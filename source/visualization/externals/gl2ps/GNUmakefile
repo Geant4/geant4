@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 68732 2013-04-05 09:44:10Z gcosmo $
+# $Id: GNUmakefile 110519 2018-05-28 07:53:49Z gcosmo $
 # -------------------------------------------------------------
 # GNUmakefile for gl2ps.  Laurent Garnier, 6/2/09.
 
@@ -22,6 +22,7 @@ QTFLAGS =
 QTLIBS  =
 GLQTLIBS =
 
+CPPFLAGS += -I$(G4BASE)/global/management/include
 ifdef G4LIB_BUILD_ZLIB
   CPPFLAGS += -I$(G4BASE)/externals/zlib/include
 endif

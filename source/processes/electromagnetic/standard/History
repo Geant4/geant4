@@ -1,4 +1,4 @@
-$Id: History 108504 2018-02-15 15:46:37Z gcosmo $
+$Id: History 110934 2018-06-26 08:11:04Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,109 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
-09 December 17: V.Ivanchenko (emstand-V10-03-52)
+25 June 18: V.Ivanchenko (emstand-V10-04-29)
+- G4LindhardSorensenData - fixed Coverity warnings on read beyond 
+    the array boundary
+
+15 June 18: V.Ivanchenko (emstand-V10-04-28)
+- G4AtimaEnergyLossModel, G4LindhardSorensenData - fixed Coverity warnings
+    on read/write out of the array boundary
+
+11 June 18: M.Novak (emstand-V10-04-27)
+- G4PairProductionRelModel, G4BetheHeitler5DModel - fixed computation of cross 
+  section in the new version of the high energy model. Fixed triplet production 
+  below treshold in the 5D model by I. Semeniouk.   
+ 
+11 June 18: V.Ivanchenko (emstand-V10-04-26)
+- G4AtimaEnergyLossModel, G4AtimaFluctuations - fixed data handling in the
+  new ion ionisation, which were identified by Coverity code analysis
+  
+04 June 18: M. Novak (emstand-V10-04-25)
+- G4BetheHeitler5DModel - optimization of the final state sampling (M. Novak)
+
+28 May 18: M. Novak (emstand-V10-04-24)
+- G4GoudsmitSaundersonTable - fix gcc-8 warnings regarding.
+
+28 May 18: M. Novak (emstand-V10-04-23)
+- G4BetheHeitlerModel, G4PairProductionRelModel, G4BetheHeitler5DModel - new 
+    versions of G4BetheHeitlerModel, G4PairProductionRelModel with improved 
+    screening function approximation, improved LPM function apporximation, 
+    efficiency, documentation and cleanup. Corrected call to selecting target 
+    atom in final state sampling. Follow up changes in the derived 
+    G4BetheHeitler5DModel. 
+
+23 May 18: V.Ivanchenko (emstand-V10-04-22)
+- G4BetheHeitlerModel - use G4ModifiedTsai angular generator
+
+22 May 18: V.Ivanchenko (emstand-V10-04-21)
+- G4DipBustGenerator, G4ModifiedTsai - implement new interface for
+    directions of e+e- pair
+- G4PairProductionRelModel - use G4ModifiedTsai angular generator
+- G4BetheHeitlerModel - use G4DipBustGenerator angular generator
+- G4UrbanMscModel - use more fast lateral displacement by default
+
+04 May 18: V.Ivanchenko (emstand-V10-04-20)
+- G4AtimaEnergyLossModel, G4AtimaFluctuations - new ion ionisation
+    model developed by J.L.R. Sanchez
+- G4WentzelOKandVIxSection - improved Mott corrections to e+-
+- G4LindhardSorensenData - fixed Coverity warning
+
+02 May 18: V.Ivanchenko (emstand-V10-04-17)
+- G4ScreeningMottCrossSection - added extra method for more effective 
+    computation of the Mott correction 
+- G4WentzelOKandVIxSection - added Mott corrections to e+-
+- G4NISTStoppingData - cleanup header
+
+24 April 18: V.Ivanchenko (emstand-V10-04-16)
+- G4LindhardSorensenIonModel,G4LindhardSorensenData - new relativistic ion 
+    ionisation model
+- G4BetheBlochModel - minor cleanup
+
+18 April 18: V.Ivanchenko (emstand-V10-04-15)
+- G4LindhardSorensenIonModel - new ion ionisation model
+- G4UrbanMscModel - use second type of parameterisation in all EM physics
+- G4BetheHeitler5DModel - D.Bernard added detailed description of the model
+
+05 April 18: V.Ivanchenko (emstand-V10-04-14)
+- G4BetheHeitler5DModel - fixed Coverity warning
+
+01 April 18: V.Ivanchenko (emstand-V10-04-13)
+- G4eplusAnnihilation - moved sampling of final state from AtRestDoIt()
+    method to the SamplingSecondaries() model of a model
+- G4eeToTwoGammaModel - cleanup
+- G4eplusTo2GammaOKVIModel, G4eplusTo3GammaOKVIModel - new models
+
+23 March 18: V.Ivanchenko (emstand-V10-04-12)
+- G4BetheHeitlerModel, G4BetheHeitler5DModel - Igor Semeniouk cleanup the code
+
+07 March 18: V.Ivanchenko (emstand-V10-04-11)
+07 March 18: V.Ivanchenko (emstand-V10-04-09)
+- G4BetheBlochModel - fixed non-reproducibility introduced in early tag
+
+05 March 18: V.Ivanchenko (emstand-V10-04-08)
+05 March 18: V.Ivanchenko (emstand-V10-04-05)
+- G4UrbanMscModel - (L.Urban) new lateral displacement algorithm
+- G4BetheHeitlerModel, G4BetheHeitler5DModel - Igor Semeniouk and Denis Bernard
+    added new 5D model
+
+09 February 18: V.Ivanchenko (emstand-V10-04-04)
+- G4eBremsstrahlungRelModel, G4PairProductionRelModel, G4PAIySection,
+  G4PAIxSection, G4ICRU73QOModel - inline method which use static constants
+    are moved to source, improved formatting of the code 
+
+02 February 18: M.Novak (emstand-V10-04-03)
+- G4GoudsmitSaundersonMscModel - implemented interface method for macroscopic 
+  1st trans. x-section computation CrossSectionPerVolume (used only for testing)
+- G4GSMottCorrection, G4GSPWACorrections - fixed initialization of 1st moment 
+  correction factor
+
+21 December 17: V.Ivanchenko (emstand-V10-04-02) 
+- G4WentzelOKandVIxSection - fixed formfactor for proton
+- G4BetheBlochModel - use formfactor for projectile ion in 
+  formulation of NIM A 488 (2002) 282; this is needed further 
+  evalution, so the tag is not proposed
+
+09 December 17: V.Ivanchenko (emstand-V10-04-01)
 - G4PairProductionRelModel - fixed misuse of G4Pow (A13(..) should
     be used instead of Z13(..)), add initialisation of an element
     cache before sampling of final state (partly fix problem #2017) 

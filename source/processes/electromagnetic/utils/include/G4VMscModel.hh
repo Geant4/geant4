@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.hh 96626 2016-04-27 08:36:27Z gcosmo $
+// $Id: G4VMscModel.hh 110572 2018-05-30 13:08:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -349,8 +349,7 @@ G4VMscModel::GetTransportMeanFreePath(const G4ParticleDefinition* part,
     x = CrossSectionPerVolume(CurrentCouple()->GetMaterial(), part, ekin, 
 			      0.0, DBL_MAX); 
   }
-  x = (x > 0.0) ? 1.0/x : DBL_MAX;
-  return x;
+  return (x > 0.0) ? 1.0/x : DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

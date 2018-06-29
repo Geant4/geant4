@@ -1,4 +1,4 @@
-$Id: History 101658 2016-11-21 09:00:41Z gcosmo $
+$Id: History 108878 2018-03-13 14:22:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13/03/18 I. Hrivnacova  (exampleB2-V10-04-00)
+- Modified exampleB2.in test to reduce the output
 
 19/11/16 A. Dotti   (exampleB2-V10-02-01)
 - explitic set of SD to manager

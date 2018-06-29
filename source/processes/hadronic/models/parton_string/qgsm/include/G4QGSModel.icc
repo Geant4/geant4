@@ -25,109 +25,75 @@
 //
 
 //****************************************************************************************************************
-
 template<class ParticipantType>
 G4QGSModel<ParticipantType>::G4QGSModel() 
-{
-  G4VPartonStringModel::SetThisPointer(this);
-  SetEnergyMomentumCheckLevels(2*CLHEP::perCent, 150*CLHEP::MeV);
-}
-
+    {
+	G4VPartonStringModel::SetThisPointer(this);
+	SetEnergyMomentumCheckLevels(2*CLHEP::perCent, 150*CLHEP::MeV);
+    }
 template<class ParticipantType>
 G4QGSModel<ParticipantType>::G4QGSModel(const G4QGSModel &right)
-{
-  G4VPartonStringModel::SetThisPointer(this);
-  std::pair<G4double, G4double> levels=right.GetEnergyMomentumCheckLevels();
-  SetEnergyMomentumCheckLevels(levels.first, levels.second);
-}
+    {
+	G4VPartonStringModel::SetThisPointer(this);
+	std::pair<G4double, G4double> levels=right.GetEnergyMomentumCheckLevels();
+	SetEnergyMomentumCheckLevels(levels.first, levels.second);
+    }
 
 template<class ParticipantType>
 G4QGSModel<ParticipantType>& G4QGSModel<ParticipantType>::operator=(const G4QGSModel &right)
-{
-  if (this != &right )
-  {
-    G4VPartonStringModel::SetThisPointer(this);
-    std::pair<G4double, G4double> levels=right.GetEnergyMomentumCheckLevels();
-    SetEnergyMomentumCheckLevels(levels.first, levels.second);
-  }
-}
-
+    {
+       if (this != &right )
+       {
+         G4VPartonStringModel::SetThisPointer(this);
+         std::pair<G4double, G4double> levels=right.GetEnergyMomentumCheckLevels();
+         SetEnergyMomentumCheckLevels(levels.first, levels.second);
+      }
+    }
 template<class ParticipantType>
 G4QGSModel<ParticipantType>::~G4QGSModel()
-{
-}
+    {
+    }
 
 template<class ParticipantType>
 void G4QGSModel<ParticipantType>::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aProjectile)
-{
-  // clean-up and consistency with design, HPW Feb 1999
-  theParticipants.Init(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt());
-  theCurrentVelocity.setX(0);    
-  theCurrentVelocity.setY(0); 
-  // HPW Feb 1999 
-  // this is an approximation, neglecting the motion of nucleons in the nucleus & p,n mass differences. @@@
-  //G4double vz_old = aProjectile.Get4Momentum().pz()/
-  //                  (aProjectile.Get4Momentum().e() + G4Proton::Proton()->GetPDGMass());
-  G4double nCons = 1;
-  if(std::abs(aProjectile.GetDefinition()->GetBaryonNumber()) !=0) 
-  {
-    nCons = std::abs(aProjectile.GetDefinition()->GetBaryonNumber());
-  }
-  G4double pz_per_projectile = aProjectile.Get4Momentum().pz()/nCons;
-  //G4double e_per_projectile = aProjectile.Get4Momentum().vect()*aProjectile.Get4Momentum().vect();
-  //         e_per_projectile /=nCons*nCons;
-  //	     e_per_projectile += G4Proton::Proton()->GetPDGMass()*G4Proton::Proton()->GetPDGMass();
-  G4double e_per_projectile = aProjectile.Get4Momentum()*aProjectile.Get4Momentum();
-           e_per_projectile += aProjectile.Get4Momentum().vect()*aProjectile.Get4Momentum().vect();
-           e_per_projectile /=nCons*nCons;
-           e_per_projectile = std::sqrt(e_per_projectile);
-           e_per_projectile += G4Proton::Proton()->GetPDGMass();
-  G4double vz = pz_per_projectile/e_per_projectile;
-  //--DEBUG--    G4cout << "IncomingMomentum - vz "<<aProjectile.Get4Momentum()<< ", " << vz <<G4endl;
-  theCurrentVelocity.setZ(vz);
-  theParticipants.DoLorentzBoost(-theCurrentVelocity); 
-  G4LorentzVector Mom = aProjectile.Get4Momentum();
-  Mom.boost(-theCurrentVelocity);
-  G4ReactionProduct theProjectile;   
-  theProjectile.SetDefinition(aProjectile.GetDefinition());
-  theProjectile.SetTotalEnergy(Mom.e());
-  theProjectile.SetMomentum(Mom.vect());
-  //--DEBUG--    G4cout << "PreInteractionMomentum "<<Mom<<G4endl;
-  theParticipants.BuildInteractions(theProjectile);
-  theParticipants.GetWoundedNucleus()->DoLorentzBoost(theCurrentVelocity);
-}
+    {
+//    It is assumed that target nucleus is at rest.
+
+    theParticipants.Init(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt()); // Init of a target nucleus
+
+    G4LorentzVector Mom = aProjectile.Get4Momentum();                  // Momentum of a projectile
+
+    G4ReactionProduct theProjectile;   
+    theProjectile.SetDefinition(aProjectile.GetDefinition());
+    theProjectile.SetTotalEnergy(Mom.e());
+    theProjectile.SetMomentum(Mom.vect());
+
+    theParticipants.BuildInteractions(theProjectile);                  // Creation of strings and nuclear remnant
+    }
 
 template<class ParticipantType>
 G4ExcitedStringVector * G4QGSModel<ParticipantType>::GetStrings()
-{
-  // clean-up and consistancy with design, HPW Feb 1999
-  // also fixing a memory leak, removing unnecessary caching, and 
-  // streamlining of logic
+{ // The strings are produced at theParticipants.BuildInteractions(theProjectile) 
+
   G4PartonPair* aPair;
   G4ExcitedStringVector* theStrings = new G4ExcitedStringVector;
   G4ExcitedString * aString;
-  while( (aPair = theParticipants.GetNextPartonPair()) )  /* Loop checking, 26.10.2015, A.Ribon */
+  while( (aPair = theParticipants.GetNextPartonPair()) )  /* Loop checking, 07.08.2015, A.Ribon */
   {
     if (aPair->GetCollisionType() == G4PartonPair::DIFFRACTIVE)
     {
       aString = theDiffractiveStringBuilder.BuildString(aPair);
-      // G4cout << "diffractive "<<aString->Get4Momentum()<<G4endl;
     }
     else
     {
       aString = theSoftStringBuilder.BuildString(aPair);
-      // G4cout << "soft "<<aString->Get4Momentum()<<G4endl;
     }
-    //--DEBUG-- G4cout << " QGSModel.icc::GetStrings() theCurrentVelocity " << theCurrentVelocity << G4endl;   
-    aString->Boost(theCurrentVelocity);  
+
+//    aString->Boost(theCurrentVelocity);  
     theStrings->push_back(aString);
     delete aPair;
   }
-  //--DEBUG--  G4cout << G4endl;
-  //  for(G4int i=0; i<theStrings->size(); i++)
-  //  {
-  //    G4cout << "String = "<<theStrings->operator[](i)->Get4Momentum()<<G4endl;
-  //  }
+
   return theStrings;
 }
 
@@ -153,6 +119,5 @@ void G4QGSModel<ParticipantType>::ModelDescription(std::ostream& outFile) const
           << "into quarks and di-quarks, the formation and excitation of\n"
           << "quark-gluon strings, string hadronization and diffractive dissociation.\n";
 }
-
 //********************************************************************************************************************* 
 

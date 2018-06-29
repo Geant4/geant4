@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
@@ -33,6 +33,7 @@
 //
 /// \file dnaphysics.cc
 /// \brief Implementation of the dnaphysics example
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
   #include "G4MTRunManager.hh"
@@ -50,7 +51,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) 
+int main(int argc,char** argv)
 {
   // Detect interactive mode (if no arguments) and define UI session
   //
@@ -60,7 +61,7 @@ int main(int argc,char** argv)
   }
 
   // Choose the Random engine
-  
+
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
@@ -79,23 +80,23 @@ int main(int argc,char** argv)
 
   // User action initialization
   runManager->SetUserInitialization(new ActionInitialization());
-  
+
   // Visualization
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-    
+
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  
+
   // Process macro or start UI session
   //
-  if (argc>1) { 
+  if (argc>1) {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
-  else { 
+  else {
     // interactive mode
     UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();

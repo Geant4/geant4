@@ -1,3 +1,8 @@
+Gunter Folger - 12 June 2018
+============================
+- Switch to original zlib sources, using zlib 1.2.11. Use C as compiler. 
+   Keep sources.cmake, this has most of zlib CMakeLists.txt code.
+   
 Gunter Folger - 17 June 2015 
 ============================
 -  Update to zlib-1.2.8, keeping Geant4 specific structure of files. 

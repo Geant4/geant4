@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: textGeom.cc 83430 2014-08-21 15:48:43Z gcosmo $
+// $Id: textGeom.cc 110386 2018-05-22 07:51:56Z gcosmo $
 //
 /// \file persistency/P03/textGeom.cc
 /// \brief Main program of the persistency/P03 example
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4Types.hh"
 
 #include "ExTGDetectorConstruction.hh"
 #include "ExTGDetectorConstructionWithSD.hh"
@@ -46,18 +48,19 @@
 
 #include "G4UImanager.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
+  // Instantiate G4UIExecutive if interactive mode
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // Run manager
   //
 #ifdef G4MULTITHREADED
@@ -94,12 +97,10 @@ int main(int argc,char** argv)
   //
   G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
-#ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif    
 
-  if (argc!=1)   // batch mode  
+  if (!ui)   // batch mode
     {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
@@ -107,23 +108,16 @@ int main(int argc,char** argv)
     }
   else           // interactive mode : define visualization and UI terminal
     { 
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute run.mac");     
-#endif
+      UImanager->ApplyCommand("/control/execute run.mac");
       ui->SessionStart();
       delete ui;
-#endif
     }
 
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif     
   delete runManager;
 
   return 0;

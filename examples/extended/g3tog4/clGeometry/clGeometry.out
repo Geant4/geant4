@@ -1,5 +1,5 @@
 argc 4
-Geometry data file: /mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/geant4-10-04-patches_branch/geant4-10-04-patches_branch/examples/extended/g3tog4/clGeometry/data/testmodel.dat
+Geometry data file: /mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/10-04-ref-06_branch/10-04-ref-06_branch/examples/extended/g3tog4/clGeometry/data/testmodel.dat
 evaluating -m
 
         ############################################
@@ -7,7 +7,7 @@ evaluating -m
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -15,7 +15,7 @@ evaluating -m
                              WWW : http://geant4.org/
 **************************************************************
 
-Instantiated G3toG4DetectorConstruction using call list file "/mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/geant4-10-04-patches_branch/geant4-10-04-patches_branch/examples/extended/g3tog4/clGeometry/data/testmodel.dat"
+Instantiated G3toG4DetectorConstruction using call list file "/mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/10-04-ref-06_branch/10-04-ref-06_branch/examples/extended/g3tog4/clGeometry/data/testmodel.dat"
 <<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
 
 Visualization Manager instantiating with verbosity "warnings (3)"...
@@ -67,7 +67,7 @@ Some /vis commands (optionally) take a string to specify colour.
 "/vis/list" to see available colours.
 userDetector->Construct() start.
 Instantiated unit rotation matrix irot=0
-Reading the call List file /mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/geant4-10-04-patches_branch/geant4-10-04-patches_branch/examples/extended/g3tog4/clGeometry/data/testmodel.dat...
+Reading the call List file /mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/10-04-ref-06_branch/10-04-ref-06_branch/examples/extended/g3tog4/clGeometry/data/testmodel.dat...
 G4ggclos: setting top-level VolTableEntry
 Dump of VTD - 26 entries:
 Instantiated 26 volume table entries 
@@ -104,13 +104,13 @@ Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visib
   linestyle: solid, line width: 1, min line segments per circle: 3
   drawing style: not forced, auxiliary edge visibility: not forced
   line segments per circle: not forced.
-  time range: (-1.79769e+308,1.79769e+308)
+  time range: (-1e+100,1e+100)
   G4AttValue pointer is zero, G4AttDef pointer is zero
 Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1) (white)
   linestyle: solid, line width: 1, min line segments per circle: 3
   drawing style: not forced, auxiliary edge visibility: not forced
   line segments per circle: not forced.
-  time range: (-1.79769e+308,1.79769e+308)
+  time range: (-1e+100,1e+100)
   G4AttValue pointer is zero, G4AttDef pointer is zero
 HALL is registered to the default region.
 physicsList->Construct() start.
@@ -139,8 +139,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
@@ -507,7 +507,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: nCapture
         Model:               nRadCapture: 0 eV  ---> 100 TeV
@@ -750,7 +749,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
@@ -767,7 +765,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
@@ -791,7 +788,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for triton
@@ -882,7 +878,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.000000s Real=0.001294s Sys=0.000000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -912,7 +908,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.000000s Real=0.000092s Sys=0.000000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -942,7 +938,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.000000s Real=0.000108s Sys=0.000000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -972,7 +968,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.000000s Real=0.000070s Sys=0.000000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -1002,7 +998,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.000000s Real=0.000228s Sys=0.000000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -1032,7 +1028,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.000000s Real=0.000095s Sys=0.000000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -1062,7 +1058,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0.000000s Real=0.000073s Sys=0.000000s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -1092,7 +1088,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.000000s Real=0.000072s Sys=0.000000s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

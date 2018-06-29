@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GenericPhysicsList.icc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4GenericPhysicsList.icc 108673 2018-02-27 07:30:45Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   
+// ClassName:   G4GenericPhysicsList
 //
 // Author: Witek Pokorski
 //
@@ -44,7 +44,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip>   
+#include <iomanip>
 
 #include "G4DataQuestionaire.hh"
 
@@ -82,16 +82,28 @@ template<class T> void TG4GenericPhysicsList<T>::SetCuts()
 {
   if (this->verboseLevel >1){
     G4cout << "G4GenericPhysicsList::SetCuts:";
-  }  
+  }
 
-  this->SetCutsWithDefault();   
- 
+  this->SetCutsWithDefault();
+
 }
 
 template<class T> void TG4GenericPhysicsList<T>::DeclareProperties()
 {
   messenger.DeclareProperty("defaultCutValue", this->defaultCutValue, "Default Cut Value");
   messenger.DeclareMethod("SetVerboseLevel", &TG4GenericPhysicsList::SetVerboseLevel, "Verbose Level");
-  
+
   messenger.DeclareMethod("RegisterPhysics", &TG4GenericPhysicsList::RegisterPhysicsConstructor, "Register Physics Constructor");
 }
+
+#ifndef G4RegisterPhysicsConstructors_icc
+  // include G4_REFERENCE_PHYSCONSTR_FACTORY() macros here to pull them in
+  // for static builds.   Would do this in  G4PhysicsConstructorRegistry
+  // but that causes a circular dependency when the phys_ctor libs
+  // are broken in a "granular" build.
+  #ifndef REGREF
+    #define REGREF GenericPhysList // REFREF is used to make instances unique
+  #endif
+  #include "G4RegisterPhysicsConstructors.icc"
+#endif
+

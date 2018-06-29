@@ -83,20 +83,7 @@ void DetectorConstruction::DefineMaterials()
 
   G4Material * H2O = man->FindOrBuildMaterial("G4_WATER");
 
-  /*
-   If one wishes to test other density value for water material,
-   one should use instead:
-   G4Material * H2O = man->BuildMaterialWithNewDensity("G4_WATER_MODIFIED",
-   "G4_WATER",1.100*g/cm3);
-
-   Note: any string for "G4_WATER_MODIFIED" parameter is accepted
-   and "G4_WATER" parameter should not be changed
-   Both materials are created and can be selected from dna.mac
-   */
   fWaterMaterial = H2O;
-
-  //G4cout << "-> Density of water material (g/cm3)="
-  // << fWaterMaterial->GetDensity()/(g/cm/cm/cm) << G4endl;
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
@@ -129,7 +116,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
       0); //copy number
 
   // Visualization attributes
-  G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0)); //White
+  G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
   worldVisAtt->SetVisibility(true);
   fLogicWorld->SetVisAttributes(worldVisAtt);
 
@@ -149,26 +136,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
-  // Search the material by its name   
-  G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial
-     (materialChoice);
-
-  if (pttoMaterial)
-  {
-    fWaterMaterial = pttoMaterial;
-    G4LogicalVolume* logicWorld =
-        G4LogicalVolumeStore::GetInstance()->GetVolume("World");
-    logicWorld->SetMaterial(fWaterMaterial);
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructDetector());
+  // search the material by its name   
+  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
+  if (pttoMaterial) fWaterMaterial = pttoMaterial;
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -7,6 +7,11 @@ francesco.romano@lns.infn.it
              History file of the GammaKnife application
          ====================================================
 
+10.05.2018 B.Morgan        Tag: gammeknife-V10-04-00
+           - Include G4Types before use of G4MULTITHREADED. For forward
+             compatibility with move to #defines over -D for G4 preprocessor
+             symbols.
+
 04.11.2016 F.Romano         Tag: gammaknife-V10-02-02
            - macro files modifeid for correct scorer rotation
 

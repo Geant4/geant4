@@ -1,4 +1,4 @@
-$Id: History 107451 2017-11-14 11:27:57Z gcosmo $
+$Id: History 110267 2018-05-17 14:34:00Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,28 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+17 May 2017  Jonathan Madsen (hadr-mod-util-V10-04-03)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+21 December 2017  Alberto Ribon (hadr-mod-util-V10-04-02)
+- G4Fancy3DNucleus : in the case of difficulties in the method
+  ChooseFermiMomenta(), emit a "JustWarning" exception instead of
+  writing to the error stream.
+
+12 December 2017  Alberto Ribon (hadr-mod-util-V10-04-01)
+- G4Nucleon : clean-up.
+- G4Fancy3DNucleus : fixed irreproducibility seen with (but not caused by)
+  the previous tag; added also loop checks; general clean up.
+
+11 December 2017  V. Uzhinsky (hadr-mod-util-V10-04-00)
+- The first implementation of alpha cluster structure of carbon nuclei
+  is done in the G4Fancy3DNucleus according to the paper
+  (P. Bozek, W. Broniowski, E.R. Arriola and M. Rybczynski, 
+   Phys. Rev. C90, 064902 (2014)). The class G4Nucleon is also improved
+   a little bit.
 
 14 November 2017  Alberto Ribon (hadr-mod-util-V10-03-15)
 - G4SampleResonance: added protection for rare cases when a wide parent

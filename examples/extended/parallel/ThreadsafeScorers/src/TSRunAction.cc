@@ -156,6 +156,13 @@ void TSRunAction::EndOfRunAction(const G4Run* aRun)
             } else {
               valid = false;
             }
+            if(!valid)
+            {
+              G4Exception("TSRunAction", "000", JustWarning,
+                          G4String(primScorerNames.at(i) +
+                                   " HitsMap is either not "
+                                   "created or the HitsMap was empty").c_str());
+            }
           } else {
             G4TAtomicHitsMap<G4double>* hitmap
                 = tsRun->GetAtomicHitsMap(fName + "/" +
@@ -176,7 +183,7 @@ void TSRunAction::EndOfRunAction(const G4Run* aRun)
             }
             if(!valid)
             {
-              G4Exception("TSRunAction", "000", JustWarning,
+              G4Exception("TSRunAction", "001", JustWarning,
                           G4String(primScorerNames.at(i) +
                                    " HitsMap is either not "
                                    "created or the HitsMap was empty").c_str());

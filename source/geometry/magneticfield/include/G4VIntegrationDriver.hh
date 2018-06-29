@@ -53,7 +53,8 @@
 
 class G4VIntegrationDriver {
 public:
-    G4VIntegrationDriver() = default;
+    G4VIntegrationDriver()
+      : max_stepping_increase(5), max_stepping_decrease(0.1) {};
     virtual ~G4VIntegrationDriver() = default;
 
     G4VIntegrationDriver(const G4VIntegrationDriver&) = delete;
@@ -80,6 +81,9 @@ public:
     virtual const G4MagIntegratorStepper* GetStepper() const = 0;
     virtual G4MagIntegratorStepper* GetStepper() = 0;
 
+    // Method for compatibility -- relevant only for G4MagIntegratorDriver
+    virtual void RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper);
+   
     // Taking the last step's normalised error, calculate
     // a step size for the next step.
     // Do not limit the next step's size within a factor of the
@@ -89,6 +93,12 @@ public:
 
     virtual void SetVerboseLevel(G4int level) = 0;
     virtual G4int GetVerboseLevel() const = 0;
+
+  protected:
+
+    G4double max_stepping_increase;
+    G4double max_stepping_decrease;
 };
+
 
 #endif

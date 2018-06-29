@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeEventMessenger.cc 70256 2013-05-28 07:29:30Z gcosmo $
+// $Id: LXeEventMessenger.cc 110138 2018-05-16 07:31:43Z gcosmo $
 //
 /// \file optical/LXe/src/LXeEventMessenger.cc
 /// \brief Implementation of the LXeEventMessenger class
@@ -95,6 +95,5 @@ void LXeEventMessenger::SetNewValue(G4UIcommand* command, G4String newValue){
   else if(command == fForceDrawNoPhotonsCmd){
     fLXeEvent->SetForceDrawNoPhotons(fForceDrawNoPhotonsCmd
                                   ->GetNewBoolValue(newValue));
-    G4cout<<"TEST"<<G4endl;
   }
 }

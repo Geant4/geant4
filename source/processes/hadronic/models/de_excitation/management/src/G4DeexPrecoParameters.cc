@@ -148,31 +148,31 @@ void G4DeexPrecoParameters::SetMinExPerNucleounForMF(G4double val)
 
 void G4DeexPrecoParameters::SetMinZForPreco(G4int n)
 {
-  if(IsLocked() && n < 2) { return; }
+  if(IsLocked() || n < 2) { return; }
   fMinZForPreco = n;
 }
 
 void G4DeexPrecoParameters::SetMinAForPreco(G4int n)
 {
-  if(IsLocked() && n < 0) { return; }
+  if(IsLocked() || n < 0) { return; }
   fMinAForPreco = n;
 }
 
 void G4DeexPrecoParameters::SetPrecoModelType(G4int n)
 {
-  if(IsLocked() && n < 0) { return; }
+  if(IsLocked() || n < 0 || n > 3) { return; }
   fPrecoType = n;
 }
 
 void G4DeexPrecoParameters::SetDeexModelType(G4int n)
 {
-  if(IsLocked() && n < 0) { return; }
+  if(IsLocked() || n < 0 || n > 3) { return; }
   fDeexType = n;
 }
 
 void G4DeexPrecoParameters::SetTwoJMAX(G4int n)
 {
-  if(IsLocked() && n < 0) { return; }
+  if(IsLocked() || n < 0) { return; }
   fTwoJMAX = n;
 }
 

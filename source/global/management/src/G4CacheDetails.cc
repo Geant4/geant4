@@ -28,4 +28,10 @@
 
 // Decalare needed static data member for fully specialized version of cache
 #include "G4CacheDetails.hh"
-G4ThreadLocal std::vector<G4double>* G4CacheReference<G4double>::cache = 0;
+
+G4CacheReference<G4double>::cache_container*&
+G4CacheReference<G4double>::cache()
+{
+    G4ThreadLocalStatic std::vector<G4double>* _instance = nullptr;
+    return _instance;
+}

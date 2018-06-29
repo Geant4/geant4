@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -20,8 +20,68 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 <<< Reference Physics List FTFP_BERT is built
 
 Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+ASCIITree (ATree)
+DAWNFILE (DAWNFILE)
+G4HepRep (HepRepXML)
+G4HepRepFile (HepRepFile)
+RayTracer (RayTracer)
+VRML1FILE (VRML1FILE)
+VRML2FILE (VRML2FILE)
+gMocrenFile (gMocrenFile)
+OpenGLImmediateQt (OGLIQt, OGLI)
+OpenGLStoredQt (OGLSQt, OGL, OGLS)
+OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+RayTracerX (RayTracerX)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
+
+Registered filter factories:
+  attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+"/vis/list" to see available colours.
 /monopole/setup 
-/control/execute /mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/geant4-10-04-patches_branch/geant4-10-04-patches_branch/examples/extended/exoticphysics/monopole/monopole.in
+
+---------------------------------------------------------
+---> The Absorber is 10 cm  of G4_Al
+
+---------------------------------------------------------
+
+ FTFP_BERT : new threshold between BERT and FTFP is over the interval 
+ for pions :   3 to 12 GeV
+ for kaons :   3 to 12 GeV
+ for proton :  3 to 12 GeV
+ for neutron : 3 to 12 GeV
+
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+/control/execute /mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/10-04-ref-06_branch/10-04-ref-06_branch/examples/extended/exoticphysics/monopole/monopole.in
 /control/verbose 1
 /control/cout/ignoreThreadsExcept 0
 /run/verbose 0
@@ -37,19 +97,6 @@ Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
 /process/em/verbose 1
 /run/physicsModified
 /run/initialize
-
----------------------------------------------------------
----> The Absorber is 10 cm  of G4_Si
-
----------------------------------------------------------
-
- FTFP_BERT : new threshold between BERT and FTFP is over the interval 
- for pions :   3 to 12 GeV
- for kaons :   3 to 12 GeV
- for proton :  3 to 12 GeV
- for neutron : 3 to 12 GeV
-
-### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /particle/select monopole
 /particle/process/dump
 G4ProcessManager:  particle[monopole]
@@ -91,8 +138,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
@@ -459,7 +506,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: nCapture
         Model:               nRadCapture: 0 eV  ---> 100 TeV
@@ -702,7 +748,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
@@ -719,7 +764,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
@@ -743,7 +787,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for triton
@@ -793,7 +836,7 @@ Max 2J for sampling of angular correlations         10
 --> Event 90 starts.
 
  The run consists of 100 monopole of 100 GeV through 10 cm  of G4_Si (density: 2.33 g/cm3 )
- Projected Range= 7.748 cm    rms= 101.85 um 
+ Projected Range= 7.7466 cm    rms= 106.12 um 
 
 ### Stopping Powers
  E(MeV)= 0.001  dedxp(MeV/mm)= 24.465 dedxmp(MeV/mm)= 1.2659
@@ -870,33 +913,35 @@ Max 2J for sampling of angular correlations         10
  E(MeV)= 12589  dedxp(MeV/mm)= 0.43526 dedxmp(MeV/mm)= 1139.6
  E(MeV)= 15849  dedxp(MeV/mm)= 0.44479 dedxmp(MeV/mm)= 1180
  E(MeV)= 19953  dedxp(MeV/mm)= 0.45437 dedxmp(MeV/mm)= 1220.8
- E(MeV)= 25119  dedxp(MeV/mm)= 0.46392 dedxmp(MeV/mm)= 1262.1
- E(MeV)= 31623  dedxp(MeV/mm)= 0.4734 dedxmp(MeV/mm)= 1303.9
- E(MeV)= 39811  dedxp(MeV/mm)= 0.48279 dedxmp(MeV/mm)= 1346.2
- E(MeV)= 50119  dedxp(MeV/mm)= 0.49208 dedxmp(MeV/mm)= 1389
- E(MeV)= 63096  dedxp(MeV/mm)= 0.5013 dedxmp(MeV/mm)= 1432.3
- E(MeV)= 79433  dedxp(MeV/mm)= 0.51047 dedxmp(MeV/mm)= 1475.7
- E(MeV)= 1e+05  dedxp(MeV/mm)= 0.51964 dedxmp(MeV/mm)= 1521.9
- E(MeV)= 1.2589e+05  dedxp(MeV/mm)= 0.5289 dedxmp(MeV/mm)= 1569.5
- E(MeV)= 1.5849e+05  dedxp(MeV/mm)= 0.53834 dedxmp(MeV/mm)= 1616.1
- E(MeV)= 1.9953e+05  dedxp(MeV/mm)= 0.54808 dedxmp(MeV/mm)= 1661.5
- E(MeV)= 2.5119e+05  dedxp(MeV/mm)= 0.55828 dedxmp(MeV/mm)= 1705.5
- E(MeV)= 3.1623e+05  dedxp(MeV/mm)= 0.56916 dedxmp(MeV/mm)= 1747.9
- E(MeV)= 3.9811e+05  dedxp(MeV/mm)= 0.58097 dedxmp(MeV/mm)= 1788.3
- E(MeV)= 5.0119e+05  dedxp(MeV/mm)= 0.59408 dedxmp(MeV/mm)= 1826.5
- E(MeV)= 6.3096e+05  dedxp(MeV/mm)= 0.60891 dedxmp(MeV/mm)= 1862.4
- E(MeV)= 7.9433e+05  dedxp(MeV/mm)= 0.62602 dedxmp(MeV/mm)= 1895.6
- E(MeV)= 1e+06  dedxp(MeV/mm)= 0.64612 dedxmp(MeV/mm)= 1926.2
- E(MeV)= 1.2589e+06  dedxp(MeV/mm)= 0.6701 dedxmp(MeV/mm)= 1954
- E(MeV)= 1.5849e+06  dedxp(MeV/mm)= 0.6991 dedxmp(MeV/mm)= 1979
- E(MeV)= 1.9953e+06  dedxp(MeV/mm)= 0.73447 dedxmp(MeV/mm)= 2001.2
- E(MeV)= 2.5119e+06  dedxp(MeV/mm)= 0.77187 dedxmp(MeV/mm)= 2020.8
- E(MeV)= 3.1623e+06  dedxp(MeV/mm)= 0.82036 dedxmp(MeV/mm)= 2037.7
- E(MeV)= 3.9811e+06  dedxp(MeV/mm)= 0.88274 dedxmp(MeV/mm)= 2052.3
- E(MeV)= 5.0119e+06  dedxp(MeV/mm)= 0.96259 dedxmp(MeV/mm)= 2064.6
- E(MeV)= 6.3096e+06  dedxp(MeV/mm)= 1.0645 dedxmp(MeV/mm)= 2074.8
- E(MeV)= 7.9433e+06  dedxp(MeV/mm)= 1.1943 dedxmp(MeV/mm)= 2083.1
+ E(MeV)= 25119  dedxp(MeV/mm)= 0.45693 dedxmp(MeV/mm)= 1262.1
+ E(MeV)= 31623  dedxp(MeV/mm)= 0.45858 dedxmp(MeV/mm)= 1303.9
+ E(MeV)= 39811  dedxp(MeV/mm)= 0.46012 dedxmp(MeV/mm)= 1346.2
+ E(MeV)= 50119  dedxp(MeV/mm)= 0.46157 dedxmp(MeV/mm)= 1389
+ E(MeV)= 63096  dedxp(MeV/mm)= 0.46295 dedxmp(MeV/mm)= 1432.3
+ E(MeV)= 79433  dedxp(MeV/mm)= 0.46431 dedxmp(MeV/mm)= 1475.7
+ E(MeV)= 1e+05  dedxp(MeV/mm)= 0.46574 dedxmp(MeV/mm)= 1521.9
+ E(MeV)= 1.2589e+05  dedxp(MeV/mm)= 0.4673 dedxmp(MeV/mm)= 1569.5
+ E(MeV)= 1.5849e+05  dedxp(MeV/mm)= 0.46913 dedxmp(MeV/mm)= 1616.1
+ E(MeV)= 1.9953e+05  dedxp(MeV/mm)= 0.47135 dedxmp(MeV/mm)= 1661.5
+ E(MeV)= 2.5119e+05  dedxp(MeV/mm)= 0.47415 dedxmp(MeV/mm)= 1705.5
+ E(MeV)= 3.1623e+05  dedxp(MeV/mm)= 0.47776 dedxmp(MeV/mm)= 1747.9
+ E(MeV)= 3.9811e+05  dedxp(MeV/mm)= 0.48246 dedxmp(MeV/mm)= 1788.3
+ E(MeV)= 5.0119e+05  dedxp(MeV/mm)= 0.48861 dedxmp(MeV/mm)= 1826.5
+ E(MeV)= 6.3096e+05  dedxp(MeV/mm)= 0.49667 dedxmp(MeV/mm)= 1862.4
+ E(MeV)= 7.9433e+05  dedxp(MeV/mm)= 0.5072 dedxmp(MeV/mm)= 1895.6
+ E(MeV)= 1e+06  dedxp(MeV/mm)= 0.52093 dedxmp(MeV/mm)= 1926.2
+ E(MeV)= 1.2589e+06  dedxp(MeV/mm)= 0.53874 dedxmp(MeV/mm)= 1954
+ E(MeV)= 1.5849e+06  dedxp(MeV/mm)= 0.56178 dedxmp(MeV/mm)= 1979
+ E(MeV)= 1.9953e+06  dedxp(MeV/mm)= 0.59149 dedxmp(MeV/mm)= 2001.2
+ E(MeV)= 2.5119e+06  dedxp(MeV/mm)= 0.62968 dedxmp(MeV/mm)= 2020.8
+ E(MeV)= 3.1623e+06  dedxp(MeV/mm)= 0.67868 dedxmp(MeV/mm)= 2037.7
+ E(MeV)= 3.9811e+06  dedxp(MeV/mm)= 0.74137 dedxmp(MeV/mm)= 2052.3
+ E(MeV)= 5.0119e+06  dedxp(MeV/mm)= 0.82142 dedxmp(MeV/mm)= 2064.6
+ E(MeV)= 6.3096e+06  dedxp(MeV/mm)= 0.92346 dedxmp(MeV/mm)= 2074.8
+ E(MeV)= 7.9433e+06  dedxp(MeV/mm)= 1.0533 dedxmp(MeV/mm)= 2083.1
 ### End of stopping power table
 Range table for G4_Si
 ... write Root file : monopole.root - done
 ... close Root file : monopole.root - done
+Graphics systems deleted.
+Visualization Manager deleting...

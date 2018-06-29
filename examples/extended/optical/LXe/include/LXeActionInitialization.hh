@@ -33,8 +33,6 @@
 
 #include "G4VUserActionInitialization.hh"
 
-class LXeRecorderBase;
-
 class B4DetectorConstruction;
 
 /// Action initialization class.
@@ -43,16 +41,13 @@ class B4DetectorConstruction;
 class LXeActionInitialization : public G4VUserActionInitialization
 {
   public:
-    LXeActionInitialization(LXeRecorderBase*);
+    LXeActionInitialization();
     virtual ~LXeActionInitialization();
 
     virtual void BuildForMaster() const;
     virtual void Build() const;
 
-    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
-
   private:
-    LXeRecorderBase* fRecorder;
 };
 
 #endif

@@ -1,5 +1,5 @@
 
-$Id: History 107324 2017-11-08 16:35:06Z gcosmo $
+$Id: History 108856 2018-03-12 07:41:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+11-03-18 mma (testem0-V10-04-00)
+- Testem0.cc : remove G4UI_USE
 
 07-11-17 D.Sawkey (testem0-V10-03-01)
 - RunAction: write html documentation of physics list if envvars

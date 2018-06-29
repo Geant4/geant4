@@ -35,6 +35,7 @@
 // Creation date: 23.08.2017
 //
 // Modifications:
+// 02.02.2018 M.Novak: fixed initialization of first moment correction.
 //
 // Class description: see the header file.
 //
@@ -472,7 +473,7 @@ void G4GSMottCorrection::InitMCDataMaterial(const G4Material *mat) {
         //    screening parameter (= (mc^2)^\alpha^2/(4(pc)^2C_{TF}^2) dumScr
         G4double scrCorTed = constFactor*dumScr/(4.*pt2);
         G4double dum0      = G4Log(1.+1./scrCorTed);
-        perMatPerEkin->fMCFirstMoment = perMatPerEkin->fMCFirstMoment/(zs*(dum0-1./(1.-scrCorTed)));
+        perMatPerEkin->fMCFirstMoment = perMatPerEkin->fMCFirstMoment/(zs*(dum0-1./(1.+scrCorTed)));
         //
         // 3. the remaining part of the second moment correction and divide by the one computed by using the corrected
         //    screening parameter

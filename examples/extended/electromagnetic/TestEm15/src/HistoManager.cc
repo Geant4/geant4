@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc 72240 2013-07-12 08:42:44Z gcosmo $
+// $Id: HistoManager.cc 110439 2018-05-23 11:24:51Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,20 +60,28 @@ void HistoManager::Book()
   analysisManager->SetActivation(true);   //enable inactivation of histograms
   
   // Define histograms start values
-  const G4int kMaxHisto = 10;
-  const G4String id[] = { "0", "1", "2", "3" , "4", "5", "6" , "7", "8", "9"};
+  const G4int kMaxHisto = 17;
+  const G4String id[] = { "0", "1", "2", "3" , "4", "5", "6" , "7", "8", "9",
+                          "10","11","12","13","14","15","16"};
   const G4String title[] = 
-           { "dummy",                                                   //0
-             "Multiple Scattering. True step length",                   //1
-             "Multiple Scattering. Geom step length",                   //2
-             "Multiple Scattering. Ratio geomSl/trueSl",                //3
-             "Multiple Scattering. Lateral displacement: radius",       //4
-             "Multiple Scattering. Lateral displac: psi_space",         //5
-             "Multiple Scattering. Angular distrib: theta_plane",       //6
-             "Multiple Scattering. Phi-position angle",                 //7
-             "Multiple Scattering. Phi-direction angle",                //8
-             "Multiple Scattering. Correlation: std::cos(phiPos-phiDir)"//9
-            };
+           { "dummy",                                                    //0
+             "Multiple Scattering. True step length",                    //1
+             "Multiple Scattering. Geom step length",                    //2
+             "Multiple Scattering. Ratio geomSl/trueSl",                 //3
+             "Multiple Scattering. Lateral displacement: radius",        //4
+             "Multiple Scattering. Lateral displac: psi_space",          //5
+             "Multiple Scattering. Angular distrib: theta_plane",        //6
+             "Multiple Scattering. Phi-position angle",                  //7
+             "Multiple Scattering. Phi-direction angle",                 //8
+             "Multiple Scattering. Correlation: std::cos(phiPos-phiDir)",//9
+             "Gamma Conversion. Open Angle * Egamma",                    //10
+             "Gamma Conversion. Log10(P recoil)",                        //11
+             "Gamma Conversion. Phi P recoil angle",                     //12
+             "Gamma Conversion. Phi P plus angle",                       //13
+             "Gamma Conversion. 2 * cos(phiplus + phiminus) Asymmetry",  //14
+             "Gamma Conversion. E plus / E gamma",                       //15
+             "Gamma Conversion. Phi of Gamma Polarization"               //16
+           };
             
   // Default values (to be reset via /analysis/h1/set command)               
   G4int nbins = 100;

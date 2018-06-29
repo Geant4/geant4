@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.hh 106627 2017-10-17 06:23:58Z gcosmo $
+// $Id: G4Hype.hh 108078 2017-12-20 08:15:44Z gcosmo $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 //
 // 
@@ -56,7 +56,7 @@
 // --------------------------------------------------------------------
 #ifndef G4HYPE_HH
 #define G4HYPE_HH
-/*
+
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UHYPE 1
 #endif
@@ -65,7 +65,7 @@
   #define G4UHype G4Hype
   #include "G4UHype.hh"
 #else
-*/
+
 #include "G4VSolid.hh"
 #include "G4ThreeVector.hh"
 #include "G4Polyhedron.hh"
@@ -208,6 +208,6 @@ class G4Hype : public G4VSolid
 
 #include "G4Hype.icc"
 
-//#endif  // defined(G4GEOM_USE_UHYPE) && defined(G4GEOM_USE_SYS_USOLIDS)
+#endif  // defined(G4GEOM_USE_UHYPE) && defined(G4GEOM_USE_SYS_USOLIDS)
 
 #endif // G4HYPE_HH

@@ -24,16 +24,16 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
-// Jose Luis Rodriguez, CEA (translation from ABLA07 and contact person)
-// Pekka Kaitaniemi, HIP (translation)
-// Christelle Schmidt, IPNL (fission code)
+// Jose Luis Rodriguez, GSI (translation from ABLA07 and contact person)
+// Pekka Kaitaniemi, HIP (initial translation of ablav3p)
+// Aleksandra Kelic, GSI (ABLA07 code)
 // Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
+
 #define ABLAXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
-
 #include <time.h>
 #include <cmath>
 
@@ -101,7 +101,7 @@ void G4Abla::DeexcitationAblaxx(G4int nucleusA, G4int nucleusZ, G4double excitat
   SetParametersG4(nucleusZ, nucleusA);
 
   mult10:
-  int IS = 0;
+  G4int IS = 0;
 
   G4double aff = 0.0;
   G4double zff = 0.0;
@@ -121,8 +121,8 @@ void G4Abla::DeexcitationAblaxx(G4int nucleusA, G4int nucleusZ, G4double excitat
   fiss->ifis = 0;
   }
   
-  G4double aprf = (double) nucleusA;
-  G4double zprf = (double) nucleusZ;
+  G4double aprf = (G4double) nucleusA;
+  G4double zprf = (G4double) nucleusZ;
   G4double ee = excitationEnergy;
   G4double jprf = angularMomentum; // actually root-mean-squared
 
@@ -143,24 +143,24 @@ void G4Abla::DeexcitationAblaxx(G4int nucleusA, G4int nucleusZ, G4double excitat
 
   G4double ETOT_PRF=0.0,PXPRFP=0.,PYPRFP=0.,PZPRFP=0.,PPRFP=0., VX1_BU=0., VY1_BU=0., VZ1_BU=0., VBU2=0., GAMMA_REL=1.0, Eexc_BU_SUM=0., VX_BU_SUM = 0., VY_BU_SUM =0.,VZ_BU_SUM =0., E_tot_BU=0.,EKIN_BU=0.,ZIMFBU=0., AIMFBU=0., ZFFBU=0., AFFBU=0., AFBU=0., ZFBU=0., EEBU=0.,TKEIMFBU=0.,vx_evabu=0.,vy_evabu=0.,vz_evabu=0., Bvalue_BU=0.,P_BU=0.,ETOT_BU=1.,PX_BU=0.,PY_BU=0.,PZ_BU=0.,VX2_BU=0.,VY2_BU=0.,VZ2_BU=0.;
 
-  int ABU_DIFF,ZBU_DIFF,NBU_DIFF;
-  int INEWLOOP = 0, ILOOPBU=0;
+  G4int ABU_DIFF,ZBU_DIFF,NBU_DIFF;
+  G4int INEWLOOP = 0, ILOOPBU=0;
 
-  double BU_TAB_TEMP[200][5], BU_TAB_TEMP1[200][5]; 
+  G4double BU_TAB_TEMP[200][5], BU_TAB_TEMP1[200][5]; 
   G4double EV_TAB_TEMP[200][5],EV_TEMP[200][5];
   G4int IMEM_BU[201], IMEM=0;
 
-  for(int j=0;j<3;j++){
+  for(G4int j=0;j<3;j++){
    V_CM[j]=0.;
    VFP1_CM[j]=0.;
    VFP2_CM[j]=0.;
    VIMF_CM[j]=0.;
   }
 
-   for(int I1=0;I1<200;I1++){
-       for(int I2 = 0;I2<11;I2++)
+   for(G4int I1=0;I1<200;I1++){
+       for(G4int I2 = 0;I2<11;I2++)
         BU_TAB[I1][I2] = 0.0;
-       for(int I2 = 0;I2<5;I2++){
+       for(G4int I2 = 0;I2<5;I2++){
         BU_TAB_TEMP[I1][I2] = 0.0;
         BU_TAB_TEMP1[I1][I2] = 0.0;
         EV_TAB_TEMP[I1][I2] = 0.0;
@@ -193,17 +193,17 @@ void G4Abla::DeexcitationAblaxx(G4int nucleusA, G4int nucleusZ, G4double excitat
 // For coupling with INCL, comment the lines below, and use output
 // of INCL as pxincl, pyincl,pzincl
 //
-      double pincl = std::sqrt(pxrem*pxrem + pyrem*pyrem + pzrem*pzrem);
+      G4double pincl = std::sqrt(pxrem*pxrem + pyrem*pyrem + pzrem*pzrem);
 // PPRFP is in MeV/c
-      double ETOT_incl = std::sqrt(pincl*pincl + (AAINCL * amu)*(AAINCL * amu));
-      double VX_incl = C * pxrem / ETOT_incl;
-      double VY_incl = C * pyrem / ETOT_incl;
-      double VZ_incl = C * pzrem / ETOT_incl;
+      G4double ETOT_incl = std::sqrt(pincl*pincl + (AAINCL * amu)*(AAINCL * amu));
+      G4double VX_incl = C * pxrem / ETOT_incl;
+      G4double VY_incl = C * pyrem / ETOT_incl;
+      G4double VZ_incl = C * pzrem / ETOT_incl;
 
 // Multiplicity in the break-up event
-      int  IMULTBU = 0;
-      int  IMULTIFR = 0;
-      int  I_Breakup=0;
+      G4int  IMULTBU = 0;
+      G4int  IMULTIFR = 0;
+      G4int  I_Breakup=0;
            IEV_TAB = 0;
 /*
 C     Set maximum temperature for sequential decay (evaporation)
@@ -246,7 +246,7 @@ c       Clear BU_TAB (array of multifragmentation products)
         // T_Diff is of the order of 1.e-3 and less.
         varntp->kfis = 10;
 
-        for(int i=0;i<5;i++){
+        for(G4int i=0;i<5;i++){
             EE_diff = EINCL - a_tilda * T_freeze_out*T_freeze_out;
 //            Energy removed 10*5/T_init per nucleon removed in simultaneous breakup
 //            adjusted to frag. xsections 238U (1AGeV) + Pb data, KHS Dec. 2005
@@ -324,7 +324,7 @@ c       Clear BU_TAB (array of multifragmentation products)
           ABU_SUM = 0.0;
           ZBU_SUM = 0.0;
 
-          for(int i=0;i<100;i++){
+          for(G4int i=0;i<100;i++){
              IS = 0;
              mult4326:
              A_Breakup = dint(double(IPOWERLIMHAZ(ABU_SLOPE,1,idnint(A_diff))));
@@ -361,12 +361,12 @@ c       Clear BU_TAB (array of multifragmentation products)
               CZ = 2.0 * G_SYMM * 4.0 / A_Breakup;
               // 2*CZ=d^2(Esym)/dZ^2, Esym=Gamma*(A-2Z)**2/A
                // gamma = 23.6D0 is the symmetry-energy coefficient
-              int IIS = 0;
+              G4int IIS = 0;
               Sigma_Z = std::sqrt(T_freeze_out/CZ);
 
               IS = 0;
               mult4333:
-              Z_Breakup =  dint( double(gausshaz(1,Z_Breakup_Mean,Sigma_Z)));
+              Z_Breakup =  dint( G4double(gausshaz(1,Z_Breakup_Mean,Sigma_Z)));
               IS = IS +1;
 //
               if(IS>100){
@@ -440,8 +440,8 @@ c       Clear BU_TAB (array of multifragmentation products)
         std::cout << "WARNING - LESS THAN 1 BU " << IMULTBU << std::endl; 
          //,AABRA,ZABRA,IDNINT(APRF),IDNINT(ZPRF),ABU_DIFF,ZBU_DIFF
 
-        int IPROBA = 0;
-        for(int i=0;i<IMULTBU;i++)
+        G4int IPROBA = 0;
+        for(G4int i=0;i<IMULTBU;i++)
         IMEM_BU[i] = 0;
 
         while(NBU_DIFF!=0 && ZBU_DIFF!=0){
@@ -449,14 +449,14 @@ c       Clear BU_TAB (array of multifragmentation products)
 // is entering into endless loop, as it can not find proper nucleus for adapting A and Z.
          IS = 0;
          mult5555:    
-         double RHAZ = G4AblaRandom::flat()*double(IMULTBU);
+         G4double RHAZ = G4AblaRandom::flat()*double(IMULTBU);
          IPROBA = IPROBA + 1;
          IS = IS + 1;
          if(IS>100){
           std::cout << "WARNING: HAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING N_BREAKUP IN Rn07.FOR. NEW EVENT WILL BE DICED." << std::endl; 
           goto mult10;
          }
-          int IEL = int(RHAZ);
+          G4int IEL = G4int(RHAZ);
           if(IMEM_BU[IEL]==1) goto mult5555;
            if(IEL>200)std::cout << "5555:" << IEL << RHAZ << IMULTBU << std::endl; 
            if(IEL<0)std::cout << "5555:"<< IEL << RHAZ << IMULTBU << std::endl; 
@@ -501,38 +501,38 @@ c       Clear BU_TAB (array of multifragmentation products)
         }// while
 
         IPROBA = 0;
-        for(int i=0;i<IMULTBU;i++)
+        for(G4int i=0;i<IMULTBU;i++)
         IMEM_BU[i] = 0;
 
         if(NBU_DIFF != 0 && ZBU_DIFF == 0){
          while(NBU_DIFF > 0 || NBU_DIFF < 0){
          IS = 0;
          mult5556:    
-         double RHAZ = G4AblaRandom::flat()*double(IMULTBU);
+         G4double RHAZ = G4AblaRandom::flat()*double(IMULTBU);
          IS = IS + 1;
          if(IS>100){
           std::cout << "WARNING: HAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING N_BREAKUP IN Rn07.FOR. NEW EVENT WILL BE DICED." << std::endl; 
           goto mult10;
          }
-         int IEL = int(RHAZ);
+         G4int IEL = G4int(RHAZ);
          if(IMEM_BU[IEL]==1) goto mult5556;
 //         IPROBA = IPROBA + 1;
          if(IPROBA>IMULTBU+1 && NBU_DIFF>0){
          std::cout << "###',IPROBA,IMULTBU,NBU_DIFF,ZBU_DIFF,T_freeze_out" << std::endl; 
          IPROBA = IPROBA + 1;
            if(IEL<=IMULTBU){
-            BU_TAB[IEL][1] = dint(BU_TAB[IEL][1]-double(NBU_DIFF));
+            BU_TAB[IEL][1] = dint(BU_TAB[IEL][1]- G4double(NBU_DIFF));
            }else{ if(IEL>IMULTBU)
-            aprf = dint(aprf - double(NBU_DIFF));
+            aprf = dint(aprf - G4double(NBU_DIFF));
            }
          goto mult5432;
          }
            if(IEL>200)std::cout << "5556:" << IEL << RHAZ << IMULTBU << std::endl; 
            if(IEL<0)std::cout << "5556:"<< IEL << RHAZ << IMULTBU << std::endl; 
            if(IEL<=IMULTBU){
-            N_Breakup = dint(BU_TAB[IEL][1]-BU_TAB[IEL][0] - DSIGN(1.0,double(NBU_DIFF)));
+            N_Breakup = dint(BU_TAB[IEL][1]-BU_TAB[IEL][0] - DSIGN(1.0, G4double(NBU_DIFF)));
             }else if(IEL>IMULTBU){
-            N_Breakup = dint(aprf - zprf - DSIGN(1.0,double(NBU_DIFF)));
+            N_Breakup = dint(aprf - zprf - DSIGN(1.0, G4double(NBU_DIFF)));
             }
             if(N_Breakup<0.0){
              IMEM_BU[IEL] = 1;
@@ -561,7 +561,7 @@ c       Clear BU_TAB (array of multifragmentation products)
          }//while(NBU_DIFF > 0 || NBU_DIFF < 0)
 
         IPROBA = 0;
-        for(int i=0;i<IMULTBU;i++)
+        for(G4int i=0;i<IMULTBU;i++)
         IMEM_BU[i] = 0;
 
         }else{// if(NBU_DIFF != 0 && ZBU_DIFF == 0)
@@ -569,13 +569,13 @@ c       Clear BU_TAB (array of multifragmentation products)
             while(ZBU_DIFF > 0 || ZBU_DIFF < 0){
              IS = 0;
              mult5557:    
-             double RHAZ = G4AblaRandom::flat()*double(IMULTBU);
+             G4double RHAZ = G4AblaRandom::flat()* G4double(IMULTBU);
              IS = IS + 1;
              if(IS>100){
               std::cout << "WARNING: HAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING N_BREAKUP IN Rn07.FOR. NEW EVENT WILL BE DICED." << std::endl; 
               goto mult10;
              }
-             int IEL = int(RHAZ);
+             G4int IEL = G4int(RHAZ);
              if(IMEM_BU[IEL]==1) goto mult5557;
              //IPROBA = IPROBA + 1;
              if(IPROBA>IMULTBU+1 && ZBU_DIFF>0){
@@ -583,12 +583,12 @@ c       Clear BU_TAB (array of multifragmentation products)
              IPROBA = IPROBA + 1;
              if(IEL<=IMULTBU){
                N_Breakup = dint(BU_TAB[IEL][1]-BU_TAB[IEL][0]);
-               BU_TAB[IEL][0] = dint(BU_TAB[IEL][0] - double(ZBU_DIFF));
+               BU_TAB[IEL][0] = dint(BU_TAB[IEL][0] - G4double(ZBU_DIFF));
                BU_TAB[IEL][1] = dint(BU_TAB[IEL][0] + N_Breakup);
              }else{ 
                  if(IEL>IMULTBU){
                   N_Breakup = aprf - zprf;
-                  zprf = dint(zprf - double(ZBU_DIFF));
+                  zprf = dint(zprf - G4double(ZBU_DIFF));
                   aprf = dint(zprf + N_Breakup);
                  }
              }
@@ -598,10 +598,10 @@ c       Clear BU_TAB (array of multifragmentation products)
            if(IEL<0)std::cout << "5557:"<< IEL << RHAZ << IMULTBU << std::endl; 
            if(IEL<=IMULTBU){
             N_Breakup = dint(BU_TAB[IEL][1]-BU_TAB[IEL][0]);
-            ZTEMP = dint(BU_TAB[IEL][0] - DSIGN(1.0,double(ZBU_DIFF)));
+            ZTEMP = dint(BU_TAB[IEL][0] - DSIGN(1.0, G4double(ZBU_DIFF)));
            }else if(IEL>IMULTBU){
             N_Breakup = dint(aprf - zprf);
-            ZTEMP = dint(zprf - DSIGN(1.0,double(ZBU_DIFF)));
+            ZTEMP = dint(zprf - DSIGN(1.0, G4double(ZBU_DIFF)));
            }
             ATEMP = dint(ZTEMP + N_Breakup);
             if(ZTEMP<0.0){
@@ -635,7 +635,7 @@ c       Clear BU_TAB (array of multifragmentation products)
 // "giving" excitation energy to fragments
          ZMEM = 0.0;
 
-         for(int i =0;i<IMULTBU;i++){
+         for(G4int i =0;i<IMULTBU;i++){
 //For particles with Z>2 we calculate excitation energy from freeze-out temperature.
 // For particels with Z<3 we assume that they form a gas, and that temperature results
 // in kinetic energy (which is sampled from Maxwell distribution with T=Tfreeze-out)
@@ -672,7 +672,7 @@ c       Clear BU_TAB (array of multifragmentation products)
 //     Just for checking:
         ABU_SUM = aprf;
         ZBU_SUM = zprf;
-        for( int i = 0;i<IMULTBU;i++){
+        for( G4int i = 0;i<IMULTBU;i++){
          ABU_SUM = ABU_SUM + BU_TAB[i][1];
          ZBU_SUM = ZBU_SUM + BU_TAB[i][0];
         }
@@ -939,7 +939,7 @@ c       Clear BU_TAB (array of multifragmentation products)
 //      nuclei with A=Z, for other nuclei it will be done after decay:
 
          INEWLOOP = 0;
-         for(int i=0;i<IMULTBU;i++){
+         for(G4int i=0;i<IMULTBU;i++){
           if(BU_TAB[i][0]<3.0 || BU_TAB[i][0]==BU_TAB[i][1]){
             unstable_nuclei(idnint(BU_TAB[i][1]),idnint(BU_TAB[i][0]), &afpnew,&zfpnew,IOUNSTABLE,
             BU_TAB[i][4], BU_TAB[i][5], BU_TAB[i][6],
@@ -947,14 +947,14 @@ c       Clear BU_TAB (array of multifragmentation products)
 
             if(IOUNSTABLE>0){
 // Properties of "heavy fragment":
-             BU_TAB[i][1] = double(afpnew);
-             BU_TAB[i][0] = double(zfpnew);
+             BU_TAB[i][1] = G4double(afpnew);
+             BU_TAB[i][0] = G4double(zfpnew);
              BU_TAB[i][4] = VP1X;
              BU_TAB[i][5] = VP1Y;
              BU_TAB[i][6] = VP1Z;
 
 //Properties of "light" fragments:
-             for(int IJ=0;IJ<ILOOP;IJ++){
+             for(G4int IJ=0;IJ<ILOOP;IJ++){
               BU_TAB[IMULTBU+INEWLOOP+IJ][0] = BU_TAB_TEMP[IJ][0];
               BU_TAB[IMULTBU+INEWLOOP+IJ][1] = BU_TAB_TEMP[IJ][1];
               BU_TAB[IMULTBU+INEWLOOP+IJ][4] = BU_TAB_TEMP[IJ][2];
@@ -977,24 +977,18 @@ c       Clear BU_TAB (array of multifragmentation products)
         fiss->ifis = 0;          //  fission is not allowed
         gammaemission=0;
         ILOOPBU = 0;
-/*
-        std::cout << "IMULTBU after unstable= " << IMULTBU << std::endl;
 
-        for(int i=0;i<IMULTBU;i++){
-         std::cout << i << " A, Z: " << BU_TAB[i][1] << "  " << BU_TAB[i][0] << std::endl;
-        }*/
-
-         for(int i=0;i<IMULTBU;i++){
+         for(G4int i=0;i<IMULTBU;i++){
           EEBU = BU_TAB[i][2];
           BU_TAB[i][10] = BU_TAB[i][6];
-          double jprfbu = BU_TAB[i][9];
+          G4double jprfbu = BU_TAB[i][9];
           if(BU_TAB[i][0]>2.0){
            evapora(BU_TAB[i][0],BU_TAB[i][1],&EEBU,0.0, &ZFBU, &AFBU, &mtota, &vz_evabu, &vx_evabu,&vy_evabu, &ff, &fimf, &ZIMFBU, &AIMFBU,&TKEIMFBU, &jprfbu, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
 
            BU_TAB[i][9] = jprfbu;
 
 //Velocities of evaporated particles (in the frame of the primary prefragment)
-               for(int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
                EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
                EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
 //Lorentz kinematics
@@ -1033,32 +1027,32 @@ c       Clear BU_TAB (array of multifragmentation products)
 //            PRINT*,'IMF EMISSION FROM BU PRODUCTS'
 // IMF emission: Heavy partner is not allowed to fission or to emitt IMF.
                //double FEE = EEBU;
-               int FFBU1 = 0;
-               int FIMFBU1 = 0;
+               G4int FFBU1 = 0;
+               G4int FIMFBU1 = 0;
                opt->optimfallowed = 0;  //  IMF is not allowed
                fiss->ifis = 0;          //  fission is not allowed
 // Velocities of IMF and partner: 1 denotes partner, 2 denotes IMF
-               double EkinR1 = TKEIMFBU * AIMFBU / (AFBU+AIMFBU);
-               double EkinR2 = TKEIMFBU * AFBU / (AFBU+AIMFBU);
-               double V1 = std::sqrt(EkinR1/AFBU) * 1.3887;
-               double V2 = std::sqrt(EkinR2/AIMFBU) * 1.3887;
-               double VZ1_IMF = (2.0 * G4AblaRandom::flat() - 1.0) * V1;
-               double VPERP1 = std::sqrt(V1*V1 - VZ1_IMF*VZ1_IMF);
-               double ALPHA1 = G4AblaRandom::flat() * 2. * 3.142;
-               double VX1_IMF = VPERP1 * std::sin(ALPHA1);
-               double VY1_IMF = VPERP1 * std::cos(ALPHA1);
-               double VX2_IMF = - VX1_IMF / V1 * V2;
-               double VY2_IMF = - VY1_IMF / V1 * V2;
-               double VZ2_IMF = - VZ1_IMF / V1 * V2;
+               G4double EkinR1 = TKEIMFBU * AIMFBU / (AFBU+AIMFBU);
+               G4double EkinR2 = TKEIMFBU * AFBU / (AFBU+AIMFBU);
+               G4double V1 = std::sqrt(EkinR1/AFBU) * 1.3887;
+               G4double V2 = std::sqrt(EkinR2/AIMFBU) * 1.3887;
+               G4double VZ1_IMF = (2.0 * G4AblaRandom::flat() - 1.0) * V1;
+               G4double VPERP1 = std::sqrt(V1*V1 - VZ1_IMF*VZ1_IMF);
+               G4double ALPHA1 = G4AblaRandom::flat() * 2. * 3.142;
+               G4double VX1_IMF = VPERP1 * std::sin(ALPHA1);
+               G4double VY1_IMF = VPERP1 * std::cos(ALPHA1);
+               G4double VX2_IMF = - VX1_IMF / V1 * V2;
+               G4double VY2_IMF = - VY1_IMF / V1 * V2;
+               G4double VZ2_IMF = - VZ1_IMF / V1 * V2;
 
-               double EEIMFP = EEBU * AFBU /(AFBU + AIMFBU);
-               double EEIMF = EEBU * AIMFBU /(AFBU + AIMFBU);
+               G4double EEIMFP = EEBU * AFBU /(AFBU + AIMFBU);
+               G4double EEIMF = EEBU * AIMFBU /(AFBU + AIMFBU);
 
 // Decay of heavy partner
-     double IINERTTOT = 0.40 * 931.490 * 1.160*1.160 *( std::pow(AIMFBU,5.0/3.0) + std::pow(AFBU,5.0/3.0)) + 931.490 * 1.160*1.160*AIMFBU*AFBU/(AIMFBU+AFBU)*(std::pow(AIMFBU,1./3.) + std::pow(AFBU,1./3.))*(std::pow(AIMFBU,1./3.) + std::pow(AFBU,1./3.));
+     G4double IINERTTOT = 0.40 * 931.490 * 1.160*1.160 *( std::pow(AIMFBU,5.0/3.0) + std::pow(AFBU,5.0/3.0)) + 931.490 * 1.160*1.160*AIMFBU*AFBU/(AIMFBU+AFBU)*(std::pow(AIMFBU,1./3.) + std::pow(AFBU,1./3.))*(std::pow(AIMFBU,1./3.) + std::pow(AFBU,1./3.));
 
-     double JPRFHEAVY = BU_TAB[i][9] * 0.4 * 931.49 * 1.16*1.16 * std::pow(AFBU,5.0/3.0) / IINERTTOT;
-     double JPRFLIGHT = BU_TAB[i][9] * 0.4 * 931.49 * 1.16*1.16 * std::pow(AIMFBU,5.0/3.0) / IINERTTOT;
+     G4double JPRFHEAVY = BU_TAB[i][9] * 0.4 * 931.49 * 1.16*1.16 * std::pow(AFBU,5.0/3.0) / IINERTTOT;
+     G4double JPRFLIGHT = BU_TAB[i][9] * 0.4 * 931.49 * 1.16*1.16 * std::pow(AIMFBU,5.0/3.0) / IINERTTOT;
 
 // Lorentz kinematics
 //           BU_TAB(I,5) = BU_TAB(I,5) + VX1_IMF
@@ -1072,12 +1066,12 @@ c       Clear BU_TAB (array of multifragmentation products)
                BU_TAB[i][5] = VYOUT;
                BU_TAB[i][6] = VZOUT;
 
-     double vx1ev_imf=0., vy1ev_imf=0., vz1ev_imf=0., zdummy=0., adummy=0., tkedummy=0.,jprf1=0.;
+     G4double vx1ev_imf=0., vy1ev_imf=0., vz1ev_imf=0., zdummy=0., adummy=0., tkedummy=0.,jprf1=0.;
 
 // Decay of IMF's partner:
                evapora(ZFBU,AFBU,&EEIMFP,JPRFHEAVY, &ZFFBU, &AFFBU, &mtota,  &vz1ev_imf, &vx1ev_imf,&vy1ev_imf, &FFBU1, &FIMFBU1, &zdummy, &adummy,&tkedummy, &jprf1, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
 
-               for(int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
                EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
                EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
 //Lorentz kinematics
@@ -1107,16 +1101,16 @@ c       Clear BU_TAB (array of multifragmentation products)
                BU_TAB[i][5] = VYOUT;
                BU_TAB[i][6] = VZOUT;
 // For IMF - fission and IMF emission are not allowed
-              int FFBU2 = 0;
-              int FIMFBU2 = 0;
+              G4int FFBU2 = 0;
+              G4int FIMFBU2 = 0;
               opt->optimfallowed = 0;  //  IMF is not allowed
               fiss->ifis = 0;          //  fission is not allowed
 // Decay of IMF
-              double zffimf, affimf,zdummy1, adummy1, tkedummy1, jprf2, vx2ev_imf, vy2ev_imf, vz2ev_imf;
+              G4double zffimf, affimf,zdummy1, adummy1, tkedummy1, jprf2, vx2ev_imf, vy2ev_imf, vz2ev_imf;
 
               evapora(ZIMFBU,AIMFBU,&EEIMF,JPRFLIGHT, &zffimf, &affimf, &mtota, &vz2ev_imf, &vx2ev_imf,&vy2ev_imf, &FFBU2, &FIMFBU2, &zdummy1, &adummy1,&tkedummy1, &jprf2, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
 
-               for(int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
                EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
                EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
 //Lorentz kinematics
@@ -1176,7 +1170,7 @@ c       Clear BU_TAB (array of multifragmentation products)
       ABU_SUM = 0.0;
       ZBU_SUM = 0.0;
 //
-      for(int i=0;i<IMULTBU;i++){
+      for(G4int i=0;i<IMULTBU;i++){
        ABU_SUM = ABU_SUM + BU_TAB[i][8];
        ZBU_SUM = ZBU_SUM + BU_TAB[i][7];
        unstable_nuclei(idnint(BU_TAB[i][8]),idnint(BU_TAB[i][7]), &afpnew,&zfpnew,IOUNSTABLE,
@@ -1189,16 +1183,16 @@ c       Clear BU_TAB (array of multifragmentation products)
 
          if(IOUNSTABLE>0){
 // Properties of "heavy fragment":
-            ABU_SUM = ABU_SUM + double(afpnew) - BU_TAB[i][8];
-            ZBU_SUM = ZBU_SUM + double(zfpnew) - BU_TAB[i][7];
-             BU_TAB[i][8] = double(afpnew);
-             BU_TAB[i][7] = double(zfpnew);
+            ABU_SUM = ABU_SUM + G4double(afpnew) - BU_TAB[i][8];
+            ZBU_SUM = ZBU_SUM + G4double(zfpnew) - BU_TAB[i][7];
+             BU_TAB[i][8] = G4double(afpnew);
+             BU_TAB[i][7] = G4double(zfpnew);
              BU_TAB[i][4] = VP1X;
              BU_TAB[i][5] = VP1Y;
              BU_TAB[i][6] = VP1Z;
 
 //Properties of "light" fragments:
-             for(int IJ=0;IJ<ILOOP;IJ++){
+             for(G4int IJ=0;IJ<ILOOP;IJ++){
               BU_TAB[IMULTBU+INEWLOOP+IJ][7] = BU_TAB_TEMP1[IJ][0];
               BU_TAB[IMULTBU+INEWLOOP+IJ][8] = BU_TAB_TEMP1[IJ][1];
               BU_TAB[IMULTBU+INEWLOOP+IJ][4] = BU_TAB_TEMP1[IJ][2];
@@ -1227,7 +1221,7 @@ c       Clear BU_TAB (array of multifragmentation products)
         VY_PREF = VYOUT;
         VZ_PREF = VZOUT;
 
-        for(int i=0;i<IMULTBU;i++){
+        for(G4int i=0;i<IMULTBU;i++){
          lorentz_boost(VX_incl,VY_incl,VZ_incl,
                 BU_TAB[i][4],BU_TAB[i][5],BU_TAB[i][6],
                 &VXOUT,&VYOUT,&VZOUT);
@@ -1235,7 +1229,7 @@ c       Clear BU_TAB (array of multifragmentation products)
          BU_TAB[i][5] = VYOUT;
          BU_TAB[i][6] = VZOUT;
         }
-        for(int i=0;i<IEV_TAB;i++){
+        for(G4int i=0;i<IEV_TAB;i++){
          lorentz_boost(VX_incl,VY_incl,VZ_incl,
                 EV_TAB[i][2],EV_TAB[i][3],EV_TAB[i][4],
                 &VXOUT,&VYOUT,&VZOUT);
@@ -1292,13 +1286,13 @@ c       Clear BU_TAB (array of multifragmentation products)
        unstable_nuclei(aprfp,zprfp,&afpnew,&zfpnew,IOUNSTABLE,
        VX_PREF, VY_PREF, VZ_PREF,
        &VP1X,&VP1Y,&VP1Z,EV_TAB_TEMP,&ILOOP);
-         af = double(afpnew);
-         zf = double(zfpnew);
+         af = G4double(afpnew);
+         zf = G4double(zfpnew);
          VX_PREF = VP1X;
          VY_PREF = VP1Y;
          VZ_PREF = VP1Z;
-         for(int I = 0;I<ILOOP;I++){
-          for(int IJ = 0; IJ<5; IJ++)
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
            EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
          }
         IEV_TAB = IEV_TAB + ILOOP;
@@ -1321,13 +1315,13 @@ c       Clear BU_TAB (array of multifragmentation products)
        unstable_nuclei(aprfp,zprfp,&afpnew,&zfpnew,IOUNSTABLE,
        VX_PREF, VY_PREF, VZ_PREF,
        &VP1X,&VP1Y,&VP1Z,EV_TAB_TEMP,&ILOOP);
-         af = double(afpnew);
-         zf = double(zfpnew);
+         af = G4double(afpnew);
+         zf = G4double(zfpnew);
          VX_PREF = VP1X;
          VY_PREF = VP1Y;
          VZ_PREF = VP1Z;
-         for(int I = 0;I<ILOOP;I++){
-          for(int IJ = 0; IJ<5; IJ++)
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
            EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
          }
         IEV_TAB = IEV_TAB + ILOOP;
@@ -1347,7 +1341,7 @@ c       Clear BU_TAB (array of multifragmentation products)
 //
       evapora(zprf,aprf,&ee,jprf, &zf, &af, &mtota, &vz_eva, &vx_eva, &vy_eva, &ff, &fimf, &zimf, &aimf,&tkeimf, &jprf0, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
 //
-               for(int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
                EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
                EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
 //
@@ -1386,7 +1380,7 @@ c       Clear BU_TAB (array of multifragmentation products)
       VFP1_CM[0] = V_CM[0];
       VFP1_CM[1] = V_CM[1];
       VFP1_CM[2] = V_CM[2];
-       for(int j=0;j<3;j++){
+       for(G4int j=0;j<3;j++){
         VIMF_CM[j] = 0.0;
         VFP2_CM[j] = 0.0;
        }
@@ -1405,11 +1399,11 @@ c       Clear BU_TAB (array of multifragmentation products)
     varntp->kfis = 1;
    //   ftype1=0;
 
-      int IEV_TAB_FIS = 0,imode=0;
+      G4int IEV_TAB_FIS = 0,imode=0;
 
-      double vx1_fission=0.,vy1_fission=0.,vz1_fission=0.;
-      double vx2_fission=0.,vy2_fission=0.,vz2_fission=0.;
-      double vx_eva_sc=0.,vy_eva_sc=0.,vz_eva_sc=0.;
+      G4double vx1_fission=0.,vy1_fission=0.,vz1_fission=0.;
+      G4double vx2_fission=0.,vy2_fission=0.,vz2_fission=0.;
+      G4double vx_eva_sc=0.,vy_eva_sc=0.,vz_eva_sc=0.;
 
       fission(af,zf,ee,jprf0,
           &vx1_fission,&vy1_fission,&vz1_fission,
@@ -1417,7 +1411,7 @@ c       Clear BU_TAB (array of multifragmentation products)
           &ZFP1,&AFP1,&ZFP2,&AFP2,&imode,
           &vx_eva_sc,&vy_eva_sc,&vz_eva_sc,EV_TEMP,&IEV_TAB_FIS);
 
-               for(int IJ = 0; IJ< IEV_TAB_FIS;IJ++){ 
+               for(G4int IJ = 0; IJ< IEV_TAB_FIS;IJ++){ 
                EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
                EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
 // Lorentz kinematics
@@ -1474,40 +1468,40 @@ c       Clear BU_TAB (array of multifragmentation products)
 //
     }else if(ftype == 2){
 // IMF emission: Heavy partner is allowed to fission and to emitt IMF, but ONLY once.
-      int FF11 = 0;
-      int FIMF11 = 0;
+      G4int FF11 = 0;
+      G4int FIMF11 = 0;
       opt->optimfallowed = 1;  //  IMF is allowed
       fiss->ifis = 1;          //  fission is allowed
 
 //  Velocities of IMF and partner: 1 denotes partner, 2 denotes IMF
-      double EkinR1 = tkeimf * aimf / (af+aimf);
-      double EkinR2 = tkeimf * af / (af+aimf);
-      double V1 = std::sqrt(EkinR1/af) * 1.3887;
-      double V2 = std::sqrt(EkinR2/aimf) * 1.3887;
-      double VZ1_IMF = (2.0 * G4AblaRandom::flat() - 1.0) * V1;
-      double VPERP1 = std::sqrt(V1*V1 - VZ1_IMF*VZ1_IMF);
-      double ALPHA1 = G4AblaRandom::flat() * 2. * 3.142;
-      double VX1_IMF = VPERP1 * std::sin(ALPHA1);
-      double VY1_IMF = VPERP1 * std::cos(ALPHA1);
-      double VX2_IMF = - VX1_IMF / V1 * V2;
-      double VY2_IMF = - VY1_IMF / V1 * V2;
-      double VZ2_IMF = - VZ1_IMF / V1 * V2;
+      G4double EkinR1 = tkeimf * aimf / (af+aimf);
+      G4double EkinR2 = tkeimf * af / (af+aimf);
+      G4double V1 = std::sqrt(EkinR1/af) * 1.3887;
+      G4double V2 = std::sqrt(EkinR2/aimf) * 1.3887;
+      G4double VZ1_IMF = (2.0 * G4AblaRandom::flat() - 1.0) * V1;
+      G4double VPERP1 = std::sqrt(V1*V1 - VZ1_IMF*VZ1_IMF);
+      G4double ALPHA1 = G4AblaRandom::flat() * 2. * 3.142;
+      G4double VX1_IMF = VPERP1 * std::sin(ALPHA1);
+      G4double VY1_IMF = VPERP1 * std::cos(ALPHA1);
+      G4double VX2_IMF = - VX1_IMF / V1 * V2;
+      G4double VY2_IMF = - VY1_IMF / V1 * V2;
+      G4double VZ2_IMF = - VZ1_IMF / V1 * V2;
 
-      double EEIMFP = ee * af /(af + aimf);
-      double EEIMF = ee * aimf /(af + aimf);
+      G4double EEIMFP = ee * af /(af + aimf);
+      G4double EEIMF = ee * aimf /(af + aimf);
 
 // Decay of heavy partner
-     double IINERTTOT = 0.40 * 931.490 * 1.160*1.160 *( std::pow(aimf,5.0/3.0) + std::pow(af,5.0/3.0)) + 931.490 * 1.160*1.160*aimf*af/(aimf+af)*(std::pow(aimf,1./3.) + std::pow(af,1./3.))*(std::pow(aimf,1./3.) + std::pow(af,1./3.));
+     G4double IINERTTOT = 0.40 * 931.490 * 1.160*1.160 *( std::pow(aimf,5.0/3.0) + std::pow(af,5.0/3.0)) + 931.490 * 1.160*1.160*aimf*af/(aimf+af)*(std::pow(aimf,1./3.) + std::pow(af,1./3.))*(std::pow(aimf,1./3.) + std::pow(af,1./3.));
 
-     double JPRFHEAVY = jprf0 * 0.4 * 931.49 * 1.16*1.16 * std::pow(af,5.0/3.0) / IINERTTOT;
-     double JPRFLIGHT = jprf0 * 0.4 * 931.49 * 1.16*1.16 * std::pow(aimf,5.0/3.0) / IINERTTOT;
+     G4double JPRFHEAVY = jprf0 * 0.4 * 931.49 * 1.16*1.16 * std::pow(af,5.0/3.0) / IINERTTOT;
+     G4double JPRFLIGHT = jprf0 * 0.4 * 931.49 * 1.16*1.16 * std::pow(aimf,5.0/3.0) / IINERTTOT;
      if(af<2.0) std::cout << "RN117-4,AF,ZF,EE,JPRFheavy" << std::endl;
 
-     double vx1ev_imf=0., vy1ev_imf=0., vz1ev_imf=0., zdummy=0., adummy=0., tkedummy=0.,jprf1=0.;
+     G4double vx1ev_imf=0., vy1ev_imf=0., vz1ev_imf=0., zdummy=0., adummy=0., tkedummy=0.,jprf1=0.;
 
      evapora(zf,af,&EEIMFP,JPRFHEAVY, &zff, &aff, &mtota, &vz1ev_imf, &vx1ev_imf,&vy1ev_imf, &FF11, &FIMF11, &zdummy, &adummy,&tkedummy, &jprf1, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
 
-               for(int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
                EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
                EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
 //
@@ -1528,18 +1522,18 @@ c       Clear BU_TAB (array of multifragmentation products)
                IEV_TAB = IEV_TAB + IEV_TAB_TEMP;
 
 // For IMF - fission and IMF emission are not allowed
-     int FF22 = 0;
-     int FIMF22 = 0;
+     G4int FF22 = 0;
+     G4int FIMF22 = 0;
       opt->optimfallowed = 0; //  IMF is not allowed
       fiss->ifis = 0;         //  fission is not allowed
 
 // Decay of IMF
-     double zffimf, affimf,zdummy1, adummy1, tkedummy1,jprf2,vx2ev_imf,vy2ev_imf,
+     G4double zffimf, affimf,zdummy1, adummy1, tkedummy1,jprf2,vx2ev_imf,vy2ev_imf,
     vz2ev_imf;
 
      evapora(zimf,aimf,&EEIMF,JPRFLIGHT, &zffimf, &affimf, &mtota, &vz2ev_imf, &vx2ev_imf,&vy2ev_imf, &FF22, &FIMF22, &zdummy1, &adummy1,&tkedummy1, &jprf2, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
 
-               for(int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
                EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
                EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
 //
@@ -1601,7 +1595,7 @@ c       Clear BU_TAB (array of multifragmentation products)
       ftype = 2;
       AFPIMF = idnint(affimf);
       ZFPIMF = idnint(zffimf);
-        for(int I=0;I<3;I++)
+        for(G4int I=0;I<3;I++)
          VFP2_CM[I] = 0.0;
 
 
@@ -1618,11 +1612,11 @@ c       Clear BU_TAB (array of multifragmentation products)
     //  ftype1=0;
       ftype=21;
 
-      int IEV_TAB_FIS = 0,imode=0;
+      G4int IEV_TAB_FIS = 0,imode=0;
 
-      double vx1_fission=0.,vy1_fission=0.,vz1_fission=0.;
-      double vx2_fission=0.,vy2_fission=0.,vz2_fission=0.;
-      double vx_eva_sc=0.,vy_eva_sc=0.,vz_eva_sc=0.;
+      G4double vx1_fission=0.,vy1_fission=0.,vz1_fission=0.;
+      G4double vx2_fission=0.,vy2_fission=0.,vz2_fission=0.;
+      G4double vx_eva_sc=0.,vy_eva_sc=0.,vz_eva_sc=0.;
 
       fission(af,zf,ee,jprf1,
           &vx1_fission,&vy1_fission,&vz1_fission,
@@ -1630,7 +1624,7 @@ c       Clear BU_TAB (array of multifragmentation products)
           &ZFP1,&AFP1,&ZFP2,&AFP2,&imode,
           &vx_eva_sc,&vy_eva_sc,&vz_eva_sc,EV_TEMP,&IEV_TAB_FIS);
 
-               for(int IJ = 0; IJ< IEV_TAB_FIS;IJ++){ 
+               for(G4int IJ = 0; IJ< IEV_TAB_FIS;IJ++){ 
                EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
                EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
 // Lorentz kinematics
@@ -1717,14 +1711,14 @@ c       Clear BU_TAB (array of multifragmentation products)
       EkinR2 = tkeimf * af / (af+aimf);
       V1 = std::sqrt(EkinR1/af) * 1.3887;
       V2 = std::sqrt(EkinR2/aimf) * 1.3887;
-      double VZ1_IMFS = (2.0 * G4AblaRandom::flat() - 1.0) * V1;
+      G4double VZ1_IMFS = (2.0 * G4AblaRandom::flat() - 1.0) * V1;
              VPERP1 = std::sqrt(V1*V1 - VZ1_IMFS*VZ1_IMFS);
              ALPHA1 = G4AblaRandom::flat() * 2. * 3.142;
-      double VX1_IMFS = VPERP1 * std::sin(ALPHA1);
-      double VY1_IMFS = VPERP1 * std::cos(ALPHA1);
-      double VX2_IMFS = - VX1_IMFS / V1 * V2;
-      double VY2_IMFS = - VY1_IMFS / V1 * V2;
-      double VZ2_IMFS = - VZ1_IMFS / V1 * V2;
+      G4double VX1_IMFS = VPERP1 * std::sin(ALPHA1);
+      G4double VY1_IMFS = VPERP1 * std::cos(ALPHA1);
+      G4double VX2_IMFS = - VX1_IMFS / V1 * V2;
+      G4double VY2_IMFS = - VY1_IMFS / V1 * V2;
+      G4double VZ2_IMFS = - VZ1_IMFS / V1 * V2;
 
              EEIMFP = ee * af /(af + aimf);
              EEIMF = ee * aimf /(af + aimf);
@@ -1735,11 +1729,11 @@ c       Clear BU_TAB (array of multifragmentation products)
       JPRFHEAVY = jprf1 * 0.4 * 931.49 * 1.16*1.16 * std::pow(af,5.0/3.0) / IINERTTOT;
       JPRFLIGHT = jprf1 * 0.4 * 931.49 * 1.16*1.16 * std::pow(aimf,5.0/3.0) / IINERTTOT;
 
-     double zffs=0.,affs=0.,vx1ev_imfs=0.,vy1ev_imfs=0.,vz1ev_imfs=0.,jprf3=0.;
+     G4double zffs=0.,affs=0.,vx1ev_imfs=0.,vy1ev_imfs=0.,vz1ev_imfs=0.,jprf3=0.;
 
      evapora(zf,af,&EEIMFP,JPRFHEAVY, &zffs, &affs, &mtota, &vz1ev_imfs, &vx1ev_imfs,&vy1ev_imfs, &FF11, &FIMF11, &zdummy, &adummy,&tkedummy, &jprf3, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
 
-               for(int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
                EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
                EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
 //
@@ -1766,11 +1760,11 @@ c       Clear BU_TAB (array of multifragmentation products)
       FF22 = 0;
       FIMF22 = 0;
 // Decay of "second" IMF
-     double zffimfs=0.,affimfs=0.,vx2ev_imfs=0.,vy2ev_imfs=0.,vz2ev_imfs=0.,jprf4=0.;
+     G4double zffimfs=0.,affimfs=0.,vx2ev_imfs=0.,vy2ev_imfs=0.,vz2ev_imfs=0.,jprf4=0.;
 
      evapora(zimf,aimf,&EEIMF,JPRFLIGHT, &zffimfs, &affimfs, &mtota, &vz2ev_imfs, &vx2ev_imfs,&vy2ev_imfs, &FF22, &FIMF22, &zdummy1, &adummy1,&tkedummy1, &jprf4, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
 
-               for(int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
                EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
                EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
 //
@@ -1855,8 +1849,8 @@ c       Clear BU_TAB (array of multifragmentation products)
       VFP1_CM[0] = VP1X;
       VFP1_CM[1] = VP1Y;
       VFP1_CM[2] = VP1Z;
-         for(int I = 0;I<ILOOP;I++){
-          for(int IJ = 0; IJ<5; IJ++)
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
            EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
          }
         IEV_TAB = IEV_TAB + ILOOP;
@@ -1875,8 +1869,8 @@ c       Clear BU_TAB (array of multifragmentation products)
         VIMF_CM[0] = VP1X;
         VIMF_CM[1] = VP1Y;
         VIMF_CM[2] = VP1Z;
-         for(int I = 0;I<ILOOP;I++){
-          for(int IJ = 0; IJ<5; IJ++)
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
            EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
          }
         IEV_TAB = IEV_TAB + ILOOP;
@@ -1895,8 +1889,8 @@ c       Clear BU_TAB (array of multifragmentation products)
         VFP2_CM[0] = VP1X;
         VFP2_CM[1] = VP1Y;
         VFP2_CM[2] = VP1Z;
-         for(int I = 0;I<ILOOP;I++){
-          for(int IJ = 0; IJ<5; IJ++)
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
            EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
          }
          IEV_TAB = IEV_TAB + ILOOP;
@@ -1921,8 +1915,8 @@ c       Clear BU_TAB (array of multifragmentation products)
       VFP1_CM[0] = VP1X;
       VFP1_CM[1] = VP1Y;
       VFP1_CM[2] = VP1Z;
-         for(int I = 0;I<ILOOP;I++){
-          for(int IJ = 0; IJ<5; IJ++)
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
            EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
          }
         IEV_TAB = IEV_TAB + ILOOP;
@@ -1940,8 +1934,8 @@ c       Clear BU_TAB (array of multifragmentation products)
       VFP2_CM[0] = VP1X;
       VFP2_CM[1] = VP1Y;
       VFP2_CM[2] = VP1Z;
-         for(int I = 0;I<ILOOP;I++){
-          for(int IJ = 0; IJ<5; IJ++)
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
            EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
          }
         IEV_TAB = IEV_TAB + ILOOP;
@@ -1960,8 +1954,8 @@ c       Clear BU_TAB (array of multifragmentation products)
         VIMF_CM[0] = VP1X;
         VIMF_CM[1] = VP1Y;
         VIMF_CM[2] = VP1Z;
-         for(int I = 0;I<ILOOP;I++){
-          for(int IJ = 0; IJ<5; IJ++)
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
            EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
          }
         IEV_TAB = IEV_TAB + ILOOP;
@@ -2081,8 +2075,8 @@ void G4Abla::initEvapora()
     //    G4Exception("ERROR: Failed to read datafiles.");
   }
   
-  for(int z = 0; z < 99; z++) { //do 30  z = 0,98,1                                                 
-    for(int n = 0; n < 154; n++) { //do 31  n = 0,153,1                                              
+  for(G4int z = 0; z < 99; z++) { //do 30  z = 0,98,1                                                 
+    for(G4int n = 0; n < 154; n++) { //do 31  n = 0,153,1                                              
       ecld->ecfnz[n][z] = 0.e0;
       ec2sub->ecnz[n][z] = dataInterface->getEcnz(n,z);
       ecld->ecgnz[n][z] = dataInterface->getEcnz(n,z);
@@ -2092,26 +2086,26 @@ void G4Abla::initEvapora()
     }
   }
 
-  for(int z = 0; z < 137; z++){                                                  
-    for(int n = 0; n < 251; n++){  
+  for(G4int z = 0; z < 137; z++){                                                  
+    for(G4int n = 0; n < 251; n++){  
       ecld->beta2[n][z] = dataInterface->getBeta2(n,z);
       ecld->beta4[n][z] = dataInterface->getBeta4(n,z);
     }
   }
 
-  for(int z = 0; z < 500; z++) {
-    for(int a = 0; a < 500; a++) {
+  for(G4int z = 0; z < 500; z++) {
+    for(G4int a = 0; a < 500; a++) {
       pace->dm[z][a] = dataInterface->getPace2(z,a);
     }
   }
 
 
 
-  double mfrldm[154][13];
+  G4double mfrldm[154][13];
 // For 2 < Z < 12 we take "experimental" shell corrections instead of calculated
 // Read FRLDM tables
-  for(int i=0;i<13;i++){
-   for(int j=0;j<154;j++){
+  for(G4int i=0;i<13;i++){
+   for(G4int j=0;j<154;j++){
       if(dataInterface->getMexpID(j,i)==1){
        masses->mexpiop[j][i]=1;  
       }else{
@@ -2125,9 +2119,9 @@ void G4Abla::initEvapora()
    }
   }
 
-  double e0=0.;
-  for(int i=1;i<13;i++){
-   for(int j=1;j<154;j++){
+  G4double e0=0.;
+  for(G4int i=1;i<13;i++){
+   for(G4int j=1;j<154;j++){
       masses->bind[j][i]=0.;
       if(masses->mexpiop[j][i]==1){
         if(j<3){
@@ -2143,13 +2137,13 @@ void G4Abla::initEvapora()
 //
 // Parametrization of CT model by Ignatyuk; note that E0 is shifted to correspond
 // to pairing shift in Fermi-gas model (there, energy is shifted taking odd-odd nuclei as bassis)
-              double para=0.;
+              G4double para=0.;
               parite(j+i,&para);
                 if(para<0.0){
 // e-o, o-e
                  e0 =  0.285+11.17*std::pow(j+i,-0.464) -0.390-0.00058*(j+i);
                 }else{
-                  double parz=0.;
+                  G4double parz=0.;
                   parite(i,&parz);
                   if (parz>0.0){
 // e-e
@@ -2161,10 +2155,10 @@ void G4Abla::initEvapora()
                 }
 //
                 if((j==i)&&mod(j,2)==1&&mod(i,2)==1){
-                e0 = e0 - 30.0*(1.0/double(j+i));
+                e0 = e0 - 30.0*(1.0/G4double(j+i));
                 }
 
-            double delta_tot = ec2sub->ecnz[j][i] - ecld->vgsld[j][i];
+            G4double delta_tot = ec2sub->ecnz[j][i] - ecld->vgsld[j][i];
             ec2sub->ecnz[j][i] = dataInterface->getMexp(j,i) - (mfrldm[j][i] - e0);
 
             ecld->vgsld[j][i] = max(0.0,ec2sub->ecnz[j][i] - delta_tot);
@@ -2189,11 +2183,12 @@ void G4Abla::SetParametersG4(G4int z, G4int a)
 
   //collective enhancement switched on 1 or off 0 in densn (qr=val or =1.)
   fiss->optcol = 1;
-  if(fiss->zt<56){  
+  if(fiss->zt<83 && fiss->zt>56){
+  fiss->optshp = 1;
+  }
+  if(fiss->zt<=56){  
   fiss->optcol = 0;
   fiss->optshp = 3;
-  //if(fiss->zt<27)
-  //opt->optshpimf = 3;
   }
 }
 
@@ -2380,7 +2375,7 @@ G4double G4Abla::spdef(G4int a, G4int z, G4int optxfis)
   return alpha2[0]; // The algorithm is not supposed to reach this point.
 }
 
-G4double G4Abla::fissility(int a,int z, int optxfis)
+G4double G4Abla::fissility(G4int a,G4int z, G4int optxfis)
 {
   // CALCULATION OF FISSILITY PARAMETER                                 
   // 
@@ -2392,9 +2387,9 @@ G4double G4Abla::fissility(int a,int z, int optxfis)
   G4double aa = 0.0, zz = 0.0, i = 0.0,z2a,C_S,R,W,G,G1,G2,A_CC;
   G4double fissilityResult = 0.0;
 
-  aa = double(a);
-  zz = double(z);
-  i  = double(a-2*z) / aa;
+  aa = G4double(a);
+  zz = G4double(z);
+  i  = G4double(a-2*z) / aa;
   z2a= zz*zz/aa;
 
   // myers & swiatecki droplet modell                        
@@ -2557,17 +2552,17 @@ G4int *ff_par,G4int *fimf_par, G4double *fzimf, G4double *faimf,G4double *tkeimf
   G4double jprfn=0.0, jprfp=0.0, jprfd=0.0, jprft=0.0, jprfhe=0.0, jprfa=0.0;
   G4double tsum = 0.0;
 
-  const double c = 29.9792458;
-  const double mu = 931.494;
-  const double mu2 = 931.494*931.494;
+  const G4double c = 29.9792458;
+  const G4double mu = 931.494;
+  const G4double mu2 = 931.494*931.494;
 
   G4double pleva = 0.0;
   G4double pxeva = 0.0;
   G4double pyeva = 0.0;
   G4int IEV_TAB_TEMP=0;
 
-  for(int I1=0;I1<200;I1++)
-  for(int I2=0;I2<5;I2++)
+  for(G4int I1=0;I1<200;I1++)
+  for(G4int I2=0;I2<5;I2++)
   EV_TEMP[I1][I2] = 0.0;
 //
   ff = 0;
@@ -2762,7 +2757,7 @@ G4int *ff_par,G4int *fimf_par, G4double *fzimf, G4double *faimf,G4double *tkeimf
 // AIMF and ZIMF obtained from complete procedure (integration over all
 // possible Gamma(IMF) and then randomly picked
 
-   int iloop=0;
+   G4int iloop=0;
    dir1973:
    imf(af,zf,tcn,ee,&zimf,&aimf,&bimf,&sbimf,&timf,jprf);
    iloop++;
@@ -2779,7 +2774,7 @@ G4int *ff_par,G4int *fimf_par, G4double *fzimf, G4double *faimf,G4double *tkeimf
 // from the distribution determined with the temperature at saddle point
 // TKEIMF is the kinetic energy in the centre of mass of IMF and its partner
 
-   int ii=0;
+   G4int ii=0;
    dir1235:
    tkeimf= fmaxhaz(timf);
    ii++;
@@ -2850,13 +2845,13 @@ G4int *ff_par,G4int *fimf_par, G4double *fzimf, G4double *faimf,G4double *tkeimf
         stet1 = std::sqrt(1.0 - std::pow(ctet1,2)); // component perpendicular to z
         rnd = G4AblaRandom::flat();
         phi1 = rnd*2.0*3.141592654;       // angle in x-y plane: uniform probability between 0 and 2*pi
-        double xcv = stet1*std::cos(phi1);// x component
-        double ycv = stet1*std::sin(phi1);// y component
-        double zcv = ctet1;               // z component
+        G4double xcv = stet1*std::cos(phi1);// x component
+        G4double ycv = stet1*std::sin(phi1);// y component
+        G4double zcv = ctet1;               // z component
 // In the CM system
         if(gammadecay==0){
 // Light particle
-           double ETOT_LP = std::sqrt(pc*pc + amoins*amoins * mu2);
+           G4double ETOT_LP = std::sqrt(pc*pc + amoins*amoins * mu2);
            EV_TEMP[IEV_TAB_TEMP][2] = c * pc * xcv / ETOT_LP;
            EV_TEMP[IEV_TAB_TEMP][3] = c * pc * ycv / ETOT_LP;
            EV_TEMP[IEV_TAB_TEMP][4] = c * pc * zcv / ETOT_LP;
@@ -2866,7 +2861,7 @@ G4int *ff_par,G4int *fimf_par, G4double *fzimf, G4double *faimf,G4double *tkeimf
            EV_TEMP[IEV_TAB_TEMP][3] = pc * ycv;
            EV_TEMP[IEV_TAB_TEMP][4] = pc * zcv;
         }
-        double VXOUT=0.,VYOUT=0.,VZOUT=0.;
+        G4double VXOUT=0.,VYOUT=0.,VZOUT=0.;
         lorentz_boost(vxeva,vyeva,vleva,
             EV_TEMP[IEV_TAB_TEMP][2],EV_TEMP[IEV_TAB_TEMP][3],
             EV_TEMP[IEV_TAB_TEMP][4],
@@ -2876,11 +2871,11 @@ G4int *ff_par,G4int *fimf_par, G4double *fzimf, G4double *faimf,G4double *tkeimf
         EV_TEMP[IEV_TAB_TEMP][4] = VZOUT;
 // Heavy residue
         if(gammadecay==0){
-        double v2 = std::pow(EV_TEMP[IEV_TAB_TEMP][2],2.) +
+        G4double v2 = std::pow(EV_TEMP[IEV_TAB_TEMP][2],2.) +
              std::pow(EV_TEMP[IEV_TAB_TEMP][3],2.) +
              std::pow(EV_TEMP[IEV_TAB_TEMP][4],2.);
-        double gamma = 1.0/std::sqrt(1.0 - v2 / (c*c));
-        double etot_lp = amoins*mu * gamma;
+        G4double gamma = 1.0/std::sqrt(1.0 - v2 / (c*c));
+        G4double etot_lp = amoins*mu * gamma;
         pxeva = pxeva - EV_TEMP[IEV_TAB_TEMP][2] * etot_lp / c;
         pyeva = pyeva - EV_TEMP[IEV_TAB_TEMP][3] * etot_lp / c;
         pleva = pleva - EV_TEMP[IEV_TAB_TEMP][4] * etot_lp / c;
@@ -2890,9 +2885,9 @@ G4int *ff_par,G4int *fimf_par, G4double *fzimf, G4double *faimf,G4double *tkeimf
         pyeva = pyeva - EV_TEMP[IEV_TAB_TEMP][3];
         pleva = pleva - EV_TEMP[IEV_TAB_TEMP][4];
         }
-        double pteva = std::sqrt(pxeva*pxeva + pyeva*pyeva);
+        G4double pteva = std::sqrt(pxeva*pxeva + pyeva*pyeva);
 // To be checked:
-        double etot = std::sqrt ( pleva*pleva + pteva*pteva + af*af * mu2 );
+        G4double etot = std::sqrt ( pleva*pleva + pteva*pteva + af*af * mu2 );
         vxeva = c * pxeva / etot;  // recoil velocity components of residue due to evaporation
         vyeva = c * pyeva / etot;
         vleva = c * pleva / etot;
@@ -3420,7 +3415,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf, G4dou
     nt = temp;
     ecn=0.0;
     if(densn>0.){
-     int IS=0;
+     G4int IS=0;
      if(imaxwell == 1){
       rnt = nt;
       dir1234:
@@ -3474,7 +3469,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf, G4dou
     pt = temp;
     ecp = 0.;
     if(densp>0.){
-     int IS=0;
+     G4int IS=0;
      if(imaxwell == 1){
       rpt = pt;
       dir1235:
@@ -3530,7 +3525,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf, G4dou
     dt = temp;
     ecd = 0.0;
     if(densd>0.){
-     int IS=0;
+     G4int IS=0;
      if(imaxwell == 1){
       rdt = dt;
       dir1236:
@@ -3586,7 +3581,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf, G4dou
     tt = temp;
     ect=0.;
     if(denst>0.){
-     int IS=0;
+     G4int IS=0;
      if(imaxwell == 1){
       rtt = tt;
       dir1237:
@@ -3642,7 +3637,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf, G4dou
     at = temp;
     eca = 0.0;
     if(densa>0.){
-     int IS=0;
+     G4int IS=0;
      if(imaxwell == 1){
       rat = at;
       dir1238:
@@ -3698,7 +3693,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf, G4dou
     het = temp;
     eche = 0.0;
     if(denshe>0.){
-     int IS=0;
+     G4int IS=0;
      if(imaxwell == 1){
       rhet = het;
       dir1239:
@@ -3801,7 +3796,7 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf, G4dou
 
         inmax = max(inmax,inmin);          // In order to keep the variables below
 
-        for(int iaimf=izimf+inmin;iaimf<=izimf+inmax;iaimf++){
+        for(G4int iaimf=izimf+inmin;iaimf<=izimf+inmax;iaimf++){
          aimf=double(iaimf);
          if(aimf>=a || zimf>=zprf){
           width_imf = 0.0;
@@ -3861,8 +3856,8 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf, G4dou
 
         inmax = max(inmax,inmin);          // In order to keep the variables below
 
-        for(int iaimf=izimf+inmin;iaimf<=izimf+inmax;iaimf++){
-         aimf=double(iaimf);
+        for(G4int iaimf=izimf+inmin;iaimf<=izimf+inmax;iaimf++){
+         aimf=G4double(iaimf);
          if(aimf>=a || zimf>=zprf){
           width_imf = 0.0;
          }else{
@@ -4335,7 +4330,7 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
 //
    if(ifis==0&&bs!=1.0){
 // - With increasing excitation energy system in getting less and less deformed:
-     double ponq = (e-100.0)/5.0;
+     G4double ponq = (e-100.0)/5.0;
      if(ponq>700.0) ponq = 700.0;
        bs = 1.0/(1.0+std::exp(-ponq)) + 1.0/(1.0+std::exp(ponq)) * bsin;
        bk = 1.0/(1.0+std::exp(-ponq)) + 1.0/(1.0+std::exp(ponq)) * bkin;
@@ -4430,7 +4425,7 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
   // to avoid the singularity e = 0                                        
   if (ee < 5.0) {
     y1 = std::sqrt(pa*fecor);
-    for(int j = 0; j < 5; j++) {
+    for(G4int j = 0; j < 5; j++) {
       y2 = pa*fecor*(1.e0-std::exp(-y1));
       y1 = std::sqrt(y2);
     }
@@ -4440,7 +4435,7 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
     if (fecor < 1.0) {
       ecor1=1.0;
       y11 = std::sqrt(pa*ecor1);
-      for(int j = 0; j < 7; j++) {
+      for(G4int j = 0; j < 7; j++) {
 	y21 = pa*ecor1*(1.0-std::exp(-y11));
 	y11 = std::sqrt(y21);
       }
@@ -4552,7 +4547,7 @@ c in units 1/MeV
 /*
 C GROUND STATE:
 C FP_PER ~ 1+0.5*alpha2, FP_PAR ~ 1-alpha2 (Hasse & Myers, Geom. relat. macr. nucl. phys.)
-C alpha2 = sqrt(5/(4*pi))*beta2
+C alpha2 = std::sqrt(5/(4*pi))*beta2
 */
     fp_per = 0.4*std::pow(a,5.0/3.0)*fnorm*(1.0+0.50*defbet*std::sqrt(5.0/(4.0*pi)));
     fp_par = 0.40*std::pow(a,5.0/3.0)*fnorm*(1.0-defbet*std::sqrt(5.0/(4.0*pi)));
@@ -4652,19 +4647,19 @@ C
   distn = 10000000;
   distz = 10000000;
 
-  for(int i =0;i<8;i++){
+  for(G4int i =0;i<8;i++){
    ndist = std::fabs(idnint(n) - nmn[i]);
    if(ndist < distn) distn = ndist;
    zdist = std::fabs(idnint(z) - nmz[i]);
    if(zdist < distz) distz = zdist;
   }
 
-  dz = float(distz);
-  dn = float(distn);
+  dz = G4float(distz);
+  dn = G4float(distn);
 
   bet = 0.022 + 0.003*dn + 0.002*dz;
 
-  sig = 50.0*std::pow(bet,2.) * sig;
+  sig = 75.0*std::pow(bet,2.) * sig;
 
 // NO VIBRATIONAL ENHANCEMENT
  qrot11:   
@@ -4692,13 +4687,13 @@ void G4Abla::lpoly(G4double x, G4int n, G4double pl[])
   // THEY ARE CALCULATED BY RECURSION RELATION FROM THE FIRST TWO      
   // POLYNOMIALS.                                                      
   // WRITTEN BY A.J.SIERK  LANL  T-9  FEBRUARY, 1984            
-  // NOTE: PL AND X MUST BE DOUBLE PRECISION ON 32-BIT COMPUTERS!      
+  // NOTE: PL AND X MUST BE G4double PRECISION ON 32-BIT COMPUTERS!      
 
   pl[0] = 1.0;
   pl[1] = x;
 
-  for(int i = 2; i < n; i++) {
-    pl[i] = ((2*double(i+1) - 3.0)*x*pl[i-1] - (double(i+1) - 2.0)*pl[i-2])/(double(i+1)-1.0);
+  for(G4int i = 2; i < n; i++) {
+    pl[i] = ((2*G4double(i+1) - 3.0)*x*pl[i-1] - (G4double(i+1) - 2.0)*pl[i-2])/(G4double(i+1)-1.0);
   }
 }
 
@@ -4774,10 +4769,10 @@ G4double G4Abla::eflmac(G4int ia, G4int iz, G4int flag, G4int optshp)
   // charge asymmetry
   ca  =  0.10289;
 
-  z   = double(iz);
-  a   = double(ia);
+  z   = G4double(iz);
+  a   = G4double(ia);
   in  = ia - iz;                                                       
-  n   = double(in);
+  n   = G4double(in);
 
   if(flag==1){goto eflmac311;}
 
@@ -4827,14 +4822,14 @@ G4double G4Abla::eflmac(G4int ia, G4int iz, G4int flag, G4int optshp)
 // Fermi-gas model (there, energy is shifted taking odd-odd nuclei
 // as bassis)
 
-    double para=0.;
+    G4double para=0.;
     parite(a,&para);
 
     if(para<0.0){
 // e-o, o-e
       e0 =  0.285+11.17*std::pow(a,-0.464) -0.390-0.00058*(a);
     }else{
-        double parz=0.;
+        G4double parz=0.;
         parite(z,&parz);
         if (parz>0.0){
 // e-e
@@ -4860,7 +4855,7 @@ void G4Abla::appariem(G4double a, G4double z, G4double *del)
   // PROCEDURE FOR CALCULATING THE PAIRING CORRECTION TO THE BINDING   
   // ENERGY OF A SPECIFIC NUCLEUS                                      
 
-  double para = 0.0, parz = 0.0;
+  G4double para = 0.0, parz = 0.0;
   // A                 MASS NUMBER                                     
   // Z                 NUCLEAR CHARGE                                  
   // PARA              HELP VARIABLE FOR PARITY OF A                   
@@ -4896,7 +4891,7 @@ void G4Abla::parite(G4double n, G4double *par)
   // N1,N2             HELP VARIABLES                                  
   // PAR               HELP VARIABLE FOR PARITY OF N                   
 
-  n3 = double(idnint(n));
+  n3 = G4double(idnint(n));
   n1 = n3/2.0;
   n2 = n1 - dint(n1);
 
@@ -4953,7 +4948,7 @@ G4double G4Abla::cram(G4double bet, G4double homega)
   return cramResult;
 }
 
-G4double G4Abla::bipol(int iflag, G4double y)
+G4double G4Abla::bipol(G4int iflag, G4double y)
 {
   // CALCULATION OF THE SURFACE BS OR CURVATURE BK OF A NUCLEUS        
   // RELATIVE TO THE SPHERICAL CONFIGURATION                           
@@ -4964,11 +4959,11 @@ G4double G4Abla::bipol(int iflag, G4double y)
 
   // LINEAR INTERPOLATION OF BS BK TABLE                               
 
-  int i = 0;
+  G4int i = 0;
 
   G4double bipolResult = 0.0;
 
-  const int bsbkSize = 54;
+  const G4int bsbkSize = 54;
 
   G4double bk[bsbkSize] = {0.0, 1.00000,1.00087,1.00352,1.00799,1.01433,1.02265,1.03306,
 			   1.04576,1.06099,1.07910,1.10056,1.12603,1.15651,1.19348,
@@ -5085,13 +5080,7 @@ c
      BARR = 1.345 * Z1 * Z2 / RMAX;
 //C Omega according to Avishai:
      OMEGA = 4.5 / 197.3287;
-
-    // if(Z1<60){
-    //  if(Z2==1 && A2==2) BARR = BARR * 1.1;
-    //  if(Z2==1 && A2==3) BARR = BARR * 1.1;
-   //   if(Z2==2 && A2==3) BARR = BARR * 1.3;
-    //  if(Z2==2 && A2==4) BARR = BARR * 1.1;
-    // }
+//
      (*sOMEGA)=OMEGA;
      (*sBARR)=BARR;
 //
@@ -5259,9 +5248,9 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
     goto barfit902;
   }
 
-  z=double(iz);
-  a=double(ia);
-  el=double(il);
+  z=G4double(iz);
+  a=G4double(ia);
+  el=G4double(il);
   amin= 1.2e0*z + 0.01e0*z*z;
   amax= 5.8e0*z - 0.024e0*z*z;
 
@@ -5453,7 +5442,7 @@ void G4Abla::gcf(G4double *gammcf,G4double a,G4double x,G4double gln)
  c=1./fpmin;
  d=1./b;
  h=d;
- for(int i=1;i<=itmax;i++){
+ for(G4int i=1;i<=itmax;i++){
   an=-i*(i-a);
   b=b+2.;
   d=an*d+b;
@@ -5487,7 +5476,7 @@ void G4Abla::gser(G4double *gamser,G4double a,G4double x,G4double gln)
  ap=a;
  sum=1./a;
  del=sum;
- for(int n=0;n<itmax;n++){
+ for(G4int n=0;n<itmax;n++){
  ap=ap+1.;
  del=del*x/ap;
  sum=sum+del;
@@ -5512,7 +5501,7 @@ G4double G4Abla::gammln(G4double xx)
  tmp=x+5.5;
  tmp=(x+0.5)*std::log(tmp)-tmp;
  ser=1.000000000190015;
- for(int j=0;j<6;j++){
+ for(G4int j=0;j<6;j++){
  y=y+1.;
  ser=ser+cof[j]/y;
  }
@@ -5547,7 +5536,7 @@ G4double G4Abla::fmaxhaz_old(G4double T)
   // declaration des variables
   //
 
-  const int pSize = 101;
+  const G4int pSize = 101;
   G4double p[pSize];
 
   // ial generateur pour le cascade (et les iy pour eviter les correlations)
@@ -5567,9 +5556,9 @@ G4double G4Abla::fmaxhaz_old(G4double T)
 
   for(i = 1; i <= 99; i++) {
   fmaxhaz20:
-    x1 = x - (f(x) - double(i)/100.0)/fd(x);
+    x1 = x - (f(x) - G4double(i)/100.0)/fd(x);
     x = x1;
-    if (std::fabs(f(x) - double(i)/100.0) < 1e-5) {
+    if (std::fabs(f(x) - G4double(i)/100.0) < 1e-5) {
       goto fmaxhaz100;
     }
     goto fmaxhaz20;
@@ -5711,63 +5700,48 @@ void G4Abla::guet(G4double *x_par, G4double *z_par, G4double *find_par)
 
 void G4Abla::FillData(G4int IMULTBU,G4int IEV_TAB){
 
-    const double c = 29.9792458;
-    const double fmp = 938.27231,fmn=939.56563; 
+    const G4double c = 29.9792458;
+    const G4double fmp = 938.27231,fmn=939.56563; 
 
     varntp->ntrack = IMULTBU + IEV_TAB;
 
-    int intp=0;
+    G4int intp=0;
 
-//std::cout << "IMULTBU:" << IMULTBU  << std::endl;
-//std::cout << "IEV_TAB:" << IEV_TAB  << std::endl;
-
-
-    for(int i=0;i<IMULTBU;i++){
+    for(G4int i=0;i<IMULTBU;i++){
  
-    int iz = nint(BU_TAB[i][7]);
-    int ia = nint(BU_TAB[i][8]);
-
-//std::cout << "a:" << BU_TAB[i][8]  << std::endl;
-//std::cout << "z:" << BU_TAB[i][7]  << std::endl;
+    G4int iz = nint(BU_TAB[i][7]);
+    G4int ia = nint(BU_TAB[i][8]);
 
     varntp->zvv[intp] = iz;
     varntp->avv[intp] = ia;
     varntp->itypcasc[intp] = 0;
 
-   // if(ia>0){
-    double v2 = BU_TAB[i][4]*BU_TAB[i][4]+BU_TAB[i][5]*BU_TAB[i][5]+BU_TAB[i][6]*BU_TAB[i][6];
-    double gamma = std::sqrt(1.0 - v2 / (c*c));
-    double avvmass = iz*fmp + (ia-iz)*fmn + eflmac(ia,iz,0,3);
-    double etot = avvmass / gamma;
+    G4double v2 = BU_TAB[i][4]*BU_TAB[i][4]+BU_TAB[i][5]*BU_TAB[i][5]+BU_TAB[i][6]*BU_TAB[i][6];
+    G4double gamma = std::sqrt(1.0 - v2 / (c*c));
+    G4double avvmass = iz*fmp + (ia-iz)*fmn + eflmac(ia,iz,0,3);
+    G4double etot = avvmass / gamma;
     varntp->pxlab[intp] = etot * BU_TAB[i][4] / c;
     varntp->pylab[intp] = etot * BU_TAB[i][5] / c;
     varntp->pzlab[intp] = etot * BU_TAB[i][6] / c;
     varntp->enerj[intp] = etot - avvmass;
-    /* }else{
-     varntp->pxlab[intp] = BU_TAB[i][2];
-     varntp->pylab[intp] = BU_TAB[i][3];
-     varntp->pzlab[intp] = BU_TAB[i][4];
-     varntp->enerj[intp] = std::sqrt(BU_TAB[i][2]*BU_TAB[i][2]+BU_TAB[i][3]*BU_TAB[i][3]+BU_TAB[i][4]*BU_TAB[i][4]);
-     }
-*/
     intp++;
     }
 
 
-    for(int i=0;i<IEV_TAB;i++){
+    for(G4int i=0;i<IEV_TAB;i++){
  
-    int iz = nint(EV_TAB[i][0]);
-    int ia = nint(EV_TAB[i][1]);
+    G4int iz = nint(EV_TAB[i][0]);
+    G4int ia = nint(EV_TAB[i][1]);
 
     varntp->zvv[intp] = iz;
     varntp->avv[intp] = ia;
     varntp->itypcasc[intp] = 0; 
 
      if(ia>0){
-     double v2 = EV_TAB[i][2]*EV_TAB[i][2]+EV_TAB[i][3]*EV_TAB[i][3]+EV_TAB[i][4]*EV_TAB[i][4];
-     double gamma = std::sqrt(1.0 - v2 / (c*c));
-     double avvmass = iz*fmp + (ia-iz)*fmn + eflmac(ia,iz,0,3);
-     double etot = avvmass / gamma;
+     G4double v2 = EV_TAB[i][2]*EV_TAB[i][2]+EV_TAB[i][3]*EV_TAB[i][3]+EV_TAB[i][4]*EV_TAB[i][4];
+     G4double gamma = std::sqrt(1.0 - v2 / (c*c));
+     G4double avvmass = iz*fmp + (ia-iz)*fmn + eflmac(ia,iz,0,3);
+     G4double etot = avvmass / gamma;
      varntp->pxlab[intp] = etot * EV_TAB[i][2] / c;
      varntp->pylab[intp] = etot * EV_TAB[i][3] / c;
      varntp->pzlab[intp] = etot * EV_TAB[i][4] / c;
@@ -5783,9 +5757,6 @@ void G4Abla::FillData(G4int IMULTBU,G4int IEV_TAB){
 
 return;
 }
-
-
-
 
 // Utilities
 
@@ -5863,22 +5834,22 @@ G4int G4Abla::nint(G4double number)
   }
   if(number > 0) {
     if(fractpart < 0.5) {
-      return int(std::floor(number));
+      return G4int(std::floor(number));
     }
     else {
-      return int(std::ceil(number));
+      return G4int(std::ceil(number));
     }
   }
   if(number < 0) {
     if(fractpart < -0.5) {
-      return int(std::floor(number));
+      return G4int(std::floor(number));
     }
     else {
-      return int(std::ceil(number));
+      return G4int(std::ceil(number));
     }
   }
 
-  return int(std::floor(number));
+  return G4int(std::floor(number));
 }
 
 G4int G4Abla::secnds(G4int x)
@@ -5910,14 +5881,7 @@ G4int G4Abla::mod(G4int a, G4int b)
 G4double G4Abla::dint(G4double x)
 {
   G4double value = 0.0;
-/*
-  if(a < 0.0) {
-    value = double(std::ceil(a));
-  }
-  else {
-    value = double(std::floor(a));
-  }
-*/
+
 	if(x-std::floor(x) <= std::ceil(x)-x) 
          value = double(std::floor(x));
 	else 
@@ -5929,29 +5893,21 @@ G4double G4Abla::dint(G4double x)
 G4int G4Abla::idint(G4double x)
 {
   G4int value = 0;
-/*
-  if(a < 0) {
-    value = int(std::ceil(a));
-  }
-  else {
-    value = int(std::floor(a));
-  }*/
+
 	if(x-std::floor(x) <= std::ceil(x)-x) 
-         value = int(std::floor(x));
+         value = G4int(std::floor(x));
 	else 
-         value = int(std::ceil(x));
+         value = G4int(std::ceil(x));
 
   return value;
 }
 
 G4int G4Abla::idnint(G4double x)
 {
- // if(value > 0.0) return (int (std::ceil(value)));
- // else return (int (std::floor(value)));
 	if(x-std::floor(x) <= std::ceil(x)-x) 
-         return int(std::floor(x));
+         return G4int(std::floor(x));
 	else 
-         return int(std::ceil(x));
+         return G4int(std::ceil(x));
 }
 
 G4double G4Abla::dmin1(G4double a, G4double b, G4double c)
@@ -6796,7 +6752,7 @@ void G4Abla::imf(G4double ACN,G4double ZCN,G4double TEMP,G4double EE,G4double *Z
      ILIMMAX = max(INNMAX,INMIN);     // In order to keep the variables below
 //     ***
 
-     for(int INIMF=INMIN;INIMF<=ILIMMAX;INIMF++){ // Range of possible IMF isotopes
+     for(G4int INIMF=INMIN;INIMF<=ILIMMAX;INIMF++){ // Range of possible IMF isotopes
           IAIMF = IZIMF + INIMF;
           DW[IZIMF][IAIMF] = 0.0;
           AIMF_1 = 1.0*(IAIMF);
@@ -6862,7 +6818,7 @@ void G4Abla::imf(G4double ACN,G4double ZCN,G4double TEMP,G4double EE,G4double *Z
       SDWprevious = 1.e20;
       IZSTOP = 0;
 
-      for(int III_ZIMF=3;III_ZIMF<=IZIMFMAX;III_ZIMF++){
+      for(G4int III_ZIMF=3;III_ZIMF<=IZIMFMAX;III_ZIMF++){
 
         if(SDW[III_ZIMF]==0.0){
           IZSTOP = III_ZIMF - 1;
@@ -6892,7 +6848,7 @@ void G4Abla::imf(G4double ACN,G4double ZCN,G4double TEMP,G4double EE,G4double *Z
 
 //     End loop to calculate where gamma of IMF has the minimum
 
-      for(int II_ZIMF = IZSTOP;II_ZIMF<=IZIMFMAX;II_ZIMF++){
+      for(G4int II_ZIMF = IZSTOP;II_ZIMF<=IZIMFMAX;II_ZIMF++){
        SDW[II_ZIMF] =  std::pow(10.0,A2PAR) * std::pow(1.0*II_ZIMF,A1PAR);  // Power-low
        if(SDW[II_ZIMF]<0.0) SDW[II_ZIMF] = 0.0;
       }
@@ -6901,7 +6857,7 @@ void G4Abla::imf(G4double ACN,G4double ZCN,G4double TEMP,G4double EE,G4double *Z
 
 //    Sum of all decay widths (for normalisation)
       SUMDW_TOT = 0.0;
-      for(int I_ZIMF = 3;I_ZIMF<=IZIMFMAX;I_ZIMF++){
+      for(G4int I_ZIMF = 3;I_ZIMF<=IZIMFMAX;I_ZIMF++){
         SUMDW_TOT = SUMDW_TOT + SDW[I_ZIMF];
       }
       if(SUMDW_TOT<=0.0){
@@ -6923,7 +6879,7 @@ void G4Abla::imf(G4double ACN,G4double ZCN,G4double TEMP,G4double EE,G4double *Z
       fZIMF = 0.0;
       IZMEM = 0;
 
-      for(int IZ = 3;IZ<=IZIMFMAX;IZ++){
+      for(G4int IZ = 3;IZ<=IZIMFMAX;IZ++){
          SUM_Z = SUM_Z + SDW[IZ];
          if(X<SUM_Z){
             fZIMF = 1.0*IZ;
@@ -6950,7 +6906,7 @@ void G4Abla::imf(G4double ACN,G4double ZCN,G4double TEMP,G4double EE,G4double *Z
 
       IA = 0;
       SUMDW_N_TOT = 0.0;
-      for(int IIINIMF = INMINMEM;IIINIMF<=INMAXMEM;IIINIMF++){
+      for(G4int IIINIMF = INMINMEM;IIINIMF<=INMAXMEM;IIINIMF++){
        IA = IZMEM + IIINIMF;
        if(IZMEM>=3&&IZMEM<=95&&IA>=4&&IA<=250){
         SUMDW_N_TOT = SUMDW_N_TOT + DW[IZMEM][IA];
@@ -6962,12 +6918,12 @@ void G4Abla::imf(G4double ACN,G4double ZCN,G4double TEMP,G4double EE,G4double *Z
       XX = haz(1)*SUMDW_N_TOT;
       IIA = 0;
       SUM_A = 0.0;
-      for(int IINIMF = INMINMEM;IINIMF<=INMAXMEM; IINIMF++){
+      for(G4int IINIMF = INMINMEM;IINIMF<=INMAXMEM; IINIMF++){
         IIA = IZMEM + IINIMF;
   //      SUM_A = SUM_A + DW[IZ][IIA]; //FIXME
         SUM_A = SUM_A + DW[IZMEM][IIA];
         if(XX<SUM_A){
-          fAIMF = double(IIA);
+          fAIMF = G4double(IIA);
           goto imfs25;
         }
       }
@@ -6990,8 +6946,6 @@ void G4Abla::imf(G4double ACN,G4double ZCN,G4double TEMP,G4double EE,G4double *Z
         std::cout << "ACN,ZCN,ZIMF,AIMF,temp,EE,JPRF::" << ACN << ", " << ZCN << ", " << fZIMF << ", " << fAIMF << ", " << TEMP << ", " << EE << ", " << JPRF << std::endl;
 std::cout << "-IZSTOP,IZIMFMAX:" << IZSTOP << ", " << IZIMFMAX << std::endl;
 std::cout << "----X,SUM_Z,SUMDW_TOT:" << X << ", " << SUM_Z << ", " << SUMDW_TOT << std::endl;
-//for(int III_ZIMF=3;III_ZIMF<=IZIMFMAX;III_ZIMF++)
-  //    std::cout << "-**Z,SDW:" << III_ZIMF << ", " << SDW[III_ZIMF] << std::endl;
 
       goto imfs10;
       }
@@ -7002,7 +6956,7 @@ std::cout << "----X,SUM_Z,SUMDW_TOT:" << X << ", " << SUM_Z << ", " << SUMDW_TOT
         std::cout << "ACN,ZCN,ZIMF,AIMF,temp,EE,JPRF:" << ACN << ", " << ZCN << ", " << fZIMF << ", " << fAIMF << ", " << TEMP << ", " << EE << ", " << JPRF << std::endl;
 std::cout << "-IZSTOP,IZIMFMAX:" << IZSTOP << ", " << IZIMFMAX << std::endl;
 std::cout << "----X,SUM_Z,SUMDW_TOT:" << X << ", " << SUM_Z << ", " << SUMDW_TOT << std::endl;
-for(int III_ZIMF=3;III_ZIMF<=IZIMFMAX;III_ZIMF++)
+for(G4int III_ZIMF=3;III_ZIMF<=IZIMFMAX;III_ZIMF++)
       std::cout << "-**Z,SDW:" << III_ZIMF << ", " << SDW[III_ZIMF] << std::endl;
 
         fZIMF = 3.0;  // provisorisch AK
@@ -7167,7 +7121,7 @@ void G4Abla::evap_postsaddle(G4double A, G4double Z, G4double EXC, G4double *E_s
 //            is explicitely calculated. Langevin calculations made by P. Nadtochy
 //            used to parametrise saddle-to-scission time
 
-      double af,zf,ee;
+  G4double af,zf,ee;
   G4double epsiln = 0.0, probp = 0.0, probd = 0.0, probt = 0.0, probn = 0.0, probhe = 0.0, proba = 0.0, probg = 0.0, probimf=0.0, ptotl = 0.0, tcn = 0.0;  
   G4double sn = 0.0, sbp = 0.0, sbd = 0.0, sbt = 0.0, sbhe = 0.0, sba = 0.0, x = 0.0, amoins = 0.0, zmoins = 0.0,sp= 0.0,sd= 0.0,st= 0.0,she= 0.0,sa= 0.0;
   G4double ecn = 0.0, ecp = 0.0, ecd = 0.0, ect = 0.0,eche = 0.0,eca = 0.0, ecg = 0.0, bp = 0.0, bd = 0.0, bt = 0.0, bhe = 0.0, ba = 0.0;
@@ -7184,17 +7138,17 @@ void G4Abla::evap_postsaddle(G4double A, G4double Z, G4double EXC, G4double *E_s
   G4double ef = 0.0;
   G4double pc = 0.0;
 
-  double time,tauf,tau0,a0,a1,emin,ts1,tsum=0.;
-  int inttype=0,inum=0,gammadecay = 0;
+  G4double time,tauf,tau0,a0,a1,emin,ts1,tsum=0.;
+  G4int inttype=0,inum=0,gammadecay = 0;
   G4double pleva = 0.0;
   G4double pxeva = 0.0;
   G4double pyeva = 0.0;
   G4double pteva = 0.0;
   G4double etot = 0.0;
 
-  const double c = 29.9792458;
-  const double mu = 931.494;
-  const double mu2 = 931.494*931.494;
+  const G4double c = 29.9792458;
+  const G4double mu = 931.494;
+  const G4double mu2 = 931.494*931.494;
 
       vx_eva=0.;
       vy_eva=0.;
@@ -7385,7 +7339,7 @@ void G4Abla::evap_postsaddle(G4double A, G4double Z, G4double EXC, G4double *E_s
 // In the CM system
         if(gammadecay==0){
 // Light particle
-           double ETOT_LP = std::sqrt(pc*pc + amoins*amoins * mu2);
+           G4double ETOT_LP = std::sqrt(pc*pc + amoins*amoins * mu2);
            EV_TAB_SSC[IEV_TAB_SSC][2] = c * pc * xcv / ETOT_LP;
            EV_TAB_SSC[IEV_TAB_SSC][3] = c * pc * ycv / ETOT_LP;
            EV_TAB_SSC[IEV_TAB_SSC][4] = c * pc * zcv / ETOT_LP;
@@ -7405,11 +7359,11 @@ void G4Abla::evap_postsaddle(G4double A, G4double Z, G4double EXC, G4double *E_s
 
 // Heavy residue
         if(gammadecay==0){
-        double v2 = std::pow(EV_TAB_SSC[IEV_TAB_SSC][2],2.) +
+        G4double v2 = std::pow(EV_TAB_SSC[IEV_TAB_SSC][2],2.) +
              std::pow(EV_TAB_SSC[IEV_TAB_SSC][3],2.) +
              std::pow(EV_TAB_SSC[IEV_TAB_SSC][4],2.);
-        double gamma = 1.0/std::sqrt(1.0 - v2 / (c*c));
-        double etot_lp = amoins*mu * gamma;
+        G4double gamma = 1.0/std::sqrt(1.0 - v2 / (c*c));
+        G4double etot_lp = amoins*mu * gamma;
         pxeva = pxeva - EV_TAB_SSC[IEV_TAB_SSC][2] * etot_lp / c;
         pyeva = pyeva - EV_TAB_SSC[IEV_TAB_SSC][3] * etot_lp / c;
         pleva = pleva - EV_TAB_SSC[IEV_TAB_SSC][4] * etot_lp / c;
@@ -7443,13 +7397,13 @@ void G4Abla::evap_postsaddle(G4double A, G4double Z, G4double EXC, G4double *E_s
 
 void G4Abla::unbound(G4double SN,G4double SP,G4double  SD,G4double ST,G4double SHE,G4double SA,G4double BP,G4double BD,G4double BT,G4double BHE,G4double BA,G4double *PROBF,G4double *PROBN,G4double *PROBP,G4double *PROBD,G4double *PROBT,G4double *PROBHE,G4double *PROBA,G4double *PROBIMF,G4double *PROBG,G4double *ECN,G4double *ECP,G4double *ECD,G4double *ECT,G4double *ECHE,G4double *ECA)
 {
- double SBP = SP + BP;
- double SBD = SD + BD;
- double SBT = ST + BT;
- double SBHE = SHE + BHE;
- double SBA = SA + BA;
+ G4double SBP = SP + BP;
+ G4double SBD = SD + BD;
+ G4double SBT = ST + BT;
+ G4double SBHE = SHE + BHE;
+ G4double SBA = SA + BA;
 
- double e = dmin1(SBP,SBD,SBT);
+ G4double e = dmin1(SBP,SBD,SBT);
         e = dmin1(SBHE,SN,e);
         e = dmin1(SBHE,SBA,e);
 //
@@ -7611,54 +7565,54 @@ c     The most important ones are
 C      Delta_U1_shell_max and
 c      Delta_u2_shell.
 */
-      double Nheavy1_in;   //  'position of shell for Standard 1'
+      G4double Nheavy1_in;   //  'position of shell for Standard 1'
       Nheavy1_in = 83.0;
 
-      double Zheavy1_in;   //  'position of shell for Standard 1'
+      G4double Zheavy1_in;   //  'position of shell for Standard 1'
       Zheavy1_in = 50.0;
 
-      double Nheavy2;   //  'position of heavy peak valley 2'
+      G4double Nheavy2;   //  'position of heavy peak valley 2'
       Nheavy2 = 89.0;
 
-      double Delta_U1_shell_max;  //  'Shell effect for valley 1'
+      G4double Delta_U1_shell_max;  //  'Shell effect for valley 1'
       Delta_U1_shell_max = -2.45;
 
-      double U1NZ_SLOPE;  // Reduction of shell effect with distance to 132Sn
+      G4double U1NZ_SLOPE;  // Reduction of shell effect with distance to 132Sn
       U1NZ_SLOPE = 0.2;
 
-      double Delta_U2_shell;  //  'Shell effect for valley 2'
+      G4double Delta_U2_shell;  //  'Shell effect for valley 2'
       Delta_U2_shell = -2.45;
 
-      double X_s2s;   //  'Ratio (C_sad/C_scis) of curvature of potential'
+      G4double X_s2s;   //  'Ratio (C_sad/C_scis) of curvature of potential'
       X_s2s = 0.8;
 
-      double hbom1,hbom2,hbom3;   //  'Curvature of potential at saddle'
+      G4double hbom1,hbom2,hbom3;   //  'Curvature of potential at saddle'
       hbom1 = 0.2;  // hbom1 is hbar * omega1 / (2 pi) !!!
       hbom2 = 0.2;  // hbom2 is hbar * omega2 / (2 pi) !!!
       hbom3 = 0.2;  // hbom3 is hbar * omega3 / (2 pi) !!!
 
-      double Fwidth_asymm1,Fwidth_asymm2,Fwidth_symm;
+      G4double Fwidth_asymm1,Fwidth_asymm2,Fwidth_symm;
 //         'Factors for widths of distr. valley 1 and 2'
-      Fwidth_asymm1 = 0.6;
-      Fwidth_asymm2 = 0.6;
+      Fwidth_asymm1 = 0.65;
+      Fwidth_asymm2 = 0.65;
       Fwidth_symm   = 1.16;
 
-      double xLevdens;   // 'Parameter x: a = A/x'
+      G4double xLevdens;   // 'Parameter x: a = A/x'
       xLevdens = 10.75;
 //     The value of 1/0.093 = 10.75 is consistent with the
 //     systematics of the mass widths of Ref. (RuI97).
 
-      double FGAMMA; // 'Factor to gamma'
+      G4double FGAMMA; // 'Factor to gamma'
       FGAMMA = 1.;  // Theoretical expectation, not adjusted to data.
 //     Additional factor to attenuation coefficient of shell effects
 //     with increasing excitation energy
 
-      double FGAMMA1; // 'Factor to gamma_heavy1'
+      G4double FGAMMA1; // 'Factor to gamma_heavy1'
       FGAMMA1 = 2.;
 //     Adjusted to reduce the weight of Standard 1 with increasing
 //     excitation energies, as required by experimental data.
 
-      double FREDSHELL;
+      G4double FREDSHELL;
       FREDSHELL = 0.;
 //     Adjusted to the reduced attenuation of shells in the superfluid region.
 //     If FGAMMA is modified,
@@ -7669,97 +7623,97 @@ c      Delta_u2_shell.
 //     energy range. A high value of FGAMMA leads ot a stronger
 //     attenuation of shell effects above the superfluid region.
 
-      double Ecrit;
+      G4double Ecrit;
       Ecrit = 5.;
 //     The value of ECRIT determines the transition from a weak
 //     decrease of the shell effect below ECRIT to a stronger
 //     decrease above the superfluid range.
-      const double d = 2.0;   // 'Surface distance of scission configuration'
+      const G4double d = 2.0;   // 'Surface distance of scission configuration'
      // d = 2.0;
 //    Charge polarisation from Wagemanns p. 397: 
-      double cpol1; // Charge polarisation standard I
+      G4double cpol1; // Charge polarisation standard I
       cpol1 = 0.35;  // calculated internally with shells
-      double cpol2;  // Charge polarisation standard II
+      G4double cpol2;  // Charge polarisation standard II
       cpol2 = 0.;  // calculated internally from LDM
-      double Friction_factor;
+      G4double Friction_factor;
       Friction_factor = 1.0;
-      double Nheavy1;    // position of valley St 1 in Z and N
-      double Delta_U1,Delta_U2; // used shell effects
-      double cN_asymm1_shell, cN_asymm2_shell;
-      double gamma,gamma_heavy1,gamma_heavy2; // fading of shells
-      double E_saddle_scission;  // friction from saddle to scission
-      double Ysymm=0.;    // Yield of symmetric mode
-      double Yasymm1=0.;  // Yield of asymmetric mode 1
-      double Yasymm2=0.;  // Yield of asymmetric mode 2
-      double Nheavy1_eff; // Effective position of valley 1
-      double Nheavy2_eff; // Effective position of valley 2
-      double eexc1_saddle; // Excitation energy above saddle 1
-      double eexc2_saddle; // Excitation energy above saddle 2
-      double EEXC_MAX;  // Excitation energy above lowest saddle
-      double r_e_o;  // Even-odd effect in Z
-      double cN_symm;  // Curvature of symmetric valley
-      double CZ;  // Curvature of Z distribution for fixed A
-      double Nheavy2_NZ;  // Position of Shell 2, combined N and Z
-      double N;
-      double Aheavy1,Aheavy2;
-      double Sasymm1=0.,Sasymm2=0.,Ssymm=0.,Ysum=0.,Yasymm=0.;
-      double Ssymm_mode1,Ssymm_mode2;
-      double wNasymm1_saddle, wNasymm2_saddle, wNsymm_saddle;
-      double wNasymm2_scission, wNsymm_scission;
-      double wNasymm1, wNasymm2, wNsymm;
-      int imode;
-      double  rmode;
-      double ZA1width;
-      double N1r,N2r,A1r,N1,N2;
-      double Zsymm,Nsymm;
-      double N1mean, N1width;
-      double dUeff;
+      G4double Nheavy1;    // position of valley St 1 in Z and N
+      G4double Delta_U1,Delta_U2; // used shell effects
+      G4double cN_asymm1_shell, cN_asymm2_shell;
+      G4double gamma,gamma_heavy1,gamma_heavy2; // fading of shells
+      G4double E_saddle_scission;  // friction from saddle to scission
+      G4double Ysymm=0.;    // Yield of symmetric mode
+      G4double Yasymm1=0.;  // Yield of asymmetric mode 1
+      G4double Yasymm2=0.;  // Yield of asymmetric mode 2
+      G4double Nheavy1_eff; // Effective position of valley 1
+      G4double Nheavy2_eff; // Effective position of valley 2
+      G4double eexc1_saddle; // Excitation energy above saddle 1
+      G4double eexc2_saddle; // Excitation energy above saddle 2
+      G4double EEXC_MAX;  // Excitation energy above lowest saddle
+      G4double r_e_o;  // Even-odd effect in Z
+      G4double cN_symm;  // Curvature of symmetric valley
+      G4double CZ;  // Curvature of Z distribution for fixed A
+      G4double Nheavy2_NZ;  // Position of Shell 2, combined N and Z
+      G4double N;
+      G4double Aheavy1,Aheavy2;
+      G4double Sasymm1=0.,Sasymm2=0.,Ssymm=0.,Ysum=0.,Yasymm=0.;
+      G4double Ssymm_mode1,Ssymm_mode2;
+      G4double wNasymm1_saddle, wNasymm2_saddle, wNsymm_saddle;
+      G4double wNasymm2_scission, wNsymm_scission;
+      G4double wNasymm1, wNasymm2, wNsymm;
+      G4int imode;
+      G4double  rmode;
+      G4double ZA1width;
+      G4double N1r,N2r,A1r,N1,N2;
+      G4double Zsymm,Nsymm;
+      G4double N1mean, N1width;
+      G4double dUeff;
       /* effective shell effect at lowest barrier */
-      double Eld;
+      G4double Eld;
       /* Excitation energy with respect to ld barrier */
-      double re1,re2,re3;
-      double eps1,eps2;
-      double Z1UCD,Z2UCD;
-      double beta,beta1,beta2;
-     // double betacomplement;
-      double DN1_POL;
+      G4double re1,re2,re3;
+      G4double eps1,eps2;
+      G4double Z1UCD,Z2UCD;
+      G4double beta,beta1,beta2;
+     // G4double betacomplement;
+      G4double DN1_POL;
       /* shift of most probable neutron number for given Z,
             according to polarization */
-      int i_help;
-      double A_levdens;
+      G4int i_help;
+      G4double A_levdens;
             /* level-density parameter */
-     // double A_levdens_light1,A_levdens_light2;
-      double A_levdens_heavy1,A_levdens_heavy2;
+     // G4double A_levdens_light1,A_levdens_light2;
+      G4double A_levdens_heavy1,A_levdens_heavy2;
 
-      double R0=1.16;
+      G4double R0=1.16;
 
-      double epsilon_1_saddle,epsilon0_1_saddle;
-      double epsilon_2_saddle,epsilon0_2_saddle,epsilon_symm_saddle;
-      double epsilon_1_scission;//,epsilon0_1_scission;
-      double epsilon_2_scission;//,epsilon0_2_scission;
-      double epsilon_symm_scission;
+      G4double epsilon_1_saddle,epsilon0_1_saddle;
+      G4double epsilon_2_saddle,epsilon0_2_saddle,epsilon_symm_saddle;
+      G4double epsilon_1_scission;//,epsilon0_1_scission;
+      G4double epsilon_2_scission;//,epsilon0_2_scission;
+      G4double epsilon_symm_scission;
                                     /* modified energy */
-      double E_eff1_saddle,E_eff2_saddle;
-      double Epot0_mode1_saddle,Epot0_mode2_saddle,Epot0_symm_saddle;
-      double Epot_mode1_saddle,Epot_mode2_saddle,Epot_symm_saddle;
-      double E_defo,E_defo1,E_defo2,E_scission_pre,E_scission_post;
-      double E_asym;
-      double E1exc,E2exc;
-      double E1exc_sigma,E2exc_sigma;
-      double TKER;
-      double EkinR1,EkinR2;
-      double MassCurv_scis, MassCurv_sadd;
-      double cN_symm_sadd;
-      double Nheavy1_shell,Nheavy2_shell;
-      double wNasymm1_scission;
-      double Aheavy1_eff,Aheavy2_eff;
-      double Z1rr,Z1r;
-      double E_HELP;
-      double Z_scission,N_scission,A_scission;
-      double Z2_over_A_eff;
-      double beta1gs,beta2gs,betags;
-      double sigZmin;   // 'Minimum neutron width for constant Z'
-      double DSN132,Delta_U1_shell,E_eff0_saddle;//,e_scission;
+      G4double E_eff1_saddle,E_eff2_saddle;
+      G4double Epot0_mode1_saddle,Epot0_mode2_saddle,Epot0_symm_saddle;
+      G4double Epot_mode1_saddle,Epot_mode2_saddle,Epot_symm_saddle;
+      G4double E_defo,E_defo1,E_defo2,E_scission_pre,E_scission_post;
+      G4double E_asym;
+      G4double E1exc,E2exc;
+      G4double E1exc_sigma,E2exc_sigma;
+      G4double TKER;
+      G4double EkinR1,EkinR2;
+      G4double MassCurv_scis, MassCurv_sadd;
+      G4double cN_symm_sadd;
+      G4double Nheavy1_shell,Nheavy2_shell;
+      G4double wNasymm1_scission;
+      G4double Aheavy1_eff,Aheavy2_eff;
+      G4double Z1rr,Z1r;
+      G4double E_HELP;
+      G4double Z_scission,N_scission,A_scission;
+      G4double Z2_over_A_eff;
+      G4double beta1gs,beta2gs,betags;
+      G4double sigZmin;   // 'Minimum neutron width for constant Z'
+      G4double DSN132,Delta_U1_shell,E_eff0_saddle;//,e_scission;
       //
       sigZmin = 0.5;
       N = A - Z;  /*  neutron number of the fissioning nucleus  */
@@ -8191,7 +8145,7 @@ c                     E*=12 MeV :  153407 293063 553530 (1000000) */
 //     ------------------------------------------
 //     evaporation from saddle to scission ...
 //     ------------------------------------------     
-      if(E_scission_pre>50.){
+      if(E_scission_pre>5.){
        evap_postsaddle(A,Z,E_scission_pre,&E_scission_post,
         &A_scission,&Z_scission,vx_eva_sc,vy_eva_sc,vz_eva_sc);
        N_scission = A_scission - Z_scission;
@@ -8282,7 +8236,7 @@ c                     E*=12 MeV :  153407 293063 553530 (1000000) */
 
       if(imode == 1 && cpol1 != 0.0){
 //       --- asymmetric fission, mode 1 */
-       int IS = 0;
+       G4int IS = 0;
        fiss2801:
        Z1rr = Z1UCD - cpol1 * A_scission/N_scission;
      // Z1r = DBLE(GaussHaz(k,sngl(Z1rr), sngl(ZA1width) ));
@@ -8298,7 +8252,7 @@ c                     E*=12 MeV :  153407 293063 553530 (1000000) */
       }else{
         if( imode == 2 && cpol2 != 0.0 ){
 //       --- asymmetric fission, mode 2 */
-        int IS = 0;
+        G4int IS = 0;
         fiss2802:
         Z1rr = Z1UCD - cpol2 * A_scission/N_scission;
         //Z1r = Z1rr+G4AblaRandom::gaus(ZA1width);//
@@ -8347,7 +8301,7 @@ c                     E*=12 MeV :  153407 293063 553530 (1000000) */
             }
           }
 
-        int IS = 0;
+        G4int IS = 0;
         fiss2803:      
         //Z1r = Z1rr+G4AblaRandom::gaus(ZA1width);
         Z1r = gausshaz(0,Z1rr,ZA1width);
@@ -8368,7 +8322,7 @@ c                     E*=12 MeV :  153407 293063 553530 (1000000) */
 //     ------------------------------------------ 
       even_odd(Z1r, r_e_o, i_help);
 
-      z1 = double(i_help);
+      z1 = G4double(i_help);
       z2 = dint( Z_scission ) - z1;
       N1 = dint( N1r );
       N2 = dint( N_scission ) - N1;
@@ -8515,14 +8469,14 @@ void G4Abla::even_odd(G4double r_origin,G4double r_even_odd,G4int &i_out)
   G4int n_floor = 0;
 
   r_in = r_origin + 0.5;
-  r_floor = (double)((int)(r_in));
+  r_floor = (G4double)((G4int)(r_in));
   if (r_even_odd < 0.001) {
-    i_out = (int)(r_floor);
+    i_out = (G4int)(r_floor);
   } 
   else {
     r_rest = r_in - r_floor;
     r_middle = r_floor + 0.5;
-    n_floor = (int)(r_floor);
+    n_floor = (G4int)(r_floor);
     if (n_floor%2 == 0) {
       // even before modif.
       r_help = r_middle + (r_rest - 0.5) * (1.0 - r_even_odd);
@@ -8531,7 +8485,7 @@ void G4Abla::even_odd(G4double r_origin,G4double r_even_odd,G4int &i_out)
       // odd before modification
       r_help = r_middle + (r_rest - 0.5) * (1.0 + r_even_odd);
     }
-    i_out = (int)(r_help);
+    i_out = (G4int)(r_help);
   }
 }
 
@@ -8593,11 +8547,11 @@ double G4Abla::ecoul(G4double z1,G4double n1,G4double beta1,G4double z2,G4double
 }
 
 
- G4double G4Abla::Uwash(double E, double Ecrit,double Freduction,double gamma){
+ G4double G4Abla::Uwash(G4double E, G4double Ecrit,G4double Freduction,G4double gamma){
         // E       excitation energy 
         // Ecrit   critical pairing energy 
         // Freduction  reduction factor for shell washing in superfluid region
-        double R_wash,uwash;
+        G4double R_wash,uwash;
         if(E < Ecrit)
           R_wash = std::exp(-E * Freduction * gamma);
         else
@@ -8608,7 +8562,7 @@ double G4Abla::ecoul(G4double z1,G4double n1,G4double beta1,G4double z2,G4double
 }
 
 
-G4double G4Abla::frldm(double z,double n,double beta){
+G4double G4Abla::frldm(G4double z,G4double n,G4double beta){
 
 //     Liquid-drop mass, Myers & Swiatecki, Lysekil, 1967
 //     pure liquid drop, without pairing and shell effects
@@ -8620,7 +8574,7 @@ G4double G4Abla::frldm(double z,double n,double beta){
 // The idea is to use FRLDM model for beta=0 and using Lysekil
 // model to get the deformation energy
 
-      double a;
+      G4double a;
       a = n + z;
       return eflmac_profi(a,z) + umass(z,n,beta) - umass(z,n,0.0);
 }
@@ -8639,7 +8593,7 @@ G4double G4Abla::frldm(double z,double n,double beta){
 // **********************************************************************
 
 
-G4double G4Abla::eflmac_profi(double ia, double iz)
+G4double G4Abla::eflmac_profi(G4double ia, G4double iz)
 {
   // CHANGED TO CALCULATE TOTAL BINDING ENERGY INSTEAD OF MASS EXCESS.     
   // SWITCH FOR PAIRING INCLUDED AS WELL.                                  
@@ -8709,10 +8663,10 @@ G4double G4Abla::eflmac_profi(double ia, double iz)
   // charge asymmetry
   ca  =  0.10289;
 
-  z   = double(iz);
-  a   = double(ia);
+  z   = G4double(iz);
+  a   = G4double(ia);
   in  = ia - iz;                                                       
-  n   = double(in);
+  n   = G4double(in);
 
   
   c1  = 3.0/5.0*esq/r0;
@@ -8749,16 +8703,16 @@ G4double G4Abla::eflmac_profi(double ia, double iz)
 //
 void G4Abla::unstable_nuclei(G4int AFP,G4int ZFP,G4int *AFPNEW,G4int *ZFPNEW,G4int &IOUNSTABLE,G4double VX,G4double VY,G4double VZ,G4double *VP1X,G4double *VP1Y,G4double *VP1Z,G4double BU_TAB_TEMP[200][5],G4int *ILOOP){
 //
-      int INMIN,INMAX,NDIF=0,IMEM;
-      int NEVA=0,PEVA=0;
-      double   VP2X,VP2Y,VP2Z;
+      G4int INMIN,INMAX,NDIF=0,IMEM;
+      G4int NEVA=0,PEVA=0;
+      G4double   VP2X,VP2Y,VP2Z;
 
       *AFPNEW = AFP;
       *ZFPNEW = ZFP;
       IOUNSTABLE = 0;
       *ILOOP = 0;
       IMEM = 0;
-      for(int i=0;i<200;i++){
+      for(G4int i=0;i<200;i++){
       BU_TAB_TEMP[i][0] = 0.0;
       BU_TAB_TEMP[i][1] = 0.0;
       BU_TAB_TEMP[i][2] = 0.0;
@@ -8789,7 +8743,7 @@ void G4Abla::unstable_nuclei(G4int AFP,G4int ZFP,G4int *AFPNEW,G4int *ZFPNEW,G4i
       }
 
       if ((AFP-ZFP)==0 && ZFP>1){
-        for(int I = 0;I<=AFP-2;I++){
+        for(G4int I = 0;I<=AFP-2;I++){
          unstable_tke(double(AFP-I),double(AFP-I),double(AFP-I-1),double(AFP-I-1),VX,VY,VZ,
            &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
          BU_TAB_TEMP[*ILOOP][0] = 1.0;
@@ -8814,7 +8768,7 @@ void G4Abla::unstable_nuclei(G4int AFP,G4int ZFP,G4int *AFPNEW,G4int *ZFPNEW,G4i
       if(NDIF<INMIN){
 // Proton unbound
         IOUNSTABLE = 1;
-       for(int I = 1;I<=10; I++){
+       for(G4int I = 1;I<=10; I++){
         isostab_lim(ZFP-I,&INMIN,&INMAX);
          if(INMIN<=NDIF){
          IMEM = I;
@@ -8826,11 +8780,11 @@ void G4Abla::unstable_nuclei(G4int AFP,G4int ZFP,G4int *AFPNEW,G4int *ZFPNEW,G4i
        }
 //
       u10:
-       for(int I = 0;I< IMEM;I++){
-         unstable_tke(double(NDIF+ZFP+IMEM-I),
-         double(ZFP+IMEM-I),
-         double(NDIF+ZFP+IMEM-I-1),
-         double(ZFP+IMEM-I-1),
+       for(G4int I = 0;I< IMEM;I++){
+         unstable_tke(G4double(NDIF+ZFP+IMEM-I),
+         G4double(ZFP+IMEM-I),
+         G4double(NDIF+ZFP+IMEM-I-1),
+         G4double(ZFP+IMEM-I-1),
          VX,VY,VZ,
          &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
          BU_TAB_TEMP[I+1+*ILOOP][0] = 1.0;
@@ -8850,11 +8804,11 @@ void G4Abla::unstable_nuclei(G4int AFP,G4int ZFP,G4int *AFPNEW,G4int *ZFPNEW,G4i
         NEVA = NDIF - INMAX;
         AFP = ZFP + INMAX;
         IOUNSTABLE = 1;
-         for(int I = 0;I<NEVA;I++){
-         unstable_tke(double(ZFP+NDIF-I),
-         double(ZFP),
-         double(ZFP+NDIF-I-1),
-         double(ZFP),
+         for(G4int I = 0;I<NEVA;I++){
+         unstable_tke(G4double(ZFP+NDIF-I),
+         G4double(ZFP),
+         G4double(ZFP+NDIF-I-1),
+         G4double(ZFP),
          VX,VY,VZ,
          &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
 
@@ -8871,9 +8825,9 @@ void G4Abla::unstable_nuclei(G4int AFP,G4int ZFP,G4int *AFPNEW,G4int *ZFPNEW,G4i
       }
 
          if ((AFP>=2) && (ZFP==0)){
-         for(int I = 0;I<= AFP-2;I++){
-         unstable_tke(double(AFP-I),double(ZFP),
-         double(AFP-I-1),double(ZFP),
+         for(G4int I = 0;I<= AFP-2;I++){
+         unstable_tke(G4double(AFP-I),G4double(ZFP),
+         G4double(AFP-I-1),G4double(ZFP),
          VX,VY,VZ,
          &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
 
@@ -8901,7 +8855,7 @@ void G4Abla::unstable_nuclei(G4int AFP,G4int ZFP,G4int *AFPNEW,G4int *ZFPNEW,G4i
          }
          if ((AFP>=4) && (ZFP==1)){
 // Heavy residue is treated as 3H and the rest of mass is emitted as neutrons:
-         for(int I = 0; I<AFP-3;I++){
+         for(G4int I = 0; I<AFP-3;I++){
          unstable_tke(double(AFP-I),double(ZFP),
          double(AFP-I-1),double(ZFP),
          VX,VY,VZ,
@@ -9025,7 +8979,7 @@ void G4Abla::unstable_nuclei(G4int AFP,G4int ZFP,G4int *AFPNEW,G4int *ZFPNEW,G4i
 
          if ((AFP==7) && (ZFP==5)){
 // 7B -> 6Be + p -> 4He + 3p
-         for(int I = 0; I<= AFP-5;I++){
+         for(G4int I = 0; I<= AFP-5;I++){
          unstable_tke(double(AFP-I),double(ZFP-I),
          double(AFP-I-1),double(ZFP-I-1),
          VX,VY,VZ,
@@ -9389,9 +9343,9 @@ void G4Abla::unstable_nuclei(G4int AFP,G4int ZFP,G4int *AFPNEW,G4int *ZFPNEW,G4i
            NEVA = AFP - 3;
            PEVA = ZFP - 2;
 
-         for(int I = 0;I< NEVA;I++){
-        unstable_tke(double(AFP-I),double(ZFP),
-         double(AFP-I-1),double(ZFP),
+         for(G4int I = 0;I< NEVA;I++){
+        unstable_tke(G4double(AFP-I),G4double(ZFP),
+         G4double(AFP-I-1),G4double(ZFP),
          VX,VY,VZ,
          &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
          BU_TAB_TEMP[*ILOOP][0] = 0.0;
@@ -9404,9 +9358,9 @@ void G4Abla::unstable_nuclei(G4int AFP,G4int ZFP,G4int *AFPNEW,G4int *ZFPNEW,G4i
          VY = *VP1Y;
          VZ = *VP1Z;
          }
-        for( int I = 0;I<PEVA;I++){
-        unstable_tke(double(AFP-NEVA-I),double(ZFP-I),
-         double(AFP-NEVA-I-1),double(ZFP-I-1),
+        for(G4int I = 0;I<PEVA;I++){
+        unstable_tke(G4double(AFP-NEVA-I),G4double(ZFP-I),
+         G4double(AFP-NEVA-I-1),G4double(ZFP-I-1),
          VX,VY,VZ,
          &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
          BU_TAB_TEMP[*ILOOP][0] = 1.0;
@@ -9578,8 +9532,8 @@ void G4Abla::fission(G4double AF,G4double ZF,G4double EE,G4double JPRF,
        IEV_TAB_SSC=0;
        (*imode_par)=0;
 
-       for(int I1=0;I1<200;I1++)
-       for(int I2=0;I2<5;I2++){
+       for(G4int I1=0;I1<200;I1++)
+       for(G4int I2=0;I2<5;I2++){
        EV_TEMP[I1][I2] = 0.0;
        EV_TEMP1[I1][I2] = 0.0;
        EV_TEMP2[I1][I2] = 0.0;
@@ -9591,7 +9545,7 @@ void G4Abla::fission(G4double AF,G4double ZF,G4double EE,G4double JPRF,
                      vx_eva_sc,vy_eva_sc,vz_eva_sc);
 
 //     Copy of the evaporated particles from saddle to scission
-       for(int IJ = 0; IJ< IEV_TAB_SSC;IJ++){
+       for(G4int IJ = 0; IJ< IEV_TAB_SSC;IJ++){
              EV_TEMP[IJ][0] = EV_TAB_SSC[IJ][0];
              EV_TEMP[IJ][1] = EV_TAB_SSC[IJ][1];
              EV_TEMP[IJ][2] = EV_TAB_SSC[IJ][2];
@@ -9601,14 +9555,14 @@ void G4Abla::fission(G4double AF,G4double ZF,G4double EE,G4double JPRF,
        IEV_TAB_FIS = IEV_TAB_FIS + IEV_TAB_SSC;
 
 //    Velocities
-      double VZ1_FISSION = (2.0 * G4AblaRandom::flat() - 1.0) * VFF1;
-      double VPERP1 = std::sqrt(VFF1*VFF1 - VZ1_FISSION*VZ1_FISSION);
-      double ALPHA1 = G4AblaRandom::flat() * 2. * 3.142;
-      double VX1_FISSION = VPERP1 * std::sin(ALPHA1);
-      double VY1_FISSION = VPERP1 * std::cos(ALPHA1);
-      double VX2_FISSION = - VX1_FISSION / VFF1 * VFF2;
-      double VY2_FISSION = - VY1_FISSION / VFF1 * VFF2;
-      double VZ2_FISSION = - VZ1_FISSION / VFF1 * VFF2;
+      G4double VZ1_FISSION = (2.0 * G4AblaRandom::flat() - 1.0) * VFF1;
+      G4double VPERP1 = std::sqrt(VFF1*VFF1 - VZ1_FISSION*VZ1_FISSION);
+      G4double ALPHA1 = G4AblaRandom::flat() * 2. * 3.142;
+      G4double VX1_FISSION = VPERP1 * std::sin(ALPHA1);
+      G4double VY1_FISSION = VPERP1 * std::cos(ALPHA1);
+      G4double VX2_FISSION = - VX1_FISSION / VFF1 * VFF2;
+      G4double VY2_FISSION = - VY1_FISSION / VFF1 * VFF2;
+      G4double VZ2_FISSION = - VZ1_FISSION / VFF1 * VFF2;
 //
 // Fission fragment 1
       if( (ZF1<=0.0) || (AF1<=0.0) || (AF1<ZF1) ){
@@ -9618,12 +9572,12 @@ void G4Abla::fission(G4double AF,G4double ZF,G4double EE,G4double JPRF,
      opt->optimfallowed = 0; //  IMF is not allowed
      fiss->ifis = 0;         //  fission is not allowed
      gammaemission=1;
-     int FF11=0, FIMF11=0;
-     double ZIMFF1=0., AIMFF1=0.,TKEIMF1=0.,JPRFOUT=0.;
+     G4int FF11=0, FIMF11=0;
+     G4double ZIMFF1=0., AIMFF1=0.,TKEIMF1=0.,JPRFOUT=0.;
 //
      evapora(ZF1,AF1,&EFF1,0., &ZFF1, &AFF1, &mtota, &vz1_eva, &vx1_eva,&vy1_eva, &FF11, &FIMF11, &ZIMFF1, &AIMFF1,&TKEIMF1, &JPRFOUT, &inttype, &inum,EV_TEMP1,&IEV_TAB_TEMP);
 
-               for(int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
                EV_TEMP[IJ+IEV_TAB_FIS][0] = EV_TEMP1[IJ][0];
                EV_TEMP[IJ+IEV_TAB_FIS][1] = EV_TEMP1[IJ][1];
 // Lorentz kinematics
@@ -9654,12 +9608,12 @@ void G4Abla::fission(G4double AF,G4double ZF,G4double EE,G4double JPRF,
      opt->optimfallowed = 0; //  IMF is not allowed
      fiss->ifis = 0;         //  fission is not allowed
      gammaemission=1;
-     int FF22=0, FIMF22=0;
-     double ZIMFF2=0., AIMFF2=0.,TKEIMF2=0.,JPRFOUT=0.;
+     G4int FF22=0, FIMF22=0;
+     G4double ZIMFF2=0., AIMFF2=0.,TKEIMF2=0.,JPRFOUT=0.;
 //
      evapora(ZF2,AF2,&EFF2,0., &ZFF2, &AFF2, &mtota, &vz2_eva, &vx2_eva,&vy2_eva, &FF22, &FIMF22, &ZIMFF2, &AIMFF2,&TKEIMF2, &JPRFOUT, &inttype, &inum,EV_TEMP2,&IEV_TAB_TEMP);
 
-               for(int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){
                EV_TEMP[IJ+IEV_TAB_FIS][0] = EV_TEMP2[IJ][0];
                EV_TEMP[IJ+IEV_TAB_FIS][1] = EV_TEMP2[IJ][1];
 // Lorentz kinematics
@@ -9736,16 +9690,16 @@ void G4Abla::tke_bu(G4double Z,G4double A,G4double ZALL,G4double AAL,G4double *V
        }
 
        RALL = R0 * std::pow(V_over_V0,1.0/3.0) * std::pow(AAL,1.0/3.0);
-       RHAZ = double(haz(1));
+       RHAZ = G4double(haz(1));
        R = std::pow(RHAZ,1.0/3.0) * RALL;
        TKE = 1.44 * Z * ZALL * R*R * (1.0 - A/AAL)*(1.0 - A/AAL) / std::pow(RALL,3.0);
 
        Ekin = TKE * (AAL - A) / AAL;
 //       print*,'!!!',IDNINT(AAl),IDNINT(A),IDNINT(ZALL),IDNINT(Z)
        V = std::sqrt(Ekin/A) * 1.3887;
-       *VZ = (2.0 * double(haz(1)) - 1.0) * V;
+       *VZ = (2.0 * G4double(haz(1)) - 1.0) * V;
        VPERP = std::sqrt(V*V - (*VZ)*(*VZ));
-       ALPHA1 = double(haz(1)) * 2.0 * 3.142;
+       ALPHA1 = G4double(haz(1)) * 2.0 * 3.142;
        *VX = VPERP * std::sin(ALPHA1);
        *VY = VPERP * std::cos(ALPHA1);
  return;
@@ -9772,38 +9726,13 @@ G4double G4Abla::haz(G4int k)
     }
     else {
       x = 0.0;
-      y = secnds(int(x));
-      ix = int(y * 100 + 43543000);
+      y = secnds(G4int(x));
+      ix = G4int(y * 100 + 43543000);
       if(mod(ix,2) == 0) {
 	ix = ix + 1;
       }
     }}
 
-    // Here we are using random number generator copied from INCL code
-    // instead of the CERNLIB one! This causes difficulties for
-    // automatic testing since the random number generators, and thus
-    // the behavior of the routines in C++ and FORTRAN versions is no
-    // longer exactly the same!
-/*
-    x = G4AblaRandom::flat();
-    //    standardRandom(&x, &ix);
-    for(G4int iRandom = 0; iRandom < pSize; iRandom++) { //do i=1,110                                                 
-      p[iRandom] = G4AblaRandom::flat();
-      //      standardRandom(&(p[i]), &ix);
-    }
-    a = G4AblaRandom::flat();
-    //standardRandom(&a, &ix);
-    k = 0;
-  }
-
-  i = nint(100*a)+1;
-  fhaz = p[i];
-  a = G4AblaRandom::flat();
-  //  standardRandom(&a, &ix);
-  p[i] = a;
-*/
-  //  hazard->ial = ix;
-  //  haz=0.4;
   return G4AblaRandom::flat();
 }
 
@@ -9814,8 +9743,8 @@ G4double G4Abla::haz(G4int k)
 G4int G4Abla::IPOWERLIMHAZ(G4double lambda,G4int xmin,G4int xmax){
        G4double y,l_plus,rxmin,rxmax;
          l_plus = lambda + 1.;
-         rxmin = double(xmin) - 0.5;
-         rxmax = double(xmax) + 0.5;
+         rxmin = G4double(xmin) - 0.5;
+         rxmax = G4double(xmax) + 0.5;
 //       y=(HAZ(k)*(rxmax**l_plus-rxmin**l_plus)+ rxmin**l_plus)**(1.E0/l_plus)
          y=std::pow(G4AblaRandom::flat()*(std::pow(rxmax,l_plus)-std::pow(rxmin,l_plus))+ std::pow(rxmin,l_plus),1.0/l_plus);
          return nint(y);
@@ -9826,28 +9755,6 @@ void G4Abla::AMOMENT(G4double AABRA,G4double APRF, G4int IMULTIFR,G4double *PX,G
       G4int ISIGOPT = 0;
       G4double GOLDHA_BU=0.,GOLDHA=0.;
       G4double PI = 3.141592653589793;
-      //nu = 1.d0
-
-    //  G4double BETAP = sqrt(1.0 - 1.0/sqrt(1.0+EAP/931.494));
-    //  G4double GAMMAP = 1.0 / sqrt(1. - BETAP*BETAP);
-    //  G4double FACT_PROJ = (GAMMAP + 1.) / (BETAP * GAMMAP);
-
-     // G4double R = 1.160 * pow(APRF,1.0/3.0);
-
-    //  G4double RNDT = double(haz(1));
-    //  G4double CTET = 2.0*RNDT-1.0;
-    //  G4double TETA = acos(CTET);
-    //  G4double RNDP = double(haz(1));
-    //  G4double PHI = RNDP*2.0*PI;
-    //  G4double STET = sqrt(1.0-CTET*CTET);
-//      RX = R * STET * DCOS(PHI)
-//      RY = R * STET * DSIN(PHI)
-//      RZ = R * CTET
-
-    //  G4double RZ = 0.0;
-    //  G4double RY = R * sin(PHI);
-    //  G4double RX = R * cos(PHI);
-
 // In MeV/C
       G4double V0_over_VBU = 1.0 / 6.0;
       G4double SIGMA_0 = 118.50;
@@ -9880,9 +9787,9 @@ void G4Abla::AMOMENT(G4double AABRA,G4double APRF, G4int IMULTIFR,G4double *PX,G
       GOLDHA = SIGMA_0 * std::sqrt((APRF*(AABRA-APRF))/(AABRA-1.0));
       }
 
-      int IS = 0;
+      G4int IS = 0;
       mom123:  
-      *PX = double(gausshaz(1,0.0,GOLDHA));
+      *PX = G4double(gausshaz(1,0.0,GOLDHA));
       IS = IS +1;
       if(IS>100){
       std::cout << "WARNING: GAUSSHAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING PX IN Rn07.FOR. A VALUE WILL BE FORCED." << std::endl;
@@ -9894,7 +9801,7 @@ void G4Abla::AMOMENT(G4double AABRA,G4double APRF, G4int IMULTIFR,G4double *PX,G
       }
       IS = 0;
       mom456:  
-      *PY = double(gausshaz(1,0.0,GOLDHA));
+      *PY = G4double(gausshaz(1,0.0,GOLDHA));
       IS = IS +1;
       if(IS>100){
       std::cout << "WARNING: GAUSSHAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING PY IN Rn07.FOR. A VALUE WILL BE FORCED." << std::endl;
@@ -9906,7 +9813,7 @@ void G4Abla::AMOMENT(G4double AABRA,G4double APRF, G4int IMULTIFR,G4double *PX,G
       }
       IS = 0;
       mom789:  
-      *PZ = double(gausshaz(1,0.0,GOLDHA));
+      *PZ = G4double(gausshaz(1,0.0,GOLDHA));
       IS = IS +1;
       if(IS>100){
       std::cout << "WARNING: GAUSSHAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING PZ IN Rn07.FOR. A VALUE WILL BE FORCED." << std::endl;
@@ -9916,40 +9823,10 @@ void G4Abla::AMOMENT(G4double AABRA,G4double APRF, G4int IMULTIFR,G4double *PX,G
 //       PRINT*,'VX > C',PX,IDNINT(APRF)
        goto mom789;
       }
-/*
-      PTOT = DSQRT(PX**2+PY**2+PZ**2)
-
-C The component of the linear momentum along the prefr. radius (PR)
-C doesn't contribute to angular momentum, only transversal compnenet PT
-      TETA_P = DACOS(PZ/PTOT)
-      IF(PX.EQ.0.D0) THEN
-       IF(PY.GT.0.D0) PHI_P = PI / 2.D0
-       IF(PY.LT.0.D0) PHI_P = 1.5D0 * PI
-       IF(PY.EQ.0.D0) PHI_P = 0.D0
-      ELSE
-      PHI_P = DASIN(PY/DSQRT(PX**2+PY**2))
-      IF(PHI_P .LT. 0.D0) PHI_P = 2.D0 * PI - DABS(PHI_P)
-      IF(PX .LT. 0.D0) THEN
-      PHI_P = PI - DASIN(PY/DSQRT(PX**2+PY**2))
-      ENDIF
-      ENDIF
-
-// In MeV/C * fm
-      JPRFX = RX * PZ - RZ * PY
-      JPRFY = RZ * PX - RX * PZ
-      JPRFZ = RX * PY - RY * PX
-// In Hbar
-      JPRFX = JPRFX / 197.3395D0
-      JPRFY = JPRFY / 197.3395D0
-      JPRFZ = JPRFZ / 197.3395D0
-      AMOM = DSQRT(JPRFX**2 + JPRFY**2 + JPRFZ**2)
-*/
-
-
  return;
 }
 
-G4double G4Abla::gausshaz(int k, double xmoy, double sig)
+G4double G4Abla::gausshaz(G4int k, G4double xmoy, G4double sig)
 {
   // Gaussian random numbers:
 

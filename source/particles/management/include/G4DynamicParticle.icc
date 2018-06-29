@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.icc 98352 2016-07-08 08:21:00Z gcosmo $
+// $Id: G4DynamicParticle.icc 110257 2018-05-17 14:20:12Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -33,7 +33,7 @@
 //	History: first implementation, based on object model of
 //                             17 AUg. 1999   H.Kurashige  
 // ------------------------------------------------------------
-extern G4PART_DLL G4ThreadLocal G4Allocator<G4DynamicParticle> *pDynamicParticleAllocator;
+extern G4PART_DLL G4Allocator<G4DynamicParticle>*& pDynamicParticleAllocator();
 
 // ------------------------
 // Inlined operators
@@ -41,14 +41,14 @@ extern G4PART_DLL G4ThreadLocal G4Allocator<G4DynamicParticle> *pDynamicParticle
 
 inline void * G4DynamicParticle::operator new(size_t)
 {
-  if (!pDynamicParticleAllocator) pDynamicParticleAllocator =
+  if (!pDynamicParticleAllocator()) pDynamicParticleAllocator() =
     new G4Allocator<G4DynamicParticle>;
-  return pDynamicParticleAllocator->MallocSingle();
+  return pDynamicParticleAllocator()->MallocSingle();
 }
 
 inline void G4DynamicParticle::operator delete(void * aDynamicParticle)
 {
-  pDynamicParticleAllocator->FreeSingle((G4DynamicParticle *) aDynamicParticle);
+  pDynamicParticleAllocator()->FreeSingle((G4DynamicParticle *) aDynamicParticle);
 }
 
 // ------------------------

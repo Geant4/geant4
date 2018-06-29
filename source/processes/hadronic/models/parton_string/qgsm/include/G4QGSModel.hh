@@ -37,7 +37,6 @@
 
 #include "G4ExcitedStringVector.hh"
 #include "G4KineticTrackVector.hh"
-#include "G4PomeronCrossSection.hh"
 #include "G4ParticleTable.hh"
 #include "G4Fancy3DNucleus.hh"
 #include "G4VPartonStringModel.hh"
@@ -46,39 +45,43 @@
 #include "G4SoftStringBuilder.hh"
 #include "G4PartonPair.hh"
 
+//*********************************************************************************************** 
+
+
 //*****************************************************************************************
 
 template<class ParticipantType>
 class G4QGSModel : public G4VPartonStringModel
-{
-  // Constructors   
-  public:
+    {
+// Constructors   
+public:
     G4QGSModel();
     virtual ~G4QGSModel();
     G4QGSModel(const G4QGSModel &right);
     G4QGSModel& operator=(const G4QGSModel &right);
 
-  // Method
-  public:
+// Method
+public:
     virtual G4V3DNucleus* GetWoundedNucleus() const;
     virtual G4V3DNucleus* GetProjectileNucleus() const;  // Uzhi Nov. 2012
     virtual void Init(const G4Nucleus& Nucleus, const G4DynamicParticle& Projectile);
     virtual G4ExcitedStringVector * GetStrings();
     virtual void ModelDescription(std::ostream& outFile) const;
 
-  private:
-    ParticipantType theParticipants;
-    G4DiffractiveStringBuilder theDiffractiveStringBuilder;
-    G4SoftStringBuilder theSoftStringBuilder;
+private:
+   ParticipantType theParticipants;
+   G4DiffractiveStringBuilder theDiffractiveStringBuilder;
+   G4SoftStringBuilder theSoftStringBuilder;
 
-  private:
-    // cash theCurrentVelocity for lorentztrafo HPW 
-    G4ThreeVector theCurrentVelocity;
-};
+   };
+
+//-------------------------------------------------------------------------------------------
+
 
 //*****************************************************************************************
     
 #include "G4QGSModel.icc"
 
 #endif
+
 

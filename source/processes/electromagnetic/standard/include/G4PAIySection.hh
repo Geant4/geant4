@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIySection.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4PAIySection.hh 108737 2018-03-02 13:49:56Z gcosmo $
 //
 // 
 // G4PAIySection.hh -- header file
@@ -54,11 +54,11 @@ class G4PAIySection
 public:
 
   explicit G4PAIySection();
-	  
-  ~G4PAIySection();
+          
+  ~G4PAIySection() = default;
 
   void Initialize(const G4Material* material, G4double maxEnergyTransfer, 
-		  G4double betaGammaSq, G4SandiaTable*);
+                  G4double betaGammaSq, G4SandiaTable*);
 
   void ComputeLowEnergyCof(const G4Material* material);
 
@@ -67,25 +67,25 @@ public:
   void NormShift( G4double betaGammaSq );
   
   void SplainPAI( G4double betaGammaSq );
-	  	  
+                    
   // Physical methods
   G4double RutherfordIntegral( G4int intervalNumber,
-			       G4double limitLow,
-			       G4double limitHigh     );
+                               G4double limitLow,
+                               G4double limitHigh     );
 
   G4double ImPartDielectricConst( G4int intervalNumber,
-				  G4double energy        );
+                                  G4double energy        );
 
   G4double RePartDielectricConst(G4double energy);
 
   G4double DifPAIySection( G4int intervalNumber,
-			   G4double betaGammaSq    );
+                           G4double betaGammaSq    );
 
   G4double PAIdNdxCerenkov( G4int intervalNumber,
-			    G4double betaGammaSq    );
+                            G4double betaGammaSq    );
 
   G4double PAIdNdxPlasmon( G4int intervalNumber,
-			   G4double betaGammaSq    );
+                           G4double betaGammaSq    );
 
   void     IntegralPAIySection();
   void     IntegralCerenkov();
@@ -97,24 +97,26 @@ public:
   G4double SumOverInterPlasmon(G4int intervalNumber);
 
   G4double SumOverBorder( G4int intervalNumber,
-			  G4double energy          );
+                          G4double energy          );
   G4double SumOverBorderdEdx( G4int intervalNumber,
-			      G4double energy          );
+                              G4double energy          );
   G4double SumOverBordCerenkov( G4int intervalNumber,
-				G4double energy          );
+                                G4double energy          );
   G4double SumOverBordPlasmon( G4int intervalNumber,
-			       G4double energy          );
+                               G4double energy          );
 
   G4double GetStepEnergyLoss( G4double step );
   G4double GetStepCerenkovLoss( G4double step );
   G4double GetStepPlasmonLoss( G4double step );
-	 
+
+  G4double GetLorentzFactor(G4int j) const;
+         
   // Inline access functions
 
   inline G4int GetNumberOfGammas() const { return fNumberOfGammas; }
-	  
+          
   inline G4int GetSplineSize() const { return fSplineNumber; }
-	  
+          
   inline G4int GetIntervalNumber() const { return fIntervalNumber; }
 
   inline G4double GetEnergyInterval(G4int i){ return fEnergyInterval[i]; } 
@@ -122,7 +124,7 @@ public:
   inline G4double GetDifPAIySection(G4int i){ return fDifPAIySection[i]; } 
   inline G4double GetPAIdNdxCrenkov(G4int i){ return fdNdxCerenkov[i]; } 
   inline G4double GetPAIdNdxPlasmon(G4int i){ return fdNdxPlasmon[i]; } 
-	  
+          
   inline G4double GetMeanEnergyLoss() const {return fIntegralPAIySection[0]; }
   inline G4double GetMeanCerenkovLoss() const {return fIntegralCerenkov[0]; }
   inline G4double GetMeanPlasmonLoss() const {return fIntegralPlasmon[0]; }
@@ -130,11 +132,9 @@ public:
   inline G4double GetNormalizationCof() const { return fNormalizationCof; }
           
   inline G4double GetPAItable(G4int i,G4int j) const;
-
-  inline G4double GetLorentzFactor(G4int i) const;
-	  	  
+                    
   inline G4double GetSplineEnergy(G4int i) const;
-	  
+          
   inline G4double GetIntegralPAIySection(G4int i) const;
   inline G4double GetIntegralPAIdEdx(G4int i) const;
   inline G4double GetIntegralCerenkov(G4int i) const;
@@ -201,17 +201,12 @@ inline G4double G4PAIySection::GetPAItable(G4int i, G4int j) const
    return fPAItable[i][j];
 }
 
-inline G4double G4PAIySection::GetLorentzFactor(G4int j) const
-{
-   return fLorentzFactor[j];
-}
-
 inline G4double G4PAIySection::GetSplineEnergy(G4int i) const 
 {
   if(i < 1 || i > fSplineNumber) { CallError(i, "GetSplineEnergy"); }
   return fSplineEnergy[i];
 }
-	  
+  
 inline G4double G4PAIySection::GetIntegralPAIySection(G4int i) const 
 {
   if(i < 1 || i > fSplineNumber) { CallError(i, "GetIntegralPAIySection"); }

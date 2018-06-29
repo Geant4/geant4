@@ -1,13 +1,14 @@
-# 210PB (22.3 y)
-#  Excitation   Halflife Mode       Daughter Ex  Intensity           Q
-#
-# File sanitized by Vanderbilt Decay-o-matic
-# $Id: repair_decay_files.py,v 1.20 2006/04/24 14:53:36 marcus Exp $ 
-# Fri Oct  6 15:26:26 2006 
+# 210PB ( 22.20 Y   )
+#  Excitation  flag   Halflife  Mode    Daughter Ex flag   Intensity          Q
 #With modification of the time life
-P       0.0000   7.0370e+15
-                             Alpha       0.0000   5.0000e-01
-                         BetaMinus       0.0000   5.0000e-01
-                             Alpha       0.0000   1.9000e-06    3792.0000
-                         BetaMinus       0.0000   1.6000e+01      63.1000
-                         BetaMinus      46.5390   8.4000e+01      16.5610
+# P            0  - 7.005787e+08
+P            0  - 7.0370e+15
+                                  Alpha            0         1.9e-08
+                              BetaMinus            0               1
+                                  Alpha            0  -      1.9e-06       3792.3
+                              BetaMinus            0  -           16       63.486
+                              BetaMinus       46.539  -           84       16.947
+P         1195  -      4.9e-08
+                                     IT            0               1
+P         1278  -     2.01e-07
+                                     IT            0               1

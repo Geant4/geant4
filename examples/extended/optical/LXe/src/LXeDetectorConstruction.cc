@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeDetectorConstruction.cc 104474 2017-06-01 07:35:19Z gcosmo $
+// $Id: LXeDetectorConstruction.cc 110138 2018-05-16 07:31:43Z gcosmo $
 //
 /// \file optical/LXe/src/LXeDetectorConstruction.cc
 /// \brief Implementation of the LXeDetectorConstruction class
@@ -66,19 +66,20 @@ G4bool LXeDetectorConstruction::fSphereOn = true;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeDetectorConstruction::LXeDetectorConstruction()
-: fLXe_mt(NULL), fMPTPStyrene(NULL)
+: fLXe_mt(nullptr), fMPTPStyrene(nullptr)
 {
-  fExperimentalHall_box = NULL;
-  fExperimentalHall_log = NULL;
-  fExperimentalHall_phys = NULL;
+  fExperimentalHall_box = nullptr;
+  fExperimentalHall_log = nullptr;
+  fExperimentalHall_phys = nullptr;
 
-  fLXe = fAl = fAir = fVacuum = fGlass = NULL;
-  fPstyrene = fPMMA = fPethylene1 = fPethylene2 = NULL;
+  fLXe = fAl = fAir = fVacuum = fGlass = nullptr;
+  fPstyrene = fPMMA = fPethylene1 = fPethylene2 = nullptr;
 
-  fN = fO = fC = fH = NULL;
+  fN = fO = fC = fH = nullptr;
 
   SetDefaults();
 
+  DefineMaterials();
   fDetectorMessenger = new LXeDetectorMessenger(this);
 }
 
@@ -250,7 +251,6 @@ G4VPhysicalVolume* LXeDetectorConstruction::Construct(){
      G4LogicalBorderSurface::CleanSurfaceTable();
   }
 
-  DefineMaterials();
   return ConstructDetector();
 }
 
@@ -357,44 +357,52 @@ void LXeDetectorConstruction::ConstructSDandField() {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetDimensions(G4ThreeVector dims) {
-  this->fScint_x=dims[0];
-  this->fScint_y=dims[1];
-  this->fScint_z=dims[2];
+  //this->fScint_x=dims[0];
+  //this->fScint_y=dims[1];
+  //this->fScint_z=dims[2];
+  fScint_x=dims[0];
+  fScint_y=dims[1];
+  fScint_z=dims[2];
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetHousingThickness(G4double d_mtl) {
-  this->fD_mtl=d_mtl;
+  //this->fD_mtl=d_mtl;
+  fD_mtl=d_mtl;
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetNX(G4int nx) {
-  this->fNx=nx;
+  //this->fNx=nx;
+  fNx=nx;
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetNY(G4int ny) {
-  this->fNy=ny;
+  //this->fNy=ny;
+  fNy=ny;
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetNZ(G4int nz) {
-  this->fNz=nz;
+  //this->fNz=nz;
+  fNz=nz;
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetPMTRadius(G4double outerRadius_pmt) {
-  this->fOuterRadius_pmt=outerRadius_pmt;
+  //this->fOuterRadius_pmt=outerRadius_pmt;
+  fOuterRadius_pmt=outerRadius_pmt;
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
@@ -416,13 +424,13 @@ void LXeDetectorConstruction::SetDefaults() {
   fOuterRadius_pmt = 2.3*cm;
 
   fSphereOn = true;
-  fRefl=1.0;
+  fRefl = 1.0;
 
-  fNfibers=15;
-  fWLSslab=false;
-  fMainVolumeOn=true;
-  fMainVolume=NULL;
-  fSlab_z=2.5*mm;
+  fNfibers = 15;
+  fWLSslab = false;
+  fMainVolumeOn = true;
+  fMainVolume = nullptr;
+  fSlab_z = 2.5*mm;
 
   G4UImanager::GetUIpointer()
     ->ApplyCommand("/LXe/detector/scintYieldFactor 1.");

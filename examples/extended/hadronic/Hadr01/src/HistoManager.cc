@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 107541 2017-11-22 08:24:57Z gcosmo $
+// $Id: HistoManager.cc 109185 2018-04-03 07:20:46Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -91,7 +91,7 @@ HistoManager* HistoManager::GetPointer()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 HistoManager::HistoManager()
-: fPrimaryDef(0),
+: fPrimaryDef(nullptr),
   fEdepMax(1.0*GeV),
   fLength (300.*mm),
   fPrimaryKineticEnergy(0.0),  

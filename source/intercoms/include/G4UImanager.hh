@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh 106172 2017-09-15 13:03:57Z gcosmo $
+// $Id: G4UImanager.hh 110270 2018-05-17 14:38:26Z gcosmo $
 //
 
 #ifndef G4UImanager_h
@@ -147,9 +147,9 @@ class G4UImanager : public G4VStateDependent
   //    void Interact(const char * promptCharacters);
 
   private:
-      G4ICOMS_DLL static G4ThreadLocal G4UImanager * fUImanager;
-      G4ICOMS_DLL static G4ThreadLocal G4bool fUImanagerHasBeenKilled;
-      G4ICOMS_DLL static G4UImanager * fMasterUImanager;
+      G4ICOMS_DLL static G4UImanager*& fUImanager(); // thread-local
+      G4ICOMS_DLL static G4bool& fUImanagerHasBeenKilled(); // thread-local
+      G4ICOMS_DLL static G4UImanager*& fMasterUImanager();
       G4UIcommandTree * treeTop;
       G4UIsession * session;
       G4UIsession * g4UIWindow;
@@ -265,7 +265,7 @@ class G4UImanager : public G4VStateDependent
         if(val&&!bridges)
         {
            bridges = new std::vector<G4UIbridge*>;
-           fMasterUImanager = this;
+           fMasterUImanager() = this;
         }
       }
       inline void SetIgnoreCmdNotFound(G4bool val)

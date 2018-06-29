@@ -24,12 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryContainer.cc 69010 2013-04-15 09:34:16Z gcosmo $
+// $Id: G4TrajectoryContainer.cc 110273 2018-05-17 14:43:43Z gcosmo $
 //
 
 #include "G4TrajectoryContainer.hh"
 
-G4ThreadLocal G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator = 0;
+G4Allocator<G4TrajectoryContainer>*& aTrajectoryContainerAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4TrajectoryContainer>* _instance = nullptr;
+    return _instance;
+}
 
 G4TrajectoryContainer::G4TrajectoryContainer()
 {

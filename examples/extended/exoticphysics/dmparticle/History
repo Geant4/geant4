@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-05-18 J.Allison (dmparticle-V10-04-01)
+- RunAction.cc: Remove vis commands.
+
+17-05-18 J.Allison (dmparticle-V10-04-00)
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
 20-06-17 V.Ivanchenko (dmparticle-V10-03-04)
 - Run - V.Grichine fixed typo in printout
 

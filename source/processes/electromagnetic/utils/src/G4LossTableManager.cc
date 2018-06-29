@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc 107364 2017-11-09 10:53:25Z gcosmo $
+// $Id: G4LossTableManager.cc 110572 2018-05-30 13:08:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -400,6 +400,28 @@ void G4LossTableManager::RegisterExtraParticle(
   inv_range_vector.push_back(nullptr);
   tables_are_built.push_back(false);
   all_tables_are_built = false;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VEnergyLossProcess* 
+G4LossTableManager::GetEnergyLossProcess(const G4ParticleDefinition *aParticle)
+{
+  //G4cout << "G4LossTableManager::GetEnergyLossProcess: " 
+  //<< aParticle << "  " << currentParticle << "  " << currentLoss << G4endl;
+  if(aParticle != currentParticle) {
+    currentParticle = aParticle;
+    std::map<PD,G4VEnergyLossProcess*,std::less<PD> >::const_iterator pos;
+    if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
+      currentLoss = (*pos).second;
+    } else {
+      currentLoss = nullptr;
+      if ((pos = loss_map.find(theGenericIon)) != loss_map.end()) {
+        currentLoss = (*pos).second;
+      }
+    }
+  }
+  return currentLoss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

@@ -33,11 +33,13 @@
 // Comments
 //
 //            Underground Advanced example main program
-//               by A. Howard and H. Araujo 
+//               by A. Howard and H. Araujo
 //                    (27th November 2001)
 //
 // main program
 // --------------------------------------------------------------
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -65,11 +67,11 @@ int main(int argc,char** argv) {
 
   // choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
-  
+
   // Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-  //runManager->SetNumberOfThreads(2); 
+  //runManager->SetNumberOfThreads(2);
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif
@@ -91,13 +93,13 @@ int main(int argc,char** argv) {
 #else
   G4cout << " Using the DMX gun " << G4endl;
 #endif
-    
- 
+
+
   //Initialize G4 kernel
   runManager->Initialize();
-    
-  // get the pointer to the User Interface manager 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+
+  // get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   // Define UI session for interactive mode.
   if(argc == 1)
@@ -105,7 +107,7 @@ int main(int argc,char** argv) {
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute initInter.mac");     
+      UImanager->ApplyCommand("/control/execute initInter.mac");
 #endif
       ui->SessionStart();
       delete ui;
@@ -113,7 +115,7 @@ int main(int argc,char** argv) {
     }
   // Batch mode
   else
-    { 
+    {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);

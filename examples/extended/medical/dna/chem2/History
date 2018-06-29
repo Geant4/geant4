@@ -14,15 +14,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-07.06.2016 S.Incerti            tag chem2-V10-03-00                           
+26.02.2018 R. Hatcher           tag chem2-V10-04-00
+-----------------------------------------------------
+- Use G4RegisterPhysicsConstructors.icc to ensure G4PhysicsConstructorRegisty
+  is filled when using static libraries
+
+07.06.2016 S.Incerti            tag chem2-V10-03-00
 -----------------------------------------------------
 -  Modified time steps
 
-09.07.2016 S.Incerti            tag chem2-V10-02-01                           
+09.07.2016 S.Incerti            tag chem2-V10-02-01
 -----------------------------------------------------
 -  Updated README
 
-04.07.2016 I.Hrivnacova         tag chem2-V10-02-00                           
+04.07.2016 I.Hrivnacova         tag chem2-V10-02-00
 -----------------------------------------------------
 -  Fixes for Doxygen documentation
 
@@ -47,7 +52,7 @@ a pointer instead of a reference
 - Retag before release
 - Initialization of chemistry applications is simplified
 
-06.11.2014 I.Hrivnacova                             
+06.11.2014 I.Hrivnacova
 -----------------------------------------------------
 - Fixes in .README
 

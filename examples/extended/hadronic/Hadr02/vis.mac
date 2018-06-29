@@ -5,7 +5,6 @@
 /testhadr/TargetRadius     1  cm
 /testhadr/TargetLength     10 cm
 #/testhadr/NumberDivZ       100
-/testhadr/DrawTracks       all
 #/testhadr/CutsAll          1 mm
 #/testhadr/Physics          QBBC
 #

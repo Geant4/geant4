@@ -47,7 +47,7 @@
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det) :
 G4UImessenger(), fpDetector(Det), 
-fpTestDir(0), fpDetDir(0), fpMaterCmd(0), fpUpdateCmd(0), fpTrackingCutCmd(0)
+fpTestDir(0), fpDetDir(0), fpMaterCmd(0), fpTrackingCutCmd(0)
 {
   fpTestDir = new G4UIdirectory("/slowing/");
   fpTestDir->SetGuidance(" detector control.");
@@ -59,12 +59,6 @@ fpTestDir(0), fpDetDir(0), fpMaterCmd(0), fpUpdateCmd(0), fpTrackingCutCmd(0)
   fpMaterCmd->SetGuidance("Select material of the world.");
   fpMaterCmd->SetParameterName("choice", false);
   fpMaterCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-
-  fpUpdateCmd = new G4UIcmdWithoutParameter("/slowing/det/update", this);
-  fpUpdateCmd->SetGuidance("Update geometry.");
-  fpUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fpUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fpUpdateCmd->AvailableForStates(G4State_Idle);
 
   fpTrackingCutCmd = 
     new G4UIcmdWithADoubleAndUnit("/slowing/det/setTrackingCut",this);
@@ -83,7 +77,6 @@ DetectorMessenger::~DetectorMessenger()
   delete fpTestDir;
   delete fpDetDir;
   delete fpMaterCmd;
-  delete fpUpdateCmd;
   delete fpTrackingCutCmd;
 }
 
@@ -91,8 +84,9 @@ DetectorMessenger::~DetectorMessenger()
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (command == fpMaterCmd) fpDetector->SetMaterial(newValue);
-  else if (command == fpUpdateCmd) fpDetector->UpdateGeometry();
+
+  if( command == fpMaterCmd )
+   { fpDetector->SetMaterial(newValue);}
 
   if( command == fpTrackingCutCmd )
    { fpDetector->SetTrackingCut(fpTrackingCutCmd->GetNewDoubleValue(newValue));}

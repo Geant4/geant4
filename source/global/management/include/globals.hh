@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: globals.hh 110286 2018-05-18 09:40:01Z gcosmo $
 //
 //
 // Global Constants and typedefs
@@ -66,28 +66,7 @@
 // Includes some additional definitions: sqr, G4SwapPtr, G4SwapObj.
 #include "templates.hh"
 
-// Includes Physical Constants and System of Units
-// #include "G4PhysicalConstants.hh"
-// #include "G4SystemOfUnits.hh"
-
 // Global error function
-#include "G4ExceptionSeverity.hh"
-
-typedef std::ostringstream G4ExceptionDescription;
-
-void G4Exception(const char* originOfException,
-                 const char* exceptionCode,
-                             G4ExceptionSeverity severity,
-                 const char* comments);
-void G4Exception(const char* originOfException,
-                 const char* exceptionCode,
-                             G4ExceptionSeverity severity,
-                 G4ExceptionDescription & description);
-void G4Exception(const char* originOfException,
-                 const char* exceptionCode,
-                             G4ExceptionSeverity severity,
-                 G4ExceptionDescription & description,
-                 const char* comments);
+#include "G4Exception.hh"
 
 #endif /* GLOBALS_HH */
-

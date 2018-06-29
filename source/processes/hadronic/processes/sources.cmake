@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 93608 2015-10-27 08:50:25Z gcosmo $
+# $Id: sources.cmake 107975 2017-12-14 13:31:03Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -77,6 +77,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4KaonZeroSInelasticProcess.hh
         G4LambdaInelasticProcess.hh
         G4MuonNuclearProcess.hh
+        G4NeutrinoElectronProcess.hh
         G4NeutronInelasticProcess.hh
         G4OmegaMinusInelasticProcess.hh
 	G4PhotoCaptureProcess.hh
@@ -124,6 +125,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4KaonZeroSInelasticProcess.cc
         G4LambdaInelasticProcess.cc
         G4MuonNuclearProcess.cc
+        G4NeutrinoElectronProcess.cc
         G4NeutronInelasticProcess.cc
         G4OmegaMinusInelasticProcess.cc
 	G4PhotoCaptureProcess.cc

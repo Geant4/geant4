@@ -38,6 +38,7 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4EmCalculator.hh"
+#include "G4ProductionCutsTable.hh"
 
 #include <iomanip>
 
@@ -140,8 +141,8 @@ void Run::EndOfRun()
          << G4BestUnit(fEkin,"Energy") << " through " 
          << G4BestUnit(fDetector->GetSize(),"Length") << " of "
          << material->GetName() << " (density: " 
-         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;           
-  
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+
   if (numberOfEvent == 0) { G4cout.precision(dfprec);   return;}   
 
   G4double dNbOfEvents = double(numberOfEvent);  

@@ -27,10 +27,10 @@
 /// \brief Main program of the electromagnetic/TestEm17 example
 //
 //
-// $Id: TestEm17.cc 99017 2016-08-31 08:24:29Z gcosmo $
+// $Id: TestEm17.cc 109314 2018-04-11 06:42:23Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -46,72 +46,64 @@
 #include "StackingAction.hh"
 #include "HistoManager.hh"
 
-#ifdef G4VIS_USE
- #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 int main(int argc,char** argv) {
- 
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
+
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    
-  // Construct the default run manager
+
+  //construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
-  // set mandatory initialization classes
+  //set mandatory initialization classes
   DetectorConstruction* det;
   PrimaryGeneratorAction* prim;
   runManager->SetUserInitialization(det = new DetectorConstruction);
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserAction(prim = new PrimaryGeneratorAction(det));
-  
+
   HistoManager* histo = new HistoManager();
-      
-  // set user action classes
+
+  //set user action classes
   RunAction* run;  
   runManager->SetUserAction(run = new RunAction(det,prim,histo)); 
   runManager->SetUserAction(new SteppingAction(run,histo));
   runManager->SetUserAction(new StackingAction);
-  
-  // Start execution
-  //      
-  if (argc > 1) {        // execute an argument macro file if exist
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    G4UImanager::GetUIpointer()->ApplyCommand(command+fileName);
-    
-  } else {                // start interactive session
-#ifdef G4VIS_USE
-   G4VisManager* visManager = new G4VisExecutive;
+
+  //initialize visualization
+  G4VisManager* visManager = nullptr;
+
+  //get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+  if (ui)  {
+   //interactive mode
+   visManager = new G4VisExecutive;
    visManager->Initialize();
-#endif    
-     
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-      ui->SessionStart();
-      delete ui;
-#endif
-          
-#ifdef G4VIS_USE
-     delete visManager;
-#endif     
+   ui->SessionStart();
+   delete ui;
+  }
+  else  {
+   //batch mode  
+   G4String command = "/control/execute ";
+   G4String fileName = argv[1];
+   UImanager->ApplyCommand(command+fileName);
   }
 
-  // job termination
-  //
-  delete histo; 
+  //job termination 
+  delete visManager;
   delete runManager;
-
-  return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

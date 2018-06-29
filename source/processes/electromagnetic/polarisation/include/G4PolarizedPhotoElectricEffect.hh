@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedPhotoElectricEffect.hh 96114 2016-03-16 18:51:33Z gcosmo $
+// $Id: G4PolarizedPhotoElectricEffect.hh 109176 2018-04-03 06:53:39Z gcosmo $
 //
 //
 //------------------ G4PolarizedPhotoElectricEffect physics process ------------------
@@ -63,24 +63,16 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-#ifdef NOIONIZATIONAS
-#define G4PolarizedPhotoElectricEffect_h 1
-#endif
-
 
 #ifndef G4PolarizedPhotoElectricEffect_h
 #define G4PolarizedPhotoElectricEffect_h 1
 
 #include "globals.hh"
 #include "G4VEmProcess.hh"
-#include "G4Gamma.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4ParticleDefinition;
-class G4VEmModel;
-class G4MaterialCutsCouple;
-class G4DynamicParticle;
 
 class G4PolarizedPhotoElectricEffect : public G4VEmProcess
 
@@ -88,7 +80,7 @@ class G4PolarizedPhotoElectricEffect : public G4VEmProcess
 public:  // with description
 
   explicit G4PolarizedPhotoElectricEffect(const G4String& processName ="pol-phot",
-				 G4ProcessType type = fElectromagnetic);
+					  G4ProcessType type = fElectromagnetic);
 
   virtual ~G4PolarizedPhotoElectricEffect();
 
@@ -106,17 +98,6 @@ private:
 
   G4bool  isInitialised;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4bool G4PolarizedPhotoElectricEffect::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (&p == G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

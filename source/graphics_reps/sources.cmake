@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66376 2012-12-18 09:42:59Z gcosmo $
+# $Id: sources.cmake 108187 2018-01-18 16:03:33Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -73,6 +73,7 @@ GEANT4_DEFINE_MODULE(NAME G4graphics_reps
         G4Visible.icc
         HepPolyhedron.h
         HepPolyhedronProcessor.h
+        graphics_reps_defs.hh
     SOURCES
         BooleanProcessor.src
         G4AttCheck.cc

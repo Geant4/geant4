@@ -217,14 +217,9 @@ set(GEANT4_CXXSTD_FLAGS "${CMAKE_CXX${GEANT4_BUILD_CXXSTD}_STANDARD_COMPILE_OPTI
 # - ``GEANT4_BUILD_MULTITHREADED`` (Default: ``OFF``)
 #
 #   If set to ``ON``, compile Geant4 with support for multithreading.
-#   At present, this is only supported on Unix platforms.
+#   On Win32, this option requires use of static libraries only
 #
 option(GEANT4_BUILD_MULTITHREADED "Enable multithreading in Geant4" OFF)
-
-if(WIN32)
-  mark_as_advanced(GEANT4_BUILD_MULTITHREADED)
-endif()
-
 geant4_add_feature(GEANT4_BUILD_MULTITHREADED "Build multithread enabled libraries")
 
 #.rst:
@@ -233,8 +228,10 @@ geant4_add_feature(GEANT4_BUILD_MULTITHREADED "Build multithread enabled librari
 #   If ``GEANT4_BUILD_MULTITHREADED`` is ``ON`` and a GNU/Clang/Intel
 #   compiler is being used, then this option may be used to choose the
 #   Thread Local Storage model. A default of ``initial-exec`` is used
-#   to provide optimize performance for applications directly linking
-#   to the Geant4 libraries
+#   to provide optimal performance for applications directly linking
+#   to the Geant4 libraries. The dummy ``auto`` model may be selected
+#   to leave model selection to the compiler, with no additional flag(s)
+#   passed to the compiler.
 #
 if(GEANT4_BUILD_MULTITHREADED)
   # - Need Thread Local Storage support (POSIX)
@@ -243,12 +240,6 @@ if(GEANT4_BUILD_MULTITHREADED)
     if(NOT HAVE_TLS)
       message(FATAL_ERROR "Configured compiler ${CMAKE_CXX_COMPILER} does not support thread local storage")
     endif()
-  endif()
-
-  # - Emit warning on Windows - message will format oddly on CMake prior
-  # to 2.8, but still print
-  if(WIN32)
-    message(WARNING "GEANT4_BUILD_MULTITHREADED IS NOT SUPPORTED on Win32. This option should only be activated by developers")
   endif()
 
   # - Allow advanced users to select the thread local storage model,
@@ -260,9 +251,14 @@ if(GEANT4_BUILD_MULTITHREADED)
       CASE_INSENSITIVE
     )
     mark_as_advanced(GEANT4_BUILD_TLS_MODEL)
-    geant4_add_feature(GEANT4_BUILD_TLS_MODEL "Building with TLS model '${GEANT4_BUILD_TLS_MODEL}'")
 
-    set(GEANT4_MULTITHREADED_CXX_FLAGS "${GEANT4_MULTITHREADED_CXX_FLAGS} ${${GEANT4_BUILD_TLS_MODEL}_FLAGS}")
+    if(GEANT4_BUILD_TLS_MODEL STREQUAL "auto")
+      geant4_add_feature(GEANT4_BUILD_TLS_MODEL "Building without explicit TLS model")
+    else()
+      geant4_add_feature(GEANT4_BUILD_TLS_MODEL "Building with TLS model '${GEANT4_BUILD_TLS_MODEL}'")
+    endif()
+
+    set(GEANT4_MULTITHREADED_CXX_FLAGS "${GEANT4_MULTITHREADED_CXX_FLAGS} ${${GEANT4_BUILD_TLS_MODEL}_TLSMODEL_FLAGS}")
   endif()
 
   # Set Defs/Compiler Flags
@@ -349,8 +345,6 @@ endif()
 # Library Mode and Link Options
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
-
-#.rst:
 # - ``BUILD_SHARED_LIBS`` (Default: ``ON``)
 #
 #   - Build shared libraries (`.so` on Unix, `.dylib` on macOS, `.dll/.lib` on Windows)
@@ -376,24 +370,6 @@ endif()
 # granular library switch is set, e.g. from command line
 if(GEANT4_BUILD_GRANULAR_LIBS)
   message(FATAL_ERROR " Granular libraries are no longer supported!")
-endif()
-
-# On WIN32, we need to build the genwindef application to create export
-# def files for building DLLs.
-# We only use it as a helper application at the moment so we exclude it from
-# the ALL target.
-# TODO: We could move this section into the Geant4MacroLibraryTargets.cmake
-# if it can be protected so that the genwindef target wouldn't be defined
-# more than once... Put it here for now...
-# TODO: Investigate use of CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS from CMake 3.4
-#       and/or other forms of symbol visibility
-if(WIN32)
-  # Assume the sources are co-located
-  get_filename_component(_genwindef_src_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
-  add_executable(genwindef EXCLUDE_FROM_ALL
-    ${_genwindef_src_dir}/genwindef/genwindef.cpp
-    ${_genwindef_src_dir}/genwindef/LibSymbolInfo.h
-    ${_genwindef_src_dir}/genwindef/LibSymbolInfo.cpp)
 endif()
 
 #------------------------------------------------------------------------

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc 104163 2017-05-15 06:52:42Z gcosmo $
+// $Id: G4VisCommandsSceneAdd.cc 110480 2018-05-25 07:25:18Z gcosmo $
 // /vis/scene/add commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -1163,7 +1163,8 @@ G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
   fpCommand -> SetGuidance ("Adds a logical volume to the current scene,");
   fpCommand -> SetGuidance
   ("Shows boolean components (if any), voxels (if any), readout geometry"
-   "\n  (if any) and local axes, under control of the appropriate flag."
+   "\n  (if any), local axes and overlaps (if any), under control of the"
+   "\n  appropriate flag."
    "\n  Note: voxels are not constructed until start of run -"
    "\n \"/run/beamOn\".  (For voxels without a run, \"/run/beamOn 0\".)");
   G4UIparameter* parameter;
@@ -1186,6 +1187,10 @@ G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
   parameter -> SetDefaultValue (true);
   parameter -> SetGuidance ("Set \"false\" to suppress axes.");
   fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter("check-overlap-flag", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  parameter -> SetGuidance ("Set \"false\" to suppress overlap check.");
+  fpCommand->SetParameter(parameter);
 }
 
 G4VisCommandSceneAddLogicalVolume::~G4VisCommandSceneAddLogicalVolume () {
@@ -1213,13 +1218,16 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   G4String name;
   G4int requestedDepthOfDescent;
   G4String booleansString, voxelsString, readoutString, axesString;
+  G4String overlapString;
   std::istringstream is (newValue);
   is >> name >> requestedDepthOfDescent
-     >>  booleansString >> voxelsString >> readoutString >> axesString;
+     >>  booleansString >> voxelsString >> readoutString >> axesString
+     >> overlapString;
   G4bool booleans = G4UIcommand::ConvertToBool(booleansString);
   G4bool voxels = G4UIcommand::ConvertToBool(voxelsString);
   G4bool readout = G4UIcommand::ConvertToBool(readoutString);
   G4bool axes = G4UIcommand::ConvertToBool(axesString);
+  G4bool checkOverlaps = G4UIcommand::ConvertToBool(overlapString);
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
   int nLV = pLVStore -> size ();
@@ -1263,7 +1271,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   }
 
   G4LogicalVolumeModel* model = new G4LogicalVolumeModel
-    (pLV, requestedDepthOfDescent, booleans, voxels, readout);
+    (pLV, requestedDepthOfDescent, booleans, voxels, readout, checkOverlaps);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
 
@@ -1291,15 +1299,17 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Logical volume \"" << pLV -> GetName ()
-	     << " with requested depth of descent "
+	     << "\" with requested depth of descent "
 	     << requestedDepthOfDescent
-	     << ",\n with";
+	     << ",\n  with";
       if (!booleans) G4cout << "out";
       G4cout << " boolean components, with";
       if (!voxels) G4cout << "out";
-      G4cout << " voxels and with";
+      G4cout << " voxels,\n  with";
       if (!readout) G4cout << "out";
-      G4cout << " readout geometry,"
+      G4cout << " readout geometry and with";
+      if (!checkOverlaps) G4cout << "out";
+      G4cout << " overlap checking"
 	     << "\n  has been added to scene \"" << currentSceneName << "\".";
       if (axes) {
         if (axesSuccessful) {

@@ -24,7 +24,7 @@
 #
 /run/initialize
 #
-/process/em/verbose 1
+/process/em/verbose 0
 /run/setCut  1 mm
 /run/setCutForRegion GasDetector 1 mm
 #/testem/killSecondaries true

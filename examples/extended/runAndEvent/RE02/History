@@ -1,4 +1,4 @@
-$Id: History 110134 2018-05-16 06:51:34Z gcosmo $
+$Id: History 109785 2018-05-09 08:15:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-March 14, 2018  M. Asai (exampleRE02-V10-03-00)
+08 May 2018   J.Allison (exampleRE02-V10-04-01)
+- RE02.cc:
+  o Remove G4_VIS_USE and G4UI_USE.
+  o Move instantiation of G4UIExecutive to start of main.
+- vis.mac: Remove
+  /vis/viewer/set/targetPoint 0 100 0 mm
+  /vis/viewer/zoomTo 10000000
+
+21 March 2018   G.Folger  (no tag)
+- update reference outputs run.out, run3.log, and run4.log
+
+March 14, 2018  M. Asai (exampleRE02-V10-04-00)
 - RE02EventAction.cc and RE02Run.cc are modified to shorten the
   output.
 

@@ -11,12 +11,13 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 103592 2017-04-19 08:09:03Z gcosmo $
+# $Id: sources.cmake 110674 2018-06-07 10:30:11Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${TiMemory_INCLUDE_DIRS})
 
 # List internal includes needed.
 
@@ -29,7 +30,6 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         globals.hh
         templates.hh
         tls.hh
-        windefs.hh
         G4Allocator.hh
         G4strstreambuf.icc
         G4AllocatorPool.hh
@@ -41,6 +41,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4ErrorPropagatorData.hh
         G4ErrorPropagatorData.icc
         G4Evaluator.hh
+        G4Exception.hh
         G4ExceptionSeverity.hh
         G4Exp.hh
         G4FPEDetection.hh
@@ -105,6 +106,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4MasterForwardcoutDestination.hh
         G4FilecoutDestination.hh
         G4BuffercoutDestination.hh
+        G4TiMemory.hh
     SOURCES
         G4Allocator.cc
         G4AllocatorPool.cc
@@ -147,6 +149,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
     GLOBAL_DEPENDENCIES
     LINK_LIBRARIES
         ${CLHEP_LIBRARIES}
+        ${TiMemory_LIBRARIES}
 )
 
 # List any source specific properties here

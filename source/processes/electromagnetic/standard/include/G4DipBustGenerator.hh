@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DipBustGenerator.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4DipBustGenerator.hh 110415 2018-05-23 06:44:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,13 +65,23 @@ public:
                                          G4double out_energy, G4int Z,
                                          const G4Material* mat = nullptr) final;
 
-  G4double PolarAngle(const G4double initial_energy,
-		      const G4double final_energy,
-		      const G4int Z);
+  virtual void SamplePairDirections(const G4DynamicParticle* dp,
+				    G4double elecKinEnergy,
+				    G4double posiKinEnergy,
+				    G4ThreeVector& dirElectron,
+				    G4ThreeVector& dirPositron,
+				    G4int Z = 0,
+				    const G4Material* mat = nullptr) final;
+
+  G4double PolarAngle(G4double initial_energy,
+		      G4double final_energy,
+		      G4int Z);
 
   virtual void PrintGeneratorInformation() const final;
 
 private:
+
+  G4double SampleCosTheta(G4double kinEnergy);
 
   // hide assignment operator 
   G4DipBustGenerator & operator=(const  G4DipBustGenerator &right) = delete;

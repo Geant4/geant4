@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.cc 104121 2017-05-11 13:49:37Z gcosmo $
+// $Id: G4HadronicProcess.cc 110727 2018-06-11 06:08:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -67,10 +67,13 @@
 
 #include "G4HadronicException.hh"
 #include "G4HadronicProcessStore.hh"
+#include "G4VCrossSectionDataSet.hh"
 
 #include "G4AutoLock.hh"
 #include "G4NistManager.hh"
 #include "G4PhysicsModelCatalog.hh"
+#include "G4VLeadingParticleBiasing.hh"
+#include "G4Exp.hh"
 
 #include <typeinfo>
 #include <sstream>
@@ -89,7 +92,6 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
  : G4VDiscreteProcess(processName, procType)
 {
   SetProcessSubType(fHadronInelastic);	// Default unless subclass changes
-
   InitialiseLocal();
 }
 
@@ -100,7 +102,6 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
  : G4VDiscreteProcess(processName, fHadronic)
 {
   SetProcessSubType(aHadSubType);
-
   InitialiseLocal();
 }
 
@@ -119,7 +120,8 @@ void G4HadronicProcess::InitialiseLocal() {
   theProcessStore = G4HadronicProcessStore::Instance();
   theProcessStore->Register(this);
   theInitialNumberOfInteractionLength = 0.0;
-  aScaleFactor = 1;
+  aScaleFactor = 1.0;
+  fWeight = 1.0;
   xBiasOn = false;
   nMatWarn = 0;
   useIntegralXS = true;
@@ -164,31 +166,22 @@ G4HadronicProcess::GetElementCrossSection(const G4DynamicParticle * part,
 					  const G4Element * elm, 
 					  const G4Material* mat)
 {
-  G4Material* aMaterial = const_cast<G4Material*>(mat);
-  if(!aMaterial) 
+  if(!mat) 
   {
-    // Because NeutronHP needs a material pointer (for instance to get the
-    // temperature), we ask the Nist manager to find a simple material
-    // from the (integer) Z of the element. 
-    aMaterial = 
-      G4NistManager::Instance()->FindSimpleMaterial(elm->GetZasInt());
-    if(!aMaterial) {
-      ++nMatWarn;
-      static const G4int nmax = 5;
-      if(nMatWarn < nmax) {
-	G4ExceptionDescription ed;
-	ed << "Cannot compute Element x-section for " << GetProcessName()
-	   << " because no material defined \n"
-	   << " Please, specify material pointer or define simple material"
-	   << " for Z= " << elm->GetZasInt();
-	G4Exception("G4HadronicProcess::GetElementCrossSection", "had066", JustWarning,
-		    ed);
-      }
+    ++nMatWarn;
+    static const G4int nmax = 5;
+    if(nMatWarn < nmax) {
+      G4ExceptionDescription ed;
+      ed << "Cannot compute Element x-section for " << GetProcessName()
+	 << " because no material defined \n"
+	 << " Please, specify material pointer or define simple material"
+	 << " for Z= " << elm->GetZasInt();
+      G4Exception("G4HadronicProcess::GetElementCrossSection", "had066", 
+		  JustWarning, ed);
     }
   }
-  G4double x = 
-    std::max(theCrossSectionDataStore->GetCrossSection(part, elm, aMaterial),0.0);
-  return x;
+  return
+    std::max(theCrossSectionDataStore->GetCrossSection(part, elm, mat),0.0);
 }
 
 void G4HadronicProcess::PreparePhysicsTable(const G4ParticleDefinition& p)
@@ -206,7 +199,7 @@ void G4HadronicProcess::BuildPhysicsTable(const G4ParticleDefinition& p)
     theCrossSectionDataStore->BuildPhysicsTable(p);
     theEnergyRangeManager.BuildPhysicsTable(p);
   }
-  catch(G4HadronicException aR)
+  catch(G4HadronicException & aR)
   {
     G4ExceptionDescription ed;
     aR.Report(ed);
@@ -225,10 +218,10 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
   try
   {
     theLastCrossSection = aScaleFactor*
-      theCrossSectionDataStore->GetCrossSection(aTrack.GetDynamicParticle(),
-						aTrack.GetMaterial());
+      theCrossSectionDataStore->ComputeCrossSection(aTrack.GetDynamicParticle(),
+						    aTrack.GetMaterial());
   }
-  catch(G4HadronicException aR)
+  catch(G4HadronicException & aR)
   {
     G4ExceptionDescription ed;
     aR.Report(ed);
@@ -237,8 +230,8 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
     G4Exception("G4HadronicProcess::GetMeanFreePath", "had002", FatalException,
 		ed);
   }
-  G4double res = (theLastCrossSection > 0.0) ? 1.0/theLastCrossSection : DBL_MAX;
-  //G4cout << "         xsection= " << res << G4endl;
+  G4double res = (theLastCrossSection>0.0) ? 1.0/theLastCrossSection : DBL_MAX;
+  //G4cout << "         xsection= " << theLastCrossSection << G4endl;
   return res;
 }
 
@@ -250,41 +243,42 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   // if primary is not Alive then do nothing
   theTotalResult->Clear();
   theTotalResult->Initialize(aTrack);
-  theTotalResult->ProposeWeight(aTrack.GetWeight());
+  fWeight = aTrack.GetWeight();
+  theTotalResult->ProposeWeight(fWeight);
   if(aTrack.GetTrackStatus() != fAlive) { return theTotalResult; }
 
   // Find cross section at end of step and check if <= 0
   //
   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-  G4Material* aMaterial = aTrack.GetMaterial();
+  const G4Material* aMaterial = aTrack.GetMaterial();
 
   // check only for charged particles
   if(aParticle->GetDefinition()->GetPDGCharge() != 0.0) {
     G4double xs = 0.0;
     try
     {
-      xs = aScaleFactor*theCrossSectionDataStore->GetCrossSection(aParticle,aMaterial);
+      xs = aScaleFactor*
+	theCrossSectionDataStore->ComputeCrossSection(aParticle,aMaterial);
     }
-    catch(G4HadronicException aR)
+    catch(G4HadronicException & aR)
     {
       G4ExceptionDescription ed;
       aR.Report(ed);
       DumpState(aTrack,"PostStepDoIt",ed);
       ed << " Cross section is not available" << G4endl;
-      G4Exception("G4HadronicProcess::PostStepDoIt", "had002", FatalException,ed);
+      G4Exception("G4HadronicProcess::PostStepDoIt","had002",FatalException,ed);
     }
-    if(xs <= 0.0 || (useIntegralXS && xs < theLastCrossSection*G4UniformRand())) {
+    if(xs <= 0.0 || xs < theLastCrossSection*G4UniformRand()) {
       // No interaction
       return theTotalResult;
     }    
   }
 
-  G4Element* anElement = nullptr;
+  const G4Element* anElement = nullptr;
   try
   {
-     anElement = theCrossSectionDataStore->SampleZandA(aParticle,
-						       aMaterial,
-						       targetNucleus);
+    anElement = theCrossSectionDataStore->SampleZandA(aParticle, aMaterial,
+						      targetNucleus);
   }
   catch(G4HadronicException & aR)
   {
@@ -350,7 +344,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
       result = theInteraction->ApplyYourself( thePro, targetNucleus);
       ++reentryCount;
     }
-    catch(G4HadronicException aR)
+    catch(G4HadronicException & aR)
     {
       G4ExceptionDescription ed;
       aR.Report(ed);
@@ -365,7 +359,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
     }
 
     // Check the result for catastrophic energy non-conservation
-    CheckResult(thePro, targetNucleus, result);
+    result = CheckResult(thePro, targetNucleus, result);
 
     if(reentryCount>100) {
       G4ExceptionDescription ed;
@@ -432,20 +426,18 @@ void G4HadronicProcess::ProcessDescription(std::ostream& outFile) const
 
 G4double G4HadronicProcess::XBiasSurvivalProbability()
 {
-  G4double result = 0;
   G4double nLTraversed = GetTotalNumberOfInteractionLengthTraversed();
-  G4double biasedProbability = 1.-std::exp(-nLTraversed);
-  G4double realProbability = 1-std::exp(-nLTraversed/aScaleFactor);
-  result = (biasedProbability-realProbability)/biasedProbability;
+  G4double biasedProbability = 1.-G4Exp(-nLTraversed);
+  G4double realProbability = 1-G4Exp(-nLTraversed/aScaleFactor);
+  G4double result = (biasedProbability-realProbability)/biasedProbability;
   return result;
 }
 
 G4double G4HadronicProcess::XBiasSecondaryWeight()
 {
-  G4double result = 0;
   G4double nLTraversed = GetTotalNumberOfInteractionLengthTraversed();
-  result =
-     1./aScaleFactor*std::exp(-nLTraversed/aScaleFactor*(1-1./aScaleFactor));
+  G4double result =
+     1./aScaleFactor*G4Exp(-nLTraversed/aScaleFactor*(1-1./aScaleFactor));
   return result;
 }
 
@@ -505,7 +497,6 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
   } 
   G4int nSec = aR->GetNumberOfSecondaries();
   theTotalResult->SetNumberOfSecondaries(nSec);
-  G4double weight = aT.GetWeight();
 
   if (nSec > 0) { 
     G4double time0 = aT.GetGlobalTime();
@@ -528,17 +519,17 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
       G4Track* track = new G4Track(aR->GetSecondary(i)->GetParticle(),
                                    time, aT.GetPosition());
       track->SetCreatorModelIndex(aR->GetSecondary(i)->GetCreatorModelType());
-      G4double newWeight = weight*aR->GetSecondary(i)->GetWeight();
-	// G4cout << "#### ParticleDebug "
-	// <<GetProcessName()<<" "
-	//<<aR->GetSecondary(i)->GetParticle()->GetDefinition()->GetParticleName()<<" "
-	// <<aScaleFactor<<" "
-	// <<XBiasSurvivalProbability()<<" "
-	// <<XBiasSecondaryWeight()<<" "
-	// <<aT.GetWeight()<<" "
-	// <<aR->GetSecondary(i)->GetWeight()<<" "
-	// <<aR->GetSecondary(i)->GetParticle()->Get4Momentum()<<" "
-	// <<G4endl;
+      G4double newWeight = fWeight*aR->GetSecondary(i)->GetWeight();
+      // G4cout << "#### ParticleDebug "
+      // <<GetProcessName()<<" "
+      //<<aR->GetSecondary(i)->GetParticle()->GetDefinition()->GetParticleName()
+      //<<" "<<aScaleFactor<<" "
+      // <<XBiasSurvivalProbability()<<" "
+      // <<XBiasSecondaryWeight()<<" "
+      // <<aT.GetWeight()<<" "
+      // <<aR->GetSecondary(i)->GetWeight()<<" "
+      // <<aR->GetSecondary(i)->GetParticle()->Get4Momentum()<<" "
+      // <<G4endl;
       track->SetWeight(newWeight);
       track->SetTouchableHandle(aT.GetTouchableHandle());
       theTotalResult->AddSecondary(track);
@@ -555,29 +546,24 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
       }
     }
   }
-
   aR->Clear();
+}
+
+void G4HadronicProcess::MultiplyCrossSectionBy(G4double factor)
+{
+  BiasCrossSectionByFactor(factor);
 }
 
 void G4HadronicProcess::BiasCrossSectionByFactor(G4double aScale)
 {
-  xBiasOn = true;
-  aScaleFactor = aScale;
-  G4String it = GetProcessName();
-  if ((it != "photonNuclear") &&
-      (it != "electronNuclear") &&
-      (it != "positronNuclear") ) {
+  if (aScale <= 0.0) {
     G4ExceptionDescription ed;
-    G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "had009", 
-                FatalException, ed,
-                "Cross-section biasing available only for gamma and electro nuclear reactions.");
-  }
-
-  if (aScale < 100) {
-    G4ExceptionDescription ed;
-    G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "had010", JustWarning,ed,
-                "Cross-section bias readjusted to be above safe limit. New value is 100");
-    aScaleFactor = 100.;
+    ed << " Wrong biasing factor " << aScale << " for " << GetProcessName();
+    G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "had010", 
+                JustWarning, ed, "Cross-section bias is ignored");
+  } else {
+    xBiasOn = true;
+    aScaleFactor = aScale;
   }
 }
 
@@ -616,24 +602,27 @@ G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,
       G4double mass_pdg=pdyn->GetDefinition()->GetPDGMass();
       G4double mass_dyn=pdyn->GetMass();
       if ( std::abs(mass_pdg - mass_dyn) > 0.1*mass_pdg + 1.*MeV){
-          result->Clear();
-          result = 0;
-          G4ExceptionDescription desc;
-          desc << "Warning: Secondary with off-shell dynamic mass detected:  " << G4endl
-           << " " << pdyn->GetDefinition()->GetParticleName()
-           << ", PDG mass: " << mass_pdg << ", dynamic mass: "<< mass_dyn << G4endl
-    	   << (epReportLevel<0 ? "abort the event" :  "re-sample the interaction") << G4endl
-    	   << " Process / Model: " <<  GetProcessName()<< " / "
-    	   << theModel->GetModelName() << G4endl
-    	   << " Primary: " << aPro.GetDefinition()->GetParticleName()
-    	   << " (" << aPro.GetDefinition()->GetPDGEncoding() << "), "
-    	   << " E= " <<  aPro.Get4Momentum().e()
-    	   << ", target nucleus (" << aNucleus.GetZ_asInt() << ", "
-    	   << aNucleus.GetA_asInt() << ")" << G4endl;
-          G4Exception("G4HadronicProcess:CheckResult()", "had012",
-    		  epReportLevel<0 ? EventMustBeAborted : JustWarning,desc);
-          // must return here.....
-          return result;
+	result->Clear();
+	result = nullptr;
+	G4ExceptionDescription desc;
+	desc << "Warning: Secondary with off-shell dynamic mass detected:  " 
+	     << G4endl
+	     << " " << pdyn->GetDefinition()->GetParticleName()
+	     << ", PDG mass: " << mass_pdg << ", dynamic mass: "
+	     << mass_dyn << G4endl
+	     << (epReportLevel<0 ? "abort the event" 
+		 : "re-sample the interaction") << G4endl
+	     << " Process / Model: " <<  GetProcessName()<< " / "
+	     << theModel->GetModelName() << G4endl
+	     << " Primary: " << aPro.GetDefinition()->GetParticleName()
+	     << " (" << aPro.GetDefinition()->GetPDGEncoding() << "), "
+	     << " E= " <<  aPro.Get4Momentum().e()
+	     << ", target nucleus (" << aNucleus.GetZ_asInt() << ", "
+	     << aNucleus.GetA_asInt() << ")" << G4endl;
+	G4Exception("G4HadronicProcess:CheckResult()", "had012",
+		    epReportLevel<0 ? EventMustBeAborted : JustWarning,desc);
+	// must return here.....
+	return result;
       }
     }
     G4double deltaE= nuclearMass +  aPro.GetTotalEnergy() -  finalE;
@@ -644,10 +633,11 @@ G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,
         std::abs(deltaE) > checkLevels.first*aPro.GetKineticEnergy()){
       // do not delete result, this is a pointer to a data member;
       result->Clear();
-      result = 0;
+      result = nullptr;
       G4ExceptionDescription desc;
       desc << "Warning: Bad energy non-conservation detected, will "
-	   << (epReportLevel<0 ? "abort the event" :  "re-sample the interaction") << G4endl
+	   << (epReportLevel<0 ? "abort the event" 
+	       :  "re-sample the interaction") << G4endl
 	   << " Process / Model: " <<  GetProcessName()<< " / " 
 	   << theModel->GetModelName() << G4endl
 	   << " Primary: " << aPro.GetDefinition()->GetParticleName()
@@ -810,7 +800,6 @@ G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
   }
 }
 
-
 void G4HadronicProcess::DumpState(const G4Track& aTrack,
 				  const G4String& method,
 				  G4ExceptionDescription& ed)
@@ -834,4 +823,20 @@ void G4HadronicProcess::DumpState(const G4Track& aTrack,
     ed << "PhysicalVolume  <" << aTrack.GetVolume()->GetName()
        << ">" << G4endl;
   }
+}
+
+void G4HadronicProcess::DumpPhysicsTable(const G4ParticleDefinition& p)
+{ 
+  theCrossSectionDataStore->DumpPhysicsTable(p); 
+}
+
+void G4HadronicProcess::AddDataSet(G4VCrossSectionDataSet * aDataSet)
+{ 
+  theCrossSectionDataStore->AddDataSet(aDataSet);
+}
+
+std::vector<G4HadronicInteraction*>& 
+G4HadronicProcess::GetHadronicInteractionList()
+{ 
+  return theEnergyRangeManager.GetHadronicInteractionList(); 
 }

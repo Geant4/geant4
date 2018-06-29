@@ -1,4 +1,4 @@
-$Id: History 105744 2017-08-16 13:13:16Z gcosmo $
+$Id: History 109858 2018-05-09 12:15:01Z gcosmo $
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -13,7 +13,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+09-05-18 B. Morgan (exhadr03-V10-04-03)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+05-04-18 mma (exhadr03-V10-04-02)
+- Hadr03.cc : set visualisation only in interactive session.
+
+16-03-18 mma (exhadr03-V10-04-01)
+- Hadr03.cc : C++ 11 feature
+
+15-03-18 mma (exhadr03-V10-04-00)
+- Hadr03.cc : remove G4UI_USE and G4VIS_USE
+
 04-07-17 mma  (exhadr03-V10-03-04)
 - SteppingAction() : take into account e- from internal conversion
 

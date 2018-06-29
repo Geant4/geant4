@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedGammaConversion.cc 105740 2017-08-16 13:05:44Z gcosmo $
+// $Id: G4PolarizedGammaConversion.cc 109176 2018-04-03 06:53:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,6 +65,13 @@ G4PolarizedGammaConversion::G4PolarizedGammaConversion(const G4String& processNa
  
 G4PolarizedGammaConversion::~G4PolarizedGammaConversion()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4PolarizedGammaConversion::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Gamma::Gamma());
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

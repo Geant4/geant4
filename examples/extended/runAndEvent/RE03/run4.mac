@@ -36,8 +36,6 @@
 #
 # drawing slices
 #
-/vis/scene/create
-/vis/sceneHandler/attach scene-2
 /score/colorMap/setMinMax ! 0. 200.
 /control/alias iAxis 1
 /control/loop drawCylinderSlice.mac iColumn 0 29 7

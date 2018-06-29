@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElRatios.cc 96538 2016-04-20 12:39:18Z gcosmo $
+// $Id: G4QuasiElRatios.cc 109484 2018-04-24 14:49:27Z gcosmo $
 //
 //
 // G4 Physics class: G4QuasiElRatios for N+A elastic cross sections
@@ -160,11 +160,11 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double m_s, G4int A)
     if(m_s<toler || A<2) return 1.;
     if(m_s>min_s) return 0.;
     
-    if(A>238)
-    {
-        G4cout<<"-Warning-G4QuasiElRatio::GetQF2IN_Ratio:A="<<A<<">238, return zero"<<G4endl;
-        return 0.;
-    }
+    //if(A>238)
+    //{
+    //    G4cout<<"-Warning-G4QuasiElRatio::GetQF2IN_Ratio:A="<<A<<">238, return zero"<<G4endl;
+    //    return 0.;
+    //}
     G4int nDB=vARatio.size();                  // A number of nuclei already initialized in AMDB
     if(nDB && lastARatio==A && m_s==lastSRatio) return lastRRatio;  // VI do not use tolerance
     G4bool found=false;

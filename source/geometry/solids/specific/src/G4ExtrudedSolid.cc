@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc 108484 2018-02-15 14:38:03Z gcosmo $
+// $Id: G4ExtrudedSolid.cc 108078 2017-12-20 08:15:44Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -50,7 +50,7 @@
 
 #include "G4ExtrudedSolid.hh"
 
-//#if !defined(G4GEOM_USE_UEXTRUDEDSOLID)
+#if !defined(G4GEOM_USE_UEXTRUDEDSOLID)
 
 #include <set>
 #include <algorithm>
@@ -1564,4 +1564,4 @@ std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
   return os;
 }  
 
-//#endif
+#endif

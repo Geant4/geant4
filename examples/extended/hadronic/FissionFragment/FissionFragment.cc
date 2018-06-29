@@ -74,13 +74,8 @@
 #include "FFDetectorConstruction.hh"
 #include "FFActionInitialization.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 
 // Entry point
@@ -206,6 +201,12 @@ int main(int argc, char* argv[])
         }
     }
     
+    // Instantiate G4UIExecutive if interactive mode
+    G4UIExecutive* ui = nullptr;
+    if (scriptFileName.length() == 0) {
+      ui = new G4UIExecutive(argc, argv);
+    }
+
     // Set the Random engine
     // A seed of 62737819 produced a maximum number of 67 events on the
     // author's system before timing out the nightly test
@@ -239,36 +240,29 @@ int main(int argc, char* argv[])
     // Initialize the Geant4 kernel
     runManager->Initialize();
 
-#ifdef G4VIS_USE
     // Initialize visualization
     G4VisManager* visManager = new G4VisExecutive();
     visManager->Initialize();
-#endif
-    
+
     // Get the pointer to the User Interface manager
     UIManager = G4UImanager::GetUIpointer();
     
-    if(scriptFileName.length() != 0)
+    if(!ui)
     {
         // Batch mode
         UIManager->ApplyCommand(scriptFileName);
     } else
     {
         // Interactive mode
-#ifdef G4UI_USE
-        G4UIExecutive* ui = new G4UIExecutive(argc, argv);
         ui->SessionStart();
         delete ui;
-#endif
     }
 
     // Job termination
     // Free the store: user actions, physics_list and detector_description are
     // owned and deleted by the run manager, so they should not be deleted 
     // in the main() program !
-#ifdef G4VIS_USE
     delete visManager;
-#endif
     delete runManager;
     
     return 0;

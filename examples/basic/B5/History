@@ -1,4 +1,4 @@
-$Id: History 108624 2018-02-26 11:48:31Z gcosmo $
+$Id: History 110371 2018-05-22 07:31:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,11 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19 February 2017  Ivana Hrivnacova (exampleB5-V10-03-02)
+20 May 2018  John Allison (exampleB5-V10-04-01)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive nearer to start of main.
+
+19 February 2017  Ivana Hrivnacova (exampleB5-V10-04-00)
 - Fix filling ntuple 
   (there was omitted call to AddNtupleRow() in the previous update)
 
-14 April 2017  Ivana Hrivnacova (exampleB5-V10-03-01)
+14 April 2017  Ivana Hrivnacova Cosmo (exampleB5-V10-03-01)
 - Use std::array for related data members in B5EventAction to reduce the code
 - Added data members for histogram Ids and the code to retrieve them by histogram
   names via G4AnalysisManager

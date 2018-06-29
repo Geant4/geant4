@@ -201,7 +201,7 @@ void Run::EndOfRun()
       
   //Stopping Power from input Table.
   //
-  G4Material* material = fDetector->GetAbsorberMaterial();
+  const G4Material* material = fDetector->GetAbsorberMaterial();
   G4double length      = fDetector->GetAbsorberThickness();
   G4double density     = material->GetDensity();   
   G4String partName    = fParticle->GetParticleName();

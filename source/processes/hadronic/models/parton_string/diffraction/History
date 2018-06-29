@@ -1,4 +1,4 @@
-$Id: History 107525 2017-11-21 07:16:52Z gcosmo $
+$Id: History 110870 2018-06-22 12:14:16Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,59 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+22-Jun-2018 A. Ribon          (hadr-string-diff-V10-04-10)
+-  G4DiffractiveExcitation, G4FTFAnnihilation, G4FTFModel : technical
+   change to avoid silent problems of symbol resolutions leading to
+   segmentation faults (without useful debugging information).
+   No change in the random sequence.
+
+20-Jun-2018 A. Ribon          (hadr-string-diff-V10-04-09)
+-  G4FTFAnnihilation : fix (by Vladimir Uzhinsky) to get flat cos(theta)
+   and phi distributions for antiproton annihilation at rest.
+   Added also a protection for the evaluation of rapidity.
+
+12-Jun-2018 A. Ribon          (hadr-string-diff-V10-04-08)
+-  G4FTFAnnihilation : code improvement of the Annihilate method
+   (no changes in physics output, but with possible differences 
+    in the the random sequence, due to numerical effects caused by
+    re-ordering of operations).
+
+05-Jun-2018 A. Ribon          (hadr-string-diff-V10-04-07)
+-  G4FTFModel, G4DiffractiveExcitation : small code improvements
+   (no changes in physics output, but with possible differences 
+    in the the random sequence, due to numerical effects caused by
+    re-ordering of operations).
+
+31-May-2018 A. Ribon          (hadr-string-diff-V10-04-06)
+-  G4DiffractiveExcitation : code improvement of the ExciteParticipants method
+   (no changes in the random sequence).
+
+24-May-2018 A. Ribon          (hadr-string-diff-V10-04-05)
+-  G4FTFModel : small technical fix (replaced "class" with "struct" in the
+   header file) to the previous tag to avoid a compilation warning on Mac.
+
+24-May-2018 A. Ribon          (hadr-string-diff-V10-04-04)
+-  G4FTFModel : code improvement of the AdjustNucleons method
+   (no changes in the random sequence except for the trivial fix on the
+    "NumberOfTries" counter, which was increased twice).
+
+22-Mar-2018 J. Yarba          (hadr-string-diff-V10-04-03)
+- Turn to false switches for A-dep in nuclear destruction for baryon projectile 
+  (lines 136 and 138 in G4FTFParameters.cc)
+- Uncomment checks for these switches in the code (lines 1158-1161 & 1172-1175 
+  in G4FTFParameters.cc) 
+
+19-Dec-2017 V. Uzhinsky       (hadr-string-diff-V10-04-02)
+-  Correct calculation of nuclear residual excitation energy is implemented.
+   Fine tuning of the model parameters has been dome.
+
+12-Dec-2017 V. Uzhinsky       (hadr-string-diff-V10-04-01)
+-  Cleaned and merged version of FTF (merged "stable" and developer versions).
+
+07-Dec-2017 A. Ribon          (hadr-string-diff-V10-04-00)
+-  Brought back the development version of FTF 
+   (as it was in hadr-string-diff-V10-03-05).
 
 20-Nov-2017 A. Ribon          (hadr-string-diff-V10-03-10)
 - G4FTFAnnihilation : improved anisotropy of secondary pions in annihilation.

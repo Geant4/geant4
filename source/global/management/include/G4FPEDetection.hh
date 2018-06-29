@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FPEDetection.hh 86793 2014-11-18 10:01:46Z gcosmo $
+// $Id: G4FPEDetection.hh 108434 2018-02-14 07:20:56Z gcosmo $
 //
 // 
 // -*- C++ -*-
@@ -164,10 +164,10 @@
   #include <fenv.h>
   #include <signal.h>
 
-  #define DEFINED_PPC      (defined(__ppc__) || defined(__ppc64__))
-  #define DEFINED_INTEL    (defined(__i386__) || defined(__x86_64__))
+  //#define DEFINED_PPC      (defined(__ppc__) || defined(__ppc64__))
+  //#define DEFINED_INTEL    (defined(__i386__) || defined(__x86_64__))
 
-  #if DEFINED_PPC
+  #if (defined(__ppc__) || defined(__ppc64__)) // PPC
 
     #define FE_EXCEPT_SHIFT 22  // shift flags right to get masks
     #define FM_ALL_EXCEPT    FE_ALL_EXCEPT >> FE_EXCEPT_SHIFT 
@@ -198,7 +198,7 @@
       return ( fesetenv (&fenv) ? -1 : old_excepts );
     }
 
-  #elif DEFINED_INTEL
+  #elif (defined(__i386__) || defined(__x86_64__)) // INTEL
 
     static inline int feenableexcept (unsigned int excepts)
     {

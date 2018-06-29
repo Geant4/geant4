@@ -113,6 +113,7 @@ public:
 
         G4double McFcorrection(G4double);
 	G4double RatioMottRutherford(G4double);
+	G4double RatioMottRutherfordCosT(G4double);
         G4double FormFactor2ExpHof(G4double);
         G4double FormFactor2Gauss(G4double);
 	G4double FormFactor2UniformHelm(G4double);

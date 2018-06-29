@@ -247,8 +247,50 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
     mom = convertToSCM.backToTheLab(ipart->getMomentum());
     ipart->setMomentum(mom); 
   };
-  
-  // Check conservation in multibody final state
+
+  if (verboseLevel) {
+    // Check conservation in multibody final state
+    const G4ParticleDefinition* bDef = bullet->getDefinition();
+    const G4ParticleDefinition* tDef = target->getDefinition();
+
+    G4int initBaryonNumber = bDef->GetBaryonNumber() + tDef->GetBaryonNumber();
+    G4int initCharge = bullet->getCharge() + target->getCharge();
+    G4int initStrangeness = bDef->GetQuarkContent(3) - bDef->GetAntiQuarkContent(3) +
+                            tDef->GetQuarkContent(3) - tDef->GetAntiQuarkContent(3);
+
+    G4int finalBaryonNumber = 0;
+    G4int finalCharge = 0;
+    G4int finalStrangeness = 0;
+
+    for (ipart = particles.begin(); ipart != particles.end(); ipart++) {
+      finalBaryonNumber += ipart->baryon();
+      finalCharge += ipart->getCharge();
+      finalStrangeness += ipart->getStrangeness();
+    }
+
+    G4int bnc = finalBaryonNumber - initBaryonNumber;
+    G4int cnc = finalCharge - initCharge;
+    G4int snc = finalStrangeness - initStrangeness;
+
+    if (bnc != 0 || cnc != 0 || snc != 0) {
+      G4cout << " G4ElementaryParticleCollider: quantum number non-conservation " << G4endl;
+      G4cout << "   Baryon number: initial = " << initBaryonNumber << ", final = "
+                                               << finalBaryonNumber << G4endl;
+      G4cout << "   Charge: initial = " << initCharge << ", final = "
+                                        << finalCharge << G4endl;
+      G4cout << "   Strangeness: initial = " << initStrangeness << ", final = "
+                                             << finalStrangeness << G4endl;
+
+      G4cout << " bullet = " << bDef->GetParticleName() << G4endl;
+      G4cout << " target = " << tDef->GetParticleName() << G4endl;
+      G4cout << " secondaries = " ;
+      for (ipart = particles.begin(); ipart != particles.end(); ipart++) {
+        G4cout << ipart->getDefinition()->GetParticleName() << " " ;
+      }
+      G4cout << G4endl;
+    }
+  }
+
   if (verboseLevel && !validateOutput(bullet, target, particles)) {
     G4cout << " incoming particles: \n" << *particle1 << G4endl
 	   << *particle2 << G4endl
@@ -394,13 +436,14 @@ void G4ElementaryParticleCollider::fillOutgoingMasses() {
 }
 
 
-// generate nucleons momenta for pion or photon absorption by dibaryon
-// the nucleon distribution assumed to be isotropic in SCM
+// Generate nucleon momenta for pion or photon absorption by dibaryon
+// The nucleon distribution is assumed to be isotropic in SCM
 
 void
 G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
-			             G4InuclElementaryParticle* particle1,
-			             G4InuclElementaryParticle* particle2) {
+                                     G4InuclElementaryParticle* particle1,
+                                     G4InuclElementaryParticle* particle2)
+{
   if (verboseLevel > 3)
     G4cout << " >>> G4ElementaryParticleCollider::generateSCMpionAbsorption" 
 	   << G4endl;
@@ -410,19 +453,30 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 
   particle_kinds.clear();
 
-  G4int type1 = particle1->type();
-  G4int type2 = particle2->type();
+  G4int typeProduct = particle1->type() * particle2->type();
 
-  // Ensure that absportion is valid (charge conservable)
-  if (!G4NucleiModel::useQuasiDeuteron(type1, type2)) {
-    G4cerr << " pion absorption: "
-	   << particle1->getDefinition()->GetParticleName() << " + "
-	   << particle2->getDefinition()->GetParticleName() << " -> ?"
-	   << G4endl;
+  if (typeProduct == pi0*diproton || typeProduct == pip*unboundPN ||
+      typeProduct == gam*diproton) {
+    particle_kinds.push_back(pro);
+    particle_kinds.push_back(pro);
+
+  } else if (typeProduct == pim*diproton || typeProduct == pip*dineutron ||
+             typeProduct == pi0*unboundPN || typeProduct == gam*unboundPN) {
+    particle_kinds.push_back(pro);
+    particle_kinds.push_back(neu);
+
+  } else if (typeProduct == pi0*dineutron || typeProduct == pim*unboundPN ||
+             typeProduct == gam*dineutron) {
+    particle_kinds.push_back(neu);
+    particle_kinds.push_back(neu);
+
+  } else {
+    G4cerr << " Illegal absorption: "
+           << particle1->getDefinition()->GetParticleName() << " + "
+           << particle2->getDefinition()->GetParticleName() << " -> ?"
+           << G4endl;
     return;
   }
-
-  if (!splitQuasiDeuteron(type2)) return;	// Get constituents of [NN]
 
   fillOutgoingMasses();
 
@@ -439,8 +493,8 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 }
 
 
-// generate nucleons momenta for muon absorption by dibaryon
-// the nucleon distribution assumed to be isotropic in SCM
+// Generate nucleon momenta for muon absorption by dibaryon
+// The nucleon distribution is assumed to be isotropic in SCM
 
 void
 G4ElementaryParticleCollider::generateSCMmuonAbsorption(G4double etot_scm,
@@ -451,8 +505,6 @@ G4ElementaryParticleCollider::generateSCMmuonAbsorption(G4double etot_scm,
     G4cout << " >>> G4ElementaryParticleCollider::generateSCMmuonAbsorption"
            << G4endl;
 
-  // A phase space generator is required for the 3-body final state
-
   particles.clear();            // Initialize buffers for this event
   particles.resize(3);
 
@@ -461,31 +513,32 @@ G4ElementaryParticleCollider::generateSCMmuonAbsorption(G4double etot_scm,
 
   particle_kinds.clear();
 
-  G4int type1 = particle1->type();
-  G4int type2 = particle2->type();
+  G4int typeProduct = particle1->type() * particle2->type();
 
-  if (type1 != muonMinus) return;	// Sanity check, only mu- absorption
-
-  // Ensure that absportion is valid (charge conservable)
-  if (!G4NucleiModel::useQuasiDeuteron(type1, type2)) {
-    G4cerr << " mu- absorption: "
-	   << particle1->getDefinition()->GetParticleName() << " + "
-	   << particle2->getDefinition()->GetParticleName() << " -> ?"
-	   << G4endl;
+  if (typeProduct == mum*diproton) {
+    particle_kinds.push_back(pro);
+    particle_kinds.push_back(neu);
+  } else if (typeProduct == mum*unboundPN) {
+    particle_kinds.push_back(neu);
+    particle_kinds.push_back(neu);
+  } else {
+    G4cerr << " Illegal absorption: "
+           << particle1->getDefinition()->GetParticleName() << " + "
+           << particle2->getDefinition()->GetParticleName() << " -> ?"
+           << G4endl;
     return;
   }
-
-  if (!splitQuasiDeuteron(type2)) return;	// Get constituents of [NN]
   particle_kinds.push_back(mnu);
   
   fillOutgoingMasses();
 
+  // Phase space generator required for the 3-body final state
   G4GDecay3 breakup(etot_scm, masses[0], masses[1], masses[2]);
   std::vector<G4ThreeVector> theMomenta = breakup.GetThreeBodyMomenta();
 
   if (theMomenta.empty()) {
     G4cerr << " generateSCMmuonAbsorption: GetThreeBodyMomenta() failed"
-	   << " for " << type2 << " dibaryon" << G4endl;
+	   << " for " << particle2->type() << " dibaryon" << G4endl;
     particle_kinds.clear();
     masses.clear();
     particles.clear();
@@ -570,7 +623,6 @@ G4ElementaryParticleCollider::generateSCMpionNAbsorption(G4double /*etot_scm*/,
 
 
 // Evaluate whether interaction is candidate for absorption on nucleon
-
 G4bool 
 G4ElementaryParticleCollider::pionNucleonAbsorption(G4double ekin) const {
   if (verboseLevel > 3)
@@ -589,20 +641,3 @@ G4ElementaryParticleCollider::pionNucleonAbsorption(G4double ekin) const {
 	  );
 }
 
-
-// generate constituents of dibaryon for "explosion"
-
-G4bool G4ElementaryParticleCollider::splitQuasiDeuteron(G4int qdtype) {
-  if (qdtype != diproton && qdtype != unboundPN && qdtype != dineutron) {
-    G4cerr << " type " << qdtype << " not dibaryon!" << G4endl;
-    return false;
-  }
-
-  G4int b2 = qdtype % 10;	// Dibaryon codes are 1ab (a=1,2; b=1,2)
-  G4int b1 = (qdtype/10) % 10;
-
-  particle_kinds.push_back(b1);
-  particle_kinds.push_back(b2);
-
-  return true;
-}

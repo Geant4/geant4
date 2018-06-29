@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 May 18: D. Sawkey (op-V10-04-00)
+- G4OpMieHG: change GetProperty from string to enum
+
 11 September 17: S.Y. Jun (op-V10-03-03)
 - change material property keys by the enum type defined in 
   G4MaterialPropertiesIndex

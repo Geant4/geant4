@@ -1,4 +1,4 @@
-$Id: History 106385 2017-10-09 09:36:33Z gcosmo $
+$Id: History 110390 2018-05-22 08:28:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,35 @@ committal in the CVS repository !
 
 History file for graphics_reps category
 ---------------------------------------
+
+22 May 2018  Gabriele Cosmo (greps-V10-04-05)
+- Disabled deprecated static data member G4VisAttributes::Invisible for
+  Windows systems.
+
+24 April 2018  John Allison (greps-V10-04-04)
+- Co-works vis-V10-04-04.
+- G4VisAttributes: Cosmetic improvements.
+
+23 April 2018  John Allison (greps-V10-04-03)
+- Co-works vis-V10-04-04.
+- Replaced DBL_MAX by G4VisAttributes::veryLargeTime = 1.e100*CLHEP::ns,
+  about 1.e75 billion years!! The problem is that DBL_MAX (1.79769e+308)
+  is dimensionless, so we compromise with something a little less vast,
+  but which is in G4 internal units.
+
+18th January 2018  Gabriele Cosmo (greps-V10-04-01)
+- Updated GNUmakefile to add G4GREPS_ALLOC_EXPORT definition.
+
+18th January 2018  Ben Morgan (greps-V10-04-00)
+- Fix unexported global data for WINDOWS_EXPORT_ALL_SYMBOLS
+- New DLL build method identified that G4VisAttributes has a 
+  static const member that is not declared dllexport/import.
+- graphics_reps_defs.hh: New header to configure the needed
+  export/import keywords, using a macro G4GREPS_DLL
+- CMakeLists.txt: Add -D flag G4GREPS_ALLOC_EXPORT when
+  building the library to make export mode.
+- G4VisAttributes.hh: Mark static const G4VisAttributes data
+  using G4GREPS_DLL to ensure export/import.
 
 6th October 2017  John Allison  (greps-V10-03-07)
 - Rationalised:

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc 105013 2017-07-04 11:40:46Z gcosmo $
+// $Id: G4Fragment.cc 110267 2018-05-17 14:34:00Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -43,7 +43,12 @@
 #include "G4ios.hh"
 #include <iomanip>
 
-G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator = nullptr;
+G4Allocator<G4Fragment>*& pFragmentAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4Fragment>* _instance = nullptr;
+    return _instance;
+}
+
 const G4double G4Fragment::minFragExcitation = 10.*CLHEP::eV;
 
 // Default constructor

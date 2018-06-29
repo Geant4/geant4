@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.hh 106715 2017-10-20 09:39:06Z gcosmo $
+// $Id: G4eeToHadronsMultiModel.hh 109567 2018-05-02 07:04:10Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -54,8 +54,8 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4TrackStatus.hh"
 #include "Randomize.hh"
-#include "CLHEP/Units/SystemOfUnits.h"
-#include "CLHEP/Units/PhysicalConstants.h"
+#include <CLHEP/Units/SystemOfUnits.h>
+#include <CLHEP/Units/PhysicalConstants.h>
 #include <vector>
 
 class G4eeCrossSections;

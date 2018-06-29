@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc 101714 2016-11-22 08:53:13Z gcosmo $
+// $Id: G4OpenGLStoredViewer.cc 109510 2018-04-26 07:15:57Z gcosmo $
 //
 //
 // Andrew Walkden  7th February 1997
@@ -78,6 +78,8 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+      (lastVP.GetCBDAlgorithmNumber() !=
+       fVP.GetCBDAlgorithmNumber())                               ||
       (lastVP.IsSection ()          != fVP.IsSection ())          ||
       // Section (DCUT) implemented locally.  But still need to visit
       // kernel if status changes so that back plane culling can be
@@ -122,15 +124,46 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
    }
    ***************************************************************/
   
+  if (lastVP.GetCBDAlgorithmNumber() > 0) {
+    if (lastVP.GetCBDParameters().size() != fVP.GetCBDParameters().size()) return true;
+    else if (lastVP.GetCBDParameters() != fVP.GetCBDParameters()) return true;
+  }
+
   if (lastVP.IsExplode () &&
       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
   return true;
+
+  // Time window parameters operate on the existing database so no need
+  // to rebuild even if they change.
   
   return false;
 }
 
 void G4OpenGLStoredViewer::DrawDisplayLists () {
   
+  // We moved these from G4OpenGLViewer to G4ViewParamaters. To avoid
+  // editing many lines below we introduce these convenient aliases.
+#define CONVENIENT_DOUBLE_ALIAS(q) const G4double& f##q = fVP.Get##q();
+#define CONVENIENT_BOOL_ALIAS(q) const G4bool& f##q = fVP.Is##q();
+  CONVENIENT_DOUBLE_ALIAS(StartTime)
+  CONVENIENT_DOUBLE_ALIAS(EndTime)
+  CONVENIENT_DOUBLE_ALIAS(FadeFactor)
+  CONVENIENT_BOOL_ALIAS(DisplayHeadTime)
+  CONVENIENT_DOUBLE_ALIAS(DisplayHeadTimeX)
+  CONVENIENT_DOUBLE_ALIAS(DisplayHeadTimeY)
+  CONVENIENT_DOUBLE_ALIAS(DisplayHeadTimeSize)
+  CONVENIENT_DOUBLE_ALIAS(DisplayHeadTimeRed)
+  CONVENIENT_DOUBLE_ALIAS(DisplayHeadTimeGreen)
+  CONVENIENT_DOUBLE_ALIAS(DisplayHeadTimeBlue)
+  CONVENIENT_BOOL_ALIAS(DisplayLightFront)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontX)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontY)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontZ)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontT)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontRed)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontGreen)
+  CONVENIENT_DOUBLE_ALIAS(DisplayLightFrontBlue)
+
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   G4bool cutawayUnion = fVP.IsCutaway() &&
   fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion;
@@ -209,14 +242,14 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
               glLoadIdentity();
               G4OpenGLTransform3D oglt (po.fTransform);
               glMultMatrixd (oglt.GetGLMatrix ());
-              fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
-              (po.fpG4TextPlus->fG4Text);
+              // This text is from a PODL. We don't want to create a new PODL.
+              AddPrimitiveForASingleFrame(po.fpG4TextPlus->fG4Text);
             } else {
               glPushMatrix();
               G4OpenGLTransform3D oglt (po.fTransform);
               glMultMatrixd (oglt.GetGLMatrix ());
-              fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
-              (po.fpG4TextPlus->fG4Text);
+              // This text is from a PODL. We don't want to create a new PODL.
+              AddPrimitiveForASingleFrame(po.fpG4TextPlus->fG4Text);
               glPopMatrix();
             }
             
@@ -238,7 +271,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
       
       G4Transform3D lastMatrixTransform;
       G4bool first = true;
-      
+
       for (size_t iTO = 0;
            iTO < fG4OpenGLStoredSceneHandler.fTOList.size(); ++iTO) {
         if (TOSelected(iTO)) {
@@ -294,8 +327,8 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
               } else {
                 glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
               }
-              fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
-              (to.fpG4TextPlus->fG4Text);
+              // This text is from a TODL. We don't want to create a new TODL.
+              AddPrimitiveForASingleFrame(to.fpG4TextPlus->fG4Text);
               if (to.fpG4TextPlus->fProcessing2D) {
                 glMatrixMode (GL_PROJECTION);
                 glPopMatrix();
@@ -362,7 +395,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   } while (true);
   
   // Display time at "head" of time range, which is fEndTime...
-  if (fDisplayHeadTime && fEndTime < DBL_MAX) {
+  if (fDisplayHeadTime && fEndTime < G4VisAttributes::fVeryLongTime) {
     glMatrixMode (GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -378,7 +411,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
                               fDisplayHeadTimeGreen,
                               fDisplayHeadTimeBlue));
     headTimeText.SetVisAttributes(&visAtts);
-    fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive(headTimeText);
+    AddPrimitiveForASingleFrame(headTimeText);
     glMatrixMode (GL_PROJECTION);
     glPopMatrix();
     glMatrixMode (GL_MODELVIEW);
@@ -386,7 +419,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   }
   
   // Display light front...
-  if (fDisplayLightFront && fEndTime < DBL_MAX) {
+  if (fDisplayLightFront && fEndTime < G4VisAttributes::fVeryLongTime) {
     G4double lightFrontRadius = (fEndTime - fDisplayLightFrontT) * c_light;
     if (lightFrontRadius > 0.) {
       G4Point3D lightFrontCentre(fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ);
@@ -431,10 +464,30 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
         glColor3d(fDisplayLightFrontRed,
                   fDisplayLightFrontGreen,
                   fDisplayLightFrontBlue);
-        fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive(lightFront);
+        AddPrimitiveForASingleFrame(lightFront);
       }
     }
   }
+}
+
+void G4OpenGLStoredViewer::AddPrimitiveForASingleFrame(const G4Text& text)
+{
+  // We don't want this to get into a display list or a TODL or a PODL so
+  // use the fMemoryForDisplayLists flag.
+  G4bool memoryForDisplayListsKeep = fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists;
+  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = false;
+  fG4OpenGLStoredSceneHandler.G4OpenGLStoredSceneHandler::AddPrimitive(text);
+  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = memoryForDisplayListsKeep;
+}
+
+void G4OpenGLStoredViewer::AddPrimitiveForASingleFrame(const G4Circle& circle)
+{
+  // We don't want this to get into a display list or a TODL or a PODL so
+  // use the fMemoryForDisplayLists flag.
+  G4bool memoryForDisplayListsKeep = fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists;
+  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = false;
+  fG4OpenGLStoredSceneHandler.G4OpenGLStoredSceneHandler::AddPrimitive(circle);
+  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = memoryForDisplayListsKeep;
 }
 
 #endif

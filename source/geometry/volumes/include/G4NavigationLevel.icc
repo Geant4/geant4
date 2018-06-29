@@ -24,14 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.icc 86527 2014-11-13 15:06:24Z gcosmo $
+// $Id: G4NavigationLevel.icc 110271 2018-05-17 14:41:15Z gcosmo $
 //
 // 30.09.97 J.Apostolakis Initial version. 
 //                        
 // ----------------------------------------------------------------------
 
-extern G4GEOM_DLL G4ThreadLocal
-G4Allocator<G4NavigationLevel> *aNavigationLevelAllocator;
+extern G4GEOM_DLL G4Allocator<G4NavigationLevel>*& aNavigationLevelAllocator();
 
 inline
 G4VPhysicalVolume* G4NavigationLevel::GetPhysicalVolume() const 
@@ -69,11 +68,11 @@ G4int G4NavigationLevel::GetReplicaNo() const
 inline
 void* G4NavigationLevel::operator new(size_t)
 {
-  if (!aNavigationLevelAllocator)
+  if (!aNavigationLevelAllocator())
   {
-    aNavigationLevelAllocator = new G4Allocator<G4NavigationLevel>;
+    aNavigationLevelAllocator() = new G4Allocator<G4NavigationLevel>;
   }
-  return (void *) aNavigationLevelAllocator->MallocSingle();
+  return (void *) aNavigationLevelAllocator()->MallocSingle();
 }
 
 // Added for use by STL (used for pre-allocation).
@@ -87,7 +86,7 @@ void* G4NavigationLevel::operator new(size_t,void *a)
 inline
 void G4NavigationLevel::operator delete(void *aLevel)
 {
-  aNavigationLevelAllocator->FreeSingle((G4NavigationLevel *) aLevel);
+  aNavigationLevelAllocator()->FreeSingle((G4NavigationLevel *) aLevel);
 }
 
 // Added for use by STL (used for free-ing pre-allocated?).

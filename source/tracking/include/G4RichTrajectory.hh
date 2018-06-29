@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.hh 90219 2015-05-21 08:07:27Z gcosmo $
+// $Id: G4RichTrajectory.hh 110262 2018-05-17 14:25:55Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -110,19 +110,18 @@ private:
 
 };
 
-extern G4TRACKING_DLL G4ThreadLocal
-G4Allocator<G4RichTrajectory> *aRichTrajectoryAllocator;
+extern G4TRACKING_DLL G4Allocator<G4RichTrajectory>*& aRichTrajectoryAllocator();
 
 inline void* G4RichTrajectory::operator new(size_t)
 {
-  if (!aRichTrajectoryAllocator)
-  { aRichTrajectoryAllocator = new G4Allocator<G4RichTrajectory>; }
-  return (void*)aRichTrajectoryAllocator->MallocSingle();
+  if (!aRichTrajectoryAllocator())
+  { aRichTrajectoryAllocator() = new G4Allocator<G4RichTrajectory>; }
+  return (void*)aRichTrajectoryAllocator()->MallocSingle();
 }
 
 inline void G4RichTrajectory::operator delete(void* aRichTrajectory)
 {
-  aRichTrajectoryAllocator->FreeSingle((G4RichTrajectory*)aRichTrajectory);
+  aRichTrajectoryAllocator()->FreeSingle((G4RichTrajectory*)aRichTrajectory);
 }
 
 #endif

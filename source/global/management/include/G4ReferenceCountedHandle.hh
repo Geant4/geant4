@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReferenceCountedHandle.hh 108486 2018-02-15 14:47:25Z gcosmo $
+// $Id: G4ReferenceCountedHandle.hh 110251 2018-05-17 14:09:28Z gcosmo $
 //
 // 
 // Class G4ReferenceCountedHandle
@@ -115,8 +115,8 @@ private:
     // The object subject to reference counting.
 };
 
-extern G4GLOB_DLL G4ThreadLocal
-G4Allocator<G4ReferenceCountedHandle<void> > *aRCHAllocator;
+extern G4GLOB_DLL
+G4Allocator<G4ReferenceCountedHandle<void>>*& aRCHAllocator();
 
 template <class X>
 class G4CountedObject
@@ -156,8 +156,8 @@ private:
     // The counted object.
 };
 
-extern G4GLOB_DLL G4ThreadLocal
-G4Allocator<G4CountedObject<void> > *aCountedObjectAllocator;
+extern G4GLOB_DLL
+G4Allocator<G4CountedObject<void>>*& aCountedObjectAllocator();
 
 // --------- G4CountedObject<X> Inline function definitions ---------
 
@@ -189,15 +189,15 @@ void G4CountedObject<X>::Release()
 template <class X>
 void* G4CountedObject<X>::operator new( size_t )
 {
-    if (!aCountedObjectAllocator)
-      aCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >;
-    return( (void *)aCountedObjectAllocator->MallocSingle() );
+    if (!aCountedObjectAllocator())
+      aCountedObjectAllocator() = new G4Allocator<G4CountedObject<void>>;
+    return( (void *)aCountedObjectAllocator()->MallocSingle() );
 }
     
 template <class X>
 void G4CountedObject<X>::operator delete( void *pObj )
 {
-    aCountedObjectAllocator->FreeSingle( (G4CountedObject<void>*)pObj );
+    aCountedObjectAllocator()->FreeSingle( (G4CountedObject<void>*)pObj );
 }
 
 // --------- G4ReferenceCountedHandle<X> Inline function definitions ---------
@@ -282,15 +282,15 @@ X* G4ReferenceCountedHandle<X>::operator ()() const
 template <class X>
 void* G4ReferenceCountedHandle<X>::operator new( size_t )
 {
-    if (!aRCHAllocator)
-      aRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >;
-    return( (void *)aRCHAllocator->MallocSingle() );
+    if (!aRCHAllocator())
+      aRCHAllocator() = new G4Allocator<G4ReferenceCountedHandle<void> >;
+    return( (void *)aRCHAllocator()->MallocSingle() );
 }
   
 template <class X>
 void G4ReferenceCountedHandle<X>::operator delete( void *pObj )
 {
-    aRCHAllocator->FreeSingle( (G4ReferenceCountedHandle<void>*)pObj );
+    aRCHAllocator()->FreeSingle( (G4ReferenceCountedHandle<void>*)pObj );
 }
 
 #endif // _G4REFERENCECOUNTEDHANDLE_H_

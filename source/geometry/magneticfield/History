@@ -1,4 +1,4 @@
-$Id: History 107508 2017-11-20 08:23:14Z gcosmo $
+$Id: History 110833 2018-06-15 15:01:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,74 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 15, 2018 G.Cosmo                   - field-V10-04-07
+---------------------
+- Fixed minor Coverity defects in G4BurlischStoer and G4ModifiedMidPoint.
+  Code cleanup.
+
+June 13, 2018 G.Cosmo                   - field-V10-04-06
+---------------------
+- Leave override final only for clone() method in G4UniformMagField,
+  not in destructor...
+
+June 12, 2018 G.Cosmo                   - field-V10-04-05
+---------------------
+- Use G4Exception warnings instead of streaming to cerr.
+- Added override final for virtual methods in G4UniformMagField (J.Apostolakis).
+- Some code cleanup.
+
+Apr 30, 2018 J. Apostolakis             - field-V10-04-04
+---------------------------
+- G4VIntegrationDriver and derived classes
+
+  Added new virtual method in G4VIntegrationDriver :
+      void RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper)
+  which used to exist in G4MagInt_Driver. 
+  ( Its absence caused a problem in some existing user code since 10.4. )
+
+  This method must be defined in those derived driver classes which accept
+  a Runge Kutta stepper ( i.e. some or any type of G4MagIntegratorStepper )
+
+- G4IntegrationDriver, G4FSALIntegrationDriver
+  Defined default implementation (which throws a Fatal G4Exception), and 
+  implementations in the templated classes G4IntegrationDriver and
+  G4FSALIntegrationDriver which check the type (via dynamic cast) and
+  change the stepper if it is appropriate.
+
+Feb 13, 2018 J. Apostolakis             - field-V10-04-03
+---------------------------
+- Change in G4FieldManager::CreateChordFinder to cope 
+  better with case that field argument is null.
+
+Feb 13, 2018 D. Sorokin                 - field-V10-04-01
+-----------------------                 - field-V10-04-02 (comp. fix)
+- Introduced Bulirsch-Stoer method of integration, an alternative
+  to Runge-Kutta based on the mid-point method.
+  Separate driver derived G4VIntegrationDriver and implemented
+  using specialisation of G4IntegrationDriver template class.
+  Note: this method does not have a RK 'Stepper' !
+
+Jan 31, 2018 J. Apostolakis
+---------------------------
+- G4MagneticField no longer inherits from G4ElectroMagneticField
+  This was incorrect, and allowed a user to provide a full EM 
+  field, but obtain the force only from the B-field when using
+  the equation created in the G4ChordFinder constructor.
+   => potential interface change.
+
+  Result: It is no longer possible to use the equation of motion for a 
+     pure magnetic field for the case of a mixed electromagnetic field.
+     This change is desired, and is a *protection* as that inadvertent
+     use led to incorrect results. 
+  Instead the full chain of classes for equation of full EM field,
+     steppers and driver must be used for the case of the 'full' EM field.
+
+Feb 9, 2017 G.Cosmo                     - field-V10-04-00
+-------------------
+- Removed static data from G4FSALIntegrationDriver, G4IntegrationDriver and
+  G4MagIntegratorDriver and moved to base class as normal data members.
+  Fix required for allowing proper symbol exporting on Windows DLLs.
 
 Nov 17, 2017 J. Apostolakis             - field-V10-03-30
 ---------------------------
@@ -201,20 +269,13 @@ Jul 03, 2017 J.Apostolakis             - field-V10-03-08
   fAuxStepper data members in constructor.
   Coverity issues: 67393, 67394, 67391, 67390, 67363
 
-Jul 03, 2017 J.Apostolakis             - field-V10-03-07
+Jul 03, 2017 J.Apostolakis             - field-V10-03-05, -06, -07 
 --------------------------
-- G4FSALBogackiShampline45: fix for memory leak in Stepper()
-  ( Coverity issue 67389 )
-  
-Jul 03, 2017 J.Apostolakis             - field-V10-03-06
---------------------------
+- fix for memory leak in Stepper() in two steppers:
+     G4FSALBogackiShampline45 ( Coverity issue 67389 )
+     G4FSALDormandPrince745   ( Coverity issue 67397 )
 - G4BogackiShampline23: fix for memory leak in destructor
-  ( Coverity issue 67355 )
-
-Jun 30, 2017 J.Apostolakis             - field-V10-03-05
---------------------------
-- G4FSALDormandPrince745: fix for memory leak in Stepper()
-  ( Coverity issue 67397 )
+    ( Coverity issue 67355 )
 
 May 17, 2017 J.Apostolakis             - field-V10-03-03, -04 (resubmit)
 --------------------------

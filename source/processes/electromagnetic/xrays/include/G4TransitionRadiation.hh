@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TransitionRadiation.hh 108508 2018-02-15 15:54:35Z gcosmo $
+// $Id: G4TransitionRadiation.hh 108423 2018-02-13 11:18:13Z gcosmo $
 //
 // G4TransitionRadiation  -- header file
 //

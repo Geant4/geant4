@@ -51,10 +51,10 @@
 
 #include "G4Polyhedron.hh"
 
-class G4UCons : public G4UAdapter<vecgeom::UnplacedCone>
+class G4UCons : public G4UAdapter<vecgeom::GenericUnplacedCone>
 {
-  using Shape_t = vecgeom::UnplacedCone;
-  using Base_t = G4UAdapter<vecgeom::UnplacedCone>;
+  using Shape_t = vecgeom::GenericUnplacedCone;
+  using Base_t = G4UAdapter<vecgeom::GenericUnplacedCone>;
 
   public:  // with description
 

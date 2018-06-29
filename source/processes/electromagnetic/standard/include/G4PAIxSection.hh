@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4PAIxSection.hh 108737 2018-03-02 13:49:56Z gcosmo $
 //
 // 
 // G4PAIxSection.hh -- header file
@@ -194,12 +194,13 @@ public:
 
   G4double GetLowEnergyCof() const { return fLowEnergyCof; }
 
-  void SetVerbose(G4int v){fVerbose=v;};
-          
-  inline G4double GetPAItable(G4int i,G4int j) const;
+  G4double GetLorentzFactor(G4int i) const;
+
+  inline void SetVerbose(G4int v) { fVerbose=v; };
   
-  inline G4double GetLorentzFactor(G4int i) const;
-	  	  
+        
+  inline G4double GetPAItable(G4int i,G4int j) const;
+  	  	  
   inline G4double GetSplineEnergy(G4int i) const;
 	  
   inline G4double GetIntegralPAIxSection(G4int i) const;
@@ -281,11 +282,6 @@ private :
 inline G4double G4PAIxSection::GetPAItable(G4int i, G4int j) const
 {
    return fPAItable[i][j];
-}
-
-inline G4double G4PAIxSection::GetLorentzFactor(G4int j) const
-{
-   return fLorentzFactor[j];
 }
 
 inline G4double G4PAIxSection::GetSplineEnergy(G4int i) const 

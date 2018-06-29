@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: 
+// $Id:
 //
 // -------------------------------------------------------------------
 //
@@ -41,7 +41,11 @@
 #include "G4ios.hh"
 #include <iomanip>
 
+// force REFERENCE macros _not_ to be expanded here
+// but wherever the class is used (w/ that .hh use)
+#define   G4PhysicsConstructorRegistry_cc 1
 #include "G4PhysicsConstructorRegistry.hh"
+
 #include "G4VPhysicsConstructor.hh"
 #include "G4PhysicsConstructorFactory.hh"
 
@@ -66,7 +70,7 @@ G4PhysicsConstructorRegistry::~G4PhysicsConstructorRegistry()
 
 void G4PhysicsConstructorRegistry::Clean()
 {
-  size_t n = physConstr.size(); 
+  size_t n = physConstr.size();
   if(n > 0) {
     for (size_t i=0; i<n; ++i) {
       if(physConstr[i]) {
@@ -82,7 +86,7 @@ void G4PhysicsConstructorRegistry::Clean()
 void G4PhysicsConstructorRegistry::Register(G4VPhysicsConstructor* p)
 {
   if(!p) return;
-  size_t n = physConstr.size(); 
+  size_t n = physConstr.size();
   if(n > 0) {
     for (size_t i=0; i<n; ++i) {
       if(physConstr[i] == p) { return; }
@@ -94,7 +98,7 @@ void G4PhysicsConstructorRegistry::Register(G4VPhysicsConstructor* p)
 void G4PhysicsConstructorRegistry::DeRegister(G4VPhysicsConstructor* p)
 {
   if ( !p ) return;
-  size_t n = physConstr.size(); 
+  size_t n = physConstr.size();
   if ( n > 0 ) {
     for (size_t i=0; i<n; ++i) {
       if ( physConstr[i] == p ) {
@@ -119,7 +123,7 @@ G4VPhysicsConstructor* G4PhysicsConstructorRegistry::GetPhysicsConstructor(const
         // we could store the list of called factories in some vector and
         // before returning we can could first check if this physics constructor was already instantiated
         // if yes, we can throw an exception saying that this physics can been already registered
-        
+
       return factories[name]->Instantiate();
     }
   else
@@ -164,75 +168,19 @@ void G4PhysicsConstructorRegistry::PrintAvailablePhysicsConstructors() const
 }
 
 //
-// External reference to phy ctor factories for running with 'static' 
+// External reference to phy ctor factories for running with 'static'
 // libraries to pull the references of the declared factories into the
 // same compilation unit as the registry itself.
 // No harm having them in the non-static case.
 //
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4ChargeExchangePhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4DecayPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAChemistry);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option1);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option2);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option3);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option4);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option5);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option6);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option7);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_stationary);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_stationary_option2);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_stationary_option4);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_stationary_option6);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmExtraPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmLivermorePhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmLivermorePolarizedPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmLowEPPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmPenelopePhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysicsGS);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysicsSS);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysicsWVI);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option1);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option2);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option3);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option4);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4GenericBiasingPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronDElasticPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronElasticPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsHP);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsLEND);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsXS);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronHElasticPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronInelasticQBBC);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTFP_BERT);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTFP_BERT_ATL);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTFP_BERT_HP);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTFP_BERT_TRV);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsFTF_BIC);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsINCLXX);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsNuBeam);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_BERT);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_BERT_HP);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_BIC);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_BIC_AllHP);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_BIC_HP);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_FTFP_BERT);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGS_BIC);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronPhysicsShielding);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4ImportanceBiasing);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4IonBinaryCascadePhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4IonElasticPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4IonINCLXXPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4IonPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4IonQMDPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4NeutronCrossSectionXS);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4NeutronTrackingCut);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4OpticalPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4ParallelWorldPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4RadioactiveDecayPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4SpinDecayPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4StepLimiterPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4StoppingPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4WeightWindowBiasing);
 
+// Ideally we'd do the G4_REFERENCE_PHYSCONSTR_FACTORY() macros
+// here, but this introduces a circular dependence between the
+// ctor_phys_factory library and the other ctor_phys_* libraries
+// when creating granular libraries.
+// Instead we'll make the references in the location(s) where the
+// G4PhysicsConstructorRegistry is _used_ :
+//    G4
+/*
+#include "G4RegisterPhysicsConstructors.icc"
+*/

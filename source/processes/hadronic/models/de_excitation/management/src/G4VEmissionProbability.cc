@@ -98,11 +98,11 @@ G4VEmissionProbability::IntegrateProbability(G4double elow, G4double ehigh, G4do
   }
 
   G4double x(emin), del, y; 
-  G4double problast = ComputeProbability(x, eCoulomb);
-  eprobmax= emin;
-  probmax = problast;
+  eprobmax = x + edelta*0.1;
+  G4double problast = ComputeProbability(eprobmax, eCoulomb);
+  probmax  = problast;
   fEner[0] = emin;
-  fProb[0] = problast;
+  fProb[0] = probmax;
   size_t i(0);
   if(fVerbose > 1) {
     G4cout << "### G4VEmissionProbability::IntegrateProbability: " 

@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 17, 2018 J.Allison (ExUCN-V10-04-00)
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
 September 12, 2017  Soon Yung Jun  (ExUCN-V10-03-01)
 - ExUCNDetectorConstruction: commented out a wrong use of AddConstProperty
 

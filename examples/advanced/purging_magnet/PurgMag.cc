@@ -32,10 +32,12 @@
 //    *                   *
 //    *********************
 //
-// $Id: PurgMag.cc 84477 2014-10-16 08:44:04Z gcosmo $
+// $Id: PurgMag.cc 109979 2018-05-14 07:13:42Z gcosmo $
 //
-// Comments: Main program for the Purgin Magnet example. 
+// Comments: Main program for the Purgin Magnet example.
 //
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -62,32 +64,32 @@ int main(int argc,char** argv) {
 
   //choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
-  
+
   // Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-  //runManager->SetNumberOfThreads(2); 
+  //runManager->SetNumberOfThreads(2);
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif
 
   // set mandatory initialization classes
   runManager->SetUserInitialization(new PurgMagDetectorConstruction);
-  runManager->SetUserInitialization(new PurgMagPhysicsList);  
+  runManager->SetUserInitialization(new PurgMagPhysicsList);
   runManager->SetUserInitialization(new PurgMagActionInitializer());
-    
+
 
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
-  
+
   //Initialize G4 kernel
   runManager->Initialize();
-    
-  // get the pointer to the User Interface manager 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+
+  // get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
 
   if (argc==1)   // Define UI session for interactive mode.
@@ -95,14 +97,14 @@ int main(int argc,char** argv) {
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
+      UImanager->ApplyCommand("/control/execute vis.mac");
 #endif
       ui->SessionStart();
       delete ui;
 #endif
     }
   else           // Batch mode
-    { 
+    {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);

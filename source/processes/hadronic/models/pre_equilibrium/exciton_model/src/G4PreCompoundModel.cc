@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc 106233 2017-09-22 21:34:41Z gcosmo $
+// $Id: G4PreCompoundModel.cc 108685 2018-02-27 07:58:38Z gcosmo $
 //
 // by V. Lara
 //
@@ -119,7 +119,7 @@ void G4PreCompoundModel::InitialiseModel()
 
   theEmission = new G4PreCompoundEmission();
   if(param->UseHETC()) { theEmission->SetHETCModel(); }
-  else { theEmission->SetDefaultModel(); }
+  //else { theEmission->SetDefaultModel(); }
   theEmission->SetOPTxs(param->GetPrecoModelType());
 
   if(param->UseGNASH()) { theTransition = new G4GNASHTransitions; }

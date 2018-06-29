@@ -303,9 +303,7 @@ G4double G4MultiUnion::DistanceToOut(const G4ThreeVector& aPoint,
                                      G4bool* /* validNorm */,
                                      G4ThreeVector* aNormal) const
 {
-  G4double distanceToOutVoxels = DistanceToOutVoxels(aPoint, aDirection,
-                                                     aNormal);
-  return distanceToOutVoxels;
+  return DistanceToOutVoxels(aPoint, aDirection, aNormal);
 }
 
 //______________________________________________________________________________
@@ -392,7 +390,7 @@ G4double G4MultiUnion::DistanceToOutVoxels(const G4ThreeVector& aPoint,
         const G4Transform3D& transform = fTransformObjs[maxCandidate];
 
         // convert from local normal
-        *aNormal = GetGlobalVector(transform, maxNormal);
+        if (aNormal) *aNormal = GetGlobalVector(transform, maxNormal);
 
         distance += maxDistance;
         currentPoint += maxDistance * direction;

@@ -26,7 +26,7 @@
 /// \file persistency/P02/src/ExP02DetectorConstruction.cc
 /// \brief Implementation of the ExP02DetectorConstruction class
 //
-// $Id: ExP02DetectorConstruction.cc 93306 2015-10-16 07:38:07Z gcosmo $
+// $Id: ExP02DetectorConstruction.cc 110837 2018-06-15 15:16:45Z gcosmo $
 //
 //
 #include "ExP02DetectorConstruction.hh"
@@ -163,9 +163,8 @@ G4VPhysicalVolume* ExP02DetectorConstruction::Construct()
   //  gDebug = 1;
 
   const G4ElementTable* eltab = G4Element::GetElementTable();
-  const G4MaterialTable* mattab = G4Material::GetMaterialTable();
 
-  ExP02GeoTree* geotree = new ExP02GeoTree(fExperimentalHall_phys, eltab, mattab);
+  ExP02GeoTree* geotree = new ExP02GeoTree(fExperimentalHall_phys, eltab);
 
   TFile fo("geo.root","RECREATE");
 

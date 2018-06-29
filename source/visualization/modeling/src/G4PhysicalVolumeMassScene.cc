@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.cc 110128 2018-05-16 06:36:57Z gcosmo $
+// $Id: G4PhysicalVolumeMassScene.cc 108859 2018-03-12 07:44:53Z gcosmo $
 //
 // 
 // John Allison  10th August 1998.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publications:
 // Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
@@ -32,6 +32,7 @@
 //
 /// \file slowing.cc
 /// \brief Implementation of the slowing example
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
   #include "G4MTRunManager.hh"
@@ -49,7 +50,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) 
+int main(int argc,char** argv)
 {
   // Detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = 0;
@@ -57,7 +58,7 @@ int main(int argc,char** argv)
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // Choose the Random engine  
+  // Choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
@@ -66,7 +67,7 @@ int main(int argc,char** argv)
   G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(),4);
   if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
   runManager->SetNumberOfThreads(nThreads);
-  G4cout << "===== slowing is started with " 
+  G4cout << "===== slowing is started with "
          <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
 #else
   G4RunManager* runManager = new G4RunManager;
@@ -77,25 +78,25 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new PhysicsList);
 
   // User action initialization
-  
+
   runManager->SetUserInitialization(new ActionInitialization());
-  
+
   // Visualization
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-    
-  // Get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
- 
-  if (argc>1)   // batch mode  
+
+  // Get the pointer to the User Interface manager
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+
+  if (argc>1)   // batch mode
     {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
     }
-    
+
   else           //define visualization and UI terminal for interactive mode
-    { 
+    {
       ui->SessionStart();
       delete ui;
     }

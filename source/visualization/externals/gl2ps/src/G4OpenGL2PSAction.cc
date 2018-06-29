@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGL2PSAction.cc 88206 2015-02-03 13:01:27Z gcosmo $
+// $Id: G4OpenGL2PSAction.cc 110513 2018-05-28 07:37:38Z gcosmo $
 //
 // 
 
@@ -48,7 +48,6 @@ G4OpenGL2PSAction::G4OpenGL2PSAction(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  fFileName = "";
   fFile = 0;
   fViewport[0] = 0;
   fViewport[1] = 0;
@@ -112,7 +111,7 @@ void G4OpenGL2PSAction::setFileName(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-    fFileName = (strncpy((char*)malloc((unsigned)strlen(aFileName) + 1), aFileName, (unsigned)strlen(aFileName) + 1));
+  fFileName = aFileName;
 }
 //////////////////////////////////////////////////////////////////////////////
 bool G4OpenGL2PSAction::enableFileWriting(
@@ -192,7 +191,7 @@ bool G4OpenGL2PSAction::G4gl2psBegin(
                  options, 
                  GL_RGBA,0, NULL,0,0,0,
                  fBufferSize,
-                 fFile,fFileName);    
+                 fFile,fFileName.c_str());
   if (res == GL2PS_ERROR) {
     return false;
   }

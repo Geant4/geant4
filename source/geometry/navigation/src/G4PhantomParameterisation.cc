@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.cc 101807 2016-11-30 13:42:28Z gunter $
+// $Id: G4PhantomParameterisation.cc 110766 2018-06-13 07:34:39Z gcosmo $
 // GEANT4 tag $ Name:$
 //
 // class G4PhantomParameterisation implementation
@@ -240,13 +240,13 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
     message << "Point outside voxels!" << G4endl
             << "        localPoint - " << localPoint
             << " - is outside container solid: "
-            << fContainerSolid->GetName() << G4endl;
+            << fContainerSolid->GetName() << G4endl
+            << "DIFFERENCE WITH PHANTOM WALLS X: "
+            << std::fabs(localPoint.x()) - fContainerWallX
+            << " Y: " << std::fabs(localPoint.y()) - fContainerWallY
+            << " Z: " << std::fabs(localPoint.z()) - fContainerWallZ;
     G4Exception("G4PhantomParameterisation::GetReplicaNo()", "GeomNav0003",
                 JustWarning, message);
-    G4cerr << " DIFFERENCE WITH PHANTOM WALLS X: "
-           << std::fabs(localPoint.x()) - fContainerWallX
-           << " Y: " << std::fabs(localPoint.y()) - fContainerWallY
-           << " Z: " << std::fabs(localPoint.z()) - fContainerWallZ << G4endl;
   }
   
   // Check the voxel numbers corresponding to localPoint

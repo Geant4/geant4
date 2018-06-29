@@ -1,4 +1,4 @@
-$Id: History 107720 2017-11-29 08:28:30Z gcosmo $
+$Id: History 110004 2018-05-14 07:40:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B.Morgan (gtherapy-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+12-04-18 M.Maire (gtherapy-V10-04-01)
+- GammaTherapy.cc : set visualisation only in interactive mode
+
+22-03-18 M.Maire (gtherapy-V10-04-00)
+- GammaTherapy.cc : remove G4UI_USE and G4VIS_USE
 
 28-11-17 I. Hrivnacova (gtherapy-V10-03-08)
 - Fixed Doxygen warnings

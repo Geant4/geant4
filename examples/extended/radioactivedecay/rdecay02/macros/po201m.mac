@@ -23,7 +23,7 @@
 #
 # place the isotopes in the middle of the target, at rest. 
 /gun/particle ion
-/gun/ion 84 201 0 424. keV
+/gun/ion 84 201 0 424.1
 #
 # complete decay chain in VR mode
 /grdm/analogueMC false

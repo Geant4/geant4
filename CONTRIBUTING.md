@@ -1,2 +1,2 @@
 The Geant4 Collaboration:
-http://geant4.cern.ch/collaboration/members.shtml
+http://cern.ch/geant4/collaboration/members

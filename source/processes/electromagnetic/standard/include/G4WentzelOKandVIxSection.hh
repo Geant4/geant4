@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.hh 104307 2017-05-24 09:01:45Z gcosmo $
+// $Id: G4WentzelOKandVIxSection.hh 109683 2018-05-08 10:36:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -67,6 +67,7 @@
 #include "G4Threading.hh"
 
 class G4ParticleDefinition;
+class G4ScreeningMottCrossSection;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -126,6 +127,8 @@ protected:
   G4NistManager*  fNistManager;
   G4Pow*          fG4pow;
 
+  G4ScreeningMottCrossSection* fMottXSection;
+
   G4ThreeVector   temp;
 
   G4double numlimit;
@@ -170,6 +173,7 @@ protected:
   G4double factB;
   G4double factB1;
   G4double factD;
+  G4double fMottFactor;
   G4double gam0pcmp;
   G4double pcmp2;
 
@@ -223,7 +227,7 @@ inline G4double
 G4WentzelOKandVIxSection::ComputeNuclearCrossSection(G4double cosTMin,
 						     G4double cosTMax)
 {
-  return targetZ*kinFactor*(cosTMin - cosTMax)/
+  return targetZ*kinFactor*fMottFactor*(cosTMin - cosTMax)/
     ((1.0 - cosTMin + screenZ)*(1.0 - cosTMax + screenZ));
 }
 
@@ -235,7 +239,7 @@ G4WentzelOKandVIxSection::ComputeElectronCrossSection(G4double cosTMin,
 {
   G4double cost1 = std::max(cosTMin,cosTetMaxElec);
   G4double cost2 = std::max(cosTMax,cosTetMaxElec);
-  return (cost1 <= cost2) ? 0.0 : kinFactor*(cost1 - cost2)/
+  return (cost1 <= cost2) ? 0.0 : kinFactor*fMottFactor*(cost1 - cost2)/
     ((1.0 - cost1 + screenZ)*(1.0 - cost2 + screenZ));
 }
 

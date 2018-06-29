@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh 107059 2017-11-01 14:58:16Z gcosmo $
+// $Id: G4MagIntegratorDriver.hh 109569 2018-05-02 07:08:33Z gcosmo $
 //
 //
 // class G4MagInt_Driver
@@ -100,7 +100,7 @@ public:  // with description
     virtual G4EquationOfMotion* GetEquationOfMotion() override;
     virtual void SetEquationOfMotion(G4EquationOfMotion* equation) override;
    
-    inline void RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper);
+    virtual void RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper) override;
     // Sets a new stepper pItsStepper for this driver. Then it calls
     // ReSetParameters to reset its parameters accordingly.
 
@@ -218,17 +218,13 @@ private:
     const G4int  fNoVars;                  // Full number of variable
 
     G4int   fMaxNoSteps;
-    static const G4int  fMaxStepBase;
+    G4int   fMaxStepBase;
 
     G4double safety;
     G4double pshrnk;   //  exponent for shrinking
     G4double pgrow;    //  exponent for growth
     G4double errcon;
     // Parameters used to grow and shrink trial stepsize.
-
-    static const G4double max_stepping_increase;
-    static const G4double max_stepping_decrease;
-    // Maximum stepsize increase/decrease factors.
 
     G4int    fStatisticsVerboseLevel;
 

@@ -926,13 +926,14 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   if (tau >= taubig) { cth = -1.+2.*rndmEngineMod->flat(); }
   else if (tau >= tausmall) {
     static const G4double numlim = 0.01;
+    static const G4double onethird = 1./3.;
     G4double xmeanth, x2meanth;
     if(tau < numlim) {
       xmeanth = 1.0 - tau*(1.0 - 0.5*tau);
-      x2meanth= 1.0 - tau*(5.0 - 6.25*tau)/3.;
+      x2meanth= 1.0 - tau*(5.0 - 6.25*tau)*onethird;
     } else {
       xmeanth = G4Exp(-tau);
-      x2meanth = (1.+2.*G4Exp(-2.5*tau))/3.;
+      x2meanth = (1.+2.*G4Exp(-2.5*tau))*onethird;
     }
 
     // too large step of low-energy particle
@@ -952,7 +953,8 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       extremesmallstep = true ;
     }
 
-    static const G4double theta0max = CLHEP::pi/6.;
+    static const G4double onesixth = 1./6.;
+    static const G4double theta0max = CLHEP::pi*onesixth;
     //G4cout << "Theta0= " << theta0 << " theta0max= " << theta0max 
     //             << "  sqrt(tausmall)= " << sqrt(tausmall) << G4endl;
 
@@ -973,13 +975,14 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
 
     // parameter for tail
     G4double ltau= G4Log(tau);
-    G4double u   = G4Exp(ltau/6.);
-    if(extremesmallstep) { u = G4Exp(G4Log(tsmall/lambda0)/6.); }
+    G4double u = extremesmallstep 
+      ? G4Exp(G4Log(tsmall/lambda0)*onesixth) 
+      : G4Exp(ltau*onesixth);
     G4double xx  = G4Log(lambdaeff/currentRadLength);
     G4double xsi = coeffc1+u*(coeffc2+coeffc3*u)+coeffc4*xx;
 
     // tail should not be too big
-    if(xsi < 1.9) { 
+    xsi = std::max(xsi, 1.9); 
       /*
       if(KineticEnergy > 20*MeV && xsi < 1.6) {
         G4cout << "G4UrbanMscModel::SampleCosineTheta: E(GeV)= " 
@@ -990,8 +993,6 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
                << " tau= " << tau << G4endl;
       }
       */
-      xsi = 1.9; 
-    }
 
     G4double c = xsi;
 
@@ -1128,53 +1129,44 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4UrbanMscModel::SampleDisplacement(G4double sth, G4double phi)
-{
+
+void G4UrbanMscModel::SampleDisplacement(G4double , G4double phi)
+{ 
+  //simple distribution for u=r/rmax
+  // based on single scattering results
+  //  ~(u/u0)**p1     for u < u0
+  //  ~((1-u)/(1-u0))**p2 for u >= u0
+
   G4double rmax = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
+  G4double r = 0.;
+  if(rmax > 0.)
+  {
+    static const G4double su0  = 0.851549;
+    static const G4double sp1  = 3.02549;
+    static const G4double sp2  = 1.84108;
+    static const G4double su1  = 1-su0;     
+    static const G4double sp11 = sp1+1;  
+    static const G4double sp21 = sp2+1;   
+    static const G4double sweight = 0.802110;
+    G4double u;
 
-  static const G4double third  = 1./3.;
-  G4double r = rmax*G4Exp(G4Log(rndmEngineMod->flat())*third);
-  /*    
-    G4cout << "G4UrbanMscModel::SampleSecondaries: e(MeV)= " << kineticEnergy
-           << " sinTheta= " << sth << " r(mm)= " << r
-           << " trueStep(mm)= " << tPathLength
-           << " geomStep(mm)= " << zPathLength
-           << G4endl;
-  */
-
-  if(r > 0.) {
-    static const G4double kappa = 2.5;
-    static const G4double kappami1 = 1.5;
-  
-    G4double latcorr = 0.;
-    if((currentTau >= tausmall) && !insideskin) {
-      if(currentTau < taulim) {
-	latcorr = lambdaeff*kappa*currentTau*currentTau*
-	  (1.-(kappa+1.)*currentTau*third)*third;
-
-      } else {
-	G4double etau = (currentTau < taubig) ? G4Exp(-currentTau) : 0.;
-	latcorr = -kappa*currentTau;
-	latcorr = G4Exp(latcorr)/kappami1;
-	latcorr += 1.-kappa*etau/kappami1 ;
-	latcorr *= 2.*lambdaeff*third;
-      }
-    }
-    latcorr = std::min(latcorr, r);
-
-    // sample direction of lateral displacement
-    // compute it from the lateral correlation
-    G4double Phi;
-    if(std::abs(r*sth) < latcorr) {
-      Phi  = twopi*rndmEngineMod->flat();
-
+    if(rndmEngineMod->flat() < sweight) {
+      u = su0*G4Exp(G4Log(rndmEngineMod->flat())/sp11);
     } else {
-      //G4cout << "latcorr= " << latcorr << "  r*sth= " << r*sth 
-      //     << " ratio= " << latcorr/(r*sth) <<  G4endl;
-      G4double psi = std::acos(latcorr/(r*sth));
-      G4double rdm = rndmEngineMod->flat();
-      Phi = (rdm < 0.5) ? phi+psi : phi-psi;
+      u = 1-su1*G4Exp(G4Log(1-rndmEngineMod->flat())/sp21);
     }
+    r = rmax*u ; 
+  }
+  
+  //simple distribution for v=Phi-phi=psi ~exp(-beta*v)
+  // alpha determined from the requirement that distribution should give
+  // the same mean value than that obtained from the ss simulation
+  if(r > 0.)
+  { 
+    static const G4double cbeta = 1.933 ;
+    static const G4double cbeta1 = 1.-exp(-cbeta*CLHEP::pi);
+    G4double psi = -G4Log(1.-rndmEngineMod->flat()*cbeta1)/cbeta; 
+    G4double Phi = (rndmEngineMod->flat() < 0.5) ? phi+psi : phi-psi;
     fDisplacement.set(r*std::cos(Phi),r*std::sin(Phi),0.0);
   }
 }
@@ -1186,62 +1178,73 @@ void G4UrbanMscModel::SampleDisplacementNew(G4double , G4double phi)
   //sample displacement r
 
   G4double rmax = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
-  // u = (r/rmax)**2 , v=1-u
-  // paramerization from ss simulation
-  // f(u) = p0*exp(p1*log(v)-p2*v)+v*(p3+p4*v) 
-  G4double u ,v , rej;
-  G4int count = 0;
+  G4double r = 0.;
+  G4double u = r/rmax;
+  if(rmax > 0.)
+  {
+    G4double rej;
+    G4int count = 0;
 
-  static const G4double reps = 1.e-6;
-  static const G4double  rp0 = 2.2747e+4;
-  static const G4double  rp1 = 4.5980e+0;
-  static const G4double  rp2 = 1.5580e+1;
-  static const G4double  rp3 = 7.1287e-1;
-  static const G4double  rp4 =-5.7069e-1;
+    static const G4double reps = 1.e-6;
+    static const G4double  rp1 = 1.61385e+1;
+    static const G4double  rp2 = 3.26646e+0;
+    static const G4double  rp3 =-3.35702e+0;
+    static const G4double  rp4 = 7.38037e+1;
+    static const G4double  rp5 =-1.12829e+2;
+    static const G4double  rp6 = 4.63974e+1;
+    static const G4double ymax = 2.88900e+1;
 
-  do {
-    u = reps+(1.-2.*reps)*rndmEngineMod->flat();
-    v = 1.-u ;
-    rej = rp0*G4Exp(rp1*G4Log(v)-rp2*v) + v*(rp3+rp4*v);
+    do {
+      u = reps+(1.-2.*reps)*rndmEngineMod->flat();
+      G4double v = 1.-u ;
+      G4double v2= v*v;
+      G4double v4= v2*v2;
+      G4double v6= v4*v2;
+      G4double v8= v6*v2;
+      rej = G4Exp(rp1*u*u+rp2*G4Log(v))*u*v*(1+rp3*v2+rp4*v4+rp5*v6+rp6*v8);
+    }
+    // Loop checking, 15-Sept-2015, Vladimir Ivanchenko
+    while (ymax*rndmEngineMod->flat() > rej && ++count < 1000);
+    r = rmax*u;
   }
-  // Loop checking, 15-Sept-2015, Vladimir Ivanchenko
-  while (rndmEngineMod->flat() > rej && ++count < 1000);
-  G4double r = rmax*sqrt(u);
-
+                               
   if(r > 0.)
   {
     // sample Phi using lateral correlation
+    // and r/rmax - (Phi-phi) correlation
     // v = Phi-phi = acos(latcorr/(r*sth))
-    // v has a universal distribution which can be parametrized from ss
-    // simulation as
-    // f(v) = 1.49e-2*exp(-v**2/(2*0.320))+2.50e-2*exp(-31.0*log(1.+6.30e-2*v))+
-    //        1.96e-5*exp(8.42e-1*log(1.+1.45e1*v))
-    static const G4double probv1 = 0.305533;
-    static const G4double probv2 = 0.955176;
-    static const G4double vhigh  = 3.15;     
-    static const G4double w2v = 1./G4Exp(30.*G4Log(1. + 6.30e-2*vhigh));
-    static const G4double w3v = 1./G4Exp(-1.842*G4Log(1. + 1.45e1*vhigh));
+    // from SS simulation f(v) = a0*exp(-a1*v)+a2   
+    G4double v, rej;
+    G4int count(0);
 
-    G4double Phi;
-    G4double random = rndmEngineMod->flat();
-    if(random < probv1) {
-      do {
-	v = G4RandGauss::shoot(rndmEngineMod,0.,0.320);
-      }
-      // Loop checking, 15-Sept-2015, Vladimir Ivanchenko
-      while (std::abs(v) >= vhigh);
-      Phi = phi + v;
+    static const G4double a1phi[10] = {4.508e-1,6.132e-1,1.180e+0,1.357e+0,1.582e+0,
+                                       1.863e+0,2.217e+0,2.739e+0,3.652e+0,5.149e+0};
+    static const G4double a2phi[10] = {1.556e+0,3.571e-1,6.480e-2,3.964e-2,2.733e-2,
+                                       1.571e-2,8.546e-3,3.308e-3,6.464e-4,4.194e-5};
+    static const G4double a3phi[10] = {3.631e-2,1.300e-1,8.899e-1,8.396e-1,7.362e-1,
+                                       6.782e-1,5.613e-1,4.568e-1,4.296e-1,4.067e-1};
+    static const G4double gmphi[10] = {3.8455,1.5860,2.0190,1.4924,1.1711, 
+                                       1.0158,1.0086,1.0034,1.0007,1.0001};
 
-    } else {
+    G4int iphi = u*10.;
+    if(iphi < 0)      { iphi = 0; }
+    else if(iphi > 9) { iphi = 9; }
+    G4double a1 = a1phi[iphi];
+    G4double a2 = a2phi[iphi];
+    G4double a3 = a3phi[iphi];
+    G4double rejmax = gmphi[iphi];
+    G4double wphi = 1-G4Exp(-0.5*a1*CLHEP::pi);
 
-      G4double rnd = rndmEngineMod->flat();
-      v = (random < probv2) 
-        ? (-1.+1./G4Exp(G4Log(1.-rnd*(1.-w2v))/30.))/6.30e-2
-        : (-1.+1./G4Exp(G4Log(1.-rnd*(1.-w3v))/-1.842))/1.45e1;
-
-      rnd = rndmEngineMod->flat();
-      Phi = (rnd < 0.5) ? phi+v : phi-v;
+    do {
+      v = -2*G4Log(1-wphi*rndmEngineMod->flat())/a1;
+      G4double exav = G4Exp(-0.5*a1*v);    
+      rej = (1+G4Exp(a3*G4Log(v)))*(exav*exav+a2)/(exav*rejmax);
     }
+    // Loop checking, 5-March-2018, Vladimir Ivanchenko
+    while (rndmEngineMod->flat() > rej && ++count < 1000); 
+
+    G4double Phi = (rndmEngineMod->flat() < 0.5) ? phi+v  : phi-v;
+  
     fDisplacement.set(r*std::cos(Phi),r*std::sin(Phi),0.0);
   }
 }

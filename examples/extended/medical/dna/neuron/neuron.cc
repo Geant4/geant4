@@ -31,7 +31,7 @@
 // M. Batmunkh et al. J Radiat Res Appl Sci 8 (2015) 498-507
 // O. Belov et al. Physica Medica 32 (2016) 1510-1520
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // -------------------------------------------------------------------
 // November 2016
 // -------------------------------------------------------------------
@@ -41,7 +41,7 @@
 /// \brief Implementation of the neuron example
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+#include "G4Types.hh"
 #ifdef G4MULTITHREADED
   #include "G4MTRunManager.hh"
 #else
@@ -55,7 +55,7 @@
 #include "CommandLineParser.hh"
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
-#include "PhysicsList.hh" 
+#include "PhysicsList.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -65,13 +65,13 @@ CommandLineParser* parser(0);
 
 void Parse(int& argc, char** argv);
 
-int main(int argc,char** argv) 
+int main(int argc,char** argv)
 {
 
   // run time in Geant4
   G4Timer *timer = new G4Timer();
-  timer->Start();   
-  
+  timer->Start();
+
   // Choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
@@ -84,7 +84,7 @@ int main(int argc,char** argv)
   // Construct the run manager according to whether MT is activated or not
   //
   Command* commandLine(0);
-  
+
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager= new G4MTRunManager;
   if ((commandLine = parser->GetCommandIfActive("-mt")))
@@ -101,7 +101,7 @@ int main(int argc,char** argv)
     G4cout << "===== neuron is started with "
        << runManager->GetNumberOfThreads()
        << " threads of MT MODE =====" << G4endl;
- 
+
     runManager->SetNumberOfThreads(nThreads);
   }
 #else
@@ -113,12 +113,12 @@ int main(int argc,char** argv)
   // Set mandatory user initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new PhysicsList);  
+  runManager->SetUserInitialization(new PhysicsList);
 
-  // User action initialization  
+  // User action initialization
   runManager->SetUserInitialization(new ActionInitialization(detector));
-  
-  // Initialize G4 kernel  
+
+  // Initialize G4 kernel
   runManager->Initialize();
 
   // Initialize visualization
@@ -183,11 +183,11 @@ int main(int argc,char** argv)
     delete ui;
   }
 
-  // calculation time 
-  timer->Stop();  
-  G4cout << " Calculation time                      = " 
-         << timer->GetRealElapsed() << " s \n"<< G4endl;   
-   
+  // calculation time
+  timer->Stop();
+  G4cout << " Calculation time                      = "
+         << timer->GetRealElapsed() << " s \n"<< G4endl;
+
   delete visManager;
   delete runManager;
 
@@ -235,7 +235,7 @@ void Parse(int& argc, char** argv)
                      "macFile.mac");
 
 // You cann your own command, as for instance:
-//  parser->AddCommand("-seed", 
+//  parser->AddCommand("-seed",
 //                     Command::WithOption,
 //                     "Give a seed value in argument to be tested", "seed");
 // it is then up to you to manage this option
@@ -243,20 +243,20 @@ void Parse(int& argc, char** argv)
 #ifdef G4MULTITHREADED
   parser->AddCommand("-mt",
                      Command::WithOption,
-                     "Launch in MT mode (events computed in parallel)", 
+                     "Launch in MT mode (events computed in parallel)",
       " NOT RECOMMANDED WITH CHEMISTRY)",
                      "2");
 #endif
 
   parser->AddCommand("-sXY", Command::OptionNotCompulsory,
-                     "Initial beam position uniformly spread on a square!"); 
+                     "Initial beam position uniformly spread on a square!");
   parser->AddCommand("-dXY", Command::OptionNotCompulsory,
-                     "Initial beam position uniformly spread on a disk!"); 
-          
+                     "Initial beam position uniformly spread on a disk!");
+
   parser->AddCommand("-dnaliv", Command::OptionNotCompulsory,
                      "Activate Livermore + DNAPhysics");
   parser->AddCommand("-dnachemON", Command::OptionNotCompulsory,
-                     "Activate Livermore + DNAPhysics + DNAChemistry");    
+                     "Activate Livermore + DNAPhysics + DNAChemistry");
   parser->AddCommand("-dnahad", Command::OptionNotCompulsory,
                      "Activate Hadronic + Livermore + DNAPhysics");
 
@@ -269,7 +269,7 @@ void Parse(int& argc, char** argv)
                      Command::WithOption, //OptionNotCompulsory,
                      "Give a DAT file to simulation",
                      "fileName.dat");
-      
+
   parser->AddCommand("-vis",
                      Command::WithOption,
                      "Select a visualization driver",
@@ -285,7 +285,7 @@ void Parse(int& argc, char** argv)
 
   parser->AddCommand("-out",
                      Command::OptionNotCompulsory,
-                     "Output files", 
+                     "Output files",
                      exec);
 
   //////////

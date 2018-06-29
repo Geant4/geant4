@@ -40,77 +40,86 @@
 
 class G4QGSMSplitableHadron : public G4VSplitableHadron
 {
-  public:
-    G4QGSMSplitableHadron();
-    G4QGSMSplitableHadron(const G4ReactionProduct & aPrimary);
-    G4QGSMSplitableHadron(const G4ReactionProduct & aPrimary, G4bool Direction);
-    G4QGSMSplitableHadron(const G4Nucleon & aNucleon);
-    G4QGSMSplitableHadron(const G4Nucleon & aNucleon, G4bool Direction);
 
-    virtual ~G4QGSMSplitableHadron();
+public:
+	G4QGSMSplitableHadron();
+	G4QGSMSplitableHadron(const G4ReactionProduct & aPrimary);
+	G4QGSMSplitableHadron(const G4ReactionProduct & aPrimary, G4bool Direction);
+	G4QGSMSplitableHadron(const G4Nucleon & aNucleon);
+	G4QGSMSplitableHadron(const G4Nucleon & aNucleon, G4bool Direction);
 
-  private:
-    const G4QGSMSplitableHadron & operator=(const G4QGSMSplitableHadron &right);
+	virtual ~G4QGSMSplitableHadron();
 
-  public:
-    virtual void SplitUp();
-    virtual void SetFirstParton(G4int PDGcode);  // Uzhi 24.11.10
-    virtual void SetSecondParton(G4int PDGcode);  // Uzhi 24.11.10
-    virtual G4Parton * GetNextParton();
-    virtual G4Parton * GetNextAntiParton();
+private:
+	const G4QGSMSplitableHadron & operator=(const G4QGSMSplitableHadron &right);
 
-  private:
-    void InitParameters();
-    void DiffractiveSplitUp();
-    void SoftSplitUp();
-    G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare);
-    void GetValenceQuarkFlavors(const G4ParticleDefinition * aPart,
-			        G4Parton *& Parton1, G4Parton *& Parton2);
-    G4Parton * BuildSeaQuark(G4bool isAntiQuark, G4int aPDGCode, G4int nSeaPair);
-    G4double SampleX(G4double anXmin, G4int nSea, G4int theTotalSea, G4double aBeta);
+public:
+	virtual void SplitUp();
+	virtual void SetFirstParton(G4int PDGcode);  // Uzhi 24.11.10
+	virtual void SetSecondParton(G4int PDGcode);  // Uzhi 24.11.10
+	virtual G4Parton * GetNextParton();
+	virtual G4Parton * GetNextAntiParton();
 
-  private:
-    // aggregated data
-    G4bool Direction; // FALSE is target. - candidate for more detailed design. @@@@ HPW
+private:
+	void InitParameters();
+	void DiffractiveSplitUp();
+	void SoftSplitUp();
 
-    std::deque<G4Parton *> Color;
-    std::deque<G4Parton *> AntiColor;
-  private:
-    // associated classes
-    G4MesonSplitter theMesonSplitter;
-    G4BaryonSplitter theBaryonSplitter;
+	G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare);
+	void GetValenceQuarkFlavors(const G4ParticleDefinition * aPart,
+			G4Parton *& Parton1, G4Parton *& Parton2);
+	G4Parton * BuildSeaQuark(G4bool isAntiQuark, G4int aPDGCode, G4int nSeaPair);
+	G4double SampleX(G4double anXmin, G4int nSea, G4int theTotalSea, G4double aBeta);
 
-  private:
-    // model parameters
-    G4double alpha;
-    G4double beta;
-    G4double theMinPz;
-    G4double StrangeSuppress;
-    G4double sigmaPt;
-    G4double widthOfPtSquare;
-    G4double minTransverseMass;
+private:
+	// aggregated data
+	G4bool Direction; // FALSE is target. - candidate for more detailed design. @@@@ HPW
+
+	std::deque<G4Parton *> Color;
+	std::deque<G4Parton *> AntiColor;
+//std::deque<G4Parton *>::iterator iP;      // Uzhi
+//std::deque<G4Parton *>::iterator iAP;     // Uzhi
+unsigned int iP;                            // Uzhi 5.06.2015
+unsigned int iAP;                           // Uzhi 5.06.2015
+private:
+
+	// associated classes
+	G4MesonSplitter theMesonSplitter;
+	G4BaryonSplitter theBaryonSplitter;
+
+private:
+	// model parameters
+	G4double alpha;
+	G4double beta;
+	G4double theMinPz;
+	G4double StrangeSuppress;
+	G4double sigmaPt;
+	G4double widthOfPtSquare;
+	G4double minTransverseMass;
 };
 
 inline G4Parton* G4QGSMSplitableHadron::GetNextParton()
 {
-  if(Color.size()==0) return 0;
-  G4Parton * result = Color.back();
-  Color.pop_back();
-  return result;
+	if(Color.size()==0) return 0;
+
+        G4Parton * result = Color.operator[](iP);
+        iP++; if(iP == Color.size()) iP=0;
+	return result;
 }
 
 inline G4Parton* G4QGSMSplitableHadron::GetNextAntiParton()
 {
-  if(AntiColor.size() == 0) return 0;
-  G4Parton * result = AntiColor.front();
-  AntiColor.pop_front();
-  return result;
+	if(AntiColor.size() == 0) return 0;
+
+        G4Parton * result = AntiColor.operator[](iAP);
+        iAP++; if(iAP == AntiColor.size()) iAP=0;
+	return result;
 }
 
 inline void G4QGSMSplitableHadron::SetFirstParton(G4int PDGcode)
 {PDGcode++;}
 inline void G4QGSMSplitableHadron::SetSecondParton(G4int PDGcode)
 {PDGcode++;}
-
 #endif
+
 

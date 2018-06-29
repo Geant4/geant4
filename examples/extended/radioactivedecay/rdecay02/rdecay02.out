@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -88,7 +88,7 @@ Set file name: rdecay02
 =======================================================================
 ======       Radioactive Decay Physics Parameters              ========
 =======================================================================
-Max life time                                     1.4427e+06 ps
+Max life time                                     0.14427 ps
 Internal e- conversion flag                       1
 Stored internal conversion coefficients           1
 Enable correlated gamma emission                  0
@@ -313,7 +313,6 @@ NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /
         Model:        NeutronHPInelastic: 0 meV ---> 20 MeV
      Cr_sctns:      NeutronHPInelasticXS: 0 meV ---> 20 MeV
      Cr_sctns:       Barashenkov-Glauber: 0 meV ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 meV ---> 100 TeV
 
   Process: nCapture
         Model:          NeutronHPCapture: 0 meV ---> 20 MeV
@@ -336,7 +335,6 @@ NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /
         Model:              hElasticLHEP: 0 meV ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 meV ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
@@ -353,7 +351,6 @@ NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /
         Model:              hElasticLHEP: 0 meV ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 meV ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
@@ -375,7 +372,6 @@ NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 meV ---> 12 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 meV ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for triton
@@ -403,7 +399,7 @@ Number of de-excitation channels                    8
 Min excitation energy (keV)                         0.01
 Min energy per nucleon for multifragmentation (MeV) 1e+05
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1442.7
+Time limit for long lived isomeres (ns)             0.00014427
 Internal e- conversion flag                         1
 Store e- internal conversion data                   1
 Electron internal conversion ID                     0
@@ -456,56 +452,56 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.28s Real=1.34s Sys=0s
+  User=1.120000s Real=1.128817s Sys=0.000000s
 
  The run is 10000 Ne24 of 0 meV through : 
  Target   : Length = 1 cm  Radius    = 5 mm  Material = G4_CESIUM_IODIDE
  Detector : Length = 5 cm  Thickness = 2 cm  Material = Germanium
 
- Mean energy deposit in target,   in time window = 808.99 keV  rms = 420.14 keV
- Mean energy deposit in detector, in time window = 21.014 keV  rms = 115.41 keV
+ Mean energy deposit in target,   in time window = 812.08 keV  rms = 419.92 keV
+ Mean energy deposit in detector, in time window = 18.564 keV  rms = 109.43 keV
 
  Process calls frequency in target :
-     RadioactiveDecay=  60806                  Rayl=    300        Transportation=  50193
-              annihil=    155                 compt=   4197                  conv=    165
-                eIoni=  26001               ionIoni=  29996                   msc=   3653
-                 phot=   1589 
+     RadioactiveDecay=  60759                  Rayl=    285        Transportation=  50186
+              annihil=    175                 compt=   4221                  conv=    178
+                eIoni=  25991               ionIoni=  39494                   msc=   3539
+                 phot=   1549 
 
  Process calls frequency in detector:
-                 Rayl=   1325        Transportation=  45761               annihil=    353
-                compt=  22737                  conv=    351                 eIoni=  27760
-                  msc=   6427                  phot=   4381 
+                 Rayl=   1244        Transportation=  45791               annihil=    308
+                compt=  22450                  conv=    316                 eIoni=  27442
+                  msc=   6961                  phot=   4394 
 
  List of generated particles in target:
-           Mg24:   10000  Emean =  42.165 eV 	( 41.932 eV  --> 874.87 eV )
-  Mg24[1368.672]:    9996  Emean =  170.04 eV 	( 84.008 eV  --> 403.22 eV )
-  Mg24[4122.889]:    9977  Emean =  39.441 eV 	( 26.204 meV --> 74.891 eV )
+           Mg24:   10000  Emean =  42.353 eV 	( 41.932 eV  --> 909.16 eV )
+  Mg24[1368.672]:    9994  Emean =  169.95 eV 	( 85.066 eV  --> 434.16 eV )
+  Mg24[4122.889]:    9983  Emean =  39.151 eV 	( 141.48 meV --> 74.471 eV )
   Mg24[4238.240]:       1  Emean =  22.241 eV 	( 22.241 eV  --> 22.241 eV )
-  Mg24[5235.120]:      12  Emean =  3.6628 eV 	( 1.4761 eV  --> 5.7315 eV )
-           Na24:    9997  Emean =  4.9989 eV 	( 4.9901 eV  --> 15.787 eV )
-  Na24[1346.621]:     816  Emean =  27.344 eV 	( 291.06 meV --> 52.053 eV )
-  Na24[472.207]:    9999  Emean =  68.213 eV 	( 185.29 meV --> 134.38 eV )
+  Mg24[5235.120]:       7  Emean =  1.9809 eV 	( 673.5 meV --> 3.6881 eV )
+           Na24:    9995  Emean =  4.9955 eV 	( 4.9901 eV  --> 15.742 eV )
+  Na24[1346.621]:     771  Emean =  27.275 eV 	( 359.61 meV --> 53.234 eV )
+  Na24[472.207]:   10000  Emean =  68.145 eV 	( 147.52 meV --> 133.97 eV )
   Na24[563.199]:       8  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
-      anti_nu_e:   20000  Emean =  979.71 keV	( 45.206 keV --> 4.3 MeV)
-             e+:     165  Emean =  860.61 keV	( 28.287 keV --> 1.655 MeV)
-             e-:   25974  Emean =  633.95 keV	( 64.566 eV  --> 3.9153 MeV)
-          gamma:   31108  Emean =  1.5043 MeV	( 90.991 keV --> 4.2378 MeV)
+      anti_nu_e:   20000  Emean =  979.44 keV	( 45.132 keV --> 3.6011 MeV)
+             e+:     178  Emean =  818.12 keV	( 11.534 keV --> 1.6238 MeV)
+             e-:   25966  Emean =   641.5 keV	( 23.394 eV  --> 3.4358 MeV)
+          gamma:   31103  Emean =  1.5037 MeV	( 90.991 keV --> 4.2378 MeV)
 
  List of generated particles in detector:
-             e+:     351  Emean =  828.08 keV	( 13.441 keV --> 1.9307 MeV)
-             e-:   27458  Emean =  373.44 keV	( 116.82 eV  --> 3.3945 MeV)
-          gamma:     706  Emean =  520.84 keV	( 311.5 keV --> 2.0037 MeV)
+             e+:     316  Emean =  846.67 keV	( 47.029 keV --> 1.9307 MeV)
+             e-:   27151  Emean =  372.92 keV	( 105.46 eV  --> 2.7526 MeV)
+          gamma:     616  Emean =  514.48 keV	( 416.88 keV --> 1.0527 MeV)
 
 ... write Root file : rdecay02.root - done
 ... close Root file : rdecay02.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 88308746, 498406364
+ Current couple of seeds = 1581911307, 698179978
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.026 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.024 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

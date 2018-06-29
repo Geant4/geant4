@@ -1,11 +1,11 @@
-Seed used : 1527242710
+Seed used : 1530114046
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -84,7 +84,7 @@ conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
  LivermoreConversion :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
@@ -262,14 +262,12 @@ Start event 5
 Start event 6
 Start event 7
 Start event 8
- * PrimaryKiller: aborts event 8, energy loss is too large. 
- * Energy loss by primary is: 3.203 keV. Event is aborted if the Eloss is > 2 keV
 Start event 9
 
 --------------------End of Global Run-----------------------
-  The run has 9 events 
-Number of events recorded by the species scorer = 9
- Total energy deposited in the world volume : 11930 eV
+  The run has 10 events 
+Number of events recorded by the species scorer = 10
+ Total energy deposited in the world volume : 10431 eV
  ------------------------------------------------------------
 
 Graphics systems deleted.

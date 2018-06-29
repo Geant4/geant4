@@ -1,4 +1,4 @@
-$Id: History 108480 2018-02-15 14:28:27Z gcosmo $
+$Id: History 110153 2018-05-16 12:40:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,29 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-December 19, 2017 G.Cosmo (geommng-V10-03-23)
+May 16, 2018 G.Cosmo (geommng-V10-04-05)
+- G4GeomSplitter: replaced use or realloc()/free() and memcpy() with
+  normal allocation/deallocation through G4Allocator. Also addressing
+  compilation warnings on gcc-8.1.
+
+May 11, 2018 E.Tcherniaev (geommng-V10-04-04)
+- G4AffineTransform: further optimized InverseProduct(), for the case where
+  tf2 is a pure translation.
+
+May 7, 2018 E.Tcherniaev (geommng-V10-04-03)
+- G4AffineTransform: added explicit copy constructor, assignment and destructor;
+  InverseProduct() has been optimised, now it does 36 multiplications instead
+  of 45; added methods for inverse transformation: InverseTransformPoint(),
+  InverseTransformAxis(), InverseNetRotation() and InverseNetTranslation().
+
+April 24, 2018 E.Tcherniaev (geommng-V10-04-02)
+- G4AffineTransform: minor optimisation to multiplication of matrix by vector,
+  to make use of temporaries in accessing vector components.
+
+April 11, 2018 G.Cosmo (geommng-V10-04-01)
+- Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
+
+December 19, 2017 G.Cosmo (geommng-V10-04-00)
 - Fixed self-consistency in G4VVolumeMaterialScanner header (missing #include).
   Thanks to Raphael Isemann for reporting this.
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Xt.hh 70601 2013-06-03 11:20:53Z gcosmo $
+// $Id: G4Xt.hh 110808 2018-06-15 06:58:36Z gcosmo $
 //
 //  To unify X11 event treatment between 
 // G4/interfaces Xt sessions and G4/visualizations Xt drivers.
@@ -57,6 +57,10 @@ public:
   void* GetEvent();
   void FlushAndWaitExecution();
   virtual ~G4Xt();                     
+  // Workaround for gcc8 Coverity cast warning
+  static bool xt_dispatch_event(void* a_event) {
+     return XtDispatchEvent((XEvent*)a_event);
+  }
 private:
   G4Xt (const G4Xt&);
   G4Xt (int,char**,char*);

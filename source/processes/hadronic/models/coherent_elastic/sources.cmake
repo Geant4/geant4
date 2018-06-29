@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 104408 2017-05-30 07:14:50Z gcosmo $
+# $Id: sources.cmake 107965 2017-12-14 13:13:33Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -50,6 +50,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4ChargeExchange.hh
         G4ChargeExchangeProcess.hh
         G4DiffuseElastic.hh
+        G4DiffuseElasticV2.hh
         G4ElasticHadrNucleusHE.hh
         G4HadronElastic.hh
         G4LEHadronProtonElastic.hh
@@ -68,6 +69,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4ChargeExchange.cc
         G4ChargeExchangeProcess.cc
         G4DiffuseElastic.cc
+        G4DiffuseElasticV2.cc
         G4ElasticHadrNucleusHE.cc
         G4HadronElastic.cc
         G4LEHadronProtonElastic.cc

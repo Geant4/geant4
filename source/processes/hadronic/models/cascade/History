@@ -15,9 +15,39 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-27 February 2018  Alberto Ribon (hadr-casc-V10-03-07)
+ 2 May 2018  Dennis Wright  (hadr-casc-V10-04-04)
+-------------------------------------------------
+- G4ElementaryParticleCollider
+   methods generateSCMpionAbsorption and 
+   generateSCMmuonAbsorption did not produce correct nucleon pairs when 
+   pion or muon was absorbed - both methods now re-written
+
+   quantum number conservation test added to method 
+   collide(G4InuclParticle* bullet, G4InuclParticle* target,
+           G4CollisionOutput& output)
+ 
+ 20 March 2018  Julia Yarba  (hadr-casc-V10-04-03)
+---------------------------------------------------
+- Fix implementation of nuclear_rad_2par configurable key (G4CascadeParamMessenger.cc)
+
+ 6 March 2018  Dennis Wright  (hadr-casc-V10-04-02)
+---------------------------------------------------
+- G4CascadeT11pizNChannel.cc: extend strange pair production channels to
+  6,7,8 and 9 body final states
+  
+27 February 2018  Alberto Ribon (hadr-casc-V10-04-01)
 -----------------------------------------------------
 -  G4NucleiModel : replaced obsolete std::bind2nd with std::bind .
+
+ 2 February 2018  Dennis Wright (hadr-casc-V10-04-00)
+-----------------------------------------------------
+- Add strange pair production channels to list of 6, 7, 8 and 9-body 
+  final states in classes G4CascadeT31piNChannel and G4CascadeT33piNChannel.
+  Modify template values accordingly in 
+    G4CascadePiMinusNChannel.hh
+    G4CascadePiMinusPChannel.hh
+    G4CascadePiPlusNChannel.hh
+    G4CascadePiPlusPChannel.hh
 
 27 November 2017  Dennis Wright (hadr-casc-V10-03-06)
 -----------------------------------------------------

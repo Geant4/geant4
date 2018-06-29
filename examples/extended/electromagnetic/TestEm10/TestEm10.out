@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -50,8 +50,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
@@ -139,13 +139,13 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.156
 9.283e+04	3.157
 
-total time for build X-ray TR energy loss tables = 0.17 s
+total time for build X-ray TR energy loss tables = 0.14 s
 Build angle for energy distribution according the current radiator
 
 Lorentz Factor	XTR photon number
 
 
-total time for build XTR angle for given energy tables = 0.13 s
+total time for build XTR angle for given energy tables = 0.11 s
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -231,7 +231,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.156
 9.283e+04	3.157
 
-total time for build X-ray TR energy loss tables = 0.15 s
+total time for build X-ray TR energy loss tables = 0.14 s
 Build angle for energy distribution according the current radiator
 
 Lorentz Factor	XTR photon number
@@ -561,16 +561,16 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.27s Real=0.28s Sys=0s
+  User=0.320000s Real=0.327733s Sys=0.000000s
  ================== run summary =====================
  End of Run TotNbofEvents = 1000
- Mean energy deposit in absorber = 0.0491746 +-0.0185795  MeV 
- Total number of XTR gammas = 2766
- Total number of all gammas = 2860
+ Mean energy deposit in absorber = 0.0480871 +-0.0188945  MeV 
+ Total number of XTR gammas = 2724
+ Total number of all gammas = 2826
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1408944608, 622160001
+ Current couple of seeds = 957985447, 893740337
 ----------------------------------------
 ... write Root file : testem10.root - done
 ... close Root file : testem10.root - done

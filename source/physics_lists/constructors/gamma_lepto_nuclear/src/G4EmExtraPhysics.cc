@@ -32,14 +32,16 @@
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
+//
 // 10.11.2005 V.Ivanchenko edit to provide a standard
 // 19.06.2006 V.Ivanchenko add mu-nuclear process
 // 16.10.2012 A.Ribon: renamed G4EmExtraBertiniPhysics as G4EmExtraPhysics
 // 10.04.2014 A.Dotti: Add MT functionality for messenger
 // 24.04.2014 A.Ribon: switched on muon-nuclear by default
+// 29.01.2018 V.Grichine, adding neutrinos 
 //
-//----------------------------------------------------------------------------
 //
+///////////////////////////////////////////////////////////////
 
 #include "G4EmExtraPhysics.hh"
 
@@ -52,6 +54,12 @@
 #include "G4Positron.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
+#include "G4AntiNeutrinoE.hh"
+#include "G4NeutrinoE.hh"
+#include "G4AntiNeutrinoMu.hh"
+#include "G4NeutrinoMu.hh"
+#include "G4AntiNeutrinoTau.hh"
+#include "G4NeutrinoTau.hh"
 
 #include "G4SynchrotronRadiation.hh"
 #include "G4BertiniElectroNuclearBuilder.hh"
@@ -62,6 +70,11 @@
 #include "G4GammaConversionToMuons.hh"
 #include "G4AnnihiToMuPair.hh"
 #include "G4eeToHadrons.hh"
+
+#include "G4NeutrinoElectronProcess.hh"
+#include "G4NeutrinoElectronTotXsc.hh"
+#include "G4NeutrinoElectronCcModel.hh"
+#include "G4NeutrinoElectronNcModel.hh"
 
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
@@ -81,15 +94,28 @@ G4bool G4EmExtraPhysics::synActivatedForAll = false;
 G4bool G4EmExtraPhysics::gmumuActivated = false;
 G4bool G4EmExtraPhysics::pmumuActivated = false;
 G4bool G4EmExtraPhysics::phadActivated  = false;
+G4bool G4EmExtraPhysics::fNuActivated  = false;
+
 G4double G4EmExtraPhysics::gmumuFactor  = 1.0;
 G4double G4EmExtraPhysics::pmumuFactor  = 1.0;
 G4double G4EmExtraPhysics::phadFactor   = 1.0;
+G4double G4EmExtraPhysics::fNuEleCcBias = 1.0;
+G4double G4EmExtraPhysics::fNuEleNcBias = 1.0;
+G4double G4EmExtraPhysics::fNuNucleusBias = 1.0;
+
+G4String G4EmExtraPhysics::fNuDetectorName = "0";
 
 G4ThreadLocal G4BertiniElectroNuclearBuilder* G4EmExtraPhysics::theGNPhysics = nullptr;
 G4ThreadLocal G4SynchrotronRadiation* G4EmExtraPhysics::theSynchRad = nullptr;
 G4ThreadLocal G4GammaConversionToMuons* G4EmExtraPhysics::theGammaToMuMu = nullptr;
 G4ThreadLocal G4AnnihiToMuPair* G4EmExtraPhysics::thePosiToMuMu = nullptr;
 G4ThreadLocal G4eeToHadrons* G4EmExtraPhysics::thePosiToHadrons = nullptr;
+
+G4ThreadLocal G4NeutrinoElectronProcess* G4EmExtraPhysics::theNuEleProcess = nullptr;
+G4ThreadLocal G4NeutrinoElectronTotXsc*  G4EmExtraPhysics::theNuEleTotXsc  = nullptr;
+
+
+//////////////////////////////////////
 
 G4EmExtraPhysics::G4EmExtraPhysics(G4int ver): 
   G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"),
@@ -171,6 +197,35 @@ void G4EmExtraPhysics::PositronToHadronsFactor(G4double val)
   if(val > 0.0) phadFactor = val;
 }
 
+////////////////////////////////////////////////////
+
+void G4EmExtraPhysics::NeutrinoActivated(G4bool val)
+{
+  fNuActivated = val;
+}
+
+void G4EmExtraPhysics::SetNuEleCcBias(G4double bf)
+{
+  if(bf > 0.0) fNuEleCcBias = bf;
+}
+
+void G4EmExtraPhysics::SetNuEleNcBias(G4double bf)
+{
+  if(bf > 0.0) fNuEleNcBias = bf;
+}
+
+void G4EmExtraPhysics::SetNuNucleusBias(G4double bf)
+{
+  if(bf > 0.0) fNuNucleusBias = bf;
+}
+
+void G4EmExtraPhysics::SetNuDetectorName(const G4String& dn)
+{
+  fNuDetectorName = dn;
+}
+
+/////////////////////////////////////////////////
+
 void G4EmExtraPhysics::ConstructParticle()
 {
   G4Gamma::Gamma();
@@ -178,15 +233,29 @@ void G4EmExtraPhysics::ConstructParticle()
   G4Positron::Positron();
   G4MuonPlus::MuonPlus();
   G4MuonMinus::MuonMinus();
+
+  G4AntiNeutrinoE::AntiNeutrinoE();
+  G4NeutrinoE::NeutrinoE();
+  G4AntiNeutrinoMu::AntiNeutrinoMu();
+  G4NeutrinoMu::NeutrinoMu();
+  G4AntiNeutrinoTau::AntiNeutrinoTau();
+  G4NeutrinoTau::NeutrinoTau();
 }
 
 void G4EmExtraPhysics::ConstructProcess()
 {
-  G4ParticleDefinition* gamma = G4Gamma::Gamma();
-  G4ParticleDefinition* electron = G4Electron::Electron();
-  G4ParticleDefinition* positron = G4Positron::Positron();
-  G4ParticleDefinition* muonplus = G4MuonPlus::MuonPlus();
+  G4ParticleDefinition* gamma     = G4Gamma::Gamma();
+  G4ParticleDefinition* electron  = G4Electron::Electron();
+  G4ParticleDefinition* positron  = G4Positron::Positron();
+  G4ParticleDefinition* muonplus  = G4MuonPlus::MuonPlus();
   G4ParticleDefinition* muonminus = G4MuonMinus::MuonMinus();
+
+  G4ParticleDefinition* anuelectron = G4AntiNeutrinoE::AntiNeutrinoE();
+  G4ParticleDefinition* nuelectron  = G4NeutrinoE::NeutrinoE(); 
+  G4ParticleDefinition* anumuon     = G4AntiNeutrinoMu::AntiNeutrinoMu();
+  G4ParticleDefinition* numuon      = G4NeutrinoMu::NeutrinoMu();
+  G4ParticleDefinition* anutau      = G4AntiNeutrinoTau::AntiNeutrinoTau();
+  G4ParticleDefinition* nutau       = G4NeutrinoTau::NeutrinoTau();
 
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
   if(gnActivated) {
@@ -239,6 +308,28 @@ void G4EmExtraPhysics::ConstructProcess()
 	}
       }
     }
+  }
+  if( fNuActivated )
+  {
+    theNuEleProcess = new G4NeutrinoElectronProcess(fNuDetectorName);
+    theNuEleProcess->SetBiasingFactors(fNuEleCcBias,fNuEleNcBias);
+
+    theNuEleTotXsc = new G4NeutrinoElectronTotXsc();
+    theNuEleTotXsc->SetBiasingFactors(fNuEleCcBias,fNuEleNcBias);
+
+    theNuEleProcess->AddDataSet(theNuEleTotXsc);
+
+    G4NeutrinoElectronCcModel* ccModel = new G4NeutrinoElectronCcModel();
+    G4NeutrinoElectronNcModel* ncModel = new G4NeutrinoElectronNcModel();
+    theNuEleProcess->RegisterMe(ccModel);
+    theNuEleProcess->RegisterMe(ncModel);
+
+    ph->RegisterProcess(theNuEleProcess, anuelectron);
+    ph->RegisterProcess(theNuEleProcess, nuelectron);
+    ph->RegisterProcess(theNuEleProcess, anumuon);
+    ph->RegisterProcess(theNuEleProcess, numuon);
+    ph->RegisterProcess(theNuEleProcess, anutau);
+    ph->RegisterProcess(theNuEleProcess, nutau);
   }
 }
 

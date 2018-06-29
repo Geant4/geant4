@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.icc 105913 2017-08-28 08:39:12Z gcosmo $
+// $Id: G4CoupledTransportation.icc 110805 2018-06-15 06:52:15Z gcosmo $
 //
 
 // 
@@ -37,6 +37,7 @@
 //
 
 #include <CLHEP/Units/SystemOfUnits.h>
+#include "G4TransportationLogger.hh"
 
 inline void
 G4CoupledTransportation::SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
@@ -77,16 +78,19 @@ inline G4int G4CoupledTransportation::GetThresholdTrials() const
 inline void G4CoupledTransportation::SetThresholdWarningEnergy( G4double newEnWarn )
 {
   fThreshold_Warning_Energy= newEnWarn;
+  fpLogger->SetThresholdWarningEnergy( newEnWarn );  // Update the information for correct reporting  
 }
 
 inline void G4CoupledTransportation::SetThresholdImportantEnergy( G4double newEnImp )
 {
-  fThreshold_Important_Energy = newEnImp; 
+  fThreshold_Important_Energy = newEnImp;
+  fpLogger->SetThresholdImportantEnergy( newEnImp );  // Update the information for correct reporting  
 }
 
 inline void G4CoupledTransportation::SetThresholdTrials(G4int newMaxTrials )
 {
-  fThresholdTrials = newMaxTrials; 
+  fThresholdTrials = newMaxTrials;
+  fpLogger->SetThresholdTrials(newMaxTrials );  // Update the information for correct reporting  
 }
 
      // Get/Set parameters for killing loopers: 

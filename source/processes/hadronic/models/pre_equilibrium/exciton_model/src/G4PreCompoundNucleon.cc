@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundNucleon.cc 100378 2016-10-19 15:03:27Z gcosmo $
+// $Id: G4PreCompoundNucleon.cc 108685 2018-02-27 07:58:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -83,6 +83,9 @@ ProbabilityDistributionFunction(G4double eKin,
     /(CLHEP::pi2*CLHEP::hbarc*CLHEP::hbarc*CLHEP::hbarc);
   G4double Probability = fact * theReducedMass * rj * xs * eKin * P * (N-1) 
     * g4calc->powN(g1*E1/(g0*E0),N-2) * g1 / (E0*g0*g0);
+
+  //G4cout << "N= " << N << " g0= " << g0 << " g1= " << g1 << " E0= " << E0 << " E1= " << E1
+  //	 << " prob= " << Probability << G4endl;
   
   return Probability;
 }

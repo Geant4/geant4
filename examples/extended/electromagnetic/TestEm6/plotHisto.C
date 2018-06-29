@@ -1,26 +1,15 @@
 {
   gROOT->Reset();
   
-  // Draw histos filled by Geant4 simulation 
+  // Draw histos 1-6 filled by Geant4 simulation with run02.mac
   //   
-  TFile f("testem6.root");  
+  TFile f0("testem6_0.root");
   TCanvas* c1 = new TCanvas("c1", "  ");
-  
-  TH1D* hist1 = (TH1D*)f.Get("h1");
-  hist1->Draw("HIST");
-  
-  TH1D* hist2 = (TH1D*)f.Get("h2");
-  hist2->Draw("HIST");
-  
-  TH1D* hist3 = (TH1D*)f.Get("h3");
-  hist3->Draw("HIST");
-  
-  TH1D* hist4 = (TH1D*)f.Get("h4");
-  hist4->Draw("HIST");
-  
-  TH1D* hist5 = (TH1D*)f.Get("h5");
-  hist5->Draw("HIST");
-  
-  TH1D* hist6 = (TH1D*)f.Get("h6");
-  hist6->Draw("HIST");      
-}  
+  c1->Divide(2,3);
+  for(int i=1; i < 7; ++i)
+  {
+    c1->cd(i);
+    const char* hname = std::string("h"+std::to_string(i)).c_str(); // h1, h2, .. h6
+    f0.Get(hname)->Draw("HIST");
+  }
+}

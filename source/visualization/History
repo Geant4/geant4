@@ -1,4 +1,4 @@
-$Id: History 107329 2017-11-08 16:41:26Z gcosmo $
+$Id: History 110653 2018-06-05 11:49:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,159 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+05 June 2018  John Allison  (vis-V10-04-07)
+- openinventor-V10-04-02: Fix compilation error.
+- raytracer-V10-04-01: Update "thread-local-static-var" model.
+- visexternals-V10-04-01: Corrected GNUmakefile.
+
+26 May 2018  John Allison  (vis-V10-04-06)
+- visexternals-V10-04-00, visexternalgl2ps-V10-04-00,
+  VRML-V10-04-00, gMocren-V10-04-00, DAWN-V10-04-00:
+  o Fix gcc-8 warnings.
+
+25 May 2018  John Allison
+- visman-V10-04-11: Introduce /vis/drawLogicalVolume:
+  o Synonymous with /vis/specify.
+  o Both commands create a new scene and invoke /vis/scene/add/logicalVolume.
+
+24 May 2018  John Allison  (vis-V10-04-05)
+- modeling-V10-04-05:
+  o G4LogicalVolumeModel: Add overlap checking,
+  o Fix gcc-8 warnings.
+- visman-V10-04-10:
+  o /vis/specify, /vis/scene/add/logicalVolume: Include overlap checking.
+- opengl-V10-04-06:
+  o Fix gcc-8 warnings.
+
+08 May 2018 Ben Morgan
+- visman-V10-04-09: Explicitly #include G4Types header.
+
+26 April 2018  John Allison
+- openinventor-V10-04-01: Fix compilation errors.
+
+25 April 2018  John Allison  (vis-V10-04-04)
+- visXXX-V10-04-00, openinventor-V10-04-00, opengl-V10-04-05:
+  o Implement kernel visit for "colour by density".
+- visman-V10-04-08:
+  o Complete development for /vis/viewer/colourByDensity:
+    . Copy colour-by-density parameters from view parameters to
+      modeling parameters.
+    . Colour volumes according to density if the user has not specified
+      vis attributes. Useful for drawing geometry from GDML.
+
+24 April 2018  John Allison
+- modeling-V10-04-04: Small bug fix.
+- modeling-V10-04-03: Implement /vis/viewer/colourByDensity.
+- visman-V10-04-07: Small bug fix.
+- visman-V10-04-06, opengl-V10-04-04:
+  o Migrate to greps-V10-04-04.
+
+23 April 2018  John Allison
+- visman-V10-04-05:
+  o Migrate to greps-V10-04-03.
+  o Complete implementation of /vis/viewer/colourByDensity.
+
+22 April 2018  John Allison
+- visman-V10-04-04: Several small cosmetic improvements.
+
+28th March 2018  John Allison  (vis-V10-04-03)
+- visman-V10-04-03: Improve some vis commands.
+
+20th March 2018  Makoto Asai
+- raytracer-V10-04-00:
+  o Use HyperStep of G4ParallelWorldProcess to draw volumes
+    defined in a parallel world.
+
+11th March 2018  John Allison  (vis-V10-04-02)
+- modeling-V10-04-02: Fix bug calculating mass of parallel world.
+- visman-V10-04-02: Improve comments.
+- vistree-V10-04-00:
+  o Fix bug in suppressed writing of repeated parameterised volumes.
+
+13 February 2018 Jonathan Madsen
+- opengl-V10-04-03:
+  o Replaced explicit usage of G4Mutex locking/unlocking with
+    G4AutoLock pointers initialized with std::defer_lock as this
+    enables one to avoid any deadlock or non-locked condition_variable
+    waits by using G4AutoLock::owns_mutex()
+
+12 February 2018 Jonathan Madsen
+- opengl-V10-04-02:
+  o Updated G4CONDITIONWAIT(...) to new C++11 requirements
+  o Found probable bug in G4OpenGLQtViewer with condition wait -- not locked
+    prior to entering condition, which is an undefined behavior. Adapted
+    G4AutoLock to accept std::defer_lock_t (doesn't lock upon construction)
+    to prevent deadlock that occurs when the mutex is locked
+
+31st January 2017  John Allison  (vis-V10-04-01)
+- Tidy History files.
+
+8th January 2017  John Allison  (vis-V10-04-00)
+- Merged timemovebranch: visman-V10-04-01, opengl-V10-04-01:
+  o Moved time window parameters from G4OpenGLStoredViewer to
+    G4ViewParameters. Now one can interpolate time window parameters (using
+    /vis/viewer/interpolate) and make a movie of particles moving through time.
+  o To do this, see guidance on /vis/viewer/set/timeWindow/ commands. Briefly:
+      /vis/scene/add/trajectories rich
+      /vis/modeling/trajectories/drawByCharge-0/default/setTimeSliceInterval 0.01 ns
+    then typically
+      /vis/viewer/set/timeWindow/displayLightFront true 0 0 -50 cm -0.5 ns
+      /vis/viewer/set/timeWindow/displayHeadTime true
+      /vis/viewer/set/timeWindow/fadeFactor 1
+      /run/beamOn # or several until you get a good event or events
+      /vis/viewer/set/timeWindow/startTime 0 ns 1 ns
+      /vis/viewer/save
+      /vis/viewer/set/timeWindow/startTime 1 ns 1 ns
+    then zoom, pan etc to a view of interest and
+      /vis/viewer/save
+    then repeat with next start time, another view and a save, then try
+      /vis/viewer/interpolate
+
+3rd January 2017  John Allison  (timemovebranch-09)
+- G4ViewParameters:: TimeWindowCommands: Fix for /vis/viewer/save.
+
+2nd January 2017  John Allison  (timemovebranch-08)
+- Moved time window commands to /vis/viewer/set/timeWindow/.
+- DEPRECATED the equivalent /vis/ogl/set/ commands.
+
+2nd January 2017  John Allison  (timemovebranch-07)
+- Copied /vis/ogl/set time window commands to /vis/viewer/set.
+
+1st January 2017  John Allison  (timemovebranch-06)
+- G4ViewParameters: Completed PrintDifferences, operator<< and operator!= for
+  time window parameters.
+
+31st December 2017  John Allison  (timemovebranch-05)
+- G4ViewParameters: Provide proper Get and Set functions for time parameters.
+
+31st December 2017  John Allison  (timemovebranch-04)
+- Implement G4OpenGLStoredViewer::AddPrimitiveForASingleFrame.
+
+19th December 2017  Gabriele Cosmo
+- modeling-V10-04-01:
+  o Fixed self-consistency in G4AttValueFilterT header (missing #include).
+    Thanks to Raphael Isemann for reporting this.
+
+14th December 2017  John Allison  (timemovebranch-03)
+- Merged changes from trunk up to -r107990.
+
+14th December 2017  John Allison  (timemovebranch-02)
+- Time move: Tested light front drawing. Some small changes required.
+
+14th December 2017  John Allison  (timemovebranch-01)
+- Time move: First working version. Much tidying to do.
+
+14th December 2017  John Allison
+- opengl-V10-04-00: Fix display list memory being exceeded.
+
+13th December 2017  John Allison  (timemovebranch-00)
+- Move start time etc. from G4OpenGLViewer to G4Viewparameters:
+  o First stage (data are public members of G4Viewparameters).
+
+12th December 2017  John Allison
+- visman-V10-04-00: Minor cosmetic.
+- modeling-V10-04-00: Improve an informational message.
 
 7th November 2017  John Allison (vis-V10-03-10)
 - opengl-V10-03-04: Refine content of output of picking.
@@ -2178,7 +2331,8 @@ Rolling openinventor back to: openinventor-V09-05-14
 
 4th June 2010  Joseph Perl  (vis-V09-03-07)
 - vis-HepRep-V09-03-02
-  o Added command renderCylAsPolygon- opengl-V09-03-07
+  o Added command renderCylAsPolygon
+- opengl-V09-03-07
   o G4OpenGLImmediate/StoredQtViewer : Add protection against multiple
   repaint call. Add protection against resizeGl with bad values
 

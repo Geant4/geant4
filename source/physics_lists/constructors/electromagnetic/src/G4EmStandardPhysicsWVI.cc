@@ -120,7 +120,7 @@ G4EmStandardPhysicsWVI::G4EmStandardPhysicsWVI(G4int ver)
   param->SetVerbose(verbose);
   param->SetLowestElectronEnergy(10*eV);
   //param->SetLatDisplacementBeyondSafety(true);
-  //param->SetMuHadLateralDisplacement(false);
+  param->SetMuHadLateralDisplacement(true);
   param->ActivateAngularGeneratorForIonisation(true);
   param->SetMscThetaLimit(0.15);
   param->SetFluo(true);
@@ -207,14 +207,14 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
     if (!particle) { continue; }
     if (particleName == "gamma") {
 
-      G4ComptonScattering* cs = new G4ComptonScattering;
-      cs->SetEmModel(new G4KleinNishinaModel());
-
       G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
       pee->SetEmModel(new G4LivermorePhotoElectricModel());
 
-      ph->RegisterProcess(cs, particle);
+      G4ComptonScattering* cs = new G4ComptonScattering;
+      cs->SetEmModel(new G4KleinNishinaModel());
+
       ph->RegisterProcess(pee, particle);
+      ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(new G4GammaConversion(), particle);
       ph->RegisterProcess(new G4RayleighScattering(), particle);
 

@@ -25,11 +25,11 @@
 # The data files should be defined before definition of the ion source 
 # otherwise the mean life time will not be selected correctly
 #
-/grdm/setPhotoEvaporationFile 102 252 UserEvapData_z83.a210
+/grdm/setPhotoEvaporationFile 83 210 UserEvapData_z83.a210
 #
 # place the isotopes in the middle of the target, at rest.
 /gun/particle ion 
-/gun/ion 83 210 0 46.5 keV
+/gun/ion 83 210 0 46.539
 #
 # only few 
 /analysis/setFileName userBi210

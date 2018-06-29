@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Molecule.cc 103042 2017-03-10 11:50:07Z gcosmo $
+// $Id: G4Molecule.cc 110873 2018-06-22 13:11:22Z gcosmo $
 //
 // ---------------------------------------------------------------------
 //	GEANT 4 class header file
@@ -62,7 +62,11 @@ using namespace std;
 
 ITImp(G4Molecule)
 
-G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator = 0;
+G4Allocator<G4Molecule>*& aMoleculeAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4Molecule>* _instance = nullptr;
+    return _instance;
+}
 
 //______________________________________________________________________________
 

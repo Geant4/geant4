@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.hh 108486 2018-02-15 14:47:25Z gcosmo $
+// $Id: G4StateManager.hh 110286 2018-05-18 09:40:01Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -52,7 +52,8 @@
 #define G4StateManager_h 1
 
 #include <vector>
-#include "globals.hh"
+#include "G4Types.hh"
+#include "G4String.hh"
 #include "G4ApplicationState.hh"
 #include "G4VStateDependent.hh"
 #include "G4VExceptionHandler.hh"

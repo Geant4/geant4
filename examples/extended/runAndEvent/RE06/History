@@ -1,4 +1,4 @@
-$Id: History 101675 2016-11-21 09:24:40Z gcosmo $
+$Id: History 109972 2018-05-14 07:07:04Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 11, 2018 J. Allison (exampleRE06-V10-04-01)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+May 08, 2018 B. Morgan (exampleRE06-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
 
 Nov 19, 2016 A. Dotti (exampleRE06-V10-02-00)
 - Setting SD explicitly to managers

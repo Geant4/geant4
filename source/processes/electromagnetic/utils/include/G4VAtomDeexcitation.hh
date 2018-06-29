@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.hh 98985 2016-08-29 07:01:17Z gcosmo $
+// $Id: G4VAtomDeexcitation.hh 108386 2018-02-09 15:38:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -55,6 +55,7 @@
 #include "G4AtomicShellEnumerator.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Track.hh"
+#include "G4Threading.hh"
 #include <vector>
 
 class G4ParticleDefinition;
@@ -124,17 +125,15 @@ public:
                                       G4AtomicShellEnumerator shell) = 0;
 
   // generation of deexcitation for given atom and shell vacancy
-  inline void GenerateParticles(std::vector<G4DynamicParticle*>* secVect,  
-                                const G4AtomicShell*, 
-                                G4int Z,
-                                G4int coupleIndex);
+  // and material cut couple, which defines cut values 
+  void GenerateParticles(std::vector<G4DynamicParticle*>* secVect,  
+			 const G4AtomicShell*, 
+			 G4int Z, G4int coupleIndex);
 
   // generation of deexcitation for given atom and shell vacancy
   virtual void GenerateParticles(std::vector<G4DynamicParticle*>* secVect,  
                                  const G4AtomicShell*, 
-                                 G4int Z,
-                                 G4double gammaCut,
-                                 G4double eCut) = 0;
+                                 G4int Z, G4double gammaCut, G4double eCut) = 0;
 
   // access or compute PIXE cross section 
   virtual G4double 
@@ -195,6 +194,10 @@ private:
 
   static G4int pixeIDg;
   static G4int pixeIDe;
+
+#ifdef G4MULTITHREADED
+  static G4Mutex atomDeexcitationMutex;
+#endif
 };
 
 inline void G4VAtomDeexcitation::SetFluo(G4bool val)
@@ -268,31 +271,6 @@ inline G4bool
 G4VAtomDeexcitation::CheckAugerActiveRegion(G4int coupleIndex)
 {
   return (activeAugerMedia[coupleIndex]);
-}
-
-inline void 
-G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,  
-                                       const G4AtomicShell* as, 
-                                       G4int Z,
-                                       G4int idx)
-{
-  G4double gCut = DBL_MAX;
-  if(ignoreCuts) {
-    gCut = 0.0;
-  } else if (theCoupleTable) {
-    gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[idx];
-  }
-  if(gCut < as->BindingEnergy()) {
-    G4double eCut = DBL_MAX;
-    if(CheckAugerActiveRegion(idx)) {
-      if(ignoreCuts) {
-        eCut = 0.0;
-      } else if (theCoupleTable) {
-        eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[idx];
-      }
-    }
-    GenerateParticles(v, as, Z, gCut, eCut);
-  }
 }
 
 #endif

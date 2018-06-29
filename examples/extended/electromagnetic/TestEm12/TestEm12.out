@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -109,7 +109,6 @@ Spline of EM tables enabled                        1
 Apply cuts on all EM processes                     0
 Use integral approach for tracking                 1
 X-section factor for integral approach             0.8
-Use built-in Birks satuaration                     0
 Min kinetic energy for tables                      100 eV 
 Max kinetic energy for tables                      100 TeV
 Number of bins in tables                           84
@@ -118,20 +117,23 @@ Verbose level                                      0
 Verbose level for worker thread                    0
 Bremsstrahlung energy threshold above which 
   primary is added to the list of secondary        100 TeV
+Lowest triplet kinetic energy                      1 MeV
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
 =======================================================================
 ======                 Ionisation Parameters                   ========
 =======================================================================
 Step function for e+-                              (0.2, 1 mm)
 Step function for muons/hadrons                    (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         1 keV
+Lowest muon/hadron kinetic energy                  1 keV
 Fluctuations of dE/dx are enabled                  1
+Use built-in Birks satuaration                     0
 Build CSDA range enabled                           1
 Use cut as a final range enabled                   1
 Enable angular generator interface                 0
 Factor of cut reduction for sub-cutoff method      1
 Max kinetic energy for CSDA tables                 1 GeV
-Lowest e+e- kinetic energy                         1 keV
-Lowest muon/hadron kinetic energy                  1 keV
-Lowest triplet kinetic energy                      1 MeV
 Linear loss limit 0.01
 =======================================================================
 ======                 Multiple Scattering Parameters          ========
@@ -140,7 +142,7 @@ Type of msc step limit algorithm for e+-           1
 Type of msc step limit algorithm for muons/hadrons 0
 Msc lateral displacement for e+- enabled           1
 Msc lateral displacement for muons and hadrons     0
-Msc lateral displacement alg96 for e+-             1
+Urban msc model lateral displacement alg96         1
 Msc lateral displacement beyond geometry safety    0
 Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
@@ -151,6 +153,7 @@ Factor used for dynamic computation of angular
   limit between single and multiple scattering     1
 Fixed angular limit between single 
   and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
 Type of nuclear form-factor                        1
 Screening factor                                   1
 =======================================================================
@@ -170,6 +173,7 @@ Type of PIXE cross section for e+-                 Livermore
 Use fast sampling in DNA models                    0
 Use Stationary option in DNA models                0
 Use DNA with multiple scattering of e-             0
+Use DNA e- solvation model type                    3
 =======================================================================
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -184,24 +188,24 @@ Use DNA with multiple scattering of e-             0
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.02s Real=1.03s Sys=0s
+  User=0.950000s Real=0.956770s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 10000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 3.942 MeV +- 227.271 keV
+ Total Energy deposited        = 3.945 MeV +- 218.141 keV
 
- Track length of primary track = 2.044 cm  +- 2.842 mm 
+ Track length of primary track = 2.045 cm  +- 2.804 mm 
  Range from EmCalculator = 2.045 cm  (from full dE/dx)
 
- Projected range               = 1.327 cm  +- 3.570 mm 
+ Projected range               = 1.322 cm  +- 3.643 mm 
 
- Nb of steps of primary track  = 16.31 +- 3.02	 Step size= 1.289 mm  +- 278.279 um 
+ Nb of steps of primary track  = 16.32 +- 3.02	 Step size= 1.290 mm  +- 277.196 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 272666396, 987623930
+ Current couple of seeds = 2040117623, 1877391824
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

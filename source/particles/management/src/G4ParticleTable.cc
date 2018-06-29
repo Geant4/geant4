@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc 106143 2017-09-14 06:34:42Z gcosmo $
+// $Id: G4ParticleTable.cc 110257 2018-05-17 14:20:12Z gcosmo $
 //
 // class G4ParticleTable
 //
@@ -89,8 +89,16 @@ G4ParticleTable* G4ParticleTable::fgParticleTable =0;
 #ifdef G4MULTITHREADED
 // Lock for particle table accesses.
 //
-G4Mutex G4ParticleTable::particleTableMutex = G4MUTEX_INITIALIZER;
-G4int G4ParticleTable::lockCount = 0;
+G4Mutex& G4ParticleTable::particleTableMutex()
+{
+    static G4Mutex _instance = G4MUTEX_INITIALIZER;
+    return _instance;
+}
+G4int& G4ParticleTable::lockCount()
+{
+    static G4int _instance = 0;
+    return _instance;
+}
 #endif 
 
 ////////////////////
@@ -162,8 +170,8 @@ void G4ParticleTable::WorkerG4ParticleTable()
   // The iterator for the shadow particle table is not sharable.
   //
 #ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
-  G4ParticleTable::lockCount++;
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex());
+  G4ParticleTable::lockCount()++;
 #endif
   if(fDictionary == 0) { 
     fDictionary = new G4PTblDictionary();   
@@ -189,7 +197,7 @@ void G4ParticleTable::WorkerG4ParticleTable()
   fIterator =  new G4PTblDicIterator( *fDictionary);
 
 #ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex());
 #endif
 
   fIonTable->WorkerG4IonTable();
@@ -539,7 +547,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_nam
     G4ParticleDefinition* ptcl = 0;
     if(G4Threading::IsWorkerThread())
     {
-      G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
+      G4MUTEXLOCK(&G4ParticleTable::particleTableMutex());
       G4PTblDictionary::iterator its = fDictionaryShadow->find(particle_name);
       if(its != fDictionaryShadow->end())
       {
@@ -548,7 +556,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_nam
         G4int code = ptcl->GetPDGEncoding();
         if(code!=0) fEncodingDictionary->insert(std::pair<G4int, G4ParticleDefinition*>(code,ptcl) );
       }
-      G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
+      G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex());
     }
     return ptcl;
 #else
@@ -590,7 +598,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
 #ifdef G4MULTITHREADED
     if(particle == 0 && G4Threading::IsWorkerThread())
     {
-      G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
+      G4MUTEXLOCK(&G4ParticleTable::particleTableMutex());
       G4PTblEncodingDictionary::iterator its = fEncodingDictionaryShadow->find(aPDGEncoding);
       if(its!=fEncodingDictionaryShadow->end())
       {
@@ -599,7 +607,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
         G4String key = GetKey(particle);
         fDictionary->insert( std::pair<G4String, G4ParticleDefinition*>(key,particle) );
       }
-      G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);  
+      G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex());
     }
 #endif
 

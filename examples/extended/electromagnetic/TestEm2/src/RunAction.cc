@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 83431 2014-08-21 15:49:56Z gcosmo $
+// $Id: RunAction.cc 109103 2018-03-27 07:39:04Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,7 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
  :G4UserRunAction(),
-  fDet(det),fKin(kin),fRunMessenger(0), fAnalysisManager(0),fRun(0),
+  fDet(det),fKin(kin),fAnalysisManager(nullptr),fRun(nullptr),
   fVerbose(0), fEdeptrue(1.), fRmstrue(1.), fLimittrue(DBL_MAX)
 {
   fRunMessenger = new RunActionMessenger(this);

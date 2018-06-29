@@ -11,12 +11,13 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 103803 2017-04-27 14:03:05Z gcosmo $
+# $Id: sources.cmake 110673 2018-06-07 10:28:33Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${TiMemory_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/detector/include)
@@ -178,6 +179,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4track
         G4tracking
     LINK_LIBRARIES
+        ${TiMemory_LIBRARIES}
 )
 
 # List any source specific properties here

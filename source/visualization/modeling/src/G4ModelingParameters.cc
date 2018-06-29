@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc 106122 2017-09-13 12:51:53Z gcosmo $
+// $Id: G4ModelingParameters.cc 109510 2018-04-26 07:15:57Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -39,6 +39,7 @@
 #include "G4VSolid.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
+#include "G4UnitsTable.hh"
 
 G4ModelingParameters::G4ModelingParameters ():
   fWarning               (true),
@@ -49,6 +50,7 @@ G4ModelingParameters::G4ModelingParameters ():
   fDensityCulling        (false),
   fVisibleDensity        (0.01 * g / cm3),
   fCullCovered           (false),
+  fCBDAlgorithmNumber    (0),
   fExplodeFactor         (1.),
   fNoOfSides             (24),
   fpSectionSolid         (0),
@@ -74,6 +76,7 @@ G4ModelingParameters::G4ModelingParameters
   fDensityCulling (isDensityCulling),
   fVisibleDensity (visibleDensity),
   fCullCovered    (isCullingCovered),
+  fCBDAlgorithmNumber(0),
   fExplodeFactor  (1.),
   fNoOfSides      (noOfSides),
   fpSectionSolid  (0),
@@ -193,6 +196,16 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
   if (mp.fCullCovered) os << "on";
   else                os << "off";
 
+  os << "\n  Colour by density: ";
+  if (mp.fCBDAlgorithmNumber <= 0) {
+    os << "inactive";
+  } else {
+    os << "Algorithm " << mp.fCBDAlgorithmNumber << ", Parameters:";
+    for (auto p: mp.fCBDParameters) {
+      os << ' ' << G4BestUnit(p,"Volumic Mass");
+    }
+  }
+
   os << "\n  Explode factor: " << mp.fExplodeFactor
      << " about centre: " << mp.fExplodeCentre;
 
@@ -231,6 +244,7 @@ G4bool G4ModelingParameters::operator !=
       (fCullInvisible          != mp.fCullInvisible)          ||
       (fDensityCulling         != mp.fDensityCulling)         ||
       (fCullCovered            != mp.fCullCovered)            ||
+      (fCBDAlgorithmNumber     != mp.fCBDAlgorithmNumber)     ||
       (fExplodeFactor          != mp.fExplodeFactor)          ||
       (fExplodeCentre          != mp.fExplodeCentre)          ||
       (fNoOfSides              != mp.fNoOfSides)              ||
@@ -242,6 +256,11 @@ G4bool G4ModelingParameters::operator !=
 
   if (fDensityCulling &&
       (fVisibleDensity != mp.fVisibleDensity)) return true;
+
+  if (fCBDAlgorithmNumber > 0) {
+    if (fCBDParameters.size() != mp.fCBDParameters.size()) return true;
+    else if (fCBDParameters != mp.fCBDParameters) return true;
+  }
 
   if (fVisAttributesModifiers != mp.fVisAttributesModifiers)
     return true;

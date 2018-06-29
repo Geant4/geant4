@@ -27,7 +27,7 @@
 /// \brief Main program of the hadronic/Hadr01 example
 //
 //
-// $Id: Hadr01.cc 107541 2017-11-22 08:24:57Z gcosmo $
+// $Id: Hadr01.cc 109185 2018-04-03 07:20:46Z gcosmo $
 //
 // -------------------------------------------------------------
 //      GEANT4 Hadr01
@@ -61,20 +61,16 @@
 #include "EventAction.hh"
 #include "StackingAction.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
-  //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::MixMaxRng());
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
 
   //Construct the default run manager
   G4RunManager * runManager = new G4RunManager();
@@ -87,7 +83,7 @@ int main(int argc,char** argv) {
   PhysicsListMessenger* mess = nullptr;
   G4String physName = "";
 
-  // Physics List name defined via 3nd argument
+  //Physics List name defined via 3nd argument
   if (argc==3) { physName = argv[2]; }
 
   // Physics List name defined via environment variable
@@ -96,15 +92,15 @@ int main(int argc,char** argv) {
     if (path) { physName = G4String(path); }
   }
 
-  // reference PhysicsList via its name
-  if("" != physName && factory.IsReferencePhysList(physName)) {
+  //reference PhysicsList via its name
+  if ("" != physName && factory.IsReferencePhysList(physName)) {
     phys = factory.GetReferencePhysList(physName);
 
     // instantiated messenger
     mess = new PhysicsListMessenger();
   } 
 
-  // local Physics List
+  //local Physics List
   if(!phys) { phys = new PhysicsList(); }
 
   // define physics
@@ -116,40 +112,29 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new EventAction());
   runManager->SetUserAction(new StackingAction());
 
+  //initialize visualization
+  G4VisManager* visManager = nullptr;
+
   //get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
-#ifdef G4VIS_USE
-   G4VisManager* visManager = nullptr;
-#endif
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-  if (argc==1)   // Define UI terminal for interactive mode
-    {
-#ifdef G4VIS_USE
-      //visualization manager
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
-#endif
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      ui->SessionStart();
-      delete ui;
-#endif
-    }
-  else           // Batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
-    }
+  if (ui)  {
+    //interactive mode
+    visManager = new G4VisExecutive;
+    visManager->Initialize();
+    ui->SessionStart();
+    delete ui;
+  } else  {
+    //batch mode  
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
+  }
 
-  //job termination
-#ifdef G4VIS_USE
-  delete visManager;
-#endif     
-  delete runManager;
+  //job termination 
   delete mess;
-
-  return 0;
+  delete visManager;
+  delete runManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

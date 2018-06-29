@@ -1,4 +1,4 @@
-$Id: History 107366 2017-11-09 10:55:20Z gcosmo $
+$Id: History 110571 2018-05-30 13:06:17Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30 May 18: V.Ivant (emmuons-V10-04-02)
+- G4MuPairProductionModel - added minor protection
+
+25 April 18: V.Ivant (emmuons-V10-04-01)
+- G4ePairProduction - fixed model name
+
+12 February 18: V.Ivant (emmuons-V10-04-00)
+- G4MuMultipleScattering, G4MuPairProduction, G4MuIonisation,
+  G4ePairProduction, G4MuBremsstrahlungModel, G4MuBremsstrahlung,
+  G4MuBetheBlochModel - use default destructor
 
 08 November 17: D.Sawkey (emmuons-V10-03-06)
 - G4MuMultipleScattering - modify ProcessDescription text

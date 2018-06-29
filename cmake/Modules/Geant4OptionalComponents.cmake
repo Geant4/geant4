@@ -192,6 +192,32 @@ endif()
 GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Building Geant4 with GDML support")
 
 #-----------------------------------------------------------------------
+# Optional Support for TiMemory -- cross-language timing and memory
+# easily installed via:
+#   "pip install timemory" and pointing TiMemory_DIR to 
+#    <install-prefix>/share/cmake/TiMemory
+#    e.g. -DTiMemory_DIR=/usr/local/share/cmake/TiMemory
+#    for /usr/local/bin/pip
+#
+if(TiMemory_DIR)
+  set(_default_use_timemory ON)
+else()
+  set(_default_use_timemory OFF)
+endif()
+
+option(GEANT4_USE_TIMEMORY "Build Geant4 with TiMemory support"
+    ${_default_use_timemory}
+)
+
+if(GEANT4_USE_TIMEMORY)
+    find_package(TiMemory REQUIRED)
+    # definition that enables macros
+    add_definitions(-DGEANT4_USE_TIMEMORY)
+endif()
+
+GEANT4_ADD_FEATURE(GEANT4_USE_TIMEMORY "Building Geant4 with TiMemory support")
+
+#-----------------------------------------------------------------------
 # Optional support for G3TOG4 convertion interface.
 # We do not build the rztog4 application.
 # -- OLDER NOTES --
@@ -226,6 +252,7 @@ set(GEANT4_USOLIDS_SHAPES
   POLYCONE
   POLYHEDRA
   SPHERE
+  TESSELLATEDSOLID
   TET
   TRAP
   TRD

@@ -11,7 +11,7 @@
 #
 # Generated on : 29/9/2010
 #
-# $Id: sources.cmake 107113 2017-11-02 14:47:33Z gcosmo $
+# $Id: sources.cmake 109569 2018-05-02 07:08:33Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -31,6 +31,10 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
     HEADERS
         G4BogackiShampine23.hh
         G4BogackiShampine45.hh
+        G4BulirschStoer.hh
+        G4BulirschStoer.icc
+        G4BulirschStoerDriver.hh
+        G4BulirschStoerDriver.icc
         G4CachedMagneticField.hh
         G4CashKarpRKF45.hh
         G4ChargeState.hh
@@ -91,6 +95,8 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4Mag_EqRhs.hh
         G4Mag_SpinEqRhs.hh
         G4Mag_UsualEqRhs.hh
+        G4ModifiedMidpoint.hh
+        G4ModifiedMidpoint.icc
         G4MonopoleEq.hh
         G4MagneticField.hh
         G4NystromRK4.hh
@@ -112,6 +118,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
     SOURCES
         G4BogackiShampine23.cc
         G4BogackiShampine45.cc
+        G4BulirschStoer.cc
         G4CachedMagneticField.cc
         G4CashKarpRKF45.cc
         G4ChargeState.cc
@@ -159,6 +166,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4Mag_SpinEqRhs.cc
         G4Mag_UsualEqRhs.cc
         G4MagneticField.cc
+        G4ModifiedMidpoint.cc
         G4MonopoleEq.cc
         G4NystromRK4.cc
         G4QuadrupoleMagField.cc
@@ -174,6 +182,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4UniformElectricField.cc
         G4UniformGravityField.cc
         G4UniformMagField.cc
+        G4VIntegrationDriver.cc	
     GRANULAR_DEPENDENCIES
         G4globman
     GLOBAL_DEPENDENCIES

@@ -80,28 +80,31 @@
 template<typename _Tp>
 class G4atomic
 {
-public:
+  public:
+
     typedef typename std::atomic<_Tp>   base_type;
     typedef _Tp                         value_type;
 
-private:
-    using mem_odr = std::memory_order;
+  private:
 
-public:
+    using mem_ord = std::memory_order;
+
+  public:
+
     // constructors
     explicit
-    G4atomic(mem_odr odr = std::memory_order_acq_rel) : fMemOrder(odr)
+    G4atomic(mem_ord mo = std::memory_order_acq_rel) : fMemOrder(mo)
     { atomics::set(&fvalue, value_type()); }
 
     explicit
     G4atomic(const value_type& _init,
-             mem_odr odr = std::memory_order_acq_rel) : fMemOrder(odr)
+             mem_ord mo = std::memory_order_acq_rel) : fMemOrder(mo)
     { atomics::set(&fvalue, _init); }
 
     // copy-constructor from pure C++11 atomic
     explicit
     G4atomic(const base_type& rhs,
-             mem_odr odr = std::memory_order_acq_rel) : fMemOrder(odr)
+             mem_ord mo = std::memory_order_acq_rel) : fMemOrder(mo)
     { atomics::set(&fvalue, rhs); }
 
     // copy-constructor
@@ -143,20 +146,16 @@ public:
     bool is_lock_free() const volatile { return fvalue.is_lock_free(); }
 
     // store functions
-    void store(_Tp _desired, std::memory_order mem_odr
-               = std::memory_order_seq_cst)
-    { atomics::set(fvalue, _desired, mem_odr); }
-    void store(_Tp _desired, std::memory_order mem_odr
-               = std::memory_order_seq_cst) volatile
-    { atomics::set(fvalue, _desired, mem_odr); }
+    void store(_Tp _desired, mem_ord mo = std::memory_order_seq_cst)
+    { atomics::set(fvalue, _desired, mo); }
+    void store(_Tp _desired, mem_ord mo = std::memory_order_seq_cst) volatile
+    { atomics::set(fvalue, _desired, mo); }
 
     // load functions
-    _Tp load(std::memory_order mem_odr
-             = std::memory_order_seq_cst) const
-    { return atomics::get(fvalue, mem_odr); }
-    _Tp load(std::memory_order mem_odr
-             = std::memory_order_seq_cst) const volatile
-    { return atomics::get(fvalue, mem_odr); }
+    _Tp load(mem_ord mo = std::memory_order_seq_cst) const
+    { return atomics::get(fvalue, mo); }
+    _Tp load(mem_ord mo = std::memory_order_seq_cst) const volatile
+    { return atomics::get(fvalue, mo); }
 
     // implicit conversion functions
     operator _Tp() const { return this->load(); }
@@ -166,39 +165,33 @@ public:
 
     // compare-and-swap functions
     bool compare_exchange_weak(_Tp& _expected, _Tp _desired,
-                               std::memory_order _success,
-                               std::memory_order _failure)
+                               mem_ord _success, mem_ord _failure)
     { return fvalue.compare_exchange_weak(_expected, _desired,
                                           _success, _failure); }
     bool compare_exchange_weak(_Tp& _expected, _Tp _desired,
-                               std::memory_order _success,
-                               std::memory_order _failure) volatile
+                               mem_ord _success, mem_ord _failure) volatile
     { return fvalue.compare_exchange_weak(_expected, _desired,
                                           _success, _failure); }
 
-    bool compare_exchange_weak(_Tp& _expected, _Tp _desired,
-                               std::memory_order _order)
+    bool compare_exchange_weak(_Tp& _expected, _Tp _desired, mem_ord _order)
     { return fvalue.compare_exchange_weak(_expected, _desired, _order); }
     bool compare_exchange_weak(_Tp& _expected, _Tp _desired,
-                               std::memory_order _order) volatile
+                               mem_ord _order) volatile
     { return fvalue.compare_exchange_weak(_expected, _desired, _order); }
 
     bool compare_exchange_strong(_Tp& _expected, _Tp _desired,
-                                 std::memory_order _success,
-                                 std::memory_order _failure)
+                                 mem_ord _success, mem_ord _failure)
     { return fvalue.compare_exchange_weak(_expected, _desired,
                                           _success, _failure); }
     bool compare_exchange_strong(_Tp& _expected, _Tp _desired,
-                                 std::memory_order _success,
-                                 std::memory_order _failure) volatile
+                                 mem_ord _success, mem_ord _failure) volatile
     { return fvalue.compare_exchange_weak(_expected, _desired,
                                           _success, _failure); }
 
-    bool compare_exchange_strong(_Tp& _expected, _Tp _desired,
-                                 std::memory_order _order)
+    bool compare_exchange_strong(_Tp& _expected, _Tp _desired, mem_ord _order)
     { return fvalue.compare_exchange_weak(_expected, _desired, _order); }
     bool compare_exchange_strong(_Tp& _expected, _Tp _desired,
-                                 std::memory_order _order) volatile
+                                 mem_ord _order) volatile
     { return fvalue.compare_exchange_weak(_expected, _desired, _order); }
 
     // value_type operators
@@ -258,9 +251,10 @@ public:
     value_type operator--(int)
     { value_type _tmp = fvalue--; return _tmp; }
 
-protected:
+  protected:
+
     base_type fvalue;
-    mem_odr fMemOrder;
+    mem_ord fMemOrder;
 
 };
 

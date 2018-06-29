@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh 103627 2017-04-19 13:30:26Z gcosmo $
+// $Id: G4ModelingParameters.hh 109510 2018-04-26 07:15:57Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -178,6 +178,8 @@ public: // With description
   G4bool           IsDensityCulling              () const;
   G4double         GetVisibleDensity             () const;
   G4bool           IsCullingCovered              () const;
+  G4int            GetCBDAlgorithmNumber         () const;
+  const std::vector<G4double>& GetCBDParameters  () const;
   G4bool           IsExplode                     () const;
   G4double         GetExplodeFactor              () const;
   const G4Point3D& GetExplodeCentre              () const;
@@ -196,6 +198,8 @@ public: // With description
   void SetDensityCulling       (G4bool);
   void SetVisibleDensity       (G4double);
   void SetCullingCovered       (G4bool);
+  void SetCBDAlgorithmNumber   (G4int);
+  void SetCBDParameters        (const std::vector<G4double>&);
   void SetExplodeFactor        (G4double explodeFactor);
   void SetExplodeCentre        (const G4Point3D& explodeCentre);
   G4int SetNoOfSides           (G4int);  // Returns actual number set.
@@ -228,6 +232,8 @@ private:
   G4bool       fDensityCulling;  // Density culling requested.  If so...
   G4double     fVisibleDensity;  // ...density lower than this not drawn.
   G4bool       fCullCovered;     // Cull daughters covered by opaque mothers.
+  G4int        fCBDAlgorithmNumber; // Colour by density algorithm number.
+  std::vector<G4double> fCBDParameters; // Colour by density parameters.
   G4double     fExplodeFactor;   // Explode along radius by this factor...
   G4Point3D    fExplodeCentre;   // ...about this centre.
   G4int        fNoOfSides;       // ...if polygon approximates circle.

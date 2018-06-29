@@ -14,12 +14,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-09 February 2018 Ben Morgan (hadr-util-V10-03-06)
+17 May 2018 Jonathan Madsen (hadr-util-V10-04-02)
+-------------------------------------------------
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+09 February 2018 Ben Morgan (hadr-util-V10-04-01)
 -------------------------------------------------
 - G4StableIsotopes - Move member function definitions to source file
   to avoid global data visibility issues in Windows DLLs.
 
-19 December 2017 Gabriele Cosmo
+19 December 2017 Gabriele Cosmo (hadr-util-V10-04-00)
 --------------------------------------------------------
 - Fixed self-consistency in headers (missing #include) in DumpFrame,
   G4GHEKinematicsVector and G4ping.

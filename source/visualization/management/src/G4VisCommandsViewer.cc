@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc 104163 2017-05-15 06:52:42Z gcosmo $
+// $Id: G4VisCommandsViewer.cc 109510 2018-04-26 07:15:57Z gcosmo $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -557,6 +557,124 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
     G4cout << "Viewer \"" << originalName << "\" cloned." << G4endl;
     G4cout << "Clone \"" << cloneName << "\" now current." << G4endl;
   }
+}
+
+////////////// /vis/viewer/colourByDensity ///////////////////////////////////////
+
+G4VisCommandViewerColourByDensity::G4VisCommandViewerColourByDensity () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/viewer/colourByDensity", this);
+  fpCommand -> SetGuidance
+  ("If a volume has no vis attributes, colour it by density.");
+  fpCommand -> SetGuidance
+  ("Provide algorithm number, e.g., \"1\" (or \"0\" to switch off)."
+   "\nThen a unit of density, e.g., \"g/cm3\"."
+   "\nThen parameters for the algorithm assumed to be densities in that unit.");
+  fpCommand -> SetGuidance
+  ("Algorithm 1: Simple algorithm takes 3 parameters: d0, d1 and d2."
+   "\nVolumes with density < d0 are invisible."
+   "\nVolumes with d0 <= density < d1 have colour on range red->green."
+   "\nVolumes with d1 <= density < d2 have colour on range green->blue."
+   "\nVolumes with density > d2 are blue.");
+  G4UIparameter* parameter;
+  parameter  =  new G4UIparameter("n",'i',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Algorithm number (or \"0\" to switch off).");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("unit",'s',omitable = true);
+  parameter  -> SetDefaultValue  ("g/cm3");
+  parameter  -> SetGuidance      ("Unit of following densities, e.g., \"g/cm3\".");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("d0",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0.);
+  parameter  -> SetGuidance      ("Density parameter 0.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("d1",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0.);
+  parameter  -> SetGuidance      ("Density parameter 1.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("d2",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0.);
+  parameter  -> SetGuidance      ("Density parameter 2.");
+  fpCommand->SetParameter(parameter);
+}
+
+G4VisCommandViewerColourByDensity::~G4VisCommandViewerColourByDensity () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerColourByDensity::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandViewerColourByDensity::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<
+      "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
+      << G4endl;
+    }
+    return;
+  }
+  G4ViewParameters vp = viewer->GetViewParameters();
+
+  G4int algorithmNumber;
+  G4double d0, d1, d2;
+  G4String unit;
+  std::istringstream is (newValue);
+  is >> algorithmNumber >> unit >> d0 >> d1 >> d2;
+
+  if (algorithmNumber < 0 || algorithmNumber > 1) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<
+      "ERROR: Unrecognised algorithm number: " << algorithmNumber
+      << G4endl;
+    }
+    return;
+  }
+
+  std::vector<G4double> parameters;
+  if (algorithmNumber > 0) {
+    const G4String where = "G4VisCommandViewerColourByDensity::SetNewValue";
+    G4double valueOfUnit;
+    // "Volumic Mass" is Michel's phrase for "Density"
+    if (ProvideValueOfUnit(where,unit,"Volumic Mass",valueOfUnit)) {
+      // Successful outcome of unit search
+      d0 *= valueOfUnit; d1 *= valueOfUnit; d2 *= valueOfUnit;
+    } else {
+      if (verbosity >= G4VisManager::errors) {
+        G4cerr <<
+        "ERROR: Unrecognised or inappropriate unit: " << unit
+        << G4endl;
+      }
+      return;
+    }
+    parameters.push_back(d0);
+    parameters.push_back(d1);
+    parameters.push_back(d2);
+  }
+  vp.SetCBDAlgorithmNumber(algorithmNumber);
+  vp.SetCBDParameters(parameters);
+
+  if (verbosity >= G4VisManager::confirmations) {
+    if (vp.GetCBDAlgorithmNumber() == 0) {
+      G4cout << "Colour by density deactivated" << G4endl;
+    } else {
+      G4cout << "Colour by density algorithm " << vp.GetCBDAlgorithmNumber()
+      << " selected for viewer \"" << viewer->GetName()
+      << "\n  Parameters:";
+      for (auto p: vp.GetCBDParameters()) {
+        G4cout << ' ' << G4BestUnit(p,"Volumic Mass");
+      }
+      G4cout << G4endl;
+    }
+  }
+
+  SetViewParameters(viewer, vp);
 }
 
 ////////////// /vis/viewer/copyViewFrom //////////////////////////
@@ -1645,6 +1763,7 @@ namespace {
     << vp.DrawingStyleCommands()
     << vp.SceneModifyingCommands()
     << vp.TouchableCommands()
+    << vp.TimeWindowCommands()
     << std::endl;
   }
 }

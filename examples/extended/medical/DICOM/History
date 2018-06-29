@@ -1,14 +1,38 @@
-$Id: History 107433 2017-11-13 07:33:15Z gcosmo $
+$Id: History 110890 2018-06-25 06:21:23Z gcosmo $
 -------------------------------------------------------------------
-
+ 
      =========================================================
  		      Geant4 - DICOM example
      =========================================================
 
                       Category History file
 
+22.06.2018 - Jonathan Madsen (DICOM-V10-04-03)
+             Added dicomReader/cmake/DICOMUtilities.cmake that defines
+             a DICOM_BUILD_LIBRARY macro which handles how to build
+             DICOM-library (and dicomReader library if USE_DICOM_DCMTK=ON)
+             based on the Geant4 installation (e.g. build shared, static, or
+             both) + updates to DICOMConfig.cmake.in and
+             dicomReaderConfig.cmake.in to handle which library type to
+             use link to
+
+20.05.2018 - John Allison (DICOM-V10-04-02)
+             Remove G4UI_USE and G4VIS_USE.
+             Move instantiation of G4UIExecutive to start of main.
+
+09.05.2018 - Ben Morgan (DICOM-V10-04-01)
+             Include G4Types before use of G4MULTITHREADED. For forward
+             compatibility with move to #defines over -D for G4 preprocessor
+             symbols.
+
+20.03.2018 - Jonathan Madsen (DICOM-V10-04-00)
+             Enabled CMake package configuration
+             Added DICOM_USE_DCMTK and DICOM_USE_HEAD CMake
+              options back-compat with environment variables
+             Updated README and .README.txt
+
 11.11.2017 - Marc Verderi (DICOM-V10-03-12)
-	     Retag as DICOM-V10-03-11 too quickly rejected
+             Retag as DICOM-V10-03-11 too quickly rejected
 
 09.11.2017 - Ivana Hrivnacova (DICOM-V10-03-11)
              Updated DICOM data version to 1.1
@@ -243,7 +267,7 @@ $Id: History 107433 2017-11-13 07:33:15Z gcosmo $
 03.06.2010 - Joseph Perl (DICOM-V09-03-02)
 	     Updated vis usage
 
-19.11.2009 - Stéphane Chauvie (DICOM-V09-03-00)
+19.11.2009 - StÃˆphane Chauvie (DICOM-V09-03-00)
 01.06.2010 - Stephane Chauvie - Andrea Armando 
 	     Added function to read nested items (defined and undefined)
 	     Removed dependencies on CONQUEST

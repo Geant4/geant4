@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh 103954 2017-05-04 11:29:22Z gcosmo $
+// $Id: G4EmCalculator.hh 108306 2018-02-02 13:10:06Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,7 @@
 // 22.03.2006 Add ComputeElectronicDEDX and ComputeTotalDEDX (V.Ivanchenko)
 // 29.09.2006 Add member loweModel (V.Ivanchenko)
 // 15.03.2007 Add ComputeEnergyCutFromRangeCut methods (V.Ivanchenko)
+// 02.02.2018 Add parameter to FindLambdaTable to store process type (M. Novak)
 //
 // Class Description:
 //
@@ -278,8 +279,8 @@ private:
   G4bool UpdateCouple(const G4Material*, G4double cut);
 
   void FindLambdaTable(const G4ParticleDefinition*, 
-		       const G4String& processName,
-		       G4double kinEnergy);
+                       const G4String& processName,
+		                   G4double kinEnergy, G4int& proctype);
 
   G4bool FindEmModel(const G4ParticleDefinition*, 
                      const G4String& processName,

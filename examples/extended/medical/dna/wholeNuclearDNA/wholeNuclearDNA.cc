@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
@@ -34,6 +34,7 @@
 /// \brief Implementation of the microdosimetry example
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
   #include "G4MTRunManager.hh"
@@ -62,10 +63,10 @@ CommandLineParser* parser(0);
 
 void Parse(int& argc, char** argv);
 
-int main(int argc,char** argv) 
+int main(int argc,char** argv)
 {
   // Choose the Random engine
-  
+
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   //////////
@@ -94,7 +95,7 @@ int main(int argc,char** argv)
     G4cout << "===== WholeNuclearDNA is started with "
        << runManager->GetNumberOfThreads()
        << " threads =====" << G4endl;
- 
+
     runManager->SetNumberOfThreads(nThreads);
   }
 #else
@@ -106,7 +107,7 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserInitialization(new ActionInitialization());
-  
+
   // Initialize G4 kernel
   runManager->Initialize();
 
@@ -169,7 +170,7 @@ int main(int argc,char** argv)
   }
 
   if ((commandLine = parser->GetCommandIfActive("-gui")))
-  { 
+  {
 #ifdef G4UI_USE_QT
     G4UIQt* UIQt = static_cast<G4UIQt*> (UImanager->GetG4UIWindow());
     if ( UIQt) {
@@ -227,7 +228,7 @@ void Parse(int& argc, char** argv)
                      "macFile.mac");
 
 // You cann your own command, as for instance:
-//  parser->AddCommand("-seed", 
+//  parser->AddCommand("-seed",
 //                     Command::WithOption,
 //                     "Give a seed value in argument to be tested", "seed");
 // it is then up to you to manage this option
@@ -235,7 +236,7 @@ void Parse(int& argc, char** argv)
 #ifdef G4MULTITHREADED
   parser->AddCommand("-mt",
                      Command::WithOption,
-                     "Launch in MT mode (events computed in parallel)", 
+                     "Launch in MT mode (events computed in parallel)",
                      "2");
 #endif
 
@@ -254,7 +255,7 @@ void Parse(int& argc, char** argv)
 
   parser->AddCommand("-out",
                      Command::OptionNotCompulsory,
-                     "Output files (ROOT is used by default)", 
+                     "Output files (ROOT is used by default)",
                      exec);
 
   //////////

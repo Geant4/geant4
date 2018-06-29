@@ -1,4 +1,4 @@
-$Id: History 108508 2018-02-15 15:54:35Z gcosmo $
+$Id: History 110268 2018-05-17 14:35:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,16 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12 February 18: V.Ivanchenko (xrays-V10-03-01)
+17 May 18: J. Madsen (xrays-V10-04-03)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+12 February 18: V.Ivanchenko (xrays-V10-04-02)
 - G4VTransitionRadiation, G4TransitionRadiation, G4SynchrotronRadiationInMat,
   G4Scintillation, G4ForwardXrayTR, G4Cerenkov - moved static and virtual
     methods from inline to the source, removed extra empty and commented lines
 
-26 January 18: V.Ivanchenko
+26 January 18: V.Ivanchenko (xrays-V10-04-01)
 - G4VXTRenergyLoss - V.Grichine exteded XTR angle limit up to 250/gamma
     (ATLAS requirements)
 
-21 December 17: G.Cosmo
+21 December 17: G.Cosmo (xrays-V10-04-00)
 - Fixed self-consistency in G4VTRModel header (missing #include).
   Thanks to Raphael Isemann for reporting this.
 

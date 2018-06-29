@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 81776 2014-06-05 08:41:01Z gcosmo $
+// $Id: HistoManager.cc 109283 2018-04-09 10:00:23Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,16 +64,16 @@ void HistoManager::Book()
   
   // Define histograms start values
   const G4int kMaxHisto = 6;
-  const G4String id[] = { "1", "2", "3" , "4", "5", "6"};
+  const G4String id[] = { "1", "2", "3" , "4", "5", "6" };
   const G4String title[] = 
                 { "total track length of primary particle",      //1
                   "nb steps of primary particle",                //2
                   "step size of primary particle",               //3
                   "total energy deposit",                        //4
                   "energy of charged secondaries at creation",   //5
-                  "energy of neutral secondaries at creation"    //6 
+                  "energy of neutral secondaries at creation"    //6
                  };
-  // Default values (to be reset via /analysis/h1/set command)               
+  // Default values (to be reset via /analysis/h1/set command)
   G4int nbins = 100;
   G4double vmin = 0.;
   G4double vmax = 100.;

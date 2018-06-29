@@ -14,7 +14,7 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-19-December 2017, Gabriele Cosmo          hadr-im_r-V10-03-02
+19-December 2017, Gabriele Cosmo          hadr-im_r-V10-04-00
 - Fixed self-consistency in headers (missing #include) in G4CrossSectionBuffer,
   G4DeltaNstarBuilder and G4NNstarBuilder.
   Thanks to Raphael Isemann for reporting these.

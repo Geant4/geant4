@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+18-04-2018 S. Incerti tag pdb4dna-V10-04-00
+- Fix to analysis.C
+
 23.02.2017 I. Hrivnacova        tag pdb4dna-V10-03-00
 - fixed compilation (G4UIQt.hh include)
 

@@ -57,6 +57,7 @@ public:
   G4double GetCutEnergy(){return fCutEnergy;};
 
   void SetBiasingFactor(G4double bf){fBiasingFactor=bf;};
+  G4double GetBiasingFactor(){return fBiasingFactor;};
 
 protected:
 

@@ -1,4 +1,4 @@
-$Id: History 106171 2017-09-15 13:02:56Z gcosmo $
+$Id: History 110402 2018-05-22 11:35:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 22nd, 2018 J.Allison                  - geomvol-V10-04-02
+- G4PVPlacement::CheckOverlaps: Add copy number to G4Exception printing.
+
+May 17th, 2018 J.Madsen                   - geomvol-V10-04-01
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+May 9th, 2018 E.Tcherniaev                - geomvol-V10-04-00
+- Replaced use of Inverse() from G4AffineTransform with new dedicated
+  methods, to avoid creation of temporaries in G4TouchableHistory,
+  G4PVPlacement and G4PVParameterised.
 
 September 15th, 2017 G.Cosmo              - geomvol-V10-03-02
 - G4GeometryWorkspacePool: use DLL export flag for static thread-local

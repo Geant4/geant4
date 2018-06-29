@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 99442 2016-09-22 08:36:14Z gcosmo $
+// $Id: DetectorConstruction.cc 108967 2018-03-19 15:37:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -84,13 +84,15 @@ void DetectorConstruction::DefineMaterials()
   man->FindOrBuildMaterial("G4_Si");
   man->FindOrBuildMaterial("G4_Fe");
   man->FindOrBuildMaterial("G4_Ge");
+  man->FindOrBuildMaterial("G4_Gd");
   man->FindOrBuildMaterial("G4_W");
   man->FindOrBuildMaterial("G4_Pb");
   
   man->FindOrBuildMaterial("G4_AIR");
   man->FindOrBuildMaterial("G4_WATER");
+  man->FindOrBuildMaterial("G4_ALUMINUM_OXIDE");
   
- ///G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  ///G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

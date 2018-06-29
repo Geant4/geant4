@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc 108682 2018-02-27 07:54:34Z gcosmo $
+// $Id: G4RunManagerKernel.cc 110726 2018-06-11 06:05:16Z gcosmo $
 //
 //
 
@@ -57,6 +57,7 @@
 #include "G4UnitsTable.hh"
 #include "G4Version.hh"
 #include "G4ios.hh"
+#include "G4TiMemory.hh"
 
 #include "G4MTRunManager.hh"
 #include "G4AllocatorList.hh"
@@ -656,6 +657,7 @@ void G4RunManagerKernel::InitializePhysics()
 
 G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
 {
+    TIMEMORY_AUTO_TIMER("");
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
 
@@ -786,6 +788,7 @@ void G4RunManagerKernel::BuildPhysicsTables(G4bool fakeRun)
   if( G4ProductionCutsTable::GetProductionCutsTable()->IsModified()
   || physicsNeedsToBeReBuilt)
   {
+      TIMEMORY_AUTO_TIMER("");
 #ifdef G4MULTITHREADED
     if(runManagerKernelType==masterRMK)
     {

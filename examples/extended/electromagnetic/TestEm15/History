@@ -1,4 +1,4 @@
-$Id: History 100277 2016-10-17 08:32:55Z gcosmo $
+$Id: History 110788 2018-06-14 06:45:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,25 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+13-06-18 mma  (testem15-V10-04-06)
+- PhysicsList: add G4EmStandardPhysicsWVI, GS, SS
+
+24-05-18 IgS (testem15-V10-04-05)
+- extended README, added README.gamma
+
+22-05-18 IgS (testem15-V10-04-03)
+- Use G4RotationMarix to convert to gamma reference system 
+- Use default random number generator
+
+17-04-18 IgS (testem15-V10-04-02)
+- Extended testem15 with  gamma -> e+ e- 5D conversion code.
+
+09-04-18 mma (testem15-V10-04-01)
+- testem15.cc : set visualisation only in interactive mode
+
+20-03-18 mma (testem15-V10-04-00)
+- testem15.cc : remove G4UI_USE and G4VIS_USE
 
 14-10-16 G.Folger (testem15-V10-02-02)
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
@@ -27,7 +46,7 @@ track of all tags.
 
 17-06-14 mma (testem15-V10-00-01)
 - remove PhysicsList::SetCuts()
-		 
+                 
 11-06-14 mma (testem15-V10-00-00)
 - rm local commands for PhysicsList::SetCuts()
 

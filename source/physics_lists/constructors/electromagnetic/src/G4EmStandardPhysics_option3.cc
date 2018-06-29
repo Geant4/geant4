@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc 107183 2017-11-03 14:57:23Z gcosmo $
+// $Id: G4EmStandardPhysics_option3.cc 109526 2018-04-30 07:11:52Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -124,12 +124,11 @@ G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver,
   param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(10*eV);
-  param->SetMaxEnergy(100*TeV);
   param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
   param->SetMscStepLimitType(fUseDistanceToBoundary);
   param->SetMuHadLateralDisplacement(true);
-  param->SetLateralDisplacementAlg96(false);
+  //param->SetLateralDisplacementAlg96(false);
   param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
@@ -202,14 +201,14 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     if (!particle) { continue; }
     if (particleName == "gamma") {
 
-      G4ComptonScattering* cs = new G4ComptonScattering;
-      cs->SetEmModel(new G4KleinNishinaModel());
-
       G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
       pee->SetEmModel(new G4LivermorePhotoElectricModel());
-
       ph->RegisterProcess(pee, particle);
+
+      G4ComptonScattering* cs = new G4ComptonScattering;
+      cs->SetEmModel(new G4KleinNishinaModel());
       ph->RegisterProcess(cs,  particle);
+
       ph->RegisterProcess(new G4GammaConversion(), particle);
       ph->RegisterProcess(new G4RayleighScattering(), particle);
  

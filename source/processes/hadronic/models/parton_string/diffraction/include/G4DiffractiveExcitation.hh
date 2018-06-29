@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.hh 100828 2016-11-02 15:25:59Z gcosmo $
+// $Id: G4DiffractiveExcitation.hh 110870 2018-06-22 12:14:16Z gcosmo $
 
 #ifndef G4DiffractiveExcitation_h
 #define G4DiffractiveExcitation_h 1
@@ -41,7 +41,7 @@
 
 #include "globals.hh"
 #include "G4FTFParameters.hh"
-#include "G4ElasticHNScattering.hh"  // Uzhi 3.09.09
+#include "G4ElasticHNScattering.hh"
 #include "G4ThreeVector.hh"
 
 class G4VSplitableHadron;
@@ -78,6 +78,41 @@ class G4DiffractiveExcitation {
     void UnpackMeson( G4int IdPDG, G4int& Q1, G4int& Q2 ) const;
     void UnpackBaryon( G4int IdPDG, G4int& Q1, G4int& Q2, G4int& Q3 ) const;
     G4int NewNucleonId( G4int Q1, G4int Q2, G4int Q3 ) const;
+
+    // The "ExciteParticipants" method uses the following struct and 3 new utility methods:
+    struct CommonVariables {
+      G4int ProjectilePDGcode = 0, absProjectilePDGcode = 0, TargetPDGcode = 0, 
+        absTargetPDGcode = 0;
+      G4double M0projectile = 0.0, M0projectile2 = 0.0, M0target = 0.0, M0target2 = 0.0, 
+        ProjMassT = 0.0, ProjMassT2 = 0.0, TargMassT = 0.0, TargMassT2 = 0.0, 
+        MminProjectile = 0.0, MminTarget = 0.0, 
+        ProjectileDiffStateMinMass = 0.0, ProjectileDiffStateMinMass2 = 0.0, 
+        ProjectileNonDiffStateMinMass = 0.0, ProjectileNonDiffStateMinMass2 = 0.0,
+        TargetDiffStateMinMass = 0.0, TargetDiffStateMinMass2 = 0.0, 
+        TargetNonDiffStateMinMass = 0.0, TargetNonDiffStateMinMass2 = 0.0, 
+        S = 0.0, SqrtS = 0.0, Pt2 = 0.0, PZcms = 0.0, PZcms2 = 0.0, 
+        AveragePt2 = 0.0, maxPtSquare = 0.0,
+        ProbExc = 0.0, Qminus = 0.0, Qplus = 0.0,
+        PMinusNew = 0.0, PPlusNew = 0.0, TMinusNew = 0.0, TPlusNew = 0.0,
+        PMinusMin = 0.0, PMinusMax = 0.0, TPlusMin = 0.0, TPlusMax = 0.0,
+        ProbProjectileDiffraction = 0.0, ProbTargetDiffraction = 0.0, ProbOfDiffraction = 0.0;
+      G4LorentzVector Pprojectile, Ptarget, Qmomentum;
+      G4LorentzRotation toCms, toLab;
+      G4SampleResonance BrW;
+    };
+    G4int ExciteParticipants_doChargeExchange( G4VSplitableHadron*    projectile,
+                                               G4VSplitableHadron*    target,
+                                               G4FTFParameters*       theParameters,
+                                               G4ElasticHNScattering* theElastic,
+                                               CommonVariables&       common ) const;
+    G4bool ExciteParticipants_doDiffraction( G4VSplitableHadron* projectile,
+                                             G4VSplitableHadron* target,
+                                             G4FTFParameters*    theParameters,
+                                             CommonVariables&    common ) const;
+    G4bool ExciteParticipants_doNonDiffraction( G4VSplitableHadron* projectile,
+                                                G4VSplitableHadron* target,
+                                                G4FTFParameters*    theParameters,
+                                                CommonVariables&    common ) const;
 };
 
 #endif

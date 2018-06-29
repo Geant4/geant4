@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh 105349 2017-07-21 12:23:24Z gcosmo $
+// $Id: G4VVisCommand.hh 109186 2018-04-03 07:22:18Z gcosmo $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -86,6 +86,13 @@ protected:
   // (colour,"red",...,...,0.5): will give the colour red with opacity 0.5 (the
   // third and fourth arguments are ignored), or
   // (1.,0.,0.,0.5): this also will be red with opacity 0.5.
+
+  G4bool ProvideValueOfUnit
+  (const G4String& where,
+   const G4String& unit,
+   const G4String& category,
+   G4double& value);
+  // Return false if there's a problem
 
   // Other utilities.
   void UpdateVisManagerScene (const G4String& sceneName = "");

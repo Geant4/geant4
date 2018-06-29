@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -71,8 +71,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 10 eV  to 100 keV, 20 bins per decade, spline: 0
@@ -106,7 +106,7 @@ ePairProd:   for  e-    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
@@ -134,7 +134,7 @@ ePairProd:   for  e+    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -472,27 +472,27 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=2.37s Real=2.52s Sys=0s
+  User=1.520000s Real=1.521822s Sys=0.000000s
 
  ======================== run summary =====================
 
  The run is 20000 e- of 500.00 keV through 1 absorbers: 
     1      1.00 mm  of G4_Si (density: 2.33 g/cm3 )
 
- Edep in absorber 1 = 447.818 keV	(20.838 keV-->500.000 keV)
+ Edep in absorber 1 = 447.861 keV	(20.428 keV-->500.000 keV)
 
- Track length of primary track = 880.168 um  +- 192.969 um 
+ Track length of primary track = 879.764 um  +- 192.720 um 
  Range from EmCalculator = 942.776 um  (from full dE/dx)
 
- Projected range               = 317.026 um  +- 198.295 um 
+ Projected range               = 318.159 um  +- 198.950 um 
 
- Nb of steps of primary track  = 21.02 +- 4.89	 Step size= 42.334 um  +- 6.726 um 
+ Nb of steps of primary track  = 20.99 +- 4.89	 Step size= 42.393 um  +- 6.739 um 
 
- absorbed = 78.01 %   transmit = 5.12 %   reflected = 16.86 %
+ absorbed = 77.61 %   transmit = 4.96 %   reflected = 17.43 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 512212800, 564968512
+ Current couple of seeds = 1981514717, 1520502085
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

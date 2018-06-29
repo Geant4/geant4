@@ -9,6 +9,11 @@ $Id: History 70524 2013-05-31 16:36:26Z gcosmo $
                        Package History file
                        --------------------
 
+10 May 2018 - B. Morgan - tag microbeam-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
 26 October 2017 - D. Sorokin - tag microbeam-V10-03-04
 - DetectorConstructin.cc build fix
 

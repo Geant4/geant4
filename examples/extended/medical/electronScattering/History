@@ -1,4 +1,4 @@
-$Id: History 100262 2016-10-17 08:08:04Z gcosmo $
+$Id: History 109992 2018-05-14 07:27:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B.Morgan (electronScattering-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+12-04-18 mma (electronScattering-V10-04-01)
+- electronScattering.cc : set visualisation only in interactive mode
+
+22-03-18 mma (electronScattering-V10-04-00)
+- electronScattering.cc : remove G4UI_USE and G4VIS_USE
 
 14-10-16 G.Folger (electronScattering-V10-02-03)
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().

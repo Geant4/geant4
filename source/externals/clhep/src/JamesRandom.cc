@@ -268,6 +268,14 @@ void HepJamesRandom::flatArray(const int size, double* vect)
    }   
 }
 
+HepJamesRandom::operator double() {
+   return flat();
+}
+
+HepJamesRandom::operator float() {
+   return float( flat() );
+}
+
 HepJamesRandom::operator unsigned int() {
    return ((unsigned int)(flat() * exponent_bit_32()) & 0xffffffff )  |
          (((unsigned int)( u[i97] * exponent_bit_32())>>16)  & 0xff);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeWLSFiber.cc 77486 2013-11-25 10:14:16Z gcosmo $
+// $Id: LXeWLSFiber.cc 110138 2018-05-16 07:31:43Z gcosmo $
 //
 /// \file optical/LXe/src/LXeWLSFiber.cc
 /// \brief Implementation of the LXeWLSFiber class
@@ -35,7 +35,7 @@
 #include "G4LogicalBorderSurface.hh"
 #include "G4SystemOfUnits.hh"
 
-G4LogicalVolume* LXeWLSFiber::fClad2_log=NULL;
+G4LogicalVolume* LXeWLSFiber::fClad2_log = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -141,8 +141,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
@@ -777,7 +777,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
      Cr_sctns: JENDLHEInelasticCrossSection: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: nCapture
         Model:          NeutronHPCapture: 0 eV  ---> 20 MeV
@@ -799,7 +798,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 4 GeV ---> 100 TeV
@@ -816,7 +814,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 4 GeV ---> 100 TeV
@@ -840,7 +837,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:                      FTFP: 4 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 5 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for triton
@@ -1050,49 +1046,51 @@ EV: 99
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.02s Real=0.02s Sys=0s
+  User=0.020000s Real=0.015957s Sys=0.000000s
 
 --------------------End of Global Run----------------------- 
  The run was 200 events 
 LOCAL TOTAL DOSE : 	0 Gy
-      TOTAL DOSE : 	9.77666e-07 Gy
+      TOTAL DOSE : 	9.91601e-07 Gy
  ###### EndOfRunAction ###### 
 =============================================================
  Number of event processed : 200
 =============================================================
  opened file dicom.out for dose output
      Voxel |   DoseDeposit  |
-    6476     2.27494e-10 Gy
-    8130     6.68106e-08 Gy
-    8131     8.14186e-08 Gy
-    8258     7.15189e-08 Gy
-    8259     6.38208e-08 Gy
-    24514     6.58267e-08 Gy
-    24515     7.69225e-08 Gy
-    24642     6.01546e-08 Gy
-    24643     7.37641e-08 Gy
-    40258     8.73302e-09 Gy
-    40259     3.80802e-10 Gy
-    40386     1.25034e-08 Gy
-    40514     1.01908e-08 Gy
-    40642     6.55044e-09 Gy
-    40770     3.6744e-09 Gy
-    40771     1.06055e-09 Gy
-    40898     7.71618e-08 Gy
-    40899     8.73121e-08 Gy
-    40900     4.21173e-09 Gy
-    40901     3.58748e-09 Gy
-    40902     2.6142e-09 Gy
-    41026     1.14305e-07 Gy
-    41027     8.49159e-08 Gy
+    6858     3.50743e-09 Gy
+    7618     2.76848e-09 Gy
+    7746     2.29963e-10 Gy
+    8130     8.50222e-08 Gy
+    8131     7.69714e-08 Gy
+    8258     7.52747e-08 Gy
+    8259     6.21242e-08 Gy
+    23242     1.44515e-09 Gy
+    23243     1.27633e-09 Gy
+    24514     8.22897e-08 Gy
+    24515     1.20104e-07 Gy
+    24642     1.05333e-07 Gy
+    24643     6.04492e-08 Gy
+    39499     6.87256e-11 Gy
+    39627     3.08523e-09 Gy
+    40898     8.56816e-08 Gy
+    40899     8.41459e-08 Gy
+    41026     7.38862e-08 Gy
+    41027     5.96846e-08 Gy
+    41028     1.10671e-09 Gy
+    41156     2.65157e-09 Gy
+    41157     3.47024e-09 Gy
+    41415     8.6795e-11 Gy
+    42819     2.01568e-10 Gy
+    44522     7.36562e-10 Gy
 =============================================
  closed file dicom.out for dose output
 Finished : End of Run Action 0
+Graphics systems deleted.
+Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.034 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.028 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)
-Graphics systems deleted.
-Visualization Manager deleting...

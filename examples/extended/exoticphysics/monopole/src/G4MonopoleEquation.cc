@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/G4MonopoleEquation.cc
 /// \brief Implementation of the G4MonopoleEquation class
 //
-// $Id: G4MonopoleEquation.cc 69705 2013-05-13 09:09:52Z gcosmo $
+// $Id: G4MonopoleEquation.cc 108824 2018-03-09 11:05:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,7 +62,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4MonopoleEquation::G4MonopoleEquation(G4ElectroMagneticField *emField )
+G4MonopoleEquation::G4MonopoleEquation(G4MagneticField *emField )
       : G4EquationOfMotion( emField ) 
 {}
 
@@ -114,7 +114,6 @@ G4MonopoleEquation::EvaluateRhsGivenB(const G4double y[],
 
   G4double cofEl     = fElCharge * pModuleInverse ;
   G4double cofMag = fMagCharge * Energy * pModuleInverse; 
-
 
   dydx[0] = y[3]*pModuleInverse ;                         
   dydx[1] = y[4]*pModuleInverse ;                         

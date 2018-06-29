@@ -1,5 +1,5 @@
 
-$Id: History 105044 2017-07-06 12:33:38Z gcosmo $
+$Id: History 109791 2018-05-09 08:22:15Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,33 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-05-18 Ben Morgan (rdecay02-V10-04-03)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+06-04-18 mma (rdecay02-V10-04-02)
+- rdecay02.cc : set visualisation only in interactive session.
+
+04-04-18 Dennis Wright (rdecay02-V10-04-01)
+- in /src
+    PhysicsList.cc: in ctor set nuclide table half-life threshold to
+    0.1 picosecond and level tolerance to 1.0 eV, otherwise we miss many 
+    short-lived nuclides
+
+    HistoManager.cc, TrackingAction.cc: add two histograms to look at
+    0 - 0.1 MeV, and 0 to 1 MeV ranges in particle emission spectra
+
+- in /macros
+    update to latest UserEvapData_z83.a210, UserRadData_z82.a210,
+    UserEvapData_z102.a252 to latest database formats
+
+    remove energy unit (keV) from call to /gun/ion in u238b.mac,
+    po201m.mac and UserEvapDataBiTest.mac
+
+15-03-18 mma (rdecay02-V10-04-00)
+- rdecay02.cc : remove G4UI_USE and G4VIS_USE
 
 06-07-17 Vladimir Ivanchenko (rdecay02-V10-03-01)
 - PhysicsList - use G4EmStandardPhysics and G4EmExtraPhysics,

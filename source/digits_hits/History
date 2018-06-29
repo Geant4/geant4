@@ -1,4 +1,4 @@
-$Id: History 108471 2018-02-15 14:12:06Z gcosmo $
+$Id: History 110274 2018-05-17 14:44:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-January 19, 2018 M. Asai (digits_hits-V10-03-03)
+May 17th, 2018 J. Madsen (digits_hits-V10-04-01)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+January 19, 2018 M. Asai (digits_hits-V10-04-00)
 - G4ScoringMessenger G4ScoreQuantityMessenger:
 - UI command returns an error message if a command is refused due
   to incorrect parameter(s).
+- This tag requires intercoms-V10-04-01 tag.
 
 August 1, 2017 M. Asai (digits_hits-V10-03-02)
 - G4SDStructure.cc : fix propagating warning flag. Addressing bug

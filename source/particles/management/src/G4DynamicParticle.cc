@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc 98352 2016-07-08 08:21:00Z gcosmo $
+// $Id: G4DynamicParticle.cc 110257 2018-05-17 14:20:12Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -71,7 +71,11 @@
 #include "G4IonTable.hh"
 #include "G4PrimaryParticle.hh"
 
-G4ThreadLocal G4Allocator<G4DynamicParticle> *pDynamicParticleAllocator = 0;
+G4Allocator<G4DynamicParticle>*& pDynamicParticleAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4DynamicParticle>* _instance = nullptr;
+    return _instance;
+}
 
 static const G4double EnergyMomentumRelationAllowance = 1.0e-2*keV;
 

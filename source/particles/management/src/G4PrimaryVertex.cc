@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.cc 99159 2016-09-07 08:11:50Z gcosmo $
+// $Id: G4PrimaryVertex.cc 110257 2018-05-17 14:20:12Z gcosmo $
 //
 
 #include "G4PrimaryVertex.hh"
@@ -32,7 +32,11 @@
 #include "G4VUserPrimaryVertexInformation.hh"
 #include "G4ios.hh"
 
-G4ThreadLocal G4Allocator<G4PrimaryVertex> *aPrimaryVertexAllocator = 0;
+G4Allocator<G4PrimaryVertex>*& aPrimaryVertexAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4PrimaryVertex>* _instance = nullptr;
+    return _instance;
+}
 
 G4PrimaryVertex::G4PrimaryVertex()
 :X0(0.),Y0(0.),Z0(0.),T0(0.),theParticle(0),theTail(0),

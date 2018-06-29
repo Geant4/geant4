@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -345,12 +345,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=39.6s Real=40.69s Sys=0.01s
+  User=29.460000s Real=29.537053s Sys=0.010000s
 Number and type of particles created outside region "Target" :
-N e- : 756
+N e- : 759
 _______________________
 Number and type of particles created in region "Target" :
-N e- : 44589
+N e- : 45298
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

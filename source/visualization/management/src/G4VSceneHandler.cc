@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc 102802 2017-02-22 15:19:00Z gcosmo $
+// $Id: G4VSceneHandler.cc 109510 2018-04-26 07:15:57Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -594,12 +594,16 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       if (pPVModel) {
         G4cerr << pPVModel->GetFullPVPath();
       }
-      G4cerr <<
-      "\n  This means it cannot be visualized on most systems (try RayTracer)."
-      "\n  1) The solid may not have implemented the CreatePolyhedron method."
-      "\n  2) For Boolean solids, the BooleanProcessor, which attempts to create"
-      "\n     the resultant polyhedron, may have failed."
-      << G4endl;
+      static G4bool explanation = false;
+      if (!explanation) {
+        explanation = true;
+        G4cerr <<
+        "\n  This means it cannot be visualized on most systems (try RayTracer)."
+        "\n  1) The solid may not have implemented the CreatePolyhedron method."
+        "\n  2) For Boolean solids, the BooleanProcessor, which attempts to create"
+        "\n     the resultant polyhedron, may have failed.";
+      }
+      G4cerr << G4endl;
     }
   }
 }
@@ -818,6 +822,9 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
 
   pModelingParams->SetWarning
     (G4VisManager::GetVerbosity() >= G4VisManager::warnings);
+
+  pModelingParams->SetCBDAlgorithmNumber(vp.GetCBDAlgorithmNumber());
+  pModelingParams->SetCBDParameters(vp.GetCBDParameters());
 
   pModelingParams->SetExplodeFactor(vp.GetExplodeFactor());
   pModelingParams->SetExplodeCentre(vp.GetExplodeCentre());

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,6 +12,53 @@
                              WWW : http://geant4.org/
 **************************************************************
 
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+ASCIITree (ATree)
+DAWNFILE (DAWNFILE)
+G4HepRep (HepRepXML)
+G4HepRepFile (HepRepFile)
+RayTracer (RayTracer)
+VRML1FILE (VRML1FILE)
+VRML2FILE (VRML2FILE)
+gMocrenFile (gMocrenFile)
+OpenGLImmediateQt (OGLIQt, OGLI)
+OpenGLStoredQt (OGLSQt, OGL, OGLS)
+OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+RayTracerX (RayTracerX)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
+
+Registered filter factories:
+  attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+"/vis/list" to see available colours.
 ... open Root analysis file : pol01.root - done
 /run/verbose 2
 #
@@ -63,7 +110,7 @@ pol-compt:   for  gamma    SubType= 13  BuildTable= 1
 pol-conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             polConv :  Emin=        0 eV    Emax=      100 TeV
+             polConv :  Emin=        0 eV    Emax=      100 TeV   AngularGenUrban
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -148,42 +195,44 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.11s Real=0.11s Sys=0s
+  User=0.120000s Real=0.114188s Sys=0.000000s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
  Process calls frequency --->
-	Transportation = 31178
-	pol-compt = 256
-	pol-eBrem = 330
-	msc = 1744
-	pol-phot = 148
-	pol-eIoni = 575
-	pol-conv = 229
-	pol-annihil = 64
+	Transportation = 31108
+	pol-compt = 266
+	pol-eBrem = 314
+	msc = 1661
+	pol-phot = 163
+	pol-eIoni = 608
+	pol-conv = 216
+	pol-annihil = 57
  Gamma: 
-Mean Number per Event :1.0076
-Mean Energy :9.5841 MeV +- 1.8928 MeV
-Mean Polarization :-0.96564 +- 0.18371
+Mean Number per Event :1.0048
+Mean Energy :9.619 MeV +- 1.8101 MeV
+Mean Polarization :-0.96774 +- 0.1742
  Electron: 
-Mean Number per Event :0.0343
-Mean Energy :5.237 MeV +- 2.4579 MeV
-Mean Polarization :-0.72286 +- 0.2927
+Mean Number per Event :0.0341
+Mean Energy :5.1588 MeV +- 2.4665 MeV
+Mean Polarization :-0.72985 +- 0.28105
  Positron: 
-Mean Number per Event :0.017
-Mean Energy :4.1809 MeV +- 2.027 MeV
-Mean Polarization :-0.59544 +- 0.31189
+Mean Number per Event :0.0165
+Mean Energy :3.9099 MeV +- 2.0871 MeV
+Mean Polarization :-0.5533 +- 0.34208
 ... write Root file : pol01.root - done
 ... close Root file : pol01.root - done
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.935773 0.217177 0.801907 0.265304 0.932063 0.225476 0.630928 0.808899 0.103807 0.687069 0.315573 0.0224463 0.465853 0.0791903 0.00919974 0.860619 0.791296 0.218904 0.243077 0.799925 0.992455 0.819308 0.83097 0.919037 
- i_lag = 21, j_lag = 7
- carry = 5.96046e-08, count24 = 15
+ float_seed_table[] = 0.0502205 0.384011 0.595831 0.0937672 0.341182 0.0396019 0.856368 0.682676 0.983136 0.278483 0.699152 0.67165 0.216605 0.415161 0.498622 0.706824 0.241166 0.474092 0.797581 0.0664896 0.161372 0.516629 0.736871 0.469066 
+ i_lag = 4, j_lag = 14
+ carry = 0, count24 = 10
  luxury = 3 nskip = 199
 ----------------------------------------
 #
+Graphics systems deleted.
+Visualization Manager deleting...
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

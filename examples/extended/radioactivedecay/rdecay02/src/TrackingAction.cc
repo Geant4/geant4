@@ -104,6 +104,8 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
       analysisManager->AddNtupleRow(id);
     
       analysisManager->FillH1(6, energy, weight);
+      analysisManager->FillH1(7, energy, weight);
+      analysisManager->FillH1(8, energy, weight);
     }                        
   }
   

@@ -1,4 +1,4 @@
-$Id: History 104350 2017-05-26 07:20:25Z gcosmo $
+$Id: History 110139 2018-05-16 07:33:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 15, 2018 J.Allison - fieldex01-V10-04-01
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- vis.mac, gui.mac: Clean up.
+- F01RunAction.cc: Remove vis commands.
+
+May 09, 2018 B.Morgan - fieldex01-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
 May 24, 2017 J.Apostolakis   - fieldex01-V10-03-00
 - Fixed valgrind error in F01FieldSetup CreateStepperAndChordFinder() method.
     first delete all dependent objects, then create new ones.

@@ -25,11 +25,16 @@
 //
 //
 // $Id:$
-
+// 
+// G4UniformRandPool implementation
+//
+// Author: A.Dotti (SLAC)
 // ------------------------------------------------------------
 
 #include "G4UniformRandPool.hh"
 #include "globals.hh"
+#include "G4Threading.hh"
+#include "G4AutoDelete.hh"
 
 #include <climits>
 #include <stdlib.h>
@@ -47,7 +52,6 @@ void destroy_pool( G4double*& buffer)
 {
   delete[] buffer;
 }
-
 
 #if defined(WIN32)
 // No bother with WIN
@@ -67,11 +71,6 @@ void destroy_pool_align( G4double*& buffer )
 //
 void create_pool_align( G4double*& buffer , G4int ps)
 {
-//#if defined(__ICC) || (__INTEL_COMPILER)
-//  //INTEL optimized way
-//   buffer = (G4doulbe*)mm_allign(ps*sizeof(G4double),sizeof(G4double)*CHAR_BIT);
-//#else
-
   // POSIX standard way
   G4int errcode = posix_memalign( (void**) &buffer ,
                                  sizeof(G4double)*CHAR_BIT,
@@ -83,20 +82,12 @@ void create_pool_align( G4double*& buffer , G4int ps)
                 "Cannot allocate aligned buffer");
     return;
   }
-//#endif
-
   return;
 }
 
 void destroy_pool_align( G4double*& buffer )
 {
-  //#if defined(__ICC) || (__INTEL_COMPILER)
-  //mm_free(buffer);
-  //#else
-
   free(buffer);
-
-  //#endif
 }
 #endif
 
@@ -153,6 +144,16 @@ void G4UniformRandPool::Resize(/*PoolSize_t*/ G4int newSize )
   currentIdx = 0;
 }
 
+void G4UniformRandPool::Fill( G4int howmany )
+{
+  assert(howmany>0 && howmany <= size);
+
+  // Fill buffer with random numbers
+  //
+  G4Random::getTheEngine()->flatArray(howmany,buffer);
+  currentIdx = 0;
+}
+
 void G4UniformRandPool::GetMany( G4double* rnds , G4int howmany )
 {
   assert(rnds!=0 && howmany>0);
@@ -171,7 +172,7 @@ void G4UniformRandPool::GetMany( G4double* rnds , G4int howmany )
   const G4int peel = howmany%size;
   assert(peel<size);
 
-  // Ok from now I will get random numbers in group of  "size"
+  // Ok from now on I will get random numbers in group of  "size"
   // Note that if howmany<size maxcycles == 0
   //
   G4int cycle = 0;
@@ -190,9 +191,9 @@ void G4UniformRandPool::GetMany( G4double* rnds , G4int howmany )
     // We can use memcpy of std::copy, it turns out that the two are basically 
     // performance-wise equivalent (expected), since in my tests memcpy is a
     // little bit faster, I use that
-    // std::copy(buffer,buffer+size,rnds+(cycle*size));
     //
     memcpy(rnds+(cycle*size),buffer,sizeof(G4double)*size );
+    // std::copy(buffer,buffer+size,rnds+(cycle*size));
 
     // Get a new set of numbers
     //
@@ -201,7 +202,7 @@ void G4UniformRandPool::GetMany( G4double* rnds , G4int howmany )
 
   // If maxcycles>0 last think we did was to call Fill(size)
   // so currentIdx == 0
-  // and it is guranteed that peel<size, we have enough fresh random numbers
+  // and it is guaranteed that peel<size, we have enough fresh random numbers
   // but if maxcycles==0 currentIdx can be whatever, let's make sure we have
   // enough fresh numbers
   //
@@ -219,9 +220,6 @@ void G4UniformRandPool::GetMany( G4double* rnds , G4int howmany )
 }
 
 // Static interfaces implementing CLHEP methods
-
-#include "G4Threading.hh"
-#include "G4AutoDelete.hh"
 
 namespace
 {

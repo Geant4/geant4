@@ -8,6 +8,10 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+22.05.2018 G.Cosmo; Tag: hadrontherapy-V10-04-00
+	  - Replaced obsolete use if G4VisAttributes::Invisible with
+            G4VisAttributes::GetInvisible().
+
 26.10.2017 D.Sorokin; Tag: hadrontherapy-V10-03-11
 	  - LaserDrivenBeamLine.cc build fix
 

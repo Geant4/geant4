@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeTrajectory.cc 72349 2013-07-16 12:13:16Z gcosmo $
+// $Id: LXeTrajectory.cc 110138 2018-05-16 07:31:43Z gcosmo $
 //
 /// \file optical/LXe/src/LXeTrajectory.cc
 /// \brief Implementation of the LXeTrajectory class
@@ -42,14 +42,15 @@
 #include "G4VVisManager.hh"
 #include "G4Polymarker.hh"
 
-G4ThreadLocal G4Allocator<LXeTrajectory>* LXeTrajectoryAllocator = 0;
+G4ThreadLocal G4Allocator<LXeTrajectory>* LXeTrajectoryAllocator = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeTrajectory::LXeTrajectory()
-  :G4Trajectory(),fWls(false),fDrawit(false),fForceNoDraw(false),fForceDraw(false)
+  :G4Trajectory(),fWls(false),fDrawit(false),
+   fForceNoDraw(false),fForceDraw(false)
 {
-  fParticleDefinition=0;
+  fParticleDefinition = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

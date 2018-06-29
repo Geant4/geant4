@@ -1,0 +1,18 @@
+/run/numberOfThreads 1
+/run/verbose 1
+/random/setSeeds 1 1
+/vrt/numberOfSplit 200
+/detector/diameter 6.0 nm
+/detector/length   10.0 nm
+
+/run/initialize
+
+/gun/particle alpha
+/gun/position 0 20 0 nm
+/gun/direction 0 -1 0
+/gun/energy 4 MeV 
+
+#/run/beamOn 1625
+/run/printProgress 10
+/run/beamOn 100
+

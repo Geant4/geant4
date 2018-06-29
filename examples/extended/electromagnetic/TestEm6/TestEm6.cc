@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm6/TestEm6.cc
 /// \brief Main program of the electromagnetic/TestEm6 example
 //
-// $Id: TestEm6.cc 83428 2014-08-21 15:46:01Z gcosmo $
+// $Id: TestEm6.cc 109281 2018-04-09 09:57:55Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,25 +44,24 @@
 #include "SteppingAction.hh"
 #include "StackingAction.hh"
 
-#ifdef G4VIS_USE
- #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 int main(int argc,char** argv) {
- 
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
     
-  //Construct the default run manager
+  //construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
   //set mandatory initialization classes
@@ -78,39 +77,29 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new SteppingAction(RunAct));
   runManager->SetUserAction(new StackingAction);
 
-  //get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
- 
-  if (argc!=1)   // batch mode  
-    {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
-    }
-    
-  else           //define visualization and UI terminal for interactive mode
-    { 
-#ifdef G4VIS_USE
-   G4VisManager* visManager = new G4VisExecutive;
-   visManager->Initialize();
-#endif    
-     
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-      ui->SessionStart();
-      delete ui;
-#endif
-     
-#ifdef G4VIS_USE
-     delete visManager;
-#endif     
-    }
-    
-  //job termination
-  //
-  delete runManager;
+  //initialize visualization
+  G4VisManager* visManager = nullptr;
 
-  return 0;
+  //get the pointer to the User Interface manager 
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+
+  if (ui)  {
+   //interactive mode
+   visManager = new G4VisExecutive;
+   visManager->Initialize();
+   ui->SessionStart();
+   delete ui;
+  }
+  else  {
+   //batch mode  
+   G4String command = "/control/execute ";
+   G4String fileName = argv[1];
+   UImanager->ApplyCommand(command+fileName);
+  }
+
+  //job termination 
+  delete visManager;
+  delete runManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc 97392 2016-06-02 10:10:32Z gcosmo $
+// $Id: G4MuPairProductionModel.cc 110571 2018-05-30 13:06:17Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -324,7 +324,7 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
   G4double c3 = 0.75*sqrte*particleMass;
   if (residEnergy <= c3*z13) { return cross; }
 
-  G4double c7 = 4.*CLHEP::electron_mass_c2;
+  static const G4double c7 = 4.*CLHEP::electron_mass_c2;
   G4double c8 = 6.*particleMass*particleMass;
   G4double alf = c7/pairEnergy;
   G4double a3 = 1. - alf;
@@ -620,14 +620,14 @@ void G4MuPairProductionModel::SampleSecondaries(
   // the angles of e- and e+ assumed to be the same as virtual gamma
 
   // create G4DynamicParticle object for the particle1
+  G4double ekin = std::max(ElectronEnergy - electron_mass_c2,0.0);
   G4DynamicParticle* aParticle1 = 
-    new G4DynamicParticle(theElectron, gDirection, 
-                          ElectronEnergy - electron_mass_c2);
+    new G4DynamicParticle(theElectron, gDirection, ekin);
 
   // create G4DynamicParticle object for the particle2
+  ekin = std::max(PositronEnergy - electron_mass_c2,0.0);
   G4DynamicParticle* aParticle2 = 
-    new G4DynamicParticle(thePositron, gDirection,
-                          PositronEnergy - electron_mass_c2);
+    new G4DynamicParticle(thePositron, gDirection, ekin);
 
   // primary change
   kineticEnergy -= (ElectronEnergy + PositronEnergy);

@@ -39,6 +39,7 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4EmParameters.hh"
 #include "G4DecayPhysics.hh"
+#include "G4NuclideTable.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
 #include "G4HadronElasticPhysicsHP.hh"
@@ -80,6 +81,12 @@ PhysicsList::PhysicsList()
   new G4UnitDefinition("hour",   "h",   "Time", hour);
   new G4UnitDefinition("day",    "d",   "Time", day);
   new G4UnitDefinition("year",   "y",   "Time", year);
+
+  // Mandatory for G4NuclideTable
+  // Half-life threshold must be set small or many short-lived isomers 
+  // will not be assigned life times (default to 0) 
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
+  G4NuclideTable::GetInstance()->SetLevelTolerance(1.0*eV);
           
   // EM physics
   RegisterPhysics(new G4EmStandardPhysics());
@@ -87,7 +94,7 @@ PhysicsList::PhysicsList()
   param->SetAugerCascade(true);
   param->SetStepFunction(1., 1*CLHEP::mm);
   param->SetStepFunctionMuHad(1., 1*CLHEP::mm);
- 
+
   // Decay
   RegisterPhysics(new G4DecayPhysics());
 

@@ -15,10 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18/1/18  G.Folger       (factory-V10-03-03)
+18/1/18  G.Folger       (factory-V10-04-01)
 -  Re-tag using procedure to remove svn:externals from tag.
 
-15/1/18  G.Folger
+15/1/18  G.Folger       (factory-V10-04-00)
 - Correct G4INSTALL in GNUmakefile.
 
 4/12/17  G.Folger       (factory-V10-03-02)

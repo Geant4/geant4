@@ -1,4 +1,4 @@
-// $Id: History 100948 2016-11-03 11:30:18Z gcosmo $
+// $Id: History 110099 2018-05-15 11:29:56Z gcosmo $
 // ------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 15, 2018 J.Allison - fieldex06-V10-04-00
+- Add #include "G4Types.hh".
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- vis.mac, gui.mac: Clean up.
 
 Nov 03, 2016 L.Garnier - fieldex06-V10-02-02
 - remove icons.mac. Automatically include since interfaces-V10-02-07

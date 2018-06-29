@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.hh 106953 2017-10-31 08:30:13Z gcosmo $
+// $Id: G4GoudsmitSaundersonMscModel.hh 108305 2018-02-02 13:08:43Z gcosmo $
 //
 // ----------------------------------------------------------------------------
 //
@@ -98,6 +98,7 @@
 //            Unlike the default GS, the Mott-corrected angular distributions are particle type
 //            (different for e- and e+ <= the DCS_{Mott} and the screening correction) and target
 //            (Z and material) dependent.
+// 02.02.2018 M. Novak: implemented CrossSectionPerVolume interface method (used only for testing)
 //
 // Class description:
 //   Kawrakow-Bielajew Goudsmit-Saunderson MSC model based on the screened Rutherford DCS
@@ -155,6 +156,11 @@ public:
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
   virtual G4double ComputeTrueStepLength(G4double geomStepLength);
+
+  // method to compute first transport cross section per Volume (i.e. macroscropic first transport cross section; this 
+  // method is used only for testing and not during a normal simulation) 
+  virtual G4double CrossSectionPerVolume(const G4Material*, const G4ParticleDefinition*, G4double kineticEnergy,
+                                         G4double cutEnergy = 0.0, G4double maxEnergy = DBL_MAX);
 
   void     StartTracking(G4Track*);
 

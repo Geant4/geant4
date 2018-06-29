@@ -31,25 +31,77 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
-23rd May 2018 -      Gunter Folger (cmake-V10-03-54)
+19th June 2018 - Gunter Folger (cmake-V10-04-14)
+- Templates/geant4_validate_sources.cmake.in, revert addition of .c and .h
+  Skip checking sources for zlib
+    (.c and .h match far too many other files)
+- Switch to G4EMLOW7.4
+    
+14th June 2018 - Gunter Folger (cmake-V10-04-13)
+-  Templates/geant4_validate_sources.cmake.in: add C sources and headers
+
+8th June 2018 - Ben Morgan (cmake-V10-04-12)
+- Add "auto" dummy Thread Local Storage model
+  Per request from CERN, when "auto" is used,
+  no explicit compiler flag to select the TLS model is
+  set. Record this in Geant4Config.cmake and geant4-config
+  as unset/empty variables.
+
+6th Jun 2018 - Jonathan Madsen (cmake-V10-04-11)
+- Addition of TiMemory as an optional package
+
+23rd May 2018 - Ben Morgan (cmake-V10-04-10)
+- Remove CMake warning about building MT DLLs on Windows, as
+  these are now supported.
+
+23rd May 2018 - Gunter Folger  (cmake-V10-04-09)
 - Update Geant4DatasetDefinitions to use G4RealSurface 2.1.1
    patched version bringing back data lost in 2.1
 
-26th February 2018 - Ben Morgan (cmake-V10-03-53, 52)
+14st May 2018 - Gunter Folger  (cmake-V10-04-08)
+- Update Geant4DatasetDefinitions to use G4NEUTRONXS 2.0
+
+21st March 2018 - Ben Morgan (cmake-V10-04-07)
+- G4BuildSettings.cmake: Allow Windows MT builds to use DLLs, but warn.
+
+26th February 2018 - Ben Morgan (cmake-V10-04-06)
 - Geant4InstallData.cmake, Geant4CTest.cmake: Update URL for downloads 
   to "cern.ch/geant4-data" as the correct alias to new EOS area, seperate
-  from main website. Superceeds cmake-V10-03-51.
+  from main website.
 
-26th February 2018 - Ben Morgan (cmake-V10-03-51)
+26th February 2018 - Ben Morgan (cmake-V10-04-05)
 - Geant4InstallData.cmake, Geant4CTest.cmake: Update URL for downloads 
   to "cern.ch/geant4" as the correct alias.
 
-26th February 2018 - Ben Morgan (cmake-V10-03-50)
+26th February 2018 - Ben Morgan (cmake-V10-04-04)
 - G4BuildSettings.cmake: Add 17/c++17 to C++ standards against which
   Geant4 can be compiled. Will require a minimum CMake version of
   3.8 to enable, but this is not checked.
 
-8th December 2017 - Ben Morgan
+20th February 2018 - Ben Morgan (cmake-V10-04-03)
+- Initial configuration support for MT on Windows
+- Modules/G4BuildSettings.cmake: Remove restrictions and warnings on enabling
+  MT on Windows. Add restriction on building MT DLLs, emitting a fatal error
+  if this combination is selcted, and report needed settings to enable
+  static MT libraries.
+
+18th January 2018 - Ben Morgan (cmake-V10-04-02)
+- Support use of WINDOWS_EXPORT_ALL_SYMBOLS for DLL builds with cmake >=3.4
+  retaining old capability for CMake 3.3.
+- Modules/G4WindowsDLLSupport.cmake: New module to hold old DLL support.
+  Create old `genwindef` support program, moved from G4BuildSettings.
+  Implement `__geant4_add_dll_old` macro which expands to the pre cmake 3.4
+  use of `genwindef` to export symbols and create DLL.
+- Modules/G4DeveloperAPI_OLD.cmake: Include G4WindowsDLLSupport module, and
+  use functionality to create DLL when CMake is <3.4. Otherwise, use
+  new WINDOWS_EXPORT_ALL_SYMBOLS property when building a shared library.
+
+11th January 2018 - Gabriele Cosmo (cmake-V10-04-01)
+- Modules/Geant4OptionalComponents.cmake: add TESSELLATEDSOLID flag to enable
+  wrapping of G4TessellatedSolid in GEANT4_USOLIDS_SHAPES.
+  Coworks with tag geom-specific-V10-04-03.
+
+8th December 2017 - Ben Morgan (cmake-V10-04-00)
 - Templates/UseGeant4_internal.cmake: When running test driver directly,
   make it run in WORKING_DIRECTORY if this is supplied.
 

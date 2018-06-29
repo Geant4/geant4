@@ -29,6 +29,8 @@
 // $Id: $
 //
 
+#include "G4Types.hh"
+
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
 #else
@@ -45,13 +47,8 @@
 #include "FTFP_BERT.hh"
 #include "G4GenericBiasingPhysics.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,7 +74,7 @@ int main(int argc,char** argv)
     PrintUsage();
     return 1;
   }
-  
+
   G4String macro("");
   G4String onOffBiasing("");
   if ( argc == 2 ) macro = argv[1];
@@ -94,9 +91,15 @@ int main(int argc,char** argv)
             }
         }
     }
-  
+
   if ( onOffBiasing == "" ) onOffBiasing = "on";
-  
+
+  // Instantiate G4UIExecutive if interactive mode
+  G4UIExecutive* ui = nullptr;
+  if ( macro == "" ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // -- Construct the run manager : MT or sequential one
 #ifdef G4MULTITHREADED
   G4MTRunManager * runManager = new G4MTRunManager;
@@ -112,7 +115,7 @@ int main(int argc,char** argv)
 
 
   // -- Set mandatory initialization classes
-  
+
   // -- Create geometry:
   GB06DetectorConstruction*        detector = new GB06DetectorConstruction();
   // -- Create parallel world:
@@ -121,7 +124,7 @@ int main(int argc,char** argv)
   // -- and "augment" detector geometry with the parallelWorld one:
   detector->RegisterParallelWorld( parallelWorld );
   runManager->SetUserInitialization(detector);
-  
+
   // -- Select a physics list:
   FTFP_BERT* physicsList = new FTFP_BERT;
   // -- and augment it with biasing facilities:
@@ -150,20 +153,17 @@ int main(int argc,char** argv)
       G4cout << "      ************************************************* " << G4endl;
     }
   runManager->SetUserInitialization(physicsList);
-  
+
   // -- Action initialization:
   runManager->SetUserInitialization(new GB06ActionInitialization);
 
   // Initialize G4 kernel
   runManager->Initialize();
-  
 
-#ifdef G4VIS_USE
   // Initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   visManager->Initialize();
-#endif
 
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -175,24 +175,15 @@ int main(int argc,char** argv)
     }
   else
     {  // interactive mode : define UI session
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac"); 
-#endif
+      UImanager->ApplyCommand("/control/execute vis.mac");
       //      if (ui->IsGUI())
       //              UImanager->ApplyCommand("/control/execute gui.mac");
       ui->SessionStart();
       delete ui;
-#endif
     }
 
-
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
-  
 
   return 0;
 }

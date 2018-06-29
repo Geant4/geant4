@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragment.cc 100691 2016-10-31 11:26:25Z gcosmo $
+// $Id: G4PreCompoundFragment.cc 108685 2018-02-27 07:58:38Z gcosmo $
 //
 // J. M. Quesada (August 2008).  
 // Based  on previous work by V. Lara
@@ -64,9 +64,7 @@ CalcEmissionProbability(const G4Fragment & aFragment)
   if (theMaxKinEnergy <= theMinKinEnergy) { return 0.0; }    
 
   // compute power once
-  if(OPTxs <= 2) { 
-    muu = G4ChatterjeeCrossSection::ComputePowerParameter(theResA, index);
-  } else {
+  if(0 < index) { 
     muu = G4KalbachCrossSection::ComputePowerParameter(theResA, index);
   }
   
@@ -92,23 +90,20 @@ IntegrateEmissionProbability(G4double low, G4double up,
   G4double del = (up - low);
   G4int nbins  = std::max(3,(G4int)(del*den));
   del /= (G4double)nbins;
-  G4double e = low;
-  G4double y0 = ProbabilityDistributionFunction(e, aFragment);
-  probmax = y0;
-  //G4cout << "    0. e= " << low << "  y= " << y0 << G4endl;
+  G4double e = low + 0.5*del;
+  probmax = ProbabilityDistributionFunction(e, aFragment);
+  //G4cout << "    0. e= " << e << "  y= " << probmax << G4endl;
 
-  G4double sum(0.0), ds(0.0), y;
-  for (G4int i=0; i<nbins; ++i) {
+  G4double sum = probmax;
+  for (G4int i=1; i<nbins; ++i) {
     e += del;
-    y = ProbabilityDistributionFunction(e, aFragment); 
+    G4double y = ProbabilityDistributionFunction(e, aFragment); 
     probmax = std::max(probmax, y);
-    ds = y0 + y;
-    sum += ds;
-    if(ds < sum*0.01) { break; }
+    sum += y;
+    if(y < sum*0.01) { break; }
     //G4cout << "   " << i << ". e= " << e << "  y= " << y << " sum= " << sum << G4endl;
-    y0 = y;
   }
-  sum *= del*0.5;
+  sum *= del;
   //G4cout << "Evap prob: " << sum << " probmax= " << probmax << G4endl;
   return sum;
 }

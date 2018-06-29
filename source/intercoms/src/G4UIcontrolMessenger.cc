@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.cc 102561 2017-02-09 08:16:05Z gcosmo $
+// $Id: G4UIcontrolMessenger.cc 110932 2018-06-26 08:06:51Z gcosmo $
 //
 
 #include <stdlib.h>
@@ -452,7 +452,8 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { G4cout << UI->SolveAlias(newValue) << G4endl; }
   if(command==shellCommand)
   {
-    system(newValue);
+    int rc = system(newValue);
+    if ( rc < 0 ) {}
   }
   if(command==loopCommand)
   {

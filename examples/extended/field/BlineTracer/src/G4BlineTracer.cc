@@ -27,7 +27,7 @@
 /// \brief Implementation of the G4BlineTracer class
 //
 //
-// $Id: G4BlineTracer.cc 77941 2013-11-29 15:22:58Z gcosmo $
+// $Id: G4BlineTracer.cc 109623 2018-05-03 13:05:02Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -50,6 +50,7 @@
 #include "G4TransportationManager.hh"
 #include "G4FieldManager.hh"
 #include "G4PropagatorInField.hh"
+#include "G4MagIntegratorDriver.hh"
 #include "G4CashKarpRKF45.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4ChordFinder.hh"

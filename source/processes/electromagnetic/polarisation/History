@@ -1,4 +1,4 @@
-$Id: History 108502 2018-02-15 15:41:45Z gcosmo $
+$Id: History 109176 2018-04-03 06:53:39Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12 February 18: V.Ivanchenko (empolar-V10-03-02)
+01 April 18: V.Ivanchenko (empolar-V10-04-02)
+- G4PolarizedCompton, G4PolarizedPhotoElectricEffect, 
+  G4PolarizedGammaConversion, G4ePolarizedBremsstrahlung,
+  G4ePolarizedIonisation - cleanup process classes, moved virtual
+    methods to source, removed unused headers and methods
+
+01 April 18: V.Ivanchenko (empolar-V10-04-01)
+- G4PolarizedAnnihilationModel - implemented sampling of final 
+    state AtRest
+
+12 February 18: V.Ivanchenko (empolar-V10-04-00)
 - G4StokesVector - moved static inline method to the source
 
 05 August 17: V.Ivanchenko (empolar-V10-03-01)

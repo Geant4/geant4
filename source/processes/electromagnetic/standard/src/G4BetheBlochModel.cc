@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4BetheBlochModel.cc 109480 2018-04-24 14:46:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -72,7 +72,7 @@
 
 using namespace std;
 
-G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p, 
+G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition*, 
                                      const G4String& nam)
   : G4VEmModel(nam),
     particle(nullptr),
@@ -82,12 +82,7 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p,
 {
   fParticleChange = nullptr;
   theElectron = G4Electron::Electron();
-  if(p) {
-    SetGenericIon(p);
-    SetParticle(p);
-  } else {
-    SetParticle(theElectron);
-  }
+  SetParticle(theElectron);
   corr = G4LossTableManager::Instance()->EmCorrections();  
   nist = G4NistManager::Instance();
   SetLowEnergyLimit(2.0*MeV);
@@ -151,23 +146,25 @@ void G4BetheBlochModel::SetupParameters()
 {
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();
-  G4double q = particle->GetPDGCharge()/eplus;
+  G4double q = particle->GetPDGCharge()*inveplus;
   chargeSquare = q*q;
   corrFactor = chargeSquare;
   ratio = electron_mass_c2/mass;
-  G4double magmom = 
-    particle->GetPDGMagneticMoment()*mass/(0.5*eplus*hbar_Planck*c_squared);
+  static const G4double aMag = 1./(0.5*eplus*hbar_Planck*c_squared);
+  G4double magmom = particle->GetPDGMagneticMoment()*mass*aMag;
   magMoment2 = magmom*magmom - 1.0;
   formfact = 0.0;
+  tlimit = DBL_MAX;
   if(particle->GetLeptonNumber() == 0) {
-    G4double x = 0.8426*GeV;
-    if(spin == 0.0 && mass < GeV) {x = 0.736*GeV;}
-    else if(mass > GeV) {
-      x /= nist->GetZ13(mass/proton_mass_c2);
-      //        tlimit = 51.2*GeV*A13[iz]*A13[iz];
+    G4int iz = G4lrint(q);
+    if(iz <= 1) {
+      formfact = (spin == 0.0 && mass < GeV) ? 1.181e-6 : 1.548e-6;	
+    } else {
+      G4double x = nist->GetA27(iz);
+      formfact = 3.969e-6*x*x;
     }
-    formfact = 2.0*electron_mass_c2/(x*x);
-    tlimit   = 2.0/formfact;
+    tlimit = std::sqrt(0.414/formfact +
+                       electron_mass_c2*electron_mass_c2) - electron_mass_c2;
   }
 }
 
@@ -189,7 +186,7 @@ G4BetheBlochModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* p,
 {
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = min(tmax,maxKinEnergy);
+  G4double maxEnergy = std::min(tmax,maxKinEnergy);
   if(cutEnergy < maxEnergy) {
 
     G4double totEnergy = kineticEnergy + mass;
@@ -370,7 +367,7 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   // projectile formfactor - suppresion of high energy
   // delta-electron production at high energy
   
-  G4double x = formfact*deltaKinEnergy;
+  G4double x = formfact*deltaKinEnergy*(deltaKinEnergy + 2*electron_mass_c2);
   if(x > 1.e-6) {
 
     G4double x1 = 1.0 + x;

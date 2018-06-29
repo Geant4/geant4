@@ -19,6 +19,22 @@ committal in the CVS repository !
 
 History file for G4 zlib package
 --------------------------------
+
+21 June 2018 Gunter Folger  (zlib-V10-04-03)
+-  gzwrite.c: one more cast to int, 
+
+20 June 2018 Gunter Folger  (zlib-V10-04-02)
+- fixes in gzread.c/gzwrite.c for Windows 64 bit builds. 
+    Correctioins taken from https://github.com/madler/zlib/pull/279
+
+14 June 2018 Gunter Folger  (zlib-V10-04-01)
+-  move all includes in src/ to include/; This helps keep 
+     geant4_validate_sources.cmake simpler  
+     
+12 June 2018 Gunter Folger  (zlib-V10-04-00)
+- addressing compilation warnings from gcc8:
+   switch back to original source from zlib 1.2.11, and use C compiler.
+   
 18 May 2017 Gunter Folger   (zlib-V10-03-01)
 - disable warning on fall-through on many case statements issued by gcc7
    add directive -Wno-implicit-fallthrough in CMakeLists.txt, and fix copy-paste typo.

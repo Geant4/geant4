@@ -31,7 +31,6 @@
 // --------------------------------------------------------------------
 
 #include "G4ExtrudedSolid.hh"
-#if 0
 #include "G4UExtrudedSolid.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
@@ -49,22 +48,29 @@
 G4UExtrudedSolid::G4UExtrudedSolid(const G4String&          name,
                                    std::vector<G4TwoVector> polygon,
                                    std::vector<ZSection>    zsections)
-  : G4USolid(name, new UExtrudedSolid())
+  : Base_t(name)  // General constructor
 {
-  GetShape()->SetName(name);
-  std::vector<UVector2> pvec;
-  for (unsigned int i=0; i<polygon.size(); ++i)
+  unsigned int nVertices = polygon.size();
+  unsigned int nSections = zsections.size();
+
+  vecgeom::XtruVertex2* vertices = new vecgeom::XtruVertex2[nVertices];
+  vecgeom::XtruSection* sections = new vecgeom::XtruSection[nSections];
+
+  for (unsigned int i = 0; i < nVertices; ++i)
   {
-    pvec.push_back(UVector2(polygon[i].x(), polygon[i].y()));
+    vertices[i].x = polygon[i].x();
+    vertices[i].y = polygon[i].y();
   }
-  std::vector<UExtrudedSolid::ZSection> svec;
-  for (unsigned int i=0; i<zsections.size(); ++i)
+  for (unsigned int i = 0; i < nSections; ++i)
   {
-    ZSection sec = zsections[i];
-    svec.push_back(UExtrudedSolid::ZSection(sec.fZ,
-                   UVector2(sec.fOffset.x(), sec.fOffset.y()), sec.fScale));
+    sections[i].fOrigin.Set(zsections[i].fOffset.x(),
+                            zsections[i].fOffset.y(),
+                            zsections[i].fZ);
+    sections[i].fScale = zsections[i].fScale;
   }
-  GetShape()->Initialise(pvec, svec);
+  Base_t::Initialize(nVertices, vertices, nSections, sections);
+  delete[] vertices;
+  delete[] sections;
 }
 
 
@@ -73,16 +79,26 @@ G4UExtrudedSolid::G4UExtrudedSolid(const G4String&          name,
                                    G4double                 halfZ,
                                    G4TwoVector off1, G4double scale1,
                                    G4TwoVector off2, G4double scale2)
-  : G4USolid(name, new UExtrudedSolid())
-{ 
-  GetShape()->SetName(name);
-  std::vector<UVector2> pvec;
-  for (unsigned int i=0; i<polygon.size(); ++i)
+  : Base_t(name)  // Special constructor for 2 sections
+{
+  unsigned int nVertices = polygon.size();
+  unsigned int nSections = 2;
+
+  vecgeom::XtruVertex2* vertices = new vecgeom::XtruVertex2[nVertices];
+  vecgeom::XtruSection* sections = new vecgeom::XtruSection[nSections];
+
+  for (unsigned int i = 0; i < nVertices; ++i)
   {
-    pvec.push_back(UVector2(polygon[i].x(), polygon[i].y()));
+    vertices[i].x = polygon[i].x();
+    vertices[i].y = polygon[i].y();
   }
-  GetShape()->Initialise(pvec, halfZ, UVector2(off1.x(), off1.y()), scale1,
-                                      UVector2(off2.x(), off2.y()), scale2);
+  sections[0].fOrigin.Set(off1.x(), off1.y(), -halfZ);
+  sections[0].fScale = scale1;
+  sections[1].fOrigin.Set(off2.x(), off2.y(), halfZ);
+  sections[1].fScale = scale2;
+  Base_t::Initialize(nVertices, vertices, nSections, sections);
+  delete[] vertices;
+  delete[] sections;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -91,7 +107,7 @@ G4UExtrudedSolid::G4UExtrudedSolid(const G4String&          name,
 //                            for usage restricted to object persistency.
 //
 G4UExtrudedSolid::G4UExtrudedSolid(__void__& a)
-  : G4USolid(a)
+  : Base_t(a)
 {
 }
 
@@ -110,7 +126,7 @@ G4UExtrudedSolid::~G4UExtrudedSolid()
 // Copy constructor
 //
 G4UExtrudedSolid::G4UExtrudedSolid(const G4UExtrudedSolid &source)
-  : G4USolid(source)
+  : Base_t(source)
 {
 }
 
@@ -124,7 +140,7 @@ G4UExtrudedSolid::operator=(const G4UExtrudedSolid &source)
 {
   if (this == &source) return *this;
   
-  G4USolid::operator=( source );
+  Base_t::operator=( source );
   
   return *this;
 }
@@ -136,40 +152,45 @@ G4UExtrudedSolid::operator=(const G4UExtrudedSolid &source)
 
 G4int G4UExtrudedSolid::GetNofVertices() const
 {
-  return GetShape()->GetNofVertices();
+  return Base_t::GetNVertices();
 }
 G4TwoVector G4UExtrudedSolid::GetVertex(G4int i) const
 {
-  UVector2 v = GetShape()->GetVertex(i);
-  return G4TwoVector(v.x, v.y);
+  G4double xx, yy;
+  Base_t::GetVertex(i, xx, yy);
+  return G4TwoVector(xx, yy);
 }
 std::vector<G4TwoVector> G4UExtrudedSolid::GetPolygon() const
 {
-  std::vector<UVector2> pol = GetShape()->GetPolygon();
-  std::vector<G4TwoVector> v;
-  for (unsigned int i=0; i<pol.size(); ++i)
+  std::vector<G4TwoVector> pol;
+  for (unsigned int i = 0; i < Base_t::GetNVertices(); ++i)
   {
-    v.push_back(G4TwoVector(pol[i].x, pol[i].y));
+    pol.push_back(GetVertex(i));
   }
-  return v;
+  return pol;
 }
 G4int G4UExtrudedSolid::GetNofZSections() const
 {
-  return GetShape()->GetNofZSections();
+  return Base_t::GetNSections();
 }
 G4UExtrudedSolid::ZSection G4UExtrudedSolid::GetZSection(G4int i) const
 {
-  return ZSection(GetShape()->GetZSection(i));
+  vecgeom::XtruSection sect = Base_t::GetSection(i);
+  return ZSection(sect.fOrigin[2],
+                  G4TwoVector(sect.fOrigin[0], sect.fOrigin[1]),
+                  sect.fScale);
 }
 std::vector<G4UExtrudedSolid::ZSection> G4UExtrudedSolid::GetZSections() const
 {
-  std::vector<UExtrudedSolid::ZSection> sv = GetShape()->GetZSections();
-  std::vector<G4UExtrudedSolid::ZSection> vec;
-  for (unsigned int i=0; i<sv.size(); ++i)
+  std::vector<G4UExtrudedSolid::ZSection> sections;
+  for (unsigned int i = 0; i < Base_t::GetNSections(); ++i)
   {
-    vec.push_back(ZSection(sv[i]));
+    vecgeom::XtruSection sect = Base_t::GetSection(i);
+    sections.push_back(ZSection(sect.fOrigin[2],
+                                G4TwoVector(sect.fOrigin[0], sect.fOrigin[1]),
+                                sect.fScale));
   }
-  return vec;
+  return sections;
 }
 
 
@@ -237,7 +258,7 @@ void G4UExtrudedSolid::BoundingLimits(G4ThreeVector& pMin,
   if (checkBBox)
   {
     UVector3 vmin, vmax;
-    GetShape()->Extent(vmin,vmax);
+    Base_t::Extent(vmin,vmax);
     if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
         std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
         std::abs(pMin.z()-vmin.z()) > kCarTolerance ||
@@ -360,36 +381,22 @@ G4UExtrudedSolid::CalculateExtent(const EAxis pAxis,
 //
 G4Polyhedron* G4UExtrudedSolid::CreatePolyhedron () const
 {
-  G4int nFacets = GetShape()->GetNumberOfFacets();
-  G4int nVertices = 0;
-  for (G4int l = 0; l<nFacets; ++l)  // compute total number of vertices first
-  {
-    VUFacet* facet = GetShape()->GetFacet(l);
-    G4int n = facet->GetNumberOfVertices();
-    nVertices += n;
-  }
+  unsigned int nFacets = Base_t::GetStruct().fTslHelper.fFacets.size();
+  unsigned int fVertices = 3*nFacets;
 
   G4PolyhedronArbitrary *polyhedron =
-    new G4PolyhedronArbitrary (nVertices,nFacets);
+    new G4PolyhedronArbitrary (fVertices,nFacets);
 
-  for (G4int i = 0; i<nFacets; ++i)
+  for (unsigned int i = 0; i < nFacets; ++i)
   {
-    VUFacet* facet = GetShape()->GetFacet(i);
-    G4int v[4];
-    G4int n = facet->GetNumberOfVertices();
-    for (G4int m = 0; m<n; ++m)
+    G4int v[3];  // Facets are only triangular in VecGeom
+    for (unsigned int j = 0; j < 3; ++j)
     {
-      UVector3 vtx = facet->GetVertex(m);
+      UVector3 vtx = Base_t::GetStruct().fTslHelper.fFacets[i]->fVertices[j];
       polyhedron->AddVertex(G4ThreeVector(vtx.x(), vtx.y(), vtx.z()));
+      v[j] = Base_t::GetStruct().fTslHelper.fFacets[i]->fIndices[j]+1;
     }
-    if (n > 4) n = 4;
-    else if (n == 3) v[3] = 0;
-    for (G4int j=0; j<n; ++j)
-    {
-      G4int k = facet->GetVertexIndex(j);
-      v[j] = k+1;
-    }
-    polyhedron->AddFacet(v[0],v[1],v[2],v[3]);
+    polyhedron->AddFacet(v[0],v[1],v[2],0);
   }
   polyhedron->SetReferences();  
 
@@ -397,4 +404,3 @@ G4Polyhedron* G4UExtrudedSolid::CreatePolyhedron () const
 }
 
 #endif  // G4GEOM_USE_USOLIDS
-#endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc 103954 2017-05-04 11:29:22Z gcosmo $
+// $Id: G4EmCorrections.cc 110572 2018-05-30 13:08:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -78,7 +78,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const G4double G4EmCorrections::inveplus = 1.0/CLHEP::eplus;
+const G4double inveplus = 1.0/CLHEP::eplus;
+
 const G4double G4EmCorrections::ZD[11] = 
     {0., 0., 0., 1.72, 2.09, 2.48, 2.82, 3.16, 3.53, 3.84, 4.15};
 const G4double G4EmCorrections::UK[20] = {1.9999, 2.0134, 2.0258, 2.0478, 2.0662,
@@ -164,6 +165,35 @@ G4EmCorrections::~G4EmCorrections()
   }
 }
 
+void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
+				      const G4Material* mat,
+				      G4double kineticEnergy)
+{
+  if(kineticEnergy != kinEnergy || p != particle) {
+    particle = p;
+    kinEnergy = kineticEnergy;
+    mass  = p->GetPDGMass();
+    tau   = kineticEnergy / mass;
+    gamma = 1.0 + tau;
+    bg2   = tau * (tau+2.0);
+    beta2 = bg2/(gamma*gamma);
+    beta  = std::sqrt(beta2);
+    ba2   = beta2/alpha2;
+    G4double ratio = CLHEP::electron_mass_c2/mass;
+    tmax  = 2.0*CLHEP::electron_mass_c2*bg2 
+      /(1. + 2.0*gamma*ratio + ratio*ratio);
+    charge  = p->GetPDGCharge()*inveplus;
+    if(charge > 1.5) { charge = effCharge.EffectiveCharge(p,mat,kinEnergy); }
+    q2 = charge*charge;
+  }
+  if(mat != material) {
+    material = mat;
+    theElementVector = material->GetElementVector();
+    atomDensity  = material->GetAtomicNumDensityVector(); 
+    numberOfElements = material->GetNumberOfElements();
+  }
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
@@ -205,18 +235,8 @@ G4double G4EmCorrections::IonBarkasCorrection(const G4ParticleDefinition* p,
                                               const G4Material* mat,
                                               G4double e)
 {
-  // . Z^3 Barkas effect in the stopping power of matter for charged particles
-  //   J.C Ashley and R.H.Ritchie
-  //   Physical review B Vol.5 No.7 1 April 1972 pagg. 2393-2397
-  //   and ICRU49 report
-  //   valid for kineticEnergy < 0.5 MeV
-
-  SetupKinematics(p, mat, e);
-  G4double res = 0.0;
-  if(tau > 0.0) 
-    res = 2.0*BarkasCorrection(p, mat, e)*
+  return 2.0*BarkasCorrection(p, mat, e)*
       material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
-  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -336,7 +356,7 @@ G4double G4EmCorrections:: KShellCorrection(const G4ParticleDefinition* p,
   for (G4int i = 0; i<numberOfElements; ++i) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
-    G4int   iz = G4lrint(Z);
+    G4int   iz = (*theElementVector)[i]->GetZasInt();
     G4double f = 1.0;
     G4double Z2= (Z-0.3)*(Z-0.3);
     if(1 == iz) {
@@ -365,7 +385,7 @@ G4double G4EmCorrections:: LShellCorrection(const G4ParticleDefinition* p,
   for (G4int i = 0; i<numberOfElements; ++i) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
-    G4int   iz = G4lrint(Z);
+    G4int   iz = (*theElementVector)[i]->GetZasInt();
     if(2 < iz) {
       G4double Zeff = Z - ZD[10];
       if(iz < 10) { Zeff = Z - ZD[iz]; }
@@ -538,7 +558,7 @@ G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
     G4double res = 0.0;
     G4double res0 = 0.0;
     G4double Z = (*theElementVector)[i]->GetZ();
-    G4int   iz = G4lrint(Z);
+    G4int   iz = (*theElementVector)[i]->GetZasInt();
     G4double Z2= (Z-0.3)*(Z-0.3);
     G4double f = 1.0;
     if(1 == iz) {
@@ -669,7 +689,7 @@ G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
   for (G4int i = 0; i<numberOfElements; ++i) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
-    G4int iz = G4lrint(Z);
+    G4int iz = (*theElementVector)[i]->GetZasInt();
     if(iz == 47) {
       BarkasTerm += atomDensity[i]*0.006812*G4Exp(-G4Log(beta)*0.9);
     } else if(iz >= 64) {

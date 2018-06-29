@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc 101105 2016-11-07 08:09:26Z gcosmo $
+// $Id: G4OpenGLViewerMessenger.cc 109510 2018-04-26 07:15:57Z gcosmo $
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
@@ -122,7 +122,8 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandDisplayHeadTime =
     new G4UIcommand("/vis/ogl/set/displayHeadTime", this);
   fpCommandDisplayHeadTime->SetGuidance
-    ("Display head time of range in 2D text.");
+  ("DEPRECATED. Use /vis/viewer/set/timeWindow/displayHeadTime."
+   "\n  Display head time of range in 2D text.");
   parameter = new G4UIparameter ("displayHeadTime", 'b', omitable = false);
   parameter->SetDefaultValue(false);
   fpCommandDisplayHeadTime->SetParameter(parameter);
@@ -155,7 +156,8 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandDisplayLightFront =
     new G4UIcommand("/vis/ogl/set/displayLightFront", this);
   fpCommandDisplayLightFront->SetGuidance
-    ("Display the light front at head time.");
+    ("DEPRECATED. Use /vis/viewer/set/timeWindow/displayLightFront."
+     "\n  Display the light front at head time.");
   fpCommandDisplayLightFront->SetGuidance
     ("Tip: The trajectories can appear of jump ahead of the light front"
      "\nbecause their time range overlaps the viewer's time range.  To"
@@ -209,9 +211,11 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
 
   fpCommandEndTime =
     new G4UIcommand("/vis/ogl/set/endTime", this);
-  fpCommandEndTime->SetGuidance("Set end and range of track time.");
+  fpCommandEndTime->SetGuidance
+    ("DEPRECATED. Use /vis/viewer/set/timeWindow/endTime."
+     "\n  Set end and range of time window.");
   parameter = new G4UIparameter ("end-time", 'd', omitable = false);
-  parameter->SetDefaultValue(DBL_MAX);
+  parameter->SetDefaultValue(G4VisAttributes::fVeryLongTime);
   fpCommandEndTime->SetParameter(parameter);
   parameter = new G4UIparameter ("end-time-unit", 's', omitable = false);
   parameter->SetDefaultValue("ns");
@@ -234,7 +238,8 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
 
   fpCommandFade = new G4UIcmdWithADouble("/vis/ogl/set/fade", this);
   fpCommandFade->SetGuidance
-    ("0: no fade; 1: maximum fade with time within range.");
+    ("DEPRECATED. Use /vis/viewer/set/timeWindow/fadeFactor."
+    "\n  0: no fade; 1: maximum fade with time within range.");
   fpCommandFade->SetParameterName("fadefactor", omitable = false);
   fpCommandFade->SetRange("fadefactor>=0.&&fadefactor<=1.");
   fpCommandFade->SetDefaultValue(0.);
@@ -284,9 +289,11 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
 
   fpCommandStartTime =
     new G4UIcommand("/vis/ogl/set/startTime", this);
-  fpCommandStartTime->SetGuidance("Set start and range of track time.");
+  fpCommandStartTime->SetGuidance
+    ("DEPRECATED. Use /vis/viewer/set/timeWindow/startTime."
+     "\n  Set start and range of time window.");
   parameter = new G4UIparameter ("start-time", 'd', omitable = false);
-  parameter->SetDefaultValue(-DBL_MAX);
+  parameter->SetDefaultValue(-G4VisAttributes::fVeryLongTime);
   fpCommandStartTime->SetParameter(parameter);
   parameter = new G4UIparameter ("start-time-unit", 's', omitable = false);
   parameter->SetDefaultValue("ns");
@@ -500,13 +507,16 @@ void G4OpenGLViewerMessenger::SetNewValue
       std::istringstream iss(newValue);
       iss >> display >> screenX >> screenY
 	  >> screenSize >> red >> green >> blue;
-      pOGLSViewer->fDisplayHeadTime = command->ConvertToBool(display);
-      pOGLSViewer->fDisplayHeadTimeX = screenX;
-      pOGLSViewer->fDisplayHeadTimeY = screenY;
-      pOGLSViewer->fDisplayHeadTimeSize = screenSize;
-      pOGLSViewer->fDisplayHeadTimeRed = red;
-      pOGLSViewer->fDisplayHeadTimeGreen = green;
-      pOGLSViewer->fDisplayHeadTimeBlue = blue;
+      pOGLSViewer->fVP.SetDisplayHeadTime(command->ConvertToBool(display));
+      pOGLSViewer->fVP.SetDisplayHeadTimeX(screenX);
+      pOGLSViewer->fVP.SetDisplayHeadTimeY(screenY);
+      pOGLSViewer->fVP.SetDisplayHeadTimeSize(screenSize);
+      pOGLSViewer->fVP.SetDisplayHeadTimeRed(red);
+      pOGLSViewer->fVP.SetDisplayHeadTimeGreen(green);
+      pOGLSViewer->fVP.SetDisplayHeadTimeBlue(blue);
+      G4cout
+      << "DEPRECATED. Use /vis/viewer/set/timeWindow/displayHeadTime."
+      << G4endl;
       return;
     }
 
@@ -519,18 +529,21 @@ void G4OpenGLViewerMessenger::SetNewValue
 	  >> originX >> originY >> originZ >> unitS
 	  >> originT >> unitT
 	  >> red >> green >> blue;
-      pOGLSViewer->fDisplayLightFront = command->ConvertToBool(display);
-      pOGLSViewer->fDisplayLightFrontX =
-	command->ConvertToDimensionedDouble(G4String(originX + ' ' + unitS));
-      pOGLSViewer->fDisplayLightFrontY =
-	command->ConvertToDimensionedDouble(G4String(originY + ' ' + unitS));
-      pOGLSViewer->fDisplayLightFrontZ =
-	command->ConvertToDimensionedDouble(G4String(originZ + ' ' + unitS));
-      pOGLSViewer->fDisplayLightFrontT =
-	command->ConvertToDimensionedDouble(G4String(originT + ' ' + unitT));
-      pOGLSViewer->fDisplayLightFrontRed = red;
-      pOGLSViewer->fDisplayLightFrontGreen = green;
-      pOGLSViewer->fDisplayLightFrontBlue = blue;
+      pOGLSViewer->fVP.SetDisplayLightFront(command->ConvertToBool(display));
+      pOGLSViewer->fVP.SetDisplayLightFrontX
+      (command->ConvertToDimensionedDouble(G4String(originX + ' ' + unitS)));
+      pOGLSViewer->fVP.SetDisplayLightFrontY
+      (command->ConvertToDimensionedDouble(G4String(originY + ' ' + unitS)));
+      pOGLSViewer->fVP.SetDisplayLightFrontZ
+      (command->ConvertToDimensionedDouble(G4String(originZ + ' ' + unitS)));
+      pOGLSViewer->fVP.SetDisplayLightFrontT
+      (command->ConvertToDimensionedDouble(G4String(originT + ' ' + unitT)));
+      pOGLSViewer->fVP.SetDisplayLightFrontRed(red);
+      pOGLSViewer->fVP.SetDisplayLightFrontGreen(green);
+      pOGLSViewer->fVP.SetDisplayLightFrontBlue(blue);
+      G4cout
+      << "DEPRECATED. Use /vis/viewer/set/timeWindow/displayLightFront."
+      << G4endl;
       return;
     }
 
@@ -541,23 +554,31 @@ void G4OpenGLViewerMessenger::SetNewValue
       std::istringstream iss(newValue);
       iss >> end_time_string >> end_time_unit
 	  >> time_range_string >> time_range_unit;
-      pOGLSViewer->fEndTime = command->ConvertToDimensionedDouble
-	(G4String(end_time_string + ' ' + end_time_unit));
+      pOGLSViewer->fVP.SetEndTime
+      (command->ConvertToDimensionedDouble
+       (G4String(end_time_string + ' ' + end_time_unit)));
       G4double timeRange = command->ConvertToDimensionedDouble
 	(G4String(time_range_string + ' ' + time_range_unit));
       if (timeRange > 0.) {
-	pOGLSViewer->fStartTime = pOGLSViewer->fEndTime - timeRange;
+	pOGLSViewer->fVP.SetStartTime
+        (pOGLSViewer->fVP.GetEndTime() - timeRange);
       }
       if (pOGLSViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      G4cout
+      << "DEPRECATED. Use /vis/viewer/set/timeWindow/endTime."
+      << G4endl;
       return;
     }
 
   if (command == fpCommandFade)
     {
-      pOGLSViewer->fFadeFactor = command->ConvertToDouble(newValue);
+      pOGLSViewer->fVP.SetFadeFactor(command->ConvertToDouble(newValue));
       if (pOGLSViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      G4cout
+      << "DEPRECATED. Use /vis/viewer/set/timeWindow/fadeFactor."
+      << G4endl;
       return;
     }
 
@@ -568,15 +589,20 @@ void G4OpenGLViewerMessenger::SetNewValue
       std::istringstream iss(newValue);
       iss >> start_time_string >> start_time_unit
 	  >> time_range_string >> time_range_unit;
-      pOGLSViewer->fStartTime = command->ConvertToDimensionedDouble
-	(G4String(start_time_string + ' ' + start_time_unit));
+      pOGLSViewer->fVP.SetStartTime
+      (command->ConvertToDimensionedDouble
+       (G4String(start_time_string + ' ' + start_time_unit)));
       G4double timeRange = command->ConvertToDimensionedDouble
 	(G4String(time_range_string + ' ' + time_range_unit));
       if (timeRange > 0.) {
-	pOGLSViewer->fEndTime = pOGLSViewer->fStartTime + timeRange;
+	pOGLSViewer->fVP.SetEndTime
+        (pOGLSViewer->fVP.GetStartTime() + timeRange);
       }
       if (pOGLSViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      G4cout
+      << "DEPRECATED. Use /vis/viewer/set/timeWindow/startTime."
+      << G4endl;
       return;
     }
 

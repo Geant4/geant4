@@ -1,4 +1,4 @@
-$Id: History 108544 2018-02-16 09:47:30Z gcosmo $
+$Id: History 110480 2018-05-25 07:25:18Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,40 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14th December 2017  John Allison  (opengl-V10-03-05)
+24 May 2015  John Allison (opengl-V10-04-06)
+- G4OpenGLStoredQtSceneHandler.cc, G4OpenGLQtViewer.cc:
+  o Fix gcc-8 warnings.
+- G4OpenGLStoredSceneHandler.cc: Cosmetic.
+
+25 April 2015  John Allison (opengl-V10-04-05)
+- G4OpenGLStoredViewer::CompareForKernelVisit,
+  G4OpenGLStoredQtViewer::CompareForKernelVisit:
+  o Implement comparison for "colour by density".
+
+24 April 2017  John Allison  (opengl-V10-04-04)
+- Migrate to greps-V10-04-04.
+
+13 February 2018 Jonathan Madsen (opengl-V10-04-03)
+- Replaced explicit usage of G4Mutex locking/unlocking with
+  G4AutoLock pointers initialized with std::defer_lock as this
+  enables one to avoid any deadlock or non-locked condition_variable
+  waits by using G4AutoLock::owns_mutex()
+
+12 February 2018 Jonathan Madsen (opengl-V10-04-02)
+- Updated G4CONDITIONWAIT(...) to new C++11 requirements
+- Found probable bug in G4OpenGLQtViewer with condition wait -- not locked
+  prior to entering condition, which is an undefined behavior. Adapted
+  G4AutoLock to accept std::defer_lock_t (doesn't lock upon construction)
+  to prevent deadlock that occurs when the mutex is locked
+
+8th January 2017  John Allison  (opengl-V10-04-01)
+- Merged timemovebranch:
+  o Moved time window parameters from G4OpenGLStoredViewer to
+    G4ViewParameters. Now one can interpolate time window parameters (using
+    /vis/viewer/interpolate) and make a movie of particles moving through time.
+  o See vis-V10-04-00 History for more details.
+
+14th December 2017  John Allison  (opengl-V10-04-00)
 - G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal:
   o Remove glDrawBuffer(GL_FRONT), which seems to cause problems
     for the case of display list memory being exceeded.

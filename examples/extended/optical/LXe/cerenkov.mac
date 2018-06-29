@@ -6,7 +6,14 @@
 ##
 #################
 
-/control/execute defaults.mac
+/run/initialize
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/LXe/eventVerbose 0
+
+/LXe/detector/defaults
+/LXe/oneStepPrimaries false
 
 #This currently causes the program to crash due to a bug in geant4
 #Uncomment it once that bug has been fixed. Until then, to use this,
@@ -17,13 +24,12 @@
 
 /LXe/detector/nx 20
 /LXe/detector/ny 20
-/LXe/detector/nz 0
+/LXe/detector/nz 1
 /LXe/detector/dimensions 60 60 25 cm
 /LXe/detector/housingThickness 0.0635 cm
 /LXe/detector/pmtRadius 1.5 cm
 /LXe/detector/volumes/sphere 0
 /LXe/detector/reflectivity 0.0
-/LXe/detector/update
 
 /gun/particle mu+
 /gun/energy 200 MeV
@@ -33,4 +39,14 @@
 /LXe/oneStepPrimaries true
 
 #reset from a random seed that shows a good cone
-/random/resetEngineFrom random/goodCerenkov.rndm
+#/random/resetEngineFrom random/goodCerenkov.rndm
+
+/analysis/h1/set 1 100 -1 50 
+/analysis/h1/set 2 100 -1 50 
+/analysis/h1/set 4 100 -1 200
+/analysis/h1/set 5 100 -1 200
+/analysis/h1/set 6 100 -1 50 
+/analysis/h1/set 7 100 0 20 MeV
+
+/run/printProgress 1000
+/run/beamOn 100000

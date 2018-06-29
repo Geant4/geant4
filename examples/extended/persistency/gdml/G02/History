@@ -1,4 +1,4 @@
-$Id: History 104689 2017-06-12 12:17:25Z gcosmo $
+$Id: History 110383 2018-05-22 07:48:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 19th, 2018  Gabriele Cosmo G02-V10-04-00
+- G02RunAction.cc: Removed vis command.
 
 June 12th, 2017  Gabriele Cosmo G02-V10-03-01
 - Added commented block in G02DetectorConstruction to show how to limit

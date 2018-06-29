@@ -101,10 +101,18 @@ void HistoManager::Book()
                  nbins, vmin, vmax);
   analysis->SetH1Activation(id, false);  
 
-  id = analysis->CreateH1("H16","Decay emission spectrum (MeV)",
+  id = analysis->CreateH1("H16","Decay emission spectrum (0 - 10 MeV)",
                  nbins, vmin, vmax);
   analysis->SetH1Activation(id, false);  
-    
+  
+  id = analysis->CreateH1("H17","Decay emission spectrum (0 - 1 MeV)",
+                 nbins, vmin, vmax);
+  analysis->SetH1Activation(id, false);
+
+  id = analysis->CreateH1("H18","Decay emission spectrum (0 - 0.1 MeV)",
+                 nbins, vmin, vmax);
+  analysis->SetH1Activation(id, false);
+  
   // nTuples
   //
   ////analysis->SetNtupleDirectoryName("ntuple");

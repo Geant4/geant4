@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -239,8 +239,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -483,14 +483,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008233404568, 2262190991329242458, 2266470399991071809, 1976726662926872232, 245458862506414172, 1955974201201518530, 2155248512522080758, 604170912935414061, 1116171330120743511, 1861018313684488333, 1296715403254578286, 1549011045957234151, 370819759640195970, 2230139271784837643} counter= 17sumtot= 1977567618660788324
+---------------------------------------
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.05s Real=0.05s Sys=0s
+  User=0.050000s Real=0.046529s Sys=0.000000s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -506,16 +507,17 @@ Run Summary
 
  Verification from G4EmCalculator. 
 
- transport mean free path :	3.3438 mm 
+ transport mean free path :	8.3595 cm 
  range from restrict dE/dx:	2.7529 cm 
  ---> effective facRange  :	1
 
  compute theta0 from Highland :	620.23 mrad  (35.536 deg)
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008233404568, 2262190991329242458, 2266470399991071809, 1976726662926872232, 245458862506414172, 1955974201201518530, 2155248512522080758, 604170912935414061, 1116171330120743511, 1861018313684488333, 1296715403254578286, 1549011045957234151, 370819759640195970, 2230139271784837643} counter= 17sumtot= 1977567618660788324
+---------------------------------------
 #
 /gun/energy 100 keV
 /run/beamOn 10000
@@ -553,39 +555,41 @@ Index : 1     used in the geometry : Yes
 
 ### Run 1 starts.
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008233404568, 2262190991329242458, 2266470399991071809, 1976726662926872232, 245458862506414172, 1955974201201518530, 2155248512522080758, 604170912935414061, 1116171330120743511, 1861018313684488333, 1296715403254578286, 1549011045957234151, 370819759640195970, 2230139271784837643} counter= 17sumtot= 1977567618660788324
+---------------------------------------
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.13s Real=0.19s Sys=0s
+  User=0.090000s Real=0.092069s Sys=0.000000s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	6.31 um  +- 468.8 nm 
- geomPathLength :	6.1846 um  +- 450.2 nm 
- lateralDisplac :	940.52 nm  +- 264.27 nm 
- Psi            :	150.31 mrad +- 38.61 mrad  (8.6123 deg +- 2.2122 deg)
+ truePathLength :	6.2917 um  +- 475.13 nm 
+ geomPathLength :	6.167 um  +- 456.34 nm 
+ lateralDisplac :	900.24 nm  +- 215.58 nm 
+ Psi            :	144.38 mrad +- 30.394 mrad  (8.2722 deg +- 1.7415 deg)
 
- Theta_plane    :	247.48 mrad  (14.18 deg)
- phi correlation:	0.078588 +- 0.13471  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	237.39 mrad  (13.601 deg)
+ phi correlation:	0.1687 +- 0.14409  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
- transport mean free path :	1.5763 cm 
+ transport mean free path :	157.63 um 
  range from restrict dE/dx:	143.25 um 
- ---> effective facRange  :	0.00040031
+ ---> effective facRange  :	0.039915
 
- compute theta0 from Highland :	180.76 mrad  (10.357 deg)
+ compute theta0 from Highland :	180.47 mrad  (10.34 deg)
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1197317911, 1555409489
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={1878980021025824702, 1628414055095832785, 1423143082747383991, 183667810127059502, 873516494016093427, 2258436403847706357, 1766924342952509880, 2241182633882843117, 2300825244934056284, 1830781790629245517, 1820847226663247493, 1777236837741601357, 2188299593755602463, 457984591036031706, 1928140369650879678, 2142169973060122804, 1229191732611238510} counter= 13sumtot= 259626093212952161
+---------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

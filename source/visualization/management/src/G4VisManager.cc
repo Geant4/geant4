@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc 106957 2017-10-31 08:32:27Z gcosmo $
+// $Id: G4VisManager.cc 110513 2018-05-28 07:37:38Z gcosmo $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -479,6 +479,7 @@ void G4VisManager::RegisterMessengers () {
   // Compound commands...
   RegisterMessenger(new G4VisCommandDrawTree);
   RegisterMessenger(new G4VisCommandDrawView);
+  RegisterMessenger(new G4VisCommandDrawLogicalVolume);
   RegisterMessenger(new G4VisCommandDrawVolume);
   RegisterMessenger(new G4VisCommandOpen);
   RegisterMessenger(new G4VisCommandSpecify);
@@ -588,6 +589,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandViewerClearTransients);
   RegisterMessenger(new G4VisCommandViewerClearVisAttributesModifiers);
   RegisterMessenger(new G4VisCommandViewerClone);
+  RegisterMessenger(new G4VisCommandViewerColourByDensity);
   RegisterMessenger(new G4VisCommandViewerCopyViewFrom);
   RegisterMessenger(new G4VisCommandViewerCreate);
   RegisterMessenger(new G4VisCommandViewerDolly);

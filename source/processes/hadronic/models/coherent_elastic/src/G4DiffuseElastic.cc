@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc 93440 2015-10-22 14:11:41Z gcosmo $
+// $Id: G4DiffuseElastic.cc 108978 2018-03-20 13:10:24Z gcosmo $
 //
 //
 // Physics model class G4DiffuseElastic 
@@ -75,7 +75,7 @@ G4DiffuseElastic::G4DiffuseElastic()
   : G4HadronElastic("DiffuseElastic"), fParticle(0)
 {
   SetMinEnergy( 0.01*MeV ); // 0.01*GeV );
-  SetMaxEnergy( 1.*TeV );
+  SetMaxEnergy( 100.*TeV ); // 1.*TeV
 
   verboseLevel         = 0;
   lowEnergyRecoilLimit = 100.*keV;  
@@ -91,7 +91,8 @@ G4DiffuseElastic::G4DiffuseElastic()
   thePionPlus  = G4PionPlus::PionPlus();
   thePionMinus = G4PionMinus::PionMinus();
 
-  fEnergyBin = 200; 
+  fEnergyBin = 250;  // Increased from 200 to 250 to keep the same bin size when extending
+                     // the upper limit of validity of the model from 1 TeV to 100 TeV. 
   fAngleBin  = 200;
 
   fEnergyVector =  new G4PhysicsLogVector( theMinEnergy, theMaxEnergy, fEnergyBin );
@@ -1074,7 +1075,7 @@ void G4DiffuseElastic::BuildAngleTable()
       sum += delta;
       
       angleVector->PutValue( j-1 , alpha1, sum ); // alpha2
-      // G4cout<<"j-1 = "<<j-1<<"; alpha2 = "<<alpha2<<"; sum = "<<sum<<G4endl;
+      //      G4cout<<"j-1 = "<<j-1<<"; alpha2 = "<<alpha2 << " delta "<< delta <<"; sum = "<<sum<<G4endl;
     }
     fAngleTable->insertAt(i, angleVector);
 

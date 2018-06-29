@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,7 +12,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
- creating G4RunManagerKernel 0xe07600
+ creating G4RunManagerKernel 0x192e410
 
 The materials defined are : 
 
@@ -83,23 +83,23 @@ Current application state is PreInit
 Warning : Geant4 kernel is not Init state : Assuming Init state.
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0x1007770G4ErrorPhysicsList:: particle process manager e+ = 0x1009c70
-0x1007590G4ErrorPhysicsList:: particle process manager e- = 0x100b700
-0x1007440G4ErrorPhysicsList:: particle process manager gamma = 0x100b930
-0x10089a0G4ErrorPhysicsList:: particle process manager geantino = 0x100bb80
-0x1007950G4ErrorPhysicsList:: particle process manager mu+ = 0x100bdd0
-0x1007be0G4ErrorPhysicsList:: particle process manager mu- = 0x100c020
-0x1007fb0G4ErrorPhysicsList:: particle process manager pi+ = 0x100c270
-0x1008390G4ErrorPhysicsList:: particle process manager pi- = 0x100c4c0
-0x1008770G4ErrorPhysicsList:: particle process manager proton = 0x100c710
+0x1b2e290G4ErrorPhysicsList:: particle process manager e+ = 0x1b308e0
+0x1b2e0b0G4ErrorPhysicsList:: particle process manager e- = 0x1b32370
+0x1b2df60G4ErrorPhysicsList:: particle process manager gamma = 0x1b325a0
+0x1b2f610G4ErrorPhysicsList:: particle process manager geantino = 0x1b327f0
+0x1b2e470G4ErrorPhysicsList:: particle process manager mu+ = 0x1b32a40
+0x1b2e750G4ErrorPhysicsList:: particle process manager mu- = 0x1b32c90
+0x1b2eb70G4ErrorPhysicsList:: particle process manager pi+ = 0x1b32ee0
+0x1b2efc0G4ErrorPhysicsList:: particle process manager pi- = 0x1b33130
+0x1b2f3e0G4ErrorPhysicsList:: particle process manager proton = 0x1b33380
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1

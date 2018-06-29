@@ -1,4 +1,4 @@
-$Id: History 110113 2018-05-15 11:53:10Z gcosmo $
+$Id: History 109509 2018-04-26 07:07:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-25.04.2018 V.Ivanchenko, emlowen-V10-03-21
+25.04.2018 V.Ivanchenko, emlowen-V10-04-01
 - G4LivermorePhotoElectricModel - fixed double deletion of static members
     happens when models defined per region (problem #2052)
 
-19.12.2017 G.Cosmo, emlowen-V10-03-20
+19.12.2017 G.Cosmo, emlowen-V10-04-00
 - Fixed self-consistency in G4ecpssrFormFactorMixsModel header (missing #include).
   Thanks to Raphael Isemann for reporting this.
 

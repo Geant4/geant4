@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.cc 95713 2016-02-22 08:08:38Z gcosmo $
+// $Id: PrimaryGeneratorAction.cc 109102 2018-03-27 07:38:33Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -73,10 +73,8 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4double z = fParam->GetPositionZ();
-  if(0 == anEvent->GetEventID()) {
-    fParam->SetBeamParticle(fParticleGun->GetParticleDefinition());
-    fParam->SetBeamEnergy(fParticleGun->GetParticleEnergy());
-  }
+  fParam->SetBeamParticle(fParticleGun->GetParticleDefinition());
+  fParam->SetBeamEnergy(fParticleGun->GetParticleEnergy());
   fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,z));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

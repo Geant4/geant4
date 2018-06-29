@@ -11,7 +11,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+08-05-18 B. Morgan (exgps-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+13-04-18 mma (exgps-V10-04-01)
+- exgps.cc : set visualisation only in interactive mode
+
+27-03-18 mma (exgps-V10-04-00)
+- exgps.cc : remove G4UI_USE and G4VIS_USE
+
 05-07-16 I. Hrivnacova  (exgps-V10-02-00)
 - Fixes for Doxygen documentation
 

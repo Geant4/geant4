@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
-// Jose Luis Rodriguez, CEA (translation from ABLA07 and contact person)
-// Pekka Kaitaniemi, HIP (translation)
-// Christelle Schmidt, IPNL (fission code)
+// Jose Luis Rodriguez, GSI (translation from ABLA07 and contact person)
+// Pekka Kaitaniemi, HIP (initial translation of ablav3p)
+// Aleksandra Kelic, GSI (ABLA07 code)
 // Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
+
 #define ABLAXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -44,8 +45,6 @@
 #include "G4IonTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
-//#include "G4INCLParticleTable.hh"
-//#include "G4INCLGlobals.hh"
 #include <iostream>
 #include <cmath>
 
@@ -115,10 +114,9 @@ G4ParticleDefinition *G4AblaInterface::toG4ParticleDefinition(G4int A, G4int Z) 
   else if(A == 3 && Z == 1)  return G4Triton::Triton();
   else if(A == 3 && Z == 2)  return G4He3::He3();
   else if(A == 4 && Z == 2)  return G4Alpha::Alpha();
-  else if(A > 0 && Z > 0 && A >= Z) { // Returns ground state ion definition
+  else if(A > 0 && Z > 0 && A > Z) { // Returns ground state ion definition. No hyper-nucleus allows in Geant4
     return G4IonTable::GetIonTable()->GetIon(Z, A, 0);
   } else { // Error, unrecognized particle
-    G4cout << "Can't convert particle with A=" << A << ", Z=" << Z << " to G4ParticleDefinition, trouble ahead" << G4endl;
     return 0;
   }
 }
@@ -127,11 +125,11 @@ G4ReactionProduct *G4AblaInterface::toG4Particle(G4int A, G4int Z,
 						 G4double kinE,
 						 G4double px,
                                                  G4double py, G4double pz) const {
-  G4ParticleDefinition *def = toG4ParticleDefinition(A, Z);
+  const G4ParticleDefinition *def = toG4ParticleDefinition(A, Z);
   if(def == 0) { // Check if we have a valid particle definition
     return 0;
   }
-  const double energy = kinE * MeV;
+  const G4double energy = kinE * MeV;
   const G4ThreeVector momentum(px, py, pz);
   const G4ThreeVector momentumDirection = momentum.unit();
   G4DynamicParticle p(def, momentumDirection, energy);
@@ -145,12 +143,17 @@ void G4AblaInterface::ModelDescription(std::ostream& outFile) const {
 }
 
 void G4AblaInterface::DeExciteModelDescription(std::ostream& outFile) const {
-   outFile << "ABLA++ is a statistical model for nuclear de-excitation. It simulates\n"
+   outFile 
+     << "ABLA++ is a statistical model for nuclear de-excitation. It simulates\n"
      << "evaporation of neutrons, protons and alpha particles, as well as fission\n"
      << "where applicable. The code included in Geant4 is a C++ translation of the\n"
      << "original Fortran code. More details about the physics are available in the\n"
      << "the Geant4 Physics Reference Manual and in the reference articles.\n\n"
      << "Reference:\n"
-     << "A. Kelic, M. V. Ricciardi, and K. H. Schmidt, in Proceedings of Joint ICTP-IAEA Advanced Workshop on Model Codes for Spallation Reactions, ICTP Trieste, Italy, 4–8 February 2008, edited by D. Filges, S. Leray, Y. Yariv, A. Mengoni, A. Stanculescu, and G. Mank (IAEA INDC(NDS)-530, Vienna, 2008), pp. 181–221.\n\n"; }
+     << "A. Kelic, M. V. Ricciardi, and K. H. Schmidt, in Proceedings of Joint\n"
+     << "ICTP-IAEA Advanced Workshop on Model Codes for Spallation Reactions,\n"
+     << "ICTP Trieste, Italy, 4–8 February 2008, edited by D. Filges, S. Leray, Y. Yariv,\n"
+     << "A. Mengoni, A. Stanculescu, and G. Mank (IAEA INDC(NDS)-530, Vienna, 2008), pp. 181–221.\n\n"; 
+}
 
 #endif // ABLAXX_IN_GEANT4_MODE

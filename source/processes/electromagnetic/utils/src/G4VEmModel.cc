@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc 106714 2017-10-20 09:38:06Z gcosmo $
+// $Id: G4VEmModel.cc 110572 2018-05-30 13:08:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,8 +63,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4double G4VEmModel::inveplus = 1.0/CLHEP::eplus;
-
 G4VEmModel::G4VEmModel(const G4String& nam):
   flucModel(nullptr),anglModel(nullptr), name(nam), lowLimit(0.1*CLHEP::keV), 
   highLimit(100.0*CLHEP::TeV),eMinActive(0.0),eMaxActive(DBL_MAX),
@@ -72,7 +70,7 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   theLPMflag(false),flagDeexcitation(false),flagForceBuildTable(false),
   isMaster(true),fElementData(nullptr),pParticleChange(nullptr),
   xSectionTable(nullptr),theDensityFactor(nullptr),theDensityIdx(nullptr),
-  lossFlucFlag(true),fCurrentCouple(nullptr),
+  lossFlucFlag(true),inveplus(1.0/CLHEP::eplus),fCurrentCouple(nullptr),
   fCurrentElement(nullptr),fCurrentIsotope(nullptr),
   fTripletModel(nullptr),nsec(5) 
 {
@@ -94,10 +92,8 @@ G4VEmModel::G4VEmModel(const G4String& nam):
 G4VEmModel::~G4VEmModel()
 {
   if(localElmSelectors) { 
-    if(nSelectors > 0) {
-      for(G4int i=0; i<nSelectors; ++i) { 
-        delete (*elmSelectors)[i]; 
-      }
+    for(G4int i=0; i<nSelectors; ++i) { 
+      delete (*elmSelectors)[i]; 
     }
     delete elmSelectors; 
   }
@@ -229,16 +225,11 @@ void G4VEmModel::InitialiseForMaterial(const G4ParticleDefinition* part,
                                        const G4Material* material)
 {
   if(material) {
-    const G4ElementVector* theElementVector = material->GetElementVector();
-    G4int n = material->GetNumberOfElements();
-    for(G4int i=0; i<n; ++i) {
-      G4int Z = ((*theElementVector)[i])->GetZasInt();
+    size_t n = material->GetNumberOfElements();
+    for(size_t i=0; i<n; ++i) {
+      G4int Z = material->GetElement(i)->GetZasInt();
       InitialiseForElement(part, Z);
     }
-  } else {
-    //G4cout << "G4VEmModel::InitialiseForMaterial for " << GetName();
-    //if(part) { G4cout << " and  " << part->GetParticleName(); }
-    //G4cout << " with no material" << G4endl;
   }
 }
 
@@ -266,7 +257,6 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
 {
   SetupForMaterial(p, material, ekin);
   G4double cross = 0.0;
-  const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector = 
     material->GetVecNbOfAtomsPerVolume();
   G4int nelm = material->GetNumberOfElements(); 
@@ -276,7 +266,7 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
   }
   for (G4int i=0; i<nelm; ++i) {
     cross += theAtomNumDensityVector[i]*
-      ComputeCrossSectionPerAtom(p,(*theElementVector)[i],ekin,emin,emax);
+      ComputeCrossSectionPerAtom(p,material->GetElement(i),ekin,emin,emax);
     xsec[i] = cross;
   }
   return cross;
@@ -304,20 +294,62 @@ const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
                                               G4double tcut,
                                               G4double tmax)
 {
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int n = material->GetNumberOfElements() - 1;
-  fCurrentElement = (*theElementVector)[n];
-  if (n > 0) {
+  size_t n = material->GetNumberOfElements();
+  fCurrentElement = material->GetElement(0);
+  if (n > 1) {
     G4double x = G4UniformRand()*
       G4VEmModel::CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
-    for(G4int i=0; i<n; ++i) {
+    for(size_t i=0; i<n; ++i) {
       if (x <= xsec[i]) {
-        fCurrentElement = (*theElementVector)[i];
+        fCurrentElement = material->GetElement(i);
         break;
       }
     }
   }
   return fCurrentElement;
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4int G4VEmModel::SelectRandomAtomNumber(const G4Material* mat)
+{
+  // this algorith assumes that cross section is proportional to
+  // number electrons multiplied by number of atoms
+  size_t nn = mat->GetNumberOfElements();
+  fCurrentElement = mat->GetElement(0);
+  if(1 < nn) {
+    const G4double* at = mat->GetVecNbOfAtomsPerVolume();
+    G4double tot = mat->GetTotNbOfAtomsPerVolume()*G4UniformRand();
+    for(size_t i=0; i<nn; ++i) {
+      tot -= at[i];
+      if(tot <= 0.0) { 
+	fCurrentElement = mat->GetElement(i);
+	break; 
+      }
+    }
+  }
+  return fCurrentElement->GetZasInt();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
+{
+  SetCurrentElement(elm);
+  size_t ni = elm->GetNumberOfIsotopes();
+  fCurrentIsotope = elm->GetIsotope(0);
+  size_t idx = 0;
+  if(ni > 1) {
+    const G4double* ab = elm->GetRelativeAbundanceVector();
+    G4double x = G4UniformRand();
+    for(; idx<ni; ++idx) {
+      x -= ab[idx];
+      if (x <= 0.0) { 
+	fCurrentIsotope = elm->GetIsotope(idx);
+	break; 
+      }
+    }
+  }
+  return fCurrentIsotope->GetN();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.hh 97392 2016-06-02 10:10:32Z gcosmo $
+// $Id: G4MuBetheBlochModel.hh 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -74,7 +74,7 @@ public:
   explicit G4MuBetheBlochModel(const G4ParticleDefinition* p = nullptr,
                                const G4String& nam = "MuBetheBloch");
 
-  virtual ~G4MuBetheBlochModel();
+  ~G4MuBetheBlochModel() = default;
 
   virtual void Initialise(const G4ParticleDefinition*, 
                           const G4DataVector&) override;
@@ -136,8 +136,6 @@ private:
   G4double massSquare;
   G4double ratio;
   G4double twoln10;
-  //G4double bg2lim;
-  //G4double taulim;
   G4double alphaprime;
   static G4double xgi[8],wgi[8];
 };

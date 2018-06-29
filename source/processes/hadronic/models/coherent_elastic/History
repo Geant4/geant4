@@ -14,6 +14,30 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 Mar 2018 - A.Ribon              (hadr-cohe-V10-04-01)
+--------------------------------------------------------
+- Set to 100.0 TeV (instead of 1 TeV) the upper limit of applicability
+  for the model G4DiffuseElastic and G4DiffuseElasticV2
+  (the number of equally-sized logarithmic energy bins has been increased
+   from 200 to 250 to keep the same bin size (0.04) ).
+  The model has been validated with experimental data up to 300 GeV,
+  but it should not give meaningless results well above this energy.
+
+14 Dec 2017 - A.Ribon              (hadr-cohe-V10-04-00)
+--------------------------------------------------------
+- Re-tag of the previous tag (incorrectly named).
+- Grichine's update of G4hhElastic to take into account the recent
+  TOTEM data for proton-proton at 13 TeV.
+
+24 November 2017 - W. Pokorski     (hadr-cohe-V10-03-07)
+--------------------------------------------------------
+- Added new class G4DiffuseElasticV2. The underlying physics model is
+the same as in G4DiffuseElastic by V.Grichine, however, the code has been
+revised, cleanup and significantly improved in a number of places.
+The performance has been improved by the factor of ~2 with respect to the
+original implementation. The approximation of small angles has been droped
+(replaced by exact calculation) as it was not bringing any visible benefits.
+
 19 Oct 2017 - A.Ribon              (hadr-cohe-V10-03-06)
 --------------------------------------------------------
 - G4NuclNuclDiffuseElastic : Grichine's simplification of this class to

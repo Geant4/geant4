@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDTreeResult.cc 101354 2016-11-15 08:27:51Z gcosmo $
+// $Id: G4KDTreeResult.cc 110873 2018-06-22 13:11:22Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -37,7 +37,11 @@
 
 using namespace std;
 
-G4ThreadLocal G4Allocator<G4KDTreeResult> *aKDTreeAllocator= 0;
+G4Allocator<G4KDTreeResult>*& aKDTreeAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4KDTreeResult>* _instance = nullptr;
+    return _instance;
+}
 
 struct ResNode
 {

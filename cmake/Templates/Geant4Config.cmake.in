@@ -16,7 +16,7 @@
 #                        help setup CMake variables
 #  Geant4_CXXSTD       - C++ Standard used to compile Geant4, e.g. c++98
 #  Geant4_TLS_MODEL    - Thread Local Storage model used. Only set if
-#                        the install provides multithreading support.
+#                        the build used an explicit model.
 #
 # You may supply a version number through find_package which will be checked
 # against the version of this build. Standard CMake logic is used so that
@@ -305,6 +305,9 @@ if(Geant4_multithreaded_FOUND)
 
   # - Define variable to indicate TLS model used
   set(Geant4_TLS_MODEL "@GEANT4_BUILD_TLS_MODEL@")
+  if(Geant4_TLS_MODEL STREQUAL "auto")
+    unset(Geant4_TLS_MODEL)
+  endif()
 endif()
 
 # - Muonic Atom support
@@ -318,6 +321,21 @@ set(Geant4_gdml_FOUND @GEANT4_USE_GDML@)
 if(Geant4_gdml_FOUND)
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS gdml)
 endif()
+
+# - TiMemory
+set(Geant4_timemory_FOUND @GEANT4_USE_TIMEMORY@)
+if(Geant4_timemory_FOUND)
+    list(REMOVE_ITEM Geant4_FIND_COMPONENTS timemory)
+    list(APPEND Geant4_DEFINITIONS -DGEANT4_USE_TIMEMORY)
+    set(_geant4_timemory_dir "@TiMemory_DIR@")
+    # always use same installation
+    unset(TiMemory_DIR CACHE)
+    set(TiMemory_DIR "${_geant4_timemory_dir}" CACHE PATH
+        "TiMemory installation of Geant4")
+    find_package(TiMemory REQUIRED QUIET)
+    include_directories(${TiMemory_INCLUDE_DIRS})
+    set(_geant4_use_timemory_library ON)
+endif(Geant4_timemory_FOUND)
 
 # - G3toG4
 set(Geant4_g3tog4_FOUND @GEANT4_USE_G3TOG4@)
@@ -585,6 +603,11 @@ endif()
 # - G3toG4 if it's requested
 if(_geant4_use_g3tog4_library)
   set(_geant4_g3tog4_library G3toG4${_geant4_lib_use_suffix})
+endif()
+
+# - link to TiMemory library if activated
+if(_geant4_use_timemory_library)
+  list(APPEND _geant4_internal_libraries ${TiMemory_LIBRARIES})
 endif()
 
 # - Factory registration mechanism in physics_lists requires whole

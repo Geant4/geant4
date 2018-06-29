@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenInventorViewer.cc 102233 2017-01-13 15:59:06Z gcosmo $
+// $Id: G4OpenInventorViewer.cc 109520 2018-04-26 16:01:14Z gcosmo $
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
@@ -164,6 +164,8 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       (vp.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (vp.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (vp.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+      (vp.GetCBDAlgorithmNumber() !=
+       fVP.GetCBDAlgorithmNumber())                           ||
       (vp.IsSection ()          != fVP.IsSection ())          ||
       (vp.IsCutaway ()          != fVP.IsCutaway ())          ||
       // This assumes use of generic clipping (sectioning, slicing,
@@ -195,6 +197,11 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
   if (vp.IsDensityCulling () &&
       (vp.GetVisibleDensity () != fVP.GetVisibleDensity ()))
     return true;
+
+  if (vp.GetCBDAlgorithmNumber() > 0) {
+    if (vp.GetCBDParameters().size() != fVP.GetCBDParameters().size()) return true;
+    else if (vp.GetCBDParameters() != fVP.GetCBDParameters()) return true;
+  }
 
   if (vp.IsSection () &&
       (vp.GetSectionPlane () != fVP.GetSectionPlane ()))

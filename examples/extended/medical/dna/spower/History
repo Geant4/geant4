@@ -14,7 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+09-05-18 B. Morgan (spower-V10-04-01)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+26-02-18  R. Hatcher (spower-V10-04-00)
+- Use G4RegisterPhysicsConstructors.icc to ensure G4PhysicsConstructorRegisty
+  is filled when using static libraries
+
 03-05-17 SI (spower-V10-03-02)
 - updated README
 
@@ -22,4 +30,4 @@ track of all tags.
 - moved stationary constructors to physics_lists
 
 16-03-17 SI (spower-V10-03-00)
-- created 
+- created

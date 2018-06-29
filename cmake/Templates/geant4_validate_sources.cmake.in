@@ -5,7 +5,7 @@
 # We have to parse the sources.cmake files for the headers and sources 
 # because these files use the include_directories command, which is non 
 # scriptable. A simple REGEX is used to find all the .cc, .hh and .icc 
-# files listed in eah sources.cmake file. These lists are compared with 
+# files listed in each sources.cmake file. These lists are compared with 
 # a GLOB of those in the include and src directories of the module 
 # corresponding to the sources.cmake file.
 #
@@ -44,7 +44,7 @@ set(GEANT4_FALSEPOSITIVE_SOURCES
   G4VRML1SceneHandlerFunc.icc
   G4VRML2SceneHandlerFunc.icc
   # - Documentation of processes/hadronic/models/cascade/cascade
-  # lists some sources in in comments. These do not correspond to
+  # lists some sources in comments. These do not correspond to
   # real sources so we can safely filter them
   # TODO : Improve regex to identify comments!!!!
   T1xxChannel.cc
@@ -63,6 +63,9 @@ message(STATUS "Scanning source tree ${GEANT4_SOURCE_TREE}")
 file(GLOB_RECURSE GEANT4_SOURCESCMAKE_FILES
   ${GEANT4_SOURCE_TREE}/*/sources.cmake
   )
+
+list(FILTER GEANT4_SOURCESCMAKE_FILES EXCLUDE REGEX "externals\\/zlib\\/sources.cmake")
+
 list(LENGTH GEANT4_SOURCESCMAKE_FILES GEANT4_SOURCESCMAKE_COUNT)
 message(STATUS "Located ${GEANT4_SOURCESCMAKE_COUNT} sources.cmake files")
 
@@ -70,7 +73,7 @@ message(STATUS "Located ${GEANT4_SOURCESCMAKE_COUNT} sources.cmake files")
 # Parse each modules and process...
 #
 foreach(_sourcesfile ${GEANT4_SOURCESCMAKE_FILES})
-  # - Where are we?
+   # - Where are we?
   get_filename_component(_sourcesfile_location ${_sourcesfile} PATH)
 
   # - Find on disk files...

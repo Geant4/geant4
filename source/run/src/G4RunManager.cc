@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc 103291 2017-03-24 14:00:49Z gcosmo $
+// $Id: G4RunManager.cc 110726 2018-06-11 06:05:16Z gcosmo $
 //
 // 
 
@@ -60,6 +60,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ParallelWorldProcessStore.hh"
 #include "G4ios.hh"
+#include "G4TiMemory.hh"
 #include <sstream>
 
 
@@ -116,6 +117,7 @@ G4RunManager::G4RunManager()
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
   runManagerType = sequentialRM;
+  InitializeTiMemory();
 }
 
 G4RunManager::G4RunManager( RMType rmType )
@@ -178,6 +180,7 @@ G4RunManager::G4RunManager( RMType rmType )
   G4Random::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
+  InitializeTiMemory();
 }
 
 G4RunManager::~G4RunManager()
@@ -261,6 +264,7 @@ void G4RunManager::DeleteUserInitializations()
 
 void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
 {
+    TIMEMORY_AUTO_TIMER("");
   if(n_event<=0) { fakeRun = true; }
   else { fakeRun = false; }
   G4bool cond = ConfirmBeamOnCondition();
@@ -312,6 +316,7 @@ void G4RunManager::RunInitialization()
 {
   if(!(kernel->RunInitialization(fakeRun))) return;
 
+  TIMEMORY_AUTO_TIMER("");
   runAborted = false;
   numberOfEventProcessed = 0;
 
@@ -359,6 +364,7 @@ void G4RunManager::RunInitialization()
 
 void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_select)
 {
+    TIMEMORY_AUTO_TIMER("");
   InitializeEventLoop(n_event,macroFile,n_select);
 
 // Event loop
@@ -395,6 +401,7 @@ void G4RunManager::InitializeEventLoop(G4int n_event,const char* macroFile,G4int
 
 void G4RunManager::ProcessOneEvent(G4int i_event)
 {
+    TIMEMORY_AUTO_TIMER("");
   currentEvent = GenerateEvent(i_event);
   eventManager->ProcessOneEvent(currentEvent);
   AnalyzeEvent(currentEvent);
@@ -404,6 +411,7 @@ void G4RunManager::ProcessOneEvent(G4int i_event)
 
 void G4RunManager::TerminateOneEvent()
 {
+    TIMEMORY_AUTO_TIMER("");
   StackPreviousEvent(currentEvent);
   currentEvent = 0;
   numberOfEventProcessed++;
@@ -428,6 +436,7 @@ void G4RunManager::TerminateEventLoop()
 
 G4Event* G4RunManager::GenerateEvent(G4int i_event)
 {
+    TIMEMORY_AUTO_TIMER("");
   if(!userPrimaryGeneratorAction)
   {
     G4Exception("G4RunManager::GenerateEvent()", "Run0032", FatalException,
@@ -463,6 +472,7 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 
 void G4RunManager::StoreRNGStatus(const G4String& fnpref)
 {
+    TIMEMORY_AUTO_TIMER("");
     G4String fileN = randomNumberStatusDir + fnpref+".rndm";
     G4Random::saveEngineStatus(fileN);
 }
@@ -744,6 +754,7 @@ void G4RunManager::ConstructScoringWorlds()
   G4int nPar = ScM->GetNumberOfMesh();
   if(nPar<1) return;
 
+  TIMEMORY_AUTO_TIMER("");
   G4ParticleTable::G4PTblDicIterator* theParticleIterator
    = G4ParticleTable::GetParticleTable()->GetIterator();
   for(G4int iw=0;iw<nPar;iw++)
@@ -799,6 +810,7 @@ void G4RunManager::UpdateScoring()
   G4int nPar = ScM->GetNumberOfMesh();
   if(nPar<1) return;
 
+  TIMEMORY_AUTO_TIMER("");
   G4HCofThisEvent* HCE = currentEvent->GetHCofThisEvent();
   if(!HCE) return;
   G4int nColl = HCE->GetCapacity();

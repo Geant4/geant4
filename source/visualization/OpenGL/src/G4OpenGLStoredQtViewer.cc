@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc 103926 2017-05-03 13:43:27Z gcosmo $
+// $Id: G4OpenGLStoredQtViewer.cc 109510 2018-04-26 07:15:57Z gcosmo $
 //
 //
 // Class G4OpenGLStoredQtViewer : a class derived from G4OpenGLQtViewer and
@@ -119,6 +119,8 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+      (lastVP.GetCBDAlgorithmNumber() !=
+       fVP.GetCBDAlgorithmNumber())                               ||
       (lastVP.IsSection ()          != fVP.IsSection ())          ||
       // Section (DCUT) implemented locally.  But still need to visit
       // kernel if status changes so that back plane culling can be
@@ -171,6 +173,11 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
    return true;
    }
    ***************************************************************/
+
+  if (lastVP.GetCBDAlgorithmNumber() > 0) {
+    if (lastVP.GetCBDParameters().size() != fVP.GetCBDParameters().size()) return true;
+    else if (lastVP.GetCBDParameters() != fVP.GetCBDParameters()) return true;
+  }
 
   if (lastVP.IsExplode () &&
       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))

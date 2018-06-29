@@ -185,8 +185,10 @@ void G4CascadeParamMessenger::SetNewValue(G4UIcommand* cmd, G4String arg) {
   if (cmd == nucUseBestCmd)
     theParams->G4NUCMODEL_USE_BEST = StoB(arg) ? strdup(arg.c_str()) : 0;
 
+//  if (cmd == nucRad2parCmd)
+//    theParams->G4NUCMODEL_RAD_2PAR = strdup(arg.c_str());
   if (cmd == nucRad2parCmd)
-    theParams->G4NUCMODEL_RAD_2PAR = strdup(arg.c_str());
+    theParams->G4NUCMODEL_RAD_2PAR = StoB(arg) ? strdup(arg.c_str()) : 0;
 
   if (cmd == nucRadScaleCmd)
     theParams->G4NUCMODEL_RAD_SCALE = strdup(arg.c_str());

@@ -45,8 +45,6 @@
 #include "TestParameters.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -121,12 +119,6 @@ void RunAction::EndOfRunAction(const G4Run*)
     fAnalysisManager->CloseFile();
   }
   //delete fAnalysisManager;
-
-#ifdef G4VIS_USE
-  if (G4VVisManager::GetConcreteInstance()) {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  }
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

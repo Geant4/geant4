@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc 110108 2018-05-15 11:46:54Z gcosmo $
+// $Id: G4GDMLWriteStructure.cc 108895 2018-03-15 10:27:25Z gcosmo $
 //
 // class G4GDMLWriteStructure Implementation
 //

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeTrackingAction.cc 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id: LXeTrackingAction.cc 109784 2018-05-09 08:14:08Z gcosmo $
 //
 /// \file optical/LXe/src/LXeTrackingAction.cc
 /// \brief Implementation of the LXeTrackingAction class
@@ -33,7 +33,6 @@
 #include "LXeTrackingAction.hh"
 #include "LXeUserTrackInformation.hh"
 #include "LXeDetectorConstruction.hh"
-#include "LXeRecorderBase.hh"
 
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
@@ -41,8 +40,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeTrackingAction::LXeTrackingAction(LXeRecorderBase* r)
-  : fRecorder(r) {}
+LXeTrackingAction::LXeTrackingAction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,7 +65,8 @@ void LXeTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeTrackingAction::PostUserTrackingAction(const G4Track* aTrack){
-  LXeTrajectory* trajectory=(LXeTrajectory*)fpTrackingManager->GimmeTrajectory();
+  LXeTrajectory* trajectory =
+    (LXeTrajectory*)fpTrackingManager->GimmeTrajectory();
   LXeUserTrackInformation*
     trackInformation=(LXeUserTrackInformation*)aTrack->GetUserInformation();
 
@@ -95,6 +95,4 @@ void LXeTrackingAction::PostUserTrackingAction(const G4Track* aTrack){
 
   if(trackInformation->GetForceDrawTrajectory())
     trajectory->SetDrawTrajectory(true);
-
-  if(fRecorder)fRecorder->RecordTrack(aTrack);
 }

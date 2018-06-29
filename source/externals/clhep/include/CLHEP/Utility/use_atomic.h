@@ -7,21 +7,12 @@
 //
 // ======================================================================
 
-#if (defined (G4MULTITHREADED))
+#if defined (G4MULTITHREADED)
 
-#if __cplusplus >= 201103L
-
-  #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 7)
+  #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 7) || __clang__ || WIN32
     #include <atomic>
     #define CLHEP_USE_ATOMIC
-  #elif __clang__
-    #if __has_feature(c_atomic)
-      #include <atomic>
-      #define CLHEP_USE_ATOMIC
-    #endif
   #endif
-
-#endif
 
 #endif
 

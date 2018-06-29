@@ -62,7 +62,7 @@ G4bool G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
     fPOList[currentPOListIndex].fpG4TextPlus = pG4TextPlus;
     usesGLCommands = false;
   }
-  catch (std::bad_cast) {}  // No special action if not text.  Just carry on.
+  catch (const std::bad_cast&) {}  // No special action if not text.  Just carry on.
 
   G4PhysicalVolumeModel* pPVModel =
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
@@ -128,7 +128,7 @@ G4bool G4OpenGLStoredQtSceneHandler::ExtraTOProcessing
     fTOList[currentTOListIndex].fpG4TextPlus = pG4TextPlus;
     usesGLCommands = false;
   }
-  catch (std::bad_cast) {}  // Do nothing if not text.
+  catch (const std::bad_cast&) {}  // Do nothing if not text.
 
   return usesGLCommands;
 }

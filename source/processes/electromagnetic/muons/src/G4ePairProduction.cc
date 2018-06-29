@@ -70,11 +70,6 @@ G4ePairProduction::G4ePairProduction(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ePairProduction::~G4ePairProduction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4bool G4ePairProduction::IsApplicable(const G4ParticleDefinition& p)
 {
   return (G4Electron::Electron() == &p || G4Positron::Positron() == &p);
@@ -100,7 +95,7 @@ void G4ePairProduction::InitialiseEnergyLossProcess(
 
     theParticle = part;
 
-    G4MuPairProductionModel* mod = new G4MuPairProductionModel(part); 
+    G4MuPairProductionModel* mod = new G4MuPairProductionModel(part, "ePairProd"); 
     SetEmModel(mod);
 
     lowestKinEnergy = std::max(lowestKinEnergy, part->GetPDGMass()*8.0);

@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
-// $Id: PhysicsList.cc 100277 2016-10-17 08:32:55Z gcosmo $
+// $Id: PhysicsList.cc 110788 2018-06-14 06:45:08Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -190,6 +190,11 @@ void PhysicsList::ConstructProcess()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysicsWVI.hh"
+#include "G4EmStandardPhysicsGS.hh"
+#include "G4EmStandardPhysicsSS.hh"
+#include "G4EmLivermorePolarizedPhysics.hh"
+#include "PhysListEm5DStandard.hh"
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
@@ -210,7 +215,35 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
-                
+
+} else if (name == "emstandardSS") {
+
+  fEmName = name;
+  delete fEmPhysicsList;
+  fEmPhysicsList = new G4EmStandardPhysicsSS();
+
+} else if (name == "emstandardWVI") {
+
+  fEmName = name;
+  delete fEmPhysicsList;
+  fEmPhysicsList = new G4EmStandardPhysicsWVI();
+
+} else if (name == "emstandardGS") {
+
+  fEmName = name;
+  delete fEmPhysicsList;
+  fEmPhysicsList = new G4EmStandardPhysicsGS();
+
+  } else if (name == "emstandard5D") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEm5DStandard();
+
+ } else if (name == "emlivermorePola") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLivermorePolarizedPhysics();
+
   } else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh 103926 2017-05-03 13:43:27Z gcosmo $
+// $Id: G4OpenGLViewer.hh 108131 2018-01-09 13:23:26Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -209,16 +209,6 @@ protected:
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?
     haloing_enabled;        //is haloing enabled for wireframe?
-  G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
-  G4double fFadeFactor;  // 0: no fade; 1: maximum fade with time within range.
-  G4bool fDisplayHeadTime;  // Display head time (fEndTime) in 2D text.
-  G4double fDisplayHeadTimeX, fDisplayHeadTimeY;  // 2D screen coords.
-  G4double fDisplayHeadTimeSize;  // Screen size.
-  G4double fDisplayHeadTimeRed, fDisplayHeadTimeGreen, fDisplayHeadTimeBlue;
-  G4bool fDisplayLightFront;// Display light front at head time originating at
-  G4double fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ,
-    fDisplayLightFrontT;
-  G4double fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
   G4OpenGL2PSAction* fGL2PSAction;
 
   G4double     fRot_sens;        // Rotation sensibility in degrees

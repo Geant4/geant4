@@ -28,6 +28,7 @@
 
 // /vis/multithreading commands - John Allison  29th September 2015
 
+#include "G4Types.hh"
 #ifdef G4MULTITHREADED
 
 #include "G4VisCommandsMultithreading.hh"

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDTree.hh 102616 2017-02-10 07:57:14Z gcosmo $
+// $Id: G4KDTree.hh 110873 2018-06-22 13:11:22Z gcosmo $
 //
 // Author: Mathieu Karamitros
 
@@ -271,7 +271,7 @@ protected:
   int fNbActiveNodes;
   G4KDMap* fKDMap;
 
-  G4ThreadLocalStatic G4Allocator<G4KDTree>* fgAllocator;
+  static G4Allocator<G4KDTree>*& fgAllocator();
 };
 
 #include "G4KDTree.icc"

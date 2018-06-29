@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.hh 106143 2017-09-14 06:34:42Z gcosmo $
+// $Id: G4ParticleTable.hh 110257 2018-05-17 14:20:12Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -236,8 +236,8 @@ class G4ParticleTable
 #ifdef G4MULTITHREADED
 public:
      //Andrea Dotti January 16. Shared instance of a mutex
-     static G4Mutex particleTableMutex;
-     static G4int lockCount;
+     static G4GLOB_DLL G4Mutex& particleTableMutex();
+     static G4GLOB_DLL G4int& lockCount();
 #endif
 };
 #include "G4ParticleTable.icc"

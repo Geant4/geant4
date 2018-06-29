@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Types.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4Types.hh 109033 2018-03-22 11:14:17Z gcosmo $
 //
 //
 // GEANT4 native types
@@ -43,7 +43,7 @@
   // Define DLL export macro for WIN32 systems for
   // importing/exporting external symbols to DLLs
   //
-  #if defined G4LIB_BUILD_DLL
+  #if defined G4LIB_BUILD_DLL && !defined G4MULTITHREADED
     #define G4DLLEXPORT __declspec( dllexport )
     #define G4DLLIMPORT __declspec( dllimport )
   #else

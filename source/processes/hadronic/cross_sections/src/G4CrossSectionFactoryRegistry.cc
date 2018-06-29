@@ -32,21 +32,21 @@
 #include "G4AutoLock.hh"
 #include "globals.hh"
 
-namespace  {
-    //This is used to lock on shared resource
-    G4Mutex xsFactoryRegisterMutex = G4MUTEX_INITIALIZER;
-}
+//This is used to lock on shared resource
+// G4TypeMutex<G4CrossSectionFactoryRegistry>()
 
 G4CrossSectionFactoryRegistry* G4CrossSectionFactoryRegistry::instance = 0;
 G4CrossSectionFactoryRegistry* G4CrossSectionFactoryRegistry::Instance()
 {
-    G4AutoLock l(&xsFactoryRegisterMutex);
-    if ( !instance ) instance = new G4CrossSectionFactoryRegistry();
-    return instance;
+	G4AutoLock l(G4TypeMutex<G4CrossSectionFactoryRegistry>());
+	if (!instance)
+		new G4CrossSectionFactoryRegistry();
+	return instance;
 }
 
 G4CrossSectionFactoryRegistry::G4CrossSectionFactoryRegistry()
 {
+	instance = this;
 }
 
 G4CrossSectionFactoryRegistry::G4CrossSectionFactoryRegistry(const G4CrossSectionFactoryRegistry&)
@@ -63,7 +63,7 @@ G4CrossSectionFactoryRegistry& G4CrossSectionFactoryRegistry::operator=(const G4
 
 void G4CrossSectionFactoryRegistry::Register( const G4String& name, G4VBaseXSFactory* factory )
 {
-    G4AutoLock l(&xsFactoryRegisterMutex);
+	G4AutoLock l(G4TypeMutex<G4CrossSectionFactoryRegistry>());
     if ( factories.find(name) != factories.end() )
     {
         G4ExceptionDescription msg;
@@ -77,7 +77,7 @@ void G4CrossSectionFactoryRegistry::Register( const G4String& name, G4VBaseXSFac
 
 G4VBaseXSFactory* G4CrossSectionFactoryRegistry::GetFactory( const G4String& name, G4bool abortIfNotFound ) const
 {
-    G4AutoLock l(&xsFactoryRegisterMutex);
+	G4AutoLock l(G4TypeMutex<G4CrossSectionFactoryRegistry>());
     std::map<G4String,G4VBaseXSFactory*>::const_iterator it = factories.find(name);
     if ( it != factories.end() ) return it->second;
     else

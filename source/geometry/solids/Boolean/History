@@ -1,5 +1,5 @@
 
-$Id: History 110069 2018-05-15 09:32:07Z gcosmo $
+$Id: History 110606 2018-06-01 14:48:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,21 +20,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
- April 24, 2018 E. Tcherniaev            geom-bool-V10-03-05
+ June 1, 2018 G. Cosmo                   geom-bool-V10-04-04
+ - G4MultiUnion: added protection for normal initialisation in
+   DistanceToOutVoxels(). (M.Gheata)
+   Minor optimisation in DistanceToOut(p,v,..).
+
+ April 24, 2018 E. Tcherniaev            geom-bool-V10-04-03
  - G4UnionSolid: define simple bounding-box and make use of early returns
    in Inside() for points laying outside.
 
- April 11, 2018 E. Tcherniaev
+ April 11, 2018 E. Tcherniaev            geom-bool-V10-04-02
  - G4BooleanSolid: Use -1 instead of 0 as default initialisation value
    for area and capacity, so to distinguish cases when values are zero
    referring to NULL Boolean constructs.
 
- April 11, 2018 G. Cosmo
+ April 11, 2018 G. Cosmo                 geom-bool-V10-04-01
  - G4BooleanSolid: enhanced warning message for the case of an invalid
    (NULL) Boolean construct in GetPointOnSurface() and StackPolyhedron().
  - Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
 
- February 28, 2018 E. Tcherniaev
+ February 28, 2018 E. Tcherniaev         geom-bool-V10-04-00
  - Improved contruction of G4DiplaceSolid to combine transformations for
    nested displaced types.
 

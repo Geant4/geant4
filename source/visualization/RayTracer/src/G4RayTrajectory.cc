@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.cc 104015 2017-05-08 07:28:08Z gcosmo $
+// $Id: G4RayTrajectory.cc 110261 2018-05-17 14:24:23Z gcosmo $
 //
 //
 //
@@ -43,8 +43,13 @@
 #include "G4Colour.hh"
 #include "G4TransportationManager.hh"
 #include "G4ios.hh"
+#include "G4ParallelWorldProcess.hh"
 
-G4ThreadLocal G4Allocator<G4RayTrajectory>* rayTrajectoryAllocator = 0;
+G4Allocator<G4RayTrajectory>*& rayTrajectoryAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4RayTrajectory>* _instance = nullptr;
+    return _instance;
+}
 
 G4RayTrajectory :: G4RayTrajectory()
 {
@@ -72,14 +77,28 @@ G4RayTrajectory :: ~G4RayTrajectory()
   delete positionRecord;
 }
 
-void G4RayTrajectory::AppendStep(const G4Step* aStep)
+void G4RayTrajectory::AppendStep(const G4Step* theStep)
 {
   G4RayTrajectoryPoint* trajectoryPoint = new G4RayTrajectoryPoint();
 
-  trajectoryPoint->SetStepLength(aStep->GetStepLength());
-
+  const G4Step* aStep = theStep;
   G4Navigator* theNavigator 
     = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+
+  // Take care of parallel world(s)
+  if(G4ParallelWorldProcess::GetHyperStep())
+  {
+    aStep = G4ParallelWorldProcess::GetHyperStep();
+    G4int navID = G4ParallelWorldProcess::GetHypNavigatorID();
+    std::vector<G4Navigator*>::iterator iNav =
+      G4TransportationManager::GetTransportationManager()->
+                                         GetActiveNavigatorsIterator();
+    theNavigator = iNav[navID];
+  }
+
+  trajectoryPoint->SetStepLength(aStep->GetStepLength());
+
+  // Surface normal
   G4bool valid;
   G4ThreeVector theLocalNormal = theNavigator->GetLocalExitNormal(&valid);
   if(valid) { theLocalNormal = -theLocalNormal; }

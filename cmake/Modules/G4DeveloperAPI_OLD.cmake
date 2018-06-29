@@ -42,6 +42,7 @@ endif()
 
 # - Needed CMake modules
 include(CMakeParseArguments)
+include(G4WindowsDLLSupport)
 
 #-----------------------------------------------------------------------
 #.rst:
@@ -246,60 +247,23 @@ macro(geant4_library_target)
 
   if(BUILD_SHARED_LIBS)
     # Add the shared library target and link its dependencies
-    # WIN32 first
-    if(WIN32)
-      # We have to generate the def export file from an archive library.
-      # This is a temporary separate from a real archive library, and
-      # even though it's static, we need to mark that it will have
-      # DLL symbols via the G4LIB_BUILD_DLL macro
-      add_library(_${G4LIBTARGET_NAME}-archive STATIC EXCLUDE_FROM_ALL ${G4LIBTARGET_SOURCES})
-      set(_archive _${G4LIBTARGET_NAME}-archive)
-      target_compile_features(${_archive} PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
-      target_compile_definitions(${_archive} PUBLIC -DG4LIB_BUILD_DLL)
-
-      # - Add the config specific compile definitions
-      geant4_compile_definitions_config(${_archive})
-
-      # - Create the .def file for this library
-      # Use generator expressions to get path to per-mode lib and
-      # older CMAKE_CFG_INTDIR variable to set name of per-mode def
-      # file (Needed as generator expressions cannot be used in argument
-      # to OUTPUT...
-      add_custom_command(OUTPUT _${G4LIBTARGET_NAME}-${CMAKE_CFG_INTDIR}.def
-        COMMAND genwindef -o _${G4LIBTARGET_NAME}-${CMAKE_CFG_INTDIR}.def -l ${G4LIBTARGET_NAME} $<TARGET_FILE:${_archive}>
-        DEPENDS ${_archive} genwindef)
-
-      # - Now we can build the DLL
-      # We create it from a dummy empty C++ file plus the def file.
-      # Also set the public compile definition on it so that clients
-      # will set correct macro automatically.
-      file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/_${G4LIBTARGET_NAME}.cpp
-        "// empty _${G4LIBTARGET_NAME}.cpp\n")
-
-      add_library(${G4LIBTARGET_NAME} SHARED _${G4LIBTARGET_NAME}.cpp
-        _${G4LIBTARGET_NAME}-${CMAKE_CFG_INTDIR}.def)
-      target_compile_definitions(${G4LIBTARGET_NAME} PUBLIC -DG4LIB_BUILD_DLL)
-      target_compile_features(${G4LIBTARGET_NAME} PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
-
-      # - Link the DLL.
-      # We link it to the archive, and the supplied libraries,
-      # but then remove the archive from the LINK_INTERFACE.
-      target_link_libraries(${G4LIBTARGET_NAME}
-        ${_archive}
-        ${G4LIBTARGET_GEANT4_LINK_LIBRARIES}
-        ${G4LIBTARGET_LINK_LIBRARIES})
-
-      set_target_properties(${G4LIBTARGET_NAME}
-        PROPERTIES INTERFACE_LINK_LIBRARIES "${G4LIBTARGET_GEANT4_LINK_LIBRARIES};${G4LIBTARGET_LINK_LIBRARIES}")
-
+    # WIN32/CMake<3.4 workaround
+    if(WIN32 AND (CMAKE_VERSION VERSION_LESS 3.4))
+      __geant4_add_dll_old(${ARGV})
     else()
-      # - We build a Shared library in the usual fashion...
+      # - Common shared lib commands
       add_library(${G4LIBTARGET_NAME} SHARED ${G4LIBTARGET_SOURCES})
       geant4_compile_definitions_config(${G4LIBTARGET_NAME})
       target_compile_features(${G4LIBTARGET_NAME} PUBLIC ${GEANT4_TARGET_COMPILE_FEATURES})
       target_link_libraries(${G4LIBTARGET_NAME}
         ${G4LIBTARGET_GEANT4_LINK_LIBRARIES}
         ${G4LIBTARGET_LINK_LIBRARIES})
+      # DLL support, portable to all platforms
+      # G4LIB_BUILD_DLL is public as despite the name it indicates the shared/archive mode
+      # and clients must apply it when linking to the shared libs. The global
+      # category handles the exact import/export statements
+      target_compile_definitions(${G4LIBTARGET_NAME} PUBLIC G4LIB_BUILD_DLL)
+      set_target_properties(${G4LIBTARGET_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
     endif()
 
     # This property is set to prevent concurrent builds of static and
@@ -365,9 +329,8 @@ macro(geant4_library_target)
       ${G4LIBTARGET_LINK_LIBRARIES_STATIC})
 
     # But we can rename the output library to the correct name
-    # On WIN32 we *retain* the -static postfix because otherwise
-    # we'll conflict with the .lib from the DLL build...
-    # We could also install differently...
+    # On WIN32 we *retain* the -static postfix to avoid name clashes
+    # with the DLL import lib.
     if(NOT WIN32)
       set_target_properties(${G4LIBTARGET_NAME}-static
         PROPERTIES OUTPUT_NAME ${G4LIBTARGET_NAME})

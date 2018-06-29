@@ -27,10 +27,12 @@
 /// \brief Main program of the radioactivedecay/rdecay01 example
 //
 //
-// $Id: rdecay01.cc 102027 2016-12-16 14:46:49Z gcosmo $
-// 
+// $Id: rdecay01.cc 109792 2018-05-09 08:22:58Z gcosmo $
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -46,22 +48,21 @@
 #include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
- 
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = 0;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-  // Construct the default run manager
+
+  //construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads(std::min(4,G4Threading::G4GetNumberOfCores()));
@@ -69,58 +70,43 @@ int main(int argc,char** argv) {
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   G4RunManager* runManager = new G4RunManager;
-#endif  
+#endif
 
-
-  // set mandatory initialization classes
+  //set mandatory initialization classes
   //
   runManager->SetUserInitialization(new DetectorConstruction);
   runManager->SetUserInitialization(new PhysicsList);
-      
-  // set user action classes
-  // 
+
   runManager->SetUserInitialization(new ActionInitialization);
-    
-  //Initialize G4 kernel
+
+  //initialize G4 kernel
   runManager->Initialize();
 
-  // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  //initialize visualization
+  G4VisManager* visManager = nullptr;
 
-#ifdef G4VIS_USE
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
+  //get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (argc!=1)   // batch mode  
-    { 
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);  
-    }
-    
-  else           // define visualization and UI terminal for interactive mode 
-    { 
-#ifdef G4UI_USE
-     G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-#ifdef G4VIS_USE
-     UI->ApplyCommand("/control/execute vis.mac");          
-#endif
-     ui->SessionStart();
-     delete ui;
-#endif
-    }
+  if (ui)  {
+   //interactive mode
+   visManager = new G4VisExecutive;
+   visManager->Initialize();
+   UImanager->ApplyCommand("/control/execute vis.mac");
+   ui->SessionStart();
+   delete ui;
+  }
+  else  {
+   //batch mode
+   G4String command = "/control/execute ";
+   G4String fileName = argv[1];
+   UImanager->ApplyCommand(command+fileName);
+  }
 
-#ifdef G4VIS_USE
+  //job termination
   delete visManager;
-#endif     
-
-  // job termination
-  //
   delete runManager;
-
-  return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeSteppingAction.cc 73915 2013-09-17 07:32:26Z gcosmo $
+// $Id: LXeSteppingAction.cc 110138 2018-05-16 07:31:43Z gcosmo $
 //
 /// \file optical/LXe/src/LXeSteppingAction.cc
 /// \brief Implementation of the LXeSteppingAction class
@@ -35,9 +35,7 @@
 #include "LXeTrajectory.hh"
 #include "LXePMTSD.hh"
 #include "LXeUserTrackInformation.hh"
-#include "LXeUserEventInformation.hh"
 #include "LXeSteppingMessenger.hh"
-#include "LXeRecorderBase.hh"
 
 #include "G4SteppingManager.hh"
 #include "G4SDManager.hh"
@@ -54,8 +52,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeSteppingAction::LXeSteppingAction(LXeRecorderBase* r)
-  : fRecorder(r),fOneStepPrimaries(false)
+LXeSteppingAction::LXeSteppingAction(LXeEventAction* ea)
+  : fOneStepPrimaries(false),
+    fEventAction(ea)
 {
   fSteppingMessenger = new LXeSteppingMessenger(this);
 
@@ -76,9 +75,6 @@ void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
  
   LXeUserTrackInformation* trackInformation
     =(LXeUserTrackInformation*)theTrack->GetUserInformation();
-  LXeUserEventInformation* eventInformation
-    =(LXeUserEventInformation*)G4EventManager::GetEventManager()
-    ->GetConstCurrentEvent()->GetUserInformation();
 
   G4StepPoint* thePrePoint = theStep->GetPreStepPoint();
   G4VPhysicalVolume* thePrePV = thePrePoint->GetPhysicalVolume();
@@ -87,7 +83,7 @@ void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
   G4VPhysicalVolume* thePostPV = thePostPoint->GetPhysicalVolume();
 
   G4OpBoundaryProcessStatus boundaryStatus=Undefined;
-  static G4ThreadLocal G4OpBoundaryProcess* boundary=NULL;
+  static G4ThreadLocal G4OpBoundaryProcess* boundary = nullptr;
 
   //find the boundary process only once
   if(!boundary){
@@ -114,7 +110,7 @@ void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
 
     //If we havent already found the conversion position and there were
     //secondaries generated, then search for it
-    if(!eventInformation->IsConvPosSet() && tN2ndariesTot>0 ){
+    if(!fEventAction->IsConvPosSet() && tN2ndariesTot>0 ){
       for(size_t lp1=(*fSecondary).size()-tN2ndariesTot;
           lp1<(*fSecondary).size(); lp1++){
         const G4VProcess* creator=(*fSecondary)[lp1]->GetCreatorProcess();
@@ -123,7 +119,7 @@ void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
           if(creatorName=="phot"||creatorName=="compt"||creatorName=="conv"){
             //since this is happening before the secondary is being tracked
             //the Vertex position has not been set yet(set in initial step)
-            eventInformation->SetConvPos((*fSecondary)[lp1]->GetPosition());
+            fEventAction->SetConvPos((*fSecondary)[lp1]->GetPosition());
           }
         }
       }
@@ -152,7 +148,7 @@ void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
     //Was the photon absorbed by the absorption process
     if(thePostPoint->GetProcessDefinedStep()->GetProcessName()
        =="OpAbsorption"){
-      eventInformation->IncAbsorption();
+      fEventAction->IncAbsorption();
       trackInformation->AddTrackStatusFlag(absorbed);
     }
 
@@ -177,7 +173,7 @@ void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
       switch(boundaryStatus){
       case Absorption:
         trackInformation->AddTrackStatusFlag(boundaryAbsorbed);
-        eventInformation->IncBoundaryAbsorption();
+        fEventAction->IncBoundaryAbsorption();
         break;
       case Detection: //Note, this assumes that the volume causing detection
                       //is the photocathode because it is the only one with
@@ -188,7 +184,7 @@ void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
         G4SDManager* SDman = G4SDManager::GetSDMpointer();
         G4String sdName="/LXeDet/pmtSD";
         LXePMTSD* pmtSD = (LXePMTSD*)SDman->FindSensitiveDetector(sdName);
-        if(pmtSD)pmtSD->ProcessHits_constStep(theStep,NULL);
+        if(pmtSD)pmtSD->ProcessHits_constStep(theStep, nullptr);
         trackInformation->AddTrackStatusFlag(hitPMT);
         break;
         }
@@ -208,6 +204,4 @@ void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
         trackInformation->AddTrackStatusFlag(hitSphere);
     }
   }
-
-  if(fRecorder)fRecorder->RecordStep(theStep);
 }

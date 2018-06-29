@@ -1,4 +1,4 @@
-$Id: History 110058 2018-05-15 09:02:41Z gcosmo $
+$Id: History 110273 2018-05-17 14:43:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,29 +17,40 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-April 30, 2018  M. Asai (event-V10-03-06)
-- Change the default stack to
-  G4TrackStack. Addressing to bug report #2040.
+May 17th, 2018 J. Madsen (event-V10-04-07)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
 
-March 16, 2018  M. Asai
-- Change the default stack to G4TrackStack. Addressing to bug
+April 30, 2018  M. Asai (event-V10-04-06)
+- Re-tagging event-V10-04-04 : Change the default stack to
+  G4TrackStak. Addressing to bug report #2040.
+
+April 2, 2018  M. Asai (event-V10-04-05)
+- Tag event-V10-04-04 is removed for the time being.
+- G4StackManager.cc : code clean up.
+
+March 16, 2018  M. Asai (event-V10-04-04)
+- Change the default stack to G4TrackStak. Addressing to bug
   report #2040.
 
-February 8, 2018  Dennis Wright  (event-V10-03-05)
+February 8, 2018  Dennis Wright  (event-V10-04-03)
 - add deprecation warning for /gun/ionL in 
   G4ParticleGunMessenger::SetNewValue()
 
-January 9, 2018, M.Asai
+January 9, 2018, M.Asai (event-V10-04-02)
 - G4GeneralParticleSourceMessenger :
   UI command returns an error message if a command is refused due
   to incorrect parameter(s).
+- This tag requires intercoms-V10-04-01 tag.
 
-December 26, 2017, M.Asai
+December 26, 2017, M.Asai (event-V10-04-01)
 - G4ParticleGunMessenger :
   UI command returns an error message if a command is refused due
   to incorrect parameter(s).
+- This tag requires intercoms-V10-04-01 tag.
 
-December 19, 2017, G.Cosmo
+December 19, 2017, G.Cosmo (event-V10-04-00)
 - Fixed self-consistency in G4SPSRandomGenerator header (missing #include).
   Thanks to Raphael Isemann for reporting this.
 

@@ -1,4 +1,4 @@
-$Id: History 110128 2018-05-16 06:36:57Z gcosmo $
+$Id: History 110743 2018-06-12 06:33:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,14 +20,35 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
-11th March 2018  John Allison  (modeling-V10-03-10)
+11 June 2018  John Allison  (modeling-V10-04-06)
+- G4PhysicalVolumeModel.cc: Fix Coverity warning.
+  o Unnecessary check on pointer.
+
+24 May 2018  John Allison  (modeling-V10-04-05)
+- G4LogicalVolumeModel:
+  o Add fCheckOverlaps flag. Calls CheckOverlaps for each G4PVPlacement.
+  o Note: G4PVParameterised not coded in this tag.
+- G4TrajectoryDrawByEncounteredVolume.cc,
+  G4TrajectoryEncounteredVolumeFilter.cc:
+  o Fix gcc-8 warnings.
+
+30 April 2018  John Allison
+- G4PhysicalVolumeModel.cc: Colour by density: improved comments.
+
+24 April 2018  John Allison  (modeling-V10-04-04)
+- G4ModelingParameters.cc: Small bug fix.
+
+24 April 2018  John Allison  (modeling-V10-04-03)
+- Implement /vis/viewer/set/colourByDensity.
+
+11th March 2018  John Allison  (modeling-V10-04-02)
 - G4PhysicalVolumeMassScene.cc: Protect case of no material in parallel world.
 
-19th December 2017  Gabriele Cosmo  (modeling-V10-03-09)
+19th December 2017  Gabriele Cosmo  (modeling-V10-04-01)
 - Fixed self-consistency in G4AttValueFilterT header (missing #include).
   Thanks to Raphael Isemann for reporting this.
 
-12th December 2017  John Allison
+12th December 2017  John Allison  (modeling-V10-04-00)
 - G4TrajectoryDrawerUtils.cc: Improvement to an informational message.
 
 13th September 2017  John Allison  (modeling-V10-03-08)

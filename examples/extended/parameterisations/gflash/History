@@ -1,4 +1,4 @@
-$Id: History 100268 2016-10-17 08:18:32Z gcosmo $
+$Id: History 110276 2018-05-17 14:46:47Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-May-2018 J.Allison (exgflash-V10-04-00)
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+03-Nov-2016 M. Verderi (exgflash-V10-02-02)
+- Use G4FastSimulationPhysics constructor to configure the
+  physics list. Remove ExGflashPhysics one.
 
 14-Oct-2016 G.Folger (exgflash-V10-02-01)
 - remove direct use of aParticleIterator, use GetParticleTableIterator().

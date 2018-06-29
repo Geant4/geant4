@@ -1,4 +1,4 @@
-$Id: History 107718 2017-11-29 08:23:08Z gcosmo $
+$Id: History 110256 2018-05-17 14:16:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-05-2018 J.Allison (expar01-V10-04-00)
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
 
 28-11-2017 I. Hrivnacova (expar01-V10-03-00)
 - Fixed Doxygen warnings, formatting

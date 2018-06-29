@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryWorkspacePool.cc 103041 2017-03-10 11:47:01Z gcosmo $
+// $Id: G4GeometryWorkspacePool.cc 110271 2018-05-17 14:41:15Z gcosmo $
 //
 // 
 // Class G4GeometryWorkspacePool - implementation
@@ -41,7 +41,11 @@ namespace
   G4Mutex singletonM = G4MUTEX_INITIALIZER;
 }
 
-G4ThreadLocal G4GeometryWorkspace* G4GeometryWorkspacePool::fMyWorkspace=0;
+G4GeometryWorkspace*& G4GeometryWorkspacePool::fMyWorkspace()
+{
+    G4ThreadLocalStatic G4GeometryWorkspace* _instance = nullptr;
+    return _instance;
+}
 
 G4GeometryWorkspacePool* G4GeometryWorkspacePool::thePool=0;
 
@@ -60,7 +64,7 @@ G4GeometryWorkspacePool* G4GeometryWorkspacePool::GetInstance()
 G4GeometryWorkspace* G4GeometryWorkspacePool::CreateWorkspace()
 {
   G4GeometryWorkspace* geometryWrk=0;
-  if( !fMyWorkspace )
+  if( !fMyWorkspace() )
   {
     geometryWrk= new G4GeometryWorkspace();
 
@@ -71,7 +75,7 @@ G4GeometryWorkspace* G4GeometryWorkspacePool::CreateWorkspace()
     }
     else
     {
-      fMyWorkspace= geometryWrk;
+      fMyWorkspace()= geometryWrk;
     }
   }
   else
@@ -79,7 +83,7 @@ G4GeometryWorkspace* G4GeometryWorkspacePool::CreateWorkspace()
     G4Exception("GeometryWorspacePool::CreateWorkspace", "GeomVol003",
                 FatalException,
                 "Cannot create workspace twice for the same thread.");
-    geometryWrk= fMyWorkspace; 
+    geometryWrk= fMyWorkspace();
   }
   
   return geometryWrk;
@@ -98,14 +102,14 @@ void G4GeometryWorkspacePool::CreateAndUseWorkspace()
 //
 G4GeometryWorkspace* G4GeometryWorkspacePool::FindOrCreateWorkspace()
 {
-  G4GeometryWorkspace* geometryWrk= fMyWorkspace;
+  G4GeometryWorkspace* geometryWrk= fMyWorkspace();
   if( !geometryWrk )
   { 
     geometryWrk= this->CreateWorkspace(); 
   } 
   geometryWrk->UseWorkspace();
   
-  fMyWorkspace= geometryWrk; // assign it for use by this thread.
+  fMyWorkspace()= geometryWrk; // assign it for use by this thread.
   return geometryWrk;
 }
 
@@ -124,11 +128,11 @@ void G4GeometryWorkspacePool::Recycle( G4GeometryWorkspace *geometryWrk )
 //
 void G4GeometryWorkspacePool::CleanUpAndDestroyAllWorkspaces()
 {
-   if (fMyWorkspace)
+   if (fMyWorkspace())
    {
-      fMyWorkspace->DestroyWorkspace();
-      delete fMyWorkspace;
-      fMyWorkspace=0;
+      fMyWorkspace()->DestroyWorkspace();
+      delete fMyWorkspace();
+      fMyWorkspace()=0;
    }
 }
 

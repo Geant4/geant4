@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -31,6 +31,8 @@ ecal !!!
 
 ecal !!!
 
+ecal !!!
+
 hcal !!!
 
 hcal !!!
@@ -42,8 +44,6 @@ hcal !!!
 hcal !!!
 
 tracker !!!
-
-ecal !!!
 
 ecal !!!
 Warning : Region <MuonEndCap_1> does not have specific production cuts,

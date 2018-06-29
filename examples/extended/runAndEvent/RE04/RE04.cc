@@ -28,6 +28,8 @@
 //
 // $Id: $
 //
+#include "G4Types.hh"
+
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
 #else
@@ -36,13 +38,8 @@
 #include "G4ScoringManager.hh"
 #include "G4UImanager.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "RE04ActionInitialization.hh"
 #include "RE04DetectorConstruction.hh"
@@ -53,7 +50,13 @@
 
 int main(int argc,char** argv)
 {
- // Construct the run manager
+ // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+ G4UIExecutive* ui = nullptr;
+ if ( argc == 1 ) {
+   ui = new G4UIExecutive(argc, argv);
+ }
+
+// Construct the run manager
  //
 #ifdef G4MULTITHREADED
  G4MTRunManager * runManager = new G4MTRunManager;
@@ -78,36 +81,29 @@ int main(int argc,char** argv)
  physicsList->RegisterPhysics
        (new G4ParallelWorldPhysics(paraWorldName,true));
  runManager->SetUserInitialization(physicsList);
-    
+
  // Set user action classes
  //
  runManager->SetUserInitialization(new RE04ActionInitialization);
-  
-#ifdef G4VIS_USE
+
  // Visualization manager
  //
  G4VisManager* visManager = new G4VisExecutive;
  visManager->Initialize();
-#endif
-    
+
  // Initialize G4 kernel
  //
  runManager->Initialize();
-  
+
  // Get the pointer to the User Interface manager
  //
- G4UImanager* pUImanager = G4UImanager::GetUIpointer();  
+ G4UImanager* pUImanager = G4UImanager::GetUIpointer();
 
- if (argc==1)   // Define UI session for interactive mode
+ if (ui)   // Define UI session for interactive mode
  {
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-#ifdef G4VIS_USE
       pUImanager->ApplyCommand("/control/execute vis.mac");
-#endif
       ui->SessionStart();
       delete ui;
-#endif
  }
  else           // Batch mode
  {
@@ -116,9 +112,7 @@ int main(int argc,char** argv)
    pUImanager->ApplyCommand(command+fileName);
  }
 
-#ifdef G4VIS_USE
  delete visManager;
-#endif
  delete runManager;
 
  return 0;

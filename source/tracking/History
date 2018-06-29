@@ -1,4 +1,4 @@
-$Id: History 106991 2017-10-31 10:13:42Z gcosmo $
+$Id: History 110262 2018-05-17 14:25:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 17, 2018, J.Madsen (tracking-V10-04-01)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+April 2, 2018, M.Asai (tracking-V10-04-00)
+- G4SteppingManager : remove unnecessary checks of process manager for
+  generic ion and muonic atom.
+
 October 23, 2017, K.L.Genser (tracking-V10-03-02)
-- G4StackManager added #ifdef for the case when a particle IsMuonicAtom
+- G4SteppingManager added #ifdef for the case when a particle IsMuonicAtom
 
 September 12, 2017, K.L.Genser (tracking-V10-03-01)
-- G4StackManager added a case when a particle IsMuonicAtom
+- G4SteppingManager added a case when a particle IsMuonicAtom
 
 Dec 22, 2016 L.Desorgher  (tracking-V10-03-00)
 - Modification in G4AdjointSteppingAction for correction of a bug in the case of reverse

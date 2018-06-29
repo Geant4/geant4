@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pythia6DecayerMessenger.cc 66586 2012-12-21 10:48:39Z ihrivnac $
+// $Id: G4Pythia6DecayerMessenger.cc 100687 2016-10-31 11:20:33Z gcosmo $
 //
 /// \file eventgenerator/pythia/decayer6/src/G4Pythia6DecayerMessenger.cc
 /// \brief Implementation of the G4Pythia6DecayerMessenger class

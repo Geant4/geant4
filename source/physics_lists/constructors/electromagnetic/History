@@ -1,4 +1,4 @@
-$Id: History 110187 2018-05-17 10:41:08Z gcosmo $
+$Id: History 110183 2018-05-17 10:26:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,13 +14,30 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-17-May-2018 V.Ivanchenko (phys-ctor-em-V10-03-38)
+17-May-2018 V.Ivanchenko (phys-ctor-em-V10-04-03)
 - G4EmModelActivator - fixed GS and Opt3 configurations
 
-27-April-2018 V.Ivanchenko
+27-April-2018 V.Ivanchenko (phys-ctor-em-V10-04-02)
+- in several constructors return back the order of photo-effect 
+  and Compton in order to keep log file stable
+
+27-April-2018 V.Ivanchenko (phys-ctor-em-V10-04-01)
+- G4EmStandardPhysics_option1, G4EmStandardPhysics_option2 - use 
+    Livermore photo-effect model
+- G4EmStandardPhysics_option4, G4EmLivermorePhysics, 
+  G4EmPenelopePhysics - upper energy limit 100 TeV
+- G4EmLowEPPhysics - use new 5D gamma conversion model below 80 GeV,
+    use new Lindhard-Sorensen ion ionisation model above 20 MeV/u
 - G4EmModelActivator - modified accordingly
 
-28-March-2018 V.Ivanchenko
+28-March-2018 V.Ivanchenko (phys-ctor-em-V10-04-00)
+- G4EmStandardPhysics, G4EmStandardPhysics_option1, 
+  G4EmStandardPhysics_option2, G4EmStandardPhysics_option4, 
+  G4EmLowEPPhysics, G4EmPenelopePhysics, G4EmLivermorePhysics, 
+  G4EmLivermorePolarizedPhysics, G4EmStandardPhysicsGS - use new
+    parameter MscEnergyLimit() (default is 100 MeV) allowing
+    customise transition from low-energy multiple scattering to 
+    high energy combination of multiple and single scattering
 - G4EmModelActivator - fixed Opt4 and single scattering (problem #2045)
 
 07-November-2017 V.Ivanchenko (phys-ctor-em-V10-03-37)

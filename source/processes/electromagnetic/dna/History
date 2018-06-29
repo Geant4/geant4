@@ -14,13 +14,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
-09-02-2018, M.Asai tag emdna-V10-03-31
+22-06-2018, SI tag emdna-V10-04-04
+- fixed warnings in lepts models
+
+14-05-2018, SI tag emdna-V10-04-03
+- chemistry update by Mathieu
+
+01-05-2018, SI tag emdna-V10-04-02
+- chemistry update by Mathieu
+
+09-02-2018, M.Asai tag emdna-V10-04-01
 - G4DNAMolecularMaterial.cc :
   GetDensityTableFor() and GetNumMolPerVolTableFor() methods are accepted
   at G4State_Init rather than G4State_Idle.
 - Co-works with run-V10-04-01 and global-V10-04-01.
 
-21-12-2017, G.Cosmo
+21-12-2017, G.Cosmo tag emdna-V10-04-00
 - Fixed self-consistency in headers (missing #include) in G4IosFlagsSaver,
   G4KDNode, G4MoleculeIterator and G4LEPTSDiffXS.
   Fixed spurious definition of G4IT namespace in G4ITMultiNavigator header.

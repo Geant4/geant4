@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc 110069 2018-05-15 09:32:07Z gcosmo $
+// $Id: G4UnionSolid.cc 109479 2018-04-24 14:33:49Z gcosmo $
 //
 // Implementation of methods for the class G4UnionSolid
 //

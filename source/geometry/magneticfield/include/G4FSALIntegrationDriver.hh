@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FSALIntegrationDriver.hh 107164 2017-11-03 12:11:45Z gcosmo $
+// $Id: G4FSALIntegrationDriver.hh 109569 2018-05-02 07:08:33Z gcosmo $
 //
 //
 // class G4FSALIntegrationDriver
@@ -106,10 +106,12 @@ public:
     G4double GetPshrnk() const;
     G4double GetPgrow() const;
 
+    virtual void RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper) override;
+   
     // Sets a new stepper pItsStepper for this driver. Then it calls
     // ReSetParameters to reset its parameters accordingly.
-    void RenewStepperAndAdjust(T *pItsStepper);
-
+    inline void RenewStepperAndAdjustStrict(T *pItsStepper);
+   
     //  i) sets the exponents (pgrow & pshrnk),
     //     using the current Stepper's order,
     // ii) sets the safety
@@ -160,7 +162,7 @@ private:
 
      // The (default) maximum number of steps is Base
      // divided by the order of Stepper
-     static constexpr G4int  fMaxStepBase = 250;
+     G4int   fMaxStepBase;
 
      // Parameters used to grow and shrink trial stepsize.
      G4double safety;
@@ -170,10 +172,6 @@ private:
      // muximum error values for shrinking / growing (optimisation).
      G4double errorConstraintShrink;
      G4double errorConstraintGrow;
-
-     // Maximum stepsize increase/decrease factors.
-     static constexpr G4double max_stepping_increase = 5;
-     static constexpr G4double max_stepping_decrease = 0.1;
 
      T* pIntStepper;
 

@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysListEmPenelope class
 //
 //
-// $Id: PhysListEmPenelope.cc 105252 2017-07-17 09:40:37Z gcosmo $
+// $Id: PhysListEmPenelope.cc 108015 2017-12-19 09:06:35Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +36,7 @@
 #include "G4BuilderType.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
+#include "G4PhysicsListHelper.hh"
 
 // gamma
 
@@ -76,6 +77,11 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 
+// deexcitation
+
+#include "G4LossTableManager.hh"
+#include "G4UAtomicDeexcitation.hh"
+
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,13 +111,14 @@ PhysListEmPenelope::~PhysListEmPenelope()
 
 void PhysListEmPenelope::ConstructProcess()
 {
+    G4PhysicsListHelper* list = G4PhysicsListHelper::GetPhysicsListHelper();
+  
   // Add standard EM Processes
 
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();
   while( (*particleIterator)() ){
     G4ParticleDefinition* particle = particleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
     //Applicability range for Penelope models
@@ -126,28 +133,28 @@ void PhysListEmPenelope::ConstructProcess()
       photModel = new G4PenelopePhotoElectricModel();
       photModel->SetHighEnergyLimit(highEnergyLimit);
       phot->AddEmModel(0, photModel);
-      pmanager->AddDiscreteProcess(phot);
+      list->RegisterProcess(phot, particle);
 
       G4ComptonScattering* compt = new G4ComptonScattering();
       G4PenelopeComptonModel* 
       comptModel = new G4PenelopeComptonModel();
       comptModel->SetHighEnergyLimit(highEnergyLimit);
       compt->AddEmModel(0, comptModel);
-      pmanager->AddDiscreteProcess(compt);
+      list->RegisterProcess(compt, particle);
 
       G4GammaConversion* conv = new G4GammaConversion();
       G4PenelopeGammaConversionModel* 
       convModel = new G4PenelopeGammaConversionModel();
       convModel->SetHighEnergyLimit(highEnergyLimit);
       conv->AddEmModel(0, convModel);
-      pmanager->AddDiscreteProcess(conv);
+      list->RegisterProcess(conv, particle);
 
       G4RayleighScattering* rayl = new G4RayleighScattering();
       G4PenelopeRayleighModel* 
       raylModel = new G4PenelopeRayleighModel();
       raylModel->SetHighEnergyLimit(highEnergyLimit);
       rayl->AddEmModel(0, raylModel);
-      pmanager->AddDiscreteProcess(rayl);
+      list->RegisterProcess(rayl, particle);
       
     } else if (particleName == "e-") {
       //electron
@@ -157,14 +164,14 @@ void PhysListEmPenelope::ConstructProcess()
       eIoniModel = new G4PenelopeIonisationModel();
       eIoniModel->SetHighEnergyLimit(highEnergyLimit); 
       eIoni->AddEmModel(0, eIoniModel, new G4UniversalFluctuation() );
-      pmanager->AddProcess(eIoni,                   -1, 1, 1);
+      list->RegisterProcess(eIoni, particle);
       
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
       G4PenelopeBremsstrahlungModel* 
       eBremModel = new G4PenelopeBremsstrahlungModel();
       eBremModel->SetHighEnergyLimit(highEnergyLimit);
       eBrem->AddEmModel(0, eBremModel);
-      pmanager->AddProcess(eBrem,                   -1, 2, 2);
+      list->RegisterProcess(eBrem, particle);
                   
     } else if (particleName == "e+") {
       //positron
@@ -173,39 +180,43 @@ void PhysListEmPenelope::ConstructProcess()
       eIoniModel = new G4PenelopeIonisationModel();
       eIoniModel->SetHighEnergyLimit(highEnergyLimit); 
       eIoni->AddEmModel(0, eIoniModel, new G4UniversalFluctuation() );
-      pmanager->AddProcess(eIoni,                   -1, 1, 1);
+      list->RegisterProcess(eIoni, particle);
       
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
       G4PenelopeBremsstrahlungModel* 
       eBremModel = new G4PenelopeBremsstrahlungModel();
       eBremModel->SetHighEnergyLimit(highEnergyLimit);
       eBrem->AddEmModel(0, eBremModel);
-      pmanager->AddProcess(eBrem,                   -1, 2, 2);      
+      list->RegisterProcess(eBrem, particle);
 
       G4eplusAnnihilation* eAnni = new G4eplusAnnihilation();
       G4PenelopeAnnihilationModel* 
       eAnniModel = new G4PenelopeAnnihilationModel();
       eAnniModel->SetHighEnergyLimit(highEnergyLimit); 
       eAnni->AddEmModel(0, eAnniModel);
-      pmanager->AddProcess(eAnni,                    0,-1, 3);
+      list->RegisterProcess(eAnni, particle);
             
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4MuIonisation,      -1, 1, 1);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 2, 2);
-      pmanager->AddProcess(new G4MuPairProduction,  -1, 3, 3);       
+      list->RegisterProcess(new G4MuIonisation,     particle);
+      list->RegisterProcess(new G4MuBremsstrahlung, particle);
+      list->RegisterProcess(new G4MuPairProduction, particle);       
      
     } else if( particleName == "alpha" || particleName == "GenericIon" ) { 
-      pmanager->AddProcess(new G4ionIonisation,     -1, 1, 1);
+      list->RegisterProcess(new G4ionIonisation, particle);
 
     } else if ((!particle->IsShortLived()) &&
                (particle->GetPDGCharge() != 0.0) && 
                (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4hIonisation,       -1, 1, 1);
+      list->RegisterProcess(new G4hIonisation, particle);
     }
   }
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* deex = new G4UAtomicDeexcitation();
+  G4LossTableManager::Instance()->SetAtomDeexcitation(deex);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

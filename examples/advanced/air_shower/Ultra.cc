@@ -35,6 +35,7 @@
 //   *                  Ultra.cc
 //   *******************************************************
 
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -55,14 +56,14 @@
 
 int main(int argc,char** argv) {
 
-//choose the Random engine from CLHEP 
+//choose the Random engine from CLHEP
 //(lets use C++ implementation of Jame's RANLUX generator)
- 
+
   G4Random::setTheEngine(new CLHEP::RanluxEngine);
-  
+
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-  //runManager->SetNumberOfThreads(2); 
+  //runManager->SetNumberOfThreads(2);
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif

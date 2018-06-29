@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectroNuclearCrossSection.cc 107592 2017-11-24 12:04:25Z gcosmo $
+// $Id: G4ElectroNuclearCrossSection.cc 109482 2018-04-24 14:47:28Z gcosmo $
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
@@ -2381,7 +2381,10 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* xx, G4dou
 {
     // --------------------------------
     G4int r=-1;                             // Low channel for J-functions
-    if(a<=.9999 || a>238.49)                // Plutonium 244 is forbidden
+
+    //AR-24Apr2018 Switch to allow transuranic elements
+    const G4bool isHeavyElementAllowed = true;
+    if(a<=.9999 || ( !isHeavyElementAllowed && a>238.49))
     {
         G4cout<<"***G4ElectroNuclearCrossSection::GetFunctions: A="<<a<<"(?). No CS returned!"<<G4endl;
         return r;

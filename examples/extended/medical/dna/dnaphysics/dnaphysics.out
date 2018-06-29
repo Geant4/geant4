@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -103,7 +103,6 @@ userDetector->Construct() start.
 
 World is registered to the default region.
 physicsList->Construct() start.
-### G4EmStandard_opt4 Construct Processes 
 ### G4EmDNAPhysicsActivator::ConstructProcess for 1 regions DNA physics type DNA_Opt0
 ### DNA models type DNA_Opt0 are activated for G4Region DefaultRegionForTheWorld
 AddHeliumModels0 for <DefaultRegionForTheWorld> a1msc: 1 a2msc: 1 elimel= 1 pminbba= 7.9452
@@ -178,7 +177,7 @@ ePairProd:   for  e-    SubType= 4
       Lambda tables from threshold to 1 GeV, 20 bins per decade, spline: 1
       Sampling table 5x1001 from 0.1 GeV to 0.001 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=        1 GeV
+           ePairProd :  Emin=        0 eV    Emax=        1 GeV
 
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 1 GeV, 20 bins per decade, spline: 1
@@ -239,7 +238,7 @@ ePairProd:   for  e+    SubType= 4
       Lambda tables from threshold to 1 GeV, 20 bins per decade, spline: 1
       Sampling table 5x1001 from 0.1 GeV to 0.001 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=        1 GeV
+           ePairProd :  Emin=        0 eV    Emax=        1 GeV
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -697,13 +696,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
-##### Create analysis manager   0x15397b0
+##### Create analysis manager   0x1c43fc0
 Using Root analysis manager
 ... open Root analysis file : dna.root - done
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=8.88s Real=9.46s Sys=0.04s
+  User=5.500000s Real=5.574781s Sys=0.040000s
 ... write Root file : dna.root - done
 ... close Root file : dna.root - done
 Graphics systems deleted.

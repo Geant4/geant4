@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc 107056 2017-11-01 14:52:32Z gcosmo $
+// $Id: G4MuIonisation.cc 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -106,11 +106,6 @@ G4MuIonisation::G4MuIonisation(const G4String& name)
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(G4Electron::Electron());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4MuIonisation::~G4MuIonisation()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

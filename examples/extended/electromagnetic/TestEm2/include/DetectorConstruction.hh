@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 98761 2016-08-09 14:07:11Z gcosmo $
+// $Id: DetectorConstruction.hh 109103 2018-03-27 07:39:04Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,23 +68,23 @@ public:
   virtual void ConstructSDandField();
 
   const
-  G4VPhysicalVolume* GetEcal() {return fPhysiEcal;};
-  G4Material*    GetMaterial() {return fMaterial;};
+  G4VPhysicalVolume* GetEcal() const    {return fPhysiEcal;};
+  const G4Material* GetMaterial() const {return fMaterial;};
 
   // Subdivision of absorber
-  G4int    GetnLtot()          {return fNLtot;};
-  G4int    GetnRtot()          {return fNRtot;};
-  G4double GetdLradl()         {return fDLradl;};
-  G4double GetdRradl()         {return fDRradl;};
-  G4double GetdLlength()       {return fDLlength;};
-  G4double GetdRlength()       {return fDRlength;};     
-  G4double GetfullLength()     {return fEcalLength;};
-  G4double GetfullRadius()     {return fEcalRadius;};
+  G4int    GetnLtot() const      {return fNLtot;};
+  G4int    GetnRtot() const      {return fNRtot;};
+  G4double GetdLradl() const     {return fDLradl;};
+  G4double GetdRradl() const     {return fDRradl;};
+  G4double GetdLlength() const   {return fDLlength;};
+  G4double GetdRlength() const   {return fDRlength;};     
+  G4double GetfullLength() const {return fEcalLength;};
+  G4double GetfullRadius() const {return fEcalRadius;};
 
 private:
 
   void DefineMaterials();
-  G4VPhysicalVolume* ConstructVolumes();
+  void UpdateParameters();
 
   G4int    fNLtot,    fNRtot;       // nb of bins: longitudinal and radial
   G4double fDLradl,   fDRradl;      // bin thickness (in radl unit)

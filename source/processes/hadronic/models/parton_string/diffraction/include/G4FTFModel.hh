@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh 100828 2016-11-02 15:25:59Z gcosmo $
+// $Id: G4FTFModel.hh 110870 2018-06-22 12:14:16Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 // Class Description
@@ -84,12 +84,45 @@ class G4FTFModel : public G4VPartonStringModel {
     G4bool PutOnMassShell();
     G4bool ExciteParticipants();
     G4ExcitedStringVector* BuildStrings();
-    void GetResiduals();                  
+    void GetResiduals();
+      
     G4bool AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
                            G4Nucleon*          ProjectileNucleon,
                            G4VSplitableHadron* SelectedTargetNucleon,
                            G4Nucleon*          TargetNucleon,
                            G4bool              Annihilation ); 
+    // The "AdjustNucleons" method uses the following struct and 3 new utility methods:
+    struct CommonVariables {
+      G4int TResidualMassNumber = 0, TResidualCharge = 0, PResidualMassNumber = 0, 
+        PResidualCharge = 0;
+      G4double SqrtS = 0.0, S = 0.0, SumMasses = 0.0,
+        TResidualExcitationEnergy = 0.0, TResidualMass = 0.0, TNucleonMass = 0.0,
+        PResidualExcitationEnergy = 0.0, PResidualMass = 0.0, PNucleonMass = 0.0,
+        Mprojectile = 0.0, M2projectile = 0.0, Pzprojectile = 0.0, Eprojectile = 0.0, 
+        WplusProjectile = 0.0,
+        Mtarget = 0.0, M2target = 0.0, Pztarget = 0.0, Etarget = 0.0, WminusTarget = 0.0,
+        Mt2targetNucleon = 0.0, PztargetNucleon = 0.0, EtargetNucleon = 0.0,
+        Mt2projectileNucleon = 0.0, PzprojectileNucleon = 0.0, EprojectileNucleon = 0.0,
+        YtargetNucleus = 0.0, YprojectileNucleus = 0.0,
+        XminusNucleon = 0.0, XplusNucleon = 0.0, XminusResidual = 0.0, XplusResidual = 0.0;
+      G4ThreeVector PtNucleon, PtResidual, PtNucleonP, PtResidualP, PtNucleonT, PtResidualT;
+      G4LorentzVector Psum, Pprojectile, Ptmp, Ptarget, TResidual4Momentum, PResidual4Momentum;
+      G4LorentzRotation toCms, toLab;
+    };
+    G4int AdjustNucleonsAlgorithm_beforeSampling( G4int               interactionCase, 
+                                                  G4VSplitableHadron* SelectedAntiBaryon,
+                                                  G4Nucleon*          ProjectileNucleon,
+                                                  G4VSplitableHadron* SelectedTargetNucleon,
+                                                  G4Nucleon*          TargetNucleon,
+                                                  G4bool              Annihilation,
+                                                  CommonVariables&    common );  
+    G4bool AdjustNucleonsAlgorithm_Sampling(      G4int interactionCase, 
+                                                  CommonVariables& common );
+    void AdjustNucleonsAlgorithm_afterSampling( G4int               interactionCase, 
+                                                G4VSplitableHadron* SelectedAntiBaryon,
+                                                G4VSplitableHadron* SelectedTargetNucleon,
+                                                CommonVariables&    common ); 
+
     G4ThreeVector GaussianPt( G4double AveragePt2, G4double maxPtSquare ) const;
 
     G4bool ComputeNucleusProperties( G4V3DNucleus* nucleus, G4LorentzVector& nucleusMomentum, 

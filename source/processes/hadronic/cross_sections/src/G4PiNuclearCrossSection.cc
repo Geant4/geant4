@@ -48,7 +48,7 @@ G4_DECLARE_XS_FACTORY(G4PiNuclearCrossSection);
 // 22 Dec 2006 - D.H. Wright added isotope dependence
 //
 // 19 Aug 2011, V.Ivanchenko move to new design and make x-section per element
-     
+
  const G4double G4PiNuclearCrossSection::e1[38] = {
   .02, .04, .06, .08,  .1, .12, .13, .14, .15, .16, .17, .18, .19, .20, 
   .22, .24, .26, .28, .30, .35, .40, .45,  0.5, 0.55, 0.6, 0.7,  0.8,  0.9,
@@ -492,10 +492,38 @@ G4PiNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* particl
   //  debug.push_back(theZ[it]);
   //  debug.push_back(kineticEnergy);
 
-  if(Z > theZ[it]) 
+  if( it == theZ.size() ) 
   {
-    throw G4HadronicException(__FILE__, __LINE__,
-      "Called G4PiNuclearCrossSection outside parametrization");
+    //AR-24Apr2018 Switch to treat transuranic elements as uranium  
+    const G4bool isHeavyElementAllowed = true;
+    if ( isHeavyElementAllowed ) {
+      it--;
+      if ( Z > 100 ) Z = 100;  // Above Fermium, treat it as Fermium
+      // The cross section for a transuranic element is scaled from the
+      // corresponding cross section of Uranium, as follows:
+      //   (atomic_weight_element/atomic_weight_uranium)^0.75
+      // Notes:
+      // - The exponent "0.75" is used to be consistent with the method
+      //   G4PiNuclearCrossSection::Interpolate (otherwise I would use 2/3);
+      // - We use for Uranium 238.02891 and for the transuranic elements
+      //   the values showed below in the comment.
+      const std::vector<G4double> vecScaling{ 0.996756,    // <A>=237.0 for Np (Z=93)
+                                              1.018756,    // <A>=244.0 for Pu (Z=94)
+                                              1.015623,    // <A>=243.0 for Am (Z=95)
+                                              1.028136,    // <A>=247.0 for Cm (Z=96)
+                                              1.028136,    // <A>=247.0 for Bk (Z=97)
+                                              1.040598,    // <A>=251.0 for Cf (Z=98)
+                                              1.043706,    // <A>=252.0 for Es (Z=99)
+                                              1.059199 };  // <A>=257.0 for Fm (Z=100)
+      result =    vecScaling[Z-93] * thePimData[it]->ReactionXSection( kineticEnergy );
+      fTotalXsc = vecScaling[Z-93] * thePimData[it]->TotalXSection( kineticEnergy );
+      fElasticXsc = fTotalXsc - result;
+      if ( fElasticXsc < 0.0 ) fElasticXsc = 0.0;
+      return result;
+    } else {
+      throw G4HadronicException(__FILE__, __LINE__,
+        "Called G4PiNuclearCrossSection outside parametrization");
+    }
   }
   G4int Z1, Z2;
   G4double x1, x2, xt1, xt2;

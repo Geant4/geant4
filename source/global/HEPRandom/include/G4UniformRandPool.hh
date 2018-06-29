@@ -32,8 +32,10 @@
 // ------------------------------------------------------------
 // Class description:
 //
-// 
+// Class implementing a pool of random numbers filled according
+// to specified fixed size (default 1024).
 
+// Author: A.Dotti (SLAC)
 // ------------------------------------------------------------
 #ifndef G4UNIFORMRANDPOOL_HH
 #define G4UNIFORMRANDPOOL_HH
@@ -72,7 +74,7 @@ class G4UniformRandPool
 
   private:
 
-    inline void Fill( G4int howmany );
+    void Fill( G4int howmany );
 
   private:
 
@@ -96,16 +98,6 @@ inline G4double G4UniformRandPool::GetOne()
 inline /*PoolSize_t*/ G4int G4UniformRandPool::GetPoolSize() const
 {
   return size;
-}
-
-inline void G4UniformRandPool::Fill( G4int howmany )
-{
-  assert(howmany>0 && howmany <= size);
-
-  // Fill buffer with random numbers
-  //
-  G4Random::getTheEngine()->flatArray(howmany,buffer);
-  currentIdx = 0;
 }
 
 #endif

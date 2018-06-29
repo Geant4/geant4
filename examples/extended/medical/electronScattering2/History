@@ -1,4 +1,4 @@
-$Id: History 108546 2018-02-16 09:51:30Z gcosmo $
+$Id: History 109991 2018-05-14 07:26:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,8 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B. Morgan (exampleES2-V10-04-03)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
 
-02-02-18 D.Sawkey (exampleES2-V10-03-00)
+12-04-18 mma (exampleES2-V10-04-02)
+- electronScattering2.cc : set visualisation only in interactive mode
+
+22-03-18 M.Maire (exampleES2-V10-04-01)
+- electronScattering2.cc : remove G4UI_USE and G4VIS_USE
+
+02-02-18 D.Sawkey (exampleES2-V10-04-00)
 - remove unused ScoringManager
 
 19-11-16 A.Dotti  (exampleES2-V10-02-01)

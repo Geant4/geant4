@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtParticle.hh 69010 2013-04-15 09:34:16Z gcosmo $
+// $Id: G4HEPEvtParticle.hh 110273 2018-05-17 14:43:43Z gcosmo $
 //
 //
 // class desccription:
@@ -76,18 +76,18 @@ class G4HEPEvtParticle
       { return JDAHEP2; }
 };
 
-extern G4EVENT_DLL G4ThreadLocal G4Allocator<G4HEPEvtParticle> *aHEPEvtParticleAllocator;
+extern G4EVENT_DLL G4Allocator<G4HEPEvtParticle>*& aHEPEvtParticleAllocator();
 
 inline void * G4HEPEvtParticle::operator new(size_t)
 {
-  if (!aHEPEvtParticleAllocator)
-    aHEPEvtParticleAllocator = new G4Allocator<G4HEPEvtParticle>;
-  return (void *) aHEPEvtParticleAllocator->MallocSingle();
+  if (!aHEPEvtParticleAllocator())
+    aHEPEvtParticleAllocator() = new G4Allocator<G4HEPEvtParticle>;
+  return (void *) aHEPEvtParticleAllocator()->MallocSingle();
 }
 
 inline void G4HEPEvtParticle::operator delete(void * aHEPEvtParticle)
 {
-  aHEPEvtParticleAllocator->FreeSingle((G4HEPEvtParticle *) aHEPEvtParticle);
+  aHEPEvtParticleAllocator()->FreeSingle((G4HEPEvtParticle *) aHEPEvtParticle);
 }
 
 #endif

@@ -1,4 +1,4 @@
-$Id: History 108476 2018-02-15 14:21:25Z gcosmo $
+$Id: History 108074 2017-12-19 15:35:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19-Dec-2017 - G.Cosmo (error-propagation-V10-03-03)
+19-Dec-2017 - G.Cosmo (error-propagation-V10-04-00)
 - Fixed self-consistency in headers (missing #include) in G4ErrorMatrix,
   G4ErrorRunManagerHelper and G4ErrorSymMatrix.
   Thanks to Raphael Isemann for reporting these.

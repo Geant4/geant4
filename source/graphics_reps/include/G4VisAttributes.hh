@@ -24,28 +24,28 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh 98730 2016-08-09 10:47:54Z gcosmo $
+// $Id: G4VisAttributes.hh 110390 2018-05-22 08:28:07Z gcosmo $
 //
-// 
+//
 // John Allison  23rd October 1996
 
 // Class Description:
-// Visualization attributes are a set of information associated with the 
-// visualizable objects. This information is necessary only for 
-// visualization, and is not included in geometrical information such 
-// as shapes, position, and orientation. 
-// A typical example of a visualization attribute is "colour". 
-// For example, in visualizing a box, the Visualization Manager must know 
-// its colour. If an object to be visualized has not been assigned a set of 
-// visualization attributes, then a proper default set is used 
-// automatically. A set of visualization attributes is held by an 
-// instance of class G4VisAttributes defined in the graphics_reps 
+// Visualization attributes are a set of information associated with the
+// visualizable objects. This information is necessary only for
+// visualization, and is not included in geometrical information such
+// as shapes, position, and orientation.
+// A typical example of a visualization attribute is "colour".
+// For example, in visualizing a box, the Visualization Manager must know
+// its colour. If an object to be visualized has not been assigned a set of
+// visualization attributes, then a proper default set is used
+// automatically. A set of visualization attributes is held by an
+// instance of class G4VisAttributes defined in the graphics_reps
 // category. The followings are commonly-used attributes:
 //   - visibility
 //   - visibility of daughters
 //   - force wireframe style, force solid style
 //   - force auxiliary edge visibility, force line segments pe circle
-//   - colour 
+//   - colour
 // Class Description - End:
 
 
@@ -56,11 +56,15 @@
 #include <vector>
 #include <map>
 
+#include "graphics_reps_defs.hh"
+
 #include "G4Colour.hh"
 #include "G4Color.hh"
 
 class G4AttValue;
 class G4AttDef;
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 class G4VisAttributes {
 
@@ -70,8 +74,7 @@ public: // With description
 
   enum LineStyle {unbroken, dashed, dotted};
   enum ForcedDrawingStyle {wireframe, solid};
-  enum {fMinLineSegmentsPerCircle = 3};   // number of sides per circle
-  
+
   G4VisAttributes ();
   G4VisAttributes (G4bool visibility);
   G4VisAttributes (const G4Colour& colour);
@@ -80,12 +83,14 @@ public: // With description
   ~G4VisAttributes ();
   G4VisAttributes& operator= (const G4VisAttributes&);
 
+#ifndef WIN32
   // Deprecated 14 July 2016  JA
   // Use GetInvisible() instead.  E.g.:
   //   logical_volume->SetVisAttributes(G4VisAttributes::GetInvisible());
   // or use one of the above constructors or SetVisibility and
   //   logical_volume->SetVisAttributes(my_vis_attributes);
   static const G4VisAttributes Invisible;
+#endif
 
   static const G4VisAttributes& GetInvisible();
 
@@ -134,6 +139,12 @@ public: // With description
   const std::vector<G4AttValue>* CreateAttValues () const;
   // Returns the orginal long life G4AttDefs...
   const std::map<G4String,G4AttDef>* GetAttDefs  () const;
+
+  static constexpr G4int fMinLineSegmentsPerCircle = 3;
+  // Minumum number of sides per circle
+
+  static constexpr G4double fVeryLongTime = 1.e100 * CLHEP::ns;
+  // About 1.e75 billion years!! Used as default for start and end time.
 
 private:
 

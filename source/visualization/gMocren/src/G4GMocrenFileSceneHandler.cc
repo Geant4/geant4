@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc 104291 2017-05-23 13:25:51Z gcosmo $
+// $Id: G4GMocrenFileSceneHandler.cc 110513 2018-05-28 07:37:38Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -158,7 +158,8 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
   if ( std::getenv( "G4GMocrenFile_MAX_FILE_NUM" ) != NULL ) {	
     char * pcFileNum = getenv("G4GMocrenFile_MAX_FILE_NUM");
     char c10FileNum[10];
-    std::strncpy(c10FileNum, pcFileNum, 10);
+    std::strncpy(c10FileNum, pcFileNum, 9);
+    c10FileNum[9] = '\0';
     kMaxFileNum = std::atoi(c10FileNum);
 
   } else {
@@ -208,10 +209,12 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
   const G4int MAX_FILE_INDEX = kMaxFileNum - 1 ;
 
   // dest directory (null if no environmental variables is set)
-  std::strncpy(kGddFileName, kGddDestDir, std::strlen(kGddDestDir)+1);
+  std::strncpy(kGddFileName, kGddDestDir, sizeof(kGddFileName)-1);
+  kGddFileName[sizeof(kGddFileName)-1] = '\0';
 
   // create full path name (default)
-  std::strncat ( kGddFileName, DEFAULT_GDD_FILE_NAME, std::strlen(DEFAULT_GDD_FILE_NAME));
+  std::strncat ( kGddFileName, DEFAULT_GDD_FILE_NAME,
+                sizeof(kGddFileName) - std::strlen(kGddFileName) - 1);
 
   // Automatic updation of file names
   static G4int currentNumber = 0;
@@ -236,7 +239,8 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
     filename
     << kGddDestDir << GDD_FILE_HEADER
     << std::setw(2) << std::setfill('0') << i << ".wrl";
-    strncpy(kGddFileName,filename.str().c_str(),sizeof(kGddFileName));
+    strncpy(kGddFileName,filename.str().c_str(),sizeof(kGddFileName)-1);
+    kGddFileName[sizeof(kGddFileName)-1] = '\0';
 
     // check validity of the file name
     std::ifstream fin(kGddFileName); 

@@ -1,4 +1,4 @@
-$Id: History 107319 2017-11-08 16:29:22Z gcosmo $
+$Id: History 108673 2018-02-27 07:30:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,8 +14,14 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-Februrary-2018 R. Hatcher (phys-list-V10-04-00)
+- cowork with phys-ctor-fact-V10-04-00
+- Use new G4RegisterPhysicsConstructors.icc to ensure that for static builds
+  G4PhysicsConstructorRegistry is populated.
+- No longer register ShieldingLEND as a wrapper, but use explicit one
+
 07-November-2017 T. Koi (phys-list-V10-03-08)
-- Add ShieldingLEND as a new physics list 
+- Add ShieldingLEND as a new physics list
   co-working with phys-ctor-hinelastic-V10-03-06
 
 07-November-2017 V.Ivanchenko  (phys-lists-V10-03-07)

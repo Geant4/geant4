@@ -1,4 +1,4 @@
-$Id: History 103006 2017-03-08 08:12:23Z gcosmo $
+$Id: History 109715 2018-05-08 13:40:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 8th, 2018 B. Morgan - B01-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
 
 Mar 7th, 2017 A. Howard - B01-V10-03-00
 - Removed unnecessary clear sampling from B01

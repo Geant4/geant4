@@ -807,7 +807,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
   if (DecaySchemeFile.good()) {
     // Initialize variables used for reading in radioactive decay data
     G4bool floatMatch(false);
-    const G4int nMode = 9;
+    const G4int nMode = 10;
     G4double modeTotalBR[nMode] = {0.0};
     G4double modeSumBR[nMode];
     for (G4int i = 0; i < nMode; i++) {
@@ -897,12 +897,14 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                 modeTotalBR[4] = decayModeTotal; break;
               case MshellEC:
                 modeTotalBR[5] = decayModeTotal; break;
-              case Alpha:
+              case NshellEC:
                 modeTotalBR[6] = decayModeTotal; break;
-              case Proton:
+              case Alpha:
                 modeTotalBR[7] = decayModeTotal; break;
-              case Neutron:
+              case Proton:
                 modeTotalBR[8] = decayModeTotal; break;
+              case Neutron:
+                modeTotalBR[9] = decayModeTotal; break;
               case BDProton:
                 break;
               case BDNeutron:
@@ -1003,6 +1005,19 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
               }
               break;
 
+              case NshellEC:  // M-shell electron capture
+                            {
+                              G4ECDecay* aMECChannel =
+                                new G4ECDecay(&theParentNucleus, b, c*MeV, a*MeV,
+                                              daughterFloatLevel, NshellEC);
+              //              aMECChannel->DumpNuclearInfo();
+                              aMECChannel->SetHLThreshold(halflifethreshold);
+                              aMECChannel->SetARM(applyARM);
+                              theDecayTable->Insert(aMECChannel);
+                              modeSumBR[6] += b;
+                            }
+              break;
+
               case Alpha:
               {
                 G4AlphaDecay* anAlphaChannel =
@@ -1011,7 +1026,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
 //              anAlphaChannel->DumpNuclearInfo();
                 anAlphaChannel->SetHLThreshold(halflifethreshold);
                 theDecayTable->Insert(anAlphaChannel);
-                modeSumBR[6] += b;
+                modeSumBR[7] += b;
               }
               break;
 
@@ -1023,7 +1038,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
 //              aProtonChannel->DumpNuclearInfo();
                 aProtonChannel->SetHLThreshold(halflifethreshold);
                 theDecayTable->Insert(aProtonChannel);
-                modeSumBR[7] += b;
+                modeSumBR[8] += b;
               }
               break;
 
@@ -1035,7 +1050,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
 //              aNeutronChannel->DumpNuclearInfo();
                 aNeutronChannel->SetHLThreshold(halflifethreshold);
                 theDecayTable->Insert(aNeutronChannel);
-                modeSumBR[8] += b;
+                modeSumBR[9] += b;
               }
               break;
 

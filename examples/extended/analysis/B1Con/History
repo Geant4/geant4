@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08/05/18 J.Allison  (B1Con-V10-04-01)
+- Re-instated init.mac. (It is used after all! Perhaps in testing?)
+
+02/05/18 J.Allison  (B1Con-V10-04-00)
+- Removed G4VIS_USE and G4UI_USE.
+- Moved instantiation of G4UIExecutive to start of main.
+- Removed init.mac (not used).
+
 14/02/14 I. Hrivnacova (B1Con-V10-00-00)
 - Fixed tag name
 

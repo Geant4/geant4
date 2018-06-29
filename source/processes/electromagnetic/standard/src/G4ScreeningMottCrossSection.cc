@@ -308,8 +308,13 @@ G4double G4ScreeningMottCrossSection::McFcorrection(G4double angles )
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4double G4ScreeningMottCrossSection::RatioMottRutherford(G4double angles)
 {
+  return RatioMottRutherfordCosT(std::sqrt(1. -cos(angles)));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+G4double G4ScreeningMottCrossSection::RatioMottRutherfordCosT(G4double fcost)
+{
   G4double R=0;
-  G4double fcost=std::sqrt((1. -cos(angles)));
   G4double a[5];
   static const G4double shift=0.7181228;
   G4double beta0= beta -shift;

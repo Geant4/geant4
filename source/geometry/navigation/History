@@ -1,4 +1,4 @@
-$Id: History 110067 2018-05-15 09:20:12Z gcosmo $
+$Id: History 110832 2018-06-15 15:00:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,19 +17,44 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 4, 2018 - J.Apostolakis (geomnav-V10-03-11)
+June 15, 2018 - G.Cosmo (geomnav-V10-04-11)
+-----------------------
+- Fixed Coverity defect in diagnostic report in G4MultiLevelLocator.
+
+June 13, 2018 - G.Cosmo (geomnav-V10-04-10, 09)
+-----------------------
+- Use G4Exception instead of streaming to cerr in various classes.
+
+June 8, 2018 - J.Apostolakis (geomnav-V10-04-08, 07)
+----------------------------
+- G4PropagatorInField: fix for case of finishing integration in last iteration
+  (so a looping particle will not be signalled incorrectly in that case.)
+  Improved reporting of looping particle, adding info on density and
+  fraction (%) of proposed step that was completed, and momentum (-08).
+
+May 11, 2018 - E.Tcherniaev (geomnav-V10-04-06)
+---------------------------
+- G4Navigator::ComputeLocalAxis(): removed unnecessary check for IsRotated().
+
+May 9, 2018 - E.Tcherniaev (geomnav-V10-04-05)
+--------------------------
+- Replaced use of Inverse() from G4AffineTransform with new dedicated
+  methods, to avoid creation of temporaries in G4Navigator, G4RegularNavigation
+  and G4ReplicaNavigation.
+
+May 4, 2018 - J.Apostolakis (geomnav-V10-04-04)
 ---------------------------
 - G4Navigator::GetLocalExitNormal(): fix for normal calculated at the endpoint
   of current step, on a 'candidate' next volume. Adds missing transformation to
   the frame of the current volume.
   Addresses problem report #2054.
 
-April 17, 2018 - J.Apostolakis
+April 17, 2018 - J.Apostolakis (geomnav-V10-04-02,03)
 ------------------------------
 - G4Navigator::Set/RestoreSavedState(): fix for save/restore of ReplicaNumber
   (Thanks to Helmut Burkhardt).
 
-April 11, 2018 - J.Apostolakis
+April 11, 2018 - J.Apostolakis (geomnav-V10-04-01)
 ------------------------------
 - G4PathFinder::DoNextLinearStep():
   * Use 'Relocated Point' flag to signal move from call to ReLocate, and
@@ -38,12 +63,13 @@ April 11, 2018 - J.Apostolakis
     value, which can be kInfinity when step is not limited by Navigators
     (it was meant to cope with zero proposed step in RE03, however it
     caused problems in multiple cases when PathFinder was used).
+
 - G4SafetyHelper:
   * Do not limit memorisation of safety in case of parallel
     geometries (when a length is not passed to safety method).
   * Fix to including full message in Exception.
 
-February 26, 2018 - J.Apostolakis (geomnav-V10-03-10)
+February 26, 2018 - J.Apostolakis (geomnav-V10-04-00)
 ---------------------------------
 - Fix for momentum value in G4PathFinder::SetChargeMomentumMass
   Was passing magnitude square, instead of magnitude.

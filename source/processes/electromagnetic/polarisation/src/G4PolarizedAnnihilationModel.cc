@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.cc 96114 2016-03-16 18:51:33Z gcosmo $
+// $Id: G4PolarizedAnnihilationModel.cc 109176 2018-04-03 06:53:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -66,37 +66,32 @@ G4PolarizedAnnihilationModel::G4PolarizedAnnihilationModel(const G4ParticleDefin
   : G4eeToTwoGammaModel(p,nam),
     crossSectionCalculator(nullptr),
     verboseLevel(0),
-    gParticleChange(nullptr),
-    gIsInitialised(false)
+    gParticleChange(nullptr)
 {
-  crossSectionCalculator=new G4PolarizedAnnihilationCrossSection();
+  crossSectionCalculator = new G4PolarizedAnnihilationCrossSection();
 }
 
 G4PolarizedAnnihilationModel::~G4PolarizedAnnihilationModel()
 {
-  if (crossSectionCalculator) delete crossSectionCalculator;
+  delete crossSectionCalculator;
 }
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PolarizedAnnihilationModel::Initialise(const G4ParticleDefinition*,
-                                     const G4DataVector&)
+void G4PolarizedAnnihilationModel::Initialise(const G4ParticleDefinition* part,
+                                              const G4DataVector& dv)
 {
-  //  G4eeToTwoGammaModel::Initialise(part,dv);
-  if(gIsInitialised) return;
+  G4eeToTwoGammaModel::Initialise(part, dv);
+  if(gParticleChange) { return; }
   gParticleChange = GetParticleChangeForGamma();
-  gIsInitialised = true;
 }
 
-G4double G4PolarizedAnnihilationModel::ComputeCrossSectionPerElectron(
-                                const G4ParticleDefinition* pd,
-                                      G4double kinEnergy, 
-                                      G4double cut,
-                                      G4double emax)
+G4double 
+G4PolarizedAnnihilationModel::ComputeCrossSectionPerElectron(G4double kinEnergy)
 {
-  G4double xs = G4eeToTwoGammaModel::ComputeCrossSectionPerElectron(pd,kinEnergy,
-								cut,emax);
+  // cross section from base model
+  G4double xs = G4eeToTwoGammaModel::ComputeCrossSectionPerElectron(kinEnergy);
 
   G4double polzz = theBeamPolarization.z()*theTargetPolarization.z();
   G4double poltt = theBeamPolarization.x()*theTargetPolarization.x() 
@@ -138,24 +133,20 @@ void G4PolarizedAnnihilationModel::ComputeAsymmetriesPerElectron(G4double ene,
   if ( (valueA < -1) || (1 < valueA)) {
     G4cout<< " ERROR PolarizedAnnihilationPS::ComputeAsymmetries \n";
     G4cout<< " something wrong in total cross section calculation (valueA)\n";
-    G4cout<<"*********** LONG "<<valueX<<"\t"<<valueA<<"\t"<<valueT<<"   energy = "<<gam<<G4endl;
+    G4cout<< " LONG: "<<valueX<<"\t"<<valueA<<"\t"<<valueT<<"   energy = "<<gam<<G4endl;
   }
   if ( (valueT < -1) || (1 < valueT)) {
     G4cout<< " ERROR PolarizedAnnihilationPS::ComputeAsymmetries \n";
     G4cout<< " something wrong in total cross section calculation (valueT)\n";
-    G4cout<<"****** TRAN "<<valueX<<"\t"<<valueA<<"\t"<<valueT<<"   energy = "<<gam<<G4endl;
+    G4cout<< " TRAN: "<<valueX<<"\t"<<valueA<<"\t"<<valueT<<"   energy = "<<gam<<G4endl;
   }
 }
 
-
 void G4PolarizedAnnihilationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-						     const G4MaterialCutsCouple* /*couple*/,
+						     const G4MaterialCutsCouple*,
 						     const G4DynamicParticle* dp,
-						     G4double /*tmin*/,
-						     G4double /*maxEnergy*/) 
+						     G4double, G4double) 
 {
-//   G4ParticleChangeForGamma*  gParticleChange 
-//     = dynamic_cast<G4ParticleChangeForGamma*>(pParticleChange);
   const G4Track * aTrack = gParticleChange->GetCurrentTrack();
 
   // kill primary 
@@ -165,7 +156,7 @@ void G4PolarizedAnnihilationModel::SampleSecondaries(std::vector<G4DynamicPartic
   // V.Ivanchenko add protection against zero kin energy
   G4double PositKinEnergy = dp->GetKineticEnergy();
 
-  if(PositKinEnergy < DBL_MIN) {
+  if(PositKinEnergy == 0.0) {
 
     G4double cosTeta = 2.*G4UniformRand()-1.;
     G4double sinTeta = std::sqrt((1.0 - cosTeta)*(1.0 + cosTeta));

@@ -1,4 +1,4 @@
-$Id: History 106588 2017-10-13 13:44:45Z gcosmo $
+$Id: History 109315 2018-04-11 06:42:51Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,7 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+
+10-04-18 mma (testem18-V10-04-02)
+- testem18.cc : set visualisation only in interactive mode
+
+21-03-18 mma (testem18-V10-04-01)
+- testem18.cc : remove G4UI_USE and G4VIS_USE
+
+15-12-17 mma (testem18-V10-04-00)
+- update PhysListEmLivermore and Penelope
+
 13-10-17 mma (testem18-V10-03-06)
 - add edep.mac
 

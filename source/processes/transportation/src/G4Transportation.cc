@@ -59,6 +59,7 @@
 
 #include "G4Transportation.hh"
 #include "G4TransportationProcessType.hh"
+#include "G4TransportationLogger.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -69,12 +70,11 @@
 #include "G4EquationOfMotion.hh"
 
 #include "G4FieldManagerStore.hh"
+#include "G4CoupledTransportation.hh"
 
 class G4VSensitiveDetector;
 
 G4bool G4Transportation::fUseMagneticMoment=false;
-
-// #define  G4DEBUG_TRANSPORT 1
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -97,16 +97,14 @@ G4Transportation::G4Transportation( G4int verbosity )
     fFieldExertedForce( false ),
     fPreviousSftOrigin( 0.,0.,0. ),
     fPreviousSafety( 0.0 ),
-    // fParticleChange(),
     fEndPointDistance( -1.0 ), 
-    fThreshold_Warning_Energy( 100 * MeV ),  
-    fThreshold_Important_Energy( 250 * MeV ), 
+    fThreshold_Warning_Energy( 1.0 * CLHEP::kiloelectronvolt ),
+    fThreshold_Important_Energy( 1.0 * MeV ), 
     fThresholdTrials( 10 ), 
     fNoLooperTrials( 0 ),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
     fShortStepOptimisation( false ) // Old default: true (=fast short steps)
 {
-  // set Process Sub Type
   SetProcessSubType(static_cast<G4int>(TRANSPORTATION));
   pParticleChange= &fParticleChange;   // Required to conform to G4VProcess 
   SetVerboseLevel(verbosity);
@@ -121,6 +119,10 @@ G4Transportation::G4Transportation( G4int verbosity )
 
   fpSafetyHelper =   transportMgr->GetSafetyHelper();  // New 
 
+  fpLogger = new G4TransportationLogger("G4Transportation", verbosity);
+  fpLogger->SetThresholds( GetThresholdWarningEnergy(), GetThresholdImportantEnergy(),
+                           GetThresholdTrials() );
+   
   // Cannot determine whether a field exists here, as it would 
   //  depend on the relative order of creating the detector's 
   //  field and this process. That order is not guaranted.
@@ -145,11 +147,14 @@ G4Transportation::G4Transportation( G4int verbosity )
 
 G4Transportation::~G4Transportation()
 {
+  delete fpLogger;
   if( (verboseLevel > 0) && (fSumEnergyKilled > 0.0 ) )
   { 
     G4cout << " G4Transportation: Statistics for looping particles " << G4endl;
-    G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled << G4endl;
-    G4cout << "   Max energy of loopers killed: " <<  fMaxEnergyKilled << G4endl;
+    G4cout << "   Sum of energy of loopers killed: "
+           <<  fSumEnergyKilled << G4endl;
+    G4cout << "   Max energy of loopers killed: "
+           <<  fMaxEnergyKilled << G4endl;
   } 
 }
 
@@ -185,6 +190,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   fLastStepInVolume= false;
   fNewTrack = false;
 
+  fParticleChange.ProposeFirstStepInVolume(fFirstStepInVolume);
+  
   // Get initial Energy/Momentum of the track
   //
   const G4DynamicParticle*    pParticle  = track.GetDynamicParticle() ;
@@ -255,8 +262,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         }
      }
   }
-  // G4cout << " G4Transport:  field exerts force= " << fieldExertsForce
-  //        << "  fieldMgr= " << fieldMgr << G4endl;
   fFieldExertedForce = fieldExertsForce; 
   
   if( !fieldExertsForce ) 
@@ -324,7 +329,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      // For insurance, could set it again
      // chargeState.SetPDGSpin(pParticleDef->GetPDGSpin() );   // Provisionally in same object
 
-     G4EquationOfMotion* equationOfMotion = fFieldPropagator->GetCurrentEquationOfMotion();
+     auto equationOfMotion = fFieldPropagator->GetCurrentEquationOfMotion();
 
      equationOfMotion->SetChargeMomentumMass( chargeState,
                                               momentumMagnitude,
@@ -519,8 +524,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
 {
-  static G4ThreadLocal G4int noCalls=0;
-  noCalls++;
+  static G4ThreadLocal G4long noCallsASDI=0;
+  const char *methodName= "AlongStepDoIt";
+  noCallsASDI++;
 
   fParticleChange.Initialize(track) ;
 
@@ -570,12 +576,12 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   //fParticleChange. ProposeTrueStepLength( track.GetStepLength() ) ;
 
   // If the particle is caught looping or is stuck (in very difficult
-  // boundaries) in a magnetic field (doing many steps) 
-  //   THEN this kills it ...
+  // boundaries) in a magnetic field (doing many steps) THEN this kills it ...
   //
   if ( fParticleIsLooping )
   {
       G4double endEnergy= fTransportEndKineticEnergy;
+      fNoLooperTrials ++; 
 
       if( (endEnergy < fThreshold_Important_Energy) 
           || (fNoLooperTrials >= fThresholdTrials ) )
@@ -585,34 +591,28 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
         fParticleChange.ProposeTrackStatus( fStopAndKill )  ;
 
         // 'Bare' statistics
+        //
         fSumEnergyKilled += endEnergy; 
         if( endEnergy > fMaxEnergyKilled) { fMaxEnergyKilled= endEnergy; }
-
-#ifdef G4VERBOSE
-        if( (verboseLevel > 1) && 
-            ( endEnergy > fThreshold_Warning_Energy )  )
-        { 
-          G4cout << " G4Transportation is killing track that is looping or stuck "
-                 << G4endl
-                 << "   This track has " << track.GetKineticEnergy() / MeV
-                 << " MeV energy." << G4endl;
-          G4cout << "   Number of trials = " << fNoLooperTrials 
-                 << "   No of calls to AlongStepDoIt = " << noCalls 
-                 << G4endl;
+        
+        if( endEnergy > fThreshold_Warning_Energy )
+        {
+          fpLogger->ReportLoopingTrack( track, stepData, fNoLooperTrials, noCallsASDI, methodName );
+          // const char* fullMethodName= "G4Transportation::AlongStepDotIt()";
+          // ReportLoopingTrack( track, stepData, noCallsASDI, fullMethodName );
         }
-#endif
         fNoLooperTrials=0; 
       }
       else
       {
-        fNoLooperTrials ++; 
 #ifdef G4VERBOSE
-        if( (verboseLevel > 2) )
+        if( verboseLevel > 2 )
         {
           G4cout << "   G4Transportation::AlongStepDoIt(): Particle looping -  "
+                 << G4endl
                  << "   Number of trials = " << fNoLooperTrials 
-                 << "   No of calls to  = " << noCalls 
-                 << G4endl;
+                 << G4endl
+                 << "   No of calls to  = " << noCallsASDI << G4endl;
         }
 #endif
       }
@@ -811,7 +811,8 @@ G4Transportation::StartTracking(G4Track* aTrack)
   fFieldPropagator->PrepareNewTrack();
 }
 
-#include "G4CoupledTransportation.hh"
+// ------------------------===========================---------------------------
+
 G4bool G4Transportation::EnableUseMagneticMoment(G4bool useMoment)
 {
   G4bool lastValue= fUseMagneticMoment;

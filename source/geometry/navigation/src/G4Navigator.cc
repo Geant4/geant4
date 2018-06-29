@@ -1149,10 +1149,8 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       G4int depth= fHistory.GetDepth();
       if( depth > 0 )
       {
-        G4AffineTransform GrandMotherToGlobalTransf =
-          fHistory.GetTransform(depth-1).Inverse();
         fExitNormalGlobalFrame =
-          GrandMotherToGlobalTransf.TransformAxis( fGrandMotherExitNormal );
+          fHistory.GetTransform(depth-1).InverseTransformAxis( fGrandMotherExitNormal );
       }
       else
       {
@@ -1362,7 +1360,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
             GetMotherToDaughterTransform( fBlockedPhysicalVolume, 
                                           fBlockedReplicaNo,
                                           VolumeType(fBlockedPhysicalVolume) ); 
-          G4ThreeVector daughterPointOwnLocal= 
+          G4ThreeVector daughterPointOwnLocal=
             MotherToDaughterTransform.TransformPoint( fLastStepEndPointLocal ); 
 
           // OK if it is a parameterised volume
@@ -1396,7 +1394,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
             //
             // First flip ( ExitNormal = -nextSolidExitNormal; )
             //  and then rotate the the normal to the frame of the mother (current volume)
-            ExitNormal = MotherToDaughterTransform.Inverse().TransformAxis( -nextSolidExitNormal );
+            ExitNormal = MotherToDaughterTransform.InverseTransformAxis( -nextSolidExitNormal );
             fCalculatedExitNormal= true;
           }
           else
@@ -1647,9 +1645,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
        localNormal = GetLocalExitNormalAndCheck(IntersectPointGlobal,
                                                 &validNormal);
        *pNormalCalculated = fCalculatedExitNormal;
-
-       G4AffineTransform localToGlobal = GetLocalToGlobalTransform();
-       globalNormal = localToGlobal.TransformAxis( localNormal );
+       globalNormal = fHistory.GetTopTransform().InverseTransformAxis( localNormal );
     }
   }
   else
@@ -1706,8 +1702,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
                    "Value obtained from new local *solid* is incorrect.");
        localNormal = localNormal.unit(); // Should we correct it ??
      }
-     G4AffineTransform localToGlobal = GetLocalToGlobalTransform();
-     globalNormal = localToGlobal.TransformAxis( localNormal );
+     globalNormal = fHistory.GetTopTransform().InverseTransformAxis( localNormal );
   }
 
 #ifdef G4DEBUG_NAVIGATION
@@ -1717,8 +1712,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
 
     localNormal= GetLocalExitNormalAndCheck(IntersectPointGlobal, &validNormal);
     
-    G4AffineTransform localToGlobal = GetLocalToGlobalTransform();
-    globalNormAgn = localToGlobal.TransformAxis( localNormal );
+    globalNormAgn = fHistory.GetTopTransform().InverseTransformAxis( localNormal );
     
     // Check the value computed against fExitNormalGlobalFrame
     G4ThreeVector diffNorm = globalNormAgn - fExitNormalGlobalFrame;
@@ -2163,8 +2157,8 @@ void G4Navigator::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
   const G4double fAccuracyForWarning   = kCarTolerance,
                  fAccuracyForException = 1000*kCarTolerance;
 
-  G4ThreeVector OriginalGlobalpoint = fHistory.GetTopTransform().Inverse().
-                                      TransformPoint(fLastLocatedPointLocal); 
+  G4ThreeVector OriginalGlobalpoint = fHistory.GetTopTransform().
+                                      InverseTransformPoint(fLastLocatedPointLocal); 
 
   G4double shiftOriginSafSq = (fPreviousSftOrigin-pGlobalpoint).mag2();
 

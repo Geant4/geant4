@@ -14,6 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 19th 2018 J.Allison (exampleP03-V10-04-00)
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
 19 November 2016 A. Dotti (exampleP03-V10-02-00)
 - Explicit set of SD to manager
 

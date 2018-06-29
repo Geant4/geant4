@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc 106953 2017-10-31 08:30:13Z gcosmo $
+// $Id: G4GoudsmitSaundersonMscModel.cc 108305 2018-02-02 13:08:43Z gcosmo $
 //
 // ----------------------------------------------------------------------------
 //
@@ -105,6 +105,7 @@
 //               # fUseSafety corresponds to Urban's fUseSafety
 //               # fUseDistanceToBoundary corresponds to Urban's fUseDistanceToBoundary
 //               # fUseSafetyPlus corresponds to the error-free stepping algorithm
+// 02.02.2018 M. Novak: implemented CrossSectionPerVolume interface method (used only for testing)
 //
 // Class description:
 //   Kawrakow-Bielajew Goudsmit-Saunderson MSC model based on the screened Rutherford DCS
@@ -253,7 +254,6 @@ G4GoudsmitSaundersonMscModel::~G4GoudsmitSaundersonMscModel() {
 
 void G4GoudsmitSaundersonMscModel::Initialise(const G4ParticleDefinition* p, const G4DataVector&) {
   SetParticle(p);
-  fParticleChange = GetParticleChangeForMSC(p);
   // -create GoudsmitSaundersonTable and init its Mott-correction member if
   //  Mott-correction was required
   if (IsMaster()) {
@@ -292,10 +292,11 @@ void G4GoudsmitSaundersonMscModel::Initialise(const G4ParticleDefinition* p, con
     fGSTable->Initialise(LowEnergyLimit(),HighEnergyLimit());
     // create PWA corrections table if it was requested (and not disactivated because active Mott-correction)
     if (fIsUsePWACorrection) {
-      fPWACorrection = new G4GSPWACorrections();
+      fPWACorrection = new G4GSPWACorrections(isElectron);
       fPWACorrection->Initialise();
     }
   }
+  fParticleChange = GetParticleChangeForMSC(p);
 }
 
 
@@ -304,6 +305,62 @@ void G4GoudsmitSaundersonMscModel::InitialiseLocal(const G4ParticleDefinition*, 
    fIsUseMottCorrection   = static_cast<G4GoudsmitSaundersonMscModel*>(masterModel)->GetOptionMottCorrection();
    fIsUsePWACorrection    = static_cast<G4GoudsmitSaundersonMscModel*>(masterModel)->GetOptionPWACorrection();
    fPWACorrection         = static_cast<G4GoudsmitSaundersonMscModel*>(masterModel)->GetPWACorrection();
+}
+
+
+// computes macroscopic first transport cross section: used only in testing not during mc transport
+G4double G4GoudsmitSaundersonMscModel::CrossSectionPerVolume(const G4Material* mat,
+                                         const G4ParticleDefinition*,
+                                         G4double kineticEnergy,
+                                         G4double,
+                                         G4double) {
+  G4double xsecTr1  = 0.; // cross section per volume i.e. macroscopic 1st transport cross section
+  G4double efEnergy = kineticEnergy;
+  // 
+  fLambda0 = 0.0; // elastic mean free path
+  fLambda1 = 0.0; // first transport mean free path
+  fScrA    = 0.0; // screening parameter
+  fG1      = 0.0; // first transport coef.
+  // use Moliere's screening (with Mott-corretion if it was requested)
+  if  (efEnergy<10.*CLHEP::eV) efEnergy = 10.*CLHEP::eV;
+  // total mometum square
+  G4double pt2     = efEnergy*(efEnergy+2.0*electron_mass_c2);
+  // beta square
+  G4double beta2   = pt2/(pt2+electron_mass_c2*electron_mass_c2);
+  // current material index
+  G4int    matindx = mat->GetIndex();
+  // Moliere's b_c
+  G4double bc      = fGSTable->GetMoliereBc(matindx);
+  // get the Mott-correcton factors if Mott-correcton was requested by the user
+  fMCtoScrA       = 1.0;
+  fMCtoQ1         = 1.0;
+  fMCtoG2PerG1    = 1.0;
+  G4double scpCor = 1.0;
+  if (fIsUseMottCorrection) {
+    fGSTable->GetMottCorrectionFactors(G4Log(efEnergy), beta2, matindx, fMCtoScrA, fMCtoQ1, fMCtoG2PerG1);
+    // ! no scattering power correction since the current couple is not set before this interface method is called
+    // scpCor = fGSTable->ComputeScatteringPowerCorrection(currentCouple, efEnergy);
+  } else if (fIsUsePWACorrection) {
+    fPWACorrection->GetPWACorrectionFactors(G4Log(efEnergy), beta2, matindx, fMCtoScrA, fMCtoQ1, fMCtoG2PerG1);
+    // scpCor = fGSTable->ComputeScatteringPowerCorrection(currentCouple, efEnergy);
+  }
+  // screening parameter:
+  // - if Mott-corretioncorrection: the Screened-Rutherford times Mott-corretion DCS with this
+  //   screening parameter gives back the (elsepa) PWA first transport cross section
+  // - if PWA correction: he Screened-Rutherford DCS with this screening parameter
+  //   gives back the (elsepa) PWA first transport cross section
+  fScrA    = fGSTable->GetMoliereXc2(matindx)/(4.0*pt2*bc)*fMCtoScrA;
+  // elastic mean free path in Geant4 internal lenght units: the neglected (1+screening parameter) term is corrected
+  // (if Mott-corretion: the corrected screening parameter is used for this (1+A) correction + Moliere b_c is also
+  // corrected with the screening parameter correction)
+  fLambda0 = beta2*(1.+fScrA)*fMCtoScrA/bc/scpCor;
+  // first transport coefficient (if Mott-corretion: the corrected screening parameter is used (it will be fully
+  // consistent with the one used during the pre-computation of the Mott-correted GS angular distributions))
+  fG1      = 2.0*fScrA*((1.0+fScrA)*G4Log(1.0/fScrA+1.0)-1.0);
+  // first transport mean free path
+  fLambda1 = fLambda0/fG1;
+  xsecTr1  = 1./fLambda1;
+  return xsecTr1;
 }
 
 

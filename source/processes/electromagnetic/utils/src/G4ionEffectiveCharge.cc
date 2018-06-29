@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc 100363 2016-10-19 09:24:47Z gcosmo $
+// $Id: G4ionEffectiveCharge.cc 108386 2018-02-09 15:38:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -62,8 +62,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const G4double G4ionEffectiveCharge::inveplus = 1.0/CLHEP::eplus;
-
 G4ionEffectiveCharge::G4ionEffectiveCharge()
 {
   chargeCorrection = 1.0;
@@ -76,6 +74,7 @@ G4ionEffectiveCharge::G4ionEffectiveCharge()
   lastMat          = 0;
   lastKinEnergy    = 0.0;
   effCharge        = eplus;
+  inveplus         = 1.0/CLHEP::eplus;
   g4calc = G4Pow::GetInstance();
 }
 

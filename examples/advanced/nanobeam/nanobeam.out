@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -98,8 +98,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -209,7 +209,7 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-##### Create analysis manager   0xbc4250
+##### Create analysis manager   0x1a46030
 Using Root analysis manager
 Ntuple-1 created
 Ntuple-2 created
@@ -217,23 +217,353 @@ Ntuple-3 created
 -> Event= 2: X0(mm)= -0.350574 X0(mm) = 0.351397 Z0(m) = -8.87 THETA(mrad)= -0.0583587 PHI(mrad)= 0.0535903 E0(MeV)= 2.99997
     =>IMAGE : X(microns)=-14.618686145351 Y(microns)=4.8482017033361 THETA(mrad)=-8.2635245808525 PHI(mrad)=14.970781960189
 
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.620505,1.12412,75.0795) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 271.566351997 mm  out of requested step 1000000 mm  a fraction of 0.02716 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.620505,1.12412,75.0795) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 271.566351997 mm  out of requested step 1000000 mm  a fraction of 0.02716 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.620505,1.12412,75.0795) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 271.566351997 mm  out of requested step 1000000 mm  a fraction of 0.02716 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.620505,1.12412,75.0795) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 271.566351997 mm  out of requested step 1000000 mm  a fraction of 0.02716 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.620505,1.12412,75.0795) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 271.566351997 mm  out of requested step 976530.654295 mm  a fraction of 0.02781 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.620505,1.12412,75.0795) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 271.566351997 mm  out of requested step 949374.019096 mm  a fraction of 0.0286 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.620505,1.12412,75.0795) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 271.566351997 mm  out of requested step 922217.383896 mm  a fraction of 0.02945 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.620505,1.12412,75.0795) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 271.566351997 mm  out of requested step 895060.748696 mm  a fraction of 0.03034 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.620505,1.12412,75.0795) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 271.566351997 mm  out of requested step 867904.113497 mm  a fraction of 0.03129 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.620505,1.12412,75.0795) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 271.566351997 mm  out of requested step 840747.478297 mm  a fraction of 0.0323 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Transport-001-ExcessSteps
+      issued by : G4Transportation::AlongStepDoIt
+ Transportation is killing track that is looping or stuck. 
+   Track is proton and has 2.99997 MeV energy  ( pre-Step = 2.99997 ) 
+   momentum = (-0.620505,1.12412,75.0795) mag= 75.0904
+   position = (-20.2112,36.5935,2693.74) is in volume 'World',  its material is 'Vacuum' with density = 1e-25 g/cm^3 
+ Total number of Steps by this track: 9131
+ Length of this step = 271.566 mm 
+ Number of propagation trials = 10 ( vs maximum = 10 for 'important' particles ) 
+   ( Number of *calls* of Transport/AlongStepDoIt = 9131 )
+ =============== Recommendations / advice ====================
+ Recommendations to address this issue (Transport-001-ExcessSteps)
+ This warning is controlled by the SetThresholdWarningEnergy  method of G4Transportation.  
+ Current value of 'warning' threshold= 0.001 MeV 
+ - If 'unimportant' particles (with energy low enough not to matter in your   application, then increase its value. 
+ - If particles of high-enough energy to be important are being  killed, you can 
+   a) Increase the trial steps using the method  SetThresholdTrials().    Particles above the 'important' threshold 
+  will be given this many 'chances'.  The default value was 10, and the current value is 10
+   b) Increase the energy which you consider 'important' (above this they are killed only after extra trials), using the method SetThresholdImportantEnergy() 
+      Note: this can incur a potentially high cost in extra simulation time  if more tracks require very large number of integration steps . 
+   c) investigate alternative integration methods 
+    e.g.  Helical methods for uniform or almost uniform fields or else higher order RK methods such as DormandPrince78 
+ This information is provided 5 times. Current count: 1 / 5
+ =============================================================
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 -> Event= 3: X0(mm)= -0.086051067241418 X0(mm) = 0.30625301427677 Z0(m) = -8.87 THETA(mrad)= -0.0062443981190946 PHI(mrad)= 0.076499579504345 E0(MeV)= 3.0000171217089
     =>IMAGE : X(microns)=-1.8135133819675 Y(microns)=3.9381164261963 THETA(mrad)=-1.5012568108426 PHI(mrad)=16.066736355286
 
 -> Event= 6: X0(mm)= -0.67020745874248 X0(mm) = 0.38664382771754 Z0(m) = -8.87 THETA(mrad)= -0.066974174364989 PHI(mrad)= 0.072910081210034 E0(MeV)= 3.0000807810555
     =>IMAGE : X(microns)=-39.733358512768 Y(microns)=6.6034577531174 THETA(mrad)=-12.933397067685 PHI(mrad)=17.891682803603
 
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.971165,1.34345,75.0735) ( magnitude = 75.0918 ) 
+ after 1000 field substeps  totaling 312.577898214 mm  out of requested step 1000000 mm  a fraction of 0.03126 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.971165,1.34345,75.0735) ( magnitude = 75.0918 ) 
+ after 1000 field substeps  totaling 520.260635256 mm  out of requested step 1000000 mm  a fraction of 0.05203 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 -> Event= 10: X0(mm)= 0.60287957589054 X0(mm) = 0.7080715167675 Z0(m) = -8.87 THETA(mrad)= 0.057041542870381 PHI(mrad)= 0.040206237427358 E0(MeV)= 2.9998941214472
     =>IMAGE : X(microns)=32.879979934731 Y(microns)=11.183105116642 THETA(mrad)=11.420683962575 PHI(mrad)=23.297941790405
 
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.857555,1.74927,75.0642) ( magnitude = 75.0895 ) 
+ after 1000 field substeps  totaling 288.120343708 mm  out of requested step 1000000 mm  a fraction of 0.02881 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.857555,1.74927,75.0642) ( magnitude = 75.0895 ) 
+ after 1000 field substeps  totaling 5921.95240211 mm  out of requested step 1000000 mm  a fraction of 0.5922 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 -> Event= 11: X0(mm)= -0.028534188462388 X0(mm) = 0.020253654526918 Z0(m) = -8.87 THETA(mrad)= 0.068485088059658 PHI(mrad)= 0.020301401577701 E0(MeV)= 2.9999091491852
     =>IMAGE : X(microns)=1.2210989702438 Y(microns)=0.28742415130269 THETA(mrad)=4.0759350728066 PHI(mrad)=2.6088667708801
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.30606,0.195899,75.0888) ( magnitude = 75.0897 ) 
+ after 1000 field substeps  totaling 2764.83519839 mm  out of requested step 1000000 mm  a fraction of 0.2765 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.30606,0.195899,75.0888) ( magnitude = 75.0897 ) 
+ after 1000 field substeps  totaling 2764.83519839 mm  out of requested step 808529.068269 mm  a fraction of 0.342 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.30606,0.195899,75.0888) ( magnitude = 75.0897 ) 
+ after 1000 field substeps  totaling 2764.83519839 mm  out of requested step 532045.54843 mm  a fraction of 0.5197 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
 
 -> Event= 14: X0(mm)= 0.16090347786117 X0(mm) = -0.081999159607915 Z0(m) = -8.87 THETA(mrad)= 0.019785816576648 PHI(mrad)= -0.039324660789 E0(MeV)= 2.9999920921771
     =>IMAGE : X(microns)=3.5283256847954 Y(microns)=-0.99566899608279 THETA(mrad)=3.3328691246288 PHI(mrad)=-6.2130478475869
 
 -> Event= 18: X0(mm)= 0.4754453631828 X0(mm) = 0.11035232256611 Z0(m) = -8.87 THETA(mrad)= 0.068503371680473 PHI(mrad)= 0.070682466573986 E0(MeV)= 2.9999685995807
     =>IMAGE : X(microns)=23.622660791713 Y(microns)=2.0865659322397 THETA(mrad)=10.525895438129 PHI(mrad)=10.166423952112
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.790379,0.763388,75.0824) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 293.886081375 mm  out of requested step 1000000 mm  a fraction of 0.02939 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.790379,0.763388,75.0824) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 293.886081375 mm  out of requested step 1000000 mm  a fraction of 0.02939 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.790379,0.763388,75.0824) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 293.886081375 mm  out of requested step 1000000 mm  a fraction of 0.02939 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.790379,0.763388,75.0824) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 293.886081375 mm  out of requested step 996949.295939 mm  a fraction of 0.02948 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.790379,0.763388,75.0824) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 293.886081375 mm  out of requested step 967560.687801 mm  a fraction of 0.03037 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.790379,0.763388,75.0824) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 293.886081375 mm  out of requested step 938172.079664 mm  a fraction of 0.03133 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.790379,0.763388,75.0824) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 293.886081375 mm  out of requested step 908783.471526 mm  a fraction of 0.03234 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.790379,0.763388,75.0824) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 293.886081375 mm  out of requested step 879394.863389 mm  a fraction of 0.03342 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.790379,0.763388,75.0824) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 293.886081375 mm  out of requested step 850006.255251 mm  a fraction of 0.03457 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.790379,0.763388,75.0824) ( magnitude = 75.0904 ) 
+ after 1000 field substeps  totaling 293.886081375 mm  out of requested step 820617.647114 mm  a fraction of 0.03581 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Transport-001-ExcessSteps
+      issued by : G4Transportation::AlongStepDoIt
+ Transportation is killing track that is looping or stuck. 
+   Track is proton and has 2.99997 MeV energy  ( pre-Step = 2.99997 ) 
+   momentum = (0.790379,0.763388,75.0824) mag= 75.0904
+   position = (27.8638,26.8916,2894.69) is in volume 'World',  its material is 'Vacuum' with density = 1e-25 g/cm^3 
+ Total number of Steps by this track: 9131
+ Length of this step = 293.886 mm 
+ Number of propagation trials = 10 ( vs maximum = 10 for 'important' particles ) 
+   ( Number of *calls* of Transport/AlongStepDoIt = 63879 )
+ =============== Recommendations / advice ====================
+ Recommendations to address this issue (Transport-001-ExcessSteps)
+ This warning is controlled by the SetThresholdWarningEnergy  method of G4Transportation.  
+ Current value of 'warning' threshold= 0.001 MeV 
+ - If 'unimportant' particles (with energy low enough not to matter in your   application, then increase its value. 
+ - If particles of high-enough energy to be important are being  killed, you can 
+   a) Increase the trial steps using the method  SetThresholdTrials().    Particles above the 'important' threshold 
+  will be given this many 'chances'.  The default value was 10, and the current value is 10
+   b) Increase the energy which you consider 'important' (above this they are killed only after extra trials), using the method SetThresholdImportantEnergy() 
+      Note: this can incur a potentially high cost in extra simulation time  if more tracks require very large number of integration steps . 
+   c) investigate alternative integration methods 
+    e.g.  Helical methods for uniform or almost uniform fields or else higher order RK methods such as DormandPrince78 
+ This information is provided 5 times. Current count: 2 / 5
+ =============================================================
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
 
 -> Event= 20: X0(mm)= 0.20667925895533 X0(mm) = -0.27400828259202 Z0(m) = -8.87 THETA(mrad)= 0.0313219969655 PHI(mrad)= -0.052954806429599 E0(MeV)= 3.0000271663979
     =>IMAGE : X(microns)=5.4957963118256 Y(microns)=-3.3868267541957 THETA(mrad)=4.6654379862447 PHI(mrad)=-12.804050001934
@@ -253,6 +583,66 @@ Ntuple-3 created
 -> Event= 36: X0(mm)= -0.0079086737969922 X0(mm) = -0.1848738373955 Z0(m) = -8.87 THETA(mrad)= 0.0092569578549554 PHI(mrad)= -0.068791407570621 E0(MeV)= 2.9999987305134
     =>IMAGE : X(microns)=0.0023934449762555 Y(microns)=-2.2957483694844 THETA(mrad)=0.49909041569329 PHI(mrad)=-11.992329244261
 
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.0374771,-0.900492,75.0854) ( magnitude = 75.0908 ) 
+ after 1000 field substeps  totaling 1742.87341124 mm  out of requested step 1000000 mm  a fraction of 0.1743 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.0374771,-0.900492,75.0854) ( magnitude = 75.0908 ) 
+ after 1000 field substeps  totaling 1742.87341124 mm  out of requested step 910790.098503 mm  a fraction of 0.1914 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.0374771,-0.900492,75.0854) ( magnitude = 75.0908 ) 
+ after 1000 field substeps  totaling 1742.87341124 mm  out of requested step 736502.757379 mm  a fraction of 0.2366 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.0374771,-0.900492,75.0854) ( magnitude = 75.0908 ) 
+ after 1000 field substeps  totaling 1742.87341124 mm  out of requested step 562215.416254 mm  a fraction of 0.31 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.0374771,-0.900492,75.0854) ( magnitude = 75.0908 ) 
+ after 1000 field substeps  totaling 1742.87341124 mm  out of requested step 387928.07513 mm  a fraction of 0.4493 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.0374771,-0.900492,75.0854) ( magnitude = 75.0908 ) 
+ after 1000 field substeps  totaling 1742.87341124 mm  out of requested step 213640.734006 mm  a fraction of 0.8158 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 -> Event= 41: X0(mm)= -0.0052936934761979 X0(mm) = 0.063381672744254 Z0(m) = -8.87 THETA(mrad)= 0.02160096985706 PHI(mrad)= -0.049328983057872 E0(MeV)= 3.0000031288488
     =>IMAGE : X(microns)=0.14493027930128 Y(microns)=0.55163915199522 THETA(mrad)=1.3321248333661 PHI(mrad)=-3.284499552786
 
@@ -268,11 +658,41 @@ Ntuple-3 created
 -> Event= 53: X0(mm)= 0.18024795019127 X0(mm) = 0.26563720953034 Z0(m) = -8.87 THETA(mrad)= 0.068194327905589 PHI(mrad)= 0.046458164706904 E0(MeV)= 2.9999178358303
     =>IMAGE : X(microns)=8.2850321960764 Y(microns)=3.4551410788841 THETA(mrad)=6.7239674516931 PHI(mrad)=11.919757684389
 
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.504898,0.895031,75.0828) ( magnitude = 75.0898 ) 
+ after 1000 field substeps  totaling 7715.3708201 mm  out of requested step 1000000 mm  a fraction of 0.7715 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 -> Event= 55: X0(mm)= -0.85375717958006 X0(mm) = 0.3573014582006 Z0(m) = -8.87 THETA(mrad)= -0.074501244846954 PHI(mrad)= 0.039440666297839 E0(MeV)= 2.999966559615
     =>IMAGE : X(microns)=-64.056973108109 Y(microns)=6.1147263296419 THETA(mrad)=-15.804452953896 PHI(mrad)=13.702865334869
 
 -> Event= 56: X0(mm)= 0.1454709674432 X0(mm) = -0.011799618926587 Z0(m) = -8.87 THETA(mrad)= -0.03021980519692 PHI(mrad)= 0.027948785176419 E0(MeV)= 2.9999781445788
     =>IMAGE : X(microns)=2.228017482073 Y(microns)=-0.066003037047051 THETA(mrad)=-0.10470313679937 PHI(mrad)=2.514955102375
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.00786222,0.188849,75.0903) ( magnitude = 75.0906 ) 
+ after 1000 field substeps  totaling 3789.93187217 mm  out of requested step 1000000 mm  a fraction of 0.379 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.00786222,0.188849,75.0903) ( magnitude = 75.0906 ) 
+ after 1000 field substeps  totaling 3789.93187217 mm  out of requested step 706010.218372 mm  a fraction of 0.5368 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
 
 -> Event= 61: X0(mm)= 0.010073418340366 X0(mm) = 0.048133463820978 Z0(m) = -8.87 THETA(mrad)= 0.01569024581137 PHI(mrad)= -0.05838311092919 E0(MeV)= 3.0000742147028
     =>IMAGE : X(microns)=0.32104110881693 Y(microns)=0.39630414349225 THETA(mrad)=1.144850602253 PHI(mrad)=-4.6160975785052
@@ -292,14 +712,94 @@ Ntuple-3 created
 -> Event= 69: X0(mm)= 0.14954473621966 X0(mm) = 0.20655990656738 Z0(m) = -8.87 THETA(mrad)= -0.034447112736969 PHI(mrad)= 0.069897440887196 E0(MeV)= 3.0000337863959
     =>IMAGE : X(microns)=2.2314738789964 Y(microns)=2.5408619221782 THETA(mrad)=-0.32672390793924 PHI(mrad)=12.692332568214
 
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.0245341,0.953058,75.0852) ( magnitude = 75.0912 ) 
+ after 1000 field substeps  totaling 1691.58794371 mm  out of requested step 1000000 mm  a fraction of 0.1692 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.0245341,0.953058,75.0852) ( magnitude = 75.0912 ) 
+ after 1000 field substeps  totaling 1691.58794371 mm  out of requested step 915927.857559 mm  a fraction of 0.1847 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.0245341,0.953058,75.0852) ( magnitude = 75.0912 ) 
+ after 1000 field substeps  totaling 1691.58794371 mm  out of requested step 746769.063188 mm  a fraction of 0.2265 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.0245341,0.953058,75.0852) ( magnitude = 75.0912 ) 
+ after 1000 field substeps  totaling 1691.58794371 mm  out of requested step 577610.268816 mm  a fraction of 0.2929 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.0245341,0.953058,75.0852) ( magnitude = 75.0912 ) 
+ after 1000 field substeps  totaling 1691.58794371 mm  out of requested step 408451.474445 mm  a fraction of 0.4141 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.0245341,0.953058,75.0852) ( magnitude = 75.0912 ) 
+ after 1000 field substeps  totaling 1691.58794371 mm  out of requested step 239292.680074 mm  a fraction of 0.7069 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 -> Event= 72: X0(mm)= 0.48339298704702 X0(mm) = -0.71032537470226 Z0(m) = -8.87 THETA(mrad)= 0.051701130704913 PHI(mrad)= -0.04866088524039 E0(MeV)= 2.9999484082423
     =>IMAGE : X(microns)=22.66835029285 Y(microns)=-10.904642330323 THETA(mrad)=9.535461936975 PHI(mrad)=-24.21342707267
 
 -> Event= 74: X0(mm)= 0.0094465464091236 X0(mm) = 0.3470856075926 Z0(m) = -8.87 THETA(mrad)= 0.043734254900955 PHI(mrad)= 0.077189968514549 E0(MeV)= 3.0000341940519
     =>IMAGE : X(microns)=1.3555365713929 Y(microns)=4.5582289833841 THETA(mrad)=2.9551911195202 PHI(mrad)=17.24452366754
 
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.221909,1.29485,75.0798) ( magnitude = 75.0913 ) 
+ after 1000 field substeps  totaling 1446.38027337 mm  out of requested step 1000000 mm  a fraction of 0.1446 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 -> Event= 76: X0(mm)= 0.032601879808464 X0(mm) = 0.016270507061099 Z0(m) = -8.87 THETA(mrad)= 0.082718966005109 PHI(mrad)= 0.031582361301935 E0(MeV)= 3.0000283538282
     =>IMAGE : X(microns)=3.6596087625872 Y(microns)=0.29743161505596 THETA(mrad)=5.7793582471033 PHI(mrad)=3.6449830941049
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.433976,0.273705,75.0894) ( magnitude = 75.0912 ) 
+ after 1000 field substeps  totaling 5979.86667739 mm  out of requested step 1000000 mm  a fraction of 0.598 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
 
 -> Event= 83: X0(mm)= -0.85403243133586 X0(mm) = -0.0091240517582702 Z0(m) = -8.87 THETA(mrad)= -0.079627748200215 PHI(mrad)= -0.01920863277583 E0(MeV)= 2.9999727618311
     =>IMAGE : X(microns)=-65.470687040491 Y(microns)=-0.45660500053381 THETA(mrad)=-16.143658574273 PHI(mrad)=-2.1976424293579
@@ -307,11 +807,71 @@ Ntuple-3 created
 -> Event= 84: X0(mm)= 0.019869526159409 X0(mm) = 0.027356472793811 Z0(m) = -8.87 THETA(mrad)= 0.013216483507124 PHI(mrad)= -0.064005070837523 E0(MeV)= 3.0000225971111
     =>IMAGE : X(microns)=0.51282655853388 Y(microns)=0.14423310759093 THETA(mrad)=1.1094917777804 PHI(mrad)=-5.7501395670797
 
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.083313,-0.431782,75.0898) ( magnitude = 75.0911 ) 
+ after 1000 field substeps  totaling 2485.4573187 mm  out of requested step 1000000 mm  a fraction of 0.2485 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.083313,-0.431782,75.0898) ( magnitude = 75.0911 ) 
+ after 1000 field substeps  totaling 2485.4573187 mm  out of requested step 836472.702011 mm  a fraction of 0.2971 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.083313,-0.431782,75.0898) ( magnitude = 75.0911 ) 
+ after 1000 field substeps  totaling 2485.4573187 mm  out of requested step 587926.970141 mm  a fraction of 0.4227 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.083313,-0.431782,75.0898) ( magnitude = 75.0911 ) 
+ after 1000 field substeps  totaling 2485.4573187 mm  out of requested step 339381.238271 mm  a fraction of 0.7323 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 -> Event= 85: X0(mm)= 1.0674724333131 X0(mm) = -1.0663214971145 Z0(m) = -8.87 THETA(mrad)= 0.063205803646676 PHI(mrad)= -0.055370508485 E0(MeV)= 3.000051629789
     =>IMAGE : X(microns)=97.290191946545 Y(microns)=-23.485205289819 THETA(mrad)=17.851794016779 PHI(mrad)=-34.581819616613
 
 -> Event= 86: X0(mm)= -0.19481916629754 X0(mm) = 0.95206247986366 Z0(m) = -8.87 THETA(mrad)= -0.0050314491063534 PHI(mrad)= 0.088572692400845 E0(MeV)= 2.9999719319194
     =>IMAGE : X(microns)=-5.6762828541568 Y(microns)=16.627258615422 THETA(mrad)=-2.8117224626258 PHI(mrad)=34.820750894377
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.211133,2.61418,75.0447) ( magnitude = 75.0905 ) 
+ after 1000 field substeps  totaling 5227.31158797 mm  out of requested step 1000000 mm  a fraction of 0.5227 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.211133,2.61418,75.0447) ( magnitude = 75.0905 ) 
+ after 1000 field substeps  totaling 5227.31158797 mm  out of requested step 562925.138243 mm  a fraction of 0.9286 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
 
 -> Event= 88: X0(mm)= -0.22545561238938 X0(mm) = -0.030927067231415 Z0(m) = -8.87 THETA(mrad)= -0.045660693985418 PHI(mrad)= 0.031393071444182 E0(MeV)= 3.0000172375688
     =>IMAGE : X(microns)=-6.7173566424659 Y(microns)=-0.21812869072347 THETA(mrad)=-5.835430632314 PHI(mrad)=2.3456102190408
@@ -319,9 +879,79 @@ Ntuple-3 created
 -> Event= 96: X0(mm)= 0.22011014269581 X0(mm) = 0.15902386447663 Z0(m) = -8.87 THETA(mrad)= 0.022230939077933 PHI(mrad)= 0.089392622525076 E0(MeV)= 3.000055786943
     =>IMAGE : X(microns)=5.2879849726628 Y(microns)=2.259375146752 THETA(mrad)=4.2467644610932 PHI(mrad)=13.380935141203
 
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.318895,1.00476,75.0841) ( magnitude = 75.0915 ) 
+ after 1000 field substeps  totaling 1612.02869329 mm  out of requested step 1000000 mm  a fraction of 0.1612 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.318895,1.00476,75.0841) ( magnitude = 75.0915 ) 
+ after 1000 field substeps  totaling 1612.02869329 mm  out of requested step 923903.073411 mm  a fraction of 0.1745 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 -> Event= 97: X0(mm)= -0.039068652311959 X0(mm) = 0.016949266328071 Z0(m) = -8.87 THETA(mrad)= 0.026369793436265 PHI(mrad)= 0.031743743594098 E0(MeV)= 3.0000321175827
     =>IMAGE : X(microns)=-0.38272594907984 Y(microns)=0.23903584339209 THETA(mrad)=1.2108399262061 PHI(mrad)=3.6794519800011
 
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (0.0909234,0.276294,75.0907) ( magnitude = 75.0912 ) 
+ after 1000 field substeps  totaling 3067.63902183 mm  out of requested step 1000000 mm  a fraction of 0.3068 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 -> Event= 98: X0(mm)= -0.26981294994438 X0(mm) = -0.15163857783775 Z0(m) = -8.87 THETA(mrad)= -0.038486114555135 PHI(mrad)= -0.058017023830174 E0(MeV)= 3.0000219596412
     =>IMAGE : X(microns)=-7.8791063604948 Y(microns)=-2.0088517167155 THETA(mrad)=-5.9364929005825 PHI(mrad)=-9.9985801938916
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.445775,-0.750792,75.086) ( magnitude = 75.0911 ) 
+ after 1000 field substeps  totaling 1774.82183069 mm  out of requested step 1000000 mm  a fraction of 0.1775 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.445775,-0.750792,75.086) ( magnitude = 75.0911 ) 
+ after 1000 field substeps  totaling 1774.82183069 mm  out of requested step 907590.499574 mm  a fraction of 0.1956 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.445775,-0.750792,75.086) ( magnitude = 75.0911 ) 
+ after 1000 field substeps  totaling 1774.82183069 mm  out of requested step 730108.316505 mm  a fraction of 0.2431 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomNav1002
+      issued by : G4PropagatorInField::ComputeStep
+ Unfinished integration of track (likely looping particle)   of momentum (-0.445775,-0.750792,75.086) ( magnitude = 75.0911 ) 
+ after 1000 field substeps  totaling 1774.82183069 mm  out of requested step 552626.133436 mm  a fraction of 0.3212 % 
+ in volume World with material Vacuum ( density = 1e-25 g / cm^3 ) 
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
 

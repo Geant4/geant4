@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc 106143 2017-09-14 06:34:42Z gcosmo $
+// $Id: G4ParticleDefinition.cc 110257 2018-05-17 14:20:12Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -69,61 +69,61 @@ G4PDefManager G4ParticleDefinition::subInstanceManager;
 // This macro changes the references to fields that are now encapsulated
 // in the class G4PDefData.
 //
-#define G4MT_pmanager ((subInstanceManager.offset[g4particleDefinitionInstanceID]).theProcessManager)
+#define G4MT_pmanager ((subInstanceManager.offset()[g4particleDefinitionInstanceID]).theProcessManager)
 
 G4ParticleDefinition::G4ParticleDefinition(
-		     const G4String&     aName,  
-		     G4double            mass,
-		     G4double            width,
-                     G4double            charge,   
-		     G4int               iSpin,
-                     G4int               iParity,    
-		     G4int               iConjugation,
-                     G4int               iIsospin,   
-		     G4int               iIsospin3, 
-		     G4int               gParity,
-		     const G4String&     pType,
-                     G4int               lepton,      
-		     G4int               baryon,
-		     G4int               encoding,
-		     G4bool              stable,
-		     G4double            lifetime,
-		     G4DecayTable        *decaytable,
-		     G4bool              shortlived,
-                     const G4String&     subType,
-                     G4int               anti_encoding,
-		     G4double            magneticMoment)
+        const G4String&     aName,
+        G4double            mass,
+        G4double            width,
+        G4double            charge,
+        G4int               iSpin,
+        G4int               iParity,
+        G4int               iConjugation,
+        G4int               iIsospin,
+        G4int               iIsospin3,
+        G4int               gParity,
+        const G4String&     pType,
+        G4int               lepton,
+        G4int               baryon,
+        G4int               encoding,
+        G4bool              stable,
+        G4double            lifetime,
+        G4DecayTable        *decaytable,
+        G4bool              shortlived,
+        const G4String&     subType,
+        G4int               anti_encoding,
+        G4double            magneticMoment)
 
-		 : theParticleName(aName), 
-		   thePDGMass(mass),
-		   thePDGWidth(width),
-		   thePDGCharge(charge),
-		   thePDGiSpin(iSpin),
-		   thePDGSpin(iSpin*0.5),
-		   thePDGiParity(iParity), 
-		   thePDGiConjugation(iConjugation),
-		   thePDGiGParity(gParity),
-		   thePDGiIsospin(iIsospin),
-		   thePDGiIsospin3(iIsospin3),
-		   thePDGIsospin(iIsospin*0.5),
-		   thePDGIsospin3(iIsospin3*0.5),
-		   thePDGMagneticMoment(magneticMoment),
-		   theLeptonNumber(lepton),
-		   theBaryonNumber(baryon),
-		   theParticleType(pType), 
-		   theParticleSubType(subType), 
-		   thePDGEncoding(encoding),
-		   theAntiPDGEncoding(-1*encoding),
-		   fShortLivedFlag(shortlived),
-		   thePDGStable(stable), 
-		   thePDGLifeTime(lifetime), 
-                   theDecayTable(decaytable),
-                   theAtomicNumber(0),
-                   theAtomicMass(0),
-                   verboseLevel(1),
-  		   fApplyCutsFlag(false),
-		   isGeneralIon(false),
-		   isMuonicAtom(false)
+    : theParticleName(aName),
+      thePDGMass(mass),
+      thePDGWidth(width),
+      thePDGCharge(charge),
+      thePDGiSpin(iSpin),
+      thePDGSpin(iSpin*0.5),
+      thePDGiParity(iParity),
+      thePDGiConjugation(iConjugation),
+      thePDGiGParity(gParity),
+      thePDGiIsospin(iIsospin),
+      thePDGiIsospin3(iIsospin3),
+      thePDGIsospin(iIsospin*0.5),
+      thePDGIsospin3(iIsospin3*0.5),
+      thePDGMagneticMoment(magneticMoment),
+      theLeptonNumber(lepton),
+      theBaryonNumber(baryon),
+      theParticleType(pType),
+      theParticleSubType(subType),
+      thePDGEncoding(encoding),
+      theAntiPDGEncoding(-1*encoding),
+      fShortLivedFlag(shortlived),
+      thePDGStable(stable),
+      thePDGLifeTime(lifetime),
+      theDecayTable(decaytable),
+      theAtomicNumber(0),
+      theAtomicMass(0),
+      verboseLevel(1),
+      fApplyCutsFlag(false),
+      isGeneralIon(false),
+      isMuonicAtom(false)
 {
    static const G4String nucleus("nucleus");
    static const G4String muAtom("MuonicAtom"); 

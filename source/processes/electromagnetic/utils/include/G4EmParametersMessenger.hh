@@ -78,9 +78,11 @@ private:
 
   G4EmParameters*            theParameters;
 
+  G4UIdirectory*             gconvDirectory;
   G4UIdirectory*             eLossDirectory;
   G4UIdirectory*             mscDirectory;
   G4UIdirectory*             emDirectory;
+  G4UIdirectory*             dnaDirectory;
 
   G4UIcmdWithABool*          flucCmd;
   G4UIcmdWithABool*          rangeCmd;
@@ -106,6 +108,7 @@ private:
   G4UIcmdWithABool*          dnasCmd;
   G4UIcmdWithABool*          dnamscCmd;
   G4UIcmdWithABool*          sharkCmd;
+  G4UIcmdWithABool*          onIsolatedCmd;
 
   G4UIcmdWithADouble*        minSubSecCmd;
   G4UIcmdWithADoubleAndUnit* minEnCmd;
@@ -119,6 +122,7 @@ private:
   G4UIcmdWithADouble*        labCmd;
   G4UIcmdWithADouble*        mscfCmd;
   G4UIcmdWithADoubleAndUnit* angCmd;
+  G4UIcmdWithADoubleAndUnit* msceCmd;
   G4UIcmdWithADouble*        frCmd;
   G4UIcmdWithADouble*        fr1Cmd;
   G4UIcmdWithADouble*        fgCmd;
@@ -131,12 +135,14 @@ private:
   G4UIcmdWithAnInteger*      verCmd;
   G4UIcmdWithAnInteger*      ver1Cmd;
   G4UIcmdWithAnInteger*      ver2Cmd;
+  G4UIcmdWithAnInteger*      tripletCmd;
 
   G4UIcmdWithAString*        mscCmd;
   G4UIcmdWithAString*        msc1Cmd;
 
   G4UIcmdWithAString*        pixeXsCmd;
   G4UIcmdWithAString*        pixeeXsCmd;
+  G4UIcmdWithAString*        dnaSolCmd;
 
   G4UIcommand*               paiCmd;
   G4UIcmdWithAString*        meCmd;

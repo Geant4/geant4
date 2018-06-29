@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4RegularNavigation.cc 109826 2018-05-09 10:55:30Z gcosmo $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -77,9 +77,9 @@ G4double G4RegularNavigation::
   // problems would make this method to be called
 
   G4ThreeVector globalPoint =
-         history.GetTopTransform().Inverse().TransformPoint(localPoint);
+         history.GetTopTransform().InverseTransformPoint(localPoint);
   G4ThreeVector globalDirection =
-         history.GetTopTransform().Inverse().TransformAxis(localDirection);
+         history.GetTopTransform().InverseTransformAxis(localDirection);
 
   G4ThreeVector localPoint2 = localPoint; // take away constantness
 
@@ -161,11 +161,11 @@ G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
   // param container volume
   //
   G4int ide = history.GetDepth();
-  G4ThreeVector containerPoint = history.GetTransform(ide).Inverse().TransformPoint(localPoint);
+  G4ThreeVector containerPoint = history.GetTransform(ide).InverseTransformPoint(localPoint);
 
   // Point in global frame
   //
-  containerPoint = history.GetTransform(ide).Inverse().TransformPoint(localPoint);
+  containerPoint = history.GetTransform(ide).InverseTransformPoint(localPoint);
 
   // Point in voxel parent volume frame
   //

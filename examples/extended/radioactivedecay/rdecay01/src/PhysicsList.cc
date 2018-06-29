@@ -26,7 +26,7 @@
 /// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 107227 2017-11-06 11:43:04Z gcosmo $
+// $Id: PhysicsList.cc 108902 2018-03-15 14:51:23Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +65,7 @@ PhysicsList::PhysicsList()
   //
   G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
   G4NuclideTable::GetInstance()->SetLevelTolerance(1.0*eV);
-  
+
   //read new PhotonEvaporation data set 
   //
   G4DeexPrecoParameters* deex = 
@@ -107,33 +107,34 @@ void PhysicsList::ConstructParticle()
   iConstructor.ConstructParticle();  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
 
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
-  
+
   G4bool ARMflag = false;
-  radioactiveDecay->SetARM(ARMflag);               //Atomic Rearangement
+  radioactiveDecay->SetARM(ARMflag);        //Atomic Rearangement
 
   // need to initialize atomic deexcitation
   //
   G4LossTableManager* man = G4LossTableManager::Instance();
   G4VAtomDeexcitation* deex = man->AtomDeexcitation();
   if (!deex) {
+     ///G4EmParameters::Instance()->SetFluo(true);
      G4EmParameters::Instance()->SetAugerCascade(ARMflag);
      deex = new G4UAtomicDeexcitation();
      deex->InitialiseAtomicDeexcitation();
      man->SetAtomDeexcitation(deex);
   }
-    
+
   // register radioactiveDecay
   //
-  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
   ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
-  
+
   //printout
   //
   G4cout << "\n  Set atomic relaxation mode " << ARMflag << G4endl;

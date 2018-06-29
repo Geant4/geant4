@@ -108,6 +108,12 @@ void DetectorConstruction::DefineMaterials()
   H2O->AddElement(H, 2);
   H2O->AddElement(O, 1);
   H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
+
+  G4Element* Hf = man->FindOrBuildElement("Hf");
+ 
+  G4Material* HfO2 = new G4Material("HfO2", 9.68*g/cm3, 2);
+  HfO2->AddElement(Hf, 1);
+  HfO2->AddElement(O , 2);
   
   // example of vacuum
   G4double density     = universe_mean_density;    //from PhysicalConstants.h

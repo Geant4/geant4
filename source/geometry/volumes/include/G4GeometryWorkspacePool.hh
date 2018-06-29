@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryWorkspacePool.hh 106171 2017-09-15 13:02:56Z gcosmo $
+// $Id: G4GeometryWorkspacePool.hh 110271 2018-05-17 14:41:15Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -66,7 +66,7 @@ class G4GeometryWorkspacePool
       // Reuse an existing workspace or create a new one if needed.
       // This will never fail, except if system is out of resources
 
-    inline G4GeometryWorkspace* GetWorkspace() { return fMyWorkspace; } 
+    inline G4GeometryWorkspace* GetWorkspace() { return fMyWorkspace(); }
       // Give back the existing, active workspace for my thread / task
 
     void Recycle( G4GeometryWorkspace * );
@@ -96,7 +96,7 @@ class G4GeometryWorkspacePool
       // for tbb.
       // Further development: template parameter with portable default
 
-    G4GEOM_DLL static G4ThreadLocal G4GeometryWorkspace* fMyWorkspace;
+    G4GEOM_DLL static G4GeometryWorkspace*& fMyWorkspace();
       // The thread's workspace - if assigned.
 };
 

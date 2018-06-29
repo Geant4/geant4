@@ -73,7 +73,7 @@ bool SoGL2PSAction::enableFileWriting(
   fFile = ::fopen(fFileName,"w");
   if(!fFile) {
     SoDebugError::post("SoGL2PSAction::enableFileWriting",
-                       "Cannot open file %s",fFileName);
+                       "Cannot open file %s",fFileName.c_str());
     return false;
   }
 #ifdef __COIN__

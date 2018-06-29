@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh 104316 2017-05-24 13:04:23Z gcosmo $
+// $Id: G4TessellatedSolid.hh 108151 2018-01-12 09:29:46Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -98,6 +98,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef G4TessellatedSolid_hh
 #define G4TessellatedSolid_hh 1
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UTESSELLATEDSOLID 1
+#endif
+
+#if defined(G4GEOM_USE_UTESSELLATEDSOLID)
+  #define G4UTessellatedSolid G4TessellatedSolid
+  #include "G4UTessellatedSolid.hh"
+#else
 
 #include <iostream>
 #include <vector>
@@ -325,5 +334,7 @@ inline G4bool G4TessellatedSolid::OutsideOfExtent(const G4ThreeVector &p,
         || p.z() < fMinExtent.z() - tolerance
         || p.z() > fMaxExtent.z() + tolerance);
 }
+
+#endif
 
 #endif

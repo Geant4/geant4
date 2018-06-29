@@ -7,12 +7,29 @@ $Id: History 66241 2012-12-13 18:34:42Z gunter $
 
               Hadronic physics-list/constructors/factory History
               --------------------------------------------------
-This file should be used  to briefly summarize all major modifications 
+This file should be used  to briefly summarize all major modifications
 introduced in the code and keeptrack of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-Mar-2018, Robert Hatcher             (phys-ctor-fact-V10-04-02)
+- Allows override of exclusion of G4RegisterPhysicsConstructors.icc
+   when using WIN32 by setting USING_STATIC_LIBS
+
+28-Feb-2018, Robert Hatcher             (phys-ctor-fact-V10-04-01)
+- WIN32 linker works differently then Unix for externals in shared mode
+  Special case WIN32 (for both shared & static builds for now)
+
+26-Feb-2018, Robert Hatcher             (phys-ctor-fact-V10-04-00)
+- Move G4_REFERENCE_PHYSCONSTR_FACTORY macro calls out of
+  G4PhysicsConstructorRegistry.cc, where they cause an implicit
+  circular link when building granular libraries, and into a new
+  G4RegisterPhysicsConstructors.icc, where they can be included
+  as necessary in a higher level compilation unit.
+- REFERENCE macro calls can be made unique by #define REGREF <anything>
+- Whitespace cleanup
 
 01-May-2017, Sebastien Incerti          (phys-ctor-fact-V10-03-00)
 - added Geant4-DNA stationary constructors

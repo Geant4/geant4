@@ -1,4 +1,4 @@
-$Id: History 110108 2018-05-15 11:46:54Z gcosmo $
+$Id: History 110680 2018-06-07 14:51:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,14 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15 March 2018 Gabriele Cosmo (gdml-V10-03-11)
+7 June 2018 Gabriele Cosmo (gdml-V10-04-03)
+- Clear also auxiliary map information in G4GDMLReadStructure::Clear().
+  Addressing problem report #2064.
+
+15 March 2018 Gabriele Cosmo (gdml-V10-04-02)
 - Protect printout of progress in reading/writing by G4VERBOSE. 
 
-07 February 2018 Daren Sawkey (gdml-V10-03-10)
-- Updates to changes in G4Material[Const]PropertiesTable (fix bug #2030) in 
+7 February 2018 Daren Sawkey (gdml-V10-04-01)
+- Updates to changes in G4Material[Const]PropertiesTable in 
   G4GDMLWriteSolids and G4GDMLWriteMaterials.
+  Addressing problem report #2030.
 
-19 December 2017 Gabriele Cosmo
+19 December 2017 Gabriele Cosmo (gdml-V10-04-00)
 - Fixed self-consistency in G4GDMLAuxStructType header (missing #include).
   Thanks to Raphael Isemann for reporting this.
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIySection.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4PAIySection.cc 108737 2018-03-02 13:49:56Z gcosmo $
 //
 // 
 // G4PAIySection.cc -- class implementation file
@@ -105,10 +105,12 @@ G4PAIySection::G4PAIySection()
 
 ////////////////////////////////////////////////////////////////////////////
 //
-// Destructor
+// 
 
-G4PAIySection::~G4PAIySection()
-{}
+G4double G4PAIySection::GetLorentzFactor(G4int j) const
+{
+   return fLorentzFactor[j];
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -297,7 +299,7 @@ void G4PAIySection::InitPAI()
    }
    fPAItable[0][0] = fSplineNumber;
    
-   for( G4int j = 1; j < 112; j++)       // for other gammas
+   for( G4int j = 1; j < 112; ++j)       // for other gammas
    {
       if( j == fRefGammaNumber ) continue;
       
@@ -329,9 +331,9 @@ void G4PAIySection::NormShift(G4double betaGammaSq)
 {
   G4int i, j;
 
-  for( i = 1; i <= fIntervalNumber-1; i++ )
+  for( i = 1; i <= fIntervalNumber-1; ++i)
   {
-    for( j = 1; j <= 2; j++ )
+    for( j = 1; j <= 2; ++j)
     {
       fSplineNumber = (i-1)*2 + j;
 
@@ -373,9 +375,9 @@ void G4PAIySection::NormShift(G4double betaGammaSq)
           // Calculation of PAI differrential cross-section (1/(keV*cm))
           // in the energy points near borders of energy intervals
 
-   for(G4int k=1;k<=fIntervalNumber-1;k++)
+   for(G4int k=1; k<=fIntervalNumber-1; ++k)
    {
-      for(j=1;j<=2;j++)
+      for(j=1; j<=2; ++j)
       {
          i = (k-1)*2 + j;
          fImPartDielectricConst[i] = fNormalizationCof*
@@ -462,7 +464,7 @@ void G4PAIySection::SplainPAI(G4double betaGammaSq)
       G4double x = 2*(fDifPAIySection[i+1] - y)/(fDifPAIySection[i+1] + y);
 
       G4double delta = 2.*(fSplineEnergy[i+1]-fSplineEnergy[i])
-	/(fSplineEnergy[i+1]+fSplineEnergy[i]);
+        /(fSplineEnergy[i+1]+fSplineEnergy[i]);
 
       if( x < 0 ) 
       {

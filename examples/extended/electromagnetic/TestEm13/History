@@ -1,4 +1,4 @@
-$Id: History 103623 2017-04-19 13:24:15Z gcosmo $
+$Id: History 109861 2018-05-09 12:17:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B.Morgan (testem13-V10-04-03)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+09-04-18 mma (testem13-V10-04-02)
+- testem13.cc : set visualisation only in interactive mode
+
+19-03-18 mma (testem13-V10-04-01)
+- testem13.cc : remove G4UI_USE and G4VIS_USE
+
+21-12-17 mma  (testem13-V10-04-00)
+- update PhysListEmStandard, livermore, penelope
 
 19-04-17 mma  (testem13-V10-03-00)
 - BeginOfRunAction() : remove SetRandomNumberStore(true)

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66376 2012-12-18 09:42:59Z gcosmo $
+# $Id: GNUmakefile 108190 2018-01-18 16:08:46Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for graphics_reps library.  John Allison, 19/7/96.
 # --------------------------------------------------------------
@@ -13,6 +13,7 @@ GLOBLIBS = libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4GREPS_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include

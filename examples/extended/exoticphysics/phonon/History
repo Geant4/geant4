@@ -1,4 +1,4 @@
-$Id: History 107810 2017-12-04 15:58:40Z gcosmo $
+$Id: History 110889 2018-06-25 06:19:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 June 2018 G.Folger        (phononExample-V10-04-03)
+- Correct Windows specific references for windows line ends
+
+21 June 2018 G.Folger        (phononExample-V10-04-02)
+- Add references specific for Windows-MT
+
+17 May 2018 J.Allison        (phononExample-V10-04-01)
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+21 March 2018 G.Folger       (phononExample-V10-04-00)
+-  update references for caustic and timing
+     changed caused by new CLHEP 2.4.0.4 with changes in random 
+
 
 4 December 2017 G.Folger     (phononExample-V10-03-08)
 - fix typo in caustic.out-clang-MT, it had extra \n at end.

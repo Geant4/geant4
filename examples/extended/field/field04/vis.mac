@@ -10,6 +10,9 @@
 #
 /vis/open OGL 600x600-0+0
 #
+# Create an empty scene and add the detector geometry to it
+/vis/drawVolume
+#
 #/vis/viewer/set/style surface
 /vis/viewer/set/style wireframe
 #
@@ -24,8 +27,6 @@
 #    /vis/scene/create
 #    /vis/scene/add/volume
 #    /vis/sceneHandler/attach
-# Create an empty scene and add the detector geometry to it
-/vis/drawVolume
 #
 # Store particle trajectories for visualization
 # (if too many tracks cause core dump => storeTrajectory 0)

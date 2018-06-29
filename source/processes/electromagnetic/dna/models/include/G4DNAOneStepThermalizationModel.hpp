@@ -54,16 +54,15 @@
 template<typename MODEL>
 G4TDNAOneStepThermalizationModel<MODEL>::
 G4TDNAOneStepThermalizationModel(const G4ParticleDefinition*,
-                                const G4String& nam) :
+                                 const G4String& nam) :
 G4VEmModel(nam), fIsInitialised(false)
 {
   fVerboseLevel = 0;
   SetLowEnergyLimit(0.);
   G4DNAWaterExcitationStructure exStructure;
   SetHighEnergyLimit(exStructure.ExcitationEnergy(0));
-  fParticleChangeForGamma = 0;
+  fpParticleChangeForGamma = 0;
   fpWaterDensity = 0;
-  fNavigator = 0;
 }
 
 //------------------------------------------------------------------------------
@@ -71,12 +70,8 @@ G4VEmModel(nam), fIsInitialised(false)
 template<typename MODEL>
 G4TDNAOneStepThermalizationModel<MODEL>::~G4TDNAOneStepThermalizationModel()
 {
-  if(fNavigator)
-  {
-    //    if(fNavigator->GetNavigatorState())
-    //      delete fNavigator->GetNavigatorState();
-    delete fNavigator;
-  }
+    //    if(fpNavigator && fpNavigator->GetNavigatorState())
+    //      delete fpNavigator->GetNavigatorState();
 }
 
 //------------------------------------------------------------------------------
@@ -104,19 +99,19 @@ Initialise(const G4ParticleDefinition* particleDefinition,
   if(!fIsInitialised)
   {
     fIsInitialised = true;
-    fParticleChangeForGamma = GetParticleChangeForGamma();
+    fpParticleChangeForGamma = GetParticleChangeForGamma();
   }
   
   G4Navigator* navigator =
   G4TransportationManager::GetTransportationManager()->
   GetNavigatorForTracking();
   
-  fNavigator = new G4Navigator();
+  fpNavigator.reset(new G4Navigator());
   
   if(navigator){ // add these checks for testing mode
     auto world=navigator->GetWorldVolume();
     if(world){
-      fNavigator->SetWorldVolume(world);
+      fpNavigator->SetWorldVolume(world);
       //fNavigator->NewNavigatorState();
     }
   }
@@ -188,8 +183,8 @@ SampleSecondaries(std::vector<G4DynamicParticle*>*,
   
   if (k <= HighEnergyLimit())
   {
-    fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
-    fParticleChangeForGamma->ProposeLocalEnergyDeposit(k);
+    fpParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
+    fpParticleChangeForGamma->ProposeLocalEnergyDeposit(k);
     
     if(G4DNAChemistryManager::IsActivated())
     {
@@ -198,10 +193,10 @@ SampleSecondaries(std::vector<G4DynamicParticle*>*,
       
       //______________________________________________________________
       const G4Track * theIncomingTrack =
-      fParticleChangeForGamma->GetCurrentTrack();
+      fpParticleChangeForGamma->GetCurrentTrack();
       G4ThreeVector finalPosition(theIncomingTrack->GetPosition()+displacement);
       
-      fNavigator->SetWorldVolume(theIncomingTrack->GetTouchable()->
+      fpNavigator->SetWorldVolume(theIncomingTrack->GetTouchable()->
                                  GetVolume(theIncomingTrack->GetTouchable()->
                                            GetHistoryDepth()));
       
@@ -229,12 +224,12 @@ SampleSecondaries(std::vector<G4DynamicParticle*>*,
       //     }
       //--
       
-      fNavigator->ResetHierarchyAndLocate(theIncomingTrack->GetPosition(),
+      fpNavigator->ResetHierarchyAndLocate(theIncomingTrack->GetPosition(),
                                           direction,
                                           *((G4TouchableHistory*)
                                             theIncomingTrack->GetTouchable()));
       
-      fNavigator->ComputeStep(theIncomingTrack->GetPosition(),
+      fpNavigator->ComputeStep(theIncomingTrack->GetPosition(),
                               displacement/displacementMag,
                               displacementMag,
                               safety);
@@ -248,7 +243,7 @@ SampleSecondaries(std::vector<G4DynamicParticle*>*,
       G4DNAChemistryManager::Instance()->CreateSolvatedElectron(theIncomingTrack,
                                                                 &finalPosition);
       
-      fParticleChangeForGamma->SetProposedKineticEnergy(25.e-3*eV);
+      fpParticleChangeForGamma->SetProposedKineticEnergy(25.e-3*eV);
     }
   }
 }

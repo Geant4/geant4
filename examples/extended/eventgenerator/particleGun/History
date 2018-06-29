@@ -1,4 +1,4 @@
-$Id: History 99721 2016-10-03 08:11:44Z gcosmo $
+$Id: History 109733 2018-05-08 14:05:09Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -12,7 +12,18 @@ summarize all major modifications introduced in the code and keep
 track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-	 
+
+08-04-18 B. Morgan (particleGunExample-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+13-04-18 mma (particleGunExample-V10-04-01)
+- particleGun.cc : set visualisation only in interactive mode
+
+14-03-18 mma (particleGunExample-V10-04-00)
+- particleGun.cc : remove G4UI_USE and G4VIS_USE
+
 03-10-2016 mma (particleGunExample-V10-02-03)
 - cosmetic in PrimaryGeneratorAction2
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc 107508 2017-11-20 08:23:14Z gcosmo $
+// $Id: G4ChordFinder.cc 110753 2018-06-12 15:44:03Z gcosmo $
 //
 //
 // 25.02.97 - John Apostolakis - Design and implementation 
@@ -76,8 +76,6 @@ G4ChordFinder::G4ChordFinder(G4VIntegrationDriver* pIntegrationDriver)
 
   SetFractions_Last_Next( fFractionLast, fFractionNextEstimate);  
     // check the values and set the other parameters
-
-  // G4cout << "G4ChordFinder 1st Constructor called - (driver given). " << G4endl;
 }
 
 
@@ -86,7 +84,6 @@ G4ChordFinder::G4ChordFinder(G4VIntegrationDriver* pIntegrationDriver)
 G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
                               G4double                stepMinimum, 
                               G4MagIntegratorStepper* pItsStepper,     // nullptr is default
-                              // G4bool      useHigherEfficiencyStepper,  // false by default
                               G4bool                  useFSALstepper ) // false by default
   : fDefaultDeltaChord( 0.25 * mm ),     // Constants 
     fDeltaChord( fDefaultDeltaChord ),   // Parameters
@@ -102,9 +99,6 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
 
   using NewFsalStepperType = G4RK547FEq1; // or 2 or 3
   const char* NewFSALStepperName = "G4RK574FEq1> FSAL 4th/5th order 7-stage 'Equilibrium-type' #1.";
-//  using OldFsalStepperType = G4FSALBogackiShampine45;
-//  const char* OldFSALStepperName = "FSAL BogackiShampine 45 (Embedded 5th/4th Order, 7-stage)";
-          // = G4FSALDormandPrince745; // = "FSAL Dormand Prince 745 stepper";   
   using RegularStepperType =
          G4DormandPrince745; // Famous DOPRI5 (MatLab) 5th order embedded method. High efficiency.
          // G4ClassicalRK4;        // The old default
@@ -117,20 +111,16 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
 
   // Configurable
   G4bool forceFSALstepper= false; //  Choice - true to enable !!
-  // G4bool useNewFSALtype= true;
-  // G4bool forceHigherEffiencyStepper = false;
-  G4bool report = false;  // Report type of stepper used
-
-  bool recallFSALflag  = useFSALstepper;
+  G4bool recallFSALflag  = useFSALstepper;
   useFSALstepper   = forceFSALstepper || useFSALstepper;
 
-  if( report ) {
+#ifdef G4DEBUG_FIELD
      G4cout << "G4ChordFinder 2nd Constructor called. " << G4endl;
      G4cout << " Parameters: " << G4endl;
      G4cout << "    useFSAL stepper= " << useFSALstepper
             << " (request = " << recallFSALflag 
             << " force FSAL = " << forceFSALstepper << " )" << G4endl;
-  }
+#endif
 
   // useHigherStepper = forceHigherEffiencyStepper || useHigherStepper;
   
@@ -149,7 +139,6 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   G4bool errorInStepperCreation = false;
 
   std::ostringstream message;  // In case of failure, load with description !
-  message << "G4ChordFinder 2nd Constructor called. " << G4endl;
 
   if( pItsStepper != nullptr )
   {
@@ -169,9 +158,11 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
 
      if( regularStepper == nullptr )
      {
-        message << "  ERROR> 'Regular' RK Stepper instantiation FAILED." << G4endl;        
+        message << "Stepper instantiation FAILED." << G4endl;        
         message << "G4ChordFinder: Attempted to instantiate "
                 << RegularStepperName << " type stepper " << G4endl;
+        G4Exception("G4ChordFinder::G4ChordFinder()",
+                    "GeomField1001", JustWarning, message);
         errorInStepperCreation = true;
      }
      else
@@ -186,12 +177,13 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
            // new G4IntegrationDriver<RegularStepperType>(stepMinimum,
            //  ====  Create the driver which knows the class type
         
-        if( (fIntgrDriver==nullptr) || report ) {        
-           message << "G4ChordFinder: Using G4IntegrationDriver with "
+        if( fIntgrDriver==nullptr)
+        {        
+           message << "Using G4IntegrationDriver with "
                    << RegularStepperName << " type stepper " << G4endl;
-        }
-        if(fIntgrDriver==nullptr) {
-           message << "  ERROR> 'Regular' RK Driver instantiation FAILED." << G4endl;
+           message << "Driver instantiation FAILED." << G4endl;
+           G4Exception("G4ChordFinder::G4ChordFinder()",
+                       "GeomField1001", JustWarning, message);
         }
      }
   }
@@ -200,14 +192,14 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
      auto fsalStepper=  new NewFsalStepperType(pEquation);
      //                     ******************
      fNewFSALStepperOwned = fsalStepper;
-     // delete fsalStepper;
-     // /*NewFsalStepperType* */ fsalStepper =nullptr;  // To check the exception
 
      if( fsalStepper == nullptr )
      {
-        message << "  ERROR> 'FSAL' RK Stepper instantiation FAILED." << G4endl;        
-        message << "G4ChordFinder: Attempted to instantiate "
+        message << "Stepper instantiation FAILED." << G4endl;        
+        message << "Attempted to instantiate "
                 << NewFSALStepperName << " type stepper " << G4endl;
+        G4Exception("G4ChordFinder::G4ChordFinder()",
+                    "GeomField1001", JustWarning, message);
         errorInStepperCreation = true;
      }
      else
@@ -218,12 +210,13 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
                                                        fsalStepper->GetNumberOfVariables() );
            //  ====  Create the driver which knows the class type
         
-        if( (fIntgrDriver==nullptr) || report ) {
-           message << "G4ChordFinder: Using G4FSALIntegrationDriver with stepper type: " << G4endl
-                   << NewFSALStepperName << " (new-FSAL type stepper.) " << G4endl;
-        }
-        if(fIntgrDriver==nullptr) {
-           message << "  ERROR> FSAL Integration Driver instantiation FAILED." << G4endl;
+        if( fIntgrDriver==nullptr )
+        {
+           message << "Using G4FSALIntegrationDriver with stepper type: "
+                   << NewFSALStepperName << G4endl;
+           message << "Integration Driver instantiation FAILED." << G4endl;
+           G4Exception("G4ChordFinder::G4ChordFinder()",
+                       "GeomField1001", JustWarning, message);
         }
      }
   }
@@ -255,27 +248,19 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
      errmsg << "  Configuration:  (constructor arguments) " << G4endl        
             << "    provided Stepper = " << pItsStepper << G4endl
             << "    use FSAL stepper = " << BoolName[useFSALstepper]
-                               // ( useFSALstepper    ? "True" : "False" )
             << " (request = " << BoolName[recallFSALflag]
-            << " force FSAL = " << BoolName[forceFSALstepper] << " )"  << G4endl;
-//          << "     use new FSAL stp = " << ( useNewFSALstepper ? "True" : "False" ) << G4endl;
+            << " force FSAL = " << BoolName[forceFSALstepper] << " )" << G4endl;
      errmsg << message.str(); 
      errmsg << "Aborting.";
-     G4Exception("G4ChordFinder::G4ChordFinder() - constructor 2", "GeomField0003",
-                  FatalException, errmsg);     
-  }
-  else if ( report )
-  {
-     G4cout << message.str();
+     G4Exception("G4ChordFinder::G4ChordFinder() - constructor 2",
+                 "GeomField0003", FatalException, errmsg);     
   }
 
   assert(    ( pItsStepper    != nullptr ) 
           || ( fRegularStepperOwned != nullptr )
           || ( fNewFSALStepperOwned  != nullptr )
- //       || ( fOldFSALStepperOwned  != nullptr )
      );
   assert( fIntgrDriver != nullptr );
-
 }
 
 
@@ -286,7 +271,6 @@ G4ChordFinder::~G4ChordFinder()
   delete   fEquation; // fIntgrDriver->pIntStepper->theEquation_Rhs;
   delete   fRegularStepperOwned;
   delete   fNewFSALStepperOwned;
-  // delete   fOldFSALStepperOwned;       
   delete   fIntgrDriver; 
 
   if( fStatsVerbose ) { PrintStatistics(); }
@@ -321,9 +305,11 @@ G4ChordFinder::SetFractions_Last_Next( G4double fractLast, G4double fractNext )
   }
   else
   {
-    G4cerr << "G4ChordFinder::SetFractions_Last_Next: Invalid "
-           << " fraction Last = " << fractLast
-           << " must be  0 <  fractionLast <= 1 " << G4endl;
+     std::ostringstream message;
+     message << "Invalid fraction Last = " << fractLast
+             << "; must be  0 <  fractionLast <= 1 ";
+     G4Exception("G4ChordFinder::SetFractions_Last_Next()",
+                 "GeomField1001", JustWarning, message);
   }
   if( (fractNext > 0.0) && (fractNext <1.0) )
   {
@@ -331,9 +317,11 @@ G4ChordFinder::SetFractions_Last_Next( G4double fractLast, G4double fractNext )
   }
   else
   {
-    G4cerr << "G4ChordFinder:: SetFractions_Last_Next: Invalid "
-           << " fraction Next = " << fractNext
-           << " must be  0 <  fractionNext < 1 " << G4endl;
+    std::ostringstream message;
+    message << "Invalid fraction Next = " << fractNext
+            << "; must be  0 <  fractionNext < 1 ";
+    G4Exception("G4ChordFinder::SetFractions_Last_Next()",
+                "GeomField1001", JustWarning, message);
   }
 }
 
@@ -352,11 +340,9 @@ G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
   G4FieldTrack yEnd( yCurrent);
   G4double  startCurveLen= yCurrent.GetCurveLength();
   G4double nextStep;
-  //            *************
+
   stepPossible= FindNextChord(yCurrent, stepMax, yEnd, dyErr, epsStep,
-                              &nextStep, latestSafetyOrigin, latestSafetyRadius
-                             );
-  //            *************
+                             &nextStep, latestSafetyOrigin, latestSafetyRadius);
 
   G4bool good_advance;
 
@@ -398,8 +384,6 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack& yStart,
 {
   // Returns Length of Step taken
 
-  // G4cout << ">G4ChordFinder::FindNextChord called." << G4endl;
-   
   G4FieldTrack yCurrent=  yStart;  
   G4double    stepTrial, stepForAccuracy;
   G4double    dydx[G4FieldTrack::ncompSVEC]; 
@@ -497,14 +481,6 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack& yStart,
      *pStepForAccuracy = stepForAccuracy;
   }
 
-#ifdef  TEST_CHORD_PRINT
-  static int dbg=0;
-  if( dbg )
-  {
-    G4cout << "ChordF/FindNextChord:  NoTrials= " << noTrials 
-           << " StepForGoodChord=" << std::setw(10) << stepTrial << G4endl;
-  }
-#endif
   yEnd=  yCurrent;  
   return stepTrial; 
 }

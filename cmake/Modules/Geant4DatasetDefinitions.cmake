@@ -18,11 +18,11 @@ geant4_add_dataset(
 # - Low energy electromagnetics
 geant4_add_dataset(
   NAME      G4EMLOW
-  VERSION   7.3
+  VERSION   7.4
   FILENAME  G4EMLOW
   EXTENSION tar.gz
   ENVVAR    G4LEDATA
-  MD5SUM    0446e7f53af993343956e5d3900157b8
+  MD5SUM    a4443411b1a8782640b6eec691e7c25f
   )
 
 # - Photon evaporation
@@ -48,11 +48,11 @@ geant4_add_dataset(
 # - Neutron XS
 geant4_add_dataset(
   NAME      G4NEUTRONXS
-  VERSION   1.4
+  VERSION   2.0
   FILENAME  G4NEUTRONXS
   EXTENSION tar.gz
   ENVVAR    G4NEUTRONXSDATA
-  MD5SUM    665a12771267e3b31a08c622ba1238a7
+  MD5SUM    c3af588c26522f289ec60dcb7c847ade
   )
 
 # - PII

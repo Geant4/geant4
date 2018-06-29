@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStateDependent.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4VStateDependent.hh 110286 2018-05-18 09:40:01Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -49,7 +49,7 @@
 #ifndef G4VStateDependent_h
 #define G4VStateDependent_h 1
 
-#include "globals.hh"
+#include "G4Types.hh"
 #include "G4ApplicationState.hh"
 
 class G4VStateDependent

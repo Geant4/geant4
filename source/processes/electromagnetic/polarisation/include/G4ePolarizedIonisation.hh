@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedIonisation.hh 96114 2016-03-16 18:51:33Z gcosmo $
+// $Id: G4ePolarizedIonisation.hh 109176 2018-04-03 06:53:39Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -96,10 +96,6 @@ protected:
                               G4ForceCondition* condition) override;
 
   virtual void BuildPhysicsTable(const G4ParticleDefinition&) override;
-
-protected:
-
-  const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition* p);
 
 private:
 

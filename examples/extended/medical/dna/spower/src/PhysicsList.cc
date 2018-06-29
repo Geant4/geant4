@@ -30,6 +30,9 @@
 #include "PhysicsListMessenger.hh"
 
 #include "G4PhysicsConstructorRegistry.hh"
+// G4RegisterPhysicsConstructors.icc is necessary for static builds
+#define REGREF PhysicsList
+#include "G4RegisterPhysicsConstructors.icc"
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

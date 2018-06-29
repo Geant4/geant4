@@ -76,18 +76,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     G4cout << "### Run " << id << " start" << G4endl;
     fHisto->BeginOfRun();
   }
-
-#ifdef G4VIS_USE
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-    UI->ApplyCommand("/vis/scene/notifyHandlers");
-  }
-#endif
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,12 +94,6 @@ void RunAction::EndOfRunAction(const G4Run*)
     }
     fHisto->EndOfRun();
   }
-#ifdef G4VIS_USE
-  if (G4VVisManager::GetConcreteInstance()) {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  }
-#endif
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

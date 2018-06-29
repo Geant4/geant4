@@ -1,4 +1,4 @@
-$Id: History 106957 2017-10-31 08:32:27Z gcosmo $
+$Id: History 110513 2018-05-28 07:37:38Z gcosmo $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,75 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+25 May 2018  John Allison (visman-V10-04-11)
+- Introduce /vis/drawLogicalVolume:
+  o Synonymous with /vis/specify.
+  o Both commands create a new scene and invoke /vis/scene/add/logicalVolume.
+
+24 May 2018  John Allison (visman-V10-04-10)
+- /vis/specify, /vis/scene/add/logicalVolume:
+  o Include overlap checking.
+
+08 May 2018 Ben Morgan (visman-V10-04-09)
+- G4VisCommandsMultithreading.cc:
+  - Explicitly #include G4Types header before use
+    of G4MULTITHREADED symbol. This prepares visman
+    for migration from -D flags to explicit header-set
+    #defines. It is backward compatible with old system.
+
+25 April 2018  John Allison (visman-V10-04-08)
+- G4VSceneHandler::CreateModelingParameters:
+  o Copy colour-by-density to modeling parameters.
+
+24 April 2018  John Allison (visman-V10-04-07)
+- G4ViewParameters.cc: Small bug fix.
+
+24 April 2018  John Allison (visman-V10-04-06)
+- Co-works greps-V10-04-04.
+
+23 April 2018  John Allison (visman-V10-04-05)
+- Co-works greps-V10-04-03.
+- G4VisCommandsViewerSet.cc: /vis/viewer/set/timeWindow/ commands:
+  o Migrate to greps-V10-04-03.
+- G4VisCommandsViewer.cc: Fix small error in guidance.
+- G4ViewParameters.cc:
+  o Complete implementation of /vis/viewer/colourByDensity, e.g.,
+    operator<<, etc.
+  o Migrate to greps-V10-04-03.
+
+22 April 2018  John Allison
+- G4VisCommandsViewer, G4ViewParameters:
+  o Add /vis/viewer/colourByDensity.
+
+22 April 2018  John Allison (visman-V10-04-04)
+- G4VSceneHandler.cc: Reduced repetitive error messages.
+
+31st March 2018  John Allison
+- /vis/viewer/set/culling density: further cosmetic improvement.
+
+30th March 2018  John Allison
+- /vis/viewer/set/culling density: cosmetic improvement.
+
+28th March 2018  John Allison  (visman-V10-04-03)
+- Introduce G4VVisCommand::ProvideValueOfUnit.
+- /vis/viewer/set/culling density:
+  o Use G4VVisCommand::ProvideValueOfUnit.
+  o Fix bug and improve parsing.
+- /vis/drawTree: Improve guidance.
+
+11th March 2018  John Allison  (visman-V10-04-02)
+- G4VViewer.hh: Improve comments about switching threads.
+
+8th January 2018  John Allison  (visman-V10-04-01)
+- Merged timemovebranch:
+  o Moved time window parameters from G4OpenGLStoredViewer to
+    G4ViewParameters. Now one can interpolate time window parameters (using
+    /vis/viewer/interpolate) and make a movie of particles moving through time.
+  o See vis-V10-04-00 History for more details.
+
+12th December 2017  John Allison  (visman-V10-04-00)
+- G4ViewParameters.cc: Minor cosmetic.
 
 29th October 2017  John Allison  (visman-V10-03-16)
 - G4VisManager.cc: Protect /vis/enable issued before run established.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc 108506 2018-02-15 15:50:39Z gcosmo $
+// $Id: G4VEnergyLossProcess.cc 107959 2017-12-14 13:05:59Z gcosmo $
 //
 // -------------------------------------------------------------------
 //

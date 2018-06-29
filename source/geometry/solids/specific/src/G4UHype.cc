@@ -33,7 +33,7 @@
 // --------------------------------------------------------------------
 
 #include "G4Hype.hh"
-#if 0
+
 #include "G4UHype.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
@@ -240,5 +240,3 @@ G4Polyhedron* G4UHype::CreatePolyhedron() const
 }
 
 #endif  // G4GEOM_USE_USOLIDS
-
-#endif

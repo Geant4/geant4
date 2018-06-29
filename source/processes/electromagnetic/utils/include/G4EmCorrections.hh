@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh 103954 2017-05-04 11:29:22Z gcosmo $
+// $Id: G4EmCorrections.hh 108386 2018-02-09 15:38:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -191,7 +191,6 @@ private:
 
   G4Pow* g4calc;
 
-  static const G4double inveplus;
   static const G4double ZD[11];
   static const G4double UK[20];
   static const G4double VK[20];
@@ -206,7 +205,7 @@ private:
   static G4LPhysicsFreeVector* ThetaK;
   static G4LPhysicsFreeVector* ThetaL;
 
-  G4double     alpha2;
+  G4double alpha2;
 
   std::vector<const G4Material*> currmat;
   std::map< G4int, std::vector<G4double> > thcorr;
@@ -321,35 +320,6 @@ G4EmCorrections::EffectiveChargeSquareRatio(const G4ParticleDefinition* p,
                                             G4double kineticEnergy)
 {
   return effCharge.EffectiveChargeSquareRatio(p,mat,kineticEnergy);
-}
-
-inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
-                                             const G4Material* mat,
-                                             G4double kineticEnergy)
-{
-  if(kineticEnergy != kinEnergy || p != particle) {
-    particle = p;
-    kinEnergy = kineticEnergy;
-    mass  = p->GetPDGMass();
-    tau   = kineticEnergy / mass;
-    gamma = 1.0 + tau;
-    bg2   = tau * (tau+2.0);
-    beta2 = bg2/(gamma*gamma);
-    beta  = std::sqrt(beta2);
-    ba2   = beta2/alpha2;
-    G4double ratio = CLHEP::electron_mass_c2/mass;
-    tmax  = 2.0*CLHEP::electron_mass_c2*bg2 
-      /(1. + 2.0*gamma*ratio + ratio*ratio);
-    charge  = p->GetPDGCharge()*inveplus;
-    if(charge > 1.5) { charge = effCharge.EffectiveCharge(p,mat,kinEnergy); }
-    q2 = charge*charge;
-  }
-  if(mat != material) {
-    material = mat;
-    theElementVector = material->GetElementVector();
-    atomDensity  = material->GetAtomicNumDensityVector(); 
-    numberOfElements = material->GetNumberOfElements();
-  }
 }
 
 inline void G4EmCorrections::SetVerbose(G4int verb)

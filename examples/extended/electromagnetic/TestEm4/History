@@ -1,4 +1,4 @@
-$Id: History 103468 2017-04-11 07:28:24Z gcosmo $
+$Id: History 109865 2018-05-09 12:21:39Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+09-05-18 B.Morgan (testem4-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+07-04-18 mma (testem4-V10-04-01)
+- testem4.cc : set visualisation only in interactive mode
+
+13-03-18 mma (testem4-V10-04-00)
+- testem4.cc : remove G4UI_USE and G4VIS_USE
+
 10-04-17 mma  (testem4-V10-03-00)
 - BeginOfRunAction() : remove SetRandomNumberStore(true)
 

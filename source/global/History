@@ -17,15 +17,132 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-February 12, 2018 G.Cosmo (global-V10-03-12)
+June 6, 2018 Jonathan Madsen (global-V10-04-18)
+- Added G4TiMemory.hh which defines an dummy initializer and empty macros when
+  TiMemory is disabled and includes the TiMemory headers and defines an
+  initializer when built with TiMemory support
+- Removed "#define times ostimes" from G4Timer.hh and G4SliceTimer.hh
+  - conflicts with TiMemory and this is left over from a conflict that
+    no longer exists (see global-01-00-03 from 1999)
+  - Removed corresponding "#undef times" from G4Timer.cc and G4SliceTimer.cc
+- Added TiMemory libraries and includes to sources.cmake
+
+May 18, 2018 Gabriele Cosmo (global-V10-04-17)
+- Moved G4Exception functions to inline and extracted banner front/end
+  strings for use in Qt parsing.
+
+May 17, 2018 Jonathan Madsen (global-V10-04-16)
+- Removed G4GLOB_DLL from G4CacheReference<G4double>
+
+May 17, 2018 Jonathan Madsen (global-V10-04-15)
+- Updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+March 23, 2018 Mihaly Novak (global-V10-04-14)
+- Increased accuracy of G4Pow::A13 in the most critical [1/4,4] interval.
+
+March 22, 2018 Gabriele Cosmo (global-V10-04-13)
+- Avoid exporting symbols for Windows DLLs in multi-threaded builds.
+
+March 21, 2018 Gabriele Cosmo (global-V10-04-12)
+- Moved test80 to unit tests in HEPRandom/test module and renamed testRngMT.
+
+March 9, 2018 Gabriele Cosmo (global-V10-04-11)
+- Removed obsolete MT wrappers for random numbers, no longer necessary.
+  Simplified definition of G4Random types in Randomize.hh accordingly.
+- Full support for thread-local storage on clang (also MacOS clang) now
+  enabled; updated tls.hh definitions accordingly; removed use of the
+  G4USE_STD11 flag, now always enabled by default.
+- Minor code cleanup in G4UniformRandPool.
+
+March 7, 2018 Jonathan Madsen (global-V10-04-10)
+- Replaced erroneous "id_type" return type for G4DummyThread::get_id() 
+  with correct "id" type.
+
+March 6, 2018 Jonathan Madsen (global-V10-04-09)
+- updated G4cout_p and G4cerr_p to point to std::cout and std::cerr before
+  and after library load. G4cout before G4RunManager creation has been seen to
+  fail on Windows
+- Improvement to G4AutoLock in non-MT mode + bug fix (void try_lock() ->
+  bool try_lock()) plus error handling within G4AutoLock if static mutex
+  is attempted to be used at application cleanup (previously handled in
+  G4Cache)
+- using atomics in G4Cache
+- Define G4ThisThread, G4Promise, G4Future, and G4SharedFuture in G4Threading
+  the promises and futures are not currently used except for in upcoming
+  RNG testing but will be used in future
+- G4TypeMutex and G4RecursiveTypeMutex now accept an index, e.g.
+  G4AutoLock l(G4TypeMutex<G4SomeClass>(0)) and
+  G4AutoLock l(G4TypeMutex<G4SomeClass>(1))
+- G4DummyThread typedef std::thread::id as id instead of id_type
+
+March 6, 2018 Gabriele Cosmo (global-V10-04-08)
+- Use thread_local keyword on Windows, instead of __declspec(thread) in tls.hh.
+- Removed no longer necessary windefs.hh header.
+
+February 21, 2018 Jonathan Madsen (global-V10-04-07)
+- Overloaded G4AutoLock member functions in serial mode to not
+  execute locking/unlocking
+- Fixed std::system_error in G4Cache where destructor tries
+  to use a static G4Mutex that has already been deleted by cleanup
+  which is a non-critical error related to a singleton memory leak
+- Returned some functionality in G4Threading to dummy types such
+  as G4MUTEXLOCK and G4MUTEXUNLOCK do not actually lock
+  and G4Thread is a dummy thread that executes upon construction
+
+February 19, 2018 Jonathan Madsen (global-V10-04-06)
+- Added G4TypeMutex<T> and G4TypeRecursiveMutex<T> function to threading
+  for safely obtaining a static mutex that is unique to the template type T
+- Replaced static G4Mutex in G4Cache<T> with calls to G4TypeMutex<G4Cache<T>>
+  function calls to safely initialize mutexes on Windows
+
+February 14, 2018 Jonathan Madsen (global-V10-04-05)
+- G4THREADSLEEP had an extra space before paramter field rendering the
+  macro invalid. This was fixed
+- Sequential clang builds were emitting -Wunused-private-field warning
+  in G4MTBarrier. Modified G4CONDITION macros to fix this
+
+February 13, 2018 Jonathan Madsen (global-V10-04-04)
+- Simplified G4Threading by not ifdef'ing out G4Mutex
+  It was determined the average time to lock and unlock a mutex in
+  single-thread mode is ~5 nanoseconds in release mode. Therefore, it
+  was determined the mutex locking is not a concern for performance in
+  non-MT mode. This fixes issues with G4Mutex and G4AutoLock in
+  global-V10-04-03
+- Extended G4TemplateAutoLock to take advantage of the features
+  std::unique_lock offers
+- migrated G4Timer real (wall) time to use std::chrono::high_precision_clock
+  from C++11
+
+February 12, 2018 Jonathan Madsen (global-V10-04-03)
+- G4Threading - replaced POSIX threading with C++11 threading
+  - std::condition_variable
+  - std::mutex + std::recursive_mutex
+  - std::thread
+  - many of the former macros are now dummy macros (e.g. G4MUTEXINIT,
+    G4MUTEX_INITIALIZER, etc.)
+  - G4GetPidId() -> uses std::this_thread::get_id()
+  - G4GetNumberOfCores() -> uses std::thread::hardware_concurrency()
+  - Updated pin affinity
+  - Removed G4THREADSELF (not used, no C++11 platform-independent equivalent)
+- G4AutoLock is now a thin wrapper around std::unique_lock providing previous
+  functionality + more features (e.g. try_lock, try_lock_until, etc.)
+- Added G4RecursiveAutoLock for recursive mutexes
+- Expanded DEFINED_PPC and DEFINED_INTEL in G4FPEDetection (warning in GCC 7+)
+- G4MTBarrier: removed WIN32 specifics, updated G4CONDITIONWAIT to use
+  G4AutoLock (std::unique_lock) instead of G4Mutex, removed G4MUTEX_INITIALIZER
+  from constructor
+
+February 12, 2018 G.Cosmo (global-V10-04-02)
 - G4StateManager: move static method SetVerboseLevel() to be non inline.
 
-February 9, 2018 M.Asai
+February 9, 2018 M.Asai (global-V10-04-01)
 - G4MTcoutDestination.cc blocks G4cout from worker threads while spplication
   is in G4State_Init instead of G4State_Idle.
 - G4StateManager has a new method to set verbosity and print the state change.
   
-December 19, 2017 G.Cosmo
+December 19, 2017 G.Cosmo (global-V10-04-00)
 - Fixed self-consistency in G4ReferenceCountedHandle header (missing #include).
   Added missing #ifdef guard in G4CacheDetails header; code formatting.
   Thanks to Raphael Isemann for reporting these.

@@ -1,4 +1,4 @@
-$Id: History 99162 2016-09-07 08:14:24Z gcosmo $
+$Id: History 110440 2018-05-23 11:28:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 23, 2018 M. Asai (exampleRE03-V10-04-01)
+- Add batchrun1.mac for batch job and update CMakelists.txt
+  accordingly.
+
+May 16, 2018 J. Allison
+- Minor fixes to run*.mac files.
+
+May 14, 2018 J. Allison  (exampleRE03-V10-04-00)
+- Add #include "G4Types.hh".
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- vis.mac: Tidy.
+  o No need to create empty scene - /vis/drawVolume creates a new one.
+  o No need to /tracking/storeTrajectories - /vis/scene/add/trajectories does.
+- run1.mac: Tidy.
 
 Sep 02, 2016 M. Asai (exampleRE03-V10-02-00)
 - Migrate to G4THitsMap<G4StatDouble>.

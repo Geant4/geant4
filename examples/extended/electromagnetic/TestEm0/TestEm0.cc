@@ -27,10 +27,11 @@
 /// \brief Main program of the electromagnetic/TestEm0 example
 //
 //
-// $Id: TestEm0.cc 66241 2012-12-13 18:34:42Z gunter $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+// $Id: TestEm0.cc 108856 2018-03-12 07:41:27Z gcosmo $
+//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -40,14 +41,16 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 int main(int argc,char** argv) {
-    
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = 0;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
@@ -60,27 +63,25 @@ int main(int argc,char** argv) {
       
   // set user action classes
   runManager->SetUserAction(new RunAction(det,prim));
-  
-  if (argc!=1)   // batch mode   
-    {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     G4UImanager::GetUIpointer()->ApplyCommand(command+fileName); 
-    }
-    
-  else           // define UI terminal for interactive mode 
-    { 
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-      ui->SessionStart();
-      delete ui;
-#endif
-    }
-  // job termination 
+
+  //get the pointer to the User Interface manager 
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+  if (ui)  {
+   //interactive mode
+   ui->SessionStart();
+   delete ui;
+  }
+  else  {
+   //batch mode  
+   G4String command = "/control/execute ";
+   G4String fileName = argv[1];
+   UImanager->ApplyCommand(command+fileName);
+  }
+
+  //job termination 
   //
   delete runManager;
-
-  return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

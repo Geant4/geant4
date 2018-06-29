@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularMaterial.cc 108498 2018-02-15 15:33:07Z gcosmo $
+// $Id: G4DNAMolecularMaterial.cc 108397 2018-02-12 10:21:10Z gcosmo $
 //
 // Author: Mathieu Karamitros
 //

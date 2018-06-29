@@ -217,6 +217,10 @@ void RanshiEngine::showStatus() const {
   std::cout << "-------------------------------------------" << std::endl;
 }
 
+RanshiEngine::operator double() {
+  return flat();
+}
+
 RanshiEngine::operator float() {
   unsigned int redAngle = (((numBuff/2) - 1) & redSpin) + halfBuff;
   unsigned int blkSpin  = buffer[redAngle] & 0xffffffff;

@@ -23,31 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeRunAction.cc 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id: LXeRunAction.cc 109784 2018-05-09 08:14:08Z gcosmo $
 //
 /// \file optical/LXe/src/LXeRunAction.cc
 /// \brief Implementation of the LXeRunAction class
 //
 //
 #include "LXeRunAction.hh"
-#include "LXeRecorderBase.hh"
+#include "LXeRun.hh"
+#include "LXeHistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeRunAction::LXeRunAction(LXeRecorderBase* r) : fRecorder(r) {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-LXeRunAction::~LXeRunAction() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void LXeRunAction::BeginOfRunAction(const G4Run* aRun){
-  if(fRecorder)fRecorder->RecordBeginOfRun(aRun);
+LXeRunAction::LXeRunAction() : fRun(nullptr), fHistoManager(nullptr)
+{
+  // Book predefined histograms
+  fHistoManager = new LXeHistoManager();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeRunAction::EndOfRunAction(const G4Run* aRun){
-  if(fRecorder)fRecorder->RecordEndOfRun(aRun);
+LXeRunAction::~LXeRunAction()
+{
+  delete fHistoManager;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4Run* LXeRunAction::GenerateRun()
+{
+  fRun = new LXeRun();
+  return fRun;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXeRunAction::BeginOfRunAction(const G4Run*)
+{
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if (analysisManager->IsActive()) {
+    analysisManager->OpenFile();
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXeRunAction::EndOfRunAction(const G4Run*){
+  if (isMaster) fRun->EndOfRun();
+
+  // save histograms
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if (analysisManager->IsActive()) {
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }
 }

@@ -38,6 +38,8 @@
 //    *******************************
 //
 //
+#include "G4Types.hh"
+
 #ifdef G4MULTITHREADED
   #include "G4MTRunManager.hh"
 #else
@@ -61,7 +63,7 @@
 #include "BrachyPhysicsList.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
 #include "G4SDManager.hh"
-#include "Randomize.hh"  
+#include "Randomize.hh"
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
@@ -85,15 +87,15 @@ int main(int argc ,char ** argv)
 #else
  G4RunManager* pRunManager = new G4RunManager;
 #endif
- 
+
   G4cout << "***********************" << G4endl;
   G4cout << "*** " << G4Random::getTheSeed() << " ***" << G4endl;
   G4cout << "***********************" << G4endl;
  // Access to the Scoring Manager pointer
-  
+
   G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
 
-  // Overwrite the default output file with user-defined one 
+  // Overwrite the default output file with user-defined one
   scoringManager->SetScoreWriter(new BrachyUserScoreWriter());
 
   // Initialize the physics component
@@ -109,39 +111,39 @@ int main(int argc ,char ** argv)
   analysis -> book();
 #endif
 
-  // User action initialization  
+  // User action initialization
 
   BrachyActionInitialization* actions = new BrachyActionInitialization();
   pRunManager->SetUserInitialization(actions);
- 
+
   //Initialize G4 kernel
   pRunManager -> Initialize();
- 
-//// Initialize the Visualization component 
+
+//// Initialize the Visualization component
 #ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
- 
-  // get the pointer to the User Interface manager 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+
+  // get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   if (argc == 1)   // Define UI session for interactive mode.
-    { 
+    {
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       G4cout << " UI session starts ..." << G4endl;
-      UImanager -> ApplyCommand("/control/execute VisualisationMacro.mac");    
+      UImanager -> ApplyCommand("/control/execute VisualisationMacro.mac");
       ui -> SessionStart();
       delete ui;
 #endif
     }
   else           // Batch mode
-    { 
+    {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager -> ApplyCommand(command+fileName);
-    }  
+    }
 
   // Job termination
 #ifdef G4VIS_USE
@@ -150,7 +152,7 @@ int main(int argc ,char ** argv)
 
 #ifdef ANALYSIS_USE
 // Close the output ROOT file with the results
-   analysis -> save(); 
+   analysis -> save();
   delete analysis;
 #endif
 

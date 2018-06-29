@@ -31,7 +31,13 @@
 
 #include "G4ScintillationTrackInformation.hh"
 
-G4ThreadLocal G4Allocator<G4ScintillationTrackInformation> *aScintillationTIAllocator = nullptr;
+G4Allocator<G4ScintillationTrackInformation>*& aScintillationTIAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4ScintillationTrackInformation>*
+            _instance = nullptr;
+    return _instance;
+}
+
 const G4String G4ScintillationTrackInformation::BaseType = "G4ScintillationTrackInformation";
 
 G4ScintillationTrackInformation::G4ScintillationTrackInformation(const G4ScintillationType& aType)

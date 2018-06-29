@@ -140,9 +140,7 @@ G4double G4EvaporationProbability::TotalProbability(
   } else {
 
     // compute power once
-    if(OPTxs <= 2) { 
-      muu =  G4ChatterjeeCrossSection::ComputePowerParameter(resA, index);
-    } else {
+    if(0 < index) { 
       muu = G4KalbachCrossSection::ComputePowerParameter(resA, index);
     }
     // if Coulomb barrier cutoff is superimposed for all cross sections 
@@ -161,7 +159,7 @@ G4double G4EvaporationProbability::ComputeProbability(G4double K, G4double cb)
 
   G4double E0 = U - delta0;
   //G4double E1 = Mass - partMass - resMass - delta1 - K;
-  G4double E1 = sqrt((Mass - partMass)*(Mass - partMass) - 2*Mass*K) 
+  G4double E1 = std::sqrt((Mass - partMass)*(Mass - partMass) - 2*Mass*K) 
     - resMass - delta1;
   /*  
   G4cout << "PDF: FragZ= " << fragZ << " FragA= " << fragA

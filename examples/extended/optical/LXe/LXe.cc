@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXe.cc 77782 2013-11-28 08:12:12Z gcosmo $
+// $Id: LXe.cc 110280 2018-05-17 14:50:16Z gcosmo $
 //
 /// \file optical/LXe/LXe.cc
 /// \brief Main program of the optical/LXe example
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -39,75 +41,82 @@
 #include "G4UImanager.hh"
 #include "G4String.hh"
 
-#include "LXePhysicsList.hh"
+#include "FTFP_BERT.hh"
+#include "G4OpticalPhysics.hh"
+#include "G4EmStandardPhysics_option4.hh"
+
 #include "LXeDetectorConstruction.hh"
 
 #include "LXeActionInitialization.hh"
 
-#include "LXeRecorderBase.hh"
-
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc, char** argv)
 {
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
 #ifdef G4MULTITHREADED
   G4MTRunManager * runManager = new G4MTRunManager;
+  G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(), 4);
+  runManager->SetNumberOfThreads(nThreads);
+  G4cout << "===== LXe is started with "
+         <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
 #else
   G4RunManager * runManager = new G4RunManager;
 #endif
 
   runManager->SetUserInitialization(new LXeDetectorConstruction());
-  runManager->SetUserInitialization(new LXePhysicsList());
 
-  LXeRecorderBase* recorder = NULL; //No recording is done in this example
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
+  G4OpticalPhysics* opticalPhysics = new G4OpticalPhysics();
+  opticalPhysics->SetWLSTimeProfile("delta");
 
-  runManager->SetUserInitialization(new LXeActionInitialization(recorder));
+  opticalPhysics->SetScintillationYieldFactor(1.0);
+  opticalPhysics->SetScintillationExcitationRatio(0.0);
 
-#ifdef G4VIS_USE
+  opticalPhysics->SetMaxNumPhotonsPerStep(100);
+  opticalPhysics->SetMaxBetaChangePerStep(10.0);
+
+  opticalPhysics->SetTrackSecondariesFirst(kCerenkov, true);
+  opticalPhysics->SetTrackSecondariesFirst(kScintillation, true);
+
+  physicsList->RegisterPhysics(opticalPhysics);
+  runManager->SetUserInitialization(physicsList);
+
+  runManager->SetUserInitialization(new LXeActionInitialization());
+
+  //initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
-  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
-#endif
 
-  // runManager->Initialize();
- 
-  // get the pointer to the UI manager and set verbosities
+  //get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if(argc==1){
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
+  if (ui)  {
+    //interactive mode
     UImanager->ApplyCommand("/control/execute vis.mac");
-#endif
-    if (ui->IsGUI())
-       UImanager->ApplyCommand("/control/execute gui.mac");
+    if (ui->IsGUI()) {
+     UImanager->ApplyCommand("/control/execute gui.mac");
+    }
     ui->SessionStart();
     delete ui;
-#endif
   }
-  else{
+  else  {
+    //batch mode  
     G4String command = "/control/execute ";
-    G4String filename = argv[1];
-    UImanager->ApplyCommand(command+filename);
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
   }
-
-//  if(recorder)delete recorder;
-
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
 
   // job termination
+  delete visManager;
   delete runManager;
   return 0;
 }

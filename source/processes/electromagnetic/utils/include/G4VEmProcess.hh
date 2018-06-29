@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh 106983 2017-10-31 09:08:30Z gcosmo $
+// $Id: G4VEmProcess.hh 109178 2018-04-03 07:13:58Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -298,6 +298,10 @@ protected:
 
   inline size_t CurrentMaterialCutsCoupleIndex() const;
 
+  inline const G4MaterialCutsCouple* MaterialCutsCouple() const;
+
+  inline G4bool ApplyCuts() const;
+
   inline G4double GetGammaEnergyCut();
 
   inline G4double GetElectronEnergyCut();
@@ -344,9 +348,6 @@ private:
   G4LossTableManager*          lManager;
   G4EmParameters*              theParameters;  
   G4EmModelManager*            modelManager;
-  G4EmBiasingManager*          biasManager;
-  const G4ParticleDefinition*  theGamma;
-  const G4ParticleDefinition*  theElectron;
   const G4ParticleDefinition*  thePositron;
   const G4ParticleDefinition*  secondaryParticle;
 
@@ -396,11 +397,20 @@ private:
 
 protected:
 
+  G4EmBiasingManager*          biasManager;
+  const G4ParticleDefinition*  theGamma;
+  const G4ParticleDefinition*  theElectron;
   G4ParticleChangeForGamma     fParticleChange;
+  std::vector<G4DynamicParticle*> secParticles;
+  const G4MaterialCutsCouple*  currentCouple;
+
+  G4int                        mainSecondaries;
+  G4int                        secID;  
+  G4int                        fluoID;  
+  G4int                        augerID;  
+  G4int                        biasID;  
 
 private:
-
-  std::vector<G4DynamicParticle*> secParticles;
 
   G4VEmModel*                  currentModel;  
 
@@ -410,7 +420,6 @@ private:
   // cache
   const G4Material*            baseMaterial;
   const G4Material*            currentMaterial;
-  const G4MaterialCutsCouple*  currentCouple;
   size_t                       currentCoupleIndex;
   size_t                       basedCoupleIndex;
 
@@ -420,19 +429,27 @@ private:
   G4double                     fFactor;
   G4bool                       biasFlag;
   G4bool                       weightFlag;
-
-  G4int                        mainSecondaries;
-  G4int                        secID;  
-  G4int                        fluoID;  
-  G4int                        augerID;  
-  G4int                        biasID;  
 };
 
 // ======== Run time inline methods ================
 
+inline G4bool G4VEmProcess::ApplyCuts() const 
+{
+  return applyCuts;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline size_t G4VEmProcess::CurrentMaterialCutsCoupleIndex() const 
 {
   return currentCoupleIndex;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline const G4MaterialCutsCouple* G4VEmProcess::MaterialCutsCouple() const
+{
+  return currentCouple;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

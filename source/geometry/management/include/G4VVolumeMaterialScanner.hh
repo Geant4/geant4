@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVolumeMaterialScanner.hh 108480 2018-02-15 14:28:27Z gcosmo $
+// $Id: G4VVolumeMaterialScanner.hh 108073 2017-12-19 15:32:30Z gcosmo $
 //
 // class G4VVolumeMaterialScanner
 //

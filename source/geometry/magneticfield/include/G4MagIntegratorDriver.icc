@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.icc 107059 2017-11-01 14:58:16Z gcosmo $
+// $Id: G4MagIntegratorDriver.icc 109569 2018-05-02 07:08:33Z gcosmo $
 //
 // --------------------------------------------------------------------
 
@@ -104,13 +104,6 @@ inline
 void G4MagInt_Driver::SetErrcon(G4double val)
 { 
       errcon=val;
-}
-
-inline
-void G4MagInt_Driver::RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper)
-{  
-      pIntStepper = pItsStepper; 
-      ReSetParameters();
 }
 
 inline

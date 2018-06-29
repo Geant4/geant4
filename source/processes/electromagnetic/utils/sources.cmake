@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 105801 2017-08-21 07:37:34Z gcosmo $
+# $Id: sources.cmake 110416 2018-05-23 06:45:42Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -46,6 +46,7 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4AngleDirect.hh
         G4AtomicShell.hh
         G4AtomicShellEnumerator.hh
+        G4DNAModelSubType.hh
         G4DummyModel.hh
         G4ElectronIonPair.hh
         G4EmBiasingManager.hh

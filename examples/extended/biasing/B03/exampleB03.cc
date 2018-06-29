@@ -29,7 +29,7 @@
 //
 // $Id: exampleB03.cc 70528 2013-05-31 16:50:36Z gcosmo $
 //
-// 
+//
 // --------------------------------------------------------------
 //      GEANT 4 - exampleB03
 //
@@ -39,22 +39,24 @@
 // This example intends to show how to use both importance sampling and a
 // customized scoring making use of the scoring framework
 // in a parallel geometry.
-// 
+//
 // A simple geometry consisting of a 180 cm high concrete cylinder
 // is constructed in the mass geometry.
 // A geometry is constructed in the parallel geometry
 // in order to assign importance values to slabs
-// of width 10cm and for scoring. The parallel world volume should 
-// overlap the mass world volume and  the radii of the slabs is larger 
+// of width 10cm and for scoring. The parallel world volume should
+// overlap the mass world volume and  the radii of the slabs is larger
 // than the radius of the concrete cylinder in the mass geometry.
 // Pairs of G4GeometryCell and importance values are stored in
 // the importance store.
 // The scoring uses the primitive scorers via the Multi Functional Detector
-// 
-// 
+//
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include <iostream>
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -78,13 +80,13 @@
 
 // Files specific for biasing and scoring
 //#include "G4Scorer.hh"
-#include "G4GeometrySampler.hh"
+// #include "G4GeometrySampler.hh"
 #include "G4IStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int , char **)
-{  
+{
   G4int numberOfEvents = 100;
 
   G4long myseed = 345354;
@@ -108,16 +110,20 @@ int main(int , char **)
 
   // create a parallel detector
   G4String parallelName("ParallelBiasingWorld");
-  B03ImportanceDetectorConstruction *pdet = 
+  B03ImportanceDetectorConstruction *pdet =
     new B03ImportanceDetectorConstruction(parallelName);
   detector->RegisterParallelWorld(pdet);
 
-  G4GeometrySampler pgs(pdet->GetWorldVolume(),"neutron");
-  B03PhysicsList* physlist = new B03PhysicsList;
-  physlist->AddParallelWorldName(parallelName); 
+  // G4GeometrySampler pgs(pdet->GetWorldVolume(),"neutron");
+  // B03PhysicsList* physlist = new B03PhysicsList;
+  // name of first parallel world:
+  B03PhysicsList* physlist = new B03PhysicsList(parallelName);
+  // push parallel world to store in case of multiple worlds:
+  physlist->AddParallelWorldName(parallelName);
+  // physlist->AddParallelWorldName(parallelName);
   //physlist->AddParallelWorldName(sparallelName);
-  physlist->AddBiasing(&pgs,parallelName);
-  
+  // physlist->AddBiasing(&pgs,parallelName);
+
   runManager->SetUserInitialization(physlist);
 
  // Set user action classes through Worker Initialization
@@ -134,7 +140,7 @@ int main(int , char **)
   G4VPhysicalVolume& aghostWorld = pdet->GetWorldVolumeAddress();
   G4cout << " ghost world: " << pdet->GetName() << G4endl;
 
-  // create an importance 
+  // create an importance
   G4IStore *aIstore = G4IStore::GetInstance(pdet->GetName());
 
   // create a geometry cell for the world volume replpicanumber is 0!
@@ -142,12 +148,12 @@ int main(int , char **)
   // set world volume importance to 1
   aIstore->AddImportanceGeometryCell(1, gWorldVolumeCell);
 
-  // set importance values and create scorers 
+  // set importance values and create scorers
   G4int cell(1);
   for (cell=1; cell<=18; cell++) {
     G4GeometryCell gCell = pdet->GetGeometryCell(cell);
-    G4cout << " adding cell: " << cell 
-           << " replica: " << gCell.GetReplicaNumber() 
+    G4cout << " adding cell: " << cell
+           << " replica: " << gCell.GetReplicaNumber()
            << " name: " << gCell.GetPhysicalVolume().GetName() << G4endl;
     G4double imp = std::pow(2.0,cell-1);
     //x    aIstore.AddImportanceGeometryCell(imp, gCell);
@@ -158,18 +164,18 @@ int main(int , char **)
   //  G4GeometryCell gCell = pdet->GetGeometryCell(18);
 
   // create importance geometry cell pair for the "rest"cell
-  // with the same importance as the last concrete cell 
+  // with the same importance as the last concrete cell
   G4GeometryCell gCell = pdet->GetGeometryCell(19);
-  //  G4double imp = std::pow(2.0,18); 
-  G4double imp = std::pow(2.0,17); 
+  //  G4double imp = std::pow(2.0,18);
+  G4double imp = std::pow(2.0,17);
   aIstore->AddImportanceGeometryCell(imp, gCell.GetPhysicalVolume(), 19);
-  
+
   //temporary fix before runManager->BeamOn works...
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4String command1 = "/control/cout/setCoutFile fileName";
   UImanager->ApplyCommand(command1);
 
-  G4String command2 = "/run/beamOn " 
+  G4String command2 = "/run/beamOn "
                     + G4UIcommand::ConvertToString(numberOfEvents);;
   UImanager->ApplyCommand(command2);
 
@@ -178,7 +184,7 @@ int main(int , char **)
   // pgs.ClearSampling();
 
   delete runManager;
- 
+
   return 0;
 }
 

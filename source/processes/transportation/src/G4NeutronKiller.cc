@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronKiller.cc 68048 2013-03-13 14:34:07Z gcosmo $
+// $Id: G4NeutronKiller.cc 110694 2018-06-08 06:39:34Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -50,7 +50,7 @@ G4NeutronKiller::G4NeutronKiller(const G4String& processName, G4ProcessType aTyp
  : G4VDiscreteProcess(processName, aType)
 {
   // set Process Sub Type
-  SetProcessSubType(static_cast<int>(NEUTRON_KILLER));
+  SetProcessSubType(NEUTRON_KILLER);
 
   kinEnergyThreshold = 0.0;
   timeThreshold = DBL_MAX;
@@ -93,4 +93,33 @@ void G4NeutronKiller::SetKinEnergyLimit(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double G4NeutronKiller::PostStepGetPhysicalInteractionLength( 
+				 const G4Track& aTrack,
+				 G4double, G4ForceCondition* condition)
+{
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+  
+  return (aTrack.GetGlobalTime() > timeThreshold || 
+          aTrack.GetKineticEnergy() < kinEnergyThreshold) ? 0.0 : DBL_MAX;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4NeutronKiller::GetMeanFreePath(const G4Track&,G4double,
+					  G4ForceCondition*)
+{
+  return DBL_MAX;
+}    
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VParticleChange* G4NeutronKiller::PostStepDoIt(const G4Track& aTrack, 
+						 const G4Step&)
+{
+  pParticleChange->Initialize(aTrack);
+  pParticleChange->ProposeTrackStatus(fStopAndKill);
+  return pParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

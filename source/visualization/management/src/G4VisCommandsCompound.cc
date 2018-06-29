@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc 98766 2016-08-09 14:17:17Z gcosmo $
+// $Id: G4VisCommandsCompound.cc 110513 2018-05-28 07:37:38Z gcosmo $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -43,9 +43,10 @@ G4VisCommandDrawTree::G4VisCommandDrawTree() {
   G4bool omitable;
   fpCommand = new G4UIcommand("/vis/drawTree", this);
   fpCommand->SetGuidance
-    ("(DTREE) Creates a scene consisting of this physical volume and"
-     "\n  produces a representation of the geometry hieracrhy.");
-  fpCommand->SetGuidance("The scene becomes current.");
+    ("Produces a representation of the geometry hierarchy. Further"
+     "\nguidance is given on running the command. Or look at the guidance"
+     "\nfor \"/vis/ASCIITree/verbose\".");
+  fpCommand->SetGuidance("The pre-existing scene and view are preserved.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter("physical-volume-name", 's', omitable = true);
   parameter -> SetDefaultValue("world");
@@ -197,6 +198,77 @@ void G4VisCommandDrawView::SetNewValue(G4UIcommand*, G4String newValue) {
   UImanager->SetVerboseLevel(keepVerbose);
 }
 
+////////////// /vis/specify ///////////////////////////////////////
+
+G4VisCommandDrawLogicalVolume::G4VisCommandDrawLogicalVolume() {
+  G4bool omitable;
+  fpCommand = new G4UIcommand("/vis/drawLogicalVolume", this);
+  fpCommand->SetGuidance
+  ("Draws logical volume with Boolean components, voxels and readout geometry.");
+  fpCommand->SetGuidance
+  ("Synonymous with \"/vis/specify\".");
+  fpCommand->SetGuidance
+  ("Creates a scene consisting of this logical volume and asks the"
+   "\n  current viewer to draw it to the specified depth of descent"
+   "\n  showing boolean components (if any), voxels (if any),"
+   "\n  readout geometry (if any), local axes and overlaps (if any),"
+   "\n  under control of the appropriate flag.");
+  fpCommand->SetGuidance
+  ("Note: voxels are not constructed until start of run - /run/beamOn."
+   "\n  (For voxels without a run, \"/run/beamOn 0\".)");
+  fpCommand->SetGuidance("The scene becomes current.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter("logical-volume-name", 's', omitable = false);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("depth-of-descent", 'i', omitable = true);
+  parameter->SetDefaultValue(1);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("booleans-flag", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("voxels-flag", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("readout-flag", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("axes-flag", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  parameter -> SetGuidance ("Set \"false\" to suppress axes.");
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("check-overlap-flag", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  parameter -> SetGuidance ("Set \"false\" to suppress overlap check.");
+  fpCommand->SetParameter(parameter);
+}
+
+G4VisCommandDrawLogicalVolume::~G4VisCommandDrawLogicalVolume() {
+  delete fpCommand;
+}
+
+void G4VisCommandDrawLogicalVolume::SetNewValue(G4UIcommand*, G4String newValue) {
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4int keepVerbose = UImanager->GetVerboseLevel();
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
+  // UImanager->ApplyCommand(G4String("/geometry/print " + newValue));
+  UImanager->ApplyCommand("/vis/scene/create");
+  UImanager->ApplyCommand(G4String("/vis/scene/add/logicalVolume " + newValue));
+  UImanager->ApplyCommand("/vis/sceneHandler/attach");
+  UImanager->SetVerboseLevel(keepVerbose);
+  static G4bool warned = false;
+  if (verbosity >= G4VisManager::confirmations && !warned) {
+    G4cout <<
+    "NOTE: For systems which are not \"auto-refresh\" you will need to"
+    "\n  issue \"/vis/viewer/refresh\" or \"/vis/viewer/flush\"."
+    << G4endl;
+    warned = true;
+  }
+}
+
 ////////////// /vis/drawVolume ///////////////////////////////////////
 
 G4VisCommandDrawVolume::G4VisCommandDrawVolume() {
@@ -309,11 +381,13 @@ G4VisCommandSpecify::G4VisCommandSpecify() {
   fpCommand->SetGuidance
     ("Draws logical volume with Boolean components, voxels and readout geometry.");
   fpCommand->SetGuidance
+    ("Synonymous with \"/vis/drawLogicalVolume\".");
+  fpCommand->SetGuidance
     ("Creates a scene consisting of this logical volume and asks the"
      "\n  current viewer to draw it to the specified depth of descent"
      "\n  showing boolean components (if any), voxels (if any),"
-     "\n  readout geometry (if any) and local axes, under control of the"
-     "\n  appropriate flag.");
+     "\n  readout geometry (if any), local axes and overlaps (if any),"
+     "\n  under control of the appropriate flag.");
   fpCommand->SetGuidance
   ("Note: voxels are not constructed until start of run - /run/beamOn."
    "\n  (For voxels without a run, \"/run/beamOn 0\".)");
@@ -336,6 +410,10 @@ G4VisCommandSpecify::G4VisCommandSpecify() {
   parameter = new G4UIparameter("axes-flag", 'b', omitable = true);
   parameter->SetDefaultValue(true);
   parameter -> SetGuidance ("Set \"false\" to suppress axes.");
+  fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("check-overlap-flag", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  parameter -> SetGuidance ("Set \"false\" to suppress overlap check.");
   fpCommand->SetParameter(parameter);
 }
 

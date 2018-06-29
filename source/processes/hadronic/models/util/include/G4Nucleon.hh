@@ -64,8 +64,8 @@ class G4Nucleon : public G4VKineticNucleon
 
   public:
 
-    inline void SetPosition(G4ThreeVector & aPosition) {thePosition = aPosition;}
-    virtual inline const G4ThreeVector & GetPosition()  const {return thePosition;}
+    void SetPosition(const G4ThreeVector aPosition);
+    const G4ThreeVector& GetPosition() const;
 
     inline void SetMomentum(G4LorentzVector & aMomentum) {theMomentum = aMomentum;}
     inline const G4LorentzVector& GetMomentum()  const {return theMomentum;}
@@ -77,9 +77,8 @@ class G4Nucleon : public G4VKineticNucleon
     inline void SetParticleType(G4Proton * aProton) {theParticleType = aProton;}
     inline void SetParticleType(G4Neutron *aNeutron){theParticleType = aNeutron;}
 
-    inline void SetParticleType(G4AntiProton * aAntiProton) {theParticleType =aAntiProton;} //VU
-    inline void SetParticleType(G4AntiNeutron *aAntiNeutron){theParticleType =aAntiNeutron;}//VU
-
+    inline void SetParticleType(G4AntiProton * aAntiProton) {theParticleType =aAntiProton;}
+    inline void SetParticleType(G4AntiNeutron *aAntiNeutron){theParticleType =aAntiNeutron;}
 
     inline  const G4ParticleDefinition* GetParticleType() const {return theParticleType;}
     virtual const G4ParticleDefinition* GetDefinition() const {return theParticleType;}
@@ -131,6 +130,15 @@ inline G4Nucleon& G4Nucleon::operator=(const G4Nucleon& right)
 	return *this;
 }
 
-#endif
+inline void G4Nucleon::SetPosition(const G4ThreeVector aPosition)
+{
+  thePosition = aPosition;
+}
 
+inline const G4ThreeVector& G4Nucleon::GetPosition() const
+{
+  return thePosition;
+}
+
+#endif
 

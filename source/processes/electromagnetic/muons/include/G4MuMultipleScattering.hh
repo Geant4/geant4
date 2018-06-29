@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.hh 107056 2017-11-01 14:52:32Z gcosmo $
+// $Id: G4MuMultipleScattering.hh 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -64,7 +64,7 @@ public:    // with description
 
   explicit G4MuMultipleScattering(const G4String& processName="muMsc");
 
-  virtual ~G4MuMultipleScattering();
+  ~G4MuMultipleScattering() = default;
 
   // returns true for charged particles, false otherwise
   G4bool IsApplicable (const G4ParticleDefinition& p) override;

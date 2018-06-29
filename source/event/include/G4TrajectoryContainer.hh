@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryContainer.hh 69010 2013-04-15 09:34:16Z gcosmo $
+// $Id: G4TrajectoryContainer.hh 110273 2018-05-17 14:43:43Z gcosmo $
 //
 //
 // G4TrajectoryContainer
@@ -82,18 +82,18 @@ class G4TrajectoryContainer
     TrajectoryVector* vect;
 };
 
-extern G4EVENT_DLL G4ThreadLocal G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator;
+extern G4EVENT_DLL G4Allocator<G4TrajectoryContainer>*& aTrajectoryContainerAllocator();
 
 inline void* G4TrajectoryContainer::operator new(size_t)
 {
-  if (!aTrajectoryContainerAllocator)
-    aTrajectoryContainerAllocator = new G4Allocator<G4TrajectoryContainer>;
-  return (void*)aTrajectoryContainerAllocator->MallocSingle();
+  if (!aTrajectoryContainerAllocator())
+    aTrajectoryContainerAllocator() = new G4Allocator<G4TrajectoryContainer>;
+  return (void*)aTrajectoryContainerAllocator()->MallocSingle();
 }
 
 inline void G4TrajectoryContainer::operator delete(void* aTrajectoryContainer)
 {
-  aTrajectoryContainerAllocator->FreeSingle((G4TrajectoryContainer*)aTrajectoryContainer);
+  aTrajectoryContainerAllocator()->FreeSingle((G4TrajectoryContainer*)aTrajectoryContainer);
 }
 
 #endif

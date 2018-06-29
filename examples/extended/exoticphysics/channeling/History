@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 08, 2018 B. Morgan (channelingExample-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
 August 22, 2017 E. Bagli (channelingExample-V10-03-03)
 - Modified sdht_ID to fSDHT_ID
 - Removed G4VIS_USE, G4UI_USE

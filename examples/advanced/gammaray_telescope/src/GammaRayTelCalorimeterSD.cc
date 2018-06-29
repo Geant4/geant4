@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelCalorimeterSD.cc 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelCalorimeterSD.cc 109971 2018-05-14 07:06:05Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -94,8 +94,9 @@ void GammaRayTelCalorimeterSD::Initialize(G4HCofThisEvent*)
 G4bool GammaRayTelCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 { 
   
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  if ((edep/keV == 0.)) return false;      
+  G4double edep = 0.;
+  edep = aStep->GetTotalEnergyDeposit();
+  if (edep == 0.) return false;      
   
   // This TouchableHistory is used to obtain the physical volume
   // of the hit

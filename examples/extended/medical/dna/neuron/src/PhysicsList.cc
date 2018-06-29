@@ -38,12 +38,15 @@
 //
 // $Id$
 //
-/// \file PhysicsList.cc 
+/// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 
 #include "PhysicsList.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicsConstructorRegistry.hh"
+// G4RegisterPhysicsConstructors.icc is necessary for static builds
+#define REGREF PhysicsList
+#include "G4RegisterPhysicsConstructors.icc"
 #include "CommandLineParser.hh"
 #include "G4EmParameters.hh"
 // for discrete physics constructors!

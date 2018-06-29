@@ -1,4 +1,4 @@
-$Id: History 110104 2018-05-15 11:40:56Z gcosmo $
+$Id: History 110258 2018-05-17 14:20:46Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- 09 April 2018 Makoto Asai ( particles-V10-03-17 )
+- 17 May 2018 Jonathan Madsen (particles-V10-04-03)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+- 09 April 2018 Makoto Asai (particles-V10-04-02)
 - G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
   Fix incorrect indexing. Addressing bug report #2053.
+
+- 12 February 2018 Jonathan Madsen (particles-V10-04-01)
+- Removed G4MUTEX_INITIALIZER from constructor in G4VDecayChannel
+
+- 07 February 2018 Hisaya Kurashige  ( particles-V10-04-00 )
+- remove obsolete enum of MaxNumberOfProducts in G4DecayProducts
 
 - 13 September 2017 Krzysztof Genser ( particles-V10-03-16 )
 - moved G4MuonicAtom & G4MuonicAtomHelper to management

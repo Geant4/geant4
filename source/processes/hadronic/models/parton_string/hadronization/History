@@ -1,4 +1,4 @@
-$Id: History 106967 2017-10-31 08:41:49Z gcosmo $
+$Id: History 108179 2018-01-18 08:53:39Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,21 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+18-Jan-2018 A. Ribon         (had-hadronization-V10-04-03)
+-  G4VLongitudinalStringDecay : removed useless caching in the method
+   FragmentationMass which was causing rare irreproducibilities in
+   gamma-nuclear reactions (i.e. involving QGS).
+
+19-Dec-2017 V. Uzhinsky      (had-hadronization-V10-04-02)
+-  Fine tuning of LUND and QGS fragmentations.
+
+14-Dec-2017 V. Uzhinsky      (had-hadronization-V10-04-01)
+-  Improved versions of LUND and QGS fragmentations.
+
+07-Dec-2017 A. Ribon         (had-hadronization-V10-04-00)
+-  Brought back the development version of hadronization 
+   (as it was in had-hadronization-V10-03-07).
 
 27-Oct-2017 A. Ribon         (had-hadronization-V10-03-09)
 -  G4ExcitedStringDecay : introduced smearing of resonance masses

@@ -97,7 +97,7 @@ G4FissionProductYieldDist( G4int WhichIsotope,
     {
         // Initialize the class
         Initialize(dataStream);
-    } catch (std::exception e)
+    } catch (std::exception& e)
     {
         G4FFG_FUNCTIONLEAVE__
         throw e;
@@ -125,7 +125,7 @@ G4FissionProductYieldDist( G4int WhichIsotope,
     {
         // Initialize the class
         Initialize(dataStream);
-    } catch (std::exception e)
+    } catch (std::exception& e)
     {
         G4FFG_FUNCTIONLEAVE__
         throw e;

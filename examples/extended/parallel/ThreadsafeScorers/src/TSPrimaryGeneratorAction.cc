@@ -46,6 +46,7 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4TiMemory.hh"
 
 using namespace CLHEP;
 
@@ -76,6 +77,7 @@ TSPrimaryGeneratorAction::~TSPrimaryGeneratorAction()
 
 void TSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+    TIMEMORY_AUTO_TIMER();
     static TSDetectorConstruction* detector
             = TSDetectorConstruction::Instance();
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.cc 105720 2017-08-16 12:38:10Z gcosmo $
+// $Id: G4VDecayChannel.cc 108440 2018-02-14 07:35:49Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -76,9 +76,7 @@ G4VDecayChannel::G4VDecayChannel(const G4String &aName, G4int Verbose)
    rangeMass(2.5),
    parent_polarization(),
    particletable(nullptr),
-   verboseLevel(Verbose),
-   daughtersMutex(G4MUTEX_INITIALIZER),
-   parentMutex(G4MUTEX_INITIALIZER)
+   verboseLevel(Verbose)
 {
   G4MT_parent = nullptr;
   G4MT_daughters = nullptr;
@@ -106,9 +104,7 @@ G4VDecayChannel::G4VDecayChannel(const G4String  &aName,
                 rangeMass(1.0),
                 parent_polarization(),
 		particletable(0),
-		verboseLevel(1),
-		daughtersMutex(G4MUTEX_INITIALIZER),
-		parentMutex(G4MUTEX_INITIALIZER)
+        verboseLevel(1)
 {
   G4MT_parent = nullptr;
   G4MT_daughters = nullptr;

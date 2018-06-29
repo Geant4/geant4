@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc 107056 2017-11-01 14:52:32Z gcosmo $
+// $Id: G4MuPairProduction.cc 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -91,11 +91,6 @@ G4MuPairProduction::G4MuPairProduction(const G4String& name)
   SetSecondaryParticle(G4Positron::Positron());
   SetIonisation(false);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4MuPairProduction::~G4MuPairProduction()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

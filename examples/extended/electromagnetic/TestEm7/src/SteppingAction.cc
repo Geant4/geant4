@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 101250 2016-11-10 08:54:02Z gcosmo $
+// $Id: SteppingAction.cc 110643 2018-06-04 16:49:29Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,6 +86,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   G4double x2 = postPoint->GetPosition().x() + xmax*0.5;
   if(x1 >= 0.0 && x2 <= xmax) {  
     G4double x  = x1 + G4UniformRand()*(x2-x1);
+    if (step->GetTrack()->GetDefinition()->GetPDGCharge() == 0.) x = x2;
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     analysisManager->FillH1(1, x, edep);  
     analysisManager->FillH1(2, x, edep);

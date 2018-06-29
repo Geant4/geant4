@@ -91,6 +91,7 @@ G4_DECLARE_PHYSLIST_FACTORY(QGSP_INCLXX_HP);
 #include "Shielding.hh"
 G4_DECLARE_PHYSLIST_FACTORY(Shielding);
 
+/*** no longer necessary as of 2017-12-07
 // some extra hoops because the physlist factory expects to be able
 // to construct a list using just a verbosity argument
 // but
@@ -103,6 +104,10 @@ public:
   explicit ShieldingLEND(G4int verbose = 1) : Shielding(verbose,"LEND","") { ; }
   virtual ~ShieldingLEND() { ; }
 };
+G4_DECLARE_PHYSLIST_FACTORY(ShieldingLEND);
+***/
+
+#include "ShieldingLEND.hh"
 G4_DECLARE_PHYSLIST_FACTORY(ShieldingLEND);
 
 class ShieldingM : public Shielding

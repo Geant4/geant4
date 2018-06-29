@@ -1,4 +1,4 @@
-$Id: History 110072 2018-05-15 09:59:42Z gcosmo $
+$Id: History 110899 2018-06-25 08:39:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,25 +10,53 @@ $Id: History 110072 2018-05-15 09:59:42Z gcosmo $
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all directory-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+It DOES NOT substitute the log-message one should put at every
+committal in the source repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-11-April-2018  G.Cosmo             (geom-specific-V10-03-27)
+25-Jun-2018  G.Cosmo               (geom-specific-V10-04-10)
+- Use dynamic_cast to attempt fix for spurious compilation warnings on
+  CentOS7/gcc-5.3 on G4UTessellatedSolid wrapper.
+
+17-May-2018  J.Madsen              (geom-specific-V10-04-09)
+- Updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+11-April-2018  G.Cosmo             (geom-specific-V10-04-08)
 - Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
 
-13-February-2018  G.Cosmo
+13-February-2018  E.Tcherniaev     (geom-specific-V10-04-07)
 - Corrected conversion of input parameters to internal structure (used for
   caching for adoption in GDML persistency) in G4UPolycone and G4UPolyhedra
   wrappers.
 
-13-December-2017  E.Tcherniaev     (geom-specific-V10-03-26)
+9-February-2018  G.Cosmo           (geom-specific-V10-04-06)
+- Caching facets and vertices in G4UTessellatedSolid wrapper for properly
+  treating indexing in facets.
+
+31-January-2018  G.Cosmo           (geom-specific-V10-04-05)
+- Corrected use of facets indeces in G4UTessellatedSolid for visualization.
+- Minor cleanup in G4TessellatedSolid::CreatePolyhedron(), no functional
+  changes.
+
+15-January-2018  G.Cosmo           (geom-specific-V10-04-04)
+- Added validity checks in G4UTessellatedSolid::AddFacet().
+
+11-January-2018  G.Cosmo           (geom-specific-V10-04-03)
+- Added and enabled VecGeom wrapper for G4TessellatedSolid.
+  Requires tags cmake-V10-04-01 and config-V10-04-00.
+
+20-December-2017  G.Cosmo          (geom-specific-V10-04-02)
+- Enabled VecGeom wrappers for G4ExtrudedSolid and G4Hype.
+
+13-December-2017  E.Tcherniaev     (geom-specific-V10-04-01)
 - Removed redundant data initialistion in G4ExtrudedSolid constructors. 
 
-11-December-2017  E.Tcherniaev
+11-December-2017  E.Tcherniaev     (geom-specific-V10-04-00)
 - Added missing initialisation of two data-members in copy-ctor and
   assignment operator of G4ExtrudedSolid. Addressing problem report #2016.
 

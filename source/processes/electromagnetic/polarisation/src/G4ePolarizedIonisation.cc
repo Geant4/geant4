@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ePolarizedIonisation.cc 105740 2017-08-16 13:05:44Z gcosmo $
+// $Id: G4ePolarizedIonisation.cc 109176 2018-04-03 06:53:39Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -127,7 +127,7 @@ G4bool G4ePolarizedIonisation::IsApplicable(const G4ParticleDefinition& p)
 
 void G4ePolarizedIonisation::InitialiseEnergyLossProcess(
 		    const G4ParticleDefinition* part,
-		    const G4ParticleDefinition* /*part2*/)
+		    const G4ParticleDefinition*)
 {
   if(!isInitialised) {
 

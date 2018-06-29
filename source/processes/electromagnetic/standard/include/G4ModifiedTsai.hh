@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModifiedTsai.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4ModifiedTsai.hh 110415 2018-05-23 06:44:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,9 +73,19 @@ public:
                                          G4double out_energy, G4int Z,
                                          const G4Material* mat = nullptr) final;
 
+  virtual void SamplePairDirections(const G4DynamicParticle* dp,
+				    G4double elecKinEnergy,
+				    G4double posiKinEnergy,
+				    G4ThreeVector& dirElectron,
+				    G4ThreeVector& dirPositron,
+				    G4int Z = 0,
+				    const G4Material* mat = nullptr) final;
+
   virtual void PrintGeneratorInformation() const final;
 
 private:
+
+  G4double SampleCosTheta(G4double kinEnergy);
 
   // hide assignment operator 
   G4ModifiedTsai & operator=(const  G4ModifiedTsai &right) = delete;

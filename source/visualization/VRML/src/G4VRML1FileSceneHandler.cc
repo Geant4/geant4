@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileSceneHandler.cc 104289 2017-05-23 13:24:09Z gcosmo $
+// $Id: G4VRML1FileSceneHandler.cc 110513 2018-05-28 07:37:38Z gcosmo $
 //
 // G4VRML1FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -152,7 +152,8 @@ void G4VRML1FileSceneHandler::connectPort()
 		filename
 		<< fVRMLFileDestDir << WRL_FILE_HEADER
 		<< std::setw(2) << std::setfill('0') << i << ".wrl";
-		strncpy(fVRMLFileName,filename.str().c_str(),sizeof(fVRMLFileName));
+		strncpy(fVRMLFileName,filename.str().c_str(),sizeof(fVRMLFileName)-1);
+                fVRMLFileName[sizeof(fVRMLFileName)-1] = '\0';
 
 		// check validity of the file name
 		std::ifstream  fin ;
@@ -210,7 +211,8 @@ void G4VRML1FileSceneHandler::closePort()
 	} else {
 		std::ostringstream ossCommand;
 		ossCommand << viewer << ' ' << fVRMLFileName;
-		strncpy(command,ossCommand.str().c_str(),sizeof(command));
+		strncpy(command,ossCommand.str().c_str(),sizeof(command)-1);
+                command[sizeof(command)-1] = '\0';
 		(void) system( command );
 	}
 }

@@ -58,31 +58,14 @@ namespace
 }
 
 G4Pid_t G4Threading::G4GetPidId()
-{ // In multithreaded mode return Thread ID
-   #if defined(__MACH__)
-   #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12
-     uint64_t tid64;
-     pthread_threadid_np(NULL, &tid64);
-     return (pid_t)tid64;
-   #else
-     return syscall(SYS_thread_selfid);
-   #endif
-   #elif defined(WIN32)
-     return GetCurrentThreadId();
-   #else
-     return syscall(SYS_gettid);
-   #endif
+{
+    // In multithreaded mode return Thread ID
+    return std::this_thread::get_id();
 }
 
 G4int G4Threading::G4GetNumberOfCores()
 {
-   #if defined(WIN32)
-     SYSTEM_INFO sysinfo;
-     GetSystemInfo( &sysinfo );
-     return static_cast<G4int>( sysinfo.dwNumberOfProcessors );
-   #else
-     return static_cast<G4int>(sysconf( _SC_NPROCESSORS_ONLN ));
-   #endif
+    return std::thread::hardware_concurrency();
 }
 
 void G4Threading::G4SetThreadId(G4int value ) { G4ThreadID = value; }
@@ -90,38 +73,40 @@ G4int G4Threading::G4GetThreadId() { return G4ThreadID; }
 G4bool G4Threading::IsWorkerThread() { return (G4ThreadID>=0); }
 G4bool G4Threading::IsMasterThread() { return (G4ThreadID==MASTER_ID); }
 
-#if defined(WIN32)  // WIN32 stuff needed for MT
-DWORD /*WINAPI*/ G4WaitForSingleObjectInf( __in G4Mutex m )
- { return WaitForSingleObject( m , INFINITE); }
-BOOL G4ReleaseMutex( __in G4Mutex m)
- { return ReleaseMutex(m); }
-#endif
-
 #if defined(__linux__) || defined(_AIX)
-G4bool G4Threading::G4SetPinAffinity(G4int cpu, G4Thread& aT)
+G4bool G4Threading::G4SetPinAffinity(G4int cpu, G4NativeThread& aT)
 {
-   cpu_set_t* aset = new cpu_set_t;
-   G4AutoDelete::Register(aset);
-   CPU_ZERO(aset);
-   CPU_SET(cpu,aset);
-   return ( pthread_setaffinity_np(aT, sizeof(cpu_set_t), aset) == 0 );
+    cpu_set_t* aset = new cpu_set_t;
+    G4AutoDelete::Register(aset);
+    CPU_ZERO(aset);
+    CPU_SET(cpu, aset);
+    pthread_t& _aT = (pthread_t&) (aT);
+    return (pthread_setaffinity_np(_aT, sizeof(cpu_set_t), aset) == 0);
 }
 #else //Not available for Mac, WIN,...
-G4bool G4Threading::G4SetPinAffinity(G4int, G4Thread&)
+G4bool G4Threading::G4SetPinAffinity(G4int, G4NativeThread&)
 {
-   G4Exception("G4Threading::G4SetPinAffinity()",
-          "NotImplemented", JustWarning,
-          "Affinity setting not available for this architecture, ignoring...");
-   return true;
+    G4Exception("G4Threading::G4SetPinAffinity()",
+                "NotImplemented", JustWarning,
+                "Affinity setting not available for this architecture, "
+                "ignoring...");
+    return true;
 }
 #endif
 
-void G4Threading::SetMultithreadedApplication(G4bool value ) { isMTAppType = value; }
-G4bool G4Threading::IsMultithreadedApplication() { return isMTAppType; }
+void G4Threading::SetMultithreadedApplication(G4bool value)
+{
+    isMTAppType = value;
+}
+
+G4bool G4Threading::IsMultithreadedApplication()
+{
+    return isMTAppType;
+}
 
 namespace
 {
-  std::atomic_int numActThreads(0);
+    std::atomic_int numActThreads(0);
 }
 int G4Threading::WorkerThreadLeavesPool() { return numActThreads--; }
 int G4Threading::WorkerThreadJoinsPool() { return numActThreads++;}
@@ -129,15 +114,14 @@ G4int G4Threading::GetNumberOfRunningWorkerThreads() { return numActThreads.load
 
 #else  // Sequential mode
 
-G4int fake_mutex_lock_unlock( G4Mutex* ) { return 0; }
-
 G4Pid_t G4Threading::G4GetPidId()
-{                    // In sequential mode return Process ID and not Thread ID
-    #if defined(WIN32)
+{
+    // In sequential mode return Process ID and not Thread ID
+#if defined(WIN32)
     return GetCurrentProcessId();
-    #else
+#else
     return getpid();
-    #endif
+#endif
 }
 
 G4int G4Threading::G4GetNumberOfCores() { return 1; }
@@ -146,7 +130,7 @@ G4bool G4Threading::IsWorkerThread() { return false; }
 G4bool G4Threading::IsMasterThread() { return true; }
 void G4Threading::G4SetThreadId(G4int) {}
 
-G4bool G4Threading::G4SetPinAffinity(G4int,G4Thread&) { return true;}
+G4bool G4Threading::G4SetPinAffinity(G4int, G4NativeThread&) { return true; }
 
 void G4Threading::SetMultithreadedApplication(G4bool) {}
 G4bool G4Threading::IsMultithreadedApplication() { return false; }

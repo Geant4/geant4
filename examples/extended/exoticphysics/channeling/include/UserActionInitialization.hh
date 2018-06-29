@@ -25,6 +25,8 @@
 //
 //
 
+#include "G4Types.hh"
+
 #ifdef G4MULTITHREADED
 
 #ifndef UserActionInitialization_h

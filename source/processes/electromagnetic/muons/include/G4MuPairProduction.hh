@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.hh 106716 2017-10-20 09:40:09Z gcosmo $
+// $Id: G4MuPairProduction.hh 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,7 +77,7 @@ public:
 
   explicit G4MuPairProduction(const G4String& processName = "muPairProd");
 
-  virtual ~G4MuPairProduction();
+  ~G4MuPairProduction() = default;
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
 

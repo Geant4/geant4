@@ -1,4 +1,4 @@
-$Id: History 104291 2017-05-23 13:25:51Z gcosmo $
+$Id: History 110513 2018-05-28 07:37:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+
+26 May 2018  John Allison  (gMocren-V10-04-00)
+- Fix gcc-8 warnings.
 
 23rd May 2017  John Allison  (gMocren-V10-03-00)
 - Fixes for gcc-7.1 warnings.

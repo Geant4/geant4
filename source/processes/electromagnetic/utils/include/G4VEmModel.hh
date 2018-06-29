@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh 106714 2017-10-20 09:38:06Z gcosmo $
+// $Id: G4VEmModel.hh 108386 2018-02-09 15:38:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -282,9 +282,6 @@ public:
                                              G4double cutEnergy = 0.0,
                                              G4double maxEnergy = DBL_MAX);
 
-  // select isotope in order to have precise mass of the nucleus
-  inline G4int SelectIsotopeNumber(const G4Element*);
-
   // atom can be selected effitiantly if element selectors are initialised 
   inline const G4Element* SelectRandomAtom(const G4MaterialCutsCouple*,
                                            const G4ParticleDefinition*,
@@ -300,7 +297,10 @@ public:
                                     G4double maxEnergy = DBL_MAX);
 
   // to select atom if cross section is proportional number of electrons 
-  inline G4int SelectRandomAtomNumber(const G4Material*);
+  G4int SelectRandomAtomNumber(const G4Material*);
+
+  // select isotope in order to have precise mass of the nucleus
+  G4int SelectIsotopeNumber(const G4Element*);
 
   //------------------------------------------------------------------------
   // Get/Set methods
@@ -434,7 +434,7 @@ protected:
   const std::vector<G4int>*    theDensityIdx;
   size_t                       idxTable;
   G4bool                       lossFlucFlag;
-  const static G4double        inveplus;       
+  G4double                     inveplus;       
 
   // ======== Cached values - may be state dependent ================
 
@@ -556,63 +556,11 @@ G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
                              G4double maxEnergy)
 {
   fCurrentCouple = couple;
-  if(nSelectors > 0) {
-    fCurrentElement = 
-      ((*elmSelectors)[couple->GetIndex()])->SelectRandomAtom(kinEnergy);
-  } else {
-    fCurrentElement = SelectRandomAtom(couple->GetMaterial(),part,kinEnergy,
-                                       cutEnergy,maxEnergy);
-  }
+  fCurrentElement = (nSelectors > 0) ?
+    ((*elmSelectors)[couple->GetIndex()])->SelectRandomAtom(kinEnergy) :
+    SelectRandomAtom(couple->GetMaterial(),part,kinEnergy,cutEnergy,maxEnergy);
   fCurrentIsotope = nullptr;
   return fCurrentElement;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4int G4VEmModel::SelectRandomAtomNumber(const G4Material* mat)
-{
-  // this algorith assumes that cross section is proportional to
-  // number electrons multiplied by number of atoms
-  size_t nn = mat->GetNumberOfElements();
-  const G4ElementVector* elmv = mat->GetElementVector();
-  G4int Z = (*elmv)[0]->GetZasInt();
-  if(1 < nn) {
-    const G4double* at = mat->GetVecNbOfAtomsPerVolume();
-    G4double tot = mat->GetTotNbOfAtomsPerVolume()*G4UniformRand();
-    for( size_t i=0; i<nn; ++i) {
-      tot -= at[i];
-      if(tot <= 0.0) { 
-	Z = (*elmv)[i]->GetZasInt();
-	break; 
-      }
-    }
-  }
-  return Z;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
-{
-  SetCurrentElement(elm);
-  G4int N = G4lrint(elm->GetN());
-  G4int ni = elm->GetNumberOfIsotopes();
-  fCurrentIsotope = nullptr;
-  if(ni > 0) {
-    G4int idx = 0;
-    if(ni > 1) {
-      G4double* ab = elm->GetRelativeAbundanceVector();
-      G4double x = G4UniformRand();
-      for(; idx<ni; ++idx) {
-        x -= ab[idx];
-        if (x <= 0.0) { break; }
-      }
-      if(idx >= ni) { idx = ni - 1; }
-    }
-    fCurrentIsotope = elm->GetIsotope(idx);
-    N = fCurrentIsotope->GetN();
-  }
-  return N;
 }
 
 // ======== Get/Set inline methods used at initialisation ================
@@ -844,7 +792,7 @@ inline void
 G4VEmModel::SetElementSelectors(std::vector<G4EmElementSelector*>* p)
 {
   elmSelectors = p;
-  if(elmSelectors) { nSelectors = elmSelectors->size(); }
+  nSelectors = (elmSelectors) ? elmSelectors->size() : 0;
   localElmSelectors = false;
 }
 

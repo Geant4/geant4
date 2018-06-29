@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 106953 2017-10-31 08:30:13Z gcosmo $
+# $Id: sources.cmake 109620 2018-05-03 13:01:04Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -46,9 +46,12 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emstandard
     HEADERS
         G4ASTARStopping.hh
+        G4AtimaEnergyLossModel.hh
+        G4AtimaFluctuations.hh
         G4BetheBlochIonGasModel.hh
         G4BetheBlochModel.hh
         G4BetheHeitlerModel.hh
+        G4BetheHeitler5DModel.hh
         G4BohrFluctuations.hh
         G4BraggIonGasModel.hh
         G4BraggIonModel.hh
@@ -73,6 +76,8 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4IonFluctuations.hh
         G4KleinNishinaCompton.hh
         G4KleinNishinaModel.hh
+        G4LindhardSorensenData.hh
+        G4LindhardSorensenIonModel.hh
         G4ModifiedTsai.hh
         G4MollerBhabhaModel.hh
         G4MottCoefficients.hh
@@ -109,15 +114,20 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4eSingleCoulombScatteringModel.hh
         G4eeToTwoGammaModel.hh
         G4eplusAnnihilation.hh
+        G4eplusTo2GammaOKVIModel.hh
+        G4eplusTo3GammaOKVIModel.hh
         G4hCoulombScatteringModel.hh
         G4hIonisation.hh
         G4hMultipleScattering.hh
         G4ionIonisation.hh
     SOURCES
         G4ASTARStopping.cc
+        G4AtimaEnergyLossModel.cc
+        G4AtimaFluctuations.cc
         G4BetheBlochIonGasModel.cc
         G4BetheBlochModel.cc
         G4BetheHeitlerModel.cc
+        G4BetheHeitler5DModel.cc
         G4BohrFluctuations.cc
         G4BraggIonGasModel.cc
         G4BraggIonModel.cc
@@ -142,6 +152,8 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4IonFluctuations.cc
         G4KleinNishinaCompton.cc
         G4KleinNishinaModel.cc
+        G4LindhardSorensenData.cc
+        G4LindhardSorensenIonModel.cc
         G4ModifiedTsai.cc
         G4MollerBhabhaModel.cc
         G4MottCoefficients.cc
@@ -177,6 +189,8 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4eSingleCoulombScatteringModel.cc
         G4eeToTwoGammaModel.cc
         G4eplusAnnihilation.cc
+        G4eplusTo2GammaOKVIModel.cc
+        G4eplusTo3GammaOKVIModel.cc
         G4hCoulombScatteringModel.cc
         G4hIonisation.cc
         G4hMultipleScattering.cc

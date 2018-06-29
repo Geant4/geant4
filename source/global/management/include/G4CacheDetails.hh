@@ -100,7 +100,7 @@ template<class VALTYPE> class G4CacheReference
     // std::vector in case of stored objects and allow use of
     // specialized allocators
 
-    static G4ThreadLocal cache_container *cache;
+    static cache_container*& cache();
 };
 
 // Template specialization for pointers
@@ -118,7 +118,7 @@ template<class VALTYPE> class G4CacheReference<VALTYPE*>
 
   private:
     typedef std::vector<VALTYPE*> cache_container;
-    static G4ThreadLocal cache_container *cache;
+    static cache_container*& cache();
 };
 
 // Template specialization for probably the most used case: double
@@ -137,7 +137,7 @@ template<> class G4CacheReference<G4double>
   private:
 
     typedef std::vector<G4double> cache_container;
-    G4GLOB_DLL static G4ThreadLocal std::vector<G4double> *cache;
+    static G4GLOB_DLL cache_container*& cache();
 };
 
 
@@ -152,47 +152,47 @@ template<class V>
 void G4CacheReference<V>::Initialize( unsigned int id )
 {
 #ifdef g4cdebug
-  if ( cache == 0 )
+  if ( cache() == 0 )
     cout<<"Generic template"<<endl;
 #endif
 
   // Create cache container
-  if ( cache == 0 )
-    cache = new cache_container;
-  if ( cache->size() <= id )
-    cache->resize(id+1,static_cast<V*>(0));
-  if ( (*cache)[id] == 0 )
-    (*cache)[id]=new V;
+  if ( cache() == 0 )
+    cache() = new cache_container;
+  if ( cache()->size() <= id )
+    cache()->resize(id+1,static_cast<V*>(0));
+  if ( (*cache())[id] == 0 )
+    (*cache())[id]=new V;
 }
 
 template<class V>
 void G4CacheReference<V>::Destroy( unsigned int id, G4bool last )
 {
-  if ( cache )
+  if ( cache() )
   {
 #ifdef g4cdebug
     cout<<"Destroying element"<<id<<" is last?"<<last<<endl;
 #endif
-    if ( cache->size() < id )
+    if ( cache()->size() < id )
     {
       G4ExceptionDescription msg;
       msg << "Internal fatal error. Invalid G4Cache size (requested id: "
-          << id << " but cache has size: "<<cache->size();
+          << id << " but cache has size: "<< cache()->size();
       msg << " Possibly client created G4Cache object in a thread and"
           << " tried to delete it from another thread!";
       G4Exception("G4CacheReference<V>::Destroy", "Cache001",
                   FatalException, msg);
       return;
     }
-    if ( cache->size() > id && (*cache)[id] )
+    if ( cache()->size() > id && (*cache())[id] )
     {
-      delete (*cache)[id];
-      (*cache)[id]=0;
+      delete (*cache())[id];
+      (*cache())[id]=0;
     }
     if (last)
     {
-      delete cache;
-      cache = 0;
+      delete cache();
+      cache() = 0;
     }
   }
 }
@@ -200,12 +200,16 @@ void G4CacheReference<V>::Destroy( unsigned int id, G4bool last )
 template<class V>
 V& G4CacheReference<V>::GetCache( unsigned int id ) const
 {
-  return *(cache->operator[](id));
+  return *(cache()->operator[](id));
 }
 
 template<class V>
-G4ThreadLocal typename
-G4CacheReference<V>::cache_container * G4CacheReference<V>::cache = 0;
+typename G4CacheReference<V>::cache_container*&
+G4CacheReference<V>::cache()
+{
+    G4ThreadLocalStatic cache_container* _instance = nullptr;
+    return _instance;
+}
 
 //======= Implementation: G4CacheReference<V*>
 //============================================
@@ -214,45 +218,45 @@ template<class V>
 void G4CacheReference<V*>::Initialize( unsigned int id )
 {
 #ifdef g4cdebug
-  if ( cache == 0 )
+  if ( cache() == 0 )
     cout<<"Pointer template"<<endl;
 #endif
-  if ( cache == 0 )
-    cache = new cache_container;
-  if ( cache->size() <= id )
-    cache->resize(id+1,static_cast<V*>(0));
+  if ( cache() == 0 )
+    cache() = new cache_container;
+  if ( cache()->size() <= id )
+    cache()->resize(id+1,static_cast<V*>(0));
 }
 
 template<class V>
 inline void G4CacheReference<V*>::Destroy( unsigned int id , G4bool last )
 {
-  if ( cache )
+  if ( cache() )
   {
 #ifdef g4cdebug
     cout << "Destroying element" << id << " is last?" << last
          << "-Pointer template specialization-" << endl;
 #endif
-    if ( cache->size() < id )
+    if ( cache()->size() < id )
     {
       G4ExceptionDescription msg;
       msg << "Internal fatal error. Invalid G4Cache size (requested id: "
-          << id << " but cache has size: " << cache->size();
+          << id << " but cache has size: " << cache()->size();
       msg << " Possibly client created G4Cache object in a thread and"
           << " tried to delete it from another thread!";
       G4Exception("G4CacheReference<V*>::Destroy", "Cache001",
                   FatalException, msg);
       return;
     }
-    if ( cache->size() > id && (*cache)[id] )
+    if ( cache()->size() > id && (*cache())[id] )
     {
       // Ownership is for client
       // delete (*cache)[id];
-      (*cache)[id]=0;
+      (*cache())[id]=0;
     }
     if (last )
     {
-      delete cache;
-      cache = 0;
+      delete cache();
+      cache() = 0;
     }
   }
 }
@@ -260,12 +264,16 @@ inline void G4CacheReference<V*>::Destroy( unsigned int id , G4bool last )
 template<class V>
 V*& G4CacheReference<V*>::GetCache(unsigned int id) const
 {
-  return (cache->operator[](id));
+  return (cache()->operator[](id));
 }
 
 template<class V>
-G4ThreadLocal typename
-G4CacheReference<V*>::cache_container * G4CacheReference<V*>::cache = 0;
+typename G4CacheReference<V*>::cache_container*&
+G4CacheReference<V*>::cache()
+{
+    G4ThreadLocalStatic cache_container* _instance = nullptr;
+    return _instance;
+}
 
 //======= Implementation: G4CacheReference<double>
 //============================================
@@ -275,10 +283,10 @@ void G4CacheReference<G4double>::Initialize( unsigned int id )
 #ifdef g4cdebug
   cout<<"Specialized template for G4double"<<endl;
 #endif
-  if ( cache == 0 )
-    cache = new cache_container;
-  if ( cache->size() <= id )
-    cache->resize(id+1,static_cast<G4double>(0));
+  if ( cache() == 0 )
+    cache() = new cache_container;
+  if ( cache()->size() <= id )
+    cache()->resize(id+1,static_cast<G4double>(0));
 }
 
 #ifdef g4cdebug
@@ -287,20 +295,20 @@ void G4CacheReference<G4double>::Destroy( unsigned int id , G4bool last)
 void G4CacheReference<G4double>::Destroy( unsigned int /*id*/ , G4bool last)
 #endif
 {
-  if ( cache && last )
+  if ( cache() && last )
   {
 #ifdef g4cdebug
     cout << "Destroying element" << id << " is last?" << last
          << "-Pointer template specialization-" << endl;
 #endif
-    delete cache;
-    cache = 0;
+    delete cache();
+    cache() = 0;
   }
 }
 
 G4double& G4CacheReference<G4double>::GetCache(unsigned int id) const
 {
-  return cache->operator[](id);
+  return cache()->operator[](id);
 }
 
 #endif

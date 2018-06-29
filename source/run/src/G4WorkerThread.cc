@@ -229,10 +229,11 @@ void G4WorkerThread::SetPinAffinity(G4int affinity) const
   }
   G4cout << "Setting affinity to:" << cpuindex << G4endl;
 
-#if defined(G4MULTITHREADED)  // Avoid compilation warning in C90 standard w/o MT
-  G4Thread t = G4THREADSELF();
+#if defined(G4MULTITHREADED)
+    // Avoid compilation warning in C90 standard w/o MT
+    G4NativeThread t = pthread_self();
 #else
-  G4Thread t;
+    G4NativeThread t;
 #endif
   G4bool success = G4Threading::G4SetPinAffinity(cpuindex,t);
   if ( ! success )

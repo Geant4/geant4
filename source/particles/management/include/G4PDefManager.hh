@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDefManager.hh 103108 2017-03-16 13:00:35Z gcosmo $
+// $Id: G4PDefManager.hh 110257 2018-05-17 14:20:12Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -111,8 +111,8 @@ class G4PDefManager
 
   public:
 
-    G4PART_DLL G4ThreadLocalStatic G4int slavetotalspace;
-    G4PART_DLL G4ThreadLocalStatic G4PDefData* offset;
+    G4PART_DLL static G4int& slavetotalspace(); // thread-local
+    G4PART_DLL static G4PDefData*& offset(); // thread-local
 
   private:
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAngularDistribution.hh 95657 2016-02-17 13:03:36Z gcosmo $
+// $Id: G4VEmAngularDistribution.hh 110416 2018-05-23 06:45:42Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -82,6 +82,14 @@ public:
 					 G4int Z,
 					 G4int shellID,
 					 const G4Material*);
+
+  virtual void SamplePairDirections(const G4DynamicParticle* dp,
+				    G4double elecKinEnergy,
+				    G4double posiKinEnergy,
+				    G4ThreeVector& dirElectron,
+				    G4ThreeVector& dirPositron,
+				    G4int Z = 0,
+				    const G4Material* mat = nullptr);
 
   inline const G4String& GetName() const;
 

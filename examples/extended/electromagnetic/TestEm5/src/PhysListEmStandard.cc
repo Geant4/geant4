@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc 100286 2016-10-17 08:43:45Z gcosmo $
+// $Id: PhysListEmStandard.cc 110387 2018-05-22 07:52:43Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,6 +62,8 @@
 
 #include "G4LossTableManager.hh"
 #include "G4UAtomicDeexcitation.hh"
+#include "G4LindhardSorensenIonModel.hh"
+#include "G4BraggIonModel.hh"
 
 #include "G4BuilderType.hh"
 #include "G4SystemOfUnits.hh"
@@ -77,6 +79,7 @@ PhysListEmStandard::PhysListEmStandard(const G4String& name)
     param->SetMaxEnergy(10*TeV);
     param->SetNumberOfBinsPerDecade(10);
     param->SetMscStepLimitType(fUseSafetyPlus);
+    param->SetFluo(true);
     SetPhysicsType(bElectromagnetic);
 }
 
@@ -101,12 +104,12 @@ void PhysListEmStandard::ConstructProcess()
      
     if (particleName == "gamma") {
 
-      ////ph->RegisterProcess(new G4RayleighScattering, particle);      
       ph->RegisterProcess(new G4PhotoElectricEffect, particle);      
-      G4ComptonScattering* cs   = new G4ComptonScattering;
+      G4ComptonScattering* cs = new G4ComptonScattering;
       cs->SetEmModel(new G4KleinNishinaModel());
       ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(new G4GammaConversion, particle);
+      ph->RegisterProcess(new G4RayleighScattering, particle);      
      
     } else if (particleName == "e-") {
       
@@ -178,14 +181,10 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4hIonisation(), particle);
     }
   }
-
     
   // Deexcitation
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  de->SetFluo(true);
-  de->SetAuger(false);   
-  de->SetPIXE(false);  
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 }
 

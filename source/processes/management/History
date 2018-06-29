@@ -1,4 +1,4 @@
-$Id: History 108536 2018-02-16 09:20:49Z gcosmo $
+$Id: History 108134 2018-01-09 13:29:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
-- Dec. 26, 2017  Makoto Asai (procman-V10-03-03)
+- Dec. 26, 2017  Makoto Asai (procman-V10-04-02)
 - G4ProcessManagerMessenger, G4ProcessTableMessenger :
   UI command returns an error message if a command is refused due
   to incorrect parameter(s).
+- This tag requires intercoms-V10-04-01 tag.
 
-- Dec. 18, 2017  Makoto Asai
+- Dec. 18, 2017  Makoto Asai (procman-V10-04-01)
 - Following UI commands are now forbidden for G4State_GeomClosed or
   G4State_EventProc application states.
    - /process/activate
@@ -30,7 +31,7 @@ committal in the CVS repository !
    - /particle/process/activate
    - /particle/process/inactivate
    
-- Dec. 13, 2017  Michel Maire
+- Dec. 13, 2017  Michel Maire  (procman-V10-04-00)
 - Add method 
   G4VProcess* G4ProcessManager::GetProcess(const G4String& processName) const;
   to get a process from its name

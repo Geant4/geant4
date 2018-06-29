@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pythia6_common_address.c 98526 2016-07-21 11:15:24Z ihrivnac $
+// $Id: pythia6_common_address.c 100687 2016-10-31 11:20:33Z gcosmo $
 //
 // According to pythia6_common_address.c provided in Root
 // Pythia6 distribution:

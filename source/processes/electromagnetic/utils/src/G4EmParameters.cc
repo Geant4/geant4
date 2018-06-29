@@ -78,7 +78,7 @@ G4EmParameters* G4EmParameters::Instance()
       theInstance = &manager;
 #ifdef G4MULTITHREADED
     }
-    G4MUTEXUNLOCK(&G4EmParameters::emParametersMutex);
+    G4MUTEXUNLOCK(&emParametersMutex);
 #endif
   }
   return theInstance;
@@ -135,6 +135,7 @@ void G4EmParameters::Initialise()
   dnaStationary = false;
   dnaMsc = false;
   gammaShark = false;
+  onIsolated = false;
 
   minSubRange = 1.0;
   minKinEnergy = 0.1*CLHEP::keV;
@@ -148,6 +149,7 @@ void G4EmParameters::Initialise()
   lambdaFactor = 0.8;
   factorForAngleLimit = 1.0;
   thetaLimit = CLHEP::pi;
+  energyLimit = 100.0*CLHEP::MeV;
   rangeFactor = 0.04;
   rangeFactorMuHad = 0.2;
   geomFactor = 2.5;
@@ -162,10 +164,12 @@ void G4EmParameters::Initialise()
   nbinsPerDecade = 7;
   verbose = 1;
   workerVerbose = 0;
+  tripletConv = 0;
 
   mscStepLimit = fUseSafety;
   mscStepLimitMuHad = fMinimal;
   nucFormfactor = fExponentialNF;
+  dnaElectronSolvation = fMeesungnoen2002eSolvation;
 
   namePIXE = "Empirical";
   nameElectronPIXE = "Livermore";
@@ -261,9 +265,7 @@ G4bool G4EmParameters::BeardenFluoDir() const
 
 void G4EmParameters::SetAuger(G4bool val)
 {
-  if(IsLocked()) { return; }
-  auger = val;
-  if(val) { fluo = true; }
+  SetAugerCascade(val);
 }
 
 G4bool G4EmParameters::Auger() const
@@ -275,7 +277,8 @@ void G4EmParameters::SetAugerCascade(G4bool val)
 {
   if(IsLocked()) { return; }
   augerCascade = val;
-  if(val) { fluo = true; auger = true; }
+  auger = val; 
+  if(val) { fluo = true; }
 }
 
 G4bool G4EmParameters::AugerCascade() const
@@ -454,6 +457,17 @@ void G4EmParameters::SetEmSaturation(G4EmSaturation* ptr)
     emSaturation = ptr;
     SetBirksActive(true);
   }
+}
+
+void G4EmParameters::SetOnIsolated(G4bool val)
+{
+  if(IsLocked()) { return; }
+  onIsolated = val;
+}
+
+G4bool G4EmParameters::OnIsolated() const
+{
+  return onIsolated;
 }
 
 G4EmSaturation* G4EmParameters::GetEmSaturation()
@@ -673,6 +687,24 @@ G4double G4EmParameters::MscThetaLimit() const
   return thetaLimit;
 }
 
+void G4EmParameters::SetMscEnergyLimit(G4double val)
+{
+  if(IsLocked()) { return; }
+  if(val >= 0.0) {
+    energyLimit = val;
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Value of msc energy limit is out of range: " 
+       << val << " is ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+G4double G4EmParameters::MscEnergyLimit() const
+{
+  return energyLimit;
+}
+
 void G4EmParameters::SetMscRangeFactor(G4double val)
 {
   if(IsLocked()) { return; }
@@ -886,10 +918,32 @@ G4NuclearFormfactorType G4EmParameters::NuclearFormfactorType() const
   return nucFormfactor;
 }
 
+void G4EmParameters::SetDNAeSolvationSubType(G4DNAModelSubType val)
+{
+  if(IsLocked()) { return; }
+  dnaElectronSolvation = val;
+}
+
+G4DNAModelSubType G4EmParameters::DNAeSolvationSubType() const
+{
+  return dnaElectronSolvation;
+}
+
+void G4EmParameters::SetConversionType(G4int val)
+{
+  if(IsLocked()) { return; }
+  tripletConv = val;
+}
+
+G4int G4EmParameters::GetConversionType() const
+{
+  return tripletConv;
+}
+
 void G4EmParameters::SetPIXECrossSectionModel(const G4String& sss)
 {
-  G4cout << "G4EmParameters::SetPIXECrossSectionModel " << sss << G4endl;
   if(IsLocked()) { return; }
+  G4cout << "G4EmParameters::SetPIXECrossSectionModel " << sss << G4endl;
   namePIXE = sss;
 }
 
@@ -1142,28 +1196,28 @@ void
 G4EmParameters::ActivateSecondaryBiasing(const G4String& procname,
                                          const G4String& region, 
                                          G4double factor,
-                                         G4double energyLimit)
+                                         G4double energyLim)
 {
   if(IsLocked()) { return; }
   G4String r = CheckRegion(region);
-  if(factor >= 0.0 && energyLimit >= 0.0) {
+  if(factor >= 0.0 && energyLim >= 0.0) {
     G4int n =  m_procBiasedSec.size();
     for(G4int i=0; i<n; ++i) {
       if(procname == m_procBiasedSec[i] && r == m_regnamesBiasedSec[i] ) { 
 	m_factBiasedSec[i] = factor;
-	m_elimBiasedSec[i] = energyLimit;
+	m_elimBiasedSec[i] = energyLim;
 	return; 
       }
     }
     m_regnamesBiasedSec.push_back(r);
     m_procBiasedSec.push_back(procname);
     m_factBiasedSec.push_back(factor);
-    m_elimBiasedSec.push_back(energyLimit);
+    m_elimBiasedSec.push_back(energyLim);
   } else {
     G4ExceptionDescription ed;
     ed << "Process: " << procname << " in region " << r
        << " : secondary bised factor= " 
-       << factor << ", Elim= " << energyLimit <<  " - ignored"; 
+       << factor << ", Elim= " << energyLim <<  " - ignored"; 
     PrintWarning(ed);
   }
 }
@@ -1256,9 +1310,8 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
   os << "LPM effect enabled                                 " <<flagLPM << "\n";
   os << "Spline of EM tables enabled                        " <<spline << "\n";
   os << "Apply cuts on all EM processes                     " <<applyCuts << "\n";
-  os << "Use integral approach for tracking                 " << integral << "\n";
+  os << "Use integral approach for tracking                 " <<integral << "\n";
   os << "X-section factor for integral approach             " <<lambdaFactor << "\n";
-  os << "Use built-in Birks satuaration                     " << birks << "\n";
   os << "Min kinetic energy for tables                      " 
      <<G4BestUnit(minKinEnergy,"Energy") << "\n";
   os << "Max kinetic energy for tables                      " 
@@ -1270,15 +1323,24 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Bremsstrahlung energy threshold above which \n" 
      << "  primary is added to the list of secondary        " 
      <<G4BestUnit(bremsTh,"Energy") << "\n";
+  os << "Lowest triplet kinetic energy                      " 
+     <<G4BestUnit(lowestTripletEnergy,"Energy") << "\n";
+  os << "5D gamma conversion model type                     " <<tripletConv << "\n";
+  os << "5D gamma conversion model on isolated ion          " <<onIsolated << "\n";
 
   os << "=======================================================================" << "\n";
   os << "======                 Ionisation Parameters                   ========" << "\n";
   os << "=======================================================================" << "\n";
   os << "Step function for e+-                              " <<"("<< dRoverRange
-     << ", " << finalRange << " mm)\n";
+     << ", " << finalRange/CLHEP::mm << " mm)\n";
   os << "Step function for muons/hadrons                    " <<"("<< dRoverRangeMuHad
-     << ", " << finalRangeMuHad << " mm)\n";
+     << ", " << finalRangeMuHad/CLHEP::mm << " mm)\n";
+  os << "Lowest e+e- kinetic energy                         " 
+     <<G4BestUnit(lowestElectronEnergy,"Energy") << "\n";
+  os << "Lowest muon/hadron kinetic energy                  " 
+     <<G4BestUnit(lowestMuHadEnergy,"Energy") << "\n";
   os << "Fluctuations of dE/dx are enabled                  " <<lossFluctuation << "\n";
+  os << "Use built-in Birks satuaration                     " << birks << "\n";
   os << "Build CSDA range enabled                           " <<buildCSDARange << "\n";
   os << "Use cut as a final range enabled                   " <<finalRange << "\n";
   os << "Enable angular generator interface                 " 
@@ -1286,12 +1348,6 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Factor of cut reduction for sub-cutoff method      " << minSubRange << "\n";
   os << "Max kinetic energy for CSDA tables                 " 
      <<G4BestUnit(maxKinEnergyCSDA,"Energy") << "\n";
-  os << "Lowest e+e- kinetic energy                         " 
-     <<G4BestUnit(lowestElectronEnergy,"Energy") << "\n";
-  os << "Lowest muon/hadron kinetic energy                  " 
-     <<G4BestUnit(lowestMuHadEnergy,"Energy") << "\n";
-  os << "Lowest triplet kinetic energy                      " 
-     <<G4BestUnit(lowestTripletEnergy,"Energy") << "\n";
   os << "Linear loss limit " <<linLossLimit << "\n";
 
   os << "=======================================================================" << "\n";
@@ -1301,7 +1357,7 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Type of msc step limit algorithm for muons/hadrons " <<mscStepLimitMuHad << "\n";
   os << "Msc lateral displacement for e+- enabled           " <<lateralDisplacement << "\n";
   os << "Msc lateral displacement for muons and hadrons     " <<muhadLateralDisplacement << "\n";
-  os << "Msc lateral displacement alg96 for e+-             " <<lateralDisplacementAlg96 << "\n";
+  os << "Urban msc model lateral displacement alg96         " <<lateralDisplacementAlg96 << "\n";
   os << "Msc lateral displacement beyond geometry safety    " <<latDisplacementBeyondSafety << "\n";
   os << "Range factor for msc step limit for e+-            " <<rangeFactor << "\n";
   os << "Range factor for msc step limit for muons/hadrons  " <<rangeFactorMuHad << "\n";
@@ -1312,7 +1368,9 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
      << "  limit between single and multiple scattering     " << factorForAngleLimit << "\n";
   os << "Fixed angular limit between single \n"
      << "  and multiple scattering                          " 
-     <<thetaLimit/rad << " rad" << "\n";
+     << thetaLimit/CLHEP::rad << " rad" << "\n";
+  os << "Upper energy limit for e+- multiple scattering     " 
+     << energyLimit/CLHEP::MeV << " MeV" << "\n";
   os << "Type of nuclear form-factor                        " <<nucFormfactor << "\n";
   os << "Screening factor                                   " <<factorScreen << "\n";
 
@@ -1334,6 +1392,8 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Use fast sampling in DNA models                    " << dnaFast << "\n";
   os << "Use Stationary option in DNA models                " << dnaStationary << "\n";
   os << "Use DNA with multiple scattering of e-             " << dnaMsc << "\n";
+  os << "Use DNA e- solvation model type                    " 
+     << dnaElectronSolvation << "\n";
   os << "=======================================================================" << "\n";
   os.precision(prec);
   return os;

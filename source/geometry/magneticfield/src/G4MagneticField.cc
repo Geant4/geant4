@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticField.cc 96678 2016-04-29 16:21:01Z gcosmo $
+// $Id: G4MagneticField.cc 108823 2018-03-09 11:03:44Z gcosmo $
 //
 // --------------------------------------------------------------------
 
 #include "G4MagneticField.hh"
 
 G4MagneticField::G4MagneticField()
-  : G4ElectroMagneticField()
+   : G4Field( false ) // No gravitational field (default)
 {
 }
 
@@ -39,14 +39,14 @@ G4MagneticField::~G4MagneticField()
 {
 }
 
-G4MagneticField::G4MagneticField(const G4MagneticField &MagField)
-  : G4ElectroMagneticField( MagField )
+G4MagneticField::G4MagneticField(const G4MagneticField & )
+   : G4Field( false )
 {
 }
 
 G4MagneticField& G4MagneticField::operator = (const G4MagneticField &p)
 {
   if (&p == this) return *this; 
-  G4ElectroMagneticField::operator=(p); 
+  G4Field::operator=(p); 
   return *this;
 }

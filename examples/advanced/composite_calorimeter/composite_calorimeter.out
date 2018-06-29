@@ -51,7 +51,7 @@ Some /vis commands (optionally) take a string to specify colour.
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -77,12 +77,6 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 *                                                                 *
 *                                                                 *
 *******************************************************************
-Now Instantiate stepping action
-... open Root analysis file : ccal.root - done
-********************************************
-* o/p file ccal
-********************************************
-
 Get Calorimter organisation
 end of instantiation of EndofEventAction
 userDetector->Construct() start.
@@ -163,8 +157,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
@@ -531,7 +525,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: nCapture
         Model:               nRadCapture: 0 eV  ---> 100 TeV
@@ -774,7 +767,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
@@ -791,7 +783,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
@@ -815,7 +806,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for triton
@@ -935,6 +925,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ### Run 0 start.
 WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
+... open Root analysis file : ccal.root - done
+********************************************
+* o/p file ccal
+********************************************
+
 
 *******************************************************************
 *                                                                 *
@@ -959,7 +954,7 @@ WARNING: Scene "none" not found.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=17.99s Real=19.56s Sys=0.02s
+  User=12.600000s Real=12.871157s Sys=0.020000s
 ### Run 0 end.
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 ... write Root file : ccal.root - done
@@ -967,6 +962,7 @@ WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
+UserActionInitialization deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
@@ -976,7 +972,7 @@ CCaloSD: HadronCalorimeter deleted
 CCalHcalOrganization deleted
 G4SDManager deleted.
 CCalSteppingAction deleted
-CCalEndOfEventAction deleted
+CCalOfEventAction deleted
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
@@ -984,19 +980,19 @@ Total navigation history collections cleaned: 47
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.0692 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0683 MB
+Pool ID '17G4DynamicParticle', size : 0.269 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.136 MB
+Pool ID '7G4Track', size : 0.537 MB
 Pool ID '18G4TouchableHistory', size : 0.00577 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '17G4ReactionProduct', size : 0.0115 MB
-Pool ID '10G4Fragment', size : 0.00577 MB
+Pool ID '17G4ReactionProduct', size : 0.00961 MB
+Pool ID '10G4Fragment', size : 0.00481 MB
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.3 MB
+Dynamic pools deleted: 13 / Total memory freed: 0.9 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

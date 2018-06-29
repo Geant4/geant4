@@ -1,0 +1,13 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Example DICOM2
+                            --------------
+
+ This example demonstrates how to inherit from the DICOM example.
+ For more information on the DICOM example, see the README in
+ the DICOM example
+ 	

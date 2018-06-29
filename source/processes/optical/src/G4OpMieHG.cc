@@ -172,7 +172,7 @@ G4double G4OpMieHG::GetMeanFreePath(const G4Track& aTrack,
 
         if (aMaterialPropertyTable) {
            G4MaterialPropertyVector* AttenuationLengthVector =
-                                 aMaterialPropertyTable->GetProperty("MIEHG");
+                                 aMaterialPropertyTable->GetProperty(kMIEHG);
            if (AttenuationLengthVector) {
               AttenuationLength = AttenuationLengthVector ->
                                     Value(thePhotonEnergy);

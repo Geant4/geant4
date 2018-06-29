@@ -56,7 +56,6 @@ public:
   virtual G4VPhysicalVolume* Construct();
 
   void SetMaterial(G4String);
-  void UpdateGeometry();
   void SetTrackingCut(G4double);
   void PrintParameters() const;
   

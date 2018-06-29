@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.hh 96114 2016-03-16 18:51:33Z gcosmo $
+// $Id: G4PolarizedAnnihilationModel.hh 109176 2018-04-03 06:53:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,12 +71,11 @@ public:
   virtual ~G4PolarizedAnnihilationModel();
 
   virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) override;
-  virtual G4double ComputeCrossSectionPerElectron(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double cut,
-                                      G4double emax) override;
+			  const G4DataVector&) final;
+
+  virtual G4double 
+  ComputeCrossSectionPerElectron(G4double kinEnergy) final;
+
   void ComputeAsymmetriesPerElectron(G4double gammaEnergy,
 				     G4double & valueX,
 				     G4double & valueA,
@@ -86,7 +85,7 @@ public:
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy) override;
+				 G4double maxEnergy) final;
 
   // polarized routines 
   inline void SetTargetPolarization(const G4ThreeVector & pTarget);
@@ -95,11 +94,12 @@ public:
   inline const G4ThreeVector & GetBeamPolarization() const;
   inline const G4ThreeVector & GetFinalGamma1Polarization() const;
   inline const G4ThreeVector & GetFinalGamma2Polarization() const;
+
 private:
 
   // hide assignment operator
   G4PolarizedAnnihilationModel & 
-    operator=(const  G4PolarizedAnnihilationModel &right) = delete;
+  operator=(const  G4PolarizedAnnihilationModel &right) = delete;
   G4PolarizedAnnihilationModel(const  G4PolarizedAnnihilationModel&) = delete;
 
   G4PolarizedAnnihilationCrossSection * crossSectionCalculator;
@@ -113,7 +113,6 @@ private:
   G4int verboseLevel;
 
   G4ParticleChangeForGamma* gParticleChange;
-  G4bool gIsInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

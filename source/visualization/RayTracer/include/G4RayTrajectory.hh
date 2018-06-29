@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.hh 71495 2013-06-17 09:13:30Z gcosmo $
+// $Id: G4RayTrajectory.hh 110261 2018-05-17 14:24:23Z gcosmo $
 //
 //
 
@@ -96,21 +96,21 @@ class G4RayTrajectory : public G4VTrajectory
 };
 
 #if defined G4VIS_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4RayTrajectory>* rayTrajectoryAllocator;
+  extern G4DLLEXPORT G4Allocator<G4RayTrajectory>*& rayTrajectoryAllocator();
 #else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4RayTrajectory>* rayTrajectoryAllocator;
+  extern G4DLLIMPORT G4Allocator<G4RayTrajectory>*& rayTrajectoryAllocator();
 #endif
 
 inline void* G4RayTrajectory::operator new(size_t)
 {
-   if(!rayTrajectoryAllocator)
-   { rayTrajectoryAllocator = new G4Allocator<G4RayTrajectory>; }
-   return (void*)rayTrajectoryAllocator->MallocSingle();
+   if(!rayTrajectoryAllocator())
+   { rayTrajectoryAllocator() = new G4Allocator<G4RayTrajectory>; }
+   return (void*)rayTrajectoryAllocator()->MallocSingle();
 }
 
 inline void G4RayTrajectory::operator delete(void* aTrajectory)
 {
-   rayTrajectoryAllocator->FreeSingle((G4RayTrajectory*)aTrajectory);
+   rayTrajectoryAllocator()->FreeSingle((G4RayTrajectory*)aTrajectory);
 }
 
 

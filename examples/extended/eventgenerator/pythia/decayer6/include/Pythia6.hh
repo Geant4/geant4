@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Pythia6.hh 66586 2012-12-21 10:48:39Z ihrivnac $
+// $Id: Pythia6.hh 100687 2016-10-31 11:20:33Z gcosmo $
 //
 /// \file eventgenerator/pythia/decayer6/include/Pythia6.hh
 /// \brief Definition of the Pythia6 class

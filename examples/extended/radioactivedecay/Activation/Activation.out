@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -316,7 +316,6 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
         Model:        NeutronHPInelastic: 0 meV ---> 20 MeV
      Cr_sctns:      NeutronHPInelasticXS: 0 meV ---> 20 MeV
      Cr_sctns:       Barashenkov-Glauber: 0 meV ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 meV ---> 100 TeV
 
   Process: nCapture
         Model:          NeutronHPCapture: 0 meV ---> 20 MeV
@@ -339,7 +338,6 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
         Model:              hElasticLHEP: 0 meV ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 meV ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
@@ -356,7 +354,6 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
         Model:              hElasticLHEP: 0 meV ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 meV ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
@@ -380,7 +377,6 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 meV ---> 12 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 meV ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 meV ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for triton
@@ -453,36 +449,36 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.18s Real=0.19s Sys=0s
+  User=0.180000s Real=0.175630s Sys=0.000000s
 
  The run is 1000 neutron of 25 meV through 1 cm  of G4_Co (density: 8.9 g/cm3 )
 
  Process calls frequency :
-     RadioactiveDecay=   3916        Transportation=  11406               annihil=     29
-                compt=   1164                  conv=     36                 eIoni=   2324
-           hadElastic=    142               ionIoni=   2030                   msc=    686
-             nCapture=    944                  phot=    198 
+     RadioactiveDecay=   3963        Transportation=  11454               annihil=     37
+                compt=   1109                  conv=     49                 eIoni=   2312
+           hadElastic=    139               ionIoni=   2051                   msc=    743
+             nCapture=    956                  phot=    207 
 
  List of generated particles:
-           Co59:     142  Emean =  41.299 meV	( 0.27649 meV --> 164.15 meV)	stable
-           Co60:     944  Emean =   255.9 eV 	( 3.7398 meV --> 517.51 eV )	mean life = 7.6098 y  
-           Ni60:     944  Emean =  15.907 eV 	( 15.907 eV  --> 15.907 eV )	stable
-  Ni60[1332.514]:     944  Emean =  12.352 eV 	( 12.331 eV  --> 24.625 eV )	mean life = 0 ps 
-  Ni60[2505.753]:     942  Emean =  1.4892 eV 	( 21.384 meV --> 3.6054 eV )	mean life = 0 ps 
-      anti_nu_e:     944  Emean =   220.9 keV	( 26.17 keV --> 1.2389 MeV)	stable
-             e+:      36  Emean =  2.1239 MeV	( 28.256 keV --> 4.6269 MeV)	stable
-             e-:    2342  Emean =  391.19 keV	( 31.765 eV  --> 7.1943 MeV)	stable
-          gamma:    4382  Emean =  2.1602 MeV	( 839.31 eV  --> 7.4919 MeV)	stable
+           Co59:     139  Emean =  40.637 meV	( 2.3938 meV --> 152.42 meV)	stable
+           Co60:     956  Emean =  258.87 eV 	( 10.041 meV --> 517.51 eV )	mean life = 7.6098 y  
+           Ni60:     956  Emean =  15.907 eV 	( 15.907 eV  --> 15.907 eV )	stable
+  Ni60[1332.514]:     956  Emean =  12.331 eV 	( 12.331 eV  --> 12.331 eV )	mean life = 0 ps 
+  Ni60[2505.753]:     956  Emean =  1.4609 eV 	( 21.384 meV --> 3.6054 eV )	mean life = 0 ps 
+      anti_nu_e:     956  Emean =  219.51 keV	( 20.613 keV --> 316.88 keV)	stable
+             e+:      49  Emean =  2.4488 MeV	( 28.256 keV --> 6.0448 MeV)	stable
+             e-:    2321  Emean =  415.22 keV	( 31.765 eV  --> 7.2362 MeV)	stable
+          gamma:    4420  Emean =  2.1716 MeV	( 839.31 eV  --> 7.4919 MeV)	stable
 
- Mean energy deposit per event = 888.55 keV  rms = 1.3655 MeV
- Mean energy flow per event    = 8.8417 MeV  rms = 2.5479 MeV
+ Mean energy deposit per event = 975.33 keV  rms = 1.5097 MeV
+ Mean energy flow per event    = 8.8736 MeV  rms = 2.4353 MeV
 
  List of particles emerging from the target :
-      anti_nu_e:     944  Emean =   220.9 keV	( 26.17 keV --> 1.2389 MeV) 	Eflow/event = 208.53 keV
-             e+:       7  Emean =  2.0518 MeV	( 280.09 keV --> 3.7426 MeV) 	Eflow/event = 14.362 keV
-             e-:      46  Emean =  1.9635 MeV	( 123.73 keV --> 6.6154 MeV) 	Eflow/event = 90.321 keV
-          gamma:    4148  Emean =   2.056 MeV	( 57.473 keV --> 7.4919 MeV) 	Eflow/event = 8.5284 MeV
-        neutron:      56  Emean =  26.005 meV	( 13.136 meV --> 44.36 meV) 	Eflow/event = 1.4563 meV
+      anti_nu_e:     956  Emean =  219.51 keV	( 20.613 keV --> 316.88 keV) 	Eflow/event = 209.85 keV
+             e+:      12  Emean =  2.6866 MeV	( 1.2373 MeV --> 4.5516 MeV) 	Eflow/event = 32.239 keV
+             e-:      44  Emean =  1.7112 MeV	( 89.562 keV --> 5.6315 MeV) 	Eflow/event = 75.291 keV
+          gamma:    4164  Emean =  2.0548 MeV	( 63.737 keV --> 7.4919 MeV) 	Eflow/event = 8.5562 MeV
+        neutron:      44  Emean =   24.75 meV	( 11.672 meV --> 35.737 meV) 	Eflow/event = 1.089 meV
 
  histo Id for populations :
                  Co59  id =  26
@@ -492,7 +488,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 694184962, 549240548
+ Current couple of seeds = 1210684622, 1643653393
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

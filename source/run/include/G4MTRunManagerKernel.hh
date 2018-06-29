@@ -73,7 +73,7 @@ public: // with descroption
     // This static method is used to start a worker thread.
     // Virtual methods to be invoked from this methos are
     // defined in G4UserWorkerInitialization class.
-    static void* StartThread(void* context);
+    static void StartThread(G4WorkerThread* context);
 
 //private:
 //    static void ReinitializeGeometry();

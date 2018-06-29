@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option4.cc 107332 2017-11-08 16:44:06Z gcosmo $
+// $Id: G4EmStandardPhysics_option4.cc 109526 2018-04-30 07:11:52Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -133,7 +133,6 @@ G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver,
   param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(100*eV);
-  param->SetMaxEnergy(10*TeV);
   param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
@@ -142,8 +141,6 @@ G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver,
   param->SetMscSkin(3);                       // error-free stepping for e-/e+ msc gs
   param->SetMscRangeFactor(0.2);              // error-free stepping for e-/e+ msc gs
   param->SetMuHadLateralDisplacement(true);
-  //  param->SetLatDisplacementBeyondSafety(true);
-  // param->SetFluo(true);
   param->SetAugerCascade(true);
   SetPhysicsType(bElectromagnetic);
 }
@@ -188,7 +185,7 @@ void G4EmStandardPhysics_option4::ConstructParticle()
 
 void G4EmStandardPhysics_option4::ConstructProcess()
 {
-  if(verbose > -1) {
+  if(verbose > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
@@ -220,7 +217,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
   // energy limits for e+- scattering models
-  G4double highEnergyLimit = 100*MeV;
+  G4double highEnergyLimit = G4EmParameters::Instance()->MscEnergyLimit();
   // energy limits for e+- ionisation models
   G4double penEnergyLimit = 1*MeV;
 

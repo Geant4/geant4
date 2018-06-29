@@ -36,7 +36,11 @@ namespace
   G4Mutex singletonMutexSWP = G4MUTEX_INITIALIZER;
 }
 
-G4ThreadLocal G4SolidsWorkspace* G4SolidsWorkspacePool::fMyWorkspace=0;
+G4SolidsWorkspace*& G4SolidsWorkspacePool::fMyWorkspace()
+{
+    G4ThreadLocalStatic G4SolidsWorkspace* _instance = nullptr;
+    return _instance;
+}
 G4SolidsWorkspacePool* G4SolidsWorkspacePool::thePool=0;
 
 G4SolidsWorkspacePool* G4SolidsWorkspacePool::GetInstance()
@@ -51,7 +55,7 @@ G4SolidsWorkspacePool* G4SolidsWorkspacePool::GetInstance()
 G4SolidsWorkspace* G4SolidsWorkspacePool::CreateWorkspace()
 {
   G4SolidsWorkspace* geometryWrk=0;
-  if( !fMyWorkspace )
+  if( !fMyWorkspace() )
   {
     geometryWrk= new G4SolidsWorkspace();
 
@@ -63,7 +67,7 @@ G4SolidsWorkspace* G4SolidsWorkspacePool::CreateWorkspace()
     else
     {
       // geometryWrk->UseWorkspace();  // Do not assign it already.
-      fMyWorkspace= geometryWrk;
+      fMyWorkspace()= geometryWrk;
     }
   }
   else
@@ -71,7 +75,7 @@ G4SolidsWorkspace* G4SolidsWorkspacePool::CreateWorkspace()
     G4Exception("GeometryWorspacePool::CreateWorkspace", "Geom-003",
                 FatalException,
                 "Cannot create workspace twice for the same thread.");
-    geometryWrk= fMyWorkspace; 
+    geometryWrk= fMyWorkspace();
   }
   
   return geometryWrk;
@@ -88,14 +92,14 @@ void G4SolidsWorkspacePool::CreateAndUseWorkspace()
 //
 G4SolidsWorkspace* G4SolidsWorkspacePool::FindOrCreateWorkspace()
 {
-  G4SolidsWorkspace* geometryWrk= fMyWorkspace;
+  G4SolidsWorkspace* geometryWrk= fMyWorkspace();
   if( !geometryWrk )
   { 
     geometryWrk= this->CreateWorkspace(); 
   } 
   geometryWrk->UseWorkspace();
   
-  fMyWorkspace= geometryWrk; // assign it for use by this thread.
+  fMyWorkspace()= geometryWrk; // assign it for use by this thread.
   return geometryWrk;
 }
 
@@ -111,11 +115,11 @@ void G4SolidsWorkspacePool::Recycle( G4SolidsWorkspace *geometryWrk )
 
 void G4SolidsWorkspacePool::CleanUpAndDestroyAllWorkspaces()
 {
-  if (fMyWorkspace)
+  if (fMyWorkspace())
   {
-     fMyWorkspace->DestroyWorkspace();
-     delete fMyWorkspace;
-     fMyWorkspace=0;
+     fMyWorkspace()->DestroyWorkspace();
+     delete fMyWorkspace();
+     fMyWorkspace()=0;
   }
 }
 

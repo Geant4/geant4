@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 96634 2016-04-27 09:31:49Z gcosmo $
+# $Id: sources.cmake 108684 2018-02-27 07:56:59Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -70,6 +70,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_util
         G4CameronShellPlusPairingCorrections.cc
         G4CameronTruranHilfPairingCorrections.cc
         G4CameronTruranHilfShellCorrections.cc
+	G4ChatterjeeCrossSection.cc
         G4ConstantLevelDensityParameter.cc
         G4CookPairingCorrections.cc
         G4CookShellCorrections.cc
@@ -77,6 +78,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_util
         G4DeuteronCoulombBarrier.cc
         G4EvaporationLevelDensityParameter.cc
         G4He3CoulombBarrier.cc
+        G4KalbachCrossSection.cc
         G4NeutronCoulombBarrier.cc
         G4PairingCorrection.cc
         G4ProtonCoulombBarrier.cc

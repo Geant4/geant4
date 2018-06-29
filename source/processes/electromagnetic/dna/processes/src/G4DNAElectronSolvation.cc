@@ -66,7 +66,7 @@ void G4DNAElectronSolvation::InitialiseProcess(const G4ParticleDefinition*)
 
     if(!EmModel())
     {
-      SetEmModel(new G4DNAOneStepThermalizationModel);
+      SetEmModel(G4DNASolvationModelFactory::GetMacroDefinedModel());
     }
     AddEmModel(1, EmModel());
   }

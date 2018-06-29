@@ -25,6 +25,7 @@
 //
 /// \file spower.cc
 /// \brief Main program of the medical/dna/spower example
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -44,12 +45,12 @@
 #include "G4UIExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 int main(int argc,char** argv) {
- 
+
   //delete output file
   remove ("spower.txt");
-  
+
   // Detect interactive mode (if no arguments) and define UI session
   //
   G4UIExecutive* ui = 0;
@@ -59,19 +60,19 @@ int main(int argc,char** argv) {
 
   //choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
-    
+
   //construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
 #else
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);  
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   G4RunManager* runManager = new G4RunManager;
-#endif  
+#endif
 
   //set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction;
   runManager->SetUserInitialization(det);
-     
+
   PhysicsList* phys = new PhysicsList;
   runManager->SetUserInitialization(phys);
 
@@ -89,13 +90,13 @@ int main(int argc,char** argv) {
 
   // Process macro or start UI session
   //
-  if ( ! ui ) { 
+  if ( ! ui ) {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
-  else { 
+  else {
     // interactive mode
     ui->SessionStart();
     delete ui;

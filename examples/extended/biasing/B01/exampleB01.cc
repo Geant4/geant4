@@ -27,9 +27,9 @@
 /// \brief Main program of the biasing/B01 example
 //
 //
-// $Id: exampleB01.cc 103006 2017-03-08 08:12:23Z gcosmo $
+// $Id: exampleB01.cc 109715 2018-05-08 13:40:02Z gcosmo $
 //
-// 
+//
 // --------------------------------------------------------------
 //      GEANT 4 - exampleB01
 //
@@ -39,7 +39,7 @@
 // This example intends to show how to use importance sampling and scoring
 // in the mass (tracking) geometry.
 // A simple geometry consisting of a 180 cm high concrete cylinder
-// divided into 18 slabs of 10cm each is created. 
+// divided into 18 slabs of 10cm each is created.
 // Importance values are assigned to the 18 concrete slabs in the
 // detector construction class for simplicity.
 // Pairs of G4GeometryCell and importance values are stored in
@@ -49,9 +49,9 @@
 //
 // Alex Howard (alexander.howard@cern.ch):
 // 22/11/13: Migrated to the new MT compliant design which moves the
-//           biasing process to the physicslist constructor - here 
+//           biasing process to the physicslist constructor - here
 //           via the modular physicslists
-// 
+//
 
 // --------------------------------------------------------------
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,6 +59,8 @@
 #include <iostream>
 
 #include <stdlib.h>
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -116,16 +118,16 @@ int main(int argc, char **argv)
   G4GeometrySampler mgs(detector->GetWorldVolume(),"neutron");
 
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
-  if(mode == 0) 
+  if(mode == 0)
     {
       physicsList->RegisterPhysics(new G4ImportanceBiasing(&mgs));
     }
   else
     {
       wwAlg = new G4WeightWindowAlgorithm(1,    // upper limit factor
-                                          1,    // survival factor 
+                                          1,    // survival factor
                                           100); // max. number of splitting
-      
+
       physicsList->RegisterPhysics(new G4WeightWindowBiasing
                                   (&mgs, wwAlg, onBoundary));
                                     // place of action
@@ -139,11 +141,11 @@ int main(int argc, char **argv)
 
   runManager->Initialize();
 
-  if (mode == 0) 
+  if (mode == 0)
     {
       detector->CreateImportanceStore();
-    } 
-  else 
+    }
+  else
     {
       detector->CreateWeightWindowStore();
     }
@@ -151,10 +153,10 @@ int main(int argc, char **argv)
   //  runManager->BeamOn(numberOfEvents);
 
   //temporary fix before runManager->BeamOn works...
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4String command1 = "/control/cout/setCoutFile threadOut";
   UImanager->ApplyCommand(command1);
-  G4String command2 = "/run/beamOn " + 
+  G4String command2 = "/run/beamOn " +
                       G4UIcommand::ConvertToString(numberOfEvents);;
   UImanager->ApplyCommand(command2);
 

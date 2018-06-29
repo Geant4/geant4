@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -290,7 +290,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=7.53s Real=7.8s Sys=0s
+  User=6.050000s Real=6.068313s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -300,7 +300,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1181298208, 2146998257
+ Current couple of seeds = 55770765, 732737266
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

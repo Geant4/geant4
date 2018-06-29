@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.cc 101248 2016-11-10 08:51:37Z gcosmo $
+// $Id: G4VAtomDeexcitation.cc 108386 2018-02-09 15:38:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -62,6 +62,10 @@
 #include "G4PhysicsModelCatalog.hh"
 #include "G4Gamma.hh"
 
+#ifdef G4MULTITHREADED
+  G4Mutex G4VAtomDeexcitation::atomDeexcitationMutex = G4MUTEX_INITIALIZER;
+#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4VAtomDeexcitation::pixeIDg = -1;
@@ -78,8 +82,18 @@ G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname)
   theCoupleTable = nullptr;
   G4String gg = "gammaPIXE";
   G4String ee = "e-PIXE";
-  if(pixeIDg < 0) { pixeIDg = G4PhysicsModelCatalog::Register(gg); }
-  if(pixeIDe < 0) { pixeIDe = G4PhysicsModelCatalog::Register(ee); }
+  if(pixeIDg < 0) { 
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&atomDeexcitationMutex);
+    if(pixeIDg < 0) { 
+#endif
+      pixeIDg = G4PhysicsModelCatalog::Register(gg); 
+      pixeIDe = G4PhysicsModelCatalog::Register(ee); 
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&atomDeexcitationMutex);
+#endif
+  }
   gamma = G4Gamma::Gamma();
 }
 
@@ -233,6 +247,29 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
                                   valAuger, valPIXE);
                                   
     }
+  }
+}
+
+void G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,  
+					    const G4AtomicShell* as, 
+					    G4int Z, G4int idx)
+{
+  G4double gCut = DBL_MAX;
+  if(ignoreCuts) {
+    gCut = 0.0;
+  } else if (theCoupleTable) {
+    gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[idx];
+  }
+  if(gCut < as->BindingEnergy()) {
+    G4double eCut = DBL_MAX;
+    if(CheckAugerActiveRegion(idx)) {
+      if(ignoreCuts) {
+        eCut = 0.0;
+      } else if (theCoupleTable) {
+        eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[idx];
+      }
+    }
+    GenerateParticles(v, as, Z, gCut, eCut);
   }
 }
 

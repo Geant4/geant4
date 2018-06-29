@@ -5,6 +5,14 @@
                        Package History file
                        --------------------
 
+13 June 2018 - tag slowing-V10-04-01 - S. Incerti
+- updated slowing.in
+
+09 May 2018 - tag slowing-V10-04-00 - B. Morgan
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
 26 Jul 2017 - tag slowing-V10-03-02 - S. Incerti
 - apply coding guidelines
 

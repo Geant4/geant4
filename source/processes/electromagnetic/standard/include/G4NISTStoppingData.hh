@@ -47,7 +47,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
-#include "CLHEP/Units/SystemOfUnits.h"
+#include <CLHEP/Units/SystemOfUnits.h>
 
 static const G4String nameNIST[74] = {
   "G4_A-150_TISSUE", "G4_ACETYLENE","G4_ADIPOSE_TISSUE_ICRP","G4_Ag","G4_AIR",

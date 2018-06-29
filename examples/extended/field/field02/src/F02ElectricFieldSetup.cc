@@ -27,7 +27,7 @@
 /// \brief Implementation of the F02ElectricFieldSetup class
 //
 //
-// $Id: F02ElectricFieldSetup.cc 104352 2017-05-26 07:23:36Z gcosmo $
+// $Id: F02ElectricFieldSetup.cc 109871 2018-05-09 12:40:14Z gcosmo $
 //
 //   User Field class implementation.
 //
@@ -117,7 +117,7 @@ F02ElectricFieldSetup::F02ElectricFieldSetup(G4ThreeVector fieldVector)
 
 F02ElectricFieldSetup::~F02ElectricFieldSetup()
 {
-  G4cout << " F02ElectricFieldSetup - dtor called. " << G4endl;
+  // G4cout << " F02ElectricFieldSetup - dtor called. " << G4endl;
 
   delete fFieldMessenger; fFieldMessenger= nullptr;
    // Delete the messenger first, to avoid messages to deleted classes!
@@ -161,12 +161,18 @@ void F02ElectricFieldSetup::UpdateIntegrator()
   //  -- Careful to call this after all old objects are destroyed, and
   //      pointers nullified.
   CreateStepper();  // Note that this method deleted the existing Stepper!
-  
-  fIntgrDriver = new G4MagInt_Driver(fMinStep,
-                                     fStepper,
-                                     fStepper->GetNumberOfVariables());
+  // G4cout << "F02ElectricFieldSetup::UpdateIntegrator> "
+  //        << "New value of stepper ptr= " << fStepper << G4endl;
+  assert(fStepper != nullptr);
 
-  fChordFinder = new G4ChordFinder(fIntgrDriver);
+  if( fStepper ) {
+     fIntgrDriver = new G4MagInt_Driver(fMinStep,
+                                        fStepper,
+                                        fStepper->GetNumberOfVariables());
+     if( fIntgrDriver ){ 
+        fChordFinder = new G4ChordFinder(fIntgrDriver);
+     }
+  }
 
   fFieldManager->SetChordFinder(fChordFinder);
   fFieldManager->SetDetectorField(fEMfield);
@@ -203,7 +209,7 @@ void F02ElectricFieldSetup::CreateStepper()
       break;
     case 4:
       fStepper = new G4ClassicalRK4( fEquation, nvar );
-      G4cout<<"G4ClassicalRK4 (default) is called"<<G4endl;
+      G4cout<<"G4ClassicalRK4 is called"<<G4endl;
       break;
     case 5:
       fStepper = new G4CashKarpRKF45( fEquation, nvar );
@@ -226,7 +232,10 @@ void F02ElectricFieldSetup::CreateStepper()
       fStepper = 0; // new G4HelixSimpleRunge( fEquation );
       G4cout<<"G4HelixSimpleRunge is not valid for Electric Field"<<G4endl;
       break;
-    default: fStepper = 0;
+    default:  /* fStepper = 0; // Older code */
+      fStepper = new G4ClassicalRK4( fEquation, nvar );
+      G4cout<<"G4ClassicalRK4 (default) is called"<<G4endl;
+      break;
   }
 
   delete oldStepper;

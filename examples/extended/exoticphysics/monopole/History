@@ -1,4 +1,4 @@
-$Id: History 107534 2017-11-21 13:13:36Z gcosmo $
+$Id: History 110255 2018-05-17 14:15:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-May-2018 J.Allison (monopole-V10-04-02)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- Add runManager->Initialize().
+
+8 May 2018: B. Morgan (monopole-V10-04-01)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+8 March 2018: J. Apostolakis   (monopole-V10-04-00)
+- As equations of motion do not use Electric field, changed
+  G4MonopoleEquation to use G4MagneticField (instead of 
+   G4ElectroMagneticField.)
+  This is needed due to correction of inheritance in 
+     magfield-V10-04-00 which is a co-working tag.
 
 21 November 17: V.Ivantchenko (monopole-V10-03-04)
 - Simplified histograms defition and filling

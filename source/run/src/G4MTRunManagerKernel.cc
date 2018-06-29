@@ -102,7 +102,7 @@ G4ThreadLocal G4WorkerThread* G4MTRunManagerKernel::wThreadContext = 0;
 G4WorkerThread* G4MTRunManagerKernel::GetWorkerThread() 
 { return wThreadContext; }
 
-void* G4MTRunManagerKernel::StartThread(void* context)
+void G4MTRunManagerKernel::StartThread(G4WorkerThread* context)
 {
   //!!!!!!!!!!!!!!!!!!!!!!!!!!
   //!!!!!! IMPORTANT !!!!!!!!!
@@ -118,7 +118,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
 //    turnontpmalloc();
 //#endif
   G4Threading::WorkerThreadJoinsPool();
-  wThreadContext = static_cast<G4WorkerThread*>(context);  
+  wThreadContext = context;
   G4MTRunManager* masterRM = G4MTRunManager::GetMasterRunManager();
 
     
@@ -216,7 +216,6 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   wThreadContext = 0;
 
   G4Threading::WorkerThreadLeavesPool();
-  return static_cast<void*>(0);
 }
 
 #include "G4ParticleDefinition.hh"

@@ -56,7 +56,6 @@ public:
   }
 };
 
-
 #define G4_DECLARE_PHYSCONSTR_FACTORY(physics_constructor) \
   const G4PhysicsConstructorFactory<physics_constructor>& physics_constructor##Factory = G4PhysicsConstructorFactory<physics_constructor>(#physics_constructor)
 
@@ -76,16 +75,21 @@ public:
 // the compilation unit static variable from the library and cause it
 // to be initialized (and thus self-register)
 
+// Use REGREF to allow cases where REFERENCE macro is used twice
+#ifndef REGREF
+  #define REGREF 0
+#endif
+
 #define G4_REFERENCE_PHYSCONSTR_FACTORY(physics_constructor) \
   class physics_constructor; \
   extern const G4PhysicsConstructorFactory<physics_constructor>& physics_constructor##Factory; \
-  const G4PhysicsConstructorFactory<physics_constructor>& physics_constructor##FactoryRef = physics_constructor##Factory
+  const G4PhysicsConstructorFactory<physics_constructor>& physics_constructor##FactoryRef##REGREF = physics_constructor##Factory
 
 #define G4_REFERENCE_PHYSCONSTR_FACTORY_NS( physics_constructor, nsname, pcbase ) \
   namespace nsname { \
     class pcbase; \
     extern const G4PhysicsConstructorFactory<physics_constructor>& pcbase##Factory; \
-    const G4PhysicsConstructorFactory<physics_constructor>& pcbase##FactoryRef = pcbase##Factory; \
+    const G4PhysicsConstructorFactory<physics_constructor>& pcbase##FactoryRef##REGREF = pcbase##Factory; \
   } \
   typedef int xyzzy__LINE__
   // eat trailing semicolon using silly typedef

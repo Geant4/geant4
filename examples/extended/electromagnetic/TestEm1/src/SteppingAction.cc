@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 98759 2016-08-09 14:03:09Z gcosmo $
+// $Id: SteppingAction.cc 109283 2018-04-09 10:00:23Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,6 +56,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
    
   G4double EdepStep = aStep->GetTotalEnergyDeposit();
+
   if (EdepStep > 0.) {         run->AddEdep(EdepStep);
                       fEventAction->AddEdep(EdepStep);
   }

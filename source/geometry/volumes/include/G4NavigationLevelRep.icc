@@ -24,14 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevelRep.icc 87590 2014-12-11 14:30:29Z gcosmo $
+// $Id: G4NavigationLevelRep.icc 110271 2018-05-17 14:41:15Z gcosmo $
 //
 //  1 October 1997 J.Apostolakis Initial version. 
 //                        
 // ----------------------------------------------------------------------
 
-extern G4GEOM_DLL G4ThreadLocal
-G4Allocator<G4NavigationLevelRep> *aNavigLevelRepAllocator;
+extern G4GEOM_DLL G4Allocator<G4NavigationLevelRep>*& aNavigLevelRepAllocator();
 
 // Constructors
 //--------------
@@ -172,15 +171,15 @@ G4bool G4NavigationLevelRep::RemoveAReference()
 inline
 void* G4NavigationLevelRep::operator new(size_t)
 {
-  if (!aNavigLevelRepAllocator)
+  if (!aNavigLevelRepAllocator())
   {
-    aNavigLevelRepAllocator = new G4Allocator<G4NavigationLevelRep>;
+    aNavigLevelRepAllocator() = new G4Allocator<G4NavigationLevelRep>;
   }
-  return (void *) aNavigLevelRepAllocator->MallocSingle();
+  return (void *) aNavigLevelRepAllocator()->MallocSingle();
 }
 
 inline
 void G4NavigationLevelRep::operator delete(void *aLevelRep)
 {
-  aNavigLevelRepAllocator->FreeSingle((G4NavigationLevelRep *) aLevelRep);
+  aNavigLevelRepAllocator()->FreeSingle((G4NavigationLevelRep *) aLevelRep);
 }

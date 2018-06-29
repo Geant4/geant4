@@ -1,4 +1,4 @@
-$Id: History 107258 2017-11-07 09:58:16Z gcosmo $
+$Id: History 110378 2018-05-22 07:43:50Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 20, 2018 J.Allison  (ReverseMC01-V10-04-00)
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive nearer to start of main.
 
 Nov 6, 2017 V.Ivanchenko  (ReverseMC01-V10-03-01)
 - G4AdjointPhysicsList - use SetEmModel(..) instead of AddEmModel

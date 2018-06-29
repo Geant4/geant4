@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.cc 107234 2017-11-06 11:53:54Z gcosmo $
+// $Id: G4GoudsmitSaundersonTable.cc 110527 2018-05-29 06:09:58Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -88,6 +88,8 @@
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProductionCutsTable.hh"
+
+#include "G4String.hh"
 
 #include <fstream>
 #include <cstdlib>
@@ -443,15 +445,14 @@ void G4GoudsmitSaundersonTable::LoadMSCData() {
   }
   //
   gGSMSCAngularDistributions1.resize(gLAMBNUM*gQNUM1,nullptr);
+  const G4String str1 = G4String(path) + "/msc_GS/GSGrid_1/gsDistr_";
   for (G4int il=0; il<gLAMBNUM; ++il) {
-    char fname[512];
-    sprintf(fname,"%s/msc_GS/GSGrid_1/gsDistr_%d",path,il);
+    G4String fname = str1 + std::to_string(il);
     std::ifstream infile(fname,std::ios::in);
     if (!infile.is_open()) {
-      char msgc[512];
-      sprintf(msgc,"Cannot open file: %s .",fname);
+      G4String msgc = "Cannot open file: " + fname;
       G4Exception("G4GoudsmitSaundersonTable::LoadMSCData()","em0006",
-	 	  FatalException, msgc);
+	 	  FatalException, msgc.c_str());
       return;
     }
     for (G4int iq=0; iq<gQNUM1; ++iq) {
@@ -474,15 +475,14 @@ void G4GoudsmitSaundersonTable::LoadMSCData() {
   //
   // second grid
   gGSMSCAngularDistributions2.resize(gLAMBNUM*gQNUM2,nullptr);
+  const G4String str2 = G4String(path) + "/msc_GS/GSGrid_2/gsDistr_";
   for (G4int il=0; il<gLAMBNUM; ++il) {
-    char fname[512];
-    sprintf(fname,"%s/msc_GS/GSGrid_2/gsDistr_%d",path,il);
+    G4String fname = str2 + std::to_string(il);
     std::ifstream infile(fname,std::ios::in);
     if (!infile.is_open()) {
-      char msgc[512];
-      sprintf(msgc,"Cannot open file: %s .",fname);
+      G4String msgc = "Cannot open file: " + fname;
       G4Exception("G4GoudsmitSaundersonTable::LoadMSCData()","em0006",
-	 	  FatalException, msgc);
+	 	  FatalException, msgc.c_str());
       return;
     }
     for (G4int iq=0; iq<gQNUM2; ++iq) {

@@ -26,6 +26,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4Types.hh"
+
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
 #else
@@ -73,7 +75,7 @@ int main(int argc,char** argv)
 #else
     G4RunManager* runManager = new G4RunManager;
 #endif
-    
+
     // Activate UI-command base scorer
     G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
     scManager->SetVerboseLevel(0);
@@ -87,7 +89,7 @@ int main(int argc,char** argv)
     biasingPhysics->PhysicsBiasAllCharged();
     physlist->RegisterPhysics(biasingPhysics);
     runManager->SetUserInitialization(physlist);
-    
+
 #ifndef G4MULTITHREADED
     // Set user action classes
     runManager->SetUserAction(new PrimaryGeneratorAction());
@@ -112,13 +114,13 @@ int main(int argc,char** argv)
 
     // Process macro or start UI session
     //
-    if ( ! ui ) { 
+    if ( ! ui ) {
       // batch mode
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);
     }
-    else { 
+    else {
       // interactive mode
       UImanager->ApplyCommand("/control/execute init_vis.mac");
       ui->SessionStart();
@@ -128,9 +130,9 @@ int main(int argc,char** argv)
 
     // Job termination
     // Free the store: user actions, physics_list and detector_description are
-    // owned and deleted by the run manager, so they should not be deleted 
+    // owned and deleted by the run manager, so they should not be deleted
     // in the main() program !
-  
+
     delete visManager;
     delete runManager;
 

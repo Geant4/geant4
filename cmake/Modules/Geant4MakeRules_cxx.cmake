@@ -7,16 +7,20 @@
 #-----------------------------------------------------------------------
 # function __configure_tls_models()
 #          Set available thread local storage models. Valid for GNU,
-#          Clang and Intel compilers.
+#          Clang and Intel compilers. Adds an additional "auto"
+#          dummy model to indicate that no flag should be added.
 #
 function(__configure_tls_models)
   # available models, default first
   set(_TLSMODELS initial-exec local-exec global-dynamic local-dynamic)
+  foreach(_s ${_TLSMODELS})
+    set(${_s}_TLSMODEL_FLAGS "-ftls-model=${_s}" PARENT_SCOPE)
+  endforeach()
+
+  list(APPEND _TLSMODELS auto)
+  set(auto_TLSMODEL_FLAGS "" PARENT_SCOPE)
 
   set(TLSMODEL_IS_AVAILABLE ${_TLSMODELS} PARENT_SCOPE)
-  foreach(_s ${_TLSMODELS})
-    set(${_s}_FLAGS "-ftls-model=${_s}" PARENT_SCOPE)
-  endforeach()
 endfunction()
 
 #-----------------------------------------------------------------------

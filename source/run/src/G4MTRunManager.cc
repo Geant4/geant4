@@ -42,6 +42,7 @@
 #include "G4UserRunAction.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Timer.hh"
+#include "G4TiMemory.hh"
 
 G4ScoringManager* G4MTRunManager::masterScM = 0;
 G4MTRunManager::masterWorlds_t G4MTRunManager::masterWorlds = G4MTRunManager::masterWorlds_t();
@@ -255,6 +256,7 @@ void G4MTRunManager::CreateAndStartWorkers()
 
 void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G4int n_select)
 {
+    TIMEMORY_AUTO_TIMER("");
   MTkernel->SetUpDecayChannels();
   numberOfEventToBeProcessed = n_event;
   numberOfEventProcessed = 0;

@@ -44,6 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
     #include "G4MTRunManager.hh"
@@ -64,6 +65,7 @@
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4TiMemory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -134,11 +136,21 @@ int main(int argc, char** argv)
         delete ui;
     }
 
+#ifdef GEANT4_USE_TIMEMORY
+    G4cout << "\nOutputting TiMemory results...\n" << G4endl;
+    tim::manager* manager = tim::manager::instance();
+    manager->write_report(std::cout, true);
+    std::string fname = argv[0];
+    std::string rfname = fname + ".txt";
+    std::string sfname = fname + ".json";
+    manager->write_report(rfname);
+    manager->write_serialization(sfname);
+#endif
+
     // Job termination
     // Free the store: user actions, physics_list and detector_description are
     // owned and deleted by the run manager, so they should not be deleted
     // in the main() program !
-
     delete visManager;
     delete runmanager;
 

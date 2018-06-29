@@ -4,6 +4,10 @@
 
                        Package History file
                        --------------------
+9 May 18 B. Morgan - tag dnaphysics-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
 
 7 Nov 17 S. Incerti - tag dnaphysics-V10-03-15
 - updated plot.C

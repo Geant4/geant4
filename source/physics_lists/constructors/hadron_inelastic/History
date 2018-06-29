@@ -1,4 +1,4 @@
-$Id: History 107320 2017-11-08 16:30:22Z gcosmo $
+$Id: History 110587 2018-05-31 12:05:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,11 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31-May-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-00)
+- G4HadronInelasticQBBC - use G4ParticleInelasticXS both for neutrons
+    and protons
+
 7-Nov-2017, Tatsumi Koi (phys-ctor-hinelastic-V10-03-06) 
 - Adding G4HadronPhysicsShieldingLEND
 

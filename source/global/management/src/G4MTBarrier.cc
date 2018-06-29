@@ -30,6 +30,8 @@
  *
  *  Created on: Feb 10, 2016
  *      Author: adotti
+ *  Updated on: Feb 9, 2018
+ *      Author: jmadsen
  */
 
 #include "G4MTBarrier.hh"
@@ -37,60 +39,30 @@
 
 G4MTBarrier::G4MTBarrier(unsigned int numThreads ) :
   m_numActiveThreads(numThreads),
-  m_counter(0),
-  m_mutex(G4MUTEX_INITIALIZER),
-  m_counterChanged(G4CONDITION_INITIALIZER),
-  m_continue(G4CONDITION_INITIALIZER)
-{
-#if defined(WIN32)
-  InitializeCriticalSection( &cs1 );
-  InitializeCriticalSection( &cs2 );
-#endif
-}
+  m_counter(0)
+{}
 
 void G4MTBarrier::ThisWorkerReady() {
   //Step-1: Worker acquires lock on shared resource (the counter)
-#ifndef WIN32
   G4AutoLock lock(&m_mutex);
-#else
-  EnterCriticalSection( &cs1 );
-#endif
   //Step-2: Worker increases counter
   ++m_counter;
   //Step-3: Worker broadcasts that the counter has changed
   G4CONDITIONBROADCAST(&m_counterChanged);
   //Step-4: Worker waits on condition to continue
-#ifndef WIN32
-  G4CONDITIONWAIT(&m_continue,&m_mutex);
-#else
-# ifdef G4MULTITHREADED
-  G4CONDITIONWAIT(&m_continue,&cs1);
-# endif
-  LeaveCriticalSection(&cs1);
-#endif
+  G4CONDITIONWAIT(&m_continue,&lock);
 }
 
 void G4MTBarrier::Wait() {
   while (true)
   {
       //Step-2: Acquires lock on shared resource (the counter)
-#ifndef WIN32
       G4AutoLock lock(&m_mutex);
-#else
-      EnterCriticalSection(&cs2);
-#endif
       //If the counter equals active threads, all threads are ready, exit the loop
       if ( m_counter == m_numActiveThreads ) { break; }
       //Step-3: Not all workers are ready, wait for the number to change
       //before repeating the check
-#ifdef WIN32
-#     ifdef G4MULTITHREADED
-      G4CONDITIONWAIT(&m_counterChanged,&cs2);
-#     endif
-      LeaveCriticalSection(&cs2);
-#else
-      G4CONDITIONWAIT(&m_counterChanged,&m_mutex);
-#endif
+      G4CONDITIONWAIT(&m_counterChanged,&lock);
   }
 }
 

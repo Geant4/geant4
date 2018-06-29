@@ -1,4 +1,4 @@
-$Id: History 108488 2018-02-15 14:52:00Z gcosmo $
+$Id: History 110932 2018-06-26 08:06:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20 December, 2017 Makoto Asai (intercoms-V10-03-05)
+26 Jone, 2018 K. Murakami (intercoms-V10-04-03)
+- G4G4InteractorMessenger.cc ::fix compilation warning for -Wunused-result
+
+17 May, 2018 J. Madsen (intercoms-V10-04-02)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+20 December, 2017 Makoto Asai (intercoms-V10-04-01)
 - G4UIcommand, G4UImanager: additional implementation for adding 
   a mechanism of carrying back error message from the messenger
   if a command is rejected due to the target class or the messenger.
 
-18 December, 2017 Makoto Asai
+18 December, 2017 Makoto Asai (intercoms-V10-04-00)
 - G4UIcommand: added a mechanism of carrying error message from
   the messenger.
 

@@ -14,7 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-19 December 2017 Gabriele Cosmo (hadr-deex-V10-03-52)
+26 February 2018 Vladimir Ivanchenko (hadr-deex-V10-04-02)
+26 February 2018 Vladimir Ivanchenko (hadr-deex-V10-04-01)
+- G4ChatterjeeCrossSection, G4KalbachCrossSection - moved
+    implementation to source
+- G4VEmissionProbability, G4EvaporationProbability - fixed integration 
+    of probabilities for neutron emission for OPT=1,2
+- G4DeexPrecoParameters - fixed checks on parameter values
+
+19 December 2017 Gabriele Cosmo (hadr-deex-V10-04-00)
 - Fixed self-consistency in G4ChatterjeeCrossSection header (missing #include).
   Fixed #ifdef guard in G4StatMFMacroBiNucleon header.
   Thanks to Raphael Isemann for reporting these.

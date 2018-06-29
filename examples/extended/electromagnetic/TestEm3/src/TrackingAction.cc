@@ -27,7 +27,7 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id: TrackingAction.cc 78655 2014-01-14 11:13:41Z gcosmo $
+// $Id: TrackingAction.cc 109096 2018-03-26 14:46:51Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,11 +68,12 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track )
     }
     
     G4double Eflow = track->GetKineticEnergy();
-    if (track->GetDefinition() == G4Positron::Positron())
-      Eflow += 2*electron_mass_c2; 
+    if (track->GetDefinition() == G4Positron::Positron()) {
+      Eflow += 2*electron_mass_c2;
+    }
          
     //flux artefact, if primary vertex is inside the calorimeter   
-    for (G4int pl=1; pl<=Idnow; pl++) {run->SumEnergyFlow(pl, Eflow);}
+    for (G4int pl=1; pl<=Idnow; ++pl) {run->SumEnergyFlow(pl, Eflow);}
   } else {
     run->AddSecondaryTrack(track);
   }

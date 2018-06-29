@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh 99005 2016-08-30 11:26:40Z gcosmo $
+// $Id: G4HadronInelasticQBBC.hh 110587 2018-05-31 12:05:13Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -70,8 +70,8 @@ private:
   G4HadronInelasticQBBC(G4HadronInelasticQBBC &);
   G4HadronInelasticQBBC & operator=(const G4HadronInelasticQBBC &right);
 
-  static G4ThreadLocal G4ComponentAntiNuclNuclearXS* theAntiNuclXS;
-  static G4ThreadLocal G4ComponentGGHadronNucleusXsc* theKaonXS;
+  static G4ThreadLocal std::unique_ptr<G4ComponentAntiNuclNuclearXS> theAntiNuclXS;
+  static G4ThreadLocal std::unique_ptr<G4ComponentGGHadronNucleusXsc> theKaonXS;
 
   G4int    verbose;
 };

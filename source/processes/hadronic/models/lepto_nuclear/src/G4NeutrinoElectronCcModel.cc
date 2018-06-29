@@ -93,6 +93,7 @@ G4bool G4NeutrinoElectronCcModel::IsApplicable(const G4HadProjectile & aPart,
   else fmass = emass;
 
   minEnergy = (fmass-emass)*(fmass+emass)/emass;
+  SetMinEnergy( minEnergy );
   
   if( ( pName == "nu_mu"  || pName == "anti_nu_mu"  || 
         pName == "nu_tau" || pName == "anti_nu_tau"   ) &&
@@ -118,14 +119,22 @@ G4HadFinalState* G4NeutrinoElectronCcModel::ApplyYourself(
   const G4HadProjectile* aParticle = &aTrack;
   G4double energy = aParticle->GetTotalEnergy();
 
-  if( energy <= GetMinEnergy() ) 
+  G4String pName  = aParticle->GetDefinition()->GetParticleName();
+  G4double minEnergy(0.), fmass(0.), emass = electron_mass_c2;
+
+  if(      pName == "nu_mu"   || pName == "anti_nu_mu"  ) fmass = theMuonMinus->GetPDGMass(); 
+  else if( pName == "nu_tau"  || pName == "anti_nu_tau" ) fmass = theTauMinus->GetPDGMass(); 
+  else                                                    fmass = emass;
+
+  minEnergy = (fmass-emass)*(fmass+emass)/emass;
+
+  if( energy <= minEnergy ) 
   {
     theParticleChange.SetEnergyChange(energy);
     theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
     return &theParticleChange;
   }
-
-  G4double emass = electron_mass_c2;
+  G4double massf(0.), massf2(0.); // , emass = electron_mass_c2;
   G4double sTot = 2.*energy*emass + emass*emass;
  
   G4LorentzVector lvp1 = aParticle->Get4Momentum();
@@ -141,13 +150,10 @@ G4HadFinalState* G4NeutrinoElectronCcModel::ApplyYourself(
 
   G4ThreeVector eP( sint*std::cos(phi), sint*std::sin(phi), cost );
 
-  G4String pName  = aParticle->GetDefinition()->GetParticleName();
-
-  G4double massf = 0.0;
   if(      pName == "nu_mu" || pName == "anti_nu_mu"  ) massf = theMuonMinus->GetPDGMass();
   else if( pName == "nu_tau" || pName == "anti_nu_tau") massf = theTauMinus->GetPDGMass();
 
-  G4double massf2 = massf*massf;
+  massf2 = massf*massf;
 
   G4double epf = 0.5*(sTot - massf2)/sqrt(sTot);
   // G4double etf = epf*(sTot + massf2)/(sTot - massf2);
@@ -158,7 +164,7 @@ G4HadFinalState* G4NeutrinoElectronCcModel::ApplyYourself(
 
   G4LorentzVector lvt2 = lvsum - lvp2; // ?
 
-  G4DynamicParticle* aNu = nullptr; 
+  G4DynamicParticle* aNu   = nullptr; 
   G4DynamicParticle* aLept = nullptr; 
 
   if(  pName == "nu_mu" || pName == "nu_tau")               
@@ -177,9 +183,8 @@ G4HadFinalState* G4NeutrinoElectronCcModel::ApplyYourself(
   {
     aLept = new G4DynamicParticle( theTauMinus, lvt2 );
   }
-
-  if ( aNu ) theParticleChange.AddSecondary( aNu );
-  if ( aLept ) theParticleChange.AddSecondary( aLept );
+  if(aNu)   { theParticleChange.AddSecondary( aNu ); }
+  if(aLept) { theParticleChange.AddSecondary( aLept ); }
 
   G4int Z = targetNucleus.GetZ_asInt();
         Z *= 1;

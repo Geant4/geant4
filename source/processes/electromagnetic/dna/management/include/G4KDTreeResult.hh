@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDTreeResult.hh 101354 2016-11-15 08:27:51Z gcosmo $
+// $Id: G4KDTreeResult.hh 110873 2018-06-22 13:11:22Z gcosmo $
 //
 // Author: Mathieu Karamitros
 
@@ -120,20 +120,20 @@ public:
 
 //------------------------------------------------------------------------------
 #if defined G4EM_ALLOC_EXPORT
-extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4KDTreeResult> *aKDTreeAllocator;
+extern G4DLLEXPORT G4Allocator<G4KDTreeResult>*& aKDTreeAllocator();
 #else
-extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4KDTreeResult> *aKDTreeAllocator;
+extern G4DLLIMPORT G4Allocator<G4KDTreeResult>*& aKDTreeAllocator();
 #endif
 
 inline void * G4KDTreeResult::operator new(size_t)
 {
-  if (!aKDTreeAllocator) aKDTreeAllocator = new G4Allocator<G4KDTreeResult>;
-  return (void *) aKDTreeAllocator->MallocSingle();
+  if (!aKDTreeAllocator()) aKDTreeAllocator() = new G4Allocator<G4KDTreeResult>;
+  return (void *) aKDTreeAllocator()->MallocSingle();
 }
 
 inline void G4KDTreeResult::operator delete(void * object)
 {
-  aKDTreeAllocator->FreeSingle((G4KDTreeResult *) object);
+  aKDTreeAllocator()->FreeSingle((G4KDTreeResult *) object);
 }
 //------------------------------------------------------------------------------
 template<typename PointT>

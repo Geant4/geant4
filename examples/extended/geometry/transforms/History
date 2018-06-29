@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	
+	 
+11-03-18 mma (exTransforms-V10-04-00)
+- transforms.cc : remove G4UI_USE and G4VIS_USE
+
 12-10-16 mma (exTransforms-V10-02-04)
 - remove again debug.mac
 

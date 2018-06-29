@@ -26,6 +26,7 @@
 /run/verbose 1
 #######/event/verbose 1
 #######/tracking/verbose 1
+#######/vis/verbose confirmations
 /gun/particle e-
 /run/beamOn 2000
 /vis/enable
@@ -43,14 +44,16 @@
 #
 # drawing slices
 #
-/vis/scene/create
-/vis/sceneHandler/attach scene-2
+# new scene and viewer
+/vis/open OGL
+/vis/drawVolume world
+/vis/viewer/copyViewFrom viewer-0
 /score/colorMap/setMinMax ! 0. 800.
 /control/loop drawSlice.mac iColumn 0 29 7
 #
 ########################################
 #
-# Dump scores to a file
+# Dump scorers to a file
 #
 /score/dumpQuantityToFile boxMesh_1 nOfStepGamma nOfStepGamma.txt
 #

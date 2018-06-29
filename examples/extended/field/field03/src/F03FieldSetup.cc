@@ -27,7 +27,7 @@
 /// \brief Implementation of the F03FieldSetup class
 //
 //
-// $Id: F03FieldSetup.cc 104351 2017-05-26 07:23:04Z gcosmo $
+// $Id: F03FieldSetup.cc 109870 2018-05-09 12:39:45Z gcosmo $
 //
 //
 //   Field Setup class implementation.
@@ -126,7 +126,8 @@ void F03FieldSetup::UpdateField()
         << G4endl;
 
   // 2. Create the steppers ( Note: this also deletes the previous ones. )
-  SetStepper();
+  CreateSteppers();
+
 
   // 3. Create the chord finder(s)
   fChordFinder = new G4ChordFinder(fMagneticField, fMinStep, fStepper);
@@ -143,7 +144,7 @@ void F03FieldSetup::UpdateField()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F03FieldSetup::SetStepper()
+void F03FieldSetup::CreateSteppers()
 {
   delete fStepper;
   fStepper= nullptr;

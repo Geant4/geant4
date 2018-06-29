@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh 102234 2017-01-13 15:59:41Z gcosmo $
+// $Id: G4VisCommandsViewer.hh 109510 2018-04-26 07:15:57Z gcosmo $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -137,6 +137,18 @@ private:
   G4VisCommandViewerClone (const G4VisCommandViewerClone&);
   G4VisCommandViewerClone& operator =
   (const G4VisCommandViewerClone&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandViewerColourByDensity: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerColourByDensity ();
+  virtual ~G4VisCommandViewerColourByDensity ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerColourByDensity (const G4VisCommandViewerColourByDensity&);
+  G4VisCommandViewerColourByDensity& operator = (const G4VisCommandViewerColourByDensity&);
   G4UIcommand* fpCommand;
 };
 

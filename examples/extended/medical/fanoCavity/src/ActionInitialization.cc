@@ -57,7 +57,7 @@ void ActionInitialization::BuildForMaster() const
 {
   RunAction* ra = 
     new RunAction(fDetector,new PrimaryGeneratorAction(fDetector));
-  ra->SetMaster(true);
+  ///ra->SetMaster(true);
   SetUserAction(ra);
 }
 
@@ -68,7 +68,7 @@ void ActionInitialization::Build() const
   PrimaryGeneratorAction* prim = new PrimaryGeneratorAction(fDetector);
   SetUserAction(prim);
   RunAction* ra = new RunAction(fDetector,prim);
-  ra->SetMaster(false);
+  ///ra->SetMaster(false);
   SetUserAction(ra);
 
   SetUserAction(new EventAction());

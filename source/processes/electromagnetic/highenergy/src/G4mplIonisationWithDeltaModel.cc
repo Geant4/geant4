@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationWithDeltaModel.cc 97391 2016-06-02 10:08:45Z gcosmo $
+// $Id: G4mplIonisationWithDeltaModel.cc 109567 2018-05-02 07:04:10Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -80,7 +80,7 @@ G4mplIonisationWithDeltaModel::G4mplIonisationWithDeltaModel(G4double mCharge,
   beta2lim(betalim*betalim),
   bg2lim(beta2lim*(1.0 + beta2lim))
 {
-  nmpl = G4lrint(std::fabs(magCharge) * 2 * fine_structure_const);
+  nmpl = G4lrint(std::abs(magCharge) * 2 * fine_structure_const);
   if(nmpl > 6)      { nmpl = 6; }
   else if(nmpl < 1) { nmpl = 1; }
   pi_hbarc2_over_mc2 = pi * hbarc * hbarc / electron_mass_c2;

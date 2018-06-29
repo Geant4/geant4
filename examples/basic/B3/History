@@ -1,4 +1,4 @@
-$Id: History 102186 2017-01-09 13:35:29Z gcosmo $
+$Id: History 109713 2018-05-08 13:37:44Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08/05/18 B. Morgan     (exampleB3-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
 
 22/12/16 M. Maire      (exampleB3-V10-03-00)
 - PhysicsList : register Electromagnetic before RadioactiveDecay

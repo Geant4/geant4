@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc 102197 2017-01-10 14:25:23Z gcosmo $
+// $Id: G4NavigationHistory.cc 110271 2018-05-17 14:41:15Z gcosmo $
 //
 // 
 // G4NavigationHistory Implementation
@@ -36,7 +36,11 @@
 #include "G4ios.hh"
 #include "G4NavigationHistory.hh"
 
-G4ThreadLocal G4Allocator<G4NavigationHistory> *aNavigHistoryAllocator = 0;
+G4Allocator<G4NavigationHistory>*& aNavigHistoryAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4NavigationHistory>* _instance = nullptr;
+    return _instance;
+}
 
 G4NavigationHistory::G4NavigationHistory()
   : fStackDepth(0)

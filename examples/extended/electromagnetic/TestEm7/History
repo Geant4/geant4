@@ -1,4 +1,4 @@
-$Id: History 107330 2017-11-08 16:42:09Z gcosmo $
+$Id: History 110821 2018-06-15 12:53:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-06-18 V.Ivant (testem7-V10-04-03)
+- fixed gcc8.0 warnings
+	 
+04-06-18 mma (testem7-V10-04-02)
+- SteppingAction.cc : Photoelectric, edep at end of step
+
+08-04-18 mma (testem7-V10-04-01)
+- testem7.cc : set visualisation in interactive mode only
+
+17-03-18 mma (testem7-V10-04-00)
+- testem7.cc : remove G4UI_USE and G4VIS_USE
 
 07-11-17 V.Ivant (testem7-V10-03-01)
 - fixed macro files

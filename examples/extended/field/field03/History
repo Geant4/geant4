@@ -1,4 +1,4 @@
-$Id: History 104351 2017-05-26 07:23:04Z gcosmo $
+$Id: History 110100 2018-05-15 11:30:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,21 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 15, 2018 J.Allison - fieldex03-V10-04-01
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- vis.mac, gui.mac: Clean up.
+- F03RunAction.cc: Remove vis commands.
+
+May 09, 2018 B.Morgan - fieldex03-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Jun   2, 2017 - J.Apostolakis - fieldex03-V10-03-01
+- renamed SetStepper() method to CreateSteppers()
+
 May  24, 2017 - J.Apostolakis - fieldex03-V10-03-00
 - fixed valgrind issues in field setup's update method: first
     delete all dependent objects, then create new ones.

@@ -24,23 +24,25 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
-// Jose Luis Rodriguez, CEA (translation from ABLA07 and contact person)
-// Pekka Kaitaniemi, HIP (translation)
-// Christelle Schmidt, IPNL (fission code)
+// Jose Luis Rodriguez, GSI (translation from ABLA07 and contact person)
+// Pekka Kaitaniemi, HIP (initial translation of ablav3p)
+// Aleksandra Kelic, GSI (ABLA07 code)
 // Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
+
 #define ABLAXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
 #include "G4AblaDataFile.hh"
-//#include "G4HadronicException.hh"
+
 #ifdef ABLAXX_IN_GEANT4_MODE
 #include "globals.hh"
 #else
 #include "G4INCLGeant4Compat.hh"
 #endif
+
 #include <fstream>
 #include <cmath>
 #include <iostream>
@@ -121,7 +123,7 @@ bool G4AblaDataFile::readData()
   if (!((buf1->is_open()) && (buf2->is_open()) && (buf3->is_open()) && (buf4->is_open()) && (buf5->is_open()) && (buf6->is_open()) && (buf7->is_open()))) {
 #ifdef ABLAXX_IN_GEANT4_MODE
     G4ExceptionDescription ed;
-    ed << " Data missing: could not find ABLA data file in " << dataPath
+    ed << "Data missing: could not find ABLA data file in " << dataPath
        << "defined by environment variable G4ABLADATA" << G4endl;
     G4Exception("G4AblaDataFile::readData()", "ABLA", FatalException, ed);
 #else

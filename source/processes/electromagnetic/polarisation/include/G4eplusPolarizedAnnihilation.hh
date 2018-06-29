@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.hh 96114 2016-03-16 18:51:33Z gcosmo $
+// $Id: G4eplusPolarizedAnnihilation.hh 109176 2018-04-03 06:53:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -106,7 +106,7 @@ private:
   G4PolarizedAnnihilationModel* emModel;
   G4ThreeVector theTargetPolarization;
 
-  G4PhysicsTable* theAsymmetryTable;          // table for cross section assym.
+  G4PhysicsTable* theAsymmetryTable;           // table for cross section assym.
   G4PhysicsTable* theTransverseAsymmetryTable; // table for transverse cross section assym.
 };
 

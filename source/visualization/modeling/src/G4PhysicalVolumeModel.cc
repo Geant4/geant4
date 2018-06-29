@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc 106122 2017-09-13 12:51:53Z gcosmo $
+// $Id: G4PhysicalVolumeModel.cc 110743 2018-06-12 06:33:37Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -229,8 +229,8 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
   // local variables to preserve re-entrancy.
   G4LogicalVolume* pLV  = pVPV -> GetLogicalVolume ();
 
-  G4VSolid* pSol;
-  G4Material* pMaterial;
+  G4VSolid* pSol = nullptr;
+  G4Material* pMaterial = nullptr;
 
   if (!(pVPV -> IsReplicated ())) {
     // Non-replicated physical volume.
@@ -384,12 +384,42 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   fpCurrentTransform = &theNewAT;
 
   const G4VisAttributes* pVisAttribs = pLV->GetVisAttributes();
-  if (!pVisAttribs) pVisAttribs = fpMP->GetDefaultVisAttributes();
-  // Beware - pVisAttribs might still be zero - probably will, since that's
-  // the default for G4ModelingParameters.  So create one if necessary...
+  //  If the volume does not have any vis attributes, create it.
+  G4VisAttributes* tempVisAtts = nullptr;
   if (!pVisAttribs) {
-    static G4VisAttributes defaultVisAttribs;
-    pVisAttribs = &defaultVisAttribs;
+    tempVisAtts = new G4VisAttributes; // Default value.
+    // The user may request /vis/viewer/set/colourByDensity.
+    if (fpMP->GetCBDAlgorithmNumber() == 1) {
+      // Algorithm 1: 3 parameters: Simple rainbow mapping.
+      if (fpMP->GetCBDParameters().size() != 3) {
+        G4Exception("G4PhysicalVolumeModelTouchable::DescribeAndDescend",
+                    "modeling0014",
+                    FatalErrorInArgument,
+                    "Algorithm-parameter mismatch for Colour By Density");
+      } else {
+        const G4double d = pMaterial? pMaterial->GetDensity(): 0.;
+        const G4double d0 = fpMP->GetCBDParameters()[0]; // Invisible d < d0.
+        const G4double d1 = fpMP->GetCBDParameters()[1]; // Rainbow d0->d1->d2.
+        const G4double d2 = fpMP->GetCBDParameters()[2]; // Blue d > d2.
+        if (d < d0) { // Density < d0 is invisible.
+          tempVisAtts->SetVisibility(false);
+        } else { // Intermediate densities are on a spectrum.
+          G4double red, green, blue;
+          if (d < d1) {
+            red = (d1-d)/(d1-d0); green = (d-d0)/(d1-d0); blue = 0.;
+          } else if (d < d2) {
+            red = 0.; green = (d2-d)/(d2-d1); blue = (d-d1)/(d2-d1);
+          } else {  // Density >= d2 is blue.
+            red = 0.; green = 0.; blue = 1.;
+          }
+          tempVisAtts->SetColour(G4Colour(red,green,blue));
+        }
+      }
+    } else if (fpMP->GetCBDAlgorithmNumber() == 2) {
+      // Algorithm 2
+      // ...etc.
+    }
+    pVisAttribs = tempVisAtts;
   }
   // From here, can assume pVisAttribs is a valid pointer.  This is necessary
   // because PreAddSolid needs a vis attributes object.
@@ -603,6 +633,8 @@ void G4PhysicalVolumeModel::DescribeAndDescend
       fCurrentDepth--;
     }
   }
+
+  delete tempVisAtts;
 
   // Reset for normal descending of next volume at this level...
   fCurtailDescent = false;

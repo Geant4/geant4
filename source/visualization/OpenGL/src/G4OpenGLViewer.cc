@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc 107329 2017-11-08 16:41:26Z gcosmo $
+// $Id: G4OpenGLViewer.cc 108131 2018-01-09 13:23:26Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -74,24 +74,6 @@ background (G4Colour(0.,0.,0.)),
 transparency_enabled (true),
 antialiasing_enabled (false),
 haloing_enabled (false),
-fStartTime(-DBL_MAX),
-fEndTime(DBL_MAX),
-fFadeFactor(0.),
-fDisplayHeadTime(false),
-fDisplayHeadTimeX(-0.9),
-fDisplayHeadTimeY(-0.9),
-fDisplayHeadTimeSize(24.),
-fDisplayHeadTimeRed(0.),
-fDisplayHeadTimeGreen(1.),
-fDisplayHeadTimeBlue(1.),
-fDisplayLightFront(false),
-fDisplayLightFrontX(0.),
-fDisplayLightFrontY(0.),
-fDisplayLightFrontZ(0.),
-fDisplayLightFrontT(0.),
-fDisplayLightFrontRed(0.),
-fDisplayLightFrontGreen(1.),
-fDisplayLightFrontBlue(0.),
 fRot_sens(1.),
 fPan_sens(0.01),
 fWinSize_x(0),

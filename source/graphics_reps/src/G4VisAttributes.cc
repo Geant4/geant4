@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc 98730 2016-08-09 10:47:54Z gcosmo $
+// $Id: G4VisAttributes.cc 110390 2018-05-22 08:28:07Z gcosmo $
 //
 // 
 // John Allison  23rd October 1996
@@ -45,8 +45,8 @@ fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
-fStartTime           (-DBL_MAX),
-fEndTime             (DBL_MAX),
+fStartTime           (-fVeryLongTime),
+fEndTime             (fVeryLongTime),
 fAttValues           (0),
 fAttDefs             (0)
 {}
@@ -62,8 +62,8 @@ fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
-fStartTime           (-DBL_MAX),
-fEndTime             (DBL_MAX),
+fStartTime           (-fVeryLongTime),
+fEndTime             (fVeryLongTime),
 fAttValues           (0),
 fAttDefs             (0)
 {}
@@ -79,8 +79,8 @@ fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
-fStartTime           (-DBL_MAX),
-fEndTime             (DBL_MAX),
+fStartTime           (-fVeryLongTime),
+fEndTime             (fVeryLongTime),
 fAttValues           (0),
 fAttDefs             (0)
 {}
@@ -97,8 +97,8 @@ fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
-fStartTime           (-DBL_MAX),
-fEndTime             (DBL_MAX),
+fStartTime           (-fVeryLongTime),
+fEndTime             (fVeryLongTime),
 fAttValues           (0),
 fAttDefs             (0)
 {}
@@ -153,8 +153,10 @@ G4VisAttributes& G4VisAttributes::operator= (const G4VisAttributes& rhs)
   return *this;
 }
 
+#ifndef WIN32
 // Deprecated 14 July 2016  JA
 const G4VisAttributes  G4VisAttributes::Invisible = G4VisAttributes (false);
+#endif
 
 const G4VisAttributes& G4VisAttributes::GetInvisible() {
   static const G4VisAttributes invisible = G4VisAttributes(false);

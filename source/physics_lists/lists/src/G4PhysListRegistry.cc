@@ -45,7 +45,14 @@
 #include "G4PhysListRegistry.hh"
 #include "G4VModularPhysicsList.hh"
 #include "G4PhysListStamper.hh"
+
 #include "G4PhysicsConstructorRegistry.hh"
+// include G4_REFERENCE_PHYSCONSTR_FACTORY() macros here to pull them in
+// for static builds.   Would do this in  G4PhysicsConstructorRegistry
+// but that causes a circular dependency when the phys_ctor libs
+// are broken in a "granular" build.
+#define REGREF PhysListReg // REGREF is used to make instances unique
+#include "G4RegisterPhysicsConstructors.icc"
 
 // include this with this compilation unit so static builds pull them in
 #include "G4RegisterPhysLists.icc"
@@ -429,3 +436,4 @@ void G4PhysListRegistry::PrintAvailablePhysLists() const
          << "   to use ReplacePhysics() (\"_\") or RegisterPhysics() (\"+\")."
          << G4endl;
 }
+

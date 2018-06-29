@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragmentVector.cc 96603 2016-04-25 13:29:51Z gcosmo $
+// $Id: G4PreCompoundFragmentVector.cc 108685 2018-02-27 07:58:38Z gcosmo $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
@@ -41,22 +41,25 @@ G4PreCompoundFragmentVector::G4PreCompoundFragmentVector(pcfvector * avector)
   SetVector(avector);
 }
 
-G4PreCompoundFragmentVector::~G4PreCompoundFragmentVector()
-{}
-
 void G4PreCompoundFragmentVector::SetVector(pcfvector * avector)
 {
-  theChannels = avector;
+  if(avector != theChannels) {
+    delete theChannels;
+    theChannels = avector;
+  }
   if(theChannels) {
     nChannels = theChannels->size();
-    probabilities.resize(nChannels);
+    probabilities.resize(nChannels, 0.0);
+  } else {
+    nChannels = 0;
+    probabilities.clear();
   }
 }
 
 //for inverse cross section choice
 void G4PreCompoundFragmentVector::SetOPTxs(G4int opt)
 {    
-  for (G4int i=0; i< nChannels; ++i) { 
+  for (G4int i=0; i<nChannels; ++i) { 
     (*theChannels)[i]->SetOPTxs(opt);
   }
 }
@@ -67,5 +70,36 @@ void G4PreCompoundFragmentVector::UseSICB(G4bool use)
   for (G4int i=0; i< nChannels; ++i) { 
     (*theChannels)[i]->UseSICB(use);
   }
+}
+
+G4double G4PreCompoundFragmentVector::CalculateProbabilities(
+         const G4Fragment & aFragment)
+{
+  //G4cout << "## G4PreCompoundFragmentVector::CalculateProbabilities nCh= " 
+  //	 << nChannels << G4endl;
+  G4double probtot = 0.0;  
+  for (G4int i=0; i< nChannels; ++i) { 
+    (*theChannels)[i]->Initialize(aFragment);
+    G4double prob = ((*theChannels)[i]->IsItPossible(aFragment)) 
+      ? (*theChannels)[i]->CalcEmissionProbability(aFragment)
+      : 0.0;
+    probtot += prob;
+    probabilities[i] = probtot;
+    //G4cout<<" prob= " << prob << " probtot= " << probtot 
+    //	  << " for "<< i << "-th channel" <<G4endl;
+  }
+  return probtot;
+}
+
+G4VPreCompoundFragment* G4PreCompoundFragmentVector::ChooseFragment()
+{
+  //G4cout << "## G4PreCompoundFragmentVector::ChooseFragment nCh= " 
+  //	 << nChannels << G4endl;
+  G4double x = probabilities[nChannels-1]*G4UniformRand();
+  G4int i=0;
+  for (; i<nChannels; ++i) { 
+    if(x <= probabilities[i]) { break; }
+  }
+  return (*theChannels)[i];  
 }
 

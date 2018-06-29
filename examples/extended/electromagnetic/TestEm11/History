@@ -1,4 +1,4 @@
-$Id: History 103624 2017-04-19 13:27:14Z gcosmo $
+$Id: History 110644 2018-06-04 16:51:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,20 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+04-06-18 mma (testem11-V10-04-03)
+- SteppingAction.cc : Photoelectric, edep at end of step
+
+09-05-18 B.Morgan (testem11-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+09-04-18 mma (testem11-V10-04-01)
+- testem11.cc : set visualisation only in interactive mode
+
+19-03-18 mma (testem11-V10-04-00)
+- testem11.cc : remove G4UI_USE and G4VIS_USE
+
 19-04-17 mma  (testem11-V10-03-00)
 - BeginOfRunAction() : remove SetRandomNumberStore(true)
 

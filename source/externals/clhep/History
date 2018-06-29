@@ -17,6 +17,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 May 2018 - G.Cosmo
+- Fixed compilation warnings from gcc-8.1.0 when using -Woverloaded-virtual
+  compilation option (default in Geant4).
+
+16 March 2018 - G.Cosmo
+- Synchronised with CLHEP-2.4.0.4.
+
+07 March 2018 - G.Cosmo
+- Removed kludge for Windows introduced in tag "clhep-V10-04-00" to
+  MinMaxRng.hh.
+- Further simplified setup for thread-local storage and atomics, as
+  now all supported by c++11 in either clang or VC++.
+
+06 March 2018 - G.Cosmo
+- Enabled thread-local storage and atomics on Windows; added flag in
+  thread_local.h, use_atomic.h and atomic_in.h.
+
+19 February 2018 - J.Madsen (clhep-V10-04-00)
+- Fixed Windows MT data race in MinMaxRng.hh.
+- Fixed warning C4293: '>>': shift count negative or too big, undefined behavior
+  in Ranlux64Engine on Windows
+
 11 December 2017 - G.Cosmo
 - MixMaxRng: fixed guard for assembly code in modadd() to protect
   builds on 32-bit systems.

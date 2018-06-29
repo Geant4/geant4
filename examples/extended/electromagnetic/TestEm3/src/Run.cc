@@ -54,7 +54,7 @@
 Run::Run(DetectorConstruction* det)
 : G4Run(),
   fDetector(det), 
-  fParticle(0), fEkin(0.),
+  fParticle(nullptr), fEkin(0.),
   fChargedStep(0), fNeutralStep(0),
   fN_gamma(0), fN_elec(0), fN_pos(0),
   fApplyLimit(false)
@@ -293,8 +293,8 @@ void Run::EndOfRun()
   
   G4int nbOfAbsor = fDetector->GetNbOfAbsor();
   for (G4int Id=1; Id<=Idmax; Id++) {
-   G4int iAbsor = Id%nbOfAbsor; if (iAbsor==0) iAbsor = nbOfAbsor;
-   EdepTot[iAbsor] += (fEnergyFlow[Id] - fEnergyFlow[Id+1] - fLateralEleak[Id]);
+    G4int iAbsor = Id%nbOfAbsor; if (iAbsor==0) iAbsor = nbOfAbsor;
+    EdepTot[iAbsor] += (fEnergyFlow[Id]-fEnergyFlow[Id+1]-fLateralEleak[Id]);
   }
   
   G4cout << std::setprecision(3)

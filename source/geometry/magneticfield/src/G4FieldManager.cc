@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.cc 107059 2017-11-01 14:58:16Z gcosmo $
+// $Id: G4FieldManager.cc 108823 2018-03-09 11:03:44Z gcosmo $
 //
 // -------------------------------------------------------------------
 
@@ -140,10 +140,16 @@ G4FieldManager::~G4FieldManager()
 void
 G4FieldManager::CreateChordFinder(G4MagneticField *detectorMagField)
 {
-   if ( fAllocatedChordFinder )
+   if ( fAllocatedChordFinder ) 
       delete fChordFinder;
-   fChordFinder= new G4ChordFinder( detectorMagField );
-   fAllocatedChordFinder= true;
+   fAllocatedChordFinder= false;
+
+   if( detectorMagField ) {
+      fChordFinder= new G4ChordFinder( detectorMagField );
+      fAllocatedChordFinder= true;
+   } else {
+      fChordFinder = nullptr;
+   }
 }
 
 void G4FieldManager::InitialiseFieldChangesEnergy()

@@ -44,7 +44,6 @@
 class DetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
-class G4UIcmdWithoutParameter;
 class G4UIcmdWithADoubleAndUnit;
 
 class DetectorMessenger: public G4UImessenger
@@ -62,7 +61,6 @@ class DetectorMessenger: public G4UImessenger
     G4UIdirectory*             fpTestDir;
     G4UIdirectory*             fpDetDir;
     G4UIcmdWithAString*        fpMaterCmd;
-    G4UIcmdWithoutParameter*   fpUpdateCmd;
     G4UIcmdWithADoubleAndUnit* fpTrackingCutCmd;
 };
 

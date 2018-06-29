@@ -36,6 +36,7 @@
 /// \brief icds example
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
   #include "G4MTRunManager.hh"
@@ -48,10 +49,7 @@
 #include "G4UItcsh.hh"
 #include "G4UIExecutive.hh"
 
-
-#ifdef G4VIS_USE
-  #include "G4VisExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
@@ -59,7 +57,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int main(int argc,char** argv) 
+int main(int argc,char** argv)
 {
     G4String macroName ("");
 
@@ -100,11 +98,11 @@ int main(int argc,char** argv)
 
   // User action initialization
   runManager->SetUserInitialization(new ActionInitialization());
-  
+
   // Initialize G4 kernel
   runManager->Initialize();
-    
-  // Get the pointer to the User Interface manager 
+
+  // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4String command = "/control/execute ";
   UImanager->ApplyCommand(command+macroName);

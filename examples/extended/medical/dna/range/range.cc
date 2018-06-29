@@ -25,6 +25,7 @@
 //
 /// \file medical/dna/range/range.cc
 /// \brief Main program of the medical/dna/range example
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
  #include "G4MTRunManager.hh"
@@ -44,12 +45,12 @@
 #include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
 int main(int argc,char** argv) {
- 
+
   //delete output file
   remove ("range.txt");
-  
+
   //detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = 0;
   if ( argc == 1 ) {
@@ -58,7 +59,7 @@ int main(int argc,char** argv) {
 
   //choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
-    
+
   //Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager();
@@ -72,9 +73,9 @@ int main(int argc,char** argv) {
   }
   runManager->SetNumberOfThreads(nThreads);
 #else
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);  
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   G4RunManager* runManager = new G4RunManager();
-#endif  
+#endif
 
   //set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction());
@@ -84,19 +85,19 @@ int main(int argc,char** argv) {
   //visualization
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-    
-  //get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  if (argc>1)   // batch mode  
+  //get the pointer to the User Interface manager
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+
+  if (argc>1)   // batch mode
     {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
     }
-    
+
   else           //define visualization and UI terminal for interactive mode
-    { 
+    {
       ui->SessionStart();
       delete ui;
     }

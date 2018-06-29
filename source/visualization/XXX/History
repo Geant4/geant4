@@ -1,4 +1,4 @@
-$Id: History 99076 2016-09-01 12:40:47Z gcosmo $
+$Id: History 109510 2018-04-26 07:15:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+25 April 2015  John Allison (visXXX-V10-04-00)
+- G4XXXStoredViewer::CompareForKernelVisit, G4XXXSGViewer::CompareForKernelVisit
+  o Implement comparison for "colour by density".
 
 31st August 2016  John Allison (visXXX-V10-02-01)
 - Fix G4Orb and G4Ellipsoid hiding warnings.

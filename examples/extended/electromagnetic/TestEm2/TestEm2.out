@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,23 +12,8 @@
                              WWW : http://geant4.org/
 **************************************************************
 
-/control/cout/ignoreThreadsExcept 0
-/run/numberOfThreads 2
-*** /run/numberOfThreads command is issued in sequential mode.
-Command is ignored.
-/run/verbose 1
-/testem/det/setMat G4_PbWO4
-/testem/det/setLbin 40 0.5
-/run/reinitializeGeometry
-/testem/det/setRbin 50 0.1
-/run/reinitializeGeometry
-/testem/run/acceptance 0.949 0.0082 3.0
-/testem/phys/addPhysics emstandard_opt0
-PhysicsList::AddPhysicsList: <emstandard_opt0>
-/run/setCut 1.0 mm
-/run/initialize
 
-***** Table : Nb of materials = 10 *****
+***** Table : Nb of materials = 9 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.356 cm 
                        Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
@@ -138,38 +123,25 @@ PhysicsList::AddPhysicsList: <emstandard_opt0>
           ElmMassFraction:  67.10 %  ElmAbundance  21.05 % 
 
 
- Material: G4_PbWO4    density:  8.280 g/cm3   RadL:   8.925 mm   Nucl.Int.Length:  20.740 cm 
-                       Imean: 542.741 eV   temperature: 293.15 K  pressure:   1.00 atm
 
-   --->  Element: O (O)   Z =  8.0   N =    16   A = 15.999 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction:  14.06 %  ElmAbundance  66.67 % 
-
-   --->  Element: Pb (Pb)   Z = 82.0   N =   207   A = 207.217 g/mole
-         --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:  1.400 %
-         --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance: 24.100 %
-         --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance: 22.100 %
-         --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance: 52.400 %
-          ElmMassFraction:  45.54 %  ElmAbundance  16.67 % 
-
-   --->  Element: W (W)   Z = 74.0   N =   184   A = 183.842 g/mole
-         --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:  0.120 %
-         --->  Isotope:  W182   Z = 74   N = 182   A = 181.95 g/mole   abundance: 26.500 %
-         --->  Isotope:  W183   Z = 74   N = 183   A = 182.95 g/mole   abundance: 14.310 %
-         --->  Isotope:  W184   Z = 74   N = 184   A = 183.95 g/mole   abundance: 30.640 %
-         --->  Isotope:  W186   Z = 74   N = 186   A = 185.95 g/mole   abundance: 28.430 %
-          ElmMassFraction:  40.40 %  ElmAbundance  16.67 % 
-
-
-
-Absorber is 17.8491 cm  of G4_PbWO4
-PhysicsList::ConstructProcess start
+/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 2
+*** /run/numberOfThreads command is issued in sequential mode.
+Command is ignored.
+/run/verbose 1
+/testem/det/setMat G4_PbWO4
+/testem/det/setLbin 40 0.5
+/testem/det/setRbin 50 0.1
+/testem/run/acceptance 0.949 0.0082 3.0
+/testem/phys/addPhysics emstandard_opt0
+PhysicsList::AddPhysicsList: <emstandard_opt0>
+/run/setCut 1.0 mm
 /process/em/verbose 1
 /run/physicsModified
 /process/em/workerVerbose 0
 /run/physicsModified
+/run/initialize
+Absorber is 17.8491 cm  of G4_PbWO4  R= 4.46227 cm
 /gun/particle e-
 /gun/energy 5 GeV
 /run/printProgress 20
@@ -189,8 +161,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
@@ -554,10 +526,11 @@ Index : 0     used in the geometry : Yes
 
 ### Run 0 starts.
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008233404568, 2262190991329242458, 2266470399991071809, 1976726662926872232, 245458862506414172, 1955974201201518530, 2155248512522080758, 604170912935414061, 1116171330120743511, 1861018313684488333, 1296715403254578286, 1549011045957234151, 370819759640195970, 2230139271784837643} counter= 17sumtot= 1977567618660788324
+---------------------------------------
 
 ----> Histogram file is opened in testem2.root
 --> Event 0 starts.
@@ -568,36 +541,37 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.05s Real=5.29s Sys=0.01s
+  User=2.920000s Real=2.937130s Sys=0.000000s
 
  ===== SUMMARY ===== 
 
  Total number of events:        100
- Mean number of charged steps:  7259.57
- Mean number of neutral steps:  4106.07
+ Mean number of charged steps:  7243.27
+ Mean number of neutral steps:  4104.09
 
- energy deposit :   95.01 % E0 +-    0.93 % E0
- charged traklen:  484.76 radl +-    4.72 radl
- neutral traklen: 4206.70 radl +-  136.89 radl
+ energy deposit :   94.89 % E0 +-    1.11 % E0
+ charged traklen:  483.88 radl +-    5.68 radl
+ neutral traklen: 4233.34 radl +-  119.48 radl
 
- 90.00 % confinement: radius = 2.92 radl  (2.60 cm )
+ 90.00 % confinement: radius = 2.96 radl  (2.64 cm )
 
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.950099  delEdep= 0.00109901 nrms= 1.34026
-Erms: 0.00933018  delErms= 0.00113018 nrms= 1.37827
+Edep: 0.94885  delEdep= -0.000149558 nrms= -0.182388
+Erms: 0.0110611  delErms= 0.00286108 nrms= 3.48912
 <<<<END>>>>   IS ACCEPTED
 
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 653022131, 168608089
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={813669451166920716, 915193248309464868, 2019028336631320324, 725375911233882969, 621752734653241375, 1140962754503444046, 619630234792985507, 1718169589993349277, 1815988620821611100, 1931397531447879596, 1259925193533438907, 347741036259688487, 1562667380514912651, 575501281937601346, 1248915206512850464, 2125251310845429716, 1584232443418017805} counter= 11sumtot= 272815183652793595
+---------------------------------------
 ... write Root file : testem2.root - done
 ... close Root file : testem2.root - done
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.058 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.066 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

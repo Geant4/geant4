@@ -88,20 +88,20 @@ class G4ScintillationTrackInformation : public G4VUserTrackInformation
 class G4ScintillationTrackInformation; 
 
 #if defined G4EM_ALLOC_EXPORT
-extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4ScintillationTrackInformation> *aScintillationTIAllocator;
+extern G4DLLEXPORT G4Allocator<G4ScintillationTrackInformation>*& aScintillationTIAllocator();
 #else
-extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4ScintillationTrackInformation> *aScintillationTIAllocator;
+extern G4DLLIMPORT G4Allocator<G4ScintillationTrackInformation>*& aScintillationTIAllocator();
 #endif
 
 inline void* G4ScintillationTrackInformation::operator new(size_t)
 {
-  if (!aScintillationTIAllocator) aScintillationTIAllocator = new G4Allocator<G4ScintillationTrackInformation>;
-  return (void *) aScintillationTIAllocator->MallocSingle();
+  if (!aScintillationTIAllocator()) aScintillationTIAllocator() = new G4Allocator<G4ScintillationTrackInformation>;
+  return (void *) aScintillationTIAllocator()->MallocSingle();
 }
 
 inline void G4ScintillationTrackInformation::operator delete(void *aScintillationTI)
 {
-  aScintillationTIAllocator->FreeSingle((G4ScintillationTrackInformation *) aScintillationTI);
+  aScintillationTIAllocator()->FreeSingle((G4ScintillationTrackInformation *) aScintillationTI);
 }
 
 #endif // G4SCINTILLATIONTRACKINFORMATION_H

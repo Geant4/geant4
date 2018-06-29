@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
-// Jose Luis Rodriguez, CEA (translation from ABLA07 and contact person)
-// Pekka Kaitaniemi, HIP (translation)
-// Christelle Schmidt, IPNL (fission code)
+// Jose Luis Rodriguez, GSI (translation from ABLA07 and contact person)
+// Pekka Kaitaniemi, HIP (initial translation of ablav3p)
+// Aleksandra Kelic, GSI (ABLA07 code)
 // Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
@@ -67,8 +67,8 @@ private:
   G4Abla *theABLAModel;
   G4long eventNumber;
 
-  /// \brief Convert an Abla particle to a G4ReactionProduct
-  G4ReactionProduct *toG4Particle(G4int A, G4int Z , G4double kinE, G4double px, G4double py, G4double pz) const;
+  /// \brief Convert an Abla particle to a G4DynamicParticle
+  G4ReactionProduct *toG4Particle(G4int A, G4int Z, G4double kinE, G4double px, G4double py, G4double pz) const;
 
   /// \brief Convert A and Z to a G4ParticleDefinition
   G4ParticleDefinition *toG4ParticleDefinition (G4int A, G4int Z) const;

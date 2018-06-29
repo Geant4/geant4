@@ -1,9 +1,22 @@
-/control/execute defaults.mac
+/run/initialize
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 0
+/LXe/eventVerbose 0
+
+/LXe/detector/defaults
+/LXe/oneStepPrimaries false
+
 /LXe/detector/volumes/wls 1
 /LXe/detector/volumes/lxe 0
 /LXe/detector/nfibers 15
 /LXe/detector/WLSScintYield 10000
-/LXe/detector/update
 /gun/particle e-
 /gun/energy 511 keV
 
+/analysis/h1/set 3 100 -1 10000 
+/analysis/h1/set 4 100 -1 100
+/analysis/h1/set 5 100 -1 10000
+
+/run/printProgress 10
+/run/beamOn 1000

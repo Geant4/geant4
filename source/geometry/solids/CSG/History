@@ -1,4 +1,4 @@
-$Id: History 110070 2018-05-15 09:40:05Z gcosmo $
+$Id: History 109684 2018-05-08 10:37:49Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,16 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-April 11, 2018 G.Cosmo geom-csg-V10-03-40
+May 7, 2018 G.Cosmo geom-csg-V10-04-03
+- Make G4UCons wrapper inheriting from vecgeom::GenericUnplacedCone,
+  following the latest changes in VecGeom.
+
+April 11, 2018 G.Cosmo geom-csg-V10-04-02
 - G4Box: simplified and optimised calculation of normal in method
   DistanceToOut(p,v,..). (E.Tcherniaev)
 - Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
 
-February 5, 2018 G.Cosmo geom-csg-V10-03-39
+February 5, 2018 G.Cosmo geom-csg-V10-04-01
 - Correction in G4UPara::ComputeDimensions() to add explicit cast for the
   solid type to parameterise.
 
-December 11, 2017 E.Tcherniaev
+December 11, 2017 E.Tcherniaev geom-csg-V10-04-00
 - Fixed typo in G4Trd::GetPointOnSurface() for the area settings.
 
 November 22, 2017 G.Cosmo geom-csg-V10-03-38

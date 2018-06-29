@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 77255 2013-11-22 10:09:14Z gcosmo $
+// $Id: DetectorConstruction.hh 109185 2018-04-03 07:20:46Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -49,7 +49,9 @@
 
 class CheckVolumeSD;
 class TargetSD;
+class G4Tubs;
 class G4LogicalVolume;
+class G4VPhysicalVolume;
 class DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,20 +73,36 @@ public:
 
 private:
 
+  void ComputeGeomParameters();
+
   DetectorConstruction & operator=(const DetectorConstruction &right);
   DetectorConstruction(const DetectorConstruction&);
 
-  G4double fRadius;
-
   G4Material*  fTargetMaterial;
   G4Material*  fWorldMaterial;
+
+  G4Tubs* fSolidW;
+  G4Tubs* fSolidA;
+  G4Tubs* fSolidC;
 
   G4LogicalVolume* fLogicTarget;
   G4LogicalVolume* fLogicCheck;
   G4LogicalVolume* fLogicWorld;
 
+  G4VPhysicalVolume* fPhysWorld;
+
   DetectorMessenger* fDetectorMessenger;
 
+  G4double fRadius;
+  G4double fCheckR;
+  G4double fWorldR;
+  G4double fTargetZ; 
+  G4double fCheckZ;
+  G4double fWorldZ;
+  G4double fSliceZ;
+
+  G4int fSlices;
+  G4bool fInitialized;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

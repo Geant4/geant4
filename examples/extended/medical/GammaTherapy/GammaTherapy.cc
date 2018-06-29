@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GammaTherapy.cc 103469 2017-04-11 07:29:36Z gcosmo $
+// $Id: GammaTherapy.cc 110004 2018-05-14 07:40:59Z gcosmo $
 //
 /// \file medical/GammaTherapy/GammaTherapy.cc
 /// \brief Main program of the medical/GammaTherapy example
@@ -42,6 +42,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -52,13 +53,8 @@
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
@@ -69,6 +65,10 @@
 
 int main(int argc,char** argv) {
 
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
   //choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
@@ -78,55 +78,45 @@ int main(int argc,char** argv) {
   G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(),2);
   if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
   runManager->SetNumberOfThreads(nThreads);
-  G4cout << "===== GammaTherapy is started with " 
+  G4cout << "===== GammaTherapy is started with "
          <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
 #else
   G4RunManager* runManager = new G4RunManager();
 #endif
 
-  // set mandatory initialization classes
+  //set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction();
   runManager->SetUserInitialization(det);
 
   runManager->SetUserInitialization(new PhysicsList());
 
   // set user action classes
-   runManager->SetUserInitialization(new ActionInitialization(det));
+  runManager->SetUserInitialization(new ActionInitialization(det));
 
-  // get the pointer to the User Interface manager
+  //initialize visualization
+  G4VisManager* visManager = nullptr;
+
+  //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-#ifdef G4VIS_USE
-  G4VisManager* visManager = new G4VisExecutive("Quiet");
-  visManager->Initialize();
-#endif
+  if (ui)  {
+   //interactive mode
+   visManager = new G4VisExecutive;
+   visManager->Initialize();
+   UImanager->ApplyCommand("/control/execute vis.mac");
+   ui->SessionStart();
+   delete ui;
+  }
+  else  {
+  //batch mode
+   G4String command = "/control/execute ";
+   G4String fileName = argv[1];
+   UImanager->ApplyCommand(command+fileName);
+  }
 
-  if (argc==1)   // Define UI terminal for interactive mode
-    {
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
-      ui->SessionStart();
-      delete ui;
-#endif
-    }
-  else if (argc>1) // Batch mode with 1 or more files
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
-    }
-
-#ifdef G4VIS_USE
+  //job termination
   delete visManager;
-#endif
-
-  // job termination
   delete runManager;
-
-  return 0;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

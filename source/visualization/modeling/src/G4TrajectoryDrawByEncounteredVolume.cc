@@ -89,7 +89,7 @@ G4TrajectoryDrawByEncounteredVolume::Draw(const G4VTrajectory& traj, const G4boo
     
   }
 
-  catch (std::bad_cast)
+  catch (const std::bad_cast&)
   {
     G4ExceptionDescription ed;
     ed << "Requires G4RichTrajectory - \"/vis/scene/add/trajectories rich\"";

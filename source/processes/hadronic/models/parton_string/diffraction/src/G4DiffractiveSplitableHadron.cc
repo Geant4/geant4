@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.cc 107317 2017-11-08 16:25:57Z gcosmo $
+// $Id: G4DiffractiveSplitableHadron.cc 108010 2017-12-19 08:59:48Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -47,8 +47,11 @@
 G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron() 
 {
   PartonIndex = -1;
+  G4LorentzVector tmp=G4LorentzVector(0.,0.,0.,0.);            // Uzhi 16 Oct. 2017
   Parton[0] = new G4Parton( 1 );
   Parton[1] = new G4Parton(-1 );
+
+  Parton[0]->Set4Momentum(tmp); Parton[1]->Set4Momentum(tmp);  // Uzhi 16 Oct. 2017
 }
 
 
@@ -85,15 +88,13 @@ G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron( const G4VKineticNucl
 //============================================================================
 
 G4DiffractiveSplitableHadron::~G4DiffractiveSplitableHadron() {
-  //G4cout << "Destruct G4DiffractiveSplitableHadron" << Parton[0] << " " << Parton[1] << G4endl;
-  //if ( Parton[0] != NULL ) { delete Parton[0]; delete Parton[1]; }
 }
 
 
 //============================================================================
 
 void G4DiffractiveSplitableHadron::SplitUp() {
-  //G4cout << "SplitUp() IsSplit() Parton[0] " << IsSplit() << " " << Parton[0] << G4endl;
+
   if ( IsSplit() ) return;
   Splitting();
   // Split once only...
@@ -106,6 +107,9 @@ void G4DiffractiveSplitableHadron::SplitUp() {
 
   Parton[0] = new G4Parton( stringStart );
   Parton[1] = new G4Parton( stringEnd );
+
+  G4LorentzVector tmp=G4LorentzVector(0.,0.,0.,0.);            // Uzhi 16 Oct. 2017
+  Parton[0]->Set4Momentum(tmp); Parton[1]->Set4Momentum(tmp);  // Uzhi 16 Oct. 2017
 
   /*                                        // Inversion of a string
   if ( G4UniformRand() < 1.75 ) {  //0.75
@@ -148,6 +152,9 @@ G4Parton* G4DiffractiveSplitableHadron::GetNextAntiParton() {
 void G4DiffractiveSplitableHadron::SetFirstParton( G4int PDGcode ) {
   delete Parton[0];
   Parton[0] = new G4Parton( PDGcode );
+  G4LorentzVector tmp=G4LorentzVector(0.,0.,0.,0.);            // Uzhi 16 Oct. 2017
+  Parton[0]->Set4Momentum(tmp);                                // Uzhi 16 Oct. 2017
+
 }
 
 
@@ -156,6 +163,8 @@ void G4DiffractiveSplitableHadron::SetFirstParton( G4int PDGcode ) {
 void G4DiffractiveSplitableHadron::SetSecondParton( G4int PDGcode ) {
   delete Parton[1];
   Parton[1] = new G4Parton( PDGcode );
+  G4LorentzVector tmp=G4LorentzVector(0.,0.,0.,0.);            // Uzhi 16 Oct. 2017
+  Parton[1]->Set4Momentum(tmp);                                // Uzhi 16 Oct. 2017
 }
 
 
@@ -197,6 +206,7 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
     G4double SuppresUUDDSS=1.0/2.0;
     if((j1000 == j100) && (j1000 == j10)) SuppresUUDDSS=1.; 
 
+//
     const G4int maxNumberOfLoops = 1000;
     G4int loopCounter = 0;
     do

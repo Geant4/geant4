@@ -1,4 +1,4 @@
-$Id: History 100288 2016-10-17 08:45:43Z gcosmo $
+$Id: History 109866 2018-05-09 12:22:46Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,33 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B.Morgan (testem3-V10-04-06)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+29-03-18 V.Ivant (testem3-V10-04-05)
+- TestEm3.cc - small optimisation
+
+27-03-18 mma (testem3-V10-04-04)
+- remove radioactive.mac
+
+26-03-18 V.Ivant (testem3-V10-04-03)
+- DetectorConstruction - fixed initialisation
+
+23-03-18 V.Ivant (testem3-V10-04-02)
+- StepMax - use thread safe instantiation, mesenger merged with 
+    PhysicsListMessenger
+- DetectorConstruction - improved method names, not allow to clear 
+    geometry between runs
+- PhysicsList - make Opt0 default, removed local instantiation of G4Decay
+- Use MixMax default random number generator 
+
+13-03-18 mma (testem3-V10-04-01)
+- testem1.cc : remove G4UI_USE and G4VIS_USE
+
+14-12-17 V.Ivant (testem3-V10-04-00)
+- corrected TestEm3.in to optimise output
 
 14-10-16 G.Folger (testem3-V10-02-06)
 - remove direct use of theParticleIterator, use GetParticleTableIterator().

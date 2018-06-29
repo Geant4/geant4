@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pythia6Decayer.cc 98498 2016-07-20 15:39:59Z ihrivnac $
+// $Id: G4Pythia6Decayer.cc 100687 2016-10-31 11:20:33Z gcosmo $
 //
 /// \file eventgenerator/pythia/decayer6/src/G4Pythia6Decayer.cc
 /// \brief Implementation of the G4Pythia6Decayer class

@@ -50,7 +50,7 @@ class G4SolidsWorkspacePool
       // Reuse an existing workspace - or create a new one if needed.
       // This will never fail, except if system is out of resources
 
-     inline G4SolidsWorkspace* GetWorkspace() { return fMyWorkspace; } 
+     inline G4SolidsWorkspace* GetWorkspace() { return fMyWorkspace(); }
       // Give back the existing, active workspace for my thread / task
 
      void Recycle( G4SolidsWorkspace * );
@@ -71,7 +71,7 @@ class G4SolidsWorkspacePool
  private: 
      static G4SolidsWorkspacePool* thePool;
 
-     G4GEOM_DLL static G4ThreadLocal G4SolidsWorkspace* fMyWorkspace;
+     G4GEOM_DLL static G4SolidsWorkspace*& fMyWorkspace();
      // The thread's workspace - if assigned.
 };
 

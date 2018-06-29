@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 104417 2017-05-30 08:30:48Z gcosmo $
+// $Id: PhysicsList.cc 110387 2018-05-22 07:52:43Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,8 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
-#include "PhysListEmStandardSSM.hh"
+#include "PhysListEm5DStandard.hh"
+#include "PhysListEm19DStandard.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
@@ -57,10 +58,8 @@
 
 #include "G4HadronElasticPhysics.hh"
 
-#include "G4Decay.hh"
+#include "G4DecayPhysics.hh"
 #include "StepMax.hh"
-
-#include "G4LossTableManager.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
@@ -88,10 +87,12 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList(),
   SetVerboseLevel(1);
      
   // EM physics
-  fEmName = G4String("local");
-  fEmPhysicsList = new PhysListEmStandard(fEmName);
+  fEmName = G4String("emstandard_opt4");
+  fEmPhysicsList = new G4EmStandardPhysics_option4();
+
+  // Decay physics  
+  fDecayPhysics = new G4DecayPhysics(1);
   
-  G4LossTableManager::Instance();
   SetDefaultCutValue(1*mm);  
 }
 
@@ -141,35 +142,9 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   fEmPhysicsList->ConstructProcess();
+  fDecayPhysics->ConstructProcess();
   if(fHadPhysicsList) { fHadPhysicsList->ConstructProcess(); }
-  AddDecay();  
   AddStepMax();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::AddDecay()
-{
-  // Add Decay Process
-
-  G4Decay* fDecayProcess = new G4Decay();
-
-  auto particleIterator=GetParticleIterator();
-  particleIterator->reset();
-  while( (*particleIterator)() ){
-    G4ParticleDefinition* particle = particleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
-
-      pmanager ->AddProcess(fDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
-    }
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -177,7 +152,7 @@ void PhysicsList::AddDecay()
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
-  StepMax* stepMaxProcess = new StepMax();
+  StepMax* stepMaxProcess = new StepMax(fMessenger);
 
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();
@@ -185,7 +160,7 @@ void PhysicsList::AddStepMax()
     G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
+    if (stepMaxProcess->IsApplicable(*particle))
       {
         pmanager ->AddDiscreteProcess(stepMaxProcess);
       }
@@ -237,6 +212,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option4();
+
+  } else if (name == "emstandardATIMA") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEm19DStandard();
         
   } else if (name == "emstandardSS") {
 
@@ -244,11 +225,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsSS();
 
-  } else if (name == "emstandardSSM") {
+  } else if (name == "emstandard5D") {
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandardSSM();
+    fEmPhysicsList = new PhysListEm5DStandard();
 
   } else if (name == "emstandardWVI") {
 

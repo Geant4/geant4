@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 94973 2016-01-12 10:13:56Z gcosmo $
+// $Id: PhysicsList.hh 109000 2018-03-21 09:25:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +53,6 @@ public:
   void AddPhysicsList(const G4String& name);
     
   virtual void ConstructProcess();    
-  void AddDecay();
   void AddStepMax();
     
 private:
@@ -62,6 +61,7 @@ private:
 
   G4String fEmName;
   G4VPhysicsConstructor*  fEmPhysicsList;
+  G4VPhysicsConstructor*  fDecayPhysics;
   G4VPhysicsConstructor*  fHadPhysicsList;
 };
 

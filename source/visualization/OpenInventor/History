@@ -1,4 +1,4 @@
-$Id: History 103926 2017-05-03 13:43:27Z gcosmo $
+$Id: History 110811 2018-06-15 07:09:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,20 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+15 June 2018  Fred Jones (openinventor-V10-04-03)
+- Fixed compilation warnings for casts on gcc-8.1.
+
+28 May 2018  Gabriele Cosmo (openinventor-V10-04-02)
+- Fixed compilation error in SoGL2PSAction, induced after last changes in
+  visualization.
+
+26 April 2018  John Allison (openinventor-V10-04-01)
+- Fix compilation errors.
+
+25 April 2018  John Allison (openinventor-V10-04-00)
+- G4OpenInventorViewer::CompareForKernelVisit:
+  o Implement comparison for "colour by density".
 
 13 January 2017  Frederick Jones
 - G4OpenInventorXtExaminerViewer:

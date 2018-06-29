@@ -119,11 +119,8 @@
 
 #ifndef G4MTBARRIER_HH_
 #define G4MTBARRIER_HH_
-#include "G4Threading.hh"
 
-#ifdef WIN32
-#include "windefs.hh"
-#endif
+#include "G4Threading.hh"
 
 class G4MTBarrier
 {
@@ -154,11 +151,6 @@ private:
   G4Mutex m_mutex;
   G4Condition m_counterChanged;
   G4Condition m_continue;
-#if defined(WIN32)
-  CRITICAL_SECTION cs1;
-  CRITICAL_SECTION cs2;
-#endif
-
 };
 
 #endif /* G4MTBARRIER_HH_ */

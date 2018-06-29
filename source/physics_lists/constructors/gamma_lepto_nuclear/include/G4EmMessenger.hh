@@ -34,6 +34,7 @@
 // Modified:
 // 09.11.2005 V.Ivanchenko edit to provide a standard
 // 19.06.2006 V.Ivanchenko add mu-nuclear process
+// 31.01.2018 V.Grichine, activation of neutrino-electron process
 //
 //----------------------------------------------------------------------------
 //
@@ -47,6 +48,9 @@ class G4EmExtraPhysics;
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWithAString.hh"
+
+//////////////////////////////////////
 
 class G4EmMessenger: public G4UImessenger
 {
@@ -58,6 +62,7 @@ public:
 
 private:
   G4EmExtraPhysics*   theB;
+
   G4UIcmdWithABool*   theSynch;
   G4UIcmdWithABool*   theSynchAll;
   G4UIcmdWithABool*   theGN;
@@ -67,9 +72,17 @@ private:
   G4UIcmdWithABool*   theGMM;
   G4UIcmdWithABool*   thePMM;
   G4UIcmdWithABool*   thePH;
+  G4UIcmdWithABool*   theNu;
+
   G4UIcmdWithADouble* theGMM1;
   G4UIcmdWithADouble* thePMM1;
   G4UIcmdWithADouble* thePH1;
+  G4UIcmdWithADouble* theNuEleCcBF;
+  G4UIcmdWithADouble* theNuEleNcBF;
+  G4UIcmdWithADouble* theNuNucleusBF;
+
+  G4UIcmdWithAString* theNuDN;
+
   G4UIdirectory*      aDir1;
   G4UIdirectory*      aDir2;
 };

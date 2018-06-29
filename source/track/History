@@ -1,4 +1,4 @@
-$Id: History 107603 2017-11-27 07:21:59Z gcosmo $
+$Id: History 110263 2018-05-17 14:28:14Z gcosmo $
 -------------------------------------------------------------------
 
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+
+- May 17, 2018 J.Madsen (track-V10-04-00)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
 
 - November 25, 2017 V.Ivanchenko (track-V10-03-00)
 - G4VelocityTable - use G4ThreadLocalSingletone patern in order

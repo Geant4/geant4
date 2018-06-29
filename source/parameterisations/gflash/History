@@ -1,4 +1,4 @@
-$Id: History 108494 2018-02-15 15:23:15Z gcosmo $
+$Id: History 108069 2017-12-19 15:27:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-Dec 19th, 2017, G.Cosmo (gflash-V10-03-00)
------------------------
+Dec 19th, 2017, G.Cosmo (gflash-V10-04-00)
 - Fixed self-consistency in GVFlashHomoShowerTuning header (missing #include).
   Thanks to Raphael Isemann for reporting this.
 

@@ -1,4 +1,4 @@
-$Id: History 107367 2017-11-09 10:56:09Z gcosmo $
+$Id: History 109567 2018-05-02 07:04:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01 May 2018: V.Ivant (emhighenergy-V10-04-01)
+- G4eeToHadronsMultiModel - cleanup of headers
+- G4eeToHadronsModel, G4mplIonisationWithDeltaModel - minor cleanup
+
+28 Feb 2018: V.Ivant (emhighenergy-V10-04-00)
+- G4AnnihiToMuPair - H.Burkhardt added Coulomb correction to the 
+    cross section at the threshold
 
 08 Nov 2017: D.Sawkey (emhighenergy-V10-03-05)
 - G4hBremsstrahlung, G4hPairProduction - update ProcessDescription text

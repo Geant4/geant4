@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc 104015 2017-05-08 07:28:08Z gcosmo $
+// $Id: G4DAWNFILESceneHandler.cc 110513 2018-05-28 07:37:38Z gcosmo $
 //
 // Satoshi TANAKA
 // DAWNFILE scene.
@@ -174,7 +174,8 @@ void	G4DAWNFILESceneHandler::SetG4PrimFileName()
 		std::ostringstream filename; filename
 		<< fG4PrimDestDir << G4PRIM_FILE_HEADER
 		<< std::setw(4) << std::setfill('0') << i << ".prim";
-		strncpy(fG4PrimFileName,filename.str().c_str(),sizeof(fG4PrimFileName));
+		strncpy(fG4PrimFileName,filename.str().c_str(),sizeof(fG4PrimFileName)-1);
+                fG4PrimFileName[sizeof(fG4PrimFileName)-1] = '\0';
 
 		// check validity of the file name
 		std::ifstream  fin ; 

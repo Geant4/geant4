@@ -1,4 +1,4 @@
-$Id: History 107321 2017-11-08 16:31:08Z gcosmo $
+$Id: History 109314 2018-04-11 06:42:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+10-04-18 mma (testem17-V10-04-01)
+- testem17.cc : set visualisation only in interactive mode
+
+21-03-18 mma (testem17-V10-04-00)
+- testem17.cc : remove G4UI_USE and G4VIS_USE
 
 07-11-17 D.Sawkey (testem17-V10-03-00)
 - PhysicsList: fix setting emstandard; add emstandard_opt4 

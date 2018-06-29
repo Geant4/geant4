@@ -1,4 +1,4 @@
-$Id: History 100922 2016-11-03 10:47:43Z gcosmo $
+$Id: History 109859 2018-05-09 12:16:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B.Morgan (testem16-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+09-04-18 mma (testem16-V10-04-01)
+- testem16.cc : set visualisation only in interactive mode
+
+20-03-18 mma (testem16-V10-04-00)
+- testem16.cc : remove G4UI_USE and G4VIS_USE
 
 02-11-16 L.Garnier (testem16-V10-02-04)
 - remove icons.mac. Automatically include since interfaces-V10-02-07

@@ -1,4 +1,4 @@
-$Id: History 103280 2017-03-23 14:18:19Z gcosmo $
+$Id: History 110384 2018-05-22 07:50:04Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 19th, 2018  Gabriele Cosmo G03-V10-04-00
+- G03RunAction.cc: Removed vis command.
 
 March 23rd, 2017  Gabriele Cosmo G03-V10-03-00
 - Updated setup for visualization in main program.

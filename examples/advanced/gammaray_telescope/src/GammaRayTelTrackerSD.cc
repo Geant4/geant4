@@ -96,8 +96,9 @@ void GammaRayTelTrackerSD::Initialize(G4HCofThisEvent*)
 G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* )
 { 
    
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  if ((edep/keV == 0.)) return false;      
+  G4double edep = 0.;
+  edep = aStep->GetTotalEnergyDeposit();
+  if (edep == 0.) return false;      
   
   G4int StripTotal = Detector->GetNbOfTKRStrips();
   G4int TileTotal  = Detector->GetNbOfTKRTiles();  

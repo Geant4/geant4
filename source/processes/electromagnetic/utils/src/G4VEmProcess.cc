@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc 108506 2018-02-15 15:50:39Z gcosmo $
+// $Id: G4VEmProcess.cc 109178 2018-04-03 07:13:58Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -102,10 +102,10 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   startFromNull(false),
   splineFlag(true),
   isIon(false),
+  currentCouple(nullptr),
   currentModel(nullptr),
   particle(nullptr),
-  currentParticle(nullptr),
-  currentCouple(nullptr)
+  currentParticle(nullptr)
 {
   theParameters = G4EmParameters::Instance();
   SetVerboseLevel(1);

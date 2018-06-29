@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.hh 103661 2017-04-20 14:57:11Z gcosmo $
+// $Id: G4strstreambuf.hh 110251 2018-05-17 14:09:28Z gcosmo $
 //
 // ====================================================================
 //
@@ -43,10 +43,10 @@ class G4strstreambuf;
 
 #ifdef G4MULTITHREADED
 
-  extern G4GLOB_DLL G4ThreadLocal G4strstreambuf *G4coutbuf_p;
-  extern G4GLOB_DLL G4ThreadLocal G4strstreambuf *G4cerrbuf_p;
-  #define G4coutbuf (*G4coutbuf_p)
-  #define G4cerrbuf (*G4cerrbuf_p)
+  extern G4GLOB_DLL G4strstreambuf*& _G4coutbuf_p();
+  extern G4GLOB_DLL G4strstreambuf*& _G4cerrbuf_p();
+  #define G4coutbuf (*_G4coutbuf_p())
+  #define G4cerrbuf (*_G4cerrbuf_p())
 
 #else  // Sequential
 

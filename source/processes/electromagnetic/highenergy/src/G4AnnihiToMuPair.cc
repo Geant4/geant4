@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.cc 97391 2016-06-02 10:08:45Z gcosmo $
+// $Id: G4AnnihiToMuPair.cc 108750 2018-03-02 15:26:50Z gcosmo $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, November 2002
@@ -35,6 +35,7 @@
 // 27.01.03 : first implementation (hbu)
 // 04.02.03 : cosmetic simplifications (mma)
 // 25.10.04 : migrade to new interfaces of ParticleChange (vi)
+// 28.02.18 : cross section now including SSS threshold factor
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -110,15 +111,18 @@ G4double G4AnnihiToMuPair::ComputeCrossSectionPerAtom(G4double Epos, G4double Z)
 // It gives a good description from threshold to 1000 GeV
 {
   static const G4double Mmuon = G4MuonPlus::MuonPlus()->GetPDGMass();
-  static const G4double Rmuon = elm_coupling/Mmuon; //classical particle radius
-  static const G4double Sig0  = pi*Rmuon*Rmuon/3.;  //constant in crossSection
+  static const G4double Rmuon = CLHEP::elm_coupling/Mmuon; //classical particle radius
+  static const G4double Sig0  = CLHEP::pi*Rmuon*Rmuon/3.;  //constant in crossSection
+  static const G4double pia = CLHEP::pi * CLHEP::fine_structure_const; // pi * alphaQED
 
   G4double CrossSection = 0.;
   if (Epos < LowestEnergyLimit) return CrossSection;
    
   G4double xi = LowestEnergyLimit/Epos;
-  G4double SigmaEl = Sig0*xi*(1.+xi/2.)*sqrt(1.-xi); // per electron
-  CrossSection = SigmaEl*Z;         // number of electrons per atom
+  G4double piaxi = pia * sqrt(xi);
+  G4double SigmaEl = Sig0 * xi * (1.+xi/2.) * piaxi;
+  if( Epos>LowestEnergyLimit+1.e-5 ) SigmaEl /= (1.-std::exp( -piaxi/std::sqrt(1-xi) ));
+  CrossSection = SigmaEl*Z; // SigmaEl per electron * number of electrons per atom
   return CrossSection;
 }
 

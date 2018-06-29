@@ -14,6 +14,38 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+8 June 2018 J. Yarba (hadr-man-V10-04-04)
+---------------------------------------------------
+- G4HadronicProcess - use correct return type when calling CheckResult
+  (from PostStepDoIt); otherwise the value of pointer 'result' does not
+  get properly reset to NULL in case a non-conservation is detected,
+  thus "bad" interaction does not get re-sampled
+
+31 May 2017 V. Ivanchenko (hadr-man-V10-04-03)
+---------------------------------------------------
+- G4HadronicProcess, G4HadronInelasticProcess - added keyword 
+    "override", cleanup cross section scale factor and weights
+- G4HadronicProcessStore - use "nullptr", added flag buildXSTable
+    and get/set methods
+
+30 May 2017 V. Ivanchenko (hadr-man-V10-04-02)
+---------------------------------------------------
+- G4HadronicProcess, G4VLeadingParticleBiasing, G4HadLeadBias
+    fixed compilation warning of CMSSW at gcc7.0.0
+
+29 May 2017 V. Ivanchenko (hadr-man-V10-04-01)
+---------------------------------------------------
+- G4HadronicProcess - use const pointers and "nullptr" for
+    G4Material and G4Element, use ComputeCrossSection(...) method,
+    remove creation of new materials in run time inside
+    GetElementCrossSection(..) method, all materials should
+    be created in user code
+
+09 May 2018  Alberto Ribon (hadr-man-V10-04-00)
+---------------------------------------------------
+- G4HadronicProcess : fixed warnings in gcc 8 regarding catching 
+    polymorphic type by value, instead of by reference.
+
 12 September 2017  Krzysztof Genser (hadr-man-V10-03-06)
 ---------------------------------------------------
 - G4HadronicProcessType.hh added fMuAtomicCapture

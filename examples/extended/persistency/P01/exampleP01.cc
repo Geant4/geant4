@@ -27,11 +27,13 @@
 /// \brief Main program of the persistency/P01 example
 //
 //
-// $Id: exampleP01.cc 82130 2014-06-11 09:26:44Z gcosmo $
+// $Id: exampleP01.cc 110382 2018-05-22 07:48:02Z gcosmo $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4Types.hh"
 
 #include "ExP01DetectorConstruction.hh"
 #include "ExP01PrimaryGeneratorAction.hh"
@@ -45,17 +47,18 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
+
+  // Instantiate G4UIExecutive if interactive mode
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new ExP01SteppingVerbose);
@@ -70,12 +73,10 @@ int main(int argc,char** argv) {
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
   runManager->SetUserInitialization(physicsList);
   
-#ifdef G4VIS_USE
-  // Visualization, if you choose to have it!
+  // Visualization
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
-   
+
   // UserAction classes
   runManager->SetUserAction(new ExP01PrimaryGeneratorAction(ExP01detector));
   runManager->SetUserAction(new ExP01RunAction);  
@@ -88,17 +89,12 @@ int main(int argc,char** argv) {
   //get the pointer to the User Interface manager 
   G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
-  if(argc==1)
+  if(ui)
   // Define (G)UI terminal for interactive mode  
   { 
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-    UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
+    UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();
     delete ui;
-#endif
   }
   else
   // Batch mode
@@ -108,9 +104,7 @@ int main(int argc,char** argv) {
     UImanager->ApplyCommand(command+fileName);
   }
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
 
   delete runManager;
 

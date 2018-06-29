@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc 99977 2016-10-13 07:26:42Z gcosmo $
+// $Id: G4HadronInelasticQBBC.cc 110587 2018-05-31 12:05:13Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,7 +49,7 @@
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4BGGPionInelasticXS.hh"
 
-#include "G4NeutronInelasticXS.hh"
+#include "G4ParticleInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
 
 #include "G4CrossSectionInelastic.hh"
@@ -79,8 +79,8 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronInelasticQBBC);
 
-G4ThreadLocal G4ComponentAntiNuclNuclearXS* G4HadronInelasticQBBC::theAntiNuclXS = nullptr;
-G4ThreadLocal G4ComponentGGHadronNucleusXsc* G4HadronInelasticQBBC::theKaonXS = nullptr;
+G4ThreadLocal std::unique_ptr<G4ComponentAntiNuclNuclearXS> G4HadronInelasticQBBC::theAntiNuclXS;
+G4ThreadLocal std::unique_ptr<G4ComponentGGHadronNucleusXsc> G4HadronInelasticQBBC::theKaonXS;
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver) 
   : G4VHadronPhysics("hInelasticQBBC"),verbose(ver)
@@ -94,10 +94,7 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String&, G4int ver,
 {}
 
 G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
-{
-  delete theAntiNuclXS; theAntiNuclXS=nullptr;
-  delete theKaonXS;     theKaonXS=nullptr;
-}
+{}
 
 void G4HadronInelasticQBBC::ConstructProcess()
 {
@@ -139,11 +136,11 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4HadronicInteraction* theBIC = NewModel(bic,0.0,1.5*GeV);
 
   // cross sections
-  theAntiNuclXS = new G4ComponentAntiNuclNuclearXS();
+  theAntiNuclXS.reset(new G4ComponentAntiNuclNuclearXS());
   G4CrossSectionInelastic* anucxs = 
-    new G4CrossSectionInelastic(theAntiNuclXS);
-  theKaonXS = new G4ComponentGGHadronNucleusXsc();
-  G4CrossSectionInelastic* kaonxs = new G4CrossSectionInelastic(theKaonXS);
+    new G4CrossSectionInelastic(theAntiNuclXS.get());
+  theKaonXS.reset(new G4ComponentGGHadronNucleusXsc());
+  G4CrossSectionInelastic* kaonxs = new G4CrossSectionInelastic(theKaonXS.get());
 
   // loop over particles
   auto myParticleIterator=GetParticleIterator();
@@ -160,30 +157,26 @@ void G4HadronInelasticQBBC::ConstructProcess()
     //
     if(pname == "proton") {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
-      hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
+      hp->AddDataSet(new G4ParticleInelasticXS(particle));
       
-      //hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
       hp->RegisterMe(theBERT);
       hp->RegisterMe(theBIC);
 
     } else if(pname == "neutron") {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
-      hp->AddDataSet((G4NeutronInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronInelasticXS::Default_Name()));
-      //hp->RegisterMe(theQGSP);
+      hp->AddDataSet(new G4ParticleInelasticXS(particle));
       hp->RegisterMe(theFTFP);
        
       G4HadronicProcess* capture = FindCaptureProcess();
-      capture->AddDataSet((G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name()));
+      capture->RegisterMe(new G4NeutronRadCapture());
+      capture->AddDataSet(new G4NeutronCaptureXS());
       hp->RegisterMe(theBERT);
       hp->RegisterMe(theBIC);
-      capture->RegisterMe(new G4NeutronRadCapture());
 
     } else if(pname == "pi-" || pname == "pi+") {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
       hp->AddDataSet(new G4BGGPionInelasticXS(particle));
-      //hp->AddDataSet(new G4CrossSectionPairGG((G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV));
-      //hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
       hp->RegisterMe(theBERT1);
 
@@ -235,7 +228,6 @@ void G4HadronInelasticQBBC::ConstructProcess()
       G4HadronicProcess* hp = FindInelasticProcess(particle);
       hp->RegisterMe(theFTFP2);
       hp->AddDataSet(anucxs);
-
     } 
   }
 }

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -138,53 +138,6 @@
 
 
 
-Visualization Manager instantiating with verbosity "warnings (3)"...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-ASCIITree (ATree)
-DAWNFILE (DAWNFILE)
-G4HepRep (HepRepXML)
-G4HepRepFile (HepRepFile)
-RayTracer (RayTracer)
-VRML1FILE (VRML1FILE)
-VRML2FILE (VRML2FILE)
-gMocrenFile (gMocrenFile)
-OpenGLImmediateQt (OGLIQt, OGLI)
-OpenGLStoredQt (OGLSQt, OGL, OGLS)
-OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
-OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
-OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
-RayTracerX (RayTracerX)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByAttribute
-  drawByCharge
-  drawByOriginVolume
-  drawByParticleID
-  drawByEncounteredVolume
-
-Registered filter factories:
-  attributeFilter
-  chargeFilter
-  originVolumeFilter
-  particleFilter
-  encounteredVolumeFilter
-
-You have successfully registered the following user vis actions.
-Run Duration User Vis Actions: none
-End of Event User Vis Actions: none
-End of Run User Vis Actions: none
-
-Some /vis commands (optionally) take a string to specify colour.
-"/vis/list" to see available colours.
 /control/cout/ignoreThreadsExcept 0
 /run/verbose 2
 #
@@ -225,7 +178,7 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 10 GeV, 28 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       10 GeV
+        BetheHeitler :  Emin=        0 eV    Emax=       10 GeV   AngularGenUrban
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
@@ -337,44 +290,44 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 --> Event 0 starts.
 --> Event 10000 starts.
 
---->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52676 Ne-_cav= 2836 doseCavity/Ebeam= 0.92675  (100*(ratio-1) = -7.32527 %)
+--->evntNb= 10000 Nwall= 9999 Ncav= 2 Ic/Iw= 1.05363 Ne-_cav= 2842 doseCavity/Ebeam= 1.08386  (100*(ratio-1) = 8.38553 %)
 --> Event 20000 starts.
 
---->evntNb= 20000 Nwall= 19998 Ncav= 3 Ic/Iw= 0.79022 Ne-_cav= 5643 doseCavity/Ebeam= 1.01684  (100*(ratio-1) = 1.68352 %)
+--->evntNb= 20000 Nwall= 19996 Ncav= 5 Ic/Iw= 1.31717 Ne-_cav= 5575 doseCavity/Ebeam= 1.00544  (100*(ratio-1) = 0.54442 %)
 --> Event 30000 starts.
 
---->evntNb= 30000 Nwall= 29998 Ncav= 3 Ic/Iw= 0.52680 Ne-_cav= 8363 doseCavity/Ebeam= 0.98685  (100*(ratio-1) = -1.31497 %)
+--->evntNb= 30000 Nwall= 29994 Ncav= 7 Ic/Iw= 1.22936 Ne-_cav= 8451 doseCavity/Ebeam= 1.14351  (100*(ratio-1) = 14.35110 %)
  Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=5.01s Real=5.56s Sys=0s
+  User=3.710000s Real=3.717123s Sys=0.000000s
 
- Process calls frequency --->  msc= 600730  eIoni= 602433  Transportation= 22326
+ Process calls frequency --->  msc= 603705  eIoni= 602015  Transportation= 22547
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 11161	 Energy = 7.159 GeV
-      Exit  --> nbParticles = 11165	 Energy = 7.159 GeV
+      Enter --> nbParticles = 11274	 Energy = 7.150 GeV
+      Exit  --> nbParticles = 11273	 Energy = 7.149 GeV
 
- beamFluence in wall = 39992	 in cavity = 8	 Icav/Iwall = 1.05373	 energyFluence = 37.96063 MeV*cm2/mg
+ beamFluence in wall = 39993	 in cavity = 7	 Icav/Iwall = 0.92199	 energyFluence = 37.96063 MeV*cm2/mg
 
- Total edep in cavity = 7.82354 MeV +- 3.48496 %
- Total dose in cavity = 39.11769 MeV*cm2/mg +- 3.48496 %
+ Total edep in cavity = 8.46852 MeV +- 5.31993 %
+ Total dose in cavity = 42.34262 MeV*cm2/mg +- 5.31993 %
 
- DoseCavity/EnergyFluence = 1.03048 +- 0.03591
+ DoseCavity/EnergyFluence = 1.11544 +- 0.05934
 
- Total charged trackLength in cavity = 36.2086 m     (mean value = 3.2442 mm )
+ Total charged trackLength in cavity = 35.7571 m     (mean value = 3.1716 mm )
 
- StepSize of ch. tracks in wall   = 146.7060 um  +- 128.6618 um 	 (nbSteps/track = 30.0231)
- StepSize of ch. tracks in cavity = 1.4598 mm  +- 2.2814 mm 	 (nbSteps/track = 2.2224)
+ StepSize of ch. tracks in wall   = 146.5110 um  +- 128.6699 um 	 (nbSteps/track = 30.0821)
+ StepSize of ch. tracks in cavity = 1.4194 mm  +- 1.8534 mm 	 (nbSteps/track = 2.2345)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 93729, 438395792
+ Current couple of seeds = 1925133009, 335529427
 ----------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 93729, 438395792
+ Current couple of seeds = 1925133009, 335529427
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

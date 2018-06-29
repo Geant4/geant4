@@ -14,6 +14,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08-05-18 Ben Morgan (activation-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+06-04-18 mma (activation-V10-04-01)
+- Activation.cc : set visualisation only in interactive mode
+
+15-03-18 mma (activation-V10-04-00)
+- Activation.cc : remove G4UI_USE and G4VIS_USE
+
 28-11-17 Ivana Hrivnacova (activation-V10-03-05)
 - Fixed Doxygen warnings
 

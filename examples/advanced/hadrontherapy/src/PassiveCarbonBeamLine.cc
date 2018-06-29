@@ -261,7 +261,7 @@ void PassiveCarbonBeamLine::ConstructPassiveCarbonBeamLine()
     
     
     // The treatment room is invisible in the Visualisation
-    logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
+    logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::GetInvisible());
     
     // Components of the Passive Carbon Beam Line
     HadrontherapyBeamLineSupport();
@@ -483,7 +483,7 @@ void PassiveCarbonBeamLine::HadrontherapyRippleFilter()
                                           2,
                                           true);
     
-    LogicRippleFilter -> SetVisAttributes(G4VisAttributes::Invisible);
+    LogicRippleFilter -> SetVisAttributes(G4VisAttributes::GetInvisible());
     
     SolidRippleFilterBase = new G4Box("RippleFilterBase",
                                       RF_x/2,

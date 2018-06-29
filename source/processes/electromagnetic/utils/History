@@ -1,4 +1,4 @@
-$Id: History 108506 2018-02-15 15:50:39Z gcosmo $
+$Id: History 110572 2018-05-30 13:08:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,44 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14 December 17: V.Ivant (emutils-V10-03-32)
+30 May 18: V.Ivant (emutils-V10-04-11)
+30 May 18: V.Ivant (emutils-V10-04-10)
+- G4LossTableManager - moved inline run time method to source
+- G4VMscModel, G4VEmModel, G4EmCorrections - minor cleanup
+
+22 May 18: V.Ivant (emutils-V10-04-09)
+- G4VEmAngularDistribution - added SamplePairDirections method
+    for sampling of e+e- pair production
+
+18 May 18: V.Ivant (emutils-V10-04-08)
+- G4EmParameters, G4EmParametersMessenger - added extra DNA UI directory
+    and DNA comand, improve dump of EM parameters
+- G4DNAModelSubType - new enumerator
+- G4EmCorrections - minor optimisation
+
+01 April 18: V.Ivant (emutils-V10-04-07)
+- G4VEmProcess - moved few private members to protected
+
+28 March 18: V.Ivant (emutils-V10-04-06)
+- G4EmParameters, G4EmParametersMessenger - added MscEnergyLimit()
+    and corresponding UI command (needed for bug fix 2045) 
+
+21 March 18: V.Ivant (emutils-V10-04-05)
+- G4EmParameters, G4EmParametersMessenger - (I.Semeniouk) added 5D
+    gamma conversion model parameters
+
+09 February 18: V.Ivant (emutils-V10-04-04)
+09 February 18: V.Ivant (emutils-V10-04-03)
+- G4EmCorrections, G4VEmModel, G4ionEffectiveCharge, G4VAtomDeexcitation
+    do not use static class members in inline methods, long methods are moved 
+    to the source, add thread safe definition of model index for de-excitation
+
+02 February 18: M.Novak (emutils-V10-04-02)
+- G4EmCalculator - fixed GetCrossSectionPerVolume method in case of multiple 
+    scattering process: the proper value of the 1st transport cross section is 
+    retrived now
+
+14 December 17: V.Ivant (emutils-V10-04-01)
 - G4EmParametersMessenger - use G4Exception for warnings instead 
     of G4cout, review G4State for UI commands and make a signal to
     the RunManager about modification of physics if a command
@@ -26,7 +63,7 @@ committal in the CVS repository !
     same default values for few internal members (this is a 
     cleanup, which does not affect results)
 
-13 December 17: V.Ivant
+13 December 17: V.Ivant (emutils-V10-04-00)
 - G4EmParameters, G4EmParametersMessenger - fixed printout format
     and add lock and protection in commands defining physics
     pre region

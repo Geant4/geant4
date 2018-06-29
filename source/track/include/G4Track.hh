@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh 94983 2016-01-13 11:02:33Z gcosmo $
+// $Id: G4Track.hh 110263 2018-05-17 14:28:14Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -321,7 +321,7 @@ public: // With description
    mutable G4double                  prev_momentum;
 
    G4bool          is_OpticalPhoton; 
-   static G4ThreadLocal G4VelocityTable*  velTable;
+   static G4VelocityTable*&  velTable();
  
    G4bool          useGivenVelocity;
       // do not calclulate velocity and just use current fVelocity

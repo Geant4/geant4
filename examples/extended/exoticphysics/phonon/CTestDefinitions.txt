@@ -13,6 +13,8 @@ if(GEANT4_BUILD_MULTITHREADED)
     set(_MTsuffix "-MT")
   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
     set(_MTsuffix "-clang-MT")
+  elseif(MSVC)
+    set(_MTsuffix "-win-MT") 
   endif()
 endif()
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4BetheBlochModel.hh 108810 2018-03-08 15:04:30Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -175,7 +175,7 @@ inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
   if(particle != p) {
     particle = p;
     if(p->GetBaryonNumber() > 3 || p->GetPDGCharge() > CLHEP::eplus) 
-      { isIon = true; }
+      { isIon = true; } 
     SetupParameters();
   }
 }
@@ -184,9 +184,7 @@ inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 
 inline void G4BetheBlochModel::SetGenericIon(const G4ParticleDefinition* p)
 {
-  if(p && particle != p) { 
-    if(p->GetParticleName() == "GenericIon") { isIon = true; }
-  }
+  if(p && p->GetParticleName() == "GenericIon") { isIon = true; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

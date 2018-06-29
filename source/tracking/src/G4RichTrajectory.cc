@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.cc 91269 2015-06-29 07:05:59Z gcosmo $
+// $Id: G4RichTrajectory.cc 110262 2018-05-17 14:25:55Z gcosmo $
 //
 // ---------------------------------------------------------------
 //
@@ -58,7 +58,11 @@
 
 #include <sstream>
 
-G4ThreadLocal G4Allocator<G4RichTrajectory> *aRichTrajectoryAllocator = 0;
+G4Allocator<G4RichTrajectory>*& aRichTrajectoryAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4RichTrajectory>* _instance = nullptr;
+    return _instance;
+}
 
 G4RichTrajectory::G4RichTrajectory():
   fpRichPointsContainer(0),

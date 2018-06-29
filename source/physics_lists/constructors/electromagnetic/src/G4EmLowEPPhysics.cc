@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLowEPPhysics.cc 107183 2017-11-03 14:57:23Z gcosmo $
+// $Id: G4EmLowEPPhysics.cc 109526 2018-04-30 07:11:52Z gcosmo $
 
 #include "G4EmLowEPPhysics.hh"
 #include "G4ParticleDefinition.hh"
@@ -56,6 +56,7 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4LivermoreBremsstrahlungModel.hh"
 #include "G4Generator2BS.hh"
+#include "G4BetheHeitler5DModel.hh"
 
 // e+
 #include "G4eplusAnnihilation.hh"
@@ -78,6 +79,7 @@
 #include "G4ionIonisation.hh"
 #include "G4alphaIonisation.hh"
 #include "G4IonParametrisedLossModel.hh"
+#include "G4LindhardSorensenIonModel.hh"
 #include "G4NuclearStopping.hh"
 
 // msc models
@@ -131,11 +133,9 @@ G4EmLowEPPhysics::G4EmLowEPPhysics(G4int ver, const G4String&)
   param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(100*eV);
-  param->SetMaxEnergy(1*TeV);
   param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
-  param->SetLateralDisplacementAlg96(false);
   param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
@@ -230,7 +230,7 @@ void G4EmLowEPPhysics::ConstructProcess()
 
       // gamma conversion - Livermore model below 80 GeV
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      theGammaConversion->SetEmModel(new G4LivermoreGammaConversionModel());
+      theGammaConversion->SetEmModel(new G4BetheHeitler5DModel());
       ph->RegisterProcess(theGammaConversion, particle);
 
       // default Rayleigh scattering is Livermore
@@ -310,7 +310,12 @@ void G4EmLowEPPhysics::ConstructProcess()
     } else if (particleName == "GenericIon") {
       
       G4ionIonisation* ionIoni = new G4ionIonisation();
-      ionIoni->SetEmModel(new G4IonParametrisedLossModel());
+      G4VEmModel* mod1 = new G4IonParametrisedLossModel();
+      G4VEmModel* mod2 = new G4LindhardSorensenIonModel();
+      mod1->SetHighEnergyLimit(20*MeV);
+      mod2->SetLowEnergyLimit(20*MeV);
+      ionIoni->SetEmModel(mod1);
+      ionIoni->SetEmModel(mod2);
       ionIoni->SetStepFunction(0.1, 1*um);
 
       ph->RegisterProcess(hmsc, particle);

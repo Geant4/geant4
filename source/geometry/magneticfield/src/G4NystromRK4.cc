@@ -24,11 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4NystromRK4.cc 107821 2017-12-05 14:14:47Z gunter $
+// $Id: G4NystromRK4.cc 110753 2018-06-12 15:44:03Z gcosmo $
 //
 // History:
 // - Created:      I.Gavrilenko    15.05.2009   (as G4AtlasRK4)
-// - Adaptations:  J. Apostolakis  May-Nov 2009
+// - Adaptations:  J.Apostolakis  May-Nov 2009
 // -------------------------------------------------------------------
 
 #include <iostream>
@@ -64,13 +64,14 @@ G4NystromRK4::~G4NystromRK4()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // Integration in one  step 
-/////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 void 
-G4NystromRK4::Stepper
-(const G4double P[],const G4double dPdS[],G4double Step,G4double Po[],G4double Err[])
+G4NystromRK4::Stepper (const G4double P[],
+                       const G4double dPdS[],
+                             G4double Step, G4double Po[], G4double Err[])
 {
   const G4double perMillion = 1.0e-6;
   G4double R[4] = {   P[0],   P[1] ,    P[2],  P[7] };   // x, y, z, t
@@ -92,7 +93,8 @@ G4NystromRK4::Stepper
   // - Quick check momentum magnitude (squared) against previous value
   G4double newmom2 = (P[3]*P[3]+P[4]*P[4]+P[5]*P[5]); 
   G4double oldmom2 = m_mom * m_mom;
-  if( std::fabs(newmom2 - oldmom2) > perMillion * oldmom2 ) {
+  if( std::fabs(newmom2 - oldmom2) > perMillion * oldmom2 )
+  {
      m_mom   = std::sqrt(newmom2) ;
      m_imom  = 1./m_mom;
      m_cof   = m_fEq->FCof()*m_imom;
@@ -178,9 +180,9 @@ G4NystromRK4::Stepper
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // Estimate the maximum distance from the curve to the chord
-/////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 G4double 
 G4NystromRK4::DistChord() const 
@@ -193,7 +195,8 @@ G4NystromRK4::DistChord() const
   G4double dz = m_mPoint[2]-m_iPoint[2];
   G4double d2 = (ax*ax+ay*ay+az*az)    ; 
 
-  if(d2!=0.) {
+  if(d2!=0.)
+  {
     G4double ds = (ax*dx+ay*dy+az*dz)/d2;
     dx         -= (ds*ax)               ;
     dy         -= (ds*ay)               ;
@@ -202,9 +205,9 @@ G4NystromRK4::DistChord() const
   return std::sqrt(dx*dx+dy*dy+dz*dz);
 }
 
-/////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // Derivatives calculation - caching the momentum value
-/////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 void 
 G4NystromRK4::ComputeRightHandSide(const G4double P[],G4double dPdS[])
@@ -236,12 +239,15 @@ G4NystromRK4::CheckFieldPosition( const G4double Position[3],
   G4double dy = Position[1] - lastPosition[1];
   G4double dz = Position[2] - lastPosition[2];
   G4double distMag2 = dx*dx+dy*dy+dz*dz;
-  if( distMag2 > m_magdistance2) {
+  if( distMag2 > m_magdistance2)
+  {
      const G4double allowedDist = std::sqrt( m_magdistance2 );
      G4double dist= std::sqrt( distMag2 );
-     G4cerr << " NystromRK4::Stepper> ERROR> Moved from correct field position by "
-               << dist <<  "( larger than allowed = " << allowedDist << " ) "
-               << G4endl;
+     std::ostringstream message;
+     message << "Moved from correct field position by " << dist
+             << "( larger than allowed = " << allowedDist << " ) ";
+     G4Exception("G4NystromRK4::CheckFieldPosition()",
+                 "GeomField1001", JustWarning, message);
      ok= false;
   }
   return ok;
@@ -256,16 +262,22 @@ G4bool G4NystromRK4::CheckCachedMomemtum( const G4double PosMom[6],
 {
   constexpr G4double perThousand = 1.0e-3;
   G4bool ok= true;
-  G4double new_mom2= (PosMom[3]*PosMom[3]+PosMom[4]*PosMom[4]+PosMom[5]*PosMom[5]);
+  G4double new_mom2= (PosMom[3]*PosMom[3]
+                     +PosMom[4]*PosMom[4]
+                     +PosMom[5]*PosMom[5]);
   G4double new_mom=  std::sqrt(new_mom2); 
-  if( std::fabs(new_mom - savedMom ) > perThousand * savedMom ) {
-     G4cerr << " Nystrom::Stepper WARNING: momentum magnitude is invalid / has changed "
-            << G4endl
-            << " new value    (p-mag) = "   << new_mom << G4endl
-            << " cached value (p-mag) = "  << savedMom   << G4endl;
-     if( savedMom > 0.0 ) {
-        G4cerr << " ratio  (new/old) = " << new_mom / savedMom << G4endl;
+  if( std::fabs(new_mom - savedMom ) > perThousand * savedMom )
+  {
+     std::ostringstream message;
+     message << "Momentum magnitude is invalid / has changed !" << G4endl
+             << " new value    (p-mag) = "  << new_mom << G4endl
+             << " cached value (p-mag) = "  << savedMom;
+     if( savedMom > 0.0 )
+     {
+       message << "; ratio (new/old) = " << new_mom / savedMom;
      }
+     G4Exception("G4NystromRK4::CheckCachedMomemtum()",
+                 "GeomField1001", JustWarning, message);
      ok= false;
   }
   return ok;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc 104456 2017-05-31 15:51:40Z gcosmo $
+// $Id: G4eBremsstrahlungRelModel.cc 108737 2018-03-02 13:49:56Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -76,10 +76,10 @@
 
 const G4double 
 G4eBremsstrahlungRelModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
-				   0.5917, 0.7628, 0.8983, 0.9801 };
+                                   0.5917, 0.7628, 0.8983, 0.9801 };
 const G4double 
 G4eBremsstrahlungRelModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
-				   0.1813, 0.1569, 0.1112, 0.0506 };
+                                   0.1813, 0.1569, 0.1112, 0.0506 };
 const G4double 
 G4eBremsstrahlungRelModel::Fel_light[]  = {0., 5.31  , 4.79  , 4.74 ,  4.71};
 const G4double 
@@ -107,7 +107,6 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(
   nist = G4NistManager::Instance();  
 
   SetLPMFlag(true);
-  //SetAngularDistribution(new G4ModifiedTsai());
   SetAngularDistribution(new G4DipBustGenerator());
 
   particleMass = kinEnergy = totalEnergy = z13 = z23 = lnZ = Fel 
@@ -133,25 +132,18 @@ void G4eBremsstrahlungRelModel::InitialiseConstants()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eBremsstrahlungRelModel::~G4eBremsstrahlungRelModel()
-{
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4eBremsstrahlungRelModel::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
   particleMass = p->GetPDGMass();
-  if(p == G4Electron::Electron()) { isElectron = true; }
-  else                            { isElectron = false;}
+  isElectron = (p == G4Electron::Electron()) ? true : false; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
-						 const G4Material* mat, 
-						 G4double kineticEnergy)
+                                                 const G4Material* mat, 
+                                                 G4double kineticEnergy)
 {
   densityFactor = mat->GetElectronDensity()*fMigdalConstant;
   lpmEnergy = mat->GetRadlen()*fLPMconstant;
@@ -172,10 +164,37 @@ void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
   kp=sqrt(densityCorr);    
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4eBremsstrahlungRelModel::SetCurrentElement(G4int Z)
+{
+  if(Z != currentZ) {
+    currentZ = Z;
+
+    z13 = nist->GetZ13(Z);
+    z23 = z13*z13;
+    lnZ = nist->GetLOGZ(Z);
+
+    if (Z <= 4) {
+      Fel = Fel_light[Z];  
+      Finel = Finel_light[Z] ; 
+    }
+    else {
+      G4double lnzt = lnZ/3.;
+      Fel = facFel - lnzt;
+      Finel = facFinel - 2*lnzt;
+    }
+
+    fCoulomb = GetCurrentElement()->GetfCoulomb();
+    G4double xz = 1.0/(G4double)Z;
+    fMax = Fel-fCoulomb + Finel*xz  + (1. + xz)/12.;
+  }
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
-					   const G4DataVector& cuts)
+                                           const G4DataVector& cuts)
 {
   if(p) { SetParticle(p); }
 
@@ -195,7 +214,7 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eBremsstrahlungRelModel::InitialiseLocal(const G4ParticleDefinition*,
-						G4VEmModel* masterModel)
+                                                G4VEmModel* masterModel)
 {
   if(LowEnergyLimit() < HighEnergyLimit()) { 
     SetElementSelectors(masterModel->GetElementSelectors());
@@ -206,8 +225,8 @@ void G4eBremsstrahlungRelModel::InitialiseLocal(const G4ParticleDefinition*,
 
 G4double 
 G4eBremsstrahlungRelModel::MinPrimaryEnergy(const G4Material*,
-					    const G4ParticleDefinition*,
-					    G4double cut)
+                                            const G4ParticleDefinition*,
+                                            G4double cut)
 {
   return std::max(lowestKinEnergy, cut);
 }
@@ -215,7 +234,7 @@ G4eBremsstrahlungRelModel::MinPrimaryEnergy(const G4Material*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(
-					     const G4Material* material,
+                                             const G4Material* material,
                                              const G4ParticleDefinition* p,
                                                    G4double kineticEnergy,
                                                    G4double cutEnergy)
@@ -268,9 +287,9 @@ G4double G4eBremsstrahlungRelModel::ComputeBremLoss(G4double cut)
       G4double eg = (e0 + xgi[i]*delta)*totalEnergy;
 
       if(totalEnergy > energyThresholdLPM) {
-	xs = ComputeRelDXSectionPerAtom(eg);
+        xs = ComputeRelDXSectionPerAtom(eg);
       } else {
-	xs = ComputeDXSectionPerAtom(eg);
+        xs = ComputeDXSectionPerAtom(eg);
       }
       loss += wgi[i]*xs/(1.0 + densityCorr/(eg*eg));
     }
@@ -286,10 +305,10 @@ G4double G4eBremsstrahlungRelModel::ComputeBremLoss(G4double cut)
 
 G4double G4eBremsstrahlungRelModel::ComputeCrossSectionPerAtom(
                                               const G4ParticleDefinition* p,
-					      G4double kineticEnergy, 
-					      G4double Z,   G4double,
-					      G4double cutEnergy, 
-					      G4double maxEnergy)
+                                              G4double kineticEnergy, 
+                                              G4double Z,   G4double,
+                                              G4double cutEnergy, 
+                                              G4double maxEnergy)
 {
   if(!particle) { SetParticle(p); }
   if(kineticEnergy < LowEnergyLimit()) { return 0.0; }
@@ -335,9 +354,9 @@ G4double G4eBremsstrahlungRelModel::ComputeXSectionPerAtom(G4double cut)
       G4double eg = G4Exp(e0 + xgi[i]*delta)*totalEnergy;
 
       if(totalEnergy > energyThresholdLPM) {
-	xs = ComputeRelDXSectionPerAtom(eg);
+        xs = ComputeRelDXSectionPerAtom(eg);
       } else {
-	xs = ComputeDXSectionPerAtom(eg);
+        xs = ComputeDXSectionPerAtom(eg);
       }
       cross += wgi[i]*xs/(1.0 + densityCorr/(eg*eg));
     }
@@ -400,7 +419,7 @@ void  G4eBremsstrahlungRelModel::CalcLPMFunctions(G4double k)
     // intermediate suppression
     // using eq.77 approxim. valid s<2.      
     phiLPM = 1.-G4Exp(-6.*s0*(1.+(3.-pi)*s0)
-		+s3/(0.623+0.795*s0+0.658*s2));
+                +s3/(0.623+0.795*s0+0.658*s2));
     if (s0<0.415827397755) {
       // using eq.77 approxim. valid 0.07<s<2
       G4double psiLPM = 1-G4Exp(-4*s0-8*s2/(1+3.936*s0+4.97*s2-0.05*s3+7.50*s4));
@@ -409,7 +428,7 @@ void  G4eBremsstrahlungRelModel::CalcLPMFunctions(G4double k)
     else {
       // using alternative parametrisiation
       G4double pre = -0.16072300849123999 + s0*3.7550300067531581 + s2*-1.7981383069010097 
-	+ s3*0.67282686077812381 + s4*-0.1207722909879257;
+        + s3*0.67282686077812381 + s4*-0.1207722909879257;
       gLPM = tanh(pre);
     }
   }
@@ -503,11 +522,11 @@ G4double G4eBremsstrahlungRelModel::ComputeDXSectionPerAtom(G4double gammaEnergy
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eBremsstrahlungRelModel::SampleSecondaries(
-				      std::vector<G4DynamicParticle*>* vdp, 
-				      const G4MaterialCutsCouple* couple,
-				      const G4DynamicParticle* dp,
-				      G4double cutEnergy,
-				      G4double maxEnergy)
+                                      std::vector<G4DynamicParticle*>* vdp, 
+                                      const G4MaterialCutsCouple* couple,
+                                      const G4DynamicParticle* dp,
+                                      G4double cutEnergy,
+                                      G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
   if(kineticEnergy < LowEnergyLimit()) { return; }
@@ -543,11 +562,11 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
 
     if ( f > fMax ) {
       G4cout << "### G4eBremsstrahlungRelModel Warning: Majoranta exceeded! "
-	     << f << " > " << fMax
-	     << " Egamma(MeV)= " << gammaEnergy
-	     << " Ee(MeV)= " << kineticEnergy
-	     << "  " << GetName()
-	     << G4endl;
+             << f << " > " << fMax
+             << " Egamma(MeV)= " << gammaEnergy
+             << " Ee(MeV)= " << kineticEnergy
+             << "  " << GetName()
+             << G4endl;
     }
 
     // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
@@ -556,7 +575,7 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
   // scattering off nucleus or off e- by triplet model
   if(scatOffElectron && G4UniformRand()*sumTerm > nucTerm) {
     GetTripletModel()->SampleSecondaries(vdp, couple, dp, 
-					 cutEnergy, maxEnergy);
+                                         cutEnergy, maxEnergy);
     return;
   }
 
@@ -567,17 +586,17 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
 
   G4ThreeVector gammaDirection = 
     GetAngularDistribution()->SampleDirection(dp, totalEnergy-gammaEnergy,
-					      currentZ, 
-					      couple->GetMaterial());
+                                              currentZ, 
+                                              couple->GetMaterial());
 
   // create G4DynamicParticle object for the Gamma
   G4DynamicParticle* gamma = new G4DynamicParticle(theGamma,gammaDirection,
-						   gammaEnergy);
+                                                   gammaEnergy);
   vdp->push_back(gamma);
   
   G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
   G4ThreeVector direction = (totMomentum*dp->GetMomentumDirection()
-			     - gammaEnergy*gammaDirection).unit();
+                             - gammaEnergy*gammaDirection).unit();
 
   // energy of primary
   G4double finalE = kineticEnergy - gammaEnergy;
@@ -588,7 +607,7 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
     fParticleChange->SetProposedKineticEnergy(0.0);
     G4DynamicParticle* el = 
       new G4DynamicParticle(const_cast<G4ParticleDefinition*>(particle),
-			    direction, finalE);
+                            direction, finalE);
     vdp->push_back(el);
 
     // continue tracking

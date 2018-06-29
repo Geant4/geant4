@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh 104963 2017-07-03 07:38:44Z gcosmo $
+// $Id: G4Fragment.hh 110267 2018-05-17 14:34:00Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -220,20 +220,20 @@ private:
 // ============= INLINE METHOD IMPLEMENTATIONS ===================
 
 #if defined G4HADRONIC_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator;
+  extern G4DLLEXPORT G4Allocator<G4Fragment>*& pFragmentAllocator();
 #else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator;
+  extern G4DLLIMPORT G4Allocator<G4Fragment>*& pFragmentAllocator();
 #endif
 
 inline void * G4Fragment::operator new(size_t)
 {
-  if (!pFragmentAllocator) { pFragmentAllocator = new G4Allocator<G4Fragment>; }
-  return (void*) pFragmentAllocator->MallocSingle();
+  if (!pFragmentAllocator()) { pFragmentAllocator() = new G4Allocator<G4Fragment>; }
+  return (void*) pFragmentAllocator()->MallocSingle();
 }
 
 inline void G4Fragment::operator delete(void * aFragment)
 {
-  pFragmentAllocator->FreeSingle((G4Fragment *) aFragment);
+  pFragmentAllocator()->FreeSingle((G4Fragment *) aFragment);
 }
 
 inline void G4Fragment::CalculateExcitationEnergy()

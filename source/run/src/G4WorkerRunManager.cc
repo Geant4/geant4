@@ -46,6 +46,7 @@
 #include "G4SDManager.hh"
 #include "G4VScoringMesh.hh"
 #include "G4Timer.hh"
+#include "G4TiMemory.hh"
 #include <sstream>
 #include <fstream>
 
@@ -133,6 +134,7 @@ void G4WorkerRunManager::InitializeGeometry() {
 
 void G4WorkerRunManager::RunInitialization()
 {
+    TIMEMORY_AUTO_TIMER("");
 #ifdef G4MULTITHREADED
   if(!visIsSetUp)
   {
@@ -204,6 +206,7 @@ void G4WorkerRunManager::RunInitialization()
 
 void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4int n_select)
 {
+    TIMEMORY_AUTO_TIMER("");
     if(!userPrimaryGeneratorAction)
     {
       G4Exception("G4RunManager::GenerateEvent()", "Run0032", FatalException,
@@ -248,6 +251,7 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
 
 void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
 {
+    TIMEMORY_AUTO_TIMER("");
   currentEvent = GenerateEvent(i_event);
   if(eventLoopOnGoing)
   {  
@@ -260,6 +264,7 @@ void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
 
 G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
 {
+    TIMEMORY_AUTO_TIMER("");
   G4Event* anEvent = new G4Event(i_event);
   long s1 = 0;
   long s2 = 0;
@@ -588,6 +593,7 @@ void G4WorkerRunManager::StoreRNGStatus(const G4String& fn )
 
 void G4WorkerRunManager::DoWork()
 {
+    TIMEMORY_AUTO_TIMER("");
   G4MTRunManager* mrm = G4MTRunManager::GetMasterRunManager();
   G4MTRunManager::WorkerActionRequest nextAction = mrm->ThisWorkerWaitForNextAction();
   while( nextAction != G4MTRunManager::WorkerActionRequest::ENDWORKER )

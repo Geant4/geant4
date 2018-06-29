@@ -1,4 +1,4 @@
-$Id: History 107435 2017-11-13 07:34:58Z gcosmo $
+$Id: History 110387 2018-05-22 07:52:43Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,37 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-05-18 V.Ivant (testem5-V10-04-06)
+18-05-18 V.Ivant (testem5-V10-04-05)
+- added test of the new ion ionisation model, which is included in 
+  the new physics constructor PhysListEm19DStandard, atima.mac 
+  macro file is also added to compare with known data
+
+09-05-18 B.Morgan (testem5-V10-04-04)
+- TestEm5.cc : include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+08-04-18 mma (testem5-V10-04-03)
+- TestEm5.cc : purely cosmetic
+
+20-03-18 V.Ivant (testem5-V10-04-02)
+- StepMax - use thread safe instantiation, mesenger merged with 
+    PhysicsListMessenger
+- DetectorConstruction - improved method names
+- PhysicsList - make Opt4 default, removed local instantiation of G4Decay
+- Use MixMax default random number generator
+- removed G4VIS_USE and G4UI_USE
+
+08-03-18 V.Ivant (testem5-V10-04-01)
+- PhysListEm5DStandard - experimental PhysList with the new 
+    5D gamma conversion model
+- PhysListEm5DStandard - clean-up for 10.4
+- PhysListEmStandardSSM - removed as obsolete
+
+14-12-17 V.Ivant (testem5-V10-04-00)
+- corrected TestEm5.in to optimise output
 	 
 11-11-17 mma (testem5-V10-03-08)
 - Updated README   .README.txt

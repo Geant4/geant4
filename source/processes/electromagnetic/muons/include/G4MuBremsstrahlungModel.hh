@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh 103220 2017-03-22 11:35:04Z gcosmo $
+// $Id: G4MuBremsstrahlungModel.hh 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,7 +77,7 @@ public:
   explicit G4MuBremsstrahlungModel(const G4ParticleDefinition* p = nullptr,
                           const G4String& nam = "MuBrem");
 
-  virtual ~G4MuBremsstrahlungModel();
+  ~G4MuBremsstrahlungModel() = default;
 
   virtual void Initialise(const G4ParticleDefinition*, 
                           const G4DataVector&) override;

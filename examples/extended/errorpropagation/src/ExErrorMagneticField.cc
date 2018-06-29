@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExErrorMagneticField.cc 68019 2013-03-13 13:32:43Z gcosmo $
+// $Id: ExErrorMagneticField.cc 110760 2018-06-13 06:24:05Z gcosmo $
 //
 /// \file ExErrorMagneticField.cc
 /// \brief Implementation of the ExErrorMagneticField class
@@ -72,11 +72,6 @@ void ExErrorMagneticField::SetFieldValue(G4ThreeVector fieldVector)
     G4MagneticField* magField = NULL;
     fieldMgr->SetDetectorField(magField);
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-ExErrorMagneticField::~ExErrorMagneticField()
-{
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

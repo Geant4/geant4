@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 // 
-// $Id: PhysicsList.cc 100290 2016-10-17 08:47:55Z gcosmo $
+// $Id: PhysicsList.cc 108857 2018-03-12 07:42:27Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -134,7 +134,12 @@ void PhysicsList::ConstructProcess()
 
   // step limitation (as a full process)
   //  
-  AddStepMax();    
+  AddStepMax();
+  
+  // Get process
+  auto process = GetProcess("RadioactiveDecay");
+  if (process != nullptr)
+  G4cout << "\n  GetProcess : " << process->GetProcessName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -303,3 +308,21 @@ void PhysicsList::GetRange(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Proton.hh"
+#include "G4GenericIon.hh"
+
+G4VProcess* PhysicsList::GetProcess(const G4String& processName) const
+{
+  G4ParticleDefinition* particle = G4GenericIon::GenericIon();
+  G4ProcessVector* procList = particle->GetProcessManager()->GetProcessList();
+  G4int nbProc = particle->GetProcessManager()->GetProcessListLength();
+  for (G4int k=0; k<nbProc; k++) {
+    G4VProcess* process = (*procList)[k];
+    if (process->GetProcessName() == processName) return process;
+  }
+  return nullptr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

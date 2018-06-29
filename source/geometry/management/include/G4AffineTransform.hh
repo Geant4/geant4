@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AffineTransform.hh 98309 2016-07-06 10:30:15Z gcosmo $
+// $Id: G4AffineTransform.hh 109778 2018-05-09 08:07:16Z gcosmo $
 //
 //
 // class G4AffineTransform
@@ -53,11 +53,15 @@
 // History:
 // Paul R C Kent 6 Aug 1996 - initial version
 //
-// 19.09.96 E.Chernyaev:
+// 19.09.1996 E.Tcherniaev:
 // - direct access to the protected members of the G4RotationMatrix class
-//   replaced by access via public access functions            
+//   replaced by access via public access functions
 // - conversion of the rotation matrix to angle & axis used to get
 //   a possibility to remove "friend" from the G4RotationMatrix class
+// 06.05.2018 E.Tcherniaev:
+// - optimized InverseProduct
+// - added methods for inverse transformation: InverseTrasformPoint,  
+//   InverseTransformAxis, InverseNetRotation, InverseNetTranslation
 // --------------------------------------------------------------------
 #ifndef G4AFFINETRANSFORM_HH
 #define G4AFFINETRANSFORM_HH
@@ -89,7 +93,16 @@ public: // with description
   inline G4AffineTransform(const G4RotationMatrix* rot,
                            const G4ThreeVector& tlate);
     // Optionally rotate by *rot then translate by tlate - rot may be null
-  
+
+  inline G4AffineTransform(const G4AffineTransform& rhs);
+    // Copy constructor
+
+  inline G4AffineTransform& operator=(const G4AffineTransform& rhs);
+    // Assignment operator
+
+  inline ~G4AffineTransform();
+    // Destructor
+
   inline G4AffineTransform operator * (const G4AffineTransform& tf) const;
     // Compound Transforms:
     //       tf2=tf2*tf1 equivalent to tf2*=tf1
@@ -114,8 +127,14 @@ public: // with description
   inline G4ThreeVector TransformPoint(const G4ThreeVector& vec) const;
     // Transform the specified point: returns vec*rot+tlate
 
+  inline G4ThreeVector InverseTransformPoint(const G4ThreeVector& vec) const;
+    // Transform the specified point using inverse transformation
+
   inline G4ThreeVector TransformAxis(const G4ThreeVector& axis) const;
-    // Transform the specified axis: returns
+    // Transform the specified axis: returns vec*rot
+
+  inline G4ThreeVector InverseTransformAxis(const G4ThreeVector& axis) const;
+    // Transform the specified axis using inverse transfromation
 
   inline void ApplyPointTransform(G4ThreeVector& vec) const;
     // Transform the specified point (in place): sets vec=vec*rot+tlate
@@ -147,7 +166,11 @@ public: // with description
 
   inline G4RotationMatrix NetRotation() const;
 
+  inline G4RotationMatrix InverseNetRotation() const;
+
   inline G4ThreeVector NetTranslation() const;
+
+  inline G4ThreeVector InverseNetTranslation() const;
 
   inline void SetNetRotation(const G4RotationMatrix& rot);
 

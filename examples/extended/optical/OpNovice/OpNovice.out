@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -425,8 +425,8 @@ Some /vis commands (optionally) take a string to specify colour.
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
@@ -660,9 +660,9 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 0 start.
-Number of Scintillation photons produced in this event : 73
-Number of Cerenkov photons produced in this event : 17
-number of event = 1 User=0s Real=0.01s Sys=0s
+Number of Scintillation photons produced in this event : 71
+Number of Cerenkov photons produced in this event : 23
+number of event = 1 User=0.000000s Real=0.003424s Sys=0.000000s
 #
 Graphics systems deleted.
 Visualization Manager deleting...

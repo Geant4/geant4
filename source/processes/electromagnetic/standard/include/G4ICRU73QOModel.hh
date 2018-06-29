@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU73QOModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4ICRU73QOModel.hh 108737 2018-03-02 13:49:56Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -74,54 +74,54 @@ class G4ICRU73QOModel : public G4VEmModel
 public:
 
   explicit G4ICRU73QOModel(const G4ParticleDefinition* p = 0,
-			   const G4String& nam = "ICRU73QO");
+                           const G4String& nam = "ICRU73QO");
 
-  virtual ~G4ICRU73QOModel();
+  ~G4ICRU73QOModel() = default;
 
   virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) override;
+                          const G4DataVector&) override;
 
   virtual G4double ComputeCrossSectionPerElectron(
-				 const G4ParticleDefinition*,
-				 G4double kineticEnergy,
-				 G4double cutEnergy,
-				 G4double maxEnergy) final;
-				 
+                                 const G4ParticleDefinition*,
+                                 G4double kineticEnergy,
+                                 G4double cutEnergy,
+                                 G4double maxEnergy) final;
+                                 
   virtual G4double ComputeCrossSectionPerAtom(
-				 const G4ParticleDefinition*,
-				 G4double kineticEnergy,
-				 G4double Z, G4double A,
-				 G4double cutEnergy,
-				 G4double maxEnergy) override;
-				 				 
+                                 const G4ParticleDefinition*,
+                                 G4double kineticEnergy,
+                                 G4double Z, G4double A,
+                                 G4double cutEnergy,
+                                 G4double maxEnergy) override;
+                                                                  
   virtual G4double CrossSectionPerVolume(const G4Material*,
-				 const G4ParticleDefinition*,
-				 G4double kineticEnergy,
-				 G4double cutEnergy,
-				 G4double maxEnergy) override;
-				 
+                                 const G4ParticleDefinition*,
+                                 G4double kineticEnergy,
+                                 G4double cutEnergy,
+                                 G4double maxEnergy) override;
+                                 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
-					const G4ParticleDefinition*,
-					G4double kineticEnergy,
-					G4double) override;
+                                        const G4ParticleDefinition*,
+                                        G4double kineticEnergy,
+                                        G4double) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy) override;
+                                 const G4MaterialCutsCouple*,
+                                 const G4DynamicParticle*,
+                                 G4double tmin,
+                                 G4double maxEnergy) override;
 
   // add correction to energy loss and compute non-ionizing energy loss
   virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
-				    const G4DynamicParticle*,
-				    G4double& eloss,
-				    G4double& niel,
-				    G4double length) override;
+                                    const G4DynamicParticle*,
+                                    G4double& eloss,
+                                    G4double& niel,
+                                    G4double length) override;
  
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				      G4double kinEnergy) final;
+                                      G4double kinEnergy) final;
 
 private:
 
@@ -132,6 +132,21 @@ private:
 
   G4double DEDXPerElement(G4int Z, G4double kineticEnergy);
 
+  // get number of shell, energy and oscillator strenghts for material
+  G4int GetNumberOfShells(G4int Z) const;
+
+  G4double GetShellEnergy(G4int Z, G4int nbOfTheShell) const; 
+  G4double GetOscillatorEnergy(G4int Z, G4int nbOfTheShell) const; 
+  G4double GetShellStrength(G4int Z, G4int nbOfTheShell) const;
+
+  // calculate stopping number for L's term
+  G4double GetL0(G4double normEnergy) const;
+  // terms in Z^2
+  G4double GetL1(G4double normEnergy) const;
+  // terms in Z^3
+  G4double GetL2(G4double normEnergy) const;
+  // terms in Z^4
+  
   // hide assignment operator
   G4ICRU73QOModel & operator=(const  G4ICRU73QOModel &right) = delete;
   G4ICRU73QOModel(const  G4ICRU73QOModel&) = delete;
@@ -149,22 +164,6 @@ private:
   G4double lowestKinEnergy;
 
   G4bool   isInitialised;
-
-  // get number of shell, energy and oscillator strenghts for material
-  G4int GetNumberOfShells(G4int Z) const;
-
-  G4double GetShellEnergy(G4int Z, G4int nbOfTheShell) const; 
-  G4double GetOscillatorEnergy(G4int Z, G4int nbOfTheShell) const; 
-  G4double GetShellStrength(G4int Z, G4int nbOfTheShell) const;
-
-  // calculate stopping number for L's term
-  G4double GetL0(G4double normEnergy) const;
-  // terms in Z^2
-  G4double GetL1(G4double normEnergy) const;
-  // terms in Z^3
-  G4double GetL2(G4double normEnergy) const;
-  // terms in Z^4
-  
 
   // Z of element at now avaliable for the model
   static const G4int NQOELEM  = 26;
@@ -203,48 +202,6 @@ inline void G4ICRU73QOModel::SetParticle(const G4ParticleDefinition* p)
   chargeSquare = charge*charge;
   massRate     = mass/CLHEP::proton_mass_c2;
   ratio = CLHEP::electron_mass_c2/mass;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4int G4ICRU73QOModel::GetNumberOfShells(G4int Z) const
-{
-  G4int nShell = 0;
-
-  if(indexZ[Z] >= 0) { nShell = nbofShellsForElement[indexZ[Z]]; 
-  } else { nShell = G4AtomicShells::GetNumberOfShells(Z); }
-
-  return nShell;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double 
-G4ICRU73QOModel::GetShellEnergy(G4int Z, G4int nbOfTheShell) const
-{
-  G4double shellEnergy = 0.;
-
-  G4int idx = indexZ[Z];
-
-  if(idx >= 0) { shellEnergy = ShellEnergy[startElemIndex[idx] + nbOfTheShell]*CLHEP::eV; 
-  } else { shellEnergy = GetOscillatorEnergy(Z, nbOfTheShell); }
-
-  return  shellEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double 
-G4ICRU73QOModel::GetShellStrength(G4int Z, G4int nbOfTheShell) const
-{
-  G4double shellStrength = 0.;
-
-  G4int idx = indexZ[Z];
-
-  if(idx >= 0) { shellStrength = SubShellOccupation[startElemIndex[idx] + nbOfTheShell] / Z; 
-  } else { shellStrength = G4double(G4AtomicShells::GetNumberOfElectrons(Z,nbOfTheShell))/Z; }
-  
-  return shellStrength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -5,12 +5,11 @@
 #                                                                     #
 #  DATE: 18th August 2006                                             #
 #                                                                     #
-#  CONTENTS: Time development of an electrmagnetic shower.            #
+#  CONTENTS: Time development of an electromagnetic shower.           #
 #                                                                     #
 #  USAGE:                                                             #
-#     exampleN03 visTutor/exN03Vis12.mac                              #
-#  or Idle> /control/execute visTutor/exN03Vis12.mac                  #
-#  or pull down "Vis" menu and click on "EmShower"                    #
+#     cp -pr <install-dir>/geant4/examples/basic/B4/macros/visTutor . #
+#     <place-of-binary>/exampleB4a -m visTutor/exN03Vis13.mac         #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Mac/Unix with X-Windows, OpenGL    #
 #                                                                     #
@@ -18,9 +17,10 @@
 
 /control/verbose 2
 /vis/verbose confirmations
+/run/initialize
 
 /vis/open OGL 600x600-0+0
-/vis/ogl/set/displayListLimit 100000
+/vis/drawVolume
 
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
@@ -28,7 +28,6 @@
 /vis/verbose errors
 
 /vis/viewer/set/viewpointThetaPhi 90. 180.
-/vis/drawVolume
 /vis/scene/add/eventID
 /vis/scene/add/trajectories rich
 
@@ -62,13 +61,13 @@
 /run/beamOn
 
 # Run time sequence
-/vis/ogl/set/fade 1
-/vis/ogl/set/displayHeadTime true
+/vis/viewer/set/timeWindow/fadeFactor 1
+/vis/viewer/set/timeWindow/displayHeadTime true
 # The trajectories can appear of jump ahead of the light front because
 # their time range overlaps the viewer's time range.  To mitigate this
 # effect of discrete time intervals, advance the light front by half the
 # trajectories interval...
-/vis/ogl/set/displayLightFront true 0 0 -90 mm -{halfInterval} ns
+/vis/viewer/set/timeWindow/displayLightFront true 0 0 -90 mm -{halfInterval} ns
 /vis/viewer/panTo -9 0 cm
 /vis/viewer/zoomTo 2
 /control/alias timeRange 0.1
@@ -76,7 +75,7 @@
 # Switch off auto-refresh to avoid refresh on /vis/viewer/pan in loop.
 # (Then force refresh in loop.)
 /vis/viewer/set/autoRefresh 0
-/vis/verbose warnings
+/vis/verbose errors
 /control/verbose 0
 /control/loop visTutor/exN03Vis13.loop endTime 0 0.7 0.001
 /control/verbose 2

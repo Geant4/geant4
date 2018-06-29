@@ -1,4 +1,4 @@
-$Id: History 104289 2017-05-23 13:24:09Z gcosmo $
+$Id: History 110513 2018-05-28 07:37:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/VRML sub-category
 ------------------------------------------------
+
+26 May 2018  John Allison (VRML-V10-04-00)
+- G4VRML2FileSceneHandler.cc: Fix gcc-8 warnings.
 
 23rd May 2017  John Allison (VRML-V10-03-01)
 - Fixes for gcc-7.1 warnings.

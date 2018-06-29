@@ -27,7 +27,7 @@
 /// \brief Implementation of the F03RunAction class
 //
 //
-// $Id: F03RunAction.cc 92498 2015-09-02 07:24:12Z gcosmo $
+// $Id: F03RunAction.cc 110100 2018-05-15 11:30:23Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,6 @@
 
 #include "G4Run.hh"
 #include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 
 #include "Randomize.hh"
 
@@ -69,22 +68,12 @@ void F03RunAction::BeginOfRunAction(const G4Run*)
       G4Random::showEngineStatus();
       G4Random::saveEngineStatus("beginOfRun.rndm");
   }
-  G4UImanager* ui = G4UImanager::GetUIpointer();
- 
-  G4VVisManager* visManager = G4VVisManager::GetConcreteInstance();
-
-  if (visManager) ui->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03RunAction::EndOfRunAction(const G4Run*)
 {
-  if (G4VVisManager::GetConcreteInstance())
-  {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  }
-
   // save Rndm status
 
   if (fSaveRndm == 1)

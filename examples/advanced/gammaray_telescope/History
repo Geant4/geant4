@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 101656 2016-11-21 08:57:32Z gcosmo $
+$Id: History 110147 2018-05-16 12:20:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,23 @@ $Id: History 101656 2016-11-21 08:57:32Z gcosmo $
 
                           History file
                           ------------
+
+16.05.2018 - L. Pandola, Tag gammaraytel-V10-04-04
+             Fix compiler warning on gcc8.1
+
+15.05.2018 - B. Morgan, Tag gammaraytel-V10-04-03
+             Include G4Types before use of G4MULTITHREADED. For forward
+             compatibility with move to #defines over -D for G4 preprocessor
+             symbols.
+
+13.05.2018 - L. Pandola, Tag gammaraytel-V10-04-02
+	     Fix more warnings on clang
+
+10.05.2018 - L. Pandola, Tag gammaraytel-V10-04-01
+             Fix warning on clang
+
+08.05.2018 - F. Longo and L. Pandola, Tag gammaraytel-V10-04-00
+	     Fix problems reported by Valgrind (bug report #1981)
 
 19.11.2016 - A. Dotti gammaraytel-V10-02-02
 	     explicit set of SDs to manager

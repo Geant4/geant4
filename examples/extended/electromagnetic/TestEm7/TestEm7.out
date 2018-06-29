@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -153,8 +153,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 10 eV  to 100 keV, 20 bins per decade, spline: 0
@@ -187,7 +187,7 @@ ePairProd:   for  e-    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
@@ -214,7 +214,7 @@ ePairProd:   for  e+    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -509,28 +509,28 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=7.59s Real=7.79s Sys=0s
+  User=5.660000s Real=5.672458s Sys=0.000000s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 17.7447 cm    rms= 1.93203 mm 
- Mean number of primary steps = 188.324
+ Projected Range= 17.7434 cm    rms= 1.89616 mm 
+ Mean number of primary steps = 188.277
  Total energy deposit= 160 MeV
- niel energy deposit = 130.661 eV 
+ niel energy deposit = 135.738 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.67918 GeV	0.292449 % 	9.37108e-05 Gy
- tally 1: 	 	4.98998 GeV	0.311874 % 	9.99353e-05 Gy
- tally 2: 	 	3.24098 GeV	0.202561 % 	6.49077e-05 Gy
- tally 3: 	 	1.93458 GeV	0.120911 % 	3.87441e-05 Gy
+ tally 0: 	 	4.62286 GeV	0.288929 % 	9.25831e-05 Gy
+ tally 1: 	 	4.92138 GeV	0.307586 % 	9.85615e-05 Gy
+ tally 2: 	 	3.23572 GeV	0.202233 % 	6.48025e-05 Gy
+ tally 3: 	 	1.78155 GeV	0.111347 % 	3.56795e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 679368451, 1462579354
+ Current couple of seeds = 302851405, 950587931
 ----------------------------------------
 /gun/particle ion
 /gun/ion 6 12 6
@@ -561,34 +561,34 @@ Index : 1     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 679368451, 1462579354
+ Current couple of seeds = 302851405, 950587931
 ----------------------------------------
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.07s Real=3.16s Sys=0s
+  User=2.390000s Real=2.388118s Sys=0.000000s
 
  The run consists of 1000 C12 of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 16.4916 cm    rms= 448.214 um 
- Mean number of primary steps = 152.402
- Total energy deposit= 3.49997 GeV
- niel energy deposit = 278.439 keV
+ Projected Range= 16.4921 cm    rms= 467.284 um 
+ Mean number of primary steps = 151.992
+ Total energy deposit= 3.49998 GeV
+ niel energy deposit = 279.149 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.6123 GeV	0.331779 % 	0.000232561 Gy
- tally 1: 	 	13.2674 GeV	0.379067 % 	0.000265708 Gy
- tally 2: 	 	15.8419 GeV	0.452627 % 	0.00031727 Gy
- tally 3: 	 	24.051 GeV	0.687172 % 	0.000481675 Gy
+ tally 0: 	 	12.0912 GeV	0.345464 % 	0.000242153 Gy
+ tally 1: 	 	13.7267 GeV	0.392192 % 	0.000274908 Gy
+ tally 2: 	 	16.0822 GeV	0.45949 % 	0.000322081 Gy
+ tally 3: 	 	22.8196 GeV	0.651989 % 	0.000457013 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1651225650, 1665143184
+ Current couple of seeds = 579441909, 1296661690
 ----------------------------------------
 /testem/det/tallyNumber 0
 /testem/det/setMat G4_Cu
@@ -614,8 +614,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 10 eV  to 100 keV, 20 bins per decade, spline: 0
@@ -648,7 +648,7 @@ ePairProd:   for  e-    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
@@ -675,7 +675,7 @@ ePairProd:   for  e+    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -962,24 +962,24 @@ Index : 2     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1651225650, 1665143184
+ Current couple of seeds = 579441909, 1296661690
 ----------------------------------------
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.74s Real=1.75s Sys=0s
+  User=1.260000s Real=1.259881s Sys=0.010000s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.15282 cm    rms= 1.20964 mm 
- Mean number of primary steps = 20.238
- Total energy deposit= 285.889 MeV
+ Projected Range= 2.14726 cm    rms= 1.75321 mm 
+ Mean number of primary steps = 20.154
+ Total energy deposit= 290.464 MeV
  niel energy deposit = 0 eV 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 578592682, 657912297
+ Current couple of seeds = 1064795073, 322470766
 ----------------------------------------
 /testem/det/setMat TechVacuum
 /gun/particle alpha
@@ -1004,8 +1004,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 10 eV  to 100 keV, 20 bins per decade, spline: 0
@@ -1038,7 +1038,7 @@ ePairProd:   for  e-    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
@@ -1065,7 +1065,7 @@ ePairProd:   for  e+    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1357,13 +1357,13 @@ Index : 3     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 578592682, 657912297
+ Current couple of seeds = 1064795073, 322470766
 ----------------------------------------
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0s Real=0s Sys=0s
+  User=0.000000s Real=0.000429s Sys=0.000000s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 kg/m3 )
 
@@ -1374,7 +1374,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1761180387, 1379095523
+ Current couple of seeds = 1968451798, 1669929844
 ----------------------------------------
 /testem/det/setMat G4_WATER
 /gun/particle alpha
@@ -1399,8 +1399,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 10 eV  to 100 keV, 20 bins per decade, spline: 0
@@ -1433,7 +1433,7 @@ ePairProd:   for  e-    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
@@ -1460,7 +1460,7 @@ ePairProd:   for  e+    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1750,24 +1750,24 @@ Index : 3     used in the geometry : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1761180387, 1379095523
+ Current couple of seeds = 1968451798, 1669929844
 ----------------------------------------
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0.01s Sys=0s
+  User=0.010000s Real=0.010449s Sys=0.000000s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 6.4458 mm    rms= 42.4584 um 
- Mean number of primary steps = 36.76
+ Projected Range= 6.45177 mm    rms= 45.9124 um 
+ Mean number of primary steps = 36.87
  Total energy deposit= 100 MeV
- niel energy deposit = 11.697 keV
+ niel energy deposit = 11.64 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 403908668, 1275159654
+ Current couple of seeds = 721632875, 817176941
 ----------------------------------------
 /testem/det/setMat G4_Si
 /gun/particle ion
@@ -1794,8 +1794,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 10 eV  to 100 keV, 20 bins per decade, spline: 0
@@ -1828,7 +1828,7 @@ ePairProd:   for  e-    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
@@ -1855,7 +1855,7 @@ ePairProd:   for  e+    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -2152,24 +2152,24 @@ Index : 4     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 403908668, 1275159654
+ Current couple of seeds = 721632875, 817176941
 ----------------------------------------
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=4.78s Real=4.95s Sys=0.04s
+  User=5.390000s Real=5.461283s Sys=0.040000s
 
  The run consists of 10 Xe131 of 1.217 GeV through 20 cm  of G4_Si (density: 2.33 g/cm3 )
 
- Projected Range= 97.066 um    rms= 23.4062 um 
- Mean number of primary steps = 45885.3
- Total energy deposit= 1.21691 GeV
- niel energy deposit = 6.9188 MeV
+ Projected Range= 114.39 um    rms= 29.2376 um 
+ Mean number of primary steps = 71011.8
+ Total energy deposit= 1.21694 GeV
+ niel energy deposit = 6.9164 MeV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1288790559, 2033710354
+ Current couple of seeds = 1295948721, 509235014
 ----------------------------------------
 /testem/det/setMat Water_1.05
 /gun/particle proton
@@ -2197,8 +2197,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 10 eV  to 100 keV, 20 bins per decade, spline: 0
@@ -2231,7 +2231,7 @@ ePairProd:   for  e-    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
@@ -2258,7 +2258,7 @@ ePairProd:   for  e+    SubType= 4
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       Sampling table 25x1001 from 0.1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -2560,24 +2560,24 @@ Index : 5     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1288790559, 2033710354
+ Current couple of seeds = 1295948721, 509235014
 ----------------------------------------
 --> Event 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.69s Real=0.7s Sys=0s
+  User=0.560000s Real=0.565508s Sys=0.000000s
 
  The run consists of 1000 proton of 160 MeV through 20 cm  of Water_1.05 (density: 1.05 g/cm3 )
 
- Projected Range= 16.9121 cm    rms= 1.80456 mm 
- Mean number of primary steps = 179.899
+ Projected Range= 16.9099 cm    rms= 2.19702 mm 
+ Mean number of primary steps = 179.982
  Total energy deposit= 160 MeV
- niel energy deposit = 134.242 eV 
+ niel energy deposit = 119.771 eV 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1927002782, 1639300653
+ Current couple of seeds = 2092199858, 385065263
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

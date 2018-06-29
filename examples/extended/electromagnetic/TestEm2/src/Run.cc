@@ -76,12 +76,12 @@ void Run::Reset()
   
   //initialize arrays of cumulative energy deposition
   //
-  for (G4int i=0; i<f_nLbin; i++) 
-     fSumELongit[i]=fSumE2Longit[i]=fSumELongitCumul[i]=fSumE2LongitCumul[i]=0.;
-  
-  for (G4int j=0; j<f_nRbin; j++)
-     fSumERadial[j]=fSumE2Radial[j]=fSumERadialCumul[j]=fSumE2RadialCumul[j]=0.;
-
+  for (G4int i=0; i<f_nLbin; ++i) { 
+    fSumELongit[i]=fSumE2Longit[i]=fSumELongitCumul[i]=fSumE2LongitCumul[i]=0.;
+  }
+  for (G4int j=0; j<f_nRbin; ++j) {
+    fSumERadial[j]=fSumE2Radial[j]=fSumERadialCumul[j]=fSumE2RadialCumul[j]=0.;
+  }
   //initialize track length
   fSumChargTrLength=fSum2ChargTrLength=fSumNeutrTrLength=fSum2NeutrTrLength=0.;
 
@@ -97,11 +97,11 @@ Run::~Run()
 void Run::InitializePerEvent()
 {
   //initialize arrays of energy deposit per bin
-  for (G4int i=0; i<f_nLbin; i++)
-     { f_dEdL[i] = 0.; }
+  for (G4int i=0; i<f_nLbin; ++i)
+    { f_dEdL[i] = 0.; }
      
-  for (G4int j=0; j<f_nRbin; j++)
-     { f_dEdR[j] = 0.; }     
+  for (G4int j=0; j<f_nRbin; ++j)
+    { f_dEdR[j] = 0.; }
   
   //initialize tracklength 
   fChargTrLength = fNeutrTrLength = 0.;
@@ -114,7 +114,7 @@ void Run::FillPerEvent()
   //accumulate statistic
   //
   G4double dLCumul = 0.;
-  for (G4int i=0; i<f_nLbin; i++)
+  for (G4int i=0; i<f_nLbin; ++i)
     {
       fSumELongit[i]  += f_dEdL[i];
       fSumE2Longit[i] += f_dEdL[i]*f_dEdL[i];
@@ -153,12 +153,12 @@ void Run::FillPerEvent()
   //profiles
   G4double norm = 100./(Ekin+mass);    
   G4double dLradl = fDet->GetdLradl();  
-  for (G4int i=0; i<f_nLbin; i++) {
+  for (G4int i=0; i<f_nLbin; ++i) {
     G4double bin = (i+0.5)*dLradl;
     analysisManager->FillP1(0, bin, norm*f_dEdL[i]/dLradl);
   }
   G4double dRradl = fDet->GetdRradl();  
-  for (G4int j=0; j<f_nRbin; j++) {
+  for (G4int j=0; j<f_nRbin; ++j) {
     G4double bin = (j+0.5)*dRradl;
     analysisManager->FillP1(1, bin, norm*f_dEdR[j]/dRradl);
   }      
@@ -173,14 +173,14 @@ void Run::Merge(const G4Run* run)
   fChargedStep += localRun->fChargedStep;
   fNeutralStep += localRun->fNeutralStep; 
 
-  for (G4int i=0; i<f_nLbin; i++) {
+  for (G4int i=0; i<f_nLbin; ++i) {
     fSumELongit[i] += localRun->fSumELongit[i];
     fSumE2Longit[i] += localRun->fSumE2Longit[i];
     fSumELongitCumul[i] += localRun->fSumELongitCumul[i];
     fSumE2LongitCumul[i] += localRun->fSumE2LongitCumul[i];
   }
 
-  for (G4int j=0; j<f_nRbin; j++) {
+  for (G4int j=0; j<f_nRbin; ++j) {
     fSumERadial[j] += localRun->fSumERadial[j];
     fSumE2Radial[j] += localRun->fSumE2Radial[j];
     fSumERadialCumul[j] += localRun->fSumERadialCumul[j];
@@ -220,7 +220,7 @@ void Run::EndOfRun(G4double edep, G4double rms, G4double& limit)
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
   G4int i;
-  for (i=0; i<f_nLbin; i++) {
+  for (i=0; i<f_nLbin; ++i) {
     MeanELongit[i] = norme*fSumELongit[i];
     rmsELongit[i] = 
       norme*std::sqrt(std::abs(NbOfEvents*fSumE2Longit[i]
@@ -244,7 +244,7 @@ void Run::EndOfRun(G4double edep, G4double rms, G4double& limit)
   MyVector MeanERadial(f_nRbin),      rmsERadial(f_nRbin);
   MyVector MeanERadialCumul(f_nRbin), rmsERadialCumul(f_nRbin);
 
-  for (i=0; i<f_nRbin; i++) {
+  for (i=0; i<f_nRbin; ++i) {
     MeanERadial[i] = norme*fSumERadial[i];
     rmsERadial[i] = norme*std::sqrt(std::abs(NbOfEvents*fSumE2Radial[i]
                                     - fSumERadial[i]*fSumERadial[i]));
@@ -281,12 +281,12 @@ void Run::EndOfRun(G4double edep, G4double rms, G4double& limit)
   norme = 1./(NbOfEvents*(fDet->GetMaterial()->GetRadlen()));
   G4double MeanChargTrLength = norme*fSumChargTrLength;
   G4double  rmsChargTrLength = 
-    norme*std::sqrt(std::fabs(NbOfEvents*fSum2ChargTrLength
+    norme*std::sqrt(std::abs(NbOfEvents*fSum2ChargTrLength
                             - fSumChargTrLength*fSumChargTrLength));
 
   G4double MeanNeutrTrLength = norme*fSumNeutrTrLength;
   G4double  rmsNeutrTrLength = 
-    norme*std::sqrt(std::fabs(NbOfEvents*fSum2NeutrTrLength
+    norme*std::sqrt(std::abs(NbOfEvents*fSum2NeutrTrLength
                             - fSumNeutrTrLength*fSumNeutrTrLength));
 
   //print
@@ -302,7 +302,7 @@ void Run::EndOfRun(G4double edep, G4double rms, G4double& limit)
     G4cout << "        bin   " << "           Mean         rms         "
            << "        bin "   << "           Mean      rms \n" << G4endl;
 
-    for (i=0; i<f_nLbin; i++) {
+    for (i=0; i<f_nLbin; ++i) {
       G4double inf=i*dLradl, sup=inf+dLradl;
 
       G4cout << std::setw(8) << inf << "->"
@@ -323,7 +323,7 @@ void Run::EndOfRun(G4double edep, G4double rms, G4double& limit)
     G4cout << "        bin   " << "           Mean         rms         "
            << "        bin "   << "           Mean      rms \n" << G4endl;
 
-    for (i=0; i<f_nRbin; i++) {
+    for (i=0; i<f_nRbin; ++i) {
       G4double inf=i*dRradl, sup=inf+dRradl;
 
       G4cout << std::setw(8) << inf << "->"

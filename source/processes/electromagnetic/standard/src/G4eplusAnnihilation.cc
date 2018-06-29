@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc 107058 2017-11-01 14:54:12Z gcosmo $
+// $Id: G4eplusAnnihilation.cc 109177 2018-04-03 06:55:14Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,6 +59,7 @@
 #include "G4Gamma.hh"
 #include "G4Positron.hh"
 #include "G4eeToTwoGammaModel.hh"
+#include "G4EmBiasingManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -74,6 +75,7 @@ G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
   SetSecondaryParticle(theGamma);
   SetProcessSubType(fAnnihilation);
   enableAtRestDoIt = true;
+  mainSecondaries = 2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -118,55 +120,92 @@ void G4eplusAnnihilation::StreamProcessInfo(std::ostream&,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
-						   const G4Step& )
-//
+G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
+						   const G4Step& step)
 // Performs the e+ e- annihilation when both particles are assumed at rest.
-// It generates two back to back photons with energy = electron_mass.
-// The angular distribution is isotropic.
-// GEANT4 internal units
-//
-// Note : Effects due to binding of atomic electrons are negliged.
 {
-  fParticleChange.InitializeForPostStep(aTrack);
-  CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
+  fParticleChange.InitializeForPostStep(track);
+  size_t idx = CurrentMaterialCutsCoupleIndex();
+  G4double ene(0.0);
+  G4VEmModel* model = SelectModel(ene, idx);
 
-  G4double cosTeta = 2.*rndmEngine->flat()-1.; 
-  G4double sinTeta = sqrt((1.-cosTeta)*(1.0 + cosTeta));
-  G4double phi     = twopi * rndmEngine->flat();
-  G4ThreeVector dir(sinTeta*cos(phi), sinTeta*sin(phi), cosTeta);
-  phi = twopi * rndmEngine->flat();
-  G4double cosphi = cos(phi);
-  G4double sinphi = sin(phi);
-  G4ThreeVector pol(cosphi, sinphi, 0.0);
-  pol.rotateUz(dir);
+  // define new weight for primary and secondaries
+  G4double weight = fParticleChange.GetParentWeight();
 
-  // e+ parameters
-  G4double weight = aTrack.GetWeight();
-  G4double time   = aTrack.GetGlobalTime();
+  // sample secondaries
+  secParticles.clear();
+  G4double gammaCut = GetGammaEnergyCut();
+  model->SampleSecondaries(&secParticles, MaterialCutsCouple(), 
+			   track.GetDynamicParticle(), gammaCut);
+ 
+  G4int num0 = secParticles.size();
 
-  // add gammas
-  fParticleChange.SetNumberOfSecondaries(2);
-  G4DynamicParticle* dp = 
-    new G4DynamicParticle(theGamma, dir, electron_mass_c2);
-  dp->SetPolarization(pol.x(),pol.y(),pol.z());
-  G4Track* track = new G4Track(dp, time, aTrack.GetPosition());
-  track->SetTouchableHandle(aTrack.GetTouchableHandle());
-  track->SetWeight(weight); 
-  pParticleChange->AddSecondary(track);
+  // splitting or Russian roulette
+  if(biasManager) {
+    if(biasManager->SecondaryBiasingRegion(idx)) {
+      G4double eloss = 0.0;
+      weight *= biasManager->ApplySecondaryBiasing(
+	secParticles, track, model, &fParticleChange, eloss, 
+        idx, gammaCut, step.GetPostStepPoint()->GetSafety());
+      if(eloss > 0.0) {
+        eloss += fParticleChange.GetLocalEnergyDeposit();
+        fParticleChange.ProposeLocalEnergyDeposit(eloss);
+      }
+    }
+  }
+  // save secondaries
+  G4int num = secParticles.size();
+  if(num > 0) {
 
-  dp = new G4DynamicParticle(theGamma,-dir, electron_mass_c2);
-  pol.set(-sinphi, cosphi, 0.0);
-  pol.rotateUz(dir);
-  dp->SetPolarization(pol.x(),pol.y(),pol.z());
-  track = new G4Track(dp, time, aTrack.GetPosition());
-  track->SetTouchableHandle(aTrack.GetTouchableHandle());
-  track->SetWeight(weight); 
-  pParticleChange->AddSecondary(track);
+    fParticleChange.SetNumberOfSecondaries(num);
+    G4double edep = fParticleChange.GetLocalEnergyDeposit();
+    G4double time = track.GetGlobalTime();
+     
+    for (G4int i=0; i<num; ++i) {
+      if (secParticles[i]) {
+        G4DynamicParticle* dp = secParticles[i];
+        const G4ParticleDefinition* p = dp->GetParticleDefinition();
+        G4double e = dp->GetKineticEnergy();
+        G4bool good = true;
+        if(ApplyCuts()) {
+          if (p == theGamma) {
+            if (e < gammaCut) { good = false; }
+          } else if (p == theElectron) {
+            if (e < GetElectronEnergyCut()) { good = false; }
+          }
+          // added secondary if it is good
+        }
+        if (good) { 
+          G4Track* t = new G4Track(dp, time, track.GetPosition());
+          t->SetTouchableHandle(track.GetTouchableHandle());
+          t->SetWeight(weight);
+          pParticleChange->AddSecondary(t);
 
-  // Kill the incident positron
-  //
-  fParticleChange.ProposeTrackStatus(fStopAndKill);
+          // define type of secondary
+          if(i < mainSecondaries) { t->SetCreatorModelIndex(secID); }
+          else if(i < num0) {
+            if(p == theGamma) { 
+              t->SetCreatorModelIndex(fluoID);
+            } else {
+              t->SetCreatorModelIndex(augerID);
+	    }
+	  } else {
+            t->SetCreatorModelIndex(biasID);
+          }
+          /* 
+          G4cout << "Secondary(post step) has weight " << t->GetWeight() 
+                 << ", Ekin= " << t->GetKineticEnergy()/MeV << " MeV "
+                 << GetProcessName() << " fluoID= " << fluoID
+                 << " augerID= " << augerID <<G4endl;
+          */
+        } else {
+          delete dp;
+          edep += e;
+        }
+      } 
+    }
+    fParticleChange.ProposeLocalEnergyDeposit(edep);
+  }
   return &fParticleChange;
 }
 

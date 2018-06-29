@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -225,8 +225,8 @@ Use Bearden atomic level energies                 0
 ### Run 0 start.
 
 --------------------End of Global Run-----------------------
-  The run was 10000 events  Nb of 'good' e+ annihilations: 1335
- Total dose in patient : 290.445 picoGy 
+  The run was 10000 events  Nb of 'good' e+ annihilations: 1344
+ Total dose in patient : 290.282 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

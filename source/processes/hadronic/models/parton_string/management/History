@@ -1,4 +1,4 @@
-$Id: History 108528 2018-02-16 08:38:40Z gcosmo $
+$Id: History 108062 2017-12-19 15:18:27Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -15,9 +15,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-19-Dec-2017 G. Cosmo      hadr-partonstring-mgt-V10-03-05
+19-Dec-2017 G. Cosmo      hadr-partonstring-mgt-V10-04-01
 - Fixed self-consistency in G4VertexCode header (missing #include).
   Thanks to Raphael Isemann for reporting this.
+
+07-Dec-2017 A. Ribon      hadr-partonstring-mgt-V10-04-00
+-  Resumed the development version (i.e. deleted the class 
+   G4PomeronCrossSection which is not needed any longer).
 
 08-Nov-2017 A. Ribon      hadr-partonstring-mgt-V10-03-04
 -  Minor clean-up and indentation: no changes in the random sequence.

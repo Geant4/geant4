@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 104099 2017-05-11 07:41:46Z gcosmo $
+$Id: History 110842 2018-06-19 07:29:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,27 @@ $Id: History 104099 2017-05-11 07:41:46Z gcosmo $
 
                       Example History file
                       ---------------------
+
+18.06.2018 - A.Ribon (ccal-V10-04-05)
+- Fixed compilation warning on gcc-8 in CCalRunAction
+  (replacing  sprintf  with  strings manipulations).
+
+27.03.2018 - L.Pandola (ccal-V10-04-04)
+- restore version of ccal-V10-04-00
+
+26.03.2018 -  L.Pandola (ccal-V10-04-03)
+- continue testing of ccal-V10-04-02: fix compiler warning.
+
+23.03.2018 -  L.Pandola (ccal-V10-04-02)
+- Added try/catch, as an attempt to debug the FPE on CDash
+
+22.03.2018 - L.Pandola (ccal-V10-04-01)
+- Added try/catch, as an attempt to debug the FPE on CDash
+
+05.02.2018 - L.Pandola  (ccal-V10-04-00)
+- Try to fix erratic crashes seen in SST-MT
+- Create an ActionInitialization, as preparation for MT migration
+- Dump singleton CCalAnalysis class and employ g4analysis only
 
 11.05.2017 - G. Cosmo   (ccal-V10-03-00)
 - Fixed compilation warning on gcc-7.1 in CCalAnalysis constructor.

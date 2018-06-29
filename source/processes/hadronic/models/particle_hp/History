@@ -14,15 +14,23 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-24 April 2018 Alberto Ribon (hadr-hpp-V10-03-11)
+9 May 2018 Alberto Ribon (hadr-hpp-V10-04-02)
+---------------------------------------------------
+- G4ENDFTapeRead, G4FissionProductYieldDist : fixed warnings in gcc 8
+    regarding catching polymorphic type by value, instead of by reference.
+
+
+24 April 2018 Alberto Ribon (hadr-hpp-V10-04-01)
 ---------------------------------------------------
 - G4ParticleHPFissionFS : protect against very rare cases of division by zero.
 
-19 December 2017 Gabriele Cosmo (hadr-hpp-V10-03-10)
+
+19 December 2017 Gabriele Cosmo (hadr-hpp-V10-04-00)
 ---------------------------------------------------
 - Fixed self-consistency in headers (missing #include) in G4FFGEnumerations,
   G4FPYNubarValues, G4ParticleHPAngularP and G4ParticleHPHash.
   Thanks to Raphael Isemann for reporting these.
+
 
 29 November 2017 Tatsumi Koi (hadr-hpp-V10-03-09)
 ---------------------------------------------------

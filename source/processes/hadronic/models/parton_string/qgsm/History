@@ -1,4 +1,4 @@
-$Id: History 108530 2018-02-16 08:45:20Z gcosmo $
+$Id: History 108334 2018-02-05 15:18:30Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -15,9 +15,28 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-19-Dec-2017 G. Cosmo                     (hadr-qgsm-V10-03-06)
+05-Feb-2018 A. Ribon                     (hadr-qgsm-V10-04-04)
+-  G4QGSParticipants : introduced protection against negative squared mass
+   in method PutOnMassShell(), which was causing some rare crashes. 
+   If a negative squared mass occurs, a "JustWarning" exception is thrown
+   and the squared mass is set to 0, before calling the square root (which
+   is now computed only once).
+
+18-Jan-2018 A. Ribon                     (hadr-qgsm-V10-04-03)
+-  Proposing a new tag - although exactly the same as the previous one -
+   after fixing the irreproducibility seen in gamma-nuclear (handled
+   by QGS) with a tag in hadronization.
+
+19-Dec-2017 V. Uzhinsky                  (hadr-qgsm-V10-04-02)
+-  Improved QGSM.
+
+19-Dec-2017 G. Cosmo                     (hadr-qgsm-V10-04-01)
 - Fixed self-consistency in G4SPPartonInfo header (missing #include).
   Thanks to Raphael Isemann for reporting this.
+
+07-Dec-2017 A. Ribon                     (hadr-qgsm-V10-04-00)
+-  Brought back the development version of QGS 
+   (as it was in hadr-qgsm-V10-03-04).
 
 26-Oct-2017 A. Ribon                     (hadr-qgsm-V10-03-05)
 - Brought back the stable, production QGS (as in 10.3).

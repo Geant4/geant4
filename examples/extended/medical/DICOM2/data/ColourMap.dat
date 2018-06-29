@@ -1,0 +1,12 @@
+10
+Air             0.0     0.0     0.0     1.0
+LungInhale      0.8     0.5     0.5     1.0
+LungExhale      0.7     0.7     0.7     1.0
+AdiposeTissue   1.0     0.8     0.8     1.0
+Breast          0.9     0.0     0.9     1.0
+Water           0.9     0.8     0.8     1.0
+Muscle          0.8     0.3     0.3     1.0
+Liver           0.9     0.9     0.9     1.0
+TrabecularBone  1.0     1.0     1.0     1.0
+DenseBone       0.8     0.8     0.8     1.0
+material        red     green   blue    opacity

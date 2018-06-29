@@ -235,11 +235,9 @@ public:
     }
     return false;
   }
-  
+
   template <class T>
-  bool element_atb_value(const std::string& a_elem,
-                         const std::string& a_atb,
-                         T& a_value) const {
+  bool element_atb_value(const std::string& a_elem,const std::string& a_atb,T& a_value) const {
     std::string sv;
     if(!element_atb_value(a_elem,a_atb,sv)) {a_value=T();return false;}
     return to<T>(sv,a_value);
@@ -325,12 +323,12 @@ public:
    {const std::vector<atb>& atbs = a_tree.attributes();
     size_t atbn = atbs.size();       
     for(size_t index=0;index<atbn;index++) {
-      const std::string& atb = atbs[index].first;
+      const std::string& _atb = atbs[index].first;
       const std::string& atbv = atbs[index].second;
       if(atbv.empty()) {
         visitor->f_out << "check_item :"
             << " for XML item " << sout(a_tree.tag_name())
-            << ", attribute " << sout(atb) << " has an empty value."
+            << ", attribute " << sout(_atb) << " has an empty value."
             << std::endl;
         visitor->m_status = false;
       }
@@ -341,12 +339,12 @@ public:
       const std::vector<atb>& atbs = _elem->attributes();
       size_t atbn = atbs.size();       
       for(size_t index=0;index<atbn;index++) {
-        const std::string& atb = atbs[index].first;
+        const std::string& _atb = atbs[index].first;
         const std::string& atbv = atbs[index].second;
         if(atbv.empty()) {
           visitor->f_out << "ItemM::check_item :"
               << " for XML item " << sout(a_tree.tag_name())
-              << ", attribute " << sout(atb) << " has an empty value."
+              << ", attribute " << sout(_atb) << " has an empty value."
               << std::endl;
           visitor->m_status = false;
         }

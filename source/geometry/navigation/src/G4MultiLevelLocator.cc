@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultiLevelLocator.cc 107606 2017-11-27 09:39:04Z gcosmo $
+// $Id: G4MultiLevelLocator.cc 110832 2018-06-15 15:00:33Z gcosmo $
 //
 // Class G4MultiLevelLocator implementation
 //
@@ -694,7 +694,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
           ReportReversedPoints(errmsg, 
                     CurveStartPointVelocity, CurveEndPointVelocity,
                     NewSafety, fiEpsilonStep, 
-                    CurrentA_PointVelocity, CurrentA_PointVelocity,
+                    CurrentA_PointVelocity, CurrentB_PointVelocity,
                     SubStart_PointVelocity, CurrentE_Point,
                     ApproxIntersecPointV, substep_no, substep_no_p, depth);
           G4Exception(MethodName, "GeomNav0003", FatalException, errmsg);

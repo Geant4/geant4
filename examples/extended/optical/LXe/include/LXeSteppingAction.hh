@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeSteppingAction.hh 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id: LXeSteppingAction.hh 109784 2018-05-09 08:14:08Z gcosmo $
 //
 /// \file optical/LXe/include/LXeSteppingAction.hh
 /// \brief Definition of the LXeSteppingAction class
@@ -36,7 +36,6 @@
 
 #include "G4OpBoundaryProcess.hh"
 
-class LXeRecorderBase;
 class LXeEventAction;
 class LXeTrackingAction;
 class LXeSteppingMessenger;
@@ -45,7 +44,7 @@ class LXeSteppingAction : public G4UserSteppingAction
 {
   public:
 
-    LXeSteppingAction(LXeRecorderBase*);
+    LXeSteppingAction(LXeEventAction*);
     virtual ~LXeSteppingAction();
     virtual void UserSteppingAction(const G4Step*);
 
@@ -54,9 +53,9 @@ class LXeSteppingAction : public G4UserSteppingAction
  
   private:
 
-    LXeRecorderBase* fRecorder;
     G4bool fOneStepPrimaries;
     LXeSteppingMessenger* fSteppingMessenger;
+    LXeEventAction*       fEventAction;
 
     G4OpBoundaryProcessStatus fExpectedNextStatus;
 };

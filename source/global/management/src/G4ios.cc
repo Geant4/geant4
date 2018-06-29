@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ios.cc 78780 2014-01-23 13:55:15Z gcosmo $
+// $Id: G4ios.cc 110251 2018-05-17 14:09:28Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -36,53 +36,75 @@
 
 #include "G4ios.hh"
 #include "G4strstreambuf.hh"
+#include <iostream>
 
 #ifdef G4MULTITHREADED
-  G4ThreadLocal G4strstreambuf *G4coutbuf_p = 0;
-  G4ThreadLocal G4strstreambuf *G4cerrbuf_p = 0;
-  G4ThreadLocal std::ostream *G4cout_p = 0;
-  G4ThreadLocal std::ostream *G4cerr_p = 0;
-  #define G4coutbuf (*G4coutbuf_p)
-  #define G4cerrbuf (*G4cerrbuf_p)
-  #define G4cout (*G4cout_p)
-  #define G4cerr (*G4cerr_p)
 
-  void G4iosInitialization()
-  {
-    if (G4coutbuf_p == 0) G4coutbuf_p = new G4strstreambuf;
-    if (G4cerrbuf_p == 0) G4cerrbuf_p = new G4strstreambuf;
-    if (G4cout_p == 0) G4cout_p = new std::ostream(G4coutbuf_p);
-    if (G4cerr_p == 0) G4cerr_p = new std::ostream(G4cerrbuf_p);
-  }
+G4strstreambuf*& _G4coutbuf_p()
+{
+    G4ThreadLocalStatic G4strstreambuf* _instance = new G4strstreambuf();
+    return _instance;
+}
 
-  void G4iosFinalization()
-  {
-      delete G4cout_p; G4cout_p = 0;
-      delete G4cerr_p;  G4cerr_p = 0;
-      delete G4coutbuf_p; G4coutbuf_p = 0;
-      delete G4cerrbuf_p; G4cerrbuf_p = 0;
-  }
+G4strstreambuf*& _G4cerrbuf_p()
+{
+    G4ThreadLocalStatic G4strstreambuf* _instance = new G4strstreambuf();
+    return _instance;
+}
 
-  // These two functions are guaranteed to be called at load and
-  // unload of the library containing this code.
-  namespace
-  {
+std::ostream*& _G4cout_p()
+{
+    G4ThreadLocalStatic std::ostream* _instance = new std::ostream(_G4coutbuf_p());
+    return _instance;
+}
+
+std::ostream*& _G4cerr_p()
+{
+    G4ThreadLocalStatic std::ostream* _instance = new std::ostream(_G4cerrbuf_p());
+    return _instance;
+}
+
+#define G4coutbuf (*_G4coutbuf_p())
+#define G4cerrbuf (*_G4cerrbuf_p())
+#define G4cout (*_G4cout_p())
+#define G4cerr (*_G4cerr_p())
+
+void G4iosInitialization()
+{
+    if (_G4coutbuf_p() == 0) _G4coutbuf_p() = new G4strstreambuf;
+    if (_G4cerrbuf_p() == 0) _G4cerrbuf_p() = new G4strstreambuf;
+    if (_G4cout_p() == &std::cout || _G4cout_p() == 0) _G4cout_p() = new std::ostream(_G4coutbuf_p());
+    if (_G4cerr_p() == &std::cerr || _G4cerr_p() == 0) _G4cerr_p() = new std::ostream(_G4cerrbuf_p());
+}
+
+void G4iosFinalization()
+{
+    delete _G4cout_p(); _G4cout_p() = &std::cout;
+    delete _G4cerr_p(); _G4cerr_p() = &std::cerr;
+    delete _G4coutbuf_p(); _G4coutbuf_p() = nullptr;
+    delete _G4cerrbuf_p(); _G4cerrbuf_p() = nullptr;
+}
+
+// These two functions are guaranteed to be called at load and
+// unload of the library containing this code.
+namespace
+{
 #ifndef WIN32
     void setupG4ioSystem(void) __attribute__ ((constructor));
     void cleanupG4ioSystem(void) __attribute__((destructor));
 #endif
     void setupG4ioSystem(void) { G4iosInitialization(); }
     void cleanupG4ioSystem(void) { G4iosFinalization(); }
-  }
+}
 
 #else  // Sequential
 
-  G4strstreambuf G4coutbuf;
-  G4strstreambuf G4cerrbuf;
-  std::ostream G4cout(&G4coutbuf);
-  std::ostream G4cerr(&G4cerrbuf);
+G4strstreambuf G4coutbuf;
+G4strstreambuf G4cerrbuf;
+std::ostream G4cout(&G4coutbuf);
+std::ostream G4cerr(&G4cerrbuf);
 
-  void G4iosInitialization() {}
-  void G4iosFinalization() {}
+void G4iosInitialization() {}
+void G4iosFinalization() {}
 
 #endif

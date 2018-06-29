@@ -1,4 +1,4 @@
-$Id: History 107541 2017-11-22 08:24:57Z gcosmo $
+$Id: History 109654 2018-05-04 08:57:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-05-18  J.Allison (exhadr01-V10-04-03)
+- RunAction.cc:
+  o Remove G4VIS_USE.
+  o Remove /vis/ commands - not necessary now and causes
+    problem in Qt with in multithreaded mode.
+- DetectorConstruction.cc: Pass vis attributes as objects, not pointers.
+
+29-03-18  V.Ivanchenko (exhadr01-V10-04-02)
+- DetectorConstruction, DetectorMessenger, HistoManager,
+  PrimaryGeneratorAction - cleanup geometry definition
+
+26-03-18  V.Ivanchenko (exhadr01-V10-04-01)
+- Fixed compilation
+
+22-03-18  M.Maire (exhadr01-V10-04-00)
+- Hadr01.cc : remove G4UI_USE and G4VIS_USE
 
 21-11-17  V.Ivanchenko (exhadr01-V10-03-00)
 - Fixed histograms and radioactive decay 

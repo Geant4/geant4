@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc 105349 2017-07-21 12:23:24Z gcosmo $
+// $Id: G4VVisCommand.cc 109510 2018-04-26 07:15:57Z gcosmo $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -154,6 +154,38 @@ void G4VVisCommand::ConvertToColour
     }
     
   }
+}
+
+G4bool G4VVisCommand::ProvideValueOfUnit
+(const G4String& where,
+ const G4String& unit,
+ const G4String& category,
+ G4double& value)
+{
+  // Return false if there's a problem
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4bool success = true;
+  if (!G4UnitDefinition::IsUnitDefined(unit)) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cerr << where
+      << "\n  Unit \"" << unit << "\" not defined"
+      << G4endl;
+    }
+    success = false;
+  } else if (G4UnitDefinition::GetCategory(unit) != category) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cerr << where
+      << "\n  Unit \"" << unit << "\" not a unit of " << category;
+      if (category == "Volumic Mass") G4cerr << " (density)";
+      G4cerr << G4endl;
+    }
+    success = false;
+  } else {
+    value = G4UnitDefinition::GetValueOf(unit);
+  }
+  return success;
 }
 
 void G4VVisCommand::UpdateVisManagerScene

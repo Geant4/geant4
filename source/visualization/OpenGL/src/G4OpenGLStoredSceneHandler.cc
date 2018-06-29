@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc 108544 2018-02-16 09:47:30Z gcosmo $
+// $Id: G4OpenGLStoredSceneHandler.cc 110480 2018-05-25 07:25:18Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -102,8 +102,8 @@ G4OpenGLStoredSceneHandler::PO& G4OpenGLStoredSceneHandler::PO::operator=
 G4OpenGLStoredSceneHandler::TO::TO():
   fDisplayListId(0),
   fPickName(0),
-  fStartTime(-DBL_MAX),
-  fEndTime(DBL_MAX),
+  fStartTime(-G4VisAttributes::fVeryLongTime),
+  fEndTime(G4VisAttributes::fVeryLongTime),
   fpG4TextPlus(0),
   fMarkerOrPolyline(false)
 {}
@@ -123,8 +123,8 @@ G4OpenGLStoredSceneHandler::TO::TO(G4int id, const G4Transform3D& tr):
   fDisplayListId(id),
   fTransform(tr),
   fPickName(0),
-  fStartTime(-DBL_MAX),
-  fEndTime(DBL_MAX),
+  fStartTime(-G4VisAttributes::fVeryLongTime),
+  fEndTime(G4VisAttributes::fVeryLongTime),
   fpG4TextPlus(0),
   fMarkerOrPolyline(false)
 {}
@@ -203,7 +203,8 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Polyhedron& visi
   return AddPrimitivePreambleInternal(visible, false, false);
 }
 
-G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal(const G4Visible& visible, bool isMarker, bool isPolyline)
+G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal
+(const G4Visible& visible, bool isMarker, bool isPolyline)
 {
 // Get applicable vis attributes for all primitives.
   fpVisAttribs = fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
@@ -212,10 +213,10 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal(const G4Visible&
 
   G4bool transparency_enabled = true;
   G4bool isMarkerNotHidden = true;
-  G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  if (pViewer) {
-    transparency_enabled = pViewer->transparency_enabled;
-    isMarkerNotHidden = pViewer->fVP.IsMarkerNotHidden();
+  G4OpenGLViewer* pOGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if (pOGLViewer) {
+    transparency_enabled = pOGLViewer->transparency_enabled;
+    isMarkerNotHidden = pOGLViewer->fVP.IsMarkerNotHidden();
   }
   
   G4bool isTransparent = opacity < 1.;
@@ -260,7 +261,6 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal(const G4Visible&
     if (fThirdPassForNonHiddenMarkers) {
       if (!treatAsNotHidden) {
         return false;  // No further processing.
-        
       }
     }
   }  // fThreePassCapable
@@ -432,8 +432,8 @@ end_of_display_list_reuse_test:
     glMatrixMode (GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    if (pViewer) {
-      pViewer->g4GlOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+    if (pOGLViewer) {
+      pOGLViewer->g4GlOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
     }
     glMatrixMode (GL_MODELVIEW);
     glPushMatrix();

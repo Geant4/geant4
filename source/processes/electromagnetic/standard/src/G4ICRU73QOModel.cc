@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU73QOModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4ICRU73QOModel.cc 108737 2018-03-02 13:49:56Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -94,11 +94,6 @@ G4ICRU73QOModel::G4ICRU73QOModel(const G4ParticleDefinition* p, const G4String& 
   fParticleChange = nullptr;
   denEffData = nullptr;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ICRU73QOModel::~G4ICRU73QOModel()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -226,7 +221,7 @@ G4double G4ICRU73QOModel::DEDX(const G4Material* material,
     {
       const G4Element* element = (*theElementVector)[i] ;
       eloss   += DEDXPerElement(element->GetZasInt(), kineticEnergy)
-	* theAtomicNumDensityVector[i] * element->GetZ();
+        * theAtomicNumDensityVector[i] * element->GetZ();
     }      
   return eloss;
 }
@@ -236,10 +231,8 @@ G4double G4ICRU73QOModel::DEDX(const G4Material* material,
 G4double G4ICRU73QOModel::DEDXPerElement(G4int AtomicNumber,
                                          G4double kineticEnergy)
 {
-  G4int Z = AtomicNumber;
-  if(Z > 97) { Z = 97; }
-  G4int nbOfShells = GetNumberOfShells(Z);
-  if(nbOfShells < 1) { nbOfShells = 1; }
+  G4int Z = std::min(AtomicNumber, 97);
+  G4int nbOfShells = std::max(GetNumberOfShells(Z), 1);
 
   G4double v = CLHEP::c_light * std::sqrt( 2.0*kineticEnergy/proton_mass_c2 );
 
@@ -299,6 +292,54 @@ G4double G4ICRU73QOModel::GetOscillatorEnergy(G4int Z,
   G4double oscShellEnergy = std::sqrt( ionTerm2 + plasmonTerm );
 
   return  oscShellEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int G4ICRU73QOModel::GetNumberOfShells(G4int Z) const
+{
+  G4int nShell = 0;
+
+  if(indexZ[Z] >= 0) { 
+    nShell = nbofShellsForElement[indexZ[Z]]; 
+  } else { 
+    nShell = G4AtomicShells::GetNumberOfShells(Z); 
+  }
+  return nShell;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4ICRU73QOModel::GetShellEnergy(G4int Z, G4int nbOfTheShell) const
+{
+  G4double shellEnergy = 0.;
+
+  G4int idx = indexZ[Z];
+
+  if(idx >= 0) { 
+    shellEnergy = ShellEnergy[startElemIndex[idx] + nbOfTheShell]*CLHEP::eV; 
+  } else { 
+    shellEnergy = GetOscillatorEnergy(Z, nbOfTheShell); 
+  }
+
+  return  shellEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4ICRU73QOModel::GetShellStrength(G4int Z, G4int nbOfTheShell) const
+{
+  G4double shellStrength = 0.;
+
+  G4int idx = indexZ[Z];
+
+  if(idx >= 0) { 
+    shellStrength = SubShellOccupation[startElemIndex[idx] + nbOfTheShell] / Z; 
+  } else { 
+    shellStrength = G4double(G4AtomicShells::GetNumberOfElectrons(Z,nbOfTheShell))/Z; 
+  }
+  
+  return shellStrength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

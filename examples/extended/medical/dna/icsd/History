@@ -14,5 +14,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-05-18 J. Allison (exicsd-V10-04-01)
+- Remove G4UI_USE.
+
+09-05-18 B. Morgan (exicsd-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
 06-06-2017 C. Villagrasa & S. Meylan (exicsd-V10-03-01)
 - New extended example using DNA materials

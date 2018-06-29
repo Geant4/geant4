@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh 101105 2016-11-07 08:09:26Z gcosmo $
+// $Id: G4OpenGLQtViewer.hh 108601 2018-02-26 10:03:17Z gcosmo $
 //
 // 
 // G4OpenGLQtViewer : Class to provide WindowsNT specific
@@ -41,6 +41,7 @@
 
 #include "G4OpenGLViewer.hh"
 #include "G4PhysicalVolumeModel.hh"
+#include "G4AutoLock.hh"
 
 #include <qobject.h>
 #include <qpoint.h>
@@ -381,7 +382,11 @@ private:
   QThread* fQGLContextVisSubThread;
   QThread* fQGLContextMainThread;
 #endif
-  
+
+  // safe to use in serial mode
+  G4AutoLock* lWaitForVisSubThreadQtOpenGLContextInitialized;
+  G4AutoLock* lWaitForVisSubThreadQtOpenGLContextMoved;
+
 public Q_SLOTS :
   void startPauseVideo();
 

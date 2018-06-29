@@ -1,4 +1,4 @@
-$Id: History 104017 2017-05-08 07:31:29Z gcosmo $
+$Id: History 110007 2018-05-14 08:23:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-05-18 J. Allison    (exampleRE05-V10-04-02)
+- Move deletion of vis manager to top scope. For batch jobs it was
+  not being deleted.
+
+10-05-18 J. Allison    (exampleRE05-V10-04-01)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
 
 05-05-17 M. Asai       (exampleRE05-V10-03-00)
 - RE05PrimaryGeneratorAction.cc : fix potential rare race condition

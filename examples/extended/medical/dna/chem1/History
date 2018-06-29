@@ -14,11 +14,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-09.07.2016 S.Incerti         tag chem1-V10-02-01                           
+26.02.2018 R. Hatcher           tag chem1-V10-04-00
+-----------------------------------------------------
+- Use G4RegisterPhysicsConstructors.icc to ensure G4PhysicsConstructorRegisty
+  is filled when using static libraries
+
+09.07.2016 S.Incerti            tag chem1-V10-02-01
 -----------------------------------------------------
 -  Updated README
 
-04.07.2016 I.Hrivnacova         tag chem1-V10-02-00                           
+04.07.2016 I.Hrivnacova         tag chem1-V10-02-00
 -----------------------------------------------------
 -  Fixes for Doxygen documentation
 
@@ -34,7 +39,7 @@ committal in the CVS repository !
 -----------------------------------------------------
 - Retag before release
 
-06.11.2014 I.Hrivnacova                             
+06.11.2014 I.Hrivnacova
 -----------------------------------------------------
 - Fixes in .README
 

@@ -4,6 +4,10 @@
 
                        Package History file
                        --------------------
+09 May 2018 - B. Morgan - wholeNuclearDNA-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
 
 23 February 2017 - I. Hrivnacova - wholeNuclearDNA-V10-03-00
 - fixed compilation (G4UIQt.hh include)

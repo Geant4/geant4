@@ -58,6 +58,7 @@
 #include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4VPrimitiveScorer.hh"
+#include "G4TiMemory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -153,43 +154,50 @@ void TSRun::RecordEvent(const G4Event* aEvent)
 {
     G4Run::RecordEvent(aEvent);
 
-  //=============================
-  // HitsCollection of This Event
-  //============================
-  G4HCofThisEvent* HCE = aEvent->GetHCofThisEvent();
-  if (!HCE) return;
+    //=============================
+    // HitsCollection of This Event
+    //============================
+    G4HCofThisEvent* HCE = aEvent->GetHCofThisEvent();
+    if (!HCE) return;
 
-  for(unsigned i = 0; i < fCollIDs.size(); ++i)
-  {
-    G4int fCollID = fCollIDs.at(i);
-    //=======================================================
-    // Sum up HitsMap of this Event into HitsMap of this RUN
-    //=======================================================
-    G4THitsMap<G4double>* EvtMap = 0;
-    if ( fCollID >= 0 )           // Collection is attached to HCE
-      EvtMap = static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID));
-    else
-      G4cout <<" Error EvtMap Not Found " << G4endl;
-
-    if ( EvtMap )
+    for(unsigned i = 0; i < fCollIDs.size(); ++i)
     {
-      //=== Sum up HitsMap of this event to HitsMap of RUN.===
-      *fRunMaps[fCollID] += *EvtMap;
-      // atomic run map
-      *fAtomicRunMaps[fCollID] += *EvtMap;
-      // mutex run map
-      static G4Mutex mtx = G4MUTEX_INITIALIZER;
-      {
-        G4AutoLock lock(&mtx);
-        for(const auto& itr : *EvtMap)
-        {
-          fMutexRunMaps[fCollNames[fCollID]][itr.first] += *itr.second;
-        }
-      }
-      //----------------------------------------------------------------//
-    }
+        G4int fCollID = fCollIDs.at(i);
+        //=======================================================
+        // Sum up HitsMap of this Event into HitsMap of this RUN
+        //=======================================================
+        G4THitsMap<G4double>* EvtMap = 0;
+        if ( fCollID >= 0 )           // Collection is attached to HCE
+            EvtMap = static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID));
+        else
+            G4cout <<" Error EvtMap Not Found " << G4endl;
 
-  }
+        if ( EvtMap )
+        {
+            //=== Sum up HitsMap of this event to HitsMap of RUN.===
+            {
+                TIMEMORY_AUTO_TIMER("[standard_run_map]");
+                *fRunMaps[fCollID] += *EvtMap;
+            }
+            // atomic run map
+            {
+                TIMEMORY_AUTO_TIMER("[atomic_run_map]");
+                *fAtomicRunMaps[fCollID] += *EvtMap;
+            }
+            TIMEMORY_AUTO_TIMER("[mutex_run_map]");
+            // mutex run map
+            static G4Mutex mtx = G4MUTEX_INITIALIZER;
+            {
+                G4AutoLock lock(&mtx);
+                for(const auto& itr : *EvtMap)
+                {
+                    fMutexRunMaps[fCollNames[fCollID]][itr.first]
+                            += *itr.second;
+                }
+            }
+            //----------------------------------------------------------------//
+        }
+    }
 
 }
 

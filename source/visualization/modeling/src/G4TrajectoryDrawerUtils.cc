@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc 108542 2018-02-16 09:35:32Z gcosmo $
+// $Id: G4TrajectoryDrawerUtils.cc 107920 2017-12-13 08:06:00Z gcosmo $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //

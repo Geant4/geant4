@@ -1,4 +1,4 @@
-$Id: History 100660 2016-10-31 10:19:31Z gcosmo $
+$Id: History 109984 2018-05-14 07:18:32Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-05-18 Ben Morgan (amsEcal-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+13-04-18 mma (amsEcal-V10-04-01)
+- amsEcal.cc : set visualisation only in interactive mode
+
+23-03-18 mma (amsEcal-V10-04-00)
+- amsEcal.cc : remove G4UI_USE and G4VIS_USE
 
 28-11-16 Gunter Folger   	 (amsEcal-V10-02-01)
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().

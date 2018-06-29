@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysListEmLivermore class
 //
 //
-// $Id: PhysListEmLivermore.cc 105252 2017-07-17 09:40:37Z gcosmo $
+// $Id: PhysListEmLivermore.cc 108015 2017-12-19 09:06:35Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +36,7 @@
 #include "G4BuilderType.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
+#include "G4PhysicsListHelper.hh"
 
 // gamma
 
@@ -75,6 +76,11 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 
+// deexcitation
+
+#include "G4LossTableManager.hh"
+#include "G4UAtomicDeexcitation.hh"
+
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,13 +110,14 @@ PhysListEmLivermore::~PhysListEmLivermore()
 
 void PhysListEmLivermore::ConstructProcess()
 {
-  // Add standard EM Processes
-
+  G4PhysicsListHelper* list = G4PhysicsListHelper::GetPhysicsListHelper();
+  
+  // Add Livermore EM Processes
+  
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();
   while( (*particleIterator)() ){
     G4ParticleDefinition* particle = particleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
     //Applicability range for Livermore models
@@ -125,28 +132,28 @@ void PhysListEmLivermore::ConstructProcess()
       photModel = new G4LivermorePhotoElectricModel();
       photModel->SetHighEnergyLimit(highEnergyLimit);
       phot->AddEmModel(0, photModel);
-      pmanager->AddDiscreteProcess(phot);
+      list->RegisterProcess(phot, particle);
 
       G4ComptonScattering* compt = new G4ComptonScattering();
       G4LivermoreComptonModel* 
       comptModel = new G4LivermoreComptonModel();
       comptModel->SetHighEnergyLimit(highEnergyLimit);
       compt->AddEmModel(0, comptModel);
-      pmanager->AddDiscreteProcess(compt);
+      list->RegisterProcess(compt, particle);
 
       G4GammaConversion* conv = new G4GammaConversion();
       G4LivermoreGammaConversionModel* 
       convModel = new G4LivermoreGammaConversionModel();
       convModel->SetHighEnergyLimit(highEnergyLimit);
       conv->AddEmModel(0, convModel);
-      pmanager->AddDiscreteProcess(conv);
+      list->RegisterProcess(conv, particle);
 
       G4RayleighScattering* rayl = new G4RayleighScattering();
       G4LivermoreRayleighModel* 
       raylModel = new G4LivermoreRayleighModel();
       raylModel->SetHighEnergyLimit(highEnergyLimit);
       rayl->AddEmModel(0, raylModel);
-      pmanager->AddDiscreteProcess(rayl);
+      list->RegisterProcess(rayl, particle);
       
     } else if (particleName == "e-") {
       //electron
@@ -156,38 +163,42 @@ void PhysListEmLivermore::ConstructProcess()
       eIoniModel = new G4LivermoreIonisationModel();
       eIoniModel->SetHighEnergyLimit(highEnergyLimit); 
       eIoni->AddEmModel(0, eIoniModel, new G4UniversalFluctuation() );
-      pmanager->AddProcess(eIoni,                   -1, 1, 1);
+      list->RegisterProcess(eIoni, particle);
       
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
       G4LivermoreBremsstrahlungModel* 
       eBremModel = new G4LivermoreBremsstrahlungModel();
       eBremModel->SetHighEnergyLimit(highEnergyLimit);
       eBrem->AddEmModel(0, eBremModel);
-      pmanager->AddProcess(eBrem,                   -1, 2, 2);
+      list->RegisterProcess(eBrem, particle);
                   
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4eIonisation,       -1, 1, 1);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 2, 2);
-      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1, 3);
+      list->RegisterProcess(new G4eIonisation, particle);
+      list->RegisterProcess(new G4eBremsstrahlung, particle);
+      list->RegisterProcess(new G4eplusAnnihilation, particle);
       
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4MuIonisation,      -1, 1, 1);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 2, 2);
-      pmanager->AddProcess(new G4MuPairProduction,  -1, 3, 3);       
+      list->RegisterProcess(new G4MuIonisation, particle);
+      list->RegisterProcess(new G4MuBremsstrahlung, particle);
+      list->RegisterProcess(new G4MuPairProduction, particle);       
      
     } else if( particleName == "alpha" || particleName == "GenericIon" ) { 
-      pmanager->AddProcess(new G4ionIonisation,     -1, 1, 1);
+      list->RegisterProcess(new G4ionIonisation, particle);
 
     } else if ((!particle->IsShortLived()) &&
                (particle->GetPDGCharge() != 0.0) && 
                (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4hIonisation,       -1, 1, 1);
+      list->RegisterProcess(new G4hIonisation, particle);
     }
   }
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* deex = new G4UAtomicDeexcitation();
+  G4LossTableManager::Instance()->SetAtomDeexcitation(deex);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

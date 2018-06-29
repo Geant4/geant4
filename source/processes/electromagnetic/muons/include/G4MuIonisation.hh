@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.hh 106716 2017-10-20 09:40:09Z gcosmo $
+// $Id: G4MuIonisation.hh 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -89,7 +89,7 @@ public:
 
   explicit G4MuIonisation(const G4String& name = "muIoni");
 
-  virtual ~G4MuIonisation();
+  ~G4MuIonisation() = default;
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
 

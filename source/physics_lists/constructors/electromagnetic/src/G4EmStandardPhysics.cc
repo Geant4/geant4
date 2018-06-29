@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc 107183 2017-11-03 14:57:23Z gcosmo $
+// $Id: G4EmStandardPhysics.cc 109122 2018-03-28 13:08:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -191,7 +191,7 @@ void G4EmStandardPhysics::ConstructProcess()
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
   // high energy limit for e+- scattering models
-  G4double highEnergyLimit = 100*MeV;
+  G4double highEnergyLimit = G4EmParameters::Instance()->MscEnergyLimit();
 
   // Add standard EM Processes
   G4ParticleTable* table = G4ParticleTable::GetParticleTable();

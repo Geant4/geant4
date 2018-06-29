@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXePMTHit.cc 72250 2013-07-12 08:59:26Z gcosmo $
+// $Id: LXePMTHit.cc 110138 2018-05-16 07:31:43Z gcosmo $
 //
 /// \file optical/LXe/src/LXePMTHit.cc
 /// \brief Implementation of the LXePMTHit class
@@ -42,7 +42,7 @@ G4ThreadLocal G4Allocator<LXePMTHit>* LXePMTHitAllocator=0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXePMTHit::LXePMTHit()
-  : fPmtNumber(-1),fPhotons(0),fPhysVol(0),fDrawit(false) {}
+  : fPmtNumber(-1),fPhotons(0),fPhysVol(nullptr),fDrawit(false) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

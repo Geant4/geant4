@@ -15,6 +15,22 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-05-18 J.Allison (testem9-V10-04-04)
+- RunAction.cc: Removed vis commands.
+
+01-05-18 J.Allison (testem9-V10-04-03)
+- RunAction.cc: Removed G4VIS_USE and G4UI_USE.
+
+08-04-18 mma (testem9-V10-04-02)
+- TestEm9.cc - correct visualisation
+
+04-04-18 V.Ivant (testem9-V10-04-01)
+- TestEm9.cc - use default random engine, do not use visualisation 
+    in the batch mode
+
+18-03-18 mma (testem9-V10-04-00)
+- testem9.cc : remove G4UI_USE and G4VIS_USE
+
 01-11-16  I. Hrivnacova (testem9-V10-02-03)
 - Coding guidelines (class member names)
 

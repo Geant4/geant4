@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.cc 107062 2017-11-01 15:01:02Z gcosmo $
+// $Id: G4PreCompoundEmission.cc 108685 2018-02-27 07:58:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -105,7 +105,7 @@ G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
   // Choose a Fragment for emission
   G4VPreCompoundFragment * thePreFragment = 
     theFragmentsVector->ChooseFragment();
-  if (thePreFragment == 0)
+  if (thePreFragment == nullptr)
     {
       G4cout << "G4PreCompoundEmission::PerformEmission : "
 	     << "I couldn't choose a fragment\n"
@@ -170,9 +170,9 @@ G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
   G4ReactionProduct * MyRP = thePreFragment->GetReactionProduct();
 
   //  if(kinEnergy < MeV) {
-  //  G4cout << "G4PreCompoundEmission::Fragment emitted" << G4endl;
-  //  G4cout << *thePreFragment << G4endl;
-    // }
+  //G4cout << "G4PreCompoundEmission::Fragment emitted" << G4endl;
+  //G4cout << *thePreFragment << G4endl;
+  // }
   return MyRP;
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.hh 99159 2016-09-07 08:11:50Z gcosmo $
+// $Id: G4PrimaryParticle.hh 110257 2018-05-17 14:20:12Z gcosmo $
 //
 //
 
@@ -179,20 +179,20 @@ class G4PrimaryParticle
 
 };
 
-extern G4PART_DLL G4ThreadLocal G4Allocator<G4PrimaryParticle> *aPrimaryParticleAllocator;
+extern G4PART_DLL G4Allocator<G4PrimaryParticle>*& aPrimaryParticleAllocator();
 
 inline void * G4PrimaryParticle::operator new(size_t)
 {
-  if (!aPrimaryParticleAllocator)
+  if (!aPrimaryParticleAllocator())
   {
-    aPrimaryParticleAllocator = new G4Allocator<G4PrimaryParticle>;
+    aPrimaryParticleAllocator() = new G4Allocator<G4PrimaryParticle>;
   }
-  return (void *) aPrimaryParticleAllocator->MallocSingle();
+  return (void *) aPrimaryParticleAllocator()->MallocSingle();
 }
 
 inline void G4PrimaryParticle::operator delete(void * aPrimaryParticle)
 {
-  aPrimaryParticleAllocator->FreeSingle((G4PrimaryParticle *) aPrimaryParticle);
+  aPrimaryParticleAllocator()->FreeSingle((G4PrimaryParticle *) aPrimaryParticle);
 }
 
 inline G4double G4PrimaryParticle::GetMass() const

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc 103954 2017-05-04 11:29:22Z gcosmo $
+// $Id: G4EmCalculator.cc 108306 2018-02-02 13:10:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +54,8 @@
 //            10 keV to 1 keV (V. Ivanchenko)
 // 15.03.2007 Add ComputeEnergyCutFromRangeCut methods (V.Ivanchenko)
 // 21.04.2008 Updated computations for ions (V.Ivanchenko)
+// 02.02.2018 Fix the MCS (i.e. transport mean free path) case in
+//            GetCrossSectionPerVolume (M. Novak) 
 //
 // Class Description:
 //
@@ -281,29 +283,39 @@ G4double G4EmCalculator::GetCrossSectionPerVolume(G4double kinEnergy,
 
   if(couple && UpdateParticle(p, kinEnergy)) {
     if(FindEmModel(p, processName, kinEnergy)) {
-      G4int idx = couple->GetIndex();
-      FindLambdaTable(p, processName, kinEnergy);
+      G4int idx      = couple->GetIndex();
+      G4int procType = -1;
+      FindLambdaTable(p, processName, kinEnergy, procType);
 
       G4VEmProcess* emproc = FindDiscreteProcess(p, processName);
       if(emproc) {
-	res = emproc->CrossSectionPerVolume(kinEnergy, couple);
+	      res = emproc->CrossSectionPerVolume(kinEnergy, couple);
       } else if(currentLambda) {
-	G4double e = kinEnergy*massRatio;
-	res = (((*currentLambda)[idx])->Value(e))*chargeSquare;
+        // special tables are built for Msc models (procType is set in FindLambdaTable
+        if(procType==2) {
+          G4VMscModel* mscM = static_cast<G4VMscModel*>(currentModel);
+          mscM->SetCurrentCouple(couple);
+          G4double tr1Mfp   = mscM->GetTransportMeanFreePath(p, kinEnergy);
+          if (tr1Mfp<DBL_MAX) {
+            res = 1./tr1Mfp;
+          }
+        } else {  
+          G4double e = kinEnergy*massRatio;
+          res = (((*currentLambda)[idx])->Value(e))*chargeSquare;
+        } 
       } else {
-	res = ComputeCrossSectionPerVolume(kinEnergy, p, processName, mat, 
-                                           kinEnergy);
+      	res = ComputeCrossSectionPerVolume(kinEnergy, p, processName, mat, kinEnergy);
       }
       if(verbose>0) {
-	G4cout << "G4EmCalculator::GetXSPerVolume: E(MeV)= " << kinEnergy/MeV
-	       << " cross(cm-1)= " << res*cm
-	       << "  " <<  p->GetParticleName()
-	       << " in " <<  mat->GetName();
-	if(verbose>1) 
-	  G4cout << "  idx= " << idx << "  Escaled((MeV)= " 
-		 << kinEnergy*massRatio 
-		 << "  q2= " << chargeSquare; 
-	G4cout << G4endl;
+      	G4cout << "G4EmCalculator::GetXSPerVolume: E(MeV)= " << kinEnergy/MeV
+      	       << " cross(cm-1)= " << res*cm
+      	       << "  " <<  p->GetParticleName()
+      	       << " in " <<  mat->GetName();
+      	if(verbose>1) 
+      	  G4cout << "  idx= " << idx << "  Escaled((MeV)= " 
+      		 << kinEnergy*massRatio 
+      		 << "  q2= " << chargeSquare; 
+      	G4cout << G4endl;
       } 
     }
   }
@@ -972,7 +984,7 @@ G4bool G4EmCalculator::UpdateCouple(const G4Material* material, G4double cut)
 
 void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
                                      const G4String& processName,
-                                     G4double kinEnergy)
+                                     G4double kinEnergy, G4int& proctype)
 {
   // Search for the process
   if (!currentLambda || p != lambdaParticle || processName != lambdaName) {
@@ -991,6 +1003,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
     G4VEnergyLossProcess* elproc = FindEnLossProcess(part, processName);
     if(elproc) {
       currentLambda = elproc->LambdaTable();
+      proctype      = 0;
       if(currentLambda) {
         isApplicable = true;
         if(verbose>1) { 
@@ -1006,6 +1019,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
     G4VEmProcess* proc = FindDiscreteProcess(part, processName);
     if(proc) {
       currentLambda = proc->LambdaTable();
+      proctype      = 1;
       if(currentLambda) {
         isApplicable = true;
         if(verbose>1) { 
@@ -1020,6 +1034,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
     G4VMultipleScattering* msc = FindMscProcess(part, processName);
     if(msc) {
       currentModel = msc->SelectModel(kinEnergy,0);
+      proctype     = 2;
       if(currentModel) {
         currentLambda = currentModel->GetCrossSectionTable();
         if(currentLambda) {

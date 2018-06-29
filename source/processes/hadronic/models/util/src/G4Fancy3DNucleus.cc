@@ -49,13 +49,18 @@
 #include "G4Pow.hh"
 #include "G4HadronicException.hh"
 
+#include "Randomize.hh"
+#include "G4ThreeVector.hh"
+#include "G4RandomDirection.hh"
+#include "G4LorentzRotation.hh"
+#include "G4RotationMatrix.hh"             
+#include "G4PhysicalConstants.hh"
 
 G4Fancy3DNucleus::G4Fancy3DNucleus()
   : myA(0), myZ(0), theNucleons(250), currentNucleon(-1), theDensity(0), 
     nucleondistance(0.8*fermi),excitationEnergy(0.),
     places(250), momentum(250), fermiM(250), testSums(250)
 {
-//G4cout <<"G4Fancy3DNucleus::G4Fancy3DNucleus()"<<G4endl;
 }
 
 G4Fancy3DNucleus::~G4Fancy3DNucleus()
@@ -76,9 +81,13 @@ void G4Fancy3DNucleus::Init(G4double theA, G4double theZ)
 
 void G4Fancy3DNucleus::Init(G4int theA, G4int theZ)
 {
-//  G4cout << "G4Fancy3DNucleus::Init(theA, theZ) called"<<G4endl;
   currentNucleon=-1;
   theNucleons.clear();
+  nucleondistance = 0.8*fermi;
+  places.clear();
+  momentum.clear();
+  fermiM.clear();
+  testSums.clear();
 
   myZ = theZ;
   myA= theA;
@@ -86,11 +95,10 @@ void G4Fancy3DNucleus::Init(G4int theA, G4int theZ)
 
   theNucleons.resize(myA);	// Pre-loads vector with empty elements
   
-//  G4cout << "myA, myZ" << myA << ", " << myZ << G4endl;
-
   if(theDensity) delete theDensity;
   if ( myA < 17 ) {
      theDensity = new G4NuclearShellModelDensity(myA, myZ);
+     if( myA == 12 ) nucleondistance=0.9*fermi; 
   } else {
      theDensity = new G4NuclearFermiDensity(myA, myZ);
   }
@@ -101,7 +109,7 @@ void G4Fancy3DNucleus::Init(G4int theA, G4int theZ)
   
   ChoosePositions();
   
-//  CenterNucleons();   // This would introduce a bias 
+  if( myA == 12 ) CenterNucleons();   // This would introduce a bias
 
   ChooseFermiMomenta();
   
@@ -111,7 +119,6 @@ void G4Fancy3DNucleus::Init(G4int theA, G4int theZ)
   {
 	theNucleons[aNucleon].SetBindingEnergy(Ebinding);
   }
-  
   
   return;
 }
@@ -141,7 +148,7 @@ bool G4Fancy3DNucleusHelperForSortInZ(const G4Nucleon& nuc1, const G4Nucleon& nu
 	return nuc1.GetPosition().z() < nuc2.GetPosition().z();
 }
 
-void G4Fancy3DNucleus::SortNucleonsIncZ() // on increased Z-coordinates Uzhi 29.08.08
+void G4Fancy3DNucleus::SortNucleonsIncZ()
 {
   if (theNucleons.size() < 2 ) return;	 	// Avoid unnecesary work
 
@@ -149,7 +156,7 @@ void G4Fancy3DNucleus::SortNucleonsIncZ() // on increased Z-coordinates Uzhi 29.
 	    G4Fancy3DNucleusHelperForSortInZ); 
 }
 
-void G4Fancy3DNucleus::SortNucleonsDecZ() // on decreased Z-coordinates Uzhi 29.08.08
+void G4Fancy3DNucleus::SortNucleonsDecZ()
 {
   if (theNucleons.size() < 2 ) return;		// Avoid unnecessary work
   SortNucleonsIncZ();
@@ -286,72 +293,153 @@ void G4Fancy3DNucleus::ChooseNucleons()
 
 void G4Fancy3DNucleus::ChoosePositions()
 {
-	G4int i=0;
-	G4ThreeVector	aPos, delta;
-	G4bool		freeplace;
-	const G4double nd2=sqr(nucleondistance);
-	G4double maxR=GetNuclearRadius(0.001);   //  there are no nucleons at a
-	                                        //  relative Density of 0.01
-	G4int jr=0;
-	G4int jx,jy;
-	G4double arand[600];
-	G4double *prand=arand;
+  if( myA != 12) {
 
-	places.clear();				// Reset data buffer
-  G4int interationsLeft=1000*myA;
-  while ( (i < myA) && (--interationsLeft>0))  /* Loop checking, 30-Oct-2015, G.Folger */
+    G4int i=0;
+    G4ThreeVector	aPos, delta;
+    G4bool		freeplace;
+    const G4double nd2=sqr(nucleondistance);
+    G4double maxR=GetNuclearRadius(0.001);   //  there are no nucleons at a
+	                                     //  relative Density of 0.01
+    G4int jr=0;
+    G4int jx,jy;
+    G4double arand[600];
+    G4double *prand=arand;
+    places.clear();				// Reset data buffer
+    G4int interationsLeft=1000*myA;
+    while ( (i < myA) && (--interationsLeft>0))  /* Loop checking, 30-Oct-2015, G.Folger */
+    {
+      do
+      {   	
+        if ( jr < 3 ) 
 	{
-	   do
-	   {   	
-		if ( jr < 3 ) 
-		{
-		    jr=std::min(600,9*(myA - i));
-            G4RandFlat::shootArray(jr,prand);
-		    //CLHEP::RandFlat::shootArray(jr, prand );
-		}
-		jx=--jr;
-		jy=--jr;
-		aPos.set((2*arand[jx]-1.), (2*arand[jy]-1.), (2*arand[--jr]-1.));
-	   } while (aPos.mag2() > 1. );  /* Loop checking, 30-Oct-2015, G.Folger */
-	   aPos *=maxR;
-	   G4double density=theDensity->GetRelativeDensity(aPos);
-	   if (G4UniformRand() < density)
-	   {
-	      freeplace= true;
-	      std::vector<G4ThreeVector>::iterator iplace;
-	      for( iplace=places.begin(); iplace!=places.end() && freeplace;++iplace)
-	      {
-	        delta = *iplace - aPos;
-		freeplace= delta.mag2() > nd2;
-	      }
-	      
-	      if ( freeplace )
-	      {
-		  G4double pFermi=theFermi.GetFermiMomentum(theDensity->GetDensity(aPos));
-		    // protons must at least have binding energy of CoulombBarrier, so
-		    //  assuming the Fermi energy corresponds to a potential, we must place these such
-		    //  that the Fermi Energy > CoulombBarrier
-		  if (theNucleons[i].GetDefinition() == G4Proton::Proton())
-		  {
-		    G4double nucMass = theNucleons[i].GetDefinition()->GetPDGMass();
-		    G4double eFermi= std::sqrt( sqr(pFermi) + sqr(nucMass) )
-		                      - nucMass;
-		    if (eFermi <= CoulombBarrier() ) freeplace=false;
-		  }
-	      }
-	      if ( freeplace )
-	      {
-		  theNucleons[i].SetPosition(aPos);
-		  places.push_back(aPos);
-		  ++i;
-	      }
-	   }
+          jr=std::min(600,9*(myA - i));
+          G4RandFlat::shootArray(jr,prand);
+	  //CLHEP::RandFlat::shootArray(jr, prand );
 	}
-	if (interationsLeft<=0) {
-	   G4Exception("model/util/G4Fancy3DNucleus.cc", "mod_util001", FatalException,
-             "Problem to place nucleons");
+	jx=--jr;
+	jy=--jr;
+	aPos.set((2*arand[jx]-1.), (2*arand[jy]-1.), (2*arand[--jr]-1.));
+      } while (aPos.mag2() > 1. );  /* Loop checking, 30-Oct-2015, G.Folger */
+      aPos *=maxR;
+      G4double density=theDensity->GetRelativeDensity(aPos);
+      if (G4UniformRand() < density)
+      {
+        freeplace= true;
+	std::vector<G4ThreeVector>::iterator iplace;
+	for( iplace=places.begin(); iplace!=places.end() && freeplace;++iplace)
+	{
+	  delta = *iplace - aPos;
+	  freeplace= delta.mag2() > nd2;
+	}      
+	if ( freeplace ) {
+          G4double pFermi=theFermi.GetFermiMomentum(theDensity->GetDensity(aPos));
+          // protons must at least have binding energy of CoulombBarrier, so
+          //  assuming the Fermi energy corresponds to a potential, we must place these such
+          //  that the Fermi Energy > CoulombBarrier
+	  if (theNucleons[i].GetDefinition() == G4Proton::Proton())
+          {
+            G4double nucMass = theNucleons[i].GetDefinition()->GetPDGMass();
+            G4double eFermi= std::sqrt( sqr(pFermi) + sqr(nucMass) ) - nucMass;
+	    if (eFermi <= CoulombBarrier() ) freeplace=false;
+	  }
+	} 
+	if ( freeplace ) {
+          theNucleons[i].SetPosition(aPos);
+	  places.push_back(aPos);
+	  ++i;
 	}
+      }
+    }
+    if (interationsLeft<=0) {
+      G4Exception("model/util/G4Fancy3DNucleus.cc", "mod_util001", FatalException,
+                  "Problem to place nucleons");
+    }
 
+  } else {
+    // Start insertion
+    // Alpha cluster structure of carbon nuclei, C-12, is implemented according to
+    //       P. Bozek, W. Broniowski, E.R. Arriola and M. Rybczynski
+    //                Phys. Rev. C90, 064902 (2014) 
+    const G4double Lbase=3.05*fermi;
+    const G4double Disp=0.552;        // 0.91^2*2/3 fermi^2
+    const G4double nd2=sqr(nucleondistance);
+    const G4ThreeVector Corner1=G4ThreeVector( Lbase/2.,         0., 0.);
+    const G4ThreeVector Corner2=G4ThreeVector(-Lbase/2.,         0., 0.);
+    const G4ThreeVector Corner3=G4ThreeVector(       0.,Lbase*0.866, 0.);  // 0.866=sqrt(3)/2
+    G4ThreeVector R1;
+    R1=G4ThreeVector(G4RandGauss::shoot(0.,Disp), G4RandGauss::shoot(0.,Disp), G4RandGauss::shoot(0.,Disp))*fermi + Corner1;
+    theNucleons[0].SetPosition(R1); // First nucleon of the first He-4
+    G4int loopCounterLeft = 10000;
+    for(G4int ii=1; ii<4; ii++)     // 2 - 4 nucleons of the first He-4
+    {
+      G4bool Continue;
+      do
+      {
+        R1=G4ThreeVector(G4RandGauss::shoot(0.,Disp), G4RandGauss::shoot(0.,Disp), G4RandGauss::shoot(0.,Disp))*fermi + Corner1;
+        theNucleons[ii].SetPosition(R1);
+        Continue=false;
+        for(G4int jj=0; jj < ii; jj++)
+        {
+          if( (theNucleons[ii].GetPosition() - theNucleons[jj].GetPosition()).mag2() <= nd2 ) {Continue = true; break;}
+        }
+      } while( Continue && --loopCounterLeft > 0 );  /* Loop checking, 12-Dec-2017, A.Ribon */
+    }
+    if ( loopCounterLeft <= 0 ) {
+      G4Exception("model/util/G4Fancy3DNucleus.cc", "mod_util002", FatalException,
+                  "Unable to find a good position for the first alpha cluster");
+    }
+    loopCounterLeft = 10000;
+    for(G4int ii=4; ii<8; ii++)     // 5 - 8 nucleons of the second He-4
+    {
+      G4bool Continue;
+      do
+      {
+        R1=G4ThreeVector(G4RandGauss::shoot(0.,Disp), G4RandGauss::shoot(0.,Disp), G4RandGauss::shoot(0.,Disp))*fermi + Corner2;
+        theNucleons[ii].SetPosition(R1);
+        Continue=false;
+        for(G4int jj=0; jj < ii; jj++)
+        {
+          if( (theNucleons[ii].GetPosition() - theNucleons[jj].GetPosition()).mag2() <= nd2 ) {Continue = true; break;}
+        }
+      } while( Continue && --loopCounterLeft > 0 );  /* Loop checking, 12-Dec-2017, A.Ribon */
+    }
+    if ( loopCounterLeft <= 0 ) {
+      G4Exception("model/util/G4Fancy3DNucleus.cc", "mod_util003", FatalException,
+                  "Unable to find a good position for the second alpha cluster");
+    }
+    loopCounterLeft = 10000;
+    for(G4int ii=8; ii<12; ii++)    // 9 - 12 nucleons of the third He-4
+    {
+      G4bool Continue;
+      do
+      {
+        R1=G4ThreeVector(G4RandGauss::shoot(0.,Disp), G4RandGauss::shoot(0.,Disp), G4RandGauss::shoot(0.,Disp))*fermi + Corner3;
+        theNucleons[ii].SetPosition(R1);
+        Continue=false;
+        for(G4int jj=0; jj < ii; jj++)
+        {
+          if( (theNucleons[ii].GetPosition() - theNucleons[jj].GetPosition()).mag2() <= nd2 ) {Continue = true; break;}
+        }
+      } while( Continue && --loopCounterLeft > 0 );  /* Loop checking, 12-Dec-2017, A.Ribon */
+    }
+    if ( loopCounterLeft <= 0 ) {
+      G4Exception("model/util/G4Fancy3DNucleus.cc", "mod_util004", FatalException,
+                  "Unable to find a good position for the third alpha cluster");
+    }
+    G4LorentzRotation RandomRotation;
+    RandomRotation.rotateZ(2.*pi*G4UniformRand());
+    RandomRotation.rotateY(std::acos(2.*G4UniformRand()-1.));
+    // Randomly rotation of the created nucleus
+    G4LorentzVector Pos;
+    for(G4int ii=0; ii<myA; ii++ )
+    {
+      Pos=G4LorentzVector(theNucleons[ii].GetPosition(),0.); Pos *=RandomRotation;
+      G4ThreeVector NewPos = Pos.vect();
+      theNucleons[ii].SetPosition(NewPos);
+    }
+
+  }
 }
 
 void G4Fancy3DNucleus::ChooseFermiMomenta()
@@ -384,7 +472,13 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 		  }
 	      }  else
 	      {
-	          G4cerr << "G4Fancy3DNucleus: difficulty finding proton momentum" << G4endl;
+                  //AR-21Dec2017 : emit a "JustWarning" exception instead of writing on the error stream.
+	          //G4cerr << "G4Fancy3DNucleus: difficulty finding proton momentum" << G4endl;
+                  G4ExceptionDescription ed;
+                  ed << "Nucleus Z A " << myZ << " " << myA << G4endl;
+                  ed << "proton with eMax=" << eMax << G4endl;
+                  G4Exception( "G4Fancy3DNucleus::ChooseFermiMomenta(): difficulty finding proton momentum, set it to (0,0,0)",
+                               "HAD_FANCY3DNUCLEUS_001", JustWarning, ed );
 		  mom=G4ThreeVector(0,0,0);
 	      }
 

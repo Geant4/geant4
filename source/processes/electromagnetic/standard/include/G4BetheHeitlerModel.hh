@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.hh 106628 2017-10-17 06:25:38Z gcosmo $
+// $Id: G4BetheHeitlerModel.hh 110527 2018-05-29 06:09:58Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -38,6 +38,8 @@
 //
 // Modifications:
 // 02-02-06 Remove InitialiseCrossSectionPerAtom();
+// 28-05-18 New version with improved screening function approximation, improved
+//          efficiency, documentation and cleanup (M. Novak)   
 //
 // Class Description:
 //
@@ -54,6 +56,8 @@
 #include "G4PhysicsTable.hh"
 #include "G4Log.hh"
 
+#include <vector>
+
 class G4ParticleChangeForGamma;
 class G4Pow;
 
@@ -63,70 +67,109 @@ class G4BetheHeitlerModel : public G4VEmModel
 public:
 
   explicit G4BetheHeitlerModel(const G4ParticleDefinition* p = 0, 
-			       const G4String& nam = "BetheHeitler");
+                               const G4String& nam = "BetheHeitler");
  
   virtual ~G4BetheHeitlerModel();
 
   virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&) override;
+                          const G4DataVector&) override;
 
   virtual void InitialiseLocal(const G4ParticleDefinition*, 
-			       G4VEmModel* masterModel) override;
+                               G4VEmModel* masterModel) override;
 
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A=0., 
-                                      G4double cut=0.,
-                                      G4double emax=DBL_MAX) override;
+  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+                                              G4double kinEnergy, 
+                                              G4double Z, 
+                                              G4double A=0., 
+                                              G4double cut=0.,
+                                              G4double emax=DBL_MAX) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy) override;
+                                 const G4MaterialCutsCouple*,
+                                 const G4DynamicParticle*,
+                                 G4double tmin,
+                                 G4double maxEnergy) override;
+
+protected:
+
+  inline G4double ScreenFunction1(const G4double delta);
+
+  inline G4double ScreenFunction2(const G4double delta);
+
+  inline void ScreenFunction12(const G4double delta, G4double &f1, G4double &f2);
+
+  void     InitialiseElementData();
+ 
+  struct ElementData {
+    G4double fDeltaMaxLow;
+    G4double fDeltaMaxHigh;
+  };
 
 private:
-
-  G4double ScreenFunction1(G4double ScreenVariable);
-
-  G4double ScreenFunction2(G4double ScreenVariable);
 
   // hide assignment operator
   G4BetheHeitlerModel & operator=(const G4BetheHeitlerModel &right) = delete;
   G4BetheHeitlerModel(const  G4BetheHeitlerModel&) = delete;
 
 protected:
+  
+  static const G4int                gMaxZet; 
+  
+  G4Pow*                            fG4Calc;
+  G4ParticleDefinition*             fTheGamma;
+  G4ParticleDefinition*             fTheElectron;
+  G4ParticleDefinition*             fThePositron;
+  G4ParticleChangeForGamma*         fParticleChange;
 
-  G4Pow*                    g4calc;
-  G4ParticleDefinition*     theGamma;
-  G4ParticleDefinition*     theElectron;
-  G4ParticleDefinition*     thePositron;
-  G4ParticleChangeForGamma* fParticleChange;
+  static std::vector<ElementData*>  gElementData;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4BetheHeitlerModel::ScreenFunction1(G4double ScreenVariable)
+//
+// Bethe screening functions for the elastic (coherent) scattering:
+// Bethe's phi1, phi2 coherent screening functions were computed numerically 
+// by using (the universal) atomic form factors computed based on the Thomas-
+// Fermi model of the atom (using numerical solution of the Thomas-Fermi 
+// screening function instead of Moliere's analytical approximation). The 
+// numerical results can be well approximated (better than Butcher & Messel 
+// especially near the delta=1 limit) by:
+// ## if delta <= 1.4 
+//  phi1(delta) = 20.806 - delta*(3.190 - 0.5710*delta)   
+//  phi2(delta) = 20.234 - delta*(2.126 - 0.0903*delta)
+// ## if delta  > 1.4
+//  phi1(delta) = phi2(delta) = 21.0190 - 4.145*ln(delta + 0.958)
+// with delta = 136mc^2kZ^{-1/3}/[E(Eg-E)] = 136Z^{-1/3}eps0/[eps(1-eps)] where 
+// Eg is the initial photon energy, E is the total energy transferred to one of 
+// the e-/e+ pair, eps0 = mc^2/Eg and eps = E/Eg.
 
-// compute the value of the screening function 3*PHI1 - PHI2
+// Compute the value of the screening function 3*PHI1(delta) - PHI2(delta):
+inline G4double G4BetheHeitlerModel::ScreenFunction1(const G4double delta)
 {
-  return (ScreenVariable > 1.)
-    ? 42.24 - 8.368*G4Log(ScreenVariable+0.952)
-    : 42.392 - ScreenVariable*(7.796 - 1.961*ScreenVariable);
+  return (delta > 1.4) ? 42.038 - 8.29*G4Log(delta + 0.958) 
+                       : 42.184 - delta*(7.444 - 1.623*delta);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4BetheHeitlerModel::ScreenFunction2(G4double ScreenVariable)
-// compute the value of the screening function 1.5*PHI1 - 0.5*PHI2
+// Compute the value of the screening function 1.5*PHI1(delta) +0.5*PHI2(delta):
+inline G4double G4BetheHeitlerModel::ScreenFunction2(const G4double delta)
 {
-  return (ScreenVariable > 1.)
-    ? 42.24 - 8.368*G4Log(ScreenVariable+0.952)
-    : 41.405 - ScreenVariable*(5.828 - 0.8945*ScreenVariable);
+  return (delta > 1.4) ? 42.038 - 8.29*G4Log(delta + 0.958)
+                       : 41.326 - delta*(5.848 - 0.902*delta);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// Same as ScreenFunction1 and ScreenFunction2 but computes them at once
+inline void G4BetheHeitlerModel::ScreenFunction12(const G4double delta, 
+                                                  G4double &f1, G4double &f2)
+{
+  if (delta > 1.4) {
+    f1 = 42.038 - 8.29*G4Log(delta + 0.958);
+    f2 = f1;
+  } else {
+    f1 = 42.184 - delta*(7.444 - 1.623*delta);
+    f2 = 41.326 - delta*(5.848 - 0.902*delta); 
+  }
+}
+
 
 #endif

@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc 106710 2017-10-20 09:22:51Z gcosmo $
+// $Id: G4TessellatedSolid.cc 108288 2018-01-31 09:36:41Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -72,6 +72,10 @@
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+#include "G4TessellatedSolid.hh"
+
+#if !defined(G4GEOM_USE_UTESSELLATEDSOLID)
+
 #include <iostream>
 #include <stack>
 #include <iostream>
@@ -79,8 +83,6 @@
 #include <fstream>
 #include <algorithm>
 #include <list>
-
-#include "G4TessellatedSolid.hh"
 
 #include "geomdefs.hh"
 #include "Randomize.hh"
@@ -1785,14 +1787,14 @@ G4Polyhedron *G4TessellatedSolid::CreatePolyhedron () const
   G4int size = fFacets.size();
   for (G4int i = 0; i < size; ++i)
   {
-    G4VFacet &facet = *fFacets[i];
+    G4VFacet* facet = fFacets[i];
     G4int v[4];
-    G4int n = facet.GetNumberOfVertices();
+    G4int n = facet->GetNumberOfVertices();
     if (n > 4) n = 4;
     else if (n == 3) v[3] = 0;
     for (G4int j=0; j<n; ++j)
     {
-      G4int k = facet.GetVertexIndex(j);
+      G4int k = facet->GetVertexIndex(j);
       v[j] = k+1;
     }
     polyhedron->AddFacet(v[0],v[1],v[2],v[3]);
@@ -2098,3 +2100,5 @@ G4int G4TessellatedSolid::AllocatedMemory()
   size += sizeInsides + sizeVoxels;
   return size;
 }
+
+#endif

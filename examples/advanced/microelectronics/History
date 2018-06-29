@@ -8,6 +8,10 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
 
                        Package History file
                        --------------------
+10 May 2018 - B. Morgan - microelectronics-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
 
 2 November 2016 - L. Garnier - microelectronics-V10-02-03
   - Remove icons.mac. Automatically include since interfaces-V10-02-07

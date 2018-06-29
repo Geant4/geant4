@@ -14,7 +14,7 @@ code and to keep track of all tags.
     * Please list in reverse chronological order (last date on top)
     ---------------------------------------------------------------
 
-19 December 2017  Gabriele Cosmo (hadr-fission-V10-03-00)
+19 December 2017  Gabriele Cosmo (hadr-fission-V10-04-00)
 -------------------------------------------------------
 - Fixed self-consistency in G4LLNLFission header (missing #include).
   Added missing #ifdef guards in G4fissionEvent header.

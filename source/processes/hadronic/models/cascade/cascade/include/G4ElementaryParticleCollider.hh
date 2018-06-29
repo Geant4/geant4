@@ -109,8 +109,6 @@ private:
 
   G4bool pionNucleonAbsorption(G4double ekin) const;
 
-  G4bool splitQuasiDeuteron(G4int qdtype); 	// Fill kinds with NN components
-
   void fillOutgoingMasses();		// Fill mass arrays from particle types
 
   // Utility class to generate final-state kinematics

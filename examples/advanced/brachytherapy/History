@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 107393 2017-11-10 08:14:22Z gcosmo $
+$Id: History 109983 2018-05-14 07:17:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,11 @@ $Id: History 107393 2017-11-10 08:14:22Z gcosmo $
 
                       Category History file
                       ---------------------
+
+10.05.2018 - B. Morgan; brachy-V10-04-00
+             Include G4Types before use of G4MULTITHREADED. For forward
+             compatibility with move to #defines over -D for G4 preprocessor
+             symbols.
 
 10.11.2017 - G. Cosmo; brachy-V10-03-01
              Avoid setting the initial seed to zero.

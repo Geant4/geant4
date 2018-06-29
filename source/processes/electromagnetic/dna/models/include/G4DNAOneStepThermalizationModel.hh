@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAOneStepThermalizationModel.hh 108498 2018-02-15 15:33:07Z gcosmo $
+// $Id: G4DNAOneStepThermalizationModel.hh 110873 2018-06-22 13:11:22Z gcosmo $
 //
 // Author: Mathieu Karamitros
 
@@ -47,6 +47,7 @@
 #ifndef G4DNAOneStepThermalizationModel_hh
 #define G4DNAOneStepThermalizationModel_hh
 
+#include <memory>
 #include "G4VEmModel.hh"
 
 class G4ITNavigator;
@@ -86,6 +87,21 @@ namespace DNA{
       static const double gEnergies_T1990[11];
       static const double gStdDev_T1990[11];
     };
+    
+    //-----------------------
+    /*
+     * Article: Ritchie RH, Hamm RN, Turner JE, Bolch WE (1994) Interaction of
+     *          low-energy electrons with condensed matter: relevance for track
+     *          structure.
+     *          Computational approaches in molecular radiation biology, Plenum,
+     *          New York, Vol. 63, pp. 155–166
+     *          Note: also used in Ballarini et al., 2000
+     */
+    struct Ritchie1994{
+      static void GetPenetration(G4double energy,
+                                 G4ThreeVector& displacement);
+      static double GetRmean(double energy);
+    };
   }
 }
 
@@ -102,7 +118,7 @@ class G4TDNAOneStepThermalizationModel : public G4VEmModel
 public:
   typedef MODEL Model;
   G4TDNAOneStepThermalizationModel(const G4ParticleDefinition* p = 0,
-                                  const G4String& nam =
+                                   const G4String& nam =
                                       "DNAOneStepThermalizationModel");
   virtual ~G4TDNAOneStepThermalizationModel();
 
@@ -123,19 +139,19 @@ public:
   inline void SetVerbose(int flag){
     fVerboseLevel = flag;
   }
-  
+
   void GetPenetration(G4double energy,
                       G4ThreeVector& displacement);
-  
+
   double GetRmean(double energy);
 
 protected:
   const std::vector<G4double>* fpWaterDensity;
-  
-  G4ParticleChangeForGamma* fParticleChangeForGamma;
+
+  G4ParticleChangeForGamma* fpParticleChangeForGamma;
   G4bool fIsInitialised;
   G4int fVerboseLevel;
-  G4Navigator* fNavigator;
+  std::unique_ptr<G4Navigator> fpNavigator;
 
 private:
   G4TDNAOneStepThermalizationModel&
@@ -151,4 +167,21 @@ typedef G4TDNAOneStepThermalizationModel<DNA::Penetration::Meesungnoen2002> G4DN
 // Note: if you use the above distribution, it would be
 // better to follow the electrons down to 6 eV and only then apply
 // the one step thermalization
+
+class G4DNASolvationModelFactory
+{
+public:
+  /// @param penetrationType Available options:
+  ///        Meesungnoen2002, Terrisol1990, Ritchie1994
+  static G4VEmModel* Create(const G4String& penetrationModel);
+  
+  /// \brief One step thermalization model can be chosen via macro using
+  ///        /process/dna/e-SolvationSubType Ritchie1994
+  /// \return Create the model defined via the command macro
+  ///         /process/dna/e-SolvationSubType
+  ///         In case the command is unused, it returns the default model set in
+  ///         G4EmParameters.
+  static G4VEmModel* GetMacroDefinedModel();
+};
+
 #endif

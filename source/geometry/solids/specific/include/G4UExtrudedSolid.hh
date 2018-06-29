@@ -35,33 +35,34 @@
 //
 // Class description:
 //
-//   Wrapper class for G4UExtrudedSolid to make use of it from USolids module.
+//   Wrapper class for G4ExtrudedSolid to make use of VecGeom ExtrudedSolid.
 
 // History:
-// 30.10.13 G.Cosmo, CERN/PH
+// 17.11.17 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UEXTRUDEDSOLID_hh
 #define G4UEXTRUDEDSOLID_hh
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UExtrudedSolid.hh"
+#include <volumes/UnplacedExtruded.h>
 #include "G4TwoVector.hh"
+
 #include "G4Polyhedron.hh"
 
-class G4UExtrudedSolid : public G4USolid 
+class G4UExtrudedSolid : public G4UAdapter<vecgeom::UnplacedExtruded>
 {
+  using Shape_t = vecgeom::UnplacedExtruded;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedExtruded>;
+
   public:  // without description
 
     struct ZSection
     {
       ZSection(G4double z, G4TwoVector offset, G4double scale)
         : fZ(z), fOffset(offset), fScale(scale) {}
-      ZSection(const UExtrudedSolid::ZSection& zs)
-        : fZ(zs.fZ), fOffset(G4TwoVector(zs.fOffset.x,zs.fOffset.y)),
-          fScale(zs.fScale) {}
 
       G4double    fZ;
       G4TwoVector fOffset;
@@ -71,20 +72,18 @@ class G4UExtrudedSolid : public G4USolid
   public:  // with description
 
     G4UExtrudedSolid(const G4String&        pName,
-                   std::vector<G4TwoVector> polygon,
-                   std::vector<ZSection>    zsections);
+                     std::vector<G4TwoVector> polygon,
+                     std::vector<ZSection>    zsections);
     // General constructor
 
     G4UExtrudedSolid(const G4String&        pName,
-                   std::vector<G4TwoVector> polygon,
-                   G4double                 halfZ,
-                   G4TwoVector off1, G4double scale1,
-                   G4TwoVector off2, G4double scale2);
+                     std::vector<G4TwoVector> polygon,
+                     G4double                 halfZ,
+                     G4TwoVector off1, G4double scale1,
+                     G4TwoVector off2, G4double scale2);
     // Special constructor for solid with 2 z-sections
 
    ~G4UExtrudedSolid();
-
-    inline UExtrudedSolid* GetShape() const;
 
     G4int GetNofVertices() const;
     G4TwoVector GetVertex(G4int index) const;
@@ -118,11 +117,6 @@ class G4UExtrudedSolid : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UExtrudedSolid* G4UExtrudedSolid::GetShape() const
-{
-  return (UExtrudedSolid*) fShape;
-}
 
 inline G4GeometryType G4UExtrudedSolid::GetEntityType() const
 {

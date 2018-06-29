@@ -37,10 +37,12 @@
 // Decay all input tracks, put daughters onto end of list
 
 G4DecayKineticTracks::G4DecayKineticTracks(G4KineticTrackVector *tracks) {
+
   if (tracks) Decay(tracks);
 }
 
 void G4DecayKineticTracks::Decay(G4KineticTrackVector *tracks) const {
+
   if (!tracks) return;
 
   G4KineticTrackVector* daughters = 0;

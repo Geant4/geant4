@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc 100697 2016-10-31 11:32:35Z gcosmo $
+// $Id: GammaRayTel.cc 110103 2018-05-15 11:33:34Z gcosmo $
 //
-// 
+//
 // ------------------------------------------------------------
 //      GEANT 4 main program
 //      CERN Geneva Switzerland
@@ -34,10 +34,12 @@
 //
 //      ------------ GammaRayTel example main program ------
 //           by F.Longo, R.Giannitrapani & G.Santin (29 nov 2000)
-//           See README file for details on this example            
-//  20.11.01 G.Santin: new analysis management, and some modification in the 
+//           See README file for details on this example
+//  20.11.01 G.Santin: new analysis management, and some modification in the
 //                     construction of some Action's
-// ************************************************************ 
+// ************************************************************
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -45,46 +47,46 @@
 #include "G4RunManager.hh"
 #endif
 
-#include "G4UImanager.hh" 
+#include "G4UImanager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif 
+#endif
 
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
 #endif
- 
+
 #include "GammaRayTelDetectorConstruction.hh"
 #include "GammaRayTelPhysicsList.hh"
 #include "GammaRayTelActionInitializer.hh"
 
-//#include "QGSP_BIC.hh" 
-#include "FTFP_BERT.hh" 
+//#include "QGSP_BIC.hh"
+#include "FTFP_BERT.hh"
 
 #include "GammaRayTelAnalysis.hh"
- 
-// This is the main function 
+
+// This is the main function
 int main(int argc, char** argv)
 {
   // Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-  //runManager->SetNumberOfThreads(2); 
+  //  runManager->SetNumberOfThreads(1);
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif
 
   // Set mandatory user initialization classes
-  GammaRayTelDetectorConstruction* detector = 
+  GammaRayTelDetectorConstruction* detector =
     new GammaRayTelDetectorConstruction;
   runManager->SetUserInitialization(detector);
-  
+
   // POSSIBILITY TO SELECT ANOTHER PHYSICS LIST
-  //  do not use   GammaRayTelPhysicsList, this is old style and crashes at 
-  //    program exit   
+  //  do not use   GammaRayTelPhysicsList, this is old style and crashes at
+  //    program exit
   runManager->SetUserInitialization(new GammaRayTelPhysicsList);
-  
+
   //  runManager->SetUserInitialization(new QGSP_BIC);
   //runManager->SetUserInitialization(new FTFP_BERT);
 
@@ -93,17 +95,17 @@ int main(int argc, char** argv)
 
   // Creation of the analysis manager
   GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
-    
+
   // Set visualization and user interface
 #ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
-  
+
   // Initialize G4 kernel
   //  runManager->Initialize();
-  
+
   // Get the pointer to the UI manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   if (argc!=1)   // batch mode
@@ -123,7 +125,7 @@ int main(int argc, char** argv)
 	  ui->SessionStart();
 	}
       delete ui;
-#endif  
+#endif
     }
   // Job termination
 #ifdef G4VIS_USE

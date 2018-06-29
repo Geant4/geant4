@@ -17,10 +17,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19 March 2018 - G.Cosmo (externals-V10-03-10)
+24 May 2018 - G.Cosmo (externals-V10-04-05)
+- CLHEP: fixed compilation warnings from gcc-8.1.0 when using
+  -Woverloaded-virtual compilation option (default in Geant4).
+
+19 March 2018 - G.Cosmo (externals-V10-04-04)
 - Corrected GNUmakefile for Windows.
 
-11-December-2017 - G.Cosmo (externals-V10-03-09)
+16 March 2018 - G.Cosmo (externals-V10-04-03)
+- Synchronised with CLHEP-2.4.0.4.
+
+07 March 2018 - G.Cosmo (externals-V10-04-02)
+- CLHEP: removed kludge for Windows previously introduced to MinMaxRng.hh.
+  Further simplified setup for thread-local storage and atomics, as
+  now all supported by c++11 in either clang or VC++.
+
+06 March 2018 - G.Cosmo (externals-V10-04-01)
+- CLHEP: enabled thread-local storage and atomics on Windows; added flag in
+  thread_local.h, use_atomic.h and atomic_in.h.
+
+19 February 2018 - J.Madsen
+- CLHEP: temporary fix for Windows MT data race in MinMaxRng.hh.
+  Fixed warning C4293: '>>': shift count negative or too big, undefined behavior
+  in Ranlux64Engine on Windows
+
+11-December-2017 - G.Cosmo (externals-V10-04-00)
 - CLHEP: in MixMaxRng::modadd(), fixed guard for assembly code to protect
   builds on 32-bit systems.
 

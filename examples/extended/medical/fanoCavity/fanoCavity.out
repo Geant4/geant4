@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -170,7 +170,7 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 10 GeV, 28 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       10 GeV
+        BetheHeitler :  Emin=        0 eV    Emax=       10 GeV   AngularGenUrban
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
@@ -246,20 +246,51 @@ Index : 2     used in the geometry : Yes
 --> Event 0 starts.
 --> Event 1000 starts.
 
- ---> NbofEvents= 1000   NbOfelectr= 70417   Tkin= 589.722 keV (0.000 %)   NbOfelec in cav= 4894   Dose/EnFluence= 31.512 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 70442   Tkin= 588.205 keV (0.000 %)   NbOfelec in cav= 5091   Dose/EnFluence= 32.195 cm2/g (0.000 %)
 --> Event 2000 starts.
 
- ---> NbofEvents= 2000   NbOfelectr= 140609   Tkin= 588.876 keV (-0.143 %)   NbOfelec in cav= 9566   Dose/EnFluence= 29.322 cm2/g (-6.948 %)
+ ---> NbofEvents= 2000   NbOfelectr= 141266   Tkin= 587.984 keV (-0.037 %)   NbOfelec in cav= 9922   Dose/EnFluence= 31.701 cm2/g (-1.536 %)
 --> Event 3000 starts.
 
- ---> NbofEvents= 3000   NbOfelectr= 210652   Tkin= 589.125 keV (0.042 %)   NbOfelec in cav= 14502   Dose/EnFluence= 30.920 cm2/g (5.451 %)
+ ---> NbofEvents= 3000   NbOfelectr= 211448   Tkin= 588.253 keV (0.046 %)   NbOfelec in cav= 14912   Dose/EnFluence= 32.618 cm2/g (2.893 %)
  Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=21.52s Real=21.93s Sys=0.01s
+  User=14.460000s Real=14.672463s Sys=0.010000s
+
+ ======================== run summary ======================
+
+ The run consists of 4000 gamma of 1.250 MeV through 2*5.000 mm  of Water (density: 1.000 g/cm3 )
+
+ the cavity is 2.000 mm  of Water_vapor (density: 1.000 mg/cm3) Mass = 0.628 mg
+
+ ============================================================
+
+ Process calls frequency --->  compt= 281415  Transportation= 79810  msc= 2531286  eIoni= 1702830
+
+ Gamma crossSections in wall material :  compt= 63.464 cm2/g   --> total= 63.464 cm2/g
+
+ Mean energy of secondary e- = 588.2369 keV +- 0.1031 %  (--> range in wall material = 2.2211 mm )
+ Mass_energy_transfer coef: 29.8654 cm2/g
+
+ StoppingPower in wall   = 1.9644 MeV*cm2/g
+               in cavity = 1.9830 MeV*cm2/g
+
+ Charged particle flow in cavity :
+      Enter --> nbParticles = 19810	 Energy = 9.9952 GeV
+      Exit  --> nbParticles = 19803	 Energy = 9.9932 GeV
+
+ Total edep in cavity = 14.0644 MeV +- 3.5936 %	 Total charged trackLength = 54.6517 m     (mean value = 2.7588 mm )
+ Total dose in cavity = 22.3842 MeV/mg
+ Dose/EnergyFluence   = 31.6449 cm2/g
+
+ (Dose/EnergyFluence)/Mass_energy_transfer = 1.05958 +- 0.03809
+
+ StepSize of ch. tracks in wall   = 110.5535 um  +- 70.1348 um 	 (nbSteps/track = 15.1420)
+ StepSize of ch. tracks in cavity = 1.2129 mm  +- 1.1560 mm 	 (nbSteps/track = 2.2745)
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.07 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.067 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

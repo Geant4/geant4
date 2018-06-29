@@ -27,10 +27,11 @@
 /// \brief Main program of the electromagnetic/TestEm5 example
 //
 //
-// $Id: TestEm5.cc 91972 2015-08-12 13:48:40Z gcosmo $
+// $Id: TestEm5.cc 109864 2018-05-09 12:20:54Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -46,20 +47,18 @@
 #include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
-  //choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
+  //choose the local stepping verbose
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
 
   // Construct the default run manager
@@ -68,54 +67,43 @@ int main(int argc,char** argv) {
   G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(),4);
   if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
   runManager->SetNumberOfThreads(nThreads);
-  G4cout << "===== TestEm5 is started with " 
+  G4cout << "===== TestEm5 is started with "
          <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif
 
-  // set mandatory initialization classes
+  //set mandatory initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList());
 
-  // set user action classes
-  //
-  runManager->SetUserInitialization(new ActionInitialization(detector));  
-   
-  // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
- 
-  if (argc!=1)   // batch mode  
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
-    }
-    
-  else           //define visualization and UI terminal for interactive mode
-    { 
-#ifdef G4VIS_USE
-      G4VisManager* visManager = new G4VisExecutive;
-      visManager->Initialize();
-#endif    
-     
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-      ui->SessionStart();
-      delete ui;
-#endif
-     
-#ifdef G4VIS_USE
-      delete visManager;
-#endif     
-    }
-    
-  // job termination
-  //  
-  delete runManager;
+  //set user action classes
+  runManager->SetUserInitialization(new ActionInitialization(detector));
 
-  return 0;
+  //initialize visualization
+  G4VisManager* visManager = nullptr;
+
+  //get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+  if (ui)  {
+   //interactive mode
+   visManager = new G4VisExecutive;
+   visManager->Initialize();
+   ui->SessionStart();
+   delete ui;
+  }
+  else  {
+   //batch mode
+   G4String command = "/control/execute ";
+   G4String fileName = argv[1];
+   UImanager->ApplyCommand(command+fileName);
+  }
+
+  //job termination
+  delete visManager;
+  delete runManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

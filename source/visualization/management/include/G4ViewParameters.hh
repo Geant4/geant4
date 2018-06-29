@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh 99418 2016-09-21 09:18:42Z gcosmo $
+// $Id: G4ViewParameters.hh 109510 2018-04-26 07:15:57Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -129,6 +129,8 @@ public: // With description
         G4bool           IsDensityCulling        () const;
         G4double         GetVisibleDensity       () const;
         G4bool           IsCullingCovered        () const;
+        G4int            GetCBDAlgorithmNumber   () const;
+  const std::vector<G4double>& GetCBDParameters  () const;
         G4bool           IsSection               () const;
   const G4Plane3D&       GetSectionPlane         () const;
         G4bool           IsCutaway               () const;
@@ -179,7 +181,25 @@ public: // With description
         RotationStyle    GetRotationStyle        () const;
   const std::vector<G4ModelingParameters::VisAttributesModifier>&
                          GetVisAttributesModifiers () const;
-  
+        G4double         GetStartTime            () const;
+        G4double         GetEndTime              () const;
+        G4double         GetFadeFactor           () const;
+        G4bool           IsDisplayHeadTime       () const;
+        G4double         GetDisplayHeadTimeX     () const;
+        G4double         GetDisplayHeadTimeY     () const;
+        G4double         GetDisplayHeadTimeSize  () const;
+        G4double         GetDisplayHeadTimeRed   () const;
+        G4double         GetDisplayHeadTimeGreen () const;
+        G4double         GetDisplayHeadTimeBlue  () const;
+        G4bool           IsDisplayLightFront     () const;
+        G4double         GetDisplayLightFrontX   () const;
+        G4double         GetDisplayLightFrontY   () const;
+        G4double         GetDisplayLightFrontZ   () const;
+        G4double         GetDisplayLightFrontT   () const;
+        G4double         GetDisplayLightFrontRed () const;
+        G4double         GetDisplayLightFrontGreen () const;
+        G4double         GetDisplayLightFrontBlue () const;
+
   // Here Follow functions to evaluate useful quantities as a
   // function of the radius of the Bounding Sphere of the object being
   // viewed.  Call them in the order given - for efficiency, later
@@ -200,6 +220,8 @@ public: // With description
   void SetDensityCulling       (G4bool);
   void SetVisibleDensity       (G4double visibleDensity);
   void SetCullingCovered       (G4bool);
+  void SetCBDAlgorithmNumber   (G4int);
+  void SetCBDParameters        (const std::vector<G4double>&);
   void SetSectionPlane         (const G4Plane3D& sectionPlane);
   void UnsetSectionPlane       ();
   void SetCutawayMode          (CutawayMode);
@@ -250,6 +272,24 @@ public: // With description
   void SetRotationStyle        (RotationStyle);
   void ClearVisAttributesModifiers ();
   void AddVisAttributesModifier(const G4ModelingParameters::VisAttributesModifier&);
+  void SetStartTime            (G4double);
+  void SetEndTime              (G4double);
+  void SetFadeFactor           (G4double);
+  void SetDisplayHeadTime      (G4bool);
+  void SetDisplayHeadTimeX     (G4double);
+  void SetDisplayHeadTimeY     (G4double);
+  void SetDisplayHeadTimeSize  (G4double);
+  void SetDisplayHeadTimeRed   (G4double);
+  void SetDisplayHeadTimeGreen (G4double);
+  void SetDisplayHeadTimeBlue  (G4double);
+  void SetDisplayLightFront    (G4bool);
+  void SetDisplayLightFrontX   (G4double);
+  void SetDisplayLightFrontY   (G4double);
+  void SetDisplayLightFrontZ   (G4double);
+  void SetDisplayLightFrontT   (G4double);
+  void SetDisplayLightFrontRed (G4double);
+  void SetDisplayLightFrontGreen (G4double);
+  void SetDisplayLightFrontBlue (G4double);
 
   // Command dumping functions.
   // For camera commands we need to provide the standard target point from
@@ -258,7 +298,8 @@ public: // With description
   G4String DrawingStyleCommands  () const;
   G4String SceneModifyingCommands() const;
   G4String TouchableCommands     () const;
-  
+  G4String TimeWindowCommands    () const;
+
   // Other functions.
   void PrintDifferences (const G4ViewParameters& v) const;
 
@@ -287,6 +328,8 @@ private:
   G4bool       fDensityCulling;  // Density culling requested.  If so...
   G4double     fVisibleDensity;  // ...density lower than this not drawn.
   G4bool       fCullCovered;     // Cull daughters covered by opaque mothers.
+  G4int        fCBDAlgorithmNumber; // Colour by density algorithm number.
+  std::vector<G4double> fCBDParameters; // Colour by density parameters.
   G4bool       fSection;         // Section drawing requested (DCUT in GEANT3).
   G4Plane3D    fSectionPlane;    // Cut plane for section drawing (DCUT).
   CutawayMode  fCutawayMode;     // Cutaway mode.
@@ -329,6 +372,16 @@ private:
   G4bool       fPicking;         // Request picking.
   RotationStyle fRotationStyle;  // Rotation style.
   std::vector<G4ModelingParameters::VisAttributesModifier> fVisAttributesModifiers;
+  G4double     fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
+  G4double     fFadeFactor;  // 0: no fade; 1: maximum fade with time within range.
+  G4bool       fDisplayHeadTime;  // Display head time (fEndTime) in 2D text.
+  G4double     fDisplayHeadTimeX, fDisplayHeadTimeY;  // 2D screen coords.
+  G4double     fDisplayHeadTimeSize;  // Screen size.
+  G4double     fDisplayHeadTimeRed, fDisplayHeadTimeGreen, fDisplayHeadTimeBlue;
+  G4bool       fDisplayLightFront;// Display light front at head time originating at
+  G4double     fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ,
+               fDisplayLightFrontT;
+  G4double     fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
 
   enum { // Constants for geometry mask in ParseGeometry and related functions.
     fNoValue     = 0,

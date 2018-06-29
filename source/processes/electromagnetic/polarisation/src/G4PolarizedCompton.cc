@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedCompton.cc 105740 2017-08-16 13:05:44Z gcosmo $
+// $Id: G4PolarizedCompton.cc 109176 2018-04-03 06:53:39Z gcosmo $
 // 
 //
 // File name:     G4PolarizedCompton
@@ -123,7 +123,7 @@ void G4PolarizedCompton::InitialiseProcess(const G4ParticleDefinition*)
       if(!EmModel(0)) { SetEmModel(new G4KleinNishinaCompton()); }
     } else {
       emModel = new G4PolarizedComptonModel();
-      SetEmModel(emModel, 1); 
+      SetEmModel(emModel); 
     }
     G4EmParameters* param = G4EmParameters::Instance();
     EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());

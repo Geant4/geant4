@@ -75,6 +75,17 @@ And to run it, you have to add to the enviromental variable LD_LIBRARY_PATH the 
         -DDCMTK_DIR=/path_to_dcmtk_install /path/to/DICOM/source' 
 then make
 
+---> 2c) CMake installation and inheriting from DICOM:
+
+ - Set the CMAKE_INSTALL_PREFIX (typically use the same install prefix as the Geant4 distribution)
+ - Install the project
+ - Installation will install libraries + DICOMConfig.cmake + other config files
+   - if DCMTK is enabled, will also install dicomReader library + icomReaderConfig.cmake and it's other config files
+ - In the new Geant4 application, add "find_package(DICOM REQUIRED)" to CMakeLists.txt
+   - (optionally) add "set(DICOM_DIR ${Geant4_DIR} CACHE PATH "Path to DICOM installation config files") to CMakeLists.txt
+   - add "include_directories(${DICOM_INCLUDE_DIRS}) and link target to ${DICOM_LIBRARIES}
+   - if DCMTK is enabled, DICOMConfig.cmake will include the DCMTK and dicomReader installations, i.e. there is not need for "find_package(dicomReader)" or "find_package(DCMTK)"
+
 
 ---> 3) Run the example:
 

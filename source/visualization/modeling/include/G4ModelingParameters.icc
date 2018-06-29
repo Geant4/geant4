@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.icc 99418 2016-09-21 09:18:42Z gcosmo $
+// $Id: G4ModelingParameters.icc 109510 2018-04-26 07:15:57Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -62,6 +62,14 @@ inline G4double G4ModelingParameters::GetVisibleDensity () const {
 
 inline G4bool G4ModelingParameters::IsCullingCovered () const {
   return fCullCovered;
+}
+
+inline G4int G4ModelingParameters::GetCBDAlgorithmNumber () const {
+  return fCBDAlgorithmNumber;
+}
+
+inline const std::vector<G4double>& G4ModelingParameters::GetCBDParameters () const {
+  return fCBDParameters;
 }
 
 inline G4bool G4ModelingParameters::IsExplode () const {
@@ -123,6 +131,14 @@ inline void G4ModelingParameters::SetDensityCulling (G4bool value) {
 
 inline void G4ModelingParameters::SetCullingCovered (G4bool value) {
   fCullCovered = value;
+}
+
+inline void G4ModelingParameters::SetCBDAlgorithmNumber (G4int n) {
+  fCBDAlgorithmNumber = n;
+}
+
+inline void G4ModelingParameters::SetCBDParameters (const std::vector<G4double>& p) {
+  fCBDParameters = p;
 }
 
 inline void G4ModelingParameters::SetExplodeFactor (G4double explodeFactor) {

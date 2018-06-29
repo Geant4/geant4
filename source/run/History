@@ -1,4 +1,4 @@
-$Id: History 110119 2018-05-15 12:22:31Z gcosmo $
+$Id: History 110726 2018-06-11 06:05:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,25 +17,50 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-April 3, 2018, M. Asai (run-V10-03-19)
+June 8th, 2018, J. Madsen (run-V10-04-09)
+- Fixed compilation warnings related to TIMEMORY_AUTO_TIMER macros on Windows
+
+June 6th, 2018, J. Madsen (run-V10-04-08)
+- Added TiMemory auto-timer macros to some key functions in
+  G4RunManager, G4RunManagerKernel, G4MTRunManager, and G4MTRunManagerKernel
+- Added TiMemory libraries and includes to sources.cmake
+
+May 17th, 2018, J. Madsen (run-V10-04-07)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+April 3, 2018, M. Asai (run-V10-04-06)
 - G4ExceptionHandler: Add track/step/volume information when 
   exception happens while event is in process.
 
-February 27, 2018, G. Cosmo (run-V10-03-18)
+February 27, 2018, G. Cosmo (run-V10-04-05)
 - G4RunManagerKernel: updated also MT banner.
 
-February 26, 2018, M. Asai
+February 26, 2018, M. Asai (run-V10-04-04)
 - G4RunManagerKernel: two general papers are added to the banner.
 
-February 9, 2018, M. Asai (run-V10-03-17)
+February 21 2018 Jonathan Madsen (run-V10-04-03)
+- Replace pthread-style <void*(void*)> function signatures with
+  <void(G4WorkerThread*)> as it is now unnecessary
+ 
+February 12 2018 Jonathan Madsen (run-V10-04-02)
+- Removed WIN32 conditional for G4THREADCREATE in
+  G4UnserWorkerThreadInitialization (no longer needed)
+- Changed G4Thread to G4NativeThread when setting pin affinity in
+  G4WorkerThread
+
+February 9, 2018, M. Asai (run-V10-04-01)
 - G4RunManagerKernel.cc :
   Application state is set to G4State_Init while application is in
   RunInitialization().
+- Co-working with global-V10-04-01.
 
-December 26, 2017, M. Asai
+December 26, 2017, M. Asai (run-V10-04-00)
 - G4UserPhysicsListMessenger : 
   UI command returns an error message if a command is refused due
   to incorrect parameter(s).
+- This tag requires intercoms-V10-04-01 tag.
 
 November 21, 2017, G. Cosmo (run-V10-03-16)
 - Fixed compilation warning on clang compiler.

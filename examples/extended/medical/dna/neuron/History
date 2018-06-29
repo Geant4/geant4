@@ -5,6 +5,14 @@
 
                        Package History file
                        --------------------
+09 May 2018 - B. Morgan - tag neuron-V10-04-01
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+26 February 2018 - R. Hatcher - tag neuron-V10-04-00
+- Use G4RegisterPhysicsConstructors.icc to ensure G4PhysicsConstructorRegisty
+  is filled when using static libraries
 
 28 November 2017 - I. Hrivnacova - tag neuron-V10-03-05
 - Fixed Doxygen warnings

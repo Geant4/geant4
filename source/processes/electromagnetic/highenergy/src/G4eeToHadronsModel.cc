@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.cc 97391 2016-06-02 10:08:45Z gcosmo $
+// $Id: G4eeToHadronsModel.cc 109567 2018-05-02 07:04:10Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -175,11 +175,7 @@ G4double G4eeToHadronsModel::ComputeCrossSectionPerElectron(
                                                 G4double energy,
                                                 G4double, G4double)
 {
-  G4double cross = 0.0;
-  if(crossPerElectron) {
-    cross = crossPerElectron->Value(energy);
-  }
-  return cross;
+  return (crossPerElectron) ? crossPerElectron->Value(energy) : 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -226,7 +222,7 @@ void G4eeToHadronsModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp
       gamma->Set4Momentum(gLv);
       t -= gLv.e();
       newp->push_back(gamma);
-      if(fabs(t) > MeV) {
+      if(std::abs(t) > MeV) {
 	G4cout << "G4eeToHadronsModel::SampleSecondaries: Ebalance(MeV)= " 
 	       << t/MeV << " primary 4-momentum: " << inlv <<  G4endl;
       }

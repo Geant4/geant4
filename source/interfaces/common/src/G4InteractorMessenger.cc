@@ -157,7 +157,8 @@ void G4InteractorMessenger::SetNewValue (
     } else if(command==defaultIcons) {
       session->DefaultIcons(command->ConvertToBool(newValue));
     } else if(command==sys) {
-      system((const char*)params[0]);
+      int rc = system((const char*)params[0]);
+      if ( rc < 0 ){ } 
     }
   }
   delete [] params;

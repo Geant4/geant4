@@ -7,6 +7,11 @@
                            History file
                            ------------
 
+10.05.2018 - B. Morgan (air_shower-V10-04-00)
+       Include G4Types before use of G4MULTITHREADED. For forward
+       compatibility with move to #defines over -D for G4 preprocessor
+       symbols.
+
 09.03.2017 - G. Cosmo (air_shower-V10-03-00)
 	     Updated setup for visualization in main() and Visualisation.mac.
 

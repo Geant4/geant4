@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -16,14 +16,19 @@
 /run/verbose 2
 #
 /testem/phys/addPhysics emstandard_opt0
+PhysicsList::AddPhysicsList: <emstandard_opt0>
 #
+/process/em/verbose 1
+/run/physicsModified
+/process/msc/Skin 1
+/run/physicsModified
 /run/initialize
 userDetector->Construct() start.
 
 -------------------------------------------------------------
  ---> The calorimeter is 50 layers of:
- 	        Lead:    2.3 mm 
- 	 liquidArgon:    5.7 mm 
+ 	       G4_Pb:    2.3 mm 
+ 	      G4_lAr:    5.7 mm 
 -------------------------------------------------------------
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113427275.267 pc 
@@ -35,7 +40,7 @@ userDetector->Construct() start.
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     Lead    density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.248 cm 
+ Material:    G4_Pb    density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.248 cm 
                        Imean: 823.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Pb (Pb)   Z = 82.0   N =   207   A = 207.217 g/mole
@@ -46,8 +51,8 @@ userDetector->Construct() start.
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.064 cm   Nucl.Int.Length:  86.076 cm 
-                       Imean: 188.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+ Material:   G4_lAr    density:  1.396 g/cm3   RadL:  14.003 cm   Nucl.Int.Length:  85.706 cm 
+                       Imean: 188.000 eV   temperature:   0.00 K  pressure:   1.00 atm
 
    --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.948 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
@@ -61,10 +66,6 @@ World is registered to the default region.
 physicsList->Construct() start.
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
-/process/em/verbose 1
-/run/physicsModified
-/process/msc/Skin 1
-/run/physicsModified
 #
 /gun/particle e-
 /gun/energy 1 GeV
@@ -95,8 +96,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
@@ -451,7 +452,7 @@ Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Galactic Lead liquidArgon 
+ Materials : Galactic G4_Pb G4_lAr 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -470,16 +471,16 @@ Index : 0     used in the geometry : Yes
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
- Material : Lead
+ Material : G4_Pb
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
- Material : liquidArgon
+ Material : G4_lAr
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.19986 keV    e-  344.855 keV    e+  333.46 keV proton 100 keV
+ Energy thresholds :  gamma  6.19986 keV    e-  349.521 keV    e+  337.972 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -508,28 +509,28 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.41s Real=2.46s Sys=0s
+  User=2.040000s Real=2.049782s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead:  782.1 MeV :  15.83 MeV     2.024 +- 0.2024 %      55.3 cm  +- 1.26 cm 
-   liquidArgon: 208.75 MeV :  14.69 MeV     7.036 +- 0.7036 %      1.03 m   +- 7.46 cm 
+         G4_Pb:  776.8 MeV :  17.87 MeV       2.3 +-  0.23 %      54.9 cm  +- 1.43 cm 
+        G4_lAr: 214.95 MeV :  16.47 MeV     7.661 +- 0.7661 %      1.06 m   +- 8.33 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       511
- Mean number of e-          876
- Mean number of e+          53.8
- Mean number of charged steps  3601.95
- Mean number of neutral steps  3706.26
+ Mean number of gamma       510
+ Mean number of e-          871
+ Mean number of e+          53.6
+ Mean number of charged steps  3645.68
+ Mean number of neutral steps  3685.62
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 782.1 MeV
-liquidArgon:	 208.735 MeV
+     G4_Pb:	 776.793 MeV
+    G4_lAr:	 214.963 MeV
 
 ------------------------------------------------------------
 
@@ -563,8 +564,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
@@ -919,7 +920,7 @@ Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Galactic Lead liquidArgon 
+ Materials : Galactic G4_Pb G4_lAr 
  Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -938,16 +939,16 @@ Index : 0     used in the geometry : Yes
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
- Material : Lead
+ Material : G4_Pb
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
- Material : liquidArgon
+ Material : G4_lAr
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.19986 keV    e-  344.855 keV    e+  333.46 keV proton 100 keV
+ Energy thresholds :  gamma  6.19986 keV    e-  349.521 keV    e+  337.972 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -959,28 +960,28 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.71s Real=1.74s Sys=0s
+  User=1.460000s Real=1.474312s Sys=0.000000s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 774.13 MeV :  24.73 MeV     3.195 +- 0.3195 %      52.2 cm  +- 1.41 cm 
-   liquidArgon: 212.94 MeV :  18.39 MeV     8.638 +- 0.8638 %      1.01 m   +- 8.69 cm 
+         G4_Pb: 773.34 MeV :  20.11 MeV       2.6 +-  0.26 %      52.1 cm  +- 1.23 cm 
+        G4_lAr: 213.71 MeV :  16.74 MeV     7.831 +- 0.7831 %      1.01 m   +- 7.65 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       291
- Mean number of e-          551
- Mean number of e+          53.6
- Mean number of charged steps  3054.29
- Mean number of neutral steps  2911.63
+ Mean number of gamma       292
+ Mean number of e-          558
+ Mean number of e+          54.1
+ Mean number of charged steps  3062.83
+ Mean number of neutral steps  2947.67
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 774.328 MeV
-liquidArgon:	 215.025 MeV
+     G4_Pb:	 773.537 MeV
+    G4_lAr:	 215.508 MeV
 
 ------------------------------------------------------------
 
@@ -995,15 +996,15 @@ RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 34
+Total navigation history collections cleaned: 32
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0509 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0481 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0115 MB
-Pool ID '7G4Track', size : 0.0231 MB
+Pool ID '17G4DynamicParticle', size : 0.0125 MB
+Pool ID '7G4Track', size : 0.025 MB
 Pool ID '18G4TouchableHistory', size : 0.00385 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0

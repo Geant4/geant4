@@ -64,12 +64,16 @@
 G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr) 
   : theParameters(ptr)
 {
+  gconvDirectory = new G4UIdirectory("/process/gconv/");
+  gconvDirectory->SetGuidance("Commands for EM gamma conversion BH5D model.");
   eLossDirectory = new G4UIdirectory("/process/eLoss/");
   eLossDirectory->SetGuidance("Commands for EM processes.");
   mscDirectory = new G4UIdirectory("/process/msc/");
   mscDirectory->SetGuidance("Commands for EM scattering processes.");
   emDirectory = new G4UIdirectory("/process/em/");
   emDirectory->SetGuidance("General commands for EM processes.");
+  dnaDirectory = new G4UIdirectory("/process/dna/");
+  dnaDirectory->SetGuidance("Commands for DNA processes.");
 
   flucCmd = new G4UIcmdWithABool("/process/eLoss/fluct",this);
   flucCmd->SetGuidance("Enable/disable energy loss fluctuations.");
@@ -191,19 +195,19 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   birksCmd->SetDefaultValue(false);
   birksCmd->AvailableForStates(G4State_PreInit,G4State_Init);
 
-  dnafCmd = new G4UIcmdWithABool("/process/em/UseDNAFast",this);
+  dnafCmd = new G4UIcmdWithABool("/process/dna/UseDNAFast",this);
   dnafCmd->SetGuidance("Enable usage of fast sampling for DNA models");
   dnafCmd->SetParameterName("dnaf",true);
   dnafCmd->SetDefaultValue(false);
-  dnafCmd->AvailableForStates(G4State_PreInit,G4State_Init);
+  dnafCmd->AvailableForStates(G4State_PreInit);
 
-  dnasCmd = new G4UIcmdWithABool("/process/em/UseDNAStationary",this);
+  dnasCmd = new G4UIcmdWithABool("/process/dna/UseDNAStationary",this);
   dnasCmd->SetGuidance("Enable usage of Stationary option for DNA models");
   dnasCmd->SetParameterName("dnas",true);
   dnasCmd->SetDefaultValue(false);
-  dnasCmd->AvailableForStates(G4State_PreInit,G4State_Init);
+  dnasCmd->AvailableForStates(G4State_PreInit);
 
-  dnamscCmd = new G4UIcmdWithABool("/process/em/UseDNAElectronMsc",this);
+  dnamscCmd = new G4UIcmdWithABool("/process/dna/UseDNAElectronMsc",this);
   dnamscCmd->SetGuidance("Enable usage of e- msc for DNA");
   dnamscCmd->SetParameterName("dnamsc",true);
   dnamscCmd->SetDefaultValue(false);
@@ -284,6 +288,12 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   angCmd->SetParameterName("theta",true);
   angCmd->SetUnitCategory("Angle");
   angCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  msceCmd = new G4UIcmdWithADoubleAndUnit("/process/msc/EnergyLimit",this);
+  msceCmd->SetGuidance("Set the upper energy limit for msc");
+  msceCmd->SetParameterName("mscE",true);
+  msceCmd->SetUnitCategory("Energy");
+  msceCmd->AvailableForStates(G4State_PreInit);
 
   frCmd = new G4UIcmdWithADouble("/process/msc/RangeFactor",this);
   frCmd->SetGuidance("Set RangeFactor for msc processes of e+-");
@@ -375,6 +385,12 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   pixeeXsCmd->SetParameterName("pixeEXS",true);
   pixeeXsCmd->SetCandidates("ECPSSR_Analytical Empirical Livermore Penelope");
   pixeeXsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  dnaSolCmd = new G4UIcmdWithAString("/process/dna/e-SolvationSubType",this);
+  dnaSolCmd->SetGuidance("The name of e- solvation DNA model");
+  dnaSolCmd->SetParameterName("dnaSol",true);
+  dnaSolCmd->SetCandidates("Ritchie1994 Terrisol1990 Meesungnoen2002");
+  dnaSolCmd->AvailableForStates(G4State_PreInit);
 
   paiCmd = new G4UIcommand("/process/em/AddPAIRegion",this);
   paiCmd->SetGuidance("Activate PAI in the G4Region.");
@@ -561,15 +577,35 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   nffCmd->SetParameterName("NucFF",true);
   nffCmd->SetCandidates("None Exponential Gaussian Flat");
   nffCmd->AvailableForStates(G4State_PreInit);
+
+  tripletCmd = new G4UIcmdWithAnInteger("/process/gconv/conversionType",this);
+  tripletCmd->SetGuidance("gamma conversion triplet/nuclear genaration type:");
+  tripletCmd->SetGuidance("0 - (default) both triplet and nuclear");
+  tripletCmd->SetGuidance("1 - force nuclear");
+  tripletCmd->SetGuidance("2 - force triplet");
+  tripletCmd->SetParameterName("type",false);
+  tripletCmd->SetRange("type >= 0 && type <= 2");
+  tripletCmd->SetDefaultValue(0);
+  tripletCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  onIsolatedCmd = new G4UIcmdWithABool("/process/gconv/onIsolated",this);
+  onIsolatedCmd->SetGuidance("Conversion on isolated charged particles");
+  onIsolatedCmd->SetGuidance("false (default) : atomic electron screening");
+  onIsolatedCmd->SetGuidance("true : conversion on isolated particles.");
+  onIsolatedCmd->SetParameterName("flag",false);
+  onIsolatedCmd->SetDefaultValue(false);
+  onIsolatedCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EmParametersMessenger::~G4EmParametersMessenger()
 {
+  delete gconvDirectory;
   delete eLossDirectory;
   delete mscDirectory;
   delete emDirectory;
+  delete dnaDirectory;
 
   delete flucCmd;
   delete rangeCmd;
@@ -608,6 +644,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete labCmd;
   delete mscfCmd;
   delete angCmd;
+  delete msceCmd;
   delete frCmd;
   delete fr1Cmd;
   delete fgCmd;
@@ -626,6 +663,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
 
   delete pixeXsCmd;
   delete pixeeXsCmd;
+  delete dnaSolCmd;
 
   delete paiCmd;
   delete meCmd;
@@ -641,6 +679,9 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete fiCmd;
   delete bsCmd;
   delete nffCmd;
+
+  delete onIsolatedCmd;
+  delete tripletCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -709,6 +750,16 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetDNAStationary(dnasCmd->GetNewBoolValue(newValue));
   } else if (command == dnamscCmd) {
     theParameters->SetBirksActive(dnamscCmd->GetNewBoolValue(newValue));
+  } else if (command == dnaSolCmd) {
+    G4DNAModelSubType ttt = fDNAUnknownModel;
+    if(newValue == "Ritchie1994") { 
+      ttt = fRitchie1994eSolvation; 
+    } else if(newValue == "Terrisol1990") { 
+      ttt = fTerrisol1990eSolvation; 
+    } else if (newValue == "Meesungnoen2002") { 
+      ttt = fMeesungnoen2002eSolvation;
+    }
+    theParameters->SetDNAeSolvationSubType(ttt);
   } else if (command == sharkCmd) {
     theParameters->SetGammaSharkActive(sharkCmd->GetNewBoolValue(newValue));
 
@@ -744,6 +795,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
   } else if (command == angCmd) { 
     theParameters->SetMscThetaLimit(angCmd->GetNewDoubleValue(newValue));
     physicsModified = true;
+  } else if (command == msceCmd) { 
+    theParameters->SetMscEnergyLimit(msceCmd->GetNewDoubleValue(newValue));
   } else if (command == frCmd) {
     theParameters->SetMscRangeFactor(frCmd->GetNewDoubleValue(newValue));
     physicsModified = true;
@@ -889,7 +942,14 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
       return; 
     }
     theParameters->SetNuclearFormfactorType(x);
+  } else if ( command==tripletCmd ) {
+    theParameters->SetConversionType(tripletCmd->GetNewIntValue(newValue));
+    physicsModified = true;
+  } else if ( command==onIsolatedCmd ) {
+    theParameters->SetOnIsolated(onIsolatedCmd->GetNewBoolValue(newValue));
+    physicsModified = true;
   }
+  
   if(physicsModified) {
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   }

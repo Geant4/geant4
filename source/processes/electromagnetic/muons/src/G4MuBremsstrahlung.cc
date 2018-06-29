@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc 107056 2017-11-01 14:52:32Z gcosmo $
+// $Id: G4MuBremsstrahlung.cc 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -82,11 +82,6 @@ G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
   SetSecondaryParticle(G4Gamma::Gamma());
   SetIonisation(false);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4MuBremsstrahlung::~G4MuBremsstrahlung()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

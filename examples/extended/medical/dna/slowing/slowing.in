@@ -3,6 +3,8 @@
 #
 /run/numberOfThreads 8
 #
+/slowing/det/setMat G4_WATER
+#
 /slowing/det/setTrackingCut 9 eV
 #
 /slowing/phys/addPhysics  dna	        

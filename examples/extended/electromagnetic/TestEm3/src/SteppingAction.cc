@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 98762 2016-08-09 14:08:07Z gcosmo $
+// $Id: SteppingAction.cc 109096 2018-03-26 14:46:51Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,15 +59,16 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   //track informations
   const G4StepPoint* prePoint = aStep->GetPreStepPoint();   
-  const G4StepPoint* endPoint = aStep->GetPostStepPoint();
-  const G4ParticleDefinition* particle = aStep->GetTrack()->GetDefinition(); 
     
   //if World, return
   //
   G4VPhysicalVolume* volume = prePoint->GetTouchableHandle()->GetVolume();    
   //if sum of absorbers do not fill exactly a layer: check material, not volume.
-  G4Material* mat = volume->GetLogicalVolume()->GetMaterial();
+  const G4Material* mat = volume->GetLogicalVolume()->GetMaterial();
   if (mat == fDetector->GetWorldMaterial()) return; 
+
+  const G4StepPoint* endPoint = aStep->GetPostStepPoint();
+  const G4ParticleDefinition* particle = aStep->GetTrack()->GetDefinition(); 
  
   //here we are in an absorber. Locate it
   //
@@ -110,8 +111,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     G4ThreeVector direction = endPoint->GetMomentumDirection();
     G4double sizeYZ = 0.5*fDetector->GetCalorSizeYZ();       
     G4double Eflow = endPoint->GetKineticEnergy();
-    if (particle == G4Positron::Positron()) Eflow += 2*electron_mass_c2;
-   if ((std::abs(position.y()) >= sizeYZ) || (std::abs(position.z()) >= sizeYZ))
+    if(particle == G4Positron::Positron()) Eflow += 2*electron_mass_c2;
+    if((std::abs(position.y()) >= sizeYZ) || (std::abs(position.z()) >= sizeYZ))
                                   run->SumLateralEleak(Idnow, Eflow);
     else if (direction.x() >= 0.) run->SumEnergyFlow(plane=Idnow+1, Eflow);
     else                          run->SumEnergyFlow(plane=Idnow,  -Eflow);    

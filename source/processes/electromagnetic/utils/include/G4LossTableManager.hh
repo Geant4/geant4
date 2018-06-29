@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh 106714 2017-10-20 09:38:06Z gcosmo $
+// $Id: G4LossTableManager.hh 110572 2018-05-30 13:08:12Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -217,7 +217,6 @@ public:
 
   inline G4bool IsMaster() const;
 
-  inline 
   G4VEnergyLossProcess* GetEnergyLossProcess(const G4ParticleDefinition*);
  
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
@@ -315,28 +314,6 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4VEnergyLossProcess* 
-G4LossTableManager::GetEnergyLossProcess(const G4ParticleDefinition *aParticle)
-{
-  //G4cout << "G4LossTableManager::GetEnergyLossProcess: " 
-  //<< aParticle << "  " << currentParticle << "  " << currentLoss << G4endl;
-  if(aParticle != currentParticle) {
-    currentParticle = aParticle;
-    std::map<PD,G4VEnergyLossProcess*,std::less<PD> >::const_iterator pos;
-    if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
-      currentLoss = (*pos).second;
-    } else {
-      currentLoss = nullptr;
-      if ((pos = loss_map.find(theGenericIon)) != loss_map.end()) {
-        currentLoss = (*pos).second;
-      }
-    }
-  }
-  return currentLoss;
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline

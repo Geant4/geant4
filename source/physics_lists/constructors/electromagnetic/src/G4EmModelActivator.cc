@@ -168,7 +168,7 @@ void G4EmModelActivator::ActivateEmOptions()
   G4VEmModel* mod;
 
   // high energy limit for low-energy e+- model of msc
-  G4double mscEnergyLimit = 100*MeV;
+  G4double mscEnergyLimit = G4EmParameters::Instance()->MscEnergyLimit();
 
   // high energy limit for Livermore and Penelope models
   G4double highEnergyLimit = 1*GeV;

@@ -25,7 +25,6 @@
 //
 // $Id: G4EmParameters.hh 66885 2013-01-16 17:37:13Z gunter $
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -60,6 +59,7 @@
 #include "G4ios.hh"
 #include "G4MscStepLimitType.hh"
 #include "G4NuclearFormfactorType.hh"
+#include "G4DNAModelSubType.hh"
 #include "G4EmSaturation.hh"
 #include "G4Threading.hh"
 #include <vector>
@@ -161,6 +161,10 @@ public:
   void SetEmSaturation(G4EmSaturation*);
   G4EmSaturation* GetEmSaturation();
 
+  // 5d
+  void  SetOnIsolated(G4bool val);
+  bool  OnIsolated() const;
+
   // double parameters with values
   void SetMinSubRange(G4double val);
   G4double MinSubRange() const;
@@ -197,6 +201,9 @@ public:
 
   void SetMscThetaLimit(G4double val);
   G4double MscThetaLimit() const;
+
+  void SetMscEnergyLimit(G4double val);
+  G4double MscEnergyLimit() const;
 
   void SetMscRangeFactor(G4double val);
   G4double MscRangeFactor() const;
@@ -238,6 +245,13 @@ public:
 
   void SetNuclearFormfactorType(G4NuclearFormfactorType val);
   G4NuclearFormfactorType NuclearFormfactorType() const;
+
+  void SetDNAeSolvationSubType(G4DNAModelSubType val);
+  G4DNAModelSubType DNAeSolvationSubType() const;
+
+  //5d
+  void  SetConversionType(G4int val);
+  G4int GetConversionType() const;
 
   // string parameters 
   void SetPIXECrossSectionModel(const G4String&);
@@ -340,6 +354,7 @@ private:
   G4bool dnaStationary;
   G4bool dnaMsc;
   G4bool gammaShark;
+  G4bool onIsolated; // 5d model conversion on free ions
 
   G4double minSubRange;
   G4double minKinEnergy;
@@ -353,6 +368,7 @@ private:
   G4double lambdaFactor;
   G4double factorForAngleLimit;
   G4double thetaLimit;
+  G4double energyLimit;
   G4double rangeFactor;
   G4double rangeFactorMuHad;
   G4double geomFactor;
@@ -367,10 +383,12 @@ private:
   G4int nbinsPerDecade;
   G4int verbose;
   G4int workerVerbose;
+  G4int tripletConv;  // 5d model triplet generation type
 
   G4MscStepLimitType mscStepLimit;
   G4MscStepLimitType mscStepLimitMuHad;
   G4NuclearFormfactorType nucFormfactor;
+  G4DNAModelSubType  dnaElectronSolvation;
 
   G4String namePIXE;
   G4String nameElectronPIXE;

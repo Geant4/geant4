@@ -40,6 +40,9 @@
 #include "G4SystemOfUnits.hh"
 #include "G4EmDNAChemistry.hh"
 #include "G4PhysicsConstructorRegistry.hh"
+// G4RegisterPhysicsConstructors.icc is necessary for static builds
+#define REGREF PhysicsList
+#include "G4RegisterPhysicsConstructors.icc"
 #include "CommandLineParser.hh"
 
 using namespace G4DNAPARSER;

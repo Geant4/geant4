@@ -13,8 +13,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+8 May 2018  Laurent Desorgher  radioactive_decay-V10-04-03
+---------------------------------------------------------
+- G4ECCapture, G4RadioactiveDecay, G4RadioactiveDecayMode
+    -Add the electron capture channel from the N Shell :
 
- 4 April 2018  Dennis Wright  radioactive_decay-V10-03-23
+- G4ECCapture
+    -Add tables of PL2/PL1 PM2/PM1 and PN2/PN1 based on  bound electrons radial wave amplitudes
+     taken from bambynek et, Rev. Mod. Phys., vol. 49, 1977 
+    
+    -Compute partial probabilities of subshells PL1,PL2,PM1,PM2,PN1,PN2 from 
+     the tables  PL2/PL1, PM2/PM1, and PN2/PN1. Valid for allowed transitions.
+
+
+ 4 April 2018  Dennis Wright  radioactive_decay-V10-04-02
 ---------------------------------------------------------
 - G4RadioactiveDecay::ConvolveSourceTimeProfile: switch from std::exp to
   std::expm1 where small exp arguments are expected.  This greatly reduces
@@ -25,14 +37,14 @@ track of all tags.
 
 - G4Radioactivation::ConvolveSourceTimeProfile: same as above. 
 
-12 March 2018  Dennis Wright
+12 March 2018  Dennis Wright  radioactive_decay-V10-04-01
 ---------------------------------------------------------
 - G4RadioactiveDecay::AddDeexcitationSpectrumForBiasMode: make sure 
     last stable nuclide in decay chain is included as secondary.
     Fixes bug 2024.
 - G4Radioactivation::AddDeexcitationSpectrumForBiasMode: same as above 
 
-14 December 2017  Dennis Wright  radioactive_decay-V10-03-22
+14 December 2017  Dennis Wright  radioactive_decay-V10-04-00
 ------------------------------------------------------------
 - re-tag 
  

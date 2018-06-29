@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.hh 91268 2015-06-29 07:04:24Z gcosmo $
+// $Id: G4OpenGLStoredViewer.hh 108131 2018-01-09 13:23:26Z gcosmo $
 //
 //
 // Andrew Walkden  7th February 1997
@@ -41,6 +41,8 @@
 
 class G4OpenGLStoredSceneHandler;
 class G4Colour;
+class G4Text;
+class G4Circle;
 
 class G4OpenGLStoredViewer: virtual public G4OpenGLViewer {
   
@@ -51,10 +53,17 @@ public:
 protected:
   void KernelVisitDecision ();
   virtual G4bool CompareForKernelVisit(G4ViewParameters&);
+  
   void DrawDisplayLists ();
+
   virtual void DisplayTimePOColourModification
   (G4Colour&, size_t /*currentPOListIndex*/) {}
+
+  void AddPrimitiveForASingleFrame(const G4Text& text);
+  void AddPrimitiveForASingleFrame(const G4Circle& circle);
+
   G4OpenGLStoredSceneHandler& fG4OpenGLStoredSceneHandler;
+
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
   
   // Two virtual functions to return sub-class selection.

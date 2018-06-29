@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.hh 69003 2013-04-15 09:25:23Z gcosmo $
+// $Id: G4Trajectory.hh 110262 2018-05-17 14:25:55Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -136,19 +136,18 @@ public: // with description
 
 };
 
-extern G4TRACKING_DLL G4ThreadLocal
-G4Allocator<G4Trajectory> *aTrajectoryAllocator;
+extern G4TRACKING_DLL G4Allocator<G4Trajectory>*& aTrajectoryAllocator();
 
 inline void* G4Trajectory::operator new(size_t)
 {
-  if (!aTrajectoryAllocator)
-  { aTrajectoryAllocator = new G4Allocator<G4Trajectory>; }
-  return (void*)aTrajectoryAllocator->MallocSingle();
+  if (!aTrajectoryAllocator())
+  { aTrajectoryAllocator() = new G4Allocator<G4Trajectory>; }
+  return (void*)aTrajectoryAllocator()->MallocSingle();
 }
 
 inline void G4Trajectory::operator delete(void* aTrajectory)
 {
-  aTrajectoryAllocator->FreeSingle((G4Trajectory*)aTrajectory);
+  aTrajectoryAllocator()->FreeSingle((G4Trajectory*)aTrajectory);
 }
 
 #endif

@@ -35,6 +35,7 @@
 // 10.11.2005 V.Ivanchenko edit to provide a standard
 // 19.06.2006 V.Ivanchenko add mu-nuclear process
 // 16.10.2012 A.Ribon: renamed G4EmExtraBertiniPhysics as G4EmExtraPhysics
+// 31.01.2018 V. Grichine: add neutrino-electron process and xsc
 //
 //----------------------------------------------------------------------------
 //
@@ -52,6 +53,8 @@ class G4SynchrotronRadiation;
 class G4GammaConversionToMuons;
 class G4AnnihiToMuPair;
 class G4eeToHadrons;
+class G4NeutrinoElectronProcess;
+class G4NeutrinoElectronTotXsc;
 
 class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
@@ -80,6 +83,12 @@ public:
   void PositronToMuMuFactor(G4double val);
   void PositronToHadronsFactor(G4double val);
 
+  void NeutrinoActivated(G4bool val);
+  void SetNuEleCcBias(G4double bf);
+  void SetNuEleNcBias(G4double bf);
+  void SetNuNucleusBias(G4double bf);
+  void SetNuDetectorName(const G4String& dn);
+
 private:
 
   static G4bool gnActivated;
@@ -91,15 +100,25 @@ private:
   static G4bool gmumuActivated;
   static G4bool pmumuActivated;
   static G4bool phadActivated;
+  static G4bool fNuActivated;
+
   static G4double gmumuFactor;
   static G4double pmumuFactor;
   static G4double phadFactor;
+  static G4double fNuEleCcBias;
+  static G4double fNuEleNcBias;
+  static G4double fNuNucleusBias;
+
+  static G4String fNuDetectorName;
 
   static G4ThreadLocal G4BertiniElectroNuclearBuilder* theGNPhysics;
   static G4ThreadLocal G4SynchrotronRadiation* theSynchRad;
   static G4ThreadLocal G4GammaConversionToMuons* theGammaToMuMu;
   static G4ThreadLocal G4AnnihiToMuPair* thePosiToMuMu;
   static G4ThreadLocal G4eeToHadrons* thePosiToHadrons;
+
+  static G4ThreadLocal G4NeutrinoElectronProcess* theNuEleProcess;
+  static G4ThreadLocal G4NeutrinoElectronTotXsc* theNuEleTotXsc;
 
   G4EmMessenger* theMessenger;
   G4int verbose;

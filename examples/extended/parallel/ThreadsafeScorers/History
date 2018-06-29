@@ -15,6 +15,22 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15/6/2018 Gabriele Cosmo (ThreadsafeScorers-V10-04-03)
+- Fixed shadowing warnings in G4atomic.hh header.
+
+6/6/2018 Jonathan Madsen (ThreadsafeScorers-V10-04-02)
+- TSPhysicsLists no longer declares G4VPhysicsConstructors in header
+- Added TiMemory timing to TSPrimaryGeneratorAction and G4Run
+- Added TiMemory ASCII output and serialization to ts_scorers.cc
+
+10/05/2018 Ben Morban (ThreadsafeScorers-V10-04-01)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+12/2/2018 Jonathan Madsen (ThreadsafeScorers-V10-04-00)
+- Removed G4MUTEX_INITIALIZER from constructors of G4TAtomicHits{Collection,Map}
+
 12/8/17 Hisaya Kurashige              (ThreadsafeScorers-V10-03-02)
 - Add inclusion of <deque> in TSPhysicsList.hh
 

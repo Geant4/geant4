@@ -338,6 +338,16 @@ void MixMaxRng::flatArray(const int size, double* vect )
    for (int i=0; i<size; ++i) { vect[i] = flat(); }
 }
 
+MixMaxRng::operator double()
+{
+  return flat();
+}
+
+MixMaxRng::operator float()
+{
+  return float( flat() );
+}
+
 MixMaxRng::operator unsigned int()
 {
    return static_cast<unsigned int>(get_next());
