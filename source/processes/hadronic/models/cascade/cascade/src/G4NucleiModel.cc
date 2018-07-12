@@ -650,7 +650,7 @@ G4double G4NucleiModel::zoneIntegralGaussian(G4double r1, G4double r2,
     fun1 = fun;
   }	// while (itry < itry_max)
 
-  if (abs(verboseLevel) > 2 && itry == itry_max)
+  if (verboseLevel > 2 && itry == itry_max)
     G4cerr << " zoneIntegralGaussian-> n iter " << itry_max << G4endl;
 
   return gaussRadius*gaussRadius*gaussRadius * fun;
@@ -777,7 +777,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   }
 
   if (path < -small) { 			// something wrong
-    if (abs(verboseLevel))
+    if (verboseLevel)
       G4cerr << " generateInteractionPartners-> negative path length" << G4endl;
     return;
   }
@@ -900,9 +900,6 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       //      qdeutrons.push_back(ppd);
     } 
     
-
-    /// FIX FROM HERE: SAME ALGORITHM BUT USE THE PAIRS OF PARTNERS NOT THE ACSEC STUFF
-
     // Select interaction from non-zero cross-section choices
     if (verboseLevel > 2) {
       for (size_t i=0; i<candidatePartners.size(); i++) {
@@ -995,7 +992,7 @@ generateParticleFate(G4CascadParticle& cparticle,
   generateInteractionPartners(cparticle);	// Fills "thePartners" data
 
   if (thePartners.empty()) { // smth. is wrong -> needs special treatment
-    if (abs(verboseLevel))
+    if (verboseLevel)
       G4cerr << " generateParticleFate-> got empty interaction-partners list "
 	     << G4endl;
     return;
@@ -1236,7 +1233,7 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   G4int zone = cparticle.getCurrentZone();
 
   if (cparticle.movingInsideNuclei() && zone == 0) {
-    if (abs(verboseLevel)) G4cerr << " boundaryTransition-> in zone 0 " << G4endl;
+    if (verboseLevel) G4cerr << " boundaryTransition-> in zone 0 " << G4endl;
     return;
   }
 
