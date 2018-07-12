@@ -231,12 +231,8 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
   }    
 
   if (particles.empty()) {	// No final state possible, pass bullet through
-    if (abs(verboseLevel)) {
+    if (verboseLevel) {
       G4cerr << " ElementaryParticleCollider -> failed to collide " 
-	     << particle1->getMomModule() << " GeV/c " 
-	     << particle1->getDefinition()->GetParticleName() << " with "
-	     << particle2->getDefinition()->GetParticleName() << G4endl;
-      G4cout << " ElementaryParticleCollider -> failed to collide " 
 	     << particle1->getMomModule() << " GeV/c " 
 	     << particle1->getDefinition()->GetParticleName() << " with "
 	     << particle2->getDefinition()->GetParticleName() << G4endl;
@@ -356,14 +352,6 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 
     // Attempt to produce final state kinematics
     fsGenerator.Configure(particle1, particle2, particle_kinds);
-
-    if(verboseLevel >4){
-      G4cout << "particle_kinds[0,1] = " << particle_kinds[0] << ", " << particle_kinds[1]<< G4endl;
-    }
-    if(verboseLevel >4){
-      G4cout << "masses[0,1] = " << masses[0] << ", " << masses[1]<< G4endl;
-    }
-
     generate = !fsGenerator.Generate(etot_scm, masses, scm_momentums);
   }	// while (generate) 
 

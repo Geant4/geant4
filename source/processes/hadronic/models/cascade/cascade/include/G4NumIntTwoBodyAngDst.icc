@@ -49,25 +49,12 @@ GetCosTheta(const G4double& ekin, const G4double& pcm) const
   G4double costh=1.0, slope=1.0;		// Buffers for final result
   G4double xrand = G4UniformRand();		// Random value to sample CDF
 
-  if(verboseLevel>5){ 
-    G4cout<< ">>> G4NumIntTwoBodyAngDst<"<<NKEBINS<<","<<NANGLES<<">::GetCosTheta: " 
-	  << G4endl
-	  << "xrand = "  << xrand << G4endl;
-  }	 
-
   if (ekin < labKE[nDists-1]) {
-    if(verboseLevel>5)
-      G4cout << "ekin = " << ekin << " within kinematic range -- using interpolation" << G4endl;    
     Interpolate(ekin);				// Get intermediate CDF @ energy
     for (G4int i=1; i<nAngles; i++) {
-      if(verboseLevel>6)
-	G4cout << "bin " << i << ": angDist="<< angDist[i] << G4endl;
       if (xrand < angDist[i]) {
         slope = (cosBins[i] - cosBins[i-1])/(angDist[i] - angDist[i-1]);
         costh = (xrand - angDist[i-1])*slope + cosBins[i-1];
-	if(verboseLevel>6)
-	  G4cout << "**slope= " << slope << " bin from " << cosBins[i-1] 
-		 << " to " << cosBins[i] << " costh = " << costh << G4endl;
         break;
       }
     }
@@ -85,23 +72,12 @@ GetCosTheta(const G4double& ekin, const G4double& pcm) const
 template <G4int NKEBINS, G4int NANGLES>
 void G4NumIntTwoBodyAngDst<NKEBINS,NANGLES>::Interpolate(const G4double& ekin) const
 {
-  if(verboseLevel>6){
-    G4cout << ">>> G4NumIntTwoBodyAngDst<"<<NKEBINS<<","<<NANGLES
-	   <<">::Interpolate(ekin = "  << ekin << ") " << G4endl;
-    G4cout << "{";
-  }
   for (G4int j=1; j<nDists; j++) {
     if (ekin >= labKE[j]) continue;	// Find desired pair of cos(theta) CDFs
+
     G4double frac = (ekin - labKE[j-1])/(labKE[j] - labKE[j-1]);
     for (G4int i=0; i < nAngles; i++) {
       angDist[i] = (1.0 - frac)*angDists[j-1][i] + frac*angDists[j][i];
-      if(verboseLevel>6){
-	G4cout << "angDist[i]";
-	if(i!=nDists)
-	  G4cout << ", ";
-	else
-	  G4cout << "}";
-      }
     }
 
     break;
