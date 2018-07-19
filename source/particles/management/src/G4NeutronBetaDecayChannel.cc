@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronBetaDecayChannel.cc 97537 2016-06-03 15:26:56Z gcosmo $
+// $Id: G4NeutronBetaDecayChannel.cc 95906 2016-03-02 10:56:50Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 

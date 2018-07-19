@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiationInMat.cc 91871 2015-08-07 15:22:30Z gcosmo $
+// $Id: G4SynchrotronRadiationInMat.cc 108423 2018-02-13 11:18:13Z gcosmo $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -123,15 +123,9 @@ G4SynchrotronRadiationInMat::fIntegralProbabilityOfSR[200] =
 G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& processName,
   G4ProcessType type):G4VDiscreteProcess (processName, type),
   LowestKineticEnergy (10.*keV),
-  HighestKineticEnergy (100.*TeV),
-  TotBin(200),
   theGamma (G4Gamma::Gamma() ),
   theElectron ( G4Electron::Electron() ),
   thePositron ( G4Positron::Positron() ), 
-  GammaCutInKineticEnergy(0),
-  ElectronCutInKineticEnergy(0),
-  PositronCutInKineticEnergy(0),
-  ParticleCutInKineticEnergy(0),
   fAlpha(0.0), fRootNumber(80),
   fVerboseLevel( verboseLevel )
 {
@@ -156,10 +150,18 @@ G4SynchrotronRadiationInMat::~G4SynchrotronRadiationInMat()
 G4bool
 G4SynchrotronRadiationInMat::IsApplicable( const G4ParticleDefinition& particle )
 {
-
   return ( ( &particle == (const G4ParticleDefinition *)theElectron ) ||
-	   ( &particle == (const G4ParticleDefinition *)thePositron )    );
+	   ( &particle == (const G4ParticleDefinition *)thePositron ));
+}
 
+G4double G4SynchrotronRadiationInMat::GetLambdaConst()
+{ 
+  return fLambdaConst; 
+}
+
+G4double G4SynchrotronRadiationInMat::GetEnergyConst()
+{ 
+  return fEnergyConst; 
 }
  
 /////////////////////////////// METHODS /////////////////////////////////
@@ -197,20 +199,20 @@ G4SynchrotronRadiationInMat::GetMeanFreePath( const G4Track& trackData,
   {
 
     G4ThreeVector  FieldValue;
-    const G4Field*   pField = 0;
+    const G4Field*   pField = nullptr;
 
-    G4FieldManager* fieldMgr=0;
+    G4FieldManager* fieldMgr=nullptr;
     G4bool          fieldExertsForce = false;
 
     if( (particleCharge != 0.0) )
     {
       fieldMgr = fFieldPropagator->FindAndSetFieldManager( trackData.GetVolume() );
 
-      if ( fieldMgr != 0 ) 
+      if ( fieldMgr != nullptr ) 
       {
         // If the field manager has no field, there is no field !
 
-        fieldExertsForce = ( fieldMgr->GetDetectorField() != 0 );
+        fieldExertsForce = ( fieldMgr->GetDetectorField() != nullptr );
       }
     }
     if ( fieldExertsForce )
@@ -274,19 +276,19 @@ G4SynchrotronRadiationInMat::PostStepDoIt(const G4Track& trackData,
   G4double particleCharge = aDynamicParticle->GetDefinition()->GetPDGCharge();
 
   G4ThreeVector  FieldValue;
-  const G4Field*   pField = 0 ;
+  const G4Field*   pField = nullptr ;
 
-  G4FieldManager* fieldMgr=0;
+  G4FieldManager* fieldMgr=nullptr;
   G4bool          fieldExertsForce = false;
 
   if( (particleCharge != 0.0) )
   {
     fieldMgr = fFieldPropagator->FindAndSetFieldManager( trackData.GetVolume() );
-    if ( fieldMgr != 0 ) 
+    if ( fieldMgr != nullptr ) 
     {
       // If the field manager has no field, there is no field !
 
-      fieldExertsForce = ( fieldMgr->GetDetectorField() != 0 );
+      fieldExertsForce = ( fieldMgr->GetDetectorField() != nullptr );
     }
   }
   if ( fieldExertsForce )
@@ -435,15 +437,15 @@ G4SynchrotronRadiationInMat::GetPhotonEnergy( const G4Track& trackData,
   G4double particleCharge = aDynamicParticle->GetDefinition()->GetPDGCharge();
 
   G4ThreeVector  FieldValue;
-  const G4Field*   pField = 0 ;
+  const G4Field*   pField = nullptr ;
 
-  G4FieldManager* fieldMgr=0;
+  G4FieldManager* fieldMgr=nullptr;
   G4bool          fieldExertsForce = false;
 
   if( (particleCharge != 0.0) )
   {
     fieldMgr = fFieldPropagator->FindAndSetFieldManager( trackData.GetVolume() );
-    if ( fieldMgr != 0 ) 
+    if ( fieldMgr != nullptr ) 
     {
       // If the field manager has no field, there is no field !
 
@@ -660,20 +662,20 @@ G4double G4SynchrotronRadiationInMat::GetAngleNumberAtGammaKsi( G4double gpsi)
   G4double result, funK, funK2, gpsi2 = gpsi*gpsi;
 
   fPsiGamma    = gpsi;
-  fEta         = 0.5*fKsi*(1 + gpsi2)*std::sqrt(1 + gpsi2);
+  fEta         = 0.5*fKsi*(1. + gpsi2)*std::sqrt(1. + gpsi2);
  
   fOrderAngleK = 1./3.;
   funK         = GetAngleK(fEta); 
   funK2        = funK*funK;
 
-  result       = gpsi2*funK2/(1 + gpsi2);
+  result       = gpsi2*funK2/(1. + gpsi2);
 
   fOrderAngleK = 2./3.;
   funK         = GetAngleK(fEta); 
   funK2        = funK*funK;
 
   result      += funK2;
-  result      *= (1 + gpsi2)*fKsi;
+  result      *= (1. + gpsi2)*fKsi;
      
   return result;
 }

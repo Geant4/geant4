@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.hh 83518 2014-08-27 12:57:10Z gcosmo $
+// $Id: G4ScoringCylinder.hh 99154 2016-09-07 08:06:30Z gcosmo $
 //
 
 #ifndef G4ScoringCylinder_h
@@ -49,8 +49,8 @@ class G4ScoringCylinder : public G4VScoringMesh
 
   public:
       virtual void List() const;
-      virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
-      virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
+      virtual void Draw(RunScore * map, G4VScoreColorMap* colorMap, G4int axflg=111);
+      virtual void DrawColumn(RunScore * map, G4VScoreColorMap* colorMap, 
 			  G4int idxProj, G4int idxColumn); 
 
   void SetRMax(G4double rMax) {fSize[0] = rMax;}

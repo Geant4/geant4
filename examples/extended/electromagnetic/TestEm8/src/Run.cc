@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm2/src/Run.cc
+/// \file electromagnetic/TestEm8/src/Run.cc
 /// \brief Implementation of the Run class
 //
 // $Id: Run.cc 75577 2013-11-04 12:03:26Z vnivanch $
@@ -83,7 +83,7 @@ void Run::BeginOfRun()
     G4int binsCluster = fParam->GetNumberBinsCluster();
     G4cout << " BinsCluster= " << binsCluster << "    BinsE= " <<  fNbins
            << "   Emax(keV)= " << fMaxEnergy/keV << G4endl;
-    G4cout << " WidthALICE= " << fWidthALICE 
+    G4cout << " WidthALICE(keV)= " << fWidthALICE/keV 
            << "      FactorALICE= " << fFactorALICE << G4endl;
 
   }
@@ -94,8 +94,7 @@ void Run::BeginOfRun()
 void Run::EndOfRun()
 {
   G4int nEvt = GetNumberOfEvent();
-  G4double norm = nEvt;
-  if(nEvt > 0) { norm = 1.0/norm; }
+  G4double norm = (nEvt > 0) ? 1.0/(G4double)nEvt : 0.0; 
 
   fTotStepGas  *= norm;
   fTotCluster  *= norm;
@@ -104,13 +103,19 @@ void Run::EndOfRun()
 
   G4double y1 = fEdep.mean();
   G4double y2 = fEdep.rms();
-  if(y2 > 0.0) { y2 = std::sqrt(y2); }
 
   G4double de = fMaxEnergy/G4double(fNbins);  
   G4double x1 = -de*0.5; 
 
   fFactorALICE = fParam->GetFactorALICE();
 
+  G4cout << " ====================================================" << G4endl;
+  G4cout << "   Beam Particle: " 
+         << fParam->GetBeamParticle()->GetParticleName() << G4endl
+         << "   Ekin(MeV)    = " << fParam->GetBeamEnergy()/MeV
+         << G4endl
+         << "   Z(mm)        = " << fParam->GetPositionZ()/mm 
+         << G4endl;
   G4cout << " ================== run summary =====================" << G4endl;
   G4int prec = G4cout.precision(5);
   G4cout << "   End of Run TotNbofEvents    = " 
@@ -178,9 +183,9 @@ void Run::EndOfEvent()
   fTotCluster += fCluster;
 
   if(fWidthALICE > 0.0) {
-    G4double x = G4RandGauss::shoot(1.,fWidthALICE);
-    if(x <= 0.0) { x = 1.0; }
-    fTotEdep *= x;
+    G4double x = G4RandGauss::shoot(0.,fWidthALICE);
+    fTotEdep += x;
+    fTotEdep = std::max(fTotEdep, 0.0);
   }
 
   G4int idx = G4int(fTotEdep*fNbins/fMaxEnergy);

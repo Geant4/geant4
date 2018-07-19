@@ -1,0 +1,20 @@
+/control/verbose 2
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 83 211
+#
+/rdecay01/fullChain true
+#
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+#
+/rdecay01/timeWindow 4 min 2 min
+#
+/analysis/setFileName time
+/analysis/h1/set 8  100  0. 50. min		#time of life
+#
+/run/printProgress 10000
+#  
+/run/beamOn 100000

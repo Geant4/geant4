@@ -27,7 +27,6 @@
 // See more at: https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 
 #include "HadrontherapyAnalysisFileMessenger.hh"
-#include "HadrontherapyAnalysisManager.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIdirectory.hh"
@@ -52,25 +51,11 @@ HadrontherapyAnalysisFileMessenger::HadrontherapyAnalysisFileMessenger(Hadronthe
   DoseMatrixCmd->SetDefaultValue("Dose.out");
   DoseMatrixCmd->SetParameterName("choice",true); 
 
-  // With this messenger you can:
-  // give a name to the generated .root file
-  // One can use this messenger to define a different .root file name other then the default one 
-#ifdef G4ANALYSIS_USE_ROOT
-  FileNameCmd = new G4UIcmdWithAString("/analysis/setAnalysisFile",this);
-  FileNameCmd->SetGuidance("Set the .root filename for the root-output");
-  FileNameCmd->SetDefaultValue("default.root");
-  FileNameCmd->SetParameterName("choice",true); ///<doc did not say what second boolean really does
-  FileNameCmd->AvailableForStates(G4State_Idle,G4State_PreInit);
-#endif
-
-
-LetCmd = new G4UIcmdWithABool("/analysis/computeLet",this);
+    LetCmd = new G4UIcmdWithABool("/analysis/computeLet",this);
 	LetCmd  -> SetParameterName("choice",true); 
 	LetCmd  -> SetDefaultValue(true);
 	LetCmd  -> SetGuidance("Set if Let must be computed and write the ASCII filename for the Let");
 	LetCmd  -> AvailableForStates(G4State_Idle, G4State_PreInit);
-
-
 
 }
 
@@ -80,10 +65,6 @@ HadrontherapyAnalysisFileMessenger::~HadrontherapyAnalysisFileMessenger()
   delete secondaryCmd; 
   delete DoseMatrixCmd; 
   delete LetCmd;
-
-#ifdef G4ANALYSIS_USE_ROOT
-  delete FileNameCmd;
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -101,12 +82,8 @@ void HadrontherapyAnalysisFileMessenger::SetNewValue(G4UIcommand* command, G4Str
     { 
 	if ( HadrontherapyMatrix * pMatrix = HadrontherapyMatrix::GetInstance() )
 	{
-	    pMatrix -> TotalEnergyDeposit(); 
+	    //pMatrix -> TotalEnergyDeposit();
 	    pMatrix -> StoreDoseFluenceAscii(newValue);
-#ifdef G4ANALYSIS_USE_ROOT
-	    pMatrix -> StoreDoseFluenceRoot();
-	    HadrontherapyAnalysisManager::GetInstance() -> flush();     // Finalize & write the root file 
-#endif
 	}
     }
     
@@ -115,13 +92,5 @@ void HadrontherapyAnalysisFileMessenger::SetNewValue(G4UIcommand* command, G4Str
 		if (HadrontherapyLet::GetInstance())
 			HadrontherapyLet::GetInstance() -> doCalculation = LetCmd -> GetNewBoolValue(newValue);
     }
-    
-#ifdef G4ANALYSIS_USE_ROOT
-    else if (command == FileNameCmd)
-    {
-	AnalysisManager->SetAnalysisFileName(newValue);
-	HadrontherapyAnalysisManager::GetInstance() -> book(); // Book for a new ROOT TFile 
-    }
-#endif
 }
 

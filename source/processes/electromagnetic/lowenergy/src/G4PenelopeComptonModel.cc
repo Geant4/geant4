@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc 97613 2016-06-06 12:24:51Z gcosmo $
+// $Id: G4PenelopeComptonModel.cc 99415 2016-09-21 09:05:43Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -554,7 +554,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
     }
 
   //the local energy deposit is what remains: part of this may be spent for fluorescence.
-  //Notice: shell might be NULL (invalid!) if shFlag=30. Must be protected
+  //Notice: shell might be nullptr (invalid!) if shFlag=30. Must be protected
   //Now, take care of fluorescence, if required
   if (fAtomDeexcitation && shell)
     {

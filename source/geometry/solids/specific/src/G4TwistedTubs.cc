@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4TwistedTubs.cc 105776 2017-08-17 08:09:09Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -48,7 +48,7 @@
 #include "G4GeometryTolerance.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
-#include "G4SolidExtentList.hh"
+#include "G4BoundingEnvelope.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4VPVParameterisation.hh"
 #include "meshdefs.hh"
@@ -324,245 +324,51 @@ void G4TwistedTubs::ComputeDimensions(G4VPVParameterisation* /* p */ ,
               "G4TwistedTubs does not support Parameterisation.");
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
 
-//=====================================================================
-//* CalculateExtent ---------------------------------------------------
-
-G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
-                                       const G4VoxelLimits     &voxelLimit,
-                                       const G4AffineTransform &transform,
-                                             G4double          &min,
-                                             G4double          &max ) const
+void G4TwistedTubs::BoundingLimits(G4ThreeVector& pMin,
+                                   G4ThreeVector& pMax) const
 {
-
-  G4SolidExtentList  extentList( axis, voxelLimit );
   G4double maxEndOuterRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ?
                              fEndOuterRadius[0] : fEndOuterRadius[1]);
-  G4double maxEndInnerRad = (fEndInnerRadius[0] > fEndInnerRadius[1] ?
-                             fEndInnerRadius[0] : fEndInnerRadius[1]);
-  G4double maxphi         = (std::fabs(fEndPhi[0]) > std::fabs(fEndPhi[1]) ?
-                             std::fabs(fEndPhi[0]) : std::fabs(fEndPhi[1]));
-   
-  //
-  // Choose phi size of our segment(s) based on constants as
-  // defined in meshdefs.hh
-  //
-  // G4int numPhi = kMaxMeshSections;
-  G4double sigPhi = 2*maxphi + fDPhi;
-  G4double rFudge = 1.0/std::cos(0.5*sigPhi);
-  G4double fudgeEndOuterRad = rFudge * maxEndOuterRad;
-  
-  //
-  // We work around in phi building polygons along the way.
-  // As a reasonable compromise between accuracy and
-  // complexity (=cpu time), the following facets are chosen:
-  //
-  //   1. If fOuterRadius/maxEndOuterRad > 0.95, approximate
-  //      the outer surface as a cylinder, and use one
-  //      rectangular polygon (0-1) to build its mesh.
-  //
-  //      Otherwise, use two trapazoidal polygons that 
-  //      meet at z = 0 (0-4-1)
-  //
-  //   2. If there is no inner surface, then use one
-  //      polygon for each entire endcap.  (0) and (1)
-  //
-  //      Otherwise, use a trapazoidal polygon for each
-  //      phi segment of each endcap.    (0-2) and (1-3)
-  //
-  //   3. For the inner surface, if fInnerRadius/maxEndInnerRad > 0.95,
-  //      approximate the inner surface as a cylinder of
-  //      radius fInnerRadius and use one rectangular polygon
-  //      to build each phi segment of its mesh.   (2-3)
-  //
-  //      Otherwise, use one rectangular polygon centered
-  //      at z = 0 (5-6) and two connecting trapazoidal polygons
-  //      for each phi segment (2-5) and (3-6).
-  //
+  pMin.set(-maxEndOuterRad,-maxEndOuterRad,-fZHalfLength);
+  pMax.set( maxEndOuterRad, maxEndOuterRad, fZHalfLength);
 
-  G4bool splitOuter = (fOuterRadius/maxEndOuterRad < 0.95);
-  G4bool splitInner = (fInnerRadius/maxEndInnerRad < 0.95);
-  
+  // Check correctness of the bounding box
   //
-  // Vertex assignments (v and w arrays)
-  // [0] and [1] are mandatory
-  // the rest are optional
-  //
-  //     +                     -
-  //      [0]------[4]------[1]      <--- outer radius
-  //       |                 |       
-  //       |                 |       
-  //      [2]---[5]---[6]---[3]      <--- inner radius
-  //
-
-  G4ClippablePolygon endPoly1, endPoly2;
-  
-  G4double phimax   = maxphi + 0.5*fDPhi;
-  if ( phimax > pi/2)  { phimax = pi-phimax; }
-  G4double phimin   = - phimax;
-
-  G4ThreeVector v0, v1, v2, v3, v4, v5, v6;   // -ve phi verticies for polygon
-  G4ThreeVector w0, w1, w2, w3, w4, w5, w6;   // +ve phi verticies for polygon
-
-  //
-  // decide verticies of -ve phi boundary
-  //
-  
-  G4double cosPhi = std::cos(phimin);
-  G4double sinPhi = std::sin(phimin);
- 
-  // Outer hyperbolic surface  
-
-  v0 = transform.TransformPoint( 
-       G4ThreeVector(fudgeEndOuterRad*cosPhi, fudgeEndOuterRad*sinPhi, 
-                     + fZHalfLength));
-  v1 = transform.TransformPoint( 
-       G4ThreeVector(fudgeEndOuterRad*cosPhi, fudgeEndOuterRad*sinPhi, 
-                     - fZHalfLength));
-  if (splitOuter)
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
   {
-     v4 = transform.TransformPoint(
-          G4ThreeVector(fudgeEndOuterRad*cosPhi, fudgeEndOuterRad*sinPhi, 0));
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4TwistedTubs::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
   }
-  
-  // Inner hyperbolic surface  
-
-  G4double zInnerSplit = 0.;
-  if (splitInner)
-  {
-     v2 = transform.TransformPoint( 
-          G4ThreeVector(maxEndInnerRad*cosPhi, maxEndInnerRad*sinPhi, 
-                        + fZHalfLength));
-     v3 = transform.TransformPoint( 
-          G4ThreeVector(maxEndInnerRad*cosPhi, maxEndInnerRad*sinPhi, 
-                        - fZHalfLength));
-      
-     // Find intersection of tangential line of inner
-     // surface at z = fZHalfLength and line r=fInnerRadius.
-     G4double dr = fZHalfLength * fTanInnerStereo2;
-     G4double dz = maxEndInnerRad;
-     zInnerSplit = fZHalfLength + (fInnerRadius - maxEndInnerRad) * dz / dr;
-
-     // Build associated vertices
-     v5 = transform.TransformPoint( 
-          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi, 
-                        + zInnerSplit));
-     v6 = transform.TransformPoint( 
-          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi, 
-                        - zInnerSplit));
-  }
-  else
-  {
-     v2 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi, 
-                        + fZHalfLength));
-     v3 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi, 
-                        - fZHalfLength));
-  }
-
-  //
-  // decide vertices of +ve phi boundary
-  // 
-
-  cosPhi = std::cos(phimax);
-  sinPhi = std::sin(phimax);
-   
-  // Outer hyperbolic surface  
-  
-  w0 = transform.TransformPoint(
-       G4ThreeVector(fudgeEndOuterRad*cosPhi, fudgeEndOuterRad*sinPhi,
-                     + fZHalfLength));
-  w1 = transform.TransformPoint(
-       G4ThreeVector(fudgeEndOuterRad*cosPhi, fudgeEndOuterRad*sinPhi,
-                     - fZHalfLength));
-  if (splitOuter)
-  {
-     G4double r = rFudge*fOuterRadius;
-     
-     w4 = transform.TransformPoint(G4ThreeVector( r*cosPhi, r*sinPhi, 0 ));
-      
-     AddPolyToExtent( v0, v4, w4, w0, voxelLimit, axis, extentList );
-     AddPolyToExtent( v4, v1, w1, w4, voxelLimit, axis, extentList );
-  }
-  else
-  {
-     AddPolyToExtent( v0, v1, w1, w0, voxelLimit, axis, extentList );
-  }
-  
-  // Inner hyperbolic surface
-  
-  if (splitInner)
-  {
-     w2 = transform.TransformPoint(
-          G4ThreeVector(maxEndInnerRad*cosPhi, maxEndInnerRad*sinPhi, 
-                        + fZHalfLength));
-     w3 = transform.TransformPoint(
-          G4ThreeVector(maxEndInnerRad*cosPhi, maxEndInnerRad*sinPhi, 
-                        - fZHalfLength));
-          
-     w5 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi,
-                        + zInnerSplit));
-     w6 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi,
-                        - zInnerSplit));
-                                   
-     AddPolyToExtent( v3, v6, w6, w3, voxelLimit, axis, extentList );
-     AddPolyToExtent( v6, v5, w5, w6, voxelLimit, axis, extentList );
-     AddPolyToExtent( v5, v2, w2, w5, voxelLimit, axis, extentList );
-     
-  }
-  else
-  {
-     w2 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi,
-                        + fZHalfLength));
-     w3 = transform.TransformPoint(
-          G4ThreeVector(fInnerRadius*cosPhi, fInnerRadius*sinPhi,
-                        - fZHalfLength));
-
-     AddPolyToExtent( v3, v2, w2, w3, voxelLimit, axis, extentList );
-  }
-
-  //
-  // Endplate segments
-  //
-  AddPolyToExtent( v1, v3, w3, w1, voxelLimit, axis, extentList );
-  AddPolyToExtent( v2, v0, w0, w2, voxelLimit, axis, extentList );
-  
-  //
-  // Return min/max value
-  //
-  return extentList.GetExtent( min, max );
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
 
-//=====================================================================
-//* AddPolyToExtent ---------------------------------------------------
-
-void G4TwistedTubs::AddPolyToExtent( const G4ThreeVector &v0,
-                                     const G4ThreeVector &v1,
-                                     const G4ThreeVector &w1,
-                                     const G4ThreeVector &w0,
-                                     const G4VoxelLimits &voxelLimit,
-                                     const EAxis          axis,
-                                     G4SolidExtentList   &extentList ) 
+G4bool
+G4TwistedTubs::CalculateExtent(const EAxis pAxis,
+                               const G4VoxelLimits& pVoxelLimit,
+                               const G4AffineTransform& pTransform,
+                                     G4double& pMin, G4double& pMax) const
 {
-    // Utility function for CalculateExtent
-    //
-    G4ClippablePolygon phiPoly;
+  G4ThreeVector bmin, bmax;
 
-    phiPoly.AddVertexInOrder( v0 );
-    phiPoly.AddVertexInOrder( v1 );
-    phiPoly.AddVertexInOrder( w1 );
-    phiPoly.AddVertexInOrder( w0 );
+  // Get bounding box
+  BoundingLimits(bmin,bmax);
 
-    if (phiPoly.PartialClip( voxelLimit, axis ))
-    {
-        phiPoly.SetNormal( (v1-v0).cross(w0-v0).unit() );
-        extentList.AddSurface( phiPoly );
-    }
+  // Find extent
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 }
 
 
@@ -1086,7 +892,8 @@ G4VisExtent G4TwistedTubs::GetExtent() const
 {
   // Define the sides of the box into which the G4Tubs instance would fit.
 
-  G4double maxEndOuterRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ? 0 : 1);
+  G4double maxEndOuterRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ?
+                             fEndOuterRadius[0] : fEndOuterRadius[1]);
   return G4VisExtent( -maxEndOuterRad, maxEndOuterRad, 
                       -maxEndOuterRad, maxEndOuterRad, 
                       -fZHalfLength, fZHalfLength );
@@ -1099,11 +906,12 @@ G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const
 {
   // number of meshes
   //
-  G4double dA = std::max(fDPhi,fPhiTwist);
+  G4double absPhiTwist = std::abs(fPhiTwist);
+  G4double dA = std::max(fDPhi,absPhiTwist);
   const G4int k =
     G4int(G4Polyhedron::GetNumberOfRotationSteps() * dA / twopi) + 2;
   const G4int n =
-    G4int(G4Polyhedron::GetNumberOfRotationSteps() * fPhiTwist / twopi) + 2;
+    G4int(G4Polyhedron::GetNumberOfRotationSteps() * absPhiTwist / twopi) + 2;
 
   const G4int nnodes = 4*(k-1)*(n-2) + 2*k*k ;
   const G4int nfaces = 4*(k-1)*(n-1) + 2*(k-1)*(k-1) ;

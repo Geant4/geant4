@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.hh 68797 2013-04-05 13:27:11Z gcosmo $
+// $Id: G4eplusAnnihilation.hh 106717 2017-10-20 09:41:27Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -67,27 +67,31 @@ class G4eplusAnnihilation : public G4VEmProcess
 
 public:
 
-  G4eplusAnnihilation(const G4String& name = "annihil");
+  explicit G4eplusAnnihilation(const G4String& name = "annihil");
 
   virtual ~G4eplusAnnihilation();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) final;
 
   virtual G4VParticleChange* AtRestDoIt(
                              const G4Track& track,
-                             const G4Step& stepData);
+                             const G4Step& stepData) override;
 
   virtual G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4ForceCondition* condition
-                            );
+                            ) override;
 
-  // Print out of the class parameters
-  virtual void PrintInfo();
+  // print documentation in html format
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  // Print out of the class parameters
+  virtual void StreamProcessInfo(std::ostream& outFile,
+                             G4String endOfLine=G4String("\n")) const override;
+
+  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:
   

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeCrossSections.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4eeCrossSections.hh 97391 2016-06-02 10:08:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -104,8 +104,8 @@ private:
   std::complex<G4double> DpPhi(G4double e);
 
   // hide assignment operator
-  G4eeCrossSections & operator=(const  G4eeCrossSections &right);
-  G4eeCrossSections(const  G4eeCrossSections&);
+  G4eeCrossSections & operator=(const  G4eeCrossSections &right) = delete;
+  G4eeCrossSections(const  G4eeCrossSections&) = delete;
 
   G4double MsPi, MsPi0, MsEta, MsEtap, MsKs, MsKc, MsRho, MsOm;
   G4double MsF0, MsA0, MsPhi, MsK892, MsK0892;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4eeToHadrons.hh 106715 2017-10-20 09:39:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,29 +61,33 @@ class G4eeToHadrons : public G4VEmProcess
 
 public:
 
-  G4eeToHadrons(const G4String& name = "ee2hadr");
+  explicit G4eeToHadrons(const G4String& name = "ee2hadr");
 
   virtual ~G4eeToHadrons();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
-
-  // Print out of the class parameters
-  virtual void PrintInfo();
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
   // Set the factor to artificially increase the crossSection (default 1)
   void SetCrossSecFactor(G4double fac);
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  // Print out of the class parameters
+  virtual void StreamProcessInfo(std::ostream& outFile,
+                             G4String endOfLine=G4String("\n")) const override;
+
+  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
+
+  // print description in html
+  virtual void ProcessDescription(std::ostream&) const override;
 
 private:
 
   std::vector<G4DynamicParticle*>* GenerateSecondaries(const G4DynamicParticle*);
 
   // hide assignment operator
-  G4eeToHadrons & operator=(const G4eeToHadrons &right);
-  G4eeToHadrons(const G4eeToHadrons&);
+  G4eeToHadrons & operator=(const G4eeToHadrons &right) = delete;
+  G4eeToHadrons(const G4eeToHadrons&) = delete;
 
   G4eeToHadronsMultiModel*  multimodel;
   G4double                  csFactor;

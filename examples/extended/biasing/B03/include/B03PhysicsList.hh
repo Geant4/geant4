@@ -41,15 +41,15 @@
 class B03PhysicsList: public G4VUserPhysicsList
 {
   public:
-    B03PhysicsList();
+    B03PhysicsList(G4String);
     virtual ~B03PhysicsList();
 
   public: 
     void AddParallelWorldName(G4String& pname)
          {fParaWorldName.push_back(pname);}
 
-    void AddBiasing(G4GeometrySampler *mgs, G4String& pname) 
-         {fGeomSampler = mgs; fBiasWorldName = pname;}
+    // void AddBiasing(G4GeometrySampler *mgs, G4String& pname) 
+    //      {fGeomSampler = mgs; fBiasWorldName = pname;}
 
   protected:
     // Construct particle and physics
@@ -79,12 +79,10 @@ class B03PhysicsList: public G4VUserPhysicsList
 
   private:
     std::vector<G4String>  fParaWorldName; 
-    G4String fBiasWorldName;
-    G4GeometrySampler* fGeomSampler;
+  G4String fBiasWorldName;
+  // G4GeometrySampler* fGeomSampler;
 
 };
 
 #endif
-
-
 

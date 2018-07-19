@@ -37,9 +37,11 @@
 #ifndef G4ecpssrFormFactorMixsModel_HH
 #define G4ecpssrFormFactorMixsModel_HH 1
 
-#include "G4VecpssrMiModel.hh"
-#include "globals.hh"
 #include <map>
+#include <vector>
+
+#include "G4Types.hh"
+#include "G4VecpssrMiModel.hh"
 
 class G4VDataSetAlgorithm;
 class G4VEMDataSet;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BinaryPionBuilder.hh 67969 2013-03-13 09:44:42Z gcosmo $
+// $Id: G4BinaryPionBuilder.hh 103593 2017-04-19 08:10:21Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -31,6 +31,8 @@
 //
 // Author: 2011 Gunter Folger
 //
+// Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -52,16 +54,16 @@ class G4BinaryPionBuilder : public G4VPionBuilder
 {
   public: 
     G4BinaryPionBuilder();
-    virtual ~G4BinaryPionBuilder();
+    virtual ~G4BinaryPionBuilder() {}
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4PionPlusInelasticProcess * aP);
-    virtual void Build(G4PionMinusInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4PionPlusInelasticProcess * aP) final override;
+    virtual void Build(G4PionMinusInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    void SetMinEnergy(G4double aM) final override {theMin = aM;}
+    void SetMaxEnergy(G4double aM) final override {theMax = aM;}
 
+    using G4VPionBuilder::Build; //Prevent compiler warning
   private:
     G4VCrossSectionDataSet * thePiData;
     G4BinaryCascade * theModel;    

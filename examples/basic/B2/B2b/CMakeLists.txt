@@ -1,4 +1,4 @@
-# $Id: CMakeLists.txt 86065 2014-11-07 08:51:15Z gcosmo $
+# $Id: CMakeLists.txt 100813 2016-11-02 15:09:50Z gcosmo $
 
 #----------------------------------------------------------------------------
 # Setup the project
@@ -46,9 +46,7 @@ target_link_libraries(exampleB2b ${Geant4_LIBRARIES})
 set(EXAMPLEB2B_SCRIPTS
   exampleB2b.out
   exampleB2.in
-  icons.mac
   gui.mac
-  run.png
   init_vis.mac
   run1.mac
   run2.mac

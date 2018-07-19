@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.icc 70961 2013-06-07 15:17:02Z gcosmo $
+// $Id: G4PhysicsTable.icc 98864 2016-08-15 11:53:26Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -38,7 +38,7 @@
 inline
  void G4PhysicsTable::clearAndDestroy() 
 {
-  G4PhysicsVector* a=0;
+  G4PhysicsVector* a=nullptr;
   while (size()>0)
   {
     a = G4PhysCollection::back();

@@ -110,7 +110,7 @@ void RE04DetectorConstruction::SetupGeometry()
   //                                        
   // Visualization attributes
   //
-  worldLogical->SetVisAttributes(G4VisAttributes::Invisible);
+  worldLogical->SetVisAttributes(G4VisAttributes::GetInvisible());
   G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   simpleBoxVisAtt->SetVisibility(true);
   phantomLogical->SetVisAttributes(simpleBoxVisAtt);

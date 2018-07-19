@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc 87924 2015-01-21 13:17:25Z gcosmo $
+// $Id: G4ProcessManager.cc 107935 2017-12-14 09:04:59Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -1080,10 +1080,6 @@ void G4ProcessManager::CreateGPILvectors()
 }
 
 
-
-
-
-
 //////////////////////////////////////////
 void G4ProcessManager::StartTracking(G4Track* aTrack)
 {
@@ -1102,6 +1098,17 @@ void G4ProcessManager::EndTracking()
       ((*theProcessList)[idx])->EndTracking();
   }
   duringTracking = false;
+}
+
+
+/////////////////////////////////////////////
+G4VProcess* G4ProcessManager::GetProcess(const G4String& processName) const
+{
+  for (G4int k=0; k<numberOfProcesses; k++) {
+    G4VProcess* process = (*theProcessList)[k];
+    if (process->GetProcessName() == processName) return process;
+  }
+  return nullptr;
 }
 
 
@@ -1214,6 +1221,4 @@ void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
   
   return;
 }
-
-
 

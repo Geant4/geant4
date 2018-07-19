@@ -36,7 +36,7 @@
 #include <vector>
 #include <string>
 
-
+#include "g4csv.hh"
 #include "HadrontherapyMatrix.hh"
 struct ionLet 
 { 
@@ -79,9 +79,8 @@ void FillEnergySpectrum (G4int trackID,
 				G4double DX,
 				G4int i, G4int j, G4int k); 
 	void LetOutput(); 
-
 	void StoreLetAscii();
-	void StoreLetRoot();
+
 
     private:
 	static HadrontherapyLet *instance;

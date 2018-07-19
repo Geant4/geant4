@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc 72936 2013-08-14 13:17:11Z gcosmo $
+// $Id: G4VSolid.cc 104317 2017-05-24 13:08:38Z gcosmo $
 //
 // class G4VSolid
 //
@@ -617,6 +617,27 @@ G4VSolid::ClipPolygonToSimpleLimits( G4ThreeVectorList& pPolygon,
     }
   }
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Throw exception (warning) for solids not implementing the method
+
+void G4VSolid::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  std::ostringstream message;
+  message << "Not implemented for solid: "
+          << GetEntityType() << " !"
+          << "\nReturning infinite boundinx box.";
+  G4Exception("G4VSolid::BoundingLimits()", "GeomMgt1001",
+              JustWarning, message);
+
+  pMin.set(-kInfinity,-kInfinity,-kInfinity);
+  pMax.set( kInfinity, kInfinity, kInfinity);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Get G4VisExtent - bounding box for graphics
 
 G4VisExtent G4VSolid::GetExtent () const 
 {

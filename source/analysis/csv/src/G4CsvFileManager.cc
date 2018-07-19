@@ -85,6 +85,7 @@ G4bool G4CsvFileManager::CreateNtupleFile(
 
   auto ntupleFile = new std::ofstream(GetNtupleFileName(ntupleName));
   if ( ntupleFile->fail() ) {
+    delete ntupleFile;
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " 
                 << GetNtupleFileName(ntupleName);
@@ -107,6 +108,9 @@ G4bool G4CsvFileManager::CreateNtupleFile(
 G4bool G4CsvFileManager::CloseNtupleFile(
   G4TNtupleDescription<tools::wcsv::ntuple>* ntupleDescription)
 {
+  // Do nothing if there is no file
+  if ( ! ntupleDescription->fFile ) return true;
+
   G4String ntupleName = ntupleDescription->fNtupleBooking.name();
 
 #ifdef G4VERBOSE

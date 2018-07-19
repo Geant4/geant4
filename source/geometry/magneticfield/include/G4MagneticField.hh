@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticField.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4MagneticField.hh 108823 2018-03-09 11:03:44Z gcosmo $
 //
 //
 // class G4MagneticField
@@ -41,9 +41,9 @@
 #define G4MAGNETIC_FIELD_DEF
 
 #include "G4Types.hh"
-#include "G4ElectroMagneticField.hh"
+#include "G4Field.hh"
 
-class G4MagneticField : public G4ElectroMagneticField
+class G4MagneticField : public G4Field
 {
   public:  // with description
 

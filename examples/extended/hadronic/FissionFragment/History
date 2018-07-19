@@ -14,8 +14,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08-05-18    J. Allison		(exExtHadFissFrag-V10-04-01)
+- FissionFragment.cc:
+  o Move instantiation of G4UIExecutive beyond the point where the main
+    program could exit, for example, if environment variables are incorrectly
+    set. The problem was that if G4UIExecutive invokes G4UIQt, and if the
+    program exits after instantiation but before SessionStart, all output
+    is lost.
+
+03-05-18    J. Allison		(exExtHadFissFrag-V10-04-00)
+- FissionFragment.cc:
+  o Remove G4_VIS_USE and G4UI_USE.
+  o Move instantiation of G4UIExecutive to start of main.
+
 26-10-15    T. Koi		(exExtHadFissFrag-V10-01-01)
-- Fix Waring message in prvious tag
+- Fix compiler waring message in previous tag
 
 25-10-15    T. Koi		(exExtHadFissFrag-V10-01-00)
 - Limit number of worker threads of one

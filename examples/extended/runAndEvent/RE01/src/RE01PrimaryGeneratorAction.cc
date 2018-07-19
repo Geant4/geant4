@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01PrimaryGeneratorAction.cc
 /// \brief Implementation of the RE01PrimaryGeneratorAction class
 //
-// $Id: RE01PrimaryGeneratorAction.cc 90679 2015-06-08 07:58:19Z gcosmo $
+// $Id: RE01PrimaryGeneratorAction.cc 97383 2016-06-02 09:56:35Z gcosmo $
 //
 
 #include "RE01PrimaryGeneratorAction.hh"
@@ -39,7 +39,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"    
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01PrimaryGeneratorAction::RE01PrimaryGeneratorAction()
   : G4VUserPrimaryGeneratorAction(),
     fHEPEvt(0), fParticleGun(0), fMessenger(0)
@@ -79,13 +79,19 @@ RE01PrimaryGeneratorAction::~RE01PrimaryGeneratorAction()
   delete fMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   if(fUseHEPEvt)
   {
     G4AutoLock lock(&RE01PrimGenMutex);
-    fHEPEvt->GeneratePrimaryVertex(anEvent); }
+    fHEPEvt->GeneratePrimaryVertex(anEvent);
+    if(anEvent->GetNumberOfPrimaryVertex()==0)
+    { // End-of-file
+      G4Exception("RE01PrimaryGeneratorAction::GeneratePrimaries",
+                  "RE01_0001",RunMustBeAborted,"End of file detected.");
+    }
+  }
   else
   { fParticleGun->GeneratePrimaryVertex(anEvent); }
 }

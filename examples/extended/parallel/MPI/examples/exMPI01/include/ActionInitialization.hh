@@ -25,8 +25,8 @@
 //
 // $Id: PrimaryGeneratorAction.hh 66587 2012-12-21 11:06:44Z ihrivnac $
 //
-/// @file PrimaryGeneratrorAction.hh
-/// @brief Define primary generator action
+/// @file ActionInitialization.hh
+/// @brief Define action initialization
 
 #ifndef ACTION_INITIALIZATION_H
 #define ACTION_INITIALIZATION_H

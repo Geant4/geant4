@@ -51,36 +51,6 @@ const G4VBiasingInteractionLaw* G4BOptnForceFreeFlight::ProvideOccurenceBiasingI
   return fForceFreeFlightInteractionLaw;
 }
 
-G4bool G4BOptnForceFreeFlight::DenyProcessPostStepDoIt( const G4BiasingProcessInterface*, const G4Track*, const G4Step* step, G4double& proposedWeight )
-{
-  // -- force free flight always deny process to apply its doit.
-  // -- if reaching boundary, track is restored with non-zero weight
-  if ( fInitialTrackWeight <= DBL_MIN )
-    {
-      G4ExceptionDescription ed;
-      ed << " Initial track weight is null ! " << G4endl;
-      G4Exception(" G4BOptnForceFreeFlight::DenyProcessPostStepDoIt(...)",
-		  "BIAS.GEN.05",
-		  JustWarning,
-		  ed);
-    }
-  if ( fCumulatedWeightChange <= DBL_MIN )
-    {
-      G4ExceptionDescription ed;
-      ed << " Cumulated weight is null ! " << G4endl;
-      G4Exception(" G4BOptnForceFreeFlight::DenyProcessPostStepDoIt(...)",
-		  "BIAS.GEN.06",
-		  JustWarning,
-		  ed);
-    }
-  if ( step->GetPostStepPoint()->GetStepStatus() == fGeomBoundary )
-    {
-      if ( proposedWeight <= DBL_MIN ) proposedWeight  = fCumulatedWeightChange * fInitialTrackWeight;
-      else                             proposedWeight *= fCumulatedWeightChange;
-    }
-  
-  return true;
-}
 
 G4VParticleChange* G4BOptnForceFreeFlight::ApplyFinalStateBiasing( const G4BiasingProcessInterface* callingProcess,
 								   const G4Track* track,

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.hh 97537 2016-06-03 15:26:56Z gcosmo $
+// $Id: G4VDecayChannel.hh 105720 2017-08-16 12:38:10Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -289,9 +289,6 @@ inline
 
 inline
  const G4String& G4VDecayChannel::GetKinematicsName() const { return kinematics_name; }
-
-inline
- void  G4VDecayChannel::SetBR(G4double value){ rbranch = value; }
 
 inline
  G4double G4VDecayChannel::GetBR() const { return rbranch; }

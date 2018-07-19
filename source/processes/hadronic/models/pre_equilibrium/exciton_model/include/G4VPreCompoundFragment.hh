@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundFragment.hh 90337 2015-05-26 08:34:27Z gcosmo $
+// $Id: G4VPreCompoundFragment.hh 100378 2016-10-19 15:03:27Z gcosmo $
 //
 // J. M. Quesada (August 2008).  
 // Based  on previous work by V. Lara
@@ -48,25 +48,17 @@
 #include "G4Fragment.hh"
 #include "G4VCoulombBarrier.hh"
 #include "G4ReactionProduct.hh"
-#include "G4PreCompoundParameters.hh"
+#include "G4DeexPrecoParameters.hh"
 #include "G4Pow.hh"
 
 class G4VPreCompoundFragment
 {
 public:  
 
-  // ============================
-  // Constructors and destructor
-  // ============================
-    
-  G4VPreCompoundFragment(const G4ParticleDefinition*,
-			 G4VCoulombBarrier * aCoulombBarrier);
+  explicit G4VPreCompoundFragment(const G4ParticleDefinition*,
+				  G4VCoulombBarrier * aCoulombBarrier);
   
   virtual ~G4VPreCompoundFragment();
-  
-  // ==========
-  // operators 
-  // ========== 
   
   friend std::ostream& 
   operator<<(std::ostream&, const G4VPreCompoundFragment*);
@@ -129,12 +121,11 @@ protected:
 
 private:
 
-  G4VPreCompoundFragment();
-  G4VPreCompoundFragment(const G4VPreCompoundFragment &right);
+  G4VPreCompoundFragment(const G4VPreCompoundFragment &right) = delete;
   const G4VPreCompoundFragment& 
-  operator= (const G4VPreCompoundFragment &right);  
-  G4int operator==(const G4VPreCompoundFragment &right) const;
-  G4int operator!=(const G4VPreCompoundFragment &right) const;
+  operator= (const G4VPreCompoundFragment &right) = delete;  
+  G4int operator==(const G4VPreCompoundFragment &right) const = delete;
+  G4int operator!=(const G4VPreCompoundFragment &right) const = delete;
 
   // =============
   // Data members
@@ -147,8 +138,8 @@ private:
   
 protected:
 
-  G4PreCompoundParameters* theParameters;
-  G4Pow* g4pow;
+  G4DeexPrecoParameters* theParameters;
+  G4Pow* g4calc;
 
   G4int theA;
   G4int theZ;
@@ -159,6 +150,7 @@ protected:
 
   G4double theResA13;
   G4double theBindingEnergy;
+  G4double theMinKinEnergy;
   G4double theMaxKinEnergy;
   G4double theResMass;
   G4double theReducedMass;

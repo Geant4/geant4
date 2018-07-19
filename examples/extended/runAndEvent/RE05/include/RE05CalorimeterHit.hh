@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05CalorimeterHit.hh 69764 2013-05-14 09:59:36Z gcosmo $
+// $Id: RE05CalorimeterHit.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05CalorimeterHit.hh
 /// \brief Definition of the RE05CalorimeterHit class
@@ -63,38 +63,38 @@ class RE05CalorimeterHit : public G4VHit
       virtual void Print();
 
   private:
-      G4int ZCellID;
-      G4int PhiCellID;
-      G4double edep;
-      G4ThreeVector pos;
-      G4RotationMatrix rot;
-      const G4LogicalVolume* pLogV;
+      G4int fZCellID;
+      G4int fPhiCellID;
+      G4double fEdep;
+      G4ThreeVector fPos;
+      G4RotationMatrix fRot;
+      const G4LogicalVolume* fLogV;
       static std::map<G4String,G4AttDef> fAttDefs;
 
   public:
       inline void SetCellID(G4int z,G4int phi)
       {
-        ZCellID = z;
-        PhiCellID = phi;
+        fZCellID = z;
+        fPhiCellID = phi;
       }
-      inline G4int GetZ() { return ZCellID; }
-      inline G4int GetPhi() { return PhiCellID; }
+      inline G4int GetZ() { return fZCellID; }
+      inline G4int GetPhi() { return fPhiCellID; }
       inline void SetEdep(G4double de)
-      { edep = de; }
+      { fEdep = de; }
       inline void AddEdep(G4double de)
-      { edep += de; }
+      { fEdep += de; }
       inline G4double GetEdep()
-      { return edep; }
+      { return fEdep; }
       inline void SetPos(G4ThreeVector xyz)
-      { pos = xyz; }
+      { fPos = xyz; }
       inline G4ThreeVector GetPos()
-      { return pos; }
+      { return fPos; }
       inline void SetRot(G4RotationMatrix rmat)
-      { rot = rmat; }
+      { fRot = rmat; }
       inline G4RotationMatrix GetRot()
-      { return rot; }
+      { return fRot; }
       inline const G4LogicalVolume * GetLogV()
-      { return pLogV; }
+      { return fLogV; }
 
 };
 
@@ -115,5 +115,3 @@ inline void RE05CalorimeterHit::operator delete(void *aHit)
 }
 
 #endif
-
-

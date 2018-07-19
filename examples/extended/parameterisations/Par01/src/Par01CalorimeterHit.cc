@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par01/src/Par01CalorimeterHit.cc
+/// \brief Implementation of the Par01CalorimeterHit class
 //
-// $Id: Par01CalorimeterHit.cc 90093 2015-05-13 11:59:54Z gcosmo $
+//
+// $Id: Par01CalorimeterHit.cc 101151 2016-11-08 08:06:16Z gcosmo $
 //
 
 #include "Par01CalorimeterHit.hh"
@@ -37,15 +40,25 @@
 
 G4ThreadLocal G4Allocator<Par01CalorimeterHit>* Par01CalorimeterHitAllocator=0;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01CalorimeterHit::Par01CalorimeterHit()
-{fLogV=NULL;}
+{
+  fLogV = nullptr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par01CalorimeterHit::Par01CalorimeterHit(G4LogicalVolume* logVol)
  :fLogV(logVol)
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01CalorimeterHit::~Par01CalorimeterHit()
 {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par01CalorimeterHit::Par01CalorimeterHit(const Par01CalorimeterHit &right)
   : G4VHit()
@@ -56,6 +69,8 @@ Par01CalorimeterHit::Par01CalorimeterHit(const Par01CalorimeterHit &right)
   fLogV     = right.fLogV;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 const Par01CalorimeterHit& Par01CalorimeterHit::operator=(const Par01CalorimeterHit &right)
 {
   fEdep     = right.fEdep;
@@ -65,10 +80,14 @@ const Par01CalorimeterHit& Par01CalorimeterHit::operator=(const Par01Calorimeter
   return *this;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4int Par01CalorimeterHit::operator==(const Par01CalorimeterHit &right) const
 {
   return (this==&right) ? 1 : 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01CalorimeterHit::Draw()
 {
@@ -86,6 +105,8 @@ void Par01CalorimeterHit::Draw()
     pVVisManager->Draw(*fLogV,attribs,trans);
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01CalorimeterHit::Print()
 {

@@ -43,9 +43,7 @@ target_link_libraries(${name} ${Geant4_LIBRARIES})
 set(MICROELECTRONICS_SCRIPTS
   microelectronics.mac
   microelectronics.in
-  icons.mac
   vis.mac
-  run.png
   plot.C
   )
 

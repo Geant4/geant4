@@ -48,7 +48,7 @@ B5ActionInitialization::~B5ActionInitialization()
 
 void B5ActionInitialization::BuildForMaster() const
 {
-  B5EventAction* eventAction = 0;
+  B5EventAction* eventAction = new B5EventAction;
   SetUserAction(new B5RunAction(eventAction));
 }
 
@@ -58,7 +58,7 @@ void B5ActionInitialization::Build() const
 {
   SetUserAction(new B5PrimaryGeneratorAction);
 
-  B5EventAction* eventAction = new B5EventAction;
+  auto eventAction = new B5EventAction;
   SetUserAction(eventAction);
 
   SetUserAction(new B5RunAction(eventAction));

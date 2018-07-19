@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FragmentingString.hh 69569 2013-05-08 13:19:50Z gcosmo $
+// $Id: G4FragmentingString.hh 107869 2017-12-07 14:46:39Z gcosmo $
 //
 
 #ifndef G4FragmentingString_h
@@ -42,6 +42,7 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
+#include "G4LorentzRotation.hh"
 #include "G4ParticleDefinition.hh"
 
 class G4ExcitedString;
@@ -95,6 +96,16 @@ class G4FragmentingString
       G4bool    StableIsQuark();
       G4bool    FourQuarkString(void) const;
 
+G4LorentzVector   GetPstring();
+G4LorentzVector   GetPleft();
+void              SetPleft(G4LorentzVector a4momentum);
+G4LorentzVector   GetPright();
+void              SetPright(G4LorentzVector a4momentum);
+void              LorentzRotate(const G4LorentzRotation & rotation);
+G4LorentzRotation TransformToCenterOfMass();
+G4LorentzRotation TransformToAlignedCms();
+void              Boost(G4ThreeVector& Velocity);
+
 
   private:
 
@@ -104,6 +115,7 @@ class G4FragmentingString
   
       G4ParticleDefinition * theStableParton, * theDecayParton;
       
+      G4LorentzVector Pstring, Pleft, Pright;
       enum DecaySide { None, Left, Right };
       DecaySide decaying; 
 };
@@ -145,8 +157,64 @@ G4ParticleDefinition* G4FragmentingString::GetRightParton(void) const
     return RightParton; 
     }
 
+//+++++++++++++++++++++++++++
+inline
+void G4FragmentingString::LorentzRotate(const G4LorentzRotation & rotation)
+{
+     SetPleft(rotation*Pleft);
+     SetPright(rotation*Pright);
+     Pstring = Pleft+Pright;
+Ptleft =Pleft.vect();  Ptleft.setZ(0.);
+Ptright=Pright.vect(); Ptright.setZ(0.);
+Pplus =Pstring.plus();
+Pminus=Pstring.minus();
+}
 
+inline
+G4LorentzRotation G4FragmentingString::TransformToCenterOfMass()
+{
+     G4LorentzVector momentum=Pstring;
+     G4LorentzRotation toCMS(-1*momentum.boostVector());
 
+     Pleft   *= toCMS;
+     Pright  *= toCMS;
+     Pstring *= toCMS;
+Ptleft =Pleft.vect();  Ptleft.setZ(0.);
+Ptright=Pright.vect(); Ptright.setZ(0.);
+Pplus =Pstring.plus();
+Pminus=Pstring.minus();
+     return toCMS;
+}
+
+inline
+G4LorentzRotation G4FragmentingString::TransformToAlignedCms()
+{
+     G4LorentzVector momentum=Pstring;
+     G4LorentzRotation toAlignedCms(-1*momentum.boostVector());
+
+     momentum= toAlignedCms* Pleft;
+     toAlignedCms.rotateZ(-1*momentum.phi());
+     toAlignedCms.rotateY(-1*momentum.theta());
+
+     Pleft   *= toAlignedCms;
+     Pright  *= toAlignedCms;
+     Pstring *= toAlignedCms;
+
+Ptleft  = G4ThreeVector(0.,0.,0.);
+Ptright = G4ThreeVector(0.,0.,0.);
+Pplus  = Pstring.plus();
+Pminus = Pstring.minus();
+
+     return toAlignedCms;
+}
+
+inline
+void G4FragmentingString::SetPleft(G4LorentzVector a4momentum)
+{    Pleft = a4momentum;}
+
+inline
+void G4FragmentingString::SetPright(G4LorentzVector a4momentum)
+{    Pright = a4momentum;}
 #endif
 
 

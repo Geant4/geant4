@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radioactivedecay/rdecay01/include/TrackingMessenger.hh
+/// \file TrackingMessenger.hh
 /// \brief Definition of the TrackingMessenger class
 //
-// $Id: TrackingMessenger.hh 68017 2013-03-13 13:29:53Z gcosmo $
+// $Id: TrackingMessenger.hh 98257 2016-07-04 17:39:46Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 
 class TrackingAction;
 class G4UIcmdWithABool;
+class G4UIcommand;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,6 +54,7 @@ class TrackingMessenger: public G4UImessenger
   private:
     TrackingAction*   fTrackingAction;    
     G4UIcmdWithABool* fTrackingCmd;
+    G4UIcommand*      fTimeWindowCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -54,16 +54,16 @@ G4ecpssrFormFactorKxsModel::G4ecpssrFormFactorKxsModel()
 { 
   interpolation = new G4LogLogInterpolation();
 
-  for (G4int i=6; i<93; i++) 
+  for (G4int i=3; i<93; i++) 
   {
       protonDataSetMap[i] = new G4EMDataSet(i,interpolation);
-      protonDataSetMap[i]->LoadData("pixe/ecpssr/proton/k-");
+      protonDataSetMap[i]->LoadData("pixe/ecpssr/proton/k-i01m001c01-");
   }
 
-  for (G4int i=6; i<93; i++) 
+  for (G4int i=3; i<93; i++) 
   {
       alphaDataSetMap[i] = new G4EMDataSet(i,interpolation);
-      alphaDataSetMap[i]->LoadData("pixe/ecpssr/alpha/k-");
+      alphaDataSetMap[i]->LoadData("pixe/ecpssr/alpha/k-i02m004c02-");
   }
 
 }
@@ -85,7 +85,7 @@ G4double G4ecpssrFormFactorKxsModel::CalculateCrossSection(G4int zTarget,G4doubl
   G4Alpha* aAlpha = G4Alpha::Alpha();  
   G4double sigma = 0;
 
-  if (energyIncident > 0.1*MeV && energyIncident < 100.*MeV && zTarget < 93 && zTarget > 5) {
+  if (energyIncident > 0.1*MeV && energyIncident < 100.*MeV && zTarget < 93 && zTarget > 2) {
 
     if (massIncident == aProton->GetPDGMass())
       {      	

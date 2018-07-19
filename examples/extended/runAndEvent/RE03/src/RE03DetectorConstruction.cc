@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE03/src/RE03DetectorConstruction.cc
 /// \brief Implementation of the RE03DetectorConstruction class
 //
-// $Id: RE03DetectorConstruction.cc 68780 2013-04-05 13:06:07Z gcosmo $
+// $Id: RE03DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 
 #include "RE03DetectorConstruction.hh"
@@ -105,7 +105,7 @@ void RE03DetectorConstruction::SetupGeometry()
   //                                        
   // Visualization attributes
   //
-  // worldLogical->SetVisAttributes(G4VisAttributes::Invisible);
+  // worldLogical->SetVisAttributes(G4VisAttributes::GetInvisible());
   G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   simpleBoxVisAtt->SetVisibility(true);
   phantomLogical->SetVisAttributes(simpleBoxVisAtt);

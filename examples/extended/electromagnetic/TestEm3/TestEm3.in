@@ -1,4 +1,4 @@
-# $Id: TestEm3.in 92914 2015-09-21 15:00:48Z gcosmo $
+# $Id: TestEm3.in 107962 2017-12-14 13:08:45Z gcosmo $
 #
 # Macro file for "exampleN03.cc"
 # (can be run in batch, without graphic)
@@ -11,9 +11,9 @@
 #
 /testem/phys/addPhysics  emstandard_opt0
 #
-/run/initialize
 /process/em/verbose 1
 /process/msc/Skin 1
+/run/initialize
 #
 /gun/particle e-
 /gun/energy 1 GeV

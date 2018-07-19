@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4strstreambuf.hh 110251 2018-05-17 14:09:28Z gcosmo $
+//
 // ====================================================================
 //
 //   G4strstreambuf
@@ -33,18 +34,19 @@
 #ifndef G4_STR_STREAM_BUF_HH
 #define G4_STR_STREAM_BUF_HH
 
+#include <streambuf>
+
 #include "globals.hh"
 #include "G4coutDestination.hh"
-#include <streambuf>
 
 class G4strstreambuf;
 
 #ifdef G4MULTITHREADED
 
-  extern G4GLOB_DLL G4ThreadLocal G4strstreambuf *G4coutbuf_p;
-  extern G4GLOB_DLL G4ThreadLocal G4strstreambuf *G4cerrbuf_p;
-  #define G4coutbuf (*G4coutbuf_p)
-  #define G4cerrbuf (*G4cerrbuf_p)
+  extern G4GLOB_DLL G4strstreambuf*& _G4coutbuf_p();
+  extern G4GLOB_DLL G4strstreambuf*& _G4cerrbuf_p();
+  #define G4coutbuf (*_G4coutbuf_p())
+  #define G4cerrbuf (*_G4cerrbuf_p())
 
 #else  // Sequential
 
@@ -68,6 +70,7 @@ class G4strstreambuf : public std::basic_streambuf<char>
 #endif
 
     void SetDestination(G4coutDestination* dest);
+    inline G4coutDestination* GetDestination() const;
     inline G4int ReceiveString ();
   
   private:
@@ -84,4 +87,3 @@ class G4strstreambuf : public std::basic_streambuf<char>
 #include "G4strstreambuf.icc"
 
 #endif
-

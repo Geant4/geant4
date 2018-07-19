@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4GammaConversion.hh 106717 2017-10-20 09:41:27Z gcosmo $
 //
 //
 //------------------ G4GammaConversion physics process------------------------
@@ -77,26 +77,32 @@ class G4GammaConversion : public G4VEmProcess
 {
 public:  // with description
 
-  G4GammaConversion(const G4String& processName ="conv",
-		      G4ProcessType type = fElectromagnetic);
+  explicit G4GammaConversion(const G4String& processName ="conv",
+			     G4ProcessType type = fElectromagnetic);
 
   virtual ~G4GammaConversion();
 
   // true for Gamma only.
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&) final;
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-				    const G4Material*);
+				    const G4Material*) override;
 
   // Print few lines of informations about the process: validity range,
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
+
+  // print documentation in html format
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:
      
+  G4GammaConversion & operator=(const  G4GammaConversion &right) = delete;
+  G4GammaConversion(const  G4GammaConversion&) = delete;
+
   G4bool  isInitialised;
 };
 

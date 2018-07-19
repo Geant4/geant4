@@ -55,9 +55,11 @@ public:
     hasAnyData = true;
     theBaseZ = 0;
     theBaseA = 0;
+    theBaseM = 0;
 
     theNDLDataZ = 0;
     theNDLDataA = 0;
+    theNDLDataM = 0;
 
      adjustResult = true;
      if ( getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;

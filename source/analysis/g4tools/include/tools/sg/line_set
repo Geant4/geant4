@@ -37,7 +37,7 @@ public:
 
   virtual void render(render_action& a_action) {
     tools_vforcit(line_t,lines.values(),it) {
-      a_action.draw_vertex_array(tools::gl::line_strip(),*it);
+      a_action.draw_vertex_array(gl::line_strip(),*it);
     }
   }
 
@@ -58,13 +58,13 @@ public:
   ,lines()
   {
 #ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
+    mem::increment(s_class().c_str());
 #endif
     add_fields();
   }
   virtual ~line_set(){
 #ifdef TOOLS_MEM
-    tools::mem::decrement(s_class().c_str());
+    mem::decrement(s_class().c_str());
 #endif
   }
 public:
@@ -73,7 +73,7 @@ public:
   ,lines(a_from.lines)
   {
 #ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
+    mem::increment(s_class().c_str());
 #endif
     add_fields();
   }
@@ -84,7 +84,7 @@ public:
   }
 public:
   bool add(const line_t& a_line) { 
-    unsigned int npoint = a_line.size()/3;
+    size_t npoint = a_line.size()/3;
     if(npoint*3!=a_line.size()) return false;
     lines.add(a_line);
     return true;

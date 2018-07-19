@@ -12,12 +12,11 @@
 /control/verbose 1
 /control/saveHistory
 /run/verbose 1
-/gun/sourceGen true
-/control/execute emstd.mac
+/control/execute physics.mac
 
 /run/initialize
-
-/particle/select gamma	
+/gun/sourceGen true
+/gun/particle gamma
 /gun/vertexRadius 25. cm
 /gun/sourceType 2
 

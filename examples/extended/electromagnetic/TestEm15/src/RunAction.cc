@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm15/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 82283 2014-06-13 14:49:40Z gcosmo $
+// $Id: RunAction.cc 109394 2018-04-18 06:22:36Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -129,83 +129,87 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      G4cout << "\t" << procName << " = " << count;
   }
   
-  if (fTotalCount == 0) return;
+  if (fTotalCount > 0) {
   
-  //compute path length and related quantities
-  //
-  G4double MeanTPL  = fTruePL /fTotalCount;     
-  G4double MeanTPL2 = fTruePL2/fTotalCount;     
-  G4double rmsTPL   = std::sqrt(std::fabs(MeanTPL2 - MeanTPL*MeanTPL));
-  
-  G4double MeanGPL  = fGeomPL /fTotalCount;     
-  G4double MeanGPL2 = fGeomPL2/fTotalCount;     
-  G4double rmsGPL   = std::sqrt(std::fabs(MeanGPL2 - MeanGPL*MeanGPL));
-  
-  G4double MeanLaD  = fLDispl /fTotalCount;     
-  G4double MeanLaD2 = fLDispl2/fTotalCount;     
-  G4double rmsLaD   = std::sqrt(std::fabs(MeanLaD2 - MeanLaD*MeanLaD));
-  
-  G4double MeanPsi  = fPsiSpa /(fTotalCount);     
-  G4double MeanPsi2 = fPsiSpa2/(fTotalCount);     
-  G4double rmsPsi   = std::sqrt(std::fabs(MeanPsi2 - MeanPsi*MeanPsi));
-  
-  G4double MeanTeta  = fTetPrj /(2*fTotalCount);     
-  G4double MeanTeta2 = fTetPrj2/(2*fTotalCount);     
-  G4double rmsTeta   = std::sqrt(std::fabs(MeanTeta2 - MeanTeta*MeanTeta));
-  
-  G4double MeanCorrel  = fPhiCor /(fTotalCount);     
-  G4double MeanCorrel2 = fPhiCor2/(fTotalCount);     
-  G4double rmsCorrel = std::sqrt(std::fabs(MeanCorrel2-MeanCorrel*MeanCorrel));
-           
-  G4cout << "\n\n truePathLength :\t" << G4BestUnit(MeanTPL,"Length")
-         << " +- "                    << G4BestUnit( rmsTPL,"Length")
-         <<   "\n geomPathLength :\t" << G4BestUnit(MeanGPL,"Length")
-         << " +- "                    << G4BestUnit( rmsGPL,"Length")
-         <<   "\n lateralDisplac :\t" << G4BestUnit(MeanLaD,"Length")
-         << " +- "                    << G4BestUnit( rmsLaD,"Length")
-         <<   "\n Psi            :\t" << MeanPsi/mrad << " mrad"
-         << " +- "                    << rmsPsi /mrad << " mrad"
-         <<   "  ("                   << MeanPsi/deg  << " deg"
-         << " +- "                    << rmsPsi /deg  << " deg)"
-         << G4endl;
-                           
-  G4cout <<   "\n Theta_plane    :\t" << rmsTeta/mrad << " mrad"
-         <<   "  ("                   << rmsTeta/deg  << " deg)"
-         <<   "\n phi correlation:\t" << MeanCorrel 
-         << " +- "                    << rmsCorrel
-         << "  (std::cos(phi_pos - phi_dir))"                  
-         << G4endl;
-         
-
-  //cross check from G4EmCalculator
-  //
-  G4cout << "\n Verification from G4EmCalculator. \n";
-  
-  G4EmCalculator emCal;
-  
-  //get transport mean free path (for multiple scattering)
-  G4double MSmfp = emCal.GetMeanFreePath(energy,particle,"msc",material);
+    //compute path length and related quantities
+    //
+    G4double MeanTPL  = fTruePL /fTotalCount;     
+    G4double MeanTPL2 = fTruePL2/fTotalCount;     
+    G4double rmsTPL   = std::sqrt(std::fabs(MeanTPL2 - MeanTPL*MeanTPL));
     
-  //get range from restricted dedx
-  G4double range = emCal.GetRangeFromRestricteDEDX(energy,particle,material);
+    G4double MeanGPL  = fGeomPL /fTotalCount;     
+    G4double MeanGPL2 = fGeomPL2/fTotalCount;     
+    G4double rmsGPL   = std::sqrt(std::fabs(MeanGPL2 - MeanGPL*MeanGPL));
+    
+    G4double MeanLaD  = fLDispl /fTotalCount;     
+    G4double MeanLaD2 = fLDispl2/fTotalCount;     
+    G4double rmsLaD   = std::sqrt(std::fabs(MeanLaD2 - MeanLaD*MeanLaD));
+    
+    G4double MeanPsi  = fPsiSpa /(fTotalCount);     
+    G4double MeanPsi2 = fPsiSpa2/(fTotalCount);     
+    G4double rmsPsi   = std::sqrt(std::fabs(MeanPsi2 - MeanPsi*MeanPsi));
+    
+    G4double MeanTeta  = fTetPrj /(2*fTotalCount);     
+    G4double MeanTeta2 = fTetPrj2/(2*fTotalCount);     
+    G4double rmsTeta   = std::sqrt(std::fabs(MeanTeta2 - MeanTeta*MeanTeta));
+    
+    G4double MeanCorrel  = fPhiCor /(fTotalCount);     
+    G4double MeanCorrel2 = fPhiCor2/(fTotalCount);     
+    G4double rmsCorrel =
+      std::sqrt(std::fabs(MeanCorrel2-MeanCorrel*MeanCorrel));
+           
+    G4cout << "\n\n truePathLength :\t" << G4BestUnit(MeanTPL,"Length")
+           << " +- "                    << G4BestUnit( rmsTPL,"Length")
+           <<   "\n geomPathLength :\t" << G4BestUnit(MeanGPL,"Length")
+           << " +- "                    << G4BestUnit( rmsGPL,"Length")
+           <<   "\n lateralDisplac :\t" << G4BestUnit(MeanLaD,"Length")
+           << " +- "                    << G4BestUnit( rmsLaD,"Length")
+           <<   "\n Psi            :\t" << MeanPsi/mrad << " mrad"
+           << " +- "                    << rmsPsi /mrad << " mrad"
+           <<   "  ("                   << MeanPsi/deg  << " deg"
+           << " +- "                    << rmsPsi /deg  << " deg)"
+           << G4endl;
+    
+    G4cout <<   "\n Theta_plane    :\t" << rmsTeta/mrad << " mrad"
+           <<   "  ("                   << rmsTeta/deg  << " deg)"
+           <<   "\n phi correlation:\t" << MeanCorrel 
+           << " +- "                    << rmsCorrel
+           << "  (std::cos(phi_pos - phi_dir))"                  
+           << G4endl;
+    
+    
+    //cross check from G4EmCalculator
+    //
+    G4cout << "\n Verification from G4EmCalculator. \n";
+    
+    G4EmCalculator emCal;
   
-  //effective facRange
-  G4double efFacrange = MeanTPL/std::max(MSmfp, range);
-  if (MeanTPL/range >= 0.99) efFacrange = 1.;
-
-  G4cout << "\n transport mean free path :\t" << G4BestUnit(MSmfp,"Length")
-         << "\n range from restrict dE/dx:\t" << G4BestUnit(range,"Length")
-         << "\n ---> effective facRange  :\t" << efFacrange
-         << G4endl;
-
-  G4cout << "\n compute theta0 from Highland :\t"
-          << ComputeMscHighland(MeanTPL)/mrad << " mrad" 
-         << "  (" << ComputeMscHighland(MeanTPL)/deg << " deg)" 
-         << G4endl;
+    //get transport mean free path (for multiple scattering)
+    G4double MSmfp = emCal.GetMeanFreePath(energy,particle,"msc",material);
+    
+    //get range from restricted dedx
+    G4double range = emCal.GetRangeFromRestricteDEDX(energy,particle,material);
+  
+    //effective facRange
+    G4double efFacrange = MeanTPL/std::max(MSmfp, range);
+    if (MeanTPL/range >= 0.99) efFacrange = 1.;
+    
+    G4cout << "\n transport mean free path :\t" << G4BestUnit(MSmfp,"Length")
+           << "\n range from restrict dE/dx:\t" << G4BestUnit(range,"Length")
+           << "\n ---> effective facRange  :\t" << efFacrange
+           << G4endl;
+    
+    G4cout << "\n compute theta0 from Highland :\t"
+           << ComputeMscHighland(MeanTPL)/mrad << " mrad" 
+           << "  (" << ComputeMscHighland(MeanTPL)/deg << " deg)" 
+           << G4endl;
                            
+  } else
+    G4cout<< G4endl;
+
   //restore default format         
   G4cout.precision(prec);         
-
+  
   // delete and remove all contents in fProcCounter 
   while (fProcCounter->size()>0){
     OneProcessCount* aProcCount=fProcCounter->back();
@@ -217,8 +221,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //save histograms      
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
   if ( analysisManager->IsActive() ) {
-    analysisManager->Write();
-    analysisManager->CloseFile();
+  analysisManager->Write();
+  analysisManager->CloseFile();
   }       
 
   // show Rndm status

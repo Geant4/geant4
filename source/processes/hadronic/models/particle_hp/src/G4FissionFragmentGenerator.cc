@@ -40,6 +40,11 @@
 
 #include "G4FFGDebuggingMacros.hh"
 #include "G4FFGDefaultValues.hh"
+// Use a few select constant of CLHEP namespace 
+using CLHEP::eV;
+using CLHEP::keV;
+using CLHEP::MeV;
+using CLHEP::GeV;
 #include "G4FFGEnumerations.hh"
 #include "G4FPYNormalFragmentDist.hh"
 #include "G4FPYBiasedLightFragmentDist.hh"

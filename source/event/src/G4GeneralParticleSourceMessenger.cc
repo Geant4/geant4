@@ -103,7 +103,7 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   (G4GeneralParticleSource *fPtclGun) 
     : fGPS(fPtclGun),fParticleGun(0),fShootIon(false),
       fAtomicNumber(0),fAtomicMass(0),fIonCharge(0),fIonExciteEnergy(0.),
-      fShootIonL(0),fAtomicNumberL(0),fAtomicMassL(0),fIonChargeL(0),fIonEnergyLevel(0)
+      fAtomicNumberL(0),fAtomicMassL(0),fIonChargeL(0),fIonEnergyLevel(0)
       
 {
   //A.Dotti - 10th October 2014
@@ -307,7 +307,7 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   shapeCmd1->SetGuidance("Sets source shape for Plan, Surface or Volume type source.");
   shapeCmd1->SetParameterName("Shape",false,false);
   shapeCmd1->SetDefaultValue("NULL");
-  shapeCmd1->SetCandidates("Circle Annulus Ellipse Square Rectangle Sphere Ellipsoid Cylinder Para");
+  shapeCmd1->SetCandidates("Circle Annulus Ellipse Square Rectangle Sphere Ellipsoid Cylinder EllipticCylinder Para");
 
   centreCmd1 = new G4UIcmdWith3VectorAndUnit("/gps/pos/centre",this);
   centreCmd1->SetGuidance("Set centre coordinates of source.");
@@ -677,7 +677,7 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   energytypeCmd1->SetGuidance("Sets energy distribution type");
   energytypeCmd1->SetParameterName("EnergyDis",false,false);
   energytypeCmd1->SetDefaultValue("Mono");
-  energytypeCmd1->SetCandidates("Mono Lin Pow Exp Gauss Brem Bbody Cdg User Arb Epn");
+  energytypeCmd1->SetCandidates("Mono Lin Pow Exp CPow Gauss Brem Bbody Cdg User Arb Epn");
 
   eminCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ene/min",this);
   eminCmd1->SetGuidance("Sets minimum energy");
@@ -1744,8 +1744,6 @@ G4String G4GeneralParticleSourceMessenger::GetCurrentValue(G4UIcommand *)
 
 void G4GeneralParticleSourceMessenger::IonCommand(G4String newValues)
 {
-  fShootIon = true;
-
   if (fShootIon)
   {
     G4Tokenizer next( newValues );
@@ -1762,20 +1760,22 @@ void G4GeneralParticleSourceMessenger::IonCommand(G4String newValues)
 	fIonCharge = StoI(sQ);
 	sQ = next();
 	if (sQ.isNull())
-      {
+        {
 	  fIonExciteEnergy = 0.0;
-      }
-      else
-      {
+        }
+        else
+        {
 	  fIonExciteEnergy = StoD(sQ) * keV;
-      }
+        }
     }
     G4ParticleDefinition* ion;
     ion =  G4IonTable::GetIonTable()->GetIon( fAtomicNumber, fAtomicMass, fIonExciteEnergy);
     if (ion==0)
     {
-      G4cout << "Ion with Z=" << fAtomicNumber;
-      G4cout << " A=" << fAtomicMass << " is not defined" << G4endl;    
+      G4ExceptionDescription ed;
+      ed << "Ion with Z=" << fAtomicNumber;
+      ed << " A=" << fAtomicMass << " is not defined";    
+      ionCmd->CommandFailed(ed);
     }
     else
     {
@@ -1785,16 +1785,16 @@ void G4GeneralParticleSourceMessenger::IonCommand(G4String newValues)
   }
   else
   {
-    G4cout << "Set /gps/particle to ion before using /gps/ion command";
-    G4cout << G4endl; 
+    G4ExceptionDescription ed;
+    ed << "Set /gps/particle to ion before using /gps/ion command";
+    ionCmd->CommandFailed(ed);
   }
 }
 
 void G4GeneralParticleSourceMessenger::IonLvlCommand(G4String newValues)
 {
-  fShootIonL = true;
-
-  if (fShootIonL) {
+  if (fShootIon)
+  {
     G4Tokenizer next(newValues);
     // check argument
     fAtomicNumberL = StoI(next());
@@ -1815,16 +1815,19 @@ void G4GeneralParticleSourceMessenger::IonLvlCommand(G4String newValues)
     G4ParticleDefinition* ion;
     ion =  G4IonTable::GetIonTable()->GetIon(fAtomicNumberL, fAtomicMassL, fIonEnergyLevel);
     if (ion == 0) {
-      G4cout << "Ion with Z=" << fAtomicNumberL;
-      G4cout << " A=" << fAtomicMassL << " is not defined" << G4endl;
+      G4ExceptionDescription ed;
+      ed << "Ion with Z=" << fAtomicNumberL;
+      ed << " A=" << fAtomicMassL << " is not defined";
+      ionLvlCmd->CommandFailed(ed);
     } else {
       fParticleGun->SetParticleDefinition(ion);
       fParticleGun->SetParticleCharge(fIonChargeL*eplus);
     }
 
   } else {
-    G4cout << "Set /gps/particle to ion before using /gps/ionLvl command";
-    G4cout << G4endl;
+    G4ExceptionDescription ed;
+    ed << "Set /gps/particle to ion before using /gps/ionLvl command";
+    ionLvlCmd->CommandFailed(ed);
   }
 }
 

@@ -1,4 +1,4 @@
-$Id: History 92421 2015-09-01 07:38:57Z gcosmo $
+$Id: History 109654 2018-05-04 08:57:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,38 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-05-18  J.Allison (exhadr01-V10-04-03)
+- RunAction.cc:
+  o Remove G4VIS_USE.
+  o Remove /vis/ commands - not necessary now and causes
+    problem in Qt with in multithreaded mode.
+- DetectorConstruction.cc: Pass vis attributes as objects, not pointers.
+
+29-03-18  V.Ivanchenko (exhadr01-V10-04-02)
+- DetectorConstruction, DetectorMessenger, HistoManager,
+  PrimaryGeneratorAction - cleanup geometry definition
+
+26-03-18  V.Ivanchenko (exhadr01-V10-04-01)
+- Fixed compilation
+
+22-03-18  M.Maire (exhadr01-V10-04-00)
+- Hadr01.cc : remove G4UI_USE and G4VIS_USE
+
+21-11-17  V.Ivanchenko (exhadr01-V10-03-00)
+- Fixed histograms and radioactive decay 
+
+09-11-16  V.Ivanchenko (exhadr01-V10-02-03)
+- PhysicsList - synchronisation with physics_list library of 10.3
+- G4EmUserPhysics - removed as obsolete
+
+01-11-16  I. Hrivnacova (exhadr01-V10-02-01)
+- Coding guidelines (class member names)
+
+30-08-16  I. Hrivnacova (exhadr01-V10-02-00)
+- Removed data. functions and commands to define cuts
+  from PhysicsList and PhysicsListMessenger;
+  using Geant4 commands 
 
 31-08-15  V.Ivanchenko (exhadr01-V10-01-00)
 - PhysicsList - syncronisation with physics_list library

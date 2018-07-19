@@ -62,6 +62,10 @@ G4QMDReaction::G4QMDReaction()
    collision = new G4QMDCollision();
 
    excitationHandler = new G4ExcitationHandler;
+   excitationHandler->SetDeexChannelsType( fCombined );
+   //fEvaporation - 8 default channels
+   //fCombined    - 8 default + 60 GEM
+   //fGEM         - 2 default + 66 GEM
    evaporation = new G4Evaporation;
    excitationHandler->SetEvaporation( evaporation );
    setEvaporationCh();

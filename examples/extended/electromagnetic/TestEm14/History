@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109860 2018-05-09 12:17:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,12 +14,38 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B.Morgan (testem14-V10-04-03)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
 
-14-10-16 G.Folger
+09-04-18 mma (testem14-V10-04-02)
+- testem14.cc : set visualisation only in interactive mode
+
+20-03-18 mma (testem14-V10-04-01)
+- testem14.cc : remove G4UI_USE and G4VIS_USE
+
+18-12-17 mma  (testem14-V10-04-00)
+- update PhysListEmStandard, livermore, penelope
+
+14-08-17 mma  (testem14-V10-03-01)
+- cosmetic in printout
+
+19-04-17 mma  (testem14-V10-03-00)
+- BeginOfRunAction() : remove SetRandomNumberStore(true)
+
+14-10-16 G.Folger (testem14-V10-02-03)
 - remove direct use of aParticleIterator, use GetParticleTableIterator().
     fix required by clang39 on Linux and MAC
+	 
+04-07-16 I. Hrivnacova  (testem14-V10-02-02)
+- Fixes for Doxygen documentation
 
-10-12-15 V.Ivant (testem14-V10-01-01)
+08-04-16 mma  (testem14-V10-02-01)
+- PhysicsList: use G4EmParameters
+- remove geant3 subdirectory
+
+10-12-15 V.Ivant (testem14-V10-02-00)
 - H.Burkhardt fixed root macro allowing to work both with root5 and 6
 	 	 
 27-09-15 mma (testem14-V10-01-00)

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 89640 2015-04-24 07:34:42Z gcosmo $
+# $Id: sources.cmake 106719 2017-10-20 09:44:30Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -47,22 +47,18 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_abla_abla
     HEADERS
         G4AblaDataDefs.hh
-        G4AblaFission.hh
         G4AblaRandom.hh
         G4AblaInterface.hh
         G4AblaDataFile.hh
         G4Abla.hh
         G4AblaVirtualData.hh
-        G4AblaFissionBase.hh
 
     SOURCES
         G4AblaVirtualData.cc
-        G4AblaFissionBase.cc
         G4Abla.cc
         G4AblaRandom.cc
         G4AblaDataFile.cc
         G4AblaInterface.cc
-        G4AblaFission.cc
 
     GRANULAR_DEPENDENCIES
         G4baryons

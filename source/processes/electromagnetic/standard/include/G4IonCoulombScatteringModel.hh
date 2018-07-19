@@ -72,11 +72,13 @@ class G4IonCoulombScatteringModel : public G4VEmModel
 {
 public:
 
-  G4IonCoulombScatteringModel(const G4String& nam = "IonCoulombScattering");
+  explicit G4IonCoulombScatteringModel(const G4String& nam = 
+				       "IonCoulombScattering");
  
   virtual ~G4IonCoulombScatteringModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) final;
  
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -84,13 +86,13 @@ public:
 				G4double Z, 
 				G4double A, 
 				G4double cut,
-				G4double emax);
+				G4double emax) final;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) final;
 
 
   	
@@ -109,8 +111,9 @@ private:
   inline void SetupParticle(const G4ParticleDefinition*);
 
   // hide assignment operator
-  G4IonCoulombScatteringModel & operator=(const G4IonCoulombScatteringModel &right);
-  G4IonCoulombScatteringModel(const  G4IonCoulombScatteringModel&);
+  G4IonCoulombScatteringModel & operator=
+  (const G4IonCoulombScatteringModel &right) = delete;
+  G4IonCoulombScatteringModel(const  G4IonCoulombScatteringModel&) = delete;
 
   //protected:
 

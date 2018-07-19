@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPAntiBarionBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
+// $Id: G4FTFPAntiBarionBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 //---------------------------------------------------------------------------
@@ -85,9 +85,6 @@ G4FTFPAntiBarionBuilder::~G4FTFPAntiBarionBuilder()
   delete theAntiNucleonXS;
   //delete theAntiNucleonData;
 }
-
-void G4FTFPAntiBarionBuilder::
-Build(G4HadronElasticProcess * ) {}
 
 void G4FTFPAntiBarionBuilder::
 Build(G4AntiProtonInelasticProcess * aP)

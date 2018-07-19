@@ -21,22 +21,8 @@ public:
     m_flat = a_from.m_flat;
     return *this;
   }
-protected:
-  rtausmef m_flat;
-};
-
-class rbwf : public rbw<rtausmef,float> {
-  typedef rbw<rtausmef,float> parent;
 public:
-  rbwf(float a_mean = 0,float a_gamma = 1):parent(m_flat,a_mean,a_gamma),m_flat(){}
-  virtual ~rbwf(){}
-public:
-  rbwf(const rbwf& a_from):parent(m_flat),m_flat(a_from.m_flat){}
-  rbwf& operator=(const rbwf& a_from) {
-    parent::operator=(a_from);
-    m_flat = a_from.m_flat;
-    return *this;
-  }
+  float shoot() const {return parent::shoot(::sqrtf,::logf);}
 protected:
   rtausmef m_flat;
 };
@@ -53,6 +39,32 @@ public:
     m_flat = a_from.m_flat;
     return *this;
   }
+public:
+  float shoot() const {return parent::shoot(::logf);}
+protected:
+  rtausmef m_flat;
+};
+
+}
+
+#include "mathf"
+
+namespace tools {
+
+class rbwf : public rbw<rtausmef,float> {
+  typedef rbw<rtausmef,float> parent;
+public:
+  rbwf(float a_mean = 0,float a_gamma = 1):parent(m_flat,a_mean,a_gamma),m_flat(){}
+  virtual ~rbwf(){}
+public:
+  rbwf(const rbwf& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rbwf& operator=(const rbwf& a_from) {
+    parent::operator=(a_from);
+    m_flat = a_from.m_flat;
+    return *this;
+  }
+public:
+  float shoot() const {return parent::shoot(fhalf_pi(),::tanf);}
 protected:
   rtausmef m_flat;
 };

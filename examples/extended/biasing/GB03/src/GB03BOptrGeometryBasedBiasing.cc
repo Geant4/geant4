@@ -59,7 +59,6 @@ GB03BOptrGeometryBasedBiasing::GB03BOptrGeometryBasedBiasing()
                                 "Define the probability to apply the splitting/killing." );
   applyProbCmd.SetStates(G4State_Idle);
 
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,13 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtParticle.cc 69010 2013-04-15 09:34:16Z gcosmo $
+// $Id: G4HEPEvtParticle.cc 110273 2018-05-17 14:43:43Z gcosmo $
 //
 //
 
 #include "G4HEPEvtParticle.hh"
 
-G4ThreadLocal G4Allocator<G4HEPEvtParticle> *aHEPEvtParticleAllocator = 0;
+G4Allocator<G4HEPEvtParticle>*& aHEPEvtParticleAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4HEPEvtParticle>* _instance = nullptr;
+    return _instance;
+}
 
 G4HEPEvtParticle::G4HEPEvtParticle()
   : theParticle(0), ISTHEP(1), JDAHEP1(1), JDAHEP2(1)

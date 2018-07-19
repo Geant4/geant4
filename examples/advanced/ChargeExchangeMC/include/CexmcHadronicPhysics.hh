@@ -63,8 +63,8 @@ class  CexmcHadronicPhysics : public CexmcStudiedPhysics< CexmcHadronicProcess >
 
 template  < typename  ProductionModel >
 CexmcHadronicPhysics< ProductionModel >::CexmcHadronicPhysics(
-                                    CexmcPhysicsManager *  physicsManager ) :
-    CexmcStudiedPhysics< CexmcHadronicProcess >( physicsManager )
+                                    CexmcPhysicsManager *  physicsManager_ ) :
+    CexmcStudiedPhysics< CexmcHadronicProcess >( physicsManager_ )
 {
     productionModel = new ProductionModel;
 }

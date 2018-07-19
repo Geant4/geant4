@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventGenerator.cc 67999 2013-03-13 11:14:32Z gcosmo $
+// $Id: G4EventGenerator.cc 100828 2016-11-02 15:25:59Z gcosmo $
 //
 // G4EventGenerator
 
@@ -49,7 +49,8 @@ G4EventGenerator::~G4EventGenerator()
 
 const G4EventGenerator & G4EventGenerator::operator=(const G4EventGenerator &)
 {
-  throw G4HadronicException(__FILE__, __LINE__, "G4EventGenerator::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, 
+                            "G4EventGenerator::operator= meant to not be accessable");
   return *this;
 }
 
@@ -63,3 +64,4 @@ int G4EventGenerator::operator!=(const G4EventGenerator &) const
 {
   return 1;
 }
+

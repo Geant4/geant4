@@ -28,6 +28,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleHPInelasticData.hh"
+#include "G4SystemOfUnits.hh"
 
 G4DeuteronPHPBuilder::
 G4DeuteronPHPBuilder() 
@@ -36,10 +37,6 @@ G4DeuteronPHPBuilder()
   theMax=200.*MeV;
   theParticlePHPModel = 0;
 }
-
-G4DeuteronPHPBuilder::
-~G4DeuteronPHPBuilder() 
-{}
 
 void G4DeuteronPHPBuilder::
 Build(G4HadronElasticProcess *)

@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 <<< Geant4 Physics List simulation engine: G4GenericPhysicsList
 
@@ -39,16 +41,18 @@ Registering model factories...
 You have successfully registered the following model factories.
 Registered model factories:
   generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
   drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
 
 Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
   attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -56,9 +60,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
 /geometry/textInput/verbose 0
 /run/initialize
 userDetector->Construct() start.
@@ -156,9 +158,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.000000s Real=0.001967s Sys=0.000000s
 WARNING: 10 events have been kept for refreshing and/or reviewing.
-  "/vis/reviewKeptEvents" to review them.
+
+  "/vis/reviewKeptEvents" to review them one by one.
+  "/vis/enable", then "/vis/viewer/flush" or "/vis/viewer/rebuild" to see them accumulated.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
@@ -170,6 +174,7 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+TransportationManager deleted.
 Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00769 MB
@@ -181,11 +186,11 @@ Pool ID '17G4DynamicParticle', size : 0.000961 MB
 Pool ID '7G4Track', size : 0.000961 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '18G4SmoothTrajectory', size : 0.000961 MB
+Pool ID '18G4SmoothTrajectory', size : 0.00192 MB
 Pool ID '23G4SmoothTrajectoryPoint', size : 0.00288 MB
 Pool ID '21G4TrajectoryContainer', size : 0.000961 MB
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.021 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.022 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

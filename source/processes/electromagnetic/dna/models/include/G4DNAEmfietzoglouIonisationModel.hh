@@ -39,17 +39,15 @@
 #include "G4VEmModel.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4ProductionCutsTable.hh"
-
-#include "G4DNACrossSectionDataSet.hh"
-#include "G4Electron.hh"
-#include "G4Proton.hh"
-#include "G4DNAGenericIonsManager.hh"
-
-#include "G4LogLogInterpolation.hh"
-
-#include "G4DNAEmfietzoglouWaterIonisationStructure.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4NistManager.hh"
+#include "G4Electron.hh"
+#include "G4Proton.hh"
+
+#include "G4DNACrossSectionDataSet.hh"
+#include "G4DNAGenericIonsManager.hh"
+#include "G4LogLogInterpolation.hh"
+#include "G4DNAEmfietzoglouWaterIonisationStructure.hh"
 
 class G4DNAEmfietzoglouIonisationModel : public G4VEmModel
 {
@@ -77,7 +75,7 @@ public:
                                  G4double tmin,
                                  G4double maxEnergy);
 
-  double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition,
+  G4double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition,
                                   G4double k,
                                   G4double energyTransfer,
                                   G4int shell);
@@ -104,9 +102,6 @@ private:
 
   std::map<G4String, G4double, std::less<G4String> > lowEnergyLimit;
   std::map<G4String, G4double, std::less<G4String> > highEnergyLimit;
-
-  // TODO :
-//  std::map<const G4ParticleDefinition*,std::pair<G4double,G4double> > fEnergyLimits;
 
   G4bool isInitialised;
   G4int verboseLevel;
@@ -154,16 +149,16 @@ private:
                             G4double t,
                             G4double e);
 
-  typedef std::map<double, std::map<double, double> > TriDimensionMap;
+  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
 
   TriDimensionMap eDiffCrossSectionData[6];
   TriDimensionMap eNrjTransfData[6]; // for cumulated dcs
 
   TriDimensionMap pDiffCrossSectionData[6];
 
-  std::vector<double> eTdummyVec;
+  std::vector<G4double> eTdummyVec;
 
-  typedef std::map<double, std::vector<double> > VecMap;
+  typedef std::map<G4double, std::vector<G4double> > VecMap;
 
   VecMap eVecm;
 

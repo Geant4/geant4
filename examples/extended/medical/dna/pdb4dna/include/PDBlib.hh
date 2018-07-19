@@ -49,7 +49,6 @@
 
 #include "PDBbarycenter.hh"
 #include "PDBmolecule.hh"
-#include <vector>
 
 //! PDBlib Class
 /*!
@@ -64,9 +63,9 @@ public:
   ~PDBlib() {};
 
   //! Load PDB file into memory
-  Molecule* Load( const string &filename,
-      unsigned short int &isDNA,
-      unsigned short int verbose);
+  Molecule* Load(const std::string&filename,
+                 unsigned short int &isDNA,
+                 unsigned short int verbose);
 
   // All declarations below are 'DNA specific'
   // Just comment those lines if you need to use this code elsewhere.

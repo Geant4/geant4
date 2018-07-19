@@ -1,0 +1,272 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_hatcher
+#define tools_hatcher
+
+/**
+ *  
+ * hatcher is a class to draw Hatch in a 3D polyline plane
+ * A hatch is caracterise by a direction (dirAngle), a spacing to get 
+ * second hatch,
+ * an offset, and a stripWidth :
+ * - offset value : between 0-1, This value set the offset of
+ *   the hatch.0 meen that the hatch  will touch the first point
+ *   of the polyline, and 1 meen that first hatch will be draw
+ *   at a 'spacing' distance to first point
+ * - offsetVec : the 3D point from where a hatch had to pass. This is 
+ *   very usefull to have hach continuing in different polygones
+ *
+ * The compute_polyline() method<br> 
+ * By default:
+ * - spacing = .1;
+ * - dirAngle = PI/4;
+ * - offsetValue = 0;
+ * - stripWidth=0.0;
+ * 
+ * A way to get all points and vertices and to draw them can be :
+ * <pre>
+ *  iindex =0;
+ *  icoord =0;
+ *  for (unsigned int a=0;a<sbHatch.number_of_vertices();a++) {
+ *    for (unsigned int b=0;b<sbHatch.number_of_vertices()[a];b++) {
+ *      coordinate3->point.set1Value(icoord,sbHatch.get_points()[icoord]);
+ *      indexedFaceSet->coordIndex.set1Value(iindex,icoord);
+ *      iindex++;
+ *      icoord ++;
+ *    }
+ *    indexedFaceSet->coordIndex.set1Value(iindex,SO_END_LINE_INDEX);
+ *    iindex++;
+ *  }
+ * </pre>
+ *
+ * @author Laurent Garnier
+ * Creation : on Fri Jan 05 2004
+ * Last update : 9 April 2004
+ *
+ */
+
+#include "lina/vec3f"
+#include "lina/vec2f"
+#include "mathf"
+#include <cfloat> // for FLT_MAX
+
+namespace tools {
+
+class hatcher {
+public:
+  hatcher()
+  :fShift(.1f)
+  ,fDirAngle(fpi()/4)
+  ,fOffsetValue(.0f)
+  ,fOffset(vec3f(FLT_MAX,FLT_MAX,FLT_MAX))
+  ,fPrecisionFactor (.0001f) // good value to get rid of some errors
+  ,fStripWidth(0.0)
+  ,fFirstNumHatch(0)
+  ,fNumberHatchToDraw(0)
+  ,fFirstPolyline(true)
+  ,fResolveResult(UNDEFINED)
+  {}
+  virtual ~hatcher() {}
+protected:
+  hatcher(const hatcher& a_from)
+  :fNormal(a_from.fNormal)
+  ,fShift(a_from.fShift)
+  ,fDirAngle(a_from.fDirAngle)
+  ,fOffsetValue(a_from.fOffsetValue)
+  ,fOffset(a_from.fOffset)
+  ,fShiftVec(a_from.fShiftVec)
+  ,fPrecisionFactor(a_from.fPrecisionFactor)
+  ,fDirVec(a_from.fDirVec)
+  ,fStripWidth(a_from.fStripWidth)
+  ,fPoints(a_from.fPoints)
+  ,fVertices(a_from.fVertices)
+  ,fConflictNumHatchLineTab(a_from.fConflictNumHatchLineTab)
+  ,fHatchShiftToMatchPointVec(a_from.fHatchShiftToMatchPointVec)
+  ,fFirstNumHatch(a_from.fFirstNumHatch)
+  ,fNumberHatchToDraw(a_from.fNumberHatchToDraw)
+  ,fFirstPolyline(a_from.fFirstPolyline)
+  ,fResolveResult(a_from.fResolveResult)
+  {}
+  hatcher& operator=(const hatcher& a_from){
+    fNormal = a_from.fNormal;
+    fShift = a_from.fShift;
+    fDirAngle = a_from.fDirAngle;
+    fOffsetValue = a_from.fOffsetValue;
+    fOffset = a_from.fOffset;
+    fShiftVec = a_from.fShiftVec;
+    fPrecisionFactor = a_from.fPrecisionFactor;
+    fDirVec = a_from.fDirVec;
+    fStripWidth = a_from.fStripWidth;
+    fPoints = a_from.fPoints;
+    fVertices = a_from.fVertices;
+    fConflictNumHatchLineTab = a_from.fConflictNumHatchLineTab;
+    fHatchShiftToMatchPointVec = a_from.fHatchShiftToMatchPointVec;
+    fFirstNumHatch = a_from.fFirstNumHatch;
+    fNumberHatchToDraw = a_from.fNumberHatchToDraw;
+    fFirstPolyline = a_from.fFirstPolyline;
+    fResolveResult = a_from.fResolveResult;
+    return *this;
+  }
+public:  
+  /**
+  * draw the hatch into the polyline bounding box given in argument
+  * You have to get all compute points by the get_points() method
+  * Number of points can be get by number_of_points()
+  * The  number of vertices in the return polyline can be get by number_of_vertices()
+  * and vertice table by get_vertices
+  * @return FALSE if :
+  *    - All points are not in the same plan
+  *    - There is a precision error on one or more point
+  */
+  bool compute_polyline (vec3f* listPoints,unsigned int number);
+
+
+  /**
+  * test if the polygone given is correct for hatching
+  * @return FALSE if :
+  *    - All points are not in the same plan
+  *    - Number of points <3
+  *    - Offset point is not in the same plan
+  *    - There is less than three different points
+  *    - The vector from point[0],point[1] is colinear to point[0],lastPoint
+  */
+  bool check_polyline(vec3f* listPoints,unsigned int number);
+
+  void set_spacing(float a) {fShift = a;}       //set the spacing for this hatch.
+  void set_angle(float a) {fDirAngle = a;}      //set the Direction angle for the hatch in radians.
+  void set_offset(float a) {fOffsetValue = a;}  //set the offset value for this hatch.
+  void set_offset_point(vec3f a) {fOffset = a;}  //set the offset Point for this hatch.
+  void set_precision_factor(float a) {fPrecisionFactor = a;} //set the precision factor for computing (0.0001 is default).
+  
+  bool set_strip_width(float a) {
+    // set the strip width value(0 is default and means no strip).
+    if (a<0 || a>1) {
+      fStripWidth = 0;
+      return false;
+    }
+    fStripWidth = a;
+    return true;
+  }
+
+  float get_spacing()const {return fShift;}
+  float get_angle()const {return fDirAngle;}
+  float get_offset()const {return fOffsetValue;}
+  const vec3f& get_offset_point() {return fOffset;}
+  float get_precision_factor()const {return fPrecisionFactor;}
+  float get_strip_width()const {return fStripWidth;}
+  const vec3f& get_normal() {return fNormal;}
+
+  //size_t number_of_points() const {return fPoints.size();} //get the number of points compute for this hatch.
+  /** vector of compute points<br>
+   * Be careful with this function because it can return a set of non convex
+   * polygone if you have a non convex polygone at beginning !So, when you want
+   * to draw it, you have to use a tesselisation algorithm first
+   */
+  const std::vector<vec3f>& points() {return fPoints;}
+  
+  //size_t number_of_vertices() const {return fVertices.size();} //get the number of vertices compute for this hatch.
+  /** vector of numbers of vertices */
+  const std::vector<unsigned int>& vertices() {return fVertices;}
+
+protected:
+  
+  /**
+  * draw the hatch into the polyline bounding box given in argument
+  * @return FALSE if :
+  *    - All points are not in the same plan
+  *    - There is a precision error on one or more point
+  */
+  bool compute_single_polyline (vec3f* listPoints,unsigned int number);
+
+  
+  /**
+  * Compute a vector system equation aA+bB=C
+  * return SbVec2f(0,0) if there is an error
+  * set the resolveResult variable to the error code :
+  * COLINEAR if A and B are 
+  * PRECISION_ERROR if there is a lack of precision in computing
+  * Z_ERROR if there s no solution for Z
+  * UNDEFINED never throw
+  * return a SbVec2f  for result. a is 'x' value and b is 'y' if it is correct
+  */
+  vec2f resolve_system(const vec3f& A,const vec3f& B,const vec3f& C);
+
+
+protected:
+  /** normal vector for the current polyline */
+  vec3f fNormal;
+
+  /** Spacing vector between two hatch */
+  float fShift; // Absloute distance between two hatch in the polyline plan  */
+  
+  /** The angle (given in radians) is the one between the first
+   * line (point 1-point0) and the hatch lines, in the polyline plan.
+   * Given in the direct axis ((point1-point0),(lastPoint-point0),
+   * normalPlanVec). The angle in compute only one time for the first polyline.
+   * Changes on angle value for others polyline will not take effect.This is to
+   * perform correct hatching between the polylines
+   */
+  float fDirAngle;
+  
+  /** between 0-1. This value set the offset of the hatch.0 meen 
+  * that the hatch will touch the first point of the polyline, 
+  * and 1 meen that first hatch will be draw
+  * at a 'spacing' distance to first point
+  */
+  float fOffsetValue;
+
+  /** first point of the hatch. 
+   * offset = firstPolylinePoint+ShiftVec*offsetValue 
+   */
+  vec3f fOffset;
+
+  /** Orientation vector for the hatch  */
+  vec3f fShiftVec;
+
+  /** factor for compute error between two points */
+  float fPrecisionFactor;
+  
+  /** hatch direction Vector */
+  vec3f  fDirVec;
+
+  /** strip with size : set to 0 by default
+   * between 0 and 1.0 means no strip, 0.5 means strip size is 
+   * half of distance between two hatches
+   */
+  float fStripWidth;
+
+  /** vector list of points */
+  std::vector<vec3f> fPoints;
+
+  /** vector vertices number */
+  std::vector<unsigned int> fVertices;
+ 
+  /** conflict line table */
+  std::vector< std::vector<int> > fConflictNumHatchLineTab;
+
+  /** hatchShiftToMatchPointVec tab*/
+  std::vector<float> fHatchShiftToMatchPointVec;
+
+  /** first hatch number to draw */
+  int fFirstNumHatch;
+
+  /**number of hatch to draw */
+  unsigned int fNumberHatchToDraw;
+
+  bool fFirstPolyline;
+  enum ResolveErrors{
+    OK = 0,
+    COLINEAR,
+    Z_ERROR,
+    PRECISION_ERROR,
+    UNDEFINED
+  };
+  ResolveErrors fResolveResult;
+};
+
+}
+
+#include "hatcher.icc"
+
+#endif

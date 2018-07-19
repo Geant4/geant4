@@ -14,7 +14,6 @@ namespace tools {
 namespace wroot {
 
 class free_seg {
-  static uint32 START_BIG_FILE() {return 2000000000;}
 public:
   free_seg(std::ostream& a_out,seek a_first,seek a_last)
   :m_out(a_out),m_first(a_first),m_last(a_last){}
@@ -50,13 +49,13 @@ public:
   bool fill_buffer(wbuf& a_wb) {
     short version = 1;
 
-    //GB if(fLast>START_BIG_FILE()) version += 1000;
+    //GB if(fLast>START_BIG_FILE()) version += big_file_version_tag();
     if((m_first>START_BIG_FILE())||
-       (m_last>START_BIG_FILE())) version += 1000;
+       (m_last>START_BIG_FILE())) version += big_file_version_tag();
 
     if(!a_wb.write(version)) return false;
 
-    if(version>1000) {
+    if(version>(short)big_file_version_tag()) {
       if(!a_wb.write(m_first)) return false;
       if(!a_wb.write(m_last)) return false;
     } else {
@@ -94,8 +93,7 @@ protected:
 namespace tools {
 namespace wroot {
 
-inline free_seg* find_after(const std::list<free_seg*>& a_list,
-                            free_seg* a_what) {
+inline free_seg* find_after(const std::list<free_seg*>& a_list,free_seg* a_what) {
   tools_lforcit(free_seg*,a_list,it) {
     if((*it)==a_what) {
       it++;
@@ -116,8 +114,7 @@ inline void remove(std::list<free_seg*>& a_list,free_seg* a_what) {
   }
 }
 
-inline void add_before(std::list<free_seg*>& a_list,
-                       free_seg* a_what,free_seg* a_new) {
+inline void add_before(std::list<free_seg*>& a_list,free_seg* a_what,free_seg* a_new) {
   tools_lforit(free_seg*,a_list,it) {
     if((*it)==a_what) {
       a_list.insert(it,a_new);
@@ -126,8 +123,7 @@ inline void add_before(std::list<free_seg*>& a_list,
   }
 }
 
-inline free_seg* add_free(std::list<free_seg*>& a_list,
-                            seek a_first,seek a_last) {
+inline free_seg* add_free(std::list<free_seg*>& a_list,seek a_first,seek a_last) {
   // Add a new free segment to the list of free segments
   // ===================================================
   //  If last just preceedes an existing free segment, then first becomes

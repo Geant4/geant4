@@ -23,14 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc 102356 2017-01-23 16:22:42Z gcosmo $
+// $Id: PhysListEmStandard.cc 100660 2016-10-31 10:19:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "PhysListEmStandard.hh"
+
+#include "G4BuilderType.hh"
 #include "G4ParticleDefinition.hh"
-///#include "G4ProcessManager.hh"
 #include "G4PhysicsListHelper.hh"
 
 #include "G4ComptonScattering.hh"
@@ -54,7 +55,6 @@
 
 #include "G4ionIonisation.hh"
 
-#include "G4EmProcessOptions.hh"
 #include "G4MscStepLimitType.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -63,7 +63,19 @@
 
 PhysListEmStandard::PhysListEmStandard(const G4String& name)
    :  G4VPhysicsConstructor(name)
-{}
+{
+    SetPhysicsType(bElectromagnetic);
+
+    G4EmParameters* param = G4EmParameters::Instance();
+    param->SetDefaults();
+	param->SetVerbose(0);
+    param->SetMinEnergy(100*eV);
+    param->SetMaxEnergy(100*TeV);
+    param->SetNumberOfBinsPerDecade(10);
+    param->SetMscStepLimitType(fUseSafety);
+    param->SetStepFunction(0.2, 100*um);
+    param->SetStepFunctionMuHad(0.2, 100*um);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -135,32 +147,6 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4hIonisation,         particle);
     }
   }
-
-  // Em options
-  //
-  // Main options and setting parameters are shown here.
-  // Several of them have default values.
-  //
-  G4EmProcessOptions emOptions;
-  
-  //physics tables
-  //
-  emOptions.SetMinEnergy(100*eV);	  //default    
-  emOptions.SetMaxEnergy(100*TeV);	  //default  
-  emOptions.SetDEDXBinning(12*10);	  //default=12*7  
-  emOptions.SetLambdaBinning(12*10);  //default=12*7
-      
-  //multiple coulomb scattering
-  //
-  emOptions.SetMscStepLimitation(fUseSafety);  //default=fUseSafety
-      
-  //energy loss
-  //
-  emOptions.SetStepFunction(0.2, 100*um);	//default=(0.2, 1*mm)      
-   
-  //verbose
-  //
-  emOptions.SetVerbose(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -279,9 +279,12 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
                 G4cout << "G4ParticleHPNames: The material was: A="<<A<<", Z="<<Z<<G4endl;
                 //throw G4HadronicException(__FILE__, __LINE__, "In case the data sets are at present not available in the neutron data library, please contact Hans-Peter.Wellisch@cern.ch");
                 throw G4HadronicException(__FILE__, __LINE__, "In case the data sets are at present not available in the neutron data library, please contact Hadron Group Coordinator");
+/*
+160910 TK makes commented out sructurally dead code
                 delete theName;
                 theFileName = "";
                 return result;
+*/
              //}
           }
 

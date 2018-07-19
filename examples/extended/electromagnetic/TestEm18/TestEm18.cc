@@ -27,7 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm18 example
 //
 //
-// $Id: TestEm18.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: TestEm18.cc 109315 2018-04-11 06:42:51Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,21 +41,21 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "EventAction.hh"
+#include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
 #include "StackingAction.hh"
 
-#ifdef G4VIS_USE
- #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
 
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
@@ -86,47 +86,41 @@ int main(int argc,char** argv) {
   EventAction* eventaction = new EventAction(runaction);
   runManager->SetUserAction(eventaction);
 
+  //TrackingAction
+  TrackingAction* trackingaction = new TrackingAction(runaction);
+  runManager->SetUserAction(trackingaction);
+
   //stepAction
   SteppingAction* steppingaction = new SteppingAction(runaction, eventaction);
   runManager->SetUserAction(steppingaction);
-  
+
   //stackAction
-  StackingAction* stackingaction = new StackingAction(runaction, eventaction);
-  runManager->SetUserAction(stackingaction);      
-   
-  // get the pointer to the User Interface manager 
-    G4UImanager* UI = G4UImanager::GetUIpointer();  
+  StackingAction* stackingaction = new StackingAction();
+  runManager->SetUserAction(stackingaction);
 
-  if (argc!=1)   // batch mode  
-    {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
-    }
-    
-  else           //define visualization and UI terminal for interactive mode
-    { 
-#ifdef G4VIS_USE
-   G4VisManager* visManager = new G4VisExecutive;
+  //initialize visualization
+  G4VisManager* visManager = nullptr;
+
+  //get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+  if (ui)  {
+   //interactive mode
+   visManager = new G4VisExecutive;
    visManager->Initialize();
-#endif    
-     
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-      ui->SessionStart();
-      delete ui;
-#endif
-          
-#ifdef G4VIS_USE
-     delete visManager;
-#endif     
-    }
-    
-  // job termination
-  // 
-  delete runManager;
+   ui->SessionStart();
+   delete ui;
+  }
+  else  {
+   //batch mode  
+   G4String command = "/control/execute ";
+   G4String fileName = argv[1];
+   UImanager->ApplyCommand(command+fileName);
+  }
 
-  return 0;
+  //job termination 
+  delete visManager;
+  delete runManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

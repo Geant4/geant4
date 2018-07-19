@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc 90009 2015-05-08 07:42:39Z gcosmo $
+// $Id: G4PathFinder.cc 109355 2018-04-12 08:08:58Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -52,7 +52,7 @@ G4ThreadLocal G4PathFinder* G4PathFinder::fpPathFinder=0;
 // ----------------------------------------------------------------------------
 // GetInstance()
 //
-// Retrieve the static instance of the singleton
+// Retrieve the static instance of the singleton and create it if not existing
 //
 G4PathFinder* G4PathFinder::GetInstance()
 {
@@ -64,12 +64,22 @@ G4PathFinder* G4PathFinder::GetInstance()
 }
 
 // ----------------------------------------------------------------------------
+// GetInstanceIfExist()
+//
+// Retrieve the static instance pointer of the singleton
+//
+G4PathFinder* G4PathFinder::GetInstanceIfExist()
+{
+   return fpPathFinder;
+}
+
+// ----------------------------------------------------------------------------
 // Constructor
 //
 G4PathFinder::G4PathFinder() 
   : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
     fFieldExertedForce(false),
-    fRelocatedPoint(true),
+    fRelocatedPoint(false),
     fLastStepNo(-1), fCurrentStepNo(-1),
     fVerboseLevel(0)
 {
@@ -115,7 +125,7 @@ G4PathFinder::G4PathFinder()
 G4PathFinder::~G4PathFinder() 
 {
    delete fpMultiNavigator;
-   if (fpPathFinder)  { delete fpPathFinder; fpPathFinder=0; }
+   fpPathFinder = 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -246,6 +256,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
        //--------------
     }
     fLastStepNo= stepNo; 
+    fRelocatedPoint= false;
 
 #ifdef  G4DEBUG_PATHFINDER
     if ( (fNoGeometriesLimiting < 0)
@@ -264,7 +275,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   else
   {
      const G4double checkTolerance = 1.0e-9; 
-     if( proposedStepLength < fTrueMinStep * ( 1.0 + checkTolerance) )  // For 2nd+ geometry 
+     if( proposedStepLength < fTrueMinStep * ( 1.0 - checkTolerance) )  // For 2nd+ geometry 
      { 
        std::ostringstream message;
        message.precision( 12 ); 
@@ -325,7 +336,6 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 
   pNewSafety  = fCurrentPreStepSafety[ navigatorNo ]; 
   limitedStep = fLimitedStep[ navigatorNo ];
-  fRelocatedPoint= false;
 
   possibleStep= std::min(proposedStepLength, fCurrentStepSize[ navigatorNo ]);
   EndState = fEndState;  //  now corrected for smaller step, if needed
@@ -452,19 +462,18 @@ void G4PathFinder::ReportMove( const G4ThreeVector& OldVector,
 {
     G4ThreeVector moveVec = ( NewVector - OldVector );
 
-    G4int prc= G4cerr.precision(12); 
     std::ostringstream message;
+    message.precision(16); 
     message << "Endpoint moved between value returned by ComputeStep()"
             << " and call to Locate(). " << G4endl
             << "          Change of " << Quantity << " is "
             << moveVec.mag() / mm << " mm long" << G4endl
             << "          and its vector is "
             << (1.0/mm) * moveVec << " mm " << G4endl
-            << "          Endpoint of ComputeStep() was " << OldVector << G4endl
+            << "          Endpoint of ComputeStep() was     " << OldVector << G4endl
             << "          and current position to locate is " << NewVector;
     G4Exception("G4PathFinder::ReportMove()", "GeomNav1002",  
                 JustWarning, message); 
-    G4cerr.precision(prc); 
 }
 
 void
@@ -474,16 +483,19 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
 {
   // Locate the point in each geometry
 
+  static const G4double movLenTol = 10*kCarTolerance*kCarTolerance;
+
   std::vector<G4Navigator*>::iterator pNavIter=
      fpTransportManager->GetActiveNavigatorsIterator(); 
 
-  G4ThreeVector lastEndPosition= fEndState.GetPosition(); 
-  G4ThreeVector moveVec = (position - lastEndPosition );
+  G4ThreeVector lastEndPosition= fRelocatedPoint ?
+             fLastLocatedPosition : fEndState.GetPosition();
+  G4ThreeVector moveVec = ( position - lastEndPosition );
   G4double      moveLenSq= moveVec.mag2();
-  if( (!fNewTrack) && (!fRelocatedPoint)
-   && ( moveLenSq> 10*kCarTolerance*kCarTolerance ) )
+  if( (!fNewTrack) && ( moveLenSq > movLenTol ) )
   {
-     ReportMove( position, lastEndPosition, "Position" ); 
+     ReportMove( lastEndPosition, position,
+                 " (End) Position / G4PathFinder::Locate" ); 
   }
   fLastLocatedPosition= position; 
 
@@ -660,8 +672,8 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
      if ( longMoveEnd && longMoveSaf
        && longMoveRevisedEnd && (moveMinusSafety>0.0) )
      { 
-        G4int oldPrec= G4cout.precision(9); 
         std::ostringstream message;
+        message.precision(9); 
         message << "ReLocation is further than end-safety value." << G4endl
                 << " Moved from last endpoint by " << moveLenEndPosition 
                 << " compared to end safety (from preStep point) = " 
@@ -693,7 +705,6 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
         ReportMove( lastEndPosition, position, "Position" ); 
         G4Exception("G4PathFinder::ReLocate", "GeomNav0003", 
                     FatalException, message); 
-        G4cout.precision(oldPrec); 
     }
   }
 
@@ -729,7 +740,7 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
   }
 
   fLastLocatedPosition= position; 
-  fRelocatedPoint= false;
+  fRelocatedPoint= true;
 
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 )
@@ -816,8 +827,8 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 {
   std::vector<G4Navigator*>::iterator pNavigatorIter;
   G4double safety= 0.0, step=0.0;
-  G4double minSafety= kInfinity, minStep;
-
+  G4double minSafety= kInfinity, minStep= kInfinity;
+     
   const G4int IdTransport= 0;  // Id of Mass Navigator !!
   G4int num=0; 
 
@@ -923,12 +934,9 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
            step= (*pNavigatorIter)->ComputeStep( initialPosition, 
                                                  initialDirection,
                                                  proposedStepLength,
-                                                 safety ); 
-           minStep  = std::min( step,  minStep);
-
-           //  TODO: consider whether/how to reduce the proposed step 
-           //        to the latest minStep value - to reduce calculations
-
+                                                 safety );
+           minStep  = std::min( step,  minStep);  // OLD ==> can be 'logical' value, ie. kInfinity
+           
 #ifdef G4DEBUG_PATHFINDER
            if( fVerboseLevel > 0)
            {
@@ -942,8 +950,12 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
            } 
 #endif
         }
-        fCurrentStepSize[num] = step; 
+        fCurrentStepSize[num] = step;   // Raw value - can be kInfinity
 
+           //  TODO: consider whether/how to reduce the proposed step
+           //        to the latest minStep value - to reduce calculations.
+           //        ( If so, much change 1st minimum above. )
+        
         // Save safety value, must be done for all geometries "together"
         // (even if not recomputed using call to ComputeStep)
         // since they share the fPreSafetyLocation
@@ -992,9 +1004,11 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 1 )
   {
+    G4int oldPrec= G4cout.precision(14);     
     G4cout << "G4PathFinder::DoNextLinearStep : "
            << " initialPosition = " << initialPosition 
            << " and endPosition = " << endPosition<< G4endl;
+    G4cout.precision(oldPrec);    
   }
 #endif
 
@@ -1159,11 +1173,10 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
 
 
   G4EquationOfMotion* equationOfMotion = 
-     (fpFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
-     ->GetEquationOfMotion();
+     fpFieldPropagator->GetCurrentEquationOfMotion();
 
   equationOfMotion->SetChargeMomentumMass( *(initialState.GetChargeState()), 
-                                           initialState.GetMomentum().mag2(),
+                                           initialState.GetMomentum().mag(),
                                            initialState.GetRestMass() );
   
 #ifdef G4DEBUG_PATHFINDER

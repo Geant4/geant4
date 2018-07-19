@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAngularDistribution.hh 73847 2013-09-13 14:32:39Z gcosmo $
+// $Id: G4VEmAngularDistribution.hh 110416 2018-05-23 06:45:42Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,7 +61,7 @@ class G4VEmAngularDistribution
 {
 public:
 
-  G4VEmAngularDistribution(const G4String& name);
+  explicit G4VEmAngularDistribution(const G4String& name);
 
   virtual ~G4VEmAngularDistribution();
 
@@ -83,6 +83,14 @@ public:
 					 G4int shellID,
 					 const G4Material*);
 
+  virtual void SamplePairDirections(const G4DynamicParticle* dp,
+				    G4double elecKinEnergy,
+				    G4double posiKinEnergy,
+				    G4ThreeVector& dirElectron,
+				    G4ThreeVector& dirPositron,
+				    G4int Z = 0,
+				    const G4Material* mat = nullptr);
+
   inline const G4String& GetName() const;
 
 protected:
@@ -91,9 +99,10 @@ protected:
 
 private:
 
-  // hide assignment operator 
-  G4VEmAngularDistribution & operator=(const  G4VEmAngularDistribution &right);
-  G4VEmAngularDistribution(const  G4VEmAngularDistribution&);
+  // hide assignment operator
+  G4VEmAngularDistribution & 
+    operator=(const  G4VEmAngularDistribution &right) = delete;
+  G4VEmAngularDistribution(const  G4VEmAngularDistribution&) = delete;
 
   G4String fName;
 };

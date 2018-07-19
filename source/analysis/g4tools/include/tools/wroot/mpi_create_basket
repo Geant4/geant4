@@ -1,0 +1,63 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_mpi_create_basket
+#define tools_wroot_mpi_create_basket
+
+#include "basket"
+#include "../impi"
+
+namespace tools {
+namespace wroot {
+
+inline basket* mpi_create_basket(std::ostream& a_out,impi& a_mpi,bool a_byte_swap,seek a_seek_directory,uint32 a_basket_size) { 
+  std::string oname;
+  if(!a_mpi.sunpack(oname)) return 0;
+  std::string otitle;
+  if(!a_mpi.sunpack(otitle)) return 0;
+
+  uint32 last,nev_buf_size,nev;     
+  if(!a_mpi.unpack(last)) return 0;
+  if(!a_mpi.unpack(nev_buf_size)) return 0;
+  if(!a_mpi.unpack(nev)) return 0;
+
+  int* entry_offset = 0;
+ {bool not_null;
+  if(!a_mpi.bunpack(not_null)) return 0;
+  if(not_null) {
+    uint32 n;
+    if(!a_mpi.unpack(n,entry_offset)) return 0;
+  }} 
+
+  int* displacement = 0;
+ {bool not_null;
+  if(!a_mpi.bunpack(not_null)) return 0;
+  if(not_null) {
+    uint32 n;
+    if(!a_mpi.unpack(n,displacement)) return 0;
+  }} 
+
+  uint32 _size;
+  char* _buffer;
+  if(!a_mpi.unpack(_size,_buffer)) {a_out << "unpack(buffer) failed."<< std::endl;return 0;}
+
+  // wbasket fields set at file writing :
+  //m_buf_size,m_buffer,m_nbytes,m_object_size,m_date,m_cycle,m_seek_key
+
+  //::printf("debug :  col = %d, %s, %s, %lu\n",
+  //    icol,rbasket.object_class().c_str(),rbasket.object_name().c_str(),rbasket.seek_key());
+
+  basket* _basket = new basket(a_out,a_byte_swap,a_seek_directory,
+                               oname,otitle,"TBasket",a_basket_size,
+                               false/*verbose*/);
+  _basket->datbuf().write_fast_array(_buffer,_size);
+  _basket->set_nev(last,nev_buf_size,nev,entry_offset,displacement);
+
+  delete [] _buffer;
+
+  return _basket;
+}
+
+}}
+
+#endif

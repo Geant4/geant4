@@ -42,6 +42,7 @@
 #include "G4UserRunAction.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Timer.hh"
+#include "G4TiMemory.hh"
 
 G4ScoringManager* G4MTRunManager::masterScM = 0;
 G4MTRunManager::masterWorlds_t G4MTRunManager::masterWorlds = G4MTRunManager::masterWorlds_t();
@@ -54,13 +55,6 @@ namespace {
  G4Mutex runMergerMutex = G4MUTEX_INITIALIZER;
  G4Mutex setUpEventMutex = G4MUTEX_INITIALIZER;
 }
-
-//This is needed to initialize windows conditions
-#if defined(WIN32)
-namespace {
-	void InitializeWindowsConditions();
-}
-#endif
 
 G4MTRunManager* G4MTRunManager::GetMasterRunManager()
 {
@@ -84,14 +78,14 @@ G4MTRunManagerKernel* G4MTRunManager::GetMTMasterRunManagerKernel()
 G4MTRunManager::G4MTRunManager() : G4RunManager(masterRM),
     nworkers(2),forcedNwokers(-1),pinAffinity(0),
     masterRNGEngine(0),
-    nextActionRequest(UNDEFINED),
+    nextActionRequest(WorkerActionRequest::UNDEFINED),
     eventModuloDef(0),eventModulo(1),
     nSeedsUsed(0),nSeedsFilled(0),
     nSeedsMax(10000),nSeedsPerEvent(2)
 {
     if ( fMasterRM )
     {
-        G4Exception("G4MTRunManager::G4MTRunManager", "Run0035",FatalException,
+        G4Exception("G4MTRunManager::G4MTRunManager", "Run0110",FatalException,
                     "Another instance of a G4MTRunManager already exists.");
     }
     fMasterRM = this;
@@ -101,7 +95,7 @@ G4MTRunManager::G4MTRunManager() : G4RunManager(masterRM),
     msg << "Geant4 code is compiled without multi-threading support"
         << "(-DG4MULTITHREADED is set to off).\n";
     msg << "G4MTRunManager can only be used in multi-threaded applications.";
-    G4Exception("G4MTRunManager::G4MTRunManager","Run0035",FatalException,msg);
+    G4Exception("G4MTRunManager::G4MTRunManager","Run0111",FatalException,msg);
 #endif
 
     G4int numberOfStaticAllocators = kernel->GetNumberOfStaticAllocators();
@@ -122,9 +116,6 @@ G4MTRunManager::G4MTRunManager() : G4RunManager(masterRM),
     //G4Random::getTheEngine(); //User did not specify RNG, create defaults
     //Now remember the master instance of the RNG Engine
     masterRNGEngine = G4Random::getTheEngine();
-#if defined (WIN32)
-    InitializeWindowsConditions();
-#endif
 
     numberOfEventToBeProcessed = 0;
     randDbl = new double[nSeedsPerEvent*nSeedsMax];
@@ -185,7 +176,7 @@ void G4MTRunManager::SetNumberOfThreads(G4int n )
       msg << "Number of threads cannot be changed at this moment \n"
           << "(old threads are still alive). Method ignored.";
       G4Exception("G4MTRunManager::SetNumberOfThreads(G4int)",
-                  "Run0035", JustWarning, msg);
+                  "Run0112", JustWarning, msg);
     }
     else if ( forcedNwokers > 0 )
     {
@@ -194,7 +185,7 @@ void G4MTRunManager::SetNumberOfThreads(G4int n )
           << " by G4FORCENUMBEROFTHREADS shell variable.\n"
           << "Method ignored.";
       G4Exception("G4MTRunManager::SetNumberOfThreads(G4int)",
-                  "Run0035", JustWarning, msg);
+                  "Run0113", JustWarning, msg);
     }
     else  
     {
@@ -259,12 +250,13 @@ void G4MTRunManager::CreateAndStartWorkers()
         }
     }
     //Signal to threads they can start a new run
-    NewActionRequest(NEXTITERATION);
+    NewActionRequest(WorkerActionRequest::NEXTITERATION);
 }
 
 
 void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G4int n_select)
 {
+    TIMEMORY_AUTO_TIMER("");
   MTkernel->SetUpDecayChannels();
   numberOfEventToBeProcessed = n_event;
   numberOfEventProcessed = 0;
@@ -443,36 +435,36 @@ void G4MTRunManager::SetUserInitialization(G4VUserDetectorConstruction *userDC)
 void G4MTRunManager::SetUserAction(G4UserRunAction* userAction)
 {
     G4RunManager::SetUserAction(userAction); 
-    userAction->SetMaster();
+    if(userAction) userAction->SetMaster();
 }
 
 void G4MTRunManager::SetUserAction(G4VUserPrimaryGeneratorAction* /*userAction*/)
 {
-  G4Exception("G4MTRunManager::SetUserAction()", "Run3011", FatalException,
+  G4Exception("G4MTRunManager::SetUserAction()", "Run0123", FatalException,
     "For multi-threaded version, define G4VUserPrimaryGeneratorAction in G4VUserActionInitialization.");
 }
 
 void G4MTRunManager::SetUserAction(G4UserEventAction* /*userAction*/)
 {
-  G4Exception("G4MTRunManager::SetUserAction()", "Run3011", FatalException,
+  G4Exception("G4MTRunManager::SetUserAction()", "Run0124", FatalException,
     "For multi-threaded version, define G4UserEventAction in G4VUserActionInitialization.");
 }
 
 void G4MTRunManager::SetUserAction(G4UserStackingAction* /*userAction*/)
 {
-  G4Exception("G4MTRunManager::SetUserAction()", "Run3011", FatalException,
+  G4Exception("G4MTRunManager::SetUserAction()", "Run0125", FatalException,
     "For multi-threaded version, define G4UserStackingAction in G4VUserActionInitialization.");
 }
 
 void G4MTRunManager::SetUserAction(G4UserTrackingAction* /*userAction*/)
 {
-  G4Exception("G4MTRunManager::SetUserAction()", "Run3011", FatalException,
+  G4Exception("G4MTRunManager::SetUserAction()", "Run0126", FatalException,
     "For multi-threaded version, define G4UserTrackingAction in G4VUserActionInitialization.");
 }
 
 void G4MTRunManager::SetUserAction(G4UserSteppingAction* /*userAction*/)
 {
-  G4Exception("G4MTRunManager::SetUserAction()", "Run3011", FatalException,
+  G4Exception("G4MTRunManager::SetUserAction()", "Run0127", FatalException,
     "For multi-threaded version, define G4UserSteppingAction in G4VUserActionInitialization.");
 }
 
@@ -542,7 +534,10 @@ G4int G4MTRunManager::SetUpNEvents(G4Event* evt, G4SeedsQueue* seedsQueue,G4bool
 
 void G4MTRunManager::TerminateWorkers()
 {
-    NewActionRequest( ENDWORKER );
+    //Force workers to execute (if any) all UI commands left in the stack
+    RequestWorkersProcessCommandsStack();
+    //Ask workers to exit
+    NewActionRequest( WorkerActionRequest::ENDWORKER );
     //Now join threads.
 #ifdef G4MULTITHREADED //protect here to prevent warning in compilation
     while ( ! threads.empty() )
@@ -578,328 +573,55 @@ void G4MTRunManager::AbortEvent()
   // nothing to do in the master thread
 }
 
-// =====================================
-// Barriers mechanism
-// =====================================
-// We want to implement barriers.
-// We define a barrier has a point in which threads synchronize.
-// When workers threads reach a barrier they wait for the master thread a
-// signal that they can continue. The master thread broadcast this signal
-// only when all worker threads have reached this point.
-// Currently only three points require this sync in the life-time of a G4 applicattion:
-// Just before and just after the for-loop controlling the thread event-loop.
-// Between runs.
-// TODO: If this mechanism is needed in other parts of the code we can provide
-// the barrier mechanism as a utility class/functions to the kernel.
-// Note: we need a special treatment for WIN32
-//
-// The basic algorith of each barrier works like this:
-// In the master:
-//   WaitWorkers()  {
-//    while (true)
-//    {
-//     G4AutoLock l(&counterMutex);                          || Mutex is locked (1)
-//     if ( counter == nActiveThreads ) break;
-//     G4CONDITIONWAIT( &conditionOnCounter, &counterMutex); || Mutex is atomically released and wait, upon return locked (2)
-//    }                                                      || unlock mutex
-//    G4AutoLock l(&counterMutex);                           || lock again mutex (3)
-//    G4CONDITIONBROADCAST( &doSomethingCanStart );          || Here mutex is locked (4)
-//   }                                                       || final unlock (5)
-// In the workers:
-//   WaitSignalFromMaster() {
-//    G4AutoLock l(&counterMutex);                           || (6)
-//    ++counter;
-//    G4CONDITIONBROADCAST(&conditionOnCounter);             || (7)
-//    G4CONDITIONWAIT( &doSomethingCanStart , &counterMutex);|| (8)
-//   }
-// Each barriers requires 2 conditions and one mutex, plus a counter.
-// Important note: the thread calling broadcast should hold the mutex
-// before calling broadcast to obtain predictible behavior
-// http://pubs.opengroup.org/onlinepubs/7908799/xsh/pthread_cond_broadcast.html
-// Also remember that the wait for condition will atomically release the mutex
-// and wait on condition, but it will lock again on mutex when returning
-// Here it is how the control flows.
-// Imagine master starts and only one worker (nActiveThreads==1)
-// Master       |    Worker        | counter | Who holds mutex
-// Gets to (1)  |   Blocks on (6)  | 0       | M
-// Waits in (2) |                  | 0       | -
-//              |  Arrives to (7)  | 1       | W
-//              |  Waits in (8)    | 1       | -
-// Gets to (1)  |                  | 1       | M
-// Jumps to (3) |                  | 1       | M
-// End          |                  | 1       | -
-//              | End              | 1       | -
-// Similarly for more than one worker threads or if worker starts
-
-#ifdef WIN32
-#include <windows.h> //For CRITICAL_SECTION objects
-#endif
-namespace {
-    //Avoid compilation warning if squenetial for unused variables
-#ifdef G4MULTITHREADED
-    //Conditions
-    // Condition to signal green light for start of event loop
-    G4Condition beginEventLoopCondition = G4CONDITION_INITIALIZER;
-    // Condition to signal green light to finish event loop
-    // (actuallyt exit function performing event loop)
-    G4Condition endEventLoopCondition = G4CONDITION_INITIALIZER;
-    // Condition to signal the num of workers ready for event loop has changed
-    G4Condition numWorkersBeginEventLoopChangeCondition = G4CONDITION_INITIALIZER;
-    // Condition to signal the num of workers that terminated event loop
-    // has changed
-    G4Condition numWorkersEndEventLoopChangedCondition = G4CONDITION_INITIALIZER;
-    // This condition is to handle more than one run w/o killing threads
-    G4Condition requestChangeActionForWorker = G4CONDITION_INITIALIZER;
-    G4Condition numberOfReadyWorkersForNewActionChangedCondition = G4CONDITION_INITIALIZER;
-#endif
-    // Counter/mutex for workers ready to begin event loop
-    G4Mutex numberOfReadyWorkersMutex = G4MUTEX_INITIALIZER;
-    G4int numberOfReadyWorkers = 0;
-    //Counter/mutex for workers with end of event loop
-    G4Mutex numberOfEndOfEventLoopWorkersMutex = G4MUTEX_INITIALIZER;
-    G4int numberOfEndOfEventLoopWorkers = 0;
-    //
-    //Action handling
-    G4Mutex nextActionRequestMutex = G4MUTEX_INITIALIZER;
-    G4int numberOfReadyWorkersForNewAction = 0;
-    G4Mutex numberOfReadyWorkersForNewActionMutex = G4MUTEX_INITIALIZER;
-#ifdef WIN32
-    CRITICAL_SECTION cs1;
-    CRITICAL_SECTION cs2;
-    CRITICAL_SECTION cs3;
-    //Note we need to use two separate counters because
-    //we can get a situation in which a thread is much faster then the others
-    //(for example if last thread has less events to process.
-    //We have the extreme case of some medical applications (moving setups)
-    //in which the number of events of a run is ~ number of threads
-	void InitializeWindowsConditions()
-	{
-	#ifdef G4MULTITHREADED
-           InitializeConditionVariable( &beginEventLoopCondition );
-           InitializeConditionVariable( &endEventLoopCondition );
-           InitializeConditionVariable( &numWorkersBeginEventLoopChangeCondition );
-           InitializeConditionVariable( &numWorkersEndEventLoopChangedCondition );
-           InitializeConditionVariable( &requestChangeActionForWorker);
-	   InitializeConditionVariable( &numberOfReadyWorkersForNewActionChangedCondition );
-	#endif
-           InitializeCriticalSection( &cs1 );
-           InitializeCriticalSection( &cs2 );
-           InitializeCriticalSection( &cs3 );
-	}
-#endif
+void G4MTRunManager::WaitForReadyWorkers() {
+  beginOfEventLoopBarrier.Wait( GetNumberActiveThreads() );
+  endOfEventLoopBarrier.ResetCounter();
+  beginOfEventLoopBarrier.ReleaseBarrier();
 }
 
-void G4MTRunManager::WaitForReadyWorkers()
-{
-    while (true) //begin barrier
-    {
-#ifndef WIN32
-        G4AutoLock lockLoop(&numberOfReadyWorkersMutex);
-#else
-        EnterCriticalSection( &cs1 );
-#endif
-        //Check number of workers ready to begin
-	G4int activethreads = threads.size();
-        if (numberOfReadyWorkers == activethreads )
-        {
-            //Ok, interrupt the loop
-            break;
-        }
-        //Wait for the number of workers to be changed
-#ifdef WIN32
-        G4CONDITIONWAIT(&numWorkersBeginEventLoopChangeCondition,
-                        &cs1);
-        LeaveCriticalSection( &cs1 );
-#else
-        G4CONDITIONWAIT(&numWorkersBeginEventLoopChangeCondition,
-                        &numberOfReadyWorkersMutex);
-#endif
-    }
-    //Now number of workers is as expected.
-//////    static G4bool createIsomerOnlyOnce = false;
-//////    if(!createIsomerOnlyOnce)
-//////    {
-//////      createIsomerOnlyOnce = true;
-//////      G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
-//////      if(gion)
-//////      {
-//////        ////G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
-//////        G4int gionId = gion->GetParticleDefinitionID();
-//////        G4ParticleTable::G4PTblDicIterator* pItr = G4ParticleTable::GetParticleTable()->GetIterator();
-//////        pItr->reset(false);
-//////        while( (*pItr)() )
-//////        {
-//////          G4ParticleDefinition* particle = pItr->value();
-//////          if(particle->IsGeneralIon()) particle->SetParticleDefinitionID(gionId);
-//////        }
-//////      }
-//////    }
-
-    //Prepare to wait for workers to end eventloop
-    //Reset number of workers in "EndOfEventLoop"
-    G4AutoLock l(&numberOfEndOfEventLoopWorkersMutex);
-    numberOfEndOfEventLoopWorkers = 0;
-    
-    //signal workers they can start the event-loop
-    G4AutoLock l2(&numberOfReadyWorkersMutex);
-    G4CONDTIONBROADCAST(&beginEventLoopCondition);
+void G4MTRunManager::ThisWorkerReady() {
+  beginOfEventLoopBarrier.ThisWorkerReady();
 }
 
-void G4MTRunManager::ThisWorkerReady()
-{
-    //Increament number of active worker by 1
-#ifndef WIN32
-    G4AutoLock lockLoop(&numberOfReadyWorkersMutex);
-#else
-    EnterCriticalSection( &cs1 );
-#endif
-    ++numberOfReadyWorkers;
-    //Signal the number of workers has changed
-    G4CONDTIONBROADCAST(&numWorkersBeginEventLoopChangeCondition);
-    //Wait for condition to start eventloop
-#ifdef WIN32
-    G4CONDITIONWAIT(&beginEventLoopCondition,&cs1);
-    LeaveCriticalSection( &cs1 );
-#else
-    G4CONDITIONWAIT(&beginEventLoopCondition,&numberOfReadyWorkersMutex);
-#endif
-    //Protects access to shared resource, guarantees we do not call this method
-    //while someone else is modifying its content (e.g. creating a new particle)
-    //G4PDefManager& pdm = const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager());
-    //pdm.Lock();
-    //pdm.NewSubInstances();
-    //pdm.UnLock();
-    //const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).NewSubInstances();
-    // I believe this is not necessary and safe to remove (Makoto)
-    //G4ParticleTable::GetParticleTable()->WorkerG4ParticleTable();
+void G4MTRunManager::WaitForEndEventLoopWorkers() {
+  endOfEventLoopBarrier.Wait( GetNumberActiveThreads() );
+  beginOfEventLoopBarrier.ResetCounter();
+  endOfEventLoopBarrier.ReleaseBarrier();
 }
 
-
-void G4MTRunManager::WaitForEndEventLoopWorkers()
-{
-    while (true)
-    {
-#ifndef WIN32
-        G4AutoLock l(&numberOfEndOfEventLoopWorkersMutex);
-#else
-        EnterCriticalSection( &cs2 );
-#endif
-	G4int activethreads = threads.size();
-        if ( numberOfEndOfEventLoopWorkers == activethreads )
-        {
-            break;
-        }
-#ifdef WIN32
-        G4CONDITIONWAIT(&numWorkersEndEventLoopChangedCondition,
-                        &cs2);
-        LeaveCriticalSection( &cs2 );
-#else
-        G4CONDITIONWAIT(&numWorkersEndEventLoopChangedCondition,
-                        &numberOfEndOfEventLoopWorkersMutex);
-#endif
-    }
-    //Now number of workers that reached end of event loop is as expected
-    //Reset number of workers in ready for work state so a new run can start
-    G4AutoLock l(&numberOfReadyWorkersMutex);
-    numberOfReadyWorkers = 0;
-    //Signal workers they can end event-loop
-    G4AutoLock l2(&numberOfEndOfEventLoopWorkersMutex);
-    G4CONDTIONBROADCAST(&endEventLoopCondition);
+void G4MTRunManager::ThisWorkerEndEventLoop() {
+  endOfEventLoopBarrier.ThisWorkerReady();
 }
 
-void G4MTRunManager::ThisWorkerEndEventLoop()
-{
-    //Increament number of workers in end of evnet loop by 1
-#ifndef WIN32
-    G4AutoLock l(&numberOfEndOfEventLoopWorkersMutex);
-#else
-    EnterCriticalSection( &cs2 );
-#endif
-    ++numberOfEndOfEventLoopWorkers;
-    //Signale this number has changed
-    G4CONDTIONBROADCAST(&numWorkersEndEventLoopChangedCondition);
-    //Wait for condition to exit eventloop
-#ifdef WIN32
-    G4CONDITIONWAIT(&endEventLoopCondition,&cs2);
-    LeaveCriticalSection( &cs2 );
-#else
-    G4CONDITIONWAIT(&endEventLoopCondition,&numberOfEndOfEventLoopWorkersMutex);
-#endif
+void G4MTRunManager::NewActionRequest(G4MTRunManager::WorkerActionRequest newRequest) {
+   nextActionRequestBarrier.Wait( GetNumberActiveThreads() );
+   //nextActionRequest is a shared resource, but there is no
+   //data-race thanks to the barrier: all threads are waiting
+   nextActionRequest = newRequest;
+   nextActionRequestBarrier.ReleaseBarrier();
 }
 
-void G4MTRunManager::NewActionRequest(G4MTRunManager::WorkerActionRequest newRequest)
-{
-  //Wait for all workers to be ready to accept a new action request
-  while (true)
-  {
-#ifndef WIN32
-    G4AutoLock l(&numberOfReadyWorkersForNewActionMutex);
-#else
-    EnterCriticalSection( &cs3 );
-#endif
-    //Check the number of workers that are ready for next action
-    G4int activethreads = threads.size();
-    if ( numberOfReadyWorkersForNewAction == activethreads )
-    {
-	//Ok, exit the loop
-	break;
-    }
-    //Wait for the number of workers ready for new action to change
-#ifdef WIN32
-    G4CONDITIONWAIT(&numberOfReadyWorkersForNewActionChangedCondition,
-		    &cs3);
-    LeaveCriticalSection( &cs3 );
-#else
-    G4CONDITIONWAIT(&numberOfReadyWorkersForNewActionChangedCondition,
-		    &numberOfReadyWorkersForNewActionMutex);
-#endif 
-  }
-  //Now set the new action to the shared resource
-  G4AutoLock l(&nextActionRequestMutex);
-  nextActionRequest = newRequest;
-  l.unlock();
-  //Reset counter of workers ready-for-new-action in preparation of next call
-  G4AutoLock l2(&numberOfReadyWorkersForNewActionMutex);
-  numberOfReadyWorkersForNewAction = 0;
-  //l2.unlock(); //<----- This thread needs to have control on mutex associated
-  //to condition variable (report from valgrind --tool=drd)
-  //see: http://pic.dhe.ibm.com/infocenter/iseries/v7r1m0/index.jsp?topic=%2Fapis%2Fusers_73.htm
-  //Now signal all workers that there is a new action to be performed
-  G4CONDTIONBROADCAST(&requestChangeActionForWorker);
+G4MTRunManager::WorkerActionRequest G4MTRunManager::ThisWorkerWaitForNextAction() {
+  nextActionRequestBarrier.ThisWorkerReady();
+  return nextActionRequest;
 }
 
-G4MTRunManager::WorkerActionRequest G4MTRunManager::ThisWorkerWaitForNextAction()
-{
-  //This worker is ready to receive a new action request, 
-  //increment counter by 1
- #ifndef WIN32
-  G4AutoLock l(&numberOfReadyWorkersForNewActionMutex);
-#else
-  EnterCriticalSection( &cs3 );
-#endif
-  ++numberOfReadyWorkersForNewAction;
-  //Singal the sahred resource has changed to the master
-  G4CONDTIONBROADCAST(&numberOfReadyWorkersForNewActionChangedCondition);
-  //Wait for condition that a new aciton is ready
-#ifdef WIN32
-  G4CONDITIONWAIT(&requestChangeActionForWorker,&cs3);
-  LeaveCriticalSection( &cs3 );
-#else
-  G4CONDITIONWAIT(&requestChangeActionForWorker,&numberOfReadyWorkersForNewActionMutex);
-#endif 
-  //Ok, if I am here it means that a new action has been requested by the master
-  //reads it value that is now read-only, so no mutex is needed, but you never know...
-  G4AutoLock l2(&nextActionRequestMutex);
-  WorkerActionRequest result = nextActionRequest;
-  return result;
+void G4MTRunManager::RequestWorkersProcessCommandsStack() {
+  PrepareCommandsStack();
+  NewActionRequest(WorkerActionRequest::PROCESSUI);
+  processUIBarrier.SetActiveThreads( GetNumberActiveThreads() );
+  processUIBarrier.WaitForReadyWorkers();
 }
 
+void G4MTRunManager::ThisWorkerProcessCommandsStackDone() {
+  processUIBarrier.ThisWorkerReady();
+}
 void G4MTRunManager::SetPinAffinity(G4int n)
 {
 	if ( n == 0 )
 	{
 		G4Exception("G4MTRunManager::SetPinAffinity",
-					"Run0035",FatalException,
+					"Run0114",FatalException,
 					"Pin affinity must be >0 or <0.");
 	}
 	pinAffinity = n;

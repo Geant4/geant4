@@ -27,7 +27,7 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.cc 73446 2013-08-27 11:32:59Z gcosmo $
+// $Id: DetectorConstruction.cc 99841 2016-10-07 10:09:34Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -37,6 +37,8 @@
 // Author: Witold POKORSKI (Witold.Pokorski@cern.ch)
 //
 // --------------------------------------------------------------
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include "DetectorConstruction.hh"
 #include "G4Material.hh"
@@ -48,15 +50,19 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 DetectorConstruction::DetectorConstruction() :  
   Iron(0), Copper(0), Tungsten(0), Lead(0), Uranium(0), PbWO4(0),
   Polystyrene(0), LiquidArgon(0), 
   theAbsorberMaterial(0),
   logicAbsorber(0), physiAbsorber(0) {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 DetectorConstruction::~DetectorConstruction() {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
@@ -226,6 +232,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   return experimentalHall_phys;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void DetectorConstruction::PrintParameters()
 {
@@ -240,3 +247,5 @@ void DetectorConstruction::PrintParameters()
   G4cout << G4endl << " -------------------------------------------------------- "
          << G4endl << G4endl;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

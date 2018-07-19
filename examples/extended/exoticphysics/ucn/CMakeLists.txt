@@ -40,7 +40,7 @@ target_link_libraries(ExUCN ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(ExUCN_SCRIPTS
-    ExUCN.in ExUCN.out vis.mac gui.mac icons.mac
+    ExUCN.in ExUCN.out vis.mac gui.mac
   )
 
 foreach(_script ${ExUCN_SCRIPTS})

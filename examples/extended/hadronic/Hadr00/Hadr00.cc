@@ -27,7 +27,7 @@
 /// \brief Main program of the hadronic/Hadr00 example
 //
 //
-// $Id: Hadr00.cc 81073 2014-05-20 10:23:13Z gcosmo $
+// $Id: Hadr00.cc 109182 2018-04-03 07:18:45Z gcosmo $
 //
 // -------------------------------------------------------------
 //      GEANT4 Hadr00
@@ -55,20 +55,16 @@
 #include "PrimaryGeneratorAction.hh"
 #include "ActionInitialization.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
-  //choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine());
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
 
 #ifdef G4MULTITHREADED  
   G4MTRunManager * runManager = new G4MTRunManager(); 
@@ -78,11 +74,11 @@ int main(int argc,char** argv) {
     G4int nThreads = G4UIcommand::ConvertToInt(argv[3]);
     runManager->SetNumberOfThreads(nThreads);
   }
-  G4cout << "##### Hadr00 started for " << runManager->GetNumberOfThreads() 
+  G4cout << "##### Hadr00 started for " << runManager->GetNumberOfThreads()
          << " threads" << " #####" << G4endl;
 #else
-  G4RunManager * runManager = new G4RunManager(); 
-  G4cout << "##### Hadr00 started in sequential mode" 
+  G4RunManager * runManager = new G4RunManager();
+  G4cout << "##### Hadr00 started in sequential mode"
          << " #####" << G4endl;
 #endif
 
@@ -91,64 +87,54 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(det);
 
   G4PhysListFactory factory;
-  G4VModularPhysicsList* phys = 0;
+  G4VModularPhysicsList* phys = nullptr;
   G4String physName = "";
 
-  // Physics List name defined via 3nd argument
+  //Physics List name defined via 3nd argument
   if (argc>=3) { physName = argv[2]; }
 
-  // Physics List is defined via environment variable PHYSLIST
-  if("" == physName) {
+  //Physics List is defined via environment variable PHYSLIST
+  if ("" == physName) {
     char* path = getenv("PHYSLIST");
     if (path) { physName = G4String(path); }
   }
 
-  // if name is not known to the factory use FTFP_BERT
+  //if name is not known to the factory use FTFP_BERT
   if("" == physName || !factory.IsReferencePhysList(physName)) {
-    physName = "FTFP_BERT"; 
+    physName = "FTFP_BERT";
   }
 
-  // reference PhysicsList via its name
+  //reference PhysicsList via its name
   phys = factory.GetReferencePhysList(physName);
 
   runManager->SetUserInitialization(phys);
+  det->SetPhysicsList(phys);
 
   //set user action classes
   runManager->SetUserInitialization(new ActionInitialization(det));
 
+  //initialize visualization
+  G4VisManager* visManager = nullptr;
+
   //get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
-#ifdef G4VIS_USE
-  G4VisManager* visManager = 0;
-#endif
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-  if (argc==1)   // Define UI terminal for interactive mode
-    {
-#ifdef G4VIS_USE
-      //visualization manager
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
-#endif
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      ui->SessionStart();
-      delete ui;
-#endif
-    }
-  else           // Batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
-    }
+  if (ui)  {
+    //interactive mode
+    visManager = new G4VisExecutive;
+    visManager->Initialize();
+    ui->SessionStart();
+    delete ui;
+  } else  {
+    //batch mode  
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
+  }
 
-  //job termination
-#ifdef G4VIS_USE
+  //job termination 
   delete visManager;
-#endif
   delete runManager;
-
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

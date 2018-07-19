@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+26/09/16 I. Hrivnacova (exampleB1-V10-02-01)
+- Updated for renaming G4Parameter in G4Accumulable
+
+20/09/16 J. Allison (exampleB1-V10-02-00)
+- vis.mac: Added this to make "Envelope" transparent blue:
+  # "Envelope" is transparent blue to represent water
+  /vis/geometry/set/colour Envelope 0 0 0 1 .3
+
 02/11/15 I. Hrivnacova (exampleB1-V10-01-03)
 - B1Run class replaced with a code based on G4Parameter
 

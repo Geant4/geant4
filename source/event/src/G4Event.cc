@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.cc 102263 2017-01-19 10:09:58Z gcosmo $
+// $Id: G4Event.cc 110273 2018-05-17 14:43:43Z gcosmo $
 //
 
 // G4Event
@@ -37,7 +37,11 @@
 #include "G4VDigiCollection.hh"
 #include "G4ios.hh"
 
-G4ThreadLocal G4Allocator<G4Event> *anEventAllocator = nullptr;
+G4Allocator<G4Event>*& anEventAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4Event>* _instance = nullptr;
+    return _instance;
+}
 
 G4Event::G4Event()
 :eventID(0),

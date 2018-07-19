@@ -24,12 +24,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc 95424 2016-02-10 14:38:11Z gcosmo $
+// $Id: G4TessellatedSolid.cc 108288 2018-01-31 09:36:41Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // CHANGE HISTORY
 // --------------
+// 23 October 2016,   E Tcherniaev, reimplemented CalculateExtent() to make
+//                    use of G4BoundingEnvelope.
+//
 // 12 October 2012,   M Gayer, CERN, complete rewrite reducing memory
 //                    requirements more than 50% and speedup by a factor of
 //                    tens or more depending on the number of facets, thanks
@@ -69,6 +72,10 @@
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+#include "G4TessellatedSolid.hh"
+
+#if !defined(G4GEOM_USE_UTESSELLATEDSOLID)
+
 #include <iostream>
 #include <stack>
 #include <iostream>
@@ -76,8 +83,6 @@
 #include <fstream>
 #include <algorithm>
 #include <list>
-
-#include "G4TessellatedSolid.hh"
 
 #include "geomdefs.hh"
 #include "Randomize.hh"
@@ -87,6 +92,7 @@
 #include "G4VFacet.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
 
 #include "G4PolyhedronArbitrary.hh"
 #include "G4VGraphicsScene.hh"
@@ -270,7 +276,7 @@ G4bool G4TessellatedSolid::AddFacet (G4VFacet *aFacet)
         {
           --it;
           G4int id = (*it).id;
-          G4VFacet *facet = fFacets[id];	  
+          G4VFacet *facet = fFacets[id];  
           G4ThreeVector q = facet->GetCircumcentre();
           found = (facet == aFacet);
           if (found) break;
@@ -375,7 +381,10 @@ void G4TessellatedSolid::PrecalculateInsides()
         G4int index = fVoxels.GetVoxelsIndex(voxel);
         if (!checked[index] && fVoxels.IsEmpty(index))
         {
-          for (G4int i = 0; i <= 2; ++i) point[i] = fVoxels.GetBoundary(i)[voxel[i]];
+          for (G4int i = 0; i <= 2; ++i)
+          {
+            point[i] = fVoxels.GetBoundary(i)[voxel[i]];
+          }
           G4bool inside = (G4bool) (InsideNoVoxels(point) == kInside);
           SetAllUsingStack(voxel, maxVoxels, inside, checked);
         }
@@ -511,11 +520,11 @@ void G4TessellatedSolid::CreateVertexList()
 
       if (!found)
       {
-#ifdef G4SPECSDEBUG	
+#ifdef G4SPECSDEBUG
         G4cout << p.x() << ":" << p.y() << ":" << p.z() << G4endl;
         G4cout << "Adding new vertex #" << i << " of facet " << k
                << " id " << value.id << G4endl;
-        G4cout << "===" << G4endl;	
+        G4cout << "===" << G4endl;
 #endif
         fVertexList.push_back(p);
         vertexListSorted.insert(value);
@@ -538,7 +547,7 @@ void G4TessellatedSolid::CreateVertexList()
       }
       else
       {
-#ifdef G4SPECSDEBUG	
+#ifdef G4SPECSDEBUG
         G4cout << p.x() << ":" << p.y() << ":" << p.z() << G4endl;
         G4cout << "Vertex #" << i << " of facet " << k
                << " found, redirecting to " << id << G4endl;
@@ -579,7 +588,7 @@ void G4TessellatedSolid::DisplayAllocatedMemory()
   G4int with = AllocatedMemory();
   G4double ratio = (G4double) with / without;
   G4cout << "G4TessellatedSolid - Allocated memory without voxel overhead "
-         << without << "; with " << with << "; ratio: " << ratio << G4endl;	 
+         << without << "; with " << with << "; ratio: " << ratio << G4endl; 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1114,12 +1123,12 @@ G4TessellatedSolid::DistanceToInNoVoxels (const G4ThreeVector &p,
       else
       {
         if (-kCarToleranceHalf <= dist && dist <= kCarToleranceHalf)
-	{
+        {
           return 0.0;
         }
         else
         {
-	  if  (distFromSurface > -kCarToleranceHalf
+          if  (distFromSurface > -kCarToleranceHalf
             && distFromSurface <  kCarToleranceHalf)
           {
             minDist = dist;
@@ -1598,6 +1607,7 @@ G4GeometryType G4TessellatedSolid::GetEntityType () const
 std::ostream &G4TessellatedSolid::StreamInfo(std::ostream &os) const
 {
   os << G4endl;
+  os << "Solid name       = " << GetName()      << G4endl;
   os << "Geometry Type    = " << fGeometryType  << G4endl;
   os << "Number of facets = " << fFacets.size() << G4endl;
 
@@ -1777,14 +1787,14 @@ G4Polyhedron *G4TessellatedSolid::CreatePolyhedron () const
   G4int size = fFacets.size();
   for (G4int i = 0; i < size; ++i)
   {
-    G4VFacet &facet = *fFacets[i];
+    G4VFacet* facet = fFacets[i];
     G4int v[4];
-    G4int n = facet.GetNumberOfVertices();
+    G4int n = facet->GetNumberOfVertices();
     if (n > 4) n = 4;
     else if (n == 3) v[3] = 0;
     for (G4int j=0; j<n; ++j)
     {
-      G4int k = facet.GetVertexIndex(j);
+      G4int k = facet->GetVertexIndex(j);
       v[j] = k+1;
     }
     polyhedron->AddFacet(v[0],v[1],v[2],v[3]);
@@ -1816,9 +1826,32 @@ G4Polyhedron* G4TessellatedSolid::GetPolyhedron () const
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// CalculateExtent
+// Get bounding box
 //
-// Based on correction provided by Stan Seibert, University of Texas.
+void G4TessellatedSolid::BoundingLimits(G4ThreeVector& pMin,
+                                        G4ThreeVector& pMax) const
+{
+  pMin = fMinExtent;
+  pMax = fMaxExtent;
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4TessellatedSolid::BoundingLimits()",
+                "GeomMgt0001", JustWarning, message);
+    DumpInfo();
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
 //
 G4bool
 G4TessellatedSolid::CalculateExtent(const EAxis pAxis,
@@ -1826,81 +1859,55 @@ G4TessellatedSolid::CalculateExtent(const EAxis pAxis,
                                     const G4AffineTransform& pTransform,
                                           G4double& pMin, G4double& pMax) const
 {
-  G4ThreeVectorList transVertexList(fVertexList);
-  G4int size = fVertexList.size();
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
 
-  // Put solid into transformed frame
-  for (G4int i=0; i < size; ++i)
+  // Check bounding box (bbox)
+  //
+  BoundingLimits(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    pTransform.ApplyPointTransform(transVertexList[i]);
+    return exist = (pMin < pMax) ? true : false;
   }
 
-  // Find min and max extent in each dimension
-  G4ThreeVector minExtent(kInfinity, kInfinity, kInfinity);
-  G4ThreeVector maxExtent(-kInfinity, -kInfinity, -kInfinity);
+  // The extent is calculated as cumulative extent of the pyramids
+  // formed by facets and the center of the bounding box.
+  //
+  G4double eminlim = pVoxelLimit.GetMinExtent(pAxis);
+  G4double emaxlim = pVoxelLimit.GetMaxExtent(pAxis);
 
-  size = transVertexList.size();
-  for (G4int i=0; i< size; ++i)
+  G4ThreeVectorList base;
+  G4ThreeVectorList apex(1);
+  std::vector<const G4ThreeVectorList *> pyramid(2);
+  pyramid[0] = &base;
+  pyramid[1] = &apex;
+  apex[0] = (bmin+bmax)*0.5;
+
+  // main loop along facets
+  pMin =  kInfinity;
+  pMax = -kInfinity;
+  for (G4int i=0; i<GetNumberOfFacets(); ++i)
   {
-    for (G4int axis=G4ThreeVector::X; axis < G4ThreeVector::SIZE; ++axis)
-    {
-      G4double coordinate = transVertexList[i][axis];
-      if (coordinate < minExtent[axis])
-      { minExtent[axis] = coordinate; }
-      if (coordinate > maxExtent[axis])
-      { maxExtent[axis] = coordinate; }
-    }
+    G4VFacet* facet = GetFacet(i);
+    if (std::abs((facet->GetSurfaceNormal()).dot(facet->GetVertex(0)-apex[0]))
+        < kCarToleranceHalf) continue;
+
+    G4int nv = facet->GetNumberOfVertices();
+    base.resize(nv);
+    for (G4int k=0; k<nv; ++k) { base[k] = facet->GetVertex(k); }
+
+    G4double emin,emax;
+    G4BoundingEnvelope benv(pyramid);
+    if (!benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,emin,emax)) continue;
+    if (emin < pMin) pMin = emin;
+    if (emax > pMax) pMax = emax;
+    if (eminlim > pMin && emaxlim < pMax) break; // max possible extent
   }
-
-  // Check for containment and clamp to voxel boundaries
-  for (G4int axis=G4ThreeVector::X; axis < G4ThreeVector::SIZE; ++axis)
-  {
-    EAxis geomAxis = kXAxis; // U geom classes use different index type
-    switch(axis)
-    {
-    case G4ThreeVector::X: geomAxis = kXAxis; break;
-    case G4ThreeVector::Y: geomAxis = kYAxis; break;
-    case G4ThreeVector::Z: geomAxis = kZAxis; break;
-    }
-    G4bool isLimited = pVoxelLimit.IsLimited(geomAxis);
-    G4double voxelMinExtent = pVoxelLimit.GetMinExtent(geomAxis);
-    G4double voxelMaxExtent = pVoxelLimit.GetMaxExtent(geomAxis);
-
-    if (isLimited)
-    {
-      if ( minExtent[axis] > voxelMaxExtent+kCarTolerance ||
-        maxExtent[axis] < voxelMinExtent-kCarTolerance    )
-      {
-        return false ;
-      }
-      else
-      {
-        if (minExtent[axis] < voxelMinExtent)
-        {
-          minExtent[axis] = voxelMinExtent ;
-        }
-        if (maxExtent[axis] > voxelMaxExtent)
-        {
-          maxExtent[axis] = voxelMaxExtent;
-        }
-      }
-    }
-  }
-
-  // Convert pAxis into G4ThreeVector index
-  G4int vecAxis=0;
-  switch(pAxis)
-  {
-  case kXAxis: vecAxis = G4ThreeVector::X; break;
-  case kYAxis: vecAxis = G4ThreeVector::Y; break;
-  case kZAxis: vecAxis = G4ThreeVector::Z; break;
-  default: break;
-  } 
-
-  pMin = minExtent[vecAxis] - kCarTolerance;
-  pMax = maxExtent[vecAxis] + kCarTolerance;
-
-  return true;
+  return (pMin < pMax);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1949,7 +1956,9 @@ G4double G4TessellatedSolid::GetMaxZExtent () const
 //
 G4VisExtent G4TessellatedSolid::GetExtent () const
 {
-  return G4VisExtent (fMinExtent.x(), fMaxExtent.x(), fMinExtent.y(), fMaxExtent.y(), fMinExtent.z(), fMaxExtent.z());
+  return G4VisExtent (fMinExtent.x(), fMaxExtent.x(),
+                      fMinExtent.y(), fMaxExtent.y(),
+                      fMinExtent.z(), fMaxExtent.z());
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2091,3 +2100,5 @@ G4int G4TessellatedSolid::AllocatedMemory()
   size += sizeInsides + sizeVoxels;
   return size;
 }
+
+#endif

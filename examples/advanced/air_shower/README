@@ -53,10 +53,16 @@ provided, for building with cmake                                       |
 
 The following environment variables can be set:                         |
 
-setenv ULTRA_VERBOSE
+ 1) GNUmakefile
 
-setenv ULTRA_MIRROR_USE 1 : A specular reflecting surface is used.
-setenv ULTRA_GROUND_USE 1 : A diffusive reflecting surface is used. 
+  setenv ULTRA_VERBOSE
+  setenv ULTRA_MIRROR_USE 1 : A specular reflecting surface is used.
+  setenv ULTRA_GROUND_USE 1 : A diffusive reflecting surface is used. 
+
+ 2) CMakeLists.txt
+
+    set ON/OFF the appropriate option (ULTRA_MIRROR_USE, ULTRA_GROUND_USE)
+
 
 ------------------------------------------------------------------------
 
@@ -80,16 +86,16 @@ the Geant4 application developer manual (Analysis Manager Classes)
 -----------------------------------------------------------------------
 ----> How to run the example.                                           |
 
-- batch mode:
-  $G4WORDIR/bin/Linux-g++/Ultra UltraMacro.mac                          |
-                                                                        |
-- Interative mode:                                                      
-  3) $G4WORDIR/bin/Linux-g++/Ultra                                      |
+  From the directory where the Ultra binary resides :
+
+  ./Ultra UltraMacro.mac   for running in batch mode                   |
+                                                                       |                                             
+  ./Ultra     for running in interative mode.                          |
 
 ------------------------------------------------------------------------
 ----> Simulation output                                                 |
 
-the output is ultra.xml (or ultra.root) 		                | 
+the output is ultra.xml (or ultra.root) 		                            | 
  It contains:
  1)1Dhistogram with the detected photons energy (eV)                    |
  2)1Dhistogram with the number of detected photons per event            |
@@ -104,5 +110,5 @@ to run it :  $G4WORKDIR/bin/Linux-g++/Ultra Visualisation.mac
 for comments and questions: bernardo@lip.pt
 for more info http://www.ge.infn.it/geant4/examples/
 
-last modified:  L. Pandola 28/05/2013
+last modified:  B. Tome 26/11/2016
 created by   :  B. Tome and M.C. Espirito Santo 20/05/2004

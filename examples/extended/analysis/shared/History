@@ -1,4 +1,4 @@
-$Id: History 68015 2013-03-13 13:27:27Z gcosmo $
+$Id: History 98244 2016-07-04 17:21:15Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,4 +14,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-07-16 I. Hrivnacova (analysisShared-V10-02-01)
+- Fixes for Doxygen documentation
+
+01-07-16 I. Hrivnacova (analysisShared-V10-02-00)
+- Coding guidelines (function names)
+
+27-08-15 I. Hrivnacova (analysisShared-V10-01-00)
+- Updated histogram ids in FillHiso (now starting from 0);
+  updated for changed function names in HistoManager classes
+ 
+06-11-14 I. Hrivnacova (analysisShared-V10-00-01)
+- Moved scripts from upper directory in shared
      
+05-11-14 I. Hrivnacova (analysisShared-V10-00-00)
+- Tagged version which will be included in AnaEx0N examples

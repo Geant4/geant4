@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/src/Run.cc
+/// \file Run.cc
 /// \brief Implementation of the Run class
 //
 // $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
@@ -44,7 +44,8 @@
 Run::Run()
 : G4Run(),
   fParticle(0), fEkin(0.),
-  fDecayCount(0), fTimeCount(0), fPrimaryTime(0.)
+  fDecayCount(0), fTimeCount(0), fPrimaryTime(0.),
+  fTimeWindow1(0.), fTimeWindow2(0.)
 {
   fEkinTot[0] = fPbalance[0] = fEventTime[0] = fEvisEvent[0] = 0. ;
   fEkinTot[1] = fPbalance[1] = fEventTime[1] = fEvisEvent[1] = DBL_MAX;
@@ -65,11 +66,11 @@ void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::ParticleCount(G4String name, G4double Ekin)
+void Run::ParticleCount(G4String name, G4double Ekin, G4double meanLife)
 {
   std::map<G4String, ParticleData>::iterator it = fParticleDataMap.find(name);
   if ( it == fParticleDataMap.end()) {
-    fParticleDataMap[name] = ParticleData(1, Ekin, Ekin, Ekin);
+    fParticleDataMap[name] = ParticleData(1, Ekin, Ekin, Ekin, meanLife);
   }
   else {
     ParticleData& data = it->second;
@@ -79,8 +80,38 @@ void Run::ParticleCount(G4String name, G4double Ekin)
     G4double emin = data.fEmin;
     if (Ekin < emin) data.fEmin = Ekin;
     G4double emax = data.fEmax;
-    if (Ekin > emax) data.fEmax = Ekin; 
+    if (Ekin > emax) data.fEmax = Ekin;
+    data.fTmean = meanLife;
   }   
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::SetTimeWindow(G4double t1, G4double t2)
+{
+  fTimeWindow1 = t1;
+  fTimeWindow2 = t2;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::CountInTimeWindow(G4String name, G4bool life1,
+                                           G4bool life2, G4bool decay)
+{
+  std::map<G4String, ActivityData>::iterator it = fActivityMap.find(name);
+  if ( it == fActivityMap.end()) {
+    G4int n1(0), n2(0), nd(0);
+    if(life1) n1 = 1;
+    if(life2) n2 = 1;
+    if(decay) nd = 1;
+    fActivityMap[name] = ActivityData(n1, n2, nd);
+  }
+  else {
+    ActivityData& data = it->second;
+    if(life1) data.fNlife_t1++;
+    if(life2) data.fNlife_t2++;
+    if(decay) data.fNdecay_t1t2++;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -180,7 +211,8 @@ void Run::Merge(const G4Run* run)
        = ParticleData(localData.fCount, 
                       localData.fEmean, 
                       localData.fEmin, 
-                      localData.fEmax);
+                      localData.fEmax,
+                      localData.fTmean);
     }
     else {
       ParticleData& data = fParticleDataMap[name];   
@@ -189,10 +221,34 @@ void Run::Merge(const G4Run* run)
       G4double emin = localData.fEmin;
       if (emin < data.fEmin) data.fEmin = emin;
       G4double emax = localData.fEmax;
-      if (emax > data.fEmax) data.fEmax = emax; 
+      if (emax > data.fEmax) data.fEmax = emax;
+      data.fTmean = localData.fTmean;
     }   
   }
-
+  
+  //activity
+  fTimeWindow1 = localRun->fTimeWindow1;
+  fTimeWindow2 = localRun->fTimeWindow2;
+  
+  std::map<G4String,ActivityData>::const_iterator ita;
+  for (ita = localRun->fActivityMap.begin(); 
+       ita != localRun->fActivityMap.end(); ++ita) {
+    
+    G4String name = ita->first;
+    const ActivityData& localData = ita->second;   
+    if ( fActivityMap.find(name) == fActivityMap.end()) {
+      fActivityMap[name]
+       = ActivityData(localData.fNlife_t1, 
+                      localData.fNlife_t2, 
+                      localData.fNdecay_t1t2);
+    } else {
+      ActivityData& data = fActivityMap[name];   
+      data.fNlife_t1 += localData.fNlife_t1;
+      data.fNlife_t2 += localData.fNlife_t2;
+      data.fNdecay_t1t2 += localData.fNdecay_t1t2;
+    }
+  }
+  
   G4Run::Merge(run); 
 } 
     
@@ -224,13 +280,17 @@ void Run::EndOfRun()
     G4int count    = data.fCount;
     G4double eMean = data.fEmean/count;
     G4double eMin  = data.fEmin;
-    G4double eMax  = data.fEmax;    
+    G4double eMax  = data.fEmax;
+    G4double meanLife = data.fTmean;
          
-    G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
+    G4cout << "  " << std::setw(15) << name << ": " << std::setw(7) << count
            << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
            << "\t( "  << G4BestUnit(eMin, "Energy")
-           << " --> " << G4BestUnit(eMax, "Energy") 
-           << ")" << G4endl;           
+           << " --> " << G4BestUnit(eMax, "Energy") << ")";
+    if (meanLife > 0.)
+      G4cout << "\tmean life = " << G4BestUnit(meanLife, "Time")   << G4endl;
+    else if (meanLife < 0.) G4cout << "\tstable" << G4endl;
+    else G4cout << G4endl;
  }
  
  //energy momentum balance
@@ -294,7 +354,35 @@ void Run::EndOfRun()
             << " Bq/g   ("     << Activity_perUnitOfMass*g/curie
             << " Ci/g) \n" 
             << G4endl;
-            
+
+      
+ //activities in time window
+ //
+ if (fTimeWindow2 > 0.) {
+   G4double dt = fTimeWindow2 - fTimeWindow1;
+   G4cout << "   Activities in time window [t1, t2] = [" 
+          << G4BestUnit(fTimeWindow1, "Time") << ", "
+          << G4BestUnit(fTimeWindow2, "Time") << "]  (delta time = "
+          << G4BestUnit(dt, "Time") << ") : \n" << G4endl;
+
+   std::map<G4String,ActivityData>::iterator ita;               
+   for (ita = fActivityMap.begin(); ita != fActivityMap.end(); ita++) { 
+      G4String name     = ita->first;
+      ActivityData data = ita->second;
+      G4int n1     = data.fNlife_t1;
+      G4int n2     = data.fNlife_t2;
+      G4int ndecay = data.fNdecay_t1t2;
+      G4double actv = ndecay/dt;
+
+      G4cout << "  " << std::setw(15) << name << ": "
+             << "  n(t1) = " << std::setw(7) << n1
+             << "\tn(t2) = " << std::setw(7) << n2
+             << "\t   decays = " << std::setw(7) << ndecay 
+             << "   ---> <actv> = "  << G4BestUnit(actv, "Activity") << "\n";
+   }
+ }
+ G4cout << G4endl;
+ 
  //normalize histograms
  //
  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
@@ -307,7 +395,8 @@ void Run::EndOfRun()
                                                 
  // remove all contents in fParticleDataMap
  // 
- fParticleDataMap.clear(); 
+ fParticleDataMap.clear();
+ fActivityMap.clear();
 
  // restore default precision
  // 

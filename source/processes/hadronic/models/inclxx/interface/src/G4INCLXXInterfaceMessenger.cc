@@ -98,7 +98,7 @@ G4INCLXXInterfaceMessenger::G4INCLXXInterfaceMessenger(G4INCLXXInterfaceStore *a
   // This command allows the user to change the de-excitation model to be used
   // with INCL++
   useAblaCmd = new G4UIcommand((theUIDirectory + "useAbla").data(),this);
-  useAblaCmd->SetGuidance("Use ABLA V3 as de-excitation model after INCL++.");
+  useAblaCmd->SetGuidance("Use ABLA++ as de-excitation model after INCL++.");
   useAblaCmd->AvailableForStates(G4State_Idle);
 }
 

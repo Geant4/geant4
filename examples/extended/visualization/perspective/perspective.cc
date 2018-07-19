@@ -27,7 +27,7 @@
 /// \brief Main program of the visualization/perspective example
 //
 //
-// $Id: perspective.cc 69587 2013-05-08 14:26:03Z gcosmo $
+// $Id: perspective.cc 103931 2017-05-03 13:52:02Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,20 +46,18 @@
 
 int main(int argc,char** argv) {
 
+  G4UIExecutive* ui = new G4UIExecutive(argc,argv);
+
   G4VisManager* visManager = new G4VisExecutive;
+
+  visManager->RegisterRunDurationUserVisAction
+  ("Perspective",
+   new PerspectiveVisAction,
+   G4VisExtent(-100*m,100*m,-100*m,100*m,-100*m,100*m));
+
   visManager->Initialise();
 
-  visManager->SetUserAction
-    (new PerspectiveVisAction,
-     G4VisExtent(-100*m,100*m,-100*m,100*m,-100*m,100*m));
-
-  G4String command = "/control/execute ";
-  G4String fileName = "vis.mac";
-  if (argc > 1) {  // Macro name supplied.
-    fileName = argv[1];
-  }
-  G4UIExecutive* ui = new G4UIExecutive(argc,argv);
-  G4UImanager::GetUIpointer()->ApplyCommand(command+fileName);    
+  G4UImanager::GetUIpointer()->ApplyCommand("/control/execute vis.mac");
   ui->SessionStart();
 
   delete ui;

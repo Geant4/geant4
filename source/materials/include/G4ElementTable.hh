@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElementTable.hh 66811 2013-01-12 16:04:23Z gcosmo $
+// $Id: G4ElementTable.hh 108070 2017-12-19 15:29:00Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -37,6 +37,8 @@
  
 #ifndef G4ELEMENTTABLE_HH
 #define G4ELEMENTTABLE_HH
+
+#include <vector>
 
 class G4Element;
 

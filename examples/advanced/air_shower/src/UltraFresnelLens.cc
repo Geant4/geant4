@@ -102,7 +102,7 @@ G4LogicalVolume *LensMotherLV
 G4VPhysicalVolume *LensMotherPV 
     = new G4PVPlacement(0,LensPosition,"LensMotherPV",LensMotherLV,MotherPV,false,0);
 
-LensMotherLV->SetVisAttributes (G4VisAttributes::Invisible);
+LensMotherLV->SetVisAttributes (G4VisAttributes::GetInvisible());
 
 
 G4Cons *solidGroove 

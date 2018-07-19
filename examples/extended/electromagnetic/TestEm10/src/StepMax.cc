@@ -26,94 +26,73 @@
 /// \file electromagnetic/TestEm10/src/StepMax.cc
 /// \brief Implementation of the StepMax class
 //
-// $Id: StepMax.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: StepMax.cc 98276 2016-07-04 18:00:15Z gcosmo $
 //
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StepMax.hh"
-// #include "StepMaxMessenger.hh"
-// #include "Histo.hh"
+#include "StepMaxMessenger.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4SystemOfUnits.hh"
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName)
- : G4VDiscreteProcess(processName),
-   MaxChargedStep(DBL_MAX),
-   thDensity(0.1*gram/cm3),
-   first(true)
+  : G4VDiscreteProcess(processName),
+    fMaxChargedStep(DBL_MAX),
+    fMessenger(0)
 {
-  //  pMess = new StepMaxMessenger(this);
-  //  histo = Histo::GetPointer();
+  fMessenger = new StepMaxMessenger(this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::~StepMax() 
 { 
-  // delete pMess; 
+  delete fMessenger; 
 }
 
-////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return (  particle.GetPDGCharge() != 0. );
+  return (particle.GetPDGCharge() != 0.);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
+void StepMax::SetMaxStep(G4double step) 
+{
+  fMaxChargedStep = step;
+}
 
-/////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double StepMax::PostStepGetPhysicalInteractionLength(
-                                              const G4Track& aTrack,
-                                                    G4double,
-                                                    G4ForceCondition* condition )
+G4double 
+StepMax::PostStepGetPhysicalInteractionLength(const G4Track&,
+                                              G4double,
+                                              G4ForceCondition* condition)
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
-  ProposedStep = DBL_MAX;
+  fProposedStep = fMaxChargedStep;
 
-  if(first) 
-  {
-    //  checkVolume = histo->CheckVolume();
-    //  gasVolume   = histo->GasVolume();
-    first = false;
-  }
-
-  G4VPhysicalVolume* pv = aTrack.GetVolume();
-
-  if( pv == gasVolume || pv == checkVolume ) ProposedStep = 0.0;
-
-  else if( (aTrack.GetMaterial())->GetDensity() > thDensity && 
-           aTrack.GetPosition().z() < 0.0 )                    ProposedStep = MaxChargedStep;
-
-  return ProposedStep;
+  return fProposedStep;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
   aParticleChange.Initialize(aTrack);
-
-  if ( ProposedStep == 0.0 ) 
-  {
-    aParticleChange.ProposeTrackStatus(fStopAndKill);
-    /*
-    if(1 < (Histo::GetPointer())->GetVerbose()) 
-    {
-      G4cout << "StepMax: " << aTrack.GetDefinition()->GetParticleName()
-             << " with energy = " << aTrack.GetKineticEnergy()/MeV
-             << " MeV is killed in Check volume at " << aTrack.GetPosition()
-             << G4endl;
-    }
-    */
-  }
   return &aParticleChange;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double StepMax::GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+{
+  return 0.;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

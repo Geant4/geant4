@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN04CalorimeterROGeometry.cc 78055 2013-12-03 08:27:48Z gcosmo $
+// $Id: ExN04CalorimeterROGeometry.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 /// \file parallel/ParN04/src/ExN04CalorimeterROGeometry.cc
 /// \brief Implementation of the ExN04CalorimeterROGeometry class
@@ -72,7 +72,7 @@ G4VPhysicalVolume* ExN04CalorimeterROGeometry::Build()
   G4Box *ROWorldBox = new G4Box("ROWorldBox", expHall_x, expHall_y, expHall_z);
   G4LogicalVolume *ROWorldLog = new G4LogicalVolume(ROWorldBox, dummyMat,
                                                     "ROWorldLogical", 0, 0, 0);
-  ROWorldLog->SetVisAttributes(G4VisAttributes::Invisible);
+  ROWorldLog->SetVisAttributes(G4VisAttributes::GetInvisible());
   G4PVPlacement *ROWorldPhys = new G4PVPlacement(0,G4ThreeVector(),
                                                  "ROWorldPhysical",
                                                  ROWorldLog,

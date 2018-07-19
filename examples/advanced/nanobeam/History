@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 103568 2017-04-18 11:07:44Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,9 +9,25 @@ $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
                        Package History file
                        --------------------
 
-28 Oct 2016 - G.Folger
+17 Apr 2017 - S.Incerti - tag nanobeam-V10-03-03
+- changed EM field settings for MT
+
+14 Apr 2017 - S.Incerti - tag nanobeam-V10-03-02
+- changed default.mac macro for MT mode
+
+30 Dec 2016 - S.Incerti - tag nanobeam-V10-03-01
+- cleanup
+
+15 Dec 2016 - S.Incerti - tag nanobeam-V10-03-00
+- added usage of std::floor() in TabulatedField3D.cc
+- updated handling of UI commands
+
+28 Oct 2016 - G.Folger tag nanobeam-V10-02-01
 - Remove direct use of theParticleIterator, use GetParticleTableIterator().
    fix required by clang39 on Linux and MAC
+
+02 Mar 2016 - S.Incerti - tag nanobeam-V10-02-00
+- removed exp
 
 22 Oct 2015 - tag nanobeam-V10-01-00 - S. Incerti
 - upgraded plot.C to ROOT 6

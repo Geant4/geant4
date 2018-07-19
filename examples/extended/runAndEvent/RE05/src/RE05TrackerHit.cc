@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05TrackerHit.cc 69764 2013-05-14 09:59:36Z gcosmo $
+// $Id: RE05TrackerHit.cc 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/src/RE05TrackerHit.cc
 /// \brief Implementation of the RE05TrackerHit class
@@ -40,40 +40,53 @@
 #include "G4AttCheck.hh"
 
 G4ThreadLocal G4Allocator<RE05TrackerHit>* RE05TrackerHitAllocator=0;
+std::map<G4String,G4AttDef> RE05TrackerHit::fAttDefs;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05TrackerHit::RE05TrackerHit()
-{;}
+: G4VHit(),
+  fEdep(0.),fPos()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05TrackerHit::~RE05TrackerHit()
-{;}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05TrackerHit::RE05TrackerHit(const RE05TrackerHit &right)
   : G4VHit()
 {
-  edep = right.edep;
-  pos = right.pos;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const RE05TrackerHit& RE05TrackerHit::operator=(const RE05TrackerHit &right)
 {
-  edep = right.edep;
-  pos = right.pos;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
   return *this;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int RE05TrackerHit::operator==(const RE05TrackerHit &right) const
 {
   return (this==&right) ? 1 : 0;
 }
 
-std::map<G4String,G4AttDef> RE05TrackerHit::fAttDefs;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05TrackerHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager)
   {
-    G4Circle circle(pos);
+    G4Circle circle(fPos);
     circle.SetScreenSize(0.04);
     circle.SetFillStyle(G4Circle::filled);
     G4Colour colour(1.,0.,0.);
@@ -82,6 +95,8 @@ void RE05TrackerHit::Draw()
     pVVisManager->Draw(circle);
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const std::map<G4String,G4AttDef>* RE05TrackerHit::GetAttDefs() const
 {
@@ -93,6 +108,8 @@ const std::map<G4String,G4AttDef>* RE05TrackerHit::GetAttDefs() const
   return &fAttDefs;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 std::vector<G4AttValue>* RE05TrackerHit::CreateAttValues() const
 {
   // Create expendable G4AttsValues for picking...
@@ -103,7 +120,10 @@ std::vector<G4AttValue>* RE05TrackerHit::CreateAttValues() const
   return attValues;
 }
 
-void RE05TrackerHit::Print()
-{;}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void RE05TrackerHit::Print()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

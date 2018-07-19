@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr06/include/HadronElasticPhysicsHP.hh
+/// \file HadronElasticPhysicsHP.cc
 /// \brief Definition of the HadronElasticPhysicsHP class
 //
 // $Id:HadronElasticPhysicsHP.cc 71037 2013-06-10 09:20:54Z gcosmo $
@@ -73,12 +73,12 @@ void HadronElasticPhysicsHP::ConstructProcess()
   process->RegisterMe(model1);
   process->AddDataSet(new G4ParticleHPElasticData());
 
-  if (fThermal) {    
+  if (fThermal) {
+    model1->SetMinEnergy(4*eV);
     G4ParticleHPThermalScattering* model2 = new G4ParticleHPThermalScattering();
     process->RegisterMe(model2);
-    process->AddDataSet(new G4ParticleHPThermalScatteringData());  
-    model1->SetMinEnergy(4*eV);
-  }      
+    process->AddDataSet(new G4ParticleHPThermalScatteringData());
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

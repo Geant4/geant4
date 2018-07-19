@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc 87695 2014-12-17 09:35:24Z gcosmo $
+// $Id: G4OpenGLXmViewer.cc 96733 2016-05-02 11:52:48Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -58,6 +58,10 @@
 #include <sstream>
 
 void G4OpenGLXmViewer::ShowView () {
+
+  glXWaitGL (); //Wait for effects of all previous OpenGL commands to
+                //be propagated before progressing.
+  glFlush ();
 
   G4Xt::getInstance () -> SecondaryLoop ();
 

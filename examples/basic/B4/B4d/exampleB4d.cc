@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleB4d.cc 95508 2016-02-12 13:52:06Z gcosmo $
+// $Id: exampleB4d.cc 100946 2016-11-03 11:28:08Z gcosmo $
 //
 /// \file exampleB4d.cc
 /// \brief Main program of the B4d example
@@ -90,7 +90,7 @@ int main(int argc,char** argv)
   
   // Detect interactive mode (if no macro provided) and define UI session
   //
-  G4UIExecutive* ui = 0;
+  G4UIExecutive* ui = nullptr;
   if ( ! macro.size() ) {
     ui = new G4UIExecutive(argc, argv, session);
   }
@@ -102,34 +102,33 @@ int main(int argc,char** argv)
   // Construct the MT run manager
   //
 #ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
+  auto runManager = new G4MTRunManager;
   if ( nThreads > 0 ) { 
     runManager->SetNumberOfThreads(nThreads);
   }  
 #else
-  G4RunManager * runManager = new G4RunManager;
+  auto runManager = new G4RunManager;
 #endif
 
   // Set mandatory initialization classes
   //
-  B4dDetectorConstruction* detConstruction = new B4dDetectorConstruction();
+  auto detConstruction = new B4dDetectorConstruction();
   runManager->SetUserInitialization(detConstruction);
 
-  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  auto physicsList = new FTFP_BERT;
   runManager->SetUserInitialization(physicsList);
 
-  B4dActionInitialization* actionInitialization
-     = new B4dActionInitialization();
+  auto actionInitialization = new B4dActionInitialization();
   runManager->SetUserInitialization(actionInitialization);
   
   // Initialize visualization
-  G4VisManager* visManager = new G4VisExecutive;
+  auto visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  auto UImanager = G4UImanager::GetUIpointer();
 
   // Process macro or start UI session
   //

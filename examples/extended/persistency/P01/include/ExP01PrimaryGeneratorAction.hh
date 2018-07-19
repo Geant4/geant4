@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01PrimaryGeneratorAction class
 //
 //
-// $Id: ExP01PrimaryGeneratorAction.hh 71397 2013-06-14 15:05:31Z gcosmo $
+// $Id: ExP01PrimaryGeneratorAction.hh 98770 2016-08-09 14:22:25Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,5 +62,4 @@ class ExP01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
 

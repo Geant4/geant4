@@ -1547,7 +1547,7 @@ static GLboolean gl2psLess(GLfloat f1, GLfloat f2)
 
 static void gl2psBuildBspTree(GL2PSbsptree *tree, GL2PSlist *primitives)
 {
-  GL2PSprimitive *prim, *frontprim = NULL, *backprim = NULL;
+  GL2PSprimitive *prim = NULL, *frontprim = NULL, *backprim = NULL;
   GL2PSlist *frontlist, *backlist;
   GLint i, index;
 
@@ -3885,7 +3885,7 @@ static int gl2psPDFgroupListWriteXObjectResources(void)
       gro->imobjno = gl2ps->objects_stack++;
       if(GL_RGBA == p->data.image->format)  /* reserve one object for image mask */
         gl2ps->objects_stack++;
-      offs += fprintf(gl2ps->stream, "/Im%d %d 0 R\n", gro->imno, gro->imobjno);
+      offs += fprintf(gl2ps->stream, "/Im%d %d 0 R\n", gro->imno, gro->imobjno);  // fallthrough
     case GL2PS_TRIANGLE:
       if(gro->trgroupno >=0)
         offs += fprintf(gl2ps->stream, "/TrG%d %d 0 R\n", gro->trgroupno, gro->trgroupobjno);

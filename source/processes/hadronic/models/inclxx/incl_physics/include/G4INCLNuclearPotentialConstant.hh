@@ -65,7 +65,7 @@ namespace G4INCL {
         virtual G4double computePotentialEnergy(const Particle * const p) const;
 
       private:
-        G4double vNucleon, vDelta;
+        G4double vNucleon, vDelta, vSigma, vLambda;
 
         void initialize();
 

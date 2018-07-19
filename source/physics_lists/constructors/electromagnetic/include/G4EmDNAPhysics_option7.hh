@@ -26,8 +26,8 @@
 // S. Incerti (incerti@cenbg.in2p3.fr)
 //
 
-#ifndef G4EmDNAPhysics_option5_h
-#define G4EmDNAPhysics_option5_h 1
+#ifndef G4EmDNAPhysics_option7_h
+#define G4EmDNAPhysics_option7_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
@@ -38,9 +38,7 @@ class G4EmDNAPhysics_option7 : public G4VPhysicsConstructor
 {
 public:
 
-  G4EmDNAPhysics_option7(G4int ver = 1);
-
-  G4EmDNAPhysics_option7(G4int ver, const G4String& name);
+  explicit G4EmDNAPhysics_option7(G4int ver=1, const G4String& name="");
 
   virtual ~G4EmDNAPhysics_option7();
 

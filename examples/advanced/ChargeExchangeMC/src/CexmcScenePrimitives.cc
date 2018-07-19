@@ -68,8 +68,8 @@ namespace
 }
 
 
-CexmcScenePrimitives::CexmcScenePrimitives( CexmcSetup *  setup ) :
-    setup( setup ), markTargetCenter( false ), highlightInnerCrystals( false ),
+CexmcScenePrimitives::CexmcScenePrimitives( CexmcSetup *  setup_ ) :
+    setup( setup_ ), markTargetCenter( false ), highlightInnerCrystals( false ),
     messenger( NULL )
 {
     messenger = new CexmcScenePrimitivesMessenger( this );

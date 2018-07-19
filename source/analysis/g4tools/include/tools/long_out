@@ -12,7 +12,7 @@ namespace tools {
 class long_out : public std::string {
   typedef std::string parent;
 public:
-  long_out(const long& a_value) {
+  long_out(long a_value) {
     char s[512];
     snpf(s,sizeof(s),"%ld",a_value);
     parent::operator+=(s);

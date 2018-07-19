@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProcessType.hh 71045 2013-06-10 09:34:33Z gcosmo $
+// $Id: G4DecayProcessType.hh 106151 2017-09-14 06:43:04Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -47,6 +47,7 @@ enum G4DecayProcessType
   DECAY_PionMakeSpin ,
   DECAY_Radioactive = 210,
   DECAY_Unknown = 211,
+  DECAY_MuAtom  = 221,
   DECAY_External = 231
 };
 #endif

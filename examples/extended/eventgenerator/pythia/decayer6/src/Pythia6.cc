@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Pythia6.cc 72244 2013-07-12 08:49:56Z gcosmo $
+// $Id: Pythia6.cc 100687 2016-10-31 11:20:33Z gcosmo $
 //
 /// \file eventgenerator/pythia/decayer6/src/Pythia6.cc
 /// \brief Implementation of the Pythia6 class
@@ -104,11 +104,19 @@
 # define type_of_call _stdcall
 #endif
 
+// pythia6 functions
 extern "C" {
   int  type_of_call pycomp(int *kf);
   void type_of_call py1ent(int&, int&, double&, double&, double&);
   void*  pythia6_common_address(const char*);
 }
+
+// Direct declaration of pythia6 common blocks
+// extern "C" {
+//   extern Pyjets_t pyjets_;
+//   extern Pydat1_t pydat1_;
+//   extern Pydat3_t pydat3_;
+// }
 
 Pythia6*  Pythia6::fgInstance = 0;
 
@@ -144,10 +152,16 @@ Pythia6::Pythia6()
   
    fParticles = new ParticleVector();
 
-   // initialize common-blocks
+   // Initialize common-blocks 
    fPyjets = (Pyjets_t*) pythia6_common_address("PYJETS");
    fPydat1 = (Pydat1_t*) pythia6_common_address("PYDAT1");
    fPydat3 = (Pydat3_t*) pythia6_common_address("PYDAT3");
+
+   // Alternative way to initialize common-blocks
+   // usind direct declaration of pythia6 common blocks
+   // fPyjets = &pyjets_;
+   // fPydat1 = &pydat1_;
+   // fPydat3 = &pydat3_;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

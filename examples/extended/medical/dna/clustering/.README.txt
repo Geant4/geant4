@@ -1,16 +1,24 @@
 //$Id$
 -----------------------------------------
-///\file ".README.txt"
-///\brief clustering README page
+///\file "medical/dna/clustering/.README.txt"
+///\brief Exampleclustering README page
 
 /*! \page Exampleclustering Example clustering
 
-Authors: Y. Perrot, H. Payno
-
-(a) ysperrot@gmail.com
-(b) henri.payno@gmail.com
-
+\author Y. Perrot, H. Payno \n
+(a) ysperrot@gmail.com      \n
+(b) henri.payno@gmail.com   \n
 Laboratoire de Physique Corpusculaire de Clermont-Ferrand, CNRS/IN2P3 - Clermont University, France
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:  \n
+Phys. Med. 31 (2015) 861-874    \n
+Med. Phys. 37 (2010) 4692-4708
 
 \section clustering_s1 Introduction
   
@@ -34,21 +42,27 @@ Energy deposits in the Target are registered (see SteppingAction.cc) and the clu
   
 To get help, run:
 
+\verbatim
 > ./clustering -h
+\endverbatim
 
 In interactive mode, run:
 
+\verbatim
 > ./clustering -gui
+\endverbatim
 
 In batch mode , run:
 
+\verbatim
 > ./clustering [-mac run.in] [-mt numberofThreads]
+\endverbatim
 
 Two macros are available:
 
-run.in: shoots 1000 protons of 500 keV
+- run.in: shoots 1000 protons of 500 keV
 
-runOneEvent.in: shoots one proton of 500 keV
+- runOneEvent.in: shoots one proton of 500 keV
 
 All UI clustering commands in these macros are described below in section 'More information'.
  	 
@@ -61,41 +75,52 @@ The output results consists in a clusters_output.root file, containing for each 
 - the cluster size distribution
 - the absorbed dose in the Target
 
-\section clustering_s4 More information
+\section clustering_s5 More information
 
 Specific classes are available in this example:
 
-* ClusteringAlgo: contains the core clustering algorithm
+- ClusteringAlgo: contains the core clustering algorithm
 
-* ClusteringAlgoMessenger: defines all UI commands to tune 
+- ClusteringAlgoMessenger: defines all UI commands to tune 
 the clustering algorithm
 
-/clustering/algo/setMinPts: 
+\verbatim
+/clustering/algo/setMinPts
+\endverbatim
   Minimal number of points to create a cluster
 
-/clustering/algo/setSelectionProb: 
+\verbatim
+/clustering/algo/setSelectionProb
+\endverbatim
   Probability to select potential damage according to the geometry
 
-/clustering/algo/setEps: 
+\verbatim
+/clustering/algo/setEps
+\endverbatim
   Maximal distance between points to create a cluster
 
-/clustering/algo/setEmin: 
+\verbatim
+/clustering/algo/setEmin
+\endverbatim
   Energy to have a probability to create a strand break = 0
 
-/clustering/algo/setEmax: 
+\verbatim
+/clustering/algo/setEmax
+\endverbatim
   Energy to have a probability to create a strand break = 1
 allow
-* ClusterSBPoints: defines a cluster of strand break points
 
-* CommandLineParser: defines a parser for command line control
+- ClusterSBPoints: defines a cluster of strand break points
+
+- CommandLineParser: defines a parser for command line control
 as in other Geant4-DNA examples
 
-* RunInitObserver: allows initializations at new run 
+- RunInitObserver: allows initializations at new run 
 (as in pdb4dna and microdosimetry)
 
-* SBPoint: defines a class for point of energy deposition
+- SBPoint: defines a class for point of energy deposition
 
-\section clustering_s4 Acknowledgments
+\section clustering_s6 Acknowledgments
 
 Ziad Francis for discussion about clustering algorithm.
 

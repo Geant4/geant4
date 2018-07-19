@@ -68,7 +68,7 @@ class G4PAIPhotData
 
 public:
 
-  G4PAIPhotData(G4double tmin, G4double tmax, G4int verbose);
+  explicit G4PAIPhotData(G4double tmin, G4double tmax, G4int verbose);
 
   ~G4PAIPhotData();
 
@@ -109,8 +109,8 @@ private:
 			     G4double position) const;
 
   // hide assignment operator 
-  G4PAIPhotData & operator=(const  G4PAIPhotData &right);
-  G4PAIPhotData(const  G4PAIPhotData&);
+  G4PAIPhotData & operator=(const  G4PAIPhotData &right) = delete;
+  G4PAIPhotData(const  G4PAIPhotData&) = delete;
 
   G4int                fTotBin;
   G4double             fLowestKineticEnergy;

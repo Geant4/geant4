@@ -76,6 +76,10 @@
 #include "G4MoleculeDefinition.hh"
 
 class G4Molecule;
+template<>
+G4KDNode<G4Molecule>::~G4KDNode();
+
+class G4Molecule;
 class G4MolecularConfiguration;
 class G4MoleculeDefinition;
 class G4MolecularDissociationChannel;
@@ -295,24 +299,24 @@ private:
 };
 
 #if defined G4EM_ALLOC_EXPORT
-extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator;
+extern G4DLLEXPORT G4Allocator<G4Molecule>*& aMoleculeAllocator();
 #else
-extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator;
+extern G4DLLIMPORT G4Allocator<G4Molecule>*& aMoleculeAllocator();
 #endif
 
 //////////////////////////
 inline void * G4Molecule::operator new(size_t)
 //////////////////////////
 {
-  if (!aMoleculeAllocator) aMoleculeAllocator = new G4Allocator<G4Molecule>;
-  return (void *) aMoleculeAllocator->MallocSingle();
+  if (!aMoleculeAllocator()) aMoleculeAllocator() = new G4Allocator<G4Molecule>;
+  return (void *) aMoleculeAllocator()->MallocSingle();
 }
 
 //////////////////////////
 inline void G4Molecule::operator delete(void * aMolecule)
 //////////////////////////
 {
-  aMoleculeAllocator->FreeSingle((G4Molecule *) aMolecule);
+  aMoleculeAllocator()->FreeSingle((G4Molecule *) aMolecule);
 }
 
 #endif

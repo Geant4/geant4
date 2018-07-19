@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.hh 89493 2015-04-14 09:22:54Z gcosmo $
+// $Id: G4GDMLWriteStructure.hh 104688 2017-06-12 12:16:28Z gcosmo $
 //
 //
 // class G4GDMLWriteStructure
@@ -65,6 +65,10 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
    void AddVolumeAuxiliary(G4GDMLAuxStructType myaux, const G4LogicalVolume* const);
 
    void SetEnergyCutsExport(G4bool);
+   void SetSDExport(G4bool);
+
+   G4int GetMaxExportLevel() const;
+   void SetMaxExportLevel(G4int);
 
  protected:
 
@@ -81,6 +85,7 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
    const G4LogicalSkinSurface* GetSkinSurface(const G4LogicalVolume* const);
    G4bool FindOpticalSurface(const G4SurfaceProperty*);
    void ExportEnergyCuts(const G4LogicalVolume* const);
+   void ExportSD(const G4LogicalVolume* const);
 
  protected:
 
@@ -94,6 +99,9 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
    std::vector<const G4OpticalSurface*> opt_vec;
    G4ReflectionFactory* reflFactory;
    G4bool cexport;  // Flag for optional export of energy cuts per volume
+   G4bool sdexport; // Flag for optional export of SD per volume
+   G4int maxLevel;  // Maximum number of levels to export
+   static G4int levelNo;  // Counter for level being exported
 };
 
 #endif

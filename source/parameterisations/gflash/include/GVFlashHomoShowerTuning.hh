@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GVFlashHomoShowerTuning.hh 68057 2013-03-13 14:46:00Z gcosmo $
+// $Id: GVFlashHomoShowerTuning.hh 108069 2017-12-19 15:27:55Z gcosmo $
 //
 //
 // ---------------------------------------------------------------
@@ -58,6 +58,8 @@
 //---------------------------------------------------------------
 #ifndef GVFlashHomoShowerTuning_hh
 #define GVFlashHomoShowerTuning_hh
+
+#include "G4Types.hh"
 
 class GVFlashHomoShowerTuning
 {

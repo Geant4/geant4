@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TritonGEMChannel.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4TritonGEMChannel.hh 97097 2016-05-25 07:50:31Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept. 2001)
@@ -34,31 +34,24 @@
 #define G4TritonGEMChannel_h 1
 
 #include "G4GEMChannel.hh"
-#include "G4TritonGEMCoulombBarrier.hh"
 #include "G4TritonGEMProbability.hh"
 
 class G4TritonGEMChannel : public G4GEMChannel
 {
 public:
   // only available constructor
-  G4TritonGEMChannel() : G4GEMChannel(3,1,"triton",
-                                      &theEvaporationProbability,
-                                      &theCoulombBarrier)
-  {
-    theEvaporationProbability.SetCoulomBarrier(&theCoulombBarrier);
-  }
+  explicit G4TritonGEMChannel() 
+  : G4GEMChannel(3,1,"t",&theEvaporationProbability) {}
     
   // destructor
   ~G4TritonGEMChannel() {};
 
 private:
-  const G4TritonGEMChannel & operator=(const G4TritonGEMChannel & right);    
-  G4TritonGEMChannel(const G4TritonGEMChannel & right);
-  G4bool operator==(const G4TritonGEMChannel & right) const;
-  G4bool operator!=(const G4TritonGEMChannel & right) const;
+  const G4TritonGEMChannel & operator=(const G4TritonGEMChannel & right) = delete;    
+  G4TritonGEMChannel(const G4TritonGEMChannel & right) = delete;
+  G4bool operator==(const G4TritonGEMChannel & right) const = delete;
+  G4bool operator!=(const G4TritonGEMChannel & right) const = delete;
     
-  // JMQ 190709
-  G4TritonGEMCoulombBarrier theCoulombBarrier;
   G4TritonGEMProbability theEvaporationProbability;
     
 };

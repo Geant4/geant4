@@ -28,6 +28,7 @@
 //---------------------------------------------------------------------------
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -74,9 +75,6 @@ G4FTFPPionBuilder::~G4FTFPPionBuilder()
   if ( theQuasiElastic ) delete theQuasiElastic;
   delete theLund;
 }
-
-void G4FTFPPionBuilder::
-Build(G4HadronElasticProcess * ) {}
 
 void G4FTFPPionBuilder::
 Build(G4PionPlusInelasticProcess * aP)

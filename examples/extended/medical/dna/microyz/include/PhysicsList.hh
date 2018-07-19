@@ -25,11 +25,10 @@
 //
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// shall cite the following Geant4-DNA collaboration publications:
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
-//
-// $Id$
 //
 /// \file PhysicsList.hh
 /// \brief Definition of the PhysicsList class
@@ -38,14 +37,32 @@
 #define PhysicsList_h 1
 
 #include "G4VModularPhysicsList.hh"
+#include "globals.hh"
 
-/// Physics list class
+class PhysicsListMessenger;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysicsList: public G4VModularPhysicsList
 {
   public:
+  
     PhysicsList();
-    virtual ~PhysicsList();
+   ~PhysicsList();
+
+    virtual void ConstructParticle();
+        
+    void AddPhysicsList(const G4String& name);
+    virtual void ConstructProcess();
+
+    void AddTrackingCut();       
+
+  private:       
+  
+    G4String                      fEmName;
+    G4VPhysicsConstructor*        fEmPhysicsList;    
+    
+    PhysicsListMessenger*         fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B2aDetectorConstruction.cc 87359 2014-12-01 16:04:27Z gcosmo $
+// $Id: B2aDetectorConstruction.cc 101658 2016-11-21 09:00:41Z gcosmo $
 //
 /// \file B2aDetectorConstruction.cc
 /// \brief Implementation of the B2aDetectorConstruction class
@@ -34,6 +34,7 @@
 
 #include "G4Material.hh"
 #include "G4NistManager.hh"
+#include "G4SDManager.hh"
 
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -294,6 +295,7 @@ void B2aDetectorConstruction::ConstructSDandField()
   G4String trackerChamberSDname = "B2/TrackerChamberSD";
   B2TrackerSD* aTrackerSD = new B2TrackerSD(trackerChamberSDname,
                                             "TrackerHitsCollection");
+  G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
   // Setting aTrackerSD to all logical volumes with the same name 
   // of "Chamber_LV".
   SetSensitiveDetector("Chamber_LV", aTrackerSD, true);

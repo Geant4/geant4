@@ -27,7 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm0 example
 //
 //
-// $Id: DirectAccess.cc 94302 2015-11-11 12:58:04Z gcosmo $
+// $Id: DirectAccess.cc 108856 2018-03-12 07:41:27Z gcosmo $
 // 
 // ------------------------------------------------------------
 //
@@ -163,7 +163,7 @@ int main() {
   G4VEmModel* brem = new G4SeltzerBergerModel();
   ioni->Initialise(elec, cuts);
   brem->Initialise(elec, cuts);
-  
+
   // compute CrossSection per atom and MeanFreePath
   //
   Emin = 1.01*MeV; Emax = 101.01*MeV; dE = 10*MeV;
@@ -200,7 +200,7 @@ int main() {
   }
   
   G4cout << G4endl;
-  
+
   // initialise proton processes (models)
   //    
   ioni = new G4BetheBlochModel();

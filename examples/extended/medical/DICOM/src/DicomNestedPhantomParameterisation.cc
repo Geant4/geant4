@@ -26,7 +26,7 @@
 /// \file medical/DICOM/src/DicomNestedPhantomParameterisation.cc
 /// \brief Implementation of the DicomNestedPhantomParameterisation class
 //
-// $Id: DicomNestedPhantomParameterisation.cc 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id: DicomNestedPhantomParameterisation.cc 106196 2017-09-19 04:19:33Z gcosmo $
 //
 
 #include "DicomNestedPhantomParameterisation.hh"
@@ -82,7 +82,7 @@ void DicomNestedPhantomParameterisation::ReadColourData()
         G4Colour colour( cred, cgreen, cblue, copacity );
         G4VisAttributes* visAtt = (copacity > 0.) ?
         (new G4VisAttributes( colour )) : 
-        (new G4VisAttributes(G4VisAttributes::Invisible));
+        (new G4VisAttributes(G4VisAttributes::GetInvisible()));
         //visAtt->SetForceSolid(true);
         fColours[mateName] = visAtt;
     }*/
@@ -93,7 +93,12 @@ void DicomNestedPhantomParameterisation::ReadColourData()
     fColours["Default"] = blankAtt;
 
     //----- Read file
+#ifdef DICOM_USE_HEAD
+ G4String colourFile = "DICOM_HEAD/ColourMap.dat";
+#else
     G4String colourFile = "ColourMap.dat";
+#endif
+  
     std::ifstream fin(colourFile.c_str());
     G4int nMate;
     G4String mateName;

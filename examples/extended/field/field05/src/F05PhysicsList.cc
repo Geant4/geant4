@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F05PhysicsList.cc 89451 2015-04-10 08:39:38Z gcosmo $
+// $Id: F05PhysicsList.cc 98064 2016-07-01 16:28:58Z gcosmo $
 //
 /// \file field/field05/src/F05PhysicsList.cc
 /// \brief Implementation of the F05PhysicsList class
@@ -32,15 +32,14 @@
 #include "F05PhysicsList.hh"
 
 #include "G4SpinDecayPhysics.hh"
-
-#include "F05ExtraPhysics.hh"
+#include "G4StepLimiterPhysics.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F05PhysicsList::F05PhysicsList() : G4VModularPhysicsList() 
 {
     RegisterPhysics(new G4SpinDecayPhysics());
-    RegisterPhysics(new F05ExtraPhysics());
+    RegisterPhysics(new G4StepLimiterPhysics());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

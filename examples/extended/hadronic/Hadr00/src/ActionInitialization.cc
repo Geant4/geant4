@@ -39,9 +39,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ActionInitialization::ActionInitialization(const DetectorConstruction* det)
-  : fDetector(det)
+  : fMasterRunAction(0), fDetector(det)
 {
-  masterRunAction = new RunAction(fDetector);
+  fMasterRunAction = new RunAction(fDetector);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +57,7 @@ void ActionInitialization::Build() const
 #ifdef G4MULTITHREADED
   RunAction* run = new RunAction();
 #else
-  RunAction* run = masterRunAction;
+  RunAction* run = fMasterRunAction;
 #endif
 
   SetUserAction(run);
@@ -69,7 +69,7 @@ void ActionInitialization::Build() const
 
 void ActionInitialization::BuildForMaster() const
 {
-  SetUserAction(masterRunAction);
+  SetUserAction(fMasterRunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: 
+// $Id:
 //
 // -------------------------------------------------------------------
 //
@@ -41,7 +41,11 @@
 #include "G4ios.hh"
 #include <iomanip>
 
+// force REFERENCE macros _not_ to be expanded here
+// but wherever the class is used (w/ that .hh use)
+#define   G4PhysicsConstructorRegistry_cc 1
 #include "G4PhysicsConstructorRegistry.hh"
+
 #include "G4VPhysicsConstructor.hh"
 #include "G4PhysicsConstructorFactory.hh"
 
@@ -66,7 +70,7 @@ G4PhysicsConstructorRegistry::~G4PhysicsConstructorRegistry()
 
 void G4PhysicsConstructorRegistry::Clean()
 {
-  size_t n = physConstr.size(); 
+  size_t n = physConstr.size();
   if(n > 0) {
     for (size_t i=0; i<n; ++i) {
       if(physConstr[i]) {
@@ -82,7 +86,7 @@ void G4PhysicsConstructorRegistry::Clean()
 void G4PhysicsConstructorRegistry::Register(G4VPhysicsConstructor* p)
 {
   if(!p) return;
-  size_t n = physConstr.size(); 
+  size_t n = physConstr.size();
   if(n > 0) {
     for (size_t i=0; i<n; ++i) {
       if(physConstr[i] == p) { return; }
@@ -94,7 +98,7 @@ void G4PhysicsConstructorRegistry::Register(G4VPhysicsConstructor* p)
 void G4PhysicsConstructorRegistry::DeRegister(G4VPhysicsConstructor* p)
 {
   if ( !p ) return;
-  size_t n = physConstr.size(); 
+  size_t n = physConstr.size();
   if ( n > 0 ) {
     for (size_t i=0; i<n; ++i) {
       if ( physConstr[i] == p ) {
@@ -119,7 +123,7 @@ G4VPhysicsConstructor* G4PhysicsConstructorRegistry::GetPhysicsConstructor(const
         // we could store the list of called factories in some vector and
         // before returning we can could first check if this physics constructor was already instantiated
         // if yes, we can throw an exception saying that this physics can been already registered
-        
+
       return factories[name]->Instantiate();
     }
   else
@@ -162,3 +166,21 @@ void G4PhysicsConstructorRegistry::PrintAvailablePhysicsConstructors() const
     }
   }
 }
+
+//
+// External reference to phy ctor factories for running with 'static'
+// libraries to pull the references of the declared factories into the
+// same compilation unit as the registry itself.
+// No harm having them in the non-static case.
+//
+
+// Ideally we'd do the G4_REFERENCE_PHYSCONSTR_FACTORY() macros
+// here, but this introduces a circular dependence between the
+// ctor_phys_factory library and the other ctor_phys_* libraries
+// when creating granular libraries.
+// Instead we'll make the references in the location(s) where the
+// G4PhysicsConstructorRegistry is _used_ :
+//    G4
+/*
+#include "G4RegisterPhysicsConstructors.icc"
+*/

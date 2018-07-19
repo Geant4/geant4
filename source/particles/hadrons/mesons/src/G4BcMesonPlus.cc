@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BcMesonPlus.cc 83749 2014-09-12 12:14:59Z gcosmo $
+// $Id: G4BcMesonPlus.cc 105720 2017-08-16 12:38:10Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -64,11 +64,11 @@ G4BcMesonPlus* G4BcMesonPlus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,      6.2756*GeV,  1.460e-9*MeV,   +1.*eplus,
+                 name,      6.2749*GeV,  1.298e-9*MeV,   +1.*eplus,
                     0,              -1,             0,
                     0,               0,             0,
               "meson",               0,             0,         541,
-                false,     0.452e-3*ns,          NULL,
+                false,     0.507e-3*ns,          NULL,
                 false,       "Bc");
   }
   theInstance = reinterpret_cast<G4BcMesonPlus*>(anInstance);

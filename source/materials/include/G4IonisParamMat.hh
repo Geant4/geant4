@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonisParamMat.hh 93568 2015-10-26 14:52:36Z gcosmo $
+// $Id: G4IonisParamMat.hh 106243 2017-09-26 01:56:43Z gcosmo $
 //
 
 // class description
@@ -49,6 +49,7 @@
 #include "globals.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4Threading.hh"
 
 class G4Material;                        // forward declaration
 class G4DensityEffectData;
@@ -59,19 +60,15 @@ class G4IonisParamMat  // with description
 {
 public:
 
-  G4IonisParamMat(G4Material*); 
-  virtual ~G4IonisParamMat();
+  G4IonisParamMat(const G4Material*); 
+  ~G4IonisParamMat();
 
-  //
-  // retrieval methods
-  //
-     
   // parameters for mean energy loss calculation:
   inline
   G4double  GetMeanExcitationEnergy()   const {return fMeanExcitationEnergy;};
 
   void      SetMeanExcitationEnergy(G4double value);
-  G4double  FindMeanExcitationEnergy(const G4String& chFormula);
+  G4double  FindMeanExcitationEnergy(const G4Material*) const;
 
   inline
   G4double  GetLogMeanExcEnergy()       const {return fLogMeanExcEnergy;};
@@ -97,6 +94,13 @@ public:
   G4double  GetX1density()              const {return fX1density;};
   inline
   G4double  GetD0density()              const {return fD0density;};
+
+  // user defined density correction parameterisation
+  void SetDensityEffectParameters(G4double cd, G4double md, G4double ad,
+                                  G4double x0, G4double x1, G4double d0);
+
+  // defined density correction parameterisation via base material
+  void SetDensityEffectParameters(const G4Material* bmat);
     
   // compute density correction as a function of the kinematic variable
   // x = log10(beta*gamma)  
@@ -164,15 +168,15 @@ private:
   void ComputeIonParameters();
 
   // operators
-  G4IonisParamMat& operator=(const G4IonisParamMat&);          
-  G4int operator==(const G4IonisParamMat&) const;
-  G4int operator!=(const G4IonisParamMat&) const;
-  G4IonisParamMat(const G4IonisParamMat&);
+  G4IonisParamMat& operator=(const G4IonisParamMat&) = delete;
+  G4int operator==(const G4IonisParamMat&) const = delete;
+  G4int operator!=(const G4IonisParamMat&) const = delete;
+  G4IonisParamMat(const G4IonisParamMat&) = delete;
 
   //
   // data members
   //
-  G4Material* fMaterial;                    // this material
+  const G4Material* fMaterial;       // this material
 
   // parameters for mean energy loss calculation
   G4double  fMeanExcitationEnergy;          // 
@@ -215,6 +219,9 @@ private:
   // static data created only once
   static G4DensityEffectData* fDensityData;
   G4double twoln10;
+#ifdef G4MULTITHREADED
+  static G4Mutex ionisMutex;
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -222,7 +229,6 @@ private:
 inline G4double G4IonisParamMat::DensityCorrection(G4double x)
 {
   // x = log10(beta*gamma)  
-
   G4double y = 0.0;
   if(x < fX0density) {
     if(fD0density > 0.0) { y = fD0density*G4Exp(twoln10*(x - fX0density)); }

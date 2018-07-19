@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VReadOutGeometry.cc 97466 2016-06-03 09:59:34Z gcosmo $
+// $Id: G4VReadOutGeometry.cc 94771 2015-12-09 09:44:05Z gcosmo $
 //
 
 #include "G4VReadOutGeometry.hh"

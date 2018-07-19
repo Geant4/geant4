@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSPhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
+// $Id: WLSPhysicsList.cc 101181 2016-11-08 15:08:33Z gcosmo $
 //
 /// \file optical/wls/src/WLSPhysicsList.cc
 /// \brief Implementation of the WLSPhysicsList class
@@ -99,19 +99,10 @@ WLSPhysicsList::WLSPhysicsList(G4String physName) : G4VModularPhysicsList()
 
     fAbsorptionOn = true;
     
-    //This looks complex, but it is not:
-    //Get from base-class the pointer of the phsyicsVector
-    //to be used. Remember: G4VModularPhysicsList is now a split class.
-    //Why G4VModularPhysicsList::RegisterPhysics method is not used instead?
-    //If possible we can remove this...
-    fPhysicsVector =
-                GetSubInstanceManager().offset[GetInstanceID()].physicsVector;
-    
-    fPhysicsVector->push_back(new WLSExtraPhysics());
-    fPhysicsVector->push_back(fOpticalPhysics =
-                                        new WLSOpticalPhysics(fAbsorptionOn));
+    RegisterPhysics(new WLSExtraPhysics());
+    RegisterPhysics(fOpticalPhysics = new WLSOpticalPhysics(fAbsorptionOn));
 
-    fPhysicsVector->push_back(new G4RadioactiveDecayPhysics());
+    RegisterPhysics(new G4RadioactiveDecayPhysics());
 
     fStepMaxProcess = new WLSStepMax();
 }

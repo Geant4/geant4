@@ -52,6 +52,11 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fGridCmd->SetParameterName("grid",false);
   fGridCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
+  fCoefCmd = new G4UIcmdWithAnInteger("/setCoef",this);
+  fCoefCmd->SetGuidance("Calculate aberration coefficients.");
+  fCoefCmd->SetParameterName("coef",false);
+  fCoefCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  
   fG1Cmd = new G4UIcmdWithADouble("/quad/setG1",this);
   fG1Cmd->SetGuidance("Set G1.");
   fG1Cmd->SetParameterName("G1",false);
@@ -72,11 +77,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fG4Cmd->SetParameterName("G4",false);
   fG4Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  fUpdateCmd = new G4UIcmdWithoutParameter("/quad/update",this);
-  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
-  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fUpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,11 +87,11 @@ DetectorMessenger::~DetectorMessenger()
   delete fG2Cmd;
   delete fG3Cmd;
   delete fG4Cmd;
-  delete fUpdateCmd;
   delete fQuadDir;  
   delete fModelCmd;
   delete fProfileCmd;
   delete fGridCmd;
+  delete fCoefCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,6 +107,9 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fGridCmd )
    { fDetector->SetGrid(fGridCmd->GetNewIntValue(newValue));}
 
+  if( command == fCoefCmd )
+   { fDetector->SetCoef(fGridCmd->GetNewIntValue(newValue));}
+
   if( command == fG1Cmd )
    { fDetector->SetG1(fG1Cmd->GetNewDoubleValue(newValue));}
    
@@ -119,6 +122,4 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fG4Cmd )
    { fDetector->SetG4(fG1Cmd->GetNewDoubleValue(newValue));}
    
-  if( command == fUpdateCmd )
-   { fDetector->UpdateGeometry();}
 }

@@ -411,6 +411,14 @@ void RanluxEngine::flatArray(const int size, double* vect)
   }
 } 
 
+RanluxEngine::operator double() {
+  return flat();
+}
+
+RanluxEngine::operator float() {
+  return float( flat() );
+}
+
 RanluxEngine::operator unsigned int() {
    return ((unsigned int)(flat() * exponent_bit_32()) & 0xffffffff) |
          (((unsigned int)(float_seed_table[i_lag]*exponent_bit_32())>>16) & 0xff);

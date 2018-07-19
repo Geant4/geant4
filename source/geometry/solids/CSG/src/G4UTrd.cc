@@ -35,7 +35,11 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
+#include "G4AffineTransform.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4BoundingEnvelope.hh"
+
+using namespace CLHEP;
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -45,7 +49,7 @@ G4UTrd::G4UTrd(const G4String& pName,
                      G4double pdx1,  G4double pdx2,
                      G4double pdy1,  G4double pdy2,
                      G4double pdz)
-  : G4USolid(pName, new UTrd(pName, pdx1, pdx2, pdy1, pdy2, pdz))
+  : Base_t(pName, pdx1, pdx2, pdy1, pdy2, pdz)
 {
 }
 
@@ -55,7 +59,7 @@ G4UTrd::G4UTrd(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4UTrd::G4UTrd( __void__& a )
-  : G4USolid(a)
+  : Base_t(a)
 {
 }
 
@@ -72,7 +76,7 @@ G4UTrd::~G4UTrd()
 // Copy constructor
 //
 G4UTrd::G4UTrd(const G4UTrd& rhs)
-  : G4USolid(rhs)
+  : Base_t(rhs)
 {
 }
 
@@ -88,7 +92,7 @@ G4UTrd& G4UTrd::operator = (const G4UTrd& rhs)
 
    // Copy base class data
    //
-   G4USolid::operator=(rhs);
+   Base_t::operator=(rhs);
 
    return *this;
 }
@@ -99,54 +103,54 @@ G4UTrd& G4UTrd::operator = (const G4UTrd& rhs)
 
 G4double G4UTrd::GetXHalfLength1() const
 {
-  return GetShape()->GetXHalfLength1();
+  return dx1();
 }
 G4double G4UTrd::GetXHalfLength2() const
 {
-  return GetShape()->GetXHalfLength2();
+  return dx2();
 }
 G4double G4UTrd::GetYHalfLength1() const
 {
-  return GetShape()->GetYHalfLength1();
+  return dy1();
 }
 G4double G4UTrd::GetYHalfLength2() const
 {
-  return GetShape()->GetYHalfLength2();
+  return dy2();
 }
 G4double G4UTrd::GetZHalfLength()  const
 {
-  return GetShape()->GetZHalfLength();
+  return dz();
 }
 
 void G4UTrd::SetXHalfLength1(G4double val)
 {
-  GetShape()->SetXHalfLength1(val);
+  Base_t::SetXHalfLength1(val);
   fRebuildPolyhedron = true;
 }
 void G4UTrd::SetXHalfLength2(G4double val)
 {
-  GetShape()->SetXHalfLength2(val);
+  Base_t::SetXHalfLength2(val);
   fRebuildPolyhedron = true;
 }
 void G4UTrd::SetYHalfLength1(G4double val)
 {
-  GetShape()->SetYHalfLength1(val);
+  Base_t::SetYHalfLength1(val);
   fRebuildPolyhedron = true;
 }
 void G4UTrd::SetYHalfLength2(G4double val)
 {
-  GetShape()->SetYHalfLength2(val);
+  Base_t::SetYHalfLength2(val);
   fRebuildPolyhedron = true;
 }
 void G4UTrd::SetZHalfLength(G4double val)
 {
-  GetShape()->SetZHalfLength(val);
+  Base_t::SetZHalfLength(val);
   fRebuildPolyhedron = true;
 }
 void G4UTrd::SetAllParameters(G4double pdx1, G4double pdx2,
                               G4double pdy1, G4double pdy2, G4double pdz)
 {
-  GetShape()->SetAllParameters(pdx1, pdx2, pdy1, pdy2, pdz);
+  Base_t::SetAllParameters(pdx1, pdx2, pdy1, pdy2, pdz);
   fRebuildPolyhedron = true;
 }
 
@@ -169,6 +173,116 @@ void G4UTrd::ComputeDimensions(      G4VPVParameterisation* p,
 G4VSolid* G4UTrd::Clone() const
 {
   return new G4UTrd(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4UTrd::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  static G4bool checkBBox = true;
+
+  G4double dx1 = GetXHalfLength1();
+  G4double dx2 = GetXHalfLength2();
+  G4double dy1 = GetYHalfLength1();
+  G4double dy2 = GetYHalfLength2();
+  G4double dz  = GetZHalfLength();
+
+  G4double xmax = std::max(dx1,dx2);
+  G4double ymax = std::max(dy1,dy2);
+  pMin.set(-xmax,-ymax,-dz);
+  pMax.set( xmax, ymax, dz);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4UTrd::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    StreamInfo(G4cout);
+  }
+
+  // Check consistency of bounding boxes
+  //
+  if (checkBBox)
+  {
+    U3Vector vmin, vmax;
+    Extent(vmin,vmax);
+    if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
+        std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
+        std::abs(pMin.z()-vmin.z()) > kCarTolerance ||
+        std::abs(pMax.x()-vmax.x()) > kCarTolerance ||
+        std::abs(pMax.y()-vmax.y()) > kCarTolerance ||
+        std::abs(pMax.z()-vmax.z()) > kCarTolerance)
+    {
+      std::ostringstream message;
+      message << "Inconsistency in bounding boxes for solid: "
+              << GetName() << " !"
+              << "\nBBox min: wrapper = " << pMin << " solid = " << vmin
+              << "\nBBox max: wrapper = " << pMax << " solid = " << vmax;
+      G4Exception("G4UTrd::BoundingLimits()", "GeomMgt0001",
+                  JustWarning, message);
+      checkBBox = false;
+    }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool
+G4UTrd::CalculateExtent(const EAxis pAxis,
+                        const G4VoxelLimits& pVoxelLimit,
+                        const G4AffineTransform& pTransform,
+                              G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
+
+  // Check bounding box (bbox)
+  //
+  BoundingLimits(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
+  {
+    return exist = (pMin < pMax) ? true : false;
+  }
+
+  // Set bounding envelope (benv) and calculate extent
+  //
+  G4double dx1 = GetXHalfLength1();
+  G4double dx2 = GetXHalfLength2();
+  G4double dy1 = GetYHalfLength1();
+  G4double dy2 = GetYHalfLength2();
+  G4double dz  = GetZHalfLength();
+
+  G4ThreeVectorList baseA(4), baseB(4);
+  baseA[0].set(-dx1,-dy1,-dz);
+  baseA[1].set( dx1,-dy1,-dz);
+  baseA[2].set( dx1, dy1,-dz);
+  baseA[3].set(-dx1, dy1,-dz);
+  baseB[0].set(-dx2,-dy2, dz);
+  baseB[1].set( dx2,-dy2, dz);
+  baseB[2].set( dx2, dy2, dz);
+  baseB[3].set(-dx2, dy2, dz);
+
+  std::vector<const G4ThreeVectorList *> polygons(2);
+  polygons[0] = &baseA;
+  polygons[1] = &baseB;
+
+  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return exist;
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -51,8 +51,8 @@
 
 
 CexmcRunManagerMessenger::CexmcRunManagerMessenger(
-                                CexmcRunManager *  runManager ) :
-    runManager( runManager ), setProductionModel( NULL ), setGdmlFile( NULL ),
+                                CexmcRunManager *  runManager_ ) :
+    runManager( runManager_ ), setProductionModel( NULL ), setGdmlFile( NULL ),
     setGuiMacro( NULL ), setEventCountPolicy( NULL ),
     setEventDataVerboseLevel( NULL ),
 #ifdef CEXMC_USE_PERSISTENCY

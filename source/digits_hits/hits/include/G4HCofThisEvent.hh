@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCofThisEvent.hh 81087 2014-05-20 15:44:27Z gcosmo $
+// $Id: G4HCofThisEvent.hh 110274 2018-05-17 14:44:24Z gcosmo $
 //
 
 #ifndef G4HCofThisEvent_h
@@ -89,20 +89,20 @@ class G4HCofThisEvent
 };
 
 #if defined G4DIGI_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4HCofThisEvent> *anHCoTHAllocator_G4MT_TLS_;
+  extern G4DLLEXPORT G4Allocator<G4HCofThisEvent>*& anHCoTHAllocator_G4MT_TLS_();
 #else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4HCofThisEvent> *anHCoTHAllocator_G4MT_TLS_;
+  extern G4DLLIMPORT G4Allocator<G4HCofThisEvent>*& anHCoTHAllocator_G4MT_TLS_();
 #endif
 
 inline void* G4HCofThisEvent::operator new(size_t)
-{  ;;;   if (!anHCoTHAllocator_G4MT_TLS_) anHCoTHAllocator_G4MT_TLS_ = new G4Allocator<G4HCofThisEvent>  ; G4Allocator<G4HCofThisEvent> &anHCoTHAllocator = *anHCoTHAllocator_G4MT_TLS_;  ;;;  
+{  ;;;   if (!anHCoTHAllocator_G4MT_TLS_()) anHCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4HCofThisEvent>  ; G4Allocator<G4HCofThisEvent> &anHCoTHAllocator = *anHCoTHAllocator_G4MT_TLS_();  ;;;
   void* anHCoTH;
   anHCoTH = (void*)anHCoTHAllocator.MallocSingle();
   return anHCoTH;
 }
 
 inline void G4HCofThisEvent::operator delete(void* anHCoTH)
-{  ;;;   if (!anHCoTHAllocator_G4MT_TLS_) anHCoTHAllocator_G4MT_TLS_ = new G4Allocator<G4HCofThisEvent>  ; G4Allocator<G4HCofThisEvent> &anHCoTHAllocator = *anHCoTHAllocator_G4MT_TLS_;  ;;;  
+{  ;;;   if (!anHCoTHAllocator_G4MT_TLS_()) anHCoTHAllocator_G4MT_TLS_() = new G4Allocator<G4HCofThisEvent>  ; G4Allocator<G4HCofThisEvent> &anHCoTHAllocator = *anHCoTHAllocator_G4MT_TLS_();  ;;;
   anHCoTHAllocator.FreeSingle((G4HCofThisEvent*)anHCoTH);
 }
 

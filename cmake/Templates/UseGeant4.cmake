@@ -37,18 +37,41 @@ add_definitions(${Geant4_DEFINITIONS})
 include_directories(AFTER SYSTEM ${Geant4_INCLUDE_DIRS})
 
 #-----------------------------------------------------------------------
-# Because Geant4 is sensitive to the compiler flags, let's set the base
+# Because Geant4 is sensitive to the compiler flags, set the base
 # set here. This reproduces as far as possible the behaviour of the
-# original makefile system. However, we append any existing CMake flags in
-# case the user wishes to override these (at their own risk).
-# Though this may lead to duplication, that should not affect behaviour.
+# original makefile system. Users requiring additional flags must append them
+# *after* inclusion of this file
 #
-set(CMAKE_CXX_FLAGS                "${Geant4_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
-set(CMAKE_CXX_FLAGS_DEBUG          "${Geant4_CXX_FLAGS_DEBUG} ${CMAKE_CXX_FLAGS_DEBUG}")
-set(CMAKE_CXX_FLAGS_MINSIZEREL     "${Geant4_CXX_FLAGS_MINSIZEREL} ${CMAKE_CXX_FLAGS_MINSIZEREL}")
-set(CMAKE_CXX_FLAGS_RELEASE        "${Geant4_CXX_FLAGS_RELEASE} ${CMAKE_CXX_FLAGS_RELEASE}")
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${Geant4_CXX_FLAGS_RELWITHDEBINFO} ${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
-set(CMAKE_EXE_LINKER_FLAGS         "${Geant4_EXE_LINKER_FLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
+set(CMAKE_CXX_FLAGS                "${Geant4_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS_DEBUG          "${Geant4_CXX_FLAGS_DEBUG}")
+set(CMAKE_CXX_FLAGS_MINSIZEREL     "${Geant4_CXX_FLAGS_MINSIZEREL}")
+set(CMAKE_CXX_FLAGS_RELEASE        "${Geant4_CXX_FLAGS_RELEASE}")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${Geant4_CXX_FLAGS_RELWITHDEBINFO}")
+set(CMAKE_EXE_LINKER_FLAGS         "${Geant4_EXE_LINKER_FLAGS}")
+
+#-----------------------------------------------------------------------
+# Update build type information ONLY for single mode build tools, adding
+# type used to build this install if none has been set, but otherwise leaving
+# value alone.
+# NB: this doesn't allow "None" for the build type - would need something
+# more sophisticated using an internal cache variable.
+# Good enough for now!
+#
+if(NOT CMAKE_CONFIGURATION_TYPES)
+  if(NOT CMAKE_BUILD_TYPE)
+    # Default to type used to build this install.
+    set(CMAKE_BUILD_TYPE "${Geant4_BUILD_TYPE}"
+      CACHE STRING "Choose the type of build, options are: None Release MinSizeRel Debug RelWithDebInfo MinSizeRel."
+      FORCE
+      )
+  else()
+    # Force to the cache, but use existing value.
+    set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}"
+      CACHE STRING "Choose the type of build, options are: None Release MinSizeRel Debug RelWithDebInfo MinSizeRel."
+      FORCE
+      )
+  endif()
+endif()
 
 #-----------------------------------------------------------------------
 # Locate ourselves

@@ -17,11 +17,30 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 14th, 2016 G.Folger
+May 8th, 2018 B. Morgan - B03-V10-04-01
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Feb 15th, 2018 A. Howard - B03-V10-04-00
+- Removed parallel geometry setting directly from main - created a data-race
+  in MT mode. Now everything is handled with B03PhysicsList.cc
+
+Mar 8th, 2017 A. Howard - B03-V10-03-01
+- B03PhysicsList - removed obsolete unnececssary instantiation of 
+  de-excitation sub-models
+
+Mar 7th, 2017 A. Howard - B03-V10-03-00
+- Removed unnecessary clear sampling from B03
+
+October 14th, 2016 G.Folger   - B03-V10-02-01
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
   fix required by clang39 on Linux and MAC
 
-Jan 27th, 2016 M. Asai - B03-V10-01-01
+Jul 20th, 2016 I. Hrivnacova
+- Coding guidelines (redundant empty lines)
+
+Jan 27th, 2016 M. Asai - B03-V10-02-00
 - B03PhysicsList.cc : change process order index of G4ParallelWorldProcess
   to 9900 to make sure it is registered prior to G4OpBoundaryProcess.
 

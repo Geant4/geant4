@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109978 2018-05-14 07:13:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,9 +9,20 @@ $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
                       Category History file
                       ---------------------
 
-28.10.2016 - G. Folger
+10.05.2018 - B. Morgan     (DMX-V10-04-00)
+             Include G4Types before use of G4MULTITHREADED. For forward
+             compatibility with move to #defines over -D for G4 preprocessor
+             symbols.
+
+19.11.2016 - A. Dotti       (DMX-V10-02-02)
+	    explicit set of SDs to manager
+
+28.10.2016 - G. Folger      (DMX-V10-02-01)
             Remove direct use of theParticleIterator, use GetParticleTableIterator().
              fix required by clang39 on Linux and MAC
+
+22.06.2016 - V. Ivanchenko (DMX-V10-02-00)
+             DMXPhysicsList: migrated EM physics to G4EmParameters.
 
 02.11.2015 - A. Ribon (DMX-V10-01-01)
              DMXPhysicsList: migrated to ParticleHP.

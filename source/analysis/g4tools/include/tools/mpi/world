@@ -72,6 +72,4 @@ protected:
 
 }}
 
-//exlib_build_use inlib mpi
-
 #endif

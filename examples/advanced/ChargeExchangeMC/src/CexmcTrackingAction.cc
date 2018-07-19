@@ -56,8 +56,8 @@
 
 
 CexmcTrackingAction::CexmcTrackingAction(
-                                    CexmcPhysicsManager *  physicsManager ) :
-    physicsManager( physicsManager ), targetVolume( NULL ),
+                                    CexmcPhysicsManager *  physicsManager_ ) :
+    physicsManager( physicsManager_ ), targetVolume( NULL ),
     outputParticleTrackId( CexmcInvalidTrackId ),
     outputParticleDecayProductCopyNumber( 0 ), incidentParticle( NULL ),
     outputParticle( NULL ), nucleusOutputParticle( NULL )

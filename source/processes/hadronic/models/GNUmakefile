@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 94122 2015-11-06 09:38:11Z gcosmo $
+# $Id: GNUmakefile 106468 2017-10-11 08:11:47Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for hadronic models library. G.Folger 10-Dec-97
 # --------------------------------------------------------------
@@ -22,23 +22,24 @@ SUBDIRS += de_excitation/util
 SUBDIRS += de_excitation/ablation
 SUBDIRS += em_dissociation
 SUBDIRS += fission
+SUBDIRS += gamma_nuclear
 SUBDIRS += im_r_matrix
 SUBDIRS += inclxx/utils
 SUBDIRS += inclxx/incl_physics
 SUBDIRS += inclxx/interface
 SUBDIRS += lend
+SUBDIRS += lepto_nuclear
 SUBDIRS += management
 SUBDIRS += particle_hp
-SUBDIRS += lepto_nuclear
 SUBDIRS += parton_string/diffraction
 SUBDIRS += parton_string/hadronization
 SUBDIRS += parton_string/management
 SUBDIRS += parton_string/qgsm
 SUBDIRS += pre_equilibrium/exciton_model
+SUBDIRS += qmd
+SUBDIRS += quasi_elastic
 SUBDIRS += radioactive_decay
 SUBDIRS += rpg
-SUBDIRS += quasi_elastic
-SUBDIRS += qmd
 SUBDIRS += theo_high_energy
 SUBDIRS += util
 
@@ -47,6 +48,7 @@ SUBLIBS +=  G4hadronic_abrasion
 SUBLIBS +=  G4hadronic_binary
 SUBLIBS +=  G4hadronic_coherent_elastic
 SUBLIBS +=  G4had_fission
+SUBLIBS +=  G4had_gamm_nuclear
 SUBLIBS +=  G4had_im_r_matrix
 SUBLIBS +=  G4hadronic_RPG
 SUBLIBS +=  G4hadronic_qmd

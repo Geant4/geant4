@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/shared/src/RunAction.cc
+/// \file RunAction.cc
 /// \brief Implementation of the RunAction class
 //
 //
-// $Id: RunAction.cc 74272 2013-10-02 14:48:50Z gcosmo $
+// $Id: RunAction.cc 98244 2016-07-04 17:21:15Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,12 +68,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   
   //histograms
   //
-  fHistoManager->book(); 
+  fHistoManager->Book(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::fillPerEvent(G4double EAbs, G4double EGap,
+void RunAction::FillPerEvent(G4double EAbs, G4double EGap,
                                   G4double LAbs, G4double LGap)
 {
   //accumulate statistic
@@ -131,7 +131,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //save histograms
   //
   fHistoManager->PrintStatistic();
-  fHistoManager->save();   
+  fHistoManager->Save();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

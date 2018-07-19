@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserTrackingAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4UserTrackingAction.hh 95247 2016-02-02 09:36:27Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -64,7 +64,7 @@ public: // with description
    virtual ~G4UserTrackingAction();
 
 // Member functions
-   void SetTrackingManagerPointer(G4TrackingManager* pValue);
+   virtual void SetTrackingManagerPointer(G4TrackingManager* pValue);
    virtual void PreUserTrackingAction(const G4Track*){;}
    virtual void PostUserTrackingAction(const G4Track*){;}
 

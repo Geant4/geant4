@@ -49,12 +49,6 @@
 ##########################
 # Visualisation 
 # none 
-
-##########################
-# Definition of the GUI
-# It will work only if the QT GUI interface is active
-#
-/control/execute macro/GUIPersonalisation.mac
 ##########################
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:

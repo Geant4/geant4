@@ -65,7 +65,6 @@ class G4InteractionLawPhysical;
 class G4VBiasingOperator;
 class G4VBiasingOperation;
 class G4ParticleChangeForOccurenceBiasing;
-class G4ParticleChange;
 class G4ParticleChangeForNothing;
 
 class G4BiasingProcessInterface : public G4VProcess {
@@ -210,17 +209,17 @@ private:
   void   ResetForUnbiasedTracking();
   void ReorderBiasingVectorAsGPIL();
 
-  G4Track*                                               fCurrentTrack;
-  G4double                                           fPreviousStepSize;
-  G4double                                         fCurrentMinimumStep;
-  G4double                                             fProposedSafety;
+  G4Track*                                                  fCurrentTrack;
+  G4double                                              fPreviousStepSize;
+  G4double                                            fCurrentMinimumStep;
+  G4double                                                fProposedSafety;
 
-  G4VBiasingOperation*                          fOccurenceBiasingOperation;
-  G4VBiasingOperation*                         fFinalStateBiasingOperation;
-  G4VBiasingOperation*                         fNonPhysicsBiasingOperation;
-  G4VBiasingOperation*                  fPreviousOccurenceBiasingOperation;
-  G4VBiasingOperation*                 fPreviousFinalStateBiasingOperation;
-  G4VBiasingOperation*                 fPreviousNonPhysicsBiasingOperation;
+  G4VBiasingOperation*                         fOccurenceBiasingOperation;
+  G4VBiasingOperation*                        fFinalStateBiasingOperation;
+  G4VBiasingOperation*                        fNonPhysicsBiasingOperation;
+  G4VBiasingOperation*                 fPreviousOccurenceBiasingOperation;
+  G4VBiasingOperation*                fPreviousFinalStateBiasingOperation;
+  G4VBiasingOperation*                fPreviousNonPhysicsBiasingOperation;
 
   G4bool                            fResetWrappedProcessInteractionLength;
 
@@ -245,7 +244,6 @@ private:
   const G4VBiasingInteractionLaw*          fPreviousBiasingInteractionLaw;
   G4InteractionLawPhysical*                       fPhysicalInteractionLaw;
   G4ParticleChangeForOccurenceBiasing*    fOccurenceBiasingParticleChange;
-  G4ParticleChange*                                       fParticleChange; // -- to be changed with a light version for weight only
   G4ParticleChangeForNothing*                        fDummyParticleChange;
   G4bool                                               fFirstLastFlags[8];
   G4int       IdxFirstLast(G4int firstLast, G4int GPILDoIt, G4int physAll) const
@@ -261,29 +259,21 @@ private:
 					 G4double          previousStepSize,
 					 G4ForceCondition*        condition );
   // -- the instance being "firstGPIL" does work shared by other instances:
-  G4bool                                                   fIamFirstGPIL;
+  G4bool                                                    fIamFirstGPIL;
 
 
   // -- MUST be **thread local**:
-  static G4Cache<G4bool>                           fResetInteractionLaws;
-  static G4Cache<G4bool>                                    fCommonStart;
-  static G4Cache<G4bool>                                      fCommonEnd;
-  static G4Cache<G4bool>                              fDoCommonConfigure;
+  static G4Cache<G4bool>                            fResetInteractionLaws;
+  static G4Cache<G4bool>                                     fCommonStart;
+  static G4Cache<G4bool>                                       fCommonEnd;
+  static G4Cache<G4bool>                               fDoCommonConfigure;
 
-  const G4ProcessManager* fProcessManager;
+  const G4ProcessManager*                                 fProcessManager;
 
 
   // -- the data shared among processes attached to a same process manager:
-  G4BiasingProcessSharedData*                         fSharedData;
-  // -- thread local:
-  // -- Map between process managers and shared data. This map is made of
-  // -- pointers of G4BiasingSharedData instead of objects themselves :
-  // -- each process needs to keep a valid pointer of a shared data object
-  // -- but a map of object will make pointers invalid when map is increaded.
-  static G4MapCache< const G4ProcessManager*, 
-		     G4BiasingProcessSharedData* > fSharedDataMap;
+  G4BiasingProcessSharedData*                                 fSharedData;
 
-  
 };
 
 #endif

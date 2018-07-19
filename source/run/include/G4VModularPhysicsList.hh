@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModularPhysicsList.hh 72043 2013-07-04 12:10:30Z gcosmo $
+// $Id: G4VModularPhysicsList.hh 103803 2017-04-27 14:03:05Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -45,6 +45,7 @@
 // History
 // - first version                   12 Nov 2000 by H.Kurashige 
 // - Add  ReplacePhysics             14 Mar 2011 by H.Kurashige
+// - Add Worker cleanup              21 Apr 2017 by A.Dotti
 //
 // ------------------------------------------------------------
 #ifndef G4VModularPhysicsList_h
@@ -66,6 +67,8 @@ class G4VMPLData {
 public:
     void initialize();
     typedef std::vector<G4VPhysicsConstructor*> G4PhysConstVectorData;
+    //TODO: understand this
+    //See: https://jira-geant4.kek.jp/browse/DEV-284
     G4PhysConstVectorData* physicsVector;
 };
 
@@ -101,12 +104,12 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
   public:  // with description
     // This method will be invoked in the Construct() method. 
     // each particle type will be instantiated
-    virtual void ConstructParticle();
+    virtual void ConstructParticle() override;
  
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
-    virtual void ConstructProcess();
+    virtual void ConstructProcess() override;
   
   public: // with description
     // Register Physics Constructor 
@@ -140,9 +143,6 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
    // given verbose level is set to all physics constructors 
 
   protected: // with description
-   // vector of pointers to G4VPhysicsConstructor
-   //typedef std::vector<G4VPhysicsConstructor*> G4PhysConstVector;
-   //static G4ThreadLocal G4PhysConstVector* physicsVector;
    G4int verboseLevel;
     typedef G4VMPLData::G4PhysConstVectorData G4PhysConstVector;
     G4int g4vmplInstanceID;
@@ -150,6 +150,7 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
   public:
     inline G4int GetInstanceID() const;
     static const G4VMPLManager& GetSubInstanceManager();
+    virtual void TerminateWorker() override;
 };
    
 inline  

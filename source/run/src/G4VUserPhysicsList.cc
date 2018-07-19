@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc 102337 2017-01-23 13:20:50Z gcosmo $
+// $Id: G4VUserPhysicsList.cc 110264 2018-05-17 14:29:16Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -85,6 +85,7 @@
 #define G4MT_thePLHelper ((this->subInstanceManager.offset[this->g4vuplInstanceID])._thePLHelper)
 #define fIsPhysicsTableBuilt ((this->subInstanceManager.offset[this->g4vuplInstanceID])._fIsPhysicsTableBuilt)
 #define fDisplayThreshold ((this->subInstanceManager.offset[this->g4vuplInstanceID])._fDisplayThreshold)
+#define theParticleIterator ((this->subInstanceManager.offset[this->g4vuplInstanceID])._theParticleIterator)
 
 // This field helps to use the class G4VUPLManager
 //
@@ -149,6 +150,12 @@ void G4VUserPhysicsList::InitializeWorker()
     G4MT_theMessenger = new G4UserPhysicsListMessenger(this);
 }
 
+void G4VUserPhysicsList::TerminateWorker()
+{
+  RemoveProcessManager();
+  delete G4MT_theMessenger;
+  G4MT_theMessenger = nullptr;
+}
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::~G4VUserPhysicsList()
 {
@@ -237,8 +244,8 @@ void G4VUserPhysicsList::InitializeProcessManager()
   //Request lock for particle table accesses. Some changes are inside
   //this critical region.
 #ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
-  G4ParticleTable::lockCount++;
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex());
+  G4ParticleTable::lockCount()++;
 #endif
   G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
 
@@ -284,7 +291,7 @@ void G4VUserPhysicsList::InitializeProcessManager()
 
   //release lock for particle table accesses.
 #ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex());
 #endif
 //  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
@@ -296,8 +303,8 @@ void G4VUserPhysicsList::RemoveProcessManager()
   //Request lock for particle table accesses. Some changes are inside
   //this critical region.
 #ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
-  G4ParticleTable::lockCount++;
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex());
+  G4ParticleTable::lockCount()++;
 #endif
 //  G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
@@ -305,7 +312,7 @@ void G4VUserPhysicsList::RemoveProcessManager()
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
-    if (particle->GetInstanceID() < G4ParticleDefinitionSubInstanceManager::slavetotalspace)
+    if (particle->GetInstanceID() < G4ParticleDefinitionSubInstanceManager::slavetotalspace())
     {
       if(particle->GetParticleSubType()!="generic" || particle->GetParticleName()=="GenericIon")
       {
@@ -325,7 +332,7 @@ void G4VUserPhysicsList::RemoveProcessManager()
 
   //release lock for particle table accesses.
 #ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex());
 #endif
 //  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 

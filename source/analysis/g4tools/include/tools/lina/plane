@@ -8,21 +8,23 @@
 
 namespace tools {
 
-template <class T>
+template <class VEC3>
 class plane {
+protected:
+  typedef typename VEC3::elem_t T;
 public:
   plane(){}
 
-  plane(const vec3<T>& a_p0,const vec3<T>& a_p1,const vec3<T>& a_p2) {
+  plane(const VEC3& a_p0,const VEC3& a_p1,const VEC3& a_p2) {
     // Construct a plane given 3 points.
     // Orientation is computed by taking (p1 - p0) x (p2 - p0) and
     // pointing the normal in that direction.
   
-    vec3<T> P = a_p1;
+    VEC3 P = a_p1;
     P.subtract(a_p0);
-    vec3<T> P2 = a_p2;
+    VEC3 P2 = a_p2;
     P2.subtract(a_p0);
-    m_normal = P.cross(P2);
+    P.cross(P2,m_normal);
     if(!m_normal.normalize()) {} //throw
     m_distance = 
       m_normal.v0() * a_p0.v0() + 
@@ -30,11 +32,11 @@ public:
       m_normal.v2() * a_p0.v2();
   }
 
-  plane(const vec3<T>& a_normal,const T& a_distance){
+  plane(const VEC3& a_normal,const T& a_distance){
     set(a_normal,a_distance);
   }
 
-  plane(const vec3<T>& a_normal,const vec3<T>& a_point){
+  plane(const VEC3& a_normal,const VEC3& a_point){
     set(a_normal,a_point);
   }
 
@@ -58,11 +60,11 @@ public:
     m_distance += a_distance;
   }
   
-  bool intersect(const line<T>& a_line,vec3<T>& a_intersection) const {
+  bool intersect(const line<VEC3>& a_line,VEC3& a_intersection) const {
     // Intersect line and plane, returning true if there is an intersection
     // false if line is parallel to plane
-    const vec3<T>& pos = a_line.position();
-    const vec3<T>& dir = a_line.direction();
+    const VEC3& pos = a_line.position();
+    const VEC3& dir = a_line.direction();
     T d = m_normal.dot(dir);
     if(d==T()) return false;
     T t = (m_distance - m_normal.dot(pos))/d;
@@ -73,33 +75,33 @@ public:
     return true;
   }
   
-  bool is_in_half_space(const vec3<T>& a_point) const {
+  bool is_in_half_space(const VEC3& a_point) const {
     // Returns true if the given point is within the half-space
     // defined by the plane
     //vec pos = m_normal * m_distance;
-    vec3<T> pos = m_normal;
+    VEC3 pos = m_normal;
     pos.multiply(-m_distance);
     pos.add(a_point);
     return (m_normal.dot(pos) >= T() ? true : false);
   }
   
-  const vec3<T>& normal() const {return m_normal;}
+  const VEC3& normal() const {return m_normal;}
 
   T distance_from_origin() const {return m_distance;}
   
-  T distance(const vec3<T>& a_point) const {
+  T distance(const VEC3& a_point) const {
     // Return the distance from point to plane. Positive distance means
     // the point is in the plane's half space.
     return a_point.dot(m_normal) - m_distance;
   }
 
-  void set(const vec3<T>& a_normal,const T& a_distance){
+  void set(const VEC3& a_normal,const T& a_distance){
     m_normal = a_normal;
     if(!m_normal.normalize()) {} //throw
     m_distance = a_distance;
   }
 
-  void set(const vec3<T>& a_normal,const vec3<T>& a_point){
+  void set(const VEC3& a_normal,const VEC3& a_point){
     // Construct a plane given normal and a point to pass through
     // Orientation is given by the normal vector n.
     m_normal = a_normal;
@@ -111,12 +113,12 @@ public:
   }
 
 public: //iv2sg
-  const vec3<T>& getNormal() const {return m_normal;}
+  const VEC3& getNormal() const {return m_normal;}
 protected:
   // equation of the plane is :
   //  norm[0]*x+norm[1]*y+norm[2]*z = dist
 
-  vec3<T> m_normal; //normalized.
+  VEC3 m_normal; //normalized.
   T m_distance;
 };
 

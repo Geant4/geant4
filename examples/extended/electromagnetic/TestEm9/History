@@ -1,4 +1,4 @@
-$Id:$
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,9 +15,34 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14-10-16 G.Folger
+16-05-18 J.Allison (testem9-V10-04-04)
+- RunAction.cc: Removed vis commands.
+
+01-05-18 J.Allison (testem9-V10-04-03)
+- RunAction.cc: Removed G4VIS_USE and G4UI_USE.
+
+08-04-18 mma (testem9-V10-04-02)
+- TestEm9.cc - correct visualisation
+
+04-04-18 V.Ivant (testem9-V10-04-01)
+- TestEm9.cc - use default random engine, do not use visualisation 
+    in the batch mode
+
+18-03-18 mma (testem9-V10-04-00)
+- testem9.cc : remove G4UI_USE and G4VIS_USE
+
+01-11-16  I. Hrivnacova (testem9-V10-02-03)
+- Coding guidelines (class member names)
+
+14-10-16 G.Folger (testem9-V10-02-02)
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
-  fix required by clang39 on Linux and MAC
+    fix required by clang39 on Linux and MAC
+
+12-06-14 V.Ivant (testem9-V10-02-01)
+- TestEm9.in - add validation of EM physics per region
+
+04-07-16 I. Hrivnacova  (testem9-V10-02-00)
+- Fixes for Doxygen documentation
 
 27-10-15 D.Sawkey (testem9-V10-01-01)
 - Add physics lists G4EmStandardPhysicsGS, SS, WVI

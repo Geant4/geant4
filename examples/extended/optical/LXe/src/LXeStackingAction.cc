@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeStackingAction.cc 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id: LXeStackingAction.cc 109652 2018-05-04 08:49:34Z gcosmo $
 //
 /// \file optical/LXe/src/LXeStackingAction.cc
 /// \brief Implementation of the LXeStackingAction class
 //
 //
 #include "LXeStackingAction.hh"
-#include "LXeUserEventInformation.hh"
+#include "LXeEventAction.hh"
 #include "LXeSteppingAction.hh"
 
 #include "G4ios.hh"
@@ -43,7 +43,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeStackingAction::LXeStackingAction() {}
+LXeStackingAction::LXeStackingAction(LXeEventAction* ea)
+ : fEventAction(ea)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,19 +56,15 @@ LXeStackingAction::~LXeStackingAction() {}
 G4ClassificationOfNewTrack
 LXeStackingAction::ClassifyNewTrack(const G4Track * aTrack){
  
-  LXeUserEventInformation* eventInformation=
-    (LXeUserEventInformation*)G4EventManager::GetEventManager()
-    ->GetConstCurrentEvent()->GetUserInformation();
- 
   //Count what process generated the optical photons
   if(aTrack->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition()){
     // particle is optical photon
     if(aTrack->GetParentID()>0){
       // particle is secondary
       if(aTrack->GetCreatorProcess()->GetProcessName()=="Scintillation")
-        eventInformation->IncPhotonCount_Scint();
+        fEventAction->IncPhotonCount_Scint();
       else if(aTrack->GetCreatorProcess()->GetProcessName()=="Cerenkov")
-        eventInformation->IncPhotonCount_Ceren();
+        fEventAction->IncPhotonCount_Ceren();
     }
   }
   else{

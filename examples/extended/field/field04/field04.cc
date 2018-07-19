@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: field04.cc 78551 2014-01-07 09:45:08Z gcosmo $
+// $Id: field04.cc 110170 2018-05-17 07:28:42Z gcosmo $
 //
 /// \file field/field04/field04.cc
 /// \brief Main program of the field/field04 example
@@ -43,6 +43,8 @@
 #include <unistd.h>
 #endif
 
+#include "G4Types.hh"
+
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
 #else
@@ -59,13 +61,8 @@
 
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 // argc holds the number of arguments (including the name) on the command line
 // -> it is ONE when only the name is  given !!!
@@ -76,6 +73,12 @@
 
 int main(int argc,char** argv)
 {
+  // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // Choose the Random engine
   //
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
@@ -129,14 +132,12 @@ int main(int argc,char** argv)
   //
   //runManager->Initialize();
 
-#ifdef G4VIS_USE
   // Initialize visualization
   //
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
-#endif
 
   // Get the pointer to the User Interface manager
   //
@@ -156,7 +157,7 @@ int main(int argc,char** argv)
      }
   }
 #else  // Simple UI for Windows runs, no possibility of additional arguments
-  if (argc!=1)   // batch mode
+  if (!ui)   // batch mode
   {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
@@ -165,10 +166,6 @@ int main(int argc,char** argv)
 #endif
   else
   {
-     // Define (G)UI terminal for interactive mode
-#ifdef G4UI_USE
-     G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-#ifdef G4VIS_USE
 //     UImanager->ApplyCommand("/control/execute vis.mac");
      G4cout << "At the prompt, issue commands to set up detector & field, then:"
          << G4endl;
@@ -177,12 +174,10 @@ int main(int argc,char** argv)
      G4cout << "/control/execute vis.mac" << G4endl;
      G4cout << "Then: " << G4endl;
      G4cout << "/run/beamOn … etc." << G4endl;
-#endif
      if (ui->IsGUI())
         UImanager->ApplyCommand("/control/execute gui.mac");
      ui->SessionStart();
      delete ui;
-#endif
   }
 
   // Job termination
@@ -190,9 +185,7 @@ int main(int argc,char** argv)
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
 
   return 0;

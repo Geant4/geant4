@@ -29,7 +29,7 @@ Int_t AnalyseChannelingEfficiency(TTree *fTree,Float_t fChannelingMinimum = 35.,
     
     TH1F *hChannelingEfficiency = new TH1F("hChannelingEfficiency","G4Channeling;Horizontal Incoming Angle [#murad];Efficiency [%]",21,-10.5,10.5);
 
-    fTree->Draw("-(angXout-angXin):-angXin>>hChannelingPlot");
+    fTree->Draw("(angXout-angXin):angXin>>hChannelingPlot");
     
     Double_t vNormalizationToAmorphous = 0.965; // Normalization for channeling efficiency, see PRSTAB 11, 063501 (2008)
     

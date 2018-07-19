@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsListMessenger class
 //
 //
-// $Id: PhysicsListMessenger.hh 92047 2015-08-14 07:23:37Z gcosmo $
+// $Id: PhysicsListMessenger.hh 95713 2016-02-22 08:08:38Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -79,7 +79,7 @@ private:
   G4UIcmdWithAString*        fListCmd;
   G4UIcmdWithADoubleAndUnit* fADCCmd;
   G4UIcmdWithADouble*        fNorCmd;
-  G4UIcmdWithADouble*        fSmCmd;
+  G4UIcmdWithADoubleAndUnit* fSmCmd;
     
 };
 

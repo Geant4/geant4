@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //

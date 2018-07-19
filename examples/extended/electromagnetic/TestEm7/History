@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 110821 2018-06-15 12:53:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,11 +15,52 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14-10-16 G.Folger
-- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
-  fix required by clang39 on Linux and MAC
+15-06-18 V.Ivant (testem7-V10-04-03)
+- fixed gcc8.0 warnings
+	 
+04-06-18 mma (testem7-V10-04-02)
+- SteppingAction.cc : Photoelectric, edep at end of step
 
-10-12-15 V.Ivant (testem7-V10-01-02)
+08-04-18 mma (testem7-V10-04-01)
+- testem7.cc : set visualisation in interactive mode only
+
+17-03-18 mma (testem7-V10-04-00)
+- testem7.cc : remove G4UI_USE and G4VIS_USE
+
+07-11-17 V.Ivant (testem7-V10-03-01)
+- fixed macro files
+
+08-05-17 V.Ivant (testem7-V10-03-00)
+- c2_functions - fixed compillation for gcc 7.1
+
+16-11-16 V.Ivant (testem7-V10-02-07)
+- DetectorConstruction - fixed valgrind reported problem
+
+09-11-16 V.Ivant (testem7-V10-02-06)
+- PhysicsList - removed local PhysListEmStandardSS, removed
+    usage of G4EmProcessOptions
+- PhysListEmStandard - use G4EmParameters
+- DetectorConstruction, DetectorMessenger - removed warnings for
+    incorrect calls to kernel, updated UI commands 
+- macro files are updated accordingly
+
+01-11-16  I. Hrivnacova (testem7-V10-02-05)
+- Renamed MaxTally constant in kMaxTally
+
+14-10-16 G.Folger (testem7-V10-02-04)
+- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+04-07-16 I. Hrivnacova  (testem7-V10-02-03)
+- Fixes for Doxygen documentation
+
+04-06-16 V.Ivant (testem7-V10-02-02)
+- c2_functions - fixed nigtly problem
+
+20-05-16 V.Ivant (testem7-V10-02-01)
+- c2_functions - fixed gcc6.1 warnings
+
+10-12-15 V.Ivant (testem7-V10-02-00)
 - H.Burkhardt fixed root macro allowing to work both with root5 and 6
     
 27-10-15 D.Sawkey (testem7-V10-01-01)

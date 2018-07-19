@@ -81,13 +81,16 @@
   G4ParticleHPCapture::~G4ParticleHPCapture()
   {
     //delete [] theCapture;
-     if ( theCapture != NULL ) {
-        for ( std::vector<G4ParticleHPChannel*>::iterator 
-              ite = theCapture->begin() ; ite != theCapture->end() ; ite++ ) {
-           delete *ite;
+    //vector is shared, only master deletes
+    if ( ! G4Threading::IsWorkerThread() ) {
+        if ( theCapture != NULL ) {
+            for ( std::vector<G4ParticleHPChannel*>::iterator
+                ite = theCapture->begin() ; ite != theCapture->end() ; ite++ ) {
+                delete *ite;
+            }
+            theCapture->clear();
         }
-        theCapture->clear();
-     }
+    }
   }
   
   #include "G4ParticleHPThermalBoost.hh"

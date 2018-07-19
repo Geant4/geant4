@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSimManager.hh 81773 2014-06-05 08:35:38Z gcosmo $
+// $Id: G4AdjointSimManager.hh 102435 2017-01-27 08:28:15Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSimManager.hh
@@ -168,17 +168,24 @@ class G4AdjointSimManager: public G4UserRunAction
     G4bool GetDidAdjParticleReachTheExtSource();
     void RegisterAtEndOfAdjointTrack();
     void RegisterAdjointPrimaryWeight(G4double aWeight);
+    void ResetDidOneAdjPartReachExtSourceDuringEvent();
     //to continue here
     inline G4int GetIDOfLastAdjParticleReachingExtSource(){return ID_of_last_particle_that_reach_the_ext_source;};
-    G4ThreeVector GetPositionAtEndOfLastAdjointTrack();
-    G4ThreeVector GetDirectionAtEndOfLastAdjointTrack();
-    G4double GetEkinAtEndOfLastAdjointTrack();
-    G4double GetEkinNucAtEndOfLastAdjointTrack();
-    G4double GetWeightAtEndOfLastAdjointTrack();
-    G4double GetCosthAtEndOfLastAdjointTrack();
+    G4ThreeVector GetPositionAtEndOfLastAdjointTrack(size_t i=0);
+    G4ThreeVector GetDirectionAtEndOfLastAdjointTrack(size_t i=0);
+    G4double GetEkinAtEndOfLastAdjointTrack(size_t i=0);
+    G4double GetEkinNucAtEndOfLastAdjointTrack(size_t i=0);
+    G4double GetWeightAtEndOfLastAdjointTrack(size_t i=0);
+    G4double GetCosthAtEndOfLastAdjointTrack(size_t i=0);
     const G4String& GetFwdParticleNameAtEndOfLastAdjointTrack();
-    G4int GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack();
-    G4int GetFwdParticleIndexAtEndOfLastAdjointTrack();
+    G4int GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(size_t i=0);
+    G4int GetFwdParticleIndexAtEndOfLastAdjointTrack(size_t i=0);
+    size_t GetNbOfAdointTracksReachingTheExternalSurface();
+    void ClearEndOfAdjointTrackInfoVectors();
+    G4ParticleDefinition* GetLastGeneratedFwdPrimaryParticle();
+
+
+
     
     std::vector<G4ParticleDefinition*>* GetListOfPrimaryFwdParticles();
     size_t GetNbOfPrimaryFwdParticles();
@@ -223,6 +230,12 @@ class G4AdjointSimManager: public G4UserRunAction
     //---------------------------
     void SetNbOfPrimaryFwdGammasPerEvent(G4int);
 
+
+    //Set nb of adjoint primaries for reverse splitting
+    //-------------------------------------------------
+    void SetNbAdjointPrimaryGammasPerEvent(G4int);
+    void SetNbAdjointPrimaryElectronsPerEvent(G4int);
+
     //Convergence test
     //-----------------------
    /*
@@ -249,6 +262,7 @@ class G4AdjointSimManager: public G4UserRunAction
   public:
     void SwitchToAdjointSimulationMode();
     void BackToFwdSimulationMode();
+
 
   private: //constructor and destructor
   
@@ -289,6 +303,19 @@ class G4AdjointSimManager: public G4UserRunAction
 
   //adjoint particle information on the external surface
   //----------------------------- 
+    std::vector<G4ThreeVector> last_pos_vec;
+    std::vector<G4ThreeVector> last_direction_vec;
+    std::vector<G4double>  last_ekin_vec;
+    std::vector<G4double>  last_ekin_nuc_vec;
+    std::vector<G4double>  last_cos_th_vec;
+    std::vector<G4double> last_weight_vec;
+    std::vector<G4int> last_fwd_part_PDGEncoding_vec;
+    std::vector<G4int> last_fwd_part_index_vec;
+    std::vector<G4int> ID_of_last_particle_that_reach_the_ext_source_vec;
+
+
+
+
     G4ThreeVector last_pos;
     G4ThreeVector last_direction;
     G4double last_ekin,last_ekin_nuc; //last_ekin_nuc=last_ekin/nuc, nuc is 1 if not a nucleus

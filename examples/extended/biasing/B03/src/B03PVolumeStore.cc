@@ -40,7 +40,6 @@
 #include "B03PVolumeStore.hh"
 #include <sstream>
 
-
 #include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

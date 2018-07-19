@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm0/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 93512 2015-10-23 13:45:07Z gcosmo $
+// $Id: RunAction.cc 107324 2017-11-08 16:35:06Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,11 +37,13 @@
 
 #include "G4Run.hh"
 #include "G4ProcessManager.hh"
+#include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4EmCalculator.hh"
-#include "G4Electron.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 #include <vector>
 
@@ -75,7 +77,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4double energy   = fPrimary->GetParticleGun()->GetParticleEnergy();
  
   // get material
-  G4Material* material = fDetector->GetMaterial();
+  const G4Material* material = fDetector->GetMaterial();
   G4String matName     = material->GetName();
   G4double density     = material->GetDensity();
   G4double radl        = material->GetRadlen();  
@@ -103,8 +105,12 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4double Mass_c2 = particle->GetPDGMass();
   G4double moverM = electron_mass_c2/Mass_c2;
   G4double gamM1 = energy/Mass_c2, gam = gamM1 + 1., gamP1 = gam + 1.;
-  G4double Tmax = 
-            (2*electron_mass_c2*gamM1*gamP1)/(1.+2*gam*moverM+moverM*moverM);
+  G4double Tmax = energy; 
+  if(particle == G4Electron::Electron()) { 
+    Tmax *= 0.5; 
+  } else if(particle != G4Positron::Positron()) { 
+    Tmax = (2*electron_mass_c2*gamM1*gamP1)/(1.+2*gam*moverM+moverM*moverM);
+  }
   G4double range = emCal.GetCSDARange(Tmax,G4Electron::Electron(),material);
   
   G4cout << "\n  Max_energy _transferable  : " << G4BestUnit(Tmax,"Energy")
@@ -127,6 +133,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
        emName.push_back(procName);
        enerCut.push_back(cut);
      }  
+  }
+  
+  // write html documentation, if requested
+  char* htmlDocName = getenv("G4PhysListName");   // file name 
+  char* htmlDocDir  = getenv("G4PhysListDocDir"); // directory
+  if (htmlDocName && htmlDocDir) {
+    G4LossTableManager::Instance()->DumpHtml();
   }
   
   // print list of processes
@@ -169,7 +182,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
       (energy,particle,emName[j],material,enerCut[j]);  
     SigtotComp += Sig;    
     sigma0.push_back(Sig);
-    Sig = emCal.GetCrossSectionPerVolume(energy,particle,emName[j],material);      
+    Sig = emCal.GetCrossSectionPerVolume(energy,particle,emName[j],material);
     Sigtot += Sig;    
     sigma1.push_back(Sig);
     sigma2.push_back(Sig/density);                        
@@ -216,7 +229,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   
   if (charge == 0.) {
     G4cout.precision(prec);
-    G4cout << "\n-------------------------------------------------------------\n"
+    G4cout << "\n-----------------------------------------------------------\n"
            << G4endl;
     return;
   }
@@ -280,15 +293,16 @@ void RunAction::BeginOfRunAction(const G4Run*)
          << "\t" << std::setw(8) << G4BestUnit(range1,"Length")
          << " (" << std::setw(8) << G4BestUnit(range2,"Mass/Surface") << ")";
   
-   //get range from full dedx
-  if(energy < GeV) {
+  //get range from full dedx
+  G4double EmaxTable = G4EmParameters::Instance()->MaxEnergyForCSDARange();
+  if(energy < EmaxTable) {
     G4double Range1 = emCal.GetCSDARange(energy,particle,material);
     G4double Range2 = Range1*density;
      
     G4cout << "\n  range from full dE/dx    : " 
            << "\t" << std::setw(8) << G4BestUnit(Range1,"Length")
            << " (" << std::setw(8) << G4BestUnit(Range2,"Mass/Surface") << ")";
-  }         
+  }
 
   //get transport mean free path (for multiple scattering)
   G4double MSmfp1 = emCal.GetMeanFreePath(energy,particle,"msc",material);

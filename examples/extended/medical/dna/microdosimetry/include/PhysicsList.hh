@@ -56,23 +56,20 @@ public:
   
 protected:
 
-  // these methods construct particles 
   void ConstructBosons();
   void ConstructLeptons();
   void ConstructBarions();
 
-  // these methods construct physics processes and register them
   void ConstructGeneral();
   void ConstructEM();
 
-  // Construct particle and physics
   virtual void ConstructParticle();
   virtual void ConstructProcess();
   
-  // set cuts
   void SetCuts();
     
 private:
+
   G4double fCutForGamma;
   G4double fCutForElectron;
   G4double fCutForPositron;

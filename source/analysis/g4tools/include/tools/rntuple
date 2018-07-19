@@ -37,8 +37,8 @@ public:
   }
 public: //icol
   virtual void* cast(cid a_class) const {
-    if(void* p = cmp_cast<icolumn>(this,a_class)) {return p;}
-    else return 0;
+    if(void* p = cmp_cast<icolumn>(this,a_class)) return p;
+    return 0;
   }
   virtual cid id_cls() const {return id_class();}
 public:

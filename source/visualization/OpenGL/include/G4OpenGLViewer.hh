@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh 87695 2014-12-17 09:35:24Z gcosmo $
+// $Id: G4OpenGLViewer.hh 108131 2018-01-09 13:23:26Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -153,7 +153,7 @@ protected:
   void ResizeGLView();
   void ResizeWindow(unsigned int, unsigned int);
   virtual G4String Pick(GLdouble x, GLdouble y);
-  std::vector < G4OpenGLViewerPickMap* > GetPickDetails(GLdouble x, GLdouble y);
+  const std::vector < G4OpenGLViewerPickMap* > & GetPickDetails(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
   void rotateScene (G4double dx, G4double dy);
   void rotateSceneToggle (G4double dx, G4double dy);
@@ -180,6 +180,8 @@ protected:
   void addExportImageFormat(std::string format);
   // add a image format to the available export format list
   G4bool isGl2psWriting();
+  G4bool isFramebufferReady();
+  
   void g4GluPickMatrix(GLdouble x, GLdouble y, GLdouble width, GLdouble height,
                        GLint viewport[4]);
   // MESA implementation of gluPickMatrix
@@ -207,16 +209,6 @@ protected:
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?
     haloing_enabled;        //is haloing enabled for wireframe?
-  G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
-  G4double fFadeFactor;  // 0: no fade; 1: maximum fade with time within range.
-  G4bool fDisplayHeadTime;  // Display head time (fEndTime) in 2D text.
-  G4double fDisplayHeadTimeX, fDisplayHeadTimeY;  // 2D screen coords.
-  G4double fDisplayHeadTimeSize;  // Screen size.
-  G4double fDisplayHeadTimeRed, fDisplayHeadTimeGreen, fDisplayHeadTimeBlue;
-  G4bool fDisplayLightFront;// Display light front at head time originating at
-  G4double fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ,
-    fDisplayLightFrontT;
-  G4double fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
   G4OpenGL2PSAction* fGL2PSAction;
 
   G4double     fRot_sens;        // Rotation sensibility in degrees

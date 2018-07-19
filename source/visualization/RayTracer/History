@@ -1,4 +1,4 @@
-$Id: History 97700 2016-06-07 10:29:36Z gcosmo $
+$Id: History 110261 2018-05-17 14:24:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,68 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
-2nd May 2016  John Allison (raytracer-V10-01-01)
+17th May 2018  Jonathan Madsen (raytracer-V10-04-01)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+20th March 2018  Makoto Asai (raytracer-V10-04-00)
+- G4RayTrajectory.cc
+  o Use HyperStep of G4ParallelWorldProcess to draw volumes
+    defined in a parallel world.
+  o sources.cmake and GNUmakefile are modified accordingly.
+
+7th May 2017  John Allison (raytracer-V10-03-04)
+- G4RayTracerViewer.cc:
+  o Expanded filename numbering to 4 digits, zero filled, e.g.,
+      g4RayTracer.viewer-1_0000.jpeg
+      g4RayTracer.viewer-1_0001.jpeg
+    etc.
+  o Useful for producing many files for a movie.
+
+5th May 2017  John Allison (raytracer-V10-03-03)
+- Pick up vis attributes of the geometry from the vis scene (G4Scene).
+  Make a map of the vis attributes by touchable path from the G4Scene in
+  G4RayTracerSceneHandler. When a touchable is encountered in the Ray
+  Tracer, pick up the vis attributes from the map instead of from the
+  geometry tree.  For simple use, for example
+    /vis/open RayTracer  # or RayTracerX
+    /vis/drawVolume
+    /vis/viewer/flush
+  the result will be the same as before. But when a user selects a
+  sub-component, for example
+    /vs/drawVolume Shape1
+  the Ray Tracer will now draw only Shape1. The Ray Tracer will also
+  follow changes made in other viewers by copying the view. For example
+  the user can chose a viewing angle and zoom, and change the visibility
+  and colour of volumes, using, say, a Qt viewer (say viewer-0), and see
+  the effect in the Ray Tracer:
+    /vis/open RayTracer  # Gets the same scene as the Qt viewer
+    /vis/viewer/copyViewFrom viewer-0  # Copies camera parameters, or...
+    /vis/viewer/set/all viewer-0       # ...copies all parameters
+    /vis/viewerflush
+
+19th February 2017  John Allison (raytracer-V10-03-02)
+- G4RTXScanner.cc:
+  o Changed back to XA_RGB_BEST_MAP. (I don't know what was going on
+    but it seems OK now.)
+- G4RayTracer.cc and G4RayTracerViewer.cc:
+  o The ray tracer pointer is now passed from G4RayTracer to
+    G4RayTracerViewer so that there is no need to instantiate it there.
+    This works for both sequential and MT modes.  (G4RayTracerViewer.cc
+    no longer has any need for special action for G4MULTITHREADED - it
+    is all done in G4RayTracer.cc.)
+  o Introduced G4RayTracerViewer::Initialise.  Fixes a bug whereby the
+    jpeg for RayTracer was always 600x600.
+
+22nd February 2017  John Allison (raytracer-V10-03-00)
+- G4RTXScanner.cc: Changed XA_RGB_BEST_MAP to XA_RGB_DEFAULT_MAP.
+  (It seems XA_RGB_BEST_MAP no longer available on Mac XQuartz 2.7.11.)
+
+31st August 2016  John Allison (raytracer-V10-02-01)
+- Fix G4Orb and G4Ellipsoid hiding warnings.
+
+2nd May 2016  John Allison (raytracer-V10-02-00)
 - G4RTJpegCoder.cc: Fixed gcc-6.1 warning.
 
 2nd February 2015  Gabriele Cosmo (raytracer-V10-01-00)

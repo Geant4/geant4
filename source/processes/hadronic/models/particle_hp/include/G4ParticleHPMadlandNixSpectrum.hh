@@ -54,6 +54,8 @@ class G4ParticleHPMadlandNixSpectrum : public G4VParticleHPEDis
   G4ParticleHPMadlandNixSpectrum()
   {
     expm1 = G4Exp(-1.);
+    theAvarageKineticPerNucleonForLightFragments = 0.0;
+    theAvarageKineticPerNucleonForHeavyFragments = 0.0;
   }
   ~G4ParticleHPMadlandNixSpectrum()
   {

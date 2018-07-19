@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -37,16 +39,18 @@ Registering model factories...
 You have successfully registered the following model factories.
 Registered model factories:
   generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
   drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
 
 Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
   attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -54,94 +58,101 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
  Using the DMX gun 
 
 Calibration source centre (X,Y,Z):  0, 0, -302.65 mm
 
 User Limits: 
-	 theMaxTimeCuts:     1.79769e+299 s  
-	 theRoomTimeCut:     1 mus
+	 theMaxTimeCuts:     1.79769e+299 s 
+	 theRoomTimeCut:     1 us
 	 theMaxStepSize:     5.82593e+288 pc 
 	 theMinEKine:        250 eV 
 	 minRoomMinEKine:    250 eV 
 
-/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
+/cvmfs/geant4.cern.ch/share/data/G4NDL4.5
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
 DMXPhysicsList::SetCuts:CutLength : 1 um 
 Verbosity Set to: 0
 
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld  1  1  1
+
+### === G4UAtomicDeexcitation::InitialiseForNewRun()
+### ===  Auger cascade flag: 1
+### ===  Ignore cuts flag:   0
+### ===  PIXE model for hadrons: Empirical
+### ===  PIXE model for e+-:     Livermore
+
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
-      Lambda table from 100 eV  to 100 keV, 22 bins per decade, spline: 0
-      LambdaPrime table from 100 keV to 100 GeV in 133 bins 
+      Lambda table from 100 eV  to 100 keV, 20 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 100 GeV in 120 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh :  Emin=        0 eV    Emax=      100 GeV   CullenGenerator
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
-      LambdaPrime table from 200 keV to 100 GeV in 127 bins 
+      LambdaPrime table from 200 keV to 100 GeV in 114 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermorePhElectric :  Emin=        0 eV    Emax=      100 GeV   AngularGenSauterGavrila
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 GeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
-      Lambda table from 100 eV  to 1 MeV, 22 bins per decade, spline: 1
-      LambdaPrime table from 1 MeV to 100 GeV in 111 bins 
+      Lambda table from 100 eV  to 1 MeV, 20 bins per decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 GeV in 100 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-    LivermoreCompton :  Emin=        0 eV    Emax=      100 GeV
+    LivermoreCompton :  Emin=        0 eV    Emax=      100 GeV  FluoActive
 
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 GeV, 24 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
  LivermoreConversion :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 GeV   AngularGenUrban
 
 msc:   for e-    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 198 bins Emin=    100 eV    Emax=    100 GeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 180 bins Emin=    100 eV    Emax=    100 GeV
 
 eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        LowEnergyIoni :  Emin=        0 eV    Emax=      100 GeV   deltaVI
 
 eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            LowEnBrem :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
             eBremLPM :  Emin=        1 GeV   Emax=      100 GeV   DipBustGen
 
 msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 198 bins Emin=    100 eV    Emax=    100 GeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 180 bins Emin=    100 eV    Emax=    100 GeV
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=      100 GeV
 
 eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=      100 GeV   DipBustGen
@@ -153,11 +164,11 @@ annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 198 bins Emin=    100 eV    Emax=    100 GeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 180 bins Emin=    100 eV    Emax=    100 GeV
 
 hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV
@@ -165,8 +176,8 @@ hIoni:   for  proton    SubType= 2
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=      100 GeV
       ===== Limit on energy threshold has been applied 
@@ -177,28 +188,35 @@ msc:   for GenericIon    SubType= 10
             UrbanMsc :  Emin=        0 eV    Emax=      100 GeV
 
 ionIoni:   for  GenericIon    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :  Emin=        0 eV    Emax=      100 GeV   deltaVI
       ===== Limit on energy threshold has been applied 
-
-### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld
-
-### === G4UAtomicDeexcitation::InitialiseForNewRun()
-### ===  PIXE model for hadrons: Empirical
-### ===  PIXE model for e+-:     Livermore
+=======================================================================
+======       Radioactive Decay Physics Parameters              ========
+=======================================================================
+Max life time                                     1e+15 ps
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           0
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Auger cascade enabled                             1
+Check EM cuts disabled for atomic de-excitation   0
+Use Bearden atomic level energies                 0
+=======================================================================
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 198 bins Emin=    100 eV    Emax=    100 GeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 180 bins Emin=    100 eV    Emax=    100 GeV
 
 ionIoni:   for  alpha    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
@@ -208,11 +226,11 @@ ionIoni:   for  alpha    SubType= 2
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 198 bins Emin=    100 eV    Emax=    100 GeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 180 bins Emin=    100 eV    Emax=    100 GeV
 
 hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
@@ -222,11 +240,11 @@ hIoni:   for  anti_proton    SubType= 2
 msc:   for kaon+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 198 bins Emin=    100 eV    Emax=    100 GeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 180 bins Emin=    100 eV    Emax=    100 GeV
 
 hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
@@ -236,11 +254,11 @@ hIoni:   for  kaon+    SubType= 2
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 198 bins Emin=    100 eV    Emax=    100 GeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 180 bins Emin=    100 eV    Emax=    100 GeV
 
 hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
@@ -250,12 +268,12 @@ hIoni:   for  kaon-    SubType= 2
 msc:   for mu+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 198 bins Emin=    100 eV    Emax=    100 GeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 180 bins Emin=    100 eV    Emax=    100 GeV
 
 muIoni:   for  mu+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
@@ -263,15 +281,15 @@ muIoni:   for  mu+    SubType= 2
       ===== Limit on energy threshold has been applied 
 
 muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem :  Emin=        0 eV    Emax=      100 GeV
       ===== Limit on energy threshold has been applied 
 
 muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       Sampling table 9x1001 from 1 GeV to 0.1 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=      100 GeV
@@ -279,12 +297,12 @@ muPairProd:   for  mu+    SubType= 4
 msc:   for mu-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 198 bins Emin=    100 eV    Emax=    100 GeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 180 bins Emin=    100 eV    Emax=    100 GeV
 
 muIoni:   for  mu-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
@@ -292,44 +310,43 @@ muIoni:   for  mu-    SubType= 2
       ===== Limit on energy threshold has been applied 
 
 muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem :  Emin=        0 eV    Emax=      100 GeV
       ===== Limit on energy threshold has been applied 
 
 muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       Sampling table 9x1001 from 1 GeV to 0.1 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=      100 GeV
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
 
 msc:   for pi+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 198 bins Emin=    100 eV    Emax=    100 GeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 180 bins Emin=    100 eV    Emax=    100 GeV
 
 hIoni:   for  pi+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
@@ -337,8 +354,8 @@ hIoni:   for  pi+    SubType= 2
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=      100 GeV
       ===== Limit on energy threshold has been applied 
@@ -346,11 +363,11 @@ hBrems:   for  pi+    SubType= 3
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 198 bins Emin=    100 eV    Emax=    100 GeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 GeV  Table with 180 bins Emin=    100 eV    Emax=    100 GeV
 
 hIoni:   for  pi-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
@@ -358,8 +375,8 @@ hIoni:   for  pi-    SubType= 2
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 GeV in 200 bins
-      Lambda tables from threshold to 100 GeV, 22 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 GeV in 180 bins
+      Lambda tables from threshold to 100 GeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=      100 GeV
       ===== Limit on energy threshold has been applied 
@@ -470,7 +487,6 @@ hBrems:   for  pi-    SubType= 3
         Model:        NeutronHPInelastic: 0 eV  ---> 20 MeV
      Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: nCapture
         Model:          NeutronHPCapture: 0 eV  ---> 20 MeV
@@ -484,7 +500,6 @@ hBrems:   for  pi-    SubType= 3
         Model:              hElasticLHEP: 0 eV  ---> 1 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: inelastic
         Model:                      FTFP: 4 GeV ---> 100 TeV
@@ -501,7 +516,6 @@ hBrems:   for  pi-    SubType= 3
         Model:              hElasticLHEP: 0 eV  ---> 1 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: inelastic
         Model:                      FTFP: 4 GeV ---> 100 TeV
@@ -525,7 +539,6 @@ hBrems:   for  pi-    SubType= 3
         Model:                      FTFP: 4 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 5 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for triton
@@ -541,6 +554,44 @@ hBrems:   for  pi-    SubType= 3
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
+=======================================================================
+======       Pre-compound/De-excitation Physics Parameters     ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
+Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation
+Number of de-excitation channels                    8
+Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
+Level density (1/MeV)                               0.1
+Time limit for long lived isomeres (ns)             1e+12
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
+Electron internal conversion ID                     2
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
+=======================================================================
+=======================================================================
+======       Pre-compound/De-excitation Physics Parameters     ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
+Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation
+Number of de-excitation channels                    8
+Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
+Level density (1/MeV)                               0.1
+Time limit for long lived isomeres (ns)             1e+12
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
+Electron internal conversion ID                     2
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
+=======================================================================
 
 ========= Table of registered couples ==============================
 
@@ -651,10 +702,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 29
-     Total energy in LXe: 60 keV
-     Average light collection time: 17.9502 ns 
-     Number of PMT hits (photoelectron equivalent): 57
+     Number of hits in LXe: 31
+     Total energy in LXe: 21.4628 keV
+     Average light collection time: 26.7181 ns
+     Number of PMT hits (photoelectron equivalent): 19
      Event summary in file gamma_1000.out
 
 ---> End of event: 10
@@ -671,7 +722,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 30
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 61
+     Total energy in LXe: 60 keV
+     Average light collection time: 20.6184 ns
+     Number of PMT hits (photoelectron equivalent): 95
+     Event summary in file gamma_1000.out
 
 ---> End of event: 30
 
@@ -695,7 +751,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 60
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 10
+     Total energy in LXe: 13.6268 keV
+     Average light collection time: 31.5558 ns
+     Number of PMT hits (photoelectron equivalent): 12
+     Event summary in file gamma_1000.out
 
 ---> End of event: 60
 
@@ -711,12 +772,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 80
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 42
-     Total energy in LXe: 60 keV
-     Average light collection time: 18.6674 ns 
-     Number of PMT hits (photoelectron equivalent): 85
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 80
 
@@ -724,12 +780,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 90
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 20
-     Total energy in LXe: 60 keV
-     Average light collection time: 19.5206 ns 
-     Number of PMT hits (photoelectron equivalent): 141
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 90
 
@@ -745,7 +796,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 110
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 65
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 23.5494 ns
+     Number of PMT hits (photoelectron equivalent): 27
+     Event summary in file gamma_1000.out
 
 ---> End of event: 110
 
@@ -753,12 +809,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 120
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 23
-     Total energy in LXe: 60 keV
-     Average light collection time: 17.9193 ns 
-     Number of PMT hits (photoelectron equivalent): 67
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 120
 
@@ -767,10 +818,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 23
+     Number of hits in LXe: 69
      Total energy in LXe: 60 keV
-     Average light collection time: 18.8955 ns 
-     Number of PMT hits (photoelectron equivalent): 59
+     Average light collection time: 24.7716 ns
+     Number of PMT hits (photoelectron equivalent): 61
      Event summary in file gamma_1000.out
 
 ---> End of event: 130
@@ -779,11 +830,11 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 140
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 23
-     Total energy in LXe: 60 keV
-     Average light collection time: 26.441 ns 
-     Number of PMT hits (photoelectron equivalent): 60
+     First hit in LXe: e-
+     Number of hits in LXe: 80
+     Total energy in LXe: 35.0952 keV
+     Average light collection time: 20.9365 ns
+     Number of PMT hits (photoelectron equivalent): 45
      Event summary in file gamma_1000.out
 
 ---> End of event: 140
@@ -792,12 +843,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 150
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 23
-     Total energy in LXe: 60 keV
-     Average light collection time: 19.0052 ns 
-     Number of PMT hits (photoelectron equivalent): 45
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 150
 
@@ -814,10 +860,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 15
+     Number of hits in LXe: 47
      Total energy in LXe: 60 keV
-     Average light collection time: 20.3441 ns 
-     Number of PMT hits (photoelectron equivalent): 68
+     Average light collection time: 18.0918 ns
+     Number of PMT hits (photoelectron equivalent): 177
      Event summary in file gamma_1000.out
 
 ---> End of event: 170
@@ -826,7 +872,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 180
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 16
+     Total energy in LXe: 14.8158 keV
+     Average light collection time: 15.3594 ns
+     Number of PMT hits (photoelectron equivalent): 15
+     Event summary in file gamma_1000.out
 
 ---> End of event: 180
 
@@ -858,7 +909,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 220
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 31
+     Total energy in LXe: 26.4335 keV
+     Average light collection time: 24.9397 ns
+     Number of PMT hits (photoelectron equivalent): 20
+     Event summary in file gamma_1000.out
 
 ---> End of event: 220
 
@@ -866,12 +922,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 230
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 31
-     Total energy in LXe: 60 keV
-     Average light collection time: 20.5801 ns 
-     Number of PMT hits (photoelectron equivalent): 54
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 230
 
@@ -879,12 +930,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 240
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 14
-     Total energy in LXe: 60 keV
-     Average light collection time: 18.8963 ns 
-     Number of PMT hits (photoelectron equivalent): 62
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 240
 
@@ -908,7 +954,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 270
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 26
+     Total energy in LXe: 30.5479 keV
+     Average light collection time: 17.9697 ns
+     Number of PMT hits (photoelectron equivalent): 27
+     Event summary in file gamma_1000.out
 
 ---> End of event: 270
 
@@ -924,7 +975,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 290
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 60
+     Total energy in LXe: 60 keV
+     Average light collection time: 19.4674 ns
+     Number of PMT hits (photoelectron equivalent): 52
+     Event summary in file gamma_1000.out
 
 ---> End of event: 290
 
@@ -940,12 +996,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 310
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 20
-     Total energy in LXe: 60 keV
-     Average light collection time: 24.1207 ns 
-     Number of PMT hits (photoelectron equivalent): 54
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 310
 
@@ -953,12 +1004,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 320
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 32
-     Total energy in LXe: 60 keV
-     Average light collection time: 19.3477 ns 
-     Number of PMT hits (photoelectron equivalent): 49
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 320
 
@@ -990,12 +1036,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 360
 
      Primary Energy: 60 keV
-     First hit in LXe: e-
-     Number of hits in LXe: 34
-     Total energy in LXe: 33.8928 keV
-     Average light collection time: 21.8096 ns 
-     Number of PMT hits (photoelectron equivalent): 30
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 360
 
@@ -1003,7 +1044,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 370
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 71
+     Total energy in LXe: 60 keV
+     Average light collection time: 21.9501 ns
+     Number of PMT hits (photoelectron equivalent): 67
+     Event summary in file gamma_1000.out
 
 ---> End of event: 370
 
@@ -1012,10 +1058,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 19
+     Number of hits in LXe: 54
      Total energy in LXe: 60 keV
-     Average light collection time: 18.9438 ns 
-     Number of PMT hits (photoelectron equivalent): 48
+     Average light collection time: 20.2688 ns
+     Number of PMT hits (photoelectron equivalent): 38
      Event summary in file gamma_1000.out
 
 ---> End of event: 380
@@ -1024,7 +1070,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 390
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 74
+     Total energy in LXe: 60 keV
+     Average light collection time: 17.7531 ns
+     Number of PMT hits (photoelectron equivalent): 62
+     Event summary in file gamma_1000.out
 
 ---> End of event: 390
 
@@ -1056,7 +1107,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 430
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 77
+     Total energy in LXe: 60 keV
+     Average light collection time: 15.9186 ns
+     Number of PMT hits (photoelectron equivalent): 52
+     Event summary in file gamma_1000.out
 
 ---> End of event: 430
 
@@ -1072,7 +1128,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 450
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 63
+     Total energy in LXe: 60 keV
+     Average light collection time: 22.3941 ns
+     Number of PMT hits (photoelectron equivalent): 48
+     Event summary in file gamma_1000.out
 
 ---> End of event: 450
 
@@ -1080,7 +1141,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 460
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 37
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 15.3315 ns
+     Number of PMT hits (photoelectron equivalent): 39
+     Event summary in file gamma_1000.out
 
 ---> End of event: 460
 
@@ -1088,12 +1154,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 470
 
      Primary Energy: 60 keV
-     First hit in LXe: e-
-     Number of hits in LXe: 13
-     Total energy in LXe: 19.6701 keV
-     Average light collection time: 24.9545 ns 
-     Number of PMT hits (photoelectron equivalent): 19
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 470
 
@@ -1110,10 +1171,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 16
+     Number of hits in LXe: 53
      Total energy in LXe: 60 keV
-     Average light collection time: 18.7867 ns 
-     Number of PMT hits (photoelectron equivalent): 101
+     Average light collection time: 20.716 ns
+     Number of PMT hits (photoelectron equivalent): 134
      Event summary in file gamma_1000.out
 
 ---> End of event: 490
@@ -1130,12 +1191,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 510
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 16
-     Total energy in LXe: 60 keV
-     Average light collection time: 24.5047 ns 
-     Number of PMT hits (photoelectron equivalent): 62
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 510
 
@@ -1143,12 +1199,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 520
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 21
-     Total energy in LXe: 60 keV
-     Average light collection time: 18.1987 ns 
-     Number of PMT hits (photoelectron equivalent): 52
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 520
 
@@ -1164,7 +1215,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 540
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 63
+     Total energy in LXe: 60 keV
+     Average light collection time: 19.0108 ns
+     Number of PMT hits (photoelectron equivalent): 48
+     Event summary in file gamma_1000.out
 
 ---> End of event: 540
 
@@ -1172,12 +1228,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 550
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 20
-     Total energy in LXe: 60 keV
-     Average light collection time: 20.3813 ns 
-     Number of PMT hits (photoelectron equivalent): 55
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 550
 
@@ -1193,7 +1244,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 570
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: e-
+     Number of hits in LXe: 110
+     Total energy in LXe: 45.9575 keV
+     Average light collection time: 23.9289 ns
+     Number of PMT hits (photoelectron equivalent): 47
+     Event summary in file gamma_1000.out
 
 ---> End of event: 570
 
@@ -1202,10 +1258,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 10
+     Number of hits in LXe: 60
      Total energy in LXe: 60 keV
-     Average light collection time: 21.6645 ns 
-     Number of PMT hits (photoelectron equivalent): 47
+     Average light collection time: 19.7397 ns
+     Number of PMT hits (photoelectron equivalent): 72
      Event summary in file gamma_1000.out
 
 ---> End of event: 580
@@ -1222,7 +1278,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 600
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 44
+     Total energy in LXe: 60 keV
+     Average light collection time: 22.4053 ns
+     Number of PMT hits (photoelectron equivalent): 67
+     Event summary in file gamma_1000.out
 
 ---> End of event: 600
 
@@ -1230,12 +1291,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 610
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 49
-     Total energy in LXe: 60 keV
-     Average light collection time: 23.7514 ns 
-     Number of PMT hits (photoelectron equivalent): 53
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 610
 
@@ -1244,10 +1300,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 16
+     Number of hits in LXe: 47
      Total energy in LXe: 60 keV
-     Average light collection time: 18.9205 ns 
-     Number of PMT hits (photoelectron equivalent): 154
+     Average light collection time: 19.7082 ns
+     Number of PMT hits (photoelectron equivalent): 54
      Event summary in file gamma_1000.out
 
 ---> End of event: 620
@@ -1264,12 +1320,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 640
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 23
-     Total energy in LXe: 60 keV
-     Average light collection time: 18.2381 ns 
-     Number of PMT hits (photoelectron equivalent): 51
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 640
 
@@ -1301,7 +1352,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 680
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 50
+     Total energy in LXe: 60 keV
+     Average light collection time: 25.8205 ns
+     Number of PMT hits (photoelectron equivalent): 45
+     Event summary in file gamma_1000.out
 
 ---> End of event: 680
 
@@ -1309,7 +1365,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 690
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 52
+     Total energy in LXe: 60 keV
+     Average light collection time: 19.7781 ns
+     Number of PMT hits (photoelectron equivalent): 48
+     Event summary in file gamma_1000.out
 
 ---> End of event: 690
 
@@ -1325,12 +1386,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 710
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 2
-     Total energy in LXe: 2.24311 keV
-     Average light collection time: 12.8971 ns 
-     Number of PMT hits (photoelectron equivalent): 1
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 710
 
@@ -1338,12 +1394,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 720
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 15
-     Total energy in LXe: 60 keV
-     Average light collection time: 20.7652 ns 
-     Number of PMT hits (photoelectron equivalent): 64
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 720
 
@@ -1360,10 +1411,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 15
-     Total energy in LXe: 60 keV
-     Average light collection time: 20.4908 ns 
-     Number of PMT hits (photoelectron equivalent): 91
+     Number of hits in LXe: 22
+     Total energy in LXe: 12.6275 keV
+     Average light collection time: 26.2598 ns
+     Number of PMT hits (photoelectron equivalent): 5
      Event summary in file gamma_1000.out
 
 ---> End of event: 740
@@ -1373,10 +1424,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 22
+     Number of hits in LXe: 61
      Total energy in LXe: 60 keV
-     Average light collection time: 22.6878 ns 
-     Number of PMT hits (photoelectron equivalent): 51
+     Average light collection time: 16.4401 ns
+     Number of PMT hits (photoelectron equivalent): 48
      Event summary in file gamma_1000.out
 
 ---> End of event: 750
@@ -1386,10 +1437,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 24
+     Number of hits in LXe: 67
      Total energy in LXe: 60 keV
-     Average light collection time: 21.0236 ns 
-     Number of PMT hits (photoelectron equivalent): 63
+     Average light collection time: 19.9245 ns
+     Number of PMT hits (photoelectron equivalent): 71
      Event summary in file gamma_1000.out
 
 ---> End of event: 760
@@ -1414,11 +1465,11 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 790
 
      Primary Energy: 60 keV
-     First hit in LXe: e-
-     Number of hits in LXe: 23
-     Total energy in LXe: 26.2454 keV
-     Average light collection time: 31.2021 ns 
-     Number of PMT hits (photoelectron equivalent): 19
+     First hit in LXe: gamma
+     Number of hits in LXe: 63
+     Total energy in LXe: 37.6657 keV
+     Average light collection time: 24.6836 ns
+     Number of PMT hits (photoelectron equivalent): 33
      Event summary in file gamma_1000.out
 
 ---> End of event: 790
@@ -1428,10 +1479,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 12
+     Number of hits in LXe: 70
      Total energy in LXe: 60 keV
-     Average light collection time: 17.5756 ns 
-     Number of PMT hits (photoelectron equivalent): 57
+     Average light collection time: 17.4435 ns
+     Number of PMT hits (photoelectron equivalent): 53
      Event summary in file gamma_1000.out
 
 ---> End of event: 800
@@ -1441,10 +1492,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 28
+     Number of hits in LXe: 63
      Total energy in LXe: 60 keV
-     Average light collection time: 18.8274 ns 
-     Number of PMT hits (photoelectron equivalent): 75
+     Average light collection time: 22.5962 ns
+     Number of PMT hits (photoelectron equivalent): 60
      Event summary in file gamma_1000.out
 
 ---> End of event: 810
@@ -1453,7 +1504,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 820
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 64
+     Total energy in LXe: 60 keV
+     Average light collection time: 20.8597 ns
+     Number of PMT hits (photoelectron equivalent): 70
+     Event summary in file gamma_1000.out
 
 ---> End of event: 820
 
@@ -1461,12 +1517,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 830
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 47
-     Total energy in LXe: 60 keV
-     Average light collection time: 27.3344 ns 
-     Number of PMT hits (photoelectron equivalent): 67
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 830
 
@@ -1474,7 +1525,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 840
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 13
+     Total energy in LXe: 7.66094 keV
+     Average light collection time: 8.67327 ns
+     Number of PMT hits (photoelectron equivalent): 4
+     Event summary in file gamma_1000.out
 
 ---> End of event: 840
 
@@ -1482,12 +1538,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 850
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 18
-     Total energy in LXe: 60 keV
-     Average light collection time: 20.2659 ns 
-     Number of PMT hits (photoelectron equivalent): 45
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 850
 
@@ -1495,12 +1546,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 860
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 51
-     Total energy in LXe: 60 keV
-     Average light collection time: 21.2981 ns 
-     Number of PMT hits (photoelectron equivalent): 57
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 860
 
@@ -1508,7 +1554,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 870
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 66
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 22.2762 ns
+     Number of PMT hits (photoelectron equivalent): 91
+     Event summary in file gamma_1000.out
 
 ---> End of event: 870
 
@@ -1516,12 +1567,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 880
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 18
-     Total energy in LXe: 60 keV
-     Average light collection time: 23.8309 ns 
-     Number of PMT hits (photoelectron equivalent): 66
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 880
 
@@ -1537,12 +1583,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 900
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 20
-     Total energy in LXe: 60 keV
-     Average light collection time: 17.8907 ns 
-     Number of PMT hits (photoelectron equivalent): 56
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 900
 
@@ -1559,10 +1600,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 25
+     Number of hits in LXe: 51
      Total energy in LXe: 60 keV
-     Average light collection time: 18.9128 ns 
-     Number of PMT hits (photoelectron equivalent): 60
+     Average light collection time: 19.8799 ns
+     Number of PMT hits (photoelectron equivalent): 71
      Event summary in file gamma_1000.out
 
 ---> End of event: 920
@@ -1580,10 +1621,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 24
+     Number of hits in LXe: 54
      Total energy in LXe: 60 keV
-     Average light collection time: 17.0767 ns 
-     Number of PMT hits (photoelectron equivalent): 54
+     Average light collection time: 24.182 ns
+     Number of PMT hits (photoelectron equivalent): 64
      Event summary in file gamma_1000.out
 
 ---> End of event: 940
@@ -1592,12 +1633,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 950
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 21
-     Total energy in LXe: 60 keV
-     Average light collection time: 21.7371 ns 
-     Number of PMT hits (photoelectron equivalent): 89
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 950
 
@@ -1613,12 +1649,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 970
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 20
-     Total energy in LXe: 60 keV
-     Average light collection time: 22.748 ns 
-     Number of PMT hits (photoelectron equivalent): 64
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 970
 
@@ -1634,12 +1665,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 990
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 26
-     Total energy in LXe: 60 keV
-     Average light collection time: 20.4052 ns 
-     Number of PMT hits (photoelectron equivalent): 62
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 990
 

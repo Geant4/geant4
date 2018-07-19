@@ -4,16 +4,7 @@ include(CMakeDependentOption)
 set(name ChargeExchangeMC)
 project(${name})
 
-
-find_package(Geant4 REQUIRED)
-
-# the project requires Geant4 GDML support!
-find_package(gdml QUIET)
-if(NOT gdml_FOUND)
-  message(STATUS "G4 Examples: GDML package not found. --> ChargeExchangeMC example disabled"
-)  
-  return()
-endif()
+find_package(Geant4 REQUIRED gdml)
 
 # if CEXMC_USE_TCSH is 'yes' then tcsh session support will be built
 option(CEXMC_USE_TCSH
@@ -48,7 +39,7 @@ set(EXTRA_LIBRARIES )
 # written; requires boost::serialize headers and library
 option(CEXMC_USE_PERSISTENCY
     "Build ${name} with data persistency support
-    (requires Boost Serialization library)" ON)
+    (requires Boost Serialization library)" OFF)
 if(CEXMC_USE_PERSISTENCY)
     find_package(Boost COMPONENTS serialization)
     if(Boost_SERIALIZATION_FOUND)
@@ -121,7 +112,7 @@ if(CEXMC_USE_HISTOGRAMING)
     find_package(ROOT QUIET)
     if(ROOT_FOUND)
         add_definitions(-DCEXMC_USE_ROOT)
-        include_directories(${ROOT_INCLUDE_DIR})
+        include_directories(${ROOT_INCLUDE_DIRS})
         list(APPEND EXTRA_LIBRARIES ${ROOT_LIBRARIES})
         message(STATUS
             "Libraries ${ROOT_LIBRARIES} were added to the linkage list")
@@ -143,8 +134,8 @@ if(CEXMC_USE_ROOTQT AND ROOT_FOUND)
         NO_DEFAULT_PATH)
     if(ROOTQT_LIBRARY)
         add_definitions(-DCEXMC_USE_ROOTQT)
-        list(APPEND EXTRA_LIBRARIES -lGQt)
-        message(STATUS "Library -lGQt was added to the linkage list")
+        list(APPEND EXTRA_LIBRARIES ${ROOTQT_LIBRARY})
+        message(STATUS "ROOT Qt library was added to the linkage list")
     else()
         message(WARNING
             "Could not find ROOT Qt library, skip GUI histograming support")
@@ -162,7 +153,7 @@ if(CEXMC_USE_GENBOD)
     if(CERNLIB_CONFIG_EXE)
         execute_process(
             COMMAND ${CERNLIB_CONFIG_EXE} geant321 phtools packlib kernlib
-            OUTPUT_VARIABLE CERNLIB_LIBRARIES 
+            OUTPUT_VARIABLE CERNLIB_LIBRARIES
             OUTPUT_STRIP_TRAILING_WHITESPACE)
         add_definitions(-DCEXMC_USE_GENBOD)
         list(APPEND EXTRA_LIBRARIES ${CERNLIB_LIBRARIES})
@@ -174,9 +165,6 @@ if(CEXMC_USE_GENBOD)
     endif()
 endif()
 
-# all classes in this project have same member names as their formal constructor
-# parameters, so -Wno-shadow option is mandatory to prevent multiple warnings!
-add_definitions(-Wno-shadow)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
@@ -184,5 +172,25 @@ file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 add_executable(${name} ${name}.cc ${sources})
 target_link_libraries(${name} ${Geant4_LIBRARIES} ${EXTRA_LIBRARIES})
 
+#----------------------------------------------------------------------------
+# Copy all scripts to the build directory, i.e. the directory in which we
+# build ChargeExchangeMC. This is so that we can run the executable
+# directly because it relies on these scripts being in the current working
+# directory.
+
+set(chargeexchangemc_SCRIPTS
+    batch.mac replay.mac init.mac preinit.mac lht.gdml)
+
+foreach(_script ${chargeexchangemc_SCRIPTS})
+  configure_file(
+    ${PROJECT_SOURCE_DIR}/${_script}
+    ${PROJECT_BINARY_DIR}/${_script}
+    COPYONLY
+    )
+endforeach()
+
+#----------------------------------------------------------------------------
+# Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
+#
 install(TARGETS ${name} DESTINATION bin)
 

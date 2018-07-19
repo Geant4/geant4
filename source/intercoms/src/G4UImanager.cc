@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc 94366 2015-11-13 08:15:49Z gcosmo $
+// $Id: G4UImanager.cc 110270 2018-05-17 14:38:26Z gcosmo $
 //
 //
 // ---------------------------------------------------------------------
@@ -49,27 +49,42 @@
 #include <sstream>
 #include <fstream>
 
-G4ThreadLocal G4UImanager * G4UImanager::fUImanager = 0;
-G4ThreadLocal G4bool G4UImanager::fUImanagerHasBeenKilled = false;
-G4UImanager * G4UImanager::fMasterUImanager = 0;
+G4UImanager*& G4UImanager::fUImanager()
+{
+    G4ThreadLocalStatic G4UImanager* _instance = nullptr;
+    return _instance;
+}
+
+G4bool& G4UImanager::fUImanagerHasBeenKilled()
+{
+    G4ThreadLocalStatic bool _instance = false;
+    return _instance;
+}
+
+G4UImanager*& G4UImanager::fMasterUImanager()
+{
+    static G4UImanager* _instance = nullptr;
+    return _instance;
+}
+G4bool G4UImanager::doublePrecisionStr = false;
 
 G4int G4UImanager::igThreadID = -1;
 
 G4UImanager * G4UImanager::GetUIpointer()
 {
-  if(!fUImanager)
+  if(!fUImanager())
   {
-    if(!fUImanagerHasBeenKilled)
+    if(!fUImanagerHasBeenKilled())
     {
-      fUImanager = new G4UImanager;
-      fUImanager->CreateMessenger();
+      fUImanager() = new G4UImanager;
+      fUImanager()->CreateMessenger();
     }
   }
-  return fUImanager;
+  return fUImanager();
 }
 
 G4UImanager * G4UImanager::GetMasterUIpointer()
-{ return fMasterUImanager; }
+{ return fMasterUImanager(); }
 
 G4UImanager::G4UImanager()
   : G4VStateDependent(true),
@@ -119,8 +134,8 @@ G4UImanager::~G4UImanager()
   delete UImessenger;
   delete treeTop;
   delete aliasList;
-  fUImanagerHasBeenKilled = true;
-  fUImanager = NULL;
+  fUImanagerHasBeenKilled() = true;
+  fUImanager() = NULL;
   if(commandStack)
   {
     commandStack->clear();
@@ -166,6 +181,11 @@ G4int G4UImanager::operator==(const G4UImanager &right) const
 { return (this==&right); }
 G4int G4UImanager::operator!=(const G4UImanager &right) const
 { return (this!=&right); }
+
+void G4UImanager::UseDoublePrecisionStr(G4bool val)
+{ doublePrecisionStr = val; }
+G4bool G4UImanager::DoublePrecisionStr()
+{ return doublePrecisionStr; }
 
 G4String G4UImanager::GetCurrentValues(const char * aCommand)
 {
@@ -268,8 +288,8 @@ G4int parameterNumber, G4bool reGet)
 void G4UImanager::AddNewCommand(G4UIcommand * newCommand)
 {
   treeTop->AddNewCommand( newCommand );
-  if(fMasterUImanager!=0&&G4Threading::G4GetThreadId()==0)
-  { fMasterUImanager->AddWorkerCommand(newCommand); }
+  if(fMasterUImanager()!=0&&G4Threading::G4GetThreadId()==0)
+  { fMasterUImanager()->AddWorkerCommand(newCommand); }
 }
 
 void G4UImanager::AddWorkerCommand(G4UIcommand * newCommand)
@@ -280,8 +300,8 @@ void G4UImanager::AddWorkerCommand(G4UIcommand * newCommand)
 void G4UImanager::RemoveCommand(G4UIcommand * aCommand)
 {
   treeTop->RemoveCommand( aCommand );
-  if(fMasterUImanager!=0&&G4Threading::G4GetThreadId()==0)
-  { fMasterUImanager->RemoveWorkerCommand(aCommand); }
+  if(fMasterUImanager()!=0&&G4Threading::G4GetThreadId()==0)
+  { fMasterUImanager()->RemoveWorkerCommand(aCommand); }
 }
 
 void G4UImanager::RemoveWorkerCommand(G4UIcommand * aCommand)
@@ -520,7 +540,22 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
   { histVec.erase(histVec.begin()); }
   histVec.push_back(aCommand);
 
-  return targetCommand->DoIt( commandParameter );
+  targetCommand->ResetFailure();
+  G4int commandFailureCode = targetCommand->DoIt( commandParameter );
+  if(commandFailureCode==0)
+  {
+    G4int additionalFailureCode = targetCommand->IfCommandFailed();
+    if(additionalFailureCode > 0)
+    {
+      G4ExceptionDescription msg;
+      msg << targetCommand->GetFailureDescription() << "\n"
+          << "Error code : " << additionalFailureCode;
+      G4Exception("G4UImanager::ApplyCommand","UIMAN0123",
+                   JustWarning,msg);
+      commandFailureCode += additionalFailureCode;
+    }
+  }
+  return commandFailureCode;
 }
 
 void G4UImanager::StoreHistory(const char* fileName)

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: DetectorMessenger.hh 101250 2016-11-10 08:54:02Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,28 +49,29 @@ class G4UIcmdWithoutParameter;
 
 class DetectorMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
+  DetectorMessenger(DetectorConstruction* );
+  virtual ~DetectorMessenger();
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
   
-    DetectorConstruction*      fDetector;
+  DetectorConstruction*      fDetector;
     
-    G4UIdirectory*             fTestemDir;
-    G4UIdirectory*             fDetDir;    
-    G4UIcmdWithAString*        fMaterCmd;
-    G4UIcmdWithADoubleAndUnit* fSizeXCmd;
-    G4UIcmdWithADoubleAndUnit* fSizeYZCmd;    
-    G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
+  G4UIdirectory*             fTestemDir;
+  G4UIdirectory*             fDetDir;    
+  G4UIcmdWithAString*        fMaterCmd;
+  G4UIcmdWithAString*        fWMaterCmd;
+  G4UIcmdWithADoubleAndUnit* fSizeXCmd;
+  G4UIcmdWithADoubleAndUnit* fSizeYZCmd;    
+  G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
     
-    G4UIcmdWithAnInteger*      fTalNbCmd;    
-    G4UIcommand*               fTalDefCmd;
-    G4UIcommand*               fTalPosiCmd;                
-    G4UIcmdWithoutParameter*   fUpdateCmd;
+  G4UIcmdWithAnInteger*      fTalNbCmd;    
+  G4UIcommand*               fTalDefCmd;
+  G4UIcommand*               fTalPosiCmd;                
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -25,11 +25,10 @@
 //
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// shall cite the following Geant4-DNA collaboration publications:
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
-//
-// $Id: EventAction.cc 75214 2013-10-29 16:04:42Z gcosmo $
 //
 /// \file EventAction.cc
 /// \brief Implementation of the EventAction class
@@ -56,35 +55,7 @@ void EventAction::BeginOfEventAction(const G4Event*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::EndOfEventAction(const G4Event* event)
-{
-  // get number of stored trajectories
-
-  // G4TrajectoryContainer* trajectoryContainer = 
-  //  event->GetTrajectoryContainer();
-  // G4int n_trajectories = 0;
-  
-  // if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-
-  // periodic printing
-
-  G4int eventID = event->GetEventID();
-  
-  //if ( eventID < 100 || eventID % 100 == 0)
-   {
-    G4cout << ">>> Event: " << eventID  << G4endl;
-    
-    /*
-     if ( trajectoryContainer ) {
-      G4cout << "    " << n_trajectories
-             << " trajectories stored in this event." << G4endl;
-    }
-    */
-    
-    G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
-    G4cout << "    "  
-           << hc->GetSize() << " hits stored in this event" << G4endl;
-  }
-}  
+void EventAction::EndOfEventAction(const G4Event*)
+{}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

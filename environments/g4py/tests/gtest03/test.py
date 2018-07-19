@@ -92,9 +92,5 @@ ConstructGeom()
 # ------------------------------------------------------------------
 gRunManager.Initialize()
 
-# visualization
-gControlExecute("vis.mac")
-
 # beamOn
-#gRunManager.BeamOn(3)
-
+gRunManager.BeamOn(10)

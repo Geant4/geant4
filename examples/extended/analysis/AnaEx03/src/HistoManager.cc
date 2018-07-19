@@ -26,7 +26,7 @@
 /// \file analysis/AnaEx03/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 92373 2015-08-31 08:51:33Z gcosmo $
+// $Id: HistoManager.cc 105492 2017-07-28 09:00:58Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +52,7 @@ HistoManager::HistoManager()
   }           
       
   // histograms
-  for (G4int k=0; k<MaxHisto; k++) fHisto[k] = 0;
+  for (G4int k=0; k<kMaxHisto; k++) fHisto[k] = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,7 +113,7 @@ void HistoManager::Book()
   // id = 3
   fHisto[3] = hf->createHistogram1D("LGap", "LGap: trackL in gap", 100, 0., 50*cm);
 
-  for ( G4int i=0; i<MaxHisto; ++i ) {
+  for ( G4int i=0; i<kMaxHisto; ++i ) {
     if (! fHisto[i]) G4cout << "\n can't create histo " << i << G4endl;
   }  
 
@@ -156,7 +156,7 @@ void HistoManager::Save()
 
 void HistoManager::FillHisto(G4int ih, G4double xbin, G4double weight)
 {
-  if (ih >= MaxHisto) {
+  if (ih >= kMaxHisto) {
     G4cout << "---> warning from HistoManager::FillHisto() : histo " << ih
            << " does not exist. (xbin=" << xbin << " weight=" << weight << ")"
            << G4endl;
@@ -170,7 +170,7 @@ void HistoManager::FillHisto(G4int ih, G4double xbin, G4double weight)
 
 void HistoManager::Normalize(G4int ih, G4double fac)
 {
-  if (ih >= MaxHisto) {
+  if (ih >= kMaxHisto) {
     G4cout << "---> warning from HistoManager::Normalize() : histo " << ih
            << " does not exist. (fac=" << fac << ")" << G4endl;
     return;
@@ -199,7 +199,7 @@ void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
 void HistoManager::PrintStatistic()
 {
   G4cout << "\n ----> print histograms statistic \n" << G4endl;
-  for ( G4int i=0; i<MaxHisto; ++i ) {
+  for ( G4int i=0; i<kMaxHisto; ++i ) {
     AIDA::IHistogram1D* h1 = fHisto[i];
     G4String title = h1->title();  
     // extract name as first 4 characters from title, as aida seems not to keep
@@ -218,5 +218,3 @@ void HistoManager::PrintStatistic()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc 94337 2015-11-12 10:02:04Z gcosmo $
+// $Id: G4RunMessenger.cc 95634 2016-02-17 08:05:21Z gcosmo $
 //
 
 #include "G4RunMessenger.hh"
@@ -324,6 +324,12 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   randEvtCmd->SetRange("flag>=0 && flag<3");
   randEvtCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
+  procUICmds = new G4UIcmdWithoutParameter("/run/workersProcessCmds",this);
+  procUICmds->SetToBeBroadcasted(false);
+  procUICmds->SetGuidance("Force workers to process current stack of UI commands.");
+  procUICmds->SetGuidance("This commands is meaningful only in MT mode.");
+  procUICmds->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
+
 }
 
 G4RunMessenger::~G4RunMessenger()
@@ -334,6 +340,7 @@ G4RunMessenger::~G4RunMessenger()
   delete printProgCmd;
   delete nThreadsCmd;
   delete maxThreadsCmd;
+  delete pinAffinityCmd;
   delete evModCmd;
   delete optCmd;
   delete dumpRegCmd;
@@ -348,6 +355,7 @@ G4RunMessenger::~G4RunMessenger()
   delete physCmd;
   delete randEvtCmd;
   delete constScoreCmd;
+  delete procUICmds;
   
   delete seedCmd;
   delete savingFlagCmd;
@@ -356,7 +364,7 @@ G4RunMessenger::~G4RunMessenger()
   delete restoreRandCmd;
   delete randomDirectory;
   delete saveEachEventCmd;
-    
+ 
   delete randDirCmd;
   delete runDirectory;
 
@@ -526,6 +534,24 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->ConstructScoringWorlds(); }
   else if( command==restoreRandCmdMT)
   { runManager->RestoreRndmEachEvent(restoreRandCmdMT->GetNewBoolValue(newValue)); }
+  else if ( command==procUICmds)
+    {
+      G4RunManager::RMType rmType = runManager->GetRunManagerType();
+      if( rmType==G4RunManager::masterRM ) {
+          auto rm = dynamic_cast<G4MTRunManager*>(runManager);
+          if ( rm != nullptr ) {
+              rm->RequestWorkersProcessCommandsStack();
+          }
+          else { G4Exception("G4RunManager::ApplyNewCommand","Run0128",FatalException,"/run/workersProcessCmds command issued on a non-G4MTRunManager class instance."); }
+      } else if ( rmType==G4RunManager::sequentialRM ) {
+          G4cout<<"*** /run/workersProcessCmds command is issued in sequential mode."
+                <<"\nCommand is ignored."<<G4endl;
+      } else {
+          G4Exception("G4RunMessenger::ApplyNewCommand","Run0129",FatalException,
+          "/run/workersProcessCmds command is issued to local thread.");
+      }
+    }
+
 }
 
 G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)

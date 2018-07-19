@@ -36,7 +36,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 B02ActionInitialization::B02ActionInitialization()
 {;} 
 
@@ -63,4 +62,3 @@ void B02ActionInitialization::Build() const
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

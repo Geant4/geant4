@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc 97613 2016-06-06 12:24:51Z gcosmo $
+// $Id: G4eIonisationSpectrum.cc 95950 2016-03-03 10:42:48Z gcosmo $
 //
 // -------------------------------------------------------------------
 //

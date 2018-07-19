@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementData.hh 72057 2013-07-04 13:07:29Z gcosmo $
+// $Id: G4ElementData.hh 96794 2016-05-09 10:09:30Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -57,7 +57,7 @@ class G4ElementData
 {
 public:
 
-  G4ElementData();
+  explicit G4ElementData();
 
   ~G4ElementData();
 
@@ -106,8 +106,8 @@ public:
 private:
 
   // Assignment operator and copy constructor
-  G4ElementData & operator=(const G4ElementData &right);
-  G4ElementData(const G4ElementData&);
+  G4ElementData & operator=(const G4ElementData &right) = delete;
+  G4ElementData(const G4ElementData&) = delete;
 
   G4PhysicsVector* elmData[maxNumElements]; 
   G4Physics2DVector* elm2Data[maxNumElements];

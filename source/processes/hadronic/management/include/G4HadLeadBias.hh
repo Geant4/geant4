@@ -29,12 +29,10 @@
 #define G4HadLeadBias_h
 
 #include "G4VLeadingParticleBiasing.hh"
-#include <vector>
-#include "G4HadFinalState.hh"
 
 class G4HadLeadBias : public G4VLeadingParticleBiasing
 {
-  public:
+public:
   virtual G4HadFinalState * Bias(G4HadFinalState * result);
   virtual ~G4HadLeadBias() {};
 };

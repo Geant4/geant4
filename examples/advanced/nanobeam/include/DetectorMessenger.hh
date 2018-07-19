@@ -59,7 +59,7 @@ class DetectorMessenger: public G4UImessenger
     G4UIcmdWithAnInteger* fModelCmd;
     G4UIcmdWithAnInteger* fProfileCmd;
     G4UIcmdWithAnInteger* fGridCmd;
-    G4UIcmdWithoutParameter* fUpdateCmd;
+    G4UIcmdWithAnInteger* fCoefCmd;
 };
 #endif
 

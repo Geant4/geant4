@@ -1,4 +1,4 @@
-// $Id: Doxymodules_biasing.h 86514 2014-11-13 09:10:24Z gcosmo $
+// $Id: Doxymodules_biasing.h 104750 2017-06-15 08:47:26Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_biasing.h
@@ -16,12 +16,11 @@
  *  @{
  */
 
+  class B01ActionInitialization {};
   class B01DetectorConstruction {};
-  class B01PhysicsList {};
   class B01PrimaryGeneratorAction {};
   class B01RunAction {};
   class B01Run {};
-  class B01ScoreTable {};
 
 
 /** @} */
@@ -32,18 +31,13 @@
  *  @{
  */
 
-  class B02CellScorer {};
-  class B02CellScorerStore {};
+  class B02ActionInitialization {};
   class B02DetectorConstruction {};
   class B02ImportanceDetectorConstruction {};
-  class B02PhysicsList {};
   class B02PrimaryGeneratorAction {};
-  class B02PSScoringDetectorConstruction {};
   class B02PVolumeStore {};
   class B02RunAction {};
   class B02Run {};
-  class B02ScoreTable {};
-  class B02ScoringDetectorConstruction {};
 
 /** @} */
 
@@ -120,6 +114,37 @@
 
 /** @} */
 
+/** @defgroup extended_biasing_GB05 GB05
+ *  Biasing example GB05
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class GB05ActionInitialization {};
+  class GB05BOptnSplitAndKillByCrossSection {};
+  class GB05BOptrSplitAndKillByCrossSection {};
+  class GB05DetectorConstruction {};
+  class GB05PrimaryGeneratorAction {};
+  class GB05SD {};
+
+/** @} */
+
+/** @defgroup extended_biasing_GB06 GB06
+ *  Biasing example GB06
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class GB06ActionInitialization {};
+  class GB06BOptnSplitAndKillByImportance {};
+  class GB06BOptrSplitAndKillByImportance {};
+  class GB06DetectorConstruction {};
+  class GB06ParallelWorldForSlices {};
+  class GB06PrimaryGeneratorAction {};
+  class GB06SD {};
+
+/** @} */
+
 /** @defgroup extended_biasing_ReverseMC01 ReverseMC01
  *  Biasing example ReverseMC01
  *  @ingroup extended_biasing
@@ -128,9 +153,6 @@
 
   class G4AdjointPhysicsList {};
   class G4AdjointPhysicsMessenger {};
-  class Histo1DVar {};
-  class Histo2DVar {};
-  class Histograms {};
   class RMC01AdjointEventAction {};
   class RMC01AnalysisManager {};
   class RMC01AnalysisManagerMessenger {};
@@ -141,8 +163,6 @@
   class RMC01PrimaryGeneratorAction {};
   class RMC01RunAction {};
   class RMC01SD {};
-  enum  side {};
-  class VariableLengthPartition {};
 
 /** @} */
 

@@ -4,6 +4,8 @@
 #ifndef tools_rroot_cids
 #define tools_rroot_cids
 
+//NOTE : logic must be in sync with wroot/cids.
+
 #include "../cid"
 
 namespace tools {
@@ -12,16 +14,16 @@ namespace rroot {
 inline cid base_cid()           {return 100;} //must be > cids in ../cids.
 
 inline cid iros_cid()           {return base_cid()+0;}
-inline cid List_cid()           {return base_cid()+1;}
-inline cid HashList_cid()       {return base_cid()+2;}
-inline cid ObjArray_cid()       {return base_cid()+3;}
+inline cid obj_list_cid()       {return base_cid()+1;}
+inline cid hash_list_cid()      {return base_cid()+2;}
+inline cid obj_array_cid()      {return base_cid()+3;}
 
 inline cid dummy_cid()          {return base_cid()+4;}
 
 inline cid basket_cid()         {return base_cid()+5;}
 inline cid branch_cid()         {return base_cid()+6;}
 inline cid branch_element_cid() {return base_cid()+7;}
-inline cid tree_item()          {return base_cid()+8;}
+//inline cid tree_item()          {return base_cid()+8;}
 
 inline cid graph_cid()          {return base_cid()+9;}
 inline cid matrix_cid()         {return base_cid()+10;}
@@ -33,6 +35,11 @@ inline cid StreamerInfo_cid()      {return base_cid()+13;}
 inline cid streamer_element_cid()  {return base_cid()+14;}
 
 inline cid stl_vector_string_cid() {return base_cid()+16;}
+
+inline cid named_cid()             {return base_cid()+17;}
+
+inline cid leaf_object_cid()    {return base_cid()+18;}
+inline cid branch_object_cid()  {return base_cid()+19;}
 
 //base for templates :
 inline cid base_leaf_cid()         {return base_cid()+20;} //+12=32

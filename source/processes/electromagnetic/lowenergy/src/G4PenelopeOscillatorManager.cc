@@ -102,10 +102,9 @@ void G4PenelopeOscillatorManager::Clear()
     G4cout << " G4PenelopeOscillatorManager::Clear() - Clean Oscillator Tables" << G4endl;
 
   //Clean up OscillatorStoreIonisation
-  std::map<const G4Material*,G4PenelopeOscillatorTable*>::iterator i;
-  for (i=oscillatorStoreIonisation->begin();i != oscillatorStoreIonisation->end();i++)
+  for (auto& item : (*oscillatorStoreIonisation))
     {
-      G4PenelopeOscillatorTable* table = i->second;
+      G4PenelopeOscillatorTable* table = item.second;
       if (table)
 	{
 	  for (size_t k=0;k<table->size();k++) //clean individual oscillators
@@ -119,9 +118,9 @@ void G4PenelopeOscillatorManager::Clear()
   delete oscillatorStoreIonisation;
 
   //Clean up OscillatorStoreCompton
-  for (i=oscillatorStoreCompton->begin();i != oscillatorStoreCompton->end();i++)
+  for (auto& item : (*oscillatorStoreCompton))
     {
-      G4PenelopeOscillatorTable* table = i->second;
+      G4PenelopeOscillatorTable* table = item.second;
       if (table)
 	{
 	  for (size_t k=0;k<table->size();k++) //clean individual oscillators
@@ -336,7 +335,7 @@ G4PenelopeOscillatorTable* G4PenelopeOscillatorManager::GetOscillatorTableIonisa
     {
       G4cout << "G4PenelopeOscillatorManager::GetOscillatorTableIonisation() " << G4endl;
       G4cout << "Impossible to create ionisation oscillator table for " << mat->GetName() << G4endl;
-      return NULL;
+      return nullptr;
     }
 }
 
@@ -354,7 +353,7 @@ G4PenelopeOscillator* G4PenelopeOscillatorManager::GetOscillatorIonisation(const
 	theTable->size() << " oscillators" << G4endl;
       G4cout << "Oscillator #" << index << " cannot be retrieved" << G4endl;
       G4cout << "Returning null pointer" << G4endl;
-      return NULL;
+      return nullptr;
     }
 }
 
@@ -383,7 +382,7 @@ G4PenelopeOscillatorTable* G4PenelopeOscillatorManager::GetOscillatorTableCompto
     {
       G4cout << "G4PenelopeOscillatorManager::GetOscillatorTableCompton() " << G4endl;
       G4cout << "Impossible to create Compton oscillator table for " << mat->GetName() << G4endl;
-      return NULL;
+      return nullptr;
     }
 }
 
@@ -401,7 +400,7 @@ G4PenelopeOscillator* G4PenelopeOscillatorManager::GetOscillatorCompton(const G4
 	theTable->size() << " oscillators" << G4endl;
       G4cout << "Oscillator #" << index << " cannot be retrieved" << G4endl;
       G4cout << "Returning null pointer" << G4endl;
-      return NULL;
+      return nullptr;
     }
 }
 
@@ -803,7 +802,6 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 
   if (verbosityLevel > 1)
       G4cout << "Cutoff energy: " << cutEnergy/eV << " eV" << G4endl;
-
   //
   //Copy helper in the oscillatorTable for Ionisation
   //
@@ -827,12 +825,14 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 
   size_t firstIndex = (isAConductor) ? 1 : 0; //for conductors, skip conduction oscillator
   G4bool loopAgain = false;
+  G4int nLoops = 0;
   G4int removedLevels = 0;
   do
     {
       loopAgain = false;
+      nLoops++;
       if (Nost>firstIndex+1)
-	{
+	{	  
 	  removedLevels = 0;
 	  for (size_t i=firstIndex;i<theTable->size()-1;i++)
 	    {
@@ -900,6 +900,9 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	  Rgroup = Rgroup*Rgroup;
 	  loopAgain = true;
 	}
+      //Add protection against infinite loops here
+      if (nLoops > 100 && !removedLevels)
+	loopAgain = false;
     }while(loopAgain);
 
   if (verbosityLevel > 1)
@@ -953,6 +956,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   removedLevels = 0;
   do
     {
+      nLoops++;
       loopAgain = false;
       if (Nost>firstIndex+1)
 	{
@@ -1010,6 +1014,9 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	  Rgroup = Rgroup*Rgroup;
 	  loopAgain = true;
 	}
+      //Add protection against infinite loops here
+      if (nLoops > 100 && !removedLevels)
+	loopAgain = false;
     }while(loopAgain);
 
 

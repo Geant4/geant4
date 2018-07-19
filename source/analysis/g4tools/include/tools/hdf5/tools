@@ -1,0 +1,749 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_hdf5_tools
+#define tools_hdf5_tools
+
+#include "hdf5_h"
+
+#include <cstdlib>
+
+namespace tools {
+namespace hdf5 {
+
+inline bool check_sizes(){
+  if(sizeof(bool)!=1) return false;
+  if(sizeof(char)!=1) return false;
+  if(sizeof(short)!=2) return false;
+  if(sizeof(int)!=4) return false;
+  if(sizeof(float)!=4) return false;
+  if(sizeof(double)!=8) return false;
+  return true;
+}
+
+inline int failure() {return -1;}
+
+inline hid_t string_datatype(size_t aSize){
+  // aSize should include the trailing null char.
+  hid_t datatype = ::H5Tcopy(H5T_C_S1);
+  if(datatype<0) return failure();
+
+  if(::H5Tset_size(datatype,aSize)<0) {
+    ::H5Tclose(datatype);
+    return failure();
+  }
+
+  if(::H5Tset_strpad(datatype,H5T_STR_NULLTERM)<0) {
+    ::H5Tclose(datatype);
+    return failure();
+  }
+
+  return datatype;
+}
+
+inline hid_t basic_mem_type(hid_t a_file_type){
+  H5T_class_t mclass = H5Tget_class(a_file_type);
+  size_t msize = H5Tget_size(a_file_type);
+  if(mclass==H5T_INTEGER) {
+    H5T_sign_t msign = H5Tget_sign(a_file_type);
+    if(msize==1) {
+      if(msign==H5T_SGN_NONE) {
+        return H5Tcopy(H5T_NATIVE_UCHAR);
+      } else {
+        return H5Tcopy(H5T_NATIVE_CHAR);
+      }
+    } else if(msize==4) {
+      if(msign==H5T_SGN_NONE) {
+        return H5Tcopy(H5T_NATIVE_UINT);
+      } else {
+        return H5Tcopy(H5T_NATIVE_INT);
+      }
+    } else if(msize==8) { //for osc_file::header::fDate.
+      if(msign==H5T_SGN_NONE) {
+        return H5Tcopy(H5T_NATIVE_UINT64);
+      } else {
+        return H5Tcopy(H5T_NATIVE_INT64);
+      }
+    } else {
+      return failure();
+    }
+  } else if(mclass==H5T_FLOAT) {
+    if(msize==4) {
+      return H5Tcopy(H5T_NATIVE_FLOAT);
+    } else if(msize==8) {
+      return H5Tcopy(H5T_NATIVE_DOUBLE);
+    } else {
+      return failure();
+    }
+  } else if(mclass==H5T_STRING) {
+    return H5Tcopy(a_file_type);
+  }
+
+  return failure();
+}
+
+}}
+
+#include <vector>
+
+namespace tools {
+namespace hdf5 {
+
+inline hid_t compound_mem_type(hid_t a_file_type){
+  // FIXME : In principle H5T_get_native_type should do the job but it crashes.
+
+  H5T_class_t t_class = H5Tget_class(a_file_type);
+  if(t_class!=H5T_COMPOUND) return failure();
+
+  size_t sz = H5Tget_size(a_file_type);
+  //printf("debug : compound_mem_type : sz %lu\n",sz);
+
+  hid_t memtype = ::H5Tcreate(H5T_COMPOUND,sz);
+  if(memtype<0) return failure();
+
+  //FIXME : WARNING : is order the booked order ?
+
+  int mn = H5Tget_nmembers(a_file_type);
+  std::vector<unsigned int> szs(mn);
+  //printf("debug : members : %d\n",mn);
+  for(int index=0;index<mn;index++) {
+    char* mname = H5Tget_member_name(a_file_type,index);
+    size_t moffset = H5Tget_member_offset(a_file_type,index);
+    hid_t mtype = H5Tget_member_type(a_file_type,index);
+    //printf("debug : members :   %d (%d) : %s : begin\n",index,mn,mname);
+
+   {H5T_class_t mclass = H5Tget_class(mtype);
+    if( (mclass==H5T_INTEGER) || 
+        (mclass==H5T_STRING)  ||
+        (mclass==H5T_FLOAT)   ) {
+      hid_t mmemtype = basic_mem_type(mtype);
+      if(mmemtype<0) {
+        ::H5Tclose(mtype);
+        if(mname) ::free(mname);
+        ::H5Tclose(memtype);
+        return failure();
+      }
+      if(H5Tinsert(memtype,mname,moffset,mmemtype)<0) {
+        ::H5Tclose(mmemtype);
+        ::H5Tclose(mtype);
+        if(mname) ::free(mname);
+        ::H5Tclose(memtype);
+        return failure();
+      }
+      ::H5Tclose(mmemtype);
+
+    } else if(mclass==H5T_ARRAY) {
+      int dimn = ::H5Tget_array_ndims(mtype); //Should be 1;
+      hsize_t* dims = new hsize_t[dimn];
+      int* perms = new int[dimn];
+      if(tools_H5Tget_array_dims(mtype,dims,perms)<0) {
+        delete [] dims;
+        delete [] perms;
+        ::H5Tclose(mtype);
+        if(mname) ::free(mname);
+        ::H5Tclose(memtype);
+        return failure();
+      }
+      hid_t base_type = H5Tget_super(mtype);
+      if(base_type<0) {
+        delete [] dims;
+        delete [] perms;
+        ::H5Tclose(mtype);
+        if(mname) ::free(mname);
+        ::H5Tclose(memtype);
+        return failure();
+      }
+      hid_t mmemtype = basic_mem_type(base_type);
+      if(mmemtype<0) {
+        delete [] dims;
+        delete [] perms;
+        ::H5Tclose(base_type);
+        ::H5Tclose(mtype);
+        if(mname) ::free(mname);
+        ::H5Tclose(memtype);
+        return failure();
+      }
+      ::H5Tclose(base_type);
+      hid_t array_type = tools_H5Tarray_create(mmemtype,dimn,dims,perms);
+      delete [] dims;
+      delete [] perms;
+      if(array_type<0) {
+        ::H5Tclose(mmemtype);
+        ::H5Tclose(mtype);
+        if(mname) ::free(mname);
+        ::H5Tclose(memtype);
+        return failure();
+      }
+      ::H5Tclose(mmemtype);
+
+      if(H5Tinsert(memtype,mname,moffset,array_type)<0) {
+        ::H5Tclose(array_type);
+        ::H5Tclose(mtype);
+        if(mname) ::free(mname);
+        ::H5Tclose(memtype);
+        return failure();
+      }
+      ::H5Tclose(array_type);
+
+    } else if(mclass==H5T_COMPOUND) {
+      hid_t mmemtype = compound_mem_type(mtype);
+      if(memtype<0) {
+        ::H5Tclose(mtype);
+        if(mname) ::free(mname);
+        ::H5Tclose(memtype);
+        return failure();
+      }
+      if(H5Tinsert(memtype,mname,moffset,mmemtype)<0) {
+        ::H5Tclose(mmemtype);
+        ::H5Tclose(mtype);
+        if(mname) ::free(mname);
+        ::H5Tclose(memtype);
+        return failure();
+      }
+      ::H5Tclose(mmemtype);
+    } else {
+      ::H5Tclose(mtype);
+      if(mname) ::free(mname);
+      ::H5Tclose(memtype);
+      return failure();
+    }}
+    ::H5Tclose(mtype);
+    //printf("debug : compound_mem_type :   %d (%d) : %s : end\n",index,mn,mname);
+    if(mname) ::free(mname);
+  }
+
+  return memtype;
+}
+
+}}
+
+#include "atb"
+#include <string>
+
+namespace tools {
+namespace hdf5 {
+
+inline bool read_atb(hid_t aID,const std::string& a_name,std::string& aData,unsigned int aSize = 100){
+  // From H5LT.c/H5LTget_attribute_string.
+  if(!H5LT_find_attribute(aID,a_name.c_str())) {aData.clear();return false;}
+  char* b = new char[aSize];
+  if(H5LT_get_attribute_disk(aID,a_name.c_str(),b)<0) {
+    delete [] b;
+    return false;
+  }
+  aData = std::string(b);
+  delete [] b;
+  return true;
+}
+
+inline bool read_atb(hid_t aID,const std::string& a_name,unsigned int& aData){
+  if(!H5LT_find_attribute(aID,a_name.c_str())) {aData=0;return false;}
+  if(H5LT_get_attribute_mem(aID,a_name.c_str(),H5T_NATIVE_UINT,&aData)<0) return false;
+  return true;
+}
+
+inline bool read_atb(hid_t aID,const std::string& a_name,int& aData){
+  if(!H5LT_find_attribute(aID,a_name.c_str())) {aData=0;return false;}
+  if(H5LT_get_attribute_mem(aID,a_name.c_str(),H5T_NATIVE_INT,&aData)<0) return false;
+  return true;
+}
+
+inline hid_t H5T_STD_U8XX() {return H5T_STD_U8LE;}
+inline hid_t H5T_STD_U32XX() {return H5T_STD_U32LE;}
+inline hid_t H5T_STD_U64XX() {return H5T_STD_U64LE;}
+inline hid_t H5T_STD_I8XX() {return H5T_STD_I8LE;}
+inline hid_t H5T_STD_I16XX() {return H5T_STD_I16LE;}
+inline hid_t H5T_STD_I32XX() {return H5T_STD_I32LE;}
+inline hid_t H5T_STD_I64XX() {return H5T_STD_I64LE;}
+inline hid_t H5T_IEEE_F32XX() {return H5T_IEEE_F32LE;}
+inline hid_t H5T_IEEE_F64XX() {return H5T_IEEE_F64LE;}
+
+inline bool dataset_vec_size(hid_t a_loc,const std::string& a_name,hsize_t& a_size) {
+  hid_t dataset = tools_H5Dopen(a_loc,a_name.c_str());
+  if(dataset<0) {
+    a_size = 0;
+    return false; // data set not found.
+  }
+
+  hid_t file_space = H5Dget_space(dataset);
+  if(file_space<0) {
+    ::H5Dclose(dataset);
+    a_size = 0;
+    return false;
+  }
+
+  int dimn = H5Sget_simple_extent_ndims(file_space);
+  if(dimn<0) {
+    ::H5Sclose(file_space);
+    ::H5Dclose(dataset);
+    a_size = 0;
+    return false;
+  }
+  if(dimn!=1) {
+    ::H5Sclose(file_space);
+    ::H5Dclose(dataset);
+    a_size = 0;
+    return false;
+  }
+  //printf("debug : read dimn %d\n",dimn);
+
+  hsize_t dims[1];
+ {if(H5Sget_simple_extent_dims(file_space,dims,NULL)<0) {
+    ::H5Sclose(file_space);
+    ::H5Dclose(dataset);
+    a_size = 0;
+    return false;
+  }}
+
+  ::H5Sclose(file_space);
+  ::H5Dclose(dataset);
+
+  a_size = dims[0];
+  return true;
+}
+
+inline bool write_atb(hid_t aDS,const std::string& a_name,const std::string& aData){
+  // From H5LT.c/H5LTset_attribute_string.
+  int has_attr = H5LT_find_attribute(aDS,a_name.c_str());
+  if(has_attr==1)  {
+    if(H5Adelete(aDS,a_name.c_str())<0) return false;
+  }
+    
+  hid_t datatype = string_datatype(aData.size()+1);
+  if(datatype<0) return false;
+
+  hid_t scalar = ::H5Screate(H5S_SCALAR);
+  if(scalar<0) {
+    ::H5Tclose(datatype);
+    return false;
+  }
+    
+  hid_t aid = tools_H5Acreate(aDS,a_name.c_str(),datatype,scalar,H5P_DEFAULT);
+  if(aid<0) {
+    ::H5Sclose(scalar);
+    ::H5Tclose(datatype);
+    return false;
+  }
+    
+  if(H5Awrite(aid,datatype,aData.c_str())<0) {
+    ::H5Aclose(aid);
+    ::H5Sclose(scalar);
+    ::H5Tclose(datatype);
+    return false;
+  }
+    
+  ::H5Aclose(aid);
+  ::H5Sclose(scalar);
+  ::H5Tclose(datatype);
+    
+  return true;
+}
+    
+inline bool write_bool(hid_t a_loc,const std::string& a_name,bool aData) {
+  hid_t scalar = ::H5Screate(H5S_SCALAR);
+  if(scalar<0) return false;
+
+  hid_t compact = ::H5Pcreate(H5P_DATASET_CREATE);
+  if(compact<0) {
+    ::H5Sclose(scalar);
+    return false;
+  }
+  if(H5Pset_layout(compact,H5D_COMPACT)<0) { 
+    ::H5Pclose(compact);
+    ::H5Sclose(scalar);
+    return false;
+  }
+
+  hid_t dataset = tools_H5Dcreate(a_loc,a_name.c_str(),H5T_STD_U8XX(),scalar,compact);
+  if(dataset<0) {
+    ::H5Pclose(compact);
+    ::H5Sclose(scalar);
+    return false;
+  }
+  
+  unsigned char data = aData?1:0;
+  if(::H5Dwrite(dataset,H5T_NATIVE_UCHAR,H5S_ALL,H5S_ALL,H5P_DEFAULT,&data)<0) {
+    ::H5Pclose(compact);
+    ::H5Sclose(scalar);
+    ::H5Dclose(dataset);                 
+    return false;
+  }
+  
+  ::H5Pclose(compact);
+  ::H5Sclose(scalar);
+  ::H5Dclose(dataset);                 
+  return true;
+}
+  
+inline bool write_string(hid_t a_loc,const std::string& a_name,const std::string& aString) {
+  hid_t scalar = ::H5Screate(H5S_SCALAR);
+  if(scalar<0) return false;
+
+  hid_t compact = ::H5Pcreate(H5P_DATASET_CREATE);
+  if(compact<0) {
+    ::H5Sclose(scalar);
+    return false;
+  }
+
+  if(H5Pset_layout(compact,H5D_COMPACT)<0) { 
+    ::H5Pclose(compact);
+    ::H5Sclose(scalar);
+    return false;
+  }
+
+  // From H5LTmakge_dataset_string.
+  hid_t filetype = string_datatype(aString.size()+1);
+  if(filetype<0) {
+    ::H5Pclose(compact);
+    ::H5Sclose(scalar);
+    return false;
+  }
+  
+  hid_t dataset = tools_H5Dcreate(a_loc,a_name.c_str(),filetype,scalar,compact);
+  if(dataset<0) {
+    ::H5Pclose(compact);
+    ::H5Sclose(scalar);
+    ::H5Tclose(filetype);
+    return false;
+  }
+  
+  hid_t memtype = filetype;
+  if(H5Dwrite(dataset,memtype,H5S_ALL,H5S_ALL,H5P_DEFAULT,aString.c_str())<0) {
+    ::H5Pclose(compact);
+    ::H5Sclose(scalar);
+    ::H5Dclose(dataset);                 
+    ::H5Tclose(filetype);
+    return false;
+  }
+  
+  ::H5Pclose(compact);
+  ::H5Sclose(scalar);
+  ::H5Dclose(dataset);                 
+  ::H5Tclose(filetype);
+  return true;
+}
+
+}}
+
+#include <tools/buf2lines>
+
+namespace tools {
+namespace hdf5 {
+
+inline bool write_array_string(hid_t a_loc,const std::string& a_name,const std::vector<std::string>& a_array) {
+  hid_t scalar = ::H5Screate(H5S_SCALAR);
+  if(scalar<0) return false;
+
+  // From H5LTmake_dataset_string.
+  size_t sz;
+  char* buffer;
+  if(!tools::strings2buf(a_array,sz,buffer)) {
+    ::H5Sclose(scalar);
+    return false;
+  }
+    
+  hid_t filetype = string_datatype(sz);
+  if(filetype<0) {
+    delete [] buffer;
+    ::H5Sclose(scalar);
+    return false;
+  }
+  
+  hid_t dataset = tools_H5Dcreate(a_loc,a_name.c_str(),filetype,scalar,H5P_DEFAULT);
+  if(dataset<0) {
+    delete [] buffer;
+    ::H5Tclose(filetype);
+    ::H5Sclose(scalar);
+    return false;
+  }
+  
+  hid_t memtype = filetype;
+  if(H5Dwrite(dataset,memtype,H5S_ALL,H5S_ALL,H5P_DEFAULT,buffer)<0) {
+    delete [] buffer;
+    ::H5Dclose(dataset);                 
+    ::H5Tclose(filetype);
+    ::H5Sclose(scalar);
+    return false;
+  }
+  
+  delete [] buffer;
+
+  ::H5Dclose(dataset);                 
+  ::H5Tclose(filetype);
+  ::H5Sclose(scalar);
+  return true;
+}
+
+inline bool write_object(hid_t a_loc,const std::string& a_name,hid_t a_file_type,char* aData) {
+  unsigned int chunked = 0;
+  unsigned int compress = 0;
+
+  hid_t cpt = -1;
+  if(compress || chunked) {
+    cpt = ::H5Pcreate(H5P_DATASET_CREATE);
+    if(cpt<0) return false;
+    if(chunked) {
+      if(H5Pset_layout(cpt,H5D_CHUNKED)<0) { 
+        ::H5Pclose(cpt);
+        return false;
+      }
+      hsize_t cdims[1];
+      cdims[0] = chunked;
+      if(H5Pset_chunk(cpt,1,cdims)<0) {
+        ::H5Pclose(cpt);
+        return false;
+      }
+    } else {
+      if(H5Pset_layout(cpt,H5D_COMPACT)<0) { 
+        ::H5Pclose(cpt);
+        return false;
+      }
+    }
+    if(compress) {
+      if(H5Pset_deflate(cpt,compress>9?9:compress)<0) {
+        ::H5Pclose(cpt);
+        return false;
+      }
+    }
+  } else {
+    cpt = H5P_DEFAULT;
+  }
+  
+  hsize_t dims[1];
+  dims[0] = 1;
+  hid_t simple = ::H5Screate_simple(1,dims,NULL);
+  if(simple<0) {
+    if(cpt>=0) ::H5Pclose(cpt);
+    return false;
+  }
+
+  hid_t mem_type = compound_mem_type(a_file_type);
+  if(mem_type<0) {
+    ::H5Sclose(simple);
+    if(cpt>=0) ::H5Pclose(cpt);
+    return false;
+  }
+  
+  hid_t dataset = tools_H5Dcreate(a_loc,a_name.c_str(),a_file_type,simple,cpt);
+  if(dataset<0) {
+    ::H5Tclose(mem_type);                 
+    ::H5Sclose(simple);
+    if(cpt>=0) ::H5Pclose(cpt);
+    return false;
+  }
+  
+  if(H5Dwrite(dataset,mem_type,H5S_ALL,H5S_ALL,H5P_DEFAULT,aData)<0) {
+    ::H5Dclose(dataset);                 
+    ::H5Tclose(mem_type);                 
+    ::H5Sclose(simple);
+    if(cpt>=0) ::H5Pclose(cpt);
+    return false;
+  }
+  
+  ::H5Dclose(dataset);                 
+  ::H5Tclose(mem_type);                 
+  ::H5Sclose(simple);
+  if(cpt>=0) ::H5Pclose(cpt);
+
+  return true;
+}
+  
+inline bool read_string(hid_t a_loc,const std::string& a_name,std::string& aString) {
+  // From H5LTread_dataset_string.
+  hid_t dataset = tools_H5Dopen(a_loc,a_name.c_str());
+  if(dataset<0) {
+    aString.clear();
+    return false; // data set not found.
+  }
+
+  hid_t filetype = H5Dget_type(dataset);
+  if(filetype<0) {
+    ::H5Dclose(dataset);
+    aString.clear();
+    return false;
+  }
+
+  H5T_class_t t_class = H5Tget_class(filetype);
+  if(t_class!=H5T_STRING) {
+    ::H5Tclose(filetype);
+    ::H5Dclose(dataset);
+    aString.clear();
+    return false;
+  }
+  
+  size_t sz = H5Tget_size(filetype);
+  ::H5Tclose(filetype);
+  if(!sz) {
+    ::H5Dclose(dataset);
+    aString.clear();
+    return false;
+  }
+
+  // We could have use filetype since, for string, 
+  // file type is the same than memory type.
+  hid_t memtype = string_datatype(sz);
+  if(memtype<0) {
+    ::H5Dclose(dataset);
+    aString.clear();
+    return false;
+  }
+
+  char* buff = new char[sz];
+  herr_t stat = H5Dread(dataset,memtype,H5S_ALL,H5S_ALL,H5P_DEFAULT,buff);
+  ::H5Tclose(memtype);
+  ::H5Dclose(dataset);
+  if(stat<0) {
+    delete [] buff;
+    aString.clear();
+    return false;
+  }
+
+  size_t len = sz-1;
+  aString.resize(len,0);
+  for(size_t index=0;index<len;index++) aString[index] = buff[index];
+
+  delete [] buff;
+
+  return true;
+}
+
+inline bool read_object(hid_t a_loc,const std::string& a_name,size_t& a_size,char*& aData) {
+  hid_t dataset = tools_H5Dopen(a_loc,a_name.c_str());
+  if(dataset<0) {
+    a_size = 0;
+    aData = 0;
+    return false;
+  }
+  
+  hid_t filetype = H5Dget_type(dataset);
+  if(filetype<0) {
+    ::H5Dclose(dataset);
+    a_size = 0;
+    aData = 0;
+    return false;
+  }
+  
+  H5T_class_t t_class = H5Tget_class(filetype);
+  if(t_class!=H5T_COMPOUND) {
+    ::H5Tclose(filetype);
+    ::H5Dclose(dataset);
+    a_size = 0;
+    aData = 0;
+    return false;
+  }
+    
+  size_t sz = H5Tget_size(filetype);
+  if(!sz) {
+    ::H5Tclose(filetype);
+    ::H5Dclose(dataset);
+    a_size = 0;
+    aData = 0;
+    return false;
+  }
+  
+  hid_t memtype = compound_mem_type(filetype);
+  if(memtype<0) {
+    ::H5Tclose(filetype);
+    ::H5Dclose(dataset);
+    a_size = 0;
+    aData = 0;
+    return false;
+  }
+  
+  ::H5Tclose(filetype);
+  
+  hid_t dataspace = H5Dget_space(dataset);
+  if(dataspace<0) {
+    ::H5Tclose(memtype);
+    ::H5Dclose(dataset);
+    a_size = 0;
+    aData = 0;
+    return false;
+  }
+  
+  hid_t scalar = ::H5Screate(H5S_SCALAR);
+  if(scalar<0) {
+    ::H5Sclose(dataspace);
+    ::H5Tclose(memtype);
+    ::H5Dclose(dataset);
+    a_size = 0;
+    aData = 0;
+    return false;
+  }
+
+  char* buffer = new char[sz];
+  if(H5Dread(dataset,memtype,scalar,dataspace,H5P_DEFAULT,buffer)<0) {
+    delete [] buffer;
+    ::H5Sclose(scalar);
+    ::H5Sclose(dataspace);
+    ::H5Tclose(memtype);
+    ::H5Dclose(dataset);
+    a_size = 0;
+    aData = 0;
+    return false;
+  }
+  
+  ::H5Sclose(scalar);
+  ::H5Sclose(dataspace);
+  ::H5Tclose(memtype);
+  ::H5Dclose(dataset);
+  
+  a_size = sz;
+  aData = buffer;  
+  return true;
+}
+
+inline bool read_array_string(hid_t a_loc,const std::string& a_name,std::vector<std::string>& a_array) {
+  a_array.clear();
+  hid_t dataset = tools_H5Dopen(a_loc,a_name.c_str());
+  if(dataset<0) return false;
+
+  hid_t filetype = H5Dget_type(dataset);
+  if(filetype<0) {
+    ::H5Dclose(dataset);
+    return false;
+  }
+
+  H5T_class_t t_class = H5Tget_class(filetype);
+  if(t_class!=H5T_STRING) {
+    ::H5Tclose(filetype);
+    ::H5Dclose(dataset);
+    return false;
+  }
+  
+  size_t sz = H5Tget_size(filetype);
+  ::H5Tclose(filetype);
+  if(!sz) {
+    ::H5Dclose(dataset);
+    return false;
+  }
+
+  // We could have use filetype since, for string, 
+  // file type is the same than memory type.
+  hid_t memtype = string_datatype(sz);
+  if(memtype<0) {
+    ::H5Dclose(dataset);
+    return false;
+  }
+
+  char* buffer = new char[sz];
+  herr_t stat = H5Dread(dataset,memtype,H5S_ALL,H5S_ALL,H5P_DEFAULT,buffer);
+  ::H5Tclose(memtype);
+  ::H5Dclose(dataset);
+  if(stat<0) {
+    delete [] buffer;
+    return false;
+  }
+
+  if(!tools::buf2strings(sz,buffer,a_array)) {
+    delete [] buffer;
+    return false;
+  }
+
+  delete [] buffer;
+  return true;
+}
+                           
+}}
+
+#endif

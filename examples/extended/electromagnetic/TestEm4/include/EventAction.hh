@@ -27,7 +27,7 @@
 /// \brief Definition of the EventAction class
 //
 //
-// $Id: EventAction.hh 75839 2013-11-06 17:27:26Z gcosmo $
+// $Id: EventAction.hh 98767 2016-08-09 14:18:40Z gcosmo $
 //
 // 
 
@@ -52,7 +52,7 @@ class EventAction : public G4UserEventAction
     virtual void BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
     
-    void addEdep(G4double Edep)     {fTotalEnergyDeposit += Edep;};      
+    void AddEdep(G4double Edep)     {fTotalEnergyDeposit += Edep;};      
     G4double GetEnergyDeposit()     {return fTotalEnergyDeposit;};    
         
   private:

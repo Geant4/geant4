@@ -30,8 +30,11 @@
 
 #include "G4ReactionProduct.hh"
 
-G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
-
+G4Allocator<G4ReactionProduct>*& aRPAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4ReactionProduct>* _instance = nullptr;
+    return _instance;
+}
 
  G4ReactionProduct::G4ReactionProduct() :
     theParticleDefinition(NULL),

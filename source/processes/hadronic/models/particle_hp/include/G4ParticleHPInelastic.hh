@@ -107,6 +107,7 @@ protected:
   
   //G4ParticleHPChannelList * theInelastic; // one List per element
   std::vector<G4ParticleHPChannelList*>* theInelastic; // one List per element
+  G4String dataDirVariable;
   G4String dirName;
   G4int numEle;
 

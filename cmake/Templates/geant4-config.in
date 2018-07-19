@@ -88,6 +88,9 @@ have_multithreading="@G4_BUILTWITH_MULTITHREADING@"
 feature_list="${feature_list} multithreading[${have_multithreading}]"
 if test "x${have_multithreading}" = "xyes" ; then
   geant4_tls_model="@GEANT4_BUILD_TLS_MODEL@"
+  if test "x${geant4_tls_model}" = "xauto" ; then
+    geant4_tls_model=""
+  fi
   cflags="${cflags} -DG4MULTITHREADED"
 else
   geant4_tls_model=""
@@ -123,6 +126,10 @@ libs="-lG4interfaces \
 # - ALL
 geant4_uses_opengl="no"
 geant4_uses_x11="no"
+
+# - Muonic Atom support
+have_muonic_atoms="@G4_BUILTWITH_MUONIC_ATOMS@"
+feature_list="${feature_list} muonic_atoms[${have_muonic_atoms}]"
 
 # - CLHEP
 have_clhep="@G4_BUILTWITH_CLHEP@"
@@ -170,6 +177,10 @@ fi
 # - Freetype
 have_freetype="@G4_BUILTWITH_FREETYPE@"
 feature_list="${feature_list} freetype[${have_freetype}]"
+
+# - HDF5
+have_hdf5="@G4_BUILTWITH_HDF5@"
+feature_list="${feature_list} hdf5[${have_hdf5}]"
 
 # - G3toG4
 have_g3tog4="@G4_BUILTWITH_G3TOG4@"
@@ -563,6 +574,9 @@ while test $# -gt 0 ; do
           ;;
         freetype)
           echo ${have_freetype}
+          ;;
+        hdf5)
+          echo ${have_hdf5}
           ;;
         g3tog4)
           echo ${have_g3tog4}

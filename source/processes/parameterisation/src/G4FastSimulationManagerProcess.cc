@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.cc 68056 2013-03-13 14:44:48Z gcosmo $
+// $Id: G4FastSimulationManagerProcess.cc 101152 2016-11-08 08:07:39Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -54,15 +54,16 @@ G4FastSimulationManagerProcess::
 G4FastSimulationManagerProcess(const G4String& processName,
 			       G4ProcessType       theType) : 
   G4VProcess(processName,theType),
-  fWorldVolume(0),
-  fIsTrackingTime(false),
-  fGhostNavigator(0),
-  fGhostNavigatorIndex(-1),
-  fIsGhostGeometry(false),
-  fGhostSafety(-1.0),
-  fFieldTrack('0'),
-  fFastSimulationManager(0),
-  fFastSimulationTrigger(false)
+  fWorldVolume          ( nullptr ),
+  fIsTrackingTime       ( false   ),
+  fIsFirstStep          ( false   ),
+  fGhostNavigator       ( nullptr ),
+  fGhostNavigatorIndex  ( -1      ),
+  fIsGhostGeometry      ( false   ),
+  fGhostSafety          ( -1.0    ),
+  fFieldTrack           ( '0'     ),
+  fFastSimulationManager( nullptr ),
+  fFastSimulationTrigger( false   )
 {
   // -- set Process Sub Type
   SetProcessSubType(static_cast<int>(FASTSIM_ManagerProcess));
@@ -84,15 +85,16 @@ G4FastSimulationManagerProcess(const G4String&     processName,
 			       const G4String& worldVolumeName,
 			       G4ProcessType           theType) :
   G4VProcess(processName,theType),
-  fWorldVolume(0),
-  fIsTrackingTime(false),
-  fGhostNavigator(0),
-  fGhostNavigatorIndex(-1),
-  fIsGhostGeometry(false),
-  fGhostSafety(-1.0),
-  fFieldTrack('0'),
-  fFastSimulationManager(0),
-  fFastSimulationTrigger(false)
+  fWorldVolume          ( nullptr ),
+  fIsTrackingTime       ( false   ),
+  fIsFirstStep          ( false   ),
+  fGhostNavigator       ( nullptr ),
+  fGhostNavigatorIndex  ( -1      ),
+  fIsGhostGeometry      ( false   ),
+  fGhostSafety          ( -1.0    ),
+  fFieldTrack           ( '0'     ),
+  fFastSimulationManager( nullptr ),
+  fFastSimulationTrigger( false   )
 {
   // -- set Process Sub Type
   SetProcessSubType(static_cast<int>(FASTSIM_ManagerProcess));
@@ -114,15 +116,16 @@ G4FastSimulationManagerProcess(const G4String&    processName,
 			       G4VPhysicalVolume* worldVolume,
 			       G4ProcessType      theType) :
   G4VProcess(processName,theType),
-  fWorldVolume(0),
-  fIsTrackingTime(false),
-  fGhostNavigator(0),
-  fGhostNavigatorIndex(-1),
-  fIsGhostGeometry(false),
-  fGhostSafety(-1.0),
-  fFieldTrack('0'),
-  fFastSimulationManager(0),
-  fFastSimulationTrigger(false)
+  fWorldVolume          ( nullptr ),
+  fIsTrackingTime       ( false   ),
+  fIsFirstStep          ( false   ),
+  fGhostNavigator       ( nullptr ),
+  fGhostNavigatorIndex  ( -1      ),
+  fIsGhostGeometry      ( false   ),
+  fGhostSafety          ( -1.0    ),
+  fFieldTrack           ( '0'     ),
+  fFastSimulationManager( nullptr ),
+  fFastSimulationTrigger( false   )
 {
   // -- set Process Sub Type
   SetProcessSubType(static_cast<int>(FASTSIM_ManagerProcess));
@@ -205,9 +208,7 @@ void G4FastSimulationManagerProcess::SetWorldVolume(G4VPhysicalVolume* newWorld)
 // --------------------
 //  Start/End tracking:
 // --------------------
-void
-G4FastSimulationManagerProcess::
-StartTracking(G4Track* track)
+void G4FastSimulationManagerProcess::StartTracking(G4Track* track)
 {
   fIsTrackingTime = true;
   fIsFirstStep    = true;
@@ -308,8 +309,13 @@ AlongStepGetPhysicalInteractionLength(const G4Track&                track,
   // --------------------------------------------------
   if ( fIsGhostGeometry )
     {
-      static G4ThreadLocal G4FieldTrack *endTrack_G4MT_TLS_ = 0 ; if (!endTrack_G4MT_TLS_) endTrack_G4MT_TLS_ = new  G4FieldTrack ('0') ;  G4FieldTrack &endTrack = *endTrack_G4MT_TLS_;
-      static G4ThreadLocal ELimited *eLimited_G4MT_TLS_ = 0 ; if (!eLimited_G4MT_TLS_) eLimited_G4MT_TLS_ = new  ELimited  ;  ELimited &eLimited = *eLimited_G4MT_TLS_;
+      static G4ThreadLocal G4FieldTrack *endTrack_G4MT_TLS_ = 0 ;
+      if (!endTrack_G4MT_TLS_) endTrack_G4MT_TLS_ = new  G4FieldTrack ('0') ;
+      G4FieldTrack &endTrack = *endTrack_G4MT_TLS_;
+      
+      static G4ThreadLocal ELimited *eLimited_G4MT_TLS_ = 0 ;
+      if (!eLimited_G4MT_TLS_) eLimited_G4MT_TLS_ = new  ELimited  ;
+      ELimited &eLimited = *eLimited_G4MT_TLS_;
       
       if (previousStepSize > 0.) fGhostSafety -= previousStepSize;
       if (fGhostSafety < 0.)     fGhostSafety = 0.0;

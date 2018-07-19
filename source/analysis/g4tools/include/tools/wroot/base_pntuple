@@ -1,0 +1,114 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_base_pntuple
+#define tools_wroot_base_pntuple
+
+// pntuple = for parallel ntupling.
+
+#include "branch_element"
+#include "icol"
+
+#include "../vfind"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+namespace tools {
+namespace wroot {
+
+class base_pntuple {
+public:
+
+#include "columns.icc"
+
+public:
+  base_pntuple(std::ostream& a_out,seek a_seek_directory,const std::string& a_name,const std::string& a_title)
+  :m_out(a_out)
+  ,m_seek_directory(a_seek_directory)
+  ,m_name(a_name)
+  ,m_title(a_title)
+  {}
+
+  virtual ~base_pntuple() {
+    safe_clear<icol>(m_cols);
+  }
+protected:
+  base_pntuple(const base_pntuple& a_from):m_out(a_from.m_out){}
+  base_pntuple& operator=(const base_pntuple&){return *this;}
+public:
+  const std::vector<icol*>& columns() const {return m_cols;}
+  
+  template <class T>
+  column_ref<T>* find_column_ref(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column_ref<T> >(*col);
+  }
+
+  template <class T>
+  column<T>* find_column(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column<T> >(*col);
+  }
+
+  column_string_ref* find_column_string_ref(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column_string_ref >(*col);
+  }
+
+  column_string* find_column_string(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column_string >(*col);
+  }
+
+  template <class T>
+  std_vector_column_ref<T>* find_column_vector_ref(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, std_vector_column_ref<T> >(*col);
+  }
+
+  template <class T>
+  std_vector_column<T>* find_column_vector(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, std_vector_column<T> >(*col);
+  }
+
+  column_vector_string_ref* find_column_vector_string_ref(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column_vector_string_ref >(*col);
+  }
+
+  column_vector_string* find_column_vector_string(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column_vector_string >(*col);
+  }
+
+  void print_columns(std::ostream& a_out) {
+    a_out << "for ntuple named " << sout(m_name) << ", number of columns " << m_cols.size() << " :" << std::endl;
+    tools_vforit(icol*,m_cols,it) {
+      a_out << " " << (*it)->name() << std::endl;
+    }
+  }
+
+  //void set_basket_size(uint32 a_size) {tools_vforit(icol*,m_cols,it) (*it)->set_basket_size(a_size);}
+
+protected:
+  std::ostream& m_out;
+  seek m_seek_directory;
+  std::string m_name;
+  std::string m_title;
+  std::vector<icol*> m_cols;  
+};
+
+}}
+
+#endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPNeutronBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
+// $Id: G4FTFPNeutronBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,6 +35,7 @@
 // 18.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
 //             section at high energies.
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -79,21 +80,6 @@ G4FTFPNeutronBuilder::
   delete theStringModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
   delete theLund;
-}
-
-void G4FTFPNeutronBuilder::
-Build(G4HadronElasticProcess * )
-{
-}
-
-void G4FTFPNeutronBuilder::
-Build(G4HadronFissionProcess * )
-{
-}
-
-void G4FTFPNeutronBuilder::
-Build(G4HadronCaptureProcess * )
-{
 }
 
 void G4FTFPNeutronBuilder::

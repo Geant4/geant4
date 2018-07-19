@@ -33,10 +33,7 @@ public:
 public: //idir
   virtual ifile& file() {return m_file;}
   virtual seek seek_directory() const {return m_seek_directory;}
-  virtual void append_object(iobject* a_object) {
-    //take ownership of a_object
-    m_objs.push_back(a_object);
-  }
+  virtual void append_object(iobject* a_object) {m_objs.push_back(a_object);} //take ownership of a_object
 public:
   directory(ifile& a_file)
   :m_file(a_file)  
@@ -135,9 +132,8 @@ public:
     m_seek_parent = m_parent->seek_directory();
     uint32 nbytes = record_size();
 
-    wroot::key* key = 
-      new wroot::key(m_file,m_parent->seek_directory(),
-                     m_name,m_title,"TDirectory",nbytes); //set m_END
+    wroot::key* key = new wroot::key(m_file.out(),m_file,m_parent->seek_directory(),
+                                     m_name,m_title,"TDirectory",nbytes); // It does a m_file.set_END().
     m_nbytes_name = key->key_length();
     m_seek_directory = key->seek_key(); //at EOF
     if(!m_seek_directory) {
@@ -159,14 +155,14 @@ public:
     }}
     uint16 cycle = m_parent->append_key(key);
     key->set_cycle(cycle);
-    if(!key->write_self()) {
+    if(!key->write_self(m_file)) {
       m_file.out() << "tools::wroot::directory::directory :"
                    << " key.write_self() failed."
                    << std::endl;
       return; //FIXME : throw
     }  
     uint32 n;
-    if(!key->write_file(n)) {
+    if(!key->write_file(m_file,n)) {
       m_file.out() << "tools::wroot::directory::directory :"
                    << " directory name " << sout(m_name)
                    << " cannot write key to file."
@@ -259,7 +255,7 @@ public:
     // Decode input buffer.
     // (Name, title) are stored in the (name, title) of the associated key.
     short version = class_version();
-    version += 1000; //GB : enforce writing on seek (and not seek32).
+    version += big_file_version_tag(); //GB : enforce writing on seek (and not seek32).
     if(!a_wb.write(version)) return false;
     if(!a_wb.write(m_date_C)) return false;
     if(!a_wb.write(m_date_M)) return false;
@@ -289,8 +285,8 @@ public:
     if(m_file.verbose()) {
       m_file.out() << "tools::wroot::directory::write :"
                    << " " << sout(m_name)
-                   << " : " << long_out(m_dirs.size())
-                   << " : " << long_out(m_objs.size())
+                   << " : " << m_dirs.size()
+                   << " : " << m_objs.size()
                    << " objects."
                    << std::endl;
     }
@@ -328,8 +324,8 @@ public:
     return true;
   }
 
-  void clear_dirs() {clear<directory>(m_dirs);}
-  void clear_objs() {clear<iobject>(m_objs);}
+  void clear_dirs() {safe_clear<directory>(m_dirs);}
+  void clear_objs() {safe_clear<iobject>(m_objs);}
 
 protected:
   void clear_keys() {
@@ -404,7 +400,7 @@ protected:
     //}
 
     // Write new keys record :
-    uint32 nkeys  = m_keys.size();
+    uint32 nkeys  = uint32(m_keys.size());
 
     // Compute size of all keys
     uint32 nbytes = sizeof(nkeys);
@@ -413,15 +409,14 @@ protected:
       nbytes += (*it)->key_length();
     }}
 
-    key headerkey(m_file,m_seek_directory,
-                  m_name,m_title,"TDirectory",nbytes);
+    key headerkey(m_file.out(),m_file,m_seek_directory,m_name,m_title,"TDirectory",nbytes); // m_file.set_END().
     if(!headerkey.seek_key()) return false;
 
    {char* buffer = headerkey.data_buffer();
     wbuf wb(m_file.out(),m_file.byte_swap(),headerkey.eob(),buffer);
     if(!wb.write(nkeys)) return false;
    {tools_lforit(key*,m_keys,it) {
-      if(!((*it)->to_buffer(wb))) return false;
+      if(!((*it)->to_buffer(wb,m_file.verbose()))) return false;
     }}}
   
     m_seek_keys = headerkey.seek_key();
@@ -441,7 +436,7 @@ protected:
     }
 
     headerkey.set_cycle(1);
-    if(!headerkey.write_self()) {
+    if(!headerkey.write_self(m_file)) {
       m_file.out() << "tools::wroot::directory::write_keys :" 
                    << " key.write_self() failed."
                    << std::endl;
@@ -449,7 +444,7 @@ protected:
     }  
 
     uint32 n;
-    return headerkey.write_file(n);
+    return headerkey.write_file(m_file,n);
   }
 
   bool write_header(){
@@ -498,10 +493,10 @@ protected:
 
     //first create the key to get key_length();
 
-    wroot::key* key = new wroot::key(m_file,m_seek_directory,
+    wroot::key* key = new wroot::key(m_file.out(),m_file,m_seek_directory,
                                      name,
                                      a_obj.title(),a_obj.store_class_name(),
-                                     bref.length()); //set m_END
+                                     bref.length()); // It does a m_file.set_END().
 
     if(!key->seek_key()) {
       delete key;
@@ -528,7 +523,7 @@ protected:
     uint16 cycle = append_key(key);
     key->set_cycle(cycle);
     
-    if(!key->write_self()) {
+    if(!key->write_self(m_file)) {
       m_file.out() << "tools::wroot::directory::write_object :" 
                    << " key.write_self() failed."
                    << std::endl;
@@ -543,7 +538,7 @@ protected:
                    << std::endl;
     }
     
-    return key->write_file(a_nbytes);
+    return key->write_file(m_file,a_nbytes);
   }
 
 protected:

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MolecularConfiguration.cc 94289 2015-11-11 08:33:40Z gcosmo $
+// $Id: G4MolecularConfiguration.cc 101354 2016-11-15 08:27:51Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -1556,6 +1556,8 @@ G4MolecularConfiguration::GetMolecularConfiguration(const G4String& userID)
 {
   return GetManager()->GetMolecularConfiguration(userID);
 }
+
+//______________________________________________________________________________
 
 void G4MolecularConfiguration::FinalizeAll()
 {

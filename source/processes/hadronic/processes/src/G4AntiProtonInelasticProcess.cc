@@ -40,7 +40,7 @@ G4AntiProtonInelasticProcess::G4AntiProtonInelasticProcess(const G4String& name)
 
 void G4AntiProtonInelasticProcess::ProcessDescription(std::ostream& outFile) const
 {
-  outFile << "This process handles the inelastic scattering of anti-protons\n" 
-          << "from nuclei by invoking one or more hadronic models and one\n"
-          << "or more hadronic cross sections.\n";
+  outFile << "G4AntiProtonInelasticProcess handles the inelastic scattering\n" 
+          << "of anti-protons from nuclei by invoking one or more hadronic\n"
+          << "models and one or more hadronic cross section sets.\n";
 }

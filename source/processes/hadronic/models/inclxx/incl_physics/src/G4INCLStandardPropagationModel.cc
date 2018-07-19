@@ -55,6 +55,8 @@
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLCoulombDistortion.hh"
 #include "G4INCLDeltaDecayChannel.hh"
+#include "G4INCLSigmaZeroDecayChannel.hh"
+#include "G4INCLPionResonanceDecayChannel.hh"
 #include "G4INCLParticleEntryAvatar.hh"
 #include "G4INCLIntersection.hh"
 
@@ -99,7 +101,7 @@ namespace G4INCL {
 
       G4double temfin;
       G4double TLab;
-      if( p->isPion() ) {
+      if( p->isMeson()) {
         temfin = 30.18 * std::pow(theNucleus->getA(), 0.17);
         TLab = p->getKineticEnergy();
       } else {
@@ -284,8 +286,8 @@ namespace G4INCL {
         hasLocalEnergy = ((theLocalEnergyType == FirstCollisionLocalEnergy &&
               theNucleus->getStore()->getBook().getAcceptedCollisions()==0) ||
             theLocalEnergyType == AlwaysLocalEnergy);
-      const G4bool p1HasLocalEnergy = (hasLocalEnergy && !p1->isPion());
-      const G4bool p2HasLocalEnergy = (hasLocalEnergy && !p2->isPion());
+      const G4bool p1HasLocalEnergy = (hasLocalEnergy && !p1->isMeson());
+      const G4bool p2HasLocalEnergy = (hasLocalEnergy && !p2->isMeson());
 
       if(p1HasLocalEnergy) {
         backupParticle1 = *p1;
@@ -462,13 +464,27 @@ namespace G4INCL {
 
     void StandardPropagationModel::generateDecays(const ParticleList &particles) {
       for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
-	if((*i)->isDelta()) {
-          G4double decayTime = DeltaDecayChannel::computeDecayTime((*i));
-	  G4double time = currentTime + decayTime;
-	  if(time <= maximumTime) {
-	    registerAvatar(new DecayAvatar((*i), time, theNucleus));
-	  }
-	}
+	       if((*i)->isDelta()) {
+             G4double decayTime = DeltaDecayChannel::computeDecayTime((*i)); // time in fm/c
+	         G4double time = currentTime + decayTime;
+	         if(time <= maximumTime) {
+	           registerAvatar(new DecayAvatar((*i), time, theNucleus));
+	         }
+	       }
+	       else if((*i)->getType() == SigmaZero) {
+	         G4double decayTime = SigmaZeroDecayChannel::computeDecayTime((*i)); // time in fm/c
+	         G4double time = currentTime + decayTime;
+	         if(time <= maximumTime) {
+	           registerAvatar(new DecayAvatar((*i), time, theNucleus));
+	         }
+	       }
+        if((*i)->isOmega()) {
+          G4double decayTimeOmega = PionResonanceDecayChannel::computeDecayTime((*i));
+          G4double timeOmega = currentTime + decayTimeOmega;
+          if(timeOmega <= maximumTime) {
+            registerAvatar(new DecayAvatar((*i), timeOmega, theNucleus));
+          }
+        }
       }
     }
 

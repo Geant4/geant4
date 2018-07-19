@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh 95805 2016-02-25 11:11:49Z gcosmo $
+// $Id: G4TessellatedSolid.hh 108151 2018-01-12 09:29:46Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -99,6 +99,15 @@
 #ifndef G4TessellatedSolid_hh
 #define G4TessellatedSolid_hh 1
 
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UTESSELLATEDSOLID 1
+#endif
+
+#if defined(G4GEOM_USE_UTESSELLATEDSOLID)
+  #define G4UTessellatedSolid G4TessellatedSolid
+  #include "G4UTessellatedSolid.hh"
+#else
+
 #include <iostream>
 #include <vector>
 #include <set>
@@ -106,7 +115,7 @@
 
 #include "G4VSolid.hh"
 #include "G4Types.hh"
-#include "G4SurfaceVoxelizer.hh"
+#include "G4Voxelizer.hh"
 
 struct G4VertexInfo
 {
@@ -180,12 +189,14 @@ class G4TessellatedSolid : public G4VSolid
 
     inline void SetMaxVoxels(G4int max);
 
-    inline G4SurfaceVoxelizer &GetVoxels();
+    inline G4Voxelizer &GetVoxels();
 
     virtual G4bool CalculateExtent(const EAxis pAxis,
                                    const G4VoxelLimits& pVoxelLimit,
                                    const G4AffineTransform& pTransform,
                                          G4double& pMin, G4double& pMax) const;
+
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4double      GetMinXExtent () const;
     G4double      GetMaxXExtent () const;
@@ -193,10 +204,6 @@ class G4TessellatedSolid : public G4VSolid
     G4double      GetMaxYExtent () const;
     G4double      GetMinZExtent () const;
     G4double      GetMaxZExtent () const;
-
-    G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pT) const;
-      // Create the List of transformed vertices in the format required
-      // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 
     virtual G4Polyhedron* CreatePolyhedron () const;
     virtual G4Polyhedron* GetPolyhedron    () const;
@@ -293,7 +300,7 @@ class G4TessellatedSolid : public G4VSolid
 
     G4int fMaxTries;
 
-    G4SurfaceVoxelizer fVoxels;  // Pointer to the voxelized solid
+    G4Voxelizer fVoxels;  // Pointer to the voxelized solid
 
     G4SurfBits fInsides;
 };
@@ -312,7 +319,7 @@ inline void G4TessellatedSolid::SetMaxVoxels(G4int max)
   fVoxels.SetMaxVoxels(max);
 }
 
-inline G4SurfaceVoxelizer &G4TessellatedSolid::GetVoxels()
+inline G4Voxelizer &G4TessellatedSolid::GetVoxels()
 {
   return fVoxels;
 }
@@ -327,5 +334,7 @@ inline G4bool G4TessellatedSolid::OutsideOfExtent(const G4ThreeVector &p,
         || p.z() < fMinExtent.z() - tolerance
         || p.z() > fMaxExtent.z() + tolerance);
 }
+
+#endif
 
 #endif

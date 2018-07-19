@@ -37,12 +37,13 @@ public:
   tbbTask(G4int anId, tbb::concurrent_queue<const G4Run*>* output=0 , G4int nEvts = 1 );
   virtual ~tbbTask();
   tbb::task* execute();
+  
+  unsigned int GetSlotId();  //
 private:
-  G4int nEvents;
-  G4int thisID;
-  tbb::concurrent_queue<const G4Run*>* output;
-  G4bool beamOnCondition;
+  G4int m_nEvents;
+  G4int m_taskID;
+  tbb::concurrent_queue<const G4Run*>* m_output;
+  G4bool m_beamOnCondition;
 };
-
 
 #endif //TBBTASK_HH

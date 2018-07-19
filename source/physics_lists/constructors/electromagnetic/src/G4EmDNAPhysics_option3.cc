@@ -33,6 +33,7 @@
 
 // *** Processes and models for Geant4-DNA
 
+#include "G4DNAElectronSolvation.hh"
 #include "G4DNAElastic.hh"
 #include "G4DNAChampionElasticModel.hh"
 #include "G4DNAScreenedRutherfordElasticModel.hh"
@@ -82,22 +83,18 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option3);
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4EmDNAPhysics_option3::G4EmDNAPhysics_option3(G4int ver)
-  : G4VPhysicsConstructor("G4EmDNAPhysics_option3"), verbose(ver)
-{
-  G4EmParameters::Instance()->SetDefaults();
-  SetPhysicsType(bElectromagnetic);
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmDNAPhysics_option3::G4EmDNAPhysics_option3(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmDNAPhysics_option3"), verbose(ver)
 {
-  G4EmParameters::Instance()->SetDefaults();
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
+  param->SetFluo(true);  
+  param->SetAuger(true);  
+  param->SetAugerCascade(true);  
+  param->SetDeexcitationIgnoreCut(true);
+
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -148,7 +145,15 @@ void G4EmDNAPhysics_option3::ConstructProcess()
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "e-") {
-
+      
+      G4DNAElectronSolvation* solvation =
+      new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
+      G4DNAOneStepThermalizationModel* therm =
+      new G4DNAOneStepThermalizationModel();
+      therm->SetHighEnergyLimit(7.4*eV); // limit of the Champion's model
+      solvation->SetEmModel(therm);
+      ph->RegisterProcess(solvation, particle);
+      
       // *** Elastic scattering (two alternative models available) ***
       
       G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
@@ -229,33 +234,23 @@ void G4EmDNAPhysics_option3::ConstructProcess()
 
     } else if (particleName == "gamma") {
     
-      G4double LivermoreHighEnergyLimit = GeV;
-
+      // photoelectric effect - Livermore model only
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = 
-	new G4LivermorePhotoElectricModel();
-      theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
+      thePhotoElectricEffect->SetEmModel(new G4LivermorePhotoElectricModel());
       ph->RegisterProcess(thePhotoElectricEffect, particle);
 
+      // Compton scattering - Livermore model only
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      G4LivermoreComptonModel* theLivermoreComptonModel = 
-	new G4LivermoreComptonModel();
-      theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
+      theComptonScattering->SetEmModel(new G4LivermoreComptonModel());
       ph->RegisterProcess(theComptonScattering, particle);
 
+      // gamma conversion - Livermore model below 80 GeV
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
-	new G4LivermoreGammaConversionModel();
-      theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
+      theGammaConversion->SetEmModel(new G4LivermoreGammaConversionModel());
       ph->RegisterProcess(theGammaConversion, particle);
 
+      // default Rayleigh scattering is Livermore
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
-      theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theRayleigh->AddEmModel(0, theRayleighModel);
       ph->RegisterProcess(theRayleigh, particle);
     }
     
@@ -267,7 +262,6 @@ void G4EmDNAPhysics_option3::ConstructProcess()
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
-  de->SetFluo(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

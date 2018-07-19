@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: 
+// $Id:
 //
 //
 // -------------------------------------------------------------------
@@ -37,7 +37,7 @@
 // Author  W. Pokorski  21.09.2012
 //
 // Modifications:
-// 
+//
 //
 // Class Description
 // This is a singleton keeping pointers to all physics constructors
@@ -59,10 +59,10 @@ class G4PhysicsConstructorRegistry
 public:
 
   static G4PhysicsConstructorRegistry* Instance();
-  // access 
-  
+  // access
+
   ~G4PhysicsConstructorRegistry();
-  
+
   void Register(G4VPhysicsConstructor*);
   //register new physics constructors
 
@@ -71,7 +71,7 @@ public:
 
   void Clean();
   //clean the store
-  
+
   void AddFactory(G4String, G4VBasePhysConstrFactory*);
 
   G4VPhysicsConstructor* GetPhysicsConstructor(const G4String& name);
@@ -81,13 +81,13 @@ public:
   std::vector<G4String> AvailablePhysicsConstructors() const;
 
   void PrintAvailablePhysicsConstructors() const;
-    
+
 private:
 
   G4PhysicsConstructorRegistry();
 
   static G4ThreadLocal G4PhysicsConstructorRegistry* theInstance;
-  
+
   std::vector <G4VPhysicsConstructor*> physConstr;
 
   std::map <G4String, G4VBasePhysConstrFactory*> factories;

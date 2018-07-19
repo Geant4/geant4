@@ -14,7 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-20-Apr-2016, G.Cosmo hadr-qelastic-V10-01-04
+24-Apr-2018, A.Ribon hadr-qelastic-V10-04-00
+- G4QuasiElRatios : removed unnecessary protection against heavy elements.
+
+20-Apr-2016, G.Cosmo hadr-qelastic-V10-02-00
 - Fixed shadowing compilation warnings in G4QuasiElRatios for 'ps'.
 
 01-Nov-2015, W.Pokorski hadr-qelastic-V10-01-03

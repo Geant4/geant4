@@ -37,6 +37,7 @@
 #include "G4RunManager.hh"
 #include "G4VUserParallelWorld.hh"
 #include "G4ThreeVector.hh"
+#include "TrentoPassiveProtonBeamLine.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyGeometryController::HadrontherapyGeometryController()
@@ -61,6 +62,11 @@ void HadrontherapyGeometryController::SetGeometry(G4String name)
     else if(name == "LaserDriven")
     {
       registerGeometry(new LaserDrivenBeamLine());
+    }
+    
+    else if(name == "TrentoLine")
+    {
+        registerGeometry(new TrentoPassiveProtonBeamLine());
     }
     else
     {

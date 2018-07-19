@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleRE05.cc 69920 2013-05-17 13:36:37Z gcosmo $
+// $Id: exampleRE05.cc 110007 2018-05-14 08:23:07Z gcosmo $
 //
 /// \file RE05/exampleRE05.cc
 /// \brief Main program of the RE05 example
@@ -31,6 +31,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -43,21 +45,22 @@
 #include "G4UImanager.hh"
 
 #include "RE05DetectorConstruction.hh"
-#include "RE05CalorimeterROGeometry.hh"
+#include "RE05CalorimeterParallelWorld.hh"
 #include "QBBC.hh"
 #include "G4ParallelWorldPhysics.hh"
 #include "RE05ActionInitialization.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 int main(int argc,char** argv)
 {
+  // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   G4int number_of_threads = 4; // default number of threads
@@ -74,7 +77,7 @@ int main(int argc,char** argv)
   //
   G4VUserDetectorConstruction* detector = new RE05DetectorConstruction();
   detector->RegisterParallelWorld
-       (new RE05CalorimeterROGeometry(parallelWorldName));
+       (new RE05CalorimeterParallelWorld(parallelWorldName));
   runManager->SetUserInitialization(detector);
   //
   G4VModularPhysicsList* physicsList = new QBBC;
@@ -87,36 +90,27 @@ int main(int argc,char** argv)
 
   runManager->Initialize();
 
-#ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif    
-     
+
   //get the pointer to the User Interface manager   
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-  if (argc!=1)   // batch mode  
+  if (!ui)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);
     }
   else           // interactive mode : define UI session
-    { 
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
+    {
+      UImanager->ApplyCommand("/control/execute vis.mac");
       ui->SessionStart();
       delete ui;
-#endif
-     
-#ifdef G4VIS_USE
-      delete visManager;
-#endif     
     }
-    
+
+  delete visManager;
+
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh 83424 2014-08-21 15:39:44Z gcosmo $
+// $Id: G4SynchrotronRadiation.hh 97385 2016-06-02 09:59:53Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -65,17 +65,17 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
 {
 public:
 
-  G4SynchrotronRadiation(const G4String& pName = "SynRad",
+  explicit G4SynchrotronRadiation(const G4String& pName = "SynRad",
 		         G4ProcessType type = fElectromagnetic);
 
   virtual ~G4SynchrotronRadiation();
 
   virtual G4double GetMeanFreePath( const G4Track& track,
 				    G4double previousStepSize,
-				    G4ForceCondition* condition );
+				    G4ForceCondition* condition ) override;
 
   virtual G4VParticleChange *PostStepDoIt( const G4Track& track,
-					   const G4Step& Step    );
+					   const G4Step& Step    ) override;
 
   G4double GetPhotonEnergy( const G4Track& trackData,
                                const G4Step&  stepData      );
@@ -86,16 +86,17 @@ public:
   G4double Chebyshev(G4double a,G4double b,const G4double c[],
 		     G4int n, G4double x);
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
-  virtual void BuildPhysicsTable(const G4ParticleDefinition& );
+  virtual G4bool IsApplicable(const G4ParticleDefinition&) override;
+  virtual void BuildPhysicsTable(const G4ParticleDefinition& ) override;
   virtual void PrintInfoDefinition();
 
   void SetAngularGenerator(G4VEmAngularDistribution* p);
 
 private:
 
-  G4SynchrotronRadiation & operator=(const G4SynchrotronRadiation &right);
-  G4SynchrotronRadiation(const G4SynchrotronRadiation&);
+  G4SynchrotronRadiation & 
+    operator=(const G4SynchrotronRadiation &right) = delete;
+  G4SynchrotronRadiation(const G4SynchrotronRadiation&) = delete;
 
   G4VEmAngularDistribution*   genAngle;
 
@@ -114,7 +115,7 @@ G4SynchrotronRadiation::Chebyshev(G4double a, G4double b, const G4double c[],
 {
   G4double y;
   G4double y2=2.0*(y=(2.0*x-a-b)/(b-a)); // Change of variable.
-  G4double d=0,dd=0;
+  G4double d=0.,dd=0.;
   for (G4int j=n-1;j>=1;--j) // Clenshaw's recurrence.
   { G4double sv=d;
 	d=y2*d-dd+c[j];

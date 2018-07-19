@@ -104,10 +104,11 @@ include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_ctor_factory
     HEADERS
-	G4PhysicsConstructorFactory.hh
+        G4RegisterPhysicsConstructors.icc
+        G4PhysicsConstructorFactory.hh
         G4PhysicsConstructorRegistry.hh
     SOURCES
-	G4PhysicsConstructorRegistry.cc
+        G4PhysicsConstructorRegistry.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

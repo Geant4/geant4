@@ -57,8 +57,8 @@
 
 
 CexmcSteppingAction::CexmcSteppingAction(
-                                    CexmcPhysicsManager *  physicsManager ) :
-    physicsManager( physicsManager ), targetVolume( NULL )
+                                    CexmcPhysicsManager *  physicsManager_ ) :
+    physicsManager( physicsManager_ ), targetVolume( NULL )
 {
     G4RunManager *      runManager( G4RunManager::GetRunManager() );
     const CexmcSetup *  setup( static_cast< const CexmcSetup * >(

@@ -38,10 +38,10 @@
 //
 // Class description:
 //
-//   Wrapper class for UTet to make use of UTet from USolids module.
+//   Wrapper class for G4Tet to make use of VecGeom Tet.
 
 // History:
-// 1.11.13 G.Cosmo, CERN/PH
+// 1.11.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UTET_HH
 #define G4UTET_HH
@@ -82,6 +82,13 @@ class G4UTet : public G4USolid
     G4UTet(const G4UTet& rhs);
     G4UTet& operator=(const G4UTet& rhs); 
       // Copy constructor and assignment operator.
+
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pMin, G4double& pMax) const;
 
     G4Polyhedron* CreatePolyhedron() const;
 

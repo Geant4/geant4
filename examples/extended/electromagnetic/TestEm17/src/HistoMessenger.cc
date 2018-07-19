@@ -27,7 +27,7 @@
 /// \brief Implementation of the HistoMessenger class
 //
 //
-// $Id: HistoMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: HistoMessenger.cc 100677 2016-10-31 10:46:50Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -63,7 +63,7 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
   fHistoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
   //
   G4UIparameter* ih = new G4UIparameter("ih",'i',false);
-  ih->SetGuidance("histo number : from 1 to MaxHisto");
+  ih->SetGuidance("histo number : from 1 to kMaxHisto");
   ih->SetParameterRange("ih>0");
   fHistoCmd->SetParameter(ih);
   //

@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/range/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
-//
-// $Id: TrackingAction.cc 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
 
@@ -38,6 +33,7 @@
 #include "HistoManager.hh"
 
 #include "G4RunManager.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -107,7 +103,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  //
  
  if (track->GetDefinition()->GetPDGCharge() >= 0 
-     && track->GetDefinition()->GetPDGMass() > 0) 
+     && track->GetDefinition()->GetPDGMass() > 0
+     && track->GetDefinition() != G4Positron::PositronDefinition() 
+    ) 
  {   
     //local cumulation is required before scoring once
     fTrackLength =  fTrackLength + tracklen;
@@ -123,7 +121,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  //
 
  if (track->GetDefinition()->GetPDGCharge() >= 0 
-     && track->GetDefinition()->GetPDGMass() > 0) 
+     && track->GetDefinition()->GetPDGMass() > 0
+     && track->GetDefinition() != G4Positron::PositronDefinition() 
+    ) 
  {  
    G4double pr = (track->GetPosition())*
                  (fPrimary->GetParticleGun()->GetParticleMomentumDirection());
@@ -138,7 +138,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  //extract penetration range of primary particle
  //
  if (track->GetDefinition()->GetPDGCharge() >= 0 
-     && track->GetDefinition()->GetPDGMass() > 0) 
+     && track->GetDefinition()->GetPDGMass() > 0
+     && track->GetDefinition() != G4Positron::PositronDefinition() 
+    ) 
  {    
    G4double pene = std::sqrt((track->GetPosition())*(track->GetPosition()));
    
@@ -150,5 +152,3 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  };
 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

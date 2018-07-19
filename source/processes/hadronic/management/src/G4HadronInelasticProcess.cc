@@ -44,17 +44,16 @@
 #include "G4ParticleDefinition.hh"
   
 G4HadronInelasticProcess::G4HadronInelasticProcess(const G4String& processName,
-                                                   G4ParticleDefinition* aParticle):
+                                                   G4ParticleDefinition*):
   G4HadronicProcess(processName,fHadronInelastic)
 {
   AddDataSet(new G4HadronInelasticDataSet());
-  theParticle = aParticle;
 }
 
 G4HadronInelasticProcess::~G4HadronInelasticProcess() 
 {}
 
-G4bool G4HadronInelasticProcess::IsApplicable(const G4ParticleDefinition& aP)
+G4bool G4HadronInelasticProcess::IsApplicable(const G4ParticleDefinition&)
 {
-  return  theParticle == &aP || theParticle == G4GenericIon::GenericIon();
+  return  true;
 }

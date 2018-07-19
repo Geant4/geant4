@@ -29,6 +29,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4KineticTrack.hh"
 
+#include "G4SampleResonance.hh"     // Uzhi July 2017
+
 //#define debug_G4ExcitedStringDecay
 //#define debug_G4ExcitedStringCorr
 
@@ -84,17 +86,21 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
 #endif
 
   for ( unsigned int astring=0; astring < theStrings->size(); astring++)
+//  for ( unsigned int astring=0; astring < 1; astring++)
   {
+//G4cout<<"theStrings->operator[](astring)->IsExcited() "<<" "<<astring<<" "<<theStrings->operator[](astring)->IsExcited()<<G4endl;
    if ( theStrings->operator[](astring)->IsExcited() )
         {KTsum+= theStrings->operator[](astring)->Get4Momentum();}
    else {KTsum+=theStrings->operator[](astring)->GetKineticTrack()->Get4Momentum();}
   }
 
-  G4LorentzRotation toCms( -1 * KTsum.boostVector() );                   // Uzhi 22 June 2014
-  G4LorentzRotation toLab(toCms.inverse());                              // Uzhi 22 June 2014
+  G4LorentzRotation toCms( -1 * KTsum.boostVector() );
+  G4LorentzRotation toLab(toCms.inverse());
   G4LorentzVector Ptmp;
   KTsum=G4LorentzVector(0.,0.,0.,0.);
-  for ( unsigned int astring=0; astring < theStrings->size(); astring++) // Uzhi 22 June 2014
+
+  for ( unsigned int astring=0; astring < theStrings->size(); astring++)
+//  for ( unsigned int astring=0; astring < 1; astring++)
   {
    if ( theStrings->operator[](astring)->IsExcited() )
    {
@@ -112,7 +118,10 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
     theStrings->operator[](astring)->GetKineticTrack()->Set4Momentum(Ptmp);
     KTsum+= theStrings->operator[](astring)->GetKineticTrack()->Get4Momentum();
    }
-  }                                                                      // Uzhi 22 June 2014
+  }
+
+  G4SampleResonance BrW;                             // Uzhi July 2017
+  const G4ParticleDefinition* TrackDefinition=0;     // Uzhi July 2017
 
   G4KineticTrackVector * theResult = new G4KineticTrackVector;
   G4int attempts(0);
@@ -132,7 +141,7 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
 	NeedEnergyCorrector=false;
 
 	for ( unsigned int astring=0; astring < theStrings->size(); astring++)
-//	for ( unsigned int astring=0; astring < 1; astring++)
+//	for ( unsigned int astring=0; astring < 1; astring++)                       // Uzhi For testing purposes
 	{
 #ifdef debug_G4ExcitedStringDecay  
           G4cout<<"String No "<<astring+1<<" Excited?  "<<theStrings->operator[](astring)->IsExcited()<<G4endl;
@@ -152,7 +161,8 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
 #endif
   	     generatedKineticTracks=FragmentString(*theStrings->operator[](astring));
 #ifdef debug_G4ExcitedStringDecay  
-            G4cout<<"(G4ExcitedStringDecay) Number of produced hadrons = "<<generatedKineticTracks->size()<<G4endl;
+            G4cout<<"(G4ExcitedStringDecay) Number of produced hadrons = "
+                  <<generatedKineticTracks->size()<<G4endl;
 #endif
 	  } else {
 #ifdef debug_G4ExcitedStringDecay  
@@ -174,12 +184,11 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
 	     generatedKineticTracks->push_back(aTrack);
 	  }    
 
-//	  if (generatedKineticTracks == NULL)                // Uzhi 02.06.2015
-	  if (generatedKineticTracks->size() == 0)           // Uzhi 02.06.2015
+	  if (generatedKineticTracks->size() == 0)
 	  {
-//	     G4cerr << "G4VPartonStringModel:No KineticTracks produced" << G4endl; // Uzhi 02.06.2015
-//	     continue;                                                             // Uzhi 02.06.2015
-             success=false; NeedEnergyCorrector=false; break;                      // Uzhi 02.06.2015
+//	     G4cerr << "G4VPartonStringModel:No KineticTracks produced" << G4endl; 
+//	     continue;                                                             
+             success=false; NeedEnergyCorrector=false; break;                      
 	  }
 
           G4LorentzVector KTsum1(0.,0.,0.,0.);
@@ -188,8 +197,31 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
 #ifdef debug_G4ExcitedStringDecay  
              G4cout<<"Prod part No. "<<aTrack+1<<" "
                    <<(*generatedKineticTracks)[aTrack]->GetDefinition()->GetParticleName()<<" "
-                   <<(*generatedKineticTracks)[aTrack]->Get4Momentum()<<G4endl;
+                   <<(*generatedKineticTracks)[aTrack]->Get4Momentum()
+                   <<(*generatedKineticTracks)[aTrack]->Get4Momentum().mag()<<G4endl;
 #endif
+// --------------- Sampling mass of unstable hadronic resonances ---------------- Uzhi July 2017
+             TrackDefinition = (*generatedKineticTracks)[aTrack]->GetDefinition();
+
+	     if(TrackDefinition->IsShortLived())
+             {
+              G4double NewTrackMass = BrW.SampleMass( TrackDefinition,
+                       TrackDefinition->GetPDGMass() + 5.0*TrackDefinition->GetPDGWidth() );
+              G4LorentzVector Tmp=G4LorentzVector((*generatedKineticTracks)[aTrack]->Get4Momentum());
+              Tmp.setE(std::sqrt(sqr(NewTrackMass) + Tmp.vect().mag2()));
+
+              (*generatedKineticTracks)[aTrack]->Set4Momentum(Tmp);
+
+#ifdef debug_G4ExcitedStringDecay  
+             G4cout<<"Resonance *** "<<aTrack+1<<" "
+                   <<(*generatedKineticTracks)[aTrack]->GetDefinition()->GetParticleName()<<" "
+                   <<(*generatedKineticTracks)[aTrack]->Get4Momentum()
+                   <<(*generatedKineticTracks)[aTrack]->Get4Momentum().mag()<<G4endl;
+#endif
+
+     	     }
+// //----------------------------------------------------------------------------------------------
+
              theResult->push_back(generatedKineticTracks->operator[](aTrack));
              KTsum1+= (*generatedKineticTracks)[aTrack]->Get4Momentum();
 	  }
@@ -212,20 +244,18 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
 
 //        clean up
 	  delete generatedKineticTracks;
-	  success=true;                          // Uzhi 02.06.2015
+	  success=true;                          
 	}
 
-//        success=true;                          // Uzhi 02.06.2015
-
 	if ( NeedEnergyCorrector ) success=EnergyAndMomentumCorrector(theResult, KTsum);
-  } while(!success && (attempts < 10));  /* Loop checking, 07.08.2015, A.Ribon */
+  } while(!success && (attempts < 100));  /* Loop checking, 07.08.2015, A.Ribon */
 
-  for ( unsigned int aTrack=0; aTrack<theResult->size();aTrack++)       // Uzhi 22 June 2014
+  for ( unsigned int aTrack=0; aTrack<theResult->size();aTrack++)
   {
    Ptmp=(*theResult)[aTrack]->Get4Momentum();
    Ptmp.transform( toLab);
    (*theResult)[aTrack]->Set4Momentum(Ptmp);
-  }                                                                    // Uzhi 22 June 2014
+  }
 
 #ifdef debug_G4ExcitedStringDecay  
   G4cout<<"End of the strings fragmentation (G4ExcitedStringDecay)"<<G4endl;
@@ -240,13 +270,22 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
       KTsum1+= (*theResult)[aTrack]->Get4Momentum();
   }
 
-  G4cout << "Needcorrector/success " << NeedEnergyCorrector << "/" << success << ", Corrected total  4 momentum " << KTsum1  << G4endl;
+  G4cout << "Needcorrector/success " << NeedEnergyCorrector << "/" << success 
+         << ", Corrected total  4 momentum " << KTsum1  << G4endl;
   if ( ! success ) G4cout << "failed to correct E/p" << G4endl;  
 
   G4cout<<"End of the Hadronization (G4ExcitedStringDecay)"<<G4endl;
 #endif
 
-  for ( unsigned int astring=0; astring < theStrings->size(); astring++) // Uzhi 24 Oct. 2014
+if(!success)
+{
+ if(theResult->size() != 0)
+ {std::for_each(theResult->begin() , theResult->end() , DeleteKineticTrack());
+  theResult->clear();
+  delete theResult; theResult=0;
+ }
+  for ( unsigned int astring=0; astring < theStrings->size(); astring++)
+//  for ( unsigned int astring=0; astring < 1; astring++) // Uzhi 2016 Need more correct. For testing purposes.
   {
    if ( theStrings->operator[](astring)->IsExcited() )
    {
@@ -264,8 +303,8 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
     Ptmp.transform( toLab);
     theStrings->operator[](astring)->GetKineticTrack()->Set4Momentum(Ptmp);
    }
-  }                                                                      // Uzhi 24 Oct. 2014
-
+  }
+}
   return theResult;
 }
 
@@ -279,6 +318,8 @@ G4bool G4ExcitedStringDecay::EnergyAndMomentumCorrector
     G4double        SumMass = 0;
     G4double        TotalCollisionMass = TotalCollisionMom.m();
 
+    std::vector<G4double> HadronMass; G4double HadronM(0.);
+
 #ifdef debug_G4ExcitedStringCorr
     G4cout<<G4endl<<"EnergyAndMomentumCorrector. Number of particles: "<<Output->size()<<G4endl;
 #endif
@@ -287,7 +328,8 @@ G4bool G4ExcitedStringDecay::EnergyAndMomentumCorrector
     for(cHadron = 0; cHadron < Output->size(); cHadron++)
     {
         SumMom  += Output->operator[](cHadron)->Get4Momentum();
-        SumMass += Output->operator[](cHadron)->GetDefinition()->GetPDGMass();
+        HadronM=Output->operator[](cHadron)->Get4Momentum().mag(); HadronMass.push_back(HadronM);
+        SumMass += Output->operator[](cHadron)->Get4Momentum().mag();  //GetDefinition()->GetPDGMass();
     }
 
 #ifdef debug_G4ExcitedStringCorr
@@ -305,8 +347,8 @@ G4bool G4ExcitedStringDecay::EnergyAndMomentumCorrector
     SumMass = std::sqrt(SumMass);
 
      // Compute c.m.s. hadron velocity and boost KTV to hadron c.m.s.
-//    G4ThreeVector Beta = -SumMom.boostVector();          // Uzhi 22 June 2014
-    G4ThreeVector Beta = -TotalCollisionMom.boostVector(); // Uzhi 22 June 2014
+//    G4ThreeVector Beta = -SumMom.boostVector();          
+    G4ThreeVector Beta = -TotalCollisionMom.boostVector(); 
     Output->Boost(Beta);
 
     // Scale total c.m.s. hadron energy (hadron system mass).
@@ -320,9 +362,11 @@ G4bool G4ExcitedStringDecay::EnergyAndMomentumCorrector
       Sum = 0;
       for(cHadron = 0; cHadron < Output->size(); cHadron++)
       {
+        HadronM = HadronMass.at(cHadron);
         G4LorentzVector HadronMom = Output->operator[](cHadron)->Get4Momentum();
         HadronMom.setVect(Scale*HadronMom.vect());
-        G4double E = std::sqrt(HadronMom.vect().mag2() + sqr(Output->operator[](cHadron)->GetDefinition()->GetPDGMass()));
+        G4double E = std::sqrt(HadronMom.vect().mag2() + sqr(HadronM));
+                                                       //sqr(Output->operator[](cHadron)->GetDefinition()->GetPDGMass()));
         HadronMom.setE(E);
         Output->operator[](cHadron)->Set4Momentum(HadronMom);
         Sum += E;
@@ -340,6 +384,7 @@ G4bool G4ExcitedStringDecay::EnergyAndMomentumCorrector
 	break;
       }
     }
+
 #ifdef debug_G4ExcitedStringCorr
     if(!success)
     {

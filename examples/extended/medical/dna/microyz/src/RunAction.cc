@@ -25,11 +25,10 @@
 //
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// shall cite the following Geant4-DNA collaboration publications:
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
-//
-// $Id: RunAction.cc 75214 2013-10-29 16:04:42Z gcosmo $
 //
 /// \file RunAction.cc
 /// \brief Implementation of the RunAction class
@@ -43,11 +42,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction()
- : G4UserRunAction()
-{ 
-  // set printing event number per each 10 events
-  G4RunManager::GetRunManager()->SetPrintProgress(10);     
-}
+:G4UserRunAction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -87,8 +83,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
   
   analysisManager->CreateNtuple("yz", "yz-distributions");
   analysisManager->CreateNtupleDColumn("radius");
+  analysisManager->CreateNtupleDColumn("eventID");
+  analysisManager->CreateNtupleDColumn("nbHits");
+  analysisManager->CreateNtupleDColumn("nbScoredHits");
   analysisManager->CreateNtupleDColumn("y");
   analysisManager->CreateNtupleDColumn("z");
+  analysisManager->CreateNtupleDColumn("Einc");
+
   analysisManager->FinishNtuple();}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

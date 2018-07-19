@@ -43,7 +43,11 @@
 
 using namespace std;
 
-G4ThreadLocal G4Allocator<G4KDTree>* G4KDTree::fgAllocator(0);
+G4Allocator<G4KDTree>*& G4KDTree::fgAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4KDTree>* _instance = nullptr;
+    return _instance;
+}
 
 //______________________________________________________________________
 // KDTree methods
@@ -73,13 +77,13 @@ G4KDTree::~G4KDTree()
 
 void* G4KDTree::operator new(size_t)
 {
-  if (!fgAllocator) fgAllocator = new G4Allocator<G4KDTree>;
-  return (void *) fgAllocator->MallocSingle();
+  if (!fgAllocator()) fgAllocator() = new G4Allocator<G4KDTree>;
+  return (void *) fgAllocator()->MallocSingle();
 }
 
 void G4KDTree::operator delete(void *aNode)
 {
-  fgAllocator->FreeSingle((G4KDTree*) aNode);
+  fgAllocator()->FreeSingle((G4KDTree*) aNode);
 }
 
 void G4KDTree::Print(std::ostream& out) const

@@ -37,23 +37,27 @@
 
 #include "G4PolynomialPDF.hh"
 #include "Randomize.hh"
-//#include <time.h>
 
 using namespace std;
 
 G4PolynomialPDF::G4PolynomialPDF(size_t n, const G4double* coeffs, 
 				 G4double x1, G4double x2) :
-fX1(x1), fX2(x2), fChanged(true), fTolerance(1.e-8)
+  fX1(x1), fX2(x2), fChanged(true), fTolerance(1.e-8), fVerbose(0)
 {
-  if(coeffs != NULL) SetCoefficients(n, coeffs);
+  if(coeffs != nullptr) SetCoefficients(n, coeffs);
   else if(n > 0) SetNCoefficients(n);
 }
 
-void G4PolynomialPDF::SetCoefficient(size_t i, G4double value)
+G4PolynomialPDF::~G4PolynomialPDF() 
+{}
+
+void G4PolynomialPDF::SetCoefficient(size_t i, G4double value, bool doSimplify)
 {
-  while(i >= fCoefficients.size()) fCoefficients.push_back(0);  /* Loop checking, 30-Oct-2015, G.Folger */
+  while(i >= fCoefficients.size()) fCoefficients.push_back(0);  
+  /* Loop checking, 30-Oct-2015, G.Folger */
   fCoefficients[i] = value;
   fChanged = true;
+  if(doSimplify) Simplify();
 }
 
 void G4PolynomialPDF::SetCoefficients(size_t nCoeffs, 
@@ -61,16 +65,31 @@ void G4PolynomialPDF::SetCoefficients(size_t nCoeffs,
 {
   SetNCoefficients(nCoeffs);
   for(size_t i=0; i<GetNCoefficients(); ++i) {
-    SetCoefficient(i, coefficients[i]);
+    SetCoefficient(i, coefficients[i], false);
   }
   fChanged = true;
+  Simplify();
+}
+
+void G4PolynomialPDF::Simplify()
+{
+  while(fCoefficients.size() && fCoefficients[fCoefficients.size()-1] == 0) {
+    if(fVerbose > 0) {
+      G4cout << "G4PolynomialPDF::Simplify() WARNING: had to pop coefficient "
+             << fCoefficients.size()-1 << G4endl;
+    }
+    fCoefficients.pop_back();
+    fChanged = true;
+  }
 }
 
 void G4PolynomialPDF::SetDomain(G4double x1, G4double x2) 
 { 
   if(x2 <= x1) {
-    G4cout << "G4PolynomialPDF::SetDomain(): Invalide domain! "
-           << "(x1 = " << x1 << ", x2 = " << x2 << ")." << G4endl;
+    if(fVerbose > 0) {
+      G4cout << "G4PolynomialPDF::SetDomain() WARNING: Invalide domain! "
+	     << "(x1 = " << x1 << ", x2 = " << x2 << ")." << G4endl;
+    }
     return;
   }
   fX1 = x1; 
@@ -95,15 +114,18 @@ void G4PolynomialPDF::Normalize()
     x2N*=fX2;
   }
   if(sum <= 0) {
-    G4cout << "G4PolynomialPDF::Normalize() PDF has non-positive area: " 
-	   << sum << G4endl;
-    Dump();
+    if(fVerbose > 0) {
+      G4cout << "G4PolynomialPDF::Normalize() WARNING: PDF has non-positive area: " 
+	     << sum << G4endl;
+      Dump();
+    }
     return;
   }
 
   for(size_t i=0; i<GetNCoefficients(); ++i) {
-    SetCoefficient(i, GetCoefficient(i)/sum);
+    SetCoefficient(i, GetCoefficient(i)/sum, false);
   }
+  Simplify();
 }
 
 G4double G4PolynomialPDF::Evaluate(G4double x, G4int ddxPower)
@@ -114,14 +136,16 @@ G4double G4PolynomialPDF::Evaluate(G4double x, G4int ddxPower)
   /// ddxPower = 1: f = (d/dx) PDF
   /// ddxPower = 2: f = (d2/dx2) PDF
   if(ddxPower < -1 || ddxPower > 2) {
-    G4cout << "G4PolynomialPDF::GetX(): ddxPower " << ddxPower 
-	   << " not implemented" << G4endl;
-    return 0;
+    if(fVerbose > 0) {
+      G4cout << "G4PolynomialPDF::GetX() WARNING: ddxPower " << ddxPower 
+	     << " not implemented" << G4endl;
+    }
+    return 0.0;
   }
 
-  double f = 0; // return value
-  double xN = 1; // x to the power N
-  double x1N = 1; // endpoint x1 to the power N; only used by CDF
+  double f = 0.; // return value
+  double xN = 1.; // x to the power N
+  double x1N = 1.; // endpoint x1 to the power N; only used by CDF
   for(size_t i=0; i<=GetNCoefficients(); ++i) {
     if(ddxPower == -1) { // CDF
       if(i>0) f += GetCoefficient(i-1)*(xN - x1N)/i;
@@ -145,8 +169,10 @@ G4bool G4PolynomialPDF::HasNegativeMinimum(G4double x1, G4double x2)
   // p': 2ax + b = 0 -> = 0 at min: x_extreme = -b/2a
 
   if(x1 < fX1 || x2 > fX2 || x2 < x1) {
-    G4cout << "G4PolynomialPDF::HasNegativeMinimum(): Invalid range " 
-	   << x1 << " - " << x2 << G4endl;
+    if(fVerbose > 0) {
+      G4cout << "G4PolynomialPDF::HasNegativeMinimum() WARNING: Invalid range " 
+	     << x1 << " - " << x2 << G4endl;
+    }
     return false;
   }
 
@@ -156,7 +182,7 @@ G4bool G4PolynomialPDF::HasNegativeMinimum(G4double x1, G4double x2)
   // If linear, or if quadratic with negative second derivative, 
   // just check the endpoints
   if(GetNCoefficients() == 2 || 
-     (GetNCoefficients() == 3 && GetCoefficient(2) < 0)) {
+     (GetNCoefficients() == 3 && GetCoefficient(2) <= 0)) {
     return (Evaluate(x1) < -fTolerance) || (Evaluate(x2) < -fTolerance);
   }
 
@@ -183,8 +209,11 @@ G4double G4PolynomialPDF::GetRandomX()
   if(fChanged) {
     Normalize(); 
     if(HasNegativeMinimum(fX1, fX2)) {
-      G4cout << "G4PolynomialPDF::GetRandomX(): PDF has negative values, returning 0..." << G4endl;
-      return 0;
+      if(fVerbose > 0) {
+	G4cout << "G4PolynomialPDF::GetRandomX() WARNING: PDF has negative values, returning 0..." 
+	       << G4endl;
+      }
+      return 0.0;
     }
     fChanged = false;
   }
@@ -203,23 +232,31 @@ G4double G4PolynomialPDF::GetX(G4double p, G4double x1, G4double x2,
 
   // input range checking
   if(GetNCoefficients() == 0) {
-    G4cout << "G4PolynomialPDF::GetX(): no PDF defined!" << G4endl;
+    if(fVerbose > 0) {
+      G4cout << "G4PolynomialPDF::GetX() WARNING: no PDF defined!" << G4endl;
+    }
     return x2;
   }
   if(ddxPower < -1 || ddxPower > 1) {
-    G4cout << "G4PolynomialPDF::GetX(): ddxPower " << ddxPower 
-	   << " not implemented" << G4endl;
+    if(fVerbose > 0) {
+      G4cout << "G4PolynomialPDF::GetX() WARNING: ddxPower " << ddxPower 
+	     << " not implemented" << G4endl;
+    }
     return x2;
   }
   if(ddxPower == -1 && (p<0 || p>1)) {
-    G4cout << "G4PolynomialPDF::GetX(): p is out of range" << G4endl;
+    if(fVerbose > 0) {
+      G4cout << "G4PolynomialPDF::GetX() WARNING: p is out of range" << G4endl;
+    }
     return fX2;
   }
 
   // check limits
   if(x2 <= x1 || x1 < fX1 || x2 > fX2) {
-    G4cout << "G4PolynomialPDF::GetX(): domain must have fX1 <= x1 < x2 <= fX2. "
-           << "You sent x1 = " << x1 << ", x2 = " << x2 << "." << G4endl;
+    if(fVerbose > 0) {
+      G4cout << "G4PolynomialPDF::GetX() WARNING: domain must have fX1 <= x1 < x2 <= fX2. "
+	     << "You sent x1 = " << x1 << ", x2 = " << x2 << "." << G4endl;
+    }
     return x2;
   }
 
@@ -232,7 +269,14 @@ G4double G4PolynomialPDF::GetX(G4double p, G4double x1, G4double x2,
      (ddxPower ==  0 && GetNCoefficients() == 2) ||
      (ddxPower ==  1 && GetNCoefficients() == 3)) {
     G4double b = (ddxPower > -1) ? GetCoefficient(ddxPower) : -GetCoefficient(0)*fX1;
-    G4double slope = GetCoefficient(ddxPower+1);
+    G4double slope = GetCoefficient(ddxPower+1); // the highest-order coefficient
+    if(slope == 0) { // the highest-order coefficient should never be zero if simplified
+      if(fVerbose > 0) {
+        G4cout << "G4PolynomialPDF::GetX() WARNING: Got slope = 0. "
+               << "Did you forget to Simplify()?" << G4endl;
+      }
+      return x2;
+    }
     if(ddxPower == 1) slope *= 2.;
     G4double value = (p-b)/slope;
     if(value < x1) {
@@ -254,7 +298,14 @@ G4double G4PolynomialPDF::GetX(G4double p, G4double x1, G4double x2,
     if(ddxPower == -1) c -= (GetCoefficient(0) + GetCoefficient(1)/2.*fX1)*fX1;
     G4double b = GetCoefficient(ddxPower+1);
     if(ddxPower == 1) b *= 2.;
-    G4double a = GetCoefficient(ddxPower+2);
+    G4double a = GetCoefficient(ddxPower+2); // the highest-order coefficient
+    if(a == 0) { // the highest-order coefficient should never be 0 if simplified
+      if(fVerbose > 0) {
+        G4cout << "G4PolynomialPDF::GetX() WARNING: Got a = 0. "
+               << "Did you forget to Simplify()?" << G4endl;
+      }
+      return x2;
+    }
     if(ddxPower == 1) a *= 3;
     else if(ddxPower == -1) a *= 0.5;
     double sqrtFactor = b*b - 4.*a*c;
@@ -298,8 +349,10 @@ G4double G4PolynomialPDF::GetX(G4double p, G4double x1, G4double x2,
     }
     if(f == 0) return guess;
     if(dfdx == 0) {
-      G4cout << "G4PolynomialPDF::GetX(): got f != 0 but slope = 0 for ddxPower = " 
-	     << ddxPower << G4endl;
+      if(fVerbose > 0) {
+	G4cout << "G4PolynomialPDF::GetX() WARNING: got f != 0 but slope = 0 for ddxPower = " 
+	       << ddxPower << G4endl;
+      }
       return x2;
     }
     lastChange = - f/dfdx;
@@ -316,13 +369,18 @@ G4double G4PolynomialPDF::GetX(G4double p, G4double x1, G4double x2,
     ++iterations;
     if(iterations > 50) {
       if(p!=0) {
-        G4cout << "G4PolynomialPDF::GetX(): got stuck searching for " << p 
-               << " between " << x1 << " and " << x2 << " with ddxPower = " 
-	       << ddxPower 
-               << ". Last guess was " << guess << "." << G4endl;
+	if(fVerbose > 0) {
+	  G4cout << "G4PolynomialPDF::GetX() WARNING: got stuck searching for " << p 
+		 << " between " << x1 << " and " << x2 << " with ddxPower = " 
+		 << ddxPower 
+		 << ". Last guess was " << guess << "." << G4endl;
+	}
       }
       if(ddxPower==-1 && bisect) {
-        G4cout << "Bisceting and trying again..." << G4endl;
+	if(fVerbose > 0) {
+	  G4cout << "G4PolynomialPDF::GetX() WARNING: Bisceting and trying again..." 
+		 << G4endl;
+	}
         return Bisect(p, x1, x2);
       }
       else return guess;

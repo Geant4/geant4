@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomDetectorConstruction.cc 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id: DicomDetectorConstruction.cc 107363 2017-11-09 10:51:28Z gcosmo $
 //
 /// \file  medical/DICOM/src/DicomDetectorConstruction.cc
 /// \brief Implementation of the DicomDetectorConstruction class
@@ -39,17 +39,28 @@
 #include "G4Element.hh"
 #include "G4UIcommand.hh"
 #include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4NistManager.hh"
+// #include "G4SystemOfUnits.hh"
+#include "CLHEP/Units/SystemOfUnits.h"
 
 #include "DicomDetectorConstruction.hh"
 #include "DicomPhantomZSliceHeader.hh"
 
 #include "DicomRunAction.hh"
 #include "DicomRun.hh"
-
+#ifdef G4_DCMTK
+#include "DicomFileMgr.hh"
+#endif
 #include "G4VisAttributes.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+using CLHEP::m;
+using CLHEP::cm3;
+using CLHEP::mole;
+using CLHEP::g;
+using CLHEP::mg;
+using CLHEP::perCent;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 DicomDetectorConstruction::DicomDetectorConstruction()
  : G4VUserDetectorConstruction(),
    fAir(0),
@@ -79,12 +90,12 @@ DicomDetectorConstruction::DicomDetectorConstruction()
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 DicomDetectorConstruction::~DicomDetectorConstruction()
 {
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 G4VPhysicalVolume* DicomDetectorConstruction::Construct()
 {
   if(!fConstructed || fWorld_phys == 0) {
@@ -114,15 +125,20 @@ G4VPhysicalVolume* DicomDetectorConstruction::Construct()
                                     false,
                                     0 );
 
+#ifdef G4_DCMTK
+    ReadPhantomDataNew();
+    ConstructPhantomContainerNew();
+#else
     ReadPhantomData();
-
     ConstructPhantomContainer();
+#endif
+    
     ConstructPhantom();
   }
     return fWorld_phys;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........
 void DicomDetectorConstruction::InitialisationOfMaterials()
 {
     // Creating elements :
@@ -144,6 +160,12 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
     G4Element* elNa = new G4Element( name = "Sodium",
                                     symbol = "Na",
                                     z= 11.0, a = 22.98977* g/mole );
+    G4Element* elMg = new G4Element( name = "Magnesium",
+                                    symbol = "Mg",
+                                    z = 12.0, a = 24.3050* g/mole );
+    G4Element* elP = new G4Element( name = "Phosphorus",
+                                   symbol = "P",
+                                   z = 15.0, a = 30.973976* g/mole );
     G4Element* elS = new G4Element( name = "Sulfur",
                                    symbol = "S",
                                    z = 16.0,a = 32.065* g/mole );
@@ -153,18 +175,18 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
     G4Element* elK = new G4Element( name = "Potassium",
                                    symbol = "P",
                                    z = 19.0, a = 30.0983* g/mole );
-    G4Element* elP = new G4Element( name = "Phosphorus",
-                                   symbol = "P",
-                                   z = 30.0, a = 30.973976* g/mole );
+
     G4Element* elFe = new G4Element( name = "Iron",
                                     symbol = "Fe",
                                     z = 26, a = 56.845* g/mole );
-    G4Element* elMg = new G4Element( name = "Magnesium",
-                                    symbol = "Mg",
-                                    z = 12.0, a = 24.3050* g/mole );
+ 
     G4Element* elCa = new G4Element( name="Calcium",
                                     symbol = "Ca",
                                     z = 20.0, a = 40.078* g/mole );
+
+    G4Element* elZn = new G4Element( name = "Zinc",
+                                   symbol = "Zn",
+                                   z = 30.0,a = 65.382* g/mole );
 
     // Creating Materials :
     G4int numberofElements;
@@ -175,6 +197,24 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
                           numberofElements = 2 );
     fAir->AddElement(elN, 0.7);
     fAir->AddElement(elO, 0.3);
+
+
+   // Soft tissue (ICRP - NIST)
+    G4Material* softTissue = new G4Material ("SoftTissue", 1.00*g/cm3, 
+                                             numberofElements = 13);
+    softTissue->AddElement(elH, 10.4472*perCent);
+    softTissue->AddElement(elC, 23.219*perCent);
+    softTissue->AddElement(elN, 2.488*perCent);
+    softTissue->AddElement(elO, 63.0238*perCent);
+    softTissue->AddElement(elNa, 0.113*perCent);
+    softTissue->AddElement(elMg, 0.0113*perCent);
+    softTissue->AddElement(elP, 0.113*perCent);
+    softTissue->AddElement(elS, 0.199*perCent);
+    softTissue->AddElement(elCl, 0.134*perCent);
+    softTissue->AddElement(elK, 0.199*perCent);
+    softTissue->AddElement(elCa, 0.023*perCent);
+    softTissue->AddElement(elFe, 0.005*perCent);
+    softTissue->AddElement(elZn, 0.003*perCent);
 
     //  Lung Inhale
     G4Material* lunginhale = new G4Material( "LungInhale",
@@ -216,7 +256,25 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
     adiposeTissue->AddElement(elS,0.001);
     adiposeTissue->AddElement(elCl,0.001);
 
-    // Breast
+    // Brain (ICRP - NIST)
+    G4Material* brainTissue = new G4Material ("BrainTissue", 1.03 * g/cm3, 
+                                               numberofElements = 13);
+    brainTissue->AddElement(elH, 11.0667*perCent);
+    brainTissue->AddElement(elC, 12.542*perCent);
+    brainTissue->AddElement(elN, 1.328*perCent);
+    brainTissue->AddElement(elO, 73.7723*perCent);
+    brainTissue->AddElement(elNa, 0.1840*perCent);
+    brainTissue->AddElement(elMg, 0.015*perCent);
+    brainTissue->AddElement(elP, 0.356*perCent);
+    brainTissue->AddElement(elS, 0.177*perCent);
+    brainTissue->AddElement(elCl, 0.236*perCent);
+    brainTissue->AddElement(elK, 0.31*perCent);
+    brainTissue->AddElement(elCa, 0.009*perCent);
+    brainTissue->AddElement(elFe, 0.005*perCent);
+    brainTissue->AddElement(elZn, 0.001*perCent); 
+
+
+   // Breast
     G4Material* breast = new G4Material( "Breast",
                                         density = 0.990*g/cm3,
                                         numberofElements = 8 );
@@ -228,6 +286,19 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
     breast->AddElement(elP,0.001);
     breast->AddElement(elS,0.001);
     breast->AddElement(elCl,0.001);
+
+    // Spinal Disc
+    G4Material* spinalDisc = new G4Material ("SpinalDisc", 1.10 * g/cm3, 
+                                              numberofElements = 8);
+    spinalDisc->AddElement(elH, 9.60*perCent);
+    spinalDisc->AddElement(elC, 9.90*perCent);
+    spinalDisc->AddElement(elN, 2.20*perCent);
+    spinalDisc->AddElement(elO, 74.40*perCent);
+    spinalDisc->AddElement(elNa, 0.50*perCent);
+    spinalDisc->AddElement(elP, 2.20*perCent);
+    spinalDisc->AddElement(elS, 0.90*perCent);
+    spinalDisc->AddElement(elCl, 0.30*perCent);
+
 
     // Water
     G4Material* water = new G4Material( "Water",
@@ -264,10 +335,24 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
     liver->AddElement(elCl,0.002);
     liver->AddElement(elK,0.003);
 
+    // Tooth Dentin
+    G4Material* toothDentin = new G4Material ("ToothDentin", 2.14 * g/cm3, 
+                                              numberofElements = 10);
+    toothDentin->AddElement(elH, 2.67*perCent);
+    toothDentin->AddElement(elC, 12.77*perCent);
+    toothDentin->AddElement(elN, 4.27*perCent);
+    toothDentin->AddElement(elO, 40.40*perCent);
+    toothDentin->AddElement(elNa, 0.65*perCent);
+    toothDentin->AddElement(elMg, 0.59*perCent);
+    toothDentin->AddElement(elP, 11.86*perCent);
+    toothDentin->AddElement(elCl, 0.04*perCent);
+    toothDentin->AddElement(elCa, 26.74*perCent);
+    toothDentin->AddElement(elZn, 0.01*perCent);
+
+
     // Trabecular Bone
-    G4Material* trabecularBone = new G4Material( "TrabecularBone",
-                                                density = 1.159*g/cm3,
-                                                numberofElements = 12 );
+    G4Material* trabecularBone = new G4Material( "TrabecularBone", density = 1.159*g/cm3,
+                                                 numberofElements = 12 );
     trabecularBone->AddElement(elH,0.085);
     trabecularBone->AddElement(elC,0.404);
     trabecularBone->AddElement(elN,0.058);
@@ -280,6 +365,24 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
     trabecularBone->AddElement(elK,0.001);
     trabecularBone->AddElement(elCa,0.044);
     trabecularBone->AddElement(elFe,0.001);
+
+    // Trabecular bone used in the DICOM Head
+   
+    G4Material* trabecularBone_head = new G4Material ("TrabecularBone_HEAD", 
+                                                      1.18 * g/cm3, 
+                                                      numberofElements = 12);
+    trabecularBone_head->AddElement(elH, 8.50*perCent);
+    trabecularBone_head->AddElement(elC, 40.40*perCent);
+    trabecularBone_head->AddElement(elN, 2.80*perCent);
+    trabecularBone_head->AddElement(elO, 36.70*perCent);
+    trabecularBone_head->AddElement(elNa, 0.10*perCent);
+    trabecularBone_head->AddElement(elMg, 0.10*perCent);
+    trabecularBone_head->AddElement(elP, 3.40*perCent);
+    trabecularBone_head->AddElement(elS, 0.20*perCent);
+    trabecularBone_head->AddElement(elCl, 0.20*perCent);
+    trabecularBone_head->AddElement(elK, 0.10*perCent);
+    trabecularBone_head->AddElement(elCa, 7.40*perCent);
+    trabecularBone_head->AddElement(elFe, 0.10*perCent);
 
     // Dense Bone
     G4Material* denseBone = new G4Material( "DenseBone",
@@ -297,60 +400,310 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
     denseBone->AddElement(elK,0.001);
     denseBone->AddElement(elCa,0.146);
 
-    //----- Put the materials in a vector
-    fOriginalMaterials.push_back(fAir); // rho = 0.00129
-    fOriginalMaterials.push_back(lunginhale); // rho = 0.217
-    fOriginalMaterials.push_back(lungexhale); // rho = 0.508
-    fOriginalMaterials.push_back(adiposeTissue); // rho = 0.967
-    fOriginalMaterials.push_back(breast ); // rho = 0.990
-    fOriginalMaterials.push_back(water); // rho = 1.018
-    fOriginalMaterials.push_back(muscle); // rho = 1.061
-    fOriginalMaterials.push_back(liver); // rho = 1.071
-    fOriginalMaterials.push_back(trabecularBone); // rho = 1.159
-    fOriginalMaterials.push_back(denseBone); // rho = 1.575
+    // Cortical Bone (ICRP - NIST)
+    G4Material* corticalBone = new G4Material ("CorticalBone", 1.85 * g/cm3, 
+                                               numberofElements = 9);
+    corticalBone->AddElement(elH, 4.7234*perCent);
+    corticalBone->AddElement(elC, 14.4330*perCent);
+    corticalBone->AddElement(elN, 4.199*perCent);
+    corticalBone->AddElement(elO, 44.6096*perCent);
+    corticalBone->AddElement(elMg, 0.22*perCent);
+    corticalBone->AddElement(elP, 10.497*perCent);
+    corticalBone->AddElement(elS, 0.315*perCent);
+    corticalBone->AddElement(elCa, 20.993*perCent);
+    corticalBone->AddElement(elZn, 0.01*perCent);
+
+
+    // Tooth enamel 
+    G4Material* toothEnamel = new G4Material ("ToothEnamel", 2.89 * g/cm3,
+                                              numberofElements = 10);
+    toothEnamel->AddElement(elH, 0.95*perCent);
+    toothEnamel->AddElement(elC, 1.11*perCent);
+    toothEnamel->AddElement(elN, 0.23*perCent);
+    toothEnamel->AddElement(elO,41.66*perCent);
+    toothEnamel->AddElement(elNa, 0.79*perCent);
+    toothEnamel->AddElement(elMg, 0.23*perCent);
+    toothEnamel->AddElement(elP, 18.71*perCent);
+    toothEnamel->AddElement(elCl, 0.34*perCent);
+    toothEnamel->AddElement(elCa, 35.97*perCent);
+    toothEnamel->AddElement(elZn, 0.02*perCent);
+
+#ifdef DICOM_USE_HEAD
+  //----- Put the materials in a vector HEAD PHANTOM
+  fOriginalMaterials.push_back(fAir); //0.00129 g/cm3
+  fOriginalMaterials.push_back(softTissue); // 1.055 g/cm3
+  fOriginalMaterials.push_back(brainTissue); // 1.07 g/cm3
+  fOriginalMaterials.push_back(spinalDisc); // 1.10 g/cm3
+  fOriginalMaterials.push_back(trabecularBone_head); // 1.13 g/cm3
+  fOriginalMaterials.push_back(toothDentin); // 1.66 g/cm3
+  fOriginalMaterials.push_back(corticalBone);  // 1.75 g/cm3
+  fOriginalMaterials.push_back(toothEnamel); // 2.04 g/cm3
+ G4cout << "The materials of the DICOM Head have been used" << G4endl;
+#else
+  fOriginalMaterials.push_back(fAir); // rho = 0.00129
+  fOriginalMaterials.push_back(lunginhale); // rho = 0.217
+  fOriginalMaterials.push_back(lungexhale); // rho = 0.508
+  fOriginalMaterials.push_back(adiposeTissue); // rho = 0.967
+  fOriginalMaterials.push_back(breast ); // rho = 0.990
+  fOriginalMaterials.push_back(water); // rho = 1.018
+  fOriginalMaterials.push_back(muscle); // rho = 1.061
+  fOriginalMaterials.push_back(liver); // rho = 1.071
+  fOriginalMaterials.push_back(trabecularBone); // rho = 1.159 - HEAD PHANTOM
+  fOriginalMaterials.push_back(denseBone); // rho = 1.575
+  G4cout << "The default materials of the DICOM Extended examples have been used" 
+         << G4endl;
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void DicomDetectorConstruction::ReadPhantomDataNew()
+{
+#ifdef G4_DCMTK
+  G4String fileName = DicomFileMgr::GetInstance()->GetFileOutName();
+  
+  std::ifstream fin(fileName);
+  std::vector<G4String> wl;
+  G4int nMaterials;
+  fin >> nMaterials;
+  G4String mateName;
+  G4int nmate;
+  for( G4int ii = 0; ii < nMaterials; ii++ ){
+    fin >> nmate;
+    fin >> mateName;
+    if( mateName[0] == '"' && mateName[mateName.length()-1] == '"' ) {
+      mateName = mateName.substr(1,mateName.length()-2);
+    }
+    G4cout << "GmReadPhantomG4Geometry::ReadPhantomData reading nmate " 
+           << ii << " = " << nmate 
+           << " mate " << mateName << G4endl;
+    if( ii != nmate ) 
+    G4Exception("GmReadPhantomG4Geometry::ReadPhantomData",
+                "Wrong argument",
+                FatalErrorInArgument,
+                "Material number should be in increasing order:wrong material number");
+
+    G4Material* mate = 0;
+    const G4MaterialTable* matTab = G4Material::GetMaterialTable();
+    std::vector<G4Material*>::const_iterator matite;
+    for( matite = matTab->begin(); matite != matTab->end(); ++matite ) {
+      if( (*matite)->GetName() == mateName ) {
+        mate = *matite;
+      }
+    }
+    if( mate == 0 ) {
+      mate = G4NistManager::Instance()->FindOrBuildMaterial(mateName);
+    }
+    if( !mate ) G4Exception("GmReadPhantomG4Geometry::ReadPhantomData",
+                            "Wrong argument",
+                            FatalErrorInArgument,
+                            ("Material not found" + mateName).c_str());
+    thePhantomMaterialsOriginal[nmate] = mate;
+  }
+
+  fin >> fNVoxelX >> fNVoxelY >> fNVoxelZ;
+  G4cout << "GmReadPhantomG4Geometry::ReadPhantomData fNVoxel X/Y/Z " 
+         << fNVoxelX << " " 
+         << fNVoxelY << " " << fNVoxelZ << G4endl;
+  fin >> fMinX >> fMaxX;
+  fin >> fMinY >> fMaxY;
+  fin >> fMinZ >> fMaxZ;
+  fVoxelHalfDimX = (fMaxX-fMinX)/fNVoxelX/2.;
+  fVoxelHalfDimY = (fMaxY-fMinY)/fNVoxelY/2.;
+  fVoxelHalfDimZ = (fMaxZ-fMinZ)/fNVoxelZ/2.;
+#ifdef G4VERBOSE
+  G4cout << " Extension in X " << fMinX << " " << fMaxX << G4endl
+         << " Extension in Y " << fMinY << " " << fMaxY << G4endl
+         << " Extension in Z " << fMinZ << " " << fMaxZ << G4endl;
+#endif
+
+  fMateIDs = new size_t[fNVoxelX*fNVoxelY*fNVoxelZ];
+  for( G4int iz = 0; iz < fNVoxelZ; iz++ ) {
+    for( G4int iy = 0; iy < fNVoxelY; iy++ ) {
+      for( G4int ix = 0; ix < fNVoxelX; ix++ ) {
+        G4int mateID;
+        fin >> mateID; 
+        G4int nnew = ix + (iy)*fNVoxelX + (iz)*fNVoxelX*fNVoxelY;
+        if( mateID < 0 || mateID >= nMaterials ) {
+          G4Exception("GmReadPhantomG4Geometry::ReadPhantomData",
+                      "Wrong index in phantom file",
+                      FatalException,
+                      G4String("It should be between 0 and "
+                              + G4UIcommand::ConvertToString(nMaterials-1) 
+                              + ", while it is " 
+                              + G4UIcommand::ConvertToString(mateID)).c_str());
+        }
+        fMateIDs[nnew] = mateID;
+      }
+    }
+  }
+
+  ReadVoxelDensities( fin );
+
+  fin.close();
+#endif
+
+}
+void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
+{
+  G4String stemp;
+  std::map<G4int, std::pair<G4double,G4double> > densiMinMax;
+  std::map<G4int, std::pair<G4double,G4double> >::iterator mpite;
+  for( size_t ii = 0; ii < thePhantomMaterialsOriginal.size(); ii++ ){
+    densiMinMax[ii] = std::pair<G4double,G4double>(DBL_MAX,-DBL_MAX);
+  }
+
+  char* part = getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
+  G4double densityDiff = -1.;
+  if( part ) densityDiff = G4UIcommand::ConvertToDouble(part);
+
+  std::map<G4int,G4double> densityDiffs;
+  for( size_t ii = 0; ii < thePhantomMaterialsOriginal.size(); ii++ ){
+    densityDiffs[ii] = densityDiff; //currently all materials with same step
+  }
+  //  densityDiffs[0] = 0.0001; //air
+
+  //--- Calculate the average material density for each material/density bin
+  std::map< std::pair<G4Material*,G4int>, matInfo* > newMateDens;
+
+  //---- Read the material densities
+  G4double dens;
+  for( G4int iz = 0; iz < fNVoxelZ; iz++ ) {
+    for( G4int iy = 0; iy < fNVoxelY; iy++ ) {
+      for( G4int ix = 0; ix < fNVoxelX; ix++ ) {
+        fin >> dens; 
+        //        G4cout << ix << " " << iy << " " << iz
+        // << " density " << dens << G4endl;
+        G4int copyNo = ix + (iy)*fNVoxelX + (iz)*fNVoxelX*fNVoxelY;
+
+        if( densityDiff != -1. ) continue; 
+
+        //--- store the minimum and maximum density for each material (just for printin
+        mpite = densiMinMax.find( fMateIDs[copyNo] );
+        if( dens < (*mpite).second.first ) (*mpite).second.first = dens;
+        if( dens > (*mpite).second.second ) (*mpite).second.second = dens;
+        //--- Get material from original list of material in file
+        int mateID = fMateIDs[copyNo];
+        std::map<G4int,G4Material*>::const_iterator imite = 
+         thePhantomMaterialsOriginal.find(mateID);
+        //        G4cout << copyNo << " mateID " << mateID << G4endl;
+        //--- Check if density is equal to the original material density
+        if(std::fabs(dens - (*imite).second->GetDensity()/CLHEP::g*CLHEP::cm3 ) < 1.e-9 ) continue;
+        
+        //--- Build material name with thePhantomMaterialsOriginal name + density
+        //float densityBin = densityDiffs[mateID] * (G4int(dens/densityDiffs[mateID])+0.5);
+        G4int densityBin = (G4int(dens/densityDiffs[mateID]));
+
+        G4String mateName = (*imite).second->GetName()+G4UIcommand::ConvertToString(densityBin);
+        //--- Look if it is the first voxel with this material/densityBin
+        std::pair<G4Material*,G4int> matdens((*imite).second, densityBin );
+
+        std::map< std::pair<G4Material*,G4int>, matInfo* >::iterator mppite = 
+         newMateDens.find( matdens );
+        if( mppite != newMateDens.end() ){
+          matInfo* mi = (*mppite).second;
+          mi->fSumdens += dens;
+          mi->fNvoxels++;
+          fMateIDs[copyNo] = thePhantomMaterialsOriginal.size()-1 + mi->fId;
+        } else {
+          matInfo* mi = new matInfo;
+          mi->fSumdens = dens;
+          mi->fNvoxels = 1;
+          mi->fId = newMateDens.size()+1;
+          newMateDens[matdens] = mi;
+          fMateIDs[copyNo] = thePhantomMaterialsOriginal.size()-1 + mi->fId;
+        }
+      }
+    }
+  }
+
+  if( densityDiff != -1. ) { 
+    for( mpite = densiMinMax.begin(); mpite != densiMinMax.end(); mpite++ ){
+#ifdef G4VERBOSE
+      G4cout << "DicomDetectorConstruction::ReadVoxelDensities ORIG MATERIALS DENSITY " 
+             << (*mpite).first << " MIN " << (*mpite).second.first << " MAX " 
+             << (*mpite).second.second << G4endl;
+#endif
+    }
+  }
+
+  //----- Build the list of phantom materials that go to Parameterisation
+  //--- Add original materials
+  std::map<G4int,G4Material*>::const_iterator mimite;
+  for( mimite = thePhantomMaterialsOriginal.begin(); mimite != thePhantomMaterialsOriginal.end(); 
+   mimite++ ){
+    fMaterials.push_back( (*mimite).second );
+  }
+  // 
+  //---- Build and add new materials
+std::map< std::pair<G4Material*,G4int>, matInfo* >::iterator mppite;
+  for( mppite= newMateDens.begin(); mppite != newMateDens.end(); mppite++ ){
+    G4double averdens = (*mppite).second->fSumdens/(*mppite).second->fNvoxels;
+    G4double saverdens = G4int(1000.001*averdens)/1000.;
+#ifndef G4VERBOSE
+    G4cout << "DicomDetectorConstruction::ReadVoxelDensities AVER DENS " 
+           << averdens << " -> " 
+           << saverdens << " -> " << G4int(1000*averdens) << " " 
+           << G4int(1000*averdens)/1000 
+           << " " <<  G4int(1000*averdens)/1000. << G4endl;
+#endif
+
+      G4String mateName = ((*mppite).first).first->GetName() + "_"
+       + G4UIcommand::ConvertToString(saverdens);
+    fMaterials.push_back( BuildMaterialWithChangingDensity( 
+     (*mppite).first.first, averdens, mateName ) );
+  }
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.......
 void DicomDetectorConstruction::ReadPhantomData()
 {
+#ifdef DICOM_USE_HEAD
+  G4String path = getenv("DICOM_PATH");
+  G4String dataFile = path+"/Data.dat";
+#else
+  G4String dataFile = "Data.dat";
+#endif
+  std::ifstream finDF(dataFile.c_str());
+  G4String fname;
 
-    G4String dataFile = "Data.dat";
-    std::ifstream finDF(dataFile.c_str());
-    G4String fname;
-    if(finDF.good() != 1 ) {
-        G4String descript = "Problem reading data file: "+dataFile;
-        G4Exception(" DicomDetectorConstruction::ReadPhantomData",
-                    "",
-                    FatalException,
-                    descript);
-    }
+if(finDF.good() != 1 ) 
+ { 
+  G4String descript = "Problem reading data file: "+dataFile;
+  G4Exception(" DicomDetectorConstruction::ReadPhantomData"," ", 
+              FatalException,descript);
+  }
 
-    G4int compression;
-    finDF >> compression; // not used here
+  G4int compression;
+  finDF >> compression; // not used here
+  finDF >> fNoFiles;
 
-    finDF >> fNoFiles;
-    for(G4int i = 0; i < fNoFiles; i++ ) {
-        finDF >> fname;
-        //--- Read one data file
-        fname += ".g4dcm";
-        ReadPhantomDataFile(fname);
-    }
+  for(G4int i = 0; i < fNoFiles; i++ ) {
 
-    //----- Merge data headers
-    MergeZSliceHeaders();
+  finDF >> fname;
 
-    finDF.close();
+  //--- Read one data file
+  fname += ".g4dcm";
+
+  ReadPhantomDataFile(fname);
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//----- Merge data headers
+MergeZSliceHeaders();
+finDF.close();
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........
 void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
 {
+  G4cout << " DicomDetectorConstruction::ReadPhantomDataFile opening file " 
+         << fname << G4endl; //GDEB
+
 #ifdef G4VERBOSE
   G4cout << " DicomDetectorConstruction::ReadPhantomDataFile opening file " 
          << fname << G4endl;
 #endif
+  
   std::ifstream fin(fname.c_str(), std::ios_base::in);
   if( !fin.is_open() ) {
     G4Exception("DicomDetectorConstruction::ReadPhantomDataFile",
@@ -379,7 +732,7 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
   //----- Read data header
   DicomPhantomZSliceHeader* sliceHeader = new DicomPhantomZSliceHeader( fin );
   fZSliceHeaders.push_back( sliceHeader );
-  
+ 
   //----- Read material indices
   G4int nVoxels = sliceHeader->GetNoVoxels();
   
@@ -452,7 +805,7 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void DicomDetectorConstruction::MergeZSliceHeaders()
 {
   //----- Images must have the same dimension ...
@@ -463,7 +816,7 @@ void DicomDetectorConstruction::MergeZSliceHeaders()
   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Material* DicomDetectorConstruction::BuildMaterialWithChangingDensity(
            const G4Material* origMate, float density, G4String newMateName )
 {
@@ -481,7 +834,7 @@ G4Material* DicomDetectorConstruction::BuildMaterialWithChangingDensity(
   return mate;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 void DicomDetectorConstruction::ConstructPhantomContainer()
 {
   //---- Extract number of voxels and voxel dimensions
@@ -535,28 +888,74 @@ void DicomDetectorConstruction::ConstructPhantomContainer()
   //fContainer_logic->SetVisAttributes(new G4VisAttributes(G4Colour(1.,0.,0.)));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void DicomDetectorConstruction::ConstructPhantomContainerNew()
+{
+#ifdef G4_DCMTK
+  //---- Extract number of voxels and voxel dimensions
+#ifdef G4VERBOSE
+  G4cout << " fNVoxelX " << fNVoxelX << " fVoxelHalfDimX " << fVoxelHalfDimX 
+         <<G4endl;
+  G4cout << " fNVoxelY " << fNVoxelY << " fVoxelHalfDimY " << fVoxelHalfDimY 
+         <<G4endl;
+  G4cout << " fNVoxelZ " << fNVoxelZ << " fVoxelHalfDimZ " << fVoxelHalfDimZ 
+         <<G4endl;
+  G4cout << " totalPixels " << fNVoxelX*fNVoxelY*fNVoxelZ <<  G4endl;
+#endif
+  
+  //----- Define the volume that contains all the voxels
+  fContainer_solid = new G4Box("phantomContainer",fNVoxelX*fVoxelHalfDimX,
+                               fNVoxelY*fVoxelHalfDimY,
+                               fNVoxelZ*fVoxelHalfDimZ);
+  fContainer_logic =
+    new G4LogicalVolume( fContainer_solid,
+   //the material is not important, it will be fully filled by the voxels
+                         fMaterials[0],
+                         "phantomContainer",
+                         0, 0, 0 );
+
+  G4ThreeVector posCentreVoxels((fMinX+fMaxX)/2.,(fMinY+fMaxY)/2.,(fMinZ+fMaxZ)/2.);
+#ifdef G4VERBOSE
+  G4cout << " placing voxel container volume at " << posCentreVoxels << G4endl;
+#endif
+  fContainer_phys =
+    new G4PVPlacement(0,  // rotation
+                      posCentreVoxels,
+                      fContainer_logic,     // The logic volume
+                      "phantomContainer",  // Name
+                      fWorld_logic,  // Mother
+                      false,           // No op. bool.
+                      1);              // Copy number
+  
+  //fContainer_logic->SetVisAttributes(new G4VisAttributes(G4Colour(1.,0.,0.)));
+#endif
+}
+
 #include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4PSDoseDeposit.hh"
 #include "G4PSDoseDeposit3D.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.
 void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
 {
-  
-  G4cout << "\n\n\n\n\t SET SCORER : " << voxel_logic->GetName() 
-         << " \n\n\n" << G4endl;
+
+#ifdef G4VERBOSE
+  G4cout << "\t SET SCORER : " << voxel_logic->GetName() << G4endl;
+#endif
   
   fScorers.insert(voxel_logic);
   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DicomDetectorConstruction::ConstructSDandField()
 {
   
-  G4cout << "\n\n\n\n\t CONSTRUCT SD AND FIELD \n\n\n" << G4endl;
+#ifdef G4VERBOSE
+  G4cout << "\t CONSTRUCT SD AND FIELD" << G4endl;
+#endif
   
   //G4SDManager* SDman = G4SDManager::GetSDMpointer();
   
@@ -575,7 +974,7 @@ void DicomDetectorConstruction::ConstructSDandField()
   // declare MFDet as a MultiFunctionalDetector scorer
   G4MultiFunctionalDetector* MFDet = 
     new G4MultiFunctionalDetector(concreteSDname);
-  //SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
+  G4SDManager::GetSDMpointer()->AddNewDetector( MFDet );
   //G4VPrimitiveScorer* dosedep = new G4PSDoseDeposit("DoseDeposit");
   G4VPrimitiveScorer* dosedep = 
     new G4PSDoseDeposit3D("DoseDeposit", fNVoxelX, fNVoxelY, fNVoxelZ);

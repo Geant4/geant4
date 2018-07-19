@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExErrorMagneticField.hh 68019 2013-03-13 13:32:43Z gcosmo $
+// $Id: ExErrorMagneticField.hh 110760 2018-06-13 06:24:05Z gcosmo $
 //
 /// \file errorpropagation/include/ExErrorMagneticField.hh
 /// \brief Definition of the ExErrorMagneticField class
@@ -51,7 +51,6 @@ class ExErrorMagneticField: public G4UniformMagField
   
    ExErrorMagneticField(G4ThreeVector);  //  The value of the field
    ExErrorMagneticField();               //  A zero field
-  ~ExErrorMagneticField();  
       
    //Set the field (0,0,fieldValue)
    void SetFieldValue(G4double fieldValue);

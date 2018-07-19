@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.hh 69003 2013-04-15 09:25:23Z gcosmo $
+// $Id: G4SmoothTrajectoryPoint.hh 110262 2018-05-17 14:25:55Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -92,19 +92,18 @@ public:
    std::vector<G4ThreeVector>* fAuxiliaryPointVector;
 };
 
-extern G4TRACKING_DLL G4ThreadLocal
-G4Allocator<G4SmoothTrajectoryPoint> *aSmoothTrajectoryPointAllocator;
+extern G4TRACKING_DLL G4Allocator<G4SmoothTrajectoryPoint>*& aSmoothTrajectoryPointAllocator();
 
 inline void* G4SmoothTrajectoryPoint::operator new(size_t)
 {
-  if (!aSmoothTrajectoryPointAllocator)
-  { aSmoothTrajectoryPointAllocator= new G4Allocator<G4SmoothTrajectoryPoint>; }
-  return (void *) aSmoothTrajectoryPointAllocator->MallocSingle();
+  if (!aSmoothTrajectoryPointAllocator())
+  { aSmoothTrajectoryPointAllocator()= new G4Allocator<G4SmoothTrajectoryPoint>; }
+  return (void *) aSmoothTrajectoryPointAllocator()->MallocSingle();
 }
 
 inline void G4SmoothTrajectoryPoint::operator delete(void *aTrajectoryPoint)
 {
-  aSmoothTrajectoryPointAllocator->FreeSingle((G4SmoothTrajectoryPoint *) aTrajectoryPoint);
+  aSmoothTrajectoryPointAllocator()->FreeSingle((G4SmoothTrajectoryPoint *) aTrajectoryPoint);
 }
 
 #endif

@@ -1,5 +1,5 @@
 # Use this open statement to create an OpenGL view:
-/vis/open OGL 600x600-0+0
+/vis/open OGLIX 600x600-0+0
 #
 # Use this open statement to create a .prim file suitable for
 # viewing in DAWN:
@@ -66,6 +66,6 @@
 #
 # For file-based drivers, use this to create an empty detector view:
 #/vis/viewer/flush
-/control/execute IridiumSourceMacro.mac
-#/control/execute IodiumSourceMacro.mac
-#/control/execute  LeipzigSourceMacro.mac
+# Flexi Ir source is the default 
+/control/execute iridium_source_primary.mac
+

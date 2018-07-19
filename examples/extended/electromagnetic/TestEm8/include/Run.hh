@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm2/include/Run.hh
+/// \file electromagnetic/TestEm8/include/Run.hh
 /// \brief Definition of the Run class
 //
 // $Id: Run.hh 75565 2013-11-04 11:24:11Z vnivanch $

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.cc 84598 2014-10-17 07:39:15Z gcosmo $
+// $Id: G4PhotoElectricEffect.cc 107058 2017-11-01 14:54:12Z gcosmo $
 //
 //
 //------------------ G4PhotoElectricEffect physics process ---------------------
@@ -105,11 +105,11 @@ void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    if(!EmModel(1)) { SetEmModel(new G4PEEffectFluoModel(),1); }
+    if(!EmModel()) { SetEmModel(new G4PEEffectFluoModel()); }
     G4EmParameters* param = G4EmParameters::Instance();
-    EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(param->MaxKinEnergy());
-    AddEmModel(1, EmModel(1));
+    EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
+    EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());
+    AddEmModel(1, EmModel());
   }
 }
 
@@ -117,5 +117,13 @@ void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
 
 void G4PhotoElectricEffect::PrintInfo()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4PhotoElectricEffect::ProcessDescription(std::ostream& out) const
+{
+  out << "<strong>Photoelectric effect</strong>";
+  G4VEmProcess::ProcessDescription(out);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

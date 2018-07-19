@@ -1,4 +1,10 @@
 
+# reduce output in MT
+/control/cout/ignoreThreadsExcept 0
+
+# initialize
+/run/initialize
+
 # e- 500MeV 
 /gun/particle e-
 /gun/energy 500 MeV

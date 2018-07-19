@@ -20,17 +20,17 @@ example FORTRAN code of PYTHIA for generating this event sample.
 \section RE05_s2 Readout geometry
 
  RE05DetectorConstruction defines a simplified collider detecor
-geometry, tracker made of cylindrical tubes, calorimeter made of
+geometry, a tracker made of cylindrical tubes, a calorimeter made of
 cylindrical tubes, and muon trackers made of planes.
 
-Cylindrical calorimeter is made of tubes of lead and scintirator
-without cut in phi nor z direction. Energy deposition in scintirator
-is accumurated by RE05CalorimeterSD sensitive detector, which has
-a readout geometry to find the phi-z cell.
+ The cylindrical calorimeter is made of tubes of lead and a scintillator.
+Energy deposition in the scintillator is accumulated by RE05CalorimeterSD 
+sensitive detector, which is assigned to a dedicated parallel world,
+RE05CalorimeterParallelWorld, which defines the phi-z cell.
 
 \section RE05_s3 Physics processes
 
- The example uses the QGSP physics list, which includes electromagnetic 
+ The example uses the QBBC physics list, which includes electromagnetic 
 and hadronic interactions. 
 
 \section RE05_s4 Event filtering by the stacking mechanism

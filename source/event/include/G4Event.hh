@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh 97477 2016-06-03 10:13:42Z gcosmo $
+// $Id: G4Event.hh 110273 2018-05-17 14:43:43Z gcosmo $
 //
 //
 // class description:
@@ -217,17 +217,17 @@ class G4Event
       }
 };
 
-extern G4EVENT_DLL G4ThreadLocal G4Allocator<G4Event> *anEventAllocator;
+extern G4EVENT_DLL G4Allocator<G4Event>*& anEventAllocator();
 
 inline void* G4Event::operator new(size_t)
 { 
-  if (!anEventAllocator) anEventAllocator = new G4Allocator<G4Event>;
-  return (void*)anEventAllocator->MallocSingle();
+  if (!anEventAllocator()) anEventAllocator() = new G4Allocator<G4Event>;
+  return (void*)anEventAllocator()->MallocSingle();
 }
 
 inline void G4Event::operator delete(void* anEvent)
 {
-  anEventAllocator->FreeSingle((G4Event*)anEvent);
+  anEventAllocator()->FreeSingle((G4Event*)anEvent);
 }
 
 #endif

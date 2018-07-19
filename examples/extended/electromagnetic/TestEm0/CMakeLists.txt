@@ -36,7 +36,7 @@ target_link_libraries(DirectAccess ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(TestEm0_SCRIPTS
-    TestEm0.in TestEm0.out
+    TestEm0.in TestEm0.out muon.mac
   )
 
 foreach(_script ${TestEm0_SCRIPTS})

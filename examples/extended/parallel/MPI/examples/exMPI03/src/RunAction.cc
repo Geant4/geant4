@@ -65,13 +65,10 @@ void RunAction::BeginOfRunAction(const G4Run*)
 void RunAction::EndOfRunAction(const G4Run*)
 {
    G4int rank = G4MPImanager::GetManager()-> GetRank();
-
-  char str[64];
   //NOTE: if only histograms are active actually we do not create the per-thread
   //ntuple file
-  sprintf(str, "dose-rank%03d-thread%03d", rank,G4Threading::G4GetThreadId());
-  G4String fname(str);
-
+  std::ostringstream fname;
+  fname<<"dose-rank"<<rank<<"-thread"<<G4Threading::G4GetThreadId();
   Analysis* myana = Analysis::GetAnalysis();
-  myana-> Save(fname);
+  myana-> Save(fname.str());
 }

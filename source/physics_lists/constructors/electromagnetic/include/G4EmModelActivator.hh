@@ -53,34 +53,37 @@
 
 class G4EmParameters;
 class G4ProcessManager;
+class G4ParticleDefinition;
+class G4EmConfigurator;
+class G4VMscModel;
 
 class G4EmModelActivator 
 {
 public:
 
-  G4EmModelActivator();
-  ~G4EmModelActivator();
-
-  void ConstructParticle();
-
-  void ConstructProcess();
+  explicit G4EmModelActivator(const G4String& emphys="");
 
 private:
-
-  void ConstructDNAParticles();
 
   void ActivatePAI();
 
   void ActivateMicroElec();
 
-  void ActivateDNA();
+  void ActivateEmOptions();
+
+  void FindOrAddProcess(const G4ParticleDefinition*, const G4String&);
+
+  void AddStandardScattering(const G4ParticleDefinition*, G4EmConfigurator*,
+                             G4VMscModel*, const G4String&, 
+                             G4double, G4double);
 
   G4bool HasMsc(G4ProcessManager*) const;
 
-  G4EmModelActivator & operator=(const G4EmModelActivator &right);
-  G4EmModelActivator(const G4EmModelActivator&);
+  G4EmModelActivator & operator=(const G4EmModelActivator &right) = delete;
+  G4EmModelActivator(const G4EmModelActivator&) = delete;
 
   G4EmParameters* theParameters;
+  G4String baseName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

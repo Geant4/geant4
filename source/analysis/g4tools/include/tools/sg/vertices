@@ -10,6 +10,7 @@
 #include "render_action"
 #include "pick_action"
 #include "bbox_action"
+#include "visible_action"
 
 namespace tools {
 namespace sg {
@@ -17,7 +18,7 @@ namespace sg {
 class vertices : public node {
   TOOLS_NODE(vertices,tools::sg::vertices,node)
 public:
-  sf<tools::gl::mode_t> mode;
+  sf<gl::mode_t> mode;
   mf<float> xyzs;
 public:
   virtual const std::vector<field_desc>& node_fields() const {
@@ -37,7 +38,7 @@ private:
   }
 public:
   virtual void render(render_action& a_action) {
-    if(tools::gl::is_line(mode.value())) {
+    if(gl::is_line(mode.value())) {
       //Same logic as Inventor SoLightModel.model = BASE_COLOR.
       const state& state = a_action.state();
       a_action.set_lighting(false);
@@ -54,19 +55,22 @@ public:
   virtual void bbox(bbox_action& a_action) {
     a_action.add_points(xyzs.values());
   }
+  virtual void is_visible(visible_action& a_action) {
+    if(_is_visible(a_action)) a_action.increment();
+  }
 
 public:
   vertices()
   :parent()
-  ,mode(tools::gl::line_strip()){
+  ,mode(gl::line_strip()){
 #ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
+    mem::increment(s_class().c_str());
 #endif
     add_fields();
   }
   virtual ~vertices(){
 #ifdef TOOLS_MEM
-    tools::mem::decrement(s_class().c_str());
+    mem::decrement(s_class().c_str());
 #endif
   }
 public:
@@ -76,7 +80,7 @@ public:
   ,xyzs(a_from.xyzs)
   {
 #ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
+    mem::increment(s_class().c_str());
 #endif
     add_fields();
   }
@@ -100,7 +104,7 @@ public:
     xyzs.add(a_y);
     xyzs.add(a_z);
   }
-  void add_allocated(unsigned int& a_pos,float a_x,float a_y,float a_z) {
+  void add_allocated(size_t& a_pos,float a_x,float a_y,float a_z) {
     std::vector<float>& v = xyzs.values();
     v[a_pos] = a_x;a_pos++;
     v[a_pos] = a_y;a_pos++;
@@ -120,8 +124,7 @@ public:
     return true;
   }
 */
-  //unsigned int size() const {return xyzs.size();}
-  unsigned int number() const {return xyzs.size()/3;}
+  size_t number() const {return xyzs.size()/3;}
   void clear() {xyzs.clear();}
 
   bool add_dashed_line(float a_bx,float a_by,float a_bz,
@@ -151,7 +154,22 @@ public:
       py += two_sy;
       pz += two_sz;
     }
-    return false;
+    return true;
+  }
+protected:
+  bool _is_visible(const matrix_action& a_action) {
+    if(xyzs.empty()) return false;
+    const state& _state = a_action.state();
+    pick_action action(a_action.out(),_state.m_ww,_state.m_wh,0,float(_state.m_ww),0,float(_state.m_wh));
+    action.set_win_size(_state.m_ww,_state.m_wh);
+    action.set_area(0,float(_state.m_ww),0,float(_state.m_wh));
+    action.set_stop_at_first(true);
+    action.matrix_action::operator=(a_action); //IMPORTANT.
+    int old_cur = action.cur(); //not 0.
+    action.add__primitive(*this,mode.value(),xyzs.values(),true);
+    if(action.cur()!=old_cur) return false;
+    if(!action.node()) return false;
+    return true;
   }
 };
 

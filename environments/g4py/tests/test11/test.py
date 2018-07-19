@@ -7,5 +7,8 @@
 import test11
 
 a= test11.AClass(1)
-b= test11.AClass()
 
+try:
+  b = test11.AClass()
+except:
+  print "AClass default constructor is not allowed."

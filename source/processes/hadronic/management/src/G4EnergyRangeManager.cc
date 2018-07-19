@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyRangeManager.cc 83772 2014-09-15 07:18:08Z gcosmo $
+// $Id: G4EnergyRangeManager.cc 98067 2016-07-01 16:33:54Z gcosmo $
 //
  // Hadronic Process: Energy Range Manager
  // original by H.P. Wellisch
@@ -45,10 +45,8 @@ G4EnergyRangeManager::~G4EnergyRangeManager()
 
 G4EnergyRangeManager::G4EnergyRangeManager(const G4EnergyRangeManager& right)
 {
-  if (this != &right) {
-    theHadronicInteractionCounter = right.theHadronicInteractionCounter;
-    theHadronicInteraction = right.theHadronicInteraction;
-  }
+  theHadronicInteractionCounter = right.theHadronicInteractionCounter;
+  theHadronicInteraction = right.theHadronicInteraction;
 }
  
 G4EnergyRangeManager& G4EnergyRangeManager::operator=(

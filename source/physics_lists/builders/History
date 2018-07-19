@@ -14,7 +14,31 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18-Jan-2016, Alberto Ribon          (phys-builders-V10-01-06)
+7-Nov-2017, T. Koi	(phys-builders-V10-03-06)
+- G4NeutronLENDBuilder: Modify setting of selection of target data
+
+26-Apr-2017, Andrea Dotti       (phys-builders-V10-03-03, -04 -05)
+- Next step in migration to new design to properly clean memory in MT mode
+  G4BuilderInterface renamed G4PhysicsBuilderInterface and moved to run
+  category
+- Coworking tag: run-V10-03-08
+
+17-Apr-2017, Andrea Dotti	    (phys-builders-V10-03-02)
+- Workaround for compilation errror for MIC (that is actually a bug in the 
+  compiler for MIC)
+
+13-Apr-2017, Andrea Dotti	    (phys-builders-V10-03-01)
+- Fix compilation warning
+
+12-Apr-2017, Andrea Dotti	    (phys-builders-V10-03-00)
+- New design with base class for all builders
+- Add c++11 compatibility
+- Removed unused class TheoModelFactory
+
+15-Apr-2016, Vladimir Ivanchenko    (phys-builders-V10-02-01)
+- OrderingParameterTable - disable msc PostStep
+
+18-Jan-2016, Alberto Ribon          (phys-builders-V10-02-00)
 - G4NeutronHPBuilder : used the name "NeutronHPInelastic" 
   (instead of "ParticleHPInelastic")
 

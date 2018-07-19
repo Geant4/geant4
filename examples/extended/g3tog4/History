@@ -1,4 +1,4 @@
-$Id: History 90821 2015-06-10 06:44:10Z gcosmo $
+$Id: History 106392 2017-10-09 09:44:29Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,31 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 29, 2017 I.Hrivnacova  (g3tog4Tests-V10-03-02,03)
+---------------------------
+- Updated for changes in common classes
+- Updated main (removed G4UI_USE, G4VIS_USE macros, moved initialization
+  in macros)
+
+March 16, 2017 Gunter Folger  (g3tog4Tests-V10-03-01)
+---------------------------
+-  Re-tag, using procedure from Ivana, 
+    using  excommon-V10-02-01 as tag for common
+    See https://jira-geant4.kek.jp/browse/DEV-131
+
+March 15, 2017 Gunter Folger  (g3tog4Tests-V10-03-00)
+---------------------------
+-  Fix link error for static build, i.e. 
+     CMakeLists.txt: remove extra G3toG4 from  target_link_libraries() 
+
+July 20, 2016 I.Hrivnacova   (g3tog4Tests-V10-02-01)
+---------------------------
+-  Coding guidelines in common
+
+July 04, 2016 I.Hrivnacova   (g3tog4Tests-V10-02-00)
+---------------------------
+-  Fixes for Doxygen documentation
 
 June 9th, 2014  I.Hrivnacova (g3tog4Tests-V10-01-00)
 ---------------------------

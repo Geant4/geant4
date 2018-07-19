@@ -27,10 +27,10 @@
 /// \brief Definition of the HistoManager class
 //
 //
-// $Id: HistoManager.hh 67531 2013-02-23 19:25:07Z vnivanch $
+// $Id: HistoManager.hh 100677 2016-10-31 10:46:50Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
@@ -42,7 +42,7 @@
 
 class HistoMessenger;
 
-const G4int MaxHisto = 15;
+const G4int kMaxHisto = 15;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,9 +53,9 @@ public:
   HistoManager();
   ~HistoManager();
 
-  void book();
-  void save();
-  void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
+  void Book();
+  void Save();
+  void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");
   void FillHisto(G4int id, G4double e, G4double weight = 1.0);
   void Normalize(G4int id, G4double fac);    
   void PrintHisto(G4int);
@@ -72,23 +72,23 @@ public:
 
 private:
 
-  void saveAscii();            
+  void SaveAscii();            
 
   G4String         fileName[2];
   G4bool           factoryOn;
 
   G4int            fNbHist;
-  G4int            fHistId[MaxHisto];
-  G4AnaH1*         fHistPt[MaxHisto];
-  G4bool           fExist[MaxHisto];
-  G4String         fLabel[MaxHisto];
-  G4String         fTitle[MaxHisto];
-  G4int            fNbins[MaxHisto];
-  G4double         fVmin [MaxHisto];
-  G4double         fVmax [MaxHisto];
-  G4double         fUnit [MaxHisto];
-  G4double         fWidth[MaxHisto];
-  G4bool           fAscii[MaxHisto];
+  G4int            fHistId[kMaxHisto];
+  G4AnaH1*         fHistPt[kMaxHisto];
+  G4bool           fExist[kMaxHisto];
+  G4String         fLabel[kMaxHisto];
+  G4String         fTitle[kMaxHisto];
+  G4int            fNbins[kMaxHisto];
+  G4double         fVmin [kMaxHisto];
+  G4double         fVmax [kMaxHisto];
+  G4double         fUnit [kMaxHisto];
+  G4double         fWidth[kMaxHisto];
+  G4bool           fAscii[kMaxHisto];
         
   HistoMessenger*  fHistoMessenger;
     

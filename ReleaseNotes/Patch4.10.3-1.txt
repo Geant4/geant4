@@ -1,0 +1,236 @@
+
+                 Geant4 10.3 - patch-01 Release Notes
+                 ------------------------------------
+
+                                                                 24 February 2017
+
+List of fixes included in this public patch since the public release 10.3:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Updated data-sets to G4PhotonEvaporation-4.3.2 and
+        G4RadioactiveDecay-5.1.1.
+
+  o Analysis
+    --------
+    + Restored clean-up of Root empty files in MT mode.
+
+  o Geometry:
+    --------
+    + solids/Boolean:
+      o Return normal from solid being subtracted, in case point is located
+        outside in G4SubtractionSolid::SurfaceNormal().
+      o Code formatting and minor cleanup in G4IntersectionSolid.
+    + solids/CSG:
+      o Use radius differences and hypot to improve precision in G4Torus.
+        Addressing problem report #1931.
+      o Fix in GetCubicVolume() and GetSurfaceArea() for G4CutTubs, to make
+        use of the cached values. Addressing problem report #1943.
+      o Removed redundant code/checks in G4Orb::SurfaceNormal().
+    + solids/specific:
+      o Correction in G4UExtrudedSolid to signature for CalculateExtent().
+        Fixes issue of undefined symbol if extruded-solid not included in the
+        list of VecGeom wrappers to activate.
+    + volumes:
+      o Correction in G4NavigationHistory default constructor to use
+        GetLevels() instead of GetNewLevels() from G4NavigationHistoryPool,
+        to favor re-use of already allocated space.
+
+  o Global:
+    ------
+    + Removed obsolete G4SubString code used internally in G4String, as no
+      longer necessary and also including unnecessary and buggy operators.
+      Addressing problem report #1864.
+    + Updated date and version for 10.3.p01.
+
+  o Intercoms:
+    ---------
+    + Added "/control/useDoublePrecision" UI command to extend to 17 digits
+      precision printout for the current parameter values.
+      Addressing problem report #1921.
+
+  o Interfaces:
+    ----------
+    + G4UIQt: added missing check for pointer deletion.
+      Addressing problem report #1933.
+
+  o Materials:
+    ---------
+    + Removed debug printout from G4MaterialPropertiesTable destructor.
+      Addressing problem report #1944.
+
+  o Particles:
+    ---------
+    + Fixed calculation of neutrino mass in G4MuonRadiativeDecayWithSpin.
+      Addressing problem report #1928.
+    + Added class G4AdjointElectronFI.
+
+  o Physics Lists
+    -------------
+    + constructors/decay:
+      o G4RadioactiveDecayPhysics: simplified list of EM parameters.
+        Switch on storing of all internal conversion data vector for correct
+        gamma deexcitation modeling in radioactive decay.
+    + constructors/electromagnetic:
+      o Added 'setCerenkov/ScintillationStackPhotons' commands to
+        G4OpticalPhysicsMessenger and use them in G4OpticalPhysics.
+    + constructors/hadron_inelastic:
+      o Fixed printing of setup for transition energy region between FTFP
+        and BERT  to happen only from master thread.
+    + constructors/limiters:
+      o Fixed printing of setup parameter for nureon tracking cuts to happen
+        only from master thread.
+    + lists:
+      o G4PhysListFactory: added single scattering EM option (need to add
+        "__SS" to the reference physics list name for activation).
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + adjoint:
+      o Correction for cases of FPE in G4AdjointForcedInteractionForGamma.
+    + dna:
+      o Prevent a crash when calling G4ITTrackingManager::EndTracking() from
+        the UserTimeStepAction::PostTimeStepAction.
+      o Added missing call to tracking-manager.
+      o Code cleanup in G4KDNode and G4KDMap.
+    + utils:
+      o Fixed typo in G4EmParametersMessenger. Addressing problem report #1929.
+
+  o Processes - Hadronic:
+    --------------------
+    + models/de_excitation:
+      o G4LevelManager, G4NuclLevel, G4LevelReader: reduce memory for description
+        of a level: each two integer parameters are packed into one integer value;
+        use only one set of probabilities of transition independently on use-case
+        (HEP or radioactive decay). Fill internal conversion coefficients into the
+        data structure only if a flag SetStoreAllLevels() is set to true; in the
+        last case, more memory required per isotope (~8 times).
+      o G4LevelManager: fixed unpacking of spin.
+      o G4LevelReader: fixed Ra228 problem; read all levels from a data file.
+        Fixed U235[0.076] problem: if value of alpha (relative probability of the
+        internal conversion) is 10^10, then assume that internal conversion will
+        go via outer levels and gamma emission has zero probability; internal
+        conversion is forced independently on other flags.
+      o G4NucLevel: in TransitionType, use % operator to correctly strip off
+        leading digit.
+      o G4GammaTransition: sample e- with kinetic energy corresponding to
+        transition between nuclear levels, ignoring atomic effects, when internal
+        conversion data are not filled but sampling e- emission is selected.
+        In SampleDirection(), fix to avoid only zero polarization returned;
+        return back sampling when initial state has angular moment but its
+        polarisation is random; also fix in order to comply with instructions in
+        G4PolarizationTransition for the call order and to properly initialize
+        the nuclear polarization.
+        Use SetExcitationEnergy() method of G4Fragment for keeping excitation
+        energy exact as in the database and avoid rare cases of event
+        non-reproducibility; added SetVerbose() method.
+        Fixed multipolarity based on the updated data-set.
+        Added control on printout; fixed thread unsafe check.
+      o G4PhotonEvaporation, G4GammaTransition: improved sampling and kinematics
+        for internal conversion. Added internal conversion in G4PhotonEvaporation
+        even if the data are not stored.
+      o G4PolarizationTransition: fix for computation of polarisation and
+        multi-polarity. Fix in SetGammaTransitionData().
+        Added SetVerbose() method; added protection from extra verbosity.
+      o G4ExcitationHandler: moved Dump() printout within Initialise()
+        method; print info if evaporation channels are changed.
+        Added local data member to control verbosity level.
+      o G4ExcitationHandler, G4PhotonEvaporation: use floating level number.
+      o G4DeexPrecoParameters: changed default time limit from 0.01 s to
+        1 microsecond. By default use uniform angular distribution in CM
+        system of precompound decay. Extended Dump() printout; make new data
+        structure the default. By default, use uniform angular distribution
+        in CM sytem of precompound decay.
+        Changed minimum excitation energy now set to 10 eV (was 100 eV).
+      o G4VEvaporation: added extra const access method.
+      o G4Evaporation: added data member to control verbosity level.
+      o Fixed case of event non-reproducibility due precision lost in
+        Lorentz transformations.
+      o G4LevelReader: in the case of broken file structure or absence of
+        a data file a fatal exception is issued.
+        Addressing problem report #1942.
+    + models/im_r_matrix:
+      o G4VScatteringCollision: fixed memory leak in MT-mode.
+        Addressing problem report #1905.
+    + models/radioactive_decay:
+      o G4ITDecay: in constructor, make G4PhotonEvaporation a class member 
+        and initialize only once to avoid memory churn.
+        Added check on Z, A, excitation energy in order to be sure that
+        correlated gamma may be sampled; reset 4-momentum at rest when previous
+        nucleaus is reused; use floating level index when a new ion is created.
+      o G4RadioactiveDecay: temporarily switched off correlated gamma emission,
+        to limit observed event non-reproducibility violations.
+    + models/util:
+      o G4Fragment: minor cleanup of check on excitation energy of a ground
+        state. Added method SetExcEnergyAndMomentum() allowing to preserve
+        excitation energy value without precision lost; 4-momentum is
+        recomputed. Added missing class member and accesors/modifiers for
+        floating levels number.
+      o Added control on printout in G4PolynomialPDF.
+
+  o Run:
+    ---
+    + Modifications to fix bug with reverse track splitting.
+      Added function ResetDidOneAdjPartReachExtSourceDuringEvent() to
+      G4AdjointSimManager and use it in G4AdjointPrimaryGeneratorAction.
+    + Fixed printing of banner to happen only from master thread.
+
+  o Tracking:
+    --------
+    + Modification in G4AdjointSteppingAction for fixing bug with reverse
+      track splitting.
+
+  o Visualization:
+    -------------
+    + management:
+      o Fix in G4VisCommandsViewer to have '/vis/viewer/interpolate' to work
+        on Windows.
+    + OpenGL:
+      o Fixed bug in ScaledFlush.
+    + OpenInventor:
+      o G4OpenInventorXtExtendedViewer: added viewer button for Wireframe/Solid
+        switching. Added workaround to prevent empty second page in PS and PDF
+        output (due to superimposed scene).
+    + RayTracer:
+      o G4RTXScanner: changed XA_RGB_BEST_MAP to XA_RGB_DEFAULT_MAP.
+
+  o Data sets:
+    ---------
+    + Patched data set for nuclides properties G4PhotonEvaporation-4.3.2:
+      o Corrected correlated_gamma files for the uncorrect setting of the
+        multipolarity E0 as -1. Now considering E0,E1,M1, as 1,2,3,.....
+        The value of = is for unkown.
+      o Corrected correlated_gamma files z64.a148,z64.a149,z64.a150,z81.a194
+        for problem of order of level index.
+    + Patched data set for radioactive-decay, G4RadioactiveDecay-5.1.1:
+      o Correction of negative Q value for metastable 190+X level in z77.a194. 
+      o Correction of z38.a85 (Sr-85) with input data from DDEP.
+        Addressing problem report #1922.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + advanced/hadrotherapy:
+      o Fixed field setup; corrected physics-list.
+        Addressing problem report #1879.
+    + extended/exoticphysics/ucn:
+      o Reduced verbosity.
+    + extended/medical/dna/pdb4dna:
+    + extended/medical/dna/wholeNuclearDNA:
+      o Fixed compilation problem when Qt is enabled.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.3.
+  o  Technical notes distributed for release 10.3 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.3.p01 are available
+through our "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

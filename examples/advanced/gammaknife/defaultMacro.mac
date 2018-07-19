@@ -18,6 +18,7 @@
 
 /score/create/boxMesh boxMesh_1
 /score/mesh/boxSize 22.5 22.5 22.5 mm
+/score/mesh/rotate/rotateX 360 deg          # Note: Hack to enable rotation (as of 10.3)
 /score/mesh/nBin 45 45 45
 /score/quantity/energyDeposit eDep
 /score/close

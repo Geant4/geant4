@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc 97537 2016-06-03 15:26:56Z gcosmo $
+// $Id: G4PhaseSpaceDecayChannel.cc 109299 2018-04-10 06:51:21Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -49,7 +49,8 @@
 //G4ThreadLocal G4double G4PhaseSpaceDecayChannel::current_parent_mass = 0.0;
 
 G4PhaseSpaceDecayChannel::G4PhaseSpaceDecayChannel(G4int Verbose)
- :G4VDecayChannel("Phase Space", Verbose)
+  :G4VDecayChannel("Phase Space", Verbose),
+   useGivenDaughterMass(false)
 {
 
 }
@@ -198,8 +199,10 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
 		    "Can not create decay products: sum of daughter mass is larger than parent mass");
 	return products;
       }
-      G4double dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
-      G4double dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
+      G4double dm1=daughtermass[0];
+      if (daughterwidth[0] > 0.) dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
+      G4double dm2= daughtermass[1];
+      if (daughterwidth[1] > 0.) dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
       while (dm1+dm2>parentmass){ // Loop checking, 09.08.2015, K.Kurashige
 	dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
 	dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
@@ -306,9 +309,12 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
 		    "Can not create decay products: sum of daughter mass is larger than parent mass");
 	return products;
       }
-      G4double dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
-      G4double dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
-      G4double dm3= DynamicalMass(daughtermass[2],daughterwidth[2], maxDev);
+      G4double dm1=daughtermass[0];
+      if (daughterwidth[0] > 0.) dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
+      G4double dm2= daughtermass[1];
+      if (daughterwidth[1] > 0.) dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
+      G4double dm3= daughtermass[2];
+      if (daughterwidth[2] > 0.) dm3= DynamicalMass(daughtermass[2],daughterwidth[2], maxDev);
       while (dm1+dm2+dm3>parentmass){ // Loop checking, 09.08.2015, K.Kurashige
 	dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
 	dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
@@ -501,6 +507,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
     G4Exception("G4PhaseSpaceDecayChannel::ManyBodyDecayIt",
 		"PART112", JustWarning,
 		"Can not create decay products: sum of daughter mass is larger than parent mass");
+    delete [] daughtermass;
     return products;
   }  
 
@@ -547,7 +554,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
     //Calculate daughter momentum
     weight = 1.0;
     G4bool smOK=true;
-    for(index =0; index< numberOfDaughters-1 && smOK; index--) {
+    for(index =0; index< numberOfDaughters-1 && smOK; index++) {
       smOK = (sm[index]-daughtermass[index]- sm[index+1] >=0.); 
     }
     if (!smOK) continue;
@@ -582,7 +589,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
 	delete [] sm;
 	delete [] daughtermass;
 	delete [] daughtermomentum;
-
+        delete products;
 	G4Exception("G4PhaseSpaceDecayChannel::ManyBodyDecayIt",
                 "PART112", JustWarning,
                 "Can not create decay products: sum of daughter mass is larger than parent mass");
@@ -628,6 +635,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
       delete [] sm;
       delete [] daughtermass;
       delete [] daughtermomentum;
+      delete products;
       return 0;  // Error detection
     }
     if ( weight < G4UniformRand()) break; 

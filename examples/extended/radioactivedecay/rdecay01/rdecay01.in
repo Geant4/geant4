@@ -1,5 +1,6 @@
 /control/verbose 2
 /run/verbose 1
+/control/cout/ignoreThreadsExcept 0
 #
 /gun/particle ion
 /gun/ion 27 60

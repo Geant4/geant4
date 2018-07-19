@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4RegionStore.cc 103235 2017-03-22 15:53:48Z gcosmo $
 //
 // G4RegionStore
 //
@@ -67,7 +67,8 @@ G4RegionStore::G4RegionStore()
 //
 G4RegionStore::~G4RegionStore() 
 {
-  Clean();
+  Clean();  // Delete all regions in the store
+  G4Region::Clean();  // Delete allocated sub-instance data
 }
 
 // ***************************************************************************
@@ -78,7 +79,7 @@ void G4RegionStore::Clean()
 {
   // Do nothing if geometry is closed
   //
-  if (G4GeometryManager::GetInstance()->IsGeometryClosed())
+  if (G4GeometryManager::IsGeometryClosed())
   {
     G4cout << "WARNING - Attempt to delete the region store"
            << " while geometry closed !" << G4endl;

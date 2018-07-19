@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc 91743 2015-08-04 11:49:58Z gcosmo $
+// $Id: G4MuBetheBlochModel.cc 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -79,17 +79,17 @@ using namespace std;
 G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p,
                                          const G4String& nam)
   : G4VEmModel(nam),
-  particle(0),
+  particle(nullptr),
   limitKinEnergy(100.*keV),
   logLimitKinEnergy(G4Log(limitKinEnergy)),
   twoln10(2.0*G4Log(10.0)),
-  bg2lim(0.0169),
-  taulim(8.4146e-3),
+  //bg2lim(0.0169),
+  //taulim(8.4146e-3),
   alphaprime(fine_structure_const/twopi)
 {
   theElectron = G4Electron::Electron();
   corr = G4LossTableManager::Instance()->EmCorrections();
-  fParticleChange = 0;
+  fParticleChange = nullptr;
 
   // initial initialisation of memeber should be overwritten
   // by SetParticle
@@ -97,11 +97,6 @@ G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p,
 
   if(p) { SetParticle(p); }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4MuBetheBlochModel::~G4MuBetheBlochModel()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

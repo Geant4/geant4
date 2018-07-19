@@ -3,12 +3,19 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+
+
+	--> Running in serial mode
+
 
 Checking overlaps for volume Target_0_0_0 ... OK! 
 Checking overlaps for volume Target_1_0_0 ... OK! 
@@ -135,12 +142,12 @@ Checking overlaps for volume Target_1_4_4 ... OK!
 Checking overlaps for volume Target_2_4_4 ... OK! 
 Checking overlaps for volume Target_3_4_4 ... OK! 
 Checking overlaps for volume Target_4_4_4 ... OK! 
-/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+/cvmfs/geant4.cern.ch/share/data/G4NDL4.5
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -168,16 +175,18 @@ Registering model factories...
 You have successfully registered the following model factories.
 Registered model factories:
   generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
   drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
 
 Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
   attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -185,9 +194,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
 /tracking/verbose 0
 /run/verbose 1
 /event/verbose 0
@@ -197,123 +204,139 @@ Available colours:
 /run/beamOn 10000
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld
+          DefaultRegionForTheWorld  1  1  0
+### ===  Auger cascade flag: 1
+### ===  Ignore cuts flag:   0
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
-      LambdaPrime table from 200 keV to 10 TeV in 154 bins 
+      LambdaPrime table from 200 keV to 100 TeV in 174 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermorePhElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 20 bins per decade, spline: 1
-      LambdaPrime table from 1 MeV to 10 TeV in 140 bins 
+      LambdaPrime table from 1 MeV to 100 TeV in 160 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LowEPComptonModel :  Emin=        0 eV    Emax=       20 MeV  FluoActive
-        KleinNishina :  Emin=       20 MeV   Emax=       10 TeV  FluoActive
+        KleinNishina :  Emin=       20 MeV   Emax=      100 TeV  FluoActive
 
 conv:   for  gamma    SubType= 14  BuildTable= 1
-      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      Lambda table from 1.022 MeV to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PenConversion :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 20 bins per decade, spline: 0
-      LambdaPrime table from 100 keV to 10 TeV in 160 bins 
+      LambdaPrime table from 100 keV to 100 TeV in 180 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
+   LivermoreRayleigh :  Emin=        0 eV    Emax=      100 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
-      RangeFactor= 0.02, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 2, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
-        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 100 bins Emin=    100 MeV   Emax=     10 TeV
+  GoudsmitSaunderson :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 120 bins Emin=    100 MeV   Emax=    100 TeV
 
 eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              PenIoni :  Emin=        0 eV    Emax=        1 MeV
-        MollerBhabha :  Emin=        1 MeV   Emax=       10 TeV   deltaVI
+        MollerBhabha :  Emin=        1 MeV   Emax=      100 TeV   deltaVI
 
 eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGen2BS
+
+ePairProd:   for  e-    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      Sampling table 25x1001 from 0.1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from 100 MeV to 10 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from 100 MeV to 100 TeV, 20 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for e+    SubType= 10
-      RangeFactor= 0.02, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 2, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
-        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 100 bins Emin=    100 MeV   Emax=     10 TeV
+  GoudsmitSaunderson :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 120 bins Emin=    100 MeV   Emax=    100 TeV
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              PenIoni :  Emin=        0 eV    Emax=        1 MeV
-        MollerBhabha :  Emin=        1 MeV   Emax=       10 TeV   deltaVI
+        MollerBhabha :  Emin=        1 MeV   Emax=      100 TeV   deltaVI
 
 eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGen2BS
+
+ePairProd:   for  e+    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      Sampling table 25x1001 from 0.1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           ePairProd :  Emin=        0 eV    Emax=      100 TeV
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+            eplus2gg :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from 100 MeV to 10 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from 100 MeV to 100 TeV, 20 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for proton    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 240 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV   deltaVI
 
 hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
-      Used Lambda table of anti_proton
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 20 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 nuclearStopping:   for  proton    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -322,275 +345,285 @@ nuclearStopping:   for  proton    SubType= 8  BuildTable= 0
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV   deltaVI
+         ParamICRU73 :  Emin=        0 eV    Emax=      100 TeV   deltaVI
 
 nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
-
-### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld
+=======================================================================
+======       Radioactive Decay Physics Parameters              ========
+=======================================================================
+Max life time                                     1.4427e+06 ps
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Auger cascade enabled                             1
+Check EM cuts disabled for atomic de-excitation   0
+Use Bearden atomic level energies                 0
+=======================================================================
 
 msc:   for alpha    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 TeV  Table with 240 bins Emin=    100 eV    Emax=    100 TeV
 
 ionIoni:   for  alpha    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV   deltaVI
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV   deltaVI
+          BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV   deltaVI
 
 nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for anti_proton    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 240 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV   deltaVI
 
 hBrems:   for  anti_proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  anti_proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 20 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 nuclearStopping:   for  anti_proton    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for kaon+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 240 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV   deltaVI
 
 hBrems:   for  kaon+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  kaon+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 20 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 240 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV   deltaVI
 
 hBrems:   for  kaon-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  kaon-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of kaon+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for mu+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 240 bins Emin=    100 eV    Emax=    100 TeV
 
 muIoni:   for  mu+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
-        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=      100 TeV
 
 muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+              MuBrem :  Emin=        0 eV    Emax=      100 TeV
 
 muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+          muPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 20 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for mu-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 240 bins Emin=    100 eV    Emax=    100 TeV
 
 muIoni:   for  mu-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
-        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=      100 TeV
 
 muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+              MuBrem :  Emin=        0 eV    Emax=      100 TeV
 
 muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+          muPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of mu+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
-/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
 
 msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 240 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  pi+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV   deltaVI
 
 hBrems:   for  pi+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  pi+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  pi+, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 20 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 240 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  pi-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV   deltaVI
 
 hBrems:   for  pi-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  pi-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
+      Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of pi+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -744,6 +777,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -759,6 +793,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -784,8 +819,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:        NeutronHPInelastic: 0 eV  ---> 20 MeV
      Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: nCapture
         Model:          NeutronHPCapture: 0 eV  ---> 20 MeV
@@ -827,7 +860,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
@@ -848,7 +880,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for proton
@@ -858,8 +889,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:                      FTFP: 9.5 GeV ---> 25 GeV
         Model:            BertiniCascade: 0 eV  ---> 9.9 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
@@ -880,6 +909,25 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
+=======================================================================
+======       Pre-compound/De-excitation Physics Parameters     ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
+Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation
+Number of de-excitation channels                    8
+Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
+Level density (1/MeV)                               0.1
+Time limit for long lived isomeres (ns)             1442.7
+Internal e- conversion flag                         1
+Store e- internal conversion data                   1
+Electron internal conversion ID                     0
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
+=======================================================================
 
 ========= Table of registered couples ==============================
 
@@ -1012,526 +1060,524 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=37.14s Real=37.67s Sys=0.38s
+  User=27.880000s Real=97.926299s Sys=1.110000s
  ###### EndOfTSRunAction ###### 
 ============================================================
  opened file mfd_tl_EnergyDeposit.out for output
 ============================================================
-             0        2522.301612 keV
-             1           9.674968 keV
-             2        1705.001204 keV
-             3        2643.301176 keV
-             4          74.542871 keV
-             5         383.912006 keV
-             6         361.853120 keV
-             7        5194.960137 keV
-             8         215.192754 keV
-             9        1564.933159 keV
-            10        1031.987416 keV
-            11         290.880744 keV
-            12        2029.947118 keV
-            13         115.081625 keV
-            14        1197.195329 keV
-            15         998.081832 keV
-            16         312.447296 keV
-            17        3001.278007 keV
-            18         176.314923 keV
-            19         273.307388 keV
-            20        2028.665074 keV
-            21         853.036934 keV
-            22         598.943785 keV
-            23         372.249303 keV
-            24         232.066846 keV
-            25          85.908894 keV
-            26        2527.195213 keV
-            27        2601.239136 keV
-            28        1322.251911 keV
-            29        2068.716338 keV
-            30        4946.251091 keV
-            31        3437.359362 keV
-            32       15926.853282 keV
-            33        5484.853238 keV
-            34         467.302884 keV
-            35        1392.122325 keV
-            36        3619.432282 keV
-            37        3677.227107 keV
-            38        3004.856125 keV
-            39        2650.030904 keV
-            40        4327.780374 keV
-            41        8000.786582 keV
-            42        3410.213604 keV
-            43        3507.586689 keV
-            44         203.133656 keV
-            45         295.054892 keV
-            46        2877.335365 keV
-            47        1110.765253 keV
-            48        1818.682307 keV
-            49        1087.134960 keV
-            50        4192.076616 keV
-            51        5692.079382 keV
-            52        5573.564242 keV
-            53        1464.180723 keV
-            54         989.009133 keV
-            55        7199.344661 keV
-            56       15279.269992 keV
-            57       28282.000987 keV
-            58       23778.815906 keV
-            59        3906.757432 keV
-            60        7761.363062 keV
-            61       20399.977796 keV
-            62       22237.860872 keV
-            63       23522.381187 keV
-            64        3999.882342 keV
-            65        3115.340437 keV
-            66       18273.254260 keV
-            67       19681.562356 keV
-            68       23562.636905 keV
-            69        6613.803193 keV
-            70        2246.843068 keV
-            71        3044.015532 keV
-            72        4631.652690 keV
-            73        3148.405566 keV
-            74        8518.616078 keV
-            75       14244.955169 keV
-            76       24637.079113 keV
-            77       28518.642263 keV
-            78       24779.675321 keV
-            79       16875.587305 keV
-            80       22820.409735 keV
-            81      344635.876441 keV
-            82      344503.692515 keV
-            83      362539.536288 keV
-            84       38041.067910 keV
-            85       26233.967698 keV
-            86      368179.621238 keV
-            87      235709.030490 keV
-            88      309599.357373 keV
-            89       25331.760353 keV
-            90       31080.503496 keV
-            91      331500.948472 keV
-            92      304563.561959 keV
-            93      356869.080200 keV
-            94       28634.082215 keV
-            95       26317.158005 keV
-            96       29331.269368 keV
-            97       33385.194718 keV
-            98       26824.339920 keV
-            99       20300.707384 keV
-           100      304419.555485 keV
-           101      350157.877855 keV
-           102      344316.898456 keV
-           103      355259.841505 keV
-           104      328258.337705 keV
-           105      404064.860386 keV
-           106      369386.666878 keV
-           107      418951.577004 keV
-           108      390112.156355 keV
-           109      333951.312543 keV
-           110      365996.223817 keV
-           111      394320.254627 keV
-           112      378172.357408 keV
-           113      402257.913895 keV
-           114      357059.061102 keV
-           115      330766.430271 keV
-           116      409015.171274 keV
-           117      417883.779341 keV
-           118      390017.779416 keV
-           119      345896.167901 keV
-           120      346295.438120 keV
-           121      323922.001655 keV
-           122      363991.822851 keV
-           123      341363.884964 keV
-           124      349624.052158 keV
+             0          78.320181 keV
+             1         388.798049 keV
+             2         237.130326 keV
+             3         948.473826 keV
+             4         112.816682 keV
+             5        1569.968019 keV
+             6         184.189873 keV
+             7         387.355209 keV
+             8        1712.180059 keV
+             9        1467.951834 keV
+            10         446.973666 keV
+            11         287.256927 keV
+            12         146.149457 keV
+            13         135.352607 keV
+            14        1693.342936 keV
+            15        1279.168649 keV
+            16        1937.211158 keV
+            17         330.036157 keV
+            18         492.562800 keV
+            19        2340.375888 keV
+            20          11.131135 keV
+            21          86.684203 keV
+            22        2695.329769 keV
+            24          55.063629 keV
+            25        3984.150396 keV
+            26        4092.900692 keV
+            27         689.772366 keV
+            28        1914.678533 keV
+            29        1470.191952 keV
+            30        2234.962447 keV
+            31        4541.665035 keV
+            32        1976.938537 keV
+            33        4971.201065 keV
+            34        5743.768679 keV
+            35        1552.991736 keV
+            36        1788.592972 keV
+            37        2512.443505 keV
+            38        7519.400134 keV
+            39        2843.596194 keV
+            40        4767.877026 keV
+            41        1594.545800 keV
+            42        4076.766845 keV
+            43       10968.368229 keV
+            44        3757.881035 keV
+            45         304.361997 keV
+            46        2184.975357 keV
+            47         857.507378 keV
+            48        3523.347307 keV
+            49         313.850134 keV
+            50       11110.952109 keV
+            51       11100.339191 keV
+            52        4635.769414 keV
+            53        6785.609530 keV
+            54        3692.747320 keV
+            55        7627.570867 keV
+            56       16172.233387 keV
+            57       16814.735945 keV
+            58       16361.468034 keV
+            59        7374.915706 keV
+            60        5287.318673 keV
+            61       24543.326041 keV
+            62       27880.444155 keV
+            63       21356.806768 keV
+            64       10122.287686 keV
+            65       11216.055616 keV
+            66       19916.217721 keV
+            67       19813.778235 keV
+            68       22750.830096 keV
+            69        4053.678225 keV
+            70        4106.148624 keV
+            71        5097.869736 keV
+            72        3394.805270 keV
+            73        7505.564606 keV
+            74         346.746179 keV
+            75       28376.732840 keV
+            76       29764.750072 keV
+            77       41695.436619 keV
+            78       42278.633011 keV
+            79       23449.135361 keV
+            80       35530.023560 keV
+            81      351746.537736 keV
+            82      334972.552375 keV
+            83      347798.773843 keV
+            84       28145.098368 keV
+            85       35341.926905 keV
+            86      303757.345624 keV
+            87      253057.088648 keV
+            88      305955.112422 keV
+            89       32903.522533 keV
+            90       20122.661930 keV
+            91      348643.345356 keV
+            92      358858.926244 keV
+            93      347655.302457 keV
+            94       24603.981173 keV
+            95       25879.467585 keV
+            96       38871.433792 keV
+            97       35493.095900 keV
+            98       27739.294255 keV
+            99       22528.105757 keV
+           100      313149.681930 keV
+           101      361857.042968 keV
+           102      391878.010222 keV
+           103      359450.960212 keV
+           104      346397.418094 keV
+           105      393403.737762 keV
+           106      397333.626661 keV
+           107      394431.343342 keV
+           108      378033.684035 keV
+           109      302623.932352 keV
+           110      379747.004897 keV
+           111      394089.824921 keV
+           112      416887.027654 keV
+           113      353317.282913 keV
+           114      347959.951411 keV
+           115      324653.099645 keV
+           116      406773.126249 keV
+           117      382812.509641 keV
+           118      348550.161218 keV
+           119      329346.577448 keV
+           120      339210.048192 keV
+           121      351123.269531 keV
+           122      356913.055242 keV
+           123      345568.031185 keV
+           124      332324.140898 keV
 ============================================================
  closed file mfd_tl_EnergyDeposit.out for output
 ============================================================
  opened file mfd_tg_EnergyDeposit.out for output
 ============================================================
-             0        2522.301612 keV
-             1           9.674968 keV
-             2        1705.001204 keV
-             3        2643.301176 keV
-             4          74.542871 keV
-             5         383.912006 keV
-             6         361.853120 keV
-             7        5194.960137 keV
-             8         215.192754 keV
-             9        1564.933159 keV
-            10        1031.987416 keV
-            11         290.880744 keV
-            12        2029.947118 keV
-            13         115.081625 keV
-            14        1197.195329 keV
-            15         998.081832 keV
-            16         312.447296 keV
-            17        3001.278007 keV
-            18         176.314923 keV
-            19         273.307388 keV
-            20        2028.665074 keV
-            21         853.036934 keV
-            22         598.943785 keV
-            23         372.249303 keV
-            24         232.066846 keV
-            25          85.908894 keV
-            26        2527.195213 keV
-            27        2601.239136 keV
-            28        1322.251911 keV
-            29        2068.716338 keV
-            30        4946.251091 keV
-            31        3437.359362 keV
-            32       15926.853282 keV
-            33        5484.853238 keV
-            34         467.302884 keV
-            35        1392.122325 keV
-            36        3619.432282 keV
-            37        3677.227107 keV
-            38        3004.856125 keV
-            39        2650.030904 keV
-            40        4327.780374 keV
-            41        8000.786582 keV
-            42        3410.213604 keV
-            43        3507.586689 keV
-            44         203.133656 keV
-            45         295.054892 keV
-            46        2877.335365 keV
-            47        1110.765253 keV
-            48        1818.682307 keV
-            49        1087.134960 keV
-            50        4192.076616 keV
-            51        5692.079382 keV
-            52        5573.564242 keV
-            53        1464.180723 keV
-            54         989.009133 keV
-            55        7199.344661 keV
-            56       15279.269992 keV
-            57       28282.000987 keV
-            58       23778.815906 keV
-            59        3906.757432 keV
-            60        7761.363062 keV
-            61       20399.977796 keV
-            62       22237.860872 keV
-            63       23522.381187 keV
-            64        3999.882342 keV
-            65        3115.340437 keV
-            66       18273.254260 keV
-            67       19681.562356 keV
-            68       23562.636905 keV
-            69        6613.803193 keV
-            70        2246.843068 keV
-            71        3044.015532 keV
-            72        4631.652690 keV
-            73        3148.405566 keV
-            74        8518.616078 keV
-            75       14244.955169 keV
-            76       24637.079113 keV
-            77       28518.642263 keV
-            78       24779.675321 keV
-            79       16875.587305 keV
-            80       22820.409735 keV
-            81      344635.876441 keV
-            82      344503.692515 keV
-            83      362539.536288 keV
-            84       38041.067910 keV
-            85       26233.967698 keV
-            86      368179.621238 keV
-            87      235709.030490 keV
-            88      309599.357373 keV
-            89       25331.760353 keV
-            90       31080.503496 keV
-            91      331500.948472 keV
-            92      304563.561959 keV
-            93      356869.080200 keV
-            94       28634.082215 keV
-            95       26317.158005 keV
-            96       29331.269368 keV
-            97       33385.194718 keV
-            98       26824.339920 keV
-            99       20300.707384 keV
-           100      304419.555485 keV
-           101      350157.877855 keV
-           102      344316.898456 keV
-           103      355259.841505 keV
-           104      328258.337705 keV
-           105      404064.860386 keV
-           106      369386.666878 keV
-           107      418951.577004 keV
-           108      390112.156355 keV
-           109      333951.312543 keV
-           110      365996.223817 keV
-           111      394320.254627 keV
-           112      378172.357408 keV
-           113      402257.913895 keV
-           114      357059.061102 keV
-           115      330766.430271 keV
-           116      409015.171274 keV
-           117      417883.779341 keV
-           118      390017.779416 keV
-           119      345896.167901 keV
-           120      346295.438120 keV
-           121      323922.001655 keV
-           122      363991.822851 keV
-           123      341363.884964 keV
-           124      349624.052158 keV
+             0          78.320181 keV
+             1         388.798049 keV
+             2         237.130326 keV
+             3         948.473826 keV
+             4         112.816682 keV
+             5        1569.968019 keV
+             6         184.189873 keV
+             7         387.355209 keV
+             8        1712.180059 keV
+             9        1467.951834 keV
+            10         446.973666 keV
+            11         287.256927 keV
+            12         146.149457 keV
+            13         135.352607 keV
+            14        1693.342936 keV
+            15        1279.168649 keV
+            16        1937.211158 keV
+            17         330.036157 keV
+            18         492.562800 keV
+            19        2340.375888 keV
+            20          11.131135 keV
+            21          86.684203 keV
+            22        2695.329769 keV
+            24          55.063629 keV
+            25        3984.150396 keV
+            26        4092.900692 keV
+            27         689.772366 keV
+            28        1914.678533 keV
+            29        1470.191952 keV
+            30        2234.962447 keV
+            31        4541.665035 keV
+            32        1976.938537 keV
+            33        4971.201065 keV
+            34        5743.768679 keV
+            35        1552.991736 keV
+            36        1788.592972 keV
+            37        2512.443505 keV
+            38        7519.400134 keV
+            39        2843.596194 keV
+            40        4767.877026 keV
+            41        1594.545800 keV
+            42        4076.766845 keV
+            43       10968.368229 keV
+            44        3757.881035 keV
+            45         304.361997 keV
+            46        2184.975357 keV
+            47         857.507378 keV
+            48        3523.347307 keV
+            49         313.850134 keV
+            50       11110.952109 keV
+            51       11100.339191 keV
+            52        4635.769414 keV
+            53        6785.609530 keV
+            54        3692.747320 keV
+            55        7627.570867 keV
+            56       16172.233387 keV
+            57       16814.735945 keV
+            58       16361.468034 keV
+            59        7374.915706 keV
+            60        5287.318673 keV
+            61       24543.326041 keV
+            62       27880.444155 keV
+            63       21356.806768 keV
+            64       10122.287686 keV
+            65       11216.055616 keV
+            66       19916.217721 keV
+            67       19813.778235 keV
+            68       22750.830096 keV
+            69        4053.678225 keV
+            70        4106.148624 keV
+            71        5097.869736 keV
+            72        3394.805270 keV
+            73        7505.564606 keV
+            74         346.746179 keV
+            75       28376.732840 keV
+            76       29764.750072 keV
+            77       41695.436619 keV
+            78       42278.633011 keV
+            79       23449.135361 keV
+            80       35530.023560 keV
+            81      351746.537736 keV
+            82      334972.552375 keV
+            83      347798.773843 keV
+            84       28145.098368 keV
+            85       35341.926905 keV
+            86      303757.345624 keV
+            87      253057.088648 keV
+            88      305955.112422 keV
+            89       32903.522533 keV
+            90       20122.661930 keV
+            91      348643.345356 keV
+            92      358858.926244 keV
+            93      347655.302457 keV
+            94       24603.981173 keV
+            95       25879.467585 keV
+            96       38871.433792 keV
+            97       35493.095900 keV
+            98       27739.294255 keV
+            99       22528.105757 keV
+           100      313149.681930 keV
+           101      361857.042968 keV
+           102      391878.010222 keV
+           103      359450.960212 keV
+           104      346397.418094 keV
+           105      393403.737762 keV
+           106      397333.626661 keV
+           107      394431.343342 keV
+           108      378033.684035 keV
+           109      302623.932352 keV
+           110      379747.004897 keV
+           111      394089.824921 keV
+           112      416887.027654 keV
+           113      353317.282913 keV
+           114      347959.951411 keV
+           115      324653.099645 keV
+           116      406773.126249 keV
+           117      382812.509641 keV
+           118      348550.161218 keV
+           119      329346.577448 keV
+           120      339210.048192 keV
+           121      351123.269531 keV
+           122      356913.055242 keV
+           123      345568.031185 keV
+           124      332324.140898 keV
 ============================================================
  closed file mfd_tg_EnergyDeposit.out for output
 ============================================================
  opened file mfd_tl_NumberOfSteps.out for output
 ============================================================
-             0          59.000000 steps
-             1           5.000000 steps
-             2          44.000000 steps
-             3          55.000000 steps
-             4          18.000000 steps
-             5          11.000000 steps
-             6          21.000000 steps
-             7          65.000000 steps
-             8          15.000000 steps
-             9          41.000000 steps
-            10          44.000000 steps
-            11          18.000000 steps
-            12          59.000000 steps
+             0           9.000000 steps
+             1          32.000000 steps
+             2          28.000000 steps
+             3          83.000000 steps
+             4          15.000000 steps
+             5          89.000000 steps
+             6          40.000000 steps
+             7          40.000000 steps
+             8          90.000000 steps
+             9          35.000000 steps
+            10          55.000000 steps
+            11          33.000000 steps
+            12          30.000000 steps
             13          33.000000 steps
-            14          31.000000 steps
-            15          47.000000 steps
-            16          39.000000 steps
-            17          73.000000 steps
-            18          26.000000 steps
-            19          17.000000 steps
-            20          40.000000 steps
-            21          39.000000 steps
-            22          51.000000 steps
-            23          28.000000 steps
-            24          20.000000 steps
-            25          46.000000 steps
-            26         103.000000 steps
-            27          87.000000 steps
-            28         146.000000 steps
-            29         161.000000 steps
-            30         136.000000 steps
-            31         160.000000 steps
-            32         311.000000 steps
-            33         173.000000 steps
-            34          38.000000 steps
-            35          83.000000 steps
-            36         185.000000 steps
-            37         326.000000 steps
-            38         168.000000 steps
-            39         105.000000 steps
-            40         136.000000 steps
-            41         227.000000 steps
-            42         250.000000 steps
-            43         345.000000 steps
-            44          57.000000 steps
-            45          50.000000 steps
-            46         196.000000 steps
-            47          87.000000 steps
-            48          84.000000 steps
-            49          66.000000 steps
-            50         453.000000 steps
-            51         450.000000 steps
-            52         427.000000 steps
-            53         306.000000 steps
-            54         140.000000 steps
-            55         482.000000 steps
-            56         482.000000 steps
-            57         825.000000 steps
-            58         560.000000 steps
-            59         143.000000 steps
-            60         403.000000 steps
-            61         767.000000 steps
-            62         938.000000 steps
-            63         842.000000 steps
-            64         304.000000 steps
-            65         230.000000 steps
-            66         613.000000 steps
-            67         897.000000 steps
-            68         652.000000 steps
-            69         704.000000 steps
-            70          99.000000 steps
-            71         242.000000 steps
-            72         279.000000 steps
-            73         565.000000 steps
-            74         376.000000 steps
-            75        2498.000000 steps
-            76        3187.000000 steps
-            77        3193.000000 steps
-            78        2782.000000 steps
-            79        2267.000000 steps
-            80        3263.000000 steps
-            81        2602.000000 steps
-            82        3053.000000 steps
-            83        2815.000000 steps
-            84        3543.000000 steps
-            85        3680.000000 steps
-            86        3168.000000 steps
-            87        2658.000000 steps
-            88        2846.000000 steps
-            89        2970.000000 steps
-            90        2324.000000 steps
-            91        2671.000000 steps
-            92        2772.000000 steps
-            93        2722.000000 steps
-            94        3432.000000 steps
-            95        2265.000000 steps
-            96        2903.000000 steps
-            97        3185.000000 steps
-            98        3347.000000 steps
-            99        2458.000000 steps
-           100       12911.000000 steps
-           101       17033.000000 steps
-           102       17700.000000 steps
-           103       17146.000000 steps
-           104       14179.000000 steps
-           105       17427.000000 steps
-           106       22315.000000 steps
-           107       21781.000000 steps
-           108       21418.000000 steps
-           109       18177.000000 steps
-           110       18122.000000 steps
-           111       21732.000000 steps
-           112       21317.000000 steps
-           113       22969.000000 steps
-           114       16724.000000 steps
-           115       15042.000000 steps
-           116       22121.000000 steps
-           117       23338.000000 steps
-           118       22561.000000 steps
-           119       18004.000000 steps
-           120       14114.000000 steps
-           121       16257.000000 steps
-           122       16822.000000 steps
-           123       18735.000000 steps
-           124       14487.000000 steps
+            14          54.000000 steps
+            15          56.000000 steps
+            16          46.000000 steps
+            17          34.000000 steps
+            18          72.000000 steps
+            19          76.000000 steps
+            20           7.000000 steps
+            21          17.000000 steps
+            22          78.000000 steps
+            23           4.000000 steps
+            24          28.000000 steps
+            25         105.000000 steps
+            26         162.000000 steps
+            27          93.000000 steps
+            28          69.000000 steps
+            29         118.000000 steps
+            30         173.000000 steps
+            31         278.000000 steps
+            32         252.000000 steps
+            33         314.000000 steps
+            34         253.000000 steps
+            35         160.000000 steps
+            36         198.000000 steps
+            37         192.000000 steps
+            38         333.000000 steps
+            39         239.000000 steps
+            40         139.000000 steps
+            41         160.000000 steps
+            42         308.000000 steps
+            43         465.000000 steps
+            44         142.000000 steps
+            45          64.000000 steps
+            46         141.000000 steps
+            47         121.000000 steps
+            48         118.000000 steps
+            49          56.000000 steps
+            50         493.000000 steps
+            51         833.000000 steps
+            52         551.000000 steps
+            53         498.000000 steps
+            54         247.000000 steps
+            55         394.000000 steps
+            56         611.000000 steps
+            57         937.000000 steps
+            58        1058.000000 steps
+            59         458.000000 steps
+            60         503.000000 steps
+            61        1185.000000 steps
+            62        1124.000000 steps
+            63         919.000000 steps
+            64         517.000000 steps
+            65         591.000000 steps
+            66         931.000000 steps
+            67        1143.000000 steps
+            68        1050.000000 steps
+            69         240.000000 steps
+            70         258.000000 steps
+            71         534.000000 steps
+            72         539.000000 steps
+            73         477.000000 steps
+            74         135.000000 steps
+            75        3184.000000 steps
+            76        3375.000000 steps
+            77        4113.000000 steps
+            78        4429.000000 steps
+            79        2354.000000 steps
+            80        4259.000000 steps
+            81        3889.000000 steps
+            82        4087.000000 steps
+            83        3578.000000 steps
+            84        2997.000000 steps
+            85        3877.000000 steps
+            86        3987.000000 steps
+            87        3857.000000 steps
+            88        3850.000000 steps
+            89        3590.000000 steps
+            90        2874.000000 steps
+            91        3823.000000 steps
+            92        4168.000000 steps
+            93        3813.000000 steps
+            94        2676.000000 steps
+            95        2449.000000 steps
+            96        3454.000000 steps
+            97        4116.000000 steps
+            98        3987.000000 steps
+            99        2816.000000 steps
+           100       13668.000000 steps
+           101       16511.000000 steps
+           102       19199.000000 steps
+           103       19529.000000 steps
+           104       14790.000000 steps
+           105       19657.000000 steps
+           106       22886.000000 steps
+           107       23330.000000 steps
+           108       23428.000000 steps
+           109       16906.000000 steps
+           110       19325.000000 steps
+           111       23962.000000 steps
+           112       23008.000000 steps
+           113       20934.000000 steps
+           114       16657.000000 steps
+           115       16477.000000 steps
+           116       22925.000000 steps
+           117       23532.000000 steps
+           118       21211.000000 steps
+           119       16310.000000 steps
+           120       13417.000000 steps
+           121       18007.000000 steps
+           122       18057.000000 steps
+           123       18060.000000 steps
+           124       14048.000000 steps
 ============================================================
  closed file mfd_tl_NumberOfSteps.out for output
 ============================================================
  opened file mfd_tg_NumberOfSteps.out for output
 ============================================================
-             0          59.000000 steps
-             1           5.000000 steps
-             2          44.000000 steps
-             3          55.000000 steps
-             4          18.000000 steps
-             5          11.000000 steps
-             6          21.000000 steps
-             7          65.000000 steps
-             8          15.000000 steps
-             9          41.000000 steps
-            10          44.000000 steps
-            11          18.000000 steps
-            12          59.000000 steps
+             0           9.000000 steps
+             1          32.000000 steps
+             2          28.000000 steps
+             3          83.000000 steps
+             4          15.000000 steps
+             5          89.000000 steps
+             6          40.000000 steps
+             7          40.000000 steps
+             8          90.000000 steps
+             9          35.000000 steps
+            10          55.000000 steps
+            11          33.000000 steps
+            12          30.000000 steps
             13          33.000000 steps
-            14          31.000000 steps
-            15          47.000000 steps
-            16          39.000000 steps
-            17          73.000000 steps
-            18          26.000000 steps
-            19          17.000000 steps
-            20          40.000000 steps
-            21          39.000000 steps
-            22          51.000000 steps
-            23          28.000000 steps
-            24          20.000000 steps
-            25          46.000000 steps
-            26         103.000000 steps
-            27          87.000000 steps
-            28         146.000000 steps
-            29         161.000000 steps
-            30         136.000000 steps
-            31         160.000000 steps
-            32         311.000000 steps
-            33         173.000000 steps
-            34          38.000000 steps
-            35          83.000000 steps
-            36         185.000000 steps
-            37         326.000000 steps
-            38         168.000000 steps
-            39         105.000000 steps
-            40         136.000000 steps
-            41         227.000000 steps
-            42         250.000000 steps
-            43         345.000000 steps
-            44          57.000000 steps
-            45          50.000000 steps
-            46         196.000000 steps
-            47          87.000000 steps
-            48          84.000000 steps
-            49          66.000000 steps
-            50         453.000000 steps
-            51         450.000000 steps
-            52         427.000000 steps
-            53         306.000000 steps
-            54         140.000000 steps
-            55         482.000000 steps
-            56         482.000000 steps
-            57         825.000000 steps
-            58         560.000000 steps
-            59         143.000000 steps
-            60         403.000000 steps
-            61         767.000000 steps
-            62         938.000000 steps
-            63         842.000000 steps
-            64         304.000000 steps
-            65         230.000000 steps
-            66         613.000000 steps
-            67         897.000000 steps
-            68         652.000000 steps
-            69         704.000000 steps
-            70          99.000000 steps
-            71         242.000000 steps
-            72         279.000000 steps
-            73         565.000000 steps
-            74         376.000000 steps
-            75        2498.000000 steps
-            76        3187.000000 steps
-            77        3193.000000 steps
-            78        2782.000000 steps
-            79        2267.000000 steps
-            80        3263.000000 steps
-            81        2602.000000 steps
-            82        3053.000000 steps
-            83        2815.000000 steps
-            84        3543.000000 steps
-            85        3680.000000 steps
-            86        3168.000000 steps
-            87        2658.000000 steps
-            88        2846.000000 steps
-            89        2970.000000 steps
-            90        2324.000000 steps
-            91        2671.000000 steps
-            92        2772.000000 steps
-            93        2722.000000 steps
-            94        3432.000000 steps
-            95        2265.000000 steps
-            96        2903.000000 steps
-            97        3185.000000 steps
-            98        3347.000000 steps
-            99        2458.000000 steps
-           100       12911.000000 steps
-           101       17033.000000 steps
-           102       17700.000000 steps
-           103       17146.000000 steps
-           104       14179.000000 steps
-           105       17427.000000 steps
-           106       22315.000000 steps
-           107       21781.000000 steps
-           108       21418.000000 steps
-           109       18177.000000 steps
-           110       18122.000000 steps
-           111       21732.000000 steps
-           112       21317.000000 steps
-           113       22969.000000 steps
-           114       16724.000000 steps
-           115       15042.000000 steps
-           116       22121.000000 steps
-           117       23338.000000 steps
-           118       22561.000000 steps
-           119       18004.000000 steps
-           120       14114.000000 steps
-           121       16257.000000 steps
-           122       16822.000000 steps
-           123       18735.000000 steps
-           124       14487.000000 steps
+            14          54.000000 steps
+            15          56.000000 steps
+            16          46.000000 steps
+            17          34.000000 steps
+            18          72.000000 steps
+            19          76.000000 steps
+            20           7.000000 steps
+            21          17.000000 steps
+            22          78.000000 steps
+            23           4.000000 steps
+            24          28.000000 steps
+            25         105.000000 steps
+            26         162.000000 steps
+            27          93.000000 steps
+            28          69.000000 steps
+            29         118.000000 steps
+            30         173.000000 steps
+            31         278.000000 steps
+            32         252.000000 steps
+            33         314.000000 steps
+            34         253.000000 steps
+            35         160.000000 steps
+            36         198.000000 steps
+            37         192.000000 steps
+            38         333.000000 steps
+            39         239.000000 steps
+            40         139.000000 steps
+            41         160.000000 steps
+            42         308.000000 steps
+            43         465.000000 steps
+            44         142.000000 steps
+            45          64.000000 steps
+            46         141.000000 steps
+            47         121.000000 steps
+            48         118.000000 steps
+            49          56.000000 steps
+            50         493.000000 steps
+            51         833.000000 steps
+            52         551.000000 steps
+            53         498.000000 steps
+            54         247.000000 steps
+            55         394.000000 steps
+            56         611.000000 steps
+            57         937.000000 steps
+            58        1058.000000 steps
+            59         458.000000 steps
+            60         503.000000 steps
+            61        1185.000000 steps
+            62        1124.000000 steps
+            63         919.000000 steps
+            64         517.000000 steps
+            65         591.000000 steps
+            66         931.000000 steps
+            67        1143.000000 steps
+            68        1050.000000 steps
+            69         240.000000 steps
+            70         258.000000 steps
+            71         534.000000 steps
+            72         539.000000 steps
+            73         477.000000 steps
+            74         135.000000 steps
+            75        3184.000000 steps
+            76        3375.000000 steps
+            77        4113.000000 steps
+            78        4429.000000 steps
+            79        2354.000000 steps
+            80        4259.000000 steps
+            81        3889.000000 steps
+            82        4087.000000 steps
+            83        3578.000000 steps
+            84        2997.000000 steps
+            85        3877.000000 steps
+            86        3987.000000 steps
+            87        3857.000000 steps
+            88        3850.000000 steps
+            89        3590.000000 steps
+            90        2874.000000 steps
+            91        3823.000000 steps
+            92        4168.000000 steps
+            93        3813.000000 steps
+            94        2676.000000 steps
+            95        2449.000000 steps
+            96        3454.000000 steps
+            97        4116.000000 steps
+            98        3987.000000 steps
+            99        2816.000000 steps
+           100       13668.000000 steps
+           101       16511.000000 steps
+           102       19199.000000 steps
+           103       19529.000000 steps
+           104       14790.000000 steps
+           105       19657.000000 steps
+           106       22886.000000 steps
+           107       23330.000000 steps
+           108       23428.000000 steps
+           109       16906.000000 steps
+           110       19325.000000 steps
+           111       23962.000000 steps
+           112       23008.000000 steps
+           113       20934.000000 steps
+           114       16657.000000 steps
+           115       16477.000000 steps
+           116       22925.000000 steps
+           117       23532.000000 steps
+           118       21211.000000 steps
+           119       16310.000000 steps
+           120       13417.000000 steps
+           121       18007.000000 steps
+           122       18057.000000 steps
+           123       18060.000000 steps
+           124       14048.000000 steps
 ============================================================
  closed file mfd_tg_NumberOfSteps.out for output
 ============================================================
@@ -1544,6 +1590,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.061 MB
+Dynamic pools deleted: 13 / Total memory freed: 0.064 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

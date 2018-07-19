@@ -29,6 +29,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include "G4Types.hh"
+
 #ifdef G4MULTITHREADED
   #include "G4MTRunManager.hh"
 #else
@@ -49,7 +51,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int main(int argc,char** argv) 
+int main(int argc,char** argv)
 {
   G4UIExecutive* session = NULL;
   if (argc==1)   // Define UI session for interactive mode.
@@ -58,11 +60,11 @@ int main(int argc,char** argv)
   }
 
   // Choose the Random engine
-  
+
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
-  
+
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   // runManager->SetNumberOfThreads(2); // Is equal to 2 by default
@@ -73,20 +75,20 @@ int main(int argc,char** argv)
   // Set mandatory user initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  
+
   runManager->SetUserInitialization(new PhysicsList);
-  
+
   // User action initialization
   runManager->SetUserInitialization(new ActionInitialization(detector));
-  
+
   // Initialize G4 kernel
   runManager->Initialize();
-  
+
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-  
-  // Get the pointer to the User Interface manager 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+
+  // Get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if (argc==1)   // Define UI session for interactive mode.
   {
@@ -95,7 +97,7 @@ int main(int argc,char** argv)
     delete session;
   }
   else           // Batch mode
-  { 
+  {
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);

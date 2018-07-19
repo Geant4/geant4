@@ -1,0 +1,40 @@
+$Id: $
+-------------------------------------------------------------------
+
+
+ G4IonBinaryCascadePhysics
+ -------------------------
+ Inelastic ion-ion processes (for deuteron, triton, He3, alpha and
+ generic ion projectiles), with Glauber-Gribov cross section and
+ Binary Light Ion (BIC, with Precompound/de-excitation) and Fritiof (FTF)
+ string model (with Precompound/de-excitation) for the final state.
+ BIC is used for projectiles of kinetic energies below 4 GeV/nucleon, and
+ FTF above 2 GeV/nucleon.
+ 
+ G4IonINCLXXPhysics
+ ------------------
+ Inelastic ion-ion processes (for deuteron, triton, He3, alpha and
+ generic ion projectiles), with Glauber-Gribov cross section and
+ INCLXX and FTFP for the final state. INCLXX is used below 3 GeV/nucleon,
+ and FTF above 2.9 GeV/nucleon.
+ 
+ G4IonPhysics
+ ------------
+ Currently equivalent to G4IonBinaryCascadePhysics.
+
+ G4IonPhysicsPHP
+ ---------------
+ Similar to G4IonBinaryCascadePhysics, except that ParticleHP (for both
+ cross sections and final states) is used below 200 MeV/n for deuteron,
+ triton, He3 and alpha (and BIC used above 190 MeV/n for these light ions).
+
+ G4IonQMDPhysic
+ --------------
+ Inelastic ion-ion processes (for deuteron, triton, He3, alpha and
+ generic ion projectiles), with Glauber-Gribov cross section and
+ BIC, QMD and FTFP for the final state. These three final-state models
+ are used in the following intervals of projectile kinetic energy:
+ -  BIC below 110 MeV/nucleon;
+ -  QMD between 100 and 10'000 MeV/nucleon;
+ -  FTF above 9990 MeV/nucleon.
+

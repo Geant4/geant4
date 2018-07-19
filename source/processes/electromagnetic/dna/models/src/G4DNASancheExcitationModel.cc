@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.cc 93616 2015-10-27 08:59:17Z gcosmo $
+// $Id: G4DNASancheExcitationModel.cc 105719 2017-08-16 12:36:37Z gcosmo $
 //
 
 // Created by Z. Francis
@@ -36,6 +36,8 @@
 
 using namespace std;
 
+//#define SANCHE_VERBOSE
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4DNASancheExcitationModel::G4DNASancheExcitationModel(const G4ParticleDefinition*,
@@ -44,10 +46,8 @@ G4DNASancheExcitationModel::G4DNASancheExcitationModel(const G4ParticleDefinitio
 {
   fpWaterDensity = 0;
 
-  lowEnergyLimit = 2 * eV;
-  highEnergyLimit = 100 * eV;
-  SetLowEnergyLimit(lowEnergyLimit);
-  SetHighEnergyLimit(highEnergyLimit);
+  SetLowEnergyLimit(2.*eV);
+  SetHighEnergyLimit(100 * eV);
   nLevels = 9;
 
   verboseLevel = 0;
@@ -58,15 +58,24 @@ G4DNASancheExcitationModel::G4DNASancheExcitationModel(const G4ParticleDefinitio
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
+#ifdef SANCHE_VERBOSE
   if (verboseLevel > 0)
   {
-    G4cout << "Sanche Excitation model is constructed " << G4endl<< "Energy range: "
-    << lowEnergyLimit / eV << " eV - "
-    << highEnergyLimit / eV << " eV"
-    << G4endl;
+    G4cout << "Sanche Excitation model is constructed "
+           << G4endl
+           << "Energy range: "
+           << LowEnergyLimit() / eV << " eV - "
+           << HighEnergyLimit() / eV << " eV"
+           << G4endl;
   }
+#endif
+  
   fParticleChangeForGamma = 0;
   fpWaterDensity = 0;
+
+  // Selection of stationary mode
+
+  statCode = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,31 +86,38 @@ G4DNASancheExcitationModel::~G4DNASancheExcitationModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4DNASancheExcitationModel::Initialise(const G4ParticleDefinition* /*particle*/,
-                                            const G4DataVector& /*cuts*/)
+void
+G4DNASancheExcitationModel::
+Initialise(const G4ParticleDefinition* /*particle*/,
+           const G4DataVector& /*cuts*/)
 {
-
+  
+#ifdef SANCHE_VERBOSE
   if (verboseLevel > 3)
-  G4cout << "Calling G4DNASancheExcitationModel::Initialise()" << G4endl;
-
+  {
+    G4cout << "Calling G4DNASancheExcitationModel::Initialise()"
+           << G4endl;
+  }
+#endif
+  
   // Energy limits
 
-  if (LowEnergyLimit() < lowEnergyLimit)
+  if (LowEnergyLimit() < 2.*eV)
   {
-    G4cout << "G4DNASancheExcitationModel: low energy limit increased from " <<
-    LowEnergyLimit()/eV << " eV to " << lowEnergyLimit/eV << " eV" << G4endl;
-    SetLowEnergyLimit(lowEnergyLimit);
+    G4Exception("*** WARNING : the G4DNASancheExcitationModel class is not "
+                "validated below 2 eV !",
+                "", JustWarning, "");
   }
 
-  if (HighEnergyLimit() > highEnergyLimit)
+  if (HighEnergyLimit() > 100.*eV)
   {
     G4cout << "G4DNASancheExcitationModel: high energy limit decreased from " <<
-    HighEnergyLimit()/eV << " eV to " << highEnergyLimit/eV << " eV" << G4endl;
-    SetHighEnergyLimit(highEnergyLimit);
+    HighEnergyLimit()/eV << " eV to " << 100. << " eV" << G4endl;
+    SetHighEnergyLimit(100.*eV);
   }
 
   //
-
+#ifdef SANCHE_VERBOSE
   if (verboseLevel > 0)
   {
     G4cout << "Sanche Excitation model is initialized " << G4endl
@@ -110,6 +126,7 @@ void G4DNASancheExcitationModel::Initialise(const G4ParticleDefinition* /*partic
     << HighEnergyLimit() / eV << " eV"
     << G4endl;
   }
+#endif
 
   // Initialize water density pointer
   fpWaterDensity = G4DNAMolecularMaterial::Instance()->
@@ -136,17 +153,17 @@ void G4DNASancheExcitationModel::Initialise(const G4ParticleDefinition* /*partic
   tdummyVec.clear();
   //
 
-  double t;
-  double xs;
+  G4double t;
+  G4double xs;
 
   while(!input.eof())
   {
     input>>t;
     tdummyVec.push_back(t);
 
-    fEnergyLevelXS.push_back(std::vector<double>());
+    fEnergyLevelXS.push_back(std::vector<G4double>());
     fEnergyTotalXS.push_back(0);
-    std::vector<double>& levelXS = fEnergyLevelXS.back();
+    std::vector<G4double>& levelXS = fEnergyLevelXS.back();
     levelXS.reserve(9);
 
 //    G4cout<<t;
@@ -166,34 +183,39 @@ void G4DNASancheExcitationModel::Initialise(const G4ParticleDefinition* /*partic
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4DNASancheExcitationModel::CrossSectionPerVolume(const G4Material* material,
-                                                           const G4ParticleDefinition* particleDefinition,
+                                                           const G4ParticleDefinition*
+#ifdef SANCHE_VERBOSE
+                                                           particleDefinition
+#endif
+                                                           ,
                                                            G4double ekin,
                                                            G4double,
                                                            G4double)
 {
+#ifdef SANCHE_VERBOSE
   if (verboseLevel > 3)
-  G4cout << "Calling CrossSectionPerVolume() of G4DNASancheExcitationModel"
-  << G4endl;
+  {
+    G4cout << "Calling CrossSectionPerVolume() of G4DNASancheExcitationModel"
+           << G4endl;
+  }
+#endif
 
   // Calculate total cross section for model
 
-  G4double sigma=0;
+  G4double sigma = 0.;
 
   G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
 
   if(waterDensity!= 0.0)
   {
-
-//    if (particleDefinition == G4Electron::ElectronDefinition()) // pas besoin
+    if (ekin >= LowEnergyLimit() && ekin < HighEnergyLimit())
+      // for now this is necessary
     {
-      if (ekin >= lowEnergyLimit && ekin < highEnergyLimit)
-        // for now this is necessary 
-      {
-        //sigma = Sum(ekin);
-        sigma =  TotalCrossSection(ekin);
-      }
+      //sigma = Sum(ekin);
+      sigma =  TotalCrossSection(ekin);
     }
 
+#ifdef SANCHE_VERBOSE
     if (verboseLevel > 2)
     {
       G4cout << "__________________________________" << G4endl;
@@ -203,10 +225,10 @@ G4double G4DNASancheExcitationModel::CrossSectionPerVolume(const G4Material* mat
       G4cout << "=== Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
       G4cout << "=== G4DNASancheExcitationModel - XS INFO END" << G4endl;
     }
-
+#endif
   } // if water
 
-  return sigma*2*waterDensity;
+  return sigma*2.*waterDensity;
   // see papers for factor 2 description
 
 }
@@ -220,10 +242,13 @@ void G4DNASancheExcitationModel::SampleSecondaries(std::vector<
                                                    G4double,
                                                    G4double)
 {
-
+#ifdef SANCHE_VERBOSE
   if (verboseLevel > 3)
-  G4cout << "Calling SampleSecondaries() of G4DNASancheExcitationModel"
-  << G4endl;
+  {
+    G4cout << "Calling SampleSecondaries() of G4DNASancheExcitationModel"
+           << G4endl;
+  }
+#endif
 
   G4double electronEnergy0 = aDynamicElectron->GetKineticEnergy();
   G4int level = RandomSelect(electronEnergy0);
@@ -248,11 +273,23 @@ void G4DNASancheExcitationModel::SampleSecondaries(std::vector<
    }
    */
 
-  if (electronEnergy0 < highEnergyLimit && newEnergy>0.)
+  if (electronEnergy0 < HighEnergyLimit() && newEnergy>0.)
   {
-    fParticleChangeForGamma->ProposeMomentumDirection(aDynamicElectron->GetMomentumDirection());
-    fParticleChangeForGamma->SetProposedKineticEnergy(newEnergy);
-    fParticleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
+
+    if (!statCode)     
+    {     
+      fParticleChangeForGamma->ProposeMomentumDirection(aDynamicElectron->GetMomentumDirection());
+      fParticleChangeForGamma->SetProposedKineticEnergy(newEnergy);
+      fParticleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
+    }
+
+    else 
+    {
+      fParticleChangeForGamma->ProposeMomentumDirection(aDynamicElectron->GetMomentumDirection());
+      fParticleChangeForGamma->SetProposedKineticEnergy(electronEnergy0);
+      fParticleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
+    }
+
   }
 
   //
@@ -263,19 +300,19 @@ void G4DNASancheExcitationModel::SampleSecondaries(std::vector<
 G4double G4DNASancheExcitationModel::PartialCrossSection(G4double t,
                                                          G4int level)
 {
-  std::vector<double>::iterator t2 = std::upper_bound(tdummyVec.begin(),
+  std::vector<G4double>::iterator t2 = std::upper_bound(tdummyVec.begin(),
                                                       tdummyVec.end(), t / eV);
-  std::vector<double>::iterator t1 = t2 - 1;
+  std::vector<G4double>::iterator t1 = t2 - 1;
 
   size_t i1 = t1 - tdummyVec.begin();
   size_t i2 = t2 - tdummyVec.begin();
 
-  double sigma = LinInterpolate((*t1), (*t2),
+  G4double sigma = LinInterpolate((*t1), (*t2),
                                 t / eV,
                                 fEnergyLevelXS[i1][level],
                                 fEnergyLevelXS[i2][level]);
 
-  static const double conv_factor =  1e-16 * cm * cm;
+  static const G4double conv_factor =  1e-16 * cm * cm;
 
   sigma *= conv_factor;
   if (sigma == 0.) sigma = 1e-30;
@@ -286,19 +323,19 @@ G4double G4DNASancheExcitationModel::PartialCrossSection(G4double t,
 
 G4double G4DNASancheExcitationModel::TotalCrossSection(G4double t)
 {
-  std::vector<double>::iterator t2 = std::upper_bound(tdummyVec.begin(),
+  std::vector<G4double>::iterator t2 = std::upper_bound(tdummyVec.begin(),
                                                       tdummyVec.end(), t / eV);
-  std::vector<double>::iterator t1 = t2 - 1;
+  std::vector<G4double>::iterator t1 = t2 - 1;
 
   size_t i1 = t1 - tdummyVec.begin();
   size_t i2 = t2 - tdummyVec.begin();
 
-  double sigma = LinInterpolate((*t1), (*t2),
+  G4double sigma = LinInterpolate((*t1), (*t2),
                                 t / eV,
                                 fEnergyTotalXS[i1],
                                 fEnergyTotalXS[i2]);
 
-  static const double conv_factor =  1e-16 * cm * cm;
+  static const G4double conv_factor =  1e-16 * cm * cm;
 
   sigma *= conv_factor;
   if (sigma == 0.) sigma = 1e-30;
@@ -323,7 +360,7 @@ G4int G4DNASancheExcitationModel::RandomSelect(G4double k)
 
   G4int i = nLevels;
   G4double value = 0.;
-  std::deque<double> values;
+  std::deque<G4double> values;
 
   while (i > 0)
   {

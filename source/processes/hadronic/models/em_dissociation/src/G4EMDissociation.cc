@@ -61,9 +61,6 @@
 #include "G4EMDissociation.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4Evaporation.hh"
-#include "G4FermiBreakUp.hh"
-#include "G4StatMF.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4LorentzVector.hh"
 #include "G4PhysicsFreeVector.hh"
@@ -86,13 +83,6 @@ G4EMDissociation::G4EMDissociation():G4HadronicInteraction("EMDissociation") {
 
   // No de-excitation handler has been supplied - define the default handler.
   theExcitationHandler            = new G4ExcitationHandler;
-  G4Evaporation* theEvaporation   = new G4Evaporation;
-  G4FermiBreakUp* theFermiBreakUp = new G4FermiBreakUp;
-  G4StatMF* theMF                 = new G4StatMF;
-  theExcitationHandler->SetEvaporation(theEvaporation);
-  theExcitationHandler->SetFermiModel(theFermiBreakUp);
-  theExcitationHandler->SetMultiFragmentation(theMF);
-  theExcitationHandler->SetMaxAandZForFermiBreakUp(12, 6);
   theExcitationHandler->SetMinEForMultiFrag(5.0*MeV);
   handlerDefinedInternally = true;
 
@@ -109,28 +99,6 @@ G4EMDissociation::G4EMDissociation():G4HadronicInteraction("EMDissociation") {
   // Set the default verbose level to 0 - no output.
   verboseLevel = 0;
 }
-
-/*
-G4EMDissociation::G4EMDissociation(const G4EMDissociation& emd)
- : G4HadronicInteraction(emd)
-{
-  if (emd.theExcitationHandler != 0) {
-    theExcitationHandler = new G4ExcitationHandler;
-    *theExcitationHandler = *emd.theExcitationHandler;
-  }
-
-  handlerDefinedInternally = emd.handlerDefinedInternally;
-
-  if (emd.dissociationCrossSection != 0) {
-    dissociationCrossSection = new G4EMDissociationCrossSection;
-    *dissociationCrossSection = *emd.dissociationCrossSection;
-  }
-
-  if (emd.thePhotonSpectrum !- 0) {
-    thePhotonSpectrum = new G4EMDissociationSpectrum;
-    *thePhotonSpectrum = *emd.thePhotonSpectrum;
-}
-*/
 
 G4EMDissociation::G4EMDissociation (G4ExcitationHandler *aExcitationHandler)
 {

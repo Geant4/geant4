@@ -25,13 +25,9 @@
 //
 /// \file medical/dna/svalue/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
-//
-// $Id: PrimaryGeneratorAction.cc 73024 2013-08-15 09:11:40Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction.hh"
+#include "DetectorConstruction.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -40,7 +36,6 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-#include "DetectorConstruction.hh"
 #include "G4RandomDirection.hh"
 #include "G4RunManager.hh"
 #include "G4StateManager.hh"

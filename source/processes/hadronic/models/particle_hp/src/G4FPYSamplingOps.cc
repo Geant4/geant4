@@ -400,7 +400,7 @@ G4FFG_SAMPLING_FUNCTIONENTER__
         {
             A = NeutronInducedWattConstants[IsotopeIndex][0][0];
             WattConstants_->B = NeutronInducedWattConstants[IsotopeIndex][0][1];
-        } else if (WattConstants_->Energy > 14.0 * MeV)
+        } else if (WattConstants_->Energy > 14.0 * CLHEP::MeV)
         {
             G4Exception("G4FPYSamplingOps::G4SampleWatt()",
                         "Incident neutron energy above 14 MeV requested.",

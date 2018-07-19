@@ -45,6 +45,8 @@
 
 class G4Region;
 class DetectorMessenger;
+class G4LogicalVolume;
+class G4PVPlacement;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -56,15 +58,16 @@ public:
   virtual G4VPhysicalVolume* Construct();
 
   void SetMaterial(G4String);
-  void UpdateGeometry();
 
 private:
+
   G4Material* fpWaterMaterial;
 
   void DefineMaterials();
 
   G4VPhysicalVolume* ConstructDetector();
   DetectorMessenger* fDetectorMessenger;
-
+  G4LogicalVolume*   fLogicWorld;
+  G4PVPlacement*     fPhysiWorld;
 };
 #endif

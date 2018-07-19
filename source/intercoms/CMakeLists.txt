@@ -7,11 +7,15 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt 66892 2013-01-17 10:57:59Z gunter $
+# $Id: CMakeLists.txt 106172 2017-09-15 13:03:57Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
 include(Geant4MacroLibraryTargets)
+
+# Add allocation export symbol for the geometry category
+add_definitions(-DG4ICOMS_ALLOC_EXPORT)
+
 if(GEANT4_BUILD_GRANULAR_LIBS)
     GEANT4_GRANULAR_LIBRARY_TARGET(COMPONENT sources.cmake)
 else()

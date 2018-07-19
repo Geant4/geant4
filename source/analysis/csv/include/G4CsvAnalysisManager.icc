@@ -31,6 +31,88 @@
 #include "tools/wcsv_histo"
 
 //_____________________________________________________________________________
+template <>
+inline 
+G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p1d*>& htVector,
+                                    const std::vector<G4HnInformation*>& hnVector,
+                                    const G4String& hnType)
+{
+  for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
+    auto info = hnVector[i];
+    auto activation = info->GetActivation();
+    auto name = info->GetName();
+    // skip writing if activation is enabled and H1 is inactivated
+    if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
+    auto ht = htVector[i];
+    auto fileName = fFileManager->GetHnFileName(hnType, name);
+    std::ofstream hnFile(fileName);
+
+    // Do nothing if there is no file
+    if ( ! hnFile.is_open() ) return false;
+
+    auto result
+      = tools::wcsv::pto(hnFile, ht->s_cls(), *ht);
+
+    if ( ! result ) {
+      G4ExceptionDescription description;
+      description << "      " << "saving " << hnType << " " << name << " failed";
+      G4Exception("G4CsvAnalysisManager::Write()",
+                "Analysis_W022", JustWarning, description);
+      return false;       
+    } 
+    hnFile.close();
+#ifdef G4VERBOSE
+    if ( fState.GetVerboseL1() ) 
+      fState.GetVerboseL1()->Message("write", "file", fileName);
+#endif
+    fFileManager->LockHistoDirectoryName();
+  }
+
+  return true;
+}  
+
+//_____________________________________________________________________________
+template <>
+inline 
+G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p2d*>& htVector,
+                                    const std::vector<G4HnInformation*>& hnVector,
+                                    const G4String& hnType)
+{
+  for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
+    auto info = hnVector[i];
+    auto activation = info->GetActivation();
+    auto name = info->GetName();
+    // skip writing if activation is enabled and H1 is inactivated
+    if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
+    auto ht = htVector[i];
+    auto fileName = fFileManager->GetHnFileName(hnType, name);
+    std::ofstream hnFile(fileName);
+
+    // Do nothing if there is no file
+    if ( ! hnFile.is_open() ) return false;
+
+    auto result
+      = tools::wcsv::pto(hnFile, ht->s_cls(), *ht);
+
+    if ( ! result ) {
+      G4ExceptionDescription description;
+      description << "      " << "saving " << hnType << " " << name << " failed";
+      G4Exception("G4CsvAnalysisManager::Write()",
+                "Analysis_W022", JustWarning, description);
+      return false;       
+    } 
+    hnFile.close();
+#ifdef G4VERBOSE
+    if ( fState.GetVerboseL1() ) 
+      fState.GetVerboseL1()->Message("write", "file", fileName);
+#endif
+    fFileManager->LockHistoDirectoryName();
+  }
+
+  return true;
+}  
+
+//_____________________________________________________________________________
 template <typename T>
 inline 
 G4bool G4CsvAnalysisManager::WriteT(const std::vector<T*>& htVector,
@@ -46,6 +128,9 @@ G4bool G4CsvAnalysisManager::WriteT(const std::vector<T*>& htVector,
     auto ht = htVector[i];
     auto fileName = fFileManager->GetHnFileName(hnType, name);
     std::ofstream hnFile(fileName);
+
+    // Do nothing if there is no file
+    if ( ! hnFile.is_open() ) return false;
 
     auto result
       = tools::wcsv::hto(hnFile, ht->s_cls(), *ht);

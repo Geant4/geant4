@@ -26,18 +26,19 @@
 /// \file polarisation/Pol01/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 86418 2014-11-11 10:39:38Z gcosmo $
+// $Id: EventAction.cc 98772 2016-08-09 14:25:31Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
-#include "G4Event.hh"
 #include "RunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction * ra) : runAction(ra)
+EventAction::EventAction(RunAction * ra) 
+: G4UserEventAction(), 
+  fRunAction(ra)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,9 +55,8 @@ void EventAction::BeginOfEventAction(const G4Event*)
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  runAction->EventFinished(); 
+  fRunAction->EventFinished(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

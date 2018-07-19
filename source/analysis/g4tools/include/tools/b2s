@@ -24,11 +24,11 @@ namespace tools {
 
 inline void b2s(const std::vector<bool>& a_vals,std::string& a_s,const std::string& a_sep = "\n",bool a_sep_at_end = false) {
   a_s.clear();
-  unsigned int number = a_vals.size();
+  size_t number = a_vals.size();
   if(number<=0) return;
   number--;
   std::string stmp;
-  for(unsigned int index=0;index<number;index++) {
+  for(size_t index=0;index<number;index++) {
     b2s(a_vals[index],stmp);
     a_s += stmp;
     a_s += a_sep;

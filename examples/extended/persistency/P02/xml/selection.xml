@@ -47,6 +47,9 @@
 
 <class name="G4MaterialPropertyVector"/>
 <class name="G4MaterialPropertiesTable"/>
+<class name="std::map<G4int, G4MaterialPropertyVector*, std::less<G4int> >" />
+<class name="std::map< G4int, G4double, std::less<G4int> >" />
+
 
 <class name="std::map<G4String, G4MaterialPropertyVector*>" /> 
 <class name="std::map<G4String, double>" />

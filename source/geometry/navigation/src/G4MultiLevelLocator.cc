@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultiLevelLocator.cc 102290 2017-01-20 11:19:44Z gcosmo $
+// $Id: G4MultiLevelLocator.cc 110832 2018-06-15 15:00:33Z gcosmo $
 //
 // Class G4MultiLevelLocator implementation
 //
@@ -560,7 +560,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
 
         G4double Sub_len = (all_len-did_len)/(2.);
         G4FieldTrack midPoint = CurrentA_PointVelocity;
-        G4MagInt_Driver* integrDriver
+        auto integrDriver
                        = GetChordFinderFor()->GetIntegrationDriver();
         G4bool fullAdvance=              
            integrDriver->AccurateAdvance(midPoint, Sub_len, fiEpsilonStep);
@@ -593,8 +593,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
                   << "        at end (midpoint)= " << midPoint << G4endl;
            G4cout << "  Particle mass = " << midPoint.GetRestMass() << G4endl;
 
-           G4EquationOfMotion *equation
-                  = integrDriver->GetStepper()->GetEquationOfMotion();
+           G4EquationOfMotion *equation = integrDriver->GetEquationOfMotion();
            ReportFieldValue( CurrentA_PointVelocity, "start", equation );
            ReportFieldValue( midPoint, "midPoint", equation );            
            G4cout << "  Original Start = "
@@ -695,7 +694,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
           ReportReversedPoints(errmsg, 
                     CurveStartPointVelocity, CurveEndPointVelocity,
                     NewSafety, fiEpsilonStep, 
-                    CurrentA_PointVelocity, CurrentA_PointVelocity,
+                    CurrentA_PointVelocity, CurrentB_PointVelocity,
                     SubStart_PointVelocity, CurrentE_Point,
                     ApproxIntersecPointV, substep_no, substep_no_p, depth);
           G4Exception(MethodName, "GeomNav0003", FatalException, errmsg);

@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.hh 86418 2014-11-11 10:39:38Z gcosmo $
+// $Id: PhysicsListMessenger.hh 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,14 +54,13 @@ public:
     
 private:
   
-  PhysicsList*               pPhysicsList;
+  PhysicsList*               fPhysicsList;
     
-  G4UIdirectory*             physDir;
-  G4UIcmdWithAString*        pListCmd;
+  G4UIdirectory*             fPhysDir;
+  G4UIcmdWithAString*        fListCmd;
     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

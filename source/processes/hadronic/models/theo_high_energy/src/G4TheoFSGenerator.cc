@@ -71,6 +71,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   // init particle change
   theParticleChange->Clear();
   theParticleChange->SetStatusChange(stopAndKill);
+  G4double timePrimary=thePrimary.GetGlobalTime();
   
   // check if models have been registered, and use default, in case this is not true @@
   
@@ -199,16 +200,19 @@ if(theProjectileNucleus == 0)                                       // Uzhi Nov.
 }                                                                   // Uzhi Nov. 2012
 
   // Fill particle change
-  unsigned int i;
-  for(i=0; i<theTransportResult->size(); i++)
+  for(auto i=theTransportResult->begin(); i!=theTransportResult->end(); i++)
   {
-    G4DynamicParticle * aNew = 
-       new G4DynamicParticle(theTransportResult->operator[](i)->GetDefinition(),
-                             theTransportResult->operator[](i)->GetTotalEnergy(),
-                             theTransportResult->operator[](i)->GetMomentum());
-    // @@@ - overkill? G4double newTime = theParticleChange->GetGlobalTime(theTransportResult->operator[](i)->GetFormationTime());
+    G4DynamicParticle * aNewDP =
+       new G4DynamicParticle((*i)->GetDefinition(),
+                             (*i)->GetTotalEnergy(),
+                             (*i)->GetMomentum());
+	G4HadSecondary aNew = G4HadSecondary(aNewDP);
+    G4double time=(*i)->GetFormationTime();
+    if(time < 0.0) { time = 0.0; }
+    aNew.SetTime(timePrimary + time);
+    aNew.SetCreatorModelType((*i)->GetCreatorModel());
     theParticleChange->AddSecondary(aNew);
-    delete theTransportResult->operator[](i);
+    delete (*i);
   }
   
   // some garbage collection

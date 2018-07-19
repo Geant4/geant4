@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.cc 85443 2014-10-29 14:35:57Z gcosmo $
+// $Id: G4UnstableFragmentBreakUp.cc 99812 2016-10-06 08:49:27Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -43,116 +43,161 @@
 
 #include "G4UnstableFragmentBreakUp.hh"
 #include "Randomize.hh"
+#include "G4RandomDirection.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4LorentzVector.hh"
 #include "G4Fragment.hh"
 #include "G4FragmentVector.hh"
 #include "G4NucleiProperties.hh"
-#include "G4NistManager.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4LevelManager.hh"
+
+const G4int G4UnstableFragmentBreakUp::Zfr[] = {0, 1, 1, 1, 2, 2};
+const G4int G4UnstableFragmentBreakUp::Afr[] = {1, 1, 2, 3, 3, 4};
 
 G4UnstableFragmentBreakUp::G4UnstableFragmentBreakUp()
-  :verbose(0)
 { 
-  fNistManager = G4NistManager::Instance();
-  const G4int z[6] = {0, 1, 1, 1, 2, 2};
-  const G4int a[6] = {1, 1, 2, 3, 3, 4};
+  fLevelData = G4NuclearLevelData::GetInstance();
   for(G4int i=0; i<6; ++i) {
-    Zfr[i] = z[i];
-    Afr[i] = a[i];
-    masses[i] = G4NucleiProperties::GetNuclearMass(a[i], z[i]);
+    masses[i] = G4NucleiProperties::GetNuclearMass(Afr[i], Zfr[i]);
   }
 }
 
 G4UnstableFragmentBreakUp::~G4UnstableFragmentBreakUp()
 {}
 
-G4Fragment* G4UnstableFragmentBreakUp::EmittedFragment(G4Fragment*)
-{
-  return 0;
-}
-
-G4FragmentVector* G4UnstableFragmentBreakUp::BreakUpFragment(G4Fragment* nucleus)
-{
-  //G4cout << "G4UnstableFragmentBreakUp::BreakUpFragment" << G4endl;
-  G4FragmentVector * theResult = new G4FragmentVector();
-  BreakUpChain(theResult, nucleus);
-  return theResult;
-}
-
-G4bool G4UnstableFragmentBreakUp::BreakUpChain(G4FragmentVector* theResult, 
+G4bool G4UnstableFragmentBreakUp::BreakUpChain(G4FragmentVector* results, 
 					       G4Fragment* nucleus)
 {
-  //G4cout << "G4UnstableFragmentBreakUp::BreakUpChain" << G4endl;
-
+  //G4cout << "G4UnstableFragmentBreakUp::EmittedFragment" << G4endl;
+  G4Fragment* frag = nullptr;
+  
   G4int Z = nucleus->GetZ_asInt();
   G4int A = nucleus->GetA_asInt();
-  G4int Amax = A;
+
+  // if the isotope is in the database it is not exotic
+  // so, cannot be handled by this class
+  if(fLevelData->GetLevelManager(Z, A)) { return false; }
+
   G4LorentzVector lv = nucleus->GetMomentum();
   G4double time = nucleus->GetCreationTime();
 
-  G4double deltaE, mass, mass1(0.0), mass2(0.0);
-  G4int i, index;
-
-  // Starts loop over evaporated particles, loop is limited by number
-  // of nucleons
-  for(G4int ia=0; ia<Amax; ++ia) {
+  G4double mass1(0.0), mass2(0.0);
  
-    mass = lv.mag();
-    deltaE = 0.0;
-    index  = -1;
-    for(i=0; i<6; ++i) {
-      G4int Zres = Z - Zfr[i];
-      G4int Ares = A - Afr[i];
+  G4double mass = lv.mag();
+  G4bool   done = false;
+
+  G4int Amax = A;
+  G4int Zres = Z;
+  G4int Ares = A;
+
+  for(G4int k=0; k<Amax; ++k) {
+    // look for the decay channel with normal masses
+    // without Coulomb barrier and paring corrections
+
+    // 1 - recoil, 2 - emitted light ion 
+
+    //G4cout << "Unstable decay #" << k << " Z= " << Z << " A= " << A << G4endl;
+
+    G4double ekin = 0.0;
+    G4int index = -1;
+    for(G4int i=0; i<6; ++i) {
+      Zres = Z - Zfr[i];
+      Ares = A - Afr[i];
+      for(G4int j=0; j<6; ++j) {
+	if(Zres == Zfr[j] && Ares == Afr[j]) {
+	  /*
+	  G4cout << "i= " << i << " j= " << j << " Zres= " << Zres
+		 << " Ares= " << Ares << " dm= " << mass - masses[i] - masses[j]
+		 << G4endl;
+	  */ 
+	  if(mass >= masses[i] + masses[j]) {
+ 	    mass2 = masses[i];
+	    mass1 = masses[j];
+	    ekin  = 0.0;
+	    done = true;
+	    break;
+	  }
+	}
+      }
+      if(done) {
+	index = i;
+        break;
+      }
       if(Zres >= 0 && Ares >= Zres && Ares > 0) {
-	G4double m1 = G4NucleiProperties::GetNuclearMass(Ares, Zres);
-	G4double de = mass - m1 - masses[i];
-        if(de > deltaE) {
-	  mass1 = m1;
-          mass2 = masses[i];
-          deltaE= de;
-          index = i;
+	G4double m = G4NucleiProperties::GetNuclearMass(Ares, Zres);
+	G4double e = mass - m - masses[i];
+	if(e > ekin) {
+	  mass2 = masses[i];
+	  mass1 = m;
+	  ekin  = e;
+	  index = i;
+	  if(fLevelData->GetLevelManager(Z, A)) {
+	    done = true;
+            break;
+	  }	
 	}
       }
     }
 
-    // no decay channels
-    if(index < 0) { break; }
+    // no decay channel - assume that primary mass is biased
+    // only energy will be conserved
+    if(index < 0) {
+      for(G4int i=0; i<6; ++i) {
+	Zres = Z - Zfr[i];
+	Ares = A - Afr[i];
+	if(Zres >= 0 && Ares >= Zres && Ares > 0) {
+          
+	  G4double m = proton_mass_c2*Zres + neutron_mass_c2*(Ares - Zres);
+	  G4double e = mass - m - masses[i];
+	  if(e > ekin) {
+	    mass2 = masses[i];
+	    mass1 = m;
+	    ekin  = e;
+	    index = i;
+	  }
+	}
+      }
+    }
+    if(index < 0) {
+
+      // further decay impossible
+      // if no one decay sampled do not update primary 
+      if(0 == k) { return false; }
+      else       { break; }
+    }
+
+    // useful to left max excitation for the residual
+    mass1 += ekin;
 
     // compute energy of light fragment
     G4double e2 = 0.5*((mass - mass1)*(mass + mass1) + mass2*mass2)/mass;
-    if(e2 < mass2) { break; }
+    e2 = std::max(e2, mass2);
+    G4double mom = std::sqrt((e2 - mass2)*(e2 + mass2));
 
     // sample decay
     G4ThreeVector bst  = lv.boostVector();
-
-    G4double cosTheta = 1. - 2. * G4UniformRand(); 
-    G4double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
-    G4double phi = twopi * G4UniformRand();
-    G4double mom = std::sqrt((e2 - mass2)*(e2 + mass2));
-    G4LorentzVector mom2(mom * sinTheta * std::cos(phi),
-			 mom * sinTheta * std::sin(phi),
-			 mom * cosTheta,
-			 e2);
+    G4ThreeVector v = G4RandomDirection();
+    G4LorentzVector mom2 = G4LorentzVector(v*mom, e2);
     mom2.boost(bst);  
-    G4Fragment* fr = new G4Fragment(Afr[index], Zfr[index], mom2);
-    fr->SetCreationTime(time);
-    theResult->push_back(fr);
+    frag = new G4Fragment(Afr[index], Zfr[index], mom2);
+    frag->SetCreationTime(time);
+    results->push_back(frag);
 
     // residual
     lv -= mom2;
     Z  -= Zfr[index];
     A  -= Afr[index];
+    
+    mass = lv.mag();
+
+    if(done) { break; }
   }
 
+  // updated primary
   nucleus->SetZandA_asInt(Z, A);
   nucleus->SetMomentum(lv);
-  theResult->push_back(nucleus);
-  return false;
-}
-
-G4FragmentVector* G4UnstableFragmentBreakUp::BreakUp(const G4Fragment&)
-{
-  return 0;
+  return true;
 }
 
 G4double G4UnstableFragmentBreakUp::GetEmissionProbability(G4Fragment*)

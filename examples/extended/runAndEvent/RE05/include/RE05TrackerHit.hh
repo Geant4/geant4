@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05TrackerHit.hh 69764 2013-05-14 09:59:36Z gcosmo $
+// $Id: RE05TrackerHit.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05TrackerHit.hh
 /// \brief Definition of the RE05TrackerHit class
@@ -59,20 +59,19 @@ class RE05TrackerHit : public G4VHit
       virtual void Print();
 
   private:
-      G4double edep;
-      G4ThreeVector pos;
+      G4double fEdep;
+      G4ThreeVector fPos;
       static std::map<G4String,G4AttDef> fAttDefs;
 
   public:
       inline void SetEdep(G4double de)
-      { edep = de; }
+      { fEdep = de; }
       inline G4double GetEdep()
-      { return edep; }
+      { return fEdep; }
       inline void SetPos(G4ThreeVector xyz)
-      { pos = xyz; }
+      { fPos = xyz; }
       inline G4ThreeVector GetPos()
-      { return pos; }
-
+      { return fPos; }
 };
 
 typedef G4THitsCollection<RE05TrackerHit> RE05TrackerHitsCollection;

@@ -1,4 +1,4 @@
-$Id: History 97681 2016-06-07 08:59:17Z gcosmo $
+$Id: History 110933 2018-06-26 08:09:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,13 +17,121 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-3rd June 2016  Laurent Garnier (interfaces-V10-01-02)
+26th June 2018 Koichi Murakami (interfaces-V10-04-07)
+- G4UIGainServer.cc, G4InteractorMessenger.cc :
+  suppress compilation warning for -Wunused-result
+
+15th June 2018 Fred Jones (interfaces-V10-04-06)
+- G4Xt: fixed compilation warnings for casts on gcc-8.1.
+
+14th May 2018 Garnier Laurent (interfaces-V10-04-05)
+- G4UIQt.cc:
+ o Fix a bug with some "critical errors" message containing HTML tags inside (<, > and &)
+ 
+23th April 2018 Garnier Laurent (interfaces-V10-04-03, interfaces-V10-04-04)
+- G4UIQt:
+ o Fix a bug with command guidance with HTML tags inside (<, > and &)
+
+8th February 2018 Garnier Laurent (interfaces-V10-04-01, interfaces-V10-04-02)
+- G4UIQt:
+ o Take account \n in account for command guidance in help tree. Bug #296 Fixed
+
+13th December 2017 Garnier Laurent (interfaces-V10-04-00)
+- G4UIQt:
+ o Remove parameters from popup in Qt interface when autocomplete command line
+ 
+5th August 2017 Koichi Murakami (interfaces-V10-03-01)
+- G4VBasicShell
+ o Fix std::out_of_range exception in ModifyPath() when typing ls command 
+   at the top dir
+
+20th January Laurent Garnier
+- G4UIQt:
+  o Set always-on-top to the picking windows
+
+13th January Laurent Garnier (interfaces-V10-03-00)
+- G4UIQt:
+  o Fix bugzilla 1933. I check was missing to avoid a NULL pointer
+  o Avoid problem on close when deleting objects
+
+25th November 2016  Laurent Garnier (interfaces-V10-02-13-interfaces-V10-02-14)
+- G4UIQt:
+  o Fix a bug on Qt5.7 with an extra whitespace
+    - at the end of "search" in help tree
+    - at the end a the command line
+
+11th November 2016  Laurent Garnier (interfaces-V10-02-12)
+- G4UIQt:
+  o Fix a problem /run/beamOn 1. The parameter was not taken in account in the icon toolbar
+
+8th November 2016  Laurent Garnier (interfaces-V10-02-11)
+- G4UIQt:
+  o Fix a problem without default icon on mac + Qt5.5 : Sometimes I have a gray panel on left due do a to-early
+    show event for QToolbar
+  o Add a few protection against null pointer
+
+7th November 2016  Laurent Garnier (interfaces-V10-02-10)
+- G4UIQt:
+  o Fix Warning: "A toolBar icon "Run beam on" already exists with the same name!"
+  o Fix Warning: "command 'exit' does not exist"
+  o Fix a problem with selected icons (without default icons)
+  
+4th November 2016  Laurent Garnier (interfaces-V10-02-09 co-works with opengl-V10-02-20)
+- G4UIQt:
+ o Remove (multiple) scene tree from a tab to put it in a single, auto-update widget
+ o Remove (multiple) viewer properties from a tab to put it in a outside dialog
+ o Remove (multiple) pick infos from a tab to put it in a outside dialog
+ o Lot of remaning in order to do previous work
+ o Fix a bd signal/slot connection for the filter of the scene tree (perhaps a bug in some cases)
+ o Change the pick icon
+ o Remove unused parameter
+ o Rename GetSceneTreeComponentsTBWidget -> GetSceneTreeWidget
+
+3rd Nov 2016  Laurent Garnier (interfaces-V10-02-08)
+- G4UIQt
+ o Bugfix on the /gui/defaultIcons command (does nothing before)
+
+27th Oct 2016  Laurent Garnier (interfaces-V10-02-06, interfaces-V10-02-07)
+- G4UIQt/G4InteractorMessenger/G4VInteractiveSession
+ o Add a new command /gui/defaultIcons to enable/disable Geant4 default icon toolbar
+- G4UIQt :
+ o Add a default icon toolbar
+
+27th Oct 2016  Brian Smith
+- G4UIQt :
+  o Prevent potential Windows crash by protecting masterG4coutDestination assignment with #ifdef G4MULTITHREADED
+
+7th Oct 2016  Laurent Garnier (interfaces-V10-02-05)
+- G4UIQt :
+  o Fix a uninitialized value
+
+7th Oct 2016  Laurent Garnier (interfaces-V10-02-04)
+- G4UIQt :
+  o Move eventFilter init at sessionStart() : avoid bad init state in help tree and 
+    events to be send twice or more
+  o Fix "Tab" completion on command line, was previously break by the QCompleter
+  o Fix tooltip on completion. Now tooltips are diplayed in multiple lines
+
+6th Oct 2016  Laurent Garnier (interfaces-V10-02-03)
+- G4UIQt
+  o completion widget for UIQt
+
+15th Sept 2016  Laurent Garnier
+- G4UIQt
+  o First draft of a completion widget for UIQt
+
+8th June 2016  Laurent Garnier
+- G4UIQt
+  o Add "save output" icon
+  o Better icon management in the code
+
+3rd June 2016  Laurent Garnier (interfaces-V10-02-02)
 - G4UIWin32: Re-Fixed compilation warnings on Win32 about HMENU.
 
-1st June 2016  Laurent Garnier
+1st June 2016  Laurent Garnier (interfaces-V10-02-01)
 - G4UIWin32 :Fixed compilation warnings on Win32 about LONG_PTR and HMENU.
 
-27th May 2016  Gabriele Cosmo
+27th May 2016  Gabriele Cosmo (interfaces-V10-02-00)
 - Fixed compilation warnings on MacOS for conversion to char* in G4UIXm.cc.
 
 3rd November 2015  Laurent Garnier

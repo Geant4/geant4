@@ -27,7 +27,7 @@
 /// \brief Main program of the biasing/ReverseMC01 example
 //
 //
-// $Id: exampleRMC01.cc 76253 2013-11-08 11:26:50Z gcosmo $
+// $Id: exampleRMC01.cc 110378 2018-05-22 07:43:50Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -40,22 +40,18 @@
 // 
 // --------------------------------------------------------------
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4Types.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "G4AdjointSimManager.hh"
 #include "RMC01DetectorConstruction.hh"
@@ -64,7 +60,6 @@
 #include "RMC01RunAction.hh"
 #include "G4AdjointPhysicsList.hh"
 
-
 #include "G4AdjointSimManager.hh"
 #include "RMC01AdjointEventAction.hh"
 
@@ -72,8 +67,12 @@
 
 int main(int argc,char** argv) {
    
-   
- 
+  // Instantiate G4UIExecutive if interactive mode
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // Construct the default run manager
   G4RunManager * theRunManager = new G4RunManager;
    
@@ -84,19 +83,17 @@ int main(int argc,char** argv) {
   //--------------------------------------------
   theRunManager->SetUserInitialization(detector);
   theRunManager->SetUserInitialization(new G4AdjointPhysicsList);
-                        
-                                                          
-  
+
   theRunManager->SetUserAction(new RMC01PrimaryGeneratorAction);
   theRunManager->SetUserAction(new RMC01EventAction);
   RMC01RunAction* theRunAction = new RMC01RunAction;
   theRunManager->SetUserAction(theRunAction);
  
-  
   //The adjoint simulation manager will control the Reverse MC mode 
   //---------------------------------------------------------------
   
-  G4AdjointSimManager* theAdjointSimManager = G4AdjointSimManager::GetInstance();
+  G4AdjointSimManager* theAdjointSimManager
+                            = G4AdjointSimManager::GetInstance();
   
   //It is possible to define action that will be used during
   //                                        the adjoint tracking phase
@@ -105,17 +102,14 @@ int main(int argc,char** argv) {
   //theAdjointSimManager->SetAdjointEventAction(new RMC01AdjointEventAction);
   theAdjointSimManager->SetAdjointEventAction(new RMC01EventAction);
   
-#ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-  
-#endif
 
   // get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-  if (argc!=1)   // batch mode
+  if (!ui)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
@@ -123,17 +117,12 @@ int main(int argc,char** argv) {
     }
   else
     {  // interactive mode : define UI session
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       ui->SessionStart();
       delete ui;
-#endif
     }
 
   // job termination
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete theRunManager;
 
   return 0;

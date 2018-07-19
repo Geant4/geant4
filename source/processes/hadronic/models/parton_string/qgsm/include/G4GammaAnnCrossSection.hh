@@ -33,15 +33,15 @@
 
 class G4GammaAnnCrossSection : public G4VAnnihilationCrossSection
 {
-public:
-	G4GammaAnnCrossSection();
-	G4bool InCharge(G4int aCode, G4int bCode);
-	G4double GetXsec(G4double S);
-	virtual ~G4GammaAnnCrossSection(){}
+  public:
+    G4GammaAnnCrossSection();
+    G4bool InCharge(G4int aCode, G4int bCode);
+    G4double GetXsec(G4double S);
+    virtual ~G4GammaAnnCrossSection(){}
 
-private:
-
-	std::vector<G4ASCCrossSection*> theGammaNucXSections;
+  private:
+    std::vector<G4ASCCrossSection*> theGammaNucXSections;
 };
 
 #endif
+

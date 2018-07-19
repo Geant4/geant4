@@ -1,4 +1,4 @@
-$Id: README 94269 2015-11-10 07:55:24Z gcosmo $
+$Id: README 96329 2016-04-06 15:53:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -57,7 +57,7 @@ $Id: README 94269 2015-11-10 07:55:24Z gcosmo $
                   G4DiscreteScatteringModel is applied; for this model 
                   a data set G4GBFPDATA should be requested from EM group
 
- A local builder, PhysListEmStandard "local" (similar to opt0) is also
+ A local builder, PhysListEmStandard "local" (similar to opt3) is also
  available.
       
  Physics lists and options can be (re)set with UI commands
@@ -147,7 +147,7 @@ $Id: README 94269 2015-11-10 07:55:24Z gcosmo $
    TestEm11 has several predefined 1D histograms : 
   
       1 : longitudinal energy profile (in MeV/mm and per event)
-      2 : total energy deposited in the absorber
+      2 : total energy deposited in all absorbers
       3 : total track length of the primary track
       4 : step size of the primary track      
       5 : projected range of the primary track
@@ -155,7 +155,11 @@ $Id: README 94269 2015-11-10 07:55:24Z gcosmo $
       7 : step size of charged secondary tracks      
       8 : longitudinal energy profile (in MeV.cm2/g), as a function of x/r0
           where r0 is the range of the primary particle 
-	       
+
+      11 : energy deposited in absorber 1
+      12 : energy deposited in absorber 2
+      ...etc........
+
    The histograms are managed by G4Analysis classes. 
    The histos can be individually activated with the command :
    /analysis/h1/set id nbBins  valMin valMax unit 
@@ -170,10 +174,3 @@ $Id: README 94269 2015-11-10 07:55:24Z gcosmo $
    It is also possible to print selected histograms on an ascii file:
    /analysis/h1/setAscii id
    All selected histos will be written on a file name.ascii  (default testem11) 
-    
- Using hbook format
- ------------------
- 
- Need a special treatement : the Cern Library must be installed and the
- environment variable CERNLIB correctly set. Then, *before* compiling,
- activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in HistoManager.hh

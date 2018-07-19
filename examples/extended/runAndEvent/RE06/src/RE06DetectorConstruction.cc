@@ -26,7 +26,7 @@
 /// \file RE06/src/RE06DetectorConstruction.cc
 /// \brief Implementation of the RE06DetectorConstruction class
 //
-// $Id: RE06DetectorConstruction.cc 83381 2014-08-21 14:18:13Z gcosmo $
+// $Id: RE06DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 // 
 
 #include "RE06DetectorConstruction.hh"
@@ -302,7 +302,7 @@ void RE06DetectorConstruction::SetupGeometry()
   //                                        
   // Visualization attributes
   //
-  fWorldLogical->SetVisAttributes(G4VisAttributes::Invisible);
+  fWorldLogical->SetVisAttributes(G4VisAttributes::GetInvisible());
   G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   simpleBoxVisAtt->SetVisibility(true);
   for(i=0;i<3;i++)
@@ -345,6 +345,7 @@ void RE06DetectorConstruction::SetupDetectors()
     else
     { detName += "_gap"; }
     G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector(detName);
+    G4SDManager::GetSDMpointer()->AddNewDetector(det);
 
     // The second argument in each primitive means the "level" of geometrical 
     // hierarchy, the copy number of that level is used as the key of the 

@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsList class
 //
 //
-// $Id: PhysicsList.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: PhysicsList.hh 98767 2016-08-09 14:18:40Z gcosmo $
 //
 // 
 
@@ -70,6 +70,4 @@ class PhysicsList: public G4VUserPhysicsList
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
 

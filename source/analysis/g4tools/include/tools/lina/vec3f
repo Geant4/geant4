@@ -6,25 +6,27 @@
 
 #include "vec3"
 #include "../S_STRING"
+#include <cmath> //sqrt
 
 namespace tools {
 
 class vec3f : public vec3<float> {
+  typedef vec3<float> parent;
 public:
   TOOLS_SCLASS(tools::vec3f) //for stype()
 public:
-  vec3f():vec3<float>(){}
-  vec3f(const float a_vec[3]):vec3<float>(a_vec){}
-  vec3f(float a0,float a1,float a2):vec3<float>(a0,a1,a2){}
+  vec3f():parent(){}
+  vec3f(const float a_vec[3]):parent(a_vec){}
+  vec3f(float a0,float a1,float a2):parent(a0,a1,a2){}
   virtual ~vec3f() {}
 public:
-  vec3f(const vec3f& a_from):vec3<float>(a_from){}
+  vec3f(const vec3f& a_from):parent(a_from){}
   vec3f& operator=(const vec3f& a_from){
-    vec3<float>::operator=(a_from);
+    parent::operator=(a_from);
     return *this;
   }
 
-  vec3f(const vec3<float>& a_from):vec3<float>(a_from){}
+  vec3f(const parent& a_from):parent(a_from){}
 
 public: //operators
   vec3f operator*(float a_v) const {
@@ -63,7 +65,26 @@ public: //operators
   vec3f operator-() const {
     return vec3f(-m_data[0],-m_data[1],-m_data[2]);
   }
+public:
+#define TOOLS_VEC3F_MORE_PREC
+#ifdef TOOLS_VEC3F_MORE_PREC
+  float length() const {
+    return float(::sqrt(m_data[0]*m_data[0]+m_data[1]*m_data[1]+m_data[2]*m_data[2]));
+  }
+  float normalize() {
+    float norme = length();
+    if(!norme) return 0;
+    divide(norme);
+    return norme;
+  }
+#else
+  float length() const {return parent::length(::sqrtf);}
+  float normalize() {return parent::normalize(::sqrtf);}
+#endif
 
+  bool theta_phi(float& a_theta,float& a_phi) const {
+    return parent::theta_phi(a_theta,a_phi,::sqrtf,::atan2f);
+  }
 public: //iv2sg
   bool equals(const vec3f& a_v,const float a_epsil) const {
     //if(a_epsil<0.0f))
@@ -86,6 +107,30 @@ inline vec3f operator*(float a_f,const vec3f& a_v) {
   res *= a_f;
   return res;
 }
+
+#define TOOLS_VEC3F_MORE_PREC
+#ifdef TOOLS_VEC3F_MORE_PREC
+inline void get_normal(const vec3f& a_p0,const vec3f& a_p1,const vec3f& a_p2,vec3f& a_nm,
+                       vec3f& a_tmp_1,vec3f& a_tmp_2) {
+  // Used to optimize sg::bin().
+  //(a_p1-a_p0).cross(a_p2-a_p1,a_nm);
+
+  a_tmp_1 = a_p1;
+  a_tmp_1.subtract(a_p0);
+
+  a_tmp_2 = a_p2;
+  a_tmp_2.subtract(a_p1);
+
+  a_tmp_1.cross(a_tmp_2,a_nm);
+
+  a_nm.normalize();
+}
+#else
+inline void get_normal(const vec3f& a_p0,const vec3f& a_p1,const vec3f& a_p2,vec3f& a_nm,
+                       vec3f& a_tmp_1,vec3f& a_tmp_2) {
+  get_normal<float>(a_p0,a_p1,a_p2,a_nm,a_tmp_1,a_tmp_2,::sqrtf);
+}
+#endif
 
 }
 

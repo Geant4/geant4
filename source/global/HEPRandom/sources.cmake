@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 89393 2015-04-09 07:45:40Z gcosmo $
+# $Id: sources.cmake 108829 2018-03-09 12:44:00Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -25,39 +25,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 # Define the Geant4 Module.
 #
 
-# The following are needed only in
-# multi-threaded builds
-set (_mtheaders "")
-set (_mtsrcs "")
-if(GEANT4_BUILD_MULTITHREADED)
-  set(_mtheaders ${_mtheaders} 
-	G4MTHepRandom.hh 
-	G4MTHepRandom.icc
-	G4MTRandBit.hh
-	G4MTRandBit.icc
-	G4MTRandExponential.hh
-	G4MTRandExponential.icc
-	G4MTRandFlat.hh
-	G4MTRandFlat.icc
-	G4MTRandGamma.hh
-	G4MTRandGamma.icc
-	G4MTRandGauss.hh
-	G4MTRandGauss.icc
-	G4MTRandGaussQ.hh
-	G4MTRandGaussQ.icc
-	G4MTRandGeneral.hh
-	G4MTRandGeneral.icc )
-  set(_mtsrcs ${_mtsrcs}
-	G4MTHepRandom.cc 
-	G4MTRandBit.cc 
-	G4MTRandExponential.cc
-	G4MTRandFlat.cc
-	G4MTRandGamma.cc
-	G4MTRandGauss.cc
-	G4MTRandGaussQ.cc
-	G4MTRandGeneral.cc )
-endif()
-
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4heprandom 
     HEADERS
@@ -66,9 +33,7 @@ GEANT4_DEFINE_MODULE(NAME G4heprandom
         G4RandomTools.hh
         Randomize.hh
 	G4UniformRandPool.hh
-	${_mtheaders}
     SOURCES
-	${_mtsrcs}
         G4Poisson.cc
 	G4UniformRandPool.cc
     GRANULAR_DEPENDENCIES

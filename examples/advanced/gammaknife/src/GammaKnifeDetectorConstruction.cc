@@ -113,7 +113,7 @@ void GammaKnifeDetectorConstruction::ConstructBeamLine()
 
 
   // The treatment room is invisible in the Visualisation
-  logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
+  logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::GetInvisible());
 
 
   // Visualisation attributes of all elements colours 

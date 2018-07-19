@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.hh 78955 2014-02-05 09:45:46Z gcosmo $
+// $Id: G4VisExtent.hh 102801 2017-02-22 15:17:53Z gcosmo $
 //
 // 
 // A.Walkden 28/11/95
@@ -77,7 +77,6 @@ public: // With description
   void SetZmin (G4double zmin);
   void SetZmax (G4double zmax);
   friend std::ostream& operator << (std::ostream& os, const G4VisExtent& e);
-  static const G4VisExtent NullExtent;
 
 private:
   G4double fXmin, fXmax, fYmin, fYmax, fZmin, fZmax;

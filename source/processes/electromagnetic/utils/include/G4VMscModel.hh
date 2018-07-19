@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.hh 93264 2015-10-14 09:30:04Z gcosmo $
+// $Id: G4VMscModel.hh 110572 2018-05-30 13:08:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -58,7 +58,6 @@
 #include "G4Track.hh"
 #include "G4SafetyHelper.hh"
 #include "G4VEnergyLossProcess.hh"
-#include "G4LossTableManager.hh"
 #include "G4PhysicsTable.hh"
 #include "G4ThreeVector.hh"
 #include <vector>
@@ -70,7 +69,7 @@ class G4VMscModel : public G4VEmModel
 
 public:
 
-  G4VMscModel(const G4String& nam);
+  explicit G4VMscModel(const G4String& nam);
 
   virtual ~G4VMscModel();
 
@@ -89,7 +88,7 @@ public:
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double tmax);
+				 G4double tmax) override;
 
   //================================================================
   //  Set parameters of multiple scattering models
@@ -125,7 +124,7 @@ protected:
   // initialisation of the ParticleChange for the model
   // initialisation of interface with geometry and ionisation 
   G4ParticleChangeForMSC* 
-  GetParticleChangeForMSC(const G4ParticleDefinition* p = 0);
+  GetParticleChangeForMSC(const G4ParticleDefinition* p = nullptr);
 
   // convert true length to geometry length
   inline G4double ConvertTrueToGeom(G4double& tLength, G4double& gLength);
@@ -160,13 +159,12 @@ public:
 private:
 
   //  hide assignment operator
-  G4VMscModel & operator=(const  G4VMscModel &right);
-  G4VMscModel(const  G4VMscModel&);
+  G4VMscModel & operator=(const  G4VMscModel &right) = delete;
+  G4VMscModel(const  G4VMscModel&) = delete;
 
   G4SafetyHelper* safetyHelper;
   G4VEnergyLossProcess* ionisation;
   const G4ParticleDefinition* currentPart;
-  G4LossTableManager* man;
 
   G4double dedx;
   G4double localtkin;
@@ -258,16 +256,6 @@ inline G4double G4VMscModel::ComputeGeomLimit(const G4Track& track,
 					      G4double& presafety, 
 					      G4double limit)
 {
-  /*
-  G4double res = geomMax;
-  if(track.GetVolume() != safetyHelper->GetWorldVolume()) {
-    G4double res = safetyHelper->CheckNextStep(
-          track.GetStep()->GetPreStepPoint()->GetPosition(),
-	  track.GetMomentumDirection(),
-	  limit, presafety);
-  }
-  return res;
-  */
   return safetyHelper->CheckNextStep(
           track.GetStep()->GetPreStepPoint()->GetPosition(),
 	  track.GetMomentumDirection(),
@@ -361,9 +349,7 @@ G4VMscModel::GetTransportMeanFreePath(const G4ParticleDefinition* part,
     x = CrossSectionPerVolume(CurrentCouple()->GetMaterial(), part, ekin, 
 			      0.0, DBL_MAX); 
   }
-  if(0.0 >= x) { x = DBL_MAX; }
-  else { x = 1.0/x; }
-  return x;
+  return (x > 0.0) ? 1.0/x : DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

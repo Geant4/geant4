@@ -103,6 +103,12 @@ namespace G4INCL {
     G4double gauss(G4double sigma=1.);
 
     /**
+     * Generate random numbers using gaussian distribution to be used only
+     * for correlated pairs
+     */
+    G4double gaussWithMemory(G4double sigma=1.);
+
+    /**
      * Generate isotropically-distributed ThreeVectors of given norm.
      */
     ThreeVector normVector(G4double norm=1.);

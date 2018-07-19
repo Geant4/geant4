@@ -9,6 +9,7 @@
 
 #include "forit"
 #include "sout"
+#include "schar"
 
 #ifdef TOOLS_MEM
 #include "mem"
@@ -159,8 +160,7 @@ inline void delete_columns(std::vector<value>& a_vars) {
   a_vars.clear();
 }
 
-inline void copy_columns(const std::vector<value>& a_from,
-                         std::vector<value>& a_to) {
+inline void copy_columns(const std::vector<value>& a_from,std::vector<value>& a_to) {
   std::vector<value>::const_iterator it;
   for(it=a_from.begin();it!=a_from.end();++it) {
     if((*it).type()==value::VOID_STAR) {
@@ -177,9 +177,7 @@ inline void copy_columns(const std::vector<value>& a_from,
   }
 }
 
-inline void dump_columns(std::ostream& a_out,
-                         const std::vector<value>& a_vars,
-                         const std::string& a_margin = "") {
+inline void dump_columns(std::ostream& a_out,const std::vector<value>& a_vars,const std::string& a_margin = "") {
   std::vector<value>::const_iterator it;
   for(it=a_vars.begin();it!=a_vars.end();++it) {
     if((*it).type()==value::VOID_STAR) {
@@ -192,7 +190,6 @@ inline void dump_columns(std::ostream& a_out,
       //      << "ITuple : " << (*it).label() << " : end "
       //      << std::endl;
     } else {
-      //(*it).print(a_out);
       std::string stype;        
       (*it).s_type(stype);
       std::string sval;        
@@ -207,7 +204,7 @@ inline void dump_columns(std::ostream& a_out,
   }
 }
 
-class finder : public tools::columns::parser {
+class finder : public columns::parser {
 public:
   finder(std::ostream& a_out,const std::string& a_script) 
   :m_out(a_out)
@@ -231,10 +228,9 @@ public:
     return true;
   }
 
-  std::vector<value> result() const {
-    std::vector<value> vars;
-    copy_columns(m_stack,vars);
-    return vars;
+  void result(std::vector<value>& a_vars) const {
+    a_vars.clear();
+    copy_columns(m_stack,a_vars);
   }
 
   void clear() {
@@ -248,15 +244,15 @@ public:
   std::ostream& out() const {return m_out;}
 */
 protected:
-  bool analyse(tools::columns::tree& a_tree,
-                      std::vector<value>& a_stack) {
+  bool analyse(columns::tree& a_tree,std::vector<value>& a_stack) {
     if(a_tree.m_dcl.empty()) { //top
       //std::cout << "debug : dcl empty" << std::endl;
-      tools_vforit(tools::columns::tree,a_tree.m_sub,it) {
+      tools_vforit(columns::tree,a_tree.m_sub,it) {
         if(!analyse(*it,a_stack)) return false;
       }
     } else {
       //std::cout << "debug : dcl not empty" << std::endl;
+      if(is_spaces(a_tree.m_dcl)) return true;
       value* v = analyse_dcl(a_tree.m_dcl);
       if(!v) return false;
       //std::cout << "debug : dcl label " << v->label() << std::endl;
@@ -270,7 +266,7 @@ protected:
         }
         m_cur_type = value::NONE;
         std::vector<value>* stk = new std::vector<value>();
-        tools_vforit(tools::columns::tree,a_tree.m_sub,it) {
+        tools_vforit(columns::tree,a_tree.m_sub,it) {
           if(!analyse(*it,*stk)) {
             delete v;
             return false;
@@ -286,15 +282,15 @@ protected:
     return true;
   }
   value* analyse_dcl(const std::string& a_s) {
-    std::vector<std::string> words;
-    tools::words(a_s,"=",false,words);
-    if(words.size()==2) { //<type> <name>=<value>
+    std::vector<std::string> ws;
+    words(a_s,"=",false,ws);
+    if(ws.size()==2) { //<type> <name>=<value>
       std::vector<std::string> swords;
-      tools::words(words[0]," ",false,swords);
+      words(ws[0]," ",false,swords);
       if(swords.size()==2) {
 
-        tools::strip(swords[0]);
-        tools::strip(swords[1]);
+        strip(swords[0]);
+        strip(swords[1]);
 
         if(swords[0]=="ITuple") {
   
@@ -308,16 +304,16 @@ protected:
           value::e_type type;
           if(!s2type(swords[0],type)){
             m_out << "tools::columns::finder::analyse_dcl :"
-                  << " s2type failed for " << tools::sout(swords[0]) << "."
+                  << " s2type failed for " << sout(swords[0]) << "."
                   << std::endl;
             return 0;
           }
 
-          tools::strip(words[1]);
-          value* v = new_value(type,words[1]);
+          strip(ws[1]);
+          value* v = new_value(type,ws[1]);
           if(!v) {
             m_out << "tools::columns::finder::analyse_dcl :"
-                  << " syntax error in " << tools::sout(a_s) << "."
+                  << " syntax error in " << sout(a_s) << "."
                   << " new_value() failed."
                   << std::endl;
             return 0;
@@ -335,12 +331,12 @@ protected:
           return 0;
         }
 
-        tools::strip(words[1]);
-        value* v = new_value(m_cur_type,words[1]);
+        strip(ws[1]);
+        value* v = new_value(m_cur_type,ws[1]);
         if(!v) {
           m_out << "tools::columns::finder::analyse_dcl :"
-                << " syntax error in " << tools::sout(a_s) << "."
-                << " Bad value " << tools::sout(words[1]) << "."
+                << " syntax error in " << sout(a_s) << "."
+                << " Bad value " << sout(ws[1]) << "."
                 << std::endl;
           return 0;
         }
@@ -349,20 +345,20 @@ protected:
 
       } else {
         m_out << "tools::columns::finder::analyse_dcl :"
-              << " syntax error in " << tools::sout(a_s)
+              << " syntax error in " << sout(a_s)
               << ". Case 1."
               << std::endl;
         return 0;
       }
 
-    } else if(words.size()==1) {
+    } else if(ws.size()==1) {
       //<type> <name>
       //<type> <name>={
       std::vector<std::string> swords;
-      tools::words(words[0]," ",false,swords);
+      words(ws[0]," ",false,swords);
       if(swords.size()==2) {
-        tools::strip(swords[0]);
-        tools::strip(swords[1]);
+        strip(swords[0]);
+        strip(swords[1]);
 
         if(swords[0]=="ITuple") {
   
@@ -375,7 +371,7 @@ protected:
           value::e_type type;
           if(!s2type(swords[0],type)){
             m_out << "tools::columns::finder::analyse_dcl :"
-                  << " s2type failed for " << tools::sout(swords[0]) << "."
+                  << " s2type failed for " << sout(swords[0]) << "."
                   << std::endl;
             return 0;
           }
@@ -383,8 +379,8 @@ protected:
           value* v = new_value(type,"");
           if(!v) {
             m_out << "tools::columns::finder::analyse_dcl :"
-                  << " (2) syntax error in " << tools::sout(words[0]) << "."
-                  << " Unknown type " << tools::sout(swords[0]) << "."
+                  << " (2) syntax error in " << sout(ws[0]) << "."
+                  << " Unknown type " << sout(swords[0]) << "."
                   << std::endl;
             return 0;
           }
@@ -408,7 +404,7 @@ protected:
 
       } else {
         m_out << "tools::columns::finder::analyse_dcl :"
-              << " syntax error in " << tools::sout(a_s)
+              << " syntax error in " << sout(a_s)
               << ". Case 2."
               << std::endl;
         return 0;
@@ -416,7 +412,7 @@ protected:
 
     } else {
       m_out << "tools::columns::finder::analyse_dcl :"
-            << " syntax error in " << tools::sout(a_s)
+            << " syntax error in " << sout(a_s)
             << ". Case 3."
             << std::endl;
       return 0;
@@ -476,36 +472,35 @@ protected:
     }
     return true;
   }
-  static value* new_value(value::e_type a_type,
-                                        const std::string& a_v) {
+  static value* new_value(value::e_type a_type,const std::string& a_v) {
            if(a_type==value::FLOAT) {
       float v = 0;
-      if(a_v.size()) {if(!tools::to<float>(a_v,v)) return 0;}
+      if(a_v.size()) {if(!to<float>(a_v,v)) return 0;}
       return new value(v);    
     } else if(a_type==value::DOUBLE) {
       double v = 0;
-      if(a_v.size()) {if(!tools::to<double>(a_v,v)) return 0;}
+      if(a_v.size()) {if(!to<double>(a_v,v)) return 0;}
       return new value(v);    
     //} else if(a_type==value::CHAR) {
     //  char v = 0;
-    //  if(a_v.size()) {if(!tools::to<char>(a_v,v)) return 0;}
+    //  if(a_v.size()) {if(!to<char>(a_v,v)) return 0;}
     //  return new value(v);    
     } else if(a_type==value::SHORT) {
       short v = 0;
-      if(a_v.size()) {if(!tools::to<short>(a_v,v)) return 0;}
+      if(a_v.size()) {if(!to<short>(a_v,v)) return 0;}
       return new value(v);    
     } else if(a_type==value::INT) {
       int v = 0;
-      if(a_v.size()) {if(!tools::to<int>(a_v,v)) return 0;}
+      if(a_v.size()) {if(!to<int>(a_v,v)) return 0;}
       return new value(v);    
 
     } else if(a_type==value::INT64) {
       int64 v = 0;
-      if(a_v.size()) {if(!tools::to<int64>(a_v,v)) return 0;}
+      if(a_v.size()) {if(!to<int64>(a_v,v)) return 0;}
       return new value(v);    
     } else if(a_type==value::BOOL) {
       bool v = false;
-      if(a_v.size()) {if(!tools::to(a_v,v)) return 0;}
+      if(a_v.size()) {if(!to(a_v,v)) return 0;}
       return new value(v);    
 
     } else if(a_type==value::STRING) {
@@ -517,21 +512,21 @@ protected:
 
     //} else if(a_type==value::UNSIGNED_CHAR) {
     //  unsigned short v = 0;
-    //  if(a_v.size()) {if(!tools::to<unsigned short>(a_v,v)) return 0;}
+    //  if(a_v.size()) {if(!to<unsigned short>(a_v,v)) return 0;}
     //  return new value((unsigned char)v);    
 
     } else if(a_type==value::UNSIGNED_SHORT) {
       unsigned short v = 0;
-      if(a_v.size()) {if(!tools::to<unsigned short>(a_v,v)) return 0;}
+      if(a_v.size()) {if(!to<unsigned short>(a_v,v)) return 0;}
       return new value(v);    
     } else if(a_type==value::UNSIGNED_INT) {
       unsigned int v = 0;
-      if(a_v.size()) {if(!tools::to<unsigned int>(a_v,v)) return 0;}
+      if(a_v.size()) {if(!to<unsigned int>(a_v,v)) return 0;}
       return new value(v);    
 
     } else if(a_type==value::UNSIGNED_INT64) {
       uint64 v = 0;
-      if(a_v.size()) {if(!tools::to<uint64>(a_v,v)) return 0;}
+      if(a_v.size()) {if(!to<uint64>(a_v,v)) return 0;}
       return new value(v);    
 
     } else if(a_type==value::ARRAY_FLOAT) {

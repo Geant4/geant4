@@ -17,8 +17,6 @@
 #ifdef _MSC_VER
 #include <io.h>
 #include <sys/stat.h>
-// disable the warning about the usage of "this" in the constructor.
-#pragma warning(disable:4355)
 #else
 #include <unistd.h>
 #endif
@@ -27,12 +25,14 @@ namespace tools {
 namespace rroot {
 
 class file : public virtual ifile {
+  file& get_me() {return *this;} //_MSC_VER : to avoid warning about the usage of "this" in the constructor.
   static int not_open() {return -1;}
 public:
   static const std::string& s_class() {
     static const std::string s_v("tools::rroot::file");
     return s_v;
   }
+  virtual const std::string& s_cls() const {return s_class();}
 public: //ifile
   virtual const std::string& path() const {return m_path;}
 
@@ -114,8 +114,8 @@ public:
   ,m_verbose(a_verbose)
   ,m_file(not_open())
   ,m_bytes_read(0)
-  ,m_root_directory(*this)
-  ,m_streamer_info_key(*this)
+  ,m_root_directory(get_me())
+  ,m_streamer_info_key(a_out)
   // begin of record :
   ,m_version(0)
   ,m_BEGIN(0)
@@ -155,8 +155,8 @@ protected:
   file(const file& a_from)
   :ifile(a_from)
   ,m_out(a_from.m_out)
-  ,m_root_directory(*this)
-  ,m_streamer_info_key(*this)
+  ,m_root_directory(get_me())
+  ,m_streamer_info_key(a_from.m_out)
   { 
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -422,7 +422,7 @@ protected:
     char* buffer = new char[m_nbytes_info+1];
     if(!read_buffer(buffer,m_nbytes_info)) {delete [] buffer;return false;}
     char* buf = buffer;
-    if(!m_streamer_info_key.from_buffer(buffer+m_nbytes_info,buf)) {
+    if(!m_streamer_info_key.from_buffer(byte_swap(),buffer+m_nbytes_info,buf,m_verbose)) {
       delete [] buffer;
       return false;
     }
@@ -444,7 +444,7 @@ protected:
   std::string m_path;
   bool m_verbose;
   int m_file;
-  tools::uint64 m_bytes_read; //Number of bytes read from this file
+  uint64 m_bytes_read; //Number of bytes read from this file
   directory m_root_directory;
   key m_streamer_info_key;
   std::map<char,decompress_func> m_unzipers;

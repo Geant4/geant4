@@ -1,4 +1,4 @@
-$Id: History 102294 2017-01-20 11:41:52Z gcosmo $
+$Id: History 109684 2018-05-08 10:37:49Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,29 +17,242 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 3, 2016 E.Tcherniaev            geom-csg-V10-01-12
+May 7, 2018 G.Cosmo geom-csg-V10-04-03
+- Make G4UCons wrapper inheriting from vecgeom::GenericUnplacedCone,
+  following the latest changes in VecGeom.
+
+April 11, 2018 G.Cosmo geom-csg-V10-04-02
+- G4Box: simplified and optimised calculation of normal in method
+  DistanceToOut(p,v,..). (E.Tcherniaev)
+- Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
+
+February 5, 2018 G.Cosmo geom-csg-V10-04-01
+- Correction in G4UPara::ComputeDimensions() to add explicit cast for the
+  solid type to parameterise.
+
+December 11, 2017 E.Tcherniaev geom-csg-V10-04-00
+- Fixed typo in G4Trd::GetPointOnSurface() for the area settings.
+
+November 22, 2017 G.Cosmo geom-csg-V10-03-38
+- Fix in SurfaceNormal() for G4Trap, G4Para, G4Trd to assure explicit
+  counting of the surfaces where the point is placed on edges.
+
+October 20, 2017 G.Cosmo geom-csg-V10-03-37
+- Removed redundant overloaded implementation for StreamInfo() in G4UBox
+  wrapper.
+
+October 9, 2017 G.Cosmo geom-csg-V10-03-36
+- Enabled adapter for G4UTorus wrapper, according to migration done in
+  VecGeom for UnplacedTorus2.
+
+September 1, 2017 E.Tcherniaev geom-csg-V10-03-35
+- G4Trap: use specialization (fTrapType 3) for traps that could be also
+  defined as G4Trd, where isosceles trapeziod is in the XY section, instead
+  of XZ (faces at Xmin/Xmax symmetrical and have Z-component of normals equal
+  to zero). Factorised code with case statements for the different
+  specialisations.
+
+August 14, 2017 E.Tcherniaev geom-csg-V10-03-34
+- Reviewed implementation of G4Orb, made more compact and performant.
+
+July 20, 2017 E.Tcherniaev geom-csg-V10-03-33, 32
+- Use G4RandomRadiusInRing() in G4CSGSolid::GetRadiusInRing().
+
+July 19, 2017 G.Cosmo geom-csg-V10-03-31
+- Enabled adapter also in G4USphere wrapper.
+
+July 13, 2017 E.Tcherniaev geom-csg-V10-03-30
+- Improved calculation of bounding box in G4CutTubs and related wrapper.
+
+July 11, 2017 G.Cosmo geom-csg-V10-03-29
+- Added G4UPara wrapper for enabling VecGeom Parallelepiped shape.
+- Removed inheritance from G4Tubs for G4CutTubs.
+
+July 10, 2017 G.Cosmo geom-csg-V10-03-28
+- Added G4UCutTubs wrapper for enabling VecGeom CutTube shape.
+- Removed clone class G4OTubs no longer necessary and make G4CutTubs
+  directly inheriting (temporary) from G4Tubs.
+
+July 4, 2017 E.Tcherniaev geom-csg-V10-03-27
+- G4Box: minor optimisation in DistanceToOut(p).
+- G4Para: optimisation in Inside(), DistanceToIn/Out(p), use std::abs(xx)
+  in place of std::max(xx,-xx).
+
+June 26, 2017 E.Tcherniaev geom-csg-V10-03-26
+- G4Trd: allow Dx and Dy parameters be equal to zero where appropriate.
+
+June 15, 2017 G.Cosmo geom-csg-V10-03-25
+- Enabled adapter also in G4UCons wrapper.
+
+June 6, 2017 G.Cosmo geom-csg-V10-03-24
+- Enable adapter for VecGeom shapes in G4U* wrappers for: box, trap, trd,
+  tubs and orb. From now on, wrappers depends directly on VecGeom shapes
+  implementation. USolids API is deprecated and no longer supported.
+
+June 1, 2017 E.Tcherniaev geom-csg-V10-03-23
+- G4Trap: added more strict condition for trap definition in case when
+  YZ section is a rectangle.
+
+May 31, 2017 E.Tcherniaev geom-csg-V10-03-22
+- Reviewed implementation of G4Para, made more compact and performant.
+- G4Trap: fix in the calculation of side planes.
+- G4Trd: speedup further DistanceToIn(p,v) making it similar to the
+  implementation in G4Para. Fix in the calculation of side planes.
+
+May 29, 2017 E.Tcherniaev geom-csg-V10-03-21
+- G4Trd: fixed issue in GetPointOnSurface().
+- Updated unit tests.
+
+May 26, 2017 E.Tcherniaev geom-csg-V10-03-20
+- Reviewed implementation of G4Trd, made more compact and performant.
+  Removed obsolete method CheckAndSetAllParameters().
+
+May 24, 2017 G.Cosmo geom-csg-V10-03-19
+- Renamed ambiguous name Extent() in all solids and G4U* wrappers to
+  BoundingLimits(). Change required in order to avoid signature conflict
+  with VecGeom in G4U* wrappers.
+  Requires tag geommng-V10-03-16.
+
+May 23, 2017 E.Tcherniaev geom-csg-V10-03-18
+- G4Trap: some code improvements.. use std::copysign(); replace division
+  with multiplication by inverse value; code formatting.
+
+May 21, 2017 E.Tcherniaev geom-csg-V10-03-17
+- Fix in G4CutTubs::Inside() for case where inside points were concidered
+  as points on surface. Addressing problem report #1973.
+
+May 8, 2017 E.Tcherniaev geom-csg-V10-03-16
+- G4Box: use std::copysign() to improve performance on Linux.
+  Some code formatting.
+
+May 4, 2017 E.Tcherniaev geom-csg-V10-03-15
+- G4Trap: fixed cases of division by zero reported by testing.
+
+May 1, 2017 E.Tcherniaev geom-csg-V10-03-14
+- Reviewed implementation of G4Trap, made more compact and performant.
+
+April 18, 2017 E.Tchernieav geom-csg-V10-03-13, 12
+- Reviewed implementation of G4Box, made more compact and performant.
+
+April 11, 2017 G.Cosmo geom-csg-V10-03-11, 10, 09
+- Added accessor for radial tolerance also in G4UOrb wrapper.
+
+April 7, 2017 G.Cosmo geom-csg-V10-03-08
+- Added accessor to G4Orb for retrieving cached max radius tolerance.
+- Added private members halfCarTolerance and fTrapType to G4Trap (E.Tcherniaev).
+
+April 1, 2017 E.Tcherniaev geom-csg-V10-03-07
+- G4Trap: Fix in GetPointOnSurface(), the method could generate points laying
+  outside the surface. Added private method GetVertices(), calculating vertices
+  of the trap from its side planes; removed private methods GetFaceArea() and
+  GetPointOnPlane(). Improved GetCubicVolume() and GetSurfaceArea();
+  calculation of the volume and surface area is now done by using vertices
+  calculated by GetVertices(). Improved/simplified other methods: StreamInfo(),
+  MakePlanes(), MakePlanes(pt), Extent() and CalculateExtent().
+
+March 16, 2017 E.Tcherniaev geom-csg-V10-03-06, 05, 04
+- G4Trap: modified computation of side planes; bounding box/envelope
+  are computed directly from side planes. Added CheckParameters() and
+  MakePlanes(pt), simplified constructors and SetAllParameters().
+- G4UTrap: bounding box/envelope are computed directly from side planes
+  as for G4Trap. Increased tolerance in the check of consistency of
+  bounding boxes in Extent().
+
+March 2, 2017 E.Tcherniaev geom-csg-V10-03-03
+- Fixed possible rounding off error in calculation of 'astep' (max angle
+  for one step) in CalculateExtent() for G4Cons, G4Tubsm, G4CutTubs
+  and related USolids wrappers.
+- Increased tolerance in the check of consistency of bounding boxes in
+  G4UTrap::Extent().
+
+February 22, 2017 E.Tcherniaev geom-csg-V10-03-02
+- Fix in GetCubicVolume() and GetSurfaceArea() for G4CutTubs, to make
+  use of the cached values. Addressing problem report #1943.
+
+February 2, 2017 G.Cosmo geom-csg-V10-03-01
+- Removed redundant code/checks in G4Orb::SurfaceNormal().
+
+December 20, 2016 H.Burkhardt, E.Tcherniaev geom-csg-V10-03-00
+- Use radius differences and hypot to improve precision in G4Torus.
+  Addressing problem report #1931.
+
+November 18, 2016 E.Tcherniaev geom-csg-V10-02-19
+- Added consistency checks for extent computation in USolids wrappers.
+
+November 7, 2016 E.Tcherniaev geom-csg-V10-02-18
+- Added optional debug flag G4BBOX_EXTENT in GNUMake build to compare
+  extent calculation by simply using bounding-box.
+
+November 3, 2016 E.Tcherniaev geom-csg-V10-02-17
 - Disabled check for intersection of cut planes in G4CutTubs constructor,
   as too strict and not necessary. Addressing problem report #1887.
 
-October 31, 2016 G.Cosmo
+October 31, 2016 E.Tcherniaev geom-csg-V10-02-16
+- Re-implemented CalculateExtent() to make use of G4BoundingEnvelope and
+  removed no-longer used method CreateRotatedVertices() in G4Sphere, G4OTubs,
+  G4Torus, G4Orb, and related USolids wrappers.
+- Use G4GeomTools::DiskExtent() for calculation of bounding box in Extent()
+  for G4Tubs, G4Cons and related USolids wrappers.
 - Use G4RandFlat instead of RandFlat.
 
-May 20, 2016 G.Cosmo                     geom-csg-V10-01-11
+October 5, 2016 E.Tcherniaev geom-csg-V10-02-15
+- G4Cons, G4UCons: re-implemented CalculateExtent() to make use of
+  G4BoundingEnvelope; removed no-longer used method CreateRotatedVertices().
+- G4Tubs, G4UTubs: revised implementation of CalculateExtent() to avoid use
+  of addresses to vectors elements. Attempting fix for reported Coverity defect.
+
+September 27, 2016 G.Cosmo geom-csg-V10-02-14
+- Reduced number of segments in G4Tubs and G4UTubs for CalculateExtent() from
+  48 to 24.
+
+September 27, 2016 E.Tcherniaev geom-csg-V10-02-13
+- Corrected vertices order for definition of bounding envelope in
+  G4Trap, G4UTrap and G4Para.
+
+September 26, 2016 E.Tcherniaev geom-csg-V10-02-12
+- More corrections in G4Trap and G4UTrap in Extent() for use of 'alpha'
+  accessors.
+
+September 26, 2016 G.Cosmo, E.Tcherniaev geom-csg-V10-02-11, 10
+- Re-implemented CalculateExtent() of G4Para, G4Trd, G4Trap to make use of
+  G4BoundingEnvelope; removed no-longer used method CreateRotatedVertices()
+  implementation. Use same algorithm in G4UTrd and G4UTrap wrappers.
+- Fix in G4UBox in computation of the extent for problem introduced in
+  previous tags.
+
+September 22, 2016 E.Tcherniaev          geom-csg-V10-02-09, 08, 07
+- G4Box, G4Tubs: added Extent() method and checks on extent validity.
+- G4UBox, G4UTubs: use same CalculateExtent() technique as for G4Box
+  and G4Tubs.
+
+August 30, 2016 E.Tcherniaev             geom-csg-V10-02-06
+- G4Tubs: added construction of bounding envelope in CalculateExtent().
+
+August 29, 2016 G.Cosmo                  geom-csg-V10-02-05
+- Removed no-longer used method CreateRotatedVertices() implementation in
+  G4Box and G4Tubs. Simplified code in G4Tubs::CalculateExtent().
+
+August 26, 2016 E.Tcherniaev
+- Re-implemented CalculateExtent() of G4Box and G4Tubs to make use of
+  G4BoundingEnvelope. Implemented bounding-box in G4Tubs to take into
+  consideration cuts in phi.
+
+May 20, 2016 G.Cosmo                     geom-csg-V10-02-04
 - Moved accessors and modifiers in USolids wrappers to be not inlined.
   Required modification in order to allow correct dispatching to VecGeom
   types.
 
-April 15, 2016 G.Cosmo
+April 15, 2016 G.Cosmo                   geom-csg-V10-02-03
 - Added flag in USolids wrappers for partial use of USolids/VecGeom types.
 
-April 5, 2016 J.Allison
+April 5, 2016 J.Allison                  geom-csg-V10-02-02
 - G4Orb.cc: Fixed typo in G4Exception message.
 
-March 31, 2016 G.Cosmo
+March 31, 2016 G.Cosmo                   geom-csg-V10-02-01
 - Added overloaded CreatePolyhedron() method to USolids wrappers.
   It is now possible to visualize supported VecGeom shapes.
 
-March 10, 2016 G.Cosmo
+March 10, 2016 G.Cosmo                   geom-csg-V10-02-00
 - Added overloaded GetEntityType() method to USolids wrappers.
 
 October 23, 2015 G.Cosmo                 geom-csg-V10-01-10

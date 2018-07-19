@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc 87920 2015-01-21 13:11:38Z gcosmo $
+// $Id: G4TriangularFacet.cc 95945 2016-03-03 09:54:38Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -55,6 +55,10 @@
 //                  New implementation reducing memory requirements by 50%,
 //                  and considerable CPU speedup together with the new
 //                  implementation of G4TessellatedSolid.
+//
+// 23 February 2016 E Tcherniaev, CERN
+//                  Improved test to detect degenerate (too small or
+//                  too narrow) triangles.
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -96,69 +100,65 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector &vt0,
     fE2 = vt2;
   }
 
+  G4ThreeVector E1xE2 = fE1.cross(fE2);
+  fArea = 0.5 * E1xE2.mag();
   for (G4int i = 0; i < 3; ++i) fIndices[i] = -1;
 
-  G4double eMag1 = fE1.mag();
-  G4double eMag2 = fE2.mag();
-  G4double eMag3 = (fE2-fE1).mag();
+  fIsDefined = true;
+  G4double delta = kCarTolerance; // Set tolerance for checking
 
-  if (eMag1 <= kCarTolerance || eMag2 <= kCarTolerance
-                             || eMag3 <= kCarTolerance)
+  // Check length of edges
+  //
+  G4double leng1 = fE1.mag();
+  G4double leng2 = (fE2-fE1).mag();
+  G4double leng3 = fE2.mag();
+  if (leng1 <= delta || leng2 <= delta || leng3 <= delta) 
+  {
+    fIsDefined = false;
+  }
+
+  // Check min height of triangle
+  //
+  if (fIsDefined)
+  {
+    if (2.*fArea/std::max(std::max(leng1,leng2),leng3) <= delta)
+    {
+      fIsDefined = false;
+    } 
+  }
+
+  // Define facet
+  //
+  if (!fIsDefined)
   {
     ostringstream message;
-    message << "Length of sides of facet are too small." << G4endl
-      << "fVertices[0] = " << GetVertex(0) << G4endl
-      << "fVertices[1] = " << GetVertex(1) << G4endl
-      << "fVertices[2] = " << GetVertex(2) << G4endl
-      << "Side lengths = fVertices[0]->fVertices[1]" << eMag1 << G4endl
-      << "Side lengths = fVertices[0]->fVertices[2]" << eMag2 << G4endl
-      << "Side lengths = fVertices[1]->fVertices[2]" << eMag3;
+    message << "Facet is too small or too narrow." << G4endl
+            << "Triangle area = " << fArea << G4endl
+            << "P0 = " << GetVertex(0) << G4endl
+            << "P1 = " << GetVertex(1) << G4endl
+            << "P2 = " << GetVertex(2) << G4endl
+            << "Side1 length (P0->P1) = " << leng1 << G4endl
+            << "Side2 length (P1->P2) = " << leng2 << G4endl
+            << "Side3 length (P2->P0) = " << leng3;
     G4Exception("G4TriangularFacet::G4TriangularFacet()",
-                "GeomSolids1001", JustWarning, message);
-    fIsDefined     = false;
+		"GeomSolids1001", JustWarning, message);
     fSurfaceNormal.set(0,0,0);
     fA = fB = fC = 0.0;
     fDet = 0.0;
+    fCircumcentre = vt0 + 0.5*fE1 + 0.5*fE2;
     fArea = fRadius = 0.0;
   }
   else
   { 
-    fIsDefined     = true;
-    fSurfaceNormal = fE1.cross(fE2).unit();
+    fSurfaceNormal = E1xE2.unit();
     fA   = fE1.mag2();
     fB   = fE1.dot(fE2);
     fC   = fE2.mag2();
-    fDet = fabs(fA*fC - fB*fB);
+    fDet = std::fabs(fA*fC - fB*fB);
 
-    //    sMin = -0.5*kCarTolerance/sqrt(fA);
-    //    sMax = 1.0 - sMin;
-    //    tMin = -0.5*kCarTolerance/sqrt(fC);
-    //    G4ThreeVector vtmp = 0.25 * (fE1 + fE2);
-
-    fArea = 0.5 * (fE1.cross(fE2)).mag();
-    G4double lambda0, lambda1;
-    if(std::fabs(fArea) < kCarTolerance*kCarTolerance)
-    {
-      ostringstream message;
-      message << "Area of Facet is too small, possible flat triangle!" << G4endl
-              << "  fVertices[0] = " << GetVertex(0) << G4endl
-              << "  fVertices[1] = " << GetVertex(1) << G4endl
-              << "  fVertices[2] = " << GetVertex(2) << G4endl
-              << "Area = " << fArea;
-      G4Exception("G4TriangularFacet::G4TriangularFacet()",
-                  "GeomSolids1001", JustWarning, message);
-      lambda0 = 0.5;
-      lambda1 = 0.5;  
-    }
-    else
-    {
-      lambda0 = (fA-fB) * fC / (8.0*fArea*fArea);
-      lambda1 = (fC-fB) * fA / (8.0*fArea*fArea);
-    }
-    G4ThreeVector p0 = GetVertex(0);
-    fCircumcentre = p0 + lambda0*fE1 + lambda1*fE2;
-    G4double radiusSqr = (fCircumcentre-p0).mag2();
-    fRadius = sqrt(radiusSqr);
+    fCircumcentre = 
+      vt0 + (E1xE2.cross(fE1)*fC + fE2.cross(E1xE2)*fA) / (2.*E1xE2.mag2());
+    fRadius = (fCircumcentre - vt0).mag();
   }
 }
 
@@ -752,16 +752,14 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
 //
 // GetPointOnFace
 //
-// Auxiliary method for get fA random point on surface
+// Auxiliary method, returns a uniform random point on the facet
 //
 G4ThreeVector G4TriangularFacet::GetPointOnFace() const
 {
-  G4double alpha = G4RandFlat::shoot(0., 1.);
-  G4double beta = G4RandFlat::shoot(0., 1.);
-  G4double lambda1 = alpha*beta;
-  G4double lambda0 = alpha-lambda1;
-
-  return GetVertex(0) + lambda0*fE1 + lambda1*fE2;
+  G4double u = G4UniformRand();
+  G4double v = G4UniformRand();
+  if (u+v > 1.) { u = 1. - u; v = 1. - v; }
+  return GetVertex(0) + u*fE1 + v*fE2;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -770,7 +768,7 @@ G4ThreeVector G4TriangularFacet::GetPointOnFace() const
 //
 // Auxiliary method for returning the surface fArea
 //
-G4double G4TriangularFacet::GetArea()
+G4double G4TriangularFacet::GetArea() const
 {
   return fArea;
 }

@@ -8,6 +8,8 @@
 /clustering/algo/setEmin 5 eV			#default Value = 5 eV
 /clustering/algo/setEmax 37.5 eV		#default Value = 37.5 eV
 
+/clustering/run/setFileName test
+
 /gun/energy 500 keV
 
 /run/beamOn 1

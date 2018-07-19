@@ -46,6 +46,7 @@
 #define G4EmStandardPhysicsWVI_h 1
 
 #include "G4VPhysicsConstructor.hh"
+#include "G4EmParticleList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +54,8 @@
 class G4EmStandardPhysicsWVI : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysicsWVI(G4int ver = 1);
+
+  explicit G4EmStandardPhysicsWVI(G4int ver = 1);
 
   virtual ~G4EmStandardPhysicsWVI();
 
@@ -62,6 +64,7 @@ public:
 
 private:
   G4int  verbose;
+  G4EmParticleList partList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

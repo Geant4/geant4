@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file GB01/src/GB01DetectorConstruction.cc
+/// \brief Implementation of the GB01DetectorConstruction class
+//
 #include "GB01DetectorConstruction.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -42,7 +45,6 @@
 
 #include "GB01BOptrMultiParticleChangeCrossSection.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB01DetectorConstruction::GB01DetectorConstruction()
@@ -59,7 +61,6 @@ G4VPhysicalVolume* GB01DetectorConstruction::Construct()
 {
   G4Material*   worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
   G4Material* defaultMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_lN2");
-
 
   G4VSolid* solidWorld = new G4Box("World", 10*m, 10*m, 10*m );
   
@@ -96,7 +97,6 @@ G4VPhysicalVolume* GB01DetectorConstruction::Construct()
   
   return physiWorld;
 }
-
 
 void GB01DetectorConstruction::ConstructSDandField()
 {

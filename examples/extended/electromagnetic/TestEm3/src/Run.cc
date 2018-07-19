@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/src/Run.cc
+/// \file electromagnetic/TestEm3/src/Run.cc
 /// \brief Implementation of the Run class
 //
 // $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
@@ -54,14 +54,14 @@
 Run::Run(DetectorConstruction* det)
 : G4Run(),
   fDetector(det), 
-  fParticle(0), fEkin(0.),
+  fParticle(nullptr), fEkin(0.),
   fChargedStep(0), fNeutralStep(0),
   fN_gamma(0), fN_elec(0), fN_pos(0),
   fApplyLimit(false)
 {
   //initialize cumulative quantities
   //
-  for (G4int k=0; k<MaxAbsor; k++) {
+  for (G4int k=0; k<kMaxAbsor; k++) {
     fSumEAbs[k] = fSum2EAbs[k]  = fSumLAbs[k] = fSum2LAbs[k] = 0.;
     fEnergyDeposit[k].clear();
     fEdeptrue[k] = fRmstrue[k] = 1.;
@@ -150,7 +150,7 @@ void Run::Merge(const G4Run* run)
 
   // accumulate sums
   //
-  for (G4int k=0; k<MaxAbsor; k++) {
+  for (G4int k=0; k<kMaxAbsor; k++) {
     fSumEAbs[k]  += localRun->fSumEAbs[k]; 
     fSum2EAbs[k] += localRun->fSum2EAbs[k]; 
     fSumLAbs[k]  += localRun->fSumLAbs[k]; 
@@ -173,7 +173,7 @@ void Run::Merge(const G4Run* run)
      
   fApplyLimit = localRun->fApplyLimit;
   
-  for (G4int k=0; k<MaxAbsor; k++) {
+  for (G4int k=0; k<kMaxAbsor; k++) {
     fEdeptrue[k]  = localRun->fEdeptrue[k]; 
     fRmstrue[k]   = localRun->fRmstrue[k]; 
     fLimittrue[k] = localRun->fLimittrue[k]; 
@@ -282,19 +282,19 @@ void Run::EndOfRun()
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
   G4int Idmax = (fDetector->GetNbOfLayers())*(fDetector->GetNbOfAbsor());
   for (G4int Id=1; Id<=Idmax+1; Id++) {
-    analysis->FillH1(2*MaxAbsor+1, (G4double)Id, fEnergyFlow[Id]);
-    analysis->FillH1(2*MaxAbsor+2, (G4double)Id, fLateralEleak[Id]);
+    analysis->FillH1(2*kMaxAbsor+1, (G4double)Id, fEnergyFlow[Id]);
+    analysis->FillH1(2*kMaxAbsor+2, (G4double)Id, fLateralEleak[Id]);
   }
   
   //Energy deposit from energy flow balance
   //
-  G4double EdepTot[MaxAbsor];
-  for (G4int k=0; k<MaxAbsor; k++) EdepTot[k] = 0.;
+  G4double EdepTot[kMaxAbsor];
+  for (G4int k=0; k<kMaxAbsor; k++) EdepTot[k] = 0.;
   
   G4int nbOfAbsor = fDetector->GetNbOfAbsor();
   for (G4int Id=1; Id<=Idmax; Id++) {
-   G4int iAbsor = Id%nbOfAbsor; if (iAbsor==0) iAbsor = nbOfAbsor;
-   EdepTot[iAbsor] += (fEnergyFlow[Id] - fEnergyFlow[Id+1] - fLateralEleak[Id]);
+    G4int iAbsor = Id%nbOfAbsor; if (iAbsor==0) iAbsor = nbOfAbsor;
+    EdepTot[iAbsor] += (fEnergyFlow[Id]-fEnergyFlow[Id+1]-fLateralEleak[Id]);
   }
   
   G4cout << std::setprecision(3)
@@ -333,7 +333,7 @@ void Run::EndOfRun()
 
   //normalize histograms
   //
-  for (G4int ih = MaxAbsor+1; ih < MaxHisto; ih++) {
+  for (G4int ih = kMaxAbsor+1; ih < kMaxHisto; ih++) {
     analysis->ScaleH1(ih,norm/MeV);
   }
   
@@ -345,7 +345,7 @@ void Run::EndOfRun()
 
 void Run::SetEdepAndRMS(G4int i, G4double edep, G4double rms, G4double lim)
 {
-  if (i>=0 && i<MaxAbsor) {
+  if (i>=0 && i<kMaxAbsor) {
     fEdeptrue [i] = edep;
     fRmstrue  [i] = rms;
     fLimittrue[i] = lim;

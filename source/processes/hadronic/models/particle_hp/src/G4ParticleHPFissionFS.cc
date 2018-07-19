@@ -224,7 +224,17 @@
 //G4cout << "delayed" << G4endl;
      for(i0=Prompt; i0<Prompt+delayed; i0++)
      {
-       G4double time = -G4Log(G4UniformRand())/theDecayConstants[i0-Prompt];
+       // Protect against the very rare case of division by zero
+       G4double time = 0.0;
+       if ( theDecayConstants[i0-Prompt] > 1.0e-30 ) {
+         time = -G4Log(G4UniformRand())/theDecayConstants[i0-Prompt];
+       } else {
+         G4ExceptionDescription ed;
+         ed << " theDecayConstants[i0-Prompt]=" << theDecayConstants[i0-Prompt]
+            << "   -> cannot sample the time : set it to 0.0 !" << G4endl;
+         G4Exception( "G4ParticleHPFissionFS::ApplyYourself ", "HAD_FISSIONHP_001", JustWarning, ed );
+       }
+
        time += theTrack.GetGlobalTime();        
        theResult.Get()->AddSecondary(theNeutrons->operator[](i0));
        theResult.Get()->GetSecondary(theResult.Get()->GetNumberOfSecondaries()-1)->SetTime(time);

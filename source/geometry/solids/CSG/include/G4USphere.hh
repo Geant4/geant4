@@ -34,7 +34,7 @@
 //
 // Class description:
 //
-//   Wrapper class for USphere to make use of USphere from USolids module.
+//   Wrapper class for G4Sphere to make use of VecGeom Sphere.
 
 // History:
 // 13.09.13 G.Cosmo, CERN/PH
@@ -42,16 +42,19 @@
 #ifndef G4USPHERE_HH
 #define G4USPHERE_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "USphere.hh"
+#include <volumes/UnplacedSphere.h>
 
 #include "G4Polyhedron.hh"
 
-class G4USphere : public G4USolid
+class G4USphere : public G4UAdapter<vecgeom::UnplacedSphere>
 {
+  using Shape_t = vecgeom::UnplacedSphere;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedSphere>;
+
   public:  // with description
 
     G4USphere(const G4String& pName,
@@ -69,14 +72,20 @@ class G4USphere : public G4USolid
 
     G4VSolid* Clone() const;
 
-    inline USphere* GetShape() const;
-
     G4double GetInnerRadius    () const;
     G4double GetOuterRadius    () const;
     G4double GetStartPhiAngle  () const;
     G4double GetDeltaPhiAngle  () const;
     G4double GetStartThetaAngle() const;
     G4double GetDeltaThetaAngle() const;
+    G4double GetSinStartPhi    () const;
+    G4double GetCosStartPhi    () const;
+    G4double GetSinEndPhi      () const;
+    G4double GetCosEndPhi      () const;
+    G4double GetSinStartTheta  () const;
+    G4double GetCosStartTheta  () const;
+    G4double GetSinEndTheta    () const;
+    G4double GetCosEndTheta    () const;
 
     void SetInnerRadius    (G4double newRMin);
     void SetOuterRadius    (G4double newRmax);
@@ -86,6 +95,13 @@ class G4USphere : public G4USolid
     void SetDeltaThetaAngle(G4double newDTheta);
 
     inline G4GeometryType GetEntityType() const;
+
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pMin, G4double& pMax) const;
 
     G4Polyhedron* CreatePolyhedron() const;
 
@@ -105,11 +121,6 @@ class G4USphere : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline USphere* G4USphere::GetShape() const
-{
-  return (USphere*) fShape;
-}
 
 inline G4GeometryType G4USphere::GetEntityType() const
 {

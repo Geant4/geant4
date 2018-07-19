@@ -225,7 +225,7 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::ConstructWorld()
   G4VisAttributes* WorldVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
     
   WorldVisAtt->SetForceSolid(false);
-  logicWorld->SetVisAttributes(G4VisAttributes::Invisible);
+  logicWorld->SetVisAttributes(G4VisAttributes::GetInvisible());
  
   return motherVolume;
 }
@@ -282,7 +282,7 @@ void G4HumanPhantomConstruction::SetPhantomModel(G4String newModel)
 void G4HumanPhantomConstruction::ConstructSDandField()
 {
    G4HumanPhantomSD* SD = new G4HumanPhantomSD("SD", "HumanPhantomCollection");
-
+   G4SDManager::GetSDMpointer()->AddNewDetector(SD);
 if (model != "ORNLMale" && model != "ORNLFemale" && model!= "ORNLHead")  
 {
   SetSensitiveDetector("logicalHead",SD);

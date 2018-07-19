@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh 97617 2016-06-06 12:47:17Z gcosmo $
+// $Id: G4Fragment.hh 110267 2018-05-17 14:34:00Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -91,7 +91,6 @@ public:
   G4bool operator==(const G4Fragment &right) const;
   G4bool operator!=(const G4Fragment &right) const;
 
-  friend std::ostream& operator<<(std::ostream&, const G4Fragment*);
   friend std::ostream& operator<<(std::ostream&, const G4Fragment&);
 
   //  new/delete operators are overloded to use G4Allocator
@@ -105,6 +104,7 @@ public:
   inline void SetZandA_asInt(G4int Znew, G4int Anew);
   
   inline G4double GetExcitationEnergy() const;
+  inline void SetExcEnergyAndMomentum(G4double eexc, const G4LorentzVector&);
 
   inline G4double GetGroundStateMass() const;
    
@@ -151,16 +151,22 @@ public:
   inline G4int GetNumberOfElectrons() const;
   inline void SetNumberOfElectrons(G4int value);
 
+  inline G4int GetFloatingLevelNumber() const;
+  inline void SetFloatingLevelNumber(G4int value);
+
   inline const G4ParticleDefinition * GetParticleDefinition() const;
   inline void SetParticleDefinition(const G4ParticleDefinition * p);
 
   inline G4double GetCreationTime() const;
   inline void SetCreationTime(G4double time);
 
+  // G4Fragment class is not responsible for creation and delition of 
+  // G4NuclearPolarization object
+  inline G4NuclearPolarization* NuclearPolarization();
   inline G4NuclearPolarization* GetNuclearPolarization() const;
   inline void SetNuclearPolarization(G4NuclearPolarization*);
 
-  void SetAngularMomentum(G4ThreeVector&);
+  void SetAngularMomentum(const G4ThreeVector&);
   G4ThreeVector GetAngularMomentum() const;
 
   // ============= PRIVATE METHODS ==============================
@@ -201,45 +207,42 @@ private:
 
   // Gamma evaporation data members
   G4int numberOfShellElectrons;
+  G4int xLevel;
 
   const G4ParticleDefinition* theParticleDefinition;
   
   G4double spin;
   G4double theCreationTime;
+
+  static const G4double minFragExcitation;
 };
 
 // ============= INLINE METHOD IMPLEMENTATIONS ===================
 
-inline void G4Fragment::SetNuclearPolarization(G4NuclearPolarization* p)
-{
-  if(p !=  thePolarization) {
-    delete thePolarization;
-    thePolarization = p;
-  }
-}
-
 #if defined G4HADRONIC_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator;
+  extern G4DLLEXPORT G4Allocator<G4Fragment>*& pFragmentAllocator();
 #else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator;
+  extern G4DLLIMPORT G4Allocator<G4Fragment>*& pFragmentAllocator();
 #endif
 
 inline void * G4Fragment::operator new(size_t)
 {
-  if (!pFragmentAllocator) { pFragmentAllocator = new G4Allocator<G4Fragment>; }
-  return (void*) pFragmentAllocator->MallocSingle();
+  if (!pFragmentAllocator()) { pFragmentAllocator() = new G4Allocator<G4Fragment>; }
+  return (void*) pFragmentAllocator()->MallocSingle();
 }
 
 inline void G4Fragment::operator delete(void * aFragment)
 {
-  ((G4Fragment *)aFragment)->SetNuclearPolarization(nullptr);
-  pFragmentAllocator->FreeSingle((G4Fragment *) aFragment);
+  pFragmentAllocator()->FreeSingle((G4Fragment *) aFragment);
 }
 
 inline void G4Fragment::CalculateExcitationEnergy()
 {
   theExcitationEnergy = theMomentum.mag() - theGroundStateMass;
-  if(theExcitationEnergy < 0.0) { ExcitationEnergyWarning(); }
+  if(theExcitationEnergy < minFragExcitation) { 
+    if(theExcitationEnergy < -minFragExcitation) {  ExcitationEnergyWarning(); }
+    theExcitationEnergy = 0.0;
+  }
 }
 
 inline G4double 
@@ -278,6 +281,14 @@ inline G4double G4Fragment::GetExcitationEnergy()  const
 inline G4double G4Fragment::GetGroundStateMass() const
 {
   return theGroundStateMass; 
+}
+
+inline void G4Fragment::SetExcEnergyAndMomentum(G4double eexc, 
+						const G4LorentzVector& v)
+{
+  theExcitationEnergy = eexc;
+  theMomentum.set(0.0, 0.0, 0.0, theGroundStateMass + eexc);
+  theMomentum.boost(v.boostVector());
 }
 
 inline G4double G4Fragment::GetBindingEnergy() const
@@ -406,6 +417,16 @@ inline void G4Fragment::SetSpin(G4double value)
   spin = value;
 }
 
+inline G4int G4Fragment::GetFloatingLevelNumber() const
+{
+  return xLevel;
+}
+
+inline void G4Fragment::SetFloatingLevelNumber(G4int value)
+{
+  xLevel = value;
+}
+
 inline 
 const G4ParticleDefinition* G4Fragment::GetParticleDefinition(void) const
 {
@@ -427,9 +448,19 @@ inline void G4Fragment::SetCreationTime(G4double time)
   theCreationTime = time;
 }
 
+inline G4NuclearPolarization* G4Fragment::NuclearPolarization()
+{
+  return thePolarization;
+}
+
 inline G4NuclearPolarization* G4Fragment::GetNuclearPolarization() const
 {
   return thePolarization;
+}
+
+inline void G4Fragment::SetNuclearPolarization(G4NuclearPolarization* p)
+{
+  thePolarization = p;
 }
 
 #endif

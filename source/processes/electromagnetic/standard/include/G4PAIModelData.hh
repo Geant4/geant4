@@ -70,7 +70,7 @@ class G4PAIModelData
 
 public:
 
-  G4PAIModelData(G4double tmin, G4double tmax, G4int verbose);
+  explicit G4PAIModelData(G4double tmin, G4double tmax, G4int verbose);
 
   ~G4PAIModelData();
 
@@ -97,8 +97,8 @@ private:
 			     G4double position) const;
 
   // hide assignment operator 
-  G4PAIModelData & operator=(const  G4PAIModelData &right);
-  G4PAIModelData(const  G4PAIModelData&);
+  G4PAIModelData & operator=(const  G4PAIModelData &right) = delete;
+  G4PAIModelData(const  G4PAIModelData&) = delete;
 
   G4int                fTotBin;
   G4double             fLowestKineticEnergy;
@@ -112,16 +112,7 @@ private:
   std::vector<G4PhysicsTable*>      fPAIxscBank;
   std::vector<G4PhysicsTable*>      fPAIdEdxBank;
   std::vector<G4PhysicsLogVector*>  fdEdxTable;
-  //  std::vector<G4PhysicsLogVector*>  fdNdxCutTable;
-  //std::vector<G4PhysicsLogVector*>  fdEdxCutTable;
-
 };
 
 #endif
-
-
-
-
-
-
 

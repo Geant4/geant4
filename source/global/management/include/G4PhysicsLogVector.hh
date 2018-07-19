@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.hh 74256 2013-10-02 14:24:02Z gcosmo $
+// $Id: G4PhysicsLogVector.hh 98864 2016-08-15 11:53:26Z gcosmo $
 //
 // 
 //--------------------------------------------------------------------
@@ -59,28 +59,26 @@
 
 class G4PhysicsLogVector : public G4PhysicsVector  
 {
-  public:
+public:// with description
 
-    G4PhysicsLogVector();
-    explicit G4PhysicsLogVector(size_t theNbin);
-      // Constructors
+  G4PhysicsLogVector();
+       // the vector will be filled from external file using Retrieve method
 
-
-  public:  // with description
-
-    G4PhysicsLogVector(G4double theEmin, G4double theEmax, size_t theNbin);
-       // Because of logarithmic scale, note that 'theEmin' has to be 
+  G4PhysicsLogVector(G4double theEmin, G4double theEmax, size_t theNbin);
+       // Energy vector will be computed and filled at construction, 
+       // number of nodes 'theNbin+1'. Use PutValue() to fill the data vector
+       // 
+       // Because of logarithmic scale, 'theEmin' has to be 
        // greater than zero. No protection exists against this error.
 
-    virtual ~G4PhysicsLogVector();
-      // Destructor
-      
-    virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
-      // To retrieve persistent data from file stream.
+  virtual ~G4PhysicsLogVector();
 
-    virtual void ScaleVector(G4double factorE, G4double factorV);
-      // Scale all values of the vector and second derivatives
-      // by factorV, energies by vectorE. 
+  virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii) final;
+       // To retrieve persistent data from a file stream.
+
+  virtual void ScaleVector(G4double factorE, G4double factorV) final;
+       // Scale all values of the vector and second derivatives
+       // by factorV, energies - by vectorE. 
 
 };
 

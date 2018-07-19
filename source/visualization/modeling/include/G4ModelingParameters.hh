@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh 81056 2014-05-20 09:02:16Z gcosmo $
+// $Id: G4ModelingParameters.hh 109510 2018-04-26 07:15:57Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -39,6 +39,7 @@
 #include "globals.hh"
 #include "G4VisExtent.hh"
 #include "G4VisAttributes.hh"
+#include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 
 #include <vector>
@@ -77,8 +78,14 @@ public: // With description
 
   class PVNameCopyNo {
   public:
-    PVNameCopyNo(G4String name, G4int copyNo):
-    fName(name), fCopyNo(copyNo) {}
+    // Normal constructor
+    PVNameCopyNo(G4String name, G4int copyNo)
+    : fName(name), fCopyNo(copyNo) {}
+    // Constructor from G4PhysicalVolumeModel::G4PhysicalVolumeNodeID
+    PVNameCopyNo
+    (const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& nodeID)
+    : fName(nodeID.GetPhysicalVolume()->GetName())
+    , fCopyNo(nodeID.GetCopyNo()) {}
     const G4String& GetName() const {return fName;}
     G4int GetCopyNo() const {return fCopyNo;}
     G4bool operator!=(const PVNameCopyNo&) const;
@@ -90,32 +97,60 @@ public: // With description
   typedef std::vector<PVNameCopyNo> PVNameCopyNoPath;
   typedef PVNameCopyNoPath::const_iterator PVNameCopyNoPathConstIterator;
 
+  class PVPointerCopyNo {
+  public:
+    // Normal constructor
+    PVPointerCopyNo(G4VPhysicalVolume* pPV, G4int copyNo)
+    : fpPV(pPV), fCopyNo(copyNo) {}
+    // Constructor from G4PhysicalVolumeModel::G4PhysicalVolumeNodeID
+    PVPointerCopyNo
+    (const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& nodeID)
+    : fpPV(nodeID.GetPhysicalVolume())
+    , fCopyNo(nodeID.GetCopyNo()) {}
+    const G4String& GetName() const;
+    const G4VPhysicalVolume* GetPVPointer() const {return fpPV;}
+    G4int GetCopyNo() const {return fCopyNo;}
+    G4bool operator!=(const PVPointerCopyNo&) const;
+    G4bool operator==(const PVPointerCopyNo& rhs) const {return !operator!=(rhs);}
+  private:
+    G4VPhysicalVolume* fpPV;
+    G4int fCopyNo;
+  };
+  typedef std::vector<PVPointerCopyNo> PVPointerCopyNoPath;
+  typedef PVPointerCopyNoPath::const_iterator PVPointerCopyNoPathConstIterator;
+
   class VisAttributesModifier {
   public:
     VisAttributesModifier
-      (const G4VisAttributes& visAtts,
-       VisAttributesSignifier signifier,
-       const PVNameCopyNoPath& path):
-      fVisAtts(visAtts), fSignifier(signifier), fPVNameCopyNoPath(path) {}
+    (const G4VisAttributes& visAtts,
+     VisAttributesSignifier signifier,
+     const PVNameCopyNoPath& path):
+    fVisAtts(visAtts), fSignifier(signifier), fPVNameCopyNoPath(path) {}
     VisAttributesModifier
-      (const G4VisAttributes& visAtts,
-       VisAttributesSignifier signifier,
-       const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path);
+    (const G4VisAttributes& visAtts,
+     VisAttributesSignifier signifier,
+     const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path);
     const G4VisAttributes& GetVisAttributes() const
-      {return fVisAtts;}
+    {return fVisAtts;}
     VisAttributesSignifier GetVisAttributesSignifier() const
-      {return fSignifier;}
+    {return fSignifier;}
     const PVNameCopyNoPath& GetPVNameCopyNoPath() const
-      {return fPVNameCopyNoPath;}
+    {return fPVNameCopyNoPath;}
+    void SetVisAttributes(const G4VisAttributes& visAtts)
+    {fVisAtts = visAtts;}
+    void SetVisAttributesSignifier(VisAttributesSignifier signifier)
+    {fSignifier = signifier;}
+    void SetPVNameCopyNoPath(const PVNameCopyNoPath& PVNameCopyNoPath)
+    {fPVNameCopyNoPath = PVNameCopyNoPath;}
     G4bool operator!=(const VisAttributesModifier&) const;
     G4bool operator==(const VisAttributesModifier& rhs) const
-      {return !operator!=(rhs);}
+    {return !operator!=(rhs);}
   private:
     G4VisAttributes fVisAtts;
     VisAttributesSignifier fSignifier;
     PVNameCopyNoPath fPVNameCopyNoPath;
   };
-  
+
   G4ModelingParameters ();
 
   G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
@@ -143,6 +178,8 @@ public: // With description
   G4bool           IsDensityCulling              () const;
   G4double         GetVisibleDensity             () const;
   G4bool           IsCullingCovered              () const;
+  G4int            GetCBDAlgorithmNumber         () const;
+  const std::vector<G4double>& GetCBDParameters  () const;
   G4bool           IsExplode                     () const;
   G4double         GetExplodeFactor              () const;
   const G4Point3D& GetExplodeCentre              () const;
@@ -161,6 +198,8 @@ public: // With description
   void SetDensityCulling       (G4bool);
   void SetVisibleDensity       (G4double);
   void SetCullingCovered       (G4bool);
+  void SetCBDAlgorithmNumber   (G4int);
+  void SetCBDParameters        (const std::vector<G4double>&);
   void SetExplodeFactor        (G4double explodeFactor);
   void SetExplodeCentre        (const G4Point3D& explodeCentre);
   G4int SetNoOfSides           (G4int);  // Returns actual number set.
@@ -174,6 +213,9 @@ public: // With description
   
   friend std::ostream& operator <<
   (std::ostream& os, const PVNameCopyNoPath&);
+
+  friend std::ostream& operator <<
+  (std::ostream& os, const PVPointerCopyNoPath&);
 
   friend std::ostream& operator <<
   (std::ostream& os,
@@ -190,6 +232,8 @@ private:
   G4bool       fDensityCulling;  // Density culling requested.  If so...
   G4double     fVisibleDensity;  // ...density lower than this not drawn.
   G4bool       fCullCovered;     // Cull daughters covered by opaque mothers.
+  G4int        fCBDAlgorithmNumber; // Colour by density algorithm number.
+  std::vector<G4double> fCBDParameters; // Colour by density parameters.
   G4double     fExplodeFactor;   // Explode along radius by this factor...
   G4Point3D    fExplodeCentre;   // ...about this centre.
   G4int        fNoOfSides;       // ...if polygon approximates circle.
@@ -204,6 +248,9 @@ std::ostream& operator <<
 
 std::ostream& operator <<
 (std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath&);
+
+std::ostream& operator <<
+(std::ostream& os, const G4ModelingParameters::PVPointerCopyNoPath&);
 
 std::ostream& operator <<
 (std::ostream& os,

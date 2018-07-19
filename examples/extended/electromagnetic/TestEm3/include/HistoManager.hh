@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.hh 78655 2014-01-14 11:13:41Z gcosmo $
+// $Id: HistoManager.hh 98762 2016-08-09 14:08:07Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
-  const G4int MaxHisto = 2*MaxAbsor + 3;
+  const G4int kMaxHisto = 2*kMaxAbsor + 3;
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

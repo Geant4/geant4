@@ -1,4 +1,4 @@
-$Id: History 95537 2016-02-12 14:28:41Z gcosmo $
+$Id: History 109314 2018-04-11 06:42:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,31 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-09-12-15 V.Ivant (testem17-V10-01-02)
+
+10-04-18 mma (testem17-V10-04-01)
+- testem17.cc : set visualisation only in interactive mode
+
+21-03-18 mma (testem17-V10-04-00)
+- testem17.cc : remove G4UI_USE and G4VIS_USE
+
+07-11-17 D.Sawkey (testem17-V10-03-00)
+- PhysicsList: fix setting emstandard; add emstandard_opt4 
+
+25-10-16 I. Hrivnacova  (testem17-V10-02-04)
+- HistoManager : kMaxHisto (instead of MaxHisto)
+  to get rid off the violation report in automatic checking of coding 
+  guidelines
+
+29-09-16 mma  (testem17-V10-02-03)
+- HistoManager : coding conventions
+
+30-08-16 I. Hrivnacova  (testem17-V10-02-02)
+- Removed obsolete EventAction, EventActionMessenger
+
+04-07-16 I. Hrivnacova  (testem17-V10-02-01)
+- Fixes for Doxygen documentation
+
+09-12-15 V.Ivant (testem17-V10-02-00)
 - H.Burkhardt fixed root macro allowing to work both with root5 and 6;
   added run01_prot.mac - demonstrating synkrotron radiation for FCC
 

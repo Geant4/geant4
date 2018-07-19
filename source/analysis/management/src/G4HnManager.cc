@@ -83,7 +83,7 @@ G4HnInformation* G4HnManager::GetHnInformation(G4int id,
                   << " does not exist.";
       G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }  
-    return 0;         
+    return nullptr;         
   }
   return fHnVector[index];
 }    
@@ -94,7 +94,7 @@ G4HnDimensionInformation* G4HnManager::GetHnDimensionInformation(G4int id,
                                 G4String functionName, G4bool warn) const
 {
   auto hnInformation = GetHnInformation(id, functionName, warn);
-  if ( ! hnInformation ) return 0; 
+  if ( ! hnInformation ) return nullptr; 
 
   return hnInformation->GetHnDimensionInformation(dimension);
 }    

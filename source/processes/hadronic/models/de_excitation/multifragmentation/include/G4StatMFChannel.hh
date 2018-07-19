@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4StatMFChannel.hh 107060 2017-11-01 15:00:04Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -86,12 +86,6 @@ private:
     // Fragment kinetic energies will be calculated according to the
     // Boltzamann distribution at given temperature.
     void FragmentsMomenta(G4int NF, G4int idx, G4double T);	
-
-
-    // Samples a isotropic random vectorwith a magnitud given by Magnitude.
-    // By default Magnitude = 1
-    G4ThreeVector IsotropicVector(G4double Magnitude = 1.0);
-
 
     // Rotates a 3-vector P to close momentum triangle Pa + V + P = 0
     G4ThreeVector RotateMomentum(G4ThreeVector Pa, G4ThreeVector V, 

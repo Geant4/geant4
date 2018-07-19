@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: lArCal.cc 89572 2015-04-20 07:18:15Z gcosmo $
+// $Id: lArCal.cc 109981 2018-05-14 07:15:53Z gcosmo $
 //
-// 
+//
 // --------------------------------------------------------------
-//      GEANT 4 - exampleN03 
+//      GEANT 4 - exampleN03
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD Group
@@ -35,6 +35,8 @@
 // Comments
 //
 // --------------------------------------------------------------
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -62,47 +64,47 @@ int main(int argc,char** argv) {
 
   // choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
-    
+
   // Construct the default run manager
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
 #else
     G4RunManager* runManager = new G4RunManager;
 #endif
-    
+
   // set mandatory initialization classes
   FCALTestbeamSetup* detector = new FCALTestbeamSetup;
   runManager->SetUserInitialization(detector);
 
   G4PhysListFactory factory;
   runManager->SetUserInitialization(factory.ReferencePhysList());
-  
+
   runManager->SetUserInitialization(new FCALActionInitialization);
 
-  // get the pointer to the User Interface manager 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  // get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
-        
+
   if (argc==1)   // Define UI session for interactive mode.
      {
 #ifdef G4UI_USE
        G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-       UImanager->ApplyCommand("/control/execute prerunlArcal.mac");     
+       UImanager->ApplyCommand("/control/execute prerunlArcal.mac");
 #endif
        if (ui->IsGUI())
-	 UImanager->ApplyCommand("/control/execute gui.mac");     
+	 UImanager->ApplyCommand("/control/execute gui.mac");
        ui->SessionStart();
        delete ui;
 #endif
     }
   else           // Batch mode
-    { 
+    {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);

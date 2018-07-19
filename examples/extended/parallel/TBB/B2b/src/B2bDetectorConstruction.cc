@@ -42,6 +42,7 @@
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
 #include "G4GlobalMagFieldMessenger.hh"
+#include "G4SDManager.hh"
 
 #include "G4GeometryTolerance.hh"
 #include "G4GeometryManager.hh"
@@ -284,6 +285,7 @@ void B2bDetectorConstruction::ConstructSDandField()
   G4String trackerChamberSDname = "B2/TrackerChamberSD";
   B2TrackerSD* aTrackerSD = new B2TrackerSD(trackerChamberSDname,
                                             "TrackerHitsCollection");
+  G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
   SetSensitiveDetector( fLogicChamber,  aTrackerSD );
 
   // Create global magnetic field messenger.

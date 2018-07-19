@@ -3,10 +3,6 @@
 # the menu bar of the G4UIXm, G4UIQt, G4UIWin32 sessions.
 # It has no effect with G4UIterminal.
 #
-# Add icons of general interest
-#
-/control/execute icons.mac
-#
 # File menu :
 /gui/addMenu file File
 /gui/addButton file Quit exit
@@ -46,5 +42,3 @@
 # To limit the output flow in the "dump" widget :
 /run/printProgress 100
 #
-# User defined icon :
-/gui/addIcon "Run beam on" user_icon "/run/beamOn 1" run.png 

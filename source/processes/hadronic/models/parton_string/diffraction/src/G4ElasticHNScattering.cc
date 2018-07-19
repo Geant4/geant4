@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc 91914 2015-08-11 07:00:39Z gcosmo $
+// $Id: G4ElasticHNScattering.cc 100828 2016-11-02 15:25:59Z gcosmo $
 //
 
 // ------------------------------------------------------------
@@ -49,7 +49,7 @@
 #include "G4ExcitedString.hh"
 #include "G4FTFParameters.hh"
 
-#include "G4SampleResonance.hh"                                  // Uzhi Oct 2014
+#include "G4SampleResonance.hh"
 
 #include "G4Exp.hh"
 #include "G4Log.hh"
@@ -67,18 +67,18 @@ G4bool G4ElasticHNScattering::ElasticScattering( G4VSplitableHadron* projectile,
   projectile->IncrementCollisionCount( 1 );
   target->IncrementCollisionCount( 1 );
 
-  G4SampleResonance BrW;                                                    // Uzhi Oct 2014
+  G4SampleResonance BrW;
 
   // Projectile parameters
   G4LorentzVector Pprojectile = projectile->Get4Momentum();
   if ( Pprojectile.z() < 0.0 ) return false;
   G4bool PutOnMassShell( false );
   G4double M0projectile = Pprojectile.mag();       
-//  if ( M0projectile < projectile->GetDefinition()->GetPDGMass() ) {       // Uzhi Oct 2014
+  //if ( M0projectile < projectile->GetDefinition()->GetPDGMass() ) {
 
-  G4double MminProjectile=BrW.GetMinimumMass(projectile->GetDefinition());  // Uzhi Oct 2014
+  G4double MminProjectile=BrW.GetMinimumMass(projectile->GetDefinition());
 
-  if ( M0projectile < MminProjectile ) {                                    // Uzhi Oct 2014
+  if ( M0projectile < MminProjectile ) {
     PutOnMassShell = true;
     M0projectile = projectile->GetDefinition()->GetPDGMass();
   }
@@ -88,11 +88,11 @@ G4bool G4ElasticHNScattering::ElasticScattering( G4VSplitableHadron* projectile,
   // Target parameters
   G4LorentzVector Ptarget = target->Get4Momentum();
   G4double M0target = Ptarget.mag();
-//  if ( M0target < target->GetDefinition()->GetPDGMass() ) {              // Uzhi Oct 2014
+  //if ( M0target < target->GetDefinition()->GetPDGMass() ) {
 
-  G4double MminTarget=BrW.GetMinimumMass(target->GetDefinition());         // Uzhi Oct 2014
+  G4double MminTarget=BrW.GetMinimumMass(target->GetDefinition());
 
-  if ( M0target < MminTarget ) {                                           // Uzhi Oct 2014
+  if ( M0target < MminTarget ) {
     PutOnMassShell = true;
     M0target = target->GetDefinition()->GetPDGMass();
   }   
@@ -104,7 +104,7 @@ G4bool G4ElasticHNScattering::ElasticScattering( G4VSplitableHadron* projectile,
   G4LorentzRotation toCms( -1*Psum.boostVector() );
   G4LorentzVector Ptmp = toCms*Pprojectile;
   if ( Ptmp.pz() <= 0.0 ) return false;                                 
-  // "String" moving backwards in  CMS, abort collision !
+  //"String" moving backwards in  CMS, abort collision !
   //G4cout << " abort Collision! " << G4endl;
   toCms.rotateZ( -1*Ptmp.phi() );
   toCms.rotateY( -1*Ptmp.theta() );
@@ -259,3 +259,4 @@ int G4ElasticHNScattering::operator!=( const G4ElasticHNScattering& ) const {
   throw G4HadronicException( __FILE__, __LINE__, 
                             "G4ElasticHNScattering != operator not meant to be called" );
 }
+

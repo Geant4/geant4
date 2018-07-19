@@ -63,6 +63,10 @@ class G4ParticleHPAngular
       theProbArray = 0;
       toBeCached val;
       fCache.Put( val );
+      
+      theAngularDistributionType = 0;
+      frameFlag = 0;
+      targetMass = 0.0;
   } 
 
   ~G4ParticleHPAngular()

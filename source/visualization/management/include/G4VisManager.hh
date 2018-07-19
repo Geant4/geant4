@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh 93026 2015-09-30 16:07:07Z gcosmo $
+// $Id: G4VisManager.hh 106384 2017-10-09 09:34:51Z gcosmo $
 //
 // 
 
@@ -79,6 +79,11 @@
 
 #ifndef G4VISMANAGER_HH
 #define G4VISMANAGER_HH
+
+// Temporary definition until Xeon Phi can handle full C++11.
+#ifndef __MIC__
+#define G4VIS_USE_STD11
+#endif
 
 #include "G4VVisManager.hh"
 
@@ -169,19 +174,25 @@ public:
 public: // With description
 
   void Initialise ();
-  void Initialize ();  // Alias Initialise ().
+  void Initialize ();  // Alias Initialise ()
 
   // Optional registration of user vis actions.  Added to scene with
   // /vis/scene/add/userAction.
   void RegisterRunDurationUserVisAction
   (const G4String& name, G4VUserVisAction*,
-   const G4VisExtent& = G4VisExtent::NullExtent);
+   const G4VisExtent& = G4VisExtent());
   void RegisterEndOfEventUserVisAction
   (const G4String& name, G4VUserVisAction*,
-   const G4VisExtent& = G4VisExtent::NullExtent);
+   const G4VisExtent& = G4VisExtent());
   void RegisterEndOfRunUserVisAction
   (const G4String& name, G4VUserVisAction*,
-   const G4VisExtent& = G4VisExtent::NullExtent);
+   const G4VisExtent& = G4VisExtent());
+  void SetUserAction
+  (G4VUserVisAction* pVisAction,
+   const G4VisExtent& = G4VisExtent());
+  // SetUserAction is deprecated.  Use RegisterRunDurationUserVisAction
+  // or other of the above.
+  void SetUserActionExtent (const G4VisExtent&);  //Legacy: deprecated.
 
   G4bool RegisterGraphicsSystem (G4VGraphicsSystem*);
   // Register an individual graphics system.  Normally this is done in
@@ -394,6 +405,7 @@ public: // With description
   static Verbosity             GetVerbosity                ();
   G4bool                       GetTransientsDrawnThisRun   () const;
   G4bool                       GetTransientsDrawnThisEvent () const;
+  G4bool                       GetDrawEventOnlyIfToBeKept  () const;
   const G4Event*               GetRequestedEvent           () const;
   G4bool                       GetAbortReviewKeptEvents    () const;
   const G4ViewParameters&      GetDefaultViewParameters    () const;
@@ -402,10 +414,6 @@ public: // With description
   G4bool                       GetWaitOnEventQueueFull     () const;
 #endif
 
-  void SetUserAction
-  (G4VUserVisAction* pVisAction,
-   const G4VisExtent& = G4VisExtent::NullExtent);  // Register run-duration.
-  void SetUserActionExtent (const G4VisExtent&);  //Legacy: deprecated.
   void              SetCurrentGraphicsSystem    (G4VGraphicsSystem*);
   void              SetCurrentScene             (G4Scene*);
   void              SetCurrentSceneHandler      (G4VSceneHandler*);
@@ -419,6 +427,7 @@ public: // With description
   void              ResetTransientsDrawnFlags   ();
   void              SetTransientsDrawnThisRun   (G4bool);
   void              SetTransientsDrawnThisEvent (G4bool);
+  void              SetDrawEventOnlyIfToBeKept  (G4bool);
   // If non-zero, requested event is used in G4VSceneHandler::ProcessScene.
   void              SetRequestedEvent           (const G4Event*);
   void              SetAbortReviewKeptEvents    (G4bool);
@@ -481,8 +490,9 @@ private:
   (const T& graphics_primitive, const G4Transform3D& objectTransform);
 
   void PrintAvailableModels            (Verbosity) const;
+  void InitialiseG4ColourMap           () const;
   void PrintAvailableColours           (Verbosity) const;
-  void PrintAvailableUserVisActions   (Verbosity) const;
+  void PrintAvailableUserVisActions    (Verbosity) const;
   void PrintInvalidPointers            () const;
   G4bool IsValidView ();
   // True if view is valid.  Prints messages and sanitises various data.
@@ -514,6 +524,7 @@ private:
   G4int                 fNKeepRequests;
   G4bool                fEventKeepingSuspended;
   G4bool                fKeptLastEvent;
+  G4bool                fDrawEventOnlyIfToBeKept;
   const G4Event*        fpRequestedEvent; // If non-zero, scene handler uses.
   G4bool                fAbortReviewKeptEvents;
   G4ViewParameters      fDefaultViewParameters;

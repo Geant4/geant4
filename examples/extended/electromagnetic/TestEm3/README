@@ -1,4 +1,4 @@
-$Id: README 93737 2015-10-30 11:01:43Z gcosmo $
+$Id: README 107962 2017-12-14 13:08:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -165,9 +165,9 @@ $Id: README 93737 2015-10-30 11:01:43Z gcosmo $
   ...etc...........
       
   NB. Numbering scheme for histograms:
-  layer     : from 1 to NbOfLayers (inclued)
-  absorbers : from 1 to NbOfAbsor (inclued)
-  planes    : from 1 to NbOfLayers*NbOfAbsor + 1 (inclued)
+  layer     : from 1 to NbOfLayers (included)
+  absorbers : from 1 to NbOfAbsor (included)
+  planes    : from 1 to NbOfLayers*NbOfAbsor + 1 (included)
   
  One can control the binning of the histo with the command:
   /analysis/h1/set   idAbsor  nbin  Emin  Emax  unit 

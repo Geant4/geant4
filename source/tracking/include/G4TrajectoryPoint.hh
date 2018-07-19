@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryPoint.hh 69003 2013-04-15 09:25:23Z gcosmo $
+// $Id: G4TrajectoryPoint.hh 110262 2018-05-17 14:25:55Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -94,19 +94,19 @@ public: // without description
 
 };
 
-extern G4TRACKING_DLL G4ThreadLocal
-G4Allocator<G4TrajectoryPoint> *aTrajectoryPointAllocator;
+extern G4TRACKING_DLL
+G4Allocator<G4TrajectoryPoint>*& aTrajectoryPointAllocator();
 
 inline void* G4TrajectoryPoint::operator new(size_t)
 {
-  if (!aTrajectoryPointAllocator)
-  { aTrajectoryPointAllocator = new G4Allocator<G4TrajectoryPoint>; }
-  return (void *) aTrajectoryPointAllocator->MallocSingle();
+  if (!aTrajectoryPointAllocator())
+  { aTrajectoryPointAllocator() = new G4Allocator<G4TrajectoryPoint>; }
+  return (void *) aTrajectoryPointAllocator()->MallocSingle();
 }
 
 inline void G4TrajectoryPoint::operator delete(void *aTrajectoryPoint)
 {
-  aTrajectoryPointAllocator->FreeSingle((G4TrajectoryPoint *) aTrajectoryPoint);
+  aTrajectoryPointAllocator()->FreeSingle((G4TrajectoryPoint *) aTrajectoryPoint);
 }
 
 #endif

@@ -41,10 +41,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Atom::Atom(int s,string n,string rN,int numInRes,int rS,
-      double xInit,double yInit,double zInit,
-      double radius,
-      double o, double tF, string e)
+Atom::Atom(int s, const std::string& n,
+           const std::string& rN,int numInRes,int rS,
+           double xInit,double yInit,double zInit,
+           double radius,
+           double o, double tF, const std::string& e)
 {
   fSerial=s;
   fName=n;//!< Atom name
@@ -98,14 +99,14 @@ int Atom::GetID()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-string Atom::GetName()
+const std::string& Atom::GetName()
 {
   return fName;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-string Atom::GetElementName()
+const std::string& Atom::GetElementName()
 {
   return fElement;
 }

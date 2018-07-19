@@ -47,8 +47,7 @@
 #ifndef ATOM_H
 #define ATOM_H
 
-#include <iostream>
-using namespace std;
+#include <string>
 
 //! Atom Class
 /*!
@@ -58,10 +57,19 @@ class Atom
 {
 public:
   //! constructor with initialization
-  Atom(int serial,string name,string resName,int numInRes,int resSeq,
-      double xInit,double yInit,double zInit,
-      double radius,
-      double occupancy, double tempFactor, string element);
+  Atom(int serial, 
+       const std::string& name, 
+       const std::string& resName,
+       int numInRes,
+       int resSeq,
+       double xInit,
+       double yInit,
+       double zInit,
+       double radius,
+       double occupancy, 
+       double tempFactor, 
+       const std::string& element);
+       
   //! Empty destructor
   ~Atom()
   {
@@ -78,9 +86,9 @@ public:
   //! Return the Atom's ID
   int GetID();
   //! Return name of the atom
-  string GetName();
+  const std::string& GetName();
   //! Return name of the element
-  string GetElementName();
+  const std::string& GetElementName();
   //! Return name of the atom
   double GetVanDerWaalsRadius();
   //! Set the next atom
@@ -88,15 +96,15 @@ public:
 
   int fSerial;       //!< its serial number
   int fNumInRes;     //!< its number in residue sequence
-  string fName;      //!< Atom name
-  string fResName;   //!< Residue name
+  std::string fName;      //!< Atom name
+  std::string fResName;   //!< Residue name
   int fResSeq;       //!< Residue sequence number
   double fX;          //!< X orthogonal coordinates in Angstroms
   double fY;          //!< Y orthogonal coordinates in Angstroms
   double fZ;          //!< Z orthogonal coordinates in Angstroms
   double fVdwRadius;  // Vand der Waals Radius in Angstrom
   double fOccupancy;  //!< Occupancy for the Atom
-  string fElement;   //!< Element symbol extracted from 'atom name'
+  std::string fElement;   //!< Element symbol extracted from 'atom name'
   double fTempFactor; //!< Temperature factor for the Atom
 
 private:

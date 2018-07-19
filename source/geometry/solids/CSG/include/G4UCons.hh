@@ -43,16 +43,19 @@
 #ifndef G4UCONS_HH
 #define G4UCONS_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UCons.hh"
+#include <volumes/UnplacedCone.h>
 
 #include "G4Polyhedron.hh"
 
-class G4UCons : public G4USolid
+class G4UCons : public G4UAdapter<vecgeom::GenericUnplacedCone>
 {
+  using Shape_t = vecgeom::GenericUnplacedCone;
+  using Base_t = G4UAdapter<vecgeom::GenericUnplacedCone>;
+
   public:  // with description
 
     G4UCons(const G4String& pName,
@@ -70,8 +73,6 @@ class G4UCons : public G4USolid
 
     G4VSolid* Clone() const;
 
-    inline UCons* GetShape() const;
-
     G4double GetInnerRadiusMinusZ() const;
     G4double GetOuterRadiusMinusZ() const;
     G4double GetInnerRadiusPlusZ()  const;
@@ -79,6 +80,10 @@ class G4UCons : public G4USolid
     G4double GetZHalfLength()       const;
     G4double GetStartPhiAngle()     const;
     G4double GetDeltaPhiAngle()     const;
+    G4double GetSinStartPhi()       const;
+    G4double GetCosStartPhi()       const;
+    G4double GetSinEndPhi()         const;
+    G4double GetCosEndPhi()         const;
   
     void SetInnerRadiusMinusZ (G4double Rmin1 );
     void SetOuterRadiusMinusZ (G4double Rmax1 );
@@ -89,6 +94,13 @@ class G4UCons : public G4USolid
     void SetDeltaPhiAngle     (G4double newDPhi);
 
     inline G4GeometryType GetEntityType() const;
+
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pMin, G4double& pMax) const;
 
     G4Polyhedron* CreatePolyhedron() const;
 
@@ -107,11 +119,6 @@ class G4UCons : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UCons* G4UCons::GetShape() const
-{
-  return (UCons*) fShape;
-}
 
 inline G4GeometryType G4UCons::GetEntityType() const
 {

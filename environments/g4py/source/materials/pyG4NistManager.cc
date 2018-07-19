@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4NistManager.cc 76884 2013-11-18 12:54:03Z gcosmo $
+// $Id: pyG4NistManager.cc 101514 2016-11-18 15:30:57Z gcosmo $
 // ====================================================================
 //   pyG4NistManager.cc
 //
@@ -52,9 +52,9 @@ BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_FindOrBuildElement,
 				       FindOrBuildElement, 1, 2)
 
 // PrintElement
-void(G4NistManager::*f1_PrintElement)(const G4String&)
+void(G4NistManager::*f1_PrintElement)(const G4String&) const
   = &G4NistManager::PrintElement;
-void(G4NistManager::*f2_PrintElement)(G4int)
+void(G4NistManager::*f2_PrintElement)(G4int) const
   = &G4NistManager::PrintElement;
 
 // FindOrBuildMaterial
@@ -148,4 +148,3 @@ void export_G4NistManager()
     ;
 #endif
 }
-

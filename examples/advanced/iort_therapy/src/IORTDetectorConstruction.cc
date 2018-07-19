@@ -176,7 +176,7 @@ void IORTDetectorConstruction::ConstructPhantom()
     //red -> SetForceSolid(true);
     //red -> SetForceWireframe(true);
     phantomLogicalVolume -> SetVisAttributes(red); 
-    //phantomLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible);
+    //phantomLogicalVolume -> SetVisAttributes(G4VisAttributes::GetInvisible());
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -234,7 +234,7 @@ void IORTDetectorConstruction::ConstructDetector()
     //detectorLogicalVolume -> SetVisAttributes(skyBlue);
     detectorLogicalVolume -> SetVisAttributes(skyBlue1);
     
-   // detectorLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible);
+   // detectorLogicalVolume -> SetVisAttributes(G4VisAttributes::GetInvisible());
 
 
   // **************

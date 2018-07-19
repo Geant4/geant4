@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh 83466 2014-08-25 10:31:39Z gcosmo $
+// $Id: G4TransportationManager.hh 103219 2017-03-22 11:30:15Z gcosmo $
 //
 // class G4TransportationManager
 //
@@ -60,6 +60,8 @@ class G4TransportationManager
 
      static G4TransportationManager* GetTransportationManager();
        // Retrieve the static instance
+     static G4TransportationManager* GetInstanceIfExist();
+       // Retrieve singleton instance pointer.
 
      inline G4PropagatorInField* GetPropagatorInField() const;
      inline void SetPropagatorInField( G4PropagatorInField* newFieldPropagator );
@@ -115,11 +117,13 @@ class G4TransportationManager
        // associated with parallel worlds. Internal method called only
        // by the RunManager when the entire geometry is rebuilt from scratch.
 
+     ~G4TransportationManager(); 
+       // Destructor
+
   protected:
 
      G4TransportationManager();
-     ~G4TransportationManager(); 
-       // Singleton. Protected constructor and destructor
+       // Singleton. Protected constructor
 
   private:
 

@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/svalue/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
-//
-// $Id: PrimaryGeneratorAction.hh 73024 2013-08-15 09:11:40Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
@@ -50,9 +45,9 @@ class PrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction,
 public:
   PrimaryGeneratorAction();
   virtual ~PrimaryGeneratorAction();
+
   virtual G4bool Notify(G4ApplicationState requestedState);
 
-public:
   virtual void GeneratePrimaries(G4Event*);
 
   G4ParticleGun* GetParticleGun() const
@@ -64,8 +59,6 @@ private:
   G4ParticleGun* fParticleGun;
   const DetectorConstruction* fDetector;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

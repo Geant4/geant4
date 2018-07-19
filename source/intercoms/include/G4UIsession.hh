@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIsession.hh 67965 2013-03-13 09:35:29Z gcosmo $
+// $Id: G4UIsession.hh 106172 2017-09-15 13:03:57Z gcosmo $
 //
 // $id$
 
@@ -33,6 +33,7 @@
 
 #include "G4coutDestination.hh"
 #include "globals.hh"
+#include "icomsdefs.hh"
 
 // class description:
 //
@@ -46,6 +47,7 @@ class G4UIsession : public G4coutDestination
   
   public:
       G4UIsession();
+      G4UIsession(G4int iBatch);
       virtual ~G4UIsession();
 
       virtual G4UIsession * SessionStart();
@@ -60,6 +62,11 @@ class G4UIsession : public G4coutDestination
       virtual G4int ReceiveG4cerr(const G4String& cerrString);
       // These two methods will be invoked by G4strstreambuf.
 
+  protected:
+      G4ICOMS_DLL static G4int inSession;
+      G4int ifBatch;
+  public:
+      static G4int InSession() { return inSession; }
 };
 
 

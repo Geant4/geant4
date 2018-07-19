@@ -43,6 +43,7 @@
 #
 /run/setCut  0.5 mm
 /run/setCutForRegion GasDetector 1.8 mm
+/process/em/verbose 0
 #/run/particle/dumpCutValues
 #
 #/gun/particle e-

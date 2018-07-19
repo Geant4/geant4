@@ -23,14 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/src/SteppingVerbose.cc
+/// \file medical/dna/wvalue/src/SteppingVerbose.cc
 /// \brief Implementation of the SteppingVerbose class
-//
-//
-// $Id: SteppingVerbose.cc 71676 2013-06-20 13:15:08Z gcosmo $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingVerbose.hh"
 
@@ -154,5 +148,3 @@ void SteppingVerbose::StepInfo()
   }
   G4cout.precision(prec);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

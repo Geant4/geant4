@@ -61,10 +61,39 @@ public:
 
 // support for physics list defined within a namespace
 // a bit tricky because cpp macro expansion doesn't like "::"
-// ala  G4_DECLARE_PHYSLIST_FACTORY_NS(myns::MyPL,myns,MyPL)   // without trailing ";"
+// ala  G4_DECLARE_PHYSLIST_FACTORY_NS(myns::MyPL,myns,MyPL);
 #define G4_DECLARE_PHYSLIST_FACTORY_NS( physics_list , nsname , plbase )    \
   namespace nsname {                                                    \
     const G4PhysListStamper<physics_list>& plbase##Factory = G4PhysListStamper<physics_list>(#physics_list); \
-  }
+  } \
+  typedef int xyzzy__LINE__
+  // eat trailing semicolon using silly typedef
+
+// REFERENCE (rather than DECLARE) when the physics list if it is part
+// of a static library.  No need to include the header (DECLARE needs this
+// to build the code), we just need to make a reference in order to pull
+// the compilation unit static variable from the library and cause it
+// to be initialized (and thus self-register)
+
+// this is _very_ much complicated because of the templating of these lists
+
+#define G4_REFERENCE_PHYSLIST_FACTORY(physics_list)	\
+  class G4VModularPhysicsList;			        \
+  template <class T> class T##physics_list;	\
+  typedef T##physics_list<G4VModularPhysicsList> physics_list;	       \
+  extern const G4PhysListStamper<physics_list>& physics_list##Factory; \
+  const G4PhysListStamper<physics_list>& physics_list##FactoryRef = physics_list##Factory
+
+#define G4_REFERENCE_PHYSLIST_FACTORY_NS(physics_list, nsname, plbase )	\
+  class G4VModularPhysicsList;    \
+  namespace nsname { \
+    template <class T> class T##plbase;	\
+    typedef T##plbase<G4VModularPhysicsList> plbase; \
+    extern const G4PhysListStamper<plbase>& plbase##Factory; \
+    const G4PhysListStamper<plbase>& plbase##FactoryRef = plbase##Factory; \
+  } \
+  typedef int xyzzy__LINE__
+  // eat trailing semicolon using silly typedef
 
 #endif
+

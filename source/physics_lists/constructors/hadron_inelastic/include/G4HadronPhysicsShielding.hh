@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsShielding.hh 93878 2015-11-03 08:18:00Z gcosmo $
+// $Id: G4HadronPhysicsShielding.hh 101813 2016-11-30 18:05:43Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,6 +42,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4VPhysicsConstructor.hh"
 
@@ -73,7 +74,7 @@ class G4HadronPhysicsShielding : public G4VPhysicsConstructor
     explicit G4HadronPhysicsShielding(G4int verbose=1);
     explicit G4HadronPhysicsShielding(const G4String& name, G4bool );
     explicit G4HadronPhysicsShielding(const G4String& name, G4int verbose=1,
-                                      G4double minFTFPEnergy=9.5*GeV, G4double maxBertiniEnergy=9.9*GeV);
+                                      G4double minFTFPEnergy=9.5*CLHEP::GeV, G4double maxBertiniEnergy=9.9*CLHEP::GeV);
     virtual ~G4HadronPhysicsShielding();
 
   public: 

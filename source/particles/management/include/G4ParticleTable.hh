@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.hh 94421 2015-11-16 08:22:56Z gcosmo $
+// $Id: G4ParticleTable.hh 110257 2018-05-17 14:20:12Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -45,6 +45,7 @@
 //                                       28 ct., 99  H.Kurashige
 //      modified implementation of Remove 21 Mar.,08  H.Kurashige
 //      remove G4ShortLivedTable         25 July, 13 H.Kurashige
+//      added support for MuonicAtom     September, 17 K.L.Genser
 //
 
 #ifndef G4ParticleTable_h
@@ -219,12 +220,15 @@ class G4ParticleTable
 
    G4bool                readyToUse;
    G4ParticleDefinition* genericIon;
+   G4ParticleDefinition* genericMuonicAtom;
  
  public:
    void SetReadiness(G4bool val=true);
    G4bool GetReadiness() const;
    G4ParticleDefinition* GetGenericIon() const;
    void SetGenericIon(G4ParticleDefinition*);
+   G4ParticleDefinition* GetGenericMuonicAtom() const;
+   void SetGenericMuonicAtom(G4ParticleDefinition*);
  private:
    void CheckReadiness() const;
 
@@ -232,8 +236,8 @@ class G4ParticleTable
 #ifdef G4MULTITHREADED
 public:
      //Andrea Dotti January 16. Shared instance of a mutex
-     static G4Mutex particleTableMutex;
-     static G4int lockCount;
+     static G4GLOB_DLL G4Mutex& particleTableMutex();
+     static G4GLOB_DLL G4int& lockCount();
 #endif
 };
 #include "G4ParticleTable.icc"

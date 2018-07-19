@@ -53,15 +53,20 @@
 #include "G4PolynomialPDF.hh"
 #include "G4Pow.hh"
 
-class G4Fragment;
+class G4NuclearPolarization;
 
 class G4PolarizationTransition
 {
   typedef std::vector< std::vector<G4complex> > POLAR;
 
   public:
-    G4PolarizationTransition();
+    explicit G4PolarizationTransition();
     ~G4PolarizationTransition();
+
+    void SampleGammaTransition(G4NuclearPolarization* np, 
+			       G4int twoJ1, G4int twoJ2, 
+                               G4int L0, G4int Lp, G4double mpRatio, 
+			       G4double& cosTheta, G4double& phi);
 
     // generic static functions
     G4double FCoefficient(G4int K, G4int L, G4int Lprime, 
@@ -73,24 +78,27 @@ class G4PolarizationTransition
     G4double GammaTransFCoefficient(G4int K) const;
     G4double GammaTransF3Coefficient(G4int K, G4int K2, G4int K1) const;
 
-    // Gamma angle generation and decay: call these functions in this order!
-    // All angles are in the same coordinate system: user may choose any axis
-    void SetGammaTransitionData(G4int twoJ1, G4int twoJ2, G4int Lbar, 
-				G4double delta=0, G4int Lprime=1);
-    G4double GenerateGammaCosTheta(const POLAR&);
-    G4double GenerateGammaPhi(G4double cosTheta, const POLAR&);
-    void UpdatePolarizationToFinalState(G4double cosTheta, G4double phi, 
-					G4Fragment*);
-
     void DumpTransitionData(const POLAR& pol) const;
+
+    inline void SetVerbose(G4int val) { fVerbose = val; };
 
   private:
 
+    G4PolarizationTransition(const G4PolarizationTransition &right) = delete;
+    const G4PolarizationTransition& operator=(const G4PolarizationTransition &right) = delete;
+
+    // Gamma angle generation and decay: call these functions in this order!
+    // All angles are in the same coordinate system: user may choose any axis
+    G4double GenerateGammaCosTheta(const POLAR&);
+    G4double GenerateGammaPhi(G4double& cosTheta, const POLAR&);
+
     inline G4double LnFactorial(int k) const { return G4Pow::GetInstance()->logfactorial(k); }
 
+    G4int fVerbose;
     G4int fTwoJ1, fTwoJ2;
     G4int fLbar, fL;
     G4double fDelta;
+    G4double kEps;
     G4PolynomialPDF kPolyPDF;
     G4LegendrePolynomial fgLegendrePolys;
 };

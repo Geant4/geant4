@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: DetectorConstruction.cc 103257 2017-03-23 08:54:31Z gcosmo $
 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,41 +86,33 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 void DetectorConstruction::DefineMaterials()
 { 
   //
-  // define Elements
-  //
-  G4double z,a;
-  
-  G4Element* H  = new G4Element("Hydrogen" ,"H" , z= 1., a=   1.01*g/mole);
-  G4Element* N  = new G4Element("Nitrogen" ,"N" , z= 7., a=  14.01*g/mole);
-  G4Element* O  = new G4Element("Oxygen"   ,"O" , z= 8., a=  16.00*g/mole);
-
-  //
   // define materials
   //  
-  G4Material* H2O = 
-  new G4Material("Water", 1.0*g/cm3, 2);
-  H2O->AddElement(H, 2);
-  H2O->AddElement(O, 1);
+
+  G4Material* H2O = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
+  H2O->SetName("Water");
   H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
-  
-  G4Material* vapor = 
-  new G4Material("Water_vapor", 1.0*mg/cm3, 2);
-  vapor->AddElement(H, 2);
-  vapor->AddElement(O, 1);
+
+  G4Material* vapor = G4NistManager::Instance()->BuildMaterialWithNewDensity(
+                       "Water_vapor","G4_WATER_VAPOR", 1.0*mg/cm3);
   vapor->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
+
+  G4Material* Air = G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR");
+  Air->SetName("Air");
   
-  G4Material* Air = 
-  new G4Material("Air", 1.290*mg/cm3, 2);
-  Air->AddElement(N, 70.*perCent);
-  Air->AddElement(O, 30.*perCent);
+  G4NistManager::Instance()->BuildMaterialWithNewDensity("Graphite", 
+                                                         "G4_GRAPHITE", 
+                                                         2.265*g/cm3);
+  G4NistManager::Instance()->BuildMaterialWithNewDensity("Graphite_gas", 
+                                                         "G4_GRAPHITE", 
+                                                         2.265*mg/cm3);
   
-  new G4Material("Graphite",     6, 12.01*g/mole, 2.265*g/cm3);
-  new G4Material("Graphite_gas", 6, 12.01*g/mole, 2.265*mg/cm3);  
-  
-  new G4Material("Aluminium",     13, 26.98*g/mole, 2.700*g/cm3);
-  new G4Material("Aluminium_gas", 13, 26.98*g/mole, 2.700*mg/cm3);  
-          
- G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  G4NistManager::Instance()->BuildMaterialWithNewDensity("Aluminium", "G4_Al",
+                                                         2.7*g/cm3);
+  G4NistManager::Instance()->BuildMaterialWithNewDensity("Aluminium_gas", 
+                                                         "G4_Al", 2.7*mg/cm3);
+
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -143,7 +135,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   G4LogicalVolume*
   lChamber = new G4LogicalVolume(sChamber,              //solid
-                                     fWallMaterial,     //material
+                                    fWallMaterial,     //material
                                     "Chamber");         //name
                                    
   fWall = new G4PVPlacement(0,                          //no rotation

@@ -306,6 +306,10 @@ G4double G4ChipsHyperonInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
                                                               G4double P, G4double lP)
 {
   G4double sigma=0.;
+
+  //AR-24Apr2018 Switch to allow transuranic elements
+  const G4bool isHeavyElementAllowed = true;
+
   if(tZ==1 && !tN)                        // Hyperon-P interaction from G4QuasiElastRatios
   {
     G4double ld=lP-3.5;
@@ -317,7 +321,7 @@ G4double G4ChipsHyperonInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
     G4double To=(.3*ld2+38.2+900./sp)/(1.+27./sp+3./p4);
     sigma=To-El;
   }
-  else if(tZ<97 && tN<152)                // General solution
+  else if((tZ<97 && tN<152) || isHeavyElementAllowed)                 // General solution
   {
     G4double d=lP-4.2;
     G4double p2=P*P;

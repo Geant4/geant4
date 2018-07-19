@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 92047 2015-08-14 07:23:37Z gcosmo $
+// $Id: DetectorConstruction.cc 109102 2018-03-27 07:38:33Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -75,13 +75,14 @@
 
 DetectorConstruction::DetectorConstruction()
   : G4VUserDetectorConstruction(),
-    fGasMat(0), fWindowMat(0), fWorldMaterial(0),
-    fSolidWorld(0), fSolidContainer(0), fSolidDetector(0),
-    fPhysWorld(0), fLogicWorld(0), fLogicContainer(0), fLogicDetector(0),
-    fDetectorMessenger(0), fGasDetectorCuts(0), fRegGasDet(0)
+    fGasMat(nullptr), fWindowMat(nullptr), fWorldMaterial(nullptr),
+    fSolidWorld(nullptr), fSolidContainer(nullptr), fSolidDetector(nullptr),
+    fPhysWorld(nullptr), fLogicWorld(nullptr), fLogicContainer(nullptr), 
+    fLogicDetector(nullptr),fRegGasDet(nullptr)
 {
   fGasThickness = 23.0*mm;
   fGasRadius    = 10.*cm;
+  fMaxStep      = DBL_MAX;
 
   fWindowThick  = 51.0*micrometer;
 
@@ -89,7 +90,7 @@ DetectorConstruction::DetectorConstruction()
 
   fDetectorMessenger = new DetectorMessenger(this);
 
-  G4double cut = 23.*mm;
+  G4double cut = 0.7*mm;
   fGasDetectorCuts   = new G4ProductionCuts();
   fGasDetectorCuts->SetProductionCut(cut,"gamma");
   fGasDetectorCuts->SetProductionCut(cut,"e-");
@@ -318,7 +319,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   fRegGasDet->AddRootLogicalVolume(fLogicDetector);
 
   // visualisation
-  fLogicWorld->SetVisAttributes(G4VisAttributes::Invisible);
+  fLogicWorld->SetVisAttributes(G4VisAttributes::GetInvisible());
   G4VisAttributes* color1 = new G4VisAttributes(G4Colour(0.3, 0.3, 0.3));
   fLogicContainer->SetVisAttributes(color1);
   G4VisAttributes* color2 = new G4VisAttributes(G4Colour(0.0, 0.3, 0.7));
@@ -333,8 +334,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::ConstructSDandField()
-{  
-  SetSensitiveDetector(fLogicDetector, new TargetSD("GasSD")); 
+{ 
+  auto sd = new TargetSD("GasSD");
+  G4SDManager::GetSDMpointer()->AddNewDetector(sd);
+  SetSensitiveDetector(fLogicDetector, sd); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -450,7 +453,6 @@ void DetectorConstruction::ChangeGeometry()
 
   fSolidDetector->SetOuterRadius(fGasRadius);
   fSolidDetector->SetZHalfLength(fGasThickness*0.5);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

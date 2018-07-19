@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.cc 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: TrackingAction.cc 103469 2017-04-11 07:29:36Z gcosmo $
 //
 /// \file medical/GammaTherapy/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
@@ -46,16 +46,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "TrackingAction.hh"
-#include "Histo.hh"
+#include "G4RunManager.hh"
+#include "Run.hh"
 
 #include "G4Track.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-TrackingAction::TrackingAction():
-  fHisto(Histo::GetPointer())
-{}
+TrackingAction::TrackingAction()
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -66,9 +67,13 @@ TrackingAction::~TrackingAction()
 
 void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
-  fHisto->ScoreNewTrack(aTrack);
 
-  if(1 < fHisto->GetVerbose()) {
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
+  run->ScoreNewTrack(aTrack);
+
+  if(run->GetVerbose()) {
     G4cout << "New track #"
            << aTrack->GetTrackID() << " of " 
            << aTrack->GetParticleDefinition()->GetParticleName()

@@ -55,7 +55,6 @@ void ActionInitialization::BuildForMaster() const
  SetUserAction(new RunAction(fDetector));
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::Build() const

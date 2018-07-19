@@ -51,20 +51,17 @@ int main(int argc,char** argv) {
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
 
-  // By default, only one thread for aberration coefficient calculation ("coef*" macros)
+  // Use only one thread for aberration coefficient calculation ("coef*" macros)
   //
   // For high statistics (no aberration coefficient calculation, "image*" & "grid*" macros), 
   // switch to more threads 
     
   runManager->SetNumberOfThreads(1);
-  //runManager->SetNumberOfThreads(2);
 
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif
 
-  
-  //
   // Set mandatory initialization classes
   
   DetectorConstruction* detector = new DetectorConstruction;

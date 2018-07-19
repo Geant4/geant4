@@ -161,7 +161,7 @@ public:
 
 public:
   // Partition :
-  bool configure(const std::vector<TC>& aEdges) {
+  bool configure(const std::vector<TC>& a_edges) {
     // init :
     m_number_of_bins = 0;
     m_minimum_value = 0;
@@ -170,17 +170,17 @@ public:
     m_bin_width = 0;
     m_edges.clear();
     // setup :
-    if(aEdges.size()<=1) return false;
-    bn_t number = (bn_t)aEdges.size()-1;
+    if(a_edges.size()<=1) return false;
+    bn_t number = (bn_t)a_edges.size()-1;
     for(bn_t index=0;index<number;index++) {
-      if((aEdges[index]>=aEdges[index+1])) {
+      if((a_edges[index]>=a_edges[index+1])) {
         return false;
       }
     }
-    m_edges = aEdges;
+    m_edges = a_edges;
     m_number_of_bins = number;
-    m_minimum_value = aEdges[0];
-    m_maximum_value = aEdges[m_number_of_bins];
+    m_minimum_value = a_edges[0];
+    m_maximum_value = a_edges[m_number_of_bins];
     m_fixed = false;
     return true;
   }
@@ -244,6 +244,21 @@ public:
     m_edges = a_from.m_edges;
     return *this;
   }
+public:
+  bool equals(const axis& a_from) const {
+    if(&a_from==this) return true;
+    if(m_offset!=a_from.m_offset) return false;
+    if(m_number_of_bins!=a_from.m_number_of_bins) return false;
+    if(m_minimum_value!=a_from.m_minimum_value) return false;
+    if(m_maximum_value!=a_from.m_maximum_value) return false;
+    if(m_fixed!=a_from.m_fixed) return false;
+    if(m_bin_width!=a_from.m_bin_width) return false;
+    if(m_edges!=a_from.m_edges) return false;
+    return true;
+  }
+  
+  bool operator==(const axis& a_from) const {return equals(a_from);}
+  bool operator!=(const axis& a_from) const {return !equals(a_from);}
 
 public:
   TO m_offset;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPEEffectCrossSection.hh 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedPEEffectCrossSection.hh 96114 2016-03-16 18:51:33Z gcosmo $
 //
 // GEANT4 Class file
 //
@@ -56,14 +56,15 @@ public:
   virtual void Initialize(G4double aGammaE, G4double aLept0E, G4double sintheta,
 			  const G4StokesVector & beamPol,
 			  const G4StokesVector & ,
-			  G4int flag=0);
+			  G4int flag=0) override;
 
-  G4double XSection(const G4StokesVector & pol2,const G4StokesVector & pol3); 
+  G4double XSection(const G4StokesVector & pol2,
+                    const G4StokesVector & pol3) override;
 
 public:
   // return expected mean polarisation
-  G4StokesVector GetPol2();
-  G4StokesVector GetPol3();
+  G4StokesVector GetPol2() override;
+  G4StokesVector GetPol3() override;
 private:
   G4StokesVector theFinalElectronPolarization;
 };

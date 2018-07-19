@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc 83418 2014-08-21 15:30:47Z gcosmo $
+// $Id: DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -302,9 +302,9 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   
   // Visualization attributes
   //
-  lvol_fiber->SetVisAttributes (G4VisAttributes::Invisible);  
-  lvol_layer->SetVisAttributes (G4VisAttributes::Invisible);
-  lvol_world->SetVisAttributes (G4VisAttributes::Invisible);
+  lvol_fiber->SetVisAttributes (G4VisAttributes::GetInvisible());  
+  lvol_layer->SetVisAttributes (G4VisAttributes::GetInvisible());
+  lvol_world->SetVisAttributes (G4VisAttributes::GetInvisible());
     
   //always return the physical World
   //

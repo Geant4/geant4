@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109979 2018-05-14 07:13:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,14 @@ $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
 
                       Category History file
                       ---------------------
+10.05.2018 - B. Morgan     (purmag-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+28.11.2016 - G. Folger      (purmag-V10-02-00)
+            Remove direct use of theParticleIterator, use GetParticleTableIterator().
+             fix required by clang39 on Linux and MAC
 
 28.11.2016 - G. Folger
 - Remove direct use of theParticleIterator, use GetParticleTableIterator().

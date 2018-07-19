@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109990 2018-05-14 07:25:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,10 +14,45 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B. Morgan (fano-V10-04-03)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
 
-14-10-16 G.Folger
+11-04-18 mma (fano-V10-04-02)
+- fanoCavity.cc : set visualisation only in interactive mode
+
+24-03-18 mma (fano-V10-04-01)
+- ActionInitialization.cc : restaure printout of Run::EndOfRun()
+
+21-03-18 mma (fano-V10-04-00)
+- fanoCavity.cc : remove G4UI_USE and G4VIS_USE
+
+12-10-17 V.Ivant (fano-V10-03-02)
+- simplified default printout
+
+21-03-17 S.Elles (fano-V10-03-01)
+- switch to NIST material description (keeping material densities defined in
+  previous version)
+- default thread number is not set to the maximum available cores but 
+  ( set to 2 by default // fanoCavity blabla.mac -1 set the thred number to
+    the core number ) 
+
+21-03-17 V.Ivant (fano-V10-03-00)
+- PhysListEmStandard_GS, PhysListEmStandard_SS, PhysListEmStandard_WVI,
+  PhysListEmStandard_option3 - use the same step function as in 
+  physics_list factory for corresponding constructors, ensure that
+  step function parameters may be redefined by UI commands
+
+14-10-16 G.Folger (fano-V10-02-02)
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
     fix required by clang39 on Linux and MAC
+
+21-07-16 mma (fano-V10-02-01)
+- Fixe coding conventions in Run.hh
+
+04-07-16 I.Hrivnacova (fano-V10-02-00)
+- Fixes for Doxygen documentation
 
 12-10-15 J.Jacquemier (fano-V10-01-03)
 - Remove EventActionMessenger class

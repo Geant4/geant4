@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc 87695 2014-12-17 09:35:24Z gcosmo $
+// $Id: G4OpenGLStoredSceneHandler.cc 110480 2018-05-25 07:25:18Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -50,6 +50,12 @@
 #include "G4AttHolder.hh"
 
 #include <typeinfo>
+
+G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
+
+G4int  G4OpenGLStoredSceneHandler::fDisplayListId = 0;
+G4bool G4OpenGLStoredSceneHandler::fMemoryForDisplayLists = true;
+G4int  G4OpenGLStoredSceneHandler::fDisplayListLimit = 50000;
 
 G4OpenGLStoredSceneHandler::PO::PO():
   fDisplayListId(0),
@@ -96,8 +102,8 @@ G4OpenGLStoredSceneHandler::PO& G4OpenGLStoredSceneHandler::PO::operator=
 G4OpenGLStoredSceneHandler::TO::TO():
   fDisplayListId(0),
   fPickName(0),
-  fStartTime(-DBL_MAX),
-  fEndTime(DBL_MAX),
+  fStartTime(-G4VisAttributes::fVeryLongTime),
+  fEndTime(G4VisAttributes::fVeryLongTime),
   fpG4TextPlus(0),
   fMarkerOrPolyline(false)
 {}
@@ -117,8 +123,8 @@ G4OpenGLStoredSceneHandler::TO::TO(G4int id, const G4Transform3D& tr):
   fDisplayListId(id),
   fTransform(tr),
   fPickName(0),
-  fStartTime(-DBL_MAX),
-  fEndTime(DBL_MAX),
+  fStartTime(-G4VisAttributes::fVeryLongTime),
+  fEndTime(G4VisAttributes::fVeryLongTime),
   fpG4TextPlus(0),
   fMarkerOrPolyline(false)
 {}
@@ -197,17 +203,20 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Polyhedron& visi
   return AddPrimitivePreambleInternal(visible, false, false);
 }
 
-G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal(const G4Visible& visible, bool isMarker, bool isPolyline)
+G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal
+(const G4Visible& visible, bool isMarker, bool isPolyline)
 {
-  const G4Colour& c = GetColour (visible);
+// Get applicable vis attributes for all primitives.
+  fpVisAttribs = fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
+  const G4Colour& c = GetColour ();
   G4double opacity = c.GetAlpha ();
 
   G4bool transparency_enabled = true;
   G4bool isMarkerNotHidden = true;
-  G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  if (pViewer) {
-    transparency_enabled = pViewer->transparency_enabled;
-    isMarkerNotHidden = pViewer->fVP.IsMarkerNotHidden();
+  G4OpenGLViewer* pOGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if (pOGLViewer) {
+    transparency_enabled = pOGLViewer->transparency_enabled;
+    isMarkerNotHidden = pOGLViewer->fVP.IsMarkerNotHidden();
   }
   
   G4bool isTransparent = opacity < 1.;
@@ -252,7 +261,6 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal(const G4Visible&
     if (fThirdPassForNonHiddenMarkers) {
       if (!treatAsNotHidden) {
         return false;  // No further processing.
-        
       }
     }
   }  // fThreePassCapable
@@ -356,10 +364,8 @@ end_of_display_list_reuse_test:
       TO to(fDisplayListId, fObjectTransformation);
       if (isPicking) to.fPickName = fPickName;
       to.fColour = c;
-      const G4VisAttributes* pVA =
-	fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
-      to.fStartTime = pVA->GetStartTime();
-      to.fEndTime = pVA->GetEndTime();
+      to.fStartTime = fpVisAttribs->GetStartTime();
+      to.fEndTime = fpVisAttribs->GetEndTime();
       to.fMarkerOrPolyline = isMarkerOrPolyline;
       fTOList.push_back(to);
       // For transient objects, colour, transformation, are kept in
@@ -410,7 +416,6 @@ end_of_display_list_reuse_test:
       glNewList (fDisplayListId, GL_COMPILE);
     }
   } else {  // Out of memory (or being used when display lists not required).
-    glDrawBuffer (GL_FRONT);
     glPushMatrix();
     G4OpenGLTransform3D oglt (fObjectTransformation);
     glMultMatrixd (oglt.GetGLMatrix ());
@@ -427,8 +432,8 @@ end_of_display_list_reuse_test:
     glMatrixMode (GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    if (pViewer) {
-      pViewer->g4GlOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+    if (pOGLViewer) {
+      pOGLViewer->g4GlOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
     }
     glMatrixMode (GL_MODELVIEW);
     glPushMatrix();
@@ -626,10 +631,5 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore ()
   }
 }
 
-G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
-
-G4int  G4OpenGLStoredSceneHandler::fDisplayListId = 0;
-G4bool G4OpenGLStoredSceneHandler::fMemoryForDisplayLists = true;
-G4int  G4OpenGLStoredSceneHandler::fDisplayListLimit = 50000;
 
 #endif

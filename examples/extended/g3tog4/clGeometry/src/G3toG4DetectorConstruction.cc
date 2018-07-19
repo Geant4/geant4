@@ -27,7 +27,7 @@
 /// \brief Implementation of the G3toG4DetectorConstruction class
 //
 //
-// $Id: G3toG4DetectorConstruction.cc 84605 2014-10-17 07:49:11Z gcosmo $
+// $Id: G3toG4DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 //--------------------------------------------------------------------------
 // G3toG4DetectorConstruction. Most the work is Done in
@@ -126,7 +126,7 @@ G4LogicalVolume* G3toG4DetectorConstruction::SimpleConstruct()
   // Visualization attributes
   //
 
-  logicMother->SetVisAttributes (G4VisAttributes::Invisible);
+  logicMother->SetVisAttributes (G4VisAttributes::GetInvisible());
   G4VisAttributes* daughterVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   daughterVisAtt->SetVisibility(true);
   logicDaughter->SetVisAttributes(daughterVisAtt);

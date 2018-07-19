@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 78723 2014-01-20 10:32:17Z gcosmo $
+// $Id: DetectorConstruction.hh 99442 2016-09-22 08:36:14Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,8 +36,11 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include <vector>
 
 class G4VPhysicalVolume;
+class G4LogicalVolume;
+class G4Sphere;
 class G4Material;
 class DetectorMessenger;
 
@@ -48,7 +51,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
     DetectorConstruction();
-   ~DetectorConstruction();
+    virtual ~DetectorConstruction();
 
   public:
        
@@ -65,6 +68,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4int        GetNbOfLayers()    {return fNbOfLayers;};   
      
      void         PrintParameters();
+     void         DefineMaterials();
                        
   private:
 
@@ -76,10 +80,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      DetectorMessenger*  fDetectorMessenger;
 
-  private:
+     std::vector<G4LogicalVolume*> fLVolumes;
+     std::vector<G4Sphere*> fSpheres;
     
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

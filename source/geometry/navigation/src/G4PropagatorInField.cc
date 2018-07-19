@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc 102290 2017-01-20 11:19:44Z gcosmo $
+// $Id: G4PropagatorInField.cc 110728 2018-06-11 06:12:39Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PropagatorInField Implementation
@@ -100,7 +100,7 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
   G4cout << " PiF:   Value of kCarTolerance = "
          << kCarTolerance / millimeter 
 	 << " mm. " << G4endl;
-  fVerboseLevel = 3;   
+  fVerboseLevel = 2;
   fVerbTracePiF = true;   
 #endif 
 
@@ -151,6 +151,7 @@ G4PropagatorInField::ComputeStep(
   // If CurrentProposedStepLength is too small for finding Chords
   // then return with no action (for now - TODO: some action)
   //
+  const char* methodName="G4PropagatorInField::ComputeStep";
   if(CurrentProposedStepLength<kCarTolerance)
   {
     return kInfinity;
@@ -169,7 +170,7 @@ G4PropagatorInField::ComputeStep(
 
   if( fVerboseLevel > 2 )
   {
-    G4cout << "G4PropagatorInField::ComputeStep() called" << G4endl;
+    G4cout << methodName << " called" << G4endl;
     G4cout << "   Starting FT: " << pFieldTrack;
     G4cout << "   Requested length = " << CurrentProposedStepLength << G4endl;
     G4cout << "   PhysVol = ";
@@ -270,13 +271,21 @@ G4PropagatorInField::ComputeStep(
      stepTrial *= decreaseFactor;
 
 #ifdef G4DEBUG_FIELD
-     G4cerr << " G4PropagatorInField::ComputeStep(): " << G4endl
-	    << "  Decreasing step -  in volume " << pPhysVol;
-     if( pPhysVol )
-        G4cerr << "    with name " << pPhysVol->GetName(); 
-     G4cerr << G4endl;
-     PrintStepLengthDiagnostic(CurrentProposedStepLength, decreaseFactor,
-                               stepTrial, pFieldTrack);
+     if( fVerboseLevel > 2
+         || (fNoZeroStep >= fSevereActionThreshold_NoZeroSteps)
+        )
+     {
+        G4cerr << " " << methodName
+               << "  Decreasing step after " << fNoZeroStep << " zero steps "
+               << " - in volume " << pPhysVol;
+        if( pPhysVol )
+           G4cerr << " with name " << pPhysVol->GetName();
+        else
+           G4cerr << " i.e. *unknown* volume.";
+        G4cerr << G4endl;
+        PrintStepLengthDiagnostic(CurrentProposedStepLength, decreaseFactor,
+                                  stepTrial, pFieldTrack);
+     }
 #endif
      if( stepTrial == 0.0 )  //  Change to make it < 0.1 * kCarTolerance ??
      {
@@ -287,8 +296,7 @@ G4PropagatorInField::ComputeStep(
                << "  Attempting a zero step = " << stepTrial << G4endl
                << "  while attempting to progress after " << fNoZeroStep
                << " trial steps. Will abandon step.";
-       G4Exception("G4PropagatorInField::ComputeStep()", "GeomNav1002",
-                   JustWarning, message);
+       G4Exception(methodName, "GeomNav1002", JustWarning, message);
        fParticleIsLooping= true;
        return 0;  // = stepTrial;
      }
@@ -408,6 +416,11 @@ G4PropagatorInField::ComputeStep(
 #ifdef G4DEBUG_FIELD
     if( fNoZeroStep > fActionThreshold_NoZeroSteps )
     {
+      if( fNoZeroStep > fSevereActionThreshold_NoZeroSteps )
+        G4cout << " Above 'Severe Action' threshold -- for Zero steps.  ";
+      else
+        G4cout << " Above 'action' threshold -- for Zero steps.  ";         
+      G4cout << " Number of zero steps = " << fNoZeroStep << G4endl;
       printStatus( SubStepStartState,  // or OriginalState,
                    CurrentState,  CurrentProposedStepLength, 
                    NewSafety,     do_loop_count,  pPhysVol );
@@ -418,6 +431,8 @@ G4PropagatorInField::ComputeStep(
       {
         G4cout << " G4PropagatorInField::ComputeStep(): " << G4endl
                << "  Difficult track - taking many sub steps." << G4endl;
+        printStatus( SubStepStartState, SubStepStartState, CurrentProposedStepLength, 
+                     NewSafety, 0, pPhysVol );        
       }
       printStatus( SubStepStartState, CurrentState, CurrentProposedStepLength, 
                    NewSafety, do_loop_count, pPhysVol );
@@ -431,13 +446,17 @@ G4PropagatorInField::ComputeStep(
         && (StepTaken + kCarTolerance < CurrentProposedStepLength)  
         && ( do_loop_count < fMax_loop_count ) );
 
-  if( do_loop_count >= fMax_loop_count  )
+  if(  do_loop_count >= fMax_loop_count
+      && (StepTaken + kCarTolerance < CurrentProposedStepLength)
+     )
   {
     fParticleIsLooping = true;
   }
-  if ( fParticleIsLooping && (fVerboseLevel > 0) )
+  if ( fParticleIsLooping ) // && (fVerboseLevel > 0) )
   {
-    ReportLoopingParticle( do_loop_count, StepTaken, pPhysVol );
+    ReportLoopingParticle( do_loop_count, StepTaken,
+                           CurrentProposedStepLength, methodName,
+                           CurrentState.GetMomentum(), pPhysVol );
   }
     
   if( !intersects )
@@ -475,8 +494,7 @@ G4PropagatorInField::ComputeStep(
                - End_PointAndTangent.GetCurveLength() << G4endl
             << "  Original state = " << OriginalState   << G4endl
             << "  Proposed state = " << End_PointAndTangent;
-    G4Exception("G4PropagatorInField::ComputeStep()",
-                "GeomNav0003", FatalException, message);
+    G4Exception(methodName, "GeomNav0003", FatalException, message);
   }
 #endif
 
@@ -533,9 +551,9 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
   if( ((stepNo == 0) && (verboseLevel <3)) || (verboseLevel >= 3) )
   {
     oldprec = G4cout.precision(4);
-    G4cout << std::setw( 6)  << " " 
-           << std::setw( 25) << " Current Position  and  Direction" << " "
-           << G4endl; 
+//    G4cout << std::setw( 6)  << " " 
+//           << std::setw( 25) << " Current Position  and  Direction" << " "
+//           << G4endl; 
     G4cout << std::setw( 5) << "Step#" 
            << std::setw(10) << "  s  " << " "
            << std::setw(10) << "X(mm)" << " "
@@ -726,31 +744,54 @@ G4int G4PropagatorInField::SetVerboseLevel( G4int level )
   // Forward the verbose level 'reduced' to ChordFinder,
   // MagIntegratorDriver ... ? 
   //
-  G4MagInt_Driver* integrDriver= GetChordFinder()->GetIntegrationDriver(); 
+  auto integrDriver= GetChordFinder()->GetIntegrationDriver(); 
   integrDriver->SetVerboseLevel( fVerboseLevel - 2 );
   G4cout << "Set Driver verbosity to " << fVerboseLevel - 2 << G4endl;
 
   return oldval;
 }
 
+#include "G4Material.hh"
+
 void G4PropagatorInField::ReportLoopingParticle( G4int              count,
                                                  G4double           StepTaken,
+                                                 G4double           StepRequested,
+                                                 const char*        methodName,
+                                                 G4ThreeVector      momentumVec,
                                                  G4VPhysicalVolume* pPhysVol)
 {
    std::ostringstream message;
-   message << "  Killing looping particle " 
+   G4double fraction = StepTaken / StepRequested;
+   message << " Unfinished integration of track (likely looping particle)  "
+           << " of momentum " << momentumVec << " ( magnitude = " << momentumVec.mag() << " ) "
+           << G4endl
            << " after " << count << " field substeps "
-           << " totaling " << StepTaken / mm << " mm " ;
+           << " totaling " << std::setprecision(12) << StepTaken / mm << " mm "
+           << " out of requested step " << std::setprecision(12) << StepRequested / mm << " mm ";
+   message << " a fraction of ";
+   int prec= 4;
+   if( fraction > 0.99 ) 
+     prec= 7;
+   else
+     if (fraction > 0.97 )
+       prec= 5;
+   message << std::setprecision(prec) 
+           << 100. * StepTaken / StepRequested << " % " << G4endl ;
    if( pPhysVol )
    {
-      message << " in *volume* " << pPhysVol->GetName() ;
+      message << " in volume " << pPhysVol->GetName() ;
+      auto material= pPhysVol->GetLogicalVolume()->GetMaterial();
+      if( material )
+         message << " with material " << material->GetName()
+                 << " ( density = "
+                 << material->GetDensity() / ( gram / ( centimeter * centimeter * centimeter ) )
+                 << " g / cm^3 ) "; 
    }
    else
    {
-      message << " in unknown or null volume. " ;
+      message << " in unknown (null) volume. " ;
    }
-   G4Exception("G4PropagatorInField::ComputeStep()", "GeomNav1002",
-               JustWarning, message);   
+   G4Exception(methodName, "GeomNav1002", JustWarning, message);   
 }
 
 void G4PropagatorInField::ReportStuckParticle( G4int      noZeroSteps,

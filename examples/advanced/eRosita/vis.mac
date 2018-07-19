@@ -13,6 +13,7 @@
 #
 #/vis/open OGL 600x600-0+0
 /vis/open OGL
+/vis/ogl/set/displayListLimit 100000
 #
 ####/vis/open OGLSXm
 ####/vis/open HepRepXML

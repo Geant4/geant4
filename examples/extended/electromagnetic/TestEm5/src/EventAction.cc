@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 76464 2013-11-11 10:22:56Z gcosmo $
+// $Id: EventAction.cc 95802 2016-02-25 11:00:43Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,8 +81,9 @@ void EventAction::EndOfEventAction(const G4Event*)
 
  run->CountTransmit (fTransmitFlag);
  run->CountReflect  (fReflectFlag);
-
- G4AnalysisManager::Instance()->FillH1(1,fEnergyDeposit);
+ 
+ if (fEnergyDeposit > 0.)
+    G4AnalysisManager::Instance()->FillH1(1,fEnergyDeposit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

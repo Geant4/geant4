@@ -1,4 +1,4 @@
-// $Id: Doxymodules_parameterisations.h 94561 2015-11-24 09:17:12Z gcosmo $
+// $Id: Doxymodules_parameterisations.h 104750 2017-06-15 08:47:26Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_parameterisations.h
@@ -22,7 +22,6 @@ class Par01DetectorConstruction {};
 class Par01EMShowerModel {};
 class Par01EnergySpot {};
 class Par01ParallelWorldForPion {};
-class Par01PhysicsList {};
 class Par01PiModel {};
 class Par01PionShowerModel {};
 class Par01PrimaryGeneratorAction {};
@@ -63,7 +62,7 @@ class Par02TrackingAction {};
   class ExGflashEventAction {};
   class ExGflashHit {};
   class ExGflashHitsCollection {};
-  class ExGflashPhysicsList {};
+  class ExGflashPhysics {};
   class ExGflashPrimaryGeneratorAction {};
   class ExGflashRunAction {};
   class ExGflashSensitiveDetector {};

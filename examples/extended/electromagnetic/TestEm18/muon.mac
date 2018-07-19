@@ -1,0 +1,32 @@
+# macro file for TestEm18.cc
+#
+/testem/det/setMat G4_Cu
+/testem/det/setSize 1 m
+#
+/testem/phys/addPhysics standard
+#
+/run/setCut 1 mm
+#
+/run/initialize
+/process/list
+#
+/gun/particle mu+
+/gun/energy 1 TeV
+#
+/analysis/setFileName mu+
+#
+/analysis/h1/set  1 100 0    30 cm  #step size
+/analysis/h1/set  2 100 0    2 GeV  #continuous Edeposited 
+/analysis/h1/set  3 100 0 1000 GeV  #Etransfered by ionisation
+/analysis/h1/set  4 100 0 1000 GeV  #Etransfered by brems
+/analysis/h1/set  5 100 0 1000 GeV  #Etransfered by (e+,e-) prod
+/analysis/h1/set  6 100 0 1000 GeV  #total Etransfered
+/analysis/h1/set  7 100 0 1000 GeV  #total Elost
+/analysis/h1/set  8 100 0 1000 GeV    #energy balance
+/analysis/h1/set 11 100 0 1000 GeV  #gamma energy spectrum
+/analysis/h1/set 12 100 0 1000 GeV  #e- energy spectrum
+/analysis/h1/set 13 100 0 1000 GeV  #e+ energy spectrum
+#
+/run/printProgress 10000
+
+/run/beamOn 100000

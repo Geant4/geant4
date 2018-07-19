@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc 77255 2013-11-22 10:09:14Z gcosmo $
+// $Id: DetectorMessenger.cc 109185 2018-04-03 07:20:46Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -93,17 +93,17 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fLCmd->SetParameterName("length",false);
   fLCmd->SetUnitCategory("Length");
   fLCmd->SetRange("length>0");
-  fLCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fLCmd->AvailableForStates(G4State_PreInit);
 
   fBinCmd = new G4UIcmdWithAnInteger("/testhadr/NumberOfBinsE",this);
   fBinCmd->SetGuidance("Set number of bins for Energy");
   fBinCmd->SetParameterName("NEbins",false);
-  fBinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fBinCmd->AvailableForStates(G4State_PreInit);
 
   fNOfAbsCmd = new G4UIcmdWithAnInteger("/testhadr/NumberDivZ",this);
   fNOfAbsCmd->SetGuidance("Set number of slices");
   fNOfAbsCmd->SetParameterName("NZ",false);
-  fNOfAbsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNOfAbsCmd->AvailableForStates(G4State_PreInit);
 
   fEdepCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/MaxEdep",this);
   fEdepCmd->SetGuidance("Set max energy in histogram");
@@ -113,7 +113,8 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fEdepCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fBeamCmd = new G4UIcmdWithABool("/testhadr/DefaultBeamPosition",this);
-  fBeamCmd->SetGuidance("show inelastic and elastic cross sections");
+  fBeamCmd->SetGuidance("Use default beam position");
+  fBeamCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fVerbCmd = new G4UIcmdWithAnInteger("/testhadr/Verbose",this);
   fVerbCmd->SetGuidance("Set verbose for ");
@@ -143,9 +144,9 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   HistoManager* h = HistoManager::GetPointer();
   if( command == fMatCmd ) {
-   fDetector->SetTargetMaterial(newValue);
+    fDetector->SetTargetMaterial(newValue);
   } else if( command == fMat1Cmd ) {
-   fDetector->SetWorldMaterial(newValue);
+    fDetector->SetWorldMaterial(newValue);
   } else if( command == fRCmd ) {
     fDetector->SetTargetRadius(fRCmd->GetNewDoubleValue(newValue));
   } else if( command == fLCmd ) {

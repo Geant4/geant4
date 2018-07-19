@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05DetectorConstruction.cc 69920 2013-05-17 13:36:37Z gcosmo $
+// $Id: RE05DetectorConstruction.cc 101676 2016-11-21 09:25:51Z gcosmo $
 //
 /// \file RE05/src/RE05DetectorConstruction.cc
 /// \brief Implementation of the RE05DetectorConstruction class
@@ -59,6 +59,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05DetectorConstruction::RE05DetectorConstruction()
+: G4VUserDetectorConstruction()
 {
 
 #include "RE05DetectorParameterDef.icc"
@@ -68,18 +69,7 @@ RE05DetectorConstruction::RE05DetectorConstruction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05DetectorConstruction::~RE05DetectorConstruction()
-{
-  delete Scinti;
-  delete Silicon;
-  delete Ar;
-  delete Lead;
-  delete Air;
-
-  delete O;
-  delete N;
-  delete C;
-  delete H;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -92,27 +82,27 @@ void RE05DetectorConstruction::DefineMaterials()
   G4double a, z, density;
   G4int nel;
 
-  H = new G4Element("Hydrogen", "H", z=1., a=  1.01*g/mole);
-  C = new G4Element("Carbon",   "C", z=6., a= 12.01*g/mole);
-  N = new G4Element("Nitrogen", "N", z=7., a= 14.01*g/mole);
-  O = new G4Element("Oxygen",   "O", z=8., a= 16.00*g/mole);
+  G4Element* H = new G4Element("Hydrogen", "H", z=1., a=  1.01*g/mole);
+  G4Element* C = new G4Element("Carbon",   "C", z=6., a= 12.01*g/mole);
+  G4Element* N = new G4Element("Nitrogen", "N", z=7., a= 14.01*g/mole);
+  G4Element* O = new G4Element("Oxygen",   "O", z=8., a= 16.00*g/mole);
 
-  Air = new G4Material("Air", density= 1.29*mg/cm3, nel=2);
-  Air->AddElement(N, 70.*perCent);
-  Air->AddElement(O, 30.*perCent);
+  fAir = new G4Material("Air", density= 1.29*mg/cm3, nel=2);
+  fAir->AddElement(N, 70.*perCent);
+  fAir->AddElement(O, 30.*perCent);
 
-  Lead = 
+  fLead = 
   new G4Material("Lead", z=82., a= 207.19*g/mole, density= 11.35*g/cm3);
 
-  Ar = 
+  fAr = 
   new G4Material("ArgonGas",z=18., a= 39.95*g/mole, density=1.782*mg/cm3);
 
-  Silicon = 
+  fSilicon = 
   new G4Material("Silicon", z=14., a= 28.09*g/mole, density= 2.33*g/cm3);
 
-  Scinti = new G4Material("Scintillator", density= 1.032*g/cm3, nel=2);
-  Scinti->AddElement(C, 9);
-  Scinti->AddElement(H, 10);
+  fScinti = new G4Material("Scintillator", density= 1.032*g/cm3, nel=2);
+  fScinti->AddElement(C, 9);
+  fScinti->AddElement(H, 10);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -127,41 +117,41 @@ G4VPhysicalVolume* RE05DetectorConstruction::Construct()
 
   //------------------------------ experimental hall
   G4Box * experimentalHall_box
-    = new G4Box("expHall_b",expHall_x,expHall_y,expHall_z);
+    = new G4Box("expHall_b",fExpHall_x,fExpHall_y,fExpHall_z);
   G4LogicalVolume * experimentalHall_log
-    = new G4LogicalVolume(experimentalHall_box,Air,"expHall_L",0,0,0);
+    = new G4LogicalVolume(experimentalHall_box,fAir,"expHall_L",0,0,0);
   G4VPhysicalVolume * experimentalHall_phys
     = new G4PVPlacement(0,G4ThreeVector(),experimentalHall_log,"expHall_P",
                         0,false,0);
   experimentalHall_log->SetVisAttributes(G4VisAttributes::GetInvisible());
 
   //------------------------------ tracker
-  G4VSolid * tracker_tubs
-    = new G4Tubs("trkTubs_tubs",trkTubs_rmin,trkTubs_rmax,trkTubs_dz,
-                 trkTubs_sphi,trkTubs_dphi);
-  G4LogicalVolume * tracker_log
-    = new G4LogicalVolume(tracker_tubs,Ar,"trackerT_L",0,0,0);
-  // G4VPhysicalVolume * tracker_phys =
-      new G4PVPlacement(0,G4ThreeVector(),tracker_log,"tracker_phys",
+  G4VSolid * fTracker_tubs
+    = new G4Tubs("trkTubs_tubs",fTrkTubs_rmin,fTrkTubs_rmax,fTrkTubs_dz,
+                 fTrkTubs_sphi,fTrkTubs_dphi);
+  G4LogicalVolume * fTracker_log
+    = new G4LogicalVolume(fTracker_tubs,fAr,"trackerT_L",0,0,0);
+  // G4VPhysicalVolume * fTracker_phys =
+      new G4PVPlacement(0,G4ThreeVector(),fTracker_log,"tracker_phys",
                         experimentalHall_log,false,0);
-  G4VisAttributes* tracker_logVisAtt
+  G4VisAttributes* fTracker_logVisAtt
     = new G4VisAttributes(G4Colour(1.0,0.0,1.0));
-  tracker_log->SetVisAttributes(tracker_logVisAtt);
+  fTracker_log->SetVisAttributes(fTracker_logVisAtt);
 
   //------------------------------ tracker layers
   // As an example for Parameterised volume 
   // dummy values for G4Tubs -- modified by parameterised volume
   G4VSolid * trackerLayer_tubs
-    = new G4Tubs("trackerLayer_tubs",trkTubs_rmin,trkTubs_rmax,trkTubs_dz,
-                 trkTubs_sphi,trkTubs_dphi);
+    = new G4Tubs("trackerLayer_tubs",fTrkTubs_rmin,fTrkTubs_rmax,fTrkTubs_dz,
+                 fTrkTubs_sphi,fTrkTubs_dphi);
   G4LogicalVolume * trackerLayer_log
-    = new G4LogicalVolume(trackerLayer_tubs,Silicon,"trackerB_L",0,0,0);
+    = new G4LogicalVolume(trackerLayer_tubs,fSilicon,"trackerB_L",0,0,0);
   G4VPVParameterisation * trackerParam
     = new RE05TrackerParametrisation;
   // dummy value : kXAxis -- modified by parameterised volume
   // G4VPhysicalVolume *trackerLayer_phys =
-      new G4PVParameterised("trackerLayer_phys",trackerLayer_log,tracker_log,
-                           kXAxis, notrkLayers, trackerParam);
+      new G4PVParameterised("trackerLayer_phys",trackerLayer_log,fTracker_log,
+                           kXAxis, fNotrkLayers, trackerParam);
   G4VisAttributes* trackerLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.5,0.0,1.0));
   trackerLayer_logVisAtt->SetForceWireframe(true);
@@ -169,10 +159,10 @@ G4VPhysicalVolume* RE05DetectorConstruction::Construct()
 
   //------------------------------ calorimeter
   G4VSolid * calorimeter_tubs
-    = new G4Tubs("calorimeter_tubs",caloTubs_rmin,caloTubs_rmax,
-                  caloTubs_dz,caloTubs_sphi,caloTubs_dphi);
+    = new G4Tubs("calorimeter_tubs",fCaloTubs_rmin,fCaloTubs_rmax,
+                  fCaloTubs_dz,fCaloTubs_sphi,fCaloTubs_dphi);
   G4LogicalVolume * calorimeter_log
-    = new G4LogicalVolume(calorimeter_tubs,Scinti,"caloT_L",0,0,0);
+    = new G4LogicalVolume(calorimeter_tubs,fScinti,"caloT_L",0,0,0);
   // G4VPhysicalVolume * calorimeter_phys =
       new G4PVPlacement(0,G4ThreeVector(),calorimeter_log,"caloM_P",
                         experimentalHall_log,false,0);
@@ -185,16 +175,16 @@ G4VPhysicalVolume* RE05DetectorConstruction::Construct()
   // As an example for Parameterised volume 
   // dummy values for G4Tubs -- modified by parameterised volume
   G4VSolid * caloLayer_tubs
-    = new G4Tubs("caloLayer_tubs",caloRing_rmin,caloRing_rmax,
-                  caloRing_dz,caloRing_sphi,caloRing_dphi);
+    = new G4Tubs("caloLayer_tubs",fCaloRing_rmin,fCaloRing_rmax,
+                  fCaloRing_dz,fCaloRing_sphi,fCaloRing_dphi);
   G4LogicalVolume * caloLayer_log
-    = new G4LogicalVolume(caloLayer_tubs,Lead,"caloR_L",0,0,0);
+    = new G4LogicalVolume(caloLayer_tubs,fLead,"caloR_L",0,0,0);
   G4VPVParameterisation * calorimeterParam
     = new RE05CalorimeterParametrisation;
   // dummy value : kXAxis -- modified by parameterised volume
   // G4VPhysicalVolume * caloLayer_phys =
       new G4PVParameterised("caloLayer_phys",caloLayer_log,calorimeter_log,
-                           kXAxis, nocaloLayers, calorimeterParam);
+                           kXAxis, fNocaloLayers, calorimeterParam);
   G4VisAttributes* caloLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.7,1.0,0.0));
   caloLayer_log->SetVisAttributes(caloLayer_logVisAtt);
@@ -202,16 +192,16 @@ G4VPhysicalVolume* RE05DetectorConstruction::Construct()
   //------------------------------ muon counters
   // As an example of CSG volumes with rotation
   G4VSolid * muoncounter_box
-    = new G4Box("muoncounter_box",muBox_width,muBox_thick,
-                muBox_length);
+    = new G4Box("muoncounter_box",fMuBox_width,fMuBox_thick,
+                fMuBox_length);
   G4LogicalVolume * muoncounter_log
-    = new G4LogicalVolume(muoncounter_box,Scinti,"mucounter_L",0,0,0);
-  for(int i=0; i<nomucounter ; i++)
+    = new G4LogicalVolume(muoncounter_box,fScinti,"mucounter_L",0,0,0);
+  for(int i=0; i<fNomucounter ; i++)
   {
     G4double phi, x, y, z;
-    phi = 360.*deg/nomucounter*i;
-    x = muBox_radius*std::sin(phi);
-    y = muBox_radius*std::cos(phi);
+    phi = 360.*deg/fNomucounter*i;
+    x = fMuBox_radius*std::sin(phi);
+    y = fMuBox_radius*std::cos(phi);
     z = 0.*cm;
     G4RotationMatrix rm;
     rm.rotateZ(phi);
@@ -245,10 +235,13 @@ void RE05DetectorConstruction::ConstructSDandField()
   //------------------------------------------------------------------
   G4String trackerSDname = "/mydet/tracker";
   RE05TrackerSD * trackerSD = new RE05TrackerSD(trackerSDname);
+  G4SDManager::GetSDMpointer()->AddNewDetector(trackerSD);
   SetSensitiveDetector("trackerB_L",trackerSD);
 
   G4String muonSDname = "/mydet/muon";
   RE05MuonSD * muonSD = new RE05MuonSD(muonSDname);
+  G4SDManager::GetSDMpointer()->AddNewDetector(muonSD);
   SetSensitiveDetector("mucounter_L",muonSD);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

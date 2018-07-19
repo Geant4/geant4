@@ -32,8 +32,11 @@
 #include <mpi.h>
 #include "G4MPImanager.hh"
 
-typedef G4THitsMap<G4double> HitMap;
+//typedef G4THitsMap<G4double> HitMap;
+typedef G4THitsMap<G4StatDouble> HitStatDoubleMap;
 
+// This class allows for merging over MPI two command line scorers
+// via MPI
 class G4MPIscorerMerger {
 public:
   G4MPIscorerMerger();
@@ -73,13 +76,16 @@ protected:
   void UnPackAndMerge(G4VScoringMesh* );
 
   //! Pack a single score map
-  void Pack(const HitMap*);
-  HitMap* UnPackHitMap(const G4String& detName, const G4String& colName);
+  //void Pack(const HitMap*);//Used When hits are <double>
+  void Pack(const HitStatDoubleMap*);//Used when hits are statdouble
+  //HitMap* UnPackHitMap(const G4String& detName, const G4String& colName);
+  HitStatDoubleMap* UnPackHitStatDoubleMap(const G4String& detName, const G4String& colName);
 
   //Return size (in bytes) of the message needed to send the mesh
   G4int CalculatePackSize(const G4ScoringManager*) const;
   G4int CalculatePackSize(const G4VScoringMesh*) const;
-  G4int CalculatePackSize(const HitMap*) const;
+  //G4int CalculatePackSize(const HitMap*) const;
+  G4int CalculatePackSize(const HitStatDoubleMap* ) const;
 
 protected:
   void Send(const unsigned int destination);

@@ -33,7 +33,7 @@ public:
 public:
   virtual bool write(io::iwbuf& a_buffer) {
     const std::vector<T>& vec = parent::m_values;
-    return a_buffer.write_vec(vec.size(),vec_data(vec));
+    return a_buffer.write_vec((uint32)vec.size(),vec_data(vec));
   }
   virtual bool read(io::irbuf& a_buffer) {
     std::vector<T>& vec = parent::m_values;
@@ -50,11 +50,11 @@ public:
   }
 public:
   mf(){}
+  mf(const T& a_v):parent(a_v){}
+  mf(const std::vector<T>& a_v):parent(a_v){}
   virtual ~mf(){}
 public:
-  mf(const mf& a_from)
-  :parent(a_from)
-  {}
+  mf(const mf& a_from):parent(a_from){}
   mf& operator=(const mf& a_from){
     //typedef typename parent::iterator bmf_t;
     parent::operator=(a_from);
@@ -92,10 +92,11 @@ public:
   }
 public:
   mf_string():parent(){}
+  mf_string(const std::string& a_v):parent(a_v){}
+  mf_string(const std::vector<std::string>& a_v):parent(a_v){}
   virtual ~mf_string(){}
 public:
-  mf_string(const mf_string& a_from)
-  :parent(a_from){}
+  mf_string(const mf_string& a_from):parent(a_from){}
   mf_string& operator=(const mf_string& a_from){
     parent::operator=(a_from);
     return *this;
@@ -103,6 +104,10 @@ public:
 public:
   mf_string& operator=(const std::vector<std::string>& a_value){
     parent::operator=(a_value);
+    return *this;
+  }
+  mf_string& operator=(const char* a_cstr){
+    parent::operator=(a_cstr);
     return *this;
   }
 };
@@ -128,7 +133,7 @@ public:
     std::vector<int16> v; //an enum can be negative.
     typedef typename std::vector<T>::const_iterator cit_t;
     for(cit_t it=vec.begin();it!=vec.end();++it) v.push_back(*it);
-    return a_buffer.write_vec(v.size(),vec_data(v));
+    return a_buffer.write_vec((uint32)v.size(),vec_data(v));
   }
   virtual bool read(io::irbuf& a_buffer) {
     std::vector<int16> v; //an enum can be negative.
@@ -150,10 +155,11 @@ public:
   }
 public:
   mf_enum():parent(){}
+  mf_enum(const T& a_v):parent(a_v){}
+  mf_enum(const std::vector<T>& a_v):parent(a_v){}
   virtual ~mf_enum(){}
 public:
-  mf_enum(const mf_enum& a_from)
-  :parent(a_from){}
+  mf_enum(const mf_enum& a_from):parent(a_from){}
   mf_enum& operator=(const mf_enum& a_from){
     parent::operator=(a_from);
     return *this;
@@ -206,11 +212,11 @@ public:
     for(cit_t it=vec.begin();it!=vec.end();++it) {
 
       const T& v = (*it);
-      unsigned int num = v.size();
+      size_t num = v.size();
       const TT* d = get_data(v);
 
       std::vector<TT> std_vec(num);
-      for(unsigned int i=0;i<num;i++) std_vec[i] = d[i];
+      for(size_t i=0;i<num;i++) std_vec[i] = d[i];
 
       vec_vec.push_back(std_vec);
     }
@@ -243,10 +249,11 @@ public:
   }
 public:
   mf_vec():parent(){}
+  mf_vec(const T& a_v):parent(a_v){}
+  mf_vec(const std::vector<T>& a_v):parent(a_v){}
   virtual ~mf_vec(){}
 public:
-  mf_vec(const mf_vec& a_from)
-  :parent(a_from){}
+  mf_vec(const mf_vec& a_from):parent(a_from){}
   mf_vec& operator=(const mf_vec& a_from){
     parent::operator=(a_from);
     return *this;
@@ -287,10 +294,11 @@ public:
   }
 public:
   mf_std_vec():parent(){}
+  mf_std_vec(const T& a_v):parent(a_v){}
+  mf_std_vec(const std::vector<T>& a_v):parent(a_v){}
   virtual ~mf_std_vec(){}
 public:
-  mf_std_vec(const mf_std_vec& a_from)
-  :parent(a_from){}
+  mf_std_vec(const mf_std_vec& a_from):parent(a_from){}
   mf_std_vec& operator=(const mf_std_vec& a_from){
     parent::operator=(a_from);
     return *this;

@@ -35,6 +35,7 @@
 //   *                  Ultra.cc
 //   *******************************************************
 
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -45,13 +46,8 @@
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "UltraActionInitializer.hh"
 #include "UltraDetectorConstruction.hh"
@@ -60,14 +56,14 @@
 
 int main(int argc,char** argv) {
 
-//choose the Random engine from CLHEP 
+//choose the Random engine from CLHEP
 //(lets use C++ implementation of Jame's RANLUX generator)
- 
+
   G4Random::setTheEngine(new CLHEP::RanluxEngine);
-  
+
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-  //runManager->SetNumberOfThreads(2); 
+  //runManager->SetNumberOfThreads(2);
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif
@@ -81,14 +77,15 @@ int main(int argc,char** argv) {
   // UserAction classes - optional
   runManager->SetUserInitialization(new UltraActionInitializer());
 
-#ifdef G4VIS_USE
-  // Visualization, if you choose to have it!
+  // Detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = 0;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
+  // Initialise visualization
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
-
-  //Initialize G4 kernel
-  runManager->Initialize();
 
   // Get the Pointer to the UI Manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -97,24 +94,18 @@ int main(int argc,char** argv) {
   // Define (G)UI for interactive mode
   if(argc==1)
   {
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    UImanager->ApplyCommand("/control/execute Visualisation.mac");
     ui->SessionStart();
     delete ui;
-#endif
   }
-  else
-  // Batch mode
+  else  // Batch mode
   {
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
 
-#ifdef G4VIS_USE
-  delete  visManager;
-#endif
-
+  delete visManager;
   delete runManager;
 
   return 0;

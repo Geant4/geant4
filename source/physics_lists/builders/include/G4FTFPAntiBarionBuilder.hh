@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPAntiBarionBuilder.hh 81935 2014-06-06 15:41:42Z gcosmo $ 
+// $Id: G4FTFPAntiBarionBuilder.hh 103555 2017-04-18 09:04:37Z gcosmo $ 
 // GEANT4 tag $Name: $
 //
 //---------------------------------------------------------------------------
@@ -33,6 +33,7 @@
 // Author: 2011 J. Apostolakis
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -62,17 +63,18 @@ class G4FTFPAntiBarionBuilder : public G4VAntiBarionBuilder
     G4FTFPAntiBarionBuilder(G4bool quasiElastic=false);
     virtual ~G4FTFPAntiBarionBuilder();
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4AntiProtonInelasticProcess * aP);
-    virtual void Build(G4AntiNeutronInelasticProcess * aP);
-    virtual void Build(G4AntiDeuteronInelasticProcess * aP);
-    virtual void Build(G4AntiTritonInelasticProcess * aP);
-    virtual void Build(G4AntiHe3InelasticProcess * aP);
-    virtual void Build(G4AntiAlphaInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4AntiProtonInelasticProcess * aP) final override;
+    virtual void Build(G4AntiNeutronInelasticProcess * aP) final override;
+    virtual void Build(G4AntiDeuteronInelasticProcess * aP) final override;
+    virtual void Build(G4AntiTritonInelasticProcess * aP) final override;
+    virtual void Build(G4AntiHe3InelasticProcess * aP) final override;
+    virtual void Build(G4AntiAlphaInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double val) {theMin = val;}
-    void SetMaxEnergy(G4double val) {theMax = val;}
+    virtual void SetMinEnergy(G4double val) final override {theMin = val;}
+    virtual void SetMaxEnergy(G4double val) final override {theMax = val;}
+
+    using G4VAntiBarionBuilder::Build;  //Prevent compiler warning
 
   private:
     G4TheoFSGenerator * theModel;

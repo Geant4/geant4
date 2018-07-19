@@ -191,7 +191,8 @@ G4bool G4IsotopeMagneticMomentTable::FindIsotope(G4IsotopeProperty* pP)
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4IsotopeProperty* 
- G4IsotopeMagneticMomentTable::GetIsotope(G4int Z, G4int A, G4double E)
+ G4IsotopeMagneticMomentTable::GetIsotope(G4int Z, G4int A, G4double E,
+                                          G4Ions::G4FloatLevelBase /*flb*/)
 {
   G4IsotopeProperty* fProperty = 0;
   for (size_t i = 0 ; i< fIsotopeList.size(); ++i) {

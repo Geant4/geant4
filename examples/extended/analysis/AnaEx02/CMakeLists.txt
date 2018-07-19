@@ -28,10 +28,10 @@ find_package(ROOT REQUIRED)
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${PROJECT_SOURCE_DIR}/shared/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
+                    ${PROJECT_SOURCE_DIR}/shared/include
                     ${Geant4_INCLUDE_DIR}
-                    ${ROOT_INCLUDE_DIR})
+                    ${ROOT_INCLUDE_DIRS})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc
                   ${PROJECT_SOURCE_DIR}/shared/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh
@@ -49,7 +49,7 @@ target_link_libraries(AnaEx02 ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(AnaEx02_SCRIPTS
-    AnaEx02.in run.mac vis.mac
+    AnaEx02.in run.mac init_vis.mac vis.mac
   )
 
 foreach(_script ${AnaEx02_SCRIPTS})

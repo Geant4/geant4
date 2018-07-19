@@ -22,15 +22,14 @@ and the total number of ionisations.
 
 It is adapted from svalue.
 
-*** It is a preliminary version which might be buggy ***
-
 This example is provided by the Geant4-DNA collaboration.
 
 These processes and models are further described at:
 http://geant4-dna.org
 
 Any report or published results obtained using the Geant4-DNA software shall 
-cite the following Geant4-DNA collaboration publication:
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
 Med. Phys. 37 (2010) 4692-4708
 
 This example is presented in the following paper, which shall also be cited:
@@ -66,7 +65,7 @@ The wvalue.in macro allows a full control of the simulation.
 
 ---->4. PHYSICS
 
-You can select Geant4-DNA physics in wvalue.in.
+You can select Geant4-DNA physics constructor in wvalue.in.
 
 A tracking cut can be applied if requested.
 
@@ -78,6 +77,8 @@ The output results consist in a text file (wvalue.txt), containing :
 - its rms
 - the w value (in eV)
 - its rms (in eV)
+
+Note: rms values correspond to standard deviation.
 
 In addition, another macro (histo.in) is also provided including 
 a series of histograms :
@@ -93,3 +94,4 @@ a series of histograms :
 
 Should you have any enquiry, please do not hesitate to contact: 
 incerti@cenbg.in2p3.fr
+

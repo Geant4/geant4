@@ -1,4 +1,4 @@
-$Id: History 90679 2015-06-08 07:58:19Z gcosmo $
+$Id: History 110043 2018-05-15 06:03:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,27 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 14, 2018 J. Allison  (exampleRE01-V10-04-01)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+May 08, 2018 B.Morgan (exampleRE01-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Nov 19, 2016 A. Dotti (exampleRE01-V10-02-02)
+- Explicitly add SD to manager
+
+Jun 06, 2016 M. Asai (exampleRE01-V10-02-01)
+- Add protection against a track sticks on the calorimeter inner
+  boundary.
+
+Jun 01, 2016 M. Asai (exampleRE01-V10-02-00)
+- Remove the obsolete use of readout geometry.
+- Use G4UnknownDecayPhysics constructor and remove hard-coded
+  physics RE01PhysicsList.
 
 Jun 06, 2015 M. Asai (exampleRE01-V10-01-00)
 - Reduce print out.

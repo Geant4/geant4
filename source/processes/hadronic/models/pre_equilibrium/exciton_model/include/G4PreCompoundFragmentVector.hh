@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragmentVector.hh 90337 2015-05-26 08:34:27Z gcosmo $
+// $Id: G4PreCompoundFragmentVector.hh 108685 2018-02-27 07:58:38Z gcosmo $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara
@@ -53,9 +53,9 @@ class G4PreCompoundFragmentVector
 {
 public:
 
-  G4PreCompoundFragmentVector(pcfvector * avector);
+  explicit G4PreCompoundFragmentVector(pcfvector * avector);
 
-  ~G4PreCompoundFragmentVector();
+  ~G4PreCompoundFragmentVector() = default;
 
   void SetVector(pcfvector * avector);
 
@@ -63,53 +63,23 @@ public:
 
   void UseSICB(G4bool);
 
-  inline G4double CalculateProbabilities(const G4Fragment & aFragment);
+  G4double CalculateProbabilities(const G4Fragment & aFragment);
 	
-  inline G4VPreCompoundFragment * ChooseFragment();
+  G4VPreCompoundFragment * ChooseFragment();
 		  
 private:
 
-  G4PreCompoundFragmentVector(const G4PreCompoundFragmentVector &right);
+  G4PreCompoundFragmentVector(const G4PreCompoundFragmentVector &right) = delete;
   const G4PreCompoundFragmentVector& 
-  operator=(const G4PreCompoundFragmentVector &right);
-  G4bool operator==(const G4PreCompoundFragmentVector &right) const;
-  G4bool operator!=(const G4PreCompoundFragmentVector &right) const;	
+  operator=(const G4PreCompoundFragmentVector &right) = delete;
+  G4bool operator==(const G4PreCompoundFragmentVector &right) const = delete;
+  G4bool operator!=(const G4PreCompoundFragmentVector &right) const = delete;
   
   pcfvector * theChannels;
   G4DataVector probabilities;
 
   G4int nChannels;
-
 };
-
-inline G4double 
-G4PreCompoundFragmentVector::CalculateProbabilities(const G4Fragment & aFragment)
-{
-  //G4cout << "## G4PreCompoundFragmentVector::CalculateProbabilities" << G4endl;
-  G4double probtot = 0.0; 
-  G4double prob; 
-  for (G4int i=0; i< nChannels; ++i) { 
-    (*theChannels)[i]->Initialize(aFragment);
-    prob = 0.0;
-    if ((*theChannels)[i]->IsItPossible(aFragment)) {
-      prob = (*theChannels)[i]->CalcEmissionProbability(aFragment);
-    }
-    probtot += prob;
-    probabilities[i] = probtot;
-    //G4cout<<" prob= "<<prob<<" for "<<(*theChannels)[i]->GetName()<<G4endl;
-  }
-  return probtot;
-}
-
-inline G4VPreCompoundFragment* G4PreCompoundFragmentVector::ChooseFragment()
-{
-  G4double x = probabilities[nChannels-1]*G4UniformRand();
-  G4int i=0;
-  for (; i<nChannels; ++i) { 
-    if(x <= probabilities[i]) { break; }
-  }
-  return (*theChannels)[i];  
-}
 
 #endif
 

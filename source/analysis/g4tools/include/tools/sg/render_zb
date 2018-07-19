@@ -15,6 +15,10 @@
 #include "../lina/plane"
 #include "../mathf"
 #include "../hls"
+#include "../colorfs"
+#include "../lina/vec2f"
+#include "../lina/vec3d" //ZZ=double
+#include "../lina/geom2"
 
 #ifdef _MSC_VER
 // disable the warning about the usage of "this" in the constructor.
@@ -26,25 +30,25 @@ namespace sg {
 
 class render_zb : public render_action {
 public:
-  virtual void draw_vertex_array(gl::mode_t a_mode,unsigned int a_floatn,const float* a_xyzs){
+  virtual void draw_vertex_array(gl::mode_t a_mode,size_t a_floatn,const float* a_xyzs){
     m_pv.add_primitive(a_mode,a_floatn,a_xyzs);
   }
 
-  virtual void draw_vertex_array_xy(gl::mode_t a_mode,unsigned int a_floatn,const float* a_xys){
+  virtual void draw_vertex_array_xy(gl::mode_t a_mode,size_t a_floatn,const float* a_xys){
     m_pv.add_primitive_xy(a_mode,a_floatn,a_xys);
   }
 
-  virtual void draw_vertex_color_array(gl::mode_t a_mode,unsigned int a_floatn,
+  virtual void draw_vertex_color_array(gl::mode_t a_mode,size_t a_floatn,
                                        const float* a_xyzs,const float* a_rgbas){
     m_pv.add_primitive(a_mode,a_floatn,a_xyzs,a_rgbas);
   }
 
-  virtual void draw_vertex_normal_array(gl::mode_t a_mode,unsigned int a_floatn,
+  virtual void draw_vertex_normal_array(gl::mode_t a_mode,size_t a_floatn,
                                         const float* a_xyzs,const float* /*a_nms*/){
     m_pv.add_primitive(a_mode,a_floatn,a_xyzs);
   }
 
-  virtual void draw_vertex_color_normal_array(gl::mode_t a_mode,unsigned int a_floatn,
+  virtual void draw_vertex_color_normal_array(gl::mode_t a_mode,size_t a_floatn,
                                               const float* a_xyzs,const float* a_rgbas,const float* /*a_nms*/){
     // We expect a_nms of size : 3*(a_floatn/3)
     // (then one normal per 3D point).
@@ -128,14 +132,25 @@ public:
   /////////////////////////////////////////////////////////////////
   /// texture /////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////
-  virtual void draw_vertex_array_texture(tools::gl::mode_t,unsigned int a_xyzn,const float* a_xyzs,
-                                         unsigned int a_id,const float*) {
+  virtual void draw_vertex_array_texture(gl::mode_t,size_t a_xyzn,const float* a_xyzs,
+                                         gstoid a_id,const float* a_tcs) {
     //::printf("debug : render_zb : 000 : %d\n",a_id);
 
-    tools::img_byte img;
+    img_byte img;
     if(!m_mgr.find(a_id,img)) return;    
 
     //::printf("debug : render_zb : img : %d %d\n",img.width(),img.height());
+    if(img.is_empty()) return;
+
+    unsigned int imw = img.width();
+    unsigned int imh = img.height();
+    unsigned int imn = img.bpp();
+    if(imn!=3) {
+      m_out << "tools::sg::render_zb::draw_vertex_array_texture :"
+            << " not a 3 bytes per pixel image."
+            << std::endl;
+      return;
+    }
 
     if(a_xyzn!=12) {
       m_out << "tools::sg::render_zb::draw_vertex_array_texture :"
@@ -144,69 +159,84 @@ public:
       return;
     }
 
-    float x1 = a_xyzs[0];
-    float y1 = a_xyzs[ 1];
-  //float z1 = a_xyzs[ 2];
+  //::printf("debug : render_zb : tcs : %g %g, %g %g, %g %g, %g %g\n",
+  //   a_tcs[0],a_tcs[1],a_tcs[2],a_tcs[3],a_tcs[4],a_tcs[5],a_tcs[6],a_tcs[7]);
 
-    float x2 = a_xyzs[3];
-  //float y2 = a_xyzs[ 4];
-  //float z2 = a_xyzs[ 5];
+    vec3f p1(a_xyzs[0],a_xyzs[ 1],a_xyzs[ 2]);
+    vec3f p2(a_xyzs[3],a_xyzs[ 4],a_xyzs[ 5]);
+  //vec3f p3(a_xyzs[6],a_xyzs[ 7],a_xyzs[ 8]);
+    vec3f p4(a_xyzs[9],a_xyzs[10],a_xyzs[11]);
 
-  //float x3 = a_xyzs[6];
-  //float y3 = a_xyzs[ 7];
-  //float z3 = a_xyzs[ 8];
+    vec3f dx = p2-p1;
+    vec3f dy = p4-p1;
 
-  //float x4 = a_xyzs[9];
-    float y4 = a_xyzs[10];
-  //float z4 = a_xyzs[11];
-
-    float bw = x2-x1;
-    float bh = y4-y1;
-    float bw_2 = bw*0.5f;
-    float bh_2 = bh*0.5f;
-
-    //::printf("debug : render_zb : box : %g %g\n",bw,bh);
-
-    unsigned int w = img.width();
-    unsigned int h = img.height();
-    unsigned int bpp = img.bpp();
-    if(bpp!=3) {
+    vec2f t1(a_tcs[0],a_tcs[1]);
+    vec2f t2(a_tcs[2],a_tcs[3]);
+    vec2f t3(a_tcs[4],a_tcs[5]);
+    vec2f t4(a_tcs[6],a_tcs[7]);
+    vec2f tdx = t2-t1;
+    vec2f tdy = t4-t1;
+    if(!tdx.length()) {
       m_out << "tools::sg::render_zb::draw_vertex_array_texture :"
-            << " not a 3 bytes per pixel image."
+            << " tdx is null."
             << std::endl;
       return;
     }
-
-    unsigned char* pos = img.buffer();
-    for(unsigned int row=0;row<h;row++) {
-      for(unsigned int col=0;col<w;col++) {
-        float r = (*pos)/255.0f;pos++;
-        float g = (*pos)/255.0f;pos++;
-        float b = (*pos)/255.0f;pos++;
-        float x = bw*float(col)/float(w-1)-bw_2;
-        float y = bh*float(row)/float(h-1)-bh_2;
-        float z = 0;
-        m_rgba.set_value(r,g,b,1);
-        m_pv.add_one_point(x,y,z);
-      }
+    if(!tdy.length()) {
+      m_out << "tools::sg::render_zb::draw_vertex_array_texture :"
+            << " tdy is null."
+            << std::endl;
+      return;
     }
+    std::vector<vec2f> poly;
+    poly.push_back(t1);
+    poly.push_back(t2);
+    poly.push_back(t3);
+    poly.push_back(t4);
+    poly.push_back(t1);
+
+   {float r,g,b,tx,ty;
+    vec3f p;
+    vec2f t;
+    unsigned char* pos = img.buffer();
+    for(unsigned int row=0;row<imh;row++) {
+      for(unsigned int col=0;col<imw;col++) {
+        r = (*pos)/255.0f;pos++;
+        g = (*pos)/255.0f;pos++;
+        b = (*pos)/255.0f;pos++;
+
+        tx = float(col)/float(imw-1); //[0,1]
+        ty = float(row)/float(imh-1); //[0,1]
+
+        t.set_value(tx,ty);
+
+        if(!is_inside(t,poly)) continue;
+
+        t = t - t1;
+
+        p = p1+dx*t.x()/tdx.length()+dy*t.y()/tdy.length();
+
+        m_rgba.set_value(r,g,b,1);
+        m_pv.add_one_point(p.x(),p.y(),p.z());
+      }
+    }}
 
   }
 
-  virtual void draw_vertex_normal_array_texture(tools::gl::mode_t a_mode,
-                                                unsigned int a_xyzn,const float* a_xyzs,const float* /*a_nms*/,
-                                                unsigned int a_id,const float* a_tcs) {
+  virtual void draw_vertex_normal_array_texture(gl::mode_t a_mode,
+                                                size_t a_xyzn,const float* a_xyzs,const float* /*a_nms*/,
+                                                gstoid a_id,const float* a_tcs) {
     draw_vertex_array_texture(a_mode,a_xyzn,a_xyzs,a_id,a_tcs);
   }
 
   /////////////////////////////////////////////////////////////////
   /// VBO /////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////
-  virtual void begin_gsto(unsigned int) {}
-  virtual void draw_gsto_v(tools::gl::mode_t,unsigned int,bufpos){}
-  virtual void draw_gsto_vc(tools::gl::mode_t,unsigned int,bufpos,bufpos) {}
-  virtual void draw_gsto_vn(tools::gl::mode_t,unsigned int,bufpos,bufpos) {}
-  virtual void draw_gsto_vcn(tools::gl::mode_t,unsigned int,bufpos,bufpos,bufpos) {}
+  virtual void begin_gsto(gstoid) {}
+  virtual void draw_gsto_v(gl::mode_t,size_t,bufpos){}
+  virtual void draw_gsto_vc(gl::mode_t,size_t,bufpos,bufpos) {}
+  virtual void draw_gsto_vn(gl::mode_t,size_t,bufpos,bufpos) {}
+  virtual void draw_gsto_vcn(gl::mode_t,size_t,bufpos,bufpos,bufpos) {}
   virtual void end_gsto() {}
   /////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////
@@ -217,8 +247,8 @@ public:
   :render_action(a_out,a_ww,a_wh)
   ,m_mgr(a_mgr)
   ,m_pv(*this)
-  ,m_light_color(tools::colorf::white())
-  ,m_light_direction(tools::vec3f(0,0,-1))
+  ,m_light_color(colorf_white())
+  ,m_light_direction(vec3f(0,0,-1))
 
   ,m_ccw(true)
   ,m_POLYGON_OFFSET_FILL(false)
@@ -310,7 +340,7 @@ public:
   zb::buffer::ZPixel add_color(const colorf& a_col){
     //::printf("debug : render_zb::add_color : %g %g %g %g : %d\n",
     //    a_col.r(),a_col.g(),a_col.b(),a_col.a(),m_cmap.size());
-    zb::buffer::ZPixel pix = m_cmap.size();
+    zb::buffer::ZPixel pix = (zb::buffer::ZPixel)m_cmap.size();
     m_cmap[a_col] = pix;
     return pix;
   }
@@ -333,11 +363,11 @@ protected:
     }    
   }
 public:
-  //typedef tools::wps::VCol VCol;
+  //typedef wps::VCol VCol;
   typedef float VCol;
 
   static bool get_rgb(void* a_tag,unsigned int a_col,unsigned int a_row,VCol& a_r,VCol& a_g,VCol& a_b){
-    //used with tools::wps.
+    //used with wps.
     render_zb* rzb = (render_zb*)a_tag; 
 
     zb::buffer::ZPixel pix;
@@ -366,6 +396,27 @@ public:
     a_b = (*it).second.b();}
 
     return true;
+  }
+
+  unsigned char* get_rgbas(size_t& a_sz) {
+    if(!m_ww || !m_wh) {a_sz = 0;return 0;}
+    a_sz = 4 * m_ww * m_wh;
+    typedef unsigned char uchar;
+    uchar* rgbas = new uchar[a_sz];
+    if(!rgbas) {a_sz = 0;return 0;}
+    uchar* pos = rgbas;
+    VCol r,g,b;
+    VCol a = 1;
+    for(unsigned int row=0;row<m_wh;row++) {
+      for(unsigned int col=0;col<m_ww;col++) {
+        get_rgb(this,col,m_wh-row-1,r,g,b);
+        *pos = (uchar)(r*255.0F);pos++;
+        *pos = (uchar)(g*255.0F);pos++;
+        *pos = (uchar)(b*255.0F);pos++;
+        *pos = (uchar)(a*255.0F);pos++;
+      }
+    }
+    return rgbas;
   }
 
 protected:
@@ -540,9 +591,9 @@ protected:
         p3z -= epsil;
       }
 
-      typedef tools::zb::ZZ ZZ;
+      typedef zb::ZZ ZZ; //double
   
-      plane<ZZ> pn(
+      plane<vec3d> pn(
         vec3<ZZ>(p1x,p1y,p1z),
         vec3<ZZ>(p2x,p2y,p2z),
         vec3<ZZ>(p3x,p3y,p3z)
@@ -590,7 +641,7 @@ protected:
         m_rzb.m_proj_1.mul_4f(_p2x,_p2y,_p2z,_p2w);
         m_rzb.m_proj_1.mul_4f(_p3x,_p3y,_p3z,_p3w);
 
-        plane<ZZ> _pn(
+        plane<vec3d> _pn(
           vec3<ZZ>(_p1x,_p1y,_p1z),
           vec3<ZZ>(_p2x,_p2y,_p2z),
           vec3<ZZ>(_p3x,_p3y,_p3z)

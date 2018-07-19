@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.cc 67975 2013-03-13 10:19:44Z gcosmo $
+// $Id: G4SolidStore.cc 103345 2017-03-28 14:20:20Z gcosmo $
 //
 // G4SolidStore
 //
@@ -63,13 +63,7 @@ G4SolidStore::G4SolidStore()
 //
 G4SolidStore::~G4SolidStore() 
 {
-  // In multi-threaded mode, since parameterised solids are replicated
-  // by threads, the master thread can not free them when thread private
-  // malloc library is used. May let the master thread to replicate.
-
-#ifndef G4MULTITHREADED  
   Clean();
-#endif
 }
 
 // ***************************************************************************
@@ -80,7 +74,7 @@ void G4SolidStore::Clean()
 {
   // Do nothing if geometry is closed
   //
-  if (G4GeometryManager::GetInstance()->IsGeometryClosed())
+  if (G4GeometryManager::IsGeometryClosed())
   {
     G4cout << "WARNING - Attempt to delete the solid store"
            << " while geometry closed !" << G4endl;

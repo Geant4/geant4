@@ -25,13 +25,12 @@
 //
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// shall cite the following Geant4-DNA collaboration publications:
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 // Contact author: S. Incerti, CNRS, France (incerti@cenbg.in2p3.fr)
-//
-// $Id: microyz.cc 86065 2014-11-07 08:51:15Z gcosmo $
 //
 /// \file microyz.cc
 /// \brief Main program of the microyz example
@@ -40,16 +39,15 @@
 #include "ActionInitialization.hh"
 
 #ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
+  #include "G4MTRunManager.hh"
 #else
-#include "G4RunManager.hh"
+  #include "G4RunManager.hh"
 #endif
 
 #include "G4UImanager.hh"
-#include "Randomize.hh"
-
-#include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4VisExecutive.hh"
+#include "Randomize.hh"
 
 #include "PhysicsList.hh"
 
@@ -58,7 +56,6 @@
 int main(int argc,char** argv)
 {
   // Detect interactive mode (if no arguments) and define UI session
-  //
   G4UIExecutive* ui = 0;
   if ( argc == 1 ) {
     ui = new G4UIExecutive(argc, argv);
@@ -68,7 +65,6 @@ int main(int argc,char** argv)
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
-  //
 
 #ifdef G4MULTITHREADED  
   G4MTRunManager* runManager = new G4MTRunManager;
@@ -77,7 +73,6 @@ int main(int argc,char** argv)
 #endif
 
   // Set mandatory initialization classes
-  //
   runManager->SetUserInitialization(new DetectorConstruction());
 
   runManager->SetUserInitialization(new PhysicsList);
@@ -86,7 +81,6 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new ActionInitialization());
   
   // Initialize visualization
-  //
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
@@ -96,7 +90,6 @@ int main(int argc,char** argv)
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   // Process macro or start UI session
-  //
   if ( ! ui ) { 
     // batch mode
     G4String command = "/control/execute ";

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc 85846 2014-11-05 15:45:28Z gcosmo $
+// $Id: G4PVPlacement.cc 110402 2018-05-22 11:35:41Z gcosmo $
 //
 // 
 // class G4PVPlacement Implementation
@@ -277,7 +277,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
         std::ostringstream message;
         message << "Overlap with mother volume !" << G4endl
                 << "          Overlap is detected for volume "
-                << GetName() << G4endl
+                << GetName() << ':' << GetCopyNo() << G4endl
                 << "          with its mother volume "
                 << motherLog->GetName() << G4endl
                 << "          at mother local point " << mp << ", "
@@ -307,7 +307,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
       //
       G4AffineTransform Td( daughter->GetRotation(),
                             daughter->GetTranslation() );
-      G4ThreeVector md = Td.Inverse().TransformPoint(mp);
+      G4ThreeVector md = Td.InverseTransformPoint(mp);
 
       G4VSolid* daughterSolid = daughter->GetLogicalVolume()->GetSolid();
       if (daughterSolid->Inside(md)==kInside)
@@ -319,8 +319,9 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
           std::ostringstream message;
           message << "Overlap with volume already placed !" << G4endl
                   << "          Overlap is detected for volume "
-                  << GetName() << G4endl
-                  << "          with " << daughter->GetName() << " volume's"
+                  << GetName() << ':' << GetCopyNo() << G4endl
+                  << "          with " << daughter->GetName()
+                  << ':' << daughter->GetCopyNo() << " volume's"
                   << G4endl
                   << "          local point " << md << ", "
                   << "overlapping by at least: "
@@ -351,7 +352,7 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
         // and finally to current volume's coordinate system
         //
         G4ThreeVector mp2 = Td.TransformPoint(dPoint);
-        G4ThreeVector msi = Tm.Inverse().TransformPoint(mp2);
+        G4ThreeVector msi = Tm.InverseTransformPoint(mp2);
 
         if (solid->Inside(msi)==kInside)
         {
@@ -359,9 +360,9 @@ G4bool G4PVPlacement::CheckOverlaps(G4int res, G4double tol,
           std::ostringstream message;
           message << "Overlap with volume already placed !" << G4endl
                   << "          Overlap is detected for volume "
-                  << GetName() << G4endl
+                  << GetName() << ':' << GetCopyNo() << G4endl
                   << "          apparently fully encapsulating volume "
-                  << daughter->GetName() << G4endl
+                  << daughter->GetName() << ':' << daughter->GetCopyNo()
                   << "          at the same level !";
           G4Exception("G4PVPlacement::CheckOverlaps()",
                       "GeomVol1002", JustWarning, message);

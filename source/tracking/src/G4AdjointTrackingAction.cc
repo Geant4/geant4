@@ -100,10 +100,30 @@ void G4AdjointTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
                 last_fwd_part_index=i;
        i++;
       }
+    //Fill the vectors
+      last_pos_vec.push_back(last_pos);
+      last_direction_vec.push_back(last_direction);
+      last_ekin_vec.push_back(last_ekin);
+      last_ekin_nuc_vec.push_back(last_ekin_nuc);
+      last_cos_th_vec.push_back(last_cos_th);
+      last_weight_vec.push_back(last_weight);
+      //G4cout<<"Last weight "<<last_weight<<std::endl;
+      last_fwd_part_PDGEncoding_vec.push_back(last_fwd_part_PDGEncoding);
+      last_fwd_part_index_vec.push_back(last_fwd_part_index);
   }
   else {
 
   }
 }
-
+ /////////////////////////////////////////////////////////
+  void G4AdjointTrackingAction::ClearEndOfAdjointTrackInfoVectors()
+ { last_pos_vec.clear();
+   last_direction_vec.clear();
+   last_ekin_vec.clear();
+   last_ekin_nuc_vec.clear();
+   last_cos_th_vec.clear();
+   last_weight_vec.clear();
+   last_fwd_part_PDGEncoding_vec.clear();
+   last_fwd_part_index_vec.clear();
+ }
 

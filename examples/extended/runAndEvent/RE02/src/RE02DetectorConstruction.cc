@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE02DetectorConstruction class
 //
 //
-// $Id: RE02DetectorConstruction.cc 75682 2013-11-05 09:11:19Z gcosmo $
+// $Id: RE02DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
  
 #include "RE02DetectorConstruction.hh"
@@ -270,7 +270,7 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
 
   G4VisAttributes* boxVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   logicWorld  ->SetVisAttributes(boxVisAtt);  
-  //logicWorld->SetVisAttributes(G4VisAttributes::Invisible);  
+  //logicWorld->SetVisAttributes(G4VisAttributes::GetInvisible());  
 
   // Mother volume of WaterPhantom
   G4VisAttributes* phantomVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
@@ -283,7 +283,7 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   logXRep->SetVisAttributes(xRepVisAtt);
   
   // Skip the visualization for those voxels.
-  fLVPhantomSens->SetVisAttributes(G4VisAttributes::Invisible);
+  fLVPhantomSens->SetVisAttributes(G4VisAttributes::GetInvisible());
 
   
   return physiWorld;

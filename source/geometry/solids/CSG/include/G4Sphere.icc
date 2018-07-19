@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.icc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Sphere.icc 100820 2016-11-02 15:18:48Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -73,6 +73,54 @@ G4double G4Sphere::GetStartThetaAngle() const
 G4double G4Sphere::GetDeltaThetaAngle() const
 {
   return fDTheta;
+}
+
+inline
+G4double G4Sphere::GetSinStartPhi () const
+{
+  return sinSPhi;
+}
+
+inline
+G4double G4Sphere::GetCosStartPhi () const
+{
+  return cosSPhi;
+}
+
+inline
+G4double G4Sphere::GetSinEndPhi () const
+{
+  return sinEPhi;
+}
+
+inline
+G4double G4Sphere::GetCosEndPhi () const
+{
+  return cosEPhi;
+}
+
+inline
+G4double G4Sphere::GetSinStartTheta () const
+{
+  return sinSTheta;
+}
+
+inline
+G4double G4Sphere::GetCosStartTheta () const
+{
+  return cosSTheta;
+}
+
+inline
+G4double G4Sphere::GetSinEndTheta () const
+{
+  return sinETheta;
+}
+
+inline
+G4double G4Sphere::GetCosEndTheta () const
+{
+  return cosETheta;
 }
 
 inline 

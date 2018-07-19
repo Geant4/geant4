@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorFreeTrajState.cc 71874 2013-06-27 13:39:59Z gunter $
+// $Id: G4ErrorFreeTrajState.cc 107409 2017-11-10 13:36:41Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -249,10 +249,11 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
   G4Vector3D vpPostNorm = vpPost * pInvPost;
   if( iverbose >= 2 ) G4cout << "G4EP: vpPreNorm " << vpPreNorm << " vpPostNorm " << vpPostNorm << G4endl;
   //return if propagation along Z??  
+  if( 1. - std::fabs(vpPreNorm.z()) < kCarTolerance ) return 4;
   if( 1. - std::fabs(vpPostNorm.z()) < kCarTolerance ) return 4;
   G4double sinpPre = std::sin( vpPreNorm.theta() ); //cosine perpendicular to pPre = sine pPre
   G4double sinpPost = std::sin( vpPostNorm.theta() ); //cosine perpendicular to pPost = sine pPost
-  G4double sinpPostInv = 1./std::sin( vpPreNorm.theta() );
+  G4double sinpPostInv = 1./std::sin( vpPostNorm.theta() );
 
 #ifdef G4EVERBOSE
   if( iverbose >= 2 ) G4cout << "G4EP: cosl " << sinpPre << " cosl0 " << sinpPost << G4endl;

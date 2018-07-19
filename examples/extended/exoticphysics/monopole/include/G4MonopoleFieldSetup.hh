@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/G4MonopoleFieldSetup.hh
 /// \brief Definition of the G4MonopoleFieldSetup class
 //
-// $Id: G4MonopoleFieldSetup.hh 66817 2013-01-12 16:16:08Z gcosmo $
+// $Id: G4MonopoleFieldSetup.hh 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,32 +64,40 @@ class G4MonopoleFieldSetup
 {
 public:  
 
-  void InitialiseAll();    //  Set parameters and call method below
-  void SetMagField(G4double fieldValue);
-  void SetStepperAndChordFinder(G4int val);
-
-  static G4MonopoleFieldSetup* GetMonopoleFieldSetup();
-
+  G4MonopoleFieldSetup();            
   ~G4MonopoleFieldSetup() ;     
+
+  void InitialiseAll();    //  Set parameters and call method below
+  //  void SetMagField(G4double fieldValue);
+  void SetStepperAndChordFinder(G4int val);
+  void SetMagField   (G4double v, bool checkIfAlreadyDefined=false);
+
+  //  static G4MonopoleFieldSetup* GetMonopoleFieldSetup();
+  double GetZmagFieldValue() const { return fZmagFieldValue; }
   
 private:
 
-  G4MonopoleFieldSetup();            
 
   G4FieldManager*         GetGlobalFieldManager() ;   // static 
 
   G4FieldManager*         fFieldManager ;
   G4ChordFinder*          fChordFinder ;
+  G4ChordFinder*          fUsualChordFinder ;
+  G4ChordFinder*          fMonopoleChordFinder ;
   G4Mag_UsualEqRhs*       fEquation ; 
   G4MonopoleEquation*     fMonopoleEquation ;
+
   G4MagneticField*        fMagneticField ; 
 
   G4MagIntegratorStepper* fStepper ;
   G4MagIntegratorStepper* fMonopoleStepper ;
 
   G4double                fMinStep ;
+  G4double                fZmagFieldValue;
 
-  static G4MonopoleFieldSetup*  fMonopoleFieldSetup;  
+  //  G4int                   fStepperIndex;
+
+  //  static G4MonopoleFieldSetup*  fMonopoleFieldSetup;  
   G4MonopoleFieldMessenger*     fMonopoleFieldMessenger;
  
 };

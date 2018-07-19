@@ -25,14 +25,8 @@
 //
 /// \file medical/dna/svalue/src/EventAction.cc
 /// \brief Implementation of the EventAction class
-//
-// $Id: EventAction.cc 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
-
 #include "Run.hh"
 #include "HistoManager.hh"
 
@@ -43,12 +37,12 @@
 
 EventAction::EventAction()
 :G4UserEventAction()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -78,4 +72,3 @@ void EventAction::EndOfEventAction(const G4Event*)
   }  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

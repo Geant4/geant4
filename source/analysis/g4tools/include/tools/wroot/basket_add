@@ -1,0 +1,48 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_basket_add
+#define tools_wroot_basket_add
+
+// used in pntuple.
+
+#include "branch"
+
+namespace tools {
+namespace wroot {
+
+class basket_add : public virtual branch::iadd_basket {
+  typedef branch::iadd_basket parent;
+public:
+  virtual bool add_basket(basket& a_basket) {
+    m_mutex.lock();
+    uint32 add_bytes,nout;
+    if(!m_main_branch->add_basket(m_main_file,a_basket,add_bytes,nout)) {
+      m_mutex.unlock();
+      return false;
+    }
+    m_main_branch->set_tot_bytes(m_main_branch->tot_bytes()+add_bytes);
+    m_main_branch->set_zip_bytes(m_main_branch->zip_bytes()+nout);
+    m_mutex.unlock();
+    return true;
+  }
+public:
+  basket_add(imutex& a_mutex,ifile& a_main_file)
+  :m_mutex(a_mutex),m_main_file(a_main_file),m_main_branch(0)
+  {}
+protected:
+  basket_add(const basket_add& a_from):parent()
+  ,m_mutex(a_from.m_mutex),m_main_file(a_from.m_main_file),m_main_branch(0)
+  {}
+  basket_add& operator=(const basket_add&){return *this;}
+public:
+  void set_main_branch(branch* a_main_branch) {m_main_branch = a_main_branch;}
+protected:
+  imutex& m_mutex;
+  ifile& m_main_file;
+  branch* m_main_branch;
+};
+
+}}
+
+#endif

@@ -53,8 +53,8 @@
 
 
 CexmcHistoManagerMessenger::CexmcHistoManagerMessenger(
-                                        CexmcHistoManager *  histoManager ) :
-    histoManager( histoManager ), setVerboseLevel( NULL ), listHistos( NULL ),
+                                        CexmcHistoManager *  histoManager_ ) :
+    histoManager( histoManager_ ), setVerboseLevel( NULL ), listHistos( NULL ),
     printHisto( NULL )
 #ifdef CEXMC_USE_ROOTQT
     , drawHisto( NULL ), addHistoMenu( NULL ), drawHistoOptions1D( NULL ),

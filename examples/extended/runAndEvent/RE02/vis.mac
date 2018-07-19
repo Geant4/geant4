@@ -74,9 +74,6 @@
 # To superimpose all of the events from a given run:
 /vis/scene/endOfEventAction accumulate
 #
-/vis/viewer/set/targetPoint 0 100 0 mm
-/vis/viewer/zoomTo 10000000
-#
 # Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true
 /vis/verbose warnings

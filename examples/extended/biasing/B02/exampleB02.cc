@@ -27,9 +27,9 @@
 /// \brief Main program of the biasing/B02 example
 //
 //
-// $Id: exampleB02.cc 77475 2013-11-25 09:38:51Z gcosmo $
+// $Id: exampleB02.cc 109717 2018-05-08 13:41:05Z gcosmo $
 //
-// 
+//
 // --------------------------------------------------------------
 //      GEANT 4 - exampleB02
 //
@@ -39,18 +39,20 @@
 // This example intends to show how to use importance sampling and scoring
 // in the mass (tracking) geometry.
 // A simple geometry consisting of a 180 cm high concrete cylinder
-// divided into 18 slabs of 10cm each is created. 
+// divided into 18 slabs of 10cm each is created.
 // Importance values are assigned to the 18 concrete slabs in the
 // detector construction class for simplicity.
 // Pairs of G4GeometryCell and importance values are stored in
 // the importance store.
-// 
+//
 
 // --------------------------------------------------------------
 
 #include <iostream>
 
 #include <stdlib.h>
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -86,7 +88,7 @@ int main(int argc, char **argv)
   G4int mode = 0;
   if (argc>1)  mode = atoi(argv[1]);
   if(mode != 0) {
-    G4cout << " mode not used yet, refer to B01 to see WeightWindow technique " 
+    G4cout << " mode not used yet, refer to B01 to see WeightWindow technique "
            << mode << G4endl;
   }
 
@@ -110,7 +112,7 @@ int main(int argc, char **argv)
   runManager->SetUserInitialization(detector);
 
   G4String parallelName("ParallelBiasingWorld");
-  B02ImportanceDetectorConstruction* pdet = 
+  B02ImportanceDetectorConstruction* pdet =
                    new B02ImportanceDetectorConstruction(parallelName);
   detector->RegisterParallelWorld(pdet);
 
@@ -134,10 +136,10 @@ int main(int argc, char **argv)
   pdet->CreateImportanceStore();
 
   //temporary fix before runManager->BeamOn works...
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4String command1 = "/control/cout/setCoutFile threadOut";
   UImanager->ApplyCommand(command1);
-  G4String command2 = "/run/beamOn " + 
+  G4String command2 = "/run/beamOn " +
                       G4UIcommand::ConvertToString(numberOfEvents);
   UImanager->ApplyCommand(command2);
 
@@ -145,7 +147,7 @@ int main(int argc, char **argv)
   //
   G4GeometryManager::GetInstance()->OpenGeometry();
 
-  pgs.ClearSampling();
+  // pgs.ClearSampling();
 
   delete runManager;
 

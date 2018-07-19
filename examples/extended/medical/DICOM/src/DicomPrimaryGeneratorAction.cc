@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPrimaryGeneratorAction.cc 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id: DicomPrimaryGeneratorAction.cc 101109 2016-11-07 08:14:53Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomPrimaryGeneratorAction.cc
 /// \brief Implementation of the DicomPrimaryGeneratorAction class
@@ -85,7 +85,7 @@ void DicomPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
   fParticleGun->SetParticleMomentumDirection(dir);       
   fParticleGun->SetParticleEnergy(100.*MeV);
   //put it at SAD = 1 m on xy plane of central slice
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-120.));
   //fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-22.));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

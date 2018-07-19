@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAIonisation.cc 91992 2015-08-13 07:20:24Z gcosmo $
+// $Id: G4DNAIonisation.cc 105719 2017-08-16 12:36:37Z gcosmo $
 
 #include "G4DNAIonisation.hh"
 #include "G4LEPTSIonisationModel.hh"
@@ -108,23 +108,23 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "proton")
     {
-      if(!EmModel(1)) // MK : Is this a reliable test ?
+      if(!EmModel(0)) // MK : Is this a reliable test ? VI: it is useful
       {
         G4DNARuddIonisationModel* rudd =
              new G4DNARuddIonisationModel();
         rudd->SetLowEnergyLimit(0 * eV);
         rudd->SetHighEnergyLimit(500 * keV);
-        SetEmModel(rudd, 1);
+        SetEmModel(rudd);
 
         G4DNABornIonisationModel* born =
             new G4DNABornIonisationModel();
         born->SetLowEnergyLimit(500 * keV);
         born->SetHighEnergyLimit(100 * MeV);
-        SetEmModel(born, 2);
+        SetEmModel(born);
       }
 
-      AddEmModel(1, EmModel(1));
-      if(EmModel(2)) AddEmModel(2, EmModel(2));
+      AddEmModel(1, EmModel());
+      if(EmModel(1)) AddEmModel(2, EmModel(1));
     }
 
     if(name == "hydrogen")
@@ -172,7 +172,6 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
       }
       AddEmModel(1, EmModel());
     }
-
   }
 }
 
@@ -180,10 +179,10 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4DNAIonisation::PrintInfo()
 {
-  if(EmModel(2))
+  if(EmModel(1))
   {
-    G4cout << " Total cross sections computed from " << EmModel(1)->GetName()
-           << " and " << EmModel(2)->GetName() << " models" << G4endl;
+    G4cout << " Total cross sections computed from " << EmModel(0)->GetName()
+           << " and " << EmModel(1)->GetName() << " models" << G4endl;
   }
   else
   {

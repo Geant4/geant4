@@ -1,0 +1,219 @@
+
+                 Geant4 10.3 - patch-02 Release Notes
+                 ------------------------------------
+
+                                                                   27 July 2017
+
+List of fixes included in this public patch since the public release 10.3.p01:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Added VECGEOM_DEFINITIONS and VECGEOM_EXTERNAL_INCLUDES when compiling
+        with USolids/VecGeom enabled, to allow for detection of external
+        packages paths from VecGeom.
+      o Corrected Qt setup for GNUmake builds, avoid setting QTLIBS and
+        GLQTLIBS as already handled by the GNUmake system for Qt4 and Qt5.
+    + GNUmake:
+      o Corrected order of linkage in binmake.gmk for analysis global library.
+
+  o Analysis:
+    --------
+    + Fixed problem of removing non-empty ntuple files in user application
+      where ntuples are created after open file.
+    + Added GetP[1,2]Id(const G4String&) functions to G4AnaysisManager.
+      Addressing problem report #1949.
+    + Corrected handling of open file failure.
+      Addressing problem report #1957.
+
+  o Event:
+    -----
+    + Fixed 'fallthrough' compilation warnings in case statements on gcc-7.1.
+
+  o Externals:
+    ---------
+    + Fixed compilation warnings on gcc-7.1.
+
+  o G3toG4:
+    ------
+    + Fixed compilation warnings on gcc-7.1.
+
+  o Generic Processes:
+    -----------------
+    + biasing:
+      o G4GeometrySampler: removed unnecessary ClearSampling() from the
+        destructor.
+    + scoring:
+      o G4ParallelWorldProcess: fix to have a valid pointer to secondaries
+        in G4Step of a parallel world.
+
+  o Geometry:
+    --------
+    + biasing:
+      o Added mutex locks to methods within G4IStore and G4ImportanceAlgorithm.
+        Temporary fix for erratic behaviour in MT-mode and crashing if bounds-
+        checking is switched on with many threads/events.
+        Addressing problem report #1945.
+    + solids/CSG:
+      o Fixed possible rounding off error in calculation of 'astep' (max angle
+        for one step) in CalculateExtent() for G4Cons, G4Tubs, G4CutTubs
+        and related USolids wrappers.
+      o Added accessor to G4Orb and G4UOrb for retrieving cached max radius
+        tolerance.
+      o Fix in G4CutTubs::Inside() for case where inside points were considered
+        as points on surface. Addressing problem report #1973.
+    + solids/specific:
+      o Fixed possible rounding off error in calculation of 'astep' (max angle
+        for one step) in CalculateExtent() for G4Polycone, G4GenericPolycone
+        and related USolids wrappers.
+      o Removed potential race condition in G4VTwistSurface::AmIOnLeftSide().
+        Addressing problem report #1972.
+
+  o Global:
+    ------
+    + Corrected TLS setup in tls.hh for gcc compiler.
+    + Updated date and version for 10.3.p02.
+
+  o Intercoms:
+    ---------
+    + Fix to G4GenericMessenger::Command::SetUnit: do not ignore setting and
+      issue a warning when running sequential application built against Geant4
+      libraries compiled with MT enabled.
+
+  o Physics Lists
+    -------------
+    + constructors/electromagnetic:
+      o G4EmStandardPhysicsSS: apply single scattering to all particles.
+        Addressing problem report #1966.
+      o G4EmModelActivator: fixed Opt4 and SS per region.
+    + lists:
+      o G4PhysListFactory: fixed EM option "__SS".
+        Addressing problem report #1966.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + dna:
+      o Fixed compilation warnings on gcc-7.1.
+    + lowenergy:
+      o G4LowEPPolarizedComptonModel: fixed FPE in comptation of std::acos().
+      o Fixed compilation warnings on gcc-7.1.
+    + standard:
+      o G4UniversalFluctuation: fixed numerical problem for sampling 
+        low-energy anti-protons with very small steps.
+      o G4NuclearStopping, G4ICRU49NuclearStoppingModel: fixed nuclear
+        stopping power computation addressed in Hypernews post #1595 in the
+        Hadronic Processes Forum.
+      o G4hIonisation: fixed min/max energy for dEdx table for the case when
+        the mass of a hadron is very different from the mass of proton.
+    + utils:
+      o G4EmCalculator: for computation of the nuclear stopping power, use
+        concrete model (applied at run time) instead of G4EmCorrections
+        emulation; to get cross section per volume for discrete processes
+        use interface of the process. Addressing Hypernwes post #1595 in the
+        Hadronic Processes Forum.
+      o G4VEmModel: added extra protected class member for nuclear stopping.
+      o G4EmSaturation: fixed typo in printout.
+
+  o Processes - Hadronic:
+    --------------------
+    + models/cascade:
+      o G4CascadeCoalescence: removed clusterHash() function and 'triedClusters'
+        registry. Droped redundant calls of tryCluster() with subcombinatorics;
+        all combinations are handled, uniquely, in main loop over indices.
+        This eliminates significant memory usage observed with high-energy
+        applications of BERT.
+    + models/de_excitation:
+      o G4DeexPrecoParameters: disabled parameter change in G4_Idle state,
+        only G4_PreInit is allowed; disabled correlated gamma;
+        set default time limit to 1000s (if radioactive decay is enabled this 
+        time may be set to the limit of the G4NuclideTable), this allows do 
+        not create extra isomeres if radioactive decay is not included in the
+        physics list
+      o G4LevelReader, G4LevelManager, G4PhotonEvaporation: for stable states 
+        (ground state isotopes) set life time to "-1"; changed all checks 
+        accordingly.
+      o G4LevelReader: issue fatal exception if data file is not open.
+        Addressing problem report #1942.
+      o G4PhotonEvaporation: always have gamma transition to the discrete
+        level (if there is no levels, go to the ground state).
+        Addressing problem report #1950.
+    + models/lend:
+      o Fixed compilation warnings on gcc-7.1.
+      o Fixed Coverity defects.
+    + models/particle_hp:
+      o Added check for He3 projectile. Addressing problem report #1907.
+      o G4ParticleHPThermalScattering: fixed angular distribution sampling
+        problem. Addressing problem report #1971.
+      o Fix in destructor of processes to protect against concurrent deletion.
+      o Bug fix and improved stability in G4ParticleHPFinalState.
+      o Suppressed unnecessary warning messages in G4ParticleHPEnAngCorrelation.
+      o Fixed minor inconsistency between documentation and code.
+    + models/radioactive_decay:
+      o G4RadioactiveDecay::DecayIt(): added statement to propagate weight of
+        parent track. Addressing problem report #1946.
+    + models/util:
+      o G4Fragment: fixed destructor and printout.
+      o G4PolynomialPDF: fix for potential division by zero.
+    + util:
+      o G4GHEKinematicsVector: fixed case of variable shadowing.
+
+  o Run:
+    ---
+    + G4RunManagerKernel: removed unnecessary warning message.
+
+  o Visualization:
+    -------------
+    + Fixed compilation warnings on gcc-7.1.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + Fixed compilation warning on gcc-7.1.
+    + advanced/air_shower:
+      o Updated setup for visualization in main() and Visualisation.mac.
+    + extended/biasing/B01:
+    + extended/biasing/B02:
+      o Removed unnecessary clearing of sampling.
+    + extended/biasing/B03:
+      o B03PhysicsList: removed obsolete unnecessary instantiation of 
+        de-excitation sub-models.
+      o Removed unnecessary clearing of sampling.
+    + extended/eventgenerator/HepMC/MCTruth:
+      o Fixed typo in initialisation.
+    + extended/g3tog4:
+      o Fixed linking problem for static build.
+    + extended/optical/LXe:
+      o Fix for issue reported on Hypernews Optical-Photons Forum #651.
+    + extended/medical/DICOM:
+      o Fix to DicomRun::RecordEvent() that was incrementing the inherited
+        numberOfEvent variable from G4Run twice causing the output of the
+        number of events to be twice the actual value.
+      o Corrected element definitions for Potassium and Phosphorus in
+        DetectorConstruction.
+    + extended/persistency/gdml/G01:
+      o Updated setup for visualization in main program.
+      o Added missing gdml files to CMake installation script.
+    + extended/persistency/gdml/G02:
+    + extended/persistency/gdml/G03:
+      o Updated setup for visualization in main program.
+    + extended/radioactivedecay/rdecay02:
+      o Updated README, adding a note stating that all histograms but one are
+        turned off by default, and describing how to turn them back on.
+        Addressing problem report #1936.
+    + extended/runAndEvent/RE05:
+      o Fixed potential rare race condition issue in RE05PrimaryGeneratorAction.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.3.p01.
+  o  Technical notes distributed for release 10.3 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.3.p02 are available
+through our "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

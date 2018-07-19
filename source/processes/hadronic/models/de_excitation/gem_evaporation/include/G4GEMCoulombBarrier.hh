@@ -30,34 +30,29 @@
 #ifndef G4GEMCoulombBarrier_h
 #define G4GEMCoulombBarrier_h 1
 
-#include "G4VCoulombBarrier.hh"
+#include "G4CoulombBarrier.hh"
 #include "globals.hh"
 
 
-class G4GEMCoulombBarrier : public G4VCoulombBarrier
+class G4GEMCoulombBarrier : public G4CoulombBarrier
 {
 public:
-  G4GEMCoulombBarrier(G4int anA, G4int aZ);
+  explicit G4GEMCoulombBarrier(G4int anA, G4int aZ);
 
   virtual ~G4GEMCoulombBarrier();
 
-  G4double GetCoulombBarrier(G4int ARes, G4int ZRes, G4double U) const;
+  virtual G4double GetCoulombBarrier(G4int ARes, G4int ZRes, G4double U) const;
 
 private:
-  G4GEMCoulombBarrier();
-  G4GEMCoulombBarrier(const G4GEMCoulombBarrier & right);
 
-  const G4GEMCoulombBarrier & operator=(const G4GEMCoulombBarrier & right);
-  G4bool operator==(const G4GEMCoulombBarrier & right) const;
-  G4bool operator!=(const G4GEMCoulombBarrier & right) const;
+  G4GEMCoulombBarrier(const G4GEMCoulombBarrier & right) = delete;
+  const G4GEMCoulombBarrier & operator=(const G4GEMCoulombBarrier & right) = delete;
+  G4bool operator==(const G4GEMCoulombBarrier & right) const = delete;
+  G4bool operator!=(const G4GEMCoulombBarrier & right) const = delete;
   
-public:
-
-  virtual G4double BarrierPenetrationFactor(G4double /*aZ*/) const 
-  {return 1.0;};
-
   G4double CalcCompoundRadius(G4int ARes) const;
 
+  G4double AejectOneThird;
 };
 #endif
 

@@ -57,7 +57,7 @@ namespace G4INCL {
   private:
     Particle *particle1, *particle2;
 
-    INCL_DECLARE_ALLOCATION_POOL(ElasticChannel);
+    INCL_DECLARE_ALLOCATION_POOL(ElasticChannel)
   };
 
 }

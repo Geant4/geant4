@@ -569,6 +569,9 @@ inline int __gl_meshDelete( GLUhalfEdge *eDel )
     /* We are joining two loops into one -- remove the left face */
     joiningLoops = GLU_TRUE;
     static_KillFace( eDel->Lface, eDel->Rface );
+    /* G.Barrand : note : Coverity says that there is a problem using eDel->Lface->anEdge in the below,
+       but it appears that at the out of the upper static_KillFace() call (then here), eDel->Lface before
+       (the pointer freeed) is not the same than after (then here). */
   }
 
   if( eDel->Onext == eDel ) {

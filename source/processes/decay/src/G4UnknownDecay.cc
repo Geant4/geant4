@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnknownDecay.cc 71045 2013-06-10 09:34:33Z gcosmo $
+// $Id: G4UnknownDecay.cc 105727 2017-08-16 12:47:05Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -95,8 +95,8 @@ G4VParticleChange* G4UnknownDecay::DecayIt(const G4Track& aTrack, const G4Step& 
 
   //check if thePreAssignedDecayProducts exists
   const G4DecayProducts* o_products = (aParticle->GetPreAssignedDecayProducts());
-  G4bool isPreAssigned = (o_products != 0);   
-  G4DecayProducts* products = 0;
+  G4bool isPreAssigned = (o_products != nullptr);   
+  G4DecayProducts* products = nullptr;
 
   if (!isPreAssigned ){
     fParticleChangeForDecay.SetNumberOfSecondaries(0);
@@ -154,22 +154,21 @@ G4VParticleChange* G4UnknownDecay::DecayIt(const G4Track& aTrack, const G4Step& 
   G4int index;
   G4ThreeVector currentPosition;
   const G4TouchableHandle thand = aTrack.GetTouchableHandle();
-  for (index=0; index < numberOfSecondaries; index++)
-  {
-     // get current position of the track
-     currentPosition = aTrack.GetPosition();
-     // create a new track object
-     G4Track* secondary = new G4Track( products->PopProducts(),
+  for (index=0; index < numberOfSecondaries; index++){
+    // get current position of the track
+    currentPosition = aTrack.GetPosition();
+    // create a new track object
+    G4Track* secondary = new G4Track( products->PopProducts(),
 				      finalGlobalTime ,
 				      currentPosition );
-     // switch on good for tracking flag
-     secondary->SetGoodForTrackingFlag();
-     secondary->SetTouchableHandle(thand);
-     // add the secondary track in the List
-     fParticleChangeForDecay.AddSecondary(secondary);
+    // switch on good for tracking flag
+    secondary->SetGoodForTrackingFlag();
+    secondary->SetTouchableHandle(thand);
+    // add the secondary track in the List
+    fParticleChangeForDecay.AddSecondary(secondary);
   }
   delete products;
-
+  
   // Kill the parent particle
   fParticleChangeForDecay.ProposeTrackStatus( fStopAndKill ) ;
   fParticleChangeForDecay.ProposeLocalEnergyDeposit(energyDeposit); 
@@ -180,6 +179,13 @@ G4VParticleChange* G4UnknownDecay::DecayIt(const G4Track& aTrack, const G4Step& 
   return &fParticleChangeForDecay ;
 } 
 
+void G4UnknownDecay::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << GetProcessName()
+	  << ": Decay of 'unknown' particles. \n"
+	  << "kinematics of daughters are dertermined "
+	  << "by PreAssignedDecayProducts. \n";
+}
 
 
 

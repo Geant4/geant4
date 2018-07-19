@@ -48,20 +48,23 @@ class G4DecayWithSpin : public G4Decay
 
     //  Destructor
     virtual ~G4DecayWithSpin();
+ 
+    virtual void ProcessDescription(std::ostream& outFile) const override;
+    //
 
   protected: // With Description
     virtual G4VParticleChange* PostStepDoIt(
                              const G4Track& aTrack,
                              const G4Step&  aStep
-                            );
+                            ) override;
 
     virtual G4VParticleChange* AtRestDoIt(
                              const G4Track& aTrack,
                              const G4Step&  aStep
-                            );
+                            ) override;
   private:
-  G4ThreeVector Spin_Precession(const G4Step& aStep,
-                                G4ThreeVector B, G4double deltatime );
+     G4ThreeVector Spin_Precession(const G4Step& aStep,
+                                   G4ThreeVector B, G4double deltatime );
 
 };
 

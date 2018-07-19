@@ -53,6 +53,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_par_hp
     G4InterpolationIterator.hh
     G4InterpolationManager.hh
     G4InterpolationScheme.hh
+    G4NRESP71M03.hh
     G4ParticleHPList.hh
     G4ParticleHPIsoData.hh
     G4ParticleHPLevel.hh
@@ -305,6 +306,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_par_hp
 ### Headers of NeutronHP for backward compatibility - end
   SOURCES
     G4InterpolationManager.cc
+    G4NRESP71M03.cc
     G4ParticleHPIsoData.cc
     G4ParticleHPLevel.cc
     G4ParticleHP2AInelasticFS.cc
@@ -458,7 +460,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_par_hp
   )
 
 # List any source specific properties here
-if(NOT "$ENV{DO_NOT_SET_PHP_AS_HP}")
+if("$ENV{PHP_AS_HP}")
 set_source_files_properties(
     ${G4had_par_hp_SOURCES}
     PROPERTIES COMPILE_DEFINITIONS PHP_AS_HP

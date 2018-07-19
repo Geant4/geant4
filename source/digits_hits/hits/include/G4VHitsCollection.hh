@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHitsCollection.hh 97466 2016-06-03 09:59:34Z gcosmo $
+// $Id: G4VHitsCollection.hh 94772 2015-12-09 09:46:45Z gcosmo $
 //
 
 #ifndef G4VHitsCollection_h

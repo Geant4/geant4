@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 110256 2018-05-17 14:16:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,9 +15,28 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14-10-16 G.Folger
+17-05-2018 J.Allison (expar01-V10-04-00)
+- Add #include "G4Types.hh"
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+28-11-2017 I. Hrivnacova (expar01-V10-03-00)
+- Fixed Doxygen warnings, formatting
+
+03-11-2016 M. Verderi (expar01-V10-02-03)
+- Use new G4FastSimulationPhysics physics constructor to configure
+  the physics list for fast simulation
+- Suppress Par01PhysicsList.
+
+02-11-2016 I. Hrivnacova (expar01-V10-02-02)
+- Added file descriptions for Doxygen documentation
+
+27-10-2016 M. Verderi (expar01-V10-02-01)
+- apply coding guidelines
+
+14-10-16 G.Folger (expar01-V10-02-00)
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
-  fix required by clang39 on Linux and MAC
+    fix required by clang39 on Linux and MAC
 
 29-11-2013 M. Verderi (expar01-V09-06-02)
 - fix of src/Par01EMShowerModel.cc of spurious remaing CLHEP:: :

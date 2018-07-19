@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDTreeResult.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4KDTreeResult.hh 110873 2018-06-22 13:11:22Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -65,15 +65,26 @@ typedef G4ReferenceCountedHandle<ResNode> ResNodeHandle;
  * by G4KDTree.
  */
 
-class G4KDTreeResult : protected std::list<ResNode>
+#define KDTR_parent std::vector<ResNode>
+
+class G4KDTreeResult : protected KDTR_parent//protected std::list<ResNode>
 {
 protected:
   G4KDTree *fTree;
-  std::list<ResNode>::iterator fIterator;
+//  std::list<ResNode>::iterator fIterator;
+  KDTR_parent::iterator fIterator;
 
 public:
   G4KDTreeResult(G4KDTree*);
   virtual ~G4KDTreeResult();
+  
+  //  new/delete operators are overloded to use G4Allocator
+  inline void *operator new(size_t);
+#ifdef __IBMCPP__
+  inline void *operator new(size_t sz, void* p)
+  { return p;}
+#endif
+  inline void operator delete(void*);
 
   void Insert(double, G4KDNode_Base*);
 
@@ -107,6 +118,24 @@ public:
   double GetDistanceSqr() const;
 };
 
+//------------------------------------------------------------------------------
+#if defined G4EM_ALLOC_EXPORT
+extern G4DLLEXPORT G4Allocator<G4KDTreeResult>*& aKDTreeAllocator();
+#else
+extern G4DLLIMPORT G4Allocator<G4KDTreeResult>*& aKDTreeAllocator();
+#endif
+
+inline void * G4KDTreeResult::operator new(size_t)
+{
+  if (!aKDTreeAllocator()) aKDTreeAllocator() = new G4Allocator<G4KDTreeResult>;
+  return (void *) aKDTreeAllocator()->MallocSingle();
+}
+
+inline void G4KDTreeResult::operator delete(void * object)
+{
+  aKDTreeAllocator()->FreeSingle((G4KDTreeResult *) object);
+}
+//------------------------------------------------------------------------------
 template<typename PointT>
   PointT* G4KDTreeResult::GetItem() const
   {

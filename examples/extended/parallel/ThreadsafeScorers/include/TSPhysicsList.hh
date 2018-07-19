@@ -47,15 +47,9 @@
 
 #include "globals.hh"
 #include "G4VUserPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
 
-#include "G4EmStandardPhysics_option4.hh"
-#include "G4RadioactiveDecayPhysics.hh"
-#include "G4HadronPhysicsQGSP_BERT_HP.hh"
-#include "G4HadronElasticPhysicsHP.hh"
-#include "G4IonElasticPhysics.hh"
-#include "G4IonBinaryCascadePhysics.hh"
-#include "G4DecayPhysics.hh"
-
+#include <deque>
 class TSPhysicsList : public G4VUserPhysicsList
 {
 public:
@@ -65,26 +59,15 @@ public:
     TSPhysicsList();
     virtual ~TSPhysicsList();
 
-    static TSPhysicsList* Instance();
-
 public:
+    static TSPhysicsList* Instance();
     void ConstructParticle();
     void ConstructProcess();
     void SetCuts();
 
 private:
     static TSPhysicsList* fgInstance;
-
-    G4EmStandardPhysics_option4*    fEmPhysics_opt4;
-    G4DecayPhysics*                 fDecayPhysics;
-    G4RadioactiveDecayPhysics*      fRadDecayPhysics;
-    G4HadronPhysicsQGSP_BERT_HP*    fHadronInelasticPhysics;
-    G4HadronElasticPhysicsHP*       fHadronElasticPhysics;
-    G4IonElasticPhysics*            fIonElasticPhysics;
-    G4IonBinaryCascadePhysics*      fIonBinaryCascadePhysics;
-
     PhysicsSet_t fConstructors;
-
     G4double fDefaultCutValue;
 
 };

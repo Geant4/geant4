@@ -56,22 +56,42 @@ public:
   }
 };
 
-
 #define G4_DECLARE_PHYSCONSTR_FACTORY(physics_constructor) \
   const G4PhysicsConstructorFactory<physics_constructor>& physics_constructor##Factory = G4PhysicsConstructorFactory<physics_constructor>(#physics_constructor)
 
 // support for phys constructors defined within a namespace
 // a bit tricky due to cpp macro expansion and the use of "::"
-// use  G4_DECLARE_PHYSCONSTR_FACTORY_NS( myns::MyProc, myns, MyProc )  // without trailing ";"
+// use  G4_DECLARE_PHYSCONSTR_FACTORY_NS( myns::MyProc, myns, MyProc );
 #define G4_DECLARE_PHYSCONSTR_FACTORY_NS( physics_constructor, nsname, pcbase )  \
   namespace nsname { \
     const G4PhysicsConstructorFactory<physics_constructor>& pcbase##Factory = G4PhysicsConstructorFactory<physics_constructor>(#physics_constructor); \
-  }
+  } \
+  typedef int xyzzy__LINE__
+  // eat trailing semicolon using silly typedef
+
+// REFERENCE (rather than DECLARE) when the physics constructor if it is part
+// of a static library.  No need to include the header (DECLARE needs this
+// to build the code), we just need to make a reference in order to pull
+// the compilation unit static variable from the library and cause it
+// to be initialized (and thus self-register)
+
+// Use REGREF to allow cases where REFERENCE macro is used twice
+#ifndef REGREF
+  #define REGREF 0
+#endif
 
 #define G4_REFERENCE_PHYSCONSTR_FACTORY(physics_constructor) \
   class physics_constructor; \
   extern const G4PhysicsConstructorFactory<physics_constructor>& physics_constructor##Factory; \
-  const G4PhysicsConstructorFactory<physics_constructor>& physics_constructor##FactoryRef = physics_constructor##Factory
+  const G4PhysicsConstructorFactory<physics_constructor>& physics_constructor##FactoryRef##REGREF = physics_constructor##Factory
 
+#define G4_REFERENCE_PHYSCONSTR_FACTORY_NS( physics_constructor, nsname, pcbase ) \
+  namespace nsname { \
+    class pcbase; \
+    extern const G4PhysicsConstructorFactory<physics_constructor>& pcbase##Factory; \
+    const G4PhysicsConstructorFactory<physics_constructor>& pcbase##FactoryRef##REGREF = pcbase##Factory; \
+  } \
+  typedef int xyzzy__LINE__
+  // eat trailing semicolon using silly typedef
 
 #endif

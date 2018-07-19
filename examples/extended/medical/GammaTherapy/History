@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 110004 2018-05-14 07:40:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,54 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B.Morgan (gtherapy-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+12-04-18 M.Maire (gtherapy-V10-04-01)
+- GammaTherapy.cc : set visualisation only in interactive mode
+
+22-03-18 M.Maire (gtherapy-V10-04-00)
+- GammaTherapy.cc : remove G4UI_USE and G4VIS_USE
+
+28-11-17 I. Hrivnacova (gtherapy-V10-03-08)
+- Fixed Doxygen warnings
+
+12-10-17  V.Ivant (gtherapy-V10-03-07)
+- improved main macro
+
+02-05-17 S.Elles (gtherapy-V10-03-06)
+- Fix bug in RunAction destructor (non MT Geant4 release)
+
+28-04-17 S.Elles (gtherapy-V10-03-05)
+- Fix bug in RunAction constructor
+
+27-04-17 S.Elles (gtherapy-V10-03-04)
+- Fix memory leaks in PrimageryGeneratorMessenger and ActionInitialization
+
+20-04-17 S.Elles (gtherapy-V10-03-03)
+- Fix bug in PrimageryGeneratorAction
+
+11-04-17 S.Elles (gtherapy-V10-03-02)
+- Fix Windows gcc warnings
+- Fix memcheck warning
+
+10-04-17 S.Elles (gtherapy-V10-03-01)
+- Fix gcc warnings
+- Fix package memory leaks 
+
+06-04-17 S.Elles (gtherapy-V10-03-00)
+- Porting to MT
+
+09-11-16  V.Ivant (gtherapy-V10-02-01)
+- PhysicsList - removed warnings, use G4EmParameters
+- DetectorConstruction, DetectorMessenger - do not change detector
+    between runs
+
+14-10-16 G.Folger (gtherapy-V10-02-00)
+- remove direct use of aParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
 
 14-10-16 G.Folger
 - remove direct use of aParticleIterator, use GetParticleTableIterator().

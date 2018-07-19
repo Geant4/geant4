@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashDetectorConstruction.cc 94396 2015-11-13 13:37:16Z gcosmo $
+// $Id: ExGflashDetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
-/// \file fParameterisations/gflash/src/ExGflashDetectorConstruction.cc
+/// \file parameterisations/gflash/src/ExGflashDetectorConstruction.cc
 /// \brief Implementation of the ExGflashDetectorConstruction class
 //
 // Created by Joanna Weng 26.11.2004
@@ -211,7 +211,7 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
          <<" cm. The Material is "<< pbWO4 << G4endl;
   
   
-  experimentalHall_log->SetVisAttributes(G4VisAttributes::Invisible);
+  experimentalHall_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   G4VisAttributes* caloVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   G4VisAttributes* crystalVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
   calo_log->SetVisAttributes(caloVisAtt);

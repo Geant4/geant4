@@ -33,6 +33,7 @@
 // Modified:
 // 16.11.2005 G.Folger: don't  keep processes as data members, but new these
 // 13.06.2006 G.Folger: (re)move elastic scatterring 
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -53,10 +54,6 @@ G4NeutronBuilder(G4bool fissionFlag): wasActivated(false), isFissionActivated(fi
   } 
 }
 
-G4NeutronBuilder::
-~G4NeutronBuilder() 
-{}
-
 void G4NeutronBuilder::
 Build()
 {
@@ -72,5 +69,14 @@ Build()
   theProcMan->AddDiscreteProcess(theNeutronInelastic);
   theProcMan->AddDiscreteProcess(theNeutronCapture);
   if ( isFissionActivated ) theProcMan->AddDiscreteProcess(theNeutronFission);
+}
+
+void G4NeutronBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {
+  auto bld = dynamic_cast<G4VNeutronBuilder*>(aB);
+  if ( bld != nullptr ) {
+      theModelCollections.push_back(bld);
+  } else {
+      G4PhysicsBuilderInterface::RegisterMe(aB);
+  }
 }
 // 2002 by J.P. Wellisch

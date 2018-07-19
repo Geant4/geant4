@@ -87,6 +87,8 @@ using CLHEP::megahertz;
 using CLHEP::ns;
 using CLHEP::s;
 using CLHEP::ms;
+using CLHEP::us;
+using CLHEP::ps;
 using CLHEP::eplus;
 using CLHEP::e_SI;
 using CLHEP::coulomb;

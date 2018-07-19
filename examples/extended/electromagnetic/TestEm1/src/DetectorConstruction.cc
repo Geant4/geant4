@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 84815 2014-10-21 12:19:02Z gcosmo $
+// $Id: DetectorConstruction.cc 99441 2016-09-22 08:35:13Z gcosmo $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,11 +49,13 @@
 
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),fPBox(0), fLBox(0), fMaterial(0)
+:G4VUserDetectorConstruction(),fPBox(nullptr), fLBox(nullptr), 
+  fBox(nullptr), fMaterial(nullptr)
 {
   fBoxSize = 10*m;
   DefineMaterials();
@@ -65,13 +67,6 @@ DetectorConstruction::DetectorConstruction()
 
 DetectorConstruction::~DetectorConstruction()
 { delete fDetectorMessenger;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VPhysicalVolume* DetectorConstruction::Construct()
-{
-  return ConstructVolumes();
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -167,10 +162,17 @@ void DetectorConstruction::DefineMaterials()
  ArButane->AddMaterial(argonGas, fractionmass=70*perCent);
  ArButane->AddMaterial(butane ,  fractionmass=30*perCent);
 
+ // example of vacuum
+ //
+ density = universe_mean_density;    //from PhysicalConstants.h
+ new G4Material("Galactic", z=1., a=1.008*g/mole, density,
+                            kStateGas,2.73*kelvin,3.e-18*pascal);
+
+ // use Nist
+ //
  G4NistManager* man = G4NistManager::Instance();
  
  G4bool isotopes = false;
- 
  ///G4Element*  O = man->FindOrBuildElement("O" , isotopes); 
  G4Element* Si = man->FindOrBuildElement("Si", isotopes);
  G4Element* Lu = man->FindOrBuildElement("Lu", isotopes);  
@@ -185,19 +187,12 @@ void DetectorConstruction::DefineMaterials()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
+G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  // Cleanup old geometry
-  G4GeometryManager::GetInstance()->OpenGeometry();
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
-
-  G4Box*
-  sBox = new G4Box("Container",                         //its name
+  fBox = new G4Box("Container",                         //its name
                    fBoxSize/2,fBoxSize/2,fBoxSize/2);   //its dimensions
 
-  fLBox = new G4LogicalVolume(sBox,                     //its shape
+  fLBox = new G4LogicalVolume(fBox,                     //its shape
                              fMaterial,                 //its material
                              fMaterial->GetName());     //its name
 
@@ -229,14 +224,13 @@ void DetectorConstruction::PrintParameters()
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name
-  ////G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
   G4Material* pttoMaterial = 
      G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
   
   if (pttoMaterial) {
-      fMaterial = pttoMaterial;
-      if ( fLBox ) fLBox->SetMaterial(fMaterial);
-    } else {
+    fMaterial = pttoMaterial;
+    if ( fLBox ) { fLBox->SetMaterial(fMaterial); }
+  } else {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
            << materialChoice << " not found" << G4endl;
   }
@@ -248,11 +242,14 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 void DetectorConstruction::SetSize(G4double value)
 {
   fBoxSize = value;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if(fBox) {
+    fBox->SetXHalfLength(fBoxSize/2);
+    fBox->SetYHalfLength(fBoxSize/2);
+    fBox->SetZHalfLength(fBoxSize/2);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #include "G4GlobalMagFieldMessenger.hh"
 #include "G4AutoDelete.hh"

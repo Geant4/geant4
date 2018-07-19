@@ -1,4 +1,4 @@
-svn log $Id: History 97454 2016-06-03 09:15:24Z gcosmo $
+svn log $Id: History 109363 2018-04-12 15:17:01Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,13 +16,82 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-25th April 2016  Gabriele Cosmo  (config-V10-01-10)
+12th April 2018 Gabriele Cosmo  (config-V10-04-05)
+- WIN32-VC.gmk: updated obsolete configuration for Qt5.
+
+20th March 2018 Gabriele Cosmo  (config-V10-04-04)
+- architecture.gmk: corrected default path for external expat and zlib.
+
+19th March 2018 Gabriele Cosmo  (config-V10-04-03)
+- architecture.gmk: corrected settings for external expat and zlib.
+
+9th March 2018 Gabriele Cosmo  (config-V10-04-02)
+- Darwing-clang.gmk: removed -pthread and -fPIC compilation options.
+
+14th February 2018 Gabriele Cosmo  (config-V10-04-01)
+- Disable "-Wl,-force_load" global linker flag for static libraries in macro
+  Darwing-clang.gmk.
+
+11th January 2018 Gabriele Cosmo  (config-V10-04-00)
+- geomconf.gmk: added G4GEOM_USE_UTESSELLATEDSOLID flag to enable VecGeom
+  wrapper for G4TessellatedSolid.
+
+16th November 2017 Gabriele Cosmo  (config-V10-03-07)
+- architecture.gmk: removed references to old USolids library; just use VecGeom.
+
+16th October 2017 Gabriele Cosmo  (config-V10-03-06)
+- geomconf.gmk: added G4GEOM_USE_UHYPE flag to enable VecGeom wrapper for G4Hype.
+
+10th October 2017 Gabriele Cosmo  (config-V10-03-05)
+- binmake.gmk: added hadronic/models/gamma_nuclear module to include paths.
+
+11th July 2017 Gabriele Cosmo  (config-V10-03-04)
+- geomconf.gmk: updated flags for Scalar build of VecGeom.
+
+11th July 2017 Gabriele Cosmo  (config-V10-03-03)
+- geomconf.gmk: added selector for G4GEOM_USE_UPARA flag, to enable
+  wrapping of G4Para for USolids/VecGeom.
+  Coworks with tag geom-csg-V10-03-29.
+
+10th July 2017 Gabriele Cosmo  (config-V10-03-02)
+- geomconf.gmk: added selector for G4GEOM_USE_UCTUBS flag, to enable
+  wrapping of G4CutTubs for USolids/VecGeom.
+  Coworks with tag geom-csg-V10-03-28.
+
+20th April 2017 Gabriele Cosmo  (config-V10-03-01)
+- binmake-gmk: added 'processses/solidstate' module include path.
+
+14th March 2017 Gabriele Cosmo  (config-V10-03-00)
+- Corrected order of linkage in binmake.gmk for analysis global library.
+
+18th November 2016 Gunter Folger  (config-V10-02-07)
+- add include for analysis/accumulables
+- revert change forcing load of libraries
+
+9th November 2016 Gunter Folger  (config-V10-02-06)  *tag REJECTED*
+- Force loading of symbols for physics_lists/constructor and builders 
+   libraries in granular mode for static libs
+	
+17th October 2016 Gabriele Cosmo  (config-V10-02-05)
+- Changed default optimisation settings to -O3 for g++, clang and icc.
+- Added -fno-trapping-math -ftree-vectorize -fno-math-errno to g++ and
+  clang settings.
+- Better factorise -std options in scripts.
+
+8th June 2016 Gunter Folger  (config-V10-02-04)
+- Reverted previous change for G4{,NO}STATIC_MODE
+
+8th June 2016 Gunter Folger  (config-V10-02-03)
+- Deleted G4STATIC_MODE and G4NOSTATIC_MODE options in sys/Darwin*
+  and sys/linux*. This is not a complete removal of the option yet...
+
+25th April 2016  Gabriele Cosmo  (config-V10-02-02)
 - Added Linux-clang.gmk script for use of clang compiler on Linux system.
 
-14th April 2016  Gabriele Cosmo
+14th April 2016  Gabriele Cosmo  (config-V10-02-01)
 - Added flags for partial use of USolids/VecGeom types.
 
-5th February 2016  Gabriele Cosmo  (config-V10-01-09)
+5th February 2016  Gabriele Cosmo  (config-V10-02-00)
 - Added settings for 14 and 17 C++ standards in platform specific scripts.
 
 24th November 2015  Gabriele Cosmo  (config-V10-01-08)

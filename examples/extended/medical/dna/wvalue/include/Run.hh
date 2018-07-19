@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/include/Run.hh
+/// \file medical/dna/wvalue/include/Run.hh
 /// \brief Definition of the Run class
-//
-// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Run_h
 #define Run_h 1
@@ -76,8 +71,6 @@ class Run : public G4Run
     G4int      fNbOfSteps,   fNbOfSteps2;
     G4double   fStepSize,    fStepSize2;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -1,4 +1,4 @@
-$Id: History 102321 2017-01-23 09:51:59Z gcosmo $
+$Id: History 101034 2016-11-04 08:47:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,13 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-11-Oct-2016, Gunter Folger
+03-Nov-2016, Alberto Ribon              (phys-ctor-stopping-V10-02-02)
+- Written first draft of the README
+	 
+16-October-2016, Michel Maire           (phys-ctor-stopping-V10-02-01)
+- add README
+
+11-Oct-2016, Gunter Folger              (phys-ctor-stopping-V10-02-00)
 - replace direct use of aParticleIterator by GetParticleIterator().
 
 05-Nov-2015, Alberto Ribon              (phys-ctor-stopping-V10-01-00)

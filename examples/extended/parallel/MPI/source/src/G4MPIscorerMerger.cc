@@ -31,6 +31,45 @@
 #include <functional>
 #include "G4MPIutils.hh"
 
+#define DMSG( LVL , MSG ) { if ( verbose > LVL ) { G4cout << MSG << G4endl; } }
+
+namespace {
+    //This class extends G4StatDouble to get access
+    //to all data-members of the base class.
+    //It provides two functions: pack and unpack
+    //into a buffer for sending/receiving via MPI
+    struct MPIStatDouble : public G4StatDouble {
+      G4int verbose;
+      inline void Pack(void* buffer,int bufferSize,int* position , MPI::Intracomm& comm ) const
+      {
+        DMSG(4,"Packing G4StatDouble(n,scale,sum_w,sum_w2,sum_wx,sum_wx2): "
+             <<m_n<<" "<<m_scale<<" "<<m_sum_w<<" "<<m_sum_w2
+             <<" "<<m_sum_wx<<" "<<m_sum_wx2);
+        MPI_Pack(&m_n,1,MPI::INT,buffer,bufferSize,position,comm);
+        const G4double data[]{m_scale,m_sum_w,m_sum_w2,m_sum_wx,m_sum_wx2};
+        MPI_Pack(&data,5,MPI::DOUBLE,buffer,bufferSize,position,comm);
+      }
+      inline void UnPack(void* buffer,int bufferSize,int* position , MPI::Intracomm& comm ) {
+        MPI_Unpack(buffer,bufferSize,position,&m_n,1,MPI::INT,comm);
+        G4double data[5];
+        MPI_Unpack(buffer,bufferSize,position,data,5,MPI::DOUBLE,comm);
+        m_scale = data[0];
+        m_sum_w = data[1];
+        m_sum_w2= data[2];
+        m_sum_wx= data[3];
+        m_sum_wx2=data[4];
+        DMSG(4,"UnPacking G4StatDouble(n,scale,sum_w,sum_w2,sum_wx,sum_wx2): "
+             <<m_n<<" "<<m_scale<<" "<<m_sum_w<<" "<<m_sum_w2
+             <<" "<<m_sum_wx<<" "<<m_sum_wx2);
+      }
+      MPIStatDouble(G4int ver = 0) : verbose(ver) {}
+      MPIStatDouble(const G4StatDouble& rhs , G4int ver) : verbose(ver)
+      {
+        G4StatDouble::operator=(rhs);
+      }
+    };
+}
+
 G4MPIscorerMerger::G4MPIscorerMerger() :
   outputBuffer(nullptr),outputBufferSize(0),outputBufferPosition(0),bytesSent(0),
   ownsBuffer(false),scoringManager(nullptr),commSize(0),
@@ -50,9 +89,6 @@ G4MPIscorerMerger::G4MPIscorerMerger(G4ScoringManager* mgr,
 G4MPIscorerMerger::~G4MPIscorerMerger() {
   if ( ownsBuffer ) delete[] outputBuffer;
 }
-
-#define DMSG( LVL , MSG ) { if ( verbose > LVL ) { G4cout << MSG << G4endl; } }
-
 
 /* Format of the message.
  *
@@ -213,8 +249,7 @@ void G4MPIscorerMerger::Send(const unsigned int destination) {
   assert(outputBufferSize==outputBufferPosition);
 
   //Version 1: p2p communication
-  comm.Send( outputBuffer , outputBufferSize , MPI::PACKED ,
-                                                 destination , G4MPImanager::kTAG_CMDSCR);
+  comm.Send(outputBuffer, outputBufferSize, MPI::PACKED, destination, G4MPImanager::kTAG_CMDSCR);
   bytesSent += newbuffsize;
   //Receiver should use probe to get size of the package being sent
   DMSG(1,"Sending done");
@@ -304,9 +339,7 @@ void G4MPIscorerMerger::Pack(const G4VScoringMesh* mesh) {
 #else
       const char* nn = name.c_str();
 #endif
-      MPI_Pack(nn,ss,MPI::CHAR,
-          outputBuffer,outputBufferSize,
-          &outputBufferPosition,comm);
+      MPI_Pack(nn,ss,MPI::CHAR,outputBuffer,outputBufferSize,&outputBufferPosition,comm);
       Pack(ele.second);
 #ifdef G4MPI_USE_MPI_PACK_NOT_CONST
       delete[] nn;
@@ -338,13 +371,40 @@ void G4MPIscorerMerger::UnPackAndMerge(G4VScoringMesh* inmesh) {
       //This memory churn is very inefficient, but we cannot reuse the HitMap
       //because we cannot change the names
       //TODO: Evaluate change in HitMap class to allow for change of names
-      HitMap* hm = UnPackHitMap(detName,colname);
+      //HitMap* hm = UnPackHitMap(detName,colname);
+      HitStatDoubleMap* hm = UnPackHitStatDoubleMap(detName,colname);
       inmesh->Accumulate(hm);
       delete hm;
   }
 }
 
-void G4MPIscorerMerger::Pack(const HitMap* sm) {
+
+//void G4MPIscorerMerger::Pack(const HitMap* sm) {
+//  assert(sm!=nullptr);
+//  assert(outputBuffer!=nullptr);
+//  assert(outputBufferPosition<=outputBufferSize);
+//  DMSG(3,"Packing hitmap: "<<sm<<" with: "<<sm->GetSize()<<" elements.");
+//  /*const*/ size_t numEl = sm->GetSize();//TODO: old MPI implementation
+//  MPI_Pack(&numEl,1,MPI::UNSIGNED,
+//      outputBuffer,outputBufferSize,
+//      &outputBufferPosition,comm);
+//  const auto& theMap = *sm->GetMap();
+//  std::vector<G4int> ids;
+//  std::vector<G4double> vals;
+//  std::transform(theMap.begin(),theMap.end(),std::back_inserter(ids),
+//      [](decltype(*theMap.begin())& e){ return e.first;});
+//  std::transform(theMap.begin(),theMap.end(),std::back_inserter(vals),
+//      [](decltype(*theMap.begin())& e){ return *e.second;});
+//  assert(ids.size()==vals.size()&&ids.size()==numEl);
+//  MPI_Pack(ids.data(),ids.size(),MPI::INT,
+//      outputBuffer,outputBufferSize,
+//      &outputBufferPosition,comm);
+//  MPI_Pack(vals.data(),vals.size(),MPI::DOUBLE,
+//      outputBuffer,outputBufferSize,
+//      &outputBufferPosition,comm);
+//}
+
+void G4MPIscorerMerger::Pack(const HitStatDoubleMap* sm) {
   assert(sm!=nullptr);
   assert(outputBuffer!=nullptr);
   assert(outputBufferPosition<=outputBufferSize);
@@ -355,40 +415,61 @@ void G4MPIscorerMerger::Pack(const HitMap* sm) {
       &outputBufferPosition,comm);
   const auto& theMap = *sm->GetMap();
   std::vector<G4int> ids;
-  std::vector<G4double> vals;
   std::transform(theMap.begin(),theMap.end(),std::back_inserter(ids),
       [](decltype(*theMap.begin())& e){ return e.first;});
-  std::transform(theMap.begin(),theMap.end(),std::back_inserter(vals),
-      [](decltype(*theMap.begin())& e){ return *e.second;});
-  assert(ids.size()==vals.size()&&ids.size()==numEl);
-  MPI_Pack(ids.data(),ids.size(),MPI::INT,
-      outputBuffer,outputBufferSize,
+  assert(/*ids.size()==vals.size()&&*/ids.size()==numEl);
+  MPI_Pack(ids.data(),ids.size(),MPI::INT,outputBuffer,outputBufferSize,
       &outputBufferPosition,comm);
-  MPI_Pack(vals.data(),vals.size(),MPI::DOUBLE,
-      outputBuffer,outputBufferSize,
-      &outputBufferPosition,comm);
+  for( const auto& e : theMap) {
+     const MPIStatDouble sd(*e.second,verbose);
+     sd.Pack(outputBuffer,outputBufferSize,&outputBufferPosition,comm);
+  }
 }
 
-HitMap* G4MPIscorerMerger::UnPackHitMap(const G4String& detName,
-                                                                const G4String& colName) {
+//HitMap* G4MPIscorerMerger::UnPackHitMap(const G4String& detName,
+//                                        const G4String& colName) {
+//  assert(outputBuffer!=nullptr);
+//  assert(outputBufferPosition<=outputBufferSize);
+//  DMSG(3,"Preparing to unpack a hit map for: "<<detName<<","<<colName);
+//  size_t numEl =0 ;
+//  MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
+//             &numEl,1,MPI::UNSIGNED,comm);
+//  G4int* ids = new G4int[numEl];
+//  MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
+//             ids,numEl,MPI::INT,comm);
+//  G4double* vals = new G4double[numEl];
+//  MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
+//      vals,numEl,MPI::DOUBLE,comm);
+//  HitMap* result = new HitMap(detName,colName);
+//  for ( unsigned int i = 0; i<numEl;++i) result->set(ids[i],vals[i]);
+//  delete[] ids;
+//  delete[] vals;
+//  return result;
+//}
+
+HitStatDoubleMap* G4MPIscorerMerger::UnPackHitStatDoubleMap(
+    const G4String& detName, const G4String& colName)
+{
   assert(outputBuffer!=nullptr);
   assert(outputBufferPosition<=outputBufferSize);
   DMSG(3,"Preparing to unpack a hit map for: "<<detName<<","<<colName);
   size_t numEl =0 ;
   MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
-      &numEl,1,MPI::UNSIGNED,comm);
+             &numEl,1,MPI::UNSIGNED,comm);
+  DMSG(3,"Will receive "<<numEl<<" values");
   G4int* ids = new G4int[numEl];
   MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
-      ids,numEl,MPI::INT,comm);
-  G4double* vals = new G4double[numEl];
-  MPI_Unpack(outputBuffer,outputBufferSize,&outputBufferPosition,
-      vals,numEl,MPI::DOUBLE,comm);
-  HitMap* result = new HitMap(detName,colName);
-  for ( unsigned int i = 0; i<numEl;++i) result->set(ids[i],vals[i]);
+             ids,numEl,MPI::INT,comm);
+  HitStatDoubleMap* result = new HitStatDoubleMap(detName,colName);
+  for ( unsigned int i = 0; i<numEl;++i) {
+      MPIStatDouble sd(verbose);
+      sd.UnPack(outputBuffer,outputBufferSize,&outputBufferPosition,comm);
+      result->set(ids[i],sd);
+    }
   delete[] ids;
-  delete[] vals;
   return result;
 }
+
 
 G4int G4MPIscorerMerger::CalculatePackSize(const G4ScoringManager* sm) const
 {
@@ -426,13 +507,23 @@ G4int G4MPIscorerMerger::CalculatePackSize(const G4VScoringMesh* mesh) const
   return size;
 }
 
-G4int G4MPIscorerMerger::CalculatePackSize(const HitMap* map) const {
+//G4int G4MPIscorerMerger::CalculatePackSize(const HitMap* map) const {
+//  const G4int numEls = map->GetSize();
+//  G4int size = sizeof(unsigned int);
+//  size += sizeof(G4int)*numEls;
+//  size += sizeof(G4double)*numEls;
+//  DMSG(3,"HitMap "<<map<<" size: "<<size<<" in "<<numEls<<" elements.");
+//  return size;
+//}
+
+G4int G4MPIscorerMerger::CalculatePackSize(const HitStatDoubleMap* map) const {
   const G4int numEls = map->GetSize();
   G4int size = sizeof(unsigned int);
   size += sizeof(G4int)*numEls;
-  size += sizeof(G4double)*numEls;
-  DMSG(3,"HitMap "<<map<<" size: "<<size<<" in "<<numEls<<" elements.");
+  //G4StatDouble: 5 doubles and 1 int
+  //Can I use sizeof(G4StatDouble)? NO sizeof(G4StatDouble)==56
+  size += numEls*(sizeof(G4double)*5+sizeof(G4int));
+  DMSG(3,"HitStatDoubleMap "<<map<<" size: "<<size<<" in "<<numEls<<" elements.");
   return size;
 }
-
 

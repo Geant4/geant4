@@ -26,8 +26,10 @@
 /// \file exoticphysics/phonon/XGeBox.cc
 /// \brief Main program of the exoticphysics/phonon example
 //
-// $Id: XGeBox.cc 84197 2014-10-10 14:33:03Z gcosmo $
+// $Id: XGeBox.cc 110254 2018-05-17 14:14:23Z gcosmo $
 //
+
+#include "G4Types.hh"
 
 #include "G4UImanager.hh"
 #include "G4UserSteppingAction.hh"
@@ -38,13 +40,8 @@
 #include "G4RunManager.hh"
 #endif
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "XActionInitialization.hh"
 #include "XDetectorConstruction.hh"
@@ -54,6 +51,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 int main(int argc,char** argv) {
+
+ // Instantiate G4UIExecutive if interactive mode
+ G4UIExecutive* ui = nullptr;
+ if ( argc == 1 ) {
+   ui = new G4UIExecutive(argc, argv);
+ }
+
  // Construct the run manager
  //
 #ifdef G4MULTITHREADED
@@ -75,13 +79,11 @@ int main(int argc,char** argv) {
  //
  runManager->SetUserInitialization(new XActionInitialization);
 
-#ifdef G4VIS_USE
  // Visualization manager
  //
  G4VisManager* visManager = new G4VisExecutive;
  visManager->Initialize();
-#endif
-    
+
  // Initialize G4 kernel (replaces /run/initialize macro command)
  //
  runManager->Initialize();
@@ -90,16 +92,11 @@ int main(int argc,char** argv) {
  //
  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
- if (argc==1)   // Define UI session for interactive mode
+ if (ui)   // Define UI session for interactive mode
  {
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-#ifdef G4VIS_USE
       UImanager->ApplyCommand("/control/execute vis.mac");
-#endif
       ui->SessionStart();
       delete ui;
-#endif
  }
  else           // Batch mode
  {
@@ -108,9 +105,7 @@ int main(int argc,char** argv) {
    UImanager->ApplyCommand(command+fileName);
  }
 
-#ifdef G4VIS_USE
  delete visManager;
-#endif
  delete runManager;
 
  return 0;

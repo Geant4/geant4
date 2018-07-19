@@ -1,0 +1,22 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_Object
+#define tools_rroot_Object
+
+#include "buffer"
+
+namespace tools {
+namespace rroot {
+
+inline bool Object_stream(buffer& a_buffer,uint32& a_id,uint32& a_bits) {
+  short v;
+  if(!a_buffer.read_version(v)) return false;
+  if(!a_buffer.read(a_id)) return false;
+  if(!a_buffer.read(a_bits)) return false;
+  return true;
+}
+
+}}
+
+#endif

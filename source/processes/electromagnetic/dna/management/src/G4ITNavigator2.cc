@@ -982,6 +982,7 @@ G4double G4ITNavigator2::ComputeStep( const G4ThreeVector &pGlobalpoint,
       case kNormal:
         if ( motherLogical->GetVoxelHeader() )
         {
+          LocateGlobalPointWithinVolume(pGlobalpoint);
           Step = fvoxelNav.ComputeStep(fLastLocatedPointLocal,
                                        localDirection,
                                        pCurrentProposedStepLength,
@@ -1980,6 +1981,7 @@ G4double G4ITNavigator2::ComputeSafety( const G4ThreeVector &pGlobalpoint,
             newSafety= safetyTwo;   // Faster and best available
 #else
             G4double safetyOldVoxel;
+            LocateGlobalPointWithinVolume(pGlobalpoint);
             safetyOldVoxel =
               fvoxelNav.ComputeSafety(localPoint,fHistory,pMaxLength);
             newSafety= safetyOldVoxel;
@@ -2273,12 +2275,16 @@ void  G4ITNavigator2::PrintState() const
            << std::setw( 9)  << fExiting          << " "
            << std::setw( 9)  << fEntering         << " ";
     if ( fBlockedPhysicalVolume==0 )
+    {
       G4cout << std::setw(15) << "None";
+    }
     else
+    {
       G4cout << std::setw(15)<< fBlockedPhysicalVolume->GetName();
+    }
     G4cout << std::setw( 9)  << fBlockedReplicaNo  << " "
            << std::setw( 8)  << fLastStepWasZero   << " "
-           << G4endl;   
+           << G4endl;
   }
   if( fVerbose > 2 ) 
   {
@@ -2415,10 +2421,16 @@ std::ostream& operator << (std::ostream &os,const G4ITNavigator2 &n)
     << "  Exiting        = " << n.fExiting         << G4endl
     << "  Entering       = " << n.fEntering        << G4endl
     << "  BlockedPhysicalVolume= " ;
+    
     if (n.fBlockedPhysicalVolume==0)
+    {
       os << "None";
+    }
     else
+    {
       os << n.fBlockedPhysicalVolume->GetName();
+    }
+    
     os << G4endl
     << "  BlockedReplicaNo     = " <<  n.fBlockedReplicaNo       << G4endl
     << "  LastStepWasZero      = " <<   n.fLastStepWasZero       << G4endl
@@ -2441,10 +2453,12 @@ std::ostream& operator << (std::ostream &os,const G4ITNavigator2 &n)
     << std::setw( 5)  << n.fValidExitNormal  << " "
     << std::setw( 9)  << n.fExiting          << " "
     << std::setw( 9)  << n.fEntering         << " ";
+    
     if ( n.fBlockedPhysicalVolume==0 )
-      { os << std::setw(15) << "None"; }
+    { os << std::setw(15) << "None"; }
     else
-      { os << std::setw(15)<< n.fBlockedPhysicalVolume->GetName(); }
+    { os << std::setw(15)<< n.fBlockedPhysicalVolume->GetName(); }
+    
     os << std::setw( 9)  << n.fBlockedReplicaNo  << " "
     << std::setw( 8)  << n.fLastStepWasZero   << " "
     << G4endl;

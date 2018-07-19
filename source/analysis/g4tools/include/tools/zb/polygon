@@ -85,10 +85,10 @@ public:
 	  (pts[3].y == pts[0].y)))) 
       {
         int  xmin,xmax,ymin,ymax;
-	xmin = (int)tools::mn(pts[0].x, pts[2].x);
-	ymin = (int)tools::mn(pts[0].y, pts[2].y);
-	xmax = (int)tools::mx(pts[0].x, pts[2].x);
-	ymax = (int)tools::mx(pts[0].y, pts[2].y);
+	xmin = (int)mn(pts[0].x, pts[2].x);
+	ymin = (int)mn(pts[0].y, pts[2].y);
+	xmax = (int)mx(pts[0].x, pts[2].x);
+	ymax = (int)mx(pts[0].y, pts[2].y);
 	if ((xmin != xmax) && (ymin != ymax)) 
 	    {
               for(y=ymin;y<=ymax;y++)  a_proc(a_tag,xmin  ,xmax  ,y);

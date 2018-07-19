@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05StackingAction.cc 77724 2013-11-27 17:11:16Z gcosmo $
+// $Id: RE05StackingAction.cc 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/src/RE05StackingAction.cc
 /// \brief Implementation of the RE05StackingAction class
@@ -42,23 +42,31 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05StackingAction::RE05StackingAction()
- : trkHits(0), muonHits(0), stage(0)
+ : G4UserStackingAction(),
+   fTrkHits(0), fMuonHits(0), fMessenger(0), 
+   fStage(0),
+   fReqMuon(2),
+   fReqIso(10),
+   fAngRoI(30.0*deg)
 { 
-  angRoI = 30.0*deg; 
-  reqMuon = 2;
-  reqIso = 10;
-  theMessenger = new RE05StackingActionMessenger(this);
+  fMessenger = new RE05StackingActionMessenger(this);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05StackingAction::~RE05StackingAction()
-{ delete theMessenger; }
+{ delete fMessenger; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ClassificationOfNewTrack 
 RE05StackingAction::ClassifyNewTrack(const G4Track * aTrack)
 {
   G4ClassificationOfNewTrack classification = fWaiting;
-  switch(stage)
+  switch(fStage)
   {
   case 0: // Stage 0 : Primary muons only
     if(aTrack->GetParentID()==0)
@@ -86,7 +94,7 @@ RE05StackingAction::ClassifyNewTrack(const G4Track * aTrack)
       classification = fUrgent;
       break;
     }
-    if((angRoI<0.)||InsideRoI(aTrack,angRoI))
+    if((fAngRoI<0.)||InsideRoI(aTrack,fAngRoI))
     { 
       classification = fUrgent;
       break;
@@ -96,26 +104,30 @@ RE05StackingAction::ClassifyNewTrack(const G4Track * aTrack)
   return classification;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4bool RE05StackingAction::InsideRoI(const G4Track * aTrack,G4double ang)
 {
-  if(!muonHits)
-  { muonHits = (RE05MuonHitsCollection*)GetCollection("muonCollection"); }
-  if(!muonHits)
+  if(!fMuonHits)
+  { fMuonHits = (RE05MuonHitsCollection*)GetCollection("muonCollection"); }
+  if(!fMuonHits)
   { G4cerr << "muonCollection NOT FOUND" << G4endl;
     return true; }
 
-  G4int nhits = muonHits->entries();
+  G4int nhits = fMuonHits->entries();
 
   const G4ThreeVector trPos = aTrack->GetPosition();
   for(G4int i=0;i<nhits;i++)
   {
-    G4ThreeVector muHitPos = (*muonHits)[i]->GetPos();
+    G4ThreeVector muHitPos = (*fMuonHits)[i]->GetPos();
     G4double angl = muHitPos.angle(trPos);
     if(angl<ang) { return true; }
   }
 
   return false;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VHitsCollection* RE05StackingAction::GetCollection(G4String colName)
 {
@@ -131,23 +143,25 @@ G4VHitsCollection* RE05StackingAction::GetCollection(G4String colName)
   return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RE05StackingAction::NewStage()
 {
-  stage++;
+  fStage++;
   G4int nhits;
-  if(stage==1)
+  if(fStage==1)
   {
-  // Stage 0->1 : check if at least "reqMuon" hits on muon chamber
+  // Stage 0->1 : check if at least "fReqMuon" hits on muon chamber
   //              otherwise abort current event
-    if(!muonHits)
-    { muonHits = (RE05MuonHitsCollection*)GetCollection("muonCollection"); }
-    if(!muonHits)
+    if(!fMuonHits)
+    { fMuonHits = (RE05MuonHitsCollection*)GetCollection("muonCollection"); }
+    if(!fMuonHits)
     { G4cerr << "muonCollection NOT FOUND" << G4endl;
       return; }
-    nhits = muonHits->entries();
+    nhits = fMuonHits->entries();
 ////    G4cout << "Stage 0->1 : " << nhits << " hits found in the muon chamber."
 ////         << G4endl;
-    if(nhits<reqMuon)
+    if(nhits<fReqMuon)
     { 
       stackManager->clear();
 ////      G4cout << "++++++++ event aborted" << G4endl;
@@ -157,35 +171,35 @@ void RE05StackingAction::NewStage()
     return;
   }
 
-  else if(stage==2)
+  else if(fStage==2)
   {
   // Stage 1->2 : check the isolation of muon tracks
-  //              at least "reqIsoMuon" isolated muons
+  //              at least "fReqIsoMuon" isolated muons
   //              otherwise abort current event.
-  //              Isolation requires "reqIso" or less hits
+  //              Isolation requires "fReqIso" or less hits
   //              (including own hits) in the RoI region
   //              in the tracker layers.
-    nhits = muonHits->entries();
-    if(!trkHits)
-    { trkHits = (RE05TrackerHitsCollection*)GetCollection("trackerCollection"); }
-    if(!trkHits)
+    nhits = fMuonHits->entries();
+    if(!fTrkHits)
+    { fTrkHits = (RE05TrackerHitsCollection*)GetCollection("trackerCollection"); }
+    if(!fTrkHits)
     { G4cerr << "trackerCollection NOT FOUND" << G4endl;
       return; }
-    G4int nTrkhits = trkHits->entries();
+    G4int nTrkhits = fTrkHits->entries();
     G4int isoMuon = 0;
     for(G4int j=0;j<nhits;j++)
     {
-      G4ThreeVector hitPos = (*muonHits)[j]->GetPos();
+      G4ThreeVector hitPos = (*fMuonHits)[j]->GetPos();
       G4int nhitIn = 0;
-      for(G4int jj=0;(jj<nTrkhits)&&(nhitIn<=reqIso);jj++)
+      for(G4int jj=0;(jj<nTrkhits)&&(nhitIn<=fReqIso);jj++)
       {
-        G4ThreeVector trkhitPos = (*trkHits)[jj]->GetPos();
-        if(trkhitPos.angle(hitPos)<angRoI) nhitIn++;
+        G4ThreeVector trkhitPos = (*fTrkHits)[jj]->GetPos();
+        if(trkhitPos.angle(hitPos)<fAngRoI) nhitIn++;
       }
-      if(nhitIn<=reqIso) isoMuon++;
+      if(nhitIn<=fReqIso) isoMuon++;
     }
 ////    G4cout << "Stage 1->2 : " << isoMuon << " isolated muon found." << G4endl;
-    if(isoMuon<reqIsoMuon)
+    if(isoMuon<fReqIsoMuon)
     {
       stackManager->clear();
 ////      G4cout << "++++++++ event aborted" << G4endl;
@@ -197,16 +211,18 @@ void RE05StackingAction::NewStage()
 
   else
   {
-  // Other stage change : just re-classify
+  // Other fStage change : just re-classify
     stackManager->ReClassify();
   }
 }
     
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RE05StackingAction::PrepareNewEvent()
 { 
-  stage = 0; 
-  trkHits = 0;
-  muonHits = 0;
+  fStage = 0; 
+  fTrkHits = 0;
+  fMuonHits = 0;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

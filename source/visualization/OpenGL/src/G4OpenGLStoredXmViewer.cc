@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.cc 87695 2014-12-17 09:35:24Z gcosmo $
+// $Id: G4OpenGLStoredXmViewer.cc 97241 2016-05-30 12:06:54Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -77,19 +77,6 @@ void G4OpenGLStoredXmViewer::DrawView () {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredXmViewer::DrawView \n");
 #endif
-
-//  //Make sure current viewer is attached and clean...
-//#ifdef G4MULTITHREADED
-//  G4int thread_id = G4Threading::G4GetThreadId();
-//  G4cout << "G4OpenGLStoredXmViewer::DrawView: thread " << thread_id << G4endl;
-//  if (thread_id < 0) {
-//    glXMakeCurrent (dpy, win, cxMaster);
-//  } else {
-//    glXMakeCurrent (dpy, win, cxVisSubThread);
-//  }
-//#else
-//  glXMakeCurrent (dpy, win, cxMaster);
-//#endif
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 

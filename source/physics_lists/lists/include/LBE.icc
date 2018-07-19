@@ -212,7 +212,7 @@ template<class T> TLBE<T>::~TLBE()
  template<class T> void TLBE<T>::AddTransportation() {
   
   G4VUserPhysicsList::AddTransportation();
-
+  
   auto myParticleIterator=G4ParticleTable::GetParticleTable()->GetIterator();
   myParticleIterator->reset();
   while( (*(myParticleIterator))() ){
@@ -886,6 +886,11 @@ template<class T> TLBE<T>::~TLBE()
 #include "G4IonTable.hh"
 #include "G4Ions.hh"
 
+#include "G4LossTableManager.hh"
+#include "G4UAtomicDeexcitation.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4NuclideTable.hh"
+
  template<class T> void TLBE<T>::ConstructGeneral() {
 
   // Add Decay Process
@@ -912,6 +917,24 @@ template<class T> TLBE<T>::~TLBE()
   const G4IonTable *theIonTable = 
     G4ParticleTable::GetParticleTable()->GetIonTable();
   G4RadioactiveDecay *theRadioactiveDecay = new G4RadioactiveDecay();
+ 
+  //Fix for activation of RadioactiveDecay, based on G4RadioactiveDecayPhysics 
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetAugerCascade(true);
+  param->AddPhysics("world","G4RadioactiveDecay");
+
+  G4DeexPrecoParameters* deex = G4NuclearLevelData::GetInstance()->GetParameters();
+  deex->SetStoreAllLevels(true);
+  deex->SetMaxLifeTime(G4NuclideTable::GetInstance()->GetThresholdOfHalfLife()
+                       /std::log(2.));
+
+  G4LossTableManager* man = G4LossTableManager::Instance();
+  G4VAtomDeexcitation* ad = man->AtomDeexcitation();
+  if(!ad) {
+    ad = new G4UAtomicDeexcitation();
+    man->SetAtomDeexcitation(ad);
+    ad->InitialiseAtomicDeexcitation();
+  }
 
   for (G4int i=0; i<theIonTable->Entries(); i++) 
     {

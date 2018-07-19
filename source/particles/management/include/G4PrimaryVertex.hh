@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.hh 102267 2017-01-19 10:14:40Z gcosmo $
+// $Id: G4PrimaryVertex.hh 110257 2018-05-17 14:20:12Z gcosmo $
 //
 //
 
@@ -102,20 +102,20 @@ class G4PrimaryVertex
 
 };
 
-extern G4PART_DLL G4ThreadLocal G4Allocator<G4PrimaryVertex> *aPrimaryVertexAllocator;
+extern G4PART_DLL G4Allocator<G4PrimaryVertex>*& aPrimaryVertexAllocator();
 
 inline void * G4PrimaryVertex::operator new(size_t)
 {
-  if (!aPrimaryVertexAllocator)
+  if (!aPrimaryVertexAllocator())
   {
-    aPrimaryVertexAllocator = new G4Allocator<G4PrimaryVertex>;
+    aPrimaryVertexAllocator() = new G4Allocator<G4PrimaryVertex>;
   }
-  return (void *) aPrimaryVertexAllocator->MallocSingle();
+  return (void *) aPrimaryVertexAllocator()->MallocSingle();
 }
 
 inline void G4PrimaryVertex::operator delete(void * aPrimaryVertex)
 {
-  aPrimaryVertexAllocator->FreeSingle((G4PrimaryVertex *) aPrimaryVertex);
+  aPrimaryVertexAllocator()->FreeSingle((G4PrimaryVertex *) aPrimaryVertex);
 }
 
 inline G4ThreeVector  G4PrimaryVertex::GetPosition() const

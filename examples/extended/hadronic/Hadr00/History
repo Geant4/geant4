@@ -1,4 +1,4 @@
-$Id: History 83404 2014-08-21 15:08:52Z gcosmo $
+$Id: History 109655 2018-05-04 08:57:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,28 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-05-18  J.Allison (exhadr00-V10-04-03)
+- RunAction.cc:
+  o Remove G4VIS_USE.
+  o Remove /vis/ commands - not necessary now and causes
+    problem in Qt with in multithreaded mode.
+
+29-03-18  V.Ivanchenko (exhadr00-V10-04-02)
+- DetectorConstruction - cleanup geometry
+- Hadr00.cc - more cleanup visualisation
+	 
+24-03-18  M.Maire (exhadr00-V10-04-01)
+- Hadr00.cc : come back to FTFP_BERT
+
+22-03-18  M.Maire (exhadr00-V10-04-00)
+- Hadr00.cc : remove G4UI_USE and G4VIS_USE
+
+25-09-17  V.Ivanchenko (exhadr00-V10-03-00)
+- Added possibility to enable radioactive decay
+
+01-11-16  I. Hrivnacova (exhadr00-V10-02-00)
+- Coding guidelines (class data member names)
 
 11-08-14  V.Ivanchenko (exhadr00-V10-00-01)
 - Reduced log output

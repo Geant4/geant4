@@ -1,4 +1,4 @@
-$Id: History 77941 2013-11-29 15:22:58Z gcosmo $
+$Id: History 109623 2018-05-03 13:05:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2nd May 2018  Ivana Hrivnacova (BlineTracer-V10-04-00)
+- Fixed compilation error (missing include)
 
 29th November 2012  Ivana Hrivnacova (BlineTracer-V09-06-00)
 - Fixed shadowed declarations

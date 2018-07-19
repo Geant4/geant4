@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm3/include/StepMax.hh
-/// \brief Definition of the StepMax class
-//
-// $Id: StepMax.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: StepMax.hh 109096 2018-03-26 14:46:51Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,69 +32,42 @@
 #define StepMax_h 1
 
 #include "globals.hh"
-#include "G4VDiscreteProcess.hh"
+#include "G4VEmProcess.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Step.hh"
 
-#include "DetectorConstruction.hh"
-
-class StepMaxMessenger;
+class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StepMax : public G4VDiscreteProcess
+class StepMax : public G4VEmProcess
 {
 public:
 
-  StepMax(const G4String& processName = "UserStepMax");
- ~StepMax();
+  StepMax(PhysicsListMessenger* mess);
+  virtual ~StepMax();
 
-  G4bool   IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&);
 
-  void     SetStepMax(G4int, G4double);
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
 
-  G4double GetStepMax(G4int k) { return fStepMax[k];};
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
-  G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
-                                               G4double previousStepSize,
-                                               G4ForceCondition* condition);
+  virtual void InitialiseProcess(const G4ParticleDefinition*);
 
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  virtual G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
+                                                        G4double previousStep,
+                                                        G4ForceCondition* cond);
 
-  G4double GetMeanFreePath(const G4Track&, G4double,G4ForceCondition*)
-     {return DBL_MAX;};    
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
 private:
 
-  G4double fStepMax[MaxAbsor];
-     
-  StepMaxMessenger* fMess;
+  PhysicsListMessenger* fMessenger;
+
+  G4double fMaxChargedStep;
+  G4bool isInitialised;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline 
-G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
-                                    G4double, G4ForceCondition* condition)
-{
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-  
-  G4double limit = DBL_MAX; 
-  G4int n = aTrack.GetVolume()->GetCopyNo();
-  if (n < MaxAbsor) limit = fStepMax[n];
-  return limit;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline 
-G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
-{
-   // do nothing
-   aParticleChange.Initialize(aTrack);
-   return &aParticleChange;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

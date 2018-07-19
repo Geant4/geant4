@@ -19,14 +19,17 @@
 /testem/phys/setNbinsE 20
 /testem/phys/setMaxE 0.060  MeV  
 #
+/process/em/lowestElectronEnergy 0.0 MeV
+/process/em/lowestMuHadEnergy    0.0 MeV
+#
 /run/initialize
 #
+/process/em/verbose 0
 /run/setCut  0.5 mm
+/run/setCutForAGivenParticle  proton  0.0 mm
 /run/setCutForRegion GasDetector 1.8 mm
-/process/em/verbose 1
 #/run/particle/dumpCutValues
 #
-#/process/eLoss/fluct false
 #/gun/particle e-
 #
 /gun/particle proton

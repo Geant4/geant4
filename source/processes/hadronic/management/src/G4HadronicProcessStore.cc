@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc 92691 2015-09-14 07:04:52Z gcosmo $
+// $Id: G4HadronicProcessStore.cc 110586 2018-05-31 12:01:42Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,12 +59,11 @@
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4HadronicEPTestMessenger.hh"
-#ifdef G4USE_STD11
-  #include <algorithm>   //transform
-#endif
+#include <algorithm>
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4ThreadLocal G4HadronicProcessStore* G4HadronicProcessStore::instance = 0;
+G4ThreadLocal G4HadronicProcessStore* G4HadronicProcessStore::instance = nullptr;
 
 G4HadronicProcessStore* G4HadronicProcessStore::Instance()
 {
@@ -95,6 +94,7 @@ void G4HadronicProcessStore::Clean()
       //G4cout << "G4HadronicProcessStore::Clean() delete hadronic "
       //  << i << "  " <<  process[i]->GetProcessName() << G4endl;
       delete process[i];
+      process[i] = nullptr;
     }
   }
   for(i=0; i<n_extra; ++i) {
@@ -102,7 +102,7 @@ void G4HadronicProcessStore::Clean()
         // G4cout << "G4HadronicProcessStore::Clean() delete extra proc "
         //<< i << "  " << extraProcess[i]->GetProcessName() << G4endl;
         delete extraProcess[i];
-        extraProcess[i] = 0;
+        extraProcess[i] = nullptr;
     }
   }
   //std::cout << "G4HadronicProcessStore::Clean() done" << std::endl;
@@ -118,14 +118,16 @@ G4HadronicProcessStore::G4HadronicProcessStore()
   n_part = 0;
   n_model= 0;
   n_extra= 0;
-  currentProcess  = 0;
-  currentParticle = 0;
+  currentProcess  = nullptr;
+  currentParticle = nullptr;
   theGenericIon = 
     G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
   verbose = 1;
   buildTableStart = true;
+  buildXSTable = false;
   theEPTestMessenger = new G4HadronicEPTestMessenger(this);
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4double G4HadronicProcessStore::GetCrossSectionPerAtom(
@@ -478,7 +480,7 @@ void G4HadronicProcessStore::DeRegister(G4HadronicProcess* proc)
 {
   for(G4int i=0; i<n_proc; ++i) {
     if(process[i] == proc) {
-      process[i] = 0;
+      process[i] = nullptr;
       DeRegisterExtraProcess((G4VProcess*)proc);      
       return;
     }
@@ -543,7 +545,7 @@ void G4HadronicProcessStore::DeRegisterExtraProcess(G4VProcess* proc)
 {
   for(G4int i=0; i<n_extra; ++i) {
     if(extraProcess[i] == proc) {
-      extraProcess[i] = 0;
+      extraProcess[i] = nullptr;
       if(1 < verbose) {
 	G4cout << "Extra Process: " << i << "  " 
 	       <<proc->GetProcessName()<< " is deregisted " << G4endl;
@@ -551,6 +553,20 @@ void G4HadronicProcessStore::DeRegisterExtraProcess(G4VProcess* proc)
       return;
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4HadronicProcessStore::SetBuildXSTable(G4bool val)
+{
+  buildXSTable = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4bool G4HadronicProcessStore::GetBuildXSTable() const
+{
+  return buildXSTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -563,6 +579,7 @@ void G4HadronicProcessStore::PrintInfo(const G4ParticleDefinition* part)
     buildTableStart = false;
     Dump(verbose);
     if (getenv("G4PhysListDocDir") ) DumpHtml();
+    G4HadronicInteractionRegistry::Instance()->InitialiseModels();
   }
 }
 
@@ -605,6 +622,7 @@ void G4HadronicProcessStore::DumpHtml()
     PrintHtml(G4KaonMinus::KaonMinus(), outFile);
     PrintHtml(G4Lambda::Lambda(), outFile);
     PrintHtml(G4Alpha::Alpha(), outFile);
+    PrintHtml(G4GenericIon::GenericIon(), outFile);
 
     outFile << "</ul>\n";
     outFile << "</body>\n";
@@ -677,8 +695,26 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
 
     outFile << "  </li>\n";
     outFile << "</ul>\n";
+
   }
-}
+
+  // Loop over extra (G4VProcess) processes
+
+  std::multimap<PD,G4VProcess*,std::less<PD> >::iterator itp;
+  for (itp=ep_map.lower_bound(theParticle); itp!=ep_map.upper_bound(theParticle); ++itp) {
+    if (itp->first == theParticle) {
+      G4VProcess* proc = (itp->second);
+      outFile << "<br> &nbsp;&nbsp; <b><font color=\" 0000ff \">process : "
+              << proc->GetProcessName() << "</font></b>\n";
+      outFile << "<ul>\n";
+      outFile << "  <li>";
+      proc->ProcessDescription(outFile);
+      outFile << "  </li>\n";
+      outFile << "</ul>\n";
+    }
+  }
+
+} // PrintHtml for particle
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 

@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Par01ParallelWorldForPion.cc 90093 2015-05-13 11:59:54Z gcosmo $
+/// \file Par01/src/Par01ParallelWorldForPion.cc
+/// \brief Implementation of the Par01ParallelWorldForPion class
+//
+// $Id: Par01ParallelWorldForPion.cc 100936 2016-11-03 11:07:41Z gcosmo $
 //
 #include "Par01ParallelWorldForPion.hh"
 #include "Par01PionShowerModel.hh"
@@ -38,12 +41,18 @@
 
 #include "G4RegionStore.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01ParallelWorldForPion::Par01ParallelWorldForPion(G4String worldName)
   : G4VUserParallelWorld(worldName)
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01ParallelWorldForPion::~Par01ParallelWorldForPion()
 {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01ParallelWorldForPion::Construct()
 {
@@ -93,6 +102,7 @@ void Par01ParallelWorldForPion::Construct()
   
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01ParallelWorldForPion::ConstructSD()
 {

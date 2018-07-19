@@ -119,7 +119,7 @@ G4TablesForExtrapolator:: ~G4TablesForExtrapolator()
 const G4PhysicsTable* 
 G4TablesForExtrapolator::GetPhysicsTable(ExtTableType type) const
 {
-  const G4PhysicsTable* table = 0;
+  const G4PhysicsTable* table = nullptr;
   switch (type) 
     {
     case fDedxElectron:
@@ -171,7 +171,7 @@ void G4TablesForExtrapolator::Initialisation()
   if(verbose>1) {
     G4cout << "### G4TablesForExtrapolator::Initialisation" << G4endl;
   }
-  currentParticle = 0;
+  currentParticle = nullptr;
 
   electron = G4Electron::Electron();
   positron = G4Positron::Positron();

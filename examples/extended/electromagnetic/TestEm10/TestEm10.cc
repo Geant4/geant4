@@ -27,7 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm10 example
 //
 //
-// $Id: TestEm10.cc 73033 2013-08-15 09:24:45Z gcosmo $
+// $Id: TestEm10.cc 109304 2018-04-10 06:57:03Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,103 +37,75 @@
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
-#include "Em10DetectorConstruction.hh"
-// #include "ALICEDetectorConstruction.hh"
-#include "Em10PhysicsList.hh"
-#include "Em10PrimaryGeneratorAction.hh"
-#include "Em10RunAction.hh"
-#include "Em10EventAction.hh"
-#include "Em10SteppingAction.hh"
-#include "Em10SteppingVerbose.hh"
-#include "Em10TrackingAction.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "StackingAction.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 int main(int argc,char** argv) 
 {
 
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
   //choose the Random engine
-
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-  //my Verbose output class
-
-  G4VSteppingVerbose::SetInstance(new Em10SteppingVerbose);
-    
-  // Construct the default run manager
-
+      
+  //construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
-  // set mandatory initialization classes
-
-  Em10DetectorConstruction* detector;
-  detector = new Em10DetectorConstruction;
+  //set mandatory initialization classes
+  DetectorConstruction* detector;
+  detector = new DetectorConstruction;
 
   // ALICEDetectorConstruction* detector;
   // detector = new ALICEDetectorConstruction;
 
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new Em10PhysicsList(detector));
- 
-  // set user action classes
-  runManager->SetUserAction(new Em10PrimaryGeneratorAction(detector));
+  runManager->SetUserInitialization(new PhysicsList(detector));
 
-  Em10RunAction* runAction = new Em10RunAction;
+  //set user action classes
+  runManager->SetUserAction(new PrimaryGeneratorAction());
 
+  RunAction* runAction = new RunAction;
   runManager->SetUserAction(runAction);
 
-  Em10EventAction* eventAction = new Em10EventAction(runAction);
-
+  EventAction* eventAction = new EventAction(runAction);
   runManager->SetUserAction(eventAction);
 
-  Em10SteppingAction* steppingAction = new Em10SteppingAction(eventAction,
-                                                              runAction);
-  runManager->SetUserAction(steppingAction);
+  runManager->SetUserAction( new StackingAction );
 
+  //initialize visualization
+  G4VisManager* visManager = nullptr;
 
-  runManager->SetUserAction( new Em10TrackingAction );
+  //get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
-
-  if (argc!=1)   // batch mode  
-    {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
-    }
-    
-  else           //define visualization and UI terminal for interactive mode
-    { 
-#ifdef G4VIS_USE
-   G4VisManager* visManager = new G4VisExecutive;
+  if (ui)  {
+   //interactive mode
+   visManager = new G4VisExecutive;
    visManager->Initialize();
-#endif    
-     
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-      ui->SessionStart();
-      delete ui;
-#endif
-     
-#ifdef G4VIS_USE
-     delete visManager;
-#endif     
-    } 
- 
-  // job termination
-  // 
-  delete runManager;
+   ui->SessionStart();
+   delete ui;
+  }
+  else  {
+   //batch mode
+   G4String command = "/control/execute ";
+   G4String fileName = argv[1];
+   UImanager->ApplyCommand(command+fileName);
+  }
 
-  return 0;
+  //job termination
+  delete visManager;
+  delete runManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

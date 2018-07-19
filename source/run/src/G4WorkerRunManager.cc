@@ -46,6 +46,7 @@
 #include "G4SDManager.hh"
 #include "G4VScoringMesh.hh"
 #include "G4Timer.hh"
+#include "G4TiMemory.hh"
 #include <sstream>
 #include <fstream>
 
@@ -61,7 +62,7 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
     G4ExceptionDescription msg;
     msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
     msg<<" This type of RunManager can only be used in mult-threaded applications.";
-    G4Exception("G4WorkerRunManager::G4WorkerRunManager()","Run0035",FatalException,msg);
+    G4Exception("G4WorkerRunManager::G4WorkerRunManager()","Run0103",FatalException,msg);
 #endif
     G4ParticleTable::GetParticleTable()->WorkerG4ParticleTable();
     G4ScoringManager* masterScM = G4MTRunManager::GetMasterScoringManager();
@@ -91,8 +92,9 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
 #include "G4MTRunManager.hh"
 
 G4WorkerRunManager::~G4WorkerRunManager() {
-    // Delete thread-local process manager objects
-    physicsList->RemoveProcessManager();
+    // Delete thread-local data process manager objects
+    physicsList->TerminateWorker();
+//    physicsList->RemoveProcessManager();
 
     //Put these pointers to zero: owned by master thread
     //If not to zero, the base class destructor will attempt to
@@ -132,6 +134,7 @@ void G4WorkerRunManager::InitializeGeometry() {
 
 void G4WorkerRunManager::RunInitialization()
 {
+    TIMEMORY_AUTO_TIMER("");
 #ifdef G4MULTITHREADED
   if(!visIsSetUp)
   {
@@ -203,6 +206,7 @@ void G4WorkerRunManager::RunInitialization()
 
 void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4int n_select)
 {
+    TIMEMORY_AUTO_TIMER("");
     if(!userPrimaryGeneratorAction)
     {
       G4Exception("G4RunManager::GenerateEvent()", "Run0032", FatalException,
@@ -247,6 +251,7 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
 
 void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
 {
+    TIMEMORY_AUTO_TIMER("");
   currentEvent = GenerateEvent(i_event);
   if(eventLoopOnGoing)
   {  
@@ -259,6 +264,7 @@ void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
 
 G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
 {
+    TIMEMORY_AUTO_TIMER("");
   G4Event* anEvent = new G4Event(i_event);
   long s1 = 0;
   long s2 = 0;
@@ -370,8 +376,10 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
 
   if(printModulo > 0 && anEvent->GetEventID()%printModulo == 0 )
   {
-    G4cout << "--> Event " << anEvent->GetEventID() << " starts with initial seeds ("
-           << s1 << "," << s2 << ")." << G4endl;
+    G4cout << "--> Event " << anEvent->GetEventID() << " starts";
+    if(eventHasToBeSeeded)
+    { G4cout << " with initial seeds (" << s1 << "," << s2 << ")"; }
+    G4cout << "." << G4endl;
   }
   userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
   return anEvent;
@@ -506,25 +514,25 @@ void G4WorkerRunManager::ConstructScoringWorlds()
 
 void G4WorkerRunManager::SetUserInitialization(G4UserWorkerInitialization*)
 {
-    G4Exception("G4RunManager::SetUserInitialization(G4UserWorkerInitialization*)", "Run3021",
+    G4Exception("G4RunManager::SetUserInitialization(G4UserWorkerInitialization*)", "Run0118",
                 FatalException, "This method should be used only with an instance of G4MTRunManager");
 }
 
 void G4WorkerRunManager::SetUserInitialization(G4UserWorkerThreadInitialization*)
 {
-    G4Exception("G4RunManager::SetUserInitialization(G4UserWorkerThreadInitialization*)", "Run3021",
+    G4Exception("G4RunManager::SetUserInitialization(G4UserWorkerThreadInitialization*)", "Run0119",
                 FatalException, "This method should be used only with an instance of G4MTRunManager");
 }
 
 void G4WorkerRunManager::SetUserInitialization(G4VUserActionInitialization*)
 {
-    G4Exception("G4RunManager::SetUserInitialization(G4VUserActionInitialization*)", "Run3021",
+    G4Exception("G4RunManager::SetUserInitialization(G4VUserActionInitialization*)", "Run0120",
                 FatalException, "This method should be used only with an instance of G4MTRunManager");
 }
 
 void G4WorkerRunManager::SetUserInitialization(G4VUserDetectorConstruction*)
 {
-    G4Exception("G4RunManager::SetUserInitialization(G4VUserDetectorConstruction*)", "Run3021",
+    G4Exception("G4RunManager::SetUserInitialization(G4VUserDetectorConstruction*)", "Run0121",
                 FatalException, "This method should be used only with an instance of G4MTRunManager");
 }
 
@@ -537,7 +545,7 @@ void G4WorkerRunManager::SetUserInitialization(G4VUserPhysicsList* pl)
 void G4WorkerRunManager::SetUserAction(G4UserRunAction* userAction)
 {
     G4RunManager::SetUserAction(userAction);
-    userAction->SetMaster(false);
+    if(userAction) userAction->SetMaster(false);
 }
 
 void G4WorkerRunManager::SetupDefaultRNGEngine()
@@ -585,11 +593,12 @@ void G4WorkerRunManager::StoreRNGStatus(const G4String& fn )
 
 void G4WorkerRunManager::DoWork()
 {
+    TIMEMORY_AUTO_TIMER("");
   G4MTRunManager* mrm = G4MTRunManager::GetMasterRunManager();
   G4MTRunManager::WorkerActionRequest nextAction = mrm->ThisWorkerWaitForNextAction();
-  while( nextAction != G4MTRunManager::ENDWORKER )
+  while( nextAction != G4MTRunManager::WorkerActionRequest::ENDWORKER )
   {
-    if( nextAction == G4MTRunManager::NEXTITERATION ) // start the next run
+    if( nextAction == G4MTRunManager::WorkerActionRequest::NEXTITERATION ) // start the next run
     {
       //The following code deals with changing materials between runs
       static G4ThreadLocal G4bool skipInitialization = true;
@@ -604,7 +613,7 @@ void G4WorkerRunManager::DoWork()
           workerContext->UpdateGeometryAndPhysicsVectorFromMaster();
       }
 
-      // Execute UI commands stored in the masther UI manager
+      // Execute UI commands stored in the master UI manager
       std::vector<G4String> cmds = mrm->GetCommandStack();
       G4UImanager* uimgr = G4UImanager::GetUIpointer(); //TLS instance
       std::vector<G4String>::const_iterator it = cmds.begin();
@@ -623,13 +632,20 @@ void G4WorkerRunManager::DoWork()
           this->BeamOn(numevents,macroFile,numSelect);
       }
     }
+    else if (nextAction == G4MTRunManager::WorkerActionRequest::PROCESSUI ) {
+        std::vector<G4String> cmds = mrm->GetCommandStack();
+        G4UImanager* uimgr = G4UImanager::GetUIpointer(); //TLS instance
+        std::vector<G4String>::const_iterator it = cmds.begin();
+        for(;it!=cmds.end();it++)
+        { uimgr->ApplyCommand(*it); }
+        mrm->ThisWorkerProcessCommandsStackDone();
+    }
     else
     {
       G4ExceptionDescription d;
       d<<"Cannot continue, this worker has been requested an unknwon action: "
-       <<nextAction<<" expecting: ENDWORKER(=" <<G4MTRunManager::ENDWORKER
-       <<") or NEXTITERATION(="<<G4MTRunManager::NEXTITERATION<<")";
-      G4Exception("G4WorkerRunManager::DoWork","Run0035",FatalException,d);
+       <<static_cast<std::underlying_type<G4MTRunManager::WorkerActionRequest>::type>(nextAction);
+      G4Exception("G4WorkerRunManager::DoWork","Run0104",FatalException,d);
     }
 
     //Now wait for master thread to signal new action to be performed

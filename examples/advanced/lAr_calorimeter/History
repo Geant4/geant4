@@ -1,5 +1,5 @@
 Hi-------------------------------------------------------------------
-$Id: History 89572 2015-04-20 07:18:15Z gcosmo $
+$Id: History 109981 2018-05-14 07:15:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,14 @@ $Id: History 89572 2015-04-20 07:18:15Z gcosmo $
 
                       Category History file
                       ---------------------
+
+10.05.2018 - B. Morgan (lAr_calorimeter-V10-04-00)
+             Include G4Types before use of G4MULTITHREADED. For forward 
+             compatibility with move to #defines over -D for G4 preprocessor 
+             symbols.
+
+02.11.2016 - L. Garnier (lAr_calorimeter-V10-02-00)
+             Remove icons.mac. Automatically include since interfaces-V10-02-07
 
 20.04.2015 - V.Ivanhenko Tag (lAr_calorimeter-V10-01-00)
              Fixed internal array overflow in FCALTestSetupSD, which

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5HadCalorimeterSD.hh 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5HadCalorimeterSD.hh 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5HadCalorimeterSD.hh
 /// \brief Definition of the B5HadCalorimeterSD class
@@ -43,14 +43,14 @@ class G4TouchableHistory;
 
 class B5HadCalorimeterSD : public G4VSensitiveDetector
 {    
-public:
+  public:
     B5HadCalorimeterSD(G4String name);
     virtual ~B5HadCalorimeterSD();
     
     virtual void Initialize(G4HCofThisEvent*HCE);
     virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
     
-private:
+  private:
     B5HadCalorimeterHitsCollection* fHitsCollection;
     G4int fHCID;
 };

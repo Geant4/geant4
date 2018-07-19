@@ -35,7 +35,8 @@ enum marker_style {
   marker_square_line,
   marker_square_filled,
   marker_penta_star_line,
-  marker_penta_star_filled
+  marker_penta_star_filled,
+  marker_minus
 };
 
 enum area_style {
@@ -141,7 +142,8 @@ enum number_type {
   number_uint,
   number_int,
   number_real,
-  number_ip
+  number_ip,
+  number_radec
 };
 
 enum camera_type {
@@ -159,6 +161,12 @@ enum layout_policy {
   layout_text_under_image = 0,
   layout_text_at_left_of_image = 1
   //layout_text_at_right_of_image = 2
+};
+
+enum auto_lut_policy {
+  auto_lut_none = 0,
+  auto_lut_min_max = 1,
+  auto_lut_mean_rms = 2
 };
 
 }}

@@ -396,7 +396,7 @@ G4UCNBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         } else {
           aParticleChange.ProposeEnergy(Enew);
           aParticleChange.ProposeMomentumDirection(NewMomentum);
-          aParticleChange.ProposeVelocity(sqrt(2*Enew/neutron_mass_c2)*c_light);
+          aParticleChange.ProposeVelocity(std::sqrt(2*Enew/neutron_mass_c2)*c_light);
           aParticleChange.ProposeLocalEnergyDeposit(Energy-Enew);
         }
 
@@ -437,7 +437,7 @@ G4UCNBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
           aParticleChange.ProposeEnergy(Enew);
           aParticleChange.ProposeMomentumDirection(NewMomentum.unit());
-          aParticleChange.ProposeVelocity(sqrt(2*Enew/neutron_mass_c2)*c_light);
+          aParticleChange.ProposeVelocity(std::sqrt(2*Enew/neutron_mass_c2)*c_light);
           aParticleChange.ProposeLocalEnergyDeposit(Energy-Enew);
 
           if (verboseLevel > 1) { 

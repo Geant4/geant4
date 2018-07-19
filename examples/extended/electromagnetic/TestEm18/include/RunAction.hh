@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm18/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: RunAction.hh 105927 2017-08-29 13:25:29Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,8 +35,9 @@
 #define RunAction_h 1
 
 #include "G4UserRunAction.hh"
-
+#include "G4VProcess.hh"
 #include "globals.hh"
+#include <map>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,43 +61,64 @@ class RunAction : public G4UserRunAction
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
 
-    void AddEnergyDeposit (G4double edep)
-                   {fEnergyDeposit += edep;};
+    void CountProcesses(G4String procName);
 
-    void AddTrackLength (G4double step)
-                 {fTrackLength += step; fNbSteps++;};
-                 
-    void AddChargedSecondary (G4double ekin)
-                 {fEnergyCharged += ekin; fNbCharged++;
-                  if (ekin<fEmin[0]) fEmin[0] = ekin;
-                  if (ekin>fEmax[0]) fEmax[0] = ekin;
-                 };
-                 
-    void AddNeutralSecondary (G4double ekin)
-                 {fEnergyNeutral += ekin; fNbNeutral++;
-                  if (ekin<fEmin[1]) fEmin[1] = ekin;
-                  if (ekin>fEmax[1]) fEmax[1] = ekin;
-                 };
-                
+    void TrackLength (G4double step);
+
+    void EnergyDeposited (G4double edepPrim, G4double edepSecond);
+
+    void EnergyTransferedByProcess (G4String procName, G4double energy);
+
+    void EnergyTransfered (G4double energy);
+
+    void TotalEnergyLost (G4double energy);
+
+    void EnergyBalance (G4double energy);
+
+    void TotalEnergyDeposit (G4double energy);
+
+    void EnergySpectrumOfSecondaries (G4String particleName, G4double ekin);
+
   public:
     G4double GetEnergyFromRestrictedRange
              (G4double,G4ParticleDefinition*,G4Material*,G4double);
                        
     G4double GetEnergyFromCSDARange
-             (G4double,G4ParticleDefinition*,G4Material*,G4double);                 
-                 
+             (G4double,G4ParticleDefinition*,G4Material*,G4double);
+
+private:
+  struct MinMaxData {
+   MinMaxData()
+     : fCount(0), fVsum(0.), fVmin(0.), fVmax(0.) {}
+   MinMaxData(G4int count, G4double vsum, G4double vmin, G4double vmax)
+     : fCount(count), fVsum(vsum), fVmin(vmin), fVmax(vmax) {}
+   G4int     fCount;
+   G4double  fVsum;
+   G4double  fVmin;
+   G4double  fVmax;
+  };
+  
   private:
-    G4double fEnergyDeposit;
-    G4double fTrackLength;
-    G4double fEnergyCharged, fEnergyNeutral;
-    G4double fEmin[2], fEmax[2];
-    
-    G4long   fNbSteps;
-    G4int    fNbCharged, fNbNeutral;
 
     DetectorConstruction*   fDetector;
     PrimaryGeneratorAction* fPrimary;
     HistoManager*           fHistoManager;
+
+    std::map<G4String,G4int>  fProcCounter;
+
+    G4long   fNbSteps;
+    G4double fTrackLength, fStepMin, fStepMax;
+
+    G4double fEdepPrimary, fEdepPrimMin, fEdepPrimMax;
+    std::map<G4String,MinMaxData> fEtransfByProcess;
+    G4double fEnergyTransfered, fEtransfMin, fEtransfMax;
+    G4double fEnergyLost, fElostMin, fElostMax;
+    G4double fEnergyBalance, fEbalMin, fEbalMax;
+
+    G4double fEdepSecondary, fEdepSecMin, fEdepSecMax;
+    G4double fEdepTotal, fEdepTotMin, fEdepTotMax;
+
+    std::map<G4String,MinMaxData> fEkinOfSecondaries;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

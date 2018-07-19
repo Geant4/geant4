@@ -34,7 +34,6 @@
 #include "RunAction.hh"
 #include "G4Proton.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class SteppingAction : public G4UserSteppingAction

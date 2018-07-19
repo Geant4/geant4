@@ -34,7 +34,7 @@ G4WorkerRunManagerKernel::G4WorkerRunManagerKernel() : G4RunManagerKernel(worker
     G4ExceptionDescription msg;
     msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
     msg<<" This type of RunManager can only be used in mult-threaded applications.";
-    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0035",FatalException,msg);
+    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0102",FatalException,msg);
 #endif
 
 }
@@ -63,7 +63,7 @@ void G4WorkerRunManagerKernel::SetupShadowProcess() const
             msg << "Process manager or process manager shadow to master are not set.\n";
             msg << "Particle : "<<pd->GetParticleName()<<" ("<<pd<<"), proc-manager: "<<pm;
             msg << " proc-manager-shadow: "<<pmM;
-            G4Exception("G4WorkerRunManagerKernel::SetupShadowProcess()","Run11001",FatalException,
+            G4Exception("G4WorkerRunManagerKernel::SetupShadowProcess()","Run0116",FatalException,
             msg);
 	    return;
         }
@@ -84,8 +84,8 @@ void G4WorkerRunManagerKernel::SetupShadowProcess() const
           msg<<" Size of G4ProcessVector is inconsistent between master and worker threads ";
           msg<<" for the particle <"<<pd->GetParticleName()<<">. \n";
           msg<<" size of G4ProcessVector for worker thread is "<<procs.size();
-          msg<<" while masther thread is "<<procsM.size()<<".";
-          G4Exception("G4WorkerRunManagerKernel::SetupShadowProcess()","Run11002",FatalException,msg);
+          msg<<" while master thread is "<<procsM.size()<<".";
+          G4Exception("G4WorkerRunManagerKernel::SetupShadowProcess()","Run0117",FatalException,msg);
         }
         //To each process add the reference to the same
         //process from master. Note that we rely on

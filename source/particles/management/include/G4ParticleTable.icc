@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.icc 73711 2013-09-09 09:57:29Z gcosmo $
+// $Id: G4ParticleTable.icc 106143 2017-09-14 06:34:42Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
 //      implement new version for using STL map instaed of RW PtrHashedDictionary
 //                                       28 ct., 99  H.Kurashige
+//      added support for MuonicAtom        Sep, 17  K.L.Genser
 
 
 inline  
@@ -99,4 +100,16 @@ inline
  void G4ParticleTable::SetGenericIon(G4ParticleDefinition* gi)
 {
   genericIon = gi;
+}
+
+inline
+ G4ParticleDefinition* G4ParticleTable::GetGenericMuonicAtom() const
+{
+  return genericMuonicAtom;
+}
+
+inline 
+ void G4ParticleTable::SetGenericMuonicAtom(G4ParticleDefinition* gma)
+{
+  genericMuonicAtom = gma;
 }

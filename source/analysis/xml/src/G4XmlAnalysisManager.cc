@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4XmlAnalysisManager.cc 93815 2015-11-02 11:32:20Z gcosmo $
+// $Id: G4XmlAnalysisManager.cc 103532 2017-04-13 14:00:35Z gcosmo $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -310,7 +310,7 @@ G4bool G4XmlAnalysisManager::OpenFileImpl(const G4String& fileName)
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()->Message("open", "analysis file", name);
+    fState.GetVerboseL1()->Message("open", "analysis file", name, finalResult);
 #endif
   
   return finalResult;

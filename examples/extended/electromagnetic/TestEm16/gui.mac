@@ -1,0 +1,42 @@
+#
+# This file permits to customize, with commands,
+# the menu bar of the G4UIXm, G4UIQt, G4UIWin32 sessions.
+# It has no effect with G4UIterminal.
+#
+# File menu :
+/gui/addMenu file File
+/gui/addButton file Quit exit
+#
+# Run menu :
+/gui/addMenu run Run
+/gui/addButton run vis "/control/execute vis.mac"
+/gui/addButton run "beamOn 1" "/run/beamOn 1"
+/gui/addButton run run01      "/control/execute run01.mac"
+/gui/addButton run run02      "/control/execute run02.mac"
+/gui/addButton run run01_prot "/control/execute run01_prot.mac"
+#
+# Gun menu :
+/gui/addMenu gun Gun
+/gui/addButton gun "1 GeV"   "/gun/energy 1 GeV"
+/gui/addButton gun "3 GeV"   "/gun/energy 3 GeV"
+/gui/addButton gun "10 GeV"  "/gun/energy 10 GeV"
+/gui/addButton gun "50 TeV"  "/gun/energy 50 TeV"
+/gui/addButton gun "e+"      "/gun/particle e+"
+/gui/addButton gun "e-"      "/gun/particle e-"
+/gui/addButton gun "proton"  "/gun/particle proton"
+# Field menu :
+/gui/addMenu field Field
+/gui/addButton field "off"        "/globalField/setValue 0   0 0 tesla"
+/gui/addButton field "0.5 tesla"  "/globalField/setValue 0.5 0 0 tesla"
+/gui/addButton field "2.0 tesla"  "/globalField/setValue 2.0 0 0 tesla"
+/gui/addButton field "20  tesla"  "/globalField/setValue 20  0 0 tesla"
+#
+# Viewer menu :
+/gui/addMenu viewer Viewer
+/gui/addButton viewer "Set style surface" "/vis/viewer/set/style surface"
+/gui/addButton viewer "Set style wireframe" "/vis/viewer/set/style wireframe"
+/gui/addButton viewer "Refresh viewer" "/vis/viewer/refresh"
+/gui/addButton viewer "Update viewer (interaction or end-of-file)" "/vis/viewer/update"
+/gui/addButton viewer "Flush viewer (= refresh + update)" "/vis/viewer/flush"
+/gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"
+#

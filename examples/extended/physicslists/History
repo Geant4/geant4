@@ -1,0 +1,21 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    physicslists examples History file
+                    -----------------------------------
+
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+03/11/17 R. Hatcher
+- Addition of extensibleFactory example
+
+25/10/17 I. Hrivnacova
+- First version of category

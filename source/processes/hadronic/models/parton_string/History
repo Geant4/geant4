@@ -15,6 +15,52 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 --------------------------------------------------
+07 December 2016,  A. Ribon (hadr-prtn-stable-V10-02-06/hadr-prtn-V10-02-03)
+   G4FTFParameter : set SetExcitationEnergyPerWoundedNucleon to 40 MeV.
+
+--------------------------------------------------
+01 December 2016,  A. Ribon (hadr-prtn-stable-V10-02-05/hadr-prtn-V10-02-02)
+   G4FTFParameter : changed SetExcitationEnergyPerWoundedNucleon 
+   from 100 MeV (as in G4 10.1) to 80 MeV (it was 40 MeV in G4 10.2).
+
+--------------------------------------------------
+09 November 2016,  A. Ribon (hadr-prtn-stable-V10-02-04/hadr-prtn-V10-02-01)
+   G4ExcitedStringDecay : increased the number of max attempts to
+   fragment strings from 10 to 100.
+
+--------------------------------------------------
+12 October 2016,  A. Ribon (hadr-prtn-stable-V10-02-03/hadr-prtn-V10-02-00)
+   G4VPartonStringModel : instead of having the string creation loop
+   (with max 20 attempts) and the string fragmentation loop (with max
+   100 attempts) separated, there is now one single loop for string
+   creation and fragmentation, with max 1000 attempts, and in the case
+   of failure a just-warning exception is thrown.
+
+--------------------------------------------------
+11 October 2016,  A. Ribon (hadr-prtn-stable-V10-02-02)
+   G4FTFModel : brought back completely, as in G4 10.1, the treatment
+   of the residual nucleus excitation energy (there were a few places
+   which were forgotten in the tag cms_hadr-string-diff-V10-01-17).
+
+--------------------------------------------------
+11 October 2016,  A. Ribon (hadr-prtn-stable-V10-02-01)
+   First clean-up and identation of the code.
+   No changes of the random number sequence.
+
+--------------------------------------------------
+06 October 2016,  A. Ribon (hadr-prtn-stable-V10-02-00)
+   Created first (internal) tag of the stable parton_string branch.
+   This corresponds to parton_string as in G4 10.2.p02 , with the special
+   (internal) tag cms_hadr-string-diff-V10-01-17 on top of diffraction,
+   in order to bring the residual nucleus excitation energy as it was in
+   G4 10.1 .
+   The aim of this stable parton_string branch is to produce hadronic
+   showers, with either FTF or QGS string models, very similar to those
+   in G4 10.1, which are reasonably good for the LHC experiments.
+
+==================================================
+
+--------------------------------------------------
 26 March 2014,  G.Folger (hadr-prtn-V10-00-02)
    convert to const G4Particledefinition*
 

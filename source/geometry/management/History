@@ -1,4 +1,4 @@
-$Id: History 102288 2017-01-20 10:57:03Z gcosmo $
+$Id: History 110153 2018-05-16 12:40:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,31 +17,241 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 21, 2016 G.Cosmo                   geommng-V10-01-09
+May 16, 2018 G.Cosmo (geommng-V10-04-05)
+- G4GeomSplitter: replaced use or realloc()/free() and memcpy() with
+  normal allocation/deallocation through G4Allocator. Also addressing
+  compilation warnings on gcc-8.1.
+
+May 11, 2018 E.Tcherniaev (geommng-V10-04-04)
+- G4AffineTransform: further optimized InverseProduct(), for the case where
+  tf2 is a pure translation.
+
+May 7, 2018 E.Tcherniaev (geommng-V10-04-03)
+- G4AffineTransform: added explicit copy constructor, assignment and destructor;
+  InverseProduct() has been optimised, now it does 36 multiplications instead
+  of 45; added methods for inverse transformation: InverseTransformPoint(),
+  InverseTransformAxis(), InverseNetRotation() and InverseNetTranslation().
+
+April 24, 2018 E.Tcherniaev (geommng-V10-04-02)
+- G4AffineTransform: minor optimisation to multiplication of matrix by vector,
+  to make use of temporaries in accessing vector components.
+
+April 11, 2018 G.Cosmo (geommng-V10-04-01)
+- Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
+
+December 19, 2017 G.Cosmo (geommng-V10-04-00)
+- Fixed self-consistency in G4VVolumeMaterialScanner header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
+
+November 10, 2017 P.Arce (geommng-V10-03-22)
+- Bug report 2011: precision correction in G4ErrorPlaneSurfaceTarget.cc 
+
+October 16, 2017 G.Cosmo                   geommng-V10-03-21
+- Removed G4USolid base wrapper for USolids. Only native VecGeom
+  implementation through G4UAdapter is now supported.
+  Requires corresponding tag "geom-specific-V10-03-20".
+- Enable proper implementation of operator=() in G4UAdapter.
+
+October 11, 2017 E.Tcherniaev              geommng-V10-03-20, 19
+- G4GeomTools: added PointInPolygon() function, to dtermine the position of a
+  point relative to a polygon in 2D.
+
+June 9, 2017 G.Cosmo                       geommng-V10-03-18
+- Corrections and improvements to G4UAdapter.
+
+June 1, 2017 G.Cosmo                       geommng-V10-03-17
+- Made G4UAdapter compliant with latest modifications in VecGeom for
+  renaming of GetPointOnSurface() method to SamplePointOnSurface().
+
+May 24, 2017 G.Cosmo                       geommng-V10-03-16
+- Renamed ambiguous name Extent() in G4VSolid to BoundingLimits().
+  Modified G4ReflectedSolid accordingly.
+  Change required in order to avoid signature conflict with VecGeom
+  in G4U* wrappers.
+
+May 24, 2017 G.Cosmo                       geommng-V10-03-15
+- Added adapter class G4UAdapter for interfacing G4U* wrappers with VecGeom.
+  Will replace G4USolid bridge class, deprecating USolids API in favour of
+  direct use of VecGeom signatures and removal of one extra-level of
+  indirection/inheritance.
+
+May 9, 2017 G.Cosmo                        geommng-V10-03-14
+- Moved few key methods to be inline in G4USolid.
+
+March 28, 2017 G.Cosmo                     geommng-V10-03-13
+- Enabled deletion of solids in G4SolidsStore destructor also for MT mode. 
+
+March 22, 2017 G.Cosmo                     geommng-V10-03-12
+- Define IsGeometryClosed() in G4GeometryManager as a static method, to
+  avoid call to GetInstance(). Made related Boolean flag thread-local.
+
+March 21, 2017 G.Cosmo                     geommng-V10-03-11, 10
+- Restore singleton pointer to thread-local and provide simple accessor to it.
+
+March 17, 2017 G.Cosmo                     geommng-V10-03-09
+- Define G4GeometryManager as normal singleton.
+
+March 15, 2017 G.Cosmo                     geommng-V10-03-08
+- Refined deletion of subinstance offsets in stores.
+
+March 14, 2017 G.Cosmo                     geommng-V10-03-07
+- Removed additional wrong lock in G4GeomSplitter for function
+  SlaveReCopySubInstanceArray().
+- Disable cleaning of subinstance offsets on Windows.
+
+March 10, 2017 G.Cosmo                     geommng-V10-03-06,5,4,3
+- Fixed static memory leak from G4LogicalVolume, G4VPhysicalVolume and
+  G4Region, for offsets allocated in sequential mode.
+
+February 27, 2017 E.Tcherniaev             geommng-V10-03-02
+- Added functions EllipsePerimeter(), EllipticConeLateralArea() and
+  comp_ellint_2() to G4GeomTools.
+
+December 16, 2016 G.Cosmo                  geommng-V10-03-01
+- Fixed compilation warning on gcc-6.2 for last changes in G4GeomTools.
+
+December 14, 2016 E.Tcherniaev             geommng-V10-03-00
+- Added methods TriangelAreaNormal(), QuadAreaNormal(), PolygonAreaNormal(),
+  ClosestPointOnSegment() and ClosestPointOnTriangle() to G4GeomTools.
+
+November 8, 2016 G.Cosmo                   geommng-V10-02-32
+- Fixed header inclusions in G4LogicalCrystalVolume and make use of
+  dynamic_cast instead of C-style cast.
+
+November 8, 2016 G.Cosmo                   geommng-V10-02-31
+- Again code formatting to G4LogicalCrystalVolume files.
+
+November 7, 2016 E. Bagli                  geommng-V10-02-30
+- Modified G4LogicalCrystalVolume for the G4CrystalExtension
+
+November 3, 2016 G.Cosmo                   geommng-V10-02-29
+- Added Extent() virtual method to G4VSolid and G4ReflectedSolid (E.Tcherniaev).
+- Fixed Coverity defect in G4LogicalVolume::ClearDaughters().
+
+November 1, 2016 E.Tcherniaev              geommng-V10-02-28
+- Added function DistancePointSegment() to G4GeomTools class.
+- Code formatting in G4LogicalCrystalVolume.
+
+October 26, 2016 E.Tcherniaev              geommng-V10-02-27
+- Added new functions SphereExtent(), TriangulatePolygon(), IsConvex() and
+  RemoveRedundantVertices() to G4GeomTools class.
+
+October 24, 2016 E.Bagli                   geommng-V10-02-26
+- Added class G4LogicalCrystalVolume, representing an extended logical
+  volume for crystal description.
+
+October 21, 2016 G.Cosmo                   geommng-V10-02-25
 - Moved initialisation of G4GeomSplitter thread-local data to be inline
   along with generic template type.
   Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+- Added IsConvex() method to G4GeomTools.
 
-September 20, 2016 G.Cosmo
+October 19, 2016 M.Asai                    geommng-V10-02-24, 23
+- G4LogicalVolume: added virtual keyword is to destructor for extended
+  yypes in the kernel. Added IsExtended() method.
+
+October 16, 2016 E.Tcherniaev
+- New utility class G4GeomTools providing static utility methods for
+  geometry related calculations.
+
+October 2, 2016 E.Tcherniaev               geommng-V10-02-22
+- G4BoundingEnvelope: take into account four points instead of three in
+  CreateListOfPlanes().
+
+September 26, 2016 E.Tcherniaev            geommng-V10-02-21
+- G4USolid: make direct use extent from shapes for computing bounding-box
+  in CalculateExtent().
+
+September 22, 2016 E.Tcherniaev            geommng-V10-02-20
+- Added checks for bounding-box extents in G4USolid.
+- Converted fatal exception to warning for CheckBoundingBox() in
+  G4BoundingEnvelope. Corrected use of 'const' data to resolve Coverity
+  defects.
+
+September 20, 2016 G.Cosmo                 geommng-V10-02-19
 - Moved accessors/modifiers for splitter data to non-inline in G4Region,
   G4LogicalVolume, G4VPhysicalVolume.
   Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
-July 7, 2016 G.Cosmo
+September 9, 2016 E.Tcherniaev
+- G4BoundingEnvelope: added QuickCheck() function.
+
+September 2, 2016 E.Tcherniaev             geommng-V10-02-18
+- G4BoundingEnvelope: fixed bug in construction of voxel edges.
+
+August 8, 2016 E.Tcherniaev                geommng-V10-02-17
+- G4BoundingEnvelope: some improvement of internal consistency in the code.
+
+July 7, 2016 G.Cosmo                       geommng-V10-02-16
 - Removed redundant check in G4GeomSplitter::UseWorkArea().
   Addressing problem report #1876.
 
-April 14, 2016 G.Cosmo                     geommng-V10-01-08
+July 6, 2016 G.Cosmo                       geommng-V10-02-15
+- Correction in G4USolid::CalculateExtent() for correct return-type.
+
+June 29, 2016 E.Tcherniaev                 geommng-V10-02-14
+- Optimised version of G4BoundingEnvelope.
+
+June 28, 2016 E.Tcherniaev
+- Re-implemented CalculateExtent() in G4USolid to use G4BoundingEnvelope;
+  removed method CreateRotatedVertices().
+
+June 27, 2016 E.Tcherniaev
+- G4AffineTransform: added conversion operator to G4Transform3D and
+  simplified implementation of NetRotation() in terms of G4Rep3x3.
+
+June 13, 2016 E.Tcherniaev
+- G4ReflectedSolid: new revision of CalculateExtent(), to make use of
+  CalculateExtent() from the constituent solid, applying proper transformation.
+  Removed use of G4BoundingEnvelope.
+
+June 7, 2016 G.Cosmo                       geommng-V10-02-13
+- Initialise 'emin' and 'emax' in G4BoundingEnvelope::CalculateExtent().
+
+June 6, 2016 E.Tcherniaev                  geommng-V10-02-12
+- Introduced G4BoundingEnvelope helper class to be used for the calculation
+  of the extent of a solid within the limits defined by the G4VoxelLimits
+  object.
+- Re-implemented CalculateExtent() in G4ReflectedSolid to use new class
+  G4BoundingEnvelope.
+
+June 6, 2016 E.Tcherniaev                  geommng-V10-02-11
+- G4G4ScaleTransform: simplified signatures in TransformDistance() and
+  in InverseTransformDistance(); make use of accessors.
+
+June 1, 2016 G.Cosmo                       geommng-V10-02-10
+- Corrected treatment of polyhedron for G4ReflectedSolid to avoid thread
+  contention.
+
+May 18, 2016 G.Cosmo                       geommng-V10-02-09, 08
+- More simplified code for G4ReflectedSolid; also removed not used cached
+  inverse transformation.
+
+May 17, 2016 E.Tcherniaev                  geommng-V10-02-07
+- Use G4Normal3D with proper inverse transformation for calculation of
+  normals in G4ReflectedSolid.
+
+May 13, 2016 G.Cosmo                       geommng-V10-02-06, 05
+- Properly use 3D transformations in G4ReflectedSolid. Removed unused
+  affine-transformation data and related methods.
+  Corrected GetPolyhedron() for multi-threading.
+- Updated unit test visualization macros and UI setup.
+
+May 12, 2016 E.Tcherniaev                  geommng-V10-02-04
+- Added transformations for normal vectors in G4ScaleTransform.
+
+April 14, 2016 G.Cosmo                     geommng-V10-02-03
 - Added flag for partial use of USolids/VecGeom types.
 
-April 12, 2016 G.Cosmo
+April 12, 2016 G.Cosmo                     geommng-V10-02-02
 - Minor cosmetics to G4USolid.
 
-March 31, 2016 G.Cosmo
+March 31, 2016 G.Cosmo                     geommng-V10-02-01
 - Throw exception in call to CreatePolyhedron() for base class G4USolid.
   Method is now implemented in the concrete wrappers.
 
-March 16, 2016 G.Cosmo
+March 16, 2016 G.Cosmo                     geommng-V10-02-00
+- Added G4ScaleTransform class for Cartesian scaling transformations.
 - G4AffineTransform: added inline keywords and fixed formatting.
 - In G4USolid, directly call GetEntityType() from wrapper classes for
   CreatePolyhedron().

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBinaryPiKBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
+// $Id: G4QGSBinaryPiKBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 //
 // Modified:
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -80,9 +81,6 @@ G4QGSBinaryPiKBuilder::
   delete theStringDecay;
   delete theStringModel;
 }
-
-void G4QGSBinaryPiKBuilder::
-Build(G4HadronElasticProcess * ) {}
 
 void G4QGSBinaryPiKBuilder::
 Build(G4PionPlusInelasticProcess * aP)

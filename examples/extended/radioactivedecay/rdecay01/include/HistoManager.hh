@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file HistoManager.hh
+/// \brief Definition of the HistoManager class
 //
-// $Id: HistoManager.hh 68017 2013-03-13 13:29:53Z gcosmo $
+// $Id: HistoManager.hh 98257 2016-07-04 17:39:46Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

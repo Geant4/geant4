@@ -1,0 +1,24 @@
+$Id: History 103900 2017-05-03 08:29:10Z gcosmo $
+-------------------------------------------------------------------
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+            History file for hadronic/models/gamma_nuclear directory
+            -----------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+9 October 2017 Tatsumi Koi (hadr-gamnuc-V10-03-00)
+---------------------------------------------------
+- Created gamma_nuclear directory 
+- G4LENDorBERTModel: This is a combined model.
+LEND is the first choice as final state generator. 
+If there is no LEND data for a target, 
+then BERT model will be used as the final state generator of the reaction.

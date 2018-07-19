@@ -1,0 +1,6 @@
+#
+/process/inactivate nKiller
+#
+/gun/particle neutron
+/run/beamOn 50
+#

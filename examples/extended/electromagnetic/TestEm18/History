@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109315 2018-04-11 06:42:51Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -15,13 +15,48 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14-10-16 G.Folger
-- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
-  fix required by clang39 on Linux and MAC
+10-04-18 mma (testem18-V10-04-02)
+- testem18.cc : set visualisation only in interactive mode
 
-09-12-15 V.Ivant (testem18-V10-01-00)
-- H.Burkhardt fixed root macro allowing to work both with root5 and 6;
-  added run01_prot.mac - demonstrating synkrotron radiation for FCC
+21-03-18 mma (testem18-V10-04-01)
+- testem18.cc : remove G4UI_USE and G4VIS_USE
+
+15-12-17 mma (testem18-V10-04-00)
+- update PhysListEmLivermore and Penelope
+
+13-10-17 mma (testem18-V10-03-06)
+- add edep.mac
+
+31-08-17 G.Cosmo (testem18-V10-03-05)
+- Corrected initialisation of fEdepSecMin and fEdepSecMax.
+
+29-08-17 mma (testem18-V10-03-04)
+- in option, allow the tracking of secondary particles.
+
+24-07-17 mma (testem18-V10-03-03)
+- update readme
+
+16-07-17 mma (testem18-V10-03-02)
+- RunAction : fix compilation warning
+
+12-07-17 mma (testem18-V10-03-01)
+- entirely revised -> more explicit output
+
+19-04-17 mma  (testem18-V10-03-00)
+- BeginOfRunAction() : remove SetRandomNumberStore(true)
+
+14-10-16 G.Folger (testem18-V10-02-03)
+- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+	 
+04-07-16 I. Hrivnacova  (testem18-V10-02-02)
+- Fixes for Doxygen documentation
+
+10-04-16 mma  (testem18-V10-02-01)
+- PhysListEmStandard: use G4EmParameters
+
+09-12-15 V.Ivant (testem18-V10-02-00)
+- H.Burkhardt fixed root macro allowing to work both with root5 and 6
 	 
 18-06-14 mma (testem18-V10-00-00)
 - remove PhysicsList::SetCuts()

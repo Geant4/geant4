@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/G4MonopolePhysics.cc
 /// \brief Implementation of the G4MonopolePhysics class
 //
-// $Id: G4MonopolePhysics.cc 68036 2013-03-13 14:13:45Z gcosmo $
+// $Id: G4MonopolePhysics.cc 107526 2017-11-21 07:17:43Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,7 +36,8 @@
 //
 // Modified:
 //
-//  12.07.10  S.Burdin (changed the magnetic and electric charge variables from integer to double)
+//  12.07.10  S.Burdin (changed the magnetic and electric charge variables 
+//            from integer to double)
 //----------------------------------------------------------------------------
 //
 //
@@ -68,16 +69,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopolePhysics::G4MonopolePhysics(const G4String& nam)
-  : G4VPhysicsConstructor(nam),
-    fMessenger(0), fMpl(0)
+  : G4VPhysicsConstructor(nam), fMpl(nullptr)
 {
   fMagCharge = 1.0;
   //  fMagCharge = -1.0;
   //  fElCharge  = -50.0;
   fElCharge  = 0.0;
   fMonopoleMass = 100.*GeV;
-  fMessenger = new G4MonopolePhysicsMessenger(this);
   SetPhysicsType(bUnknown);
+  fMessenger = new G4MonopolePhysicsMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

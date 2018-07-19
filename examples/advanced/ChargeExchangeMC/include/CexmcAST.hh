@@ -78,9 +78,9 @@ namespace  CexmcAST
 
     struct  Operator
     {
-        Operator( OperatorType  type = Uninitialized, int  priority = 0,
-                  bool  hasRLAssoc = false ) :
-            type( type ), priority( priority ), hasRLAssoc( hasRLAssoc )
+        Operator( OperatorType  type_ = Uninitialized, int  priority_ = 0,
+                  bool  hasRLAssoc_ = false ) :
+            type( type_ ), priority( priority_ ), hasRLAssoc( hasRLAssoc_ )
         {}
 
         OperatorType  type;

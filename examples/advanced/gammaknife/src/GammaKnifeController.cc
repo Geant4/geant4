@@ -107,7 +107,8 @@ void GammaKnifeController::PrepareHitsAccumulation()
             for( ; it != scoreMap.end(); it++)
             {
                 std::string hitMapName = it->first;
-                G4THitsMap<G4double>* hitMapToStore = new G4THitsMap<G4double>("GammaKnifeController", hitMapName);
+                G4THitsMap<G4StatDouble>* hitMapToStore
+                   = new G4THitsMap<G4StatDouble>("GammaKnifeController", hitMapName);
                 storedScoreMap[ hitMapName ] = hitMapToStore;
             }
         }
@@ -130,8 +131,18 @@ void GammaKnifeController::StoreHits()
             MeshScoreMap::iterator it = scoreMap.begin();
             for( ; it != scoreMap.end(); it++)
             {
-                std::string hitMapName = it->first;
-                *storedScoreMap[hitMapName] += *(it->second);
+               std::string hitMapName = it->first;
+               //*storedScoreMap[hitMapName] += *(it->second);
+               auto storedMap = storedScoreMap[hitMapName]->GetMap();
+               auto mapItr = it->second->GetMap()->begin();
+               for(;mapItr!=it->second->GetMap()->end();mapItr++)
+               {
+                 auto key = mapItr->first;
+                 auto val = mapItr->second;
+                 if(storedMap->find(key)==storedMap->end())
+                 { (*storedMap)[key] = new G4StatDouble(); }
+                 (*storedMap)[key]->add(val);
+               }
             }
         }
     }

@@ -6,9 +6,7 @@
 namespace tools {
 
 template <class T>
-inline bool realloc(T*& a_pointer,
-                    unsigned int a_new_size,unsigned int a_old_size,
-                    bool a_init = false) {
+inline bool realloc(T*& a_pointer,size_t a_new_size,size_t a_old_size,bool a_init = false) {
   if(!a_new_size) { 
     delete [] a_pointer; 
     a_pointer = 0;
@@ -29,9 +27,9 @@ inline bool realloc(T*& a_pointer,
   if(a_new_size>a_old_size) {
     ::memcpy(pointer,a_pointer,a_old_size*sizeof(T));
     if(a_init){
-      unsigned int num = a_new_size-a_old_size;   
+      size_t num = a_new_size-a_old_size;   
       T* pos = pointer+a_old_size;
-      for(unsigned int i=0;i<num;i++,pos++) *pos = T();
+      for(size_t i=0;i<num;i++,pos++) *pos = T();
     }
   } else {
     ::memcpy(pointer,a_pointer,a_new_size*sizeof(T));

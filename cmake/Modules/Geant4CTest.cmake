@@ -1,5 +1,16 @@
 # - Basic setup for testing Geant4 using CMake/CTest
 #
+#-----------------------------------------------------------------------
+# Integration and unit tests
+# - "ENABLE_TESTING" means all tests under tests/
+option(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project" OFF)
+GEANT4_ADD_FEATURE(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project")
+mark_as_advanced(GEANT4_ENABLE_TESTING)
+
+# - "BUILD_TESTS" means all 'tests' in individual categories.
+option(GEANT4_BUILD_TESTS "Build all the tests of the project" OFF)
+GEANT4_ADD_FEATURE(GEANT4_BUILD_TESTS "Build all the tests of the project")
+mark_as_advanced(GEANT4_BUILD_TESTS)
 
 #-----------------------------------------------------------------------
 # Configure CTest and relevant Geant4 settings, if required
@@ -22,7 +33,7 @@ if(GEANT4_ENABLE_TESTING)
   endforeach()
 
   # - Add base URL for test reference files
-  set (GEANT4_TEST_REFERENCES_URL "http://geant4.cern.ch/stt/references/" CACHE
+  set (GEANT4_TEST_REFERENCES_URL "http://cern.ch/geant4-data/stt/references/" CACHE
        STRING "base URL for test reference files")
   mark_as_advanced(GEANT4_TEST_REFERENCES_URL)
 

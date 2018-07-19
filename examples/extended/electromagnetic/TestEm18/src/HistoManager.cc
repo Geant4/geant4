@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc 72242 2013-07-12 08:44:19Z gcosmo $
+// $Id: HistoManager.cc 105927 2017-08-29 13:25:29Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,17 +60,25 @@ void HistoManager::Book()
   analysisManager->SetActivation(true);   //enable inactivation of histograms
   
   // Define histograms start values
-  const G4int kMaxHisto = 7;
-  const G4String id[] = { "0", "1", "2", "3" , "4", "5", "6"};
+  const G4int kMaxHisto = 14;
+  const G4String id[] = { "0", "1", "2", "3" , "4", "5", "6", "7", "8", "9",
+                          "10", "11", "12", "13"};
   const G4String title[] =
-                { "dummy",                                        //0
-                  "continuous energy loss along primary track",   //1
-                  "energy from secondaries",                      //2
-                  "total energy lost by primary track",           //3
-                  "energy spectrum of e-+",                       //4
-                  "energy spectrum of gamma",                     //5
-                  "step size"                                     //6
-                 };
+           { "dummy",                                                    //0
+             "step size of primary track",                               //1
+             "energy continuously deposited along primary track",        //2
+             "energy transfered to secondaries by ionisation",           //3
+             "energy transfered to secondaries by Bremsstrahlung",       //4
+             "energy transfered to secondaries by (e+,e-) production",   //5
+             "total energy transfered to secondaries",                   //6
+             "total energy lost by primary track",                       //7
+             "total energy lost by primary track from energy balance",   //8
+             "energy continuously deposited along secondary tracks",     //9
+             "total energy deposited",                                   //10
+             "energy spectrum of gamma",                                 //11
+             "energy spectrum of e-",                                    //12
+             "energy spectrum of e+"                                     //13
+            };
             
   // Default values (to be reset via /analysis/h1/set command)               
   G4int nbins = 100;

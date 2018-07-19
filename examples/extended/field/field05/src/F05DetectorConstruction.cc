@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F05DetectorConstruction.cc 75672 2013-11-05 08:47:41Z gcosmo $
+// $Id: F05DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 /// \file field/field05/src/F05DetectorConstruction.cc
 /// \brief Implementation of the F05DetectorConstruction class
@@ -127,7 +127,7 @@ G4VPhysicalVolume* F05DetectorConstruction::Construct()
   //
   // Visualization attributes
   //
-  // fLogicWorld->SetVisAttributes (G4VisAttributes::Invisible);
+  // fLogicWorld->SetVisAttributes (G4VisAttributes::GetInvisible());
 
   //
   //always return the physical World

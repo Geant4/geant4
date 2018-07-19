@@ -56,7 +56,7 @@ Classes Used
 \section field05_s4 PHYSICS
 \verbatim
 RegisterPHysics(new G4DecayPhysics());
-RegisterPhysics(new F05ExtraPhysics());
+RegisterPhysics(new G4StepLimiterPhysics());
 
 G4VModularPhysicsList::ConstructParticle();
 \endverbatim
@@ -69,7 +69,7 @@ G4VModularPhysicsList::ConstructParticle();
 - G4DecayWithSpin process for the muon
 - G4PionDecayMakeSpin process for the pion
 
- F05ExtraPhysics defines G4StepLimiter and G4UserSpecialCuts
+ G4StepLimiterPhysics defines G4StepLimiter and G4UserSpecialCuts
 
 \section field05_s5 User Action Classes
 

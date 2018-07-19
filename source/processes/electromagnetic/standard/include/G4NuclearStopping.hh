@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearStopping.hh 78837 2014-01-28 08:44:36Z gcosmo $
+// $Id: G4NuclearStopping.hh 106717 2017-10-20 09:41:27Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -61,49 +61,47 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4ICRU49NuclearStoppingModel;
-
 class G4NuclearStopping : public G4VEmProcess
 {
 
 public:    // with description
 
-  G4NuclearStopping(const G4String& processName="nuclearStopping");
+  explicit G4NuclearStopping(const G4String& processName="nuclearStopping");
 
   virtual ~G4NuclearStopping();
 
   // returns true for charged particles, false otherwise
-  G4bool IsApplicable (const G4ParticleDefinition& p);
+  G4bool IsApplicable (const G4ParticleDefinition& p) final;
 
   // implementation of pure virtual method
   G4double AlongStepGetPhysicalInteractionLength(const G4Track& track,
 						 G4double  previousStepSize,
 						 G4double  currentMinimumStep,
 						 G4double& proposedSafety,
-						 G4GPILSelection* selection);
+						 G4GPILSelection* selection) final;
 
   // implementation of energy loss along step
   G4VParticleChange* AlongStepDoIt(const G4Track& track,
-				   const G4Step&  step);
+				   const G4Step&  step) final;
 
   // Print few lines of informations about the process: validity range,
-  void PrintInfo();
+  virtual void PrintInfo() final;
+
+  // print documentation in html format
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
 
   // This function initialise process
-  void InitialiseProcess(const G4ParticleDefinition*);
+  void InitialiseProcess(const G4ParticleDefinition*) final;
 
 private:       
 
   // copy constructor and hide assignment operator
-  G4NuclearStopping(G4NuclearStopping &);
-  G4NuclearStopping & operator=(const G4NuclearStopping &right);
+  G4NuclearStopping(G4NuclearStopping &) = delete;
+  G4NuclearStopping & operator=(const G4NuclearStopping &right) = delete;
 
   G4ParticleChangeForLoss nParticleChange;
-
-  G4ICRU49NuclearStoppingModel* modelICRU49;
-
   G4bool   isInitialized;
 
 };

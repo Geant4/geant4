@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4cCalorimeterSD.cc 87359 2014-12-01 16:04:27Z gcosmo $
+// $Id: B4cCalorimeterSD.cc 100946 2016-11-03 11:28:08Z gcosmo $
 //
 /// \file B4cCalorimeterSD.cc
 /// \brief Implementation of the B4cCalorimeterSD class
@@ -42,7 +42,7 @@ B4cCalorimeterSD::B4cCalorimeterSD(
                             const G4String& hitsCollectionName,
                             G4int nofCells)
  : G4VSensitiveDetector(name),
-   fHitsCollection(0),
+   fHitsCollection(nullptr),
    fNofCells(nofCells)
 {
   collectionName.insert(hitsCollectionName);
@@ -63,7 +63,7 @@ void B4cCalorimeterSD::Initialize(G4HCofThisEvent* hce)
     = new B4cCalorHitsCollection(SensitiveDetectorName, collectionName[0]); 
 
   // Add this collection in hce
-  G4int hcID 
+  auto hcID 
     = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
   hce->AddHitsCollection( hcID, fHitsCollection ); 
 
@@ -80,7 +80,7 @@ G4bool B4cCalorimeterSD::ProcessHits(G4Step* step,
                                      G4TouchableHistory*)
 {  
   // energy deposit
-  G4double edep = step->GetTotalEnergyDeposit();
+  auto edep = step->GetTotalEnergyDeposit();
   
   // step length
   G4double stepLength = 0.;
@@ -90,14 +90,13 @@ G4bool B4cCalorimeterSD::ProcessHits(G4Step* step,
 
   if ( edep==0. && stepLength == 0. ) return false;      
 
-  G4TouchableHistory* touchable
-    = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
+  auto touchable = (step->GetPreStepPoint()->GetTouchable());
     
   // Get calorimeter cell id 
-  G4int layerNumber = touchable->GetReplicaNumber(1);
+  auto layerNumber = touchable->GetReplicaNumber(1);
   
   // Get hit accounting data for this cell
-  B4cCalorHit* hit = (*fHitsCollection)[layerNumber];
+  auto hit = (*fHitsCollection)[layerNumber];
   if ( ! hit ) {
     G4ExceptionDescription msg;
     msg << "Cannot access hit " << layerNumber; 
@@ -106,7 +105,7 @@ G4bool B4cCalorimeterSD::ProcessHits(G4Step* step,
   }         
 
   // Get hit for total accounting
-  B4cCalorHit* hitTotal 
+  auto hitTotal 
     = (*fHitsCollection)[fHitsCollection->entries()-1];
   
   // Add values
@@ -121,7 +120,7 @@ G4bool B4cCalorimeterSD::ProcessHits(G4Step* step,
 void B4cCalorimeterSD::EndOfEvent(G4HCofThisEvent*)
 {
   if ( verboseLevel>1 ) { 
-     G4int nofHits = fHitsCollection->entries();
+     auto nofHits = fHitsCollection->entries();
      G4cout
        << G4endl 
        << "-------->Hits Collection: in this event they are " << nofHits 

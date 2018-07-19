@@ -1,0 +1,213 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id:$
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
+// G4Voxelizer inline methods
+//
+// History:
+// 19.10.12 Marek Gayer, created
+// --------------------------------------------------------------------
+
+
+template <typename T> inline
+G4int G4Voxelizer::BinarySearch(const std::vector<T> &vec, T value)
+{
+  typename std::vector<T>::const_iterator begin=vec.begin(), end=vec.end();
+  G4int res = std::upper_bound(begin, end, value) - begin - 1;
+  return res;
+}
+
+inline
+const std::vector<G4VoxelBox> &G4Voxelizer::GetBoxes() const
+{
+  return fBoxes;
+}
+  
+inline
+const std::vector<G4double> &G4Voxelizer::GetBoundary(G4int index) const
+{
+  return fBoundaries[index];
+}
+
+inline
+void G4Voxelizer::GetVoxel(std::vector<G4int> &curVoxel,
+                                  const G4ThreeVector &point) const
+{
+  for (G4int i=0; i<=2; ++i)
+  {
+    const std::vector<double> &boundary = GetBoundary(i);
+    G4int n = BinarySearch(boundary, point[i]);
+    if (n == -1)
+      { n = 0; }
+    else if (n == G4int(boundary.size()) - 1)
+      { n--; }
+    curVoxel[i] = n;
+  }
+}
+
+inline
+G4int G4Voxelizer::GetBitsPerSlice () const
+{
+  return fNPerSlice*8*sizeof(unsigned int);
+}
+
+inline
+G4int G4Voxelizer::GetVoxelsIndex(G4int x, G4int y, G4int z) const
+{
+  if (x < 0 || y < 0 || z < 0) { return -1; }
+  G4int maxX = fBoundaries[0].size();
+  G4int maxY = fBoundaries[1].size();
+  G4int index = x + y*maxX + z*maxX*maxY;
+
+  return index;
+}
+
+inline
+G4int G4Voxelizer::GetVoxelsIndex(const std::vector<G4int> &voxels) const
+{
+  return GetVoxelsIndex(voxels[0], voxels[1], voxels[2]);
+}
+
+inline
+G4bool G4Voxelizer::GetPointVoxel(const G4ThreeVector& p,
+                                  std::vector<G4int>& voxels) const
+{
+  for (G4int i = 0; i <= 2; ++i)
+  {
+    if (p[i] < *fBoundaries[i].begin() || p[i] > *fBoundaries[i].end())
+    {
+      return false;
+    }
+  }
+  for (G4int i = 0; i <= 2; ++i)
+  {
+    voxels[i] = BinarySearch(fBoundaries[i], p[i]);
+  }
+
+  return true;
+}
+
+inline
+G4int G4Voxelizer::GetPointIndex(const G4ThreeVector &p) const
+{
+  G4int maxX = fBoundaries[0].size();
+  G4int maxY = fBoundaries[1].size();
+  G4int x = BinarySearch(fBoundaries[0], p[0]);
+  G4int y = BinarySearch(fBoundaries[1], p[1]);
+  G4int z = BinarySearch(fBoundaries[2], p[2]);
+  G4int index = x + y*maxX + z*maxX*maxY;
+
+  return index;
+}
+
+inline
+const G4SurfBits &G4Voxelizer::Empty() const
+{
+  return fEmpty;
+}
+
+inline
+G4bool G4Voxelizer::IsEmpty(G4int index) const
+{
+  return fEmpty[index];
+}
+
+inline
+G4int G4Voxelizer::GetMaxVoxels(G4ThreeVector &ratioOfReduction)
+{
+  ratioOfReduction = fReductionRatio;
+  return fMaxVoxels;
+}
+
+inline
+long long G4Voxelizer::GetCountOfVoxels() const
+{
+  return fCountOfVoxels;
+}
+
+inline
+long long G4Voxelizer::CountVoxels(std::vector<G4double> boundaries[]) const
+{
+  long long sx = boundaries[0].size() - 1;
+  long long sy = boundaries[1].size() - 1;
+  long long sz = boundaries[2].size() - 1;
+
+  return  sx * sy *sz;
+}
+
+inline
+const std::vector<G4int>&
+G4Voxelizer::GetCandidates(std::vector<G4int> &curVoxel) const
+{
+  G4int voxelsIndex = GetVoxelsIndex(curVoxel);
+
+  if (voxelsIndex >= 0 && !fEmpty[voxelsIndex])
+  {      
+    return fCandidates[voxelsIndex];
+  }
+  return fNoCandidates;
+}
+
+inline
+G4int G4Voxelizer::GetTotalCandidates() const
+{
+  return fTotalCandidates;
+}
+
+inline
+G4int G4Voxelizer::GetVoxelBoxesSize() const
+{
+  return fVoxelBoxes.size();
+}
+
+inline
+const G4VoxelBox &G4Voxelizer::GetVoxelBox(G4int i) const
+{
+  return fVoxelBoxes[i];
+}
+
+inline
+const std::vector<G4int>&
+G4Voxelizer::GetVoxelBoxCandidates(G4int i) const
+{
+  return fVoxelBoxesCandidates[i];
+}
+
+inline
+G4ThreeVector
+G4Voxelizer::GetGlobalPoint(const G4Transform3D& trans,
+                            const G4ThreeVector& local) const
+{
+  // Returns global point coordinates converted from the local frame defined
+  // by the transformation. This is defined by multiplying this transformation
+  // with the local vector.
+
+  return trans*G4Point3D(local);
+}

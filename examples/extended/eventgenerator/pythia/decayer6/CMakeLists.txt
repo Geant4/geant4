@@ -53,7 +53,7 @@ target_link_libraries(pythia6_decayer ${common_prefix}common ${Geant4_LIBRARIES}
 # relies on these scripts being in the current working directory.
 #
 set(decayer6_SCRIPTS
-    init.mac init_vis.mac pythia6_decayer.in pythia6_decayer.out vis.mac
+    init_vis.mac pythia6_decayer.in pythia6_decayer.out vis.mac
   )
 
 foreach(_script ${decayer6_SCRIPTS})

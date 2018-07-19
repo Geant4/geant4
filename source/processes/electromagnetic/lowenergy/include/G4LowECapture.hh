@@ -94,6 +94,7 @@ private:
   G4LowECapture& operator = (const G4LowECapture &right);
 
   G4double kinEnergyThreshold;
+  G4bool   isIon;
   G4int    nRegions;
   std::vector<G4String> regionName;
   std::vector<const G4Region*> region;

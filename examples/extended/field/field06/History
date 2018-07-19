@@ -1,4 +1,4 @@
-// $Id: History 91270 2015-06-29 07:07:49Z gcosmo $
+// $Id: History 110099 2018-05-15 11:29:56Z gcosmo $
 // ------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 15, 2018 J.Allison - fieldex06-V10-04-00
+- Add #include "G4Types.hh".
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- vis.mac, gui.mac: Clean up.
+
+Nov 03, 2016 L.Garnier - fieldex06-V10-02-02
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+July 18, 2016 I. Hrivnacova - fieldex06-V10-02-01
+- In F06PhysicsList: apply step limiter process to all particles
+  by calling the new G4StepLimiterPhysics::SetApplyToAll() function
+
+July 01, 2016 I. Hrivnacova - fieldex06-V10-02-00
+- Replaced F06ExtraPhysics with use of G4StepLimiterPhysics, 
+  code clean-up
 
 June 26, 2015 P. Gumplinger - fieldex06-V10-01-01/02/03
 - remove AddBetaDecay method

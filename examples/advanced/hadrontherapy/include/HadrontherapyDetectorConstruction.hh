@@ -59,6 +59,7 @@ static HadrontherapyDetectorConstruction* GetInstance();
 				    G4ThreeVector detectorToWorldPosition);
   G4VPhysicalVolume* motherPhys;
   HadrontherapyDetectorSD*         detectorSD; // Pointer to sensitive detector
+    
 
 private: 
 

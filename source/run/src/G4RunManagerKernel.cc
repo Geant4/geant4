@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc 90233 2015-05-21 08:56:28Z gcosmo $
+// $Id: G4RunManagerKernel.cc 110726 2018-06-11 06:05:16Z gcosmo $
 //
 //
 
@@ -37,7 +37,9 @@
 #include "G4ExceptionHandler.hh"
 #include "G4PrimaryTransformer.hh"
 #include "G4GeometryManager.hh"
+#include "G4FieldManagerStore.hh"
 #include "G4NavigationHistoryPool.hh"
+#include "G4PathFinder.hh"
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -55,11 +57,13 @@
 #include "G4UnitsTable.hh"
 #include "G4Version.hh"
 #include "G4ios.hh"
+#include "G4TiMemory.hh"
 
 #include "G4MTRunManager.hh"
 #include "G4AllocatorList.hh"
 
 #include "G4AutoLock.hh"
+#include "G4RNGHelper.hh"
 
 #ifdef G4FPE_DEBUG
   #include "G4FPEDetection.hh"
@@ -134,12 +138,14 @@ G4RunManagerKernel::G4RunManagerKernel()
   versionString += "   ";
   versionString += G4Date;
   G4cout << G4endl
-    << "*************************************************************" << G4endl
+    << "**************************************************************" << G4endl
     << versionString << G4endl
-    << "                      Copyright : Geant4 Collaboration" << G4endl
-    << "                      Reference : NIM A 506 (2003), 250-303" << G4endl
-    << "                            WWW : http://cern.ch/geant4" << G4endl
-    << "*************************************************************" << G4endl
+    << "                       Copyright : Geant4 Collaboration" << G4endl
+    << "                      References : NIM A 506 (2003), 250-303" << G4endl
+    << "                                 : IEEE-TNS 53 (2006), 270-278" << G4endl
+    << "                                 : NIM A 835 (2016), 186-225" << G4endl
+    << "                             WWW : http://geant4.org/" << G4endl
+    << "**************************************************************" << G4endl
     << G4endl;
 }
 
@@ -156,7 +162,7 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
     G4ExceptionDescription msg;
     msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
     msg<<" This type of RunManagerKernel can only be used in mult-threaded applications.";
-    G4Exception("G4RunManagerKernel::G4RunManagerKernel(G4bool)","Run0035",FatalException,msg);
+    G4Exception("G4RunManagerKernel::G4RunManagerKernel(G4bool)","Run0105",FatalException,msg);
 #endif
 
 #ifdef G4FPE_DEBUG
@@ -197,7 +203,7 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
         defaultRegionForParallelWorld = 0;
         G4ExceptionDescription msgx;
         msgx<<" This type of RunManagerKernel can only be used in mult-threaded applications.";
-        G4Exception("G4RunManagerKernel::G4RunManagerKernel(G4bool)","Run0035",FatalException,msgx);
+        G4Exception("G4RunManagerKernel::G4RunManagerKernel(G4bool)","Run0106",FatalException,msgx);
     }
     runManagerKernelType = rmkType;
     
@@ -215,24 +221,32 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
       versionString += "   ";
       versionString += G4Date;
       G4cout << G4endl
-       << "*************************************************************" << G4endl
+       << "**************************************************************" << G4endl
        << versionString << G4endl
        << "  << in Multi-threaded mode >> " << G4endl
-       << "                      Copyright : Geant4 Collaboration" << G4endl
-       << "                      Reference : NIM A 506 (2003), 250-303" << G4endl
-       << "                            WWW : http://cern.ch/geant4" << G4endl
-       << "*************************************************************" << G4endl
+       << "                       Copyright : Geant4 Collaboration" << G4endl
+       << "                      References : NIM A 506 (2003), 250-303" << G4endl
+       << "                                 : IEEE-TNS 53 (2006), 270-278" << G4endl
+       << "                                 : NIM A 835 (2016), 186-225" << G4endl
+       << "                             WWW : http://geant4.org/" << G4endl
+       << "**************************************************************" << G4endl
        << G4endl;
        break;
      default:
-      versionString = " Local thread RunManagerKernel version ";
-      versionString += vs;
-      G4cout << G4endl
+      if(verboseLevel) {
+       versionString = " Local thread RunManagerKernel version ";
+       versionString += vs;
+       G4cout << G4endl
        << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
        << versionString << G4endl
        << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
        << G4endl;
+      }
     }
+
+#ifdef G4MULTITHREADED
+    G4UnitDefinition::GetUnitsTable().Synchronize();
+#endif
 }
 
 void G4RunManagerKernel::SetupDefaultRegion()
@@ -286,9 +300,34 @@ G4RunManagerKernel::~G4RunManagerKernel()
   G4UnitDefinition::ClearUnitsTable();
   if(verboseLevel>1) G4cout << "Units table cleared." << G4endl;
 
+  // deletion of path-finder field-manager store, geometry and transportation manager
+  G4PathFinder* pFinder = G4PathFinder::GetInstanceIfExist();
+  if (pFinder) delete pFinder;
+  G4FieldManagerStore* fmStore = G4FieldManagerStore::GetInstanceIfExist();
+  if (fmStore) delete fmStore;
+  G4GeometryManager* gManager = G4GeometryManager::GetInstanceIfExist();
+  if (gManager) delete gManager;
+  G4TransportationManager* tManager = G4TransportationManager::GetInstanceIfExist();
+  if (tManager)
+  {
+    delete tManager;
+    if(verboseLevel>1) G4cout << "TransportationManager deleted." << G4endl;
+  }
+
   // deletion of navigation levels
   if(verboseLevel>1) G4NavigationHistoryPool::GetInstance()->Print();
   delete G4NavigationHistoryPool::GetInstance();
+
+  // deletion of G4RNGHelper singleton
+  if(runManagerKernelType!=workerRMK)
+  {
+    G4RNGHelper * rngHelper = G4RNGHelper::GetInstanceIfExist();
+    if(rngHelper)
+    {
+      delete rngHelper;
+      if(verboseLevel>1) G4cout << "G4RNGHelper object is deleted." << G4endl;
+    }
+  }
 
   // deletion of allocators
   G4AllocatorList* allocList = G4AllocatorList::GetAllocatorListIfExist();
@@ -339,15 +378,26 @@ void G4RunManagerKernel::WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
 {
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
-  if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
+  if(currentState!=G4State_Init)
   {
-    G4Exception("G4RunManagerKernel::DefineWorldVolume",
+    if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
+    {
+      G4cout << "Current application state is "
+        << stateManager->GetStateString(currentState) << G4endl;
+      G4Exception("G4RunManagerKernel::DefineWorldVolume",
 		"DefineWorldVolumeAtIncorrectState",
-		JustWarning,
-		"Geant4 kernel is not PreInit or Idle state : Method ignored.");
-    if(verboseLevel>1) G4cerr << "Current application state is "
-      << stateManager->GetStateString(currentState) << G4endl;
-    return;
+		FatalException,
+		"Geant4 kernel is not Init state : Method ignored.");
+      return;
+    } else {
+      //G4Exception("G4RunManagerKernel::DefineWorldVolume",
+      //        "DefineWorldVolumeAtIncorrectState",
+      //        JustWarning,
+      //        "Geant4 kernel is not Init state : Assuming Init state.");
+      //G4cout<<"Warning : Geant4 kernel is not Init state : Assuming Init state."
+      //      <<G4endl;
+      stateManager->SetNewState(G4State_Init); 
+    }
   }
 
   currentWorld = worldVol;
@@ -382,6 +432,7 @@ void G4RunManagerKernel::WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
   }
 
   geometryInitialized = true;
+  stateManager->SetNewState(currentState); 
   if(physicsInitialized && currentState!=G4State_Idle)
   { stateManager->SetNewState(G4State_Idle); }
 }
@@ -391,13 +442,26 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 {
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
-  if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
-  { 
-    G4Exception("G4RunManagerKernel::DefineWorldVolume",
-                "Run00031",
-                JustWarning,
-                "Geant4 kernel is not PreInit or Idle state : Method ignored.");
-    return;
+  if(currentState!=G4State_Init)
+  {
+    if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
+    {
+      G4cout << "Current application state is "
+        << stateManager->GetStateString(currentState) << G4endl;
+      G4Exception("G4RunManagerKernel::DefineWorldVolume",
+		"DefineWorldVolumeAtIncorrectState",
+		FatalException,
+		"Geant4 kernel is not Init state : Method ignored.");
+      return;
+    } else {
+      //G4Exception("G4RunManagerKernel::DefineWorldVolume",
+      //        "DefineWorldVolumeAtIncorrectState",
+      //        JustWarning,
+      //        "Geant4 kernel is not Init state : Assuming Init state.");
+      //G4cout<<"Warning : Geant4 kernel is not Init state : Assuming Init state."
+      //      <<G4endl;
+      stateManager->SetNewState(G4State_Init); 
+    }
   }
 
   // The world volume MUST NOT have a region defined by the user
@@ -442,6 +506,7 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
   }
 
   geometryInitialized = true;
+  stateManager->SetNewState(currentState); 
   if(physicsInitialized && currentState!=G4State_Idle)
   { stateManager->SetNewState(G4State_Idle); }
 } 
@@ -475,7 +540,7 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 
 void G4RunManagerKernel::SetupPhysics()
 {
-	G4ParticleTable::GetParticleTable()->SetReadiness();
+    G4ParticleTable::GetParticleTable()->SetReadiness();
 
     physicsList->ConstructParticle();
 
@@ -504,6 +569,9 @@ void G4RunManagerKernel::SetupPhysics()
         if(particle->IsGeneralIon()) particle->SetParticleDefinitionID(gionId);
       }
     }
+#ifdef G4MULTITHREADED
+    G4UnitDefinition::GetUnitsTable().Synchronize();
+#endif
 }
 
 namespace {
@@ -514,12 +582,26 @@ void G4RunManagerKernel::InitializePhysics()
 {
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
-  if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
-  { 
-    G4Exception("G4RunManagerKernel::InitializePhysics",
-                "Run0011", JustWarning,
-                "Geant4 kernel is not PreInit or Idle state : Method ignored.");
-    return;
+  if(currentState!=G4State_Init)
+  {
+    G4cout << "Current application state is "
+        << stateManager->GetStateString(currentState) << G4endl;
+    if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
+    {
+      G4Exception("G4RunManagerKernel::InitializePhysics",
+		"InitializePhysicsIncorrectState",
+		FatalException,
+		"Geant4 kernel is not Init state : Method ignored.");
+      return;
+    } else {
+      //G4Exception("G4RunManagerKernel::DefineWorldVolume",
+	//"DefineWorldVolumeAtIncorrectState",
+	//JustWarning,
+	//"Geant4 kernel is not Init state : Assuming Init state.");
+      G4cout<<"Warning : Geant4 kernel is not Init state : Assuming Init state."
+            <<G4endl;
+      stateManager->SetNewState(G4State_Init); 
+    }
   }
 
   if(!physicsList)
@@ -565,12 +647,17 @@ void G4RunManagerKernel::InitializePhysics()
 *********************/
 
   physicsInitialized = true;
+#ifdef G4MULTITHREADED
+  G4UnitDefinition::GetUnitsTable().Synchronize();
+#endif
+  stateManager->SetNewState(currentState); 
   if(geometryInitialized && currentState!=G4State_Idle)
   { stateManager->SetNewState(G4State_Idle); }
 }
 
 G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
 {
+    TIMEMORY_AUTO_TIMER("");
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
 
@@ -603,6 +690,7 @@ G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
 
   if(geometryNeedsToBeClosed) CheckRegularGeometry();
 
+  stateManager->SetNewState(G4State_Init);
   PropagateGenericIonID();
   SetupShadowProcess();
   UpdateRegion();
@@ -622,6 +710,10 @@ G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
  
   GetPrimaryTransformer()->CheckUnknown();
 
+#ifdef G4MULTITHREADED
+  G4UnitDefinition::GetUnitsTable().Synchronize();
+#endif
+  stateManager->SetNewState(G4State_Idle);
   stateManager->SetNewState(G4State_GeomClosed);
   return true;
 }
@@ -673,12 +765,12 @@ void G4RunManagerKernel::UpdateRegion()
 {
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
-  if( currentState != G4State_Idle )
+  if( currentState != G4State_Init )
   { 
     G4Exception("G4RunManagerKernel::UpdateRegion",
                 "Run0024",
                 JustWarning,
-                "Geant4 kernel not in Idle state : method ignored.");
+                "Geant4 kernel not in Init state : method ignored.");
     return;
   }
 
@@ -696,6 +788,7 @@ void G4RunManagerKernel::BuildPhysicsTables(G4bool fakeRun)
   if( G4ProductionCutsTable::GetProductionCutsTable()->IsModified()
   || physicsNeedsToBeReBuilt)
   {
+      TIMEMORY_AUTO_TIMER("");
 #ifdef G4MULTITHREADED
     if(runManagerKernelType==masterRMK)
     {

@@ -32,38 +32,37 @@
 #define G4LivermoreGammaConversionModel_h 1
 
 #include "G4VEmModel.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4ParticleChangeForGamma.hh"
-#include "G4LPhysicsFreeVector.hh"
-#include "G4ProductionCutsTable.hh"
+#include "G4Log.hh"
+
+class G4ParticleChangeForGamma;
+class G4LPhysicsFreeVector;
+class G4PhysicsLogVector;
 
 class G4LivermoreGammaConversionModel : public G4VEmModel
 {
 
 public:
 
-  G4LivermoreGammaConversionModel(const G4ParticleDefinition* p = 0, 
-		                  const G4String& nam = "LivermoreConversion");
+  explicit G4LivermoreGammaConversionModel(
+                      const G4ParticleDefinition* p = nullptr, 
+		      const G4String& nam = "LivermoreConversion");
 
   virtual ~G4LivermoreGammaConversionModel();
 
   virtual void Initialise(const G4ParticleDefinition*, 
                           const G4DataVector&);
 
-  //MT
   virtual void InitialiseLocal(const G4ParticleDefinition*, 
 			             G4VEmModel* masterModel);
 
   virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
-  //END MT
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
                                       G4double kinEnergy, 
                                       G4double Z, 
-                                      G4double A=0, 
-                                      G4double cut=0,
+                                      G4double A=0.0, 
+                                      G4double cut=0.0,
                                       G4double emax=DBL_MAX);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
@@ -78,30 +77,51 @@ public:
 
 private:
 
-  void ReadData(size_t Z, const char* path = 0);
+  void ReadData(size_t Z, const char* path = nullptr);
+  void InitialiseProbability(const G4ParticleDefinition*, G4int Z);
 
-  G4double ScreenFunction1(G4double screenVariable);
-  G4double ScreenFunction2(G4double screenVariable);
+  inline G4double ScreenFunction1(G4double screenVariable);
+  inline G4double ScreenFunction2(G4double screenVariable);
 
-  G4LivermoreGammaConversionModel & operator=(const  G4LivermoreGammaConversionModel &right);
-  G4LivermoreGammaConversionModel(const  G4LivermoreGammaConversionModel&);
+  G4LivermoreGammaConversionModel & operator=
+  (const  G4LivermoreGammaConversionModel &right) = delete;
+  G4LivermoreGammaConversionModel(const  G4LivermoreGammaConversionModel&) = delete;
 
-  G4bool isInitialised;
-  G4int verboseLevel;
-
-  G4double lowEnergyLimit;  
-  G4double smallEnergy;
+  static G4double lowEnergyLimit;  
+  static G4double tripletLowEnergy;
+  static G4double tripletHighEnergy;
   
-  //MT
+  static G4int verboseLevel;
+  static G4int nbinsTriplet;
   static G4int maxZ;
+
   static G4LPhysicsFreeVector* data[100]; // 100 because Z range is 1-99
-                                          // in LivermoreRayleighModel, 101
-					  //  because Z range is 1-100
-  //END MT
+  static G4PhysicsLogVector*   probTriplet[100]; // 
   
   G4ParticleChangeForGamma* fParticleChange;
-
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double 
+G4LivermoreGammaConversionModel::ScreenFunction1(G4double screenVariable)
+{
+  // Compute the value of the screening function 3*phi1 - phi2
+  return (screenVariable > 1.) 
+    ? 42.24 - 8.368 * G4Log(screenVariable + 0.952)
+    : 42.392 - screenVariable * (7.796 - 1.961 * screenVariable);
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double 
+G4LivermoreGammaConversionModel::ScreenFunction2(G4double screenVariable)
+{
+  // Compute the value of the screening function 1.5*phi1 - 0.5*phi2
+  return (screenVariable > 1.)
+    ? 42.24 - 8.368 * G4Log(screenVariable + 0.952)
+    : 41.405 - screenVariable * (5.828 - 0.8945 * screenVariable);
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

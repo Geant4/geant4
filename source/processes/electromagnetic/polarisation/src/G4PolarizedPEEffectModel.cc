@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPEEffectModel.cc 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedPEEffectModel.cc 96114 2016-03-16 18:51:33Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -67,7 +67,9 @@
 
 G4PolarizedPEEffectModel::G4PolarizedPEEffectModel(const G4ParticleDefinition*,
 						   const G4String& nam)
-  : G4PEEffectFluoModel(nam),crossSectionCalculator(0),verboseLevel(0)
+  : G4PEEffectFluoModel(nam),
+    crossSectionCalculator(nullptr),
+    verboseLevel(0)
 {
 }
 
@@ -98,6 +100,10 @@ void G4PolarizedPEEffectModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 {
   //  std::vector<G4DynamicParticle*>* vdp = 
   G4PEEffectFluoModel::SampleSecondaries(vdp,couple, dp, tmin, maxEnergy);
+
+  if (verboseLevel >= 1) {
+    G4cout << "G4PolarizedPEEffectModel::SampleSecondaries" << G4endl;
+  }
 
   if(vdp && vdp->size()>0) {
     G4double gamEnergy0 = dp->GetKineticEnergy();

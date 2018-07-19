@@ -50,11 +50,11 @@
 class  G4Event;
 class  CexmcPhysicsManager;
 class  CexmcEnergyDepositDigitizer;
-class  CexmcEnergyDepositStore;
+struct  CexmcEnergyDepositStore;
 class  CexmcTrackPointsDigitizer;
-class  CexmcTrackPointsStore;
+struct  CexmcTrackPointsStore;
 class  CexmcEventActionMessenger;
-class  CexmcProductionModelData;
+struct  CexmcProductionModelData;
 class  CexmcChargeExchangeReconstructor;
 
 
@@ -150,7 +150,9 @@ class  CexmcEventAction : public G4UserEventAction
 
         CexmcChargeExchangeReconstructor *  reconstructor;
 
-        G4double                            opKinEnergy;
+#ifdef CEXMC_USE_ROOT
+  G4double                            opKinEnergy;
+#endif
 
     private:
         G4int                               verbose;

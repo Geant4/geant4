@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm18/include/StackingAction.hh
 /// \brief Definition of the StackingAction class
 //
-// $Id: StackingAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: StackingAction.hh 105927 2017-08-29 13:25:29Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,22 +37,23 @@
 #include "G4UserStackingAction.hh"
 #include "globals.hh"
 
-class RunAction;
-class EventAction;
+class StackingMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class StackingAction : public G4UserStackingAction
 {
   public:
-    StackingAction(RunAction*, EventAction*);
+    StackingAction();
    ~StackingAction();
-     
+
+    void SetTrackSecondaries(G4bool value) { fTrackSecondaries = value;};
+
     virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
-    
+
   private:
-    RunAction*    fRunaction;
-    EventAction*  fEventaction;
+    G4bool              fTrackSecondaries;
+    StackingMessenger*  fStackMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

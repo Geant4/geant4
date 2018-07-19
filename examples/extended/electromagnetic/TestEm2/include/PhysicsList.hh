@@ -23,15 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm2/include/PhysicsList.hh
+/// \file electromagnetic/TestEm5/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-//
-// $Id: PhysicsList.hh 82293 2014-06-13 15:23:19Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
+// $Id: PhysicsList.hh 109103 2018-03-27 07:39:04Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,6 +37,7 @@
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
+class G4VPhysicsConstructor;
 class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,22 +46,23 @@ class PhysicsList: public G4VModularPhysicsList
 {
 public:
   PhysicsList();
-  virtual ~PhysicsList();
+ ~PhysicsList();
 
   virtual void ConstructParticle();
-  virtual void ConstructProcess();
-            
+        
   void AddPhysicsList(const G4String& name);
     
-  void AddStepMax();       
-
+  virtual void ConstructProcess();    
+  void AddStepMax();
+    
 private:
 
-  G4String               fEmName;
-  G4VPhysicsConstructor* fEmPhysicsList;    
-  G4VPhysicsConstructor* fDecay;    
-    
-  PhysicsListMessenger*  fMessenger;
+  PhysicsListMessenger* fMessenger; 
+
+  G4String fEmName;
+  G4VPhysicsConstructor*  fEmPhysicsList;
+  G4VPhysicsConstructor*  fDecayPhysics;
+  G4VPhysicsConstructor*  fHadPhysicsList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

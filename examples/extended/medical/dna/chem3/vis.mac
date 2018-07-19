@@ -139,8 +139,6 @@
 #/vis/viewer/set/viewpointThetaPhi 95 170
 /vis/viewer/set/viewpointThetaPhi -70 0
 
-/tracking/storeTrajectory 3
-
 #
 # Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true

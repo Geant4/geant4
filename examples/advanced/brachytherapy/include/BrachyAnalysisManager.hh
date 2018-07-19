@@ -37,8 +37,8 @@ The class BrachyAnalysisManager creates and manages histograms and ntuples
 #ifdef ANALYSIS_USE
 #include "TROOT.h"
 #include "TFile.h"
-#include "TNtuple.h"
 #include "TH1F.h"
+#include "TH2F.h"
 #endif
 
 
@@ -56,11 +56,12 @@ public:
   // Create the ntuple and histograms
 
 #ifdef ANALYSIS_USE
-  void FillNtupleWithEnergyDeposition(G4double,G4double,G4double,G4double);
-  // Method to fill the ntuple with the energy deposition, integrated over a run, in each voxel
-  // of the scoring mesh
 
-  void FillPrimaryParticleHistogram(G4double);
+  void FillH2WithEnergyDeposition(G4double xx,G4double yy, G4double energyDep);
+  // Method to fill the 2D histogram with the energy deposition, integrated over a run, in each voxel
+  // of the scoring mesh. The scoring mesh is in the plane containing the source.
+  
+ void FillPrimaryParticleHistogram(G4double);
   // Energy spectrum of primary particles
 #endif
 
@@ -74,7 +75,7 @@ private:
 #ifdef ANALYSIS_USE
     TFile* theTFile;
     TH1F* histo;
-    TNtuple* ntuple;
+    TH2F* histo2;
 #endif
 };
 #endif

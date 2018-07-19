@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.hh 85443 2014-10-29 14:35:57Z gcosmo $
+// $Id: G4UnstableFragmentBreakUp.hh 99812 2016-10-06 08:49:27Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -52,57 +52,34 @@
 #include "G4VEvaporationChannel.hh"
 
 class G4Fragment;
-class G4NistManager;
+class G4NuclearLevelData;
 
 class G4UnstableFragmentBreakUp : public G4VEvaporationChannel 
 {
 
 public:
 
-  G4UnstableFragmentBreakUp();
+  explicit G4UnstableFragmentBreakUp();
 
   virtual ~G4UnstableFragmentBreakUp();
 
-  // decay fragment on light ions
-  virtual G4FragmentVector* BreakUpFragment(G4Fragment* fragment);
+  virtual G4bool BreakUpChain(G4FragmentVector*, G4Fragment*) final;
 
-  // returns always "false" by this model - primary is not deleted
-  // but after de-excitation it is modified and added to the products 
-  virtual G4bool 
-  BreakUpChain(G4FragmentVector* theResult, G4Fragment* theNucleus);
-
-  // dummy virtual methods
-  virtual G4Fragment* EmittedFragment(G4Fragment* fragment);
-
-  virtual G4FragmentVector * BreakUp(const G4Fragment& fragment);
-
-  virtual G4double GetEmissionProbability(G4Fragment* fragment);
-
-  inline void SetVerboseLevel(G4int val);
+  virtual G4double GetEmissionProbability(G4Fragment* fragment) final;
 
 private:
 
-  G4UnstableFragmentBreakUp(const G4UnstableFragmentBreakUp & right);
-  const G4UnstableFragmentBreakUp & operator = (const G4UnstableFragmentBreakUp & right);
+  G4UnstableFragmentBreakUp(const G4UnstableFragmentBreakUp & right) = delete;
+  const G4UnstableFragmentBreakUp & operator = 
+  (const G4UnstableFragmentBreakUp & right) = delete;
+  G4bool operator == (const G4UnstableFragmentBreakUp & right) const = delete;
+  G4bool operator != (const G4UnstableFragmentBreakUp & right) const = delete;
 
-  G4bool operator == (const G4UnstableFragmentBreakUp & right) const;
-  G4bool operator != (const G4UnstableFragmentBreakUp & right) const;
-
-  G4int verbose;
-
-  G4int Zfr[6];
-  G4int Afr[6];
+  static const G4int Zfr[6];
+  static const G4int Afr[6];
   G4double masses[6];
 
-  G4NistManager* fNistManager;
+  G4NuclearLevelData* fLevelData;
 };
 
-inline void G4UnstableFragmentBreakUp::SetVerboseLevel(G4int val)
-{
-  verbose = val;
-}
-
 #endif
-
-
-

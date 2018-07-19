@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 93883 2015-11-03 08:25:04Z gcosmo $
+# $Id: sources.cmake 100802 2016-11-02 14:55:27Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -46,8 +46,9 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-molman
         G4Molecule.hh
         G4MoleculeIterator.hh
         G4MoleculeTable.hh
-        G4VMolecularDissociationDisplacer.hh
         G4Serialize.hh
+        G4VMolecularDissociationDisplacer.hh
+        G4VMoleculeCounter.hh
     SOURCES
         G4FakeParticleID.cc
         G4MolecularConfiguration.cc
@@ -58,8 +59,9 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-molman
         G4MoleculeDefinition.cc
         G4MoleculeHandleManager.cc
         G4MoleculeTable.cc
-        G4VMolecularDissociationDisplacer.cc
         G4Serialize.cc
+        G4VMolecularDissociationDisplacer.cc
+        G4VMoleculeCounter.cc
     GRANULAR_DEPENDENCIES
         G4geometrymng
         G4volumes

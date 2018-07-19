@@ -42,6 +42,8 @@ std::istream &operator >> (std::istream& strm, G4RadioactiveDecayMode& q)
     {q = LshellEC;}
   else if (a == "MshellEC")
     {q = MshellEC;}
+  else if (a == "NshellEC")
+      {q = NshellEC;}
   else if (a == "Alpha")
     {q = Alpha;}
   else if (a == "Proton")

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryProtonBuilder.cc 83616 2014-09-04 13:30:16Z gcosmo $
+// $Id: G4FTFBinaryProtonBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -88,9 +88,4 @@ G4FTFBinaryProtonBuilder::
   delete theStringModel;
   //delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
-}
-
-void G4FTFBinaryProtonBuilder::
-Build(G4HadronElasticProcess * )
-{
 }

@@ -43,7 +43,7 @@ class G4Material;
 class G4Step;
 #include <vector>
 
-class G4EnergySplitter 
+class G4EnergySplitter
 {
 public: // with description
   G4EnergySplitter();

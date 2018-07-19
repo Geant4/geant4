@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.hh 93409 2015-10-21 13:26:27Z gcosmo $
+// $Id: G4PhysicsOrderedFreeVector.hh 98864 2016-08-15 11:53:26Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Definition
@@ -74,12 +74,18 @@ class G4PhysicsOrderedFreeVector : public G4PhysicsVector
   ////////////////////////////////
   
   G4PhysicsOrderedFreeVector();
+  // the vector will be filled from exteran file using Retrieve
+  // or InsertValues methods
+
   G4PhysicsOrderedFreeVector(G4double* Energies,
 			     G4double* Values,
 			     size_t VectorLength);
-  
+  // the vector is filled in this constructor 
+  // 'Energies' and 'Values' need to have the same vector length
+  // 'Energies' assumed to be ordered
+
   virtual ~G4PhysicsOrderedFreeVector();
-  
+    
   ////////////
   // Methods
   ////////////
@@ -96,8 +102,6 @@ class G4PhysicsOrderedFreeVector : public G4PhysicsVector
   
   inline G4double GetMinLowEdgeEnergy();
   
-  void DumpValues();
-
  private:
   
   size_t FindValueBinLocation(G4double aValue);
@@ -105,7 +109,29 @@ class G4PhysicsOrderedFreeVector : public G4PhysicsVector
   G4double LinearInterpolationOfEnergy(G4double aValue, size_t theLocBin);
 };
 
-#include "G4PhysicsOrderedFreeVector.icc"
+inline
+G4double G4PhysicsOrderedFreeVector::GetMaxValue()
+{
+  return dataVector.back();
+}
+
+inline
+G4double G4PhysicsOrderedFreeVector::GetMinValue()
+{
+  return dataVector.front();
+}
+
+inline
+G4double G4PhysicsOrderedFreeVector::GetMaxLowEdgeEnergy()
+{
+  return binVector.back();
+}
+
+inline
+G4double G4PhysicsOrderedFreeVector::GetMinLowEdgeEnergy()
+{
+  return binVector.front();
+}
 
 #endif /* G4PhysicsOrderedFreeVector_h */
 

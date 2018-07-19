@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hPairProductionModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4hPairProductionModel.hh 97391 2016-06-02 10:08:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -58,7 +58,7 @@ class G4hPairProductionModel : public G4MuPairProductionModel
 
 public:
 
-  G4hPairProductionModel(const G4ParticleDefinition* p = 0,
+  explicit G4hPairProductionModel(const G4ParticleDefinition* p = nullptr,
 			 const G4String& nam = "hPairProd");
 
   virtual ~G4hPairProductionModel();
@@ -67,12 +67,13 @@ protected:
 
   virtual G4double ComputeDMicroscopicCrossSection(G4double tkin,
 						   G4double Z,
-						   G4double pairEnergy);
+						   G4double pairEnergy) override;
 private:
 
   // hide assignment operator
-  G4hPairProductionModel & operator=(const  G4hPairProductionModel &right);
-  G4hPairProductionModel(const  G4hPairProductionModel&);
+  G4hPairProductionModel & 
+    operator=(const  G4hPairProductionModel &right) = delete;
+  G4hPairProductionModel(const  G4hPairProductionModel&) = delete;
 
 };
 

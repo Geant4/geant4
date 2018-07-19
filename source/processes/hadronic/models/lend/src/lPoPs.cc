@@ -182,7 +182,8 @@ int lPoPs_addParticleIfNeeded( statusMessageReporting *smr, char const *name, ch
 */
 static char const *lPoPs_ZSymbol( int Z ) {
 
-    if( ( Z < 0 ) || ( Z > nZs ) ) return( NULL );
+    //Coverity #63066
+    if( ( Z < 0 ) || ( Z >= nZs ) ) return( NULL );
     return( Zs[Z].Symbol );
 }
 

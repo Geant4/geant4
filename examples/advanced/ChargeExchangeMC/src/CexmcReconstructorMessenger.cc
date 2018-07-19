@@ -51,8 +51,8 @@
 
 
 CexmcReconstructorMessenger::CexmcReconstructorMessenger(
-                                        CexmcReconstructor *  reconstructor ) :
-    reconstructor( reconstructor ),
+                                        CexmcReconstructor *  reconstructor_ ) :
+    reconstructor( reconstructor_ ),
     setCalorimeterEntryPointDefinitionAlgorithm( NULL ),
     setCrystalSelectionAlgorithm( NULL ), useInnerRefCrystal( NULL ),
     setCalorimeterEntryPointDepth( NULL )

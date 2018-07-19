@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85247 2014-10-27 08:27:24Z gcosmo $
+# $Id: sources.cmake 96156 2016-03-21 08:10:21Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -53,6 +53,7 @@ GEANT4_DEFINE_MODULE(NAME G4muons
         G4MuPairProduction.hh
         G4MuPairProductionModel.hh
         G4TablesForExtrapolator.hh
+        G4ePairProduction.hh
     SOURCES
         G4EnergyLossForExtrapolator.cc
         G4ErrorEnergyLoss.cc
@@ -64,6 +65,7 @@ GEANT4_DEFINE_MODULE(NAME G4muons
         G4MuPairProduction.cc
         G4MuPairProductionModel.cc
         G4TablesForExtrapolator.cc
+        G4ePairProduction.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

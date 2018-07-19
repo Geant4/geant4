@@ -4,6 +4,19 @@
 
                        Package History file
                        --------------------
+09 May 2018 - B. Morgan - wholeNuclearDNA-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+23 February 2017 - I. Hrivnacova - wholeNuclearDNA-V10-03-00
+- fixed compilation (G4UIQt.hh include)
+
+09 July 2016 - S. Incerti - tag wholeNuclearDNA-V10-02-01
+- Updated README
+
+04 July 2016 - I. Hrivnacova - tag wholeNuclearDNA-V10-02-00
+- Fixes for Doxygen documentation
 
 24 Nov 2014 - M. Karamitros - tag wholeNuclearDNA-V10-00-07
 - Add beamOn 2

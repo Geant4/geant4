@@ -24,20 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.hh 86986 2014-11-21 13:00:05Z gcosmo $
+// $Id: G4GEMChannel.hh 107060 2017-11-01 15:00:04Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
-
-
 #ifndef G4GEMChannel_h
 #define G4GEMChannel_h 1
 
 #include "G4VEvaporationChannel.hh"
 #include "G4GEMProbability.hh"
 #include "G4VLevelDensityParameter.hh"
-#include "G4VCoulombBarrier.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
 #include "G4NucleiProperties.hh"
 #include "Randomize.hh"
@@ -45,14 +42,14 @@
 
 class G4Pow;
 class G4PairingCorrection;
+class G4VCoulombBarrier;
 
 class G4GEMChannel : public G4VEvaporationChannel
 {
 public:
 
-  G4GEMChannel(const G4int theA, const G4int theZ, const G4String & aName,
-	       G4GEMProbability * aEmissionStrategy,
-	       G4VCoulombBarrier * aCoulombBarrier);
+  explicit G4GEMChannel(G4int theA, G4int theZ, const G4String & aName,
+			G4GEMProbability * aEmissionStrategy);
 
   // destructor
   virtual ~G4GEMChannel();
@@ -60,8 +57,6 @@ public:
   virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
   virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
-
-  virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
 
   virtual void Dump() const;
 
@@ -77,13 +72,10 @@ private:
   // Samples fragment kinetic energy.
   G4double SampleKineticEnergy(const G4Fragment & fragment);
 
-  // This has to be removed and put in Random Generator
-  G4ThreeVector IsotropicVector(G4double Magnitude  = 1.0);
-
-  G4GEMChannel(const G4GEMChannel & right);  
-  const G4GEMChannel & operator=(const G4GEMChannel & right);
-  G4bool operator==(const G4GEMChannel & right) const;
-  G4bool operator!=(const G4GEMChannel & right) const;
+  G4GEMChannel(const G4GEMChannel & right) = delete;  
+  const G4GEMChannel & operator=(const G4GEMChannel & right) = delete;
+  G4bool operator==(const G4GEMChannel & right) const = delete;
+  G4bool operator!=(const G4GEMChannel & right) const = delete;
   
   // Data Members ************
   // This data member define the channel. 

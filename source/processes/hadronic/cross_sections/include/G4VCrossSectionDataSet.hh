@@ -98,14 +98,14 @@ public: //with description
   // This is a generic method to access cross section per element
   // This method should not be overwritten in a derived class
   inline G4double GetCrossSection(const G4DynamicParticle*, const G4Element*,
-				  const G4Material* mat = 0);
+				  const G4Material* mat = nullptr);
 
   // This is a generic method to compute cross section per element
   // If the DataSet is not applicable the method returns zero
   // This method should not be overwritten in a derived class
   G4double ComputeCrossSection(const G4DynamicParticle*, 
 			       const G4Element*,
-			       const G4Material* mat = 0);
+			       const G4Material* mat = nullptr);
 
   // The following two methods have default implementations which throw
   // G4HadronicException.  Derived classes should implement only needed
@@ -114,23 +114,23 @@ public: //with description
   // Implement this method for element-wise cross section 
   virtual
   G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z,
-				  const G4Material* mat = 0);
+				  const G4Material* mat = nullptr);
 
   // Derived classes should implement this method if they provide isotope-wise
   // cross sections.  Default arguments G4Element and G4Material are needed to
   // access low-energy neutron cross sections, but are not required for others. 
   virtual
   G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,  
-			      const G4Isotope* iso = 0,
-			      const G4Element* elm = 0,
-			      const G4Material* mat = 0);
+			      const G4Isotope* iso = nullptr,
+			      const G4Element* elm = nullptr,
+			      const G4Material* mat = nullptr);
 
   //=====================================================================
 
   // Implement this method if needed
   // This method is called for element-wise cross section
   // Default implementation assumes equal cross sections for all isotopes 
-  virtual G4Isotope* SelectIsotope(const G4Element*, G4double kinEnergy);
+  virtual const G4Isotope* SelectIsotope(const G4Element*, G4double kinEnergy);
 
   // Implement this method if needed
   virtual
@@ -158,6 +158,10 @@ public: // Without Description
 
   inline void SetMaxKinEnergy(G4double value);
 
+  inline bool ForAllAtomsAndEnergies() const;
+
+  inline void SetForAllAtomsAndEnergies(G4bool val);
+
   inline const G4String& GetName() const;
 
 protected:
@@ -175,6 +179,8 @@ private:
 
   G4double minKinEnergy;
   G4double maxKinEnergy;
+
+  G4bool isForAllAtomsAndEnergies;
 
   G4String name;
 };
@@ -221,6 +227,16 @@ inline G4double G4VCrossSectionDataSet::GetMaxKinEnergy() const
 inline const G4String& G4VCrossSectionDataSet::GetName() const
 {
   return name;
+}
+
+inline bool G4VCrossSectionDataSet::ForAllAtomsAndEnergies() const
+{
+  return isForAllAtomsAndEnergies;
+}
+
+inline void G4VCrossSectionDataSet::SetForAllAtomsAndEnergies(G4bool val)
+{
+  isForAllAtomsAndEnergies = val;
 }
 
 inline void G4VCrossSectionDataSet::SetName(const G4String& nam)

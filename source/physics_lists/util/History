@@ -1,4 +1,4 @@
-$Id: History 94094 2015-11-05 15:17:11Z gcosmo $
+$Id: History 106958 2017-10-31 08:33:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-Oct-2017, Tatsumi Koi                (phys-util-V10-03-00)
+- Fix address of ftp site of LEND data 
+- Improve instruction about download file and environment variable for LEND data
 
 05-Nov-2015, Alberto Ribon              (phys-util-V10-01-00)
 - Removed neutron_hp/

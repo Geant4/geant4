@@ -13,7 +13,7 @@ namespace tools {
 //////////////////////////////////////////////////////////
 
 template <class T>
-inline void clear(std::vector<T*>& a_vec){
+inline void safe_clear(std::vector<T*>& a_vec){
   // the below takes into account the case in
   // which "delete entry" could modify a_vec.
   typedef typename std::vector<T*>::iterator it_t;
@@ -24,6 +24,24 @@ inline void clear(std::vector<T*>& a_vec){
     delete entry;    
   }
 }
+
+template <class T>
+inline void safe_reverse_clear(std::vector<T*>& a_vec){ //used in sg/group.
+  // the below takes into account the case in
+  // which "delete entry" could modify a_vec.
+  typedef typename std::vector<T*>::iterator it_t;
+  while(!a_vec.empty()) {
+    it_t it = a_vec.end();
+    it--;
+    T* entry  = *it;
+    a_vec.erase(it);
+    delete entry;
+  }
+}
+
+#ifdef TOOLS_DEPRECATED
+template <class T> inline void clear(std::vector<T*>& a_vec){safe_clear<T>(a_vec);}
+#endif
 
 template <class T>
 inline void raw_clear(std::vector<T*>& a_vec){
@@ -40,6 +58,9 @@ inline void copy(std::vector<T*>& a_to,const std::vector<T*>& a_from){
     a_to.push_back((*it)->copy());
   }
 }
+
+template <class T>
+inline void vcopy(std::vector<T*>& a_to,const std::vector<T*>& a_from) {return copy<T>(a_to,a_from);}
 
 template <class T>
 inline void append(std::vector<T>& a_vec,const std::vector<T>& a_from) {
@@ -65,7 +86,7 @@ inline void append(std::vector<T>& a_vec,unsigned int a_num,const T* a_from) {
 }
 
 template <class T>
-inline void removep(std::vector<T*>& a_vec,T* a_elem) {
+inline void removep(std::vector<T*>& a_vec,const T* a_elem) {
   typedef typename std::vector<T*>::iterator it_t;
   it_t it;
   for(it=a_vec.begin();it!=a_vec.end();) {
@@ -108,6 +129,16 @@ inline bool remove(std::vector<T>& a_vals,const T& a_elem){
   }
   a_vals = vs;
   return found_some;
+}
+
+template <class T>
+inline void vfilter(std::vector<T>& a_vals,bool(*a_filter_func)(const T& a_elem)){
+  std::vector<T> vs;
+  typedef typename std::vector<T>::iterator it_t;
+  for(it_t it=a_vals.begin();it!=a_vals.end();++it) {
+    if(a_filter_func(*it)) vs.push_back(*it);
+  }
+  a_vals = vs;
 }
 
 template <class T>
@@ -179,11 +210,11 @@ inline T sum(const std::vector<T>& a_vec) {
 }
 
 template <class T>  
-inline void filter(std::vector<T>& a_vec,unsigned int a_mn,unsigned int a_mx){
+inline void filter(std::vector<T>& a_vec,unsigned int a_min,unsigned int a_max){
   unsigned int imx = a_vec.size()-1;
-  unsigned int mx = a_mx<imx?a_mx:imx;
+  unsigned int mx = a_max<imx?a_max:imx;
   unsigned int i = 0;
-  for(unsigned int index=a_mn;index<=mx;index++) {
+  for(unsigned int index=a_min;index<=mx;index++) {
     a_vec[i] = a_vec[index];i++;
   }
   a_vec.resize(i);
@@ -205,6 +236,28 @@ inline bool add(std::vector<T>& a_vec,const std::vector<T>& a_v){
   for(;it!=a_vec.end();++it,++vit) *it += *vit;
   return true;
 }
+
+template <class T>
+inline bool vequ(const std::vector<T>& a_vec,const std::vector<T>& a_v){
+  if(a_vec.size()!=a_v.size()) return false;
+  typedef typename std::vector<T>::const_iterator it_t;
+  typedef typename std::vector<T>::const_iterator cit_t;
+  it_t it = a_vec.begin();
+  cit_t vit = a_v.begin();
+  //size_t count = 0;
+  for(;it!=a_vec.end();++it,++vit
+  //  ,count++
+  ) {
+    if((*it)!=(*vit))
+    //{::printf("debug : %lu : %d %d\n",count,(*it),(*vit));
+      return false;
+    //}
+  }
+  return true;
+}
+
+template <class T>
+inline bool vadd(std::vector<T>& a_vec,const std::vector<T>& a_v) {return add<T>(a_vec,a_v);}
 
 template <class T>
 inline bool sub(std::vector<T>& a_vec,const std::vector<T>& a_v){
@@ -252,6 +305,8 @@ inline void mul(std::vector<T>& a_vec,const T& a_v){
   typedef typename std::vector<T>::iterator it_t;
   for(it_t it=a_vec.begin();it!=a_vec.end();++it) *it *= a_v;
 }
+template <class T>
+inline bool vmul(std::vector<T>& a_vec,const std::vector<T>& a_v) {return vmul<T>(a_vec,a_v);}
 
 template <class T>
 inline void div(std::vector<T>& a_vec,const T& a_v){
@@ -259,6 +314,7 @@ inline void div(std::vector<T>& a_vec,const T& a_v){
   for(it_t it=a_vec.begin();it!=a_vec.end();++it) *it /= a_v;
 }
 
+/*
 template <class FROM,class TO>
 inline std::vector<TO> convert(const std::vector<FROM>& a_from){
   typedef typename std::vector<FROM>::const_iterator const_it_t;
@@ -268,6 +324,64 @@ inline std::vector<TO> convert(const std::vector<FROM>& a_from){
   it_t toit = to.begin();
   for(;ait!=a_from.end();++ait,++toit) {*toit = (TO)*ait;}
   return to;
+}
+*/
+template <class FROM,class TO>
+inline void convert(const std::vector<FROM>& a_from,std::vector<TO>& a_to) {
+  typedef typename std::vector<FROM>::const_iterator const_it_t;
+  typedef typename std::vector<TO>::iterator it_t;
+  a_to.resize(a_from.size());
+  const_it_t ait = a_from.begin();
+  it_t toit = a_to.begin();
+  for(;ait!=a_from.end();++ait,++toit) {*toit = (TO)*ait;}
+}
+
+template <class T>  
+inline bool min_max(const std::vector<T>& a_vec,T& a_min,T& a_max) {
+  if(a_vec.empty()) {a_min=T();a_max=T();return false;}
+  a_min = *(a_vec.begin());
+  a_max = a_min;
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) {
+    a_min = *it<a_min?*it:a_min;
+    a_max = *it>a_max?*it:a_max;
+  }
+  return true;
+}
+
+template <class T>  
+inline bool mean_rms(const std::vector<T>& a_vec,T& a_mean,T& a_rms,T(*a_sqrt)(T),T(*a_fabs)(T)) {
+  if(a_vec.empty()) {a_mean=T();a_rms=T();return false;}
+  T S = T();
+  T S2 = T();
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) {
+    S += *it;
+    S2 += (*it) * (*it);
+  }
+  a_mean = S/T(a_vec.size());
+  a_rms = a_sqrt(a_fabs(S2/T(a_vec.size()) - a_mean * a_mean));
+  return true;
+}
+
+template <class T>  
+inline bool min_max_mean_rms(const std::vector<T>& a_vec,T& a_min,T& a_max,T& a_mean,T& a_rms,
+                             T(*a_sqrt)(T),T(*a_fabs)(T)) {
+  if(a_vec.empty()) {a_min=T();a_max=T();a_mean=T();a_rms=T();return false;}
+  a_min = *(a_vec.begin());
+  a_max = a_min;
+  T S = T();
+  T S2 = T();
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) {
+    a_min = *it<a_min?*it:a_min;
+    a_max = *it>a_max?*it:a_max;
+    S += *it;
+    S2 += (*it) * (*it);
+  }
+  a_mean = S/T(a_vec.size());
+  a_rms = a_sqrt(a_fabs(S2/T(a_vec.size()) - a_mean * a_mean));
+  return true;
 }
 
 }
@@ -287,28 +401,6 @@ inline void dump(const std::vector<T>& a_vec,std::ostream& a_out){
   for(it=a_vec.begin();it!=a_vec.end();++it) {
     a_out << *it << std::endl;
   }
-}
-
-}
-
-#include <cmath>
-
-namespace tools {
-
-template <class T>  
-inline bool mean_rms(const std::vector<T>& a_vec,T& a_mean,T& a_rms) {
-  if(a_vec.empty()) {a_mean=T();a_rms=T();return false;}
-  T S = T();
-  T S2 = T();
-  typedef typename std::vector<T>::const_iterator it_t;
-  for(it_t it = a_vec.begin();it!=a_vec.end();++it) {
-    S += *it;
-    S2 += (*it) * (*it);
-  }
-  a_mean = S/T(a_vec.size());
-  //NOTE : should use a templated sqrt and fabs.
-  a_rms = ::sqrt(::fabs(S2/T(a_vec.size()) - a_mean * a_mean));
-  return true;
 }
 
 }

@@ -22,16 +22,18 @@ public:
   typedef unsigned int unichar;
   typedef std::vector<unichar> uniline;  
   mf_std_vec<unichar> unitext;
+  //mf_string font_dirs; //do we want that ? It is costly. We should have a sg::font node.
 public:
   virtual const std::vector<field_desc>& node_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::base_freetype)
-    static std::vector<tools::sg::field_desc> s_v;
+    static std::vector<field_desc> s_v;
     if(s_v.empty()) {
       s_v = parent::node_fields();
       TOOLS_ADD_FIELD_DESC(font)
       TOOLS_ADD_FIELD_DESC(front_face)
       TOOLS_ADD_FIELD_DESC(modeling)
       TOOLS_ADD_FIELD_DESC(unitext)
+      //TOOLS_ADD_FIELD_DESC(font_dirs)
     }
     return s_v;
   }
@@ -41,6 +43,7 @@ private:
     add_field(&front_face);
     add_field(&modeling);
     add_field(&unitext);
+    //add_field(&font_dirs);
   }
 public:
   base_freetype()
@@ -52,6 +55,7 @@ public:
   ,modeling(font_filled) //font_outline
   //,modeling(font_outline)
   ,unitext()
+  //,font_dirs()
   {
     add_fields();
   }
@@ -65,6 +69,7 @@ public:
   ,front_face(a_from.front_face)
   ,modeling(a_from.modeling)
   ,unitext(a_from.unitext)
+  //,font_dirs(a_from.font_dirs)
   {
     add_fields();
   }
@@ -76,6 +81,7 @@ public:
     front_face = a_from.front_face;
     modeling = a_from.modeling;
     unitext = a_from.unitext;
+    //font_dirs = a_from.font_dirs;
     return *this;
   }
 

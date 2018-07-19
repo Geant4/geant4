@@ -1,4 +1,4 @@
-$Id: README 94486 2015-11-19 08:33:37Z gcosmo $
+$Id: README 103553 2017-04-18 09:00:54Z gcosmo $
 
     =========================================================
     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -191,7 +191,6 @@ $Id: README 94486 2015-11-19 08:33:37Z gcosmo $
    2D histograms:
    - Drift Chamber 1 X vs Y positions
    - Drift Chamber 2 X vs Y positions
-   - Total energy deposit vs time of flight  
    
    Ntuple:
    - Number of hits in Chamber 1
@@ -206,9 +205,8 @@ $Id: README 94486 2015-11-19 08:33:37Z gcosmo $
    The histograms and ntuple are saved in the output file in a format
    according to a technology selected in B5Analysis.hh.
 
-   When running in multi-threading mode, the histograms accumulated on threads are
-   automatically merged in a single output file, while the ntuple is written
-   in files per thread.
+   When running in multi-threading mode, the histograms and ntuple accumulated 
+   on threads are automatically merged in a single output file.
 
   8- BUILD OPTIONS:
   
@@ -216,7 +214,7 @@ $Id: README 94486 2015-11-19 08:33:37Z gcosmo $
   Geant4 user interface via G4VIS_USE and G4UI_USE compiler options 
   (see exampleB5.cc).
   These options are defined by default with Geant4 configuration;
-  they can switched off at compilation time via the CMake options 
+  they can be switched off at compilation time via the CMake options 
   G4VIS_NONE or G4UI_NONE or via the environment variables of the 
   same name if using GNUmake build.
 

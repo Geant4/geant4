@@ -45,10 +45,12 @@ B5RunAction::B5RunAction(B5EventAction* eventAction)
   // Create analysis manager
   // The choice of analysis technology is done via selectin of a namespace
   // in B5Analysis.hh
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  auto analysisManager = G4AnalysisManager::Instance();
   G4cout << "Using " << analysisManager->GetType() << G4endl;
 
   // Default settings
+  analysisManager->SetNtupleMerging(true);
+     // Note: merging ntuples is available only with Root output
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetFileName("B5");
 
@@ -102,7 +104,7 @@ void B5RunAction::BeginOfRunAction(const G4Run* /*run*/)
   //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   
   // Get analysis manager
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  auto analysisManager = G4AnalysisManager::Instance();
 
   // Open an output file 
   // The default file name is set in B5RunAction::B5RunAction(),
@@ -116,7 +118,7 @@ void B5RunAction::EndOfRunAction(const G4Run* /*run*/)
 {
   // save histograms & ntuple
   //
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  auto analysisManager = G4AnalysisManager::Instance();
   analysisManager->Write();
   analysisManager->CloseFile();
 

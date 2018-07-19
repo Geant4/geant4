@@ -45,6 +45,12 @@
 
 #include "G4VoxelSafety.hh"
 
+// Constant determining how precise normals should be (how close to unit
+// vectors). If exceeded, warnings will be issued.
+// Can be CLHEP::perMillion (its old default) for geometry checking.
+//
+static const G4double kToleranceNormalCheck = CLHEP::perThousand;
+
 // ********************************************************************
 // Constructor
 // ********************************************************************
@@ -668,7 +674,7 @@ void G4Navigator::SetSavedState()
   fSaveState.sEntering = fEntering;
 
   fSaveState.spBlockedPhysicalVolume = fBlockedPhysicalVolume;
-  fSaveState.sBlockedReplicaNo = fBlockedReplicaNo, 
+  fSaveState.sBlockedReplicaNo = fBlockedReplicaNo;
 
   fSaveState.sLastStepWasZero = fLastStepWasZero;
   
@@ -698,7 +704,7 @@ void G4Navigator::RestoreSavedState()
   fEntering = fSaveState.sEntering;
 
   fBlockedPhysicalVolume = fSaveState.spBlockedPhysicalVolume;
-  fBlockedReplicaNo = fSaveState.sBlockedReplicaNo, 
+  fBlockedReplicaNo = fSaveState.sBlockedReplicaNo; 
 
   fLastStepWasZero = fSaveState.sLastStepWasZero;
   
@@ -1003,6 +1009,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
        if ((!fPushed) && (fWarnPush))
        {
          std::ostringstream message;
+         message.precision(16);
          message << "Track stuck or not moving." << G4endl
                  << "          Track stuck, not moving for " 
                  << fNumberZeroSteps << " steps" << G4endl
@@ -1142,10 +1149,8 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       G4int depth= fHistory.GetDepth();
       if( depth > 0 )
       {
-        G4AffineTransform GrandMotherToGlobalTransf =
-          fHistory.GetTransform(depth-1).Inverse();
         fExitNormalGlobalFrame =
-          GrandMotherToGlobalTransf.TransformAxis( fGrandMotherExitNormal );
+          fHistory.GetTransform(depth-1).InverseTransformAxis( fGrandMotherExitNormal );
       }
       else
       {
@@ -1331,6 +1336,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
   G4ThreeVector    ExitNormal(0.,0.,0.);
   G4VSolid        *currentSolid=0;
   G4LogicalVolume *candidateLogical;
+
   if ( fLastTriedStepComputation ) 
   {
     // use fLastLocatedPointLocal and next candidate volume
@@ -1354,7 +1360,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
             GetMotherToDaughterTransform( fBlockedPhysicalVolume, 
                                           fBlockedReplicaNo,
                                           VolumeType(fBlockedPhysicalVolume) ); 
-          G4ThreeVector daughterPointOwnLocal= 
+          G4ThreeVector daughterPointOwnLocal=
             MotherToDaughterTransform.TransformPoint( fLastStepEndPointLocal ); 
 
           // OK if it is a parameterised volume
@@ -1386,7 +1392,9 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
  
             // Entering the solid ==> opposite
             //
-            ExitNormal = -nextSolidExitNormal;
+            // First flip ( ExitNormal = -nextSolidExitNormal; )
+            //  and then rotate the the normal to the frame of the mother (current volume)
+            ExitNormal = MotherToDaughterTransform.InverseTransformAxis( -nextSolidExitNormal );
             fCalculatedExitNormal= true;
           }
           else
@@ -1446,7 +1454,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
       G4VSolid* daughterSolid =fHistory.GetTopVolume()->GetLogicalVolume()
                                                       ->GetSolid();
       ExitNormal= -(daughterSolid->SurfaceNormal(fLastLocatedPointLocal));
-      if( std::fabs(ExitNormal.mag2()-1.0 ) > CLHEP::perMillion )
+      if( std::fabs(ExitNormal.mag2()-1.0 ) > kToleranceNormalCheck )
       {
         G4ExceptionDescription desc;
         desc << " Parameters of solid: " << *daughterSolid
@@ -1592,7 +1600,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
     //
     globalNormal = fExitNormalGlobalFrame; 
     G4double  normMag2 = globalNormal.mag2(); 
-    if( std::fabs ( normMag2 - 1.0 ) < perMillion )  // Value is good 
+    if( std::fabs ( normMag2 - 1.0 ) < perThousand ) // was perMillion )  // Value is good 
     {
        *pNormalCalculated = true; // ComputeStep always computes it if Exiting
                                   // (fExiting==true)
@@ -1637,9 +1645,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
        localNormal = GetLocalExitNormalAndCheck(IntersectPointGlobal,
                                                 &validNormal);
        *pNormalCalculated = fCalculatedExitNormal;
-
-       G4AffineTransform localToGlobal = GetLocalToGlobalTransform();
-       globalNormal = localToGlobal.TransformAxis( localNormal );
+       globalNormal = fHistory.GetTopTransform().InverseTransformAxis( localNormal );
     }
   }
   else
@@ -1668,7 +1674,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
 #endif
      
      G4double localMag2= localNormal.mag2();
-     if( validNormal && (std::fabs(localMag2-1.0)) > CLHEP::perMillion )
+     if( validNormal && (std::fabs(localMag2-1.0)) > kToleranceNormalCheck )
      {
        G4ExceptionDescription edN;
        edN.precision(10); 
@@ -1696,8 +1702,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
                    "Value obtained from new local *solid* is incorrect.");
        localNormal = localNormal.unit(); // Should we correct it ??
      }
-     G4AffineTransform localToGlobal = GetLocalToGlobalTransform();
-     globalNormal = localToGlobal.TransformAxis( localNormal );
+     globalNormal = fHistory.GetTopTransform().InverseTransformAxis( localNormal );
   }
 
 #ifdef G4DEBUG_NAVIGATION
@@ -1707,12 +1712,11 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
 
     localNormal= GetLocalExitNormalAndCheck(IntersectPointGlobal, &validNormal);
     
-    G4AffineTransform localToGlobal = GetLocalToGlobalTransform();
-    globalNormAgn = localToGlobal.TransformAxis( localNormal );
+    globalNormAgn = fHistory.GetTopTransform().InverseTransformAxis( localNormal );
     
     // Check the value computed against fExitNormalGlobalFrame
     G4ThreeVector diffNorm = globalNormAgn - fExitNormalGlobalFrame;
-    if( diffNorm.mag2() > perMillion*CLHEP::perMillion)
+    if( diffNorm.mag2() > kToleranceNormalCheck )
     {
       G4ExceptionDescription edDfn;
       edDfn << "Found difference in normals in case of exiting mother "
@@ -2153,8 +2157,8 @@ void G4Navigator::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
   const G4double fAccuracyForWarning   = kCarTolerance,
                  fAccuracyForException = 1000*kCarTolerance;
 
-  G4ThreeVector OriginalGlobalpoint = fHistory.GetTopTransform().Inverse().
-                                      TransformPoint(fLastLocatedPointLocal); 
+  G4ThreeVector OriginalGlobalpoint = fHistory.GetTopTransform().
+                                      InverseTransformPoint(fLastLocatedPointLocal); 
 
   G4double shiftOriginSafSq = (fPreviousSftOrigin-pGlobalpoint).mag2();
 

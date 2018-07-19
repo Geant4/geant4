@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc 84598 2014-10-17 07:39:15Z gcosmo $
+// $Id: G4eIonisation.cc 107058 2017-11-01 14:54:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -89,7 +89,6 @@ G4eIonisation::G4eIonisation(const G4String& name)
     isElectron(true),
     isInitialised(false)
 {
-  //  SetStepFunction(0.2, 1*mm);
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(theElectron);
 }
@@ -125,10 +124,10 @@ void G4eIonisation::InitialiseEnergyLossProcess(
 {
   if(!isInitialised) {
     if(part != theElectron) { isElectron = false; }
-    if (!EmModel(1)) { SetEmModel(new G4MollerBhabhaModel()); }
+    if (!EmModel(0)) { SetEmModel(new G4MollerBhabhaModel()); }
     G4EmParameters* param = G4EmParameters::Instance();
-    EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(param->MaxKinEnergy());
+    EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
+    EmModel(0)->SetHighEnergyLimit(param->MaxKinEnergy());
     if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
                 
     AddEmModel(1, EmModel(), FluctModel());
@@ -142,3 +141,11 @@ void G4eIonisation::PrintInfo()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4eIonisation::ProcessDescription(std::ostream& out) const
+{
+  out << "<strong>Ionisation</strong>";
+  G4VEnergyLossProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

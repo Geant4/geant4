@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMProbability.cc 91834 2015-08-07 07:24:22Z gcosmo $
+// $Id: G4GEMProbability.cc 105799 2017-08-21 07:35:55Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -52,17 +52,19 @@
 #include "G4GEMProbability.hh"
 #include "G4PairingCorrection.hh"
 #include "G4NucleiProperties.hh"
+#include "G4NuclearLevelData.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Log.hh"
 
-G4GEMProbability:: G4GEMProbability(G4int anA, G4int aZ, G4double aSpin) : 
-  theA(anA), theZ(aZ), Spin(aSpin), theCoulombBarrierPtr(0)
+G4GEMProbability:: G4GEMProbability(G4int anA, G4int aZ, G4double aSpin) 
+  : G4VEmissionProbability(aZ, anA), Spin(aSpin), 
+    theCoulombBarrierPtr(nullptr)
 {
   theEvapLDPptr = new G4EvaporationLevelDensityParameter;
   fG4pow = G4Pow::GetInstance(); 
   fPlanck= CLHEP::hbar_Planck*fG4pow->logZ(2);
-  fPairCorr = G4PairingCorrection::GetInstance();
+  fPairCorr = G4NuclearLevelData::GetInstance()->GetPairingCorrection();
 }
     
 G4GEMProbability::~G4GEMProbability()

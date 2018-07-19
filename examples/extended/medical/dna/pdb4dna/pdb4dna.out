@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 
 ----> Histogram file is opened in pdb4dna_output.root
@@ -39,16 +41,18 @@ Registering model factories...
 You have successfully registered the following model factories.
 Registered model factories:
   generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
   drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
 
 Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
   attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -56,9 +60,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
 This PDB file is DNA.
 **************** atomisticView(...) ****************
 Number of loaded chains = 2
@@ -92,120 +94,170 @@ G4Material WARNING: duplicate name of material Galactic
 This PDB file is DNA.
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld
+          DefaultRegionForTheWorld  1  1  0
+### ===  Auger cascade flag: 1
+### ===  Ignore cuts flag:   1
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
-      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
+      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermorePhElectric :  Emin=        0 eV    Emax=        1 GeV   AngularGenSauterGavrila  FluoActive
-       PhotoElectric :  Emin=        1 GeV   Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
-      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-    LivermoreCompton :  Emin=        0 eV    Emax=        1 GeV  FluoActive
-       Klein-Nishina :  Emin=        1 GeV   Emax=       10 TeV
+    LivermoreCompton :  Emin=        0 eV    Emax=      100 TeV  FluoActive
 
 conv:   for  gamma    SubType= 14  BuildTable= 1
-      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermoreConversion :  Emin=        0 eV    Emax=        1 GeV
-        BetheHeitler :  Emin=        1 GeV   Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+ LivermoreConversion :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
-      LambdaPrime table from 100 keV to 10 TeV in 56 bins 
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LivermoreRayleigh :  Emin=        0 eV    Emax=        1 GeV   CullenGenerator
-   LivermoreRayleigh :  Emin=        1 GeV   Emax=       10 TeV   CullenGenerator
+   LivermoreRayleigh :  Emin=        0 eV    Emax=      100 TeV   CullenGenerator
+
+e-_G4DNAElectronSolvation:   for  e-    SubType= 58  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAOneStepThermalizationModel :  Emin=        0 eV    Emax=      7.4 eV 
 
 e-_G4DNAElastic:   for  e-    SubType= 51  BuildTable= 0
- Total cross sections computed from DNAChampionElasticModel model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAChampionElasticModel :  Emin=        0 eV    Emax=        1 MeV
 
 e-_G4DNAExcitation:   for  e-    SubType= 52  BuildTable= 0
- Total cross sections computed from DNABornExcitationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNABornExcitationModel :  Emin=        0 eV    Emax=        1 MeV
 
 e-_G4DNAIonisation:   for  e-    SubType= 53  BuildTable= 0
- Total cross sections computed from DNABornIonisationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNABornIonisationModel :  Emin=        0 eV    Emax=        1 MeV   deltaBorn  FluoActive
 
 e-_G4DNAVibExcitation:   for  e-    SubType= 54  BuildTable= 0
- Total cross sections computed from DNASancheExcitationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNASancheExcitationModel :  Emin=        0 eV    Emax=      100 eV 
 
 e-_G4DNAAttachment:   for  e-    SubType= 55  BuildTable= 0
- Total cross sections computed from DNAMeltonAttachmentModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAMeltonAttachmentModel :  Emin=        0 eV    Emax=       13 eV 
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=      100 TeV
 
 eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+            eplus2gg :  Emin=        0 eV    Emax=      100 TeV
+
+proton_G4DNAElastic:   for  proton    SubType= 51  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel :  Emin=        0 eV    Emax=        1 MeV
 
 proton_G4DNAExcitation:   for  proton    SubType= 52  BuildTable= 0
- Total cross sections computed from DNAMillerGreenExcitationModel and DNABornExcitationModel models
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      500 keV
 DNABornExcitationModel :  Emin=      500 keV   Emax=      100 MeV
 
 proton_G4DNAIonisation:   for  proton    SubType= 53  BuildTable= 0
- Total cross sections computed from DNARuddIonisationModel and DNABornIonisationModel models
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNARuddIonisationModel :  Emin=        0 eV    Emax=      500 keV   deltaRudd  FluoActive
 DNABornIonisationModel :  Emin=      500 keV   Emax=      100 MeV   deltaBorn  FluoActive
 
 proton_G4DNAChargeDecrease:   for  proton    SubType= 56  BuildTable= 0
- Total cross sections computed from DNADingfelderChargeDecreaseModel model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      100 MeV
 
 GenericIon_G4DNAIonisation:   for  GenericIon    SubType= 53  BuildTable= 0
- Total cross sections computed from DNARuddIonisationExtendedModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=        1 TeV   deltaRudd  FluoActive
 
+alpha_G4DNAElastic:   for  alpha    SubType= 51  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel :  Emin=        0 eV    Emax=        1 MeV
+
 alpha_G4DNAExcitation:   for  alpha    SubType= 52  BuildTable= 0
- Total cross sections computed from DNAMillerGreenExcitationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      400 MeV
 
 alpha_G4DNAIonisation:   for  alpha    SubType= 53  BuildTable= 0
- Total cross sections computed from DNARuddIonisationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV   deltaRudd  FluoActive
 
 alpha_G4DNAChargeDecrease:   for  alpha    SubType= 56  BuildTable= 0
- Total cross sections computed from DNADingfelderChargeDecreaseModel model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
+
+alpha+_G4DNAElastic:   for  alpha+    SubType= 51  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel :  Emin=        0 eV    Emax=        1 MeV
+
+alpha+_G4DNAExcitation:   for  alpha+    SubType= 52  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      400 MeV
+
+alpha+_G4DNAIonisation:   for  alpha+    SubType= 53  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV   deltaRudd  FluoActive
+
+alpha+_G4DNAChargeDecrease:   for  alpha+    SubType= 56  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
+
+alpha+_G4DNAChargeIncrease:   for  alpha+    SubType= 57  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      400 MeV
+
+helium_G4DNAElastic:   for  helium    SubType= 51  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel :  Emin=        0 eV    Emax=        1 MeV
+
+helium_G4DNAExcitation:   for  helium    SubType= 52  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      400 MeV
+
+helium_G4DNAIonisation:   for  helium    SubType= 53  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV   deltaRudd  FluoActive
+
+helium_G4DNAChargeIncrease:   for  helium    SubType= 57  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      400 MeV
+
+hydrogen_G4DNAElastic:   for  hydrogen    SubType= 51  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  DNAIonElasticModel :  Emin=        0 eV    Emax=        1 MeV
+
+hydrogen_G4DNAExcitation:   for  hydrogen    SubType= 52  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      500 keV
+
+hydrogen_G4DNAIonisation:   for  hydrogen    SubType= 53  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationModel :  Emin=        0 eV    Emax=      100 MeV   deltaRudd  FluoActive
+
+hydrogen_G4DNAChargeIncrease:   for  hydrogen    SubType= 57  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      100 MeV
 ### Run 0 starts.
 --> Event 0 starts.
 --> Event 100 starts.

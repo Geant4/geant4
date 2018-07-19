@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/src/Run.cc
+/// \file Run.cc
 /// \brief Implementation of the Run class
 //
 // $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
@@ -299,7 +299,7 @@ void Run::EndOfRun()
                                 
  //particles flux
  //
- G4cout << "\n List of particles leaving the absorber :" << G4endl;
+ G4cout << "\n List of particles emerging from the absorber :" << G4endl;
      
  std::map<G4String,ParticleData>::iterator itn;               
  for (itn = fParticleDataMap2.begin(); itn != fParticleDataMap2.end(); itn++) { 
@@ -320,15 +320,12 @@ void Run::EndOfRun()
  
   //normalize histograms
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();        
-  for (G4int ih=1; ih<14; ih++) {
-    G4double binWidth = analysisManager->GetH1Width(ih);
-    G4double unit     = analysisManager->GetH1Unit(ih);  
-    G4double fac = unit/binWidth;
-    ///G4double fac = unit/(numberOfEvent*binWidth);
-    if (ih == 2) fac = (1./(numberOfEvent*binWidth))*(mm/MeV);    
-    analysisManager->ScaleH1(ih,fac);
-  }  
-           
+
+  G4int ih = 2;
+  G4double binWidth = analysisManager->GetH1Width(ih);
+  G4double fac = (1./(numberOfEvent*binWidth))*(mm/MeV);    
+  analysisManager->ScaleH1(ih,fac);
+
   //remove all contents in fProcCounter, fCount 
   fProcCounter.clear();
   fParticleDataMap2.clear();

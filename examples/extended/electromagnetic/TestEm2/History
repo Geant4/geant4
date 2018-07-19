@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109179 2018-04-03 07:14:46Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -15,11 +15,42 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14-10-16 G.Folger
-- remove direct use of theParticleIterator, use GetParticleTableIterator().
-  fix required by clang39 on Linux and MAC
+30-03-18 V.Ivant (testem2-V10-04-04)
+- testem2.cc : minor cleanup
 
-10-12-15 V.Ivant (testem2-V10-01-04)
+26-03-18 V.Ivant (testem2-V10-04-03)
+- StepMax - use thread safe instantiation, mesenger merged with 
+    PhysicsListMessenger
+- DetectorConstruction - improved method names, not allow to clear 
+    geometry between runs
+- PhysicsList - make Opt0 default, removed local instantiation of G4Decay
+- Use MixMax default random number generator 
+
+15-03-18 V.Ivant (testem2-V10-04-02)
+- PhysListEm5DStandard - experimental PhysList with the new 
+    5D gamma conversion model
+
+12-03-18 mma (testem2-V10-04-01)
+- testem2.cc : remove G4UI_USE and G4VIS_USE
+
+14-12-17 V.Ivant (testem2-V10-04-00)
+- corrected TestEm2.in, run03.mac to optimise output
+
+14-10-16 G.Folger (testem2-V10-02-04)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+23-07-16 mma  (testem2-V10-02-03)
+- coding convention : MaxBin -> kMaxBin
+
+04-07-16 I. Hrivnacova  (testem2-V10-02-02)
+- Fixes for Doxygen documentation
+
+11-04-16 mma  (testem2-V10-02-01)
+- PhysListEmStandard: use G4EmParameters
+- remove geant3 subdirectory
+
+10-12-15 V.Ivant (testem2-V10-02-00)
 - H.Burkhardt fixed root macro allowing to work both with root5 and 6
     
 28-10-15 D.Sawkey (testem2-V10-01-03)

@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radioactivedecay/rdecay01/src/SteppingVerbose.cc
+/// \file geometry/transforms/src/SteppingVerbose.cc
 /// \brief Implementation of the SteppingVerbose class
 //
 //
-// $Id: SteppingVerbose.cc 71036 2013-06-10 09:19:10Z gcosmo $
+// $Id: SteppingVerbose.cc 98266 2016-07-04 17:48:45Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

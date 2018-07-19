@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.icc 72152 2013-07-11 12:49:58Z gcosmo $
+// $Id: G4DynamicParticle.icc 110257 2018-05-17 14:20:12Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -33,8 +33,7 @@
 //	History: first implementation, based on object model of
 //                             17 AUg. 1999   H.Kurashige  
 // ------------------------------------------------------------
-
-extern G4PART_DLL G4ThreadLocal G4Allocator<G4DynamicParticle> *pDynamicParticleAllocator;
+extern G4PART_DLL G4Allocator<G4DynamicParticle>*& pDynamicParticleAllocator();
 
 // ------------------------
 // Inlined operators
@@ -42,14 +41,14 @@ extern G4PART_DLL G4ThreadLocal G4Allocator<G4DynamicParticle> *pDynamicParticle
 
 inline void * G4DynamicParticle::operator new(size_t)
 {
-  if (!pDynamicParticleAllocator) pDynamicParticleAllocator =
+  if (!pDynamicParticleAllocator()) pDynamicParticleAllocator() =
     new G4Allocator<G4DynamicParticle>;
-  return pDynamicParticleAllocator->MallocSingle();
+  return pDynamicParticleAllocator()->MallocSingle();
 }
 
 inline void G4DynamicParticle::operator delete(void * aDynamicParticle)
 {
-  pDynamicParticleAllocator->FreeSingle((G4DynamicParticle *) aDynamicParticle);
+  pDynamicParticleAllocator()->FreeSingle((G4DynamicParticle *) aDynamicParticle);
 }
 
 // ------------------------
@@ -143,11 +142,6 @@ inline G4double G4DynamicParticle::GetMagneticMoment() const
 inline void  G4DynamicParticle::SetMagneticMoment(G4double magneticMoment)
 {
    theDynamicalMagneticMoment = magneticMoment;  
-}
-
-inline void G4DynamicParticle::SetMass(G4double newMass)
-{
-  theDynamicalMass = newMass;
 }
 
 inline const G4ThreeVector& G4DynamicParticle::GetMomentumDirection() const

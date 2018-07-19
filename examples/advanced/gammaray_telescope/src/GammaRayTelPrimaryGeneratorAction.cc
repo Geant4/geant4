@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.cc 82630 2014-07-01 09:43:00Z gcosmo $
+// $Id: GammaRayTelPrimaryGeneratorAction.cc 110939 2018-06-27 12:02:21Z gunter $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -56,7 +56,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction()
-  :rndmFlag("off"),nSourceType(0),nSpectrumType(0),sourceGun(false)
+//  :rndmFlag("off"),nSourceType(0),nSpectrumType(0),sourceGun(false)
 {
   GammaRayTelDetector = static_cast<const GammaRayTelDetectorConstruction*>
     (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
@@ -65,6 +65,12 @@ GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction()
   
   gunMessenger = new GammaRayTelPrimaryGeneratorMessenger(this);
 
+  rndmFlag = "off";
+  nSourceType = 0;
+  nSpectrumType = 0;
+  sourceGun = false;
+  dVertexRadius = 15.*cm; 
+  
   G4int n_particle = 1;
 
   particleGun  = new G4ParticleGun(n_particle);     
@@ -90,7 +96,6 @@ GammaRayTelPrimaryGeneratorAction::~GammaRayTelPrimaryGeneratorAction()
  
   delete particleGun;
   delete particleSource;
-
   delete gunMessenger;
 }
 
@@ -101,18 +106,20 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
    if (sourceGun)
     {
 
+      G4cout << "Using G4ParticleGun ... " << G4endl; 
+
       //this function is called at the begining of event
       // 
       G4double z0 = 0.5*(GammaRayTelDetector->GetWorldSizeZ());
       G4double x0 = 0.*cm, y0 = 0.*cm;
   
       G4ThreeVector pos0;
-      G4ThreeVector dir0;
       G4ThreeVector vertex0 = G4ThreeVector(x0,y0,z0);
+      G4ThreeVector dir0 = G4ThreeVector(0.,0.,-1.);
       
-      dir0 = G4ThreeVector(0.,0.,-1.);
-      
-      G4double theta, phi, y, f;
+      G4double theta, phi;
+      G4double y = 0.;
+      G4double f = 0.;
       G4double theta0=0.;
       G4double phi0=0.;
       
@@ -204,27 +211,35 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       }
       
       
-      G4double pEnergy;
+      G4double pEnergy = 100*MeV;
       
       switch(nSpectrumType) {
-      case 0:
+      case 0: // Uniform energy (1-10 GeV)
+	y = G4UniformRand();
+	pEnergy = y*9.0*GeV + 1.0*GeV;
+	G4cout << pEnergy/GeV << " LIN" << G4endl;
 	break;
-      case 1:
+      case 1: // Logaritmic energy
+	y = G4UniformRand();
+	pEnergy = std::pow(10,y)*GeV;
+	G4cout << pEnergy/GeV << " LOG" << G4endl;
 	break;
-      case 2:
+      case 2: // Power Law (-4)
 	do {
 	  y = G4UniformRand()*100000.0;
 	  pEnergy = G4UniformRand() * 10. * GeV;
 	  f = std::pow(pEnergy * (1/GeV), -4.);
 	} while (y > f);
-	
-	particleGun->SetParticleEnergy(pEnergy);
-	
+	//	particleGun->SetParticleEnergy(pEnergy);
 	break;
-      case 3:
+      case 3: // Monochromatic 
+	pEnergy = particleGun->GetParticleEnergy(); 
+	//100 * MeV; 
+	G4cout << pEnergy << " MONO" << G4endl;
 	break;
       }
-      
+      particleGun->SetParticleEnergy(pEnergy);
+      G4cout << particleGun->GetParticleDefinition()->GetParticleName() << G4endl;
       particleGun->GeneratePrimaryVertex(anEvent);
     }
    else

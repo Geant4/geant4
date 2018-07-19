@@ -28,6 +28,7 @@
 #define G4EmLowEPPhysics_h 1
 
 #include "G4VPhysicsConstructor.hh"
+#include "G4EmParticleList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,10 +37,7 @@ class G4EmLowEPPhysics : public G4VPhysicsConstructor
 {
 public:
 
-  G4EmLowEPPhysics(G4int ver = 1);
-
-  // obsolete
-  G4EmLowEPPhysics(G4int ver, const G4String& name);
+  explicit G4EmLowEPPhysics(G4int ver=1, const G4String& name= "");
 
   virtual ~G4EmLowEPPhysics();
 
@@ -48,6 +46,7 @@ public:
 
 private:
   G4int  verbose;
+  G4EmParticleList partList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-# $Id: History 102327 2017-01-23 10:33:16Z gcosmo $
+# $Id: History 107438 2017-11-13 07:38:19Z gcosmo $
 # -----------------------------------------------------------
 
           ==================================================
@@ -15,31 +15,91 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-07 November 2016 Tatsumi Koi (hadr-lend-V10-01-17)
+10 November 2017 Tatsumi Koi (hadr-lend-V10-03-12)
+-----------------------------------------------
+-Fix gamma(2.2MeV) emission from n captured by H
+-Fix minor problem on DumpLENDTargetInfo
+-Fix misplaced description in this file
+
+7 November 2017 Tatsumi Koi (hadr-lend-V10-03-11)
+-----------------------------------------------
+-Fix typo in names of cross section data set
+
+10 October 2017 Tatsumi Koi (hadr-lend-V10-03-10)
+-----------------------------------------------
+-Adding G4LENDCombinedModel and G4LENDCombinedCrossSection
+-Adding DumpLENDTargetInfo 
+-Reducing default (VerboseLevel=0) output from models and cross sections
+
+9 October 2017 Tatsumi Koi (hadr-lend-V10-03-09)
+-----------------------------------------------
+-G4LENDCrossSection: IsIsoApplicable returns false for the case of target is not exist
+-G4LENDModel: ApplyYourself returns unchanged final state for the case of target is not exist with warning message
+
+2 October 2017 Tatsumi Koi (hadr-lend-V10-03-08)
+-----------------------------------------------
+-Fix bug in G4LENDElastic
+
+21 June 2017 Tatsumi Koi (hadr-lend-V10-03-07)
+-----------------------------------------------
+-Fix Coverity 63049
+
+27 June 2017 Tatsumi Koi (hadr-lend-V10-03-06)
+-----------------------------------------------
+-Fix Coverity 63063
+
+14 June 2017 Tatsumi Koi (hadr-lend-V10-03-05)
+-----------------------------------------------
+-Fix Coverity 63066
+
+12 June 2017 Tatsumi Koi (hadr-lend-V10-03-04)
+-----------------------------------------------
+-Fix Coverity 63074 and 63077
+
+23 May 2017 Tatsumi Koi (hadr-lend-V10-03-03)
+-----------------------------------------------
+-Fix bug related to "fallthrough" and add comment 
+
+12 May 2017 Gabriele Cosmo (hadr-lend-V10-03-02)
+-----------------------------------------------
+-Added 'fallthrough' comment to nf_angularMomentumCoupling.cc:145,
+ to quit compilation warning message on gcc-7.1.
+
+09 May 2017 Tatsumi Koi (hadr-lend-V10-03-01)
+-----------------------------------------------
+-Fix inconsistency of name of excited isomer between data and code
+-Fix Fix problem in handling excited isomer target
+-Add table of excitation energy of excited isomer target
+
+08 May 2017 Tatsumi Koi (hadr-lend-V10-03-00)
+-----------------------------------------------
+-Fix warning messages from compiler(gcc7.1)
+
+07 November 2016 Tatsumi Koi (hadr-lend-V10-02-06)
 -----------------------------------------------
 -Fix warning messages from compiler(gcc6.2 -O3)
 
-02 November 2016 Tatsumi Koi
+02 November 2016 Tatsumi Koi (hadr-lend-V10-02-05)
 -----------------------------------------------
 -Improve memory consumption in MT library
 
-02 September 2016 Tatsumi Koi
+02 September 2016 Tatsumi Koi (hadr-lend-V10-02-04)
 -----------------------------------------------
 -Migrate to use G4Rand
 
-11 April 2016 Tatsumi Koi (hadr-lend-V10-01-16)
+11 April 2016 Tatsumi Koi (hadr-lend-V10-02-03)
 -----------------------------------------------
 -Fix problem on setting birth time of delayed neutrons
 
-15 January 2016 Tatsumi Koi (hadr-lend-V10-01-15)
+15 January 2016 Tatsumi Koi (hadr-lend-V10-02-02)
 -----------------------------------------------
--Fix problem in prodcution of residual neutrons
+-Fix problem in production of residual neutrons
 
-8 January 2016 Tatsumi Koi
+8 January 2016 Tatsumi Koi (hadr-lend-V10-02-01)
 -----------------------------------------------
 -Fix for Coverity #63079 and 63081
 
-17 December 2015 Gabriele Cosmo
+17 December 2015 Gabriele Cosmo (hadr-lend-V10-02-00)
 -----------------------------------------------
 -Corrected use of isnan() in nf_utilities.cc to std::isnan() for
  compilers different than Windows/VC++.

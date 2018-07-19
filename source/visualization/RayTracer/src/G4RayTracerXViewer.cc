@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerXViewer.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4RayTracerXViewer.cc 104015 2017-05-08 07:28:08Z gcosmo $
 
 #ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
 
@@ -50,14 +50,7 @@ G4RayTracerXViewer::~G4RayTracerXViewer() {}
 
 void G4RayTracerXViewer::Initialise() {
 
-  if (!theTracer) {
-    G4cerr << "G4RayTracerXViewer::Initialise: No tracer" << G4endl;
-    fViewId = -1;  // This flags an error.
-    return;
-  }
-
-  theTracer->SetNColumn(fVP.GetWindowSizeHintX());
-  theTracer->SetNRow(fVP.GetWindowSizeHintY());
+  G4RayTracerViewer::Initialise();
 
   // Set up X Window...
   G4RTXScanner* theXScanner = (G4RTXScanner*)theTracer->GetScanner();

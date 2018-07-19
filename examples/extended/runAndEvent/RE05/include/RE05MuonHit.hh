@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05MuonHit.hh 69764 2013-05-14 09:59:36Z gcosmo $
+// $Id: RE05MuonHit.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05MuonHit.hh
 /// \brief Definition of the RE05MuonHit class
@@ -50,7 +50,6 @@ class RE05MuonHit : public G4VHit
       const RE05MuonHit& operator=(const RE05MuonHit &right);
       G4int operator==(const RE05MuonHit &right) const;
 
-
       inline void *operator new(size_t);
       inline void operator delete(void *aHit);
 
@@ -60,22 +59,21 @@ class RE05MuonHit : public G4VHit
       virtual void Print();
 
   private:
-      G4double edep;
-      G4ThreeVector pos;
+      G4double fEdep;
+      G4ThreeVector fPos;
       static std::map<G4String,G4AttDef> fAttDefs;
 
   public:
       inline void SetEdep(G4double de)
-      { edep = de; }
+      { fEdep = de; }
       inline void AddEdep(G4double de)
-      { edep += de; }
+      { fEdep += de; }
       inline G4double GetEdep()
-      { return edep; }
+      { return fEdep; }
       inline void SetPos(G4ThreeVector xyz)
-      { pos = xyz; }
+      { fPos = xyz; }
       inline G4ThreeVector GetPos()
-      { return pos; }
-
+      { return fPos; }
 };
 
 typedef G4THitsCollection<RE05MuonHit> RE05MuonHitsCollection;
@@ -94,5 +92,3 @@ inline void RE05MuonHit::operator delete(void *aHit)
 }
 
 #endif
-
-

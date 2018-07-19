@@ -36,7 +36,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstructionI.cc 69765 2013-05-14 10:11:22Z gcosmo $
+// $Id: BrachyDetectorConstructionI.cc 100821 2016-11-02 15:21:34Z gcosmo $
 //
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
@@ -78,7 +78,7 @@ void BrachyDetectorConstructionI::ConstructIodium(G4VPhysicalVolume* mother)
   //Get materials for source construction ...
   G4Material* titanium = pMaterial -> GetMat("titanium");
   G4Material* air = pMaterial -> GetMat("Air");
-  G4Material* iodium = pMaterial -> GetMat("Iodium");
+  G4Material* iodium = pMaterial -> GetMat("Iodine");
  
   G4Colour  red     (1.0, 0.0, 0.0) ;
   G4Colour  magenta (1.0, 0.0, 1.0) ; 

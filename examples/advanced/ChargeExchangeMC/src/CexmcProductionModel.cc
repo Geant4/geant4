@@ -46,10 +46,10 @@
 #include "CexmcProductionModelMessenger.hh"
 
 
-CexmcProductionModel::CexmcProductionModel( const G4String &  name,
-                                            G4bool  fermiMotionIsOn ) :
-    name( name ), fermiMotionIsOn( fermiMotionIsOn ), incidentParticle( NULL ),
-    nucleusParticle( NULL ), outputParticle( NULL ),
+CexmcProductionModel::CexmcProductionModel( const G4String &  name_,
+                                            G4bool  fermiMotionIsOn_ ) :
+    name( name_ ), fermiMotionIsOn( fermiMotionIsOn_ ),
+    incidentParticle( NULL ), nucleusParticle( NULL ), outputParticle( NULL ),
     nucleusOutputParticle( NULL ), messenger( NULL )
 {
     angularRanges.push_back( CexmcAngularRange( 1.0, -1.0, 0 ) );

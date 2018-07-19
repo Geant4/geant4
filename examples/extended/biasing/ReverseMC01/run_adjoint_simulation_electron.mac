@@ -14,7 +14,7 @@
 #Select physics list
 ###############################################
 
-#/adjoint_physics/UseProtonIonisation true
+/adjoint_physics/UseProtonIonisation false
 /adjoint_physics/UseGammaConversion false
 /adjoint_physics/UseBremsstrahlung true
 /adjoint_physics/UseCompton true

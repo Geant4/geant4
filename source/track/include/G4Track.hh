@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh 91231 2015-06-26 10:40:45Z gcosmo $
+// $Id: G4Track.hh 110263 2018-05-17 14:28:14Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -258,7 +258,7 @@ public: // With description
 
   // User information
   G4VUserTrackInformation* GetUserInformation() const;
-  void SetUserInformation(G4VUserTrackInformation* aValue);
+  void SetUserInformation(G4VUserTrackInformation* aValue) const;
  
   // Velocity table
   static void SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin);
@@ -312,7 +312,7 @@ public: // With description
    const G4VProcess* fpCreatorProcess; // Process which created the track
    G4int fCreatorModelIndex;           // Index of the physics model which created the track
    
-   G4VUserTrackInformation* fpUserInformation;
+   mutable G4VUserTrackInformation* fpUserInformation;
 
    // cached values for CalculateVelocity  
    mutable G4Material*               prev_mat;
@@ -321,7 +321,7 @@ public: // With description
    mutable G4double                  prev_momentum;
 
    G4bool          is_OpticalPhoton; 
-   static G4ThreadLocal G4VelocityTable*  velTable;
+   static G4VelocityTable*&  velTable();
  
    G4bool          useGivenVelocity;
       // do not calclulate velocity and just use current fVelocity

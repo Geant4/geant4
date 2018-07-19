@@ -31,7 +31,7 @@ public:
     float dy = direction.value()[1];
     float dz = direction.value()[2];
     
-   {tools::mat4f mtx;
+   {mat4f mtx;
     state.m_camera_orientation.value(mtx);
     mtx.mul_3f(dx,dy,dz);}
 

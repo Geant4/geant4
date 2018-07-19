@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE03/src/RE03UserScoreWriter.cc
 /// \brief Implementation of the RE03UserScoreWriter class
 //
-// $Id: RE03UserScoreWriter.cc 68026 2013-03-13 13:45:22Z gcosmo $
+// $Id: RE03UserScoreWriter.cc 99162 2016-09-07 08:14:24Z gcosmo $
 //
 
 #include "RE03UserScoreWriter.hh"
@@ -88,7 +88,7 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
            << psName << "\"." << G4endl;
     return;
   }
-  std::map<G4int, G4double*> * score = msMapItr->second->GetMap();
+  std::map<G4int, G4StatDouble*> * score = msMapItr->second->GetMap();
   ofile << "# primitive scorer name: " << msMapItr->first << G4endl;
 
   // write header info 
@@ -108,8 +108,8 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName,
 
         G4int idx = GetIndex(x, y, z);
         
-        std::map<G4int, G4double*>::iterator value = score->find(idx);
-        if(value != score->end()) projxy[x][y] += *(value->second);
+        std::map<G4int, G4StatDouble*>::iterator value = score->find(idx);
+        if(value != score->end()) projxy[x][y] += value->second->sum_wx();
 
       } // z
     } // y

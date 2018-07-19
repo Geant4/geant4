@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.cc 92859 2015-09-18 07:58:30Z gcosmo $
+// $Id: G4DNAMillerGreenExcitationModel.cc 105719 2017-08-16 12:36:37Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -31,6 +31,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -496,7 +497,7 @@ G4int G4DNAMillerGreenExcitationModel::RandomSelect(G4double k,const G4ParticleD
 {
     G4int i = nLevels;
     G4double value = 0.;
-    std::deque<double> values;
+    std::deque<G4double> values;
 
     G4DNAGenericIonsManager *instance;
     instance = G4DNAGenericIonsManager::Instance();
@@ -598,7 +599,7 @@ G4double G4DNAMillerGreenExcitationModel::S_1s(G4double t,
     // Dingfelder, in Chattanooga 2005 proceedings, formula (7)
 
     G4double r = R(t, energyTransferred, _slaterEffectiveCharge, shellNumber);
-    G4double value = 1. - std::exp(-2 * r) * ( ( 2. * r + 2. ) * r + 1. );
+    G4double value = 1. - G4Exp(-2 * r) * ( ( 2. * r + 2. ) * r + 1. );
 
     return value;
 }
@@ -615,7 +616,7 @@ G4double G4DNAMillerGreenExcitationModel::S_2s(G4double t,
     // Dingfelder, in Chattanooga 2005 proceedings, formula (8)
 
     G4double r = R(t, energyTransferred, _slaterEffectiveCharge, shellNumber);
-    G4double value =  1. - std::exp(-2 * r) * (((2. * r * r + 2.) * r + 2.) * r + 1.);
+    G4double value =  1. - G4Exp(-2 * r) * (((2. * r * r + 2.) * r + 2.) * r + 1.);
 
     return value;
 
@@ -632,7 +633,7 @@ G4double G4DNAMillerGreenExcitationModel::S_2p(G4double t,
     // Dingfelder, in Chattanooga 2005 proceedings, formula (9)
 
     G4double r = R(t, energyTransferred, _slaterEffectiveCharge, shellNumber);
-    G4double value =  1. - std::exp(-2 * r) * (((( 2./3. * r + 4./3.) * r + 2.) * r + 2.) * r  + 1.);
+    G4double value =  1. - G4Exp(-2 * r) * (((( 2./3. * r + 4./3.) * r + 2.) * r + 2.) * r  + 1.);
 
     return value;
 }

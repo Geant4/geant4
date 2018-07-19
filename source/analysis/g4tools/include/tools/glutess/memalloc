@@ -8,19 +8,19 @@
 ////////////////////////////////////////////////////////
 
 #ifdef TOOLS_MEM
-#include <tools/mem>
+#include "../mem"
 #include <cstdlib>
 namespace tools {
 inline void* mem_alloc(size_t a_size){
-  tools::mem::increment(tools::s_malloc().c_str());
+  mem::increment(tools::s_malloc().c_str());
   return ::malloc(a_size);
 }
 inline void* mem_realloc(void* a_ptr,size_t a_size){
-  if(a_ptr==NULL) tools::mem::increment(tools::s_malloc().c_str());
+  if(a_ptr==NULL) mem::increment(tools::s_malloc().c_str());
   return ::realloc(a_ptr,a_size);
 }
 inline void mem_free(void* a_ptr){
-  if(a_ptr!=NULL) tools::mem::decrement(tools::s_malloc().c_str());
+  if(a_ptr!=NULL) mem::decrement(tools::s_malloc().c_str());
   ::free(a_ptr);
 }
 inline int mem_init( size_t /*maxFast*/) {return 1;}

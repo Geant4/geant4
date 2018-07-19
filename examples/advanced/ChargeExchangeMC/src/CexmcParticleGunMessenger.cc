@@ -55,8 +55,8 @@
 
 
 CexmcParticleGunMessenger::CexmcParticleGunMessenger(
-                                            CexmcParticleGun *  particleGun ) :
-    particleGun( particleGun ), setParticle( NULL ), setOrigPosition( NULL ),
+                                            CexmcParticleGun *  particleGun_ ) :
+    particleGun( particleGun_ ), setParticle( NULL ), setOrigPosition( NULL ),
     setOrigDirection( NULL ), setOrigMomentumAmp( NULL )
 {
     setParticle = new G4UIcmdWithAString(

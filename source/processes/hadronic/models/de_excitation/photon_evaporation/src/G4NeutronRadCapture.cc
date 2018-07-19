@@ -42,35 +42,47 @@
 #include "G4NucleiProperties.hh"
 #include "G4VEvaporationChannel.hh"
 #include "G4PhotonEvaporation.hh"
-#include "G4PhotonEvaporationOLD.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+#include "G4Electron.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
 #include "G4He3.hh"
 #include "G4Alpha.hh"
+#include "G4RandomDirection.hh"
 
 G4NeutronRadCapture::G4NeutronRadCapture() 
   : G4HadronicInteraction("nRadCapture"),
-    lab4mom(0.,0.,0.,0.)
+    photonEvaporation(nullptr),lab4mom(0.,0.,0.,0.)
 {
-  lowestEnergyLimit = 10*eV;
-  minExcitation = 1*keV;
-  SetMinEnergy( 0.0*GeV );
-  SetMaxEnergy( 100.*TeV );
+  lowestEnergyLimit = 10*CLHEP::eV;
+  minExcitation = 0.1*CLHEP::keV;
+  SetMinEnergy( 0.0*CLHEP::GeV );
+  SetMaxEnergy( 100.*CLHEP::TeV );
 
-  char* env = getenv("G4UsePhotonEvaporationOLD"); 
-  if(!env) { photonEvaporation = new G4PhotonEvaporation(); } 
-  else     { photonEvaporation = new G4PhotonEvaporationOLD(); }
-  photonEvaporation->SetICM(true);
- 
+  electron = G4Electron::Electron();
+  icID = -1;
+
   theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
 }
 
 G4NeutronRadCapture::~G4NeutronRadCapture()
 {
   delete photonEvaporation;
+}
+
+void G4NeutronRadCapture::InitialiseModel()
+{
+  if(photonEvaporation != nullptr) { return; }
+  G4DeexPrecoParameters* param = 
+    G4NuclearLevelData::GetInstance()->GetParameters();
+  minExcitation = param->GetMinExcitation();
+  icID = param->GetInternalConversionID();
+
+  photonEvaporation = new G4PhotonEvaporation();
+  photonEvaporation->Initialise();
+  photonEvaporation->SetICM(true);
 }
 
 G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
@@ -110,15 +122,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
 	     << "  Z= " << Z << "  A= " << A << G4endl;
     }
     G4double e1 = (M - mass)*(M + mass)/(2*M);
-
-    G4double cost = 2.0*G4UniformRand() - 1.0;
-    if(cost > 1.0) {cost = 1.0;}
-    else if(cost < -1.0) {cost = -1.0;}
-    G4double sint = std::sqrt((1. - cost)*(1.0 + cost));
-    G4double phi  = G4UniformRand()*CLHEP::twopi;
-
-    G4LorentzVector lv2(e1*sint*std::cos(phi),e1*sint*std::sin(phi),
-			e1*cost,e1);
+    G4LorentzVector lv2(e1*G4RandomDirection(),e1);
     lv2.boost(bst);
     G4HadSecondary* news = 
       new G4HadSecondary(new G4DynamicParticle(G4Gamma::Gamma(), lv2));
@@ -133,7 +137,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     else if (Z == 1 && A == 3) {theDef = G4Triton::Triton();}
     else if (Z == 2 && A == 3) {theDef = G4He3::He3();}
     else if (Z == 2 && A == 4) {theDef = G4Alpha::Alpha();}
-    else {  theDef = theTableOfIons->GetIon(Z,A,0.0); }
+    else {  theDef = theTableOfIons->GetIon(Z,A,0.0,noFloat,0); }
 
     if (verboseLevel > 1) {
       G4cout << "Gamma 4-mom: " << lv2 << "   " 
@@ -174,7 +178,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     size_t n = fv->size();
 
     if (verboseLevel > 1) {
-      G4cout << "G4NeutronRadCapture: " << n << " final particle" << G4endl;
+      G4cout << "G4NeutronRadCapture: " << n << " final particle icID= " << icID << G4endl;
     }
     for(size_t i=0; i<n; ++i) {
 
@@ -193,9 +197,9 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
       else {
         G4double eexc = f->GetExcitationEnergy();
 	if(eexc <= minExcitation) { eexc = 0.0; }
-	theDef = theTableOfIons->GetIon(Z, A, eexc);
-	/*
-	G4cout << "### Find ion Z= " << Z << " A= " << A
+	theDef = theTableOfIons->GetIon(Z, A, eexc, noFloat, 0);
+	/*	
+	G4cout << "### NC Find ion Z= " << Z << " A= " << A
 	       << " Eexc(MeV)= " << eexc/MeV << "  " 
 	       << theDef << G4endl;
 	*/
@@ -214,12 +218,14 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
       G4double timeF = f->GetCreationTime();
       if(timeF < 0.0) { timeF = 0.0; }
       news->SetTime(time + timeF);
+      if(theDef == electron) { news->SetCreatorModelType(icID); }
       theParticleChange.AddSecondary(*news);
       delete news;
       delete f;
     }
     delete fv;
   }
+  //G4cout << "Capture done" << G4endl;
   return &theParticleChange;
 }
 

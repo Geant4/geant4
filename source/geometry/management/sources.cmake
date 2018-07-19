@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85608 2014-10-31 11:23:30Z gcosmo $
+# $Id: sources.cmake 109331 2018-04-11 08:43:16Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -37,14 +37,17 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4AffineTransform.icc
         G4BlockingList.hh
         G4BlockingList.icc
+        G4BoundingEnvelope.hh
         G4ErrorCylSurfaceTarget.hh
         G4ErrorPlaneSurfaceTarget.hh
         G4ErrorSurfaceTarget.hh
         G4ErrorTanPlaneTarget.hh
         G4ErrorTarget.hh
         G4GeomSplitter.hh
+        G4GeomTools.hh
         G4GeometryManager.hh
         G4IdentityTrajectoryFilter.hh
+        G4LogicalCrystalVolume.hh
         G4LogicalSurface.hh
         G4LogicalSurface.icc
         G4LogicalVolume.hh
@@ -55,6 +58,8 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4Region.hh
         G4Region.icc
         G4RegionStore.hh
+        G4ScaleTransform.hh
+        G4ScaleTransform.icc
         G4SmartVoxelHeader.hh
         G4SmartVoxelHeader.icc
         G4SmartVoxelNode.hh
@@ -64,7 +69,7 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4SmartVoxelStat.hh
         G4SolidStore.hh
         G4TouchableHandle.hh
-        G4USolid.hh
+        G4UAdapter.hh
         G4VCurvedTrajectoryFilter.hh
         G4VNestedParameterisation.hh
         G4VPVDivisionFactory.hh
@@ -85,13 +90,16 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         voxeldefs.hh
     SOURCES
         G4BlockingList.cc
+        G4BoundingEnvelope.cc
         G4ErrorCylSurfaceTarget.cc
         G4ErrorPlaneSurfaceTarget.cc
         G4ErrorSurfaceTarget.cc
         G4ErrorTanPlaneTarget.cc
         G4ErrorTarget.cc
+        G4GeomTools.cc
         G4GeometryManager.cc
         G4IdentityTrajectoryFilter.cc
+        G4LogicalCrystalVolume.cc
         G4LogicalSurface.cc
         G4LogicalVolume.cc
         G4LogicalVolumeStore.cc
@@ -104,7 +112,6 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4SmartVoxelProxy.cc
         G4SmartVoxelStat.cc
         G4SolidStore.cc
-        G4USolid.cc
         G4VCurvedTrajectoryFilter.cc
         G4VNestedParameterisation.cc
         G4VPVDivisionFactory.cc
@@ -124,7 +131,7 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4intercoms
         G4materials
     LINK_LIBRARIES
-        ${USOLIDS_LIBRARIES}
+        ${VECGEOM_LIBRARIES}
 )
 
 # List any source specific properties here

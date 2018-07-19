@@ -26,21 +26,22 @@
 /// \file exoticphysics/monopole/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 68036 2013-03-13 14:13:45Z gcosmo $
+// $Id: SteppingAction.cc 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
 #include "G4Step.hh"
-#include "RunAction.hh"
+#include "G4RunManager.hh"
+#include "Run.hh"
+
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct)
- : G4UserSteppingAction(),
-   fRunAction(RuAct)
+SteppingAction::SteppingAction()
+ : G4UserSteppingAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,12 +55,15 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   if (edep <= 0.) { return; }
+
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
  
   //Bragg curve
   G4double x = aStep->GetPreStepPoint()->GetPosition().x();
   G4double dx = aStep->GetPostStepPoint()->GetPosition().x() - x;
-  x += dx*G4UniformRand() - fRunAction->GetOffsetX();
-  fRunAction->FillHisto(0, x, edep);
+  x += dx*G4UniformRand() - run->GetOffsetX();
+  run->FillHisto(1, x, edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

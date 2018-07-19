@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh 93567 2015-10-26 14:51:41Z gcosmo $
+// $Id: G4eBremsstrahlungRelModel.hh 108737 2018-03-02 13:49:56Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -64,39 +64,39 @@ class G4eBremsstrahlungRelModel : public G4VEmModel
 
 public:
 
-  G4eBremsstrahlungRelModel(const G4ParticleDefinition* p = 0, 
-			    const G4String& nam = "eBremLPM");
+  explicit G4eBremsstrahlungRelModel(const G4ParticleDefinition* p = 0, 
+                                     const G4String& nam = "eBremLPM");
 
-  virtual ~G4eBremsstrahlungRelModel();
+  ~G4eBremsstrahlungRelModel() = default;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
   virtual void InitialiseLocal(const G4ParticleDefinition*,
-			       G4VEmModel* masterModel);
+                               G4VEmModel* masterModel) override;
 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
-					const G4ParticleDefinition*,
-					G4double kineticEnergy,
-					G4double cutEnergy);
-					
+                                        const G4ParticleDefinition*,
+                                        G4double kineticEnergy,
+                                        G4double cutEnergy) override;
+                                        
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-					      G4double tkin, 
-					      G4double Z,   G4double,
-					      G4double cutEnergy,
-					      G4double maxEnergy = DBL_MAX);
+                                              G4double tkin, 
+                                              G4double Z,   G4double,
+                                              G4double cutEnergy,
+                                              G4double maxEnergy = DBL_MAX) override;
   
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double cutEnergy,
-				 G4double maxEnergy);
+                                 const G4MaterialCutsCouple*,
+                                 const G4DynamicParticle*,
+                                 G4double cutEnergy,
+                                 G4double maxEnergy) override;
 
   virtual void SetupForMaterial(const G4ParticleDefinition*,
-                                const G4Material*,G4double);
+                                const G4Material*,G4double) override;
 
   virtual G4double MinPrimaryEnergy(const G4Material*,
-				    const G4ParticleDefinition*,
-				    G4double cut);
+                                    const G4ParticleDefinition*,
+                                    G4double cut) override;
 
   inline void SetLPMconstant(G4double val);
   inline G4double LPMconstant() const;
@@ -109,8 +109,7 @@ protected:
 
   virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
 
-  // * fast inline functions *
-  inline void SetCurrentElement(const G4double);
+  void SetCurrentElement(G4int);
 
 private:
 
@@ -132,8 +131,8 @@ private:
   inline G4double Psi1M2(G4double,G4double);
 
   // hide assignment operator
-  G4eBremsstrahlungRelModel & operator=(const  G4eBremsstrahlungRelModel &right);
-  G4eBremsstrahlungRelModel(const  G4eBremsstrahlungRelModel&);
+  G4eBremsstrahlungRelModel & operator=(const  G4eBremsstrahlungRelModel &right) = delete;
+  G4eBremsstrahlungRelModel(const  G4eBremsstrahlungRelModel&) = delete;
 
 protected:
 
@@ -148,11 +147,17 @@ protected:
   G4double particleMass;
   G4double kinEnergy;
   G4double totalEnergy;
-  G4double currentZ;
   G4double densityFactor;
   G4double densityCorr;
 
-  G4bool   isElectron;
+  // scattering off electrons
+  G4double nucTerm;
+  G4double sumTerm;
+
+  G4bool scatOffElectron;
+  G4bool isElectron;
+
+  G4int  currentZ;
 
 private:
 
@@ -174,7 +179,6 @@ private:
 
   // LPM effect
   G4double lpmEnergy;
-  G4PhysicsVector  *fXiLPM, *fPhiLPM, *fGLPM;
   G4double xiLPM, phiLPM, gLPM;
 
   // critical gamma energies
@@ -182,34 +186,8 @@ private:
 
   // flags
   G4bool   use_completescreening;
+
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4eBremsstrahlungRelModel::SetCurrentElement(const G4double Z)
-{
-  if(Z != currentZ) {
-    currentZ = Z;
-
-    G4int iz = G4lrint(Z);
-    z13 = nist->GetZ13(iz);
-    z23 = z13*z13;
-    lnZ = nist->GetLOGZ(iz);
-
-    if (iz <= 4) {
-      Fel = Fel_light[iz];  
-      Finel = Finel_light[iz] ; 
-    }
-    else {
-      G4double lnzt = lnZ/3.;
-      Fel = facFel - lnzt;
-      Finel = facFinel - 2*lnzt;
-    }
-
-    fCoulomb = GetCurrentElement()->GetfCoulomb();
-    fMax = Fel-fCoulomb + Finel/currentZ  +  (1.+1./currentZ)/12.;
-  }
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

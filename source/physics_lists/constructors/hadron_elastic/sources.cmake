@@ -11,7 +11,7 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 94088 2015-11-05 15:11:00Z gcosmo $
+# $Id: sources.cmake 104019 2017-05-08 07:34:08Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -39,6 +39,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/builders/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/factory/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/hadron_inelastic/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/transportation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
@@ -70,6 +71,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_helastic
         G4HadronHElasticPhysics.hh
         G4IonElasticPhysics.hh
         G4HadronElasticPhysicsPHP.hh
+        G4ThermalNeutrons.hh
     SOURCES
         G4ChargeExchangePhysics.cc
         G4HadronDElasticPhysics.cc
@@ -80,6 +82,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_helastic
         G4HadronHElasticPhysics.cc
         G4IonElasticPhysics.cc
         G4HadronElasticPhysicsPHP.cc
+        G4ThermalNeutrons.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
@@ -141,6 +144,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_helastic
         G4partman
         G4phys_builders
         G4phys_ctor_factory
+	G4phys_ctor_hinelastic
         G4procman
         G4run
         G4shortlived

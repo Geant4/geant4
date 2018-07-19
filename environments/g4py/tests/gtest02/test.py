@@ -24,7 +24,7 @@ def Setup0():
 
   # NIST materials
   #g4py.NISTmaterials.Construct()
-  
+
   # normal way for constructing user geometry
   #qDC= g4py.Qgeom.QDetectorConstruction()
   #gRunManager.SetUserInitialization(qDC)
@@ -125,9 +125,5 @@ pg.SetParticleMomentumDirection(primary_direction)
 # ------------------------------------------------------------------
 gRunManager.Initialize()
 
-# visualization
-gApplyUICommand("/control/execute vis.mac")
-
 # beamOn
-#gRunManager.BeamOn(3)
-
+gRunManager.BeamOn(10)

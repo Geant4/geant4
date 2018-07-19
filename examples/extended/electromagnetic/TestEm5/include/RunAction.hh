@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 76464 2013-11-11 10:22:56Z gcosmo $
+// $Id: RunAction.hh 98752 2016-08-09 13:44:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,7 +57,6 @@ public:
     virtual G4Run* GenerateRun();    
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
-
 
   private:
     DetectorConstruction*   fDetector;

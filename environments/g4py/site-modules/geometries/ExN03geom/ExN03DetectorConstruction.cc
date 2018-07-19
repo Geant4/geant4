@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: ExN03DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 // 
 
@@ -344,7 +344,7 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
   //                                        
   // Visualization attributes
   //
-  logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
+  logicWorld->SetVisAttributes (G4VisAttributes::GetInvisible());
 
   G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   simpleBoxVisAtt->SetVisibility(true);

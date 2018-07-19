@@ -173,7 +173,7 @@ int MCGIDI_angular_parseFromTOM( statusMessageReporting *smr, xDataTOM_element *
 err:
     if( pdfXY != NULL ) ptwXY_free( pdfXY );
     if( cdfX != NULL ) cdfX = ptwX_free( cdfX );
-    MCGIDI_angular_free( smr, angular );
+    if ( angular != NULL ) MCGIDI_angular_free( smr, angular );
     return( 1 );
 }
 /*

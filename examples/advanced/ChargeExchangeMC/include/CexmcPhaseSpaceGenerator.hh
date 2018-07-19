@@ -51,8 +51,9 @@
 
 struct  CexmcPhaseSpaceOutVectorElement
 {
-    CexmcPhaseSpaceOutVectorElement( G4LorentzVector *  lVec, G4double  mass ) :
-        lVec( lVec ), mass( mass )
+    CexmcPhaseSpaceOutVectorElement( G4LorentzVector *  lVec_,
+                                     G4double  mass_ ) :
+        lVec( lVec_ ), mass( mass_ )
     {}
 
     G4LorentzVector *  lVec;

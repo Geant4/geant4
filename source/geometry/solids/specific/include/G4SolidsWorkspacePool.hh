@@ -30,27 +30,27 @@
 #ifndef G4SOLIDSWORKSPACEPOOL_HH
 #define G4SOLIDSWORKSPACEPOOL_HH
 
-class G4SolidsWorkspace;
-// #include "G4SolidsWorkspace.hh"
+#include "geomwdefs.hh"
 
-//Note: Investigate potential to make it a template - on the workspace type
+class G4SolidsWorkspace;
 
 class G4SolidsWorkspacePool
 {
   public: 
      static G4SolidsWorkspacePool* GetInstance();
 
-   // For use with simple MT mode - each thread gets a workspace and uses it until end
      G4SolidsWorkspace* CreateWorkspace();
+       // For use with simple MT mode - each thread gets a workspace
+       // and uses it until end
 
      void CreateAndUseWorkspace();  // Create it (as above) and use it
   
-   // For use with 'dynamic' model of threading - workspaces can be recycled
      G4SolidsWorkspace* FindOrCreateWorkspace();
+      // For use with 'dynamic' model of threading - workspaces can be recycled
       // Reuse an existing workspace - or create a new one if needed.
       // This will never fail, except if system is out of resources
 
-     inline G4SolidsWorkspace* GetWorkspace() { return fMyWorkspace; } 
+     inline G4SolidsWorkspace* GetWorkspace() { return fMyWorkspace(); }
       // Give back the existing, active workspace for my thread / task
 
      void Recycle( G4SolidsWorkspace * );
@@ -60,8 +60,6 @@ class G4SolidsWorkspacePool
      // To be called once at the end of the job
   
  protected:
-      void ReleaseAndDestroyWorkspace(G4SolidsWorkspace*);
-      // Destroy workspace - after releasing it
 
       // void RegisterWarehouse( G4GeometryWarehouse *) ;
       // The (optional) warehouse keeps a list of free workspaces
@@ -73,7 +71,7 @@ class G4SolidsWorkspacePool
  private: 
      static G4SolidsWorkspacePool* thePool;
 
-     static G4ThreadLocal G4SolidsWorkspace*    fMyWorkspace;
+     G4GEOM_DLL static G4SolidsWorkspace*& fMyWorkspace();
      // The thread's workspace - if assigned.
 };
 

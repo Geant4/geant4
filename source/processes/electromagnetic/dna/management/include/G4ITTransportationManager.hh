@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTransportationManager.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4ITTransportationManager.hh 100802 2016-11-02 14:55:27Z gcosmo $
 //
 /// \brief {Duplicated version of G4TransportationManager.
 ///         This class just contains the pointer to the navigator object of the
 ///         simulation.}
 //
 // -------------------------------------------------------------------
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //

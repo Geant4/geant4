@@ -47,21 +47,22 @@ class G4ProtonPHPBuilder : public G4VProtonBuilder
 {
 public: 
   G4ProtonPHPBuilder();
-  virtual ~G4ProtonPHPBuilder();
+  virtual ~G4ProtonPHPBuilder() {}
   
-public: 
-  virtual void Build(G4ProtonInelasticProcess * aP);
-  virtual void Build(G4HadronElasticProcess * aP);
+  virtual void Build(G4ProtonInelasticProcess * aP) final override;
+  virtual void Build(G4HadronElasticProcess * aP) final override;
   
-  void SetMinEnergy(G4double aM) 
+  virtual void SetMinEnergy(G4double aM) final override
   {
     theMin=aM;
   }
-  void SetMaxEnergy(G4double aM) 
+  virtual void SetMaxEnergy(G4double aM) final override
   {
     theMax=aM;
   }
   
+  using G4VProtonBuilder::Build; //Prevent compiler warning
+
 private:
   G4double theMin;
   G4double theMax;

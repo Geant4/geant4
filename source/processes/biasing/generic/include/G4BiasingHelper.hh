@@ -44,6 +44,7 @@
 #include "globals.hh"
 
 class G4ProcessManager;
+class G4ParallelGeometriesLimiterProcess;
 
 #include <vector>
 
@@ -66,6 +67,11 @@ public:
   // -- this process can be passed, otherwise the default name "biasWrapper(0)" is used.
   static void   ActivateNonPhysicsBiasing(G4ProcessManager* pmanager,
 					  G4String nonPhysicsProcessName = "");
+  
+  // -- Add a G4ParallelGeometriesLimiterProcess instance to the given process manager
+  // -- The pointer of the added process is returned.
+  static G4ParallelGeometriesLimiterProcess* AddLimiterProcess(G4ProcessManager* pmanager,
+							       const G4String& processName = "biasLimiter");
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

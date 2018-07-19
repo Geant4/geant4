@@ -52,7 +52,7 @@ namespace G4INCL {
     G4bool isBlocked(ParticleList const &, Nucleus const * const);
 
     inline void processOneParticle(Particle const * const p) {
-      if(p->isNucleon()) {
+      if(p->isBaryon()) {
         const G4double Tf = thePotential->getFermiEnergy(p);
         const G4double T = p->getKineticEnergy();
 
@@ -62,7 +62,7 @@ namespace G4INCL {
         } else {
           TbelowTf += T - p->getPotentialEnergy();
         }
-      } else if(p->isPion() || p->isResonance()) {
+      } else if(p->isMeson() || p->isResonance()) {
         const G4double sep = thePotential->getSeparationEnergy(p);
         Sk += sep;
       }

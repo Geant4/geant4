@@ -29,7 +29,7 @@
 // --------------------------------------------------------------
 //
 // Code developed by:
-//  S.Guatelli
+//  S.Guatelli and D. Cutajar
 //
 //
 //    *******************************
@@ -38,7 +38,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyRunAction.cc 69765 2013-05-14 10:11:22Z gcosmo $
+// $Id: BrachyRunAction.cc 100821 2016-11-02 15:21:34Z gcosmo $
 //
 
 #include "BrachyRunAction.hh"

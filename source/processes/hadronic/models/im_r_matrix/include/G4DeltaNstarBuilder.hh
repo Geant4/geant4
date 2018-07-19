@@ -27,6 +27,7 @@
 #define G4DeltaNstarBuilder_h
 
 #include "G4VXResonanceTable.hh"
+#include "G4XDeltaNstarTable.hh"
 
 class G4DeltaNstarBuilder : public G4VXResonanceTable
 {

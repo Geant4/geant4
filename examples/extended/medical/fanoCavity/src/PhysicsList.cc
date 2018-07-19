@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
+// $Id: PhysicsList.cc 100265 2016-10-17 08:11:18Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,6 @@
 #include "G4ChargedGeantino.hh"
 #include "G4Geantino.hh"
 #include "G4Gamma.hh"
-
 
 // leptons
 #include "G4Electron.hh"

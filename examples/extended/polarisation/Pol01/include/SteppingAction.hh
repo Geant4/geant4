@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
-// $Id: SteppingAction.hh 86418 2014-11-11 10:39:38Z gcosmo $
+// $Id: SteppingAction.hh 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,9 +53,9 @@ public:
   virtual void UserSteppingAction(const G4Step*);
     
 private:
-  DetectorConstruction*   detector;
-  PrimaryGeneratorAction* primary;
-  RunAction*              runAction;
+  DetectorConstruction*   fDetector;
+  PrimaryGeneratorAction* fPrimary;
+  RunAction*              fRunAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

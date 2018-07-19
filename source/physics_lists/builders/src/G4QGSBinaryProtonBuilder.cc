@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBinaryProtonBuilder.cc 83616 2014-09-04 13:30:16Z gcosmo $
+// $Id: G4QGSBinaryProtonBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -73,11 +73,6 @@ Build(G4ProtonInelasticProcess * aP)
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
    aP->RegisterMe(theModel);
- }
-
-void G4QGSBinaryProtonBuilder::
-Build(G4HadronElasticProcess * )
- {
  }
 
 G4QGSBinaryProtonBuilder::~G4QGSBinaryProtonBuilder() 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc 102312 2017-01-20 15:33:46Z gcosmo $
+// $Id: G4GDMLReadStructure.cc 110680 2018-06-07 14:51:42Z gcosmo $
 //
 // class G4GDMLReadStructure Implementation
 //
@@ -794,8 +794,9 @@ Volume_contentRead(const xercesc::DOMElement* const volumeElement)
 void G4GDMLReadStructure::
 StructureRead(const xercesc::DOMElement* const structureElement)
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Reading structure..." << G4endl;
-
+#endif
    for (xercesc::DOMNode* iter = structureElement->getFirstChild();
         iter != 0; iter = iter->getNextSibling())
    {
@@ -901,4 +902,5 @@ void G4GDMLReadStructure::Clear()
 {
   eval.Clear();
   setuptoPV.clear();
+  auxMap.clear();
 }

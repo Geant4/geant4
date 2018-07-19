@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 92047 2015-08-14 07:23:37Z gcosmo $
+// $Id: DetectorConstruction.hh 106960 2017-10-31 08:35:19Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -73,7 +73,11 @@ public:
   void SetContainerThickness(G4double);     
 
   void SetPairEnergy(G4double);
-     
+
+  inline G4VPhysicalVolume* GetWorldPhysVol() const { return fPhysWorld; }
+  inline void SetMaxChargedStep(G4double x) { fMaxStep = x; }
+  inline G4double GetMaxChargedStep() const { return fMaxStep; }
+      
 private:
 
   void DefineMaterials();
@@ -82,6 +86,7 @@ private:
   G4Material*        fGasMat;
   G4double           fGasThickness;
   G4double           fGasRadius;
+  G4double           fMaxStep;
 
   G4Material*        fWindowMat;
   G4double           fWindowThick;

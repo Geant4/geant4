@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/src/RMC01AnalysisManager.cc
 /// \brief Implementation of the RMC01AnalysisManager class
 //
-// $Id: RMC01AnalysisManager.cc 90260 2015-05-22 08:59:31Z gcosmo $
+// $Id: RMC01AnalysisManager.cc 101420 2016-11-17 10:37:14Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01AnalysisManager
@@ -52,7 +52,6 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "RMC01AnalysisManagerMessenger.hh"
-
 
 RMC01AnalysisManager* RMC01AnalysisManager::fInstance = 0;
 
@@ -117,7 +116,6 @@ RMC01AnalysisManager* RMC01AnalysisManager::GetInstance()
 void RMC01AnalysisManager::BeginOfRun(const G4Run* aRun)
 {
 
-
    fAccumulated_edep =0.;
    fAccumulated_edep2 =0.;
    fNentry = 0.0;
@@ -147,7 +145,7 @@ void RMC01AnalysisManager::BeginOfRun(const G4Run* aRun)
    fTimer->Start();
    fElapsed_time=0.;
 
-   book();
+   Book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -169,7 +167,7 @@ void RMC01AnalysisManager::EndOfRun(const G4Run* aRun)
    factor=1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun()
                                  *fNb_evt_per_adj_evt/aRun->GetNumberOfEvent();
   }
-  save(factor);
+  Save(factor);
   fConvergenceFileOutput.close();
 }
 
@@ -197,7 +195,6 @@ void RMC01AnalysisManager::EndOfEvent(const G4Event* anEvent)
                 nb_event =static_cast<G4int>(n_adj_evt);
         }        
         else nb_event=0;
-        
    }
    
    if (nb_event>100 && fStop_run_if_precision_reached &&
@@ -255,7 +252,8 @@ void  RMC01AnalysisManager::EndOfEventForForwardSimulation(
            fAccumulated_edep +=totEdep ;
            fAccumulated_edep2 +=totEdep*totEdep;
            fNentry += 1.0;
-           G4PrimaryParticle* thePrimary=anEvent->GetPrimaryVertex()->GetPrimary();
+           G4PrimaryParticle* thePrimary=
+                                 anEvent->GetPrimaryVertex()->GetPrimary();
            G4double E0= thePrimary->GetG4code()->GetPDGMass();
            G4double P=thePrimary->GetMomentum().mag();
            G4double prim_ekin =std::sqrt(E0*E0+P*P)-E0;
@@ -312,112 +310,79 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(
                   (RMC01DoubleWithWeightHitsCollection*)(
                  HCE->GetHC(SDman->GetCollectionID("current_gamma")));
   
+  //Computation of total energy deposited in fwd tracking phase
+  //-------------------------------
+   G4double totEdep=0;
+   G4int i;
+   for (i=0;i<edepCollection->entries();i++)
+       totEdep+=(*edepCollection)[i]->GetValue()*
+                                            (*edepCollection)[i]->GetWeight();
+
   //Output from adjoint tracking phase
   //----------------------------------------------------------------------------
   
   G4AdjointSimManager* theAdjointSimManager =
                    G4AdjointSimManager::GetInstance();
-  G4int pdg_nb =theAdjointSimManager
-           ->GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack();
-  G4double prim_ekin=theAdjointSimManager->GetEkinAtEndOfLastAdjointTrack();
-  G4double adj_weight=theAdjointSimManager->GetWeightAtEndOfLastAdjointTrack();
+
+  size_t nb_adj_track =
+       theAdjointSimManager->GetNbOfAdointTracksReachingTheExternalSurface();
+  G4double total_normalised_weight = 0.;
+
+  //We need to loop over the adjoint tracks that have reached the external
+  //surface.
+  for (size_t j=0;j<nb_adj_track;j++) {
+    G4int pdg_nb =theAdjointSimManager
+         ->GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(j);
+    G4double prim_ekin=theAdjointSimManager
+                              ->GetEkinAtEndOfLastAdjointTrack(j);
+    G4double adj_weight=theAdjointSimManager
+                             ->GetWeightAtEndOfLastAdjointTrack(j);
  
   
-  //Factor of normalisation to user defined prim spectrum (power law or exp)
-  //---------------------------------------------------------------------------
-  
-  G4double normalised_weight = 0.;
-  if (pdg_nb== fPrimPDG_ID && prim_ekin>= fEmin_prim_spectrum
+    //Factor of normalisation to user defined prim spectrum (power law or exp)
+    //------------------------------------------------------------------------
+    G4double normalised_weight = 0.;
+    if (pdg_nb== fPrimPDG_ID && prim_ekin>= fEmin_prim_spectrum
                                          && prim_ekin<= fEmax_prim_spectrum)
-  normalised_weight =
+      normalised_weight =
                 adj_weight*PrimDiffAndDirFluxForAdjointSim(prim_ekin);
+    total_normalised_weight += normalised_weight;
   
-  //Answer matrices
-  //-------------
-   G4AnaH1* edep_rmatrix =0;
-   G4AnaH2* electron_current_rmatrix =0;
-   G4AnaH2* gamma_current_rmatrix =0;
-   G4AnaH2* proton_current_rmatrix =0;
+    //Answer matrices
+    //-------------
+    G4AnaH1* edep_rmatrix =0;
+    G4AnaH2* electron_current_rmatrix =0;
+    G4AnaH2* gamma_current_rmatrix =0;
+    G4AnaH2* proton_current_rmatrix =0;
 
-   if (pdg_nb == G4Electron::Electron()->GetPDGEncoding()){ //e- answer matrices
-     edep_rmatrix = fEdep_rmatrix_vs_electron_prim_energy;
-
-     electron_current_rmatrix =
+    if (pdg_nb == G4Electron::Electron()->GetPDGEncoding()){ //e- matrices
+      edep_rmatrix = fEdep_rmatrix_vs_electron_prim_energy;
+      electron_current_rmatrix =
                           fElectron_current_rmatrix_vs_electron_prim_energy;
-
-     gamma_current_rmatrix = fGamma_current_rmatrix_vs_electron_prim_energy;
-   }
-   else if (pdg_nb == G4Gamma::Gamma()->GetPDGEncoding()){
-     //gammma answer matrices
-     edep_rmatrix = fEdep_rmatrix_vs_gamma_prim_energy;
-     electron_current_rmatrix = fElectron_current_rmatrix_vs_gamma_prim_energy;
-     gamma_current_rmatrix = fGamma_current_rmatrix_vs_gamma_prim_energy;
-   }
-   else if (pdg_nb == G4Proton::Proton()->GetPDGEncoding()){
-     //proton answer matrices
-     edep_rmatrix = fEdep_rmatrix_vs_proton_prim_energy;
-     electron_current_rmatrix = fElectron_current_rmatrix_vs_proton_prim_energy;
-     gamma_current_rmatrix = fGamma_current_rmatrix_vs_proton_prim_energy;
-     proton_current_rmatrix = fProton_current_rmatrix_vs_proton_prim_energy;
-   }
-  
-  //Registering of total energy deposited in Event
-  //-------------------------------
-   G4double totEdep=0; 
-   G4int i;
-   for (i=0;i<edepCollection->entries();i++)
-           totEdep+=(*edepCollection)[i]->GetValue()*
-                                            (*edepCollection)[i]->GetWeight();
-   
-   G4bool new_mean_computed=false;
-   if (totEdep>0.){
-     if (normalised_weight>0.){
-       G4double edep=totEdep* normalised_weight;
-                
-      //Check if the edep is not wrongly too high
-      //-----------------------------------------
-      G4double new_mean , new_error;
-                
-      fAccumulated_edep +=edep;
-      fAccumulated_edep2 +=edep*edep;
-      fNentry += 1.0;
-      ComputeMeanEdepAndError(anEvent,new_mean,new_error);
-      G4double new_relative_error = 1.;
-      if ( new_error >0) new_relative_error = new_error/ new_mean;
-      if (fRelative_error <0.10 && new_relative_error>1.5*fRelative_error) {
-         G4cout<<"Potential wrong adjoint weight!"<<std::endl;
-         G4cout<<"The results of this event will not be registered!"
-                                                            <<std::endl;
-         G4cout<<"previous mean edep [MeV] "<< fMean_edep<<std::endl;
-         G4cout<<"previous relative error "<< fRelative_error<<std::endl;
-         G4cout<<"new rejected mean edep [MeV] "<< new_mean<<std::endl;
-         G4cout<<"new rejected relative error "<< new_relative_error
-                                                              <<std::endl;
-         fAccumulated_edep -=edep;
-         fAccumulated_edep2 -=edep*edep;
-         fNentry -= 1.0;
-         return; 
-                }
-                else { //accepted
-                        fMean_edep = new_mean;
-                        fError_mean_edep = new_error;
-                        fRelative_error =new_relative_error;
-                        new_mean_computed=true;
-                }         
-                fEdep_vs_prim_ekin->fill(prim_ekin,edep); 
-        }
-        
-        // Registering answer matrix
-        //---------------------------
-        
-        edep_rmatrix->fill(prim_ekin,totEdep*adj_weight/cm2);
-   }
-   if (!new_mean_computed){
-     ComputeMeanEdepAndError(anEvent,fMean_edep,fError_mean_edep);
-     if (fError_mean_edep>0) fRelative_error= fError_mean_edep/fMean_edep;
-   }         
+      gamma_current_rmatrix = fGamma_current_rmatrix_vs_electron_prim_energy;
+    }
+    else if (pdg_nb == G4Gamma::Gamma()->GetPDGEncoding()){
+      //gammma answer matrices
+      edep_rmatrix = fEdep_rmatrix_vs_gamma_prim_energy;
+      electron_current_rmatrix = fElectron_current_rmatrix_vs_gamma_prim_energy;
+      gamma_current_rmatrix = fGamma_current_rmatrix_vs_gamma_prim_energy;
+    }
+    else if (pdg_nb == G4Proton::Proton()->GetPDGEncoding()){
+      //proton answer matrices
+      edep_rmatrix = fEdep_rmatrix_vs_proton_prim_energy;
+      electron_current_rmatrix =
+                         fElectron_current_rmatrix_vs_proton_prim_energy;
+      gamma_current_rmatrix = fGamma_current_rmatrix_vs_proton_prim_energy;
+      proton_current_rmatrix = fProton_current_rmatrix_vs_proton_prim_energy;
+    }
+    //Register histo edep vs prim ekin
+    //----------------------------------
+    if (normalised_weight>0) fEdep_vs_prim_ekin
+                        ->fill(prim_ekin,totEdep*normalised_weight);
+    // Registering answer matrix
+    //---------------------------
+    edep_rmatrix->fill(prim_ekin,totEdep*adj_weight/cm2);
     
-   
   //Registering of current of particles on the sensitive volume
   //------------------------------------------------------------
    
@@ -427,19 +392,62 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(
      fElectron_current->fill(ekin,weight*normalised_weight);
      electron_current_rmatrix->fill(prim_ekin,ekin,weight*adj_weight/cm2);
    }
-   
    for (i=0;i<protonCurrentCollection->entries();i++) {
      G4double ekin =(*protonCurrentCollection)[i]->GetValue();
      G4double weight=(*protonCurrentCollection)[i]->GetWeight();
      fProton_current->fill(ekin,weight*normalised_weight);
      proton_current_rmatrix->fill(prim_ekin,ekin,weight*adj_weight/cm2);
-  }        
-   
+   }
    for (i=0;i<gammaCurrentCollection->entries();i++) {
      G4double ekin =(*gammaCurrentCollection)[i]->GetValue();
      G4double weight=(*gammaCurrentCollection)[i]->GetWeight();
      fGamma_current->fill(ekin,weight*normalised_weight);
      gamma_current_rmatrix->fill(prim_ekin,ekin,weight*adj_weight/cm2);
+   }
+  }
+
+  //Registering of total energy deposited in Event
+  //-------------------------------
+     G4bool new_mean_computed=false;
+     if (totEdep>0.){
+       if (total_normalised_weight>0.){
+         G4double edep=totEdep* total_normalised_weight;
+
+         //Check if the edep is not wrongly too high
+         //-----------------------------------------
+         G4double new_mean , new_error;
+         fAccumulated_edep +=edep;
+         fAccumulated_edep2 +=edep*edep;
+         fNentry += 1.0;
+         ComputeMeanEdepAndError(anEvent,new_mean,new_error);
+         G4double new_relative_error = 1.;
+         if ( new_error >0) new_relative_error = new_error/ new_mean;
+         if (fRelative_error <0.10 && new_relative_error>1.5*fRelative_error) {
+           G4cout<<"Potential wrong adjoint weight!"<<std::endl;
+           G4cout<<"The results of this event will not be registered!"
+                                                         <<std::endl;
+           G4cout<<"previous mean edep [MeV] "<< fMean_edep<<std::endl;
+           G4cout<<"previous relative error "<< fRelative_error<<std::endl;
+           G4cout<<"new rejected mean edep [MeV] "<< new_mean<<std::endl;
+           G4cout<<"new rejected relative error "<< new_relative_error
+                                                           <<std::endl;
+           fAccumulated_edep -=edep;
+           fAccumulated_edep2 -=edep*edep;
+           fNentry -= 1.0;
+           return;
+         }
+         else { //accepted
+           fMean_edep = new_mean;
+           fError_mean_edep = new_error;
+           fRelative_error =new_relative_error;
+           new_mean_computed=true;
+         }
+
+     }
+    if (!new_mean_computed){
+         ComputeMeanEdepAndError(anEvent,fMean_edep,fError_mean_edep);
+         if (fError_mean_edep>0) fRelative_error= fError_mean_edep/fMean_edep;
+    }
    }
 }
 
@@ -508,15 +516,19 @@ void RMC01AnalysisManager::ComputeMeanEdepAndError(
    
    // VI: error computation now is based on number of entries and not 
    //     number of events
-   if (fNentry > 1.0) {
-      mean = fAccumulated_edep/fNentry;
-      G4double mean_x2 = fAccumulated_edep2/fNentry;
+   // LD: This is wrong! With the use of fNentry the results were no longer
+   //     correctly normalised. The mean and the error should be computed
+   //     with nb_event. The old computation has been reset.
+   G4float nb_event_float = G4float(nb_event);
+   if (nb_event_float >1.) {
+      mean = fAccumulated_edep/nb_event_float;
+      G4double mean_x2 = fAccumulated_edep2/nb_event_float;
       /*
       G4cout << "Nevt= " << nb_event <<  " mean= " << mean 
              << "  mean_x2= " <<  mean_x2 << " x2 - x*x= " 
              << mean_x2-mean*mean << G4endl;
       */
-      error = factor*std::sqrt(mean_x2-mean*mean)/std::sqrt(fNentry);
+      error = factor*std::sqrt(mean_x2-mean*mean)/std::sqrt(nb_event_float);
       mean *=factor;
    }
    else {
@@ -586,7 +598,7 @@ void RMC01AnalysisManager::SetPrimaryPowerLawSpectrumForAdjointSim(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RMC01AnalysisManager::book()
+void RMC01AnalysisManager::Book()
 {
   //----------------------
   //Creation of histograms
@@ -609,9 +621,10 @@ void RMC01AnalysisManager::book()
 
    G4bool fileOpen = theHistoManager->OpenFile(fFileName[0]);
    if (!fileOpen) {
-       G4cout << "\n---> RMC01AnalysisManager::book(): cannot open " << fFileName[1]
+     G4cout << "\n---> RMC01AnalysisManager::Book(): cannot open "
+             << fFileName[1]
               << G4endl;
-       return;
+     return;
    }
 
     // Create directories
@@ -621,7 +634,6 @@ void RMC01AnalysisManager::book()
   //        1)the forward simulation results
   //        2)the Reverse MC  simulation results normalised to a user spectrum
   //------------------------------------------------------------------------
-
 
    G4int idHisto =
       theHistoManager->CreateH1(G4String("Edep_vs_prim_ekin"),
@@ -640,12 +652,10 @@ void RMC01AnalysisManager::book()
         "none","none",G4String("log"));
   fProton_current=theHistoManager->GetH1(idHisto);
 
-
   idHisto= theHistoManager->CreateH1(G4String("gamma_current"),
           G4String("gamma"),60,emin,emax,
           "none","none",G4String("log"));
   fGamma_current=theHistoManager->GetH1(idHisto);
-
 
   //Response matrices for the adjoint simulation only
   //-----------------------------------------------
@@ -676,10 +686,8 @@ void RMC01AnalysisManager::book()
            60,emin,emax,60,emin,emax,
            "none","none","none","none",G4String("log"),G4String("log"));
 
-
    fGamma_current_rmatrix_vs_electron_prim_energy =
                                            theHistoManager->GetH2(idHisto);
-
 
   //Response matrices for external isotropic gamma source
 
@@ -708,8 +716,6 @@ void RMC01AnalysisManager::book()
 
    fGamma_current_rmatrix_vs_gamma_prim_energy =
                                              theHistoManager->GetH2(idHisto);
-
-
 
   //Response matrices for external isotropic proton source
    idHisto =
@@ -754,7 +760,7 @@ void RMC01AnalysisManager::book()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RMC01AnalysisManager::save(G4double scaling_factor)
+void RMC01AnalysisManager::Save(G4double scaling_factor)
 { if (fFactoryOn) {
     G4AnalysisManager* theHistoManager = G4AnalysisManager::Instance();
     //scaling of results

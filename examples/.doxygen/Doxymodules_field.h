@@ -1,4 +1,4 @@
-// $Id: Doxymodules_field.h 76473 2013-11-11 10:35:14Z gcosmo $
+// $Id: Doxymodules_field.h 104750 2017-06-15 08:47:26Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_field.h
@@ -39,13 +39,10 @@
   class F01EventActionMessenger {};
   class F01FieldMessenger {};
   class F01FieldSetup {};
-  class F01PhysicsList {};
-  class F01PhysicsListMessenger {};
   class F01PrimaryGeneratorAction {};
   class F01PrimaryGeneratorMessenger {};
   class F01RunAction {};
   class F01RunMessenger {};
-  class F01StepCut {};
   class F01SteppingVerbose {};
 
 /** @} */
@@ -64,13 +61,10 @@
   class F02EventAction {};
   class F02EventActionMessenger {};
   class F02FieldMessenger {};
-  class F02PhysicsList {};
-  class F02PhysicsListMessenger {};
   class F02PrimaryGeneratorAction {};
   class F02PrimaryGeneratorMessenger {};
   class F02RunAction {};
   class F02RunMessenger {};
-  class F02StepCut {};
   class F02SteppingVerbose {};
 
 /** @} */
@@ -80,6 +74,7 @@
  *  @{
  */
 
+  class F03ActionInitialization {};
   class F03CalorHit {};
   class F03CalorimeterSD {};
   class F03DetectorConstruction {};
@@ -88,13 +83,10 @@
   class F03EventActionMessenger {};
   class F03FieldMessenger {};
   class F03FieldSetup {};
-  class F03PhysicsList {};
-  class F03PhysicsListMessenger {};
   class F03PrimaryGeneratorAction {};
   class F03PrimaryGeneratorMessenger {};
   class F03RunAction {};
   class F03RunMessenger {};
-  class F03StepCut {};
   class F03SteppingVerbose {};
 
 /** @} */
@@ -104,6 +96,7 @@
  *  @{
  */
 
+  class F04ActionInitialization {};
   class F04DetectorConstruction {};
   class F04DetectorMessenger {};
   class F04ElementField {};
@@ -141,7 +134,6 @@
 
   class F05ActionInitialization {};
   class F05DetectorConstruction {};
-  class F05ExtraPhysics {};
   class F05Field {};
   class F05PhysicsList {};
   class F05PrimaryGeneratorAction {};
@@ -157,7 +149,6 @@
 
   class F06ActionInitialization {};
   class F06DetectorConstruction {};
-  class F06ExtraPhysics {};
   class F06PhysicsList {};
   class F06PrimaryGeneratorAction {};
 

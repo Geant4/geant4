@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm12/src/TrackingAction.cc
+/// \file TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
 // $Id: TrackingAction.cc 69099 2013-04-18 12:25:19Z maire $
@@ -104,6 +104,8 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
       analysisManager->AddNtupleRow(id);
     
       analysisManager->FillH1(6, energy, weight);
+      analysisManager->FillH1(7, energy, weight);
+      analysisManager->FillH1(8, energy, weight);
     }                        
   }
   

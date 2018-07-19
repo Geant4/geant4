@@ -46,14 +46,18 @@ G4ThreadLocal G4int G4ParticleHPChannelList::trycounter = 0;
     theChannels  = new G4ParticleHPChannel * [n];
     allChannelsCreated = false;
     theInitCount = 0;
+    theElement = NULL;
   }
   
+#include "G4Neutron.hh"
   G4ParticleHPChannelList::G4ParticleHPChannelList()
   {
     nChannels = 0;
     theChannels = 0;
     allChannelsCreated = false;
     theInitCount = 0;
+    theElement = NULL;
+    theProjectile = G4Neutron::Neutron();
   }
   
   G4ParticleHPChannelList::~G4ParticleHPChannelList()
@@ -152,6 +156,7 @@ G4ThreadLocal G4int G4ParticleHPChannelList::trycounter = 0;
        //TK121106
        G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargA( targA ); 
        G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargZ( targZ ); 
+       delete [] running;
        return &unChanged;
     }
     //TK120607

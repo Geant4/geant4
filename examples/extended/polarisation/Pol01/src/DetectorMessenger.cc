@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: DetectorMessenger.cc 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,68 +41,70 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:Detector(Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
+:G4UImessenger(), 
+ fDetector(det), fTestemDir(0), fDetDir(0),
+ fMaterCmd(0), fSizeXYCmd(0), fSizeZCmd(0), fUpdateCmd(0)
 { 
-  testemDir = new G4UIdirectory("/testem/");
-  testemDir->SetGuidance("commands specific to this example");
+  fTestemDir = new G4UIdirectory("/testem/");
+  fTestemDir->SetGuidance("commands specific to this example");
   
-  detDir = new G4UIdirectory("/testem/det/");
-  detDir->SetGuidance("detector construction");
+  fDetDir = new G4UIdirectory("/testem/det/");
+  fDetDir->SetGuidance("detector construction");
         
-  MaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
-  MaterCmd->SetGuidance("Select material of the box.");
-  MaterCmd->SetParameterName("choice",false);
-  MaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
+  fMaterCmd->SetGuidance("Select material of the box.");
+  fMaterCmd->SetParameterName("choice",false);
+  fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  SizeXYCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSizeXY",this);
-  SizeXYCmd->SetGuidance("Set sizeXY of the box");
-  SizeXYCmd->SetParameterName("Size",false);
-  SizeXYCmd->SetRange("Size>0.");
-  SizeXYCmd->SetUnitCategory("Length");
-  SizeXYCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSizeXYCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSizeXY",this);
+  fSizeXYCmd->SetGuidance("Set sizeXY of the box");
+  fSizeXYCmd->SetParameterName("Size",false);
+  fSizeXYCmd->SetRange("Size>0.");
+  fSizeXYCmd->SetUnitCategory("Length");
+  fSizeXYCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  SizeZCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSizeZ",this);
-  SizeZCmd->SetGuidance("Set sizeZ of the box");
-  SizeZCmd->SetParameterName("SizeZ",false);
-  SizeZCmd->SetRange("SizeZ>0.");
-  SizeZCmd->SetUnitCategory("Length");
-  SizeZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSizeZCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSizeZ",this);
+  fSizeZCmd->SetGuidance("Set sizeZ of the box");
+  fSizeZCmd->SetParameterName("SizeZ",false);
+  fSizeZCmd->SetRange("SizeZ>0.");
+  fSizeZCmd->SetUnitCategory("Length");
+  fSizeZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
-  UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
-  UpdateCmd->SetGuidance("Update calorimeter geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
+  fUpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
+  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete MaterCmd;
-  delete SizeXYCmd;
-  delete SizeZCmd; 
-  delete UpdateCmd;
-  delete detDir;  
-  delete testemDir;
+  delete fMaterCmd;
+  delete fSizeXYCmd;
+  delete fSizeZCmd; 
+  delete fUpdateCmd;
+  delete fDetDir;  
+  delete fTestemDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
-  if( command == MaterCmd )
-   { Detector->SetTargetMaterial(newValue);}
+  if( command == fMaterCmd )
+   { fDetector->SetTargetMaterial(newValue);}
    
-  if( command == SizeXYCmd )
-   { Detector->SetSizeXY(SizeXYCmd->GetNewDoubleValue(newValue));}
+  if( command == fSizeXYCmd )
+   { fDetector->SetSizeXY(fSizeXYCmd->GetNewDoubleValue(newValue));}
    
-  if( command == SizeZCmd )
-   { Detector->SetSizeZ(SizeZCmd->GetNewDoubleValue(newValue));}
+  if( command == fSizeZCmd )
+   { fDetector->SetSizeZ(fSizeZCmd->GetNewDoubleValue(newValue));}
      
-  if( command == UpdateCmd )
-   { Detector->UpdateGeometry(); }
+  if( command == fUpdateCmd )
+   { fDetector->UpdateGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

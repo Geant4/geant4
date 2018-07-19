@@ -36,7 +36,8 @@ class HadrontherapyDetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithoutParameter; 
-class G4UIcmdWithAString;        
+class G4UIcmdWithAString;
+class G4UIcmdWithABool;
 
 class HadrontherapyDetectorMessenger: public G4UImessenger
 {
@@ -60,6 +61,13 @@ private:
     *changeTheDetectorSizeCmd, 
     *changeTheDetectorToPhantomPositionCmd,
     *changeTheDetectorVoxelCmd;
+
+
 };
+
+
+
+
+
 #endif
 

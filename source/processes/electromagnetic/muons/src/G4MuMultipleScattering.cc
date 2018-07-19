@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.cc 88678 2015-03-05 08:34:20Z gcosmo $
+// $Id: G4MuMultipleScattering.cc 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -62,11 +62,6 @@ G4MuMultipleScattering::G4MuMultipleScattering(const G4String& pnam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4MuMultipleScattering::~G4MuMultipleScattering()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4bool G4MuMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 {
   return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
@@ -78,21 +73,32 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   // Modification of parameters between runs
   if(isInitialized) { return; }
-  if(!EmModel(1)) { SetEmModel(new G4UrbanMscModel(), 1); }
-  AddEmModel(1, EmModel(1));
+  if(!EmModel(0)) { SetEmModel(new G4UrbanMscModel()); }
+  AddEmModel(1, EmModel(0));
   isInitialized = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MuMultipleScattering::PrintInfo()
+void G4MuMultipleScattering::StreamProcessInfo(std::ostream& out,
+                                               G4String endOfLine) const
 {
-  G4cout << "      RangeFactor= " << RangeFactor()
-         << ", step limit type: " << StepLimitType()
-         << ", lateralDisplacement: " << LateralDisplasmentFlag()
-	 << ", polarAngleLimit(deg)= " << PolarAngleLimit()/degree
-         << G4endl;
+  out << "      RangeFactor= " << RangeFactor()
+      << ", step limit type: " << StepLimitType()
+      << ", lateralDisplacement: " << LateralDisplasmentFlag()
+      << ", polarAngleLimit(deg)= " << PolarAngleLimit()/degree
+      << endOfLine;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4MuMultipleScattering::ProcessDescription(std::ostream& out) const
+{
+  out << "<strong>"
+  "Muon multiple scattering</strong>. Simulates combined effects of <br>"
+  "elastic scattering at the end of the step, to save computing time. May<br>"
+  "be combined with Coulomb scattering in a 'mixed' scattering algorithm.";
+  G4VMultipleScattering::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

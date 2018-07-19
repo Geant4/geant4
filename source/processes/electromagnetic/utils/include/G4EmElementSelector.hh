@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.hh 92921 2015-09-21 15:06:51Z gcosmo $
+// $Id: G4EmElementSelector.hh 95657 2016-02-17 13:03:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,7 +73,7 @@ public:
 
   void Initialise(const G4ParticleDefinition*, G4double cut = 0.0);
 
-  void Dump(const G4ParticleDefinition* p = 0);
+  void Dump(const G4ParticleDefinition* p = nullptr);
 
   inline const G4Element* SelectRandomAtom(G4double kineticEnergy) const;
 
@@ -82,8 +82,8 @@ public:
 private:
 
   //  hide assignment operator
-  G4EmElementSelector & operator=(const  G4EmElementSelector &right);
-  G4EmElementSelector(const  G4EmElementSelector&);
+  G4EmElementSelector & operator=(const  G4EmElementSelector &right) = delete;
+  G4EmElementSelector(const  G4EmElementSelector&) = delete;
 
   G4VEmModel*       model;
   const G4Material* material;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointBremsstrahlungModel.cc 75591 2013-11-04 12:33:11Z gcosmo $
+// $Id: G4AdjointBremsstrahlungModel.cc 100666 2016-10-31 10:27:00Z gcosmo $
 //
 #include "G4AdjointBremsstrahlungModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -70,18 +70,7 @@ G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel(G4VEmModel* aModel):
   second_part_of_same_type=false;
 
   
-  /*UsePenelopeModel=false;
-  if (UsePenelopeModel) {
-  	G4PenelopeBremsstrahlungModel* thePenelopeModel = new G4PenelopeBremsstrahlungModel(G4Electron::Electron(),"PenelopeBrem");
-	theEmModelManagerForFwdModels = new G4EmModelManager();
-  	isPenelopeModelInitialised = false;
-	G4VEmFluctuationModel* f=0;
-	G4Region* r=0;
-	theDirectEMModel=thePenelopeModel;
-	theEmModelManagerForFwdModels->AddEmModel(1, thePenelopeModel, f, r);
-  }
-  */	
-  
+  CS_biasing_factor =1.;
 
   
 }
@@ -109,7 +98,6 @@ G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel():
   theAdjEquivOfDirectSecondPartDef=G4AdjointGamma::AdjointGamma();
   theDirectPrimaryPartDef=G4Electron::Electron();
   second_part_of_same_type=false;
-
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -223,7 +211,7 @@ void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
         G4double Emin=  GetSecondAdjEnergyMinForProdToProjCase(adjointPrimKinEnergy);;
 	if (Emin>=Emax) return;
 	projectileKinEnergy=Emin*std::pow(Emax/Emin,G4UniformRand());
-	diffCSUsed=100.*CS_biasing_factor*lastCZ/projectileKinEnergy;
+	diffCSUsed=CS_biasing_factor*lastCZ/projectileKinEnergy;
  	
  }
  else {	G4double Emax = GetSecondAdjEnergyMaxForScatProjToProjCase(adjointPrimKinEnergy);
@@ -231,7 +219,6 @@ void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
 	if (Emin>=Emax) return;
 	G4double f1=(Emin-adjointPrimKinEnergy)/Emin;
 	G4double f2=(Emax-adjointPrimKinEnergy)/Emax/f1;
-	//G4cout<<"f1 and f2 "<<f1<<'\t'<<f2<<G4endl;
 	projectileKinEnergy=adjointPrimKinEnergy/(1.-f1*std::pow(f2,G4UniformRand()));
 	gammaEnergy=projectileKinEnergy-adjointPrimKinEnergy;
 	diffCSUsed=lastCZ*adjointPrimKinEnergy/projectileKinEnergy/gammaEnergy;
@@ -244,16 +231,31 @@ void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
  //Weight correction
  //-----------------------
  //First w_corr is set to the ratio between adjoint total CS and fwd total CS
- G4double w_corr=G4AdjointCSManager::GetAdjointCSManager()->GetPostStepWeightCorrection();
+ //if this has to be done in the model
+ //For the case of forced interaction this will be done in the PostStepDoIt of the
+ //forced interaction
+ //It is important to set the weight before the vreation of the  secondary
+ //
+ G4double w_corr=additional_weight_correction_factor_for_post_step_outside_model;
+ if (correct_weight_for_post_step_in_model) {
+     w_corr=G4AdjointCSManager::GetAdjointCSManager()->GetPostStepWeightCorrection();
+ }
+ //G4cout<<"Correction factor start in brem model "<<w_corr<<std::endl;
+
 
  //Then another correction is needed due to the fact that a biaised differential CS has been used rather than the one consistent with the direct model
  //Here we consider the true  diffCS as the one obtained by the numericla differentiation over Tcut of the direct CS, corrected by the Migdal term.
  //Basically any other differential CS   diffCS could be used here (example Penelope). 
- 
+
  G4double diffCS = DiffCrossSectionPerVolumePrimToSecond(currentMaterial, projectileKinEnergy, gammaEnergy);
+ /*G4cout<<"diffCS "<<diffCS <<std::endl;
+ G4cout<<"diffCS_Used "<<diffCSUsed <<std::endl;*/
  w_corr*=diffCS/diffCSUsed;
-	   
+
+
  G4double new_weight = aTrack.GetWeight()*w_corr;
+ /*G4cout<<"New weight brem "<<new_weight<<std::endl;
+ G4cout<<"Weight correction brem "<<w_corr<<std::endl;*/
  fParticleChange->SetParentWeightByProcess(false);
  fParticleChange->SetSecondaryWeightByProcess(false);
  fParticleChange->ProposeParentWeight(new_weight);
@@ -265,7 +267,22 @@ void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
  G4double projectileP2 = projectileTotalEnergy*projectileTotalEnergy - projectileM0*projectileM0;	
  G4double projectileP = std::sqrt(projectileP2);
  
- 
+
+ //Use the angular model of the forward model to generate the gamma direction
+ //---------------------------------------------------------------------------
+//Dum dynamic particle to use the model
+ G4DynamicParticle * aDynPart = new G4DynamicParticle(G4Electron::Electron(),G4ThreeVector(0.,0.,1.)*projectileP);
+
+ //Get the element from the direct model
+ const G4Element* elm = theDirectEMModel->SelectRandomAtom(currentCouple,G4Electron::Electron(),
+                                                        projectileKinEnergy,currentTcutForDirectSecond);
+ G4int Z=elm->GetZasInt();
+ G4double energy = aDynPart->GetTotalEnergy()-gammaEnergy;
+ G4ThreeVector projectileMomentum =
+   theDirectEMModel->GetAngularDistribution()->SampleDirection(aDynPart,energy,Z,currentMaterial)*projectileP;
+  G4double phi = projectileMomentum.getPhi();
+
+/*
  //Angle of the gamma direction with the projectile taken from G4eBremsstrahlungModel
  //------------------------------------------------
   G4double u;
@@ -280,21 +297,18 @@ void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
   G4double cost = std::cos(theta);
 
   G4double phi = twopi * G4UniformRand() ;
-  
   G4ThreeVector projectileMomentum;
   projectileMomentum=G4ThreeVector(std::cos(phi)*sint,std::sin(phi)*sint,cost)*projectileP; //gamma frame
+*/
   if (IsScatProjToProjCase) {//the adjoint primary is the scattered e-
   	G4ThreeVector gammaMomentum = (projectileTotalEnergy-adjointPrimTotalEnergy)*G4ThreeVector(0.,0.,1.);
 	G4ThreeVector dirProd=projectileMomentum-gammaMomentum;
 	G4double cost1 = std::cos(dirProd.angle(projectileMomentum));
 	G4double sint1 =  std::sqrt(1.-cost1*cost1);
 	projectileMomentum=G4ThreeVector(std::cos(phi)*sint1,std::sin(phi)*sint1,cost1)*projectileP;
-  
   }
-  
+
   projectileMomentum.rotateUz(theAdjointPrimary->GetMomentumDirection());
- 
- 
  
   if (!IsScatProjToProjCase ){ //kill the primary and add a secondary
  	fParticleChange->ProposeTrackStatus(fStopAndKill);
@@ -303,7 +317,6 @@ void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
   else {
  	fParticleChange->ProposeEnergy(projectileKinEnergy);
 	fParticleChange->ProposeMomentumDirection(projectileMomentum.unit());
-	
   }	
 } 
 ////////////////////////////////////////////////////////////////////////////////
@@ -316,13 +329,14 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond(con
 	theEmModelManagerForFwdModels->Initialise(G4Electron::Electron(),G4Gamma::Gamma(),1.,0);
 	isDirectModelInitialised =true;
  }
-
+/*
  return  DiffCrossSectionPerVolumePrimToSecondApproximated2(aMaterial,
                                       			         kinEnergyProj, 
                                       			         kinEnergyProd);
- /*return G4VEmAdjointModel::DiffCrossSectionPerVolumePrimToSecond(aMaterial,
+*/
+return G4VEmAdjointModel::DiffCrossSectionPerVolumePrimToSecond(aMaterial,
                                       			         kinEnergyProj, 
-                                      			         kinEnergyProd);*/								 								 
+                                      			         kinEnergyProd);								 								 
 }				      
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -376,22 +390,8 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecondAppr
  	G4double C1=theDirectEMModel->ComputeCrossSectionPerAtom(theDirectPrimaryPartDef,kinEnergyProj,(*theElementVector)[i]->GetZ(),dum ,E1);
 	G4double C2=theDirectEMModel->ComputeCrossSectionPerAtom(theDirectPrimaryPartDef,kinEnergyProj,(*theElementVector)[i]->GetZ(),dum,E2);
 	dCrossEprod += theAtomNumDensityVector[i] * (C1-C2)/dE;
-   
  }
  
- //Now the Migdal correction
-/*
- G4double totalEnergy = kinEnergyProj+electron_mass_c2 ;
- G4double kp2 = MigdalConstant*totalEnergy*totalEnergy
-                                             *(material->GetElectronDensity());
-  					     
- 
- G4double MigdalFactor = 1./(1.+kp2/(kinEnergyProd*kinEnergyProd)); // its seems that the factor used in the CS compuation i the direct
- 								    //model is different than the one used in the secondary sampling by a
-								    //factor (1.+kp2) To be checked!
- 
- dCrossEprod*=MigdalFactor;
- */
  return dCrossEprod;
   
 }
@@ -412,7 +412,7 @@ G4double G4AdjointBremsstrahlungModel::AdjointCrossSection(const G4MaterialCutsC
   if (!IsScatProjToProjCase ){
   	G4double Emax_proj = GetSecondAdjEnergyMaxForProdToProjCase(primEnergy);
   	G4double Emin_proj = GetSecondAdjEnergyMinForProdToProjCase(primEnergy);
-	if (Emax_proj>Emin_proj && primEnergy > currentTcutForDirectSecond) Cross= 100.*CS_biasing_factor*lastCZ*std::log(Emax_proj/Emin_proj);
+	if (Emax_proj>Emin_proj && primEnergy > currentTcutForDirectSecond) Cross= CS_biasing_factor*lastCZ*std::log(Emax_proj/Emin_proj);
   }
   else {
   	G4double Emax_proj = GetSecondAdjEnergyMaxForScatProjToProjCase(primEnergy);

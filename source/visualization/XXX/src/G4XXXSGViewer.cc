@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGViewer.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4XXXSGViewer.cc 109510 2018-04-26 07:15:57Z gcosmo $
 //
 // 
 // John Allison  10th March 2006
@@ -122,6 +122,8 @@ G4bool G4XXXSGViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
       (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+      (lastVP.GetCBDAlgorithmNumber() !=
+       fVP.GetCBDAlgorithmNumber())                               ||
       // No need to visit kernel if section plane changes.
       // No need to visit kernel if cutaway planes change.
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
@@ -132,8 +134,8 @@ G4bool G4XXXSGViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
-      (lastVP.GetVisAttributesModifiers().size() !=
-       fVP.GetVisAttributesModifiers().size())
+      (lastVP.GetVisAttributesModifiers() !=
+       fVP.GetVisAttributesModifiers())
       ) {
     return true;
   }
@@ -141,6 +143,11 @@ G4bool G4XXXSGViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
   if (lastVP.IsDensityCulling () &&
       (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
     return true;
+
+  if (lastVP.GetCBDAlgorithmNumber() > 0) {
+    if (lastVP.GetCBDParameters().size() != fVP.GetCBDParameters().size()) return true;
+    else if (lastVP.GetCBDParameters() != fVP.GetCBDParameters()) return true;
+  }
 
   if (lastVP.IsExplode () &&
       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))

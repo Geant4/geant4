@@ -37,27 +37,31 @@
 #include "G4Timer.hh"
 #include "HadrontherapyRunAction.hh"
 
-
-#include "HadrontherapyAnalysisManager.hh"
-
-
 #include "HadrontherapyMatrix.hh"
 
 HadrontherapyRunAction::HadrontherapyRunAction()
 {
+
+    
 }
 
 HadrontherapyRunAction::~HadrontherapyRunAction()
-{ 
+{
+    
 }
 
+
+
 void HadrontherapyRunAction::BeginOfRunAction(const G4Run* aRun)
-{ 	
+{
     G4RunManager::GetRunManager()-> SetRandomNumberStore(true);
     G4cout << "Run " << aRun -> GetRunID() << " starts ..." << G4endl;
-
+    
     electromagnetic = 0;
     hadronic = 0;
+    
+    
+    
 }
 
 void HadrontherapyRunAction::EndOfRunAction(const G4Run*)
@@ -70,10 +74,10 @@ void HadrontherapyRunAction::EndOfRunAction(const G4Run*)
 }
 void HadrontherapyRunAction::AddEMProcess()
 {
- electromagnetic += 1;
+    electromagnetic += 1;
 }
 void HadrontherapyRunAction::AddHadronicProcess()
 {
-  hadronic += 1;
+    hadronic += 1;
 }
 

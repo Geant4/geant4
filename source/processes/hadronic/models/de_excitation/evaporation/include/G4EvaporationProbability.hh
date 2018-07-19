@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationProbability.hh 90273 2015-05-22 10:20:32Z gcosmo $
+// $Id: G4EvaporationProbability.hh 103162 2017-03-20 09:40:58Z gcosmo $
 //
 //J.M. Quesada (August2008). Based on:
 //
@@ -38,33 +38,36 @@
 #include "G4EvaporationLevelDensityParameter.hh"
 
 class G4VCoulombBarrier;
+class G4NuclearLevelData;
 
 class G4EvaporationProbability : public G4VEmissionProbability
 {
 public:
 
-  G4EvaporationProbability(G4int anA, G4int aZ, G4double aGamma,
-			   G4VCoulombBarrier *); 
+  explicit G4EvaporationProbability(G4int anA, G4int aZ, 
+                                    G4double aGamma, 
+                                    G4VCoulombBarrier *); 
 
   virtual ~G4EvaporationProbability();
 
-  inline G4int GetZ(void) const { return theZ; }
-	
-  inline G4int GetA(void) const { return theA; }
+  // not used for evaporation
+  virtual G4double EmissionProbability(const G4Fragment& fragment,
+				       G4double maxKineticEnergy);
 
-  // obsolete method
-  G4double EmissionProbability(const G4Fragment& fragment,
-			       G4double maxKineticEnergy);
-
+  // general method used for evaporation
   G4double TotalProbability(const G4Fragment& fragment,
 			    G4double minKineticEnergy,
-			    G4double maxKineticEnergy);
+			    G4double maxKineticEnergy,
+			    G4double CoulombBarrier = 0.0);
 
-  G4double ProbabilityDistributionFunction(G4double K);
+  // main method to compute full probability for OPTx > 2
+  virtual G4double ComputeProbability(G4double K, G4double kBarrier);
 
-  // Samples fragment kinetic energy.
+  // Samples fragment kinetic energy and excitation energy 
+  // of the residual nucleaus
   G4double SampleKineticEnergy(G4double minKineticEnergy,
-			       G4double maxKineticEnergy);
+			       G4double maxKineticEnergy,
+			       G4double CoulombBarrier = 0.0);
 
 protected:
 
@@ -74,38 +77,37 @@ protected:
 
 private:
 
-  G4double IntegrateEmissionProbability(G4double low, G4double up);
-
-  G4double CrossSection(G4double K);  
+  G4double CrossSection(G4double K, G4double CoulombBarrier);  
 
   // Copy constructor
-  G4EvaporationProbability(const G4EvaporationProbability &right);
+  G4EvaporationProbability(const G4EvaporationProbability &right) = delete;
 
-  const G4EvaporationProbability & operator=(const G4EvaporationProbability &right);
-  G4bool operator==(const G4EvaporationProbability &right) const;
-  G4bool operator!=(const G4EvaporationProbability &right) const;
+  const G4EvaporationProbability & operator=
+  (const G4EvaporationProbability &right) = delete;
+  G4bool operator==(const G4EvaporationProbability &right) const = delete;
+  G4bool operator!=(const G4EvaporationProbability &right) const = delete;
 
-  G4int theA;
-  G4int theZ;
+  G4NuclearLevelData* fLevelData;
+
   G4int fragA;
   G4int fragZ;
   G4int resA;
   G4int resZ;
   G4int index;
-  G4int nbins;
 
   G4double resA13;
   G4double muu;
   G4double partMass;
   G4double resMass;
-  G4double fragMass;
+  G4double Mass;
   G4double U, delta0, delta1, a0;
 
   // Gamma is A_f(2S_f+1) factor, where A_f is fragment atomic 
   // number and S_f is fragment spin
   G4double Gamma;
+  G4double pcoeff;
 
-  G4double probability[11];
+  G4double probmax;
 };
 
 #endif

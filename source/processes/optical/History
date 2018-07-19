@@ -16,10 +16,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-03 Oct 16: P. Gumplinger (op-V10-01-07)
+25 May 18: D. Sawkey (op-V10-04-00)
+- G4OpMieHG: change GetProperty from string to enum
+
+11 September 17: S.Y. Jun (op-V10-03-03)
+- change material property keys by the enum type defined in 
+  G4MaterialPropertiesIndex
+
+29 May 17: P. Gumplinger (op-V10-03-02)
+- This version of Mariele Stockhoff's DAVIS model includes not only
+  reflection but also the capability of transmitting photons based on LUTs
+
+22 Mar 17: P. Gumplinger (op-V10-03-00/op-V10-03-01)
+- add Mariele Stockhoff's DAVIS model
+
+03 Oct 16: P. Gumplinger (op-V10-02-02)
 - act on bug report 1888
 
-16 Feb 16: P. Gumplinger (op-V10-01-06)
+07 Mar 16: P. Gumplinger (op-V10-02-01)
+- add flag for InvokeSD method call in G4OpBoundaryProcess
+
+16 Feb 16: P. Gumplinger (op-V10-02-00)
 - addresses bug report #1826, thanks to Tetsuma Yaguchi
   in DielectricLUT of G4OpBoundaryProcess
 

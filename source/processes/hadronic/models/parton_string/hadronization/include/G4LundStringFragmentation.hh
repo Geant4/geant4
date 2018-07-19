@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.hh 84219 2014-10-10 14:55:19Z gcosmo $
+// $Id: G4LundStringFragmentation.hh 107869 2017-12-07 14:46:39Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -56,7 +56,8 @@ private:
     int operator!=(const G4LundStringFragmentation &right) const;
 
 private:
-   void SetMinimalStringMass(const G4FragmentingString  * const string);		    
+   void SetMinMasses();   // Uzhi 23 Dec. 2016
+   void SetMinimalStringMass(const G4FragmentingString  * const string);
    void SetMinimalStringMass2(const G4double aValue);	
 
    virtual G4bool StopFragmenting(const G4FragmentingString  * const string);
@@ -70,9 +71,12 @@ private:
                                 G4LorentzVector* AntiMom, G4double AntiMass, 
                                 G4double InitialMass); 
 
+   virtual G4KineticTrack * Splitup(G4FragmentingString *string,
+                            G4FragmentingString *&newString);
+
    virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, 
                                         G4FragmentingString * string,
-                                        G4FragmentingString * newString); // Uzhi
+                                        G4FragmentingString * newString);
 
    virtual G4double GetLightConeZ(G4double zmin, G4double zmax, 
                                   G4int PartonEncoding,  
@@ -81,14 +85,13 @@ private:
 
    G4double lambda(G4double s, G4double m1_Sqr, G4double m2_Sqr);
 
-   virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay, // Uzhi June 2014
+   virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay, 
                                          G4ParticleDefinition *&created);
-
 
 private:
    // Internal methods introduced to improve the code structure (AR Nov 2011)
 
-   G4bool Loop_toFragmentString(G4ExcitedString * & theStringInCMS, 
+   G4bool Loop_toFragmentString(const G4ExcitedString & theStringInCMS, // * &
                                 G4KineticTrackVector * & LeftVector, 
                                 G4KineticTrackVector * & RightVector);
 
@@ -115,6 +118,10 @@ private:
    G4double Mass_of_light_quark;
    G4double Mass_of_heavy_quark;
    G4double Mass_of_string_junction;
+
+   G4double minMassQQbarStr[3][3];
+   G4double minMassQDiQStr[3][3][3];
+
 // ------ An estimated minimal string mass ----------------------
    G4double MinimalStringMass;
    G4double MinimalStringMass2;

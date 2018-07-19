@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 
-
 #include "G4ChordFinderSaf.hh"
 #include <iomanip>
 
 // ..........................................................................
 
-G4ChordFinderSaf::G4ChordFinderSaf(G4MagInt_Driver* pIntegrationDriver)
+G4ChordFinderSaf::G4ChordFinderSaf(G4VIntegrationDriver* pIntegrationDriver)
   : G4ChordFinder(pIntegrationDriver)
 {
     // check the values and set the other parameters
@@ -140,7 +139,9 @@ G4ChordFinderSaf::FindNextChord( const  G4FieldTrack&  yStart,
 
   GetIntegrationDriver()-> GetDerivatives( yCurrent, dydx )  ;
 
-  G4int     noTrials=0;
+  unsigned int noTrials=0;
+  const unsigned int  maxTrials= 75; // Avoid endless loop for bad convergence 
+
   const G4double safetyFactor= GetFirstFraction(); // was 0.999
 
   // Figure out the starting safety
@@ -155,11 +156,11 @@ G4ChordFinderSaf::FindNextChord( const  G4FieldTrack&  yStart,
 
   stepTrial  = std::min( stepMax,  likelyGood ); 
 
-  G4MagInt_Driver *pIntgrDriver= G4ChordFinder::GetIntegrationDriver(); 
-  G4double newStepEst_Uncons= 0.0; 
+  auto pIntgrDriver= G4ChordFinder::GetIntegrationDriver();
+  G4double newStepEst_Uncons= 0.0;
+  G4double stepForChord= -1.0;
   do
   { 
-     G4double stepForChord;  
      yCurrent = yStart;    // Always start from initial point
 
    //            ************
@@ -199,8 +200,22 @@ G4ChordFinderSaf::FindNextChord( const  G4FieldTrack&  yStart,
 
      noTrials++; 
   }
-  while( ! validEndPoint );   // End of do-while  RKD 
+  while( (! validEndPoint) && (noTrials < maxTrials) );
+  // Loop checking, 07.10.2016, J. Apostolakis
 
+  if( noTrials >= maxTrials )
+  {
+      std::ostringstream message;
+      message << "Exceeded maximum number of trials= " << maxTrials << G4endl
+              << "Current sagita dist= " << dChordStep << G4endl
+              << "Step sizes (actual and proposed): " << G4endl
+              << "Last trial =         " << lastStepLength  << G4endl
+              << "Next trial =         " << stepTrial  << G4endl
+              << "Proposed for chord = " << stepForChord  << G4endl              
+              ;
+      G4Exception("G4ChordFinderSaf::FindNextChord()", "GeomField0003",
+                  JustWarning, message);
+  }
   AccumulateStatistics( noTrials );
 
   // Should we update newStepEst_Uncons for a 'long step' via safety ??

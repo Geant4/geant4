@@ -52,10 +52,14 @@
 #include "HadrontherapyMatrix.hh"
 #include "HadrontherapyLet.hh"
 #include "PassiveProtonBeamLine.hh"
-#include "HadrontherapyAnalysisManager.hh"
+#include "TrentoPassiveProtonBeamLine.hh"
+#include "HadrontherapyMatrix.hh"
+
 #include "G4SystemOfUnits.hh"
 
 #include <cmath>
+
+
 
 HadrontherapyDetectorConstruction* HadrontherapyDetectorConstruction::instance = 0;
 /////////////////////////////////////////////////////////////////////////////
@@ -87,15 +91,18 @@ aRegion(0)
     // Define here the material of the water phantom and of the detector
     SetPhantomMaterial("G4_WATER");
     // Construct geometry (messenger commands)
-    SetDetectorSize(4.*cm, 4.*cm, 4.*cm);
+    // SetDetectorSize(4.*cm, 4.*cm, 4.*cm);
+    SetDetectorSize(4. *cm, 4. *cm, 4. *cm);
     SetPhantomSize(40. *cm, 40. *cm, 40. *cm);
+    
     SetPhantomPosition(G4ThreeVector(20. *cm, 0. *cm, 0. *cm));
-    SetDetectorToPhantomPosition(G4ThreeVector(0. *cm, 18. *cm, 18. *cm));
+    SetDetectorToPhantomPosition(G4ThreeVector(0. *cm, 0. *cm, 0. *cm));
     SetDetectorPosition();
     //GetDetectorToWorldPosition();
     
     // Write virtual parameters to the real ones and check for consistency
     UpdateGeometry();
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -109,7 +116,7 @@ HadrontherapyDetectorConstruction::~HadrontherapyDetectorConstruction()
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorConstruction* HadrontherapyDetectorConstruction::GetInstance()
 {
-	return instance;
+    return instance;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -168,12 +175,16 @@ void HadrontherapyDetectorConstruction::ConstructPhantom()
 // and inside it different quantities (dose distribution, fluence distribution, LET, etc)
 // can be stored.
 void HadrontherapyDetectorConstruction::ConstructDetector()
+
 {
     // Definition of the solid volume of the Detector
     detector = new G4Box("Detector",
-                         detectorSizeX/2,
-                         detectorSizeY/2,
-                         detectorSizeZ/2);
+                         
+                         phantomSizeX/2,
+                         
+                         phantomSizeY/2,
+                         
+                         phantomSizeZ/2);
     
     // Definition of the logic volume of the Phantom
     detectorLogicalVolume = new G4LogicalVolume(detector,
@@ -205,7 +216,7 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
     {
         aRegion = new G4Region("DetectorLog");
         detectorLogicalVolume -> SetRegion(aRegion);
-        aRegion -> AddRootLogicalVolume(detectorLogicalVolume);
+        aRegion->AddRootLogicalVolume( detectorLogicalVolume );
     }
 }
 
@@ -272,7 +283,7 @@ G4bool HadrontherapyDetectorConstruction::SetPhantomMaterial(G4String material)
     else
     {
         G4cout << "WARNING: material \"" << material << "\" doesn't exist in NIST elements/materials"
-	    " table [located in $G4INSTALL/source/materials/src/G4NistMaterialBuilder.cc]" << G4endl;
+        " table [located in $G4INSTALL/source/materials/src/G4NistMaterialBuilder.cc]" << G4endl;
         G4cout << "Use command \"/parameter/nist\" to see full materials list!" << G4endl;
         return false;
     }
@@ -391,11 +402,6 @@ void HadrontherapyDetectorConstruction::UpdateGeometry()
     
     
     // Initialize analysis
-#ifdef G4ANALYSIS_USE_ROOT
-    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
-    analysis -> flush();     // Finalize the root file
-    analysis -> book();
-#endif
     // Inform the kernel about the new geometry
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
     G4RunManager::GetRunManager() -> PhysicsHasBeenModified();
@@ -427,27 +433,27 @@ void HadrontherapyDetectorConstruction::PrintParameters()
 {
     
     G4cout << "The (X,Y,Z) dimensions of the phantom are : (" <<
-	G4BestUnit( phantom -> GetXHalfLength()*2., "Length") << ',' <<
-	G4BestUnit( phantom -> GetYHalfLength()*2., "Length") << ',' <<
-	G4BestUnit( phantom -> GetZHalfLength()*2., "Length") << ')' << G4endl;
+    G4BestUnit( phantom -> GetXHalfLength()*2., "Length") << ',' <<
+    G4BestUnit( phantom -> GetYHalfLength()*2., "Length") << ',' <<
+    G4BestUnit( phantom -> GetZHalfLength()*2., "Length") << ')' << G4endl;
     
     G4cout << "The (X,Y,Z) dimensions of the detector are : (" <<
-	G4BestUnit( detector -> GetXHalfLength()*2., "Length") << ',' <<
-	G4BestUnit( detector -> GetYHalfLength()*2., "Length") << ',' <<
-	G4BestUnit( detector -> GetZHalfLength()*2., "Length") << ')' << G4endl;
+    G4BestUnit( detector -> GetXHalfLength()*2., "Length") << ',' <<
+    G4BestUnit( detector -> GetYHalfLength()*2., "Length") << ',' <<
+    G4BestUnit( detector -> GetZHalfLength()*2., "Length") << ')' << G4endl;
     
     G4cout << "Displacement between Phantom and World is: ";
     G4cout << "DX= "<< G4BestUnit(phantomPosition.getX(),"Length") <<
-	"DY= "<< G4BestUnit(phantomPosition.getY(),"Length") <<
-	"DZ= "<< G4BestUnit(phantomPosition.getZ(),"Length") << G4endl;
+    "DY= "<< G4BestUnit(phantomPosition.getY(),"Length") <<
+    "DZ= "<< G4BestUnit(phantomPosition.getZ(),"Length") << G4endl;
     
     G4cout << "The (X,Y,Z) sizes of the Voxels are: (" <<
-	G4BestUnit(sizeOfVoxelAlongX, "Length")  << ',' <<
-	G4BestUnit(sizeOfVoxelAlongY, "Length")  << ',' <<
-	G4BestUnit(sizeOfVoxelAlongZ, "Length") << ')' << G4endl;
+    G4BestUnit(sizeOfVoxelAlongX, "Length")  << ',' <<
+    G4BestUnit(sizeOfVoxelAlongY, "Length")  << ',' <<
+    G4BestUnit(sizeOfVoxelAlongZ, "Length") << ')' << G4endl;
     
     G4cout << "The number of Voxels along (X,Y,Z) is: (" <<
-	numberOfVoxelsAlongX  << ',' <<
+    numberOfVoxelsAlongX  << ',' <<
     numberOfVoxelsAlongY  <<','  <<
     numberOfVoxelsAlongZ  << ')' << G4endl;
 }

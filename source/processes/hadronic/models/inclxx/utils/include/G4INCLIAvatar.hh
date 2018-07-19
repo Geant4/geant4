@@ -64,9 +64,9 @@ template class std::vector<G4INCL::IAvatar*>;
 namespace G4INCL {
 
   enum AvatarType {SurfaceAvatarType,
-		   CollisionAvatarType,
-		   DecayAvatarType,
-		   ParticleEntryAvatarType,
+           CollisionAvatarType,
+           DecayAvatarType,
+           ParticleEntryAvatarType,
                    UnknownAvatarType};
 
   class IAvatar {
@@ -101,7 +101,7 @@ namespace G4INCL {
   protected:
     G4double theTime;
 
-    INCL_DECLARE_ALLOCATION_POOL(IAvatar);
+    INCL_DECLARE_ALLOCATION_POOL(IAvatar)
   };
 
   typedef UnorderedVector<IAvatar*> IAvatarList;

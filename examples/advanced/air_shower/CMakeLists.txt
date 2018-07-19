@@ -23,7 +23,7 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Add options 
 #
-option(ULTRA_MIRROR_USE "Use of mirrors" OFF)
+option(ULTRA_MIRROR_USE "Use of mirrors" ON)
 if(ULTRA_MIRROR_USE)
   add_definitions(-DULTRA_MIRROR_USE)
 endif()
@@ -36,11 +36,6 @@ endif()
 option(ULTRA_GROUND_USE "Use ground" OFF)
 if(ULTRA_GROUND_USE)
   add_definitions(-DULTRA_GROUND_USE)
-endif()
-
-option(ULTRA_REFLECTION_USE "Use of reflection" OFF)
-if(ULTRA_REFLECTION_USE)
-  add_definitions(-DULTRA_REFLECTION_USE)
 endif()
 
 #----------------------------------------------------------------------------

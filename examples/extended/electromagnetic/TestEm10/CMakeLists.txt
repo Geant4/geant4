@@ -40,7 +40,7 @@ target_link_libraries(TestEm10 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(TestEm10_SCRIPTS
-    alice06.mac bari05.mac barr90.mac harris73.mac run11.mac salice.mac TestEm10.in TestEm10.large_N.in TestEm10.large_N.out TestEm10.out test.mac vis.mac watase86.mac
+    alice06.mac bari05.mac barr90.mac harris73.mac salice.mac TestEm10.in TestEm10.large_N.in TestEm10.large_N.out TestEm10.out vis.mac watase86.mac test_suite.sh
   )
 
 foreach(_script ${TestEm10_SCRIPTS})

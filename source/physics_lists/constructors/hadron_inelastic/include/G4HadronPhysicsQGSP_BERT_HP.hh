@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsQGSP_BERT_HP.hh 93878 2015-11-03 08:18:00Z gcosmo $
+// $Id: G4HadronPhysicsQGSP_BERT_HP.hh 105736 2017-08-16 13:01:11Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,76 +42,46 @@
 #ifndef G4HadronPhysicsQGSP_BERT_HP_h
 #define G4HadronPhysicsQGSP_BERT_HP_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
 
-#include "G4VPhysicsConstructor.hh"
+//#include "globals.hh"
+//#include "G4ios.hh"
+//
+//#include "G4VPhysicsConstructor.hh"
+//
+//#include "G4PiKBuilder.hh"
+//#include "G4FTFPPiKBuilder.hh"
+//#include "G4QGSPPiKBuilder.hh"
+//#include "G4BertiniPiKBuilder.hh"
+//
+//#include "G4ProtonBuilder.hh"
+//#include "G4FTFPProtonBuilder.hh"
+//#include "G4QGSPProtonBuilder.hh"
+//#include "G4BertiniProtonBuilder.hh"
+//
+//#include "G4NeutronBuilder.hh"
+//#include "G4FTFPNeutronBuilder.hh"
+//#include "G4QGSPNeutronBuilder.hh"
+//#include "G4BertiniNeutronBuilder.hh"
+//#include "G4NeutronPHPBuilder.hh"
+//
+//#include "G4HyperonFTFPBuilder.hh"
+//#include "G4AntiBarionBuilder.hh"
+//#include "G4FTFPAntiBarionBuilder.hh"
+//
+//class G4ComponentGGHadronNucleusXsc;
+//
 
-#include "G4PiKBuilder.hh"
-#include "G4FTFPPiKBuilder.hh"
-#include "G4QGSPPiKBuilder.hh"
-#include "G4BertiniPiKBuilder.hh"
-
-#include "G4ProtonBuilder.hh"
-#include "G4FTFPProtonBuilder.hh"
-#include "G4QGSPProtonBuilder.hh"
-#include "G4BertiniProtonBuilder.hh"
-
-#include "G4NeutronBuilder.hh"
-#include "G4FTFPNeutronBuilder.hh"
-#include "G4QGSPNeutronBuilder.hh"
-#include "G4BertiniNeutronBuilder.hh"
-#include "G4NeutronPHPBuilder.hh"
-
-#include "G4HyperonFTFPBuilder.hh"
-#include "G4AntiBarionBuilder.hh"
-#include "G4FTFPAntiBarionBuilder.hh"
-
-class G4ComponentGGHadronNucleusXsc;
-
-
-class G4HadronPhysicsQGSP_BERT_HP : public G4VPhysicsConstructor
+class G4HadronPhysicsQGSP_BERT_HP : public G4HadronPhysicsQGSP_BERT 
 {
   public: 
     G4HadronPhysicsQGSP_BERT_HP(G4int verbose =1);
     G4HadronPhysicsQGSP_BERT_HP(const G4String& name, G4bool quasiElastic=true);
-    virtual ~G4HadronPhysicsQGSP_BERT_HP();
+    virtual ~G4HadronPhysicsQGSP_BERT_HP() {}
 
-  public: 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
-
-  private:
-    void CreateModels();
-
-    struct ThreadPrivate {
-      G4NeutronBuilder * theNeutrons;
-      G4FTFPNeutronBuilder * theFTFPNeutron;
-      G4QGSPNeutronBuilder * theQGSPNeutron;
-      G4BertiniNeutronBuilder * theBertiniNeutron;
-      G4NeutronPHPBuilder * theHPNeutron;
-
-      G4PiKBuilder * thePiK;
-      G4FTFPPiKBuilder * theFTFPPiK;
-      G4QGSPPiKBuilder * theQGSPPiK;
-      G4BertiniPiKBuilder * theBertiniPiK;
-
-      G4ProtonBuilder * thePro;
-      G4FTFPProtonBuilder * theFTFPPro;
-      G4QGSPProtonBuilder * theQGSPPro; 
-      G4BertiniProtonBuilder * theBertiniPro;
-
-      G4HyperonFTFPBuilder * theHyperon;
-
-      G4AntiBarionBuilder * theAntiBaryon;
-      G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
-
-      G4ComponentGGHadronNucleusXsc * xsKaon;
-      G4VCrossSectionDataSet * xsNeutronCaptureXS;
-    };
-    static G4ThreadLocal ThreadPrivate* tpdata;
-
-    // G4bool QuasiElastic;
+  protected:
+    virtual void Neutron() override;
+    virtual void ExtraConfiguration() override;
 };
 
 // 2002 by J.P. Wellisch

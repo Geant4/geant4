@@ -97,7 +97,7 @@ if(msMapItr == fSMap.end())
    return;
   }
 
-std::map<G4int, G4double*> * score = msMapItr -> second-> GetMap();
+std::map<G4int, G4StatDouble*> * score = msMapItr -> second-> GetMap();
   
 ofile << "# primitive scorer name: " << msMapItr -> first << G4endl;
 //
@@ -108,27 +108,31 @@ ofile << std::setprecision(16); // for double value with 8 bytes
 for(int x = 0; x < fNMeshSegments[0]; x++) {
    for(int y = 0; y < fNMeshSegments[1]; y++) {
      for(int z = 0; z < fNMeshSegments[2]; z++){
-        G4int numberOfVoxel = fNMeshSegments[0];
+        G4int numberOfVoxel_x = fNMeshSegments[0];
+        G4int numberOfVoxel_y = fNMeshSegments[1];
+        G4int numberOfVoxel_z =fNMeshSegments[2];
         // If the voxel width is changed in the macro file, 
         // the voxel width variable must be updated
-        G4double voxelWidth = 1. *mm;
+        G4double voxelWidth = 0.25 *mm;
         //
-        G4double xx = ( - numberOfVoxel + 1+ 2*x )* voxelWidth/2;
-        G4double yy = ( - numberOfVoxel + 1+ 2*y )* voxelWidth/2;
-        G4double zz = ( - numberOfVoxel + 1+ 2*z )* voxelWidth/2;
+        G4double xx = ( - numberOfVoxel_x + 1+ 2*x )* voxelWidth/2;
+        G4double yy = ( - numberOfVoxel_y + 1+ 2*y )* voxelWidth/2;
+        G4double zz = ( - numberOfVoxel_z + 1+ 2*z )* voxelWidth/2;
         G4int idx = GetIndex(x, y, z);
-        std::map<G4int, G4double*>::iterator value = score -> find(idx);
+        std::map<G4int, G4StatDouble*>::iterator value = score -> find(idx);
 
        if (value != score -> end()) 
         {
          // Print in the ASCII output file the information
+ 
          ofile << xx << "  " << yy << "  " << zz <<"  " 
-               <<*(value->second)/keV << G4endl;
+               <<(value->second->sum_wx())/keV << G4endl;
 
 #ifdef ANALYSIS_USE          
         // Save the same information in the output analysis file
        BrachyAnalysisManager* analysis = BrachyAnalysisManager::GetInstance();
-       analysis -> FillNtupleWithEnergyDeposition(xx, yy, zz, *(value->second)/keV);
+   
+       if(zz> -0.125 *mm && zz < 0.125*mm) analysis -> FillH2WithEnergyDeposition(xx,yy, (value->second->sum_wx())/keV);
 #endif
 }}}} 
 

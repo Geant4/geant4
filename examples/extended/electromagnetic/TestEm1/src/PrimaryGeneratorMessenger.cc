@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the PrimaryGeneratorMessenger class
 //
-// $Id: PrimaryGeneratorMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: PrimaryGeneratorMessenger.cc 98759 2016-08-09 14:03:09Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,7 @@
 
 PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
                                              PrimaryGeneratorAction* Gun)
-:G4UImessenger(),Action(Gun),
+:G4UImessenger(),fAction(Gun),
  fGunDir(0), 
  fDefaultCmd(0),
  fRndmCmd(0)
@@ -79,10 +79,10 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
                                                G4String newValue)
 { 
   if (command == fDefaultCmd)
-   {Action->SetDefaultKinematic(fDefaultCmd->GetNewIntValue(newValue));}
+   {fAction->SetDefaultKinematic(fDefaultCmd->GetNewIntValue(newValue));}
    
   if (command == fRndmCmd)
-   {Action->SetRndmBeam(fRndmCmd->GetNewDoubleValue(newValue));}   
+   {fAction->SetRndmBeam(fRndmCmd->GetNewDoubleValue(newValue));}   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

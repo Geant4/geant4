@@ -18,6 +18,8 @@ public:
   }
   const std::string& s_cls() const {return s_class();}
 public:
+  p2d():parent("",10,0,1,10,0,1){} //for I/O when reading.
+
   p2d(const std::string& a_title,
       unsigned int aXnumber,double aXmin,double aXmax,
       unsigned int aYnumber,double aYmin,double aYmax)
@@ -32,16 +34,16 @@ public:
   {}
 
   p2d(const std::string& a_title,
-      const std::vector<double>& aEdgesX,
-      const std::vector<double>& aEdgesY)
-  :parent(a_title,aEdgesX,aEdgesY)
+      const std::vector<double>& a_edges_x,
+      const std::vector<double>& a_edges_y)
+  :parent(a_title,a_edges_x,a_edges_y)
   {}
 
   p2d(const std::string& a_title,
-      const std::vector<double>& aEdgesX,
-      const std::vector<double>& aEdgesY,
+      const std::vector<double>& a_edges_x,
+      const std::vector<double>& a_edges_y,
       double aVmin,double aVmax)
-  :parent(a_title,aEdgesX,aEdgesY,aVmin,aVmax)
+  :parent(a_title,a_edges_x,a_edges_y,aVmin,aVmax)
   {}
 
   virtual ~p2d(){}

@@ -77,7 +77,7 @@ public:
     sdsConstIter GetBegin() const { return fSensitiveDetectors.begin(); }
     sdsConstIter GetEnd() const { return fSensitiveDetectors.end(); }
     void ClearSDs() { fSensitiveDetectors.clear(); }
-    void AddSD( G4VSensitiveDetector* sd);
+    void AddSD( G4VSensitiveDetector* sd) { fSensitiveDetectors.push_back(sd); }
 private:
     sds_t fSensitiveDetectors;
 };

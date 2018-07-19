@@ -23,20 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id:$
+//
+// ------------------------------------------------------------
+// GEANT 4 class header file 
+//
+// Class Description:
+//
+// Create and hold a pointer to Workspace.
+// This class holds a thread-private static instance
+// of the template parameter workspace.
+//
+// The concrete implementation of workspace objects
+// are responsible for instantiating a singleton instance
+// of this pool.
+//
+// Recycling of this pool can enable reuse among different
+// threads in task-based - or 'on-demand' - simulation.
 
-//   Create and hold a pointer to Workspace.
-//   
-//   This class holds a thread-private static instance
-//   of the template parameter workspace.
-//
-//   Note: 
-//   The concrete implementation of workspace objects
-//   are responsible for instantiating a singleton instance
-//   of this pool.
-//
-//   This class will be extended to recycle workspaces.
-//   This can enable their reuse between different threads, 
-//   in task-based - or 'on-demand' - simulation.
+// ------------------------------------------------------------
 
 #ifndef G4TWORKSPACEPOOL_HH
 #define G4TWORKSPACEPOOL_HH
@@ -47,38 +53,38 @@
 template<class T>
 class G4TWorkspacePool
 {
-public:
-    // For use with simple MT mode - each thread gets a workspace and uses it until end
-    T* CreateWorkspace();
+  public:
+
+    inline T* CreateWorkspace();
+    // For use with simple MT mode - each thread gets a workspace
+    // and uses it until end
     
-    void CreateAndUseWorkspace();  // Create it (as above) and use it
+    inline void CreateAndUseWorkspace();
+    // Create it (as above) and use it
     
+    inline T* FindOrCreateWorkspace();
     // For use with 'dynamic' model of threading - workspaces can be recycled
-    T* FindOrCreateWorkspace();
     // Reuse an existing workspace - or create a new one if needed.
     // This will never fail, except if system is out of resources
     
     inline T* GetWorkspace() { return fMyWorkspace; }
     // Give back the existing, active workspace for my thread / task
     
-    //The recycling logic of workspace needs to be implemented
-    //void Recycle( T * );
-    // Keep the unused Workspace - for recycling : To be implemented
+    inline void Recycle( T * myWrkSpace );
+    // Keep the unused Workspace - for recycling
     
-    //void CleanUpAndDestroyAllWorkspaces();
+    inline void CleanUpAndDestroyAllWorkspaces();
     // To be called once at the end of the job
 
-    //void ReleaseAndDestroyWorkspace(T*);
-    // Destroy workspace - after releasing it
-    
-public:
+  public:
+
     G4TWorkspacePool() {}
     ~G4TWorkspacePool() {}
     
-private:
-    static G4ThreadLocal T*    fMyWorkspace;
-    // The thread's workspace - if assigned.
-    
+  private:
+
+    static G4ThreadLocal T* fMyWorkspace;
+    // The thread's workspace - if assigned
 };
 
 template<typename T> G4ThreadLocal T* G4TWorkspacePool<T>::fMyWorkspace=0;
@@ -87,17 +93,24 @@ template<class T>
 T* G4TWorkspacePool<T>::CreateWorkspace()
 {
     T* wrk = 0;
-    if ( !fMyWorkspace ) {
+    if ( !fMyWorkspace )
+    {
         wrk = new T;
-        if ( !wrk ) {
-            G4Exception("G4TWorspacePool<someType>::CreateWorkspace", "Workspace01",
-                        FatalException, "Failed to create workspace.");
-        } else {
+        if ( !wrk )
+        {
+            G4Exception("G4TWorspacePool<someType>::CreateWorkspace",
+                        "MemoryError", FatalException,
+                        "Failed to create workspace.");
+        }
+        else
+        {
             fMyWorkspace = wrk;
         }
-    } else {
-        G4Exception("ParticlesWorspacePool::CreateWorkspace", "Workspace02",
-                    FatalException,
+    }
+    else
+    {
+        G4Exception("ParticlesWorspacePool::CreateWorkspace",
+                    "InvalidCondition", FatalException,
                     "Cannot create workspace twice for the same thread.");
         wrk = fMyWorkspace;
     }
@@ -114,7 +127,8 @@ template<class T>
 T* G4TWorkspacePool<T>::FindOrCreateWorkspace()
 {
     T* wrk= fMyWorkspace;
-    if( !wrk ){
+    if( !wrk )
+    {
         wrk= this->CreateWorkspace();
     }
     wrk->UseWorkspace();
@@ -123,4 +137,22 @@ T* G4TWorkspacePool<T>::FindOrCreateWorkspace()
     return wrk;
 }
 
-#endif //G4GEOMETRYWORKSPACEPOOL_HH
+template<class T>
+void G4TWorkspacePool<T>::Recycle( T * myWrkSpace )
+{
+   myWrkSpace->ReleaseWorkspace(); 
+   delete myWrkSpace;
+}
+
+template<class T>
+void G4TWorkspacePool<T>::CleanUpAndDestroyAllWorkspaces()
+{
+   if (fMyWorkspace)
+   {
+      fMyWorkspace->DestroyWorkspace();
+      delete fMyWorkspace;
+      fMyWorkspace=0;
+   }
+}
+
+#endif // G4TWORKSPACEPOOL_HH

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AlphaEvaporationProbability.cc 89518 2015-04-15 14:43:30Z gcosmo $
+// $Id: G4AlphaEvaporationProbability.cc 99962 2016-10-12 14:09:03Z gcosmo $
 //
 // J.M. Quesada (August2008). Based on:
 //
@@ -35,7 +35,6 @@
 // 17-11-2010 V.Ivanchenko integer Z and A
 
 #include "G4AlphaEvaporationProbability.hh"
-#include "G4KalbachCrossSection.hh"
 #include "G4SystemOfUnits.hh"
 
 G4AlphaEvaporationProbability::G4AlphaEvaporationProbability() :

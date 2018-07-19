@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/include/HistoManager.hh
+/// \file eventgenerator/particleGun/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id: HistoManager.hh 68734 2013-04-05 09:47:02Z gcosmo $
+// $Id: HistoManager.hh 98304 2016-07-05 15:29:08Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

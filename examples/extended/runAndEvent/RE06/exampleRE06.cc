@@ -26,11 +26,13 @@
 /// \file RE06/exampleRE06.cc
 /// \brief Main program of the RE06 example
 //
-// $Id: exampleRE06.cc 86969 2014-11-21 11:54:05Z gcosmo $
-// 
+// $Id: exampleRE06.cc 109972 2018-05-14 07:07:04Z gcosmo $
+//
 // --------------------------------------------------------------
-//      GEANT 4 - example RE06 
+//      GEANT 4 - example RE06
 // --------------------------------------------------------------
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -38,13 +40,8 @@
 #include "G4RunManager.hh"
 #endif
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "G4UImanager.hh"
 #include "FTFP_BERT.hh"
@@ -60,6 +57,12 @@
 
 int main(int argc,char** argv)
 {
+ // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+ G4UIExecutive* ui = nullptr;
+ if ( argc == 1 ) {
+   ui = new G4UIExecutive(argc, argv);
+ }
+
  // Construct the stepping verbose class
  RE06SteppingVerbose* verbosity = new RE06SteppingVerbose;
  G4VSteppingVerbose::SetInstance(verbosity);
@@ -84,53 +87,44 @@ int main(int argc,char** argv)
  G4VModularPhysicsList* physics = new FTFP_BERT;
  physics->RegisterPhysics(new G4ParallelWorldPhysics(parallelWorldName));
  runManager->SetUserInitialization(physics);
-  
+
  // Set user action classes
  //
  runManager->SetUserInitialization(new RE06ActionInitialization);
-  
-#ifdef G4VIS_USE
+
  // Visualization manager
  //
  G4VisManager* visManager = new G4VisExecutive;
  visManager->Initialize();
-#endif
-    
+
  // Initialize G4 kernel
  //
  runManager->Initialize();
-  
+
  // Get the pointer to the User Interface manager
  //
- G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+ G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
- if (argc==1)   // Define UI session for interactive mode
+ if (ui)   // Define UI session for interactive mode
  {
-#ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
+      UImanager->ApplyCommand("/control/execute vis.mac");
       ui->SessionStart();
       delete ui;
-#endif
  }
  else           // Batch mode
- { 
+ {
    G4String command = "/control/execute ";
    G4String fileName = argv[1];
    UImanager->ApplyCommand(command+fileName);
  }
 
   // Job termination
-  // Free the store: 
+  // Free the store:
   // user actions, physics_list and detector_description are
   // owned and deleted by the run manager, so they should not
   // be deleted in the main() program !
 
-#ifdef G4VIS_USE
  delete visManager;
-#endif
  delete runManager;
 
  return 0;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IsotopeProperty.cc 69557 2013-05-08 12:01:40Z gcosmo $
+// $Id: G4IsotopeProperty.cc 98732 2016-08-09 10:50:57Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -50,7 +50,8 @@ G4IsotopeProperty::G4IsotopeProperty():
 		   fISpin(0),fEnergy(0.0),
 		   fLifeTime(-1.0),fDecayTable(0),
 		   fMagneticMoment(0.0),
-		   fIsomerLevel(-1)
+		   fIsomerLevel(-1),
+                   fFloatLevelBase(G4Ions::G4FloatLevelBase::no_Float)
 {
 }
 
@@ -69,6 +70,7 @@ G4IsotopeProperty::G4IsotopeProperty(const  G4IsotopeProperty& right)
   fEnergy          = right.fEnergy;
   fLifeTime        = right.fLifeTime;
   fIsomerLevel     = right.fIsomerLevel;
+  fFloatLevelBase  = right.fFloatLevelBase;
   // decay table is not copied because G4DecayTable has no copy constructor
   fDecayTable   = 0;
 }
@@ -84,6 +86,7 @@ G4IsotopeProperty & G4IsotopeProperty::operator=(G4IsotopeProperty& right)
     fEnergy          = right.fEnergy;
     fLifeTime        = right.fLifeTime;
     fIsomerLevel     = right.fIsomerLevel;
+    fFloatLevelBase  = right.fFloatLevelBase;
     // decay table is not copied because G4DecayTable has no copy constructor
     fDecayTable   = 0;
   }
@@ -102,6 +105,7 @@ G4int G4IsotopeProperty::operator==(const G4IsotopeProperty &right) const
   value = value && ( fEnergy          == right.fEnergy);
   value = value && ( fLifeTime        == right.fLifeTime);
   value = value && ( fIsomerLevel     == right.fIsomerLevel);
+  value = value && ( fFloatLevelBase  == right.fFloatLevelBase);
   return value;
 }
 
@@ -126,11 +130,15 @@ void G4IsotopeProperty::DumpInfo() const
 	 << fIsomerLevel
 	 << ", Excited Energy: " 
 	 << std::setprecision(1) 
-	 << fEnergy/keV << "[keV]" 
+	 << fEnergy/keV;
+  if(fFloatLevelBase!=G4Ions::G4FloatLevelBase::no_Float)
+  { G4cout << " +" << G4Ions::FloatLevelBaseChar(fFloatLevelBase); }
+  G4cout << " [keV]" 
 	 << ",   "
 	 << std::setprecision(6)
 	 << "Life Time: " 
-	 << fLifeTime/ns << "[ns]" << G4endl;
+	 << fLifeTime/ns << "[ns]"
+         << G4endl;
   if (fDecayTable != 0) {
     fDecayTable->DumpInfo();
   } else {

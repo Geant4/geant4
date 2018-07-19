@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B3DetectorConstruction.cc 71079 2013-06-10 20:37:11Z ihrivnac $
+// $Id: B3DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 /// \file B3DetectorConstruction.cc
 /// \brief Implementation of the B3DetectorConstruction class
@@ -237,8 +237,8 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
                                           
   // Visualization attributes
   //
-  logicRing->SetVisAttributes (G4VisAttributes::Invisible);
-  logicDetector->SetVisAttributes (G4VisAttributes::Invisible);    
+  logicRing->SetVisAttributes (G4VisAttributes::GetInvisible());
+  logicDetector->SetVisAttributes (G4VisAttributes::GetInvisible());    
 
   // Print materials
   G4cout << *(G4Material::GetMaterialTable()) << G4endl; 
@@ -257,6 +257,7 @@ void B3DetectorConstruction::ConstructSDandField()
   // declare crystal as a MultiFunctionalDetector scorer
   //  
   G4MultiFunctionalDetector* cryst = new G4MultiFunctionalDetector("crystal");
+  G4SDManager::GetSDMpointer()->AddNewDetector(cryst);
   G4VPrimitiveScorer* primitiv1 = new G4PSEnergyDeposit("edep");
   cryst->RegisterPrimitive(primitiv1);
   SetSensitiveDetector("CrystalLV",cryst);
@@ -264,6 +265,7 @@ void B3DetectorConstruction::ConstructSDandField()
   // declare patient as a MultiFunctionalDetector scorer
   //  
   G4MultiFunctionalDetector* patient = new G4MultiFunctionalDetector("patient");
+  G4SDManager::GetSDMpointer()->AddNewDetector(patient);
   G4VPrimitiveScorer* primitiv2 = new G4PSDoseDeposit("dose");
   patient->RegisterPrimitive(primitiv2);
   SetSensitiveDetector("PatientLV",patient);

@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 110387 2018-05-22 07:52:43Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -15,11 +15,91 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14-10-16 G.Folger
-- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
-  fix required by clang39 on Linux and MAC
+18-05-18 V.Ivant (testem5-V10-04-06)
+18-05-18 V.Ivant (testem5-V10-04-05)
+- added test of the new ion ionisation model, which is included in 
+  the new physics constructor PhysListEm19DStandard, atima.mac 
+  macro file is also added to compare with known data
 
-10-12-15 V.Ivant (testem5-V10-01-07)
+09-05-18 B.Morgan (testem5-V10-04-04)
+- TestEm5.cc : include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+08-04-18 mma (testem5-V10-04-03)
+- TestEm5.cc : purely cosmetic
+
+20-03-18 V.Ivant (testem5-V10-04-02)
+- StepMax - use thread safe instantiation, mesenger merged with 
+    PhysicsListMessenger
+- DetectorConstruction - improved method names
+- PhysicsList - make Opt4 default, removed local instantiation of G4Decay
+- Use MixMax default random number generator
+- removed G4VIS_USE and G4UI_USE
+
+08-03-18 V.Ivant (testem5-V10-04-01)
+- PhysListEm5DStandard - experimental PhysList with the new 
+    5D gamma conversion model
+- PhysListEm5DStandard - clean-up for 10.4
+- PhysListEmStandardSSM - removed as obsolete
+
+14-12-17 V.Ivant (testem5-V10-04-00)
+- corrected TestEm5.in to optimise output
+	 
+11-11-17 mma (testem5-V10-03-08)
+- Updated README   .README.txt
+
+07-11-17 V.Ivanchenko (testem5-V10-03-07)
+- Updated fluo.mac
+	 
+28-07-17 SI (testem5-V10-03-06)
+- Addition of dna.mac and update of pixe.mac
+
+30-05-17 SI (testem5-V10-03-05)
+- Addition of DNA constructors in PhysicsList
+- Addition of DNA histograms in HistoManager
+- Addition of flags in StackingAction
+- Update of README
+
+19-04-17 mma  (testem5-V10-03-04)
+- BeginOfRunAction() : remove SetRandomNumberStore(true)
+
+10-03-17 mma (testem5-V10-03-03)
+- DetectorConstruction : correct definition of element Chrome
+
+17-02-17 mma (testem5-V10-03-02)
+- Run.cc : modify normalisation of histo 1 and 10
+
+01-02-17 V.Ivanchenko (testem5-V10-03-01)
+- PhysicsList - use more uniform builder names
+
+27-12-16 S. Incerti (testem5-V10-03-00)
+- updated pixe.mac
+
+19-11-16 L.Urban (testem5-V10-02-07)
+- typos corrected in Run.cc  
+
+14-10-16 G.Folger (testem5-V10-02-06)
+- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+28-07-16 mma  (testem5-V10-02-05)
+- coding convention : rm double blank lines
+
+04-07-16 I. Hrivnacova  (testem5-V10-02-04)
+- Fixes for Doxygen documentation
+
+11-04-16 mma  (testem5-V10-02-03)
+- PhysListEmStandard: use G4EmParameters
+- remove geant3 subdirectory
+
+24-02-16 mma (testem5-V10-02-02)
+- EventAction: correct filling of histo 1
+
+11-01-16 V.Ivant (testem5-V10-02-01)
+- PhysicsList - added hadron elastic physics
+
+10-12-15 V.Ivant (testem5-V10-02-00)
 - H.Burkhardt fixed root macro allowing to work both with root5 and 6
     
 12-11-15 V.Ivant (testem5-V10-01-06)

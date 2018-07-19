@@ -1,4 +1,4 @@
-$Id: History 95501 2016-02-12 11:01:30Z gcosmo $
+$Id: History 110265 2018-05-17 14:30:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-January 27, 2016, M. Asai (procscore-V10-01-02)
+May 17, 2018, J. Madsen (procscore-V10-04-00)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+April 24, 2017, M. Asai (procscore-V10-03-00)
+- G4ParallelWorldProcess: G4Step of a parallel world now has a valid
+  pointer to secondaries.
+
+January 27, 2016, M. Asai (procscore-V10-02-00)
 - G4ParallelWorldProcess: change processType from fParameterized
   to fParallel and set the processSubType to 491.
 

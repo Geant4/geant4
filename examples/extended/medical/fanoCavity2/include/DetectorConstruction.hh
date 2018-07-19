@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 68763 2013-04-05 12:36:20Z gcosmo $
+// $Id: DetectorConstruction.hh 103507 2017-04-11 14:15:33Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #define DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
+#include "G4NistManager.hh"
 #include "globals.hh"
 
 class G4VPhysicalVolume;

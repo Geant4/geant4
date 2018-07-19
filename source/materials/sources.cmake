@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 82116 2014-06-11 09:08:07Z gcosmo $
+# $Id: sources.cmake 106115 2017-09-13 10:16:51Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -30,13 +30,24 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4materials
     HEADERS
+			G4AtomicBond.hh
+			G4AtomicFormFactor.hh
 			G4AtomicShells.hh
+			G4AtomicShells_EADL.hh 
+			G4AtomicShells_EADL.hh 
+			G4AtomicShells_EADL.hh 
+			G4CrystalAtomBase.hh
+			G4CrystalBravaisLattices.h
+			G4CrystalLatticeSystems.h
+			G4CrystalExtension.hh
+			G4CrystalUnitCell.hh
 			G4DensityEffectData.hh
 			G4ElementData.hh
 			G4Element.hh
 			G4ElementTable.hh
 			G4ElementVector.hh
 			G4ExtDEDXTable.hh
+			G4ExtendedMaterial.hh
 			G4IonisParamElm.hh
 			G4IonisParamMat.hh
 			G4IonStoppingData.hh
@@ -45,6 +56,7 @@ GEANT4_DEFINE_MODULE(NAME G4materials
 			G4LatticeLogical.hh
 			G4LatticePhysical.hh
 			G4Material.hh
+                        G4MaterialPropertiesIndex.hh
 			G4MaterialPropertiesTable.hh
 			G4MaterialPropertiesTable.icc
 			G4MaterialPropertyVector.hh
@@ -60,12 +72,21 @@ GEANT4_DEFINE_MODULE(NAME G4materials
 			G4UCNMaterialPropertiesTable.hh
 			G4UCNMicroRoughnessHelper.hh
 			G4VIonDEDXTable.hh
+			G4VMaterialExtension.hh
     SOURCES
+			G4AtomicBond.cc
+			G4AtomicFormFactor.cc
 			G4AtomicShells.cc
+			G4AtomicShells_EADL.cc 
+			G4AtomicShells_EADL.cc 
+			G4AtomicShells_EADL.cc 
+			G4CrystalExtension.cc
+			G4CrystalUnitCell.cc
 			G4DensityEffectData.cc
 			G4Element.cc
 			G4ElementData.cc
 			G4ExtDEDXTable.cc
+			G4ExtendedMaterial.cc
 			G4IonisParamElm.cc
 			G4IonisParamMat.cc
 			G4IonStoppingData.cc

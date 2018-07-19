@@ -89,8 +89,8 @@ struct WattSpectrumConstants
 static const G4double IncidentEnergyBins[] = 
 {
     G4FFGDefaultValues::ThermalNeutronEnergy,
-    1.0 * MeV,
-    14.0 * MeV,
+    1.0 * CLHEP::MeV,
+    14.0 * CLHEP::MeV,
     -1 // End of array
 };
 

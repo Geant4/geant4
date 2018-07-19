@@ -28,22 +28,26 @@
 // ClassName:   G4VAlphaBuilder
 //
 // Author: 2013 P. Arce
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
 #ifndef G4VAlphaBuilder_h
 #define G4VAlphaBuilder_h
 
+#include "G4PhysicsBuilderInterface.hh"
+
 class G4AlphaInelasticProcess;
 class G4HadronElasticProcess;
 
-class G4VAlphaBuilder
+class G4VAlphaBuilder : public G4PhysicsBuilderInterface
 {
 public:
-  G4VAlphaBuilder();
-  virtual ~G4VAlphaBuilder();
+  G4VAlphaBuilder() = default;
+  virtual ~G4VAlphaBuilder() {} 
   virtual void Build(G4HadronElasticProcess * aP) = 0;
   virtual void Build(G4AlphaInelasticProcess * aP) = 0;
+  using G4PhysicsBuilderInterface::Build;
 };
 
 #endif

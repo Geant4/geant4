@@ -47,6 +47,7 @@
 #include "G4INCLEventInfo.hh"
 #include "G4INCLGlobals.hh"
 #include "G4INCLParticleTable.hh"
+#include "G4INCLParticle.hh"
 #include <cmath>
 
 namespace G4INCL {
@@ -65,7 +66,7 @@ namespace G4INCL {
                         0.0);
       } else {
         INCL_WARN("Particle with null kinetic energy in fillInverseKinematics, cannot determine its mass:\n"
-                  << "  A=" << A[i] << ", Z=" << Z[i] << '\n'
+                  << "  A=" << A[i] << ", Z=" << Z[i] << ", S=" << S[i] << '\n'
                   << "  EKin=" << EKin[i] << ", px=" << px[i] << ", py=" << py[i] << ", pz=" << pz[i] << '\n'
                   << "  Falling back to the mass from the INCL ParticleTable" << '\n');
         mass = ParticleTable::getRealMass(A[i], Z[i]);
@@ -87,8 +88,17 @@ namespace G4INCL {
   }
 
   void EventInfo::remnantToParticle(const G4int remnantIndex) {
+    
+    INCL_DEBUG("remnantToParticle function used\n");
+    
     A[nParticles] = ARem[remnantIndex];
     Z[nParticles] = ZRem[remnantIndex];
+    S[nParticles] = SRem[remnantIndex];
+    
+	ParticleSpecies pt(A[nParticles],Z[nParticles],S[nParticles]);
+	PDGCode[nParticles] = pt.getPDGCode();
+	
+    ParticleBias[nParticles] = Particle::getTotalBias();
     emissionTime[nParticles] = stoppingTime;
 
     px[nParticles] = pxRem[remnantIndex];

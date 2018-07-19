@@ -80,11 +80,11 @@ G4IonCoulombScatteringModel::G4IonCoulombScatteringModel(const G4String& nam)
   theIonTable  = G4ParticleTable::GetParticleTable()->GetIonTable();
   theProton    = G4Proton::Proton();
 
-  pCuts=0;
-  currentMaterial = 0;
-  currentElement  = 0;
-  currentCouple = 0;
-  fParticleChange = 0;
+  pCuts = nullptr;
+  currentMaterial = nullptr;
+  currentElement  = nullptr;
+  currentCouple   = nullptr;
+  fParticleChange = nullptr;
 
   recoilThreshold = 0.*eV;
   heavycorr =0;
@@ -134,7 +134,7 @@ G4double G4IonCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
   DefineMaterial(CurrentCouple());
 
-  G4int iz = G4int(Z);
+  G4int iz = G4lrint(Z);
 
   //from lab to pCM & mu_rel of effective particle
   G4double tmass = proton_mass_c2;
@@ -166,14 +166,13 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   // Choose nucleus
   currentElement = SelectRandomAtom(couple, particle, kinEnergy);
 
-  G4double Z  = currentElement->GetZ();
-  G4int iz = G4int(Z);
+  G4int iz = currentElement->GetZasInt();
   G4int ia = SelectIsotopeNumber(currentElement);
   G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
   ioncross->SetupKinematic(kinEnergy, mass2);
 
-  ioncross->SetupTarget(Z, kinEnergy, heavycorr);
+  ioncross->SetupTarget(currentElement->GetZ(), kinEnergy, heavycorr);
     
   //scattering angle, z1 == (1-cost)
   G4double z1 = ioncross->SampleCosineTheta(); 

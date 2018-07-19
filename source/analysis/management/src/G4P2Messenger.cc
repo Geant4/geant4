@@ -63,7 +63,7 @@ G4P2Messenger::G4P2Messenger(G4VAnalysisManager* manager)
   SetP2Cmd();
   fSetP2XCmd = fHelper->CreateSetBinsCommand("x", this);
   fSetP2YCmd = fHelper->CreateSetBinsCommand("y", this);
-  fSetP2YCmd = fHelper->CreateSetValuesCommand("z", this);
+  fSetP2ZCmd = fHelper->CreateSetValuesCommand("z", this);
 
   fSetP2TitleCmd = fHelper->CreateSetTitleCommand(this);
   fSetP2XAxisCmd = fHelper->CreateSetAxisCommand("x", this);
@@ -209,11 +209,11 @@ void G4P2Messenger::SetP2Cmd()
   auto p2xValMax = new G4UIparameter("xvalMax", 'd', false);
   p2xValMax->SetGuidance("Maximum x-value, expressed in unit");
   
-  auto p2xValUnit = new G4UIparameter("xvalUnit", 's', false);
+  auto p2xValUnit = new G4UIparameter("xvalUnit", 's', true);
   p2xValUnit->SetGuidance("The unit applied to filled x-values and xvalMin0, xvalMax0");
   p2xValUnit->SetDefaultValue("none");
  
-  auto p2xValFcn = new G4UIparameter("xvalFcn", 's', false);
+  auto p2xValFcn = new G4UIparameter("xvalFcn", 's', true);
   p2xValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnxGuidance = "The function applied to filled x-values (log, log10, exp, none).";
   p2xValFcn->SetGuidance(fcnxGuidance);
@@ -225,20 +225,20 @@ void G4P2Messenger::SetP2Cmd()
   p2xValBinScheme->SetGuidance(binSchemeGuidance);
   p2xValBinScheme->SetDefaultValue("linear");
  
-  auto p2yNbins = new G4UIparameter("nybins", 'i', false);
+  auto p2yNbins = new G4UIparameter("nybins", 'i', true);
   p2yNbins->SetGuidance("Number of y-bins");
   
-  auto p2yValMin = new G4UIparameter("yvalMin", 'd', false);
+  auto p2yValMin = new G4UIparameter("yvalMin", 'd', true);
   p2yValMin->SetGuidance("Minimum y-value, expressed in unit");
   
-  auto p2yValMax = new G4UIparameter("yvalMax", 'd', false);
+  auto p2yValMax = new G4UIparameter("yvalMax", 'd', true);
   p2yValMax->SetGuidance("Maximum y-value, expressed in unit");
   
   auto p2yValUnit = new G4UIparameter("yvalUnit", 's', true);
   p2yValUnit->SetGuidance("The unit applied to filled y-values and yvalMin0, yvalMax0");
   p2yValUnit->SetDefaultValue("none");
  
-  auto p2yValFcn = new G4UIparameter("yvalFcn", 's', false);
+  auto p2yValFcn = new G4UIparameter("yvalFcn", 's', true);
   p2yValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnyGuidance = "The function applied to filled y-values (log, log10, exp, none).";
   p2yValFcn->SetGuidance(fcnyGuidance);
@@ -249,17 +249,17 @@ void G4P2Messenger::SetP2Cmd()
   p2yValBinScheme->SetGuidance(binSchemeGuidance);
   p2yValBinScheme->SetDefaultValue("linear");
  
-  auto p2zValMin = new G4UIparameter("zvalMin", 'd', false);
+  auto p2zValMin = new G4UIparameter("zvalMin", 'd', true);
   p2zValMin->SetGuidance("Minimum z-value, expressed in unit");
   
-  auto p2zValMax = new G4UIparameter("zvalMax", 'd', false);
+  auto p2zValMax = new G4UIparameter("zvalMax", 'd', true);
   p2zValMax->SetGuidance("Maximum z-value, expressed in unit");
   
   auto p2zValUnit = new G4UIparameter("zvalUnit", 's', true);
   p2zValUnit->SetGuidance("The unit applied to filled z-values and zvalMin0, zvalMax0");
   p2zValUnit->SetDefaultValue("none");
  
-  auto p2zValFcn = new G4UIparameter("zvalFcn", 's', false);
+  auto p2zValFcn = new G4UIparameter("zvalFcn", 's', true);
   p2zValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnzGuidance = "The function applied to filled z-values (log, log10, exp, none).";
   p2zValFcn->SetGuidance(fcnzGuidance);
@@ -356,10 +356,26 @@ void G4P2Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     fHelper->GetBinData(fXData, parameters, counter);
   }
   else if ( command == fSetP2YCmd.get() ) { 
-    // Only save values
+    // Save values
     auto counter = 0;
     fYId = G4UIcommand::ConvertToInt(parameters[counter++]);
+    // Check if setX command was called
+    if ( fXId == -1 || fXId != fYId ) {
+      fHelper->WarnAboutSetCommands();
+      return;
+    }
     fHelper->GetBinData(fYData, parameters, counter);
+    // Set values
+    // (another set may follow if setZ is also called)
+    auto xunit = GetUnitValue(fXData.fSunit);
+    auto yunit = GetUnitValue(fYData.fSunit);
+    fManager->SetP2(fYId, 
+                    fXData.fNbins, fXData.fVmin*xunit, fXData.fVmax*xunit,
+                    fYData.fNbins, fYData.fVmin*yunit, fYData.fVmax*yunit,
+                    0., 0., 
+                    fXData.fSunit, fYData.fSunit, "none",
+                    fXData.fSfcn, fYData.fSfcn, "none",
+                    fXData.fSbinScheme, fYData.fSbinScheme);     
   }
   else if ( command == fSetP2ZCmd.get() ) { 
     auto counter = 0;

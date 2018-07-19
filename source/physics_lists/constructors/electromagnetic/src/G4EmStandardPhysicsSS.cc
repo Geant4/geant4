@@ -27,7 +27,7 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4EmStandardPhysics
+// ClassName:   G4EmStandardPhysicsSS
 //
 // Author:      V.Ivanchenko 09.11.2005
 //
@@ -60,6 +60,7 @@
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
+#include "G4hCoulombScatteringModel.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4UrbanMscModel.hh"
 
@@ -84,6 +85,7 @@
 #include "G4ionIonisation.hh"
 #include "G4alphaIonisation.hh"
 
+#include "G4ParticleTable.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -120,8 +122,7 @@ G4EmStandardPhysicsSS::G4EmStandardPhysicsSS(G4int ver)
   param->SetVerbose(verbose);
   param->SetLowestElectronEnergy(10*eV);
   param->SetMscThetaLimit(0.0);
-  param->SetFluo(true);
-  param->SetAuger(true);
+  param->SetAugerCascade(true);
   param->SetPixe(true);
   SetPhysicsType(bElectromagnetic);
 }
@@ -160,10 +161,6 @@ void G4EmStandardPhysicsSS::ConstructParticle()
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
-
-  // dna
-  G4EmModelActivator mact;
-  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -185,32 +182,29 @@ void G4EmStandardPhysicsSS::ConstructProcess()
   G4hBremsstrahlung* pb = new G4hBremsstrahlung();
   G4hPairProduction* pp = new G4hPairProduction();
 
-  // muon & hadron multiple scattering
+  // muon & hadron scattering
   G4CoulombScattering* muss = new G4CoulombScattering();
+  muss->SetEmModel(new G4hCoulombScatteringModel());
   G4CoulombScattering* piss = new G4CoulombScattering();
+  piss->SetEmModel(new G4hCoulombScatteringModel());
   G4CoulombScattering* kss = new G4CoulombScattering();
-  G4CoulombScattering* pss = new G4CoulombScattering();
-
-  G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
-
+  kss->SetEmModel(new G4hCoulombScatteringModel());
 
   // Add standard EM Processes
-  auto myParticleIterator=GetParticleIterator();
-  myParticleIterator->reset();
-  while( (*myParticleIterator)() ){
-    G4ParticleDefinition* particle = myParticleIterator->value();
-    G4String particleName = particle->GetParticleName();
-
+  G4ParticleTable* table = G4ParticleTable::GetParticleTable();
+  for(const auto& particleName : partList.PartNames()) {
+    G4ParticleDefinition* particle = table->FindParticle(particleName);
+    if (!particle) { continue; }
     if (particleName == "gamma") {
 
-      G4ComptonScattering* cs = new G4ComptonScattering;
-      cs->SetEmModel(new G4KleinNishinaModel(), 1);
-
       G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
-      pee->SetEmModel(new G4LivermorePhotoElectricModel(), 1);
+      pee->SetEmModel(new G4LivermorePhotoElectricModel());
 
-      ph->RegisterProcess(cs, particle);
+      G4ComptonScattering* cs = new G4ComptonScattering;
+      cs->SetEmModel(new G4KleinNishinaModel());
+
       ph->RegisterProcess(pee, particle);
+      ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(new G4GammaConversion(), particle);
       ph->RegisterProcess(new G4RayleighScattering(), particle);
 
@@ -218,8 +212,7 @@ void G4EmStandardPhysicsSS::ConstructProcess()
 
       G4CoulombScattering* ss = new G4CoulombScattering();
       if(G4EmParameters::Instance()->UseMottCorrection()) {
-	ss->SetEmModel(new G4eSingleCoulombScatteringModel(), 1);
-        ss->SetBuildTableFlag(false);
+	ss->SetEmModel(new G4eSingleCoulombScatteringModel());
       }
 
       ph->RegisterProcess(new G4eIonisation(), particle);
@@ -273,6 +266,9 @@ void G4EmStandardPhysicsSS::ConstructProcess()
     } else if (particleName == "proton" ||
 	       particleName == "anti_proton") {
 
+      G4CoulombScattering* pss = new G4CoulombScattering();
+      pss->SetEmModel(new G4hCoulombScatteringModel());
+
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(pb, particle);
       ph->RegisterProcess(pp, particle);
@@ -309,8 +305,8 @@ void G4EmStandardPhysicsSS::ConstructProcess()
                particleName == "xi_c+" ||
                particleName == "xi-" ) {
 
-      ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
     }
   }
 
@@ -319,8 +315,7 @@ void G4EmStandardPhysicsSS::ConstructProcess()
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 
-  G4EmModelActivator mact;
-  mact.ConstructProcess();
+  G4EmModelActivator mact(GetPhysicsName());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

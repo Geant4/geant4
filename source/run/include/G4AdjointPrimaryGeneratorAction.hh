@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPrimaryGeneratorAction.hh 86968 2014-11-21 11:52:04Z gcosmo $
+// $Id: G4AdjointPrimaryGeneratorAction.hh 98735 2016-08-09 10:54:06Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointPrimaryGeneratorAction
@@ -101,6 +101,9 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
                                              return &ListOfPrimaryFwdParticles;}
     inline const G4String& GetPrimaryIonName(){return ion_name;}
     inline void SetNbPrimaryFwdGammasPerEvent(G4int nb) {nb_fwd_gammas_per_event=nb;}
+    inline void SetNbAdjointPrimaryGammasPerEvent(G4int nb) {nb_adj_primary_gammas_per_event=nb;}
+    inline void SetNbAdjointPrimaryElectronsPerEvent(G4int nb) {nb_adj_primary_electrons_per_event=nb;}
+    inline  G4ParticleDefinition* GetLastGeneratedFwdPrimaryParticle(){return ListOfPrimaryFwdParticles[index_particle];}
 
   private: //private methods
 
@@ -135,6 +138,8 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double radius_spherical_source;
     G4ThreeVector center_spherical_source;
     G4int nb_fwd_gammas_per_event;
+    G4int nb_adj_primary_gammas_per_event;
+    G4int nb_adj_primary_electrons_per_event;
     
     //For simulation with ions
     //--------------------------

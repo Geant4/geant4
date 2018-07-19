@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.hh 92074 2015-08-17 07:03:46Z gcosmo $
+// $Id: G4DNAScreenedRutherfordElasticModel.hh 97520 2016-06-03 14:23:17Z gcosmo $
 //
 
 #ifndef G4DNAScreenedRutherfordElasticModel_h
@@ -38,9 +38,7 @@
 
 class G4DNAScreenedRutherfordElasticModel : public G4VEmModel
 {
-
 public:
-
   G4DNAScreenedRutherfordElasticModel(const G4ParticleDefinition* p = 0, 
 		          const G4String& nam = "DNAScreenedRutherfordElasticModel");
 
@@ -49,75 +47,77 @@ public:
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
   virtual G4double CrossSectionPerVolume(const G4Material* material,
-					   const G4ParticleDefinition* p,
-					   G4double ekin,
-					   G4double emin,
-					   G4double emax);
+                                         const G4ParticleDefinition* p,
+                                         G4double ekin,
+                                         G4double emin,
+                                         G4double emax);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
+                                 const G4MaterialCutsCouple*,
+                                 const G4DynamicParticle*,
+                                 G4double tmin,
+                                 G4double maxEnergy);
 
-  inline void SetKillBelowThreshold (G4double threshold);		 
-  G4double GetKillBelowThreshold () { return killBelowEnergy; }		 
+  inline void SetKillBelowThreshold (G4double threshold);
 
   inline void SelectFasterComputation(G4bool input); 
 
 protected:
-
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
-
-  G4bool fasterCode;
-
-  // Water density table
-  const std::vector<G4double>* fpWaterDensity;
-
-  G4double killBelowEnergy;  
-  G4double lowEnergyLimit;  
+  G4double lowEnergyLimit;
   G4double intermediateEnergyLimit;
-  G4double highEnergyLimit; 
-  G4bool isInitialised;
-  G4int verboseLevel;
+  G4double highEnergyLimit;
   
-  // Cross section
-  
-  G4double RutherfordCrossSection(G4double energy, G4double z);
-  
-  G4double ScreeningFactor(G4double energy, G4double z);
-  
-  // Final state according to Brenner & Zaider
-
-  G4double BrennerZaiderRandomizeCosTheta(G4double k);
-  G4double CalculatePolynomial(G4double k, std::vector<G4double>& vec);
+  // -- Brenner & Zaider
   std::vector<G4double> betaCoeff;
   std::vector<G4double> deltaCoeff;
   std::vector<G4double> gamma035_10Coeff;
   std::vector<G4double> gamma10_100Coeff;
   std::vector<G4double> gamma100_200Coeff;
-   
-  // Final state according to Screened Rutherford
+  
+  // -- Water density table
+  const std::vector<G4double>* fpWaterDensity;
+  
+  G4int verboseLevel;
+  
+  G4bool isInitialised;
+  G4bool fasterCode;
+  
+  // -- Cross section
+  G4double RutherfordCrossSection(G4double energy, G4double z);
+  G4double ScreeningFactor(G4double energy, G4double z);
+  
+  // -- Final state according to Brenner & Zaider
+  G4double BrennerZaiderRandomizeCosTheta(G4double k);
+  G4double CalculatePolynomial(G4double k, std::vector<G4double>& vec);
 
+   
+  // -- Final state according to Screened Rutherford
   G4double ScreenedRutherfordRandomizeCosTheta(G4double k, G4double z);
 
   //
-   
-  G4DNAScreenedRutherfordElasticModel & operator=(const  G4DNAScreenedRutherfordElasticModel &right);
-  G4DNAScreenedRutherfordElasticModel(const  G4DNAScreenedRutherfordElasticModel&);
-
+  G4DNAScreenedRutherfordElasticModel& operator=
+    (const G4DNAScreenedRutherfordElasticModel &right);
+  G4DNAScreenedRutherfordElasticModel(const G4DNAScreenedRutherfordElasticModel&);
 };
 
-inline void G4DNAScreenedRutherfordElasticModel::SetKillBelowThreshold (G4double threshold) 
-{ 
-    killBelowEnergy = threshold; 
-    if (threshold < 9*CLHEP::eV)
-     G4Exception ("*** WARNING : the G4DNAScreenedRutherfordElasticModel class is not validated below 9 eV !","",JustWarning,"") ;   
+inline void
+G4DNAScreenedRutherfordElasticModel::SetKillBelowThreshold (G4double)
+{
+    G4ExceptionDescription errMsg;
+    errMsg << "The method G4DNAScreenedRutherfordElasticModel::"
+              "SetKillBelowThreshold is deprecated";
+    
+    G4Exception("G4DNAScreenedRutherfordElasticModel::SetKillBelowThreshold",
+                "deprecated",
+                JustWarning,
+                errMsg);
 }		 
 
-inline void G4DNAScreenedRutherfordElasticModel::SelectFasterComputation (G4bool input)
+inline void
+G4DNAScreenedRutherfordElasticModel::SelectFasterComputation(G4bool input)
 { 
     fasterCode = input; 
 }		 

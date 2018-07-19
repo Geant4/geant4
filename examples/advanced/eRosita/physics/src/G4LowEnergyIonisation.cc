@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LowEnergyIonisation.cc 107396 2017-11-10 08:28:08Z gcosmo $
 // GEANT4 tag $Name:  $
 // 
 // --------------------------------------------------------------

@@ -1,4 +1,4 @@
-$Id: History 102303 2017-01-20 14:14:36Z gcosmo $
+$Id: History 108515 2018-02-16 07:15:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,22 +17,167 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-04-10-16 P.Gumplinger (materials-V10-01-17)
+15-02-18 D.Sawkey (materials-V10-04-03)
+- G4MaterialPropertiesTable: Restore return of nullptr if material property
+  not found. Add bool to print warnings. Continuation of bug #2030
+
+12-02-18 V.Ivanchenko (materials-V10-04-02)
+- G4OpticalSurface - move static methods to source
+
+07-02-18 D.Sawkey (materials-V10-04-01)
+- Re-enable user-defined material properties (fix bug #2030)
+  in G4MaterialPropertiesTable and G4MaterialPropertiesIndex
+
+19-12-17 G.Cosmo (materials-V10-04-00)
+- Fixed self-consistency in headers (missing #include) in G4ElementTable and
+  G4MaterialTable. Thanks to Raphael Isemann for reporting these.
+
+20-10-17 S.Y.Jun (materials-V10-03-13)
+- G4MaterialPropertiesTable - rename SetGROUPVEL to CalculateGROUPVEL
+  and move it from GetProperty to AddProperty to resolve a MT scaling
+  problem. Remove SetGROUPVEL from the next release (version 11),  
+  courtesy of Tao Lin, IHEP (the JUNO experiment)
+
+25-09-17 V.Ivanchenko (materials-V10-03-12)
+- G4Material - set lock when defining Material Property Table
+- G4IonisParamMat - set lock when user defines density effect parameters
+
+15-09-17 S.Y.Jun (materials-V10-03-11)
+- G4MaterialPropertiesTable - keep old property and constant property
+  maps and public methods, GetPropertiesMap and GetPropertiesCMap. 
+  These method should be obsolete from the next release and GetPropertyMap 
+  and GetConstPropertyMap should be used instead
+
+13-09-17 S.Y.Jun (materials-V10-03-10)
+- G4MaterialPropertiesIndex - add missing MIEHG index and name
+
+12-09-17 S.Y.Jun (materials-V10-03-09)
+- G4MaterialPropertiesTable - fix the warning from a wrong comparison 
+  between different enum types
+
+11-09-17 S.Y.Jun (materials-V10-03-08)
+- add a header file (G4MaterialPropertiesIndex.hh) to define indices 
+  and names for G4MaterialProperties
+- G4MaterialPropertiesIndex - use the enum type instead of G4String 
+  for keys in the material (constant) property table maps and provide 
+  necessary accessors and interfaces
+
+01-09-17 V.Ivanchenko (materials-V10-03-07)
+- G4IonisParMat - added possibility of defining custom density effect
+    parameters and another possibility to request parameters of a base 
+    material, which may have not exactly the same atomic composition
+
+25-08-17 V.Ivanchenko (materials-V10-03-06)
+- G4Material, G4IonisParMat - fixed definition of State of material,
+    when a material is constructed via based material (problem #1997)
+
+21-08-17 V.Ivanchenko (materials-V10-03-05)
+- G4NistManager, G4NistElementBuilder, G4NistMaterialBuilder - thread
+    safe element and material build
+
+29-05-17 P.Gumplinger (materials-V10-03-04)
+- This version of Mariele Stockhoff's DAVIS model includes not only
+  reflection but also the capability of transmitting photons based on LUTs
+
+22-03-17 P.Gumplinger (materials-V10-03-03)
+- fix compilation waring in previous tag
+
+21-03-17 P.Gumplinger (materials-V10-03-02)
+- Mariele Stockhoff's DAVIS model
+
+24-02-17 V.Ivanchenko (materials-V10-03-01)
+- G4Material - improved printout - always print temperature and presure 
+    independently on the state of the material (CMS requirement)
+
+22-02-17 G.Cosmo (materials-V10-03-00)
+- Removed debug printout from G4MaterialPropertiesTable destructor.
+  Addressing problem report #1944.
+
+08-11-16 E.Bagli (materials-V10-02-20)
+- Fixed Coverity warnings
+
+07-11-16 E.Bagli (materials-V10-02-19)
+- Moved G4CrystalMaterial to G4CrystalExtension
+
+28-10-16 M.Asai (materials-V10-02-18)
+- Fix G4ExtendedMaterial to be correctly printed.
+
+24-10-16 E.Bagli (materials-V10-02-17)
+- Introduction of G4CrystalMaterial as a derived class of G4ExtendedMaterial.
+- Introduction of G4CrystalUnitCell with the crystalline unit cell parameters.
+- Introduction of G4AtomicFormFactor for the calculation of the form factor.
+- Introduction of G4AtomicBond for the G4CrystalUnitCell.
+
+21-10-16 M.Asai (materials-V10-02-16)
+- G4ExtendedMaterial now uses std::hash and std::unordered_map.
+
+20-10-16 M.Asai (materials-V10-02-15)
+- Introduing G4ExtendedMaterial and G4VMaterialExtension.
+
+04-10-16 P.Gumplinger (materials-V10-02-14)
 - Fix incorrectly calculated index for MicroRoughness lookup table
   in G4UCNMaterialPropertiesTable.cc
-  (thanks to W. Schreyer/Technische Universität München)
+  (thanks to W. Schreyer/Technische UniversitÃ¤t MÃ¼nchen)
 - Fix incorrectly calculated MicroRoughness amplitude
   in G4UCNMicroRoughnessHelper.cc
-  (thanks to W. Schreyer/Technische Universität München)
+  (thanks to W. Schreyer/Technische UniversitÃ¤t MÃ¼nchen)
 
-18-02-16 A. Dotti   (materials-V10-01-16)
+20-09-16 V.Ivanchenko (materials-V10-02-13)
+- G4NistMaterialBuilder - (Nathanael Lampe) reviewed and updated 
+    BioChemicalMaterials() method, which now instantiate two
+    type of materials: 
+       G4_XXXXX - molecule in its free state;
+       G4_DNA_XXXXX - molecule, considering atoms lost in bonding
+
+06-06-16 V.Ivanchenko (materials-V10-02-12)
+- G4DensityEffectData - fixed initialisation 
+
+30-05-16 V.Ivanchenko (materials-V10-02-11)
+- G4DensityEffectData, G4IonisParamMat - fixed density effect 
+    parameters corrections for the case when NIST mean ionisation
+    potential does not equal to that parameter in Shternheimer table
+- G4NistElementBuilder, G4NistMaterialBuilder - added access to 
+    the mean ionisation potential; put liquid water in front of
+    the list of NIST materials (index=0), so pure materials can be 
+    easier accessted via atomic number (Z > 0)
+
+09-05-16 V.Ivanchenko (materials-V10-02-10)
+- G4Material - do not delete G4MaterialPropertyTable, because this 
+    is unsafe
+
+06-05-16 V.Ivanchenko (materials-V10-02-09)
+06-05-16 V.Ivanchenko (materials-V10-02-08)
+- cleanup all classes: use nullptr, use const/static 
+- G4MaterialPropertiesTable - 4 complex methods moved from inline
+    to source
+- G4UCNMicroRoughnessHelper - all methods are const
+- G4NistManager, G4NistMaterialBuilder, G4NistElementBuilder -
+    added new const methods FindElement(..), FindMaterial(..), 
+    FindSimpleMaterial(..), which may be used in run time in MT mode
+- G4Element - added method GetZ_asInt()
+
+08-04-16 L.G. Sarmiento (materials-V10-02-07)
+- G4AtomicShells_EADL class added. Not being used by anything yet.
+
+06-04-16 V.Ivanchenko (materials-V10-02-06)
+- G4SandiaTable - fixed problem for the case when G4VERBOSE flag
+    unset (introduced in the previous tag)
+
+06-03-16 V.Ivanchenko (materials-V10-02-05)
+04-03-16 V.Ivanchenko (materials-V10-02-04)
+- G4AtomicShells, G4SandiaTable - asserts are substituted by G4Exception,
+    which are happens only if G4VERBOSE compillation flag is set;
+- G4SandiaTable - cleanup of methods is done, unused methods removed, 
+    some are moved from public to private 
+
+18-02-16 A. Dotti   (materials-V10-02-02)
 - Fix rare data-race in G4MaterialPropertiesTable for optical physics
   crash
 
-03-01-16 M. Verderi (materials-V10-01-15)
+03-01-16 M. Verderi (materials-V10-02-01)
 - src/G4NistElementBuilder.cc : fixed typo in print reported in #1786.
 
-20-01-16 V.Ivanchenko
+20-01-16 V.Ivanchenko (materials-V10-02-00)
 - G4NistMaterialBuilder - added lock to build of a new NIST
     material. This is needed, because some physics processes may 
     create a new NIST material from a worker thread.

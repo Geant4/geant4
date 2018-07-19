@@ -34,12 +34,15 @@
 #include "RE02RunAction.hh"
 #include "RE02EventAction.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02ActionInitialization::RE02ActionInitialization()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02ActionInitialization::~RE02ActionInitialization()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE02ActionInitialization::Build() const
 {
   //
@@ -50,6 +53,7 @@ void RE02ActionInitialization::Build() const
   SetUserAction(new RE02EventAction);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE02ActionInitialization::BuildForMaster() const
 {
   //

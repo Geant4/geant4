@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4RandomDirection.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: pyG4RandomDirection.cc 107590 2017-11-24 11:59:22Z gcosmo $
 // ====================================================================
 //   pyG4RandomDirection.cc
 //
@@ -35,10 +35,22 @@
 using namespace boost::python;
 
 // ====================================================================
+// thin wrappers
+// ====================================================================
+namespace pyG4RandomDirection {
+
+G4ThreeVector(*G4RandomDirection_1)() = G4RandomDirection;
+G4ThreeVector(*G4RandomDirection_2)(double) = G4RandomDirection;
+
+}
+
+using namespace pyG4RandomDirection;
+
+// ====================================================================
 // module definition
 // ====================================================================
 void export_G4RandomDirection()
 {
-  def("G4RandomDirection",  G4RandomDirection);
+  def("G4RandomDirection",  G4RandomDirection_1);
+  def("G4RandomDirection",  G4RandomDirection_2);
 }
-

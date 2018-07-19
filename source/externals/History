@@ -17,12 +17,124 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 May 2018 - G.Cosmo (externals-V10-04-05)
+- CLHEP: fixed compilation warnings from gcc-8.1.0 when using
+  -Woverloaded-virtual compilation option (default in Geant4).
+
+19 March 2018 - G.Cosmo (externals-V10-04-04)
+- Corrected GNUmakefile for Windows.
+
+16 March 2018 - G.Cosmo (externals-V10-04-03)
+- Synchronised with CLHEP-2.4.0.4.
+
+07 March 2018 - G.Cosmo (externals-V10-04-02)
+- CLHEP: removed kludge for Windows previously introduced to MinMaxRng.hh.
+  Further simplified setup for thread-local storage and atomics, as
+  now all supported by c++11 in either clang or VC++.
+
+06 March 2018 - G.Cosmo (externals-V10-04-01)
+- CLHEP: enabled thread-local storage and atomics on Windows; added flag in
+  thread_local.h, use_atomic.h and atomic_in.h.
+
+19 February 2018 - J.Madsen
+- CLHEP: temporary fix for Windows MT data race in MinMaxRng.hh.
+  Fixed warning C4293: '>>': shift count negative or too big, undefined behavior
+  in Ranlux64Engine on Windows
+
+11-December-2017 - G.Cosmo (externals-V10-04-00)
+- CLHEP: in MixMaxRng::modadd(), fixed guard for assembly code to protect
+  builds on 32-bit systems.
+
+15-November-2017 - G.Cosmo (externals-V10-03-08)
+- CLHEP: fixed print_state() method to proper C++ in MixMaxRng.
+
+13-November-2017 - G.Cosmo (externals-V10-03-07)
+- CLHEP: fixed shadowing warning in MixMaxRng.
+
+09-November-2017 - G.Cosmo (externals-V10-03-06, 05, 04)
+- CLHEP: updated MixMaxRng class to include latest C++ revision by K.Savvidy
+  based in MixMax-2.0. Replaced skipping coefficients optional set for
+  N=256 with N=240. Removed old C implementation files.
+  Set MixMax as the default random number generator in HepRandom.
+
+09-October-2017 - G.Cosmo (externals-V10-03-03)
+- CLHEP: added missing DLL_API specification for static data member in
+  Transform3D class.
+
+10-May-2017 - G.Cosmo (externals-V10-03-02)
+- CLHEP: fixed shadowing compilation warnings on RotationA.cc.
+
+09-May-2017 - G.Cosmo (externals-V10-03-01)
+- Updated to CLHEP-2.3.4.4.
+- CLHEP: fix in HepRotation::axis() for proper treatment of degenerating cases.
+  Fixed compilation warnings on gcc-7.1 in Evaluator.cc.
+
+28-February-2017 - G.Cosmo (externals-V10-03-00)
+- Adapted CMake scripts to new configuration for internal/external
+  packages of CLHEP, expat and zlib.
+
+04-November-2016 - G.Cosmo (externals-V10-02-11)
+- Updated to CLHEP-2.3.4.3.
+- CLHEP: fixed array initialisation in Evaluator static method function().
+
+08-July-2016 - G.Cosmo (externals-V10-02-10)
+- CLHEP: corrected value of SPECIALMUL in mixmax.h to correspond to exact
+  formula for N=17 (m=2^36+1).
+
+10-May-2016 - G.Cosmo (externals-V10-02-09)
+- Updated to CLHEP-2.3.3.0.
+- CLHEP: corrected check for counter range in MixMaxRng::getState().
+  Avoid hard-coded constant for initialisation of VECTOR_STATE_SIZE in
+  MixMaxRng, to directly use actual value of "N" from mixmax.
+
+02-May-2016 - G.Cosmo (externals-V10-02-08)
+- CLHEP: added symbols 'us' and 'ps' for microsend and picosecond respectively
+  to SystemOfUnits.h and setSystemOfUnits.cc and converted all symbols and
+  constants from "static const" to "static constexpr".
+
+28-April-2016 - G.Cosmo (externals-V10-02-07)
+- CLHEP: restored skipping of sequences for safer seeds setting in setSeeds()
+  in MixMaxRng. Changed number of N in mixmax to 17 (was 256) and provided
+  new skipping coefficients for the new value of N and for the case N=8.
+
+25-April-2016 - G.Cosmo (externals-V10-02-06)
+- CLHEP: use seed_spbox() for seeding MixMax with single seed.
+
+21-April-2016 - G.Cosmo (externals-V10-02-05, 04)
+- CLHEP: refined fix for sequence skipping; make it optional by adding Boolean
+  flag argument (true by default) in seed_uniquestream() function in mixmax.cc
+  to force sequence skipping when setting seeds. Simplified code, removing
+  compilation guard flags.
+  Set flag to false by default in MixMaxRng wrapper and defined function
+  skipSequencesOnce() to optional instruct to apply skipping of sequences
+  at the next seeds setting.
+
+20-April-2016: G.Cosmo (externals-V10-02-03, 02)
+- Updated to CLHEP-2.3.2.2:
+  o Added use_atomic.h header to use std::atomic if compiler supports it.
+  o MixMaxRng: corrected initialisation and use of 'numberOfEngines'
+    when more than one threads calls the constructor.
+  o HepRandom: revised settings of "defaults" to use a single thread_local
+    pointer.
+- Including tag "zlib-V10-02-01":
+  o Fix in gzguts.h for Windows with Visual Studio 2015 in 64 bit compilation.
+
+19-April-2016: G.Cosmo (externals-V10-02-01)
+- CLHEP: commented out seeds skipping from built-in table in mixmax.cc
+  (undefined flag SKIPISON), in order to avoid contention in multi-threaded
+  jobs and simplify seeding procedure. Removed use of obselete 'register'
+  keyword. Minor code cleanup in MixMaxRng.
+
+11-April-2016: G.Cosmo (externals-V10-02-00)
+- CLHEP: use simple loop for flatArray() in MixMaxRng; engine built-in
+  function turns out to be extremely slow and unefficient.
+
 9-November-2015: G.Cosmo (externals-V10-01-19)
 - Updated to CLHEP-2.3.1.1.
 - Added MixMaxRng to Randomize.h.
 
 30-October-2015 - G.Cosmo (externals-V10-01-18)
-- CLHEP: Fixed default seeding in MixMaxRng::setSeeds().
+- CLHEP: fixed default seeding in MixMaxRng::setSeeds().
 
 7-October-2015 - G.Cosmo (externals-V10-01-17)
 - Removed internal USolids module. Now USolids/VecGeom can be used only as

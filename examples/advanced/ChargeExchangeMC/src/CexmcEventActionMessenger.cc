@@ -48,8 +48,8 @@
 
 
 CexmcEventActionMessenger::CexmcEventActionMessenger(
-                                            CexmcEventAction *  eventAction ) :
-    eventAction( eventAction ), setVerboseLevel( NULL ),
+                                            CexmcEventAction *  eventAction_ ) :
+    eventAction( eventAction_ ), setVerboseLevel( NULL ),
     setVerboseDrawLevel( NULL )
 {
     setVerboseLevel = new G4UIcmdWithAnInteger(

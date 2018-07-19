@@ -1,4 +1,4 @@
-$Id: History 102321 2017-01-23 09:51:59Z gcosmo $
+$Id: History 107437 2017-11-13 07:37:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,14 +14,49 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12-October-2016 G.Folger
+10-Nov-2017, T. Koi         (phys-ctor-helastic-V10-03-04)
+-Dumpping LEND target information in G4HadronElasticPhysicsLEND
+
+7-Nov-2017, T. Koi         (phys-ctor-helastic-V10-03-03)
+- G4HadronElasticPhysicsLEND: Modify setting of selection of target data
+
+19-Oct-2017, A. Ribon         (phys-ctor-helastic-V10-03-02)
+- G4HadronHElasticPhysics : use G4NuclNuclDiffuseElastic for the elastic
+  scattering of light and generic ions (this is possible now because
+  the latest version of G4NuclNuclDiffuseElastic respects reproducibility).
+
+14-Aug-2017, A. Ribon         (phys-ctor-helastic-V10-03-01)
+- G4HadronElasticPhysics, G4HadronHElasticPhysics : changed kaon elastic 
+  cross sections from, respectively, Gheisha (used in G4HadronElasticPhysics)
+  and Chips (used in G4HadronHElasticPhysics), to Grichine's Glauber Gribov
+  ones. In this way, the total (elastic + inelastic) kaon cross sections
+  are consistent with the PDG ones. 
+  Notes:
+  - For the time being, kept the original elastic final-state model
+    (i.e. Gheisha in G4HadronElasticPhysics and Chips in
+    G4HadronHElasticPhysics).
+  - These two changes should be used also for the next patch of G4 10.3
+    (i.e. for 10.3.p03 : the two files G4HadronElasticPhysics.cc and
+    G4HadronHElasticPhysics.cc can be taken directly).
+
+04-May-2017, V.Ivanchenko     (phys-ctor-helastic-V10-03-00)
+- G4ThermalNeutrons - new class for addition of thermal neutron
+    scattering below 4 eV (backported from CMS simulation)
+
+04-Nov-2016, Alberto Ribon    (phys-ctor-helastic-V10-02-04)
+- Written first draft of the README
+	 
+16-October-2016 M.Maire  (phys-ctor-helastic-V10-02-03)
+- add README
+
+12-October-2016 G.Folger  (phys-ctor-helastic-V10-02-02)
 - replace direct use of aParticleIterator by GetParticleIterator().
   fix required by clang39 on Windows and MAC
 
-26-May-2016, A. Ribon         (phys-ctor-helastic-V10-01-07)
+26-May-2016, A. Ribon         (phys-ctor-helastic-V10-02-01)
 - G4HadronElasticPhysicsPHP : made it thread-safe.
 
-23-Feb-2016, A. Ribon         (phys-ctor-helastic-V10-01-06)
+23-Feb-2016, A. Ribon         (phys-ctor-helastic-V10-02-00)
 - G4HadronElasticPhysics : added missing hadron elastic for He3,
   using Glauber-Gribov elastic cross section (Gheisha does not have
   hadronic (elastic and inelastic) cross sections for He3).

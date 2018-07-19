@@ -142,7 +142,9 @@ static double w6j0( int i, int *x ) {
        case 1: if ( ( x[0] != x[2] ) || ( x[3] != x[5] ) ) return( 0.0 );
                x[5] = x[4];                                break;
        case 2: if ( ( x[0] != x[1] ) || ( x[3] != x[4] ) ) return( 0.0 );
-               if ( x[3] != x[4] )                         break;
+               break;
+	       //TK fix bug and add comment on 17-05-23
+               //This is the case of 6.3.2 of A. R. Edmonds, Angular Momentum in Quantum Mechanics, Princeton University Press 1974.
        case 3: if ( ( x[1] != x[5] ) || ( x[2] != x[4] ) ) return( 0.0 );
                x[5] = x[0]; x[0] = x[4]; x[3] = x[1];      break;
        case 4: if ( ( x[0] != x[5] ) || ( x[2] != x[3] ) ) return( 0.0 );

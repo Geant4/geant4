@@ -8,5 +8,8 @@
 /tracking/verbose 1
 /tracking/storeTrajectory 1
 #
+# Initialize kernel
+/run/initialize
+#
 # Visualization setting
 /control/execute vis.mac

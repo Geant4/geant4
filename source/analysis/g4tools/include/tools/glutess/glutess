@@ -190,6 +190,7 @@ gluTessProperty( GLUtesselator *tess, GLUenum which, GLUdouble value )
     default:
       break;
     }
+    return; //G.Barrand : add : seen with g++-8.1.0.
 
   case GLU_TESS_BOUNDARY_ONLY:
     tess->boundaryOnly = (value != 0);
@@ -238,6 +239,31 @@ gluTessNormal( GLUtesselator *tess, GLUdouble x, GLUdouble y, GLUdouble z )
   tess->normal[1] = y;
   tess->normal[2] = z;
 }
+
+// G.Barrand : begin : g++-8.1.0 : the five below functions introduced to avoid warnings :
+//                                   warning :cast between incompatible function types
+inline void GLUAPIENTRY
+gluTessCallback_GLU_TESS_VERTEX_DATA(GLUtesselator *tess,void (GLUAPIENTRY* a_fn)(void *, void *)) {
+  tess->callVertexData = (a_fn == NULL) ? &__gl_noVertexData : a_fn;
+}
+inline void GLUAPIENTRY
+gluTessCallback_GLU_TESS_BEGIN_DATA(GLUtesselator *tess,void (GLUAPIENTRY* a_fn)(GLUenum, void *)) {
+  tess->callBeginData = (a_fn == NULL) ? &__gl_noBeginData : a_fn;
+}
+inline void GLUAPIENTRY
+gluTessCallback_GLU_TESS_END_DATA(GLUtesselator *tess,void (GLUAPIENTRY* a_fn)(void *)) {
+  tess->callEndData = (a_fn == NULL) ? &__gl_noEndData : a_fn;
+}
+inline void GLUAPIENTRY
+gluTessCallback_GLU_TESS_ERROR_DATA(GLUtesselator *tess,void (GLUAPIENTRY* a_fn)(GLUenum, void *)) {
+  tess->callErrorData = (a_fn == NULL) ? &__gl_noErrorData : a_fn;
+}
+inline void GLUAPIENTRY
+gluTessCallback_GLU_TESS_COMBINE_DATA(GLUtesselator *tess,
+                                      void (GLUAPIENTRY* a_fn)(GLUdouble [3],void *[4],GLUfloat [4],void **,void *)) {
+  tess->callCombineData = (a_fn == NULL) ? &__gl_noCombineData : a_fn;
+}
+// G.Barrand : end : g++-8.1.0.
 
 inline void GLUAPIENTRY
 gluTessCallback( GLUtesselator *tess, GLUenum which, _GLUfuncptr fn)

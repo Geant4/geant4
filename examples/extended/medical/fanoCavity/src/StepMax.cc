@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/StepMax.cc
 /// \brief Implementation of the StepMax class
 //
-// $Id: StepMax.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: StepMax.cc 98764 2016-08-09 14:12:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,5 +79,4 @@ G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

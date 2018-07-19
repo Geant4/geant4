@@ -27,6 +27,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4SystemOfUnits.hh"
 
 G4NeutronPHPBuilder::
 G4NeutronPHPBuilder() 
@@ -49,10 +50,6 @@ G4NeutronPHPBuilder()
   theIMax = theMax;
 
 }
-
-G4NeutronPHPBuilder::
-~G4NeutronPHPBuilder() 
-{}
 
 void G4NeutronPHPBuilder::
 Build(G4HadronElasticProcess * aP)

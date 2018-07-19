@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/shared/include/SteppingAction.hh
+/// \file SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
 //
-// $Id: SteppingAction.hh 67226 2013-02-08 12:07:18Z ihrivnac $
+// $Id: SteppingAction.hh 98243 2016-07-04 16:58:38Z gcosmo $
 //
 // 
 

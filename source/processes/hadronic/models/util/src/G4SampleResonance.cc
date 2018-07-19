@@ -116,10 +116,18 @@ G4double G4SampleResonance::SampleMass(const G4double poleMass,
 	//     according to a Breit-Wigner function with constant
 	//     width gamma and pole poleMass
 
+
+        //AR-14Nov2017 : protection for rare cases when a wide parent resonance, with a very small
+        //               dynamic mass, decays into another wide (daughter) resonance: it can happen
+        //               then that for the daugther resonance minMass > maxMass : in these cases,
+        //               do not crash, but simply consider maxMass as the minimal mass for
+        //               the sampling of the daughter resonance mass.
+        G4double protectedMinMass = minMass;
 	if ( minMass > maxMass )
 	{
-		throw G4HadronicException(__FILE__, __LINE__,
-				"SampleResonanceMass: mass range negative (minMass>maxMass)");
+		//throw G4HadronicException(__FILE__, __LINE__,
+		//        "SampleResonanceMass: mass range negative (minMass>maxMass)");
+                protectedMinMass = maxMass;
 	}
 
 	G4double returnMass;
@@ -130,7 +138,8 @@ G4double G4SampleResonance::SampleMass(const G4double poleMass,
 	}
 	else
 	{
-		double fmin = BrWigInt0(minMass, gamma, poleMass);
+		//double fmin = BrWigInt0(minMass, gamma, poleMass);
+		double fmin = BrWigInt0(protectedMinMass, gamma, poleMass);
 		double fmax = BrWigInt0(maxMass, gamma, poleMass);
 		double f = fmin + (fmax-fmin)*G4UniformRand();
 		returnMass = BrWigInv(f, gamma, poleMass);

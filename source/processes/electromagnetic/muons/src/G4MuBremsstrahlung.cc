@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc 85023 2014-10-23 09:56:39Z gcosmo $
+// $Id: G4MuBremsstrahlung.cc 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -85,11 +85,6 @@ G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuBremsstrahlung::~G4MuBremsstrahlung()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4bool G4MuBremsstrahlung::IsApplicable(const G4ParticleDefinition& p)
 {
   return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);
@@ -116,7 +111,7 @@ void G4MuBremsstrahlung::InitialiseEnergyLossProcess(
 
     if (!EmModel()) { SetEmModel(new G4MuBremsstrahlungModel()); }
 
-    G4VEmFluctuationModel* fm = 0;
+    G4VEmFluctuationModel* fm = nullptr;
     G4EmParameters* param = G4EmParameters::Instance();
     EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
     EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());
@@ -131,3 +126,10 @@ void G4MuBremsstrahlung::PrintInfo()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4MuBremsstrahlung::ProcessDescription(std::ostream& out) const
+{
+  out << "<strong>Muon bremsstrahlung</strong>";
+  G4VEnergyLossProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

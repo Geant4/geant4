@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 97608 2016-06-06 09:37:51Z gcosmo $
+# $Id: sources.cmake 107319 2017-11-08 16:29:22Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -116,10 +116,13 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
 	FTFP_BERT_TRV.icc
 	FTFP_BERT_ATL.hh
 	FTFP_BERT_ATL.icc
+	FTFQGSP_BERT.hh
+	FTFQGSP_BERT.icc
 	G4GenericPhysicsList.hh
 	G4GenericPhysicsList.icc
         G4PhysListFactory.hh
-	LBE.hh
+        G4PhysListFactoryMessenger.hh
+        LBE.hh
 	LBE.icc
 	NuBeam.hh
 	NuBeam.icc
@@ -144,17 +147,20 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         FTFP_INCLXX_HP.hh
 	Shielding.hh
 	Shielding.icc
+	ShieldingLEND.hh
+	ShieldingLEND.icc
         G4PhysListRegistry.hh
         G4PhysListStamper.hh
         G4PhysListFactoryAlt.hh
         QGSP_BIC_AllHP.hh
         QGSP_BIC_AllHP.icc
+        G4RegisterPhysLists.icc
     SOURCES
         G4PhysListFactory.cc
+        G4PhysListFactoryMessenger.cc
         QBBC.cc
         G4PhysListRegistry.cc
         G4PhysListFactoryAlt.cc
-        G4RegisterPhysLists.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

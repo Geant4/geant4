@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/include/EventAction.hh
+/// \file medical/dna/wvalue/include/EventAction.hh
 /// \brief Definition of the EventAction class
-//
-// $Id: EventAction.hh 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef EventAction_h
 #define EventAction_h 1
@@ -45,7 +40,6 @@ public:
   EventAction();
   ~EventAction();
 
-public:
   virtual void BeginOfEventAction(const G4Event*);
   virtual void EndOfEventAction(const G4Event*);
 
@@ -63,8 +57,6 @@ private:
   G4double fTotalEdep;
   G4double fNbInelastic;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

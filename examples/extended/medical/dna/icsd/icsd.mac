@@ -1,0 +1,5 @@
+#/control/execute vis.mac
+#/tracking/verbose 0
+/gun/particle e-
+/gun/energy 500 eV
+/run/beamOn 100

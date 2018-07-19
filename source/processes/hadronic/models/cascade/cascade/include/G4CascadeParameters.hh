@@ -113,6 +113,10 @@ private:	// Environment variable values, null pointers mean not set
   G4String RANDOM_FILE;
 
   G4bool BEST_PAR;		// Nuclear structure parameters
+//BEST_PAR has been used in a project on hold.
+//Currently setting BEST_PAR or G4NUCMODEL_USE_BEST does not improve physics performance.
+//Developer can get more information about this from cascade/test/README
+
   G4bool TWOPARAM_RADIUS;
   G4double RADIUS_SCALE;	
   G4double RADIUS_SMALL;

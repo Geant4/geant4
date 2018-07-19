@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/include/Histo.hh
+/// \file electromagnetic/TestEm9/include/Histo.hh
 /// \brief Definition of the Histo class
 //
-// $Id: Histo.hh 82278 2014-06-13 14:42:11Z gcosmo $
+// $Id: Histo.hh 98275 2016-07-04 17:59:05Z gcosmo $
 
 #ifndef Histo_h
 #define Histo_h 1

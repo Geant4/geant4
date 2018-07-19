@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.hh 80656 2014-05-06 08:31:39Z gcosmo $
+// $Id: G4WentzelOKandVIxSection.hh 109683 2018-05-08 10:36:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,10 +61,13 @@
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include "G4NistManager.hh"
+#include "G4NuclearFormfactorType.hh"
 #include "G4ThreeVector.hh"
 #include "G4Pow.hh"
+#include "G4Threading.hh"
 
 class G4ParticleDefinition;
+class G4ScreeningMottCrossSection;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,7 +76,7 @@ class G4WentzelOKandVIxSection
 
 public:
 
-  G4WentzelOKandVIxSection(G4bool combined = true);
+  explicit G4WentzelOKandVIxSection(G4bool comb=true);
 
   virtual ~G4WentzelOKandVIxSection();
 
@@ -83,13 +86,14 @@ public:
 
   // return cos(ThetaMax) for msc and cos(thetaMin) for single scattering
   // cut = DBL_MAX means no scattering off electrons 
-  G4double SetupTarget(G4int Z, G4double cut = DBL_MAX);
+  G4double SetupKinematic(G4double kinEnergy, const G4Material* mat);
+  G4double SetupTarget(G4int Z, G4double cut);
 
   G4double ComputeTransportCrossSectionPerAtom(G4double CosThetaMax);
  
   G4ThreeVector& SampleSingleScattering(G4double CosThetaMin,
 					G4double CosThetaMax,
-					G4double elecRatio = 0.0);
+					G4double elecRatio);
 
   G4double ComputeSecondTransportMoment(G4double CosThetaMax);
 
@@ -98,9 +102,7 @@ public:
  
   inline G4double ComputeElectronCrossSection(G4double CosThetaMin,
 					      G4double CosThetaMax);
- 
-  inline G4double SetupKinematic(G4double kinEnergy, const G4Material* mat);
-  
+   
   inline void SetTargetMass(G4double value);
 
   inline G4double GetMomentumSquare() const;
@@ -109,13 +111,13 @@ public:
 
   inline G4double GetCosThetaElec() const;
 
-private:
+protected:
 
   void ComputeMaxElectronScattering(G4double cut);
 
-  //  hide assignment operator
-  G4WentzelOKandVIxSection & operator=(const  G4WentzelOKandVIxSection &right);
-  G4WentzelOKandVIxSection(const  G4WentzelOKandVIxSection&);
+  void InitialiseA();
+
+  inline G4double FlatFormfactor(G4double x);
 
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theElectron;
@@ -125,6 +127,8 @@ private:
   G4NistManager*  fNistManager;
   G4Pow*          fG4pow;
 
+  G4ScreeningMottCrossSection* fMottXSection;
+
   G4ThreeVector   temp;
 
   G4double numlimit;
@@ -132,6 +136,8 @@ private:
   // integer parameters
   G4int    nwarnings;
   G4int    nwarnlimit;
+
+  G4NuclearFormfactorType fNucFormfactor;
 
   G4bool   isCombined;
 
@@ -167,33 +173,24 @@ private:
   G4double factB;
   G4double factB1;
   G4double factD;
+  G4double fMottFactor;
   G4double gam0pcmp;
   G4double pcmp2;
 
   static G4double ScreenRSquareElec[100];
   static G4double ScreenRSquare[100];
   static G4double FormFactor[100];
+
+#ifdef G4MULTITHREADED
+  static G4Mutex WentzelOKandVIxSectionMutex;
+#endif
+
+private:
+  //  hide assignment operator
+  G4WentzelOKandVIxSection & operator=
+  (const G4WentzelOKandVIxSection &right) = delete;
+  G4WentzelOKandVIxSection(const  G4WentzelOKandVIxSection&) = delete;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double 
-G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
-{
-  if(ekin != tkin || mat != currentMaterial) { 
-    currentMaterial = mat;
-    tkin  = ekin;
-    mom2  = tkin*(tkin + 2.0*mass);
-    invbeta2 = 1.0 +  mass*mass/mom2;
-    factB = spin/invbeta2; 
-    cosTetMaxNuc = cosThetaMax;
-    if(isCombined) {
-      cosTetMaxNuc = std::max(cosTetMaxNuc, 
-	1.-factorA2*mat->GetIonisation()->GetInvA23()/mom2);
-    }
-  } 
-  return cosTetMaxNuc;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -230,12 +227,8 @@ inline G4double
 G4WentzelOKandVIxSection::ComputeNuclearCrossSection(G4double cosTMin,
 						     G4double cosTMax)
 {
-  G4double xsec = 0.0;
-  if(cosTMax < cosTMin) {
-    xsec = targetZ*kinFactor*(cosTMin - cosTMax)/
-      ((1.0 - cosTMin + screenZ)*(1.0 - cosTMax + screenZ));
-  }
-  return xsec;
+  return targetZ*kinFactor*fMottFactor*(cosTMin - cosTMax)/
+    ((1.0 - cosTMin + screenZ)*(1.0 - cosTMax + screenZ));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -244,15 +237,17 @@ inline G4double
 G4WentzelOKandVIxSection::ComputeElectronCrossSection(G4double cosTMin,
 						      G4double cosTMax)
 {
-  G4double xsec = 0.0;
   G4double cost1 = std::max(cosTMin,cosTetMaxElec);
   G4double cost2 = std::max(cosTMax,cosTetMaxElec);
-  if(cost1 > cost2) {
-    xsec = kinFactor*(cost1 - cost2)/
-      ((1.0 - cost1 + screenZ)*(1.0 - cost2 + screenZ));
-  }
-  return xsec;
+  return (cost1 <= cost2) ? 0.0 : kinFactor*fMottFactor*(cost1 - cost2)/
+    ((1.0 - cost1 + screenZ)*(1.0 - cost2 + screenZ));
 }
+
+inline G4double G4WentzelOKandVIxSection::FlatFormfactor(G4double x)
+{
+  return 3.0*(std::sin(x) - x*std::cos(x))/(x*x*x);
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

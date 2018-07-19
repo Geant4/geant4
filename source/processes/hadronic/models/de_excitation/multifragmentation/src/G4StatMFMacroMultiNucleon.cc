@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiNucleon.cc 91834 2015-08-07 07:24:22Z gcosmo $
+// $Id: G4StatMFMacroMultiNucleon.cc 100379 2016-10-19 15:05:35Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -86,8 +86,8 @@ G4double G4StatMFMacroMultiNucleon::CalcMeanMultiplicity(const G4double FreeVol,
 {
   G4double ThermalWaveLenght = 16.15*fermi/std::sqrt(T);	
   G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
-  G4Pow* g4pow = G4Pow::GetInstance();
-  G4double A23 = g4pow->Z23(theA);
+  G4Pow* g4calc = G4Pow::GetInstance();
+  G4double A23 = g4calc->Z23(theA);
 	
   G4double exponent = (mu + nu*theZARatio+ G4StatMFParameters::GetE0() 
 		       + T*T/_InvLevelDensity 
@@ -115,8 +115,8 @@ G4double G4StatMFMacroMultiNucleon::CalcZARatio(const G4double nu)
 
 G4double G4StatMFMacroMultiNucleon::CalcEnergy(const G4double T)
 {
-  G4Pow* g4pow = G4Pow::GetInstance();
-  G4double A23 = g4pow->Z23(theA);
+  G4Pow* g4calc = G4Pow::GetInstance();
+  G4double A23 = g4calc->Z23(theA);
 
   // Volume term 
   G4double EVol = theA * (T*T/_InvLevelDensity - G4StatMFParameters::GetE0());

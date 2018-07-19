@@ -69,18 +69,20 @@ class G4EmParametersMessenger: public G4UImessenger
 {
 public:   // with description
   
-  G4EmParametersMessenger(G4EmParameters*);
+  explicit G4EmParametersMessenger(G4EmParameters*);
   virtual ~G4EmParametersMessenger();
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String) override;
 
 private:
 
   G4EmParameters*            theParameters;
 
+  G4UIdirectory*             gconvDirectory;
   G4UIdirectory*             eLossDirectory;
   G4UIdirectory*             mscDirectory;
   G4UIdirectory*             emDirectory;
+  G4UIdirectory*             dnaDirectory;
 
   G4UIcmdWithABool*          flucCmd;
   G4UIcmdWithABool*          rangeCmd;
@@ -95,26 +97,37 @@ private:
   G4UIcmdWithABool*          pixeCmd;
   G4UIcmdWithABool*          dcutCmd;
   G4UIcmdWithABool*          latCmd;
+  G4UIcmdWithABool*          lat96Cmd;
   G4UIcmdWithABool*          mulatCmd;
   G4UIcmdWithABool*          catCmd;
   G4UIcmdWithABool*          delCmd;
+  G4UIcmdWithABool*          IntegCmd;
   G4UIcmdWithABool*          mottCmd;
+  G4UIcmdWithABool*          birksCmd;
+  G4UIcmdWithABool*          dnafCmd;
+  G4UIcmdWithABool*          dnasCmd;
+  G4UIcmdWithABool*          dnamscCmd;
+  G4UIcmdWithABool*          sharkCmd;
+  G4UIcmdWithABool*          onIsolatedCmd;
 
   G4UIcmdWithADouble*        minSubSecCmd;
   G4UIcmdWithADoubleAndUnit* minEnCmd;
   G4UIcmdWithADoubleAndUnit* maxEnCmd;
   G4UIcmdWithADoubleAndUnit* cenCmd;
   G4UIcmdWithADoubleAndUnit* lowEnCmd;
+  G4UIcmdWithADoubleAndUnit* lowEn3Cmd;
   G4UIcmdWithADoubleAndUnit* lowhEnCmd;
   G4UIcmdWithADouble*        lllCmd;
   G4UIcmdWithADoubleAndUnit* brCmd;
   G4UIcmdWithADouble*        labCmd;
   G4UIcmdWithADouble*        mscfCmd;
   G4UIcmdWithADoubleAndUnit* angCmd;
+  G4UIcmdWithADoubleAndUnit* msceCmd;
   G4UIcmdWithADouble*        frCmd;
   G4UIcmdWithADouble*        fr1Cmd;
   G4UIcmdWithADouble*        fgCmd;
   G4UIcmdWithADouble*        skinCmd;
+  G4UIcmdWithADouble*        screCmd;
 
   G4UIcmdWithAnInteger*      dedxCmd;
   G4UIcmdWithAnInteger*      lamCmd;
@@ -122,17 +135,30 @@ private:
   G4UIcmdWithAnInteger*      verCmd;
   G4UIcmdWithAnInteger*      ver1Cmd;
   G4UIcmdWithAnInteger*      ver2Cmd;
+  G4UIcmdWithAnInteger*      tripletCmd;
 
   G4UIcmdWithAString*        mscCmd;
   G4UIcmdWithAString*        msc1Cmd;
 
   G4UIcmdWithAString*        pixeXsCmd;
   G4UIcmdWithAString*        pixeeXsCmd;
+  G4UIcmdWithAString*        dnaSolCmd;
 
   G4UIcommand*               paiCmd;
   G4UIcmdWithAString*        meCmd;
   G4UIcommand*               dnaCmd;
+  G4UIcommand*               mscoCmd;
   G4UIcommand*               dumpCmd;
+
+  G4UIcommand*               SubSecCmd;
+  G4UIcommand*               StepFuncCmd;
+  G4UIcommand*               StepFuncCmd1;
+  G4UIcommand*               deexCmd;
+  G4UIcommand*               bfCmd;
+  G4UIcommand*               fiCmd;
+  G4UIcommand*               bsCmd;
+  G4UIcmdWithAString*        nffCmd;
+
 };
 
 #endif

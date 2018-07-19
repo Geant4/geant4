@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4bRunData.cc 69223 2013-04-23 12:36:10Z gcosmo $
+// $Id: B4bRunData.cc 100946 2016-11-03 11:28:08Z gcosmo $
 //
 /// \file B4bRunData.cc
 /// \brief Implementation of the B4bRunData class
@@ -36,15 +36,16 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B4bRunData::B4bRunData() : G4Run()
+B4bRunData::B4bRunData() 
+ : G4Run(),
+   fVolumeNames{ { "Absorber", "Gap" } }
 {
-  fVolumeNames[0] = "Absorber";
-  fVolumeNames[1] = "Gap";
- 
-  for ( G4int i=0; i<kDim; i++) {
-    fEdep[i] = 0.;
-    fTrackLength[i] = 0.; 
-  }  
+  for ( auto& edep : fEdep ) { 
+    edep = 0.; 
+  }
+  for ( auto& trackLength : fTrackLength ) {
+    trackLength = 0.; 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,20 +58,19 @@ B4bRunData::~B4bRunData()
 void B4bRunData::FillPerEvent()
 {
   // get analysis manager
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  //accumulate statistic
-  //
+  auto analysisManager = G4AnalysisManager::Instance();
 
-  for ( G4int i=0; i<kDim; i++) {
-    // fill histograms
-    analysisManager->FillH1(i+1, fEdep[i]);
-    analysisManager->FillH1(kDim+i+1, fTrackLength[i]);
-
-    // fill ntuple
-    analysisManager->FillNtupleDColumn(i, fEdep[i]);
-    analysisManager->FillNtupleDColumn(kDim+i, fTrackLength[i]);
+  // accumulate statistic
+  // in the order od the histograms, ntuple columns declarations
+  G4int counter = 0;
+  for ( auto edep : fEdep ) {
+    analysisManager->FillH1(counter, edep);
+    analysisManager->FillNtupleDColumn(counter++, edep);
+  }
+  for ( auto trackLength : fTrackLength ) {
+    analysisManager->FillH1(counter, trackLength);
+    analysisManager->FillNtupleDColumn(counter++, trackLength);
   }  
-
   analysisManager->AddNtupleRow();  
 }
 
@@ -78,10 +78,12 @@ void B4bRunData::FillPerEvent()
 
 void B4bRunData::Reset()
 { 
-  for ( G4int i=0; i<kDim; i++) {
-    fEdep[i] = 0.;
-    fTrackLength[i] = 0.; 
-  }  
+  for ( auto& edep : fEdep ) { 
+    edep = 0.; 
+  }
+  for ( auto& trackLength : fTrackLength ) {
+    trackLength = 0.; 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

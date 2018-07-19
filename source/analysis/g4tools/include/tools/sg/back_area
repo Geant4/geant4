@@ -5,7 +5,6 @@
 #define tools_sg_back_area
 
 #include "node"
-#include "../colorf"
 #include "atb_vertices"
 #include "rgba"
 #include "draw_style"
@@ -114,11 +113,11 @@ public:
   :parent()
   ,width(1)
   ,height(1)
-  ,color(colorf::white())
+  ,color(colorf_white())
   ,gradient(false)
-  ,color_top(colorf::white())
+  ,color_top(colorf_white())
   ,border_visible(true)
-  ,border_color(colorf::black())
+  ,border_color(colorf_black())
   ,border_line_width(1)
   ,shadow(0)
   ,corner_radius(0) //in percent of the height.
@@ -182,7 +181,7 @@ protected:
       float ye = height*0.5f;
 
       sg::rgba* mat = new sg::rgba();
-      mat->color = colorf::black();
+      mat->color = colorf_black();
       m_back_sep.add(mat);
 
       normal* nm = new normal;

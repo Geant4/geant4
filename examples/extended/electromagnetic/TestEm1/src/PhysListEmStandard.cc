@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc 102356 2017-01-23 16:22:42Z gcosmo $
+// $Id: PhysListEmStandard.cc 100290 2016-10-17 08:47:55Z gcosmo $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 #include "G4PhotoElectricEffect.hh"
 #include "G4RayleighScattering.hh"
 #include "G4KleinNishinaModel.hh"
+#include "G4LivermorePhotoElectricModel.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
@@ -59,19 +60,27 @@
 #include "G4IonParametrisedLossModel.hh"
 #include "G4NuclearStopping.hh"
 
-#include "G4EmProcessOptions.hh"
 #include "G4MscStepLimitType.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UAtomicDeexcitation.hh"
 
+#include "G4BuilderType.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard::PhysListEmStandard(const G4String& name)
    :  G4VPhysicsConstructor(name)
-{}
+{
+    G4EmParameters* param = G4EmParameters::Instance();
+    param->SetDefaults();
+    param->SetMinEnergy(10*eV);
+    param->SetMaxEnergy(10*TeV);
+    param->SetNumberOfBinsPerDecade(10);
+    param->SetMscStepLimitType(fUseSafetyPlus);
+    SetPhysicsType(bElectromagnetic);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -95,7 +104,11 @@ void PhysListEmStandard::ConstructProcess()
     if (particleName == "gamma") {
 
       ////ph->RegisterProcess(new G4RayleighScattering, particle);      
-      ph->RegisterProcess(new G4PhotoElectricEffect, particle);      
+      ph->RegisterProcess(new G4PhotoElectricEffect, particle);
+      ///G4PhotoElectricEffect* phot = new G4PhotoElectricEffect();
+      ///phot->SetEmModel(new G4LivermorePhotoElectricModel(), 1);
+      ///ph->RegisterProcess(phot, particle);
+
       G4ComptonScattering* cs   = new G4ComptonScattering;
       cs->SetEmModel(new G4KleinNishinaModel());
       ph->RegisterProcess(cs, particle);
@@ -172,24 +185,6 @@ void PhysListEmStandard::ConstructProcess()
     }
   }
 
-  // Em options
-  //
-  // Main options and setting parameters are shown here.
-  // Several of them have default values.
-  //
-  G4EmProcessOptions emOptions;
-  
-  //physics tables
-  //
-  emOptions.SetMinEnergy(10*eV);        //default 100 eV   
-  emOptions.SetMaxEnergy(10*TeV);       //default 100 TeV 
-  emOptions.SetDEDXBinning(12*10);      //default=12*7
-  emOptions.SetLambdaBinning(12*10);    //default=12*7
-  
-  //multiple coulomb scattering
-  //
-  emOptions.SetMscStepLimitation(fUseSafetyPlus);  //default=fUseSafety
-    
   // Deexcitation
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();

@@ -1,4 +1,4 @@
-$Id: History 94215 2015-11-09 08:18:57Z gcosmo $
+$Id: History 109666 2018-05-04 13:59:45Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -15,36 +15,75 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
- 6 November 2015  D.H. Wright (hadr-lepnuc-V10-01-02)
------------------------------------------------------
-- switch to fast math functions G4Exp and G4Log
+04 May 2018 Vladimir Ivanchenko (hadr-lepnuc-V10-04-01)
+---------------------------------------------------
+- G4NeutrinoElectronCcModel : fixed Coverity report
 
-1 September 2015  D.H. Wright (hadr-lepnuc-V10-01-01)
+15 February 2018 Vladimir Ivanchenko (hadr-lepnuc-V10-04-00)
+---------------------------------------------------
+- G4NeutrinoElectronCcModel : V.Grichine added extra interfaces
+
+28 April 2017 Alberto Ribon (hadr-lepnuc-V10-03-01)
+---------------------------------------------------
+- G4NeutrinoElectronCcModel : fixed a few warnings.
+
+28 April 2017 Alberto Ribon (hadr-lepnuc-V10-03-00)
+---------------------------------------------------
+- G4NeutrinoElectronCcModel : added new class by Vladimir Grichine
+  for the final-state model of neutrino-electron inelastic interaction
+  (charge current).
+
+11 November 2016 Vladimir Ivanchenko (hadr-lepnuc-V10-02-03)
+------------------------------------------------------
+- G4MuonVDNuclearModel: fixed Coverity report, reduce number of
+    bins for trasfer energy from 1000 to 800
+
+18 October 2016 Vladimir Ivanchenko (hadr-lepnuc-V10-02-02)
+------------------------------------------------------
+- G4MuonVDNuclearModel: added ModelDescription method, code cleanup
+    including removal not used headers
+
+18 October 2016 Vladimir Ivanchenko (hadr-lepnuc-V10-02-01)
+------------------------------------------------------
+- G4MuonVDNuclearModel: A.Bogdanov proposed modifications for EM part
+    of the code; increased the number of points in energy from 8 to 73; 
+    G4ElementData is added instead of 3D array;
+    Data class is now static, shared between threads and mu+, mu-.
+
+11 August 2016  Gabriele Cosmo (hadr-lepnuc-V10-02-00)
+------------------------------------------------------
+- Added missing dependency to de_excitation/management in GNUmakefile.
+
+06 November 2015  D.H. Wright (hadr-lepnuc-V10-01-02)
 -----------------------------------------------------
+- Switch to fast math functions G4Exp and G4Log
+
+01 September 2015  D.H. Wright (hadr-lepnuc-V10-01-01)
+------------------------------------------------------
 - G4MuonVDNuclearModel.cc: add temporary while loop checks
 
-17-Mar-2015, Vladimir Ivanchenko        (hadr-lepnuc-V10-01-00)
----------------------------------------------------------------
+17 March 2015, Vladimir Ivanchenko        (hadr-lepnuc-V10-01-00)
+-----------------------------------------------------------------
 - G4MuonVDNuclearModel - defined G4KokoulinMuonNuclearXS via
-    factory interface allowing reuse already instantiated class;
-    keep pointer of G4KokoulinMuonNuclearXS instead of object
-    in order to avoid double deletion at exit
+  factory interface allowing reuse already instantiated class;
+  keep pointer of G4KokoulinMuonNuclearXS instead of object
+  in order to avoid double deletion at exit
 
-05-May-2014, Vladimir Ivanchenko        (hadr-lepnuc-V10-00-01)
+05 May 2014, Vladimir Ivanchenko        (hadr-lepnuc-V10-00-01)
 ---------------------------------------------------------------
 - Reuse PreCompoundModel and ExcitationHandler and not instantiate
-    locally as new; do not delete objects which following 
-    G4HadronicInteraction interface to avoid double delition
+  locally as new; do not delete objects which following 
+  G4HadronicInteraction interface to avoid double delition
 
-29-Jan-2014, Gunter Folger              (hadr-lepnuc-V10-00-00)
----------------------------------------------------------------
+29 January 2014, Gunter Folger              (hadr-lepnuc-V10-00-00)
+-------------------------------------------------------------------
 - Removed cascade/{evaporation,utils}, high_energy, low_energy
   from sources.cmake
 
 22 November 2013 W. Pokorski (hadr-lepnuc-V09-06-04)
 ---------------------------------------------
 - Adding a dummy call to GetCrossSection, just to initialize the cache 
-in order to have reproducibility. To be properly fixed later.
+  in order to have reproducibility. To be properly fixed later.
 
 11 September 2013 W. Pokorski (hadr-lepnuc-V09-06-03)
 ---------------------------------------------

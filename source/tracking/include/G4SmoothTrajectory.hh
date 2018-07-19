@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.hh 69003 2013-04-15 09:25:23Z gcosmo $
+// $Id: G4SmoothTrajectory.hh 110262 2018-05-17 14:25:55Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -135,19 +135,18 @@ public:
 
 };
 
-extern G4TRACKING_DLL G4ThreadLocal
-G4Allocator<G4SmoothTrajectory> *aSmoothTrajectoryAllocator;
+extern G4TRACKING_DLL G4Allocator<G4SmoothTrajectory>*& aSmoothTrajectoryAllocator();
 
 inline void* G4SmoothTrajectory::operator new(size_t)
 {
-  if (!aSmoothTrajectoryAllocator)
-  { aSmoothTrajectoryAllocator = new G4Allocator<G4SmoothTrajectory>; }
-  return (void*)aSmoothTrajectoryAllocator->MallocSingle();
+  if (!aSmoothTrajectoryAllocator())
+  { aSmoothTrajectoryAllocator() = new G4Allocator<G4SmoothTrajectory>; }
+  return (void*)aSmoothTrajectoryAllocator()->MallocSingle();
 }
 
 inline void G4SmoothTrajectory::operator delete(void* aTrajectory)
 {
-  aSmoothTrajectoryAllocator->FreeSingle((G4SmoothTrajectory*)aTrajectory);
+  aSmoothTrajectoryAllocator()->FreeSingle((G4SmoothTrajectory*)aTrajectory);
 }
 
 #endif

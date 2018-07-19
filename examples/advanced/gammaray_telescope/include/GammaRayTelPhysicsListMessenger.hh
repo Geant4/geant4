@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// Authors: Susanna Guatelli, susanna@uow.edu.au,
+// Authors: Jeremy Davis, jad028@uowmail.edu.au
+//
+
+// Code based on the hadrontherapy && radioprotection advanced example
 
 #ifndef GammaRayTelPhysicsListMessenger_h
 #define GammaRayTelPhysicsListMessenger_h 1
@@ -53,9 +56,12 @@ class GammaRayTelPhysicsListMessenger: public G4UImessenger
   GammaRayTelPhysicsList* pPhysicsList;
     
   G4UIdirectory*             physDir;        
+  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* electCutCmd;
+  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
   G4UIcmdWithADoubleAndUnit* allCutCmd;    
   G4UIcmdWithAString*        pListCmd;
-
+  G4UIcmdWithAString* packageListCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

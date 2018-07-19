@@ -35,7 +35,11 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
+#include "G4AffineTransform.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4BoundingEnvelope.hh"
+
+using namespace CLHEP;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -43,10 +47,10 @@
 
 
 G4UBox::G4UBox(const G4String& pName,
-                   G4double pX,
-                   G4double pY,
-                   G4double pZ)
-  : G4USolid(pName, new UBox(pName, pX, pY, pZ))
+                     G4double pX,
+                     G4double pY,
+                     G4double pZ)
+  : Base_t(pName, pX, pY, pZ)
 {
 }
 
@@ -56,7 +60,7 @@ G4UBox::G4UBox(const G4String& pName,
 //                            for usage restricted to object persistency.
 
 G4UBox::G4UBox( __void__& a )
-  : G4USolid(a)
+  : Base_t(a)
 {
 }
 
@@ -73,7 +77,7 @@ G4UBox::~G4UBox()
 // Copy constructor
 
 G4UBox::G4UBox(const G4UBox& rhs)
-  : G4USolid(rhs)
+  : Base_t(rhs)
 {
 }
 
@@ -89,7 +93,7 @@ G4UBox& G4UBox::operator = (const G4UBox& rhs)
 
    // Copy base class data
    //
-   G4USolid::operator=(rhs);
+   Base_t::operator=(rhs);
 
    return *this;
 }
@@ -100,30 +104,30 @@ G4UBox& G4UBox::operator = (const G4UBox& rhs)
 
 G4double G4UBox::GetXHalfLength() const
 {
-  return GetShape()->GetXHalfLength();
+  return x();
 }
 G4double G4UBox::GetYHalfLength() const
 {
-  return GetShape()->GetYHalfLength();
+  return y();
 }
 G4double G4UBox::GetZHalfLength() const
 {
-  return GetShape()->GetZHalfLength();
+  return z();
 }
 
 void G4UBox::SetXHalfLength(G4double dx)
 {
-  GetShape()->SetXHalfLength(dx);
+  SetX(dx);
   fRebuildPolyhedron = true;
 }
 void G4UBox::SetYHalfLength(G4double dy)
 {
-  GetShape()->SetYHalfLength(dy);
+  SetY(dy);
   fRebuildPolyhedron = true;
 }
 void G4UBox::SetZHalfLength(G4double dz)
 {
-  GetShape()->SetZHalfLength(dz);
+  SetZ(dz);
   fRebuildPolyhedron = true;
 }
 
@@ -147,6 +151,54 @@ G4VSolid* G4UBox::Clone() const
 {
   return new G4UBox(*this);
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4UBox::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4double dx = GetXHalfLength();
+  G4double dy = GetYHalfLength();
+  G4double dz = GetZHalfLength();
+  pMin.set(-dx,-dy,-dz);
+  pMax.set( dx, dy, dz);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4UBox::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    StreamInfo(G4cout);
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool
+G4UBox::CalculateExtent(const EAxis pAxis,
+                        const G4VoxelLimits& pVoxelLimit,
+                        const G4AffineTransform& pTransform,
+                              G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
+
+  // Get bounding box limits
+  BoundingLimits(bmin,bmax);
+
+  // Find extent
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 //

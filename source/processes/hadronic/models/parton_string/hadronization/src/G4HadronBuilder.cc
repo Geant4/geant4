@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.cc 69569 2013-05-08 13:19:50Z gcosmo $
+// $Id: G4HadronBuilder.cc 107968 2017-12-14 13:16:35Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -57,6 +57,7 @@ G4ParticleDefinition * G4HadronBuilder::Build(G4ParticleDefinition * black, G4Pa
 
 //    Barion
 	   Spin spin = (G4UniformRand() < barionSpinMix) ? SpinHalf : SpinThreeHalf;
+
 	   return Barion(black,white,spin);
 
 	} else {	
@@ -64,7 +65,6 @@ G4ParticleDefinition * G4HadronBuilder::Build(G4ParticleDefinition * black, G4Pa
 //    Meson
 	   Spin spin = (G4UniformRand() < mesonSpinMix) ? SpinZero : SpinOne;
 	   return Meson(black,white,spin);
-
 	}
 }
 
@@ -147,7 +147,6 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
 	   if( (IsUp && IsAnti ) || (!IsUp && !IsAnti ) ) 
 	      PDGEncoding = - PDGEncoding;
  	}
-	   
 	   
 	G4ParticleDefinition * MesonDef=
 		G4ParticleTable::GetParticleTable()->FindParticle(PDGEncoding);

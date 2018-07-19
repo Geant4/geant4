@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/DetectorConstruction.cc
+/// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 78398 2013-12-16 16:39:55Z gcosmo $
+// $Id: DetectorConstruction.cc 108917 2018-03-16 07:18:27Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,6 @@
 #include "G4SystemOfUnits.hh"
 
 #include "G4RunManager.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -83,12 +82,40 @@ void DetectorConstruction::DefineMaterials()
  // define a Material from isotopes
  //
  MaterialWithSingleIsotope("Molybdenum98", "Mo98",  10.28*g/cm3, 42, 98);
-    
+ 
+ //NE213
+ G4Element* H  = new G4Element("Hydrogen" ,"H" , 1.,  1.01*g/mole);
+ G4Element* C  = new G4Element("Carbon"   ,"C" , 6., 12.00*g/mole);
+ G4Material* ne213 = 
+ new G4Material("NE213", 0.874*g/cm3, 2);
+ ne213->AddElement(H,    9.2*perCent);
+ ne213->AddElement(C,   90.8*perCent);
+ 
+ G4Material* hydrogen = 
+ new G4Material("hydrogen", 1.0*g/cm3, 1);
+ hydrogen->AddElement(H, 1);
+ 
+ G4Material* carbon = 
+ new G4Material("carbon", 1.0*g/cm3, 1);
+ carbon->AddElement(C, 1);
+ 
+ G4Material* plastic = 
+ new G4Material("plastic", 1.0*g/cm3, 2);
+ plastic->AddElement(H, 1);
+ plastic->AddElement(C, 1);
+ 
  // or use G4-NIST materials data base
  //
  G4NistManager* man = G4NistManager::Instance();
  man->FindOrBuildMaterial("G4_B");
 
+ G4Element*  O = man->FindOrBuildElement("O");
+ G4Element* Hf = man->FindOrBuildElement("Hf");
+ 
+ G4Material* HfO2 = new G4Material("HfO2", 9.68*g/cm3, 2);
+ HfO2->AddElement(Hf, 1);
+ HfO2->AddElement(O , 2);
+ 
  ///G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 

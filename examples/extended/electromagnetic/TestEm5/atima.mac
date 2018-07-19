@@ -1,0 +1,170 @@
+
+#
+# macro file for TestEm5
+#
+/control/cout/ignoreThreadsExcept 0
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat G4_Be
+#
+/testem/det/setAbsThick 0.1 mm
+/testem/det/setAbsYZ    1 m
+#
+#/testem/phys/addPhysics  emstandard
+/testem/phys/addPhysics  emstandardATIMA
+#
+/run/setCut 1 km
+#
+/run/initialize
+#
+#/testem/gun/setDefault
+#Bi209 at 879.6 MeV/u
+#/gun/particle ion
+#/gun/ion 83 209 
+#/gun/energy 183836.4 MeV
+
+/gun/particle ion
+/gun/ion 83 209
+/gun/energy 183.8364 GeV
+/gun/position  -6 0 0 cm
+/gun/direction 1 0 0
+
+#/analysis/setFileName ion
+#/analysis/h1/set 10 60000 1. 882. MeV		#energy in absorber
+
+#
+/tracking/verbose 0
+#
+/run/beamOn 10000
+
+#Bi209 at 525.1 MeV/u
+/gun/particle ion
+/gun/ion 83 209 
+/gun/energy 109745.9 MeV
+#
+/run/beamOn 1000
+
+#Bi209 at 264 MeV/u
+/gun/particle ion
+/gun/ion 83 209 
+/gun/energy 55176.0 MeV
+#
+/run/beamOn 1000
+
+/testem/det/setAbsThick 2.170 cm
+/testem/det/setAbsYZ    1 m
+
+#Xe136 at 799 MeV/u
+/gun/particle ion
+/gun/ion 54 136 54
+/gun/energy 108664 MeV
+/gun/position  -6 0 0 cm
+/gun/direction 1 0 0
+#
+
+/analysis/setFileName ionxe3
+/analysis/h1/set 10 60000 1. 882. MeV		#energy in absorber
+
+/run/beamOn 10000
+
+/testem/det/setAbsThick 1.088 cm
+/testem/det/setAbsYZ    1 m
+
+#Xe136 at 799 MeV/u
+/gun/particle ion
+/gun/ion 54 136 54
+/gun/energy 108664 MeV
+/gun/position  -6 0 0 cm
+/gun/direction 1 0 0
+#
+
+/analysis/setFileName ionxe2
+/analysis/h1/set 10 60000 1. 882. MeV		#energy in absorber
+
+/run/beamOn 10000
+
+/testem/det/setAbsThick 0.5444 cm
+/testem/det/setAbsYZ    1 m
+
+#Xe136 at 799 MeV/u
+/gun/particle ion
+/gun/ion 54 136 54
+/gun/energy 108664 MeV
+/gun/position  -6 0 0 cm
+/gun/direction 1 0 0
+#
+
+/analysis/setFileName ionxe1
+/analysis/h1/set 10 60000 1. 882. MeV		#energy in absorber
+
+/run/beamOn 10000
+
+/testem/det/setAbsMat G4_Pb
+/testem/det/setAbsThick 0.698 cm
+/testem/det/setAbsYZ    1 m
+
+#Xe136 at 799 MeV/u
+/gun/particle ion
+/gun/ion 8 18 8
+/gun/energy 12564 MeV
+/gun/position  -6 0 0 cm
+/gun/direction 1 0 0
+#
+
+/analysis/setFileName ionox
+/analysis/h1/set 10 60000 1. 882. MeV		#energy in absorber
+
+/run/beamOn 10000
+
+/testem/det/setAbsMat G4_Au
+/testem/det/setAbsThick 0.098 cm
+/testem/det/setAbsYZ    1 m
+
+#Xe136 at 799 MeV/u
+/gun/particle ion
+/gun/ion 92 238 92
+/gun/energy 224434 MeV
+/gun/position  -6 0 0 cm
+/gun/direction 1 0 0
+#
+
+/analysis/setFileName ionU1
+/analysis/h1/set 10 60000 1. 882. MeV		#energy in absorber
+
+/run/beamOn 10000
+
+/testem/det/setAbsMat G4_Au
+/testem/det/setAbsThick 0.2418 cm
+/testem/det/setAbsYZ    1 m
+
+#Xe136 at 799 MeV/u
+/gun/particle ion
+/gun/ion 92 238 92
+/gun/energy 224434 MeV
+/gun/position  -6 0 0 cm
+/gun/direction 1 0 0
+#
+
+/analysis/setFileName ionU2
+/analysis/h1/set 10 60000 1. 882. MeV		#energy in absorber
+
+/run/beamOn 10000
+
+/testem/det/setAbsMat G4_Ti
+/testem/det/setAbsThick 0.2211 cm
+/testem/det/setAbsYZ    1 m
+
+#Xe136 at 799 MeV/u
+/gun/particle ion
+/gun/ion 79 197 79
+/gun/energy 194636 MeV
+/gun/position  -6 0 0 cm
+/gun/direction 1 0 0
+#
+
+/analysis/setFileName ionAu
+/analysis/h1/set 10 60000 1. 1000. MeV		#energy in absorber
+
+/run/beamOn 10000
+

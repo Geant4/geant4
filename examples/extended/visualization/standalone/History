@@ -1,4 +1,4 @@
-$Id: History 87256 2014-11-28 07:58:08Z gcosmo $
+$Id: History 103931 2017-05-03 13:52:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8th January 2017  John Allison  (exam-ext-vis-standalone-V10-03-00)
+- standalone.cc:
+  o Updated to current practice.
 
 27th November 2014  John Allison  (exam-ext-vis-standalone-V10-00-01)
 - README: Mention /vis/scene/add/extent.

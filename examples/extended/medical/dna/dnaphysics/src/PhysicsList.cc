@@ -36,9 +36,21 @@
 
 #include "PhysicsList.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4EmDNAPhysics.hh"
-#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmParameters.hh"
+
+#include "G4EmDNAPhysics.hh"
+#include "G4EmDNAPhysics_option1.hh"
+#include "G4EmDNAPhysics_option2.hh"
+#include "G4EmDNAPhysics_option3.hh"
+#include "G4EmDNAPhysics_option4.hh"
+#include "G4EmDNAPhysics_option5.hh"
+#include "G4EmDNAPhysics_option6.hh"
+#include "G4EmDNAPhysics_option7.hh"
+
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4DecayPhysics.hh"
+
+#include "G4EmDNAPhysicsActivator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,16 +59,43 @@ PhysicsList::PhysicsList()
 {
   SetDefaultCutValue(1.0*micrometer);
   SetVerboseLevel(1);
+  
+  // FIRST METHOD TO ACTIVATE Geant4-DNA Physics, 
+  //  using a Geant4-DNA Physics constructor only
+  //
   //  RegisterPhysics(new G4EmDNAPhysics());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option1());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option2());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option3());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option4());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option5());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option6());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option7());
+  
+  // or SECOND METHOD TO ACTIVATE Geant4-DNA Physics
+  // (this includes combination with Geant4 EM Physics)
+  
   RegisterPhysics(new G4EmStandardPhysics_option4());
-  G4EmParameters::Instance()->AddDNA("World","Opt0");
+  
+  RegisterPhysics(new G4DecayPhysics());
+  
+  RegisterPhysics(new G4EmDNAPhysicsActivator());
+
   G4ProductionCutsTable::GetProductionCutsTable()->
       SetEnergyRange(100*eV, 1*GeV);
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetMinEnergy(100*eV);
+  param->SetMaxEnergy(1*GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::~PhysicsList()
-{
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+{}

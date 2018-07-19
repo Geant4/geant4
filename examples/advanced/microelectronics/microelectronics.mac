@@ -1,5 +1,4 @@
 /control/execute vis.mac
-/control/execute icons.mac
 /tracking/verbose 0
 
 #/gun/particle ion

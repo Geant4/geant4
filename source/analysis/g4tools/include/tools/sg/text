@@ -148,7 +148,7 @@ public:
   ,strings()
   ,confine(false)
 
-  ,color(colorf::black())
+  ,color(colorf_black())
   ,font(font_hershey())
   ,encoding(encoding_PAW())
   ,line_width(1)

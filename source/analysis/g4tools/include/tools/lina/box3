@@ -16,6 +16,7 @@ class box3 {
 protected:
   typedef typename VEC3::elem_t T_t;
   //static T_t num_max() {return std::numeric_limits<T_t>::max();} //max is a forever pain on Windows.
+  static T_t zero() {return T_t();}
 protected:
   box3(){
     //make_empty();
@@ -96,12 +97,12 @@ public:
     if(is_empty()) {
       set_bounds(a_point,a_point);
     } else {
-      m_min.set_value(tools::mn<T_t>(a_point[0],m_min[0]),
-                      tools::mn<T_t>(a_point[1],m_min[1]),
-                      tools::mn<T_t>(a_point[2],m_min[2]));
-      m_max.set_value(tools::mx<T_t>(a_point[0],m_max[0]),
-                      tools::mx<T_t>(a_point[1],m_max[1]),
-                      tools::mx<T_t>(a_point[2],m_max[2]));
+      m_min.set_value(min_of<T_t>(a_point[0],m_min[0]),
+                      min_of<T_t>(a_point[1],m_min[1]),
+                      min_of<T_t>(a_point[2],m_min[2]));
+      m_max.set_value(max_of<T_t>(a_point[0],m_max[0]),
+                      max_of<T_t>(a_point[1],m_max[1]),
+                      max_of<T_t>(a_point[2],m_max[2]));
     }
   }
 
@@ -111,13 +112,36 @@ public:
     if(is_empty()) {
       set_bounds(a_x,a_y,a_z,a_x,a_y,a_z);
     } else {
-      m_min.set_value(tools::mn<T_t>(a_x,m_min[0]),
-                      tools::mn<T_t>(a_y,m_min[1]),
-                      tools::mn<T_t>(a_z,m_min[2]));
-      m_max.set_value(tools::mx<T_t>(a_x,m_max[0]),
-                      tools::mx<T_t>(a_y,m_max[1]),
-                      tools::mx<T_t>(a_z,m_max[2]));
+      m_min.set_value(min_of<T_t>(a_x,m_min[0]),
+                      min_of<T_t>(a_y,m_min[1]),
+                      min_of<T_t>(a_z,m_min[2]));
+      m_max.set_value(max_of<T_t>(a_x,m_max[0]),
+                      max_of<T_t>(a_y,m_max[1]),
+                      max_of<T_t>(a_z,m_max[2]));
     }
+  }
+
+  bool get_cube_size(T_t& a_dx,T_t& a_dy,T_t& a_dz,T_t(*a_sqrt)(T_t)) const {
+    if(!get_size(a_dx,a_dy,a_dz)) return false;    
+    if((a_dx<=zero())&&(a_dy<=zero())&&(a_dz<=zero())) return false;
+    if((a_dx<=zero())&&(a_dy<=zero())) { //dz not 0 :
+      a_dx = T_t(0.1)*a_dz;
+      a_dy = T_t(0.1)*a_dz;
+    } else if((a_dy<=zero())&&(a_dz<=zero())) { //dx not 0 :
+      a_dy = T_t(0.1)*a_dx;
+      a_dz = T_t(0.1)*a_dx;
+    } else if((a_dz<=zero())&&(a_dx<=zero())) { //dy not 0 :
+      a_dz = T_t(0.1)*a_dy;
+      a_dx = T_t(0.1)*a_dy;
+
+    } else if(a_dx<=zero()) { //dy,dz not 0 :
+      a_dx = T_t(0.1)*a_sqrt(a_dy*a_dy+a_dz*a_dz);
+    } else if(a_dy<=zero()) { //dx,dz not 0 :
+      a_dy = T_t(0.1)*a_sqrt(a_dx*a_dx+a_dz*a_dz);
+    } else if(a_dz<=zero()) { //dx,dy not 0 :
+      a_dz = T_t(0.1)*a_sqrt(a_dx*a_dx+a_dy*a_dy);
+    }
+    return true;
   }
 
   //NOTE : print is a Python keyword.

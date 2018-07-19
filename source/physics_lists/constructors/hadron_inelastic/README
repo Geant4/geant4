@@ -1,0 +1,338 @@
+$Id: $
+-------------------------------------------------------------------
+
+
+ G4HadronInelasticQBBC
+ ---------------------
+ Hadron nuclear inelastic processes for all hadrons:
+ - proton inelastic:
+   - cross section: Barashenkov-Glauber-Gribov 
+   - final-state:   Fritiof coupled with Precompound/de-excitation (FTFP) above 3 GeV; 
+                    Bertini (BERT) between 1 and 5 GeV;
+                    Binary coupled with Precompound/de-excitation (BIC) below 1.5 GeV
+ - neutron inelastic:
+   - cross section: G4NeutronInelasticXS   
+   - final-state:   FTFP > 3 GeV; 1 GeV < BERT < 5 GeV; BIC < 1.5 GeV
+   neutron capture:
+   - cross section: G4NeutronCaptureXS
+   - final-state:   G4NeutronRadCapture
+ - charged pions inelastic:
+   - cross section: Barashenkov-Glauber-Gribov
+   - final-state:   FTFP > 3 GeV; BERT < 5 GeV
+ - kaons inelastic:
+   - cross section: Glauber-Gribov
+   - final-state:   FTFP > 3 GeV; BERT < 5 GeV
+ - hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP > 3 GeV; BERT < 5 GeV
+ - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, anti_alpha,
+   anti_hyperons inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   FTFP for all energies
+
+ 
+ G4HadronPhysicsFTFP_BERT
+ ------------------------
+ Hadron nuclear inelastic processes for all hadrons:
+ - proton inelastic:
+   - cross section: Barashenkov-Glauber-Gribov 
+   - final-state:   FTFP > 3 GeV; BERT < 12 GeV 
+ - neutron inelastic:
+   - cross section: G4NeutronInelasticXS   
+   - final-state:   FTFP > 3 GeV; BERT < 12 GeV
+   neutron capture:
+   - cross section: G4NeutronCaptureXS
+   - final-state:   G4NeutronRadCapture
+ - charged pions inelastic:
+   - cross section: Barashenkov-Glauber-Gribov
+   - final-state:   FTFP > 3 GeV; BERT < 12 GeV
+ - kaons inelastic:
+   - cross section: Glauber-Gribov
+   - final-state:   FTFP > 3 GeV; BERT < 12 GeV
+ - hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP > 2 GeV; BERT < 6 GeV
+ - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, anti_alpha inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   FTFP for all energies
+ - anti_hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP for all energies
+
+ 
+ G4HadronPhysicsFTFP_BERT_ATL
+ ----------------------------
+ Similar to G4HadronPhysicsFTFP_BERT, with the difference that for proton,
+ neutron, pions and kaons, the FTFP is used above 9 GeV and BERT below 12 GeV
+ (i.e. transition between these two models is in the interval [9, 12] GeV).
+
+
+ G4HadronPhysicsFTFP_BERT_HP
+ --------------------------
+ Similar to G4HadronPhysicsFTFP_BERT, with the only difference of the
+ treatment of low-energy neutrons:
+ - neutron inelastic: use NeutronHP (for both cross section and final state)
+                      below 20 MeV; above G4NeutronCaptureXS cross section;
+                      final-state: BERT between 19.9 MeV and 12 GeV, 
+                      FTFP above 3 GeV.
+ - neutron capture: use NeutronHP (for both cross section and final state)
+                    below 20 MeV; above G4NeutronCaptureXS cross section
+                    and G4NeutronRadCapture final-state.
+ - neutron fission: use NeutronHP (for both cross section and final state)
+                    below 20 MeV; above Gheisha (cross section and final state).
+
+
+ G4HadronPhysicsFTFP_BERT_TRV
+ ----------------------------
+ Similar to G4HadronPhysicsFTFP_BERT, with the only difference that the
+ transition between FTFP and BERT is in the interval [2 , 4] GeV.
+
+
+ G4HadronPhysicsFTF_BIC
+ ----------------------
+ Similar to G4HadronPhysicsFTFP_BERT, with the following differences for
+ proton, neutron, pions and kaons:
+ -  BIC is used (instead of BERT) below 5 GeV;
+ -  FTF is still used above 4 GeV, but it is coupled with BIC (instead of
+    Precompound/de-excitation)
+
+ 
+ G4HadronPhysicsINCLXX
+ ---------------------
+ Hadron nuclear inelastic processes for all hadrons:
+ - proton inelastic:
+   - cross section: Barashenkov-Glauber-Gribov 
+   - final-state:   QGSP > 15 GeV; 1 MeV < INCLXX < 20 GeV; Preco < 2 MeV 
+ - neutron inelastic:
+   - cross section: G4NeutronInelasticXS   
+   - final-state:   QGSP > 15 GeV; 1 MeV < INCLXX < 20 GeV; Preco < 2 MeV
+   neutron capture:
+   - cross section: G4NeutronCaptureXS
+   - final-state:   G4NeutronRadCapture
+ - charged pions inelastic:
+   - cross section: Barashenkov-Glauber-Gribov
+   - final-state:   QGSP > 15 GeV; 1 MeV < INCLXX < 20 GeV; Preco < 2 MeV
+ - kaons inelastic:
+   - cross section: Glauber-Gribov
+   - final-state:   QGSP > 14 GeV; BERT < 15 GeV
+ - hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP > 2 GeV; BERT < 6 GeV
+ - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, anti_alpha inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   FTF for all energies
+ - anti_hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTF for all energies
+ Note: it is possible to specify in the constructor the use of FTFP instead
+       of QGSP for proton, neutron, charged pions and kaons;
+       moreover, NeutronHP can also be activated in the constructor, in which
+       case inelastic, capture and fission below 20 MeV are taken from
+       NeutronHP (both cross section and final-state).
+
+
+ G4HadronPhysicsNuBeam
+ ---------------------
+ Hadron nuclear inelastic processes for all hadrons:
+ - proton inelastic:
+   - cross section: Barashenkov-Glauber-Gribov 
+   - final-state:   QGSP with Lund string fragmentation > 100 GeV; 
+                    3 GeV < FTFP < 101 GeV; BERT < 3.5 GeV 
+ - neutron inelastic:
+   - cross section: G4NeutronInelasticXS
+   - final-state:   FTFP > 4 GeV; BERT < 5 GeV
+   neutron capture:
+   - cross section: G4NeutronCaptureXS
+   - final-state:   G4NeutronRadCapture
+ - charged pions inelastic:
+   - cross section: Barashenkov-Glauber-Gribov
+   - final-state:   FTFP > 3 GeV; BERT < 3.5 GeV
+ - kaons inelastic:
+   - cross section: Glauber-Gribov
+   - final-state:   FTFP > 3 GeV; BERT < 3.5 GeV
+ - hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP > 2 GeV; BERT < 6 GeV
+ - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, anti_alpha inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   FTFP for all energies
+ - anti_hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP for all energies
+
+
+ G4HadronPhysicsQGSP_BERT
+ ------------------------
+ Hadron nuclear inelastic processes for all hadrons:
+ - proton inelastic:
+   - cross section: Barashenkov-Glauber-Gribov 
+   - final-state:   QGSP > 12 GeV; 9.5 GeV < FTFP < 25 GeV; BERT < 9.9 GeV 
+ - neutron inelastic:
+   - cross section: G4NeutronInelasticXS   
+   - final-state:   QGSP > 12 GeV; 9.5 GeV < FTFP < 25 GeV; BERT < 9.9 GeV
+   neutron capture:
+   - cross section: G4NeutronCaptureXS
+   - final-state:   G4NeutronRadCapture
+ - charged pions inelastic:
+   - cross section: Barashenkov-Glauber-Gribov
+   - final-state:   QGSP > 12 GeV; 9.5 GeV < FTFP < 25 GeV; BERT < 9.9 GeV
+ - kaons inelastic:
+   - cross section: Glauber-Gribov
+   - final-state:   QGSP > 12 GeV; 9.5 GeV < FTFP < 25 GeV; BERT < 9.9 GeV
+ - hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP > 2 GeV; BERT < 6 GeV
+ - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, anti_alpha inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   FTFP for all energies
+ - anti_hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP for all energies
+
+ 
+ G4HadronPhysicsQGSP_BERT_HP
+ ---------------------------
+ Similar to G4HadronPhysicsQGSP_BERT, with the only difference for neutron:
+ - neutron inelastic: use NeutronHP (for both cross section and final state)
+                      below 20 MeV; above G4NeutronCaptureXS cross section;
+                      final-state: BERT between 19.9 MeV and 9.9 GeV,
+                      FTFP between 9.5 and 25 GeV, QGSP above 12 GeV. 
+ - neutron capture: use NeutronHP (for both cross section and final state)
+                    below 20 MeV; above G4NeutronCaptureXS cross section
+                    and G4NeutronRadCapture final-state.
+ - neutron fission: use NeutronHP (for both cross section and final state)
+                    below 20 MeV; above Gheisha (cross section and final state).
+
+ 
+ G4HadronPhysicsQGSP_BIC
+ -----------------------
+ Hadron nuclear inelastic processes for all hadrons:
+ - proton inelastic:
+   - cross section: Barashenkov-Glauber-Gribov 
+   - final-state:   QGSP > 12 GeV; 9.5 GeV < FTFP < 25 GeV; BIC < 9.9 GeV 
+ - neutron inelastic:
+   - cross section: G4NeutronInelasticXS 
+   - final-state:   QGSP > 12 GeV; 9.5 GeV < FTFP < 25 GeV; BIC < 9.9 GeV
+   neutron capture:
+   - cross section: G4NeutronCaptureXS
+   - final-state:   G4NeutronRadCapture
+ - charged pions inelastic:
+   - cross section: Barashenkov-Glauber-Gribov
+   - final-state:   QGSP > 12 GeV; 4 GeV < FTFP < 25 GeV; BERT < 5 GeV
+ - kaons inelastic:
+   - cross section: Glauber-Gribov
+   - final-state:   QGSP > 12 GeV; 4 GeV < FTFP < 25 GeV; BERT < 5 GeV
+ - hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP > 2 GeV; BERT < 6 GeV
+ - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, anti_alpha inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   FTFP for all energies
+ - anti_hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP for all energies
+
+ 
+ G4HadronPhysicsQGSP_BIC_AllHP
+ -----------------------------
+ Similar to G4HadronPhysicsQGSP_BIC_HP (see below) with the only difference
+ for proton: ParticleHP is used (for both cross section and final state) 
+ below 200 MeV; above it: Barashenkov-Glauber-Gribov inelastic cross section; 
+ final-state: QGSP > 12 GeV; 9.5 GeV < FTFP < 25 GeV; 200 MeV < BIC < 9.9 GeV.
+
+ 
+ G4HadronPhysicsQGSP_BIC_HP
+ --------------------------
+ Similar to G4HadronPhysicsQGSP_BIC, with the only difference for neutron:
+ - neutron inelastic: use NeutronHP (for both cross section and final state)
+                      below 20 MeV; above G4NeutronCaptureXS cross section;
+                      final-state: BIC between 19.9 MeV and 9.9 GeV, 
+                      FTFP between 9.5 and 25 GeV, QGSP above 12 GeV. 
+ - neutron capture: use NeutronHP (for both cross section and final state)
+                    below 20 MeV; above G4NeutronCaptureXS cross section
+                    and G4NeutronRadCapture final-state.
+ - neutron fission: use NeutronHP (for both cross section and final state)
+                    below 20 MeV; above Gheisha (cross section and final state).
+
+ 
+ G4HadronPhysicsQGSP_FTFP_BERT
+ -----------------------------
+ Hadron nuclear inelastic processes for all hadrons:
+ - proton inelastic:
+   - cross section: Barashenkov-Glauber-Gribov 
+   - final-state:   QGSP > 12 GeV; 6 GeV < FTFP < 25 GeV; BERT < 8 GeV 
+ - neutron inelastic:
+   - cross section: G4NeutronInelasticXS   
+   - final-state:   QGSP > 12 GeV; 6 GeV < FTFP < 25 GeV; BERT < 8 GeV
+   neutron capture:
+   - cross section: G4NeutronCaptureXS
+   - final-state:   G4NeutronRadCapture
+ - charged pions inelastic:
+   - cross section: Barashenkov-Glauber-Gribov
+   - final-state:   QGSP > 12 GeV; 6 GeV < FTFP < 25 GeV; BERT < 8 GeV
+ - kaons inelastic:
+   - cross section: Glauber-Gribov
+   - final-state:   QGSP > 12 GeV; 6 GeV < FTFP < 25 GeV; BERT < 8 GeV
+ - hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP > 2 GeV; BERT < 6 GeV
+ - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, anti_alpha inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   FTFP for all energies
+ - anti_hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP for all energies
+
+ 
+ G4HadronPhysicsQGS_BIC
+ ----------------------
+ Similar to G4HadronPhysicsQGSP_BIC, with the following differences 
+ in the final-state for some projectile hadrons:
+ -  proton inelastic:
+    QGS_BIC > 12 GeV; 9.5 GeV < FTF_BIC < 25 GeV; BIC < 9.9 GeV
+ -  neutron inelastic:
+    QGS_BIC > 12 GeV; 9.5 GeV < FTF_BIC < 25 GeV; BIC < 9.9 GeV
+ -  pions inelastic:
+    QGS_BIC > 12 GeV; 4 GeV < FTF_BIC < 25 GeV; 1.2 GeV < BERT < 5 GeV; BIC < 1.3 GeV 
+ -  kaons inelastic:
+    QGS_BIC > 12 GeV; 4 GeV < FTF_BIC < 25 GeV; BERT < 5 GeV
+ Note: QGS_BIC and FTF_BIC indicate that QGS and FTF, respectively, 
+       are coupled with BIC (instead of Precompound/de-excitation).
+
+
+ G4HadronPhysicsShielding
+ ------------------------
+ Hadron nuclear inelastic processes for all hadrons:
+ - proton inelastic:
+   - cross section: Barashenkov-Glauber-Gribov 
+   - final-state:   FTFP > 9.5 GeV; BERT < 9.9 GeV 
+ - neutron inelastic:
+   - cross section: G4NeutronInelasticXS > 20 MeV; NeutronHP or LEND < 20 MeV
+   - final-state:   FTFP > 9.5 GeV; 19.9 MeV < BERT < 9.9 GeV; NeutronHP or LEND < 20 MeV
+   neutron capture:
+   - cross section: G4NeutronCaptureXS > 20 MeV; NeutronHP or LEND < 20 MeV
+   - final-state:   G4NeutronRadCapture > 19.9 MeV; NeutronHP or LEND < 20 MeV
+   neutron fission:
+   - cross section: Gheisha > 20 MeV; NeutronHP or LEND < 20 MeV
+   - final-state:   Gheisha > 19.9 MeV; NeutronHP or LEND < 20 MeV
+ - charged pions inelastic:
+   - cross section: Barashenkov-Glauber-Gribov
+   - final-state:   FTFP > 9.5 GeV; BERT < 9.9 GeV
+ - kaons inelastic:
+   - cross section: Glauber-Gribov
+   - final-state:   FTFP > 9.5 GeV; BERT < 9.9 GeV
+ - hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP > 2 GeV; BERT < 6 GeV
+ - anti_proton, anti_neutron, anti_deuteron, anti_triton, anti_He3, anti_alpha inelastic:
+   - cross-section: Galoyan-Uzhinsky-Glauber-Gribov
+   - final-state:   FTFP for all energies
+ - anti_hyperons inelastic:
+   - cross section: Chips
+   - final-state:   FTFP for all energies
+
+ 
+ G4VHadronPhysics
+ ----------------
+ Utility class which provides useful methods.
+

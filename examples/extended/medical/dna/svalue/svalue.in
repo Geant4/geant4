@@ -6,10 +6,7 @@
 #
 /svalue/det/setTrackingCut 12 eV
 #
-# Register physics constructors
 /svalue/phys/addPhysics  dna	        
-#/svalue/phys/addPhysics dna_opt2	
-
 #
 /run/initialize
 #

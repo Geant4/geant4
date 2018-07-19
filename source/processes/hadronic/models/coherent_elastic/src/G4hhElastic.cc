@@ -179,7 +179,6 @@ G4hhElastic::G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* pr
   thePionMinus= G4PionMinus::PionMinus();
 
   fTarget  = G4Proton::Proton(); // later vmg
-  fProjectile  = 0;
   fMassTarg   = fTarget->GetPDGMass();
   fMassProj   = fProjectile->GetPDGMass();
   fMassSum2   = (fMassTarg+fMassProj)*(fMassTarg+fMassProj);
@@ -663,7 +662,7 @@ G4hhElastic:: GetTransfer( G4int iTkin, G4int iTransfer, G4double position )
   return randTransfer;
 }
 
-const G4double G4hhElastic::theNuclNuclData[18][6] = 
+const G4double G4hhElastic::theNuclNuclData[19][6] = 
 {
   // sqrt(fSpp) in GeV, fRA in 1/GeV, fRB in 1/GeV, fBq, fBQ, fImCof 
 
@@ -689,7 +688,8 @@ const G4double G4hhElastic::theNuclNuclData[18][6] =
 
   { 546,        7.4,	7.4,	0.013,	0.845877,	5.5  }, // pb-p 546 GeV
   { 1960,	7.8,	7.8,	0.022,	0.809062,	7.5  }, // pb-p 1960 GeV
-  { 7000,	8,	8,	0.024,	0.820441,	5.5  }  // pp TOTEM
+  { 7000,	8,	8,	0.024,	0.820441,	5.5  },  // pp TOTEM 7 TeV
+  { 13000,	8.5,	8.5,	0.03,	0.796721,	10.5  }  // pp TOTEM 13 TeV
  
 };
 

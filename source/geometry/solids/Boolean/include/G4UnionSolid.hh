@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4UnionSolid.hh 109479 2018-04-24 14:33:49Z gcosmo $
 //
 //
 // class G4UnionSolid
@@ -85,6 +85,8 @@ class G4UnionSolid : public G4BooleanSolid
     G4UnionSolid& operator=(const G4UnionSolid& rhs);
       // Copy constructor and assignment operator.
 
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
                             const G4AffineTransform& pTransform,
@@ -115,6 +117,9 @@ class G4UnionSolid : public G4BooleanSolid
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
 
+  private:
+
+    G4ThreeVector fPMin, fPMax; // bounding box extended by half-tolerance
 };
 
 #endif

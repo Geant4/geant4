@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc 86988 2014-11-21 13:06:15Z gcosmo $
+// $Id: G4VisCommandsViewerSet.cc 109510 2018-04-26 07:15:57Z gcosmo $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -42,7 +42,7 @@
 #include "G4SystemOfUnits.hh"
 
 #include <sstream>
-#include <cctype>
+#include <iomanip>
 
 G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fLightsVector    (G4ThreeVector(1.,1.,1.)),
@@ -56,8 +56,11 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandAll->SetGuidance
     ("Copies view parameters.");
   fpCommandAll->SetGuidance
-    ("Copies view parameters (except the autoRefresh status) from"
-     "\nfrom-viewer to current viewer.");
+  ("Copies ALL view parameters (except the autoRefresh status) from"
+   "\nfrom-viewer to current viewer. You may need \"/vis/viewer/rebuild\".");
+  fpCommandAll->SetGuidance
+  ("Note: to copy only the camera-specific parameters use"
+   "\n\"/vis/viewer/copyfrom\".");
   fpCommandAll->SetParameterName ("from-viewer-name",omitable = false);
 
   fpCommandAutoRefresh = new G4UIcmdWithABool
@@ -82,12 +85,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/background",this);
   fpCommandBackground->SetGuidance
     ("Set background colour and transparency (default black and opaque).");
-  fpCommandBackground->SetGuidance
-    ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
-     "\n(b) string such as \"white\", \"black\", \"grey\", \"red\"..."
-     "\n(c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
-     "\n    or \"grey ! ! .6\" (note \"!\"'s for unused green and blue parameters),"
-     "\n    e.g. \"! ! ! 0.\" for a transparent background.");
+  fpCommandBackground->SetGuidance(ConvertToColourGuidance());
   parameter = new G4UIparameter("red_or_string", 's', omitable = true);
   parameter -> SetDefaultValue ("0.");
   fpCommandBackground -> SetParameter (parameter);
@@ -117,7 +115,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("\"density\": culls volumes with density lower than threshold.  Useful"
      "\nfor eliminating \"container volumes\" with no physical correspondence,"
      "\nwhose material is usually air.  If this is selected, provide threshold"
-     "\ndensity and unit (g/cm3 mg/cm3 or kg/m3)."
+     "\ndensity and unit (e.g., g/cm3, mg/cm3 or kg/m3)."
      );
   parameter = new G4UIparameter("culling-option",'s',omitable = false);
   parameter->SetParameterCandidates
@@ -130,7 +128,8 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   parameter->SetDefaultValue("0.01");
   fpCommandCulling->SetParameter(parameter);
   parameter = new G4UIparameter("unit",'s',omitable = true);
-  parameter->SetParameterCandidates ("g/cm3, mg/cm3 kg/m3");
+  // parameter->SetParameterCandidates ("g/cm3 mg/cm3 kg/m3");
+  // Instead of the above, SetNewValue accepts *any* density unit.
   parameter->SetDefaultValue("g/cm3");
   fpCommandCulling->SetParameter(parameter);
 
@@ -146,12 +145,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/defaultColour",this);
   fpCommandDefaultColour->SetGuidance
     ("Set defaultColour colour and transparency (default white and opaque).");
-  fpCommandDefaultColour->SetGuidance
-    ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
-     "\n(b) string such as \"white\", \"black\", \"grey\", \"red\"..."
-     "\n(c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
-     "\n    or \"grey ! ! .6\" (note \"!\"'s for unused green and blue parameters),"
-     "\n    e.g. \"! ! ! 0.\" for a transparent colour.");
+  fpCommandDefaultColour->SetGuidance(ConvertToColourGuidance());
   parameter = new G4UIparameter("red_or_string", 's', omitable = true);
   parameter -> SetDefaultValue ("1.");
   fpCommandDefaultColour -> SetParameter (parameter);
@@ -168,18 +162,13 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandDefaultTextColour = new G4UIcommand
     ("/vis/viewer/set/defaultTextColour",this);
   fpCommandDefaultTextColour->SetGuidance
-    ("Set defaultTextColour colour and transparency (default white and opaque).");
-  fpCommandDefaultTextColour->SetGuidance
-    ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
-     "\n(b) string such as \"white\", \"black\", \"grey\", \"red\"..."
-     "\n(c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
-     "\n    or \"grey ! ! .6\" (note \"!\"'s for unused green and blue parameters),"
-     "\n    e.g. \"! ! ! 0.\" for a transparent colour.");
+    ("Set defaultTextColour colour and transparency (default blue and opaque).");
+  fpCommandDefaultTextColour->SetGuidance(ConvertToColourGuidance());
   parameter = new G4UIparameter("red_or_string", 's', omitable = true);
-  parameter -> SetDefaultValue ("1.");
+  parameter -> SetDefaultValue ("0.");
   fpCommandDefaultTextColour -> SetParameter (parameter);
   parameter = new G4UIparameter("green", 'd', omitable = true);
-  parameter -> SetDefaultValue (1.);
+  parameter -> SetDefaultValue (0.);
   fpCommandDefaultTextColour -> SetParameter (parameter);
   parameter = new G4UIparameter ("blue", 'd', omitable = true);
   parameter -> SetDefaultValue (1.);
@@ -455,37 +444,187 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   parameter = new G4UIparameter ("z", 'd', omitable = true);
   parameter -> SetDefaultValue (1.);
   fpCommandViewpointVector -> SetParameter (parameter);
+
+  fpTimeWindowDirectory = new G4UIdirectory ("/vis/viewer/set/timeWindow/");
+  fpTimeWindowDirectory -> SetGuidance ("Set time window parameters of current viewer.");
+  G4String timeWindowGuidance =
+  "For these commands use"
+  "\n  /vis/scene/add/trajectories rich"
+  "\n  /vis/modeling/trajectories/drawByCharge-0/default/setTimeSliceInterval 0.01 ns"
+  "\nthen typically"
+  "\n  /vis/viewer/set/timeWindow/displayLightFront true 0 0 -50 cm -0.5 ns"
+  "\n  /vis/viewer/set/timeWindow/displayHeadTime true"
+  "\n  /vis/viewer/set/timeWindow/fadeFactor 1"
+  "\n  /run/beamOn # or several until you get a good event or events"
+  "\n  /vis/viewer/set/timeWindow/startTime 0 ns 1 ns"
+  "\n  /vis/viewer/save"
+  "\n  /vis/viewer/set/timeWindow/startTime 1 ns 1 ns"
+  "\nthen zoom, pan etc to a view of interest and"
+  "\n  /vis/viewer/save"
+  "\nthen repeat with next start time, another view and a save, then try"
+  "\n  /vis/viewer/interpolate";
+
+  fpCommandTimeWindowDisplayHeadTime =
+  new G4UIcommand("/vis/viewer/set/timeWindow/displayHeadTime", this);
+  fpCommandTimeWindowDisplayHeadTime->SetGuidance
+  ("Display head time of range in 2D text.");
+  fpCommandTimeWindowDisplayHeadTime->SetGuidance(timeWindowGuidance);
+  parameter = new G4UIparameter ("displayHeadTime", 'b', omitable = false);
+  parameter->SetDefaultValue(false);
+  fpCommandTimeWindowDisplayHeadTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("screenX", 'd', omitable = true);
+  parameter->SetGuidance("-1 < screenX < 1");
+  parameter->SetParameterRange("screenX >= -1. && screenX <= 1.");
+  parameter->SetDefaultValue(-0.9);
+  fpCommandTimeWindowDisplayHeadTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("screenY", 'd', omitable = true);
+  parameter->SetGuidance("-1 < screenY < 1");
+  parameter->SetParameterRange("screenY >= -1. && screenY <= 1.");
+  parameter->SetDefaultValue(-0.9);
+  fpCommandTimeWindowDisplayHeadTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("screenSize", 'd', omitable = true);
+  parameter->SetDefaultValue(24.);
+  fpCommandTimeWindowDisplayHeadTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("red", 'd', omitable = true);
+  parameter->SetParameterRange("red >= 0. && red <= 1.");
+  parameter->SetDefaultValue(0.);
+  fpCommandTimeWindowDisplayHeadTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("green", 'd', omitable = true);
+  parameter->SetParameterRange("green >= 0. && green <= 1.");
+  parameter->SetDefaultValue(1.);
+  fpCommandTimeWindowDisplayHeadTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("blue", 'd', omitable = true);
+  parameter->SetParameterRange("blue >= 0. && blue <= 1.");
+  parameter->SetDefaultValue(1.);
+  fpCommandTimeWindowDisplayHeadTime->SetParameter(parameter);
+
+  fpCommandTimeWindowDisplayLightFront =
+  new G4UIcommand("/vis/viewer/set/timeWindow/displayLightFront", this);
+  fpCommandTimeWindowDisplayLightFront->SetGuidance
+  ("Display the light front at head time.");
+  fpCommandTimeWindowDisplayLightFront->SetGuidance
+  ("Tip: The trajectories can appear of jump ahead of the light front"
+   "\nbecause their time range overlaps the viewer's time range.  To"
+   "\naverage out this discrete time effect, advance the light front by"
+   "\nhalf the trajectories interval. E.g., if the trajectory time slice"
+   "\ninterval is 0.01 ns:"
+   "\n  /vis/viewer/set/timeWindow/displayLightFront true -90 0 0 mm -0.005 ns"
+   "\nTo prevent them beating the light front at all:"
+   "\n  /vis/viewer/set/timeWindow/displayLightFront true -90 0 0 mm -0.01 ns");
+  fpCommandTimeWindowDisplayLightFront->SetGuidance(timeWindowGuidance);
+  parameter = new G4UIparameter ("displayLightFront", 'b', omitable = false);
+  parameter->SetDefaultValue(false);
+  fpCommandTimeWindowDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("originX", 'd', omitable = true);
+  parameter->SetDefaultValue(0.);
+  fpCommandTimeWindowDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("originY", 'd', omitable = true);
+  parameter->SetDefaultValue(0.);
+  fpCommandTimeWindowDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("originZ", 'd', omitable = true);
+  parameter->SetDefaultValue(0.);
+  fpCommandTimeWindowDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("space_unit", 's', omitable = true);
+  parameter->SetDefaultValue("m");
+  fpCommandTimeWindowDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("originT", 'd', omitable = true);
+  parameter->SetDefaultValue(0.);
+  fpCommandTimeWindowDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("time_unit", 's', omitable = true);
+  parameter->SetDefaultValue("s");
+  fpCommandTimeWindowDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("red", 'd', omitable = true);
+  parameter->SetParameterRange("red >= 0. && red <= 1.");
+  parameter->SetDefaultValue(0.);
+  fpCommandTimeWindowDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("green", 'd', omitable = true);
+  parameter->SetParameterRange("green >= 0. && green <= 1.");
+  parameter->SetDefaultValue(1.);
+  fpCommandTimeWindowDisplayLightFront->SetParameter(parameter);
+  parameter = new G4UIparameter ("blue", 'd', omitable = true);
+  parameter->SetParameterRange("blue >= 0. && blue <= 1.");
+  parameter->SetDefaultValue(0.);
+  fpCommandTimeWindowDisplayLightFront->SetParameter(parameter);
+
+  fpCommandTimeWindowEndTime =
+  new G4UIcommand("/vis/viewer/set/timeWindow/endTime", this);
+  fpCommandTimeWindowEndTime->SetGuidance("Set end and range of track time.");
+  fpCommandTimeWindowEndTime->SetGuidance(timeWindowGuidance);
+  parameter = new G4UIparameter ("end-time", 'd', omitable = false);
+  parameter->SetDefaultValue(G4VisAttributes::fVeryLongTime);
+  fpCommandTimeWindowEndTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("end-time-unit", 's', omitable = false);
+  parameter->SetDefaultValue("ns");
+  fpCommandTimeWindowEndTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("time-range", 'd', omitable = true);
+  parameter->SetDefaultValue(-1.);
+  fpCommandTimeWindowEndTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("time-range-unit", 's', omitable = true);
+  parameter->SetDefaultValue("ns");
+  fpCommandTimeWindowEndTime->SetParameter(parameter);
+
+  fpCommandTimeWindowFadeFactor =
+  new G4UIcmdWithADouble("/vis/viewer/set/timeWindow/fadeFactor", this);
+  fpCommandTimeWindowFadeFactor->SetGuidance
+  ("0: no fade; 1: maximum fade with time window.");
+  fpCommandTimeWindowFadeFactor->SetGuidance(timeWindowGuidance);
+  fpCommandTimeWindowFadeFactor->SetParameterName("fade_factor", omitable = false);
+  fpCommandTimeWindowFadeFactor->SetRange("fade_factor>=0.&&fade_factor<=1.");
+  fpCommandTimeWindowFadeFactor->SetDefaultValue(0.);
+
+  fpCommandTimeWindowStartTime =
+  new G4UIcommand("/vis/viewer/set/timeWindow/startTime", this);
+  fpCommandTimeWindowStartTime->SetGuidance("Set start and range of track time.");
+  fpCommandTimeWindowStartTime->SetGuidance(timeWindowGuidance);
+  parameter = new G4UIparameter ("start-time", 'd', omitable = false);
+  parameter->SetDefaultValue(-G4VisAttributes::fVeryLongTime);
+  fpCommandTimeWindowStartTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("start-time-unit", 's', omitable = false);
+  parameter->SetDefaultValue("ns");
+  fpCommandTimeWindowStartTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("time-range", 'd', omitable = true);
+  parameter->SetDefaultValue(-1.);
+  fpCommandTimeWindowStartTime->SetParameter(parameter);
+  parameter = new G4UIparameter ("time-range-unit", 's', omitable = true);
+  parameter->SetDefaultValue("ns");
+  fpCommandTimeWindowStartTime->SetParameter(parameter);
 }
 
 G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
-  delete fpCommandAll;
+  delete fpCommandTimeWindowStartTime;
+  delete fpCommandTimeWindowFadeFactor;
+  delete fpCommandTimeWindowEndTime;
+  delete fpCommandTimeWindowDisplayLightFront;
+  delete fpCommandTimeWindowDisplayHeadTime;
+  delete fpTimeWindowDirectory;
+  delete fpCommandViewpointVector;
+  delete fpCommandViewpointThetaPhi;
+  delete fpCommandUpVector;
+  delete fpCommandUpThetaPhi;
+  delete fpCommandTargetPoint;
+  delete fpCommandStyle;
+  delete fpCommandSectionPlane;
+  delete fpCommandRotationStyle;
+  delete fpCommandProjection;
+  delete fpCommandPicking;
+  delete fpCommandLineSegments;
+  delete fpCommandLightsVector;
+  delete fpCommandLightsThetaPhi;
+  delete fpCommandLightsMove;
+  delete fpCommandHiddenMarker;
+  delete fpCommandHiddenEdge;
+  delete fpCommandGlobalMarkerScale;
+  delete fpCommandGlobalLineWidthScale;
+  delete fpCommandExplodeFactor;
+  delete fpCommandEdge;
+  delete fpCommandDefaultTextColour;
+  delete fpCommandDefaultColour;
+  delete fpCommandCutawayMode;
+  delete fpCommandCulling;
+  delete fpCommandBackground;
   delete fpCommandAuxEdge;
   delete fpCommandAutoRefresh;
-  delete fpCommandBackground;
-  delete fpCommandCulling;
-  delete fpCommandCutawayMode;
-  delete fpCommandDefaultColour;
-  delete fpCommandDefaultTextColour;
-  delete fpCommandEdge;
-  delete fpCommandExplodeFactor;
-  delete fpCommandGlobalLineWidthScale;
-  delete fpCommandGlobalMarkerScale;
-  delete fpCommandHiddenEdge;
-  delete fpCommandHiddenMarker;
-  delete fpCommandLineSegments;
-  delete fpCommandLightsMove;
-  delete fpCommandLightsThetaPhi;
-  delete fpCommandLightsVector;
-  delete fpCommandPicking;
-  delete fpCommandProjection;
-  delete fpCommandRotationStyle;
-  delete fpCommandSectionPlane;
-  delete fpCommandStyle;
-  delete fpCommandTargetPoint;
-  delete fpCommandUpThetaPhi;
-  delete fpCommandUpVector;
-  delete fpCommandViewpointThetaPhi;
-  delete fpCommandViewpointVector;
+  delete fpCommandAll;
 }
 
 G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand*) {
@@ -549,6 +688,10 @@ void G4VisCommandsViewerSet::SetNewValue
 	     << "\"."
 	     << G4endl;
     }
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "You may need \"/vis/viewer/rebuild\"."
+	     << G4endl;
+    }
   }
 
   else if (command == fpCommandAutoRefresh) {
@@ -593,20 +736,7 @@ void G4VisCommandsViewerSet::SetNewValue
     std::istringstream iss(newValue);
     iss >> redOrString >> green >> blue >> opacity;
     G4Colour colour(0.,0.,0.);  // Default black and opaque.
-    const size_t iPos0 = 0;
-    if (std::isalpha(redOrString[iPos0])) {
-      if (!G4Colour::GetColour(redOrString, colour)) {
-	if (verbosity >= G4VisManager::warnings) {
-	  G4cout << "WARNING: Text colour \"" << redOrString
-		 << "\" not found.  Defaulting to black and opaque."
-		 << G4endl;
-	}
-      }
-    } else {
-      colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
-    }
-    // Add opacity
-    colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+    ConvertToColour(colour, redOrString, green, blue, opacity);
     vp.SetBackgroundColour(colour);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Background colour "
@@ -660,22 +790,32 @@ void G4VisCommandsViewerSet::SetNewValue
       }
     }
     else if (cullingOption == "density") {
-      vp.SetDensityCulling(boolFlag);
+      const G4String where =
+      "G4VisCommandsViewerSet::SetNewValue: culling: culling by density";
       if (boolFlag) {
-	density *= G4UnitDefinition::GetValueOf(unit);
-	vp.SetVisibleDensity(density);
-      }
-      else {
-	density = vp.GetVisibleDensity();
+        G4double valueOfUnit;
+        // "Volumic Mass" is Michel's phrase for "Density"
+        if (ProvideValueOfUnit(where,unit,"Volumic Mass",valueOfUnit)) {
+          // Successful outcome of unit search
+          vp.SetDensityCulling(boolFlag);
+          density *= valueOfUnit;
+          vp.SetVisibleDensity(density);
+        } else {
+          // Unsuccessful outcome of unit search. Flag and density unchanged.
+          density = vp.GetVisibleDensity();
+        }
+      } else {  // Reset flag but density unchanged.
+        vp.SetDensityCulling(boolFlag);
       }
       if (verbosity >= G4VisManager::confirmations) {
-	G4cout <<
-	  "G4VisCommandsViewerSet::SetNewValue: culling: culling by density"
-	  "\n  flag set to " << G4UIcommand::ConvertToString(boolFlag) <<
-	  ".  Volumes with density less than " <<
-	  G4BestUnit(density,"Volumic Mass") <<
-	  "\n  will be culled, i.e., not drawn, if this flag is true."
-	       << G4endl;
+        G4cout
+        << where
+        << "\n  flag set to "
+        << std::boolalpha << vp.IsDensityCulling()
+        << ".  Volumes with density less than "
+        << G4BestUnit(density,"Volumic Mass")
+        << "\n  will be culled, i.e., not drawn, if this flag is true."
+        << G4endl;
       }
     }
     else {
@@ -710,20 +850,7 @@ void G4VisCommandsViewerSet::SetNewValue
     std::istringstream iss(newValue);
     iss >> redOrString >> green >> blue >> opacity;
     G4Colour colour(1.,1.,1.);  // Default white and opaque.
-    const size_t iPos0 = 0;
-    if (std::isalpha(redOrString[iPos0])) {
-      if (!G4Colour::GetColour(redOrString, colour)) {
-	if (verbosity >= G4VisManager::warnings) {
-	  G4cout << "WARNING: Text colour \"" << redOrString
-		 << "\" not found.  Defaulting to white and opaque."
-		 << G4endl;
-	}
-      }
-    } else {
-      colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
-    }
-    // Add opacity
-    colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+    ConvertToColour(colour, redOrString, green, blue, opacity);
     G4VisAttributes va = vp.GetDefaultVisAttributes();
     va.SetColour(colour);
     vp.SetDefaultVisAttributes(va);
@@ -741,20 +868,7 @@ void G4VisCommandsViewerSet::SetNewValue
     std::istringstream iss(newValue);
     iss >> redOrString >> green >> blue >> opacity;
     G4Colour colour(1.,1.,1.);  // Default white and opaque.
-    const size_t iPos0 = 0;
-    if (std::isalpha(redOrString[iPos0])) {
-      if (!G4Colour::GetColour(redOrString, colour)) {
-	if (verbosity >= G4VisManager::warnings) {
-	  G4cout << "WARNING: Text colour \"" << redOrString
-		 << "\" not found.  Defaulting to white and opaque."
-		 << G4endl;
-	}
-      }
-    } else {
-      colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
-    }
-    // Add opacity
-    colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+    ConvertToColour(colour, redOrString, green, blue, opacity);
     G4VisAttributes va = vp.GetDefaultTextVisAttributes();
     va.SetColour(colour);
     vp.SetDefaultTextVisAttributes(va);
@@ -906,15 +1020,16 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandLightsThetaPhi) {
     G4double theta, phi;
-    ConvertToDoublePair(newValue, theta, phi);
-    G4double x = std::sin (theta) * std::cos (phi);
-    G4double y = std::sin (theta) * std::sin (phi);
-    G4double z = std::cos (theta);
-    fLightsVector = G4ThreeVector (x, y, z);
-    vp.SetLightpointDirection(fLightsVector);
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Lights direction set to "
-	     << vp.GetLightpointDirection() << G4endl;
+    if (ConvertToDoublePair(newValue, theta, phi)) {
+      G4double x = std::sin (theta) * std::cos (phi);
+      G4double y = std::sin (theta) * std::sin (phi);
+      G4double z = std::cos (theta);
+      fLightsVector = G4ThreeVector (x, y, z);
+      vp.SetLightpointDirection(fLightsVector);
+      if (verbosity >= G4VisManager::confirmations) {
+        G4cout << "Lights direction set to "
+        << vp.GetLightpointDirection() << G4endl;
+      }
     }
   }
 
@@ -999,7 +1114,6 @@ void G4VisCommandsViewerSet::SetNewValue
     G4double x, y, z, nx, ny, nz;
     std::istringstream is (newValue);
     is >> choice >> x >> y >> z >> unit >> nx >> ny >> nz;
-
     G4int iSelector = -1;
     if (choice.compareTo("off",G4String::ignoreCase) == 0 ||
 	!G4UIcommand::ConvertToBool(choice)) iSelector = 0;
@@ -1017,7 +1131,6 @@ void G4VisCommandsViewerSet::SetNewValue
       }
       return;
     }
-
     G4double F = 1.;
     // iSelector can only be 0 or 1
     switch (iSelector) {
@@ -1031,7 +1144,6 @@ void G4VisCommandsViewerSet::SetNewValue
       vp.SetViewpointDirection(G4Normal3D(nx,ny,nz));
       break;
     }
-
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Section drawing is now: ";
       if (vp.IsSection ()) G4cout << "on";
@@ -1129,14 +1241,15 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandUpThetaPhi) {
     G4double theta, phi;
-    ConvertToDoublePair(newValue, theta, phi);
-    G4double x = std::sin (theta) * std::cos (phi);
-    G4double y = std::sin (theta) * std::sin (phi);
-    G4double z = std::cos (theta);
-    fUpVector = G4ThreeVector (x, y, z);
-    vp.SetUpVector(fUpVector);
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Up direction set to " << vp.GetUpVector() << G4endl;
+    if (ConvertToDoublePair(newValue, theta, phi)) {
+      G4double x = std::sin (theta) * std::cos (phi);
+      G4double y = std::sin (theta) * std::sin (phi);
+      G4double z = std::cos (theta);
+      fUpVector = G4ThreeVector (x, y, z);
+      vp.SetUpVector(fUpVector);
+      if (verbosity >= G4VisManager::confirmations) {
+        G4cout << "Up direction set to " << vp.GetUpVector() << G4endl;
+      }
     }
   }
 
@@ -1150,18 +1263,19 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandViewpointThetaPhi) {
     G4double theta, phi;
-    ConvertToDoublePair(newValue, theta, phi);
-    G4double x = std::sin (theta) * std::cos (phi);
-    G4double y = std::sin (theta) * std::sin (phi);
-    G4double z = std::cos (theta);
-    fViewpointVector = G4ThreeVector (x, y, z);
-    vp.SetViewAndLights(fViewpointVector);
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Viewpoint direction set to "
-	     << vp.GetViewpointDirection() << G4endl;
-      if (vp.GetLightsMoveWithCamera ()) {
-	G4cout << "Lightpoint direction set to "
-	       << vp.GetActualLightpointDirection () << G4endl;
+    if (ConvertToDoublePair(newValue, theta, phi)) {
+      G4double x = std::sin (theta) * std::cos (phi);
+      G4double y = std::sin (theta) * std::sin (phi);
+      G4double z = std::cos (theta);
+      fViewpointVector = G4ThreeVector (x, y, z);
+      vp.SetViewAndLights(fViewpointVector);
+      if (verbosity >= G4VisManager::confirmations) {
+        G4cout << "Viewpoint direction set to "
+        << vp.GetViewpointDirection() << G4endl;
+        if (vp.GetLightsMoveWithCamera ()) {
+          G4cout << "Lightpoint direction set to "
+          << vp.GetActualLightpointDirection () << G4endl;
+        }
       }
     }
   }
@@ -1183,6 +1297,117 @@ void G4VisCommandsViewerSet::SetNewValue
           << vp.GetActualLightpointDirection () << G4endl;
         }
       }
+    }
+  }
+
+  else if (command == fpCommandTimeWindowDisplayHeadTime)
+  {
+    G4String display;
+    G4double screenX, screenY, screenSize, red, green, blue;
+    std::istringstream iss(newValue);
+    iss >> display >> screenX >> screenY
+    >> screenSize >> red >> green >> blue;
+    vp.SetDisplayHeadTime(command->ConvertToBool(display));
+    vp.SetDisplayHeadTimeX(screenX);
+    vp.SetDisplayHeadTimeY(screenY);
+    vp.SetDisplayHeadTimeSize(screenSize);
+    vp.SetDisplayHeadTimeRed(red);
+    vp.SetDisplayHeadTimeGreen(green);
+    vp.SetDisplayHeadTimeBlue(blue);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Display head time flag set: "
+      << vp
+      << G4endl;
+    }
+  }
+
+  else if (command == fpCommandTimeWindowDisplayLightFront)
+  {
+    G4String display, originX, originY, originZ, unitS, originT, unitT;
+    G4double red, green, blue;
+    std::istringstream iss(newValue);
+    iss >> display
+    >> originX >> originY >> originZ >> unitS
+    >> originT >> unitT
+    >> red >> green >> blue;
+    vp.SetDisplayLightFront(command->ConvertToBool(display));
+    vp.SetDisplayLightFrontX
+    (command->ConvertToDimensionedDouble(G4String(originX + ' ' + unitS)));
+    vp.SetDisplayLightFrontY
+    (command->ConvertToDimensionedDouble(G4String(originY + ' ' + unitS)));
+    vp.SetDisplayLightFrontZ
+    (command->ConvertToDimensionedDouble(G4String(originZ + ' ' + unitS)));
+    vp.SetDisplayLightFrontT
+    (command->ConvertToDimensionedDouble(G4String(originT + ' ' + unitT)));
+    vp.SetDisplayLightFrontRed(red);
+    vp.SetDisplayLightFrontGreen(green);
+    vp.SetDisplayLightFrontBlue(blue);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Display light front flag set: "
+      << vp
+      << G4endl;
+    }
+  }
+
+  else if (command == fpCommandTimeWindowEndTime)
+  {
+    G4String end_time_string, end_time_unit,
+    time_range_string, time_range_unit;
+    std::istringstream iss(newValue);
+    iss >> end_time_string >> end_time_unit
+    >> time_range_string >> time_range_unit;
+    vp.SetEndTime
+    (command->ConvertToDimensionedDouble
+     (G4String(end_time_string + ' ' + end_time_unit)));
+    G4double timeRange = command->ConvertToDimensionedDouble
+    (G4String(time_range_string + ' ' + time_range_unit));
+    if (timeRange > 0.) {
+      vp.SetStartTime
+      (vp.GetEndTime() - timeRange);
+    }
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout
+      << "Time window start time: " << vp.GetStartTime()/ns << " ns"
+      << ", time window end time: " << vp.GetEndTime()/ns << " ns";
+      if (timeRange > 0.) {
+        G4cout << "\n  (time range: " << timeRange/ns << " ns)";
+      }
+      G4cout << G4endl;
+    }
+  }
+
+  else if (command == fpCommandTimeWindowFadeFactor) {
+    vp.SetFadeFactor(command->ConvertToDouble(newValue));
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Time window fade factor changed to " << vp.GetFadeFactor()
+      << G4endl;
+    }
+  }
+
+  else if (command == fpCommandTimeWindowStartTime)
+  {
+    G4String start_time_string, start_time_unit,
+    time_range_string, time_range_unit;
+    std::istringstream iss(newValue);
+    iss >> start_time_string >> start_time_unit
+    >> time_range_string >> time_range_unit;
+    vp.SetStartTime
+    (command->ConvertToDimensionedDouble
+     (G4String(start_time_string + ' ' + start_time_unit)));
+    G4double timeRange = command->ConvertToDimensionedDouble
+    (G4String(time_range_string + ' ' + time_range_unit));
+    if (timeRange > 0.) {
+      vp.SetEndTime
+      (vp.GetStartTime() + timeRange);
+    }
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout
+      << "Time window start time: " << vp.GetStartTime()/ns << " ns"
+      << ", time window end time: " << vp.GetEndTime()/ns << " ns";
+      if (timeRange > 0.) {
+        G4cout << "\n  (time range: " << timeRange/ns << " ns)";
+      }
+      G4cout << G4endl;
     }
   }
 

@@ -1,4 +1,4 @@
-$Id: README 68021 2013-03-13 13:36:07Z gcosmo $
+$Id: README 98066 2016-07-01 16:31:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,7 @@ $Id: README 68021 2013-03-13 13:36:07Z gcosmo $
         The field is a constant electric field.
 
         Technical note: in order to use any electric field, it is
- 	necessary to create the objects for its equation of motion,
+ 	necessary to  create the objects for its equation of motion,
 	the stepper and driver for the integration, and the 
 	chord finder.
 
@@ -62,15 +62,12 @@ $Id: README 68021 2013-03-13 13:36:07Z gcosmo $
  	Therefore  the absorber is declared
  	'sensitive detector' (SD), see F02CalorimeterSD, which means they can contribute to the hit.
  				
- 4- PHYSICS DEMO
+ 4- PHYSICS LIST
  
- 	The particle's type and the physic processes which will be available
- 	in this example are set in F02PhysicsList class.
- 	
- 	The  messenger classes, F02PhysicsListMessenger, introduce interactive commands . Using these
-        commands the geometry of the detector, the data of the primary
-        particle, etc. can be changed.
- 	
+     The particle's type and the physic processes which will be available
+     in this example are set in the FTFP_BERT physics list. This physics list 
+     requires data files for electromagnetic and hadronic processes.
+     See more on installation of the datasets in Geant4 Installation Guide, 	
 
  5- HOW TO START ?
  

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh 94016 2015-11-05 10:14:49Z gcosmo $
+// $Id: G4Material.hh 106243 2017-09-26 01:56:43Z gcosmo $
 //
 
 //---------------------------------------------------------------------------
@@ -110,6 +110,7 @@
 #include "G4SandiaTable.hh"
 #include "G4ElementVector.hh"
 #include "G4MaterialTable.hh"
+#include "G4Threading.hh"
 
 enum G4State { kStateUndefined = 0, kStateSolid, kStateLiquid, kStateGas };
 
@@ -246,8 +247,7 @@ public:  // with description
   G4double GetA() const;
 
   //the MaterialPropertiesTable (if any) attached to this material:
-  inline void SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT)
-  {fMaterialPropertiesTable = anMPT;}
+  void SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT);
   				       
   inline G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
   {return fMaterialPropertiesTable;}
@@ -270,10 +270,6 @@ public:  // with description
   friend std::ostream& operator<<(std::ostream&, const G4Material*);    
   friend std::ostream& operator<<(std::ostream&, const G4Material&);    
   friend std::ostream& operator<<(std::ostream&, G4MaterialTable);
-
-  // operators       
-  G4int operator==(const G4Material&) const;
-  G4int operator!=(const G4Material&) const;
     
   G4Material(__void__&);
     // Fake default constructor for usage restricted to direct object
@@ -282,10 +278,15 @@ public:  // with description
 
   inline void SetName (const G4String& name) {fName=name;}
 
+  virtual G4bool IsExtended() const;
+
 private:
 
-  G4Material(const G4Material&);
-  const G4Material& operator=(const G4Material&);
+  // operators       
+  G4int operator==(const G4Material&) const = delete;
+  G4int operator!=(const G4Material&) const = delete;
+  G4Material(const G4Material&) = delete;
+  const G4Material& operator=(const G4Material&) = delete;
 
   void InitializePointers();
    
@@ -350,6 +351,9 @@ private:
   G4double fMassOfMolecule; 		  // for materials built by atoms count
   std::map<G4Material*,G4double> fMatComponents; // for composites built via
                                                  // AddMaterial()
+#ifdef G4MULTITHREADED
+  static G4Mutex materialMutex;
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.cc 93661 2015-10-28 09:47:47Z gcosmo $
+// $Id: G4FieldManager.cc 108823 2018-03-09 11:03:44Z gcosmo $
 //
 // -------------------------------------------------------------------
 
@@ -140,21 +140,70 @@ G4FieldManager::~G4FieldManager()
 void
 G4FieldManager::CreateChordFinder(G4MagneticField *detectorMagField)
 {
-   if ( fAllocatedChordFinder )
+   if ( fAllocatedChordFinder ) 
       delete fChordFinder;
-   fChordFinder= new G4ChordFinder( detectorMagField );
-   fAllocatedChordFinder= true;
+   fAllocatedChordFinder= false;
+
+   if( detectorMagField ) {
+      fChordFinder= new G4ChordFinder( detectorMagField );
+      fAllocatedChordFinder= true;
+   } else {
+      fChordFinder = nullptr;
+   }
 }
 
-G4bool G4FieldManager::SetDetectorField(G4Field *pDetectorField)
+void G4FieldManager::InitialiseFieldChangesEnergy()
 {
-   fDetectorField= pDetectorField;
-
-   if ( pDetectorField )
-     fFieldChangesEnergy= pDetectorField->DoesFieldChangeEnergy();
+   if ( fDetectorField )
+     fFieldChangesEnergy= fDetectorField->DoesFieldChangeEnergy();
    else
-     fFieldChangesEnergy= false;   //  No field 
+     fFieldChangesEnergy= false;   //  No field , no change!
+}
 
-   return false;
+G4bool G4FieldManager::SetDetectorField(G4Field *pDetectorField, int failMode )
+{
+   G4VIntegrationDriver* driver = nullptr;
+   G4EquationOfMotion* equation = nullptr;
+   // G4bool  compatibleField= false;
+   G4bool ableToSet= false;
+
+   fDetectorField= pDetectorField;
+   InitialiseFieldChangesEnergy();
+   
+   // Must 'propagate' the field to the dependent classes
+   //
+   if( fChordFinder )
+   {
+     failMode= std::max( failMode, 1) ; // If a chord finder exists, warn in case of error!
+      
+     driver = fChordFinder->GetIntegrationDriver();
+     if( driver ){
+        equation = driver->GetEquationOfMotion();
+        // Should check the compatibility between the field and the equation HERE
+        if( equation ) {
+           equation->SetFieldObj(pDetectorField);
+           ableToSet = true;
+        }
+     }
+   }
+   
+   if( !ableToSet && (failMode > 0) )
+   {
+      // If this fails, report the issue !
+      G4ExceptionDescription msg;
+      msg << "Unable to set the field in the dependent objects of G4FieldManager" << G4endl;
+      msg << "All the dependent classes must be fully initialised, before it is possible to call this method." << G4endl;
+      msg << "The problem encountered was the following: " << G4endl;
+      if( !fChordFinder ) { msg << "  No ChordFinder. " ; }
+      else if( !driver)   { msg << "  No Integration Driver set. ";}
+      else if( !equation) { msg << "  No Equation found. " ; }
+      // else if( !compatibleField ) { msg << "  Field not compatible. ";}
+      else { msg << "  Can NOT find reason for failure. ";}
+      msg << G4endl;
+      G4ExceptionSeverity severity= (failMode != 1) ? FatalException : JustWarning ;
+      G4Exception("G4FieldManager::SetDetectorField", "Geometry001",
+                  severity, msg);
+   }
+   return ableToSet;
 }
 

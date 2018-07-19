@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXePMTSD.cc 73915 2013-09-17 07:32:26Z gcosmo $
+// $Id: LXePMTSD.cc 110138 2018-05-16 07:31:43Z gcosmo $
 //
 /// \file optical/LXe/src/LXePMTSD.cc
 /// \brief Implementation of the LXePMTSD class
@@ -47,8 +47,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXePMTSD::LXePMTSD(G4String name)
-  : G4VSensitiveDetector(name),fPMTHitCollection(0),fPMTPositionsX(0)
-  ,fPMTPositionsY(0),fPMTPositionsZ(0)
+  : G4VSensitiveDetector(name),fPMTHitCollection(nullptr),
+    fPMTPositionsX(nullptr),fPMTPositionsY(nullptr),fPMTPositionsZ(nullptr)
 {
   collectionName.insert("pmtHitCollection");
 }
@@ -109,7 +109,7 @@ G4bool LXePMTSD::ProcessHits_constStep(const G4Step* aStep,
 
   //Find the correct hit collection
   G4int n=fPMTHitCollection->entries();
-  LXePMTHit* hit=NULL;
+  LXePMTHit* hit = nullptr;
   for(G4int i=0;i<n;i++){
     if((*fPMTHitCollection)[i]->GetPMTNumber()==pmtNumber){
       hit=(*fPMTHitCollection)[i];
@@ -117,7 +117,7 @@ G4bool LXePMTSD::ProcessHits_constStep(const G4Step* aStep,
     }
   }
  
-  if(hit==NULL){//this pmt wasnt previously hit in this event
+  if (hit == nullptr) {//this pmt wasnt previously hit in this event
     hit = new LXePMTHit(); //so create new hit
     hit->SetPMTNumber(pmtNumber);
     hit->SetPMTPhysVol(physVol);

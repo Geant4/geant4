@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05CalorimeterSD.hh 68698 2013-04-05 08:41:22Z gcosmo $
+// $Id: RE05CalorimeterSD.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05CalorimeterSD.hh
 /// \brief Definition of the RE05CalorimeterSD class
@@ -40,7 +40,6 @@ class G4TouchableHistory;
 
 class RE05CalorimeterSD : public G4VSensitiveDetector
 {
-
   public:
       RE05CalorimeterSD(G4String name);
       virtual ~RE05CalorimeterSD();
@@ -53,14 +52,10 @@ class RE05CalorimeterSD : public G4VSensitiveDetector
       virtual void PrintAll();
 
   private:
-      RE05CalorimeterHitsCollection *CalCollection;
-      int CellID[20][48];
-      const int numberOfCellsInZ;
-      const int numberOfCellsInPhi;
+      RE05CalorimeterHitsCollection *fCalCollection;
+      G4int fCellID[20][48];
+      const G4int fNumberOfCellsInZ;
+      const G4int fNumberOfCellsInPhi;
 };
 
-
-
-
 #endif
-

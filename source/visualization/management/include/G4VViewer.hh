@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh 90651 2015-06-05 13:30:54Z gcosmo $
+// $Id: G4VViewer.hh 108859 2018-03-12 07:44:53Z gcosmo $
 //
 // 
 // John Allison  27th March 1996
@@ -39,6 +39,7 @@
 #include "globals.hh"
 
 #include "G4ViewParameters.hh"
+#include "G4PhysicalVolumeModel.hh"
 
 class G4VSceneHandler;
 
@@ -98,18 +99,35 @@ public: // With description
   // It is not yet the end of all drawing; that is signalled by
   // ShowView ().)
 
+  std::vector<G4ThreeVector> ComputeFlyThrough(G4Vector3D*);
+
 #ifdef G4MULTITHREADED
-  // In MT mode these functions are called in the following order for each run:
+  // Note: the order of calling of MovingToVisSubThread and SwitchToVisSubThread
+  // is undefined, so you may need to implement mutexes to ensure your preferred
+  // order - see, e.g., G4OpenGLQtViewer. To summarise, the order of calling is
+  // as follows - see G4VisManager.cc.
+  // DoneWithMasterThread
+  // MovingToVisSubThread ) or ( SwitchToVisSubThread
+  // SwitchToVisSubThread )    ( MovingToVisSubThread
+  // DoneWithVisSubThread
+  // MovingToMasterThread
+  // SwitchToMasterThread
+
   // Called on the master thread before starting the vis sub-thread.
   virtual void DoneWithMasterThread ();
+
   // Called on the master thread after starting the vis sub-thread.
   virtual void MovingToVisSubThread ();
-  // Called on the vis sub-thread when waiting for events.
+
+  // Called on the vis sub-thread at start of vis sub-thread.
   virtual void SwitchToVisSubThread ();
+
   // Called on the vis sub-thread when all events have been processed.
   virtual void DoneWithVisSubThread ();
+
   // Called on the vis sub-thread when all events have been processed.
   virtual void MovingToMasterThread ();
+  
   // Called on the master thread after the vis sub-thread has terminated.
   virtual void SwitchToMasterThread ();
 #endif
@@ -151,6 +169,48 @@ public: // With description
 
 protected:
 
+  //////////////////////////////////////////////////////////////
+  // Protected utility functions.
+
+  void SetTouchable
+  (const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& fullPath);
+  // Set the touchable for /vis/touchable/set/... commands.
+
+  void TouchableSetVisibility
+  (const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& fullPath,
+   G4bool visibility);
+  // Set the touchable visibility attribute.
+  // Changes the Vis Attribute Modifiers WITHOUT triggering a rebuild.
+
+  void TouchableSetColour
+  (const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& fullPath,
+   const G4Colour&);
+  // Set the touchable colour attribute.
+  // Changes the Vis Attribute Modifiers WITHOUT triggering a rebuild.
+
+  class G4Spline
+  {
+  public:
+
+    // Constructors and destructor
+    G4Spline();
+    ~G4Spline();
+
+    // Operations
+    void AddSplinePoint(const G4Vector3D& v);
+    G4Vector3D GetInterpolatedSplinePoint(float t);   // t = 0...1; 0=vp[0] ... 1=vp[max]
+    int GetNumPoints();
+    G4Vector3D GetPoint(int);
+    // method for computing the Catmull-Rom parametric equation
+    // given a time (t) and a vector quadruple (p1,p2,p3,p4).
+    G4Vector3D CatmullRom_Eq(float t, const G4Vector3D& p1, const G4Vector3D& p2,
+                             const G4Vector3D& p3, const G4Vector3D& p4);
+
+  private:
+    std::vector<G4Vector3D> vp;
+    float delta_t;
+  };
+  
   //////////////////////////////////////////////////////////////
   // Data members
   G4VSceneHandler&        fSceneHandler;     // Abstract scene for this view.

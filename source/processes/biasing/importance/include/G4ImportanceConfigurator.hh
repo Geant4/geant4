@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceConfigurator.hh 77477 2013-11-25 09:42:24Z gcosmo $
+// $Id: G4ImportanceConfigurator.hh 108675 2018-02-27 07:34:55Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // Class G4ImportanceConfigurator
@@ -60,7 +60,7 @@ public:  // with description
                             const G4VImportanceAlgorithm *ialg,
 			   G4bool paraflag);
 
-  G4ImportanceConfigurator(const G4String worldvolumeName, 
+  G4ImportanceConfigurator(const G4String &worldvolumeName, 
 			   const G4String &particlename,
                             G4VIStore &istore,
                             const G4VImportanceAlgorithm *ialg,
@@ -70,7 +70,7 @@ public:  // with description
   virtual void Configure(G4VSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;
 
-  void SetWorldName(G4String Name);
+  void SetWorldName(const G4String& Name);
 
 private:
 

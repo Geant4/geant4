@@ -33,7 +33,7 @@
 
 //G4-TBB interfaces
 #include "tbbUserWorkerInitialization.hh"
-#include "tbbMasterRunManager.hh"
+#include "SimpleTbbMasterRunManager.hh"
 #include "G4Threading.hh"
 
 #include "G4UImanager.hh"
@@ -68,10 +68,10 @@ G4ThreadFunReturnType startWork(G4ThreadFunArgType arg)
     //We assume at least one /run/beamOn was executed, thus the tasklist is now filled,
     //lets start TBB
     try {
-        std::cout<<"Now spawn work and waiting"<<std::endl;
+        std::cout<<"Now calling 'tbb::task::spawn_work_and_wait' "<<std::endl;
         tbb::task::spawn_root_and_wait( *tasks );
     } catch(std::exception& e) {
-        std::cerr<<"Error occurred. Error test is:\""<<e.what()<<"\""<<std::endl;
+        std::cerr<<"Error occurred. Error info is:\""<<e.what()<<"\""<<std::endl;
     }
     return static_cast<G4ThreadFunReturnType>(0);
 }
@@ -83,14 +83,14 @@ int main(int argc,char** argv)
   // Choose the Random engine
 
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
-    
-    
-  //=== TBB engine initialization
-  tbb::task_scheduler_init init( G4Threading::G4GetNumberOfCores() );
-  tbb::task_list tasks;
   
+  unsigned int numCoresAvailable=  G4Threading::G4GetNumberOfCores();
+  unsigned int numberOfCoresToUse= (numCoresAvailable > 1 ) ? 2 : 1 ;
+  //=== TBB engine initialization
+  tbb::task_scheduler_init init( numberOfCoresToUse );
+  tbb::task_list tasks;
    
-  tbbMasterRunManager* runManager = new tbbMasterRunManager;
+  SimpleTbbMasterRunManager* runManager = new SimpleTbbMasterRunManager;
     
   //Set TBB specific data to run-manager, 1 event per tbb::task (e.g. Nevents == N tasks)
   //Note that a /run/beamOn command will just create tasks and add them to tasks
@@ -117,14 +117,6 @@ int main(int argc,char** argv)
 
   runManager->Initialize();
   
-#ifdef G4VIS_USE
-  // Initialize visualization
-  G4VisManager* visManager = new G4VisExecutive;
-  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
-  visManager->Initialize();
-#endif
-
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
@@ -136,17 +128,18 @@ int main(int argc,char** argv)
     }
   else
     {  // interactive mode : define UI session
-#ifdef G4UI_USE
+#if 1
+      G4int nEvents= 50; 
+      runManager->BeamOn(nEvents); 
+#else     
+   #ifdef G4UI_USE      
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-        UImanager->ApplyCommand("/control/execute init_vis.mac");
-#else
-        UImanager->ApplyCommand("/control/execute init.mac");
-#endif
+      UImanager->ApplyCommand("/control/execute init.mac");
       if (ui->IsGUI())
          UImanager->ApplyCommand("/control/execute gui.mac");
       ui->SessionStart();
       delete ui;
+   #endif
 #endif
     }
  //END-G4
@@ -156,10 +149,6 @@ int main(int argc,char** argv)
     //Wait for work to be finised
     G4THREADJOIN(aThread);
   
-#ifdef G4VIS_USE
-    delete visManager;
-#endif
-
     delete runManager;
 
     return 0;

@@ -47,7 +47,7 @@ G4XTRGammaRadModel::G4XTRGammaRadModel(G4LogicalVolume* anEnvelope,
                                      const G4String& processName) :
   G4VXTRenergyLoss(anEnvelope,foilMat,gasMat,a,b,n,processName)
 {
-  G4cout<<"Gammma distributed X-ray TR radiator model is called"<<G4endl ;
+  G4cout<<"Gamma distributed X-ray TR radiator model is called"<<G4endl ;
 
   // Build energy and angular integral spectra of X-ray TR photons from
   // a radiator
@@ -107,7 +107,7 @@ G4XTRGammaRadModel::GetStackFactor( G4double energy,
 
   F2          *= std::pow(Q,G4double(fPlateNumber)) - std::pow(H,fPlateNumber) ;
 
-  result      = ( 1 - std::pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
+  result      = ( 1. - std::pow(Q,G4double(fPlateNumber)) )/( 1. - Q ) ;
 
   G4complex stack  = result*F1;
             stack += F2;

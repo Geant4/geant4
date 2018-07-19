@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 77288 2013-11-22 10:52:58Z gcosmo $
+// $Id: DetectorConstruction.cc 98749 2016-08-09 13:43:36Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,7 +67,7 @@ DetectorConstruction::DetectorConstruction()
   fAbsorThickness[0] = 0*mm;        //dummy, for initialization   
   fAbsorThickness[1] = 1*mm;  
   fAbsorSizeYZ       = 1.*mm;
-  for (G4int iAbs=0; iAbs<MaxAbsor; iAbs++) {
+  for (G4int iAbs=0; iAbs<kMaxAbsor; iAbs++) {
     fNbOfDivisions[iAbs]  = 1;
   }  
   ComputeParameters();
@@ -230,7 +230,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
                       LayerThickness);     //witdth of replica    
   }
 
-
   PrintParameters();
 
   //always return the physical World
@@ -260,9 +259,9 @@ void DetectorConstruction::SetNbOfAbsor(G4int ival)
 {
   // set the number of Absorbers
   //
-  if (ival < 1 || ival > (MaxAbsor-1))
+  if (ival < 1 || ival > (kMaxAbsor-1))
     { G4cout << "\n ---> warning from SetfNbOfAbsor: "
-             << ival << " must be at least 1 and and most " << MaxAbsor-1
+             << ival << " must be at least 1 and and most " << kMaxAbsor-1
              << ". Command refused" << G4endl;
       return;
     }
@@ -345,7 +344,6 @@ void DetectorConstruction::SetNbOfDivisions(G4int iabs, G4int ival)
   fNbOfDivisions[iabs] = ival;
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

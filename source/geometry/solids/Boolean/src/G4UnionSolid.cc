@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc 95422 2016-02-10 14:35:47Z gcosmo $
+// $Id: G4UnionSolid.cc 109479 2018-04-24 14:33:49Z gcosmo $
 //
-// Implementation of methods for the class G4IntersectionSolid
+// Implementation of methods for the class G4UnionSolid
 //
 // History:
 //
@@ -34,6 +34,8 @@
 // 28.11.98 V.Grichine: fix while loops in DistToIn/Out 
 // 27.07.99 V.Grichine: modifications in DistToOut(p,v,...), while -> do-while
 // 16.03.01 V.Grichine: modifications in CalculateExtent()
+// 17.03.17 E.Tcherniaev: revision of SurfaceNormal()
+// 23.04.18 E.Tcherniaev: added extended BBox, yearly return in Inside()
 //
 // --------------------------------------------------------------------
 
@@ -60,6 +62,11 @@ G4UnionSolid:: G4UnionSolid( const G4String& pName,
                                    G4VSolid* pSolidB )
   : G4BooleanSolid(pName,pSolidA,pSolidB)
 {
+  G4ThreeVector pdelta(0.5*kCarTolerance,0.5*kCarTolerance,0.5*kCarTolerance);
+  G4ThreeVector pmin, pmax;
+  BoundingLimits(pmin, pmax);
+  fPMin = pmin - pdelta;
+  fPMax = pmax + pdelta;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -74,6 +81,11 @@ G4UnionSolid::G4UnionSolid( const G4String& pName,
   : G4BooleanSolid(pName,pSolidA,pSolidB,rotMatrix,transVector)
 
 {
+  G4ThreeVector pdelta(0.5*kCarTolerance,0.5*kCarTolerance,0.5*kCarTolerance);
+  G4ThreeVector pmin, pmax;
+  BoundingLimits(pmin, pmax);
+  fPMin = pmin - pdelta;
+  fPMax = pmax + pdelta;
 }
 
 ///////////////////////////////////////////////////////////
@@ -86,6 +98,11 @@ G4UnionSolid::G4UnionSolid( const G4String& pName,
                             const G4Transform3D& transform )
   : G4BooleanSolid(pName,pSolidA,pSolidB,transform)
 {
+  G4ThreeVector pdelta(0.5*kCarTolerance,0.5*kCarTolerance,0.5*kCarTolerance);
+  G4ThreeVector pmin, pmax;
+  BoundingLimits(pmin, pmax);
+  fPMin = pmin - pdelta;
+  fPMax = pmax + pdelta;
 } 
 
 //////////////////////////////////////////////////////////////////
@@ -113,6 +130,8 @@ G4UnionSolid::~G4UnionSolid()
 G4UnionSolid::G4UnionSolid(const G4UnionSolid& rhs)
   : G4BooleanSolid (rhs)
 {
+  fPMin = rhs.fPMin;
+  fPMax = rhs.fPMax;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -129,12 +148,48 @@ G4UnionSolid& G4UnionSolid::operator = (const G4UnionSolid& rhs)
   //
   G4BooleanSolid::operator=(rhs);
 
+  fPMin = rhs.fPMin;
+  fPMax = rhs.fPMax;
   return *this;
 }  
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
+// Get bounding box
+
+void G4UnionSolid::BoundingLimits(G4ThreeVector& pMin,
+                                  G4ThreeVector& pMax) const
+{
+  G4ThreeVector minA,maxA, minB,maxB;
+  fPtrSolidA->BoundingLimits(minA,maxA);
+  fPtrSolidB->BoundingLimits(minB,maxB);
+
+  pMin.set(std::min(minA.x(),minB.x()),
+           std::min(minA.y(),minB.y()),
+           std::min(minA.z(),minB.z()));
+
+  pMax.set(std::max(maxA.x(),maxB.x()),
+           std::max(maxA.y(),maxB.y()),
+           std::max(maxA.z(),maxB.z()));
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4UnionSolid::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
+// Calculate extent under transform and specified limit
      
 G4bool 
 G4UnionSolid::CalculateExtent( const EAxis pAxis,
@@ -149,15 +204,18 @@ G4UnionSolid::CalculateExtent( const EAxis pAxis,
 
   touchesA = fPtrSolidA->CalculateExtent( pAxis, pVoxelLimit, 
                                           pTransform, minA, maxA);
-  touchesB= fPtrSolidB->CalculateExtent( pAxis, pVoxelLimit, 
-                                         pTransform, minB, maxB);
+  touchesB = fPtrSolidB->CalculateExtent( pAxis, pVoxelLimit, 
+                                          pTransform, minB, maxB);
   if( touchesA || touchesB )
   {
     pMin = std::min( minA, minB ); 
     pMax = std::max( maxA, maxB );
     out  = true ; 
   }
-  else out = false ;
+  else
+  {
+    out = false ;
+  }
 
   return out ;  // It exists in this slice if either one does.
 }
@@ -170,79 +228,63 @@ G4UnionSolid::CalculateExtent( const EAxis pAxis,
 
 EInside G4UnionSolid::Inside( const G4ThreeVector& p ) const
 {
-  EInside positionA = fPtrSolidA->Inside(p);
-  if (positionA == kInside)  { return kInside; }
+  if (std::max(p.z()-fPMax.z(),fPMin.z()-p.z()) > 0) return kOutside;
 
+  EInside positionA = fPtrSolidA->Inside(p);
+  if (positionA == kInside)  { return positionA; } // inside A
+  EInside positionB = fPtrSolidB->Inside(p);
+  if (positionA == kOutside) { return positionB; }
+
+  if (positionB == kInside)  { return positionB; } // inside  B
+  if (positionB == kOutside) { return positionA; } // surface A
+
+  // Both points are on surface
+  //
   static const G4double rtol
     = 1000*G4GeometryTolerance::GetInstance()->GetRadialTolerance();
-  EInside positionB = fPtrSolidB->Inside(p);
 
-  if( positionB == kInside  ||
-    ( positionA == kSurface && positionB == kSurface &&
-        ( fPtrSolidA->SurfaceNormal(p) + 
-          fPtrSolidB->SurfaceNormal(p) ).mag2() < rtol ) )
-  {
-    return kInside;
-  }
-  else
-  {
-    if( ( positionB == kSurface ) || ( positionA == kSurface ) )
-      { return kSurface; }
-    else
-      { return kOutside; } 
-  }
+  return ((fPtrSolidA->SurfaceNormal(p) + 
+           fPtrSolidB->SurfaceNormal(p)).mag2() < rtol) ? kInside : kSurface;
 }
 
 //////////////////////////////////////////////////////////////
 //
-//
+// Get surface normal
 
 G4ThreeVector 
 G4UnionSolid::SurfaceNormal( const G4ThreeVector& p ) const 
 {
-    G4ThreeVector normal;
+  EInside positionA = fPtrSolidA->Inside(p);
+  EInside positionB = fPtrSolidB->Inside(p);
 
-#ifdef G4BOOLDEBUG
-    if( Inside(p) == kOutside )
-    {
-      G4cout << "WARNING - Invalid call in "
-             << "G4UnionSolid::SurfaceNormal(p)" << G4endl
-             << "  Point p is outside !" << G4endl;
-      G4cout << "          p = " << p << G4endl;
-      G4cerr << "WARNING - Invalid call in "
-             << "G4UnionSolid::SurfaceNormal(p)" << G4endl
-             << "  Point p is outside !" << G4endl;
-      G4cerr << "          p = " << p << G4endl;
-    }
-#endif
+  if (positionA == kSurface &&
+      positionB == kOutside) return fPtrSolidA->SurfaceNormal(p);
 
-    if(fPtrSolidA->Inside(p) == kSurface && fPtrSolidB->Inside(p) != kInside) 
+  if (positionA == kOutside &&
+      positionB == kSurface) return fPtrSolidB->SurfaceNormal(p);
+
+  if (positionA == kSurface &&
+      positionB == kSurface)
+  {
+    if (Inside(p) == kSurface)
     {
-       normal= fPtrSolidA->SurfaceNormal(p) ;
+      G4ThreeVector normalA = fPtrSolidA->SurfaceNormal(p);
+      G4ThreeVector normalB = fPtrSolidB->SurfaceNormal(p);
+      return (normalA + normalB).unit(); 
     }
-    else if(fPtrSolidB->Inside(p) == kSurface && 
-            fPtrSolidA->Inside(p) != kInside)
-    {
-       normal= fPtrSolidB->SurfaceNormal(p) ;
-    }
-    else 
-    {
-      normal= fPtrSolidA->SurfaceNormal(p) ;
+  }
 #ifdef G4BOOLDEBUG
-      if(Inside(p)==kInside)
-      {
-        G4cout << "WARNING - Invalid call in "
-             << "G4UnionSolid::SurfaceNormal(p)" << G4endl
-             << "  Point p is inside !" << G4endl;
-        G4cout << "          p = " << p << G4endl;
-        G4cerr << "WARNING - Invalid call in "
-             << "G4UnionSolid::SurfaceNormal(p)" << G4endl
-             << "  Point p is inside !" << G4endl;
-        G4cerr << "          p = " << p << G4endl;
-      }
+  G4String surf[3] = { "OUTSIDE", "SURFACE", "INSIDE" };
+  std::ostringstream message;
+  G4int oldprc = message.precision(16);
+  message << "Invalid call of SurfaceNormal(p) for union solid: "
+          << GetName() << " !"
+          << "\nPoint p" << p << " is " << surf[Inside(p)] << " !!!"; 
+  message.precision(oldprc);
+  G4Exception("G4UnionSolid::SurfaceNormal()", "GeomMgt0001",
+              JustWarning, message);
 #endif
-    }
-    return normal;
+  return fPtrSolidA->SurfaceNormal(p);
 }
 
 /////////////////////////////////////////////////////////////

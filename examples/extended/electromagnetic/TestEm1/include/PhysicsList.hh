@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 82331 2014-06-16 09:54:40Z gcosmo $
+// $Id: PhysicsList.hh 108857 2018-03-12 07:42:27Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -44,6 +44,7 @@
 class DetectorConstruction;
 class PhysicsListMessenger;
 class G4VPhysicsConstructor;
+class G4VProcess;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,7 +63,8 @@ class PhysicsList: public G4VModularPhysicsList
     void AddStepMax();
 
     void GetRange(G4double);
-      
+    G4VProcess*  GetProcess(const G4String&) const;
+
   private:    
     G4VPhysicsConstructor* fEmPhysicsList;
     G4String               fEmName;

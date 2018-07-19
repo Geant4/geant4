@@ -35,6 +35,7 @@
 
 #include "G4Material.hh"
 #include "G4NistManager.hh"
+#include "G4SDManager.hh"
 
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -283,6 +284,7 @@ void B2bDetectorConstruction::ConstructSDandField()
   G4String trackerChamberSDname = "B2/TrackerChamberSD";
   B2TrackerSD* aTrackerSD = new B2TrackerSD(trackerChamberSDname,
                                             "TrackerHitsCollection");
+  G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
   SetSensitiveDetector( fLogicChamber,  aTrackerSD );
 
   // Create global magnetic field messenger.

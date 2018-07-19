@@ -1,4 +1,4 @@
-# $Id: TestEm18.in 82401 2014-06-18 14:43:54Z gcosmo $
+# $Id: TestEm18.in 105252 2017-07-17 09:40:37Z gcosmo $
 #
 # macro file for TestEm18.cc
 #
@@ -13,8 +13,9 @@
 /run/setCut 1 mm
 #
 /run/initialize
+/process/list
 #
 /gun/particle e- 
-/gun/energy 10 MeV
+/gun/energy 100 MeV
 #
 /run/beamOn 100000

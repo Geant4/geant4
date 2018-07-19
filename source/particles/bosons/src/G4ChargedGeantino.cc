@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargedGeantino.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4ChargedGeantino.cc 102841 2017-02-27 13:00:47Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -70,7 +70,7 @@ G4ChargedGeantino*  G4ChargedGeantino::Definition()
 		    0,               0,             0,          
 		    0,               0,             0,             
 	   "geantino",               0,             0,           0,
-    	         true,             0.0,          NULL,
+    	         true,            -1.0,          NULL,
 		 false,     "geantino",             0
 	  );
   }

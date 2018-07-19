@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc 84598 2014-10-17 07:39:15Z gcosmo $
+// $Id: G4hIonisation.cc 107058 2017-11-01 14:54:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -111,7 +111,6 @@ G4hIonisation::G4hIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     isInitialised(false)
 {
-  SetStepFunction(0.2, 0.1*mm);
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(G4Electron::Electron());
   mass = 0.0;
@@ -151,7 +150,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 {
   if(!isInitialised) {
 
-    const G4ParticleDefinition* theBaseParticle = 0;
+    const G4ParticleDefinition* theBaseParticle = nullptr;
     G4String pname = part->GetParticleName();
     G4double q = part->GetPDGCharge();
 
@@ -165,10 +164,10 @@ void G4hIonisation::InitialiseEnergyLossProcess(
        pname == "kaon+" || pname == "kaon-" || pname == "GenericIon"
        || pname == "He3" || pname == "alpha") 
       { 
-	theBaseParticle = 0;
+	theBaseParticle = nullptr;
       }
     // select base particle 
-    else if(bpart == 0) {
+    else if(bpart == nullptr) {
 
       if(part->GetPDGSpin() == 0.0) {
 	if(q > 0.0) { theBaseParticle = G4KaonPlus::KaonPlus(); }
@@ -188,21 +187,31 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     ratio = electron_mass_c2/mass;
     eth   = 2.0*MeV*mass/proton_mass_c2;
 
-    if (!EmModel(1)) { 
-      if(q > 0.0) { SetEmModel(new G4BraggModel(),1); }
-      else { SetEmModel(new G4ICRU73QOModel(),1); }
-    }
     G4EmParameters* param = G4EmParameters::Instance();
-    EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(eth);
-    AddEmModel(1, EmModel(1), new G4IonFluctuations());
+    G4double emin = std::min(param->MinKinEnergy(), 0.1*eth);
+    G4double emax = std::max(param->MaxKinEnergy(), 100*eth);
+
+    if(emin != param->MinKinEnergy() || emax != param->MaxKinEnergy()) {
+      SetMinKinEnergy(emin);
+      SetMaxKinEnergy(emax);
+      G4int bin = G4lrint(param->NumberOfBinsPerDecade()*std::log10(emax/emin));
+      SetDEDXBinning(bin);
+    }
+
+    if (!EmModel(0)) { 
+      if(q > 0.0) { SetEmModel(new G4BraggModel()); }
+      else        { SetEmModel(new G4ICRU73QOModel()); }
+    }
+    EmModel(0)->SetLowEnergyLimit(emin);
+    EmModel(0)->SetHighEnergyLimit(eth);
+    AddEmModel(1, EmModel(0), new G4IonFluctuations());
 
     if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
 
-    if (!EmModel(2)) { SetEmModel(new G4BetheBlochModel(),2); }
-    EmModel(2)->SetLowEnergyLimit(eth);
-    EmModel(2)->SetHighEnergyLimit(param->MaxKinEnergy());
-    AddEmModel(2, EmModel(2), FluctModel());  
+    if (!EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }
+    EmModel(1)->SetLowEnergyLimit(eth);
+    EmModel(1)->SetHighEnergyLimit(emax);
+    AddEmModel(1, EmModel(1), FluctModel());  
 
     isInitialised = true;
   }
@@ -214,3 +223,11 @@ void G4hIonisation::PrintInfo()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hIonisation::ProcessDescription(std::ostream& out) const
+{
+  out << "<strong>Ionisation</strong>";
+  G4VEnergyLossProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

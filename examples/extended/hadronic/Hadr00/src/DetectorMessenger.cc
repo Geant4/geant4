@@ -27,7 +27,7 @@
 /// \brief Implementation of the DetectorMessenger class
 //
 //
-// $Id: DetectorMessenger.cc 77254 2013-11-22 10:08:02Z gcosmo $
+// $Id: DetectorMessenger.cc 106244 2017-09-26 01:58:00Z gcosmo $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -52,6 +52,8 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "HistoManager.hh"
+#include "G4RadioactiveDecayPhysics.hh"
+#include "G4VModularPhysicsList.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -72,6 +74,12 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fmat1Cmd->SetParameterName("wMaterial",false);
   fmat1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   fmat1Cmd->SetToBeBroadcasted(false);
+
+  fRDCmd = new G4UIcmdWithABool("/testhadr/RadDecay",this);
+  fRDCmd->SetGuidance("Enable radioactive decay");
+  fRDCmd->SetParameterName("RD",false);
+  fRDCmd->AvailableForStates(G4State_PreInit);
+  fRDCmd->SetToBeBroadcasted(false);
 
   frCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/TargetRadius",this);
   frCmd->SetGuidance("Set radius of the target");
@@ -97,6 +105,7 @@ DetectorMessenger::~DetectorMessenger()
 {
   delete fmatCmd;
   delete fmat1Cmd;
+  delete fRDCmd;
   delete frCmd;
   delete flCmd;
   delete ftestDir;
@@ -114,6 +123,11 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fDetector->SetTargetRadius(frCmd->GetNewDoubleValue(newValue));
   } else if( command == flCmd ) { 
     fDetector->SetTargetLength(flCmd->GetNewDoubleValue(newValue));
+  } else if( command == fRDCmd ) { 
+    if(fRDCmd->GetNewBoolValue(newValue)) {
+      fDetector->GetPhysicsList()
+        ->RegisterPhysics(new G4RadioactiveDecayPhysics(1));
+    }
   }
 }
 

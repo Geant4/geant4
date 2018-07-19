@@ -13,7 +13,7 @@ namespace tools {
 
 template <class TO>
 inline void* cmp_cast(const TO* a_this,const std::string& a_class) {
-  if(!tools::rcmp(a_class,TO::s_class())) return 0;
+  if(!rcmp(a_class,TO::s_class())) return 0;
   return (void*)static_cast<const TO*>(a_this);
 }
 

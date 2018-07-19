@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
-// $Id: PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
+// $Id: PhysicsList.cc 100257 2016-10-17 08:00:06Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,22 +39,20 @@
 #include "PhysListEmPolarized.hh"
 
 #include "G4EmParameters.hh"
-#include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() 
-: G4VModularPhysicsList()
+: G4VModularPhysicsList(),
+  fEmPhysicsList(0), fEmName("polarized"), fMessenger(0)
 {
-  pMessenger = new PhysicsListMessenger(this);
+  fMessenger = new PhysicsListMessenger(this);
 
   G4EmParameters::Instance();
 
   SetVerboseLevel(1);
 
-  emName = "polarized";
-  emPhysicsList = new PhysListEmPolarized();
+  fEmPhysicsList = new PhysListEmPolarized();
 
 }
 
@@ -62,26 +60,41 @@ PhysicsList::PhysicsList()
 
 PhysicsList::~PhysicsList()
 {
-  delete pMessenger;
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Bosons
-#include "G4Gamma.hh"
-
-// leptons
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
+#include "G4BosonConstructor.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BosonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-  G4Gamma::GammaDefinition();
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
+  G4BosonConstructor  pBosonConstructor;
+  pBosonConstructor.ConstructParticle();
+
+  G4LeptonConstructor pLeptonConstructor;
+  pLeptonConstructor.ConstructParticle();
+
+  G4MesonConstructor pMesonConstructor;
+  pMesonConstructor.ConstructParticle();
+
+  G4BaryonConstructor pBaryonConstructor;
+  pBaryonConstructor.ConstructParticle();
+
+  G4IonConstructor pIonConstructor;
+  pIonConstructor.ConstructParticle();
+
+  G4ShortLivedConstructor pShortLivedConstructor;
+  pShortLivedConstructor.ConstructParticle();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,7 +109,7 @@ void PhysicsList::ConstructProcess()
 
   // Electromagnetic physics list
   //
-  emPhysicsList->ConstructProcess();
+  fEmPhysicsList->ConstructProcess();
     
   // step limitation (as a full process)
   //  
@@ -111,19 +124,19 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
   
-  if (name == emName) return;
+  if (name == fEmName) return;
 
   if (name == "standard") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics();
             
   } else if (name == "polarized") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmPolarized();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmPolarized();
 
   } else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"

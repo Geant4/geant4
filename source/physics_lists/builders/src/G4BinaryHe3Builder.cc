@@ -58,14 +58,4 @@ Build(G4He3InelasticProcess * aP)
   aP->RegisterMe(theModel);
 }
 
-G4BinaryHe3Builder::
-~G4BinaryHe3Builder() 
-{
-}
-
-void G4BinaryHe3Builder::
-Build(G4HadronElasticProcess * )
-{
-}
-
 // 2002 by J.P. Wellisch

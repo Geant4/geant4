@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.cc 102321 2017-01-23 09:51:59Z gcosmo $
+// $Id: G4EmLivermorePolarizedPhysics.cc 109526 2018-04-30 07:11:52Z gcosmo $
 
 #include "G4EmLivermorePolarizedPhysics.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4ParticleTable.hh"
 
 // *** Processes and models
 
@@ -43,6 +44,8 @@
 
 #include "G4RayleighScattering.hh" 
 #include "G4LivermorePolarizedRayleighModel.hh"
+#include "G4LivermorePhotoElectricModel.hh"
+#include "G4PhotoElectricAngularGeneratorPolarized.hh"
 
 // e+-
 #include "G4eMultipleScattering.hh"
@@ -53,6 +56,8 @@
 
 #include "G4eBremsstrahlung.hh"
 #include "G4LivermoreBremsstrahlungModel.hh"
+#include "G4Generator2BS.hh"
+#include "G4SeltzerBergerModel.hh"
 
 // e+
 #include "G4eplusAnnihilation.hh"
@@ -121,36 +126,22 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4EmLivermorePolarizedPhysics);
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(G4int ver)
-  : G4VPhysicsConstructor("G4EmLivermorePolarizedPhysics"), verbose(ver)
+G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(G4int ver, 
+							     const G4String&)
+  : G4VPhysicsConstructor("G4EmLivermorePolarized"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(100*eV);
-  param->SetMaxEnergy(10*TeV);
   param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
-  param->SetFluo(true);
-  SetPhysicsType(bElectromagnetic);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(G4int ver, const G4String&)
-  : G4VPhysicsConstructor("G4EmLivermorePolarizedPhysics"), verbose(ver)
-{
-  G4EmParameters* param = G4EmParameters::Instance();
-  param->SetDefaults();
-  param->SetVerbose(verbose);
-  param->SetMinEnergy(100*eV);
-  param->SetMaxEnergy(10*TeV);
-  param->SetNumberOfBinsPerDecade(20);
-  param->ActivateAngularGeneratorForIonisation(true);
+  param->SetMscRangeFactor(0.02);
+  param->SetMuHadLateralDisplacement(true);
+  param->SetMscStepLimitType(fUseDistanceToBoundary);
   param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
@@ -189,10 +180,6 @@ void G4EmLivermorePolarizedPhysics::ConstructParticle()
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
-
-  // dna
-  G4EmModelActivator mact;
-  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -216,80 +203,63 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
 
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
-  mumsc->AddEmModel(0, new G4WentzelVIModel());
-  G4MuMultipleScattering* pimsc = new G4MuMultipleScattering();
-  pimsc->AddEmModel(0, new G4WentzelVIModel());
-  G4MuMultipleScattering* kmsc = new G4MuMultipleScattering();
-  kmsc->AddEmModel(0, new G4WentzelVIModel());
-  G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
-  pmsc->AddEmModel(0, new G4WentzelVIModel());
+  mumsc->SetEmModel(new G4WentzelVIModel());
+  G4hMultipleScattering* pimsc = new G4hMultipleScattering();
+  pimsc->SetEmModel(new G4WentzelVIModel());
+  G4hMultipleScattering* kmsc = new G4hMultipleScattering();
+  kmsc->SetEmModel(new G4WentzelVIModel());
+
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
   // high energy limit for e+- scattering models
-  G4double highEnergyLimit = 100*MeV;
+  G4double highEnergyLimit = G4EmParameters::Instance()->MscEnergyLimit();
 
   // nuclear stopping
   G4NuclearStopping* pnuc = new G4NuclearStopping();
 
   // Add Livermore EM Processes
-  auto myParticleIterator=GetParticleIterator();
-  myParticleIterator->reset();
-
-  while( (*myParticleIterator)() ){
-  
-    G4ParticleDefinition* particle = myParticleIterator->value();
-    G4String particleName = particle->GetParticleName();
-
-    //Applicability range for Livermore models
-    //for higher energies, the Standard models are used   
-    G4double LivermoreHighEnergyLimit = GeV;
-
+  G4ParticleTable* table = G4ParticleTable::GetParticleTable();
+  for(const auto& particleName : partList.PartNames()) {
+    G4ParticleDefinition* particle = table->FindParticle(particleName);
+    if (!particle) { continue; }
     if (particleName == "gamma") {
 
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      G4LivermorePolarizedPhotoElectricModel* theLivermorePhotoElectricModel = new G4LivermorePolarizedPhotoElectricModel();
-      theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
+      G4VEmModel* mod = new G4LivermorePhotoElectricModel();
+      mod->SetAngularDistribution(new G4PhotoElectricAngularGeneratorPolarized());
+      thePhotoElectricEffect->SetEmModel(mod);
       ph->RegisterProcess(thePhotoElectricEffect, particle);
 
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      G4LivermorePolarizedComptonModel* theLivermoreComptonModel = new G4LivermorePolarizedComptonModel();
-      theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
+      theComptonScattering->SetEmModel(new G4LivermorePolarizedComptonModel());
       ph->RegisterProcess(theComptonScattering, particle);
 
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      G4LivermorePolarizedGammaConversionModel* theLivermoreGammaConversionModel = new G4LivermorePolarizedGammaConversionModel();
-      theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
+      theGammaConversion->SetEmModel(new G4LivermorePolarizedGammaConversionModel());
       ph->RegisterProcess(theGammaConversion, particle);
 
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      G4LivermorePolarizedRayleighModel* theRayleighModel = new G4LivermorePolarizedRayleighModel();
-      theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theRayleigh->AddEmModel(0, theRayleighModel);
+      theRayleigh->SetEmModel(new G4LivermorePolarizedRayleighModel());
       ph->RegisterProcess(theRayleigh, particle);
 
     } else if (particleName == "e-") {
 
-      // multiple scattering
+      // multiple and single scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fUseDistanceToBoundary);
       G4UrbanMscModel* msc1 = new G4UrbanMscModel();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
-      msc->AddEmModel(0, msc1);
-      msc->AddEmModel(0, msc2);
+      msc->SetEmModel(msc1);
+      msc->SetEmModel(msc2);
 
       G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
       G4CoulombScattering* ss = new G4CoulombScattering();
-      ss->SetEmModel(ssm, 1); 
+      ss->SetEmModel(ssm); 
       ss->SetMinKinEnergy(highEnergyLimit);
       ssm->SetLowEnergyLimit(highEnergyLimit);
       ssm->SetActivationLowEnergyLimit(highEnergyLimit);
-      ph->RegisterProcess(msc, particle);
-      ph->RegisterProcess(ss, particle);
       
       // Ionisation
       G4eIonisation* eIoni = new G4eIonisation();
@@ -298,11 +268,18 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       theIoniLivermore->SetHighEnergyLimit(0.1*MeV); 
       eIoni->AddEmModel(0, theIoniLivermore, new G4UniversalFluctuation() );
       eIoni->SetStepFunction(0.2, 100*um); //     
-      ph->RegisterProcess(eIoni, particle);
       
       // Bremsstrahlung from standard
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
+      G4VEmModel* mod = new G4SeltzerBergerModel();
+      mod->SetAngularDistribution(new G4Generator2BS());
+      eBrem->SetEmModel(mod);
+
+      // register processes
+      ph->RegisterProcess(msc, particle);
+      ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(eBrem, particle);
+      ph->RegisterProcess(ss, particle);
 
     } else if (particleName == "e+") {
 
@@ -313,12 +290,12 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
-      msc->AddEmModel(0, msc1);
-      msc->AddEmModel(0, msc2);
+      msc->SetEmModel(msc1);
+      msc->SetEmModel(msc2);
 
       G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
       G4CoulombScattering* ss = new G4CoulombScattering();
-      ss->SetEmModel(ssm, 1); 
+      ss->SetEmModel(ssm); 
       ss->SetMinKinEnergy(highEnergyLimit);
       ssm->SetLowEnergyLimit(highEnergyLimit);
       ssm->SetActivationLowEnergyLimit(highEnergyLimit);
@@ -327,9 +304,15 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);      
 
+      // Bremsstrahlung from standard
+      G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
+      G4VEmModel* mod = new G4SeltzerBergerModel();
+      mod->SetAngularDistribution(new G4Generator2BS());
+      eBrem->SetEmModel(mod);
+
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eIoni, particle);
-      ph->RegisterProcess(new G4eBremsstrahlung(), particle);
+      ph->RegisterProcess(eBrem, particle);
       ph->RegisterProcess(new G4eplusAnnihilation(), particle);
       ph->RegisterProcess(ss, particle);
 
@@ -347,8 +330,6 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
 
     } else if (particleName == "alpha" ||
                particleName == "He3" ) {
-
-      // Identical to G4EmStandardPhysics_option3
       
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       G4ionIonisation* ionIoni = new G4ionIonisation();
@@ -359,8 +340,6 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       ph->RegisterProcess(pnuc, particle);
 
     } else if (particleName == "GenericIon") {
-
-      // Identical to G4EmStandardPhysics_option3
       
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
@@ -373,7 +352,6 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
     } else if (particleName == "pi+" ||
                particleName == "pi-" ) {
 
-      //G4hMultipleScattering* pimsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
 
@@ -386,7 +364,6 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
     } else if (particleName == "kaon+" ||
                particleName == "kaon-" ) {
 
-      //G4hMultipleScattering* kmsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
 
@@ -399,7 +376,9 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
     } else if (particleName == "proton" ||
 	       particleName == "anti_proton") {
 
-      //G4hMultipleScattering* pmsc = new G4hMultipleScattering();
+      G4hMultipleScattering* pmsc = new G4hMultipleScattering();
+      pmsc->SetEmModel(new G4WentzelVIModel());
+
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
 
@@ -440,9 +419,6 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
                particleName == "triton" ||
                particleName == "xi_c+" ||
                particleName == "xi-" ) {
-
-      // Identical to G4EmStandardPhysics_option3
-      
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(pnuc, particle);
@@ -457,8 +433,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 
-  G4EmModelActivator mact;
-  mact.ConstructProcess();
+  G4EmModelActivator mact(GetPhysicsName());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

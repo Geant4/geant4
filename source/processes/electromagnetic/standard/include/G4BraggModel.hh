@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.hh 93362 2015-10-19 13:45:19Z gcosmo $
+// $Id: G4BraggModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,12 +73,13 @@ class G4BraggModel : public G4VEmModel
 
 public:
 
-  G4BraggModel(const G4ParticleDefinition* p = nullptr,
-               const G4String& nam = "Bragg");
+  explicit G4BraggModel(const G4ParticleDefinition* p = nullptr,
+			const G4String& nam = "Bragg");
 
   virtual ~G4BraggModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
 
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
@@ -91,38 +92,38 @@ public:
 				 G4double kineticEnergy,
 				 G4double Z, G4double A,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 				 				 
   virtual G4double CrossSectionPerVolume(const G4Material*,
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 				 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 				const G4ParticleDefinition*,
 				G4double kineticEnergy,
-				G4double cutEnergy);
+				G4double cutEnergy) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   // Compute ion charge 
   virtual G4double GetChargeSquareRatio(const G4ParticleDefinition*,
 					const G4Material*,
-					G4double kineticEnergy);
+					G4double kineticEnergy) override;
 
   virtual G4double GetParticleCharge(const G4ParticleDefinition* p,
 				     const G4Material* mat,
-				     G4double kineticEnergy);
+				     G4double kineticEnergy) override;
 
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				      G4double kinEnergy);
+				      G4double kinEnergy) final;
 
   inline G4double GetChargeSquareRatio() const;
 
@@ -146,11 +147,9 @@ private:
 
   G4double ChemicalFactor(G4double kineticEnergy, G4double eloss125) const;
 
-  void SetExpStopPower125(G4double value) {expStopPower125 = value;};
-
   // hide assignment operator
-  G4BraggModel & operator=(const  G4BraggModel &right);
-  G4BraggModel(const  G4BraggModel&);
+  G4BraggModel & operator=(const  G4BraggModel &right) = delete;
+  G4BraggModel(const  G4BraggModel&) = delete;
 
   G4EmCorrections*            corr;
 
@@ -174,7 +173,6 @@ private:
   G4int    iMolecula;          // index in the molecula's table
   G4int    iPSTAR;             // index in PSTAR
   G4bool   isIon;
-  G4bool   isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

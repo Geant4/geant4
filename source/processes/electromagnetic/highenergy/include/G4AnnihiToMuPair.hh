@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4AnnihiToMuPair.hh 97391 2016-06-02 10:08:45Z gcosmo $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, November 2002
@@ -58,15 +58,15 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
 {
   public:  // with description
 
-     G4AnnihiToMuPair(const G4String& processName ="AnnihiToMuPair",
+     explicit G4AnnihiToMuPair(const G4String& processName ="AnnihiToMuPair",
 		            G4ProcessType type = fElectromagnetic);
 
     ~G4AnnihiToMuPair();
 
-     G4bool IsApplicable(const G4ParticleDefinition&);
+     G4bool IsApplicable(const G4ParticleDefinition&) override;
        // true for positron only.
 
-     void BuildPhysicsTable(const G4ParticleDefinition&);
+     void BuildPhysicsTable(const G4ParticleDefinition&) override;
        // here dummy, just calling PrintInfoDefinition
        // the total cross section is calculated analytically
 
@@ -91,7 +91,7 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
 
      G4double GetMeanFreePath(const G4Track& aTrack,
                               G4double previousStepSize,
-                              G4ForceCondition* );
+                              G4ForceCondition* ) override;
        // It returns the MeanFreePath of the process for the current track :
        // (energy, material)
        // The previousStepSize and G4ForceCondition* are not used.
@@ -99,7 +99,7 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
        // It is invoked by the ProcessManager of the Particle.
 
      G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-				     const G4Step& aStep);
+				     const G4Step& aStep) override;
        // It computes the final state of the process (at end of step),
        // returned as a ParticleChange object.
        // This function overloads a virtual function of the base class.
@@ -108,8 +108,8 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
   private:
 
      // hide assignment operator as private
-     G4AnnihiToMuPair& operator=(const G4AnnihiToMuPair &right);
-     G4AnnihiToMuPair(const G4AnnihiToMuPair& );
+     G4AnnihiToMuPair& operator=(const G4AnnihiToMuPair &right) = delete;
+     G4AnnihiToMuPair(const G4AnnihiToMuPair& ) = delete;
 
      G4double LowestEnergyLimit;     // Energy threshold of e+
      G4double HighestEnergyLimit;    // Limit of validity of the model

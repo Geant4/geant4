@@ -61,6 +61,7 @@ namespace  CexmcCustomFilter
     using namespace boost::spirit::ascii;
     using namespace boost::phoenix;
     using namespace CexmcAST;
+    using boost::spirit::qi::rule;
     using boost::spirit::ascii::space;
     using boost::spirit::ascii::space_type;
     using boost::spirit::ascii::alpha;

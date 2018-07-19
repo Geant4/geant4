@@ -1,0 +1,81 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_mapmanip
+#define tools_mapmanip
+
+#include <map>
+
+namespace tools {
+
+template <class K,class V>
+inline void safe_clear(std::map<K,V*>& a_m){
+  // the below takes into account the case in
+  // which "delete entry" could modify a_m.
+  typedef typename std::map<K,V*>::iterator it_t;
+  while(!a_m.empty()) {
+    it_t it = a_m.begin();
+    V* entry  = (*it).second;
+    a_m.erase(it);
+    delete entry;    
+  }
+}
+
+template <class K,class V>
+inline void find_and_remove_value(std::map<K,V*>& a_m,V* a_value){
+  typedef typename std::map<K,V*>::iterator it_t;
+  while(true) {
+    bool found = false;
+    for(it_t it=a_m.begin();it!=a_m.end();++it) {
+      if((*it).second==a_value) {
+        a_m.erase(it);
+	found = true;
+	break;
+      }
+    }
+    if(!found) break;
+  }
+}
+
+#ifdef TOOLS_DEPRECATED
+template <class K,class V> inline void clear(std::map<K,V*>& a_m){safe_clear<K,V>(a_m);}
+#endif
+
+template <class K,class V>
+inline void delete_key(std::map<K,V*>& a_m,const K& a_key){
+  typedef typename std::map<K,V*>::iterator it_t;
+  it_t it = a_m.find(a_key);
+  if(it==a_m.end()) return;
+  V* obj = (*it).second;
+  a_m.erase(it);
+  delete obj;
+}
+
+template <class K,class V>
+inline void raw_clear(std::map<K,V*>& a_m){
+  typedef typename std::map<K,V*>::iterator it_t;
+  for(it_t it=a_m.begin();it!=a_m.end();++it) delete (*it).second;
+  a_m.clear();
+}
+
+template <class K,class V>
+inline void copy(std::map<K,V*>& a_to,const std::map<K,V*>& a_from){
+  raw_clear<K,V>(a_to);
+  typedef typename std::map<K,V*>::const_iterator it_t;
+  for(it_t it=a_from.begin();it!=a_from.end();++it) {
+    a_to[(*it).first] = (*it).second->copy();
+  }
+}
+
+template <class K,class V>
+inline bool find(const std::map<K,V>& a_map,const K& a_key,V& a_value) {
+  typedef typename std::map<K,V>::const_iterator it_t;
+  it_t it = a_map.find(a_key);
+  if(it==a_map.end()) {a_value = V();return false;}
+  a_value = (*it).second;
+  return true;
+}
+
+}
+
+#endif

@@ -117,13 +117,16 @@
 #include "G4VDecayChannel.hh"
 #include "G4NuclearDecay.hh"
 #include "G4RadioactiveDecayMode.hh"
+#include "G4Fragment.hh"
 #include "G4Ions.hh"
 #include "G4IonTable.hh"
 #include "G4BetaDecayType.hh"
 #include "Randomize.hh"
 #include "G4LogicalVolumeStore.hh"
-#include "G4NuclearLevelManager.hh"
-#include "G4NuclearLevelStore.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
+#include "G4EmParameters.hh"
+#include "G4LevelManager.hh"
 #include "G4ThreeVector.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -134,9 +137,7 @@
 
 #include "G4HadronicProcessType.hh"
 #include "G4HadronicException.hh"
-#include "G4LossTableManager.hh"
-#include "G4VAtomDeexcitation.hh"
-#include "G4UAtomicDeexcitation.hh"
+#include "G4PhotonEvaporation.hh"
 
 #include <vector>
 #include <sstream>
@@ -145,7 +146,7 @@
 
 using namespace CLHEP;
 
-const G4double G4RadioactiveDecay::levelTolerance = 0.1*keV;
+const G4double G4RadioactiveDecay::levelTolerance = 10.0*eV;
 const G4ThreeVector G4RadioactiveDecay::origin(0.,0.,0.);
 
 #ifdef G4MULTITHREADED
@@ -156,7 +157,8 @@ DecayTableMap* G4RadioactiveDecay::master_dkmap = 0;
 
 G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
  : G4VRestDiscreteProcess(processName, fDecay), isInitialised(false),
-   forceDecayDirection(0.,0.,0.), forceDecayHalfAngle(0.*deg), verboseLevel(0)
+   forceDecayDirection(0.,0.,0.), forceDecayHalfAngle(0.*deg), dirPath(""),
+   verboseLevel(0)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 1) {
@@ -169,6 +171,28 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
 
   theRadioactiveDecaymessenger = new G4RadioactiveDecaymessenger(this);
   pParticleChange = &fParticleChangeForRadDecay;
+
+  // Set up photon evaporation for use in G4ITDecay
+  photonEvaporation = new G4PhotonEvaporation();
+  // photonEvaporation->SetVerboseLevel(2);
+  photonEvaporation->RDMForced(true);
+  photonEvaporation->SetICM(true);
+
+  // Check data directory
+  char* path_var = getenv("G4RADIOACTIVEDATA");
+  if (!path_var) {
+    G4Exception("G4RadioactiveDecay()","HAD_RDM_200",FatalException,
+                "Environment variable G4RADIOACTIVEDATA is not set");
+  } else {
+    dirPath = path_var;   // convert to string
+    std::ostringstream os;
+    os << dirPath << "/z1.a3";   // used as a dummy 
+    std::ifstream testFile;
+    testFile.open(os.str() );
+    if (!testFile.is_open() ) 
+      G4Exception("G4RadioactiveDecay()","HAD_RDM_201",FatalException,
+                  "Environment variable G4RADIOACTIVEDATA is set, but does not point to correct directory");
+  }
 
   // Reset the list of user defined data files
   theUserRadioactiveDataFiles.clear();
@@ -208,9 +232,20 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
 }
 
 
+void G4RadioactiveDecay::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << "The radioactive decay process (G4RadioactiveDecay) handles the\n"
+          << "alpha, beta+, beta-, electron capture and isomeric transition\n"
+          << "decays of nuclei (G4GenericIon) with masses A > 4.\n"
+          << "The required half-lives and decay schemes are retrieved from\n"
+          << "the RadioactiveDecay database which was derived from ENSDF.\n";
+}
+
+
 G4RadioactiveDecay::~G4RadioactiveDecay()
 {
   delete theRadioactiveDecaymessenger;
+  delete photonEvaporation;
   for (DecayTableMap::iterator i = dkmap->begin(); i != dkmap->end(); i++) {
     delete i->second;
   }
@@ -221,18 +256,23 @@ G4RadioactiveDecay::~G4RadioactiveDecay()
 
 G4bool G4RadioactiveDecay::IsApplicable(const G4ParticleDefinition& aParticle)
 {
-  // All particles other than G4Ions, are rejected by default
-  if (((const G4Ions*)(&aParticle))->GetExcitationEnergy() > 0.) {return true;}
+  // All particles other than G4Ions are rejected by default
+  if (((const G4Ions*)(&aParticle))->GetExcitationEnergy() > 0.) {
+    return true;    // Not ground state - decay
+  }
+
   if (aParticle.GetParticleName() == "GenericIon") {
     return true;
   } else if (!(aParticle.GetParticleType() == "nucleus")
              || aParticle.GetPDGLifeTime() < 0. ) {
-    return false;
+    return false;   // Nuclide is stable - no decay
   }
 
-  // Determine whether the nuclide falls into the correct A and Z range
+  // At this point nuclide must be an unstable ground state
+  // Determine whether it falls into the correct A and Z range
   G4int A = ((const G4Ions*) (&aParticle))->GetAtomicMass();
   G4int Z = ((const G4Ions*) (&aParticle))->GetAtomicNumber();
+
   if (A > theNucleusLimits.GetAMax() || A < theNucleusLimits.GetAMin())
     {return false;}
   else if (Z > theNucleusLimits.GetZMax() || Z < theNucleusLimits.GetZMin())
@@ -246,9 +286,9 @@ G4DecayTable* G4RadioactiveDecay::GetDecayTable(const G4ParticleDefinition* aNuc
   DecayTableMap::iterator table_ptr = dkmap->find(key);
 
   G4DecayTable* theDecayTable = 0;
-  if (table_ptr == dkmap->end() ) {              // If table not there,     
-    theDecayTable = LoadDecayTable(*aNucleus);   // load from file and
-    (*dkmap)[key] = theDecayTable;               // store in library 
+  if (table_ptr == dkmap->end() ) {                   // If table not there,     
+    theDecayTable = LoadDecayTable(*aNucleus);        // load from file and
+    if(theDecayTable) (*dkmap)[key] = theDecayTable;  // store in library 
   } else {
     theDecayTable = table_ptr->second;
   }
@@ -351,23 +391,21 @@ G4RadioactiveDecay::IsRateTableReady(const G4ParticleDefinition& aParticle)
   // Check whether the radioactive decay rates table for the ion has already
   // been calculated.
   G4String aParticleName = aParticle.GetParticleName();
-  for (size_t i = 0; i < theDecayRateTableVector.size(); i++) {
-    if (theDecayRateTableVector[i].GetIonName() == aParticleName) return true;
+  for (size_t i = 0; i < theParentChainTable.size(); i++) {
+    if (theParentChainTable[i].GetIonName() == aParticleName) return true;
   }
   return false;
 }
 
-// GetDecayRateTable
 // retrieve the decayratetable for the specified aParticle
-
 void
-G4RadioactiveDecay::GetDecayRateTable(const G4ParticleDefinition& aParticle)
+G4RadioactiveDecay::GetChainsFromParent(const G4ParticleDefinition& aParticle)
 {
   G4String aParticleName = aParticle.GetParticleName();
 
-  for (size_t i = 0; i < theDecayRateTableVector.size(); i++) {
-    if (theDecayRateTableVector[i].GetIonName() == aParticleName) {
-      theDecayRateVector = theDecayRateTableVector[i].GetItsRates();
+  for (size_t i = 0; i < theParentChainTable.size(); i++) {
+    if (theParentChainTable[i].GetIonName() == aParticleName) {
+      theDecayRateVector = theParentChainTable[i].GetItsRates();
     }
   }
 #ifdef G4VERBOSE
@@ -378,15 +416,11 @@ G4RadioactiveDecay::GetDecayRateTable(const G4ParticleDefinition& aParticle)
 #endif
 }
 
-// GetTaoTime performs the convolution of the source time profile function
-// with the decay constants in the decay chain. 
-// The time profile is treated as a step function so that the convolution
-// integral can be done bin-by-bin.
-// The profile function should be normalized to 1.  Is it??
- 
-G4double G4RadioactiveDecay::GetTaoTime(const G4double t, const G4double tao)
+/* DHW: long double version - only few % improvement, but don't delete yet
+G4double
+G4RadioactiveDecay::ConvolveSourceTimeProfile(const G4double t, const G4double tau)
 {
-  long double taotime = 0.L;
+  long double convolvedTime = 0.L;
   G4int nbin;
   if ( t > SBin[NSourceBin]) {
     nbin  = NSourceBin;
@@ -396,10 +430,11 @@ G4double G4RadioactiveDecay::GetTaoTime(const G4double t, const G4double tao)
     G4int loop = 0;
     G4ExceptionDescription ed;
     ed << " While count exceeded " << G4endl;
-    while (t > SBin[nbin]) {  /* Loop checking, 01.09.2015, D.Wright */
+    while (t > SBin[nbin]) {
       loop++;
       if (loop > 1000) {
-        G4Exception("G4RadioactiveDecay::GetTaoTime()", "HAD_RDM_100", JustWarning, ed);
+        G4Exception("G4RadioactiveDecay::ConvolveSourceTimeProfile()",
+                    "HAD_RDM_100", JustWarning, ed);
         break;
       }
  
@@ -407,142 +442,103 @@ G4double G4RadioactiveDecay::GetTaoTime(const G4double t, const G4double tao)
     }
     nbin--;
   }
-  long double lt = t ;
-  long double ltao = tao;
 
+  long double lt = t ;
+  long double ltau = tau;
+  long double earg = 0.L;
   if (nbin > 0) {
     for (G4int i = 0; i < nbin; i++) {
-      taotime += (long double)SProfile[i] *
-       (std::exp(-(lt-(long double)SBin[i+1])/ltao)-std::exp(-(lt-(long double)SBin[i])/ltao));
+      earg = (long double)(SBin[i+1] - SBin[i])/ltau;
+      if (earg < 100.) {
+        convolvedTime += (long double)SProfile[i] *
+                         std::exp(((long double)SBin[i] - lt)/ltau) *
+                         std::expm1(earg);
+      } else {
+        convolvedTime += (long double)SProfile[i] *
+          (std::exp(-(lt-(long double)SBin[i+1])/ltau)-std::exp(-(lt-(long double)SBin[i])/ltau));
+      }
     }
   }
-  taotime +=  (long double)SProfile[nbin] * (1.L-std::exp(-(lt-(long double)SBin[nbin])/ltao));
-  // Is the above line necessary?  If so, the 1.L looks incorrect - should be an exp
-  // Also, it looks like the final integral should be multiplied by ltao
+  // Use -expm1 instead of 1 - exp 
+  convolvedTime -= (long double)SProfile[nbin] * std::expm1(((long double)SBin[nbin] - lt)/ltau);
 
-  if (taotime < 0.)  {
-    G4cout <<" Tao time =: " <<taotime << " reset to zero!"<<G4endl;
-    G4cout <<" t = " << t <<" tao = " <<tao <<G4endl;
-    G4cout << SBin[nbin] << " " <<SBin[0] << G4endl;
-    taotime = 0.;
+  if (convolvedTime < 0.)  {
+    G4cout << " Convolved time =: " << convolvedTime << " reset to zero! " << G4endl;
+    G4cout << " t = " << t << " tau = " << tau << G4endl;
+    G4cout << SBin[nbin] << " " << SBin[0] << G4endl;
+    convolvedTime = 0.;
   }
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 1)
-    G4cout <<" Tao time: " <<taotime <<G4endl;
+    G4cout << " Convolved time: " << convolvedTime << G4endl;
 #endif
-  return (G4double)taotime ;
-}
-
-/*
-// Other implementation tests to avoid use of  long double
-G4double G4RadioactiveDecay::GetTaoTime(const G4double t, const G4double tao)
-{
-  long double taotime =0.L;
-  G4int nbin;
-  if ( t > SBin[NSourceBin]) {
-    nbin  = NSourceBin;}
-  else {
-    nbin = 0;
-    while (t > SBin[nbin]) nbin++;
-    nbin--;}
-  long double lt = t ;
-  long double ltao = tao;
-  long double factor,factor1,dt1,dt;
-  if (nbin > 0) {
-	    for (G4int i = 0; i < nbin; i++)
-	      { long double s1=SBin[i];
-	        long double s2=SBin[i+1];
-	    	dt1=(s2-s1)/ltao;
-	      	if (dt1 <50.) {
-	      		factor1=std::exp(dt1)-1.;
-	      		if (factor1<dt1) factor1 =dt1;
-	      		dt=(lt-s1)/ltao;
-	      		factor=std::exp(-dt);
-	      	}
-	      	else {
-	      		factor1=1.-std::exp(-dt1);
-	      		dt=(lt-s2)/ltao;
-	      		factor=std::exp(-dt);
-	      	}
-	      	G4cout<<(long double) SProfile[i] *factor*factor1<<'\t'<<std::endl;
-	      	long double test  = (long double)SProfile[i] * (std::exp(-(lt-(long double)SBin[i+1])/ltao)-std::exp(-(lt-(long double)SBin[i])/ltao));
-	      	G4cout<<test<<std::endl;
-	      	taotime += (long double) SProfile[i] *factor*factor1;
-	   }
-   }
-  long double s=SBin[nbin];
-  dt1=(lt-s)/ltao;
-  factor=1.-std::exp(-dt1);
-  taotime += (long double)  SProfile[nbin] *factor;
- if (taotime < 0.)  {
-    G4cout <<" Tao time =: " <<taotime << " reset to zero!"<<G4endl;
-    G4cout <<" t = " << t <<" tao = " <<tao <<G4endl;
-    G4cout << SBin[nbin] << " " <<SBin[0] << G4endl;
-    taotime = 0.;
-  }
-#ifdef G4VERBOSE
-  if (GetVerboseLevel()>1)
-    {G4cout <<" Tao time: " <<taotime <<G4endl;}
-#endif
-  return (G4double)taotime ;
-}
-
-
-
-G4double G4RadioactiveDecay::GetTaoTime(const G4double t, const G4double tao)
-{
-  G4double taotime =0.;
-  G4int nbin;
-  if ( t > SBin[NSourceBin]) {
-    nbin  = NSourceBin;}
-  else {
-    nbin = 0;
-    while (t > SBin[nbin]) nbin++;
-    nbin--;}
-  G4double lt = t ;
-  G4double ltao = tao;
-  G4double factor,factor1,dt1,dt;
-
-  if (nbin > 0) {
-    for (G4int i = 0; i < nbin; i++)
-      { dt1=(SBin[i+1]-SBin[i])/ltao;
-      	if (dt1 <50.) {
-      		factor1=std::exp(dt1)-1.;
-      		if (factor1<dt1) factor1 =dt1;
-      		dt=(lt-SBin[i])/ltao;
-      		factor=std::exp(-(lt-SBin[i])/ltao);
-      		G4cout<<factor<<'\t'<<factor1<<std::endl;
-      	}
-      	else {
-      		factor1=1.-std::exp(-dt1);
-      		factor=std::exp(-(lt-SBin[i+1])/ltao);
-      	}
-      	G4cout<<factor<<'\t'<<factor1<<std::endl;
-      	taotime += SProfile[i] *factor*factor1;
-      	G4cout<<taotime<<std::endl;
-      }
-  }
-  dt1=(lt-SBin[nbin])/ltao;
-  factor=1.-std::exp(-dt1);
-  if (factor<(dt1-0.5*dt1*dt1)) factor =dt1-0.5*dt1*dt1;
-
-
-  taotime +=  SProfile[nbin] *factor;
-  G4cout<<factor<<'\t'<<taotime<<std::endl;
-  if (taotime < 0.)  {
-    G4cout <<" Tao time =: " <<taotime << " reset to zero!"<<G4endl;
-    G4cout <<" t = " << t <<" tao = " <<tao <<G4endl;
-    G4cout << SBin[nbin] << " " <<SBin[0] << G4endl;
-    taotime = 0.;
-  }
-
-#ifdef G4VERBOSE
-  if (GetVerboseLevel()>1)
-    {G4cout <<" Tao time: " <<taotime <<G4endl;}
-#endif
-  return (G4double)taotime ;
+  return (G4double)convolvedTime;
 }
 */
+
+// ConvolveSourceTimeProfile performs the convolution of the source time profile
+// function with a single exponential characterized by a decay constant in the 
+// decay chain.  The time profile is treated as a set of step functions so that 
+// the convolution integral can be done bin-by-bin.
+// This implements Eq. 4.13 of DERA technical note, with SProfile[i] = F(t')
+
+G4double
+G4RadioactiveDecay::ConvolveSourceTimeProfile(const G4double t, const G4double tau)
+{
+  G4double convolvedTime = 0.0;
+  G4int nbin;
+  if ( t > SBin[NSourceBin]) {
+    nbin  = NSourceBin;
+  } else {
+    nbin = 0;
+
+    G4int loop = 0;
+    G4ExceptionDescription ed;
+    ed << " While count exceeded " << G4endl;
+    while (t > SBin[nbin]) {  // Loop checking, 01.09.2015, D.Wright
+      loop++;
+      if (loop > 1000) {
+        G4Exception("G4RadioactiveDecay::ConvolveSourceTimeProfile()",
+                    "HAD_RDM_100", JustWarning, ed);
+        break;
+      }
+      nbin++;
+    }
+    nbin--;
+  }
+
+  // Use expm1 wherever possible to avoid large cancellation errors in
+  // 1 - exp(x) for small x 
+  G4double earg = 0.0;
+  if (nbin > 0) {
+    for (G4int i = 0; i < nbin; i++) {
+      earg = (SBin[i+1] - SBin[i])/tau;
+      if (earg < 100.) {
+        convolvedTime += SProfile[i] * std::exp((SBin[i] - t)/tau) *
+                         std::expm1(earg);
+      } else {
+        convolvedTime += SProfile[i] *
+          (std::exp(-(t-SBin[i+1])/tau)-std::exp(-(t-SBin[i])/tau));
+      }
+    }
+  }
+  convolvedTime -= SProfile[nbin] * std::expm1((SBin[nbin] - t)/tau);
+  // tau divided out of final result to provide probability of decay in window
+
+  if (convolvedTime < 0.)  {
+    G4cout << " Convolved time =: " << convolvedTime << " reset to zero! " << G4endl;
+    G4cout << " t = " << t << " tau = " << tau << G4endl;
+    G4cout << SBin[nbin] << " " << SBin[0] << G4endl;
+    convolvedTime = 0.;
+  }
+#ifdef G4VERBOSE
+  if (GetVerboseLevel() > 1)
+    G4cout << " Convolved time: " << convolvedTime << G4endl;
+#endif
+  return convolvedTime;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //  GetDecayTime                                                              //
@@ -607,9 +603,9 @@ G4int G4RadioactiveDecay::GetDecayTimeBin(const G4double aDecayTime)
 G4double G4RadioactiveDecay::GetMeanLifeTime(const G4Track& theTrack,
                                              G4ForceCondition*)
 {
-  // For varience reduction implementation the time is set to 0 so as to 
-  // force the particle to decay immediately.
-  // In analogueMC mode it return the particle's mean-life.
+  // For variance reduction the time is set to 0 so as to force the particle
+  // to decay immediately.
+  // In analogueMC mode it returns the particle's mean-life.
 
   G4double meanlife = 0.;
   if (AnalogueMC) {
@@ -622,7 +618,7 @@ G4double G4RadioactiveDecay::GetMeanLifeTime(const G4Track& theTrack,
        G4cout << "KineticEnergy: " << theParticle->GetKineticEnergy()/GeV
               << " GeV, Mass: " << theParticle->GetMass()/GeV
               << " GeV, Life time: " << theLife/ns << " ns " << G4endl;
-      }
+    }
 #endif
     if (theParticleDef->GetPDGStable()) {meanlife = DBL_MAX;}
     else if (theLife < 0.0) {meanlife = DBL_MAX;}
@@ -707,7 +703,7 @@ G4double G4RadioactiveDecay::GetMeanFreePath (const G4Track& aTrack, G4double,
 
 ////////////////////////////////////////////////////////////////////////
 //                                                                    //
-//  BuildPhysicsTable - initialisation of atomic de-excitation        //
+//  BuildPhysicsTable - enable print of parameters                    //
 //                                                                    //
 ////////////////////////////////////////////////////////////////////////
 
@@ -715,18 +711,53 @@ void G4RadioactiveDecay::BuildPhysicsTable(const G4ParticleDefinition&)
 {
   if (!isInitialised) {
     isInitialised = true;
-    G4LossTableManager* theManager = G4LossTableManager::Instance();
-    G4VAtomDeexcitation* p = theManager->AtomDeexcitation();
-    if (!p) {
-      G4UAtomicDeexcitation* atomDeex = new G4UAtomicDeexcitation();
-      theManager->SetAtomDeexcitation(atomDeex);
-      p = theManager->AtomDeexcitation();
-    }
-    p->SetFluo(true);
-    p->SetAuger(true);
-    p->InitialiseAtomicDeexcitation();
+    if(G4Threading::IsMasterThread()) { StreamInfo(G4cout, "\n"); }
   }
 }
+
+////////////////////////////////////////////////////////////////////////
+//                                                                    //
+//  StreamInfo - stream out parameters                                //
+//                                                                    //
+////////////////////////////////////////////////////////////////////////
+
+void G4RadioactiveDecay::StreamInfo(std::ostream& os, const G4String& endline)
+{
+  G4DeexPrecoParameters* deex = 
+    G4NuclearLevelData::GetInstance()->GetParameters();
+  G4EmParameters* emparam = G4EmParameters::Instance();
+  
+  G4int prec = os.precision(5);
+  os << "=======================================================================" 
+     << endline;
+  os << "======       Radioactive Decay Physics Parameters              ========" 
+     << endline;
+  os << "=======================================================================" 
+     << endline;
+  os << "Max life time                                     " 
+     << deex->GetMaxLifeTime()/CLHEP::ps << " ps" << endline;
+  os << "Internal e- conversion flag                       " 
+     << deex->GetInternalConversionFlag() << endline;
+  os << "Stored internal conversion coefficients           " 
+     << deex->StoreICLevelData() << endline;
+  os << "Enable correlated gamma emission                  " 
+     << deex->CorrelatedGamma() << endline;
+  os << "Max 2J for sampling of angular correlations       " 
+     << deex->GetTwoJMAX() << endline;
+  os << "Atomic de-excitation enabled                      " 
+     << emparam->Fluo() << endline;
+  os << "Auger electron emission enabled                   " 
+     << emparam->Auger() << endline;
+  os << "Auger cascade enabled                             " 
+     << emparam->AugerCascade() << endline;
+  os << "Check EM cuts disabled for atomic de-excitation   " 
+     << emparam->DeexcitationIgnoreCut() << endline;
+  os << "Use Bearden atomic level energies                 " 
+     << emparam->BeardenFluoDir() << endline;
+  os << "=======================================================================" 
+     << endline;
+  os.precision(prec);
+}    
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -742,8 +773,10 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
   // file containing radioactive decay data.
   G4int A = ((const G4Ions*)(&theParentNucleus))->GetAtomicMass();
   G4int Z = ((const G4Ions*)(&theParentNucleus))->GetAtomicNumber();
+
   G4double levelEnergy = ((const G4Ions*)(&theParentNucleus))->GetExcitationEnergy();
-  G4DecayTable* theDecayTable = 0;
+  G4Ions::G4FloatLevelBase floatingLevel =
+    ((const G4Ions*)(&theParentNucleus))->GetFloatLevelBase();
 
 #ifdef G4MULTITHREADED
   G4AutoLock lk(&G4RadioactiveDecay::radioactiveDecayMutex);
@@ -756,57 +789,56 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
   }
 #endif
 
-  // Create and initialise variables used in the method.
-  theDecayTable = new G4DecayTable();
-
   //Check if data have been provided by the user
-  G4String file= theUserRadioactiveDataFiles[1000*A+Z];
+  G4String file = theUserRadioactiveDataFiles[1000*A+Z];
 
-  if (file =="") {
-    if (!getenv("G4RADIOACTIVEDATA") ) {
-      G4cout << "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files."
-             << G4endl;
-      throw G4HadronicException(__FILE__, __LINE__, " Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files.");
-    }
-    G4String dirName = getenv("G4RADIOACTIVEDATA");
-
+  if (file == "") {
     std::ostringstream os;
-    os <<dirName <<"/z" <<Z <<".a" <<A <<'\0';
+    os << dirPath << "/z" << Z << ".a" << A << '\0';
     file = os.str();
   }
 
-  std::ifstream DecaySchemeFile(file);
+  G4DecayTable* theDecayTable = new G4DecayTable();
+  G4bool found(false);     // True if energy level matches one in table
 
-  G4bool found(false);
-  if (DecaySchemeFile) { 
-    // Initialise variables used for reading in radioactive decay data.
-    const G4int nMode = 9;
-    G4bool modeFirstRecord[nMode];
+  std::ifstream DecaySchemeFile;
+  DecaySchemeFile.open(file);
+
+  if (DecaySchemeFile.good()) {
+    // Initialize variables used for reading in radioactive decay data
+    G4bool floatMatch(false);
+    const G4int nMode = 10;
     G4double modeTotalBR[nMode] = {0.0};
     G4double modeSumBR[nMode];
     for (G4int i = 0; i < nMode; i++) {
-      modeFirstRecord[i] = true;
       modeSumBR[i] = 0.0;
     }
 
-    G4bool complete(false);
-    char inputChars[100]={' '};
+    char inputChars[120]={' '};
     G4String inputLine;
     G4String recordType("");
+    G4String floatingFlag("");
+    G4String daughterFloatFlag("");
+    G4Ions::G4FloatLevelBase daughterFloatLevel;
     G4RadioactiveDecayMode theDecayMode;
+    G4double decayModeTotal(0.0);
+    G4double parentExcitation(0.0);
     G4double a(0.0);
     G4double b(0.0);
     G4double c(0.0);
+    G4double dummy(0.0);
     G4BetaDecayType betaType(allowed);
 
     // Loop through each data file record until you identify the decay
     // data relating to the nuclide of concern.
 
+    G4bool complete(false);  // bool insures only one set of values read for any
+                             // given parent energy level
     G4int loop = 0;
     G4ExceptionDescription ed;
     ed << " While count exceeded " << G4endl;
  
-    while (!complete && !DecaySchemeFile.getline(inputChars, 100).eof()) {  /* Loop checking, 01.09.2015, D.Wright */
+    while (!complete && !DecaySchemeFile.getline(inputChars, 120).eof()) {  /* Loop checking, 01.09.2015, D.Wright */
       loop++;
       if (loop > 100000) {
         G4Exception("G4RadioactiveDecay::LoadDecayTable()", "HAD_RDM_100", JustWarning, ed);
@@ -821,169 +853,207 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
         if (inputChars[0] == 'P') {
           // Nucleus is a parent type.  Check excitation level to see if it
           // matches that of theParentNucleus
-          tmpStream >> recordType >> a >> b;
+          tmpStream >> recordType >> parentExcitation >> floatingFlag >> dummy;
+          // "dummy" takes the place of half-life
+          //  Now read in from ENSDFSTATE in particle category
+
           if (found) {
             complete = true;
           } else {
-            found = (std::abs(a*keV - levelEnergy) < levelTolerance);
+            // Take first level which matches excitation energy regardless of floating level
+            found = (std::abs(parentExcitation*keV - levelEnergy) < levelTolerance);
+            if (floatingLevel != noFloat) {
+              // If floating level specificed, require match of both energy and floating level
+              floatMatch = (floatingLevel == G4Ions::FloatLevelBase(floatingFlag.back()) );
+              if (!floatMatch) found = false;
+            }
           }
 
         } else if (found) {
           // The right part of the radioactive decay data file has been found.  Search
           // through it to determine the mode of decay of the subsequent records.
-          if (inputChars[0] == 'W') {
-#ifdef G4VERBOSE
-            if (GetVerboseLevel() > 0) {
-              // a comment line identified and print out the message
-              G4cout << " Warning in G4RadioactiveDecay::LoadDecayTable " << G4endl;
-              G4cout << "   In data file " << file << G4endl;
-              G4cout << "   " << inputLine << G4endl;
-            }
-#endif
-          } else {
-            tmpStream >> theDecayMode >> a >> b >> c >> betaType;
-            // Allowed transitions are the default. Forbidden transitions are
-            // indicated in the last column.
-            if (inputLine.length() < 80) betaType = allowed;
-            a /= 1000.;
-            c /= 1000.;
 
+          // Store for later the total decay probability for each decay mode 
+          if (inputLine.length() < 72) {
+            tmpStream >> theDecayMode >> dummy >> decayModeTotal;
             switch (theDecayMode) {
-
-              case IT:   // Isomeric transition
-              {
-                G4ITDecay* anITChannel = new G4ITDecay(&theParentNucleus, b,
-                                                       c*MeV, a*MeV);
-//                anITChannel->DumpNuclearInfo();
+              case IT:
+                {
+                G4ITDecay* anITChannel = new G4ITDecay(&theParentNucleus, decayModeTotal,
+                                                       0.0, 0.0, photonEvaporation);
                 anITChannel->SetHLThreshold(halflifethreshold);
                 anITChannel->SetARM(applyARM);
                 theDecayTable->Insert(anITChannel);
-              }
-              break;
+//                anITChannel->DumpNuclearInfo();
+                }
+                break;
+              case BetaMinus:
+                modeTotalBR[1] = decayModeTotal; break;
+              case BetaPlus:
+                modeTotalBR[2] = decayModeTotal; break;
+              case KshellEC:
+                modeTotalBR[3] = decayModeTotal; break;
+              case LshellEC:
+                modeTotalBR[4] = decayModeTotal; break;
+              case MshellEC:
+                modeTotalBR[5] = decayModeTotal; break;
+              case NshellEC:
+                modeTotalBR[6] = decayModeTotal; break;
+              case Alpha:
+                modeTotalBR[7] = decayModeTotal; break;
+              case Proton:
+                modeTotalBR[8] = decayModeTotal; break;
+              case Neutron:
+                modeTotalBR[9] = decayModeTotal; break;
+              case BDProton:
+                break;
+              case BDNeutron:
+                break;
+              case Beta2Minus:
+                break;
+              case Beta2Plus:
+                break;
+              case Proton2:
+                break;
+              case Neutron2:
+                break;
+              case SpFission:
+                break;
+              case RDM_ERROR:
 
+              default:
+                G4Exception("G4RadioactiveDecay::LoadDecayTable()", "HAD_RDM_000",
+                            FatalException, "Selected decay mode does not exist");
+            }  // switch
+
+          } else {
+            if (inputLine.length() < 84) {
+              tmpStream >> theDecayMode >> a >> daughterFloatFlag >> b >> c;
+              betaType = allowed;
+            } else {
+              tmpStream >> theDecayMode >> a >> daughterFloatFlag >> b >> c >> betaType;
+            }
+
+            // Allowed transitions are the default. Forbidden transitions are
+            // indicated in the last column.
+            a /= 1000.;
+            c /= 1000.;
+            b/=100.;
+            daughterFloatLevel = G4Ions::FloatLevelBase(daughterFloatFlag.back());
+
+            switch (theDecayMode) {
               case BetaMinus:
               {
-                if (modeFirstRecord[1]) {
-                  modeFirstRecord[1] = false;
-                  modeTotalBR[1] = b;
-                } else {
-                  G4BetaMinusDecay* aBetaMinusChannel =
-                    new G4BetaMinusDecay(&theParentNucleus, b, c*MeV, a*MeV,
-                                         betaType);
-//                  aBetaMinusChannel->DumpNuclearInfo();
-                  aBetaMinusChannel->SetHLThreshold(halflifethreshold);
-                  theDecayTable->Insert(aBetaMinusChannel);
-                  modeSumBR[1] += b;
-                } // if not first record
+                G4BetaMinusDecay* aBetaMinusChannel =
+                  new G4BetaMinusDecay(&theParentNucleus, b, c*MeV, a*MeV,
+                                       daughterFloatLevel, betaType);
+//              aBetaMinusChannel->DumpNuclearInfo();
+                aBetaMinusChannel->SetHLThreshold(halflifethreshold);
+                theDecayTable->Insert(aBetaMinusChannel);
+                modeSumBR[1] += b;
               }
               break;
 
               case BetaPlus:
               {
-                if (modeFirstRecord[2]) {
-                  modeFirstRecord[2] = false;
-                  modeTotalBR[2] = b;
-                } else {
-                  G4BetaPlusDecay* aBetaPlusChannel =
-                    new G4BetaPlusDecay(&theParentNucleus, b, c*MeV, a*MeV,
-                                        betaType);
-//                  aBetaPlusChannel->DumpNuclearInfo();
-                  aBetaPlusChannel->SetHLThreshold(halflifethreshold);
-                  theDecayTable->Insert(aBetaPlusChannel);
-                  modeSumBR[2] += b;
-                } // if not first record
+                G4BetaPlusDecay* aBetaPlusChannel =
+                  new G4BetaPlusDecay(&theParentNucleus, b, c*MeV, a*MeV,
+                                      daughterFloatLevel, betaType);
+//              aBetaPlusChannel->DumpNuclearInfo();
+                aBetaPlusChannel->SetHLThreshold(halflifethreshold);
+                theDecayTable->Insert(aBetaPlusChannel);
+                modeSumBR[2] += b;
               }
               break;
 
               case KshellEC:  // K-shell electron capture
-
-                if (modeFirstRecord[3]) {
-                  modeFirstRecord[3] = false;
-                  modeTotalBR[3] = b;
-                } else {
-                  G4ECDecay* aKECChannel = new G4ECDecay(&theParentNucleus, b,
-                                                         c*MeV, a*MeV, KshellEC);
-//                  aKECChannel->DumpNuclearInfo();
-                  aKECChannel->SetHLThreshold(halflifethreshold);
-                  aKECChannel->SetARM(applyARM);
-                  theDecayTable->Insert(aKECChannel);
-                  modeSumBR[3] += b;
-                }
-                break;
+              {
+                G4ECDecay* aKECChannel =
+                  new G4ECDecay(&theParentNucleus, b, c*MeV, a*MeV,
+                                daughterFloatLevel, KshellEC);
+//              aKECChannel->DumpNuclearInfo();
+                aKECChannel->SetHLThreshold(halflifethreshold);
+                aKECChannel->SetARM(applyARM);
+                theDecayTable->Insert(aKECChannel);
+                modeSumBR[3] += b;
+              }
+              break;
 
               case LshellEC:  // L-shell electron capture
-
-                if (modeFirstRecord[4]) {
-                  modeFirstRecord[4] = false;
-                  modeTotalBR[4] = b;
-                } else {
-                  G4ECDecay* aLECChannel = new G4ECDecay(&theParentNucleus, b,
-                                                         c*MeV, a*MeV, LshellEC);
-//                  aLECChannel->DumpNuclearInfo();
-                  aLECChannel->SetHLThreshold(halflifethreshold);
-                  aLECChannel->SetARM(applyARM);
-                  theDecayTable->Insert(aLECChannel);
-                  modeSumBR[4] += b;
-                }
-                break;
+              {
+                G4ECDecay* aLECChannel =
+                  new G4ECDecay(&theParentNucleus, b, c*MeV, a*MeV,
+                                daughterFloatLevel, LshellEC);
+//              aLECChannel->DumpNuclearInfo();
+                aLECChannel->SetHLThreshold(halflifethreshold);
+                aLECChannel->SetARM(applyARM);
+                theDecayTable->Insert(aLECChannel);
+                modeSumBR[4] += b;
+              }
+              break;
 
               case MshellEC:  // M-shell electron capture
-                              // In this implementation it is added to L-shell case
-                if (modeFirstRecord[5]) {
-                  modeFirstRecord[5] = false;
-                  modeTotalBR[5] = b;
-                } else {
-                  G4ECDecay* aMECChannel = new G4ECDecay(&theParentNucleus, b,
-                                                         c*MeV, a*MeV, MshellEC);
-//                  aMECChannel->DumpNuclearInfo();
-                  aMECChannel->SetHLThreshold(halflifethreshold);
-                  aMECChannel->SetARM(applyARM);
-                  theDecayTable->Insert(aMECChannel);
-                  modeSumBR[5] += b;
-                }
-                break;
+              {
+                G4ECDecay* aMECChannel =
+                  new G4ECDecay(&theParentNucleus, b, c*MeV, a*MeV,
+                                daughterFloatLevel, MshellEC);
+//              aMECChannel->DumpNuclearInfo();
+                aMECChannel->SetHLThreshold(halflifethreshold);
+                aMECChannel->SetARM(applyARM);
+                theDecayTable->Insert(aMECChannel);
+                modeSumBR[5] += b;
+              }
+              break;
+
+              case NshellEC:  // M-shell electron capture
+                            {
+                              G4ECDecay* aMECChannel =
+                                new G4ECDecay(&theParentNucleus, b, c*MeV, a*MeV,
+                                              daughterFloatLevel, NshellEC);
+              //              aMECChannel->DumpNuclearInfo();
+                              aMECChannel->SetHLThreshold(halflifethreshold);
+                              aMECChannel->SetARM(applyARM);
+                              theDecayTable->Insert(aMECChannel);
+                              modeSumBR[6] += b;
+                            }
+              break;
 
               case Alpha:
-            	if (modeFirstRecord[6]) {
-                  modeFirstRecord[6] = false;
-                  modeTotalBR[6] = b;
-                } else {
-                  G4AlphaDecay* anAlphaChannel =
-                     new G4AlphaDecay(&theParentNucleus, b, c*MeV, a*MeV);
-//                  anAlphaChannel->DumpNuclearInfo();
-                  anAlphaChannel->SetHLThreshold(halflifethreshold);
-                  theDecayTable->Insert(anAlphaChannel);
-                  modeSumBR[6] += b;
-                }
-                break;
+              {
+                G4AlphaDecay* anAlphaChannel =
+                  new G4AlphaDecay(&theParentNucleus, b, c*MeV, a*MeV,
+                                   daughterFloatLevel);
+//              anAlphaChannel->DumpNuclearInfo();
+                anAlphaChannel->SetHLThreshold(halflifethreshold);
+                theDecayTable->Insert(anAlphaChannel);
+                modeSumBR[7] += b;
+              }
+              break;
 
 	      case Proton:
-            	  if (modeFirstRecord[7]) {
-                  modeFirstRecord[7] = false;
-                  modeTotalBR[7] = b;
-                } else {
-                  G4ProtonDecay* aProtonChannel =
-                     new G4ProtonDecay(&theParentNucleus, b, c*MeV, a*MeV);
-//                  aProtonChannel->DumpNuclearInfo();
-                  aProtonChannel->SetHLThreshold(halflifethreshold);
-                  theDecayTable->Insert(aProtonChannel);
-                  modeSumBR[7] += b;
-                }
-                break;
+              {
+                G4ProtonDecay* aProtonChannel =
+                  new G4ProtonDecay(&theParentNucleus, b, c*MeV, a*MeV,
+                                    daughterFloatLevel);
+//              aProtonChannel->DumpNuclearInfo();
+                aProtonChannel->SetHLThreshold(halflifethreshold);
+                theDecayTable->Insert(aProtonChannel);
+                modeSumBR[8] += b;
+              }
+              break;
 
               case Neutron:
-            	  if (modeFirstRecord[8]) {
-                  modeFirstRecord[8] = false;
-                  modeTotalBR[8] = b;
-                } else {
-                  G4NeutronDecay* aNeutronChannel =
-                     new G4NeutronDecay(&theParentNucleus, b, c*MeV, a*MeV);
-//                  aNeutronChannel->DumpNuclearInfo();
-                  aNeutronChannel->SetHLThreshold(halflifethreshold);
-                  theDecayTable->Insert(aNeutronChannel);
-                  modeSumBR[8] += b;
-                }
-                break;
+              {
+                G4NeutronDecay* aNeutronChannel =
+                  new G4NeutronDecay(&theParentNucleus, b, c*MeV, a*MeV,
+                                     daughterFloatLevel);
+//              aNeutronChannel->DumpNuclearInfo();
+                aNeutronChannel->SetHLThreshold(halflifethreshold);
+                theDecayTable->Insert(aNeutronChannel);
+                modeSumBR[9] += b;
+              }
+              break;
+
               case BDProton:
                   // Not yet implemented
                   // G4cout << " beta-delayed proton decay, a = " << a << ", b = " << b << ", c = " << c << G4endl;
@@ -1018,7 +1088,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                 G4Exception("G4RadioactiveDecay::LoadDecayTable()", "HAD_RDM_000",
                             FatalException, "Selected decay mode does not exist");
             }  // switch
-	  }  // if char == W
+          }  // line < 72
         }  // if char == P
       }  // if char != #
     }  // While
@@ -1041,24 +1111,18 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
 	theChannel->SetBR(theBR*modeTotalBR[theDecayMode]/modeSumBR[theDecayMode]);
       }
     }
-  }   // if (DecaySchemeFile)	
+  }  // decay file exists
+
   DecaySchemeFile.close();
 
   if (!found && levelEnergy > 0) {
     // Case where IT cascade for excited isotopes has no entries in RDM database
     // Decay mode is isomeric transition.
-    G4ITDecay* anITChannel = new G4ITDecay(&theParentNucleus, 1.0, 0.0, 0.0);
+    G4ITDecay* anITChannel = new G4ITDecay(&theParentNucleus, 1.0, 0.0, 0.0,
+                                           photonEvaporation);
     anITChannel->SetHLThreshold(halflifethreshold);
     anITChannel->SetARM(applyARM);
     theDecayTable->Insert(anITChannel);
-  } 
-  if (!theDecayTable) {
-    // There is no radioactive decay data for this nucleus.  Return a null
-    // decay table.
-    G4cerr << "G4RadoactiveDecay::LoadDecayTable() : cannot find ion radioactive decay file "
-           << G4endl;
-    theDecayTable = 0;
-    return theDecayTable;
   }
 
   if (theDecayTable && GetVerboseLevel() > 1) {
@@ -1088,42 +1152,42 @@ G4RadioactiveDecay::AddUserDecayDataFile(G4int Z, G4int A, G4String filename)
 
 void
 G4RadioactiveDecay::SetDecayRate(G4int theZ, G4int theA, G4double theE, 
-                                 G4int theG, std::vector<G4double> theRates, 
+                                 G4int theG, std::vector<G4double> theCoefficients, 
                                  std::vector<G4double> theTaos)
+//  Why not make this a method of G4RadioactiveDecayRate? (e.g. SetParameters)
 { 
   //fill the decay rate vector 
-  theDecayRate.SetZ(theZ);
-  theDecayRate.SetA(theA);
-  theDecayRate.SetE(theE);
-  theDecayRate.SetGeneration(theG);
-  theDecayRate.SetDecayRateC(theRates);
-  theDecayRate.SetTaos(theTaos);
+  ratesToDaughter.SetZ(theZ);
+  ratesToDaughter.SetA(theA);
+  ratesToDaughter.SetE(theE);
+  ratesToDaughter.SetGeneration(theG);
+  ratesToDaughter.SetDecayRateC(theCoefficients);
+  ratesToDaughter.SetTaos(theTaos);
 }
 
 
-void
-G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucleus)
+void G4RadioactiveDecay::
+CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
 {
-  // 1) To calculate all the coefficiecies required to derive the
-  //    radioactivities for all progeny of theParentNucleus
-  //
-  // 2) Add the coefficiencies to the decay rate table vector 
-  //
+  // Use extended Bateman equation to calculate the radioactivities of all
+  // progeny of theParentNucleus.  The coefficients required to do this are 
+  // calculated using the method of P. Truscott (Ph.D. thesis and
+  // DERA Technical Note DERA/CIS/CIS2/7/36/4/10) 11 January 2000.
+  // Coefficients are then added to the decay rate table vector
 
-  //
   // Create and initialise variables used in the method.
-  //
   theDecayRateVector.clear();
 
   G4int nGeneration = 0;
-  std::vector<G4double> rates;
+
   std::vector<G4double> taos;
 
-  // start rate is -1.
-  // Eq.4.26 of the Technical Note
-  rates.push_back(-1.);
-  //
-  //
+  // Dimensionless A coefficients of Eqs. 4.24 and 4.25 of the TN
+  std::vector<G4double> Acoeffs;
+
+  // According to Eq. 4.26 the first coefficient (A_1:1) is -1
+  Acoeffs.push_back(-1.);
+
   G4int A = ((const G4Ions*)(&theParentNucleus))->GetAtomicMass();
   G4int Z = ((const G4Ions*)(&theParentNucleus))->GetAtomicNumber();
   G4double E = ((const G4Ions*)(&theParentNucleus))->GetExcitationEnergy();
@@ -1132,16 +1196,15 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
   taos.push_back(tao);
   G4int nEntry = 0;
 
-  // Fill the decay rate container (G4RadioactiveDecayRate) with the parent 
-  // isotope data
-  SetDecayRate(Z,A,E,nGeneration,rates,taos);   // Fill TP with parent lifetime
+  // Fill the decay rate container (G4RadioactiveDecayRatesToDaughter) with
+  // the parent isotope data
+  SetDecayRate(Z,A,E,nGeneration,Acoeffs,taos);
 
   // store the decay rate in decay rate vector
-  theDecayRateVector.push_back(theDecayRate);
+  theDecayRateVector.push_back(ratesToDaughter);
   nEntry++;
 
-  // now start treating the sencondary generations..
-
+  // Now start treating the secondary generations.
   G4bool stable = false;
   G4int i;
   G4int j;
@@ -1162,16 +1225,18 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
   G4int ZD = 0;
   G4double EP = 0.;
   std::vector<G4double> TP;
-  std::vector<G4double> RP;
+  std::vector<G4double> RP;   // A coefficients of the previous generation
   G4ParticleDefinition *theDaughterNucleus;
   G4double daughterExcitation;
+  G4double nearestEnergy = 0.0;
+  G4int nearestLevelIndex = 0;
   G4ParticleDefinition *aParentNucleus;
   G4IonTable* theIonTable;
-  G4DecayTable *aTempDecayTable;
+  G4DecayTable* parentDecayTable;
   G4double theRate;
   G4double TaoPlus;
-  G4int nS = 0;
-  G4int nT = nEntry;
+  G4int nS = 0;        // Running index of first decay in a given generation
+  G4int nT = nEntry;   // Total number of decays accumulated over entire history
   const G4int nMode = 9;
   G4double brs[nMode];
   //
@@ -1185,7 +1250,7 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
   while (!stable) {   /* Loop checking, 01.09.2015, D.Wright */
     loop++;
     if (loop > 10000) {
-      G4Exception("G4RadioactiveDecay::AddDecayRateTable()", "HAD_RDM_100", JustWarning, ed);
+      G4Exception("G4RadioactiveDecay::CalculateChainsFromParent()", "HAD_RDM_100", JustWarning, ed);
       break;
     }
     nGeneration++;
@@ -1197,24 +1262,33 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
       RP = theDecayRateVector[j].GetDecayRateC();
       TP = theDecayRateVector[j].GetTaos();
       if (GetVerboseLevel() > 0) {
-        G4cout << "G4RadioactiveDecay::AddDecayRateTable : daughters of ("
+        G4cout << "G4RadioactiveDecay::CalculateChainsFromParent: daughters of ("
                << ZP << ", " << AP << ", " << EP
                << ") are being calculated,  generation = " << nGeneration
                << G4endl;
       }
+//      G4cout << " Taus = " << G4endl;
+//      for (G4int ii = 0; ii < TP.size(); ii++) G4cout << TP[ii] << ", " ;
+//      G4cout << G4endl;
 
       aParentNucleus = theIonTable->GetIon(ZP,AP,EP);
-      aTempDecayTable = GetDecayTable(aParentNucleus);
+      parentDecayTable = GetDecayTable(aParentNucleus);
 
-      // Local decay table for accessing BRs and decay channels, but channels
-      // stored in it are not used to perform the actual decays
-      G4DecayTable* theDecayTable = new G4DecayTable();
+      G4DecayTable* summedDecayTable = new G4DecayTable();
+      // This instance of G4DecayTable is for accumulating BRs and decay
+      // channels.  It will contain one decay channel per type of decay
+      // (alpha, beta, etc.); its branching ratio will be the sum of all
+      // branching ratios for that type of decay of the parent.  If the
+      // halflife of a particular channel is longer than some threshold,
+      // that channel will be inserted specifically and its branching
+      // ratio will not be included in the above sums.
+      // This instance is not used to perform actual decays.
 
       for (G4int k = 0; k < nMode; k++) brs[k] = 0.0;
 
       // Go through the decay table and sum all channels having the same decay mode
-      for (i = 0; i < aTempDecayTable->entries(); i++) {
-        theChannel = aTempDecayTable->GetDecayChannel(i);
+      for (i = 0; i < parentDecayTable->entries(); i++) {
+        theChannel = parentDecayTable->GetDecayChannel(i);
         theNuclearDecayChannel = static_cast<G4NuclearDecay*>(theChannel);
         theDecayMode = theNuclearDecayChannel->GetDecayMode();
         daughterExcitation = theNuclearDecayChannel->GetDaughterExcitation();
@@ -1222,18 +1296,18 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
 
         AD = ((const G4Ions*)(theDaughterNucleus))->GetAtomicMass();
         ZD = ((const G4Ions*)(theDaughterNucleus))->GetAtomicNumber();  
-        G4NuclearLevelManager* levelManager = 
-           G4NuclearLevelStore::GetInstance()->GetManager(ZD, AD);
-        if (levelManager->NumberOfLevels() ) {
-          const G4NuclearLevel* level =
-          levelManager->NearestLevel (daughterExcitation);
+        const G4LevelManager* levelManager =
+          G4NuclearLevelData::GetInstance()->GetLevelManager(ZD,AD);
 
-          if (std::abs(daughterExcitation - level->Energy()) < levelTolerance) {
+        if (levelManager->NumberOfTransitions() ) {
+          nearestEnergy = levelManager->NearestLevelEnergy(daughterExcitation);
+          if (std::abs(daughterExcitation - nearestEnergy) < levelTolerance) {
             // Level half-life is in ns and the threshold is set to 1 micros
             // by default, user can set it via the UI command
-            if (level->HalfLife()*ns >= halflifethreshold){    
+            nearestLevelIndex = levelManager->NearestLevelIndex(daughterExcitation);
+            if (levelManager->LifeTime(nearestLevelIndex)*ns >= halflifethreshold){
               // save the metastable nucleus 
-              theDecayTable->Insert(theChannel);
+              summedDecayTable->Insert(theChannel);
             } else {
               brs[theDecayMode] += theChannel->GetBR();
             }
@@ -1252,43 +1326,46 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
           switch ( i ) {
           case 0:
             // Decay mode is isomeric transition
-            theITChannel = new G4ITDecay(aParentNucleus, brs[0], 0.0, 0.0);
+            theITChannel = new G4ITDecay(aParentNucleus, brs[0], 0.0, 0.0,
+                                         photonEvaporation);
 
-            theDecayTable->Insert(theITChannel);
+            summedDecayTable->Insert(theITChannel);
             break;
 
           case 1:
             // Decay mode is beta-
             theBetaMinusChannel = new G4BetaMinusDecay(aParentNucleus, brs[1],
-                                                       0.*MeV, 0.*MeV, allowed);
-            theDecayTable->Insert(theBetaMinusChannel);
+                                                       0.*MeV, 0.*MeV,
+                                                       noFloat, allowed);
+            summedDecayTable->Insert(theBetaMinusChannel);
             break;
 
           case 2:
             // Decay mode is beta+ + EC.
             theBetaPlusChannel = new G4BetaPlusDecay(aParentNucleus, brs[2],    // DHW: April 2015
-                                                     0.*MeV, 0.*MeV, allowed);
-            theDecayTable->Insert(theBetaPlusChannel);
+                                                     0.*MeV, 0.*MeV,
+                                                     noFloat, allowed);
+            summedDecayTable->Insert(theBetaPlusChannel);
             break;
 
           case 6:
             // Decay mode is alpha.
             theAlphaChannel = new G4AlphaDecay(aParentNucleus, brs[6], 0.*MeV,
-                                               0.*MeV);
-            theDecayTable->Insert(theAlphaChannel);
+                                               0.*MeV, noFloat);
+            summedDecayTable->Insert(theAlphaChannel);
             break;
 
 	  case 7:
             // Decay mode is proton.
             theProtonChannel = new G4ProtonDecay(aParentNucleus, brs[7], 0.*MeV,
-                                                 0.*MeV);
-            theDecayTable->Insert(theProtonChannel);
+                                                 0.*MeV, noFloat);
+            summedDecayTable->Insert(theProtonChannel);
             break;
 	  case 8:
             // Decay mode is neutron.
             theNeutronChannel = new G4NeutronDecay(aParentNucleus, brs[8], 0.*MeV,
-                                                 0.*MeV);
-            theDecayTable->Insert(theNeutronChannel);
+                                                 0.*MeV, noFloat);
+            summedDecayTable->Insert(theNeutronChannel);
             break;
 
           default:
@@ -1296,10 +1373,10 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
           }
         }
       }
-      // loop over all branches in theDecayTable
+      // loop over all branches in summedDecayTable
       //
-      for (i = 0; i < theDecayTable->entries(); i++){
-        theChannel = theDecayTable->GetDecayChannel(i);
+      for (i = 0; i < summedDecayTable->entries(); i++){
+        theChannel = summedDecayTable->GetDecayChannel(i);
         theNuclearDecayChannel = static_cast<G4NuclearDecay*>(theChannel);
         theBR = theChannel->GetBR();
         theDaughterNucleus = theNuclearDecayChannel->GetDaughterNucleus();
@@ -1315,9 +1392,9 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
         if (IsApplicable(*theDaughterNucleus) && theBR && 
             aParentNucleus != theDaughterNucleus) { 
           // need to make sure daughter has decay table
-          aTempDecayTable = GetDecayTable(theDaughterNucleus);
+          parentDecayTable = GetDecayTable(theDaughterNucleus);
 
-          if (aTempDecayTable->entries() ) {
+          if (parentDecayTable->entries() ) {
             A = ((const G4Ions*)(theDaughterNucleus))->GetAtomicMass();
             Z = ((const G4Ions*)(theDaughterNucleus))->GetAtomicNumber();
             E = ((const G4Ions*)(theDaughterNucleus))->GetExcitationEnergy();
@@ -1338,7 +1415,7 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
             //
             // they are in two parts, first the less than n ones
             // Eq 4.24 of the TN
-            rates.clear();
+            Acoeffs.clear();
             long double ta1,ta2;
             ta2 = (long double)TaoPlus;
             for (k = 0; k < RP.size(); k++){
@@ -1349,7 +1426,7 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
                 theRate = ta1/(ta1-ta2);
               }
               theRate = theRate * theBR * RP[k];
-              rates.push_back(theRate);
+              Acoeffs.push_back(theRate);
             }
 
             // the second part: the n:n coefficiency
@@ -1369,14 +1446,14 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
               aRate1 += aRate;
             }
             theRate = -aRate1;
-            rates.push_back(theRate); 	      
-            SetDecayRate (Z,A,E,nGeneration,rates,taos);
-            theDecayRateVector.push_back(theDecayRate);
+            Acoeffs.push_back(theRate); 	      
+            SetDecayRate (Z,A,E,nGeneration,Acoeffs,taos);
+            theDecayRateVector.push_back(ratesToDaughter);
             nEntry++;
           } // there are entries in the table
         } // nuclide is OK to decay
       } // end of loop (i) over decay table branches 
-      //      delete theDecayTable;
+      //      delete summedDecayTable;
 
     } // Getting contents of decay rate vector (end loop on j)
     nS = nT;
@@ -1390,13 +1467,13 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
 
   // fill the first part of the decay rate table
   // which is the name of the original particle (isotope)
-  theDecayRateTable.SetIonName(theParentNucleus.GetParticleName()); 
+  chainsFromParent.SetIonName(theParentNucleus.GetParticleName()); 
 
   // now fill the decay table with the newly completed decay rate vector
-  theDecayRateTable.SetItsRates(theDecayRateVector);
+  chainsFromParent.SetItsRates(theDecayRateVector);
 
   // finally add the decayratetable to the tablevector
-  theDecayRateTableVector.push_back(theDecayRateTable);
+  theParentChainTable.push_back(chainsFromParent);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1522,6 +1599,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
   // Initialize G4ParticleChange object, get particle details and decay table
 
   fParticleChangeForRadDecay.Initialize(theTrack);
+  fParticleChangeForRadDecay.ProposeWeight(theTrack.GetWeight());
   const G4DynamicParticle* theParticle = theTrack.GetDynamicParticle();
   const G4ParticleDefinition* theParticleDef = theParticle->GetDefinition();
 
@@ -1676,13 +1754,9 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
       if (GetVerboseLevel()>0)
         G4cout << "DecayIt: Variance Reduction version " << G4endl;
 #endif
-      if (!IsRateTableReady(*theParticleDef)) {
-        // if the decayrates are not ready, calculate them and 
-        // add to the rate table vector 
-        AddDecayRateTable(*theParticleDef);
-      }
-      //retrieve the rates 
-      GetDecayRateTable(*theParticleDef);
+      // Get decay chains for the given nuclide 
+      if (!IsRateTableReady(*theParticleDef)) CalculateChainsFromParent(*theParticleDef);
+      GetChainsFromParent(*theParticleDef);
 
       // declare some of the variables required in the implementation
       G4ParticleDefinition* parentNucleus;
@@ -1693,11 +1767,11 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
       G4String keyName;
       std::vector<G4double> PT;
       std::vector<G4double> PR;
-      G4double taotime;
+      G4double tauprob;
       long double decayRate;
 
       size_t i;
-      size_t j;
+//      size_t j;
       G4int numberOfSecondaries;
       G4int totalNumberOfSecondaries = 0;
       G4double currentTime = 0.;
@@ -1729,7 +1803,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
         // it should be calculated in seconds
         weight1 /= s ;
 	    
-        // loop over all the possible secondaries of the nucleus
+        // Loop over all the possible secondaries of the nucleus
         // the first one is itself.
         for (i = 0; i < theDecayRateVector.size(); i++) {
           PZ = theDecayRateVector[i].GetZ();
@@ -1738,37 +1812,100 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
           PT = theDecayRateVector[i].GetTaos();
           PR = theDecayRateVector[i].GetDecayRateC();
 
-          // Calculate the decay rate of the isotope
-          // decayRate is the radioactivity of isotope (PZ,PA,PE) at the 
-          // time 'theDecayTime'
-          // it will be used to calculate the statistical weight of the 
+          // The array of arrays theDecayRateVector contains all possible decay
+          // chains of a given parent nucleus (ZP,AP,EP) to a given descendant
+          // nuclide (Z,A,E).
+          //
+          // theDecayRateVector[0] contains the decay parameters of the parent
+          // nucleus
+          //           PZ = ZP
+          //           PA = AP
+          //           PE = EP
+          //           PT[] = {TP}
+          //           PR[] = {RP}
+          //
+          // theDecayRateVector[1] contains the decay of the parent to the first
+          // generation daughter (Z1,A1,E1).
+          //           PZ = Z1
+          //           PA = A1
+          //           PE = E1
+          //           PT[] = {TP, T1}
+          //           PR[] = {RP, R1}
+          //
+          // theDecayRateVector[2] contains the decay of the parent to the first
+          // generation daughter (Z1,A1,E1) and the decay of the first
+          // generation  daughter to the second generation daughter (Z2,A2,E2).
+          //           PZ = Z2
+          //           PA = A2
+          //           PE = E2
+          //           PT[] = {TP, T1, T2}
+          //           PR[] = {RP, R1, R2}
+          //
+          // theDecayRateVector[3] may contain a branch chain
+          //           PZ = Z2a
+          //           PA = A2a
+          //           PE = E2a
+          //           PT[] = {TP, T1, T2a}
+          //           PR[] = {RP, R1, R2a}
+          //
+          // and so on.
+
+          // Calculate the decay rate of the isotope.  decayRate is the 
+          // radioactivity of isotope (PZ,PA,PE) at 'theDecayTime'.
+          // It will be used to calculate the statistical weight of the 
           // decay products of this isotope
 
-          //  G4cout <<"PA= "<< PA << " PZ= " << PZ << " PE= "<< PE  <<G4endl;
+          // For each nuclide, calculate all the decay chains which can reach
+          // the parent nuclide
           decayRate = 0.L;
-          for (j = 0; j < PT.size(); j++) {
-            taotime = GetTaoTime(theDecayTime,PT[j]);
-            decayRate -= PR[j] * (long double)taotime;
+          for (G4int j = 0; j < G4int(PT.size()); j++) {
+            tauprob = ConvolveSourceTimeProfile(theDecayTime,PT[j]);
+            // tauprob is dimensionless, PR has units of s-1
+            decayRate -= PR[j] * (long double)tauprob;
             // Eq.4.23 of of the TN
             // note the negative here is required as the rate in the
             // equation is defined to be negative, 
             // i.e. decay away, but we need positive value here.
 
-            // G4cout << j << "\t"<< PT[j]/s <<"\t"<<PR[j]<< "\t"
-            //        << decayRate << G4endl;		
+            // G4cout << j << "\t" << PT[j]/s << "\t" << PR[j] << "\t" << decayRate << G4endl;
           }
 
-          // add the isotope to the radioactivity tables
-          //  G4cout <<theDecayTime/s <<"\t"<<nbin<<G4endl;
-          //  G4cout << theTrack.GetWeight() <<"\t"<<weight1<<"\t"<<decayRate<< G4endl;
-          theRadioactivityTables[decayWindows[nbin-1]]->AddIsotope(PZ,PA,PE,weight1*decayRate,theTrack.GetWeight());
+          // At this point any negative decay rates are probably small enough
+          // (order 10**-30) that negative values are likely due to cancellation
+          // errors.  Set them to zero.
+          if (decayRate < 0.0) decayRate = 0.0;
+/*
+          if (decayRate < 0.0) {
+            if (-decayRate > 1.0e-30) {
+              G4ExceptionDescription ed;
+              ed << "    Negative decay probability (magnitude > 1e-30) \n"
+                 << "    in variance reduction branch " << G4endl;
+              G4Exception("G4RadioactiveDecay::DecayIt()",
+                          "HAD_RDM_200", JustWarning, ed);
+            } else {
+              // Decay probability is small enough that negative value is likely
+              // due to cancellation errors.  Set it to zero.
+              decayRate = 0.0;
+            }
+          }
+
+          if (decayRate < 0.0) G4cout << " NEGATIVE decay rate = " << decayRate << G4endl;
+*/
+          //  G4cout << theDecayTime/s << "\t" << nbin << G4endl;
+          //  G4cout << theTrack.GetWeight() << "\t" << weight1 << "\t" << decayRate << G4endl;
+
+          // Add isotope to the radioactivity tables
+          // One table for each observation time window specifed in
+          // SetDecayBias(G4String filename)
+          theRadioactivityTables[decayWindows[nbin-1]]
+                ->AddIsotope(PZ,PA,PE,weight1*decayRate,theTrack.GetWeight());
 
           // Now calculate the statistical weight
           // One needs to fold the source bias function with the decaytime
           // also need to include the track weight! (F.Lei, 28/10/10)
           G4double weight = weight1*decayRate*theTrack.GetWeight();
 
-          // decay the isotope 
+          // Decay the isotope 
           theIonTable = (G4IonTable *)(G4ParticleTable::GetParticleTable()->GetIonTable());
           parentNucleus = theIonTable->GetIon(PZ,PA,PE);
 
@@ -1804,15 +1941,21 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
             tempprods = DoDecay(*parentNucleus);
           }
 
-          // save the secondaries for buffers
+          // Save the secondaries for buffers
           numberOfSecondaries = tempprods->entries();
           currentTime = finalGlobalTime + theDecayTime;
           for (index = 0; index < numberOfSecondaries; index++) {
             asecondaryparticle = tempprods->PopProducts();
-            if (asecondaryparticle->GetDefinition()->GetBaryonNumber() < 5) {
+            if (asecondaryparticle->GetDefinition()->GetPDGStable() ) {
               pw.push_back(weight);
               ptime.push_back(currentTime);
               secondaryparticles.push_back(asecondaryparticle);
+            } else if (((const G4Ions*)(asecondaryparticle->GetDefinition()))->GetExcitationEnergy() > 0.
+                                                                                           && weight > 0.) {
+              // Compute the gamma
+              // Generate gammas and XRays from excited nucleus, added by L.Desorgher
+              G4ParticleDefinition* apartDef =asecondaryparticle->GetDefinition();
+              AddDeexcitationSpectrumForBiasMode(apartDef,weight,currentTime,pw,ptime,secondaryparticles);
             }
           }
           delete tempprods;
@@ -1846,7 +1989,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
     // Reset NumberOfInteractionLengthLeft.
     ClearNumberOfInteractionLengthLeft();
 
-    return &fParticleChangeForRadDecay ;
+    return &fParticleChangeForRadDecay;
   }
 } 
 
@@ -1870,8 +2013,10 @@ G4RadioactiveDecay::DoDecay(const G4ParticleDefinition& theParticleDef)
 
   if (theDecayChannel == 0) {
     // Decay channel not found.
-    G4cerr << "G4RadioactiveDecay::DoIt : can not determine decay channel";
-    G4cerr << G4endl;
+    G4ExceptionDescription ed;
+    ed << " Cannot determine decay channel for " << theParticleDef.GetParticleName() << G4endl;
+    G4Exception("G4RadioactiveDecay::DoDecay", "HAD_RDM_013",
+                FatalException, ed);
   } else {
     // A decay channel has been identified, so execute the DecayIt.
 #ifdef G4VERBOSE
@@ -1959,3 +2104,48 @@ G4ThreeVector G4RadioactiveDecay::ChooseCollimationDirection() const {
 
   return dir;
 }
+
+// Add gamma, X-ray, conversion and auger electrons for bias mode
+void
+G4RadioactiveDecay::AddDeexcitationSpectrumForBiasMode(G4ParticleDefinition* apartDef,
+                                        G4double weight,G4double currentTime,
+                                        std::vector<double>& weights_v,
+                                        std::vector<double>& times_v,
+                                        std::vector<G4DynamicParticle*>& secondaries_v)
+{
+  G4double elevel = ((const G4Ions*)(apartDef))->GetExcitationEnergy();
+  G4double life_time = apartDef->GetPDGLifeTime();
+  G4ITDecay* anITChannel = 0;
+
+  while (life_time < halflifethreshold && elevel > 0.) {
+    anITChannel = new G4ITDecay(apartDef, 100., elevel, elevel, photonEvaporation);
+    G4DecayProducts* pevap_products = anITChannel->DecayIt(0.);
+    G4int nb_pevapSecondaries = pevap_products->entries();
+
+    G4DynamicParticle* a_pevap_secondary = 0;
+    G4ParticleDefinition* secDef = 0;
+    for (G4int ind = 0; ind < nb_pevapSecondaries; ind++) {
+      a_pevap_secondary = pevap_products->PopProducts();
+      secDef = a_pevap_secondary->GetDefinition();
+
+      if (secDef->GetBaryonNumber() > 4) {
+        elevel = ((const G4Ions*)(secDef))->GetExcitationEnergy();
+        life_time = secDef->GetPDGLifeTime();
+        apartDef = secDef;
+        if (secDef->GetPDGStable() ) {
+          weights_v.push_back(weight);
+          times_v.push_back(currentTime);
+          secondaries_v.push_back(a_pevap_secondary);
+        }
+      } else {
+        weights_v.push_back(weight);
+        times_v.push_back(currentTime);
+        secondaries_v.push_back(a_pevap_secondary);
+      }
+    }
+
+    delete anITChannel;
+  }
+}
+
+

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4mplIonisation.hh 106715 2017-10-20 09:39:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -66,25 +66,29 @@ class G4mplIonisation : public G4VEnergyLossProcess
 
 public:
 
-  G4mplIonisation(G4double mCharge = 0.0, const G4String& name = "mplIoni");
+  explicit G4mplIonisation(G4double mCharge = 0.0, 
+                           const G4String& name = "mplIoni");
 
   virtual ~G4mplIonisation();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
   // Print out of the class parameters
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
+
+  // print description in html
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*);
+					   const G4ParticleDefinition*) override;
 
 private:
 
   // hide assignment operator
-  G4mplIonisation & operator=(const G4mplIonisation &right);
-  G4mplIonisation(const G4mplIonisation&);
+  G4mplIonisation & operator=(const G4mplIonisation &right) = delete;
+  G4mplIonisation(const G4mplIonisation&) = delete;
 
   G4double    magneticCharge;
   G4bool      isInitialised;

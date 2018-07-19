@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4VisCommandsViewerSet.hh 108131 2018-01-09 13:23:26Z gcosmo $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -35,6 +35,7 @@
 
 #include <vector>
 
+class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithAString;
 class G4UIcmdWithABool;
@@ -82,6 +83,12 @@ private:
   G4UIcommand*          fpCommandViewpointThetaPhi;
   G4UIcommand*          fpCommandViewpointVector;
   G4ThreeVector         fViewpointVector;
+  G4UIdirectory*        fpTimeWindowDirectory;
+  G4UIcommand*          fpCommandTimeWindowDisplayHeadTime;
+  G4UIcommand*          fpCommandTimeWindowDisplayLightFront;
+  G4UIcommand*          fpCommandTimeWindowEndTime;
+  G4UIcmdWithADouble*   fpCommandTimeWindowFadeFactor;
+  G4UIcommand*          fpCommandTimeWindowStartTime;
 };
 
 #endif

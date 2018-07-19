@@ -40,7 +40,7 @@ target_link_libraries(transforms ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(transforms_SCRIPTS
-    debug.mac vis.mac
+    transforms.in vis.mac
   )
 
 foreach(_script ${transforms_SCRIPTS})

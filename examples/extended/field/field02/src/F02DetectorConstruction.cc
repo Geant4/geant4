@@ -27,7 +27,7 @@
 /// \brief Implementation of the F02DetectorConstruction class
 //
 //
-// $Id: F02DetectorConstruction.cc 77654 2013-11-27 08:51:29Z gcosmo $
+// $Id: F02DetectorConstruction.cc 101665 2016-11-21 09:11:07Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,6 +50,7 @@
 #include "G4PVPlacement.hh"
 #include "G4RunManager.hh"
 #include "G4AutoDelete.hh"
+#include "G4SDManager.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -388,6 +389,7 @@ void F02DetectorConstruction::ConstructSDandField()
     F02CalorimeterSD* calorimeterSD = new F02CalorimeterSD("CalorSD",this);
     fCalorimeterSD.Put(calorimeterSD);
   }  
+  G4SDManager::GetSDMpointer()->AddNewDetector(fCalorimeterSD.Get());
   SetSensitiveDetector(fLogicAbsorber, fCalorimeterSD.Get());
 
   // Construct the field creator - this will register the field it creates

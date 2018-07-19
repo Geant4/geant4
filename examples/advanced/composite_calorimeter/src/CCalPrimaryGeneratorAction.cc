@@ -34,6 +34,7 @@
 #include "CCalPrimaryGeneratorMessenger.hh"
 #include "G4HEPEvtInterface.hh"
 
+#include "G4Exp.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
@@ -95,7 +96,7 @@ void CCalPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 
     G4double eta = CLHEP::RandFlat::shoot(etaMin,etaMax);
     G4double phi = CLHEP::RandFlat::shoot(phiMin,phiMax);
-    G4double theta = std::atan(std::exp(-eta))*2.;
+    G4double theta = std::atan(G4Exp(-eta))*2.;
     G4double randomX = std::sin(theta)*std::cos(phi);
     G4double randomY = std::sin(theta)*std::sin(phi);
     G4double randomZ = std::cos(theta);
@@ -140,7 +141,7 @@ void CCalPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
     } else {
       phiValue += scanPhiStep;
     }    
-    G4double theta = std::atan(std::exp(-etaValue))*2.;
+    G4double theta = std::atan(G4Exp(-etaValue))*2.;
 
     G4double scanX = std::sin(theta)*std::cos(phiValue);
     G4double scanY = std::sin(theta)*std::sin(phiValue);

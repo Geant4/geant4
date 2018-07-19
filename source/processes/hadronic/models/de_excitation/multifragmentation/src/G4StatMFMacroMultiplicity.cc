@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiplicity.cc 91834 2015-08-07 07:24:22Z gcosmo $
+// $Id: G4StatMFMacroMultiplicity.cc 100379 2016-10-19 15:05:35Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -64,7 +64,7 @@ G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu(void)
     //	Calculate Chemical potential \mu
     // For that is necesary to calculate mean multiplicities
 {
-  G4Pow* g4pow = G4Pow::GetInstance();
+  G4Pow* g4calc = G4Pow::GetInstance();
   G4double CP = G4StatMFParameters::GetCoulomb();
 
   // starting value for chemical potential \mu
@@ -75,8 +75,8 @@ G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu(void)
     _MeanTemperature*_MeanTemperature/ILD5 -
     _ChemPotentialNu*ZA5 + 
     G4StatMFParameters::GetGamma0()*(1.0-2.0*ZA5)*(1.0-2.0*ZA5) +
-    (2.0/3.0)*G4StatMFParameters::Beta(_MeanTemperature)/g4pow->Z13(5) +
-    (5.0/3.0)*CP*ZA5*ZA5*g4pow->Z23(5) -
+    (2.0/3.0)*G4StatMFParameters::Beta(_MeanTemperature)/g4calc->Z13(5) +
+    (5.0/3.0)*CP*ZA5*ZA5*g4calc->Z23(5) -
     1.5*_MeanTemperature/5.0;
 		
   G4double ChemPa = _ChemPotentialMu;

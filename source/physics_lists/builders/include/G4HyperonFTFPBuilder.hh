@@ -32,12 +32,14 @@
 // Author: 2012 G.Folger
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
 #ifndef G4HyperonFTFPBuilder_h
 #define G4HyperonFTFPBuilder_h 1
 
+#include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
 #include "G4LambdaInelasticProcess.hh"
@@ -59,16 +61,16 @@
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4CascadeInterface.hh"
-
 #include "G4ChipsHyperonInelasticXS.hh"
-class G4HyperonFTFPBuilder 
+
+
+class G4HyperonFTFPBuilder : public G4PhysicsBuilderInterface
 {
   public: 
     G4HyperonFTFPBuilder();
     virtual ~G4HyperonFTFPBuilder();
 
-  public: 
-    void Build();
+    virtual void Build() final override;
 
   private:
  

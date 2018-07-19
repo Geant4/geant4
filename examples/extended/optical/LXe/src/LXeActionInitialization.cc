@@ -37,14 +37,11 @@
 #include "LXeTrackingAction.hh"
 #include "LXeSteppingAction.hh"
 #include "LXeStackingAction.hh"
-#include "LXeSteppingVerbose.hh"
-
-#include "LXeRecorderBase.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeActionInitialization::LXeActionInitialization(LXeRecorderBase* recorder)
- : G4VUserActionInitialization(), fRecorder(recorder)
+LXeActionInitialization::LXeActionInitialization()
+ : G4VUserActionInitialization()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +53,7 @@ LXeActionInitialization::~LXeActionInitialization()
 
 void LXeActionInitialization::BuildForMaster() const
 {
-  SetUserAction(new LXeRunAction(fRecorder));
+  SetUserAction(new LXeRunAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,19 +62,13 @@ void LXeActionInitialization::Build() const
 {
   SetUserAction(new LXePrimaryGeneratorAction());
 
-  SetUserAction(new LXeStackingAction());
+  LXeEventAction* eventAction = new LXeEventAction();
+  SetUserAction(eventAction);
+  SetUserAction(new LXeStackingAction(eventAction));
 
-  SetUserAction(new LXeRunAction(fRecorder));
-  SetUserAction(new LXeEventAction(fRecorder));
-  SetUserAction(new LXeTrackingAction(fRecorder));
-  SetUserAction(new LXeSteppingAction(fRecorder));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VSteppingVerbose* LXeActionInitialization::InitializeSteppingVerbose() const
-{
-  return new LXeSteppingVerbose();
+  SetUserAction(new LXeRunAction());
+  SetUserAction(new LXeTrackingAction());
+  SetUserAction(new LXeSteppingAction(eventAction));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

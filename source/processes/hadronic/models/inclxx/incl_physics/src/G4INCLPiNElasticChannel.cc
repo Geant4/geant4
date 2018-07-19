@@ -64,40 +64,7 @@ namespace G4INCL {
             nucleon = particle2;
             pion = particle1;
         }
-
-        /*    ParticleType deltaType = DeltaZero;
-         if(ParticleConfig::isPair(particle1, particle2, Proton, PiPlus)) {
-         deltaType = DeltaPlusPlus;
-         } else if(ParticleConfig::isPair(particle1, particle2, Neutron, PiPlus)) {
-         deltaType = DeltaPlus;
-         } else if(ParticleConfig::isPair(particle1, particle2, Proton, PiZero)) {
-         deltaType = DeltaPlus;
-         } else if(ParticleConfig::isPair(particle1, particle2, Neutron, PiZero)) {
-         deltaType = DeltaZero;
-         } else if(ParticleConfig::isPair(particle1, particle2, Proton, PiMinus)) {
-         deltaType = DeltaZero;
-         } else if(ParticleConfig::isPair(particle1, particle2, Neutron, PiMinus)) {
-         deltaType = DeltaMinus;
-         } else {
-         INCL_ERROR("Unknown particle pair in Pi-N collision." << '\n');
-         }
-
-         G4double deltaEnergy = nucleon->getEnergy()+ pion->getEnergy();
-
-         nucleon->setType(deltaType); // nucleon becomes the delta
-         nucleon->setEnergy(deltaEnergy); // set the energy of the delta
-
-         ThreeVector deltaMomentum = nucleon->getMomentum() + pion->getMomentum();
-         nucleon->setMomentum(deltaMomentum);
-
-         const G4double deltaMass = std::sqrt(deltaEnergy*deltaEnergy - deltaMomentum.mag2());
-         nucleon->setMass(deltaMass);
-         nucleon->setHelicity(1.0);
-
-         fs->addModifiedParticle(nucleon); // nucleon became a delta
-         fs->addDestroyedParticle(pion);  // pion was removed
-         fs->setDeltaFixed(true);
-         */
+        
         G4double bpn=8e-6;  // B-parameter of exp(Bt) - (MeV/c)^-2
         G4double px_nucleon=nucleon->getMomentum().getX();
         G4double py_nucleon=nucleon->getMomentum().getY();
@@ -142,7 +109,7 @@ namespace G4INCL {
                 pion->setType(PiZero);
             }
         }
-        else {
+        else { // Useless
             ParticleType nucleonType=ParticleTable::getNucleonType(iso/3);
             nucleon->setType(nucleonType);
             ParticleType pionType=ParticleTable::getPionType(2*iso/3);

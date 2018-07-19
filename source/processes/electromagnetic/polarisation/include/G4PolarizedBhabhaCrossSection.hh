@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedBhabhaCrossSection.hh 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedBhabhaCrossSection.hh 96114 2016-03-16 18:51:33Z gcosmo $
 //
 // GEANT4 Class file
 //
@@ -57,15 +57,15 @@ public:
 public:
   void Initialize(G4double x, G4double y, G4double phi, 
 		  const G4StokesVector & p0,const G4StokesVector & p1,
-		  G4int flag=0); 
+		  G4int flag=0) override; 
 
-  G4double XSection(const G4StokesVector & pol2,const G4StokesVector & pol3); 
+  G4double XSection(const G4StokesVector & pol2,const G4StokesVector & pol3) override; 
   G4double TotalXSection(G4double xmin, G4double xmax, G4double y,
 			 const G4StokesVector & pol0,
-			 const G4StokesVector & pol1); 
+			 const G4StokesVector & pol1) override; 
   // return expected mean polarisation
-  G4StokesVector GetPol2();
-  G4StokesVector GetPol3();
+  G4StokesVector GetPol2() override;
+  G4StokesVector GetPol3() override;
 private:
   G4double phi0;
   // - part depending on the polarization of the final positron

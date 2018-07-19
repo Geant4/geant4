@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLogger.cc 97507 2016-06-03 12:48:42Z gcosmo $
+// $Id: G4NavigationLogger.cc 96409 2016-04-12 08:12:10Z gcosmo $
 //
 //
 // class G4NavigationLogger Implementation

@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/shared/src/EventAction.cc
+/// \file EventAction.cc
 /// \brief Implementation of the EventAction class
 //
 //
-// $Id: EventAction.cc 92322 2015-08-27 14:54:05Z gcosmo $
+// $Id: EventAction.cc 98242 2016-07-04 16:57:39Z gcosmo $
 //
 // 
 
@@ -76,7 +76,7 @@ void EventAction::EndOfEventAction(const G4Event*)
 {
   //accumulates statistic
   //
-  fRunAct->fillPerEvent(fEnergyAbs, fEnergyGap, fTrackLAbs, fTrackLGap);
+  fRunAct->FillPerEvent(fEnergyAbs, fEnergyGap, fTrackLAbs, fTrackLGap);
   
   //fill histograms
   //

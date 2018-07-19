@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoulombBarrier.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4CoulombBarrier.hh 100690 2016-10-31 11:25:43Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -34,36 +34,33 @@
 #ifndef G4CoulombBarrier_h
 #define G4CoulombBarrier_h 1
 
-#include <CLHEP/Units/SystemOfUnits.h>
-
 #include "globals.hh"
 #include "G4VCoulombBarrier.hh"
-#include "G4HadronicException.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
+
+class G4Pow;
 
 class G4CoulombBarrier : public G4VCoulombBarrier
 {
 
 public:
 
-  G4CoulombBarrier();
-  G4CoulombBarrier(G4int anA, G4int aZ);
+  explicit G4CoulombBarrier(G4int anA, G4int aZ);
   virtual ~G4CoulombBarrier();
 
   G4double GetCoulombBarrier(G4int ARes, G4int ZRes, G4double U) const;
 
+  virtual G4double BarrierPenetrationFactor(G4int Eexc) const;
+
 private:
-  G4CoulombBarrier(const G4CoulombBarrier & right);
 
-  const G4CoulombBarrier & operator=(const G4CoulombBarrier & right);
-  G4bool operator==(const G4CoulombBarrier & right) const;
-  G4bool operator!=(const G4CoulombBarrier & right) const;
+  G4CoulombBarrier(const G4CoulombBarrier & right) = delete;
+  const G4CoulombBarrier & operator=(const G4CoulombBarrier & right) = delete;
+  G4bool operator==(const G4CoulombBarrier & right) const = delete;
+  G4bool operator!=(const G4CoulombBarrier & right) const = delete;
   
-  virtual G4double BarrierPenetrationFactor(G4double ) const;
+protected:
 
-  inline G4double CalcCompoundRadius(const G4double ZRes) const 
-  {
-    return 2.173*CLHEP::fermi*(1.0+0.006103*static_cast<G4double>(GetZ())*ZRes)/
-      (1.0+0.009443*static_cast<G4double>(GetZ())*ZRes);
-  }
+  G4Pow* g4calc;
 };
 #endif

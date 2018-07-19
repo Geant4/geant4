@@ -27,7 +27,7 @@
 /// \brief Definition of the B02RunAction class
 //
 //
-// $Id: B02RunAction.hh 72953 2013-08-14 14:13:36Z gcosmo $
+// $Id: B02RunAction.hh 98774 2016-08-09 14:28:06Z gcosmo $
 // 
 
 #ifndef B02RunAction_h
@@ -70,7 +70,6 @@ private:
   std::vector<G4String> fSDName;  
   //  G4int fFieldName;
   G4int fFieldValue;
-
 
 };
 

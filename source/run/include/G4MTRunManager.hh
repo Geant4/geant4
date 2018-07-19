@@ -37,6 +37,7 @@
 #include "G4RunManager.hh"
 #include "G4Threading.hh"
 #include "G4RNGHelper.hh"
+#include "G4MTBarrier.hh"
 #include <list>
 #include <map>
 
@@ -100,6 +101,11 @@ public:
     //This method is invoked just before spawning the threads to
     //collect from UI managere the list of commands that threads
     //will execute.
+    size_t GetNumberActiveThreads() const { return threads.size(); }
+    //Returns number of currently active threads.
+    //This number may be different from the number of threads currently
+    //in running state (e.g. the number returned by:
+    //G4Threading::GetNumberOfActiveWorkerThreads() method).
 private:
     // Number of worker threads. To be set by SetNumberOfThreads() method.
     G4int nworkers;
@@ -189,12 +195,18 @@ public:
     
 public:
     //Handling of more than one run per thread
-    enum WorkerActionRequest {
+    enum class WorkerActionRequest {
         UNDEFINED ,
         NEXTITERATION ,    // There is another set of UI commands to be executed
+        PROCESSUI,         // Process UI commands w/o a /run/beamOn
         ENDWORKER          // Terminate thread, work finished
     };
-        
+    virtual void RequestWorkersProcessCommandsStack();
+    //Called to force workers to request and process the UI commands stack
+    //This will block untill all workers have processed UI commands
+    virtual void ThisWorkerProcessCommandsStackDone();
+    //Called by workers to signal to master it has completed processing of
+    //UI commands
     virtual WorkerActionRequest ThisWorkerWaitForNextAction();
     //Worker thread barrier
     //This method should be used by workers' run manager to wait,
@@ -243,6 +255,12 @@ protected:
 public:
     static G4int SeedOncePerCommunication() { return seedOncePerCommunication; }
     static void SetSeedOncePerCommunication(G4int val) { seedOncePerCommunication = val; }
+protected:
+    //Barriers: synch points between master and workers
+    G4MTBarrier beginOfEventLoopBarrier;
+    G4MTBarrier endOfEventLoopBarrier;
+    G4MTBarrier nextActionRequestBarrier;
+    G4MTBarrier processUIBarrier;
 };
 
 #endif //G4MTRunManager_h

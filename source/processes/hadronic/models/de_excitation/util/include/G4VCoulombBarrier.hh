@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCoulombBarrier.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4VCoulombBarrier.hh 100690 2016-10-31 11:25:43Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -38,26 +38,32 @@ class G4VCoulombBarrier
 {
 public:
 
-  G4VCoulombBarrier(G4int anA, G4int aZ);
+  explicit G4VCoulombBarrier(G4int anA, G4int aZ);
   virtual ~G4VCoulombBarrier();
 
   virtual G4double GetCoulombBarrier(G4int ARes, G4int ZRes, 
 				     G4double U) const = 0;
+
+  virtual G4double BarrierPenetrationFactor(G4int Eexc) const = 0;
+
+  void SetParameters(G4double rho, G4double r0); 
 					
-  G4int GetA(void) const {return theA;}
-  G4int GetZ(void) const {return theZ;}
+  inline G4int GetA(void) const { return theA; }
+  inline G4int GetZ(void) const { return theZ; }
+  inline G4double GetRho(void) const { return theRho; }
+  inline G4double GetR0(void)  const { return theR0; }
 
 private:
 
-  G4VCoulombBarrier();
-  G4VCoulombBarrier(const G4VCoulombBarrier & right);
-  const G4VCoulombBarrier & operator=(const G4VCoulombBarrier & right);
-  G4bool operator==(const G4VCoulombBarrier & right) const;
-  G4bool operator!=(const G4VCoulombBarrier & right) const;
+  G4VCoulombBarrier(const G4VCoulombBarrier & right) = delete;
+  const G4VCoulombBarrier & operator=(const G4VCoulombBarrier & right) = delete;
+  G4bool operator==(const G4VCoulombBarrier & right) const = delete;
+  G4bool operator!=(const G4VCoulombBarrier & right) const = delete;
 	
   G4int theA;
   G4int theZ;
-
+  G4double theRho;
+  G4double theR0;
 };
 
 #endif

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/include/PrimaryGeneratorMessenger.hh
 /// \brief Definition of the PrimaryGeneratorMessenger class
 //
-// $Id: PrimaryGeneratorMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: PrimaryGeneratorMessenger.hh 96172 2016-03-22 09:19:11Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 
 class PrimaryGeneratorAction;
 class G4UIdirectory;
+class G4UIcmdWithoutParameter;
 class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +54,8 @@ class PrimaryGeneratorMessenger: public G4UImessenger
     
   private:
     PrimaryGeneratorAction*    fAction;
-    G4UIdirectory*             fGunDir;         
+    G4UIdirectory*             fGunDir;
+    G4UIcmdWithoutParameter*   fDefaultCmd;
     G4UIcmdWithADoubleAndUnit* fRndmCmd;
 };
 

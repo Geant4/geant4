@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExceptionHandler.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4ExceptionHandler.hh 109231 2018-04-05 06:57:57Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -79,6 +79,8 @@ private:
   G4ExceptionHandler(const G4ExceptionHandler &right);
   G4ExceptionHandler& operator=(const G4ExceptionHandler &right);
 
+private:
+  void DumpTrackInfo();
 };
 
 #endif

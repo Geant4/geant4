@@ -24,28 +24,33 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.cc 91834 2015-08-07 07:24:22Z gcosmo $
+// $Id: G4FissionProbability.cc 105799 2017-08-21 07:35:55Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
 //
-// J.M.Quesada (14 february 2009) bug fixed in fission width: missing parenthesis in the denominator 
+// J.M.Quesada (14 february 2009) bug fixed in fission width: missing 
+//                                parenthesis in the denominator 
 
 
 #include "G4FissionProbability.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4NuclearLevelData.hh"
 #include "G4PairingCorrection.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
 #include "G4FissionLevelDensityParameter.hh"
 #include "G4Exp.hh"
 
 G4FissionProbability::G4FissionProbability() :
+  G4VEmissionProbability(0, 0),
   theEvapLDP(new G4EvaporationLevelDensityParameter),
   theFissLDP(new G4FissionLevelDensityParameter),
   ownEvapLDP(true),
   ownFissLDP(true)
-{}
+{
+  fPairCorr = G4NuclearLevelData::GetInstance()->GetPairingCorrection();
+}
 
 G4FissionProbability::~G4FissionProbability()
 {
@@ -53,22 +58,19 @@ G4FissionProbability::~G4FissionProbability()
   if (ownFissLDP) delete theFissLDP;
 }
 
-
 G4double 
 G4FissionProbability::EmissionProbability(const G4Fragment & fragment, 
 					  G4double MaximalKineticEnergy)
   // Compute integrated probability of fission channel
 {
-  if (MaximalKineticEnergy <= 0.0) return 0.0;
+  if (MaximalKineticEnergy <= 0.0) { return 0.0; }
   G4int A = fragment.GetA_asInt();
   G4int Z = fragment.GetZ_asInt();
   G4double U = fragment.GetExcitationEnergy();
   
-  G4double Ucompound = U - 
-    G4PairingCorrection::GetInstance()->GetPairingCorrection(A,Z);
+  G4double Ucompound = U - fPairCorr->GetPairingCorrection(A,Z);
 
-  G4double Ufission = U - 
-    G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(A,Z);
+  G4double Ufission = U - fPairCorr->GetFissionPairingCorrection(A,Z);
   
   G4double SystemEntropy = 
     2.0*std::sqrt(theEvapLDP->LevelDensityParameter(A,Z,Ucompound)*Ucompound);

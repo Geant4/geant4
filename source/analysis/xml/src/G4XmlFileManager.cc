@@ -91,6 +91,7 @@ G4bool G4XmlFileManager::CreateHnFile()
   
   fHnFile = std::make_shared<std::ofstream>(GetFullFileName());
   if ( fHnFile->fail() ) {
+    fHnFile = nullptr;
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " << GetFullFileName();
     G4Exception("G4XmlFileManager::CreateHnFile()",
@@ -146,6 +147,7 @@ G4bool G4XmlFileManager::CreateNtupleFile(
 
   auto ntupleFile = new std::ofstream(GetNtupleFileName(ntupleName));
   if ( ntupleFile->fail() ) {
+    delete ntupleFile;
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " 
                 << GetNtupleFileName(ntupleName);
@@ -170,6 +172,9 @@ G4bool G4XmlFileManager::CreateNtupleFile(
 G4bool G4XmlFileManager::CloseNtupleFile(
   G4TNtupleDescription<tools::waxml::ntuple>* ntupleDescription)
 {
+  // Do nothing if there is no file
+  if ( ! ntupleDescription->fFile ) return true;
+
   G4String ntupleName = ntupleDescription->fNtupleBooking.name();
 
 #ifdef G4VERBOSE

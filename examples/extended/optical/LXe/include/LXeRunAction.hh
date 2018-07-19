@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeRunAction.hh 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id: LXeRunAction.hh 109784 2018-05-09 08:14:08Z gcosmo $
 //
 /// \file optical/LXe/include/LXeRunAction.hh
 /// \brief Definition of the LXeRunAction class
@@ -34,21 +34,25 @@
 #ifndef LXeRunAction_h
 #define LXeRunAction_h 1
 
-class LXeRecorderBase;
+class LXeRun;
+class LXeHistoManager;
+class G4Run;
 
 class LXeRunAction : public G4UserRunAction
 {
   public:
 
-    LXeRunAction(LXeRecorderBase*);
+    LXeRunAction();
     virtual ~LXeRunAction();
 
+    virtual G4Run* GenerateRun();
     virtual void BeginOfRunAction(const G4Run*);
     virtual void EndOfRunAction(const G4Run*);
 
   private:
 
-    LXeRecorderBase* fRecorder;
+    LXeRun*          fRun;
+    LXeHistoManager* fHistoManager;
 };
 
 #endif

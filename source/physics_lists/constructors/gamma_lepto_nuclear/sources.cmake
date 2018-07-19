@@ -11,7 +11,7 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 78907 2014-02-03 14:59:37Z gcosmo $
+# $Id: sources.cmake 106950 2017-10-31 08:26:27Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -66,7 +66,9 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/multifragmentation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/photon_evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/gamma_nuclear/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lepto_nuclear/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
@@ -86,10 +88,12 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_glnuclear
         G4BertiniElectroNuclearBuilder.hh
 	G4EmExtraPhysics.hh
 	G4EmMessenger.hh
+	G4LENDBertiniGammaElectroNuclearBuilder.hh
     SOURCES
         G4BertiniElectroNuclearBuilder.cc
 	G4EmExtraPhysics.cc
 	G4EmMessenger.cc
+	G4LENDBertiniGammaElectroNuclearBuilder.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

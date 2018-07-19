@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94218 2015-11-09 08:24:48Z gcosmo $
+# $Id: sources.cmake 101354 2016-11-15 08:27:51Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -42,6 +42,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
     HEADERS
         AddClone_def.hh
         G4AllITFinder.hh
+        G4CTCounter.hh
         G4FastList.hh
         G4FastList.icc
         G4IosFlagsSaver.hh

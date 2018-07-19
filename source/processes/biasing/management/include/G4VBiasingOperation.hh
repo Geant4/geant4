@@ -27,7 +27,7 @@
 // $Id: $
 //
 // --------------------------------------------------------------------
-// GEANT 4 class header file 
+// Geant4 class header file 
 //
 // Class Description:
 //
@@ -140,21 +140,6 @@ public:
   virtual void                                                      AlongMoveBy( const G4BiasingProcessInterface*           /* callingProcess */,
 										 const G4Step*                                        /* step */,
 										 G4double                          /* weightForNonInteraction */ ) {}
-
-  // ----
-  // ---- I.4) Methods called in at the PostStepDoIt(...) level :
-  // ---- 
-  // ------ o Method allowing the operation to prevent wrapped process interaction to happen:
-  // ------   - has to return true if interaction is denied by the operation
-  // ------   - the primary is left unchanged in this case
-  // ------   - but its weight becomes the one given by proposedTrackWeight.
-  // DEPRECATED
-  // virtual G4bool                                        DenyProcessPostStepDoIt( const G4BiasingProcessInterface*      /* callingProcess */,
-  // 										 const G4Track*                                 /* track */,
-  // 										 const G4Step*                                   /* step */,
-  // 										 G4double&                        /* proposedTrackWeight */ )
-  // {return false;}
-
 
 
   // ---- II. Biasing of the process post step final state:

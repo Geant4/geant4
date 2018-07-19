@@ -55,7 +55,7 @@ public:
 
 private:
 
-  RunAction* masterRunAction;
+  RunAction* fMasterRunAction;
   const DetectorConstruction* fDetector;
 };
 

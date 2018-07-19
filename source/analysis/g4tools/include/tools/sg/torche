@@ -10,7 +10,7 @@
 #include "sf_vec"
 #include "render_action"
 
-#include "../colorf"
+#include "../colorfs"
 
 namespace tools {
 namespace sg {
@@ -18,8 +18,8 @@ namespace sg {
 class torche : public node {
   TOOLS_NODE(torche,tools::sg::torche,node)
 public:
-  sf_vec<tools::colorf,float> color;
-  sf_vec<tools::vec3f,float> direction;
+  sf_vec<colorf,float> color;
+  sf_vec<vec3f,float> direction;
   sf<bool> on;
 public:
   virtual const std::vector<field_desc>& node_fields() const {
@@ -60,8 +60,8 @@ public:
 public:
   torche()
   :parent()
-  ,color(tools::colorf::white())
-  ,direction(tools::vec3f(0,0,-1))
+  ,color(colorf_white())
+  ,direction(vec3f(0,0,-1))
   ,on(true)
   {
     add_fields();

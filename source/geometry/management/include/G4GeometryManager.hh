@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.hh 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4GeometryManager.hh 103235 2017-03-22 15:53:48Z gcosmo $
 //
 // class G4GeometryManager
 //
@@ -37,8 +37,8 @@
 //
 // Member data:
 //
-//   static G4GeometryManager* fgInstance
-//     - Ptr to the unique instance of class
+//   - fgInstance
+//     Ptr to the unique instance of class
 
 // Author:
 // 26.07.95 P.Kent Initial version, including optimisation Build
@@ -67,7 +67,7 @@ class G4GeometryManager
       // present. Applies to just a specific subtree if a physical volume is
       // specified.
 
-    G4bool IsGeometryClosed();
+    static G4bool IsGeometryClosed();
       // Return true/false according to state of optimised geoemtry.
 
     void SetWorldMaximumExtent(G4double worldExtent);
@@ -75,11 +75,21 @@ class G4GeometryManager
       // allowed only if NO solids have been created already.
 
     static G4GeometryManager* GetInstance();
-      // Return ptr to singleton instance of the class.
+      // Return ptr to singleton instance of the class, creating it if
+      // not existing.
+
+    static G4GeometryManager* GetInstanceIfExist();
+      // Return ptr to singleton instance.
+
+  public:  // without description
+
+   ~G4GeometryManager();
+      // Destructor.
 
   protected:
 
     G4GeometryManager();
+      // Protected constructor
 
   private:
 
@@ -90,7 +100,7 @@ class G4GeometryManager
     static void ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
                                   G4double totalCpuTime );
     static G4ThreadLocal G4GeometryManager* fgInstance;
-    G4bool fIsClosed;
+    static G4ThreadLocal G4bool fIsClosed;
 };
 
 #endif

@@ -26,13 +26,14 @@
 /// \file medical/electronScattering/src/PhysListEmStandardSS.cc
 /// \brief Implementation of the PhysListEmStandardSS class
 //
-// $Id: PhysListEmStandardSS.cc 102356 2017-01-23 16:22:42Z gcosmo $
+// $Id: PhysListEmStandardSS.cc 100262 2016-10-17 08:08:04Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandardSS.hh"
 
+#include "G4BuilderType.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
@@ -52,13 +53,18 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
-#include "G4EmProcessOptions.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandardSS::PhysListEmStandardSS(const G4String& name)
    :  G4VPhysicsConstructor(name)
-{}
+{
+    SetPhysicsType(bElectromagnetic);
+
+    G4EmParameters* param = G4EmParameters::Instance();
+    param->SetDefaults();
+    param->SetMscThetaLimit(0.0);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -125,9 +131,6 @@ void PhysListEmStandardSS::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,        -1, 1, 1);
     }
   }
-
-  G4EmProcessOptions emOptions;
-  emOptions.SetPolarAngleLimit(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

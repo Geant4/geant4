@@ -1,5 +1,5 @@
 =================================================================
-                     Geant4 - PDB4DNA
+                     Geant4 - pdb4dna
 =================================================================
 
 
@@ -7,6 +7,16 @@ Authors: E. Delage *(a), Y. Perrot *(a), Q.T. Pham (a)
 
 (a) Laboratoire de Physique Corpusculaire de Clermont-Ferrand, CNRS/IN2P3 - Clermont University, France
 * Corresponding authors, email to delage@clermont.in2p3.fr, perrot@clermont.in2p3.fr
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
 
 ---> 1. A brief description
 

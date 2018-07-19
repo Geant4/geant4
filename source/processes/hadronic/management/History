@@ -14,7 +14,84 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+8 June 2018 J. Yarba (hadr-man-V10-04-04)
+---------------------------------------------------
+- G4HadronicProcess - use correct return type when calling CheckResult
+  (from PostStepDoIt); otherwise the value of pointer 'result' does not
+  get properly reset to NULL in case a non-conservation is detected,
+  thus "bad" interaction does not get re-sampled
+
+31 May 2017 V. Ivanchenko (hadr-man-V10-04-03)
+---------------------------------------------------
+- G4HadronicProcess, G4HadronInelasticProcess - added keyword 
+    "override", cleanup cross section scale factor and weights
+- G4HadronicProcessStore - use "nullptr", added flag buildXSTable
+    and get/set methods
+
+30 May 2017 V. Ivanchenko (hadr-man-V10-04-02)
+---------------------------------------------------
+- G4HadronicProcess, G4VLeadingParticleBiasing, G4HadLeadBias
+    fixed compilation warning of CMSSW at gcc7.0.0
+
+29 May 2017 V. Ivanchenko (hadr-man-V10-04-01)
+---------------------------------------------------
+- G4HadronicProcess - use const pointers and "nullptr" for
+    G4Material and G4Element, use ComputeCrossSection(...) method,
+    remove creation of new materials in run time inside
+    GetElementCrossSection(..) method, all materials should
+    be created in user code
+
+09 May 2018  Alberto Ribon (hadr-man-V10-04-00)
+---------------------------------------------------
+- G4HadronicProcess : fixed warnings in gcc 8 regarding catching 
+    polymorphic type by value, instead of by reference.
+
+12 September 2017  Krzysztof Genser (hadr-man-V10-03-06)
+---------------------------------------------------
+- G4HadronicProcessType.hh added fMuAtomicCapture
+
+31 August 2017  Dennis Wright  (hadr-man-V10-03-05)
+---------------------------------------------------
+- G4HadronicProcessStore.cc: remove circular dependence on G4RadioactiveDecay
+
+17 July 2017  Dennis Wright  (hadr-man-V10-03-04)
+-------------------------------------------------
+- G4HadronicProcessStore::DumpHtml(): add PrintHtml for generic ion
+- G4HadronicProcessStore::PrintHtml(): add loop to print descriptions
+   of "extra" processes, including radioactive decay.
+- G4HadronicProcessStore::Clean(): add exception to prevent deletion 
+   of G4RadioactiveDecay - already deleted somwhere else. 
+
+11 May 2017 V. Ivanchenko (hadr-man-V10-03-03)
+10 May 2017 V. Ivanchenko (hadr-man-V10-03-00)
+---------------------------------------------------
+- G4HadronicProcess - correctly check charge and energy balance
+    in the case of e- internal convertion; improved initialisation
+    for constructors 
+
+01 July 2016 V. Ivanchenko (hadr-man-V10-02-03)
+---------------------------------------------------
+- G4EnergyRangeManager - fixed Coverity warning
+
+24 June 2016  Alberto Ribon  (hadr-man-V10-02-02)
+---------------------------------------------------
+- G4HadronicProcess - added check on the final-state secondaries to see
+  if kaon0 or anti_kaon0 are present: if this the case, they are transformed
+  into either kaon0S or kaon0L, with equal (50%) probability.
+
+27 May 2016 V. Ivanchenko (hadr-man-V10-02-01)
+---------------------------------------------------
+- G4HadronicProcess - added flag of "integral" approach to take into
+    account cross section change at a step; use nullptr;
+    do not create new materials in the method GetElementCrossSection(),
+    istead only try to find existing simple G4Material 
+
+18 April 2016 V. Ivanchenko (hadr-man-V10-02-00)
+---------------------------------------------------
+- G4HadronicProcessStore - call initialisation of all G4HadronicInteractions
+
 30 October 2015  Gunter Folger    (hadr-man-V10-01-06)
+---------------------------------------------------
 - while loop check: G4HadronicProcess.cc has one loops, already checked with
     counter
 

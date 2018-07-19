@@ -1,0 +1,46 @@
+
+#define TOOLS_WROOT_MT_NTUPLE_SET_MAX(a__type) \
+     {leaf_ref<a__type>* _mleaf_ = _mleaf?id_cast<base_leaf, leaf_ref<a__type> >(*_mleaf):0;\
+      leaf_ref<a__type>* _pleaf_ = _pleaf?id_cast<base_leaf, leaf_ref<a__type> >(*_pleaf):0;\
+      if(_mleaf_&&!_pleaf_) {\
+        m_out << "tools::wroot::mt_ntuple::end_leaves : merge leaves problem (1)." << std::endl;\
+        if(_mleaf) m_out << "main leaf name " << _mleaf->name() << ", cid " << _mleaf->id_cls() << std::endl;\
+        return false;\
+      }\
+      if(!_mleaf_&&_pleaf_) {\
+        m_out << "tools::wroot::mt_ntuple::end_leaves : merge leaves problem (2)." << std::endl;\
+        if(_pleaf) m_out << "to compare with parallel leaf name " << _pleaf->name() << ", cid " << _pleaf->id_cls() << std::endl;\
+        return false;\
+      }\
+      if(_mleaf_ && _pleaf_) {\
+        /*uint32 _length = _pleaf_->length();*/\
+        a__type _mx = _pleaf_->get_max();\
+        a_mutex.lock(); /*do it here (and not outside loop) because of upper m_out.*/\
+        /*_mleaf_->set_length(max_of(_length,_mleaf_->length()));*/\
+        _mleaf_->set_max(max_of<a__type>(_mx,_mleaf_->get_max()));\
+        a_mutex.unlock();\
+      }}
+
+#define TOOLS_WROOT_MT_NTUPLE_STRING_SET_MAX \
+     {leaf_string_ref* _mleaf_ = _mleaf?id_cast<base_leaf,leaf_string_ref>(*_mleaf):0;\
+      leaf_string_ref* _pleaf_ = _pleaf?id_cast<base_leaf,leaf_string_ref>(*_pleaf):0;\
+      if(_mleaf_&&!_pleaf_) {\
+        m_out << "tools::wroot::mt_ntuple::end_leaves : merge string leaves problem (1)." << std::endl;\
+        if(_mleaf) m_out << "main leaf name " << _mleaf->name() << ", cid " << _mleaf->id_cls() << std::endl;\
+        return false;\
+      }\
+      if(!_mleaf_&&_pleaf_) {\
+        m_out << "tools::wroot::mt_ntuple::end_leaves : merge string leaves problem (2)." << std::endl;\
+        if(_pleaf) m_out << "to compare with parallel leaf name " << _pleaf->name() << ", cid " << _pleaf->id_cls() << std::endl;\
+        return false;\
+      }\
+      if(_mleaf_ && _pleaf_) {\
+        /*m_out << "tools::wroot::mt_ntuple::end_leaves : merge string leaves ok." << std::endl;*/\
+        uint32 _length = _pleaf_->length();\
+        int _mx = _pleaf_->get_max();\
+        a_mutex.lock(); /*do it here (and not outside loop) because of upper m_out.*/\
+        _mleaf_->set_length(max_of(_length,_mleaf_->length()));\
+        _mleaf_->set_max(max_of(_mx,_mleaf_->get_max()));\
+        a_mutex.unlock();\
+      }}
+

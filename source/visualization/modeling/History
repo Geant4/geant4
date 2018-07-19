@@ -1,4 +1,4 @@
-$Id: History 97704 2016-06-07 10:43:40Z gcosmo $
+$Id: History 110743 2018-06-12 06:33:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,8 +20,200 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
-2nd May 2016  John Allison  (modeling-V10-01-06)
+11 June 2018  John Allison  (modeling-V10-04-06)
+- G4PhysicalVolumeModel.cc: Fix Coverity warning.
+  o Unnecessary check on pointer.
+
+24 May 2018  John Allison  (modeling-V10-04-05)
+- G4LogicalVolumeModel:
+  o Add fCheckOverlaps flag. Calls CheckOverlaps for each G4PVPlacement.
+  o Note: G4PVParameterised not coded in this tag.
+- G4TrajectoryDrawByEncounteredVolume.cc,
+  G4TrajectoryEncounteredVolumeFilter.cc:
+  o Fix gcc-8 warnings.
+
+30 April 2018  John Allison
+- G4PhysicalVolumeModel.cc: Colour by density: improved comments.
+
+24 April 2018  John Allison  (modeling-V10-04-04)
+- G4ModelingParameters.cc: Small bug fix.
+
+24 April 2018  John Allison  (modeling-V10-04-03)
+- Implement /vis/viewer/set/colourByDensity.
+
+11th March 2018  John Allison  (modeling-V10-04-02)
+- G4PhysicalVolumeMassScene.cc: Protect case of no material in parallel world.
+
+19th December 2017  Gabriele Cosmo  (modeling-V10-04-01)
+- Fixed self-consistency in G4AttValueFilterT header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
+
+12th December 2017  John Allison  (modeling-V10-04-00)
+- G4TrajectoryDrawerUtils.cc: Improvement to an informational message.
+
+13th September 2017  John Allison  (modeling-V10-03-08)
+- G4ModelingParameters.cc, G4PhysicalVolumeModel.cc:
+  Reverted default number of line segments per circle to 24.
+  (72 lines per circle gives trouble in the Boolean Processor, so until that
+  is fixed we revert to 24.)
+
+14th May 2017  John Allison (modeling-V10-03-07)
+- G4GPSModel: Added user-selectable colour.
+
+3rd May 2017  John Allison (modeling-V10-03-06)
+- Needs event-V10-03-01.
+- Completed G4GPSModel for visualisation of General Particle Source. Can
+  be used with command /vis/scene/add/gps.
+
+3rd May 2017  John Allison (modeling-V10-03-05)
+- Added prototype/skeleton G4GPSModel.
+- G4PhysicalVolumeModel::Validate:
+  o Check world pointer (can be null if geometry has been cleared/destroyed).
+
+19th April 2017  John Allison (modeling-V10-03-01)
+- Added G4ModelingParameters::PVPointerCopyNo.
+
+9th December 2016  John Allison (modeling-V10-03-00)
+- Coworks with visman-V10-03-00.
+- G4MagneticFieldModel: Augmented to take lineSegmentsPerCircle.
+  Default is 6 for rapid yet adequate drawing, but this my be changed
+  with /vis/set/arrow3DLineSegmentsPerCircle.
+
+3rd November 2016  John Allison (modeling-V10-02-17)
+- G4ModelingParameters and G4PhysicalVolumeModel:
+  Changed default number of line segments per circle from 24 to 72.
+
+2nd November 2016  John Allison (modeling-V10-02-16)
+- G4ArrowModel: Default lines per circle = 6.
+  But... there is no way to change this at run time with a
+  UI command.  The following commands would have to be augmented:
+    /vis/scene/add/arrow
+    /vis/scene/add/axes
+    /vis/scene/add/magneticField
+  or a new general command added such as
+    /vis/set/arrowLineSegmentsPerCircle
+
+29th September 2016  John Allison (modeling-V10-02-15)
+- G4PhysicalVolumeModel:
+  o Delayed creation of modifiedVisAtts so that not created at all
+    if there are no vis attributes modifiers.
+  o Added std::ostream& operator<< (std::ostream& os,
+    const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path)
+  o Modified so path can be copied and pasted into
+   /vis/set/touchable command:
+    std::ostream& operator<< (std::ostream& os,
+    const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& node)
+
+19th September 2016  John Allison (modeling-V10-02-14)
+- G4PhysicalVolumeModel.cc:
+  o Used static to ensure a plausible vis attributes pointer.
+    Note: G4VSceneHandler::PreAddSolid requires a G4VisAttributes
+    object, so we have to provide one - we choose the default
+    G4VisAttributes if no other is specified.
+
+19th September 2016  John Allison (modeling-V10-02-13)
+- Moved Vis Attributes Modifiers (VAMs) back from G4ViewParameters,
+  reversing modeling-V10-02-11.
+- Reversed modeling-V10-02-12.
+
+12th September 2016  John Allison (modeling-V10-02-12)
+- G4ModelingParameters.cc:
+  o Changed output of 
+    std::ostream& operator <<
+    (std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath& path)
+    to correspond to arguments of /vis/set/touchable.
+
+11th September 2016  John Allison (modeling-V10-02-11)
+- G4ModelingParameters:
+  o Removed Vis Attributes Modifiers (VAMs).
+  o VAMs are now entirely in G4ViewParameters and dealt with
+    in G4VViewer::GetApplicableVisAttributes.
+- G4PhysicalVolumeModel.cc: Removed VAM code.
+
+8th September 2016  John Allison
+- G4PhysicalVolumeModel.cc: Commented out VAM code.
+
+31st August 2016  John Allison (modeling-V10-02-10)
+- Co-works greps-V10-02-05.
+- G4PseudoScene.hh:
+  o Added
+      void AddSolid (const G4Orb&);
+      void AddSolid (const G4Ellipsoid&);
+    to conform to greps-V10-02-05.
+  o Tidied.
+- G4PhysicalVolumeMassScene:
+  o Changed to inherit G4PseudoScene.
+  o Changed AccrueMass to ProcessVolume to conform to G4PseudoScene.
+  o Added
+      void AddSolid (const G4Orb&);
+      void AddSolid (const G4Ellipsoid&);
+    to conform to greps-V10-02-05.
+  o Tidied.
+
+14th August 2016  John Allison  (modeling-V10-02-07)
+- G4TrajectoriesModel::DescribeYourselfTo:
+  o Return if run or event not found.
+
+7th August 2016  John Allison  (modeling-V10-02-06 needs greps-V10-02-02)
+- G4ModelingParameters:
+  o Added changes in Vis Att Modifiers for new flag IsForceDrawingStyle.
+- G4PhysicalVolumeModel:
+  o Takes account of new flag IsForceDrawingStyle.
+
+20th July 2016  John Allison  (modeling-V10-02-05)
+- Introduced drawing and filtering by encountered volume.  I.e.,
+    /vis/modeling/trajectories/create/drawByEncounteredVolume
+    /vis/filtering/trajectories/create/encounteredVolumeFilter
+  and their associated commands.  They replace the TouchedVolume
+  commands introduced in modeling-V10-02-02.
+
+2nd May 2016  John Allison  (modeling-V10-02-04)
 - G4PhysicalVolumeModel.cc: Fixed gcc-6.1 warning.
+
+5th April 2016  John Allison  (modeling-V10-02-03)
+- G4TrajectoryDrawByOriginVolume.cc: Tidied #include statements.
+
+15th February 2016  John Allison  (modeling-V10-02-02)
+- Introduced drawing and filtering by touched volume.  I.e.,
+    /vis/modeling/trajectories/create/drawByTouchedVolume
+    /vis/filtering/trajectories/create/touchedVolumeFilter
+  and their associated commands.  Note that this
+  selects only by a single string, the physical volume name.  If there
+  are more than one physical volumes with that name then any trajectory
+  touching any one of those volumes will be selected.  If the user sets
+  more than one physical volume name (by using the set command more than
+  once) the trajectory will be selected if it touches either of those
+  volumes and which of the attributes (e.g., colour) associated with
+  those volumes is chosen is undefined, but one will be chosen.
+  A more comprehensive facility would allow the user to select by
+  touched touchable, i.e., by the full path and copy numbers of the
+  physical volume - but that is a job for the future if a use case arises.
+  o G4TrajectoryModelFactories.hh/cc:
+    Added G4TrajectoryDrawByTouchedVolumeFactory.
+  o G4TrajectoryFilterFactories.hh/cc:
+    Added G4TrajectoryTouchedVolumeFilterFactory.
+  o Added new files and classes:
+    G4TrajectoryDrawByTouchedVolume.hh/cc
+    G4TrajectoryTouchedVolumeFilter.hh/cc  
+  o G4ModelColourMap.hh: Added new access function:
+    const std::map<T, G4Colour>& GetBasicMap() const;
+    to allow access to the T objects (which are G4String objects,
+    physical volume name(s) in this case) that have been set.
+  o sources.make: Added:
+    G4TrajectoryDrawByTouchedVolume.hh
+    G4TrajectoryTouchedVolumeFilter.hh
+    G4TrajectoryDrawByTouchedVolume.cc
+    G4TrajectoryTouchedVolumeFilter.cc
+- G4TrajectoryDrawByOriginVolume.cc: Tidied.
+
+26th January 2016  John Allison  (modeling-V10-02-01)
+- G4ModelingParameters.hh: Added VisAttributesModifier Set commands.
+
+26th January 2016  John Allison  (modeling-V10-02-00)
+- G4TrajectoryDrawByOriginVolume::Draw and
+  G4TrajectoryOriginVolumeFilter::Evaluate:
+  Added specific arguments to LocateGlobalPointAndSetup to handle
+  multithreading mode.
 
 2nd October 2015  John Allison  (modeling-V10-01-05)
 - G4MagneticFieldModel.cc: Cosmetic improvements.

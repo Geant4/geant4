@@ -98,6 +98,8 @@ static int variable(const string & name, double & result,
     pchar exp_end   = exp_begin + strlen(exp_begin) - 1;
     if (engine(exp_begin, exp_end, result, exp_end, dictionary) == EVAL::OK)
       return EVAL::OK;
+    else
+      return EVAL::ERROR_CALCULATION_ERROR;
   }
   default:
     return EVAL::ERROR_CALCULATION_ERROR;
@@ -129,7 +131,7 @@ static int function(const string & name, stack<double> & par,
   if (iter == dictionary.end()) return EVAL::ERROR_UNKNOWN_FUNCTION;
   Item item = iter->second;
 
-  double pp[MAX_N_PAR];
+  double pp[MAX_N_PAR] = {0.0};
   for(int i=0; i<npar; i++) { pp[i] = par.top(); par.pop(); }
   errno = 0;
   if (item.function == 0)       return EVAL::ERROR_CALCULATION_ERROR;
@@ -328,6 +330,7 @@ static int maker(int op, stack<double> & val)
     errno = 0;
     val.top() = std::pow(val1,val2);
     if (errno == 0) return EVAL::OK;
+    else return EVAL::ERROR_CALCULATION_ERROR;
   case UNARY_PLUS:                              // unary operator '+'
     val.top() = val1 + val2;			// val1 is zero
     return EVAL::OK;

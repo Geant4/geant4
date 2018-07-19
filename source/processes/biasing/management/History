@@ -1,4 +1,4 @@
-$Id: History 95455 2016-02-11 09:53:38Z gcosmo $
+$Id: History 101028 2016-11-04 08:40:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 3rd, 2016, M. Verderi
+- remove obsolete BAC_DenyInteraction value in G4BiasingAppliedCase
+  enum and clean up of obsolete (and commeted out) portion of codes
+  related to this case.
+- tag :  : proc-biasmng-V10-02-02
+
+May 30th, 2016, M. Verderi
+- check for unbounded while loop in G4ProcessPlacer.cc
+- tag :  : proc-biasmng-V10-02-01
+
 January 19th, 2016, M. Verderi
 - fix coveriy warnings in src/G4VBiasingOperator.cc
-- tag : proc-biasmng-V10-01-01
+- tag : proc-biasmng-V10-02-00
 
 November 6th, 2015, M. Verderi
 - adaptation to using G4VAuxiliaryTrackInformation:

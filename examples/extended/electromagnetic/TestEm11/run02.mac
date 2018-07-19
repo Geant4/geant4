@@ -1,4 +1,4 @@
-# $Id: run02.mac 74997 2013-10-25 10:52:13Z gcosmo $
+# $Id: run02.mac 96172 2016-03-22 09:19:11Z gcosmo $
 #
 # limit the step size by geometry
 #
@@ -15,6 +15,7 @@
 #
 /run/initialize
 #
+/testem/gun/setDefault
 /gun/particle e-
 /gun/energy 500 keV
 #

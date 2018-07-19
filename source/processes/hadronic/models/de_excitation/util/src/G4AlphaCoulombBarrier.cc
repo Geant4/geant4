@@ -24,33 +24,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaCoulombBarrier.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4AlphaCoulombBarrier.cc 97097 2016-05-25 07:50:31Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
 
 
 #include "G4AlphaCoulombBarrier.hh"
-#include "G4HadronicException.hh"
 
 G4AlphaCoulombBarrier::G4AlphaCoulombBarrier() : G4CoulombBarrier(4,2) {}
 G4AlphaCoulombBarrier::~G4AlphaCoulombBarrier() {}
 
-
-G4double G4AlphaCoulombBarrier::BarrierPenetrationFactor(G4double aZ) const
+G4double G4AlphaCoulombBarrier::BarrierPenetrationFactor(G4int aZ) const
 {
-    // Data comes from 
-    // Dostrovsky, Fraenkel and Friedlander
-    // Physical Review, vol 116, num. 3 1959
-    // 
-    // const G4int size = 5;
-    // const G4double Zlist[size]  = {10.0, 20.0, 30.0, 50.0, 70.0};
-    // const G4double Kalpha[size] = {0.68, 0.82, 0.91, 0.97, 0.98};
-    G4double K = 1.0;
-    if (aZ>=70.0) {
-	K = 0.98;
-    } else {
-	K = (((0.23684e-5*aZ) - 0.42143e-3)*aZ + 0.25222e-1)*aZ + 0.46699;
-    }
-    return K;
+  // Data comes from 
+  // Dostrovsky, Fraenkel and Friedlander
+  // Physical Review, vol 116, num. 3 1959
+  // 
+  // const G4int size = 5;
+  // const G4double Zlist[size]  = {10.0, 20.0, 30.0, 50.0, 70.0};
+  // const G4double Kalpha[size] = {0.68, 0.82, 0.91, 0.97, 0.98};
+  return  (aZ >= 70) ? 0.98 :
+    (((0.23684e-5*aZ) - 0.42143e-3)*aZ + 0.25222e-1)*aZ + 0.46699;
 }

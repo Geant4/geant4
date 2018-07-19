@@ -1,4 +1,4 @@
-$Id: History 93027 2015-09-30 16:07:56Z gcosmo $
+$Id: History 106151 2017-09-14 06:43:04Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,35 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 12 September 2017 Krzysztof Genser (decay-V10-03-04)
+- Moved Muonic Atom files to processes/hadronic/stopping
+- Replaced DECAY_MuonicAtomDecay process type with DECAY_MuAtom
+
+- Aug. 15, 2017 Hisaya Kurashige (decay-V10-03-03)
+- clean up NULL and 0 pointer and use nullptr
+- remove tests/test01
+- add tests/tst_dcy_01
+
+- Aug. 14, 2017 Hisaya Kurashige (decay-V10-03-02)
+- Modified to suppress Compiler Warning (clang80)
+
+- Aug. 14, 2017 Hisaya Kurashige (decay-V10-03-00)
+- Add ProcessDescription
+
+- October 18, 2016 Gabriele Cosmo (decay-V10-02-03)
+- Corrected CMake and GNUMake scripts to include new dependency on
+  particles/hadrons/ions submodule...
+
+- October 17, 2016 Kevin Lynch (for Lynch and Genser) (decay-V10-02-02)
+- Add G4MuonicAtomDecay for decay of muonic atoms
+
+- June 10, 16 Gunter Folger     (decay-V10-02-01)
+  - G4Decay::DecayIt(): better format and info on IsOK... in exception DECAY003
+  
+- June 10, 16 Gunter Folger     (decay-V10-02-00)
+  - In G4Decay::DecayIt(): add more information in exception DECAY003
+  
 - Sep. 29, 15 Hisaya Kurashige  (decay-V10-01-04)
 - fix problem #1783 of spin treatment for in-filght decay 
   (co-work tags: track-V10-01-10, particles-V10-01-10)

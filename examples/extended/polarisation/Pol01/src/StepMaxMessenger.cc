@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/StepMaxMessenger.cc
 /// \brief Implementation of the StepMaxMessenger class
 //
-// $Id: StepMaxMessenger.cc 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: StepMaxMessenger.cc 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,29 +38,30 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
-:pStepMax(stepM)
+StepMaxMessenger::StepMaxMessenger(StepMax* stepMax)
+: G4UImessenger(),
+  fStepMax(stepMax), fStepMaxCmd(0)
 { 
-  StepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
-  StepMaxCmd->SetGuidance("Set max allowed step length");
-  StepMaxCmd->SetParameterName("mxStep",false);
-  StepMaxCmd->SetRange("mxStep>0.");
-  StepMaxCmd->SetUnitCategory("Length");
+  fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
+  fStepMaxCmd->SetGuidance("Set max allowed step length");
+  fStepMaxCmd->SetParameterName("mxStep",false);
+  fStepMaxCmd->SetRange("mxStep>0.");
+  fStepMaxCmd->SetUnitCategory("Length");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMaxMessenger::~StepMaxMessenger()
 {
-  delete StepMaxCmd;
+  delete fStepMaxCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StepMaxMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
-  if (command == StepMaxCmd)
-    { pStepMax->SetMaxStep(StepMaxCmd->GetNewDoubleValue(newValue));}
+  if (command == fStepMaxCmd)
+    { fStepMax->SetMaxStep(fStepMaxCmd->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

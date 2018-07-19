@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 74997 2013-10-25 10:52:13Z gcosmo $
+// $Id: SteppingAction.cc 110644 2018-06-04 16:51:03Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,10 +59,6 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  G4double edep = step->GetTotalEnergyDeposit();
  if (edep <= 0.) return;
  
- //total energy deposit in absorber
- //
- fEventAction->AddEdep(edep); 
- 
  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();     
  
  //longitudinal profile of deposited energy
@@ -73,8 +69,9 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  G4ThreeVector P1 = prePoint ->GetPosition();
  G4ThreeVector P2 = postPoint->GetPosition();
  G4ThreeVector point = P1 + G4UniformRand()*(P2 - P1);
+ if (step->GetTrack()->GetDefinition()->GetPDGCharge() == 0.) point = P2;
  G4double x = point.x();
- G4double xshifted = x + 0.5*fDetector->GetAbsorSizeX();  
+ G4double xshifted = x + 0.5*fDetector->GetAbsorSizeX();
  analysisManager->FillH1(1, xshifted, edep);
 
  //"normalized" histogram
@@ -91,16 +88,19 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
    G4double xnorm = xfrontNorm + (x - xfront)/csdaRange;
    analysisManager->FillH1(8, xnorm, edep/(csdaRange*density));
  }
-   
+ 
+ //total energy deposit in absorber
+ //
+ fEventAction->AddEdep(iabs, edep);
+ 
  //step size of primary particle or charged secondaries
  //
  G4double steplen = step->GetStepLength();
  const G4Track* track = step->GetTrack();
  if      (track->GetTrackID() == 1) analysisManager->FillH1(4, steplen);
  else if (track->GetDefinition()->GetPDGCharge() != 0.)
-                                    analysisManager->FillH1(7, steplen); 
+                                    analysisManager->FillH1(7, steplen);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

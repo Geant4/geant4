@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94498 2015-11-19 15:46:58Z gcosmo $
+# $Id: sources.cmake 103801 2017-04-27 13:59:03Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -155,7 +155,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4VPiKBuilder.hh
         G4VPionBuilder.hh
         G4VProtonBuilder.hh
-        TheoModelFactory.hh
         G4AlphaBuilder.hh
         G4AlphaPHPBuilder.hh
         G4BinaryAlphaBuilder.hh
@@ -222,13 +221,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QGSPPionBuilder.cc
         G4QGSPKaonBuilder.cc
         G4QGSPProtonBuilder.cc
-        G4VAntiBarionBuilder.cc
         G4VHadronModelBuilder.cc
-        G4VKaonBuilder.cc
-        G4VNeutronBuilder.cc
-        G4VPiKBuilder.cc
-        G4VPionBuilder.cc
-        G4VProtonBuilder.cc
         G4AlphaBuilder.cc
         G4AlphaPHPBuilder.cc
         G4BinaryAlphaBuilder.cc
@@ -243,10 +236,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4ProtonPHPBuilder.cc
         G4TritonBuilder.cc
         G4TritonPHPBuilder.cc
-        G4VAlphaBuilder.cc
-        G4VDeuteronBuilder.cc
-        G4VHe3Builder.cc
-        G4VTritonBuilder.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

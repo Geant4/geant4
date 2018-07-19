@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm2/include/PhysicsListMessenger.hh
+/// \file electromagnetic/TestEm5/include/PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.hh 75118 2013-10-28 09:40:24Z gcosmo $
+// $Id: PhysicsListMessenger.hh 109103 2018-03-27 07:39:04Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,13 +34,13 @@
 #ifndef PhysicsListMessenger_h
 #define PhysicsListMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class PhysicsList;
 class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,17 +49,20 @@ class PhysicsListMessenger: public G4UImessenger
 public:
   
   PhysicsListMessenger(PhysicsList* );
-  virtual ~PhysicsListMessenger();
+ ~PhysicsListMessenger();
     
   virtual void SetNewValue(G4UIcommand*, G4String);
+
+  inline G4double GetMaxChargedStep() const { return fMaxChargedStep; }
     
 private:
   
-  PhysicsList* fPhysicsList;
+  PhysicsList*               fPhysicsList;
     
-  G4UIdirectory*             fPhysDir;        
-  G4UIcmdWithAString*        fListCmd;
-  
+  G4UIdirectory*             fPhysDir;    
+  G4UIcmdWithAString*        fListCmd;    
+  G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
+  G4double                   fMaxChargedStep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

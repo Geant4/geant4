@@ -28,10 +28,13 @@ find_package(ROOT REQUIRED)
 # ROOT version 6 required
 if(ROOT_FOUND)
   STRING(REGEX MATCH "6.*" VERSION6MATCH ${ROOT_VERSION})
-  if(NOT VERSION6MATCH) 
+  if(NOT VERSION6MATCH)
     message(FATAL_ERROR "P02 requires ROOT 6")
   endif()
 endif()
+
+# Include ROOT's CMake functions for dictionary generation
+include("${ROOT_DIR}/modules/RootNewMacros.cmake")
 
 #----------------------------------------------------------------------------
 # P01 requires shared libraries
@@ -44,9 +47,9 @@ endif()
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR}
-                    ${ROOT_INCLUDE_DIR})
+                    ${ROOT_INCLUDE_DIRS})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -54,7 +57,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Generate dictionaries, add ROOT libraries propoertiries
 #
 REFLEX_GENERATE_DICTIONARY(ExP02Classes include/ExP02Classes.hh SELECTION xml/selection.xml)
-add_library(ExP02ClassesDict SHARED ${sources} ExP02Classes.cpp)
+add_library(ExP02ClassesDict SHARED ${sources} ExP02Classes.cxx)
 set(libsuffix .so)
 set(ROOT_LIBRARY_PROPERTIES ${ROOT_LIBRARY_PROPERTIES} SUFFIX ${libsuffix})
 set_target_properties(ExP02ClassesDict PROPERTIES ${ROOT_LIBRARY_PROPERTIES})

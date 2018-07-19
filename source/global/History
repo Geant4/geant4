@@ -17,52 +17,291 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 16, 2016 G.Cosmo (global-V10-01-29)
+June 6, 2018 Jonathan Madsen (global-V10-04-18)
+- Added G4TiMemory.hh which defines an dummy initializer and empty macros when
+  TiMemory is disabled and includes the TiMemory headers and defines an
+  initializer when built with TiMemory support
+- Removed "#define times ostimes" from G4Timer.hh and G4SliceTimer.hh
+  - conflicts with TiMemory and this is left over from a conflict that
+    no longer exists (see global-01-00-03 from 1999)
+  - Removed corresponding "#undef times" from G4Timer.cc and G4SliceTimer.cc
+- Added TiMemory libraries and includes to sources.cmake
+
+May 18, 2018 Gabriele Cosmo (global-V10-04-17)
+- Moved G4Exception functions to inline and extracted banner front/end
+  strings for use in Qt parsing.
+
+May 17, 2018 Jonathan Madsen (global-V10-04-16)
+- Removed G4GLOB_DLL from G4CacheReference<G4double>
+
+May 17, 2018 Jonathan Madsen (global-V10-04-15)
+- Updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+March 23, 2018 Mihaly Novak (global-V10-04-14)
+- Increased accuracy of G4Pow::A13 in the most critical [1/4,4] interval.
+
+March 22, 2018 Gabriele Cosmo (global-V10-04-13)
+- Avoid exporting symbols for Windows DLLs in multi-threaded builds.
+
+March 21, 2018 Gabriele Cosmo (global-V10-04-12)
+- Moved test80 to unit tests in HEPRandom/test module and renamed testRngMT.
+
+March 9, 2018 Gabriele Cosmo (global-V10-04-11)
+- Removed obsolete MT wrappers for random numbers, no longer necessary.
+  Simplified definition of G4Random types in Randomize.hh accordingly.
+- Full support for thread-local storage on clang (also MacOS clang) now
+  enabled; updated tls.hh definitions accordingly; removed use of the
+  G4USE_STD11 flag, now always enabled by default.
+- Minor code cleanup in G4UniformRandPool.
+
+March 7, 2018 Jonathan Madsen (global-V10-04-10)
+- Replaced erroneous "id_type" return type for G4DummyThread::get_id() 
+  with correct "id" type.
+
+March 6, 2018 Jonathan Madsen (global-V10-04-09)
+- updated G4cout_p and G4cerr_p to point to std::cout and std::cerr before
+  and after library load. G4cout before G4RunManager creation has been seen to
+  fail on Windows
+- Improvement to G4AutoLock in non-MT mode + bug fix (void try_lock() ->
+  bool try_lock()) plus error handling within G4AutoLock if static mutex
+  is attempted to be used at application cleanup (previously handled in
+  G4Cache)
+- using atomics in G4Cache
+- Define G4ThisThread, G4Promise, G4Future, and G4SharedFuture in G4Threading
+  the promises and futures are not currently used except for in upcoming
+  RNG testing but will be used in future
+- G4TypeMutex and G4RecursiveTypeMutex now accept an index, e.g.
+  G4AutoLock l(G4TypeMutex<G4SomeClass>(0)) and
+  G4AutoLock l(G4TypeMutex<G4SomeClass>(1))
+- G4DummyThread typedef std::thread::id as id instead of id_type
+
+March 6, 2018 Gabriele Cosmo (global-V10-04-08)
+- Use thread_local keyword on Windows, instead of __declspec(thread) in tls.hh.
+- Removed no longer necessary windefs.hh header.
+
+February 21, 2018 Jonathan Madsen (global-V10-04-07)
+- Overloaded G4AutoLock member functions in serial mode to not
+  execute locking/unlocking
+- Fixed std::system_error in G4Cache where destructor tries
+  to use a static G4Mutex that has already been deleted by cleanup
+  which is a non-critical error related to a singleton memory leak
+- Returned some functionality in G4Threading to dummy types such
+  as G4MUTEXLOCK and G4MUTEXUNLOCK do not actually lock
+  and G4Thread is a dummy thread that executes upon construction
+
+February 19, 2018 Jonathan Madsen (global-V10-04-06)
+- Added G4TypeMutex<T> and G4TypeRecursiveMutex<T> function to threading
+  for safely obtaining a static mutex that is unique to the template type T
+- Replaced static G4Mutex in G4Cache<T> with calls to G4TypeMutex<G4Cache<T>>
+  function calls to safely initialize mutexes on Windows
+
+February 14, 2018 Jonathan Madsen (global-V10-04-05)
+- G4THREADSLEEP had an extra space before paramter field rendering the
+  macro invalid. This was fixed
+- Sequential clang builds were emitting -Wunused-private-field warning
+  in G4MTBarrier. Modified G4CONDITION macros to fix this
+
+February 13, 2018 Jonathan Madsen (global-V10-04-04)
+- Simplified G4Threading by not ifdef'ing out G4Mutex
+  It was determined the average time to lock and unlock a mutex in
+  single-thread mode is ~5 nanoseconds in release mode. Therefore, it
+  was determined the mutex locking is not a concern for performance in
+  non-MT mode. This fixes issues with G4Mutex and G4AutoLock in
+  global-V10-04-03
+- Extended G4TemplateAutoLock to take advantage of the features
+  std::unique_lock offers
+- migrated G4Timer real (wall) time to use std::chrono::high_precision_clock
+  from C++11
+
+February 12, 2018 Jonathan Madsen (global-V10-04-03)
+- G4Threading - replaced POSIX threading with C++11 threading
+  - std::condition_variable
+  - std::mutex + std::recursive_mutex
+  - std::thread
+  - many of the former macros are now dummy macros (e.g. G4MUTEXINIT,
+    G4MUTEX_INITIALIZER, etc.)
+  - G4GetPidId() -> uses std::this_thread::get_id()
+  - G4GetNumberOfCores() -> uses std::thread::hardware_concurrency()
+  - Updated pin affinity
+  - Removed G4THREADSELF (not used, no C++11 platform-independent equivalent)
+- G4AutoLock is now a thin wrapper around std::unique_lock providing previous
+  functionality + more features (e.g. try_lock, try_lock_until, etc.)
+- Added G4RecursiveAutoLock for recursive mutexes
+- Expanded DEFINED_PPC and DEFINED_INTEL in G4FPEDetection (warning in GCC 7+)
+- G4MTBarrier: removed WIN32 specifics, updated G4CONDITIONWAIT to use
+  G4AutoLock (std::unique_lock) instead of G4Mutex, removed G4MUTEX_INITIALIZER
+  from constructor
+
+February 12, 2018 G.Cosmo (global-V10-04-02)
+- G4StateManager: move static method SetVerboseLevel() to be non inline.
+
+February 9, 2018 M.Asai (global-V10-04-01)
+- G4MTcoutDestination.cc blocks G4cout from worker threads while spplication
+  is in G4State_Init instead of G4State_Idle.
+- G4StateManager has a new method to set verbosity and print the state change.
+  
+December 19, 2017 G.Cosmo (global-V10-04-00)
+- Fixed self-consistency in G4ReferenceCountedHandle header (missing #include).
+  Added missing #ifdef guard in G4CacheDetails header; code formatting.
+  Thanks to Raphael Isemann for reporting these.
+
+October 20, 2017 E.Tcherniaev (global-V10-03-11)
+- Use more performant G.Marsaglia (1972) algorithm for G4RandomDirection.
+  Thanks to Kostas Savvidy for the suggestion.
+- Updated unit test G4RandomDirectionTest.
+
+July 24, 2017 E.Tcherniaev (global-V10-03-10)
+- Added G4RandomPointOnEllipsoid() and G4RandomPointOnEllipse() to functions
+  collection in G4RandomTools.hh.
+
+July 20, 2017 E.Tcherniaev (global-V10-03-09)
+- Added G4RandomRadiusInRing() and G4RandomPointInEllipse() to functions
+  collection in G4RandomTools.hh.
+
+June 21, 2017 G.Cosmo      (global-V10-03-08)
+- Corrected TLS setup in tls.hh for gcc compiler.
+
+April 20, 2017 G.Cosmo     (global-V10-03-07)
+- Removed obsolete internal definition of abs() in templates.hh.
+- Code cleanup/formatting in recent G4cout* classes.
+
+April 18, 2017 A.Dotti     (global-V10-03-06)
+- Fixed WIN compilation error.
+
+April 18, 2017 A.Dotti     (global-V10-03-05)
+- Fixed compiler error for gcc < 5.
+- Fixed compilation warning on Mac OS  10.11 clang-8.
+
+April 18, 2017 A.Dotti     (global-V10-03-04)
+- New structure for G4coutDestination functionality with division
+  between sink and filter. 
+
+April 6, 2017 E.Tcherniaev (global-V10-03-03)
+- Added function G4RandomDirection(G4double cosTheta) to G4RandomDirection.hh.
+  Addressing enhancement request #1961.
+
+March 14, 2017 G.Cosmo (global-V10-03-02)
+- Fix in destructor of G4ThreadLocalSingleton to destroy mutex as last
+  action. Fixes contention reported by Valgrind/DRD.
+
+March 13, 2017 G.Cosmo (global-V10-03-01)
+- G4TWorkspacePool: implemented CleanUpAndDestroyAllWorkspaces(),
+  and Recycle() to be called by worker threads.
+
+December 19, 2016 G.Cosmo (global-V10-03-00)
+- Removed obsolete utility class G4SubString used internally in G4String,
+  as no longer necessary and also including unnecessary and buggy operators.
+  Addressing problem report #1864.
+
+November 16, 2016 G.Cosmo (global-V10-02-33)
 - Fixed compilation warning on MacOS Sierra in MT mode in function
   G4Threading::G4GetPidId().
 
-October 21, 2016 G.Cosmo (global-V10-01-28)
+October 21, 2016 A.Dotti (global-V10-02-31, -32)
+- To avoid confusion rename method to:
+  G4Threading::GetNumberOfRunningWorkerThreads() 
+
+October 21, 2016 G.Cosmo (global-V10-02-30)
 - Made initialisation of G4TWorkspacePool thread-local data to be inline
   along with generic template type.
   Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
-September 7, 2016 M.Asai
+October 17, 2016 G.Cosmo (global-V10-02-29)
+- Moved inclusion of <atomic> within G4MULTITHREADED guard in G4Threading.cc
+
+October 11, 2016 A.Dotti (global-V10-02-28)
+- Added G4Threading::GetNumberOfActiveWorkerThreads() function.
+
+September 26, 2016 G.Cosmo (global-V10-02-27)
+- Added kilovolt/m and megavolt/m to G4UnitsTable for electric field.
+  Addressing enhancement request #1891.
+
+September 7, 2016 M.Asai (global-V10-02-26)
 - G4StatDouble: Additional constructor.
 
-September 6, 2016 M.Asai
+September 6, 2016 M.Asai (global-V10-02-25)
 - G4StatDouble: Added = and += operators.
 
-August 31, 2016 V.Ivanchenko
+August 31, 2016 V.Ivanchenko (global-V10-02-24)
 - G4StatDouble: fixed computation of RMS - was completely wrong.
 
-August 12, 2016 G.Cosmo
+August 18, 2016 G.Cosmo (global-V10-02-23)
+- G4UnitsTable: added IsUnitDefined() method, checking existance of a unit
+  in the table. Addressing problem report #1880.
+
+August 15, 2016 V.Ivanchenko (global-V10-02-22)
+- G4PhysicsVector, G4PhysicsTable and derived classes: general cleanup.
+  Updated comments; removed duplicate methods; more correct names for some
+  variables; adoption of c++11 keywords.
+  Removed .icc files for G4LPhysicsFreeVector and G4PhysicsOrderedFreeVector.
+
+August 12, 2016 G.Cosmo (global-V10-02-21)
 - G4UnitsTable: use 'hep_pascal' instead of 'pascal' to avoid potential
   symbol conflicts on Windows.
 
-April 25, 2016 G.Cosmo (global-V10-01-27)
+July 29, 2016 M.Asai (global-V10-02-20)
+- Fix G4UnitDefinition to be properly shared by all threads.
+  Addressed to Bug report #1869.
+
+July 21 and 22, 2016 M.Asai (global-V10-02-16, -17, -18 and -19)
+- Fix G4UnitsTable to be properly shared by all threads.
+  Addressed to Bug report #1869.
+
+June 3, 2016 G.Cosmo (global-V10-02-15)
+- Enabled new units 'us' and 'ps' in G4SystemOfUnits.hh.
+  Now requiring CLHEP-2.3.3.0.
+- Updated version ID for 10.3-Beta.
+
+May 2, 2016 G.Cosmo (global-V10-02-14)
+- Added 'us' and 'ps' units symbols for microsend and picosecond
+  respectively to G4UnitsTable. (M.Maire)
+  Commented out in G4SystemOfUnits.hh, pending installation of new
+  external CLHEP library.
+- Converted all units anc constants from "static const" to "static constexpr".
+- Coworks with tag "externals-V10-02-08".
+
+April 25, 2016 G.Cosmo (global-V10-02-13)
 - Added check for support of atomics for clang compiler in HEPRandom wrappers.
 
-April 14, 2016 G.Cosmo
+April 14, 2016 G.Cosmo (global-V10-02-12)
 - Define G4GeometryTolerance singleton instance pointer as tread-local
   to get rid of spurious race conflicts at initialisation.
 
-March 30, 2016 G.Cosmo
+March 30, 2016 G.Cosmo (global-V10-02-11)
 - Added MixMax in unit tests for HepRandom.
 
-March 22, 2016 A.Dotti
+March 22, 2016 A.Dotti (global-V10-02-10)
 - Fixing compilation of unit test for HEPRandom. Only test
   subdirectory touched to port to new G4 interfaces
 
-March 16, 2016 G.Cosmo
+March 16, 2016 G.Cosmo (global-V10-02-09)
 - Improved algorithm for G4RandomDirection (E.Tcherniaev).
 - Turn warnings to fatal exceptions in G4UnitsTable for non existing
   units or categories in the table. Addressing problem report #1843.
 
-December 17, 2015 G.Cosmo (global-V10-01-26)
+February 17, 1016 A.Dotti (global-V10-02-08, 07, 06, 05)
+- Fixed sequential build and Windows builds for G4MTBarrier class.
+
+February 16, 2016 A.Dotti (global-V10-02-04)
+- Fixed typo CONDTIONBROADCAST for sequential mode.
+- Removed default move constructor to prevent compilation errors on Windows.
+
+February 16, 2016 A.Dotti (global-V10-02-03)
+- Introduced new utility class G4MTBarrier implementing a synchronization
+  point between threads.
+- Corrected typo for macro CONDITIONBROADCAST.
+
+January 28, 2016 A.Dotti (global-V10-02-02)
+- Changed exception code in G4TWorkspacePool from G4TWorkspacePool
+  to "WorkspaceNN".
+
+December 17, 2015 G.Cosmo (global-V10-02-01)
 - Corrected conditions for proper treatment of gcc-5 in tls.hh and
   G4Threading.hh.
 
-December 10, 2015 G.Cosmo
+December 10, 2015 G.Cosmo (global-V10-02-00)
 - Removed unused and buggy operator=(const G4String&) in G4SubString.
 
 November 5, 2015 G.Cosmo (global-V10-01-25)

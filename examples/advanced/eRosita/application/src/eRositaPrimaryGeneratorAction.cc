@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: eRositaPrimaryGeneratorAction.cc 107473 2017-11-15 08:02:34Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,9 +41,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-eRositaPrimaryGeneratorAction::eRositaPrimaryGeneratorAction(
-	                                eRositaDetectorConstruction* myDC)
-:myDetector(myDC)
+eRositaPrimaryGeneratorAction::eRositaPrimaryGeneratorAction()
 {
   G4int n_particle = 1;
 //   G4int n_particle = 1000;

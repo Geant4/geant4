@@ -1,4 +1,4 @@
-$Id: History 97631 2016-06-06 14:06:58Z gcosmo $
+$Id: History 110263 2018-05-17 14:28:14Z gcosmo $
 -------------------------------------------------------------------
 
 
@@ -17,8 +17,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
 
-- May 4, 2016 H.Kurashige(track-V10-01-11)
+- May 17, 2018 J.Madsen (track-V10-04-00)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+- November 25, 2017 V.Ivanchenko (track-V10-03-00)
+- G4VelocityTable - use G4ThreadLocalSingletone patern in order
+    to provide correct deletion of these objects end of run;
+    use only G4Log and G4Exp instead of std::log10 which is not
+    needed
+
+- May 4, 2016 H.Kurashige(track-V10-02-01)
 - Use G4Log in G4VelocityTable::Value()
+
+- January 12, 2016 M.Asai (track-V10-02-00)
+- Chnage G4VUserTrackInformation pointer in G4Track to mutable
+  and set-method to be const-method. This allows the user to
+  set his/her G4VUserTrackInformation pointer without casting
+  G4Track const pointer.
 
 - September 29, 2015 H.Kurashige (track-V10-01-10)
 - Add GetNumberOfSecondariesInCurrrentStep method to G4Step

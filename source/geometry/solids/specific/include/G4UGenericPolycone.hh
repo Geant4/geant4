@@ -35,10 +35,10 @@
 //
 // Class description:
 //
-//   Wrapper class for G4UGenericPolycone to make use of it from USolids module.
+//   Wrapper class for G4GenericPolycone to make use of VecGeom GenericPolycone.
 
 // History:
-// 30.10.13 G.Cosmo, CERN/PH
+// 30.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UGENERICPOLYCONE_hh
 #define G4UGENERICPOLYCONE_hh
@@ -65,10 +65,14 @@ class G4UGenericPolycone : public G4USolid
 
     inline UGenericPolycone* GetShape() const;
 
-    G4double GetStartPhi()  const;
-    G4double GetEndPhi()    const;
-    G4bool IsOpen()         const;
-    G4int  GetNumRZCorner() const;
+    G4double GetStartPhi()    const;
+    G4double GetEndPhi()      const;
+    G4double GetSinStartPhi() const;
+    G4double GetCosStartPhi() const;
+    G4double GetSinEndPhi()   const;
+    G4double GetCosEndPhi()   const;
+    G4bool IsOpen()           const;
+    G4int  GetNumRZCorner()   const;
     G4PolyconeSideRZ GetCorner(G4int index) const;
   
     inline G4GeometryType GetEntityType() const;
@@ -83,6 +87,14 @@ class G4UGenericPolycone : public G4USolid
     G4UGenericPolycone( const G4UGenericPolycone& source );
     G4UGenericPolycone &operator=(const G4UGenericPolycone& source);
       // Copy constructor and assignment operator.
+
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                           G4double& pMin, G4double& pMax) const;
+
     G4Polyhedron* CreatePolyhedron() const;
 };
 

@@ -1,4 +1,4 @@
-$Id: History 77475 2013-11-25 09:38:51Z gcosmo $
+$Id: History 109717 2018-05-08 13:41:05Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 8th, 2018 B. Morgan - B02-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+Mar 7th, 2017 A. Howard - B02-V10-03-00
+- Removed unnecessary clear sampling from B02
+
+Jul 20th, 2016 I. Hrivnacova
+- Coding guidelines (redundant empty lines)
+- Removed unused B02DetectorConstruction::aIstore and its getter
 
 Nov 22nd, 2013 A.Howard - B02-V09-06-10
 - Removed non-english variable names!

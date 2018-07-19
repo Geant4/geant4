@@ -145,7 +145,7 @@ public:
 public:
   bool read(unsigned char& a_x) {
     if(!_check_eob<unsigned char>(a_x)) return false;
-    a_x = *m_pos++;
+    a_x = *m_pos;m_pos++;
     return true;
   }
   bool read(unsigned short& a_x) {
@@ -185,7 +185,7 @@ public:
 
   bool read(char& a_x) {
     if(!_check_eob<char>(a_x)) return false;
-    a_x = *m_pos++;
+    a_x = *m_pos;m_pos++;
     return true;
   }
   bool read(short& a_x) {

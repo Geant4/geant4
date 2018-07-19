@@ -63,7 +63,7 @@ namespace G4INCL {
     Nucleus *theNucleus;
     Particle *theParticle;
 
-    INCL_DECLARE_ALLOCATION_POOL(ParticleEntryAvatar);
+    INCL_DECLARE_ALLOCATION_POOL(ParticleEntryAvatar)
   };
 }
 

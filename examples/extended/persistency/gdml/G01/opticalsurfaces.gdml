@@ -13,6 +13,7 @@
                                           5.0 -11.1"/>
 
   <matrix name="RINDEX" coldim="2" values="1.65*eV 1.58" />
+  <matrix name="REFLECTIVITY" coldim="2" values="1.65*eV 0.8" />
  </define>
 
  <materials>
@@ -37,6 +38,9 @@
   <box aunit="radian" lunit="mm" name="world" x="10000" y="10000" z="10000" />
   <box aunit="radian" lunit="mm" name="det" x="2000" y="2000" z="2000" />
   <opticalsurface name="surf1" model="glisur" finish="polished" type="dielectric_dielectric" value="1.0"/>
+  <opticalsurface name="surf2" model="glisur" finish="polished" type="dielectric_metal" value="1.0">
+    <property name="REFLECTIVITY" ref="REFLECTIVITY" />
+  </opticalsurface>
  </solids>
 
  <structure>
@@ -61,7 +65,7 @@
     <volumeref ref="Detector"/>
   </skinsurface> 
 
-  <bordersurface name="bordersrf1" surfaceproperty="surf1" >
+  <bordersurface name="bordersrf1" surfaceproperty="surf2" >
     <physvolref ref="pv1"/>
     <physvolref ref="pv2"/>
   </bordersurface> 

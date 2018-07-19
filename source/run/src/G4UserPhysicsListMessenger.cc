@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc 71799 2013-06-24 14:45:59Z gcosmo $
+// $Id: G4UserPhysicsListMessenger.cc 108133 2018-01-09 13:25:44Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -227,6 +227,7 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
 
 void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
+  G4ExceptionDescription ed;
   if( command==setCutCmd ){
     G4double newCut = setCutCmd->GetNewDoubleValue(newValue); 
     thePhysicsList->SetDefaultCutValue(newCut);
@@ -238,7 +239,7 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
     str >> particleName >> cut >> unit ;
     thePhysicsList->SetCutValue(cut*G4UIcommand::ValueOf(unit), particleName) ; 
 
-   } else if( command==getCutForAGivenParticleCmd ){
+  } else if( command==getCutForAGivenParticleCmd ){
     G4cout << thePhysicsList->GetCutValue(newValue)/mm <<"[mm]" << G4endl ;
 
   } else if( command==setCutRCmd ){
@@ -248,7 +249,8 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
     G4double cVal = -1.0;
     is >> regName >> cVal >> uniName;
     if (is.fail()) {
-      G4cout << "illegal arguments : try again " << G4endl;
+      ed << "illegal arguments : " << newValue;
+      command->CommandFailed(ed);
       return;
     }
     thePhysicsList->SetCutsForRegion(cVal*(setCutRCmd->ValueOf(uniName)),regName);
@@ -265,13 +267,28 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
 
   }  else if( command == addProcManCmd ){
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
-    if (particle == 0) return;
-    if (particle->GetProcessManager() != 0) return;
+    if (particle == 0)
+    {
+      ed << " Particle is not found : " << newValue;
+      command->CommandFailed(ed);
+      return;
+    }
+    else if (particle->GetProcessManager() != 0)
+    {
+      ed << " Particle is not initialized : " << newValue;
+      command->CommandFailed(ed);
+      return;
+    }
     thePhysicsList->AddProcessManager(particle);
 
   }  else if( command == buildPTCmd ){
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
-    if (particle == 0) return;
+    if (particle == 0)
+    {
+      ed << " Particle is not found : " << newValue;
+      command->CommandFailed(ed);
+      return;
+    }
     thePhysicsList->PreparePhysicsTable(particle);
     thePhysicsList->BuildPhysicsTable(particle);
     

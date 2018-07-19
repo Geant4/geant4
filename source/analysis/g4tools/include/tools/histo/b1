@@ -17,7 +17,8 @@ class b1 : public base_histo<TC,TO,TN,TW,TH> {
 protected:
   enum {AxisX=0};
 public:
-  typedef histo::axis<TC,TO> axis_t;
+  typedef base_histo<TC,TO,TN,TW,TH> base_histo_t;
+  typedef typename parent::axis_t axis_t;
   typedef typename parent::bn_t bn_t;
 public:
   virtual TH bin_error(int) const = 0; //for print
@@ -156,17 +157,21 @@ protected:
     maxs.push_back(aXmax);
     parent::configure(1,nbins,mins,maxs);
   }
-  b1(const std::string& a_title,const std::vector<TC>& aEdges) {
+  b1(const std::string& a_title,const std::vector<TC>& a_edges) {
     parent::m_title = a_title;
     std::vector< std::vector<TC> > edges(1);
-    edges[0] = aEdges;
+    edges[0] = a_edges;
     parent::configure(1,edges);
   }
 
   virtual ~b1(){}
 protected:
   b1(const b1& a_from):parent(a_from){}
-  b1& operator=(const b1& a_from) {parent::operator=(a_from);return *this;}
+  b1& operator=(const b1& a_from) {
+    if(&a_from==this) return *this;
+    parent::operator=(a_from);
+    return *this;
+  }
 public:
   bool configure(bn_t aXnumber,TC aXmin,TC aXmax){
     std::vector<bn_t> nbins;
@@ -177,9 +182,9 @@ public:
     maxs.push_back(aXmax);
     return parent::configure(1,nbins,mins,maxs);
   }
-  bool configure(const std::vector<TC>& aEdges) {
+  bool configure(const std::vector<TC>& a_edges) {
     std::vector< std::vector<TC> > edges(1);
-    edges[0] = aEdges;
+    edges[0] = a_edges;
     return parent::configure(1,edges);
   }
 protected:

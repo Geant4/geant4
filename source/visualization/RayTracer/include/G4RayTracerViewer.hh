@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4RayTracerViewer.hh 103626 2017-04-19 13:29:18Z gcosmo $
 
 // John Allison  17th March 2000
 
@@ -41,6 +41,7 @@ public:
 		    const G4String& name,
 		    G4TheRayTracer* = 0);
   virtual ~G4RayTracerViewer();
+  void Initialise();
   void SetView();
   void ClearView();
   void DrawView();

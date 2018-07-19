@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05CalorimeterParametrisation.cc 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id: RE05CalorimeterParametrisation.cc 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/src/RE05CalorimeterParametrisation.cc
 /// \brief Implementation of the RE05CalorimeterParametrisation class
@@ -36,13 +36,20 @@
 #include "G4Tubs.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05CalorimeterParametrisation::RE05CalorimeterParametrisation()
+: G4VPVParameterisation()
 {
 #include "RE05DetectorParameterDef.icc"
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05CalorimeterParametrisation::~RE05CalorimeterParametrisation()
-{;}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05CalorimeterParametrisation::ComputeTransformation
 (const G4int,G4VPhysicalVolume *physVol) const
@@ -51,14 +58,18 @@ void RE05CalorimeterParametrisation::ComputeTransformation
   physVol->SetTranslation(origin);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RE05CalorimeterParametrisation::ComputeDimensions
 (G4Tubs & calorimeterLayer, const G4int copyNo, const G4VPhysicalVolume*) const
 {
-  G4double innerRad = caloTubs_rmin
-              + copyNo*(absorber_thick+scinti_thick);
+  G4double innerRad = fCaloTubs_rmin
+              + copyNo*(fAbsorber_thick+fScinti_thick);
   calorimeterLayer.SetInnerRadius(innerRad);
-  calorimeterLayer.SetOuterRadius(innerRad+absorber_thick);
-  calorimeterLayer.SetZHalfLength(caloTubs_dz);
-  calorimeterLayer.SetStartPhiAngle(caloTubs_sphi,false);
-  calorimeterLayer.SetDeltaPhiAngle(caloTubs_dphi);
+  calorimeterLayer.SetOuterRadius(innerRad+fAbsorber_thick);
+  calorimeterLayer.SetZHalfLength(fCaloTubs_dz);
+  calorimeterLayer.SetStartPhiAngle(fCaloTubs_sphi,false);
+  calorimeterLayer.SetDeltaPhiAngle(fCaloTubs_dphi);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.hh 91580 2015-07-27 12:55:01Z gcosmo $
+// $Id: G4NeutronCaptureXS.hh 110787 2018-06-14 06:43:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +48,7 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
 #include "G4ElementData.hh"
+#include "G4Threading.hh"
 #include <vector>
 #include <iostream>
 
@@ -60,9 +61,9 @@ class G4PhysicsVector;
 
 class G4NeutronCaptureXS : public G4VCrossSectionDataSet
 {
-public: // With Description
+public: 
 
-  G4NeutronCaptureXS();
+  explicit G4NeutronCaptureXS();
 
   virtual ~G4NeutronCaptureXS();
     
@@ -78,7 +79,7 @@ public: // With Description
 
   virtual
   G4double GetElementCrossSection(const G4DynamicParticle*, 
-				  G4int Z, const G4Material* mat=0);
+				  G4int Z, const G4Material* mat=nullptr);
   
   virtual
   G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
@@ -86,7 +87,7 @@ public: // With Description
                               const G4Element* elm,
                               const G4Material* mat);
 
-  virtual G4Isotope* SelectIsotope(const G4Element*, G4double kinEnergy);
+  virtual const G4Isotope* SelectIsotope(const G4Element*, G4double kinEnergy);
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&);
@@ -95,7 +96,7 @@ public: // With Description
 
 private: 
 
-  void Initialise(G4int Z, const char* = 0);
+  void Initialise(G4int Z, const char*);
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
 
@@ -115,6 +116,9 @@ private:
   static const G4int amin[MAXZCAPTURE];
   static const G4int amax[MAXZCAPTURE];
 
+#ifdef G4MULTITHREADED
+  static G4Mutex neutronCaptureXSMutex;
+#endif
 };
 
 #endif

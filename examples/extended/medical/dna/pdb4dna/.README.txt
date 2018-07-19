@@ -9,6 +9,16 @@
 Laboratoire de Physique Corpusculaire de Clermont-Ferrand \n
 CNRS/IN2P2 - Clermont University, France
 
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+
 \section pdb4dna_s1 A brief description
 
 The PDB4DNA example simulates energy deposits in a target volume generated from a PDB file representing DNA geometry.

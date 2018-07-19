@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.hh 89821 2015-04-30 14:56:43Z gcosmo $
+// $Id: G4PAIModel.hh 105869 2017-08-24 13:37:59Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,44 +71,44 @@ class G4PAIModel : public G4VEmModel, public G4VEmFluctuationModel
 
 public:
 
-  G4PAIModel(const G4ParticleDefinition* p = 0, const G4String& nam = "PAI");
+  explicit G4PAIModel(const G4ParticleDefinition* p = nullptr, 
+		      const G4String& nam = "PAI");
 
-  virtual ~G4PAIModel();
+  ~G4PAIModel() final;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) final;
 
-  virtual void InitialiseLocal(const G4ParticleDefinition*, 
-                               G4VEmModel* masterModel);
+  void InitialiseLocal(const G4ParticleDefinition*, 
+                       G4VEmModel* masterModel) final;
 
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-			       const G4ParticleDefinition*,
-			       G4double kineticEnergy,
-			       G4double cutEnergy);
+  G4double MinEnergyCut(const G4ParticleDefinition*,
+                        const G4MaterialCutsCouple* couple) final;
 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-				const G4ParticleDefinition*,
-				G4double kineticEnergy,
-				G4double cutEnergy,
-				G4double maxEnergy);
+  G4double ComputeDEDXPerVolume(const G4Material*,
+			        const G4ParticleDefinition*,
+			        G4double kineticEnergy,
+			        G4double cutEnergy) final;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  G4double CrossSectionPerVolume(const G4Material*,
+			         const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy,
+				 G4double maxEnergy) final;
+
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) final;
 
-  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
-				      const G4DynamicParticle*,
-				      G4double,
-				      G4double,
-				      G4double);
+  G4double SampleFluctuations(const G4MaterialCutsCouple*,
+			      const G4DynamicParticle*,
+			      G4double, G4double, G4double) final;
 
-  virtual G4double Dispersion(    const G4Material*,
-				  const G4DynamicParticle*,
-				  G4double,
-				  G4double);
+  G4double Dispersion(const G4Material*, const G4DynamicParticle*,
+		      G4double, G4double) final;
 
-  void DefineForRegion(const G4Region* r);
+  void DefineForRegion(const G4Region* r) final;
 
   inline G4PAIModelData* GetPAIModelData();
 
@@ -120,8 +120,8 @@ public:
 
 protected:
 
-  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-			      G4double kinEnergy);
+  G4double MaxSecondaryEnergy(const G4ParticleDefinition*, 
+                              G4double kinEnergy) final;
 
 private:
 
@@ -130,8 +130,8 @@ private:
   inline void SetParticle(const G4ParticleDefinition* p);
 
   // hide assignment operator 
-  G4PAIModel & operator=(const  G4PAIModel &right);
-  G4PAIModel(const  G4PAIModel&);
+  G4PAIModel & operator=(const  G4PAIModel &right) = delete;
+  G4PAIModel(const  G4PAIModel&) = delete;
 
   G4int                       fVerbose; 
 
@@ -148,6 +148,7 @@ private:
   G4double fMass;
   G4double fRatio;
   G4double fChargeSquare;
+  G4double fLowestTcut;
 };
 
 inline G4PAIModelData* G4PAIModel::GetPAIModelData()

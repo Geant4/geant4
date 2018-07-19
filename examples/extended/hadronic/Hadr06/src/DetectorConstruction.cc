@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/DetectorConstruction.cc
+/// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
 // $Id: DetectorConstruction.cc 70755 2013-06-05 12:17:48Z ihrivnac $
@@ -83,31 +83,47 @@ void DetectorConstruction::DefineMaterials()
 {
   // specific element name for thermal neutronHP
   // (see G4ParticleHPThermalScatteringNames.cc)
+
+  G4int ncomponents, natoms;
+
+  // pressurized water
   G4Element* H  = new G4Element("TS_H_of_Water" ,"H" , 1., 1.0079*g/mole);
   G4Element* O  = new G4Element("Oxygen"        ,"O" , 8., 16.00*g/mole);
-  
-  G4int ncomponents, natoms;
-   
   G4Material* H2O = 
   new G4Material("Water_ts", 1.000*g/cm3, ncomponents=2,
-                         kStateLiquid, 593*kelvin, 150*bar);
+                            kStateLiquid, 593*kelvin, 150*bar);
   H2O->AddElement(H, natoms=2);
   H2O->AddElement(O, natoms=1);
   H2O->GetIonisation()->SetMeanExcitationEnergy(78.0*eV);
 
+  // heavy water
+  G4Isotope* H2 = new G4Isotope("H2",1,2);
+  G4Element* D  = new G4Element("TS_D_of_Heavy_Water", "D", 1);
+  D->AddIsotope(H2, 100*perCent);  
+  G4Material* D2O = new G4Material("HeavyWater", 1.11*g/cm3, ncomponents=2,
+                        kStateLiquid, 293.15*kelvin, 1*atmosphere);
+  D2O->AddElement(D, natoms=2);
+  D2O->AddElement(O, natoms=1);
+
   // graphite
   G4Isotope* C12 = new G4Isotope("C12", 6, 12);  
-  G4Element* elC = new G4Element("TS_C_of_Graphite","C", ncomponents=1);
-  elC->AddIsotope(C12, 100.*perCent);
+  G4Element* C   = new G4Element("TS_C_of_Graphite","C", ncomponents=1);
+  C->AddIsotope(C12, 100.*perCent);
   G4Material* graphite = 
   new G4Material("graphite", 2.27*g/cm3, ncomponents=1,
                          kStateSolid, 293*kelvin, 1*atmosphere);
-  graphite->AddElement(elC, natoms=1);
+  graphite->AddElement(C, natoms=1);
+  
+  //NE213
+  G4Material* ne213 = 
+  new G4Material("NE213", 0.874*g/cm3, ncomponents=2);
+  ne213->AddElement(H,  9.2*perCent);
+  ne213->AddElement(C, 90.8*perCent);  
       
   // example of vacuum
   fWorldMat = new G4Material("Galactic", 1, 1.01*g/mole, universe_mean_density,
                  kStateGas, 2.73*kelvin, 3.e-18*pascal);
-                   
+
  ///G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 

@@ -42,15 +42,16 @@
 # Visualisation 
 #
 /vis/scene/create
-/vis/open OGL
+/vis/open OGLI
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 50 130 deg
-/vis/viewer/zoom 3.5
-/vis/viewer/pan -60  40 cm
+/vis/scene/add/axes 0 0 0 0.1 m
+/vis/viewer/zoom 1
+/vis/viewer/panTo -80  40 cm
 /vis/scene/add/trajectories
 /vis/viewer/update
-/vis/scene/add/trajectories
 /vis/scene/endOfEventAction accumulate
+/vis/viewer/set/hiddenMarker 1
 #########################
 # Set the primary particle type,
 # energy and position along the X direction
@@ -58,40 +59,72 @@
 
 #---------------------------gps-----------------
 /gps/pos/shape Circle
-/gps/pos/centre -310. 0. 0. cm ##-270
+/gps/pos/centre -310. 0. 0. cm
 /gps/pos/radius 0. mm
-/gps/pos/sigma_r 2. mm ##3
+/gps/pos/sigma_r 2.5 mm
 /gps/particle proton
 /gps/pos/type Beam
+
 
 # the incident surface is in the y-z plane
 
 /gps/pos/rot1 0 1 0
 /gps/pos/rot2 0 0 1
 
+# the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
+#
+
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0 
+/gps/ang/type beam1d 
+/gps/ang/sigma_r 0. deg
+
 
 # the beam energy is in gaussian profile
 #
 /gps/ene/type Gauss
-/gps/energy 62 MeV
-/gps/ene/sigma 300 keV
-/gps/direction 1 0 0
+/gps/ene/mono 62 MeV
+/gps/ene/sigma 0.3 MeV
 
 
 ##########################
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
-/run/setCut 0.1 mm
-/Step/waterPhantomStepMax 0.01 mm 
+#
+#/Physics/setDetectorCuts 0.001 mm
+#/Physics/setCuts 1 mm
+/Step/waterPhantomStepMax 0.005 mm 
+
+/changePhantom/size 40 40 40  cm
+/changePhantom/position 20 0 0 cm
+
+/changeDetector/size 4 4 4 cm
+/changeDetector/voxelSize .1 40 40 mm
+
+/changeDetector/displacement 0 18. 18. cm
+/changePhantom/update
 
 
 # IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
 # THE FOLLOWIG PARAMETERS
 # SETTING FOR THE RANGE SHIFTER
 
-/beamLine/RangeShifter/RSMat G4_AIR
-/beamLine/RangeShifter/thickness 1 cm
+# /beamLine/RangeShifter/G4_PLEXIGLASS
+# /beamLine/RangeShifter/thickness 1 cm
+##########################################################
+### Set the modulator properties
 
+/modulator/ReadData  
+
+# You can set as a parameter your data file in a right format instead if you left blank or input default, .. 
+# .. data will be read from the default file "ModulWeight.txt"
+
+/modulator/RMWMat G4_PLEXIGLASS
+/modulator/position -2160.5 30 50 mm
+/modulator/innerRadius 2.5 cm
+/modulator/outRadius 9.5 cm
+############################################################
+/event/printEventNumber 1000
 
 # START OF THE MODULATOR ROTATION
 # IT CONSISTS IN A COMPLETE ROTATION 

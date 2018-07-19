@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 74997 2013-10-25 10:52:13Z gcosmo $
+// $Id: EventAction.hh 98749 2016-08-09 13:43:36Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,24 +36,26 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "DetectorConstruction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
   public:
-    EventAction();
+    EventAction(DetectorConstruction*);
    ~EventAction();
 
   public:
     virtual void BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
     
-    void AddEdep(G4double edep) { fTotalEdep += edep; }
-    G4double GetEdep() const    { return fTotalEdep; }
+    void AddEdep(G4int k, G4double edep) { fEdepAbsor[k] += edep; }
     
   private:
-    G4double  fTotalEdep;
+    DetectorConstruction* fDetector;
+
+    G4double  fEdepAbsor[kMaxAbsor];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

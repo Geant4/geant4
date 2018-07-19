@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.cc 94214 2015-11-09 08:18:05Z gcosmo $
+// $Id: G4RPGInelastic.cc 109779 2018-05-09 08:08:28Z gcosmo $
 //
 
 #include "G4RPGInelastic.hh"
@@ -367,7 +367,7 @@ G4RPGInelastic::CalculateMomenta(G4FastVector<G4ReactionProduct,256>& vec,
                                  vec, vecLen,
                                  leadFlag, leadingStrangeParticle);
     }
-     catch(G4HadReentrentException aC)
+     catch(G4HadReentrentException & aC)
     {
        aC.Report(G4cout);
        throw G4HadReentrentException(__FILE__, __LINE__, "Failing to calculate momenta");

@@ -7,11 +7,22 @@
 #
 ifeq ($(G4SYSTEM),WIN32-g++)
   CXX       := g++
-  CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
-  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
-  ifdef G4USE_STD11
-    CPPFLAGS  += -std=c++11
-    CXXFLAGS  += -std=c++11
+  CXXFLAGS  := -Wall -Wno-non-virtual-dtor -Wno-long-long
+  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
+  CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
+  CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
+  G4USE_STD11 := 1
+  ifdef G4USE_STD14
+    CPPFLAGS  += -std=c++14
+    CXXFLAGS  += -std=c++14
+  else
+    ifdef G4USE_STD17
+      CPPFLAGS  += -std=c++17
+      CXXFLAGS  += -std=c++17
+    else
+      CXXFLAGS  += -std=c++11
+      CPPFLAGS  += -std=c++11
+    endif
   endif
   ifdef G4USE_STD14
     G4USE_STD11 := 1
@@ -24,9 +35,9 @@ ifeq ($(G4SYSTEM),WIN32-g++)
     CXXFLAGS  += -std=c++17
   endif
   ifdef G4OPTIMISE
-    CXXFLAGS  += -O
-    FCFLAGS   := -O
-    CCFLAGS   := -O
+    CXXFLAGS  += -O3
+    FCFLAGS   := -O3
+    CCFLAGS   := -O3
   else
     ifdef G4DEBUG
       CXXFLAGS  += -g

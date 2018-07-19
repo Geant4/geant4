@@ -27,7 +27,7 @@
 /// \brief Definition of the MCTruthManager class
 //
 //
-// $Id: MCTruthManager.hh 73446 2013-08-27 11:32:59Z gcosmo $
+// $Id: MCTruthManager.hh 99841 2016-10-07 10:09:34Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -57,14 +57,14 @@ public:
   static MCTruthManager* GetInstance();
 
   void NewEvent();
-  HepMC::GenEvent* GetCurrentEvent() const {return event;}
+  HepMC::GenEvent* GetCurrentEvent() const {return fEvent;}
   void PrintEvent();
 
   void AddParticle(G4LorentzVector&, G4LorentzVector&, G4LorentzVector&, 
                    G4int, G4int, G4int, G4bool);
 
-  void SetConfig(MCTruthConfig* c) {config=c;}
-  MCTruthConfig* GetConfig() const {return config;}
+  void SetConfig(MCTruthConfig* c) {fConfig=c;}
+  MCTruthConfig* GetConfig() const {return fConfig;}
 
 protected:
 
@@ -74,25 +74,25 @@ protected:
 
 private:
 
-  HepMC::GenEvent* event;
+  HepMC::GenEvent* fEvent;
 
   // vector containing barcodes of primary particles (not having any mother)
   //
-  std::vector<G4int> primarybarcodes;
+  std::vector<G4int> fPrimarybarcodes;
 
   // map containing number of 'segmentations' for each particle (i.e. number
   // of additional vertices introduced in order to attach secondary particles
   // which were created 'in-flight', for instance bremstrahlung gammas, etc)
   //
-  std::map<G4int,G4int> segmentations;
+  std::map<G4int,G4int> fSegmentations;
 
   // different criteria for storing (or not) particles
   //
-  MCTruthConfig* config;
+  MCTruthConfig* fConfig;
 
   // recursive printing of the tree
   //
-  void printTree(HepMC::GenParticle*, G4String);
+  void PrintTree(HepMC::GenParticle*, G4String);
   
 };
 #endif // INCLUDE_MCTRUTHMANAGER_H

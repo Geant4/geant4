@@ -44,6 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
     #include "G4MTRunManager.hh"
@@ -64,6 +65,25 @@
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4TiMemory.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void message(RunManager* runmanager)
+{
+#ifdef G4MULTITHREADED
+    runmanager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
+    G4cout << "\n\n\t--> Running in multithreaded mode with "
+           << runmanager->GetNumberOfThreads()
+           << " threads\n\n" << G4endl;
+#else
+    // get rid of unused variable warning
+    runmanager->SetVerboseLevel(runmanager->GetVerboseLevel());
+    G4cout << "\n\n\t--> Running in serial mode\n\n" << G4endl;
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc, char** argv)
 {
@@ -74,12 +94,12 @@ int main(int argc, char** argv)
     if(argc == 1)
         ui = new G4UIExecutive(argc, argv);
 
-    // Choose the Random engine
-    //G4Random::setTheEngine(new CLHEP::RanecuEngine);
-
-    CLHEP::HepRandom::setTheSeed(1245214);
+    // Set the random seed
+    CLHEP::HepRandom::setTheSeed(1245214UL);
 
     RunManager* runmanager = new RunManager();
+
+    message(runmanager);
 
     runmanager->SetUserInitialization(new TSDetectorConstruction);
 
@@ -106,7 +126,7 @@ int main(int argc, char** argv)
     {
         // batch mode
         G4String command = "/control/execute ";
-        G4String fileName = argv[1];
+        G4String fileName = argv[argc-1];
         UImanager->ApplyCommand(command+fileName);
     } else
     {
@@ -116,11 +136,21 @@ int main(int argc, char** argv)
         delete ui;
     }
 
+#ifdef GEANT4_USE_TIMEMORY
+    G4cout << "\nOutputting TiMemory results...\n" << G4endl;
+    tim::manager* manager = tim::manager::instance();
+    manager->write_report(std::cout, true);
+    std::string fname = argv[0];
+    std::string rfname = fname + ".txt";
+    std::string sfname = fname + ".json";
+    manager->write_report(rfname);
+    manager->write_serialization(sfname);
+#endif
+
     // Job termination
     // Free the store: user actions, physics_list and detector_description are
     // owned and deleted by the run manager, so they should not be deleted
     // in the main() program !
-
     delete visManager;
     delete runmanager;
 

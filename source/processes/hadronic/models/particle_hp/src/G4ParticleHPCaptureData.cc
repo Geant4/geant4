@@ -60,6 +60,12 @@ G4ParticleHPCaptureData::G4ParticleHPCaptureData()
    if ( G4Threading::IsWorkerThread() ) {
       instanceOfWorker = true;
    }
+
+   element_cache = NULL;
+   material_cache = NULL;
+   ke_cache = 0.0; 
+   xs_cache = 0.0; 
+    
    //BuildPhysicsTable(*G4Neutron::Neutron());
 }
    

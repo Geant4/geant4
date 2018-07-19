@@ -31,9 +31,9 @@ Author: Susanna Guatelli
 // example analysis/AnaEx01
 
 #include <stdlib.h>
+#include "G4SystemOfUnits.hh"
 #include "BrachyAnalysisManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
 
 BrachyAnalysisManager* BrachyAnalysisManager::instance = 0;
 
@@ -41,8 +41,8 @@ BrachyAnalysisManager::BrachyAnalysisManager()
 {
 #ifdef ANALYSIS_USE
  theTFile = 0;
+ histo2 =0;
  histo = 0;
- ntuple = 0; 
 #endif
 }
 
@@ -50,16 +50,15 @@ BrachyAnalysisManager::~BrachyAnalysisManager()
 { 
 #ifdef G4ANALYSIS_USE
  delete theTFile; theTFile = 0;
+ delete histo2; histo2 = 0;
  delete histo; histo = 0;
- delete ntuple; ntuple = 0; 
 #endif
-
 }
 
 BrachyAnalysisManager* BrachyAnalysisManager::GetInstance()
 {
-	if (instance == 0) instance = new BrachyAnalysisManager;
-	return instance;
+  if (instance == 0) instance = new BrachyAnalysisManager;
+  return instance;
 }
 
 void BrachyAnalysisManager::book() 
@@ -69,17 +68,17 @@ void BrachyAnalysisManager::book()
  theTFile = new TFile("brachytherapy.root", "RECREATE");
  
  histo = new TH1F("h10","energy spectrum", 800, 0., 800);
- ntuple =  new TNtuple("ntuple","edep3D","xx:yy:zz:edep");
+ histo2 = new TH2F("h20","edep2Dxy", 801, -100.125, 100.125, // binning, xmin, xmax, along x direction in mm
+				     801, -100.125, 100.125);// binning, ymin, ymax, along y direction in mm
 #endif 
  }
 
 #ifdef ANALYSIS_USE
-void BrachyAnalysisManager::FillNtupleWithEnergyDeposition(G4double xx,
+void BrachyAnalysisManager::FillH2WithEnergyDeposition(G4double xx,
                                                      G4double yy, 
-                                                     G4double zz,
                                                      G4double energyDep)
 {
-  ntuple -> Fill(xx, yy, zz, energyDep);
+  histo2 -> Fill(xx, yy,energyDep);
 }
 
 void BrachyAnalysisManager::FillPrimaryParticleHistogram(G4double primaryParticleEnergy)

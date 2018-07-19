@@ -14,6 +14,26 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31 May 2016 - Tatsumi Koi (hadr-modman-V10-02-03)
+-----------------------------------------------------------
+- "trunk" is revert to the situation at the hadr-modman-V10-02-01
+
+29 May 2016 - Tatsumi Koi (hadr-modman-V10-02-02)
+-----------------------------------------------------------
+- G4HadronicInteractionRegistry Deleted ad-hoc trick which was added in "hadr-modman-V10-01-04"
+
+18 April 2016 - Vladimir Ivanchenko (hadr-modman-V10-02-01)
+-----------------------------------------------------------
+- G4HadronicInteractionRegistry - added InitialiseModels() method
+- G4HadronicInteraction - added InitialiseModel() method
+- G4VPreCompoundModel, G4VIntraNuclearTransportModel - added C++11
+    keywords, minor cleanup 
+
+18 April 2016 - Vladimir Ivanchenko (hadr-modman-V10-02-00)
+-----------------------------------------------------------
+- G4HadronicInteractionRegistry, G4HadronicInteraction - added C++11
+    keywords, minor cleanup of BuildPhysicsTable interface
+
 2 November 2015 - Tatsumi Koi (hadr-modman-V10-01-07)
 -----------------------------------------------------------
 - G4HadronicInteractionRegistry - adding same ad-hoc trick of NeutronHP to ParticleHP models to prevent problem at termination

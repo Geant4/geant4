@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 91972 2015-08-12 13:48:40Z gcosmo $
+// $Id: DetectorConstruction.cc 109000 2018-03-21 09:25:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,26 +55,25 @@
 #include "G4GlobalMagFieldMessenger.hh"
 #include "G4AutoDelete.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),
- fAbsorberMaterial(0),fWorldMaterial(0),fDefaultWorld(true),
- fSolidWorld(0),fLogicWorld(0),fPhysiWorld(0),
- fSolidAbsorber(0),fLogicAbsorber(0),fPhysiAbsorber(0),
- fDetectorMessenger(0)
+ : G4VUserDetectorConstruction(),
+ fAbsorberMaterial(nullptr),fWorldMaterial(nullptr),fDefaultWorld(true),
+ fSolidWorld(nullptr),fLogicWorld(nullptr),fPhysiWorld(nullptr),
+ fSolidAbsorber(nullptr),fLogicAbsorber(nullptr),fPhysiAbsorber(nullptr),
+ fDetectorMessenger(nullptr)
 {
   // default parameter values of the calorimeter
   fAbsorberThickness = 1.*cm;
   fAbsorberSizeYZ    = 2.*cm;
   fXposAbs           = 0.*cm;
-  ComputeCalorParameters();
+  ComputeGeomParameters();
   
   // materials  
   DefineMaterials();
-  SetWorldMaterial   ("Galactic");
-  SetAbsorberMaterial("Silicon");
+  SetWorldMaterial   ("G4_Galactic");
+  SetAbsorberMaterial("G4_Si");
  
   // create commands for interactive definition of the calorimeter  
   fDetectorMessenger = new DetectorMessenger(this);
@@ -85,13 +84,6 @@ DetectorConstruction::DetectorConstruction()
 DetectorConstruction::~DetectorConstruction()
 { 
   delete fDetectorMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VPhysicalVolume* DetectorConstruction::Construct()
-{
-  return ConstructCalorimeter();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -181,7 +173,7 @@ void DetectorConstruction::DefineMaterials()
 
   //Havar
   //
-  G4Element* Cr = new G4Element("Chrome", "Cr", z=25, a=  51.996*g/mole);
+  G4Element* Cr = new G4Element("Chrome", "Cr", z=24, a=  51.996*g/mole);
   G4Element* Fe = new G4Element("Iron"  , "Fe", z=26, a=  55.845*g/mole);
   G4Element* Co = new G4Element("Cobalt", "Co", z=27, a=  58.933*g/mole);
   G4Element* Ni = new G4Element("Nickel", "Ni", z=28, a=  58.693*g/mole);
@@ -255,7 +247,7 @@ void DetectorConstruction::DefineMaterials()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::ComputeCalorParameters()
+void DetectorConstruction::ComputeGeomParameters()
 {
   // Compute derived parameters of the calorimeter
   fXstartAbs = fXposAbs-0.5*fAbsorberThickness; 
@@ -274,8 +266,9 @@ void DetectorConstruction::ComputeCalorParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
-G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
+G4VPhysicalVolume* DetectorConstruction::Construct()
 { 
+  if(fPhysiWorld) { return fPhysiWorld; }
   // World
   //
   fSolidWorld = new G4Box("World",                                //its name
@@ -310,7 +303,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                                 false,              //no boulean operat
                                 0);                 //copy number
                                         
-  PrintCalorParameters();         
+  PrintGeomParameters();         
   
   //always return the physical World
   //
@@ -319,7 +312,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::PrintCalorParameters()
+void DetectorConstruction::PrintGeomParameters()
 {
   G4cout << "\n" << fWorldMaterial    << G4endl;
   G4cout << "\n" << fAbsorberMaterial << G4endl;
@@ -340,7 +333,7 @@ void DetectorConstruction::PrintCalorParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
+void DetectorConstruction::SetAbsorberMaterial(const G4String& materialChoice)
 {
   // search the material by its name
   G4Material* pttoMaterial =
@@ -355,7 +348,7 @@ void DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
+void DetectorConstruction::SetWorldMaterial(const G4String& materialChoice)
 {
   // search the material by its name
   G4Material* pttoMaterial =
@@ -373,7 +366,7 @@ void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 void DetectorConstruction::SetAbsorberThickness(G4double val)
 {
   fAbsorberThickness = val;
-  ComputeCalorParameters();
+  ComputeGeomParameters();
   if(fPhysiWorld) { ChangeGeometry(); }
 }
 
@@ -382,7 +375,7 @@ void DetectorConstruction::SetAbsorberThickness(G4double val)
 void DetectorConstruction::SetAbsorberSizeYZ(G4double val)
 {
   fAbsorberSizeYZ = val;
-  ComputeCalorParameters();
+  ComputeGeomParameters();
   if(fPhysiWorld) { ChangeGeometry(); }
 }
 
@@ -392,7 +385,7 @@ void DetectorConstruction::SetWorldSizeX(G4double val)
 {
   fWorldSizeX = val;
   fDefaultWorld = false;
-  ComputeCalorParameters();
+  ComputeGeomParameters();
   if(fPhysiWorld) { ChangeGeometry(); }
 }
 
@@ -402,7 +395,7 @@ void DetectorConstruction::SetWorldSizeYZ(G4double val)
 {
   fWorldSizeYZ = val;
   fDefaultWorld = false;
-  ComputeCalorParameters();
+  ComputeGeomParameters();
   if(fPhysiWorld) { ChangeGeometry(); }
 }
 

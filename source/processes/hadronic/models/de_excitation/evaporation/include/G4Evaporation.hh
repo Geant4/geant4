@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Evaporation.hh 88841 2015-03-12 10:34:14Z gcosmo $
+// $Id: G4Evaporation.hh 102025 2016-12-16 14:43:41Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -49,33 +49,29 @@
 #include "G4VEvaporation.hh"
 #include "G4VEvaporationChannel.hh"
 #include "G4Fragment.hh"
-#include "G4UnstableFragmentBreakUp.hh"
+#include "G4DeexPrecoParameters.hh"
 #include <vector>
 
 class G4VEvaporationFactory;
 class G4NistManager;
 class G4IonTable;
-class G4FermiFragmentsPool;
+class G4VFermiBreakUp;
+class G4UnstableFragmentBreakUp;
 
 class G4Evaporation : public G4VEvaporation
 {
 public:
 
-  G4Evaporation();
-  G4Evaporation(G4VEvaporationChannel* photoEvaporation);
+  explicit G4Evaporation(G4VEvaporationChannel* photoEvaporation = nullptr);
 	 
   virtual ~G4Evaporation();
 
-  virtual void InitialiseChannels();
-
-  // primary fragment is copied, the copy is deleted 
-  // or is added to the list of products 
-  G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
+  virtual void InitialiseChannels() final;
 
   // new interface - vector of products is added to the provided vector
   // primary fragment is deleted or is modified and added to the list
   // of products 
-  void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus);
+  virtual void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus) final;
 
   void SetDefaultChannel();
   void SetGEMChannel();
@@ -83,30 +79,24 @@ public:
 
 private:
 
-  void SetParameters();
+  void InitialiseChannelFactory();
 
-  void InitialiseEvaporation();
+  G4Evaporation(const G4Evaporation &right) = delete;
+  const G4Evaporation & operator=(const G4Evaporation &right) = delete;
+  G4bool operator==(const G4Evaporation &right) const = delete;
+  G4bool operator!=(const G4Evaporation &right) const = delete;
 
-  G4Evaporation(const G4Evaporation &right);
-
-  const G4Evaporation & operator=(const G4Evaporation &right);
-  G4bool operator==(const G4Evaporation &right) const;
-  G4bool operator!=(const G4Evaporation &right) const;
-
-  std::vector<G4double>   probabilities;
+  G4int    fVerbose;
   size_t   nChannels;
-  G4int    maxZforFBU;
-  G4int    maxAforFBU;
   G4double minExcitation;
   G4NistManager* nist;
   G4IonTable*    theTableOfIons;
-  G4UnstableFragmentBreakUp unstableBreakUp;
-  G4FermiFragmentsPool* thePool;   
+  G4UnstableFragmentBreakUp* unstableBreakUp;
+  G4bool isInitialised;
+
+  G4DeexChannelType channelType;
+
+  std::vector<G4double> probabilities;
 };
 
 #endif
-
-
-
-
-

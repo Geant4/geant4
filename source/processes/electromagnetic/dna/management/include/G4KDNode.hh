@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDNode.hh 93883 2015-11-03 08:25:04Z gcosmo $
+// $Id: G4KDNode.hh 108087 2017-12-21 09:00:58Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -48,14 +48,13 @@
 #define G4KDNODE_HH
 
 #include <list>
-//#include <map>
 #include <vector>
 #include <deque>
-#include <G4ThreeVector.hh>
-#include <G4Allocator.hh>
-
-#include "globals.hh"
 #include <ostream>
+
+// geant4
+#include "G4Types.hh"
+#include "G4Allocator.hh"
 
 class G4KDTree;
 class G4KDMap;
@@ -63,7 +62,7 @@ class G4KDMap;
 class G4KDNode_Base
 {
 public:
-  //________________________
+  //----------------------------
   // For root node :
   // parent = 0, axis = 0, side = 0
   G4KDNode_Base(G4KDTree*, G4KDNode_Base* /*parent*/);
@@ -72,25 +71,25 @@ public:
   virtual void InactiveNode();
   virtual bool IsValid() const{ return true; }
 
-  //________________________
+  //----------------------------
   inline G4KDTree* GetTree() const {return fTree;}
   inline void SetTree(G4KDTree* tree) {fTree = tree;}
 
-  //________________________
+  //----------------------------
   int GetDim() const;
   inline int GetAxis() const{return fAxis;}
   inline G4KDNode_Base* GetParent(){return fParent;}
   inline G4KDNode_Base* GetLeft(){return fLeft;}
   inline G4KDNode_Base* GetRight(){return fRight;}
 
-  //________________________
+  //----------------------------
   template<typename Position>
     G4KDNode_Base* FindParent(const Position& x0);
     
   template<typename PointT>
     G4KDNode_Base* Insert(PointT* point);
   template<typename PointT>
-      G4KDNode_Base* Insert(const PointT& point);
+    G4KDNode_Base* Insert(const PointT& point);
   int Insert(G4KDNode_Base* newNode);
 
   void PullSubTree();
@@ -98,8 +97,10 @@ public:
 
   void Print(std::ostream& out, int level = 0) const;
 
-//  std::vector<std::deque<G4KDNode_Base* >::iterator >* GetIteratorsForSortingAlgo(G4KDMap*);
-//  std::map<G4KDMap*, std::vector<std::deque<G4KDNode_Base* >::iterator > >* fpIteratorInSortingAlgo;
+// std::vector<std::deque<G4KDNode_Base*>::iterator>*
+//   GetIteratorsForSortingAlgo(G4KDMap*);
+// std::map<G4KDMap*, std::vector<std::deque<G4KDNode_Base*>::iterator>>*
+//   fpIteratorInSortingAlgo;
 
 protected:
   //°°°°°°°°°°°
@@ -132,7 +133,7 @@ template<typename PointT>
   class G4KDNode : public G4KDNode_Base
   {
   public:
-    //________________________
+    //----------------------------
     // For root node :
     // parent = 0, axis = 0, side = 0
     G4KDNode(G4KDTree*, PointT* /*point*/, G4KDNode_Base* /*parent*/);
@@ -165,18 +166,18 @@ template<typename PointT>
 
   protected:
     PointT* fPoint;
-    G4bool fValid;
+    bool fValid;
 
   private:
     G4KDNode(const G4KDNode<PointT>& right);
     G4KDNode& operator=(const G4KDNode<PointT>& right);
 
-    static G4ThreadLocal G4Allocator<G4KDNode<PointT> >* fgAllocator;
+    static G4ThreadLocal G4Allocator<G4KDNode<PointT>>* fgAllocator;
   };
 
 template<typename PointT>
-  G4ThreadLocal G4Allocator<G4KDNode<PointT> >* G4KDNode<PointT>::fgAllocator =
-      0;
+  G4ThreadLocal G4Allocator<G4KDNode<PointT>>*
+    G4KDNode<PointT>::fgAllocator = 0;
 
 template<typename PointT>
   void* G4KDNode<PointT>::operator new(size_t)
@@ -191,17 +192,16 @@ template<typename PointT>
     fgAllocator->FreeSingle((G4KDNode<PointT> *) aNode);
   }
 
-
 /**
  * G4KDNode stores one entity in G4KDTree
  * This class is for internal use only
  */
 
 template<typename PointCopyT>
-  class G4KDNodeCopy : public G4KDNode_Base
+  class G4KDNodeCopy: public G4KDNode_Base
   {
   public:
-    //________________________
+    //----------------------------
     // For root node :
     // parent = 0, axis = 0, side = 0
     G4KDNodeCopy(G4KDTree* tree,
@@ -254,9 +254,9 @@ template<typename PointCopyT>
   private:
     G4KDNodeCopy(const G4KDNodeCopy<PointCopyT>& right) :
           G4KDNode_Base(right), fPoint(0)
-      {
-        fValid = false;
-      }
+    {
+      fValid = false;
+    }
 
     G4KDNodeCopy<PointCopyT>&
     operator=(const G4KDNodeCopy<PointCopyT>& right)
@@ -276,8 +276,8 @@ template<typename PointCopyT>
   };
 
 template<typename PointT>
-  G4ThreadLocal G4Allocator<G4KDNodeCopy<PointT>>* G4KDNodeCopy<PointT>::fgAllocator =
-      0;
+  G4ThreadLocal G4Allocator<G4KDNodeCopy<PointT>>*
+    G4KDNodeCopy<PointT>::fgAllocator = 0;
 
 #include "G4KDNode.icc"
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4PhysicalVolumeMassScene.cc 108859 2018-03-12 07:44:53Z gcosmo $
 //
 // 
 // John Allison  10th August 1998.
@@ -65,7 +65,7 @@ void G4PhysicalVolumeMassScene::Reset ()
   fDensityStack.clear();
 }
 
-void G4PhysicalVolumeMassScene::AccrueMass (const G4VSolid& solid)
+void G4PhysicalVolumeMassScene::ProcessVolume (const G4VSolid& solid)
 {
   G4int currentDepth = fpPVModel->GetCurrentDepth();
   G4VPhysicalVolume* pCurrentPV = fpPVModel->GetCurrentPV();
@@ -78,7 +78,7 @@ void G4PhysicalVolumeMassScene::AccrueMass (const G4VSolid& solid)
   }
 
   G4double currentVolume = ((G4VSolid&)solid).GetCubicVolume();
-  G4double currentDensity = pCurrentMaterial->GetDensity();
+  G4double currentDensity = pCurrentMaterial? pCurrentMaterial->GetDensity() : 0.;
   /* Using G4Polyhedron... (gives slightly different answers on Tubs, e.g.).
   G4Polyhedron* pPolyhedron = solid.GetPolyhedron();
   if (!pPolyhedron) {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VBasicShell.cc 74547 2013-10-14 12:51:17Z gcosmo $
+// $Id: G4VBasicShell.cc 105742 2017-08-16 13:11:07Z gcosmo $
 //
 
 #include "G4VBasicShell.hh"
@@ -151,15 +151,20 @@ G4String G4VBasicShell::ModifyPath(const G4String& tempPath) const
   }
 
   // end of path...
-  if(newPath(newPath.size()-3,3) == "/..") {
-    if( newPath.size() == 3) {
-      newPath = "/";
-    } else {
-      size_t idx = newPath.find_last_of('/', newPath.size()-4);
-      if(idx != G4String::npos) newPath.erase(idx+1);
+  if ( newPath.size() >= 3 ) {
+    if(newPath(newPath.size()-3,3) == "/..") {
+      if( newPath.size() == 3) {
+        newPath = "/";
+      } else {
+        size_t idx = newPath.find_last_of('/', newPath.size()-4);
+        if(idx != G4String::npos) newPath.erase(idx+1);
+      }
     }
   }
-  if(newPath(newPath.size()-2,2) == "/.") newPath.erase(newPath.size()-1,1);
+
+  if ( newPath.size() >= 2 ) {
+    if(newPath(newPath.size()-2,2) == "/.") newPath.erase(newPath.size()-1,1);
+  }
 
   // truncate "/////" to "/"
   while(1) {

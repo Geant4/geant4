@@ -24,19 +24,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc 92010 2015-08-13 10:07:52Z gcosmo $
+// $Id: G4BooleanSolid.cc 109382 2018-04-13 13:01:28Z gcosmo $
 //
 // Implementation for the abstract base class for solids created by boolean 
 // operations between other solids
 //
 // History:
 //
-// 10.09.98 V.Grichine, created
+// 2016.03.16 E.Tcherniaev - added GetListOfPrimitives(),
+//            reimplemented GetPointOnSurface()
+//
+// 1998.09.10 V.Grichine - created
 //
 // --------------------------------------------------------------------
 
 #include "G4BooleanSolid.hh"
 #include "G4VSolid.hh"
+#include "G4DisplacedSolid.hh"
+#include "G4ReflectedSolid.hh"
+#include "G4ScaledSolid.hh"
 #include "G4Polyhedron.hh"
 #include "HepPolyhedronProcessor.h"
 #include "Randomize.hh"
@@ -55,9 +61,10 @@ namespace
 G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                 G4VSolid* pSolidA ,
                                 G4VSolid* pSolidB   ) :
-  G4VSolid(pName), fAreaRatio(0.), fStatistics(1000000), fCubVolEpsilon(0.001),
-  fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
-  fRebuildPolyhedron(false), fpPolyhedron(0), createdDisplacedSolid(false)
+  G4VSolid(pName), fStatistics(1000000), fCubVolEpsilon(0.001),
+  fAreaAccuracy(-1.), fCubicVolume(-1.), fSurfaceArea(-1.),
+  fRebuildPolyhedron(false), fpPolyhedron(0), fPrimitivesSurfaceArea(0.),
+  createdDisplacedSolid(false)
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = pSolidB ;
@@ -72,9 +79,10 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4VSolid* pSolidB ,
                                       G4RotationMatrix* rotMatrix,
                                 const G4ThreeVector& transVector    ) :
-  G4VSolid(pName), fAreaRatio(0.), fStatistics(1000000), fCubVolEpsilon(0.001),
-  fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
-  fRebuildPolyhedron(false), fpPolyhedron(0), createdDisplacedSolid(true)
+  G4VSolid(pName), fStatistics(1000000), fCubVolEpsilon(0.001),
+  fAreaAccuracy(-1.), fCubicVolume(-1.), fSurfaceArea(-1.),
+  fRebuildPolyhedron(false), fpPolyhedron(0), fPrimitivesSurfaceArea(0.),
+  createdDisplacedSolid(true)
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = new G4DisplacedSolid("placedB",pSolidB,rotMatrix,transVector) ;
@@ -88,9 +96,10 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4VSolid* pSolidA ,
                                       G4VSolid* pSolidB ,
                                 const G4Transform3D& transform    ) :
-  G4VSolid(pName), fAreaRatio(0.), fStatistics(1000000), fCubVolEpsilon(0.001),
-  fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
-  fRebuildPolyhedron(false), fpPolyhedron(0), createdDisplacedSolid(true)
+  G4VSolid(pName), fStatistics(1000000), fCubVolEpsilon(0.001),
+  fAreaAccuracy(-1.), fCubicVolume(-1.), fSurfaceArea(-1.),
+  fRebuildPolyhedron(false), fpPolyhedron(0), fPrimitivesSurfaceArea(0.),
+  createdDisplacedSolid(true)
 {
   fPtrSolidA = pSolidA ;
   fPtrSolidB = new G4DisplacedSolid("placedB",pSolidB,transform) ;
@@ -102,10 +111,11 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
 //                            for usage restricted to object persistency.
 
 G4BooleanSolid::G4BooleanSolid( __void__& a )
-  : G4VSolid(a), fPtrSolidA(0), fPtrSolidB(0), fAreaRatio(0.),
+  : G4VSolid(a), fPtrSolidA(0), fPtrSolidB(0),
     fStatistics(1000000), fCubVolEpsilon(0.001), 
-    fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
-    fRebuildPolyhedron(false), fpPolyhedron(0), createdDisplacedSolid(false)
+    fAreaAccuracy(-1.), fCubicVolume(-1.), fSurfaceArea(-1.),
+    fRebuildPolyhedron(false), fpPolyhedron(0), fPrimitivesSurfaceArea(0.),
+    createdDisplacedSolid(false)
 {
 }
 
@@ -128,12 +138,12 @@ G4BooleanSolid::~G4BooleanSolid()
 
 G4BooleanSolid::G4BooleanSolid(const G4BooleanSolid& rhs)
   : G4VSolid (rhs), fPtrSolidA(rhs.fPtrSolidA), fPtrSolidB(rhs.fPtrSolidB),
-    fAreaRatio(rhs.fAreaRatio),
     fStatistics(rhs.fStatistics), fCubVolEpsilon(rhs.fCubVolEpsilon),
     fAreaAccuracy(rhs.fAreaAccuracy), fCubicVolume(rhs.fCubicVolume),
     fSurfaceArea(rhs.fSurfaceArea), fRebuildPolyhedron(false), fpPolyhedron(0),
     createdDisplacedSolid(rhs.createdDisplacedSolid)
 {
+  fPrimitives.resize(0); fPrimitivesSurfaceArea = 0.;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -153,21 +163,21 @@ G4BooleanSolid& G4BooleanSolid::operator = (const G4BooleanSolid& rhs)
   // Copy data
   //
   fPtrSolidA= rhs.fPtrSolidA; fPtrSolidB= rhs.fPtrSolidB;
-  fAreaRatio= rhs.fAreaRatio;
   fStatistics= rhs.fStatistics; fCubVolEpsilon= rhs.fCubVolEpsilon;
   fAreaAccuracy= rhs.fAreaAccuracy; fCubicVolume= rhs.fCubicVolume;
-  fSurfaceArea= rhs.fSurfaceArea; fpPolyhedron= 0;
+  fSurfaceArea= rhs.fSurfaceArea;
   createdDisplacedSolid= rhs.createdDisplacedSolid;
   fRebuildPolyhedron = false;
   delete fpPolyhedron; fpPolyhedron = 0;
+  fPrimitives.resize(0); fPrimitivesSurfaceArea = 0.;
 
   return *this;
 }  
 
 ///////////////////////////////////////////////////////////////
 //
-// If Solid is made up from a Boolean operation of two solids,
-//   return the corresponding solid (for no=0 and 1)
+// If solid is made up from a Boolean operation of two solids,
+// return the corresponding solid (for no=0 and 1)
 // If the solid is not a "Boolean", return 0
 
 const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
@@ -189,8 +199,8 @@ const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
 
 ///////////////////////////////////////////////////////////////
 //
-// If Solid is made up from a Boolean operation of two solids,
-//   return the corresponding solid (for no=0 and 1)
+// If solid is made up from a Boolean operation of two solids,
+// return the corresponding solid (for no=0 and 1)
 // If the solid is not a "Boolean", return 0
 
 G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no)
@@ -240,23 +250,114 @@ std::ostream& G4BooleanSolid::StreamInfo(std::ostream& os) const
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Returns a point (G4ThreeVector) randomly and uniformly selected
-// on the solid surface
+// Creates list of constituent primitives of and their placements
+
+void G4BooleanSolid::GetListOfPrimitives(
+       std::vector<std::pair<G4VSolid *,G4Transform3D>>& primitives,
+       const G4Transform3D& curPlacement) const
+{
+  G4Transform3D transform;
+  G4VSolid* solid;
+  G4String type;
+
+  // Repeat two times, first time for fPtrSolidA and then for fPtrSolidB
+  //
+  for (G4int i=0; i<2; i++)
+  {
+    transform = curPlacement;
+    solid     = (i == 0) ? fPtrSolidA : fPtrSolidB;
+    type      = solid->GetEntityType();
+
+    // While current solid is a trasformed solid just modify transform
+    //
+    while (type == "G4DisplacedSolid" ||
+           type == "G4ReflectedSolid" ||
+           type == "G4ScaledSolid")
+    {
+      if (type == "G4DisplacedSolid")
+      {
+        transform = transform * G4Transform3D(
+                    ((G4DisplacedSolid*)solid)->GetObjectRotation(),
+                    ((G4DisplacedSolid*)solid)->GetObjectTranslation());
+        solid     = ((G4DisplacedSolid*)solid)->GetConstituentMovedSolid();
+      }
+      else if (type == "G4ReflectedSolid")
+      {
+        transform= transform*((G4ReflectedSolid*)solid)->GetDirectTransform3D();
+        solid    = ((G4ReflectedSolid*)solid)->GetConstituentMovedSolid();
+      }
+      else if (type == "G4ScaledSolid")
+      {
+        transform = transform * ((G4ScaledSolid*)solid)->GetScaleTransform();
+        solid     = ((G4ScaledSolid*)solid)->GetUnscaledSolid();
+      }
+      type  = solid->GetEntityType();
+    }
+
+    // If current solid is a Boolean solid then continue recursion,
+    // otherwise add it to the list of primitives
+    //
+    if (type == "G4UnionSolid"        ||
+        type == "G4SubtractionSolid"  ||
+        type == "G4IntersectionSolid" ||
+        type == "G4BooleanSolid")
+    {
+      ((G4BooleanSolid *)solid)->GetListOfPrimitives(primitives,transform);
+    }
+    else
+    {
+      primitives.push_back(std::pair<G4VSolid*,G4Transform3D>(solid,transform));
+    }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
+// Returns a point (G4ThreeVector) randomly and uniformly selected
+// on the surface of the solid
 
 G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
 {
-  G4double rand;
-  G4ThreeVector p;
+  G4int nprims = fPrimitives.size();
+  std::pair<G4VSolid *, G4Transform3D> prim;
 
-  do    // Loop checking, 13.08.2015, G.Cosmo
+  // Get list of primitives and find the total area of their surfaces
+  //
+  if (nprims == 0)
   {
-    rand = G4UniformRand();
+    GetListOfPrimitives(fPrimitives, G4Transform3D());
+    nprims = fPrimitives.size();
+    fPrimitivesSurfaceArea = 0.;
+    for (G4int i=0; i<nprims; i++)
+    {
+      fPrimitivesSurfaceArea += fPrimitives[i].first->GetSurfaceArea();
+    }
+  }
 
-    if (rand < GetAreaRatio()) { p = fPtrSolidA->GetPointOnSurface(); }
-    else                       { p = fPtrSolidB->GetPointOnSurface(); }
-  } while (Inside(p) != kSurface);
-
+  // Select random primitive, get random point on its surface and
+  // check that the point belongs to the surface of the solid
+  //
+  G4ThreeVector p;
+  for (G4int k=0; k<1000000; k++) // try 1000000 times
+  {
+     G4double rand = fPrimitivesSurfaceArea * G4UniformRand();
+     G4double area = 0.;
+     for (G4int i=0; i<nprims; i++)
+     {
+       prim  = fPrimitives[i];
+       area += prim.first->GetSurfaceArea();
+       if (rand < area) break;
+     }
+     p = prim.first->GetPointOnSurface();
+     p = prim.second * G4Point3D(p);
+     if (Inside(p) == kSurface) return p;
+  }
+  std::ostringstream message;
+  message << "Solid - " << GetName() << "\n"
+          << "All attempts to generate a point on the surface have failed!\n"
+          << "The solid created may be an invalid Boolean construct!";
+  G4Exception("G4BooleanSolid::GetPointOnSurface()",
+              "GeomSolids1001", JustWarning, message);
   return p;
 }
 
@@ -319,7 +420,18 @@ G4BooleanSolid::StackPolyhedron(HepPolyhedronProcessor& processor,
     top = solidA->GetPolyhedron();
   }
   G4Polyhedron* operand = solidB->GetPolyhedron();
-  processor.push_back (operation, *operand);
+  if (operand)
+  {
+    processor.push_back (operation, *operand);
+  }
+  else
+  {
+    std::ostringstream message;
+    message << "Solid - " << solid->GetName()
+            << " - No G4Polyhedron for Boolean component";
+    G4Exception("G4BooleanSolid::StackPolyhedron()",
+                "GeomSolids2001", JustWarning, message);
+  }
 
   return top;
 }

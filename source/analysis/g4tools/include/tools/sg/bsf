@@ -37,7 +37,7 @@ public:
   }
 */
 protected:
-  bsf(){}
+  bsf():m_value(T()){}
 public:
   bsf(const T& a_value):m_value(a_value){}
   virtual ~bsf(){}
@@ -108,7 +108,7 @@ public:
 //public: //for style.
 //  bool s2v(const std::string& a_s) {
 //    T v;
-//    if(!tools::to<T>(a_s,v)) return false;
+//    if(!to<T>(a_s,v)) return false;
 //    if(v!=m_value) m_touched = true;
 //    m_value = v;
 //    return true;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiationInMat.hh 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id: G4SynchrotronRadiationInMat.hh 108423 2018-02-13 11:18:13Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -69,7 +69,7 @@ class G4SynchrotronRadiationInMat : public G4VDiscreteProcess
 {
 public:
 
-  G4SynchrotronRadiationInMat(const G4String& processName =
+  explicit G4SynchrotronRadiationInMat(const G4String& processName =
                               "SynchrotronRadiation",
                               G4ProcessType type = fElectromagnetic);
 
@@ -77,17 +77,18 @@ public:
 
 private:
 
-  G4SynchrotronRadiationInMat & operator=(const G4SynchrotronRadiationInMat &right);
-  G4SynchrotronRadiationInMat(const G4SynchrotronRadiationInMat&);
+  G4SynchrotronRadiationInMat & 
+    operator=(const G4SynchrotronRadiationInMat &right) = delete;
+  G4SynchrotronRadiationInMat(const G4SynchrotronRadiationInMat&) = delete;
 
 public:  /////////////////    Post Step functions  //////////////////////////
 
   G4double GetMeanFreePath( const G4Track& track,
                             G4double previousStepSize,
-                            G4ForceCondition* condition );
+                            G4ForceCondition* condition ) override;
 
   G4VParticleChange *PostStepDoIt( const G4Track& track,
-                                      const G4Step& Step    );
+                                      const G4Step& Step    ) override;
 
   G4double GetPhotonEnergy( const G4Track& trackData,
                                const G4Step&  stepData      );
@@ -104,10 +105,10 @@ public:  /////////////////    Post Step functions  //////////////////////////
   G4double GetAngleK( G4double );
   G4double GetAngleNumberAtGammaKsi( G4double );
 
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
 
-  static G4double GetLambdaConst(){ return fLambdaConst; };
-  static G4double GetEnergyConst(){ return fEnergyConst; };
+  static G4double GetLambdaConst();
+  static G4double GetEnergyConst();
 
   void SetRootNumber(G4int rn){ fRootNumber = rn; };
   void SetVerboseLevel(G4int v){ fVerboseLevel = v; };
@@ -127,22 +128,11 @@ private:
   const G4double
   LowestKineticEnergy;   // low  energy limit of the cross-section formula
 
-  const G4double
-  HighestKineticEnergy;  // high energy limit of the cross-section formula
-
-  G4int TotBin;          // number of bins in the tables
-
   G4double CutInRange;
 
   const G4ParticleDefinition* theGamma;
   const G4ParticleDefinition* theElectron;
   const G4ParticleDefinition* thePositron;
-
-  const G4double* GammaCutInKineticEnergy;
-  const G4double* ElectronCutInKineticEnergy;
-  const G4double* PositronCutInKineticEnergy;
-  const G4double* ParticleCutInKineticEnergy;
-
 
   G4double GammaCutInKineticEnergyNow;
   G4double ElectronCutInKineticEnergyNow;

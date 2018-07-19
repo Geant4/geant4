@@ -6,7 +6,7 @@
 
 {
   gROOT->Reset();
-
+ 
   gStyle->SetOptStat("em");
 
   TCanvas *c1;
@@ -26,7 +26,7 @@
   pad3->Draw();
 
 
-  TFile f = TFile("pdb4dna_output.root");
+  TFile f("pdb4dna_output.root");
 
   // Draw histograms
 
@@ -50,12 +50,12 @@
 
   double* pdbStats=new double[4];
 
-  hist1.GetStats(pdbStats);
+  hist1->GetStats(pdbStats);
   cout << "-> Edep in the target : " << pdbStats[2]/1E6 << " MeV" << endl;
 
-  hist2.GetStats(pdbStats);
+  hist2->GetStats(pdbStats);
   cout << "-> Number of SSB : " << pdbStats[2] << endl;
 
-  hist3.GetStats(pdbStats);
+  hist3->GetStats(pdbStats);
   cout << "-> Number of DSB : " << pdbStats[2] << endl;
 }

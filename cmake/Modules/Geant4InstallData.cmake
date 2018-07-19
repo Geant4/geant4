@@ -99,7 +99,7 @@
 # retrieving them globally
 #-----------------------------------------------------------------------
 # Geant4 Data Repository
-set(GEANT4_DATASETS_URL "http://geant4.cern.ch/support/source")
+set(GEANT4_DATASETS_URL "http://cern.ch/geant4-data/datasets")
 
 # Where to install data in the build tree
 set(GEANT4_BUILD_FULL_DATADIR ${PROJECT_BINARY_DIR}/data)
@@ -185,6 +185,8 @@ function(geant4_export_datasets _type _output)
     else()
       message(FATAL_ERROR "incorrect argument to geant4_export_datasets")
     endif()
+    # Ensure CMake paths
+    file(TO_CMAKE_PATH "${_tmpprop}" _tmpprop)
     list(APPEND _tuple ${_tmpprop})
 
     get_property(_fname GLOBAL PROPERTY ${_ds}_FILENAME)

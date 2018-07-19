@@ -15,6 +15,120 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+ 2 May 2018  Dennis Wright  (hadr-casc-V10-04-04)
+-------------------------------------------------
+- G4ElementaryParticleCollider
+   methods generateSCMpionAbsorption and 
+   generateSCMmuonAbsorption did not produce correct nucleon pairs when 
+   pion or muon was absorbed - both methods now re-written
+
+   quantum number conservation test added to method 
+   collide(G4InuclParticle* bullet, G4InuclParticle* target,
+           G4CollisionOutput& output)
+ 
+ 20 March 2018  Julia Yarba  (hadr-casc-V10-04-03)
+---------------------------------------------------
+- Fix implementation of nuclear_rad_2par configurable key (G4CascadeParamMessenger.cc)
+
+ 6 March 2018  Dennis Wright  (hadr-casc-V10-04-02)
+---------------------------------------------------
+- G4CascadeT11pizNChannel.cc: extend strange pair production channels to
+  6,7,8 and 9 body final states
+  
+27 February 2018  Alberto Ribon (hadr-casc-V10-04-01)
+-----------------------------------------------------
+-  G4NucleiModel : replaced obsolete std::bind2nd with std::bind .
+
+ 2 February 2018  Dennis Wright (hadr-casc-V10-04-00)
+-----------------------------------------------------
+- Add strange pair production channels to list of 6, 7, 8 and 9-body 
+  final states in classes G4CascadeT31piNChannel and G4CascadeT33piNChannel.
+  Modify template values accordingly in 
+    G4CascadePiMinusNChannel.hh
+    G4CascadePiMinusPChannel.hh
+    G4CascadePiPlusNChannel.hh
+    G4CascadePiPlusPChannel.hh
+
+27 November 2017  Dennis Wright (hadr-casc-V10-03-06)
+-----------------------------------------------------
+- G4CascadeInterface::createBullet, G4CascadeInterface::ApplyYourself: 
+  rotation to z-axis unnecessary and may 
+  cause irreproducibility.  Remove it according to bug report #1990. 
+
+20 October 2017  Tatsumi Koi (hadr-casc-V10-03-05)
+------------------------------------------------
+- G4CascadeParameters.cc FERMI_SCALE and RAD_TRAILING are added to changeable parameters from HDP
+Lower and upper limits of changeable parameters form HDP are registered 
+
+6 October 2017  Tatsumi Koi (hadr-casc-V10-03-04)
+------------------------------------------------
+- G4CascadeParameters.cc Remove protection for using G4HadronicDeveloperParameters
+
+5 October 2017  Tatsumi Koi (hadr-casc-V10-03-03)
+------------------------------------------------
+- Adding comment for BEST_PAR in G4CascadeParameters and test/README
+
+22 May 2017  Dennis Wright (hadr-casc-V10-03-02)
+------------------------------------------------
+- G4ElementaryParticleCollider::generateSCMmuonAbsorption: fix rare seg fault
+  spotted and diagnosed by Ralf Ehrlich (mu2e/Virgina).  Added line
+      particles.clear();  
+  if GetThreeBodyMomenta() returns no momenta.
+
+1 May 2017  Tatsumi Koi (hadr-casc-V10-03-01)
+---------------------------------------------------
+- G4CascadeParameters.cc: Use G4HadronicDeveloperParameters as a tool 
+for sharing parameters between developers and experienced users.
+Need to set environment variable of "TEST_HDP" for testing the tool. 
+
+13 April 2017  Michael Kelsey (hadr-casc-V10-03-00)
+---------------------------------------------------
+- G4CascadeCoalescence:  Remove clusterHash() function and triedClusters
+  registry.  Drop redundant calls of tryCluster() with subcombinatorics; all
+  combinations are handled, uniquely, in main loop over indices.  Eliminates
+  significant memory usage seen with high-energy applications of BERT.
+
+- test/clusterComb.cc, test/GNUmakefile:  New standalone test to exercise
+  combinatoric behaviour of G4CascadeCoalescence (used in testing above
+  changes).
+
+29 November 2016  Dennis Wright (hadr-casc-V10-02-05)
+-----------------------------------------------------
+- G4InuclCollider::photonuclearOkay(): fix segfault reported by Daren Sawkey
+  in bug report #1883
+
+ 6 October 2016  Dennis Wright (hadr-casc-V10-02-04)
+ ---------------------------------------------------
+- G4EquilibriumEvaporator::deExcite: replace sampling of evaporation spectrum
+   with original Dostrovsky method 
+- paraMaker.cc: add comments
+
+ 3 October 2016  Dennis Wright (hadr-casc-V10-02-03)
+ ---------------------------------------------------
+  Mike Kelsey added the lines
+    process->PreparePhysicsTable(*part);
+    process->BuildPhysicsTable(*part);
+  in unit test cascade/test/cascade.cc to configure RunManager event loop 
+
+30 September 2016  Dennis Wright (hadr-casc-V10-02-02)
+------------------------------------------------------
+- add 8- and 9-body final states to K-, K0 and K0b induced reactions.
+  Classes affected: G4CascadeKminusNChannel, G4CascadeKminusPChannel,
+                    G4CascadeKzeroBarNChannel, G4CascadeKzeroBarPChannel,
+                    G4CascadeKzeroNChannel, G4CascadeKzeroPChannel
+
+14 March 2016  Dennis Wright (hadr-casc-V10-02-01)
+--------------------------------------------------
+- G4InuclCollider.cc: re-instate getenv for photonuclearOkay().  This
+  method causes significant performance degradation and the physics needs 
+  to be improved before it can made default
+
+25 January 2016  Michael Kelsey (hadr-casc-V10-02-00)
+-----------------------------------------------------
+- G4InuclCollider.cc:  Remove envvar which enables "photonuclearOkay()"
+  test.  This test will now be used by default, improving the match for
+  production of neutrons and protons in the GDR region.
+
 6 November 2015  Dennis Wright (hadr-casc-V10-01-13)
 ----------------------------------------------------
 - G4CascadeKplusNChannel: extend to 9-body final states and 32 GeV using same

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingAction.hh 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: TrackingAction.hh 103469 2017-04-11 07:29:36Z gcosmo $
 //
 /// \file medical/GammaTherapy/include/TrackingAction.hh
 /// \brief Definition of the TrackingAction class
@@ -51,8 +51,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class Histo;
-
 class TrackingAction : public G4UserTrackingAction
 {
 
@@ -67,8 +65,6 @@ private:
 
   TrackingAction(const TrackingAction & right);
   const TrackingAction & operator = (const TrackingAction & right);
-
-  Histo* fHisto;
 
 };
 

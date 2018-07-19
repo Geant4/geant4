@@ -59,7 +59,7 @@
      window_log, world_phys, false, 0);
 
   G4VisAttributes* window_vat= new G4VisAttributes(yellow);
-  //  window_log->SetVisAttributes(G4VisAttributes::Invisible);
+  //  window_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   window_vat->SetVisibility(true);
   window_log->SetVisAttributes(window_vat);
 
@@ -309,7 +309,7 @@
      doorhole_log, world_phys, false, 0);
 
   G4VisAttributes* doorhole_vat= new G4VisAttributes(cyan);
-  //  window_log->SetVisAttributes(G4VisAttributes::Invisible);
+  //  window_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   doorhole_vat->SetVisibility(true);
   doorhole_log->SetVisAttributes(doorhole_vat);
 

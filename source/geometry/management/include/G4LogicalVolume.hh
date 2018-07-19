@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh 102288 2017-01-20 10:57:03Z gcosmo $
+// $Id: G4LogicalVolume.hh 103096 2017-03-15 15:21:33Z gcosmo $
 //
 // 
 // class G4LogicalVolume
@@ -96,6 +96,7 @@
 //    - Flags if the Logical Volume is an envelope for a FastSimulationManager.
 
 // History:
+// 19.10.16 M.Asai: Added virtual keyword to the destructor
 // 15.01.13 G.Cosmo, A.Dotti: Modified for thread-safety for MT
 // 12.11.04 G.Cosmo: Added GetMass() method for computing mass of the tree
 // 24.09.02 G.Cosmo: Added flags and accessors for region cuts handling
@@ -206,9 +207,10 @@ class G4LogicalVolume
       // hierarchy is applied by default. For parameterised volumes in
       // the hierarchy, optimisation is -always- applied.
 
-    ~G4LogicalVolume();
+    virtual ~G4LogicalVolume();
       // Destructor. Removes the logical volume from the logical volume Store.
-      // This class is NOT meant to act as base class.
+      // This class is NOT meant to act as base class, except for exceptional
+      // circumstances of extended types used in the kernel.
 
     inline const G4String& GetName() const;
     inline void SetName(const G4String& pName);
@@ -346,6 +348,9 @@ class G4LogicalVolume
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    virtual G4bool IsExtended() const;
+      // Return true if it is not a base-class object.
+
     inline G4FieldManager* GetMasterFieldManager() const;
       // Gets current FieldManager for the master thread.
     inline G4VSensitiveDetector* GetMasterSensitiveDetector() const;
@@ -355,14 +360,12 @@ class G4LogicalVolume
   
     inline G4int GetInstanceID() const;
       // Returns the instance ID.
-    static const G4LVManager& GetSubInstanceManager();
- 
-      // Sets the private data instance manager - in order to use a particular Workspace
 
-    // static const G4LVManager* GetSubInstanceManagerPtr(); 
-    // static const G4LVManager  SetSubInstanceManager(G4LVManager* subInstanceManager);
-      // Revised Implementation - to enable Workspaces which can used by different
-      //   threads at different times (only one thread or task can use a workspace at a time. ) 
+    static const G4LVManager& GetSubInstanceManager();
+      // Returns the private data instance manager.
+
+    static void Clean();
+      // Clear memory allocated by sub-instance manager.
 
     inline void Lock();
       // Set lock identifier for final deletion of entity.

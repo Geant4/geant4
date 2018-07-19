@@ -14,6 +14,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-11-2017 S. Incerti (exdna-V10-03-02)
+- Updated README
+
+06-06-2017 C. Villagrasa & S. Meylan (exicsd-V10-03-00)
+-New extended example using DNA materials
+
+03-04-2017 S. Incerti (exdna-V10-03-00)
+- Updated README
+
+24-11-2016 I. Hrivnacova (exdna-V10-02-00)
+- Fixes in Doxygen documentation
+
 15-09-2015 I. Hrivnacova (exdna-V10-01-04)
 - Fixes in Doxygen documentation
 

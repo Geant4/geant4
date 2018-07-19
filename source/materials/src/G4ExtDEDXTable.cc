@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExtDEDXTable.cc 91868 2015-08-07 15:19:52Z gcosmo $
+// $Id: G4ExtDEDXTable.cc 96794 2016-05-09 10:09:30Z gcosmo $
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -102,15 +102,13 @@ G4bool G4ExtDEDXTable::BuildPhysicsVector(G4int ionZ,
 G4bool G4ExtDEDXTable::IsApplicable(
          G4int atomicNumberIon,  // Atomic number of ion
          G4int atomicNumberElem  // Atomic number of elemental material
-				    ) {
-  G4bool isApplicable = true; 
+				    )
+{
   G4IonDEDXKeyElem key = std::make_pair(atomicNumberIon, atomicNumberElem);
 
   G4IonDEDXMapElem::iterator iter = dedxMapElements.find(key);
 
-  if(iter == dedxMapElements.end()) isApplicable = false; 
-
-  return isApplicable; 
+  return (iter == dedxMapElements.end()) ? false : true; 
 }
 
 // #########################################################################
@@ -118,15 +116,13 @@ G4bool G4ExtDEDXTable::IsApplicable(
 G4bool G4ExtDEDXTable::IsApplicable(
          G4int atomicNumberIon,         // Atomic number of ion
          const G4String& matIdentifier  // Name or chemical formula of material
-				    ) {
-  G4bool isApplicable = true; 
+				    )
+{
   G4IonDEDXKeyMat key = std::make_pair(atomicNumberIon, matIdentifier);
 
   G4IonDEDXMapMat::iterator iter = dedxMapMaterials.find(key);
 
-  if(iter == dedxMapMaterials.end()) isApplicable = false; 
-
-  return isApplicable; 
+  return (iter == dedxMapMaterials.end()) ? false : true; 
 }
 
 // #########################################################################
@@ -134,17 +130,13 @@ G4bool G4ExtDEDXTable::IsApplicable(
 G4PhysicsVector* G4ExtDEDXTable::GetPhysicsVector(
          G4int atomicNumberIon,        // Atomic number of ion
          G4int atomicNumberElem        // Atomic number of elemental material
-				    ) {
-
-  G4PhysicsVector* physVector = 0;
-
+				    )
+{
   G4IonDEDXKeyElem key = std::make_pair(atomicNumberIon, atomicNumberElem);
 
   G4IonDEDXMapElem::iterator iter = dedxMapElements.find(key);
 
-  if(iter != dedxMapElements.end()) physVector = iter -> second; 
-
-  return physVector; 
+  return (iter != dedxMapElements.end()) ? iter->second : nullptr; 
 }
 
 // #########################################################################
@@ -152,17 +144,13 @@ G4PhysicsVector* G4ExtDEDXTable::GetPhysicsVector(
 G4PhysicsVector*  G4ExtDEDXTable::GetPhysicsVector(
          G4int atomicNumberIon,        // Atomic number of ion
          const G4String& matIdentifier // Name or chemical formula of material
-				    ) {
-
-  G4PhysicsVector* physVector = 0;
-
+				    )
+{
   G4IonDEDXKeyMat key = std::make_pair(atomicNumberIon, matIdentifier);
 
   G4IonDEDXMapMat::iterator iter = dedxMapMaterials.find(key);
 
-  if(iter != dedxMapMaterials.end()) physVector = iter -> second; 
-
-  return physVector; 
+  return (iter != dedxMapMaterials.end()) ? iter->second : nullptr; 
 }
 
 // #########################################################################
@@ -171,21 +159,14 @@ G4double G4ExtDEDXTable::GetDEDX(
          G4double kinEnergyPerNucleon, // Kinetic energy per nucleon
          G4int atomicNumberIon,        // Atomic number of ion
          G4int atomicNumberElem        // Atomic number of elemental material
-				  ) {
-  G4double dedx = 0;
-
+				  )
+{
   G4IonDEDXKeyElem key = std::make_pair(atomicNumberIon, atomicNumberElem);
 
   G4IonDEDXMapElem::iterator iter = dedxMapElements.find(key);
 
-  if( iter != dedxMapElements.end() ) {
-     G4PhysicsVector* physicsVector = iter -> second; 
-
-     G4bool b;
-     dedx = physicsVector -> GetValue( kinEnergyPerNucleon, b );   
-  }
-
-  return dedx; 
+  return ( iter != dedxMapElements.end() ) ?
+    (iter->second)->Value( kinEnergyPerNucleon) : 0.0;
 }
 
 // #########################################################################
@@ -194,21 +175,14 @@ G4double G4ExtDEDXTable::GetDEDX(
          G4double kinEnergyPerNucleon, // Kinetic energy per nucleon
          G4int atomicNumberIon,        // Atomic number of ion
          const G4String& matIdentifier // Name or chemical formula of material
-				  ) {
-  G4double dedx = 0;
-
+				  )
+{
   G4IonDEDXKeyMat key = std::make_pair(atomicNumberIon, matIdentifier);
 
   G4IonDEDXMapMat::iterator iter = dedxMapMaterials.find(key);
 
-  if(iter != dedxMapMaterials.end()) {
-     G4PhysicsVector* physicsVector = iter -> second; 
-
-     G4bool b;
-     dedx = physicsVector -> GetValue( kinEnergyPerNucleon, b );   
-  }
-
-  return dedx; 
+  return (iter != dedxMapMaterials.end()) ?
+    (iter->second)->Value( kinEnergyPerNucleon) : 0.0;
 }
 
 // #########################################################################
@@ -220,37 +194,23 @@ G4bool G4ExtDEDXTable::AddPhysicsVector(
         G4int atomicNumberElem          // Atomic number of elemental material
 				      ) {
 
-  if(physicsVector == 0) {
-
-#ifdef G4VERBOSE
-     G4cout << "G4IonDEDXTable::AddPhysicsVector() Error: Pointer to vector"
-            << " is null-pointer."
-            << G4endl;
-#endif
-
-     return false;
+  if(physicsVector == nullptr) {
+    G4Exception ("G4ExtDEDXTable::AddPhysicsVector() for material", 
+		 "mat037", FatalException, 
+		 "Pointer to vector is null-pointer.");
+    return false;
   }
 
   if(matIdentifier.empty()) {
-
-#ifdef G4VERBOSE
-     G4cout << "G4IonDEDXTable::AddPhysicsVector() Error: "
-            << "Cannot add physics vector. Invalid name."
-            << G4endl;
-#endif
-
+    G4Exception ("G4ExtDEDXTable::AddPhysicsVector() for material", 
+                 "mat038", FatalException, "Invalid name of the material.");
      return false;
   }
 
   if(atomicNumberIon <= 2) {
-
-#ifdef G4VERBOSE
-     G4cout << "G4IonDEDXTable::AddPhysicsVector() Error: "
-            << "Cannot add physics vector. Illegal atomic number."
-            << G4endl;
-#endif
-
-     return false;
+    G4Exception ("G4ExtDEDXTable::AddPhysicsVector() for material", 
+                 "mat039", FatalException, "Illegal atomic number.");
+    return false;
   }
 
   if(atomicNumberElem > 0) {
@@ -258,13 +218,10 @@ G4bool G4ExtDEDXTable::AddPhysicsVector(
      G4IonDEDXKeyElem key = std::make_pair(atomicNumberIon, atomicNumberElem);
 
      if(dedxMapElements.count(key) == 1) {
-
-#ifdef G4VERBOSE
-        G4cout << "G4IonDEDXTable::AddPhysicsVector() Error: "
-               << "Vector already exists. Remove first before replacing."
-               << G4endl;
-#endif
-        return false;
+       G4Exception ("G4ExtDEDXTable::AddPhysicsVector() for material", 
+		    "mat037", FatalException, 
+		    "Vector already exist, remove it before replacing.");
+       return false;
      }
 
      dedxMapElements[key] = physicsVector;
@@ -273,14 +230,10 @@ G4bool G4ExtDEDXTable::AddPhysicsVector(
   G4IonDEDXKeyMat mkey = std::make_pair(atomicNumberIon, matIdentifier);
 
   if(dedxMapMaterials.count(mkey) == 1) {
-
-#ifdef G4VERBOSE
-     G4cout << "G4IonDEDXTable::AddPhysicsVector() Error: "
-            << "Vector already exists. Remove first before replacing."
-            << G4endl;
-#endif
-
-     return false;
+    G4Exception ("G4ExtDEDXTable::AddPhysicsVector() for material", 
+		 "mat037", FatalException, 
+		 "Vector already exist, remove it before replacing.");
+    return false;
   }
 
   dedxMapMaterials[mkey] = physicsVector;
@@ -295,7 +248,7 @@ G4bool G4ExtDEDXTable::RemovePhysicsVector(
         const G4String& matIdentifier  // Name or chemical formula of material
 				      ) {
 
-  G4PhysicsVector* physicsVector = 0;
+  G4PhysicsVector* physicsVector = nullptr;
 
   // Deleting key of physics vector from material map
   G4IonDEDXKeyMat key = std::make_pair(atomicNumberIon, matIdentifier);
@@ -303,13 +256,9 @@ G4bool G4ExtDEDXTable::RemovePhysicsVector(
   G4IonDEDXMapMat::iterator iter = dedxMapMaterials.find(key);
 
   if(iter == dedxMapMaterials.end()) {
-
-#ifdef G4VERBOSE
-    G4cout << "G4IonDEDXTable::RemovePhysicsVector() Warning: "
-	   << "Cannot remove physics vector. Vector not found."
-	   << G4endl;
-#endif
-
+    G4Exception ("G4ExtDEDXTable::RemovePhysicsVector() for material", 
+		 "mat037", FatalException, 
+		 "Pointer to vector is null-pointer.");
     return false;
   }
 
@@ -345,14 +294,11 @@ G4bool G4ExtDEDXTable::StorePhysicsTable(
   ofilestream.open( fileName, std::ios::out );
 
   if( !ofilestream ) {
-
-#ifdef G4VERBOSE
-     G4cout << "G4ExtDEDXTable::StorePhysicsVector() " 
-            << " Cannot open file "<< fileName 
-            << G4endl;
-#endif
-      
-     success = false;
+    G4ExceptionDescription ed;
+    ed << "Cannot open file " << fileName; 
+    G4Exception ("G4IonStoppingData::StorePhysicsTable()", 
+                 "mat030", FatalException, ed);
+    success = false;
   }   
   else {
 
@@ -372,7 +318,7 @@ G4bool G4ExtDEDXTable::StorePhysicsTable(
 
          G4int atomicNumberElem = FindAtomicNumberElement(physicsVector);
 
-         if(physicsVector != 0) {
+         if(physicsVector != nullptr) {
   	    ofilestream << atomicNumberIon << "  " << matIdentifier;
 
             if(atomicNumberElem > 0) ofilestream << "  " << atomicNumberElem;
@@ -386,15 +332,9 @@ G4bool G4ExtDEDXTable::StorePhysicsTable(
             physicsVector -> Store(ofilestream, true);
 
             ofilestream << G4endl;
-         }
-         else {
-
-#ifdef G4VERBOSE
-              G4cout << "G4ExtDEDXTable::StorePhysicsVector() " 
-                     << " Cannot store physics vector." 
-                     << G4endl;
-#endif
-
+         } else {
+	   G4Exception ("G4IonStoppingData::StorePhysicsTable()", 
+			"mat030", FatalException,"Cannot store vector.");
          }
      }
   }
@@ -411,11 +351,10 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(const G4String& fileName)
   std::ifstream ifilestream;
   ifilestream.open( fileName, std::ios::in|std::ios::binary );
   if( ! ifilestream ) {
-#ifdef G4VERBOSE
-    G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
-	   << " Cannot open file "<< fileName 
-	   << G4endl;
-#endif
+    G4ExceptionDescription ed;
+    ed << "Cannot open file " << fileName; 
+    G4Exception ("G4IonStoppingData::RetrievePhysicsTable()", 
+                 "mat030", FatalException, ed);
     return false;
   }   
 
@@ -439,11 +378,9 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(const G4String& fileName)
 
       getline( ifilestream, line );
       if( ifilestream.fail() ) { 
-#ifdef G4VERBOSE  
 	G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
 	       << " File content of " << fileName << " ill-formated." 
 	       << G4endl;
-#endif          
 	ifilestream.close(); 
 	return false; 
       }
@@ -463,13 +400,10 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(const G4String& fileName)
     headerstream >> materialName;
 
     if( headerstream.fail() || std::string::npos == atomicNumberIon) {
- 
-#ifdef G4VERBOSE  
       G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
 	     << " File content of " << fileName << " ill-formated "
 	     << " (vector header)." 
 	     << G4endl;
-#endif          
       ifilestream.close();
       return false;
     } 
@@ -486,24 +420,19 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(const G4String& fileName)
       
     G4PhysicsVector* physicsVector = CreatePhysicsVector(vectorType);
 
-    if(physicsVector == 0) {
-#ifdef G4VERBOSE  
+    if(physicsVector == nullptr) {
       G4cout << "G4ExtDEDXTable::RetrievePhysicsTable  "
 	     << " illegal physics Vector type " << vectorType
 	     << " in  " << fileName 
 	     << G4endl;
-#endif          
       ifilestream.close();
       return false;
     }
 
     if( !physicsVector -> Retrieve(ifilestream, true) ) {
-	
-#ifdef G4VERBOSE  
       G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
 	     << " File content of " << fileName << " ill-formated." 
 	     << G4endl;
-#endif          
       ifilestream.close();
       return false;
     } 

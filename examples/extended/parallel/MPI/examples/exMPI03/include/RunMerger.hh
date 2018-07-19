@@ -33,12 +33,12 @@ class RunMerger : public G4VUserMPIrunMerger {
 public:
   RunMerger(const Run* arun,G4int destination=G4MPImanager::kRANK_MASTER,
       G4int verb=0)
-  : G4VUserMPIrunMerger(arun,destination,verb ) , myrun(arun) {}
+  : G4VUserMPIrunMerger(arun,destination,verb ) , fMyRun(arun) {}
 protected:
   void Pack();
   G4Run* UnPack();
 private:
-  const Run* myrun;
+  const Run* fMyRun;
 };
 #endif
 

@@ -60,7 +60,7 @@ namespace G4INCL {
     Particle *theParticle;
     ThreeVector const incidentDirection;
 
-    INCL_DECLARE_ALLOCATION_POOL(DeltaDecayChannel);
+    INCL_DECLARE_ALLOCATION_POOL(DeltaDecayChannel)
   };
 }
 

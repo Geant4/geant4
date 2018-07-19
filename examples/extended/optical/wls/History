@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 110278 2018-05-17 14:48:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,9 +16,36 @@ track of all tags.
  
      ----------------------------------------------------------
 
-Oct 14, 2016 G.Folger
-- remove direct use of aParticleIterator, use GetParticleTableIterator().
+May 17, 2018 J. Allison (WLS-V10-04-01)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+
+May 08, 2018 B.Morgan (WLS-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+May 10, 2017 V.Ivanchenko   (WLS-V10-03-00)
+- WLSDetectorConstruction, WLSSteppingAction - fixed gcc 7.1 warnings
+
+Nov 19, 2016 A.Dotti   (WLS-V10-02-04,-05)
+- Explicit set of SD to manager
+
+Nov 08, 2016 G.Folger  (WLS-V10-02-03)
+- replace use of fPhysicsVector by RegisterPhysics in ctor of WLSPhysicsList.cc
+
+Nov 03, 2016 L.Garnier (WLS-V10-02-02)
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+Oct 14, 2016 G.Folger (WLS-V10-02-01)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
     fix required by clang39 on Linux and MAC
+
+Sep 28, 2016 P. Gumplinger (WLS-V10-02-00)
+- fully adhere to Coding Guide Lines for member functions
+
+Oct 09, 2015 P. Gumplinger (WLS-V10-01-04)
+- adhere to Coding Guide Lines for member functions
 
 May 14, 2015 P. Gumplinger (WLS-V10-01-03)
 - remove obsolete /event/drawTrack and /event/printModulo

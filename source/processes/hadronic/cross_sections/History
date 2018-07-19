@@ -14,6 +14,200 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 June 2018 - Vladimir Ivanchenko (hadr-cross-V10-04-16)
+13 June 2018 - Vladimir Ivanchenko (hadr-cross-V10-04-15)
+--------------------------------------------------------
+- G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS,
+  G4ParticleInelasticXS - restore logic used in 10.4 for 
+    selection of isotope cross sections; use const pointer to 
+    G4Isotope; make these x-sections isotope wise for all energies
+  G4VCrossSectionDataSet - use const pointer to G4Isotope
+  G4CrossSectionDataStore - restore logic used in 10.4 for 
+    selection of isotope cross sections
+
+11 June 2018 - Vladimir Ivanchenko (hadr-cross-V10-04-14)
+--------------------------------------------------------
+- G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS
+    bugfix: do not clear previous cross sections from the list 
+    allowing to use HP cross sections
+
+05 Jun 2018 - Alberto Ribon (hadr-cross-V10-04-13)
+----------------------------------------------------
+- G4PiNuclearCrossSection : logical fix suggested by Coverity, affecting
+  only transuranic elements.
+
+05 June 2018 - Vladimir Ivanchenko (hadr-cross-V10-04-12)
+--------------------------------------------------------
+- G4ParticleInelasticXS - fixed const name
+- G4HadronXSDataTable - new class for cross section handling
+
+29 May 2018 - Vladimir Ivanchenko (hadr-cross-V10-04-11)
+29 May 2018 - Vladimir Ivanchenko (hadr-cross-V10-04-09)
+--------------------------------------------------------
+- G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS
+    reduced number of type conversions and if(..) operators
+- G4ParticleInelasticXS - new inelastic cross sections for neutrons, 
+    protons, and light ions based on G4NEUTRONXS2.0 
+- G4CrossSectionDataStore - added new method ComputeCrossSection(..),
+    reduced number of type conversions, number of computation of cross
+    sections and number of if(..) calls, const pointers to G4Material, 
+    G4Element, and G4Isotope, expected hadronic tracking be faster
+- G4VCrossSectionDataSet - added new flag isForAllAtomsAndEnergies 
+    and get/set methods allowing to reduce list of cross section
+    per particle
+- G4BGGNucleonElasticXS, G4BGGNucleonInelasticXS, G4BGGPionElasticXS,
+  G4BGGPionInelasticXS
+
+22 May 2018 - Alberto Ribon (hadr-cross-V10-04-08)
+----------------------------------------------------
+- G4PiNuclearCrossSection : for transuranic elements, scale the cross
+  sections from those of Uranium (using the ratio of atomic_weights),
+  instead of using directly the latter (as done before).
+
+11 May 2018 - Vladimir Ivanchenko (hadr-cross-V10-04-07)
+--------------------------------------------------------
+- G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS
+  adopted for the new data structure G4NEUTRONXS2.0, incompatible
+  with previous
+
+24 April 2018 - Alberto Ribon (hadr-cross-V10-04-06)
+----------------------------------------------------
+- G4PiNuclearCrossSection, G4ElectroNuclearCrossSection, G4KokoulinMuonNuclearXS,
+  G4ChipsProtonElasticXS, G4ChipsKaonPlusElasticXS, G4ChipsKaonMinusElasticXS,
+  G4ChipsNeutronElasticXS, G4ChipsHyperonElasticXS, G4ChipsHyperonInelasticXS, 
+  G4ChipsAntiBaryonElasticXS, G4ChipsPionPlusElasticXS, G4ChipsPionMinusElasticXS :
+  introduced switch to allow transuranic elements.
+
+19 February 2018 - Jonathan Madsen (hadr-cross-V10-04-05)
+---------------------------------------------------------
+- Replaced file-scoped mutexes in G4CrossSectionFactoryRegistry.cc
+  to use G4TypeMutex<G4CrossSectionFactoryRegistry> which addresses
+  a static mutex initialization bug on Windows
+
+13 February 2018 - Vladimir Ivanchenko (hadr-cross-V10-04-04)
+--------------------------------------------------------
+- G4NeutrinoElectronTotXsc - V.Grichine added extra methods
+
+19 December 2017 - Gabriele Cosmo (hadr-cross-V10-04-03)
+--------------------------------------------------------
+- Commented out debug printouts in G4ProjectileFragmentCrossSection header.
+
+14 December 2017 - Alberto Ribon (hadr-cross-V10-04-02)
+-------------------------------------------------------
+- Re-tag because the previous tag was rejected by mistake.
+
+14 December 2017 - Alberto Ribon (hadr-cross-V10-04-01)
+-------------------------------------------------------
+- Forgot to update sources.cmake .
+
+14 December 2017 - Alberto Ribon (hadr-cross-V10-04-00)
+-------------------------------------------------------
+- G4NeutrinoElectronCcXsc , G4NeutrinoElectronNcXsc : added method.
+- G4NeutrinoElectronTotXsc : added new class for total (i.e. neutral current
+  plus charged current) cross section for neutrino-electron interactions.
+Work done by Vladimir Grichine.
+
+23 November 2017 - Vladimir Ivanchenko (hadr-cross-V10-03-14)
+----------------------------------------------------
+- G4ElectroNuclearCrossSection - fixed minor memory leak; 
+
+1 November 2017 - Tatsumi Koi (hadr-cross-V10-03-13)
+----------------------------------------------------
+- adding AddDataSet(G4VCrossSectionDataSet*,size_t); 
+The second argument gives the priority of the data set in list.
+
+12 September 2017 - Witek Pokorski (hadr-cross-V10-03-12)
+----------------------------------------------------
+- moving to N. Starkov parameterization for Kaon on H
+
+17 August 2017 - Witek Pokorski (hadr-cross-V10-03-11)
+----------------------------------------------------
+- updated sources.cmake for G4MuNeutrinoNucleusTotXsc
+
+17 August 2017 - Witek Pokorski (hadr-cross-V10-03-09)
+----------------------------------------------------
+- bug fix in G4ComponentGGHadronNucleusXsc.cc to use the correct cross-sections for Kaons on H
+- this change should be used also for the next patch of G4 10.3
+
+14 August 2017 - Vladimir Grichine
+----------------------------------------------------
+- Added G4MuNeutrinoNucleusTotXsc class implementing total muon
+  (anti)neutrino-nucleus cross sections in the simplified form as
+  A-multiplied nu_mu-nucleon cross-sections.
+
+13 Jun 2017 - Alberto Ribon (hadr-cross-V10-03-08)
+----------------------------------------------------
+-  G4NeutronElectronElXsc, G4ComponentGGHadronNucleusXsc : Coverity fixes.
+
+29 May 2017 - Alberto Ribon (hadr-cross-V10-03-07)
+----------------------------------------------------
+- Proposing the same tag as before, which was wrongly rejected.
+
+29 May 2017 - Alberto Ribon (hadr-cross-V10-03-06)
+----------------------------------------------------
+- G4NeutrinoElectronNcXsc, G4NeutrinoElectronCcXsc, G4NeutronElectronElXsc :
+  added possibility of biasing these cross sections.
+
+23 May 2017 - Alberto Ribon (hadr-cross-V10-03-05)
+----------------------------------------------------
+- G4NeutronElectronElXsc : fixed declaration of variables
+  (double wrongly declared as integer).
+
+23 May 2017 - Alberto Ribon (hadr-cross-V10-03-04)
+----------------------------------------------------
+- G4NeutronElectronElXsc : added new class by Vladimir Grichine
+  for the cross section of neutrons on atomic electrons. 
+  Ultra-relativistic approximation of the Rosenbluth formula is used,
+  since this is more relevant for detector applications. In particular,
+  for dark matter searches, this process can produce elctrons with high
+  energy, if there are high energy neutrons (more than 10 GeV).
+
+28 April 2017 - Alberto Ribon (hadr-cross-V10-03-03)
+----------------------------------------------------
+- G4NeutrinoElectronCcXsc : added new class by Vladimir Grichine
+  for the cross section of neutrino-electron inelastic interaction
+  (charge current).
+
+18 April 2017 - Alberto Ribon (hadr-cross-V10-03-02)
+----------------------------------------------------
+- G4NeutrinoElectronNcXsc : corrected name anti_nu_mu .
+
+11 April 2017 - Alberto Ribon (hadr-cross-V10-03-01)
+----------------------------------------------------
+- Forgot to add the (new) class G4NeutrinoElectronNcXsc in the sources.cmake.
+
+11 April 2017 - Alberto Ribon (hadr-cross-V10-03-00)
+----------------------------------------------------
+- G4NeutrinoElectronNcXsc : added new class by Vladimir Grichine
+  for the cross section of elastic neutrino-electron scattering.
+  This class is useful for dark matter and neutrino experiments.
+  Note that the cross section is small : ~10^-44 - 10^-42 cm^2
+  in the neutrino energy range 1-100 GeV.
+
+12 August 2016 - Alberto Ribon (hadr-cross-V10-02-04)
+-----------------------------------------------------
+- G4CrossSectionDataStore : added "throw" to hadronic exception;
+- G4ComponentGGHadronNucleusXsc, G4ComponentGGNuclNuclXsc.cc : comment out
+  redundant if-statement.
+(fixes suggested by the PVS-Studio static code analyzer)
+
+03 August 2016 - Alberto Ribon (hadr-cross-V10-02-03)
+-----------------------------------------------------
+- G4ComponentGGHadronNucleusXsc : two new fields were added by V. Grichine
+  to be used by final string generators.
+
+1 July 2016 - Vladimir Ivanchenko (hadr-cross-V10-02-02)
+-----------------------------------------------------------
+- G4VCrossSectionDataSet, G4CrossSectionDataStore - fixed minor Coverity report
+
+2 March 2016 - Tatsumi Koi (hadr-cross-V10-02-01)
+-----------------------------------------------------------
+- G4CrossSectionDataSetRegistry - Deleted ad-hoc trick which was added in "hadr-cross-V10-01-29"
+
+08 January 2016 - W.Pokorski (hadr-cross-V10-02-00)
+-------------------------------------------------
+- added comments about while-loop checking, no code change
+
 23 November 2015 - G.Folger (hadr-cross-V10-01-37)
 -------------------------------------------------
 - G4HadronCrossSections: Revert cross section data back to float, add f in 

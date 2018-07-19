@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109861 2018-05-09 12:17:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,10 +14,36 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
-14-10-16 G.Folger
+09-05-18 B.Morgan (testem13-V10-04-03)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+09-04-18 mma (testem13-V10-04-02)
+- testem13.cc : set visualisation only in interactive mode
+
+19-03-18 mma (testem13-V10-04-01)
+- testem13.cc : remove G4UI_USE and G4VIS_USE
+
+21-12-17 mma  (testem13-V10-04-00)
+- update PhysListEmStandard, livermore, penelope
+
+19-04-17 mma  (testem13-V10-03-00)
+- BeginOfRunAction() : remove SetRandomNumberStore(true)
+
+14-10-16 G.Folger (testem13-V10-02-03)
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
     fix required by clang39 on Linux and MAC
+
+04-07-16 I. Hrivnacova  (testem13-V10-02-02)
+- Fixes for Doxygen documentation
+
+08-04-16 mma  (testem13-V10-02-01)
+- PhysListEmStandard: remove G4EmProcessOption.hh
+
+08-04-16 mma  (testem13-V10-02-00)
+- PhysicsList: use G4EmParameters
+- remove geant3 subdirectory
 
 27-09-15 mma (testem13-V10-01-00)
 - DetectorConstruction::SetMatetial(): allow nist materials

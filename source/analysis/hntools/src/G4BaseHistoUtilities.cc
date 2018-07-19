@@ -69,7 +69,7 @@ G4double GetWidth(const G4ToolsBaseHisto& baseHisto, G4int dimension,
     G4ExceptionDescription description;
     description << "    nbins = 0 (for " << hnType << ").";
     G4Exception(functionName, "Analysis_W014", JustWarning, description);
-    return 0;
+    return 0.;
   }              
   
   return ( baseHisto.get_axis(dimension).upper_edge() 

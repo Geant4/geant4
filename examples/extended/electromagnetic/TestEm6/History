@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109281 2018-04-09 09:57:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,12 +14,24 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+07-04-18 mma (testem6-V10-04-02)
+- testem6.cc : set visualisation only in iteractive mode
 
-14-10-16 G.Folger
+17-03-18 mma (testem6-V10-04-01)
+- testem6.cc : remove G4UI_USE and G4VIS_USE
+
+28-02-18 V.Ivant (testem6-V10-04-00)
+- H.Burkhardt fixed root macro 
+
+14-10-16 G.Folger (testem6-V10-02-02)
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
-  fix required by clang39 on Linux and MAC
+    fix required by clang39 on Linux and MAC
 
-10-12-15 V.Ivant (testem6-V10-01-01)
+04-07-16 I. Hrivnacova  (testem6-V10-02-01)
+- Fixes for Doxygen documentation
+
+10-12-15 V.Ivant (testem6-V10-02-00)
 - H.Burkhardt fixed root macro allowing to work both with root5 and 6
     
 28-10-15 D.Sawkey (testem6-V10-01-00)

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file OpNovice/src/OpNovicePhysicsList.cc
+/// \brief Implementation of the OpNovicePhysicsList class
+//
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

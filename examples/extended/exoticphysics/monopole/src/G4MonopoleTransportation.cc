@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/G4MonopoleTransportation.cc
 /// \brief Implementation of the G4MonopoleTransportation class
 //
-// $Id: G4MonopoleTransportation.cc 84606 2014-10-17 07:50:04Z gcosmo $
+// $Id: G4MonopoleTransportation.cc 106979 2017-10-31 09:01:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,6 +52,9 @@
 #include "G4Monopole.hh"
 #include "G4TransportationProcessType.hh"
 #include "G4SystemOfUnits.hh"
+
+#include "G4RunManager.hh"
+#include "DetectorConstruction.hh"
 
 class G4VSensitiveDetector;
 
@@ -81,19 +84,30 @@ G4MonopoleTransportation::G4MonopoleTransportation( const G4Monopole* mpl,
   // set Process Sub Type
   SetProcessSubType(TRANSPORTATION);  
 
-  fMagSetup = G4MonopoleFieldSetup::GetMonopoleFieldSetup();
-  
-  G4TransportationManager* transportMgr ; 
 
-  transportMgr = G4TransportationManager::GetTransportationManager() ; 
+#ifdef G4MULTITHREADED
+  // Do not finalize the G4MonopoleTransportation class 
+  if (G4Threading::IsMasterThread())
+    {
+      return;
+    }
+#endif
+
+  const DetectorConstruction* detector = static_cast<const DetectorConstruction*>
+                                 (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+
+  fMagSetup = detector->GetMonopoleFieldSetup();
+  
+  G4TransportationManager* transportMgr = G4TransportationManager::GetTransportationManager(); 
 
   fLinearNavigator = transportMgr->GetNavigatorForTracking() ; 
 
   // fGlobalFieldMgr = transportMgr->GetFieldManager() ;
 
   fFieldPropagator = transportMgr->GetPropagatorInField() ;
+  fpSafetyHelper =   transportMgr->GetSafetyHelper();  
 
-  fpSafetyHelper =   transportMgr->GetSafetyHelper();  // New 
+// New 
 
   // Cannot determine whether a field exists here,
   //  because it would only work if the field manager has informed 
@@ -280,8 +294,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                particleMagneticCharge );   // in Mev/c 
 
      G4EquationOfMotion* equationOfMotion = 
-     (fFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
-     ->GetEquationOfMotion();
+       fFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetEquationOfMotion();
 
      equationOfMotion
        ->SetChargeMomentumMass( chargeState,       //  Was particleMagneticCharge - in Mev/c

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/include/PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.hh 81528 2014-06-02 16:21:24Z vnivanch $
+// $Id: PhysicsListMessenger.hh 109000 2018-03-21 09:25:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,6 +52,8 @@ public:
  ~PhysicsListMessenger();
     
   virtual void SetNewValue(G4UIcommand*, G4String);
+
+  inline G4double GetMaxChargedStep() const { return fMaxChargedStep; }
     
 private:
   
@@ -59,6 +61,8 @@ private:
     
   G4UIdirectory*             fPhysDir;    
   G4UIcmdWithAString*        fListCmd;    
+  G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
+  G4double                   fMaxChargedStep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.hh 80641 2014-05-05 15:10:28Z gcosmo $
+// $Id: G4UIcontrolMessenger.hh 102561 2017-02-09 08:16:05Z gcosmo $
 //
 
 #ifndef G4UIcontrolMessenger_h
@@ -34,6 +34,7 @@
 
 class G4UIdirectory;
 class G4UIcmdWithAString;
+class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithoutParameter;
 class G4UIcommand;
@@ -49,6 +50,7 @@ class G4UIcommand;
 //   /control/foreach
 //   /control/suppressAbortion
 //   /control/verbose
+//   /control/useDoublePrecision
 //   /control/saveHistory
 //   /control/stopSavingHistory
 //   /control/alias
@@ -67,6 +69,12 @@ class G4UIcommand;
 //   /control/subtract
 //   /control/multiply
 //   /control/divide
+//   /control/strif
+//   /control/strdoif
+//   /control/ifBatch
+//   /control/ifInteractive
+//   /control/doifBatch
+//   /control/doifInteractive
 
 class G4UIcontrolMessenger : public G4UImessenger 
 {
@@ -82,6 +90,7 @@ class G4UIcontrolMessenger : public G4UImessenger
       G4UIcmdWithAString * ExecuteCommand;
       G4UIcmdWithAnInteger * suppressAbortionCommand;
       G4UIcmdWithAnInteger * verboseCommand;
+      G4UIcmdWithABool * doublePrecCommand;
       G4UIcmdWithAString * historyCommand;
       G4UIcmdWithoutParameter * stopStoreHistoryCommand;
       G4UIcommand * aliasCommand;
@@ -103,6 +112,12 @@ class G4UIcontrolMessenger : public G4UImessenger
       G4UIcommand * multiplyCommand;
       G4UIcommand * divideCommand;
       G4UIcommand * remainderCommand;
+      G4UIcommand * strifCommand;
+      G4UIcommand * strdoifCommand;
+      G4UIcmdWithAString * ifBatchCommand;
+      G4UIcmdWithAString * ifInteractiveCommand;
+      G4UIcmdWithAString * doifBatchCommand;
+      G4UIcmdWithAString * doifInteractiveCommand;
 };
 
 #endif

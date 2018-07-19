@@ -58,7 +58,7 @@ namespace G4INCL {
     Particle *particle1, *particle2;
 
     static const G4int maxTries;
-    INCL_DECLARE_ALLOCATION_POOL(DeltaProductionChannel);
+    INCL_DECLARE_ALLOCATION_POOL(DeltaProductionChannel)
   };
 }
 

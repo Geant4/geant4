@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4cCalorHit.hh 69223 2013-04-23 12:36:10Z gcosmo $
+// $Id: B4cCalorHit.hh 100946 2016-11-03 11:28:08Z gcosmo $
 //
 /// \file B4cCalorHit.hh
 /// \brief Definition of the B4cCalorHit class
@@ -35,7 +35,7 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
-#include "tls.hh"
+#include "G4Threading.hh"
 
 /// Calorimeter hit class
 ///
@@ -75,7 +75,7 @@ class B4cCalorHit : public G4VHit
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef G4THitsCollection<B4cCalorHit> B4cCalorHitsCollection;
+using B4cCalorHitsCollection = G4THitsCollection<B4cCalorHit>;
 
 extern G4ThreadLocal G4Allocator<B4cCalorHit>* B4cCalorHitAllocator;
 
@@ -83,8 +83,9 @@ extern G4ThreadLocal G4Allocator<B4cCalorHit>* B4cCalorHitAllocator;
 
 inline void* B4cCalorHit::operator new(size_t)
 {
-  if(!B4cCalorHitAllocator)
+  if (!B4cCalorHitAllocator) {
     B4cCalorHitAllocator = new G4Allocator<B4cCalorHit>;
+  }
   void *hit;
   hit = (void *) B4cCalorHitAllocator->MallocSingle();
   return hit;
@@ -92,8 +93,9 @@ inline void* B4cCalorHit::operator new(size_t)
 
 inline void B4cCalorHit::operator delete(void *hit)
 {
-  if(!B4cCalorHitAllocator)
+  if (!B4cCalorHitAllocator) {
     B4cCalorHitAllocator = new G4Allocator<B4cCalorHit>;
+  }
   B4cCalorHitAllocator->FreeSingle((B4cCalorHit*) hit);
 }
 

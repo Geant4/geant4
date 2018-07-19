@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.hh 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: PrimaryGeneratorAction.hh 98772 2016-08-09 14:25:31Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,16 +50,14 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
    ~PrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event*);
-    G4ParticleGun* GetParticleGun() {return particleGun;};
+    virtual void GeneratePrimaries(G4Event*);
+    G4ParticleGun* GetParticleGun() {return fParticleGun;};
 
   private:
-    G4ParticleGun*        particleGun;
-    DetectorConstruction* detector;
+    G4ParticleGun*        fParticleGun;
+    DetectorConstruction* fDetector;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

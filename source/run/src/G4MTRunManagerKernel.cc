@@ -42,7 +42,7 @@ G4MTRunManagerKernel::G4MTRunManagerKernel() : G4RunManagerKernel(masterRMK)
     G4ExceptionDescription msg;
     msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
     msg<<" This type of RunManager can only be used in mult-threaded applications.";
-    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0035",FatalException,msg);
+    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0109",FatalException,msg);
 #endif
     G4AutoLock l(&workerRMMutex);
     if(!workerRMvector) workerRMvector = new std::vector<G4WorkerRunManager*>;
@@ -102,7 +102,7 @@ G4ThreadLocal G4WorkerThread* G4MTRunManagerKernel::wThreadContext = 0;
 G4WorkerThread* G4MTRunManagerKernel::GetWorkerThread() 
 { return wThreadContext; }
 
-void* G4MTRunManagerKernel::StartThread(void* context)
+void G4MTRunManagerKernel::StartThread(G4WorkerThread* context)
 {
   //!!!!!!!!!!!!!!!!!!!!!!!!!!
   //!!!!!! IMPORTANT !!!!!!!!!
@@ -117,8 +117,8 @@ void* G4MTRunManagerKernel::StartThread(void* context)
 //#ifdef G4MULTITHREADED
 //    turnontpmalloc();
 //#endif
-
-  wThreadContext = static_cast<G4WorkerThread*>(context);  
+  G4Threading::WorkerThreadJoinsPool();
+  wThreadContext = context;
   G4MTRunManager* masterRM = G4MTRunManager::GetMasterRunManager();
 
     
@@ -215,7 +215,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   wThreadContext->DestroyGeometryAndPhysicsVector();
   wThreadContext = 0;
 
-  return static_cast<void*>(0);
+  G4Threading::WorkerThreadLeavesPool();
 }
 
 #include "G4ParticleDefinition.hh"

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh 102308 2017-01-20 14:54:21Z gcosmo $
+// $Id: G4ParticleDefinition.hh 106143 2017-09-14 06:34:42Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -49,6 +49,7 @@
 // restructuring for Cuts per Region - H.Kurashige - 11 March 2003 
 // added  MagneticMoment - H.Kurashige - March 2007
 // modified for thread-safety for MT - G.Cosmo, A.Dotti - January 2013
+// added support for MuonicAtom - K.L.Genser - September 2017
 // ------------------------------------------------------------
 
 #ifndef G4ParticleDefinition_h
@@ -200,6 +201,10 @@ class G4ParticleDefinition
       // true only if the particle is G4Ions
       // (it means that theProcessManager is same as one for G4GenricIon)
 
+      G4bool IsMuonicAtom() const;
+      // true only if the particle is a G4MuonicAtom
+      // (it means that theProcessManager is same as the one for G4GenricMuonicAtom)
+
       G4int operator==(const G4ParticleDefinition &right) const;
       G4int operator!=(const G4ParticleDefinition &right) const;
 
@@ -208,19 +213,23 @@ class G4ParticleDefinition
       inline G4ProcessManager* GetMasterProcessManager() const;
       // Returns the process manager master pointer.
       inline void SetMasterProcessManager(G4ProcessManager* aNewPM);
-      //Sets the shadow master pointer (not to be used by user)
+      // Sets the shadow master pointer (not to be used by user)
 
       inline G4int GetInstanceID() const;
       // Returns the instance ID.
 
       static const G4PDefManager& GetSubInstanceManager();
       // Returns the private data instance manager.
+
+      static void Clean();
+      // Clear memory allocated by sub-instance manager.
+
  private:
       // --- Shadow of master pointers.
 
       G4ProcessManager *theProcessManagerShadow;
-      //  Each worker thread can access this field from the master thread
-      //  through this pointer.
+      // Each worker thread can access this field from the master thread
+      // through this pointer.
 
       G4int g4particleDefinitionInstanceID;
       // This field is used as instance ID.
@@ -362,6 +371,7 @@ class G4ParticleDefinition
 
    protected:
       G4bool isGeneralIon;
+      G4bool isMuonicAtom;
 
    public:
       void SetParticleDefinitionID(G4int id=-1);

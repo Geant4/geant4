@@ -46,4 +46,3 @@ class RE05WorkerInitialization : public G4UserWorkerInitialization
 };
 
 #endif
-

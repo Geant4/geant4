@@ -33,6 +33,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIdirectory.hh"
+#include "G4Threading.hh"
 
 #include <iostream>
 
@@ -182,26 +183,26 @@ void G4GenericMessenger::SetGuidance(const G4String& s) {
   dircmd->SetGuidance(s);
 }
 
-
 G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(const G4String& unit, UnitSpec spec) {
   // Change the type of command (unfortunatelly this is done a posteriory)
   // We need to delete the old command before creating the new one and therefore we need to recover the information
   // before the deletetion
-#ifdef G4MULTITHREADED
-  G4String cmdpath = command->GetCommandPath();
-  G4ExceptionDescription ed;
-  ed<<"G4GenericMessenger::Command::SetUnit() is thread-unsafe and should not be used\n"
-    <<"in multi-threaded mode. For your command <"<<cmdpath<<">, use\n"
-    <<" DeclarePropertyWithUnit(const G4String& name, const G4String& defaultUnit,\n"
-    <<"                         const G4AnyType& variable, const G4String& doc)\n"
-    <<"or\n"
-    <<" DeclareMethodWithUnit(const G4String& name, const G4String& defaultUnit,\n"
-    <<"                       const G4AnyType& variable, const G4String& doc)\n"
-    <<"to define a command with a unit <"<<unit<<">.";
-  if(spec!=UnitDefault) { ed<<"\nPlease use a default unit instead of unit category."; }
-  G4Exception("G4GenericMessenger::Command::SetUnit()","Intercom70001",FatalException,ed);
-  return *this;
-#else
+  if ( G4Threading::IsMultithreadedApplication() ) {
+    G4String cmdpath = command->GetCommandPath();
+    G4ExceptionDescription ed;
+    ed<<"G4GenericMessenger::Command::SetUnit() is thread-unsafe and should not be used\n"
+      <<"in multi-threaded mode. For your command <"<<cmdpath<<">, use\n"
+      <<" DeclarePropertyWithUnit(const G4String& name, const G4String& defaultUnit,\n"
+      <<"                         const G4AnyType& variable, const G4String& doc)\n"
+      <<"or\n"
+      <<" DeclareMethodWithUnit(const G4String& name, const G4String& defaultUnit,\n"
+      <<"                       const G4AnyType& variable, const G4String& doc)\n"
+      <<"to define a command with a unit <"<<unit<<">.";
+    if(spec!=UnitDefault) { ed<<"\nPlease use a default unit instead of unit category."; }
+    G4Exception("G4GenericMessenger::Command::SetUnit()","Intercom70001",FatalException,ed);
+    return *this;
+  }
+
   G4String cmdpath = command->GetCommandPath();
   G4UImessenger* messenger = command->GetMessenger();
   G4String range = command->GetRange();
@@ -233,7 +234,6 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(const G4String
   for (size_t i = 0; i < guidance.size(); i++) command->SetGuidance(guidance[i]);
   command->SetRange(range);
   return *this;
-#endif
 }
 
 G4GenericMessenger::Command& G4GenericMessenger::Command::SetParameterName(const G4String& name,G4bool omittable, G4bool currentAsDefault) {

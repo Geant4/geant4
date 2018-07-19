@@ -11,7 +11,7 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 97610 2016-06-06 10:02:23Z gcosmo $
+# $Id: sources.cmake 107320 2017-11-08 16:30:22Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -93,6 +93,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4HadronPhysicsFTFP_BERT_HP.hh
         G4HadronPhysicsFTFP_BERT_TRV.hh
         G4HadronPhysicsFTFP_BERT_ATL.hh
+        G4HadronPhysicsFTFQGSP_BERT.hh
 	G4HadronPhysicsNuBeam.hh
         G4HadronPhysicsQGS_BIC.hh
         G4HadronPhysicsQGSP_BERT.hh
@@ -102,6 +103,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4HadronPhysicsQGSP_FTFP_BERT.hh
         G4HadronPhysicsINCLXX.hh
         G4HadronPhysicsShielding.hh
+        G4HadronPhysicsShieldingLEND.hh
         G4VHadronPhysics.hh
         G4HadronPhysicsQGSP_BIC_AllHP.hh 
     SOURCES
@@ -111,6 +113,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4HadronPhysicsFTFP_BERT_HP.cc
         G4HadronPhysicsFTFP_BERT_TRV.cc
         G4HadronPhysicsFTFP_BERT_ATL.cc
+        G4HadronPhysicsFTFQGSP_BERT.cc
 	G4HadronPhysicsNuBeam.cc
         G4HadronPhysicsQGS_BIC.cc
         G4HadronPhysicsQGSP_BERT.cc
@@ -120,6 +123,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4HadronPhysicsQGSP_FTFP_BERT.cc
         G4HadronPhysicsINCLXX.cc
         G4HadronPhysicsShielding.cc
+        G4HadronPhysicsShieldingLEND.cc
         G4VHadronPhysics.cc
         G4HadronPhysicsQGSP_BIC_AllHP.cc 
     GRANULAR_DEPENDENCIES

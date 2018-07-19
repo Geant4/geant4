@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id: TrackingAction.cc 78550 2014-01-07 09:43:41Z gcosmo $
+// $Id: TrackingAction.cc 98761 2016-08-09 14:07:11Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,5 +57,4 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

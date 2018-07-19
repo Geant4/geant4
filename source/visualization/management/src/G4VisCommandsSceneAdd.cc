@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc 97702 2016-06-07 10:39:30Z gcosmo $
+// $Id: G4VisCommandsSceneAdd.cc 110480 2018-05-25 07:25:18Z gcosmo $
 // /vis/scene/add commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -36,6 +36,7 @@
 #include "G4ModelingParameters.hh"
 #include "G4HitsModel.hh"
 #include "G4DigiModel.hh"
+#include "G4GPSModel.hh"
 #include "G4MagneticFieldModel.hh"
 #include "G4PSHitsModel.hh"
 #include "G4TrajectoriesModel.hh"
@@ -77,6 +78,7 @@
 #include "G4UnitsTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4GeneralParticleSourceData.hh"
 
 #include <sstream>
 
@@ -151,7 +153,8 @@ void G4VisCommandSceneAddArrow::SetNewValue (G4UIcommand*, G4String newValue)
 
   G4VModel* model = new G4ArrowModel
     (x1, y1, z1, x2, y2, z2,
-     arrowWidth, fCurrentColour, newValue);
+     arrowWidth, fCurrentColour, newValue,
+     fCurrentArrow3DLineSegmentsPerCircle);
 
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
@@ -269,8 +272,8 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   fpCommand -> SetGuidance
   ("Draws axes at (x0, y0, z0) of given length and colour.");
   fpCommand -> SetGuidance
-  ("If \"unitcolour\" is \"auto\", x, y and z will be red, green and blue"
-   "\n  respectively.  Otherwise choose from the pre-defined text-specified"
+  ("If \"colour-string\" is \"auto\", x, y and z will be red, green and blue"
+   "\n  respectively.  Otherwise it can be one of the pre-defined text-specified"
    "\n  colours - see information printed by the vis manager at start-up or"
    "\n  use \"/vis/list\".");
   fpCommand -> SetGuidance
@@ -293,7 +296,7 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
   parameter->SetDefaultValue ("m");
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("unitcolour", 's', omitable = true);
+  parameter =  new G4UIparameter ("colour-string", 's', omitable = true);
   parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("showtext", 'b', omitable = true);
@@ -515,7 +518,7 @@ void G4VisCommandSceneAddDigis::SetNewValue (G4UIcommand*, G4String) {
     return;
   }
 
-  G4DigiModel* model = new G4DigiModel;
+  G4VModel* model = new G4DigiModel;
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddEndOfEventModel (model, warn);
   if (successful) {
@@ -787,7 +790,7 @@ void G4VisCommandSceneAddExtent::Extent::operator()
 
 G4VisCommandSceneAddFrame::G4VisCommandSceneAddFrame () {
   fpCommand = new G4UIcommand("/vis/scene/add/frame", this);
-  fpCommand -> SetGuidance ("Adds frame to current scene.");
+  fpCommand -> SetGuidance ("Add frame to current scene.");
   G4bool omitable;
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("size", 'd', omitable = true);
@@ -859,6 +862,75 @@ void G4VisCommandSceneAddFrame::Frame::operator()
   sceneHandler.EndPrimitives2D();
 }
 
+  ////////////// /vis/scene/add/gps ///////////////////////////////////////
+
+  G4VisCommandSceneAddGPS::G4VisCommandSceneAddGPS () {
+    G4bool omitable;
+    G4UIparameter* parameter;
+    fpCommand = new G4UIcommand ("/vis/scene/add/gps", this);
+    fpCommand -> SetGuidance
+    ("A representation of the source(s) of the General Particle Source"
+     "\nwill be added to current scene and drawn, if applicable.");
+    fpCommand->SetGuidance(ConvertToColourGuidance());
+    fpCommand->SetGuidance("Default: red and transparent.");
+    parameter = new G4UIparameter("red_or_string", 's', omitable = true);
+    parameter -> SetDefaultValue ("1.");
+    fpCommand -> SetParameter (parameter);
+    parameter = new G4UIparameter("green", 'd', omitable = true);
+    parameter -> SetDefaultValue (0.);
+    fpCommand -> SetParameter (parameter);
+    parameter = new G4UIparameter ("blue", 'd', omitable = true);
+    parameter -> SetDefaultValue (0.);
+    fpCommand -> SetParameter (parameter);
+    parameter = new G4UIparameter ("opacity", 'd', omitable = true);
+    parameter -> SetDefaultValue (0.3);
+    fpCommand -> SetParameter (parameter);
+  }
+
+  G4VisCommandSceneAddGPS::~G4VisCommandSceneAddGPS () {
+    delete fpCommand;
+  }
+
+  G4String G4VisCommandSceneAddGPS::GetCurrentValue (G4UIcommand*) {
+    return "";
+  }
+
+  void G4VisCommandSceneAddGPS::SetNewValue (G4UIcommand*, G4String newValue) {
+
+    G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+    G4bool warn(verbosity >= G4VisManager::warnings);
+
+    G4Scene* pScene = fpVisManager->GetCurrentScene();
+    if (!pScene) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cerr << "ERROR: No current scene.  Please create one." << G4endl;
+      }
+      return;
+    }
+
+    G4String redOrString;
+    G4double green, blue, opacity;
+    std::istringstream iss(newValue);
+    iss >> redOrString >> green >> blue >> opacity;
+    G4Colour colour(1.,0.,0.,0.3);  // Default red and transparent.
+    ConvertToColour(colour, redOrString, green, blue, opacity);
+
+    G4VModel* model = new G4GPSModel(colour);
+    const G4String& currentSceneName = pScene -> GetName ();
+    G4bool successful = pScene -> AddRunDurationModel (model, warn);
+    if (successful) {
+      if (verbosity >= G4VisManager::confirmations) {
+        G4cout <<
+"A representation of the source(s) of the General Particle Source will be drawn"
+"\n  in colour " << colour << " for scene \""
+        << currentSceneName << "\" if applicable."
+        << G4endl;
+      }
+    }
+    else G4VisCommandsSceneAddUnsuccessful(verbosity);
+    UpdateVisManagerScene (currentSceneName);
+  }
+  
 ////////////// /vis/scene/add/hits ///////////////////////////////////////
 
 G4VisCommandSceneAddHits::G4VisCommandSceneAddHits () {
@@ -890,7 +962,7 @@ void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand*, G4String) {
     return;
   }
 
-  G4HitsModel* model = new G4HitsModel;
+  G4VModel* model = new G4HitsModel;
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddEndOfEventModel (model, warn);
   if (successful) {
@@ -1090,9 +1162,11 @@ G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
   fpCommand = new G4UIcommand ("/vis/scene/add/logicalVolume", this);
   fpCommand -> SetGuidance ("Adds a logical volume to the current scene,");
   fpCommand -> SetGuidance
-    ("Shows boolean components (if any), voxels (if any) and readout geometry"
-     "\n(if any).  Note: voxels are not constructed until start of run -"
-     "\n \"/run/beamOn\".  (For voxels without a run, \"/run/beamOn 0\".)");
+  ("Shows boolean components (if any), voxels (if any), readout geometry"
+   "\n  (if any), local axes and overlaps (if any), under control of the"
+   "\n  appropriate flag."
+   "\n  Note: voxels are not constructed until start of run -"
+   "\n \"/run/beamOn\".  (For voxels without a run, \"/run/beamOn 0\".)");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("logical-volume-name", 's', omitable = false);
   fpCommand -> SetParameter (parameter);
@@ -1113,6 +1187,10 @@ G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
   parameter -> SetDefaultValue (true);
   parameter -> SetGuidance ("Set \"false\" to suppress axes.");
   fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter("check-overlap-flag", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  parameter -> SetGuidance ("Set \"false\" to suppress overlap check.");
+  fpCommand->SetParameter(parameter);
 }
 
 G4VisCommandSceneAddLogicalVolume::~G4VisCommandSceneAddLogicalVolume () {
@@ -1140,13 +1218,16 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   G4String name;
   G4int requestedDepthOfDescent;
   G4String booleansString, voxelsString, readoutString, axesString;
+  G4String overlapString;
   std::istringstream is (newValue);
   is >> name >> requestedDepthOfDescent
-     >>  booleansString >> voxelsString >> readoutString >> axesString;
+     >>  booleansString >> voxelsString >> readoutString >> axesString
+     >> overlapString;
   G4bool booleans = G4UIcommand::ConvertToBool(booleansString);
   G4bool voxels = G4UIcommand::ConvertToBool(voxelsString);
   G4bool readout = G4UIcommand::ConvertToBool(readoutString);
   G4bool axes = G4UIcommand::ConvertToBool(axesString);
+  G4bool checkOverlaps = G4UIcommand::ConvertToBool(overlapString);
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
   int nLV = pLVStore -> size ();
@@ -1190,7 +1271,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   }
 
   G4LogicalVolumeModel* model = new G4LogicalVolumeModel
-    (pLV, requestedDepthOfDescent, booleans, voxels, readout);
+    (pLV, requestedDepthOfDescent, booleans, voxels, readout, checkOverlaps);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
 
@@ -1218,15 +1299,17 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Logical volume \"" << pLV -> GetName ()
-	     << " with requested depth of descent "
+	     << "\" with requested depth of descent "
 	     << requestedDepthOfDescent
-	     << ",\n with";
+	     << ",\n  with";
       if (!booleans) G4cout << "out";
       G4cout << " boolean components, with";
       if (!voxels) G4cout << "out";
-      G4cout << " voxels and with";
+      G4cout << " voxels,\n  with";
       if (!readout) G4cout << "out";
-      G4cout << " readout geometry,"
+      G4cout << " readout geometry and with";
+      if (!checkOverlaps) G4cout << "out";
+      G4cout << " overlap checking"
 	     << "\n  has been added to scene \"" << currentSceneName << "\".";
       if (axes) {
         if (axesSuccessful) {
@@ -1556,7 +1639,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 G4VisCommandSceneAddLogo::G4Logo::G4Logo
 (G4double height, const G4VisAttributes& visAtts):
   fVisAtts(visAtts)
- {
+{
   const G4double& h =  height;
   const G4double h2  = 0.5 * h;   // Half height.
   const G4double ri  = 0.25 * h;  // Inner radius.
@@ -1583,6 +1666,17 @@ G4VisCommandSceneAddLogo::G4Logo::G4Logo
   // But to get inner, we make a triangle translated by...
   const G4double xtr = ss - f1, ytr = -ss - f2 -w;
   x9 += xtr; y9 += ytr;
+
+  // The idea here is to create a polyhedron for the G and the 4.  To do
+  // this we use Geant4 geometry solids and make boolean operations.
+  // Note that we do not need to keep the solids. We use local objects,
+  // which, of course, are deleted on leaving this function. This
+  // is contrary to the usual requirement for solids that are part of the
+  // detector for which solids MUST be created on the heap (with "new").
+  // Finally we invoke CreatePolyhedron, which creates a polyhedron on the heap
+  // and returns a pointer.  It is the user's responsibility to delete,
+  // which is done in the destructor of this class. Thus the polyhedra,
+  // created here, remain on the heap for the lifetime of the job.
 
   // G...
   G4Tubs tG("tG",ri,ro,d2,0.15*pi,1.85*pi);
@@ -1733,7 +1827,7 @@ G4VisCommandSceneAddMagneticField::G4VisCommandSceneAddMagneticField () {
    "\nthe default number of data points, so try reducing to 2 or 3, e.g:"
    "\n  /vis/scene/add/magneticField 3"
    "\nor, if only a small part of the scene has a field:"
-   "\n  /vis/scene/add/magneticField 50 # or more");
+   "\n  /vis/scene/add/magneticField 50 or more");
   fpCommand -> SetGuidance
   ("In the arrow representation, the length of the arrow is proportional"
    "\nto the magnitude of the field and the colour is mapped onto the range"
@@ -1779,8 +1873,9 @@ void G4VisCommandSceneAddMagneticField::SetNewValue
   if (representation == "lightArrow") {
     modelRepresentation = G4MagneticFieldModel::lightArrow;
   }
-  G4MagneticFieldModel* model =
-  new G4MagneticFieldModel(nDataPointsPerHalfScene,modelRepresentation);
+  G4VModel* model =
+  new G4MagneticFieldModel(nDataPointsPerHalfScene,modelRepresentation,
+                           fCurrentArrow3DLineSegmentsPerCircle);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
@@ -1838,7 +1933,7 @@ void G4VisCommandSceneAddPSHits::SetNewValue
     return;
   }
 
-  G4PSHitsModel* model = new G4PSHitsModel(newValue);
+  G4VModel* model = new G4PSHitsModel(newValue);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddEndOfRunModel (model, warn);
   if (successful) {
@@ -2541,7 +2636,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     }
   }
 
-  G4TrajectoriesModel* model = new G4TrajectoriesModel();
+  G4VModel* model = new G4TrajectoriesModel();
   const G4String& currentSceneName = pScene -> GetName ();
   pScene -> AddEndOfEventModel (model, warn);
 
@@ -2832,6 +2927,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     }
   }
 
+  // Get the world (the initial value of the iterator points to the mass world).
   G4VPhysicalVolume* world = *(transportationManager->GetWorldsIterator());
 
   if (!world) {
@@ -2841,32 +2937,6 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 	"\n  No world.  Maybe the geometry has not yet been defined."
 	"\n  Try \"/run/initialize\""
 	     << G4endl;
-    }
-    return;
-  }
-
-  const std::vector<G4Scene::Model>& rdModelList = pScene -> GetRunDurationModelList();
-  std::vector<G4Scene::Model>::const_iterator it;
-  for (it = rdModelList.begin(); it != rdModelList.end(); ++it) {
-    if (it->fpModel->GetGlobalDescription().find("G4PhysicalVolumeModel")
-	!= std::string::npos) {
-      if (((G4PhysicalVolumeModel*)(it->fpModel))->GetTopPhysicalVolume () == world) break;
-    }
-  }
-  if (it != rdModelList.end()) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: There is already a volume, \""
-             << it -> fpModel -> GetGlobalDescription()
-             << "\",\n in the run-duration model list of scene \""
-             << pScene -> GetName()
-             << "\".\n To get a clean scene:"
-	     << "\n  /vis/drawVolume " << name
-	     << "\n or"
-	     << "\n  /vis/scene/create"
-	     << "\n  /vis/scene/add/volume " << name
-	     << "\n  /vis/sceneHandler/attach"
-	     << "\n (and also, if necessary, /vis/viewer/flush)"
-             << G4endl;
     }
     return;
   }

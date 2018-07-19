@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par01/src/Par01DetectorConstruction.cc
+/// \brief Implementation of the Par01DetectorConstruction class
 //
-// $Id: Par01DetectorConstruction.cc 90093 2015-05-13 11:59:54Z gcosmo $
+//
+// $Id: Par01DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 #include "Par01DetectorConstruction.hh"
 #include "Par01CalorimeterSD.hh"
@@ -49,11 +52,17 @@
 
 #include "G4RegionStore.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01DetectorConstruction::Par01DetectorConstruction()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01DetectorConstruction::~Par01DetectorConstruction()
 {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* Par01DetectorConstruction::Construct()
 {
@@ -218,7 +227,7 @@ G4VPhysicalVolume* Par01DetectorConstruction::Construct()
    hadRegion->GetProductionCuts()->SetProductionCuts(cuts);
 
   //--------- Visualization attributes -------------------------------
-  WorldLog->SetVisAttributes(G4VisAttributes::Invisible);
+  WorldLog->SetVisAttributes(G4VisAttributes::GetInvisible());
 
   G4VisAttributes * driftchamberTubeVisAtt
     = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
@@ -254,6 +263,8 @@ G4VPhysicalVolume* Par01DetectorConstruction::Construct()
   //-----------------------
   return WorldPhys;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01DetectorConstruction::ConstructSDandField()
 {

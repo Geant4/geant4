@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevelRep.cc 85846 2014-11-05 15:45:28Z gcosmo $
+// $Id: G4NavigationLevelRep.cc 110271 2018-05-17 14:41:15Z gcosmo $
 //
 //  1 October 1997 J.Apostolakis Initial version. 
 //                        
@@ -32,4 +32,8 @@
 
 #include "G4NavigationLevelRep.hh"
 
-G4ThreadLocal G4Allocator<G4NavigationLevelRep> *aNavigLevelRepAllocator = 0;
+G4Allocator<G4NavigationLevelRep>*& aNavigLevelRepAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4NavigationLevelRep>* _instance = nullptr;
+    return _instance;
+}

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc 77477 2013-11-25 09:42:24Z gcosmo $
+// $Id: G4ProcessPlacer.cc 97276 2016-05-31 14:21:35Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -165,7 +165,7 @@ G4ProcessManager *G4ProcessPlacer::GetProcessManager()
   G4ProcessManager *processmanager = 0;
   // find process manager ---------------------------
   theParticleIterator->reset();
-  while( (*theParticleIterator)() )
+  while( (*theParticleIterator)() ) /* while checked for unending loop, 30.05.2016, Marc Verderi */
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
     if (particle->GetParticleName() == fParticleName)

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 78838 2014-01-28 08:46:17Z gcosmo $
+# $Id: GNUmakefile 99176 2016-09-07 09:46:36Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for modeling library.  John Allison, 31/12/1997.
 # --------------------------------------------------------------
@@ -20,6 +20,7 @@ include $(G4INSTALL)/config/architecture.gmk
 CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
+CPPFLAGS += -I$(G4BASE)/global/HEPNumerics/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/geometry/navigation/include

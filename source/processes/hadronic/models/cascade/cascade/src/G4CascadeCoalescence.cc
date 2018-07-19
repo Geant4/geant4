@@ -43,6 +43,8 @@
 // 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
 // 20130314  M. Kelsey -- Restore null initializer and if-block for _TLS_.
 // 20130326  M. Kelsey -- Replace _TLS_ with mutable data member buffer.
+// 20170406  M. Kelsey -- Remove recursive tryCluster() calls (redundant),
+//	     and remove use of triedClusters registry.
 
 #include "G4CascadeCoalescence.hh"
 #include "G4CascadeParameters.hh"
@@ -57,12 +59,6 @@
 #include <numeric>
 #include <algorithm>
 #include <iterator>
-
-
-// Short names for lists and iterators for convenience
-
-typedef std::vector<G4InuclElementaryParticle> hadronList;
-typedef hadronList::const_iterator hadronIter;
 
 
 // Constructor and Destructor
@@ -101,7 +97,6 @@ void G4CascadeCoalescence::selectCandidates() {
   if (verboseLevel)
     G4cout << " >>> G4CascadeCoalescence::selectCandidates()" << G4endl;
 
-  triedClusters.clear();
   allClusters.clear();
   usedNucleons.clear();
 
@@ -134,58 +129,34 @@ void G4CascadeCoalescence::selectCandidates() {
 
 void G4CascadeCoalescence::tryClusters(size_t idx1, size_t idx2,
 				       size_t idx3, size_t idx4) {
+  if (nucleonUsed(idx1) || nucleonUsed(idx2) ||
+      nucleonUsed(idx3) || nucleonUsed(idx4)) return;
+
   fillCluster(idx1,idx2,idx3,idx4);
-  if (clusterTried(thisCluster)) return;
+  if (verboseLevel>1) reportArgs("tryClusters",thisCluster);
 
-  if (verboseLevel>1)
-    G4cout << " >>> G4CascadeCoalescence::tryClusters " << idx1 << " " << idx2
-	   << " " << idx3 << " " << idx4 << G4endl;
-
-  triedClusters.insert(clusterHash(thisCluster));  // Remember current attempt
-
-  if (!nucleonUsed(idx1) && !nucleonUsed(idx2) &&
-      !nucleonUsed(idx3) && !nucleonUsed(idx4)) {
-    if (goodCluster(thisCluster)) {
-      allClusters.push_back(thisCluster);
-      usedNucleons.insert(idx1);
-      usedNucleons.insert(idx2);
-      usedNucleons.insert(idx3);
-      usedNucleons.insert(idx4);
-      return;
-    }
+  if (goodCluster(thisCluster)) {
+    allClusters.push_back(thisCluster);
+    usedNucleons.insert(idx1);
+    usedNucleons.insert(idx2);
+    usedNucleons.insert(idx3);
+    usedNucleons.insert(idx4);
   }
-
-  tryClusters(idx2,idx3,idx4);		// Try constituent subclusters
-  tryClusters(idx1,idx3,idx4);
-  tryClusters(idx1,idx2,idx4);
-  tryClusters(idx1,idx2,idx3);
 }
 
 void 
 G4CascadeCoalescence::tryClusters(size_t idx1, size_t idx2, size_t idx3) {
+  if (nucleonUsed(idx1) || nucleonUsed(idx2) || nucleonUsed(idx3)) return;
+
   fillCluster(idx1,idx2,idx3);
-  if (clusterTried(thisCluster)) return;
+  if (verboseLevel>1) reportArgs("tryClusters",thisCluster);
 
-  if (verboseLevel>1)
-    G4cout << " >>> G4CascadeCoalescence::tryClusters " << idx1 << " " << idx2
-	   << " " << idx3 << G4endl;
-
-  triedClusters.insert(clusterHash(thisCluster));  // Remember current attempt
-
-  if (!nucleonUsed(idx1) && !nucleonUsed(idx2) && !nucleonUsed(idx3)) {
-    fillCluster(idx1,idx2,idx3);
-    if (goodCluster(thisCluster)) {
-      allClusters.push_back(thisCluster);
-      usedNucleons.insert(idx1);
-      usedNucleons.insert(idx2);
-      usedNucleons.insert(idx3);
-      return;
-    }
+  if (goodCluster(thisCluster)) {
+    allClusters.push_back(thisCluster);
+    usedNucleons.insert(idx1);
+    usedNucleons.insert(idx2);
+    usedNucleons.insert(idx3);
   }
-
-  tryClusters(idx2,idx3);		// Try constituent subclusters
-  tryClusters(idx1,idx3);
-  tryClusters(idx1,idx2);
 }
 
 void 
@@ -193,15 +164,8 @@ G4CascadeCoalescence::tryClusters(size_t idx1, size_t idx2) {
   if (nucleonUsed(idx1) || nucleonUsed(idx2)) return;
 
   fillCluster(idx1,idx2);
-  if (clusterTried(thisCluster)) return;
+  if (verboseLevel>1) reportArgs("tryClusters",thisCluster);
 
-  if (verboseLevel>1)
-    G4cout << " >>> G4CascadeCoalescence::tryClusters " << idx1 << " " << idx2
-	   << G4endl;
-
-  triedClusters.insert(clusterHash(thisCluster));  // Remember current attempt
-
-  fillCluster(idx1,idx2);
   if (goodCluster(thisCluster)) {
     allClusters.push_back(thisCluster);
     usedNucleons.insert(idx1);
@@ -289,18 +253,6 @@ clusterType(const ClusterCandidate& aCluster) const {
   }
 
   return type;
-}
-
-// Compute "cluster hash" as chain of indices
-
-size_t G4CascadeCoalescence::
-clusterHash(const ClusterCandidate& aCluster) const {
-  G4int hash = 0;
-  for (size_t i=0; i<aCluster.size(); i++) {
-    hash = hash*1000 + aCluster[i];	// FIXME:  Use hadron list size instead?
-  }
-
-  return hash;
 }
 
 

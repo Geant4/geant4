@@ -34,6 +34,7 @@
 // Description: Modified version of G4QGSBinaryPiKBuilder to include on pions.
 //
 // Modified
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -62,11 +63,13 @@ class G4QGSBinaryPionBuilder : public G4VPionBuilder
     virtual ~G4QGSBinaryPionBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4PionPlusInelasticProcess * aP);
-    virtual void Build(G4PionMinusInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4PionPlusInelasticProcess * aP) final override;
+    virtual void Build(G4PionMinusInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+
+    using G4VPionBuilder::Build; //Prevent compiler warning
 
   private:
     G4VCrossSectionDataSet* thePiData;

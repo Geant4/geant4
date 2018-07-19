@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
+// $Id: PhysicsList.cc 102179 2017-01-09 13:27:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,6 +50,12 @@
 #include "G4EmLowEPPhysics.hh"
 #include "G4EmDNAPhysics.hh"
 #include "G4EmDNAPhysics_option1.hh"
+#include "G4EmDNAPhysics_option2.hh"
+#include "G4EmDNAPhysics_option3.hh"
+#include "G4EmDNAPhysics_option4.hh"
+#include "G4EmDNAPhysics_option5.hh"
+#include "G4EmDNAPhysics_option6.hh"
+#include "G4EmDNAPhysics_option7.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -66,12 +72,11 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4DNAGenericIonsManager.hh"
 
-G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = 0;
+G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fEmPhysicsList(0), fMessenger(0)
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   fMessenger = new PhysicsListMessenger(this);
 
@@ -79,11 +84,12 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList(),
 
   // EM physics
   fEmPhysicsList = new PhysListEmStandard(fEmName = "local");
-  
-  G4LossTableManager::Instance();
-  SetDefaultCutValue(1.*mm);
 
-  fStepMaxProcess  = 0;
+  // Em options
+  //
+  G4EmParameters::Instance()->SetBuildCSDARange(true);
+
+  SetDefaultCutValue(1.*mm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -128,7 +134,6 @@ void PhysicsList::ConstructParticle()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ProcessManager.hh"
-#include "G4EmProcessOptions.hh"
 
 void PhysicsList::ConstructProcess()
 {
@@ -140,12 +145,6 @@ void PhysicsList::ConstructProcess()
   //
   fEmPhysicsList->ConstructProcess();
   
-  // Em options
-  //
-  G4EmProcessOptions emOptions;
-  emOptions.SetBuildCSDARange(true);
-  emOptions.SetDEDXBinningForCSDARange(8*10);
-    
   // decay process
   //
   AddDecay();
@@ -250,12 +249,43 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option1();
          
+  } else if (name == "dna_opt2") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option2();
+         
+  } else if (name == "dna_opt3") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option3();
+         
+  } else if (name == "dna_opt4") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option4();
+         
+  } else if (name == "dna_opt5") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option5();
+         
+  } else if (name == "dna_opt6") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option6();
+         
+  } else if (name == "dna_opt7") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option7();
+         
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
   }
+  G4EmParameters::Instance()->SetBuildCSDARange(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

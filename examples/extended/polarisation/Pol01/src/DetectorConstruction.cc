@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 84603 2014-10-17 07:47:11Z gcosmo $
+// $Id: DetectorConstruction.cc 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,23 +53,22 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:pWorld(0), pBox(0), aMaterial(0)
+: G4VUserDetectorConstruction(),
+  fWorld(0), fBox(0), fTargetMaterial(0), fWorldMaterial(0)
 {
-  boxSizeXY = 50*mm;
-  boxSizeZ = 5*mm;
-  worldSize = 1.*m;
-  aMaterial = 0;
-  wMaterial = 0;
+  fBoxSizeXY = 50*mm;
+  fBoxSizeZ = 5*mm;
+  fWorldSize = 1.*m;
   SetTargetMaterial("G4_Fe");  
   SetWorldMaterial("G4_Galactic");  
-  detectorMessenger = new DetectorMessenger(this);
+  fMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
 { 
-  delete detectorMessenger;
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,14 +87,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //
   G4Box*
   sWorld = new G4Box("World",                            //name
-                   worldSize/2,worldSize/2,worldSize/2); //dimensions
+                   fWorldSize/2,fWorldSize/2,fWorldSize/2); //dimensions
 
   G4LogicalVolume*                                                                 
   lWorld = new G4LogicalVolume(sWorld,                   //shape
-                               wMaterial,                //material
+                               fWorldMaterial,           //material
                               "World");                  //name
 
-  pWorld = new G4PVPlacement(0,                          //no rotation
+  fWorld = new G4PVPlacement(0,                          //no rotation
                              G4ThreeVector(),            //at (0,0,0)
                              lWorld,                     //logical volume
                              "World",                    //name
@@ -107,17 +106,17 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //                           
   G4Box*
   sBox = new G4Box("Container",                           //its name
-                   boxSizeXY/2.,boxSizeXY/2.,boxSizeZ/2.);//its dimensions
+                   fBoxSizeXY/2.,fBoxSizeXY/2.,fBoxSizeZ/2.);//its dimensions
                    
   G4LogicalVolume*
   lBox = new G4LogicalVolume(sBox,                        //its shape
-                             aMaterial,                   //its material
+                             fTargetMaterial,             //its material
                              "theBox");                   //its name
 
-  pBox = new G4PVPlacement(0,                             //no rotation
+  fBox = new G4PVPlacement(0,                             //no rotation
                            G4ThreeVector(),               //at (0,0,0)
                            lBox,                          //its logical volume
-                           aMaterial->GetName(),          //its name
+                           fTargetMaterial->GetName(),    //its name
                            lWorld,                        //its mother  volume
                            false,                         //no boolean operation
                            0);                            //copy number
@@ -130,17 +129,17 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   //always return the root volume
   //
-  return pWorld;
+  return fWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::PrintParameters()
 {
-  G4cout << "\n The Box is " << G4BestUnit(boxSizeXY,"Length")
-         << " x " << G4BestUnit(boxSizeXY,"Length")
-         << " x " << G4BestUnit(boxSizeZ,"Length")
-         << " of " << aMaterial->GetName() << G4endl;
+  G4cout << "\n The Box is " << G4BestUnit(fBoxSizeXY,"Length")
+         << " x " << G4BestUnit(fBoxSizeXY,"Length")
+         << " x " << G4BestUnit(fBoxSizeZ,"Length")
+         << " of " << fTargetMaterial->GetName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -150,9 +149,9 @@ void DetectorConstruction::SetTargetMaterial(G4String materialChoice)
   // search the material by its name
   G4Material* mat =
     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
-  if (mat != aMaterial) {
+  if (mat != fTargetMaterial) {
     if(mat) {
-      aMaterial = mat;
+      fTargetMaterial = mat;
       UpdateGeometry();
     } else {
       G4cout << "### Warning!  Target material: <"
@@ -168,9 +167,9 @@ void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
   // search the material by its name
   G4Material* mat =
     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
-  if (mat != wMaterial) {
+  if (mat != fWorldMaterial) {
     if(mat) {
-      wMaterial = mat;
+      fWorldMaterial = mat;
       UpdateGeometry();
     } else {
       G4cout << "### Warning! World material: <"
@@ -183,15 +182,15 @@ void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 
 void DetectorConstruction::SetSizeXY(G4double value)
 {
-  boxSizeXY = value; 
-  if (worldSize<boxSizeXY) worldSize = 1.2*boxSizeXY;
+  fBoxSizeXY = value; 
+  if (fWorldSize<fBoxSizeXY) fWorldSize = 1.2*fBoxSizeXY;
   UpdateGeometry();
 }
 
 void DetectorConstruction::SetSizeZ(G4double value)
 {
-  boxSizeZ = value; 
-  if (worldSize<boxSizeZ) worldSize = 1.2*boxSizeZ;
+  fBoxSizeZ = value; 
+  if (fWorldSize<fBoxSizeZ) fWorldSize = 1.2*fBoxSizeZ;
   UpdateGeometry();
 }
 
@@ -201,7 +200,7 @@ void DetectorConstruction::SetSizeZ(G4double value)
 
 void DetectorConstruction::UpdateGeometry()
 {
-  if (pWorld) 
+  if (fWorld) 
     G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
 }
 

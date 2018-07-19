@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -37,16 +39,18 @@ Registering model factories...
 You have successfully registered the following model factories.
 Registered model factories:
   generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
   drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
 
 Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
   attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -54,9 +58,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
 Checking overlaps for volume crystal ... OK! 
 Checking overlaps for volume crystal ... OK! 
 Checking overlaps for volume crystal ... OK! 
@@ -104,7 +106,7 @@ Checking overlaps for volume Patient ... OK!
 ***** Table : Nb of materials = 3 *****
 
  Material:  Lu2SiO5    density:  7.400 g/cm3   RadL:   1.143 cm   Nucl.Int.Length:  20.920 cm 
-                       Imean: 418.807 eV 
+                       Imean: 418.807 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Lu (Lu)   Z = 71.0   N =   175   A = 174.967 g/mole
          --->  Isotope: Lu175   Z = 71   N = 175   A = 174.94 g/mole   abundance: 97.410 %
@@ -151,7 +153,7 @@ Checking overlaps for volume Patient ... OK!
 
 
  Material: G4_BRAIN_ICRP    density:  1.040 g/cm3   RadL:  35.403 cm   Nucl.Int.Length:  72.156 cm 
-                       Imean:  73.300 eV 
+                       Imean:  73.300 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -203,18 +205,30 @@ Checking overlaps for volume Patient ... OK!
 
 
 G4SDManager::AddNewCollection : the collection <crystal/edep> is registered at 1
-New sensitive detector <crystal> is registered at /
 G4SDManager::AddNewCollection : the collection <patient/dose> is registered at 2
-New sensitive detector <patient> is registered at /
 #
 /run/beamOn 10000
+=======================================================================
+======       Radioactive Decay Physics Parameters              ========
+=======================================================================
+Max life time                                     1.4427e+06 ps
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Auger cascade enabled                             1
+Check EM cuts disabled for atomic de-excitation   0
+Use Bearden atomic level energies                 0
+=======================================================================
 ### Run 0 start.
 
 ---> end of event: 0
 
 --------------------End of Global Run-----------------------
-  The run was 10000 events  Nb of 'good' e+ annihilations: 1294
- Total dose in patient : 291.523 picoGy 
+  The run was 10000 events  Nb of 'good' e+ annihilations: 1344
+ Total dose in patient : 290.282 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

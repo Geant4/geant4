@@ -1,4 +1,4 @@
-$Id: History 102323 2017-01-23 10:16:44Z gcosmo $
+$Id: History 109509 2018-04-26 07:07:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,32 +17,119 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15.08.2016 V.Ivanchenko, emlowen-V10-01-20
+25.04.2018 V.Ivanchenko, emlowen-V10-04-01
+- G4LivermorePhotoElectricModel - fixed double deletion of static members
+    happens when models defined per region (problem #2052)
+
+19.12.2017 G.Cosmo, emlowen-V10-04-00
+- Fixed self-consistency in G4ecpssrFormFactorMixsModel header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
+
+03.11.1017 V.Ivanchenko, emlowen-V10-03-19
+- G4RayleighScattering - added C++11 keywords to fix compilation warning at clang
+
+02.11.2017 V.Ivanchenko, emlowen-V10-03-18
+- G4LivermorePhotoElectricModel - fixed messages in the case of  G4Exception
+
+01.11.1017 D.Sawkey, emlowen-V10-03-17
+- G4RayleighScattering - add ProcessDescription
+
+20.10.2017 V.Ivanchenko, emlowen-V10-03-16
+- G4LivermorePhotoElectricModel - (M. Bandieramonte) changed dataset
+    to G4EMLOW7.2, where parameterisation is in the livermore/phot_epics2014
+
+10.10.2017 L.Pandola, emlowen-V10-03-15
+- added protection against (rare) infinite loops in 
+  G4PenelopeOscillatorManager, happening for materials made by >20 elements
+
+14.09.2017 V.Ivanchenko, emlowen-V10-03-14
+- G4hICRU49He - fixed Coverity warning
+
+01.09.2017 V.Ivanchenko, emlowen-V10-03-13
+- G4LivermorePhotoElectricModel - (M. Bandieramonte) new method of 
+    parameterisations based on epics2014 data (required G4EMLOW7.1)
+
+03.08.2017 V.Ivanchenko, emlowen-V10-03-12
+- G4MicroElecElastic, G4MicroElecInelastic - make coherent
+    initialsation of models
+
+02.08.2017 V.Ivanchenko, emlowen-V10-03-11
+- G4LowECapture - added scaling of energy threshold for ions
+
+17.06.2017 S.Incerti, emlowen-V10-03-10
+- bugzilla 1980 and C++ nullptr in G4LivermorePhotoElectricModel
+
+09.06.2017 V.Ivanchenko, emlowen-V10-03-09
+- G4BoldyshevTripletModel - fixed trivial Coverity warning
+
+05.06.2017 V.Ivanchenko, emlowen-V10-03-08
+- G4LivermoreGammaConversionModel, G4BoldyshevTripletModel - fixed
+  triplet production
+
+31.05.2017 V.Ivanchenko, emlowen-V10-03-07
+- G4LivermoreGammaConversionModel - added possibility of triplet
+    simulation, cleanup the code
+- G4BoldyshevTripletModel - cleanup of the code
+
+29.05.2017 V.Ivanchenko, emlowen-V10-03-06
+- G4LivermorePhotoElectricModel, G4LivermoreRayleighModel - minor
+    code cleanup, a small speedup foreseen
+- G4BoldyshevTripletModel, G4Generator2BS - use G4Log
+
+13.05.2017 V.Ivanchenko, emlowen-V10-03-05
+- G4MicroElecCrossSectionDataSet - fixed gcc 7.1 warnings
+
+12.05.2017 V.Ivanchenko, emlowen-V10-03-04
+10.05.2017 V.Ivanchenko, emlowen-V10-03-03
+- G4CrossSectionDataSet, G4MuElecCrossSectionDataSet - fixed gcc 7.1 warnings
+
+30.01.2017 JMC Brow, S. Incerti, emlowen-V10-03-02
+- G4LowEPPolarizedComptonModel - fixed FPE in comptation of std::acos
+
+19.12.2016 S. Incerti, emlowen-V10-03-01
+- extended coverage of shell ionisation models by M. Reis and A. Taborda
+
+19.12.2016 V.Ivanchenko, emlowen-V10-03-00
+- G4LivermoreNuclearGammaConversionModel, G4BoldyshevTripletModel
+    fixed file name to read data from G4LEDATA structure
+
+01.12.2016 L.Pandola, emlowen-V10-02-11
+- Fix memory leak in G4PenelopeBremsstrahlungFS 
+
+27.10.2016 M.Raine, emlowen-V10-02-10
+- G4MicroElecInelasticModel - changes to allow faster computation
+- needs G4EMLOW6.50
+
+20.09.2016 L.Pandola, emlowen-V10-02-09
+- Include C++11 features in the Penelope models (nullptr, 
+  range-based loops)
+
+15.08.2016 V.Ivanchenko, emlowen-V10-02-08
 - G4hParameterisedLossModel - fixed PVS-Studio warning (A.Karpov)
 
-04.07.2016 S. Incerti
+04.07.2016 S. Incerti, emlowen-V10-02-07
 - removed verbosity in G4AtomicTransitionManager (see bugzilla 1874)
 
-24.05.2015 L. Pandola,  emlowen-V10-01-19
+24.05.2016 L. Pandola, emlowen-V10-02-06
 - fix compiler warning in G4PenelopeRayleighModel by gcc-6.1
 
-10.05.2016 JMCBrown, SI,
+10.05.2016 JMCBrown, SI, emlowen-V10-02-05
 - updated G4LowEPComptonModel to fix problem 1676
 
-04.05.2016 V.Ivanchenko,
+04.05.2016 V.Ivanchenko, emlowen-V10-02-04
 - G4ecpssrBaseLixsModel - fixed gcc6.1 warning
 
-04-03-2016, SI,
+04-03-2016, SI, tag emlowen-V10-02-03
 -replaced std::log by G4Log in test
 -replaced std::log10() by G4Log()/g4pow->logZ(10) in tests
 
-02.03.2016 S. Incerti,
+02.03.2016 S. Incerti, emlowen-V10-02-02
            - Replaced std::exp by G4Exp
 
-20.01.2016 S. Incerti, emlowen-V10-01-18
+20.01.2016 S. Incerti, emlowen-V10-02-01
            - Fixed bugzilla 1816
 
-11.12.2015 V.Ivanchenko,
+11.12.2015 V.Ivanchenko, emlowen-V10-02-00
            - G4LivermorePolarizedPhotoElectricGDModel - fixed Coverity warning
            - G4LivermorePolarizedPhotoElectricGDModel, G4LivermorePolarizedPhotoElectricModel
              G4LivermorePolarizedPhotoElectricModel, G4LivermorePolarizedGammaConversionModel, 

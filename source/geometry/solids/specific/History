@@ -1,4 +1,4 @@
-$Id: History 102297 2017-01-20 13:33:54Z gcosmo $
+$Id: History 110899 2018-06-25 08:39:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,29 +10,219 @@ $Id: History 102297 2017-01-20 13:33:54Z gcosmo $
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all directory-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+It DOES NOT substitute the log-message one should put at every
+committal in the source repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-31-October-2016  G.Cosmo           (geom-specific-V10-01-20)
+25-Jun-2018  G.Cosmo               (geom-specific-V10-04-10)
+- Use dynamic_cast to attempt fix for spurious compilation warnings on
+  CentOS7/gcc-5.3 on G4UTessellatedSolid wrapper.
+
+17-May-2018  J.Madsen              (geom-specific-V10-04-09)
+- Updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+11-April-2018  G.Cosmo             (geom-specific-V10-04-08)
+- Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
+
+13-February-2018  E.Tcherniaev     (geom-specific-V10-04-07)
+- Corrected conversion of input parameters to internal structure (used for
+  caching for adoption in GDML persistency) in G4UPolycone and G4UPolyhedra
+  wrappers.
+
+9-February-2018  G.Cosmo           (geom-specific-V10-04-06)
+- Caching facets and vertices in G4UTessellatedSolid wrapper for properly
+  treating indexing in facets.
+
+31-January-2018  G.Cosmo           (geom-specific-V10-04-05)
+- Corrected use of facets indeces in G4UTessellatedSolid for visualization.
+- Minor cleanup in G4TessellatedSolid::CreatePolyhedron(), no functional
+  changes.
+
+15-January-2018  G.Cosmo           (geom-specific-V10-04-04)
+- Added validity checks in G4UTessellatedSolid::AddFacet().
+
+11-January-2018  G.Cosmo           (geom-specific-V10-04-03)
+- Added and enabled VecGeom wrapper for G4TessellatedSolid.
+  Requires tags cmake-V10-04-01 and config-V10-04-00.
+
+20-December-2017  G.Cosmo          (geom-specific-V10-04-02)
+- Enabled VecGeom wrappers for G4ExtrudedSolid and G4Hype.
+
+13-December-2017  E.Tcherniaev     (geom-specific-V10-04-01)
+- Removed redundant data initialistion in G4ExtrudedSolid constructors. 
+
+11-December-2017  E.Tcherniaev     (geom-specific-V10-04-00)
+- Added missing initialisation of two data-members in copy-ctor and
+  assignment operator of G4ExtrudedSolid. Addressing problem report #2016.
+
+22-November-2017  G.Cosmo         (geom-specific-V10-03-25)
+- Fix in SurfaceNormal() for G4ExtrudedSolid to assure explicit
+  counting of the surfaces where the point is placed on edg
+
+2-November-2017  G.Cosmo          (geom-specific-V10-03-24)
+- Fixed compilation warning introduced with last tag.
+
+31-October-2017  E.Tcherniaev     (geom-specific-V10-03-23)
+- Added specialised implementation for constructs defining a non-convex right
+  prism in G4ExtrudedSolid.
+
+20-October-2017  G.Cosmo          (geom-specific-V10-03-22)
+- G4TessellatedSolid: print also solid's name in StreamInfo().
+
+17-October-2017  G.Cosmo          (geom-specific-V10-03-21)
+- Added VecGeom wrapper G4UHype for G4Hype, not yet activated, pending
+  fixes in VecGeom.
+
+16-October-2017  G.Cosmo          (geom-specific-V10-03-20)
+- Temporarly disabled wrappers for G4Tet and G4GenericPolycone, pending
+  their corresponding implementation in VecGeom.
+
+28-September-2017  G.Cosmo        (geom-specific-V10-03-19)
+- Corrected initialisation of polyhedra by vertices in G4UPolyhdra wrapper
+  following the changes in VecGeom.
+
+15-September-2017  G.Cosmo        (geom-specific-V10-03-18)
+- G4SolidsWorkspacePool: use DLL export flag for static thread-local
+  symbol of the workspace.
+
+12-September-2017  G.Cosmo        (geom-specific-V10-03-17)
+- G4Voxelizer: directly set components for bounding-box instead of
+  recreating it in BuildBoundingBox(..).
+
+8-September-2017  E.Tcherniaev    (geom-specific-V10-03-16)
+- Added specialised implementation for constructs defining a convex right
+  prism in G4ExtrudedSolid.
+
+4-September-2017  G.Cosmo         (geom-specific-V10-03-15, 14)
+- Temporarly disabled wrapper for extruded-solid, pending implementation
+  of extruded-solid in VecGeom.
+
+16-August-2017  J.Allison         (geom-specific-V10-03-13)
+- Twisted solids: Fixed bug in drawing polyhedra with negative twist angle.
+  Addressing problem report #1995.
+
+27-July-2017  E.Tcherniaev        (geom-specific-V10-03-12)
+- G4EllipticalCone: corrected samping of random points on lateral surface in
+  function GetPointOnSurface().
+
+24-July-2017  E.Tcherniaev        (geom-specific-V10-03-11)
+- G4EllipticalCone: improved GetPointOnSurface() to have uniform sampling of
+  points, using function G4RandomPointOnEllipse().
+
+20-July-2017  E.Tcherniaev        (geom-specific-V10-03-10, 09)
+- G4EllipticalCone: reviewed implementation of Inside(), DistanceToIn/Out(p),
+  SurfaceNormal() and GetPointOnSurface(); made more compact and performant.
+  Addressing problem report #1974.
+
+15-June-2017  G.Cosmo             (geom-specific-V10-03-08)
+- Enabled adapter also in G4UPolycone wrapper.
+- Added check on open solid for G4UPolyhedra wrapper.
+
+6-June-2017  G.Cosmo              (geom-specific-V10-03-07)
+- Enable adapter for VecGeom shapes in G4U* wrappers for: paraboloid,
+  polyhedra and GenericTrap. From now on, wrappers depends directly on
+  VecGeom shapes implementation. USolids API is deprecated and no longer
+  supported.
+
+24-May-2017  G.Cosmo              (geom-specific-V10-03-06)
+- Renamed ambiguous name Extent() in all solids and G4U* wrappers to
+  BoundingLimits(). Change required in order to avoid signature conflict
+  with VecGeom in G4U* wrappers.
+  Requires tag geommng-V10-03-16.
+
+11-May-2017  G.Cosmo              (geom-specific-V10-03-05)
+- Removed potential race condition in G4VTwistSurface::AmIOnLeftSide().
+  Addressing problem report #1972.
+
+7-April-2017  G.Cosmo             (geom-specific-V10-03-04)
+- Renamed G4SurfaceVoxelizer to G4Voxelizer and extended to support
+  voxelisation of shapes in 3D space. Adapted G4TessellatedSolid accordingly.
+
+13-March-2017  G.Cosmo            (geom-specific-V10-03-03)
+- G4SolidsWorkspacePool: implemented CleanUpAndDestroyAllWorkspaces(),
+  to be called by worker threads. Removed declaration (i.e. not implemented)
+  of protected method ReleaseAndDestroyWorkspace().
+
+2-March-2017  E.Tcherniaev        (geom-specific-V10-03-02)
+- Fixed possible rounding off error in calculation of 'astep' (max angle
+  for one step) in CalculateExtent() for G4Polycone, G4GenericPolycone
+  and related USolids wrappers.
+
+27-February-2017  E.Tcherniaev    (geom-specific-V10-03-01)
+- Revised implementation of GetCubicVolume() and GetSurfaceArea() for
+  G4EllipticalTube, to return exact values.
+- Revised implementation of GetSurfaceArea() for G4EllipticalCone, to
+  return exact value; moved both GetCubicVolume() and GetSurfaceArea() to
+  be not inline.
+
+13-December-2016  G.Cosmo         (geom-specific-V10-03-00)
+- Correction in G4UExtrudedSolid to signature for CalculateExtent().
+  Fixes issue of undefined symbol if extruded-solid not included in the
+  list of VecGeom wrappers to activate.
+
+30-November-2016  E.Tcherniaev    (geom-specific-V10-02-25)
+- Call RemoveRedundantVertices() from G4GeomTools in CalculateExtent()
+  for G4Polycone, G4Polyhedra and related USolids wrappers.
+- Fix in G4Parabolid and G4UParaboloid for correct computation of extent.
+
+18-November-2016  E.Tcherniaev    (geom-specific-V10-02-24)
+- Added consistency checks for extent computation in USolids wrappers.
+- Fix in cached parameters in G4UPolyhedra.
+
+10-November-2016  G.Cosmo         (geom-specific-V10-02-23)
+- G4UPolyhedra re-introduced new implementation of CalculateExtent() using
+  G4BoundingEnvelope and extended wrapper to cache corners and start/end
+  Phi parameters, to overcome issues in VecGeom on treatment of angles.
+
+10-November-2016  E.Tcherniaev    (geom-specific-V10-02-22)
+- Added caching of corners and implementation of GetCorner() in G4UPolycone
+  in order to assure correct translation.
+- Withdrawn changes in G4UPolyhedra introduced in tag geom-specific-V10-02-16
+  until understood proper conversion from VecGeom.
+
+7-November-2016  E.Tcherniaev    (geom-specific-V10-02-21)
+- Correction in G4EllipticalCone::DistanceToOut(p) to make it more accurate.
+- Added optional debug flag G4BBOX_EXTENT in GNUMake build to compare
+  extent calculation by simply using bounding-box.
+
+3-November-2016  G.Cosmo         (geom-specific-V10-02-20, 19)
+- Fix in G4PolyPhiFace for potential unitialised data in Inside().
+
+31-October-2016  E.Tcherniaev    (geom-specific-V10-02-18)
+- Re-implemented CalculateExtent() to make use of G4BoundingEnvelope and
+  removed no-longer used method CreateRotatedVertices() in G4Polyhedra,
+  G4EllipticalCone, G4Polycone, G4Paraboloid, G4ExtrudedSolid, G4Hype,
+  G4GenericPolycone, G4TessellatedSolid, G4TwistedTubs and related USolids
+  wrappers.
 - Use G4RandFlat instead of RandFlat.
 
-21-October-2016  G.Cosmo
+21-October-2016  G.Cosmo         (geom-specific-V10-02-17)
 - Moved initialisation of G4GeomSplitter thread-local data to be inline
   along with generic template type.
   Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
-20-September-2016  G.Cosmo
+19-October-2016  E.Tcherniaev      (geom-specific-V10-02-16)
+- Reimplemented CalculateExtent() in G4Polycone, G4Polyhedra, G4GenericPolycone
+  and associated USolids wrappers, to make use of G4BoundingEnvelope.
+
+5-October-2016  E.Tcherniaev       (geom-specific-V10-02-15, 14)
+- Reimplemented CalculateExtent() in G4Tet, G4UTet, G4GenericTrap,
+  G4UGenericTrap, G4EllipticalTube and G4VTwistedFaceted, to make use
+  of G4BoundingEnvelope; removed no-longer used method CreateRotatedVertices().
+
+20-September-2016  G.Cosmo         (geom-specific-V10-02-13)
 - Moved accessors/modifiers for splitter data to non-inline in
   G4PolyhedraSide and G4PolyconeSide.
   Explicitly initialise G4GeomSplitter data in G4SolidsWorkspace
   translation unit.
   Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
-06-July-2016  E.Tcherniaev
+06-July-2016  E.Tcherniaev         (geom-specific-V10-02-12)
 - Fixed monir typo in function Create() for G4Polycone, G4Polyhedra and
   G4GenericPolycone.
   Fixed minor typos in G4GenericTrap::SurfaceNormal() and
@@ -40,42 +230,59 @@ committal in the CVS repository !
   Issues detected by PVS-Studio static code analyzer.
   Addressing problem report #1876.
 
-24-May-2016  G.Cosmo               (geom-specific-V10-01-19)
+24-May-2016  G.Cosmo               (geom-specific-V10-02-11)
 - Correction in G4UExtrudedSolid for definition of CreatePolyhedron().
 
-20-May-2016  G.Cosmo
+20-May-2016  G.Cosmo               (geom-specific-V10-02-10)
 - Moved accessors and modifiers in USolids wrappers to be not inlined.
   Required modification in order to allow correct dispatching to VecGeom
   types.
 
-15-Apr-2016  G.Cosmo
+15-Apr-2016  G.Cosmo               (geom-specific-V10-02-09)
 - Added flag in USolids wrappers for partial use of USolids/VecGeom types.
 
-31-Mar-2016  G.Cosmo
+31-Mar-2016  G.Cosmo               (geom-specific-V10-02-08, 07)
 - Added overloaded CreatePolyhedron() method to USolids wrappers.
   It is now possible to visualize supported VecGeom shapes.
 - Added implementation of CreatePolyhedron() in UExtrudedSolid wrapper.
 
-10-Mar-2016  G.Cosmo
+10-Mar-2016  G.Cosmo               (geom-specific-V10-02-06)
 - Added overloaded GetEntityType() method to USolids wrappers.
 
-07-Mar-2016  E.Tcherniaev
+07-Mar-2016  E.Tcherniaev          (geom-specific-V10-02-05)
 - Fix in G4IntersectingCone for smaller precision constant in LineHitsCone1()
   and LineHitsCone2(). Fixes issue observed in G4GenericPolycone.
   Addressing problem report #1794.
 
-25-Feb-2016  E.Tcherniaev          (geom-specific-V10-01-18)
+03-Mar-2016  G.Cosmo               (geom-specific-V10-02-04)
+- Fixed compilation warnings for potential uninitialised values in
+  G4ExtrudedSolid::CheckPolygon() function introduced in previous tag.
+
+03-Mar-2016  E.Tcherniaev          (geom-specific-V10-02-03)
+- Added 'const' qualifier for methods in G4ExtrudedSolid.
+  Added CheckPolygon() to remove collinear and coincident points from polygons.
+- G4QuadrangularFacet: added exhaustive tests in constructor to catch potential
+  problems with a quadrangular facet: collinear vertices, non planar surface,
+  degenerate, concave or self intersecting quadrilateral.
+- G4TriangularFacet: Improved test in constructor to detect degenerate (too
+  small or too narrow) triangles.
+
+25-Feb-2016  E.Tcherniaev          (geom-specific-V10-02-02)
 - Correction in G4ExtrudedSolid::AddGeneralPolygonFacets() for precision
   treatment in construction of tessels to avoid cases of collinear points
   and consequent degenerating triangles.
   Address problem report #1777.
 - Use pre-computed kCarToleranceHalf constant in G4ExtrudedSolid, now
   protected in G4TessellatedSolid.
+- Improved algorithms for computation of area in G4TriangularFacet and
+  G4QuadrangularFacet. Added post-const qualifier to GetArea().
 
-16-Feb-2016  G.Cosmo               (geom-specific-V10-01-17)
+16-Feb-2016  G.Cosmo               (geom-specific-V10-02-01)
+- Revised implementation for GetSurfaceArea() and GetCubicVolume() in
+  G4GenericTrap (E.Tcherniaev).
 - Protected debug warning in G4GenericTrap::SurfaceNormal() within G4SPECSDEBUG.
 
-02-Feb-2016  E.Tcherniaev          (geom-specific-V10-01-16)
+02-Feb-2016  E.Tcherniaev          (geom-specific-V10-02-00)
 - Fix in G4GenericTrap for compuation of extent.
   Addressing problem report #1809.
 - Use dot() in formula for computation of GetCubicVolume() in
@@ -86,7 +293,7 @@ committal in the CVS repository !
   G4TessellatedSolid (J.Allison).
 
 29-Oct-2015  G.Cosmo               (geom-specific-V10-01-14)
-- Added debug printouts withing G4SPECSDEBUG in G4TessellatedSolid for
+- Added debug printouts within G4SPECSDEBUG in G4TessellatedSolid for
   DistanceToIn/Out(p,v) to identify potential wrong responses.
 
 26-Oct-2015  G.Cosmo               (geom-specific-V10-01-13)

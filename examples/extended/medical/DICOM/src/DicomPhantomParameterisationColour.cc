@@ -58,8 +58,15 @@ void DicomPhantomParameterisationColour::ReadColourData()
     fColours["Default"] = blankAtt;
     
     //----- Read file
+#ifdef DICOM_USE_HEAD
+ G4String path = getenv("DICOM_PATH");
+ G4String colourFile = path+"/ColourMap.dat";
+ G4cout<< colourFile << G4endl; 
+#else
     G4String colourFile = "ColourMap.dat";
-    std::ifstream fin(colourFile.c_str());
+#endif
+  
+   std::ifstream fin(colourFile.c_str());
     G4int nMate;
     G4String mateName;
     G4double cred, cgreen, cblue, copacity;

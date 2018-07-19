@@ -47,8 +47,8 @@ G4double G4ParticleHPKallbachMannSyst::Sample(G4double anEnergy)
   if(zero>1) zero=1.;
   if(zero<-1)zero=-1.;
   G4double max = Kallbach(zero, anEnergy);
-  double upper = Kallbach(1., anEnergy);
-  double lower = Kallbach(-1., anEnergy);
+  G4double upper = Kallbach(1., anEnergy);
+  G4double lower = Kallbach(-1., anEnergy);
   if(upper>max) max=upper;
   if(lower>max) max=lower;
   G4double value, random;
@@ -84,10 +84,12 @@ G4double G4ParticleHPKallbachMannSyst::Kallbach(G4double cosTh, G4double anEnerg
 G4double G4ParticleHPKallbachMannSyst::GetKallbachZero(G4double anEnergy)
 {
   G4double result;
-  if ( theCompoundFraction == 1 ) 
-  { 
-     //G4cout << "080730b Adjust theCompoundFraction " << G4endl;
-     theCompoundFraction *= (1-1.0e-15);   
+  //delta 2.0e-16 in not good.
+  //delta 4.0e-16 is OK 
+  //safety factor of 2
+  G4double delta = 8.0e-16;
+  if ( std::abs (theCompoundFraction - 1 ) < delta ) { 
+     theCompoundFraction = 1.0-delta;   
   } 
   result = 0.5 * (1./A(anEnergy)) * G4Log((1-theCompoundFraction)/(1+theCompoundFraction));
   return result;
@@ -139,7 +141,6 @@ G4double G4ParticleHPKallbachMannSyst::A(G4double anEnergy)
     throw G4HadronicException(__FILE__, __LINE__, "Severe error in the sampling of Kallbach-Mann Systematics");
   }
   
-  //result = C1*X1 + C2*G4Pow::GetInstance()->powA(X1, 3.) + C3*Ma*mb*G4Pow::GetInstance()->powA(X3, 4.);
   result = C1*X1 + C2*G4Pow::GetInstance()->powN(X1, 3) + C3*Ma*mb*G4Pow::GetInstance()->powN(X3, 4);
   return result;
 }
@@ -151,10 +152,8 @@ G4double G4ParticleHPKallbachMannSyst::SeparationEnergy(G4int Ac, G4int Nc, G4in
   G4int Zc = Ac-Nc;
   result = 15.68*(Ac-AA);
   result += -28.07*((Nc-Zc)*(Nc-Zc)/Ac - (NA-ZA)*(NA-ZA)/AA);
-  //result += -18.56*(std::pow(G4double(Ac), 2./3.) - std::pow(G4double(AA), 2./3.));
   result += -18.56*(G4Pow::GetInstance()->A23(G4double(Ac)) - G4Pow::GetInstance()->A23(G4double(AA)));
   result +=  33.22*((Nc-Zc)*(Nc-Zc)/G4Pow::GetInstance()->powA(G4double(Ac), 4./3.) - (NA-ZA)*(NA-ZA)/G4Pow::GetInstance()->powA(G4double(AA), 4./3.));
-  //result += -0.717*(Zc*Zc/std::pow(G4double(Ac),1./3.)-ZA*ZA/std::pow(G4double(AA),1./3.));
   result += -0.717*(Zc*Zc/G4Pow::GetInstance()->A13(G4double(Ac))-ZA*ZA/G4Pow::GetInstance()->A13(G4double(AA)));
   result +=  1.211*(Zc*Zc/Ac-ZA*ZA/AA);
   G4double totalBinding(0);

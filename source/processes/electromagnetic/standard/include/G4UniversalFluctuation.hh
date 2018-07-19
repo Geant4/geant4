@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh 81365 2014-05-27 12:56:32Z gcosmo $
+// $Id: G4UniversalFluctuation.hh 106204 2017-09-19 10:37:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -38,12 +38,6 @@
 //
 // Modifications:
 //
-// 09-12-02 remove warnings (V.Ivanchenko)
-// 28-12-02 add method Dispersion (V.Ivanchenko)
-// 07-02-03 change signature (V.Ivanchenko)
-// 13-02-03 Add name (V.Ivanchenko)
-// 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
-// 07-02-05 define problim = 5.e-3 (mma)
 //
 // Class Description:
 //
@@ -58,37 +52,48 @@
 
 #include "G4VEmFluctuationModel.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4Poisson.hh"
+#include <CLHEP/Random/RandomEngine.h>
 
 class G4UniversalFluctuation : public G4VEmFluctuationModel
 {
 
 public:
 
-  G4UniversalFluctuation(const G4String& nam = "UniFluc");
+  explicit G4UniversalFluctuation(const G4String& nam = "UniFluc");
 
   virtual ~G4UniversalFluctuation();
 
   virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
-				      const G4DynamicParticle*,
-				      G4double,
-				      G4double,
-				      G4double);
+                                      const G4DynamicParticle*,
+                                      G4double,
+                                      G4double,
+                                      G4double) override;
 
-  virtual G4double Dispersion(    const G4Material*,
-				  const G4DynamicParticle*,
-				  G4double,
-				  G4double);
+  virtual G4double Dispersion(const G4Material*,
+                              const G4DynamicParticle*,
+                              G4double,
+                              G4double) override;
 
-  virtual void InitialiseMe(const G4ParticleDefinition*);
+  virtual void InitialiseMe(const G4ParticleDefinition*) final;
 
   // Initialisation prestep
-  virtual void SetParticleAndCharge(const G4ParticleDefinition*, G4double q2);
+  virtual void SetParticleAndCharge(const G4ParticleDefinition*, 
+                                    G4double q2) final;
 
 private:
 
+  inline void AddExcitation(CLHEP::HepRandomEngine* rndm, 
+                            G4double a, G4double e, G4double& eav, 
+                            G4double& eloss, G4double& esig2); 
+
+  inline void SampleGauss(CLHEP::HepRandomEngine* rndm, 
+                          G4double eav, G4double esig2, 
+                          G4double& eloss); 
+
   // hide assignment operator
-  G4UniversalFluctuation & operator=(const  G4UniversalFluctuation &right);
-  G4UniversalFluctuation(const  G4UniversalFluctuation&);
+  G4UniversalFluctuation & operator=(const  G4UniversalFluctuation &right) = delete;
+  G4UniversalFluctuation(const  G4UniversalFluctuation&) = delete;
 
   const G4ParticleDefinition* particle;
   const G4Material* lastMaterial;
@@ -117,10 +122,9 @@ private:
   G4double e1,e2;
 
   G4double minNumberInteractionsBohr;
-  G4double theBohrBeta2;
   G4double minLoss;
   G4double nmaxCont;
-  G4double rate,fw;
+  G4double rate,a0,fw; 
 
   G4int     sizearray;
   G4double* rndmarray;
@@ -128,6 +132,39 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+inline void 
+G4UniversalFluctuation::AddExcitation(CLHEP::HepRandomEngine* rndm, 
+                                      G4double ax, G4double ex, G4double& eav,
+                                      G4double& eloss, G4double& esig2) 
+{
+  if(ax > nmaxCont) {
+    eav  += ax*ex;
+    esig2 += ax*ex*ex;
+  } else {
+    G4int p = G4Poisson(ax);
+    if(p > 0) { eloss += ((p + 1) - 2.*rndm->flat())*ex; }
+  }
+}
+
+inline void 
+G4UniversalFluctuation::SampleGauss(CLHEP::HepRandomEngine* rndm, 
+                                    G4double eav, G4double esig2, 
+                                    G4double& eloss)
+{
+  G4double x = eav;
+  G4double sig = std::sqrt(esig2);
+  if(eav < 0.25*sig) {
+    x += (2.*rndm->flat() - 1.)*eav;
+  } else {
+    do { 
+      x = G4RandGauss::shoot(rndm, eav, sig);
+    } while (x < 0.0 || x > 2*eav);
+    // Loop checking, 23-Feb-2016, Vladimir Ivanchenko
+  }
+  eloss += x;
+} 
 
 #endif
 

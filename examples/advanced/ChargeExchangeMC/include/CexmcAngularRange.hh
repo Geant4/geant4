@@ -54,8 +54,8 @@ struct  CexmcAngularRange
     CexmcAngularRange()
     {}
 
-    CexmcAngularRange( G4double  top, G4double  bottom, G4int  index ) :
-        top( top ), bottom( bottom ), index( index )
+    CexmcAngularRange( G4double  top_, G4double  bottom_, G4int  index_ ) :
+        top( top_ ), bottom( bottom_ ), index( index_ )
     {}
 
     G4double  top;

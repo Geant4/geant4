@@ -54,8 +54,8 @@
 
 
 CexmcEnergyDepositDigitizerMessenger::CexmcEnergyDepositDigitizerMessenger(
-        CexmcEnergyDepositDigitizer *  energyDepositDigitizer ) :
-    energyDepositDigitizer( energyDepositDigitizer ),
+        CexmcEnergyDepositDigitizer *  energyDepositDigitizer_ ) :
+    energyDepositDigitizer( energyDepositDigitizer_ ),
     setMonitorThreshold( NULL ), setVetoCountersThreshold( NULL ),
     setLeftVetoCounterThreshold( NULL ), setRightVetoCounterThreshold( NULL ),
     setCalorimetersThreshold( NULL ), setLeftCalorimeterThreshold( NULL ),

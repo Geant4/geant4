@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/SteppingAction.cc
+/// \file SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 94619 2015-11-26 13:57:32Z gcosmo $
+// $Id: SteppingAction.cc 105744 2017-08-16 13:13:16Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,6 +138,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     G4ThreeVector momentum = (*secondary)[lp]->GetMomentum();
     Q        += energy;
     Pbalance += momentum;
+    //count e- from internal conversion together with gamma
+    if (particle == G4Electron::Electron()) particle = G4Gamma::Gamma();
     //particle flag
     fParticleFlag[particle]++;
   }
@@ -164,6 +166,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     if (particle == G4Gamma::Gamma()) {
      run->CountGamma(nb);
      Nb = "N ";
+     name = "gamma or e-";
     } 
     if (ip != fParticleFlag.begin()) nuclearChannel += " + ";
     nuclearChannel += Nb + name;
@@ -180,5 +183,4 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

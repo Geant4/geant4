@@ -1,0 +1,338 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_htoc
+#define tools_histo_htoc
+
+struct caxis_dui { //d=double, ui=unsigned int
+  typedef double TC;
+  typedef unsigned int TO;
+  typedef unsigned int bn_t;
+
+  TO m_offset;
+  bn_t m_number_of_bins;
+  TC m_minimum_value;
+  TC m_maximum_value;
+  unsigned char m_fixed;
+  TC m_bin_width;
+  unsigned int m_number_of_edges;
+  TC* m_edges; //[m_number_of_edges]
+};
+
+struct chisto_duiuid {
+  typedef double TC;
+  typedef unsigned int TO;
+  typedef unsigned int TN;
+  typedef double TW;
+  typedef unsigned int dim_t;
+
+  // General :
+  char* m_title;
+  dim_t m_dimension;
+  // Bins :
+  TO m_bin_number;
+  TN* m_bin_entries; //[m_bin_number]
+  TW* m_bin_Sw;      //[m_bin_number]
+  TW* m_bin_Sw2;     //[m_bin_number]
+  TC** m_bin_Sxw;    //[m_bin_number][m_dimension]
+  TC** m_bin_Sx2w;   //[m_bin_number][m_dimension]
+  // Axes :
+  caxis_dui** m_axes; //[m_dimension]
+  // etc :
+  TC* m_in_range_plane_Sxyw; //(dim,size) (1,0) (2,1) (3,3)
+  unsigned int m_number_of_annotations;
+  char** m_annotations; //[m_number_of_annotations]
+  // fast getters :
+  TN m_all_entries; //used if reading from a ROOT file.
+  TN m_in_range_entries;
+  TW m_in_range_Sw;
+  TW m_in_range_Sw2;
+  TC* m_in_range_Sxw;  //[m_dimension]
+  TC* m_in_range_Sx2w; //[m_dimension]
+};
+
+struct cprofile_duiuidd {
+  typedef double TV;
+
+  chisto_duiuid m_histo;
+
+  unsigned char m_is_profile;
+  TV* m_bin_Svw;  //[m_bin_number]
+  TV* m_bin_Sv2w; //[m_bin_number]
+  unsigned char m_cut_v;
+  TV m_min_v;
+  TV m_max_v;
+};
+
+#include "histo_data"
+
+#include "../cstr"
+#include "../cmemT"
+#include "../vdata"
+#include "../forit"
+
+namespace tools {
+namespace histo {
+
+/////////////////////////////////////////////////////////////////////////////
+/// hist_data to C struct ///////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+inline caxis_dui* caxis_dui_alloc(const axis<double,unsigned int>& a_axis) {
+  caxis_dui* a_cp = cmem_alloc<caxis_dui>(1);
+  if(!a_cp) return NULL;
+
+  caxis_dui& a_c = *a_cp;
+
+  typedef double TC;
+
+  a_c.m_offset = a_axis.m_offset;
+  a_c.m_number_of_bins = a_axis.m_number_of_bins;
+  a_c.m_minimum_value = a_axis.m_minimum_value;
+  a_c.m_maximum_value = a_axis.m_maximum_value;
+  a_c.m_fixed = a_axis.m_fixed?1:0;
+  a_c.m_bin_width = a_axis.m_bin_width;
+  a_c.m_number_of_edges = (unsigned int)a_axis.m_edges.size();
+  a_c.m_edges = cmem_alloc_copy<TC>(vec_data(a_axis.m_edges),a_axis.m_edges.size());
+
+  return a_cp;
+}
+
+inline void caxis_dui_free(caxis_dui*& a_cp) {
+  if(!a_cp) return;
+  caxis_dui& a_c = *a_cp;
+
+  cmem_free(a_c.m_edges);
+
+  a_c.m_offset = 0;
+  a_c.m_number_of_bins = 0;
+  a_c.m_minimum_value = 0;
+  a_c.m_maximum_value = 0;
+  a_c.m_fixed = 1;
+  a_c.m_bin_width = 0;
+  a_c.m_number_of_edges = 0;
+
+  cmem_free(a_cp);
+}
+
+inline void chisto_duiuid_assign(chisto_duiuid& a_c,const histo_data<double,unsigned int,unsigned int,double>& a_hd) {
+  typedef double TC;
+  typedef unsigned int TN;
+  typedef double TW;
+
+  a_c.m_title = str_dup(a_hd.m_title.c_str());
+  a_c.m_dimension = a_hd.m_dimension;
+  a_c.m_bin_number = a_hd.m_bin_number;
+  a_c.m_bin_entries = cmem_alloc_copy<TN>(vec_data(a_hd.m_bin_entries),a_hd.m_bin_number);
+  a_c.m_bin_Sw = cmem_alloc_copy<TW>(vec_data(a_hd.m_bin_Sw),a_hd.m_bin_number);
+  a_c.m_bin_Sw2 = cmem_alloc_copy<TW>(vec_data(a_hd.m_bin_Sw2),a_hd.m_bin_number);
+
+ {a_c.m_bin_Sxw = cmem_alloc<TC*>(a_hd.m_bin_number);
+  for(unsigned int ibin=0;ibin<a_hd.m_bin_number;ibin++) {
+    a_c.m_bin_Sxw[ibin] = cmem_alloc_copy<TC>(vec_data(a_hd.m_bin_Sxw[ibin]),a_hd.m_dimension);
+  }}
+ {a_c.m_bin_Sx2w = cmem_alloc<TC*>(a_hd.m_bin_number);
+  for(unsigned int ibin=0;ibin<a_hd.m_bin_number;ibin++) {
+    a_c.m_bin_Sx2w[ibin] = cmem_alloc_copy<TC>(vec_data(a_hd.m_bin_Sx2w[ibin]),a_hd.m_dimension);
+  }}
+
+  // Axes :
+ {a_c.m_axes = cmem_alloc<caxis_dui*>(a_hd.m_dimension);
+  for(unsigned int iaxis=0;iaxis<a_hd.m_dimension;iaxis++) {
+     a_c.m_axes[iaxis] = caxis_dui_alloc(a_hd.m_axes[iaxis]);
+  }}
+
+  // etc :
+  a_c.m_in_range_plane_Sxyw = cmem_alloc_copy<TC>(vec_data(a_hd.m_in_range_plane_Sxyw),dim_planes(a_hd.m_dimension));
+ {a_c.m_number_of_annotations = (unsigned int)a_hd.m_annotations.size();
+  a_c.m_annotations = cmem_alloc<char*>(2*a_hd.m_annotations.size());
+  unsigned int index = 0;
+  tools_mforcit(std::string,std::string,a_hd.m_annotations,it) {
+    a_c.m_annotations[index] = str_dup((*it).first.c_str());index++;
+    a_c.m_annotations[index] = str_dup((*it).second.c_str());index++;
+  }}
+  // fast getters :
+  a_c.m_all_entries = a_hd.m_all_entries;
+  a_c.m_in_range_entries = a_hd.m_in_range_entries;
+  a_c.m_in_range_Sw = a_hd.m_in_range_Sw;
+  a_c.m_in_range_Sw2 = a_hd.m_in_range_Sw2;
+  a_c.m_in_range_Sxw = cmem_alloc_copy<TC>(vec_data(a_hd.m_in_range_Sxw),a_hd.m_dimension);
+  a_c.m_in_range_Sx2w = cmem_alloc_copy<TC>(vec_data(a_hd.m_in_range_Sx2w),a_hd.m_dimension);
+
+  //FIXME : should check all sub pointers.
+  //if(to_del {cmem_free(a_cp);return NULL;}
+}
+
+inline chisto_duiuid* chisto_duiuid_alloc(const histo_data<double,unsigned int,unsigned int,double>& a_hd) {
+  chisto_duiuid* a_cp = cmem_alloc<chisto_duiuid>(1);
+  if(!a_cp) return NULL;
+  chisto_duiuid_assign(*a_cp,a_hd);
+  return a_cp;
+}
+
+inline void chisto_duiuid_clear(chisto_duiuid& a_c) {
+  str_del(a_c.m_title);
+
+  cmem_free(a_c.m_bin_entries);
+  cmem_free(a_c.m_bin_Sw);
+  cmem_free(a_c.m_bin_Sw2);
+
+ {for(unsigned int ibin=0;ibin<a_c.m_bin_number;ibin++) cmem_free(a_c.m_bin_Sxw[ibin]);
+  cmem_free(a_c.m_bin_Sxw);}
+ {for(unsigned int ibin=0;ibin<a_c.m_bin_number;ibin++) cmem_free(a_c.m_bin_Sx2w[ibin]);
+  cmem_free(a_c.m_bin_Sx2w);}
+
+  cmem_free(a_c.m_in_range_plane_Sxyw);
+
+ {for(unsigned int iaxis=0;iaxis<a_c.m_dimension;iaxis++) caxis_dui_free(a_c.m_axes[iaxis]);
+  cmem_free(a_c.m_axes);}
+
+ {for(unsigned int i=0;i<(2*a_c.m_number_of_annotations);i++) str_del(a_c.m_annotations[i]);
+  cmem_free(a_c.m_annotations);}
+
+  cmem_free(a_c.m_in_range_Sxw);
+  cmem_free(a_c.m_in_range_Sx2w);
+
+  a_c.m_dimension = 0;
+  a_c.m_bin_number = 0;
+  a_c.m_number_of_annotations = 0;
+
+  a_c.m_all_entries = 0;
+  a_c.m_in_range_entries = 0;
+  a_c.m_in_range_Sw = 0;
+  a_c.m_in_range_Sw2 = 0;
+}
+
+inline void chisto_duiuid_free(chisto_duiuid*& a_cp) {
+  if(!a_cp) return;
+  chisto_duiuid_clear(*a_cp);
+  cmem_free(a_cp);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+/// C struct to hist_data ///////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+template <class T>
+inline void vec_assign(std::vector<T>& a_v,unsigned int a_number,const T* a_c) {
+  a_v.resize(a_number);
+  for(unsigned int i=0;i<a_number;i++) a_v[i] = a_c[i];
+}
+
+inline void axis_dui_assign(axis<double,unsigned int>& a_axis,const caxis_dui& a_c) {
+  a_axis.m_offset = a_c.m_offset;
+  a_axis.m_number_of_bins = a_c.m_number_of_bins;
+  a_axis.m_minimum_value = a_c.m_minimum_value;
+  a_axis.m_maximum_value = a_c.m_maximum_value;
+  a_axis.m_fixed = a_c.m_fixed==1?true:false;
+  a_axis.m_bin_width = a_c.m_bin_width;
+  vec_assign(a_axis.m_edges,a_c.m_number_of_edges,a_c.m_edges);
+}
+
+inline void histo_data_duiuid_assign(histo_data<double,unsigned int,unsigned int,double>& a_hd,const chisto_duiuid& a_c) {
+  a_hd.m_title = std::string(a_c.m_title);
+  a_hd.m_dimension = a_c.m_dimension;
+  a_hd.m_bin_number = a_c.m_bin_number;
+  vec_assign(a_hd.m_bin_entries,a_c.m_bin_number,a_c.m_bin_entries);
+  vec_assign(a_hd.m_bin_Sw,a_c.m_bin_number,a_c.m_bin_Sw);
+  vec_assign(a_hd.m_bin_Sw2,a_c.m_bin_number,a_c.m_bin_Sw2);
+
+ {a_hd.m_bin_Sxw.resize(a_c.m_bin_number);
+  for(unsigned int ibin=0;ibin<a_c.m_bin_number;ibin++) {
+    vec_assign(a_hd.m_bin_Sxw[ibin],a_c.m_dimension,a_c.m_bin_Sxw[ibin]);
+  }}
+ {a_hd.m_bin_Sx2w.resize(a_c.m_bin_number);
+  for(unsigned int ibin=0;ibin<a_c.m_bin_number;ibin++) {
+    vec_assign(a_hd.m_bin_Sx2w[ibin],a_c.m_dimension,a_c.m_bin_Sx2w[ibin]);
+  }}
+
+ {a_hd.m_axes.resize(a_c.m_dimension);
+  for(unsigned int iaxis=0;iaxis<a_c.m_dimension;iaxis++) {
+     axis_dui_assign(a_hd.m_axes[iaxis],*(a_c.m_axes[iaxis]));
+  }}
+  vec_assign(a_hd.m_in_range_plane_Sxyw,dim_planes(a_c.m_dimension),a_c.m_in_range_plane_Sxyw);
+
+ {a_hd.m_annotations.clear();
+  for(unsigned int i=0;i<a_c.m_number_of_annotations;i++) {
+    a_hd.m_annotations[a_c.m_annotations[2*i+0]] = a_c.m_annotations[2*i+1];
+  }}  
+
+  a_hd.m_all_entries = a_c.m_all_entries;
+  a_hd.m_in_range_entries = a_c.m_in_range_entries;
+  a_hd.m_in_range_Sw = a_c.m_in_range_Sw;
+  a_hd.m_in_range_Sw2 = a_c.m_in_range_Sw2;
+  vec_assign(a_hd.m_in_range_Sxw,a_c.m_dimension,a_c.m_in_range_Sxw);
+  vec_assign(a_hd.m_in_range_Sx2w,a_c.m_dimension,a_c.m_in_range_Sx2w);
+}
+
+}}
+
+#include "profile_data"
+
+namespace tools {
+namespace histo {
+
+/////////////////////////////////////////////////////////////////////////////
+/// profile_data to C struct ////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+inline cprofile_duiuidd* cprofile_duiuidd_alloc(const profile_data<double,unsigned int,unsigned int,double,double>& a_pd) {
+  cprofile_duiuidd* a_cp = cmem_alloc<cprofile_duiuidd>(1);
+  if(!a_cp) return NULL;
+
+  cprofile_duiuidd& a_c = *a_cp;
+
+  chisto_duiuid_assign(a_c.m_histo,a_pd);
+
+  typedef double TV;
+
+  // profile part :
+  a_c.m_is_profile = a_pd.m_is_profile?1:0;
+  a_c.m_bin_Svw = cmem_alloc_copy<TV>(vec_data(a_pd.m_bin_Svw),a_pd.m_bin_number);
+  a_c.m_bin_Sv2w = cmem_alloc_copy<TV>(vec_data(a_pd.m_bin_Sv2w),a_pd.m_bin_number);
+  a_c.m_cut_v = a_pd.m_cut_v?1:0;
+  a_c.m_min_v = a_pd.m_min_v;
+  a_c.m_max_v = a_pd.m_max_v;
+
+  return a_cp;
+}
+
+inline void cprofile_duiuidd_free(cprofile_duiuidd*& a_cp) {
+  if(!a_cp) return;
+
+  cprofile_duiuidd& a_c = *a_cp;
+
+  chisto_duiuid_clear(a_c.m_histo);
+
+  cmem_free(a_c.m_bin_Svw);
+  cmem_free(a_c.m_bin_Sv2w);
+
+  a_c.m_is_profile = 1;
+  a_c.m_cut_v = 0;
+  a_c.m_min_v = 0;
+  a_c.m_max_v = 0;
+
+  cmem_free(a_cp);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+/// C struct to profile_data ////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+inline void profile_data_duiuidd_assign(profile_data<double,unsigned int,unsigned int,double,double>& a_pd,const cprofile_duiuidd& a_c) {
+  histo_data_duiuid_assign(a_pd,a_c.m_histo);
+  a_pd.m_is_profile = a_c.m_is_profile==1?true:false;
+  vec_assign(a_pd.m_bin_Svw,a_c.m_histo.m_bin_number,a_c.m_bin_Svw);
+  vec_assign(a_pd.m_bin_Sv2w,a_c.m_histo.m_bin_number,a_c.m_bin_Sv2w);
+  a_pd.m_cut_v = a_c.m_cut_v==1?true:false;
+  a_pd.m_min_v = a_c.m_min_v;
+  a_pd.m_max_v = a_c.m_max_v;
+}
+
+}}
+
+#endif
+
+
+
+

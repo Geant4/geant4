@@ -31,6 +31,9 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+#include "HadrontherapyPrimaryGeneratorMessenger.hh"
+#include "G4RunManager.hh"
+#include "G4ParticleGun.hh"
 
 class G4GeneralParticleSource;
 class G4Event;
@@ -45,34 +48,33 @@ public:
 public:
   // Methods to change the parameters of primary particle generation 
   // interactively
-  void SetsigmaEnergy(G4double);
-  void SetmeanKineticEnergy(G4double);
-  void GeneratePrimaries(G4Event*);
-  void SetXposition(G4double);
-  void SetYposition(G4double);
-  void SetZposition(G4double);
-  void SetsigmaY(G4double);
-  void SetsigmaZ(G4double);
-  void SetsigmaMomentumY(G4double);
-  void SetsigmaMomentumZ(G4double);
-  G4double GetmeanKineticEnergy(void);
-  G4double GetSigmaEnergy(void);
+ void GeneratePrimaries(G4Event*);
+  static G4bool ReadFile;
 
+    inline void setNewSource(G4bool Varbool){NewSource= Varbool;};
+  G4String PathSource;
+  G4bool Readfile;
+    G4bool NewSource;
+inline void setCalculatedPhaseSpaceFileIN(G4String val){calculatedPhaseSpaceFileIN=val;}
+  
+    
 private:
   void SetDefaultPrimaryParticle();
-  G4double meanKineticEnergy;
-  G4double sigmaEnergy;
-  G4double X0;
-  G4double Y0;
-  G4double Z0;
-  G4double sigmaY;
-  G4double sigmaZ;
-  G4double sigmaMomentumY;
-  G4double sigmaMomentumZ;
+
+    
+G4String calculatedPhaseSpaceFileIN;
+void setGunCalculatedPhaseSpace();
+    
+    HadrontherapyPrimaryGeneratorMessenger *PrimaryGeneratorMessenger;
+   G4ParticleGun *particleGuns;
+ 
 
 private:
   G4GeneralParticleSource* particleGun;
   G4double sigmaX;
+      std::ifstream in;
+      std::ofstream ofs;
+    
 };
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DipBustGenerator.cc 74581 2013-10-15 12:03:25Z gcosmo $
+// $Id: G4DipBustGenerator.cc 110415 2018-05-23 06:44:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -51,93 +51,94 @@
 //
 
 #include "G4DipBustGenerator.hh"
-#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include <CLHEP/Units/PhysicalConstants.h>
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DipBustGenerator::G4DipBustGenerator(const G4String&)
   : G4VEmAngularDistribution("DipBustGen")
 {}    
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4DipBustGenerator::~G4DipBustGenerator() 
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4DipBustGenerator::SampleCosTheta(G4double kinEnergy)
+{
+  G4double c = 4. - 8.*G4UniformRand();
+  G4double delta  = 0.5*(std::sqrt(c*c+4.) + std::abs(c));
+  G4double signc = (c < 0.) ? -1.0 : 1.0; 
+  G4double cofA = -signc*G4Exp(G4Log(delta)/3.0);
+  G4double cosTheta = cofA - 1./cofA;
+  G4double tau = kinEnergy/CLHEP::electron_mass_c2;
+  G4double beta = std::sqrt(tau*(tau + 2.))/(tau + 1.);
+
+  return (cosTheta + beta)/(1 + cosTheta*beta);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ThreeVector& 
 G4DipBustGenerator::SampleDirection(const G4DynamicParticle* dp,
 				    G4double, G4int, const G4Material*)
 {
-  G4double a, c, cosTheta, delta, cofA, signc = 1.;
-
-  G4double eTkin = dp->GetKineticEnergy();
-
-  c = 4. - 8.*G4UniformRand();
-  a = c;
- 
-  if( c < 0. )
-  {
-    signc = -1.;
-    a     = -c;
-  }
-  delta  = std::sqrt(a*a+4.);
-  delta += a;
-  delta *= 0.5; 
-
-  cofA = -signc*G4Exp(G4Log(delta)/3.0);
-
-  cosTheta = cofA - 1./cofA;
-
-  G4double tau = eTkin/electron_mass_c2;
-  G4double beta = std::sqrt(tau*(tau + 2.))/(tau + 1.);
-
-  cosTheta = (cosTheta + beta)/(1 + cosTheta*beta);
+  G4double cosTheta = SampleCosTheta(dp->GetKineticEnergy());
 
   G4double sinTheta = std::sqrt((1 - cosTheta)*(1 + cosTheta));
-  G4double phi  = twopi*G4UniformRand(); 
+  G4double phi  = CLHEP::twopi*G4UniformRand(); 
 
   fLocalDirection.set(sinTheta*std::cos(phi), sinTheta*std::sin(phi),cosTheta);
   fLocalDirection.rotateUz(dp->GetMomentumDirection());
 
   return fLocalDirection;
-
 }
 
-G4double G4DipBustGenerator::PolarAngle(const G4double eTkin,
-				    const G4double, // final_energy
-				    const G4int ) // Z
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4DipBustGenerator::PolarAngle(G4double eTkin,
+					G4double, // final_energy
+					G4int ) // Z
 {
-  G4double c, cosTheta, delta, cofA, signc = 1., a;
-  G4double gamma, beta, theta;
+  G4double cosTheta = SampleCosTheta(eTkin);
+  G4double theta = std::acos(cosTheta);
 
-  c = 4. - 8.*G4UniformRand();
-  a = c;
- 
-  if( c < 0. )
-  {
-    signc = -1.;
-    a     = -c;
-  }
-  delta  = std::sqrt(a*a+4.);
-  delta += a;
-  delta *= 0.5; 
-
-  cofA = -signc*G4Exp(G4Log(delta)/3.0);
-
-  cosTheta = cofA - 1./cofA;
-
-  gamma = 1. + eTkin/electron_mass_c2;
-  beta = std::sqrt(1. - 1./gamma/gamma);
-
-  cosTheta = (cosTheta + beta)/(1 + cosTheta*beta);
-
-  theta = std::acos(cosTheta);
-
-  if( theta < 0. )  theta = 0.;
-  if( theta > pi )  theta = pi;
-  // G4cout <<"theta = "<<theta<<"; ";
-
+  theta = std::min(std::max(theta, 0.), CLHEP::pi);
   return theta;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4DipBustGenerator::SamplePairDirections(const G4DynamicParticle* dp,
+					      G4double elecKinEnergy,
+					      G4double posiKinEnergy,
+					      G4ThreeVector& dirElectron,
+					      G4ThreeVector& dirPositron,
+					      G4int, const G4Material*)
+{
+  G4double phi  = CLHEP::twopi * G4UniformRand();
+  G4double sinp = std::sin(phi);
+  G4double cosp = std::cos(phi);
+
+  G4double cost = SampleCosTheta(elecKinEnergy);
+  G4double sint = std::sqrt((1. - cost)*(1. + cost));
+
+  dirElectron.set(sint*cosp, sint*sinp, cost);
+  dirElectron.rotateUz(dp->GetMomentumDirection());
+
+  cost = SampleCosTheta(posiKinEnergy);
+  sint = std::sqrt((1. - cost)*(1. + cost));
+
+  dirPositron.set(-sint*cosp, -sint*sinp, cost);
+  dirPositron.rotateUz(dp->GetMomentumDirection());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DipBustGenerator::PrintGeneratorInformation() const
 {
@@ -146,3 +147,5 @@ void G4DipBustGenerator::PrintGeneratorInformation() const
   G4cout << "J.D. Jackson, Classical Electrodynamics, Wiley, New York 1975" 
 	 << G4endl;
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

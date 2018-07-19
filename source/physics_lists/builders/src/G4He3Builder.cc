@@ -32,6 +32,9 @@
 //
 // Author: 2013 P. Arce
 //
+// Modified
+// 12.04.2017 A.Dotti move to new design with base class
+//
 //----------------------------------------------------------------------------
 //
  #include "G4He3Builder.hh"
@@ -58,7 +61,11 @@
    theHe3Inelastic=new G4He3InelasticProcess;
  }
 
- G4He3Builder::
- ~G4He3Builder() 
- {}
-
+ void G4He3Builder::RegisterMe(G4PhysicsBuilderInterface* aB) {
+   auto bld = dynamic_cast<G4VHe3Builder*>(aB);
+   if ( bld != nullptr ) {
+       theModelCollections.push_back(bld);
+   } else {
+       G4PhysicsBuilderInterface::RegisterMe(aB);
+   }
+ }

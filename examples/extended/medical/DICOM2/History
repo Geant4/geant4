@@ -1,0 +1,15 @@
+$Id: $
+-------------------------------------------------------------------
+
+     =========================================================
+ 		      Geant4 - DICOM2 example
+     =========================================================
+
+                      Category History file
+
+22.06.2018 - Jonathan Madsen (DICOM2-V10-04-01)
+             Updated CMakeLists.txt to force setting DICOM_DIR cache entry
+             to Geant4_DIR if not defined
+
+20.03.2018 - Jonathan Madsen (DICOM2-V10-04-00)
+             First public release of the example

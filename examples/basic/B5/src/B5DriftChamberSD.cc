@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5DriftChamberSD.cc 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5DriftChamberSD.cc 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5DriftChamberSD.cc
 /// \brief Implementation of the B5DriftChamber class
@@ -41,9 +41,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5DriftChamberSD::B5DriftChamberSD(G4String name)
-: G4VSensitiveDetector(name), fHitsCollection(0), fHCID(-1)
+: G4VSensitiveDetector(name), 
+  fHitsCollection(nullptr), fHCID(-1)
 {
-    collectionName.insert("driftChamberColl");
+  collectionName.insert("driftChamberColl");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,39 +56,40 @@ B5DriftChamberSD::~B5DriftChamberSD()
 
 void B5DriftChamberSD::Initialize(G4HCofThisEvent* hce)
 {
-    fHitsCollection 
-      = new B5DriftChamberHitsCollection(SensitiveDetectorName,collectionName[0]);
-    if (fHCID<0)
-    { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
-    hce->AddHitsCollection(fHCID,fHitsCollection);
+  fHitsCollection 
+    = new B5DriftChamberHitsCollection(SensitiveDetectorName,collectionName[0]);
+
+  if (fHCID<0) { 
+     fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); 
+  }
+  hce->AddHitsCollection(fHCID,fHitsCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool B5DriftChamberSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
-    G4double charge = step->GetTrack()->GetDefinition()->GetPDGCharge();
-    if (charge==0.) return true;
-    
-    G4StepPoint* preStepPoint = step->GetPreStepPoint();
+  auto charge = step->GetTrack()->GetDefinition()->GetPDGCharge();
+  if (charge==0.) return true;
+  
+  auto preStepPoint = step->GetPreStepPoint();
 
-    G4TouchableHistory* touchable
-      = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
-    G4VPhysicalVolume* motherPhysical = touchable->GetVolume(1); // mother
-    G4int copyNo = motherPhysical->GetCopyNo();
+  auto touchable = step->GetPreStepPoint()->GetTouchable();
+  auto motherPhysical = touchable->GetVolume(1); // mother
+  auto copyNo = motherPhysical->GetCopyNo();
 
-    G4ThreeVector worldPos = preStepPoint->GetPosition();
-    G4ThreeVector localPos
-      = touchable->GetHistory()->GetTopTransform().TransformPoint(worldPos);
-    
-    B5DriftChamberHit* hit = new B5DriftChamberHit(copyNo);
-    hit->SetWorldPos(worldPos);
-    hit->SetLocalPos(localPos);
-    hit->SetTime(preStepPoint->GetGlobalTime());
-    
-    fHitsCollection->insert(hit);
-    
-    return true;
+  auto worldPos = preStepPoint->GetPosition();
+  auto localPos 
+    = touchable->GetHistory()->GetTopTransform().TransformPoint(worldPos);
+  
+  auto hit = new B5DriftChamberHit(copyNo);
+  hit->SetWorldPos(worldPos);
+  hit->SetLocalPos(localPos);
+  hit->SetTime(preStepPoint->GetGlobalTime());
+  
+  fHitsCollection->insert(hit);
+  
+  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

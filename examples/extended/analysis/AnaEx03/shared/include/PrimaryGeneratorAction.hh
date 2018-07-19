@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/shared/include/PrimaryGeneratorAction.hh
+/// \file PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
 //
-// $Id: PrimaryGeneratorAction.hh 67226 2013-02-08 12:07:18Z ihrivnac $
+// $Id: PrimaryGeneratorAction.hh 98243 2016-07-04 16:58:38Z gcosmo $
 //
 // 
 

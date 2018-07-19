@@ -26,7 +26,7 @@
 /// \file analysis/AnaEx02/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 92374 2015-08-31 08:52:09Z gcosmo $
+// $Id: HistoManager.cc 105493 2017-07-28 09:01:53Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,7 @@ HistoManager::HistoManager()
 {
       
   // histograms
-  for (G4int k=0; k<MaxHisto; k++) fHisto[k] = 0;
+  for (G4int k=0; k<kMaxHisto; k++) fHisto[k] = 0;
     
   // ntuple
   fNtuple1 = 0;
@@ -88,7 +88,7 @@ void HistoManager::Book()
   // id = 3
   fHisto[3] = new TH1D("LGap", "trackL in gap (mm)", 100, 0., 50*CLHEP::cm);
 
-  for ( G4int i=0; i<MaxHisto; ++i ) {
+  for ( G4int i=0; i<kMaxHisto; ++i ) {
     if (! fHisto[i]) G4cout << "\n can't create histo " << i << G4endl;
   }  
 
@@ -121,7 +121,7 @@ void HistoManager::Save()
 
 void HistoManager::FillHisto(G4int ih, G4double xbin, G4double weight)
 {
-  if (ih >= MaxHisto) {
+  if (ih >= kMaxHisto) {
     G4cerr << "---> warning from HistoManager::FillHisto() : histo " << ih
            << " does not exist. (xbin=" << xbin << " weight=" << weight << ")"
            << G4endl;
@@ -134,7 +134,7 @@ void HistoManager::FillHisto(G4int ih, G4double xbin, G4double weight)
 
 void HistoManager::Normalize(G4int ih, G4double fac)
 {
-  if (ih >= MaxHisto) {
+  if (ih >= kMaxHisto) {
     G4cout << "---> warning from HistoManager::Normalize() : histo " << ih
            << " does not exist. (fac=" << fac << ")" << G4endl;
     return;
@@ -161,7 +161,7 @@ void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
 void HistoManager::PrintStatistic()
 {
   G4cout << "\n ----> print histograms statistic \n" << G4endl;
-  for ( G4int i=0; i<MaxHisto; ++i ) {
+  for ( G4int i=0; i<kMaxHisto; ++i ) {
     TH1D* h1 = fHisto[i];
     const G4String name = h1->GetName();  
 
@@ -177,5 +177,3 @@ void HistoManager::PrintStatistic()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.cc 92599 2015-09-07 07:11:43Z gcosmo $
+// $Id: G4VUserDetectorConstruction.cc 104521 2017-06-02 07:17:28Z gcosmo $
 //
 
 #include "G4VUserDetectorConstruction.hh"
@@ -37,6 +37,7 @@
 #include "G4SDManager.hh"
 #include "G4MultiSensitiveDetector.hh"
 #include <assert.h>
+#include <sstream>
 
 G4VUserDetectorConstruction::G4VUserDetectorConstruction()
 {;}
@@ -241,13 +242,23 @@ void G4VUserDetectorConstruction::SetSensitiveDetector
 { 
   assert(logVol!=nullptr&&aSD!=nullptr);
 
-  G4SDManager::GetSDMpointer()->AddNewDetector(aSD);
+  //The aSD has already been added by user to the manager if needed
+  //G4SDManager::GetSDMpointer()->AddNewDetector(aSD);
 
   //New Logic: allow for "multiple" SDs being attached to a single LV.
   //To do that we use a special proxy SD called G4MultiSensitiveDetector
 
   //Get existing SD if already set and check if it is of the special type
   G4VSensitiveDetector* originalSD = logVol->GetSensitiveDetector();
+  if ( originalSD == aSD ) {
+      G4ExceptionDescription msg;
+      msg << "Attempting to add multiple times the same sensitive detector (\"";
+      msg << originalSD->GetName()<<"\") is not allowed, skipping.";
+      G4Exception("G4VUserDetectorConstruction::SetSensitiveDetector",
+                  "Run0054",JustWarning,msg);
+      return;
+
+  }
   if ( originalSD == nullptr ) {
       logVol->SetSensitiveDetector(aSD);
   } else {
@@ -255,7 +266,9 @@ void G4VUserDetectorConstruction::SetSensitiveDetector
       if ( msd != nullptr ) {
           msd->AddSD(aSD);
       } else {
-          const G4String msdname = "/MultiSD_"+logVol->GetName();
+          std::ostringstream mn;
+          mn<<"/MultiSD_"<<logVol->GetName()<<"_"<<logVol;
+          const G4String msdname = mn.str();
           msd = new G4MultiSensitiveDetector(msdname);
           //We need to register the proxy to have correct handling of IDs
           G4SDManager::GetSDMpointer()->AddNewDetector(msd);

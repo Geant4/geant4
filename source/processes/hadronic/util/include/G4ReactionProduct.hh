@@ -45,9 +45,9 @@ class G4ReactionProduct;
 // To support better memory management and reduced fragmentation
 //
 #if defined G4HADRONIC_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator;
+  extern G4DLLEXPORT G4Allocator<G4ReactionProduct>*& aRPAllocator();
 #else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator;
+  extern G4DLLIMPORT G4Allocator<G4ReactionProduct>*& aRPAllocator();
 #endif
 
 class G4ReactionProduct
@@ -80,8 +80,8 @@ class G4ReactionProduct
 
     // Override new and delete for use with G4Allocator
     inline void* operator new(size_t) {
-      if (!aRPAllocator) aRPAllocator = new G4Allocator<G4ReactionProduct>  ;
-      return (void *)aRPAllocator->MallocSingle();
+      if (!aRPAllocator()) aRPAllocator() = new G4Allocator<G4ReactionProduct>  ;
+      return (void *)aRPAllocator()->MallocSingle();
     }
 #ifdef __IBMCPP__
     inline void* operator new(size_t, void *p) {
@@ -89,7 +89,7 @@ class G4ReactionProduct
     }
 #endif
     inline void operator delete(void* aReactionProduct) {
-      aRPAllocator->FreeSingle((G4ReactionProduct*)aReactionProduct);
+      aRPAllocator()->FreeSingle((G4ReactionProduct*)aReactionProduct);
     }
 
     G4ReactionProduct &operator= ( const G4ReactionProduct &right );

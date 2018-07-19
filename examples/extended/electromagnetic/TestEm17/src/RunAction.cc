@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm17/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 67491 2013-02-22 17:03:46Z vnivanch $
+// $Id: RunAction.cc 99671 2016-09-30 08:05:17Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,7 +70,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   CLHEP::HepRandom::showEngineStatus();
 
   fProcCounter = new ProcessesCount;
-  fHistoManager->book();
+  fHistoManager->Book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -168,7 +168,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }
   delete fProcCounter;
   
-  fHistoManager->save();
+  fHistoManager->Save();
   
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
@@ -183,10 +183,10 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
   MuCrossSections crossSections;
 
   G4int id = 0; G4double cut = 0.;
-  if (process == "muIoni")          {id = 11; cut =    GetEnergyCut(material,1);}
-  else if (process == "muPairProd") {id = 12; cut = 2*(GetEnergyCut(material,1) 
+  if (process == "muIoni")          {id = 11; cut =  GetEnergyCut(material,1);}
+  else if (process == "muPairProd") {id = 12; cut = 2*(GetEnergyCut(material,1)
                                                       + electron_mass_c2); }
-  else if (process == "muBrems")    {id = 13; cut =    GetEnergyCut(material,0);}
+  else if (process == "muBrems")    {id = 13; cut =  GetEnergyCut(material,0);}
   else if (process == "muonNuclear"){id = 14; }
   if (id == 0) { return 0.; }
   

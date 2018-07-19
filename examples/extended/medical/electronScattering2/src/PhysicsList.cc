@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
+// $Id: PhysicsList.cc 100254 2016-10-17 07:53:29Z gcosmo $
 //
 /// \file medical/electronScattering2/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class

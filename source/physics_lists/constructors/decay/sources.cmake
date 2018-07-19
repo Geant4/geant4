@@ -11,7 +11,7 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 94090 2015-11-05 15:13:10Z gcosmo $
+# $Id: sources.cmake 100331 2016-10-18 07:33:28Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -44,6 +44,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/transportation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/decay/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowenergy/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/stopping/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
@@ -85,21 +87,23 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_ctor_decay
     HEADERS
         G4DecayPhysics.hh
+	G4MuonicAtomDecayPhysics.hh
         G4SpinDecayPhysics.hh
         G4RadioactiveDecayPhysics.hh
+        G4UnknownDecayPhysics.hh
     SOURCES
         G4DecayPhysics.cc
+	G4MuonicAtomDecayPhysics.cc
         G4SpinDecayPhysics.cc
         G4RadioactiveDecayPhysics.cc
+        G4UnknownDecayPhysics.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
         G4cuts
         G4decay
         G4digits
-        G4emhighenergy
         G4emlowenergy
-        G4emstandard
         G4emutils
         G4event
         G4geometrymng

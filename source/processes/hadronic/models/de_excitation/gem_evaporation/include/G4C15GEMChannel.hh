@@ -24,47 +24,33 @@
 // ********************************************************************
 //
 //
-// $Id: G4C15GEMChannel.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4C15GEMChannel.hh 97097 2016-05-25 07:50:31Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept. 2001)
 //
-
-
 #ifndef G4C15GEMChannel_h
 #define G4C15GEMChannel_h 1
 
 #include "G4GEMChannel.hh"
-#include "G4C15GEMCoulombBarrier.hh"
 #include "G4C15GEMProbability.hh"
 
 class G4C15GEMChannel : public G4GEMChannel
 {
 public:
   // only available constructor
-  G4C15GEMChannel() : G4GEMChannel(15,6,"C15",
-				   &theEvaporationProbability,
-				   &theCoulombBarrier)
-  {
-    theEvaporationProbability.SetCoulomBarrier(&theCoulombBarrier);
-  }
+  explicit G4C15GEMChannel() 
+    : G4GEMChannel(15,6,"C15",&theEvaporationProbability) {}
   
   // destructor
   ~G4C15GEMChannel() {};
   
 private:
-  const G4C15GEMChannel & operator=(const G4C15GEMChannel & right);  
+  const G4C15GEMChannel & operator=(const G4C15GEMChannel & right) = delete;  
+  G4C15GEMChannel(const G4C15GEMChannel & right) = delete;
+  G4bool operator==(const G4C15GEMChannel & right) const = delete;
+  G4bool operator!=(const G4C15GEMChannel & right) const = delete;
     
-  G4C15GEMChannel(const G4C15GEMChannel & right);
-  
-public:
-  G4bool operator==(const G4C15GEMChannel & right) const;
-  G4bool operator!=(const G4C15GEMChannel & right) const;
-    
-private:
-  
-  G4C15GEMCoulombBarrier theCoulombBarrier;
-	
   G4C15GEMProbability theEvaporationProbability;
   
 };

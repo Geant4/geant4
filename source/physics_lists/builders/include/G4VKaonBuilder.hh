@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VKaonBuilder.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4VKaonBuilder.hh 103801 2017-04-27 13:59:03Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,27 +33,30 @@
 //  devired from G4VPiKBuilder
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
 #ifndef G4VKaonBuilder_h
 #define G4VKaonBuilder_h
 
+#include "G4PhysicsBuilderInterface.hh"
 #include "G4HadronElasticProcess.hh"
 #include "G4KaonPlusInelasticProcess.hh"
 #include "G4KaonMinusInelasticProcess.hh"
 #include "G4KaonZeroLInelasticProcess.hh"
 #include "G4KaonZeroSInelasticProcess.hh"
 
-class G4VKaonBuilder
+class G4VKaonBuilder : public G4PhysicsBuilderInterface
 {
 public:
-  G4VKaonBuilder();
-  virtual ~G4VKaonBuilder();
+  G4VKaonBuilder() = default;
+  virtual ~G4VKaonBuilder() {} 
   virtual void Build(G4HadronElasticProcess * aP) = 0;
   virtual void Build(G4KaonPlusInelasticProcess * aP) = 0;
   virtual void Build(G4KaonMinusInelasticProcess * aP) = 0;
   virtual void Build(G4KaonZeroLInelasticProcess * aP) = 0;
   virtual void Build(G4KaonZeroSInelasticProcess * aP) = 0;
+  using G4PhysicsBuilderInterface::Build; //Prevent compiler warning
 };
 #endif

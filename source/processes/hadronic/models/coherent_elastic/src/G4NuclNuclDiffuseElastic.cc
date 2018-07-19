@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclNuclDiffuseElastic.cc 91806 2015-08-06 12:20:45Z gcosmo $
+// $Id: G4NuclNuclDiffuseElastic.cc 106722 2017-10-20 09:48:19Z gcosmo $
 //
 //
 // Physics model class G4NuclNuclDiffuseElastic 
@@ -115,11 +115,12 @@ G4NuclNuclDiffuseElastic::G4NuclNuclDiffuseElastic()
 
   fNuclearRadius1 = fNuclearRadius2 = fNuclearRadiusSquare 
     = fRutherfordRatio = fCoulombPhase0 = fHalfRutThetaTg = fHalfRutThetaTg2 
-    = fRutherfordTheta = fProfileLambda = fCofPhase = fCofFar = fCofAlphaMax 
-    = fCofAlphaCoulomb = fSumSigma = fEtaRatio = fReZ = 0.0;
+    = fRutherfordTheta = fProfileLambda = fCofPhase = fCofFar
+    = fSumSigma = fEtaRatio = fReZ = 0.0;
   fMaxL = 0;
 
   fNuclearRadiusCof = 1.0;
+  fCoulombMuC = 0.0;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -771,13 +772,16 @@ G4NuclNuclDiffuseElastic::SampleThetaCMS(const G4ParticleDefinition* particle,
 
 ////////////////////////////////////////////////////////////////////////////
 //
-// Return inv momentum transfer -t > 0 from initialisation table
+// Interface function. Return inv momentum transfer -t > 0 from initialisation table
 
 G4double G4NuclNuclDiffuseElastic::SampleInvariantT( const G4ParticleDefinition* aParticle, G4double p, 
                                                G4int Z, G4int A)
 {
   fParticle = aParticle;
-  G4double m1 = fParticle->GetPDGMass();
+  fAtomicNumber = G4double(Z);
+  fAtomicWeight = G4double(A);
+
+  G4double t(0.), m1 = fParticle->GetPDGMass();
   G4double totElab = std::sqrt(m1*m1+p*p);
   G4double mass2 = G4NucleiProperties::GetNuclearMass(A, Z);
   G4LorentzVector lv1(p,0.0,0.0,totElab);
@@ -790,9 +794,44 @@ G4double G4NuclNuclDiffuseElastic::SampleInvariantT( const G4ParticleDefinition*
   G4ThreeVector p1 = lv1.vect();
   G4double momentumCMS = p1.mag();
 
-  G4double t = SampleTableT( aParticle,  momentumCMS, G4double(Z), G4double(A) ); // sample theta2 in cms
+  // t = SampleTableT( aParticle,  momentumCMS, G4double(Z), G4double(A) ); // sample theta2 in cms
+
+  t = SampleCoulombMuCMS( aParticle,  momentumCMS); // sample theta2 in cms
+
+
   return t;
 }
+
+////////////////////////////////////////////////////////////////////////////
+//
+// Return inv momentum transfer -t > 0 as Coulomb scattering <= thetaC
+
+G4double G4NuclNuclDiffuseElastic::SampleCoulombMuCMS( const G4ParticleDefinition* aParticle, G4double p)
+{
+  G4double t(0.), rand(0.), mu(0.);
+
+  G4double A1 = G4double( aParticle->GetBaryonNumber() );
+  G4double R1 = CalculateNuclearRad(A1);
+
+  fNuclearRadius  = CalculateNuclearRad(fAtomicWeight);
+  fNuclearRadius += R1;
+
+  InitDynParameters(fParticle, p);
+
+  fCoulombMuC = fHalfRutThetaTg2/(1.+fHalfRutThetaTg2);
+
+  rand = G4UniformRand();
+
+  // sample (1-cosTheta) in 0 < Theta < ThetaC as Coulomb scattering
+
+  mu  = fCoulombMuC*rand*fAm;
+  mu /= fAm + fCoulombMuC*( 1. - rand );
+
+  t = 4.*p*p*mu;
+
+  return t;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -1872,7 +1911,7 @@ G4NuclNuclDiffuseElastic::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle
 
     //if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
 
-    if( proj_momentum >= 10.)
+    //AR-12Aug2016  if( proj_momentum >= 10.)
     {
         B0 = 7.5;
         A0 = 100. - B0*G4Log(3.0e7);

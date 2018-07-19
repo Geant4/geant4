@@ -31,10 +31,10 @@ G4bool G4MesonSplitter::SplitMeson(G4int PDGcode, G4int* aEnd, G4int* bEnd)
 	G4bool result = true;
 	G4int absPDGcode = std::abs(PDGcode);
 	if (absPDGcode >= 1000) return false;
-	if(absPDGcode == 22)
+	if(absPDGcode == 22)                   // For gamma -> 4 (u ubar) + 1 (d dbar)
 	{
 		G4int it=1;
-		if(G4UniformRand()<.5) it++;
+		if(G4UniformRand()<0.8) it++;   // Uzhi Oct. 2016 0.5 -> 0.8
 		*aEnd = it;
 		*bEnd = -it;
 	}

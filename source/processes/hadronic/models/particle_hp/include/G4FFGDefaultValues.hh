@@ -33,7 +33,9 @@
 #ifndef G4FFGDEFAULTVALUES_HH
 #define G4FFGDEFAULTVALUES_HH
 
-#include "G4SystemOfUnits.hh"
+//#include "G4SystemOfUnits.hh" bad, use instead:
+#include <CLHEP/Units/SystemOfUnits.h>
+//  and use constants with namespace, see below e.g. eV becomes CLHEP::eV
 #include "G4ThreeVector.hh"
 
 #include "G4FFGEnumerations.hh"
@@ -46,7 +48,7 @@ namespace G4FFGDefaultValues
 {
 // Global
     /** The energy of thermal neutrons */
-    static const G4double ThermalNeutronEnergy =                            0.0253 * eV;
+    static const G4double ThermalNeutronEnergy =                            0.0253 * CLHEP::eV;
 
 // Verbosity
 #ifdef G4DEBUG_VERBOSE
@@ -65,7 +67,7 @@ namespace G4FFGDefaultValues
     /** Default fission cause */
     static const G4FFGEnumerations::FissionCause FissionCause =             G4FFGEnumerations::SPONTANEOUS;
     /** Default incident energy */
-    static const G4double IncidentEnergy =                                  ThermalNeutronEnergy / eV;
+    static const G4double IncidentEnergy =                                  ThermalNeutronEnergy / CLHEP::eV;
     /** Default incident energy unit */
     static const char IncidentEnergyUnit[] =                                "eV";
     /** Default yield type */
@@ -77,7 +79,7 @@ namespace G4FFGDefaultValues
     /** Default alpha production in a ternary fission */
     static const G4double AlphaProduction =                                 0;
     /** Default mean gamma energy for gamma sampling */
-    static const G4double MeanGammaEnergy =                                 800 * keV;
+    static const G4double MeanGammaEnergy =                                 800 * CLHEP::keV;
 
 // Event Parameters
     /** Default event time */

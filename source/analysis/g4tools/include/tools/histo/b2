@@ -17,7 +17,8 @@ class b2 : public base_histo<TC,TO,TN,TW,TH> {
 protected:
   enum {AxisX=0,AxisY=1};
 public:
-  typedef axis<TC,TO> axis_t;
+  typedef base_histo<TC,TO,TN,TW,TH> base_histo_t;
+  typedef typename parent::axis_t axis_t;
   typedef typename parent::bn_t bn_t;
 public:
   virtual TH bin_error(int,int) const = 0; //for print
@@ -302,11 +303,11 @@ protected:
     parent::configure(2,nbins,mins,maxs);
   }
 
-  b2(const std::string& a_title,const std::vector<TC>& aEdgesX,const std::vector<TC>& aEdgesY) {
+  b2(const std::string& a_title,const std::vector<TC>& a_edges_x,const std::vector<TC>& a_edges_y) {
     parent::m_title = a_title;
     std::vector< std::vector<TC> > edges(2);
-    edges[0] = aEdgesX;
-    edges[1] = aEdgesY;
+    edges[0] = a_edges_x;
+    edges[1] = a_edges_y;
     parent::configure(2,edges);
   }
 
@@ -328,10 +329,10 @@ public:
     return parent::configure(2,nbins,mins,maxs);
   }
 
-  bool configure(const std::vector<TC>& aEdgesX,const std::vector<TC>& aEdgesY){
+  bool configure(const std::vector<TC>& a_edges_x,const std::vector<TC>& a_edges_y){
     std::vector< std::vector<TC> > edges(2);
-    edges[0] = aEdgesX;
-    edges[1] = aEdgesY;
+    edges[0] = a_edges_x;
+    edges[1] = a_edges_y;
     return parent::configure(2,edges);
   }
 

@@ -46,7 +46,7 @@ be turned on or off to deflect the beam on target;
 
 6. A realistic human keratinocyte voxellized cell observed from confocal 
 microscopy and taking into account realistic nucleus and cytoplasm chemical 
-compositions
+compositions.
 
 
 ---->2. EXPERIMENTAL SET-UP.      
@@ -121,25 +121,21 @@ Ph. Moretto. Sep 2003.
 Published in Nucl.Instrum.Meth.B210:92-97, 2003
 
 
-------->3 VISUALIZATION
+---->3 VISUALIZATION
 
-The user can visualize the targeted cell by uncommenting the following line in
-microbeam.mac:
-
-#/control/execute vis.mac
+The user can visualize the targeted cell thanks to the Qt interface.
 
 ---->4. HOW TO RUN THE EXAMPLE                                         
   
 The code should be compiled with cmake.
 
-Put the 'phantom.dat' file into your build directory.
-
 Run the example from your build directory with:
+./microbeam microbeam.mac
+
+or in interactive mode:
 ./microbeam
 
-The macro file microbeam.mac is read by default. 
-
-The works in MT mode.
+The example works in MT mode.
 
 ---->5. PHYSICS
 
@@ -157,7 +153,7 @@ cytoplasm by each incident alpha particle;
 Voxel per incident alpha particle;
 
 * final stopping (x,y,z) position of the incident 
-alpha particle within the irradiated medium (cell or culture medium)
+alpha particle within the irradiated medium (cell or culture medium);
 
 * stopping power dE/dx of the incident 
 alpha particle just before penetrating into the targeted cell;
@@ -169,10 +165,8 @@ These results can be easily analyzed using for example the provided ROOT macro
 file plot.C; to do so :
 * be sure to have ROOT installed on your machine
 * be sure to be in the directory where the output ROOT files have been created
-* copy plot.C into this directory
-* launch ROOT by typing root
-* under your ROOT session, type in : .X plot.C to execute the macro file
-
+* do: root plot.C
+* or under your ROOT session, type in : .X plot.C to execute the macro file
 
 ---------------------------------------------------------------------------
 

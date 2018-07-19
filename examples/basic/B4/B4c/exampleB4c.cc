@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleB4c.cc 95508 2016-02-12 13:52:06Z gcosmo $
+// $Id: exampleB4c.cc 100946 2016-11-03 11:28:08Z gcosmo $
 //
 /// \file exampleB4c.cc
 /// \brief Main program of the B4c example
@@ -111,24 +111,23 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  B4cDetectorConstruction* detConstruction = new B4cDetectorConstruction();
+  auto detConstruction = new B4cDetectorConstruction();
   runManager->SetUserInitialization(detConstruction);
 
-  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  auto physicsList = new FTFP_BERT;
   runManager->SetUserInitialization(physicsList);
     
-  B4cActionInitialization* actionInitialization
-     = new B4cActionInitialization();
+  auto actionInitialization = new B4cActionInitialization();
   runManager->SetUserInitialization(actionInitialization);
   
   // Initialize visualization
-  G4VisManager* visManager = new G4VisExecutive;
+  auto visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  auto UImanager = G4UImanager::GetUIpointer();
 
   // Process macro or start UI session
   //

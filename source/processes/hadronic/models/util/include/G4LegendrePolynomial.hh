@@ -45,6 +45,7 @@
 
 #include "globals.hh"
 #include <vector>
+#include <map>
 
 class G4LegendrePolynomial
 {
@@ -55,7 +56,8 @@ class G4LegendrePolynomial
 
     // Evaluation functions
     G4double EvalLegendrePoly(G4int order, G4double x);
-    G4double EvalAssocLegendrePoly(G4int l, G4int m, G4double x);
+    G4double EvalAssocLegendrePoly(G4int l, G4int m, G4double x,
+                                   std::map<G4int, std::map<G4int, G4double> >* cache = NULL);
 
   protected: // Cache coefficients for speed
     void BuildUpToOrder(size_t order);

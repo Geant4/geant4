@@ -27,7 +27,7 @@
 /// \brief Main program of the visualization/standalone example
 //
 //
-// $Id: standalone.cc 69587 2013-05-08 14:26:03Z gcosmo $
+// $Id: standalone.cc 103931 2017-05-03 13:52:02Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,6 +46,8 @@
 
 int main(int argc,char** argv) {
 
+  G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+
   G4VisManager* visManager = new G4VisExecutive;
   visManager->RegisterRunDurationUserVisAction
     ("A standalone example - 3 boxes, 2 with boolean subtracted cutout",
@@ -53,9 +55,7 @@ int main(int argc,char** argv) {
      G4VisExtent(-10*m,10*m,-10*m,10*m,-10*m,10*m));
   visManager->Initialize ();
 
-  G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  UImanager->ApplyCommand ("/control/execute standalone.mac");
+  G4UImanager::GetUIpointer()->ApplyCommand ("/control/execute standalone.mac");
   ui->SessionStart();
 
   delete ui;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5DriftChamberHit.cc 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5DriftChamberHit.cc 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5DriftChamberHit.cc
 /// \brief Implementation of the B5DriftChamberHit class
@@ -49,13 +49,15 @@ G4ThreadLocal G4Allocator<B5DriftChamberHit>* B5DriftChamberHitAllocator;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5DriftChamberHit::B5DriftChamberHit()
-: G4VHit(), fLayerID(-1), fTime(0.), fLocalPos(0), fWorldPos(0)
+: G4VHit(), 
+  fLayerID(-1), fTime(0.), fLocalPos(0), fWorldPos(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B5DriftChamberHit::B5DriftChamberHit(G4int z)
-: G4VHit(), fLayerID(z), fTime(0.), fLocalPos(0), fWorldPos(0)
+B5DriftChamberHit::B5DriftChamberHit(G4int layerID)
+: G4VHit(), 
+  fLayerID(layerID), fTime(0.), fLocalPos(0), fWorldPos(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,97 +68,96 @@ B5DriftChamberHit::~B5DriftChamberHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5DriftChamberHit::B5DriftChamberHit(const B5DriftChamberHit &right)
-: G4VHit() {
-    fLayerID = right.fLayerID;
-    fWorldPos = right.fWorldPos;
-    fLocalPos = right.fLocalPos;
-    fTime = right.fTime;
-}
+: G4VHit(),
+  fLayerID(right.fLayerID),
+  fTime(right.fTime),
+  fLocalPos(right.fLocalPos),
+  fWorldPos(right.fWorldPos)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const B5DriftChamberHit& B5DriftChamberHit::operator=(const B5DriftChamberHit &right)
 {
-    fLayerID = right.fLayerID;
-    fWorldPos = right.fWorldPos;
-    fLocalPos = right.fLocalPos;
-    fTime = right.fTime;
-    return *this;
+  fLayerID = right.fLayerID;
+  fTime = right.fTime;
+  fLocalPos = right.fLocalPos;
+  fWorldPos = right.fWorldPos;
+  return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int B5DriftChamberHit::operator==(const B5DriftChamberHit &/*right*/) const
 {
-    return 0;
+  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B5DriftChamberHit::Draw()
 {
-    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-    if(pVVisManager)
-    {
-        G4Circle circle(fWorldPos);
-        circle.SetScreenSize(2);
-        circle.SetFillStyle(G4Circle::filled);
-        G4Colour colour(1.,1.,0.);
-        G4VisAttributes attribs(colour);
-        circle.SetVisAttributes(attribs);
-        pVVisManager->Draw(circle);
-    }
+  auto visManager = G4VVisManager::GetConcreteInstance();
+  if (! visManager) return;
+
+  G4Circle circle(fWorldPos);
+  circle.SetScreenSize(2);
+  circle.SetFillStyle(G4Circle::filled);
+  G4Colour colour(1.,1.,0.);
+  G4VisAttributes attribs(colour);
+  circle.SetVisAttributes(attribs);
+  visManager->Draw(circle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const std::map<G4String,G4AttDef>* B5DriftChamberHit::GetAttDefs() const
 {
-    G4bool isNew;
-    std::map<G4String,G4AttDef>* store
-      = G4AttDefStore::GetInstance("B5DriftChamberHit",isNew);
+  G4bool isNew;
+  auto store = G4AttDefStore::GetInstance("B5DriftChamberHit",isNew);
 
-    if (isNew) {
-        (*store)["HitType"] 
-          = G4AttDef("HitType","Hit Type","Physics","","G4String");
-        
-        (*store)["ID"] 
-          = G4AttDef("ID","ID","Physics","","G4int");
-        
-        (*store)["Time"] 
-          = G4AttDef("Time","Time","Physics","G4BestUnit","G4double");
-        
-        (*store)["Pos"] 
-          = G4AttDef("Pos", "Position", "Physics","G4BestUnit","G4ThreeVector");
-    }
-    return store;
+  if (isNew) {
+      (*store)["HitType"] 
+        = G4AttDef("HitType","Hit Type","Physics","","G4String");
+      
+      (*store)["ID"] 
+        = G4AttDef("ID","ID","Physics","","G4int");
+      
+      (*store)["Time"] 
+        = G4AttDef("Time","Time","Physics","G4BestUnit","G4double");
+      
+      (*store)["Pos"] 
+        = G4AttDef("Pos", "Position", "Physics","G4BestUnit","G4ThreeVector");
+  }
+  
+  return store;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 std::vector<G4AttValue>* B5DriftChamberHit::CreateAttValues() const
 {
-    std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
-    
-    values
-      ->push_back(G4AttValue("HitType","DriftChamberHit",""));
-    values
-      ->push_back(G4AttValue("ID",G4UIcommand::ConvertToString(fLayerID),""));
-    values
-      ->push_back(G4AttValue("Time",G4BestUnit(fTime,"Time"),""));
-    values
-      ->push_back(G4AttValue("Pos",G4BestUnit(fWorldPos,"Length"),""));
-    
-    return values;
+  auto values = new std::vector<G4AttValue>;
+  
+  values
+    ->push_back(G4AttValue("HitType","DriftChamberHit",""));
+  values
+    ->push_back(G4AttValue("ID",G4UIcommand::ConvertToString(fLayerID),""));
+  values
+    ->push_back(G4AttValue("Time",G4BestUnit(fTime,"Time"),""));
+  values
+    ->push_back(G4AttValue("Pos",G4BestUnit(fWorldPos,"Length"),""));
+  
+  return values;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B5DriftChamberHit::Print()
 {
-    G4cout << "  Layer[" << fLayerID << "] : time " << fTime/ns
-    << " (nsec) --- local (x,y) " << fLocalPos.x()
-    << ", " << fLocalPos.y() << G4endl;
+  G4cout << "  Layer[" << fLayerID << "] : time " << fTime/ns
+  << " (nsec) --- local (x,y) " << fLocalPos.x()
+  << ", " << fLocalPos.y() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

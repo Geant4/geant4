@@ -45,11 +45,7 @@ G4Thread* G4UserWorkerThreadInitialization::CreateAndStartWorker(G4WorkerThread*
     //Note: this method is called by G4MTRunManager, here we are still sequential
     //Create a new thread/worker structure
     G4Thread* worker = new G4Thread;
-#ifdef WIN32
-    G4THREADCREATE(worker, (LPTHREAD_START_ROUTINE)&G4MTRunManagerKernel::StartThread , wTC );
-#else
-    G4THREADCREATE(worker, &G4MTRunManagerKernel::StartThread , wTC );
-#endif
+    G4THREADCREATE(worker, &G4MTRunManagerKernel::StartThread, wTC );
     return worker;
 }
 #else
@@ -128,7 +124,7 @@ void G4UserWorkerThreadInitialization::SetupRNGEngine(const CLHEP::HepRandomEngi
            << " Cannot clone this type of RNG engine, as required for this thread" << G4endl
            << " Aborting " << G4endl;
         G4Exception("G4UserWorkerInitializition::SetupRNGEngine()",
-                    "Run10099",FatalException,msg);
+                    "Run0122",FatalException,msg);
     }
 }
 

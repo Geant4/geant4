@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.hh 93362 2015-10-19 13:45:19Z gcosmo $
+// $Id: G4KleinNishinaCompton.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,15 +60,16 @@ class G4KleinNishinaCompton : public G4VEmModel
 
 public:
 
-  G4KleinNishinaCompton(const G4ParticleDefinition* p = nullptr, 
-			const G4String& nam = "Klein-Nishina");
+  explicit G4KleinNishinaCompton(const G4ParticleDefinition* p = nullptr, 
+				 const G4String& nam = "Klein-Nishina");
 
   virtual ~G4KleinNishinaCompton();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
 
   virtual void InitialiseLocal(const G4ParticleDefinition*, 
-			       G4VEmModel* masterModel);
+			       G4VEmModel* masterModel) override;
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -76,13 +77,13 @@ public:
                                       G4double Z, 
                                       G4double A, 
                                       G4double cut,
-                                      G4double emax);
+                                      G4double emax) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
 protected:
 
@@ -94,8 +95,9 @@ protected:
 private:
 
   // hide assignment operator
-  G4KleinNishinaCompton & operator=(const  G4KleinNishinaCompton &right);
-  G4KleinNishinaCompton(const  G4KleinNishinaCompton&);
+  G4KleinNishinaCompton & operator=
+  (const G4KleinNishinaCompton &right) = delete;
+  G4KleinNishinaCompton(const  G4KleinNishinaCompton&) = delete;
 
 };
 

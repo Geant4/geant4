@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronIonPair.hh 81058 2014-05-20 09:04:28Z gcosmo $
+// $Id: G4ElectronIonPair.hh 95657 2016-02-17 13:03:36Z gcosmo $
 //
 //
 #ifndef G4ElectronIonPair_h
@@ -75,7 +75,7 @@ class G4ElectronIonPair
 {
 public: 
 
-  G4ElectronIonPair(G4int verb);
+  explicit G4ElectronIonPair(G4int verb);
 
   virtual ~G4ElectronIonPair();
 
@@ -95,7 +95,7 @@ public:
 
   // compute number of holes in the atom after PostStep interaction
   G4int ResidualeChargePostStep(const G4ParticleDefinition*,
-				const G4TrackVector* secondary = 0,
+				const G4TrackVector* secondary = nullptr,
 				G4int processSubType = -1) const;
 
   inline G4int ResidualeChargePostStep(const G4Step*) const;
@@ -118,10 +118,10 @@ private:
   G4double FindMeanEnergyPerIonPair(const G4Material*) const;
 
   // hide assignment operator
-  G4ElectronIonPair & operator=(const G4ElectronIonPair &right);
-  G4ElectronIonPair(const G4ElectronIonPair&);
+  G4ElectronIonPair & operator=(const G4ElectronIonPair &right) = delete;
+  G4ElectronIonPair(const G4ElectronIonPair&) = delete;
 
-  // cash
+  // cache
   const G4Material*  curMaterial;
   G4double           curMeanEnergy;
 

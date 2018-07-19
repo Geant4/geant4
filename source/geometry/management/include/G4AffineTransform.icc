@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AffineTransform.icc 93152 2015-10-08 11:53:57Z gcosmo $
+// $Id: G4AffineTransform.icc 110041 2018-05-15 06:01:20Z gcosmo $
 //
 //
 // G4AffineTransformation Inline implementation
@@ -53,7 +53,7 @@ inline G4AffineTransform::G4AffineTransform(const G4RotationMatrix& rot)
 {}
 
 inline G4AffineTransform::G4AffineTransform( const G4RotationMatrix& rot,
-                                             const G4ThreeVector& tlate   )
+                                             const G4ThreeVector& tlate )
  : rxx(rot.xx()),rxy(rot.xy()),rxz(rot.xz()),
    ryx(rot.yx()),ryy(rot.yy()),ryz(rot.yz()),
    rzx(rot.zx()),rzy(rot.zy()),rzz(rot.zz()),
@@ -61,361 +61,438 @@ inline G4AffineTransform::G4AffineTransform( const G4RotationMatrix& rot,
 {}
 
 inline G4AffineTransform::G4AffineTransform( const G4RotationMatrix* rot,
-                                             const G4ThreeVector& tlate)
+                                             const G4ThreeVector& tlate )
  : tx(tlate.x()),ty(tlate.y()),tz(tlate.z())
 {
   if (rot)
-    {
-      rxx=rot->xx();rxy=rot->xy();rxz=rot->xz();
-      ryx=rot->yx();ryy=rot->yy();ryz=rot->yz();
-      rzx=rot->zx();rzy=rot->zy();rzz=rot->zz();
-    }
+  {
+    rxx=rot->xx();rxy=rot->xy();rxz=rot->xz();
+    ryx=rot->yx();ryy=rot->yy();ryz=rot->yz();
+    rzx=rot->zx();rzy=rot->zy();rzz=rot->zz();
+  }
   else
-    {
-      rxx=1; rxy=0; rxz=0;
-      ryx=0; ryy=1; ryz=0;
-      rzx=0; rzy=0; rzz=1;
-    }
+  {
+    rxx=1; rxy=0; rxz=0;
+    ryx=0; ryy=1; ryz=0;
+    rzx=0; rzy=0; rzz=1;
+  }
 }
 
-inline 
+inline
 G4AffineTransform::
 G4AffineTransform( const G4double prxx,const G4double prxy,const G4double prxz,
                    const G4double pryx,const G4double pryy,const G4double pryz,
                    const G4double przx,const G4double przy,const G4double przz,
-                   const G4double ptx,const G4double pty,const G4double ptz)
+                   const G4double ptx,const G4double pty,const G4double ptz )
  : rxx(prxx),rxy(prxy),rxz(prxz),
    ryx(pryx),ryy(pryy),ryz(pryz),
    rzx(przx),rzy(przy),rzz(przz),
    tx(ptx),ty(pty),tz(ptz)
 {}
 
+inline G4AffineTransform::G4AffineTransform(const G4AffineTransform& rhs)
+ : rxx(rhs.rxx),rxy(rhs.rxy),rxz(rhs.rxz),
+   ryx(rhs.ryx),ryy(rhs.ryy),ryz(rhs.ryz),
+   rzx(rhs.rzx),rzy(rhs.rzy),rzz(rhs.rzz),
+   tx(rhs.tx),ty(rhs.ty),tz(rhs.tz)
+{}
+
+inline G4AffineTransform&
+G4AffineTransform::operator = (const G4AffineTransform& rhs)
+{
+  if (this == &rhs)  { return *this; }
+  rxx = rhs.rxx; rxy = rhs.rxy; rxz = rhs.rxz; 
+  ryx = rhs.ryx; ryy = rhs.ryy; ryz = rhs.ryz; 
+  rzx = rhs.rzx; rzy = rhs.rzy; rzz = rhs.rzz; 
+  tx = rhs.tx; ty = rhs.ty; tz = rhs.tz;
+  return *this;
+}
+
+inline G4AffineTransform::~G4AffineTransform()
+{}
+
 inline G4AffineTransform
 G4AffineTransform::operator * (const G4AffineTransform& tf) const
 {
-        return G4AffineTransform(
-        rxx*tf.rxx+rxy*tf.ryx+rxz*tf.rzx,
-        rxx*tf.rxy+rxy*tf.ryy+rxz*tf.rzy,
-        rxx*tf.rxz+rxy*tf.ryz+rxz*tf.rzz,
+  return G4AffineTransform(rxx*tf.rxx+rxy*tf.ryx+rxz*tf.rzx,
+                           rxx*tf.rxy+rxy*tf.ryy+rxz*tf.rzy,
+                           rxx*tf.rxz+rxy*tf.ryz+rxz*tf.rzz,
 
-        ryx*tf.rxx+ryy*tf.ryx+ryz*tf.rzx,
-        ryx*tf.rxy+ryy*tf.ryy+ryz*tf.rzy,
-        ryx*tf.rxz+ryy*tf.ryz+ryz*tf.rzz,
+                           ryx*tf.rxx+ryy*tf.ryx+ryz*tf.rzx,
+                           ryx*tf.rxy+ryy*tf.ryy+ryz*tf.rzy,
+                           ryx*tf.rxz+ryy*tf.ryz+ryz*tf.rzz,
 
-        rzx*tf.rxx+rzy*tf.ryx+rzz*tf.rzx,
-        rzx*tf.rxy+rzy*tf.ryy+rzz*tf.rzy,
-        rzx*tf.rxz+rzy*tf.ryz+rzz*tf.rzz,
-        
-        tx*tf.rxx+ty*tf.ryx+tz*tf.rzx+tf.tx,
-        tx*tf.rxy+ty*tf.ryy+tz*tf.rzy+tf.ty,
-        tx*tf.rxz+ty*tf.ryz+tz*tf.rzz+tf.tz);
+                           rzx*tf.rxx+rzy*tf.ryx+rzz*tf.rzx,
+                           rzx*tf.rxy+rzy*tf.ryy+rzz*tf.rzy,
+                           rzx*tf.rxz+rzy*tf.ryz+rzz*tf.rzz,
+
+                           tx*tf.rxx+ty*tf.ryx+tz*tf.rzx+tf.tx,
+                           tx*tf.rxy+ty*tf.ryy+tz*tf.rzy+tf.ty,
+                           tx*tf.rxz+ty*tf.ryz+tz*tf.rzz+tf.tz);
 }
 
 inline G4AffineTransform&
 G4AffineTransform::operator *= (const G4AffineTransform& tf)
 {
-         // Use temporaries for `in place' compound transform computation
+  // Use temporaries for `in place' compound transform computation
+  //
+  G4double nrxx=rxx*tf.rxx+rxy*tf.ryx+rxz*tf.rzx;
+  G4double nrxy=rxx*tf.rxy+rxy*tf.ryy+rxz*tf.rzy;
+  G4double nrxz=rxx*tf.rxz+rxy*tf.ryz+rxz*tf.rzz;
 
-        G4double nrxx=rxx*tf.rxx+rxy*tf.ryx+rxz*tf.rzx;
-        G4double nrxy=rxx*tf.rxy+rxy*tf.ryy+rxz*tf.rzy;
-        G4double nrxz=rxx*tf.rxz+rxy*tf.ryz+rxz*tf.rzz;
+  G4double nryx=ryx*tf.rxx+ryy*tf.ryx+ryz*tf.rzx;
+  G4double nryy=ryx*tf.rxy+ryy*tf.ryy+ryz*tf.rzy;
+  G4double nryz=ryx*tf.rxz+ryy*tf.ryz+ryz*tf.rzz;
 
-        G4double nryx=ryx*tf.rxx+ryy*tf.ryx+ryz*tf.rzx;
-        G4double nryy=ryx*tf.rxy+ryy*tf.ryy+ryz*tf.rzy;
-        G4double nryz=ryx*tf.rxz+ryy*tf.ryz+ryz*tf.rzz;
-
-        G4double nrzx=rzx*tf.rxx+rzy*tf.ryx+rzz*tf.rzx;
-        G4double nrzy=rzx*tf.rxy+rzy*tf.ryy+rzz*tf.rzy;
-        G4double nrzz=rzx*tf.rxz+rzy*tf.ryz+rzz*tf.rzz;
+  G4double nrzx=rzx*tf.rxx+rzy*tf.ryx+rzz*tf.rzx;
+  G4double nrzy=rzx*tf.rxy+rzy*tf.ryy+rzz*tf.rzy;
+  G4double nrzz=rzx*tf.rxz+rzy*tf.ryz+rzz*tf.rzz;
         
-        G4double ntx=tx*tf.rxx+ty*tf.ryx+tz*tf.rzx+tf.tx;
-        G4double nty=tx*tf.rxy+ty*tf.ryy+tz*tf.rzy+tf.ty;
-        G4double ntz=tx*tf.rxz+ty*tf.ryz+tz*tf.rzz+tf.tz;
+  G4double ntx=tx*tf.rxx+ty*tf.ryx+tz*tf.rzx+tf.tx;
+  G4double nty=tx*tf.rxy+ty*tf.ryy+tz*tf.rzy+tf.ty;
+  G4double ntz=tx*tf.rxz+ty*tf.ryz+tz*tf.rzz+tf.tz;
 
-        tx=ntx; ty=nty; tz=ntz;
-        rxx=nrxx; rxy=nrxy; rxz=nrxz;
-        ryx=nryx; ryy=nryy; ryz=nryz;
-        rzx=nrzx; rzy=nrzy; rzz=nrzz;
+  tx=ntx; ty=nty; tz=ntz;
+  rxx=nrxx; rxy=nrxy; rxz=nrxz;
+  ryx=nryx; ryy=nryy; ryz=nryz;
+  rzx=nrzx; rzy=nrzy; rzz=nrzz;
 
-        return *this;
+  return *this;
 }
 
 inline G4AffineTransform&
-G4AffineTransform::Product(const G4AffineTransform& tf1,
-                           const G4AffineTransform& tf2)
+G4AffineTransform::Product( const G4AffineTransform& tf1,
+                            const G4AffineTransform& tf2 )
 {
-        rxx=tf1.rxx*tf2.rxx + tf1.rxy*tf2.ryx + tf1.rxz*tf2.rzx;
-        rxy=tf1.rxx*tf2.rxy + tf1.rxy*tf2.ryy + tf1.rxz*tf2.rzy;
-        rxz=tf1.rxx*tf2.rxz + tf1.rxy*tf2.ryz + tf1.rxz*tf2.rzz;
+  rxx = tf1.rxx*tf2.rxx + tf1.rxy*tf2.ryx + tf1.rxz*tf2.rzx;
+  rxy = tf1.rxx*tf2.rxy + tf1.rxy*tf2.ryy + tf1.rxz*tf2.rzy;
+  rxz = tf1.rxx*tf2.rxz + tf1.rxy*tf2.ryz + tf1.rxz*tf2.rzz;
 
-        ryx=tf1.ryx*tf2.rxx + tf1.ryy*tf2.ryx + tf1.ryz*tf2.rzx;
-        ryy=tf1.ryx*tf2.rxy + tf1.ryy*tf2.ryy + tf1.ryz*tf2.rzy;
-        ryz=tf1.ryx*tf2.rxz + tf1.ryy*tf2.ryz + tf1.ryz*tf2.rzz;
+  ryx = tf1.ryx*tf2.rxx + tf1.ryy*tf2.ryx + tf1.ryz*tf2.rzx;
+  ryy = tf1.ryx*tf2.rxy + tf1.ryy*tf2.ryy + tf1.ryz*tf2.rzy;
+  ryz = tf1.ryx*tf2.rxz + tf1.ryy*tf2.ryz + tf1.ryz*tf2.rzz;
 
-        rzx=tf1.rzx*tf2.rxx + tf1.rzy*tf2.ryx + tf1.rzz*tf2.rzx;
-        rzy=tf1.rzx*tf2.rxy + tf1.rzy*tf2.ryy + tf1.rzz*tf2.rzy;
-        rzz=tf1.rzx*tf2.rxz + tf1.rzy*tf2.ryz + tf1.rzz*tf2.rzz;
-        
-        tx=tf1.tx*tf2.rxx + tf1.ty*tf2.ryx + tf1.tz*tf2.rzx   + tf2.tx;
-        ty=tf1.tx*tf2.rxy + tf1.ty*tf2.ryy + tf1.tz*tf2.rzy   + tf2.ty;
-        tz=tf1.tx*tf2.rxz + tf1.ty*tf2.ryz + tf1.tz*tf2.rzz   + tf2.tz; 
-        
-        return *this;
+  rzx = tf1.rzx*tf2.rxx + tf1.rzy*tf2.ryx + tf1.rzz*tf2.rzx;
+  rzy = tf1.rzx*tf2.rxy + tf1.rzy*tf2.ryy + tf1.rzz*tf2.rzy;
+  rzz = tf1.rzx*tf2.rxz + tf1.rzy*tf2.ryz + tf1.rzz*tf2.rzz;
+
+  tx = tf1.tx*tf2.rxx + tf1.ty*tf2.ryx + tf1.tz*tf2.rzx + tf2.tx;
+  ty = tf1.tx*tf2.rxy + tf1.ty*tf2.ryy + tf1.tz*tf2.rzy + tf2.ty;
+  tz = tf1.tx*tf2.rxz + tf1.ty*tf2.ryz + tf1.tz*tf2.rzz + tf2.tz;
+
+  return *this;
 }
 
 inline G4AffineTransform&
 G4AffineTransform::InverseProduct( const G4AffineTransform& tf1,
-                                   const G4AffineTransform& tf2)
+                                   const G4AffineTransform& tf2 )
 {
-        G4double itf2tx = - tf2.tx*tf2.rxx - tf2.ty*tf2.rxy - tf2.tz*tf2.rxz;
-        G4double itf2ty = - tf2.tx*tf2.ryx - tf2.ty*tf2.ryy - tf2.tz*tf2.ryz;
-        G4double itf2tz = - tf2.tx*tf2.rzx - tf2.ty*tf2.rzy - tf2.tz*tf2.rzz;
+  if ((tf2.rxx + tf2.ryy + tf2.rzz) == 3.)
+  {
+    rxx = tf1.rxx;
+    rxy = tf1.rxy;
+    rxz = tf1.rxz;
 
-        rxx=tf1.rxx*tf2.rxx+tf1.rxy*tf2.rxy+tf1.rxz*tf2.rxz;
-        rxy=tf1.rxx*tf2.ryx+tf1.rxy*tf2.ryy+tf1.rxz*tf2.ryz;
-        rxz=tf1.rxx*tf2.rzx+tf1.rxy*tf2.rzy+tf1.rxz*tf2.rzz;
+    ryx = tf1.ryx;
+    ryy = tf1.ryy;
+    ryz = tf1.ryz;
 
-        ryx=tf1.ryx*tf2.rxx+tf1.ryy*tf2.rxy+tf1.ryz*tf2.rxz;
-        ryy=tf1.ryx*tf2.ryx+tf1.ryy*tf2.ryy+tf1.ryz*tf2.ryz;
-        ryz=tf1.ryx*tf2.rzx+tf1.ryy*tf2.rzy+tf1.ryz*tf2.rzz;
+    rzx = tf1.rzx;
+    rzy = tf1.rzy;
+    rzz = tf1.rzz;
 
-        rzx=tf1.rzx*tf2.rxx+tf1.rzy*tf2.rxy+tf1.rzz*tf2.rxz;
-        rzy=tf1.rzx*tf2.ryx+tf1.rzy*tf2.ryy+tf1.rzz*tf2.ryz;
-        rzz=tf1.rzx*tf2.rzx+tf1.rzy*tf2.rzy+tf1.rzz*tf2.rzz;
-        
-        tx=tf1.tx*tf2.rxx+tf1.ty*tf2.rxy+tf1.tz*tf2.rxz+itf2tx;
-        ty=tf1.tx*tf2.ryx+tf1.ty*tf2.ryy+tf1.tz*tf2.ryz+itf2ty;
-        tz=tf1.tx*tf2.rzx+tf1.ty*tf2.rzy+tf1.tz*tf2.rzz+itf2tz;
+    tx = tf1.tx - tf2.tx;
+    ty = tf1.ty - tf2.ty;
+    tz = tf1.tz - tf2.tz;
+  }
+  else
+  {
+    G4double tf1rxx = tf1.rxx, tf1rxy = tf1.rxy, tf1rxz = tf1.rxz;
+    rxx = tf1rxx*tf2.rxx + tf1rxy*tf2.rxy + tf1rxz*tf2.rxz;
+    rxy = tf1rxx*tf2.ryx + tf1rxy*tf2.ryy + tf1rxz*tf2.ryz;
+    rxz = tf1rxx*tf2.rzx + tf1rxy*tf2.rzy + tf1rxz*tf2.rzz;
 
-        return *this;
+    G4double tf1ryx = tf1.ryx, tf1ryy = tf1.ryy, tf1ryz = tf1.ryz;
+    ryx = tf1ryx*tf2.rxx + tf1ryy*tf2.rxy + tf1ryz*tf2.rxz;
+    ryy = tf1ryx*tf2.ryx + tf1ryy*tf2.ryy + tf1ryz*tf2.ryz;
+    ryz = tf1ryx*tf2.rzx + tf1ryy*tf2.rzy + tf1ryz*tf2.rzz;
+
+    G4double tf1rzx = tf1.rzx, tf1rzy = tf1.rzy, tf1rzz = tf1.rzz;
+    rzx = tf1rzx*tf2.rxx + tf1rzy*tf2.rxy + tf1rzz*tf2.rxz;
+    rzy = tf1rzx*tf2.ryx + tf1rzy*tf2.ryy + tf1rzz*tf2.ryz;
+    rzz = tf1rzx*tf2.rzx + tf1rzy*tf2.rzy + tf1rzz*tf2.rzz;
+
+    G4double tf1_2tx = tf1.tx - tf2.tx;
+    G4double tf1_2ty = tf1.ty - tf2.ty;
+    G4double tf1_2tz = tf1.tz - tf2.tz;
+    tx = tf1_2tx*tf2.rxx + tf1_2ty*tf2.rxy + tf1_2tz*tf2.rxz;
+    ty = tf1_2tx*tf2.ryx + tf1_2ty*tf2.ryy + tf1_2tz*tf2.ryz;
+    tz = tf1_2tx*tf2.rzx + tf1_2ty*tf2.rzy + tf1_2tz*tf2.rzz;
+  }
+  return *this;
 }
 
-inline
-G4ThreeVector G4AffineTransform::TransformPoint(const G4ThreeVector& vec) const
+inline G4ThreeVector
+G4AffineTransform::TransformPoint(const G4ThreeVector& vec) const
 {
-        return G4ThreeVector( vec.x()*rxx + vec.y()*ryx + vec.z()*rzx   + tx,
-                              vec.x()*rxy + vec.y()*ryy + vec.z()*rzy   + ty,
-                              vec.x()*rxz + vec.y()*ryz + vec.z()*rzz   + tz  );
+  G4double vecx = vec.x(), vecy = vec.y(), vecz = vec.z();
+  return G4ThreeVector( vecx*rxx + vecy*ryx + vecz*rzx + tx,
+                        vecx*rxy + vecy*ryy + vecz*rzy + ty,
+                        vecx*rxz + vecy*ryz + vecz*rzz + tz );
 }
 
-inline
-G4ThreeVector G4AffineTransform::TransformAxis(const G4ThreeVector& axis) const
+inline G4ThreeVector
+G4AffineTransform::InverseTransformPoint(const G4ThreeVector& vec) const
 {
-        return G4ThreeVector( axis.x()*rxx + axis.y()*ryx + axis.z()*rzx,
-                              axis.x()*rxy + axis.y()*ryy + axis.z()*rzy,
-                              axis.x()*rxz + axis.y()*ryz + axis.z()*rzz  );
+  G4double vecx = vec.x()-tx, vecy = vec.y()-ty, vecz = vec.z()-tz;
+  return G4ThreeVector( vecx*rxx + vecy*rxy + vecz*rxz,
+                        vecx*ryx + vecy*ryy + vecz*ryz,
+                        vecx*rzx + vecy*rzy + vecz*rzz );
+}
+
+inline G4ThreeVector
+G4AffineTransform::TransformAxis(const G4ThreeVector& axis) const
+{
+  G4double axisx = axis.x(), axisy = axis.y(), axisz = axis.z();
+  return G4ThreeVector( axisx*rxx + axisy*ryx + axisz*rzx,
+                        axisx*rxy + axisy*ryy + axisz*rzy,
+                        axisx*rxz + axisy*ryz + axisz*rzz );
+}
+
+inline G4ThreeVector
+G4AffineTransform::InverseTransformAxis(const G4ThreeVector& axis) const
+{
+  G4double axisx = axis.x(), axisy = axis.y(), axisz = axis.z();
+  return G4ThreeVector( axisx*rxx + axisy*rxy + axisz*rxz,
+                        axisx*ryx + axisy*ryy + axisz*ryz,
+                        axisx*rzx + axisy*rzy + axisz*rzz );
 }
 
 inline
 void G4AffineTransform::ApplyPointTransform(G4ThreeVector& vec) const
 {
-        G4double x = vec.x()*rxx + vec.y()*ryx + vec.z()*rzx    + tx;
-        G4double y = vec.x()*rxy + vec.y()*ryy + vec.z()*rzy    + ty;
-        G4double z = vec.x()*rxz + vec.y()*ryz + vec.z()*rzz    + tz;
-
-        vec.setX(x);
-        vec.setY(y);
-        vec.setZ(z);
+  G4double vecx = vec.x(), vecy = vec.y(), vecz = vec.z();
+  vec.setX( vecx*rxx + vecy*ryx + vecz*rzx + tx );
+  vec.setY( vecx*rxy + vecy*ryy + vecz*rzy + ty );
+  vec.setZ( vecx*rxz + vecy*ryz + vecz*rzz + tz );
 }
 
 inline
 void G4AffineTransform::ApplyAxisTransform(G4ThreeVector& axis) const
 {
-        G4double x = axis.x()*rxx + axis.y()*ryx + axis.z()*rzx;
-        G4double y = axis.x()*rxy + axis.y()*ryy + axis.z()*rzy;
-        G4double z = axis.x()*rxz + axis.y()*ryz + axis.z()*rzz;
-
-        axis.setX(x);
-        axis.setY(y);
-        axis.setZ(z);
+  G4double axisx = axis.x(), axisy = axis.y(), axisz = axis.z();
+  axis.setX( axisx*rxx + axisy*ryx + axisz*rzx );
+  axis.setY( axisx*rxy + axisy*ryy + axisz*rzy );
+  axis.setZ( axisx*rxz + axisy*ryz + axisz*rzz );
 }
 
 inline
 G4AffineTransform G4AffineTransform::Inverse() const
 {
-        return G4AffineTransform( rxx, ryx, rzx,
-                                  rxy, ryy, rzy,
-                                  rxz, ryz, rzz,
-
-                                 -tx*rxx - ty*rxy - tz*rxz,
-                                 -tx*ryx - ty*ryy - tz*ryz,
-                                 -tx*rzx - ty*rzy - tz*rzz  );
+  G4double ttx = -tx, tty = -ty, ttz = -tz;
+  return G4AffineTransform( rxx, ryx, rzx,
+                            rxy, ryy, rzy,
+                            rxz, ryz, rzz,
+                            ttx*rxx + tty*rxy + ttz*rxz,
+                            ttx*ryx + tty*ryy + ttz*ryz,
+                            ttx*rzx + tty*rzy + ttz*rzz );
 }
 
 inline
 G4AffineTransform& G4AffineTransform::Invert()
 {
-        G4double v1 = -tx*rxx - ty*rxy - tz*rxz;
-        G4double v2 = -tx*ryx - ty*ryy - tz*ryz;
-        G4double v3 = -tx*rzx - ty*rzy - tz*rzz;
+  G4double ttx = -tx, tty = -ty, ttz = -tz;
+           tx = ttx*rxx + tty*rxy + ttz*rxz;
+           ty = ttx*ryx + tty*ryy + ttz*ryz;
+           tz = ttx*rzx + tty*rzy + ttz*rzz;
 
-        tx=v1; ty=v2; tz=v3;
+  G4double tmp1=ryx; ryx=rxy; rxy=tmp1;
+  G4double tmp2=rzx; rzx=rxz; rxz=tmp2;
+  G4double tmp3=rzy; rzy=ryz; ryz=tmp3;
 
-        G4double tmp1=ryx; ryx=rxy; rxy=tmp1;
-        G4double tmp2=rzx; rzx=rxz; rxz=tmp2;
-        G4double tmp3=rzy; rzy=ryz; ryz=tmp3;
-
-        return *this;
-
+  return *this;
 }
 
 inline
 G4AffineTransform& G4AffineTransform::operator +=(const G4ThreeVector& tlate)
 {
-        tx += tlate.x();
-        ty += tlate.y();
-        tz += tlate.z();
+  tx += tlate.x();
+  ty += tlate.y();
+  tz += tlate.z();
 
-        return *this;
+  return *this;
 }
 
 inline
 G4AffineTransform& G4AffineTransform::operator -=(const G4ThreeVector& tlate)
 {
-        tx -= tlate.x();
-        ty -= tlate.y();
-        tz -= tlate.z();
+  tx -= tlate.x();
+  ty -= tlate.y();
+  tz -= tlate.z();
 
-        return *this;
+  return *this;
 }
 
 inline
 G4bool G4AffineTransform::operator == (const G4AffineTransform& tf) const
 {
-        return (tx==tf.tx&&ty==tf.ty&&tz==tf.tz&&
-                rxx==tf.rxx&&rxy==tf.rxy&&rxz==tf.rxz&&
-                ryx==tf.ryx&&ryy==tf.ryy&&ryz==tf.ryz&&
-                rzx==tf.rzx&&rzy==tf.rzy&&rzz==tf.rzz) ? true : false;
+  return (tx==tf.tx&&ty==tf.ty&&tz==tf.tz&&
+          rxx==tf.rxx&&rxy==tf.rxy&&rxz==tf.rxz&&
+          ryx==tf.ryx&&ryy==tf.ryy&&ryz==tf.ryz&&
+          rzx==tf.rzx&&rzy==tf.rzy&&rzz==tf.rzz) ? true : false;
 }
+
 inline
 G4bool G4AffineTransform::operator != (const G4AffineTransform& tf) const
 {
-        return (tx!=tf.tx||ty!=tf.ty||tz!=tf.tz||
-                rxx!=tf.rxx||rxy!=tf.rxy||rxz!=tf.rxz||
-                ryx!=tf.ryx||ryy!=tf.ryy||ryz!=tf.ryz||
-                rzx!=tf.rzx||rzy!=tf.rzy||rzz!=tf.rzz) ? true : false;
+  return (tx!=tf.tx||ty!=tf.ty||tz!=tf.tz||
+          rxx!=tf.rxx||rxy!=tf.rxy||rxz!=tf.rxz||
+          ryx!=tf.ryx||ryy!=tf.ryy||ryz!=tf.ryz||
+          rzx!=tf.rzx||rzy!=tf.rzy||rzz!=tf.rzz) ? true : false;
 }
 
 inline
 G4double G4AffineTransform::operator [] (const G4int n) const
 {
-        G4double v = 0.0;
-        switch(n)
-                {
-                case 0:
-                        v=rxx;
-                        break;
-                case 1:
-                        v=rxy;
-                        break;
-                case 2:
-                        v=rxz;
-                        break;
-                case 4:
-                        v=ryx;
-                        break;
-                case 5:
-                        v=ryy;
-                        break;
-                case 6:
-                        v=ryz;
-                        break;
-                case 8:
-                        v=rzx;
-                        break;
-                case 9:
-                        v=rzy;
-                        break;
-                case 10:
-                        v=rzz;
-                        break;
-                case 12:
-                        v=tx;
-                        break;
-                case 13:
-                        v=ty;
-                        break;
-                case 14:
-                        v=tz;
-                        break;
-                case 3:
-                case 7:
-                case 11:
-                        break;
-                case 15:
-                        v=1.0;
-                        break;
-                }
-        return v;
+  G4double v = 0.0;
+  switch(n)
+  {
+    case 0:
+            v=rxx;
+            break;
+    case 1:
+            v=rxy;
+            break;
+    case 2:
+            v=rxz;
+            break;
+    case 4:
+            v=ryx;
+            break;
+    case 5:
+            v=ryy;
+            break;
+    case 6:
+            v=ryz;
+            break;
+    case 8:
+            v=rzx;
+            break;
+    case 9:
+            v=rzy;
+            break;
+    case 10:
+            v=rzz;
+            break;
+    case 12:
+            v=tx;
+            break;
+    case 13:
+            v=ty;
+            break;
+    case 14:
+            v=tz;
+            break;
+    case 3:
+    case 7:
+    case 11:
+            break;
+    case 15:
+            v=1.0;
+            break;
+  }
+  return v;
 }
 
 inline
 G4bool G4AffineTransform::IsRotated() const
 {
-        return (rxx==1.0 && ryy==1.0 && rzz==1.0) ? false : true;
+  return (rxx==1.0 && ryy==1.0 && rzz==1.0) ? false : true;
 }
 
 inline 
 G4bool G4AffineTransform::IsTranslated() const
 {
-        return (tx || ty || tz) ? true:false;
+  return (tx || ty || tz) ? true:false;
 }
 
 inline G4RotationMatrix G4AffineTransform::NetRotation() const
 {
-  G4RotationMatrix mat;
-  return mat.rotateAxes(G4ThreeVector(rxx,ryx,rzx),
-                        G4ThreeVector(rxy,ryy,rzy),
-                        G4ThreeVector(rxz,ryz,rzz));
+  return G4Rep3x3(rxx,rxy,rxz,
+                  ryx,ryy,ryz,
+                  rzx,rzy,rzz);
+}
+
+inline G4RotationMatrix G4AffineTransform::InverseNetRotation() const
+{
+  return G4Rep3x3(rxx,ryx,rzx,
+                  rxy,ryy,rzy,
+                  rxz,ryz,rzz);
 }
 
 inline
 G4ThreeVector G4AffineTransform::NetTranslation() const
 {
-        return G4ThreeVector(tx,ty,tz);
+  return G4ThreeVector(tx,ty,tz);
+}
+
+inline
+G4ThreeVector G4AffineTransform::InverseNetTranslation() const
+{
+  G4double ttx = -tx, tty = -ty, ttz = -tz;
+  G4double invtx = ttx*rxx + tty*rxy + ttz*rxz;
+  G4double invty = ttx*ryx + tty*ryy + ttz*ryz;
+  G4double invtz = ttx*rzx + tty*rzy + ttz*rzz;
+  return G4ThreeVector(invtx,invty,invtz);
 }
 
 inline 
 void G4AffineTransform::SetNetRotation(const G4RotationMatrix& rot)
 {
-        rxx=rot.xx();
-        rxy=rot.xy();
-        rxz=rot.xz();
-        ryx=rot.yx();
-        ryy=rot.yy();
-        ryz=rot.yz();
-        rzx=rot.zx();
-        rzy=rot.zy();
-        rzz=rot.zz();
+  rxx=rot.xx();
+  rxy=rot.xy();
+  rxz=rot.xz();
+  ryx=rot.yx();
+  ryy=rot.yy();
+  ryz=rot.yz();
+  rzx=rot.zx();
+  rzy=rot.zy();
+  rzz=rot.zz();
 }
 
 inline
 void G4AffineTransform::SetNetTranslation(const G4ThreeVector& tlate)
 {
-        tx=tlate.x();
-        ty=tlate.y();
-        tz=tlate.z();
+  tx=tlate.x();
+  ty=tlate.y();
+  tz=tlate.z();
+}
+
+inline
+G4AffineTransform::operator G4Transform3D () const
+{
+  return G4Transform3D(NetRotation().inverse(),NetTranslation());
 }
 
 inline
 std::ostream& operator << (std::ostream& os, const G4AffineTransform& transf)
 {
-  std::streamsize oldPrec = os.precision(6); 
+  std::streamsize oldPrec = os.precision(6);
   G4double DeviationTolerance = 1.0e-05;
 
-  G4double diagDeviation = 0.0; 
+  G4double diagDeviation = 0.0;
   G4double offdDeviationUL = 0.0;
   G4double offdDeviationDR = 0.0;
-  G4double offdDeviation = 0.0; 
+  G4double offdDeviation = 0.0;
 
-  os << "  Transformation: " << G4endl; 
+  os << "  Transformation: " << G4endl;
 
-  // double  a = std::max ( 1, 2, 3 ) ; 
-  
-  G4bool UnitTr = ! transf.IsRotated(); 
+  // double  a = std::max ( 1, 2, 3 ) ;
+
+  G4bool UnitTr = ! transf.IsRotated();
   diagDeviation = std::max( std::fabs( transf[0] - 1.0 ) ,   //  |rxx - 1|
                             std::fabs( transf[5] - 1.0 ) );  //  |ryy - 1|
-  diagDeviation = std::max( diagDeviation, 
+  diagDeviation = std::max( diagDeviation,
                             std::fabs( transf[10] - 1.0 ) ); //  |rzz - 1|
   
   offdDeviationUL = std::max( std::fabs( transf[1] ) ,       //  |rxy|
@@ -427,7 +504,7 @@ std::ostream& operator << (std::ostream& os, const G4AffineTransform& transf)
                               std::fabs( transf[8] ) );      //  |rzx|
   offdDeviationDR = std::max( offdDeviationDR, 
                               std::fabs( transf[9] ) );      //  |rzy|
-  offdDeviation = std::max( offdDeviationUL, offdDeviationDR ); 
+  offdDeviation = std::max( offdDeviationUL, offdDeviationDR );
 
   if( UnitTr || std::max(diagDeviation, offdDeviation) < DeviationTolerance )
   {
@@ -446,7 +523,7 @@ std::ostream& operator << (std::ostream& os, const G4AffineTransform& transf)
   os << "tr/x,y,z: " << transf[12]  << " " << transf[13] << " " << transf[14]
      << G4endl;
   
-  os.precision(oldPrec); 
+  os.precision(oldPrec);
 
-  return os; 
+  return os;
 }

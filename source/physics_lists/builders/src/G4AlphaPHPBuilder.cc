@@ -28,6 +28,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleHPInelasticData.hh"
+#include "G4SystemOfUnits.hh"
 
 G4AlphaPHPBuilder::
 G4AlphaPHPBuilder() 
@@ -36,10 +37,6 @@ G4AlphaPHPBuilder()
   theMax=200.*MeV;
   theParticlePHPModel = 0;
 }
-
-G4AlphaPHPBuilder::
-~G4AlphaPHPBuilder() 
-{}
 
 void G4AlphaPHPBuilder::
 Build(G4HadronElasticProcess *)

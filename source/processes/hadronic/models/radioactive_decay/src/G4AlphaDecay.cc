@@ -44,8 +44,9 @@
 
 G4AlphaDecay::G4AlphaDecay(const G4ParticleDefinition* theParentNucleus,
                            const G4double& branch, const G4double& Qvalue,
-                           const G4double& excitationE)
- : G4NuclearDecay("alpha decay", Alpha, excitationE), transitionQ(Qvalue)
+                           const G4double& excitationE,
+                           const G4Ions::G4FloatLevelBase& flb)
+ : G4NuclearDecay("alpha decay", Alpha, excitationE, flb), transitionQ(Qvalue)
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent 
   SetBR(branch);
@@ -54,8 +55,8 @@ G4AlphaDecay::G4AlphaDecay(const G4ParticleDefinition* theParentNucleus,
   G4IonTable* theIonTable =
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
   G4int daughterZ = theParentNucleus->GetAtomicNumber() - 2;
-  G4int daughterA = theParentNucleus->GetAtomicMass() - 4; 
-  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE) );
+  G4int daughterA = theParentNucleus->GetAtomicMass() - 4;
+  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE, flb) );
   SetDaughter(1, "alpha");
 }
 

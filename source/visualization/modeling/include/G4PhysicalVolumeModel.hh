@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh 88763 2015-03-09 12:26:23Z gcosmo $
+// $Id: G4PhysicalVolumeModel.hh 99668 2016-09-30 08:02:13Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -281,6 +281,9 @@ private:
 };
 
 std::ostream& operator<<
-  (std::ostream& os, const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID);
+(std::ostream& os, const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID&);
+
+std::ostream& operator<<
+(std::ostream& os, const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>&);
 
 #endif

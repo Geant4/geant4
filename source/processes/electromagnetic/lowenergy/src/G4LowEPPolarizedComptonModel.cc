@@ -57,7 +57,11 @@
 // | History:                                                          |
 // | --------                                                          |
 // |                                                                   |
-// | Jan. 2015 JMCB       - 1st Version based on G4LowEPPComptonModel   |
+// | Jan. 2015 JMCB       - 1st Version based on G4LowEPPComptonModel  |
+// | Feb. 2016 JMCB       - Geant4 10.2 FPE fix for bug 1676           |
+// | Nov. 2016 JMCB       - Polarisation tracking fix in collaboration |
+// |                        of Dr. Merlin Reynaard Kole,               |
+// |                        University of Geneva                       |
 // |                                                                   |
 // *********************************************************************
 
@@ -556,19 +560,29 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
            diff = 0.0;
      }
 
-
       // Plus and minus of quadratic
       G4double X_p = (-var_Y + sqrt (diff))/(2*var_W);
       G4double X_m = (-var_Y - sqrt (diff))/(2*var_W);
 
 
-      // Randomly sample one of the two possible solutions and determin theta angle of ejected Compton electron
+      // Floating point precision protection
+      // Check if X_p and X_m are greater than or less than 1 or -1, if so clean up FPE 
+      // Issue due to propagation of FPE and only impacts 8th sig fig onwards
+
+      if(X_p >1){X_p=1;} if(X_p<-1){X_p=-1;}
+      if(X_m >1){X_m=1;} if(X_m<-1){X_m=-1;}
+
+      // End of FP protection
+
       G4double ThetaE = 0.;
-      G4double sol_select = G4UniformRand();
+
+
+      // Randomly sample one of the two possible solutions and determin theta angle of ejected Compton electron
+       G4double sol_select = G4UniformRand();
 
       if (sol_select < 0.5)
       {
-          ThetaE = std::acos(X_p);
+           ThetaE = std::acos(X_p);
       }
       if (sol_select > 0.5)
       {
@@ -605,8 +619,10 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
   // Set "scattered" photon direction and energy
 
   G4ThreeVector photonDirection1(dirx,diry,dirz);
-  photonDirection1.rotateUz(photonDirection0);
-  photonPolarization1.rotateUz(photonDirection0);
+  SystemOfRefChange(photonDirection0,photonDirection1,
+		    photonPolarization0,photonPolarization1);
+
+
   if (pERecoil > 0.)
     {
      fParticleChange->SetProposedKineticEnergy(pERecoil) ;
@@ -622,7 +638,9 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
      G4double eKineticEnergy = pEIncident - pERecoil - bindingE;
 
      G4ThreeVector eDirection(eDirX,eDirY,eDirZ);
-     eDirection.rotateUz(photonDirection0);
+     SystemOfRefChangeElect(photonDirection0,eDirection,
+                  photonPolarization0);
+
      G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),
                                                    eDirection,eKineticEnergy) ;
      fvect->push_back(dp);
@@ -980,3 +998,48 @@ G4ThreeVector G4LowEPPolarizedComptonModel::SetNewPolarization(G4double LowEPPCe
   return photonPolarization1;
 
 }
+void G4LowEPPolarizedComptonModel::SystemOfRefChange(G4ThreeVector& direction0,
+                                                    G4ThreeVector& direction1,
+                                                    G4ThreeVector& polarization0,
+                                                    G4ThreeVector& polarization1)
+{
+  // direction0 is the original photon direction ---> z
+  // polarization0 is the original photon polarization ---> x
+  // need to specify y axis in the real reference frame ---> y 
+  G4ThreeVector Axis_Z0 = direction0.unit();
+  G4ThreeVector Axis_X0 = polarization0.unit();
+  G4ThreeVector Axis_Y0 = (Axis_Z0.cross(Axis_X0)).unit(); // to be confirmed;
+
+  G4double direction_x = direction1.getX();
+  G4double direction_y = direction1.getY();
+  G4double direction_z = direction1.getZ();
+  
+  direction1 = (direction_x*Axis_X0 + direction_y*Axis_Y0 + direction_z*Axis_Z0).unit();
+  G4double polarization_x = polarization1.getX();
+  G4double polarization_y = polarization1.getY();
+  G4double polarization_z = polarization1.getZ();
+
+  polarization1 = (polarization_x*Axis_X0 + polarization_y*Axis_Y0 + polarization_z*Axis_Z0).unit();
+
+}
+
+void G4LowEPPolarizedComptonModel::SystemOfRefChangeElect(G4ThreeVector& pdirection,
+                                                    G4ThreeVector& edirection,
+                                                    G4ThreeVector& ppolarization)
+{
+  // direction0 is the original photon direction ---> z
+  // polarization0 is the original photon polarization ---> x
+  // need to specify y axis in the real reference frame ---> y 
+  G4ThreeVector Axis_Z0 = pdirection.unit();
+  G4ThreeVector Axis_X0 = ppolarization.unit();
+  G4ThreeVector Axis_Y0 = (Axis_Z0.cross(Axis_X0)).unit(); // to be confirmed;
+
+  G4double direction_x = edirection.getX();
+  G4double direction_y = edirection.getY();
+  G4double direction_z = edirection.getZ();
+
+  edirection = (direction_x*Axis_X0 + direction_y*Axis_Y0 + direction_z*Axis_Z0).unit();
+
+}
+
+

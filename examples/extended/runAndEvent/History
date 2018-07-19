@@ -1,4 +1,4 @@
-$Id: History 68026 2013-03-13 13:45:22Z gcosmo $
+$Id: History 100814 2016-11-02 15:10:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Feb 15, 2013 I. Hrivnacova (exRunAndEvent-V09-06-01)
+Nov. 01, 2016 I. Hrivnacova  (exRunAndEvent-V10-02-01)
+- Coding guidelines (missing separators)
+
+Jun. 01, 2016 M. Asai (exRunAndEvent-V10-02-00)
+- README is updated
+
+Feb. 15, 2013 I. Hrivnacova (exRunAndEvent-V09-06-01)
 - Applied coding guidelines (data members names and initialization)
 - Fixed GNUmakefile (in RE05, RE06)
 

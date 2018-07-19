@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairingCorrection.cc 85841 2014-11-05 15:35:06Z gcosmo $
+// $Id: G4PairingCorrection.cc 105799 2017-08-21 07:35:55Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -34,22 +34,11 @@
 #include "G4PairingCorrection.hh"
 #include "G4SystemOfUnits.hh"
 
-G4PairingCorrection* G4PairingCorrection::theInstance = 0;
-
 G4PairingCorrection::G4PairingCorrection()
 {}
 
 G4PairingCorrection::~G4PairingCorrection()
 {}
-
-G4PairingCorrection* G4PairingCorrection::GetInstance()
-{
-  if (!theInstance)  { 
-    static G4PairingCorrection theCorrections;
-    theInstance = &theCorrections; 
-  }
-  return theInstance;
-}   
 
 G4double G4PairingCorrection::GetPairingCorrection(G4int A, G4int Z) const
 {
@@ -59,7 +48,7 @@ G4double G4PairingCorrection::GetPairingCorrection(G4int A, G4int Z) const
 
     if(!theCameronGilbertPairingCorrections.GetPairingCorrection(N,Z,pairCorr)) {
 
-      static const G4double PairingConstant = 12.0*MeV;
+      static const G4double PairingConstant = 12.0*CLHEP::MeV;
       pairCorr = ((1 - Z + 2*(Z/2)) + (1 - N + 2*(N/2)))
 	*PairingConstant/std::sqrt(static_cast<G4double>(A));
     }

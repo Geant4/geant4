@@ -1,0 +1,216 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_obj_array
+#define tools_rroot_obj_array
+
+#include "object"
+#include "../vmanip"
+#include "../scast"
+
+#include "cids"
+
+namespace tools {
+namespace rroot {
+
+template <class T>
+class obj_array : public virtual iro,public std::vector<T*> {
+  static const std::string& s_store_class() {
+    static const std::string s_v("TObjArray");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::obj_array<"+T::s_class()+">");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< obj_array<T> >(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return obj_array_cid()+T::id_class();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<obj_array>(this,a_class)) {return p;}
+    return 0;
+  }
+  virtual iro* copy() const {return new obj_array<T>(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    ifac::args args;
+    bool accept_null = false;
+    return stream(a_buffer,args,accept_null);
+  }
+public:
+  obj_array(ifac& a_fac,bool a_owner,bool a_warn) //a_warn used if a_owner=false.
+  :m_fac(a_fac)
+  ,m_owner(a_owner)
+  ,m_warn(a_warn)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~obj_array(){
+    _clear();
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  obj_array(const obj_array& a_from)
+  :iro(a_from)
+  ,std::vector<T*>()
+  ,m_fac(a_from.m_fac)
+  ,m_owner(a_from.m_owner)
+  ,m_warn(a_from.m_warn)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    if(a_from.m_owner) {
+      typedef typename std::vector<T*>::const_iterator it_t;
+      for(it_t it=a_from.begin();it!=a_from.end();++it) {
+        if(!(*it)) {
+          std::vector<T*>::push_back(0);
+        } else {
+          iro* _obj = (*it)->copy();
+          T* obj = safe_cast<iro,T>(*_obj);
+          if(!obj) {
+            //a_buffer.out() << "tools::rroot::obj_array::obj_array :"
+            //               << " inlib::cast failed."
+            //               << std::endl;
+            delete _obj;
+          } else {
+            std::vector<T*>::push_back(obj);
+          }
+        }
+      }
+    } else {
+      std::vector<T*>::operator=(a_from); 
+    }
+  }
+  obj_array& operator=(const obj_array& a_from){
+    if(&a_from==this) return *this;
+
+    _clear();
+
+    m_owner = a_from.m_owner;
+    m_warn = a_from.m_warn;
+
+    if(a_from.m_owner) {
+      typedef typename std::vector<T*>::const_iterator it_t;
+      for(it_t it=a_from.begin();it!=a_from.end();++it) {
+        if(!(*it)) {
+          std::vector<T*>::push_back(0);
+        } else {
+          iro* _obj = (*it)->copy();
+          T* obj = safe_cast<iro,T>(*_obj);
+          if(!obj) {
+            //a_buffer.out() << "tools::rroot::obj_array::operator= :"
+            //               << " inlib::cast failed."
+            //               << std::endl;
+            delete _obj;
+          } else {
+            std::vector<T*>::push_back(obj);
+          }
+        }
+      }
+    } else {
+      std::vector<T*>::operator=(a_from); 
+    }
+
+    return *this;
+  }
+public:
+  void cleanup() {_clear();}
+public:
+  bool stream(buffer& a_buffer,const ifac::args& a_args,bool a_accept_null = false) {
+    _clear();
+
+    short v;
+    unsigned int sp, bc;
+    if(!a_buffer.read_version(v,sp,bc)) return false;
+
+    //::printf("debug : obj_array::stream : version %d, byte count %d\n",v,c);
+
+   {uint32 id,bits;
+    if(!Object_stream(a_buffer,id,bits)) return false;}
+    std::string name;
+    if(!a_buffer.read(name)) return false;
+    int nobjects;
+    if(!a_buffer.read(nobjects)) return false;
+    int lowerBound;
+    if(!a_buffer.read(lowerBound)) return false;
+
+    //::printf("debug : obj_array : name \"%s\", nobject %d, lowerBound %d\n",
+    //  name.c_str(),nobjects,lowerBound);
+
+    for (int i=0;i<nobjects;i++) {
+      //::printf("debug : obj_array :    n=%d i=%d ...\n",nobjects,i);
+
+      iro* obj;
+      bool created;
+      if(!a_buffer.read_object(m_fac,a_args,obj,created)){
+        a_buffer.out() << "tools::rroot::obj_array::stream : can't read object." << std::endl;
+        return false;
+      }
+      //::printf("debug : obj_array :    n=%d i=%d : ok\n",nobjects,i);
+      if(obj) {
+        T* to = safe_cast<iro,T>(*obj);
+        if(!to) {
+          a_buffer.out() << "tools::rroot::obj_array::stream :"
+                         << " inlib::cast failed."
+                         << " " << obj->s_cls() << " is not a " << T::s_class() << "."
+                         << std::endl;
+          if(created) {
+            if(a_buffer.map_objs()) a_buffer.remove_in_map(obj);
+            delete obj;
+          }
+        } else {
+          if(created) {
+            if(m_owner) {
+              std::vector<T*>::push_back(to);
+            } else { //who manage this object ?
+              if(m_warn) {
+	        a_buffer.out() << "tools::rroot::obj_array::stream :"
+                               << " warning : created object of class " << sout(obj->s_cls()) << " not managed."
+                               << std::endl;
+              }
+              std::vector<T*>::push_back(to);
+            }
+          } else { //someone else may manage this object.
+            if(m_owner) {
+              a_buffer.out() << "tools::rroot::obj_array::stream : not created object can't be manage here." << std::endl;
+              return false;
+            } else {
+              std::vector<T*>::push_back(to);
+            }
+          }
+        }
+      } else {
+        //a_accept_null for branch::stream m_baskets.
+        if(a_accept_null) std::vector<T*>::push_back(0);
+      }
+    }
+
+    return a_buffer.check_byte_count(sp,bc,s_store_class());
+  }
+protected:
+  void _clear() {
+    if(m_owner) {
+      safe_clear<T>(*this);
+    } else {
+      std::vector<T*>::clear();
+    }
+  }
+protected:
+  ifac& m_fac;
+  bool m_owner;
+  bool m_warn;
+};
+
+}}
+
+#endif

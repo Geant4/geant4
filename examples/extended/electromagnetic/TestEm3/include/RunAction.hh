@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 85280 2014-10-27 09:20:14Z gcosmo $
+// $Id: RunAction.hh 98762 2016-08-09 14:08:07Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,6 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

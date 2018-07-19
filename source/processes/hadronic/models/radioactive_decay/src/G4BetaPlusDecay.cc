@@ -45,8 +45,9 @@
 G4BetaPlusDecay::G4BetaPlusDecay(const G4ParticleDefinition* theParentNucleus,
                                  const G4double& branch, const G4double& e0,
                                  const G4double& excitationE,
+                                 const G4Ions::G4FloatLevelBase& flb,
                                  const G4BetaDecayType& betaType)
- : G4NuclearDecay("beta+ decay", BetaPlus, excitationE),
+ : G4NuclearDecay("beta+ decay", BetaPlus, excitationE, flb),
    endpointEnergy(e0 - 2.*CLHEP::electron_mass_c2)
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent 
@@ -57,7 +58,7 @@ G4BetaPlusDecay::G4BetaPlusDecay(const G4ParticleDefinition* theParentNucleus,
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
   G4int daughterZ = theParentNucleus->GetAtomicNumber() - 1;
   G4int daughterA = theParentNucleus->GetAtomicMass(); 
-  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE) );
+  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE, flb) );
   SetUpBetaSpectrumSampler(daughterZ, daughterA, betaType);
   SetDaughter(1, "e+");
   SetDaughter(2, "nu_e");
@@ -66,7 +67,7 @@ G4BetaPlusDecay::G4BetaPlusDecay(const G4ParticleDefinition* theParentNucleus,
 
 G4BetaPlusDecay::~G4BetaPlusDecay()
 {
-	delete spectrumSampler;
+  delete spectrumSampler;
 }
 
 
@@ -81,7 +82,6 @@ G4DecayProducts* G4BetaPlusDecay::DecayIt(G4double)
   G4double parentMass = G4MT_parent->GetPDGMass();
   G4double eMass = G4MT_daughters[1]->GetPDGMass();
   G4double nucleusMass = G4MT_daughters[0]->GetPDGMass();
-
   // Set up final state
   // parentParticle is set at rest here because boost with correct momentum 
   // is done later

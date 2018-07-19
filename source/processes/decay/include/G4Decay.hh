@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.hh 78547 2014-01-07 09:40:38Z gcosmo $
+// $Id: G4Decay.hh 105727 2017-08-16 12:47:05Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -88,21 +88,21 @@ class G4Decay : public G4VRestDiscreteProcess
      virtual G4VParticleChange *PostStepDoIt(
 			     const G4Track& aTrack,
                              const G4Step& aStep
-                            );
+                            ) override;
 
      virtual G4VParticleChange* AtRestDoIt(
 			     const G4Track& aTrack,
 			     const G4Step&  aStep
-			    );
+			    ) override;
 
-     virtual void BuildPhysicsTable(const G4ParticleDefinition&); 
+     virtual void BuildPhysicsTable(const G4ParticleDefinition&) override; 
      // In G4Decay, thePhysicsTable stores values of
     //    beta * std::sqrt( 1 - beta*beta) 
     //  as a function of normalized kinetic enregy (=Ekin/mass),
     //  becasuse this table is universal for all particle types,
 
 
-    virtual G4bool IsApplicable(const G4ParticleDefinition&);
+    virtual G4bool IsApplicable(const G4ParticleDefinition&) override;
     // returns "true" if the decay process can be applied to
     // the particle type. 
  
@@ -123,13 +123,13 @@ class G4Decay : public G4VRestDiscreteProcess
     virtual G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4ForceCondition* condition
-                            );
+                            ) override;
 
     virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
                              G4ForceCondition* condition
-                            );
+                            ) override;
 
   protected: // With Description
     // GetMeanFreePath returns ctau*beta*gamma for decay in flight 
@@ -137,15 +137,15 @@ class G4Decay : public G4VRestDiscreteProcess
     virtual G4double GetMeanFreePath(const G4Track& aTrack,
                               G4double   previousStepSize,
                               G4ForceCondition* condition
-                             );
+                             ) override;
 
     virtual G4double GetMeanLifeTime(const G4Track& aTrack,
                               G4ForceCondition* condition
-                            );
+                            ) override;
 
    public: //With Description
-     virtual void StartTracking(G4Track*);
-     virtual void EndTracking();
+     virtual void StartTracking(G4Track*) override;
+     virtual void EndTracking() override;
       // inform Start/End of tracking for each track to the physics process 
 
    public: //With Description
@@ -156,9 +156,8 @@ class G4Decay : public G4VRestDiscreteProcess
     G4double GetRemainderLifeTime() const;  
     //Get Remainder of life time at rest decay 
 
-  public:
-     void  SetVerboseLevel(G4int value);
-     G4int GetVerboseLevel() const;
+    virtual void ProcessDescription(std::ostream& outFile) const override;
+    //
 
   protected:
      G4int verboseLevel;
@@ -180,12 +179,6 @@ class G4Decay : public G4VRestDiscreteProcess
     // External Decayer
     G4VExtDecayer*    pExtDecayer;
 };
-
-inline
- void  G4Decay::SetVerboseLevel(G4int value){ verboseLevel = value; }
-
-inline
- G4int G4Decay::GetVerboseLevel() const { return verboseLevel; }
 
 inline  
   G4VParticleChange* G4Decay::AtRestDoIt(

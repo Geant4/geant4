@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAExcitation.cc 91992 2015-08-13 07:20:24Z gcosmo $
+// $Id: G4DNAExcitation.cc 105719 2017-08-16 12:36:37Z gcosmo $
 
 #include "G4DNAExcitation.hh"
 #include "G4LEPTSExcitationModel.hh"
@@ -108,22 +108,22 @@ void G4DNAExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 
     else if(name == "proton")
     {
-      if(!EmModel(1)) // MK: Is this a correct test ?
+      if(!EmModel(0)) // MK: Is this a correct test ?
       {
         G4DNAMillerGreenExcitationModel* miller =
             new G4DNAMillerGreenExcitationModel();
-        SetEmModel(miller, 1);
+        SetEmModel(miller);
         miller->SetLowEnergyLimit(10 * eV);
         miller->SetHighEnergyLimit(500 * keV);
 
         G4DNABornExcitationModel* born = new G4DNABornExcitationModel();
-        SetEmModel(born, 2);
+        SetEmModel(born);
         born->SetLowEnergyLimit(500 * keV);
         born->SetHighEnergyLimit(100 * MeV);
       }
 
-      AddEmModel(1, EmModel(1));
-      if(EmModel(2)) AddEmModel(2, EmModel(2));
+      AddEmModel(1, EmModel());
+      if(EmModel(1)) AddEmModel(2, EmModel(1));
     }
 
     else if(name == "hydrogen")

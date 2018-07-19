@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 //
-// $Id: PhysicsList.cc 94383 2015-11-13 10:20:27Z gcosmo $
+// $Id: PhysicsList.cc 107321 2017-11-08 16:31:08Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +36,7 @@
 #include "PhysicsListMessenger.hh"
 
 #include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "PhysListEmStandard.hh"
 #include "MuNuclearBuilder.hh"
 
@@ -126,7 +127,7 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>1) {
+  if (verboseLevel>-1) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
@@ -136,7 +137,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     fEmName = name;
     delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandard(name);
+    fEmPhysicsList = new G4EmStandardPhysics();
+
+  } else if (name == "emstandard_opt4") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
 
   } else if (name == "local") {
 

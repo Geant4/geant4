@@ -47,6 +47,24 @@
 #include <iostream>
 using std::endl;
 
+#define OLD_RADIUS_UNITS (3.3836/1.2)		// Used with NucModel params
+
+#include "G4HadronicDeveloperParameters.hh"
+namespace { 
+   G4HadronicDeveloperParameters& HDP = G4HadronicDeveloperParameters::GetInstance();
+   class BERTParameters {
+      public: 
+         BERTParameters(){
+            //HDP.SetDefault("NAME",VALUE,LOWER_LIMIT(default=-DBL_MAX),UPPER_LIMIT(default=DBL_MAX));
+            HDP.SetDefault( "BERT_FERMI_SCALE" , 1.932/OLD_RADIUS_UNITS , 1.932/OLD_RADIUS_UNITS/2 , 1.932/OLD_RADIUS_UNITS*2 );
+            HDP.SetDefault( "BERT_RADIUS_SCALE" , OLD_RADIUS_UNITS , OLD_RADIUS_UNITS/2 , OLD_RADIUS_UNITS*2 );
+            HDP.SetDefault( "BERT_RAD_TRAILING" , 0. , 0. , 2. );
+            HDP.SetDefault( "BERT_XSEC_SCALE" , 1.0 , 0.5 , 2. );
+         }
+   };
+   BERTParameters BP;
+}
+
 
 // Singleton accessor
 
@@ -64,7 +82,7 @@ const G4CascadeParameters* G4CascadeParameters::Instance() {
 
 // Constructor initializes everything once
 
-#define OLD_RADIUS_UNITS (3.3836/1.2)		// Used with NucModel params
+//#define OLD_RADIUS_UNITS (3.3836/1.2)		// Used with NucModel params
 
 G4CascadeParameters::G4CascadeParameters()
   : G4CASCADE_VERBOSE(getenv("G4CASCADE_VERBOSE")),
@@ -108,19 +126,23 @@ void G4CascadeParameters::Initialize() {
 		    : 0.);
   RANDOM_FILE = (G4CASCADE_RANDOM_FILE ? G4CASCADE_RANDOM_FILE : "");
   BEST_PAR = (0!=G4NUCMODEL_USE_BEST);
-  TWOPARAM_RADIUS = (0!=G4NUCMODEL_RAD_2PAR);
+  TWOPARAM_RADIUS = (0!=G4NUCMODEL_RAD_2PAR); // && G4NUCMODEL_RAD_2PAR[0]!='0');
   RADIUS_SCALE = (G4NUCMODEL_RAD_SCALE ? strtod(G4NUCMODEL_RAD_SCALE,0)
-		  : (BEST_PAR?1.0:OLD_RADIUS_UNITS));
+  		  : (BEST_PAR?1.0:OLD_RADIUS_UNITS));
+  if ( G4NUCMODEL_RAD_SCALE == 0 && BEST_PAR == 0 ) HDP.DeveloperGet("BERT_RADIUS_SCALE",RADIUS_SCALE);
   RADIUS_SMALL = ((G4NUCMODEL_RAD_SMALL ? strtod(G4NUCMODEL_RAD_SMALL,0)
 		   : (BEST_PAR?1.992:(8.0/OLD_RADIUS_UNITS))) * RADIUS_SCALE);
   RADIUS_ALPHA = (G4NUCMODEL_RAD_ALPHA ? strtod(G4NUCMODEL_RAD_ALPHA,0)
 		  : (BEST_PAR?0.84:0.70));
   RADIUS_TRAILING = ((G4NUCMODEL_RAD_TRAILING ? strtod(G4NUCMODEL_RAD_TRAILING,0)
 		      : 0.) * RADIUS_SCALE);
+  if ( G4NUCMODEL_RAD_TRAILING == 0 ) HDP.DeveloperGet("BERT_RAD_TRAILING",RADIUS_TRAILING),RADIUS_TRAILING*=RADIUS_SCALE;
   FERMI_SCALE = ((G4NUCMODEL_FERMI_SCALE ? strtod(G4NUCMODEL_FERMI_SCALE,0)
 		  : (BEST_PAR?0.685:(1.932/OLD_RADIUS_UNITS))) * RADIUS_SCALE);
+  if ( G4NUCMODEL_FERMI_SCALE == 0 && BEST_PAR == 0 ) HDP.DeveloperGet("BERT_FERMI_SCALE",FERMI_SCALE),FERMI_SCALE*=RADIUS_SCALE;
   XSEC_SCALE = (G4NUCMODEL_XSEC_SCALE ? strtod(G4NUCMODEL_XSEC_SCALE,0)
-		: (BEST_PAR?0.1:1.0) );
+  		: (BEST_PAR?0.1:1.0) );
+  if ( G4NUCMODEL_XSEC_SCALE == 0 && BEST_PAR == 0 ) HDP.DeveloperGet("BERT_XSEC_SCALE",XSEC_SCALE);
   GAMMAQD_SCALE = (G4NUCMODEL_GAMMAQD?strtod(G4NUCMODEL_GAMMAQD,0):1.);
   DPMAX_DOUBLET = (DPMAX_2CLUSTER ? strtod(DPMAX_2CLUSTER,0) : 0.090);
   DPMAX_TRIPLET = (DPMAX_3CLUSTER ? strtod(DPMAX_3CLUSTER,0) : 0.108);

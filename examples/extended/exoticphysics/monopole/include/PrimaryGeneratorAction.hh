@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.hh 68036 2013-03-13 14:13:45Z gcosmo $
+// $Id: PrimaryGeneratorAction.hh 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,6 +58,7 @@ private:
   G4ParticleGun*         fParticleGun;
   DetectorConstruction*  fDetector;
 
+  G4bool                 bPrimPositionDefined;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -51,12 +51,12 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
 
    G4double ke = aTrack.GetKineticEnergy();
 
-   //G4HadFinalState* theResult = new G4HadFinalState();
    G4HadFinalState* theResult = &theParticleChange;
    theResult->Clear();
 
-   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA , iM ) )->second->GetTarget();
-   //G4double aMu = aTarget->getElasticFinalState( ke*MeV, temp, NULL, NULL );
+   G4GIDI_target* aTarget = get_target_from_map( lend_manager->GetNucleusEncoding( iZ , iA , iM ) );
+   if ( aTarget == NULL ) return returnUnchanged( aTrack , theResult );
+
    G4double aMu = aTarget->getElasticFinalState( ke*MeV, temp, MyRNG , NULL );
 
    G4double phi = twopi*G4UniformRand();
@@ -67,12 +67,16 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
    theNeutron.SetMomentum( aTrack.Get4Momentum().vect() );
    theNeutron.SetKineticEnergy( ke );
 
-//G4cout << "iZ " << iZ << " iA " << iA  << G4endl;
+   //G4ParticleDefinition* pd = G4IonTable::GetIonTable()->GetIon( iZ , iA , iM );
+   //TK 170509 Fix for the case of excited isomer target 
+   G4double EE = 0.0;
+   if ( iM != 0 ) {
+      G4LENDManager::GetInstance()->GetExcitationEnergyOfExcitedIsomer( iZ , iA , iM );
+   }
+   G4ParticleDefinition* target_pd = G4IonTable::GetIonTable()->GetIon( iZ , iA , EE );
+   G4ReactionProduct theTarget( target_pd );
 
-   G4ParticleDefinition* pd = G4IonTable::GetIonTable()->GetIon( iZ , iA , iM );
-   G4ReactionProduct theTarget( pd );
-
-   G4double mass = pd->GetPDGMass();
+   G4double mass = target_pd->GetPDGMass();
 
 // add Thermal motion 
    G4double kT = k_Boltzmann*temp;
@@ -117,7 +121,8 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
        theTarget.SetTotalEnergy(std::sqrt((tP+tM)*(tP+tM)-2.*tP*tM));
 
 
-       theNeutron.Lorentz(theNeutron, -1.*theCMS);
+      theNeutron.Lorentz(theNeutron, -1.*theCMS);
+      theTarget.Lorentz(theTarget, -1.*theCMS);
 
 //110913 Add Protection for very low energy (1e-6eV) scattering 
       if ( theNeutron.GetKineticEnergy() <= 0 )
@@ -125,23 +130,18 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
          theNeutron.SetTotalEnergy ( theNeutron.GetMass() * ( 1 + G4Pow::GetInstance()->powA( 10 , -15.65 ) ) );
       }
 
-      theTarget.Lorentz(theTarget, -1.*theCMS);
       if ( theTarget.GetKineticEnergy() < 0 )
       {
          theTarget.SetTotalEnergy ( theTarget.GetMass() * ( 1 + G4Pow::GetInstance()->powA( 10 , -15.65 ) ) );
       }
 //110913 END
 
-       theTarget.Lorentz(theTarget, -1.*theCMS);
-
      theResult->SetEnergyChange(theNeutron.GetKineticEnergy());
      theResult->SetMomentumChange(theNeutron.GetMomentum().unit());
      G4DynamicParticle* theRecoil = new G4DynamicParticle;
 
-//     theRecoil->SetDefinition( ionTable->GetIon( iZ , iA ) ); 
-       theRecoil->SetDefinition( G4IonTable::GetIonTable()->GetIon( iZ, iA , iM ));
+     theRecoil->SetDefinition( target_pd );
      theRecoil->SetMomentum( theTarget.GetMomentum() );
-
      theResult->AddSecondary( theRecoil );
 
    return theResult; 

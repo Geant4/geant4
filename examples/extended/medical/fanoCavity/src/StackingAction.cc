@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id: StackingAction.cc 90848 2015-06-10 13:44:30Z gcosmo $
+// $Id: StackingAction.cc 98764 2016-08-09 14:12:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,9 +78,6 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
    fEmCal   = new G4EmCalculator();
    first   = false;
  }
- 
-
-
 
  G4ClassificationOfNewTrack status = fUrgent;  
 
@@ -90,14 +87,13 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
  G4bool neutral = (particle->GetPDGCharge() == 0.);
  if ((track->GetParentID() == 0) || neutral) return status;
 
-
  Run* run = static_cast<Run*>(
               G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
  //energy spectrum of charged secondaries
  //
   G4double energy = track->GetKineticEnergy();  
-  run->sumEsecond(energy);
+  run->SumEsecond(energy);
   
  // kill e- which cannot reach Cavity
  //

@@ -28,7 +28,7 @@
 // *                                                                    *
 // *                    GEANT 4 xray_telescope advanced example         *
 // *                                                                    *
-// * MODULE:            XrayTel.cc                            main file *     
+// * MODULE:            XrayTel.cc                            main file *
 // * -------                                                            *
 // *                                                                    *
 // * Version:           0.4                                             *
@@ -41,14 +41,14 @@
 // HISTORY
 // -------
 //
-// The development of this advanced example is based on earlier work 
+// The development of this advanced example is based on earlier work
 // carried out by a team of Geant4 collaborators  to simulate the Chandra
 // and XMM X-ray observatories. The authors involved in those models are
 // J Apostolakis, P Arce, S Giani, F Lei, R Nartallo, S Magni,
 // P Truscott, L Urban
 //
 // **********************************************************************
-// 
+//
 // CHANGE HISTORY
 // --------------
 //
@@ -63,8 +63,8 @@
 // - Implementation of analysis manager code for histograming
 //
 // 15.11.2000 R. Nartallo
-// - Minor changes proposed by F. Lei to implement the GPS module now 
-//   replacing the standard particle gun 
+// - Minor changes proposed by F. Lei to implement the GPS module now
+//   replacing the standard particle gun
 // - Remove commented lines related to old histograming code
 //
 // 06.11.2000 R.Nartallo
@@ -74,6 +74,8 @@
 //
 //
 // **********************************************************************
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -113,32 +115,32 @@ int main( int argc, char** argv )
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();    
+  visManager->Initialize();
 #endif
 
   //Initialize G4 kernel
   runManager->Initialize();
-    
-  // get the pointer to the User Interface manager 
-  G4UImanager *UImanager = G4UImanager::GetUIpointer();  
+
+  // get the pointer to the User Interface manager
+  G4UImanager *UImanager = G4UImanager::GetUIpointer();
   if ( argc==1 ){
 #ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);    
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-       UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif    
+       UImanager->ApplyCommand("/control/execute vis.mac");
+#endif
        ui->SessionStart();
        delete ui;
 #endif
   }
   else {
-    // Create a pointer to the User Interface manager 
+    // Create a pointer to the User Interface manager
     G4String command = "/control/execute ";
     for (int i=2; i<=argc; i++) {
       G4String macroFileName = argv[i-1];
       UImanager->ApplyCommand(command+macroFileName);
     }
-  }                                  
+  }
 
   // job termination
 #ifdef G4VIS_USE

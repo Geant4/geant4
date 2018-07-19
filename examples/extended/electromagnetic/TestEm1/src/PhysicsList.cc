@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 // 
-// $Id: PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
+// $Id: PhysicsList.cc 108857 2018-03-12 07:42:27Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,9 +67,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList(DetectorConstruction* det) 
-: G4VModularPhysicsList(), fEmPhysicsList(0), fDet(0), fMessenger(0)
+  : G4VModularPhysicsList(), fDet(det)
 {
-  fDet = det;
   fMessenger = new PhysicsListMessenger(this);
   SetVerboseLevel(1);
 
@@ -115,8 +114,6 @@ void PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4EmProcessOptions.hh"
-
 void PhysicsList::ConstructProcess()
 {
   // Transportation
@@ -126,12 +123,6 @@ void PhysicsList::ConstructProcess()
   // Electromagnetic physics list
   //
   fEmPhysicsList->ConstructProcess();
-  
-  // Em options
-  //
-  G4EmProcessOptions emOptions;
-  emOptions.SetBuildCSDARange(true);
-  emOptions.SetDEDXBinningForCSDARange(10*10);
     
   // Decay Process
   //
@@ -143,7 +134,12 @@ void PhysicsList::ConstructProcess()
 
   // step limitation (as a full process)
   //  
-  AddStepMax();    
+  AddStepMax();
+  
+  // Get process
+  auto process = GetProcess("RadioactiveDecay");
+  if (process != nullptr)
+  G4cout << "\n  GetProcess : " << process->GetProcessName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -250,15 +246,20 @@ void PhysicsList::AddDecay()
 #include "G4PhysicsListHelper.hh"
 #include "G4RadioactiveDecay.hh"
 #include "G4GenericIon.hh"
+#include "G4NuclideTable.hh"
 
 void PhysicsList::AddRadioactiveDecay()
 {  
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
-  radioactiveDecay->SetHLThreshold(-1.*s);
+  
   radioactiveDecay->SetARM(true);                //Atomic Rearangement
   
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
   ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
+  
+  // mandatory for G4NuclideTable
+  //
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -307,4 +308,21 @@ void PhysicsList::GetRange(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Proton.hh"
+#include "G4GenericIon.hh"
 
+G4VProcess* PhysicsList::GetProcess(const G4String& processName) const
+{
+  G4ParticleDefinition* particle = G4GenericIon::GenericIon();
+  G4ProcessVector* procList = particle->GetProcessManager()->GetProcessList();
+  G4int nbProc = particle->GetProcessManager()->GetProcessListLength();
+  for (G4int k=0; k<nbProc; k++) {
+    G4VProcess* process = (*procList)[k];
+    if (process->GetProcessName() == processName) return process;
+  }
+  return nullptr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

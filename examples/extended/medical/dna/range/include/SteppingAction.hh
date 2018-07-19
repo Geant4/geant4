@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/range/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
-//
-// $Id: SteppingAction.hh 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SteppingAction_h
 #define SteppingAction_h 1
@@ -47,7 +42,5 @@ class SteppingAction : public G4UserSteppingAction
     virtual void UserSteppingAction(const G4Step*);
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

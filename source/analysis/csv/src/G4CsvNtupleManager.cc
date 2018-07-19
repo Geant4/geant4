@@ -87,22 +87,15 @@ void G4CsvNtupleManager::CreateTNtupleFromBooking(
     ntupleDescription->fNtuple
       = new tools::wcsv::ntuple(
               *(ntupleDescription->fFile), G4cerr, ntupleDescription->fNtupleBooking);
-    fNtupleVector.push_back(ntupleDescription->fNtuple);  
-  
-    // write header (if activated)
-    if ( ! WriteHeader(ntupleDescription->fNtuple) ) {
-       G4ExceptionDescription description;
-       description << "      " 
-                   << "Writing ntuple header has failed. ";
-       G4Exception("G4CsvNtupleManager::CreateNtupleFromBooking()",
-                   "Analysis_W021", JustWarning, description);
-    }
+    fNtupleVector.push_back(ntupleDescription->fNtuple);    
  }
 
 //_____________________________________________________________________________
 void G4CsvNtupleManager::FinishTNtuple(
   G4TNtupleDescription<tools::wcsv::ntuple>* ntupleDescription)
 {
+  if ( ! ntupleDescription->fNtuple ) return;
+
   // Write header if ntuple already exists
   if ( ! WriteHeader(ntupleDescription->fNtuple) ) {
      G4ExceptionDescription description;

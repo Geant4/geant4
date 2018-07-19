@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSSteppingAction.cc 75292 2013-10-30 09:25:15Z gcosmo $
+// $Id: WLSSteppingAction.cc 104079 2017-05-10 14:51:06Z gcosmo $
 //
 /// \file optical/wls/src/WLSSteppingAction.cc
 /// \brief Implementation of the WLSSteppingAction class
@@ -115,7 +115,7 @@ G4int WLSSteppingAction::ResetSuccessCounter()     {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void WLSSteppingAction::saveRandomStatus(G4String subDir) 
+inline void WLSSteppingAction::SaveRandomStatus(G4String subDir) 
 // save the random status into a sub-directory
 // Pre: subDir must be empty or ended with "/"
 {
@@ -200,7 +200,7 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
        (theStatus == TotalInternalReflection
         || theStatus == FresnelReflection
         || theStatus == FresnelRefraction)
-        && trackInformation->isStatus(InsideOfFiber) ) {
+        && trackInformation->IsStatus(InsideOfFiber) ) {
 
         G4double px = theTrack->GetVertexMomentumDirection().x();
         G4double py = theTrack->GetVertexMomentumDirection().y();
@@ -217,7 +217,7 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
         if ( fInitGamma / deg > 90.0)  { fInitGamma = 180 * deg - fInitGamma;}
   }
   // Record Photons that missed the photon detector but escaped from readout
-  if ( !thePostPV && trackInformation->isStatus(EscapedFromReadOut) ) {
+  if ( !thePostPV && trackInformation->IsStatus(EscapedFromReadOut) ) {
 //     UpdateHistogramSuccess(thePostPoint,theTrack);
      ResetCounters();
  
@@ -239,11 +239,11 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
  
        if ( isFiber ) {
 
-           if (trackInformation->isStatus(OutsideOfFiber))
+           if (trackInformation->IsStatus(OutsideOfFiber))
                                trackInformation->AddStatusFlag(InsideOfFiber);
 
        // Set the Exit flag when the photon refracted out of the fiber
-       } else if (trackInformation->isStatus(InsideOfFiber)) {
+       } else if (trackInformation->IsStatus(InsideOfFiber)) {
 
            // EscapedFromReadOut if the z position is the same as fiber's end
            if (theTrack->GetPosition().z() == fDetector->GetWLSFiberEnd())
@@ -281,6 +281,7 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
           G4cout << "\n Bounce Limit Exceeded" << G4endl;
           return;
        }
+       break;
  
      case FresnelReflection:
 
@@ -295,8 +296,8 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
        // Determine if the photon has reflected off the read-out end
        if (theTrack->GetPosition().z() == fDetector->GetWLSFiberEnd())
        {
-          if (!trackInformation->isStatus(ReflectedAtReadOut) &&
-              trackInformation->isStatus(InsideOfFiber))
+          if (!trackInformation->IsStatus(ReflectedAtReadOut) &&
+              trackInformation->IsStatus(InsideOfFiber))
           {
              trackInformation->AddStatusFlag(ReflectedAtReadOut);
 
@@ -338,7 +339,7 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
           if (mppcSD) mppcSD->ProcessHits_constStep(theStep,NULL);
 
           // Record Photons that escaped at the end
-//          if (trackInformation->isStatus(EscapedFromReadOut))
+//          if (trackInformation->IsStatus(EscapedFromReadOut))
 //                              UpdateHistogramSuccess(thePostPoint,theTrack);
 
           // Stop Tracking when it hits the detector's surface
@@ -347,7 +348,6 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
 
           return;
        }
-
        break;
 
      default: break;
@@ -356,7 +356,7 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
  
   // Check for absorbed photons
   if (theTrack->GetTrackStatus() != fAlive  &&
-      trackInformation->isStatus(InsideOfFiber))
+      trackInformation->IsStatus(InsideOfFiber))
   {
 //     UpdateHistogramAbsorb(thePostPoint,theTrack);
      ResetCounters();

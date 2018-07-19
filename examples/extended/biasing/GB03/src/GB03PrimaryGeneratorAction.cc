@@ -28,7 +28,6 @@
 /// \file GB03PrimaryGeneratorAction.cc
 /// \brief Implementation of the GB03PrimaryGeneratorAction class
 
-
 #include "GB03PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"

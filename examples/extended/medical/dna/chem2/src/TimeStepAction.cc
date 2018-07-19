@@ -61,9 +61,9 @@ TimeStepAction::TimeStepAction() :
 
   AddTimeStep(1 * picosecond, 0.1 * picosecond);
   AddTimeStep(10 * picosecond, 1 * picosecond);
-  AddTimeStep(100 * picosecond, 3 * picosecond);
-  AddTimeStep(1000 * picosecond, 10 * picosecond);
-  AddTimeStep(10000 * picosecond, 100 * picosecond);
+  AddTimeStep(100 * picosecond, 10 * picosecond);
+  AddTimeStep(1000 * picosecond, 100 * picosecond);
+  AddTimeStep(10000 * picosecond, 1000 * picosecond);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

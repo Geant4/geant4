@@ -26,7 +26,7 @@
 /// \file exoticphysics/phonon/src/XAluminumElectrodeSensitivity.cc
 /// \brief Implementation of the XAluminumElectrodeSensitivity class
 //
-// $Id: XAluminumElectrodeSensitivity.cc 92176 2015-08-20 13:07:22Z gcosmo $
+// $Id: XAluminumElectrodeSensitivity.cc 106987 2017-10-31 10:09:40Z gcosmo $
 //
 #include "XAluminumElectrodeSensitivity.hh"
 
@@ -160,10 +160,11 @@ WriteHitInfo(const XAluminumElectrodeHit* aHit) {
 
   G4AutoLock lockIt(&theMutex);          // Only one event can write at a time
 
-  *fWriter << "\n" << aHit->fWorldPos.getX()/mm
+  *fWriter        << aHit->fWorldPos.getX()/mm
            << "," << aHit->fWorldPos.getY()/mm
-           << "," << aHit->fWorldPos.getZ()/mm;
+           << "," << aHit->fWorldPos.getZ()/mm
+           << "\n";
 
-  *fWriter2 << "\n" << aHit->fTime/ns << " " << aHit->fEdep/eV;
+  *fWriter2 << aHit->fTime/ns << " " << aHit->fEdep/eV << "\n";
 }
 

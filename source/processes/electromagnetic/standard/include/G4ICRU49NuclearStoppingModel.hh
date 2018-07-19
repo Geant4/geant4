@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU49NuclearStoppingModel.hh 67990 2013-03-13 10:56:28Z gcosmo $
+// $Id: G4ICRU49NuclearStoppingModel.hh 103955 2017-05-04 11:29:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -53,6 +53,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4VEmModel.hh"
+#include "G4Threading.hh"
 
 class G4ParticleChangeForLoss;
 class G4Pow;
@@ -64,53 +65,46 @@ class G4ICRU49NuclearStoppingModel : public G4VEmModel
 
 public:
 
-  G4ICRU49NuclearStoppingModel(const G4String& nam = "ICRU49NucStopping");
+  explicit G4ICRU49NuclearStoppingModel(const G4String& nam = 
+					"ICRU49NucStopping");
 
   virtual ~G4ICRU49NuclearStoppingModel();
 
   virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&);
+			  const G4DataVector&) final;
 
   // main method to compute dEdx
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
                                         const G4ParticleDefinition*,
                                         G4double kineticEnergy,
-                                        G4double cutEnergy = DBL_MAX);
+                                        G4double cutEnergy = DBL_MAX) final;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*, 
-				 G4double, G4double);
-
-  inline void SetFluctuationFlag(G4bool);
+				 G4double, G4double) final;
 
 private:
 
-  void InitialiseNuclearStopping();
+  void InitialiseArray();
 
   G4double NuclearStoppingPower(G4double kineticEnergy,
 				G4double Z1, G4double Z2,
 				G4double A1, G4double A2);
 
   //  hide assignment operator
-  G4ICRU49NuclearStoppingModel & operator=(const  G4ICRU49NuclearStoppingModel &right);
-  G4ICRU49NuclearStoppingModel(const  G4ICRU49NuclearStoppingModel&);
+  G4ICRU49NuclearStoppingModel & operator=
+  (const  G4ICRU49NuclearStoppingModel &right) = delete;
+  G4ICRU49NuclearStoppingModel(const  G4ICRU49NuclearStoppingModel&) = delete;
 
-  G4Pow* g4pow;
-
-  static G4double ed[104];
-  static G4double ad[104];
-
+  G4Pow* g4calc;
   G4double theZieglerFactor;
+  static G4double Z23[100];
 
-  // flags
-  G4bool   lossFlucFlag;
+#ifdef G4MULTITHREADED
+  static G4Mutex ICRU49NuclearMutex;
+#endif
 };
-
-inline void G4ICRU49NuclearStoppingModel::SetFluctuationFlag(G4bool val)
-{
-  lossFlucFlag = val;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

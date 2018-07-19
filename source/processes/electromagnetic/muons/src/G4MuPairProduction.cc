@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc 85023 2014-10-23 09:56:39Z gcosmo $
+// $Id: G4MuPairProduction.cc 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -83,7 +83,7 @@ using namespace std;
 
 G4MuPairProduction::G4MuPairProduction(const G4String& name)
   : G4VEnergyLossProcess(name),
-    theParticle(0),
+    theParticle(nullptr),
     lowestKinEnergy(1.*GeV),
     isInitialised(false)
 {
@@ -91,11 +91,6 @@ G4MuPairProduction::G4MuPairProduction(const G4String& name)
   SetSecondaryParticle(G4Positron::Positron());
   SetIonisation(false);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4MuPairProduction::~G4MuPairProduction()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -124,33 +119,35 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
 
     theParticle = part;
 
-    if (!EmModel()) { SetEmModel(new G4MuPairProductionModel(part)); }
+    G4MuPairProductionModel* mod = new G4MuPairProductionModel(part); 
+    SetEmModel(mod);
 
-    G4double limit = part->GetPDGMass()*8;
-    if(limit > lowestKinEnergy) { lowestKinEnergy = limit; }
+    lowestKinEnergy = std::max(lowestKinEnergy, part->GetPDGMass()*8.0);
+    mod->SetLowestKineticEnergy(lowestKinEnergy);
 
-    G4VEmFluctuationModel* fm = 0;
+    G4VEmFluctuationModel* fm = nullptr;
     G4EmParameters* param = G4EmParameters::Instance();
-    EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
-    EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());
-    AddEmModel(1, EmModel(), fm);
+    mod->SetLowEnergyLimit(param->MinKinEnergy());
+    mod->SetHighEnergyLimit(param->MaxKinEnergy());
+    AddEmModel(1, mod, fm);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuPairProduction::PrintInfo()
+void G4MuPairProduction::StreamProcessInfo(std::ostream& out,
+                                           G4String endOfLine) const
 {
   G4ElementData* ed = EmModel()->GetElementData();
   if(ed) {
     for(G4int Z=1; Z<93; ++Z) {
       G4Physics2DVector* pv = ed->GetElement2DData(Z);
       if(pv) {
-        G4cout << "      Sampling table " << pv->GetLengthY()
-	       << "x" << pv->GetLengthX() << "; from "
-	       << exp(pv->GetY(0))/GeV << " GeV to " 
-	       << exp(pv->GetY(pv->GetLengthY()-1))/TeV 
-	       << " TeV " << G4endl;
+        out << "      Sampling table " << pv->GetLengthY()
+	    << "x" << pv->GetLengthX() << "; from "
+	    << exp(pv->GetY(0))/GeV << " GeV to " 
+	    << exp(pv->GetY(pv->GetLengthY()-1))/TeV 
+	    << " TeV " << endOfLine;
 	break;
       }
     }
@@ -159,6 +156,10 @@ void G4MuPairProduction::PrintInfo()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4MuPairProduction::ProcessDescription(std::ostream& out) const
+{
+  out << "<strong>Pair production</strong>";
+  G4VEnergyLossProcess::ProcessDescription(out);
+}
 
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

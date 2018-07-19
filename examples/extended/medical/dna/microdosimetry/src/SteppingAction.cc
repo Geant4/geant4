@@ -46,6 +46,14 @@
 #include "G4VPhysicalVolume.hh"
 #include "CommandLineParser.hh"
 
+#include "G4Electron.hh"
+#include "G4Proton.hh"
+#include "G4Gamma.hh"
+#include "G4Alpha.hh"
+#include "G4DNAGenericIonsManager.hh"
+#include "G4EventManager.hh"
+#include "G4Event.hh"
+
 using namespace G4DNAPARSER;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,108 +70,219 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
 { 
-  G4double flagParticle=0.;
-  G4double flagProcess=0.;
+  G4double flagParticle=-1;
+  G4double flagProcess=-1;
   G4double x,y,z,xp,yp,zp;
 
-  // Process sub-types are listed in G4PhysicsListHelper.cc
+  // Particle identification
 
+  // The following method avoids the usage of string comparison 
+
+  G4ParticleDefinition * partDef = 
+   step->GetTrack()->GetDynamicParticle()->GetDefinition();
+
+  if (partDef == G4Gamma::GammaDefinition())
+     flagParticle = 0; 
+
+  if (partDef == G4Electron::ElectronDefinition())
+     flagParticle = 1; 
+
+  if (partDef == G4Proton::ProtonDefinition())
+     flagParticle = 2; 
+
+  if (partDef == G4Alpha::AlphaDefinition())
+     flagParticle = 4; 
+
+  G4DNAGenericIonsManager *instance;
+  instance = G4DNAGenericIonsManager::Instance();
+  
+  // Usage example
   /*
- // The following method avoids the usage of string comparison 
+  G4ParticleDefinition* protonDef = G4Proton::ProtonDefinition();
+  G4ParticleDefinition* hydrogenDef = instance->GetIon("hydrogen");
+  G4ParticleDefinition* alphaPlusPlusDef = instance->GetIon("alpha++");
+  G4ParticleDefinition* alphaPlusDef = instance->GetIon("alpha+");
+  G4ParticleDefinition* heliumDef = instance->GetIon("helium");
+  */
 
- if (step->GetTrack()->GetDynamicParticle()->GetDefinition() ==
- G4Electron::ElectronDefinition())
-    flagParticle = 1; 
+  if (partDef == instance->GetIon("hydrogen"))
+     flagParticle = 3; 
 
- if (step->GetTrack()->GetDynamicParticle()->GetDefinition() ==
- G4Proton::ProtonDefinition())
-    flagParticle = 2; 
+  if (partDef == instance->GetIon("alpha+"))
+     flagParticle = 5; 
 
- if (step->GetTrack()->GetDynamicParticle()->GetDefinition() ==
- G4Alpha::AlphaDefinition())
-    flagParticle = 4; 
-
-    G4DNAGenericIonsManager *instance;
-    instance = G4DNAGenericIonsManager::Instance();
-    G4ParticleDefinition* protonDef = G4Proton::ProtonDefinition();
-    G4ParticleDefinition* hydrogenDef = instance->GetIon("hydrogen");
-    G4ParticleDefinition* alphaPlusPlusDef = instance->GetIon("alpha++");
-    G4ParticleDefinition* alphaPlusDef = instance->GetIon("alpha+");
-    G4ParticleDefinition* heliumDef = instance->GetIon("helium");
-
- if (step->GetTrack()->GetDynamicParticle()->GetDefinition() ==
- instance->GetIon("hydrogen"))
-    flagParticle = 3; 
-
- if (step->GetTrack()->GetDynamicParticle()->GetDefinition() ==
- instance->GetIon("alpha+"))
-    flagParticle = 5; 
-
- if (step->GetTrack()->GetDynamicParticle()->GetDefinition() ==
- instance->GetIon("helium"))
-    flagParticle = 6; 
-   */
-
+  if (partDef == instance->GetIon("helium"))
+     flagParticle = 6; 
+     
+  // Alternative method (based on string comparison)
+  
+  /*
   const G4String& particleName = step->GetTrack()->GetDynamicParticle()->
       GetDefinition()->GetParticleName();
-  const G4String& processName = step->GetPostStepPoint()->
-      GetProcessDefinedStep()->GetProcessName();
-
-  if (particleName == "e-")       flagParticle = 1;
+      
+  if (particleName == "gamma")         flagParticle = 0;
+  else if (particleName == "e-")       flagParticle = 1;
   else if (particleName == "proton")   flagParticle = 2;
   else if (particleName == "hydrogen") flagParticle = 3;
   else if (particleName == "alpha")    flagParticle = 4;
   else if (particleName == "alpha+")   flagParticle = 5;
   else if (particleName == "helium")   flagParticle = 6;
+  */
 
-  if (processName=="msc")      flagProcess =10;
-  else if (processName=="e-_G4DNAElastic")    flagProcess =11;
-  else if (processName=="e-_G4DNAExcitation")    flagProcess =12;
-  else if (processName=="e-_G4DNAIonisation")    flagProcess =13;
-  else if (processName=="e-_G4DNAAttachment")    flagProcess =14;
-  else if (processName=="e-_G4DNAVibExcitation")  flagProcess =15;
-  else if (processName=="eCapture")      flagProcess =16;
+  // Process identification
 
-  else if (processName=="proton_G4DNAExcitation")  flagProcess =17;
-  else if (processName=="proton_G4DNAIonisation")  flagProcess =18;
-  else if (processName=="proton_G4DNAChargeDecrease")  flagProcess =19;
+  // Process sub-types are listed in G4PhysicsListHelper.cc
+  // or in Geant4-DNA process class implementation files (*.cc)
 
-  else if (processName=="hydrogen_G4DNAExcitation")   flagProcess =20;
-  else if (processName=="hydrogen_G4DNAIonisation")   flagProcess =21;
-  else if (processName=="hydrogen_G4DNAChargeIncrease")flagProcess =22;
+  G4StepPoint * preStep = step->GetPreStepPoint();
+  G4StepPoint * postStep = step->GetPostStepPoint();
+  G4int procID = postStep->GetProcessDefinedStep()->GetProcessSubType();
 
-  else if (processName=="alpha_G4DNAExcitation")  flagProcess =23;
-  else if (processName=="alpha_G4DNAIonisation")  flagProcess =24;
-  else if (processName=="alpha_G4DNAChargeDecrease")  flagProcess =25;
+  const G4String& processName = postStep->
+      GetProcessDefinedStep()->GetProcessName();
+ 
+  if (processName=="eCapture") flagProcess =1;
+  // (no subType and procID exists at the moment for this process)
 
-  else if (processName=="alpha+_G4DNAExcitation")  flagProcess =26;
-  else if (processName=="alpha+_G4DNAIonisation")  flagProcess =27;
-  else if (processName=="alpha+_G4DNAChargeDecrease")  flagProcess =28;
-  else if (processName=="alpha+_G4DNAChargeIncrease")  flagProcess =29;
+  else if (flagParticle == 1)
 
-  else if (processName=="helium_G4DNAExcitation")  flagProcess =30;
-  else if (processName=="helium_G4DNAIonisation")  flagProcess =31;
-  else if (processName=="helium_G4DNAChargeIncrease")  flagProcess =32;
+  {
+    if      (procID==58) flagProcess =10;
+    else if (procID==51) flagProcess =11;
+    else if (procID==52) flagProcess =12;
+    else if (procID==53) flagProcess =13;
+    else if (procID==55) flagProcess =14;
+    else if (procID==54) flagProcess =15;
+    else if (procID==10) flagProcess =110;
+    else if (procID==1)  flagProcess =120;
+    else if (procID==2)  flagProcess =130;
+  }
+        
+  else if (flagParticle == 2)
 
-  else if (processName=="hIoni")  flagProcess =33;
-  else if (processName=="eIoni")  flagProcess =34;
+  {
+    if      (procID==51) flagProcess =21;
+    else if (procID==52) flagProcess =22;
+    else if (procID==53) flagProcess =23;
+    else if (procID==56) flagProcess =24;
+    else if (procID==10) flagProcess =210;
+    else if (procID==1)  flagProcess =220;
+    else if (procID==2)  flagProcess =230;
+    else if (procID==8)  flagProcess =240;
+  }
+        
+  else if (flagParticle == 3)
+
+  {
+    if      (procID==51) flagProcess =31;
+    else if (procID==52) flagProcess =32;
+    else if (procID==53) flagProcess =33;
+    else if (procID==57) flagProcess =35;
+  }
+        
+  else if (flagParticle == 4)
+
+  {
+    if      (procID==51) flagProcess =41;
+    else if (procID==52) flagProcess =42;
+    else if (procID==53) flagProcess =43;
+    else if (procID==56) flagProcess =44;
+    else if (procID==10) flagProcess =410;
+    else if (procID==1)  flagProcess =420;
+    else if (procID==2)  flagProcess =430;
+    else if (procID==8)  flagProcess =440;
+  }
+        
+  else if (flagParticle == 5)
+
+  {
+    if      (procID==51) flagProcess =51;
+    else if (procID==52) flagProcess =52;
+    else if (procID==53) flagProcess =53;
+    else if (procID==56) flagProcess =54;
+    else if (procID==57) flagProcess =55;
+    else if (procID==10) flagProcess =510;
+    else if (procID==1)  flagProcess =520;
+    else if (procID==2)  flagProcess =530;
+    else if (procID==8)  flagProcess =540;
+  }
+        
+  else if (flagParticle == 6)
+
+  {
+    if      (procID==51) flagProcess =61;
+    else if (procID==52) flagProcess =62;
+    else if (procID==53) flagProcess =63;
+    else if (procID==57) flagProcess =65;
+  }
+
+  else if (processName=="GenericIon_G4DNAIonisation") flagProcess =73;
+  else if (processName=="msc")                        flagProcess =710;
+  else if (processName=="CoulombScat")                flagProcess =720;
+  else if (processName=="ionIoni")                    flagProcess =730;
+  else if (processName=="nuclearStopping")            flagProcess =740;
+  // (for all GenericIons)
+  
+  // Alternatively, using process names
+
+  /*   
+  if (processName=="e-_G4DNAElectronSolvation")         flagProcess =10;
+  else if (processName=="e-_G4DNAElastic")              flagProcess =11;
+  else if (processName=="e-_G4DNAExcitation")           flagProcess =12;
+  else if (processName=="e-_G4DNAIonisation")           flagProcess =13;
+  else if (processName=="e-_G4DNAAttachment")           flagProcess =14;
+  else if (processName=="e-_G4DNAVibExcitation")        flagProcess =15;
+  else if (processName=="eCapture")                     flagProcess =16;
+  else if (processName=="msc")                          flagProcess =17;
+  else if (processName=="eIoni")                        flagProcess =130;
+
+  else if (processName=="proton_G4DNAElastic")          flagProcess =21;
+  else if (processName=="proton_G4DNAExcitation")       flagProcess =22;
+  else if (processName=="proton_G4DNAIonisation")       flagProcess =23;
+  else if (processName=="proton_G4DNAChargeDecrease")   flagProcess =24;
+  else if (processName=="hIoni")                        flagProcess =230;
+
+  else if (processName=="hydrogen_G4DNAElastic")        flagProcess =31;
+  else if (processName=="hydrogen_G4DNAExcitation")     flagProcess =32;
+  else if (processName=="hydrogen_G4DNAIonisation")     flagProcess =33;
+  else if (processName=="hydrogen_G4DNAChargeIncrease") flagProcess =35;
+
+  else if (processName=="alpha_G4DNAElastic")           flagProcess =41;
+  else if (processName=="alpha_G4DNAExcitation")        flagProcess =42;
+  else if (processName=="alpha_G4DNAIonisation")        flagProcess =43;
+  else if (processName=="alpha_G4DNAChargeDecrease")    flagProcess =44;
+
+  else if (processName=="alpha+_G4DNAElastic")          flagProcess =51;
+  else if (processName=="alpha+_G4DNAExcitation")       flagProcess =52;
+  else if (processName=="alpha+_G4DNAIonisation")       flagProcess =53;
+  else if (processName=="alpha+_G4DNAChargeDecrease")   flagProcess =54;
+  else if (processName=="alpha+_G4DNAChargeIncrease")   flagProcess =55;
+
+  else if (processName=="helium_G4DNAElastic")          flagProcess =61;
+  else if (processName=="helium_G4DNAExcitation")       flagProcess =62;
+  else if (processName=="helium_G4DNAIonisation")       flagProcess =63;
+  else if (processName=="helium_G4DNAChargeIncrease")   flagProcess =65;
+
+  else if (processName=="GenericIon_G4DNAIonisation")   flagProcess =73;
+*/
+
 
   if (processName!="Transportation")
   {
-    x=step->GetPreStepPoint()->GetPosition().x()/nanometer;
-    y=step->GetPreStepPoint()->GetPosition().y()/nanometer;
-    z=step->GetPreStepPoint()->GetPosition().z()/nanometer;
-    xp=step->GetPostStepPoint()->GetPosition().x()/nanometer;
-    yp=step->GetPostStepPoint()->GetPosition().y()/nanometer;
-    zp=step->GetPostStepPoint()->GetPosition().z()/nanometer;
+    x=preStep->GetPosition().x()/nanometer;
+    y=preStep->GetPosition().y()/nanometer;
+    z=preStep->GetPosition().z()/nanometer;
 
+    xp=postStep->GetPosition().x()/nanometer;
+    yp=postStep->GetPosition().y()/nanometer;
+    zp=postStep->GetPosition().z()/nanometer;
+
+    // get analysis manager
     CommandLineParser* parser = CommandLineParser::GetParser();
     Command* command(0);
     if((command = parser->GetCommandIfActive("-out"))==0) return;
 
-    // get analysis manager
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-//    if(!analysisManager->IsActive()) {return; }
 
     // fill ntuple
     analysisManager->FillNtupleDColumn(0, flagParticle);
@@ -171,12 +290,37 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     analysisManager->FillNtupleDColumn(2, x);
     analysisManager->FillNtupleDColumn(3, y);
     analysisManager->FillNtupleDColumn(4, z);
-    analysisManager->FillNtupleDColumn(5, step->GetTotalEnergyDeposit()/eV);
+    analysisManager->FillNtupleDColumn(5, 
+                                     step->GetTotalEnergyDeposit()/eV);
+
     analysisManager->FillNtupleDColumn(6,
-                                       std::sqrt((x-xp)*(x-xp)+
-                                           (y-yp)*(y-yp)+(z-zp)*(z-zp))/nm);
-    analysisManager->FillNtupleDColumn(7, (step->GetPreStepPoint()->
-        GetKineticEnergy() - step->GetPostStepPoint()->GetKineticEnergy())/eV );
+                                          std::sqrt((x-xp)*(x-xp)+
+                                           (y-yp)*(y-yp)+(z-zp)*(z-zp)));
+
+    analysisManager->FillNtupleDColumn(7,
+                                          (preStep->
+                                           GetKineticEnergy() -
+                                           postStep->
+                                           GetKineticEnergy())/eV );
+
+    analysisManager->FillNtupleDColumn(8, preStep->
+                                           GetKineticEnergy()/eV);
+
+    analysisManager->FillNtupleDColumn(9, 
+         preStep->GetMomentumDirection()
+        *postStep->GetMomentumDirection() );
+
+    analysisManager->FillNtupleIColumn(10, 
+                                   G4EventManager::GetEventManager()->
+                                   GetConstCurrentEvent()->GetEventID());
+
+    analysisManager->FillNtupleIColumn(11, step->GetTrack()->GetTrackID());
+
+    analysisManager->FillNtupleIColumn(12, step->GetTrack()->GetParentID());
+
+    analysisManager->FillNtupleIColumn(13, 
+                                   step->GetTrack()->GetCurrentStepNumber());
+
     analysisManager->AddNtupleRow();
   }
 }    

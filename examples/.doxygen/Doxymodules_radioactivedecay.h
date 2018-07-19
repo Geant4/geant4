@@ -1,4 +1,4 @@
-// $Id: Doxymodules_radioactivedecay.h 60059 2012-06-27 13:00:49Z gcosmo $
+// $Id: Doxymodules_radioactivedecay.h 104750 2017-06-15 08:47:26Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_radioactivedecay.h
@@ -9,6 +9,15 @@
  *  Extended examples eventgenerator classes
  *  @{
  */
+
+/** @defgroup extended_radioactivedecay_Activation Activation
+ *  radioactivedecay Activation example has its
+ *  <a href="../html_Activation/html/index.html">standalone documentation </a>
+ *  @ingroup extended_radioactivedecay
+ *  @{
+ */
+
+/** @} */
 
 /** @defgroup extended_radioactivedecay_rdecay01 rdecay01
  *  radioactivedecay rdecay01 example has its

@@ -47,7 +47,6 @@
 
 #include "GB04BOptrBremSplitting.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB04DetectorConstruction::GB04DetectorConstruction()
@@ -64,7 +63,6 @@ G4VPhysicalVolume* GB04DetectorConstruction::Construct()
 {
   G4Material*   worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
   G4Material* defaultMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
-
 
   G4VSolid* solidWorld = new G4Box("World", 10*m, 10*m, 10*m );
   

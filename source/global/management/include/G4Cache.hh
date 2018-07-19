@@ -77,6 +77,13 @@
 //Debug this code
 //#define g4cdebug 1
 
+#include <system_error>
+#include <atomic>
+
+// also included in G4CacheDetails.hh
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
+
 //Thread Local storage details are in this header file
 #include "G4CacheDetails.hh"
 
@@ -109,18 +116,18 @@ public:
     G4Cache& operator=(const G4Cache& rhs);
 
 protected:
-  const int& GetId() const { return id; }
-private:
-  int id;
-  mutable G4CacheReference<value_type> theCache;
-  static G4Mutex gMutex;
-  static unsigned int instancesctr;
-  static unsigned int dstrctr;
+	const int& GetId() const { return id; }
 
-  inline value_type& GetCache() const {
-    theCache.Initialize(id);
-    return theCache.GetCache(id);
-  }
+private:
+    int id;
+    mutable G4CacheReference<value_type> theCache;
+    static std::atomic<unsigned int> instancesctr;
+    static std::atomic<unsigned int> dstrctr;
+
+    inline value_type& GetCache() const {
+        theCache.Initialize(id);
+        return theCache.GetCache(id);
+    }
 
 };
 
@@ -215,7 +222,7 @@ using std::endl;
 template<class V>
 G4Cache<V>::G4Cache()
 {
-    G4AutoLock l(&gMutex);
+	G4AutoLock l(G4TypeMutex<G4Cache<V>>());
     id = instancesctr++;
 #ifdef g4cdebug
     cout<<"G4Cache id: "<<id<<endl;
@@ -228,7 +235,7 @@ G4Cache<V>::G4Cache(const G4Cache<V>& rhs)
 	//Copy is special, we need to copy the content
 	//of the cache, not the cache object
 	if ( this == &rhs ) return;
-	G4AutoLock l(&gMutex);
+	G4AutoLock l(G4TypeMutex<G4Cache<V>>());
 	id = instancesctr++;
 	//Force copy of cached data
 	V aCopy = rhs.GetCache();
@@ -254,8 +261,8 @@ G4Cache<V>& G4Cache<V>::operator=(const G4Cache<V>& rhs)
 template<class V>
 G4Cache<V>::G4Cache(const V& v)
 {
-    G4AutoLock l(&gMutex);
-    id = instancesctr++;
+	G4AutoLock l(G4TypeMutex<G4Cache<V>>());
+	id = instancesctr++;
     Put(v);
 #ifdef g4cdebug
     cout<<"G4Cache id: "<<id<<" "<<endl;
@@ -268,13 +275,38 @@ G4Cache<V>::~G4Cache()
 #ifdef g4cdebug
     cout<<"~G4Cache id: "<<id<<" "<<endl;
 #endif
-    G4AutoLock l(&gMutex);
-    ++dstrctr;
+    // don't automatically lock --> wait until we can catch an error
+    // without scoping the G4AutoLock
+    G4AutoLock l(G4TypeMutex<G4Cache<V>>(), std::defer_lock);
+    // sometimes the mutex is unavailable in destructors so
+    // try to lock the associated mutex, but catch if fails
+    try
+    {
+        // a system_error in lock means that the mutex is unavailable
+        // we want to throw the error that comes from locking an unavailable
+        // mutex so that we know there is a memory leak
+        // if the mutex is valid, this will hold until the other thread finishes
+        l.lock();
+    }
+    catch (std::system_error& e)
+    {
+        // the error that comes from locking an unavailable mutex
+#ifdef G4VERBOSE
+        G4cout << "Non-critical error: mutex lock failure in ~G4Cache<"
+               << typeid(V).name() << ">. "
+               << "If the RunManagerKernel has been deleted, it failed to "
+               << "delete an allocated resource and this destructor is being "
+               << "called after the statics were destroyed." << G4endl;
+        G4cout << "Exception: [code: " << e.code() << "] caught: "
+               << e.what() << G4endl;
+#endif
+    }
+	++dstrctr;
     G4bool last = ( dstrctr == instancesctr );
-    theCache.Destroy(id,last);
+    theCache.Destroy(id, last);
     if (last) {
-        instancesctr = 0;
-        dstrctr = 0;
+        instancesctr.store(0);
+        dstrctr.store(0);
     }
 }
 
@@ -292,13 +324,10 @@ V G4Cache<V>::Pop()
 { return GetCache(); }
 
 template<class V>
-unsigned int G4Cache<V>::instancesctr = 0;
+std::atomic<unsigned int> G4Cache<V>::instancesctr(0);
 
 template<class V>
-unsigned int G4Cache<V>::dstrctr = 0;
-
-template<class V>
-G4Mutex G4Cache<V>::gMutex = G4MUTEX_INITIALIZER;
+std::atomic<unsigned int> G4Cache<V>::dstrctr(0);
 
 //========== Implementation: G4VectorCache<V>
 template<class V>
@@ -388,10 +417,8 @@ G4MapCache<K,V>::~G4MapCache()
 }
 
 template<class K, class V>
-std::pair<typename G4MapCache<K,V>::iterator,G4bool> G4MapCache<K,V>::Insert(
-                                                                            const K& k,
-                                                                            const V& v
-                                                                             )
+std::pair<typename G4MapCache<K,V>::iterator,G4bool>
+G4MapCache<K,V>::Insert(const K& k, const V& v)
 {
     return G4Cache<map_type>::Get().insert( std::pair<key_type,value_type>(k,v) );
 }

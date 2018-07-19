@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDTree.hh 93883 2015-11-03 08:25:04Z gcosmo $
+// $Id: G4KDTree.hh 110873 2018-06-22 13:11:22Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -52,8 +52,7 @@
 #include "G4KDTreeResult.hh"
 
 class G4KDMap;
-template<typename PointT>
-  class G4KDNode;
+template<typename PointT> class G4KDNode;
 
 //__________________________________
 // Methods to act on kdnode
@@ -272,7 +271,7 @@ protected:
   int fNbActiveNodes;
   G4KDMap* fKDMap;
 
-  G4ThreadLocalStatic G4Allocator<G4KDTree>* fgAllocator;
+  static G4Allocator<G4KDTree>*& fgAllocator();
 };
 
 #include "G4KDTree.icc"

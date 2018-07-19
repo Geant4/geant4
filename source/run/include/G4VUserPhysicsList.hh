@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh 102337 2017-01-23 13:20:50Z gcosmo $
+// $Id: G4VUserPhysicsList.hh 103803 2017-04-27 14:03:05Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -80,6 +80,7 @@
 //       Added default impelmentation of SetCuts 10 June 2011 H.Kurashige 
 //           SetCuts is not 'pure virtual' any more
 //       Trasnformations for multi-threading 26 Mar. 2013 A. Dotti
+//	 Added destructions 21 Apr 2017 A. Dotti
 // ------------------------------------------------------------
 #ifndef G4VUserPhysicsList_h
 #define G4VUserPhysicsList_h 1
@@ -150,8 +151,7 @@ typedef G4VUPLManager G4VUserPhysicsListSubInstanceManager;
 //        we need to change its use in all classes that inherits from
 //        this base class (all examples). However one should note comment
 //        on JIRA task: http://jira-geant4.kek.jp/browse/DEV-27
-
-#define theParticleIterator ((this->subInstanceManager.offset[this->g4vuplInstanceID])._theParticleIterator)
+//#define theParticleIterator ((this->subInstanceManager.offset[this->g4vuplInstanceID])._theParticleIterator)
 
 class G4VUserPhysicsList
 {
@@ -397,8 +397,12 @@ class G4VUserPhysicsList
     inline G4int GetInstanceID() const;
     static const G4VUPLManager& GetSubInstanceManager();
     //Used by Worker threads on the shared instance of
-    // PL to initialize workers
-    void InitializeWorker();
+    // PL to initialize workers. Derived class re-implementing this method
+    // must also call this base class method
+    virtual void InitializeWorker();
+    //Destroy thread-local data. Note that derived classes
+    //implementing this method should still call this base class one
+    virtual void TerminateWorker();
 };
 
 inline void G4VUserPhysicsList::Construct()

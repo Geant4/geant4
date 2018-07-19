@@ -48,10 +48,10 @@
 #include "CexmcCommon.hh"
 
 
-CexmcStudiedProcess::CexmcStudiedProcess( CexmcPhysicsManager *  physicsManager,
-                                          G4ProcessType  processType ) :
+CexmcStudiedProcess::CexmcStudiedProcess(
+        CexmcPhysicsManager *  physicsManager_, G4ProcessType  processType ) :
     G4WrapperProcess( CexmcStudiedProcessFirstName, processType ),
-    physicsManager( physicsManager )
+    physicsManager( physicsManager_ )
 {
 }
 

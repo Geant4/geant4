@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc 102419 2017-01-26 10:40:50Z gcosmo $
+// $Id: G4OpenGLWin32Viewer.cc 97430 2016-06-03 07:20:11Z gcosmo $
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific

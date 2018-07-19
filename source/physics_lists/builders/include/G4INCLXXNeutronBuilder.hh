@@ -55,22 +55,23 @@ class G4INCLXXNeutronBuilder : public G4VNeutronBuilder
 {
   public: 
     G4INCLXXNeutronBuilder();
-    virtual ~G4INCLXXNeutronBuilder();
+    virtual ~G4INCLXXNeutronBuilder() {}
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4HadronFissionProcess * aP);
-    virtual void Build(G4HadronCaptureProcess * aP);
-    virtual void Build(G4NeutronInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4HadronFissionProcess *) final override {}
+    virtual void Build(G4HadronCaptureProcess *) final override {}
+    virtual void Build(G4NeutronInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
 
     void SetMinPreCompoundEnergy(G4double aM) {thePreCompoundMin = aM;}
     void SetMaxPreCompoundEnergy(G4double aM) {thePreCompoundMax = aM;}
 
     void UsePreCompound(const G4bool w) { withPreCompound = w;}
 
+    using G4VNeutronBuilder::Build; //Prevent compiler warning
   private:
     G4INCLXXInterface * theModel;    
     G4VPreCompoundModel * thePreCompoundModel;    

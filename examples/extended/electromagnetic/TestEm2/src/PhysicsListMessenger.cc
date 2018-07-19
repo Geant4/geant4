@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm2/src/PhysicsListMessenger.cc
+/// \file electromagnetic/TestEm5/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.cc 78550 2014-01-07 09:43:41Z gcosmo $
+// $Id: PhysicsListMessenger.cc 109103 2018-03-27 07:39:04Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,22 +35,29 @@
 
 #include "PhysicsList.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:G4UImessenger(),fPhysicsList(pPhys)
+  :G4UImessenger(),fPhysicsList(pPhys),fMaxChargedStep(DBL_MAX)
 {
   fPhysDir = new G4UIdirectory("/testem/phys/");
   fPhysDir->SetGuidance("physics list commands");
-   
+
   fListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
   fListCmd->SetGuidance("Add modula physics list.");
   fListCmd->SetParameterName("PList",false);
   fListCmd->AvailableForStates(G4State_PreInit);
-  fListCmd->SetToBeBroadcasted(false);    
+  fListCmd->SetToBeBroadcasted(false);      
+
+  fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
+  fStepMaxCmd->SetGuidance("Set max allowed step length");
+  fStepMaxCmd->SetParameterName("mxStep",false);
+  fStepMaxCmd->SetRange("mxStep>0.");
+  fStepMaxCmd->SetUnitCategory("Length");
+  fStepMaxCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,15 +65,18 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete fListCmd;
-  delete fPhysDir;    
+  delete fPhysDir;
+  delete fStepMaxCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{       
+{ 
   if( command == fListCmd )
-   { fPhysicsList->AddPhysicsList(newValue);}
+    { fPhysicsList->AddPhysicsList(newValue); }
+  if (command == fStepMaxCmd)
+    { fMaxChargedStep = fStepMaxCmd->GetNewDoubleValue(newValue); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.hh 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4LogicalVolumeStore.hh 103096 2017-03-15 15:21:33Z gcosmo $
 //
 // class G4LogicalVolumeStore
 //

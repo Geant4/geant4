@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelCalorimeterSD.hh 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelCalorimeterSD.hh 109971 2018-05-14 07:06:05Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -67,8 +67,8 @@ private:
   GammaRayTelCalorimeterHitsCollection*  CalorimeterCollection;      
   GammaRayTelDetectorConstruction* Detector;
 
-  G4int (*ChitXID);
-  G4int (*ChitYID);
+  G4int* ChitXID;
+  G4int* ChitYID;
 
   G4int NbOfCALLayers;
   G4int NbOfCALBars; 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeTo3PiModel.hh 82961 2014-07-21 09:20:49Z gcosmo $
+// $Id: G4eeTo3PiModel.hh 97391 2016-06-02 10:08:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,22 +61,22 @@ class G4eeTo3PiModel : public G4Vee2hadrons
 
 public:
 
-  G4eeTo3PiModel(G4eeCrossSections*,G4double,G4double);
+  explicit G4eeTo3PiModel(G4eeCrossSections*,G4double,G4double);
 
   virtual ~G4eeTo3PiModel();
 
-  virtual G4double PeakEnergy() const;
+  virtual G4double PeakEnergy() const override;
 
-  virtual G4double ComputeCrossSection(G4double) const;
+  virtual G4double ComputeCrossSection(G4double) const override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-              G4double, const G4ThreeVector&);
+              G4double, const G4ThreeVector&) override;
 
 private:
 
   // hide assignment operator
-  G4eeTo3PiModel & operator=(const  G4eeTo3PiModel &right);
-  G4eeTo3PiModel(const  G4eeTo3PiModel&);
+  G4eeTo3PiModel & operator=(const  G4eeTo3PiModel &right) = delete;
+  G4eeTo3PiModel(const  G4eeTo3PiModel&) = delete;
 
   G4double massPi;
   G4double massPi0;

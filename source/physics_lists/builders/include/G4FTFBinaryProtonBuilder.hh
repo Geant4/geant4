@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryProtonBuilder.hh 81935 2014-06-06 15:41:42Z gcosmo $
+// $Id: G4FTFBinaryProtonBuilder.hh 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 //
 // Modified:
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -60,13 +61,12 @@ class G4FTFBinaryProtonBuilder : public G4VProtonBuilder
     G4FTFBinaryProtonBuilder(G4bool quasiElastic=false);
     virtual ~G4FTFBinaryProtonBuilder();
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4ProtonInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {};
+    virtual void Build(G4ProtonInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
-
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
+    using G4VProtonBuilder::Build; //Prevent compiler warning
   private:
     G4TheoFSGenerator * theModel;
     G4BinaryCascade * theCascade;

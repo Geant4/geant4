@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc 97466 2016-06-03 09:59:34Z gcosmo $
+// $Id: G4ScoringManager.cc 94772 2015-12-09 09:46:45Z gcosmo $
 //
 
 #include "G4ScoringManager.hh"

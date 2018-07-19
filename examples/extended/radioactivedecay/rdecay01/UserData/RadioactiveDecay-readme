@@ -1,24 +1,51 @@
 
-Lines beginning with either a 'W' or a '#' are comments
+This README file provides instructions for reading the radioactive decay 
+schemes in the files zXX.aYYY found in the directory RadioactiveDecay5.0
+(most recent version).  This directory, as well as previous versions, is
+available from the Geant4 download page 
 
-Lines beginning with a 'P' are a header which describes a level of the  
-nucleus.  The first number is the excitation energy in keV, the second is the  
-half life in seconds
-Indented lines under the 'P' lines are decay modes for that  
-excitation.  There are two type of records here, distinguished by the  
-number of columns.
+http://cern.ch/geant4/support/download.shtml
 
-If there are 3 columns only, this is a header which describes all  
-decays of that type from this level.
-The first column is the decay mode, the second column is zero, and the  
-third column in the branching ratio to this mode, as a fraction of  
-unity.  Therefore, the third columns of all the 3-column records under  
-a given 'P' line should sum to 1.0.
+under the Data files heading. In order to use the radioactive decay module
+correctly, you must download and unpack the above directory in your local
+area, and set the environment variable
 
-If there are four columns, this is a record which describes a subset  
-of the decay type, specific to a given lower level in the daughter  
-species.  The first column is the decay type, the second column is the  
-excitation level of the daughter (in keV), and the third column is the  
-branching ratio as a percentage (! note... not a fraction of unity) of  
-the total branching ratio which came from the 3-column record for this  
-decay.
+G4RADIOACTIVEDATA
+
+to point to it. 
+
+**************************************************************************
+In each of the files, lines beginning with '#' are comments.
+
+Lines beginning with a 'P' are headers, indicating metastable states of the
+nucleus which may be parent nuclei for further decays.  The first number is
+the excitation energy in keV, followed by a character representing the floating
+level.  If this is "-", the level is assumed to be fixed.  If it is
++X, +Y, +Z, +W, +U or +V, the level is floating, or undetermined.  The number 
+following this is the half life in seconds.  Indented lines under the 'P' lines 
+are decay modes for that excitation.  There are two types of records here, 
+distinguished by the number of columns.
+
+If there are four columns only, this is a header describing the total strength
+of each type of decay from this level.  The first column is the decay mode,
+the second column is always zero, the third column indicates whether the level 
+is floating or not, as mentioned above, and the fourth column is the total 
+branching ratio going through this mode, as a fraction of unity.  Therefore,
+the fourth column of all the 4-column records under a given 'P' line should sum
+to 1.0.
+
+If there are five columns, this is a record which describes a subset of the 
+decay type, specific to a given lower level in the daughter species.  The 
+first column is the decay type, the second and third columns are the excitation
+level (keV) of the daughter reached after the decay and its floating level 
+indicator, and the fourth column is the branching ratio as a percentage
+(! note... not a fraction of unity) of the total branching ratio which came 
+from the 4-column record for this decay.
+
+In the case of beta- or beta+ decay, there will often be a sixth column
+describing the "forbiddenness" of the particular decay channel.  This is
+indicated by the tags firstForbidden, secondForbidden, thirdForbidden,
+uniqueFirstForbidden, uniqueSecondForbidden, uniqueThirdForbidden, which
+determine the shape of the beta spectrum.
+**************************************************************************
+

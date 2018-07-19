@@ -39,6 +39,9 @@ G4bool G4RootAnalysisManager::WriteT(const std::vector<T*>& htVector,
                                      tools::wroot::directory* directory,
                                      const G4String& hnType)
 {
+  // Do nothing if there is no file
+  if ( ! directory ) return true;
+
   for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
     auto info = hnVector[i];
     auto activation = info->GetActivation();

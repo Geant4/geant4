@@ -1,4 +1,4 @@
-$Id: History 97640 2016-06-06 14:23:20Z gcosmo $
+$Id: History 109713 2018-05-08 13:37:44Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -15,12 +15,32 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-24/05/16 I. Hrivnacova (exampleB3-V10-01-02)
+08/05/18 B. Morgan     (exampleB3-V10-04-00)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+22/12/16 M. Maire      (exampleB3-V10-03-00)
+- PhysicsList : register Electromagnetic before RadioactiveDecay
+
+
+19/11/16 A. Dotti      (exampleB3-V10-02-04)
+- explicit set of SD to manager
+
+02/11/16 I. Hrivnacova (exampleB3-V10-02-03)
+- Fixed comments for Doxygen
+- Removed obsolete B3b/exampleB3.cc
+
+26/09/16 I. Hrivnacova (exampleB3-V10-02-02)
+- Updated for renaming G4Parameter in G4Accumulable
+
+24/05/16 I. Hrivnacova (exampleB3-V10-02-01)
 - Fixed compiler warning introduced in the previous update
 
-20/05/16 I. Hrivnacova
+20/05/16 I. Hrivnacova (exampleB3-V10-02-00)
 - Fixed initialization of the hits collections IDs in B3aEventAction
   (this fixes the problem report #1862)
+- Removed History files from B3a and B3b
 
 05/11/15 I. Hrivnacova (exampleB3-V10-01-01)
 - Splitting example in two variants of merging data:

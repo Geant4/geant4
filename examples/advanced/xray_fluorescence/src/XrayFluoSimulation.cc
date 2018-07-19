@@ -26,7 +26,7 @@
 //
 // $Id: XrayFluoSimulation.cc
 //
-// Author: Elena Guardincerri 
+// Author: Elena Guardincerri
 //
 // History:
 // -----------
@@ -35,6 +35,8 @@
 // 18 Jan 2011 adapted to new deexcitation design
 //
 // -------------------------------------------------------------------
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -72,11 +74,11 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   // choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
   G4Random::setTheSeed(dir);
-   
+
 #ifdef G4MULTITHREADED
   // Construct the default run manager
   G4MTRunManager* runManager = new G4MTRunManager();
-  G4cout << "Using the MT Run Manager (G4MULTITHREADED=ON)" << G4endl; 
+  G4cout << "Using the MT Run Manager (G4MULTITHREADED=ON)" << G4endl;
 #else
   G4RunManager * runManager = new G4RunManager;
   G4cout << "Using the sequential Run Manager" << G4endl;
@@ -84,7 +86,7 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 
 
   // chosing Geometry setup
-  G4int geometryNumber = 0; 
+  G4int geometryNumber = 0;
 
   if (argc == 3){
     geometryNumber =  atoi(argv[2]);
@@ -101,14 +103,14 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   }
 
   // set analysis to have the messenger running...
-  XrayFluoAnalysisManager* analysis = 
+  XrayFluoAnalysisManager* analysis =
     XrayFluoAnalysisManager::getInstance();
 
-  // set mandatory initialization 
+  // set mandatory initialization
 
   //Initialize geometry
   if (geometryNumber == 1 || geometryNumber == 4) {
-    XrayFluoDetectorConstruction* testBeamDetector 
+    XrayFluoDetectorConstruction* testBeamDetector
       = XrayFluoDetectorConstruction::GetInstance();
     if (geometryNumber == 4) {
       testBeamDetector->PhaseSpaceOn();
@@ -117,19 +119,19 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
     runManager->SetUserInitialization(testBeamDetector);
   }
   else if (geometryNumber == 2) {
-    XrayFluoPlaneDetectorConstruction* 
+    XrayFluoPlaneDetectorConstruction*
       planeDetector = XrayFluoPlaneDetectorConstruction::GetInstance();
     runManager->SetUserInitialization(planeDetector);
   }
   else if (geometryNumber == 3) {
-    XrayFluoMercuryDetectorConstruction* mercuryDetector = 
+    XrayFluoMercuryDetectorConstruction* mercuryDetector =
       XrayFluoMercuryDetectorConstruction::GetInstance();
     runManager->SetUserInitialization(mercuryDetector);
   }
 
 
   //Initialize physics
-  runManager->SetUserInitialization(new   XrayFluoPhysicsList()); 
+  runManager->SetUserInitialization(new   XrayFluoPhysicsList());
 
   //Initialize actions
   runManager->SetUserInitialization
@@ -140,38 +142,38 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
-  
-  // get the pointer to the User Interface manager 
+
+  // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  
+
   if (getenv("G4VIS_USE")) {
     UImanager->ApplyCommand("/control/execute vis.mac");
-  }     
+  }
 
   if (argc == 1)   // Define UI session for interactive mode.
     {
-      UImanager->ApplyCommand("/control/execute initInter.mac");     
+      UImanager->ApplyCommand("/control/execute initInter.mac");
 #ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);        
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       ui->SessionStart();
       delete ui;
 #endif
     }
   else           // Batch mode
-    { 
+    {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);
     }
-  
+
   // job termination
 #ifdef G4VIS_USE
   delete visManager;
   G4cout << "visManager deleted"<< G4endl;
 #endif
 
-  
+
   delete runManager;
-  
-  
+
+
 }

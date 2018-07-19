@@ -116,7 +116,7 @@ public:
    {int v;
     if(!rb.read(v)) return false;
     m_nbytes_name = v;}
-    if(versiondir>1000) {
+    if(versiondir>(short)big_file_version_tag()) {
       if(!rb.read(m_seek_directory)) return false;
       if(!rb.read(m_seek_parent)) return false;
       if(!rb.read(m_seek_keys)) return false;
@@ -150,10 +150,10 @@ public:
 
     clear_keys();
   
-    key headerkey(m_file,m_seek_keys,m_nbytes_keys);
-    if(!headerkey.read_file()) return false;
+    key headerkey(m_file.out(),m_seek_keys,m_nbytes_keys);
+    if(!headerkey.read_file(m_file)) return false;
     char* buffer = headerkey.data_buffer();
-    if(!headerkey.from_buffer(headerkey.eob(),buffer)) return false;
+    if(!headerkey.from_buffer(m_file.byte_swap(),headerkey.eob(),buffer,m_file.verbose())) return false;
     int nkeys = 0;
     rbuf rb(m_file.out(),m_file.byte_swap(),headerkey.eob(),buffer);
     if(!rb.read(nkeys)) return false;
@@ -164,8 +164,8 @@ public:
                    << std::endl;
     }
     for(int i=0;i<nkeys;i++) {
-      key* k = new key(m_file);
-      if(!k->from_buffer(headerkey.eob(),buffer)) {
+      key* k = new key(m_file.out());
+      if(!k->from_buffer(m_file.byte_swap(),headerkey.eob(),buffer,m_file.verbose())) {
         delete k;
         return false;
       }
@@ -175,7 +175,7 @@ public:
     return true;
   }
   void clear_keys() {
-    clear<key>(m_keys);
+    safe_clear<key>(m_keys);
   }
 protected:
   ifile& m_file;
@@ -183,8 +183,8 @@ protected:
   // Record (stored in file):
   date m_date_C;           //Date and time when directory is created
   date m_date_M;           //Date and time of last modification
-  uint32 m_nbytes_keys;      //Number of bytes for the keys
-  uint32 m_nbytes_name;      //Number of bytes in TNamed at creation time
+  uint32 m_nbytes_keys;    //Number of bytes for the keys
+  uint32 m_nbytes_name;    //Number of bytes in TNamed at creation time
   seek m_seek_directory;   //Location of directory on file
   seek m_seek_parent;      //Location of parent directory on file
   seek m_seek_keys;        //Location of Keys record on file

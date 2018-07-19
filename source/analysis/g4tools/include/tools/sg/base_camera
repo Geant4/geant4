@@ -16,6 +16,8 @@
 #include "visible_action"
 #include "enums"
 
+#include "../mathf" //astro
+
 namespace tools {
 namespace sg {
 
@@ -87,9 +89,11 @@ public:
   }
   virtual void get_matrix(get_matrix_action& a_action){
     _mult_matrix(a_action);
+    set_state(a_action);
   }
   virtual void is_visible(visible_action& a_action){
     _mult_matrix(a_action);
+    set_state(a_action);
   }
 protected:
   base_camera()
@@ -161,16 +165,20 @@ public:
     orientation.value().mul_vec(vec3f(0,0,-1),a_dir);
   }
 
-  void rotate_around_direction(float a_delta){
+  void rotate_around_direction(float a_delta) { //used in exlib/examples/iOS/sg.
     vec3f dir;
     orientation.value().mul_vec(vec3f(0,0,-1),dir);
     //_MSC_VER : does not compile : orientation = rotf(dir,a_delta) * orientation;
     orientation.value(rotf(dir,a_delta) * orientation.value());
   }
+
   void rotate_around_up(float a_delta){
     vec3f up;
     orientation.value().mul_vec(vec3f(0,1,0),up);
-    orientation.value(rotf(up,a_delta) * orientation.value());
+  //orientation.value(rotf(up,a_delta) * orientation.value());
+    // must be the below so that rot-cam works for exlib/cbk/[pyrfits,astro,cfitsio] astro setup.
+    // (astro setup change camera orientation).
+    orientation.value(orientation.value() * rotf(up,a_delta));
   }
 
   void rotate_around_y_at_focal(float a_delta){
@@ -203,10 +211,9 @@ public:
     orientation.value().mul_vec(vec3f(0,0,-1),dir);
     vec3f up;
     orientation.value().mul_vec(vec3f(0,1,0),up);
-    vec3f side = dir.cross(up);
+    vec3f side;dir.cross(up,side);
     vec3f v = side * (side.dot(a_dir)) + dir * (dir.dot(a_dir));    
-    if(v.normalize())
-      orientation.value(orientation.value()*rotf(dir,v));}
+    if(v.normalize()) orientation.value(orientation.value()*rotf(dir,v));}
 
     //rotate around dir^up so that a_dir matches dir.
    {vec3f dir;
@@ -233,7 +240,7 @@ public:
     orientation.value().mul_vec(vec3f(0,0,-1),dir);
     vec3f up;
     orientation.value().mul_vec(vec3f(0,1,0),up);
-    vec3f side = dir.cross(up);
+    vec3f side;dir.cross(up,side);
 
     vec3f d(a_x,a_y,a_z);
     d.subtract(position.value());
@@ -247,7 +254,7 @@ public:
     orientation.value().mul_vec(vec3f(0,0,-1),dir);
     vec3f up;
     orientation.value().mul_vec(vec3f(0,1,0),up);
-    vec3f side = dir.cross(up);
+    vec3f side;dir.cross(up,side);
     vec3f pos = position.value() + side * a_delta;
     position.value(pos);
   }
@@ -287,6 +294,35 @@ public:
     return true;
   }
 
+  void astro_orientation(float a_ra,float a_dec/*,const vec3f&  a_center*/) {
+    // a_ra, a_dec are in decimal degrees.
+
+    // Camera default point toward -z with up along +y and +x at right.
+
+    // Arrange so that camera points toward x with up along +z :
+    rotf r(vec3f::s_y(),-fhalf_pi());
+    r *= rotf(vec3f::s_x(),fhalf_pi());    
+    // Now -y is at right.
+
+    // Then rotate it so that it points toward given (ra,dec) by keeping up upward +z direction.
+    r *= rotf(vec3f::s_y(),-a_dec*fdeg2rad());
+    r *= rotf(vec3f::s_z(),a_ra*fdeg2rad());
+    orientation = r;
+
+/*
+    position = a_center*0.99f;
+    znear = 0.1f;
+    zfar = 200.0f;
+    focal = (a_center-position).length();
+*/
+/*
+    position = vec3f(0,0,0);
+    znear = 1.0f;
+    zfar = 2000.0f; //2*sky_radius.
+    focal = a_center.length();
+    da = 0.017f/100; //1/100 of a degree
+*/
+  }
 protected:
   void update_sg(std::ostream& a_out) {
 
@@ -346,10 +382,11 @@ protected:
     _state.m_proj = a_action.projection_matrix();
   }
 
-  static const vec4<float>& id_orientation() {
-    static const vec4<float> s_v(0,0,0,1,false);
-    return s_v;
-  }
+#if defined(TOOLS_MEM) && !defined(TOOLS_MEM_ATEXIT)
+  static const vec4<float>& id_orientation() {static const vec4<float> s_v(0,0,0,1,false);return s_v;}
+#else
+  static const vec4<float>& id_orientation() {static const vec4<float> s_v(0,0,0,1);return s_v;}
+#endif
 
 protected:
   //OPTIMIZATION :

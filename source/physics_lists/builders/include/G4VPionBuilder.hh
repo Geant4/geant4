@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPionBuilder.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4VPionBuilder.hh 103801 2017-04-27 13:59:03Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,23 +33,26 @@
 //  devired from G4VPiKBuilder
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
 #ifndef G4VPionBuilder_h
 #define G4VPionBuilder_h
 
+#include "G4PhysicsBuilderInterface.hh"
 #include "G4HadronElasticProcess.hh"
 #include "G4PionPlusInelasticProcess.hh"
 #include "G4PionMinusInelasticProcess.hh"
 
-class G4VPionBuilder
+class G4VPionBuilder : public G4PhysicsBuilderInterface
 {
 public:
-  G4VPionBuilder();
-  virtual ~G4VPionBuilder();
+  G4VPionBuilder() = default;
+  virtual ~G4VPionBuilder() {} 
   virtual void Build(G4HadronElasticProcess * aP) = 0;
   virtual void Build(G4PionPlusInelasticProcess * aP) = 0;
   virtual void Build(G4PionMinusInelasticProcess * aP) = 0;
+  using G4PhysicsBuilderInterface::Build; //Prevent compiler warning
 };
 #endif

@@ -1,4 +1,4 @@
-# $Id: CMakeLists.txt 86065 2014-11-07 08:51:15Z gcosmo $
+# $Id: CMakeLists.txt 104871 2017-06-23 14:17:13Z gcosmo $
 
 #----------------------------------------------------------------------------
 # Setup the project
@@ -46,10 +46,9 @@ target_link_libraries(exampleB4d ${Geant4_LIBRARIES})
 set(EXAMPLEB4D_SCRIPTS
   exampleB4d.out
   exampleB4.in
-  icons.mac
   gui.mac
-  run.png
   init_vis.mac
+  plotHisto.C
   run1.mac
   run2.mac
   vis.mac

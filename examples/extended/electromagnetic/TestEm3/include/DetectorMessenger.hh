@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.hh 78655 2014-01-14 11:13:41Z gcosmo $
+// $Id: DetectorMessenger.hh 98762 2016-08-09 14:08:07Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,7 @@ class DetectorMessenger: public G4UImessenger
     virtual void SetNewValue(G4UIcommand*, G4String);
 
   private:
-    DetectorConstruction* Detector;
+    DetectorConstruction*      fDetector;
 
     G4UIdirectory*             fTestemDir;
     G4UIdirectory*             fDetDir;

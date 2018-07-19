@@ -137,8 +137,7 @@ public:
   template <class T>
   T* rsearch_from(const node* a_node) const {
     bool found = false;
-    std::vector<node*>::const_reverse_iterator it;
-    for(it=m_children.rbegin();it!=m_children.rend();++it) {
+    tools_vforcrit(node*,m_children,it) {
       // the below logic permits to test a_node.
       if(!found) {if(*it==a_node) found = true;}
       if(found) {
@@ -154,8 +153,7 @@ public:
                      const std::string& a_class,
                      bool a_inc_a_node = true) const {
     bool found = false;
-    std::vector<node*>::const_reverse_iterator it;
-    for(it=m_children.rbegin();it!=m_children.rend();++it) {
+    tools_vforcrit(node*,m_children,it) {
       // the below logic permits to test a_node.
       if(!found) {
         if(*it==a_node) {
@@ -231,14 +229,14 @@ public:
     //touch();
   }
 
-  void clear() {tools::clear<node>(m_children);}
+  void clear() {safe_clear<node>(m_children);}
 
   void raw_clear(){ //used for sg coming from exlib/rroot/vis_volume.
-    tools::raw_clear<node>(m_children);
+    tools::raw_clear<node>(m_children); //inlib:: is needed.
   }
-  unsigned int size() const {return m_children.size();}
+  size_t size() const {return m_children.size();}
   bool empty() const {return m_children.size()?false:true;}
-  node* operator[](unsigned int a_index) const{
+  node* operator[](size_t a_index) const{
     //WARNING : no check is done on a_index.
     return m_children[a_index];    
   }
@@ -270,18 +268,16 @@ public:
     }
     return false;
   }
-
+*/
   template <class T>
-  T* rsearch() const {
-    std::vector<node*>::const_reverse_iterator it;
-    for(it=m_children.rbegin();it!=m_children.rend();++it) {
+  T* rsearch() const { //used in agora.
+    tools_vforcrit(node*,m_children,it) {
       T* o = safe_cast<node,T>(*(*it));
       if(o) return o;
     }
     return 0;
   }
 
-*/
   bool position(const node* a_node,unsigned int& a_index) const {
     a_index = 0;
     tools_vforcit(node*,m_children,it) {

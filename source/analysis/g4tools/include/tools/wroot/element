@@ -34,7 +34,7 @@ namespace streamer_info {
     OBJECT_ANY = 62,       //  ?
     OBJECT_ARROW = 63,     //  ?
     OBJECT_POINTER = 64,   //  ?
-    TSTRING = 65,          //  8  
+    _TSTRING = 65,         //  8  //NOTE : TSTRING clashes with a cpp macro in cfitsio.
     TOBJECT = 66,          // 12
     TNAMED = 67            // 28
   };
@@ -86,7 +86,7 @@ public:
   }
 public:
   streamer_element(const std::string& aName,const std::string& aTitle,
-                  int aOffset,int aType,const std::string& aTypeName)
+                   int aOffset,int aType,const std::string& aTypeName)
   :fName(aName),fTitle(aTitle),fType(aType)
   ,fSize(0),fArrayLength(0),fArrayDim(0),fOffset(aOffset)
   ,fTypeName(aTypeName){
@@ -178,10 +178,10 @@ public: //ibo
 public: //streamer_element
   virtual streamer_element* copy() const {return new streamer_base(*this);}
 public:
-  streamer_base(const std::string& aName,const std::string& aTitle,
-               int aOffset,int aBaseVersion)
+  streamer_base(const std::string& aName,const std::string& aTitle,int aOffset,int aBaseVersion)
   :streamer_element(aName,aTitle,aOffset,streamer_info::BASE,"BASE")
-  ,fBaseVersion(aBaseVersion){
+  ,fBaseVersion(aBaseVersion)
+  {
     if (aName=="TObject") fType = streamer_info::TOBJECT;
     if (aName=="TNamed") fType = streamer_info::TNAMED;
   }
@@ -378,13 +378,12 @@ public: //streamer_element
   virtual streamer_element* copy() const {return new streamer_basic_pointer(*this);}
 public:
   streamer_basic_pointer(const std::string& aName,const std::string& aTitle,
-                       int aOffset,int aType,
-                       const std::string& aCountName,
-                       const std::string& aCountClass,
-                       int aCountVersion,
-                       const std::string& aTypeName)
-  :streamer_element(aName,aTitle,aOffset,
-                    aType+streamer_info::POINTER,aTypeName)
+                         int aOffset,int aType,
+                         const std::string& aCountName,
+                         const std::string& aCountClass,
+                         int aCountVersion,
+                         const std::string& aTypeName)
+  :streamer_element(aName,aTitle,aOffset,aType+streamer_info::POINTER,aTypeName)
   ,fCountVersion(aCountVersion)
   ,fCountName(aCountName)
   ,fCountClass(aCountClass)
@@ -427,10 +426,10 @@ public: //streamer_element
   virtual streamer_element* copy() const {return new streamer_string(*this);}
 public:
   streamer_string(const std::string& aName,const std::string& aTitle,int aOffset)
-  :streamer_element(aName,aTitle,aOffset,streamer_info::TSTRING,"TString")
+  :streamer_element(aName,aTitle,aOffset,streamer_info::_TSTRING,"TString")
   {}
   streamer_string(int& aOffset,const std::string& aName,const std::string& aTitle)
-  :streamer_element(aName,aTitle,aOffset,streamer_info::TSTRING,"TString")
+  :streamer_element(aName,aTitle,aOffset,streamer_info::_TSTRING,"TString")
   {
     aOffset += streamer_info::size_TString;
   }
@@ -457,8 +456,7 @@ public: //ibo
 public: //streamer_element
   virtual streamer_element* copy() const {return new streamer_object(*this);}
 public:
-  streamer_object(const std::string& aName,const std::string& aTitle,
-                 int aOffset,const std::string& aTypeName)
+  streamer_object(const std::string& aName,const std::string& aTitle,int aOffset,const std::string& aTypeName)
   :streamer_element(aName,aTitle,aOffset,0,aTypeName){
     fType = streamer_info::OBJECT;
     if (aName=="TObject") fType = streamer_info::TOBJECT;

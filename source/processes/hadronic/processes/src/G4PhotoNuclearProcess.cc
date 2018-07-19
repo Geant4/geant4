@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoNuclearProcess.cc 66499 2012-12-19 09:16:35Z gcosmo $
+// $Id: G4PhotoNuclearProcess.cc 105287 2017-07-19 08:45:40Z gcosmo $
 //
 
 #include "G4PhotoNuclearProcess.hh"
@@ -32,7 +32,7 @@
 
 void G4PhotoNuclearProcess::ProcessDescription(std::ostream& outFile) const
 {
-  outFile << "This process handles inelastic photon scattering from\n" 
+  outFile << "G4PhotoNuclearProcess handles inelastic photon scattering from\n" 
           << "nuclei by invoking one or more hadronic models and one\n"
-          << "or more hadronic cross sections.\n";
+          << "or more hadronic cross section sets.\n";
 }

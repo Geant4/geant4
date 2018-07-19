@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 85530 2014-10-30 16:17:43Z gcosmo $
+# $Id: GNUmakefile 101118 2016-11-07 09:10:59Z gcosmo $
 # ----------------------------------------------------------------------------
 # GNUmakefile for geometry/solids/specific library.  Gabriele Cosmo, 05/04/00.
 # ----------------------------------------------------------------------------
@@ -27,6 +27,9 @@ ifdef G4SPECSDEBUG
 endif
 ifdef G4TWISTDEBUG
   CPPFLAGS += -DG4TWISTDEBUG
+endif
+ifdef G4BBOX_EXTENT
+  CPPFLAGS += -DG4BBOX_EXTENT
 endif
 
 include $(G4INSTALL)/config/common.gmk

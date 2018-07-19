@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1RunAction.cc 93886 2015-11-03 08:28:26Z gcosmo $
+// $Id: B1RunAction.cc 99560 2016-09-27 07:03:29Z gcosmo $
 //
 /// \file B1RunAction.cc
 /// \brief Implementation of the B1RunAction class
@@ -35,7 +35,7 @@
 
 #include "G4RunManager.hh"
 #include "G4Run.hh"
-#include "G4ParameterManager.hh"
+#include "G4AccumulableManager.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4LogicalVolume.hh"
 #include "G4UnitsTable.hh"
@@ -45,8 +45,8 @@
 
 B1RunAction::B1RunAction()
 : G4UserRunAction(),
-  fEdep("Edep", 0.),
-  fEdep2("Edep2", 0.)
+  fEdep(0.),
+  fEdep2(0.)
 { 
   // add new units for dose
   // 
@@ -60,10 +60,10 @@ B1RunAction::B1RunAction()
   new G4UnitDefinition("nanogray" , "nanoGy"  , "Dose", nanogray);
   new G4UnitDefinition("picogray" , "picoGy"  , "Dose", picogray); 
 
-  // Register parameter to the parameter manager
-  G4ParameterManager* parameterManager = G4ParameterManager::Instance();
-  parameterManager->RegisterParameter(fEdep);
-  parameterManager->RegisterParameter(fEdep2); 
+  // Register accumulable to the accumulable manager
+  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  accumulableManager->RegisterAccumulable(fEdep);
+  accumulableManager->RegisterAccumulable(fEdep2); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,9 +78,9 @@ void B1RunAction::BeginOfRunAction(const G4Run*)
   // inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 
-  // reset parameters to their initial values
-  G4ParameterManager* parameterManager = G4ParameterManager::Instance();
-  parameterManager->Reset();
+  // reset accumulables to their initial values
+  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  accumulableManager->Reset();
 
 }
 
@@ -91,9 +91,9 @@ void B1RunAction::EndOfRunAction(const G4Run* run)
   G4int nofEvents = run->GetNumberOfEvent();
   if (nofEvents == 0) return;
 
-  // Merge parameters 
-  G4ParameterManager* parameterManager = G4ParameterManager::Instance();
-  parameterManager->Merge();
+  // Merge accumulables 
+  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  accumulableManager->Merge();
 
   // Compute dose = total energy deposit in a run and its variance
   //

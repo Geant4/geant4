@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4StateManager.cc 108402 2018-02-12 10:31:27Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -40,6 +40,7 @@
 // Initialization of the static pointer of the single class instance
 //
 G4ThreadLocal G4StateManager* G4StateManager::theStateManager = 0;
+G4int G4StateManager::verboseLevel = 0;
 
 G4StateManager::G4StateManager()
  : theCurrentState(G4State_PreInit),
@@ -205,6 +206,7 @@ G4StateManager::SetNewState(G4ApplicationState requestedState, const char* msg)
    G4bool ack = true;
    G4ApplicationState savedState = thePreviousState;
    thePreviousState = theCurrentState;
+   
    while ((ack) && (i<theDependentsList.size()))
    {
      ack = theDependentsList[i]->Notify(requestedState);
@@ -218,7 +220,15 @@ G4StateManager::SetNewState(G4ApplicationState requestedState, const char* msg)
    if(!ack)
    { thePreviousState = savedState; }
    else
-   { theCurrentState = requestedState; }
+   {
+     theCurrentState = requestedState;
+     if(verboseLevel>0)
+     {
+       G4cout<<"#### G4StateManager::SetNewState from "
+             <<GetStateString(thePreviousState)<<" to "
+             <<GetStateString(requestedState)<<G4endl;
+     }
+   }
    msgptr = 0;
    return ack;
 }
@@ -267,6 +277,12 @@ G4StateManager::GetStateString(G4ApplicationState aState) const
      stateName = "Unknown"; break;
   }
   return stateName;
+}
+
+void
+G4StateManager::SetVerboseLevel(G4int val)
+{
+  verboseLevel = val;
 }
 
 //void G4StateManager::Pause()

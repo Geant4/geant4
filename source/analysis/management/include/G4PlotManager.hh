@@ -34,13 +34,12 @@
 
 #include "G4AnalysisManagerState.hh"
 #include "G4PlotParameters.hh"
+#include "G4HnInformation.hh"
 
 #include <tools/viewplot>
 
 #include <vector>
 #include <memory>
-
-class G4HnInformation;
 
 class G4PlotManager
 {
@@ -115,7 +114,7 @@ inline G4bool G4PlotManager::PlotAndWrite(const std::vector<T*>& htVector,
     // set color (only blue for the time being)
     tools::sg::plotter& plotter = fViewer->plots().current_plotter();
     // set plot properties (use info object to get these)
-    plotter.bins_style(0).color = tools::colorf::blue();
+    plotter.bins_style(0).color = tools::colorf_blue();
     
     isWriteNeeded = true;
 

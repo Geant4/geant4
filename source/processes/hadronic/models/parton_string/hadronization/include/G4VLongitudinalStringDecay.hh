@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.hh 84219 2014-10-10 14:55:19Z gcosmo $
+// $Id: G4VLongitudinalStringDecay.hh 107869 2017-12-07 14:46:39Z gcosmo $
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -63,6 +63,7 @@ protected:
 
 // For changing Mass Cut used for selection of very small mass strings
    virtual void SetMassCut(G4double aValue);
+   G4double GetMassCut();
 
 // For handling a string with very low mass
    G4KineticTrackVector * LightFragmentationTest(const G4ExcitedString * const theString);
@@ -99,16 +100,13 @@ protected:
 
 // If a string fragments, do the following
 
-// For transver of a string to its CMS frame
-   G4ExcitedString *CPExcited(const G4ExcitedString& string);
-
-   G4KineticTrack * Splitup(G4FragmentingString *string, 
-                            G4FragmentingString *&newString);
+// To make a copy of a string
+   G4ExcitedString *CopyExcited(const G4ExcitedString& string);
 
    G4ParticleDefinition * QuarkSplitup(G4ParticleDefinition* decay,
 		   		       G4ParticleDefinition *&created);
 
-   virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay, // Uzhi June 2014
+   virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay,
 		   			 G4ParticleDefinition *&created)=0;
 					
    pDefPair CreatePartonPair(G4int NeedParticle, G4bool AllowDiquarks=true);
@@ -122,12 +120,14 @@ protected:
 
 //-----------------------------------------------------------------------------
 // For determination of kinematical properties of created hadron
-//   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron,    // Uzhi
-//                                        G4FragmentingString * string  )=0; // Uzhi
+//   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron,    
+//                                        G4FragmentingString * string  )=0; 
+   virtual G4KineticTrack * Splitup(G4FragmentingString *string,              // Uzhi 28 June 2016
+                            G4FragmentingString *&newString)=0;
 
-   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron,      // Uzhi
-                                        G4FragmentingString * string,        // Uzhi
-                                        G4FragmentingString * newString  )=0;// Uzhi
+   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron,      
+                                        G4FragmentingString * string,        
+                                        G4FragmentingString * newString  )=0;
 
    virtual G4double GetLightConeZ(G4double zmin, G4double zmax, 
                                   G4int PartonEncoding,  
@@ -159,8 +159,9 @@ public:
    void SetScalarMesonMixings( std::vector<G4double> aVector);
    void SetVectorMesonMixings( std::vector<G4double> aVector);
 
-   void SetStringTensionParameter(G4double aValue);            // Uzhi 20 June 08
+   void SetStringTensionParameter(G4double aValue);            
 
+//   G4LorentzVector RestMomentum;                 // Uzhi June 2016
 //private:
 protected:  
    G4double GetDiquarkSuppress()	{return DiquarkSuppress;};
@@ -169,7 +170,7 @@ protected:
    G4double GetClusterMass()		{return ClusterMass;};
    G4int    GetClusterLoopInterrupt()   {return ClusterLoopInterrupt;};
 
-   G4double GetStringTensionParameter() {return Kappa;};       // Uzhi 20 June 08
+   G4double GetStringTensionParameter() {return Kappa;};
    
 //private:
 protected:  
@@ -191,7 +192,7 @@ protected:
    
    G4bool    PastInitPhase;
 
-   G4double Kappa; // String tension parameter                 // Uzhi 20 June 08
+   G4double Kappa; // String tension parameter
 
 //   G4double MinFragmentationMass(G4ExcitedString * theString,
 //				G4ParticleDefinition*& Hadron1,

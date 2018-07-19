@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66373 2012-12-18 09:41:34Z gcosmo $
+# $Id: GNUmakefile 99445 2016-09-22 09:18:19Z gcosmo $
 
 name := G4OpenGL
 
@@ -31,15 +31,25 @@ CPPFLAGS += -I$(G4BASE)/visualization/management/include
 CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
 CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
+CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
+CPPFLAGS += -I$(G4BASE)/geometry/navigation/include
+CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
+CPPFLAGS += -I$(G4BASE)/processes/management/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/interfaces/common/include
 CPPFLAGS += -I$(G4BASE)/interfaces/basic/include
+CPPFLAGS += -I$(G4BASE)/materials/include
+CPPFLAGS += -I$(G4BASE)/track/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
+CPPFLAGS += -I$(G4BASE)/digits_hits/digits/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
+CPPFLAGS += -I$(G4BASE)/particles/management/include
+CPPFLAGS += -I$(G4BASE)/event/include
+CPPFLAGS += -I$(G4BASE)/run/include
 
 include $(G4INSTALL)/config/moc.gmk
 include $(G4INSTALL)/config/common.gmk

@@ -12,11 +12,10 @@ In this example the calorimeter is a simple cube,
 which consists of 10 x 10 crystals of PbWO4 (CMS like).
 The Geant4 shower framework is used (see also extended/parameterisation/Par01 example).
 
-Geometry, sensitive detector, hits and fast simulation process are defined respectively in:
+Geometry, sensitive detector and hits are defined respectively in:
 - ExGflashDetectorConstruction
 - ExGflashSensitiveDetector
 - ExGflashHit
-- ExGflashPhysics
 
 Briefly, whenever a e-/e+  enters the calorimeter, it is parametrised if it 
 has a minimum energy and the shower is expected to be contained 
@@ -30,10 +29,6 @@ the speed up by using GFLASH.
  
 To use GFLASH the user has to implement the following:
 
-- ExGflashPhysics::Construct(): \n
-the parameterisation has to be added to the processmanager.
-Don't forget it, since than gflash is never triggered.	
-	
 - ExGflashDetectorConstruction	: \n
 Here GFLASH has to be initialized and assigend to the envelope,  
 where it should be active (here our calorimeter = fCalo_log )
@@ -54,7 +49,7 @@ G4cout<<"end shower parameterization."<<G4endl;
 \endverbatim
 
 - ExGflashSensitiveDetector: \n
-It is mandatory to use G4VGFlashSensitiveDetector as (additionl) 
+It is mandatory to use G4VGFlashSensitiveDetector as (additional) 
 base class for the sensitive detector.
 Here it is necessary to implement a seperate 
 interface, where the GFlash spots are processed.

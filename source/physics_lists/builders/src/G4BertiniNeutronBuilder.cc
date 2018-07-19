@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniNeutronBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4BertiniNeutronBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 //
 // Modified:
 // 02.04.2009 V.Ivanchenko remove add cross section, string builderis reponsible 
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -58,24 +59,5 @@ Build(G4NeutronInelasticProcess * aP)
   aP->RegisterMe(theModel);
 }
 
-G4BertiniNeutronBuilder::
-~G4BertiniNeutronBuilder() 
-{
-}
-
-void G4BertiniNeutronBuilder::
-Build(G4HadronElasticProcess * )
-{
-}
-
-void G4BertiniNeutronBuilder::
-Build(G4HadronFissionProcess * )
-{
-}
-
-void G4BertiniNeutronBuilder::
-Build(G4HadronCaptureProcess * )
-{
-}
 
 // 2002 by J.P. Wellisch

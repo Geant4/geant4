@@ -51,15 +51,18 @@ class G4PolynomialPDF
   public:
     G4PolynomialPDF(size_t n = 0, const double* coeffs = nullptr, 
 		    G4double x1=0, G4double x2=1);
-    ~G4PolynomialPDF() {};
 
+    ~G4PolynomialPDF();
     // Setters and Getters for coefficients
     inline void SetNCoefficients(size_t n) { fCoefficients.resize(n); fChanged = true; }
     inline size_t GetNCoefficients() const { return fCoefficients.size(); }
-    inline void SetCoefficients(const std::vector<G4double>& v) { fCoefficients = v; }
+    inline void SetCoefficients(const std::vector<G4double>& v) { 
+      fCoefficients = v; fChanged = true; Simplify(); 
+    }
     inline G4double GetCoefficient(size_t i) const { return fCoefficients[i]; }
-    void SetCoefficient(size_t i, G4double value);
+    void SetCoefficient(size_t i, G4double value, bool doSimplify);
     void SetCoefficients(size_t n, const G4double* coeffs);
+    void Simplify();
 
     // Set the domain over which random numbers are generated and over which
     // the CDF is evaluated
@@ -94,7 +97,8 @@ class G4PolynomialPDF
     // Beware that if x1 and x2 are not set carefully there may be multiple
     // solutions, and care is not taken to select a particular one among them.
     // Returns x2 on error
-    G4double GetX( G4double p, G4double x1, G4double x2, G4int ddxPower = 0, G4double guess = 1.e99, G4bool bisect = true );
+    G4double GetX( G4double p, G4double x1, G4double x2, G4int ddxPower = 0, 
+                   G4double guess = 1.e99, G4bool bisect = true );
     inline G4double EvalInverseCDF(G4double p) { return GetX(p, fX1, fX2, -1, fX1 + p*(fX2-fX1)); }
     G4double Bisect( G4double p, G4double x1, G4double x2 );
 
@@ -107,8 +111,9 @@ class G4PolynomialPDF
     G4double fX1;
     G4double fX2;
     std::vector<G4double> fCoefficients;
-    G4bool fChanged;
+    G4bool   fChanged;
     G4double fTolerance;
+    G4int    fVerbose;
 };
 
 #endif

@@ -76,7 +76,7 @@ class G4TablesForExtrapolator
 {
 public:
 
-  G4TablesForExtrapolator(G4int verb, G4int bins, G4double e1, G4double e2);
+  explicit G4TablesForExtrapolator(G4int verb, G4int bins, G4double e1, G4double e2);
 
   ~G4TablesForExtrapolator();
 
@@ -101,8 +101,8 @@ private:
 			 G4PhysicsTable* table);
 
   // hide assignment operator
-  G4TablesForExtrapolator & operator=(const G4TablesForExtrapolator &right);
-  G4TablesForExtrapolator(const G4TablesForExtrapolator&);
+  G4TablesForExtrapolator & operator=(const G4TablesForExtrapolator &right) = delete;
+  G4TablesForExtrapolator(const G4TablesForExtrapolator&) = delete;
 
   const G4ParticleDefinition* currentParticle;
   const G4ParticleDefinition* electron;

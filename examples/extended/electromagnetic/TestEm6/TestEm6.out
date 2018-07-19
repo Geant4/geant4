@@ -3,18 +3,20 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 
 ***** Table : Nb of materials = 3 *****
 
  Material: Beryllium    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.413 cm 
-                       Imean:  63.700 eV 
+                       Imean:  63.700 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Be (Be)   Z =  4.0   N =     9   A =  9.012 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.000 %
@@ -22,7 +24,7 @@
 
 
  Material:   Carbon    density:  2.265 g/cm3   RadL:  18.851 cm   Nucl.Int.Length:  35.388 cm 
-                       Imean:  81.000 eV 
+                       Imean:  81.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -31,7 +33,7 @@
 
 
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm 
-                       Imean: 286.000 eV 
+                       Imean: 286.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.850 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
@@ -96,7 +98,7 @@ AnnihiToMuPair:  e+e->mu+mu- annihilation, atomic e- at rest, SubType=.6
 ee2hadr:   for  e+, integral: 1     SubType= 7  BuildTable= 0
       e+ annihilation into hadrons active from 76.2411 GeV to 19999.5 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         eeToHadrons :  Emin=        0 eV    Emax=       10 TeV
+         eeToHadrons :  Emin=        0 eV    Emax=      100 TeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <Iron> world volume
  This region is in the mass world.
@@ -180,7 +182,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -248 m       0 fm      0 fm      0 eV      0 eV   1.95 m    1.95 m        Iron   GammaToMuPair
+    1   -250 m       0 fm      0 fm      0 eV      0 eV   22.7 cm   22.7 cm       Iron   GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -192,9 +194,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0s Real=0s Sys=0s
+  User=0.000000s Real=0.001866s Sys=0.000000s
 
  Number of process calls --->	GammaToMuPair : 5... write Root file : testem6_0.root - done
+... close Root file : testem6_0.root - done
 
 #
 /gun/particle e+
@@ -285,7 +288,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -246 m       0 fm      0 fm      0 eV      0 eV   3.55 m    3.55 m        Iron   AnnihiToMuPair
+    1   -246 m       0 fm      0 fm      0 eV      0 eV   3.54 m    3.54 m        Iron   AnnihiToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
@@ -297,9 +300,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0s Real=0s Sys=0s
+  User=0.000000s Real=0.001836s Sys=0.000000s
 
  Number of process calls --->	ee2hadr : 5	AnnihiToMuPair : 1... write Root file : testem6_1.root - done
+... close Root file : testem6_1.root - done
 
 #
 #/gun/particle anti_proton
@@ -314,6 +318,7 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+TransportationManager deleted.
 Total navigation history collections cleaned: 4
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00385 MB

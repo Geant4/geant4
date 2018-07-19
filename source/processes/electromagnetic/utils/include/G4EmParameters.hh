@@ -25,7 +25,6 @@
 //
 // $Id: G4EmParameters.hh 66885 2013-01-16 17:37:13Z gunter $
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -59,9 +58,17 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4MscStepLimitType.hh"
+#include "G4NuclearFormfactorType.hh"
+#include "G4DNAModelSubType.hh"
+#include "G4EmSaturation.hh"
+#include "G4Threading.hh"
 #include <vector>
 
 class G4EmParametersMessenger;
+class G4VEnergyLossProcess;
+class G4VEmProcess;
+class G4VAtomDeexcitation;
+class G4StateManager;
 
 class G4EmParameters
 {
@@ -118,6 +125,9 @@ public:
   void SetLateralDisplacement(G4bool val);
   G4bool LateralDisplacement() const;
 
+  void SetLateralDisplacementAlg96(G4bool val);
+  G4bool LateralDisplacementAlg96() const;
+
   void SetMuHadLateralDisplacement(G4bool val);
   G4bool MuHadLateralDisplacement() const;
 
@@ -129,6 +139,31 @@ public:
 
   void SetUseMottCorrection(G4bool val);
   G4bool UseMottCorrection() const;
+
+  void SetIntegral(G4bool val);
+  G4bool Integral() const;
+
+  void SetBirksActive(G4bool val);
+  G4bool BirksActive() const;
+
+  void SetDNAFast(G4bool val);
+  G4bool DNAFast() const;
+
+  void SetDNAStationary(G4bool val);
+  G4bool DNAStationary() const;
+
+  void SetDNAElectronMsc(G4bool val);
+  G4bool DNAElectronMsc() const;
+
+  void SetGammaSharkActive(G4bool val);
+  G4bool GammaSharkActive() const;
+
+  void SetEmSaturation(G4EmSaturation*);
+  G4EmSaturation* GetEmSaturation();
+
+  // 5d
+  void  SetOnIsolated(G4bool val);
+  bool  OnIsolated() const;
 
   // double parameters with values
   void SetMinSubRange(G4double val);
@@ -149,6 +184,9 @@ public:
   void SetLowestMuHadEnergy(G4double val);
   G4double LowestMuHadEnergy() const;
 
+  void SetLowestTripletEnergy(G4double val);
+  G4double LowestTripletEnergy() const;
+
   void SetLinearLossLimit(G4double val);
   G4double LinearLossLimit() const;
 
@@ -164,6 +202,9 @@ public:
   void SetMscThetaLimit(G4double val);
   G4double MscThetaLimit() const;
 
+  void SetMscEnergyLimit(G4double val);
+  G4double MscEnergyLimit() const;
+
   void SetMscRangeFactor(G4double val);
   G4double MscRangeFactor() const;
 
@@ -175,6 +216,13 @@ public:
 
   void SetMscSkin(G4double val);
   G4double MscSkin() const;
+
+  void SetScreeningFactor(G4double val);
+  G4double ScreeningFactor() const;
+
+  void SetStepFunction(G4double v1, G4double v2);
+
+  void SetStepFunctionMuHad(G4double v1, G4double v2);
 
   // integer parameters 
   void SetNumberOfBins(G4int val);
@@ -195,6 +243,16 @@ public:
   void SetMscMuHadStepLimitType(G4MscStepLimitType val);
   G4MscStepLimitType MscMuHadStepLimitType() const;
 
+  void SetNuclearFormfactorType(G4NuclearFormfactorType val);
+  G4NuclearFormfactorType NuclearFormfactorType() const;
+
+  void SetDNAeSolvationSubType(G4DNAModelSubType val);
+  G4DNAModelSubType DNAeSolvationSubType() const;
+
+  //5d
+  void  SetConversionType(G4int val);
+  G4int GetConversionType() const;
+
   // string parameters 
   void SetPIXECrossSectionModel(const G4String&);
   const G4String& PIXECrossSectionModel();
@@ -202,6 +260,7 @@ public:
   void SetPIXEElectronCrossSectionModel(const G4String&);
   const G4String& PIXEElectronCrossSectionModel();
 
+  // parameters per region or per process 
   void AddPAIModel(const G4String& particle,
                    const G4String& region,
                    const G4String& type);
@@ -216,21 +275,66 @@ public:
   const std::vector<G4String>& RegionsDNA() const;
   const std::vector<G4String>& TypesDNA() const;
 
+  void AddMsc(const G4String& region, const G4String& type);
+  const std::vector<G4String>& RegionsMsc() const;
+  const std::vector<G4String>& TypesMsc() const;
+
+  void AddPhysics(const G4String& region, const G4String& type);
+  const std::vector<G4String>& RegionsPhysics() const;
+  const std::vector<G4String>& TypesPhysics() const;
+
+  void SetSubCutoff(G4bool val, const G4String& region = "");
+
+  void SetDeexActiveRegion(const G4String& region, G4bool fdeex,
+			   G4bool fauger, G4bool fpixe);
+
+  void SetProcessBiasingFactor(const G4String& procname, 
+                               G4double val, G4bool wflag);
+
+  void ActivateForcedInteraction(const G4String& procname, 
+                                 const G4String& region,
+                                 G4double length, 
+                                 G4bool wflag);
+
+  void ActivateSecondaryBiasing(const G4String& name,
+				const G4String& region, 
+				G4double factor,
+				G4double energyLimit);
+
+  // initialisation methods
+  void DefineRegParamForLoss(G4VEnergyLossProcess*, 
+                             G4bool isElectron) const;
+  void DefineRegParamForEM(G4VEmProcess*) const;
+  void DefineRegParamForDeex(G4VAtomDeexcitation*) const;
+
+  G4EmParameters(G4EmParameters &) = delete;
+  G4EmParameters & operator=(const G4EmParameters &right) = delete;  
+
 private:
 
   G4EmParameters();
 
-  void PrintWarning(G4ExceptionDescription& ed);
+  void Initialise();
+
+  G4bool IsLocked() const;
+
+  G4String CheckRegion(const G4String&) const;
+
+  void PrintWarning(G4ExceptionDescription& ed) const;
 
   static G4EmParameters* theInstance;
 
   G4EmParametersMessenger* theMessenger;
 
+  G4StateManager* fStateManager;
+
+  G4EmSaturation* emSaturation;
+
   G4bool lossFluctuation;
   G4bool buildCSDARange;
   G4bool flagLPM;
   G4bool spline;
-  G4bool finalRange;
+  G4bool cutAsFinalRange;
   G4bool applyCuts;
   G4bool fluo;
   G4bool beardenFluoDir;
@@ -239,10 +343,18 @@ private:
   G4bool pixe;
   G4bool deexIgnoreCut;
   G4bool lateralDisplacement;
+  G4bool lateralDisplacementAlg96;
   G4bool muhadLateralDisplacement;
   G4bool latDisplacementBeyondSafety;
   G4bool useAngGeneratorForIonisation;
   G4bool useMottCorrection;
+  G4bool integral;
+  G4bool birks;
+  G4bool dnaFast;
+  G4bool dnaStationary;
+  G4bool dnaMsc;
+  G4bool gammaShark;
+  G4bool onIsolated; // 5d model conversion on free ions
 
   G4double minSubRange;
   G4double minKinEnergy;
@@ -250,23 +362,33 @@ private:
   G4double maxKinEnergyCSDA;
   G4double lowestElectronEnergy;
   G4double lowestMuHadEnergy;
+  G4double lowestTripletEnergy;
   G4double linLossLimit;
   G4double bremsTh;
   G4double lambdaFactor;
   G4double factorForAngleLimit;
   G4double thetaLimit;
+  G4double energyLimit;
   G4double rangeFactor;
   G4double rangeFactorMuHad;
   G4double geomFactor;
   G4double skin;
+  G4double dRoverRange;
+  G4double finalRange;
+  G4double dRoverRangeMuHad;
+  G4double finalRangeMuHad;
+  G4double factorScreen;
 
   G4int nbins;
   G4int nbinsPerDecade;
   G4int verbose;
   G4int workerVerbose;
+  G4int tripletConv;  // 5d model triplet generation type
 
   G4MscStepLimitType mscStepLimit;
   G4MscStepLimitType mscStepLimitMuHad;
+  G4NuclearFormfactorType nucFormfactor;
+  G4DNAModelSubType  dnaElectronSolvation;
 
   G4String namePIXE;
   G4String nameElectronPIXE;
@@ -280,6 +402,34 @@ private:
   std::vector<G4String>  m_regnamesDNA;
   std::vector<G4String>  m_typesDNA;
 
+  std::vector<G4String>  m_regnamesMsc;
+  std::vector<G4String>  m_typesMsc;
+
+  std::vector<G4String>  m_regnamesSubCut;
+  std::vector<G4bool>    m_subCuts;
+
+  std::vector<G4String>  m_regnamesDeex;
+  std::vector<G4bool>    m_fluo;
+  std::vector<G4bool>    m_auger;
+  std::vector<G4bool>    m_pixe;
+
+  std::vector<G4String>  m_procBiasedXS;
+  std::vector<G4double>  m_factBiasedXS;
+  std::vector<G4bool>    m_weightBiasedXS;
+
+  std::vector<G4String>  m_procForced;
+  std::vector<G4String>  m_regnamesForced;
+  std::vector<G4double>  m_lengthForced;
+  std::vector<G4bool>    m_weightForced;
+
+  std::vector<G4String>  m_procBiasedSec;
+  std::vector<G4String>  m_regnamesBiasedSec;
+  std::vector<G4double>  m_factBiasedSec;
+  std::vector<G4double>  m_elimBiasedSec;
+
+#ifdef G4MULTITHREADED
+  static G4Mutex emParametersMutex;
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

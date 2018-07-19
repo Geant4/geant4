@@ -52,7 +52,6 @@
 #include "G4PSTrackCounter.hh"
 #include "G4PSTrackLength.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B03ImportanceDetectorConstruction::
@@ -88,9 +87,6 @@ void B03ImportanceDetectorConstruction::Construct()
   G4String name("none");
   //  fPVolumeStore.AddPVolume(G4GeometryCell(*pWorldVolume, 0));
   fPVolumeStore.AddPVolume(G4GeometryCell(*fGhostWorld, 0));
-
-
-
 
   // creating 18 slobs of 10 cm thicknes
 
@@ -280,13 +276,11 @@ void B03ImportanceDetectorConstruction::ConstructSD()
                          new G4MultiFunctionalDetector(concreteSDname);
   SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
 
-
   G4String fltName,particleName;
   G4SDParticleFilter* neutronFilter = 
       new G4SDParticleFilter(fltName="neutronFilter", particleName="neutron");
 
   MFDet->SetFilter(neutronFilter);
-
 
   for (std::vector<G4LogicalVolume *>::iterator it =  
                                                 fLogicalVolumeVector.begin();
@@ -299,11 +293,9 @@ void B03ImportanceDetectorConstruction::ConstructSD()
   G4PSNofCollision*   scorer0 = new G4PSNofCollision(psName="Collisions");  
   MFDet->RegisterPrimitive(scorer0);
 
-
   G4PSNofCollision*   scorer1 = new G4PSNofCollision(psName="CollWeight");  
   scorer1->Weighted(true);
   MFDet->RegisterPrimitive(scorer1);
-
 
   G4PSPopulation*   scorer2 = new G4PSPopulation(psName="Population");  
   MFDet->RegisterPrimitive(scorer2);

@@ -44,10 +44,10 @@
 #include "CexmcEventInfo.hh"
 
 
-CexmcEventInfo::CexmcEventInfo( G4bool  edTriggerIsOk, G4bool  tpTriggerIsOk,
-                                G4bool  reconstructionIsOk ) :
-    edTriggerIsOk( edTriggerIsOk ), tpTriggerIsOk( tpTriggerIsOk ),
-    reconstructionIsOk( reconstructionIsOk )
+CexmcEventInfo::CexmcEventInfo( G4bool  edTriggerIsOk_, G4bool  tpTriggerIsOk_,
+                                G4bool  reconstructionIsOk_ ) :
+    edTriggerIsOk( edTriggerIsOk_ ), tpTriggerIsOk( tpTriggerIsOk_ ),
+    reconstructionIsOk( reconstructionIsOk_ )
 {
 }
 

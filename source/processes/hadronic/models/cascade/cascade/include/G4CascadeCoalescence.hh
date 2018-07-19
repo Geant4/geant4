@@ -34,6 +34,7 @@
 // 20140116  M. Kelsey -- Move statics to const data members to avoid weird
 //		interactions with MT.
 // 20151016  M. Kelsey -- Replace forward declare of G4InuclElemPart w/include.
+// 20170406  M. Kelsey -- Remove clusterHash and triedClusters registry.
 
 #ifndef G4CASCADE_COALESCENCE_HH
 #define G4CASCADE_COALESCENCE_HH
@@ -64,7 +65,6 @@ private:
   G4int verboseLevel;				// Control diagnostic messages
 
   std::vector<ClusterCandidate> allClusters;	// List of candidates found
-  std::set<size_t> triedClusters;		// Hashes of combinatorics
   std::set<size_t> usedNucleons;		// List of converted nucleons
 
   G4CollisionOutput* thisFinalState;		// Pointers to current event
@@ -91,14 +91,6 @@ private:
   void fillCluster(size_t idx1, size_t idx2);
   void fillCluster(size_t idx1, size_t idx2, size_t idx3);
   void fillCluster(size_t idx1, size_t idx2, size_t idx3, size_t idx4);
-
-  // Convert cluster to hash index (for combinatoric reduction)
-  size_t clusterHash(const ClusterCandidate& clus) const;
-
-  // Check if candidate cluster has already been evaluated
-  bool clusterTried(const ClusterCandidate& clus) const {
-    return triedClusters.find(clusterHash(clus)) != triedClusters.end();
-  }
 
   // Check if indexed nucleon is already in a cluster
   bool nucleonUsed(size_t idx) const {

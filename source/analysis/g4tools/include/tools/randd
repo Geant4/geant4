@@ -21,22 +21,8 @@ public:
     m_flat = a_from.m_flat;
     return *this;
   }
-protected:
-  rtausmed m_flat;
-};
-
-class rbwd : public rbw<rtausmed,double> {
-  typedef rbw<rtausmed,double> parent;
 public:
-  rbwd(double a_mean = 0,double a_gamma = 1):parent(m_flat,a_mean,a_gamma),m_flat(){}
-  virtual ~rbwd(){}
-public:
-  rbwd(const rbwd& a_from):parent(m_flat),m_flat(a_from.m_flat){}
-  rbwd& operator=(const rbwd& a_from) {
-    parent::operator=(a_from);
-    m_flat = a_from.m_flat;
-    return *this;
-  }
+  double shoot() const {return parent::shoot(::sqrt,::log);}
 protected:
   rtausmed m_flat;
 };
@@ -53,6 +39,8 @@ public:
     m_flat = a_from.m_flat;
     return *this;
   }
+public:
+  double shoot() const {return parent::shoot(::log);}
 protected:
   rtausmed m_flat;
 };
@@ -85,6 +73,59 @@ public:
     m_flat = a_from.m_flat;
     return *this;
   }
+public:
+  void shoot(double& a_x,double& a_y,double& a_z) const {
+    parent::shoot(a_x,a_y,a_z,::sqrt);
+  }
+protected:
+  rtausmed m_flat;
+};
+
+}
+
+#include "mathd"
+
+namespace tools {
+
+class rbwd : public rbw<rtausmed,double> {
+  typedef rbw<rtausmed,double> parent;
+public:
+  rbwd(double a_mean = 0,double a_gamma = 1):parent(m_flat,a_mean,a_gamma),m_flat(){}
+  virtual ~rbwd(){}
+public:
+  rbwd(const rbwd& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rbwd& operator=(const rbwd& a_from) {
+    parent::operator=(a_from);
+    m_flat = a_from.m_flat;
+    return *this;
+  }
+public:
+  double shoot() const {return parent::shoot(half_pi(),::tan);}
+protected:
+  rtausmed m_flat;
+};
+
+}
+
+#include "typedefs"
+
+namespace tools {
+
+// NOTE : not used yet.
+class rpoissd : public rpoiss<rtausmed,double,uint64> {
+  typedef rpoiss<rtausmed,double,uint64> parent;
+public:
+  rpoissd(double a_mean = 1):parent(m_flat,a_mean),m_flat(){}
+  virtual ~rpoissd(){}
+public:
+  rpoissd(const rpoissd& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rpoissd& operator=(const rpoissd& a_from) {
+    parent::operator=(a_from);
+    m_flat = a_from.m_flat;
+    return *this;
+  }
+public:
+  uint64 shoot() const {return parent::shoot(two_pi(),::sqrt,::log,::exp,::cos);}
 protected:
   rtausmed m_flat;
 };

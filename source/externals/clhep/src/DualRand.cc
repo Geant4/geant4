@@ -193,6 +193,10 @@ void DualRand::showStatus() const {
   std::cout.precision(pr);
 }
 
+DualRand::operator double() {
+   return flat();
+}
+
 DualRand::operator float() {
   return (float) ( (integerCong ^ tausworthe) * twoToMinus_32() 
 		      			+ nearlyTwoToMinus_54()    ); 

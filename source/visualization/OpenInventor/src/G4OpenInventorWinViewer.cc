@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenInventorWinViewer.cc 97241 2016-05-30 12:06:54Z gcosmo $
 //
 /*
  * jck : 05 Feb 1997 : Initial Implementation
@@ -204,6 +204,7 @@ void G4OpenInventorWinViewer::Initialise() {
     fInteractorManager->FlushAndWaitExecution ();
   }
   fInteractorManager->SetCreatedInteractor (fViewer -> getWidget());
+  fViewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_ADD);
 }
 
 G4OpenInventorWinViewer::~G4OpenInventorWinViewer () {

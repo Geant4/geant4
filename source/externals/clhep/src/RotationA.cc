@@ -78,20 +78,42 @@ double    HepRotation::delta() const {
 
 Hep3Vector HepRotation::axis () const {
 
-  // Determine 2*std::sin(delta) times the u components (I call this uX, uY, Uz)
-  // Normalization is not needed; it will be done when returning the 3-Vector
+  const double eps = 1e-15;
 
-  double  Uz = ryx - rxy;
-  double  Uy = rxz - rzx;
-  double  Ux = rzy - ryz;
+  double Ux = rzy - ryz;
+  double Uy = rxz - rzx;
+  double Uz = ryx - rxy;
+  if (std::abs(Ux) < eps && std::abs(Uy) < eps && std::abs(Uz) < eps) {
 
-  if ( (Uz==0) && (Uy==0) && (Ux==0) ) {
-    if        ( rzz>0 ) {
-      return Hep3Vector(0,0,1);
-    } else if ( ryy>0 ) {
-      return Hep3Vector(0,1,0);
+    double cosdelta = (rxx + ryy + rzz - 1.0) / 2.0;
+    if (cosdelta > 0.0) return Hep3Vector(0,0,1); // angle = 0, any axis is good
+
+    double mxx = (rxx + 1)/2;
+    double myy = (ryy + 1)/2;
+    double mzz = (rzz + 1)/2;
+    double mxy = (rxy + ryx)/4;
+    double mxz = (rxz + rzx)/4;
+    double myz = (ryz + rzy)/4;
+    double x, y, z;
+
+    if (mxx > ryy && mxx > rzz) {
+      x = std::sqrt(mxx);
+      if (rzy - ryz < 0) x = -x;
+      y = mxy/x;
+      z = mxz/x;
+      return  Hep3Vector( x, y, z ).unit();
+    } else if (myy > mzz) {
+      y = std::sqrt(myy);
+      if (rxz - rzx < 0) y = -y;
+      x = mxy/y;
+      z = myz/y;
+      return  Hep3Vector( x, y, z ).unit();
     } else {
-      return Hep3Vector(1,0,0);
+      z = std::sqrt(mzz);
+      if (ryx - rxy < 0) z = -z;
+      x = mxz/z;
+      y = myz/z;
+      return  Hep3Vector( x, y, z ).unit();
     }
   } else {
     return  Hep3Vector( Ux, Uy, Uz ).unit();

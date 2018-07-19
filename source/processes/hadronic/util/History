@@ -14,13 +14,56 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
- 5 December 2016  Dennis Wright    (hadr-util-V10-01-04)
+17 May 2018 Jonathan Madsen (hadr-util-V10-04-02)
+-------------------------------------------------
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+09 February 2018 Ben Morgan (hadr-util-V10-04-01)
+-------------------------------------------------
+- G4StableIsotopes - Move member function definitions to source file
+  to avoid global data visibility issues in Windows DLLs.
+
+19 December 2017 Gabriele Cosmo (hadr-util-V10-04-00)
+--------------------------------------------------------
+- Fixed self-consistency in headers (missing #include) in DumpFrame,
+  G4GHEKinematicsVector and G4ping.
+  Thanks to Raphael Isemann for reporting these.
+
+04 July 2017 Vladimir Ivanchenko (hadr-util-V10-03-05)
+--------------------------------------------------------
+- G4NuclearPolarization - added extra members and update the class
+    for correlated gamma emission
+
+16 June 2017 Vladimir Ivanchenko (hadr-util-V10-03-04)
+--------------------------------------------------------
+- G4NuclearPolarization - improved printout
+
+28 April 2017 Tatsumi Koi (hadr-util-V10-03-03)
+--------------------------------------------------------
+- Fix warning message in previous tag  
+
+14 April 2017 Tatsumi Koi (hadr-util-V10-03-02)
+--------------------------------------------------------
+- Fix warning message in previous tag  
+
+10 April 2017 Tatsumi Koi (hadr-util-V10-03-01)
+--------------------------------------------------------
+- Introduce G4HadronicDeveloperParameter which helps 
+sharing a parameter between developer and experineced user  
+
+08 March 2017 Vladimir Ivanchenko (hadr-util-V10-03-00)
+--------------------------------------------------------
+- G4GHEKinematicsVector - fixed variable shadowing
+
+ 5 December 2016  Dennis Wright    (hadr-util-V10-02-01)
 --------------------------------------------------------
 - G4Nucleus::GetThermalNucleus: fix mistake in branch on total energy 
   calculation using relativistic energy at higher energies (see bug 
   report #1911)
 
-10 February 2016 Alberto Ribon     (hadr-util-V10-01-03)
+10 February 2016 Alberto Ribon     (hadr-util-V10-02-00)
 --------------------------------------------------------
 - G4Nucleus : increased the max number of loops allowed in the method
     GetBiasedThermalNucleus.

@@ -37,11 +37,18 @@
 #include "RE05TrackingAction.hh"
 #include "RE05SteppingAction.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05ActionInitialization::RE05ActionInitialization()
-{;}
+: G4VUserActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05ActionInitialization::~RE05ActionInitialization()
-{;}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05ActionInitialization::Build() const
 {
@@ -64,6 +71,8 @@ void RE05ActionInitialization::Build() const
   SetUserAction(stepping_action);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RE05ActionInitialization::BuildForMaster() const
 {
   //
@@ -71,3 +80,4 @@ void RE05ActionInitialization::BuildForMaster() const
   SetUserAction(run_action);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

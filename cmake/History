@@ -31,14 +31,426 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
-15th November 2016 - Ben Morgan (cmake-V10-01-47)
+19th June 2018 - Gunter Folger (cmake-V10-04-14)
+- Templates/geant4_validate_sources.cmake.in, revert addition of .c and .h
+  Skip checking sources for zlib
+    (.c and .h match far too many other files)
+- Switch to G4EMLOW7.4
+    
+14th June 2018 - Gunter Folger (cmake-V10-04-13)
+-  Templates/geant4_validate_sources.cmake.in: add C sources and headers
+
+8th June 2018 - Ben Morgan (cmake-V10-04-12)
+- Add "auto" dummy Thread Local Storage model
+  Per request from CERN, when "auto" is used,
+  no explicit compiler flag to select the TLS model is
+  set. Record this in Geant4Config.cmake and geant4-config
+  as unset/empty variables.
+
+6th Jun 2018 - Jonathan Madsen (cmake-V10-04-11)
+- Addition of TiMemory as an optional package
+
+23rd May 2018 - Ben Morgan (cmake-V10-04-10)
+- Remove CMake warning about building MT DLLs on Windows, as
+  these are now supported.
+
+23rd May 2018 - Gunter Folger  (cmake-V10-04-09)
+- Update Geant4DatasetDefinitions to use G4RealSurface 2.1.1
+   patched version bringing back data lost in 2.1
+
+14st May 2018 - Gunter Folger  (cmake-V10-04-08)
+- Update Geant4DatasetDefinitions to use G4NEUTRONXS 2.0
+
+21st March 2018 - Ben Morgan (cmake-V10-04-07)
+- G4BuildSettings.cmake: Allow Windows MT builds to use DLLs, but warn.
+
+26th February 2018 - Ben Morgan (cmake-V10-04-06)
+- Geant4InstallData.cmake, Geant4CTest.cmake: Update URL for downloads 
+  to "cern.ch/geant4-data" as the correct alias to new EOS area, seperate
+  from main website.
+
+26th February 2018 - Ben Morgan (cmake-V10-04-05)
+- Geant4InstallData.cmake, Geant4CTest.cmake: Update URL for downloads 
+  to "cern.ch/geant4" as the correct alias.
+
+26th February 2018 - Ben Morgan (cmake-V10-04-04)
+- G4BuildSettings.cmake: Add 17/c++17 to C++ standards against which
+  Geant4 can be compiled. Will require a minimum CMake version of
+  3.8 to enable, but this is not checked.
+
+20th February 2018 - Ben Morgan (cmake-V10-04-03)
+- Initial configuration support for MT on Windows
+- Modules/G4BuildSettings.cmake: Remove restrictions and warnings on enabling
+  MT on Windows. Add restriction on building MT DLLs, emitting a fatal error
+  if this combination is selcted, and report needed settings to enable
+  static MT libraries.
+
+18th January 2018 - Ben Morgan (cmake-V10-04-02)
+- Support use of WINDOWS_EXPORT_ALL_SYMBOLS for DLL builds with cmake >=3.4
+  retaining old capability for CMake 3.3.
+- Modules/G4WindowsDLLSupport.cmake: New module to hold old DLL support.
+  Create old `genwindef` support program, moved from G4BuildSettings.
+  Implement `__geant4_add_dll_old` macro which expands to the pre cmake 3.4
+  use of `genwindef` to export symbols and create DLL.
+- Modules/G4DeveloperAPI_OLD.cmake: Include G4WindowsDLLSupport module, and
+  use functionality to create DLL when CMake is <3.4. Otherwise, use
+  new WINDOWS_EXPORT_ALL_SYMBOLS property when building a shared library.
+
+11th January 2018 - Gabriele Cosmo (cmake-V10-04-01)
+- Modules/Geant4OptionalComponents.cmake: add TESSELLATEDSOLID flag to enable
+  wrapping of G4TessellatedSolid in GEANT4_USOLIDS_SHAPES.
+  Coworks with tag geom-specific-V10-04-03.
+
+8th December 2017 - Ben Morgan (cmake-V10-04-00)
+- Templates/UseGeant4_internal.cmake: When running test driver directly,
+  make it run in WORKING_DIRECTORY if this is supplied.
+
+30th November 2017 - Gabriele Cosmo (cmake-V10-03-49)
+- Replaced USolids specific flags with VecGeom in Geant4OptionalComponents.cmake.
+  From now on VecGeomConfig.cmake will be required and used instead of
+  USolidsConfig.cmake, as well as VecGeom_DIR instead of USolids_DIR.
+
+29th November 2017 - Ben Morgan (cmake-V10-03-48)
+- Bugfix: Restore reporting of GEANT4_BUILD_CXXSTD.
+
+27th November 2017 - Ben Morgan (cmake-V10-03-47)
+- Remove obsolete FindROOT module
+
+10th November 2017 - Gunter Folger  (cmake-V10-03-46)
+- Switch to new dataset G4PhotonEvaporation5.2
+
+10th November 2017 - Gabriele Cosmo (cmake-V10-03-45)
+- G4ConfigureGNUMakeHelpers.cmake: corrected setting of USOLIDS_BASE_DIR
+  path for GNUmake.
+
+7th November 2017 - Ben Morgan (cmake-V10-03-44)
+- Modules/Geant4OptionalComponents.cmake:
+  When using HDF5 with Multithreaded Geant4, check
+  that found install of HDF5 was built with thread
+  safety. Require HDF5 >= 1.8.
+
+3rd November 2017 - Ben Morgan (cmake-V10-03-43)
+- BUGFIX: Make HDF5 component checkable by clients
+- Templates/Geant4Config.cmake.in : Add "hdf5" component
+  with associated boolean Geant4_hdf5_FOUND.
+- Templates/geant4-config.in: add "hdf5" feature
+
+27th October 2017 - Gunter Folger  (cmake-V10-03-42)
+- Switch to new dataset G4EMLOW 7.3
+
+25th October 2017 - Ben Morgan (cmake-V10-03-41)
+- Modules/Geant4LibraryBuildOptions.cmake:
+  Add new advanced build option GEANT4_BUILD_MUONIC_ATOMS_IN_USE,
+  requested by Krzysztof Genser and Makoto Asai. OFF by default,
+  when ON, adds G4MUTOMS_INUSE to compile definitions. As the
+  code protected by the symbol only appears in .cc files, do
+  not export this definition to clinet side build settings.
+- Templates/geant4-config.in, Templates/Geant4Config.cmake.in
+  Record use of GEANT4_BUILD_MUONIC_ATOMS_IN_USE as a feature
+  and component respectively. Neither affects the build settings,
+  it's simply a report on whether the option was used or not.
+
+19th October 2017 - Gunter Folger  (cmake-V10-03-40)
+- Switch to new dataset G4EMLOW 7.2
+
+19th October 2017 - Gunter Folger  (cmake-V10-03-39)
+- Switch to new dataset G4ABLA 3.1
+
+16th October 2017 - Gabriele Cosmo (cmake-V10-03-38)
+- Modules/Geant4OptionalComponents.cmake: add HYPE flag to enable
+  wrapping of G4Hype in GEANT4_USOLIDS_SHAPES.
+  Coworks with tag geom-specific-V10-03-21.
+
+26th September 2017 - Gunter Folger (cmake-V10-03-37)
+- Switch to new datasets:
+  - G4ENSDFSTATE2.2
+  - G4PhotonEvaporation5.1
+  - G4RadioactiveDecay5.2
+
+13th September 2017 - Ben Morgan (cmake-V10-03-36)
+- Modules/Geant4OptionalComponents.cmake: Require system expat version
+  >= 2.0.1. Identified in Bugzilla #2003. g4tools uses expat functions
+  only present in 2.0.1 or higher. Though Geant4 supported systems all
+  meet this requirement, check expat version and error out if version
+  is < 2.0.1. On error, report information on cause and how to rectify.
+
+11th September 2017 - Ben Morgan (cmake-V10-03-35)
+- Modules/G4CMakeMain.cmake: Remove GEANT4_BUILD_EXAMPLES option.
+  Add GEANT4_INSTALL_EXAMPLES option. Advanced and ON by default,
+  thia is for use by developers who wish to save time/space by not
+  installing all the example code.
+
+7th September 2017 - Ben Morgan (cmake-V10-03-34)
+- Modules/G4DeveloperAPI_OLD.cmake: Set INSTALL_RPATH on macOS
+  Requested by Fons Rademackers. Loading Geant4 dylibs in Python
+  can lead to resolution errors as they cannot locate each other.
+  Append "@loader_path" to the INSTALL_RPATH for all Geant4 libraries.
+  This will expand to the directory of the library being loaded, which
+  will contain the other Geant4 libraries. Append is used to that
+  users may still supply CMAKE_INSTALL_RPATH at configure time,
+  and this will be preferred.
+
+5th September 2017 - Gunter Folger (cmake-V10-03-33)
+- Modules/Geant4DatasetDefinitions.cmake: switch to G4EMLOW7.1
+
+23rd August 2017 - Gunter Folger   (cmake-V10-03-32)
+- Modules/Geant4DatasetDefinitions.cmake: switch to G4EMLOW7.0
+
+3rd August 2017 - Ben Morgan (cmake-V10-03-31)
+- Create a G4HDF INTERFACE target for uniform access to HDF5 headers
+  and libraries at build, test and install time. It is not completely
+  relocatable as the target hardcodes header/library paths. However,
+  it creates a single point of access so that adding relocation
+  will require minimal changes, limited to the cmake category.
+
+27th July 2017 - Ivana Hrivnacova (cmake-V10-03-30)
+- Removed FindHdf5.cmake as the find module is provided with CMake
+
+27th July 2017 - Ivana Hrivnacova (cmake-V10-03-29)
+- Modules/Geant4OptionalComponents.cmake : Add new GEANT4_USE_HDF5
+  option, OFF by defaults, to allow user to enable Hdf5 support
+  in analysis library.
+
+18th July 2017 - Andrea Dotti (cmake-V10-03-27,-28)
+- Modules/FindStatTest.cmake fix logic to set
+  STATTEST_FOUND==FALSE if GEANT4_ENABLE_TESTING==FALSE
+ 
+17th July 2017 - Gabriele Cosmo (cmake-V10-03-26)
+- Modules/G4ConfigureGNUMakeHelpers, Modules/Geant4InterfaceOptions.cmake:
+  corrected Qt setup for GNUmake builds, avoid setting QTLIBS and GLQTLIBS
+  as already handled by the GNUmake system for Qt4 and Qt5.
+
+11th July 2017 - Gabriele Cosmo (cmake-V10-03-25)
+- Modules/Geant4OptionalComponents.cmake: add PARA flag to enable
+  wrapping of G4Para in GEANT4_USOLIDS_SHAPES.
+  Coworks with tag geom-csg-V10-03-29.
+
+10th July 2017 - Gabriele Cosmo (cmake-V10-03-24)
+- Modules/Geant4OptionalComponents.cmake: add CTUBS flag to enable
+  wrapping of G4CutTubs in GEANT4_USOLIDS_SHAPES.
+  Coworks with tag geom-csg-V10-03-28.
+
+12th June 2017 - Ben Morgan (cmake-V10-03-23)
+- Remove support for modulefile generation, as not used and
+  generated files not compatible with relocatability. It's
+  expected that software stack managers will generate a
+  modulefile file according to their requirements.
+
+9th June 2017 - Gabriele Cosmo  (cmake-V10-03-22)
+- Corrected exporting of external packages paths from VecGeom.
+
+8th June 2017 - Gunter Folger   (cmake-V10-03-21)
+- Modules/Geant4DatasetDefinitions.cmake: switch to G4EMLOW6.54 
+
+31st May 2017 - Gunter Folger   (cmake-V10-03-20)
+- Modules/Geant4DatasetDefinitions.cmake: switch to RealSurface 2.1 
+
+30th May 2017 - Gabriele Cosmo  (cmake-V10-03-19)
+- Modules/Geant4OptionalComponents.cmake: added VECGEOM_EXTERNAL_INCLUDES
+  to include directories for USolids/VecGeom enabled build, in order to
+  allow for detection of external packages paths from VecGeom (e.g. Vc if
+  Vetor backend is chosen at installation of VecGeom).
+
+24th May 2017 - Gabriele Cosmo  (cmake-V10-03-18)
+- Modules/Geant4OptionalComponents.cmake: appended VECGEOM_DEFINITIONS
+  to GEANT4_USOLIDS_COMPILE_DEFINITIONS. Preparing for introducing direct
+  dependency on VecGeom in G4U* wrappers, and deprecate USolids. 
+
+16th May 2017 - Ben Morgan      (cmake-V10-03-17)
+- BUGFIX #1960: Do not set or modify DYLD_LIBRARY_PATH in basic and
+  geant4make setup scripts on macOS.
+
+2nd May 2017 - Gunter Folger    (cmake-V10-03-16)
+- Update G4EMLOW data to 6.53
+
+4th April 2017 - Gunter Folger  (cmake-V10-03-15)
+- Update PhotonEvaporation data to 5.0
+
+27th March 2017 - Gunter Folger (cmake-V10-03-14)
+- fix previous tag: the download file for RealSurface re-named
+   from RealSurface to G4RealSurface, making this name is  consistent 
+   with other datafiles. 
+
+23rd March 2017 - Gunter Folger (cmake-V10-03-13)
+- Update RealSurface data to 2.0
+
+9th March 2017 - Gunter Folger  (cmake-V10-03-12)
+- Modules/G4CMakeMain.cmake: add directory verification to testing
+
+23rd February 2017 - Ben Morgan (cmake-V10-03-11)
+- Bugfix-1934
+- Templates/Geant4Config.cmake.in: Re-include CLHEP
+  include directories when using external CLHEP. Needed
+  to allow examples using ROOT to generate dictionaries
+  as ROOT's CMake functions do not support usage requirements
+  or generator expressions yet.
+
+21st February 2017 - Gunter Folger  (cmake-V10-03-10)
+ base on tag cmake-V10-03-06, and only update History 
+ and Modules/Geant4DatasetDefinitions.cmake to trunk.
+ Changes to above two files committed first in trunk. 
+ Then create branch cmake-V10-03-06_branch for tagging.
+- switch to PhotonEvaporation 4.3.2
+
+
+21st February 2017 - Gunter Folger  (cmake-V10-03-09) 
+ rejected: as based on previous rejected tags 
+- switch to PhotonEvaporation 4.3.2
+
+10th February 2017 - Ben Morgan (cmake-V10-03-08)
+- Bugfix: Continuous identified issue on Windows and internal CLHEP.
+  Way that DLLs are built means that target_include_directories are
+  not propagated to intermediate archive library, causing builds
+  to fail due to missing CLHEP headers.
+- Geant4OptionalComponents.cmake : Set CLHEP_INCLUDE_DIRS to internal
+  path for CLHEP headers with using builtin CLHEP.
+- TODO: look at resolution via better DLL build process.
+
+9th February 2017 - Ben Morgan (cmake-V10-03-07)
+- BUGFIX-1934
+- Incorporates all changes from branch cmake-bugfix-1934
+
+8th February 2017 - Ben Morgan (branch cmake-bugfix-1934)
+- BUGFIX 1934
+- Note that this patch should not be applied to Geant4 < 10.3 without additional
+  changes to support CLHEP's imported targets in versions =< 2.3.3.0. 
+- See the comments in Geant4OptionalComponents.cmake for details.
+- Remove obsolete FindCLHEP.cmake module
+- Geant4OptionalComponents.cmake: Update Internal/System CLHEP selection
+  - Prepend CLHEP_ROOT_DIR to CMAKE_PREFIX_PATH so that find_package's
+    Config mode finds CLHEP as FindCLHEP did. Retain auto-activation
+    of GEANT4_USE_SYSTEM_CLHEP if CLHEP_ROOT_DIR supplied.
+  - Simplify System/Granular CLHEP selection using dependent options
+  - Simplify location/setup of system CLHEP as CLHEP >= 2.3.3.0 provides
+    CLHEP_LIBRARIES set with appropriate single/granular targets with
+    full usage requirements.
+  - Remove setting of GEANT4_USE_BUILTIN_CLHEP variable.
+- G4ConfigureCMakeHelpers.cmake: Remove install of deleted FindCLHEP module
+- Geant4Config.cmake.in: Update re-find of CLHEP to use find_package Config mode
+  - Set CLHEP_DIR rather than CLHEP_ROOT_DIR.
+  - Add new variable Geant4_system_clhep_FOUND set from expansion of
+    buildtime GEANT4_USE_SYSTEM_CLHEP option.
+  - Set value of Geant4_builtin_clhep_FOUND as boolean inverse of Geant4_system_clhep_FOUND
+
+7th February 2017 - Ben Morgan (cmake-V10-03-06)
+- Restructure developer API scripts for clarity ready for new system
+- Merge Geant4MacroDefineModule.cmake and Geant4MacroLibraryTargets.cmake
+  into single G4DeveloperAPI_OLD.cmake module
+- Create new G4DeveloperAPI.cmake module. This will be the eventual home
+  for the new developer API, but for now it simply forwards to
+  G4DeveloperAPI_OLD.cmake.
+- Leave Geant4MacroDefineModule and Geant4MacroLibraryTargets modules
+  as stubs which simply forward to G4DeveloperAPI. At present these modules
+  are included in several places, so maintaining their presence is required.
+- Include G4DeveloperAPI in top levl G4CMakeMain module.
+
+3rd February 2017 - Gunter Folger  (cmake-V10-03-05)
+- switch to 
+  - PhotonEvaporation 4.3.1
+  - RadioactiveDecay 5.1.1
+
+27th January 2017 - Ben Morgan (cmake-V10-03-04)
+- Refactor core Configure/Build and Client Script modules for
+  clarity and cohesion.
+- Module renames and changes:
+  - Modules/G4CMakeSettings.cmake (NEW)
+    - Handles all core CMake behaviour and extensions
+  - Modules/Geant4MacroUtilities.cmake -> Modules/G4CMakeUtilities.cmake
+    - Rename to better reflect purpose
+  - Modules/Geant4LibraryBuildOptions.cmake -> Modules/G4BuildSettings.cmake
+    - Handles all core build/link options not dependent on externals
+    - All functionality in Modules/Geant4BuildModes.cmake moved to this module
+  - Modules/Geant4ToolchainBackwardCompatibility.cmake -> Modules/G4ConfigureGNUMakeHelpers.cmake
+    - Rename to clearly identify task
+    - Move all GMake related setup to this module
+  - Modules/Geant4ConfigureConfigScript.cmake -> Modules/G4ConfigurePkgConfigHelpers.cmake
+    - Rename to clearly identify task
+  - Modules/Geant4BuildProjectConfig.cmake -> Modules/G4ConfigureCMakeHelpers.cmake
+    - Rename to clearly identify task
+- Modules/Geant4CTest.cmake
+  - All test-related options moved into file.
+
+16th January 2017 - Ben Morgan (cmake-V10-03-03)
+- Remove/refactor obsolete CMake modules
+- Modules/CMakeMacroParseArguments.cmake: Remove as interface
+  provided by CMake builtin CMakeParseArguments. Use builtin
+  interface in modules:
+  - FindROOT.cmake
+  - Geant4MacroDefineModule.cmake
+  - Geant4MacroLibraryTargets.cmake
+  - Geant4MacroUtilities.cmake
+  - UseGeant4_internal.cmake
+- Modules/Geant4InstallDirs.cmake: Remove as interface
+  provided by CMake builtin GNUInstallDirs, included in
+  G4CMakeMain.cmake
+- Modules/MacroEnsureVersion.cmake: Remove as unused, version
+  comparison now supplied in CMake if()
+- Modules/ResolveCompilerPaths.cmake: Remove as unused.
+- Modules/Geant4BuildProjectConfig.cmake: Remove install
+  of obsolete modules.
+
+5th January 2017 - Gunter Folger    (cmake-V10-03-02)
+- switch to EMLOW6.52
+
+19th December 2016 - Gunter Folger (cmake-V10-03-01)
+- switch to EMLOW6.51
+
+12th December 2016 - Ben Morgan (cmake-V10-03-00)
+- Modules/G4CMakeMain.cmake : New Module
+  Refactor core implementation from top level CMake script into a module
+  under the CMake category. This assists with tagging and upcoming
+  modularization work, as changes will be tagged in category and
+  can be made without requiring changes and co-working tag for
+  top level script.
+
+24th November 2016 - Gunter Folger  (cmake-V10-02-37)
+- Switch to PhotonEvaporation 4.3
+
+22nd November 2016 - Ben Morgan (cmake-V10-02-36)
+- Modules/Geant4MakeRules_cxx.cmake : Change optimization level for MSVC in
+  Release mode to -Ox for consistentcy with GNUmake system.
+
+18th November 2016 - Ben Morgan (cmake-V10-02-35)
+- Modules/Geant4BuildModes.cmake : Change default build type to Release
+  when using single mode tools like Make/Ninja.
+- Modules/Geant4InstallData.cmake : Always convert exported data paths to
+  native CMake paths. Prevents parse errors on Windows, where native
+  paths are exported (reported by Brian Smith)
+
+17th November 2016 - Ben Morgan (cmake-V10-02-34)
+- Fix bug in Qt4/5 handling on Windows
+- Templates/Geant4Config.cmake.in : Move re-find of Qt4 inside overall
+  Qt4/5 setup section.
+- Modules/Geant4BuildProjectConfig.cmake : Remove setting of GEANT4_THIRD_PARTY_IMPORT_SETUP
+  variable, and replace with dedicated GEANT4_QT4_IMPORT_SETUP variable for Qt
+- Export Qt library path to dynamic loader path in Geant4GNUmake environment setup
+- Modules/Geant4ToolchainBackwardCompatibility.cmake :
+  Prepend Qt library path to dynamic loader path, noting obselescense on
+  macOS.
+- Templates/geant4make-skeleton.in : Add expansion variable for Qt dynamic
+  loader setup.
+
+15th November 2016 - Ben Morgan (cmake-V10-02-33)
 - Export USolids/VecGeom compile defs to Geant4GNUmake environment setup scripts
 - Modules/Geant4ToolchainBackwardCompatibility.cmake :
   Configure export variables based on choice of USolids full/partial
   replacement
 - Templates/geant4make-skeleton.in : Add entries for required env vars
 
-31st October 2016 - Ben Morgan
+9th November 2016 - Ivana Hrivnacova  (cmake-V10-02-32)
+- Added FindDCMTK.cmake needed for extended/medical/DICOM example
+
+8th November 2016 - Gunter Folger  (cmake-V10-02-31)
+- switch to RadioactiveDecay5.1, PhotonEvaporation4.2, G4ENSDFSTATE2.1
+ 
+3rd November 2016 - Gunter Folger  (cmake-V10-02-30)
+- switch to PhotonEvaporation 4.1
+
+31st October 2016 - Ben Morgan (cmake-V10-02-29)
+- Modules/Geant4MakeRules_cxx.cmake : fix bug - use correct
+  CMAKE_CXX_FLAGS_INIT variable to add -pipe argument to.
+
+31st October 2016 - Ben Morgan (cmake-V10-02-28)
 - Bugfix #1877
 - Templates/geant4-env-skeleton.in : Provide placeholder
   variable for adding setting of XercesC libpath
@@ -49,20 +461,80 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
   party libraries appear after the core Geant4 library path which
   should prevent clashes.
 
-3rd June 2016 - Gunter Folger (cmake-V10-01-46)
-- Switch to corrected datasets to correct bad packing in patch01:
-   - G4ENSDFSTATE.1.2.3
-	- G4RadioactiveDecay.4.3.2
+27th October 2016 - Gunter Folger (cmake-V10-02-27)
+- switch to G4EMLOW 6.50
 
-25th May 2016 - Ben Morgan (cmake-V10-01-45)
+6th October 2016 - Ben Morgan (cmake-V10-02-26)
+- Modules/Geant4MakeRules_cxx.cmake : Move all -f optimization options
+to Release mode only. Add -fno-math-errno and -ftree-vectorize.
+
+
+6th October 2016 - Ben Morgan (cmake-V10-02-25)
+- Modules/Geant4MakeRules_cxx.cmake : Add -fno-trapping-math to default
+flags of GCC/Clang compielrs to assist in auto-vectorization (recommended 
+by CMS/GCC). Bump optimization level in Release mode to O3 on all supported 
+compilers.
+
+3rd October 2016- Gunter Folger (cmake-V10-02-24)
+- switch to use G4ENSDFSTATE 2.0 
+	(requires tag particles-V10-02-28)
+
+29th September 2016 - Robert Hatcher (cmake-V10-02-23)
+- Templates/Geant4Config.cmake.in : No longer use --whole-archive for 
+G4physicslists on static builds; this was never possible for _WIN32 and recent
+physics list factory work makes this untenable on some build platforms.
+
+28th September 2016 - Andrea Dotti  (cmake-V10-02-22)
+- add option for TEXT output file in FindStatTest.cmake script
+
+19th September 2016 - Gunter Folger (cmake-V10-02-21)
+- switch to PhotonEvaporation 4.0
+
+7th September 2016 - Gunter Folger (cmake-V10-02-20)
+- switch to G4RadioactiveDecay.5.0
+
+22nd August 2016 - Ben Morgan (cmake-V10-02-19)
+- Templates/UseGeant4.cmake : Force core and per-mode flags to those used to 
+  build Geant4. When Geant4 is built with a single mode generator, default 
+  CMAKE_BUILD_TYPE for the client to that used to build this install. This
+  guarantees matching of librayr/application optimization for most use cases.
+  NB: No default mode can be provided if Geant4 itself was built/installed using
+  multimode tool like Xcode/VS. This is because multiple modes may be installed
+  at once so a sensible default cannot be set (to be looked at further).
+- Templates/Geant4Config.cmake.in : Add new Geant4_BUILD_TYPE variable to hold
+  build type of install when Geant4 is installed using a single mode tool.
+- Modules/Geant4BuildProjectConfig.cmake : Set Geant4_BUILD_TYPE to CMAKE_BUILD_TYPE
+  when building with a single mode tool.
+
+15th August 2016 - Gunter Folger (cmake-V10-02-18)
+- switch to G4EMLOW.6.49
+
+17th June 2016 - Gabriele Cosmo (cmake-V10-02-17)
+- Modules/Geant4OptionalComponents.cmake: set CLHEP-2.3.3.0 as the required
+  version for external CLHEP library.
+
+9th June 2016 - Gunter Folger  (cmake-V10-02-16)
+- revert change in Templates/Geant4Config.cmake.in in tag cmake-V10-02-14,
+    revision 97140; the coworking tags have been rejected. 
+
+3rd June 2016 - Gunter Folger  (cmake-V10-02-15)
+- switch to RadioActiveDecay 4.4.1 and  G4ENSDFSTATE 1.3.1, both provided by
+   Laurent.
+
+25th May 2016 - Robert Hatcher (cmake-V10-02-14)
+- Templates/Geant4Config.cmake.in : No longer use --whole-archive for 
+G4physicslists on static builds; this was never possible for _WIN32 and recent
+physics list factory work makes this untenable.
+
+25th May 2016 - Ben Morgan (cmake-V10-02-13)
 - Modules/Geant4InterfaceOptions.cmake : Always add Xmu to X11_LIBRARIES when
-  using Motif/OpenInventor to avoid missing symbol errors on OS X.
+using Motif/OpenInventor to avoid missing symbol errors on OS X.
 
-24th May 2016 - Ben Morgan
+24th May 2016 - Ben Morgan (cmake-V10-02-12)
 - Modules/Geant4OptionalComponents.cmake : Fix regex to avoid matching to "CONS"
   shape is check for all shapes.
 
-24th May 2016 - Ben Morgan
+24th May 2016 - Ben Morgan (cmake-V10-02-11)
 - Modules/Geant4OptionalComponents.cmake : Initial implementation of a list
   based interface to GEANT4_USE_USOLIDS. Rather than booleans, unify USolids
   replacement into single string/list variable with following behaviour:
@@ -91,29 +563,41 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 - Modules/Geant4ConfigureConfigScript.cmake : Export needed USOLIDS/shape activation
   preprocessor flags for selected configuration.
 
-28th April 2016 - Ben Morgan
+28th April 2016 - Ben Morgan (cmake-V10-02-10)
 - Templates/Geant4Config.cmake.in: BUGFIX #1855. When using an external
   CLHEP, the provided FindCLHEP module is not used. Wrap call to
   find_package(CLHEP) with push/pop of CMAKE_MODULE_PATH to ensure
   Geant4's builtin module is used and not interfere with any user
   settings of CMAKE_MODULE_PATH.
 
-19th April 2016
-- Correct Modules/genwindef/LibSymbolInfo.cpp for use with VC 64 bit compilation 
+19th April 2016 - Gunter Folger (cmake-V10-02-09)
+-  correct Modules/genwindef/LibSymbolInfo.cpp for use with VC 64 bit compilation 
      
-16th March 2016 - Ben Morgan
+29th March 2016 - Gunter Folger (cmake-V10-02-08)
+-  switch to RadioActiveDecay 4.4; dataset identical to 4.3.1, packaging
+    corrected to be a compressed tar file, 4.3.1 is plain tar
+
+16th March 2016 - Ben Morgan (cmake-V10-02-07)
 - Modules/Geant4InterfaceOptions.cmake : Fix Bug #1828
   Apply patch from Vladimir Belov to add libXt to X11_LIBRARIES on all
   Unix platforms when using Motif/Inventor.
 
-23rd February 2016 - Gunter Folger (cmake-V10-01-44)
--  Correct md5sum for RadioactiveDecay-4.3.1 after removal of MAC Safari files.
+23rd February 2016 - Gunter Folger (cmake-V10-02-06)
+-  Correct md5sum for RadioactiveDecay.4.3.1 after removal of MAC Safari files.
 
-23rd February 2016 - Gunter Folger (cmake-V10-01-43)
+23rd February 2016 - Gunter Folger (cmake-V10-02-05)
 - Modules/Geant4DatasetDefinitions.cmake:
-   use patched data-sets G4ENSDFSTATE-1.2.1 and G4RadioactiveDecay-4.3.1
-	
-22nd January 2016 - Ben Morgan (cmake-V10-01-42)
+    - revert back to G4ENSDFSTATE.1.3
+	 - use patched RadioactiveDecay data 4.3.1
+
+23rd February 2016 - Gunter Folger (cmake-V10-02-04)
+- Modules/Geant4DatasetDefinitions.cmake: Use data set G4ENSDFSTATE.1.2.1
+   Note 1.2.1 is identical to 1.3, it is a patch on 1.2 
+
+5th February 2016 - Gunter Folger (cmake-V10-02-03)
+- Modules/Geant4DatasetDefinitions.cmake: Use new data set G4ENSDFSTATE.1.3 
+
+22nd January 2016 - Ben Morgan (cmake-V10-02-02)
 - Modules/FindCLHEP.cmake : Restore from last version. Update regexing
   of defs.h file for CLHEP 2.3.1.1 changes, retaining compatibility with
   earlier versions. Create imported targets CLHEP and CLHEP::<COMPONENT>
@@ -127,13 +611,13 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 - Templates/Geant4Config.cmake.in : Refind CLHEP using package-mode,
   using hardcoded CLHEP_ROOT_DIR if set as a hint.
 
-15th December 2015 - Ben Morgan
+15th December 2015 - Ben Morgan (cmake-V10-02-01)
 - Templates/Geant4Config.cmake.in : Use PATHS option in find_package
   for CLHEP, setting it to discovered CLHEP_DIR. Required at present
   to provide a hint to builds of tests, which do not have 
   CMAKE_PREFIX_PATH set appropriately.
 
-15th December 2015 - Ben Morgan
+15th December 2015 - Ben Morgan (cmake-V10-02-00)
 - [BUGFIX #1805] : Preliminary fix for CLHEP 2.3.1.1 config error
 - Modules/FindCLHEP.cmake : REMOVED as obsolete
 - Modules/Geant4OptionalComponents.cmake : Use NO_MODULE in
@@ -232,6 +716,7 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
 23th October 2015 - Gunter Folger (cmake-V10-01-32)
 - Modules/Geant4DatasetDefinitions.cmake: Use new data set G4ENSDFSTATE.1.2 
+
 22nd October 2015 - Ben Morgan (cmake-V10-01-31)
 - Modules/Geant4ToolchainBackwardCompatibility.cmake : Add export
   of TOOLS_FONT_PATH to environment when Freetype support is enabled,

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.hh 84219 2014-10-10 14:55:19Z gcosmo $
+// $Id: G4QGSMFragmentation.hh 107869 2017-12-07 14:46:39Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -57,6 +57,10 @@ public:
    virtual void Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom, G4double AntiMass, G4double InitialMass); 
    virtual G4bool StopFragmenting(const G4FragmentingString  * const string);
    virtual G4bool IsFragmentable(const G4FragmentingString * const string);
+
+   virtual G4KineticTrack * Splitup(G4FragmentingString *string,              // Uzhi 28 June 2016
+                            G4FragmentingString *&newString);
+
    virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, 
                                         G4FragmentingString * string,     // Uzhi
                                         G4FragmentingString * newString); // Uzhi

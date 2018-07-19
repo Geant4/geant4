@@ -1,4 +1,4 @@
-$Id: History 95478 2016-02-12 09:45:33Z gcosmo $
+$Id: History 110268 2018-05-17 14:35:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,49 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14 Jan 16: V.Ivanchenko (xrays-V10-01-03)
+17 May 18: J. Madsen (xrays-V10-04-03)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+12 February 18: V.Ivanchenko (xrays-V10-04-02)
+- G4VTransitionRadiation, G4TransitionRadiation, G4SynchrotronRadiationInMat,
+  G4Scintillation, G4ForwardXrayTR, G4Cerenkov - moved static and virtual
+    methods from inline to the source, removed extra empty and commented lines
+
+26 January 18: V.Ivanchenko (xrays-V10-04-01)
+- G4VXTRenergyLoss - V.Grichine exteded XTR angle limit up to 250/gamma
+    (ATLAS requirements)
+
+21 December 17: G.Cosmo (xrays-V10-04-00)
+- Fixed self-consistency in G4VTRModel header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
+
+11 September 17: S.Y.Jun (xrays-V10-03-00)
+- Change material property keys by the enum (index) type defined in 
+  G4MaterialPropertiesIndex
+
+20 Jun 16: P. Gumplinger (xrays-V10-02-05)
+- Add a stacking flag to G4Scintillation and G4Cerenkov and add
+  GetNumPhotons() method
+
+1 Jun 16: D.Sawkey (xrays-V10-02-04)
+- Most files: use C++11 keywords override, delete, explicit, nullptr
+
+29 Jan 16: P.Gumplinger (xrays-V10-02-03)
+- Attach the G4ScintillationTrackInformation to the secondary photon
+  only if so requesed by the user
+
+22 Jan 16: P.Gumplinger (xrays-V10-02-02)
+- Add G4ScintillationTrackInformation class and use it in G4Scintillation
+  Thanks to Valentin Libioulle (Univ. Sherbrooke)
+
+14 Jan 16: V.Ivanchenko (xrays-V10-02-01)
 - G4Scintillation - use a new method of G4EmSaturation class
     G4EmSaturation::VisibleEnergyDepositionAtAStep(aStep)
     in order to fix overload problem #1807
 
-17 Dec 15: V.Ivanchenko
+17 Dec 15: V.Ivanchenko (xrays-V10-02-00)
 - G4VTransitionRadiation, G4VXTRenergyLoss - fixed process sub-type
 
 13 Aug 14: V.Ivanchenko, P. Gumplinger (xrays-V10-01-01/02)

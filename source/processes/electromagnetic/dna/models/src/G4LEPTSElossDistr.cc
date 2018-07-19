@@ -52,21 +52,21 @@ void G4LEPTSElossDistr::ReadFile()
   G4int nEnergies;
   G4int nAngles;
   G4int nData;
-  fscanf(fp,"%i \n",&nEnergies);
+  (void) fscanf(fp,"%i \n",&nEnergies);
   for( G4int ie = 0; ie < nEnergies; ie++ ){
     float energySep; 
-    fscanf(fp,"%f \n",&energySep);
-    fscanf(fp,"%i \n",&nAngles);
+    (void) fscanf(fp,"%f \n",&energySep);
+    (void) fscanf(fp,"%i \n",&nAngles);
     for( G4int ia = 0; ia < nAngles; ia++ ){
       float angleSep; 
-      fscanf(fp,"%f \n",&angleSep);
+      (void) fscanf(fp,"%f \n",&angleSep);
       G4LEPTSDistribution* dist = new G4LEPTSDistribution();
       theNDistributions ++;
       mddist angleDist;
       angleDist[angleSep] = dist;
       theDistributions[energySep] = angleDist;
       
-      fscanf(fp,"%i \n",&nData);
+      (void) fscanf(fp,"%i \n",&nData);
       if( dist->ReadFile( fp, nData ) ) {
 	G4Exception("G4LEPTSElossDistr",
 		  "",

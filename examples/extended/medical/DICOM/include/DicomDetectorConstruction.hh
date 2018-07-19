@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomDetectorConstruction.hh 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id: DicomDetectorConstruction.hh 101301 2016-11-14 11:19:22Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomDetectorConstruction.hh
 /// \brief Definition of the DicomDetectorConstruction class
@@ -37,6 +37,7 @@
 #include "DicomPhantomZSliceHeader.hh"
 
 #include <set>
+#include <map>
 
 class G4Material;
 class G4Box;
@@ -55,6 +56,13 @@ class DicomPhantomZSliceMerged;
 /// \author  P. Arce
 //*******************************************************
 
+struct matInfo 
+{
+  G4double fSumdens;
+  G4int fNvoxels;
+  G4int fId;
+};
+
 class DicomDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
@@ -70,7 +78,9 @@ protected:
     // create the original materials
 
     void ReadPhantomData();
+    void ReadPhantomDataNew();
     // read the DICOM files describing the phantom
+  void ReadVoxelDensities( std::ifstream& fin );
 
     void ReadPhantomDataFile(const G4String& fname);
     // read one of the DICOM files describing the phantom (usually one per Z slice).
@@ -84,7 +94,8 @@ protected:
     // build a new material if the density of the voxel is different to the other voxels
 
     void ConstructPhantomContainer();
-    virtual void ConstructPhantom() = 0;
+  void ConstructPhantomContainerNew();
+  virtual void ConstructPhantom() = 0;
     // construct the phantom volumes.
     //  This method should be implemented for each of the derived classes
 
@@ -122,6 +133,11 @@ protected:
 
     G4int fNVoxelX, fNVoxelY, fNVoxelZ;
     G4double fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ;
+    G4double fMinX,fMinY,fMinZ; // minimum extension of voxels (position of wall)
+    G4double fMaxX,fMaxY,fMaxZ; // maximum extension of voxels (position of wall)
+
+    std::map<G4int,G4Material*> thePhantomMaterialsOriginal;
+     // map numberOfMaterial to G4Material. They are the list of materials as built from .geom file
 
     DicomPhantomZSliceMerged* fMergedSlices;
 

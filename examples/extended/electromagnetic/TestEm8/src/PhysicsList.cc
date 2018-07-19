@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
+// $Id: PhysicsList.cc 106960 2017-10-31 08:35:19Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -78,15 +78,12 @@
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
-
-G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = 0;
+#include "DetectorConstruction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fEmPhysicsList(0),
-  fDecayPhysicsList(0),
-  fMessenger(0)
+PhysicsList::PhysicsList(DetectorConstruction* ptr) 
+  : G4VModularPhysicsList(), fDetectorConstruction(ptr)
 {
   // set verbosity for zero to avoid double printout 
   // on physics verbosity should be restored to 1 when cuts
@@ -192,6 +189,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysicsGS(0);
 
+  } else if (name == "pai") {
+    G4EmParameters::Instance()->AddPAIModel("all","world","pai");
+
+  } else if (name == "pai_photon") {
+    G4EmParameters::Instance()->AddPAIModel("all","world","pai_photon");
+
   } else if (name == "emlivermore") {
 
     fEmName = name;
@@ -223,7 +226,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
-  fStepMaxProcess = new StepMax();
+  StepMax* stepMaxProcess = new StepMax(fDetectorConstruction);
 
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();
@@ -232,9 +235,9 @@ void PhysicsList::AddStepMax()
     G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fStepMaxProcess->IsApplicable(*particle))
+    if (stepMaxProcess->IsApplicable(*particle))
     {
-      pmanager->AddDiscreteProcess(fStepMaxProcess);
+      pmanager->AddDiscreteProcess(stepMaxProcess);
     }
   }
 }
@@ -243,7 +246,7 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::SetCuts()
 {
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100.*eV,1e5);
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(25.*eV,1e5);
   if ( verboseLevel > 0 ) { DumpCutValuesTable(); }
 }
 

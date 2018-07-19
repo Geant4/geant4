@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 82280 2014-06-13 14:45:31Z gcosmo $
+// $Id: RunAction.cc 101250 2016-11-10 08:54:02Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,7 +51,7 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
                      PrimaryGeneratorAction* kin)
  : G4UserRunAction(),
    fAnalysisManager(0), fDetector(det), fPhysics(phys), fKinematic(kin),
-   fTallyEdep(new G4double[MaxTally]), fProjRange(0.), fProjRange2(0.),
+   fTallyEdep(new G4double[kMaxTally]), fProjRange(0.), fProjRange2(0.),
    fEdeptot(0.), fEniel(0.), fNbPrimarySteps(0), fRange(0)
 { 
   // Book predefined histograms
@@ -81,7 +81,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   fRange = 0;
   fProjRange = fProjRange2 = 0.;
   fEdeptot = fEniel = 0.;
-  for (G4int j=0; j<MaxTally; j++) fTallyEdep[j] = 0.;
+  for (G4int j=0; j<kMaxTally; ++j) { fTallyEdep[j] = 0.; }
   fKinematic->ResetEbeamCumul();
   
   if (fAnalysisManager->IsActive()) {
@@ -107,7 +107,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   //run conditions
   //  
-  G4Material* material = fDetector->GetAbsorMaterial();
+  const G4Material* material = fDetector->GetAbsorMaterial();
   G4double density = material->GetDensity();
    
   G4String particle = fKinematic->GetParticleGun()->GetParticleDefinition()
@@ -152,7 +152,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4double Ebeam = fKinematic->GetEbeamCumul();
     G4cout << "\n---------------------------------------------------------\n";
     G4cout << " Cumulated Doses : \tEdep      \tEdep/Ebeam \tDose" << G4endl;
-    for (G4int j=1; j <= tallyNumber; j++) {
+    for (G4int j=0; j < tallyNumber; ++j) {
       G4double Edep = fTallyEdep[j], ratio = 100*Edep/Ebeam;
       G4double tallyMass = fDetector->GetTallyMass(j);      
       G4double Dose = Edep/tallyMass;
@@ -168,7 +168,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (fAnalysisManager->IsActive() ) {        
     // normalize histograms
     //
-    for (G4int j=1; j<3; j++) {  
+    for (G4int j=1; j<3; ++j) {  
       G4double binWidth = fAnalysisManager->GetH1Width(j);
       G4double fac = (mm/MeV)/(nbofEvents * binWidth);
       fAnalysisManager->ScaleH1(j, fac);
@@ -216,7 +216,7 @@ void RunAction::BookHisto()
 
   // Create all histograms as inactivated 
   // as we have not yet set nbins, vmin, vmax
-  for (G4int k=0; k<kMaxHisto; k++) {
+  for (G4int k=0; k<kMaxHisto; ++k) {
     G4int ih = fAnalysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
     G4bool activ = false;
     if (k == 1) activ = true;

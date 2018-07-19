@@ -65,7 +65,9 @@ G4VAnalysisManager::G4VAnalysisManager(const G4String& type, G4bool isMaster)
 
 //_____________________________________________________________________________
 G4VAnalysisManager::~G4VAnalysisManager()
-{}
+{
+  delete fVNtupleManager;
+}
 
 // 
 // protected methods
@@ -114,7 +116,8 @@ void G4VAnalysisManager::SetP2Manager(G4VP2Manager* p2Manager)
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetNtupleManager(G4VNtupleManager* ntupleManager)
 {
-  fVNtupleManager.reset(ntupleManager);
+  // fVNtupleManager.reset(ntupleManager);
+  fVNtupleManager = ntupleManager;
 }  
 
 //_____________________________________________________________________________
@@ -542,7 +545,10 @@ G4int G4VAnalysisManager::CreateP1(const G4String& name,  const G4String& title,
   if ( ! CheckName(name, "P1") ) return kInvalidId;
   if ( ! CheckNbins(nbins) ) return kInvalidId;
   if ( ! CheckMinMax(xmin, xmax, xfcnName, xbinSchemeName) ) return kInvalidId;
-  if ( ! CheckMinMax(ymin, ymax) ) return kInvalidId;
+  if ( ymin != 0. || ymax != 0. ) {
+    // Do not check  default values
+    if ( ! CheckMinMax(ymin, ymax) ) return kInvalidId;
+  }
 
   return fVP1Manager->CreateP1(name, title, nbins, xmin, xmax, ymin, ymax,
                                xunitName, yunitName, xfcnName, yfcnName, 
@@ -558,6 +564,10 @@ G4int G4VAnalysisManager::CreateP1(const G4String& name,  const G4String& title,
 {
   if ( ! CheckName(name, "P1") ) return kInvalidId;
   if ( ! CheckEdges(edges) ) return kInvalidId;
+  if ( ymin != 0. || ymax != 0. ) {
+    // Do not check  default values
+    if ( ! CheckMinMax(ymin, ymax) ) return kInvalidId;
+  }
 
   return fVP1Manager->CreateP1(name, title, edges, ymin, ymax, 
                                xunitName, yunitName, xfcnName, yfcnName);
@@ -579,7 +589,10 @@ G4int G4VAnalysisManager::CreateP2(const G4String& name, const G4String& title,
   if ( ! CheckNbins(nxbins) ) return kInvalidId;
   if ( ! CheckMinMax(xmin, xmax, xfcnName, xbinSchemeName) ) return kInvalidId;
   if ( ! CheckMinMax(ymin, ymax, yfcnName, xbinSchemeName) ) return kInvalidId;
-  if ( ! CheckMinMax(zmin, zmax) ) return kInvalidId;
+  if ( zmin != 0. || zmax != 0. ) {
+    // Do not check  default values
+    if ( ! CheckMinMax(zmin, zmax) ) return kInvalidId;
+  }
 
   return fVP2Manager->CreateP2(name, title, 
                                nxbins, xmin, xmax, nybins, ymin, ymax,
@@ -602,6 +615,10 @@ G4int G4VAnalysisManager::CreateP2(const G4String& name, const G4String& title,
   if ( ! CheckName(name, "P2") ) return kInvalidId;
   if ( ! CheckEdges(xedges) ) return kInvalidId;
   if ( ! CheckEdges(yedges) ) return kInvalidId;
+  if ( zmin != 0. || zmax != 0. ) {
+    // Do not check  default values
+    if ( ! CheckMinMax(zmin, zmax) ) return kInvalidId;
+  }
 
   return fVP2Manager->CreateP2(name, title, xedges, yedges, zmin, zmax, 
                                xunitName, yunitName, zunitName,
@@ -618,6 +635,10 @@ G4bool G4VAnalysisManager::SetP1(G4int id,
 {                                
   if ( ! CheckNbins(nbins) ) return kInvalidId;
   if ( ! CheckMinMax(xmin, xmax, xfcnName, xbinSchemeName) ) return kInvalidId;
+  if ( ymin != 0. || ymax != 0. ) {
+    // Do not check  default values
+    if ( ! CheckMinMax(ymin, ymax) ) return kInvalidId;
+  }
 
   return fVP1Manager->SetP1(id, nbins, xmin, xmax, ymin, ymax, 
                             xunitName, yunitName, xfcnName, yfcnName, 
@@ -632,6 +653,10 @@ G4bool G4VAnalysisManager::SetP1(G4int id,
                                 const G4String& xfcnName, const G4String& yfcnName)
 {                                
   if ( ! CheckEdges(edges) ) return kInvalidId;
+  if ( ymin != 0. || ymax != 0. ) {
+    // Do not check  default values
+    if ( ! CheckMinMax(ymin, ymax) ) return kInvalidId;
+  }
 
   return fVP1Manager->SetP1(id, edges, ymin, ymax, 
                             xunitName, yunitName, xfcnName, yfcnName); 
@@ -653,6 +678,10 @@ G4bool G4VAnalysisManager::SetP2(G4int id,
   if ( ! CheckNbins(nybins) ) return kInvalidId;
   if ( ! CheckMinMax(xmin, xmax, xfcnName, xbinSchemeName) ) return kInvalidId;
   if ( ! CheckMinMax(ymin, ymax, yfcnName, ybinSchemeName) ) return kInvalidId;
+  if ( zmin != 0. || zmax != 0. ) {
+    // Do not check  default values
+    if ( ! CheckMinMax(zmin, zmax) ) return kInvalidId;
+  }
 
   return fVP2Manager->SetP2(id, nxbins, xmin, xmax, nybins, ymin, ymax, 
                             zmin, zmax,
@@ -675,6 +704,10 @@ G4bool G4VAnalysisManager::SetP2(G4int id,
 {
   if ( ! CheckEdges(xedges) ) return kInvalidId;
   if ( ! CheckEdges(yedges) ) return kInvalidId;
+  if ( zmin != 0. || zmax != 0. ) {
+    // Do not check  default values
+    if ( ! CheckMinMax(zmin, zmax) ) return kInvalidId;
+  }
 
   return fVP2Manager->SetP2(id, xedges, yedges, zmin, zmax, 
                             xunitName, yunitName, zunitName,

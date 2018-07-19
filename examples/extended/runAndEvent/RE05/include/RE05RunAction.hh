@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05RunAction.hh 68698 2013-04-05 08:41:22Z gcosmo $
+// $Id: RE05RunAction.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05RunAction.hh
 /// \brief Definition of the RE05RunAction class
@@ -36,7 +36,6 @@
 #define RE05RunAction_h 1
 
 #include "G4UserRunAction.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,8 +54,3 @@ class RE05RunAction : public G4UserRunAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-

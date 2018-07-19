@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/shared/src/DetectorConstruction.cc
+/// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.cc 77256 2013-11-22 10:10:23Z gcosmo $
+// $Id: DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 // 
 
@@ -242,7 +242,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   //                                        
   // Visualization attributes
   //
-  fLogicWorld->SetVisAttributes (G4VisAttributes::Invisible);
+  fLogicWorld->SetVisAttributes (G4VisAttributes::GetInvisible());
 
   G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   simpleBoxVisAtt->SetVisibility(true);

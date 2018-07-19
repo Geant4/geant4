@@ -25,8 +25,7 @@
 //
 // $Id: G4VRNtupleManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// Base class for read Ntuple manager. 
-// It defines functions independent from the output type. 
+// The pure abstract base class for read Ntuple manager. 
 //
 // Author: Ivana Hrivnacova, 09/04/2014 (ivana@ipno.in2p3.fr)
 
@@ -45,9 +44,9 @@ class G4VRNtupleManager : public G4BaseAnalysisManager
   friend class G4VAnalysisReader;
 
   public:
-    explicit G4VRNtupleManager(const G4AnalysisManagerState& state) 
+    explicit G4VRNtupleManager(const G4AnalysisManagerState& state)
       : G4BaseAnalysisManager(state) {}
-    virtual ~G4VRNtupleManager(){}
+    virtual ~G4VRNtupleManager() {}
 
     // deleted copy constructor & assignment operator
     G4VRNtupleManager(const G4VRNtupleManager& rhs) = delete;
@@ -59,9 +58,9 @@ class G4VRNtupleManager : public G4BaseAnalysisManager
     virtual G4bool SetNtupleIColumn(const G4String& columnName, 
                             G4int& value) = 0;
     virtual G4bool SetNtupleFColumn(const G4String& columnName, 
-                            G4float& value)= 0;
+                            G4float& value) = 0;
     virtual G4bool SetNtupleDColumn(const G4String& columnName, 
-                            G4double& value)= 0;
+                            G4double& value) = 0;
     virtual G4bool SetNtupleSColumn(const G4String& columnName, 
                             G4String& value) = 0;
     // Bind the ntuple columns of vector type
@@ -87,11 +86,11 @@ class G4VRNtupleManager : public G4BaseAnalysisManager
                             std::vector<G4float>& vector) = 0;
     virtual G4bool SetNtupleDColumn(G4int ntupleId, const G4String& columnName, 
                             std::vector<G4double>& vector) = 0;
-    virtual G4bool GetNtupleRow()= 0;
+    virtual G4bool GetNtupleRow() = 0;
     virtual G4bool GetNtupleRow(G4int ntupleId) = 0;
     
     // Access methods
-    virtual G4int GetNofNtuples() const { return 0; }
+    virtual G4int GetNofNtuples() const = 0;
 };
     
 #endif

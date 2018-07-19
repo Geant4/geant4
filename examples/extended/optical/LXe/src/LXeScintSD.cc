@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeScintSD.cc 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id: LXeScintSD.cc 110138 2018-05-16 07:31:43Z gcosmo $
 //
 /// \file optical/LXe/src/LXeScintSD.cc
 /// \brief Implementation of the LXeScintSD class
@@ -46,7 +46,7 @@
 LXeScintSD::LXeScintSD(G4String name)
   : G4VSensitiveDetector(name)
 {
-  fScintCollection = NULL;
+  fScintCollection = nullptr;
   collectionName.insert("scintCollection");
 }
 

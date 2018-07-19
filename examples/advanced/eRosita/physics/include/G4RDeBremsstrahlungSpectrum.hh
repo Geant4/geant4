@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4RDeBremsstrahlungSpectrum.hh 107396 2017-11-10 08:28:08Z gcosmo $
 // GEANT4 tag $Name: geant4-09-01-ref-00 $
 //
 // -------------------------------------------------------------------

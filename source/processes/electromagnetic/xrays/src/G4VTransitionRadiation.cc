@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.cc 95478 2016-02-12 09:45:33Z gcosmo $
+// $Id: G4VTransitionRadiation.cc 108423 2018-02-13 11:18:13Z gcosmo $
 //
 // G4VTransitionRadiation class -- implementation file
 
@@ -48,10 +48,10 @@
 G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName,
                                                       G4ProcessType type )
   : G4VDiscreteProcess(processName, type),
-    region(0),
-    model(0),
+    region(nullptr),
+    model(nullptr),
   nSteps(0),
-  gammaMin(100),
+  gammaMin(100.),
   cosDThetaMax(std::cos(0.1))
 {
   SetProcessSubType(fTransitionRadiation);
@@ -164,6 +164,24 @@ void G4VTransitionRadiation::SetModel(G4VTRModel* mod)
 void G4VTransitionRadiation::PrintInfoDefinition()
 {
   if(model) model->PrintInfo();
+}
+
+///////////////////////////////////////////////////////////////////////
+
+G4double G4VTransitionRadiation::GetMeanFreePath(
+                                const G4Track& track, G4double,
+                                G4ForceCondition* condition)
+{
+  if(nSteps > 0) {
+    *condition = StronglyForced;
+  } else {
+    *condition = NotForced;
+    if(track.GetKineticEnergy()/track.GetDefinition()->GetPDGMass() + 1.0 > gammaMin &&
+       track.GetVolume()->GetLogicalVolume()->GetRegion() == region) {
+         *condition = StronglyForced;
+    }
+  }
+  return DBL_MAX;      // so TR doesn't limit mean free path
 }
 
 ///////////////////////////////////////////////////////////////////////

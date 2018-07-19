@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4StateManager.hh 110286 2018-05-18 09:40:01Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -52,7 +52,8 @@
 #define G4StateManager_h 1
 
 #include <vector>
-#include "globals.hh"
+#include "G4Types.hh"
+#include "G4String.hh"
 #include "G4ApplicationState.hh"
 #include "G4VStateDependent.hh"
 #include "G4VExceptionHandler.hh"
@@ -111,8 +112,7 @@ public:
   inline const char* GetMessage() const;
   inline void SetExceptionHandler(G4VExceptionHandler* eh);
   inline G4VExceptionHandler* GetExceptionHandler() const;
-
-public:
+  static void SetVerboseLevel(G4int val);
 
   //void Pause();
   //void Pause(const char* msg);
@@ -139,7 +139,7 @@ private:
   G4int suppressAbortion;
   const char* msgptr;
   G4VExceptionHandler* exceptionHandler;
-
+  static G4int verboseLevel;
 };
 
 #include "G4StateManager.icc"

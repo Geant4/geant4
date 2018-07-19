@@ -45,23 +45,32 @@
 #include "G4OpenInventorXtExtendedViewer.hh"
 #include "G4OpenInventorXtExaminerViewerMessenger.hh"
 
+// Work around for gcc8 Coverity cast warning
+inline bool soxt_dispatch_event(void* a_event) {
+   return SoXt::dispatchEvent((XEvent*)a_event);
+}
+
 G4OpenInventorXtExtended::G4OpenInventorXtExtended ()
 :G4OpenInventor("OpenInventorXtExtended","OIXE",G4VGraphicsSystem::threeD)
 ,fInited(false)
 {
-   G4OpenInventorXtExaminerViewerMessenger(getInstance());
+   G4OpenInventorXtExaminerViewerMessenger::GetInstance();
 }
 
 void G4OpenInventorXtExtended::Initialize()
 {
-   G4cout << "DEBUG G4OpenInventorXtExtended::Initialize() CALLED" << G4endl;
+  // G4cout << "DEBUG G4OpenInventorXtExtended::Initialize() CALLED" << G4endl;
   if(fInited) return; //Done
 
   SetInteractorManager (G4Xt::getInstance ());
   GetInteractorManager () -> 
-    RemoveDispatcher((G4DispatchFunction)XtDispatchEvent);  
+     RemoveDispatcher(G4Xt::xt_dispatch_event);
+  // Coverity gcc8 cast warning
+  //    RemoveDispatcher((G4DispatchFunction)XtDispatchEvent);  
   GetInteractorManager () -> 
-    AddDispatcher   ((G4DispatchFunction)SoXt::dispatchEvent);
+     AddDispatcher(soxt_dispatch_event);
+  // Coverity gcc8 cast warning
+  //    AddDispatcher   ((G4DispatchFunction)SoXt::dispatchEvent);
 
   Widget top = (Widget)GetInteractorManager()->GetMainInteractor();
   G4cout << "TOP LEVEL WIDGET FOR SoXt::init() = " << top << G4endl;

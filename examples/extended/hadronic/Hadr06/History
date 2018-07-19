@@ -13,6 +13,52 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B. Morgan (exhadr06-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+05-04-18 mma (exhadr06-V10-04-01)
+- Hadr06.cc : set visualisation only in interactive session.
+
+16-03-18 mma (exhadr06-V10-04-00)
+- Hadr06.cc : remove G4UI_USE and G4VIS_USE
+
+28-11-17 I. Hrivnacova  (exhadr06-V10-03-04)
+- Fixed Doxygen warnings
+
+27-04-17 mma  (exhadr06-V10-03-03)
+- update readme
+
+12-04-17 mma  (exhadr06-V10-03-02)
+- BeginOfRunAction() : remove SetRandomNumberStore()
+
+19-02-17 mma  (exhadr06-V10-03-01)
+- Readme, HistoManager : add a comment
+
+17-02-17 mma  (exhadr06-V10-03-00)
+- Run.cc : modify normalisation of histos
+		 
+14-10-16 G.Folger (exhadr06-V10-02-04)
+- remove direct use of aParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+	 
+10-09-16 mma  (exhadr06-V10-02-03)
+- rename GammaPhysics --> GammaNuclearPhysics
+         EmStandardPhysics --> ElectromagneticPhysics
+		 
+12-07-16 mma (exhadr06-V10-02-02)
+- DetectorConstruction : add HeavyWater
+
+04-07-16 I. Hrivnacova
+- Fixes for Doxygen documentation
+
+13-04-16 mma  (exhadr06-V10-02-01)
+- EmStandardPhysics: use G4EmParameters
+
+14-02-16 mma (exhadr06-V10-02-00)
+- PhysicsList : add G4StoppingPhysics
+- materials : add NE213
 	 
 14-10-16 G.Folger
 - remove direct use of aParticleIterator, use GetParticleTableIterator().

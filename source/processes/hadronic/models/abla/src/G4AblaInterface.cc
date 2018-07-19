@@ -24,11 +24,13 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
-// Pekka Kaitaniemi, HIP (translation)
-// Christelle Schmidt, IPNL (fission code)
-// Davide Mancusi, CEA (contact person INCL/ABLA)
+// Jose Luis Rodriguez, GSI (translation from ABLA07 and contact person)
+// Pekka Kaitaniemi, HIP (initial translation of ablav3p)
+// Aleksandra Kelic, GSI (ABLA07 code)
+// Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
+
 #define ABLAXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -54,6 +56,7 @@ G4AblaInterface::G4AblaInterface() :
   eventNumber(0)
 {
   theABLAModel->initEvapora();
+  theABLAModel->SetParameters();
 }
 
 G4AblaInterface::~G4AblaInterface() {
@@ -68,23 +71,18 @@ G4ReactionProductVector *G4AblaInterface::DeExcite(G4Fragment &aFragment) {
 
   const G4int ARem = aFragment.GetA_asInt();
   const G4int ZRem = aFragment.GetZ_asInt();
-  const G4double nuclearMass = aFragment.GetGroundStateMass() / MeV;
   const G4double eStarRem = aFragment.GetExcitationEnergy() / MeV;
   const G4double jRem = aFragment.GetAngularMomentum().mag() / hbar_Planck;
   const G4LorentzVector &pRem = aFragment.GetMomentum();
-  const G4double eTotRem = pRem.e();
-  const G4double eKinRem = (eTotRem - pRem.invariantMass()) / MeV;
   const G4double pxRem = pRem.x() / MeV;
   const G4double pyRem = pRem.y() / MeV;
   const G4double pzRem = pRem.z() / MeV;
 
   eventNumber++;
 
-  theABLAModel->breakItUp(ARem, ZRem,
-                          nuclearMass,
+  theABLAModel->DeexcitationAblaxx(ARem, ZRem,
                           eStarRem,
                           jRem,
-                          eKinRem,
                           pxRem,
                           pyRem,
                           pzRem,
@@ -108,17 +106,17 @@ G4ReactionProductVector *G4AblaInterface::DeExcite(G4Fragment &aFragment) {
 G4ParticleDefinition *G4AblaInterface::toG4ParticleDefinition(G4int A, G4int Z) const {
   if     (A == 1 && Z == 1)  return G4Proton::Proton();
   else if(A == 1 && Z == 0)  return G4Neutron::Neutron();
-  else if(A == 0 && Z == 1)  return G4PionPlus::PionPlus();
-  else if(A == 0 && Z == -1) return G4PionMinus::PionMinus();
-  else if(A == 0 && Z == 0)  return G4PionZero::PionZero();
+  else if(A == -1 && Z == 1)  return G4PionPlus::PionPlus();
+  else if(A == -1 && Z == -1) return G4PionMinus::PionMinus();
+  else if(A == -1 && Z == 0)  return G4PionZero::PionZero();
+  else if(A == 0 && Z == 0)  return G4Gamma::Gamma();
   else if(A == 2 && Z == 1)  return G4Deuteron::Deuteron();
   else if(A == 3 && Z == 1)  return G4Triton::Triton();
   else if(A == 3 && Z == 2)  return G4He3::He3();
   else if(A == 4 && Z == 2)  return G4Alpha::Alpha();
-  else if(A > 0 && Z > 0 && A >= Z) { // Returns ground state ion definition
+  else if(A > 0 && Z > 0 && A > Z) { // Returns ground state ion definition. No hyper-nucleus allows in Geant4
     return G4IonTable::GetIonTable()->GetIon(Z, A, 0);
   } else { // Error, unrecognized particle
-    G4cout << "Can't convert particle with A=" << A << ", Z=" << Z << " to G4ParticleDefinition, trouble ahead" << G4endl;
     return 0;
   }
 }
@@ -127,11 +125,11 @@ G4ReactionProduct *G4AblaInterface::toG4Particle(G4int A, G4int Z,
 						 G4double kinE,
 						 G4double px,
                                                  G4double py, G4double pz) const {
-  G4ParticleDefinition *def = toG4ParticleDefinition(A, Z);
+  const G4ParticleDefinition *def = toG4ParticleDefinition(A, Z);
   if(def == 0) { // Check if we have a valid particle definition
     return 0;
   }
-  const double energy = kinE * MeV;
+  const G4double energy = kinE * MeV;
   const G4ThreeVector momentum(px, py, pz);
   const G4ThreeVector momentumDirection = momentum.unit();
   G4DynamicParticle p(def, momentumDirection, energy);
@@ -141,16 +139,21 @@ G4ReactionProduct *G4AblaInterface::toG4Particle(G4int A, G4int Z,
 }
 
 void G4AblaInterface::ModelDescription(std::ostream& outFile) const {
-   outFile << "ABLA V3 does not provide an implementation of the ApplyYourself method!\n\n";
+   outFile << "ABLA++ does not provide an implementation of the ApplyYourself method!\n\n";
 }
 
 void G4AblaInterface::DeExciteModelDescription(std::ostream& outFile) const {
-   outFile << "ABLA V3 is a statistical model for nuclear de-excitation. It simulates\n"
+   outFile 
+     << "ABLA++ is a statistical model for nuclear de-excitation. It simulates\n"
      << "evaporation of neutrons, protons and alpha particles, as well as fission\n"
      << "where applicable. The code included in Geant4 is a C++ translation of the\n"
      << "original Fortran code. More details about the physics are available in the\n"
      << "the Geant4 Physics Reference Manual and in the reference articles.\n\n"
-     << "References: A.R. Junghans et al., Nucl. Phys. A629 (1998) 635;\n"
-     << "            J. Benlliure et al., Nucl. Phys. A628 (1998) 458.\n\n"; }
+     << "Reference:\n"
+     << "A. Kelic, M. V. Ricciardi, and K. H. Schmidt, in Proceedings of Joint\n"
+     << "ICTP-IAEA Advanced Workshop on Model Codes for Spallation Reactions,\n"
+     << "ICTP Trieste, Italy, 4–8 February 2008, edited by D. Filges, S. Leray, Y. Yariv,\n"
+     << "A. Mengoni, A. Stanculescu, and G. Mank (IAEA INDC(NDS)-530, Vienna, 2008), pp. 181–221.\n\n"; 
+}
 
 #endif // ABLAXX_IN_GEANT4_MODE

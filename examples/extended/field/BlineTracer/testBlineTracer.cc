@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testBlineTracer.cc 68021 2013-03-13 13:36:07Z gcosmo $
+// $Id: testBlineTracer.cc 109623 2018-05-03 13:05:02Z gcosmo $
 // 
 /// \file testBlineTracer.cc
 /// \brief Test program for the G4BlineTracer class
@@ -47,8 +47,6 @@ int main()
   
   // delete it
   delete theBlineTool;
-
-  return 0;
 }
 
 

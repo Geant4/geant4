@@ -73,19 +73,20 @@ using namespace std;
 G4PAIPhotModel::G4PAIPhotModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
     fVerbose(0),
-    fModelData(0),
-    fParticle(0)
+    fModelData(nullptr),
+    fParticle(nullptr)
 {  
   fElectron = G4Electron::Electron();
   fPositron = G4Positron::Positron();
 
-  fParticleChange = 0;
+  fParticleChange = nullptr;
 
   if(p) { SetParticle(p); }
   else  { SetParticle(fElectron); }
 
   // default generator
   SetAngularDistribution(new G4DeltaAngle());
+  fLowestTcut = 12.5*CLHEP::eV;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -93,13 +94,13 @@ G4PAIPhotModel::G4PAIPhotModel(const G4ParticleDefinition* p, const G4String& na
 G4PAIPhotModel::~G4PAIPhotModel()
 {
   //G4cout << "G4PAIPhotModel::~G4PAIPhotModel() " << this << G4endl;
-  if(IsMaster()) { delete fModelData; fModelData = 0; }
+  if(IsMaster()) { delete fModelData; fModelData = nullptr; }
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
 void G4PAIPhotModel::Initialise(const G4ParticleDefinition* p,
-			    const G4DataVector& cuts)
+ 			        const G4DataVector& cuts)
 {
   if(fVerbose > 0) 
   {
@@ -189,6 +190,14 @@ void G4PAIPhotModel::InitialiseLocal(const G4ParticleDefinition*,
   fModelData = static_cast<G4PAIPhotModel*>(masterModel)->GetPAIPhotData();
   fMaterialCutsCoupleVector = static_cast<G4PAIPhotModel*>(masterModel)->GetVectorOfCouples();
   SetElementSelectors( masterModel->GetElementSelectors() );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+G4double G4PAIPhotModel::MinEnergyCut(const G4ParticleDefinition*,
+		 		      const G4MaterialCutsCouple*)
+{
+  return fLowestTcut;
 }
 
 //////////////////////////////////////////////////////////////////////////////

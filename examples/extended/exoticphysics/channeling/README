@@ -20,14 +20,14 @@ reflection in bent crystals.
 
 2.GEOMETRY
 The geometry is a bent Si crystal with three Si detectors placed at
--1.0 m, -0.01 m and 1.0 m with respect to bent crystal position.
-The Si detectors allows to measure incoming and outgoing angle
- after the interaction with the Si bent crystal. The
-geometry is all under vacuum.
+-9.998 m, -0.320 m and 10.756 m with respect to the position of
+the bent crystal itself. The Si detectors allows to measure 
+incoming and outgoing angle after the interaction with the Si bent crystal.
+The geometry is all under vacuum.
 
 3.PRIMARY EVENT
-The primary events are 400 GeV/c protons at -1.05 m from the
-crystal with 13.36E-6 rad x 11.25E-6 rad divergence.
+The primary events are 400 GeV/c protons launched at -10.5 m from the
+crystal with 13.36 microrad x 11.25 microrad divergence.
 
 4.PHYSICS
 In the example the physics of channeling and volume reflection
@@ -42,13 +42,13 @@ The executable must be run from within the source directory of the example
 to ensure that it can find the path for crystal data files.
 
 Data files for Si crystal interplanar potential, nuclei and electron density
- are stored in a named subdirectory’data’
+ are stored in a subdirectory named ’data’
 
 Upon execution, the 2009_PLB680_129.mac macro will automatically run the
 example with 1000 protons.
 
 Use
-/xtal/setCurvRadius XXX 0. 0. m
+/xtal/setBR XXX 0. 0. m
 To change crystal bending to XXX meters
 
 Use
@@ -56,10 +56,8 @@ Use
 To change crystal length to XXX millimeter
 
 Use
-/xtal/potfilename data/si110
-or
-/xtal/potfilename data/si111
-To select the (110) or (111) Si crystal plane of channeling
+/xtal/potfilename data/Si220pl
+To select the (110) Si crystal plane of channeling
 
 GPS commands are used for the primary generator.
 

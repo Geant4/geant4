@@ -4,6 +4,7 @@
 #
 #
 /control/verbose 1
+/control/cout/ignoreThreadsExcept 0
 /run/verbose 0
 /testex/run/verbose 1
 /tracking/verbose 0
@@ -17,12 +18,12 @@
 #
 /process/em/verbose 1
 /run/initialize
-/process/em/verbose 1
 /particle/select monopole
 /particle/process/dump
 #
-#/process/eLoss/verbose 1
 /run/printProgress 10
+#
+
 #
 /gun/particle monopole
 /gun/energy 100 GeV

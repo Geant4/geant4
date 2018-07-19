@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109867 2018-05-09 12:23:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,10 +15,52 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14-10-16 G.Folger
-- remove direct use of theParticleIterator, use GetParticleTableIterator().
-  fix required by clang39 on Linux and MAC
+09-05-18 B.Morgan (testem1-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
 
+06-04-18 mma (testem1-V10-04-01)
+- testem1.cc : set visualisation only in interactive mode
+
+11-03-18 mma (testem1-V10-04-00)
+- testem1.cc : remove G4UI_USE and G4VIS_USE
+
+19-04-17 mma  (testem1-V10-03-00)
+- BeginOfRunAction() : remove SetRandomNumberStore(true)
+
+14-10-16 G.Folger (testem1-V10-02-08)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+21-09-16 V.Ivant  (testem1-V10-02-07)
+- PhysicsList - enabling of CSDA range computation is moved to
+    UI command in macro file TestEm1.in
+- DetectorConstruction - do not re-initialise geometry when 
+    change box size
+
+26-07-16 mma  (testem1-V10-02-06)
+- PrimaryGeneratorMessenger : coding conventions
+
+04-07-16 I. Hrivnacova  (testem1-V10-02-05)
+- Fixes for Doxygen documentation
+
+13-06-16 mma  (testem1-V10-02-04)
+- add decayinfly.mac
+- adapt vis.mac (colors)
+
+12-04-16 mma  (testem1-V10-02-03)
+- PhysicsList: use G4EmParameters
+- remove geant3 subdirectory
+
+06-02-16 mma (testem1-V10-02-02)
+- update radioactive.mac
+
+27-01-16 mma (testem1-V10-02-01)
+- PhysicsList::AddRadioactiveDecay() :
+      G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
+
+10-12-15 V.Ivanchenko (testem1-V10-02-00)
 01-12-15 V.Ivanchenko (testem1-V10-01-04)
 - H.Burkhardt fixed plotHisto.C macro to allow to work both 
   with root5 and 6

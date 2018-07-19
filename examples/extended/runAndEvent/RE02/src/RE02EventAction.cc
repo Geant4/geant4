@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE02EventAction class
 //
 //
-// $Id: RE02EventAction.cc 68026 2013-03-13 13:45:22Z gcosmo $
+// $Id: RE02EventAction.cc 108892 2018-03-15 07:06:47Z gcosmo $
 //
  
 #include "RE02EventAction.hh"
@@ -57,7 +57,10 @@ void RE02EventAction::EndOfEventAction(const G4Event* evt)
   
   // periodic printing
   //
-  if (event_id < 100 || event_id%100 == 0) {
+  if (event_id < 10 ||
+      (event_id < 1000 && event_id%100 == 0) ||
+      (event_id < 10000 && event_id%1000 == 0) ||
+      (event_id < 100000 && event_id%10000 == 0)) {
     G4cout << ">>> Event " << evt->GetEventID() << G4endl;
 #ifdef print_stored_trajectories
     // get number of stored trajectories

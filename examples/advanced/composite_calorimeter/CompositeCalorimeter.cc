@@ -29,10 +29,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "CCalDetectorConstruction.hh"
-#include "CCalEndOfEventAction.hh"
-#include "CCalRunAction.hh"
+#include "CCalActionInitializer.hh"
+#include "CCalAnalysis.hh"
 
-#include "CCalPrimaryGeneratorAction.hh"
 #include "G4PhysListFactory.hh"
 
 #include "G4RunManager.hh"
@@ -60,29 +59,7 @@ int main(int argc,char** argv) {
   G4PhysListFactory factory;
   runManager->SetUserInitialization(factory.ReferencePhysList());
 
-  ////////////////////////////
-  //  User action classes.  //
-  //  --------------------  //
-  ////////////////////////////
-
-  //////////////////////////////////
-  // PRIMARY PARTICLEs GENERATION //
-  //////////////////////////////////
-
-  CCalPrimaryGeneratorAction* primaryGenerator = new CCalPrimaryGeneratorAction;
-  runManager->SetUserAction(primaryGenerator);
-  
-  /////////
-  // RUN //
-  /////////
-
-  runManager->SetUserAction(new CCalRunAction);
-  
-  ///////////
-  // EVENT //
-  ///////////
-
-  runManager->SetUserAction(new CCalEndOfEventAction(primaryGenerator));
+  runManager->SetUserInitialization(new CCalActionInitializer());
   
   G4UImanager * UImanager = G4UImanager::GetUIpointer();
   UImanager->ApplyCommand("/CCal/generator/verbose 2");
@@ -133,11 +110,18 @@ int main(int argc,char** argv) {
 
   }
 
-delete runManager;
-
+  //Close-out analysis:
+  // Save histograms
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->Write();
+  man->CloseFile();
+  // Complete clean-up
+  delete G4AnalysisManager::Instance();
+  delete runManager;
+  
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-
+  
   return 0;
 }

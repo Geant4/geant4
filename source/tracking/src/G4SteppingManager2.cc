@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc 73605 2013-09-02 09:34:55Z gcosmo $
+// $Id: G4SteppingManager2.cc 109172 2018-04-03 06:49:31Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -369,8 +369,24 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 	 // it invokes a rest process at the beginning of the tracking
 	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
-           if(!pm && tempSecondaryTrack->GetDefinition()->IsGeneralIon())
-           { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
+           if(!pm)
+           {
+             G4ExceptionDescription ED;
+             ED << "A track without proper process manager is pushed into the track stack.\n"
+                << " Particle name : " << tempSecondaryTrack->GetDefinition()->GetParticleName() << " -- ";
+             if(tempSecondaryTrack->GetParentID()<0)
+             { ED << "created by a primary particle generator."; }
+             else
+             {
+               const G4VProcess* vp = tempSecondaryTrack->GetCreatorProcess();
+               if(vp)
+               { ED << "created by " << vp->GetProcessName() << "."; }
+               else
+               { ED << "creaded by unknown process."; }
+             }
+             G4Exception("G4SteppingManager::InvokeAtRestDoItProcs()","Tracking10051",
+                 FatalException,ED);
+           }
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
@@ -404,7 +420,7 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 // If the current Step is defined by a 'ExclusivelyForced' 
 // PostStepDoIt, then don't invoke any AlongStepDoIt
    if(fStepStatus == fExclusivelyForcedProc){
-     return;               // Take note 'return' at here !!!
+     return;               // Take note 'return' is here !!!
    }
 
 // Invoke the all active continuous processes
@@ -445,8 +461,24 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 	 // it invokes a rest process at the beginning of the tracking
 	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
-           if(!pm && tempSecondaryTrack->GetDefinition()->IsGeneralIon())
-           { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
+           if(!pm)
+           {
+             G4ExceptionDescription ED;
+             ED << "A track without proper process manager is pushed into the track stack.\n"
+                << " Particle name : " << tempSecondaryTrack->GetDefinition()->GetParticleName() << " -- ";
+             if(tempSecondaryTrack->GetParentID()<0)
+             { ED << "created by a primary particle generator."; }
+             else
+             {
+               const G4VProcess* vp = tempSecondaryTrack->GetCreatorProcess();
+               if(vp)
+               { ED << "created by " << vp->GetProcessName() << "."; }
+               else
+               { ED << "creaded by unknown process."; }
+             }
+             G4Exception("G4SteppingManager::InvokeAlongStepDoItProcs()","Tracking10051",
+                 FatalException,ED);
+           }
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
@@ -563,8 +595,24 @@ void G4SteppingManager::InvokePSDIP(size_t np)
             // it invokes a rest process at the beginning of the tracking
 	    if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	      G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
-              if(!pm && tempSecondaryTrack->GetDefinition()->IsGeneralIon())
-              { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
+              if(!pm)
+              {
+                G4ExceptionDescription ED;
+                ED << "A track without proper process manager is pushed into the track stack.\n"
+                   << " Particle name : " << tempSecondaryTrack->GetDefinition()->GetParticleName() << " -- ";
+                if(tempSecondaryTrack->GetParentID()<0)
+                { ED << "created by a primary particle generator."; }
+                else
+                {
+                  const G4VProcess* vp = tempSecondaryTrack->GetCreatorProcess();
+                  if(vp)
+                  { ED << "created by " << vp->GetProcessName() << "."; }
+                  else
+                  { ED << "creaded by unknown process."; }
+                }
+                G4Exception("G4SteppingManager::InvokePSDIP()","Tracking10053",
+                    FatalException,ED);
+              }
 	      if (pm->GetAtRestProcessVector()->entries()>0){
 		tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 		fSecondary->push_back( tempSecondaryTrack );

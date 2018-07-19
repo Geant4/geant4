@@ -24,22 +24,22 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
-// Pekka Kaitaniemi, HIP (translation)
-// Christelle Schmidt, IPNL (fission code)
-// Davide Mancusi, CEA (contact person INCL/ABLA)
+// Jose Luis Rodriguez, GSI (translation from ABLA07 and contact person)
+// Pekka Kaitaniemi, HIP (initial translation of ablav3p)
+// Aleksandra Kelic, GSI (ABLA07 code)
+// Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
+
 #define ABLAXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
-
 #include <time.h>
 #include <cmath>
 
 #include "G4Abla.hh"
 #include "G4AblaDataFile.hh"
 #include "G4AblaRandom.hh"
-#include "G4AblaFission.hh"
 
 #ifdef ABLAXX_IN_GEANT4_MODE
 G4Abla::G4Abla(G4Volant *aVolant, G4VarNtp *aVarntp)
@@ -57,17 +57,16 @@ G4Abla::G4Abla(G4INCL::Config *config, G4Volant *aVolant, G4VarNtp *aVarntp)
   varntp = aVarntp; // Output data structure
   varntp->ntrack = 0;
  
-  // ABLA fission
-  fissionModel = new G4AblaFission();
-  if(verboseLevel > 0) {
-    fissionModel->about();
-  }
   verboseLevel = 0;
+  gammaemission= 0;// 0 presaddle, 1 postsaddle
+  T_freeze_out = 0.;
+
   pace = new G4Pace();
   ald = new G4Ald();
   eenuc = new G4Eenuc();
   ec2sub = new G4Ec2sub();
   ecld = new G4Ecld();
+  masses = new G4Mexp();
   fb = new G4Fb();
   fiss = new G4Fiss();
   opt = new G4Opt();
@@ -76,17 +75,16 @@ G4Abla::G4Abla(G4INCL::Config *config, G4Volant *aVolant, G4VarNtp *aVarntp)
 void G4Abla::setVerboseLevel(G4int level)
 {
   verboseLevel = level;
-  fissionModel->setVerboseLevel(verboseLevel);
 }
 
 G4Abla::~G4Abla()
 {
-  delete fissionModel;
   delete pace;
   delete ald;
   delete eenuc;
   delete ec2sub;
   delete ecld;
+  delete masses;
   delete fb;
   delete fiss;
   delete opt;
@@ -94,588 +92,1914 @@ G4Abla::~G4Abla()
 
 // Main interface to the evaporation
 
-// Possible problem with generic Geant4 interface: ABLA evaporation
-// needs angular momentum information (calculated by INCL) to
-// work. Maybe there is a way to obtain this information from
-// G4Fragment?
-
-void G4Abla::breakItUp(G4int nucleusA, G4int nucleusZ, G4double nucleusMass, G4double excitationEnergy,
-		       G4double angularMomentum, G4double recoilEnergy, G4double momX, G4double momY, G4double momZ,
-		       G4int eventnumber)
+void G4Abla::DeexcitationAblaxx(G4int nucleusA, G4int nucleusZ, G4double excitationEnergy, G4double angularMomentum, G4double momX, G4double momY, G4double momZ, G4int eventnumber)
 {
-  const G4double uma = 931.4942;
-  const G4double melec = 0.511;
-  const G4double fmp = 938.27231;
-  const G4double fmn = 939.56563;
 
-  G4double alrem = 0.0, berem = 0.0, garem = 0.0;
-  G4double R[4][4]; // Rotation matrix
-  G4double csdir1[4];
-  G4double csdir2[4];
-  G4double csrem[4];
-  G4double pfis_rem[4];
-  G4double pf1_rem[4];
-  for(G4int init_i = 0; init_i < 4; init_i++) {
-    csdir1[init_i] = 0.0;
-    csdir2[init_i] = 0.0;
-    csrem[init_i] = 0.0;
-    pfis_rem[init_i] = 0.0;
-    pf1_rem[init_i] = 0.0;
-    for(G4int init_j = 0; init_j < 4; init_j++) {
-      R[init_i][init_j] = 0.0;
-    }
-  }
+  const G4double amu = 931.4940; //  MeV/C^2
+  const G4double C = 29.9792458; // cm/ns
 
-  G4double plab1 = 0.0, gam1 = 0.0, eta1 = 0.0;
-  G4double plab2 = 0.0, gam2 = 0.0, eta2 = 0.0;
+  SetParametersG4(nucleusZ, nucleusA);
 
-  G4double sitet = 0.0;
-  G4double stet1 = 0.0;
-  G4double stet2 = 0.0;
-  
-  G4int nbpevap = 0;
-  G4int mempaw = 0, memiv = 0;
+  mult10:
+  G4int IS = 0;
 
-  G4double e_evapo = 0.0;
-  G4double el = 0.0;
-  G4double fmcv = 0.0;
-
-  G4double aff1 = 0.0;
-  G4double zff1 = 0.0;
-  G4double eff1 = 0.0;
-  G4double aff2 = 0.0;
-  G4double zff2 = 0.0;
-  G4double eff2 = 0.0;
-
-  G4double v1 = 0.0, v2 = 0.0;
-
-  G4double t2 = 0.0;
-  G4double ctet1 = 0.0;
-  G4double ctet2 = 0.0;
-  G4double phi1 = 0.0;
-  G4double phi2 = 0.0;
-  G4double p2 = 0.0;
-  G4double epf2_out = 0.0 ;
-  G4int lma_pf1 = 0, lmi_pf1 = 0;
-  G4int lma_pf2 = 0, lmi_pf2 = 0;
-  G4int nopart = 0;
-
-  G4double cst = 0.0, sst = 0.0, csf = 0.0, ssf = 0.0;
-  
-  G4double zf = 0.0, af = 0.0, mtota = 0.0, pleva = 0.0, pxeva = 0.0, pyeva = 0.0;
-  G4int ff = 0;
+  G4double aff = 0.0;
+  G4double zff = 0.0;
+  G4int ZFP1 = 0, AFP1 = 0, AFPIMF = 0, ZFPIMF = 0, ZFP2 = 0, AFP2 = 0;
+  G4double vx_eva = 0.0, vy_eva = 0.0, vz_eva = 0.0;  
+  G4double VX_PREF=0.,VY_PREF=0.,VZ_PREF=00,VP1X,VP1Y,VP1Z,VXOUT,VYOUT,VZOUT,V_CM[3],VFP1_CM[3],VFP2_CM[3],VIMF_CM[3],VX2OUT,VY2OUT,VZ2OUT;
+  G4double zf = 0.0, af = 0.0, mtota = 0.0, tkeimf = 0.0, jprf0=0.;
+  G4int ff = 0,afpnew=0,zfpnew=0,aprfp=0,zprfp=0,IOUNSTABLE=0,ILOOP=0,IEV_TAB=0,IEV_TAB_TEMP=0;
+  G4int fimf = 0,INMIN=0,INMAX=0;
+  G4int ftype=0;//,ftype1=0;
   G4int inum = eventnumber;
   G4int inttype = 0;
-  G4double esrem = excitationEnergy;
+  opt->optimfallowed=1;
+  if(fiss->zt>56){
+  fiss->ifis = 1;
+  }else {
+  fiss->ifis = 0;
+  }
   
-  G4double aprf = (double) nucleusA;
-  G4double zprf = (double) nucleusZ;
-  G4double mcorem = nucleusMass;
+  G4double aprf = (G4double) nucleusA;
+  G4double zprf = (G4double) nucleusZ;
   G4double ee = excitationEnergy;
   G4double jprf = angularMomentum; // actually root-mean-squared
 
-  G4double erecrem = recoilEnergy;
-  G4double trem = 0.0;
   G4double pxrem = momX;
   G4double pyrem = momY;
   G4double pzrem = momZ;
+  G4double zimf,aimf;
 
-  G4double remmass = 0.0;
-  
   volant->clear(); // Clean up an initialize ABLA output.
   varntp->clear(); // Clean up an initialize ABLA output.
   varntp->ntrack = 0;
+  varntp->kfis = 0;
   volant->iv = 0;
-  //volant->iv = 1;
-  
-  G4double pcorem = std::sqrt(std::pow(momX,2) + std::pow(momY,2) + std::pow(momZ,2));
-  if(pcorem != 0) { // Guard against division by zero.
-    alrem = pxrem/pcorem;
-    berem = pyrem/pcorem;
-    garem = pzrem/pcorem;
-  } else {
-    alrem = 0.0;
-    berem = 0.0;
-    garem = 0.0;
+  gammaemission=0;
+  G4double T_init=0.,T_diff=0.,a_tilda=0.,a_tilda_BU=0., EE_diff=0., EINCL=0., A_FINAL=0., Z_FINAL=0., E_FINAL=0.;
+
+  G4double A_diff=0.,ASLOPE1,ASLOPE2,A_ACC,ABU_SLOPE, ABU_SUM=0., AMEM=0., ZMEM=0., EMEM=0., JMEM=0., PX_BU_SUM = 0.0, PY_BU_SUM = 0.0, PZ_BU_SUM = 0.0, ETOT_SUM=0., P_BU_SUM=0., ZBU_SUM=0.,Z_Breakup_sum=0.,A_Breakup,Z_Breakup,N_Breakup,G_SYMM,CZ,Sigma_Z,Z_Breakup_Mean,ZTEMP=0.,ATEMP=0.;
+
+  G4double ETOT_PRF=0.0,PXPRFP=0.,PYPRFP=0.,PZPRFP=0.,PPRFP=0., VX1_BU=0., VY1_BU=0., VZ1_BU=0., VBU2=0., GAMMA_REL=1.0, Eexc_BU_SUM=0., VX_BU_SUM = 0., VY_BU_SUM =0.,VZ_BU_SUM =0., E_tot_BU=0.,EKIN_BU=0.,ZIMFBU=0., AIMFBU=0., ZFFBU=0., AFFBU=0., AFBU=0., ZFBU=0., EEBU=0.,TKEIMFBU=0.,vx_evabu=0.,vy_evabu=0.,vz_evabu=0., Bvalue_BU=0.,P_BU=0.,ETOT_BU=1.,PX_BU=0.,PY_BU=0.,PZ_BU=0.,VX2_BU=0.,VY2_BU=0.,VZ2_BU=0.;
+
+  G4int ABU_DIFF,ZBU_DIFF,NBU_DIFF;
+  G4int INEWLOOP = 0, ILOOPBU=0;
+
+  G4double BU_TAB_TEMP[200][5], BU_TAB_TEMP1[200][5]; 
+  G4double EV_TAB_TEMP[200][5],EV_TEMP[200][5];
+  G4int IMEM_BU[201], IMEM=0;
+
+  for(G4int j=0;j<3;j++){
+   V_CM[j]=0.;
+   VFP1_CM[j]=0.;
+   VFP2_CM[j]=0.;
+   VIMF_CM[j]=0.;
   }
+
+   for(G4int I1=0;I1<200;I1++){
+       for(G4int I2 = 0;I2<11;I2++)
+        BU_TAB[I1][I2] = 0.0;
+       for(G4int I2 = 0;I2<5;I2++){
+        BU_TAB_TEMP[I1][I2] = 0.0;
+        BU_TAB_TEMP1[I1][I2] = 0.0;
+        EV_TAB_TEMP[I1][I2] = 0.0;
+        EV_TAB[I1][I2] = 0.0;
+        EV_TAB_SSC[I1][I2] = 0.0;
+        EV_TEMP[I1][I2] = 0.0;
+       }
+   }
 
   G4int idebug = 0;
   if(idebug == 1) {
     zprf =   81.;
     aprf =   201.;
-    //    ee =   86.5877686;
-    ee = 300.0;
-    jprf =   32.;
+//    ee =   86.5877686;
+    ee = 100.0;
+    jprf =   10.;
     zf =   0.;
     af =   0.;
     mtota =   0.;
-    pleva =   0.;
-    pxeva =   0.;
-    pyeva =   0.;
-    ff =  -1;
+    ff =  1;
     inttype =  0;
-    inum =  2;
+    //inum =  2;
   }
+//
+      G4double AAINCL = aprf;
+      G4double ZAINCL = zprf;
+      EINCL = ee;
+//
+// Velocity after the first stage of reaction (INCL)
+// For coupling with INCL, comment the lines below, and use output
+// of INCL as pxincl, pyincl,pzincl
+//
+      G4double pincl = std::sqrt(pxrem*pxrem + pyrem*pyrem + pzrem*pzrem);
+// PPRFP is in MeV/c
+      G4double ETOT_incl = std::sqrt(pincl*pincl + (AAINCL * amu)*(AAINCL * amu));
+      G4double VX_incl = C * pxrem / ETOT_incl;
+      G4double VY_incl = C * pyrem / ETOT_incl;
+      G4double VZ_incl = C * pzrem / ETOT_incl;
 
-  if(esrem >= 1.0e-3) {
-    evapora(zprf,aprf,&ee,jprf, &zf, &af, &mtota, &pleva, &pxeva, &pyeva, &ff, &inttype, &inum);
-  }
-  else {
-    ff = 0; 
-    zf = zprf;
-    af = aprf;
-    pxeva = 0.;
-    pyeva = 0.;
-    pleva = 0.;
-  }
+// Multiplicity in the break-up event
+      G4int  IMULTBU = 0;
+      G4int  IMULTIFR = 0;
+      G4int  I_Breakup=0;
+           IEV_TAB = 0;
+/*
+C     Set maximum temperature for sequential decay (evaporation)
+C     Remove additional energy by simultaneous break up
+C                          (vaporisation or multi-fragmentation)
 
-  if (ff == 1) {
-    // Fission:
-    // variable ee: Energy of fissioning nucleus above the fission barrier.          
-    // Calcul des impulsions des particules evaporees (avant fission) 
-    // dans le systeme labo.
+C     Idea: If the temperature of the projectile spectator exceeds
+c           the limiting temperature T_freeze_out, the additional
+C           energy which is present in the spectator is used for
+C           a stage of simultaneous break up. It is either the
+C           simultaneous emission of a gaseous phase or the simultaneous
+C           emission of several intermediate-mass fragments. Only one
+C           piece of the projectile spectator (assumed to be the largest
+C           one) is kept track.
 
-    trem = double(erecrem);
-    remmass = pace2(aprf,zprf) + aprf*uma - zprf*melec; // canonic
-//     remmass = mcorem  + double(esrem);			// ok
-//     remmass = mcorem;					//cugnon
-    varntp->kfis = 1;
-    G4double gamrem = (remmass + trem)/remmass;
-    G4double etrem = std::sqrt(trem*(trem + 2.0*remmass))/remmass;
+C        MVR, KHS, October 2001
+C        KHS, AK 2007 - Masses from the power low; slope parameter dependent on
+C                      energy  per nucleon; symmtery-energy coeff. dependent on
+C                      energy per nucleon.
 
-    //  This is not treated as accurately as for the non fission case for which
-    //  the remnant mass is computed to satisfy the energy conservation 
-    //  of evaporated particles. But it is not bad and more canonical!      
-    remmass = pace2(aprf,zprf) + aprf*uma - zprf*melec+double(esrem); // !canonic
-    //  Essais avec la masse de KHS (9/2002):
-    el = 0.0;
-    mglms(aprf,zprf,0,&el);
-    remmass = zprf*fmp + (aprf-zprf)*fmn + el + double(esrem);
-    gamrem = std::sqrt(std::pow(pcorem,2) + std::pow(remmass,2))/remmass;
-    etrem = pcorem/remmass;
-    
-    csrem[0] = 0.0; // Should not be used.
-    csrem[1] = alrem;
-    csrem[2] = berem;
-    csrem[3] = garem;
+c       Clear BU_TAB (array of multifragmentation products)
+*/
+        if(T_freeze_out_in >= 0.0){
+          T_freeze_out = T_freeze_out_in;
+        }else{
+         T_freeze_out = max(9.33*std::exp(-0.00282*AAINCL),5.5);
+//         ! See: J. Natowitz et al, PRC65 (2002) 034618
+//        T_freeze_out=DMAX1(9.0D0*DEXP(-0.001D0*AAABRA),
+//     &                     5.5D0)
+        }
 
-    // C Pour Verif Remnant = evapo(Pre fission) + Noyau_fissionant (systeme  Remnant)
-    G4double bil_e = 0.0;
-    G4double bil_px = 0.0;
-    G4double bil_py = 0.0;
-    G4double bil_pz = 0.0;
-    G4double masse = 0.0;
-    
-    for(G4int iloc = 1; iloc <= volant->iv; iloc++) { //DO iloc=1,iv
-      mglms(double(volant->acv[iloc]),double(volant->zpcv[iloc]),0,&el);
-      masse = volant->zpcv[iloc]*fmp + (volant->acv[iloc] - volant->zpcv[iloc])*fmn + el;
-      bil_e = bil_e + std::sqrt(std::pow(volant->pcv[iloc],2) + std::pow(masse,2));
-      bil_px = bil_px + volant->pcv[iloc]*(volant->xcv[iloc]);
-      bil_py = bil_py + volant->pcv[iloc]*(volant->ycv[iloc]);
-      bil_pz = bil_pz + volant->pcv[iloc]*(volant->zcv[iloc]);
-    } //  enddo
-    // C Ce bilan (impulsion nulle) est parfait. (Bil_Px=Bil_Px+PXEVA....)
+        a_tilda = ald->av*aprf + ald->as*std::pow(aprf,2.0/3.0) + ald->ak*std::pow(aprf,1.0/3.0);
 
-    G4int ndec = 1;
-    
-    if(volant->iv != 0) { //then
-      nopart = varntp->ntrack - 1;
-      translab(gamrem,etrem,csrem,nopart,ndec);
-    }
-    nbpevap = volant->iv;	// nombre de particules d'evaporation traitees
+        T_init = std::sqrt(EINCL/a_tilda);
 
-    // C                                                                       
-    // C Now calculation of the fission fragment distribution including                  
-    // C evaporation from the fragments.                                           
-    // C                                   
+        T_diff = T_init - T_freeze_out;
 
-    // C Distribution of the fission fragments:
-                                                                       
-    //   void fissionDistri(G4double a,G4double z,G4double e,
-    // 			   G4double &a1,G4double &z1,G4double &e1,G4double &v1,
-    // 			     G4double &a2,G4double &z2,G4double &e2,G4double &v2);
+        if(T_diff>0.1 && zprf>2.){
+        // T_Diff is set to be larger than 0.1 MeV in order to avoid strange cases for which
+        // T_Diff is of the order of 1.e-3 and less.
+        varntp->kfis = 10;
 
-    //fissionModel->fissionDistri(af,zf,ee,aff1,zff1,eff1,v1,aff2,zff2,eff2,v2);
-    fissionModel->doFission(af,zf,ee,aff1,zff1,eff1,v1,aff2,zff2,eff2,v2);
-    // C verif des A et Z decimaux:
-    G4int na_f = int(std::floor(af + 0.5));
-    G4int nz_f = int(std::floor(zf + 0.5));
-    varntp->izfis = nz_f;   // copie dans le ntuple
-    varntp->iafis = na_f;
+        for(G4int i=0;i<5;i++){
+            EE_diff = EINCL - a_tilda * T_freeze_out*T_freeze_out;
+//            Energy removed 10*5/T_init per nucleon removed in simultaneous breakup
+//            adjusted to frag. xsections 238U (1AGeV) + Pb data, KHS Dec. 2005
+// This should maybe be re-checked, in a meanwhile several things in break-up description
+// have changed (AK).
 
-    //  Calcul de l'impulsion des PF dans le syteme noyau de fission:
-    G4int kboud = idnint(zf);                                                  
-    G4int jboud = idnint(af-zf);                                             
-    //G4double ef = fb->efa[kboud][jboud]; // barriere de fission
-    G4double ef = fb->efa[jboud][kboud]; // barriere de fission
-    varntp->estfis = ee + ef;   	// copie dans le ntuple   
+            A_diff = dint(EE_diff / (8.0 * 5.0 / T_freeze_out));
+
+            if(A_diff>AAINCL) A_diff = AAINCL;
+
+            A_FINAL = AAINCL - A_diff;
+
+            a_tilda = ald->av*A_FINAL + ald->as*std::pow(A_FINAL,2.0/3.0) + ald->ak*std::pow(A_FINAL,1.0/3.0);
+            E_FINAL = a_tilda * T_freeze_out*T_freeze_out;
+
+            if(A_FINAL<4.0){  // To avoid numerical problems
+              EE_diff = EINCL - E_FINAL;
+              A_FINAL = 1.0;
+              Z_FINAL = 1.0;
+              E_FINAL = 0.0;
+              goto mul4325;
+            }
+        }
+        mul4325:
+// The idea is similar to Z determination of multifragment - Z of "heavy" partner is not
+// fixed by the A/Z of the prefragment, but randomly picked from Gaussian
+         // Z_FINAL_MEAN = dint(zprf * A_FINAL / (aprf));
+
+          Z_FINAL = dint(zprf * A_FINAL / (aprf));
+
+          if(E_FINAL<0.0) E_FINAL = 0.0;
+
+          aprf = A_FINAL;
+          zprf = Z_FINAL;
+          ee = E_FINAL;
+
+          A_diff = AAINCL - aprf;
+
+// Creation of multifragmentation products by breakup
+          if(A_diff<=1.0){
+           aprf = AAINCL;
+           zprf = ZAINCL;
+           ee = EINCL;
+           IMULTIFR = 0;
+           goto mult7777;
+          }else if(A_diff>1.0){
+
+          A_ACC = 0.0;
+// Energy-dependence of the slope parameter, acc. to A. Botvina, fits also to exp. data (see
+// e.g. Sfienti et al, NPA 2007)
+          ASLOPE1 = -2.400;  // e*/a=7   -2.4
+          ASLOPE2 = -1.200;  // e*/a=3   -1.2
+
+          a_tilda = ald->av*AAINCL + ald->as*std::pow(AAINCL,2.0/3.0) + ald->ak*std::pow(AAINCL,1.0/3.0);
+
+          E_FINAL = a_tilda * T_freeze_out*T_freeze_out;
+
+          ABU_SLOPE = (ASLOPE1-ASLOPE2)/4.0*(E_FINAL/AAINCL)+
+                     ASLOPE1-(ASLOPE1-ASLOPE2)*7.0/4.0;
+
+// Botvina et al, PRC 74 (2006) 044609, fig. 5 for B0=18 MeV
+//          ABU_SLOPE = 5.57489D0-2.08149D0*(E_FINAL/AAABRA)+
+//     &    0.3552D0*(E_FINAL/AAABRA)**2-0.024927D0*(E_FINAL/AAABRA)**3+
+//     &    7.268D-4*(E_FINAL/AAABRA)**4
+// They fit with A**(-tau) and here is done A**(tau)
+//          ABU_SLOPE = ABU_SLOPE*(-1.D0)
+
+//           ABU_SLOPE = -2.60D0
+//          print*,ABU_SLOPE,(E_FINAL/AAABRA)
+
+          if(ABU_SLOPE > -1.01) ABU_SLOPE = -1.01;
+
+          I_Breakup = 0;
+          Z_Breakup_sum = Z_FINAL;
+          ABU_SUM = 0.0;
+          ZBU_SUM = 0.0;
+
+          for(G4int i=0;i<100;i++){
+             IS = 0;
+             mult4326:
+             A_Breakup = dint(double(IPOWERLIMHAZ(ABU_SLOPE,1,idnint(A_diff))));
+                  // Power law with exponent ABU_SLOPE
+             IS = IS +1;
+             if(IS>100){
+             std::cout << "WARNING: IPOWERLIMHAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING A_BREAKUP IN Rn07.FOR. NEW EVENT WILL BE DICED: " << A_Breakup << std::endl;
+             goto mult10;
+             }
+
+             if(A_Breakup>AAINCL) goto mult4326;
+
+             if(A_Breakup<=0.0){
+              std::cout << "A_BREAKUP <= 0 " << std::endl;
+              goto mult10;
+             }
+
+            A_ACC = A_ACC + A_Breakup;
+
+            if(A_ACC<=A_diff){
+
+              Z_Breakup_Mean = dint(A_Breakup * ZAINCL / AAINCL);
+
+              Z_Breakup_sum = Z_Breakup_sum + Z_Breakup_Mean;
+//
+// See G.A. Souliotis et al, PRC 75 (2007) 011601R (Fig. 2)
+              G_SYMM = 34.2281 - 5.14037 * E_FINAL/AAINCL;
+              if(E_FINAL/AAINCL < 2.0) G_SYMM = 25.0;
+              if(E_FINAL/AAINCL > 4.0) G_SYMM = 15.0;
+
+//             G_SYMM = 23.6;
+
+              G_SYMM = 25.0;      //25
+              CZ = 2.0 * G_SYMM * 4.0 / A_Breakup;
+              // 2*CZ=d^2(Esym)/dZ^2, Esym=Gamma*(A-2Z)**2/A
+               // gamma = 23.6D0 is the symmetry-energy coefficient
+              G4int IIS = 0;
+              Sigma_Z = std::sqrt(T_freeze_out/CZ);
+
+              IS = 0;
+              mult4333:
+              Z_Breakup =  dint( G4double(gausshaz(1,Z_Breakup_Mean,Sigma_Z)));
+              IS = IS +1;
+//
+              if(IS>100){
+               std::cout << "WARNING: GAUSSHAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING Z_BREAKUP IN Rn07.FOR. NEW EVENT WILL BE DICED: " << A_Breakup << " " << Z_Breakup << std::endl;
+               goto mult10;
+              }
+
+             if(Z_Breakup<0.0 ) goto mult4333;
+             if((A_Breakup-Z_Breakup)<0.0) goto mult4333;
+             if((A_Breakup-Z_Breakup)==0.0 && Z_Breakup!=1.0) goto mult4333;
+
+             if(Z_Breakup>=ZAINCL){
+               IIS = IIS + 1;
+                 if(IIS > 10){
+                   std::cout << "Z_BREAKUP RESAMPLED MORE THAN 10 TIMES; EVENT WILL BE RESAMPLED AGAIN " << std::endl;
+                   goto mult10;
+                 }
+               goto mult4333;
+             }
+
+//     *** Find the limits that fragment is bound :
+        isostab_lim(idnint(Z_Breakup),&INMIN,&INMAX);
+//        INMIN = MAX(1,INMIN-2)
+        if(Z_Breakup > 2.0){
+          if(idnint(A_Breakup-Z_Breakup)<INMIN || idnint(A_Breakup-Z_Breakup)>(INMAX+5)){
+//             PRINT*,'N_Breakup >< NMAX',
+//     &      IDNINT(Z_Breakup),IDNINT(A_Breakup-Z_Breakup),INMIN,INMAX
+            goto mult4343;
+          }
+        }
+
+  mult4343:
+
+// We consider all products, also nucleons created in the break-up
+//               I_Breakup = I_Breakup + 1;// moved below
+
+               N_Breakup = A_Breakup - Z_Breakup;
+               BU_TAB[I_Breakup][0] = dint(Z_Breakup);    // Mass of break-up product
+               BU_TAB[I_Breakup][1] = dint(A_Breakup);    // Z of break-up product
+               ABU_SUM = ABU_SUM + BU_TAB[i][1];
+               ZBU_SUM = ZBU_SUM + BU_TAB[i][0];
+//
+// Break-up products are given zero angular momentum (simplification)
+               BU_TAB[I_Breakup][3] = 0.0;
+               I_Breakup = I_Breakup + 1;
+               IMULTBU = IMULTBU + 1;
+           }else{
+//     There are A_DIFF - A_ACC nucleons lost by breakup, but they do not end up in multifragmentation products.
+//     This is a deficiency of the Monte-Carlo method applied above to determine the sizes of the fragments
+//     according to the power law.
+//            print*,'Deficiency',IDNINT(A_DIFF-A_ACC)
+
+             goto mult4327;
+           }// if(A_ACC<=A_diff)
+          }//for
+          //mult4327:
+          //IMULTIFR = 1;
+          } //  if(A_diff>1.0)
+          mult4327:
+          IMULTIFR = 1;
+
+// "Missing" A and Z picked from the power law:
+        ABU_DIFF = idnint(ABU_SUM+aprf-AAINCL);
+        ZBU_DIFF = idnint(ZBU_SUM+zprf-ZAINCL);
+        NBU_DIFF = idnint((ABU_SUM-ZBU_SUM)+(aprf-zprf)-(AAINCL-ZAINCL));
+//
+        if(IMULTBU > 200)
+        std::cout << "WARNING - MORE THAN 200 BU " << IMULTBU  << std::endl;
+
+        if(IMULTBU < 1)
+        std::cout << "WARNING - LESS THAN 1 BU " << IMULTBU << std::endl; 
+         //,AABRA,ZABRA,IDNINT(APRF),IDNINT(ZPRF),ABU_DIFF,ZBU_DIFF
+
+        G4int IPROBA = 0;
+        for(G4int i=0;i<IMULTBU;i++)
+        IMEM_BU[i] = 0;
+
+        while(NBU_DIFF!=0 && ZBU_DIFF!=0){
+// (APRF,ZPRF) is also inlcuded in this game, as from time to time the program
+// is entering into endless loop, as it can not find proper nucleus for adapting A and Z.
+         IS = 0;
+         mult5555:    
+         G4double RHAZ = G4AblaRandom::flat()*double(IMULTBU);
+         IPROBA = IPROBA + 1;
+         IS = IS + 1;
+         if(IS>100){
+          std::cout << "WARNING: HAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING N_BREAKUP IN Rn07.FOR. NEW EVENT WILL BE DICED." << std::endl; 
+          goto mult10;
+         }
+          G4int IEL = G4int(RHAZ);
+          if(IMEM_BU[IEL]==1) goto mult5555;
+           if(IEL>200)std::cout << "5555:" << IEL << RHAZ << IMULTBU << std::endl; 
+           if(IEL<0)std::cout << "5555:"<< IEL << RHAZ << IMULTBU << std::endl; 
+           if(IEL<=IMULTBU){
+            N_Breakup = dint(BU_TAB[IEL][1]-BU_TAB[IEL][0] - DSIGN(1.0,double(NBU_DIFF)));
+            }else if(IEL>IMULTBU){
+            N_Breakup = dint(aprf - zprf - DSIGN(1.0,double(NBU_DIFF)));
+            }
+            if(N_Breakup<0.0){
+             IMEM_BU[IEL] = 1;
+             goto mult5555;
+            }
+             if(IEL<=IMULTBU){
+             ZTEMP = dint(BU_TAB[IEL][0] - DSIGN(1.0,double(ZBU_DIFF)));
+             }else if(IEL>IMULTBU){
+             ZTEMP = dint(zprf - DSIGN(1.0,double(ZBU_DIFF)));
+             }
+              if(ZTEMP<0.0){
+               IMEM_BU[IEL] = 1;
+               goto mult5555;
+              }
+              if(ZTEMP<1.0 && N_Breakup<1.0){
+               IMEM_BU[IEL] = 1;
+               goto mult5555;
+              }
+// Nuclei with A=Z and Z>1 are allowed in this stage, as otherwise,
+// for more central collisions there is not enough mass which can be
+// shufeled in order to conserve A and Z. These are mostly nuclei with
+// Z=2 and in less extent 3, 4 or 5.
+//             IF(ZTEMP.GT.1.D0 .AND. N_Breakup.EQ.0.D0) THEN
+//              GOTO 5555
+//             ENDIF
+            if(IEL<=IMULTBU){
+            BU_TAB[IEL][0] = dint(ZTEMP);
+            BU_TAB[IEL][1] = dint(ZTEMP + N_Breakup);
+            }else if(IEL>IMULTBU){
+            zprf = dint(ZTEMP);
+            aprf = dint(ZTEMP + N_Breakup);
+            }
+          NBU_DIFF = NBU_DIFF - ISIGN(1,NBU_DIFF);
+          ZBU_DIFF = ZBU_DIFF - ISIGN(1,ZBU_DIFF);
+        }// while
+
+        IPROBA = 0;
+        for(G4int i=0;i<IMULTBU;i++)
+        IMEM_BU[i] = 0;
+
+        if(NBU_DIFF != 0 && ZBU_DIFF == 0){
+         while(NBU_DIFF > 0 || NBU_DIFF < 0){
+         IS = 0;
+         mult5556:    
+         G4double RHAZ = G4AblaRandom::flat()*double(IMULTBU);
+         IS = IS + 1;
+         if(IS>100){
+          std::cout << "WARNING: HAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING N_BREAKUP IN Rn07.FOR. NEW EVENT WILL BE DICED." << std::endl; 
+          goto mult10;
+         }
+         G4int IEL = G4int(RHAZ);
+         if(IMEM_BU[IEL]==1) goto mult5556;
+//         IPROBA = IPROBA + 1;
+         if(IPROBA>IMULTBU+1 && NBU_DIFF>0){
+         std::cout << "###',IPROBA,IMULTBU,NBU_DIFF,ZBU_DIFF,T_freeze_out" << std::endl; 
+         IPROBA = IPROBA + 1;
+           if(IEL<=IMULTBU){
+            BU_TAB[IEL][1] = dint(BU_TAB[IEL][1]- G4double(NBU_DIFF));
+           }else{ if(IEL>IMULTBU)
+            aprf = dint(aprf - G4double(NBU_DIFF));
+           }
+         goto mult5432;
+         }
+           if(IEL>200)std::cout << "5556:" << IEL << RHAZ << IMULTBU << std::endl; 
+           if(IEL<0)std::cout << "5556:"<< IEL << RHAZ << IMULTBU << std::endl; 
+           if(IEL<=IMULTBU){
+            N_Breakup = dint(BU_TAB[IEL][1]-BU_TAB[IEL][0] - DSIGN(1.0, G4double(NBU_DIFF)));
+            }else if(IEL>IMULTBU){
+            N_Breakup = dint(aprf - zprf - DSIGN(1.0, G4double(NBU_DIFF)));
+            }
+            if(N_Breakup<0.0){
+             IMEM_BU[IEL] = 1;
+             goto mult5556;
+            }
+            if(IEL<=IMULTBU){
+             ATEMP = dint(BU_TAB[IEL][0] + N_Breakup);
+             }else if(IEL>IMULTBU){
+             ATEMP = dint(zprf + N_Breakup);
+             }
+             if((ATEMP - N_Breakup)<1.0 && N_Breakup<1.0){
+              IMEM_BU[IEL] = 1;
+              goto mult5556;
+             }
+//             IF((ATEMP - N_Breakup).GT.1.D0 .AND.
+//     &        N_Breakup.EQ.0.D0) THEN
+//              IMEM_BU(IEL) = 1
+//              GOTO 5556
+//             ENDIF
+             if(IEL<=IMULTBU)
+             BU_TAB[IEL][1] = dint(BU_TAB[IEL][0] + N_Breakup);
+             else if(IEL>IMULTBU)
+             aprf = dint(zprf + N_Breakup);
+//
+           NBU_DIFF = NBU_DIFF - ISIGN(1,NBU_DIFF);
+         }//while(NBU_DIFF > 0 || NBU_DIFF < 0)
+
+        IPROBA = 0;
+        for(G4int i=0;i<IMULTBU;i++)
+        IMEM_BU[i] = 0;
+
+        }else{// if(NBU_DIFF != 0 && ZBU_DIFF == 0)
+          if(ZBU_DIFF != 0 && NBU_DIFF == 0){
+            while(ZBU_DIFF > 0 || ZBU_DIFF < 0){
+             IS = 0;
+             mult5557:    
+             G4double RHAZ = G4AblaRandom::flat()* G4double(IMULTBU);
+             IS = IS + 1;
+             if(IS>100){
+              std::cout << "WARNING: HAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING N_BREAKUP IN Rn07.FOR. NEW EVENT WILL BE DICED." << std::endl; 
+              goto mult10;
+             }
+             G4int IEL = G4int(RHAZ);
+             if(IMEM_BU[IEL]==1) goto mult5557;
+             //IPROBA = IPROBA + 1;
+             if(IPROBA>IMULTBU+1 && ZBU_DIFF>0){
+             std::cout << "###',IPROBA,IMULTBU,NBU_DIFF,ZBU_DIFF,T_freeze_out" << std::endl; 
+             IPROBA = IPROBA + 1;
+             if(IEL<=IMULTBU){
+               N_Breakup = dint(BU_TAB[IEL][1]-BU_TAB[IEL][0]);
+               BU_TAB[IEL][0] = dint(BU_TAB[IEL][0] - G4double(ZBU_DIFF));
+               BU_TAB[IEL][1] = dint(BU_TAB[IEL][0] + N_Breakup);
+             }else{ 
+                 if(IEL>IMULTBU){
+                  N_Breakup = aprf - zprf;
+                  zprf = dint(zprf - G4double(ZBU_DIFF));
+                  aprf = dint(zprf + N_Breakup);
+                 }
+             }
+          goto mult5432;
+          }
+           if(IEL>200)std::cout << "5557:" << IEL << RHAZ << IMULTBU << std::endl; 
+           if(IEL<0)std::cout << "5557:"<< IEL << RHAZ << IMULTBU << std::endl; 
+           if(IEL<=IMULTBU){
+            N_Breakup = dint(BU_TAB[IEL][1]-BU_TAB[IEL][0]);
+            ZTEMP = dint(BU_TAB[IEL][0] - DSIGN(1.0, G4double(ZBU_DIFF)));
+           }else if(IEL>IMULTBU){
+            N_Breakup = dint(aprf - zprf);
+            ZTEMP = dint(zprf - DSIGN(1.0, G4double(ZBU_DIFF)));
+           }
+            ATEMP = dint(ZTEMP + N_Breakup);
+            if(ZTEMP<0.0){
+             IMEM_BU[IEL] = 1;
+             goto mult5557;
+            }
+            if((ATEMP-ZTEMP)<0.0){
+             IMEM_BU[IEL] = 1;
+             goto mult5557;
+            }
+            if((ATEMP-ZTEMP)<1.0 && ZTEMP<1.0){
+             IMEM_BU[IEL] = 1;
+             goto mult5557;
+            }
+             if(IEL<=IMULTBU){
+               BU_TAB[IEL][0] = dint(ZTEMP);
+               BU_TAB[IEL][1] = dint(ZTEMP + N_Breakup);
+             }else{ 
+                 if(IEL>IMULTBU){
+                  zprf = dint(ZTEMP);
+                  aprf = dint(ZTEMP + N_Breakup);
+                 }
+             } 
+            ZBU_DIFF = ZBU_DIFF - ISIGN(1,ZBU_DIFF);
+            }//while
+          }//if(ZBU_DIFF != 0 && NBU_DIFF == 0)
+        }// if(NBU_DIFF != 0 && ZBU_DIFF == 0)
+
+        mult5432:
+// Looking for the heaviest fragment among all multifragmentation events, and
+// "giving" excitation energy to fragments
+         ZMEM = 0.0;
+
+         for(G4int i =0;i<IMULTBU;i++){
+//For particles with Z>2 we calculate excitation energy from freeze-out temperature.
+// For particels with Z<3 we assume that they form a gas, and that temperature results
+// in kinetic energy (which is sampled from Maxwell distribution with T=Tfreeze-out)
+// and not excitation energy.
+           if(BU_TAB[i][0]>2.0){
+            a_tilda_BU = ald->av*BU_TAB[i][1] + ald->as*std::pow(BU_TAB[i][1],2.0/3.0) + ald->ak*std::pow(BU_TAB[i][1],1.0/3.0);
+            BU_TAB[i][2] = a_tilda_BU * T_freeze_out*T_freeze_out; // E* of break-up product
+           }else{
+            BU_TAB[i][2] = 0.0;
+           }
+//
+           if(BU_TAB[i][0] > ZMEM){
+            IMEM = i;
+            ZMEM = BU_TAB[i][0];
+            AMEM = BU_TAB[i][1];
+            EMEM = BU_TAB[i][2];
+            JMEM = BU_TAB[i][3];
+           }
+         }//for IMULTBU
+
+         if(zprf < ZMEM){
+          BU_TAB[IMEM][0] = zprf;
+          BU_TAB[IMEM][1] = aprf;
+          BU_TAB[IMEM][2] = ee;
+          BU_TAB[IMEM][3] = jprf;
+          zprf =  ZMEM;
+          aprf =  AMEM;
+          aprfp = idnint(aprf);
+          zprfp = idnint(zprf);
+          ee   =  EMEM;
+          jprf =  JMEM;
+         }
+
+//     Just for checking:
+        ABU_SUM = aprf;
+        ZBU_SUM = zprf;
+        for( G4int i = 0;i<IMULTBU;i++){
+         ABU_SUM = ABU_SUM + BU_TAB[i][1];
+         ZBU_SUM = ZBU_SUM + BU_TAB[i][0];
+        }
+        ABU_DIFF = idnint(ABU_SUM-AAINCL);
+        ZBU_DIFF = idnint(ZBU_SUM-ZAINCL);
+//
+        if(ABU_DIFF!=0 || ZBU_DIFF!=0)
+         std::cout << "Problem of mass in BU " << ABU_DIFF << " " << ZBU_DIFF << std::endl;
+        PX_BU_SUM = 0.0;
+        PY_BU_SUM = 0.0;
+        PZ_BU_SUM = 0.0;
+// Momenta of break-up products are calculated. They are all given in the rest frame
+// of the primary prefragment (i.e. after incl):
+// Goldhaber model ****************************************
+// "Heavy" residue
+        AMOMENT(AAINCL,aprf,1,&PXPRFP,&PYPRFP,&PZPRFP);
+        PPRFP = std::sqrt(PXPRFP*PXPRFP + PYPRFP*PYPRFP + PZPRFP*PZPRFP);
+// ********************************************************
+// PPRFP is in MeV/c
+        ETOT_PRF = std::sqrt(PPRFP*PPRFP + (aprf * amu)*(aprf * amu));
+        VX_PREF = C * PXPRFP / ETOT_PRF;
+        VY_PREF = C * PYPRFP / ETOT_PRF;
+        VZ_PREF = C * PZPRFP / ETOT_PRF;
+
+// Contribution from Coulomb repulsion ********************
+        tke_bu(zprf,aprf,ZAINCL,AAINCL,&VX1_BU,&VY1_BU,&VZ1_BU);
+
+// Lorentz kinematics
+//        VX_PREF = VX_PREF + VX1_BU
+//        VY_PREF = VY_PREF + VY1_BU
+//        VZ_PREF = VZ_PREF + VZ1_BU
+// Lorentz transformation
+        lorentz_boost(VX1_BU,VY1_BU,VZ1_BU,
+                VX_PREF,VY_PREF,VZ_PREF,
+                &VXOUT,&VYOUT,&VZOUT);
+
+        VX_PREF = VXOUT;
+        VY_PREF = VYOUT;
+        VZ_PREF = VZOUT;
+
+// Total momentum: Goldhaber + Coulomb
+        VBU2 = VX_PREF*VX_PREF + VY_PREF*VY_PREF + VZ_PREF*VZ_PREF;
+        GAMMA_REL = std::sqrt(1.0 - VBU2 / (C*C));
+        ETOT_PRF = aprf * amu / GAMMA_REL;
+        PXPRFP = ETOT_PRF * VX_PREF / C;
+        PYPRFP = ETOT_PRF * VY_PREF / C;
+        PZPRFP = ETOT_PRF * VZ_PREF / C;
+
+// ********************************************************
+//  Momentum: Total width of abrasion and breakup assumed to be given 
+//  by Fermi momenta of nucleons
+// *****************************************
+
+        PX_BU_SUM = PXPRFP;
+        PY_BU_SUM = PYPRFP;
+        PZ_BU_SUM = PZPRFP;
+
+        Eexc_BU_SUM = ee;
+        Bvalue_BU = eflmac(idnint(aprf),idnint(zprf),1,0);
+
+        for(I_Breakup=0;I_Breakup<IMULTBU;I_Breakup++){
+//       For bu products:
+          Bvalue_BU = Bvalue_BU + eflmac(idnint(BU_TAB[I_Breakup][1]), idnint(BU_TAB[I_Breakup][0]),1,0);
+          Eexc_BU_SUM = Eexc_BU_SUM + BU_TAB[I_Breakup][2];
+
+          AMOMENT(AAINCL,BU_TAB[I_Breakup][1],1,&PX_BU,&PY_BU,&PZ_BU);
+          P_BU = std::sqrt(PX_BU*PX_BU + PY_BU*PY_BU + PZ_BU*PZ_BU);
+// *******************************************************
+//        PPRFP is in MeV/c
+          ETOT_BU = std::sqrt(P_BU*P_BU + (BU_TAB[I_Breakup][1]*amu)*(BU_TAB[I_Breakup][1]*amu));
+          BU_TAB[I_Breakup][4] = C * PX_BU / ETOT_BU;    // Velocity in x
+          BU_TAB[I_Breakup][5] = C * PY_BU / ETOT_BU;    // Velocity in y
+          BU_TAB[I_Breakup][6] = C * PZ_BU / ETOT_BU;    // Velocity in z
+//        Contribution from Coulomb repulsion:
+          tke_bu(BU_TAB[I_Breakup][0],BU_TAB[I_Breakup][1],ZAINCL,AAINCL,&VX2_BU,&VY2_BU,&VZ2_BU);
+// Lorentz kinematics
+//          BU_TAB(I_Breakup,5) = BU_TAB(I_Breakup,5) + VX2_BU ! velocity change by Coulomb repulsion
+//          BU_TAB(I_Breakup,6) = BU_TAB(I_Breakup,6) + VY2_BU
+//          BU_TAB(I_Breakup,7) = BU_TAB(I_Breakup,7) + VZ2_BU
+// Lorentz transformation
+          lorentz_boost(VX2_BU,VY2_BU,VZ2_BU,
+                BU_TAB[I_Breakup][4],BU_TAB[I_Breakup][5],BU_TAB[I_Breakup][6],
+                &VXOUT,&VYOUT,&VZOUT);
+
+          BU_TAB[I_Breakup][4] = VXOUT;
+          BU_TAB[I_Breakup][5] = VYOUT;
+          BU_TAB[I_Breakup][6] = VZOUT;
+
+// Total momentum: Goldhaber + Coulomb
+          VBU2 = BU_TAB[I_Breakup][4]*BU_TAB[I_Breakup][4] +
+                 BU_TAB[I_Breakup][5]*BU_TAB[I_Breakup][5] +
+                 BU_TAB[I_Breakup][6]*BU_TAB[I_Breakup][6];
+          GAMMA_REL = std::sqrt(1.0 - VBU2 / (C*C));
+          ETOT_BU = BU_TAB[I_Breakup][1]*amu/GAMMA_REL;
+          PX_BU = ETOT_BU * BU_TAB[I_Breakup][4] / C;
+          PY_BU = ETOT_BU * BU_TAB[I_Breakup][5] / C;
+          PZ_BU = ETOT_BU * BU_TAB[I_Breakup][6] / C;
+
+          PX_BU_SUM = PX_BU_SUM + PX_BU;
+          PY_BU_SUM = PY_BU_SUM + PY_BU;
+          PZ_BU_SUM = PZ_BU_SUM + PZ_BU;
+
+         }//for I_Breakup
+
+//   In the frame of source (i.e. prefragment after abrasion or INCL)
+        P_BU_SUM = std::sqrt(PX_BU_SUM*PX_BU_SUM + PY_BU_SUM*PY_BU_SUM +
+                   PZ_BU_SUM*PZ_BU_SUM);
+// ********************************************************
+// PPRFP is in MeV/c
+        ETOT_SUM = std::sqrt(P_BU_SUM*P_BU_SUM +
+                   (AAINCL * amu)*(AAINCL * amu));
+
+        VX_BU_SUM = C * PX_BU_SUM / ETOT_SUM;
+        VY_BU_SUM = C * PY_BU_SUM / ETOT_SUM;
+        VZ_BU_SUM = C * PZ_BU_SUM / ETOT_SUM;
+
+// Lorentz kinematics - DM 17/5/2010
+//        VX_PREF = VX_PREF - VX_BU_SUM
+//        VY_PREF = VY_PREF - VY_BU_SUM
+//        VZ_PREF = VZ_PREF - VZ_BU_SUM
+// Lorentz transformation
+        lorentz_boost(-VX_BU_SUM,-VY_BU_SUM,-VZ_BU_SUM,
+                VX_PREF,VY_PREF,VZ_PREF,
+                &VXOUT,&VYOUT,&VZOUT);
+
+        VX_PREF = VXOUT;
+        VY_PREF = VYOUT;
+        VZ_PREF = VZOUT;
+
+        VBU2 = VX_PREF*VX_PREF + VY_PREF*VY_PREF + VZ_PREF*VZ_PREF;
+        GAMMA_REL = std::sqrt(1.0 - VBU2 / (C*C));
+        ETOT_PRF = aprf * amu / GAMMA_REL;
+        PXPRFP = ETOT_PRF * VX_PREF / C;
+        PYPRFP = ETOT_PRF * VY_PREF / C;
+        PZPRFP = ETOT_PRF * VZ_PREF / C;
+
+        PX_BU_SUM = 0.0;
+        PY_BU_SUM = 0.0;
+        PZ_BU_SUM = 0.0;
+
+        PX_BU_SUM = PXPRFP;
+        PY_BU_SUM = PYPRFP;
+        PZ_BU_SUM = PZPRFP;
+        E_tot_BU = ETOT_PRF;
+
+        EKIN_BU = aprf * amu / GAMMA_REL - aprf * amu;
+
+        for(I_Breakup=0;I_Breakup<IMULTBU;I_Breakup++){
+// Lorentz kinematics - DM 17/5/2010
+//         BU_TAB(I_Breakup,5) = BU_TAB(I_Breakup,5) - VX_BU_SUM
+//         BU_TAB(I_Breakup,6) = BU_TAB(I_Breakup,6) - VY_BU_SUM
+//         BU_TAB(I_Breakup,7) = BU_TAB(I_Breakup,7) - VZ_BU_SUM
+// Lorentz transformation
+          lorentz_boost(-VX_BU_SUM,-VY_BU_SUM,-VZ_BU_SUM,
+                BU_TAB[I_Breakup][4],BU_TAB[I_Breakup][5],BU_TAB[I_Breakup][6],
+                &VXOUT,&VYOUT,&VZOUT);
+
+          BU_TAB[I_Breakup][4] = VXOUT;
+          BU_TAB[I_Breakup][5] = VYOUT;
+          BU_TAB[I_Breakup][6] = VZOUT;
+
+          VBU2 = BU_TAB[I_Breakup][4]*BU_TAB[I_Breakup][4] +
+                 BU_TAB[I_Breakup][5]*BU_TAB[I_Breakup][5] +
+                 BU_TAB[I_Breakup][6]*BU_TAB[I_Breakup][6];
+          GAMMA_REL = std::sqrt(1.0 - VBU2 / (C*C));
+
+          ETOT_BU = BU_TAB[I_Breakup][1]*amu/GAMMA_REL;
+
+          EKIN_BU = EKIN_BU + BU_TAB[I_Breakup][1] * amu /
+                    GAMMA_REL - BU_TAB[I_Breakup][1] * amu;
+
+          PX_BU = ETOT_BU * BU_TAB[I_Breakup][4] / C;
+          PY_BU = ETOT_BU * BU_TAB[I_Breakup][5] / C;
+          PZ_BU = ETOT_BU * BU_TAB[I_Breakup][6] / C;
+          E_tot_BU = E_tot_BU + ETOT_BU;
+
+          PX_BU_SUM = PX_BU_SUM + PX_BU;
+          PY_BU_SUM = PY_BU_SUM + PY_BU;
+          PZ_BU_SUM = PZ_BU_SUM + PZ_BU;
+        }// for I_Breakup
+
+        if(std::abs(PX_BU_SUM)>10. || std::abs(PY_BU_SUM)>10. ||
+         std::abs(PZ_BU_SUM)>10.){
+
+//   In the frame of source (i.e. prefragment after INCL)
+        P_BU_SUM = std::sqrt(PX_BU_SUM*PX_BU_SUM + PY_BU_SUM*PY_BU_SUM +
+                  PZ_BU_SUM*PZ_BU_SUM);
+// ********************************************************
+// PPRFP is in MeV/c
+        ETOT_SUM = std::sqrt(P_BU_SUM*P_BU_SUM +
+                  (AAINCL * amu)*(AAINCL * amu));
+
+        VX_BU_SUM = C * PX_BU_SUM / ETOT_SUM;
+        VY_BU_SUM = C * PY_BU_SUM / ETOT_SUM;
+        VZ_BU_SUM = C * PZ_BU_SUM / ETOT_SUM;
+
+// Lorentz kinematics
+//        VX_PREF = VX_PREF - VX_BU_SUM
+//        VY_PREF = VY_PREF - VY_BU_SUM
+//        VZ_PREF = VZ_PREF - VZ_BU_SUM
+// Lorentz transformation
+        lorentz_boost(-VX_BU_SUM,-VY_BU_SUM,-VZ_BU_SUM,
+                VX_PREF,VY_PREF,VZ_PREF,
+                &VXOUT,&VYOUT,&VZOUT);
+
+        VX_PREF = VXOUT;
+        VY_PREF = VYOUT;
+        VZ_PREF = VZOUT;
+
+        VBU2 = VX_PREF*VX_PREF + VY_PREF*VY_PREF + VZ_PREF*VZ_PREF;
+        GAMMA_REL = std::sqrt(1.0 - VBU2 / (C*C));
+        ETOT_PRF = aprf * amu / GAMMA_REL;
+        PXPRFP = ETOT_PRF * VX_PREF / C;
+        PYPRFP = ETOT_PRF * VY_PREF / C;
+        PZPRFP = ETOT_PRF * VZ_PREF / C;
+
+        PX_BU_SUM = 0.0;
+        PY_BU_SUM = 0.0;
+        PZ_BU_SUM = 0.0;
+
+        PX_BU_SUM = PXPRFP;
+        PY_BU_SUM = PYPRFP;
+        PZ_BU_SUM = PZPRFP;
+        E_tot_BU = ETOT_PRF;
+
+        EKIN_BU = aprf * amu / GAMMA_REL - aprf * amu;
+
+         for(I_Breakup=0;I_Breakup<IMULTBU;I_Breakup++){
+// Lorentz kinematics - DM 17/5/2010
+//         BU_TAB(I_Breakup,5) = BU_TAB(I_Breakup,5) - VX_BU_SUM
+//         BU_TAB(I_Breakup,6) = BU_TAB(I_Breakup,6) - VY_BU_SUM
+//         BU_TAB(I_Breakup,7) = BU_TAB(I_Breakup,7) - VZ_BU_SUM
+// Lorentz transformation
+          lorentz_boost(-VX_BU_SUM,-VY_BU_SUM,-VZ_BU_SUM,
+                BU_TAB[I_Breakup][4],BU_TAB[I_Breakup][5],BU_TAB[I_Breakup][6],
+                &VXOUT,&VYOUT,&VZOUT);
+
+          BU_TAB[I_Breakup][4] = VXOUT;
+          BU_TAB[I_Breakup][5] = VYOUT;
+          BU_TAB[I_Breakup][6] = VZOUT;
+
+          VBU2 = BU_TAB[I_Breakup][4]*BU_TAB[I_Breakup][4] +
+                 BU_TAB[I_Breakup][5]*BU_TAB[I_Breakup][5] +
+                 BU_TAB[I_Breakup][6]*BU_TAB[I_Breakup][6];
+          GAMMA_REL = std::sqrt(1.0 - VBU2 / (C*C));
+
+          ETOT_BU = BU_TAB[I_Breakup][1]*amu/GAMMA_REL;
+
+          EKIN_BU = EKIN_BU + BU_TAB[I_Breakup][1] * amu /
+                    GAMMA_REL - BU_TAB[I_Breakup][1] * amu;
+
+          PX_BU = ETOT_BU * BU_TAB[I_Breakup][4] / C;
+          PY_BU = ETOT_BU * BU_TAB[I_Breakup][5] / C;
+          PZ_BU = ETOT_BU * BU_TAB[I_Breakup][6] / C;
+          E_tot_BU = E_tot_BU + ETOT_BU;
+
+          PX_BU_SUM = PX_BU_SUM + PX_BU;
+          PY_BU_SUM = PY_BU_SUM + PY_BU;
+          PZ_BU_SUM = PZ_BU_SUM + PZ_BU;
+         }// for I_Breakup
+        }// if DABS(PX_BU_SUM).GT.10.d0
+//
+//      Find the limits that fragment is bound - only done for neutrons and LCPs and for
+//      nuclei with A=Z, for other nuclei it will be done after decay:
+
+         INEWLOOP = 0;
+         for(G4int i=0;i<IMULTBU;i++){
+          if(BU_TAB[i][0]<3.0 || BU_TAB[i][0]==BU_TAB[i][1]){
+            unstable_nuclei(idnint(BU_TAB[i][1]),idnint(BU_TAB[i][0]), &afpnew,&zfpnew,IOUNSTABLE,
+            BU_TAB[i][4], BU_TAB[i][5], BU_TAB[i][6],
+            &VP1X,&VP1Y,&VP1Z,BU_TAB_TEMP,&ILOOP);
+
+            if(IOUNSTABLE>0){
+// Properties of "heavy fragment":
+             BU_TAB[i][1] = G4double(afpnew);
+             BU_TAB[i][0] = G4double(zfpnew);
+             BU_TAB[i][4] = VP1X;
+             BU_TAB[i][5] = VP1Y;
+             BU_TAB[i][6] = VP1Z;
+
+//Properties of "light" fragments:
+             for(G4int IJ=0;IJ<ILOOP;IJ++){
+              BU_TAB[IMULTBU+INEWLOOP+IJ][0] = BU_TAB_TEMP[IJ][0];
+              BU_TAB[IMULTBU+INEWLOOP+IJ][1] = BU_TAB_TEMP[IJ][1];
+              BU_TAB[IMULTBU+INEWLOOP+IJ][4] = BU_TAB_TEMP[IJ][2];
+              BU_TAB[IMULTBU+INEWLOOP+IJ][5] = BU_TAB_TEMP[IJ][3];
+              BU_TAB[IMULTBU+INEWLOOP+IJ][6] = BU_TAB_TEMP[IJ][4];
+              BU_TAB[IMULTBU+INEWLOOP+IJ][2] = 0.0;
+              BU_TAB[IMULTBU+INEWLOOP+IJ][3] = 0.0;
+             }// for ILOOP
+
+             INEWLOOP = INEWLOOP + ILOOP;
+
+            }// if IOUNSTABLE.GT.0
+          }//if BU_TAB[I_Breakup][0]<3.0
+         }// for IMULTBU
+
+// Increased array of BU_TAB
+        IMULTBU = IMULTBU + INEWLOOP;
+// Evaporation from multifragmentation products
+        opt->optimfallowed = 1;  //  IMF is allowed
+        fiss->ifis = 0;          //  fission is not allowed
+        gammaemission=0;
+        ILOOPBU = 0;
+
+         for(G4int i=0;i<IMULTBU;i++){
+          EEBU = BU_TAB[i][2];
+          BU_TAB[i][10] = BU_TAB[i][6];
+          G4double jprfbu = BU_TAB[i][9];
+          if(BU_TAB[i][0]>2.0){
+           evapora(BU_TAB[i][0],BU_TAB[i][1],&EEBU,0.0, &ZFBU, &AFBU, &mtota, &vz_evabu, &vx_evabu,&vy_evabu, &ff, &fimf, &ZIMFBU, &AIMFBU,&TKEIMFBU, &jprfbu, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
+
+           BU_TAB[i][9] = jprfbu;
+
+//Velocities of evaporated particles (in the frame of the primary prefragment)
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
+               EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
+//Lorentz kinematics
+//                 DO IK = 3, 5, 1
+//                 EV_TAB(IJ+IEV_TAB,IK) = EV_TEMP(IJ,IK) + BU_TAB(I,IK+2)
+//                 ENDDO
+// Lorentz transformation
+               lorentz_boost(BU_TAB[i][4],BU_TAB[i][5],BU_TAB[i][6],
+                EV_TEMP[IJ][2],EV_TEMP[IJ][3],EV_TEMP[IJ][4],
+                &VXOUT,&VYOUT,&VZOUT);
+               EV_TAB[IJ+IEV_TAB][2] = VXOUT;
+               EV_TAB[IJ+IEV_TAB][3] = VYOUT;
+               EV_TAB[IJ+IEV_TAB][4] = VZOUT;
+               }
+               IEV_TAB = IEV_TAB + IEV_TAB_TEMP;
+
+//All velocities in the frame of the "primary" prefragment (after INC)
+// Lorentz kinematics
+//                BU_TAB(I,5) = BU_TAB(I,5) + VX_EVABU
+//                BU_TAB(I,6) = BU_TAB(I,6) + VY_EVABU
+//                BU_TAB(I,7) = BU_TAB(I,7) + VZ_EVABU
+// Lorentz transformation
+               lorentz_boost(vx_evabu,vy_evabu,vz_evabu,
+                BU_TAB[i][4],BU_TAB[i][5],BU_TAB[i][6],
+                &VXOUT,&VYOUT,&VZOUT);
+               BU_TAB[i][4] = VXOUT;
+               BU_TAB[i][5] = VYOUT;
+               BU_TAB[i][6] = VZOUT;
+
+               if(fimf==0){
+                 BU_TAB[i][7] = dint(ZFBU);
+                 BU_TAB[i][8] = dint(AFBU);
+               }// if fimf==0
+
+               if(fimf==1){
+//            PRINT*,'IMF EMISSION FROM BU PRODUCTS'
+// IMF emission: Heavy partner is not allowed to fission or to emitt IMF.
+               //double FEE = EEBU;
+               G4int FFBU1 = 0;
+               G4int FIMFBU1 = 0;
+               opt->optimfallowed = 0;  //  IMF is not allowed
+               fiss->ifis = 0;          //  fission is not allowed
+// Velocities of IMF and partner: 1 denotes partner, 2 denotes IMF
+               G4double EkinR1 = TKEIMFBU * AIMFBU / (AFBU+AIMFBU);
+               G4double EkinR2 = TKEIMFBU * AFBU / (AFBU+AIMFBU);
+               G4double V1 = std::sqrt(EkinR1/AFBU) * 1.3887;
+               G4double V2 = std::sqrt(EkinR2/AIMFBU) * 1.3887;
+               G4double VZ1_IMF = (2.0 * G4AblaRandom::flat() - 1.0) * V1;
+               G4double VPERP1 = std::sqrt(V1*V1 - VZ1_IMF*VZ1_IMF);
+               G4double ALPHA1 = G4AblaRandom::flat() * 2. * 3.142;
+               G4double VX1_IMF = VPERP1 * std::sin(ALPHA1);
+               G4double VY1_IMF = VPERP1 * std::cos(ALPHA1);
+               G4double VX2_IMF = - VX1_IMF / V1 * V2;
+               G4double VY2_IMF = - VY1_IMF / V1 * V2;
+               G4double VZ2_IMF = - VZ1_IMF / V1 * V2;
+
+               G4double EEIMFP = EEBU * AFBU /(AFBU + AIMFBU);
+               G4double EEIMF = EEBU * AIMFBU /(AFBU + AIMFBU);
+
+// Decay of heavy partner
+     G4double IINERTTOT = 0.40 * 931.490 * 1.160*1.160 *( std::pow(AIMFBU,5.0/3.0) + std::pow(AFBU,5.0/3.0)) + 931.490 * 1.160*1.160*AIMFBU*AFBU/(AIMFBU+AFBU)*(std::pow(AIMFBU,1./3.) + std::pow(AFBU,1./3.))*(std::pow(AIMFBU,1./3.) + std::pow(AFBU,1./3.));
+
+     G4double JPRFHEAVY = BU_TAB[i][9] * 0.4 * 931.49 * 1.16*1.16 * std::pow(AFBU,5.0/3.0) / IINERTTOT;
+     G4double JPRFLIGHT = BU_TAB[i][9] * 0.4 * 931.49 * 1.16*1.16 * std::pow(AIMFBU,5.0/3.0) / IINERTTOT;
+
+// Lorentz kinematics
+//           BU_TAB(I,5) = BU_TAB(I,5) + VX1_IMF
+//           BU_TAB(I,6) = BU_TAB(I,6) + VY1_IMF
+//           BU_TAB(I,7) = BU_TAB(I,7) + VZ1_IMF
+// Lorentz transformation
+               lorentz_boost(VX1_IMF,VY1_IMF,VZ1_IMF,
+                BU_TAB[i][4],BU_TAB[i][5],BU_TAB[i][6],
+                &VXOUT,&VYOUT,&VZOUT);
+               BU_TAB[i][4] = VXOUT;
+               BU_TAB[i][5] = VYOUT;
+               BU_TAB[i][6] = VZOUT;
+
+     G4double vx1ev_imf=0., vy1ev_imf=0., vz1ev_imf=0., zdummy=0., adummy=0., tkedummy=0.,jprf1=0.;
+
+// Decay of IMF's partner:
+               evapora(ZFBU,AFBU,&EEIMFP,JPRFHEAVY, &ZFFBU, &AFFBU, &mtota,  &vz1ev_imf, &vx1ev_imf,&vy1ev_imf, &FFBU1, &FIMFBU1, &zdummy, &adummy,&tkedummy, &jprf1, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
+
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
+               EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
+//Lorentz kinematics
+//                 DO IK = 3, 5, 1
+//                 EV_TAB(IJ+IEV_TAB,IK) = EV_TEMP(IJ,IK) + BU_TAB(I,IK+2)
+//                 ENDDO
+// Lorentz transformation
+               lorentz_boost(BU_TAB[i][4],BU_TAB[i][5],BU_TAB[i][6],
+                EV_TEMP[IJ][2],EV_TEMP[IJ][3],EV_TEMP[IJ][4],
+                &VXOUT,&VYOUT,&VZOUT);
+               EV_TAB[IJ+IEV_TAB][2] = VXOUT;
+               EV_TAB[IJ+IEV_TAB][3] = VYOUT;
+               EV_TAB[IJ+IEV_TAB][4] = VZOUT;
+               }
+               IEV_TAB = IEV_TAB + IEV_TAB_TEMP;
+
+               BU_TAB[i][7] = dint(ZFFBU);
+               BU_TAB[i][8] = dint(AFFBU);
+//Lorentz kinematics
+//           BU_TAB(I,5) = BU_TAB(I,5) + vx1ev_imf
+//           BU_TAB(I,6) = BU_TAB(I,6) + vy1ev_imf
+//           BU_TAB(I,7) = BU_TAB(I,7) + vz1ev_imf
+               lorentz_boost(vx1ev_imf,vy1ev_imf,vz1ev_imf,
+                BU_TAB[i][4],BU_TAB[i][5],BU_TAB[i][6],
+                &VXOUT,&VYOUT,&VZOUT);
+               BU_TAB[i][4] = VXOUT;
+               BU_TAB[i][5] = VYOUT;
+               BU_TAB[i][6] = VZOUT;
+// For IMF - fission and IMF emission are not allowed
+              G4int FFBU2 = 0;
+              G4int FIMFBU2 = 0;
+              opt->optimfallowed = 0;  //  IMF is not allowed
+              fiss->ifis = 0;          //  fission is not allowed
+// Decay of IMF
+              G4double zffimf, affimf,zdummy1, adummy1, tkedummy1, jprf2, vx2ev_imf, vy2ev_imf, vz2ev_imf;
+
+              evapora(ZIMFBU,AIMFBU,&EEIMF,JPRFLIGHT, &zffimf, &affimf, &mtota, &vz2ev_imf, &vx2ev_imf,&vy2ev_imf, &FFBU2, &FIMFBU2, &zdummy1, &adummy1,&tkedummy1, &jprf2, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
+
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
+               EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
+//Lorentz kinematics
+//            EV_TAB(IJ+IEV_TAB,3) = EV_TEMP(IJ,3) + BU_TAB(I,5) +VX2_IMF
+//            EV_TAB(IJ+IEV_TAB,4) = EV_TEMP(IJ,4) + BU_TAB(I,6) +VY2_IMF
+//            EV_TAB(IJ+IEV_TAB,5) = EV_TEMP(IJ,5) + BU_TAB(I,7) +VZ2_IMF
+// Lorentz transformation
+               lorentz_boost(BU_TAB[i][4],BU_TAB[i][5],BU_TAB[i][6],
+                EV_TEMP[IJ][2],EV_TEMP[IJ][3],EV_TEMP[IJ][4],
+                &VXOUT,&VYOUT,&VZOUT);
+               lorentz_boost(VX2_IMF,VY2_IMF,VZ2_IMF,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+               EV_TAB[IJ+IEV_TAB][2] = VX2OUT;
+               EV_TAB[IJ+IEV_TAB][3] = VY2OUT;
+               EV_TAB[IJ+IEV_TAB][4] = VZ2OUT;
+               }
+               IEV_TAB = IEV_TAB + IEV_TAB_TEMP;
+
+               BU_TAB[IMULTBU+ILOOPBU][0] = BU_TAB[i][0];
+               BU_TAB[IMULTBU+ILOOPBU][1] = BU_TAB[i][1];
+               BU_TAB[IMULTBU+ILOOPBU][2] = BU_TAB[i][2];
+               BU_TAB[IMULTBU+ILOOPBU][3] = BU_TAB[i][3];
+               BU_TAB[IMULTBU+ILOOPBU][7] = dint(zffimf);
+               BU_TAB[IMULTBU+ILOOPBU][8] = dint(affimf);
+// Lorentz transformation
+               lorentz_boost(VX2_IMF,VY2_IMF,VZ2_IMF,
+                BU_TAB[i][4],BU_TAB[i][5],BU_TAB[i][6],
+                &VXOUT,&VYOUT,&VZOUT);
+               lorentz_boost(vx2ev_imf,vy2ev_imf,vz2ev_imf,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+               BU_TAB[IMULTBU+ILOOPBU][4] = VX2OUT;
+               BU_TAB[IMULTBU+ILOOPBU][5] = VY2OUT;
+               BU_TAB[IMULTBU+ILOOPBU][6] = VZ2OUT;
+               ILOOPBU = ILOOPBU + 1;
+               }// if fimf==1
+
+          } else {// if BU_TAB(I,1).GT.2.D0
+           BU_TAB[i][0] = BU_TAB[i][0];
+           BU_TAB[i][1] = BU_TAB[i][1];
+           BU_TAB[i][2] = BU_TAB[i][2];
+           BU_TAB[i][3] = BU_TAB[i][3];
+           BU_TAB[i][7] = BU_TAB[i][0];
+           BU_TAB[i][8] = BU_TAB[i][1];
+           BU_TAB[i][4] = BU_TAB[i][4];
+           BU_TAB[i][5] = BU_TAB[i][5];
+           BU_TAB[i][6] = BU_TAB[i][6];
+          }// if BU_TAB(I,1).GT.2.D0
+         }// for IMULTBU
+
+         IMULTBU = IMULTBU + ILOOPBU;
+//
+// RESOLVE UNSTABLE NUCLEI
+//
+      INEWLOOP = 0;
+      ABU_SUM = 0.0;
+      ZBU_SUM = 0.0;
+//
+      for(G4int i=0;i<IMULTBU;i++){
+       ABU_SUM = ABU_SUM + BU_TAB[i][8];
+       ZBU_SUM = ZBU_SUM + BU_TAB[i][7];
+       unstable_nuclei(idnint(BU_TAB[i][8]),idnint(BU_TAB[i][7]), &afpnew,&zfpnew,IOUNSTABLE,
+            BU_TAB[i][4], BU_TAB[i][5], BU_TAB[i][6],
+            &VP1X,&VP1Y,&VP1Z,BU_TAB_TEMP1,&ILOOP);
+
+//From now on, all neutrons and LCP created in above subroutine are part of the
+// BU_TAB array (see below - Properties of "light" fragments). Therefore,
+// NEVA, PEVA ... are not needed any more in the break-up stage.
+
+         if(IOUNSTABLE>0){
+// Properties of "heavy fragment":
+            ABU_SUM = ABU_SUM + G4double(afpnew) - BU_TAB[i][8];
+            ZBU_SUM = ZBU_SUM + G4double(zfpnew) - BU_TAB[i][7];
+             BU_TAB[i][8] = G4double(afpnew);
+             BU_TAB[i][7] = G4double(zfpnew);
+             BU_TAB[i][4] = VP1X;
+             BU_TAB[i][5] = VP1Y;
+             BU_TAB[i][6] = VP1Z;
+
+//Properties of "light" fragments:
+             for(G4int IJ=0;IJ<ILOOP;IJ++){
+              BU_TAB[IMULTBU+INEWLOOP+IJ][7] = BU_TAB_TEMP1[IJ][0];
+              BU_TAB[IMULTBU+INEWLOOP+IJ][8] = BU_TAB_TEMP1[IJ][1];
+              BU_TAB[IMULTBU+INEWLOOP+IJ][4] = BU_TAB_TEMP1[IJ][2];
+              BU_TAB[IMULTBU+INEWLOOP+IJ][5] = BU_TAB_TEMP1[IJ][3];
+              BU_TAB[IMULTBU+INEWLOOP+IJ][6] = BU_TAB_TEMP1[IJ][4];
+              BU_TAB[IMULTBU+INEWLOOP+IJ][2] = 0.0;
+              BU_TAB[IMULTBU+INEWLOOP+IJ][3] = 0.0;
+              BU_TAB[IMULTBU+INEWLOOP+IJ][0] = BU_TAB[i][0];
+              BU_TAB[IMULTBU+INEWLOOP+IJ][1] = BU_TAB[i][1];
+              ABU_SUM = ABU_SUM + BU_TAB[IMULTBU+INEWLOOP+IJ][8];
+              ZBU_SUM = ZBU_SUM + BU_TAB[IMULTBU+INEWLOOP+IJ][7];
+             }// for ILOOP
+
+             INEWLOOP = INEWLOOP + ILOOP;
+         }// if(IOUNSTABLE>0)
+      }// for IMULTBU unstable
+
+// Increased array of BU_TAB
+        IMULTBU = IMULTBU + INEWLOOP;
+
+// Transform all velocities into the rest frame of the projectile
+        lorentz_boost(VX_incl,VY_incl,VZ_incl,
+                VX_PREF,VY_PREF,VZ_PREF,
+                &VXOUT,&VYOUT,&VZOUT);
+        VX_PREF = VXOUT;
+        VY_PREF = VYOUT;
+        VZ_PREF = VZOUT;
+
+        for(G4int i=0;i<IMULTBU;i++){
+         lorentz_boost(VX_incl,VY_incl,VZ_incl,
+                BU_TAB[i][4],BU_TAB[i][5],BU_TAB[i][6],
+                &VXOUT,&VYOUT,&VZOUT);
+         BU_TAB[i][4] = VXOUT;
+         BU_TAB[i][5] = VYOUT;
+         BU_TAB[i][6] = VZOUT;
+        }
+        for(G4int i=0;i<IEV_TAB;i++){
+         lorentz_boost(VX_incl,VY_incl,VZ_incl,
+                EV_TAB[i][2],EV_TAB[i][3],EV_TAB[i][4],
+                &VXOUT,&VYOUT,&VZOUT);
+         EV_TAB[i][2] = VXOUT;
+         EV_TAB[i][3] = VYOUT;
+         EV_TAB[i][4] = VZOUT;
+        }
+
+
+        if(IMULTBU>200)std::cout << "IMULTBU>200 " << IMULTBU << std::endl;
+        }// if(T_diff>0.1)
+// End of multi-fragmentation
+      mult7777:
+
+// Start basic de-excitation of fragments
+      aprfp = idnint(aprf);
+      zprfp = idnint(zprf);
      
-    // C           MASSEF = pace2(AF,ZF)
-    // C      	   MASSEF = MASSEF + AF*UMA - ZF*MELEC + EE + EF
-    // C           MASSE1 = pace2(DBLE(AFF1),DBLE(ZFF1))
-    // C      	   MASSE1 = MASSE1 + AFF1*UMA - ZFF1*MELEC + EFF1
-    // C           MASSE2 = pace2(DBLE(AFF2),DBLE(ZFF2))
-    // C      	   MASSE2 = MASSE2 + AFF2*UMA - ZFF2*MELEC + EFF2
-    // C        WRITE(6,*) 'MASSEF,MASSE1,MASSE2',MASSEF,MASSE1,MASSE2
-    // C MGLMS est la fonction de masse coherente avec KHS evapo-fis.
-    // C   Attention aux parametres, ici 0=OPTSHP, NO microscopic correct. 
-    mglms(af,zf,0,&el);
-    G4double massef = zf*fmp + (af - zf)*fmn + el + ee + ef;
-    mglms(double(aff1),double(zff1),0,&el);
-    G4double masse1 = zff1*fmp + (aff1-zff1)*fmn + el + eff1;
-    mglms(aff2,zff2,0,&el);
-    G4double masse2 = zff2*fmp + (aff2 - zff2)*fmn + el + eff2;
-    // C        WRITE(6,*) 'MASSEF,MASSE1,MASSE2',MASSEF,MASSE1,MASSE2	   
-    G4double b = massef - masse1 - masse2;
-    if(b < 0.0) { //then
-      b=0.0;
-    } //endif
-    G4double t1 = b*(b + 2.0*masse2)/(2.0*massef);
-    G4double p1 = std::sqrt(t1*(t1 + 2.0*masse1));
-    
-    G4double rndm;
-    rndm = G4AblaRandom::flat();
-    ctet1 = 2.0*rndm - 1.0;
-    rndm = G4AblaRandom::flat();
-    phi1 = rndm*2.0*3.141592654;
-           
-    // C ----Coefs de la transformation de Lorentz (noyau de fission -> Remnant) 
-    G4double peva = std::pow(pxeva,2) + std::pow(pyeva,2) + std::pow(pleva,2);
-    G4double gamfis = std::sqrt(std::pow(massef,2) + peva)/massef;
-    peva = std::sqrt(peva);
-    G4double etfis = peva/massef;
-      
-    G4double epf1_in = 0.0;
-    G4double epf1_out = 0.0;
+      if(IMULTIFR == 0){
+// These momenta are in the frame of the projectile (or target in case of direct kinematics)
+       VX_PREF = VX_incl;
+       VY_PREF = VY_incl;
+       VZ_PREF = VZ_incl;
+      }
+//
+// CALL THE EVAPORATION SUBROUTINE
+//
+      opt->optimfallowed = 1; //  IMF is allowed
+      fiss->ifis = 1;         //  fission is allowed
+      fimf=0;
+      ff=0;
 
-    // C ----Matrice de rotation (noyau de fission -> Remnant)
-    if(peva >= 1.0e-4) {
-      sitet = std::sqrt(std::pow(pxeva,2)+std::pow(pyeva,2))/peva;
+// To spare computing time; these events in any case cannot decay
+//      IF(ZPRFP.LE.2.AND.ZPRFP.LT.APRFP)THEN FIXME: <= or <
+      if(zprfp<=2 && zprfp<aprfp){
+       zf = zprf;
+       af = aprf;
+       ee = 0.0;
+       ff = 0;
+       fimf = 0;
+       ftype = 0;
+       aimf = 0.0;
+       zimf = 0.0;
+       tkeimf = 0.0;
+       vx_eva = 0.0;
+       vy_eva = 0.0;
+       vz_eva = 0.0;
+       jprf0 = jprf;
+       goto a1972;
+       }
+
+//      if(ZPRFP.LE.2.AND.ZPRFP.EQ.APRFP)
+      if(zprfp<=2 && zprfp==aprfp){
+       unstable_nuclei(aprfp,zprfp,&afpnew,&zfpnew,IOUNSTABLE,
+       VX_PREF, VY_PREF, VZ_PREF,
+       &VP1X,&VP1Y,&VP1Z,EV_TAB_TEMP,&ILOOP);
+         af = G4double(afpnew);
+         zf = G4double(zfpnew);
+         VX_PREF = VP1X;
+         VY_PREF = VP1Y;
+         VZ_PREF = VP1Z;
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
+           EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
+         }
+        IEV_TAB = IEV_TAB + ILOOP;
+        ee = 0.0;
+        ff = 0;
+        fimf = 0;
+        ftype = 0;
+        aimf = 0.0;
+        zimf = 0.0;
+        tkeimf = 0.0;
+        vx_eva = 0.0;
+        vy_eva = 0.0;
+        vz_eva = 0.0;
+        jprf0 = jprf;
+       goto a1972;
+       }
+
+//      IF(ZPRFP.EQ.APRFP)THEN
+      if(zprfp==aprfp){
+       unstable_nuclei(aprfp,zprfp,&afpnew,&zfpnew,IOUNSTABLE,
+       VX_PREF, VY_PREF, VZ_PREF,
+       &VP1X,&VP1Y,&VP1Z,EV_TAB_TEMP,&ILOOP);
+         af = G4double(afpnew);
+         zf = G4double(zfpnew);
+         VX_PREF = VP1X;
+         VY_PREF = VP1Y;
+         VZ_PREF = VP1Z;
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
+           EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
+         }
+        IEV_TAB = IEV_TAB + ILOOP;
+        ee = 0.0;
+        ff = 0;
+        fimf = 0;
+        ftype = 0;
+        aimf = 0.0;
+        zimf = 0.0;
+        tkeimf = 0.0;
+        vx_eva = 0.0;
+        vy_eva = 0.0;
+        vz_eva = 0.0;
+        jprf0 = jprf;
+       goto a1972;
+      }
+//
+      evapora(zprf,aprf,&ee,jprf, &zf, &af, &mtota, &vz_eva, &vx_eva, &vy_eva, &ff, &fimf, &zimf, &aimf,&tkeimf, &jprf0, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
+//
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
+               EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
+//
+//               EV_TAB(IJ+IEV_TAB,3) = EV_TEMP(IJ,3) + VX_PREF
+//               EV_TAB(IJ+IEV_TAB,4) = EV_TEMP(IJ,4) + VY_PREF
+//               EV_TAB(IJ+IEV_TAB,5) = EV_TEMP(IJ,5) + VZ_PREF
+// Lorentz transformation
+               lorentz_boost(VX_PREF,VY_PREF,VZ_PREF,
+                EV_TEMP[IJ][2],EV_TEMP[IJ][3],EV_TEMP[IJ][4],
+                &VXOUT,&VYOUT,&VZOUT);
+               EV_TAB[IJ+IEV_TAB][2] = VXOUT;
+               EV_TAB[IJ+IEV_TAB][3] = VYOUT;
+               EV_TAB[IJ+IEV_TAB][4] = VZOUT;
+               }
+               IEV_TAB = IEV_TAB + IEV_TAB_TEMP;
+
+      a1972:
+
+// vi_pref - velocity of the prefragment; vi_eva - recoil due to evaporation
+      lorentz_boost(VX_PREF,VY_PREF,VZ_PREF,
+      vx_eva,vy_eva,vz_eva,
+      &VXOUT,&VYOUT,&VZOUT);
+      V_CM[0] = VXOUT;
+      V_CM[1] = VYOUT;
+      V_CM[2] = VZOUT;
+//
+      if(ff == 0 && fimf == 0){
+// Evaporation of neutrons and LCP; no IMF, no fission
+      ftype = 0;
+      ZFP1 = idnint(zf);
+      AFP1 = idnint(af);
+      AFPIMF = 0;
+      ZFPIMF = 0;
+      ZFP2 = 0;
+      AFP2 = 0;
+      VFP1_CM[0] = V_CM[0];
+      VFP1_CM[1] = V_CM[1];
+      VFP1_CM[2] = V_CM[2];
+       for(G4int j=0;j<3;j++){
+        VIMF_CM[j] = 0.0;
+        VFP2_CM[j] = 0.0;
+       }
+      }
+//
+      if(ff == 1 && fimf == 0) ftype = 1;     // fission
+      if(ff == 0 && fimf == 1) ftype = 2;     // IMF emission
+//
+// AFP,ZFP IS THE FINAL FRAGMENT IF NO FISSION OR IMF EMISSION OCCURS
+// IN CASE OF FISSION IT IS THE NUCLEUS THAT UNDERGOES FISSION OR IMF
+//
+
+//***************** FISSION ***************************************
+//
+    if(ftype == 1){
+    varntp->kfis = 1;
+   //   ftype1=0;
+
+      G4int IEV_TAB_FIS = 0,imode=0;
+
+      G4double vx1_fission=0.,vy1_fission=0.,vz1_fission=0.;
+      G4double vx2_fission=0.,vy2_fission=0.,vz2_fission=0.;
+      G4double vx_eva_sc=0.,vy_eva_sc=0.,vz_eva_sc=0.;
+
+      fission(af,zf,ee,jprf0,
+          &vx1_fission,&vy1_fission,&vz1_fission,
+          &vx2_fission,&vy2_fission,&vz2_fission,
+          &ZFP1,&AFP1,&ZFP2,&AFP2,&imode,
+          &vx_eva_sc,&vy_eva_sc,&vz_eva_sc,EV_TEMP,&IEV_TAB_FIS);
+
+               for(G4int IJ = 0; IJ< IEV_TAB_FIS;IJ++){ 
+               EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
+               EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
+// Lorentz kinematics
+//               EV_TAB(IJ+IEV_TAB,3) = EV_TEMP(IJ,3) + VX_PREF
+//               EV_TAB(IJ+IEV_TAB,4) = EV_TEMP(IJ,4) + VY_PREF
+//               EV_TAB(IJ+IEV_TAB,5) = EV_TEMP(IJ,5) + VZ_PREF
+// Lorentz transformation
+               lorentz_boost(V_CM[0],V_CM[1],V_CM[2],
+                EV_TEMP[IJ][2],EV_TEMP[IJ][3],EV_TEMP[IJ][4],
+                &VXOUT,&VYOUT,&VZOUT);
+               EV_TAB[IJ+IEV_TAB][2] = VXOUT;
+               EV_TAB[IJ+IEV_TAB][3] = VYOUT;
+               EV_TAB[IJ+IEV_TAB][4] = VZOUT;
+               }
+               IEV_TAB = IEV_TAB + IEV_TAB_FIS;
+
+    //  if(imode==1) ftype1 = 1;    // S1 mode
+    //  if(imode==2) ftype1 = 2;    // S2 mode
+
+      AFPIMF = 0;
+      ZFPIMF = 0;
+
+// VX_EVA_SC,VY_EVA_SC,VZ_EVA_SC - recoil due to particle emisison
+// between saddle and scission
+// Lorentz kinematics
+//        VFP1_CM(1) = V_CM(1) + VX1_FISSION + VX_EVA_SC ! Velocity of FF1 in x
+//        VFP1_CM(2) = V_CM(2) + VY1_FISSION + VY_EVA_SC ! Velocity of FF1 in y
+//        VFP1_CM(3) = V_CM(3) + VZ1_FISSION + VZ_EVA_SC ! Velocity of FF1 in x
+        lorentz_boost(vx1_fission,vy1_fission,vz1_fission,
+                V_CM[0],V_CM[1],V_CM[2],
+                &VXOUT,&VYOUT,&VZOUT);
+        lorentz_boost(vx_eva_sc,vy_eva_sc,vz_eva_sc,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+        VFP1_CM[0] = VX2OUT;
+        VFP1_CM[1] = VY2OUT;
+        VFP1_CM[2] = VZ2OUT;
+
+// Lorentz kinematics
+//        VFP2_CM(1) = V_CM(1) + VX2_FISSION + VX_EVA_SC ! Velocity of FF2 in x
+//        VFP2_CM(2) = V_CM(2) + VY2_FISSION + VY_EVA_SC ! Velocity of FF2 in y
+//        VFP2_CM(3) = V_CM(3) + VZ2_FISSION + VZ_EVA_SC ! Velocity of FF2 in x
+        lorentz_boost(vx2_fission,vy2_fission,vz2_fission,
+                V_CM[0],V_CM[1],V_CM[2],
+                &VXOUT,&VYOUT,&VZOUT);
+        lorentz_boost(vx_eva_sc,vy_eva_sc,vz_eva_sc,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+        VFP2_CM[0] = VX2OUT;
+        VFP2_CM[1] = VY2OUT;
+        VFP2_CM[2] = VZ2OUT;
+
+//************** IMF EMISSION ************************************************
+//
+    }else if(ftype == 2){
+// IMF emission: Heavy partner is allowed to fission and to emitt IMF, but ONLY once.
+      G4int FF11 = 0;
+      G4int FIMF11 = 0;
+      opt->optimfallowed = 1;  //  IMF is allowed
+      fiss->ifis = 1;          //  fission is allowed
+
+//  Velocities of IMF and partner: 1 denotes partner, 2 denotes IMF
+      G4double EkinR1 = tkeimf * aimf / (af+aimf);
+      G4double EkinR2 = tkeimf * af / (af+aimf);
+      G4double V1 = std::sqrt(EkinR1/af) * 1.3887;
+      G4double V2 = std::sqrt(EkinR2/aimf) * 1.3887;
+      G4double VZ1_IMF = (2.0 * G4AblaRandom::flat() - 1.0) * V1;
+      G4double VPERP1 = std::sqrt(V1*V1 - VZ1_IMF*VZ1_IMF);
+      G4double ALPHA1 = G4AblaRandom::flat() * 2. * 3.142;
+      G4double VX1_IMF = VPERP1 * std::sin(ALPHA1);
+      G4double VY1_IMF = VPERP1 * std::cos(ALPHA1);
+      G4double VX2_IMF = - VX1_IMF / V1 * V2;
+      G4double VY2_IMF = - VY1_IMF / V1 * V2;
+      G4double VZ2_IMF = - VZ1_IMF / V1 * V2;
+
+      G4double EEIMFP = ee * af /(af + aimf);
+      G4double EEIMF = ee * aimf /(af + aimf);
+
+// Decay of heavy partner
+     G4double IINERTTOT = 0.40 * 931.490 * 1.160*1.160 *( std::pow(aimf,5.0/3.0) + std::pow(af,5.0/3.0)) + 931.490 * 1.160*1.160*aimf*af/(aimf+af)*(std::pow(aimf,1./3.) + std::pow(af,1./3.))*(std::pow(aimf,1./3.) + std::pow(af,1./3.));
+
+     G4double JPRFHEAVY = jprf0 * 0.4 * 931.49 * 1.16*1.16 * std::pow(af,5.0/3.0) / IINERTTOT;
+     G4double JPRFLIGHT = jprf0 * 0.4 * 931.49 * 1.16*1.16 * std::pow(aimf,5.0/3.0) / IINERTTOT;
+     if(af<2.0) std::cout << "RN117-4,AF,ZF,EE,JPRFheavy" << std::endl;
+
+     G4double vx1ev_imf=0., vy1ev_imf=0., vz1ev_imf=0., zdummy=0., adummy=0., tkedummy=0.,jprf1=0.;
+
+     evapora(zf,af,&EEIMFP,JPRFHEAVY, &zff, &aff, &mtota, &vz1ev_imf, &vx1ev_imf,&vy1ev_imf, &FF11, &FIMF11, &zdummy, &adummy,&tkedummy, &jprf1, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
+
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
+               EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
+//
+//               EV_TAB(IJ+IEV_TAB,3) = EV_TEMP(IJ,3) + VX_PREF
+//               EV_TAB(IJ+IEV_TAB,4) = EV_TEMP(IJ,4) + VY_PREF
+//               EV_TAB(IJ+IEV_TAB,5) = EV_TEMP(IJ,5) + VZ_PREF
+// Lorentz transformation
+               lorentz_boost(V_CM[0],V_CM[1],V_CM[2],
+                EV_TEMP[IJ][2],EV_TEMP[IJ][3],EV_TEMP[IJ][4],
+                &VXOUT,&VYOUT,&VZOUT);
+               lorentz_boost(vx1ev_imf,vy1ev_imf,vz1ev_imf,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+               EV_TAB[IJ+IEV_TAB][2] = VX2OUT;
+               EV_TAB[IJ+IEV_TAB][3] = VY2OUT;
+               EV_TAB[IJ+IEV_TAB][4] = VZ2OUT;
+               }
+               IEV_TAB = IEV_TAB + IEV_TAB_TEMP;
+
+// For IMF - fission and IMF emission are not allowed
+     G4int FF22 = 0;
+     G4int FIMF22 = 0;
+      opt->optimfallowed = 0; //  IMF is not allowed
+      fiss->ifis = 0;         //  fission is not allowed
+
+// Decay of IMF
+     G4double zffimf, affimf,zdummy1, adummy1, tkedummy1,jprf2,vx2ev_imf,vy2ev_imf,
+    vz2ev_imf;
+
+     evapora(zimf,aimf,&EEIMF,JPRFLIGHT, &zffimf, &affimf, &mtota, &vz2ev_imf, &vx2ev_imf,&vy2ev_imf, &FF22, &FIMF22, &zdummy1, &adummy1,&tkedummy1, &jprf2, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
+
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
+               EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
+//
+//               EV_TAB(IJ+IEV_TAB,3) = EV_TEMP(IJ,3) + VX_PREF
+//               EV_TAB(IJ+IEV_TAB,4) = EV_TEMP(IJ,4) + VY_PREF
+//               EV_TAB(IJ+IEV_TAB,5) = EV_TEMP(IJ,5) + VZ_PREF
+// Lorentz transformation
+               lorentz_boost(V_CM[0],V_CM[1],V_CM[2],
+                EV_TEMP[IJ][2],EV_TEMP[IJ][3],EV_TEMP[IJ][4],
+                &VXOUT,&VYOUT,&VZOUT);
+               lorentz_boost(VX2_IMF,VY2_IMF,VZ2_IMF,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+               EV_TAB[IJ+IEV_TAB][2] = VX2OUT;
+               EV_TAB[IJ+IEV_TAB][3] = VY2OUT;
+               EV_TAB[IJ+IEV_TAB][4] = VZ2OUT;
+               }
+               IEV_TAB = IEV_TAB + IEV_TAB_TEMP;
+// As IMF is not allowed to emit IMF, adummy1=zdummy1=0
+
+      AFPIMF = idnint(affimf);
+      ZFPIMF = idnint(zffimf);
+
+// vi1_imf, vi2_imf - velocities of imf and partner from TKE;
+// vi1ev_imf, vi2_imf - recoil of partner and imf due to evaporation
+// Lorentz kinematics - DM 18/5/2010
+//        VIMF_CM(1) = V_CM(1) + VX2_IMF + VX2EV_IMF
+//        VIMF_CM(2) = V_CM(2) + VY2_IMF + VY2EV_IMF
+//        VIMF_CM(3) = V_CM(3) + VZ2_IMF + VZ2EV_IMF
+        lorentz_boost(VX2_IMF,VY2_IMF,VZ2_IMF,
+                V_CM[0],V_CM[1],V_CM[2],
+                &VXOUT,&VYOUT,&VZOUT);
+        lorentz_boost(vx2ev_imf,vy2ev_imf,vz2ev_imf,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+        VIMF_CM[0] = VX2OUT;
+        VIMF_CM[1] = VY2OUT;
+        VIMF_CM[2] = VZ2OUT;
+// Lorentz kinematics 
+//       VFP1_CM(1) = V_CM(1) + VX1_IMF + VX1EV_IMF
+//       VFP1_CM(2) = V_CM(2) + VY1_IMF + VY1EV_IMF
+//       VFP1_CM(3) = V_CM(3) + VZ1_IMF + VZ1EV_IMF
+        lorentz_boost(VX1_IMF,VY1_IMF,VZ1_IMF,
+                V_CM[0],V_CM[1],V_CM[2],
+                &VXOUT,&VYOUT,&VZOUT);
+        lorentz_boost(vx1ev_imf,vy1ev_imf,vz1ev_imf,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+        VFP1_CM[0] = VX2OUT;
+        VFP1_CM[1] = VY2OUT;
+        VFP1_CM[2] = VZ2OUT;
+
+      if(FF11==0 && FIMF11==0){
+// heavy partner deexcites by emission of light particles
+      AFP1 = idnint(aff);
+      ZFP1 = idnint(zff);
+      ZFP2 = 0;
+      AFP2 = 0;
+      ftype = 2;
+      AFPIMF = idnint(affimf);
+      ZFPIMF = idnint(zffimf);
+        for(G4int I=0;I<3;I++)
+         VFP2_CM[I] = 0.0;
+
+
+      } else if(FF11==1 && FIMF11==0){
+// Heavy partner fissions
+      varntp->kfis = 1;
+//
+      opt->optimfallowed = 0; //  IMF is not allowed
+      fiss->ifis = 0;         //  fission is not allowed
+//
+      zf = zff;
+      af = aff;
+      ee = EEIMFP;
+    //  ftype1=0;
+      ftype=21;
+
+      G4int IEV_TAB_FIS = 0,imode=0;
+
+      G4double vx1_fission=0.,vy1_fission=0.,vz1_fission=0.;
+      G4double vx2_fission=0.,vy2_fission=0.,vz2_fission=0.;
+      G4double vx_eva_sc=0.,vy_eva_sc=0.,vz_eva_sc=0.;
+
+      fission(af,zf,ee,jprf1,
+          &vx1_fission,&vy1_fission,&vz1_fission,
+          &vx2_fission,&vy2_fission,&vz2_fission,
+          &ZFP1,&AFP1,&ZFP2,&AFP2,&imode,
+          &vx_eva_sc,&vy_eva_sc,&vz_eva_sc,EV_TEMP,&IEV_TAB_FIS);
+
+               for(G4int IJ = 0; IJ< IEV_TAB_FIS;IJ++){ 
+               EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
+               EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
+// Lorentz kinematics
+//               EV_TAB(IJ+IEV_TAB,3) = EV_TEMP(IJ,3) + VX_PREF
+//               EV_TAB(IJ+IEV_TAB,4) = EV_TEMP(IJ,4) + VY_PREF
+//               EV_TAB(IJ+IEV_TAB,5) = EV_TEMP(IJ,5) + VZ_PREF
+// Lorentz transformation
+               lorentz_boost(VFP1_CM[0],VFP1_CM[1],VFP1_CM[2],
+                EV_TEMP[IJ][2],EV_TEMP[IJ][3],EV_TEMP[IJ][4],
+                &VXOUT,&VYOUT,&VZOUT);
+               EV_TAB[IJ+IEV_TAB][2] = VXOUT;
+               EV_TAB[IJ+IEV_TAB][3] = VYOUT;
+               EV_TAB[IJ+IEV_TAB][4] = VZOUT;
+               }
+               IEV_TAB = IEV_TAB + IEV_TAB_FIS;
+
+    //  if(imode==1) ftype1 = 1;    // S1 mode
+    //  if(imode==2) ftype1 = 2;    // S2 mode
+
+// Lorentz kinematics
+//        VFP1_CM(1) = V_CM(1) + VX1_IMF + VX1EV_IMF + VX1_FISSION +
+//     &               VX_EVA_SC ! Velocity of FF1 in x
+//        VFP1_CM(2) = V_CM(2) + VY1_IMF + VY1EV_IMF + VY1_FISSION +
+//     &               VY_EVA_SC ! Velocity of FF1 in y
+//        VFP1_CM(3) = V_CM(3) + VZ1_IMF + VZ1EV_IMF + VZ1_FISSION +
+//     &               VZ_EVA_SC ! Velocity of FF1 in x
+        lorentz_boost(VX1_IMF,VY1_IMF,VZ1_IMF,
+                V_CM[0],V_CM[1],V_CM[2],
+                &VXOUT,&VYOUT,&VZOUT);
+        lorentz_boost(vx1ev_imf,vy1ev_imf,vz1ev_imf,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+        lorentz_boost(vx1_fission,vy1_fission,vz1_fission,
+                VX2OUT,VY2OUT,VZ2OUT,
+                &VXOUT,&VYOUT,&VZOUT);
+        lorentz_boost(vx_eva_sc,vy_eva_sc,vz_eva_sc,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+        VFP1_CM[0] = VX2OUT;
+        VFP1_CM[1] = VY2OUT;
+        VFP1_CM[2] = VZ2OUT;
+
+// Lorentz kinematics
+//        VFP2_CM(1) = V_CM(1) + VX1_IMF + VX1EV_IMF + VX2_FISSION +
+//     &               VX_EVA_SC ! Velocity of FF2 in x
+//        VFP2_CM(2) = V_CM(2) + VY1_IMF + VY1EV_IMF + VY2_FISSION +
+//     &               VY_EVA_SC ! Velocity of FF2 in y
+//        VFP2_CM(3) = V_CM(3) + VZ1_IMF + VZ1EV_IMF + VZ2_FISSION +
+//     &               VZ_EVA_SC ! Velocity of FF2 in x
+        lorentz_boost(VX1_IMF,VY1_IMF,VZ1_IMF,
+                V_CM[0],V_CM[1],V_CM[2],
+                &VXOUT,&VYOUT,&VZOUT);
+        lorentz_boost(vx1ev_imf,vy1ev_imf,vz1ev_imf,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+        lorentz_boost(vx2_fission,vy2_fission,vz2_fission,
+                VX2OUT,VY2OUT,VZ2OUT,
+                &VXOUT,&VYOUT,&VZOUT);
+        lorentz_boost(vx_eva_sc,vy_eva_sc,vz_eva_sc,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+        VFP2_CM[0] = VX2OUT;
+        VFP2_CM[1] = VY2OUT;
+        VFP2_CM[2] = VZ2OUT;
+
+
+
+      } else if(FF11==0 && FIMF11==1){
+// Heavy partner emits imf, consequtive imf emission or fission is not allowed
+      opt->optimfallowed = 0; //  IMF is not allowed
+      fiss->ifis = 0;         //  fission is not allowed
+//
+      zf = zff;
+      af = aff;
+      ee = EEIMFP;
+      aimf = adummy;
+      zimf = zdummy;
+      tkeimf = tkedummy;
+      FF11 = 0;
+      FIMF11 = 0;
+      ftype = 22;
+// Velocities of IMF and partner: 1 denotes partner, 2 denotes IMF
+      EkinR1 = tkeimf * aimf / (af+aimf);
+      EkinR2 = tkeimf * af / (af+aimf);
+      V1 = std::sqrt(EkinR1/af) * 1.3887;
+      V2 = std::sqrt(EkinR2/aimf) * 1.3887;
+      G4double VZ1_IMFS = (2.0 * G4AblaRandom::flat() - 1.0) * V1;
+             VPERP1 = std::sqrt(V1*V1 - VZ1_IMFS*VZ1_IMFS);
+             ALPHA1 = G4AblaRandom::flat() * 2. * 3.142;
+      G4double VX1_IMFS = VPERP1 * std::sin(ALPHA1);
+      G4double VY1_IMFS = VPERP1 * std::cos(ALPHA1);
+      G4double VX2_IMFS = - VX1_IMFS / V1 * V2;
+      G4double VY2_IMFS = - VY1_IMFS / V1 * V2;
+      G4double VZ2_IMFS = - VZ1_IMFS / V1 * V2;
+
+             EEIMFP = ee * af /(af + aimf);
+             EEIMF = ee * aimf /(af + aimf);
+
+// Decay of heavy partner
+      IINERTTOT = 0.40 * 931.490 * 1.160*1.160 *( std::pow(aimf,5.0/3.0) + std::pow(af,5.0/3.0)) + 931.490 * 1.160*1.160*aimf*af/(aimf+af)*(std::pow(aimf,1./3.) + std::pow(af,1./3.))*(std::pow(aimf,1./3.) + std::pow(af,1./3.));
+
+      JPRFHEAVY = jprf1 * 0.4 * 931.49 * 1.16*1.16 * std::pow(af,5.0/3.0) / IINERTTOT;
+      JPRFLIGHT = jprf1 * 0.4 * 931.49 * 1.16*1.16 * std::pow(aimf,5.0/3.0) / IINERTTOT;
+
+     G4double zffs=0.,affs=0.,vx1ev_imfs=0.,vy1ev_imfs=0.,vz1ev_imfs=0.,jprf3=0.;
+
+     evapora(zf,af,&EEIMFP,JPRFHEAVY, &zffs, &affs, &mtota, &vz1ev_imfs, &vx1ev_imfs,&vy1ev_imfs, &FF11, &FIMF11, &zdummy, &adummy,&tkedummy, &jprf3, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
+
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
+               EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
+//
+//               EV_TAB(IJ+IEV_TAB,3) = EV_TEMP(IJ,3) + VX_PREF
+//               EV_TAB(IJ+IEV_TAB,4) = EV_TEMP(IJ,4) + VY_PREF
+//               EV_TAB(IJ+IEV_TAB,5) = EV_TEMP(IJ,5) + VZ_PREF
+// Lorentz transformation
+               lorentz_boost(VFP1_CM[0],VFP1_CM[1],VFP1_CM[2],
+                EV_TEMP[IJ][2],EV_TEMP[IJ][3],EV_TEMP[IJ][4],
+                &VXOUT,&VYOUT,&VZOUT);
+               lorentz_boost(vx1ev_imfs,vy1ev_imfs,vz1ev_imfs,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+               EV_TAB[IJ+IEV_TAB][2] = VX2OUT;
+               EV_TAB[IJ+IEV_TAB][3] = VY2OUT;
+               EV_TAB[IJ+IEV_TAB][4] = VZ2OUT;
+               }
+               IEV_TAB = IEV_TAB + IEV_TAB_TEMP;
+
+// For IMF - fission and IMF emission are not allowed
+      opt->optimfallowed = 0; //  IMF is not allowed
+      fiss->ifis = 0;         //  fission is not allowed
+//
+      FF22 = 0;
+      FIMF22 = 0;
+// Decay of "second" IMF
+     G4double zffimfs=0.,affimfs=0.,vx2ev_imfs=0.,vy2ev_imfs=0.,vz2ev_imfs=0.,jprf4=0.;
+
+     evapora(zimf,aimf,&EEIMF,JPRFLIGHT, &zffimfs, &affimfs, &mtota, &vz2ev_imfs, &vx2ev_imfs,&vy2ev_imfs, &FF22, &FIMF22, &zdummy1, &adummy1,&tkedummy1, &jprf4, &inttype, &inum,EV_TEMP,&IEV_TAB_TEMP);
+
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               EV_TAB[IJ+IEV_TAB][0] = EV_TEMP[IJ][0];
+               EV_TAB[IJ+IEV_TAB][1] = EV_TEMP[IJ][1];
+//
+//               EV_TAB(IJ+IEV_TAB,3) = EV_TEMP(IJ,3) + VX_PREF
+//               EV_TAB(IJ+IEV_TAB,4) = EV_TEMP(IJ,4) + VY_PREF
+//               EV_TAB(IJ+IEV_TAB,5) = EV_TEMP(IJ,5) + VZ_PREF
+// Lorentz transformation
+               lorentz_boost(VFP1_CM[0],VFP1_CM[1],VFP1_CM[2],
+                EV_TEMP[IJ][2],EV_TEMP[IJ][3],EV_TEMP[IJ][4],
+                &VXOUT,&VYOUT,&VZOUT);
+               lorentz_boost(vx2ev_imfs,vy2ev_imfs,vz2ev_imfs,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+               EV_TAB[IJ+IEV_TAB][2] = VX2OUT;
+               EV_TAB[IJ+IEV_TAB][3] = VY2OUT;
+               EV_TAB[IJ+IEV_TAB][4] = VZ2OUT;
+               }
+               IEV_TAB = IEV_TAB + IEV_TAB_TEMP;
+
+      AFP1 = idnint(affs);
+      ZFP1 = idnint(zffs);
+      ZFP2 = idnint(zffimfs);
+      AFP2 = idnint(affimfs);
+
+// Velocity of final heavy residue
+// Lorentz kinematics 
+//       VFP1_CM(1) = V_CM(1) + VX1_IMF + VX1EV_IMF
+//       VFP1_CM(2) = V_CM(2) + VY1_IMF + VY1EV_IMF
+//       VFP1_CM(3) = V_CM(3) + VZ1_IMF + VZ1EV_IMF
+        lorentz_boost(VX1_IMF,VY1_IMF,VZ1_IMF,
+                V_CM[0],V_CM[1],V_CM[2],
+                &VXOUT,&VYOUT,&VZOUT);
+               lorentz_boost(vx1ev_imf,vy1ev_imf,vz1ev_imf,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+               lorentz_boost(VX1_IMFS,VY1_IMFS,VZ1_IMFS,
+                VX2OUT,VY2OUT,VZ2OUT,
+                &VXOUT,&VYOUT,&VZOUT);
+               lorentz_boost(vx1ev_imfs,vy1ev_imfs,vz1ev_imfs,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+        VFP1_CM[0] = VX2OUT;
+        VFP1_CM[1] = VY2OUT;
+        VFP1_CM[2] = VZ2OUT;
+
+// Velocity of the second IMF
+// Lorentz kinematics 
+//       VFP1_CM(1) = V_CM(1) + VX1_IMF + VX1EV_IMF
+//       VFP1_CM(2) = V_CM(2) + VY1_IMF + VY1EV_IMF
+//       VFP1_CM(3) = V_CM(3) + VZ1_IMF + VZ1EV_IMF
+        lorentz_boost(VX1_IMF,VY1_IMF,VZ1_IMF,
+                V_CM[0],V_CM[1],V_CM[2],
+                &VXOUT,&VYOUT,&VZOUT);
+               lorentz_boost(vx1ev_imf,vy1ev_imf,vz1ev_imf,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+               lorentz_boost(VX2_IMFS,VY2_IMFS,VZ2_IMFS,
+                VX2OUT,VY2OUT,VZ2OUT,
+                &VXOUT,&VYOUT,&VZOUT);
+               lorentz_boost(vx2ev_imfs,vy2ev_imfs,vz2ev_imfs,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+        VFP2_CM[0] = VX2OUT;
+        VFP2_CM[1] = VY2OUT;
+        VFP2_CM[2] = VZ2OUT;
+      }//second decay
+    }// if(ftype == 2)
+
+// Only evaporation of light particles
+    if(ftype!=1 && ftype!=21){
+
+// ----------- RESOLVE UNSTABLE NUCLEI
+      IOUNSTABLE=0;
+
+      unstable_nuclei(AFP1,ZFP1,&afpnew,&zfpnew,IOUNSTABLE,
+       VFP1_CM[0],VFP1_CM[1],VFP1_CM[2],
+       &VP1X,&VP1Y,&VP1Z,EV_TAB_TEMP,&ILOOP);
+
+      if(IOUNSTABLE==1){
+      AFP1 = afpnew;
+      ZFP1 = zfpnew;
+      VFP1_CM[0] = VP1X;
+      VFP1_CM[1] = VP1Y;
+      VFP1_CM[2] = VP1Z;
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
+           EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
+         }
+        IEV_TAB = IEV_TAB + ILOOP;
+      }
+
+      if(ftype>1){
+       IOUNSTABLE=0;
+
+       unstable_nuclei(AFPIMF,ZFPIMF,&afpnew,&zfpnew,IOUNSTABLE,
+        VIMF_CM[0],VIMF_CM[1],VIMF_CM[2],
+        &VP1X,&VP1Y,&VP1Z,EV_TAB_TEMP,&ILOOP);
+
+        if(IOUNSTABLE==1){
+        AFPIMF = afpnew;
+        ZFPIMF = zfpnew;
+        VIMF_CM[0] = VP1X;
+        VIMF_CM[1] = VP1Y;
+        VIMF_CM[2] = VP1Z;
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
+           EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
+         }
+        IEV_TAB = IEV_TAB + ILOOP;
+        }
+
+       if(ftype>2){
+        IOUNSTABLE=0;
+
+        unstable_nuclei(AFP2,ZFP2,&afpnew,&zfpnew,IOUNSTABLE,
+        VFP2_CM[0],VFP2_CM[1],VFP2_CM[2],
+        &VP1X,&VP1Y,&VP1Z,EV_TAB_TEMP,&ILOOP);
+
+        if(IOUNSTABLE==1){
+        AFP2 = afpnew;
+        ZFP2 = zfpnew;
+        VFP2_CM[0] = VP1X;
+        VFP2_CM[1] = VP1Y;
+        VFP2_CM[2] = VP1Z;
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
+           EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
+         }
+         IEV_TAB = IEV_TAB + ILOOP;
+        }
+       }// ftype>2
+      }// ftype>1
     }
-    if(sitet > 1.0e-5) { //then
-      G4double cstet = pleva/peva;
-      G4double siphi = pyeva/(sitet*peva);
-      G4double csphi = pxeva/(sitet*peva);
-	
-      R[1][1] = cstet*csphi;
-      R[1][2] = -siphi;
-      R[1][3] = sitet*csphi;
-      R[2][1] = cstet*siphi;
-      R[2][2] = csphi;
-      R[2][3] = sitet*siphi;
-      R[3][1] = -sitet;
-      R[3][2] = 0.0;
-      R[3][3] = cstet;
+
+
+// For the case of fission:
+    if(ftype==1 || ftype==21){
+// ----------- RESOLVE UNSTABLE NUCLEI
+      IOUNSTABLE=0;
+// ----------- Fragment 1
+      unstable_nuclei(AFP1,ZFP1,&afpnew,&zfpnew,IOUNSTABLE,
+       VFP1_CM[0],VFP1_CM[1],VFP1_CM[2],
+       &VP1X,&VP1Y,&VP1Z,EV_TAB_TEMP,&ILOOP);
+
+      if(IOUNSTABLE==1){
+      AFP1 = afpnew;
+      ZFP1 = zfpnew;
+      VFP1_CM[0] = VP1X;
+      VFP1_CM[1] = VP1Y;
+      VFP1_CM[2] = VP1Z;
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
+           EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
+         }
+        IEV_TAB = IEV_TAB + ILOOP;
+      }
+
+      IOUNSTABLE=0;
+// ----------- Fragment 2
+      unstable_nuclei(AFP2,ZFP2,&afpnew,&zfpnew,IOUNSTABLE,
+       VFP2_CM[0],VFP2_CM[1],VFP2_CM[2],
+       &VP1X,&VP1Y,&VP1Z,EV_TAB_TEMP,&ILOOP);
+
+      if(IOUNSTABLE==1){
+      AFP2 = afpnew;
+      ZFP2 = zfpnew;
+      VFP2_CM[0] = VP1X;
+      VFP2_CM[1] = VP1Y;
+      VFP2_CM[2] = VP1Z;
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
+           EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
+         }
+        IEV_TAB = IEV_TAB + ILOOP;
+      }
+
+       if(ftype==21){
+       IOUNSTABLE=0;
+// ----------- Fragment IMF
+       unstable_nuclei(AFPIMF,ZFPIMF,&afpnew,&zfpnew,IOUNSTABLE,
+        VIMF_CM[0],VIMF_CM[1],VIMF_CM[2],
+        &VP1X,&VP1Y,&VP1Z,EV_TAB_TEMP,&ILOOP);
+
+        if(IOUNSTABLE==1){
+        AFPIMF = afpnew;
+        ZFPIMF = zfpnew;
+        VIMF_CM[0] = VP1X;
+        VIMF_CM[1] = VP1Y;
+        VIMF_CM[2] = VP1Z;
+         for(G4int I = 0;I<ILOOP;I++){
+          for(G4int IJ = 0; IJ<5; IJ++)
+           EV_TAB[I+IEV_TAB][IJ] = EV_TAB_TEMP[I][IJ];
+         }
+        IEV_TAB = IEV_TAB + ILOOP;
+        }
+       }// ftype=21
     }
-    else {
-      R[1][1] = 1.0;
-      R[1][2] = 0.0;
-      R[1][3] = 0.0;
-      R[2][1] = 0.0;
-      R[2][2] = 1.0;
-      R[2][3] = 0.0;
-      R[3][1] = 0.0;
-      R[3][2] = 0.0;
-      R[3][3] = 1.0;
-    } //  endif
-    // c test de verif:                                      
 
-    if((zff1 <= 0.0) || (aff1 <= 0.0) || (aff1 < zff1)) { //then   
-      if(verboseLevel > 2) {
-	// G4cout <<"zf = " <<  zf <<" af = " << af <<"ee = " << ee <<"zff1 = " << zff1 <<"aff1 = " << aff1 << G4endl;
+// Cross check
+      if((ftype == 1 ||  ftype == 21) && (AFP2<=0 || AFP1<=0 || ZFP2<=0 || ZFP1<=0)){
+       std::cout << "ZFP1:" << ZFP1 << std::endl;
+       std::cout << "AFP1:" << AFP1 << std::endl;
+       std::cout << "ZFP2:" << ZFP2 << std::endl;
+       std::cout << "AFP2:" << AFP2 << std::endl;
       }
-    }
-    else {
-      // C ---------------------- PF1 will evaporate 
-      epf1_in = double(eff1);
-      epf1_out = epf1_in;
-      //   void evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf, 
-      // 	       G4double *zf_par, G4double *af_par, G4double *mtota_par,
-      // 	       G4double *pleva_par, G4double *pxeva_par, G4double *pyeva_par,
-      // 	       G4double *ff_par, G4int *inttype_par, G4int *inum_par);
-      G4double zf1 = 0.0, af1 = 0.0, malpha1 = 0.0, ffpleva1 = 0.0, ffpxeva1 = 0.0, ffpyeva1 = 0.0;
-      G4int ff1 = 0, ftype1 = 0;
-      evapora(zff1, aff1, &epf1_out, 0.0, &zf1, &af1, &malpha1, &ffpleva1,
-      	      &ffpxeva1, &ffpyeva1, &ff1, &ftype1, &inum);
-      // C On ajoute le fragment:
-      volant->iv = volant->iv + 1;
-      volant->acv[volant->iv] = af1;
-      volant->zpcv[volant->iv] = zf1;
-      if(verboseLevel > 2) {
-	// G4cout << __FILE__ << ":" << __LINE__ << " Added: zf1 = " << zf1 << " af1 = " << af1 << " at index " << volant->iv << G4endl;
-	volant->dump();
-      }
-      if(verboseLevel > 2) {
-	// G4cout <<"Added fission fragment: a = " << volant->acv[volant->iv] << " z = " << volant->zpcv[volant->iv] << G4endl;
-      }
-      peva = std::sqrt(std::pow(ffpxeva1,2) + std::pow(ffpyeva1,2) + std::pow(ffpleva1,2));
-      volant->pcv[volant->iv] = peva;
-      if(peva > 0.001) { // then
-	volant->xcv[volant->iv] = ffpxeva1/peva;
-	volant->ycv[volant->iv] = ffpyeva1/peva;
-	volant->zcv[volant->iv] = ffpleva1/peva;
-      }
-      else {
-	volant->xcv[volant->iv] = 1.0;
-	volant->ycv[volant->iv] = 0.0;
-	volant->zcv[volant->iv] = 0.0;
-      } // end if
-	        
-      // C Pour Verif evapo de PF1 dans le systeme du Noyau Fissionant
-      G4double bil1_e = 0.0;
-      G4double bil1_px = 0.0;
-      G4double bil1_py=0.0;
-      G4double bil1_pz=0.0;
-      for(G4int iloc = nbpevap + 1; iloc <= volant->iv; iloc++) { //do iloc=nbpevap+1,iv
-	//      for(G4int iloc = nbpevap + 1; iloc <= volant->iv + 1; iloc++) { //do iloc=nbpevap+1,iv
-	mglms(volant->acv[iloc], volant->zpcv[iloc],0,&el);
-       	masse = volant->zpcv[iloc]*fmp + (volant->acv[iloc] - volant->zpcv[iloc])*fmn + el; 
- 	bil1_e = bil1_e + std::sqrt(std::pow(volant->pcv[iloc],2) + std::pow(masse,2));
- 	bil1_px = bil1_px + volant->pcv[iloc]*(volant->xcv[iloc]);
- 	bil1_py = bil1_py + volant->pcv[iloc]*(volant->ycv[iloc]);
- 	bil1_pz = bil1_pz + volant->pcv[iloc]*(volant->zcv[iloc]);
-      } // enddo
 
-      // Calcul des cosinus directeurs de PF1 dans le Remnant et calcul
-      // des coefs pour la transformation de Lorentz Systeme PF --> Systeme Remnant
-      translabpf(masse1,t1,p1,ctet1,phi1,gamfis,etfis,R,&plab1,&gam1,&eta1,csdir1);
+//     Put heavy residues in the EV_TAB array
+       EV_TAB[IEV_TAB][0] = ZFP1;
+       EV_TAB[IEV_TAB][1] = AFP1;
+       EV_TAB[IEV_TAB][2] = VFP1_CM[0];
+       EV_TAB[IEV_TAB][3] = VFP1_CM[1];
+       EV_TAB[IEV_TAB][4] = VFP1_CM[2];
+       IEV_TAB = IEV_TAB + 1;
 
-      // calcul des impulsions des particules evaporees dans le systeme Remnant:
-      nopart = varntp->ntrack - 1;
-      translab(gam1,eta1,csdir1,nopart,nbpevap+1);
-      memiv = nbpevap + 1;	  // memoires pour la future transformation
-      mempaw = nopart;	  // remnant->labo pour pf1 et pf2.
-      lmi_pf1 = nopart + nbpevap + 1;  // indices min et max dans /var_ntp/
-      lma_pf1 = nopart + volant->iv;   // des particules issues de pf1
-      nbpevap = volant->iv;	// nombre de particules d'evaporation traitees
-    } // end if
-    // C --------------------- End of PF1 calculation
-  
-    // c test de verif:                                                                                                         
-    if((zff2 <= 0.0) || (aff2 <= 0.0) || (aff2 <= zff2)) { //then   
-      if(verboseLevel > 2) {
-	// G4cout << zf << " " << af << " " << ee  << " " << zff2 << " " << aff2 << G4endl;                                
-      }
-    }
-    else {                                                          
-      // C ---------------------- PF2 will evaporate 
-      G4double epf2_in = double(eff2);
-      epf2_out = epf2_in;
-      //   void evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf, 
-      // 	       G4double *zf_par, G4double *af_par, G4double *mtota_par,
-      // 	       G4double *pleva_par, G4double *pxeva_par, G4double *pyeva_par,
-      // 	       G4double *ff_par, G4int *inttype_par, G4int *inum_par);
-      G4double zf2 = 0.0, af2 = 0.0, malpha2 = 0.0, ffpleva2 = 0.0, ffpxeva2 = 0.0, ffpyeva2 = 0.0;
-      G4int ff2 = 0, ftype2 = 0;
-      evapora(zff2,aff2,&epf2_out,0.0,&zf2,&af2,&malpha2,&ffpleva2,
-      	      &ffpxeva2,&ffpyeva2,&ff2,&ftype2,&inum);
-      // C On ajoute le fragment:
-      volant->iv = volant->iv + 1;
-      volant->acv[volant->iv] = af2;
-      volant->zpcv[volant->iv] = zf2; 
-      peva = std::sqrt(std::pow(ffpxeva2,2) + std::pow(ffpyeva2,2) + std::pow(ffpleva2,2));
-      volant->pcv[volant->iv] = peva;
-      //      exit(0);
-      if(peva > 0.001) { //then
-	volant->xcv[volant->iv] = ffpxeva2/peva;
-	volant->ycv[volant->iv] = ffpyeva2/peva;
-	volant->zcv[volant->iv] = ffpleva2/peva;
-      }
-      else {
-	volant->xcv[volant->iv] = 1.0;
-	volant->ycv[volant->iv] = 0.0;
-	volant->zcv[volant->iv] = 0.0;
-      } //end if        
-      // C Pour Verif evapo de PF1 dans le systeme du Noyau Fissionant
-      G4double bil2_e = 0.0;
-      G4double bil2_px = 0.0;
-      G4double bil2_py = 0.0;
-      G4double bil2_pz = 0.0;
-      //      for(G4int iloc = nbpevap + 1; iloc <= volant->iv; iloc++) { //do iloc=nbpevap+1,iv
-      for(G4int iloc = nbpevap + 1; iloc <= volant->iv; iloc++) { //do iloc=nbpevap+1,iv
-	mglms(volant->acv[iloc],volant->zpcv[iloc],0,&el);
-      	masse = volant->zpcv[iloc]*fmp + (volant->acv[iloc] - volant->zpcv[iloc])*fmn + el; 
-	bil2_e = bil2_e + std::sqrt(std::pow(volant->pcv[iloc],2) + std::pow(masse,2));
-	bil2_px = bil2_px + volant->pcv[iloc]*(volant->xcv[iloc]);
-	bil2_py = bil2_py + volant->pcv[iloc]*(volant->ycv[iloc]);
-	bil2_pz = bil2_pz + volant->pcv[iloc]*(volant->zcv[iloc]);
-      } //enddo
+       if(AFP2>0){
+       EV_TAB[IEV_TAB][0] = ZFP2;
+       EV_TAB[IEV_TAB][1] = AFP2;
+       EV_TAB[IEV_TAB][2] = VFP2_CM[0];
+       EV_TAB[IEV_TAB][3] = VFP2_CM[1];
+       EV_TAB[IEV_TAB][4] = VFP2_CM[2];
+       IEV_TAB = IEV_TAB + 1;
+       }
 
-      // C ----Calcul des cosinus directeurs de PF2 dans le Remnant et calcul
-      // c des coefs pour la transformation de Lorentz Systeme PF --> Systeme Remnant
-      t2 = b - t1;
-      //      G4double ctet2 = -ctet1;
-      ctet2 = -1.0*ctet1;
-      phi2 = std::fmod(phi1+3.141592654,6.283185308);
-      p2 = std::sqrt(t2*(t2+2.0*masse2));
-      
-      //   void translabpf(G4double masse1, G4double t1, G4double p1, G4double ctet1,
-      // 		  G4double phi1, G4double gamrem, G4double etrem, G4double R[][4],
-      // 		  G4double *plab1, G4double *gam1, G4double *eta1, G4double csdir[]);
-      translabpf(masse2,t2,p2,ctet2,phi2,gamfis,etfis,R,&plab2,&gam2,&eta2,csdir2);
-      // C
-      // C  calcul des impulsions des particules evaporees dans le systeme Remnant:
-      // c
-      nopart = varntp->ntrack - 1;
-      translab(gam2,eta2,csdir2,nopart,nbpevap+1);
-      lmi_pf2 = nopart + nbpevap + 1;	// indices min et max dans /var_ntp/
-      lma_pf2 = nopart + volant->iv;		// des particules issues de pf2
-    } // end if
-    // C --------------------- End of PF2 calculation
+       if(AFPIMF>0){
+       EV_TAB[IEV_TAB][0] = ZFPIMF;
+       EV_TAB[IEV_TAB][1] = AFPIMF;
+       EV_TAB[IEV_TAB][2] = VIMF_CM[0];
+       EV_TAB[IEV_TAB][3] = VIMF_CM[1];
+       EV_TAB[IEV_TAB][4] = VIMF_CM[2];
+       IEV_TAB = IEV_TAB + 1;
+       }
 
-    // C Pour verifications: calculs du noyau fissionant et des PF dans 
-    // C    le systeme du remnant.
-    for(G4int iloc = 1; iloc <= 3; iloc++) { // do iloc=1,3
-      pfis_rem[iloc] = 0.0;
-    } // enddo 
-    G4double efis_rem, pfis_trav[4];
-    lorab(gamfis,etfis,massef,pfis_rem,&efis_rem,pfis_trav);
-    rotab(R,pfis_trav,pfis_rem);
-      
-    stet1 = std::sqrt(1.0 - std::pow(ctet1,2));
-    pf1_rem[1] = p1*stet1*std::cos(phi1);
-    pf1_rem[2] = p1*stet1*std::sin(phi1);
-    pf1_rem[3] = p1*ctet1;
-    G4double e1_rem;
-    lorab(gamfis,etfis,masse1+t1,pf1_rem,&e1_rem,pfis_trav);
-    rotab(R,pfis_trav,pf1_rem);
-
-    stet2 = std::sqrt(1.0 - std::pow(ctet2,2));
-    
-    G4double pf2_rem[4];
-    G4double e2_rem;
-    pf2_rem[1] = p2*stet2*std::cos(phi2);
-    pf2_rem[2] = p2*stet2*std::sin(phi2);
-    pf2_rem[3] = p2*ctet2;
-    lorab(gamfis,etfis,masse2+t2,pf2_rem,&e2_rem,pfis_trav);
-    rotab(R,pfis_trav,pf2_rem);
-    // C Verif 0: Remnant = evapo_pre_fission + Noyau Fissionant
-    bil_e = remmass - efis_rem - bil_e;
-    bil_px = bil_px + pfis_rem[1];
-    bil_py = bil_py + pfis_rem[2];  
-    bil_pz = bil_pz + pfis_rem[3];  
-    // C Verif 1: noyau fissionant = PF1 + PF2 dans le systeme remnant
-    //    G4double bilan_e = efis_rem - e1_rem - e2_rem;
-    //    G4double bilan_px = pfis_rem[1] - pf1_rem[1] - pf2_rem[1];
-    //    G4double bilan_py = pfis_rem[2] - pf1_rem[2] - pf2_rem[2];
-    //    G4double bilan_pz = pfis_rem[3] - pf1_rem[3] - pf2_rem[3];
-    // C Verif 2: PF1 et PF2 egaux a toutes leurs particules evaporees
-    // C   (Systeme remnant)
-    if((lma_pf1-lmi_pf1) != 0) { //then
-      G4double bil_e_pf1 = e1_rem - epf1_out;
-      G4double bil_px_pf1 = pf1_rem[1];
-      G4double bil_py_pf1 = pf1_rem[2]; 
-      G4double bil_pz_pf1 = pf1_rem[3];
-      for(G4int ipf1 = lmi_pf1; ipf1 <= lma_pf1; ipf1++) { //do ipf1=lmi_pf1,lma_pf1
-	if(varntp->enerj[ipf1] <= 0.0) continue; // Safeguard against a division by zero
-	bil_e_pf1 = bil_e_pf1 - (std::pow(varntp->plab[ipf1],2) + std::pow(varntp->enerj[ipf1],2))/(2.0*(varntp->enerj[ipf1]));
-	cst = std::cos(varntp->tetlab[ipf1]/57.2957795);
-	sst = std::sin(varntp->tetlab[ipf1]/57.2957795);
-	csf = std::cos(varntp->philab[ipf1]/57.2957795);
-	ssf = std::sin(varntp->philab[ipf1]/57.2957795);
-	bil_px_pf1 = bil_px_pf1 - varntp->plab[ipf1]*sst*csf;
-	bil_py_pf1 = bil_py_pf1 - varntp->plab[ipf1]*sst*ssf;
-	bil_pz_pf1 = bil_pz_pf1 - varntp->plab[ipf1]*cst;		 
-      } // enddo
-    } //endif
-	 
-    if((lma_pf2-lmi_pf2) != 0) { //then
-      G4double bil_e_pf2 =  e2_rem - epf2_out;
-      G4double bil_px_pf2 = pf2_rem[1];
-      G4double bil_py_pf2 = pf2_rem[2]; 
-      G4double bil_pz_pf2 = pf2_rem[3];
-      for(G4int ipf2 = lmi_pf2; ipf2 <= lma_pf2; ipf2++) { //do ipf2=lmi_pf2,lma_pf2
-	if(varntp->enerj[ipf2] <= 0.0) continue; // Safeguard against a division by zero
-	bil_e_pf2 = bil_e_pf2 - (std::pow(varntp->plab[ipf2],2) + std::pow(varntp->enerj[ipf2],2))/(2.0*(varntp->enerj[ipf2]));
-	cst = std::cos(varntp->tetlab[ipf2]/57.2957795);
-	sst = std::sin(varntp->tetlab[ipf2]/57.2957795);
-	csf = std::cos(varntp->philab[ipf2]/57.2957795);
-	ssf = std::sin(varntp->philab[ipf2]/57.2957795);
-	bil_px_pf2 = bil_px_pf2 - varntp->plab[ipf2]*sst*csf;
-	bil_py_pf2 = bil_py_pf2 - varntp->plab[ipf2]*sst*ssf;
-	bil_pz_pf2 = bil_pz_pf2 - varntp->plab[ipf2]*cst;		 
-      } // enddo
-    } //endif 
-    // C
-    // C ---- Transformation systeme Remnant -> systeme labo. (evapo de PF1 ET PF2)
-    // C
-    //    G4double mempaw, memiv;
-    translab(gamrem,etrem,csrem,mempaw,memiv);
-    // C *******************  END of fission calculations ************************
-    if(verboseLevel > 2) {
-      // G4cout <<"Dump at the end of fission event " << G4endl;
-      volant->dump();
-      // G4cout <<"End of dump." << G4endl;
-    }
-  }
-  else {
-    // C ************************ Evapo sans fission *****************************
-    // C Here, FF=0, --> Evapo sans fission, on ajoute le fragment:
-    // C *************************************************************************
-    varntp->kfis = 0;
-    if(verboseLevel > 2) {
-      // G4cout <<"Evaporation without fission" << G4endl;
-    }
-    volant->iv = volant->iv + 1;
-    volant->acv[volant->iv] = af;
-    volant->zpcv[volant->iv] = zf;
-
-    G4double peva = std::sqrt(std::pow(pxeva,2)+std::pow(pyeva,2)+std::pow(pleva,2));
-    volant->pcv[volant->iv] = peva;
-    if(peva > 0.001) { //then
-      volant->xcv[volant->iv] = pxeva/peva;
-      volant->ycv[volant->iv] = pyeva/peva;
-      volant->zcv[volant->iv] = pleva/peva;        
-    }
-    else {
-      volant->xcv[volant->iv] = 1.0;
-      volant->ycv[volant->iv] = 0.0;
-      volant->zcv[volant->iv] = 0.0;
-    } // end if        
-	
-    // C
-    // C  calcul des impulsions des particules evaporees dans le systeme labo:
-    // c
-    trem = double(erecrem);
-    // C      REMMASS = pace2(APRF,ZPRF) + APRF*UMA - ZPRF*MELEC	!Canonic
-    // C      REMMASS = MCOREM  + DBLE(ESREM)				!OK
-    remmass = mcorem;						//Cugnon
-    // C      GAMREM = (REMMASS + TREM)/REMMASS			!OK
-    // C      ETREM = DSQRT(TREM*(TREM + 2.*REMMASS))/REMMASS		!OK
-    csrem[0] = 0.0; // Should not be used.
-    csrem[1] = alrem;
-    csrem[2] = berem;
-    csrem[3] = garem;
-
-    //    for(G4int j = 1; j <= volant->iv; j++) { //do j=1,iv
-    for(G4int j = 1; j <= volant->iv; j++) { //do j=1,iv
-      if(volant->acv[j] == 0) {
-	if(verboseLevel > 2) {
-	  // G4cout <<"volant->acv[" << j << "] = 0" << G4endl;
-	  // G4cout <<"volant->iv = " << volant->iv << G4endl;
-	}
-      }
-      if(volant->acv[j] > 0) {
-	mglms(volant->acv[j],volant->zpcv[j],0,&el);
-	fmcv = volant->zpcv[j]*fmp + (volant->acv[j] - volant->zpcv[j])*fmn + el;
-	e_evapo = e_evapo + std::sqrt(std::pow(volant->pcv[j],2) + std::pow(fmcv,2));
-      }
-    } // enddo
-
-    // C Redefinition pour conservation d'impulsion!!!
-    // C   this mass obtained by energy balance is very close to the
-    // C   mass of the remnant computed by pace2 + excitation energy (EE). (OK)      
-    remmass = e_evapo;
-      
-    G4double gamrem = std::sqrt(std::pow(pcorem,2)+std::pow(remmass,2))/remmass;
-    G4double etrem = pcorem/remmass;
-
-    nopart = varntp->ntrack - 1;
-    translab(gamrem,etrem,csrem,nopart,1);
-                  
-    // C End of the (FISSION - NO FISSION) condition (FF=1 or 0)                                          
-  } //end if 
-  // C *********************** FIN de l'EVAPO KHS ******************** 
+// Put the array of particles in the root file of INCL
+   FillData(IMULTBU,IEV_TAB);
+   return;
 }
 
 // Evaporation code
@@ -732,134 +2056,10 @@ void G4Abla::initEvapora()
   //     85	C                                                                       
   //     86	C     ECNZ G.S. SHELL EFFECT FOR THE MASSES (IDENTICAL TO ECGNZ)        
   //     87	C---------------------------------------------------------------------  
-  //     88	C                                                                       
-  //     89	C     OPTIONS AND PARAMETERS FOR FISSION CHANNEL                        
-  //     90	C     COMMON /FISS/    AKAP,BET,HOMEGA,KOEFF,IFIS,                       
-  //     91	C                            OPTSHP,OPTXFIS,OPTLES,OPTCOL               
-  //     92	C                                                                       
-  //     93	C     AKAP   - HBAR**2/(2* MN * R_0**2) = 10 MEV                        
-  //     94	C     BET    - REDUCED NUCLEAR FRICTION COEFFICIENT IN (10**21 S**-1)   
-  //     95	C     HOMEGA - CURVATURE OF THE FISSION BARRIER = 1 MEV                 
-  //     96	C     KOEFF  - COEFFICIENT FOR THE LD FISSION BARRIER == 1.0            
-  //     97	C     IFIS   - 0/1 FISSION CHANNEL OFF/ON                               
-  //     98	C     OPTSHP - INTEGER SWITCH FOR SHELL CORRECTION IN MASSES/ENERGY     
-  //     99	C            = 0 NO MICROSCOPIC CORRECTIONS IN MASSES AND ENERGY        
-  //    100	C            = 1 SHELL ,  NO PAIRING                                    
-  //    101	C            = 2 PAIRING, NO SHELL                                      
-  //    102	C            = 3 SHELL AND PAIRING                                      
-  //    103	C     OPTCOL - 0/1 COLLECTIVE ENHANCEMENT SWITCHED ON/OFF               
-  //    104	C     OPTXFIS- 0,1,2 FOR MYERS & SWIATECKI, DAHLINGER, ANDREYEV         
-  //    105	C              FISSILITY PARAMETER.                                     
-  //    106	C     OPTLES - CONSTANT TEMPERATURE LEVEL DENSITY FOR A,Z > TH-224      
-  //    107	C     OPTCOL - 0/1 COLLECTIVE ENHANCEMENT OFF/ON                        
-  //    108	C---------------------------------------------------------------------  
-  //    109	C                                                                       
-  //    110	C     OPTIONS                                                           
-  //    111	C     COMMON /OPT/    OPTEMD,OPTCHA,EEFAC                               
-  //    112	C                                                                       
-  //    113	C     OPTEMD - 0/1  NO EMD / INCL. EMD                                  
-  //    114	C     OPTCHA - 0/1  0 GDR / 1 HYPERGEOMETRICAL PREFRAGMENT-CHARGE-DIST. 
-  //    115	C              ***  RECOMMENDED IS OPTCHA = 1 ***                       
-  //    116	C     EEFAC  - EXCITATION ENERGY FACTOR, 2.0 RECOMMENDED                
-  //    117	C---------------------------------------------------------------------  
-  //    118	C                                                                       
-  //    119	C     FISSION BARRIERS                                                  
-  //    120	C     COMMON /FB/     EFA                                               
-  //    121	C     EFA    - ARRAY OF FISSION BARRIERS                                
-  //    122	C---------------------------------------------------------------------  
-  //    123	C                                                                       
-  //    124	C p    LEVEL DENSITY PARAMETERS                                          
-  //    125	C     COMMON /ALD/    AV,AS,AK,OPTAFAN                                  
-  //    126	C     AV,AS,AK - VOLUME,SURFACE,CURVATURE DEPENDENCE OF THE             
-  //    127	C                LEVEL DENSITY PARAMETER                                
-  //    128	C     OPTAFAN - 0/1  AF/AN >=1 OR AF/AN ==1                             
-  //    129	C               RECOMMENDED IS OPTAFAN = 0                              
-  //    130	C---------------------------------------------------------------------  
-  //    131	C   ____________________________________________________________________
-  //    132	C  /                                                                    
-  //    133	C  /  INITIALIZES PARAMETERS IN COMMON /ABRAMAIN/, /EMDPAR/, /ECLD/ ... 
-  //    134	C  /  PROJECTILE PARAMETERS, EMD PARAMETERS, SHELL CORRECTION TABLES.   
-  //    135	C  /  CALCULATES MAXIMUM IMPACT PARAMETER FOR NUCLEAR COLLISIONS AND    
-  //    136	C  /  TOTAL GEOMETRICAL CROSS SECTION + EMD CROSS SECTIONS              
-  //    137	C   ____________________________________________________________________
-  //    138	C                                                                       
-  //    139	C                                                                       
-  //    201	C                                                                       
-  //    202	C---------- SET INPUT VALUES                                            
-  //    203	C                                                                       
-  //    204	C *** INPUT FROM UNIT 10 IN THE FOLLOWING SEQUENCE !                    
-  //    205	C     AP1 =    INTEGER  !                                               
-  //    206	C     ZP1 =    INTEGER  !                                               
-  //    207	C     AT1 =    INTEGER  !                                               
-  //    208	C     ZT1 =    INTEGER  !                                               
-  //    209	C     EAP =    REAL     !                                               
-  //    210	C     IMAX =   INTEGER  !                                               
-  //    211	C     IFIS =   INTEGER SWITCH FOR FISSION                               
-  //    212	C     OPTSHP = INTEGER SWITCH FOR SHELL CORRECTION IN MASSES/ENERGY     
-  //    213	C            =0 NO MICROSCOPIC CORRECTIONS IN MASSES AND ENERGY         
-  //    214	C            =1 SHELL , NO PAIRING CORRECTION                           
-  //    215	C            =2 PAIRING, NO SHELL CORRECTION                            
-  //    216	C            =3 SHELL AND PAIRING CORRECTION IN MASSES AND ENERGY       
-  //    217	C     OPTEMD =0,1  0 NO EMD, 1 INCL. EMD                                
-  //    218	C               ELECTROMAGNETIC DISSOZIATION IS CALCULATED AS WELL.     
-  //    219	C     OPTCHA =0,1  0 GDR- , 1 HYPERGEOMETRICAL PREFRAGMENT-CHARGE-DIST. 
-  //    220	C               RECOMMENDED IS OPTCHA=1                                 
-  //    221	C     OPTCOL =0,1 COLLECTIVE ENHANCEMENT SWITCHED ON 1 OR OFF 0 IN DENSN
-  //    222	C     OPTAFAN=0,1 SWITCH FOR AF/AN = 1 IN DENSNIV 0 AF/AN>1 1 AF/AN=1   
-  //    223	C     AKAP =  REAL    ALWAYS EQUALS 10                                  
-  //    224	C     BET  =  REAL    REDUCED FRICTION COEFFICIENT / 10**(+21) S**(-1)  
-  //    225	C     HOMEGA = REAL   CURVATURE / MEV RECOMMENDED = 1. MEV              
-  //    226	C     KOEFF  = REAL   COEFFICIENT FOR FISSION BARRIER                   
-  //    227	C     OPTXFIS= INTEGER 0,1,2 FOR MYERS & SWIATECKI, DAHLINGER, ANDREYEV 
-  //    228	C              FISSILITY PARAMETER.                                     
-  //    229	C     EEFAC  = REAL EMPIRICAL FACTOR FOR THE EXCITATION ENERGY          
-  //    230	C                   RECOMMENDED 2.D0, STATISTICAL ABRASION MODELL 1.D0  
-  //    231	C     AV     = REAL KOEFFICIENTS FOR CALCULATION OF A(TILDE)            
-  //    232	C     AS     = REAL LEVEL DENSITY PARAMETER                             
-  //    233	C     AK     = REAL                                                     
-  //    234	C                                                                       
-  //    235	C This following inputs will be initialized in the main through the 
-  //    236	C         common /ABLAMAIN/  (A.B.)
-  //    237	
+  //       
 
-  // switch-fission.1=on.0=off
-  fiss->ifis = 1;
-
-  // shell+pairing.0-1-2-3
-  fiss->optshp = 0;
-
-  // optemd =0,1  0 no emd, 1 incl. emd                                
-  opt->optemd = 1;
-  // read(10,*,iostat=io) dum(10),optcha                               
-  opt->optcha = 1;
-
-  // not.to.be.changed.(akap)
-  fiss->akap = 10.0;
-
-  // nuclear.viscosity.(beta)
-  fiss->bet = 1.5;
-
-  // potential-curvature
-  fiss->homega = 1.0;
-
-  // fission-barrier-coefficient
-  fiss->koeff = 1.;
-
-  //collective enhancement switched on 1 or off 0 in densn (qr=val or =1.)
-  fiss->optcol = 0;
-
-  // switch-for-low-energy-sys
-  fiss->optles = 0;
-
-  opt->eefac = 2.;
-
-  ald->optafan = 0;
-
-  ald->av = 0.073e0;
-  ald->as = 0.095e0;
-  ald->ak = 0.0e0;
-
-  fiss->optxfis = 1;
+  G4double MN = 939.5653301;   
+  G4double MP = 938.7829835;                             
 
 #ifdef ABLAXX_IN_GEANT4_MODE
   G4AblaDataFile *dataInterface = new G4AblaDataFile();
@@ -875,70 +2075,180 @@ void G4Abla::initEvapora()
     //    G4Exception("ERROR: Failed to read datafiles.");
   }
   
-  for(int z = 0; z < 99; z++) { //do 30  z = 0,98,1                                                 
-    for(int n = 0; n < 154; n++) { //do 31  n = 0,153,1                                              
+  for(G4int z = 0; z < 99; z++) { //do 30  z = 0,98,1                                                 
+    for(G4int n = 0; n < 154; n++) { //do 31  n = 0,153,1                                              
       ecld->ecfnz[n][z] = 0.e0;
       ec2sub->ecnz[n][z] = dataInterface->getEcnz(n,z);
       ecld->ecgnz[n][z] = dataInterface->getEcnz(n,z);
       ecld->alpha[n][z] = dataInterface->getAlpha(n,z);
       ecld->vgsld[n][z] = dataInterface->getVgsld(n,z);
-      //      if(ecld->ecgnz[n][z] != 0.0) // G4cout <<"ecgnz[" << n << "][" << z << "] = " << ecld->ecgnz[n][z] << G4endl;
+      ecld->rms[n][z] = dataInterface->getRms(n,z);
     }
   }
 
-  for(int z = 0; z < 500; z++) {
-    for(int a = 0; a < 500; a++) {
-      pace->dm[z][a] = dataInterface->getPace2(a,z);
+  for(G4int z = 0; z < 137; z++){                                                  
+    for(G4int n = 0; n < 251; n++){  
+      ecld->beta2[n][z] = dataInterface->getBeta2(n,z);
+      ecld->beta4[n][z] = dataInterface->getBeta4(n,z);
     }
   }
 
+  for(G4int z = 0; z < 500; z++) {
+    for(G4int a = 0; a < 500; a++) {
+      pace->dm[z][a] = dataInterface->getPace2(z,a);
+    }
+  }
+
+
+
+  G4double mfrldm[154][13];
+// For 2 < Z < 12 we take "experimental" shell corrections instead of calculated
+// Read FRLDM tables
+  for(G4int i=0;i<13;i++){
+   for(G4int j=0;j<154;j++){
+      if(dataInterface->getMexpID(j,i)==1){
+       masses->mexpiop[j][i]=1;  
+      }else{
+       masses->mexpiop[j][i]=0;
+      } 
+// LD masses (even-odd effect is later considered according to Ignatyuk)
+      if(i==0 && j==0)
+       mfrldm[j][i] = 0.;
+      else
+       mfrldm[j][i] = MP*i+MN*j+eflmac(i+j,i,1,0);
+   }
+  }
+
+  G4double e0=0.;
+  for(G4int i=1;i<13;i++){
+   for(G4int j=1;j<154;j++){
+      masses->bind[j][i]=0.;
+      if(masses->mexpiop[j][i]==1){
+        if(j<3){
+
+          ec2sub->ecnz[j][i] = 0.0;
+          ecld->ecgnz[j][i] = ec2sub->ecnz[j][i];
+          masses->bind[j][i] = dataInterface->getMexp(j,i)-MP*i -MN*j;
+          ecld->vgsld[j][i]=0.;
+
+          e0=0.;
+        }else{
+// For these nuclei, we take "experimental" ground-state shell corrections
+//
+// Parametrization of CT model by Ignatyuk; note that E0 is shifted to correspond
+// to pairing shift in Fermi-gas model (there, energy is shifted taking odd-odd nuclei as bassis)
+              G4double para=0.;
+              parite(j+i,&para);
+                if(para<0.0){
+// e-o, o-e
+                 e0 =  0.285+11.17*std::pow(j+i,-0.464) -0.390-0.00058*(j+i);
+                }else{
+                  G4double parz=0.;
+                  parite(i,&parz);
+                  if (parz>0.0){
+// e-e
+                   e0 = 22.34*std::pow(j+i,-0.464)-0.235;
+                  }else{
+// o-o
+                   e0 = 0.0;
+                  }
+                }
+//
+                if((j==i)&&mod(j,2)==1&&mod(i,2)==1){
+                e0 = e0 - 30.0*(1.0/G4double(j+i));
+                }
+
+            G4double delta_tot = ec2sub->ecnz[j][i] - ecld->vgsld[j][i];
+            ec2sub->ecnz[j][i] = dataInterface->getMexp(j,i) - (mfrldm[j][i] - e0);
+
+            ecld->vgsld[j][i] = max(0.0,ec2sub->ecnz[j][i] - delta_tot);
+            ecld->ecgnz[j][i] = ec2sub->ecnz[j][i];
+
+        }//if j
+     }//if mexpiop
+   }
+  }
+//
   delete dataInterface;
 }
 
-void G4Abla::qrot(G4double z, G4double a, G4double bet, G4double sig, G4double u, G4double *qr)
+void G4Abla::SetParametersG4(G4int z, G4int a)
 {
-  G4double ucr = 10.0; // Critical energy for damping.
-  G4double dcr = 40.0; // Width of damping.
-  G4double ponq = 0.0, dn = 0.0, n = 0.0, dz = 0.0;
+  //A and Z for the target
+  fiss->at = a;
+  fiss->zt = z;
 
-  if(((std::fabs(bet)-1.15) < 0) || ((std::fabs(bet)-1.15) == 0)) {
-    goto qrot10;
+  // shell+pairing.0-1-2-3 for IMFs
+  opt->optshpimf = 0;
+
+  //collective enhancement switched on 1 or off 0 in densn (qr=val or =1.)
+  fiss->optcol = 1;
+  if(fiss->zt<83 && fiss->zt>56){
+  fiss->optshp = 1;
   }
-
-  if((std::fabs(bet)-1.15) > 0) {
-    goto qrot11;
+  if(fiss->zt<=56){  
+  fiss->optcol = 0;
+  fiss->optshp = 3;
   }
+}
 
- qrot10:
-  n = a - z;
-  dz = std::fabs(z - 82.0);
-  if (n > 104) {
-    dn = std::fabs(n-126.e0);
-  }
-  else {
-    dn = std::fabs(n - 82.0);
-  }
+void G4Abla::SetParameters()
+{
+/*
+C     IFIS =   INTEGER SWITCH FOR FISSION
+C     OPTSHP = INTEGER SWITCH FOR SHELL CORRECTION IN MASSES/ENERGY
+C            =0 NO MICROSCOPIC CORRECTIONS IN MASSES AND ENERGY
+C            =1 SHELL , NO PAIRING CORRECTION
+C            =2 PAIRING, NO SHELL CORRECTION
+C            =3 SHELL AND PAIRING CORRECTION IN MASSES AND ENERGY
+C     OPTCOL =0,1 COLLECTIVE ENHANCEMENT SWITCHED ON 1 OR OFF 0 IN DENSN
+C     OPTAFAN=0,1 SWITCH FOR AF/AN = 1 IN DENSNIV 0 AF/AN>1 1 AF/AN=1
+C     BET  =  REAL    REDUCED FRICTION COEFFICIENT / 10**(+21) S**(-1)
+C     OPTXFIS= INTEGER 0,1,2 FOR MYERS & SWIATECKI, DAHLINGER, ANDREYEV
+C              FISSILITY PARAMETER.
+C
+C     NUCLEAR LEVEL DENSITIES:
+C     AV     = REAL KOEFFICIENTS FOR CALCULATION OF A(TILDE)
+C     AS     = REAL LEVEL DENSITY PARAMETER
+C     AK     = REAL
+*/
 
-  bet = 0.022 + 0.003*dn + 0.005*dz;
+  // switch-fission.1=on.0=off
+  fiss->ifis = 1;
 
-  sig = 25.0*std::pow(bet,2) * sig;
+  // shell+pairing.0-1-2-3
+  fiss->optshp = 3; 
 
- qrot11:   
-  ponq = (u - ucr)/dcr;
+  // optemd =0,1  0 no emd, 1 incl. emd                                
+  opt->optemd = 1;
+  // read(10,*,iostat=io) dum(10),optcha                               
+  opt->optcha = 1;
 
-  if (ponq > 700.0) {
-    ponq = 700.0;
-  }
-  if (sig < 1.0) {
-    sig = 1.0;
-  }
-  (*qr) = 1.0/(1.0 + std::exp(ponq)) * (sig - 1.0) + 1.0;
+  // shell+pairing.0-1-2-3 for IMFs
+  opt->optshpimf = 0;
+  opt->optimfallowed = 1;
 
-  if ((*qr) < 1.0) {
-    (*qr) = 1.0;
-  }
+  // nuclear.viscosity.(beta)
+  fiss->bet = 4.5;
 
-  return;
+  //collective enhancement parameters
+  fiss->ucr = 40.;
+  fiss->dcr = 10.;
+
+  // switch for temperature constant model (CTM)
+  fiss->optct = 1;
+
+  ald->optafan = 0;
+
+  ald->av = 0.0730;
+  ald->as = 0.0950;
+  ald->ak = 0.0000;
+
+  fiss->optxfis = 3;
+
+// Multi-fragmentation
+  T_freeze_out_in = -6.5;
+
 }
 
 void G4Abla::mglw(G4double a, G4double z, G4double *el)
@@ -990,10 +2300,11 @@ void G4Abla::mglms(G4double a, G4double z, G4int refopt4, G4double *el)
   //   1849	C                                                                       
   G4int a1 = idnint(a);
   G4int z1 = idnint(z);
+  G4int n1 = a1-z1;
 
   if ( (a1 <= 0) || (z1 <= 0) || ((a1-z1) <= 0) )  { //then 
     // modif pour recuperer une masse p et n correcte:
-    (*el) = 0.0;
+    (*el) = 1.e38;
     return;
     //    goto mglms50;
   }
@@ -1001,12 +2312,23 @@ void G4Abla::mglms(G4double a, G4double z, G4int refopt4, G4double *el)
     // binding energy incl. pairing contr. is calculated from                
     // function eflmac                                                       
     (*el) = eflmac(a1,z1,0,refopt4);
+
     if (refopt4 > 0) {
       if (refopt4 != 2) {
 	(*el) = (*el) + ec2sub->ecnz[a1-z1][z1];
-	//(*el) = (*el) + ec2sub->ecnz[z1][a1-z1];
       }
     }
+    
+    if(z1>=90){
+      if(n1<=145){
+         (*el) = (*el) + (12.552-0.1436*z1);
+      }else{
+        if(n1>145&&n1<=152){
+         (*el) = (*el) + ((152.4-1.77*z1)+(-0.972+0.0113*z1)*n1);
+        }
+      } 
+    }
+
   }
   return;
 }
@@ -1036,32 +2358,24 @@ G4double G4Abla::spdef(G4int a, G4int z, G4int optxfis)
   dx = 0.02;
   x  = fissility(a,z,optxfis);
 
-  if (x > 1.0) {
-    x = 1.0;
-  }
-
-  if (x < 0.0) {
-    x = 0.0;
-  }
-
   v  = (x - 0.3)/dx + 1.0;
   index = idnint(v);
 
   if (index < 1) {
-    return(alpha2[1]); // alpha2[0] -> alpha2[1]
+    return(alpha2[1]);
   }
 
-  if (index == 36) { //then // :::FIXME:: Possible off-by-one bug...                                            
+  if (index == 36) {                                             
     return(alpha2[36]); 
   }
   else {
-    return(alpha2[index] + (alpha2[index+1] - alpha2[index]) / dx * ( x - (0.3e0 + dx*(index-1)))); //:::FIXME::: Possible off-by-one
+    return(alpha2[index] + (alpha2[index+1] - alpha2[index]) / dx * ( x - (0.3e0 + dx*(index-1))));
   }                                                       
 
   return alpha2[0]; // The algorithm is not supposed to reach this point.
 }
 
-G4double G4Abla::fissility(int a,int z, int optxfis)
+G4double G4Abla::fissility(G4int a,G4int z, G4int optxfis)
 {
   // CALCULATION OF FISSILITY PARAMETER                                 
   // 
@@ -1070,12 +2384,13 @@ G4double G4Abla::fissility(int a,int z, int optxfis)
   //           1 : DAHLINGER                                     
   //           2 : ANDREYEV                                      
 
-  G4double aa = 0.0, zz = 0.0, i = 0.0;
+  G4double aa = 0.0, zz = 0.0, i = 0.0,z2a,C_S,R,W,G,G1,G2,A_CC;
   G4double fissilityResult = 0.0;
 
-  aa = double(a);
-  zz = double(z);
-  i  = double(a-2*z) / aa;
+  aa = G4double(a);
+  zz = G4double(z);
+  i  = G4double(a-2*z) / aa;
+  z2a= zz*zz/aa;
 
   // myers & swiatecki droplet modell                        
   if (optxfis == 0) { //then                                            
@@ -1092,22 +2407,43 @@ G4double G4Abla::fissility(int a,int z, int optxfis)
     fissilityResult = std::pow(zz,2) / aa  /(48.e0*(1.e0 - 17.22e0*std::pow(i,4)));
   }
 
+  if (optxfis == 3) {
+//  Fissiilty is calculated according to FRLDM, see Sierk, PRC 1984.
+         C_S = 21.13 * (1.0 - 2.3*i*i);
+         R = 1.16 * std::pow(aa,1.0/3.0);
+         W = 0.704/R;
+         G1 = 1.0 - 15.0/8.0*W+21.0/8.0*W*W*W;
+         G2 = 1.0 + 9.0/2.0*W + 7.0*W*W + 7.0/2.0*W*W*W;
+         G = 1.0 - 5.0*W*W*(G1 - 3.0/4.0*G2*std::exp(-2.0/W));
+         A_CC = 3.0/5.0 * 1.44 * G / 1.16;
+         fissilityResult = z2a * A_CC/(2.0*C_S);
+  }
+
+  if (fissilityResult > 1.0) {
+    fissilityResult = 1.0;
+  }
+
+  if (fissilityResult < 0.0) {
+    fissilityResult = 0.0;
+  }
+
   return fissilityResult;
 }
 
-void G4Abla::evapora(G4double zprf, G4double aprf, G4double *ee_par, G4double jprf, 
-		     G4double *zf_par, G4double *af_par, G4double *mtota_par,
-		     G4double *pleva_par, G4double *pxeva_par, G4double *pyeva_par,
-		     G4int *ff_par, G4int *inttype_par, G4int *inum_par)
+void G4Abla::evapora(G4double zprf, G4double aprf, G4double *ee_par, G4double jprf_par,G4double *zf_par, G4double *af_par, G4double *mtota_par,G4double *vleva_par, G4double *vxeva_par, G4double *vyeva_par,
+G4int *ff_par,G4int *fimf_par, G4double *fzimf, G4double *faimf,G4double *tkeimf_par,G4double *jprfout, G4int *inttype_par, G4int *inum_par,G4double EV_TEMP[200][5],G4int *iev_tab_temp_par)
 {
-  G4double zf = (*zf_par);
-  G4double af = (*af_par);
+  G4double zf = zprf;
+  G4double af = aprf;
   G4double ee = (*ee_par);
+  G4double jprf = dint(jprf_par);
   G4double mtota = (*mtota_par);
-  G4double pleva = (*pleva_par);
-  G4double pxeva = (*pxeva_par);
-  G4double pyeva = (*pyeva_par);
+  G4double vleva = 0.;
+  G4double vxeva = 0.;
+  G4double vyeva = 0.;
   G4int ff = (*ff_par);
+  G4int fimf = (*fimf_par);
+  G4double tkeimf = (*tkeimf_par);
   G4int inttype = (*inttype_par);
   G4int inum = (*inum_par);
 
@@ -1200,280 +2536,425 @@ void G4Abla::evapora(G4double zprf, G4double aprf, G4double *ee_par, G4double jp
   //    652	C     RNDN              NORMALIZATION OF RECOIL MOMENTUM FOR EACH STEP  
   //    653	C-----------------------------------------------------------------------
   //    654	C                                                                       
-  //    655	      SAVE                                                              
-  // SAVE -> static G4ThreadLocal
-	
-  static G4ThreadLocal G4int sortie = 0;                            
-  static G4ThreadLocal G4double epsiln = 0.0, probp = 0.0, probn = 0.0, proba = 0.0, ptotl = 0.0, e = 0.0;  
-  static G4ThreadLocal G4double sn = 0.0, sbp = 0.0, sba = 0.0, x = 0.0, amoins = 0.0, zmoins = 0.0;
-  G4double ecn = 0.0, ecp = 0.0,eca = 0.0, bp = 0.0, ba = 0.0;         
+  //                        
+  G4double epsiln = 0.0, probp = 0.0, probd = 0.0, probt = 0.0, probn = 0.0, probhe = 0.0, proba = 0.0, probg = 0.0, probimf=0.0, ptotl = 0.0, e = 0.0, tcn = 0.0;  
+  G4double sn = 0.0, sbp = 0.0, sbd = 0.0, sbt = 0.0, sbhe = 0.0, sba = 0.0, x = 0.0, amoins = 0.0, zmoins = 0.0,sp = 0.0, sd = 0.0, st = 0.0, she = 0.0, sa = 0.0;
+  G4double ecn = 0.0, ecp = 0.0, ecd = 0.0, ect = 0.0,eche = 0.0,eca = 0.0, ecg = 0.0, bp = 0.0, bd = 0.0, bt = 0.0, bhe = 0.0, ba = 0.0;
+  G4double zimf= 0.0,aimf= 0.0,bimf= 0.0,sbimf= 0.0,timf= 0.0;
+  G4int itest = 0, sortie=0;
+  G4double probf = 0.0;
+  G4double ctet1 = 0.0, stet1 = 0.0, phi1 = 0.0;
+  G4double rnd = 0.0;
+  G4double ef = 0.0;
+  G4double ts1 = 0.0;
+  G4int fgamma = 0, gammadecay = 0;
+  G4double pc = 0.0, malpha = 0.0;
+  G4double jprfn=0.0, jprfp=0.0, jprfd=0.0, jprft=0.0, jprfhe=0.0, jprfa=0.0;
+  G4double tsum = 0.0;
 
-  static G4ThreadLocal G4int itest = 0;
-  static G4ThreadLocal G4double probf = 0.0;
+  const G4double c = 29.9792458;
+  const G4double mu = 931.494;
+  const G4double mu2 = 931.494*931.494;
 
-  static G4ThreadLocal G4int k = 0, j = 0, il = 0;
+  G4double pleva = 0.0;
+  G4double pxeva = 0.0;
+  G4double pyeva = 0.0;
+  G4int IEV_TAB_TEMP=0;
 
-  static G4ThreadLocal G4double ctet1 = 0.0, stet1 = 0.0, phi1 = 0.0;
-  static G4ThreadLocal G4double sbfis = 0.0, rnd = 0.0;
-  static G4ThreadLocal G4double selmax = 0.0;
-  static G4ThreadLocal G4double segs = 0.0;
-  static G4ThreadLocal G4double ef = 0.0;
-  static G4ThreadLocal G4int irndm = 0;
-
-  static G4ThreadLocal G4double pc = 0.0, malpha = 0.0;
-
-  zf = zprf;
-  af = aprf;
-  pleva = 0.0;
-  pxeva = 0.0;
-  pyeva = 0.0;
-
-  sortie = 0;
+  for(G4int I1=0;I1<200;I1++)
+  for(G4int I2=0;I2<5;I2++)
+  EV_TEMP[I1][I2] = 0.0;
+//
   ff = 0;
-
   itest = 0;
-  if (itest == 1) {
-    // G4cout << "***************************" << G4endl;
-  }
-
- evapora10:
-
-  if (itest == 1) {
-    // G4cout <<"------zf,af,ee------" << idnint(zf) << "," << idnint(af) << "," << ee << G4endl;
-  }
-
+//
+  evapora10:
+  //
   // calculation of the probabilities for the different decay channels     
-  // plus separation energies and kinetic energies of the particles        
-  direct(zf,af,ee,jprf,&probp,&probn,&proba,&probf,&ptotl,
-	 &sn,&sbp,&sba,&ecn,&ecp,&eca,&bp,&ba,inttype,inum,itest); //:::FIXME::: Call
-  // Impose fission!
-  // probn = 0.0;
-  // probp = 0.0;
-  // proba = 0.0;
-  // probf = 1.0;
-  // ptotl = 1.0;
-  // std::cout <<"zf = " << zf << std::endl
-  // 	    <<"af = " << af << std::endl
-  // 	    <<"ee = " << ee << std::endl
-  // 	    <<"jprf = " << jprf << std::endl
-  // 	    <<"proba = " << proba << std::endl
-  // 	    <<"probn = " << probn << std::endl
-  // 	    <<"probp = " << probp << std::endl
-  // 	    <<"probf = " << probf << std::endl
-  // 	    <<"ptotl = " << ptotl << std::endl;
-  if((eca+ba) < 0) {
-    eca = 0.0;
-    ba = 0.0;
-  }
-  k = idnint(zf);
-  j = idnint(af-zf);
+  // plus separation energies and kinetic energies of the particles  
+  //
+  if(ee<0.|| zf<3.)goto evapora100;
+  direct(zf,af,ee,jprf,&probp,&probd,&probt,&probn,&probhe,&proba,&probg,&probimf,&probf,&ptotl,
+	 &sn,&sbp,&sbd,&sbt,&sbhe,&sba,
+         &ecn,&ecp,&ecd,&ect,&eche,&eca,&ecg,
+         &bp,&bd,&bt,&bhe,&ba,&sp,&sd,&st,&she,&sa,&ef,&ts1,inttype,inum,itest,&sortie,&tcn,
+         &jprfn, &jprfp, &jprfd, &jprft, &jprfhe, &jprfa, &tsum);
+//
+// HERE THE FINAL STEPS OF THE EVAPORATION ARE CALCULATED
+//
+  if(ptotl==0.0) goto evapora100;
 
-  // now ef is calculated from efa that depends on the subroutine
-  // barfit which takes into account the modification on the ang. mom.
-  // jb mvr 6-aug-1999
-  // note *** shell correction! (ecgnz)  jb mvr 20-7-1999
-  il  = idnint(jprf);
-  barfit(k,k+j,il,&sbfis,&segs,&selmax);
-  
-  if ((fiss->optshp == 1) || (fiss->optshp == 3)) { //then                     
-    //    fb->efa[k][j] = G4double(sbfis) -  ecld->ecgnz[j][k];
-    fb->efa[j][k] = G4double(sbfis) -  ecld->ecgnz[j][k];
+   e = dmin1(sba,sbhe,dmin1(sbt,sbhe,dmin1(sn,sbp,sbd)));
+
+  if(e>1e30)std::cout << "ERROR AT THE EXIT OF EVAPORA,E>1.D30,AF="<< af << " ZF=" << zf << std::endl;
+
+  if(sortie==1){
+   if (probn!=0.0) {
+    amoins = 1.0;
+    zmoins = 0.0;
+    epsiln = sn + ecn;
+    pc = std::sqrt(std::pow((1.0 + (ecn)/9.3956e2),2.) - 1.0) * 9.3956e2;
+    malpha = 0.0;
+    fgamma = 0;
+    fimf = 0;
+    gammadecay = 0;
+   }
+   else if(probp!=0.0){
+    amoins = 1.0;
+    zmoins = 1.0;
+    epsiln = sp + ecp;
+    pc = std::sqrt(std::pow((1.0 + ecp/9.3827e2),2.) - 1.0) * 9.3827e2;
+    malpha = 0.0;
+    fgamma = 0;
+    fimf = 0;
+    gammadecay = 0;
+   }
+   else if(probd!=0.0){
+    amoins = 2.0;
+    zmoins = 1.0;
+    epsiln = sd + ecd;
+    pc = std::sqrt(std::pow((1.0 + ecd/1.875358e3),2) - 1.0) * 1.875358e3;
+    malpha = 0.0;
+    fgamma = 0;
+    fimf = 0;
+    gammadecay = 0;
+   }
+   else if(probt!=0.0){
+    amoins = 3.0;
+    zmoins = 1.0;
+    epsiln = st + ect;
+    pc = std::sqrt(std::pow((1.0 + ect/2.80828e3),2) - 1.0) * 2.80828e3;
+    malpha = 0.0;
+    fgamma = 0;
+    fimf = 0;
+    gammadecay = 0;
+   }
+   else if(probhe!=0.0){
+    amoins = 3.0;
+    zmoins = 2.0;
+    epsiln = she + eche;
+    pc = std::sqrt(std::pow((1.0 + eche/2.80826e3),2) - 1.0) * 2.80826e3;
+    malpha = 0.0;
+    fgamma = 0;
+    fimf = 0;
+    gammadecay = 0;
+   }
+   else{ if(proba!=0.0){
+    amoins = 4.0;
+    zmoins = 2.0;
+    epsiln = sa + eca;
+    pc = std::sqrt(std::pow((1.0 + eca/3.72834e3),2) - 1.0) * 3.72834e3;
+    malpha = 4.0;
+    fgamma = 0;
+    fimf = 0;
+    gammadecay = 0;
+    }
+   }
+  goto direct99;
   }
-  else {
-    fb->efa[j][k] = G4double(sbfis);
-    //  fb->efa[j][k] = G4double(sbfis);
-  } //end if 
-  ef = fb->efa[j][k];
-  //  ef = fb->efa[j][k];
-  // here the final steps of the evaporation are calculated                
-  if ((sortie == 1) || (ptotl == 0.e0)) {
-    e = dmin1(sn,sbp,sba);
-    if (e > 1.0e30) {
-      if(verboseLevel > 2) {
-	// G4cout <<"erreur a la sortie evapora,e>1.e30,af=" << af <<" zf=" << zf << G4endl;
-      }
-    }
-    if (zf <= 6.0) {
-      goto evapora100;
-    }
-    if (e < 0.0) {
-      if (sn == e) {
-	af = af - 1.e0;
-      }
-      else if (sbp == e) {
-	af = af - 1.0;
-	zf = zf - 1.0;
-      }
-      else if (sba == e) {
-	af = af - 4.0;
-	zf = zf - 2.0;
-      }
-      if (af < 2.5) {
-	goto evapora100;
-      }
-      goto evapora10;
-    }
-    goto evapora100;
-  }
-  irndm = irndm + 1;
 
   // here the normal evaporation cascade starts                            
 
-  // random number for the evaporation                                     
-  //  x = double(Rndm(irndm))*ptotl;
-  // x = double(haz(1))*ptotl;
+  // random number for the evaporation
   x = G4AblaRandom::flat() * ptotl;
-//   // G4cout <<"proba = " << proba << G4endl;
-//   // G4cout <<"probp = " << probp << G4endl;
-//   // G4cout <<"probn = " << probn << G4endl;
-//   // G4cout <<"probf = " << probf << G4endl;
 
   itest = 0;
   if (x < proba) {
     // alpha evaporation                                                     
-    if (itest == 1) {
-      // G4cout <<"PK::: < alpha evaporation >" << G4endl;
-    }
     amoins = 4.0;
     zmoins = 2.0;
-    epsiln = sba + eca;
-    pc = std::sqrt(std::pow((1.0 + (eca+ba)/3.72834e3),2) - 1.0) * 3.72834e3;
+    epsiln = sa + eca;
+    pc = std::sqrt(std::pow((1.0 + eca/3.72834e3),2) - 1.0) * 3.72834e3;
     malpha = 4.0;
-
-    // volant:
-    volant->iv = volant->iv + 1;
-    volant->acv[volant->iv] = 4.;
-    volant->zpcv[volant->iv] = 2.;
-    volant->pcv[volant->iv] = pc;
+    fgamma = 0;
+    fimf = 0;
+    ff = 0;
+    gammadecay = 0;
+    jprf=jprfa;
   }
-  else if (x < proba+probp) {
+  else if (x < proba+probhe) {
+    // He3 evaporation                                                    
+    amoins = 3.0;
+    zmoins = 2.0;
+    epsiln = she + eche;
+    pc = std::sqrt(std::pow((1.0 + eche/2.80826e3),2) - 1.0) * 2.80826e3;
+    malpha = 0.0;
+    fgamma = 0;
+    fimf = 0;
+    ff = 0;
+    gammadecay = 0;
+    jprf=jprfhe;
+  }
+  else if (x < proba+probhe+probt) {
+    // triton evaporation                                                    
+    amoins = 3.0;
+    zmoins = 1.0;
+    epsiln = st + ect;
+    pc = std::sqrt(std::pow((1.0 + ect/2.80828e3),2) - 1.0) * 2.80828e3;
+    malpha = 0.0;
+    fgamma = 0;
+    fimf = 0;
+    ff = 0;
+    gammadecay = 0;
+    jprf=jprft;
+  }
+  else if (x < proba+probhe+probt+probd) {
+    // deuteron evaporation                                                    
+    amoins = 2.0;
+    zmoins = 1.0;
+    epsiln = sd + ecd;
+    pc = std::sqrt(std::pow((1.0 + ecd/1.875358e3),2) - 1.0) * 1.875358e3;
+    malpha = 0.0;
+    fgamma = 0;
+    fimf = 0;
+    ff = 0;
+    gammadecay = 0;
+    jprf=jprfd;
+  }
+  else if (x < proba+probhe+probt+probd+probp) {
     // proton evaporation                                                    
-    if (itest == 1) {
-      // G4cout <<"PK::: < proton evaporation >" << G4endl;
-    }
     amoins = 1.0;
     zmoins = 1.0;
-    epsiln = sbp + ecp;
-    pc = std::sqrt(std::pow((1.0 + (ecp + bp)/9.3827e2),2) - 1.0) * 9.3827e2;
+    epsiln = sp + ecp;
+    pc = std::sqrt(std::pow((1.0 + ecp/9.3827e2),2) - 1.0) * 9.3827e2;
     malpha = 0.0;
-    // volant:
-    volant->iv = volant->iv + 1;
-    volant->acv[volant->iv] = 1.0;
-    volant->zpcv[volant->iv] = 1.;
-    volant->pcv[volant->iv] = pc;
+    fgamma = 0;
+    fimf = 0;
+    ff = 0;
+    gammadecay = 0;
+    jprf=jprfp;
   }
-  else if (x < proba+probp+probn) {
+  else if (x < proba+probhe+probt+probd+probp+probn) {
     // neutron evaporation                                                   
-    if (itest == 1) {
-      // G4cout <<"PK::: < neutron evaporation >" << G4endl;
-    }
     amoins = 1.0;
     zmoins = 0.0;
     epsiln = sn + ecn;
-    pc = std::sqrt(std::pow((1.0 + (ecn)/9.3956e2),2) - 1.0) * 9.3956e2;
-    if(itest == 1) {
-      // G4cout <<"PK::: pc " << pc << G4endl;
-    }
+    pc = std::sqrt(std::pow((1.0 + (ecn)/9.3956e2),2.) - 1.0) * 9.3956e2;
     malpha = 0.0;
-  
-    // volant:
-    volant->iv = volant->iv + 1;
-    volant->acv[volant->iv] = 1.;
-    volant->zpcv[volant->iv] = 0.;
-    volant->pcv[volant->iv] = pc;
+    fgamma = 0;
+    fimf = 0;
+    ff = 0;
+    gammadecay = 0;
+    jprf=jprfn;
+  }
+  else if (x < proba+probhe+probt+probd+probp+probn+probg) {
+    // gamma evaporation                                                    
+    amoins = 0.0;
+    zmoins = 0.0;
+    epsiln = ecg;
+    pc = ecg;
+    malpha = 0.0;
+    gammadecay = 1;
+    //Next IF command is to shorten the calculations when gamma-emission is the only
+    //possible channel
+    if(probp==0.0 && probn==0.0 && probd==0.0 && probt==0.0 && proba==0.0 && probhe==0.0 && probimf==0.0 && probf==0.0)fgamma = 1;
+    fimf = 0;
+    ff = 0;
+  }
+//
+  else if (x < proba+probhe+probt+probd+probp+probn+probg+probimf) {
+    // imf evaporation                                                   
+// AIMF and ZIMF obtained from complete procedure (integration over all
+// possible Gamma(IMF) and then randomly picked
 
-    if(volant->getTotalMass() > 209 && verboseLevel > 0) {
-      volant->dump();
-      // G4cout <<"DEBUGA Total = " << volant->getTotalMass() << G4endl;
-    }
+   G4int iloop=0;
+   dir1973:
+   imf(af,zf,tcn,ee,&zimf,&aimf,&bimf,&sbimf,&timf,jprf);
+   iloop++;
+   if(iloop>100)std::cout << "Problem in EVAPORA: IMF called > 100 times" << std::endl;
+   if(zimf>=(zf-2.0)) goto dir1973;
+   if(zimf>zf/2.0){
+          zimf = zf - zimf;
+          aimf = af - aimf;
+   }
+   // These cases should in principle never happen
+   if(zimf==0.0 || aimf==0.0 || sbimf>ee)std::cout << "warning: Look in EVAPORA CALL IMF" << std::endl;
+
+// I sample the total kinetic energy consumed by the system of two nuclei
+// from the distribution determined with the temperature at saddle point
+// TKEIMF is the kinetic energy in the centre of mass of IMF and its partner
+
+   G4int ii=0;
+   dir1235:
+   tkeimf= fmaxhaz(timf);
+   ii++;
+   if(ii>100){
+   tkeimf=min(2.0*timf,ee-sbimf);
+   goto dir1000;
+   }
+   if(tkeimf<=0.0)goto dir1235;
+   if(tkeimf>(ee-sbimf) && timf>0.5)goto dir1235;
+   dir1000:
+   tkeimf = tkeimf + bimf;
+
+    amoins = aimf;
+    zmoins = zimf;
+    epsiln = (sbimf-bimf) + tkeimf;
+    pc = 0.0;
+    malpha = 0.0;
+    fgamma = 0; 
+    fimf = 1; 
+    ff = 0;
+    gammadecay = 0;
   }
   else {
     // fission                                                               
     // in case of fission-events the fragment nucleus is the mother nucleus  
     // before fission occurs with excitation energy above the fis.- barrier. 
     // fission fragment mass distribution is calulated in subroutine fisdis  
-    if (itest == 1) {
-      // G4cout <<"PK::: < fission >" << G4endl;
-    }
+
     amoins = 0.0;
     zmoins = 0.0;
     epsiln = ef;
-
+//
     malpha = 0.0;
     pc = 0.0;
     ff = 1;
-    // ff = 0; // For testing, allows to disable fission!
+    fimf = 0;
+    fgamma = 0;
+    gammadecay = 0;
   }
+//
+  direct99:
+  if (ee <= 0.01)ee = 0.01;
+// Davide Mancusi (DM) - 2010
+      if(gammadecay==1 && ee<(epsiln+0.010)){
+        epsiln = ee - 0.010;
+       // fgamma = 1;
+      }
 
-  if (itest == 1) {
-    // G4cout << std::setprecision(9) <<"PK::: SN,SBP,SBA,EF  " << sn << "  " << sbp << "  " << sba <<"  " << ef << G4endl;
-    // G4cout << std::setprecision(9) <<"PK::: PROBN,PROBP,PROBA,PROBF,PTOTL  " <<"  "<< probn <<"  "<< probp <<"  "<< proba <<"  "<< probf <<"  "<< ptotl << G4endl;
-  }
-
+      if(epsiln<0.0){
+       std::cout << "***WARNING epsilon<0***" << std::endl;
+       //epsiln=0.;
+       //PRINT*,IDECAYMODE,IDNINT(AF),IDNINT(ZF),EE,EPSILN
+      }
   // calculation of the daughter nucleus                                   
   af = af - amoins;
   zf = zf - zmoins;
   ee = ee - epsiln;
-  if (ee <= 0.01) {
-    ee = 0.01;
-  }
+  if (ee <= 0.01)ee = 0.01;
   mtota = mtota + malpha;
 
-  if(ff == 0) {
-    rnd = G4AblaRandom::flat();
-    ctet1 = 2.0*rnd - 1.0;
-    rnd = G4AblaRandom::flat();
-    phi1 = rnd*2.0*3.141592654;
-    stet1 = std::sqrt(1.0 - std::pow(ctet1,2));
-    volant->xcv[volant->iv] = stet1*std::cos(phi1);
-    volant->ycv[volant->iv] = stet1*std::sin(phi1);
-    volant->zcv[volant->iv] = ctet1;
-    pxeva = pxeva - pc * volant->xcv[volant->iv];
-    pyeva = pyeva - pc * volant->ycv[volant->iv];
-    pleva = pleva - pc * ctet1;
-  }
-
+// Determination of x,y,z components of momentum from known emission momentum PC
+      if(ff==0 && fimf==0){
+        //
+        EV_TEMP[IEV_TAB_TEMP][0] = zmoins;
+        EV_TEMP[IEV_TAB_TEMP][1] = amoins;
+        rnd = G4AblaRandom::flat();
+        ctet1 = 2.0*rnd - 1.0;            // z component: uniform probability between -1 and 1
+        stet1 = std::sqrt(1.0 - std::pow(ctet1,2)); // component perpendicular to z
+        rnd = G4AblaRandom::flat();
+        phi1 = rnd*2.0*3.141592654;       // angle in x-y plane: uniform probability between 0 and 2*pi
+        G4double xcv = stet1*std::cos(phi1);// x component
+        G4double ycv = stet1*std::sin(phi1);// y component
+        G4double zcv = ctet1;               // z component
+// In the CM system
+        if(gammadecay==0){
+// Light particle
+           G4double ETOT_LP = std::sqrt(pc*pc + amoins*amoins * mu2);
+           EV_TEMP[IEV_TAB_TEMP][2] = c * pc * xcv / ETOT_LP;
+           EV_TEMP[IEV_TAB_TEMP][3] = c * pc * ycv / ETOT_LP;
+           EV_TEMP[IEV_TAB_TEMP][4] = c * pc * zcv / ETOT_LP;
+        }else{
+// gamma ray
+           EV_TEMP[IEV_TAB_TEMP][2] = pc * xcv;
+           EV_TEMP[IEV_TAB_TEMP][3] = pc * ycv;
+           EV_TEMP[IEV_TAB_TEMP][4] = pc * zcv;
+        }
+        G4double VXOUT=0.,VYOUT=0.,VZOUT=0.;
+        lorentz_boost(vxeva,vyeva,vleva,
+            EV_TEMP[IEV_TAB_TEMP][2],EV_TEMP[IEV_TAB_TEMP][3],
+            EV_TEMP[IEV_TAB_TEMP][4],
+            &VXOUT,&VYOUT,&VZOUT);
+        EV_TEMP[IEV_TAB_TEMP][2] = VXOUT;
+        EV_TEMP[IEV_TAB_TEMP][3] = VYOUT;
+        EV_TEMP[IEV_TAB_TEMP][4] = VZOUT;
+// Heavy residue
+        if(gammadecay==0){
+        G4double v2 = std::pow(EV_TEMP[IEV_TAB_TEMP][2],2.) +
+             std::pow(EV_TEMP[IEV_TAB_TEMP][3],2.) +
+             std::pow(EV_TEMP[IEV_TAB_TEMP][4],2.);
+        G4double gamma = 1.0/std::sqrt(1.0 - v2 / (c*c));
+        G4double etot_lp = amoins*mu * gamma;
+        pxeva = pxeva - EV_TEMP[IEV_TAB_TEMP][2] * etot_lp / c;
+        pyeva = pyeva - EV_TEMP[IEV_TAB_TEMP][3] * etot_lp / c;
+        pleva = pleva - EV_TEMP[IEV_TAB_TEMP][4] * etot_lp / c;
+        }else{
+// in case of gammas, EV_TEMP contains momentum components and not velocity
+        pxeva = pxeva - EV_TEMP[IEV_TAB_TEMP][2];
+        pyeva = pyeva - EV_TEMP[IEV_TAB_TEMP][3];
+        pleva = pleva - EV_TEMP[IEV_TAB_TEMP][4];
+        }
+        G4double pteva = std::sqrt(pxeva*pxeva + pyeva*pyeva);
+// To be checked:
+        G4double etot = std::sqrt ( pleva*pleva + pteva*pteva + af*af * mu2 );
+        vxeva = c * pxeva / etot;  // recoil velocity components of residue due to evaporation
+        vyeva = c * pyeva / etot;
+        vleva = c * pleva / etot;
+        IEV_TAB_TEMP = IEV_TAB_TEMP + 1;
+      }
   // condition for end of evaporation                                   
-  if ((af < 2.5) || (ff == 1)) {
+  if (zf < 3. || (ff == 1) || (fgamma == 1) || (fimf==1)) {
     goto evapora100;
   }
   goto evapora10;
 
- evapora100:
+  evapora100:
   (*zf_par) = zf;
   (*af_par) = af;
   (*ee_par) = ee;
+  (*faimf) = aimf;
+  (*fzimf) = zimf;
+  (*jprfout) = jprf;
+  (*tkeimf_par) = tkeimf;
   (*mtota_par) = mtota;
-  (*pleva_par) = pleva;
-  (*pxeva_par) = pxeva;
-  (*pyeva_par) = pyeva;
+  (*vleva_par) = vleva;
+  (*vxeva_par) = vxeva;
+  (*vyeva_par) = vyeva;
   (*ff_par) = ff;
-  (*inttype_par) = inttype;                                          
+  (*fimf_par) = fimf;
+  (*inttype_par) = inttype;  
+  (*iev_tab_temp_par)= IEV_TAB_TEMP;                                       
   (*inum_par) = inum;
-
   return;
 }
 
-void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf, 
-		    G4double *probp_par, G4double *probn_par, G4double *proba_par, 
-		    G4double *probf_par, G4double *ptotl_par, G4double *sn_par,
-		    G4double *sbp_par, G4double *sba_par, G4double *ecn_par, 
-		    G4double *ecp_par,G4double *eca_par, G4double *bp_par,
-		    G4double *ba_par, G4int, G4int inum, G4int itest)
+void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf, G4double *probp_par, G4double *probd_par, G4double *probt_par, G4double *probn_par, G4double *probhe_par, G4double *proba_par, G4double *probg_par,G4double *probimf_par,G4double *probf_par, G4double *ptotl_par, G4double *sn_par, G4double *sbp_par, G4double *sbd_par, G4double *sbt_par, G4double *sbhe_par, G4double *sba_par, G4double *ecn_par, G4double *ecp_par, G4double *ecd_par, G4double *ect_par,G4double *eche_par,G4double *eca_par, G4double *ecg_par, G4double *bp_par, G4double *bd_par, G4double *bt_par, G4double *bhe_par, G4double *ba_par,G4double *sp_par,G4double *sd_par,G4double *st_par,G4double *she_par,G4double *sa_par, G4double *ef_par,G4double *ts1_par, G4int, G4int inum, G4int itest, G4int *sortie, G4double *tcn,G4double *jprfn_par, G4double *jprfp_par, G4double *jprfd_par, G4double *jprft_par, G4double *jprfhe_par, G4double *jprfa_par, G4double *tsum_par)
 {
   G4double probp = (*probp_par);
+  G4double probd = (*probd_par);
+  G4double probt = (*probt_par);
   G4double probn = (*probn_par);
+  G4double probhe = (*probhe_par);
   G4double proba = (*proba_par);
+  G4double probg = (*probg_par);
+  G4double probimf = (*probimf_par);
   G4double probf = (*probf_par);
   G4double ptotl = (*ptotl_par);
   G4double sn = (*sn_par);
+  G4double sp = (*sp_par);
+  G4double sd = (*sd_par);
+  G4double st = (*st_par);
+  G4double she = (*she_par);
+  G4double sa = (*sa_par);
   G4double sbp = (*sbp_par);
+  G4double sbd = (*sbd_par);
+  G4double sbt = (*sbt_par);
+  G4double sbhe = (*sbhe_par);
   G4double sba = (*sba_par);
   G4double ecn = (*ecn_par);
   G4double ecp = (*ecp_par);
+  G4double ecd = (*ecd_par);
+  G4double ect = (*ect_par);
+  G4double eche = (*eche_par);
   G4double eca = (*eca_par);
+  G4double ecg = (*ecg_par);
   G4double bp = (*bp_par);
+  G4double bd = (*bd_par);
+  G4double bt = (*bt_par);
+  G4double bhe = (*bhe_par);
   G4double ba = (*ba_par);
+  G4double tsum = (*tsum_par);
 
   // CALCULATION OF PARTICLE-EMISSION PROBABILITIES & FISSION     / 
   // BASED ON THE SIMPLIFIED FORMULAS FOR THE DECAY WIDTH BY      / 
@@ -1540,592 +3021,1165 @@ void G4Abla::direct(G4double zprf, G4double a, G4double ee, G4double jprf,
   // ECN,ECP,ECA,BP,BA                                         
   // - AVERAGE KINETIC ENERGIES (2*T) AND EFFECTIVE BARRIERS     
 
-  static G4ThreadLocal G4double bk = 0.0;
-  static G4ThreadLocal G4int afp = 0;
-  static G4ThreadLocal G4double at = 0.0;
-  static G4ThreadLocal G4double bs = 0.0;
-  static G4ThreadLocal G4double bshell = 0.0;
-  static G4ThreadLocal G4double cf = 0.0;
-  static G4ThreadLocal G4double dconst = 0.0;
-  static G4ThreadLocal G4double defbet = 0.0;
-  static G4ThreadLocal G4double denomi = 0.0;
-  static G4ThreadLocal G4double densa = 0.0;
-  static G4ThreadLocal G4double densf = 0.0;
-  static G4ThreadLocal G4double densg = 0.0;
-  static G4ThreadLocal G4double densn = 0.0;
-  static G4ThreadLocal G4double densp = 0.0;
-  static G4ThreadLocal G4double edyn = 0.0;
-  static G4ThreadLocal G4double eer = 0.0;
-  static G4ThreadLocal G4double ef = 0.0;
-  static G4ThreadLocal G4double ft = 0.0;
-  static G4ThreadLocal G4double ga = 0.0;
-  static G4ThreadLocal G4double gf = 0.0;
-  static G4ThreadLocal G4double gn = 0.0;
-  static G4ThreadLocal G4double gngf = 0.0;
-  static G4ThreadLocal G4double gp = 0.0;
-  static G4ThreadLocal G4double gsum = 0.0;
-  static G4ThreadLocal G4double hbar = 6.582122e-22; // = 0.0;
-  static G4ThreadLocal G4double iflag = 0.0;
-  static G4ThreadLocal G4int il = 0;
+  G4double bk = 0.0;
+  G4double bksp = 0.0;
+  G4double bc = 0.0;
+  G4int afp = 0;
+  G4double het = 0.0;
+  G4double at = 0.0;
+  G4double bs = 0.0;
+  G4double bssp = 0.0;
+  G4double bshell = 0.0;
+  G4double cf = 0.0;
+  G4double defbet = 0.0;
+  G4double densa = 0.0;
+  G4double denshe = 0.0;
+  G4double densg = 0.0;
+  G4double densn = 0.0;
+  G4double densp = 0.0;
+  G4double densd = 0.0;
+  G4double denst = 0.0;
+  G4double eer = 0.0;
+  G4double ecor = 0.0;
+  G4double ef = 0.0;
+  G4double ft = 0.0;
+  G4double timf = 0.0;
+  G4double qr = 0.0;
+  G4double qrcn = 0.0;
+  G4double omegap=0.0;
+  G4double omegad=0.0;
+  G4double omegat=0.0;
+  G4double omegahe=0.0;
+  G4double omegaa=0.0;
+  G4double ga = 0.0;
+  G4double ghe = 0.0;
+  G4double gf = 0.0;
+  G4double gff = 0.0;
+  G4double gn = 0.0;
+  G4double gp = 0.0;
+  G4double gd = 0.0;
+  G4double gt = 0.0;
+  G4double gg = 0.0;
+  G4double gimf = 0.0;
+  G4double gimf3 = 0.0;
+  G4double gimf5 = 0.0;
+  G4double bimf = 0.0;
+  G4double bsimf = 0.0;
+  G4double sbimf = 0.0;
+  G4double densimf = 0.0;
+  G4double defbetimf = 0.0;
+  G4double b_imf = 0.0;
+  G4double a_imf = 0.0;
+  G4double omegaimf = 0.0;
+  G4int izimf = 0;
+  G4double zimf = 0.0;
+  G4double gsum = 0.0;
+  G4double gtotal=0.0;
+  G4double hbar = 6.582122e-22;
+  G4double emin = 0.0;
+  G4int il = 0;
+  G4int choice_fisspart = 0;
+  G4double t_lapse=0.0;
   G4int imaxwell = 0;
-  static G4ThreadLocal G4int in = 0;
-  static G4ThreadLocal G4int iz = 0;
-  static G4ThreadLocal G4int j = 0;
-  static G4ThreadLocal G4int k = 0;
-  static G4ThreadLocal G4double ma1z = 0.0;
-  static G4ThreadLocal G4double ma1z1 = 0.0;
-  static G4ThreadLocal G4double ma4z2 = 0.0;
-  static G4ThreadLocal G4double maz = 0.0;
-  static G4ThreadLocal G4double nprf = 0.0;
-  static G4ThreadLocal G4double nt = 0.0;
-  static G4ThreadLocal G4double parc = 0.0;
-  static G4ThreadLocal G4double pi = 3.14159265;
-  static G4ThreadLocal G4double pt = 0.0;
-  static G4ThreadLocal G4double ra = 0.0;
-  static G4ThreadLocal G4double rat = 0.0;
-  static G4ThreadLocal G4double refmod = 0.0;
-  static G4ThreadLocal G4double rf = 0.0;
-  static G4ThreadLocal G4double rn = 0.0;
-  static G4ThreadLocal G4double rnd = 0.0;
-  static G4ThreadLocal G4double rnt = 0.0;
-  static G4ThreadLocal G4double rp = 0.0;
-  static G4ThreadLocal G4double rpt = 0.0;
-  static G4ThreadLocal G4double sa = 0.0;
-  static G4ThreadLocal G4double sbf = 0.0;
-  static G4ThreadLocal G4double sbfis = 0.0;
-  static G4ThreadLocal G4double segs = 0.0;
-  static G4ThreadLocal G4double selmax = 0.0;
-  static G4ThreadLocal G4double sp = 0.0;
-  static G4ThreadLocal G4double tauc = 0.0;
-  static G4ThreadLocal G4double tconst = 0.0;
-  static G4ThreadLocal G4double temp = 0.0;
-  static G4ThreadLocal G4double ts1 = 0.0;
-  static G4ThreadLocal G4double tsum = 0.0;
-  static G4ThreadLocal G4double wf = 0.0;
-  static G4ThreadLocal G4double wfex = 0.0;
-  static G4ThreadLocal G4double xx = 0.0;
-  static G4ThreadLocal G4double y = 0.0;
+  G4int in = 0;
+  G4int iz = 0;
+  G4int ind = 0;
+  G4int izd = 0;
+  G4int j = 0;
+  G4int k = 0;
+  G4double ma1z = 0.0;
+  G4double mazz = 0.0;
+  G4double ma1z1 = 0.0;
+  G4double ma2z1 = 0.0;
+  G4double ma3z1 = 0.0;
+  G4double ma3z2 = 0.0;
+  G4double ma4z2 = 0.0;
+  G4double maz = 0.0;
+  G4double nt = 0.0;
+  G4double pi = 3.1415926535;
+  G4double pt = 0.0;
+  G4double dt = 0.0;
+  G4double tt = 0.0;
+  G4double gtemp = 0.0;
+  G4double rdt = 0.0;
+  G4double rtt = 0.0;
+  G4double rat = 0.0;
+  G4double rhet = 0.0;
+  G4double refmod = 0.0;
+  G4double rnt = 0.0;
+  G4double rpt = 0.0;
+  G4double sbfis = 1.e40;
+  G4double segs = 0.0;
+  G4double selmax = 0.0;
+  G4double tauc = 0.0;
+  G4double temp = 0.0;
+  G4double ts1 = 0.0;
+  G4double xx = 0.0;
+  G4double y = 0.0;
+  G4double k1 = 0.0;
+  G4double omegasp=0.0;
+  G4double homegasp=0.0;
+  G4double omegags=0.0;
+  G4double homegags=0.0;
+  G4double pa = 0.0;
+  G4double gamma = 0.0;
+  G4double gfactor = 0.0;
+  G4double bscn;
+  G4double bkcn;
+  G4double bccn;
+  G4double ftcn=0.0;
+  G4double mfcd;
+  G4double jprfn=jprf;
+  G4double jprfp=jprf;
+  G4double jprfd=jprf;
+  G4double jprft=jprf;
+  G4double jprfhe=jprf;
+  G4double jprfa=jprf;
+  G4double djprf=0.0;
+  G4double dlout=0.0;
+  G4double sdlout=0.0;
+  G4double iinert=0.0;
+  G4double erot=0.0;
+  G4double erotn=0.0;
+  G4double erotp=0.0;
+  G4double erotd=0.0;
+  G4double erott=0.0;
+  G4double erothe=0.0;
+  G4double erota=0.0;
+  G4double erotcn=0.0;
+ // G4double ecorcn=0.0;
+  G4double imfarg=0.0;
+  G4double width_imf=0.0;
+  G4int IDjprf=0;
+  G4int fimf_allowed=opt->optimfallowed;
 
-  imaxwell = 1;
-  
-  // limiting of excitation energy where fission occurs                    
-  // Note, this is not the dynamical hindrance (see end of routine)      
-  edyn = 1000.0;
+  if(itest==1){
 
-  // no limit if statistical model is calculated.                         
-  if (fiss->bet <= 1.0e-16) {
-    edyn = 10000.0;
   }
+  // Switch to calculate Maxwellian distribution of kinetic energies
+  imaxwell = 1;
+  *sortie = 0;
 
   // just a change of name until the end of this subroutine                
   eer = ee;
   if (inum == 1) {
     ilast = 1;
   }
-
   // calculation of masses                                           
   // refmod = 1 ==> myers,swiatecki model                              
   // refmod = 0 ==> weizsaecker model                                  
   refmod = 1;  // Default = 1
-
+//
   if (refmod == 1) {
     mglms(a,zprf,fiss->optshp,&maz);
     mglms(a-1.0,zprf,fiss->optshp,&ma1z);
     mglms(a-1.0,zprf-1.0,fiss->optshp,&ma1z1);
+    mglms(a-2.0,zprf-1.0,fiss->optshp,&ma2z1);
+    mglms(a-3.0,zprf-1.0,fiss->optshp,&ma3z1);
+    mglms(a-3.0,zprf-2.0,fiss->optshp,&ma3z2);
     mglms(a-4.0,zprf-2.0,fiss->optshp,&ma4z2);
   }
   else {
     mglw(a,zprf,&maz);
     mglw(a-1.0,zprf,&ma1z);
     mglw(a-1.0,zprf-1.0,&ma1z1);
+    mglw(a-2.0,zprf-1.0,&ma2z1);
+    mglw(a-3.0,zprf-1.0,&ma3z1);
+    mglw(a-3.0,zprf-2.0,&ma3z2);
     mglw(a-4.0,zprf-2.0,&ma4z2);
   }
+
+  if((a-1.)==3.0 && (zprf-1.0)==2.0) ma1z1=-7.7181660;
+  if((a-1.)==4.0 && (zprf-1.0)==2.0) ma1z1=-28.295992;
   
-  // separation energies and effective barriers                     
+  // separation energies                     
   sn = ma1z - maz;
   sp = ma1z1 - maz;
-  sa = ma4z2 - maz - 28.29688;
-  if (zprf < 1.0e0) {
+  sd = ma2z1 - maz - 2.2246;
+  st = ma3z1 - maz - 8.481977;
+  she = ma3z2 - maz - 7.7181660;
+  sa = ma4z2 - maz - 28.295992;
+
+// coulomb barriers
+//Proton
+  if (zprf <= 1.0e0 || a <= 1.0e0 || (a-zprf) < 0.0) {
     sbp = 1.0e75;
-    goto direct30;
-  }
-
-  // parameterisation gaimard:
-  // bp = 1.44*(zprf-1.d0)/(1.22*std::pow((a - 1.0),(1.0/3.0))+5.6)     
-  // parameterisation khs (12-99)
-  bp = 1.44*(zprf - 1.0)/(2.1*std::pow((a - 1.0),(1.0/3.0)) + 0.0);
-
+    bp = 1.0e75;
+  }else{
+  barrs(idnint(zprf-1.),idnint(a-1.),1,1,&bp,&omegap);
+  bp = max(bp,0.1);
   sbp = sp + bp;
-  if (a-4.0 <= 0.0) {
-    sba = 1.0e+75;
-    goto direct30;
   }
 
-  // new effective barrier for alpha evaporation d=6.1: khs          
-  // ba = 2.88d0*(zprf-2.d0)/(1.22d0*(a-4.d0)**(1.d0/3.d0)+6.1d0)
-  // parametrisation khs (12-99)
-  ba = 2.88*(zprf - 2.0)/(2.2*std::pow((a - 4.0),(1.0/3.0)) + 0.0);
+//Deuteron
+  if (zprf <= 1.0e0 || a <= 2.0e0 || (a-zprf) < 1.0) {
+    sbd = 1.0e75;
+    bd = 1.0e75;
+  }else{
+  barrs(idnint(zprf-1.),idnint(a-2.),1,2,&bd,&omegad);
+  bd = max(bd,0.1);
+  sbd = sd + bd;
+  }
 
+//Triton
+  if (zprf <= 1.0e0 || a <= 3.0e0 || (a-zprf) < 2.0) {
+    sbt = 1.0e75;
+    bt = 1.0e75;
+  }else{
+  barrs(idnint(zprf-1.),idnint(a-3.),1,3,&bt,&omegat);
+  bt = max(bt,0.1);
+  sbt = st + bt;
+  }
+
+//Alpha
+  if (a-4.0<=0.0 || zprf<=2.0 || (a-zprf)<2.0) {
+    sba = 1.0e+75;
+    ba = 1.0e+75;
+  }else{
+  barrs(idnint(zprf-2.),idnint(a-4.),2,4,&ba,&omegaa);
+  ba = max(ba,0.1);
   sba = sa + ba;
- direct30:
+  }
 
-  // calculation of surface and curvature integrals needed to      
-  // to calculate the level density parameter (in densniv)         
+//He3
+  if (a-3.0 <= 0.0 || zprf<=2.0 || (a-zprf)<1.0) {
+    sbhe = 1.0e+75;
+    bhe = 1.0e+75;
+  }else{
+  barrs(idnint(zprf-2.),idnint(a-3.),2,3,&bhe,&omegahe);
+  bhe = max(bhe,0.1);
+  sbhe = she + bhe;
+  }
+
+// Dealing with particle-unbound systems
+   emin = dmin1(sba,sbhe,dmin1(sbt,sbhe,dmin1(sn,sbp,sbd)));
+
+   if(emin<=0.0){
+   *sortie = 1;
+   unbound(sn,sp,sd,st,she,sa,bp,bd,bt,bhe,ba,&probf,&probn,&probp,&probd,&probt,&probhe,&proba,&probimf,&probg,&ecn,&ecp,&ecd,&ect,&eche,&eca);
+   goto direct70;
+   }
+//
+  k = idnint(zprf);
+  j = idnint(a - zprf);
   if (fiss->ifis > 0) {
-    k = idnint(zprf);
-    j = idnint(a - zprf);
-
     // now ef is calculated from efa that depends on the subroutine
     // barfit which takes into account the modification on the ang. mom.
-    // jb mvr 6-aug-1999
-    // note *** shell correction! (ecgnz)  jb mvr 20-7-1999
+    // note *** shell correction (ecgnz)
     il = idnint(jprf);
     barfit(k,k+j,il,&sbfis,&segs,&selmax);
     if ((fiss->optshp == 1) || (fiss->optshp == 3)) {
-      //      fb->efa[k][j] = G4double(sbfis) -  ecld->ecgnz[j][k];
-      //      fb->efa[j][k] = G4double(sbfis) -  ecld->ecgnz[j][k];
-      fb->efa[j][k] = double(sbfis) -  ecld->ecgnz[j][k];
+       ef = double(sbfis) -  ecld->ecgnz[j][k];
+// JLRS - Nov 2016 - Corrected values of fission barriers for actinides
+     if(k==90){
+      if(mod(j,2)==1){
+         ef = ef*(4.5114-2.2687*(a-zprf)/zprf);
+      }else{
+         ef = ef*(3.3931-1.5338*(a-zprf)/zprf);
+      }
+     }
+     if(k==92){
+     if((a-zprf)/zprf>1.52)ef=ef*(1.1222-0.10886*(a-zprf)/zprf)-0.1;
+     }
+     if(k>=94&&k<=98&&j<158){// Data in this range have been tested
+// e-e
+        if(mod(j,2)==0&&mod(k,2)==0){
+        if(k>=94){ef = ef-(11.54108*(a-zprf)/zprf-18.074);}
+        }
+// O-O
+        if(mod(j,2)==1&&mod(k,2)==1){
+        if(k>=95){ef = ef-(14.567*(a-zprf)/zprf-23.266);}
+        }
+// Odd A
+        if(mod(j,2)==0&&mod(k,2)==1){
+        if(j>=144){ef = ef-(13.662*(a-zprf)/zprf-21.656);}
+        }
+
+        if(mod(j,2)==1&&mod(k,2)==0){
+        if(j>=144){ef = ef-(13.662*(a-zprf)/zprf-21.656);}
+        }
+     }
     } 
     else {
-      //      fb->efa[k][j] = G4double(sbfis);
-      fb->efa[j][k] = double(sbfis);
+      ef = double(sbfis);
     }
-    //    ef = fb->efa[k][j];
-    ef = fb->efa[j][k];
+//
+// TO AVOID NEGATIVE VALUES FOR IMPOSSIBLE NUCLEI
+// THE FISSION BARRIER IS SET TO ZERO IF SMALLER THAN ZERO.
+//                                    
+    if (ef < 0.0)ef = 0.0;
+    fb->efa[j][k]=ef;
+    (*ef_par) = ef;
 
-    // to avoid negative values for impossible nuclei                        
-    // the fission barrier is set to zero if smaller than zero.              
-    //     if (fb->efa[k][j] < 0.0) {
-    //       fb->efa[k][j] = 0.0;
-    //     }
-    if (fb->efa[j][k] < 0.0) {
-      if(verboseLevel > 2) {
-	// G4cout <<"Setting fission barrier to 0" << G4endl;
-      }
-      fb->efa[j][k] = 0.0;
-    }
-    
-    // factor with jprf should be 0.0025d0 - 0.01d0 for                     
-    // approximate influence of ang. momentum on bfis  a.j. 22.07.96        
-    // 0.0 means no angular momentum                                       
-
-    if (ef < 0.0) {
-      ef = 0.0;
-    }
+  // calculation of surface and curvature integrals needed to      
+  // to calculate the level density parameter at the saddle point
     xx = fissility((k+j),k,fiss->optxfis);
-    
     y = 1.00 - xx;
-    if (y < 0.0) {
-      y = 0.0;
-    }
-    if (y > 1.0) {
-      y = 1.0;
-    }
-    bs = bipol(1,y);
-    bk = bipol(2,y);
+    if(y<0.0) y = 0.0;
+    if(y>1.0) y = 1.0;
+    bssp = bipol(1,y);
+    bksp = bipol(2,y);
   }
   else {
     ef = 1.0e40;
-    bs = 1.0;
-    bk = 1.0;
+    sbfis = 1.0e40;
+    bssp = 1.0;
+    bksp = 1.0;
   }
-  sbf = ee - ef;
+
+//
+// COMPOUND NUCLEUS LEVEL DENSITY
+//
+//  AK 2007 - Now DENSNIV called with correct BS, BK
 
   afp = idnint(a);
   iz = idnint(zprf);
   in = afp - iz;
-  bshell = ecld->ecfnz[in][iz];
+  bshell = ecld->ecgnz[in][iz]- ecld->vgsld[in][iz];
+  defbet = ecld->beta2[in][iz];
 
-  // ld saddle point deformation                                          
-  // here: beta2 = std::sqrt(5/(4pi)) * alpha2                                  
+  iinert = 0.4 * 931.49 * 1.16*1.16 * std::pow(a,5.0/3.0)*(1.0 + 0.5*std::sqrt(5./(4.*pi))*defbet);
+  erot = jprf * jprf * 197.328 * 197.328 /(2. * iinert);
+  erotcn = erot;
 
-  // for the ground state def. 1.5d0 should be used                        
-  // because this was just the factor to produce the                       
-  // alpha-deformation table 1.5d0 should be used                          
-  // a.r.j. 6.8.97                                                         
-  defbet = 1.58533e0 * spdef(idnint(a),idnint(zprf),fiss->optxfis);
-  
-  // level density and temperature at the saddle point                     
-  //   // G4cout <<"a = " << a << G4endl;
-  //   // G4cout <<"zprf = " << zprf << G4endl;
-  //   // G4cout <<"ee = " << ee << G4endl;
-  //   // G4cout <<"ef = " << ef << G4endl;
-  //   // G4cout <<"bshell = " << bshell << G4endl;
-  //   // G4cout <<"bs = " << bs << G4endl;
-  //   // G4cout <<"bk = " << bk << G4endl;
-  //   // G4cout <<"defbet = " << defbet << G4endl;
-  densniv(a,zprf,ee,ef,&densf,bshell,bs,bk,&temp,int(fiss->optshp),int(fiss->optcol),defbet);
-  //   // G4cout <<"densf = " << densf << G4endl;
-  //   // G4cout <<"temp = " << temp << G4endl;
-  ft = temp;
-  if (iz >= 2) {
-    bshell = ecld->ecgnz[in][iz-1] - ecld->vgsld[in][iz-1];
-    defbet = 1.5 * (ecld->alpha[in][iz-1]);
+  bsbkbc(a,zprf,&bscn,&bkcn,&bccn);
 
-    // level density and temperature in the proton daughter                  
-    densniv(a-1.0,zprf-1.0e0,ee,sbp,&densp, bshell,1.e0,1.e0,&temp,int(fiss->optshp),int(fiss->optcol),defbet);
-    pt = temp;
-    if (imaxwell == 1) {
-      // valentina - random kinetic energy in a maxwelliam distribution
-      // modif juin/2002 a.b. c.v. for light targets; limit on the energy
-      // from the maxwell distribution.
-      rpt = pt;
-      ecp = 2.0 * pt;
-      if(rpt <= 1.0e-3) {
-	goto direct2914;
-      }
-      iflag = 0;
-    direct1914:
-      ecp = fmaxhaz(rpt);
-      iflag = iflag + 1;
-      if(iflag >= 10) {
-	rnd = G4AblaRandom::flat();
-	ecp=std::sqrt(rnd)*(eer-sbp);
-	goto direct2914;
-      }
-      if((ecp+sbp) > eer) {
-	goto direct1914;
-      }
-    }
-    else {
-      ecp = 2.0 * pt;
-    }
-
-  direct2914:
-    ;
-    //    // G4cout <<""<<G4endl;
+ // if(ee > erot){
+  densniv(a,zprf,ee,0.0,&densg,bshell,bscn,bkcn,&temp,fiss->optshp,fiss->optcol,defbet,&ecor,jprf,0,&qrcn);
+  ftcn = temp;
+  //ecorcn = ecor;
+/*
+  }else{
+// If EE < EROT, only gamma emission can take place
+         probf = 0.0;
+   	 probp = 0.0;
+   	 probd = 0.0;
+   	 probt = 0.0;
+  	 probn = 0.0;
+   	 probhe = 0.0;
+   	 proba = 0.0;
+   	 probg = 1.0;
+         probimf = 0.0;
+//c JLRS 03/2017 - Added this calculation
+//C According to A. Ignatyuk, GG :
+//C Here BS=BK=1, as this was assumed in the parameterization
+         pa = (ald->av)*a + (ald->as)*std::pow(a,2./3.) + (ald->ak)*std::pow(a,1./3.);
+         gamma = 2.5 * pa * std::pow(a,-4./3.);
+         gfactor = 1.+gamma*ecld->ecgnz[in][iz];
+         if(gfactor<=0.){
+          gfactor = 0.0;
+         }
+//
+         gtemp = 17.60/(std::pow(a,0.699) * std::sqrt(gfactor));
+         ecg = 4.0 * gtemp;
+//
+         goto direct70;
   }
-  else {
-    densp = 0.0;
-    ecp = 0.0;
-    pt = 0.0;
-  }
+*/
+
+//  ---------------------------------------------------------------
+//        LEVEL DENSITIES AND TEMPERATURES OF THE FINAL STATES
+//  ---------------------------------------------------------------
+//
+//  MVR - in case of charged particle emission temperature
+//  comes from random kinetic energy from a Maxwelliam distribution
+//  if option imaxwell = 1 (otherwise E=2T)
+//
+//  AK - LEVEL DENSITY AND TEMPERATURE AT THE SADDLE POINT -> now calculated in the subroutine FISSION_WIDTH
+//
+//
+// LEVEL DENSITY AND TEMPERATURE IN THE NEUTRON DAUGHTER
+//
+// KHS, AK 2007 - Reduction of angular momentum due to orbital angular momentum of emitted fragment
+// JLRS Nov-2016 - Added these caculations in abla++
 
   if (in >= 2) {
-    bshell = ecld->ecgnz[in-1][iz] - ecld->vgsld[in-1][iz];
-    defbet = 1.5e0 * (ecld->alpha[in-1][iz]);
+    ind=idnint(a)-idnint(zprf)-1;
+    izd=idnint(zprf);
+    if(jprf>0.10){
+         lorb(a,a-1.,jprf,ee-sn,&dlout,&sdlout);
+         djprf = gausshaz(1,dlout,sdlout);
+         if(IDjprf==1) djprf = 0.0;
+         jprfn = jprf + djprf;
+         jprfn = dint(std::abs(jprfn));   // The nucleus just turns the other way around
+    }
+    bshell = ecld->ecgnz[ind][izd] - ecld->vgsld[ind][izd];
+    defbet = ecld->beta2[ind][izd];
+
+    iinert = 0.4 * 931.49 * 1.16*1.16 * std::pow(a-1.,5.0/3.0)*(1.0 + 0.5*std::sqrt(5./(4.*pi))*defbet);
+    erotn = jprfn * jprfn * 197.328 * 197.328 /(2. * iinert);
+    bsbkbc(a-1.,zprf,&bs,&bk,&bc);   
 
     // level density and temperature in the neutron daughter                 
-    densniv(a-1.0,zprf,ee,sn,&densn,bshell, 1.e0,1.e0,&temp,int(fiss->optshp),int(fiss->optcol),defbet);
+    densniv(a-1.0,zprf,ee,sn,&densn,bshell, bs,bk,&temp,fiss->optshp,fiss->optcol,defbet,&ecor,jprfn,0,&qr);
     nt = temp;
-
-    if (imaxwell == 1) {
-      // valentina - random kinetic energy in a maxwelliam distribution
-      // modif juin/2002 a.b. c.v. for light targets; limit on the energy
-      // from the maxwell distribution.
+    ecn=0.0;
+    if(densn>0.){
+     G4int IS=0;
+     if(imaxwell == 1){
       rnt = nt;
+      dir1234:
+      ecn=fvmaxhaz_neut(rnt);
+      IS++;
+      if(IS>100){std::cout << "WARNING: FVMAXHAZ_NEUT CALLED MORE THAN 100 TIMES" << std::endl;
+      goto exi1000;
+      }
+       if(ecn>(ee-sn)){
+        if((ee-sn)<rnt)
+           ecn = ee-sn;
+        else
+           goto dir1234;
+           }
+        if(ecn<=0.0) goto dir1234;
+     }else{
       ecn = 2.0 * nt;
-      if(rnt <= 1.e-3) {
-	goto direct2915;
-      }
-
-      iflag=0;
-    direct1915:
-      ecn = fmaxhaz(rnt);
-      if(verboseLevel > 2) {
-	// G4cout <<"rnt = " << rnt << G4endl;
-	// G4cout << __FILE__ << ":" << __LINE__ << " ecn = " << ecn << G4endl;
-      }
-      iflag=iflag+1;
-      if(iflag >= 10) {
-	rnd = G4AblaRandom::flat();
-	ecn = std::sqrt(rnd)*(eer-sn);
-	goto direct2915;
-      }
-      if((ecn+sn) > eer) {
-      	goto direct1915;
-      } 
-    } 
-    else {
-      	ecn = 2.e0 * nt;
+     }
     }
-//       if((ecn + sn) <= eer) {
-// 	ecn = 2.0 * nt;
-// 	// G4cout << __FILE__ << ":" << __LINE__ << " ecn = " << ecn << G4endl;
-//       }
-    direct2915: 
-      ;
-      //      // G4cout <<"" <<G4endl;
   } 
   else {
     densn = 0.0;
     ecn = 0.0;
     nt = 0.0;
   }
+  exi1000:
 
+// LEVEL DENSITY AND TEMPERATURE IN THE PROTON DAUGHTER
+//
+// Reduction of angular momentum due to orbital angular momentum of emitted fragment
+  if (iz >= 2) {
+    ind=idnint(a)-idnint(zprf);
+    izd=idnint(zprf)-1;
+    if(jprf>0.10){
+         lorb(a,a-1.,jprf,ee-sbp,&dlout,&sdlout);
+         djprf = gausshaz(1,dlout,sdlout);
+         if(IDjprf==1) djprf = 0.0;
+         jprfp = jprf + djprf;
+         jprfp = dint(std::abs(jprfp));   // The nucleus just turns the other way around
+    }
+    bshell = ecld->ecgnz[ind][izd] - ecld->vgsld[ind][izd];
+    defbet =ecld->beta2[ind][izd];
+
+    iinert = 0.4 * 931.49 * 1.16*1.16 * std::pow(a-1.,5.0/3.0)*(1.0 + 0.5*std::sqrt(5./(4.*pi))*defbet);
+    erotp = jprfp * jprfp * 197.328 * 197.328 /(2. * iinert);
+
+    bsbkbc(a-1.,zprf-1.,&bs,&bk,&bc);
+   
+    // level density and temperature in the proton daughter                  
+    densniv(a-1.0,zprf-1.0,ee,sbp,&densp,bshell,bs,bk,&temp,fiss->optshp,fiss->optcol,defbet,&ecor,jprfp,0,&qr);
+    pt = temp;
+    ecp = 0.;
+    if(densp>0.){
+     G4int IS=0;
+     if(imaxwell == 1){
+      rpt = pt;
+      dir1235:
+      ecp=fvmaxhaz(rpt);
+      IS++;
+      if(IS>100){std::cout << "WARNING: FVMAXHAZ CALLED MORE THAN 100 TIMES" << std::endl;
+      goto exi1001;
+      }
+       if(ecp>(ee-sbp)){
+        if((ee-sbp)<rpt)
+           ecp = ee-sbp;
+        else
+           goto dir1235;
+           }
+        if(ecp<=0.0) goto dir1235;
+      ecp = ecp + bp;
+     }else{
+      ecp = 2.0 * pt + bp;
+     }
+    }
+  }
+  else {
+    densp = 0.0;
+    ecp = 0.0;
+    pt = 0.0;
+  }
+  exi1001:
+
+//  FINAL LEVEL DENSITY AND TEMPERATURE AFTER DEUTERON EMISSION
+//
+// Reduction of angular momentum due to orbital angular momentum of emitted fragment
+  if ((in >= 2) && (iz >= 2)) {
+    ind=idnint(a)-idnint(zprf)-1;
+    izd=idnint(zprf)-1;
+    if(jprf>0.10){
+         lorb(a,a-2.,jprf,ee-sbd,&dlout,&sdlout);
+         djprf = gausshaz(1,dlout,sdlout);
+         if(IDjprf==1) djprf = 0.0;
+         jprfd = jprf + djprf;
+         jprfd = dint(std::abs(jprfd));   // The nucleus just turns the other way around
+    }
+    bshell = ecld->ecgnz[ind][izd] - ecld->vgsld[ind][izd];
+    defbet = ecld->beta2[ind][izd];
+
+    iinert = 0.4 * 931.49 * 1.16*1.16 * std::pow(a-2.,5.0/3.0)*(1.0 + 0.5*std::sqrt(5./(4.*pi))*defbet);
+    erotd = jprfd * jprfd * 197.328 * 197.328 /(2. * iinert);
+
+    bsbkbc(a-2.,zprf-1.,&bs,&bk,&bc);
+
+    // level density and temperature in the deuteron daughter                   
+    densniv(a-2.0,zprf-1.0e0,ee,sbd,&densd,bshell,bs,bk,&temp,fiss->optshp,fiss->optcol,defbet,&ecor,jprfd,0,&qr);
+
+    dt = temp;
+    ecd = 0.0;
+    if(densd>0.){
+     G4int IS=0;
+     if(imaxwell == 1){
+      rdt = dt;
+      dir1236:
+      ecd=fvmaxhaz(rdt);
+      IS++;
+      if(IS>100){std::cout << "WARNING: FVMAXHAZ CALLED MORE THAN 100 TIMES" << std::endl;
+      goto exi1002;
+      }
+       if(ecd>(ee-sbd)){
+        if((ee-sbd)<rdt)
+           ecd = ee-sbd;
+        else
+           goto dir1236;
+           }
+        if(ecd<=0.0) goto dir1236;
+      ecd = ecd + bd;
+     }else{
+      ecd = 2.0 * dt + bd;
+     }
+    }
+  }
+  else {
+    densd = 0.0;
+    ecd = 0.0;
+    dt = 0.0;
+  }
+  exi1002:
+
+//  FINAL LEVEL DENSITY AND TEMPERATURE AFTER TRITON EMISSION
+//
+// Reduction of angular momentum due to orbital angular momentum of emitted fragment
+  if ((in >= 3) && (iz >= 2)) {
+    ind=idnint(a)-idnint(zprf)-2;
+    izd=idnint(zprf)-1;
+    if(jprf>0.10){
+         lorb(a,a-3.,jprf,ee-sbt,&dlout,&sdlout);
+         djprf = gausshaz(1,dlout,sdlout);
+         if(IDjprf==1) djprf = 0.0;
+         jprft = jprf + djprf;
+         jprft = dint(std::abs(jprft));   // The nucleus just turns the other way around
+    }
+    bshell = ecld->ecgnz[ind][izd] - ecld->vgsld[ind][izd];
+    defbet = ecld->beta2[ind][izd];
+
+    iinert = 0.4 * 931.49 * 1.16*1.16 * std::pow(a-3.,5.0/3.0)*(1.0 + 0.5*std::sqrt(5./(4.*pi))*defbet);
+    erott = jprft * jprft * 197.328 * 197.328 /(2. * iinert);
+
+    bsbkbc(a-3.,zprf-1.,&bs,&bk,&bc);
+
+    // level density and temperature in the triton daughter                   
+    densniv(a-3.0,zprf-1.0,ee,sbt,&denst,bshell,bs,bk,&temp,fiss->optshp,fiss->optcol,defbet,&ecor,jprft,0,&qr);
+
+    tt = temp;
+    ect=0.;
+    if(denst>0.){
+     G4int IS=0;
+     if(imaxwell == 1){
+      rtt = tt;
+      dir1237:
+      ect=fvmaxhaz(rtt);
+      IS++;
+      if(IS>100){std::cout << "WARNING: FVMAXHAZ CALLED MORE THAN 100 TIMES" << std::endl;
+      goto exi1003;
+      }
+       if(ect>(ee-sbt)){
+        if((ee-sbt)<rtt)
+           ect = ee-sbt;
+        else
+           goto dir1237;
+           }
+        if(ect<=0.0) goto dir1237;
+      ect = ect + bt;
+     }else{
+      ect = 2.0 * tt + bt;
+     }
+    }
+  }
+  else {
+    denst = 0.0;
+    ect = 0.0;
+    tt = 0.0;
+  }
+  exi1003: 
+
+// LEVEL DENSITY AND TEMPERATURE IN THE ALPHA DAUGHTER
+//
+// Reduction of angular momentum due to orbital angular momentum of emitted fragment
   if ((in >= 3) && (iz >= 3)) {
-    bshell = ecld->ecgnz[in-2][iz-2] - ecld->vgsld[in-2][iz-2];
-    defbet = 1.5 * (ecld->alpha[in-2][iz-2]);
+    ind=idnint(a)-idnint(zprf)-2;
+    izd=idnint(zprf)-2;
+    if(jprf>0.10){
+         lorb(a,a-4.,jprf,ee-sba,&dlout,&sdlout);
+         djprf = gausshaz(1,dlout,sdlout);
+         if(IDjprf==1) djprf = 0.0;
+         jprfa = jprf + djprf;
+         jprfa = dint(std::abs(jprfa));   // The nucleus just turns the other way around
+    }
+    bshell = ecld->ecgnz[ind][izd] - ecld->vgsld[ind][izd];
+    defbet = ecld->beta2[ind][izd];
 
-    // For debugging:
-    //    bshell = -10.7;
-    //    defbet = -0.06105;
-    // // G4cout <<"ecgnz N = " << in-2 << G4endl;
-    // // G4cout <<"ecgnz Z = " << iz-2 << G4endl;
-    //  // G4cout <<"bshell = " << bshell << G4endl;
-    // // G4cout <<"defbet = " << defbet << G4endl;
+    iinert = 0.4 * 931.49 * 1.16*1.16 * std::pow(a-4.,5.0/3.0)*(1.0 + 0.5*std::sqrt(5./(4.*pi))*defbet);
+    erota = jprfa * jprfa * 197.328 * 197.328 /(2. * iinert);
+
+    bsbkbc(a-4.,zprf-2.,&bs,&bk,&bc);
+
     // level density and temperature in the alpha daughter                   
-    densniv(a-4.0,zprf-2.0e0,ee,sba,&densa,bshell,1.e0,1.e0,&temp,int(fiss->optshp),int(fiss->optcol),defbet);
-    // // G4cout <<"densa = " << densa << G4endl;
-    // // G4cout <<"temp = " << temp << G4endl;
+    densniv(a-4.0,zprf-2.0,ee,sba,&densa,bshell,bs,bk,&temp,fiss->optshp,fiss->optcol,defbet,&ecor,jprfa,0,&qr);
 
-    // valentina - random kinetic energy in a maxwelliam distribution
     at = temp;
-    if (imaxwell == 1) {
-      // modif juin/2002 a.b. c.v. for light targets; limit on the energy
-      // from the maxwell distribution.
+    eca = 0.0;
+    if(densa>0.){
+     G4int IS=0;
+     if(imaxwell == 1){
       rat = at;
-      eca= 2.e0 * at;
-      if(rat <= 1.e-3) {
-	goto direct2916;
+      dir1238:
+      eca=fvmaxhaz(rat);
+      IS++;
+      if(IS>100){std::cout << "WARNING: FVMAXHAZ CALLED MORE THAN 100 TIMES" << std::endl;
+      goto exi1004;
       }
-      iflag=0;
-    direct1916:
-      eca = fmaxhaz(rat);
-      iflag=iflag+1;
-      if(iflag >= 10) {
-	rnd = G4AblaRandom::flat();
-	eca=std::sqrt(rnd)*(eer-sba);
-	goto direct2916;
-      }
-      if((eca+sba) > eer) {
-	goto direct1916;
-      }
+       if(eca>(ee-sba)){
+        if((ee-sba)<rat)
+           eca = ee-sba;
+        else
+           goto dir1238;
+           }
+        if(eca<=0.0) goto dir1238;
+      eca = eca + ba;
+     }else{
+      eca = 2.0 * at + ba;
+     }
     }
-    else {
-      eca = 2.0 * at;
-    }
-    direct2916:
-      ;
-      //      // G4cout <<"" << G4endl;
   }
   else {
     densa = 0.0;
     eca = 0.0;
     at = 0.0;
   }
-  //} // PK
+  exi1004: 
 
-  // special treatment for unbound nuclei                                                
-  if (sn < 0.0) {
-    probn = 1.0;
-    probp = 0.0;
-    proba = 0.0;
-    probf = 0.0;
-    goto direct70;
-  }
-  if (sbp < 0.0) {
-    probp = 1.0;
-    probn = 0.0;
-    proba = 0.0;
-    probf = 0.0;
-    goto direct70;
-  }
+//  FINAL LEVEL DENSITY AND TEMPERATURE AFTER 3HE EMISSION
+//
+// Reduction of angular momentum due to orbital angular momentum of emitted fragment
+  if ((in >= 2) && (iz >= 3)) {
+    ind=idnint(a)-idnint(zprf)-1;
+    izd=idnint(zprf)-2;
+    if(jprf>0.10){
+         lorb(a,a-3.,jprf,ee-sbhe,&dlout,&sdlout);
+         djprf = gausshaz(1,dlout,sdlout);
+         if(IDjprf==1) djprf = 0.0;
+         jprfhe = jprf + djprf;
+         jprfhe = dint(std::abs(jprfhe));   // The nucleus just turns the other way around
+    }
+    bshell = ecld->ecgnz[ind][izd] - ecld->vgsld[ind][izd];
+    defbet = ecld->beta2[ind][izd];
 
-  if ((a < 50.e0) || (ee > edyn)) { // no fission if e*> edyn or mass < 50
-    //    // G4cout <<"densf = 0.0" << G4endl;
-    densf = 0.e0;
-  }
+    iinert = 0.4 * 931.49 * 1.16*1.16 * std::pow(a-3.,5.0/3.0)*(1.0 + 0.5*std::sqrt(5./(4.*pi))*defbet);
+    erothe = jprfhe * jprfhe * 197.328 * 197.328 /(2. * iinert);
 
-  bshell = ecld->ecgnz[in][iz] - ecld->vgsld[in][iz];
-  defbet = 1.5e0 * (ecld->alpha[in][iz]);
+    bsbkbc(a-3.,zprf-2.,&bs,&bk,&bc);
 
-  // compound nucleus level density                                        
-  densniv(a,zprf,ee,0.0e0,&densg,bshell,1.e0,1.e0,&temp,int(fiss->optshp),int(fiss->optcol),defbet);
-  
-  if ( densg > 0.e0) {
-    // calculation of the partial decay width                                
-    // used for both the time scale and the evaporation decay width
-    gp = (std::pow(a,(2.0/3.0))/fiss->akap)*densp/densg/pi*std::pow(pt,2);
-    gn = (std::pow(a,(2.0/3.0))/fiss->akap)*densn/densg/pi*std::pow(nt,2);
-    ga = (std::pow(a,(2.0/3.0))/fiss->akap)*densa/densg/pi*2.0*std::pow(at,2);
-    gf = densf/densg/pi/2.0*ft;
-    
-    if(itest == 1) {
-      // G4cout <<"gn,gp,ga,gf " << gn <<","<< gp <<","<< ga <<","<< gf << G4endl;
+    // level density and temperature in the he3 daughter                   
+    densniv(a-3.0,zprf-2.0,ee,sbhe,&denshe,bshell,bs,bk,&temp,fiss->optshp,fiss->optcol,defbet,&ecor,jprfhe,0,&qr);
+
+    het = temp;
+    eche = 0.0;
+    if(denshe>0.){
+     G4int IS=0;
+     if(imaxwell == 1){
+      rhet = het;
+      dir1239:
+      eche=fvmaxhaz(rhet);
+      IS++;
+      if(IS>100){std::cout << "WARNING: FVMAXHAZ CALLED MORE THAN 100 TIMES" << std::endl;
+      goto exi1005;
+      }
+       if(eche>(ee-sbhe)){
+        if((ee-sbhe)<rhet)
+           eche = ee-sbhe;
+        else
+           goto dir1239;
+           }
+        if(eche<=0.0) goto dir1239;
+      eche = eche + bhe;
+     }else{
+      eche = 2.0 * het + bhe;
+     }
     }
   }
   else {
-    if(verboseLevel > 2) {
-      // G4cout <<"direct: densg <= 0.e0 " << a <<","<< zprf <<","<< ee << G4endl;
-    }
+    denshe = 0.0;
+    eche = 0.0;
+    het = 0.0;
   }
+  exi1005:
 
-  gsum = ga + gp + gn;
+// Decay widths for particles
+  if ( densg > 0.) {
+//
+// CALCULATION OF THE PARTIAL DECAY WIDTH
+// USED FOR BOTH THE TIME SCALE AND THE EVAPORATION DECAY WIDTH
+//
+//      AKAP = HBAR**2/(2* MN * R_0**2) = 10 MEV    *** input param ***
+//
+// AK, KHS 2005 - Energy-dependen inverse cross sections included, influence of
+//                Coulomb barrier for LCP, tunnelling for LCP
+// JLRS 2017 - Implementation in abla++ 
+
+       if(densn<=0.0){
+        gn = 0.0;
+       }else{
+        gn  = width(a,zprf,1.0,0.0,nt,0.0,sn,ee-erotn)* densn/densg;
+       }
+       if(densp<=0.0){
+        gp = 0.0;
+       }else{
+        gp  = width(a,zprf,1.0,1.0,pt,bp,sbp,ee-erotp)*densp/densg* pen(a, 1.0, omegap, pt);
+       }
+       if(densd<=0.0){
+        gd = 0.0;
+       }else{
+        gd  = width(a,zprf,2.0,1.0,dt,bd,sbd,ee-erotd)*densd/densg* pen(a, 2.0, omegad, dt);
+       }
+       if(denst<=0.0){
+        gt = 0.0;
+       }else{
+        gt  = width(a,zprf,3.0,1.0,tt,bt,sbt,ee-erott)*denst/densg* pen(a, 3.0, omegat, tt);
+       }
+       if(denshe<=0.0){
+        ghe = 0.0;
+       }else{
+        ghe =width(a,zprf,3.0,2.0,het,bhe,sbhe,ee-erothe)  * denshe/densg* pen(a, 3.0, omegahe, het);
+       }
+       if(densa<=0.0){
+        ga = 0.0;
+       }else{
+        ga  = width(a,zprf,4.0,2.0,at,ba,sba,ee-erota)  * densa/densg* pen(a, 4.0, omegaa, at);
+       }
+
+//     **************************
+//     *  Treatment of IMFs     *
+//     * KHS, AK, MVR 2005-2006 *
+//     **************************
+
+       G4int izcn=0,incn=0,inmin=0,inmax=0,inmi=0,inma=0;
+       G4double aimf,mares,maimf;
+
+       if(fimf_allowed==0 || zprf<=5.0 || a<=7.0){
+        gimf = 0.0;
+       }else{
+//      Estimate the total decay width for IMFs (Z >= 3)
+//      By using the logarithmic slope between GIMF3 and GIMF5
+
+        mglms(a,zprf,opt->optshpimf,&mazz);
+
+        gimf3 = 0.0;
+        zimf = 3.0;
+        izimf = 3;
+//      *** Find the limits that both IMF and partner are bound :
+        izcn = idnint(zprf);                  // Z of CN
+        incn = idnint(a) - izcn;              // N of CN
+
+        isostab_lim(izimf,&inmin,&inmax);     // Bound isotopes for IZIMF from INMIN to INIMFMA
+        isostab_lim(izcn-izimf,&inmi,&inma);  // Daughter nucleus after IMF emission,
+                                           //     limits of bound isotopes
+        inmin = max(inmin,incn-inma);      //     Both IMF and daughter must be bound
+        inmax = min(inmax,incn-inmi);      //        "
+
+        inmax = max(inmax,inmin);          // In order to keep the variables below
+
+        for(G4int iaimf=izimf+inmin;iaimf<=izimf+inmax;iaimf++){
+         aimf=double(iaimf);
+         if(aimf>=a || zimf>=zprf){
+          width_imf = 0.0;
+         }else{
+          // Q-values
+          mglms(a-aimf,zprf-zimf,opt->optshpimf,&mares);
+          mglms(aimf,zimf,opt->optshpimf,&maimf);
+          // Bass barrier
+          barrs(idnint(zprf-zimf),idnint(a-aimf),izimf,idnint(aimf),&bimf,&omegaimf);
+          sbimf = maimf+mares-mazz+bimf;
+          // Rotation energy
+          defbetimf = ecld->beta2[idnint(aimf-zimf)][idnint(zimf)]+ecld->beta2[idnint(a-aimf-zprf+zimf)][idnint(zprf-zimf)];
+
+          iinert= 0.40 * 931.490 * 1.160*1.160 * std::pow(a,5.0/3.0)*(std::pow(aimf,5.0/3.0) + std::pow(a - aimf,5.0/3.0)) + 931.490 * 1.160*1.160 * aimf * (a-aimf) / a *(std::pow(aimf,1.0/3.0) + std::pow(a - aimf,1.0/3.0))*(std::pow(aimf,1.0/3.0) + std::pow(a - aimf,1.0/3.0));
+
+          erot = jprf * jprf * 197.328 * 197.328 /(2.0 * iinert);
+
+          // Width
+          if(densg==0.0 || ee < (sbimf + erot)){
+           width_imf = 0.0;
+          }else{
+          // To take into account that at the barrier the system is deformed:
+          //      BSIMF = ((A-AIMF)**(2.D0/3.D0) + AIMF**(2.D0/3.D0))/A**(2.D0/3.D0)
+           bsimf = bscn;
+           densniv(a,zprf,ee,sbimf,&densimf,0.0,bsimf,1.0,&timf,0,0,defbetimf,&ecor,jprf,2,&qr);
+
+           imfarg = (sbimf+erotcn-erot)/timf;
+           if(imfarg > 200.0) imfarg = 200.0;
+
+// For IMF - The available phase space is given by the level densities in CN at the
+// barrier; applaying MOrretto -> G=WIDTH*ro_CN(E-SBIMF)/ro_CN(E).
+// Constant temperature approximation: ro(E+dE)/ro(E)=exp(dE/T)
+// Ratio  DENSIMF/DENSCN is included to take into account that at the barrier system
+// is deformed. If (above) BSIMF = 1 no deformation is considered and this ratio
+// is equal to 1.
+           width_imf = 0.0;
+         //
+           width_imf = width(a,zprf,aimf,zimf,timf,bimf,sbimf,ee-erot)*std::exp(-imfarg)*qr/qrcn;
+          }// if densg
+         }// if aimf
+         gimf3 = gimf3 + width_imf;
+        }// for IAIMF
+
+//   zimf = 5       
+        gimf5 = 0.0;
+        zimf = 5.0;
+        izimf = 5;
+//      *** Find the limits that both IMF and partner are bound :
+        izcn = idnint(zprf);                  // Z of CN
+        incn = idnint(a) - izcn;              // N of CN
+
+        isostab_lim(izimf,&inmin,&inmax);     // Bound isotopes for IZIMF from INMIN to INIMFMA
+        isostab_lim(izcn-izimf,&inmi,&inma);  // Daughter nucleus after IMF emission,
+                                           //     limits of bound isotopes
+        inmin = max(inmin,incn-inma);      //     Both IMF and daughter must be bound
+        inmax = min(inmax,incn-inmi);      //        "
+
+        inmax = max(inmax,inmin);          // In order to keep the variables below
+
+        for(G4int iaimf=izimf+inmin;iaimf<=izimf+inmax;iaimf++){
+         aimf=G4double(iaimf);
+         if(aimf>=a || zimf>=zprf){
+          width_imf = 0.0;
+         }else{
+          // Q-values
+          mglms(a-aimf,zprf-zimf,opt->optshpimf,&mares);
+          mglms(aimf,zimf,opt->optshpimf,&maimf);
+          // Bass barrier
+          barrs(idnint(zprf-zimf),idnint(a-aimf),izimf,idnint(aimf),&bimf,&omegaimf);
+          sbimf = maimf+mares-mazz+bimf;
+          // Rotation energy
+          defbetimf = ecld->beta2[idnint(aimf-zimf)][idnint(zimf)]+ecld->beta2[idnint(a-aimf-zprf+zimf)][idnint(zprf-zimf)];
+
+          iinert= 0.40 * 931.490 * 1.160*1.160 * std::pow(a,5.0/3.0)*(std::pow(aimf,5.0/3.0) + std::pow(a - aimf,5.0/3.0)) + 931.490 * 1.160*1.160 * aimf * (a-aimf) / a *(std::pow(aimf,1.0/3.0) + std::pow(a - aimf,1.0/3.0))*(std::pow(aimf,1.0/3.0) + std::pow(a - aimf,1.0/3.0));
+
+          erot = jprf * jprf * 197.328 * 197.328 /(2.0 * iinert);
+//
+          // Width
+          if(densg==0.0 || ee < (sbimf + erot)){
+           width_imf = 0.0;
+          }else{
+          // To take into account that at the barrier the system is deformed:
+          //      BSIMF = ((A-AIMF)**(2.D0/3.D0) + AIMF**(2.D0/3.D0))/A**(2.D0/3.D0)
+           bsimf = bscn;
+           densniv(a,zprf,ee,sbimf,&densimf,0.0,bsimf,1.0,&timf,0,0,defbetimf,&ecor,jprf,2,&qr);
+//
+           imfarg = (sbimf+erotcn-erot)/timf;
+           if(imfarg > 200.0) imfarg = 200.0;
+//
+// For IMF - The available phase space is given by the level densities in CN at the
+// barrier; applaying MOrretto -> G=WIDTH*ro_CN(E-SBIMF)/ro_CN(E).
+// Constant temperature approximation: ro(E+dE)/ro(E)=exp(dE/T)
+// Ratio  DENSIMF/DENSCN is included to take into account that at the barrier system
+// is deformed. If (above) BSIMF = 1 no deformation is considered and this ratio
+// is equal to 1.
+           width_imf = 0.0;
+           width_imf = width(a,zprf,aimf,zimf,timf,bimf,sbimf,ee-erot)*std::exp(-imfarg)*qr/qrcn;//*densimf/densg;
+          }// if densg
+         }// if aimf
+         gimf5 = gimf5 + width_imf;
+        }// for IAIMF
+// It is assumed that GIMFi = A_IMF*ZIMF**B_IMF; to get the total GIMF one integrates
+// Int(A_IMF*ZIMF**B_IMF)(3->ZPRF)
+
+        if(gimf3<=0.0 || gimf5<=0.0){
+         gimf = 0.0;
+         b_imf = -100.0;
+         a_imf = 0.0;
+        }else{
+//
+        b_imf = (std::log10(gimf3) - std::log10(gimf5))/(std::log10(3.0)-std::log10(5.0));
+//
+         if(b_imf >= -1.01) b_imf = -1.01;
+         if(b_imf <= -100.0) {
+          b_imf = -100.0;
+          a_imf = 0.0;
+          gimf = 0.0;
+          goto direct2007;
+         }
+//
+         a_imf = gimf3 / std::pow(3.0,b_imf);
+         gimf = a_imf * ( std::pow(zprf,b_imf+1.0) - std::pow(3.0,b_imf+1.0)) /(b_imf + 1.0);
+        }
+
+       direct2007:
+       if(gimf < 1.e-10) gimf = 0.0;
+       }// if fimf_allowed
+//
+//c JLRS 2016 - Added this calculation
+//C AK 2004 - Gamma width
+//C According to A. Ignatyuk, GG :
+//C Here BS=BK=1, as this was assumed in the parameterization
+      pa = (ald->av)*a + (ald->as)*std::pow(a,2./3.) + (ald->ak)*std::pow(a,1./3.);
+      gamma = 2.5 * pa * std::pow(a,-4./3.);
+      gfactor = 1.+gamma*ecld->ecgnz[in][iz];
+      if(gfactor<=0.){
+       gfactor = 0.0;
+      }
+//
+      gtemp = 17.60/(std::pow(a,0.699) * std::sqrt(gfactor));
+//
+//C If one switches gammas off, one should also switch off tunneling through the fission barrier.
+      gg = 0.624e-9*std::pow(a,1.6)*std::pow(gtemp,5.);
+//gammaemission==1
+//C For fission fragments, GG is ~ 2 times larger than for
+//c "oridnary" nuclei (A. Ignatyuk, private communication).
+      if(gammaemission==1){
+      gg = 2.0 * gg;
+      }
+      ecg = 4.0 * gtemp;
+//
+//
+  gsum = ga + ghe + gd + gt + gp + gn + gimf + gg;
   if (gsum > 0.0) {
     ts1  = hbar / gsum;
   }
   else {
     ts1  = 1.0e99;
+    goto direct69;
   }
+//
+//Case of nuclei below Businaro-Gallone mass asymmetry point
+    if(fiss->ifis==0 || (zprf*zprf/a<=22.74 && zprf<60.)){
+     goto direct69;
+    }
+//
+// Calculation of the fission decay width
+// Deformation is calculated using the fissility  
+//
+    defbet = y;
+    fission_width(zprf,a,ee,bssp,bksp,ef,y,&gf,&temp,jprf,0,1,fiss->optcol,fiss->optshp,densg);
+    ft=temp;
+//
+// Case of very heavy nuclei that have no fission barrier
+// For them fission is the only decay channel available
+       if(ef<=0.0){
+         probf = 1.0;
+   	 probp = 0.0;
+   	 probd = 0.0;
+   	 probt = 0.0;
+  	 probn = 0.0;
+   	 probhe = 0.0;
+   	 proba = 0.0;
+   	 probg = 0.0;
+         probimf = 0.0;
+         goto direct70;
+       }
 
+       if(fiss->bet<=0.){
+        gtotal = ga + ghe + gp + gd + gt + gn + gg +gimf + gf;
+        if(gtotal<=0.0){
+         probf = 0.0;
+   	 probp = 0.0;
+   	 probd = 0.0;
+   	 probt = 0.0;
+  	 probn = 0.0;
+   	 probhe = 0.0;
+   	 proba = 0.0;
+   	 probg = 0.0;
+         probimf = 0.0;
+         goto direct70;
+        }else{
+         probf = gf/gtotal;
+         probn = gn/gtotal;
+         probp = gp/gtotal;
+         probd = gd/gtotal;
+         probt = gt/gtotal;
+         probhe = ghe/gtotal;
+         proba = ga/gtotal;
+         probg = gg/gtotal;
+         probimf = gimf/gtotal;
+         goto direct70;
+        }
+       }
+  }else{
+   goto direct69;
+  }
+//
   if (inum > ilast) {  // new event means reset the time scale
-    tsum = 0;
+    tsum = 0.;
   }
+//
+// kramers factor for the dynamical hindrances of fission
+  fomega_sp(a,y,&mfcd,&omegasp,&homegasp);
+  cf = cram(fiss->bet,homegasp);
+//
+// We calculate the transient time
+  fomega_gs(a,zprf,&k1,&omegags,&homegags);
+  tauc=tau(fiss->bet,homegags,ef,ft);
+  gf=gf*cf;
+//
+/*
+c The subroutine part_fiss calculates the fission width GFF that corresponds to the time
+c dependence of the probability distribution obtained by solving the FOKKER-PLANCK eq
+c using a nucleus potential that is approximated by a parabola. It also gives the
+c decay time for this step T_LAPSE that includes all particle decay channels and the
+c fission channel. And it decides whether the nucleus decays by particle evaporation
+c CHOICE_FISSPART = 1 or fission CHOICE_FISSPART = 2
+*/
+//
+ part_fiss(fiss->bet,gsum,gf,y,tauc,ts1,tsum, &choice_fisspart,zprf,a,ft,&t_lapse,&gff);
+ gf = gff;
+//
+// We accumulate in TSUM the mean decay for this step including all particle decay channels and fission
+ tsum = tsum + t_lapse;
 
-  // calculate the relative probabilities for all decay channels        
-  if (densf == 0.0) {
-    if (densp == 0.0) {
-      if (densn == 0.0) {
-	if (densa == 0.0) {
-	  // no reaction is possible                                               
-	  probf = 0.0;
+//   If fission occurs
+    if(choice_fisspart==2){
+	  probf = 1.0;
 	  probp = 0.0;
+	  probd = 0.0;
+	  probt = 0.0;
 	  probn = 0.0;
+	  probhe = 0.0;
 	  proba = 0.0;
-	  goto direct70;
-	}
+	  probg = 0.0;
+          probimf = 0.0;
+          goto direct70;
+    }else{
+// If particle evaporation occurs
+// The probabilities for the different decays are calculated taking into account the fission width GFF that corresponds to this step
 
-	// alpha evaporation is the only open channel                            
-	rf = 0.0;
-	rp = 0.0;
-	rn = 0.0;
-	ra = 1.0;
-	goto direct50;
-      }
-
-      // alpha emission and neutron emission                                   
-      rf = 0.0;
-      rp = 0.0;
-      rn = 1.0;
-      ra = densa*2.0/densn*std::pow((at/nt),2);
-      goto direct50;
+       gtotal=ga + ghe + gp + gd + gt + gn + gimf + gg;
+        if(gtotal<=0.0){
+         probf = 0.0;
+   	 probp = 0.0;
+   	 probd = 0.0;
+   	 probt = 0.0;
+  	 probn = 0.0;
+   	 probhe = 0.0;
+   	 proba = 0.0;
+   	 probg = 0.0;
+         probimf = 0.0;
+         goto direct70;
+       }else{
+         probf = 0.0;
+         probn = gn/gtotal;
+         probp = gp/gtotal;
+         probd = gd/gtotal;
+         probt = gt/gtotal;
+         probhe = ghe/gtotal;
+         proba = ga/gtotal;
+         probg = gg/gtotal;
+         probimf = gimf/gtotal;
+         goto direct70;
+        }
     }
-    // alpha, proton and neutron emission                                    
-    rf = 0.0;
-    rp = 1.0;
-    rn = densn/densp*std::pow((nt/pt),2);
-    ra = densa*2.0/densp*std::pow((at/pt),2);
-    goto direct50;
+
+
+
+  if(gf<=0.0){
+  goto direct69;
+  }else{
+     gtotal = ga + ghe + gp + gd + gt + gn + gg + gimf + gf;
+     probf = gf/gtotal;
+     probn = gn/gtotal;
+     probp = gp/gtotal;
+     probd = gd/gtotal;
+     probt = gt/gtotal;
+     probhe = ghe/gtotal;
+     proba = ga/gtotal;
+     probg = gg/gtotal;
+     probimf = gimf/gtotal;
+     goto direct70;
   }
 
-  // here fission has taken place                                          
-  rf = 1.0;
+  direct69:
+        gtotal = ga + ghe + gp + gd + gt + gn + gg + gimf;
+        if(gtotal<=0.0){
+         probf = 0.0;
+   	 probp = 0.0;
+   	 probd = 0.0;
+   	 probt = 0.0;
+  	 probn = 0.0;
+   	 probhe = 0.0;
+   	 proba = 0.0;
+   	 probg = 0.0;
+         probimf = 0.0;
+       }else{
+         probf = 0.0;
+         probn = gn/gtotal;
+         probp = gp/gtotal;
+         probd = gd/gtotal;
+         probt = gt/gtotal;
+         probhe = ghe/gtotal;
+         proba = ga/gtotal;
+         probg = gg/gtotal;
+         probimf = gimf/gtotal;
+        }
 
-  // cramers and weidenmueller factors for the dynamical hindrances of     
-  // fission                                                               
-  if (fiss->bet <= 1.0e-16) {
-    cf = 1.0;
-    wf = 1.0;
-  }
-  else if (sbf > 0.0e0) {
-    cf = cram(fiss->bet,fiss->homega);
-    // if fission barrier ef=0.d0 then fission is the only possible      
-    // channel. to avoid std::log(0) in function tau                          
-    // a.j. 7/28/93                                                      
-    if (ef <= 0.0) {
-      rp = 0.0;
-      rn = 0.0;
-      ra = 0.0;
-      goto direct50;
-    }
-    else {
-      // transient time tau()                                                  
-      tauc = tau(fiss->bet,fiss->homega,ef,ft);
-    }
-    wfex = (tauc - tsum)/ts1;
-
-    if (wfex < 0.0) {
-      wf = 1.0;
-    }
-    else {
-      wf = std::exp( -wfex);
-    }
-  }
-  else {
-    cf=1.0;
-    wf=1.0;
-  }
-
-  if(verboseLevel > 2) {
-    // G4cout <<"tsum,wf,cf " << tsum <<","<< wf <<","<< cf << G4endl;
-  }
-
-  tsum = tsum + ts1;
-
-  // change by g.k. and a.h. 5.9.95                                       
-  tconst = 0.7;
-  dconst = 12.0/std::sqrt(a);
-  nprf = a - zprf;
-
-  if (fiss->optshp >= 2) { //then                                           
-    parite(nprf,&parc);
-    dconst = dconst*parc;
-  }
-  else {
-    dconst= 0.0;
-  }
-  if ((ee <= 17.e0) && (fiss->optles == 1) && (iz >= 90) && (in >= 134)) { //then                              
-    // constant changed to 5.0 accord to moretto & vandenbosch a.j. 19.3.96  
-    gngf = std::pow(a,(2.0/3.0))*tconst/10.0*std::exp((ef-sn+dconst)/tconst);
-
-    // if the excitation energy is so low that densn=0 ==> gn = 0           
-    // fission remains the only channel.                                    
-    // a. j. 10.1.94                                                        
-    if (gn == 0.0) {
-      rn = 0.0;
-      rp = 0.0;
-      ra = 0.0;
-    }
-    else {
-      rn=gngf;
-      rp=gngf*gp/gn;
-      ra=gngf*ga/gn;
-    }
-  } else {
-    rn = gn/(gf*cf);
-//     // G4cout <<"rn = " << G4endl;
-//     // G4cout <<"gn = " << gn << " gf = " << gf << " cf = " << cf << G4endl;
-    rp = gp/(gf*cf);
-    ra = ga/(gf*cf);
-  }
- direct50:
-  // relative decay probabilities                                          
-  denomi = rp+rn+ra+rf;
-  // decay probabilities after transient time
-  probf = rf/denomi;
-  probp = rp/denomi;
-  probn = rn/denomi;
-  proba = ra/denomi;
-  
-  // new treatment of grange-weidenmueller factor, 5.1.2000, khs !!!
-
-  // decay probabilites with transient time included
-  probf = probf * wf;
-  if(probf == 1.0) { // Safeguard against NaN. Originally revealed by G4 testing...
-    probp = 0.0;
-    probn = 0.0;
-    proba = 0.0;
-  }
-  else {
-    probp = probp * (wf + (1.e0-wf)/(1.e0-probf));
-    probn = probn * (wf + (1.e0-wf)/(1.e0-probf));
-    proba = proba * (wf + (1.e0-wf)/(1.e0-probf));
-  }
- direct70:
-  ptotl = probp+probn+proba+probf;
-  
+  direct70:
+  ptotl = probp+probd+probt+probn+probhe+proba+probg+probimf+probf;  
+  //
   ee = eer;
   ilast = inum;
 
   // Return values:
   (*probp_par) = probp;
+  (*probd_par) = probd;
+  (*probt_par) = probt;
   (*probn_par) = probn;
+  (*probhe_par) = probhe;
   (*proba_par) = proba;
+  (*probg_par) = probg;
+  (*probimf_par) = probimf;
   (*probf_par) = probf;
   (*ptotl_par) = ptotl;
   (*sn_par) = sn;
+  (*sp_par) = sp;
+  (*sd_par) = sd;
+  (*st_par) = st;
+  (*she_par) = she;
+  (*sa_par) = sa;
   (*sbp_par) = sbp;
+  (*sbd_par) = sbd;
+  (*sbt_par) = sbt;
+  (*sbhe_par) = sbhe;
   (*sba_par) = sba;
   (*ecn_par) = ecn;
   (*ecp_par) = ecp;
+  (*ecd_par) = ecd;
+  (*ect_par) = ect;
+  (*eche_par) = eche;
   (*eca_par) = eca;
+  (*ecg_par) = ecg;
   (*bp_par) = bp;
+  (*bd_par) = bd;
+  (*bt_par) = bt;
+  (*bhe_par) = bhe;
   (*ba_par) = ba;
+  (*tcn) = ftcn;
+  (*ts1_par) = ts1;
+  (*jprfn_par) = jprfn;
+  (*jprfp_par) = jprfp;
+  (*jprfd_par) = jprfd;
+  (*jprft_par) = jprft;
+  (*jprfhe_par) = jprfhe;
+  (*jprfa_par) = jprfa;
+  (*tsum_par) = tsum;
+  return;
 }
 
-void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4double *dens, G4double bshell, G4double bs, G4double bk, 
-		     G4double *temp, G4int optshp, G4int optcol, G4double defbet)
+void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4double *dens, G4double bshell, G4double bsin, G4double bkin, G4double *temp, G4int optshp, G4int optcol, G4double defbet, G4double *ecor, G4double jprf, G4int ifis,G4double *qr)
 {
   //   1498	C                                                                       
   //   1499	C     INPUT:                                                            
@@ -2179,29 +4233,109 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
   G4double deltau = 0.0;
   G4double deltpp = 0.0;
   G4double e = 0.0;
-  G4double ecor = 0.0;
+  G4double e0 = 0.0;
   G4double ecor1 = 0.0;
-  G4double ecr = 0.0;
+  G4double ecr = 10.0;
   G4double fe = 0.0;
-  G4double fp = 0.0;
   G4double he = 0.0;
   G4double pa = 0.0;
   G4double para = 0.0;
   G4double parz = 0.0;
   G4double ponfe = 0.0;
   G4double ponniv = 0.0;
-  G4double qr = 0.0;
-  G4double sig = 0.0;
+  G4double fqr = 1.0;
   G4double y01 = 0.0;
   G4double y11 = 0.0;
   G4double y2 = 0.0;
   G4double y21 = 0.0;
   G4double y1 = 0.0;
   G4double y0 = 0.0;
-
+  G4double fnorm=0.0;
+  G4double fp_per=0.;
+  G4double fp_par=0.;
+  G4double sig_per=0.;
+  G4double sig_par=0.;
+  G4double sigma2;
+  G4double jfact=1.;
+  G4double erot=0.;
+  G4double fdens=0.;
+  G4double fecor=0.;
+  G4double BSHELLCT=0.;
+  G4double gamma=0.;
+  G4double ftemp=0.0;
+  G4double tempct=0.0;
+  G4double densfm = 0.0;
+  G4double densct = 0.0;
+  G4double ein=0.;
+  G4double elim;
+  G4double tfm;
+  G4double bs=bsin;
+  G4double bk=bkin;
+  G4int IPARITE;
+  G4int IOPTCT=fiss->optct;
+//
   G4double pi6 = std::pow(3.1415926535,2) / 6.0;
-  ecr=10.0;
-
+  G4double pi = 3.1415926535;
+//
+  G4int afp=idnint(a);
+  G4int iz=idnint(z);
+  G4int in=afp-iz;
+//
+  if(ifis!=1){
+     BSHELLCT = ecld->ecgnz[in][iz];
+  }else{
+     BSHELLCT = 0.0;
+  }
+  if(afp<=20) BSHELLCT = 0.0;
+  //
+   parite(a,&para);
+   if (para < 0.0){
+// Odd A
+	IPARITE=1;
+   }else{   
+// Even A                                                      
+      parite(z,&parz);
+      if(parz > 0.0){
+// Even Z, even N
+        IPARITE=2;
+      }else{
+// Odd Z, odd N 
+        IPARITE=0;
+      }
+   }
+//
+   ein = ee - esous;
+//
+   if(ein>1.e30){
+      fdens = 0.0;
+      ftemp = 0.5;
+      goto densniv100;
+   }
+//
+   e = ee - esous;
+//
+   if(e<0.0&&ifis!=1){  // TUNNELING
+        fdens = 0.0;
+        densfm = 0.0;
+        densct = 0.0;
+        if(ald->optafan == 1) {
+         pa = (ald->av)*a + (ald->as)*std::pow(a,(2.e0/3.e0)) + (ald->ak)*std::pow(a,(1.e0/3.e0));
+        }else {
+         pa = (ald->av)*a + (ald->as)*bsin*std::pow(a,(2.e0/3.e0)) + (ald->ak)*bkin*std::pow(a,(1.e0/3.e0));
+        }
+        gamma = 2.5 * pa * std::pow(a,-4.0/3.0);
+        fecor=0.0;
+        goto densniv100;
+   }
+//
+   if(ifis==0&&bs!=1.0){
+// - With increasing excitation energy system in getting less and less deformed:
+     G4double ponq = (e-100.0)/5.0;
+     if(ponq>700.0) ponq = 700.0;
+       bs = 1.0/(1.0+std::exp(-ponq)) + 1.0/(1.0+std::exp(ponq)) * bsin;
+       bk = 1.0/(1.0+std::exp(-ponq)) + 1.0/(1.0+std::exp(ponq)) * bkin;
+   }
+//
   // level density parameter                                               
   if(ald->optafan == 1) {
     pa = (ald->av)*a + (ald->as)*std::pow(a,(2.e0/3.e0)) + (ald->ak)*std::pow(a,(1.e0/3.e0));
@@ -2209,29 +4343,22 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
   else {
     pa = (ald->av)*a + (ald->as)*bs*std::pow(a,(2.e0/3.e0)) + (ald->ak)*bk*std::pow(a,(1.e0/3.e0));
   }
-
-  fp = 0.01377937231e0 * std::pow(a,(5.e0/3.e0)) * (1.e0 + defbet/3.e0);
+//
+  gamma = 2.5 * pa * std::pow(a,-4.0/3.0);
+//
+// AK - 2009 - trial, in order to have transition to constant-temperature approach
+// Idea - at the phase transition superfluid-normal fluid, TCT = TEMP, and this
+// determines critical energy for pairing.
+  if(a>0.0){
+   ecr = pa*17.60/(std::pow(a,0.699) * std::sqrt(1.0+gamma*BSHELLCT))*17.60/(std::pow(a,0.699) * std::sqrt(1.0+gamma*BSHELLCT));
+  }
 
   // pairing corrections                                                   
-  if (bs > 1.0) {
+  if (ifis == 1) {
     delta0 = 14;
   }
   else {
     delta0 = 12;
-  }
-
-  if (esous > 1.0e30) {
-    (*dens) = 0.0;
-    (*temp) = 0.0;
-    goto densniv100;                                                       
-  }
-
-  e = ee - esous;
-
-  if (e < 0.0) {
-    (*dens) = 0.0;
-    (*temp) = 0.0;
-    goto densniv100;
   }
 
   // shell corrections                                                     
@@ -2242,31 +4369,39 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
     }
     if (optshp >= 2) {
       // pairing energy shift with condensation energy a.r.j. 10.03.97        
-      //      deltpp = -0.25e0* (delta0/std::pow(std::sqrt(a),2)) * pa /pi6 + 2.e0*delta0/std::sqrt(a);
-      deltpp = -0.25e0* std::pow((delta0/std::sqrt(a)),2) * pa /pi6 + 2.e0*delta0/std::sqrt(a);
-      
-      parite(a,&para);
-      if (para < 0.0) {
-	e = e - delta0/std::sqrt(a);
-      } else {                                                         
-	parite(z,&parz);
-	if (parz > 0.e0) {
-	  e = e - 2.0*delta0/std::sqrt(a);
-	}
+    //deltpp = -0.25e0* (delta0/pow(sqrt(a),2)) * pa /pi6 + 2.e0*delta0/sqrt(a);
+      deltpp = -0.25e0* std::pow((delta0/std::sqrt(a)),2) * pa /pi6 + 22.34e0*std::pow(a,-0.464)-0.235;
+      // Odd A
+      if (IPARITE == 1) {
+	//e = e - delta0/sqrt(a);
+        e=e-(0.285+11.17*std::pow(a,-0.464)-0.390-0.00058*a);//-30./a;//FIXME
+      }
+      // Even Z, even N
+      if(IPARITE==2){ 
+           e=e-(22.34*std::pow(a,-0.464)-0.235);//-30./a;//FIXME
+      }
+      // Odd Z, odd N
+      if(IPARITE==0){
+        if(in==iz){
+         //  e = e;
+        }else{
+         //  e = e-30./a;
+        }
       }
     } else {                                                          
       deltpp = 0.0;
     }
-  } else {
+  }else {
     deltau = 0.0;
     deltpp = 0.0;
   }
-  if (e < 0.0) {
+
+  if(e < 0.0){
     e = 0.0;
-    (*temp) = 0.0;
+    ftemp = 0.5;
   }
 
-  // washing out is made stronger ! g.k. 3.7.96                           
+  // washing out is made stronger                          
   ponfe = -2.5*pa*e*std::pow(a,(-4.0/3.0));
 
   if (ponfe < -700.0)  {
@@ -2280,88 +4415,269 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
   else {
     he = 1.0;
   }
-
   // Excitation energy corrected for pairing and shell effects             
   // washing out with excitation energy is included.                        
-  ecor = e + deltau*fe + deltpp*he;
-
-  if (ecor <= 0.1) {
-    ecor = 0.1;
-  }
-
-  // statt 170.d0 a.r.j. 8.11.97                                           
-
+  fecor = e + deltau*fe + deltpp*he;
+  if (fecor <= 0.1) {
+    fecor = 0.1;
+  }                                          
   // iterative procedure according to grossjean and feldmeier              
   // to avoid the singularity e = 0                                        
   if (ee < 5.0) {
-    y1 = std::sqrt(pa*ecor);
-    for(int j = 0; j < 5; j++) {
-      y2 = pa*ecor*(1.e0-std::exp(-y1));
+    y1 = std::sqrt(pa*fecor);
+    for(G4int j = 0; j < 5; j++) {
+      y2 = pa*fecor*(1.e0-std::exp(-y1));
       y1 = std::sqrt(y2);
     }
-    
     y0 = pa/y1;
-    (*temp)=1.0/y0;
-    (*dens) = std::exp(y0*ecor)/ (std::pow((std::pow(ecor,3)*y0),0.5)*std::pow((1.0-0.5*y0*ecor*std::exp(-y1)),0.5))* std::exp(y1)*(1.0-std::exp(-y1))*0.1477045;
-    if (ecor < 1.0) {
+    ftemp=1.0/y0;
+    fdens = std::exp(y0*fecor)/ (std::pow((std::pow(fecor,3)*y0),0.5)*std::pow((1.0-0.5*y0*fecor*std::exp(-y1)),0.5))* std::exp(y1)*(1.0-std::exp(-y1))*0.1477045;
+    if (fecor < 1.0) {
       ecor1=1.0;
       y11 = std::sqrt(pa*ecor1);
-      for(int j = 0; j < 7; j++) {
+      for(G4int j = 0; j < 7; j++) {
 	y21 = pa*ecor1*(1.0-std::exp(-y11));
 	y11 = std::sqrt(y21);
       }
 
       y01 = pa/y11;
-      (*dens) = (*dens)*std::pow((y01/y0),1.5);
-      (*temp) = (*temp)*std::pow((y01/y0),1.5);
+      fdens = fdens*std::pow((y01/y0),1.5);
+      ftemp = ftemp*std::pow((y01/y0),1.5);
     }
   }
   else {
-    ponniv = 2.0*std::sqrt(pa*ecor);
+    ponniv = 2.0*std::sqrt(pa*fecor);
     if (ponniv > 700.0) {
       ponniv = 700.0;
     }
-
     // fermi gas state density                                               
-    (*dens) = std::pow(pa,(-0.25e0))*std::pow(ecor,(-1.25e0))*std::exp(ponniv) * 0.1477045e0;
-    (*temp) = std::sqrt(ecor/pa);
+    fdens = 0.1477045 * std::exp(ponniv)/(std::pow(pa,0.25)*std::pow(fecor,1.25));
+    ftemp = std::sqrt(fecor/pa);
   }
+//
+  densfm = fdens;
+  tfm = ftemp;
+//
+  if(IOPTCT==0) goto densniv100;
+  tempct = 17.60/( std::pow(a,0.699) * std::sqrt(1.+gamma*BSHELLCT));
+  //tempct = 1.0 / ( (0.0570 + 0.00193*BSHELLCT) * pow(a,0.6666667));  // from  PRC 80 (2009) 054310
+
+// - CONSTANT-TEMPERATURE LEVEL DENSITY PARAMETER (ONLY AT LOW ENERGIES)
+  if(e<30.){
+   if(a>0.0){
+     if(optshp>=2){
+// Parametrization of CT model by Ignatyuk; note that E0 is shifted to correspond
+// to pairing shift in Fermi-gas model (there, energy is shifted taking odd-odd nuclei
+//  as bassis)
+// e-o, o-e
+            if (IPARITE == 1) { e0 = 0.285+11.17*std::pow(a,-0.464) - 0.390-0.00058*a;}
+// e-e
+            if (IPARITE == 2) { e0 = 22.34*std::pow(a,-0.464)-0.235;}
+// o-o
+            if (IPARITE == 0){ e0 = 0.0;}
+
+        ponniv = (ein-e0)/tempct;
+        if(ifis!=1) ponniv = max(0.0,(ein-e0)/tempct);
+        if(ponniv>700.0){ ponniv = 700.0;}
+        densct = std::exp(ponniv)/tempct*std::exp(0.079*BSHELLCT/tempct);
+
+        elim = ein;
+
+        if(elim>=ecr&&densfm<=densct){
+          fdens = densfm;
+        //  IREGCT = 0;
+        }else{
+          fdens = densct;
+         // IREGCT = 1;
+//         ecor = min(ein-e0,0.10);
+        }
+        if(elim>=ecr&&tfm>=tempct){
+          ftemp = tfm;
+        }else{
+          ftemp = tempct;
+        }
+     }else{
+// Case of no pairing considered
+//        ETEST = PA * TEMPCT**2
+        ponniv = (ein)/tempct;
+        if(ponniv>700.0){ ponniv = 700.0;}
+        densct = std::exp(ponniv)/tempct;
+
+        if(ein>=ecr && densfm<=densct){
+          fdens = densfm;
+          ftemp = tfm;
+        //  IREGCT = 0;
+        }else{
+          fdens = densct;
+          ftemp = tempct;
+//          ECOR = DMIN1(EIN,0.1D0)
+        }
+
+        if(ein>=ecr && tfm>=tempct){
+          ftemp = tfm;
+        }else{
+          ftemp = tempct;
+        }
+     }
+   }
+  }
+
+
  densniv100:
 
-  // spin cutoff parameter                                                 
-  sig = fp * (*temp);
+ if(fdens==0.0){
+    if(a>0.0){
+// Parametrization of CT model by Ignatyuk done for masses > 20
+         ftemp = 17.60/( std::pow(a,0.699) * std::sqrt(1.0+gamma*BSHELLCT));
+       //  ftemp = 1.0 / ( (0.0570 + 0.00193*BSHELLCT) * pow(a,0.6666667));  // from  PRC 80 (2009) 054310
+    }else{
+         ftemp = 0.5;
+    }
+ }
+//
+// spin cutoff parameter
+/*
+C PERPENDICULAR AND PARALLEL MOMENT OF INERTIA
+c fnorm = R0*M0/hbar**2 = 1.16fm*931.49MeV/c**2 /(6.582122e-22 MeVs)**2 and is
+c in units 1/MeV
+*/
+ fnorm = std::pow(1.16,2)*931.49*1.e-2/(9.0* std::pow(6.582122,2));
 
-  // collective enhancement                                                
+ if(ifis==0 || ifis==2){
+/*
+C GROUND STATE:
+C FP_PER ~ 1+0.5*alpha2, FP_PAR ~ 1-alpha2 (Hasse & Myers, Geom. relat. macr. nucl. phys.)
+C alpha2 = std::sqrt(5/(4*pi))*beta2
+*/
+    fp_per = 0.4*std::pow(a,5.0/3.0)*fnorm*(1.0+0.50*defbet*std::sqrt(5.0/(4.0*pi)));
+    fp_par = 0.40*std::pow(a,5.0/3.0)*fnorm*(1.0-defbet*std::sqrt(5.0/(4.0*pi)));
+
+ }else{
+  if(ifis==1){
+/*
+C SADDLE POINT
+C See Hasse&Myer, p. 100
+C Perpendicular moment of inertia
+*/
+    fp_per = 2.0/5.0*std::pow(a,5.0/3.0)*fnorm*(1.0+7.0/6.0*defbet*(1.0+1396.0/255.0*defbet));
+// Parallel moment of inertia
+    fp_par = 2.0/5.0*std::pow(a,5.0/3.0)*fnorm*(1.0-7.0/3.0*defbet*(1.0-389.0/255.0*defbet));
+  }else{
+   if(ifis==20){
+// IMF - two fragments in contact; it is asumed that both are spherical.
+// See Hasse&Myers, p.106
+// Here, DEFBET = R1/R2, where R1 and R2 are radii of IMF and its partner
+// Perpendicular moment of inertia
+   fp_per = 0.4*std::pow(a,5.0/3.0)*fnorm*3.50*(1.0 + std::pow(defbet,5.))/std::pow(1.0 + defbet*defbet*defbet,5.0/3.0);
+   fp_par = 0.4*std::pow(a,5.0/3.0)*fnorm*(1.0 + std::pow(defbet,5.0))/std::pow(1.0 + defbet*defbet*defbet,5.0/3.0);
+   }
+  }
+ }
+  if(fp_par<0.0)fp_par=0.0;
+  if(fp_per<0.0)fp_per=0.0;
+//
+  sig_per = std::sqrt(fp_per * ftemp);
+  sig_par = std::sqrt(fp_par * ftemp);
+//
+  sigma2 = sig_per*sig_per + sig_par*sig_par;
+  jfact = (2.*jprf+1.)*std::exp(-1.*jprf*(jprf+1.0)/(2.0*sigma2))/(std::sqrt(8.0*3.1415)*std::pow(sigma2,1.5));
+  erot = jprf*jprf/(2.0*std::sqrt(fp_par*fp_par+fp_per*fp_per));
+//
+  // collective enhancement                                            
   if (optcol == 1) {
-    qrot(z,a,defbet,sig,ecor,&qr);
+    qrot(z,a,defbet,sig_per,fecor-erot,&fqr);
   }
   else {
-    qr   = 1.0;
+    fqr   = 1.0;
   }
-
-  (*dens) = (*dens) * qr;
-  if(verboseLevel > 2) {
-    // G4cout <<"PK::: dens = " << (*dens) << G4endl;
-    // G4cout <<"PK::: AFP, IZ, ECOR, ECOR1 " << afp << " " << iz << " " << ecor << " " << ecor1 << G4endl;
-  }
+//
+  fdens = fdens * fqr *jfact;
+//
+  if(fdens<1e-300)fdens=0.0;
+//
+  *dens =fdens;
+  *ecor=fecor;
+  *temp=ftemp;
+  *qr=fqr;
 }
 
-
-G4double G4Abla::bfms67(G4double zms, G4double ams)
+void G4Abla::qrot(G4double z, G4double a, G4double bet, G4double sig, G4double u, G4double *qr)
 {
-  // This subroutine calculates the fission barriers                                                                  
-  // of the liquid-drop model of Myers and Swiatecki (1967).                                                                 
-  // Analytic parameterization of Dahlinger 1982 
-  // replaces tables. Barrier heights from Myers and Swiatecki !!!                                                                 
+/*
+C QROT INCLUDING DAMPING
+C
+C INPUT: Z,A,DEFBET,SIG,U
+C
+C OUTPUT: QR - COLLECTIVE ENHANCEMENT FACTOR
+C
+C SEE  JUNGHANS ET AL., NUCL. PHYS. A 629 (1998) 635
+C
+C
+C   FR(U)    EXPONENTIAL FUNCTION TO DEFINE DAMPING
+C   UCR      CRITICAL ENERGY FOR DAMPING
+C   DCR      WIDTH OF DAMPING
+C   DEFBET   BETA-DEFORMATION !
+C   SIG      PERPENDICULAR SPIN CUTOFF FACTOR
+C     U      ENERGY
+C    QR      COEFFICIENT OF COLLECTIVE ENHANCEMENT
+C     A      MASS NUMBER
+C     Z      CHARGE NUMBER
+C
+*/
+// JLRS: July 2016: new values for the collective parameters
+//
 
-  G4double nms = 0.0, ims = 0.0, ksims = 0.0, xms = 0.0, ums = 0.0;
+  G4double ucr = fiss->ucr; // Critical energy for damping.
+  G4double dcr = fiss->dcr; // Width of damping.
+  G4double ponq = 0.0, dn = 0.0, n = 0.0, dz = 0.0;
+  G4int distn,distz,ndist, zdist;
+  G4int nmn[8]= {2, 8, 14, 20, 28, 50, 82, 126};
+  G4int nmz[8]= {2, 8, 14, 20, 28, 50, 82, 126};
+//
+  sig = sig*sig;
+//
+ if(std::abs(bet)<=0.15){
+  goto qrot10;
+ }else{
+  goto qrot11;
+ }
+//
+ qrot10:
+  n = a - z;
+  distn = 10000000;
+  distz = 10000000;
 
-  nms = ams - zms;
-  ims = (nms-zms)/ams;
-  ksims= 50.15e0 * (1.- 1.78 * std::pow(ims,2));
-  xms = std::pow(zms,2) / (ams * ksims);
-  ums = 0.368e0-5.057e0*xms+8.93e0*std::pow(xms,2)-8.71*std::pow(xms,3);
-  return(0.7322e0*std::pow(zms,2)/std::pow(ams,(0.333333e0))*std::pow(10.e0,ums));
+  for(G4int i =0;i<8;i++){
+   ndist = std::fabs(idnint(n) - nmn[i]);
+   if(ndist < distn) distn = ndist;
+   zdist = std::fabs(idnint(z) - nmz[i]);
+   if(zdist < distz) distz = zdist;
+  }
+
+  dz = G4float(distz);
+  dn = G4float(distn);
+
+  bet = 0.022 + 0.003*dn + 0.002*dz;
+
+  sig = 75.0*std::pow(bet,2.) * sig;
+
+// NO VIBRATIONAL ENHANCEMENT
+ qrot11:   
+  ponq = (u - ucr)/dcr;
+
+  if (ponq > 700.0) {
+    ponq = 700.0;
+  }
+  if (sig < 1.0) {
+    sig = 1.0;
+  }
+  (*qr) = 1.0/(1.0 + std::exp(ponq)) * (sig - 1.0) + 1.0;
+
+  if ((*qr) < 1.0) {
+    (*qr) = 1.0;
+  }
+
+  return;
 }
 
 void G4Abla::lpoly(G4double x, G4int n, G4double pl[])
@@ -2370,15 +4686,14 @@ void G4Abla::lpoly(G4double x, G4int n, G4double pl[])
   // ORDER 0 TO N-1 OF ARGUMENT X AND STORES THEM IN THE VECTOR PL.    
   // THEY ARE CALCULATED BY RECURSION RELATION FROM THE FIRST TWO      
   // POLYNOMIALS.                                                      
-  // WRITTEN BY A.J.SIERK  LANL  T-9  FEBRUARY, 1984                   
-
-  // NOTE: PL AND X MUST BE DOUBLE PRECISION ON 32-BIT COMPUTERS!      
+  // WRITTEN BY A.J.SIERK  LANL  T-9  FEBRUARY, 1984            
+  // NOTE: PL AND X MUST BE G4double PRECISION ON 32-BIT COMPUTERS!      
 
   pl[0] = 1.0;
   pl[1] = x;
 
-  for(int i = 2; i < n; i++) {
-    pl[i] = ((2*double(i+1) - 3.0)*x*pl[i-1] - (double(i+1) - 2.0)*pl[i-2])/(double(i+1)-1.0);
+  for(G4int i = 2; i < n; i++) {
+    pl[i] = ((2*G4double(i+1) - 3.0)*x*pl[i-1] - (G4double(i+1) - 2.0)*pl[i-2])/(G4double(i+1)-1.0);
   }
 }
 
@@ -2406,10 +4721,10 @@ G4double G4Abla::eflmac(G4int ia, G4int iz, G4int flag, G4int optshp)
   G4int in = 0;
   G4double z = 0.0, n = 0.0, a = 0.0, av = 0.0, as = 0.0;
   G4double a0 = 0.0, c1 = 0.0, c4 = 0.0, b1 = 0.0, b3 = 0.0;
-  G4double ff = 0.0, ca = 0.0, w = 0.0, dp = 0.0, dn = 0.0, dpn = 0.0, efl = 0.0;
-  G4double rmac = 0.0, bs = 0.0, h = 0.0, r0 = 0.0, kf = 0.0, ks = 0.0;
+  G4double ff = 0.0, ca = 0.0, w = 0.0, efl = 0.0; 
+  G4double r0 = 0.0, kf = 0.0, ks = 0.0;
   G4double kv = 0.0, rp = 0.0, ay = 0.0, aden = 0.0, x0 = 0.0, y0 = 0.0;
-  G4double esq = 0.0, ael = 0.0, i = 0.0;
+  G4double esq = 0.0, ael = 0.0, i = 0.0, e0 = 0.0;
   G4double pi = 3.141592653589793238e0;
 
   // fundamental constants
@@ -2433,13 +4748,6 @@ G4double G4Abla::eflmac(G4int ia, G4int iz, G4int flag, G4int optshp)
   // nuclear charge distribution
   aden= 0.70;
 
-  // constants from considering odd-even mass differences
-  // average pairing gap
-  rmac= 4.80;
-
-  // neutron-proton interaction
-  h   = 6.6;
-
   // wigner constant
   w   = 30.0;
 
@@ -2461,17 +4769,20 @@ G4double G4Abla::eflmac(G4int ia, G4int iz, G4int flag, G4int optshp)
   // charge asymmetry
   ca  =  0.10289;
 
-  // we will account for deformation by using the microscopic           
-  // corrections tabulated from p. 68ff */                               
-  bs = 1.0;
-
-  z   = double(iz);
-  a   = double(ia);
+  z   = G4double(iz);
+  a   = G4double(ia);
   in  = ia - iz;                                                       
-  n   = double(in);
-  dn  = rmac*bs/std::pow(n,(1.0/3.0));
-  dp  = rmac*bs/std::pow(z,(1.0/3.0));
-  dpn = h/bs/std::pow(a,(2.0/3.0));
+  n   = G4double(in);
+
+  if(flag==1){goto eflmac311;}
+
+  if(iz<13&&in<3){
+     if(masses->mexpiop[in][iz]==1){
+         return masses->bind[in][iz];
+     }
+  }
+
+  eflmac311:
   
   c1  = 3.0/5.0*esq/r0;
   c4  = 5.0/4.0*std::pow((3.0/(2.0*pi)),(2.0/3.0)) * c1;
@@ -2495,35 +4806,44 @@ G4double G4Abla::eflmac(G4int ia, G4int iz, G4int flag, G4int optshp)
     + c1*z*z*b3/std::pow(a,(1.0/3.0)) - c4*std::pow(z,(4.0/3.0))/std::pow(a,(1.e0/3.e0))
     + ff*std::pow(z,2)/a -ca*(n-z) - ael * std::pow(z,(2.39e0));
 
-  if ((in == iz) && (mod(in,2) == 1) && (mod(iz,2) == 1)) {
-    // n and z odd and equal
-    efl = efl + w*(utilabs(i)+1.e0/a);
-  }
-  else {
-    efl= efl + w* utilabs(i);
-  }
+  efl = efl + w*std::abs(i);
 
   // pairing is made optional                                              
   if (optshp >= 2) {
     // average pairing
-    if ((mod(in,2) == 1) && (mod(iz,2) == 1)) {
-      efl = efl - dpn;
+    if (in==iz && (mod(in,2) == 1) && (mod(iz,2) == 1) && in>0.) {
+      efl = efl + w/a;
     }
-    if (mod(in,2) == 1) {
-      efl = efl + dn;
+
+// AK 2008 - Parametrization of CT model by Ignatyuk;
+// The following part has been introduced  in order to have correspondance
+// between pairing in masses and level densities;
+// AK 2010  note that E0 is shifted to correspond to pairing shift in
+// Fermi-gas model (there, energy is shifted taking odd-odd nuclei
+// as bassis)
+
+    G4double para=0.;
+    parite(a,&para);
+
+    if(para<0.0){
+// e-o, o-e
+      e0 =  0.285+11.17*std::pow(a,-0.464) -0.390-0.00058*(a);
+    }else{
+        G4double parz=0.;
+        parite(z,&parz);
+        if (parz>0.0){
+// e-e
+         e0 = 22.34*std::pow(a,-0.464)-0.235;
+        }else{
+// o-o
+         e0 = 0.0;
+        }
     }
-    if (mod(iz,2) == 1) {
-      efl    = efl + dp;
-    }
-    // end if for pairing term                                               
+    efl = efl - e0;
+  // end if for pairing term                                  
   }
 
-  if (flag != 0) {
-    eflmacResult =  (0.5*(dn + dp) - 0.5*dpn);
-  }
-  else {
-    eflmacResult = efl;
-  }
+  eflmacResult = efl;
 
   return eflmacResult;
 }
@@ -2535,7 +4855,7 @@ void G4Abla::appariem(G4double a, G4double z, G4double *del)
   // PROCEDURE FOR CALCULATING THE PAIRING CORRECTION TO THE BINDING   
   // ENERGY OF A SPECIFIC NUCLEUS                                      
 
-  double para = 0.0, parz = 0.0;
+  G4double para = 0.0, parz = 0.0;
   // A                 MASS NUMBER                                     
   // Z                 NUCLEAR CHARGE                                  
   // PARA              HELP VARIABLE FOR PARITY OF A                   
@@ -2571,7 +4891,7 @@ void G4Abla::parite(G4double n, G4double *par)
   // N1,N2             HELP VARIABLES                                  
   // PAR               HELP VARIABLE FOR PARITY OF N                   
 
-  n3 = double(idnint(n));
+  n3 = G4double(idnint(n));
   n1 = n3/2.0;
   n2 = n1 - dint(n1);
 
@@ -2600,8 +4920,7 @@ G4double G4Abla::tau(G4double bet, G4double homega, G4double ef, G4double t)
   if (t > tlim) {
     t = tlim;
   }
-
-  // modified bj and khs 6.1.2000:
+  //
   if (bet/(std::sqrt(2.0)*10.0*(homega/6.582122)) <= 1.0) {
     tauResult = std::log(10.0*ef/t)/(bet*1.0e21);
   }
@@ -2629,7 +4948,7 @@ G4double G4Abla::cram(G4double bet, G4double homega)
   return cramResult;
 }
 
-G4double G4Abla::bipol(int iflag, G4double y)
+G4double G4Abla::bipol(G4int iflag, G4double y)
 {
   // CALCULATION OF THE SURFACE BS OR CURVATURE BK OF A NUCLEUS        
   // RELATIVE TO THE SPHERICAL CONFIGURATION                           
@@ -2640,11 +4959,11 @@ G4double G4Abla::bipol(int iflag, G4double y)
 
   // LINEAR INTERPOLATION OF BS BK TABLE                               
 
-  int i = 0;
+  G4int i = 0;
 
   G4double bipolResult = 0.0;
 
-  const int bsbkSize = 54;
+  const G4int bsbkSize = 54;
 
   G4double bk[bsbkSize] = {0.0, 1.00000,1.00087,1.00352,1.00799,1.01433,1.02265,1.03306,
 			   1.04576,1.06099,1.07910,1.10056,1.12603,1.15651,1.19348,
@@ -2682,6 +5001,90 @@ G4double G4Abla::bipol(int iflag, G4double y)
   }
   
   return bipolResult;
+}
+
+void G4Abla::fomega_sp(G4double AF,G4double Y,G4double *MFCD,G4double *sOMEGA,G4double *sHOMEGA)
+{
+/*
+c  Y                 1 - Fissility
+c  OMEGA             Frequency at the ground state, in units 1.e-21 s
+*/
+  G4double OMEGA,HOMEGA,ES0,MR02;
+
+      ES0 = 20.760*std::pow(AF,2.0/3.0);
+// In units 1.e-42 MeVs**2; r0 = 1.175e-15 m, u=931.49MeV/c**2=103.4MeV*s**2/m**2
+// divided by 1.e-4 to go from 1.e-46 to 1.e-42
+      MR02 = std::pow(AF,5.0/3.0)*1.0340*0.010*1.175*1.175;
+// Determination of the inertia of the fission collective degree of freedom
+      (*MFCD) = MR02 * 3.0/10.0*(1.0+3.0*Y);
+// Omega at saddle
+      OMEGA = std::sqrt(ES0/MR02)*std::sqrt(8.0/3.0*Y*(1.0+304.0*Y/255.0));
+//
+      HOMEGA = 6.58122*OMEGA/10.0;
+//
+   (*sOMEGA)=OMEGA;
+   (*sHOMEGA)=HOMEGA;
+//
+  return;
+}
+
+
+void G4Abla::fomega_gs(G4double AF,G4double ZF,G4double *K1,G4double *sOMEGA,G4double *sHOMEGA)
+{
+/*
+c  Y                 1 - Fissility
+c  OMEGA             Frequency at the ground state, in units 1.e-21 s
+*/
+  G4double OMEGA,HOMEGA,MR02,MINERT,C,fk1;
+//
+      MR02 = std::pow(AF,5.0/3.0)*1.0340*0.01*1.175*1.175;
+      MINERT = 3.*MR02/10.0;
+      C = 17.9439*(1.-1.7826*std::pow((AF-2.0*ZF)/AF,2));
+      fk1 = 0.4*C*std::pow(AF,2.0/3.0)-0.1464*std::pow(ZF,2)/std::pow(AF,1./3.);
+      OMEGA = std::sqrt(fk1/MINERT);
+      HOMEGA = 6.58122*OMEGA/10.0;
+//
+   (*K1)=fk1;
+   (*sOMEGA)=OMEGA;
+   (*sHOMEGA)=HOMEGA;
+//
+  return;
+}
+
+void G4Abla::barrs(G4int Z1,G4int A1,G4int Z2,G4int A2,G4double *sBARR,G4double *sOMEGA)
+{/*
+C AK 2004 - Barriers for LCP and IMF are calculated now according to the
+C           Bass model (Nucl. Phys. A (1974))
+C KHS 2007 - To speed up, barriers are read from tabels; in case thermal
+C            expansion is considered, barriers are calculated.
+C INPUT:
+C EA    - Excitation energy per nucleon
+C Z11, A11 - Charge and mass of daughter nucleus
+C Z22, A22 - Charge and mass of LCP or IMF
+C
+C OUTPUT:
+C BARR - Barrier
+C OMEGA - Curvature of the potential
+C
+C BASS MODEL NPA 1974 - used only if expansion is considered (OPTEXP=1)
+C                        or one wants this model explicitely (OPTBAR=1)
+C October 2011 - AK - new parametrization of the barrier and its position,
+C                    see W.W. Qu et al., NPA 868 (2011) 1; this is now
+C                    default option (OPTBAR=0)
+c
+c November 2016 - JLRS - Added this function from abla07v4
+c
+*/
+     G4double BARR, OMEGA, RMAX;
+     RMAX = 1.1 * (ecld->rms[A1-Z1][Z1]+ecld->rms[A2-Z2][Z2]) + 2.8;
+     BARR = 1.345 * Z1 * Z2 / RMAX;
+//C Omega according to Avishai:
+     OMEGA = 4.5 / 197.3287;
+//
+     (*sOMEGA)=OMEGA;
+     (*sBARR)=BARR;
+//
+  return;
 }
 
 void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *segs, G4double *selmax)
@@ -2829,10 +5232,6 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
 
   for(i = 0; i < sizey; i++) {
     for(j = 0; j < sizex; j++) {
-      //       egscof[i][j][0] = egs1[i][j];
-      //       egscof[i][j][1] = egs2[i][j];
-      //       egscof[i][j][2] = egs3[i][j];
-      //       egscof[i][j][3] = egs4[i][j];
       egscof[i][j][0] = egs1[i][j];
       egscof[i][j][1] = egs2[i][j];
       egscof[i][j][2] = egs3[i][j];
@@ -2849,9 +5248,9 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
     goto barfit902;
   }
 
-  z=double(iz);
-  a=double(ia);
-  el=double(il);
+  z=G4double(iz);
+  a=G4double(ia);
+  el=G4double(il);
   amin= 1.2e0*z + 0.01e0*z*z;
   amax= 5.8e0*z - 0.024e0*z*z;
 
@@ -2870,7 +5269,6 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
   for(i = 0; i < 7; i++) { //do 10 i=1,7                                                       
     for(j = 0; j < 7; j++) { //do 10 j=1,7                                                       
       bfis0=bfis0+elzcof[j][i]*pz[i]*pa[j];
-      //bfis0=bfis0+elzcof[i][j]*pz[j]*pa[i];
     }
   }
 
@@ -2897,8 +5295,6 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
 
   for(i = 0; i < 4; i++) {
     for(j = 0; j < 5; j++) {
-//       el80 = el80 + elmcof[j][i]*pz[j]*pa[i];
-//       el20 = el20 + emncof[j][i]*pz[j]*pa[i];
             el80 = el80 + elmcof[i][j]*pz[j]*pa[i];
             el20 = el20 + emncof[i][j]*pz[j]*pa[i];
     }
@@ -2912,9 +5308,7 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
   lpoly(ell,9,pl);
 
   for(i = 0; i < 4; i++) { //do 30 i= 1,4                                                      
-    for(j = 0; j < 6; j++) { //do 30 j=1,6                                                       
-      //elmax = elmax + emxcof[j][i]*pz[j]*pa[i];
-      //      elmax = elmax + emxcof[j][i]*pz[i]*pa[j];
+    for(j = 0; j < 6; j++) { //do 30 j=1,6
       elmax = elmax + emxcof[i][j]*pz[j]*pa[i];
     }
   }
@@ -2966,9 +5360,7 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
   for(k = 0; k < 4; k++) {
     for(l = 0; l < 6; l++) {
       for(m = 0; m < 5; m++) {
-	//egs = egs + egscof[l][m][k]*pz[l]*pa[k]*pl[2*m-1];
 	egs = egs + egscof[l][m][k]*pz[l]*pa[k]*pl[2*m];
-	// egs = egs + egscof[m][l][k]*pz[l]*pa[k]*pl[2*m-1];
       }
     }
   }
@@ -3009,12 +5401,114 @@ void G4Abla::barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *seg
   return;                                                            
 }
 
-G4double G4Abla::expohaz(G4int k, G4double T)
+G4double G4Abla::erf(G4double x)
 {
-  // TIRAGE ALEATOIRE DANS UNE EXPONENTIELLLE : Y=EXP(-X/T)
+ G4double ferf;
 
-  return (-1.0*T*std::log(haz(k)));
+ if(x<0.){
+   ferf=-gammp(0.5,x*x);
+ }else{
+   ferf=gammp(0.5,x*x);;
+ }
+ return ferf;
 }
+
+G4double G4Abla::gammp(G4double a, G4double x)
+{
+ G4double fgammp;
+ G4double gammcf,gamser,gln=0.;
+
+ if(x<0.0 || a<=0.0)std::cout << "G4Abla::gammp = bad arguments in gammp" << std::endl;
+ if(x<a+1.){
+  gser(&gamser,a,x,gln);
+  fgammp=gamser;
+ }else{
+  gcf(&gammcf,a,x,gln);
+  fgammp=1.-gammcf;
+ }
+ return fgammp;
+}
+
+void G4Abla::gcf(G4double *gammcf,G4double a,G4double x,G4double gln)
+{
+ G4double fgammcf,del;
+ G4double eps=3e-7;
+ G4double fpmin=1e-30;
+ G4int itmax=100;
+ G4double an,b,c,d,h;
+
+ gln=gammln(a);
+ b=x+1.-a;
+ c=1./fpmin;
+ d=1./b;
+ h=d;
+ for(G4int i=1;i<=itmax;i++){
+  an=-i*(i-a);
+  b=b+2.;
+  d=an*d+b;
+  if(std::fabs(d)<fpmin)d=fpmin;
+  c=b+an/c;
+  if(std::fabs(c)<fpmin)c=fpmin;
+  d=1.0/d;
+  del=d*c;
+  h=h*del;
+  if(std::fabs(del-1.)<eps)goto dir1;
+ }
+ std::cout << "a too large, ITMAX too small in gcf" << std::endl;
+ dir1:
+ fgammcf=std::exp(-x+a*std::log(x)-gln)*h;
+ (*gammcf)=fgammcf;
+ return;
+}
+
+void G4Abla::gser(G4double *gamser,G4double a,G4double x,G4double gln)
+{
+ G4double fgamser,ap,sum,del;
+ G4double eps=3e-7;
+ G4int itmax=100;
+
+ gln=gammln(a);
+ if(x<=0.){
+   if(x<0.)std::cout << "G4Abla::gser = x < 0 in gser" << std::endl;
+   (*gamser)=0.0;
+   return;
+ }
+ ap=a;
+ sum=1./a;
+ del=sum;
+ for(G4int n=0;n<itmax;n++){
+ ap=ap+1.;
+ del=del*x/ap;
+ sum=sum+del;
+ if(std::fabs(del)<std::fabs(sum)*eps)goto dir1;
+ }
+ std::cout << "a too large, ITMAX too small in gser" << std::endl;
+ dir1:
+ fgamser=sum*std::exp(-x+a*std::log(x)-gln);
+ (*gamser)=fgamser;
+ return;
+}
+
+G4double G4Abla::gammln(G4double xx)
+{
+ G4double fgammln,x,ser,tmp,y;
+ G4double cof[6]={76.18009172947146,-86.50532032941677,24.01409824083091,
+-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5};
+ G4double stp=2.5066282746310005;
+
+ x=xx;
+ y=x;
+ tmp=x+5.5;
+ tmp=(x+0.5)*std::log(tmp)-tmp;
+ ser=1.000000000190015;
+ for(G4int j=0;j<6;j++){
+ y=y+1.;
+ ser=ser+cof[j]/y;
+ }
+
+ return fgammln=tmp+std::log(stp*ser/x);
+}
+
 
 G4double G4Abla::fd(G4double E)
 {
@@ -3029,7 +5523,12 @@ G4double G4Abla::f(G4double E)
   return (1.0 - (E + 1.0) * std::exp(-E));
 }
 
-G4double G4Abla::fmaxhaz(G4double T)
+G4double G4Abla::fmaxhaz(G4double x)
+{
+ return ( -x*std::log(G4AblaRandom::flat()) -x*std::log(G4AblaRandom::flat()) -x*std::log(G4AblaRandom::flat()) ) ;
+}
+
+G4double G4Abla::fmaxhaz_old(G4double T)
 {
   // tirage aleatoire dans une maxwellienne
   // t : temperature
@@ -3037,12 +5536,12 @@ G4double G4Abla::fmaxhaz(G4double T)
   // declaration des variables
   //
 
-  const int pSize = 101;
-  static G4ThreadLocal G4double p[pSize];
+  const G4int pSize = 101;
+  G4double p[pSize];
 
   // ial generateur pour le cascade (et les iy pour eviter les correlations)
-  static G4ThreadLocal G4int i = 0;
-  static G4ThreadLocal G4int itest = 0;
+  G4int i = 0;
+  G4int itest = 0;
   // programme principal
 
   // calcul des p(i) par approximation de newton
@@ -3057,9 +5556,9 @@ G4double G4Abla::fmaxhaz(G4double T)
 
   for(i = 1; i <= 99; i++) {
   fmaxhaz20:
-    x1 = x - (f(x) - double(i)/100.0)/fd(x);
+    x1 = x - (f(x) - G4double(i)/100.0)/fd(x);
     x = x1;
-    if (std::fabs(f(x) - double(i)/100.0) < 1e-5) {
+    if (std::fabs(f(x) - G4double(i)/100.0) < 1e-5) {
       goto fmaxhaz100;
     }
     goto fmaxhaz20;
@@ -3197,393 +5696,66 @@ void G4Abla::guet(G4double *x_par, G4double *z_par, G4double *find_par)
   (*z_par) = z;
   (*find_par) = find;
 }
+//
 
-//       SUBROUTINE TRANSLAB(GAMREM,ETREM,CSREM,NOPART,NDEC)
-void G4Abla::translab(G4double gamrem, G4double etrem, G4double csrem[4], G4int /*nopart*/, G4int ndec)
-{
-  // c Ce subroutine transforme dans un repere 1 les impulsions pcv des 
-  // c particules acv, zcv et de cosinus directeurs xcv, ycv, zcv calculees 
-  // c dans un repere 2.    
-  // c La transformation de lorentz est definie par GAMREM (gamma) et
-  // c ETREM (eta). La direction  du repere 2 dans 1 est donnees par les 
-  // c cosinus directeurs ALREM,BEREM,GAREM (axe oz du repere 2).
-  // c L'axe oy(2) est fixe par le produit vectoriel oz(1)*oz(2).
-  // c Le calcul est fait pour les particules de NDEC a iv du common volant.
-  // C Resultats dans le NTUPLE (common VAR_NTP) decale de NOPART (cascade).
-    
-  //       REAL*8  GAMREM,ETREM,ER,PLABI(3),PLABF(3),R(3,3)
-  //       real*8  MASSE,PTRAV2,CSREM(3),UMA,MELEC,EL
-  //       real*4 acv,zpcv,pcv,xcv,ycv,zcv
-  //       common/volant/acv(200),zpcv(200),pcv(200),xcv(200),
-  //      s              ycv(200),zcv(200),iv
-      
-  // 	parameter (max=250)                                                                       
-  // 	real*4 EXINI,ENERJ,BIMPACT,PLAB,TETLAB,PHILAB,ESTFIS
-  // 	integer AVV,ZVV,JREMN,KFIS,IZFIS,IAFIS
-  //         common/VAR_NTP/MASSINI,MZINI,EXINI,MULNCASC,MULNEVAP,
-  //      +MULNTOT,BIMPACT,JREMN,KFIS,ESTFIS,IZFIS,IAFIS,NTRACK,
-  //      +ITYPCASC(max),AVV(max),ZVV(max),ENERJ(max),PLAB(max),
-  //      +TETLAB(max),PHILAB(max)
-      
-  //       DATA UMA,MELEC/931.4942,0.511/
+void G4Abla::FillData(G4int IMULTBU,G4int IEV_TAB){
 
-  // C Matrice de rotation dans le labo:
-  G4double avv = 0.0, zvv = 0.0, enerj = 0.0, plab = 0.0, tetlab = 0.0, philab = 0.0;
-  G4double sitet = std::sqrt(std::pow(csrem[1],2)+std::pow(csrem[2],2));
-  G4double cstet = 0.0, siphi = 0.0, csphi = 0.0;
-  G4double R[4][4];
-  for(G4int init_i = 0; init_i < 4; init_i++) {
-    for(G4int init_j = 0; init_j < 4; init_j++) {
-      R[init_i][init_j] = 0.0;
-    }
-  }
-  if(sitet > 1.0e-6) { //then
-    cstet = csrem[3];
-    siphi = csrem[2]/sitet;
-    csphi = csrem[1]/sitet;	
+    const G4double c = 29.9792458;
+    const G4double fmp = 938.27231,fmn=939.56563; 
 
-    R[1][1] = cstet*csphi;
-    R[1][2] = -siphi;
-    R[1][3] = sitet*csphi;
-    R[2][1] = cstet*siphi;
-    R[2][2] = csphi;
-    R[2][3] = sitet*siphi;
-    R[3][1] = -sitet;
-    R[3][2] = 0.0;
-    R[3][3] = cstet;
-  }
-  else {
-    R[1][1] = 1.0;
-    R[1][2] = 0.0;
-    R[1][3] = 0.0;
-    R[2][1] = 0.0;
-    R[2][2] = 1.0;
-    R[2][3] = 0.0;
-    R[3][1] = 0.0;
-    R[3][2] = 0.0;
-    R[3][3] = 1.0;
-  } //endif
+    varntp->ntrack = IMULTBU + IEV_TAB;
 
-  G4double el = 0.0;
-  G4double masse = 0.0;
-  G4double er = 0.0;
-  G4double plabi[4];
-  G4double ptrav2 = 0.0;
-  G4double plabf[4];
-  G4double bidon = 0.0;
-  for(G4int init_i = 0; init_i < 4; init_i++) {
-    plabi[init_i] = 0.0;
-    plabf[init_i] = 0.0;
-  }
-  ndec = 1;
-  for(G4int i = ndec; i <= volant->iv; i++) { //do i=ndec,iv
-    if(volant->copied[i]) continue; // Avoid double copying
-#ifdef USE_LEGACY_CODE
-    varntp->ntrack = varntp->ntrack + 1;
-#endif
-    if(nint(volant->acv[i]) == 0 && nint(volant->zpcv[i]) == 0) {
-      if(verboseLevel > -1) {
-	// G4cout << __FILE__ << ":" << __LINE__ << " Error: Particles with A = 0 Z = 0 detected! " << G4endl;
-      }
-      continue;
-    }
-    if(varntp->ntrack >= VARNTPSIZE) {
-      if(verboseLevel > 2) {
-	// G4cout <<"Error! Output data structure not big enough!" << G4endl;
-      }
-    }
-#ifdef USE_LEGACY_CODE
-    varntp->avv[intp] = nint(volant->acv[i]);
-    varntp->zvv[intp] = nint(volant->zpcv[i]);
-    varntp->itypcasc[intp] = 0;    
-#else
-    avv = nint(volant->acv[i]);
-    zvv = nint(volant->zpcv[i]);
-#endif
-    // transformation de lorentz remnan --> labo:
-#ifdef USE_LEGACY_CODE
-    if (varntp->avv[intp] == -1) { //then
-#else
-    if(avv == -1) {
-#endif
-      masse = 138.00;	// cugnon
-      // c		if (avv(intp).eq.1)  masse=938.2796	!cugnon
-      // c		if (avv(intp).eq.4)  masse=3727.42	!ok
-    }
-    else {
-      mglms(double(volant->acv[i]),double(volant->zpcv[i]),0, &el);
-      masse = volant->zpcv[i]*938.27 + (volant->acv[i] - volant->zpcv[i])*939.56 + el;
-    } //end if
-	
-    er = std::sqrt(std::pow(volant->pcv[i],2) + std::pow(masse,2));
-    plabi[1] = volant->pcv[i]*(volant->xcv[i]);
-    plabi[2] = volant->pcv[i]*(volant->ycv[i]);
-    plabi[3] = er*etrem + gamrem*(volant->pcv[i])*(volant->zcv[i]);
-	
-    ptrav2 = std::pow(plabi[1],2) + std::pow(plabi[2],2) + std::pow(plabi[3],2);
-#ifdef USE_LEGACY_CODE
-    varntp->plab[intp] = std::sqrt(ptrav2); 
-#else
-    plab = std::sqrt(ptrav2);
-#endif
-#ifdef USE_LEGACY_CODE
-    if(std::abs(varntp->plab[intp] - 122.009) < 1.0e-3) {
-      // G4cout <<__FILE__ << ":" << __LINE__ << " Error: varntp->plab["<< intp <<"] = " << varntp->plab[intp] << G4endl;
-      
-      volant->dump();
-      varntp->dump();
-#
-      // G4cout <<"varntp->plab[intp] = " << varntp->plab[intp] << G4endl;
-      // G4cout <<"ndec (starting index for loop) = " << ndec << G4endl;
-      // G4cout <<"volant->iv (stopping index for loop) = " << volant->iv << G4endl;
-      // G4cout <<"i (current position) = " << i << G4endl;
-      // G4cout <<"intp (index for writing to varntp) = " << intp << G4endl;
-      //      exit(0);
-    }
-#endif
+    G4int intp=0;
 
-#ifdef USE_LEGACY_CODE
-    varntp->enerj[intp] = std::sqrt(ptrav2 + std::pow(masse,2)) - masse;
-#else
-    enerj = std::sqrt(ptrav2 + std::pow(masse,2)) - masse;
-#endif
-    // Rotation dans le labo:
-    for(G4int j = 1; j <= 3; j++) { //do j=1,3
-      plabf[j] = 0.0;
-      for(G4int k = 1; k <= 3; k++) { //do k=1,3
-	//plabf[j] = plabf[j] + R[k][j]*plabi[k]; // :::Fixme::: (indices?)
-	plabf[j] = plabf[j] + R[j][k]*plabi[k]; // :::Fixme::: (indices?)
-      } // end do
-    }  // end do
-    // C impulsions dans le nouveau systeme copiees dans /volant/
-#ifdef USE_LEGACY_CODE
-    volant->pcv[i] = varntp->plab[intp];
-#else
-    volant->pcv[i] = plab;
-#endif
-    ptrav2 = std::sqrt(std::pow(plabf[1],2) + std::pow(plabf[2],2) + std::pow(plabf[3],2));
-    if(ptrav2 >= 1.0e-6) { //then
-      volant->xcv[i] = plabf[1]/ptrav2;
-      volant->ycv[i] = plabf[2]/ptrav2;
-      volant->zcv[i] = plabf[3]/ptrav2;
-    }
-    else {
-      volant->xcv[i] = 1.0;
-      volant->ycv[i] = 0.0;
-      volant->zcv[i] = 0.0;
-    } //endif
-    // impulsions dans le nouveau systeme copiees dans /VAR_NTP/	
-#ifdef USE_LEGACY_CODE
-    if(varntp->plab[intp] >= 1.0e-6) { //then
-#else 
-    if(plab >= 1.0e-6) { //then
-#endif
-#ifdef USE_LEGACY_CODE
-      bidon = plabf[3]/(varntp->plab[intp]);
-#else
-      bidon = plabf[3]/plab;
-#endif
-      if(bidon > 1.0) { 
-	bidon = 1.0;
-      }
-      if(bidon < -1.0) {
-	bidon = -1.0;
-      }
-#ifdef USE_LEGACY_CODE
-      varntp->tetlab[intp] = std::acos(bidon);
-      sitet = std::sin(varntp->tetlab[intp]);
-      varntp->philab[intp] = std::atan2(plabf[2],plabf[1]);        
-      varntp->tetlab[intp] = varntp->tetlab[intp]*57.2957795;
-      varntp->philab[intp] = varntp->philab[intp]*57.2957795;
-#else
-      tetlab = std::acos(bidon);
-      sitet = std::sin(tetlab);
-      philab = std::atan2(plabf[2],plabf[1]);        
-      tetlab = tetlab*57.2957795;
-      philab = philab*57.2957795;
-#endif
-    }
-    else {
-#ifdef USE_LEGACY_CODE
-      varntp->tetlab[intp] = 90.0;
-      varntp->philab[intp] = 0.0;
-#else
-      tetlab = 90.0;
-      philab = 0.0;
-#endif
-    } // endif
-    volant->copied[i] = true;
-#ifndef USE_LEGACY_CODE
-    varntp->addParticle(avv, zvv, enerj, plab, tetlab, philab);
-#else
-    // G4cout <<__FILE__ << ":" << __LINE__ << " volant -> varntp: " << " intp = " << intp << "Avv = " << varntp->avv[intp] << " Zvv = " << varntp->zvv[intp] << " Plab = " << varntp->plab[intp] << G4endl;
-    // G4cout <<__FILE__ << ":" << __LINE__ << " volant index i = " << i << " varnpt index intp = " << intp << G4endl;
-#endif
-  } // end do
-}
-// C-------------------------------------------------------------------------
+    for(G4int i=0;i<IMULTBU;i++){
+ 
+    G4int iz = nint(BU_TAB[i][7]);
+    G4int ia = nint(BU_TAB[i][8]);
 
-//       SUBROUTINE TRANSLABPF(MASSE1,T1,P1,CTET1,PHI1,GAMREM,ETREM,R,
-//      s   PLAB1,GAM1,ETA1,CSDIR)
-void G4Abla::translabpf(G4double masse1, G4double t1, G4double p1, G4double ctet1,
-			G4double phi1, G4double gamrem, G4double etrem, G4double R[][4],
-			G4double *plab1, G4double *gam1, G4double *eta1, G4double csdir[])
-{
-  // C Calcul de l'impulsion du PF (PLAB1, cos directeurs CSDIR(3)) dans le
-  // C systeme remnant et des coefs de Lorentz GAM1,ETA1 de passage  
-  // c du systeme PF --> systeme remnant.
-  // c 
-  // C Input: MASSE1, T1 (energie cinetique), CTET1,PHI1 (cosTHETA et PHI)
-  // C                    (le PF dans le systeme du Noyau de Fission (NF)).
-  // C	 GAMREM,ETREM les coefs de Lorentz systeme NF --> syst remnant, 
-  // C        R(3,3) la matrice de rotation systeme NF--> systeme remnant.
-  // C
-  // C      
-  //      	REAL*8 MASSE1,T1,P1,CTET1,PHI1,GAMREM,ETREM,R(3,3),
-  //      s   PLAB1,GAM1,ETA1,CSDIR(3),ER,SITET,PLABI(3),PLABF(3)
-     
-  G4double er = t1 + masse1;
-	
-  G4double sitet = std::sqrt(1.0 - std::pow(ctet1,2));
+    varntp->zvv[intp] = iz;
+    varntp->avv[intp] = ia;
+    varntp->itypcasc[intp] = 0;
 
-  G4double plabi[4];
-  G4double plabf[4];
-  for(G4int init_i = 0; init_i < 4; init_i++) {
-    plabi[init_i] = 0.0;
-    plabf[init_i] = 0.0;
-  }
-
-  // C ----Transformation de Lorentz Noyau fissionnant --> Remnant:	
-  plabi[1] = p1*sitet*std::cos(phi1);
-  plabi[2] = p1*sitet*std::sin(phi1);
-  plabi[3] = er*etrem + gamrem*p1*ctet1;
-  
-  // C ----Rotation du syst Noyaut Fissionant vers syst remnant:
-  for(G4int j = 1; j <= 3; j++) { // do j=1,3
-    plabf[j] = 0.0;
-    for(G4int k = 1; k <= 3; k++) { //do k=1,3
-      plabf[j] = plabf[j] + R[j][k]*plabi[k];
-      //plabf[j] = plabf[j] + R[k][j]*plabi[k];
-    } //end do
-  } //end do
-  // C ----Cosinus directeurs et coefs de la transf de Lorentz dans le
-  // c     nouveau systeme:	
-  (*plab1) = std::pow(plabf[1],2) + std::pow(plabf[2],2) + std::pow(plabf[3],2);
-  (*gam1) = std::sqrt(std::pow(masse1,2) + (*plab1))/masse1;
-  (*plab1) = std::sqrt((*plab1));
-  (*eta1) = (*plab1)/masse1;
-
-  if((*plab1) <= 1.0e-6) { //then
-    csdir[1] = 0.0;
-    csdir[2] = 0.0;
-    csdir[3] = 1.0;
-  }
-  else {   
-    for(G4int i = 1; i <= 3; i++) { //do i=1,3
-      csdir[i] = plabf[i]/(*plab1);
-    } // end do
-  } //endif
-}
-
-//       SUBROUTINE LOR_AB(GAM,ETA,Ein,Pin,Eout,Pout)
-void G4Abla::lorab(G4double gam, G4double eta, G4double ein, G4double pin[],
-		   G4double *eout, G4double pout[])
-{
-  // C  Transformation de lorentz brute pour verifs.
-  // C	P(3) = P_longitudinal (transforme)
-  // C	P(1) et P(2) = P_transvers (non transformes)
-  //       DIMENSION Pin(3),Pout(3)
-  //       REAL*8 GAM,ETA,Ein
-
-  pout[1] = pin[1];
-  pout[2] = pin[2]; 
-  (*eout) = gam*ein + eta*pin[3];
-  pout[3] = eta*ein + gam*pin[3];
-}
-
-//       SUBROUTINE ROT_AB(R,Pin,Pout)
-void G4Abla::rotab(G4double R[4][4], G4double pin[4], G4double pout[4])
-{
-  // C  Rotation d'un vecteur
-  //       DIMENSION Pin(3),Pout(3)
-  //       REAL*8 R(3,3)
-      
-  for(G4int i = 1; i <= 3; i++) { // do i=1,3
-    pout[i] = 0.0;
-    for(G4int j = 1; j <= 3; j++) { //do j=1,3
-      pout[i] = pout[i] + R[i][j]*pin[j];
-      //pout[i] = pout[i] + R[j][i]*pin[j];
-    } // enddo
-  } //enddo
-}
-
-G4double G4Abla::haz(G4int k)
-{
-  const G4int pSize = 110;
-  static G4ThreadLocal G4double p[pSize];
-  static G4ThreadLocal G4long ix = 0, i = 0;
-  static G4ThreadLocal G4double x = 0.0, y = 0.0, a = 0.0, fhaz = 0.0;
-  //  k =< -1 on initialise                                        
-  //  k = -1 c'est reproductible                                   
-  //  k < -1 || k > -1 ce n'est pas reproductible
-
-  // Zero is invalid random seed. Set proper value from our random seed collection:
-  if(ix == 0) {
-    //    ix = hazard->ial;
-  }
-
-  if (k <= -1) { //then                                             
-    if(k == -1) { //then                                            
-      ix = 0;
-    }
-    else {
-      x = 0.0;
-      y = secnds(int(x));
-      ix = int(y * 100 + 43543000);
-      if(mod(ix,2) == 0) {
-	ix = ix + 1;
-      }
+    G4double v2 = BU_TAB[i][4]*BU_TAB[i][4]+BU_TAB[i][5]*BU_TAB[i][5]+BU_TAB[i][6]*BU_TAB[i][6];
+    G4double gamma = std::sqrt(1.0 - v2 / (c*c));
+    G4double avvmass = iz*fmp + (ia-iz)*fmn + eflmac(ia,iz,0,3);
+    G4double etot = avvmass / gamma;
+    varntp->pxlab[intp] = etot * BU_TAB[i][4] / c;
+    varntp->pylab[intp] = etot * BU_TAB[i][5] / c;
+    varntp->pzlab[intp] = etot * BU_TAB[i][6] / c;
+    varntp->enerj[intp] = etot - avvmass;
+    intp++;
     }
 
-    // Here we are using random number generator copied from INCL code
-    // instead of the CERNLIB one! This causes difficulties for
-    // automatic testing since the random number generators, and thus
-    // the behavior of the routines in C++ and FORTRAN versions is no
-    // longer exactly the same!
-    x = G4AblaRandom::flat();
-    for(G4int iRandom = 0; iRandom < pSize; iRandom++) {
-      int nTries = 0;
-      do { // The CERNLIB random number generator in the fortran code
-        // returns random numbers between the open interval (0,1).
-        p[iRandom] = G4AblaRandom::flat();
-        nTries++;
-        if(nTries > 100) break;
-      } while(p[iRandom] <= 0.0 || p[iRandom] >= 1.0); /* Loop checking, 28.10.2015, D.Mancusi */
-    }
-    int nTries = 0;
-    do { // The CERNLIB random number generator in the fortran code
-      // returns random numbers between the open interval (0,1).
-      a = G4AblaRandom::flat();
-      nTries++;
-      if(nTries > 100) break;
-    } while(a <= 0.0 || a >= 1.0); /* Loop checking, 28.10.2015, D.Mancusi */
 
-    k = 0;
-  }
+    for(G4int i=0;i<IEV_TAB;i++){
+ 
+    G4int iz = nint(EV_TAB[i][0]);
+    G4int ia = nint(EV_TAB[i][1]);
 
-  i = nint(100*a)+1;
-  fhaz = p[i];
-  int nTries = 0;
-  do { // The CERNLIB random number generator in the fortran code
-    // returns random numbers between the open interval (0,1).
-    a = G4AblaRandom::flat();
-    nTries++;
-    if(nTries > 100) break;
-  } while(a <= 0.0 || a >= 1.0); /* Loop checking, 28.10.2015, D.Mancusi */
-  p[i] = a;
+    varntp->zvv[intp] = iz;
+    varntp->avv[intp] = ia;
+    varntp->itypcasc[intp] = 0; 
 
-  //  hazard->ial = ix;
-  return fhaz;
+     if(ia>0){
+     G4double v2 = EV_TAB[i][2]*EV_TAB[i][2]+EV_TAB[i][3]*EV_TAB[i][3]+EV_TAB[i][4]*EV_TAB[i][4];
+     G4double gamma = std::sqrt(1.0 - v2 / (c*c));
+     G4double avvmass = iz*fmp + (ia-iz)*fmn + eflmac(ia,iz,0,3);
+     G4double etot = avvmass / gamma;
+     varntp->pxlab[intp] = etot * EV_TAB[i][2] / c;
+     varntp->pylab[intp] = etot * EV_TAB[i][3] / c;
+     varntp->pzlab[intp] = etot * EV_TAB[i][4] / c;
+     varntp->enerj[intp] = etot - avvmass;
+     }else{
+     varntp->pxlab[intp] = EV_TAB[i][2];
+     varntp->pylab[intp] = EV_TAB[i][3];
+     varntp->pzlab[intp] = EV_TAB[i][4];
+     varntp->enerj[intp] = std::sqrt(EV_TAB[i][2]*EV_TAB[i][2]+EV_TAB[i][3]*EV_TAB[i][3]+EV_TAB[i][4]*EV_TAB[i][4]);
+     }
+    intp++;
+    } 
+
+return;
 }
 
 // Utilities
@@ -3628,6 +5800,30 @@ G4int G4Abla::max(G4int a, G4int b)
   }
 }
 
+G4double G4Abla::DSIGN(G4double a, G4double b){
+// A function that assigns the sign of the second argument to the
+// absolute value of the first
+
+ if(b>=0){ 
+  return std::abs(a);
+ }else{
+  return -1.0*std::abs(a);
+ }
+ return 0;
+}
+
+G4int G4Abla::ISIGN(G4int a, G4int b){
+// A function that assigns the sign of the second argument to the
+// absolute value of the first
+
+ if(b>=0){ 
+  return std::abs(a);
+ }else{
+  return -1*std::abs(a);
+ }
+ return 0;
+}
+
 G4int G4Abla::nint(G4double number)
 {
   G4double intpart = 0.0;
@@ -3638,22 +5834,22 @@ G4int G4Abla::nint(G4double number)
   }
   if(number > 0) {
     if(fractpart < 0.5) {
-      return int(std::floor(number));
+      return G4int(std::floor(number));
     }
     else {
-      return int(std::ceil(number));
+      return G4int(std::ceil(number));
     }
   }
   if(number < 0) {
     if(fractpart < -0.5) {
-      return int(std::floor(number));
+      return G4int(std::floor(number));
     }
     else {
-      return int(std::ceil(number));
+      return G4int(std::ceil(number));
     }
   }
 
-  return int(std::floor(number));
+  return G4int(std::floor(number));
 }
 
 G4int G4Abla::secnds(G4int x)
@@ -3682,38 +5878,36 @@ G4int G4Abla::mod(G4int a, G4int b)
   } 
 }
 
-G4double G4Abla::dint(G4double a)
+G4double G4Abla::dint(G4double x)
 {
   G4double value = 0.0;
 
-  if(a < 0.0) {
-    value = double(std::ceil(a));
-  }
-  else {
-    value = double(std::floor(a));
-  }
+	if(x-std::floor(x) <= std::ceil(x)-x) 
+         value = double(std::floor(x));
+	else 
+         value = double(std::ceil(x));
 
   return value;
 }
 
-G4int G4Abla::idint(G4double a)
+G4int G4Abla::idint(G4double x)
 {
   G4int value = 0;
 
-  if(a < 0) {
-    value = int(std::ceil(a));
-  }
-  else {
-    value = int(std::floor(a));
-  }
+	if(x-std::floor(x) <= std::ceil(x)-x) 
+         value = G4int(std::floor(x));
+	else 
+         value = G4int(std::ceil(x));
 
   return value;
 }
 
-G4int G4Abla::idnint(G4double value)
+G4int G4Abla::idnint(G4double x)
 {
-  if(value > 0.0) return (int (std::ceil(value)));
-  else return (int (std::floor(value)));
+	if(x-std::floor(x) <= std::ceil(x)-x) 
+         return G4int(std::floor(x));
+	else 
+         return G4int(std::ceil(x));
 }
 
 G4double G4Abla::dmin1(G4double a, G4double b, G4double c)
@@ -3733,4 +5927,3928 @@ G4double G4Abla::dmin1(G4double a, G4double b, G4double c)
 G4double G4Abla::utilabs(G4double a)
 {
   return std::abs(a);
+}
+
+
+G4double G4Abla::width(G4double AMOTHER,G4double ZMOTHER,G4double APART,G4double ZPART,G4double TEMP,G4double B1,G4double SB1,G4double EXC)
+{
+/*
+* Implemented by JLRS for Abla c++: 06/11/2016
+*
+C  Last update:
+C       28/10/13 - JLRS - from abrablav4 (AK)
+*/
+      G4int IZPART,IAPART,NMOTHER;
+      G4double B,HBAR,PI,RGEOM,MPART,SB;
+      G4double BKONST,C,C2,G,APARTNER,MU;
+      G4double INT1,INT2,INT3,AKONST,EARG,R0,MPARTNER;
+      G4double AEXP;
+      G4double ARG;
+      G4double PAR_A1=0.,PAR_B1=0.,FACT=1.;
+      G4double fwidth=0.;
+      PI=3.141592654;
+
+      IZPART = idnint(ZPART);
+      IAPART = idnint(APART);
+
+      B = B1;
+      SB = SB1;
+      NMOTHER = idnint(AMOTHER-ZMOTHER);
+
+      PAR_A1 = 0.0;
+      PAR_B1 = 0.0;
+
+      if(SB>EXC){
+       return fwidth=0.0;
+      }else{
+// in MeV*s
+      HBAR = 6.582122e-22;
+//      HBAR2 = HBAR * HBAR
+// in m/s
+      C = 2.99792458e8;
+      C2 = C * C;
+      APARTNER = AMOTHER - APART;
+      MPARTNER = APARTNER * 931.49 / C2;
+
+//           g=(2s+1)
+      if(IAPART==1&&IZPART==0){
+        G = 2.0;
+        MPART =  939.56 / C2;
+      }else{
+       if(IAPART==1&&IZPART==1){
+        G = 2.0;
+        MPART = 938.27 / C2;
+       }
+       else{
+        if(IAPART==2&&IZPART==1){
+        G = 3.0;
+        MPART = 1876.10 / C2;
+        }else{
+         if(IAPART==3&&IZPART==1){
+          G = 2.0;
+          MPART = 2809.39 / C2;
+         }else{
+          if(IAPART==3&&IZPART==2){
+           G = 2.0;
+           MPART = 2809.37 / C2;
+          }else{
+           if(IAPART==4&&IZPART==2){
+            G = 1.0;
+            MPART = 3728.35 / C2;
+           }else{
+           // IMF
+            G = 1.0;
+            MPART = APART * 931.49 / C2;   
+           }
+          }
+         }
+        }
+       }
+      }//end g
+
+// Relative mass in MeV*s^2/m^2
+      MU = MPARTNER * MPART / (MPARTNER + MPART);
+// in m
+      R0 = 1.16e-15;
+
+      RGEOM = R0 * (std::pow(APART,1.0/3.0)+std::pow(AMOTHER-APART,1.0/3.0));
+
+// in m*sqrt(MeV)
+      AKONST = HBAR*std::sqrt(1.0 / MU);
+
+// in  1/(MeV*m^2)
+      BKONST =  MPART / ( PI * PI * HBAR * HBAR);
+//
+// USING ANALYTICAL APPROXIMATION
+
+      INT1 = 2.0 * std::pow(TEMP,3.) / (2.0 * TEMP + B);
+
+      ARG = std::sqrt(B/TEMP);
+      EARG = (erf(ARG) - 1.0);
+      if(std::abs(EARG)<1.e-9) EARG = 0.0;
+      if(B==0.0){
+        INT2 = 0.5 * std::sqrt(PI) * std::pow(TEMP,3.0/2.0);
+      }else{
+         AEXP = B/TEMP;
+          if(AEXP>700.0) AEXP = 700.0;
+         INT2 = (2.0*B*B +TEMP*B)/std::sqrt(B) + std::exp(AEXP) * std::sqrt(PI/(4.0*TEMP))*(4.0*B*B+4.0*B*TEMP - TEMP*TEMP) *EARG;
+       if(INT2<0.0) INT2 = 0.0;
+// For very low temperatures when EARG=0, INT2 get unreasonably high values
+// comming from the first term. Therefore, for these cases INT2 is set to 0.
+       if(EARG==0.0) INT2 = 0.0;
+      }//if B
+
+      INT3 = 2.0*TEMP*TEMP*TEMP / (2.0*TEMP*TEMP + 4.0*B*TEMP + B*B);
+
+      if(IZPART<-1.0&&ZMOTHER<151.0){
+//      IF(IZPART.LT.1)THEN
+// For neutrons, the width is given by a mean value between geometrical and QM values;
+// Only QM contribution (Rgeom -> Rgeom + Rlamda) seems to be too strong for neutrons
+       fwidth = PI * BKONST *  G * std::sqrt((RGEOM * RGEOM * INT1 + 2.0 * AKONST * RGEOM * INT2 + AKONST * AKONST * INT3) * RGEOM * RGEOM * INT1);
+
+      }else{
+       fwidth = PI * BKONST *  G *(RGEOM * RGEOM * INT1 + 2.0 * AKONST * RGEOM * INT2 + AKONST * AKONST * INT3);
+      }
+
+
+// To correct for too high values of analytical width compared to
+// numerical solution for energies close to the particle threshold:
+       if(IZPART<3.0){
+        if(AMOTHER<155.0){
+         PAR_A1=std::exp(2.302585*0.2083*std::exp(-0.01548472*AMOTHER))-0.05;
+         PAR_B1 = 0.59939389 + 0.00915657 * AMOTHER;
+        }else{
+         if(AMOTHER>154.0&&AMOTHER<195.0){
+           PAR_A1=1.0086961-8.629e-5*AMOTHER;
+           PAR_B1 = 1.5329331 + 0.00302074 * AMOTHER;
+         }else{
+          if(AMOTHER>194.0&&AMOTHER<208.0){
+           PAR_A1=9.8356347-0.09294663*AMOTHER+2.441e-4*AMOTHER*AMOTHER;
+           PAR_B1 = 7.7701987 - 0.02897401 * AMOTHER;
+          }else{
+           if(AMOTHER>207.0&&AMOTHER<228.0){
+            PAR_A1=15.107385-0.12414415*AMOTHER+2.7222e-4*AMOTHER*AMOTHER;
+            PAR_B1=-64.078009+0.56813179*AMOTHER-0.00121078*AMOTHER*AMOTHER; 
+           }else{
+             if(AMOTHER>227.0){
+              if(mod(NMOTHER,2)==0&&NMOTHER>147.){
+               PAR_A1 = 2.0*(0.9389118 + 6.4559e-5 * AMOTHER);
+              }else{
+               if(mod(NMOTHER,2)==1)PAR_A1 = 3.0*(0.9389118 + 6.4559e-5 * AMOTHER);
+              }
+              PAR_B1 = 2.1507177 + 0.00146119 * AMOTHER;
+             }
+           }
+          }
+         }
+        }
+       FACT = std::exp((2.302585*PAR_A1*std::exp(-PAR_B1*(EXC-SB))));
+       if(FACT<1.0) FACT = 1.0;
+       if(IZPART<-1.&&ZMOTHER<151.0){
+//       IF(IZPART.LT.1)THEN
+        fwidth = fwidth / std::sqrt(FACT);
+       }else{
+        fwidth = fwidth / FACT;
+       }
+       }//if IZPART<3.0
+
+       if(fwidth<=0.0){
+       std::cout <<"LOOK IN PARTICLE_WIDTH!" << std::endl;
+       std::cout <<"ACN,APART :"<< AMOTHER << APART << std::endl;
+       std::cout <<"EXC,TEMP,B,SB :" << EXC << " " << TEMP << " "  << B << " "  << SB << std::endl;
+       std::cout <<"INTi, i=1-3 :" << INT1 << " "  << INT2 << " "  << INT3 << std::endl;
+       std::cout <<" " << std::endl;
+       }
+
+      }//if SB>EXC
+  return fwidth;
+}
+
+G4double G4Abla::pen(G4double A, G4double ap, G4double omega, G4double T)
+{
+// JLRS: 06/11/2016
+// CORRECTIONS FOR BARRIER PENETRATION
+// AK, KHS 2005 - Energy-dependen inverse cross sections included, influence of
+//                Coulomb barrier for LCP, tunnelling for LCP
+
+ G4double fpen=0., MU, HO;
+
+// REDUCED MASSES (IN MeV/C**2)
+       MU = (A - ap) * ap / A;
+
+// ENERGY OF THE INVERSE PARABOLA AT THE POTENTIAL BARRIER (hbar*omega);
+// HERE hbar = 197.3287 fm*MeV/c, omega is in c/fm
+       HO = 197.3287 * omega;
+
+     if(T<=0.0){
+       fpen = 0.0;
+     }else{
+       fpen=std::pow(10.0,4.e-4*std::pow(T/(HO*HO*std::pow(MU,0.25)),-4.3/2.3026));
+     }
+
+ return fpen;
+}
+
+void G4Abla::bsbkbc(G4double A,G4double Z,G4double *BS,G4double *BK,G4double *BC)
+{
+// Calculate BS and BK needed for a level-density parameter:
+// BETA2 and BETA4 = quadrupole and hexadecapole deformation
+
+      G4double PI = 3.14159265;
+      G4int IZ = idnint(Z);
+      G4int IN = idnint(A - Z);
+// alphaN = sqrt(2*N/(4*pi))*BetaN
+      G4double ALPHA2 = std::sqrt(5.0/(4.0*PI))*ecld->beta2[IN][IZ];
+      G4double ALPHA4 = std::sqrt(9.0/(4.0*PI))*ecld->beta4[IN][IZ];
+
+      (*BS) = 1.0 + 0.4*ALPHA2*ALPHA2 - 4.0/105.0*ALPHA2*ALPHA2*ALPHA2 - 66.0/175.0*ALPHA2*ALPHA2*ALPHA2*ALPHA2 - 4.0/35.0*ALPHA2*ALPHA2*ALPHA4 + ALPHA4*ALPHA4;
+
+      (*BK) = 1.0 + 0.4*ALPHA2*ALPHA2 + 16.0/105.0*ALPHA2*ALPHA2*ALPHA2 - 82.0/175.0*ALPHA2*ALPHA2*ALPHA2*ALPHA2 + 2.0/35.0*ALPHA2*ALPHA2*ALPHA4 + ALPHA4*ALPHA4;
+
+      (*BC)=0.0;      
+
+ return;
+}
+
+G4double G4Abla::fvmaxhaz( G4double T)
+{
+// Random generator according to a distribution similar to a
+// Maxwell distribution with quantum-mech. x-section for charged particles according to KHS
+//      Y = X**(1.5E0) / (B+X) * EXP(-X/T) (approximation:)
+
+return (3.0 * T * std::pow(-1.*std::log(G4AblaRandom::flat()) * std::log(G4AblaRandom::flat())*std::log(G4AblaRandom::flat()),0.333333));
+}
+
+G4double G4Abla::func_trans(G4double TIME,G4double ZF,G4double AF,G4double bet,G4double Y,G4double FT,G4double T_0)
+{
+/*
+c   This function determines the fission width as a function o time
+c   according to the analytical solution of the FPE for the probability distribution
+c   at the barrier when the nucleus potential is aproximated by a parabolic
+c   potential. It is taken from S. Chandrasekhar, Rev. Mod. Phys. 15 (1943) 1
+c                   
+c***********************INPUT PARAMETERS*********************************
+c  Time               Time at which we evaluate the fission width
+c  ZF                 Z of nucleus
+C  AF                 A of nucleus		
+c  BET                Reduced dissipation coefficient
+c  FT                 Nuclear temperature
+C**************************************************************************
+C********************************OUTPUT***********************************
+C   Fission decay width at the corresponding time of the decay cascade
+C*************************************************************************
+c****************************OTHER VARIABLES******************************
+C  SIGMA_SQR         Square of the width of the prob. distribution
+C  XB                Deformation of the nucleus at the saddle point
+c  NORM              Normalization factor of the probability distribution
+c  W                 Probability distribution at the saddle deformation XB
+c  W_INFIN           Probability distr. at XB at infinite time
+c  MFCD              Mass of the fission collective degree of freedom
+C*************************************************************************
+*/
+      G4double PI = 3.14159;
+      G4double DEFO_INIT,OMEGA,HOMEGA,OMEGA_GS,HOMEGA_GS,K1,MFCD;
+      G4double BET1,XACT,SIGMA_SQR,W_EXP,XB,NORM,SIGMA_SQR_INF,W_INFIN,W;
+      G4double FUNC_TRANS,LOG_SLOPE_INF,LOG_SLOPE_ABS;
+//
+// Influence of initial deformation
+// Initial alpha2 deformation (GS)
+      DEFO_INIT = std::sqrt(5.0/(4.0*PI))*ecld->beta2[fiss->at-fiss->zt][fiss->zt];
+//
+      fomega_sp(AF,Y,&MFCD,&OMEGA,&HOMEGA);
+      fomega_gs(AF,ZF,&K1,&OMEGA_GS,&HOMEGA_GS);
+//
+// Determination of the square of the width of the probability distribution
+// For the overdamped regime BET**2 > 4*OMEGA**2
+         if((bet*bet)>4.0*OMEGA_GS*OMEGA_GS){
+          BET1=std::sqrt(bet*bet-4.0*OMEGA_GS*OMEGA_GS);
+//
+// REMEMBER THAT HOMEGA IS ACTUALLY HBAR*HOMEGA1=1MeV
+// SO THAT HOMEGA1 = HOMEGA/HBAR
+//
+          SIGMA_SQR = (FT/K1)*(1.0 -((2.0*bet*bet/(BET1*BET1)* (0.5 * (std::exp(0.50*(BET1-bet)*1.e21*TIME) - std::exp(0.5*(-BET1-bet)*1.e21*TIME)))*(0.5 * (std::exp(0.50*(BET1-bet)*1.e21*TIME) - std::exp(0.5*(-BET1-bet)*1.e21*TIME)))) + (bet/BET1*0.50 * (std::exp((BET1-bet)*1.e21*TIME)-std::exp((-BET1-bet)*1.e21*TIME))) + 1. * std::exp(-bet*1.e21*TIME)));
+//
+// Evolution of the mean x-value (KHS March 2006)
+          XACT = DEFO_INIT *std::exp(-0.5*(bet-BET1)*1.e21*(TIME-T_0));
+//
+         }else{
+// For the underdamped regime BET**2 < 4*HOMEGA**2 BET1 becomes a complex number
+// and the expression with sinh and cosh can be transformed in one with sin and cos
+          BET1=std::sqrt(4.0*OMEGA_GS*OMEGA_GS-bet*bet);
+          SIGMA_SQR = FT/K1*(1.-std::exp(-1.0*bet*1.e21*TIME)*(bet*bet/(BET1*BET1)*(1.-std::cos(BET1*1.e21*TIME)) + bet/BET1*std::sin(BET1*1.e21*TIME) + 1.0));
+          XACT = DEFO_INIT*std::cos(0.5*BET1*1.e21*(TIME-T_0))*std::exp(-bet*1.e21*(TIME-T_0));
+         }
+
+// Determination of the deformation at the saddle point according to
+// "Geometrical relationships of Macroscopic Nucl. Phys." from Hass and Myers page 100
+// This corresponds to alpha2 deformation.
+          XB = 7./3.*Y-938./765.*Y*Y+9.499768*Y*Y*Y-8.050944*Y*Y*Y*Y;
+//
+// Determination of the probability distribution at the saddle deformation
+//
+          if(SIGMA_SQR>0.0){
+           NORM = 1./std::sqrt(2.*PI*SIGMA_SQR);
+//
+           W_EXP = -1.*(XB - XACT)*(XB - XACT)/(2.0 * SIGMA_SQR);
+            if(W_EXP<(-708.0) ) W_EXP = -708.0;
+           W = NORM * std::exp( W_EXP ) * FT / (K1 * SIGMA_SQR);
+           }else{
+           W = 0.0;
+           }
+//
+// Determination of the fission decay width, we assume we are in the overdamped regime
+//
+              SIGMA_SQR_INF = FT/K1;
+              W_EXP = -XB*XB/(2.0 * SIGMA_SQR_INF);
+              if(W_EXP<(-708.0))W_EXP = -708.0;
+              W_INFIN = std::exp(W_EXP)/std::sqrt(2.0*PI*SIGMA_SQR_INF);
+              FUNC_TRANS = W / W_INFIN;
+//
+// Correction for the variation of the mean velocity at the fission barrier
+//  (see B. Jurado et al, Nucl. Phys. A747, p. 14)
+//
+              LOG_SLOPE_INF = cram(bet,HOMEGA)*bet*MFCD*OMEGA/FT;
+              LOG_SLOPE_ABS = (XB-XACT)/SIGMA_SQR-XB/SIGMA_SQR_INF+cram(bet,HOMEGA)*bet*MFCD*OMEGA/FT;
+//
+              FUNC_TRANS = FUNC_TRANS * LOG_SLOPE_ABS/LOG_SLOPE_INF;
+//
+ return FUNC_TRANS;
+}
+
+
+void G4Abla::part_fiss(G4double BET,G4double GP,G4double GF,G4double Y,G4double TAUF,G4double TS1,G4double TSUM,G4int *CHOICE,G4double ZF,G4double AF,G4double FT,G4double *T_LAPSE,G4double *GF_LOC)
+{
+/*
+C     THIS SUBROUTINE IS AIMED TO CHOOSE BETWEEN PARTICLE EMISSION
+C     AND FISSION
+C     WE USE MONTE-CARLO METHODS AND SAMPLE TIME BETWEEN T=0 AND T=1.5*TAUF
+c	TO SIMULATE THE TRANSIENT TIME WITH 30 STEPS (0.05*TAUF EACH)
+C     FOR t>1.5*TAUF , GF=CONSTANT=ASYMPTOTICAL VALUE (INCLUDING KRAMERS FACTOR)
+c------------------------------------------------------------------------
+c    Modifications introduced by BEATRIZ JURADO 18/10/01:
+c    1. Now this subrutine is included in the rutine direct
+c    2. TSUM does not include the current particle decay time
+C    3. T_LAPSE is the time until decay, taken as an output variable
+C    4. GF_LOC is also taken as an output variable
+C    5. BET (Diss. Coeff.) and HOMEGA (Frequency at the ground state
+c       are included as input variables because they are needed for FUNC_TRANS
+C-----------------------------------------------------------------------
+C     ON INPUT:
+C       GP                 Partial particle decay width
+C       GF                 Asymptotic value of Gamma-f, including Kramers factor
+C       AF                 Mass number of nucleus
+C       TAUF               Transient time
+C       TS1                Partial particle decay time for the next step
+C       TSUM               Total sum of partial particle decay times, including
+C                               the next expected one, which is in competition
+C                               with fission now
+C       ZF                 Z of nucleus
+C       AF                 A of nucleus
+C-----------------------------------------------------------------------
+C     ON OUTPUT:
+C       CHOICE             Key for decay mode: 0 = no decay (only internal)
+C                                              1 = evaporation
+C                                              2 = fission
+C-----------------------------------------------------------------------
+C     VARIABLES:
+C       GP                 Partial particle decay width
+C       GF                 Asymptotic value of Gamma-f, including Kramers factor
+C       TAUF               Transient time
+C       TS1                Partial particle decay time
+C       TSUM               Total sum of partial particle decay times
+C       CHOICE              Key for decay mode
+C       ZF                 Z of nucleus
+C       AF                 A of nucleus
+C       FT                 Used for Fermi function in FUNC_TRANS
+C       STEP_LENGTH        Step in time to sample different decays
+C       BEGIN_TIME         Total sum of partial particle decay times, excluding
+C                               the next expected one, which is in competition
+C                               with fission now
+C       LOC_TIME_BEGIN     Begin of time interval considered in one step
+C       LOC_TIME_END       End of time interval considered in one step
+C       GF_LOC             In-grow function for fission width,
+c                                 normalized to asymptotic value
+C       TS2                Effective partial fission decay time in one time step
+C       HBAR               hbar
+C       T_LAPSE            Effective decay time in one time step
+C       REAC_PROB          Reaction probability in one time step
+C       X                  Help variable for random generator
+C------------------------------------------------------------------------
+*/
+  G4double K1,OMEGA,HOMEGA,t_0,STEP_LENGTH,LOC_TIME_BEGIN,LOC_TIME_END=0.,BEGIN_TIME=0.,FISS_PROB,X,TS2,LAMBDA,REAC_PROB;
+  G4double HBAR=6.582122e-22;
+  G4int fchoice=0;
+  G4double fGF_LOC=0.,fT_LAPSE=0.;
+//
+	if(GF<=0.0){
+          *CHOICE = 1;
+          *T_LAPSE=TS1;
+          *GF_LOC = 0.0;
+  	  goto direct107;
+	}
+//
+      fomega_gs(AF,ZF,&K1,&OMEGA,&HOMEGA);
+//
+// ****************************************************************
+//    Calculation of the shift in time due to the initial conditions
+//
+//    Overdamped regime
+      if(BET*BET>4.0*OMEGA*OMEGA){
+//         REMEMBER THAT HOMEGA IS ACTUALLY HBAR*HOMEGA1=1MeV
+//         SO THAT HOMEGA1 = HOMEGA/HBAR
+//     Additional factor 1/16 proposed by KHS on 14/7/2010. Takes into
+//     account the fact that the curvature of the potential is ~16 times
+//     larger than what predicted by the liquid drop model, because of
+//     shell effects.
+          t_0 = BET*1.e21*HBAR*HBAR/(4.*HOMEGA*FT)/16.;
+       }else{
+//     Underdamped regime
+         if(((2.*FT-HOMEGA/16.)>0.000001) && BET>0.0){
+//     Additional factor 1/16 proposed by KHS on 14/7/2010. Takes into
+//     account the fact that the curvature of the potential is ~16 times
+//     larger than what predicted by the liquid drop model, because of
+//     shell effects.
+           t_0 = (std::log(2.*FT/(2.*FT-HOMEGA/16.)))/(BET*1.e21);
+         }else{
+//     Neglect fission transients if the time shift t_0 is too
+//     large. Suppresses large, spurious fission cross section at very
+//     low excitation energy in p+Ta.
+//
+              fchoice = 0;
+              goto direct106;
+         }
+       }
+// ********************************************************************+
+      fchoice = 0;
+      STEP_LENGTH = 1.5*TAUF/50.;
+//
+//  AT FIRST WE CACULATE THE REAL CURRENT TIME
+//  TSUM includes only the time elapsed in the previous steps
+//
+      BEGIN_TIME = TSUM + t_0;
+//
+      if(BEGIN_TIME<0.0) std::cout << "CURRENT TIME < 0" << BEGIN_TIME << std::endl;
+//
+      if(BEGIN_TIME<1.50*TAUF){
+        LOC_TIME_BEGIN = BEGIN_TIME;
+//
+        while((LOC_TIME_BEGIN<1.5*TAUF)&&fchoice==0){
+
+         LOC_TIME_END = LOC_TIME_BEGIN + STEP_LENGTH;
+//
+// NOW WE ESTIMATE THE MEAN VALUE OF THE FISSION WIDTH WITHIN THE SMALL INTERVAL
+         fGF_LOC=(func_trans(LOC_TIME_BEGIN,ZF,AF,BET,Y,FT,t_0)+func_trans(LOC_TIME_END,ZF,AF,BET,Y,FT,t_0))/2.0;
+//
+         fGF_LOC = fGF_LOC * GF;
+
+// TS2 IS THE MEAN DECAY TIME OF THE FISSION CHANNEL
+                 if(fGF_LOC>0.0){
+                     TS2 = HBAR/fGF_LOC;
+                 }else{
+                     TS2 = 0.0;
+                 }
+//
+                 if(TS2>0.0){
+                     LAMBDA  = 1.0/TS1 + 1.0/TS2;
+                 }else{
+                     LAMBDA = 1.0/TS1;
+                 }
+//
+// This is the probability to survive the decay at this step
+                 REAC_PROB = std::exp(-1.0*STEP_LENGTH*LAMBDA);
+// I GENERATE A RANDOM NUMBER
+                 X = G4AblaRandom::flat();
+                 if(X>REAC_PROB){
+// THEN THE EVAPORATION OR FISSION HAS OCCURED
+                        FISS_PROB = fGF_LOC / (fGF_LOC+GP);
+                        X = G4AblaRandom::flat();
+//                       WRITE(6,*)'X=',X
+                        if(X<FISS_PROB){
+// FISSION OCCURED
+                           fchoice = 2;
+                        }else{
+// EVAPORATION OCCURED
+                           fchoice = 1;
+                        }
+                  }// if x
+                  LOC_TIME_BEGIN = LOC_TIME_END;
+       }// while
+// Take the real decay time of this decay step
+      fT_LAPSE = LOC_TIME_END - BEGIN_TIME;
+      }// if BEGIN_TIME
+//
+// NOW, IF NOTHING HAPPENED DURING TRANSIENT TIME
+  direct106:
+    if(fchoice==0){
+            fGF_LOC=GF;
+            FISS_PROB = GF / (GF+GP);
+ 
+// Added for cases where already at the beginning BEGIN_TIME > 1.5d0*TAUF
+            if(GF>0.0){
+                 TS2 = HBAR/GF;
+            }else{
+                 TS2 = 0.0;
+            }
+
+            if(TS2>0.0){
+                 LAMBDA  = 1./TS1 + 1./TS2;
+            }else{
+                 LAMBDA = 1./TS1;
+            }
+//
+            X = G4AblaRandom::flat();
+
+            if(X<FISS_PROB){
+// FISSION OCCURED
+                  fchoice = 2;
+            }else{
+// EVAPORATION OCCURED
+                  fchoice = 1;
+            }
+//
+//TIRAGE ALEATOIRE DANS UNE EXPONENTIELLLE : Y=EXP(-X/T)
+//       EXPOHAZ=-T*LOG(HAZ(K))
+       fT_LAPSE = fT_LAPSE -1.0/LAMBDA*std::log(G4AblaRandom::flat());
+      }
+//
+  direct107:
+
+  (*T_LAPSE)=fT_LAPSE;
+  (*GF_LOC)=fGF_LOC;
+  (*CHOICE)=fchoice;
+  return;
+}
+
+G4double G4Abla::tunnelling(G4double A,G4double ZPRF,G4double Y,G4double EE,G4double EF,G4double TEMP,G4double DENSG,G4double DENSF,G4double ENH_FACT)
+{
+// Subroutine to caluclate fission width with included effects
+// of tunnelling through the fission barrier
+
+      G4double PI = 3.14159;
+      G4int IZ, IN;
+      G4double MFCD,OMEGA,HOMEGA1,HOMEGA2=0.,GFTUN;
+      G4double E1,E2,EXP_FACT,CORR_FUNCT,FACT1,FACT2,FACT3;
+
+      IZ = idnint(ZPRF);
+      IN = idnint(A-ZPRF);
+
+// For low energies system "sees" LD barrier
+      fomega_sp(A,Y,&MFCD,&OMEGA,&HOMEGA1);
+
+      if(mod(IN,2)==0&&mod(IZ,2)==0){    // e-e
+// Due to pairing gap, even-even nuclei cannot tunnel for excitation energy lower
+// than pairing gap (no levels at which system can be)
+      EE = EE - 12.0/std::sqrt(A);
+      HOMEGA2 = 1.04;
+      }
+
+      if(mod(IN,2)==1&&mod(IZ,2)==1){   // o-o
+      HOMEGA2 = 0.65;
+      }
+
+      if(mod(IN,2)==1&&mod(IZ,2)==0){   // o-e
+      HOMEGA2 = 0.8;
+      }
+
+      if(mod(IN,2)==0&&mod(IZ,2)==1){   // e-0
+      HOMEGA2 = 0.8;
+      }
+
+      E1 = EF + HOMEGA1/2.0/PI*std::log(HOMEGA1*(2.0*PI+HOMEGA2)/4.0/PI/PI);
+
+      E2 = EF + HOMEGA2/(2.0*PI)*std::log(1.0+2.0*PI/HOMEGA2);
+
+// AKH May 2013 - Due to approximations in the analytical integration, at energies
+// just above barrier Pf was to low, at energies below
+// barrier it was somewhat higher. LInes below are supposed to correct for this.
+// Factor 0.20 in EXP_FACT comes from the slope of the Pf(Eexc) (Gavron's data)
+// around fission barrier.
+      EXP_FACT = (EE-EF)/(HOMEGA2/(2.0*PI));
+      if(EXP_FACT>700.0) EXP_FACT = 700.0;
+      CORR_FUNCT = HOMEGA1 * (1.0-1.0/(1.0+std::exp(EXP_FACT)));
+      if(mod(IN,2)==0&&mod(IZ,2)==0){
+      CORR_FUNCT = HOMEGA1 * (1.0-1.0/(1.0+std::exp(EXP_FACT)));
+      }
+
+      FACT1 = HOMEGA1/(2.0*PI*TEMP+HOMEGA1);
+      FACT2 = (2.0*PI/(2.0*PI+HOMEGA2)-HOMEGA1*(2.0*PI+HOMEGA2)/4.0/PI/PI)/(E2-E1);
+      FACT3 = HOMEGA2/(2.0*PI*TEMP-HOMEGA2);
+
+      if(EE<E1){
+      GFTUN = FACT1*(std::exp(EE/TEMP)*std::exp(2.0*PI*(EE-EF)/HOMEGA1)-std::exp(-2.0*PI*EF/HOMEGA1));
+      }else{
+        if(EE>=E1&&EE<E2){
+         GFTUN = std::exp(EE/TEMP)*(0.50+FACT2*(EE-EF-TEMP))-std::exp(E1/TEMP)*(0.5+FACT2*(E1-EF-TEMP))+FACT1*(std::exp(E1/TEMP)*std::exp(2.0*PI*(E1-EF)/HOMEGA1)-std::exp(-2.0*PI*EF/HOMEGA1));
+        }else{
+         GFTUN = std::exp(EE/TEMP)*(1.0+FACT3*std::exp(-2.0*PI*(EE-EF)/HOMEGA2))-std::exp(E2/TEMP)*(1.0+FACT3*std::exp(-2.0*PI*(E2-EF)/HOMEGA2))+std::exp(E2/TEMP)*(0.5+FACT2*(E2-EF-TEMP))-std::exp(E1/TEMP)*(0.5+FACT2*(E1-EF-TEMP))+FACT1*(std::exp(E1/TEMP)*std::exp(2.0*PI*(E1-EF)/HOMEGA1)-std::exp(-2.0*PI*EF/HOMEGA1));
+        }
+      }
+      GFTUN = GFTUN/std::exp(EE/TEMP)*DENSF*ENH_FACT/DENSG/2.0/PI;
+      GFTUN = GFTUN * CORR_FUNCT;
+ return GFTUN;
+}
+
+
+void G4Abla::fission_width(G4double ZPRF,G4double A,G4double EE,G4double BS,G4double BK,G4double EF,G4double Y,G4double *GF,G4double *TEMP,G4double JPR,G4int IEROT,G4int FF_ALLOWED,G4int OPTCOL,G4int OPTSHP,G4double DENSG)
+{
+//
+ G4double FNORM,MASS_ASYM_SADD_B,FP_PER,FP_PAR,SIG_PER_SP,SIG_PAR_SP;
+ G4double Z2OVERA,ftemp,fgf,DENSF,ECOR,EROT,qr;
+ G4double DCR,UCR,ENH_FACTA,ENH_FACTB,ENH_FACT,PONFE;
+ G4double PI = 3.14159;
+
+      DCR = fiss->dcr;
+      UCR = fiss->ucr;
+      Z2OVERA = ZPRF * ZPRF / A;
+
+// Nuclei below Businaro-Gallone point do not go through fission
+      if((ZPRF<=55.0) || (FF_ALLOWED==0)){
+        (*GF) = 0.0;
+        (*TEMP) = 0.5;
+        return;
+      }
+
+// Level density above SP
+// Saddle-point deformation is defbet as above. But, FP_PER and FP_PAR
+// are calculated for fission in DENSNIV acc to Myers and Hasse, and their
+// parametrization is done as function of y
+      densniv(A,ZPRF,EE,EF,&DENSF,0.0,BS,BK,&ftemp,OPTSHP,0,Y,&ECOR,JPR,1,&qr);
+
+      if(OPTCOL==0){
+         fgf= DENSF/DENSG/PI/2.0*ftemp;
+         (*TEMP)=ftemp;
+         (*GF)= fgf;
+         return;
+      }
+
+// FP = 2/5*M0*R0**2/HBAR**2 * A**(5/3) * (1 + DEFBET/3)
+// FP is used to calculate the spin-cutoff parameter SIG=FP*TEMP/hbar**2; hbar**2
+// is, therefore, included in FP in order to avoid problems with large exponents
+// The factor fnorm inlcudes then R0, M0 and hbar**2 -
+// fnorm = R0*M0/hbar**2 = 1.2fm*931.49MeV/c**2 /(6.582122e-22 MeVs)**2 and is
+// in units 1/MeV
+      FNORM = 1.2*1.2 * 931.49 * 1.e-2 / (9.0 * 6.582122*6.582122);
+// FP_PER ~ 1+7*y/6, FP_PAR ~ 1-7*y/3 (Hasse & Myers, Geom. relat. macr. nucl. phys.)
+// Perpendicular moment of inertia
+      FP_PER = 2.0/5.0*std::pow(A,5.0/3.0)*FNORM*(1. + 7.0/6.0*Y*(1.0+1396.0/255.*Y));
+
+// AK - Jan 2011 - following line is needed, as for these nuclei it seems that
+// FP_PER calculated according to above formula has too large values, leading to too
+// large ENH_FACT
+      if(Z2OVERA<=30.0) FP_PER = 6.50;
+
+// Parallel moment of inertia
+      FP_PAR = 2.0/5.0*std::pow(A,5.0/3.0)*FNORM*(1.0 - 7.0/3.0*Y*(1.0-389.0/255.0*Y));
+      if(FP_PAR<0.0) FP_PAR = 0.0;
+
+      EROT = JPR * JPR / (2.0 * std::sqrt(FP_PAR*FP_PAR + FP_PER*FP_PER));
+      if(IEROT==1) EROT = 0.0;
+
+// Perpendicular spin cut-off parameter
+      SIG_PER_SP = std::sqrt(FP_PER * ftemp);
+
+      if(SIG_PER_SP<1.0) SIG_PER_SP = 1.0;
+
+// Parallel spin cut-off parameter
+      SIG_PAR_SP = std::sqrt(FP_PAR * ftemp);
+      ENH_FACT = 1.0;
+//
+        if(A>223.0){
+         MASS_ASYM_SADD_B = 2.0;
+        }else{
+         MASS_ASYM_SADD_B = 1.0;
+        }
+
+// actinides with low barriers
+      if(Z2OVERA>35.&&Z2OVERA<=(110.*110./298.0)){
+// Barrier A is axial asymmetric
+       ENH_FACTA = std::sqrt(8.0*PI) * SIG_PER_SP*SIG_PER_SP * SIG_PAR_SP;
+// Barrier B is axial symmetric
+      ENH_FACTB = MASS_ASYM_SADD_B * SIG_PER_SP*SIG_PER_SP;
+// Total enhancement
+      ENH_FACT = ENH_FACTA * ENH_FACTB / (ENH_FACTA + ENH_FACTB);
+      }else{
+// nuclei with high fission barriers (only barrier B plays a role, axial symmetric)
+        if(Z2OVERA<=35.){
+          ENH_FACT = MASS_ASYM_SADD_B*SIG_PER_SP*SIG_PER_SP;
+         }else{
+// super-heavy nuclei  (only barrier A plays a role, axial asymmetric)
+          ENH_FACT =  std::sqrt(8.0*PI) * SIG_PER_SP*SIG_PER_SP* SIG_PAR_SP;
+        }
+      }
+
+// Fading-out with excitation energy above the saddle point:
+      PONFE = (ECOR-UCR-EROT)/DCR;
+      if(PONFE>700.) PONFE = 700.0;
+// Fading-out according to Junghans:
+      ENH_FACT = 1.0/(1.0+std::exp(PONFE))*ENH_FACT+1.0;
+
+      if(ENH_FACT<1.0)ENH_FACT = 1.0;
+      fgf= DENSF/DENSG/PI/2.0*ftemp*ENH_FACT;
+
+// Tunneling
+      if(EE<EF+1.){
+      fgf=tunnelling(A,ZPRF,Y,EE,EF,ftemp,DENSG,DENSF,ENH_FACT);
+      }
+//
+      (*GF)= fgf;
+      (*TEMP)=ftemp;
+ return;
+}
+
+
+void G4Abla::lorb(G4double AMOTHER,G4double ADAUGHTER,G4double LMOTHER,G4double EEFINAL,G4double *LORBITAL,G4double *SIGMA_LORBITAL)
+{
+
+    G4double AFRAGMENT,S4FINAL,ALEVDENS;
+    G4double THETA_MOTHER,THETA_ORBITAL;
+
+/*
+C     Values on input:
+C       AMOTHER          mass of mother nucleus
+C       ADAUGHTER        mass of daughter fragment
+C       LMOTHER          angular momentum of mother (may be real)
+C       EEFINAL          excitation energy after emission
+C                          (sum of daughter and fragment)
+C
+C     Values on output:
+C       LORBITAL         mean value of orbital angular momentum
+C                           (assumed to be fully aligned with LMOTHER)
+C       SIGMA_LORBITAL   standard deviation of the orbital angular momentum
+*/
+    if (EEFINAL<=0.01) EEFINAL = 0.01;
+        AFRAGMENT = AMOTHER - ADAUGHTER;
+        ALEVDENS = 0.073*AMOTHER + 0.095*std::pow(AMOTHER,2.0/3.0);
+        S4FINAL = ALEVDENS * EEFINAL;
+        if(S4FINAL <= 0.0 || S4FINAL > 100000.){
+            std::cout<< "S4FINAL:" << S4FINAL << ALEVDENS << EEFINAL  << idnint(AMOTHER) << idnint(AFRAGMENT) << std::endl;
+        }
+        THETA_MOTHER = 0.0111 * std::pow(AMOTHER,1.66667);
+        THETA_ORBITAL = 0.0323 / std::pow(AMOTHER,2.) *std::pow(std::pow(AFRAGMENT,0.33333) + std::pow(ADAUGHTER,0.33333),2.) * AFRAGMENT*ADAUGHTER*(AFRAGMENT+ADAUGHTER);
+
+        *LORBITAL = -1.* THETA_ORBITAL * (LMOTHER / THETA_MOTHER + std::sqrt(S4FINAL) /(ALEVDENS*LMOTHER));
+
+        *SIGMA_LORBITAL = std::sqrt(std::sqrt(S4FINAL) * THETA_ORBITAL / ALEVDENS);
+
+ return;
+}
+
+// Random generator according to a distribution similar to a
+// Maxwell distribution with quantum-mech. x-section for neutrons according to KHS
+//      Y = SQRT(X) * EXP(-X/T) (approximation:)
+G4double G4Abla::fvmaxhaz_neut(G4double x){
+
+ return (2.0 * x * std::sqrt(std::log(G4AblaRandom::flat()) * std::log(G4AblaRandom::flat())));
+}
+
+void G4Abla::imf(G4double ACN,G4double ZCN,G4double TEMP,G4double EE,G4double *ZIMF,G4double *AIMF,G4double *BIMF,G4double *SBIMF,G4double *TIMF,G4double JPRF)
+{
+//     input variables (compound nucleus) Acn, Zcn, Temp, EE
+//     output variable (IMF) Zimf,Aimf,Bimf,Sbimf,IRNDM
+//
+//     SBIMF = separation energy + coulomb barrier
+//
+//     SDW(Z) is the sum over all isotopes for a given Z of the decay widths
+//     DW(Z,A) is the decay width of a certain nuclide
+//
+//  Last update:
+//             28/10/13 - JLRS - from abrablav4 (AK)
+//             13/11/16 - JLRS - Included this function in Abla++
+
+   G4int IZIMFMAX=0;
+   G4int iz=0,in=0,IZIMF=0,INMI=0,INMA=0,IZCN=0,INCN=0,INIMFMI=0,INIMFMA=0,ILIMMAX=0,INNMAX=0,INMIN=0,IAIMF=0,IZSTOP=3,IZMEM=0,IA=0,INMINMEM=0,INMAXMEM=0,IIA=0;
+   G4double BS=0,BK=0,BC=0,BSHELL=0,DEFBET=0,DEFBETIMF=0,EROT=0,MAIMF=0,MAZ=0,MARES=0,AIMF_1,OMEGAP=0,fBIMF=0.0,BSIMF=0,A1PAR=0,A2PAR=0,SUM_A,EEDAUG;
+   G4double DENSCN=0,TEMPCN=0,ECOR=0,IINERT=0,EROTCN=0,WIDTH_IMF=0.0,WIDTH1=0,IMFARG=0,QR=0,QRCN=0,DENSIMF=0,fTIMF=0,fZIMF=0,fAIMF=0.0,NIMF=0,fSBIMF=0;
+   G4double PI = 3.141592653589793238;
+   G4double ZIMF_1=0.0;
+   G4double SDWprevious=0,SUMDW_TOT=0,SUM_Z=0,X=0,SUMDW_N_TOT=0,XX=0;
+   G4double SDW[98];
+   G4double DW[98][251];
+   G4double BBIMF[98][251];
+   G4double SSBIMF[98][251];
+   G4int OPTSHPIMF=opt->optshpimf;
+
+// take the half of the CN and transform it in integer (floor it)
+   IZIMFMAX = idnint(ZCN / 2.0);
+
+   if(IZIMFMAX<3){
+         std::cout << "CHARGE_IMF line 46" << std::endl;
+         std::cout << "Problem: IZIMFMAX < 3 " << std::endl;
+         std::cout << "ZCN,IZIMFMAX," << ZCN << "," << IZIMFMAX << std::endl;
+   }
+
+  iz = idnint(ZCN);
+  in = idnint(ACN) - iz;
+  BSHELL = ecld->ecgnz[in][iz]- ecld->vgsld[in][iz];
+  DEFBET = ecld->beta2[in][iz];
+
+  bsbkbc(ACN,ZCN,&BS,&BK,&BC);
+
+  densniv(ACN,ZCN,EE,0.0,&DENSCN,BSHELL,BS,BK,&TEMPCN,0,0,DEFBET,&ECOR,JPRF,0,&QRCN);
+
+  IINERT = 0.4 * 931.49 * 1.16*1.16 * std::pow(ACN,5.0/3.0)*(1.0 + 0.5*std::sqrt(5./(4.*PI))*DEFBET);
+  EROTCN = JPRF * JPRF * 197.328 * 197.328 /(2. * IINERT);
+//
+  for(IZIMF=3;IZIMF<=IZIMFMAX;IZIMF++){
+  
+     SDW[IZIMF] = 0.0;
+     ZIMF_1 = 1.0*IZIMF;
+
+//     *** Find the limits that both IMF and partner are bound :
+
+     isostab_lim(IZIMF,&INIMFMI,&INIMFMA);// Bound isotopes for IZIMF from INMIN to INIMFMA
+// Idea - very proton-rich nuclei can live long enough to evaporate IMF before decaying:
+     INIMFMI = max(1,INIMFMI-2);
+
+     IZCN = idnint(ZCN);        //  Z of CN
+     INCN = idnint(ACN) - IZCN; //  N of CN
+
+     isostab_lim(IZCN-IZIMF,&INMI,&INMA); // Daughter nucleus after IMF emission,
+                                         // limits of bound isotopes
+     INMI = max(1,INMI-2);
+     INMIN = max(INIMFMI,INCN-INMA);  //  Both IMF and daughter must be bound
+     INNMAX = min(INIMFMA,INCN-INMI); //   "
+
+     ILIMMAX = max(INNMAX,INMIN);     // In order to keep the variables below
+//     ***
+
+     for(G4int INIMF=INMIN;INIMF<=ILIMMAX;INIMF++){ // Range of possible IMF isotopes
+          IAIMF = IZIMF + INIMF;
+          DW[IZIMF][IAIMF] = 0.0;
+          AIMF_1 = 1.0*(IAIMF);
+
+//         Q-values
+          mglms(ACN-AIMF_1,ZCN-ZIMF_1,OPTSHPIMF,&MARES);
+          mglms(AIMF_1,ZIMF_1,OPTSHPIMF,&MAIMF);
+          mglms(ACN,ZCN,OPTSHPIMF,&MAZ);
+
+//         Barrier
+          if(ACN<=AIMF_1){
+            SSBIMF[IZIMF][IAIMF] = 1.e37;
+          }else{
+            barrs(idnint(ZCN-ZIMF_1),idnint(ACN-AIMF_1),idnint(ZIMF_1),idnint(AIMF_1),&fBIMF,&OMEGAP);
+            SSBIMF[IZIMF][IAIMF] = MAIMF + MARES - MAZ + fBIMF;
+            BBIMF[IZIMF][IAIMF] = fBIMF;
+          }
+
+// *****  Width *********************
+          DEFBETIMF = ecld->beta2[idnint(AIMF_1-ZIMF_1)][idnint(ZIMF_1)]+ecld->beta2[idnint(ACN-AIMF_1-ZCN+ZIMF_1)][idnint(ZCN-ZIMF_1)];
+
+          IINERT = 0.40 * 931.490 * 1.160*1.160 * std::pow(ACN,5.0/3.0)*(std::pow(AIMF_1,5.0/3.0) + std::pow(ACN - AIMF_1,5.0/3.0)) + 931.490 * 1.160*1.160 * AIMF_1 * (ACN-AIMF_1) / ACN *(std::pow(AIMF_1,1.0/3.0) + std::pow(ACN - AIMF_1,1.0/3.0))*(std::pow(AIMF_1,1.0/3.0) + std::pow(ACN - AIMF_1,1.0/3.0));
+
+          EROT = JPRF * JPRF * 197.328 * 197.328 /(2.0 * IINERT);
+
+ //      IF(IEROT.EQ.1) EROT = 0.D0
+          if (EE<(SSBIMF[IZIMF][IAIMF]+EROT) || DENSCN<=0.0){
+           WIDTH_IMF = 0.0;
+//          PRINT*,IDNINT(ACN),IDNINT(ZCN),IZIMF,IAIMF
+          }else{
+//          here the temperature at "saddle point" is used
+// Increase of the level densitiy at the barrier due to deformation; see comment in ABLA
+//          BSIMF = ((ACN-AIMF_1)**(2.D0/3.D0) + AIMF_1**(2.D0/3.D0))/
+//     &                ACN**(2.D0/3.D0)
+           BSIMF = BS;
+           densniv(ACN,ZCN,EE,SSBIMF[IZIMF][IAIMF],&DENSIMF,0.0,BSIMF,1.0,&fTIMF,0,0,DEFBETIMF,&ECOR,JPRF,2,&QR);
+           IMFARG = (SSBIMF[IZIMF][IAIMF]+EROTCN-EROT)/fTIMF;
+           if(IMFARG>200.0) IMFARG = 200.0;
+
+           WIDTH1 = width(ACN,ZCN,AIMF_1,ZIMF_1,fTIMF,fBIMF,SSBIMF[IZIMF][IAIMF],EE-EROT);
+
+           WIDTH_IMF = WIDTH1 * std::exp(-IMFARG) * QR / QRCN;
+
+           if(WIDTH_IMF<=0.0){
+            std::cout << "GAMMA_IMF=0 -> LOOK IN GAMMA_IMF CALCULATIONS!" << std::endl;
+            std::cout << "ACN,ZCN,AIMF,ZIMF:" << idnint(ACN) << "," << idnint(ZCN) << "," << idnint(AIMF_1) << "," << idnint(ZIMF_1) << std::endl;
+            std::cout << "SSBIMF,TIMF :" << SSBIMF[IZIMF][IAIMF] << "," << fTIMF << std::endl;
+            std::cout << "DEXP(-IMFARG) = " << std::exp(-IMFARG) << std::endl;
+            std::cout << "WIDTH1 =" << WIDTH1 << std::endl;
+           }
+          }// if ee
+
+          SDW[IZIMF] = SDW[IZIMF] + WIDTH_IMF;
+
+          DW[IZIMF][IAIMF] = WIDTH_IMF;
+
+     }// for INIMF
+  }// for IZIMF
+//     End loop to calculate the decay widths ************************
+//     ***************************************************************
+
+//     Loop to calculate where the gamma of IMF has the minimum ******
+      SDWprevious = 1.e20;
+      IZSTOP = 0;
+
+      for(G4int III_ZIMF=3;III_ZIMF<=IZIMFMAX;III_ZIMF++){
+
+        if(SDW[III_ZIMF]==0.0){
+          IZSTOP = III_ZIMF - 1;
+            goto imfs30;
+        }
+
+        if(SDW[III_ZIMF]>SDWprevious){
+            IZSTOP = III_ZIMF - 1;
+            goto imfs30;
+        }else{
+            SDWprevious = SDW[III_ZIMF];
+        }
+
+      }// for III_ZIMF
+
+      imfs30:
+
+      if(IZSTOP<=6){
+       IZSTOP = IZIMFMAX;
+       goto imfs15;
+      }
+
+      A1PAR = std::log10(SDW[IZSTOP]/SDW[IZSTOP-2])/std::log10((1.0*IZSTOP)/(1.0*IZSTOP-2.0));
+      A2PAR = std::log10(SDW[IZSTOP]) - A1PAR * std::log10(1.0*(IZSTOP));
+      if(A2PAR>0.)A2PAR=-1.*A2PAR;
+      if(A1PAR>0.)A1PAR=-1.*A1PAR;
+
+//     End loop to calculate where gamma of IMF has the minimum
+
+      for(G4int II_ZIMF = IZSTOP;II_ZIMF<=IZIMFMAX;II_ZIMF++){
+       SDW[II_ZIMF] =  std::pow(10.0,A2PAR) * std::pow(1.0*II_ZIMF,A1PAR);  // Power-low
+       if(SDW[II_ZIMF]<0.0) SDW[II_ZIMF] = 0.0;
+      }
+
+      imfs15:
+
+//    Sum of all decay widths (for normalisation)
+      SUMDW_TOT = 0.0;
+      for(G4int I_ZIMF = 3;I_ZIMF<=IZIMFMAX;I_ZIMF++){
+        SUMDW_TOT = SUMDW_TOT + SDW[I_ZIMF];
+      }
+      if(SUMDW_TOT<=0.0){
+        std::cout << "*********************" << std::endl;
+        std::cout <<  "IMF function" << std::endl;
+        std::cout <<  "SUM of decay widths = " << SUMDW_TOT << " IZIMFMAX = " << IZIMFMAX << std::endl;
+        std::cout <<  "IZSTOP = " << IZSTOP << std::endl;
+      }
+
+//    End of Sum of all decay widths (for normalisation)
+  
+//    Loop to sample the nuclide that is emitted ********************
+//    ------- sample Z -----------
+      imfs10:
+      X = haz(1)*SUMDW_TOT;
+
+//      IF(X.EQ.0.D0) PRINT*,'WARNING: X=0',XRNDM,SUMDW_TOT
+      SUM_Z = 0.0;
+      fZIMF = 0.0;
+      IZMEM = 0;
+
+      for(G4int IZ = 3;IZ<=IZIMFMAX;IZ++){
+         SUM_Z = SUM_Z + SDW[IZ];
+         if(X<SUM_Z){
+            fZIMF = 1.0*IZ;
+            IZMEM = IZ;
+            goto imfs20;
+         }
+      }//for IZ
+
+      imfs20:
+
+//     ------- sample N -----------
+
+      isostab_lim(IZMEM,&INMINMEM,&INMAXMEM);
+      INMINMEM = max(1,INMINMEM-2);
+
+      isostab_lim(IZCN-IZMEM,&INMI,&INMA);  // Daughter nucleus after IMF emission,
+      INMI = max(1,INMI-2);
+                                            // limits of bound isotopes
+
+      INMINMEM = max(INMINMEM,INCN-INMA); // Both IMF and daughter must be bound
+      INMAXMEM = min(INMAXMEM,INCN-INMI); //   "
+
+      INMAXMEM = max(INMINMEM,INMAXMEM);
+
+      IA = 0;
+      SUMDW_N_TOT = 0.0;
+      for(G4int IIINIMF = INMINMEM;IIINIMF<=INMAXMEM;IIINIMF++){
+       IA = IZMEM + IIINIMF;
+       if(IZMEM>=3&&IZMEM<=95&&IA>=4&&IA<=250){
+        SUMDW_N_TOT = SUMDW_N_TOT + DW[IZMEM][IA];
+       }else{
+         std::cout << "CHARGE IMF OUT OF RANGE" << IZMEM << ", " << IA << ", " << idnint(ACN) << ", " << idnint(ZCN) << ", " << TEMP << std::endl;
+       }
+      }
+
+      XX = haz(1)*SUMDW_N_TOT;
+      IIA = 0;
+      SUM_A = 0.0;
+      for(G4int IINIMF = INMINMEM;IINIMF<=INMAXMEM; IINIMF++){
+        IIA = IZMEM + IINIMF;
+  //      SUM_A = SUM_A + DW[IZ][IIA]; //FIXME
+        SUM_A = SUM_A + DW[IZMEM][IIA];
+        if(XX<SUM_A){
+          fAIMF = G4double(IIA);
+          goto imfs25;
+        }
+      }
+
+      imfs25:
+//     CHECK POINT 1
+      NIMF = fAIMF - fZIMF;
+
+      if((ACN-ZCN-NIMF)<=0.0 || (ZCN-fZIMF) <= 0.0){
+       std::cout << "IMF Partner unstable:" << std::endl;
+       std::cout << "System: Acn,Zcn,NCN:" << std::endl;
+       std::cout << idnint(ACN) << ", " << idnint(ZCN) << ", " << idnint(ACN-ZCN) << std::endl;
+       std::cout << "IMF: A,Z,N:" << std::endl;
+       std::cout << idnint(fAIMF) << ", " << idnint(fZIMF) << ", " << idnint(fAIMF-fZIMF) << std::endl;
+       std::cout << "Partner: A,Z,N:" << std::endl;
+       std::cout << idnint(ACN-fAIMF) << ", " << idnint(ZCN-fZIMF) << ", " << idnint(ACN-ZCN-NIMF) << std::endl;
+        std::cout << "----nmin,nmax" << INMINMEM << ", " << INMAXMEM << std::endl;
+        std::cout << "----- warning: Zimf=" << fZIMF << " Aimf=" << fAIMF << std::endl;
+        std::cout << "----- look in subroutine IMF" << std::endl;
+        std::cout << "ACN,ZCN,ZIMF,AIMF,temp,EE,JPRF::" << ACN << ", " << ZCN << ", " << fZIMF << ", " << fAIMF << ", " << TEMP << ", " << EE << ", " << JPRF << std::endl;
+std::cout << "-IZSTOP,IZIMFMAX:" << IZSTOP << ", " << IZIMFMAX << std::endl;
+std::cout << "----X,SUM_Z,SUMDW_TOT:" << X << ", " << SUM_Z << ", " << SUMDW_TOT << std::endl;
+
+      goto imfs10;
+      }
+      if(fZIMF>=ZCN || fAIMF>=ACN || fZIMF<=2 || fAIMF<=3){
+        std::cout << "----nmin,nmax" << INMINMEM << ", " << INMAXMEM << std::endl;
+        std::cout << "----- warning: Zimf=" << fZIMF << " Aimf=" << fAIMF << std::endl;
+        std::cout << "----- look in subroutine IMF" << std::endl;
+        std::cout << "ACN,ZCN,ZIMF,AIMF,temp,EE,JPRF:" << ACN << ", " << ZCN << ", " << fZIMF << ", " << fAIMF << ", " << TEMP << ", " << EE << ", " << JPRF << std::endl;
+std::cout << "-IZSTOP,IZIMFMAX:" << IZSTOP << ", " << IZIMFMAX << std::endl;
+std::cout << "----X,SUM_Z,SUMDW_TOT:" << X << ", " << SUM_Z << ", " << SUMDW_TOT << std::endl;
+for(G4int III_ZIMF=3;III_ZIMF<=IZIMFMAX;III_ZIMF++)
+      std::cout << "-**Z,SDW:" << III_ZIMF << ", " << SDW[III_ZIMF] << std::endl;
+
+        fZIMF = 3.0;  // provisorisch AK
+        fAIMF = 4.0;
+      }
+
+// Characteristics of selected IMF (AIMF, ZIMF, BIMF, SBIMF, TIMF)
+      fSBIMF = SSBIMF[idnint(fZIMF)][idnint(fAIMF)];
+      fBIMF = BBIMF[idnint(fZIMF)][idnint(fAIMF)];
+
+      if((ZCN-fZIMF)<=0.0)std::cout << "CHARGE_IMF ZIMF > ZCN" << std::endl;
+      if((ACN-fAIMF)<=0.0)std::cout << "CHARGE_IMF AIMF > ACN" << std::endl;
+
+      BSHELL = ecld->ecgnz[idnint(ACN-ZCN-NIMF)][idnint(ZCN-fZIMF)] -ecld->vgsld[idnint(ACN-ZCN-NIMF)][idnint(ZCN-fZIMF)];
+
+      DEFBET = ecld->beta2[idnint(ACN-ZCN-NIMF)][idnint(ZCN-fZIMF)];
+      EEDAUG = (EE - fSBIMF) * (ACN - fAIMF) / ACN;
+      bsbkbc(ACN - fAIMF,ZCN-fZIMF,&BS,&BK,&BC);
+      densniv(ACN-fAIMF,ZCN-fZIMF,EEDAUG,0.0,&DENSIMF,BSHELL,BS,BK,&fTIMF,0,0,DEFBET,&ECOR,0.0,0,&QR);
+
+      if(fSBIMF>EE){
+        std::cout << "----- warning: EE=" << EE << "," << " S+Bimf=" << fSBIMF  << std::endl;
+        std::cout << "----- look in subroutine IMF" << std::endl;
+        std::cout << "IMF will be resampled" << std::endl;
+       goto imfs10;
+      }
+   (*ZIMF) = fZIMF;
+   (*AIMF) = fAIMF;
+   (*SBIMF) = fSBIMF;
+   (*BIMF) = fBIMF;
+   (*TIMF) = fTIMF;
+  return;
+}
+
+void G4Abla::isostab_lim(G4int z, G4int *nmin, G4int *nmax)
+{
+
+G4int VISOSTAB[191][2]={
+           {0 ,           7 },
+           {1 ,           8 },
+           {1 ,           9 },
+           {2 ,          12 },
+           {2 ,          14 },
+           {2 ,          16 },
+           {3 ,          18 },
+           {4 ,          22 },
+           {6 ,          22 },
+           {6 ,          28 },
+           {7 ,          28 },
+           {7 ,          30 },
+           {8 ,          28 },
+           {8 ,          36 },
+          {10 ,          38 },
+          {10 ,          40 },
+          {11 ,          38 },
+          {10 ,          42 },
+          {13 ,          50 },
+          {14 ,          50 },
+          {15 ,          52 },
+          {16 ,          52 },
+          {17 ,          54 },
+          {18 ,          54 },
+          {19 ,          60 },
+          {19 ,          62 },
+          {21 ,          64 },
+          {20 ,          66 },
+          {23 ,          66 },
+          {24 ,          70 },
+          {25 ,          70 },
+          {26 ,          74 },
+          {27 ,          78 },
+          {29 ,          82 },
+          {33 ,          82 },
+          {31 ,          82 },
+          {35 ,          82 },
+          {34 ,          84 },
+          {40 ,          84 },
+          {36 ,          86 },
+          {40 ,          92 },
+          {38 ,          96 },
+          {42 ,         102 },
+          {42 ,         102 },
+          {44 ,         102 },
+          {42 ,         106 },
+          {47 ,         112 },
+          {44 ,         114 },
+          {49 ,         116 },
+          {46 ,         118 },
+          {52 ,         120 },
+          {52 ,         124 },
+          {55 ,         126 },
+          {54 ,         126 },
+          {57 ,         126 },
+          {57 ,         126 },
+          {60 ,         126 },
+          {58 ,         130 },
+        {  62 ,         132 },
+        {  60 ,         140 },
+        {  67 ,         138 },
+        {  64 ,         142 },
+        {  67 ,         144 },
+        {  68 ,         146 },
+        {  70 ,         148 },
+        {  70 ,         152 },
+        {  73 ,         152 },
+        {  72 ,         154 },
+        {  75 ,         156 },
+        {  77 ,         162 },
+        {  79 ,         164 },
+        {  78 ,         164 },
+        {  82 ,         166 },
+        {  80 ,         166 },
+        {  85 ,         168 },
+        {  83 ,         176 },
+        {  87 ,         178 },
+        {  88 ,         178 },
+        {  91 ,         182 },
+        {  90 ,         184 },
+        {  96 ,         184 },
+        {  95 ,         184 },
+        {  99 ,         184 },
+        {  98 ,         184 },
+        { 105 ,         194 },
+        { 102 ,         194 },
+        { 108 ,         196 },
+        { 106 ,         198 },
+        { 115 ,         204 },
+        { 110 ,         206 },
+        { 119 ,         210 },
+        { 114 ,         210 },
+        { 124 ,         210 },
+        { 117 ,         212 },
+        { 130 ,         212 }
+        };
+
+      if (z<0){
+        *nmin = 0;
+        *nmax = 0;
+      }else{ 
+        if(z==0){
+         *nmin = 1;
+         *nmax = 1;
+// AK (Dez2010) - Just to avoid numerical problems
+        }else{ 
+         if(z>95){
+          *nmin = 130;
+          *nmax = 200;
+         }else{
+          *nmin = VISOSTAB[z-1][0];
+          *nmax = VISOSTAB[z-1][1];
+         }
+        }
+      }
+
+  return;
+}
+
+
+void G4Abla::evap_postsaddle(G4double A, G4double Z, G4double EXC, G4double *E_scission_post, G4double *A_scission, G4double *Z_scission,G4double &vx_eva,G4double &vy_eva,G4double &vz_eva){
+
+//  AK 2006 - Now in case of fission deexcitation between saddle and scission
+//            is explicitely calculated. Langevin calculations made by P. Nadtochy
+//            used to parametrise saddle-to-scission time
+
+  G4double af,zf,ee;
+  G4double epsiln = 0.0, probp = 0.0, probd = 0.0, probt = 0.0, probn = 0.0, probhe = 0.0, proba = 0.0, probg = 0.0, probimf=0.0, ptotl = 0.0, tcn = 0.0;  
+  G4double sn = 0.0, sbp = 0.0, sbd = 0.0, sbt = 0.0, sbhe = 0.0, sba = 0.0, x = 0.0, amoins = 0.0, zmoins = 0.0,sp= 0.0,sd= 0.0,st= 0.0,she= 0.0,sa= 0.0;
+  G4double ecn = 0.0, ecp = 0.0, ecd = 0.0, ect = 0.0,eche = 0.0,eca = 0.0, ecg = 0.0, bp = 0.0, bd = 0.0, bt = 0.0, bhe = 0.0, ba = 0.0;
+
+  G4double xcv=0.,ycv=0.,zcv=0.,VXOUT=0.,VYOUT=0.,VZOUT=0.;
+
+  G4double jprfn=0.0, jprfp=0.0, jprfd=0.0, jprft=0.0, jprfhe=0.0, jprfa=0.0;
+  G4double ctet1 = 0.0, stet1 = 0.0, phi1 = 0.0;
+  G4double rnd = 0.0;
+
+  G4int itest = 0, sortie=0;
+  G4double probf = 0.0;
+
+  G4double ef = 0.0;
+  G4double pc = 0.0;
+
+  G4double time,tauf,tau0,a0,a1,emin,ts1,tsum=0.;
+  G4int inttype=0,inum=0,gammadecay = 0;
+  G4double pleva = 0.0;
+  G4double pxeva = 0.0;
+  G4double pyeva = 0.0;
+  G4double pteva = 0.0;
+  G4double etot = 0.0;
+
+  const G4double c = 29.9792458;
+  const G4double mu = 931.494;
+  const G4double mu2 = 931.494*931.494;
+
+      vx_eva=0.;
+      vy_eva=0.;
+      vz_eva=0.;
+      IEV_TAB_SSC = 0;
+
+
+      af = dint(A);
+      zf = dint(Z);
+      ee = EXC;
+
+      fiss->ifis = 0;
+      opt->optimfallowed = 0;
+      gammaemission=0;
+// Initialsation
+      time = 0.0;
+ 
+// in sec
+      tau0 = 1.0e-21;
+      a0 = 0.66482503 - 3.4678935 * std::exp(-0.0104002*ee);
+      a1  = 5.6846e-04 + 0.00574515 * std::exp(-0.01114307*ee);
+      tauf = (a0 + a1 * zf*zf/std::pow(af,0.3333333)) * tau0;
+//
+      post10:
+      direct(zf,af,ee,0.,&probp,&probd,&probt,&probn,&probhe,&proba,&probg,&probimf,&probf,&ptotl,
+	 &sn,&sbp,&sbd,&sbt,&sbhe,&sba,
+         &ecn,&ecp,&ecd,&ect,&eche,&eca,&ecg,
+         &bp,&bd,&bt,&bhe,&ba,&sp,&sd,&st,&she,&sa,&ef,&ts1,inttype,inum,itest,&sortie,&tcn,
+         &jprfn, &jprfp, &jprfd, &jprft, &jprfhe, &jprfa, &tsum); //:::FIXME::: Call
+//
+// HERE THE FINAL STEPS OF THE EVAPORATION ARE CALCULATED
+//
+  if(ptotl<=0.)goto post100;
+
+  emin = dmin1(sba,sbhe,dmin1(sbt,sbhe,dmin1(sn,sbp,sbd)));
+
+  if(emin>1e30)std::cout << "ERROR AT THE EXIT OF EVAPORA,E>1.D30,AF" << std::endl;
+
+  if(sortie==1){
+   if (probn!=0.0) {
+    amoins = 1.0;
+    zmoins = 0.0;
+    epsiln = sn + ecn;
+    pc = std::sqrt(std::pow((1.0 + ecn/9.3956e2),2.) - 1.0) * 9.3956e2;
+    gammadecay = 0;
+   }
+   else if(probp!=0.0){
+    amoins = 1.0;
+    zmoins = 1.0;
+    epsiln = sp + ecp;
+    pc = std::sqrt(std::pow((1.0 + ecp/9.3827e2),2.) - 1.0) * 9.3827e2;
+    gammadecay = 0;
+   }
+   else if(probd!=0.0){
+    amoins = 2.0;
+    zmoins = 1.0;
+    epsiln = sd + ecd;
+    pc = std::sqrt(std::pow((1.0 + ecd/1.875358e3),2) - 1.0) * 1.875358e3;
+    gammadecay = 0;
+   }
+   else if(probt!=0.0){
+    amoins = 3.0;
+    zmoins = 1.0;
+    epsiln = st + ect;
+    pc = std::sqrt(std::pow((1.0 + ect/2.80828e3),2) - 1.0) * 2.80828e3;
+    gammadecay = 0;
+   }
+   else if(probhe!=0.0){
+    amoins = 3.0;
+    zmoins = 2.0;
+    epsiln = she + eche;
+    pc = std::sqrt(std::pow((1.0 + eche/2.80826e3),2) - 1.0) * 2.80826e3;
+    gammadecay = 0;
+   }
+   else{ if(proba!=0.0){
+    amoins = 4.0;
+    zmoins = 2.0;
+    epsiln = sa + eca;
+    pc = std::sqrt(std::pow((1.0 + eca/3.72834e3),2) - 1.0) * 3.72834e3;
+    gammadecay = 0;
+    }
+   }
+  goto post99;
+  }
+
+  //    IRNDM = IRNDM+1;
+//
+// HERE THE NORMAL EVAPORATION CASCADE STARTS
+// RANDOM NUMBER FOR THE EVAPORATION
+
+
+  // random number for the evaporation
+  x = G4AblaRandom::flat() * ptotl;
+
+  itest = 0;
+  if (x < proba) {
+    // alpha evaporation                                                     
+    amoins = 4.0;
+    zmoins = 2.0;
+    epsiln = sa + eca;
+    pc = std::sqrt(std::pow((1.0 + eca/3.72834e3),2) - 1.0) * 3.72834e3;
+    gammadecay = 0;
+  }  
+  else if (x < proba+probhe) {
+    // He3 evaporation                                                    
+    amoins = 3.0;
+    zmoins = 2.0;
+    epsiln = she + eche;
+    pc = std::sqrt(std::pow((1.0 + eche/2.80826e3),2) - 1.0) * 2.80826e3;
+    gammadecay = 0;
+  }
+  else if (x < proba+probhe+probt) {
+    // triton evaporation                                                    
+    amoins = 3.0;
+    zmoins = 1.0;
+    epsiln = st + ect;
+    pc = std::sqrt(std::pow((1.0 + ect/2.80828e3),2) - 1.0) * 2.80828e3;
+    gammadecay = 0;
+  }
+  else if (x < proba+probhe+probt+probd) {
+    // deuteron evaporation                                                    
+    amoins = 2.0;
+    zmoins = 1.0;
+    epsiln = sd + ecd;
+    pc = std::sqrt(std::pow((1.0 + ecd/1.875358e3),2) - 1.0) * 1.875358e3;
+    gammadecay = 0;
+  }
+  else if (x < proba+probhe+probt+probd+probp) {
+    // proton evaporation                                                    
+    amoins = 1.0;
+    zmoins = 1.0;
+    epsiln = sp + ecp;
+    pc = std::sqrt(std::pow((1.0 + ecp/9.3827e2),2) - 1.0) * 9.3827e2;
+    gammadecay = 0;
+  }
+  else if (x < proba+probhe+probt+probd+probp+probn) {
+    // neutron evaporation                                                   
+    amoins = 1.0;
+    zmoins = 0.0;
+    epsiln = sn + ecn;
+    pc = std::sqrt(std::pow((1.0 + ecn/9.3956e2),2.) - 1.0) * 9.3956e2;
+    gammadecay = 0;
+  }
+  else if (x < proba+probhe+probt+probd+probp+probn+probg) {
+    // gamma evaporation                                                    
+    amoins = 0.0;
+    zmoins = 0.0;
+    epsiln = ecg;
+    pc = ecg;
+    gammadecay = 1;
+    if(probp==0.0 && probn==0.0 && probd==0.0 && probt==0.0 && proba==0.0 && probhe==0.0 && probimf==0.0 && probf==0.0){
+    //ee = ee-epsiln;
+    //if(ee<=0.01) ee = 0.010;
+    goto post100;
+    }
+  }
+
+// CALCULATION OF THE DAUGHTER NUCLEUS
+//
+      post99:
+
+      if(gammadecay==1 && ee<=0.01+epsiln){
+       epsiln = ee-0.01;
+       time = tauf + 1.;
+      }
+
+      af = af-amoins;
+      zf = zf-zmoins;
+      ee = ee-epsiln;
+
+      if(ee<=0.01) ee = 0.010;
+
+      if(af<2.5) goto post100;
+
+      time = time + ts1;
+
+// Determination of x,y,z components of momentum from known emission momentum
+        EV_TAB_SSC[IEV_TAB_SSC][0] = zmoins;
+        EV_TAB_SSC[IEV_TAB_SSC][1] = amoins;
+        rnd = G4AblaRandom::flat();
+        ctet1 = 2.0*rnd - 1.0;           // z component: uniform probability between -1 and 1
+        stet1 = std::sqrt(1.0 - std::pow(ctet1,2));// component perpendicular to z
+        rnd = G4AblaRandom::flat();
+        phi1 = rnd*2.0*3.141592654;   // angle in x-y plane: uniform probability between 0 and 2*pi
+        xcv = stet1*std::cos(phi1);   // x component
+        ycv = stet1*std::sin(phi1);   // y component
+        zcv = ctet1;                  // z component
+// In the CM system
+        if(gammadecay==0){
+// Light particle
+           G4double ETOT_LP = std::sqrt(pc*pc + amoins*amoins * mu2);
+           EV_TAB_SSC[IEV_TAB_SSC][2] = c * pc * xcv / ETOT_LP;
+           EV_TAB_SSC[IEV_TAB_SSC][3] = c * pc * ycv / ETOT_LP;
+           EV_TAB_SSC[IEV_TAB_SSC][4] = c * pc * zcv / ETOT_LP;
+        }else{
+// gamma ray
+           EV_TAB_SSC[IEV_TAB_SSC][2] = pc * xcv;
+           EV_TAB_SSC[IEV_TAB_SSC][3] = pc * ycv;
+           EV_TAB_SSC[IEV_TAB_SSC][4] = pc * zcv;
+        }
+        lorentz_boost(vx_eva,vy_eva,vz_eva,
+            EV_TAB_SSC[IEV_TAB_SSC][2],EV_TAB_SSC[IEV_TAB_SSC][3],
+            EV_TAB_SSC[IEV_TAB_SSC][4],
+            &VXOUT,&VYOUT,&VZOUT);
+        EV_TAB_SSC[IEV_TAB_SSC][2] = VXOUT;
+        EV_TAB_SSC[IEV_TAB_SSC][3] = VYOUT;
+        EV_TAB_SSC[IEV_TAB_SSC][4] = VZOUT;
+
+// Heavy residue
+        if(gammadecay==0){
+        G4double v2 = std::pow(EV_TAB_SSC[IEV_TAB_SSC][2],2.) +
+             std::pow(EV_TAB_SSC[IEV_TAB_SSC][3],2.) +
+             std::pow(EV_TAB_SSC[IEV_TAB_SSC][4],2.);
+        G4double gamma = 1.0/std::sqrt(1.0 - v2 / (c*c));
+        G4double etot_lp = amoins*mu * gamma;
+        pxeva = pxeva - EV_TAB_SSC[IEV_TAB_SSC][2] * etot_lp / c;
+        pyeva = pyeva - EV_TAB_SSC[IEV_TAB_SSC][3] * etot_lp / c;
+        pleva = pleva - EV_TAB_SSC[IEV_TAB_SSC][4] * etot_lp / c;
+        }else{
+// in case of gammas, EV_TEMP contains momentum components and not velocity
+        pxeva = pxeva - EV_TAB_SSC[IEV_TAB_SSC][2];
+        pyeva = pyeva - EV_TAB_SSC[IEV_TAB_SSC][3];
+        pleva = pleva - EV_TAB_SSC[IEV_TAB_SSC][4];
+        }
+        pteva = std::sqrt(pxeva*pxeva + pyeva*pyeva);
+// To be checked:
+        etot = std::sqrt ( pleva*pleva + pteva*pteva + af*af * mu2 );
+        vx_eva = c * pxeva / etot;  // recoil velocity components of residue due to evaporation
+        vy_eva = c * pyeva / etot;
+        vz_eva = c * pleva / etot;
+
+        IEV_TAB_SSC = IEV_TAB_SSC +1;
+
+      if(time<tauf)goto post10;
+//
+     post100:
+//
+      *A_scission= af;
+      *Z_scission= zf;
+      *E_scission_post = ee;
+
+ return;
+}
+
+
+
+void G4Abla::unbound(G4double SN,G4double SP,G4double  SD,G4double ST,G4double SHE,G4double SA,G4double BP,G4double BD,G4double BT,G4double BHE,G4double BA,G4double *PROBF,G4double *PROBN,G4double *PROBP,G4double *PROBD,G4double *PROBT,G4double *PROBHE,G4double *PROBA,G4double *PROBIMF,G4double *PROBG,G4double *ECN,G4double *ECP,G4double *ECD,G4double *ECT,G4double *ECHE,G4double *ECA)
+{
+ G4double SBP = SP + BP;
+ G4double SBD = SD + BD;
+ G4double SBT = ST + BT;
+ G4double SBHE = SHE + BHE;
+ G4double SBA = SA + BA;
+
+ G4double e = dmin1(SBP,SBD,SBT);
+        e = dmin1(SBHE,SN,e);
+        e = dmin1(SBHE,SBA,e);
+//
+ if(SN==e){
+     *ECN = (-1.0)*SN;
+     *ECP = 0.0;
+     *ECD = 0.0;
+     *ECT = 0.0;
+     *ECHE = 0.0;
+     *ECA = 0.0;
+     *PROBN = 1.0;
+     *PROBP = 0.0;
+     *PROBD = 0.0;
+     *PROBT = 0.0;
+     *PROBHE = 0.0;
+     *PROBA = 0.0;
+     *PROBIMF = 0.0;
+     *PROBF = 0.0;
+     *PROBG = 0.0;
+ }
+ else if(SBP==e){
+     *ECN = 0.0;
+     *ECP = (-1.0)*SP + BP;
+     *ECD = 0.0;
+     *ECT = 0.0;
+     *ECHE = 0.0;
+     *ECA = 0.0;
+     *PROBN = 0.0;
+     *PROBP = 1.0;
+     *PROBD = 0.0;
+     *PROBT = 0.0;
+     *PROBHE = 0.0;
+     *PROBA = 0.0;
+     *PROBIMF = 0.0;
+     *PROBF = 0.0;
+     *PROBG = 0.0;
+ }
+ else if(SBD==e){
+     *ECN = 0.0;
+     *ECD = (-1.0)*SD + BD;
+     *ECP = 0.0;
+     *ECT = 0.0;
+     *ECHE = 0.0;
+     *ECA = 0.0;
+     *PROBN = 0.0;
+     *PROBP = 0.0;
+     *PROBD = 1.0;
+     *PROBT = 0.0;
+     *PROBHE = 0.0;
+     *PROBA = 0.0;
+     *PROBIMF = 0.0;
+     *PROBF = 0.0;
+     *PROBG = 0.0;
+ }
+ else if(SBT==e){
+     *ECN = 0.0;
+     *ECT = (-1.0)*ST + BT;
+     *ECD = 0.0;
+     *ECP = 0.0;
+     *ECHE = 0.0;
+     *ECA = 0.0;
+     *PROBN = 0.0;
+     *PROBP = 0.0;
+     *PROBD = 0.0;
+     *PROBT = 1.0;
+     *PROBHE = 0.0;
+     *PROBA = 0.0;
+     *PROBIMF = 0.0;
+     *PROBF = 0.0;
+     *PROBG = 0.0;
+ }
+ else if(SBHE==e){
+     *ECN = 0.0;
+     *ECHE= (-1.0)*SHE + BHE;
+     *ECD = 0.0;
+     *ECT = 0.0;
+     *ECP = 0.0;
+     *ECA = 0.0;
+     *PROBN = 0.0;
+     *PROBP = 0.0;
+     *PROBD = 0.0;
+     *PROBT = 0.0;
+     *PROBHE = 1.0;
+     *PROBA = 0.0;
+     *PROBIMF = 0.0;
+     *PROBF = 0.0;
+     *PROBG = 0.0;
+ }
+ else{ 
+    if(SBA==e){
+     *ECN = 0.0;
+     *ECA = (-1.0)*SA + BA;
+     *ECD = 0.0;
+     *ECT = 0.0;
+     *ECHE = 0.0;
+     *ECP = 0.0;
+     *PROBN = 0.0;
+     *PROBP = 0.0;
+     *PROBD = 0.0;
+     *PROBT = 0.0;
+     *PROBHE = 0.0;
+     *PROBA = 1.0;
+     *PROBIMF = 0.0;
+     *PROBF = 0.0;
+     *PROBG = 0.0;
+    }
+ }
+
+ return;
+}
+
+void G4Abla::fissionDistri(G4double &A,G4double &Z,G4double &E,
+		           G4double &a1,G4double &z1,G4double &e1,G4double &v1,
+		           G4double &a2,G4double &z2,G4double &e2,G4double &v2,
+                           G4double &vx_eva_sc,G4double &vy_eva_sc,G4double &vz_eva_sc)
+{
+/*
+  Last update:
+
+  21/01/17 - J.L.R.S. - Implementation of this fission model in C++
+
+
+  Authors: K.-H. Schmidt, A. Kelic, M. V. Ricciardi,J. Benlliure, and 
+           J.L.Rodriguez-Sanchez(1995 - 2017)
+
+  On input: A, Z, E (mass, atomic number and exc. energy of compound nucleus
+                     before fission)
+  On output: Ai, Zi, Ei (mass, atomic number and (absolute) exc. energy of
+                         fragment 1 and 2 after fission)
+
+*/
+  /* This program calculates isotopic distributions of fission fragments    */
+  /* with a semiempirical model                                             */
+  /* The width and eventually a shift in N/Z (polarization) follows the     */
+  /* following rules:                                                       */
+  /*                                                                        */
+  /* The line N/Z following UCD has an angle of atan(Zcn/Ncn)               */
+  /* to the horizontal axis on a chart of nuclides.                         */
+/*   (For 238U the angle is 32.2 deg.)                                      */
+/*                                                                        */
+/*   The following relations hold: (from Armbruster)
+c
+c    sigma(N) (A=const) = sigma(Z) (A=const)
+c    sigma(A) (N=const) = sigma(Z) (N=const)
+c    sigma(A) (Z=const) = sigma(N) (Z=const)
+c
+c   From this we get:
+c    sigma(Z) (N=const) * N = sigma(N) (Z=const) * Z
+c    sigma(A) (Z=const) = sigma(Z) (A=const) * A/Z
+c    sigma(N) (Z=const) = sigma(Z) (A=const) * A/Z
+c    Z*sigma(N) (Z=const) = N*sigma(Z) (N=const) = A*sigma(Z) (A=const)     */
+//
+
+/*   Model parameters: 
+C     These parameters have been adjusted to the compound nucleus 238U.
+c     For the fission of another compound nucleus, it might be
+c     necessary to slightly adjust some parameter values.
+c     The most important ones are
+C      Delta_U1_shell_max and
+c      Delta_u2_shell.
+*/
+      G4double Nheavy1_in;   //  'position of shell for Standard 1'
+      Nheavy1_in = 83.0;
+
+      G4double Zheavy1_in;   //  'position of shell for Standard 1'
+      Zheavy1_in = 50.0;
+
+      G4double Nheavy2;   //  'position of heavy peak valley 2'
+      Nheavy2 = 89.0;
+
+      G4double Delta_U1_shell_max;  //  'Shell effect for valley 1'
+      Delta_U1_shell_max = -2.45;
+
+      G4double U1NZ_SLOPE;  // Reduction of shell effect with distance to 132Sn
+      U1NZ_SLOPE = 0.2;
+
+      G4double Delta_U2_shell;  //  'Shell effect for valley 2'
+      Delta_U2_shell = -2.45;
+
+      G4double X_s2s;   //  'Ratio (C_sad/C_scis) of curvature of potential'
+      X_s2s = 0.8;
+
+      G4double hbom1,hbom2,hbom3;   //  'Curvature of potential at saddle'
+      hbom1 = 0.2;  // hbom1 is hbar * omega1 / (2 pi) !!!
+      hbom2 = 0.2;  // hbom2 is hbar * omega2 / (2 pi) !!!
+      hbom3 = 0.2;  // hbom3 is hbar * omega3 / (2 pi) !!!
+
+      G4double Fwidth_asymm1,Fwidth_asymm2,Fwidth_symm;
+//         'Factors for widths of distr. valley 1 and 2'
+      Fwidth_asymm1 = 0.65;
+      Fwidth_asymm2 = 0.65;
+      Fwidth_symm   = 1.16;
+
+      G4double xLevdens;   // 'Parameter x: a = A/x'
+      xLevdens = 10.75;
+//     The value of 1/0.093 = 10.75 is consistent with the
+//     systematics of the mass widths of Ref. (RuI97).
+
+      G4double FGAMMA; // 'Factor to gamma'
+      FGAMMA = 1.;  // Theoretical expectation, not adjusted to data.
+//     Additional factor to attenuation coefficient of shell effects
+//     with increasing excitation energy
+
+      G4double FGAMMA1; // 'Factor to gamma_heavy1'
+      FGAMMA1 = 2.;
+//     Adjusted to reduce the weight of Standard 1 with increasing
+//     excitation energies, as required by experimental data.
+
+      G4double FREDSHELL;
+      FREDSHELL = 0.;
+//     Adjusted to the reduced attenuation of shells in the superfluid region.
+//     If FGAMMA is modified,
+//     FGAMMA * FREADSHELL should remain constant (0.65) to keep
+//     the attenuation of the shell effects below the critical
+//     pairing energy ECRIT unchanged, which has been carefully
+//     adjusted to the mass yields of Vives and Zoeller in this
+//     energy range. A high value of FGAMMA leads ot a stronger
+//     attenuation of shell effects above the superfluid region.
+
+      G4double Ecrit;
+      Ecrit = 5.;
+//     The value of ECRIT determines the transition from a weak
+//     decrease of the shell effect below ECRIT to a stronger
+//     decrease above the superfluid range.
+      const G4double d = 2.0;   // 'Surface distance of scission configuration'
+     // d = 2.0;
+//    Charge polarisation from Wagemanns p. 397: 
+      G4double cpol1; // Charge polarisation standard I
+      cpol1 = 0.35;  // calculated internally with shells
+      G4double cpol2;  // Charge polarisation standard II
+      cpol2 = 0.;  // calculated internally from LDM
+      G4double Friction_factor;
+      Friction_factor = 1.0;
+      G4double Nheavy1;    // position of valley St 1 in Z and N
+      G4double Delta_U1,Delta_U2; // used shell effects
+      G4double cN_asymm1_shell, cN_asymm2_shell;
+      G4double gamma,gamma_heavy1,gamma_heavy2; // fading of shells
+      G4double E_saddle_scission;  // friction from saddle to scission
+      G4double Ysymm=0.;    // Yield of symmetric mode
+      G4double Yasymm1=0.;  // Yield of asymmetric mode 1
+      G4double Yasymm2=0.;  // Yield of asymmetric mode 2
+      G4double Nheavy1_eff; // Effective position of valley 1
+      G4double Nheavy2_eff; // Effective position of valley 2
+      G4double eexc1_saddle; // Excitation energy above saddle 1
+      G4double eexc2_saddle; // Excitation energy above saddle 2
+      G4double EEXC_MAX;  // Excitation energy above lowest saddle
+      G4double r_e_o;  // Even-odd effect in Z
+      G4double cN_symm;  // Curvature of symmetric valley
+      G4double CZ;  // Curvature of Z distribution for fixed A
+      G4double Nheavy2_NZ;  // Position of Shell 2, combined N and Z
+      G4double N;
+      G4double Aheavy1,Aheavy2;
+      G4double Sasymm1=0.,Sasymm2=0.,Ssymm=0.,Ysum=0.,Yasymm=0.;
+      G4double Ssymm_mode1,Ssymm_mode2;
+      G4double wNasymm1_saddle, wNasymm2_saddle, wNsymm_saddle;
+      G4double wNasymm2_scission, wNsymm_scission;
+      G4double wNasymm1, wNasymm2, wNsymm;
+      G4int imode;
+      G4double  rmode;
+      G4double ZA1width;
+      G4double N1r,N2r,A1r,N1,N2;
+      G4double Zsymm,Nsymm;
+      G4double N1mean, N1width;
+      G4double dUeff;
+      /* effective shell effect at lowest barrier */
+      G4double Eld;
+      /* Excitation energy with respect to ld barrier */
+      G4double re1,re2,re3;
+      G4double eps1,eps2;
+      G4double Z1UCD,Z2UCD;
+      G4double beta,beta1,beta2;
+     // G4double betacomplement;
+      G4double DN1_POL;
+      /* shift of most probable neutron number for given Z,
+            according to polarization */
+      G4int i_help;
+      G4double A_levdens;
+            /* level-density parameter */
+     // G4double A_levdens_light1,A_levdens_light2;
+      G4double A_levdens_heavy1,A_levdens_heavy2;
+
+      G4double R0=1.16;
+
+      G4double epsilon_1_saddle,epsilon0_1_saddle;
+      G4double epsilon_2_saddle,epsilon0_2_saddle,epsilon_symm_saddle;
+      G4double epsilon_1_scission;//,epsilon0_1_scission;
+      G4double epsilon_2_scission;//,epsilon0_2_scission;
+      G4double epsilon_symm_scission;
+                                    /* modified energy */
+      G4double E_eff1_saddle,E_eff2_saddle;
+      G4double Epot0_mode1_saddle,Epot0_mode2_saddle,Epot0_symm_saddle;
+      G4double Epot_mode1_saddle,Epot_mode2_saddle,Epot_symm_saddle;
+      G4double E_defo,E_defo1,E_defo2,E_scission_pre,E_scission_post;
+      G4double E_asym;
+      G4double E1exc,E2exc;
+      G4double E1exc_sigma,E2exc_sigma;
+      G4double TKER;
+      G4double EkinR1,EkinR2;
+      G4double MassCurv_scis, MassCurv_sadd;
+      G4double cN_symm_sadd;
+      G4double Nheavy1_shell,Nheavy2_shell;
+      G4double wNasymm1_scission;
+      G4double Aheavy1_eff,Aheavy2_eff;
+      G4double Z1rr,Z1r;
+      G4double E_HELP;
+      G4double Z_scission,N_scission,A_scission;
+      G4double Z2_over_A_eff;
+      G4double beta1gs,beta2gs,betags;
+      G4double sigZmin;   // 'Minimum neutron width for constant Z'
+      G4double DSN132,Delta_U1_shell,E_eff0_saddle;//,e_scission;
+      //
+      sigZmin = 0.5;
+      N = A - Z;  /*  neutron number of the fissioning nucleus  */
+//
+      cN_asymm1_shell = 0.700 * N/Z;
+      cN_asymm2_shell = 0.040 * N/Z;
+
+//*********************************************************************
+
+      DSN132 = Nheavy1_in - N/Z * Zheavy1_in;
+      Aheavy1 = Nheavy1_in + Zheavy1_in + 0.340 * DSN132;
+     /* Neutron number of valley Standard 1 */
+     /* It is assumed that the 82-neutron shell effect is stronger than
+c         the 50-proton shell effect. Therefore, the deviation in N/Z of
+c         the fissioning nucleus from the N/Z of 132Sn will
+c         change the position of the combined shell in mass. For neutron-
+c         deficient fissioning nuclei, the mass will increase and vice
+c         versa.  */
+
+      Delta_U1_shell = Delta_U1_shell_max + U1NZ_SLOPE * std::abs(DSN132);
+      Delta_U1_shell = min(0.,Delta_U1_shell);
+      /* Empirical reduction of shell effect with distance in N/Z of CN to 132Sn */
+      /* Fits (239U,n)f and 226Th e.-m.-induced fission */
+
+      Nheavy1 = N/A * Aheavy1;   /* UCD */
+      Aheavy2 = Nheavy2 * A/N;
+
+      Zsymm  = Z / 2.0; /* proton number in symmetric fission (centre) */
+      Nsymm  = N / 2.0;
+      A_levdens = A / xLevdens;
+      gamma = A_levdens / (0.40 * std::pow(A,1.3333)) * FGAMMA;
+      A_levdens_heavy1 = Aheavy1 / xLevdens;
+      gamma_heavy1 = A_levdens_heavy1 / (0.40 * std::pow(Aheavy1,1.3333)) * FGAMMA * FGAMMA1;
+      A_levdens_heavy2 = Aheavy2 / xLevdens;
+      gamma_heavy2 = A_levdens_heavy2 / (0.40 * std::pow(Aheavy2,1.3333)) * FGAMMA;
+
+//     Energy dissipated from saddle to scission
+//     F. Rejmund et al., Nucl. Phys. A 678 (2000) 215, fig. 4 b    */
+      E_saddle_scission = (-24. + 0.02227 * Z*Z/std::pow(A,0.33333))*Friction_factor;
+      E_saddle_scission = max( 0.0, E_saddle_scission );
+
+//     Fit to experimental result on curvature of potential at saddle
+//     Parametrization of T. Enqvist according to Mulgin et al. 1998
+//     MassCurv taken at scission.    */
+
+       Z2_over_A_eff = Z*Z/A;
+
+      if( Z2_over_A_eff< 34.0 )
+        MassCurv_scis = std::pow(10., -1.093364 + 0.082933 * Z2_over_A_eff - 0.0002602 * Z2_over_A_eff*Z2_over_A_eff);
+      else
+        MassCurv_scis = std::pow(10., 3.053536 - 0.056477 * Z2_over_A_eff+ 0.0002454 * Z2_over_A_eff*Z2_over_A_eff );
+
+//     to do:
+//     fix the X with the channel intensities of 226Th (KHS at SEYSSINS,1998)
+//     replace then (all) cN_symm by cN_symm_saddle (at least for Yields)
+      MassCurv_sadd = X_s2s * MassCurv_scis;
+
+      cN_symm      = 8.0 / std::pow(N,2.) * MassCurv_scis;
+      cN_symm_sadd = 8.0 / std::pow(N,2.) * MassCurv_sadd;
+
+      Nheavy1_shell = Nheavy1;
+
+      if(E < 100.0)
+      Nheavy1_eff = (cN_symm_sadd*Nsymm + cN_asymm1_shell * 
+                     Uwash(E/A*Aheavy1,Ecrit,FREDSHELL,gamma_heavy1) *
+                     Nheavy1_shell)
+                     / (cN_symm_sadd +
+                       cN_asymm1_shell *
+                     Uwash(E/A*Aheavy1,Ecrit,FREDSHELL,gamma_heavy1));
+      else
+      Nheavy1_eff = (cN_symm_sadd*Nsymm +
+                    cN_asymm1_shell*Nheavy1_shell)
+                  / (cN_symm_sadd +
+                    cN_asymm1_shell);
+      
+      /* Position of Standard II defined by neutron shell */
+      Nheavy2_NZ = Nheavy2;
+      Nheavy2_shell = Nheavy2_NZ;
+      if (E < 100.)
+      Nheavy2_eff = (cN_symm_sadd*Nsymm +
+                    cN_asymm2_shell*
+                    Uwash(E/A*Aheavy2,Ecrit,FREDSHELL,gamma_heavy2) *
+                    Nheavy2_shell)
+                  / (cN_symm_sadd +
+                    cN_asymm2_shell*
+                    Uwash(E/A*Aheavy2,Ecrit,FREDSHELL,gamma_heavy2));
+      else
+      Nheavy2_eff = (cN_symm_sadd*Nsymm +
+                    cN_asymm2_shell*Nheavy2_shell)
+                  / (cN_symm_sadd +
+                    cN_asymm2_shell);
+     
+      Delta_U1 = Delta_U1_shell + (Nheavy1_shell - Nheavy1_eff)*(Nheavy1_shell - Nheavy1_eff) * cN_asymm1_shell; /* shell effect in valley of mode 1 */
+      Delta_U1 = min(Delta_U1,0.0);
+      Delta_U2 = Delta_U2_shell + (Nheavy2_shell - Nheavy2_eff)*(Nheavy2_shell - Nheavy2_eff) * cN_asymm2_shell; /* shell effect in valley of mode 2 */
+      Delta_U2 = min(Delta_U2,0.0);
+
+//    liquid drop energies at the centres of the different shell effects
+//    with respect to liquid drop at symmetry
+      Epot0_mode1_saddle = (Nheavy1_eff-Nsymm)*(Nheavy1_eff-Nsymm) * cN_symm_sadd;
+      Epot0_mode2_saddle = (Nheavy2_eff-Nsymm)*(Nheavy2_eff-Nsymm) * cN_symm_sadd;
+      Epot0_symm_saddle = 0.0;
+
+//    energies including shell effects at the centres of the different
+//    shell effects with respect to liquid drop at symmetry  */
+      Epot_mode1_saddle = Epot0_mode1_saddle + Delta_U1;
+      Epot_mode2_saddle = Epot0_mode2_saddle + Delta_U2;
+      Epot_symm_saddle = Epot0_symm_saddle;
+
+//    minimum of potential with respect to ld potential at symmetry
+      dUeff = min( Epot_mode1_saddle, Epot_mode2_saddle);
+      dUeff = min( dUeff, Epot_symm_saddle);
+      dUeff = dUeff - Epot_symm_saddle;
+
+      Eld = E + dUeff;
+//     E   = energy above lowest effective barrier
+//     Eld = energy above liquid-drop barrier
+//     Due to this treatment the energy E on input means the excitation
+//     energy above the lowest saddle.                                  */
+
+//    excitation energies at saddle modes 1 and 2 without shell effect  */
+      epsilon0_1_saddle = Eld - Epot0_mode1_saddle;
+      epsilon0_2_saddle = Eld - Epot0_mode2_saddle;
+
+//    excitation energies at saddle modes 1 and 2 with shell effect */
+      epsilon_1_saddle = Eld - Epot_mode1_saddle;
+      epsilon_2_saddle = Eld - Epot_mode2_saddle;
+
+      epsilon_symm_saddle = Eld - Epot_symm_saddle;
+//    epsilon_symm_saddle = Eld - dUeff;
+
+      eexc1_saddle = epsilon_1_saddle;
+      eexc2_saddle = epsilon_2_saddle;
+
+//    EEXC_MAX is energy above the lowest saddle */
+      EEXC_MAX = max( eexc1_saddle, eexc2_saddle);
+      EEXC_MAX = max( EEXC_MAX, Eld);
+
+//    excitation energy at scission */
+      epsilon_1_scission = Eld + E_saddle_scission - Epot_mode1_saddle;
+      epsilon_2_scission = Eld + E_saddle_scission - Epot_mode2_saddle;
+
+//    excitation energy of symmetric fragment at scission  */
+      epsilon_symm_scission = Eld + E_saddle_scission - Epot_symm_saddle;
+
+//    calculate widhts at the saddle
+      E_eff1_saddle = epsilon0_1_saddle - Delta_U1 *
+      Uwash(epsilon_1_saddle/A*Aheavy1,Ecrit,FREDSHELL,gamma_heavy1);
+
+      if( E_eff1_saddle < A_levdens * hbom1*hbom1)
+          E_eff1_saddle = A_levdens * hbom1*hbom1;
+      
+      wNasymm1_saddle =
+        std::sqrt(0.50 * std::sqrt(1.0/A_levdens*E_eff1_saddle) /
+        (cN_asymm1_shell *
+      Uwash(epsilon_1_saddle/A*Aheavy1,Ecrit,FREDSHELL,gamma_heavy1)+
+        cN_symm_sadd));
+
+      E_eff2_saddle = epsilon0_2_saddle -
+      Delta_U2 *
+      Uwash(epsilon_2_saddle/A*Aheavy2,Ecrit,FREDSHELL,gamma_heavy2);
+
+      if(E_eff2_saddle < A_levdens * hbom2*hbom2)
+          E_eff2_saddle = A_levdens * hbom2*hbom2;
+      
+      wNasymm2_saddle =
+        std::sqrt(0.50 * std::sqrt(1.0/A_levdens*E_eff2_saddle) /
+        (cN_asymm2_shell *
+       Uwash(epsilon_2_saddle/A*Aheavy2,Ecrit,FREDSHELL,gamma_heavy2)+
+        cN_symm_sadd));
+
+      E_eff0_saddle = epsilon_symm_saddle;
+      if(E_eff0_saddle < A_levdens * hbom3*hbom3)
+          E_eff0_saddle = A_levdens * hbom3*hbom3;
+      
+      wNsymm_saddle =
+          std::sqrt(0.50 * std::sqrt(1.0/A_levdens*E_eff0_saddle) /
+                    cN_symm_sadd);
+
+      if(epsilon_symm_scission > 0.0 ){
+        E_HELP = max(E_saddle_scission,epsilon_symm_scission);
+        wNsymm_scission =
+        std::sqrt(0.50 * std::sqrt(1.0/A_levdens*(E_HELP)) /
+                    cN_symm);
+      }else{
+        wNsymm_scission =
+        std::sqrt(0.50 * std::sqrt(1.0/A_levdens*E_saddle_scission) /
+                    cN_symm);
+      }
+
+//    Calculate widhts at the scission point: 
+//    fits of ref. Beizin 1991 (Plots by Sergei Zhdanov) 
+
+      if( E_saddle_scission == 0.0 ){
+        wNasymm1_scission = wNasymm1_saddle;
+        wNasymm2_scission = wNasymm2_saddle;
+      }else{
+        if( Nheavy1_eff > 75.0 ){
+          wNasymm1_scission = std::sqrt(21.0)*N/A;
+          wNasymm2_scission = max( 12.8 - 1.0 *(92.0 - Nheavy2_eff),1.0)*N/A;
+
+        }else{
+           wNasymm1_scission = wNasymm1_saddle;
+           wNasymm2_scission = wNasymm2_saddle;
+        }
+      }
+
+      wNasymm1_scission = max( wNasymm1_scission, wNasymm1_saddle );
+      wNasymm2_scission = max( wNasymm2_scission, wNasymm2_saddle );
+
+      wNasymm1 = wNasymm1_scission * Fwidth_asymm1;
+      wNasymm2 = wNasymm2_scission * Fwidth_asymm2;
+      wNsymm   = wNsymm_scission * Fwidth_symm;
+
+//     mass and charge of fragments using UCD, needed for level densities
+      Aheavy1_eff = Nheavy1_eff * A/N;
+      Aheavy2_eff = Nheavy2_eff * A/N;
+
+      A_levdens_heavy1 = Aheavy1_eff / xLevdens;
+      A_levdens_heavy2 = Aheavy2_eff / xLevdens;
+      gamma_heavy1 = A_levdens_heavy1 / (0.40 * std::pow(Aheavy1_eff,1.3333)) * FGAMMA * FGAMMA1;
+      gamma_heavy2 = A_levdens_heavy2 / (0.40 * std::pow(Aheavy2_eff,1.3333)) * FGAMMA;
+
+      if( epsilon_symm_saddle < A_levdens * hbom3*hbom3)
+        Ssymm = 2.0 * std::sqrt(A_levdens*A_levdens * hbom3*hbom3) +
+        (epsilon_symm_saddle - A_levdens * hbom3*hbom3)/hbom3;
+      else
+        Ssymm = 2.0 * std::sqrt(A_levdens*epsilon_symm_saddle);
+      
+      Ysymm = 1.0;
+
+      if( epsilon0_1_saddle < A_levdens * hbom1*hbom1 )
+        Ssymm_mode1 = 2.0 * std::sqrt(A_levdens*A_levdens * hbom1*hbom1) +
+             (epsilon0_1_saddle - A_levdens * hbom1*hbom1)/hbom1;
+      else
+        Ssymm_mode1 = 2.0 * std::sqrt( A_levdens*epsilon0_1_saddle );
+
+      if( epsilon0_2_saddle < A_levdens * hbom2*hbom2 )
+        Ssymm_mode2 = 2.0 * std::sqrt(A_levdens*A_levdens * hbom2*hbom2) +
+             (epsilon0_2_saddle - A_levdens * hbom2*hbom2)/hbom2;
+      else
+        Ssymm_mode2 = 2.0 * std::sqrt(A_levdens*epsilon0_2_saddle);
+
+
+      if( epsilon0_1_saddle -
+         Delta_U1*
+       Uwash(epsilon_1_saddle/A*Aheavy1,Ecrit,FREDSHELL,gamma_heavy1)
+           < A_levdens * hbom1*hbom1 )
+        Sasymm1 = 2.0 * std::sqrt( A_levdens*A_levdens * hbom1*hbom1 ) +
+         (epsilon0_1_saddle - Delta_U1 *
+       Uwash(epsilon_1_saddle/A*Aheavy1,Ecrit,FREDSHELL,gamma_heavy1)
+         - A_levdens * hbom1*hbom1)/hbom1;
+      else
+        Sasymm1 = 2.0 *std::sqrt( A_levdens*(epsilon0_1_saddle - Delta_U1 *
+        Uwash(epsilon_1_saddle/A*Aheavy1,Ecrit,FREDSHELL,gamma_heavy1)));
+      
+      if( epsilon0_2_saddle -
+        Delta_U2*
+        Uwash(epsilon_2_saddle/A*Aheavy2,Ecrit,FREDSHELL,gamma_heavy2)
+        < A_levdens * hbom2*hbom2 )
+        Sasymm2 = 2.0 * std::sqrt( A_levdens*A_levdens * hbom2*hbom2 ) +
+         (epsilon0_1_saddle-Delta_U1 *
+         Uwash(epsilon_2_saddle/A*Aheavy2,Ecrit,FREDSHELL,gamma_heavy2)
+         - A_levdens * hbom2*hbom2)/hbom2;
+      else
+        Sasymm2 = 2.0 *
+             std::sqrt( A_levdens*(epsilon0_2_saddle - Delta_U2 *
+       Uwash(epsilon_2_saddle/A*Aheavy2,Ecrit,FREDSHELL,gamma_heavy2)));
+
+      Yasymm1 = ( std::exp(Sasymm1 - Ssymm) - std::exp(Ssymm_mode1 - Ssymm) ) *
+                 wNasymm1_saddle / wNsymm_saddle * 2.0;
+
+      Yasymm2 = ( std::exp(Sasymm2 - Ssymm) - std::exp(Ssymm_mode2 - Ssymm) ) *
+                 wNasymm2_saddle / wNsymm_saddle * 2.0;
+
+      Ysum = Ysymm + Yasymm1 + Yasymm2;  /* normalize */
+
+      if( Ysum > 0.00 ){
+        Ysymm = Ysymm / Ysum;
+        Yasymm1 = Yasymm1 / Ysum;
+        Yasymm2 = Yasymm2 / Ysum;
+        Yasymm = Yasymm1 + Yasymm2;
+      }else{
+        Ysymm = 0.0;
+        Yasymm1 = 0.0;
+        Yasymm2 = 0.0;
+//       search minimum threshold and attribute all events to this mode */
+        if( (epsilon_symm_saddle < epsilon_1_saddle) &&
+            (epsilon_symm_saddle < epsilon_2_saddle) )
+          Ysymm = 1.0;
+        else
+          if( epsilon_1_saddle < epsilon_2_saddle )
+            Yasymm1 = 1.0;
+          else
+            Yasymm2 = 1.0;
+      }
+  // even-odd effect
+  // Parametrization from Rejmund et al. 
+     if (mod(Z,2.0)== 0)
+      r_e_o = std::pow(10.0,-0.0170 * (E_saddle_scission + Eld)*(E_saddle_scission + Eld));
+     else
+      r_e_o = 0.0;
+     
+/*     -------------------------------------------------------
+c     selecting the fission mode using the yields at scission
+c     -------------------------------------------------------
+c     random decision: symmetric or asymmetric
+c     IMODE = 1 means asymmetric fission, mode 1
+c     IMODE = 2 means asymmetric fission, mode 2
+c     IMODE = 3 means symmetric fission
+c     testcase: 238U, E*= 6 MeV :    6467   8781   4752   (20000)
+c                                  127798 176480  95722  (400000)
+c                                  319919 440322 239759 (1000000)
+c                     E*=12 MeV :  153407 293063 553530 (1000000) */
+
+ fiss321:  // rmode = DBLE(HAZ(k))
+        rmode = G4AblaRandom::flat();
+      if( rmode < Yasymm1 )
+         imode = 1;
+      else
+         if( (rmode > Yasymm1) && (rmode < Yasymm) )
+            imode = 2;
+         else
+            imode = 3;
+         
+//    determine parameters of the neutron distribution of each mode
+//    at scission
+
+      if( imode == 1){
+         N1mean = Nheavy1_eff;
+         N1width = wNasymm1;
+      }else{
+       if( imode == 2 ){
+         N1mean = Nheavy2_eff;
+         N1width = wNasymm2;
+       }else{
+        //if( imode == 3 ) then
+         N1mean = Nsymm;
+         N1width = wNsymm;
+       }
+      }
+
+//     N2mean needed by CZ below
+    //  N2mean = N - N1mean;
+      
+//     fission mode found, then the determination of the
+//     neutron numbers N1 and N2 at scission by randon decision
+      N1r = 1.0;
+      N2r = 1.0;
+      while( N1r < 5.0 || N2r < 5.0 ){
+       //  N1r = DBLE(GaussHaz(k,sngl(N1mean), sngl(N1width) ))
+        // N1r = N1mean+G4AblaRandom::gaus(N1width);//
+         N1r = gausshaz(0,N1mean,N1width);
+         N2r = N - N1r;
+      }
+
+//     --------------------------------------------------
+//     first approximation of fission fragments using UCD at saddle
+//     --------------------------------------------------
+      Z1UCD = Z/N * N1r;
+      Z2UCD = Z/N * N2r;
+      A1r = A/N * N1r;
+//
+//     --------------------------
+//     deformations: starting ...
+//     --------------------------  */
+      if( imode == 1 ){
+// ---   N = 82  */
+        E_scission_pre = max( epsilon_1_scission, 1.0 );
+//   ! Eexc at scission, neutron evaporation from saddle to scission not considered */
+        if( N1mean > N*0.50 ){
+          beta1  = 0.0;                   /*   1. fragment is spherical */
+          beta2  = 0.55;                 /*   2. fragment is deformed  0.5*/
+        }else{
+          beta1  = 0.55;                 /*  1. fragment is deformed 0.5*/
+          beta2  = 0.00;                  /*  2. fragment is spherical */
+        }
+       }
+      if( imode == 2 ){
+// ---   N appr. 86  */
+        E_scission_pre = max( epsilon_2_scission, 1.0 );
+        if( N1mean > N*0.50 ){
+          beta1  = (N1r - 92.0) * 0.030 + 0.60;
+
+          beta1gs = ecld->beta2[idint(N1r)][idint(Z1UCD)];
+          beta2gs = ecld->beta2[idint(N2r)][idint(Z2UCD)];
+
+          beta1 = max(beta1,beta1gs);
+          beta2  = 1.0 - beta1;
+          beta2 = max(beta2,beta2gs);
+        }else{
+
+          beta1gs = ecld->beta2[idint(N1r)][idint(Z1UCD)];
+          beta2gs = ecld->beta2[idint(N2r)][idint(Z2UCD)];
+
+          beta2  = (N2r -92.0) * 0.030 + 0.60;
+          beta2 = max(beta2,beta2gs);
+          beta1 = 1.0 - beta2;
+          beta1 = max(beta1,beta1gs);
+        }
+      }
+      beta = 0.0;
+      if( imode == 3 ){
+//      if( imode >0 ){
+// ---   Symmetric fission channel
+//       the fit function for beta is the deformation for optimum energy
+//       at the scission point, d = 2
+//       beta  : deformation of symmetric fragments
+//       beta1 : deformation of first fragment
+//       beta2 : deformation of second fragment
+        betags = ecld->beta2[idint(Nsymm)][idint(Zsymm)];
+        beta1gs = ecld->beta2[idint(N1r)][idint(Z1UCD)];
+        beta2gs = ecld->beta2[idint(N2r)][idint(Z2UCD)];
+        beta  = max(0.177963+0.0153241*Zsymm-1.62037e-4*Zsymm*Zsymm,betags);
+        beta1 = max(0.177963+0.0153241*Z1UCD-1.62037e-4*Z1UCD*Z1UCD,beta1gs);
+        beta2 = max(0.177963+0.0153241*Z2UCD-1.62037e-4*Z2UCD*Z2UCD,beta2gs);
+
+        E_asym = frldm( Z1UCD, N1r, beta1 ) +
+              frldm( Z2UCD, N2r, beta2 ) +
+              ecoul( Z1UCD, N1r, beta1, Z2UCD, N2r, beta2, 2.0 ) -
+              2.0 * frldm( Zsymm, Nsymm, beta ) -
+              ecoul( Zsymm, Nsymm, beta, Zsymm, Nsymm, beta, 2.0 );
+        E_scission_pre = max( epsilon_symm_scission - E_asym, 1. );
+      }
+//     -----------------------
+//     ... end of deformations
+//     -----------------------
+
+//     ------------------------------------------
+//     evaporation from saddle to scission ...
+//     ------------------------------------------     
+      if(E_scission_pre>5.){
+       evap_postsaddle(A,Z,E_scission_pre,&E_scission_post,
+        &A_scission,&Z_scission,vx_eva_sc,vy_eva_sc,vz_eva_sc);
+       N_scission = A_scission - Z_scission;
+      }else{
+       A_scission = A;
+       Z_scission = Z;
+       E_scission_post = E_scission_pre;
+       N_scission = A_scission - Z_scission;
+      }
+//     ---------------------------------------------------
+//     second approximation of fission fragments using UCD
+//     --------------------------------------------------- */
+//
+      N1r = N1r * N_scission / N;
+      N2r = N2r * N_scission / N;
+      Z1UCD = Z1UCD * Z_scission / Z;
+      Z2UCD = Z2UCD * Z_scission / Z;
+      A1r = Z1UCD + N1r;
+
+//     ---------------------------------------------------------
+//     determination of the charge and mass of the fragments ...
+//     ---------------------------------------------------------
+
+//     - CZ is the curvature of charge distribution for fixed mass,
+//       common to all modes, gives the width of the charge distribution.
+//       The physics picture behind is that the division of the
+//       fissioning nucleus in N and Z is slow when mass transport from
+//       one nascent fragment to the other is concerned but fast when the
+//       N/Z degree of freedom is concernded. In addition, the potential
+//       minima in direction of mass transport are broad compared to the
+//       potential minimum in N/Z direction.
+//          The minima in direction of mass transport are calculated
+//          by the liquid-drop (LD) potential (for superlong mode),
+//          by LD + N=82 shell (for standard 1 mode) and
+//          by LD + N=86 shell (for standard 2 mode).
+//          Since the variation of N/Z is fast, it can quickly adjust to
+//          the potential and is thus determined close to scission.
+//          Thus, we calculate the mean N/Z and its width for fixed mass
+//          at scission.
+//          For the SL mode, the mean N/Z is calculated by the
+//          minimum of the potential at scission as a function of N/Z for
+//          fixed mass.
+//          For the S1 and S2 modes, this correlation is imposed by the
+//          empirical charge polarisation.
+//          For the SL mode, the fluctuation in this width is calculated
+//          from the curvature of the potential at scission as a function
+//          of N/Z. This value is also used for the widths of S1 and S2.
+
+
+//     Polarisation assumed for standard I and standard II:
+//      Z - Zucd = cpol (for A = const);
+//      from this we get (see remarks above)
+//      Z - Zucd =  Acn/Ncn * cpol (for N = const)   */
+//
+      CZ = ( frldm( Z1UCD-1.0, N1r+1.0, beta1 ) +
+             frldm( Z2UCD+1.0, N2r-1.0, beta2 ) +
+             frldm( Z1UCD+1.0, N1r-1.0, beta1 ) +
+             frldm( Z2UCD-1.0, N2r+1.0, beta2 ) +
+             ecoul( Z1UCD-1.0, N1r+1.0, beta1,
+                    Z2UCD+1.0, N2r-1.0, beta2, 2.0) +
+             ecoul( Z1UCD+1.0, N1r-1.0, beta1,
+                    Z2UCD-1.0, N2r+1.0, beta2, 2.0) -
+         2.0*ecoul( Z1UCD, N1r, beta1, Z2UCD, N2r, beta2, 2.0) -
+         2.0*frldm( Z1UCD, N1r, beta1 ) -
+         2.0*frldm( Z2UCD, N2r, beta2) ) * 0.50;
+//
+      if(1.0/A_levdens*E_scission_post < 0.0)
+        std::cout << "DSQRT 1 < 0" << A_levdens << " " << E_scission_post << std::endl;
+      
+      if(0.50 * std::sqrt(1.0/A_levdens*E_scission_post) / CZ < 0.0){
+        std::cout << "DSQRT 2 < 0 " << CZ << std::endl;
+        std::cout << "This event was not considered" << std::endl;
+        goto fiss321;
+      }
+
+      ZA1width = std::sqrt(0.5*std::sqrt(1.0/A_levdens*E_scission_post)/CZ);
+
+//     Minimum width in N/Z imposed.
+//     Value of minimum width taken from 235U(nth,f) data
+//     sigma_Z(A=const) = 0.4 to 0.5  (from Lang paper Nucl Phys. A345 (1980) 34)
+//     sigma_N(Z=const) = 0.45 * A/Z  (= 1.16 for 238U)
+//      therefore: SIGZMIN = 1.16                                              
+//     Physics; variation in N/Z for fixed A assumed.
+//      Thermal energy at scission is reduced by
+//      pre-scission neutron evaporation"
+
+       ZA1width = max(ZA1width,sigZmin);
+
+      if(imode == 1 && cpol1 != 0.0){
+//       --- asymmetric fission, mode 1 */
+       G4int IS = 0;
+       fiss2801:
+       Z1rr = Z1UCD - cpol1 * A_scission/N_scission;
+     // Z1r = DBLE(GaussHaz(k,sngl(Z1rr), sngl(ZA1width) ));
+      // Z1r = Z1rr+G4AblaRandom::gaus(ZA1width);//
+       Z1r =gausshaz(0,Z1rr,ZA1width);
+       IS = IS +1;
+       if(IS>100){
+       std::cout << "WARNING: GAUSSHAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING Z1R IN PROFI.FOR. A VALUE WILL BE FORCED" << std::endl;
+         Z1r = Z1rr;
+       }
+       if ((utilabs(Z1rr - Z1r) > 3.0*ZA1width) || Z1r<1.0)goto fiss2801;
+       N1r = A1r - Z1r;
+      }else{
+        if( imode == 2 && cpol2 != 0.0 ){
+//       --- asymmetric fission, mode 2 */
+        G4int IS = 0;
+        fiss2802:
+        Z1rr = Z1UCD - cpol2 * A_scission/N_scission;
+        //Z1r = Z1rr+G4AblaRandom::gaus(ZA1width);//
+        Z1r = gausshaz(0,Z1rr,ZA1width);
+        IS = IS +1;
+        if(IS>100){
+        std::cout << "WARNING: GAUSSHAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING Z1R IN PROFI.FOR. A VALUE WILL BE FORCED" << std::endl;
+         Z1r = Z1rr;
+        }
+        if( (utilabs(Z1rr - Z1r) > 3.0*ZA1width) || Z1r < 1.0 ) goto fiss2802;
+        N1r = A1r - Z1r;
+        }else{
+//      Otherwise do; /* Imode = 3 in any case; imode = 1 and 2 for CPOL = 0 */
+//       and symmetric case     */
+//         We treat a simultaneous split in Z and N to determine
+//         polarisation  */
+
+          re1 = frldm( Z1UCD-1.0, N1r+1.0, beta1 ) +
+                frldm( Z2UCD+1.0, N2r-1.0, beta2 ) +
+                ecoul( Z1UCD-1.0, N1r+1.0, beta1,
+                      Z2UCD+1.0, N2r-1.0, beta2, d ); /* d = 2 fm */
+          re2 = frldm( Z1UCD, N1r, beta1) +
+                frldm( Z2UCD, N2r, beta2 ) +
+                ecoul( Z1UCD, N1r, beta1,
+                      Z2UCD, N2r, beta2, d );  /*  d = 2 fm */
+          re3 = frldm( Z1UCD+1.0, N1r-1.0, beta1 ) +
+                frldm( Z2UCD-1.0, N2r+1.0, beta2 ) +
+                ecoul( Z1UCD+1.0, N1r-1.0, beta1,
+                      Z2UCD-1.0, N2r+1.0, beta2, d ); /* d = 2 fm */
+          eps2 = ( re1 - 2.0*re2 + re3 ) / 2.0;
+          eps1 = ( re3 - re1 ) / 2.0;
+          DN1_POL = -eps1 / ( 2.0 * eps2 );
+//
+          Z1rr = Z1UCD + DN1_POL;
+
+//       Polarization of Standard 1 from shell effects around 132Sn
+          if ( imode == 1 ){
+            if ( Z1rr > 50.0 ){
+              DN1_POL = DN1_POL - 0.6 * Uwash(E_scission_post,Ecrit,FREDSHELL,gamma);
+              Z1rr = Z1UCD + DN1_POL;
+              if ( Z1rr < 50. ) Z1rr = 50.0;
+            }else{
+              DN1_POL = DN1_POL + 0.60 * Uwash(E_scission_post,Ecrit,FREDSHELL,gamma);
+              Z1rr = Z1UCD + DN1_POL;
+              if ( Z1rr > 50.0 ) Z1rr = 50.0;
+            }
+          }
+
+        G4int IS = 0;
+        fiss2803:      
+        //Z1r = Z1rr+G4AblaRandom::gaus(ZA1width);
+        Z1r = gausshaz(0,Z1rr,ZA1width);
+        IS = IS +1;
+        if(IS>100){
+        std::cout << "WARNING: GAUSSHAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING Z1R IN PROFI.FOR. A VALUE WILL BE FORCED" << std::endl;
+         Z1r = Z1rr;
+        }
+
+        if( (utilabs(Z1rr - Z1r) > 3.0*ZA1width) || (Z1r < 1.0) )goto fiss2803;
+        N1r = A1r - Z1r;
+
+        }
+      }
+
+//     ------------------------------------------
+//     Integer proton number with even-odd effect
+//     ------------------------------------------ 
+      even_odd(Z1r, r_e_o, i_help);
+
+      z1 = G4double(i_help);
+      z2 = dint( Z_scission ) - z1;
+      N1 = dint( N1r );
+      N2 = dint( N_scission ) - N1;
+      a1 = z1 + N1;
+      a2 = z2 + N2;
+
+      if( (z1 < 0) || (z2 < 0) || (a1 < 0) || (a2 < 0) ){
+         std::cout << " -------------------------------" << std::endl;
+         std::cout << " Z, A, N : " << Z  << " " << A << " " << N << std::endl;
+         std::cout << z1 << " " << z2 << " " << a1 << " " << a2 << std::endl;
+         std::cout << E_scission_post << " " << A_levdens << " " << CZ <<  std::endl;
+
+         std::cout << " -------------------------------" << std::endl;
+      }
+
+//     -----------------------
+//     excitation energies ...
+//     -----------------------
+//
+      if( imode == 1 ){
+// ----  N = 82
+        if( N1mean > N*0.50 ){
+//         (a) 1. fragment is spherical and  2. fragment is deformed */
+          E_defo = 0.0;
+          beta2gs = ecld->beta2[idint(N2)][idint(z2)];
+          if(beta2< beta2gs) beta2 = beta2gs;
+          E1exc = E_scission_pre * a1 / A + E_defo;
+          E_defo = frldm( z2, N2, beta2 ) - frldm( z2, N2, beta2gs );
+          E2exc = E_scission_pre * a2 / A + E_defo;
+        }else{
+//         (b) 1. fragment is deformed and  2. fragment is spherical */
+          beta1gs = ecld->beta2[idint(N1)][idint(z1)];
+          if(beta1< beta1gs) beta1 = beta1gs;
+          E_defo = frldm( z1, N1, beta1 ) - frldm( z1, N1, beta1gs );
+          E1exc = E_scission_pre * a1 / A + E_defo;
+          E_defo = 0.0;
+          E2exc = E_scission_pre * a2 / A + E_defo;
+        }
+      }
+
+
+      if( imode == 2 ){
+// ---   N appr. 86 */
+        if( N1mean > N*0.5 ){       
+          /*  2. fragment is spherical */
+          beta1gs = ecld->beta2[idint(N1)][idint(z1)];
+          if(beta1< beta1gs) beta1 = beta1gs;
+          E_defo = frldm( z1, N1, beta1 ) - frldm( z1, N1, beta1gs );
+          E1exc = E_scission_pre * a1 / A + E_defo;
+          beta2gs = ecld->beta2[idint(N2)][idint(z2)];
+          if(beta2< beta2gs) beta2 = beta2gs;
+          E_defo = frldm( z2, N2, beta2 ) - frldm( z2, N2, beta2gs );
+          E2exc = E_scission_pre * a2 / A + E_defo;
+        }else{                           
+          /*  1. fragment is spherical */
+          beta2gs = ecld->beta2[idint(N2)][idint(z2)];
+          if(beta2< beta2gs) beta2 = beta2gs;
+          E_defo = frldm( z2, N2, beta2 ) - frldm( z2, N2, beta2gs );
+          E2exc = E_scission_pre * a2 / A + E_defo;
+          beta1gs = ecld->beta2[idint(N1)][idint(z1)];
+          if(beta1< beta1gs) beta1 = beta1gs;
+          E_defo = frldm( z1, N1, beta1 ) - frldm( z1, N1, beta1gs );
+          E1exc = E_scission_pre * a1 / A + E_defo;
+        }
+      }
+
+      if( imode == 3 ){
+// ---   Symmetric fission channel
+          beta1gs = ecld->beta2[idint(N1)][idint(z1)];
+          if(beta1< beta1gs) beta1 = beta1gs;
+          beta2gs = ecld->beta2[idint(N2)][idint(z2)];
+          if(beta2< beta2gs) beta2 = beta2gs;
+        E_defo1 = frldm( z1, N1, beta1 ) - frldm( z1, N1, beta1gs );
+        E_defo2 = frldm( z2, N2, beta2 ) - frldm( z2, N2, beta2gs );
+        E1exc = E_scission_pre * a1 / A + E_defo1;
+        E2exc = E_scission_pre * a2 / A + E_defo2;
+      }
+
+
+//  pre-neutron-emission total kinetic energy */
+    TKER = ( z1 * z2 * 1.440 ) /
+           ( R0 * std::pow(a1,0.333330) * (1.0 + 2.0/3.0 * beta1 ) +
+             R0 * std::pow(a2,0.333330) * (1.0 + 2.0/3.0 * beta2 ) + 2.0 );
+//  Pre-neutron-emission kinetic energies of the fragments */
+    EkinR1 = TKER * a2 / A;
+    EkinR2 = TKER * a1 / A;
+    v1 = std::sqrt(EkinR1/a1) * 1.3887;
+    v2 = std::sqrt(EkinR2/a2) * 1.3887;
+
+//  Extracted from Lang et al. Nucl. Phys. A 345 (1980) 34 */
+    E1exc_sigma = 5.50;
+    E2exc_sigma = 5.50;
+
+    fis987:
+    //e1 = E1exc+G4AblaRandom::gaus(E1exc_sigma);//
+    e1 = gausshaz(0,E1exc,E1exc_sigma);
+    if(e1<0.)goto fis987;
+    fis988:
+    //e2 = E2exc+G4AblaRandom::gaus(E2exc_sigma);//
+    e2 = gausshaz(0,E2exc,E2exc_sigma);
+    if(e2<0.)goto fis988;
+
+    return;
+}
+
+
+void G4Abla::even_odd(G4double r_origin,G4double r_even_odd,G4int &i_out)     
+{
+  // Procedure to calculate I_OUT from R_IN in a way that
+  // on the average a flat distribution in R_IN results in a
+  // fluctuating distribution in I_OUT with an even-odd effect as
+  // given by R_EVEN_ODD
+
+  //     /* ------------------------------------------------------------ */
+  //     /* EXAMPLES :                                                   */
+  //     /* ------------------------------------------------------------ */
+  //     /*    If R_EVEN_ODD = 0 :                                       */
+  //     /*           CEIL(R_IN)  ----                                   */
+  //     /*                                                              */
+  //     /*              R_IN ->                                         */
+  //     /*            (somewhere in between CEIL(R_IN) and FLOOR(R_IN)) */                                            */
+  //     /*                                                              */
+  //     /*           FLOOR(R_IN) ----       --> I_OUT                   */
+  //     /* ------------------------------------------------------------ */
+  //     /*    If R_EVEN_ODD > 0 :                                       */
+  //     /*      The interval for the above treatment is                 */
+  //     /*         larger for FLOOR(R_IN) = even and                    */
+  //     /*         smaller for FLOOR(R_IN) = odd                        */
+  //     /*    For R_EVEN_ODD < 0 : just opposite treatment              */
+  //     /* ------------------------------------------------------------ */
+
+  //     /* ------------------------------------------------------------ */
+  //     /* On input:   R_ORIGIN    nuclear charge (real number)         */
+  //     /*             R_EVEN_ODD  requested even-odd effect            */
+  //     /* Intermediate quantity: R_IN = R_ORIGIN + 0.5                 */
+  //     /* On output:  I_OUT       nuclear charge (integer)             */
+  //     /* ------------------------------------------------------------ */
+
+  //      G4double R_ORIGIN,R_IN,R_EVEN_ODD,R_REST,R_HELP;
+  G4double r_in = 0.0, r_rest = 0.0, r_help = 0.0;
+  G4double r_floor = 0.0;
+  G4double r_middle = 0.0;
+  //      G4int I_OUT,N_FLOOR;
+  G4int n_floor = 0;
+
+  r_in = r_origin + 0.5;
+  r_floor = (G4double)((G4int)(r_in));
+  if (r_even_odd < 0.001) {
+    i_out = (G4int)(r_floor);
+  } 
+  else {
+    r_rest = r_in - r_floor;
+    r_middle = r_floor + 0.5;
+    n_floor = (G4int)(r_floor);
+    if (n_floor%2 == 0) {
+      // even before modif.
+      r_help = r_middle + (r_rest - 0.5) * (1.0 - r_even_odd);
+    } 
+    else {
+      // odd before modification
+      r_help = r_middle + (r_rest - 0.5) * (1.0 + r_even_odd);
+    }
+    i_out = (G4int)(r_help);
+  }
+}
+
+double G4Abla::umass(G4double z,G4double n,G4double beta)
+{
+  // liquid-drop mass, Myers & Swiatecki, Lysekil, 1967
+  // pure liquid drop, without pairing and shell effects
+
+  // On input:    Z     nuclear charge of nucleus
+  //              N     number of neutrons in nucleus
+  //              beta  deformation of nucleus
+  // On output:   binding energy of nucleus
+
+  G4double a = 0.0, fumass = 0.0;
+  G4double alpha = 0.0;
+  G4double xcom = 0.0, xvs = 0.0, xe = 0.0;
+  const G4double pi = 3.1416;
+
+  a = n + z;
+  alpha = ( std::sqrt(5.0/(4.0*pi)) ) * beta;
+  
+  xcom = 1.0 - 1.7826 * ((a - 2.0*z)/a)*((a - 2.0*z)/a);
+  // factor for asymmetry dependence of surface and volume term
+  xvs = - xcom * ( 15.4941 * a - 
+		   17.9439 * std::pow(a,2.0/3.0) * (1.0+0.4*alpha*alpha) );
+  // sum of volume and surface energy
+  xe = z*z * (0.7053/(std::pow(a,1.0/3.0)) * (1.0-0.2*alpha*alpha) - 1.1529/a);
+  fumass = xvs + xe;
+  
+  return fumass;
+}
+
+
+double G4Abla::ecoul(G4double z1,G4double n1,G4double beta1,G4double z2,G4double n2,G4double beta2,G4double d)
+{
+  // Coulomb potential between two nuclei
+  // surfaces are in a distance of d
+  // in a tip to tip configuration
+
+  // approximate formulation
+  // On input: Z1      nuclear charge of first nucleus
+  //           N1      number of neutrons in first nucleus
+  //           beta1   deformation of first nucleus
+  //           Z2      nuclear charge of second nucleus
+  //           N2      number of neutrons in second nucleus
+  //           beta2   deformation of second nucleus
+  //           d       distance of surfaces of the nuclei
+
+  //      G4double Z1,N1,beta1,Z2,N2,beta2,d,ecoul;
+  G4double fecoul = 0;
+  G4double dtot = 0;
+  const G4double r0 = 1.16;
+
+  dtot = r0 * ( std::pow((z1+n1),1.0/3.0) * (1.0+0.6666667*beta1)
+		+ std::pow((z2+n2),1.0/3.0) * (1.0+0.6666667*beta2) ) + d;
+  fecoul = z1 * z2 * 1.44 / dtot;
+
+  return fecoul;
+}
+
+
+ G4double G4Abla::Uwash(G4double E, G4double Ecrit,G4double Freduction,G4double gamma){
+        // E       excitation energy 
+        // Ecrit   critical pairing energy 
+        // Freduction  reduction factor for shell washing in superfluid region
+        G4double R_wash,uwash;
+        if(E < Ecrit)
+          R_wash = std::exp(-E * Freduction * gamma);
+        else
+          R_wash = std::exp(- Ecrit * Freduction * gamma -(E-Ecrit) * gamma);
+        
+        uwash = R_wash;
+ return uwash;
+}
+
+
+G4double G4Abla::frldm(G4double z,G4double n,G4double beta){
+
+//     Liquid-drop mass, Myers & Swiatecki, Lysekil, 1967
+//     pure liquid drop, without pairing and shell effects
+//
+//     On input:    Z     nuclear charge of nucleus
+//                  N     number of neutrons in nucleus
+//                  beta  deformation of nucleus
+//     On output:   binding energy of nucleus
+// The idea is to use FRLDM model for beta=0 and using Lysekil
+// model to get the deformation energy
+
+      G4double a;
+      a = n + z;
+      return eflmac_profi(a,z) + umass(z,n,beta) - umass(z,n,0.0);
+}
+
+
+//**********************************************************************
+// *
+// * this function will calculate the liquid-drop nuclear mass for spheri
+// * configuration according to the preprint NUCLEAR GROUND-STATE
+// * MASSES and DEFORMATIONS by P. M"oller et al. from August 16, 1993 p.
+// * All constants are taken from this publication for consistency.
+// *
+// * Parameters:
+// *   a:    nuclear mass number
+// *   z:    nuclear charge
+// **********************************************************************
+
+
+G4double G4Abla::eflmac_profi(G4double ia, G4double iz)
+{
+  // CHANGED TO CALCULATE TOTAL BINDING ENERGY INSTEAD OF MASS EXCESS.     
+  // SWITCH FOR PAIRING INCLUDED AS WELL.                                  
+  // BINDING = EFLMAC(IA,IZ,0,OPTSHP)                                      
+  // FORTRAN TRANSCRIPT OF /U/GREWE/LANG/EEX/FRLDM.C                       
+  // A.J. 15.07.96                                                         
+
+  // this function will calculate the liquid-drop nuclear mass for spheri
+  // configuration according to the preprint NUCLEAR GROUND-STATE        
+  // MASSES and DEFORMATIONS by P. M"oller et al. from August 16, 1993 p.
+  // All constants are taken from this publication for consistency.      
+
+  // Parameters:                                                         
+  // a:    nuclear mass number                                         
+  // z:    nuclear charge                                     
+
+  G4double eflmacResult = 0.0;
+
+  G4int in = 0;
+  G4double z = 0.0, n = 0.0, a = 0.0, av = 0.0, as = 0.0;
+  G4double a0 = 0.0, c1 = 0.0, c4 = 0.0, b1 = 0.0, b3 = 0.0;
+  G4double ff = 0.0, ca = 0.0, w = 0.0, efl = 0.0; 
+  G4double r0 = 0.0, kf = 0.0, ks = 0.0;
+  G4double kv = 0.0, rp = 0.0, ay = 0.0, aden = 0.0, x0 = 0.0, y0 = 0.0;
+  G4double esq = 0.0, ael = 0.0, i = 0.0;
+  G4double pi = 3.141592653589793238e0;
+
+  // fundamental constants
+  // electronic charge squared
+  esq = 1.4399764;
+
+  // constants from considerations other than nucl. masses
+  // electronic binding
+  ael = 1.433e-5;
+
+  // proton rms radius
+  rp  = 0.8;
+
+  // nuclear radius constant
+  r0  = 1.16;
+
+  // range of yukawa-plus-expon. potential
+  ay  = 0.68;
+
+  // range of yukawa function used to generate                          
+  // nuclear charge distribution
+  aden= 0.70;
+
+  // wigner constant
+  w   = 30.0;
+
+  // adjusted parameters
+  // volume energy
+  av  = 16.00126;
+
+  // volume asymmetry
+  kv  =  1.92240;
+
+  // surface energy
+  as  = 21.18466;
+
+  // surface asymmetry
+  ks  =  2.345;
+  // a^0 constant
+  a0  =  2.615;
+
+  // charge asymmetry
+  ca  =  0.10289;
+
+  z   = G4double(iz);
+  a   = G4double(ia);
+  in  = ia - iz;                                                       
+  n   = G4double(in);
+
+  
+  c1  = 3.0/5.0*esq/r0;
+  c4  = 5.0/4.0*std::pow((3.0/(2.0*pi)),(2.0/3.0)) * c1;
+  kf  = std::pow((9.0*pi*z/(4.0*a)),(1.0/3.0))/r0;
+  
+  ff = -1.0/8.0*rp*rp*esq/std::pow(r0,3) * (145.0/48.0 - 327.0/2880.0*std::pow(kf,2) * std::pow(rp,2) + 1527.0/1209600.0*std::pow(kf,4) * std::pow(rp,4));
+
+  i   = (n-z)/a;
+
+  x0  = r0 * std::pow(a,(1.0/3.0)) / ay;
+  y0  = r0 * std::pow(a,(1.0/3.0)) / aden;
+
+  b1  = 1.0 - 3.0/(std::pow(x0,2)) + (1.0 + x0) * (2.0 + 3.0/x0 + 3.0/std::pow(x0,2)) * std::exp(-2.0*x0);
+
+  b3  = 1.0 - 5.0/std::pow(y0,2) * (1.0 - 15.0/(8.0*y0) + 21.0/(8.0 * std::pow(y0,3))
+			       - 3.0/4.0 * (1.0 + 9.0/(2.0*y0) + 7.0/std::pow(y0,2)
+					    + 7.0/(2.0 * std::pow(y0,3))) * std::exp(-2.0*y0));
+
+  // now calulation of total binding energy                  
+
+  efl = -1.0 * av*(1.0 - kv*i*i)*a + as*(1.0 - ks*i*i)*b1 * std::pow(a,(2.0/3.0)) + a0
+    + c1*z*z*b3/std::pow(a,(1.0/3.0)) - c4*std::pow(z,(4.0/3.0))/std::pow(a,(1.e0/3.e0))
+    + ff*std::pow(z,2)/a -ca*(n-z) - ael * std::pow(z,(2.39e0));
+
+  efl = efl + w*utilabs(i);
+
+  eflmacResult = efl;
+
+  return eflmacResult;
+}
+//
+//
+//
+void G4Abla::unstable_nuclei(G4int AFP,G4int ZFP,G4int *AFPNEW,G4int *ZFPNEW,G4int &IOUNSTABLE,G4double VX,G4double VY,G4double VZ,G4double *VP1X,G4double *VP1Y,G4double *VP1Z,G4double BU_TAB_TEMP[200][5],G4int *ILOOP){
+//
+      G4int INMIN,INMAX,NDIF=0,IMEM;
+      G4int NEVA=0,PEVA=0;
+      G4double   VP2X,VP2Y,VP2Z;
+
+      *AFPNEW = AFP;
+      *ZFPNEW = ZFP;
+      IOUNSTABLE = 0;
+      *ILOOP = 0;
+      IMEM = 0;
+      for(G4int i=0;i<200;i++){
+      BU_TAB_TEMP[i][0] = 0.0;
+      BU_TAB_TEMP[i][1] = 0.0;
+      BU_TAB_TEMP[i][2] = 0.0;
+      BU_TAB_TEMP[i][3] = 0.0;
+      BU_TAB_TEMP[i][4] = 0.0;
+      }
+      *VP1X = 0.0;
+      *VP1Y = 0.0;
+      *VP1Z = 0.0;
+
+      if(AFP==0 && ZFP==0){
+//       PRINT*,'UNSTABLE NUCLEI, AFP=0, ZFP=0'
+       return;
+      }
+      if((AFP==1 && ZFP==0) || 
+         (AFP==1 && ZFP==1) || 
+         (AFP==2 && ZFP==1) || 
+         (AFP==3 && ZFP==1) || 
+         (AFP==3 && ZFP==2) || 
+         (AFP==4 && ZFP==2) || 
+         (AFP==6 && ZFP==2) || 
+         (AFP==8 && ZFP==2)
+       ){
+       *VP1X = VX;
+       *VP1Y = VY;
+       *VP1Z = VZ;
+       return;
+      }
+
+      if ((AFP-ZFP)==0 && ZFP>1){
+        for(G4int I = 0;I<=AFP-2;I++){
+         unstable_tke(double(AFP-I),double(AFP-I),double(AFP-I-1),double(AFP-I-1),VX,VY,VZ,
+           &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+        }
+         PEVA = PEVA + ZFP - 1;
+         AFP = 1;
+         ZFP = 1;
+         IOUNSTABLE = 1;
+      }
+//
+//*** Find the limits nucleus is bound :
+      isostab_lim(ZFP,&INMIN,&INMAX);
+      NDIF = AFP - ZFP;
+      if(NDIF<INMIN){
+// Proton unbound
+        IOUNSTABLE = 1;
+       for(G4int I = 1;I<=10; I++){
+        isostab_lim(ZFP-I,&INMIN,&INMAX);
+         if(INMIN<=NDIF){
+         IMEM = I;
+         ZFP = ZFP - I;
+         AFP = ZFP + NDIF;
+         PEVA = I;
+         goto u10;
+         }
+       }
+//
+      u10:
+       for(G4int I = 0;I< IMEM;I++){
+         unstable_tke(G4double(NDIF+ZFP+IMEM-I),
+         G4double(ZFP+IMEM-I),
+         G4double(NDIF+ZFP+IMEM-I-1),
+         G4double(ZFP+IMEM-I-1),
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[I+1+*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[I+1+*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[I+1+*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[I+1+*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[I+1+*ILOOP][4] = VP2Z;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+       }
+         *ILOOP = *ILOOP + IMEM;
+
+      }
+      if(NDIF>INMAX){
+// Neutron unbound
+        NEVA = NDIF - INMAX;
+        AFP = ZFP + INMAX;
+        IOUNSTABLE = 1;
+         for(G4int I = 0;I<NEVA;I++){
+         unstable_tke(G4double(ZFP+NDIF-I),
+         G4double(ZFP),
+         G4double(ZFP+NDIF-I-1),
+         G4double(ZFP),
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+
+         BU_TAB_TEMP[*ILOOP][0] = 0.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+      }
+
+         if ((AFP>=2) && (ZFP==0)){
+         for(G4int I = 0;I<= AFP-2;I++){
+         unstable_tke(G4double(AFP-I),G4double(ZFP),
+         G4double(AFP-I-1),G4double(ZFP),
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+
+         BU_TAB_TEMP[*ILOOP][0] = 0.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+
+          NEVA = NEVA + (AFP - 1);
+          AFP = 1;
+          ZFP = 0;
+          IOUNSTABLE = 1;
+         }
+         if (AFP<ZFP){
+          std::cout << "WARNING - BU UNSTABLE: AF < ZF" << std::endl;
+          AFP = 0;
+          ZFP = 0;
+          IOUNSTABLE = 1;
+         }
+         if ((AFP>=4) && (ZFP==1)){
+// Heavy residue is treated as 3H and the rest of mass is emitted as neutrons:
+         for(G4int I = 0; I<AFP-3;I++){
+         unstable_tke(double(AFP-I),double(ZFP),
+         double(AFP-I-1),double(ZFP),
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+
+         BU_TAB_TEMP[*ILOOP][0] = 0.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+
+         NEVA = NEVA + (AFP - 3);
+         AFP = 3;
+         ZFP = 1;
+         IOUNSTABLE = 1;
+         }
+
+         if ((AFP==4) && (ZFP==3)){
+// 4Li -> 3He + p  ->
+         AFP = 3;
+         ZFP = 2;
+         PEVA = PEVA + 1;
+         IOUNSTABLE = 1;
+         unstable_tke(4.0,3.0,3.0,2.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         }
+         if ((AFP==5) && (ZFP==2)){
+// 5He -> 4He + n  ->
+         AFP = 4;
+         ZFP = 2;
+         NEVA = NEVA + 1;
+         IOUNSTABLE = 1;
+         unstable_tke(5.0,2.0,4.0,2.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 0.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         }
+
+         if ((AFP==5) && (ZFP==3)){
+// 5Li -> 4He + p
+         AFP = 4;
+         ZFP = 2;
+         PEVA = PEVA + 1;
+         IOUNSTABLE = 1;
+         unstable_tke(5.0,3.0,4.0,2.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         }
+
+         if ((AFP==6) && (ZFP==4)){
+// 6Be -> 4He + 2p (velocity in two steps: 6Be->5Li->4He)
+         AFP = 4;
+         ZFP = 2;
+         PEVA = PEVA + 2;
+         IOUNSTABLE = 1;
+// 6Be -> 5Li + p
+         unstable_tke(6.0,4.0,5.0,3.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+
+// 5Li -> 4He + p
+         unstable_tke(5.0,3.0,4.0,2.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         }
+         if ((AFP==7)&&(ZFP==2)){
+// 7He -> 6He + n
+         AFP = 6;
+         ZFP = 2;
+         NEVA = NEVA + 1;
+         IOUNSTABLE = 1;
+         unstable_tke(7.0,2.0,6.0,2.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 0.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         }
+
+         if ((AFP==7) && (ZFP==5)){
+// 7B -> 6Be + p -> 4He + 3p
+         for(G4int I = 0; I<= AFP-5;I++){
+         unstable_tke(double(AFP-I),double(ZFP-I),
+         double(AFP-I-1),double(ZFP-I-1),
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+
+         AFP = 4;
+         ZFP = 2;
+         PEVA = PEVA + 3;
+         IOUNSTABLE = 1;
+         }
+         if ((AFP==8) && (ZFP==4)){
+// 8Be  -> 4He + 4He
+          AFP = 4;
+          ZFP = 2;
+         IOUNSTABLE = 1;
+         unstable_tke(8.0,4.0,4.0,2.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 2.0;
+         BU_TAB_TEMP[*ILOOP][1] = 4.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         }
+         if ((AFP==8) && (ZFP==6)){
+// 8C  -> 2p + 6Be
+          AFP = 6;
+          ZFP = 4;
+          PEVA = PEVA + 2;
+         IOUNSTABLE = 1;
+
+         unstable_tke(8.0,6.0,7.0,5.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+
+         unstable_tke(7.0,5.0,6.0,4.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+
+         if((AFP==9) && (ZFP==2)){
+// 9He -> 8He + n
+           AFP = 8;
+           ZFP = 2;
+           NEVA = NEVA + 1;
+         IOUNSTABLE = 1;
+
+         unstable_tke(9.0,2.0,8.0,2.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 0.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+
+         if((AFP==9) && (ZFP==5)){
+// 9B -> 4He + 4He + p  ->
+          AFP = 4;
+          ZFP = 2;
+          PEVA = PEVA + 1;
+         IOUNSTABLE = 1;
+         unstable_tke(9.0,5.0,8.0,4.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+
+         unstable_tke(8.0,4.0,4.0,2.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 2.0;
+         BU_TAB_TEMP[*ILOOP][1] = 4.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+
+         if((AFP==10) && (ZFP==2)){
+// 10He -> 8He + 2n
+           AFP = 8;
+           ZFP = 2;
+           NEVA = NEVA + 2;
+         IOUNSTABLE = 1;
+// 10He -> 9He + n
+         unstable_tke(10.0,2.0,9.0,2.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 0.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+
+// 9He -> 8He + n
+         unstable_tke(9.0,2.0,8.0,2.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 0.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+         if ((AFP==10) && (ZFP==3)){
+// 10Li -> 9Li + n  ->
+          AFP = 9;
+          ZFP = 3;
+          NEVA = NEVA + 1;
+         IOUNSTABLE = 1;
+         unstable_tke(10.0,3.0,9.0,3.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 0.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+         if ((AFP==10) && (ZFP==7)){
+// 10N -> 9C + p  ->
+          AFP = 9;
+          ZFP = 6;
+          PEVA = PEVA + 1;
+         IOUNSTABLE = 1;
+         unstable_tke(10.0,7.0,9.0,6.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+
+         if((AFP==11) && (ZFP==7)){
+// 11N -> 10C + p  ->
+          AFP = 10;
+          ZFP = 6;
+          PEVA = PEVA + 1;
+         IOUNSTABLE = 1;
+         unstable_tke(11.0,7.0,10.0,6.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+         if ((AFP==12) && (ZFP==8)){
+// 12O -> 10C + 2p  ->
+          AFP = 10;
+          ZFP = 6;
+          PEVA = PEVA + 2;
+         IOUNSTABLE = 1;
+
+         unstable_tke(12.0,8.0,11.0,7.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+
+         unstable_tke(11.0,7.0,10.0,6.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+         if ((AFP==15) && (ZFP==9)){
+// 15F -> 14O + p  ->
+          AFP = 14;
+          ZFP = 8;
+          PEVA = PEVA + 1;
+         IOUNSTABLE = 1;
+         unstable_tke(15.0,9.0,14.0,8.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+
+         if ((AFP==16) && (ZFP==9)){
+// 16F -> 15O + p  ->
+          AFP = 15;
+          ZFP = 8;
+          PEVA = PEVA + 1;
+         IOUNSTABLE = 1;
+         unstable_tke(16.0,9.0,15.0,8.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+
+         if ((AFP==16) && (ZFP==10)){
+// 16Ne -> 14O + 2p  ->
+          AFP = 14;
+          ZFP = 8;
+          PEVA = PEVA + 2;
+         IOUNSTABLE = 1;
+         unstable_tke(16.0,10.0,15.0,9.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+
+         unstable_tke(15.0,9.0,14.0,8.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+         if((AFP==18) && (ZFP==11)){
+// 18Na -> 17Ne + p  ->
+          AFP = 17;
+          ZFP = 10;
+          PEVA = PEVA + 1;
+         IOUNSTABLE = 1;
+         unstable_tke(18.0,11.0,17.0,10.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+         if((AFP==19) && (ZFP==11)){
+// 19Na -> 18Ne + p  ->
+         AFP = 18;
+         ZFP = 10;
+         PEVA = PEVA + 1;
+         IOUNSTABLE = 1;
+         unstable_tke(19.0,11.0,18.0,10.0,
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+         if (ZFP>=4 && (AFP-ZFP)==1){
+// Heavy residue is treated as 3He
+           NEVA = AFP - 3;
+           PEVA = ZFP - 2;
+
+         for(G4int I = 0;I< NEVA;I++){
+        unstable_tke(G4double(AFP-I),G4double(ZFP),
+         G4double(AFP-I-1),G4double(ZFP),
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 0.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+        for(G4int I = 0;I<PEVA;I++){
+        unstable_tke(G4double(AFP-NEVA-I),G4double(ZFP-I),
+         G4double(AFP-NEVA-I-1),G4double(ZFP-I-1),
+         VX,VY,VZ,
+         &(*VP1X),&(*VP1Y),&(*VP1Z),&VP2X,&VP2Y,&VP2Z);
+         BU_TAB_TEMP[*ILOOP][0] = 1.0;
+         BU_TAB_TEMP[*ILOOP][1] = 1.0;
+         BU_TAB_TEMP[*ILOOP][2] = VP2X;
+         BU_TAB_TEMP[*ILOOP][3] = VP2Y;
+         BU_TAB_TEMP[*ILOOP][4] = VP2Z;
+         *ILOOP = *ILOOP + 1;
+         VX = *VP1X;
+         VY = *VP1Y;
+         VZ = *VP1Z;
+         }
+
+         AFP = 3;
+         ZFP = 2;
+         IOUNSTABLE = 1;
+         }
+//
+      *AFPNEW = AFP;
+      *ZFPNEW = ZFP;
+      return;
+}
+
+//
+//
+void G4Abla::unstable_tke(G4double ain,G4double zin,G4double anew,G4double znew,G4double vxin,G4double vyin,G4double vzin,G4double *v1x,G4double *v1y,G4double *v1z,G4double *v2x,G4double *v2y,G4double *v2z){
+//
+      G4double EKIN_P1=0.,ekin_tot=0.;
+      G4double PX1,PX2,PY1,PY2,PZ1,PZ2,PTOT;
+      G4double RNDT,CTET1,STET1,RNDP,PHI1,ETOT_P1,ETOT_P2;
+      G4double MASS,MASS1,MASS2;
+      G4double vxout=0.,vyout=0.,vzout=0.;
+      G4int iain,izin,ianew,iznew,inin,innew;
+//
+      G4double C = 29.97924580;//         cm/ns
+      G4double AMU = 931.4940; //         MeV/C^2
+//
+      iain = idnint(ain);
+      izin = idnint(zin);
+      inin = iain - izin;
+      ianew = idnint(anew);
+      iznew = idnint(znew);
+      innew = ianew - iznew;
+//
+      if(izin>12){
+      mglms(ain,zin,3,&MASS);
+      mglms(anew,znew,3,&MASS1);
+      mglms(ain-anew,zin-znew,3,&MASS2);
+      ekin_tot = MASS-MASS1-MASS2;
+      }else{
+    //  ekin_tot = MEXP(ININ,IZIN)-(MEXP(INNEW,IZNEW)+MEXP(ININ-INNEW,IZIN-IZNEW));
+      ekin_tot = masses->massexp[inin][izin]-(masses->massexp[innew][iznew]+masses->massexp[inin-innew][izin-iznew]);
+      if(izin>12)std::cout << "*** ZIN > 12 ***" << izin << std::endl;
+      }
+
+      if( ekin_tot<0.00 ){
+//         if( iain.ne.izin .and. izin.ne.0 ){
+//            print *,"Negative Q-value in UNSTABLE_TKE"
+//            print *,"ekin_tot=",ekin_tot
+//            print *,"ain,zin=",ain,zin,MEXP(ININ,IZIN)
+//            print *,"anew,znew=",anew,znew,MEXP(INNEW,IZNEW)
+//            print *
+//          }
+        ekin_tot=0.0;
+      }
+//
+      EKIN_P1 = ekin_tot*(ain-anew)/ ain;
+      ETOT_P1 = EKIN_P1 + anew * AMU;
+      PTOT = anew*AMU*std::sqrt((EKIN_P1/(anew*AMU)+1.0)*(EKIN_P1/(anew*AMU)+1.0)-1.0);  // MeV/C
+//
+      RNDT = G4AblaRandom::flat();
+      CTET1 = 2.0*RNDT-1.0;
+      STET1 = std::sqrt(1.0-CTET1*CTET1);
+      RNDP = G4AblaRandom::flat();
+      PHI1 = RNDP*2.0*3.141592654;
+      PX1 = PTOT * STET1*std::cos(PHI1);
+      PY1 = PTOT * STET1*std::sin(PHI1);
+      PZ1 = PTOT * CTET1;
+      *v1x = C * PX1 / ETOT_P1;
+      *v1y = C * PY1 / ETOT_P1;
+      *v1z = C * PZ1 / ETOT_P1;
+      lorentz_boost(vxin,vyin,vzin,*v1x,*v1y,*v1z,&vxout,&vyout,&vzout);
+      *v1x = vxout;
+      *v1y = vyout;
+      *v1z = vzout;
+//
+      PX2 = - PX1;
+      PY2 = - PY1;
+      PZ2 = - PZ1;
+      ETOT_P2 = (ekin_tot - EKIN_P1) + (ain-anew) * AMU;
+      *v2x = C * PX2 / ETOT_P2;
+      *v2y = C * PY2 / ETOT_P2;
+      *v2z = C * PZ2 / ETOT_P2;
+      lorentz_boost(vxin,vyin,vzin,*v2x,*v2y,*v2z,&vxout,&vyout,&vzout);
+      *v2x = vxout;
+      *v2y = vyout;
+      *v2z = vzout;
+//
+   return;
+}
+//
+//**************************************************************************
+//
+void G4Abla::lorentz_boost(G4double VXRIN,G4double VYRIN,G4double VZRIN,G4double VXIN,G4double VYIN,G4double VZIN,G4double *VXOUT,G4double *VYOUT,G4double *VZOUT){
+//
+// Calculate velocities of a given fragment from frame 1 into frame 2.
+// Frame 1 is moving with velocity v=(vxr,vyr,vzr) relative to frame 2.
+// Velocity of the fragment in frame 1 -> vxin,vyin,vzin
+// Velocity of the fragment in frame 2 -> vxout,vyout,vzout
+//
+      G4double  VXR,VYR,VZR;
+      G4double  GAMMA,VR,C,CC,DENO,VXNOM,VYNOM,VZNOM;
+//
+      C = 29.9792458;        // cm/ns
+      CC = C*C;
+//
+// VXR,VYR,VZR are velocities of frame 1 relative to frame 2; to go from 1 to 2
+// we need to multiply them by -1
+      VXR = -1.0 * VXRIN;
+      VYR = -1.0 * VYRIN;
+      VZR = -1.0 * VZRIN;
+//
+      VR = std::sqrt(VXR*VXR + VYR*VYR + VZR*VZR);
+      if(VR<1e-9){
+         *VXOUT = VXIN;
+         *VYOUT = VYIN;
+         *VZOUT = VZIN;
+         return;
+      }
+      GAMMA = 1.0/std::sqrt(1.0 - VR*VR/CC);
+      DENO = 1.0 - VXR*VXIN/CC - VYR*VYIN/CC - VZR*VZIN/CC;
+
+// X component
+      VXNOM = -GAMMA*VXR + (1.0+(GAMMA-1.0)*VXR*VXR/(VR*VR))*VXIN + (GAMMA-1.0)*VXR*VYR/(VR*VR)*VYIN + (GAMMA-1.0)*VXR*VZR/(VR*VR)*VZIN;
+
+      *VXOUT = VXNOM / (GAMMA * DENO);
+
+// Y component
+      VYNOM = -GAMMA*VYR + (1.0+(GAMMA-1.0)*VYR*VYR/(VR*VR))*VYIN + (GAMMA-1.0)*VXR*VYR/(VR*VR)*VXIN + (GAMMA-1.0)*VYR*VZR/(VR*VR)*VZIN;
+
+      *VYOUT = VYNOM / (GAMMA * DENO);
+
+// Z component
+      VZNOM = -GAMMA*VZR + (1.0+(GAMMA-1.0)*VZR*VZR/(VR*VR))*VZIN + (GAMMA-1.0)*VXR*VZR/(VR*VR)*VXIN + (GAMMA-1.0)*VYR*VZR/(VR*VR)*VYIN;
+
+      *VZOUT = VZNOM / (GAMMA * DENO);
+
+     return;
+}
+
+void G4Abla::fission(G4double AF,G4double ZF,G4double EE,G4double JPRF,
+        G4double *VX1_FISSION_par,G4double *VY1_FISSION_par,G4double *VZ1_FISSION_par,
+        G4double *VX2_FISSION_par,G4double *VY2_FISSION_par,G4double *VZ2_FISSION_par,
+        G4int *ZFP1,G4int *AFP1,G4int *ZFP2,G4int *AFP2,G4int *imode_par, 
+        G4double *VX_EVA_SC_par, G4double *VY_EVA_SC_par, G4double *VZ_EVA_SC_par,
+        G4double EV_TEMP[200][5],G4int *IEV_TAB_FIS_par){
+///
+       G4double EFF1=0.,EFF2=0.,VFF1=0.,VFF2=0.,
+                 AF1=0.,ZF1=0.,AF2=0.,ZF2=0.,
+                 AFF1=0.,ZFF1=0.,AFF2=0.,ZFF2=0.,
+                 vz1_eva=0., vx1_eva=0.,vy1_eva=0.,
+                 vz2_eva=0., vx2_eva=0.,vy2_eva=0.,
+                 vx_eva_sc=0.,vy_eva_sc=0.,vz_eva_sc=0.,
+                 VXOUT=0.,VYOUT=0.,VZOUT=0.,
+                 VX2OUT=0.,VY2OUT=0.,VZ2OUT=0.;
+       G4int IEV_TAB_FIS=0,IEV_TAB_TEMP=0;
+       G4double EV_TEMP1[200][5], EV_TEMP2[200][5],mtota;
+       G4int inttype = 0,inum=0;
+       IEV_TAB_SSC=0;
+       (*imode_par)=0;
+
+       for(G4int I1=0;I1<200;I1++)
+       for(G4int I2=0;I2<5;I2++){
+       EV_TEMP[I1][I2] = 0.0;
+       EV_TEMP1[I1][I2] = 0.0;
+       EV_TEMP2[I1][I2] = 0.0;
+       }
+
+       G4double et = EE - JPRF * JPRF * 197. * 197./(2.*0.4*931.*std::pow(AF,5.0/3.0)*1.16*1.16);
+
+       fissionDistri(AF,ZF,et,AF1,ZF1,EFF1,VFF1,AF2,ZF2,EFF2,VFF2,
+                     vx_eva_sc,vy_eva_sc,vz_eva_sc);
+
+//     Copy of the evaporated particles from saddle to scission
+       for(G4int IJ = 0; IJ< IEV_TAB_SSC;IJ++){
+             EV_TEMP[IJ][0] = EV_TAB_SSC[IJ][0];
+             EV_TEMP[IJ][1] = EV_TAB_SSC[IJ][1];
+             EV_TEMP[IJ][2] = EV_TAB_SSC[IJ][2];
+             EV_TEMP[IJ][3] = EV_TAB_SSC[IJ][3];
+             EV_TEMP[IJ][4] = EV_TAB_SSC[IJ][4];
+       }
+       IEV_TAB_FIS = IEV_TAB_FIS + IEV_TAB_SSC;
+
+//    Velocities
+      G4double VZ1_FISSION = (2.0 * G4AblaRandom::flat() - 1.0) * VFF1;
+      G4double VPERP1 = std::sqrt(VFF1*VFF1 - VZ1_FISSION*VZ1_FISSION);
+      G4double ALPHA1 = G4AblaRandom::flat() * 2. * 3.142;
+      G4double VX1_FISSION = VPERP1 * std::sin(ALPHA1);
+      G4double VY1_FISSION = VPERP1 * std::cos(ALPHA1);
+      G4double VX2_FISSION = - VX1_FISSION / VFF1 * VFF2;
+      G4double VY2_FISSION = - VY1_FISSION / VFF1 * VFF2;
+      G4double VZ2_FISSION = - VZ1_FISSION / VFF1 * VFF2;
+//
+// Fission fragment 1
+      if( (ZF1<=0.0) || (AF1<=0.0) || (AF1<ZF1) ){
+       std::cout << "F1 unphysical: "<<ZF<< " "<<AF<< " "<<EE<< " "<<ZF1<< " "<<AF1 << std::endl;
+      }else{
+// fission and IMF emission are not allowed
+     opt->optimfallowed = 0; //  IMF is not allowed
+     fiss->ifis = 0;         //  fission is not allowed
+     gammaemission=1;
+     G4int FF11=0, FIMF11=0;
+     G4double ZIMFF1=0., AIMFF1=0.,TKEIMF1=0.,JPRFOUT=0.;
+//
+     evapora(ZF1,AF1,&EFF1,0., &ZFF1, &AFF1, &mtota, &vz1_eva, &vx1_eva,&vy1_eva, &FF11, &FIMF11, &ZIMFF1, &AIMFF1,&TKEIMF1, &JPRFOUT, &inttype, &inum,EV_TEMP1,&IEV_TAB_TEMP);
+
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){ 
+               EV_TEMP[IJ+IEV_TAB_FIS][0] = EV_TEMP1[IJ][0];
+               EV_TEMP[IJ+IEV_TAB_FIS][1] = EV_TEMP1[IJ][1];
+// Lorentz kinematics
+//               EV_TEMP(IJ+IEV_TAB,3) = EV_TEMP(IJ,3) + VX_PREF
+//               EV_TEMP(IJ+IEV_TAB,4) = EV_TEMP(IJ,4) + VY_PREF
+//               EV_TEMP(IJ+IEV_TAB,5) = EV_TEMP(IJ,5) + VZ_PREF
+// Lorentz transformation
+               lorentz_boost(VX1_FISSION,VY1_FISSION,VZ1_FISSION,
+                EV_TEMP1[IJ][2],EV_TEMP1[IJ][3],EV_TEMP1[IJ][4],
+                &VXOUT,&VYOUT,&VZOUT);
+               lorentz_boost(vx_eva_sc,vy_eva_sc,vz_eva_sc,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+               EV_TEMP[IJ+IEV_TAB_FIS][2] = VX2OUT;
+               EV_TEMP[IJ+IEV_TAB_FIS][3] = VY2OUT;
+               EV_TEMP[IJ+IEV_TAB_FIS][4] = VZ2OUT;
+               //
+               }
+               IEV_TAB_FIS = IEV_TAB_FIS + IEV_TAB_TEMP;
+
+      }
+//
+// Fission fragment 2
+      if( (ZF2<=0.0) || (AF2<=0.0) || (AF2<ZF2) ){
+       std::cout << "F2 unphysical: "<<ZF<< " "<<AF<< " "<<EE<< " "<<ZF2<< " "<<AF2 << std::endl;
+      }else{
+// fission and IMF emission are not allowed
+     opt->optimfallowed = 0; //  IMF is not allowed
+     fiss->ifis = 0;         //  fission is not allowed
+     gammaemission=1;
+     G4int FF22=0, FIMF22=0;
+     G4double ZIMFF2=0., AIMFF2=0.,TKEIMF2=0.,JPRFOUT=0.;
+//
+     evapora(ZF2,AF2,&EFF2,0., &ZFF2, &AFF2, &mtota, &vz2_eva, &vx2_eva,&vy2_eva, &FF22, &FIMF22, &ZIMFF2, &AIMFF2,&TKEIMF2, &JPRFOUT, &inttype, &inum,EV_TEMP2,&IEV_TAB_TEMP);
+
+               for(G4int IJ = 0; IJ< IEV_TAB_TEMP;IJ++){
+               EV_TEMP[IJ+IEV_TAB_FIS][0] = EV_TEMP2[IJ][0];
+               EV_TEMP[IJ+IEV_TAB_FIS][1] = EV_TEMP2[IJ][1];
+// Lorentz kinematics
+//               EV_TEMP(IJ+IEV_TAB,3) = EV_TEMP(IJ,3) + VX_PREF
+//               EV_TEMP(IJ+IEV_TAB,4) = EV_TEMP(IJ,4) + VY_PREF
+//               EV_TEMP(IJ+IEV_TAB,5) = EV_TEMP(IJ,5) + VZ_PREF
+// Lorentz transformation
+               lorentz_boost(VX2_FISSION,VY2_FISSION,VZ2_FISSION,
+                EV_TEMP2[IJ][2],EV_TEMP2[IJ][3],EV_TEMP2[IJ][4],
+                &VXOUT,&VYOUT,&VZOUT);
+               lorentz_boost(vx_eva_sc,vy_eva_sc,vz_eva_sc,
+                VXOUT,VYOUT,VZOUT,
+                &VX2OUT,&VY2OUT,&VZ2OUT);
+               EV_TEMP[IJ+IEV_TAB_FIS][2] = VX2OUT;
+               EV_TEMP[IJ+IEV_TAB_FIS][3] = VY2OUT;
+               EV_TEMP[IJ+IEV_TAB_FIS][4] = VZ2OUT;
+               //
+               }
+               IEV_TAB_FIS = IEV_TAB_FIS + IEV_TAB_TEMP;
+      }
+//
+// Lorentz kinematics 
+//      vx1_fission = vx1_fission + vx1_eva
+//      vy1_fission = vy1_fission + vy1_eva
+//      vz1_fission = vz1_fission + vz1_eva
+//      vx2_fission = vx2_fission + vx2_eva
+//      vy2_fission = vy2_fission + vy2_eva
+//      vz2_fission = vz2_fission + vz2_eva
+// The v_eva_sc contribution is considered in the calling subroutine
+// Lorentz transformations
+               lorentz_boost(vx1_eva,vy1_eva,vz1_eva,
+                VX1_FISSION,VY1_FISSION,VZ1_FISSION,
+                &VXOUT,&VYOUT,&VZOUT);
+               VX1_FISSION = VXOUT;
+               VY1_FISSION = VYOUT;
+               VZ1_FISSION = VZOUT;
+               lorentz_boost(vx2_eva,vy2_eva,vz2_eva,
+                VX2_FISSION,VY2_FISSION,VZ2_FISSION,
+                &VXOUT,&VYOUT,&VZOUT);
+               VX2_FISSION = VXOUT;
+               VY2_FISSION = VYOUT;
+               VZ2_FISSION = VZOUT;
+//
+ (*ZFP1) = idnint(ZFF1);
+ (*AFP1) = idnint(AFF1);
+ (*VX1_FISSION_par) = VX1_FISSION;
+ (*VY1_FISSION_par) = VY1_FISSION;
+ (*VZ1_FISSION_par) = VZ1_FISSION;
+ (*VX_EVA_SC_par)=vx_eva_sc;
+ (*VY_EVA_SC_par)=vy_eva_sc;
+ (*VZ_EVA_SC_par)=vz_eva_sc;
+ (*ZFP2) = idnint(ZFF2);
+ (*AFP2) = idnint(AFF2);
+ (*VX2_FISSION_par) = VX2_FISSION;
+ (*VY2_FISSION_par) = VY2_FISSION;
+ (*VZ2_FISSION_par) = VZ2_FISSION;
+ (*IEV_TAB_FIS_par) = IEV_TAB_FIS;
+ return;
+}
+//*************************************************************************
+//
+void G4Abla::tke_bu(G4double Z,G4double A,G4double ZALL,G4double AAL,G4double *VX,G4double *VY,G4double *VZ){
+
+       G4double V_over_V0,R0,RALL,RHAZ,R,TKE,Ekin,V,VPERP,ALPHA1;
+
+       V_over_V0 = 6.0;
+       R0 = 1.16;
+
+       if(Z < 1.0){
+        *VX = 0.0;
+        *VY = 0.0;
+        *VZ = 0.0;
+        return;
+       }
+
+       RALL = R0 * std::pow(V_over_V0,1.0/3.0) * std::pow(AAL,1.0/3.0);
+       RHAZ = G4double(haz(1));
+       R = std::pow(RHAZ,1.0/3.0) * RALL;
+       TKE = 1.44 * Z * ZALL * R*R * (1.0 - A/AAL)*(1.0 - A/AAL) / std::pow(RALL,3.0);
+
+       Ekin = TKE * (AAL - A) / AAL;
+//       print*,'!!!',IDNINT(AAl),IDNINT(A),IDNINT(ZALL),IDNINT(Z)
+       V = std::sqrt(Ekin/A) * 1.3887;
+       *VZ = (2.0 * G4double(haz(1)) - 1.0) * V;
+       VPERP = std::sqrt(V*V - (*VZ)*(*VZ));
+       ALPHA1 = G4double(haz(1)) * 2.0 * 3.142;
+       *VX = VPERP * std::sin(ALPHA1);
+       *VY = VPERP * std::cos(ALPHA1);
+ return;
+}
+
+G4double G4Abla::haz(G4int k)
+{
+ // const G4int pSize = 110;
+ // static G4ThreadLocal G4double p[pSize];
+  static G4ThreadLocal G4long ix = 0;
+  static G4ThreadLocal G4double x = 0.0, y = 0.0;
+  //  k =< -1 on initialise                                        
+  //  k = -1 c'est reproductible                                   
+  //  k < -1 || k > -1 ce n'est pas reproductible
+/*
+  // Zero is invalid random seed. Set proper value from our random seed collection:
+  if(ix == 0) {
+    //    ix = hazard->ial;
+  }
+*/
+  if (k <= -1) { //then                                             
+    if(k == -1) { //then                                            
+      ix = 0;
+    }
+    else {
+      x = 0.0;
+      y = secnds(G4int(x));
+      ix = G4int(y * 100 + 43543000);
+      if(mod(ix,2) == 0) {
+	ix = ix + 1;
+      }
+    }}
+
+  return G4AblaRandom::flat();
+}
+
+//  Random generator according to the
+//  powerfunction y = x**(lambda) in the range from xmin to xmax
+//  xmin, xmax and y are integers.
+//  lambda must be different from -1 !
+G4int G4Abla::IPOWERLIMHAZ(G4double lambda,G4int xmin,G4int xmax){
+       G4double y,l_plus,rxmin,rxmax;
+         l_plus = lambda + 1.;
+         rxmin = G4double(xmin) - 0.5;
+         rxmax = G4double(xmax) + 0.5;
+//       y=(HAZ(k)*(rxmax**l_plus-rxmin**l_plus)+ rxmin**l_plus)**(1.E0/l_plus)
+         y=std::pow(G4AblaRandom::flat()*(std::pow(rxmax,l_plus)-std::pow(rxmin,l_plus))+ std::pow(rxmin,l_plus),1.0/l_plus);
+         return nint(y);
+}
+
+void G4Abla::AMOMENT(G4double AABRA,G4double APRF, G4int IMULTIFR,G4double *PX,G4double *PY,G4double *PZ){
+
+      G4int ISIGOPT = 0;
+      G4double GOLDHA_BU=0.,GOLDHA=0.;
+      G4double PI = 3.141592653589793;
+// In MeV/C
+      G4double V0_over_VBU = 1.0 / 6.0;
+      G4double SIGMA_0 = 118.50;
+      G4double Efermi = 5.0 * SIGMA_0 * SIGMA_0 / (2.0 * 931.4940);
+
+      if(IMULTIFR==1){
+       if(ISIGOPT == 0){
+// "Fermi model" picture:
+// Influence of expansion:
+        SIGMA_0 = SIGMA_0 * std::pow(V0_over_VBU,1.0/3.0);
+// To take into account the influence of thermal motion of nucleons (see W. Bauer,
+// PRC 51 (1995) 803)
+//        Efermi = 5.D0 * SIGMA_0 * SIGMA_0 / (2.D0 * 931.49D0)
+
+        GOLDHA_BU = SIGMA_0 * std::sqrt((APRF*(AABRA-APRF))/(AABRA-1.0));
+        GOLDHA    = GOLDHA_BU*std::sqrt(1.0 +
+                    5.0 * PI*PI / 12.0 * (T_freeze_out / Efermi)*(T_freeze_out / Efermi));
+//       PRINT*,'AFTER BU fermi:',IDNINT(AABRA),IDNINT(APRF),GOLDHA,
+//     &                          GOLDHA_BU
+       }else{
+// Thermal equilibrium picture (<=> to Boltzmann distribution in momentum with sigma2=M*T)
+// The factor (AABRA-APRF)/AP comes from momentum conservation:
+        GOLDHA_BU = std::sqrt(APRF *  T_freeze_out * 931.494 *
+                   (AABRA - APRF) / AABRA);
+        GOLDHA   = GOLDHA_BU;
+//       PRINT*,'AFTER BU therm:',IDNINT(AABRA),IDNINT(APRF),GOLDHA,
+//     &                          GOLDHA_BU
+       }
+      }else{
+      GOLDHA = SIGMA_0 * std::sqrt((APRF*(AABRA-APRF))/(AABRA-1.0));
+      }
+
+      G4int IS = 0;
+      mom123:  
+      *PX = G4double(gausshaz(1,0.0,GOLDHA));
+      IS = IS +1;
+      if(IS>100){
+      std::cout << "WARNING: GAUSSHAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING PX IN Rn07.FOR. A VALUE WILL BE FORCED." << std::endl;
+      *PX = (AABRA-1.0)*931.4940;
+      }
+      if(std::abs(*PX)>= AABRA*931.494){
+//       PRINT*,'VX > C',PX,IDNINT(APRF)
+       goto mom123;
+      }
+      IS = 0;
+      mom456:  
+      *PY = G4double(gausshaz(1,0.0,GOLDHA));
+      IS = IS +1;
+      if(IS>100){
+      std::cout << "WARNING: GAUSSHAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING PY IN Rn07.FOR. A VALUE WILL BE FORCED." << std::endl;
+      *PY = (AABRA-1.0)*931.4940;
+      }
+      if(std::abs(*PY)>= AABRA*931.494){
+//       PRINT*,'VX > C',PX,IDNINT(APRF)
+       goto mom456;
+      }
+      IS = 0;
+      mom789:  
+      *PZ = G4double(gausshaz(1,0.0,GOLDHA));
+      IS = IS +1;
+      if(IS>100){
+      std::cout << "WARNING: GAUSSHAZ CALLED MORE THAN 100 TIMES WHEN CALCULATING PZ IN Rn07.FOR. A VALUE WILL BE FORCED." << std::endl;
+      *PZ = (AABRA-1.0)*931.4940;
+      }
+      if(std::abs(*PZ)>= AABRA*931.494){
+//       PRINT*,'VX > C',PX,IDNINT(APRF)
+       goto mom789;
+      }
+ return;
+}
+
+G4double G4Abla::gausshaz(G4int k, G4double xmoy, G4double sig)
+{
+  // Gaussian random numbers:
+
+  //   1005       C*** TIRAGE ALEATOIRE DANS UNE GAUSSIENNE DE LARGEUR SIG ET MOYENNE XMOY
+  static G4ThreadLocal G4int  iset = 0;
+  static G4ThreadLocal G4double v1,v2,r,fac,gset,fgausshaz;
+
+  if(iset == 0) { //then                                              
+    do {
+      v1 = 2.0*haz(k) - 1.0;
+      v2 = 2.0*haz(k) - 1.0;
+      r = std::pow(v1,2) + std::pow(v2,2);
+    } while(r >= 1);
+
+    fac = std::sqrt(-2.*std::log(r)/r);
+    gset = v1*fac;
+    fgausshaz = v2*fac*sig+xmoy;
+    iset = 1;
+  }
+  else {
+    fgausshaz=gset*sig+xmoy;
+    iset=0;
+  }
+  return fgausshaz;                                                         
 }

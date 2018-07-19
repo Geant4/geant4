@@ -49,7 +49,7 @@
 #include "CexmcCommon.hh"
 
 class  CexmcChargeExchangeReconstructorMessenger;
-class  CexmcEnergyDepositStore;
+struct  CexmcEnergyDepositStore;
 class  CexmcProductionModel;
 class  CexmcParticleGun;
 

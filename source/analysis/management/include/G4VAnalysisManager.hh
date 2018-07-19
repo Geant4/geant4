@@ -404,6 +404,8 @@ class G4VAnalysisManager
     G4int GetH1Id(const G4String& name, G4bool warn = true) const;
     G4int GetH2Id(const G4String& name, G4bool warn = true) const;
     G4int GetH3Id(const G4String& name, G4bool warn = true) const;
+    G4int GetP1Id(const G4String& name, G4bool warn = true) const;
+    G4int GetP2Id(const G4String& name, G4bool warn = true) const;
    
     // Methods to manipulate histogram, profiles & ntuples additional information
     //
@@ -621,7 +623,8 @@ class G4VAnalysisManager
     std::unique_ptr<G4VH3Manager>  fVH3Manager;
     std::unique_ptr<G4VP1Manager>  fVP1Manager;
     std::unique_ptr<G4VP2Manager>  fVP2Manager;
-    std::unique_ptr<G4VNtupleManager> fVNtupleManager;
+    // std::shared_ptr<G4VNtupleManager> fVNtupleManager;
+    G4VNtupleManager* fVNtupleManager;
 };
 
 // inline functions

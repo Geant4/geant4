@@ -69,26 +69,8 @@ G4MoleculeDefinition*
 G4MoleculeTable::CreateMoleculeDefinition(const G4String& name,
                                           double diffusion_coefficient)
 {
-  // TODO
-
-  MoleculeDefTable::iterator it = fMoleculeDefTable.find(name);
-  G4MoleculeDefinition* definition(0);
-  if (it == fMoleculeDefTable.end())
-  {
-    definition = new G4MoleculeDefinition(name, -1 /* mass*/,
-                                          diffusion_coefficient);
-    fMoleculeDefTable[name] = definition;
-  }
-  else
-  {
-    // exception
-    G4ExceptionDescription description;
-    description << "The molecule definition " << name
-                << " was already recorded in the table" << G4endl;
-    G4Exception("G4MoleculeTable::CreateMoleculeDefinition",
-                "DEFINITION_ALREADY_CREATED", FatalException, description);
-  }
-  return definition;
+  return new G4MoleculeDefinition(name, -1 /* mass*/,
+                                  diffusion_coefficient);
 }
 
 //------------------------------------------------------------------------------
@@ -272,10 +254,14 @@ void G4MoleculeTable::Finalize()
   G4MolecularConfiguration::FinalizeAll();
 }
 
+//------------------------------------------------------------------------------
+
 G4ConfigurationIterator G4MoleculeTable::GetConfigurationIterator()
 {
   return G4ConfigurationIterator(G4MolecularConfiguration::GetUserIDTable());
 }
+
+//------------------------------------------------------------------------------
 
 int G4MoleculeTable::GetNumberOfDefinedSpecies()
 {

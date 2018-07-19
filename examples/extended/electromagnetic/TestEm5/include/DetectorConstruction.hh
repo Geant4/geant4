@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 91972 2015-08-12 13:48:40Z gcosmo $
+// $Id: DetectorConstruction.hh 109000 2018-03-21 09:25:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,83 +51,73 @@ class G4GlobalMagFieldMessenger;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
+public:
 
-    DetectorConstruction();
-   ~DetectorConstruction();
+  DetectorConstruction();
+  ~DetectorConstruction();
 
-  public:
+  void SetAbsorberMaterial (const G4String&);
+  void SetAbsorberThickness(G4double);
+  void SetAbsorberSizeYZ   (G4double);
 
-     void SetAbsorberMaterial (G4String);
-     void SetAbsorberThickness(G4double);
-     void SetAbsorberSizeYZ   (G4double);
+  void SetAbsorberXpos(G4double);
 
-     void SetAbsorberXpos(G4double);
+  void SetWorldMaterial(const G4String&);
+  void SetWorldSizeX   (G4double);
+  void SetWorldSizeYZ  (G4double);
 
-     void SetWorldMaterial(G4String);
-     void SetWorldSizeX   (G4double);
-     void SetWorldSizeYZ  (G4double);
+  void SetMagField(G4double);
 
-     void SetMagField(G4double);
+  virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
 
-     virtual G4VPhysicalVolume* Construct();
-     virtual void ConstructSDandField();
+  void PrintGeomParameters();
 
-  public:
+  const G4Material* GetAbsorberMaterial() const {return fAbsorberMaterial;};
+  G4double GetAbsorberThickness() const         {return fAbsorberThickness;};
+  G4double GetAbsorberSizeYZ() const            {return fAbsorberSizeYZ;};
 
-     void PrintCalorParameters();
+  G4double GetAbsorberXpos() const              {return fXposAbs;};
+  G4double GetxstartAbs() const                 {return fXstartAbs;};
+  G4double GetxendAbs() const                   {return fXendAbs;};
 
-     G4Material* GetAbsorberMaterial()  {return fAbsorberMaterial;};
-     G4double    GetAbsorberThickness() {return fAbsorberThickness;};
-     G4double    GetAbsorberSizeYZ()    {return fAbsorberSizeYZ;};
+  const G4Material* GetWorldMaterial() const    {return fWorldMaterial;};
+  G4double GetWorldSizeX() const                {return fWorldSizeX;};
 
-     G4double    GetAbsorberXpos()      {return fXposAbs;};
-     G4double    GetxstartAbs()         {return fXstartAbs;};
-     G4double    GetxendAbs()           {return fXendAbs;};
+  const G4VPhysicalVolume* GetAbsorber() const  {return fPhysiAbsorber;};
 
-     G4Material* GetWorldMaterial()     {return fWorldMaterial;};
-     G4double    GetWorldSizeX()        {return fWorldSizeX;};
+private:
 
-     const G4VPhysicalVolume* GetAbsorber() {return fPhysiAbsorber;};
+  void DefineMaterials();
+  void ComputeGeomParameters();
+  void ChangeGeometry();
 
-  private:
+  G4Material*        fAbsorberMaterial;
+  G4double           fAbsorberThickness;
+  G4double           fAbsorberSizeYZ;
 
-     void ChangeGeometry();
+  G4double           fXposAbs;
+  G4double           fXstartAbs, fXendAbs;
 
-     G4Material*        fAbsorberMaterial;
-     G4double           fAbsorberThickness;
-     G4double           fAbsorberSizeYZ;
+  G4Material*        fWorldMaterial;
+  G4double           fWorldSizeX;
+  G4double           fWorldSizeYZ;
 
-     G4double           fXposAbs;
-     G4double           fXstartAbs, fXendAbs;
+  G4bool             fDefaultWorld;
 
-     G4Material*        fWorldMaterial;
-     G4double           fWorldSizeX;
-     G4double           fWorldSizeYZ;
+  G4Box*             fSolidWorld;
+  G4LogicalVolume*   fLogicWorld;
+  G4VPhysicalVolume* fPhysiWorld;
 
-     G4bool             fDefaultWorld;
-
-     G4Box*             fSolidWorld;
-     G4LogicalVolume*   fLogicWorld;
-     G4VPhysicalVolume* fPhysiWorld;
-
-     G4Box*             fSolidAbsorber;
-     G4LogicalVolume*   fLogicAbsorber;
-     G4VPhysicalVolume* fPhysiAbsorber;
+  G4Box*             fSolidAbsorber;
+  G4LogicalVolume*   fLogicAbsorber;
+  G4VPhysicalVolume* fPhysiAbsorber;
      
-     DetectorMessenger* fDetectorMessenger;
-     G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
-    
-      
-  private:
-    
-     void DefineMaterials();
-     void ComputeCalorParameters();
-     G4VPhysicalVolume* ConstructCalorimeter();     
+  DetectorMessenger* fDetectorMessenger;
+  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #endif
 

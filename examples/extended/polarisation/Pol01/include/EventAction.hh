@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 86418 2014-11-11 10:39:38Z gcosmo $
+// $Id: EventAction.hh 98772 2016-08-09 14:25:31Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,11 +50,9 @@ public:
   virtual void EndOfEventAction(const G4Event*);
     
 private:
-  RunAction*            runAction;
+  RunAction*            fRunAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    

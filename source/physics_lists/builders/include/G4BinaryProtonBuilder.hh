@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BinaryProtonBuilder.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4BinaryProtonBuilder.hh 103593 2017-04-19 08:10:21Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,7 +33,7 @@
 //
 // Modified:
 // 30.03.2009 V.Ivanchenko create cross section by new
-//
+// 12.04.2017 A.Dotti move to new design with base class
 //----------------------------------------------------------------------------
 //
 #ifndef G4BinaryProtonBuilder_h
@@ -53,14 +53,15 @@ class G4BinaryProtonBuilder : public G4VProtonBuilder
 {
   public: 
     G4BinaryProtonBuilder();
-    virtual ~G4BinaryProtonBuilder();
+    virtual ~G4BinaryProtonBuilder() {}
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4ProtonInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {};
+    virtual void Build(G4ProtonInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
+
+    using G4VProtonBuilder::Build; //Prevent compiler warning
 
   private:
 

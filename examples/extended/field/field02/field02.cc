@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: field02.cc 77484 2013-11-25 10:11:57Z gcosmo $
+// $Id: field02.cc 110101 2018-05-15 11:31:37Z gcosmo $
 //
 /// \file field/field02/field02.cc
 /// \brief Main program of the field/field02 example
@@ -34,6 +34,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4Types.hh"
+
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
 #else
@@ -41,27 +43,27 @@
 #include "G4RunManager.hh"
 #endif
 
-#include "F02PhysicsList.hh"
 #include "F02DetectorConstruction.hh"
-
 #include "F02ActionInitialization.hh"
 
 #include "G4UImanager.hh"
-
+#include "FTFP_BERT.hh"
+#include "G4StepLimiterPhysics.hh"
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
+  // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // Choose the Random engine
   //
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
@@ -81,7 +83,9 @@ int main(int argc,char** argv)
   F02DetectorConstruction* detector = new F02DetectorConstruction();
   runManager->SetUserInitialization(detector);
   // Physics list
-  runManager->SetUserInitialization(new F02PhysicsList(detector));
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  physicsList->RegisterPhysics(new G4StepLimiterPhysics());
+  runManager->SetUserInitialization(physicsList);
   // User action initialization
   runManager->SetUserInitialization(new F02ActionInitialization(detector));
 
@@ -89,20 +93,18 @@ int main(int argc,char** argv)
   //
   runManager->Initialize();
 
-#ifdef G4VIS_USE
   // Initialize visualization
   //
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
-#endif
 
   // Get the pointer to the User Interface manager
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (argc!=1)   // batch mode
+  if (!ui)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
@@ -110,13 +112,10 @@ int main(int argc,char** argv)
     }
   else
     {  // interactive mode : define UI session
-#ifdef G4UI_USE
-     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
      if (ui->IsGUI())
         UImanager->ApplyCommand("/control/execute gui.mac");
      ui->SessionStart();
      delete ui;
-#endif
     }
 
   // Job termination
@@ -124,9 +123,7 @@ int main(int argc,char** argv)
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
 
   return 0;

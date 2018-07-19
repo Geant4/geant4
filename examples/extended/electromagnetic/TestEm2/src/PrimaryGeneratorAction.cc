@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.cc 83431 2014-08-21 15:49:56Z gcosmo $
+// $Id: PrimaryGeneratorAction.cc 109103 2018-03-27 07:39:04Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,7 +70,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //this function is called at the begin of event
   //
   G4double position = -0.5*(fDetector->GetfullLength());
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));     
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,position));
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 

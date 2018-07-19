@@ -51,9 +51,9 @@ G4BaseFileManager::~G4BaseFileManager()
 G4String G4BaseFileManager::TakeOffExtension(G4String& name) const
 {
   G4String extension;
-  if ( name.find(".") != std::string::npos ) { 
-    extension = name.substr(name.find("."));
-    name = name.substr(0, name.find("."));
+  if ( name.rfind(".") != std::string::npos ) { 
+    extension = name.substr(name.rfind("."));
+    name = name.substr(0, name.rfind("."));
   }
   else {
     extension = ".";
@@ -109,6 +109,26 @@ G4String G4BaseFileManager::GetNtupleFileName(const G4String& ntupleName) const
     name.append("_t");
     name.append(os.str());
   }  
+
+  // Add (back if it was present) file extension
+  name.append(extension);
+  
+  return name;
+}  
+
+//_____________________________________________________________________________
+G4String G4BaseFileManager::GetNtupleFileName(G4int ntupleFileNumber) const 
+{  
+  G4String name(fFileName);
+
+  // Take out file extension
+  auto extension = TakeOffExtension(name);
+    
+  // Add _M followed by ntupleFileNumber
+  std::ostringstream os;
+  os << ntupleFileNumber;
+  name.append("_m");
+  name.append(os.str());
 
   // Add (back if it was present) file extension
   name.append(extension);

@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/range/include/TrackingAction.hh
 /// \brief Definition of the TrackingAction class
-//
-// $Id: TrackingAction.hh 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef TrackingAction_h
 #define TrackingAction_h 1
@@ -55,7 +50,5 @@ class TrackingAction : public G4UserTrackingAction {
 
     G4double                fTrackLength;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

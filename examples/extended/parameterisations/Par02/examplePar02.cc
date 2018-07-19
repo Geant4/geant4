@@ -40,6 +40,8 @@
 //
 //-------------------------------------------------------------------
 
+#include "G4Types.hh"
+
 #include "G4UImanager.hh"
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -51,16 +53,16 @@
 #include "Par02PhysicsList.hh"
 #include "Par02ActionInitialization.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
-
 
 int main( int argc, char** argv ) {
+
+  // Instantiate G4UIExecutive if interactive mode
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
   //-------------------------------
   // Initialization of Run manager
@@ -97,21 +99,16 @@ int main( int argc, char** argv ) {
   //----------------
   // Visualization:
   //----------------
-  #ifdef G4VIS_USE
   G4cout << "Instantiating Visualization Manager......." << G4endl;
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-  #endif
 
-  if ( argc == 1 ) {
+  if ( ui ) {
     //--------------------------
     // Define (G)UI
     //--------------------------
-    #ifdef G4UI_USE
-    G4UIExecutive * ui = new G4UIExecutive( argc, argv );
     ui->SessionStart();
     delete ui;
-    #endif
   } else {
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
@@ -123,9 +120,7 @@ int main( int argc, char** argv ) {
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
 
-  #ifdef G4VIS_USE
   delete visManager;
-  #endif
   delete runManager;
 
   return 0;

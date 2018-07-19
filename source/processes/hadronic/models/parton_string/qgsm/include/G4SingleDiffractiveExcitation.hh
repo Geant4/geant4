@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SingleDiffractiveExcitation.hh 69570 2013-05-08 13:23:39Z gcosmo $
+// $Id: G4SingleDiffractiveExcitation.hh 107867 2017-12-07 14:44:07Z gcosmo $
 
 #ifndef G4SingleDiffractiveExcitation_h
 #define G4SingleDiffractiveExcitation_h 1
@@ -38,8 +38,7 @@
 //	excite the projectile and target
 // ------------------------------------------------------------
 
-#include <CLHEP/Units/SystemOfUnits.h>
-
+//#include "G4SystemOfUnits.hh"
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4QGSDiffractiveExcitation.hh"
@@ -52,17 +51,10 @@ class G4SingleDiffractiveExcitation : public G4QGSDiffractiveExcitation
 
 public:
 
-	G4SingleDiffractiveExcitation(G4double sigmaPt=0.6*CLHEP::GeV,
-                                      G4double minExtraMass=250*CLHEP::MeV,
-                                      G4double x0mass=250*CLHEP::MeV);
+	G4SingleDiffractiveExcitation();
 	~G4SingleDiffractiveExcitation();
 
-	G4bool ExciteParticipants (G4VSplitableHadron *aPartner, G4VSplitableHadron * bPartner) const;
-
-	//      void SetPtWidth(G4double aValue) { widthOfPtSquare = aValue*aValue; }
-	//      void SetExtraMass(G4double aValue) { minExtraMass = aValue; }
-	//      void SetMinimumMass(G4double aValue) { minmass = aValue; }
-
+	G4bool ExciteParticipants (G4VSplitableHadron *aPartner, G4VSplitableHadron * bPartner, G4bool ProjectileDiffraction) const;
 
 private:
 
@@ -75,11 +67,6 @@ private:
 	int operator==(const G4SingleDiffractiveExcitation &right) const;
 	int operator!=(const G4SingleDiffractiveExcitation &right) const;
 
-private:
-	// Model Parameters:
-	const G4double widthOfPtSquare;	// width^2 of pt for string excitation
-	const G4double minExtraMass;	// minimum excitation mass 
-	const G4double minmass;	// mean pion transverse mass; used for Xmin 
 };
 
 #endif

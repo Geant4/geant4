@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DsMesonPlus.cc 83749 2014-09-12 12:14:59Z gcosmo $
+// $Id: G4DsMesonPlus.cc 102905 2017-03-02 09:50:56Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -65,7 +65,7 @@ G4DsMesonPlus* G4DsMesonPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
    anInstance = new G4ParticleDefinition(
-                 name,     1.96830*GeV,  1.317e-9*MeV,    +1.*eplus,
+                 name,     1.96827*GeV,  1.317e-9*MeV,    +1.*eplus,
                     0,              -1,             0,
                     0,               0,             0,
               "meson",               0,             0,         431,

@@ -15,7 +15,8 @@ and the DNA geometry given in the Geom_DNA example
 shall cite the following Geant4-DNA collaboration publications: \n
 [1] NIM B 298 (2013) 47-54 \n
 [2] Med. Phys. 37 (2010) 4692-4708
-
+[3] Phys. Med. 31 (2015) 861-874
+ 
 \section wholenucleardna_s1 INTRODUCTION
 
 The wholenucleardna example offers the basic tools to simulate the track structure 

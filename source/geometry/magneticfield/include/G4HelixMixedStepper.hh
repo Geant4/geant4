@@ -37,12 +37,20 @@
 //  it possible to choose other stepper,like G4CashKarpRK45 or G4RKG3_Stepper,
 //  by setting StepperNumber : new HelixMixedStepper(EqRhs,N)
 //
-//  N=0  G4ExplicitEuler;          N=1  G4ImplicitEuler;  
 //  N=2  G4SimpleRunge;            N=3  G4SimpleHeum;
-//  N=4  G4ClassicalRK4;           N=5  G4HelixExplicitEuler;
-//  N=6  G4HelixExplicitEuler;     N=7  G4HelixSimpleRunge;
+//  N=4  G4ClassicalRK4;      
+//  N=6  G4HelixImplicitEuler;     N=7  G4HelixSimpleRunge;
 //  N=8  G4CashKarpRK45;           N=9  G4ExactHelixStepper;
-//  N=10 G4RKG3_Stepper;
+//  N=10 G4RKG3_Stepper;           N=13 G4NystromRK4
+//  N=23 BogackiShampine23         N=145 TsitourasRK45 
+//  N=45 BogackiShampine45         N=745 DormandPrince745 (ie DoPri5)
+//
+//  For completeness also available are:
+//  N=11 G4ExplicitEuler           N=12 G4ImplicitEuler;   -- Likely poor
+//  N=5  G4HelixExplicitEuler (testing only)
+//  For recommendations see comments in 'SetupStepper' method.
+//
+//  Note: Like other helix steppers, only applicable in pure magnetic field
 //
 // History: 
 // Derived from ExactHelicalStepper 18/05/07 
@@ -60,7 +68,7 @@ class G4HelixMixedStepper: public G4MagHelicalStepper
 
   public:  
 
-  G4HelixMixedStepper(G4Mag_EqRhs *EqRhs,G4int fStepperNumber= -1, G4double Angle_threshold= -1.0);
+  G4HelixMixedStepper(G4Mag_EqRhs *EqRhs,G4int StepperNumber= -1, G4double Angle_threshold= -1.0);
   ~G4HelixMixedStepper();
 
    void Stepper( const G4double y[],
@@ -94,8 +102,11 @@ class G4HelixMixedStepper: public G4MagHelicalStepper
   
     G4int IntegratorOrder() const { return 4; }
   private:
+
       // Mixed Integration RK4 for 'small' steps
-        G4MagIntegratorStepper* fRK4Stepper;
+      G4MagIntegratorStepper* fRK4Stepper;
+      G4int  fStepperNumber; //  Int ID of RK stepper 
+   
       // Threshold angle (in radians ) - above it Helical stepper is used
         G4double                fAngle_threshold;
    private:

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc 95503 2016-02-12 11:05:11Z gcosmo $
+// $Id: G4RunManager.cc 110726 2018-06-11 06:05:16Z gcosmo $
 //
 // 
 
@@ -59,9 +59,10 @@
 #include "G4UImanager.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParallelWorldProcessStore.hh"
-
 #include "G4ios.hh"
+#include "G4TiMemory.hh"
 #include <sstream>
+
 
 using namespace CLHEP;
 
@@ -116,6 +117,7 @@ G4RunManager::G4RunManager()
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
   runManagerType = sequentialRM;
+  InitializeTiMemory();
 }
 
 G4RunManager::G4RunManager( RMType rmType )
@@ -139,7 +141,7 @@ G4RunManager::G4RunManager( RMType rmType )
   G4ExceptionDescription msg;
   msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
   msg<<" This type of RunManager can only be used in mult-threaded applications.";
-  G4Exception("G4RunManager::G4RunManager(G4bool)","Run0035",FatalException,msg);
+  G4Exception("G4RunManager::G4RunManager(G4bool)","Run0107",FatalException,msg);
 #endif
     
   if(fRunManager)
@@ -161,7 +163,7 @@ G4RunManager::G4RunManager( RMType rmType )
    default:
     G4ExceptionDescription msgx;
     msgx<<" This type of RunManager can only be used in mult-threaded applications.";
-    G4Exception("G4RunManager::G4RunManager(G4bool)","Run0035",FatalException,msgx);
+    G4Exception("G4RunManager::G4RunManager(G4bool)","Run0108",FatalException,msgx);
     return;
   }
   runManagerType = rmType;
@@ -178,6 +180,7 @@ G4RunManager::G4RunManager( RMType rmType )
   G4Random::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
+  InitializeTiMemory();
 }
 
 G4RunManager::~G4RunManager()
@@ -261,6 +264,7 @@ void G4RunManager::DeleteUserInitializations()
 
 void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
 {
+    TIMEMORY_AUTO_TIMER("");
   if(n_event<=0) { fakeRun = true; }
   else { fakeRun = false; }
   G4bool cond = ConfirmBeamOnCondition();
@@ -312,6 +316,7 @@ void G4RunManager::RunInitialization()
 {
   if(!(kernel->RunInitialization(fakeRun))) return;
 
+  TIMEMORY_AUTO_TIMER("");
   runAborted = false;
   numberOfEventProcessed = 0;
 
@@ -359,6 +364,7 @@ void G4RunManager::RunInitialization()
 
 void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_select)
 {
+    TIMEMORY_AUTO_TIMER("");
   InitializeEventLoop(n_event,macroFile,n_select);
 
 // Event loop
@@ -395,6 +401,7 @@ void G4RunManager::InitializeEventLoop(G4int n_event,const char* macroFile,G4int
 
 void G4RunManager::ProcessOneEvent(G4int i_event)
 {
+    TIMEMORY_AUTO_TIMER("");
   currentEvent = GenerateEvent(i_event);
   eventManager->ProcessOneEvent(currentEvent);
   AnalyzeEvent(currentEvent);
@@ -404,6 +411,7 @@ void G4RunManager::ProcessOneEvent(G4int i_event)
 
 void G4RunManager::TerminateOneEvent()
 {
+    TIMEMORY_AUTO_TIMER("");
   StackPreviousEvent(currentEvent);
   currentEvent = 0;
   numberOfEventProcessed++;
@@ -428,6 +436,7 @@ void G4RunManager::TerminateEventLoop()
 
 G4Event* G4RunManager::GenerateEvent(G4int i_event)
 {
+    TIMEMORY_AUTO_TIMER("");
   if(!userPrimaryGeneratorAction)
   {
     G4Exception("G4RunManager::GenerateEvent()", "Run0032", FatalException,
@@ -463,6 +472,7 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 
 void G4RunManager::StoreRNGStatus(const G4String& fnpref)
 {
+    TIMEMORY_AUTO_TIMER("");
     G4String fileN = randomNumberStatusDir + fnpref+".rndm";
     G4Random::saveEngineStatus(fileN);
 }
@@ -562,9 +572,12 @@ void G4RunManager::Initialize()
     return;
   }
 
+  stateManager->SetNewState(G4State_Init);
   if(!geometryInitialized) InitializeGeometry();
   if(!physicsInitialized) InitializePhysics();
   initializedAtLeastOnce = true;
+  if(stateManager->GetCurrentState()!=G4State_Idle)
+  { stateManager->SetNewState(G4State_Idle); }
 }
 
 void G4RunManager::InitializeGeometry()
@@ -578,16 +591,25 @@ void G4RunManager::InitializeGeometry()
 
   if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
 
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  if(currentState==G4State_PreInit || currentState==G4State_Idle)
+  { stateManager->SetNewState(G4State_Init); }
   kernel->DefineWorldVolume(userDetector->Construct(),false);
   userDetector->ConstructSDandField();
   nParallelWorlds = userDetector->ConstructParallelGeometries();
   userDetector->ConstructParallelSD();
   kernel->SetNumberOfParallelWorld(nParallelWorlds);
   geometryInitialized = true;
+  stateManager->SetNewState(currentState); 
 }
 
 void G4RunManager::InitializePhysics()
 {
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  if(currentState==G4State_PreInit || currentState==G4State_Idle)
+  { stateManager->SetNewState(G4State_Init); }
   if(physicsList)
   {
     kernel->InitializePhysics();
@@ -598,6 +620,7 @@ void G4RunManager::InitializePhysics()
                 FatalException, "G4VUserPhysicsList is not defined!");
   }
   physicsInitialized = true;
+  stateManager->SetNewState(currentState); 
 
 }
 
@@ -731,6 +754,7 @@ void G4RunManager::ConstructScoringWorlds()
   G4int nPar = ScM->GetNumberOfMesh();
   if(nPar<1) return;
 
+  TIMEMORY_AUTO_TIMER("");
   G4ParticleTable::G4PTblDicIterator* theParticleIterator
    = G4ParticleTable::GetParticleTable()->GetIterator();
   for(G4int iw=0;iw<nPar;iw++)
@@ -786,6 +810,7 @@ void G4RunManager::UpdateScoring()
   G4int nPar = ScM->GetNumberOfMesh();
   if(nPar<1) return;
 
+  TIMEMORY_AUTO_TIMER("");
   G4HCofThisEvent* HCE = currentEvent->GetHCofThisEvent();
   if(!HCE) return;
   G4int nColl = HCE->GetCapacity();
@@ -860,10 +885,14 @@ void G4RunManager::SetUserInitialization(G4VUserActionInitialization* userInit)
 }
 
 void G4RunManager::SetUserAction(G4UserRunAction* userAction)
-{ userRunAction = userAction; }
+{
+  userRunAction = userAction;
+}
 
 void G4RunManager::SetUserAction(G4VUserPrimaryGeneratorAction* userAction)
-{ userPrimaryGeneratorAction = userAction; }
+{
+  userPrimaryGeneratorAction = userAction;
+}
 
 void G4RunManager::SetUserAction(G4UserEventAction* userAction)
 {
@@ -946,6 +975,12 @@ void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
   {
     kernel->GeometryHasBeenModified();
     geometryInitialized = false;
+    // Notify the VisManager as well
+    if(G4Threading::IsMasterThread())
+    {
+      G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+      if(pVVisManager) pVVisManager->GeometryHasChanged();
+    }
   }
 }
 

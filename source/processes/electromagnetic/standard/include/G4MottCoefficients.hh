@@ -32,26 +32,26 @@
 //
 // Author:      Cristina Consolandi
 //
-// Creation date: 27.05.2012  
-//                                  
+// Creation date: 27.05.2012
+//
 //  Class Description:
-// 
+//
 //       Mott Coulomb Cross section coefficients:
-// 
+//
 //       Reference:
 //       M.J. Boschini et al.
 //       "Non Ionizing Energy Loss induced by Electrons in the Space Environment"
-//       Proc. of the 13th International Conference on Particle Physics and Advanced Technology 
+//       Proc. of the 13th International Conference on Particle Physics and Advanced Technology
 //       (13th ICPPAT, Como 3-7/10/2011), World Scientific (Singapore).
-//       
+//
 //       Available at: http://arxiv.org/abs/1111.4042v4
 //       coeffb of par. 2.1 , eq. (17) were recalculated by M. Tacconi
-//       following the same procedur as: 
-//       
-//       T. Lijian et al. "Analytic Fitting to the Mott Cross Section of Electrons" 
+//       following the same procedur as:
+//
+//       T. Lijian et al. "Analytic Fitting to the Mott Cross Section of Electrons"
 //       Radiat. Phys. Chem. 45 (1995), 235–245.
-// 
-//       
+//
+//
 // ----------------------------------------------------------------------------------------
 
 //
@@ -64,28 +64,31 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class G4Pow;
+
 class G4MottCoefficients
 {
 
+
+
 public:
 
-  	G4MottCoefficients();
+  	explicit G4MottCoefficients();
 
   	virtual ~G4MottCoefficients();
 
 	void  SetMottCoeff( G4double targetZ, G4double coeff[5][6] );
+        G4double  GetTransitionRandom(G4double targetZ, G4double energy);
 
 private:
 
- 	G4MottCoefficients & operator=(const  G4MottCoefficients &right);
-  	G4MottCoefficients(const  G4MottCoefficients&);
+ 	G4MottCoefficients & operator=(const  G4MottCoefficients &right) = delete;
+  	G4MottCoefficients(const  G4MottCoefficients&) = delete;
 
-
+	G4Pow*          fG4pow;
 };
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-
-

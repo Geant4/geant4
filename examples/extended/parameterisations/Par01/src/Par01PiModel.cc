@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par01/src/Par01PiModel.cc
+/// \brief Implementation of the Par01PiModel class
 //
-// $Id: Par01PiModel.cc 90093 2015-05-13 11:59:54Z gcosmo $
+//
+// $Id: Par01PiModel.cc 101151 2016-11-08 08:06:16Z gcosmo $
 //
 #include "Par01PiModel.hh"
 
@@ -32,12 +35,18 @@
 #include "G4PionPlus.hh"
 #include "G4Gamma.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01PiModel::Par01PiModel(G4Region *anEnvelope) :
   G4VFastSimulationModel("Par01PiModel",anEnvelope)
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01PiModel::~Par01PiModel()
 {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool Par01PiModel::IsApplicable(const G4ParticleDefinition& particleType)
 {
@@ -45,6 +54,8 @@ G4bool Par01PiModel::IsApplicable(const G4ParticleDefinition& particleType)
     &particleType == G4PionMinus::PionMinusDefinition() ||
     &particleType == G4PionPlus::PionPlusDefinition();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool Par01PiModel::ModelTrigger(const G4FastTrack& fastTrack) {
   //-------------------------------------------------------------
@@ -79,14 +90,15 @@ G4bool Par01PiModel::ModelTrigger(const G4FastTrack& fastTrack) {
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Par01PiModel::DoIt(const G4FastTrack& fastTrack, 
                         G4FastStep& fastStep)
-  //--------------------------------------------------
+  //--------------------------------------------------------
   //
-  // User method to code the parameterisation properly
-  // said.
+  // User method to code the parameterisation properly said.
   //
-  //--------------------------------------------------
+  //--------------------------------------------------------
 {
 
   //------------------------------------------------
@@ -145,6 +157,5 @@ void Par01PiModel::DoIt(const G4FastTrack& fastTrack,
   //-- Creation of the secondary Track:
   //------------------------------------
   fastStep.CreateSecondaryTrack(dynamique, posi, 
-                                fastTrack.GetPrimaryTrack()->GetGlobalTime());
-  
+                                fastTrack.GetPrimaryTrack()->GetGlobalTime());  
 }

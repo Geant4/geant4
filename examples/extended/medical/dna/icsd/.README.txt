@@ -1,0 +1,64 @@
+//$Id $
+
+///\file "medical/dna/icsd/.README.txt"
+///\brief Example icsd README page
+
+/*! \page Exampleicsd Example icsd
+
+\author Sylvain Meylan , Carmen Villagrasa (a)       \n
+(a) carmen.villagrasa _irsn _ fr             \n
+
+This example is provided by the Geant4-DNA collaboration \n
+Any report or published results obtained using the Geant4-DNA software  
+shall cite the following Geant4-DNA collaboration publications: \n
+[1] Med. Phys. 37 (2010) 4692-4708 \n
+[2] Phys. Med. 31 (2015) 861-874 \n
+In addition, for this example using DNA-materials cross-sections, please cite: \n
+[3] Rad. Phys and Chem. 130 (2017) 459-479 \n
+
+\section icsd_s1 INTRODUCTION                                                  
+                                                                       
+The icsd name of this example stands for: Ionisation Cluster Size Distribution.
+This example allows the calculation of the distribution concerning the number of ionisations per event in an small cylinder of 2.3 nanometers diameter and 3.4 nanometers heigh, typical dimensions of a 10 base pairs piece of chromatin.
+It constitutes the first use of new DNA-like material's cross-sections that were experimentally obtained at PTB (Rad. Phys and Chem. 130 (2017) 459-479) for electrons and calculated for protons on THF, TMP, PY and PU materials.
+The new physical models corresponding to the DNA materials have recently been implemented in Geant4-DNA thaks to new classes, that allow the use of other materials different from liquid water: G4VDNAModel, G4DNAModelInterface,G4DNADummyModel and other associated classes.  
+
+These new models are further described at:
+http://geant4-dna.org
+
+\section icsd_s2 GEOMETRY SET-UP AND PRIMARY PARTICLES
+ 
+As indicated in the introduction, the geometry used in this exercise is very simple: a cylinder of 2.3 nanometers diameter and 3.4 nanometers heigh, typical dimensions of a 10 base pairs piece of chromatin that is centered in a cubic world of 10 nanometers side length filled with liquid water.
+This cylinder is filled with THF material. The definition of the THF material must be done using the G4String="THF". Currently, other materials are available than also use the G4Strings to be recognized by the model classes "TMP", "PY" or "PU" for the DNA-like materials and "deoxyribose","adenine", "guanine", "thymine" or "cytosine" for the derived DNA materials. 
+Primary particles are electrons starting at (-1.15 nanometers, 0,0) (at the cylinder's edge) and initial momentum (1,0,0)
+
+\section icsd_s3 PHYSICS LIST
+                                                                        
+The PhysicsList used in this example show how to use the new classes that allow Geant4-DNA to use other materials than liquid water :
+-# Models are built: classical Geant4-DNA models for liquid water material and PTB models for DNA-like materials
+-# G4DNAModelInterface object is built for each type of interaction (elastic, ionisation, excitation)
+-# G4DNAModels are registered within the corresponding  G4DNAModelInterface. For liquid water models, the particle name must be added to the RegisterModel function. For DNA-like material models and Vacuum no other parameter is needed.
+-# G4DNAProcesses objects are built and the corresponding G4DNAModelInterface is registered within. G4DNAModelInterface acts like a classical G4VEmModel
+
+Remember that new DNA-like material classes are available for:
+\verbatim
+electrons from 12 eV-1 keV, including elastic, ionisation and excitation processes
+protons from 70 keV to 10 MeV, only for ionisation processes following a modified HKS formalism
+\endverbatim
+
+\section icsd_s4 SET UP
+
+Make sure G4LEDATA points to the low energy electromagnetic data files.
+
+\section icsd_s5 HOW TO RUN THE EXAMPLE 
+
+ ./icsd  will run in multi-threaded mode with 2 threads by default. 
+ Two ntuples will be filled in the output file:
+ - Ntuple 1 contains the information for calculating the ionisation cluster size distribution per event
+ - Ntuple 2 contains interaction information at the step level
+
+\verbatim
+Please, do not forget to make "hadd ICSD.root ICSD_t0.root ICSD_t1.root" before using plot.C
+\endverbatim                                    
+
+*/

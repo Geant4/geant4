@@ -6,8 +6,7 @@
 #
 /range/det/setTrackingCut 10 eV
 #
-# Register physics constructor
-/range/phys/addPhysics  G4EmDNAPhysics
+/range/phys/addPhysics  dna	        
 #
 /run/initialize
 #

@@ -39,16 +39,16 @@
 #define G4ITDecay_h 1
 
 #include "G4NuclearDecay.hh"
+#include "G4Fragment.hh"
 
 class G4PhotonEvaporation;
-
 
 class G4ITDecay : public G4NuclearDecay
 {
   public:
     G4ITDecay(const G4ParticleDefinition* theParentNucleus,
               const G4double& theBR, const G4double& Qvalue,
-              const G4double& excitation);
+              const G4double& excitation, G4PhotonEvaporation* aPhotonEvap);
 
     virtual ~G4ITDecay();
 
@@ -63,6 +63,8 @@ class G4ITDecay : public G4NuclearDecay
     G4int parentZ;
     G4int parentA;
     G4bool applyARM;
+
+    G4PhotonEvaporation* photonEvaporation;
 };
 
 #endif

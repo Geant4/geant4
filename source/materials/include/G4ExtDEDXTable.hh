@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExtDEDXTable.hh 66811 2013-01-12 16:04:23Z gcosmo $
+// $Id: G4ExtDEDXTable.hh 96794 2016-05-09 10:09:30Z gcosmo $
 //
 // ===========================================================================
 // GEANT4 class header file
@@ -64,40 +64,40 @@
 class G4ExtDEDXTable : public G4VIonDEDXTable {
 
  public:
-   G4ExtDEDXTable();
+   explicit G4ExtDEDXTable();
    virtual ~G4ExtDEDXTable();
 
-   G4bool BuildPhysicsVector(G4int ionZ, 
-                             const G4String& matName);
+   virtual G4bool BuildPhysicsVector(G4int ionZ, 
+				     const G4String& matName);
 
-   G4bool BuildPhysicsVector(G4int ionZ, 
-                             G4int matZ);
+   virtual G4bool BuildPhysicsVector(G4int ionZ, 
+				     G4int matZ);
 
    // Function for checking the availability of stopping power tables
    // for a given ion-material couple, where the material consists of
    // a single element only.
-   G4bool IsApplicable(
+   virtual G4bool IsApplicable(
         G4int atomicNumberIon,          // Atomic number of ion
         G4int atomicNumberElem          // Atomic number of elemental material
                        );
 
    // Function for checking the availability of stopping power tables
    // for given ion-material couples.
-   G4bool IsApplicable(
+   virtual G4bool IsApplicable(
         G4int atomicNumberIon,          // Atomic number of ion
         const G4String& matIdentifier   // Name or chemical formula of material
                        );
 
    // Function returning the stopping power vector for given ion-material
    // couples, where the material consists of a single element only.
-   G4PhysicsVector* GetPhysicsVector(
+   virtual G4PhysicsVector* GetPhysicsVector(
 	G4int atomicNumberIon,          // Atomic number of ion
         G4int atomicNumberElem          // Atomic number of elemental material
 				     );
 
    // Function returning the stopping power vector for given ion-material
    // couples.
-   G4PhysicsVector* GetPhysicsVector(
+   virtual G4PhysicsVector* GetPhysicsVector(
 	G4int atomicNumberIon,          // Atomic number of ion
         const G4String& matIdenfier     // Name or chemical formula of material
 				     );
@@ -151,6 +151,10 @@ class G4ExtDEDXTable : public G4VIonDEDXTable {
    void DumpMap();
 
  private:
+
+   G4ExtDEDXTable(G4ExtDEDXTable&) = delete;
+   const G4ExtDEDXTable & operator=(const G4ExtDEDXTable&) = delete;
+
    G4PhysicsVector* CreatePhysicsVector(G4int vectorType); 
 
    G4int FindAtomicNumberElement(G4PhysicsVector* physicsVector);

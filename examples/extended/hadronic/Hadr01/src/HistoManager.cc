@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 70761 2013-06-05 12:30:51Z gcosmo $
+// $Id: HistoManager.cc 109185 2018-04-03 07:20:46Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -91,8 +91,7 @@ HistoManager* HistoManager::GetPointer()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 HistoManager::HistoManager()
-: fPrimaryDef(0),
-  fNeutron(0),
+: fPrimaryDef(nullptr),
   fEdepMax(1.0*GeV),
   fLength (300.*mm),
   fPrimaryKineticEnergy(0.0),  
@@ -101,11 +100,11 @@ HistoManager::HistoManager()
   fNSlices(300),
   fNHisto (25),
   fBeamFlag(true),
-  fHistoBooked(false),
-  fHisto(0)
+  fHistoBooked(false)
 {
   fHisto     = new Histo();
   fHisto->SetVerbose(fVerbose);
+  BookHisto();
   fNeutron   = G4Neutron::Neutron();
 }
 
@@ -118,7 +117,7 @@ HistoManager::~HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void HistoManager::bookHisto()
+void HistoManager::BookHisto()
 {
   fHistoBooked = true;
   fHisto->Add1D("1","Energy deposition (MeV/mm/event) in the target",
@@ -192,7 +191,7 @@ void HistoManager::BeginOfRun()
   fEdepSum     = 0.0;
   fEdepSum2    = 0.0;
 
-  if(!fHistoBooked) { bookHisto(); }
+  if(!fHistoBooked) { BookHisto(); }
   fHisto->Book();
 
   if(fVerbose > 0) {

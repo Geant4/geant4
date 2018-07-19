@@ -128,12 +128,20 @@ tools::histo::p2d* CreateToolsP2(
       G4Exception("G4P2ToolsManager::CreateP2",
                 "Analysis_W013", JustWarning, description);
     }              
-    return new tools::histo::p2d(title, 
-                                 nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
-                                 nybins, yfcn(ymin/yunit), yfcn(ymax/yunit),
-                                 zfcn(zmin/zunit), zfcn(zmax/zunit));
+    if ( zmin == 0. && zmax == 0.) {            
+      return new tools::histo::p2d(title, 
+                                   nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
+                                   nybins, yfcn(ymin/yunit), yfcn(ymax/yunit));
                // p2 objects are deleted in destructor and reset when 
                // closing a file.
+    } else {
+      return new tools::histo::p2d(title, 
+                                   nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
+                                   nybins, yfcn(ymin/yunit), yfcn(ymax/yunit),
+                                   zfcn(zmin/zunit), zfcn(zmax/zunit));
+               // p2 objects are deleted in destructor and reset when 
+               // closing a file.
+    }
   }
   else {
     // Compute edges
@@ -141,8 +149,12 @@ tools::histo::p2d* CreateToolsP2(
     ComputeEdges(nxbins, xmin, xmax, xunit, xfcn, xbinScheme, xedges);
     std::vector<G4double> yedges;
     ComputeEdges(nybins, ymin, ymax, yunit, yfcn, ybinScheme, yedges);
-    return new tools::histo::p2d(title, xedges, yedges, 
-                                 zfcn(zmin/zunit), zfcn(zmax/zunit)); 
+    if ( zmin == 0. && zmax == 0.) {            
+      return new tools::histo::p2d(title, xedges, yedges); 
+    } else {
+      return new tools::histo::p2d(title, xedges, yedges, 
+                                   zfcn(zmin/zunit), zfcn(zmax/zunit)); 
+    }
   }
 }     
 
@@ -172,10 +184,16 @@ tools::histo::p2d* CreateToolsP2(
   std::vector<G4double> ynewEdges;
   ComputeEdges(yedges, yunit, yfcn, ynewEdges);
   
-  return new tools::histo::p2d(title, xnewEdges, ynewEdges, 
+  if ( zmin == 0. && zmax == 0.) {            
+    return new tools::histo::p2d(title, xnewEdges, ynewEdges); 
+             // p2 objects are deleted in destructor and reset when 
+             // closing a file.
+  } else {
+    return new tools::histo::p2d(title, xnewEdges, ynewEdges, 
                                zfcn(zmin/zunit), zfcn(zmax/zunit)); 
              // p2 objects are deleted in destructor and reset when 
              // closing a file.
+  }
 }  
 
 //_____________________________________________________________________________
@@ -212,9 +230,14 @@ void  ConfigureToolsP2(tools::histo::p2d* p2d,
       G4Exception("G4P2ToolsManager::CreateP2",
                 "Analysis_W013", JustWarning, description);
     }              
-    p2d->configure(nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
-                   nybins, yfcn(ymin/yunit), yfcn(ymax/yunit),
-                   zfcn(zmin/zunit), zfcn(zmax/zunit));
+    if ( zmin == 0. && zmax == 0. ) {
+      p2d->configure(nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
+                     nybins, yfcn(ymin/yunit), yfcn(ymax/yunit));
+    } else {
+      p2d->configure(nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
+                     nybins, yfcn(ymin/yunit), yfcn(ymax/yunit),
+                     zfcn(zmin/zunit), zfcn(zmax/zunit));
+    }
   }
   else {
     // Compute bins
@@ -222,7 +245,11 @@ void  ConfigureToolsP2(tools::histo::p2d* p2d,
     ComputeEdges(nxbins, xmin, xmax, xunit, xfcn, xbinScheme, xedges);
     std::vector<G4double> yedges;
     ComputeEdges(nybins, ymin, ymax, yunit, yfcn, ybinScheme, yedges);
-    p2d->configure(xedges, yedges, zfcn(zmin/zunit), zfcn(zmax/zunit));
+    if ( zmin == 0. && zmax == 0. ) {
+      p2d->configure(xedges, yedges);
+    } else {
+      p2d->configure(xedges, yedges, zfcn(zmin/zunit), zfcn(zmax/zunit));
+    }  
   }
 }     
 
@@ -251,7 +278,11 @@ void  ConfigureToolsP2(tools::histo::p2d* p2d,
 
   auto zunit = GetUnitValue(zunitName);
   auto zfcn = GetFunction(zfcnName);
-  p2d->configure(xnewEdges, ynewEdges, zfcn(zmin/zunit), zfcn(zmax/zunit));
+  if ( zmin == 0. && zmax == 0. ) {
+    p2d->configure(xnewEdges, ynewEdges);
+  } else {
+    p2d->configure(xnewEdges, ynewEdges, zfcn(zmin/zunit), zfcn(zmax/zunit));
+  }
 }
 
 }
@@ -520,7 +551,7 @@ G4double G4P2ToolsManager::GetP2Xmin(G4int id) const
 // Returns xmin value with applied unit and profile function
 
   auto p2d = GetTInFunction(id, "GetP2Xmin");
-  if ( ! p2d ) return 0;
+  if ( ! p2d ) return 0.;
 
   return GetMin(*p2d, kX);
 }  
@@ -529,7 +560,7 @@ G4double G4P2ToolsManager::GetP2Xmin(G4int id) const
 G4double G4P2ToolsManager::GetP2Xmax(G4int id) const
 {
   auto p2d = GetTInFunction(id, "GetP2Xmax");
-  if ( ! p2d ) return 0;
+  if ( ! p2d ) return 0.;
   
   return GetMax(*p2d, kX);
 }  
@@ -538,7 +569,7 @@ G4double G4P2ToolsManager::GetP2Xmax(G4int id) const
 G4double G4P2ToolsManager::GetP2XWidth(G4int id) const
 {
   auto p2d = GetTInFunction(id, "GetP2XWidth", true, false);
-  if ( ! p2d ) return 0;
+  if ( ! p2d ) return 0.;
   
   return GetWidth(*p2d, kX, fHnManager->GetHnType());
 }  
@@ -558,7 +589,7 @@ G4double G4P2ToolsManager::GetP2Ymin(G4int id) const
 // Returns xmin value with applied unit and profile function
 
   auto p2d = GetTInFunction(id, "GetP2Ymin");
-  if ( ! p2d ) return 0;
+  if ( ! p2d ) return 0.;
   
   return GetMin(*p2d, kY);
 }  
@@ -567,7 +598,7 @@ G4double G4P2ToolsManager::GetP2Ymin(G4int id) const
 G4double G4P2ToolsManager::GetP2Ymax(G4int id) const
 {
   auto p2d = GetTInFunction(id, "GetP2Ymax");
-  if ( ! p2d ) return 0;
+  if ( ! p2d ) return 0.;
   
   return GetMax(*p2d, kY);
 }  
@@ -576,7 +607,7 @@ G4double G4P2ToolsManager::GetP2Ymax(G4int id) const
 G4double G4P2ToolsManager::GetP2YWidth(G4int id) const
 {
   auto p2d = GetTInFunction(id, "GetP2YWidth", true, false);
-  if ( ! p2d ) return 0;
+  if ( ! p2d ) return 0.;
   
   return GetWidth(*p2d, kY, fHnManager->GetHnType());
 }  
@@ -587,7 +618,7 @@ G4double G4P2ToolsManager::GetP2Zmin(G4int id) const
 // Returns xmin value with applied unit and profile function
 
   auto p2d = GetTInFunction(id, "GetP2Zmin");
-  if ( ! p2d ) return 0;
+  if ( ! p2d ) return 0.;
   
   return GetMin(*p2d, kZ);
 }  
@@ -596,7 +627,7 @@ G4double G4P2ToolsManager::GetP2Zmin(G4int id) const
 G4double G4P2ToolsManager::GetP2Zmax(G4int id) const
 {
   auto p2d = GetTInFunction(id, "GetP2Zmax");
-  if ( ! p2d ) return 0;
+  if ( ! p2d ) return 0.;
   
   return GetMax(*p2d, kZ);
 }  

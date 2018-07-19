@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 81932 2014-06-06 15:39:45Z gcosmo $
+// $Id: RunAction.cc 109656 2018-05-04 09:00:14Z gcosmo $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,13 +58,6 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   G4int id = run->GetRunID();
   G4cout << "### Run " << id << " start" << G4endl;
   HistoManager::GetPointer()->BeginOfRun();
-
-#ifdef G4VIS_USE
-  if ( G4VVisManager::GetConcreteInstance() ) {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
-  }
-#endif
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,12 +65,6 @@ void RunAction::BeginOfRunAction(const G4Run* run)
 void RunAction::EndOfRunAction(const G4Run*)
 {
   G4cout << "RunAction: End of run action is starting" << G4endl;
-
-#ifdef G4VIS_USE
-  if ( G4VVisManager::GetConcreteInstance() )
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-#endif
-
   HistoManager::GetPointer()->EndOfRun();
 }
 

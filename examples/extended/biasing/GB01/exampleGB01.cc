@@ -23,8 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file GB01/exampleGB01.cc
+/// \brief Main program of the GB01 example
+//
 // $Id: $
 //
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -41,14 +46,8 @@
 #include "FTFP_BERT.hh"
 #include "G4GenericBiasingPhysics.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,7 +63,6 @@ namespace {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 int main(int argc,char** argv)
 {
   // Evaluate arguments
@@ -73,7 +71,7 @@ int main(int argc,char** argv)
     PrintUsage();
     return 1;
   }
-  
+
   G4String macro("");
   G4String onOffBiasing("");
   if ( argc == 2 ) macro = argv[1];
@@ -90,9 +88,15 @@ int main(int argc,char** argv)
             }
         }
     }
-  
+
   if ( onOffBiasing == "" ) onOffBiasing = "on";
-  
+
+  // Instantiate G4UIExecutive if interactive mode
+  G4UIExecutive* ui = nullptr;
+  if (  macro == ""  ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // -- Construct the run manager : MT or sequential one
 #ifdef G4MULTITHREADED
   G4MTRunManager * runManager = new G4MTRunManager;
@@ -103,7 +107,6 @@ int main(int argc,char** argv)
   G4RunManager * runManager = new G4RunManager;
   G4cout << "      ********** Run Manager constructed in sequential mode ************ " << G4endl;
 #endif
-
 
   // -- Set mandatory initialization classes
   GB01DetectorConstruction* detector = new GB01DetectorConstruction();
@@ -135,43 +138,31 @@ int main(int argc,char** argv)
 
   // Initialize G4 kernel
   runManager->Initialize();
-  
 
-#ifdef G4VIS_USE
   // Initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   visManager->Initialize();
-#endif
 
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if ( macro != "" )   // batch mode
+  if ( !ui )   // batch mode
     {
       G4String command = "/control/execute ";
       UImanager->ApplyCommand(command+macro);
     }
   else
     {  // interactive mode : define UI session
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-      //      UImanager->ApplyCommand("/control/execute vis.mac"); 
-#endif
+      //      UImanager->ApplyCommand("/control/execute vis.mac");
       //      if (ui->IsGUI())
       //        UImanager->ApplyCommand("/control/execute gui.mac");
       ui->SessionStart();
       delete ui;
-#endif
     }
 
-
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
-  
 
   return 0;
 }

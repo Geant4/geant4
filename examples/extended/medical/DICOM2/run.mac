@@ -1,0 +1,34 @@
+# S. Chauvie
+#
+# Macro file recommended for the use with DICOM example and built-in physic list.
+# This macro uses the physics list already contained in the Geant4 distribution
+# 
+
+#########################
+# Set of the verboses 
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+
+##########################
+# Random
+#
+
+/random/setDirectoryName .
+/random/setSavingFlag 1
+#/random/resetEngineFrom currentEvent.rndm1
+
+
+##########################
+# Initialisation procedure
+#
+#/geometry/textInput/verbose 3
+
+/run/initialize
+
+#/dicom/intersectWithUserVolume 0. 0. 0. 45.*deg 0. 0. TUBE 0. 150. 100.
+
+/run/beamOn 100

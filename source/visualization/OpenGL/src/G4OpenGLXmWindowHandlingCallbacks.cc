@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmWindowHandlingCallbacks.cc 87695 2014-12-17 09:35:24Z gcosmo $
+// $Id: G4OpenGLXmWindowHandlingCallbacks.cc 98766 2016-08-09 14:17:17Z gcosmo $
 //
 // 
 // Andrew Walkden  16th June 1997
@@ -59,12 +59,12 @@ void G4OpenGLXmViewer::expose_callback (Widget w,
 
   pView->ResizeWindow(width,height);
 
-  //??????????????????????????? This might be a problem in MT mode.
-  glXMakeCurrent (pView->dpy, XtWindow(pView->glxarea), pView->cxMaster);
-
-  pView->SetView ();
-  pView->ClearView ();
-  pView->DrawView ();
+//??????????????????????????? This might be a problem in MT mode.
+//  glXMakeCurrent (pView->dpy, XtWindow(pView->glxarea), pView->cxMaster);
+//  pView->SetView ();
+//  pView->ClearView ();
+//  pView->DrawView ();
+//???????????????????????????? Commented out 14/06/16  JA
 }
 
 void G4OpenGLXmViewer::print_callback (Widget, 

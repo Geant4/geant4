@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniNeutronBuilder.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4BertiniNeutronBuilder.hh 103593 2017-04-19 08:10:21Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 //
 // Modified:
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -53,16 +54,17 @@ class G4BertiniNeutronBuilder : public G4VNeutronBuilder
 {
   public: 
     G4BertiniNeutronBuilder();
-    virtual ~G4BertiniNeutronBuilder();
+    virtual ~G4BertiniNeutronBuilder() {}
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4HadronFissionProcess * aP);
-    virtual void Build(G4HadronCaptureProcess * aP);
-    virtual void Build(G4NeutronInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4HadronFissionProcess *) final override {}
+    virtual void Build(G4HadronCaptureProcess *) final override {}
+    virtual void Build(G4NeutronInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
+
+    using G4VNeutronBuilder::Build;
 
   private:
     G4CascadeInterface * theModel;    

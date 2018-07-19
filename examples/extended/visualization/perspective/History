@@ -1,4 +1,4 @@
-$Id: History 69587 2013-05-08 14:26:03Z gcosmo $
+$Id: History 103931 2017-05-03 13:52:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8th January 2017  John Allison  (exam-ext-vis-persp-V10-03-00)
+- perspective.cc:
+  o Changed SetUserAction to RegisterRunDurationUserVisAction.
+  o Updated to current practice.
 
 27th March 2013  John Allison  (exam-ext-vis-persp-V09-06-02)
 - Added separators between functions.

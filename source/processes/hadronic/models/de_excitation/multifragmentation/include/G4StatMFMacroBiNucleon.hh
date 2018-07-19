@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroBiNucleon.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4StatMFMacroBiNucleon.hh 108066 2017-12-19 15:23:41Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
-#ifndef G4StatMFMacroBiBiNucleon_h
+#ifndef G4StatMFMacroBiNucleon_h_h
 #define G4StatMFMacroBiNucleon_h 1
 
 #include "G4VStatMFMacroCluster.hh"

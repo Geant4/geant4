@@ -1,4 +1,4 @@
-$Id: History 88154 2015-02-02 12:25:20Z gcosmo $
+$Id: History 109656 2018-05-04 09:00:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-05-18  J.Allison (exhadr02-V10-04-01)
+- RunAction.cc:
+  o Remove G4VIS_USE.
+  o Remove /vis/ commands - not necessary now and causes
+    problem in Qt with in multithreaded mode.
+- DetectorConstruction.cc: Pass vis attributes as objects, not pointers.
+- vis.mac: Remove "/testhadr/DrawTracks" (no longer exists).
+
+22-03-18  M.Maire (exhadr02-V10-04-00)
+- Hadr02.cc : remove G4UI_USE and G4VIS_USE
+
+01-11-16  I. Hrivnacova (exhadr02-V10-02-00)
+- Coding guidelines (class data member names)
 
 30-01-15  V.Ivanchenko (exhadr02-V10-01-00)
 - DPMJET interface is dropped according to decision of the

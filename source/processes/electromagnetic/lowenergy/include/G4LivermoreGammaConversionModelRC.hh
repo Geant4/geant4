@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreGammaConversionModelRC.hh 95459 2016-02-11 10:23:30Z gcosmo $
+// $Id: G4LivermoreGammaConversionModelRC.hh 94854 2015-12-11 13:54:09Z gcosmo $
 //
 // Authors: G.Depaola & F.Longo
 //

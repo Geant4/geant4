@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc 92942 2015-09-22 07:31:39Z gcosmo $
+// $Id: G4OpenGLXViewer.cc 103926 2017-05-03 13:43:27Z gcosmo $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -92,6 +92,15 @@ extern "C" {
 }
 
 void G4OpenGLXViewer::SetView () {
+#ifdef G4MULTITHREADED
+  if (G4Threading::IsMasterThread()) {
+    glXMakeCurrent (dpy, win, cxMaster);
+  } else {
+    glXMakeCurrent (dpy, win, cxVisSubThread);
+  }
+#else
+  glXMakeCurrent (dpy, win, cxMaster);
+#endif
   G4OpenGLViewer::SetView ();
 }
 
@@ -189,17 +198,17 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
 				      vi -> screen, 
 				      vi -> visualid, 
 				      vi -> depth, 
-				      XA_RGB_DEFAULT_MAP, 
+				      XA_RGB_BEST_MAP,
 				      False, 
 				      True);
-  
+
   if (status == 1) {
     cmap = 0;
     status = XGetRGBColormaps (dpy, 
-			       XRootWindow (dpy, vi -> screen), 
+			       XRootWindow (dpy, vi -> screen),
 			       &standardCmaps, 
 			       &numCmaps, 
-			       XA_RGB_DEFAULT_MAP);
+			       XA_RGB_BEST_MAP);
     if (status == 1)
       for (i = 0; i < numCmaps; i++) {
 	if (standardCmaps[i].visualid == vi -> visualid) {

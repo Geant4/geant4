@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4InitXscPAI.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // 
 // G4InitXscPAI.hh -- header file
@@ -49,7 +49,7 @@ class G4InitXscPAI
 {
 public:
 	  // Constructors
-  G4InitXscPAI( const G4MaterialCutsCouple* matCC);
+  explicit G4InitXscPAI( const G4MaterialCutsCouple* matCC);
 
   virtual ~G4InitXscPAI() ;
 
@@ -121,8 +121,8 @@ protected :
 
 private :
 
-  G4InitXscPAI & operator=(const G4InitXscPAI &right);
-  G4InitXscPAI(const G4InitXscPAI&);
+  G4InitXscPAI & operator=(const G4InitXscPAI &right) = delete;
+  G4InitXscPAI(const G4InitXscPAI&) = delete;
 
   // Local class constants
 

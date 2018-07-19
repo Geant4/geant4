@@ -63,7 +63,7 @@ namespace G4INCL {
     typedef std::map<long, G4double> EnergyLevelMap;
 
     ProjectileRemnant(ParticleSpecies const &species, const G4double kineticEnergy)
-      : Cluster(species.theZ, species.theA) {
+      : Cluster(species.theZ, species.theA, species.theS) {
 
       // Use the table mass
       setTableMass();
@@ -280,7 +280,7 @@ namespace G4INCL {
     /// \brief Ground-state energies for any number of nucleons
     EnergyLevels theGroundStateEnergies;
 
-    INCL_DECLARE_ALLOCATION_POOL(ProjectileRemnant);
+    INCL_DECLARE_ALLOCATION_POOL(ProjectileRemnant)
   };
 }
 

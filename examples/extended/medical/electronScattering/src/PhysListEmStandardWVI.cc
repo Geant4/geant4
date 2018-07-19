@@ -26,12 +26,14 @@
 /// \file medical/electronScattering/src/PhysListEmStandardWVI.cc
 /// \brief Implementation of the PhysListEmStandardWVI class
 //
-// $Id: PhysListEmStandardWVI.cc 102356 2017-01-23 16:22:42Z gcosmo $
+// $Id: PhysListEmStandardWVI.cc 100262 2016-10-17 08:08:04Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandardWVI.hh"
+
+#include "G4BuilderType.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
@@ -60,14 +62,17 @@
 #include "G4IonParametrisedLossModel.hh"
 #include "G4NuclearStopping.hh"
 
-#include "G4EmProcessOptions.hh"
-#include "G4MscStepLimitType.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandardWVI::PhysListEmStandardWVI(const G4String& name)
    :  G4VPhysicsConstructor(name)
-{}
+{
+    SetPhysicsType(bElectromagnetic);
+
+    G4EmParameters* param = G4EmParameters::Instance();
+    param->SetDefaults();
+    param->SetMscThetaLimit(0.2);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -160,17 +165,6 @@ void PhysListEmStandardWVI::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
     }
   }
-
-  // Em options
-  //
-  // Main options and setting parameters are shown here.
-  // Several of them have default values.
-  //
-  G4EmProcessOptions emOptions;
-      
-  //multiple coulomb scattering
-  //
-  emOptions.SetPolarAngleLimit(0.2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

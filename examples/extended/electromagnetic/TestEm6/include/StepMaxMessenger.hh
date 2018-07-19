@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/include/StepMaxMessenger.hh
+/// \file electromagnetic/TestEm6/include/StepMaxMessenger.hh
 /// \brief Definition of the StepMaxMessenger class
 //
 // $Id: StepMaxMessenger.hh 67268 2013-02-13 11:38:40Z ihrivnac $

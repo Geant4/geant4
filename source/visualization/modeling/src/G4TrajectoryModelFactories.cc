@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryModelFactories.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4TrajectoryModelFactories.cc 98766 2016-08-09 14:17:17Z gcosmo $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 
@@ -34,6 +34,7 @@
 #include "G4TrajectoryDrawByCharge.hh"
 #include "G4TrajectoryDrawByOriginVolume.hh"
 #include "G4TrajectoryDrawByParticleID.hh"
+#include "G4TrajectoryDrawByEncounteredVolume.hh"
 #include "G4TrajectoryGenericDrawer.hh"
 #include "G4TrajectoryModelFactories.hh"
 #include "G4VisTrajContext.hh"
@@ -145,7 +146,7 @@ G4TrajectoryDrawByParticleIDFactory::Create(const G4String& placement, const G4S
 
 //Draw by origin volume
 G4TrajectoryDrawByOriginVolumeFactory::G4TrajectoryDrawByOriginVolumeFactory()
-  :G4VModelFactory<G4VTrajectoryModel>("drawByOriginVolume") 
+:G4VModelFactory<G4VTrajectoryModel>("drawByOriginVolume")
 {}
 
 G4TrajectoryDrawByOriginVolumeFactory::~G4TrajectoryDrawByOriginVolumeFactory() {}
@@ -156,9 +157,9 @@ G4TrajectoryDrawByOriginVolumeFactory::Create(const G4String& placement, const G
   Messengers messengers;
 
   // Create default context and model
-  G4VisTrajContext* context = new G4VisTrajContext("default"); 
+  G4VisTrajContext* context = new G4VisTrajContext("default");
   G4TrajectoryDrawByOriginVolume* model = new G4TrajectoryDrawByOriginVolume(name, context);
-  
+
   // Create messengers for default context configuration
   G4ModelCommandUtils::AddContextMsgrs(context, messengers, placement+"/"+name);
 
@@ -166,6 +167,33 @@ G4TrajectoryDrawByOriginVolumeFactory::Create(const G4String& placement, const G
   messengers.push_back(new G4ModelCmdSetStringColour<G4TrajectoryDrawByOriginVolume>(model, placement));
   messengers.push_back(new G4ModelCmdSetDefaultColour<G4TrajectoryDrawByOriginVolume>(model, placement));
   messengers.push_back(new G4ModelCmdVerbose<G4TrajectoryDrawByOriginVolume>(model, placement));
+
+  return ModelAndMessengers(model, messengers);
+}
+
+//Draw by encountered volume
+G4TrajectoryDrawByEncounteredVolumeFactory::G4TrajectoryDrawByEncounteredVolumeFactory()
+:G4VModelFactory<G4VTrajectoryModel>("drawByEncounteredVolume")
+{}
+
+G4TrajectoryDrawByEncounteredVolumeFactory::~G4TrajectoryDrawByEncounteredVolumeFactory() {}
+
+ModelAndMessengers
+G4TrajectoryDrawByEncounteredVolumeFactory::Create(const G4String& placement, const G4String& name)
+{
+  Messengers messengers;
+
+  // Create default context and model
+  G4VisTrajContext* context = new G4VisTrajContext("default");
+  G4TrajectoryDrawByEncounteredVolume* model = new G4TrajectoryDrawByEncounteredVolume(name, context);
+
+  // Create messengers for default context configuration
+  G4ModelCommandUtils::AddContextMsgrs(context, messengers, placement+"/"+name);
+
+  // Create messengers for drawer
+  messengers.push_back(new G4ModelCmdSetStringColour<G4TrajectoryDrawByEncounteredVolume>(model, placement));
+  messengers.push_back(new G4ModelCmdSetDefaultColour<G4TrajectoryDrawByEncounteredVolume>(model, placement));
+  messengers.push_back(new G4ModelCmdVerbose<G4TrajectoryDrawByEncounteredVolume>(model, placement));
 
   return ModelAndMessengers(model, messengers);
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragment.hh 90337 2015-05-26 08:34:27Z gcosmo $
+// $Id: G4PreCompoundFragment.hh 100691 2016-10-31 11:26:25Z gcosmo $
 //
 //  J. M. Quesada (August 2008).  
 //  Based  on previous work by V. Lara
@@ -80,19 +80,16 @@ private:
 
   G4double GetOpt0(G4double ekin) const;
 
-  // default constructor
-  G4PreCompoundFragment();
   // operators
-  G4PreCompoundFragment(const G4PreCompoundFragment &right);
+  G4PreCompoundFragment(const G4PreCompoundFragment &right) = delete;
   const G4PreCompoundFragment& 
-  operator= (const G4PreCompoundFragment &right);
-  G4int operator==(const G4PreCompoundFragment &right) const;
-  G4int operator!=(const G4PreCompoundFragment &right) const;
+  operator= (const G4PreCompoundFragment &right) = delete;
+  G4int operator==(const G4PreCompoundFragment &right) const = delete;
+  G4int operator!=(const G4PreCompoundFragment &right) const = delete;
 
   G4int index;
 
   G4double muu;
-  G4double probability[12];
   G4double probmax;
 };
 

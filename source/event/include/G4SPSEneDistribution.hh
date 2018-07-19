@@ -55,6 +55,9 @@
 //    in Getters and Setters, mutex is NOT used in GenerateOne because it is
 //    assumed that properties are not changed during event loop.
 //
+// 24/11/2017  Fan Lei
+//    Added cutoff power-law distribution option. Implementation is similar to that of the BlackBody one.
+//
 ///////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -232,6 +235,7 @@ private:
 	void SplineInterpolation();//
 	void CalculateCdgSpectrum();//
 	void CalculateBbodySpectrum();//
+	void CalculateCPowSpectrum();//
 
 	// The following methods generate energies according to the spectral
 	// parameters defined above.
@@ -247,11 +251,13 @@ private:
     void GenerateExpEnergies(G4bool);//
 	void GenerateLinearEnergies(G4bool);//
 	void GeneratePowEnergies(G4bool);//
+	void GenerateCPowEnergies();//
 
     // converts energy per nucleon to energy.
 	void ConvertEPNToEnergy();
     
-    void InitHists();//
+    void BBInitHists();//
+	void CPInitHists();//
 
 private:
 
@@ -283,8 +289,14 @@ private:
 //	G4double BBHist[10001], Bbody_x[10001];
     std::vector<G4double>* BBHist;
     std::vector<G4double>* Bbody_x;
-    G4bool histInit;
-    G4bool histCalcd;
+    G4bool BBhistInit;
+    G4bool BBhistCalcd;
+//  For cutoff power-law	
+    std::vector<G4double>* CPHist;
+    std::vector<G4double>* CP_x;
+    G4bool CPhistInit;
+    G4bool CPhistCalcd;
+	
     
     //AG: Edit here to use dynamic memory, will save space inless these functions are used.
 	G4String IntType; // Interpolation type

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSSteppingAction.hh 69561 2013-05-08 12:25:56Z gcosmo $
+// $Id: WLSSteppingAction.hh 99622 2016-09-29 10:16:04Z gcosmo $
 //
 /// \file optical/wls/include/WLSSteppingAction.hh
 /// \brief Definition of the WLSSteppingAction class
@@ -104,7 +104,7 @@ class WLSSteppingAction : public G4UserSteppingAction
 
     // save the random status into a sub-directory
     // Pre: subDir must be empty or ended with "/"
-    inline void saveRandomStatus(G4String subDir);
+    inline void SaveRandomStatus(G4String subDir);
 
 };
 

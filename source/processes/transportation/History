@@ -1,4 +1,4 @@
-$Id: History 87829 2015-01-14 17:19:59Z gcosmo $
+$Id: History 110824 2018-06-15 13:25:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,106 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 15th  2018, G.Cosmo transport-V10-04-05
+------------------------
+- Fixed Coverity warnings...
+
+June 15th  2018, G.Cosmo transport-V10-04-04
+------------------------
+- Fixed compilation errors on Windows.
+
+June 14th  2018, J.Apostolakis transport-V10-04-03
+------------------------------
+- New class G4TransportationLogger to consolidate reports from the
+  Transportation processes. First step: it now issues the warning Exception
+  for looping tracks. Added information on material density, step length.    
+- G4Transportation and G4CoupledTransportation: changed default threshold from
+  0 to 1 keV for warning when abandoning looping tracks.
+  Tracks with less energy do not get reported.
+  Use G4TransportationLogger to report looping tracks.
+
+June  8th  2018, J.Apostolakis transport-V10-04-02
+------------------------------
+- Fixed and improved reporting of looping tracks.
+  Now issues warning and provides information about position and momentum,
+  in addition to energy and its value at pre-step point.
+
+June  8th  2018, G.Cosmo transport-V10-04-01
+------------------------
+- Some code cleanup in G4Transportation and G4CoupledTransportation.
+  Removed few global static symbols introduced in previous tag.
+
+June  7th 2018, J.Apostolakis transport-V10-04-00
+-----------------------------
+- G4Transportation & G4CoupledTransportation: changed default values of two
+  thresholds related to the killing of looping particles: 
+     'Important' Energy: particles with MORE energy are killed ONLY after
+                         multiple steps (fThresholdTrials) marked as 'looping'.
+     'Warning'   Energy: particles with LESS energy are killed SILENTLY
+     Intermediate value: particles between these energies are killed after
+                         one 'looping step' (with warning.)
+  New values:  Warning_Energy= 0. Important_Energy= 1.0 * MeV
+  NOTES:
+   1) This can happen if a track's propagation in field requires a large
+      number of integration steps.  ( Default number is 1000, and it is 
+      accessed by G4PropagatorInField's  Get/Set MaxLoopCount() methods.)
+   2) Usually the material is vacuum or very low density material.
+      And particles have either low momentum or momentum with a very small
+      component along the direction of the magnetic field (zero or nearly zero).
+
+  Improved reporting of the issue of dropped particles (above 'warning'
+  threshold'):
+    * Provide the type of particle and the position, in addition to
+      the energy (already).
+    * added recommendations for users if they see the warning.
+      (these are printed only for the first 5 warnings).
+  Addressing problem report #2063.
+
+November 22st 2017, V.Ivanchenko transport-V10-03-04  (internal)
+--------------------------------
+- G4NeutronKiller: moved virtual methods from inline to source,
+  do not use generic <int> type, should not affect any result.
+
+November 1st 2017, J.Apostolakis transport-V10-03-03
+--------------------------------
+- Small changes in G4Transportation - early set of 'First' flag.
+
+August 28th 2017, G.Cosmo        transport-V10-03-02
+--------------------------
+- Make appropriate setting/use of verbosity from base class G4VProcess,
+  instead of re-defining/using local verbosity flag in G4Transportation
+  and G4CoupledTransportation.
+  Addressing problem report #1999.
+
+August 28th 2017, G.Cosmo        transport-V10-03-01
+--------------------------------
+- Fixed use of G4DEBUG_TRANSPORT flag in G4CoupledTransportation.
+
+August 25th 2017, J.Apostolakis transport-V10-03-00
+--------------------------------
+- G4CoupledTransportation & G4Transportation: obtain equation of motion
+    using dedicated method of ProgatorInField. 
+    Smaller code, and future proof.
+
+February 12th 2015, J.Apostolakis transport-V10-01-03
+--------------------------------
+- G4CoupledTransportation:: Made SignifyStepInAnyVolume 'flag' static.
+    Stoped using IsLastStepInVolume for step limitation.
+    
+January 20th 2015, J.Apostolakis transport-V10-01-02
+--------------------------------
+- G4CoupledTransportation: Added ability to identify first step in a volume in either
+    the mass geometry or in any geometry.  Also added flag for last step in a volume
+    in the mass geometry.
+    Extends fix of tag transport-V10-01-00. 
+
+  Since it is not clear whether user wants/needs to identify the first/last in
+    any geometry or just in the mass geometry, allowing this to be a choice:
+  Configurable: whether the flag represents a first/last step in mass geometry
+  or any geometry (currently the default - what was the case for last step before).
+  Also depends in geomnav-V10-01-02 and track-V10-01-00.
+  Addresses Bugzilla issue #1032.
+     
 January 10th 2014, M.Kelsey transport-V10-01-01
 ---------------------------
 - G4Transportation.cc, G4CoupledTransportation: In

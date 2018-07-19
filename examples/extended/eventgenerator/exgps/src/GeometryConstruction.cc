@@ -139,7 +139,7 @@ G4VPhysicalVolume* GeometryConstruction::Construct()
                         fAl_phys,false,0);
   
 //--------- Visualization attributes -------------------------------
-  universe_log->SetVisAttributes(G4VisAttributes::Invisible);
+  universe_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   G4VisAttributes* aVisAtt= new G4VisAttributes(G4Colour(0,1.0,1.0));
   Al_log->SetVisAttributes(aVisAtt);
   G4VisAttributes* bVisAtt= new G4VisAttributes(G4Colour(1.0,2.0,.0));

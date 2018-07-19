@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh 94222 2015-11-09 08:28:49Z gcosmo $
+// $Id: G4RunMessenger.hh 95634 2016-02-17 08:05:21Z gcosmo $
 //
 // 
 //	GEANT 4 class header file 
@@ -101,6 +101,7 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithABool*           geomRebCmd;
     G4UIcmdWithoutParameter *   physCmd;
     G4UIcmdWithAnInteger *      randEvtCmd;
+    G4UIcommand *               procUICmds;
 
     G4UIdirectory *             randomDirectory;
     G4UIcmdWithAString *        seedCmd;

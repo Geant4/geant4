@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109865 2018-05-09 12:21:39Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,12 +14,37 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B.Morgan (testem4-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
 
-14-10-16 G.Folger
+07-04-18 mma (testem4-V10-04-01)
+- testem4.cc : set visualisation only in interactive mode
+
+13-03-18 mma (testem4-V10-04-00)
+- testem4.cc : remove G4UI_USE and G4VIS_USE
+
+10-04-17 mma  (testem4-V10-03-00)
+- BeginOfRunAction() : remove SetRandomNumberStore(true)
+
+14-10-16 G.Folger (testem4-V10-02-05)
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
-  fix required by clang39 on Linux and MAC
+    fix required by clang39 on Linux and MAC
+	 
+29-09-16 mma  (testem4-V10-02-04)
+- rm double blanck lines
+	 
+20-07-16 mma  (testem4-V10-02-03)
+- rm double blanck lines
 
-10-12-15 V.Ivant (testem4-V10-01-00)
+20-07-16 mma  (testem4-V10-02-02)
+- EventAction.hh : AddEdep()
+
+04-07-16 I. Hrivnacova  (testem4-V10-02-01)
+- Fixes for Doxygen documentation
+
+10-12-15 V.Ivant (testem4-V10-02-00)
 - H.Burkhardt fixed root macro allowing to work both with root5 and 6
     	 
 23-10-14 ma (testem4-V10-00-03)

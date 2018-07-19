@@ -7,7 +7,7 @@
 // Connexion inlib/histo to sg/plotter.
 
 // Inheritance :
-#include "plottable"
+#include "plottables"
 
 #include "../histo/h1d"
 #include "../histo/h2d"
@@ -45,16 +45,16 @@ public: //plottable
   virtual void infos(const std::string& a_opts,std::string& a_sinfos) const {
     a_sinfos.clear();
     std::string f_lf("\n");
-    std::vector<std::string> words;
-    tools::words(a_opts," ",false,words);
+    std::vector<std::string> ws;
+    words(a_opts," ",false,ws);
     std::vector<std::string>::const_iterator it;
   
   /*bool show_fit_ndf = false;
-   {for(it=words.begin();it!=words.end();++it) {
+   {for(it=ws.begin();it!=ws.end();++it) {
       if((*it)=="fit_ndf") {show_fit_ndf = true;break;}
     }}*/
 
-    for(it=words.begin();it!=words.end();++it) {
+    for(it=ws.begin();it!=ws.end();++it) {
       if(((*it)=="name") && m_name.size()) {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Name";
@@ -83,13 +83,13 @@ public: //plottable
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "UDFLW";
         a_sinfos += f_lf;
-        if(!numas<double>(m_data.bin_height(tools::histo::axis_UNDERFLOW_BIN),a_sinfos)){}
+        if(!numas<double>(m_data.bin_height(histo::axis_UNDERFLOW_BIN),a_sinfos)){}
   
       } else if((*it)=="overflow") {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "OVFLW";
         a_sinfos += f_lf;
-        if(!numas<double>(m_data.bin_height(tools::histo::axis_OVERFLOW_BIN),a_sinfos)){}
+        if(!numas<double>(m_data.bin_height(histo::axis_OVERFLOW_BIN),a_sinfos)){}
   
 /*
       } else if((*it)=="fit_quality") {
@@ -153,7 +153,7 @@ public: //bins1D
   virtual float bin_error(int aI) const {return (float)m_data.bin_error(aI);}
   virtual bool is_profile() const {return false;}
 public:
-  h1d2plot(const tools::histo::h1d& a_data):m_data(a_data) {
+  h1d2plot(const histo::h1d& a_data):m_data(a_data) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
@@ -180,9 +180,9 @@ public:
     return *this;
   }
 public:
-  const tools::histo::h1d& data() const {return m_data;}
+  const histo::h1d& data() const {return m_data;}
 protected:
-  const tools::histo::h1d& m_data;
+  const histo::h1d& m_data;
   std::string m_name;
   std::string m_legend;
 };
@@ -207,10 +207,10 @@ public: //plottable
   virtual void infos(const std::string& a_opts,std::string& a_sinfos) const {
     a_sinfos.clear();
     std::string f_lf("\n");
-    std::vector<std::string> words;
-    tools::words(a_opts," ",false,words);
+    std::vector<std::string> ws;
+    words(a_opts," ",false,ws);
     std::vector<std::string>::const_iterator it;
-    for(it=words.begin();it!=words.end();++it) {
+    for(it=ws.begin();it!=ws.end();++it) {
       if(((*it)=="name") && m_name.size()) {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Name\n";
@@ -264,7 +264,7 @@ public: //bins2D
 
   virtual float bin_error(int aI,int aJ) const {return (float)m_data.bin_error(aI,aJ);}
 public:
-  h2d2plot(const tools::histo::h2d& a_data)
+  h2d2plot(const histo::h2d& a_data)
   :m_data(a_data)
   {
 #ifdef TOOLS_MEM
@@ -293,7 +293,7 @@ public:
     return *this;
   }
 protected:
-  const tools::histo::h2d& m_data;
+  const histo::h2d& m_data;
   std::string m_name;
   std::string m_legend;
 };
@@ -319,10 +319,10 @@ public:
   virtual void infos(const std::string& a_opts,std::string& a_sinfos) const {
     a_sinfos.clear();
     std::string f_lf("\n");
-    std::vector<std::string> words;
-    tools::words(a_opts," ",false,words);
+    std::vector<std::string> ws;
+    words(a_opts," ",false,ws);
     std::vector<std::string>::const_iterator it;
-    for(it=words.begin();it!=words.end();++it) {
+    for(it=ws.begin();it!=ws.end();++it) {
       if(((*it)=="name") && m_name.size()) {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Name\n";
@@ -365,7 +365,7 @@ public:
 
   virtual bool is_profile() const {return true;}
 public:
-  p1d2plot(const tools::histo::p1d& a_data):m_data(a_data){}
+  p1d2plot(const histo::p1d& a_data):m_data(a_data){}
   virtual ~p1d2plot(){}
 public:
   p1d2plot(const p1d2plot& a_from)
@@ -380,7 +380,7 @@ public:
     return *this;
   }
 protected:
-  const tools::histo::p1d& m_data;
+  const histo::p1d& m_data;
   std::string m_name;
   std::string m_legend;
 };
@@ -437,10 +437,10 @@ public: //SbPlottableBins2D
   virtual void infos(const std::string& a_opts,std::string& a_sinfos) const {
     a_sinfos.clear();
     std::string f_lf("\n");
-    std::vector<std::string> words;
-    tools::words(a_opts," ",false,words);
+    std::vector<std::string> ws;
+    words(a_opts," ",false,ws);
     std::vector<std::string>::const_iterator it;
-    for(it=words.begin();it!=words.end();++it) {
+    for(it=ws.begin();it!=ws.end();++it) {
       if(((*it)=="name") && m_name.size()) {
         if(a_sinfos.size()) a_sinfos += f_lf;
         a_sinfos += "Name\n";
@@ -470,7 +470,7 @@ public: //SbPlottableBins2D
   }
 
 public:
-  p2d2plot(const tools::histo::p2d& a_data)
+  p2d2plot(const histo::p2d& a_data)
   :m_data(a_data)
   {
 #ifdef TOOLS_MEM
@@ -498,7 +498,7 @@ public:
     return *this;
   }
 protected:
-  const tools::histo::p2d& m_data;
+  const histo::p2d& m_data;
   std::string m_name;
   std::string m_legend;
 };

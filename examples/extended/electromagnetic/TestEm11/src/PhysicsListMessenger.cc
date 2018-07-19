@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.cc 94269 2015-11-10 07:55:24Z gcosmo $
+// $Id: PhysicsListMessenger.cc 96329 2016-04-06 15:53:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,6 @@
 #include "PhysicsList.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,12 +50,6 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   fListCmd->SetParameterName("PList",false);
   fListCmd->AvailableForStates(G4State_PreInit);
   fListCmd->SetToBeBroadcasted(false);
-
-  fNumAngs = new G4UIcmdWithAnInteger("/testem/phys/setNumberOfAngles",this);  
-  fNumAngs->SetGuidance("Set the Number of Discrete Angles.");
-  fNumAngs->SetParameterName("numAngles",false);
-  fNumAngs->AvailableForStates(G4State_PreInit);
-  fNumAngs->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +58,6 @@ PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete fListCmd;
   delete fPhysDir;
-  delete fNumAngs;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,8 +67,6 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
 {
   if( command == fListCmd )
    { fPhysicsList->AddPhysicsList(newValue);}
-  if( command == fNumAngs )
-   { fPhysicsList->SetNumAngles(fNumAngs->GetNewIntValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

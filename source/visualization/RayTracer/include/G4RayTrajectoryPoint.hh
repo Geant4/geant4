@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectoryPoint.hh 77479 2013-11-25 10:01:22Z gcosmo $
+// $Id: G4RayTrajectoryPoint.hh 110261 2018-05-17 14:24:23Z gcosmo $
 //
 //
 
@@ -80,21 +80,21 @@ class G4RayTrajectoryPoint :public G4VTrajectoryPoint
 };
 
 #if defined G4VIS_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4RayTrajectoryPoint>* rayTrajectoryPointAllocator;
+  extern G4DLLEXPORT G4Allocator<G4RayTrajectoryPoint>*& rayTrajectoryPointAllocator();
 #else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4RayTrajectoryPoint>* rayTrajectoryPointAllocator;
+  extern G4DLLIMPORT G4Allocator<G4RayTrajectoryPoint>*& rayTrajectoryPointAllocator();
 #endif
 
 inline void* G4RayTrajectoryPoint::operator new(size_t)
 {
-   if(!rayTrajectoryPointAllocator)
-   { rayTrajectoryPointAllocator = new G4Allocator<G4RayTrajectoryPoint>; }
-   return (void *) rayTrajectoryPointAllocator->MallocSingle();
+   if(!rayTrajectoryPointAllocator())
+   { rayTrajectoryPointAllocator() = new G4Allocator<G4RayTrajectoryPoint>; }
+   return (void *) rayTrajectoryPointAllocator()->MallocSingle();
 }
 
 inline void G4RayTrajectoryPoint::operator delete(void *aTrajectoryPoint)
 {
-   rayTrajectoryPointAllocator->FreeSingle((G4RayTrajectoryPoint *) aTrajectoryPoint);
+   rayTrajectoryPointAllocator()->FreeSingle((G4RayTrajectoryPoint *) aTrajectoryPoint);
 }
 
 #endif

@@ -43,9 +43,9 @@
 #ifndef G4GHEKinematicsVector_h
 #define G4GHEKinematicsVector_h 1
 
-#include "G4ios.hh"
-
 #include <CLHEP/Units/PhysicalConstants.h>
+#include "G4ios.hh"
+#include "G4ParticleMomentum.hh"
 
 class G4GHEKinematicsVector
  {
@@ -671,10 +671,10 @@ class G4GHEKinematicsVector
    }                 
 
   inline
-   void Print( G4int L)
+   void Print( G4int LLL)
    {
      G4cout << "G4GHEKinematicsVector: " 
-          << L << " " << momentum.x() << " " <<  momentum.y() << " " <<  momentum.z() << " "
+          << LLL << " " << momentum.x() << " " <<  momentum.y() << " " <<  momentum.z() << " "
           << energy << " " << kineticEnergy << " " << mass << " " << charge << " " 
           << timeOfFlight << " " << side << " " << flag << " " << code << particleDef << G4endl;
      return;                         

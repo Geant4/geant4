@@ -69,6 +69,7 @@ G4EmLEPTSPhysics::G4EmLEPTSPhysics( const G4String& name)
  : G4VPhysicsConstructor(name)
 {
   G4EmParameters::Instance()->SetDefaults();
+  SetPhysicsType(bElectromagnetic);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -101,6 +102,9 @@ void G4EmLEPTSPhysics::ConstructProcess()
 {
   auto myParticleIterator=GetParticleIterator();
   myParticleIterator->reset();
+
+	auto myParticleIterator=GetParticleIterator();
+	myParticleIterator->reset();
 
   while( (*myParticleIterator)() ){
     G4ParticleDefinition * particle = myParticleIterator->value();

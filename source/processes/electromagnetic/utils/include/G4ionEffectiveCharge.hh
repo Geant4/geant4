@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.hh 79394 2014-02-27 08:51:38Z gcosmo $
+// $Id: G4ionEffectiveCharge.hh 108386 2018-02-09 15:38:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -64,7 +64,7 @@ class G4ionEffectiveCharge
 
 public:
 
-  G4ionEffectiveCharge();
+  explicit G4ionEffectiveCharge();
 
   virtual ~G4ionEffectiveCharge();
 
@@ -80,11 +80,11 @@ public:
 private:
 
   // hide assignment operator
-  G4ionEffectiveCharge & operator=(const G4ionEffectiveCharge &right);
-  G4ionEffectiveCharge(const G4ionEffectiveCharge&);
+  G4ionEffectiveCharge & operator=(const G4ionEffectiveCharge &right) = delete;
+  G4ionEffectiveCharge(const G4ionEffectiveCharge&) = delete;
 
-  static const G4double       inveplus;
-  G4Pow*                      g4pow;
+  G4double                    inveplus;
+  G4Pow*                      g4calc;
 
   const G4ParticleDefinition* lastPart;
   const G4Material*           lastMat;

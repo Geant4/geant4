@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 102333 2017-01-23 10:47:30Z gcosmo $
+$Id: History 110545 2018-05-29 13:40:55Z gcosmo $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -16,7 +16,46 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-04 October 2016 Peter Gumplinger (hadr-proc-V10-01-05)
+29 May 2018 Vladimir Ivanchenko (hadr-proc-V10-04-07)
+-----------------------------------------------------
+- G4HadronElasticProcess, G4NeutrinoElectronProcess : use const pointers
+    and "nullptr" for  G4Material and G4Element
+
+09 May 2018 Alberto Ribon (hadr-proc-V10-04-06)
+-----------------------------------------------------
+- G4HadronElasticProcess, G4NeutrinoElectronProcess : fixed warnings in gcc 8
+    regarding catching polymorphic type by value, instead of by reference.
+
+13 February 2018 Vladimir Ivanchenko (hadr-proc-V10-04-05)
+-----------------------------------------------------
+- G4NeutrinoElectronProcess: V.Grichine update
+
+02 February 2018 Vladimir Ivanchenko (hadr-proc-V10-04-04)
+-----------------------------------------------------
+- G4NeutrinoElectronProcess: V.Grichine change constructor
+
+14 December 2017 Alberto Ribon  (hadr-proc-V10-04-03)
+-----------------------------------------------------
+- G4NeutrinoElectronProcess: added missing definition of method 
+                             SetLowestEnergy.
+
+14 December 2017 Alberto Ribon  (hadr-proc-V10-04-02)
+-----------------------------------------------------
+- Fixed mistake in sources.cmake .
+
+14 December 2017 Alberto Ribon  (hadr-proc-V10-04-01)
+-----------------------------------------------------
+- Forgot to update sources.cmake .
+
+14 December 2017 Alberto Ribon  (hadr-proc-V10-04-00)
+-----------------------------------------------------
+- G4NeutrinoElectronProcess : added new process created by V. Grichine.
+
+18 July 2017 Dennis Wright  (hadr-proc-V10-03-00)
+-------------------------------------------------
+- use class name in process description 
+
+04 October 2016 Peter Gumplinger (hadr-proc-V10-02-00)
 ------------------------------------------------------
 - Fix incorrectly calculated MicroRoughness correction to absorption
   probability (thanks to W. Schreyer/Technische Universität München)

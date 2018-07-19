@@ -6,7 +6,7 @@
 
 #include "mat"
 
-#include <cmath>
+//#include <cmath>
 
 namespace tools {
 
@@ -15,7 +15,11 @@ class mat4 : public mat<T,4> {
   typedef mat<T,4> parent;
   typedef mat<T,4> pr;
 public:
+#ifdef TOOLS_MEM
+  mat4(bool a_inc = true):parent(a_inc) {}
+#else
   mat4():parent() {}
+#endif
   mat4(const mat<T,4>& a_from):parent(a_from){}
   virtual ~mat4() {}
 public:
@@ -62,8 +66,8 @@ public:
   void set_translate(const T& a_x,const T& a_y,const T& a_z) {
     _set_translate(a_x,a_y,a_z,pr::m_vec);
   }
-  void set_rotate(const T& a_x,const T& a_y,const T& a_z,const T& a_angle) {
-    _set_rotate(a_x,a_y,a_z,a_angle,pr::m_vec);
+  void set_rotate(const T& a_x,const T& a_y,const T& a_z,const T& a_angle,T(*a_sin)(T),T(*a_cos)(T)) {
+    _set_rotate(a_x,a_y,a_z,a_angle,pr::m_vec,a_sin,a_cos);
   }
   void set_ortho(const T& a_l,const T& a_r,   //left,right
                  const T& a_b,const T& a_t,   //bottom,top
@@ -155,6 +159,13 @@ public:
     a_y = pr::m_vec[13];
     a_z = pr::m_vec[14];
   }
+
+//void set_translate_only(const T& a_x,const T& a_y,const T& a_z) {
+//  pr::m_vec[12] = a_x;
+//  pr::m_vec[13] = a_y;
+//  pr::m_vec[14] = a_z;
+//}
+
 public:
   void mul_4(T& a_x,T& a_y,T& a_z,T& a_p) const {
     // a_[x,y,z,p] = this * a_[x,y,z,p]
@@ -211,6 +222,14 @@ public:
     a_z = z;
   }
 
+  void mul_trans_3(T& a_x,T& a_y,T& a_z) const {
+    // used in sg::healpix.
+    // a_[x,y,z] = trans_part(this) * a_[x,y,z]
+    a_x += pr::m_vec[12];
+    a_y += pr::m_vec[13];
+    a_z += pr::m_vec[14];
+  }
+
   template <class VEC>
   void mul_dir_3(VEC& a_dir) const {
     mul_dir_3(a_dir[0],a_dir[1],a_dir[2]);
@@ -261,16 +280,15 @@ public:
     pr::m_vec[15] = pr::m_vec[3]*a_x+pr::m_vec[7]*a_y+pr::m_vec[11]*a_z+pr::m_vec[15];
   }
 
-  void mul_rotate(const T& a_x,const T& a_y,const T& a_z,const T& a_angle) {
+  void mul_rotate(const T& a_x,const T& a_y,const T& a_z,const T& a_angle,T(*a_sin)(T),T(*a_cos)(T)) {
     T rot[16];
-    _set_rotate(a_x,a_y,a_z,a_angle,rot);
+    _set_rotate(a_x,a_y,a_z,a_angle,rot,a_sin,a_cos);
     parent::_mul_mtx(rot);
   }
 
-  void left_mul_rotate(const T& a_x,const T& a_y,const T& a_z,
-                       const T& a_angle) {
+  void left_mul_rotate(const T& a_x,const T& a_y,const T& a_z,const T& a_angle,T(*a_sin)(T),T(*a_cos)(T)) {
     T _m[16];
-    _set_rotate(a_x,a_y,a_z,a_angle,_m);
+    _set_rotate(a_x,a_y,a_z,a_angle,_m,a_sin,a_cos);
     parent::_left_mul_mtx(_m);
   }
 
@@ -340,11 +358,11 @@ protected:
     v[2] =   0;v[6] =   0;v[10] = a_3;v[14] = 0;
     v[3] =   0;v[7] =   0;v[11] =   0;v[15] = T(1);
   }
-  static void _set_rotate(const T& a_x,const T& a_y,const T& a_z,
-                          const T& a_angle,T v[]) {
+
+  static void _set_rotate(const T& a_x,const T& a_y,const T& a_z,const T& a_angle,T v[],T(*a_sin)(T),T(*a_cos)(T)) {
     //WARNING : (a_x,a_y,a_z) must be a normalized vector.
-    T co = (T)::cos(a_angle);    
-    T si = (T)::sin(a_angle);    
+    T si = a_sin(a_angle);    
+    T co = a_cos(a_angle);    
     T x = a_x;
     T y = a_y;
     T z = a_z;
@@ -446,6 +464,26 @@ public:
 
 private:static void check_instantiation() {mat4<float> dummy;}
 };
+
+////////////////////////////////////////////////
+/// common matrices : //////////////////////////
+////////////////////////////////////////////////
+
+#ifdef TOOLS_MEM
+template <class T> inline const mat4<T>& mat4_zero() {static const mat4<T> s_v(false);return s_v;}
+#else
+template <class T> inline const mat4<T>& mat4_zero() {static const mat4<T> s_v;return s_v;}
+#endif
+
+/*
+template <class T>
+inline const mat4<T>& mat4_identity() {
+  static mat4<T> s_v(false);
+  static bool s_first = true;
+  if(s_first) {s_v.set_identity();s_first=false;}
+  return s_v;
+}
+*/
 
 //for sf, mf :
 template <class T>

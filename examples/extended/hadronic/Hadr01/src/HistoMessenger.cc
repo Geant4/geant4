@@ -27,7 +27,7 @@
 /// \brief Implementation of the HistoMessenger class
 //
 //
-// $Id: HistoMessenger.cc 70761 2013-06-05 12:30:51Z gcosmo $
+// $Id: HistoMessenger.cc 107541 2017-11-22 08:24:57Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,17 +45,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoMessenger::HistoMessenger(Histo* hist)
- : G4UImessenger(), fHisto(hist),
-   fHistoDir(0), fFactoryCmd(0), fFileCmd(0), fHistoCmd(0)
+ : G4UImessenger(), fHisto(hist)
 {
   fHistoDir = new G4UIdirectory("/testhadr/histo/");
   fHistoDir->SetGuidance("histograms control");
 
-  fFactoryCmd = new G4UIcmdWithAString("/testhadr/histo/fileName",this);
+  fFactoryCmd = new G4UIcmdWithAString("/testhadr/HistoName",this);
   fFactoryCmd->SetGuidance("set name for the histograms file");
-
-  fFileCmd = new G4UIcmdWithAString("/testhadr/histo/fileType",this);
-  fFileCmd->SetGuidance("set type (hbook, XML) for the histograms file");
 
   fHistoCmd = new G4UIcommand("/testhadr/histo/setHisto",this);
   fHistoCmd->SetGuidance("Set bining of the histo number ih :");
@@ -89,7 +85,6 @@ HistoMessenger::HistoMessenger(Histo* hist)
 
 HistoMessenger::~HistoMessenger()
 {
-  delete fFileCmd;
   delete fHistoCmd;
   delete fFactoryCmd;
   delete fHistoDir;
@@ -101,8 +96,6 @@ void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
   if (command == fFactoryCmd) { fHisto->SetFileName(newValues); }
 
-  if (command == fFileCmd)    { fHisto->SetFileType(newValues); }
-    
   if (command == fHistoCmd) {
     G4int ih,nbBins; 
     G4double vmin,vmax;

@@ -1,4 +1,4 @@
-$Id: History 84599 2014-10-17 07:42:42Z gcosmo $
+$Id: History 110760 2018-06-13 06:24:05Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 13, 2018  G.Cosmo (exerrprop-V10-04-00)
+- Use implicit destructor in ExErrorMagneticField.
+- Updated README.
 
 Oct 16, 2014  I.Hrivnacova (exerrprop-V10-00-00)
 - Fixed coding guidelines (long lines) in errprop.cc, ExErrorDetectorConstruction.cc

@@ -35,8 +35,21 @@
 #include "G4VVisCommand.hh"
 
 class G4UIcommand;
+class G4UIcmdWithAnInteger;
 class G4UIcmdWithADouble;
 class G4UIcmdWithAString;
+
+class G4VisCommandSetArrow3DLineSegmentsPerCircle: public G4VVisCommand {
+public:
+  G4VisCommandSetArrow3DLineSegmentsPerCircle ();
+  virtual ~G4VisCommandSetArrow3DLineSegmentsPerCircle ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSetArrow3DLineSegmentsPerCircle (const G4VisCommandSetArrow3DLineSegmentsPerCircle&);
+  G4VisCommandSetArrow3DLineSegmentsPerCircle& operator = (const G4VisCommandSetArrow3DLineSegmentsPerCircle&);
+  G4UIcmdWithAnInteger* fpCommand;
+};
 
 class G4VisCommandSetColour: public G4VVisCommand {
 public:

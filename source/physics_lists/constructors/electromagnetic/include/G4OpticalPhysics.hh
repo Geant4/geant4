@@ -90,10 +90,16 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     void SetWLSTimeProfile(G4String );
     void SetScintillationByParticleType(G4bool );
+    void SetScintillationTrackInfo(G4bool );
     //void AddScintillationSaturation(G4EmSaturation* );
 
     void SetTrackSecondariesFirst(G4OpticalProcessIndex, G4bool );
     void SetFiniteRiseTime(G4bool );
+
+    void SetCerenkovStackPhotons(G4bool );
+    void SetScintillationStackPhotons(G4bool );
+
+    void SetInvokeSD(G4bool );
 
   private:
 
@@ -134,6 +140,19 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     /// particle type and deposited energy in case of non-linear
     /// light emission in scintillators
     G4bool                      fScintillationByParticleType;
+
+    /// option to allow for G4ScintillationTrackInformation
+    /// to be attached to a scintillation photon's track
+    G4bool                      fScintillationTrackInfo;
+
+    /// option to allow for G4OpBoundaryProcess
+    /// to call/not call InvokeSD method
+    G4bool                      fInvokeSD;
+
+    /// option to allow stacking of secondary Cerenkov photons
+    G4bool                      fCerenkovStackPhotons;
+    /// option to allow stacking of secondary Scintillation photons
+    G4bool                      fScintillationStackPhotons;
 
 };
 

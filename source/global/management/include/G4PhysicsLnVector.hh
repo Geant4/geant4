@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLnVector.hh 74256 2013-10-02 14:24:02Z gcosmo $
+// $Id: G4PhysicsLnVector.hh 98864 2016-08-15 11:53:26Z gcosmo $
 //
 // 
 //--------------------------------------------------------------------
@@ -50,33 +50,8 @@
 #ifndef G4PhysicsLnVector_h
 #define G4PhysicsLnVector_h 1
 
-#include "globals.hh"
-#include "G4PhysicsVector.hh"
+#include "G4PhysicsLogVector.hh"
 
-class G4PhysicsLnVector : public G4PhysicsVector  
-{
-  public:
-
-    G4PhysicsLnVector();
-    explicit G4PhysicsLnVector(size_t theNbin);
-      // Constructors
-
-  public: // with description
-
-    G4PhysicsLnVector(G4double theEmin, G4double theEmax, size_t theNbin);
-      // Because of logarithmic scale, note that 'theEmin' has to be 
-      // greater than zero. No protection exists against this error.
-
-    virtual ~G4PhysicsLnVector();
-      // Destructor.
-
-    virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
-      // To retrieve persistent data from file stream.
-
-    virtual void ScaleVector(G4double factorE, G4double factorV);
-      // Scale all values of the vector and second derivatives
-      // by factorV, energies by vectorE. 
-
-};
+typedef G4PhysicsLogVector G4PhysicsLnVector;
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh 93264 2015-10-14 09:30:04Z gcosmo $
+// $Id: G4VEnergyLossProcess.hh 106714 2017-10-20 09:38:06Z gcosmo $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -139,13 +139,16 @@ private:
   //------------------------------------------------------------------------
 
 public:
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override = 0;
   
-  virtual void PrintInfo() = 0;
+  // obsolete to be removed
+  virtual void PrintInfo() {};
 
-  virtual void ProcessDescription(std::ostream& outFile) const; // = 0;
+  virtual void ProcessDescription(std::ostream& outFile) const override;
 
 protected:
+
+  virtual void StreamProcessInfo(std::ostream&, G4String) const {};
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
                                            const G4ParticleDefinition*) = 0;
@@ -165,10 +168,10 @@ protected:
 public:
 
   // prepare all tables
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&) override;
 
   // build all tables
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
   // build a table
   G4PhysicsTable* BuildDEDXTable(G4EmTableType tType = fRestricted);
@@ -176,11 +179,8 @@ public:
   // build a table
   G4PhysicsTable* BuildLambdaTable(G4EmTableType tType = fRestricted);
 
-  // summary printout after initialisation
-  void PrintInfoDefinition(const G4ParticleDefinition& part);
-
   // Called before tracking of each new G4Track
-  virtual void StartTracking(G4Track*);
+  virtual void StartTracking(G4Track*) override;
 
   // Step limit from AlongStep 
   virtual G4double AlongStepGetPhysicalInteractionLength(
@@ -188,16 +188,17 @@ public:
                                   G4double  previousStepSize,
                                   G4double  currentMinimumStep,
                                   G4double& currentSafety,
-                                  G4GPILSelection* selection);
+                                  G4GPILSelection* selection) override;
 
   // Step limit from cross section
   virtual G4double PostStepGetPhysicalInteractionLength(
                                   const G4Track& track,
                                   G4double   previousStepSize,
-                                  G4ForceCondition* condition);
+                                  G4ForceCondition* condition) override;
 
   // AlongStep computations
-  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, 
+                                           const G4Step&) override;
 
   // Sampling of secondaries in vicinity of geometrical boundary
   // Return sum of secodaries energy 
@@ -205,22 +206,28 @@ public:
                                    G4VEmModel* model, G4int matIdx); 
 
   // PostStep sampling of secondaries
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, 
+                                          const G4Step&) override;
 
   // Store all PhysicsTable in files.
   // Return false in case of any fatal failure at I/O  
   virtual G4bool StorePhysicsTable(const G4ParticleDefinition*,
                                    const G4String& directory,
-                                   G4bool ascii = false);
+                                   G4bool ascii = false) override;
 
   // Retrieve all Physics from a files.
   // Return true if all the Physics Table are built.
   // Return false if any fatal failure. 
   virtual G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
                                       const G4String& directory,
-                                      G4bool ascii);
+                                      G4bool ascii) override;
 
 private:
+
+  // summary printout after initialisation
+  void StreamInfo(std::ostream& out, const G4ParticleDefinition& part,
+                  G4String endOfLine=G4String("\n")) const;
+
   // store a table
   G4bool StoreTable(const G4ParticleDefinition* p, 
                     G4PhysicsTable*, G4bool ascii,
@@ -264,13 +271,13 @@ protected:
   // implementation of the pure virtual method
   virtual G4double GetMeanFreePath(const G4Track& track,
                                    G4double previousStepSize,
-                                   G4ForceCondition* condition);
+                                   G4ForceCondition* condition) override;
 
   // implementation of the pure virtual method
   virtual G4double GetContinuousStepLimit(const G4Track& track,
                                           G4double previousStepSize,
                                           G4double currentMinimumStep,
-                                          G4double& currentSafety);
+                                          G4double& currentSafety) override;
 
   //------------------------------------------------------------------------
   // Run time method which may be also used by derived processes
@@ -299,16 +306,17 @@ public:
   // energy interval  
   void AddEmModel(G4int, G4VEmModel*, 
                   G4VEmFluctuationModel* fluc = 0,
-                  const G4Region* region = 0);
+                  const G4Region* region = nullptr);
 
   // Define new energy range for the model identified by the name
   void UpdateEmModel(const G4String&, G4double, G4double);
 
-  // Assign a model to a process
-  void SetEmModel(G4VEmModel*, G4int index=1);
+  // Assign a model to a process local list, to enable the list in run time 
+  // the derived process should execute AddEmModel(..) for all such models
+  void SetEmModel(G4VEmModel*, G4int index=0);
   
-  // return the assigned model
-  G4VEmModel* EmModel(G4int index=1) const;
+  // return a model from the local list
+  G4VEmModel* EmModel(size_t index=0) const;
   
   // Access to models
   G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
@@ -316,7 +324,7 @@ public:
   G4int NumberOfModels() const;
 
   // Assign a fluctuation model to a process
-  void SetFluctModel(G4VEmFluctuationModel*);
+  inline void SetFluctModel(G4VEmFluctuationModel*);
   
   // return the assigned fluctuation model
   inline G4VEmFluctuationModel* FluctModel();
@@ -340,13 +348,13 @@ public:
   //------------------------------------------------------------------------
 
   // Add subcutoff option for the region
-  void ActivateSubCutoff(G4bool val, const G4Region* region = 0);
+  void ActivateSubCutoff(G4bool val, const G4Region* region = nullptr);
 
   // Activate biasing
   void SetCrossSectionBiasingFactor(G4double f, G4bool flag = true);
 
-  void ActivateForcedInteraction(G4double length = 0.0, 
-                                 const G4String& region = "",
+  void ActivateForcedInteraction(G4double length, 
+                                 const G4String& region,
                                  G4bool flag = true);
 
   void ActivateSecondaryBiasing(const G4String& region, G4double factor,
@@ -367,7 +375,7 @@ public:
 
   // Redefine parameteters for stepping control
   void SetLinearLossLimit(G4double val);
-  void SetStepFunction(G4double v1, G4double v2);
+  void SetStepFunction(G4double v1, G4double v2, G4bool lock=true);
   void SetLowestEnergyLimit(G4double);
 
   inline G4int NumberOfSubCutoffRegions() const;
@@ -464,8 +472,8 @@ private:
   inline void ComputeLambdaForScaledEnergy(G4double scaledKinEnergy);
 
   // hide  assignment operator
-  G4VEnergyLossProcess(G4VEnergyLossProcess &);
-  G4VEnergyLossProcess & operator=(const G4VEnergyLossProcess &right);
+  G4VEnergyLossProcess(G4VEnergyLossProcess &) = delete;
+  G4VEnergyLossProcess & operator=(const G4VEnergyLossProcess &right) = delete;
 
   // ======== Parameters of the class fixed at construction =========
 
@@ -557,6 +565,8 @@ private:
   G4bool   biasFlag;
   G4bool   weightFlag;
   G4bool   isMaster;
+  G4bool   actIntegral;
+  G4bool   actStepFunc;
   G4bool   actLinLossLimit;
   G4bool   actLossFluc;
   G4bool   actBinning;
@@ -582,8 +592,6 @@ private:
   size_t                      currentCoupleIndex;
   size_t                      basedCoupleIndex;
   size_t                      lastIdx;
-
-  G4int    nWarnings;
 
   G4double massRatio;
   G4double fFactor;
@@ -807,11 +815,9 @@ G4VEnergyLossProcess::GetCSDARange(G4double& kineticEnergy,
                                    const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
-  G4double x = DBL_MAX;
-  if(theCSDARangeTable) {
-    x=GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
-  }
-  return x;
+  return (theCSDARangeTable) ? 
+    GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor
+    : DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -822,11 +828,7 @@ G4VEnergyLossProcess::GetRangeForLoss(G4double& kineticEnergy,
 {
   //  G4cout << "GetRangeForLoss: Range from " << GetProcessName() << G4endl;
   DefineMaterial(couple);
-  G4double x = 
-    GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
-  //G4cout << "GetRangeForLoss: Range from " << GetProcessName() 
-  //         << "  e= " << kineticEnergy << " r= " << x << G4endl;
-  return x;
+  return GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -846,11 +848,7 @@ G4VEnergyLossProcess::GetLambda(G4double& kineticEnergy,
                                 const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
-  G4double x = 0.0;
-  if(theLambdaTable) { 
-    x = GetLambdaForScaledEnergy(kineticEnergy*massRatio); 
-  }
-  return x;
+  return theLambdaTable ? GetLambdaForScaledEnergy(kineticEnergy*massRatio) : 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -940,6 +938,7 @@ G4VEnergyLossProcess::SecondaryParticle() const
 inline void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
 {
   lossFluctuationFlag = val;
+  actLossFluc = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -947,6 +946,7 @@ inline void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
 inline void G4VEnergyLossProcess::SetIntegral(G4bool val)
 {
   integral = val;
+  actIntegral = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

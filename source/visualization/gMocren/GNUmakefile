@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66373 2012-12-18 09:41:34Z gcosmo $
+# $Id: GNUmakefile 99176 2016-09-07 09:46:36Z gcosmo $
 
 name := G4GMocren
 
@@ -29,6 +29,7 @@ CPPFLAGS += -I$(G4BASE)/visualization/management/include
 CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
 CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
+CPPFLAGS += -I$(G4BASE)/global/HEPNumerics/include
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include

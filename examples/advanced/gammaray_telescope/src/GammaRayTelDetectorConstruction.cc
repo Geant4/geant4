@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.cc 82630 2014-07-01 09:43:00Z gcosmo $
+// $Id: GammaRayTelDetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -776,18 +776,18 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
   //
   
   // Invisible Volume
-  logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
-  logicPayload->SetVisAttributes (G4VisAttributes::Invisible);
-  logicTKR->SetVisAttributes(G4VisAttributes::Invisible);  
-  logicTKRActiveTileX->SetVisAttributes(G4VisAttributes::Invisible);  
-  logicTKRActiveTileY->SetVisAttributes(G4VisAttributes::Invisible);  
-  logicPlane->SetVisAttributes(G4VisAttributes::Invisible);  
-  logicConverter->SetVisAttributes(G4VisAttributes::Invisible);
-  logicCAL->SetVisAttributes(G4VisAttributes::Invisible);
-  logicCALLayerX->SetVisAttributes(G4VisAttributes::Invisible);
-  logicCALLayerY->SetVisAttributes(G4VisAttributes::Invisible);
-  logicTKRStripX->SetVisAttributes(G4VisAttributes::Invisible);
-  logicTKRStripY->SetVisAttributes(G4VisAttributes::Invisible);  
+  logicWorld->SetVisAttributes (G4VisAttributes::GetInvisible());
+  logicPayload->SetVisAttributes (G4VisAttributes::GetInvisible());
+  logicTKR->SetVisAttributes(G4VisAttributes::GetInvisible());  
+  logicTKRActiveTileX->SetVisAttributes(G4VisAttributes::GetInvisible());  
+  logicTKRActiveTileY->SetVisAttributes(G4VisAttributes::GetInvisible());  
+  logicPlane->SetVisAttributes(G4VisAttributes::GetInvisible());  
+  logicConverter->SetVisAttributes(G4VisAttributes::GetInvisible());
+  logicCAL->SetVisAttributes(G4VisAttributes::GetInvisible());
+  logicCALLayerX->SetVisAttributes(G4VisAttributes::GetInvisible());
+  logicCALLayerY->SetVisAttributes(G4VisAttributes::GetInvisible());
+  logicTKRStripX->SetVisAttributes(G4VisAttributes::GetInvisible());
+  logicTKRStripY->SetVisAttributes(G4VisAttributes::GetInvisible());  
 
   // Some visualization styles
 
@@ -835,8 +835,8 @@ void GammaRayTelDetectorConstruction::ConstructSDandField()
       trackerSD.Put(SD);
     }
 
+  G4SDManager::GetSDMpointer()->AddNewDetector(trackerSD.Get());
   //Flags the strips as sensitive .
-
   if (logicTKRStripX)
     SetSensitiveDetector(logicTKRStripX,trackerSD.Get()); // ActiveStripX
   if (logicTKRStripY)
@@ -851,6 +851,7 @@ void GammaRayTelDetectorConstruction::ConstructSDandField()
       GammaRayTelCalorimeterSD* SD = new GammaRayTelCalorimeterSD("CalorimeterSD");
       calorimeterSD.Put(SD);
     }  
+  G4SDManager::GetSDMpointer()->AddNewDetector(calorimeterSD.Get());
   if (logicCALDetectorX)
     SetSensitiveDetector(logicCALDetectorX,calorimeterSD.Get()); // BarX
   if (logicCALDetectorY)
@@ -866,7 +867,7 @@ void GammaRayTelDetectorConstruction::ConstructSDandField()
 	("AnticoincidenceSD");
       anticoincidenceSD.Put(SD);
     }
-  
+  G4SDManager::GetSDMpointer()->AddNewDetector(anticoincidenceSD.Get()); 
   if (logicACT)
     SetSensitiveDetector(logicACT,anticoincidenceSD.Get()); // ACD top
   if (logicACL1)

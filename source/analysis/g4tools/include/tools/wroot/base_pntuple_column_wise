@@ -1,0 +1,320 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_base_pntuple_column_wise
+#define tools_wroot_base_pntuple_column_wise
+
+// pntuple = for parallel ntupling.
+
+#include "base_pntuple"
+
+#include "../ntuple_booking"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+namespace tools {
+namespace wroot {
+
+class base_pntuple_column_wise : public base_pntuple {
+  typedef base_pntuple parent;
+public:
+  class file {
+  public:
+    file(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,bool a_verbose)
+    :m_out(a_out)
+    ,m_byte_swap(a_byte_swap),m_compression(a_compression),m_verbose(a_verbose)
+    {}
+    virtual ~file(){}
+  public:
+    file(const file& a_from)
+    :m_out(a_from.m_out)
+    ,m_byte_swap(a_from.m_byte_swap),m_compression(a_from.m_compression),m_verbose(a_from.m_verbose)
+    {}
+    file& operator=(const file& a_from) {
+      m_byte_swap = a_from.m_byte_swap;
+      m_verbose = a_from.m_verbose;
+      return *this;
+    }
+  public:
+    bool verbose() const {return m_verbose;}
+    std::ostream& out() const {return m_out;}
+    bool byte_swap() const {return m_byte_swap;}
+    uint32 compression() const {return m_compression;}
+  protected:
+    std::ostream& m_out;
+    bool m_byte_swap;
+    uint32 m_compression;
+    bool m_verbose;
+  };
+
+public:
+  base_pntuple_column_wise(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
+                           const std::string& a_name,const std::string& a_title,bool a_verbose)
+  :parent(a_out,a_seek_directory,a_name,a_title)
+  ,m_file(a_out,a_byte_swap,a_compression,a_verbose)
+  {}
+  
+  base_pntuple_column_wise(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
+                           const std::vector<uint32>& a_basket_sizes,
+	                   const ntuple_booking& a_bkg,bool a_verbose)
+  :parent(a_out,a_seek_directory,a_bkg.name(),a_bkg.title())
+  ,m_file(a_out,a_byte_swap,a_compression,a_verbose)
+  {
+    const std::vector<column_booking>& cols = a_bkg.columns();
+    
+    if(a_basket_sizes.size()!=cols.size()) {
+      a_out << "tools::wroot::base_pntuple_column_wise :"
+            << " a_basket_sizes.size() (" << a_basket_sizes.size() << ") != "
+            << "a_bkg.columns().size() (" << a_bkg.columns().size() << ")."
+            << std::endl;
+      return;	  
+    }
+    std::vector<uint32>::const_iterator itb = a_basket_sizes.begin();
+    
+    tools_vforcit(column_booking,cols,it){
+
+#define TOOLS_WROOT_PNTUPLE_CREATE_COL(a__type) \
+      if((*it).cls_id()==_cid(a__type())) {\
+        a__type* user = (a__type*)(*it).user_obj();\
+        if(user) {\
+          if(!create_column_ref<a__type>(*itb,(*it).name(),*user)) {\
+	    a_out << "tools::wroot::base_pntuple_column_wise : create_column_ref(" << (*it).name() << ") failed." << std::endl;\
+	    safe_clear<icol>(m_cols);\
+            safe_clear<branch>(m_branches);\
+	    return;\
+	  }\
+	  itb++;\
+        } else {\
+          if(!create_column<a__type>(*itb,(*it).name())) {\
+	    a_out << "tools::wroot::base_pntuple_column_wise : create_column(" << (*it).name() << ") failed." << std::endl;\
+	    safe_clear<icol>(m_cols);\
+            safe_clear<branch>(m_branches);\
+	    return;\
+	  }\
+	  itb++;\
+        }\
+      }
+	
+#define TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(a__type) \
+      if((*it).cls_id()==_cid_std_vector<a__type>()) {\
+        std::vector<a__type>* vec = (std::vector<a__type>*)(*it).user_obj();\
+        if(vec) {\
+          if(!create_column_vector_ref<a__type>(*itb,(*it).name(),*vec)) {\
+            a_out << "tools::wroot::base_pntuple_column_wise :"\
+                  << " create_column failed for std::vector column_ref " << sout((*it).name()) << "."\
+                  << std::endl;\
+            safe_clear<icol>(m_cols);\
+            safe_clear<branch>(m_branches);\
+            return;\
+          }\
+	  itb++;\
+        } else {\
+          if(!create_column_vector<a__type>(*itb,(*it).name())) {\
+            a_out << "tools::wroot::base_pntuple_column_wise :"\
+                  << " create_column failed for std::vector column " << sout((*it).name()) << "."\
+                  << std::endl;\
+            safe_clear<icol>(m_cols);\
+            safe_clear<branch>(m_branches);\
+            return;\
+          }\
+	  itb++;\
+        }\
+      }
+      
+           TOOLS_WROOT_PNTUPLE_CREATE_COL(char)
+      else TOOLS_WROOT_PNTUPLE_CREATE_COL(short)
+      else TOOLS_WROOT_PNTUPLE_CREATE_COL(int)
+      else TOOLS_WROOT_PNTUPLE_CREATE_COL(float)
+      else TOOLS_WROOT_PNTUPLE_CREATE_COL(double)
+      
+      else if((*it).cls_id()==_cid(std::string())) {
+        std::string* user = (std::string*)(*it).user_obj();
+        if(user) {
+          if(!create_column_string_ref(*itb,(*it).name(),*user)) {
+	    a_out << "tools::wroot::base_pntuple_column_wise : create_column_string_ref(" << (*it).name() << ") failed."
+	          << std::endl;
+	    safe_clear<icol>(m_cols);
+            safe_clear<branch>(m_branches);
+	    return;
+	  }
+	  itb++;
+        } else {
+          if(!create_column_string(*itb,(*it).name())) {
+	    a_out << "tools::wroot::base_pntuple_column_wise : create_column_string(" << (*it).name() << ") failed." << std::endl;
+	    safe_clear<icol>(m_cols);
+            safe_clear<branch>(m_branches);
+	    return;
+	  }
+	  itb++;
+        }
+      }
+
+      else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(char)
+      else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(short)
+      else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(int)
+      else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(float)
+      else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(double)
+      
+      else if((*it).cls_id()==_cid_std_vector<std::string>()) {\
+        std::vector<std::string>* user = (std::vector<std::string>*)(*it).user_obj();
+        char sep = '\n';
+        if(user) {
+          if(!create_column_vector_string_ref(*itb,(*it).name(),*user,sep)) {
+	    a_out << "tools::wroot::base_pntuple_column_wise :"
+                  << " create_column_vector_string_ref(" << (*it).name() << ") failed." << std::endl;
+	    safe_clear<icol>(m_cols);
+            safe_clear<branch>(m_branches);
+	    return;
+	  }
+	  itb++;
+        } else {
+          if(!create_column_vector_string(*itb,(*it).name(),std::vector<std::string>(),sep)) {
+	    a_out << "tools::wroot::base_pntuple_column_wise :"
+                  << " create_column_vector_string(" << (*it).name() << ") failed." << std::endl;
+	    safe_clear<icol>(m_cols);
+            safe_clear<branch>(m_branches);
+	    return;
+	  }
+	  itb++;
+        }
+      }
+
+      // no leaf_store_class() defined for the other types.
+      
+      else {
+        a_out << "tools::wroot::base_pntuple_column_wise :"
+              << " for column " << sout((*it).name())
+              << ", type with cid " << (*it).cls_id() << " not yet handled."
+              << std::endl;
+        //throw
+        safe_clear<icol>(m_cols);
+        safe_clear<branch>(m_branches);
+        return;
+      }      
+
+#undef TOOLS_WROOT_PNTUPLE_CREATE_COL
+#undef TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL
+
+    }
+  }
+
+  virtual ~base_pntuple_column_wise() {safe_clear<branch>(m_branches);}
+protected:
+  base_pntuple_column_wise(const base_pntuple_column_wise& a_from):parent(a_from),m_file(a_from.m_file){}
+  base_pntuple_column_wise& operator=(const base_pntuple_column_wise&){return *this;}
+public:
+  template <class T>
+  column_ref<T>* create_column_ref(uint32 a_basket_size,const std::string& a_name,const T& a_ref) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    branch* _branch = new branch(m_file.out(),m_file.byte_swap(),m_file.compression(),
+                                 m_seek_directory,a_name,m_name,m_file.verbose());
+    _branch->set_basket_size(a_basket_size);
+    column_ref<T>* col = new column_ref<T>(*_branch,a_name,a_ref);
+    if(!col) {delete _branch;return 0;}
+    m_branches.push_back(_branch);
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  column<T>* create_column(uint32 a_basket_size,const std::string& a_name,const T& a_def = T()) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    branch*  _branch = new branch(m_file.out(),m_file.byte_swap(),m_file.compression(),
+                                  m_seek_directory,a_name,m_name,m_file.verbose());
+    _branch->set_basket_size(a_basket_size);
+    column<T>* col = new column<T>(*_branch,a_name,a_def);
+    if(!col) {delete _branch;return 0;}
+    m_branches.push_back(_branch);
+    m_cols.push_back(col);
+    return col;
+  }
+
+  column_string_ref* create_column_string_ref(uint32 a_basket_size,const std::string& a_name,const std::string& a_ref) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    branch* _branch = new branch(m_file.out(),m_file.byte_swap(),m_file.compression(),
+                                 m_seek_directory,a_name,m_name,m_file.verbose());
+    _branch->set_basket_size(a_basket_size);
+    column_string_ref* col = new column_string_ref(*_branch,a_name,a_ref);
+    if(!col) {delete _branch;return 0;}
+    m_branches.push_back(_branch);
+    m_cols.push_back(col);
+    return col;
+  }
+
+  column_string* create_column_string(uint32 a_basket_size,
+                                      const std::string& a_name,
+                                      const std::string& a_def = std::string()) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    branch* _branch = new branch(m_file.out(),m_file.byte_swap(),m_file.compression(),
+                                 m_seek_directory,a_name,m_name,m_file.verbose());
+    _branch->set_basket_size(a_basket_size);
+    column_string* col = new column_string(*_branch,a_name,a_def);
+    if(!col) {delete _branch;return 0;}
+    m_branches.push_back(_branch);
+    m_cols.push_back(col);
+    return col;
+  }
+
+  column_vector_string_ref* create_column_vector_string_ref(uint32 a_basket_size,const std::string& a_name,
+                                                            const std::vector<std::string>& a_ref,char a_sep) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    branch* _branch = new branch(m_file.out(),m_file.byte_swap(),m_file.compression(),
+                                 m_seek_directory,a_name,m_name,m_file.verbose());
+    _branch->set_basket_size(a_basket_size);
+    column_vector_string_ref* col = new column_vector_string_ref(*_branch,a_name,a_ref,a_sep);
+    if(!col) {delete _branch;return 0;}
+    m_branches.push_back(_branch);
+    m_cols.push_back(col);
+    return col;
+  }
+
+  column_vector_string* create_column_vector_string(uint32 a_basket_size,
+                                                    const std::string& a_name,
+                                                    const std::vector<std::string>& a_def,char a_sep) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    branch* _branch = new branch(m_file.out(),m_file.byte_swap(),m_file.compression(),
+                                 m_seek_directory,a_name,m_name,m_file.verbose());
+    _branch->set_basket_size(a_basket_size);
+    column_vector_string* col = new column_vector_string(*_branch,a_name,a_def,a_sep);
+    if(!col) {delete _branch;return 0;}
+    m_branches.push_back(_branch);
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  std_vector_column_ref<T>* create_column_vector_ref(uint32 a_basket_size,const std::string& a_name,const std::vector<T>& a_ref) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    std_vector_be_ref<T>* _branch = new std_vector_be_ref<T>(m_file.out(),m_file.byte_swap(),m_file.compression(),
+                                                             m_seek_directory,a_name,m_name,a_ref,m_file.verbose());
+    _branch->set_basket_size(a_basket_size);
+    std_vector_column_ref<T>* col = new std_vector_column_ref<T>(*_branch,a_name,a_ref);
+    if(!col) {delete _branch;return 0;}
+    m_branches.push_back(_branch);
+    m_cols.push_back(col);
+    return col;
+  }
+  
+  template <class T>
+  std_vector_column<T>* create_column_vector(uint32 a_basket_size,const std::string& a_name,const std::vector<T>& a_def = std::vector<T>()) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    std_vector_be_pointer<T>* _branch = new std_vector_be_pointer<T>(m_file.out(),m_file.byte_swap(),m_file.compression(),
+                                                                     m_seek_directory,a_name,m_name,0,m_file.verbose());
+    _branch->set_basket_size(a_basket_size);
+    std_vector_column<T>* col = new std_vector_column<T>(*_branch,a_name,a_def);
+    if(!col) {delete _branch;return 0;}
+    _branch->set_pointer(&(col->variable()));
+    m_branches.push_back(_branch);
+    m_cols.push_back(col);
+    return col;
+  }
+protected:
+  file m_file;
+  std::vector<branch*> m_branches;
+};
+
+}}
+
+#endif

@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109991 2018-05-14 07:26:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,26 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B. Morgan (exampleES2-V10-04-03)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+12-04-18 mma (exampleES2-V10-04-02)
+- electronScattering2.cc : set visualisation only in interactive mode
+
+22-03-18 M.Maire (exampleES2-V10-04-01)
+- electronScattering2.cc : remove G4UI_USE and G4VIS_USE
+
+02-02-18 D.Sawkey (exampleES2-V10-04-00)
+- remove unused ScoringManager
+
+19-11-16 A.Dotti  (exampleES2-V10-02-01)
+- explicit set of SD to manager
+
+14-10-16 G.Folger (exampleES2-V10-02-00)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
 
 14-10-16 G.Folger
 - remove direct use of theParticleIterator, use GetParticleTableIterator().

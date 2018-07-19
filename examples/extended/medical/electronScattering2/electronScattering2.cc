@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: electronScattering2.cc 93734 2015-10-30 10:59:21Z gcosmo $
+// $Id: electronScattering2.cc 109991 2018-05-14 07:26:42Z gcosmo $
 //
 /// \file medical/electronScattering2/electronScattering2.cc
 /// \brief Main program of the medical/electronScattering2 example
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -34,17 +35,11 @@
 #include "G4RunManager.hh"
 #endif
 
-#include "Randomize.hh"
-#include "G4ScoringManager.hh"
-
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
 #include "G4UImanager.hh"
-#ifdef G4UI_USE
+#include "Randomize.hh"
+
 #include "G4UIExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
 #include "ElectronBenchmarkDetector.hh"
 #include "PhysicsList.hh"
@@ -53,7 +48,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
-    
+
+    //detect interactive mode (if no arguments) and define UI session
+    G4UIExecutive* ui = nullptr;
+    if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
     // Parse the arguments
     G4String outputFile = "output.csv";
     G4String startingSeed = "1";
@@ -65,7 +64,7 @@ int main(int argc,char** argv) {
     G4cout << "Macro File    : " << macroFile << G4endl;
     G4cout << "Starting Seed : " << startingSeed << G4endl;
     G4cout << "Output File   : " << outputFile << G4endl;
-    
+
     // Instantiate the run manager
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
@@ -75,60 +74,47 @@ int main(int argc,char** argv) {
 
     // Instantiate the random engine
     G4Random::setTheEngine(new CLHEP::MTwistEngine);
-    
+
     // Convert the starting seed to integer and feed it to the random engine
     unsigned startingSeedInt;
     std::istringstream is(startingSeed);
     is >> startingSeedInt;
     G4Random::setTheSeed(startingSeedInt);
-    
-    // Instantiate the scoring manager
-    G4ScoringManager::GetScoringManager();
-    
+
     // Instantiate the geometry
     runManager->SetUserInitialization(new ElectronBenchmarkDetector);
-    
-    // Instantiate the physics list (in turn calls one of the choices of 
+
+    // Instantiate the physics list (in turn calls one of the choices of
     // physics list)
     runManager->SetUserInitialization(new PhysicsList);
-    
+
     // set user action classes
     runManager->SetUserInitialization(
         new ElectronActionInitialization(outputFile));
-    
-    if (argc == 1)
-    {
-        // Since no macro was specified, instantiate an interactive session 
-        // (exact session type depends on user preference expressed in 
-        // environment variables).
-        //
-        // Instantiate the visualization System
-#ifdef G4VIS_USE
-        G4VisManager* visManager = new G4VisExecutive;
-        visManager->Initialize();
-#endif
 
-#ifdef G4UI_USE
-        G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-        ui->SessionStart();
-        delete ui;
-#endif
+    //initialize visualization
+    G4VisManager* visManager = nullptr;
 
-#ifdef G4VIS_USE
-        delete visManager;
-#endif
+    //get the pointer to the User Interface manager
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+    if (ui)  {
+     //interactive mode
+     visManager = new G4VisExecutive;
+     visManager->Initialize();
+     ui->SessionStart();
+     delete ui;
     }
-    else
-    {
-        // A macro was specified.  Execute it.
-        G4UImanager* UImanager = G4UImanager::GetUIpointer();
-        G4String command = "/control/execute ";
-        UImanager->ApplyCommand(command+macroFile);
+    else  {
+    //batch mode
+     G4String command = "/control/execute ";
+     G4String fileName = argv[1];
+     UImanager->ApplyCommand(command+fileName);
     }
-    
+
+    //job termination
+    delete visManager;
     delete runManager;
-    
-    return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

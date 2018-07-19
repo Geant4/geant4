@@ -18,41 +18,41 @@ geant4_add_dataset(
 # - Low energy electromagnetics
 geant4_add_dataset(
   NAME      G4EMLOW
-  VERSION   6.48
+  VERSION   7.4
   FILENAME  G4EMLOW
   EXTENSION tar.gz
   ENVVAR    G4LEDATA
-  MD5SUM    844064faa16a063a6a08406dc7895b68
+  MD5SUM    a4443411b1a8782640b6eec691e7c25f
   )
 
 # - Photon evaporation
 geant4_add_dataset(
   NAME      PhotonEvaporation
-  VERSION   3.2
+  VERSION   5.2
   FILENAME  G4PhotonEvaporation
   EXTENSION tar.gz
   ENVVAR    G4LEVELGAMMADATA
-  MD5SUM    01d5ba17f615d3def01f7c0c6b19bd69
+  MD5SUM    37c5dea9614a07885050350d071a6973
   )
 
 # - Radioisotopes
 geant4_add_dataset(
   NAME      RadioactiveDecay
-  VERSION   4.3.2
+  VERSION   5.2
   FILENAME  G4RadioactiveDecay
   EXTENSION tar.gz
   ENVVAR    G4RADIOACTIVEDATA
-  MD5SUM    ed171641682cf8c10fc3f0266c8d482e
+  MD5SUM    e035ed77e12be3a69c2d32806d1b5cde
   )
 
 # - Neutron XS
 geant4_add_dataset(
   NAME      G4NEUTRONXS
-  VERSION   1.4
+  VERSION   2.0
   FILENAME  G4NEUTRONXS
   EXTENSION tar.gz
   ENVVAR    G4NEUTRONXSDATA
-  MD5SUM    665a12771267e3b31a08c622ba1238a7
+  MD5SUM    c3af588c26522f289ec60dcb7c847ade
   )
 
 # - PII
@@ -68,11 +68,11 @@ geant4_add_dataset(
 # - Optical Surfaces
 geant4_add_dataset(
   NAME      RealSurface
-  VERSION   1.0
-  FILENAME  RealSurface
+  VERSION   2.1.1
+  FILENAME  G4RealSurface
   EXTENSION tar.gz
   ENVVAR    G4REALSURFACEDATA
-  MD5SUM    0dde95e00fcd3bcd745804f870bb6884
+  MD5SUM    1d0fcc24c7082edae1e22a3d43fbb4d9
   )
 
 # - SAID
@@ -88,20 +88,20 @@ geant4_add_dataset(
 # - ABLA
 geant4_add_dataset(
   NAME      G4ABLA
-  VERSION   3.0
+  VERSION   3.1
   FILENAME  G4ABLA
   EXTENSION tar.gz
   ENVVAR    G4ABLADATA
-  MD5SUM    d7049166ef74a592cb97df0ed4b757bd
+  MD5SUM    180f1f5d937733b207f8d5677f76296e
   )
 
 # - ENSDFSTATE
 geant4_add_dataset(
   NAME      G4ENSDFSTATE
-  VERSION   1.2.3
+  VERSION   2.2
   FILENAME  G4ENSDFSTATE
   EXTENSION tar.gz
   ENVVAR    G4ENSDFSTATEDATA
-  MD5SUM    98fef898ea35df4010920ad7ad88f20b
+  MD5SUM    495439cf600225753d7bd99825e5c6bc
   )
 

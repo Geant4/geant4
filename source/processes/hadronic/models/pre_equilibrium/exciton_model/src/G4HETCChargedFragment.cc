@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCChargedFragment.cc 90337 2015-05-26 08:34:27Z gcosmo $
+// $Id: G4HETCChargedFragment.cc 96527 2016-04-20 08:51:00Z gcosmo $
 //
 // by V. Lara
 //
@@ -35,7 +35,6 @@
 #include "G4HETCChargedFragment.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4VCoulombBarrier.hh"
-#include "G4PreCompoundParameters.hh"
 
 G4HETCChargedFragment::G4HETCChargedFragment(
   const G4ParticleDefinition* pd, G4VCoulombBarrier * aCoulombBarrier)

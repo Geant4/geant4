@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryTolerance.cc 97527 2016-06-03 14:59:04Z gcosmo $
+// $Id: G4GeometryTolerance.cc 96427 2016-04-14 09:37:29Z gcosmo $
 //
 // class G4GeometryTolerance
 //

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TransitionRadiation.cc 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id: G4TransitionRadiation.cc 108423 2018-02-13 11:18:13Z gcosmo $
 //
 // G4TransitionRadiation class -- implementation file
 
@@ -227,8 +227,5 @@ EnergyIntegralDistribution( G4double energy1,
           + IntegralOverAngle(energy2,0.01*fMaxTheta,fMaxTheta)
             + 4.0*sumOdd + 2.0*sumEven    )/3.0 ;
 }
-
-
-
 
 // end of G4TransitionRadiation implementation file --------------------------

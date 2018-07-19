@@ -32,3 +32,4 @@ G4QGSMParameters::G4QGSMParameters()
 G4QGSMParameters::~G4QGSMParameters()
 {
 }
+

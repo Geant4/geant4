@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTXScanner.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4RTXScanner.cc 103626 2017-04-19 13:29:18Z gcosmo $
 //
 //
 
@@ -186,7 +186,7 @@ G4bool G4RTXScanner::GetXWindow(const G4String& name, G4ViewParameters& vp)
     if (!status) {
       G4cerr <<
 	"G4RTXScanner::Initialize(): cannot get color map."
-	"\n  Perhaps your system does not support RGB_BEST_MAP."
+	"\n  Perhaps your system does not support XA_RGB_BEST_MAP."
 	     << G4endl;
       return false;
     }

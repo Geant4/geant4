@@ -26,55 +26,38 @@
 /// \file electromagnetic/TestEm18/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id: StackingAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: StackingAction.cc 105927 2017-08-29 13:25:29Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StackingAction.hh"
-
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "HistoManager.hh"
+#include "StackingMessenger.hh"
 
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(RunAction* RA,EventAction* EA)
-:G4UserStackingAction(),fRunaction(RA), fEventaction(EA)
-{}
+StackingAction::StackingAction()
+:G4UserStackingAction(), fTrackSecondaries(false)
+{
+  fStackMessenger = new StackingMessenger(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::~StackingAction()
-{}
+{
+  ///delete fStackMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ClassificationOfNewTrack
 StackingAction::ClassifyNewTrack(const G4Track* track)
 {
-  //keep primary particle
-  if (track->GetParentID() == 0) return fUrgent;
-
-  //energy spectrum of secondaries
-  //
-  G4double energy = track->GetKineticEnergy();
-  G4bool  charged = (track->GetDefinition()->GetPDGCharge() != 0.);
-
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  
-  if (charged) {
-    fRunaction->AddChargedSecondary(energy);
-    analysisManager->FillH1(4,energy);
-  } else {
-    fRunaction->AddNeutralSecondary(energy);
-    analysisManager->FillH1(5,energy);
-  }
-    
-  fEventaction->AddSecondary(energy);  
-  return fKill;
+  if ((track->GetTrackID() == 1) || (fTrackSecondaries)) return fUrgent;
+  else return fKill;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

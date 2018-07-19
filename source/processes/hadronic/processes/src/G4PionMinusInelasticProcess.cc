@@ -40,7 +40,7 @@ G4PionMinusInelasticProcess::G4PionMinusInelasticProcess(const G4String& name)
 
 void G4PionMinusInelasticProcess::ProcessDescription(std::ostream& outFile) const
 {
-  outFile << "This process handles the inelastic scattering of pi-\n" 
-          << "from nuclei by invoking one or more hadronic models and one\n"
-          << "or more hadronic cross sections.\n";
+  outFile << "G4PionMinusInelasticProcess handles the inelastic scattering of\n" 
+          << "pi- from nuclei by invoking one or more hadronic models and one\n"
+          << "or more hadronic cross section sets.\n";
 }

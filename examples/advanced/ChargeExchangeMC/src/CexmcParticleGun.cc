@@ -45,9 +45,9 @@
 #include "CexmcParticleGunMessenger.hh"
 
 
-CexmcParticleGun::CexmcParticleGun( CexmcPhysicsManager *  physicsManager,
+CexmcParticleGun::CexmcParticleGun( CexmcPhysicsManager *  physicsManager_,
                                     G4int  nmbOfParticles ) :
-    G4ParticleGun( nmbOfParticles ), physicsManager( physicsManager ),
+    G4ParticleGun( nmbOfParticles ), physicsManager( physicsManager_ ),
     origPos( 0, 0, 0 ), origDir( 0, 0, 0 ), origMomentumAmp( 0 ),
     messenger( NULL )
 {

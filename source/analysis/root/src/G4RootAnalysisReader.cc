@@ -30,7 +30,6 @@
 #include "G4RootAnalysisReader.hh"
 #include "G4RootRFileManager.hh"
 #include "G4RootRNtupleManager.hh"
-#include "G4RootRNtupleDescription.hh"
 #include "G4AnalysisVerbose.hh"
 #include "G4AnalysisUtilities.hh"
 #include "G4Threading.hh"
@@ -126,7 +125,7 @@ tools::rroot::buffer* G4RootAnalysisReader::GetBuffer(
   //char* charBuffer 
   //  = ( ! key ) ? 0 : key->get_object_buffer(size);
   char* charBuffer = 0;
-  if ( key ) charBuffer = key->get_object_buffer(size);
+  if ( key ) charBuffer = key->get_object_buffer(*rfile, size);
   
   if ( ! charBuffer ) {
     G4ExceptionDescription description;
@@ -165,6 +164,7 @@ G4bool G4RootAnalysisReader::Reset()
 //_____________________________________________________________________________
 G4int G4RootAnalysisReader::ReadH1Impl(const G4String& h1Name, 
                                        const G4String& fileName,
+                                       const G4String& /*dirName*/,
                                        G4bool /*isUserFileName*/)
 {
 #ifdef G4VERBOSE
@@ -201,6 +201,7 @@ G4int G4RootAnalysisReader::ReadH1Impl(const G4String& h1Name,
 //_____________________________________________________________________________
 G4int G4RootAnalysisReader::ReadH2Impl(const G4String& h2Name, 
                                        const G4String& fileName,
+                                       const G4String& /*dirName*/,
                                        G4bool /*isUserFileName*/)
 {
 #ifdef G4VERBOSE
@@ -242,6 +243,7 @@ G4int G4RootAnalysisReader::ReadH2Impl(const G4String& h2Name,
 //_____________________________________________________________________________
 G4int G4RootAnalysisReader::ReadH3Impl(const G4String& h3Name, 
                                        const G4String& fileName,
+                                       const G4String& /*dirName*/,
                                        G4bool /*isUserFileName*/)
 {
 
@@ -283,6 +285,7 @@ G4int G4RootAnalysisReader::ReadH3Impl(const G4String& h3Name,
 //_____________________________________________________________________________
 G4int G4RootAnalysisReader::ReadP1Impl(const G4String& p1Name, 
                                        const G4String& fileName,
+                                       const G4String& /*dirName*/,
                                        G4bool /*isUserFileName*/)
 {
 #ifdef G4VERBOSE
@@ -319,6 +322,7 @@ G4int G4RootAnalysisReader::ReadP1Impl(const G4String& p1Name,
 //_____________________________________________________________________________
 G4int G4RootAnalysisReader::ReadP2Impl(const G4String& p2Name, 
                                        const G4String& fileName,
+                                       const G4String& /*dirName*/,
                                        G4bool /*isUserFileName*/)
 {
 
@@ -356,6 +360,7 @@ G4int G4RootAnalysisReader::ReadP2Impl(const G4String& p2Name,
 //_____________________________________________________________________________
 G4int G4RootAnalysisReader::ReadNtupleImpl(const G4String& ntupleName, 
                                            const G4String& fileName,
+                                           const G4String& /*dirName*/,
                                            G4bool isUserFileName)
 {
 #ifdef G4VERBOSE
@@ -387,7 +392,7 @@ G4int G4RootAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
   }
 
   unsigned int size;
-  char* charBuffer = key->get_object_buffer(size);
+  char* charBuffer = key->get_object_buffer(*rfile, size);
   if ( ! charBuffer ) {
     G4ExceptionDescription description;
     description 
@@ -402,7 +407,9 @@ G4int G4RootAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
   auto buffer
     = new tools::rroot::buffer(G4cout, rfile->byte_swap(), size, charBuffer, 
                                key->key_length(), verbose);
-  auto fac = new tools::rroot::fac(*rfile);
+  buffer->set_map_objs(true);
+
+  auto fac = new tools::rroot::fac(G4cout);
 
   auto tree = new tools::rroot::tree(*rfile, *fac);
   if ( ! tree->stream(*buffer) ) {
@@ -418,10 +425,8 @@ G4int G4RootAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
     return kInvalidId;
   }
   
-  auto rntuple 
-    = new tools::rroot::ntuple(*tree); //use the flat ntuple API.
-  auto rntupleDescription
-    = new G4RootRNtupleDescription(rntuple, buffer, fac, tree);
+  auto rntuple  = new tools::rroot::ntuple(*tree); //use the flat ntuple API.
+  auto rntupleDescription = new G4TRNtupleDescription<tools::rroot::ntuple>(rntuple);
 
   auto id = fNtupleManager->SetNtuple(rntupleDescription); 
   

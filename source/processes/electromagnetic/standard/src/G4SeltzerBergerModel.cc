@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SeltzerBergerModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
+// $Id: G4SeltzerBergerModel.cc 98737 2016-08-09 12:51:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -74,11 +74,6 @@ using namespace std;
 G4Physics2DVector* G4SeltzerBergerModel::dataSB[] = {nullptr};
 G4double G4SeltzerBergerModel::ylimit[] = {0.0};
 G4double G4SeltzerBergerModel::expnumlim = -12.;
-
-static const G4double emaxlog = 4*G4Log(10.);
-static const G4double alpha = CLHEP::twopi*CLHEP::fine_structure_const; 
-static const G4double epeaklimit= 300*CLHEP::MeV; 
-static const G4double elowlimit = 20*CLHEP::keV; 
 
 G4SeltzerBergerModel::G4SeltzerBergerModel(const G4ParticleDefinition* p,
                                            const G4String& nam)
@@ -176,6 +171,7 @@ void G4SeltzerBergerModel::ReadData(G4int Z, const char* path)
   if(v->Retrieve(fin)) { 
     if(useBicubicInterpolation) { v->SetBicubicInterpolation(true); }
     dataSB[Z] = v; 
+    static const G4double emaxlog = 4*G4Log(10.);
     ylimit[Z] = v->Value(0.97, emaxlog, idx, idy);
   } else {
     G4ExceptionDescription ed;
@@ -219,6 +215,7 @@ G4double G4SeltzerBergerModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
     G4double e2 = kinEnergy - gammaEnergy;
     if(e2 > 0.0) {
       G4double invbeta2 = (e2 + particleMass)/sqrt(e2*(e2 + 2*particleMass));
+      static const G4double alpha = CLHEP::twopi*CLHEP::fine_structure_const; 
       G4double xxx = alpha*currentZ*(invbeta1 - invbeta2);
       if(xxx < expnumlim) { cross = 0.0; }
       else { cross *= G4Exp(xxx); }
@@ -248,8 +245,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   const G4Element* elm = 
     SelectRandomAtom(couple,particle,kineticEnergy,cut,emax);
-  SetCurrentElement(elm->GetZ());
-  G4int Z = G4int(currentZ);
+  SetCurrentElement(elm->GetZasInt());
 
   totalEnergy = kineticEnergy + particleMass;
   densityCorr = densityFactor*totalEnergy*totalEnergy;
@@ -268,13 +264,21 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   // majoranta
   G4double x0 = cut/kineticEnergy;
-  G4double vmax = dataSB[Z]->Value(x0, y, idx, idy)*1.02;
-  //  G4double invbeta1 = 0;
+  G4double vmax;
+  if(currentZ <= 92) {
+    vmax = dataSB[currentZ]->Value(x0, y, idx, idy)*1.02;
+  } else {
+    idx = idy = 0;
+    vmax = dataSB[currentZ]->Value(x0, y, idx, idy)*1.2;
+  }
+
+  static const G4double epeaklimit= 300*CLHEP::MeV; 
+  static const G4double elowlimit = 20*CLHEP::keV; 
 
   // majoranta corrected for e-
   if(isElectron && x0 < 0.97 && 
      ((kineticEnergy > epeaklimit) || (kineticEnergy < elowlimit))) {
-    G4double ylim = std::min(ylimit[Z],1.1*dataSB[Z]->Value(0.97,y,idx,idy));
+    G4double ylim = std::min(ylimit[currentZ],1.1*dataSB[currentZ]->Value(0.97,y,idx,idy));
     if(ylim > vmax) { vmax = ylim; }
   }
   if(x0 < 0.05) { vmax *= 1.2; }
@@ -291,7 +295,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     if(x < 0.0) { x = 0.0; }
     gammaEnergy = sqrt(x);
     G4double x1 = gammaEnergy/kineticEnergy;
-    v = dataSB[Z]->Value(x1, y, idx, idy);
+    v = dataSB[currentZ]->Value(x1, y, idx, idy);
 
     // correction for positrons        
     if(!isElectron) {
@@ -313,7 +317,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
          << " Niter= " << nn 
          << " Egamma(MeV)= " << gammaEnergy
          << " Ee(MeV)= " << kineticEnergy
-         << " Z= " << Z << "  " << particle->GetParticleName();
+         << " Z= " << currentZ << "  " << particle->GetParticleName();
      
       if ( 20 == nwarn ) {
         ed << "\n ### G4SeltzerBergerModel Warnings stopped";
@@ -332,7 +336,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   G4ThreeVector gammaDirection = 
     GetAngularDistribution()->SampleDirection(dp, totalEnergy-gammaEnergy,
-                                              Z, couple->GetMaterial());
+                                              currentZ, couple->GetMaterial());
 
   // create G4DynamicParticle object for the Gamma
   G4DynamicParticle* gamma = 

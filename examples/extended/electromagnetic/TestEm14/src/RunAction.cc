@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm1/src/RunAction.cc
+/// \file electromagnetic/TestEm14/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 84208 2014-10-10 14:44:50Z gcosmo $
+// $Id: RunAction.cc 103622 2017-04-19 13:23:00Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,6 @@
 #include "Run.hh"
 
 #include "G4Run.hh"
-#include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4EmCalculator.hh"
 
@@ -71,8 +70,7 @@ G4Run* RunAction::GenerateRun()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {    
-  // save Rndm status
-  ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  // show Rndm status
   if (isMaster)  G4Random::showEngineStatus();
      
   // keep run condition

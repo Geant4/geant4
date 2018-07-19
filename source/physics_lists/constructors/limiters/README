@@ -1,0 +1,72 @@
+			contructors/limiters
+			--------------------
+
+    This directory contains "technical" constructors in the sense they do not
+add processes with physics content but add processes or modify physics lists to
+allow for step limitation in parallel geometries, biasing, etc.
+
+
+G4FastSimulationPhysics:
+------------------------
+
+    Constructor that modifies a given physics list to allow for fast simulation.
+
+    One, or several, G4FastSimulationManagerProcess objects are added to the
+    process manager of particles for which a fast simulation is requested.
+    
+    The fast simulation may be associated to regions in the mass geometry, in
+    what case a call like fastSimPhys->ActivateFastSimulation("e-") must be
+    done to allow for fast simulation of electrons.
+    Parallel geometries can be used also in what case the geometry is specified
+    by its name like fastSimPhys->ActivateFastSimulation("e-","parallelGeom") to
+    allow for fast simulation of electrons, with fast simulation models attached
+    to regions in "parallelGeom".
+
+
+G4GenericBiasingPhysics:
+------------------------
+
+    Constructor that modifies a given physics list to allow for generic biasing.
+
+    It provides three type of functionnalities:
+        - wrap physics processes with G4BiasingProcessInterface processes to
+	  make the generic biasing to control them (allowing change of
+	  interaction law, change of final state generation).
+	- add G4BiasingProcessInterface processes, but without wrapping a
+	  physics process, in what case these processes will be used for
+	  "non-physics based biasing" : ie, spliting and killing
+        - add G4ParallelGeometriesLimiterProcess process (at most one per
+	  process manager) that provides step limitation on the parallel
+	  geometries used in generic biasing. A process can handle several
+	  parallel geometries associated to one particle type.
+	  
+    Various methods are provided to activate these functionnalities per
+    particle, set of particles, to activate physics-based only or
+    non-physics-based only or both functionnalities, and to activate the
+    parallel geometry functionnality.
+    This is documented in include/G4GenericBiasingPhysics.hh .
+
+
+G4ImportanceBiasing:
+-------------------
+
+G4MaxTimeCuts:
+--------------
+
+G4MinEkineCuts:
+---------------
+
+G4NeutronTrackingCut:
+---------------------
+
+G4ParallelWorldPhysics:
+-----------------------
+
+G4SpecialCuts:
+--------------
+
+G4StepLimiterPhysics:
+---------------------
+
+G4WeightWindowBiasing:
+----------------------

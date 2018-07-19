@@ -10,4 +10,5 @@
 
 /gun/energy 500 keV
 
+/run/printProgress 250
 /run/beamOn 1000

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntersectionLocator.cc 102290 2017-01-20 11:19:44Z gcosmo $
+// $Id: G4VIntersectionLocator.cc 110772 2018-06-13 07:47:49Z gcosmo $
 //
 // Class G4VIntersectionLocator implementation
 //
@@ -195,7 +195,7 @@ ReEstimateEndpoint( const G4FieldTrack& CurrentStateA,
                           G4double      ) // curveDist )    // NOT used
 {  
   G4FieldTrack newEndPoint( CurrentStateA );
-  G4MagInt_Driver* integrDriver = GetChordFinderFor()->GetIntegrationDriver(); 
+  auto integrDriver = GetChordFinderFor()->GetIntegrationDriver(); 
 
   G4FieldTrack retEndPoint( CurrentStateA );
   G4bool goodAdvance;
@@ -466,10 +466,9 @@ AdjustmentOfFoundIntersection( const G4ThreeVector& CurrentA_Point,
 #ifdef G4VERBOSE
     if ( fVerboseLevel>1 )
     {
-      G4cerr << "WARNING - "
-             << "G4VIntersectionLocator::AdjustementOfFoundIntersection()"
-             << G4endl
-             << "        No intersection. Parallels lines!" << G4endl;
+      G4Exception("G4VIntersectionLocator::AdjustmentOfFoundIntersection()",
+                  "GeomNav0003", JustWarning,
+                  "No intersection. Parallels lines!");
     }
 #endif
     lambda =- Normal.dot(CurrentF_Point-CurrentE_Point)/n_d_m;
@@ -591,8 +590,7 @@ GetGlobalSurfaceNormal(const G4ThreeVector& CurrentE_Point,
             << G4endl;
     message << "  * Result: " << G4endl;
     message << "     Global Normal= " << localNormal << G4endl;
-    message << "**************************************************************"
-            << G4endl;
+    message << "**************************************************************";
     G4Exception("G4VIntersectionLocator::GetGlobalSurfaceNormal()",
                 "GeomNav1002", JustWarning, message);
   }
@@ -660,10 +658,11 @@ void G4VIntersectionLocator::ReportTrialStep( G4int step_no,
 
   if( ( std::fabs(NormalAtEntry.mag2() - 1.0) > perThousand ) ) 
   {
-    G4cerr << " PROBLEM in G4VIntersectionLocator::ReportTrialStep " << G4endl
-           << "         Normal is not unit - mag=" <<  NormalAtEntry.mag() 
-           << "         ValidNormalAtE = " << validNormal
-           << G4endl; 
+    std::ostringstream message; 
+    message << "Normal is not unit - mag= " << NormalAtEntry.mag() << G4endl
+            << "         ValidNormalAtE = " << validNormal;
+    G4Exception("G4VIntersectionLocator::ReportTrialStep()",
+                "GeomNav1002", JustWarning, message);
   }
   return; 
 }
@@ -706,11 +705,14 @@ LocateGlobalPointWithinVolumeAndCheck( const G4ThreeVector& position )
     EInside        inMother= motherSolid->Inside( localPosition );
     if( inMother != kInside )
     {
-      G4cerr << " ERROR in " << MethodName << " Position located "
-             << ( inMother == kSurface ? " on Surface " : " outside " )
-             << "expected volume" << G4endl;
-      G4double  safetyFromOut= motherSolid->DistanceToIn(localPosition);
-      G4cerr << "   Safety (from Outside) = " << safetyFromOut  << G4endl;
+      std::ostringstream message; 
+      message << "Position located "
+              << ( inMother == kSurface ? " on Surface " : " outside " )
+              << "expected volume" << G4endl
+              << "  Safety (from Outside) = "
+              << motherSolid->DistanceToIn(localPosition);
+      G4Exception("G4VIntersectionLocator::LocateGlobalPointWithinVolumeAndCheck()",
+                  "GeomNav1002", JustWarning, message);
     }
     
     // 1. Simple next step - quick relocation and check result.
@@ -722,8 +724,9 @@ LocateGlobalPointWithinVolumeAndCheck( const G4ThreeVector& position )
         || (nextPhysical->GetCopyNo() != motherCopyNo )
        )
     {
-      G4cerr << " ERROR in " << MethodName
-             << " Position located outside expected volume" << G4endl;
+      G4Exception("G4VIntersectionLocator::LocateGlobalPointWithinVolumeAndCheck()",
+                  "GeomNav1002", JustWarning,
+                  "Position located outside expected volume.");
     }
     nav->CheckMode(navCheck);  // Recover original value
   }
@@ -741,7 +744,7 @@ LocateGlobalPointWithinVolumeAndCheck( const G4ThreeVector& position )
 void G4VIntersectionLocator::
 LocateGlobalPointWithinVolumeCheckAndReport( const G4ThreeVector& position,
                                              const G4String& CodeLocationInfo,
-                                             G4int CheckMode )
+                                             G4int /* CheckMode */)
 {
   // Save value of Check mode first
   G4bool oldCheck= GetCheckMode();
@@ -749,12 +752,17 @@ LocateGlobalPointWithinVolumeCheckAndReport( const G4ThreeVector& position,
   G4bool ok= LocateGlobalPointWithinVolumeAndCheck( position );
   if( !ok )
   {
-    G4cerr << " ERROR occured in Intersection Locator" << G4endl;
-    G4cerr << "       Code Location info: " << CodeLocationInfo << G4endl;
-    if( CheckMode > 1 ) {
+    std::ostringstream message; 
+    message << "Failed point location." << G4endl
+            << "   Code Location info: " << CodeLocationInfo;
+    G4Exception("G4VIntersectionLocator::LocateGlobalPointWithinVolumeCheckAndReport()",
+                "GeomNav1002", JustWarning, message);
+/*
+    if( CheckMode > 1 )
+    {
       // Additional information
-      
     }
+*/
   }
   
   SetCheckMode( oldCheck );

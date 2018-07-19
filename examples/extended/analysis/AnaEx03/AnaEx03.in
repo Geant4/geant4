@@ -1,3 +1,5 @@
+# initialize
+/run/initialize
 
 # e- 500MeV 
 /gun/particle e-

@@ -8,9 +8,8 @@
 #  CONTENTS: A basic macro for demonstrating time slicing             #
 #                                                                     #
 #  USAGE:                                                             #
-#     exampleN03 visTutor/exN03Vis12.mac                              #
-#  or Idle> /control/execute visTutor/exN03Vis12.mac                  #
-#  or pull down "Vis" menu and click on "TimeSlicing"                 #
+#     cp -pr <install-dir>/geant4/examples/basic/B4/macros/visTutor . #
+#     <place-of-binary>/exampleB4a -m visTutor/exN03Vis12.mac         #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Mac/Unix with X-Windows, OpenGL    #
 #                                                                     #
@@ -18,8 +17,10 @@
 
 /control/verbose 2
 /vis/verbose confirmations
+/run/initialize
 
 /vis/open OGL 600x600-0+0
+/vis/drawVolume
 
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
@@ -27,7 +28,6 @@
 /vis/verbose errors
 
 /vis/viewer/set/viewpointThetaPhi 90. 180.
-/vis/drawVolume
 /vis/scene/add/eventID
 /vis/scene/add/trajectories rich
 
@@ -52,8 +52,8 @@
 /run/beamOn
 
 # Configure OpenGL for display-by-time
-/vis/ogl/set/fade 1
-/vis/ogl/set/displayHeadTime true
+/vis/viewer/set/timeWindow/fadeFactor 1
+/vis/viewer/set/timeWindow/displayHeadTime true
 /control/alias timeRange 0.1
 
 # Display time slices
@@ -106,16 +106,16 @@
 /run/beamOn
 
 /control/alias timeRange 0.1
-/vis/ogl/set/displayHeadTime true
-/vis/ogl/set/displayLightFront true 0 0 -90 mm
+/vis/viewer/set/timeWindow/displayHeadTime true
+/vis/viewer/set/timeWindow/displayLightFront true 0 0 -90 mm
 /vis/verbose warnings
 /control/verbose 0
 /control/loop visTutor/exN03Vis12.loop startTime -{timeRange} 0.7 0.001
 /control/shell sleep 5
 /control/verbose 2
 /vis/verbose confirmations
-/vis/ogl/set/displayLightFront false
-/vis/ogl/set/displayHeadTime false
+/vis/viewer/set/timeWindow/displayLightFront false
+/vis/viewer/set/timeWindow/displayHeadTime false
 
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
@@ -129,7 +129,7 @@
 /vis/filtering/trajectories/TimeSliceFilter/add anti_nu_e
 /vis/filtering/trajectories/TimeSliceFilter/add nu_e
 # Accumulate several events for effect
-# /vis/scene/endOfEventAction accumulate
+/vis/scene/endOfEventAction accumulate
 /gun/energy 100 MeV
 #/vis/viewer/set/globalLineWidthScale 2
 
@@ -137,10 +137,10 @@
 /vis/viewer/set/autoRefresh true
 /vis/verbose warnings
 
-/run/beamOn
+/run/beamOn 5
 
 /control/alias timeRange 1000
-/vis/ogl/set/displayHeadTime true
+/vis/viewer/set/timeWindow/displayHeadTime true
 /vis/verbose warnings
 /control/verbose 0
 /control/loop visTutor/exN03Vis12.loop startTime -{timeRange} 3000 5

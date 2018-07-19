@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc 73250 2013-08-22 13:22:23Z gcosmo $
+// $Id: G4PVParameterised.cc 109823 2018-05-09 10:42:34Z gcosmo $
 //
 // 
 // class G4PVParameterised
@@ -236,7 +236,7 @@ G4PVParameterised::CheckOverlaps(G4int res, G4double tol,
       {
         // Transform each point according to daughter's frame
         //
-        G4ThreeVector md = Td.Inverse().TransformPoint(*pos);
+        G4ThreeVector md = Td.InverseTransformPoint(*pos);
 
         if (solidB->Inside(md)==kInside)
         {

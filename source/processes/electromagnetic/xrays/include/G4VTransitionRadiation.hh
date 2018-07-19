@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.hh 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id: G4VTransitionRadiation.hh 108423 2018-02-13 11:18:13Z gcosmo $
 //
 // G4VTransitionRadiation  -- header file
 //
@@ -54,20 +54,21 @@ class G4VTransitionRadiation : public   G4VDiscreteProcess
 public:
 
 // Constructors
-  G4VTransitionRadiation( const G4String& processName = "TR",
+  explicit G4VTransitionRadiation( const G4String& processName = "TR",
                                 G4ProcessType type = fElectromagnetic);
 
 
 // Destructor
   virtual ~G4VTransitionRadiation() ;
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+  virtual G4bool 
+    IsApplicable(const G4ParticleDefinition& aParticleType) override;
 
   virtual G4double GetMeanFreePath(const G4Track& track, G4double,
-				         G4ForceCondition* condition);
+				         G4ForceCondition* condition) override;
 
   virtual G4VParticleChange* PostStepDoIt(const G4Track& track,
- 				          const G4Step& step);
+ 				          const G4Step& step) override;
 
   virtual void PrintInfoDefinition();
   // Print out of the class parameters
@@ -81,8 +82,9 @@ public:
   void Clear();
 
   // hide assignment operator
-  G4VTransitionRadiation & operator=(const G4VTransitionRadiation &right);
-  G4VTransitionRadiation(const G4VTransitionRadiation&);
+  G4VTransitionRadiation & 
+    operator=(const G4VTransitionRadiation &right) = delete;
+  G4VTransitionRadiation(const G4VTransitionRadiation&) = delete;
 
   std::vector<const G4Material*>  materials;
   std::vector<G4double>           steps;
@@ -99,22 +101,5 @@ public:
   G4double          cosDThetaMax;
 
 };
-
-inline G4double G4VTransitionRadiation::GetMeanFreePath(
-                                const G4Track& track, G4double,
-                                      G4ForceCondition* condition)
-{
-  if(nSteps > 0) {
-    *condition = StronglyForced;
-  } else {
-    *condition = NotForced;
-    if(track.GetKineticEnergy()/track.GetDefinition()->GetPDGMass() + 1.0 > gammaMin &&
-       track.GetVolume()->GetLogicalVolume()->GetRegion() == region) {
-         *condition = StronglyForced;
-    }
-  }
-  return DBL_MAX;      // so TR doesn't limit mean free path
-}
-
 
 #endif   // G4VTransitionRadiation_h

@@ -27,7 +27,7 @@
 /// \brief Implementation of the G03RunAction class
 //
 //
-// $Id: G03RunAction.cc 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id: G03RunAction.cc 110384 2018-05-22 07:50:04Z gcosmo $
 //
 // Class G03RunAction implementation
 //
@@ -69,8 +69,4 @@ void G03RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void G03RunAction::EndOfRunAction(const G4Run*)
 {
-  if (G4VVisManager::GetConcreteInstance())
-  {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  } 
 }

@@ -1,4 +1,4 @@
-# $Id: sandia.mac 76258 2013-11-08 11:36:51Z gcosmo $
+# $Id: sandia.mac 96172 2016-03-22 09:19:11Z gcosmo $
 #
 # limit the step size from histo 8
 #
@@ -22,6 +22,7 @@
 #
 /run/setCut 1 mm	# will set cut for proton
 #
+/testem/gun/setDefault
 /gun/particle e-
 /gun/energy 1000 keV
 #

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc 93303 2015-10-15 15:19:40Z gcosmo $
+// $Id: G4VisCommandsViewer.cc 109510 2018-04-26 07:15:57Z gcosmo $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -41,10 +41,21 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3Vector.hh"
 #include "G4Point3D.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
+#ifdef G4VIS_USE_STD11
+#include <chrono>
+#include <thread>
+#endif
 #include <sstream>
 #include <fstream>
+#include <sstream>
+#include <iomanip>
+#ifdef WIN32
+#include <regex>
+#include <filesystem>
+#endif //WIN32
 
 G4VVisCommandViewer::G4VVisCommandViewer () {}
 
@@ -275,6 +286,7 @@ void G4VisCommandViewerClear::SetNewValue (G4UIcommand*, G4String newValue) {
     return;
   }
 
+  viewer->SetView();
   viewer->ClearView();
   viewer->FinishView();
   if (verbosity >= G4VisManager::confirmations) {
@@ -372,6 +384,47 @@ void G4VisCommandViewerClearTransients::SetNewValue (G4UIcommand*, G4String newV
 
 }
 
+////////////// /vis/viewer/clearVisAttributesModifiers ///////////////////////////////////////
+
+G4VisCommandViewerClearVisAttributesModifiers::G4VisCommandViewerClearVisAttributesModifiers () {
+  fpCommand = new G4UIcmdWithoutParameter
+  ("/vis/viewer/clearVisAttributesModifiers", this);
+  fpCommand -> SetGuidance ("Clear vis attribute modifiers of current viewer.");
+  fpCommand -> SetGuidance ("(These are used for touchables, etc.)");
+}
+
+G4VisCommandViewerClearVisAttributesModifiers::~G4VisCommandViewerClearVisAttributesModifiers () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerClearVisAttributesModifiers::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandViewerClearVisAttributesModifiers::SetNewValue (G4UIcommand*, G4String) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<
+      "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4ViewParameters vp = viewer->GetViewParameters();
+  vp.ClearVisAttributesModifiers();
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Vis attributes modifiers for viewer \"" << viewer->GetName()
+	   << "\" now cleared." << G4endl;
+  }
+
+  SetViewParameters(viewer, vp);
+}
+
 ////////////// /vis/viewer/clone ///////////////////////////////////////
 
 G4VisCommandViewerClone::G4VisCommandViewerClone () {
@@ -410,7 +463,7 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
 
   // Need to handle the possibility that the names contain embedded
   // blanks within quotation marks...
-  char c;
+  char c = ' ';
   while (is.get(c) && c == ' '){}
   if (c == '"') {
     while (is.get(c) && c != '"') {originalName += c;}
@@ -506,6 +559,124 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
   }
 }
 
+////////////// /vis/viewer/colourByDensity ///////////////////////////////////////
+
+G4VisCommandViewerColourByDensity::G4VisCommandViewerColourByDensity () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/viewer/colourByDensity", this);
+  fpCommand -> SetGuidance
+  ("If a volume has no vis attributes, colour it by density.");
+  fpCommand -> SetGuidance
+  ("Provide algorithm number, e.g., \"1\" (or \"0\" to switch off)."
+   "\nThen a unit of density, e.g., \"g/cm3\"."
+   "\nThen parameters for the algorithm assumed to be densities in that unit.");
+  fpCommand -> SetGuidance
+  ("Algorithm 1: Simple algorithm takes 3 parameters: d0, d1 and d2."
+   "\nVolumes with density < d0 are invisible."
+   "\nVolumes with d0 <= density < d1 have colour on range red->green."
+   "\nVolumes with d1 <= density < d2 have colour on range green->blue."
+   "\nVolumes with density > d2 are blue.");
+  G4UIparameter* parameter;
+  parameter  =  new G4UIparameter("n",'i',omitable = true);
+  parameter  -> SetDefaultValue  (0);
+  parameter  -> SetGuidance      ("Algorithm number (or \"0\" to switch off).");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("unit",'s',omitable = true);
+  parameter  -> SetDefaultValue  ("g/cm3");
+  parameter  -> SetGuidance      ("Unit of following densities, e.g., \"g/cm3\".");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("d0",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0.);
+  parameter  -> SetGuidance      ("Density parameter 0.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("d1",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0.);
+  parameter  -> SetGuidance      ("Density parameter 1.");
+  fpCommand->SetParameter(parameter);
+  parameter  =  new G4UIparameter("d2",'d',omitable = true);
+  parameter  -> SetDefaultValue  (0.);
+  parameter  -> SetGuidance      ("Density parameter 2.");
+  fpCommand->SetParameter(parameter);
+}
+
+G4VisCommandViewerColourByDensity::~G4VisCommandViewerColourByDensity () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerColourByDensity::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandViewerColourByDensity::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<
+      "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
+      << G4endl;
+    }
+    return;
+  }
+  G4ViewParameters vp = viewer->GetViewParameters();
+
+  G4int algorithmNumber;
+  G4double d0, d1, d2;
+  G4String unit;
+  std::istringstream is (newValue);
+  is >> algorithmNumber >> unit >> d0 >> d1 >> d2;
+
+  if (algorithmNumber < 0 || algorithmNumber > 1) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<
+      "ERROR: Unrecognised algorithm number: " << algorithmNumber
+      << G4endl;
+    }
+    return;
+  }
+
+  std::vector<G4double> parameters;
+  if (algorithmNumber > 0) {
+    const G4String where = "G4VisCommandViewerColourByDensity::SetNewValue";
+    G4double valueOfUnit;
+    // "Volumic Mass" is Michel's phrase for "Density"
+    if (ProvideValueOfUnit(where,unit,"Volumic Mass",valueOfUnit)) {
+      // Successful outcome of unit search
+      d0 *= valueOfUnit; d1 *= valueOfUnit; d2 *= valueOfUnit;
+    } else {
+      if (verbosity >= G4VisManager::errors) {
+        G4cerr <<
+        "ERROR: Unrecognised or inappropriate unit: " << unit
+        << G4endl;
+      }
+      return;
+    }
+    parameters.push_back(d0);
+    parameters.push_back(d1);
+    parameters.push_back(d2);
+  }
+  vp.SetCBDAlgorithmNumber(algorithmNumber);
+  vp.SetCBDParameters(parameters);
+
+  if (verbosity >= G4VisManager::confirmations) {
+    if (vp.GetCBDAlgorithmNumber() == 0) {
+      G4cout << "Colour by density deactivated" << G4endl;
+    } else {
+      G4cout << "Colour by density algorithm " << vp.GetCBDAlgorithmNumber()
+      << " selected for viewer \"" << viewer->GetName()
+      << "\n  Parameters:";
+      for (auto p: vp.GetCBDParameters()) {
+        G4cout << ' ' << G4BestUnit(p,"Volumic Mass");
+      }
+      G4cout << G4endl;
+    }
+  }
+
+  SetViewParameters(viewer, vp);
+}
+
 ////////////// /vis/viewer/copyViewFrom //////////////////////////
 
 G4VisCommandViewerCopyViewFrom::G4VisCommandViewerCopyViewFrom () {
@@ -514,8 +685,8 @@ G4VisCommandViewerCopyViewFrom::G4VisCommandViewerCopyViewFrom () {
   fpCommand -> SetGuidance
   ("Copy the camera-specific parameters from the specified viewer.");
   fpCommand -> SetGuidance
-  ("Note: To copy scene modifications - style, etc. - please use"
-   "\n\"/vis/viewer/set/all\"");
+  ("Note: To copy ALL view parameters, including scene modifications,"
+   "\nuse \"/vis/viewer/set/all\"");
   fpCommand -> SetParameterName ("from-viewer-name", omitable = false);
 }
 
@@ -907,6 +1078,244 @@ void G4VisCommandViewerFlush::SetNewValue (G4UIcommand*, G4String newValue) {
   }
 }
 
+////////////// /vis/viewer/interpolate ///////////////////////////////////////
+
+G4VisCommandViewerInterpolate::G4VisCommandViewerInterpolate () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/viewer/interpolate", this);
+  fpCommand -> SetGuidance
+  ("Interpolate views defined by the first argument, which can contain "
+   "Unix-shell-style pattern matching characters such as '*', '?' and '[' "
+   "- see \"man sh\" and look for \"Pattern Matching\". The contents "
+   "of each file are assumed to be \"/vis/viewer\" commands "
+   "that specify a particular view. The files are processed in alphanumeric "
+   "order of filename. The files may be written by hand or produced by the "
+   "\"/vis/viewer/save\" command.");
+  fpCommand -> SetGuidance
+  ("The default is to search the working directory for files with a .g4view "
+   "extension. Another procedure is to assemble view files in a subdirectory, "
+   "e.g., \"myviews\"; then they can be interpolated with\n"
+   "\"/vis/viewer/interpolate myviews/*\".");
+  fpCommand -> SetGuidance
+  ("To export interpolated views to file for a future possible movie, "
+   "write \"export\" as 5th parameter (OpenGL only).");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter("pattern", 's', omitable = true);
+  parameter -> SetGuidance("Pattern that defines the view files.");
+  parameter -> SetDefaultValue("*.g4view");
+  fpCommand -> SetParameter(parameter);
+  parameter = new G4UIparameter("no-of-points", 'i', omitable = true);
+  parameter -> SetGuidance ("Number of interpolation points per interval.");
+  parameter -> SetDefaultValue(50);
+  fpCommand -> SetParameter(parameter);
+  parameter = new G4UIparameter("wait-time", 's', omitable = true);
+  parameter -> SetGuidance("Wait time per interpolated point");
+  parameter -> SetDefaultValue("20.");
+  fpCommand -> SetParameter(parameter);
+  parameter = new G4UIparameter("time-unit", 's', omitable = true);
+  parameter -> SetDefaultValue("millisecond");
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter("export", 's', omitable = true);
+  parameter -> SetDefaultValue("no");
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandViewerInterpolate::~G4VisCommandViewerInterpolate () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerInterpolate::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<
+      "ERROR: G4VisCommandViewerInterpolate::SetNewValue: no current viewer."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4String pattern;
+  G4int nInterpolationPoints;
+  G4String waitTimePerPointString;
+  G4String timeUnit;
+  G4String exportString;
+
+  std::istringstream iss (newValue);
+  iss
+  >> pattern
+  >> nInterpolationPoints
+  >> waitTimePerPointString
+  >> timeUnit
+  >> exportString;
+  G4String waitTimePerPointDimString(waitTimePerPointString + ' ' + timeUnit);
+  const G4double waitTimePerPoint =
+  G4UIcommand::ConvertToDimensionedDouble(waitTimePerPointDimString.c_str());
+  G4int waitTimePerPointmilliseconds = waitTimePerPoint/millisecond;
+  if (waitTimePerPointmilliseconds < 0) waitTimePerPointmilliseconds = 0;
+
+  G4UImanager* uiManager = G4UImanager::GetUIpointer();
+
+  // Save current view parameters
+  G4ViewParameters saveVP = currentViewer->GetViewParameters();
+
+  // Save current verbosities
+  G4VisManager::Verbosity keepVisVerbosity = fpVisManager->GetVerbosity();
+  G4int keepUIVerbosity = uiManager->GetVerboseLevel();
+
+  // Set verbosities for this operation
+  fpVisManager->SetVerboseLevel(G4VisManager::errors);
+  uiManager->SetVerboseLevel(0);
+
+  // Switch off auto-refresh while we read in the view files (it will be
+  // restored later).  Note: the view files do not set auto-refresh.
+  G4ViewParameters non_auto = saveVP;
+  non_auto.SetAutoRefresh(false);
+  currentViewer->SetViewParameters(non_auto);
+
+  // View vector of way points
+  std::vector<G4ViewParameters> viewVector;
+
+  const G4int safety = 9999;
+  G4int safetyCount = 0;
+  G4String pathname;
+
+#ifndef WIN32
+
+  // Execute pattern and get resulting list of filles
+  G4String shellCommand = "echo " + pattern;
+  FILE *filelist = popen(shellCommand.c_str(), "r");
+  if (!filelist) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr
+      << "ERROR: G4VisCommandViewerInterpolate::SetNewValue:"
+      << "\n  Error obtaining pipe."
+	     << G4endl;
+    }
+    return;
+  }
+
+  // Build view vector of way points
+  const size_t BUFLENGTH = 999999;
+  char buf[BUFLENGTH];
+  fgets(buf, BUFLENGTH, filelist);
+  std::istringstream fileliststream(buf);
+  while (fileliststream >> pathname
+         && safetyCount++ < safety) {  // Loop checking, 16.02.2016, J.Allison
+    uiManager->ApplyCommand("/control/execute " + pathname);
+    viewVector.push_back(currentViewer->GetViewParameters());
+  }
+  pclose(filelist);
+
+#else // WIN32 (popen is not available in Windows)
+
+  std::experimental::filesystem::v1::path filePattern(pattern);
+
+  // Default pattern : *.g4view
+  // Translated to a regexp : ^.*\\.g4view
+  // Convert pattern into a regexp
+  std::string regexp_pattern("^" + filePattern.filename().string());
+  std::string result_pattern = "";
+  // Replace '.' by "\\."
+  size_t currentPos = 0;
+  size_t nextPos = 0;
+  std::string currentReplacement = "";
+  size_t pos1 = regexp_pattern.find('.', nextPos);
+  size_t pos2 = regexp_pattern.find('*', nextPos);
+  size_t pos3 = regexp_pattern.find('?', nextPos);
+  while ((pos1 != std::string::npos) || (pos2 != std::string::npos) || (pos3 != std::string::npos)) {
+    nextPos = pos1;
+    currentReplacement = "\\.";
+    if (pos2 < nextPos) {
+      nextPos = pos2;
+      currentReplacement = ".*";
+    }
+    if (pos3 < nextPos) {
+      nextPos = pos3;
+      currentReplacement = "(.{1,1})";
+    }
+    result_pattern += regexp_pattern.substr(currentPos, nextPos - currentPos) + currentReplacement;
+    nextPos++;
+    currentPos = nextPos;
+    pos1 = regexp_pattern.find('.', currentPos);
+    pos2 = regexp_pattern.find('*', currentPos);
+    pos3 = regexp_pattern.find('?', currentPos);
+  }
+  result_pattern += regexp_pattern.substr(currentPos);
+
+  // Build view vector of way points
+  // Add "./" for empty paths
+  G4String parentPath(filePattern.parent_path().string().length() ? filePattern.parent_path().string() : std::string("./"));
+  // Iterate through files in directory and apply regex match to filter appropriate files
+  std::regex result_pattern_regex (result_pattern, std::regex_constants::basic | std::regex_constants::icase);
+  for (auto iter = std::experimental::filesystem::v1::directory_iterator(parentPath);
+       iter != std::experimental::filesystem::v1::directory_iterator() && safetyCount++ < safety;
+       ++iter)
+  {
+    const auto& file = iter->path();
+
+    G4String filename(file.filename().string());
+    if (std::regex_match(filename, result_pattern_regex))
+    {
+      uiManager->ApplyCommand("/control/execute " + filename);
+      viewVector.push_back(currentViewer->GetViewParameters());
+    }
+  }
+
+#endif // WIN32
+
+  if (safetyCount >= safety) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+      "/vis/viewer/interpolate:"
+      "\n  the number of way points exceeds the maximum currently allowed: "
+      << safety << G4endl;
+    }
+    return;
+  }
+
+  // Interpolate views
+  safetyCount = 0;
+  do {
+    G4ViewParameters* vp =
+    G4ViewParameters::CatmullRomCubicSplineInterpolation(viewVector,nInterpolationPoints);
+    if (!vp) break;  // Finished.
+    // Set original auto-refresh status.
+    vp->SetAutoRefresh(saveVP.IsAutoRefresh());
+    currentViewer->SetViewParameters(*vp);
+    currentViewer->RefreshView();
+    if (exportString == "export" &&
+        currentViewer->GetName().contains("OpenGL")) {
+      uiManager->ApplyCommand("/vis/ogl/export");
+    }
+    // File-writing viewers need to close the file
+    currentViewer->ShowView();
+#ifdef G4VIS_USE_STD11
+    if (waitTimePerPointmilliseconds > 0)
+      std::this_thread::sleep_for(std::chrono::milliseconds(waitTimePerPointmilliseconds));
+#endif
+  } while (safetyCount++ < safety);  // Loop checking, 16.02.2016, J.Allison
+
+  // Restore original verbosities
+  uiManager->SetVerboseLevel(keepUIVerbosity);
+  fpVisManager->SetVerboseLevel(keepVisVerbosity);
+
+  // Restore original view parameters
+  currentViewer->SetViewParameters(saveVP);
+  currentViewer->RefreshView();
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Viewer \"" << currentViewer -> GetName () << "\""
+    << " restored." << G4endl;
+  }
+}
+
 ////////////// /vis/viewer/list ///////////////////////////////////////
 
 G4VisCommandViewerList::G4VisCommandViewerList () {
@@ -959,11 +1368,14 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand*, G4String newValue) {
   for (int iHandler = 0; iHandler < nHandlers; iHandler++) {
     G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
     const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
-    G4cout << "Scene handler \"" << sceneHandler -> GetName ();
+    G4cout
+    << "Scene handler \"" << sceneHandler -> GetName () << "\" ("
+    << sceneHandler->GetGraphicsSystem()->GetNickname() << ')';
     const G4Scene* pScene = sceneHandler -> GetScene ();
     if (pScene) {
-      G4cout << "\", scene \"" << pScene -> GetName () << "\":";
+      G4cout << ", scene \"" << pScene -> GetName () << "\"";
     }
+    G4cout << ':';
     G4int nViewers = viewerList.size ();
     if (nViewers == 0) {
       G4cout << "\n            No viewers for this scene handler." << G4endl;
@@ -1316,9 +1728,19 @@ G4VisCommandViewerSave::G4VisCommandViewerSave () {
   fpCommand -> SetGuidance
   ("Write commands that define the current view to file.");
   fpCommand -> SetGuidance
-  ("Read them back into the same or any viewer with \"/control/execute <filename>\".");
-  fpCommand -> SetParameterName ("file-name", omitable = true);
-  fpCommand -> SetDefaultValue ("G4cout");
+  ("Read them back into the same or any viewer with \"/control/execute\".");
+  fpCommand -> SetGuidance
+  ("If the filename is omitted the view is saved to a file "
+   "\"g4_nn.g4view\", where nn is a sequential two-digit number.");
+  fpCommand -> SetGuidance
+  ("If the filename is \"-\", the data are written to G4cout.");
+  fpCommand -> SetGuidance
+  ("If you are wanting to save views for future interpolation a recommended "
+   "procedure is: save views to \"g4_nn.g4view\", as above, then move the files "
+   "into a sub-directory, say, \"views\", then interpolate with"
+   "\"/vis/viewer/interpolate views/\" (note the trailing \'/\').");
+  fpCommand -> SetParameterName ("filename", omitable = true);
+  fpCommand -> SetDefaultValue ("");
 }
 
 G4VisCommandViewerSave::~G4VisCommandViewerSave () {
@@ -1334,13 +1756,14 @@ namespace {
   void WriteCommands
   (std::ostream& os,
    const G4ViewParameters& vp,
-   const G4Point3D& stp)
+   const G4Point3D& stp)  // Standard Target Point
   {
     os
     << vp.CameraAndLightingCommands(stp)
     << vp.DrawingStyleCommands()
     << vp.SceneModifyingCommands()
     << vp.TouchableCommands()
+    << vp.TimeWindowCommands()
     << std::endl;
   }
 }
@@ -1368,38 +1791,12 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
     }
     return;
   }
-  
-  std::ofstream ofs;
-  if (newValue != "G4cout") {
-    // Check if file exists
-    std::ifstream ifs(newValue);
-    if (ifs) {
-      if (verbosity >= G4VisManager::errors) {
-        G4cerr <<
-        "ERROR: G4VisCommandsViewerSave::SetNewValue: File \""
-        << newValue << "\" already exists."
-        << G4endl;
-      }
-      ifs.close();
-      return;
-    }
-    ofs.open(newValue);
-    if (!ofs) {
-      if (verbosity >= G4VisManager::errors) {
-        G4cerr <<
-        "ERROR: G4VisCommandsViewerSave::SetNewValue: Trouble opening file \""
-        << newValue << "\"."
-        << G4endl;
-      }
-      ofs.close();
-      return;
-    }
-  }
-  
+
+  // Get view parameters and ther relevant information.
   G4ViewParameters vp = currentViewer->GetViewParameters();
   // Concatenate any private vis attributes modifiers...
   const std::vector<G4ModelingParameters::VisAttributesModifier>*
-    privateVAMs = currentViewer->GetPrivateVisAttributesModifiers();
+  privateVAMs = currentViewer->GetPrivateVisAttributesModifiers();
   if (privateVAMs) {
     std::vector<G4ModelingParameters::VisAttributesModifier>::const_iterator i;
     for (i = privateVAMs->begin(); i != privateVAMs->end(); ++i) {
@@ -1407,23 +1804,63 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
   const G4Point3D& stp = currentScene->GetStandardTargetPoint();
-  
-  if (newValue == "G4cout") {
+
+  G4String filename = newValue;
+
+  if (newValue.length() == 0) {
+    // Null filename - generate a filename
+    const G4int maxNoOfFiles = 100;
+    static G4int sequenceNumber = 0;
+    if (sequenceNumber >= maxNoOfFiles) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cerr
+        << "ERROR: G4VisCommandsViewerSave::SetNewValue: Maximum number, "
+        << maxNoOfFiles
+        << ", of files exceeded."
+        << G4endl;
+      }
+      return;
+    }
+    std::ostringstream oss;
+    oss << std::setw(2) << std::setfill('0') << sequenceNumber++;
+    filename = "g4_" + oss.str() + ".g4view";
+  }
+
+  if (filename == "-") {
+    // Write to standard output
     WriteCommands(G4cout,vp,stp);
   } else {
+    // Write to file - but add extension if not prescribed
+    if (!filename.contains('.')) {
+      // No extension supplied - add .g4view
+      filename += ".g4view";
+    }
+    std::ofstream ofs(filename);
+    if (!ofs) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cerr <<
+        "ERROR: G4VisCommandsViewerSave::SetNewValue: Trouble opening file \""
+        << filename << "\"."
+        << G4endl;
+      }
+      ofs.close();
+      return;
+    }
     WriteCommands(ofs,vp,stp);
     ofs.close();
   }
-
-  if (verbosity >= G4VisManager::confirmations) {
+  
+  if (verbosity >= G4VisManager::warnings) {
     G4cout << "Viewer \"" << currentViewer -> GetName ()
     << "\"" << " saved to ";
-    if (newValue == "G4cout") {
+    if (filename == "-") {
       G4cout << "G4cout.";
     } else {
-      G4cout << "file \'" << newValue << "\"." <<
-      "\n  Read view parameters back into this or any viewer with"
-      "\n  \"/control/execute " << newValue << "\"";
+      G4cout << "file \'" << filename << "\"." <<
+      "\n  Read the view back into this or any viewer with"
+      "\n  \"/control/execute " << filename << "\" or use"
+      "\n  \"/vis/viewer/interpolate\" if you have several saved files -"
+      "\n  see \"help /vis/viewer/interpolate\" for guidance.";
     }
     G4cout << G4endl;
   }
@@ -1553,7 +1990,8 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand*, G4String newValue) {
     return;
   }
 
-  fpVisManager -> SetCurrentViewer (viewer);  // Prints confirmation.
+  // Set pointers, call SetView and print confirmation.
+  fpVisManager -> SetCurrentViewer (viewer);
 
   RefreshIfRequired(viewer);
 }

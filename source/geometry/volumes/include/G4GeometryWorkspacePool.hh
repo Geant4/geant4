@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryWorkspacePool.hh 79096 2014-02-14 16:07:39Z gcosmo $
+// $Id: G4GeometryWorkspacePool.hh 110271 2018-05-17 14:41:15Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -41,6 +41,7 @@
 #ifndef G4GEOMETRYWORKSPACEPOOL_HH
 #define G4GEOMETRYWORKSPACEPOOL_HH
 
+#include "geomwdefs.hh"
 #include "G4Types.hh"
 
 class G4GeometryWorkspace;
@@ -65,7 +66,7 @@ class G4GeometryWorkspacePool
       // Reuse an existing workspace or create a new one if needed.
       // This will never fail, except if system is out of resources
 
-    inline G4GeometryWorkspace* GetWorkspace() { return fMyWorkspace; } 
+    inline G4GeometryWorkspace* GetWorkspace() { return fMyWorkspace(); }
       // Give back the existing, active workspace for my thread / task
 
     void Recycle( G4GeometryWorkspace * );
@@ -75,9 +76,6 @@ class G4GeometryWorkspacePool
       // To be called once at the end of the job
   
   protected:
-
-    void ReleaseAndDestroyWorkspace(G4GeometryWorkspace*);
-      // Destroy workspace after releasing it
 
     // void RegisterWarehouse( G4GeometryWarehouse *);
       // The (optional) warehouse keeps a list of free workspaces
@@ -94,13 +92,12 @@ class G4GeometryWorkspacePool
     // void* fWarehouse;
     // G4GeometryWarehouse* fWarehouse;
       // This is "void" to hide the actual container type for workspaces
-      // Implementations: a simple STL contaier for MT or something better
+      // Implementations: a simple STL container for MT or something better
       // for tbb.
       // Further development: template parameter with portable default
 
-    static G4ThreadLocal G4GeometryWorkspace* fMyWorkspace;
+    G4GEOM_DLL static G4GeometryWorkspace*& fMyWorkspace();
       // The thread's workspace - if assigned.
-      //  --> Can we do without this ?  It is dirty!!
 };
 
 #endif

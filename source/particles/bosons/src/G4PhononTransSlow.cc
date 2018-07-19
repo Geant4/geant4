@@ -26,7 +26,7 @@
 /// \file particles/phonons/src/G4PhononTransSlow.cc
 /// \brief Implementation of the G4PhononTransSlow class
 //
-// $Id: G4PhononTransSlow.cc 75122 2013-10-28 09:51:40Z gcosmo $
+// $Id: G4PhononTransSlow.cc 102841 2017-02-27 13:00:47Z gcosmo $
 //
 
 #include "G4PhononTransSlow.hh"
@@ -59,7 +59,7 @@ G4PhononTransSlow*  G4PhononTransSlow::Definition()
                     0,               0,             0,
                     0,               0,             0,
              "phonon",               0,             0,         0,
-                 true,             0.0,          NULL,
+                 true,            -1.0,          NULL,
                 false,        "phononTS",       0
              );
   }

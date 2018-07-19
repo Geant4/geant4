@@ -55,8 +55,8 @@
 
 
 CexmcScenePrimitivesMessenger::CexmcScenePrimitivesMessenger(
-                                    CexmcScenePrimitives *  scenePrimitives ) :
-    scenePrimitives( scenePrimitives ), drawRadialLine( NULL ),
+                                    CexmcScenePrimitives *  scenePrimitives_ ) :
+    scenePrimitives( scenePrimitives_ ), drawRadialLine( NULL ),
     clearRadialLines( NULL ), markTargetCenter( NULL ),
     highlightInnerCrystals( NULL ), setColour( NULL )
 {

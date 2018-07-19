@@ -243,6 +243,14 @@ void RanecuEngine::flatArray(const int size, double* vect)
    table[index][1] = seed2;
 }
 
+RanecuEngine::operator double() {
+  return flat();
+}
+
+RanecuEngine::operator float() {
+  return float( flat() );
+}
+
 RanecuEngine::operator unsigned int() {
    const int index = seq;
    long seed1 = table[index][0];

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticProcess.cc 92396 2015-08-31 14:12:40Z gcosmo $
+// $Id: G4HadronElasticProcess.cc 110545 2018-05-29 13:40:55Z gcosmo $
 //
 // Geant4 Hadron Elastic Scattering Process 
 // 
@@ -49,7 +49,7 @@
 
 G4HadronElasticProcess::G4HadronElasticProcess(const G4String& pName)
   : G4HadronicProcess(pName, fHadronElastic), isInitialised(false),
-    fDiffraction(0), fDiffractionRatio(0)
+    fDiffraction(nullptr), fDiffractionRatio(nullptr)
 {
   AddDataSet(new G4HadronElasticDataSet);
   lowestEnergy = 1.*keV;
@@ -87,11 +87,11 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   //        in earlier releases; these limits have not been changed since.
   if (kineticEnergy <= lowestEnergy)   return theTotalResult;
 
-  G4Material* material = track.GetMaterial();
+  const G4Material* material = track.GetMaterial();
   G4Nucleus* targNucleus = GetTargetNucleusPointer();
 
   // Select element
-  G4Element* elm = 0;
+  const G4Element* elm = nullptr;
   try
     {
       elm = GetCrossSectionDataStore()->SampleZandA(dynParticle, material, 
@@ -129,7 +129,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 
 	  result = fDiffraction->ApplyYourself(theProj, *targNucleus);
 	}
-      catch(G4HadronicException aR)
+      catch(G4HadronicException & aR)
 	{
 	  G4ExceptionDescription ed;
 	  aR.Report(ed);
@@ -192,7 +192,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
     {
       result = hadi->ApplyYourself( theProj, *targNucleus);
     }
-  catch(G4HadronicException aR)
+  catch(G4HadronicException & aR)
     {
       G4ExceptionDescription ed;
       aR.Report(ed);

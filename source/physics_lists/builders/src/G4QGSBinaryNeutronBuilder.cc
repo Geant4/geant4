@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBinaryNeutronBuilder.cc 83616 2014-09-04 13:30:16Z gcosmo $
+// $Id: G4QGSBinaryNeutronBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 //
 // Modified:
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -71,21 +72,6 @@ G4QGSBinaryNeutronBuilder::
   delete theStringDecay;
   delete theStringModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
-}
-
-void G4QGSBinaryNeutronBuilder::
-Build(G4HadronElasticProcess * )
-{
-}
-
-void G4QGSBinaryNeutronBuilder::
-Build(G4HadronFissionProcess * )
-{
-}
-
-void G4QGSBinaryNeutronBuilder::
-Build(G4HadronCaptureProcess * )
-{
 }
 
 void G4QGSBinaryNeutronBuilder::

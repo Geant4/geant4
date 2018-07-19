@@ -7,12 +7,52 @@ $Id: History 66241 2012-12-13 18:34:42Z gunter $
 
               Hadronic physics-list/constructors/factory History
               --------------------------------------------------
-This file should be used  to briefly summarize all major modifications 
+This file should be used  to briefly summarize all major modifications
 introduced in the code and keeptrack of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-Mar-2018, Robert Hatcher             (phys-ctor-fact-V10-04-02)
+- Allows override of exclusion of G4RegisterPhysicsConstructors.icc
+   when using WIN32 by setting USING_STATIC_LIBS
+
+28-Feb-2018, Robert Hatcher             (phys-ctor-fact-V10-04-01)
+- WIN32 linker works differently then Unix for externals in shared mode
+  Special case WIN32 (for both shared & static builds for now)
+
+26-Feb-2018, Robert Hatcher             (phys-ctor-fact-V10-04-00)
+- Move G4_REFERENCE_PHYSCONSTR_FACTORY macro calls out of
+  G4PhysicsConstructorRegistry.cc, where they cause an implicit
+  circular link when building granular libraries, and into a new
+  G4RegisterPhysicsConstructors.icc, where they can be included
+  as necessary in a higher level compilation unit.
+- REFERENCE macro calls can be made unique by #define REGREF <anything>
+- Whitespace cleanup
+
+01-May-2017, Sebastien Incerti          (phys-ctor-fact-V10-03-00)
+- added Geant4-DNA stationary constructors
+
+17-Oct-2016, Michel Maire               (phys-ctor-fact-V10-02-04)
+- add README
+
+29-Sep-2016, Robert Hatcher             (phys-ctor-fact-V10-02-03)
+- Reviewed changes in current context, propose w/ minimal changes
+
+03-Jun-2016, Robert Hatcher             (phys-ctor-fact-V10-02-02)
+- Require use of declaring and referencing macros to have
+  a trailing semicolon; for case where macro expands to a
+  namespace block, deal with eating up the ";"
+
+26-May-2016, Robert Hatcher             (phys-ctor-fact-V10-02-01)
+- Implement G4_REFERENCE_PHYSCONSTR_FACTORY_NS in case physics
+   ctor lives in a namespace
+
+10-May-2016, Robert Hatcher             (phys-ctor-fact-V10-02-00)
+- Reinstate use of G4_REFERENCE_PHYSCONSTR_FACTORY so that registry works
+   in the case of static library builds, even without forcing linker
+   to load whole library (which is not possible for MS Visual Studio)
 
 05-Nov-2014, Alberto Ribon              (phys-ctor-fact-V10-01-00)
 - Replaced neutron_hp/ with particle_hp/

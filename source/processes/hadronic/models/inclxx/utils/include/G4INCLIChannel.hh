@@ -62,7 +62,7 @@ namespace G4INCL {
     FinalState *getFinalState();
     virtual void fillFinalState(FinalState *fs) = 0;
 
-    INCL_DECLARE_ALLOCATION_POOL(IChannel);
+    INCL_DECLARE_ALLOCATION_POOL(IChannel)
   };
 
 }

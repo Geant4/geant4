@@ -43,15 +43,41 @@
 #include "G4ElementTable.hh"
 #include "G4HadronicException.hh"
 
-//TK110811
-G4bool G4LENDCrossSection::IsIsoApplicable( const G4DynamicParticle* dp, G4int /*iZ*/ , G4int /*aA*/ , 
-                                            const G4Element* /*element*/ , const G4Material* /*material*/ )
+G4bool G4LENDCrossSection::IsIsoApplicable( const G4DynamicParticle* dp, G4int iZ , G4int iA , 
+                                            const G4Element* element , const G4Material* /*material*/ )
 {
    G4double eKin = dp->GetKineticEnergy();
    if ( dp->GetDefinition() != proj ) return false;
    if ( eKin > GetMaxKinEnergy() || eKin < GetMinKinEnergy() ) return false;
 
-   return true;
+   //G4cout << "G4LENDCrossSection::GetIsoIsIsoApplicable this->GetName() = " << this->GetName() << ", iZ = " << iZ << ", iA = " << iA << ", allow_nat = " << allow_nat << G4endl;
+   //Check existence of target data
+   if ( element != NULL ) { 
+      if ( element->GetNumberOfIsotopes() != 0 ) { 
+         std::vector< const G4Isotope*> vIsotope;
+         for ( size_t i = 0 ; i != element->GetNumberOfIsotopes() ; i++ ) {
+            if ( element->GetIsotope( i )->GetN() == iA ) vIsotope.push_back( element->GetIsotope( i ) ); 
+         }
+         for ( size_t i = 0 ; i != vIsotope.size() ; i++ ) { 
+            G4int iM = vIsotope[i]->Getm(); 
+            if ( get_target_from_map( lend_manager->GetNucleusEncoding( iZ , iA , iM ) ) != NULL ) return true;
+         } 
+         //No isomer has data
+         //Check natural aboundance data for the element
+         if ( get_target_from_map( lend_manager->GetNucleusEncoding( iZ , 0 , 0 ) ) != NULL ) return true;
+      } else {
+         //Check for iZ and iA under assuming iM = 0
+         if ( get_target_from_map( lend_manager->GetNucleusEncoding( iZ , iA , 0 ) ) != NULL ) return true;
+         //Check natural aboundance data for the element
+         if ( get_target_from_map( lend_manager->GetNucleusEncoding( iZ , 0 , 0 ) ) != NULL ) return true;
+      }
+   } else {
+      //Check for iZ and iA under assuming iM = 0
+      if ( get_target_from_map( lend_manager->GetNucleusEncoding( iZ , iA , 0 ) ) != NULL ) return true;
+      //Check natural aboundance data for iZ
+      if ( get_target_from_map( lend_manager->GetNucleusEncoding( iZ , 0 , 0 ) ) != NULL ) return true;
+   }
+   return false;
 }
 
 G4double G4LENDCrossSection::GetIsoCrossSection( const G4DynamicParticle* dp , G4int iZ , G4int iA ,
@@ -61,10 +87,18 @@ G4double G4LENDCrossSection::GetIsoCrossSection( const G4DynamicParticle* dp , G
    G4double xs = 0.0;
    G4double ke = dp->GetKineticEnergy();
    G4double temp = material->GetTemperature();
-   G4int iM = isotope->Getm();
-
-   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA , iM ) )->second->GetTarget();
-
+   G4int iM = 0;
+   if ( isotope != NULL ) iM = isotope->Getm();
+ 
+   G4GIDI_target* aTarget = get_target_from_map( lend_manager->GetNucleusEncoding( iZ , iA , iM ) );
+   if ( aTarget == NULL ) {
+      G4String message;
+      message = this->GetName();
+      message += " is unexpectedly called.";
+      //G4Exception( "G4LEND::GetIsoCrossSection(,)" , "LENDCrossSection-01" , JustWarning ,
+      G4Exception( "G4LEND::GetIsoCrossSection(,)" , "LENDCrossSection-01" , FatalException ,
+                  message );
+   }
    xs = getLENDCrossSection ( aTarget , ke , temp );
 
    return xs;
@@ -297,7 +331,7 @@ void G4LENDCrossSection::create_used_target_map()
             G4int iIsomer = anElement->GetIsotope( i_iso )->Getm();
 
             //G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( G4Neutron::Neutron() , default_evaluation , iZ , iA );  
-            G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( proj , default_evaluation , iZ , iA );  
+            G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( proj , default_evaluation , iZ , iA , iIsomer );  
             if ( allow_nat == true ) aTarget->AllowNat();
             if ( allow_any == true ) aTarget->AllowAny();
             usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iA , iIsomer ) , aTarget ) );
@@ -330,24 +364,7 @@ void G4LENDCrossSection::create_used_target_map()
          }
       }
    }
-
-   G4cout << "Dump UsedTarget for " << GetName() << G4endl;
-   //G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) , Pointer of Target" << G4endl;
-   G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) " << G4endl;
-   for ( std::map< G4int , G4LENDUsedTarget* >::iterator 
-         it = usedTarget_map.begin() ; it != usedTarget_map.end() ; it ++ )
-   {
-      G4cout 
-         << " " << it->second->GetWantedEvaluation() 
-         << ", " << it->second->GetWantedZ() 
-         << ", " << it->second->GetWantedA() 
-         << " -> " << it->second->GetActualEvaluation() 
-         << ", " << it->second->GetActualZ() 
-         << ", " << it->second->GetActualA() 
-         //<< ", " << it->second->GetTarget() 
-         << G4endl; 
-   } 
-
+   DumpLENDTargetInfo();
 }
 
                                                            // elow          ehigh       xs_elow      xs_ehigh      ke (ke < elow)
@@ -360,3 +377,32 @@ G4double G4LENDCrossSection::GetUltraLowEnergyExtrapolatedXS( G4double x1, G4dou
    G4double result = a * 1/std::sqrt(ke) + b;
    return result;
 }
+
+G4GIDI_target* G4LENDCrossSection::get_target_from_map( G4int nuclear_code ) {
+   G4GIDI_target* target = NULL;
+   if ( usedTarget_map.find( nuclear_code ) != usedTarget_map.end() ) {
+      target = usedTarget_map.find( nuclear_code )->second->GetTarget();
+   }
+   return target;
+}
+
+void G4LENDCrossSection::DumpLENDTargetInfo( G4bool force ) {
+
+   if ( lend_manager->GetVerboseLevel() >= 1 || force ) {
+      if ( usedTarget_map.size() == 0 ) create_used_target_map(); 
+      G4cout << "Dumping UsedTarget of " << GetName() << " for " << proj->GetParticleName() << G4endl;
+      G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) " << G4endl;
+      for ( std::map< G4int , G4LENDUsedTarget* >::iterator 
+         it = usedTarget_map.begin() ; it != usedTarget_map.end() ; it ++ ) {
+         G4cout 
+         << " " << it->second->GetWantedEvaluation() 
+         << ", " << it->second->GetWantedZ() 
+         << ", " << it->second->GetWantedA() 
+         << " -> " << it->second->GetActualEvaluation() 
+         << ", " << it->second->GetActualZ() 
+         << ", " << it->second->GetActualA() 
+         << G4endl; 
+      } 
+   }
+}
+

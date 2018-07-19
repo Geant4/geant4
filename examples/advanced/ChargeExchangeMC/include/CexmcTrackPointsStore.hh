@@ -50,27 +50,27 @@
 
 struct  CexmcTrackPointsStore
 {
-    CexmcTrackPointsStore( const  CexmcTrackPointInfo &  monitorTP,
-    const  CexmcTrackPointInfo &  targetTPBeamParticle,
-    const  CexmcTrackPointInfo &  targetTPOutputParticle,
-    const  CexmcTrackPointInfo &  targetTPNucleusParticle,
-    const  CexmcTrackPointInfo &  targetTPOutputParticleDecayProductParticle1,
-    const  CexmcTrackPointInfo &  targetTPOutputParticleDecayProductParticle2,
-    const  CexmcTrackPointInfo &  vetoCounterTPLeft,
-    const  CexmcTrackPointInfo &  vetoCounterTPRight,
-    const  CexmcTrackPointInfo &  calorimeterTPLeft,
-    const  CexmcTrackPointInfo &  calorimeterTPRight ) :
-        monitorTP( monitorTP ), targetTPBeamParticle( targetTPBeamParticle ),
-        targetTPOutputParticle( targetTPOutputParticle ),
-        targetTPNucleusParticle( targetTPNucleusParticle ),
+    CexmcTrackPointsStore( const  CexmcTrackPointInfo &  monitorTP_,
+    const  CexmcTrackPointInfo &  targetTPBeamParticle_,
+    const  CexmcTrackPointInfo &  targetTPOutputParticle_,
+    const  CexmcTrackPointInfo &  targetTPNucleusParticle_,
+    const  CexmcTrackPointInfo &  targetTPOutputParticleDecayProductParticle1_,
+    const  CexmcTrackPointInfo &  targetTPOutputParticleDecayProductParticle2_,
+    const  CexmcTrackPointInfo &  vetoCounterTPLeft_,
+    const  CexmcTrackPointInfo &  vetoCounterTPRight_,
+    const  CexmcTrackPointInfo &  calorimeterTPLeft_,
+    const  CexmcTrackPointInfo &  calorimeterTPRight_ ) :
+        monitorTP( monitorTP_ ), targetTPBeamParticle( targetTPBeamParticle_ ),
+        targetTPOutputParticle( targetTPOutputParticle_ ),
+        targetTPNucleusParticle( targetTPNucleusParticle_ ),
         targetTPOutputParticleDecayProductParticle1(
-                                targetTPOutputParticleDecayProductParticle1 ),
+                                targetTPOutputParticleDecayProductParticle1_ ),
         targetTPOutputParticleDecayProductParticle2(
-                                targetTPOutputParticleDecayProductParticle2 ),
-        vetoCounterTPLeft( vetoCounterTPLeft ),
-        vetoCounterTPRight( vetoCounterTPRight ),
-        calorimeterTPLeft( calorimeterTPLeft ),
-        calorimeterTPRight( calorimeterTPRight )
+                                targetTPOutputParticleDecayProductParticle2_ ),
+        vetoCounterTPLeft( vetoCounterTPLeft_ ),
+        vetoCounterTPRight( vetoCounterTPRight_ ),
+        calorimeterTPLeft( calorimeterTPLeft_ ),
+        calorimeterTPRight( calorimeterTPRight_ )
     {}
 
     void *  operator new( size_t  size );

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/include/PhysListEmStandard.hh
 /// \brief Definition of the PhysListEmStandard class
 //
-// $Id: PhysListEmStandard.hh 66586 2012-12-21 10:48:39Z ihrivnac $
+// $Id: PhysListEmStandard.hh 98759 2016-08-09 14:03:09Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,11 +58,4 @@ class PhysListEmStandard : public G4VPhysicsConstructor
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-
-
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmBiasingManager.cc 102325 2017-01-23 10:25:31Z gcosmo $
+// $Id: G4EmBiasingManager.cc 98860 2016-08-15 09:59:59Z gcosmo $
 //
 // -------------------------------------------------------------------
 //

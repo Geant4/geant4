@@ -27,10 +27,10 @@
 /// \brief Definition of the PrimaryGeneratorAction2 class
 //
 //
-// $Id: PrimaryGeneratorAction2.hh 68024 2013-03-13 13:42:01Z gcosmo $
+// $Id: PrimaryGeneratorAction2.hh 99713 2016-10-03 07:35:42Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PrimaryGeneratorAction2_h
 #define PrimaryGeneratorAction2_h 1
@@ -58,14 +58,14 @@ class PrimaryGeneratorAction2
     G4double InverseCumul();            
     
   private:    
-    G4ParticleGun*         particleGun;
+    G4ParticleGun*         fParticleGun;
  
-    G4int                  nPoints;     //tabulated function
-    std::vector<G4double>  x;
-    std::vector<G4double>  f;           //f(x)
-    std::vector<G4double>  a;           //slopes
-    std::vector<G4double>  Fc;          //cumulative of f
-    G4double               fMax;        //max(f)
+    G4int                  fNPoints;    //nb of points
+    std::vector<G4double>  fX;          //abscisses X
+    std::vector<G4double>  fY;          //values of Y(X)
+    std::vector<G4double>  fSlp;        //slopes
+    std::vector<G4double>  fYC;         //cumulative function of Y
+    G4double               fYmax;       //max(Y)
 
   private:
     void InitFunction();                        

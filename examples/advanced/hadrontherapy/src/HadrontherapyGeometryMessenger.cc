@@ -57,17 +57,12 @@ HadrontherapyGeometryMessenger::~HadrontherapyGeometryMessenger()
 {
     delete changeTheGeometryDir;
     delete changeTheGeometryCmd;
-    // delete changeTheDetectorCmd;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyGeometryMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-  /* if( command == changeTheDetectorCmd )
-      {
-        hadrontherapyGeometryController -> SetDetector (newValue);
-    }
-    else*/
+
  if( command == changeTheGeometryCmd )
     {
         hadrontherapyGeometryController -> SetGeometry (newValue);

@@ -129,9 +129,9 @@ public:
   void replace(const std::string& a_old,const std::string& a_new) {
     // Used by the obuild template system.
     tools_vforit(atb,m_atbs,it) {
-      tools::replace((*it).second,a_old,a_new);
+      replace_((*it).second,a_old,a_new);
     }
-    tools::replace(m_value,a_old,a_new);
+    replace_(m_value,a_old,a_new);
   }
   
 protected:

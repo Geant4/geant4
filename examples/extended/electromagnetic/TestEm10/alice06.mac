@@ -9,10 +9,12 @@
 #
 #  PLOT: energy deposit distribution in absorber (g4.11)
 #
-/plots/sethistName g4.p11
-/plots/setnbinEn 41
-/plots/setEnlow 0.00 MeV
-/plots/setEnhigh 0.041  MeV
+/analysis/setFileName alice06
+/analysis/h1/set  1 100 0.00  0.1  MeV   # Edep
+/analysis/h1/set  2 100 0.00  0.1  MeV   # XTR gamma
+/analysis/h1/set  3 100 0.00  0.1  MeV   # all gamma
+/analysis/h1/set  4 100 0.00  0.1  MeV   # all e-
+/analysis/h1/set  5 41 0.00  0.041  MeV  # En (Edep with original limits)
 #
 #
 # Change and choice of experimental setups. Can be
@@ -42,25 +44,17 @@
 #
 /run/particle/applyCuts
 #
-# set cuts in XTR radiator
-#
-/emphyslist/setGammaCut 0.001
-/emphyslist/setElectronCut 0.001
-/emphyslist/setPositronCut 0.001
-/emphyslist/setRadiatorCuts 0.001
-#
-# set cuts in XTR detector
-#
-/emphyslist/setGammaCut 1.01
-/emphyslist/setElectronCut 1.01
-/emphyslist/setPositronCut 1.01
-#
-/emphyslist/setDetectorCuts 1.01
-#
 /run/initialize
 #
+# set cuts
+#
+/run/setCut 0.001
+/run/setCutForRegion Radiator 0.001
+/run/setCutForRegion Absorber 1.01
+#
+#/hits/verbose 1
+#
 /geometry/test/run
-/geometry/test/recursive_test
 #
 #/XTRdetector/update
 #
@@ -102,7 +96,7 @@
 
 #/tracking/verbose 1
 #
-/event/printModulo 1000
+/run/printProgress 1000
 /run/beamOn 10000
 #
 

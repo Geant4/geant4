@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SafetyHelper.cc 81060 2014-05-20 09:12:39Z gcosmo $
+// $Id: G4SafetyHelper.cc 109355 2018-04-12 08:08:58Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4SafetyHelper Implementation
@@ -114,7 +114,7 @@ G4SafetyHelper::CheckNextStep(const G4ThreeVector &position,
 G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position, G4double maxLength )
 {
   G4double newSafety;
-
+  
   // Only recompute (calling Navigator/PathFinder) if 'position'
   // is  *not* the safety location and has moved 'significantly'
   //
@@ -125,19 +125,23 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position, G4double 
     {
       // Safety for mass geometry
       newSafety = fpMassNavigator->ComputeSafety(position, maxLength, true);
+
+      // Only store a 'true' safety - one that was not restricted by maxLength
+      if( newSafety < maxLength )
+      {
+         fLastSafety= newSafety;
+         fLastSafetyPosition = position;
+      }
     }
     else
     {
       // Safety for all geometries
-      newSafety = fpPathFinder->ComputeSafety(position); 
+      newSafety = fpPathFinder->ComputeSafety(position);
+
+      fLastSafety= newSafety;
+      fLastSafetyPosition = position;
     } 
  
-    // We can only store a 'true' safety - one that was not restricted by maxLength
-    if( newSafety < maxLength )
-    {
-       fLastSafety= newSafety;
-       fLastSafetyPosition = position;
-    }
   }
   else
   {
@@ -146,26 +150,28 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position, G4double 
     // G4double moveLength = 0;
     // if( moveLengthSq > 0.0 ) { moveLength= std::sqrt(moveLengthSq); }
     newSafety = fLastSafety; // -moveLength;
-  } 
+  }
+  
   return newSafety;
 }
 
 void G4SafetyHelper::ReLocateWithinVolume( const G4ThreeVector &newPosition )
 {
+   // G4cout << " G4SafetyHelper::ReLocateWithinVolume called at " << newPosition << G4endl;
 #ifdef G4VERBOSE
-  if( fVerbose > 0 ) { 
+  if( fVerbose > 0 ) {
     // There is an opportunity - and need - to check whether the proposed move is safe
     G4ThreeVector moveVec= newPosition - fLastSafetyPosition;
     if( moveVec.mag2() > sqr(fLastSafety) )
     {
       // A problem exists - we are proposing to move outside 'Safety Sphere'
       G4ExceptionDescription ed;
+      ed << "Unsafe Move> Asked to relocate beyond 'Safety sphere'.  Details: " << G4endl;
       ed << " Safety Sphere:  Radius = " << fLastSafety;
       ed << " Center   = " << fLastSafetyPosition << G4endl;
-      ed << " New Location :  Move   = " << moveVec.mag2();
+      ed << " New Location :  Move   = " << moveVec.mag();
       ed << " Position = " << newPosition << G4endl;
-      G4Exception("G4SafetyHelper::ReLocateWithinVolume", "GeomNav999", JustWarning,
-                 "Unsafe Move> Asked to relocate beyond 'Safety sphere'.");
+      G4Exception("G4SafetyHelper::ReLocateWithinVolume", "GeomNav999", JustWarning, ed);
     }
   }
 #endif

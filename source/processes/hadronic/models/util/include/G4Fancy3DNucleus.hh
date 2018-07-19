@@ -96,8 +96,8 @@ class G4Fancy3DNucleus : public G4V3DNucleus
       void CenterNucleons();
       void DoTranslation(const G4ThreeVector & theShift);
       const G4VNuclearDensity * GetNuclearDensity() const;
-      void SortNucleonsIncZ();            // on increased Z-coordinates Uzhi 29.08.08
-      void SortNucleonsDecZ();            // on decreased Z-coordinates Uzhi 29.08.08
+      void SortNucleonsIncZ();
+      void SortNucleonsDecZ();
       
   private:
   
@@ -108,7 +108,8 @@ class G4Fancy3DNucleus : public G4V3DNucleus
   G4int currentNucleon;
   G4VNuclearDensity * theDensity;
   G4FermiMomentum theFermi;  
-  const G4double nucleondistance;
+//const G4double nucleondistance;  // Uzhi Dec. 2017
+  G4double nucleondistance;        // Uzhi Dec. 2017
   G4double excitationEnergy;
   
   std::vector<G4ThreeVector> places;		// For selecting locations

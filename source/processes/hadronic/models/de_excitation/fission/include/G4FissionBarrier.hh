@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FissionBarrier.hh 85841 2014-11-05 15:35:06Z gcosmo $
+// $Id: G4FissionBarrier.hh 96634 2016-04-27 09:31:49Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -43,29 +43,22 @@ class G4FissionBarrier : public G4VFissionBarrier
 {
 public:
 
-  G4FissionBarrier();
+  explicit G4FissionBarrier();
 
-  ~G4FissionBarrier();
+  virtual ~G4FissionBarrier();
 
-  G4double FissionBarrier(G4int A, G4int Z, G4double U);
+  virtual G4double FissionBarrier(G4int A, G4int Z, G4double U) const final;
 
 private:
 
-  G4double BarashenkovFissionBarrier(G4int A, G4int Z);
+  G4double BarashenkovFissionBarrier(G4int A, G4int Z) const;
   
-  inline G4double SellPlusPairingCorrection(G4int Z, G4int N)
-  { 
-    G4double res = 0.0;
-    SPtr->GetPairingCorrection(N,Z,res);
-    return res; 
-  }
+  G4FissionBarrier(const G4FissionBarrier & right) = delete;
+  const G4FissionBarrier & operator=(const G4FissionBarrier & right) = delete;
+  G4bool operator==(const G4FissionBarrier & right) const = delete;
+  G4bool operator!=(const G4FissionBarrier & right) const = delete;
 
-  G4FissionBarrier(const G4FissionBarrier & right);
-  const G4FissionBarrier & operator=(const G4FissionBarrier & right);
-  G4bool operator==(const G4FissionBarrier & right) const;
-  G4bool operator!=(const G4FissionBarrier & right) const;
-
-  G4CameronShellPlusPairingCorrections* SPtr;
+  const G4CameronShellPlusPairingCorrections* SPtr;
 };
 
 #endif

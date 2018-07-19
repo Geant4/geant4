@@ -74,11 +74,11 @@ G4OpMieHG::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	  aMaterial->GetMaterialPropertiesTable();
 
 	G4double forward_g =
-              aMaterialPropertyTable->GetConstProperty("MIEHG_FORWARD");
+              aMaterialPropertyTable->GetConstProperty(kMIEHG_FORWARD);
 	G4double backward_g =
-              aMaterialPropertyTable->GetConstProperty("MIEHG_BACKWARD");
+              aMaterialPropertyTable->GetConstProperty(kMIEHG_BACKWARD);
 	G4double ForwardRatio =
-              aMaterialPropertyTable->GetConstProperty("MIEHG_FORWARD_RATIO");
+              aMaterialPropertyTable->GetConstProperty(kMIEHG_FORWARD_RATIO);
 
         if (verboseLevel>0) {
 		G4cout << "MIE Scattering Photon!" << G4endl;
@@ -172,7 +172,7 @@ G4double G4OpMieHG::GetMeanFreePath(const G4Track& aTrack,
 
         if (aMaterialPropertyTable) {
            G4MaterialPropertyVector* AttenuationLengthVector =
-                                 aMaterialPropertyTable->GetProperty("MIEHG");
+                                 aMaterialPropertyTable->GetProperty(kMIEHG);
            if (AttenuationLengthVector) {
               AttenuationLength = AttenuationLengthVector ->
                                     Value(thePhotonEnergy);

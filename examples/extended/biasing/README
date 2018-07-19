@@ -86,12 +86,12 @@ of biasing. Complementary approach to the modular physics lists of B01 and B02
  ___________________________________________________________________________
 
 
-            Generic biasing examples GB01, GB02, GB03, GB04
-            -----------------------------------------------
+                  Generic biasing examples GB01 - GB06
+                  ------------------------------------
 
 These examples illustrate the usage of a biasing scheme implemented since
 version Geant4 10.0.
-The scheme is meant to be extensible, not limited to these four examples.
+The scheme is meant to be extensible, not limited to these six examples.
 
 Example GB01:
 =============
@@ -116,6 +116,18 @@ Example GB04:
 
 Illustrates a bremsstrahlung splitting.
 
+
+Example GB05:
+=============
+
+Illustrates a "splitting by cross-section" technique: a splitting-based
+technique using absorption cross-section to control the neutron population.
+
+
+Example GB06:
+=============
+
+Illustrates the usage of parallel geometries with generic biasing.
 
 
  ___________________________________________________________________________

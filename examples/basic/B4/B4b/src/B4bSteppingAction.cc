@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4bSteppingAction.cc 69223 2013-04-23 12:36:10Z gcosmo $
+// $Id: B4bSteppingAction.cc 100946 2016-11-03 11:28:08Z gcosmo $
 // 
 /// \file B4bSteppingAction.cc
 /// \brief Implementation of the B4bSteppingAction class
@@ -57,11 +57,10 @@ void B4bSteppingAction::UserSteppingAction(const G4Step* step)
 // Collect energy and track length step by step
 
   // get volume of the current step
-  G4VPhysicalVolume* volume 
-    = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
+  auto volume = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
   
   // energy deposit
-  G4double edep = step->GetTotalEnergyDeposit();
+  auto edep = step->GetTotalEnergyDeposit();
   
   // step length
   G4double stepLength = 0.;
@@ -69,7 +68,7 @@ void B4bSteppingAction::UserSteppingAction(const G4Step* step)
     stepLength = step->GetStepLength();
   }
       
-  B4bRunData* runData = static_cast<B4bRunData*>
+  auto runData = static_cast<B4bRunData*>
     (G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
   if ( volume == fDetConstruction->GetAbsorberPV() ) {

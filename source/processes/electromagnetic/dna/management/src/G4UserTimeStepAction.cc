@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UserTimeStepAction.cc 94289 2015-11-11 08:33:40Z gcosmo $
+// $Id: G4UserTimeStepAction.cc 100802 2016-11-02 14:55:27Z gcosmo $
 //
-// Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
+// Author: Mathieu Karamitros
 //
 // History:
 // -----------

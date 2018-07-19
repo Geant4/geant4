@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 93732 2015-10-30 10:57:14Z gcosmo $
+# $Id: sources.cmake 106990 2017-10-31 10:12:48Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -53,36 +53,32 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
     HEADERS
         G4AlphaDecay.hh
-        G4AlphaDecayChannel.hh
+        G4BatemanParameters.hh
         G4BetaDecayCorrections.hh
         G4BetaDecayType.hh
         G4BetaMinusDecay.hh
-        G4BetaMinusDecayChannel.hh
         G4BetaPlusDecay.hh
-        G4BetaPlusDecayChannel.hh
         G4ECDecay.hh
         G4ITDecay.hh
-        G4ITDecayChannel.hh
-        G4KshellECDecayChannel.hh
-        G4LshellECDecayChannel.hh
-        G4MshellECDecayChannel.hh
         G4NeutronDecay.hh
-        G4NuclearDecayChannel.hh
         G4NuclearDecay.hh
         G4NucleusLimits.hh
         G4ProtonDecay.hh
-	G4ProtonDecayChannel.hh
-        G4RIsotopeTable.hh
         G4RadioactiveDecay.hh
+        G4RadioactiveDecayBase.hh
+        G4RadioactiveDecayBaseMessenger.hh
+        G4Radioactivation.hh
+        G4RadioactivationMessenger.hh
         G4RadioactiveDecayMode.hh
-        G4RadioactiveDecayRate.hh
-        G4RadioactiveDecayRateVector.hh
+        G4RadioactiveDecayRatesToDaughter.hh
+        G4RadioactiveDecayChainsFromParent.hh
         G4RadioactiveDecaymessenger.hh
         G4RadioactivityTable.hh
         G4UIcmdWithNucleusLimits.hh
         G4UserLimitsForRD.hh
     SOURCES
         G4AlphaDecay.cc
+        G4BatemanParameters.cc
         G4BetaDecayCorrections.cc
         G4BetaDecayType.cc
         G4BetaMinusDecay.cc
@@ -90,15 +86,17 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4ECDecay.cc
         G4ITDecay.cc
         G4NeutronDecay.cc
-        G4NuclearDecayChannel.cc
         G4NuclearDecay.cc
         G4NucleusLimits.cc
         G4ProtonDecay.cc
-        G4RIsotopeTable.cc
         G4RadioactiveDecay.cc
+        G4RadioactiveDecayBase.cc
+        G4RadioactiveDecayBaseMessenger.cc
+        G4Radioactivation.cc
+        G4RadioactivationMessenger.cc
         G4RadioactiveDecayMode.cc
-        G4RadioactiveDecayRate.cc
-        G4RadioactiveDecayRateVector.cc
+        G4RadioactiveDecayRatesToDaughter.cc
+        G4RadioactiveDecayChainsFromParent.cc
         G4RadioactiveDecaymessenger.cc
         G4RadioactivityTable.cc
         G4UIcmdWithNucleusLimits.cc

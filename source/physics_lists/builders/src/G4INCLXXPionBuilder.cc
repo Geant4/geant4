@@ -41,12 +41,6 @@
    thePiData = new G4PiNuclearCrossSection();
  }
 
- G4INCLXXPionBuilder::
- ~G4INCLXXPionBuilder() 
-{
-  //delete theModel;
-}
-
  void G4INCLXXPionBuilder::
  Build(G4PionPlusInelasticProcess * aP)
  {
@@ -65,8 +59,6 @@
    theModel->SetMaxEnergy(theMax);
  }
 
- void G4INCLXXPionBuilder::
- Build(G4HadronElasticProcess * ) {}
 
  // 2011 by P. Kaitaniemi
 

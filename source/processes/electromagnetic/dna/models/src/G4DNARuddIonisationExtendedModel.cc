@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationExtendedModel.cc 95457 2016-02-11 10:18:10Z gcosmo $
+// $Id: G4DNARuddIonisationExtendedModel.cc 105034 2017-07-06 08:34:37Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 // Modified by Z. Francis, S. Incerti to handle HZE 
@@ -37,11 +37,10 @@
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
 
-//SEB
 #include "G4IonTable.hh"
 #include "G4DNARuddAngle.hh"
 #include "G4DeltaAngle.hh"
-//
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -150,7 +149,6 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     G4ParticleDefinition* alphaPlusDef = instance->GetIon("alpha+");
     G4ParticleDefinition* heliumDef = instance->GetIon("helium");
 
-    //SEB
     //G4ParticleDefinition* carbonDef = instance->GetIon("carbon");
     //G4ParticleDefinition* nitrogenDef = instance->GetIon("nitrogen");
     //G4ParticleDefinition* oxygenDef = instance->GetIon("oxygen");
@@ -270,7 +268,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     lithium = lithiumDef->GetParticleName();
     tableFile[lithium] = fileLithium;
 
-    //SEB
+    //SI
     //lowEnergyLimit[carbon] = lowEnergyLimitForA[5] * particle->GetAtomicMass();
     //highEnergyLimit[carbon] = 1e6* particle->GetAtomicMass() * MeV;
     lowEnergyLimit[lithium] = 0.5*7*MeV;
@@ -290,7 +288,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     beryllium = berylliumDef->GetParticleName();
     tableFile[beryllium] = fileBeryllium;
 
-    //SEB
+    //SI
     //lowEnergyLimit[carbon] = lowEnergyLimitForA[5] * particle->GetAtomicMass();
     //highEnergyLimit[carbon] = 1e6* particle->GetAtomicMass() * MeV;
     lowEnergyLimit[beryllium] = 0.5*9*MeV;
@@ -310,7 +308,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     boron = boronDef->GetParticleName();
     tableFile[boron] = fileBoron;
 
-    //SEB
+    //SI
     //lowEnergyLimit[carbon] = lowEnergyLimitForA[5] * particle->GetAtomicMass();
     //highEnergyLimit[carbon] = 1e6* particle->GetAtomicMass() * MeV;
     lowEnergyLimit[boron] = 0.5*11*MeV;
@@ -330,7 +328,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     carbon = carbonDef->GetParticleName();
     tableFile[carbon] = fileCarbon;
 
-    //SEB
+    //SI
     //lowEnergyLimit[carbon] = lowEnergyLimitForA[5] * particle->GetAtomicMass();
     //highEnergyLimit[carbon] = 1e6* particle->GetAtomicMass() * MeV;
     lowEnergyLimit[carbon] = 0.5*12*MeV;
@@ -350,7 +348,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     oxygen = oxygenDef->GetParticleName();
     tableFile[oxygen] = fileOxygen;
 
-    //SEB
+    //SI
     //lowEnergyLimit[oxygen] = lowEnergyLimitForA[5]* particle->GetAtomicMass();
     //highEnergyLimit[oxygen] = 1e6* particle->GetAtomicMass()* MeV;
     lowEnergyLimit[oxygen] = 0.5*16*MeV;
@@ -370,7 +368,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     nitrogen = nitrogenDef->GetParticleName();
     tableFile[nitrogen] = fileNitrogen;
 
-    //SEB
+    //SI
     //lowEnergyLimit[nitrogen] = lowEnergyLimitForA[5]* particle->GetAtomicMass();
     //highEnergyLimit[nitrogen] = 1e6* particle->GetAtomicMass()* MeV;
     lowEnergyLimit[nitrogen] = 0.5*14*MeV;
@@ -409,7 +407,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     iron = ironDef->GetParticleName();
     tableFile[iron] = fileIron;
 
-    //SEB
+    //SI
     //lowEnergyLimit[iron] = lowEnergyLimitForA[5]* particle->GetAtomicMass();
     //highEnergyLimit[iron] = 1e6* particle->GetAtomicMass()* MeV;
     lowEnergyLimit[iron] = 0.5*56*MeV;
@@ -426,10 +424,10 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
 
     // **********************************************************************************************
 
-    //SEB: not anymore
+    // SI: not anymore
     // ZF Following lines can be replaced by:
-    //SetLowEnergyLimit(lowEnergyLimit[particle->GetParticleName()]);
-    //SetHighEnergyLimit(highEnergyLimit[particle->GetParticleName()]);
+    // SetLowEnergyLimit(lowEnergyLimit[particle->GetParticleName()]);
+    // SetHighEnergyLimit(highEnergyLimit[particle->GetParticleName()]);
     // at least for HZE
     
   if (particle==protonDef)
@@ -542,7 +540,7 @@ G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Materia
                                                                  G4double,
                                                                  G4double)
 {
-    //SEB: particleDefinition->GetParticleName() is for eg. Fe56
+    //SI:  particleDefinition->GetParticleName() is for eg. Fe56
     //     particleDefinition->GetPDGMass() is correct
     //     particleDefinition->GetAtomicNumber() is correct
 
@@ -565,7 +563,7 @@ G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Materia
             &&
             particleDefinition != instance->GetIon("helium")
             &&
-            //SEB
+            // SI
             //particleDefinition != instance->GetIon("carbon")
             //&&
             //particleDefinition != instance->GetIon("nitrogen")
@@ -684,7 +682,7 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
                                                          G4double,
                                                          G4double)
 {
-    //SEB: particle->GetDefinition()->GetParticleName() is for eg. Fe56
+    //SI:  particle->GetDefinition()->GetParticleName() is for eg. Fe56
     //     particle->GetDefinition()->GetPDGMass() is correct
     //     particle->GetDefinition()->GetAtomicNumber() is correct
     //     particle->GetDefinition()->GetAtomicMass() is correct
@@ -741,7 +739,9 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
 
     if (pos2 != highEnergyLimit.end())highLim = pos2->second;
 
-    if (k >= lowLim && k < highLim)
+    if (k >= lowLim && k <= highLim) 
+    
+    // SI: no strict limits, like in the non extended version of the model
     {
         G4ParticleDefinition* definition = particle->GetDefinition();
         G4ParticleMomentum primaryDirection = particle->GetMomentumDirection();
@@ -758,8 +758,6 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
         // here we assume that H_{2}O electronic levels are the same as Oxygen.
         // this can be considered true with a rough 10% error in energy on K-shell,
 
-        G4int secNumberInit = 0;  // need to know at a certain point the energy of secondaries
-        G4int secNumberFinal = 0; // So I'll make the diference and then sum the energies
         G4double bindingEnergy = 0;
         bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
 
@@ -767,42 +765,21 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
         if (k<bindingEnergy) return;
         //
 
-        G4int Z = 8;
-
-        if(fAtomDeexcitation) {
-            G4AtomicShellEnumerator as = fKShell;
-
-            if (ionizationShell <5 && ionizationShell >1)
-            {
-                as = G4AtomicShellEnumerator(4-ionizationShell);
-            }
-            else if (ionizationShell <2)
-            {
-                as = G4AtomicShellEnumerator(3);
-            }
-
-            //	DEBUG
-            //	if (ionizationShell == 4) {
-            //
-            //	  G4cout << "Z: " << Z << " as: " << as
-            //               << " ionizationShell: " << ionizationShell << " bindingEnergy: "<< bindingEnergy/eV << G4endl;
-            //	  G4cout << "Press <Enter> key to continue..." << G4endl;
-            //	  G4cin.ignore();
-            //	}
-
-
-            const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
-            secNumberInit = fvect->size();
-            fAtomDeexcitation->GenerateParticles(fvect, shell, Z, 0, 0);
-            secNumberFinal = fvect->size();
-        }
-
         G4double secondaryKinetic = RandomizeEjectedElectronEnergy(definition,k,ionizationShell);
 
+        G4int Z = 8;
+	
 	G4ThreeVector deltaDirection = 
 	  GetAngularDistribution()->SampleDirectionForShell(particle, secondaryKinetic, 
 							    Z, ionizationShell,
 							    couple->GetMaterial());
+
+        G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
+        fvect->push_back(dp);
+
+        fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection);
+	
+        G4double scatteredEnergy = k-bindingEnergy-secondaryKinetic;
 
         // SI: the following lines are not needed anymore
         /*
@@ -835,14 +812,41 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
 
         fParticleChangeForGamma->ProposeMomentumDirection(direction.unit()) ;
         */
+	
+        G4int secNumberInit = 0;  // need to know at a certain point the energy of secondaries
+        G4int secNumberFinal = 0; // So I'll make the diference and then sum the energies
 
-        fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection);
-        G4double scatteredEnergy = k-bindingEnergy-secondaryKinetic;
+        if(fAtomDeexcitation) {
+            G4AtomicShellEnumerator as = fKShell;
+
+            if (ionizationShell <5 && ionizationShell >1)
+            {
+                as = G4AtomicShellEnumerator(4-ionizationShell);
+            }
+            else if (ionizationShell <2)
+            {
+                as = G4AtomicShellEnumerator(3);
+            }
+
+            //	DEBUG
+            //	if (ionizationShell == 4) {
+            //
+            //	  G4cout << "Z: " << Z << " as: " << as
+            //               << " ionizationShell: " << ionizationShell << " bindingEnergy: "<< bindingEnergy/eV << G4endl;
+            //	  G4cout << "Press <Enter> key to continue..." << G4endl;
+            //	  G4cin.ignore();
+            //	}
+
+
+            const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
+            secNumberInit = fvect->size();
+            fAtomDeexcitation->GenerateParticles(fvect, shell, Z, 0, 0);
+            secNumberFinal = fvect->size();
+        }
+	
         G4double deexSecEnergy = 0;
         for (G4int j=secNumberInit; j < secNumberFinal; j++) {
-
             deexSecEnergy = deexSecEnergy + (*fvect)[j]->GetKineticEnergy();
-
         }
 
         if (!statCode)
@@ -856,8 +860,12 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
           fParticleChangeForGamma->ProposeLocalEnergyDeposit(k-scatteredEnergy);
         }
 
-        G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
-        fvect->push_back(dp);
+        // TEST //////////////////////////
+        // if (secondaryKinetic<0) abort();
+        // if (scatteredEnergy<0) abort();
+        // if (k-scatteredEnergy-secondaryKinetic-deexSecEnergy<0) abort();
+        // if (k-scatteredEnergy<0) abort();     
+        /////////////////////////////////
 
         const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
         G4DNAChemistryManager::Instance()->CreateWaterMolecule(eIonizedMolecule,
@@ -1005,7 +1013,7 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
 
     G4double v = std::sqrt(v2);
     G4double wc = 4.*v2 - 2.*v - (Ry/(4.*Bj_energy));
-    G4double rejection_term = 1.+std::exp(alphaConst*(proposed_ws - wc) / v);
+    G4double rejection_term = 1.+G4Exp(alphaConst*(proposed_ws - wc) / v);
     rejection_term = (1./rejection_term)*CorrectionFactor(particleDefinition,k,ionizationLevelIndex) * Gj[j];
     //* (S/Bj_energy) ; Not needed anymore
 
@@ -1023,7 +1031,7 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
         G4double Z = particleDefinition->GetAtomicNumber();
 
         G4double x = 100.*std::sqrt(beta2)/std::pow(Z,(2./3.));
-        G4double Zeffion = Z*(1.-std::exp(-1.316*x+0.112*x*x-0.0650*x*x*x));
+        G4double Zeffion = Z*(1.-G4Exp(-1.316*x+0.112*x*x-0.0650*x*x*x));
         rejection_term*=Zeffion*Zeffion;
     }
 
@@ -1213,7 +1221,7 @@ G4double G4DNARuddIonisationExtendedModel::S_1s(G4double t,
     // Dingfelder, in Chattanooga 2005 proceedings, formula (7)
 
     G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
-    G4double value = 1. - std::exp(-2 * r) * ( ( 2. * r + 2. ) * r + 1. );
+    G4double value = 1. - G4Exp(-2 * r) * ( ( 2. * r + 2. ) * r + 1. );
 
     return value;
 }
@@ -1229,7 +1237,7 @@ G4double G4DNARuddIonisationExtendedModel::S_2s(G4double t,
     // Dingfelder, in Chattanooga 2005 proceedings, formula (8)
 
     G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
-    G4double value =  1. - std::exp(-2 * r) * (((2. * r * r + 2.) * r + 2.) * r + 1.);
+    G4double value =  1. - G4Exp(-2 * r) * (((2. * r * r + 2.) * r + 2.) * r + 1.);
 
     return value;
 
@@ -1246,7 +1254,7 @@ G4double G4DNARuddIonisationExtendedModel::S_2p(G4double t,
     // Dingfelder, in Chattanooga 2005 proceedings, formula (9)
 
     G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
-    G4double value =  1. - std::exp(-2 * r) * (((( 2./3. * r + 4./3.) * r + 2.) * r + 2.) * r  + 1.);
+    G4double value =  1. - G4Exp(-2 * r) * (((( 2./3. * r + 4./3.) * r + 2.) * r + 2.) * r  + 1.);
 
     return value;
 }
@@ -1281,7 +1289,7 @@ G4double G4DNARuddIonisationExtendedModel::CorrectionFactor(G4ParticleDefinition
     {
         G4double value = (std::log10(k/eV)-4.2)/0.5;
         // The following values are provided by M. Dingfelder (priv. comm)
-        return((0.6/(1+std::exp(value))) + 0.9);
+        return((0.6/(1+G4Exp(value))) + 0.9);
     }
     else
     {

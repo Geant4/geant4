@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radioactivedecay/rdecay01/include/RunAction.hh
+/// \file RunAction.hh
 /// \brief Definition of the RunAction class
 //
-//
-// $Id: RunAction.hh 78307 2013-12-11 10:55:57Z gcosmo $
+// $Id: RunAction.hh 98257 2016-07-04 17:39:46Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

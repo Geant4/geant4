@@ -1,4 +1,4 @@
-$Id: History 97698 2016-06-07 10:26:53Z gcosmo $
+$Id: History 110513 2018-05-28 07:37:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,27 @@ committal in the CVS repository !
 History file for visualization/VRML sub-category
 ------------------------------------------------
 
-19th May 2016  John Allison  (VRML-V10-01-01)
+26 May 2018  John Allison (VRML-V10-04-00)
+- G4VRML2FileSceneHandler.cc: Fix gcc-8 warnings.
+
+23rd May 2017  John Allison (VRML-V10-03-01)
+- Fixes for gcc-7.1 warnings.
+
+19th November 2016  John Allison (VRML-V10-02-03)
+- Fixed the GetColour() problem.
+
+11th September 2016  John Allison (VRML-V10-02-02)
+- GetColour/GetColor no longer takes an argument.
+- Make sure applicable vis attributes are obtained.
+  // Get and check applicable vis attributes.
+  //   fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
+  // Note: the vis attributes may have been modified by the viewer.  See
+  // code in G4VViewer::GetApplicableVisAttributes.
+
+31st August 2016  John Allison (VRML-V10-02-01)
+- Fix G4Orb and G4Ellipsoid hiding warnings.
+
+19th May 2016  John Allison  (VRML-V10-02-00)
 - Fixed gcc-6.1 warnings.
 
 2nd February 2015  Gabriele Cosmo (VRML-V10-01-00)

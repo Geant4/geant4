@@ -1,4 +1,4 @@
-# $Id: run03.mac 81771 2014-06-05 08:32:57Z gcosmo $
+# $Id: run03.mac 107960 2017-12-14 13:07:57Z gcosmo $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -20,9 +20,9 @@
 #
 /run/setCut 5.0 mm
 #
-/run/initialize
 /process/em/verbose 1
 /process/em/workerVerbose 0
+/run/initialize
 #
 /gun/particle e-
 /gun/energy 1 GeV

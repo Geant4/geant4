@@ -27,7 +27,7 @@
 /// \brief Definition of the F02ElectricFieldSetup class
 //
 //
-// $Id: F02ElectricFieldSetup.hh 76247 2013-11-08 11:18:52Z gcosmo $
+// $Id: F02ElectricFieldSetup.hh 104216 2017-05-18 13:45:22Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,6 +49,7 @@ class G4MagInt_Driver;
 class F02FieldMessenger;
 
 /// A class for control of the Electric Field of the detector.
+///     The field for this case is uniform.
 ///
 /// The field for this case is uniform.
 /// It is simply a 'setup' class that creates the field and necessary
@@ -58,29 +59,37 @@ class F02ElectricFieldSetup
 {
 public:
   F02ElectricFieldSetup(G4ThreeVector);  //  The value of the field
-  F02ElectricFieldSetup();               //  A zero field
+  F02ElectricFieldSetup();               //  A zero field - true value set later
 
   virtual ~F02ElectricFieldSetup();
 
-  void SetStepperType( G4int i) { fStepperType = i ; }
-
-  void SetStepper();
+   // Methods to set parameters or select 
+  void SetStepperType( G4int i) { fStepperType = i ; CreateStepper(); }
 
   void SetMinStep(G4double s) { fMinStep = s ; }
-
-  void UpdateField();
 
   void SetFieldValue(G4ThreeVector fieldVector);
   void SetFieldValue(G4double      fieldValue);
   G4ThreeVector GetConstantFieldValue();
+   // Set/Get Field strength in Geant4 units
 
+  void UpdateIntegrator();
+   // Prepare all the classes required for tracking - from stepper 
+   //    to Chord-Finder
+   //   NOTE:  field and equation must have been created before calling this.
+   
 protected:
 
   // Find the global Field Manager
 
   G4FieldManager*         GetGlobalFieldManager();
 
+  void CreateStepper();
+   // Implementation method - should not be exposed
+
 private:
+  G4double                fMinStep;
+  G4bool                  fVerbose;
 
   G4FieldManager*         fFieldManager;
 
@@ -97,8 +106,7 @@ private:
 
   G4int                   fStepperType;
 
-  G4double                fMinStep;
- 
+   
   F02FieldMessenger*      fFieldMessenger;
 
 };

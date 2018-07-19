@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundNucleon.cc 91837 2015-08-07 07:27:08Z gcosmo $
+// $Id: G4PreCompoundNucleon.cc 108685 2018-02-27 07:58:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -44,12 +44,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-const G4double sixoverpi2 = 6.0/CLHEP::pi2;
-const G4double fact = 2*CLHEP::millibarn/(CLHEP::pi2*CLHEP::hbarc*CLHEP::hbarc*CLHEP::hbarc);
-
-G4PreCompoundNucleon::
-G4PreCompoundNucleon(const G4ParticleDefinition* part,
-		     G4VCoulombBarrier* aCoulombBarrier)
+G4PreCompoundNucleon::G4PreCompoundNucleon(
+    const G4ParticleDefinition* part, G4VCoulombBarrier* aCoulombBarrier)
   : G4PreCompoundFragment(part,aCoulombBarrier)
 {}
 
@@ -65,6 +61,7 @@ ProbabilityDistributionFunction(G4double eKin,
   G4int H = aFragment.GetNumberOfHoles();
   G4int N = P + H;
 
+  static const G4double sixoverpi2 = 6.0/CLHEP::pi2;
   G4double g0 = sixoverpi2*theFragA*theParameters->GetLevelDensity();
   G4double g1 = sixoverpi2*theResA*theParameters->GetLevelDensity();
   
@@ -80,16 +77,15 @@ ProbabilityDistributionFunction(G4double eKin,
   G4double rj = GetRj(P, aFragment.GetNumberOfCharged());
   G4double xs = CrossSection(eKin);
 
-  if (rj <0.0 || xs < 0.0) {  
-    std::ostringstream errOs;
-    errOs << "Rj=" << rj <<"  xsec("
-	  <<eKin/MeV<<" MeV)= "<< xs <<"  A= "<<GetA()<<"  Z= "<<GetZ()
-	  <<G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, errOs.str());
-  }
+  if (rj <0.0 || xs < 0.0) { return 0.0; }
 
+  static const G4double fact = 2*CLHEP::millibarn
+    /(CLHEP::pi2*CLHEP::hbarc*CLHEP::hbarc*CLHEP::hbarc);
   G4double Probability = fact * theReducedMass * rj * xs * eKin * P * (N-1) 
-    * g4pow->powN(g1*E1/(g0*E0),N-2) * g1 / (E0*g0*g0);
+    * g4calc->powN(g1*E1/(g0*E0),N-2) * g1 / (E0*g0*g0);
+
+  //G4cout << "N= " << N << " g0= " << g0 << " g1= " << g1 << " E0= " << E0 << " E1= " << E1
+  //	 << " prob= " << Probability << G4endl;
   
   return Probability;
 }

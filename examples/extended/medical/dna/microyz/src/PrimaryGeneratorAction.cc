@@ -25,11 +25,10 @@
 //
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// shall cite the following Geant4-DNA collaboration publications:
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
-//
-// $Id: PrimaryGeneratorAction.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
@@ -39,6 +38,10 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4RandomDirection.hh"
+//NEW
+#include "G4Event.hh"
+//
 
 //#include "Randomize.hh"
 
@@ -50,13 +53,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   G4int nofParticles = 1;
   fParticleGun = new G4ParticleGun(nofParticles);
 
-  // default particle kinematic
-
   G4ParticleDefinition* particleDefinition 
     = G4ParticleTable::GetParticleTable()->FindParticle("e-");
 
   fParticleGun->SetParticleDefinition(particleDefinition);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleMomentumDirection(G4RandomDirection());
   fParticleGun->SetParticleEnergy(1*keV);
 }
 
@@ -71,9 +72,9 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  // This function is called at the begining of event
-
   fParticleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
+
+  fParticleGun->SetParticleMomentumDirection(G4RandomDirection());
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

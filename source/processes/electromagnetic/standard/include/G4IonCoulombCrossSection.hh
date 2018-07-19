@@ -70,7 +70,7 @@ class G4IonCoulombCrossSection
 {
 public:
 
-  G4IonCoulombCrossSection();
+  explicit G4IonCoulombCrossSection();
 
   virtual ~G4IonCoulombCrossSection();
 
@@ -92,8 +92,9 @@ private:
 
   void   SetScreenRSquare(G4int iz);
 
-  G4IonCoulombCrossSection & operator=(const  G4IonCoulombCrossSection &right);
-  G4IonCoulombCrossSection(const  G4IonCoulombCrossSection&);
+  G4IonCoulombCrossSection & operator=
+  (const  G4IonCoulombCrossSection &right) = delete;
+  G4IonCoulombCrossSection(const  G4IonCoulombCrossSection&) = delete;
 
   const G4ParticleDefinition* theProton;  
 
@@ -149,7 +150,7 @@ void G4IonCoulombCrossSection::SetupParticle(const G4ParticleDefinition* p)
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();
   if(0.0 != spin) { spin = 0.5; }
-  G4double q = std::fabs(particle->GetPDGCharge()/CLHEP::eplus);
+  G4double q = particle->GetPDGCharge()/CLHEP::eplus;
   chargeSquare = q*q;
   tkin = 0.0;
 }

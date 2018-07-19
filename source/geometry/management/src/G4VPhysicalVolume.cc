@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.cc 102288 2017-01-20 10:57:03Z gcosmo $
+// $Id: G4VPhysicalVolume.cc 103096 2017-03-15 15:21:33Z gcosmo $
 //
 // 
 // class G4VPhysicalVolume Implementation
@@ -107,6 +107,13 @@ InitialiseWorker( G4VPhysicalVolume* /*pMasterObject*/,
   this->SetRotation( pRot );      // G4MT_rot   = pRot;
   this->SetTranslation( tlate );  // G4MT_trans = tlate;
   //  G4PhysicalVolumeStore::Register(this);
+}
+
+// Release memory allocated for offset
+//
+void G4VPhysicalVolume::Clean()
+{
+  subInstanceManager.FreeSlave();
 }
 
 // This method is similar to the destructor. It is used by each worker

@@ -29,16 +29,17 @@
 //
 // $Id: $
 //
-// 
+//
 // --------------------------------------------------------------
 //      GEANT4 - RE01 exsample code
 //
 // --------------------------------------------------------------
 // Comments
 //
-// 
+//
 // --------------------------------------------------------------
 
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -48,22 +49,23 @@
 #include "G4UImanager.hh"
 
 #include "RE01DetectorConstruction.hh"
-#include "RE01PhysicsList.hh"
+#include "RE01CalorimeterROGeometry.hh"
 #include "QGSP_BERT.hh"
-
+#include "G4UnknownDecayPhysics.hh"
+#include "G4ParallelWorldPhysics.hh"
 #include "RE01ActionInitialization.hh"
 
-
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 int main(int argc,char** argv)
 {
+ // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+ G4UIExecutive* ui = nullptr;
+ if ( argc == 1 ) {
+   ui = new G4UIExecutive(argc, argv);
+ }
+
 #ifdef G4MULTITHREADED
  G4MTRunManager * runManager = new G4MTRunManager;
  //runManager->SetNumberOfThreads(4);
@@ -71,39 +73,42 @@ int main(int argc,char** argv)
  G4RunManager * runManager = new G4RunManager;
 #endif
 
-#ifdef G4VIS_USE
   // Visualization manager construction
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
 
-  runManager->SetUserInitialization(new RE01DetectorConstruction);
-  runManager->SetUserInitialization(new RE01PhysicsList);
-  //runManager->SetUserInitialization(new QGSP_BERT);
-  
-  runManager->SetUserInitialization(new RE01ActionInitialization);
-  
+  G4String parallelWorldName = "ReadoutWorld";
+  G4VUserDetectorConstruction* detector
+     = new RE01DetectorConstruction();
+  detector->RegisterParallelWorld(
+       new RE01CalorimeterROGeometry(parallelWorldName));
+  runManager->SetUserInitialization(detector);
+
+  G4VModularPhysicsList* physicsList = new QGSP_BERT;
+  physicsList->RegisterPhysics(new G4UnknownDecayPhysics);
+  physicsList->RegisterPhysics(
+       new G4ParallelWorldPhysics(parallelWorldName));
+  runManager->SetUserInitialization(physicsList);
+
+  runManager->SetUserInitialization(
+       new RE01ActionInitialization);
+
   runManager->Initialize();
-  
-  if(argc==1)
+
+  if(ui)
   {
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     ui->SessionStart();
     delete ui;
-#endif
   }
   else
   {
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
 
   delete runManager;
 

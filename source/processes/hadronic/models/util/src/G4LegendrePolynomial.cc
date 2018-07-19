@@ -46,18 +46,28 @@ G4double G4LegendrePolynomial::EvalLegendrePoly(G4int order, G4double x)
   return (EvalAssocLegendrePoly(order,0,x));
 }
 
-G4double G4LegendrePolynomial::EvalAssocLegendrePoly(G4int l, G4int m, G4double x)
+G4double G4LegendrePolynomial::EvalAssocLegendrePoly(G4int l, G4int m, G4double x, 
+                                                     map<G4int, map<G4int, G4double> >* cache)
 {
+  // Calculate P_l^m(x).
+  // If cache ptr is non-null, use cache[l][m] if it exists, otherwise compute
+  // P_l^m(x) and cache it in that position. The cache speeds up calculations
+  // where many P_l^m computations are need at the same value of x.
+
   if(l<0 || m<-l || m>l) return 0;
   G4Pow* g4pow =  G4Pow::GetInstance();
 
-  // Use non-log factorial, which is more efficient until l and m get 
-  // above 10 or so.
+  // Use non-log factorial for low l, m: it is more efficient until 
+  // l and m get above 10 or so.
   // FIXME: G4Pow doesn't check whether the argument gets too large, 
   // which is unsafe! Max is 512; VI: It is assume that Geant4 does not
   // need higher order
-  if(m<0) return (m%2 ? -1. : 1.) * g4pow->factorial(l+m)/g4pow->factorial(l-m) 
-	    * EvalAssocLegendrePoly(l, -m, x);
+  if(m<0) {
+    G4double value = (m%2 ? -1. : 1.) * EvalAssocLegendrePoly(l, -m, x);
+    if(l < 10) return value * g4pow->factorial(l+m)/g4pow->factorial(l-m);
+    else { return value * G4Exp(g4pow->logfactorial(l+m) - g4pow->logfactorial(l-m));
+    }
+  }
 
   // hard-code the first few orders for speed
   if(l==0)   return 1;
@@ -94,9 +104,20 @@ G4double G4LegendrePolynomial::EvalAssocLegendrePoly(G4int l, G4int m, G4double 
 	     G4Exp(G4Log((1.-x*x)*0.25)*0.5*G4double(l));
   if(m==l-1) return x*(2.*G4double(m)+1.)*EvalAssocLegendrePoly(m,m,x);
 
+  // See if we have this value cached.
+  if(cache != NULL && cache->count(l) > 0 && (*cache)[l].count(m) > 0) {
+    return (*cache)[l][m];
+  }
+
   // Otherwise calculate recursively
-  return (x*G4double(2*l-1)*EvalAssocLegendrePoly(l-1,m,x) - 
-	  (G4double(l+m-1))*EvalAssocLegendrePoly(l-2,m,x))/G4double(l-m);
+  G4double value = (x*G4double(2*l-1)*EvalAssocLegendrePoly(l-1,m,x) - 
+	           (G4double(l+m-1))*EvalAssocLegendrePoly(l-2,m,x))/G4double(l-m);
+
+  // If we are working with a cache, cache this value.
+  if(cache != NULL) {
+    (*cache)[l][m] = value;
+  }
+  return value;
 }
 
 void G4LegendrePolynomial::BuildUpToOrder(size_t orderMax)

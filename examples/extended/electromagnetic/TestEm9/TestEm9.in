@@ -1,4 +1,4 @@
-# $Id: TestEm9.in 82278 2014-06-13 14:42:11Z gcosmo $
+# $Id: TestEm9.in 98988 2016-08-29 07:04:11Z gcosmo $
 #
 # Macro file for TestEm9 - Crystal Calorimeter
 # V.Ivanchenko
@@ -11,6 +11,9 @@
 #  select EM PhysicsList
 #
 /testem/phys/addPhysics  emstandard_opt1
+#
+/process/em/AddEmRegion VertexDetector G4EmStandard_opt4
+/process/em/AddEmRegion MuonDetector G4EmStandard
 #
 /run/initialize
 #

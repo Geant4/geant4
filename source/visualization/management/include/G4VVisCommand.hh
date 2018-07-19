@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh 83403 2014-08-21 15:07:30Z gcosmo $
+// $Id: G4VVisCommand.hh 109186 2018-04-03 07:22:18Z gcosmo $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -62,11 +62,37 @@ public:
 protected:
 
   // Conversion routines augmenting those in G4UIcommand.
+
   static G4String ConvertToString(G4double x, G4double y,
 				  const char * unitName);
-  static void  ConvertToDoublePair(const G4String& paramString,
-				   G4double& xval,
-				   G4double& yval);
+
+  static G4bool ConvertToDoublePair(const G4String& paramString,
+                                    G4double& xval,
+                                    G4double& yval);
+  // Return false if problem parsing paramString.
+
+  const G4String& ConvertToColourGuidance();
+  void ConvertToColour
+  (G4Colour& colour,
+   const G4String& redOrString,
+   G4double green,
+   G4double blue,
+   G4double opacity);
+  // Note: colour is supplied by the caller and becomes the default if the
+  // remaining parameters cannot be parsed.
+  // Note: redOrString is either a number or string.  If a string it must be
+  // one of the recognised colours.
+  // Thus the arguments can be, for example:
+  // (colour,"red",...,...,0.5): will give the colour red with opacity 0.5 (the
+  // third and fourth arguments are ignored), or
+  // (1.,0.,0.,0.5): this also will be red with opacity 0.5.
+
+  G4bool ProvideValueOfUnit
+  (const G4String& where,
+   const G4String& unit,
+   const G4String& category,
+   G4double& value);
+  // Return false if there's a problem
 
   // Other utilities.
   void UpdateVisManagerScene (const G4String& sceneName = "");
@@ -74,7 +100,11 @@ protected:
   // Data members.
   static G4VisManager* fpVisManager;
 
+  // Error management
+  static G4int fErrorCode;
+
   // Current quantities for use in appropriate commands
+  static G4int fCurrentArrow3DLineSegmentsPerCircle;
   static G4Colour                   fCurrentColour;
   //static G4VMarker::FillStyle       fCurrentFillStyle;  Not yet used.
   //static G4VMarker::SizeType        fCurrentSizeType;  Not yet used.

@@ -516,131 +516,160 @@ G4KineticTrackVector* G4KineticTrack::Decay()
  G4double theTotalActualWidth = this->EvaluateTotalActualWidth();
  if (theTotalActualWidth !=0)
     {
-     G4int index;
-     G4double theSumActualWidth = 0.0;
-     G4double* theCumActualWidth = new G4double[nChannels];
-     for (index = nChannels - 1; index >= 0; index--)
-        {
-         theSumActualWidth += theActualWidth[index];
-         theCumActualWidth[index] = theSumActualWidth;
-	 //	 cout << "DECAY Cum. Width " << index << "  " << theCumActualWidth[index] << G4endl;
-	}
-     //	 cout << "DECAY Total Width " << theSumActualWidth << G4endl;
-     //	 cout << "DECAY Total Width " << theTotalActualWidth << G4endl;
-     G4double r = theTotalActualWidth * G4UniformRand();
-     G4VDecayChannel* theDecayChannel(0);
-     G4int chosench=-1;
-     for (index = nChannels - 1; index >= 0; index--)
-        {
-         if (r < theCumActualWidth[index])
-            {
-             theDecayChannel = theDecayTable->GetDecayChannel(index);
-	     //	     cout << "DECAY SELECTED CHANNEL" << index << G4endl;
-             chosench=index;
-             break; 
-            }
-        }
 
-     delete [] theCumActualWidth;
-   
-     if(!theDecayChannel)
-     {
-       G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
-       G4cerr << "  decay channel has 0x0 channel associated."<<G4endl;
-       G4cerr << "  particle was "<<thisDefinition->GetParticleName()<<G4endl;
-       G4cerr << "  channel index "<< chosench << "of "<<nChannels<<"channels"<<G4endl;
-       return 0;
-     }
-     G4String theParentName = theDecayChannel->GetParentName();
-     G4double theParentMass = this->GetActualMass();
-     G4double theBR = theActualWidth[index];
-     //     cout << "**BR*** DECAYNEW  " << theBR << G4endl;
-     G4int theNumberOfDaughters = theDecayChannel->GetNumberOfDaughters();
-     G4String theDaughtersName1 = "";
-     G4String theDaughtersName2 = "";
-     G4String theDaughtersName3 = "";
-     G4String theDaughtersName4 = "";
-     
+     //AR-16Aug2016 : Repeat the sampling of the decay channel until is 
+     //               kinematically above threshold or a max number of attempts is reached
+     G4bool isChannelBelowThreshold = true;
+     const G4int maxNumberOfLoops = 10000;
+     G4int loopCounter = 0;
+
+     G4int chosench;
+     G4String theParentName;
+     G4double theParentMass;
+     G4double theBR;
+     G4int theNumberOfDaughters;
+     G4String theDaughtersName1;
+     G4String theDaughtersName2;
+     G4String theDaughtersName3;
+     G4String theDaughtersName4;
      G4double masses[4]={0.,0.,0.,0.};
-     G4int shortlivedDaughters[4];
-     G4int numberOfShortliveds(0);
-     G4double SumLongLivedMass(0);
-     for (G4int aD=0; aD < theNumberOfDaughters ; aD++)
-     {
-        const G4ParticleDefinition* aDaughter = theDecayChannel->GetDaughter(aD);
-        masses[aD] = aDaughter->GetPDGMass();
-        if ( aDaughter->IsShortLived() ) 
-	{
-	    shortlivedDaughters[numberOfShortliveds]=aD;
-	    numberOfShortliveds++;
-	} else {
-	    SumLongLivedMass += aDaughter->GetPDGMass();
-	}
+
+     do {       
+
+       G4int index;
+       G4double theSumActualWidth = 0.0;
+       G4double* theCumActualWidth = new G4double[nChannels];
+       for (index = nChannels - 1; index >= 0; index--)
+          {
+           theSumActualWidth += theActualWidth[index];
+           theCumActualWidth[index] = theSumActualWidth;
+	   //	 cout << "DECAY Cum. Width " << index << "  " << theCumActualWidth[index] << G4endl;
+	  }
+       //	 cout << "DECAY Total Width " << theSumActualWidth << G4endl;
+       //	 cout << "DECAY Total Width " << theTotalActualWidth << G4endl;
+       G4double r = theTotalActualWidth * G4UniformRand();
+       G4VDecayChannel* theDecayChannel(0);
+       chosench=-1;
+       for (index = nChannels - 1; index >= 0; index--)
+          {
+           if (r < theCumActualWidth[index])
+              {
+               theDecayChannel = theDecayTable->GetDecayChannel(index);
+	       //	     cout << "DECAY SELECTED CHANNEL" << index << G4endl;
+               chosench=index;
+               break; 
+              }
+          }
+
+       delete [] theCumActualWidth;
+   
+       if(!theDecayChannel)
+       {
+         G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
+         G4cerr << "  decay channel has 0x0 channel associated."<<G4endl;
+         G4cerr << "  particle was "<<thisDefinition->GetParticleName()<<G4endl;
+         G4cerr << "  channel index "<< chosench << "of "<<nChannels<<"channels"<<G4endl;
+         return 0;
+       }
+       theParentName = theDecayChannel->GetParentName();
+       theParentMass = this->GetActualMass();
+       theBR = theActualWidth[index];
+       //     cout << "**BR*** DECAYNEW  " << theBR << G4endl;
+       theNumberOfDaughters = theDecayChannel->GetNumberOfDaughters();
+       theDaughtersName1 = "";
+       theDaughtersName2 = "";
+       theDaughtersName3 = "";
+       theDaughtersName4 = "";
+
+       for (G4int i=0; i < 4; i++) masses[i]=0.;
+       G4int shortlivedDaughters[4];
+       G4int numberOfShortliveds(0);
+       G4double SumLongLivedMass(0);
+       for (G4int aD=0; aD < theNumberOfDaughters ; aD++)
+       {
+          const G4ParticleDefinition* aDaughter = theDecayChannel->GetDaughter(aD);
+          masses[aD] = aDaughter->GetPDGMass();
+          if ( aDaughter->IsShortLived() ) 
+	  {
+	      shortlivedDaughters[numberOfShortliveds]=aD;
+	      numberOfShortliveds++;
+	  } else {
+	      SumLongLivedMass += aDaughter->GetPDGMass();
+	  }
 		
-     }    
-     switch (theNumberOfDaughters)
-        {
-         case 0:
-            break;
-         case 1:
-            theDaughtersName1 = theDecayChannel->GetDaughterName(0);
-            theDaughtersName2 = "";
-            theDaughtersName3 = "";
-            theDaughtersName4 = "";
-            break;
-         case 2:    
-            theDaughtersName1 = theDecayChannel->GetDaughterName(0);	    
-            theDaughtersName2 = theDecayChannel->GetDaughterName(1);
-            theDaughtersName3 = "";
-            theDaughtersName4 = "";
-	    if (  numberOfShortliveds == 1) 
-	    {   G4SampleResonance aSampler;
-                G4double massmax=theParentMass - SumLongLivedMass;
-		const G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);
-	        masses[shortlivedDaughters[0]]= aSampler.SampleMass(aDaughter,massmax);
-	    } else if (  numberOfShortliveds == 2) {
-	        // choose masses one after the other, start with randomly choosen
-	        G4int zero= (G4UniformRand() > 0.5) ? 0 : 1;
-		G4int one = 1-zero;
-		G4SampleResonance aSampler;
-		G4double massmax=theParentMass - aSampler.GetMinimumMass(theDecayChannel->GetDaughter(shortlivedDaughters[one]));
-		const G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[zero]);
-		masses[shortlivedDaughters[zero]]=aSampler.SampleMass(aDaughter,massmax);
-		massmax=theParentMass - masses[shortlivedDaughters[zero]];
-		aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[one]);
-		masses[shortlivedDaughters[one]]=aSampler.SampleMass(aDaughter,massmax);
-	    }
-	    break;		
-	 case 3:    
-            theDaughtersName1 = theDecayChannel->GetDaughterName(0);
-            theDaughtersName2 = theDecayChannel->GetDaughterName(1);
-            theDaughtersName3 = theDecayChannel->GetDaughterName(2);
-            theDaughtersName4 = "";
-	    if (  numberOfShortliveds == 1) 
-	    {   G4SampleResonance aSampler;
-                G4double massmax=theParentMass - SumLongLivedMass;
-		const G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);
-	        masses[shortlivedDaughters[0]]= aSampler.SampleMass(aDaughter,massmax);
-	    }
-	    break;
-	 default:    
-            theDaughtersName1 = theDecayChannel->GetDaughterName(0);
-            theDaughtersName2 = theDecayChannel->GetDaughterName(1);
-            theDaughtersName3 = theDecayChannel->GetDaughterName(2);
-            theDaughtersName4 = theDecayChannel->GetDaughterName(3);
-	    if (  numberOfShortliveds == 1) 
-	    {   G4SampleResonance aSampler;
-                G4double massmax=theParentMass - SumLongLivedMass;
-		const G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);
-	        masses[shortlivedDaughters[0]]= aSampler.SampleMass(aDaughter,massmax);
-	    }
-            if ( theNumberOfDaughters > 4 ) {
-              G4ExceptionDescription ed;
-              ed << "More than 4 decay daughters: kept only the first 4" << G4endl;
-              G4Exception( "G4KineticTrack::Decay()", "KINTRK5", JustWarning, ed );
-            }
-	    break;
-	}
+       }    
+       switch (theNumberOfDaughters)
+          {
+           case 0:
+              break;
+           case 1:
+              theDaughtersName1 = theDecayChannel->GetDaughterName(0);
+              theDaughtersName2 = "";
+              theDaughtersName3 = "";
+              theDaughtersName4 = "";
+              break;
+           case 2:    
+              theDaughtersName1 = theDecayChannel->GetDaughterName(0);	    
+              theDaughtersName2 = theDecayChannel->GetDaughterName(1);
+              theDaughtersName3 = "";
+              theDaughtersName4 = "";
+	      if (  numberOfShortliveds == 1) 
+	      {   G4SampleResonance aSampler;
+                  G4double massmax=theParentMass - SumLongLivedMass;
+		  const G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);
+	          masses[shortlivedDaughters[0]]= aSampler.SampleMass(aDaughter,massmax);
+	      } else if (  numberOfShortliveds == 2) {
+	          // choose masses one after the other, start with randomly choosen
+	          G4int zero= (G4UniformRand() > 0.5) ? 0 : 1;
+		  G4int one = 1-zero;
+		  G4SampleResonance aSampler;
+		  G4double massmax=theParentMass - aSampler.GetMinimumMass(theDecayChannel->GetDaughter(shortlivedDaughters[one]));
+		  const G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[zero]);
+		  masses[shortlivedDaughters[zero]]=aSampler.SampleMass(aDaughter,massmax);
+		  massmax=theParentMass - masses[shortlivedDaughters[zero]];
+		  aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[one]);
+		  masses[shortlivedDaughters[one]]=aSampler.SampleMass(aDaughter,massmax);
+	      }
+	      break;		
+	   case 3:    
+              theDaughtersName1 = theDecayChannel->GetDaughterName(0);
+              theDaughtersName2 = theDecayChannel->GetDaughterName(1);
+              theDaughtersName3 = theDecayChannel->GetDaughterName(2);
+              theDaughtersName4 = "";
+	      if (  numberOfShortliveds == 1) 
+	      {   G4SampleResonance aSampler;
+                  G4double massmax=theParentMass - SumLongLivedMass;
+	    	  const G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);
+	          masses[shortlivedDaughters[0]]= aSampler.SampleMass(aDaughter,massmax);
+	      }
+	      break;
+	   default:    
+              theDaughtersName1 = theDecayChannel->GetDaughterName(0);
+              theDaughtersName2 = theDecayChannel->GetDaughterName(1);
+              theDaughtersName3 = theDecayChannel->GetDaughterName(2);
+              theDaughtersName4 = theDecayChannel->GetDaughterName(3);
+	      if (  numberOfShortliveds == 1) 
+	      {   G4SampleResonance aSampler;
+                  G4double massmax=theParentMass - SumLongLivedMass;
+	    	  const G4ParticleDefinition * aDaughter=theDecayChannel->GetDaughter(shortlivedDaughters[0]);
+	          masses[shortlivedDaughters[0]]= aSampler.SampleMass(aDaughter,massmax);
+	      }
+              if ( theNumberOfDaughters > 4 ) {
+                G4ExceptionDescription ed;
+                ed << "More than 4 decay daughters: kept only the first 4" << G4endl;
+                G4Exception( "G4KineticTrack::Decay()", "KINTRK5", JustWarning, ed );
+              }
+	      break;
+	  }
+
+          //AR-16Aug2016 : Check whether the sum of the masses of the daughters is smaller than the parent mass.
+          //               If this is still not the case, but the max number of attempts has been reached,
+          //               then the subsequent call thePhaseSpaceDecayChannel.DecayIt() will throw an exception.
+          G4double sumDaughterMasses = 0.0;
+          for (G4int i=0; i < 4; i++) sumDaughterMasses += masses[i];
+          if ( theParentMass - sumDaughterMasses > 0.0 ) isChannelBelowThreshold = false;
+
+     } while ( isChannelBelowThreshold && ++loopCounter < maxNumberOfLoops );   /* Loop checking, 16.08.2016, A.Ribon */
 
 //	
 //      Get the decay products List

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.hh 73339 2013-08-26 06:54:49Z gcosmo $
+// $Id: G4IonFluctuations.hh 100399 2016-10-20 07:38:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,28 +63,29 @@ class G4IonFluctuations : public G4VEmFluctuationModel
 
 public:
 
-  G4IonFluctuations(const G4String& nam = "IonFluc");
+  explicit G4IonFluctuations(const G4String& nam = "IonFluc");
 
   virtual ~G4IonFluctuations();
 
   // Sample fluctuations
-  G4double SampleFluctuations(const G4MaterialCutsCouple*,
-                              const G4DynamicParticle*,
-			      G4double tmax,
-			      G4double length,
-			      G4double meanLoss);
+  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
+                                      const G4DynamicParticle*,
+                                      G4double tmax,
+                                      G4double length,
+                                      G4double meanLoss) override;
 
   // Compute dispertion 
-  G4double Dispersion(const G4Material*,
-		      const G4DynamicParticle*,
-		      G4double tmax,
-		      G4double length);
+  virtual G4double Dispersion(const G4Material*,
+                              const G4DynamicParticle*,
+                              G4double tmax,
+                              G4double length) override;
 
   // Initialisation prerun
-  void InitialiseMe(const G4ParticleDefinition*);
+  virtual void InitialiseMe(const G4ParticleDefinition*) override;
 
   // Initialisation prestep
-  void SetParticleAndCharge(const G4ParticleDefinition*, G4double q2);
+  virtual void SetParticleAndCharge(const G4ParticleDefinition*, 
+                                    G4double q2) override;
 
 private:
 
@@ -92,13 +93,13 @@ private:
   G4double RelativisticFactor(const G4Material*, G4double Zeff);
 
   // hide assignment operator
-  G4IonFluctuations & operator=(const  G4IonFluctuations &right);
-  G4IonFluctuations(const  G4IonFluctuations&);
+  G4IonFluctuations & operator=(const  G4IonFluctuations &right) = delete;
+  G4IonFluctuations(const  G4IonFluctuations&) = delete;
 
   G4UniversalFluctuation      uniFluct;
   const G4ParticleDefinition* particle;
 
-  G4Pow*   g4pow; 
+  G4Pow*   g4calc; 
 
   G4double particleMass;
   G4double charge;
@@ -107,7 +108,6 @@ private:
 
   // data members to speed up the fluctuation calculation
   G4double parameter;
-  G4double minNumberInteractionsBohr;
   G4double theBohrBeta2;
   G4double minFraction;
   G4double xmin;

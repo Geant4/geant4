@@ -243,6 +243,7 @@
 @GEANT4_TC_GLQTLIBS@
 @GEANT4_TC_G4UI_USE_QT@
 @GEANT4_TC_G4VIS_USE_OPENGLQT@
+@GEANT4_TC_QT_LIB_PATH_SETUP@
 
 #-----------------------------------------------------------------------
 # Wt UI/Vis

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5PrimaryGeneratorAction.hh 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5PrimaryGeneratorAction.hh 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5PrimaryGeneratorAction.hh
 /// \brief Definition of the B5PrimaryGeneratorAction class
@@ -50,7 +50,7 @@ class G4ParticleDefinition;
 
 class B5PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
+  public:
     B5PrimaryGeneratorAction();
     virtual ~B5PrimaryGeneratorAction();
     
@@ -68,7 +68,7 @@ public:
     void SetRandomize(G4bool val) { fRandomizePrimary = val; }
     G4bool GetRandomize() const { return fRandomizePrimary; }
     
-private:
+  private:
     void DefineCommands();
 
     G4ParticleGun* fParticleGun;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeDetectorMessenger.cc 77486 2013-11-25 10:14:16Z gcosmo $
+// $Id: LXeDetectorMessenger.cc 104474 2017-06-01 07:35:19Z gcosmo $
 //
 /// \file optical/LXe/src/LXeDetectorMessenger.cc
 /// \brief Implementation of the LXeDetectorMessenger class
@@ -40,6 +40,8 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4Scintillation.hh"
+
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -121,11 +123,6 @@ LXeDetectorMessenger::LXeDetectorMessenger(LXeDetectorConstruction* detector)
   fNFibersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   fNFibersCmd->SetToBeBroadcasted(false);
 
-  fDefaultsCmd = new G4UIcommand("/LXe/detector/defaults",this);
-  fDefaultsCmd->SetGuidance("Set all detector geometry values to defaults.");
-  fDefaultsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  fDefaultsCmd->SetToBeBroadcasted(false);
-
   fMainScintYield=new G4UIcmdWithADouble("/LXe/detector/MainScintYield",this);
   fMainScintYield->SetGuidance("Set scinitillation yield of main volume.");
   fMainScintYield->SetGuidance("Specified in photons/MeV");
@@ -137,6 +134,11 @@ LXeDetectorMessenger::LXeDetectorMessenger(LXeDetectorConstruction* detector)
   fWLSScintYield->SetGuidance("Specified in photons/MeV");
   fWLSScintYield->AvailableForStates(G4State_PreInit,G4State_Idle);
   fWLSScintYield->SetToBeBroadcasted(false);
+
+  fDefaultsCmd = new G4UIcommand("/LXe/detector/defaults",this);
+  fDefaultsCmd->SetGuidance("Set all detector geometry values to defaults.");
+  fDefaultsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fDefaultsCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -151,7 +153,6 @@ LXeDetectorMessenger::~LXeDetectorMessenger()
   delete fNzCmd;
   delete fDetectorDir;
   delete fVolumesDir;
-  delete fDefaultsCmd;
   delete fSphereCmd;
   delete fWlsCmd;
   delete fLxeCmd;
@@ -159,6 +160,7 @@ LXeDetectorMessenger::~LXeDetectorMessenger()
   delete fReflectivityCmd;
   delete fMainScintYield;
   delete fWLSScintYield;
+  delete fDefaultsCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -184,9 +186,6 @@ void LXeDetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   else if (command == fNzCmd){
     fLXeDetector->SetNZ(fNzCmd->GetNewIntValue(newValue));
   }
-  else if (command == fDefaultsCmd){
-    fLXeDetector->SetDefaults();
-  }
   else if (command == fSphereCmd){
     fLXeDetector->SetSphereOn(fSphereCmd->GetNewBoolValue(newValue));
   }
@@ -204,9 +203,15 @@ void LXeDetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fLXeDetector->SetNFibers(fNFibersCmd->GetNewIntValue(newValue));
   }
   else if (command == fMainScintYield){
-   fLXeDetector->SetMainScintYield(fMainScintYield->GetNewDoubleValue(newValue));
+   fLXeDetector->
+              SetMainScintYield(fMainScintYield->GetNewDoubleValue(newValue));
   }
   else if (command == fWLSScintYield){
     fLXeDetector->SetWLSScintYield(fWLSScintYield->GetNewDoubleValue(newValue));
+  }
+  else if (command == fDefaultsCmd){
+    fLXeDetector->SetDefaults();
+
+    G4RunManager::GetRunManager()->ReinitializeGeometry(); //Add here this line
   }
 }

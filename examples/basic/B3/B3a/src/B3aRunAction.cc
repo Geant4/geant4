@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B3aRunAction.cc 94031 2015-11-05 11:54:38Z ihrivnac $
+// $Id: B3aRunAction.cc 99559 2016-09-27 07:02:21Z gcosmo $
 //
 /// \file B3aRunAction.cc
 /// \brief Implementation of the B3aRunAction class
@@ -33,7 +33,7 @@
 
 #include "G4RunManager.hh"
 #include "G4Run.hh"
-#include "G4ParameterManager.hh"
+#include "G4AccumulableManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -41,8 +41,8 @@
 
 B3aRunAction::B3aRunAction()
  : G4UserRunAction(),
-   fGoodEvents("GoodEvents", 0),
-   fSumDose("SumDose", 0.)  
+   fGoodEvents(0),
+   fSumDose(0.)  
 {  
   //add new units for dose
   // 
@@ -56,10 +56,10 @@ B3aRunAction::B3aRunAction()
   new G4UnitDefinition("nanogray" , "nanoGy"  , "Dose", nanogray);
   new G4UnitDefinition("picogray" , "picoGy"  , "Dose", picogray);
 
-  // Register parameter to the parameter manager
-  G4ParameterManager* parameterManager = G4ParameterManager::Instance();
-  parameterManager->RegisterParameter(fGoodEvents);
-  parameterManager->RegisterParameter(fSumDose); 
+  // Register accumulable to the accumulable manager
+  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  accumulableManager->RegisterAccumulable(fGoodEvents);
+  accumulableManager->RegisterAccumulable(fSumDose); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,9 +73,9 @@ void B3aRunAction::BeginOfRunAction(const G4Run* run)
 { 
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
   
-  // reset parameters to their initial values
-  G4ParameterManager* parameterManager = G4ParameterManager::Instance();
-  parameterManager->Reset();
+  // reset accumulables to their initial values
+  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  accumulableManager->Reset();
   
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
@@ -88,9 +88,9 @@ void B3aRunAction::EndOfRunAction(const G4Run* run)
   G4int nofEvents = run->GetNumberOfEvent();
   if (nofEvents == 0) return;
   
-  // Merge parameters 
-  G4ParameterManager* parameterManager = G4ParameterManager::Instance();
-  parameterManager->Merge();
+  // Merge accumulables 
+  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  accumulableManager->Merge();
 
   // Run conditions
   //  note: There is no primary generator action object for "master"

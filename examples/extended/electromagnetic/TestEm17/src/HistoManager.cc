@@ -27,10 +27,10 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// $Id: HistoManager.cc 85311 2014-10-27 14:23:25Z gcosmo $
+// $Id: HistoManager.cc 100677 2016-10-31 10:46:50Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "HistoMessenger.hh"
@@ -48,7 +48,7 @@ HistoManager::HistoManager()
   fNbHist   = 0;
 
   // histograms
-  for (G4int k=0; k<MaxHisto; k++) {
+  for (G4int k=0; k<kMaxHisto; k++) {
     fHistId[k] = 0;
     fHistPt[k] = 0;    
     fExist[k] = false;
@@ -69,7 +69,7 @@ HistoManager::~HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::book()
+void HistoManager::Book()
 {
   // if no histos, do nothing
   if (fNbHist == 0) return;
@@ -95,7 +95,7 @@ void HistoManager::book()
   //
   analysisManager->SetFirstHistoId(1);
     
-  for (G4int k=0; k<MaxHisto; k++) {
+  for (G4int k=0; k<kMaxHisto; k++) {
     if (fExist[k]) {
       fHistId[k] = analysisManager->CreateH1( fLabel[k], fTitle[k],
                                               fNbins[k], fVmin[k], fVmax[k]);
@@ -110,14 +110,14 @@ void HistoManager::book()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::save()
+void HistoManager::Save()
 {
   if (factoryOn) {
     G4cout << "\n----> HistoManager::save " << G4endl;
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
     analysisManager->Write();
     analysisManager->CloseFile();
-    saveAscii();                    // Write fAscii file, if any
+    SaveAscii();                    // Write fAscii file, if any
     G4cout << "\n----> Histograms are saved in " << fileName[1] << G4endl;
       
     //    delete G4AnalysisManager::Instance();
@@ -129,7 +129,7 @@ void HistoManager::save()
 
 void HistoManager::FillHisto(G4int ih, G4double e, G4double weight)
 {
-  if (ih > MaxHisto) {
+  if (ih > kMaxHisto) {
     G4cout << "---> warning from HistoManager::FillHisto() : histo " << ih
            << "does not fExist; e= " << e << " w= " << weight << G4endl;
     return;
@@ -143,7 +143,7 @@ void HistoManager::FillHisto(G4int ih, G4double e, G4double weight)
 void HistoManager::SetHisto(G4int ih,
                G4int nbins, G4double vmin, G4double vmax, const G4String& unit)
 {
-  if (ih > MaxHisto) {
+  if (ih > kMaxHisto) {
     G4cout << "---> warning from HistoManager::SetHisto() : histo " << ih
            << "does not fExist" << G4endl;
     return;
@@ -197,7 +197,7 @@ void HistoManager::SetHisto(G4int ih,
 
 void HistoManager::Normalize(G4int ih, G4double fac)
 {
-  if (ih >= MaxHisto) {
+  if (ih >= kMaxHisto) {
     G4cout << "---> warning from HistoManager::Normalize() : histo " << ih
            << "  fac= " << fac << G4endl;
     return;
@@ -210,7 +210,7 @@ void HistoManager::Normalize(G4int ih, G4double fac)
 
 void HistoManager::PrintHisto(G4int ih)
 {
- if (ih < MaxHisto) { fAscii[ih] = true; fAscii[0] = true; }
+ if (ih < kMaxHisto) { fAscii[ih] = true; fAscii[0] = true; }
  else
     G4cout << "---> warning from HistoManager::PrintHisto() : histo " << ih
            << "does not exist" << G4endl;
@@ -220,7 +220,7 @@ void HistoManager::PrintHisto(G4int ih)
 
 #include <fstream>
 
-void HistoManager::saveAscii()
+void HistoManager::SaveAscii()
 {
  if (!fAscii[0]) return;
  
@@ -235,7 +235,7 @@ void HistoManager::saveAscii()
  File.setf( std::ios::scientific, std::ios::floatfield );
   
  //write selected histograms
- for (G4int ih=0; ih<MaxHisto; ih++) {
+ for (G4int ih=0; ih<kMaxHisto; ih++) {
     if (fHistPt[ih] && fAscii[ih]) {
           
       File << "\n  1D histogram " << ih << ": " << fTitle[ih] 

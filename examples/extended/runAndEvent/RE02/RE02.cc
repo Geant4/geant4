@@ -27,7 +27,7 @@
 /// \brief Main program of the runAndEvent/RE02 example
 //
 //
-// $Id: RE02.cc 76292 2013-11-08 13:10:20Z gcosmo $
+// $Id: RE02.cc 109785 2018-05-09 08:15:23Z gcosmo $
 //
 // 
 
@@ -44,16 +44,17 @@
 #include "G4UImanager.hh"
 #include "G4SystemOfUnits.hh"    
 
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
-
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
 
 //
 int main(int argc,char** argv) {
+
+  // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
   // Run manager
 #ifdef G4MULTITHREADED
@@ -82,12 +83,10 @@ int main(int argc,char** argv) {
   //
   runManager->SetUserInitialization(new QGS_BIC());
   
-#ifdef G4VIS_USE
   // Visualization, if you choose to have it!
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
-   
+
   // UserAction classes
   runManager->SetUserInitialization(new RE02ActionInitialization);
 
@@ -97,17 +96,12 @@ int main(int argc,char** argv) {
   //get the pointer to the User Interface manager 
   G4UImanager * pUI = G4UImanager::GetUIpointer();  
 
-  if(argc==1)
+  if(ui)
   // Define (G)UI terminal for interactive mode  
   { 
-#ifdef G4UI_USE
-     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-     pUI->ApplyCommand("/control/execute vis.mac");    
-#endif
+     pUI->ApplyCommand("/control/execute vis.mac");
      ui->SessionStart();
      delete ui;
-#endif
   }
   else
   // Batch mode
@@ -117,9 +111,7 @@ int main(int argc,char** argv) {
     pUI->ApplyCommand(command+fileName);
   }
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
 
   return 0;

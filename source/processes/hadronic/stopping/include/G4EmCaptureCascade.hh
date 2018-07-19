@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCaptureCascade.hh 66367 2012-12-18 09:18:08Z gcosmo $
+// $Id: G4EmCaptureCascade.hh 101422 2016-11-17 10:41:23Z gcosmo $
 //
 //-----------------------------------------------------------------------------
 //
@@ -68,14 +68,14 @@ class G4EmCaptureCascade : public G4HadronicInteraction
 { 
 public:
  
-  G4EmCaptureCascade();
+  explicit G4EmCaptureCascade();
  
-  ~G4EmCaptureCascade();
+  virtual ~G4EmCaptureCascade();
 
-  G4HadFinalState* ApplyYourself(const G4HadProjectile &aTrack, 
-				 G4Nucleus & targetNucleus );
+  virtual G4HadFinalState* ApplyYourself(const G4HadProjectile &aTrack, 
+					 G4Nucleus & targetNucleus );
 
-  void ModelDescription(std::ostream& outFile) const; 
+  virtual void ModelDescription(std::ostream& outFile) const; 
 
 private:
 
@@ -83,8 +83,8 @@ private:
 			     G4double kinEnergy);
 
   // hide assignment operator as private 
-  G4EmCaptureCascade& operator=(const G4EmCaptureCascade &right);
-  G4EmCaptureCascade(const G4EmCaptureCascade& );
+  G4EmCaptureCascade& operator=(const G4EmCaptureCascade &right) = delete;
+  G4EmCaptureCascade(const G4EmCaptureCascade& ) = delete;
 
   G4HadFinalState result;
   G4ParticleDefinition* theElectron;

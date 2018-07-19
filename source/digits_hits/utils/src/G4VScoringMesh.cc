@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc 97466 2016-06-03 09:59:34Z gcosmo $
+// $Id: G4VScoringMesh.cc 99262 2016-09-09 13:18:19Z gcosmo $
 //
 // ---------------------------------------------------------------------
 // Modifications                                                        
@@ -35,7 +35,7 @@
 // ---------------------------------------------------------------------
 
 #include "G4VScoringMesh.hh"
-
+#include "G4THitsMap.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4MultiFunctionalDetector.hh"
@@ -139,7 +139,7 @@ void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * prs) {
   prs->SetNijk(fNSegment[0], fNSegment[1], fNSegment[2]);
   fCurrentPS = prs;
   fMFD->RegisterPrimitive(prs);
-  G4THitsMap<G4double> * map = new G4THitsMap<G4double>(fWorldName, prs->GetName());
+  G4THitsMap<G4StatDouble> * map = new G4THitsMap<G4StatDouble>(fWorldName, prs->GetName());
   fMap[prs->GetName()] = map;
 }
 
@@ -172,13 +172,13 @@ void G4VScoringMesh::SetCurrentPrimitiveScorer(const G4String & name) {
 }
 
 G4bool G4VScoringMesh::FindPrimitiveScorer(const G4String & psname) {
-  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.find(psname);;
+  MeshScoreMap::iterator itr = fMap.find(psname);
   if(itr == fMap.end()) return false;
   return true;
 }
 
 G4String G4VScoringMesh::GetPSUnit(const G4String & psname) {
-  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.find(psname);;
+  MeshScoreMap::iterator itr = fMap.find(psname);
   if(itr == fMap.end()) {
     return G4String("");
   } else {
@@ -209,7 +209,7 @@ void  G4VScoringMesh::SetCurrentPSUnit(const G4String& unit){
 }
 
 G4double G4VScoringMesh::GetPSUnitValue(const G4String & psname) {
-  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.find(psname);;
+  MeshScoreMap::iterator itr = fMap.find(psname);
   if(itr == fMap.end()) {
     return 1.;
   } else {
@@ -287,11 +287,11 @@ void G4VScoringMesh::Dump() {
 void G4VScoringMesh::DrawMesh(const G4String& psName,G4VScoreColorMap* colorMap,G4int axflg)
 {
   fDrawPSName = psName;
-  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
+  MeshScoreMap::const_iterator fMapItr = fMap.find(psName);
   if(fMapItr!=fMap.end()) {
     fDrawUnit = GetPSUnit(psName);
     fDrawUnitValue = GetPSUnitValue(psName);
-    Draw(fMapItr->second->GetMap(), colorMap,axflg);
+    Draw(fMapItr->second, colorMap,axflg);
   } else {
     G4cerr << "Scorer <" << psName << "> is not defined. Method ignored." << G4endl;
   }
@@ -300,11 +300,11 @@ void G4VScoringMesh::DrawMesh(const G4String& psName,G4VScoreColorMap* colorMap,
 void G4VScoringMesh::DrawMesh(const G4String& psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap)
 {
   fDrawPSName = psName;
-  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
+  MeshScoreMap::const_iterator fMapItr = fMap.find(psName);
   if(fMapItr!=fMap.end()) {
     fDrawUnit = GetPSUnit(psName);
     fDrawUnitValue = GetPSUnitValue(psName);
-    DrawColumn(fMapItr->second->GetMap(),colorMap,idxPlane,iColumn);
+    DrawColumn(fMapItr->second,colorMap,idxPlane,iColumn);
   } else {
     G4cerr << "Scorer <" << psName << "> is not defined. Method ignored." << G4endl;
   }
@@ -313,7 +313,7 @@ void G4VScoringMesh::DrawMesh(const G4String& psName,G4int idxPlane,G4int iColum
 void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
 {
   G4String psName = map->GetName();
-  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
+  MeshScoreMap::const_iterator fMapItr = fMap.find(psName);
   *(fMapItr->second) += *map;
 
   if(verboseLevel > 9) {
@@ -321,8 +321,27 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
     G4cout << "G4VScoringMesh::Accumulate()" << G4endl;
     G4cout << "  PS name : " << psName << G4endl;
     if(fMapItr == fMap.end()) {
-      G4cout << "  "
-             << psName << " was not found." << G4endl;
+      G4cout << "  " << psName << " was not found." << G4endl;
+    } else {
+      G4cout << "  map size : " << map->GetSize() << G4endl;
+      map->PrintAllHits();
+    }
+    G4cout << G4endl;
+  }
+}
+
+void G4VScoringMesh::Accumulate(G4THitsMap<G4StatDouble> * map)
+{
+  G4String psName = map->GetName();
+  MeshScoreMap::const_iterator fMapItr = fMap.find(psName);
+  *(fMapItr->second) += *map;
+
+  if(verboseLevel > 9) {
+    G4cout << G4endl;
+    G4cout << "G4VScoringMesh::Accumulate()" << G4endl;
+    G4cout << "  PS name : " << psName << G4endl;
+    if(fMapItr == fMap.end()) {
+      G4cout << "  " << psName << " was not found." << G4endl;
     } else {
       G4cout << "  map size : " << map->GetSize() << G4endl;
       map->PrintAllHits();

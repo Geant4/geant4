@@ -24,20 +24,24 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.cc 78955 2014-02-05 09:45:46Z gcosmo $
+// $Id: G4AttDefStore.cc 105754 2017-08-16 13:47:18Z gcosmo $
 
 #include "G4AttDefStore.hh"
 
 #include "G4AttDef.hh"
+#include "G4AutoLock.hh"
 
 namespace G4AttDefStore {
 
-G4ThreadLocal
 std::map<G4String,std::map<G4String,G4AttDef>*> *m_defsmaps = 0;
+
+G4Mutex mutex = G4MUTEX_INITIALIZER;
 
 std::map<G4String,G4AttDef>*
 GetInstance(const G4String& storeKey, G4bool& isNew)
 {
+  G4AutoLock al(&mutex);
+
   if (!m_defsmaps)
     m_defsmaps = new std::map<G4String,std::map<G4String,G4AttDef>*>;
 
@@ -65,6 +69,8 @@ GetInstance(const G4String& storeKey, G4bool& isNew)
 G4bool GetStoreKey
 (const std::map<G4String,G4AttDef>* definitions, G4String& key)
 {
+  G4AutoLock al(&mutex);
+
   if (!m_defsmaps)
     m_defsmaps = new std::map<G4String,std::map<G4String,G4AttDef>*>;
   std::map<G4String,std::map<G4String,G4AttDef>*>::const_iterator i;

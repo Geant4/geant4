@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.cc 88801 2015-03-10 14:38:27Z gcosmo $
+// $Id: G4IStore.cc 102994 2017-03-07 16:31:28Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -39,6 +39,10 @@
 #include "G4GeometryCellStepStream.hh"
 #include "G4LogicalVolume.hh"
 #include "G4TransportationManager.hh"
+
+#ifdef G4MULTITHREADED
+G4Mutex G4IStore::IStoreMutex = G4MUTEX_INITIALIZER;
+#endif
 
 // ***************************************************************************
 // Static class variable: ptr to single instance of class
@@ -149,18 +153,29 @@ void G4IStore::ChangeImportance(G4double importance,
 G4double G4IStore::GetImportance(const G4VPhysicalVolume &aVolume,
 				 G4int aRepNum) const
 {  
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&G4IStore::IStoreMutex);
+#endif
   SetInternalIterator(G4GeometryCell(aVolume, aRepNum));
   G4GeometryCellImportance::const_iterator gCellIterator = fCurrentIterator;
   if (gCellIterator==fGeometryCelli.end()) {
     Error("GetImportance() - Region does not exist!");
     return 0.;
   }
-  return (*fCurrentIterator).second;
+  G4double importance_value = (*fCurrentIterator).second;
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&G4IStore::IStoreMutex);
+#endif
+  return importance_value;
+  // return (*fCurrentIterator).second;
 }
 
 
 G4double G4IStore::GetImportance(const G4GeometryCell &gCell) const
 {
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&G4IStore::IStoreMutex);
+#endif
   SetInternalIterator(gCell);
   G4GeometryCellImportance::const_iterator gCellIterator = fCurrentIterator;
   if (gCellIterator==fGeometryCelli.end()) {
@@ -171,16 +186,27 @@ G4double G4IStore::GetImportance(const G4GeometryCell &gCell) const
     Error(err_mess.str());
     return 0.;
   }
-  return (*fCurrentIterator).second;
+  G4double importance_value = (*fCurrentIterator).second;
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&G4IStore::IStoreMutex);
+#endif
+  return importance_value;
+  // return (*fCurrentIterator).second;
 }
 
 G4bool G4IStore::IsKnown(const G4GeometryCell &gCell) const {
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&G4IStore::IStoreMutex);
+#endif
   G4bool inWorldKnown(IsInWorld(gCell.GetPhysicalVolume()));
 		      
   if ( inWorldKnown ) {
     SetInternalIterator(gCell);
     inWorldKnown = (fCurrentIterator!=fGeometryCelli.end());
   }
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&G4IStore::IStoreMutex);
+#endif
   return inWorldKnown;
 }
 

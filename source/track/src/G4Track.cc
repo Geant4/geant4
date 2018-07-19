@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc 91231 2015-06-26 10:40:45Z gcosmo $
+// $Id: G4Track.cc 110263 2018-05-17 14:28:14Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -49,9 +49,17 @@
 #include <iostream>
 #include <iomanip>
 
-G4ThreadLocal G4Allocator<G4Track> *aTrackAllocator = 0;
+G4Allocator<G4Track>*& aTrackAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4Track>* _instance = nullptr;
+    return _instance;
+}
 
-G4ThreadLocal G4VelocityTable*  G4Track::velTable=0;
+G4VelocityTable*& G4Track::velTable()
+{
+    G4ThreadLocalStatic G4VelocityTable* _instance = nullptr;
+    return _instance;
+}
 
 ///////////////////////////////////////////////////////////
 G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
@@ -88,7 +96,7 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
   // check if the particle type is Optical Photon
   is_OpticalPhoton = (fpDynamicParticle->GetDefinition() == fOpticalPhoton);
 
-  if (velTable ==0 ) velTable = G4VelocityTable::GetVelocityTable();
+  if (velTable() ==0 ) velTable() = G4VelocityTable::GetVelocityTable();
 
   fVelocity = CalculateVelocity();
 
@@ -244,7 +252,7 @@ G4double G4Track::CalculateVelocity() const
     } else if (T<GetMinTOfVelocityTable()) {
       velocity = c_light*std::sqrt(T*(T+2.))/(T+1.0);
     } else {	
-      velocity = velTable->Value(T);
+      velocity = velTable()->Value(T);
     }
     
   }                                                                             
@@ -302,7 +310,7 @@ void G4Track::SetVelocityTableProperties(G4double t_max, G4double t_min, G4int n
 ///////////////////
 {
   G4VelocityTable::SetVelocityTableProperties(t_max, t_min, nbin);
-  velTable = G4VelocityTable::GetVelocityTable();
+  velTable() = G4VelocityTable::GetVelocityTable();
 }
 
 ///////////////////

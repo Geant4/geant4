@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepLimiterPhysics.hh 81367 2014-05-27 12:59:27Z gcosmo $
+// $Id: G4StepLimiterPhysics.hh 107562 2017-11-22 15:39:24Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,15 +57,18 @@ public:
   // registered to the process manager of each particle type
   virtual void ConstructProcess();
 
+  // Option to apply the step limit to all particles
+  // (by default the step limit is applied to charged particles only)
+  void   SetApplyToAll(G4bool option) { fApplyToAll= option; }
+  G4bool GetApplyToAll() const { return fApplyToAll; }
+
 private:
 
    // hide assignment operator
   G4StepLimiterPhysics & operator=(const G4StepLimiterPhysics &right);
   G4StepLimiterPhysics(const G4StepLimiterPhysics&);
 
-  G4StepLimiter* fStepLimiter;
-  G4UserSpecialCuts* fUserSpecialCuts;
-
+  G4bool  fApplyToAll;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,57 +24,57 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.hh 84396 2014-10-15 07:18:24Z gcosmo $
+// $Id: G4FissionProbability.hh 105799 2017-08-21 07:35:55Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
 //
-
-
-
 #ifndef G4FissionProbability_h
 #define G4FissionProbability_h 1
 
-
 #include "G4VEmissionProbability.hh"
 #include "G4VLevelDensityParameter.hh"
+
+class G4PairingCorrection;
 
 class G4FissionProbability : public G4VEmissionProbability
 {
 public:
   // Default constructor
-  G4FissionProbability();
+  explicit G4FissionProbability();
 
-  ~G4FissionProbability();  
+  ~G4FissionProbability() override;  
 
-private:  
-  // Copy constructor
-  G4FissionProbability(const G4FissionProbability &right);
+  G4double EmissionProbability(const G4Fragment & fragment, 
+			       G4double MaximalKineticEnergy) override;
 
-  const G4FissionProbability & operator=(const G4FissionProbability &right);
-  G4bool operator==(const G4FissionProbability &right) const;
-  G4bool operator!=(const G4FissionProbability &right) const;
-  
-public:
-  G4double EmissionProbability(const G4Fragment & fragment, G4double MaximalKineticEnergy);
-
-  inline void SetEvaporationLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
+  inline void 
+  SetEvaporationLevelDensityParameter(G4VLevelDensityParameter* aLevelDensity)
   { 
     if (ownEvapLDP) delete theEvapLDP;
     theEvapLDP = aLevelDensity;
     ownEvapLDP = false;
   }
 
-  inline void SetFissionLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
+  inline void 
+  SetFissionLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
   { 
     if (ownFissLDP) delete theFissLDP;
     theFissLDP = aLevelDensity;
     ownFissLDP = false;
   }
 
+  // Copy constructor
+  G4FissionProbability(const G4FissionProbability &right) = delete;
+  const G4FissionProbability & operator=(const G4FissionProbability &right) = delete;
+  G4bool operator==(const G4FissionProbability &right) const = delete;
+  G4bool operator!=(const G4FissionProbability &right) const = delete;
+
 private:
+  
   G4VLevelDensityParameter *theEvapLDP;
   G4VLevelDensityParameter *theFissLDP;
+  G4PairingCorrection* fPairCorr;
   bool ownEvapLDP;
   bool ownFissLDP;
 

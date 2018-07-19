@@ -44,7 +44,6 @@
 #include "G4CascadeInterface.hh"
 #include "G4TheoFSGenerator.hh" 
 #include "G4GeneratorPrecompoundInterface.hh"
-#include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
@@ -52,29 +51,40 @@
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4KokoulinMuonNuclearXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
+#include "G4ElementData.hh" 
+#include "G4Physics2DVector.hh" 
+#include "G4Pow.hh" 
+
+const G4int G4MuonVDNuclearModel::zdat[] = {1, 4, 13, 29, 92};
+const G4double G4MuonVDNuclearModel::adat[] = {1.01,9.01,26.98,63.55,238.03};
+const G4double G4MuonVDNuclearModel::tdat[] = {
+  1.e3,2.e3,3.e3,4.e3,5.e3,6.e3,7.e3,8.e3,9.e3, 
+  1.e4,2.e4,3.e4,4.e4,5.e4,6.e4,7.e4,8.e4,9.e4, 
+  1.e5,2.e5,3.e5,4.e5,5.e5,6.e5,7.e5,8.e5,9.e5, 
+  1.e6,2.e6,3.e6,4.e6,5.e6,6.e6,7.e6,8.e6,9.e6, 
+  1.e7,2.e7,3.e7,4.e7,5.e7,6.e7,7.e7,8.e7,9.e7, 
+  1.e8,2.e8,3.e8,4.e8,5.e8,6.e8,7.e8,8.e8,9.e8, 
+  1.e9,2.e9,3.e9,4.e9,5.e9,6.e9,7.e9,8.e9,9.e9, 
+  1.e10,2.e10,3.e10,4.e10,5.e10,6.e10,7.e10,8.e10,9.e10,1.e11}; 
+
+G4ElementData* G4MuonVDNuclearModel::fElementData = nullptr;             
 
 G4MuonVDNuclearModel::G4MuonVDNuclearModel()
- : G4HadronicInteraction("G4MuonVDNuclearModel")
+  : G4HadronicInteraction("G4MuonVDNuclearModel"),isMaster(false)
 {
   muNucXS = (G4KokoulinMuonNuclearXS*)G4CrossSectionDataSetRegistry::Instance()->
     GetCrossSectionDataSet(G4KokoulinMuonNuclearXS::Default_Name());
 
   SetMinEnergy(0.0);
-  SetMaxEnergy(1*PeV);
-  CutFixed = 0.2*GeV;
-  NBIN = 1000;
+  SetMaxEnergy(1*CLHEP::PeV);
+  CutFixed = 0.2*CLHEP::GeV;
 
-  for (G4int k = 0; k < 5; k++) {
-    for (G4int j = 0; j < 8; j++) {
-      for (G4int i = 0; i < 1001; i++) {
-        proba[k][j][i] = 0.0;
-        ya[i] = 0.0;
-      }
-    }
+  if(!fElementData && G4Threading::IsMasterThread()) { 
+    fElementData = new G4ElementData();
+    MakeSamplingTable(); 
+    isMaster = true;
   }
-
-  MakeSamplingTable();
-
+                    
   // reuse existing pre-compound model
   G4GeneratorPrecompoundInterface* precoInterface 
     = new G4GeneratorPrecompoundInterface();
@@ -97,13 +107,16 @@ G4MuonVDNuclearModel::G4MuonVDNuclearModel()
   bert = new G4CascadeInterface();
 }
 
-
 G4MuonVDNuclearModel::~G4MuonVDNuclearModel()
 {
   delete theFragmentation;
   delete theStringDecay;
-}
 
+  if(isMaster) { 
+    delete fElementData;
+    fElementData = nullptr;
+  } 
+}
   
 G4HadFinalState*
 G4MuonVDNuclearModel::ApplyYourself(const G4HadProjectile& aTrack,
@@ -128,7 +141,6 @@ G4MuonVDNuclearModel::ApplyYourself(const G4HadProjectile& aTrack,
   return &theParticleChange;
 }
 
-
 G4DynamicParticle*
 G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
                                         G4Nucleus& targetNucleus)
@@ -137,32 +149,28 @@ G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
   G4double KineticEnergy = aTrack.GetKineticEnergy();
   G4double TotalEnergy = aTrack.GetTotalEnergy();
   G4double Mass = G4MuonMinus::MuonMinus()->GetPDGMass();
-  G4double lnZ = G4Log(G4double(targetNucleus.GetZ_asInt() ) );
+  G4Pow* g4calc = G4Pow::GetInstance();
+  G4double lnZ = g4calc->logZ(targetNucleus.GetZ_asInt());
 
   G4double epmin = CutFixed;
   G4double epmax = TotalEnergy - 0.5*proton_mass_c2;
-  G4double m0 = 0.2*GeV;
+  G4double m0 = CutFixed;
 
   G4double delmin = 1.e10;
   G4double del;
   G4int izz = 0;
   G4int itt = 0;
-  G4int NBINminus1 = NBIN - 1;
 
-  G4int nzdat = 5;
-  G4double zdat[] = {1.,4.,13.,29.,92.};
-  for (G4int iz = 0; iz < nzdat; iz++) {
-    del = std::abs(lnZ-G4Log(zdat[iz]));
+  for (G4int iz = 0; iz < nzdat; ++iz) {
+    del = std::abs(lnZ - g4calc->logZ(zdat[iz]));
     if (del < delmin) {
       delmin = del;
       izz = iz;
     }
   }
  
-  G4int ntdat = 8;
-  G4double tdat[] = {1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
   delmin = 1.e10;
-  for (G4int it = 0; it < ntdat; it++) {
+  for (G4int it = 0; it < ntdat; ++it) {
     del = std::abs(G4Log(KineticEnergy)-G4Log(tdat[it]) );
     if (del < delmin) {
       delmin = del;
@@ -173,25 +181,20 @@ G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
   // Sample the energy transfer according to the probability table
   G4double r = G4UniformRand();
 
-  G4int iy = -1;
-  G4ExceptionDescription ed;
-  ed << " While count exceeded " << G4endl;
- 
-  do {
-       iy += 1 ;
-       if (iy > 10000) {
-         G4Exception("G4RPGAntiProtonInelastic::Cascade()", "HAD_RPG_100", JustWarning, ed);
-         break;
-       }
-     } while (((proba[izz][itt][iy]) < r)&&(iy < NBINminus1)) ;  /* Loop checking, 01.09.2015, D.Wright */
+  G4int iy;
+
+  G4int Z = zdat[izz];
+
+  for(iy = 0; iy<NBIN; ++iy)  {
+
+    G4double pvv = fElementData->GetElement2DData(Z)->GetValue(iy, itt); 
+    if(pvv >= r) { break; }
+  }       
 
   // Sampling is done uniformly in y in the bin
-
-  G4double y; 
-  if (iy < NBIN)
-    y = ya[iy] + G4UniformRand() * (ya[iy+1] - ya[iy]);
-  else
-    y = ya[iy];
+  G4double pvx = fElementData->GetElement2DData(Z)->GetX(iy); 
+  G4double pvx1 = fElementData->GetElement2DData(Z)->GetX(iy+1); 
+  G4double y = pvx + G4UniformRand() * (pvx1 - pvx);
 
   G4double x = G4Exp(y);
   G4double ep = epmin*G4Exp(x*G4Log(epmax/epmin) );
@@ -221,14 +224,13 @@ G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
   G4double rej;
 
   // Now sample t
-  G4int ntry = 0;
-  G4ExceptionDescription eda;
-  eda << " While count exceeded " << G4endl;
- 
+  G4int ntry = 0; 
   do
   {
     ntry += 1;
     if (ntry > 10000) {
+      G4ExceptionDescription eda;
+      eda << " While count exceeded " << G4endl;
       G4Exception("G4MuonVDNuclearModel::CalculateEMVertex()", "HAD_RPG_100", JustWarning, eda);
       break;
     }
@@ -272,7 +274,6 @@ G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
   return gamma;
 }
 
-
 void
 G4MuonVDNuclearModel::CalculateHadronicVertex(G4DynamicParticle* incident,
                                               G4Nucleus& target)
@@ -304,13 +305,6 @@ G4MuonVDNuclearModel::CalculateHadronicVertex(G4DynamicParticle* incident,
 
 void G4MuonVDNuclearModel::MakeSamplingTable()
 {
-  G4double adat[] = {1.01,9.01,26.98,63.55,238.03};
-  G4double zdat[] = {1.,4.,13.,29.,92.};
-  G4int nzdat = 5;
-
-  G4double tdat[] = {1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
-  G4int ntdat = 8;
-
   G4int nbin;
   G4double KineticEnergy;
   G4double TotalEnergy;
@@ -326,14 +320,19 @@ void G4MuonVDNuclearModel::MakeSamplingTable()
 
   G4double AtomicNumber;
   G4double AtomicWeight;
+ 
+  G4double mumass = G4MuonMinus::MuonMinus()->GetPDGMass();
 
-  for (G4int iz = 0; iz < nzdat; iz++) {
+  for (G4int iz = 0; iz < nzdat; ++iz) {
     AtomicNumber = zdat[iz];
-    AtomicWeight = adat[iz]*(g/mole);  
+    AtomicWeight = adat[iz]*(g/mole);
 
-    for (G4int it = 0; it < ntdat; it++) {
+    G4Physics2DVector* pv = new G4Physics2DVector(NBIN+1,ntdat+1); 
+    G4double pvv; 
+
+    for (G4int it = 0; it < ntdat; ++it) {
       KineticEnergy = tdat[it];
-      TotalEnergy = KineticEnergy + G4MuonMinus::MuonMinus()->GetPDGMass();
+      TotalEnergy = KineticEnergy + mumass;
       Maxep = TotalEnergy - 0.5*proton_mass_c2;
 
       CrossSection = 0.0;
@@ -349,7 +348,7 @@ void G4MuonVDNuclearModel::MakeSamplingTable()
 
       y = ymin - 0.5*dy;
       yy = ymin - dy;
-      for (G4int i = 0; i < NBIN; i++) {
+      for (G4int i = 0; i < NBIN; ++i) {
         y += dy;
         x = G4Exp(y);
         yy += dy;
@@ -362,22 +361,42 @@ void G4MuonVDNuclearModel::MakeSamplingTable()
 							   AtomicNumber,
 							   AtomicWeight, ep);
         if (nbin < NBIN) {
-          nbin += 1;
-          ya[nbin] = y;
-          proba[iz][it][nbin] = CrossSection;
+          ++nbin;
+          pv->PutValue(nbin, it, CrossSection); 
+          pv->PutX(nbin, y); 
         }
       }
-      ya[NBIN] = 0.;
+      pv->PutX(NBIN, 0.); 
  
       if (CrossSection > 0.0) {
-        for (G4int ib = 0; ib <= nbin; ib++) proba[iz][it][ib] /= CrossSection;
+        for (G4int ib = 0; ib <= nbin; ++ib) { 
+          pvv = pv->GetValue(ib, it); 
+          pvv = pvv/CrossSection; 
+          pv->PutValue(ib, it, pvv); 
+        } 
       }
     } // loop on it
+
+    fElementData->InitialiseForElement(zdat[iz], pv);
   } // loop on iz
 
   // G4cout << " Kokoulin XS = "
   //       << muNucXS->ComputeDDMicroscopicCrossSection(1*GeV, 20.0, 
   //         40.0*g/mole, 0.3*GeV)/millibarn
   //       << G4endl; 
+}
+
+void G4MuonVDNuclearModel::ModelDescription(std::ostream& outFile) const 
+{
+  outFile << "G4MuonVDNuclearModel handles the inelastic scattering\n"
+          << "of mu- and mu+ from nuclei using the equivalent photon\n"
+          << "approximation in which the incoming lepton generates a\n"
+          << "virtual photon at the electromagnetic vertex, and the\n"
+          << "virtual photon is converted to a real photon.  At low\n"
+          << "energies, the photon interacts directly with the nucleus\n"
+          << "using the Bertini cascade.  At high energies the photon\n"
+          << "is converted to a pi0 which interacts using the FTFP\n"
+          << "model.  The muon-nuclear cross sections of R. Kokoulin \n"
+          << "are used to generate the virtual photon spectrum\n";
 }
 

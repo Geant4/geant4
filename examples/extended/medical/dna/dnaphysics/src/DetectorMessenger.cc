@@ -35,8 +35,8 @@
 /// \brief Implementation of the DetectorMessenger class
 
 #include "DetectorMessenger.hh"
-
 #include "DetectorConstruction.hh"
+
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
@@ -52,12 +52,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det) :
   fpMaterCmd->SetGuidance("Select material of the world.");
   fpMaterCmd->SetParameterName("choice", false);
   fpMaterCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-
-  fpUpdateCmd = new G4UIcmdWithoutParameter("/dna/det/update", this);
-  fpUpdateCmd->SetGuidance("Update geometry.");
-  fpUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fpUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fpUpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +59,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det) :
 DetectorMessenger::~DetectorMessenger()
 {
   delete fpMaterCmd;
-  delete fpUpdateCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,8 +66,6 @@ DetectorMessenger::~DetectorMessenger()
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   if (command == fpMaterCmd) fpDetector->SetMaterial(newValue);
-  else if (command == fpUpdateCmd) fpDetector->UpdateGeometry();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

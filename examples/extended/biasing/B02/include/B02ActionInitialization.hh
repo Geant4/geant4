@@ -44,9 +44,7 @@ class B02ActionInitialization : public G4VUserActionInitialization
   public:
     virtual void BuildForMaster() const;
     virtual void Build() const;
- 
+
 };
 
 #endif
-
-

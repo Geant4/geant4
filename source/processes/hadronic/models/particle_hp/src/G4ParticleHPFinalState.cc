@@ -40,6 +40,7 @@
 #include "G4Proton.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
+#include "G4He3.hh"
 #include "G4Alpha.hh"
 
 void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
@@ -58,6 +59,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
    G4int imaxA = -1;
    for ( int i = 0 ; i < nSecondaries ; i++ )
    {
+      //G4cout << "G4ParticleHPFinalState::adjust_final_state theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetParticleName() = " << theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetParticleName() << G4endl;
       sum_Z += theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber();
       max_SecZ = std::max ( max_SecZ , theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicNumber() );
       sum_A += theResult.Get()->GetSecondary( i )->GetParticle()->GetDefinition()->GetAtomicMass();
@@ -84,6 +86,9 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
    } else if( theProjectile == G4Triton::Triton() ) {
      baseZNew ++;
      baseANew += 3;
+   } else if( theProjectile == G4He3::He3() ) {
+     baseZNew += 2;
+     baseANew += 3;
    } else if( theProjectile == G4Alpha::Alpha() ) {
      baseZNew += 2;
      baseANew += 4;
@@ -102,7 +107,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
    }
    else
    {
-      if ( max_SecA > int(baseANew - sum_A) ) 
+      if ( max_SecA >= int(baseANew - sum_A) ) 
       {
          //Most heavy secondary is interpreted as residual
          resi_pd = theResult.Get()->GetSecondary( imaxA )->GetParticle()->GetDefinition(); 
@@ -118,8 +123,9 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       {
          if ( int(baseZNew - sum_Z) == 0 && (int)(baseANew - sum_A) > 0 )
          {
+            //In this case, one neutron is added to secondaries 
             if ( int(baseANew - sum_A) > 1 ) G4cout << "More than one neutron is required for the balance of baryon number!" << G4endl;
-            oneMoreSec_pd = theProjectile;
+            oneMoreSec_pd = G4Neutron::Neutron();
          }
          else 
          {
@@ -153,6 +159,9 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 	  ndlANew += 2;
 	} else if( theProjectile == G4Triton::Triton() ) {
 	  ndlZNew ++;
+	  ndlANew += 3;
+	} else if( theProjectile == G4He3::He3() ) {
+	  ndlZNew += 2;
 	  ndlANew += 3;
 	} else if( theProjectile == G4Alpha::Alpha() ) {
 	  ndlZNew += 2;

@@ -28,6 +28,7 @@
 //---------------------------------------------------------------------------
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -71,9 +72,6 @@ G4QGSBinaryPionBuilder::
   delete theStringDecay;
   delete theStringModel;
 }
-
-void G4QGSBinaryPionBuilder::
-Build(G4HadronElasticProcess * ) {}
 
 void G4QGSBinaryPionBuilder::
 Build(G4PionPlusInelasticProcess * aP)

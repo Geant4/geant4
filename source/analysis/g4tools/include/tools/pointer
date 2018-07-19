@@ -27,6 +27,18 @@ inline bool to_pointer(const std::string& a_string,void*& a_value){
   return true;
 }
 
+inline bool to_pointer(const char* a_string,void*& a_value){
+  upointer v = 0;
+  if(::sscanf(a_string,upointer_format_x(),&v)!=1) {
+    if(::sscanf(a_string,upointer_format(),&v)!=1) {
+      a_value = 0;
+      return false;
+    }
+  }
+  a_value = (void*)v;
+  return true;
+}
+
 inline bool p2s(const void* a_value,std::string& a_s){
   char s[512];
   snpf(s,sizeof(s),upointer_format(),(upointer)a_value);

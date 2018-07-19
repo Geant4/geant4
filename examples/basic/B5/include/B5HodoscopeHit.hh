@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5HodoscopeHit.hh 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5HodoscopeHit.hh 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5HodoscopeHit.hh
 /// \brief Definition of the B5HodoscopeHit class
@@ -51,7 +51,7 @@ class G4AttValue;
 
 class B5HodoscopeHit : public G4VHit
 {
-public:
+  public:
     B5HodoscopeHit(G4int i,G4double t);
     B5HodoscopeHit(const B5HodoscopeHit &right);
     virtual ~B5HodoscopeHit();
@@ -81,7 +81,7 @@ public:
     void SetLogV(G4LogicalVolume* val) { fPLogV = val; }
     const G4LogicalVolume* GetLogV() const { return fPLogV; }
     
-private:
+  private:
     G4int fId;
     G4double fTime;
     G4ThreeVector fPos;
@@ -89,20 +89,21 @@ private:
     const G4LogicalVolume* fPLogV;
 };
 
-typedef G4THitsCollection<B5HodoscopeHit> B5HodoscopeHitsCollection;
+using B5HodoscopeHitsCollection = G4THitsCollection<B5HodoscopeHit>;
 
 extern G4ThreadLocal G4Allocator<B5HodoscopeHit>* B5HodoscopeHitAllocator;
 
 inline void* B5HodoscopeHit::operator new(size_t)
 {
-    if (!B5HodoscopeHitAllocator)
-        B5HodoscopeHitAllocator = new G4Allocator<B5HodoscopeHit>;
-    return (void*)B5HodoscopeHitAllocator->MallocSingle();
+  if (!B5HodoscopeHitAllocator) {
+       B5HodoscopeHitAllocator = new G4Allocator<B5HodoscopeHit>;
+  }
+  return (void*)B5HodoscopeHitAllocator->MallocSingle();
 }
 
 inline void B5HodoscopeHit::operator delete(void*aHit)
 {
-    B5HodoscopeHitAllocator->FreeSingle((B5HodoscopeHit*) aHit);
+  B5HodoscopeHitAllocator->FreeSingle((B5HodoscopeHit*) aHit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

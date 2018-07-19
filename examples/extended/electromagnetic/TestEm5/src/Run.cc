@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/src/Run.cc
+/// \file electromagnetic/TestEm5/src/Run.cc
 /// \brief Implementation of the Run class
 //
 // $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
@@ -158,12 +158,12 @@ void Run::EndOfRun()
 
   fNbStepsCharged /= TotNbofEvents; fNbStepsCharged2 /= TotNbofEvents;
   G4double rmsStCh = fNbStepsCharged2 - fNbStepsCharged*fNbStepsCharged;
-  if (rmsStCh>0.) rmsStCh = std::sqrt(rmsTLCh/TotNbofEvents);
+  if (rmsStCh>0.) rmsStCh = std::sqrt(rmsStCh/TotNbofEvents);
   else            rmsStCh = 0.;
 
   fNbStepsNeutral /= TotNbofEvents; fNbStepsNeutral2 /= TotNbofEvents;
   G4double rmsStNe = fNbStepsNeutral2 - fNbStepsNeutral*fNbStepsNeutral;
-  if (rmsStNe>0.) rmsStNe = std::sqrt(rmsTLCh/TotNbofEvents);
+  if (rmsStNe>0.) rmsStNe = std::sqrt(rmsStNe/TotNbofEvents);
   else            rmsStNe = 0.;
 
   G4double Gamma = (G4double)fNbGamma/TotNbofEvents;
@@ -201,7 +201,7 @@ void Run::EndOfRun()
       
   //Stopping Power from input Table.
   //
-  G4Material* material = fDetector->GetAbsorberMaterial();
+  const G4Material* material = fDetector->GetAbsorberMaterial();
   G4double length      = fDetector->GetAbsorberThickness();
   G4double density     = material->GetDensity();   
   G4String partName    = fParticle->GetParticleName();
@@ -311,19 +311,17 @@ void Run::EndOfRun()
   
   G4int ih = 1;
   G4double binWidth = analysisManager->GetH1Width(ih);
-  G4double unit     = analysisManager->GetH1Unit(ih);  
-  G4double fac = unit/(TotNbofEvents*binWidth);
+  G4double fac = 1./(TotNbofEvents*binWidth);
   analysisManager->ScaleH1(ih,fac);
 
   ih = 10;
   binWidth = analysisManager->GetH1Width(ih);
-  unit     = analysisManager->GetH1Unit(ih);  
-  fac = unit/(TotNbofEvents*binWidth);
+  fac = 1./(TotNbofEvents*binWidth);
   analysisManager->ScaleH1(ih,fac);
 
   ih = 12;
   analysisManager->ScaleH1(ih,1./TotNbofEvents);
-                    
+
   // reset default precision
   G4cout.precision(prec);
 }   

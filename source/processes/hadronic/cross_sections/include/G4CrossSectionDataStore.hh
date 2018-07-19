@@ -70,6 +70,7 @@ public:
 
   // Cross section per unit volume is computed (inverse mean free path)
   inline G4double GetCrossSection(const G4DynamicParticle*, const G4Material*);
+  G4double ComputeCrossSection(const G4DynamicParticle*, const G4Material*);
 
   // Cross section per element is computed
   G4double GetCrossSection(const G4DynamicParticle*, 
@@ -81,8 +82,8 @@ public:
 			   const G4Element*, const G4Material*);
 
   // Sample Z and A of a target nucleus and upload into G4Nucleus
-  G4Element* SampleZandA(const G4DynamicParticle*, const G4Material*,
-			 G4Nucleus& target);
+  const G4Element* SampleZandA(const G4DynamicParticle*, const G4Material*,
+			       G4Nucleus& target);
 
   // Initialisation before run
   void BuildPhysicsTable(const G4ParticleDefinition&);
@@ -94,7 +95,8 @@ public:
   void DumpHtml(const G4ParticleDefinition&, std::ofstream&) const;
   void PrintCrossSectionHtml(const G4VCrossSectionDataSet *cs) const;
   
-  inline void AddDataSet(G4VCrossSectionDataSet*);
+  void AddDataSet(G4VCrossSectionDataSet*);
+  void AddDataSet(G4VCrossSectionDataSet*,size_t);
 
   inline void SetVerboseLevel(G4int value);
 
@@ -155,12 +157,6 @@ private:
 inline G4double G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* particle , const G4Material* material ) {
 	//By default tries to use the fast-path mechanism
 	return GetCrossSection( particle , material , false);
-}
-
-inline void G4CrossSectionDataStore::AddDataSet(G4VCrossSectionDataSet* p)
-{
-  dataSetList.push_back(p);
-  ++nDataSetList;
 }
 
 inline void G4CrossSectionDataStore::SetVerboseLevel(G4int value)

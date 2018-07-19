@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 110166 2018-05-16 15:54:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,9 +15,52 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14-10-16 G.Folger
+16-05-18 J.Allison (testem8-V10-04-05)
+- RunAction.cc: Removed vis commands.
+
+01-05-18 J.Allison (testem8-V10-04-04)
+- RunAction.cc: Removed G4VIS_USE and G4UI_USE.
+
+29-03-18 V.Ivant (testem8-V10-04-03)
+- TestEm8.cc - minor optimisation
+
+26-03-18 V.Ivant (testem8-V10-04-02)
+- PrimaryGeneratorAction - fixed thread safety
+- TestEm8.in - disable tracking cuts
+
+17-03-18 mma (testem8-V10-04-01)
+- testem8.cc : remove G4UI_USE and G4VIS_USE
+
+14-12-17 V.Ivant (testem8-V10-04-00)
+- corrected default macro to optimise output
+
+27-10-17 V.Ivant (testem8-V10-03-01)
+- PhysicsList, DetectorConstruction, DetectorMesenger, StepMax
+  make StepMax initialisation to be more thread safe
+
+28-08-17 V.Ivant (testem8-V10-03-00)
+- PhysicsList - restore functionality for the old command
+  "/testem/phys/addPhysics pai"
+
+19-11-16 A.Dotti  (testem8-V10-02-05)
+- explicit set of SD to manager
+
+14-10-16 G.Folger (testem8-V10-02-04)
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
-  fix required by clang39 on Linux and MAC
+    fix required by clang39 on Linux and MAC
+
+02-09-16 V.Ivant (testem8-V10-02-03)
+01-09-16 V.Ivant (testem8-V10-02-02)
+- Run - fixed RMS computation by G4StatDouble
+
+04-07-16 I. Hrivnacova  (testem8-V10-02-01)
+- Fixes for Doxygen documentation
+
+19-02-16 V.Ivant (testem8-V10-02-00)
+- TestParameters, Run, PrimaryGeneratorAction, 
+  PrimaryGeneratorMessenger - reorganized printout of beam 
+    particle; use energy smearing as an addition of noise,
+    so smeared noise should be added in units of energy
 
 27-10-15 D.Sawkey (testem8-V10-01-06)
 - spellcheck, synch README, .README

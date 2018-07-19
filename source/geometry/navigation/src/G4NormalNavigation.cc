@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.cc 97507 2016-06-03 12:48:42Z gcosmo $
+// $Id: G4NormalNavigation.cc 96743 2016-05-03 08:01:33Z gcosmo $
 //
 //
 // class G4NormalNavigation Implementation

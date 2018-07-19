@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radioactivedecay/rdecay01/src/PrimaryGeneratorAction.cc
+/// \file PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-//
-// $Id: PrimaryGeneratorAction.cc 78307 2013-12-11 10:55:57Z gcosmo $
+// $Id: PrimaryGeneratorAction.cc 98257 2016-07-04 17:39:46Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +51,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
   fParticleGun->SetParticleEnergy(0*eV);
   fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));          
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));          
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

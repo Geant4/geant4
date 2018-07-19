@@ -18,6 +18,35 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30/11/17 I.Hrivnacova (doxygen-V10-03-02)
+- Fixing documentation for 10.4:
+  - Added still missing new dna examples (mft, neuron)
+  - Removed Hadr05
+
+28/11/17 I.Hrivnacova (doxygen-V10-03-01)
+- Added new physicslists category
+- Fixed warning in Doxymodules_hadronic.h
+
+13/06/17 I.Hrivnacova (doxygen-V10-03-00)
+- Added new extended examples exoticphysics/dmparticle,
+  medical/dna/icsd, slowing, spower and radioactivedecay/Activation
+- Updated lists of classes in  Doxymodules_* files
+
+24/11/16 I.Hrivnacova (doxygen-V10-02-03)
+- Added new examples extended/medical/dna/clustering,range
+
+14/11/16 I.Hrivnacova (doxygen-V10-02-02)
+- Updated Doxymodules_medical.h for new dicomReader 
+
+28/09/16 I.Hrivnacova (doxygen-V10-02-01)
+- Added new examples:
+  extended/hadronic/NeutronSource
+  extended/medical/dna/chem4
+
+05/07/16 I.Hrivnacova (doxygen-V10-02-00)
+- Updated configuration files (suppressed warnings from files present in more examples)
+- Added new example hadronic/Hadr07
+
 27/11/15 I.Hrivnacova (doxygen-V10-01-03)
 - Added extended/parallel/MPI/source classes in the documentation
 

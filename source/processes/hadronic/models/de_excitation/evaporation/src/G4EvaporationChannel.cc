@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.cc 90273 2015-05-22 10:20:32Z gcosmo $
+// $Id: G4EvaporationChannel.cc 105799 2017-08-21 07:35:55Z gcosmo $
 //
 //J.M. Quesada (August2008). Based on:
 //
@@ -40,14 +40,15 @@
 
 #include "G4EvaporationChannel.hh"
 #include "G4PairingCorrection.hh"
+#include "G4NuclearLevelData.hh"
 #include "G4NucleiProperties.hh"
 #include "G4Pow.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
-#include "G4EvaporationLevelDensityParameter.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+#include "G4RandomDirection.hh"
 #include "G4Alpha.hh"
 
 G4EvaporationChannel::G4EvaporationChannel(G4int anA, G4int aZ, 
@@ -58,30 +59,20 @@ G4EvaporationChannel::G4EvaporationChannel(G4int anA, G4int aZ,
     theA(anA),
     theZ(aZ),
     theProbability(aprob),
-    theCoulombBarrier(barrier),
-    EmissionProbability(0.0),
-    MaximalKineticEnergy(-1000.0)
+    theCoulombBarrier(barrier)
 { 
-  ResidualA = 0;
-  ResidualZ = 0;
-  ResidualMass = CoulombBarrier = 0.0;
-  EvaporatedMass = G4NucleiProperties::GetNuclearMass(theA, theZ);
-  theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
-  pairingCorrection = G4PairingCorrection::GetInstance();
+  ResA = ResZ = 0;
+  Mass = CoulombBarrier = MinKinEnergy = MaxKinEnergy = EmissionProbability = 0.0; 
+  EvapMass = G4NucleiProperties::GetNuclearMass(theA, theZ);
+  pairingCorrection = G4NuclearLevelData::GetInstance()->GetPairingCorrection();
 }
 
 G4EvaporationChannel::~G4EvaporationChannel()
-{
-  delete theLevelDensityPtr;
-}
+{}
 
 void G4EvaporationChannel::Initialise()
 {
-  //for inverse cross section choice
-  theProbability->SetOPTxs(OPTxs);
-  // for superimposed Coulomb Barrier for inverse cross sections
-  theProbability->UseSICB(useSICB);
-
+  theProbability->Initialise();
   G4VEvaporationChannel::Initialise();  
 }
 
@@ -89,93 +80,79 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
 {
   G4int FragA = fragment->GetA_asInt();
   G4int FragZ = fragment->GetZ_asInt();
-  ResidualA = FragA - theA;
-  ResidualZ = FragZ - theZ;
+  ResA = FragA - theA;
+  ResZ = FragZ - theZ;
+
+  G4double FragmentMass = fragment->GetGroundStateMass();
+  G4double ExEnergy = fragment->GetExcitationEnergy();
+  Mass = FragmentMass + ExEnergy;
   //G4cout << "G4EvaporationChannel::Initialize Z= " << theZ << " A= " << theA 
   //	 << " FragZ= " << FragZ << " FragA= " << FragA << G4endl;
   EmissionProbability = 0.0;
 
   // Only channels which are physically allowed are taken into account 
-  if (ResidualA >= ResidualZ && ResidualZ > 0 && ResidualA >= theA) {
+  if (ResA >= ResZ && ResZ > 0 && ResA >= theA) {
   
     //Effective excitation energy
-    G4double ExEnergy = fragment->GetExcitationEnergy();
+    G4double ResMass = G4NucleiProperties::GetNuclearMass(ResA, ResZ);
+
+    CoulombBarrier = (0 == theZ) ? 0.0 : 
+      theCoulombBarrier->GetCoulombBarrier(ResA,ResZ,ExEnergy);
+
     G4double delta0 = 
       std::max(0.0,pairingCorrection->GetPairingCorrection(FragA,FragZ));
     G4double delta1 = 
-      std::max(0.0,pairingCorrection->GetPairingCorrection(ResidualA,ResidualZ));
-    ResidualMass = G4NucleiProperties::GetNuclearMass(ResidualA, ResidualZ);
-    G4double FragmentMass = fragment->GetGroundStateMass();
-    G4double Etot = FragmentMass + ExEnergy;
-    G4double ResMass = ResidualMass + delta1;  
-
-    if(ExEnergy >= delta0 && Etot > ResMass + EvaporatedMass) {
-  
-      // Maximal Kinetic Energy
-      MaximalKineticEnergy = ((Etot-ResMass)*(Etot+ResMass) 
-	    + EvaporatedMass*EvaporatedMass)/(2.0*Etot) - EvaporatedMass;
-
-      // The threshold for charged particle emission must be set to 
-      // 0 if Coulomb cutoff  is included in the cross sections
-      // Of course for OPTxs=0 we have the Coulomb barrier 
-
-      CoulombBarrier = 0.0;
-      if (OPTxs==0 || useSICB) {
-	CoulombBarrier = 
-	  theCoulombBarrier->GetCoulombBarrier(ResidualA,ResidualZ,ExEnergy);
-      }
-      if (MaximalKineticEnergy > CoulombBarrier) {
-	EmissionProbability = theProbability->
-	  TotalProbability(*fragment, CoulombBarrier, MaximalKineticEnergy);
-      }
+      std::max(0.0,pairingCorrection->GetPairingCorrection(ResA,ResZ));
+    ResMass += delta1;  
+    /*
+    G4cout << "ExEnergy= " << ExEnergy << " Ec= " << CoulombBarrier
+	   << " delta0= " << delta0 << " delta1= " << delta1
+	   << " Free= " << Mass - ResMass - EvapMass 
+	   << G4endl;
+    */
+    // for OPTxs >0 penetration under the barrier is taken into account
+    // G4double elim = (0 == OPTxs) ? CoulombBarrier : CoulombBarrier*0.5;
+    static const G4double dCB = 3.5*CLHEP::MeV;
+    G4double elim = (0 == OPTxs) ? CoulombBarrier : CoulombBarrier - dCB*theZ;
+    if(ExEnergy >= delta0 && Mass >= ResMass + EvapMass + elim) {
+      G4double xm2 = (Mass - EvapMass)*(Mass - EvapMass);
+      G4double xm  = Mass - EvapMass - elim;
+      MinKinEnergy = (0.0 >= elim) ? 0.0 : std::max(0.5*(xm2 - xm*xm)/Mass, 0.0);
+      MaxKinEnergy = std::max(0.5*(xm2 - ResMass*ResMass)/Mass, 0.0);
+      //G4cout << "Emin= " << MinKinEnergy << " Emax= " << MaxKinEnergy 
+      //     << "  xm= " << xm  << G4endl;
+      EmissionProbability = theProbability->
+	TotalProbability(*fragment, MinKinEnergy, MaxKinEnergy, CoulombBarrier);
     }
   }
   //G4cout << "G4EvaporationChannel:: probability= " 
-  // << EmissionProbability << G4endl;   
+  //    << EmissionProbability << G4endl;   
   return EmissionProbability;
 }
 
 G4Fragment* G4EvaporationChannel::EmittedFragment(G4Fragment* theNucleus)
 {
-  G4Fragment* evFragment = 0;
-  G4double evEnergy = EvaporatedMass +
-    theProbability->SampleKineticEnergy(CoulombBarrier,
-					MaximalKineticEnergy);
+  G4Fragment* evFragment = nullptr;
+  G4double ekin = 0.0;
+  if(ResA <= 4 && 
+    ((ResA == 4 && ResZ == 2) || (ResA == 3 && ResZ == 2) ||
+     (ResA == 3 && ResZ == 1) || (ResA == 2 && ResZ == 1) ||
+     (ResA == 1 && ResZ == 1) || (ResA == 1 && ResZ == 0) )) {
+    G4double mres = G4NucleiProperties::GetNuclearMass(ResA, ResZ);
+    ekin = 0.5*(Mass*Mass - mres*mres + EvapMass*EvapMass)/Mass - EvapMass;
+  } else {
+    ekin = theProbability->SampleKineticEnergy(MinKinEnergy, MaxKinEnergy,
+					       CoulombBarrier);
+  }
+  G4LorentzVector lv0 = theNucleus->GetMomentum();
+  G4LorentzVector lv(std::sqrt(ekin*(ekin + 2.0*EvapMass))*G4RandomDirection(), 
+		     ekin + EvapMass);
+  lv.boost(lv0.boostVector());
 
-  G4ThreeVector momentum(IsotropicVector
-    (std::sqrt((evEnergy - EvaporatedMass)*(evEnergy + EvaporatedMass))));
-  
-  G4LorentzVector EvaporatedMomentum(momentum, evEnergy);
-  G4LorentzVector ResidualMomentum = theNucleus->GetMomentum();
-  EvaporatedMomentum.boost(ResidualMomentum.boostVector());
-  
-  evFragment = new G4Fragment(theA,theZ,EvaporatedMomentum);
-  ResidualMomentum -= EvaporatedMomentum;
-  theNucleus->SetZandA_asInt(ResidualZ, ResidualA);
-  theNucleus->SetMomentum(ResidualMomentum);
+  evFragment = new G4Fragment(theA, theZ, lv);
+  lv0 -= lv;
+  theNucleus->SetZandA_asInt(ResZ, ResA);
+  theNucleus->SetMomentum(lv0);
 
   return evFragment; 
 } 
-
-G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
-{
-  G4FragmentVector * theResult = new G4FragmentVector();
-  G4Fragment* frag0 = new G4Fragment(theNucleus);
-  G4Fragment* frag1 = EmittedFragment(frag0);
-  if(frag1) { theResult->push_back(frag1); }
-  theResult->push_back(frag0);
-  return theResult;
-} 
-
-G4ThreeVector G4EvaporationChannel::IsotropicVector(G4double Magnitude)
-    // Samples a isotropic random vectorwith a magnitud given by Magnitude.
-    // By default Magnitude = 1.0
-{
-  G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-  G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
-  G4double Phi = twopi*G4UniformRand();
-  G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
-		       Magnitude*std::sin(Phi)*SinTheta,
-		       Magnitude*CosTheta);
-  return Vector;
-}

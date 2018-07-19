@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc 67975 2013-03-13 10:19:44Z gcosmo $
+// $Id: G4GeometryManager.cc 103235 2017-03-22 15:53:48Z gcosmo $
 //
 // class G4GeometryManager
 //
@@ -57,18 +57,28 @@
 #include "G4VSolid.hh"
 
 // ***************************************************************************
-// Static class variable: ptr to single instance of class
+// Static class data
 // ***************************************************************************
 //
 G4ThreadLocal G4GeometryManager* G4GeometryManager::fgInstance = 0;
+G4ThreadLocal G4bool G4GeometryManager::fIsClosed = false;
 
 // ***************************************************************************
 // Constructor. Set the geometry to be open
 // ***************************************************************************
 //
 G4GeometryManager::G4GeometryManager() 
-  : fIsClosed(false)
 {
+}
+
+// ***************************************************************************
+// Destructor
+// ***************************************************************************
+//
+G4GeometryManager::~G4GeometryManager()
+{
+  fgInstance = 0;
+  fIsClosed = false;
 }
 
 // ***************************************************************************
@@ -81,7 +91,7 @@ G4GeometryManager::G4GeometryManager()
 G4bool G4GeometryManager::CloseGeometry(G4bool pOptimise, G4bool verbose,
                                         G4VPhysicalVolume* pVolume)
 {
-   if (!fIsClosed)
+  if (!fIsClosed)
   {
     if (pVolume)
     {
@@ -138,7 +148,16 @@ G4GeometryManager* G4GeometryManager::GetInstance()
   {
     fgInstance = new G4GeometryManager;
   }
-  return fgInstance;    
+  return fgInstance;
+}
+
+// ***************************************************************************
+// Returns the instance of the singleton.
+// ***************************************************************************
+//
+G4GeometryManager* G4GeometryManager::GetInstanceIfExist()
+{
+  return fgInstance;
 }
 
 // ***************************************************************************

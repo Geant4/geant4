@@ -38,6 +38,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4PhotonEvaporation.hh"
+#include "G4RadioactiveDecay.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4AtomicShells.hh"
 #include "G4Electron.hh"
@@ -49,9 +50,9 @@
 
 G4ITDecay::G4ITDecay(const G4ParticleDefinition* theParentNucleus,
                      const G4double& branch, const G4double& Qvalue,
-                     const G4double& excitationE)
- : G4NuclearDecay("IT decay", IT, excitationE), transitionQ(Qvalue), 
-   applyARM(true)
+                     const G4double& excitationE, G4PhotonEvaporation* aPhotoEvap)
+ : G4NuclearDecay("IT decay", IT, excitationE, noFloat), transitionQ(Qvalue), 
+   applyARM(true), photonEvaporation(aPhotoEvap)
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent 
   SetBR(branch);
@@ -62,7 +63,7 @@ G4ITDecay::G4ITDecay(const G4ParticleDefinition* theParentNucleus,
   SetNumberOfDaughters(1);
   G4IonTable* theIonTable =
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
-  SetDaughter(0, theIonTable->GetIon(parentZ, parentA, excitationE) );
+  SetDaughter(0, theIonTable->GetIon(parentZ, parentA, excitationE, noFloat) );
 }
 
 
@@ -83,25 +84,19 @@ G4DecayProducts* G4ITDecay::DecayIt(G4double)
   G4DynamicParticle parentParticle(G4MT_parent, atRest);
   G4DecayProducts* products = new G4DecayProducts(parentParticle);
 
-  // Let G4PhotonEvaporation do the decay 
-  G4PhotonEvaporation* photoEvap = new G4PhotonEvaporation;
-  photoEvap->RDMForced(true);
-  photoEvap->SetICM(true);
+  // Let G4PhotonEvaporation do the decay
+  G4Fragment parentNucleus(parentA, parentZ, atRest);
 
-  G4Fragment* nucleus = new G4Fragment(parentA, parentZ, atRest);
-  G4Fragment* eOrGamma = photoEvap->EmittedFragment(nucleus);
+  G4Fragment* eOrGamma = photonEvaporation->EmittedFragment(&parentNucleus);
 
-  // Daughter nuclide is returned in nucleus pointer
-  G4double finalDaughterExcitation = nucleus->GetExcitationEnergy();
-  if (finalDaughterExcitation < 1*keV) finalDaughterExcitation = 0.0;
-  G4LorentzVector daughterMomentum = nucleus->GetMomentum();
+  // Modified nuclide is returned as dynDaughter
   G4IonTable* theIonTable =
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable() );
   G4ParticleDefinition* daughterIon =
-    theIonTable->GetIon(parentZ, parentA, finalDaughterExcitation);
+    theIonTable->GetIon(parentZ, parentA, parentNucleus.GetExcitationEnergy(), 
+                        G4Ions::FloatLevelBase(parentNucleus.GetFloatingLevelNumber()));
   G4DynamicParticle* dynDaughter = new G4DynamicParticle(daughterIon,
-                                                         daughterMomentum); 
-  delete nucleus;
+                                                         parentNucleus.GetMomentum());
 
   if (eOrGamma) {
     G4DynamicParticle* eOrGammaDyn =
@@ -111,9 +106,9 @@ G4DecayProducts* G4ITDecay::DecayIt(G4double)
     products->PushProducts(eOrGammaDyn);
     delete eOrGamma;
 
-    // Now do atomic relaxation
+    // Now do atomic relaxation if e- is emitted
     if (applyARM) {
-      G4int shellIndex = photoEvap->GetVacantShellNumber();
+      G4int shellIndex = photonEvaporation->GetVacantShellNumber();
       if (shellIndex > -1) {
         G4VAtomDeexcitation* atomDeex =
           G4LossTableManager::Instance()->AtomDeexcitation();
@@ -126,7 +121,6 @@ G4DecayProducts* G4ITDecay::DecayIt(G4double)
 
           // VI, SI
           // Allows fixing of Bugzilla 1727
-          //const G4double deexLimit = 0.1*keV;
           G4double deexLimit = 0.1*keV;
           if (G4EmParameters::Instance()->DeexcitationIgnoreCut())  deexLimit =0.;
           //
@@ -181,8 +175,6 @@ G4DecayProducts* G4ITDecay::DecayIt(G4double)
   G4double eCons = G4MT_parent->GetPDGMass() - dynDaughter->GetMass() - KEsum;
   G4cout << " IT check: Ediff (keV) = " << eCons/keV << G4endl; 
   */
-  delete photoEvap;
-
   return products;
 }
 

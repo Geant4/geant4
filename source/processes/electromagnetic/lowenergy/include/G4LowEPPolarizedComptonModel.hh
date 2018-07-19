@@ -58,8 +58,14 @@
 // | --------                                                          |
 // |                                                                   |
 // | Jan. 2015 JMCB       - 1st Version based on G4LowEPComptonModel   |
+// | Feb. 2016 JMCB       - Geant4 10.2 FPE fix for bug 1676           |
+// | Nov. 2016 JMCB       - Polarisation tracking fix in collaboration |
+// |                        of Dr. Merlin Reynaard Kole,               |
+// |                        University of Geneva                       |
 // |                                                                   |
 // *********************************************************************
+
+
 
 #ifndef G4LowEPPolarizedComptonModel_h
 #define G4LowEPPolarizedComptonModel_h 1
@@ -130,6 +136,13 @@ private:
   G4ThreeVector SetNewPolarization(G4double LowEPPCepsilon, G4double sinT2,
                                    G4double phi, G4double cosTheta);
   G4double SetPhi(G4double, G4double);
+
+  void SystemOfRefChange(G4ThreeVector& direction0, G4ThreeVector& direction1,
+                         G4ThreeVector& polarization0, G4ThreeVector& polarization1);
+
+  void SystemOfRefChangeElect(G4ThreeVector& pdirection, G4ThreeVector& edirection,
+                         G4ThreeVector& ppolarization);
+
 
   G4ThreeVector SetPerpendicularVector(G4ThreeVector& a); 
   G4bool isInitialised;

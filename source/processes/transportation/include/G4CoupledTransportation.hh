@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.hh 86964 2014-11-21 11:47:44Z gcosmo $
+// $Id: G4CoupledTransportation.hh 110805 2018-06-15 06:52:15Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -59,7 +59,9 @@
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4ParticleChangeForTransport.hh"
+
 class G4SafetyHelper; 
+class G4TransportationLogger;
 
 class G4CoupledTransportation : public G4VProcess 
 {
@@ -87,7 +89,7 @@ class G4CoupledTransportation : public G4VProcess
                              const G4Track& track,
                              const G4Step&  stepData
                             );
-       // Responsible for the relocation.
+       // Responsible for the relocation
 
      G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& ,
@@ -95,16 +97,11 @@ class G4CoupledTransportation : public G4VProcess
                              G4ForceCondition* pForceCond
                             );
        // Forces the PostStepDoIt action to be called, 
-       // but does not limit the step.
+       // but does not limit the step
 
      G4PropagatorInField* GetPropagatorInField();
      void SetPropagatorInField( G4PropagatorInField* pFieldPropagator);
-       // Access/set the assistant class that Propagate in a Field.
-
-     inline void   SetVerboseLevel( G4int verboseLevel );
-     inline G4int  GetVerboseLevel() const;
-       // Level of warnings regarding eg energy conservation
-       // in field integration.
+       // Access/set the assistant class that Propagate in a Field
 
      inline G4double GetThresholdWarningEnergy() const; 
      inline G4double GetThresholdImportantEnergy() const; 
@@ -127,38 +124,54 @@ class G4CoupledTransportation : public G4VProcess
      static G4bool EnableUseMagneticMoment(G4bool useMoment=true); 
      // Whether to deflect particles with force due to magnetic moment
 
+     static void  SetSignifyStepsInAnyVolume( G4bool anyVol )
+       { fSignifyStepInAnyVolume = anyVol; } 
+     static G4bool GetSignifyStepsInAnyVolume()
+       { return fSignifyStepInAnyVolume; }
+     // Flag in step corresponds to first/last step in a volume 'any'
+     // geometry (if this is true) or refers to first/last step in mass
+     // geometry only (if false)
+
+     // The following methods give access to first/last step in particular
+     // geometry *independent* of the choice of the 'Signify' flag
+     //
+     G4bool IsFirstStepInAnyVolume() const { return fFirstStepInAnyVolume; }
+     G4bool IsLastStepInAnyVolume() const { return fAnyGeometryLimitedStep; } 
+     G4bool IsFirstStepInMassVolume() const { return fFirstStepInMassVolume; }
+     G4bool IsLastStepInMassVolume() const { return fMassGeometryLimitedStep; } 
+
   public:  // without description
 
      void StartTracking(G4Track* aTrack); 
      void EndTracking();
+   
+     G4double AtRestGetPhysicalInteractionLength( const G4Track& ,
+                                                  G4ForceCondition* )
+       { return -1.0; }   // No operation in AtRestGPIL
 
-     G4double AtRestGetPhysicalInteractionLength(
-                             const G4Track& ,
-                             G4ForceCondition* 
-                            ) { return -1.0; };
-       // No operation in  AtRestDoIt.
-
-     G4VParticleChange* AtRestDoIt(
-                             const G4Track& ,
-                             const G4Step&
-                            ) {return 0;};
-       // No operation in  AtRestDoIt.
+     G4VParticleChange* AtRestDoIt( const G4Track&, const G4Step&)
+       { return 0; }      // No operation in AtRestDoIt
 
   protected:
 
-     G4bool               DoesGlobalFieldExist();
-       // Checks whether a field exists for the "global" field manager.
+     G4bool DoesGlobalFieldExist();
+       // Checks whether a field exists for the "global" field manager
 
      void ReportInexactEnergy(G4double startEnergy, G4double endEnergy);
        // Issue warning
 
      void ReportMove( G4ThreeVector OldVector, G4ThreeVector NewVector,
                       const G4String& Quantity );
+   
+     // void ReportLoopingTrack( .. ) -> Moved to Logger class
+       // Warn about dropping of tracks that repeatedly exceed number of
+       // iterations for propagaton in field
 
   private:
 
      G4Navigator*         fMassNavigator;
-       // The navigator for the 'mass' geometry (the real one, that physics occurs in)
+       // The navigator for the 'mass' geometry
+       // (the real one, that physics occurs in)
      G4PathFinder*        fPathFinder;
      G4int fNavigatorId;
        // The PathFinder used to transport the particle
@@ -167,8 +180,8 @@ class G4CoupledTransportation : public G4VProcess
        // Still required in order to find/set the fieldmanager
 
      G4bool fGlobalFieldExists; 
-     // G4bool fStartedNewTrack;   //  True for first step or restarted tracking 
-                                   //    until first step's AlongStepGPIL
+     // G4bool fStartedNewTrack;   // True for first step or restarted tracking
+                                   // until first step's AlongStepGPIL
 
      G4ThreeVector        fTransportEndPosition;
      G4ThreeVector        fTransportEndMomentumDir;
@@ -181,7 +194,7 @@ class G4CoupledTransportation : public G4VProcess
      G4double             fCandidateEndGlobalTime;
 
      G4bool               fParticleIsLooping;
-   
+     G4bool               fNewTrack;
      G4ThreeVector        fPreviousSftOrigin; 
      G4double             fPreviousMassSafety;
      G4double             fPreviousFullSafety;
@@ -204,33 +217,42 @@ class G4CoupledTransportation : public G4VProcess
      G4double fEndpointDistance;
 
 
-  // Thresholds for looping particles: 
-  // 
+     // Thresholds for looping particles: 
+     // 
      G4double fThreshold_Warning_Energy;     //  Warn above this energy
      G4double fThreshold_Important_Energy;   //  Hesitate above this
      G4int    fThresholdTrials;              //    for this no of trials
        // Above 'important' energy a 'looping' particle in field will 
-       //   *NOT* be abandoned, except after fThresholdTrials attempts.
+       // *NOT* be abandoned, except after fThresholdTrials attempts.
 
-  // Counter for steps in which particle reports 'looping',
-  //   if it is above 'Important' Energy 
+     // Counter for steps in which particle reports 'looping',
+     // if it is above 'Important' Energy
+     //
      G4int    fNoLooperTrials; 
-  // Statistics for tracks abandoned
+
+     // Statistics for tracks abandoned
+     //
      G4double fSumEnergyKilled;
      G4double fMaxEnergyKilled;
 
      G4SafetyHelper* fpSafetyHelper;  // To pass it the safety value obtained
-
-  // Verbosity 
-     G4int    fVerboseLevel;
-       // Verbosity level for warnings
-       // eg about energy non-conservation in magnetic field.
-
-  // Whether to track state change from magnetic moment in a B-field
+     G4TransportationLogger* fpLogger;  // Reports issues / raises warnings
+   
   private:
-     friend class G4Transportation;
-     static G4bool fUseMagneticMoment; 
 
+     friend class G4Transportation;
+     static G4bool fUseMagneticMoment;
+
+  private:
+
+     G4bool fFirstStepInMassVolume;
+     G4bool fFirstStepInAnyVolume;
+     // G4bool fLastStepInMassVolume; => use fMassGeometryLimitedStep 
+     // G4bool fLastStepInAnyVolume; => use fAnyGeometryLimitedStep
+
+     static G4bool fSignifyStepInAnyVolume;
+       // True: First/Last step in any one of the geometries
+       // False: First/Last step in volume of 'mass' geometry
 };
 
 #include "G4CoupledTransportation.icc"

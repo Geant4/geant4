@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DELPHIMagField.hh 97486 2016-06-03 10:45:04Z gcosmo $
+// $Id: G4DELPHIMagField.hh 96751 2016-05-04 09:39:38Z gcosmo $
 //
 //
 // class G4DELPHIMagField

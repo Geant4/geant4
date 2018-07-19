@@ -44,21 +44,19 @@
 
 class SteppingAction : public G4UserSteppingAction
 {
-public:
-  SteppingAction(RunAction* ,DetectorConstruction*);
-  ~SteppingAction();
+  public:
+    SteppingAction(RunAction* ,const DetectorConstruction*);
+    virtual ~SteppingAction();
   
-  void UserSteppingAction(const G4Step*);
+    virtual void UserSteppingAction(const G4Step*);
   
-private:
-  RunAction*            fRun;
-  DetectorConstruction* fDetector;
-  CellParameterisation * fMyCellParameterisation;  
+  private:
+    RunAction*             fRun;
+    const DetectorConstruction*  fDetector;
+    const CellParameterisation * fMyCellParameterisation;  
 
 };
 
 #endif
-
-
 
 

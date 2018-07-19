@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: DetectorMessenger.hh 103469 2017-04-11 07:29:36Z gcosmo $
 //
 /// \file medical/GammaTherapy/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
@@ -84,11 +84,9 @@ private:
   G4UIcmdWithADoubleAndUnit* fAbsSizYZCmd;
   G4UIcmdWithAString*        fWorldMaterCmd;
   G4UIcmdWithADoubleAndUnit* fWorldXCmd;
-  G4UIcmdWithoutParameter*   fUpdateCmd;
   G4UIcmdWithADoubleAndUnit* fXMagFieldCmd;
   G4UIcmdWithADoubleAndUnit* fYMagFieldCmd;
   G4UIcmdWithADoubleAndUnit* fZMagFieldCmd;
-  G4UIcmdWithAString*        fHistoCmd;
   G4UIcmdWithAnInteger*      fNumOfAbsCmd;
   G4UIcmdWithAnInteger*      fNumOfEvt;
   G4UIcmdWithAnInteger*      fVerbCmd;

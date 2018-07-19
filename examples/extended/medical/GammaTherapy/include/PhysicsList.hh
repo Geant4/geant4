@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh 82277 2014-06-13 14:40:54Z gcosmo $
+// $Id: PhysicsList.hh 101245 2016-11-10 08:45:38Z gcosmo $
 //
 /// \file medical/GammaTherapy/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
@@ -59,7 +59,6 @@ private:
   PhysicsList(const PhysicsList&);
 
   G4int    fVerbose;
-  G4bool   fEmBuilderIsRegisted;
   G4bool   fHelIsRegisted;
   G4bool   fBicIsRegisted;
   G4bool   fIonIsRegisted;

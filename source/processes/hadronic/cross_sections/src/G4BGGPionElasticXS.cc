@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionElasticXS.cc 93682 2015-10-28 10:09:49Z gcosmo $
+// $Id: G4BGGPionElasticXS.cc 110543 2018-05-29 13:38:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -76,6 +76,7 @@ G4BGGPionElasticXS::G4BGGPionElasticXS(const G4ParticleDefinition*)
   theProton= G4Proton::Proton();
   isPiplus = false;
   isInitialized = false;
+  SetForAllAtomsAndEnergies(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

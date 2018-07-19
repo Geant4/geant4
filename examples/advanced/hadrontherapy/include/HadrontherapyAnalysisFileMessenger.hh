@@ -69,9 +69,7 @@ private:
    */ 
   G4UIcmdWithABool *LetCmd, *secondaryCmd; 
   G4UIcmdWithAString *DoseMatrixCmd;
-#ifdef G4ANALYSIS_USE_ROOT
-  G4UIcmdWithAString *FileNameCmd;
-#endif
+
 };
 
 #endif

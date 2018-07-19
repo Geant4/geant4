@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc 78126 2013-12-03 17:43:56Z gcosmo $
+// $Id: PrimaryGeneratorAction.cc 98250 2016-07-04 17:27:47Z gcosmo $
 //
-/// @file PrimaryGeneratrorAction.cc
+/// @file PrimaryGeneratorAction.cc
 /// @brief Define primary generator action
 
 #include "G4ParticleDefinition.hh"

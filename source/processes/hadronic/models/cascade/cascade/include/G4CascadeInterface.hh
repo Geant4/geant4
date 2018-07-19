@@ -178,7 +178,6 @@ private:
   G4InuclElementaryParticle hadronTarget;
   G4InuclNuclei             nucleusTarget;
 
-  G4LorentzRotation bulletInLabFrame;
 
 private:
   // Copying of modules is forbidden

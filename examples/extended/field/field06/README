@@ -42,11 +42,11 @@
     G4Electron and G4AntiNeutrinoE
 
     RegisterPhysics(new G4DecayPhysics());
-    RegisterPhysics(new F06ExtraPhysics());
+    RegisterPhysics(new G4StepLimiterPhysics());
 
     G4VModularPhysicsList::ConstructProcess();
 
-    F06ExtraPhysics defines G4StepLimiter and G4UserSpecialCuts
+    G4StepLimiterPhysics defines G4StepLimiter and G4UserSpecialCuts
 
  5- User Action Classes
 

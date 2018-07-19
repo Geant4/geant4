@@ -1,8 +1,0 @@
-# Macro file for the initialization phase of "pythia6Decayer" example
-# when running in interactive mode without visualization
-#
-# Sets some default verbose
-#
-/control/verbose 1
-/control/saveHistory
-/run/verbose 1

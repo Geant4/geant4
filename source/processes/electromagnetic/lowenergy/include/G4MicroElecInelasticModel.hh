@@ -87,11 +87,18 @@ public:
 
   double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double energyTransfer, G4int shell);
 
+  G4double TransferedEnergy(G4ParticleDefinition * aParticleDefinition,
+                            G4double incomingParticleEnergy, G4int shell, G4double random) ;
+  
+  inline void SelectFasterComputation(G4bool input); 
+  
 protected:
 
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+  
+  G4bool fasterCode;
 
   //deexcitation manager to produce fluo photns and e-
   G4VAtomDeexcitation*      fAtomDeexcitation;
@@ -118,10 +125,9 @@ private:
 
   G4double RandomizeEjectedElectronEnergy(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
 
-  void RandomizeEjectedElectronDirection(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4double
-                                           outgoingParticleEnergy, G4double & cosTheta, G4double & phi );
+  G4double RandomizeEjectedElectronEnergyFromCumulatedDcs(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
 
-  G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+  G4double Interpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
    
   G4double QuadInterpolator( G4double e11, 
 			     G4double e12, 
@@ -137,14 +143,23 @@ private:
 			     G4double e);
 
   typedef std::map<double, std::map<double, double> > TriDimensionMap;
+  
   TriDimensionMap eDiffCrossSectionData[7];
+  TriDimensionMap eNrjTransfData[7]; // for cumulated dcs
+  
   TriDimensionMap pDiffCrossSectionData[7];
+  TriDimensionMap pNrjTransfData[7]; // for cumulated dcs
+  
   std::vector<double> eTdummyVec;
   std::vector<double> pTdummyVec;
 
   typedef std::map<double, std::vector<double> > VecMap;
+  
   VecMap eVecm;
   VecMap pVecm;
+  
+  VecMap eProbaShellMap[7]; // for cumulated dcs
+  VecMap pProbaShellMap[7]; // for cumulated dcs
   
   // Partial cross section
   
@@ -156,6 +171,13 @@ private:
   G4MicroElecInelasticModel(const  G4MicroElecInelasticModel&);
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4MicroElecInelasticModel::SelectFasterComputation (G4bool input)
+{ 
+    fasterCode = input; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

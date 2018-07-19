@@ -3,10 +3,16 @@
 #         10.04.01 V.Ivanchneko
 #================================================
 /control/verbose 2
+/control/cout/ignoreThreadsExcept 0
 /run/verbose 1
 /tracking/verbose 0
 /event/verbose 0
 /testem/verbose 0
+#
+/testem/target1Material       G4_Be
+/testem/target2Material       G4_W
+/testem/target1Z              9 mm
+/testem/target2Z              6 mm
 #
 /testem/phys/addPhysics       emstandard
 #/testem/phys/addPhysics      emstandard_opt2
@@ -14,21 +20,15 @@
 #/testem/phys/addPhysics       emlivermore
 #/testem/phys/addPhysics      step_limit
 #
-/testem/target1Material       G4_Be
-/testem/target2Material       G4_W
-/testem/target1Z              9 mm
-/testem/target2Z              6 mm
-#
 #/testem/histoName            be_w_st
 #
 #/testem/stepMax               1.0  mm
 #
-/gun/particle e-
-/gun/energy 50.0 MeV
+/run/setCut          0.1 mm
 #
 /run/initialize
 #
-/run/setCut          0.1 mm
-#
+/gun/particle e-
+/gun/energy 50.0 MeV
 /run/beamOn 10000
 #

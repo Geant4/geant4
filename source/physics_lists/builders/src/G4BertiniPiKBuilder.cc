@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniPiKBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
+// $Id: G4BertiniPiKBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 //
 // Modified:
 // 02.04.2009 V.Ivanchenko remove add cross section, string builderis reponsible 
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -54,10 +55,6 @@ G4BertiniPiKBuilder()
    theModel->SetMaxEnergy(theMax); 
  }
 
-G4BertiniPiKBuilder::~G4BertiniPiKBuilder() 
-{
-}
-
 void G4BertiniPiKBuilder::
 Build(G4PionPlusInelasticProcess * aP)
  {
@@ -73,9 +70,6 @@ Build(G4PionMinusInelasticProcess * aP)
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
  }
-
-void G4BertiniPiKBuilder::
-Build(G4HadronElasticProcess * ) {}
 
 void G4BertiniPiKBuilder::
 Build(G4KaonPlusInelasticProcess * aP)

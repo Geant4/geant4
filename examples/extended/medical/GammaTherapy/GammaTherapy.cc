@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GammaTherapy.cc 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: GammaTherapy.cc 110004 2018-05-14 07:40:59Z gcosmo $
 //
 /// \file medical/GammaTherapy/GammaTherapy.cc
 /// \brief Main program of the medical/GammaTherapy example
@@ -42,82 +42,81 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "G4Types.hh"
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "TrackingAction.hh"
-#include "RunAction.hh"
-#include "Histo.hh"
+#include "ActionInitialization.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 int main(int argc,char** argv) {
 
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = nullptr;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager();
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(),2);
+  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+  runManager->SetNumberOfThreads(nThreads);
+  G4cout << "===== GammaTherapy is started with "
+         <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
+#else
+  G4RunManager* runManager = new G4RunManager();
+#endif
 
-  // set mandatory initialization classes
+  //set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction();
   runManager->SetUserInitialization(det);
 
   runManager->SetUserInitialization(new PhysicsList());
 
   // set user action classes
-  runManager->SetUserAction(new PrimaryGeneratorAction(det));
-  runManager->SetUserAction(new RunAction());
-  runManager->SetUserAction(new TrackingAction());
+  runManager->SetUserInitialization(new ActionInitialization(det));
 
-  // get the pointer to the User Interface manager
+  //initialize visualization
+  G4VisManager* visManager = nullptr;
+
+  //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-#ifdef G4VIS_USE
-  G4VisManager* visManager = new G4VisExecutive("Quiet");
-  visManager->Initialize();
-#endif
+  if (ui)  {
+   //interactive mode
+   visManager = new G4VisExecutive;
+   visManager->Initialize();
+   UImanager->ApplyCommand("/control/execute vis.mac");
+   ui->SessionStart();
+   delete ui;
+  }
+  else  {
+  //batch mode
+   G4String command = "/control/execute ";
+   G4String fileName = argv[1];
+   UImanager->ApplyCommand(command+fileName);
+  }
 
-  if (argc==1)   // Define UI terminal for interactive mode
-    {
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
-      ui->SessionStart();
-      delete ui;
-#endif
-    }
-  else if (argc>1) // Batch mode with 1 or more files
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
-    }
-
-#ifdef G4VIS_USE
+  //job termination
   delete visManager;
-#endif
-
-  // job termination
   delete runManager;
-
-  return 0;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

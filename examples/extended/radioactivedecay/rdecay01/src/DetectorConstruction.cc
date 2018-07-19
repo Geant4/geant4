@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radioactivedecay/rdecay01/src/DetectorConstruction.cc
+/// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-//
-// $Id: DetectorConstruction.cc 78307 2013-12-11 10:55:57Z gcosmo $
+// $Id: DetectorConstruction.cc 98257 2016-07-04 17:39:46Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +44,7 @@
 DetectorConstruction::DetectorConstruction()
  : G4VUserDetectorConstruction()
 {
-  fWorldSize = 2*mm;
+  fWorldSize = 20*mm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

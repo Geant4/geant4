@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/shared/src/DetectorMessenger.cc
+/// \file DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
 //
-// $Id: DetectorMessenger.cc 77206 2013-11-22 01:33:52Z adotti $
+// $Id: DetectorMessenger.cc 98241 2016-07-04 16:56:59Z gcosmo $
 //
 // 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4IntersectionSolid.hh 104316 2017-05-24 13:04:23Z gcosmo $
 //
 //
 // class G4IntersectionSolid
@@ -85,6 +85,8 @@ class G4IntersectionSolid : public G4BooleanSolid
     G4IntersectionSolid(const G4IntersectionSolid& rhs);
     G4IntersectionSolid& operator=(const G4IntersectionSolid& rhs);
       // Copy constructor and assignment operator.
+
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,

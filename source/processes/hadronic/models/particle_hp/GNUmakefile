@@ -11,7 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT -DG4PHPDEBUG 
+CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
@@ -44,6 +44,6 @@ endif
 
 include $(G4INSTALL)/config/common.gmk
 
-ifndef DO_NOT_SET_PHP_AS_HP
+ifdef PHP_AS_HP
    CPPFLAGS += -DPHP_AS_HP
 endif

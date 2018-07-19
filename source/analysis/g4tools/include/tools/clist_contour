@@ -1,0 +1,893 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_clist_contour
+#define tools_clist_contour
+
+// G.Barrand : inline version of the one found in Lib of OSC 16.11.
+//             This code is not mine and I keep it "as it is".
+
+// Inheritance :
+#include "ccontour"
+
+#include <list>
+#include <ostream>
+#include <iomanip> //std::setprecision
+
+namespace tools {
+
+// a list of point index referring to the secondary grid
+// Let i the index of a point,
+typedef std::list<unsigned int> cline_strip;
+typedef std::list<cline_strip*> cline_strip_list;
+typedef std::vector<cline_strip_list> cline_strip_list_vector;
+
+class clist_contour : public ccontour  
+{
+public: //ccontour
+	// Adding segment to line strips
+	// See ccontour::ExportLine for further details
+	virtual void ExportLine(int iPlane,int x1, int y1, int x2, int y2);
+
+public:
+	clist_contour();
+	virtual ~clist_contour(){CleanMemory();}
+protected: //G.Barrand
+        clist_contour(const clist_contour& a_from):ccontour(a_from){}
+private: //G.Barrand
+        clist_contour& operator=(const clist_contour&){return *this;}
+public:
+	// retreiving list of line strip for the i-th contour
+	cline_strip_list* get_lines(unsigned int iPlane);
+	// Basic algorithm to concatanate line strip. Not optimized at all !
+	bool compact_strips ();
+	// generate contour strips
+	virtual void generate();
+protected: //G.Barrand
+
+	// Initializing memory
+	virtual void InitMemory();
+	// Cleaning memory and line strips
+	virtual void CleanMemory();
+
+	// Adding segment to line strips
+	// See ccontour::ExportLine for further details
+	//void ExportLine(int iPlane,int x1, int y1, int x2, int y2);
+
+	/// debuggin
+	void DumpPlane(unsigned int iPlane) const;
+
+	// Area given by this function can be positive or negative depending on the winding direction of the contour.
+	double Area(cline_strip* Line);
+
+	double EdgeWeight(cline_strip* pLine, double R);
+	//bool   PrintContour(std::ostream& a_out);
+protected:
+	// Merges pStrip1 with pStrip2 if they have a common end point
+	bool MergeStrips(cline_strip* pStrip1, cline_strip* pStrip2);
+	// Merges the two strips with a welding threshold.
+	bool ForceMerge(cline_strip* pStrip1, cline_strip* pStrip2,double);
+	// returns true if contour is touching boundary
+	bool OnBoundary(cline_strip* pStrip);
+        // L.Garnier : check specials case for CompactStrip
+        bool SpecialCompactStripCase(double,double,double,double,double); 
+
+private:
+	// array of line strips
+	cline_strip_list_vector m_vStripLists; 
+        typedef unsigned int UINT;
+
+private:
+        static const char* _TT(const char* what) {return what;}
+
+        static void _TRACE_(const char* /*a_fmt*/,...) {
+          //va_list args;
+          //va_start(args,a_fmt);
+          //::vprintf(s,a_fmt,args);
+          //va_end(args);
+        }
+        static void _PROBLEM_(const char* what) {::printf("%s",what);}
+
+	static bool _ASSERT_RET_(bool what,const char* cmt) {
+          if(!(what)) {
+            ::printf("debug : ListContour : assert failure in %s\n",cmt);
+            return false;
+          }
+          return true;
+	}
+
+	static bool _ASSERT_MERGE_RET_(bool what,const char* cmt,cline_strip* pStrip2) {
+          if(!(what)) {
+            ::printf("debug : ListContour : assert failure in %s\n",cmt);
+            pStrip2->clear();
+            return false;
+          }
+          return true;
+        }
+};
+
+
+// implementation :
+inline clist_contour::clist_contour()
+: ccontour()
+{
+}
+
+inline void clist_contour::generate()
+{
+	// generate line strips
+	ccontour::generate();
+	// compact strips
+	compact_strips ();
+}
+
+inline void clist_contour::InitMemory()
+{
+	ccontour::InitMemory();
+	
+	cline_strip_list::iterator pos;
+	cline_strip* pStrip;
+	
+	if (!m_vStripLists.empty())
+	{
+		UINT i;
+		// reseting lists
+		_ASSERT_(m_vStripLists.size() == get_number_of_planes(),"clist_contour::InitMemory::0");
+		for (i=0;i<get_number_of_planes();i++)
+		{
+			for (pos = m_vStripLists[i].begin(); pos!=m_vStripLists[i].end() ; pos++)
+			{
+				pStrip=(*pos);
+				_ASSERTP_(pStrip,"clist_contour::InitMemory::1");
+
+				pStrip->clear();
+				delete pStrip;
+			}
+			m_vStripLists[i].clear();
+		}
+	}
+	else
+		m_vStripLists.resize(get_number_of_planes());
+}
+
+inline void clist_contour::CleanMemory()
+{
+	ccontour::CleanMemory();
+	
+	cline_strip_list::iterator pos;
+	cline_strip* pStrip;
+	UINT i;
+
+	// reseting lists
+	for (i=0;i<m_vStripLists.size();i++) //G.Barrand
+	{
+		for (pos=m_vStripLists[i].begin(); pos!=m_vStripLists[i].end();pos++)
+		{
+			pStrip=(*pos);
+			_ASSERTP_(pStrip,"clist_contour::CleanMemory");
+			pStrip->clear();
+			delete pStrip;
+		}
+		m_vStripLists[i].clear();
+	}
+}
+
+inline void clist_contour::ExportLine(int iPlane,int x1, int y1, int x2, int y2)
+{
+	_ASSERT_(iPlane>=0,"clist_contour::ExportLine::0");
+	_ASSERT_(iPlane<(int)get_number_of_planes(),"clist_contour::ExportLine::1");
+	
+	// check that the two points are not at the beginning or end of the  some line strip
+	UINT i1=y1*(m_iColSec+1)+x1;
+	UINT i2=y2*(m_iColSec+1)+x2;
+	
+	cline_strip* pStrip;
+	
+	cline_strip_list::iterator pos;
+	bool added = false;
+	for(pos=m_vStripLists[iPlane].begin(); pos!=m_vStripLists[iPlane].end() && !added; pos++)
+	{
+		pStrip=(*pos);
+		_ASSERTP_(pStrip,"clist_contour::ExportLine::2");
+		// check if points are appendable to this strip
+		if (i1==pStrip->front())
+		{
+			pStrip->insert(pStrip->begin(),i2);
+			return;
+		}
+		if (i1==pStrip->back())
+		{
+			pStrip->insert(pStrip->end(),i2);
+			return;
+		}
+		if (i2==pStrip->front())
+		{
+			pStrip->insert(pStrip->begin(),i1);
+			return;
+		}
+		if (i2==pStrip->back())
+		{
+			pStrip->insert(pStrip->end(),i1);
+			return;
+		}
+	}
+	
+	// segment was not part of any line strip, creating new one
+	pStrip=new cline_strip;
+	pStrip->insert(pStrip->begin(),i1);
+	pStrip->insert(pStrip->end(),i2);
+	m_vStripLists[iPlane].insert(m_vStripLists[iPlane].begin(),pStrip);
+}
+
+inline bool clist_contour::ForceMerge(cline_strip* pStrip1, cline_strip* pStrip2,double aHeight) 
+{
+
+	cline_strip::iterator pos;
+	cline_strip::reverse_iterator rpos;
+	
+	if (pStrip2->empty())
+		return false;
+	
+	double x[4], y[4], weldDist;
+	int index;
+	index = pStrip1->front();
+	x[0] = get_xi(index);
+	y[0] = get_yi(index);
+	index = pStrip1->back();
+	x[1] = get_xi(index);
+	y[1] = get_yi(index);
+	index = pStrip2->front();
+	x[2] = get_xi(index);
+	y[2] = get_yi(index);
+	index = pStrip2->back();
+	x[3] = get_xi(index);
+	y[3] = get_yi(index);
+	
+	weldDist = 10*(m_dDx*m_dDx+m_dDy*m_dDy);
+	
+	if (((x[1]-x[2])*(x[1]-x[2])+(y[1]-y[2])*(y[1]-y[2])< weldDist)
+            || SpecialCompactStripCase(x[1],x[2],y[1],y[2],aHeight)) // L.Garnier
+          
+    {
+		for (pos=pStrip2->begin(); pos!=pStrip2->end();pos++)
+		{
+			index=(*pos);
+			if(!_ASSERT_RET_(index>=0,"clist_contour::ForceMerge::0")) return false;
+			pStrip1->insert(pStrip1->end(),index);
+		}
+		pStrip2->clear();
+		return true;
+    }
+	
+	if (((x[3]-x[0])*(x[3]-x[0])+(y[3]-y[0])*(y[3]-y[0])< weldDist)
+            || SpecialCompactStripCase(x[3],x[0],y[3],y[0],aHeight)) // L.Garnier
+    {
+		for (rpos=pStrip2->rbegin(); rpos!=pStrip2->rend();rpos++)
+		{
+			index=(*rpos);
+			if(!_ASSERT_RET_(index>=0,"clist_contour::ForceMerge::1")) return false;
+			pStrip1->insert(pStrip1->begin(),index);
+		}
+		pStrip2->clear();
+		return true;
+    }
+	
+	if (((x[1]-x[3])*(x[1]-x[3])+(y[1]-y[3])*(y[1]-y[3])< weldDist)
+            || SpecialCompactStripCase(x[1],x[3],y[1],y[3],aHeight)) // L.Garnier
+    {
+		for (rpos=pStrip2->rbegin(); rpos!=pStrip2->rend();rpos++)
+		{
+			index=(*rpos);
+			if(!_ASSERT_RET_(index>=0,"clist_contour::ForceMerge::2")) return false;
+			pStrip1->insert(pStrip1->end(),index);
+		}
+		pStrip2->clear();
+		return true;
+    }
+
+	if (((x[0]-x[2])*(x[0]-x[2])+(y[0]-y[2])*(y[0]-y[2])< weldDist)
+            || SpecialCompactStripCase(x[0],x[2],y[0],y[2],aHeight)) // L.Garnier
+    {
+		for (pos=pStrip2->begin(); pos!=pStrip2->end();pos++)
+		{
+			index=(*pos);
+			if(!_ASSERT_RET_(index>=0,"clist_contour::ForceMerge::3")) return false;
+			pStrip1->insert(pStrip1->begin(),index);
+		}
+		pStrip2->clear();
+		return true;
+    }
+
+	return false;
+}
+
+inline bool clist_contour::MergeStrips(cline_strip* pStrip1, cline_strip* pStrip2)
+{
+	cline_strip::iterator pos;
+	cline_strip::reverse_iterator rpos;
+	if (pStrip2->empty())
+		return false;
+	
+	int index;
+
+	// debugging stuff
+	if (pStrip2->front()==pStrip1->front())
+    {
+		// retreiving first element
+		pStrip2->pop_front();
+		// adding the rest to strip1
+		for (pos=pStrip2->begin(); pos!=pStrip2->end();pos++)
+		{
+			index=(*pos);
+			if(!_ASSERT_MERGE_RET_(index>=0,"clist_contour::MergeStrips::0",pStrip2)) return false;
+			pStrip1->insert(pStrip1->begin(),index);
+		}
+		pStrip2->clear();
+		return true;
+    }
+	
+	if (pStrip2->front()==pStrip1->back())
+    {
+		pStrip2->pop_front();
+		// adding the rest to strip1
+		for (pos=pStrip2->begin(); pos!=pStrip2->end();pos++)
+		{
+			index=(*pos);
+			if(!_ASSERT_MERGE_RET_(index>=0,"clist_contour::MergeStrips::1",pStrip2)) return false;
+			pStrip1->insert(pStrip1->end(),index);
+		}
+		pStrip2->clear();
+		return true;
+    }
+	
+	if (pStrip2->back()==pStrip1->front())
+    {
+		pStrip2->pop_back();
+		// adding the rest to strip1
+		for (rpos=pStrip2->rbegin(); rpos!=pStrip2->rend();rpos++)
+		{
+			index=(*rpos);
+			if(!_ASSERT_MERGE_RET_(index>=0,"clist_contour::MergeStrips::2",pStrip2)) return false;
+			pStrip1->insert(pStrip1->begin(),index);
+		}
+		pStrip2->clear();
+		return true;
+    }
+	
+	if (pStrip2->back()==pStrip1->back())
+    {
+		pStrip2->pop_back();
+		// adding the rest to strip1
+		for (rpos=pStrip2->rbegin(); rpos!=pStrip2->rend();rpos++)
+		{
+			index=(*rpos);
+			if(!_ASSERT_MERGE_RET_(index>=0,"clist_contour::MergeStrips::3",pStrip2)) return false;
+			pStrip1->insert(pStrip1->end(),index);
+		}
+		pStrip2->clear();
+		return true;
+    }
+	
+	return false;
+}
+
+inline bool clist_contour::compact_strips ()
+{
+	cline_strip* pStrip;
+	cline_strip* pStripBase = 0;
+	UINT i;
+	cline_strip_list::iterator pos,pos2;
+	cline_strip_list newList;
+	bool again, changed;	
+	
+	const double weldDist = 10*(m_dDx*m_dDx+m_dDy*m_dDy);
+
+	if(!_ASSERT_RET_(m_vStripLists.size() == get_number_of_planes(),"clist_contour::compact_strips ::0")) return false;
+	for (i=0;i<get_number_of_planes();i++)
+	{
+		double planeHeight = get_plane(i);
+		again=true;
+		while(again)
+		{
+			// REPEAT COMPACT PROCESS UNTILL LAST PROCESS MAKES NO CHANGE
+			
+			again=false;
+			// building compacted list
+			if(!_ASSERT_RET_(newList.empty(),"clist_contour::compact_strips ::1")) return false;
+			for (pos=m_vStripLists[i].begin(); pos!=m_vStripLists[i].end();pos++)
+			{
+				pStrip=(*pos);
+				for (pos2=newList.begin(); pos2!=newList.end();pos2++)
+				{
+					pStripBase=(*pos2);
+					changed=MergeStrips(pStripBase,pStrip);
+					if (changed)
+						again=true;
+					if (pStrip->empty())
+						break;
+				}
+				if (pStrip->empty())
+					delete pStrip;
+				else
+					newList.insert(newList.begin(),pStrip);
+			}
+			
+
+			// deleting old list
+			m_vStripLists[i].clear();
+			cline_strip* pStrip2;
+			// Copying all
+			for (pos2=newList.begin(); pos2 != newList.end(); pos2++)
+			{
+				pStrip2=(*pos2);
+				cline_strip::iterator pos1 = pStrip2->begin(),pos3;
+				while (pos1!=pStrip2->end()) 
+				{
+					pos3 = pos1;
+					pos3++;
+					if (pos3==pStrip2->end()) break; //G.Barrand
+					if ( (*pos1) == (*pos3))
+					{
+					  /*G.Barrand : we can't compare with pStrip2->end() content.
+						if ( (*pos3) != (*pStrip2->end()))
+							pStrip2->erase(pos3);
+						else
+						{
+							pStrip2->erase(pos3);
+							break;
+						}
+					  */
+   					  pStrip2->erase(pos3); //G.Barrand.
+					}
+					else
+						pos1++;
+				}
+				
+				//if (!(pStrip2->front()==pStrip2->back() && pStrip2->size()==2))
+				if (pStrip2->size()!=1) 	
+					m_vStripLists[i].insert(m_vStripLists[i].begin(),pStrip2 );
+				else 
+					delete pStrip2;
+			}
+			// emptying temp list
+			newList.clear();
+			
+		} // OF WHILE(AGAIN) (LAST COMPACT PROCESS MADE NO CHANGES)
+
+	
+		if (m_vStripLists[i].empty())
+			continue;
+		///////////////////////////////////////////////////////////////////////
+		// compact more
+		int index,count;
+		size_t Nstrip,j;
+
+		Nstrip = m_vStripLists[i].size(); 
+		std::vector<bool> closed(Nstrip);
+		double x,y;
+
+		// First let's find the open and closed lists in m_vStripLists
+		for(pos2 = m_vStripLists[i].begin(), j=0, count=0; pos2 != m_vStripLists[i].end(); pos2++, j++) 
+		{
+			pStrip = (*pos2);
+
+			// is it open ?
+			if (pStrip->front() != pStrip->back()) 
+			{
+				index = pStrip->front();
+				x = get_xi(index); y = get_yi(index);
+				index = pStrip->back();
+				x -= get_xi(index); y -= get_yi(index);
+				
+				// is it "almost closed" ?
+				if ((x*x+y*y < weldDist) ||
+                                    SpecialCompactStripCase(get_xi(pStrip->front()), // L.Garnier
+                                                            get_xi(pStrip->back()),
+                                                            get_yi(pStrip->front()),
+                                                            get_yi(pStrip->back()),
+                                                            planeHeight))
+                                {
+                                        closed[j] = true; 
+                                        // close it !!! Added by L.Garnier
+                                        pStrip->push_back(pStrip->front());
+                                        //
+                                }
+				else 
+				{ 
+					closed[j] = false; 
+					// updating not closed counter...
+					count ++; 
+				}
+			} 
+			else 
+				closed[j] = true;
+		}
+		
+		// is there any open strip ?
+		if (count > 1) 
+		{ 
+			// Merge the open strips into NewList
+			pos = m_vStripLists[i].begin();
+			for(j=0;j<Nstrip;j++) 
+			{
+				if (closed[j] == false ) 
+				{
+					pStrip = (*pos);
+					newList.insert(newList.begin(),pStrip);	
+					pos = m_vStripLists[i].erase(pos);
+				}
+				else 
+					pos ++;
+			}
+			
+			// are they open strips to process ?
+			while(newList.size()>1) 
+			{
+				pStripBase = newList.front();
+				
+				// merge the rest to pStripBase
+				again = true;
+				while (again) 
+				{
+					again = false;
+					pos = newList.begin(); 
+					for(pos++; pos!=newList.end();) 
+					{
+						pStrip = (*pos);
+						changed = ForceMerge(pStripBase,pStrip,planeHeight);
+						if (changed) 
+						{ 
+							again = true;
+							delete pStrip;
+							pos = newList.erase(pos);
+						} 
+						else 
+							pos ++;
+					}		      
+				} // while(again)
+
+				index = pStripBase->front();
+				x = get_xi(index); y = get_yi(index);
+				index = pStripBase->back();
+				x -= get_xi(index); y -= get_yi(index);
+				// if pStripBase is closed or not
+
+				if ((x*x+y*y < weldDist) ||
+                                    SpecialCompactStripCase(get_xi(pStripBase->front()), // L.Garnier
+                                                            get_xi(pStripBase->back()),
+                                                            get_yi(pStripBase->front()),
+                                                            get_yi(pStripBase->back()),
+                                                            planeHeight))
+                                {
+
+                                  // close it !!! Added by L.Garnier
+                                  if ((x!=0) || (y!=0)) {
+                                    pStripBase->push_back(pStripBase->front());
+                                  }
+                                  //
+                                  m_vStripLists[i].insert(m_vStripLists[i].begin(),pStripBase);
+                                  newList.pop_front();
+				}
+				else 
+				{			
+					if (OnBoundary(pStripBase)) 
+					{
+						_TRACE_(_TT("# open strip ends on boundary, continue.\n"));
+						m_vStripLists[i].insert(m_vStripLists[i].begin(),pStripBase);
+						newList.pop_front();
+					}
+					else 
+					{
+						_PROBLEM_(_TT("unpaird open strip at 1!\n"));
+						//exit(0);
+						return false;
+					}
+				}
+			} // while(newList.size()>1);
+
+
+			if (newList.size() ==1) 
+			{
+				pStripBase = newList.front();
+				index = pStripBase->front(); // L.Garnier
+				x = get_xi(index); y = get_yi(index); // L.Garnier
+				index = pStripBase->back(); // L.Garnier
+				x -= get_xi(index); y -= get_yi(index); // L.Garnier
+				
+				// is it "almost closed", give last chance...5*weldDist
+				if (x*x+y*y < 3*weldDist) // L.Garnier
+				{
+					m_vStripLists[i].insert(m_vStripLists[i].begin(),pStripBase);
+					newList.pop_front();
+				}
+				else if (OnBoundary(pStripBase)) 
+				{
+					_TRACE_(_TT("# open strip ends on boundary, continue.\n"));
+					m_vStripLists[i].insert(m_vStripLists[i].begin(),pStripBase);
+					newList.pop_front();
+				}
+				else 
+				{
+					_PROBLEM_(_TT("unpaird open strip at 2!\n"));
+					DumpPlane(i);
+					//exit(0);
+					return false;
+				}
+			}
+			
+			newList.clear();
+			
+		} 
+		else if (count == 1) 
+		{
+			pos = m_vStripLists[i].begin();
+			for(j=0;j<Nstrip;j++) 
+			{
+				if (closed[j] == false ) 
+				{
+					pStripBase = (*pos);
+					break;
+				}
+				pos ++;
+			}
+			index = pStripBase->front(); // L.Garnier
+			x = get_xi(index); y = get_yi(index); // L.Garnier
+			index = pStripBase->back(); // L.Garnier
+			x -= get_xi(index); y -= get_yi(index); // L.Garnier
+       			
+			// is it "almost closed", give last chance...5*weldDist
+			if (x*x+y*y < 2*weldDist) // L.Garnier
+			{
+			  //close it!!
+			  pStripBase->push_back(pStripBase->front()); // L.Garnier
+			}
+			else if (OnBoundary(pStripBase)) 
+			{
+				_TRACE_(_TT("# open strip ends on boundary, continue.\n"));
+				pStripBase->push_back(pStripBase->front()); // L.Garnier
+			} 
+			else 
+			{
+				_TRACE_(_TT("unpaird open strip at 3!"));
+				DumpPlane(i);
+				return false;  // L.Garnier
+				//exit(0);
+			}
+			newList.clear();  // L.Garnier
+		}
+	}
+        return true;
+}
+
+
+inline bool clist_contour::OnBoundary(cline_strip* pStrip) 
+{
+	bool e1,e2;
+
+	int index = pStrip->front();
+	double x = get_xi(index), y = get_yi(index);
+	if (x==m_pLimits[0] || x == m_pLimits[1] || 
+		y == m_pLimits[2] || y == m_pLimits[3])
+		e1 = true;
+	else 
+		e1 = false;
+	
+	index = pStrip->back();
+	x = get_xi(index); y = get_yi(index);
+	if (x==m_pLimits[0] || x == m_pLimits[1] || 
+		y == m_pLimits[2] || y == m_pLimits[3])
+		e2 = true;
+	else 
+		e2 = false;
+	
+	return (e1 && e2);
+}
+
+inline void clist_contour::DumpPlane(UINT iPlane) const
+{
+	cline_strip_list::const_iterator pos;
+	UINT i;
+	cline_strip* pStrip;
+	
+	/*_ASSERT_(iPlane>=0,"clist_contour::DumpPlane");*/
+	_ASSERT_(iPlane<get_number_of_planes(),"clist_contour::DumpPlane::0");
+	_TRACE_(_TT("Level : %d"),get_plane(iPlane));
+	
+	_TRACE_(_TT("Number of strips : %d\r\n"),m_vStripLists[iPlane].size());
+	_TRACE_(_TT("i np start end xstart ystart xend yend\r\n"));
+	for (pos = m_vStripLists[iPlane].begin(), i=0; pos != m_vStripLists[iPlane].end(); pos++, i++)
+	{
+		pStrip=*pos;
+		_ASSERTP_(pStrip,"clist_contour::DumpPlane::1");
+		_TRACE_(_TT("%d %d %d %d %g %g %g %g\r\n"),i,pStrip->size(),pStrip->front(),pStrip->back(),
+			get_xi(pStrip->front()),get_yi(pStrip->front()),
+			get_xi(pStrip->back()),get_yi(pStrip->back()) );
+	}
+}
+
+inline double clist_contour::Area(cline_strip* Line) 
+{
+	// if Line is not closed, return 0;
+	
+	double Ar = 0, x, y, x0,y0,x1, y1;
+	int index;
+	
+	cline_strip::iterator pos;
+	pos = Line->begin();
+	index = (*pos);
+	x0 = x =  get_xi(index);
+	y0 = y =  get_yi(index);
+	
+	pos ++;
+	
+	for(;pos!=Line->end();pos++) 
+	{
+		index = (*pos);  
+		x1 = get_xi(index);
+		y1 = get_yi(index);
+		// Ar += (x1-x)*(y1+y);
+		Ar += (y1-y)*(x1+x)-(x1-x)*(y1+y);
+		x = x1;
+		y = y1;  
+		
+	}
+	
+	
+	//Ar += (x0-x)*(y0+y);
+	Ar += (y0-y)*(x0+x)-(x0-x)*(y0+y);
+	// if not closed curve, return 0;
+	if ((x0-x)*(x0-x) + (y0-y)*(y0-y)>20*(m_dDx*m_dDx+m_dDy*m_dDy)) 
+	{
+		Ar = 0;
+		_TRACE_(_TT("# open curve!\n"));
+	}
+	//else   Ar /= -2;
+	else Ar/=4;
+	// result is \int ydex/2 alone the implicit direction.
+	return Ar;
+}
+
+inline double clist_contour:: EdgeWeight(cline_strip* pLine, double R) 
+{
+	cline_strip::iterator pos;
+	int count = 0,index;
+	double x,y;
+	for(pos = pLine->begin(); pos!=pLine->end(); pos++) 
+	{
+		index = (*pos);
+		x = get_xi(index); 
+		y = get_yi(index);
+		if (fabs(x) > R || fabs(y) > R) 
+			count ++;
+	}
+	return (double)count/pLine->size();
+}
+
+/*
+inline bool clist_contour::PrintContour(std::ostream& a_out) 
+{
+        std::streamsize old_prec = a_out.precision(3);
+	a_out << std::setprecision(10);
+	
+	UINT i, index;
+	cline_strip* pStrip;
+	cline_strip::iterator pos2;
+	cline_strip_list::iterator pos;
+	
+	for(i=0;i<get_number_of_planes();i++) {
+		for(pos = m_vStripLists[i].begin();pos!=m_vStripLists[i].end();pos++) 
+		{
+			pStrip = (*pos);
+			for(pos2 = pStrip->begin();pos2!=pStrip->end();pos2++) 
+			{
+			  index = (*pos2);
+  			  a_out << get_xi(index)<<"\t"<<get_yi(index)<<"\n";
+			}
+			a_out<<"\n";
+		}
+	}
+        a_out.precision(old_prec);
+	return true;
+	
+}
+*/
+
+//G.Barrand : from .h to .cxx to avoid _ASSERT_ in .h
+inline cline_strip_list* clist_contour::get_lines(unsigned int iPlane)	{
+  /*_ASSERT_(iPlane>=0);*/
+  _ASSERT_(iPlane<get_number_of_planes(),"clist_contour::get_lines");
+  return &m_vStripLists[iPlane];
+}
+
+// Added by L.Garnier
+inline bool clist_contour::SpecialCompactStripCase(double aXfront,double aXback,double aYfront,double aYback,double actualHeight) 
+{
+  // To solve the case of a list of strips 
+  // which appeared to be open but should correspond to a closed
+  // contour.
+  //  With the today generate() algorithm, it appears that we fall
+  // on this case when the begin and end points
+  // are on a horizontal or vertical line.
+  // (case where front()->x == back()->x or front()->y == back()->y).
+  //  We try to detect in this method this situation and decide to close
+  // or not the line. To do that we check the heigth of intermediate 
+  // points to see if there are on the same contour; if so we close
+  // the line (and return true), if not we do nothing (and return false).
+
+  // check if we could realy close it
+  float marge = 1; // *m_dDy or *m_dDx. 1 seems to be good and normal, but why
+                   // not 2 in certain cases???
+
+  double distToNext =0;
+  // try to get the correct hight
+  if (get_plane(0)>= actualHeight) {
+    return false;
+  }
+  if (get_number_of_planes() >1){
+    distToNext = get_plane(1)-get_plane(0);
+  } else {
+    return false;
+  }
+
+  if ((aYback-aYfront) == 0) {
+    double temp;
+    double av;
+    double eg;
+    double ap;
+
+    if (aXfront==m_pLimits[0] && aXback == m_pLimits[1]) return false;
+    if (aXfront==m_pLimits[1] && aXback == m_pLimits[0]) return false;
+
+    if (aXfront > aXback ) {
+      temp = aXfront;
+      aXfront = aXback;
+      aXback = temp;
+    }
+    for(double check=aXfront+m_dDx;
+        check<aXback;
+        check+=m_dDx) {
+      av = ((*m_pFieldFcn)(check,aYback-marge*m_dDy,m_pFieldFcnData)-actualHeight);
+      eg = ((*m_pFieldFcn)(check,aYback,m_pFieldFcnData)-actualHeight);
+      ap = ((*m_pFieldFcn)(check,aYback+marge*m_dDy,m_pFieldFcnData)-actualHeight);
+
+      if ((av>distToNext) && (ap>distToNext) && (eg>distToNext)) {
+        return false;
+      } else if ((av<0) && (ap<0) && (eg<0)) {
+        return false;
+      }
+    }
+    return true;
+  } else if ((aXback-aXfront) == 0) {
+    double temp;
+    double av;
+    double eg;
+    double ap;
+    if (aYfront==m_pLimits[3] && aYback == m_pLimits[2]) return false;
+    if (aYfront==m_pLimits[2] && aYback == m_pLimits[3]) return false;
+
+    if (aYfront > aYback ) {
+      temp = aYfront;
+      aYfront = aYback;
+      aYback = temp;
+    }
+
+    for(double check=aYfront+m_dDy;
+        check<aYback;
+        check+=m_dDy) {
+      av = ((*m_pFieldFcn)(aXback-marge*m_dDx,check,m_pFieldFcnData)-actualHeight);
+      eg = ((*m_pFieldFcn)(aXback,check,m_pFieldFcnData)-actualHeight);
+      ap = ((*m_pFieldFcn)(aXback+marge*m_dDx,check,m_pFieldFcnData)-actualHeight);
+      if ((av>distToNext) && (ap>distToNext) && (eg>distToNext)) {
+        return false;
+      } else if ((av<0) && (ap<0) && (eg<0)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
+}
+
+#endif

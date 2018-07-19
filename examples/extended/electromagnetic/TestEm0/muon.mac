@@ -1,0 +1,17 @@
+# $Id: $
+#
+/testem/det/setMat Copper
+#
+/process/eLoss/verbose 0
+/process/eLoss/CSDARange true
+/process/eLoss/maxKinEnergyCSDA 100 TeV
+/process/em/printParameters
+#
+/run/initialize
+#
+/gun/particle mu+
+/gun/energy 1 TeV
+#
+/run/setCut 1 mm
+#
+/run/beamOn 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh 79097 2014-02-14 16:08:35Z gcosmo $
+// $Id: G4SandiaTable.hh 96794 2016-05-09 10:09:30Z gcosmo $
 
 // class description
 //
@@ -51,11 +51,10 @@
 #ifndef G4SANDIATABLE_HH
 #define G4SANDIATABLE_HH
 
-#include <assert.h>
-
 #include "G4OrderedTable.hh"      
 #include "G4ios.hh"
 #include "globals.hh"
+#include <assert.h>
 #include <vector>
 
 #include <CLHEP/Units/PhysicalConstants.h>
@@ -90,10 +89,8 @@ public:  // with description
   G4double  GetSandiaMatTable(G4int,G4int) const;
   const G4double* GetSandiaCofForMaterial(G4double energy) const;
 
-  G4double  GetSandiaCofForMaterialPAI(G4int,G4int) const;
   G4double  GetSandiaMatTablePAI(G4int,G4int) const;
   const G4double* GetSandiaCofForMaterialPAI(G4double energy) const;
-  G4OrderedTable* GetSandiaMatrixPAI();
 
   inline void SetVerbose(G4int ver) { fVerbose = ver; };
 
@@ -110,26 +107,16 @@ private:
   void ComputeMatSandiaMatrixPAI();
 
   // methods per atom
-  G4int     GetNbOfIntervals(G4int Z);
-  G4double  GetSandiaPerAtom(G4int Z, G4int, G4int);
-  G4double  GetIonizationPot(G4int Z) const;
+  G4double  GetSandiaPerAtom(G4int Z, G4int, G4int) const;
 
-  // static members of the class
-  static const G4int      fNumberOfElements;
-  static const G4int      fIntervalLimit;
-  static const G4int      fNumberOfIntervals;  
-  static const G4int      fH2OlowerInt;
+#ifdef G4VERBOSE
+  static G4int PrintErrorZ(G4int Z, const G4String&);
+  static void PrintErrorV(const G4String&);
+#endif
 
-  static const G4double   fSandiaTable[981][5];
-  static const G4double   fH2OlowerI1[23][5];
-  static const G4int      fNbOfIntervals[101];
-  static const G4double   fZtoAratio[101];
-  static const G4double   fIonizationPotentials[101];
-  static const G4double   funitc[5];
-  static const G4double   fnulcof[4];
-               
   // computed once
-  static G4int            fCumulInterval[101];
+  static G4int    fCumulInterval[101];
+  static const G4double funitc[5];
 
   // used at initialisation
   std::vector<G4double>   fSandiaCofPerAtom;
@@ -148,18 +135,11 @@ private:
 
 public:  // without description
 
-  G4SandiaTable(G4int);	 
+  G4SandiaTable(G4int matIndex);
         
   G4SandiaTable();
 
   void Initialize(G4Material*);	         
-  // void Initialize(G4MaterialCutsCouple*);	         
-  void Initialize(G4int);	         
-
-
-  void SandiaSwap(G4double** da, G4int i, G4int j);
-
-  void SandiaSort(G4double** da, G4int sz);
 
   G4int SandiaIntervals(G4int Z[], G4int el);
 
@@ -170,21 +150,30 @@ public:  // without description
 
   G4int GetMaxInterval() const; 
 
-  G4double** GetPointerToCof(); 
-
-  G4bool GetLowerI1(){return fLowerI1;};
-  void SetLowerI1(G4bool flag){fLowerI1=flag;};
+  inline G4bool GetLowerI1() {return fLowerI1;};
+  inline void   SetLowerI1(G4bool flag) {fLowerI1=flag;};
 
 private:
 
   void ComputeMatTable();
 
+  void SandiaSwap(G4double** da, G4int i, G4int j);
+
+  void SandiaSort(G4double** da, G4int sz);
+
+  G4double** GetPointerToCof(); 
+
   // copy constructor and hide assignment operator
-  G4SandiaTable(G4SandiaTable &);
-  G4SandiaTable & operator=(const G4SandiaTable &right);
+  G4SandiaTable(G4SandiaTable &) = delete;
+  G4SandiaTable & operator=(const G4SandiaTable &right) = delete;
+
+  static const G4double fSandiaTable[981][5];
+  static const G4int fNumberOfElements;
+  static const G4int fIntervalLimit;
+  static const G4int fNumberOfIntervals;
+  static const G4int fH2OlowerInt;
 
   // data members for PAI model
-
   G4double** fPhotoAbsorptionCof;  // SandiaTable  for mixture
 
   G4int fMaxInterval ;

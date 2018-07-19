@@ -1,4 +1,4 @@
-$Id: History 102280 2017-01-20 09:09:11Z gcosmo $
+$Id: History 110273 2018-05-17 14:43:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,22 +17,89 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-December 7, 2016 M.Asai (event-V10-01-11)
+May 17th, 2018 J. Madsen (event-V10-04-07)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+April 30, 2018  M. Asai (event-V10-04-06)
+- Re-tagging event-V10-04-04 : Change the default stack to
+  G4TrackStak. Addressing to bug report #2040.
+
+April 2, 2018  M. Asai (event-V10-04-05)
+- Tag event-V10-04-04 is removed for the time being.
+- G4StackManager.cc : code clean up.
+
+March 16, 2018  M. Asai (event-V10-04-04)
+- Change the default stack to G4TrackStak. Addressing to bug
+  report #2040.
+
+February 8, 2018  Dennis Wright  (event-V10-04-03)
+- add deprecation warning for /gun/ionL in 
+  G4ParticleGunMessenger::SetNewValue()
+
+January 9, 2018, M.Asai (event-V10-04-02)
+- G4GeneralParticleSourceMessenger :
+  UI command returns an error message if a command is refused due
+  to incorrect parameter(s).
+- This tag requires intercoms-V10-04-01 tag.
+
+December 26, 2017, M.Asai (event-V10-04-01)
+- G4ParticleGunMessenger :
+  UI command returns an error message if a command is refused due
+  to incorrect parameter(s).
+- This tag requires intercoms-V10-04-01 tag.
+
+December 19, 2017, G.Cosmo (event-V10-04-00)
+- Fixed self-consistency in G4SPSRandomGenerator header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
+
+October 23, 2017, K.L.Genser (event-V10-03-04)
+- G4StackManager added #ifdef for the case when a particle IsMuonicAtom
+
+September 12, 2017, K.L.Genser (event-V10-03-03)
+- G4StackManager added a case when a particle IsMuonicAtom
+
+June 1, 2017 A.Dotti (event-V10-03-02)
+- Fixing gcc-7.1 warnings for fallthroughs in case statements
+  G4EventManager and G4StackingManager
+
+May 3, 2017 J.Allison (event-V10-03-01)
+- Added more access functions for use by G4GPSModel for visualisation.
+
+April 30, 2017 J.Allison (event-V10-03-00)
+- G4SPSPosDistribution.hh: Added GetRotx,y,z access functions.
+
+December 7, 2016 M.Asai (event-V10-02-09)
 - Set polarization to pre-assigned decay products. Addressing to
   bug report #1914.
 
-September 2nd, 2016 M.Asai (event-V10-01-10)
+September 2, 2016 M.Asai (event-V10-02-08)
 - Changed the way of deleting G4PrimaryVertex objects to avoid
   stack overflow for very large number of primary vertices.
 
-May 16th, 2016 A.Dotti (event-V10-01-09)
-- Fix typos and bug from bugzilla #1860.
+July 27, 2016 M.Asai (event-V10-02-06, -07)
+- Particle gun now can shoot ions with floating level base.
 
-April 20th, 2016  G.Cosmo
+July 22, 2016 L.Desorgher  (event-V10-02-05)
+- Modification of G4AdjointStackingAction to remove compilation error on Windows.
+
+July 21, 2016 L.Desorgher  (event-V10-02-04)
+- Modification of G4AdjointStackingAction 
+for the implementation of the splitting of the reverse MC tracking.
+
+May 16th, 2016 A.Dotti (event-V10-02-03)
+- Fix typos and bug from bugzilla #1860
+
+April 20th, 2016  G.Cosmo (event-V10-02-02)
 - Fixed shadowing compilation warnings in G4GeneralParticleSourceMessenger
   for 'ps'.
 
-December 28th, 2015 M.Asai
+January 19th, 2016  A.Dotti (event-V10-02-01)
+- Introducing G4MultiEventAction to allow multiple
+  user actions in the same job
+
+December 28th, 2015 M.Asai (event-V10-02-00)
 - Code clean-up.
 
 June 8th, 2015 A.Dotti (event-V10-01-08)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc 93359 2015-10-19 13:42:18Z gcosmo $
+// $Id: G4PenelopeIonisationModel.cc 99415 2016-09-21 09:05:43Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -615,7 +615,7 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
       energySecondary = 0.0;
     }
 
-  //Notice: shell might be NULL (invalid!) if shFlag=30. Must be protected
+  //Notice: shell might be nullptr (invalid!) if shFlag=30. Must be protected
   //Disable the built-in de-excitation of the PIXE flag is active. In this 
   //case, the PIXE interface takes care (statistically) of producing the 
   //de-excitation.

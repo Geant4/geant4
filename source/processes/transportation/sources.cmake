@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 110805 2018-06-15 06:52:15Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -51,6 +51,7 @@ GEANT4_DEFINE_MODULE(NAME G4transportation
         G4Transportation.icc
         G4UserSpecialCuts.hh
         G4VTrackTerminator.hh
+	G4TransportationLogger.hh
 	G4TransportationProcessType.hh
     SOURCES
         G4CoupledTransportation.cc
@@ -58,6 +59,7 @@ GEANT4_DEFINE_MODULE(NAME G4transportation
         G4NeutronKillerMessenger.cc
         G4StepLimiter.cc
         G4Transportation.cc
+	G4TransportationLogger.cc	
         G4UserSpecialCuts.cc
         G4VTrackTerminator.cc
     GRANULAR_DEPENDENCIES

@@ -45,14 +45,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det)
+SteppingAction::SteppingAction(RunAction* run,const DetectorConstruction* det)
 :fRun(run),fDetector(det)
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 SteppingAction::~SteppingAction()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -67,163 +67,132 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
    
   fMyCellParameterisation = CellParameterisation::Instance(); 
 
-  //
-
   // Material : 1 is cytoplasm, 2 is nucleus
 
   G4int matVoxelPRE = -1;
   G4int matVoxelPOST = -1;
-  G4int tmp=-1;
-  
-  tmp = aStep->GetPreStepPoint()->GetTouchableHandle()->GetReplicaNumber(); 
+
+  const G4StepPoint* preStep = aStep->GetPreStepPoint();
+  const G4StepPoint* postStep = aStep->GetPostStepPoint();
+  const G4Track* track = aStep->GetTrack();
+
+  const G4LogicalVolume* preVolume =
+    preStep->GetPhysicalVolume()->GetLogicalVolume();
+
+  const G4LogicalVolume* postVolume = nullptr;
+  if(postStep->GetPhysicalVolume()) 
+  {
+    postVolume = postStep->GetPhysicalVolume()->GetLogicalVolume();
+  }
+  const G4ParticleDefinition* particle = 
+    track->GetDynamicParticle()->GetDefinition();
+
+  G4int preReplicaNumber = preStep->GetTouchableHandle()->GetReplicaNumber(); 
+  G4double edep = aStep->GetTotalEnergyDeposit();
     
-  if (tmp>0)  
+  if (preReplicaNumber>0)  
   {
-    matVoxelPRE =  fMyCellParameterisation->GetTissueType(tmp);
+    matVoxelPRE =  fMyCellParameterisation->GetTissueType(preReplicaNumber);
+  }
+
+  if(postVolume) 
+  {
+    G4int postReplicaNumber = postStep->GetTouchableHandle()->GetReplicaNumber();
+    if (postReplicaNumber>0) 
+    {
+      matVoxelPOST = fMyCellParameterisation->GetTissueType(postReplicaNumber);
+    }
   }
   
-  tmp = aStep->GetPostStepPoint()->GetTouchableHandle()->GetReplicaNumber();
-  
-  if (tmp>0) 
-  {
-    matVoxelPOST =  fMyCellParameterisation->GetTissueType(tmp);
-  }
-  
-// COUNT GAS DETECTOR HITS
+  // COUNT GAS DETECTOR HITS
 
-if (       ((aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == fDetector->GetLogicalCollDetYoke())
-        &&  (aStep->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == fDetector->GetLogicalIsobutane())
-        &&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Alpha::AlphaDefinition() ))
-	
-        || 
-	   ((aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == fDetector->GetLogicalCollDetGap4())
-        &&  (aStep->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == fDetector->GetLogicalIsobutane())
-        &&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Alpha::AlphaDefinition() ))
-
+  if (particle == G4Alpha::AlphaDefinition()) 
+  { 
+    if(postVolume == fDetector->GetLogicalIsobutane() &&
+       ((preVolume == fDetector->GetLogicalCollDetYoke())
+	|| 
+	(preVolume == fDetector->GetLogicalCollDetGap4())
 	||
+	(preVolume == fDetector->GetLogicalCollDetGap4())))
+    {
+      fRun->AddNbOfHitsGas();	
+    }
+  
+    // STOPPING POWER AND BEAM SPOT SIZE AT CELL ENTRANCE
+    if(preVolume == fDetector->GetLogicalPolyprop() &&
+       ( (postVolume == fDetector->GetLogicalKgm()) || 
+	 (matVoxelPOST == 1)) )
+    {	
+      G4double deltaE = preStep->GetKineticEnergy() 
+	- postStep->GetKineticEnergy();
+      if(deltaE > 0.0) 
+      {
+	//Fill ntupleid=1 
+	man->FillNtupleDColumn(1,0,preStep->GetKineticEnergy()/keV);
+	man->FillNtupleDColumn(1,1,deltaE*micrometer/(keV*aStep->GetStepLength()));
+	man->AddNtupleRow(1);
+      }
 
-    	   ((aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == fDetector->GetLogicalCollDetGap4())
-        &&  (aStep->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == fDetector->GetLogicalIsobutane())
-        &&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Alpha::AlphaDefinition() ))
+      // Average dE over step suggested by Michel Maire
+      G4ThreeVector coord1 = preStep->GetPosition();
+      const G4AffineTransform transformation1 = 
+	preStep->GetTouchable()->GetHistory()->GetTopTransform();
+      G4ThreeVector localPosition1 = transformation1.TransformPoint(coord1);
 
-    )
-	{
-	  fRun->AddNbOfHitsGas();	
-	}
-	
-// STOPPING POWER AND BEAM SPOT SIZE AT CELL ENTRANCE
+      G4ThreeVector coord2 = postStep->GetPosition();
+      const G4AffineTransform transformation2 = 
+	postStep->GetTouchable()->GetHistory()->GetTopTransform();
+      G4ThreeVector localPosition2 = transformation2.TransformPoint(coord2);
 
-if (       ((aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == fDetector->GetLogicalPolyprop())
-        &&  (aStep->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == fDetector->GetLogicalKgm())
-        &&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Alpha::AlphaDefinition() ))
-	
-        || 
-	   ((aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == fDetector->GetLogicalPolyprop())
-        &&  (matVoxelPOST == 1)
-        &&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Alpha::AlphaDefinition() ))
-    )
-	{
-	
-	 if( (aStep->GetPreStepPoint()->GetKineticEnergy() - aStep->GetPostStepPoint()->GetKineticEnergy() ) >0) 
-	 {
-	   //Fill ntupleid=1 
-	   man->FillNtupleDColumn(1,0,aStep->GetPreStepPoint()->GetKineticEnergy()/keV);
-	   man->FillNtupleDColumn(1,1,
-				  (aStep->GetPreStepPoint()->GetKineticEnergy() -
-				   aStep->GetPostStepPoint()->GetKineticEnergy())/
-				  keV/(aStep->GetStepLength()/micrometer));
-	   man->AddNtupleRow(1);
-	 }
-
-         // Average dE over step suggested by Michel Maire
-
-	 G4StepPoint* p1 = aStep->GetPreStepPoint();
-         G4ThreeVector coord1 = p1->GetPosition();
-         const G4AffineTransform transformation1 = p1->GetTouchable()->GetHistory()->GetTopTransform();
-         G4ThreeVector localPosition1 = transformation1.TransformPoint(coord1);
-
-	 G4StepPoint* p2 = aStep->GetPostStepPoint();
-         G4ThreeVector coord2 = p2->GetPosition();
-         const G4AffineTransform transformation2 = p2->GetTouchable()->GetHistory()->GetTopTransform();
-         G4ThreeVector localPosition2 = transformation2.TransformPoint(coord2);
-
-         G4ThreeVector localPosition = localPosition1 + G4UniformRand()*(localPosition2-localPosition1);
+      G4ThreeVector localPosition = 
+	localPosition1 + G4UniformRand()*(localPosition2-localPosition1);
 	 
-	 // end
-	 
-	 //Fill ntupleid=2
-	 man->FillNtupleDColumn(2,0,localPosition.x()/micrometer);
-	 man->FillNtupleDColumn(2,1,localPosition.y()/micrometer);
-	 man->AddNtupleRow(2);
-	}
+      //Fill ntupleid=2
+      man->FillNtupleDColumn(2,0,localPosition.x()/micrometer);
+      man->FillNtupleDColumn(2,1,localPosition.y()/micrometer);
+      man->AddNtupleRow(2);
+    }
 
-// ALPHA RANGE
+    // ALPHA RANGE
+    if (postStep->GetKineticEnergy() < eV && 
+	( (matVoxelPOST==1) ||
+	  (postVolume == fDetector->GetLogicalKgm()) ||	
+	  (matVoxelPOST==2) ) )
+    {
+      //Fill ntupleid=3
+      man->FillNtupleDColumn(3,0,postStep->GetPosition().x()/micrometer);
+      man->FillNtupleDColumn(3,1,postStep->GetPosition().y()/micrometer);
+      man->FillNtupleDColumn(3,2,postStep->GetPosition().z()/micrometer);
+      man->AddNtupleRow(3);
+    }
+    
+    // TOTAL DOSE DEPOSIT AND DOSE DEPOSIT WITHIN A PHANTOM VOXEL
+    // FOR ALL PARTICLES
+  }
 
-if (
+  if (matVoxelPRE  == 2)
+  { 
+    G4double dose = (edep/joule)/(fRun->GetMassNucleus()/kg);
+    fRun->AddDoseN(dose);
+    fRun->AddDoseBox(preReplicaNumber, edep/eV);
+  }
+  else if (matVoxelPRE  == 1)
+  { 
+    G4double dose = (edep/joule)/(fRun->GetMassCytoplasm()/kg);
+    fRun->AddDoseC(dose);
+    fRun->AddDoseBox(preReplicaNumber, edep/eV);
+  }
 
-	(aStep->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Alpha::AlphaDefinition())
-	
-	&&
-	
-	(aStep->GetTrack()->GetKineticEnergy()<1e-6)
-	
-	&&
-			
-          ( (matVoxelPOST==1)
-	||  (aStep->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == fDetector->GetLogicalKgm())	
-	||  (matVoxelPOST==2) )	
-		
-   )
-	
-	{
-	   //Fill ntupleid=3
-	  man->FillNtupleDColumn(3,0,
-				 aStep->GetPostStepPoint()->GetPosition().x()/micrometer);
-	  man->FillNtupleDColumn(3,1,
-				 aStep->GetPostStepPoint()->GetPosition().y()/micrometer);
-	  man->FillNtupleDColumn(3,2,
-				 aStep->GetPostStepPoint()->GetPosition().z()/micrometer);
-	  man->AddNtupleRow(3);
- 	}
+  // PROTECTION AGAINST POSSIBLE MSC LOOPS FOR e-
 
-// TOTAL DOSE DEPOSIT AND DOSE DEPOSIT WITHIN A PHANTOM VOXEL
-// FOR ALL PARTICLES
-
-if (matVoxelPRE  == 2)
-
-	{ 
-   	 G4double dose = (aStep->GetTotalEnergyDeposit()/joule)/(fRun->GetMassNucleus()/kg);
-   	 fRun->AddDoseN(dose);
-
-	 G4ThreeVector v;
-    	 fRun->AddDoseBox(aStep->GetPreStepPoint()->GetTouchableHandle()->GetReplicaNumber(),
-	  aStep->GetTotalEnergyDeposit()/eV);
-	}
-
-
-if (matVoxelPRE  == 1)
-
-	{ 
-   	 G4double dose = (aStep->GetTotalEnergyDeposit()/joule)/(fRun->GetMassCytoplasm()/kg);
-   	 fRun->AddDoseC(dose);
-
-	 G4ThreeVector v;
-    	 fRun->AddDoseBox(aStep->GetPreStepPoint()->GetTouchableHandle()->GetReplicaNumber(),
-	  aStep->GetTotalEnergyDeposit()/eV);
- 	}
-
-// PROTECTION AGAINST MSC LOOPS FOR e-
-
-if ( aStep->GetTotalEnergyDeposit()/MeV<1e-25
-     && aStep->GetTrack()->GetDefinition()==G4Electron::ElectronDefinition()) 
-{
-  aStep->GetTrack()->SetTrackStatus(fStopAndKill);
-  /*
-  G4cout << "*** Warning *** : msc loop for " 
-    << aStep->GetTrack()->GetDefinition()->GetParticleName() 
-    << " in " << 
-    aStep->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetName() << G4endl;
-  */
-}
-
+  //  if ( edep/MeV<1e-25 && particle == G4Electron::Electron()) 
+  //  {
+      //aStep->GetTrack()->SetTrackStatus(fStopAndKill);
+      /*
+	G4cout << "*** Warning *** : msc loop for " 
+	<< track->GetDefinition()->GetParticleName() 
+	<< " in " << 
+	postPoint->GetTouchableHandle()->GetVolume()->GetName() << G4endl;
+      */
+  //  }
 }

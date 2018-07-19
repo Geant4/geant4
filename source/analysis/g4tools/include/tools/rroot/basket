@@ -15,6 +15,7 @@ namespace tools {
 namespace rroot {
 
 class basket : public virtual iro, public key {
+  typedef key parent;
   static uint32 kDisplacementMask() {return 0xFF000000;}
 public:
   static const std::string& s_class() {
@@ -40,7 +41,7 @@ public:
 
     uint32 startpos = a_buffer.length();
 
-    if(!key::from_buffer(a_buffer.eob(),a_buffer.pos())) return false;
+    if(!parent::from_buffer(a_buffer.byte_swap(),a_buffer.eob(),a_buffer.pos(),a_buffer.verbose())) return false;
 
     uint32 fBufferSize;
 
@@ -56,7 +57,7 @@ public:
 
     uint16 basket_key_length = a_buffer.length()-startpos;
     if(basket_key_length!=m_key_length) {
-      //m_file.out() << "tools::rroot::basket::stream :"
+      //m_out << "tools::rroot::basket::stream :"
       //             << " key length not consistent."
       //             << " read " << m_key_length
       //             << ", expected " << basket_key_length
@@ -65,7 +66,7 @@ public:
       m_key_length = basket_key_length;
     }
     if(!m_object_size) {
-      //m_file.out() << "tools::rroot::basket::stream :"
+      //m_out << "tools::rroot::basket::stream :"
       //             << " m_object_size is found to be zero."
       //             << " Continue with (m_nbytes-m_key_length) "
       //             << (m_nbytes-m_key_length)
@@ -80,7 +81,7 @@ public:
         (flag!=11)&&(flag!=12) &&
         (flag!=41)&&(flag!=42) &&
         (flag!=51)&&(flag!=52) ) {
-      m_file.out() << "tools::rroot::basket::stream :"
+      m_out << "tools::rroot::basket::stream :"
                    << " bad flag " << (int)flag
                    << std::endl; 
       return false;
@@ -90,12 +91,12 @@ public:
       //due to the upper "G.Barrand if", flag is here in {1,11,41,51}
 
       if(!m_nev_buf_size) {
-        m_file.out() << "tools::rroot::basket::stream :" 
+        m_out << "tools::rroot::basket::stream :" 
                      << " m_nev_buf_size is zero." << std::endl; 
         return false;
       }
       if(m_nev>m_nev_buf_size) {
-        m_file.out() << "tools::rroot::basket::stream :" 
+        m_out << "tools::rroot::basket::stream :" 
                      << " m_nev>m_nev_buf_size !"
                      << " m_nev " << m_nev
                      << " m_nev_buf_size " << m_nev_buf_size
@@ -110,7 +111,7 @@ public:
           return false;
         }
         if((n!=m_nev)&&(n!=(m_nev+1))) {
-          m_file.out() << "tools::rroot::basket::stream :" 
+          m_out << "tools::rroot::basket::stream :" 
                        << " m_entry_offset read len mismatch."
                        << " n " << n
                        << " m_nev " << m_nev
@@ -134,7 +135,7 @@ public:
           return false;
         }
         if((n!=m_nev)&&(n!=(m_nev+1))) {
-          m_file.out() << "tools::rroot::basket::stream :" 
+          m_out << "tools::rroot::basket::stream :" 
                        << " m_displacement read len mismatch."
                        << " n " << n
                        << " m_nev " << m_nev
@@ -153,7 +154,7 @@ public:
       if(fBufferSize) {
         char* _buf = new char[fBufferSize];
         if(!_buf) {
-          m_file.out() << "tools::rroot::basket::stream :" 
+          m_out << "tools::rroot::basket::stream :" 
                        << " can't alloc " << fBufferSize << std::endl; 
           _clear();
           return false;
@@ -182,8 +183,8 @@ public:
     return true;
   }
 public:
-  basket(ifile& a_file)
-  :key(a_file)
+  basket(std::ostream& a_out)
+  :parent(a_out)
   ,m_nev_buf_size(0)
   ,m_nev(0)
   ,m_last(0)
@@ -194,8 +195,8 @@ public:
     mem::increment(s_class().c_str());
 #endif
   }
-  basket(ifile& a_file,seek a_pos,uint32 a_nbytes)
-  :key(a_file,a_pos,a_nbytes)
+  basket(std::ostream& a_out,seek a_pos,uint32 a_nbytes)
+  :parent(a_out,a_pos,a_nbytes)
   ,m_nev_buf_size(0)
   ,m_nev(0)
   ,m_last(0)
@@ -215,7 +216,7 @@ public:
 public:
   basket(const basket& a_from)
   :iro(a_from)
-  ,key(a_from)
+  ,parent(a_from)
   ,m_nev_buf_size(a_from.m_nev_buf_size)
   ,m_nev(a_from.m_nev)
   ,m_last(a_from.m_last)
@@ -228,7 +229,7 @@ public:
     if(a_from.m_nev && a_from.m_entry_offset) {
       m_entry_offset = new int[a_from.m_nev];
       if(!m_entry_offset) {
-        m_file.out() << "tools::rroot::basket::basket(cpcstor) :"
+        m_out << "tools::rroot::basket::basket(cpcstor) :"
                      << " can't alloc " << a_from.m_nev << "." 
                      << std::endl;
       } else {
@@ -239,7 +240,7 @@ public:
     if(a_from.m_nev && a_from.m_displacement) {
       m_displacement = new int[a_from.m_nev];
       if(!m_displacement) {
-        m_file.out() << "tools::rroot::basket::basket(cpcstor) :"
+        m_out << "tools::rroot::basket::basket(cpcstor) :"
                      << " can't alloc " << a_from.m_nev << "." 
                      << std::endl;
       } else {
@@ -249,7 +250,7 @@ public:
     }    
   }
   basket& operator=(const basket& a_from){
-    key::operator=(a_from);
+    parent::operator=(a_from);
 
     if(&a_from==this) return *this;
 
@@ -265,7 +266,7 @@ public:
     if(a_from.m_nev && a_from.m_entry_offset) {
       m_entry_offset = new int[a_from.m_nev];
       if(!m_entry_offset) {
-        m_file.out() << "tools::rroot::basket::operator=() :"
+        m_out << "tools::rroot::basket::operator=() :"
                      << " can't alloc " << a_from.m_nev << "." 
                      << std::endl;
       } else {
@@ -276,7 +277,7 @@ public:
     if(a_from.m_nev && a_from.m_displacement) {
       m_displacement = new int[a_from.m_nev];
       if(!m_displacement) {
-        m_file.out() << "tools::rroot::basket::operator=() :"
+        m_out << "tools::rroot::basket::operator=() :"
                      << " can't alloc " << a_from.m_nev << "." 
                      << std::endl;
       } else {
@@ -292,27 +293,27 @@ public:
   int* displacement() {return m_displacement;}
   uint32 nev_buf_size() const {return m_nev_buf_size;}
   uint32 nev() const {return m_nev;}
+  uint32 last() const {return m_last;}
 
-  bool read_offset_tables() {
+  bool read_offset_tables(bool a_byte_swap) {
     if(!m_buffer) return false;    
     if(!m_last) return false;    
 
     delete [] m_entry_offset;
     m_entry_offset = 0;
 
-    rroot::buffer buffer(m_file.out(),m_file.byte_swap(),
-                         m_buf_size,m_buffer,0,false); 
+    rroot::buffer buffer(m_out,a_byte_swap,m_buf_size,m_buffer,0,false); 
     buffer.set_offset(m_last);
 
    {uint32 n;
     if(!buffer.read_array<int>(0,m_entry_offset,n)) {
-      m_file.out() << "tools::rroot::basket::read_offset_tables :"
+      m_out << "tools::rroot::basket::read_offset_tables :"
                    << " read_array failed."
                    << std::endl;
       return false;
     }
     if((n!=m_nev)&&(n!=(m_nev+1))) {
-      m_file.out() << "tools::rroot::basket::read_offset_tables :"
+      m_out << "tools::rroot::basket::read_offset_tables :"
                    << " m_entry_offset read len mismatch."
                    << " n " << n
                    << " m_nev " << m_nev
@@ -327,13 +328,13 @@ public:
       // array.
       uint32 n;
       if(!buffer.read_array<int>(0,m_displacement,n)) {
-        m_file.out() << "tools::rroot::basket::read_offset_tables :"
+        m_out << "tools::rroot::basket::read_offset_tables :"
                      << " readArray(2) failed."
                      << std::endl;
         return false;
       }
       if((n!=m_nev)&&(n!=(m_nev+1))) {
-        m_file.out() << "tools::rroot::basket::read_offset_tables :"
+        m_out << "tools::rroot::basket::read_offset_tables :"
                      << " m_displacement read len mismatch."
                      << " n " << n
                      << " m_nev " << m_nev

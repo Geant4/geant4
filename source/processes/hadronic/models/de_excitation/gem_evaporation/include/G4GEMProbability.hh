@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMProbability.hh 91834 2015-08-07 07:24:22Z gcosmo $
+// $Id: G4GEMProbability.hh 103162 2017-03-20 09:40:58Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -59,22 +59,14 @@ public:
     
   virtual ~G4GEMProbability();
 
-  G4double EmissionProbability(const G4Fragment & fragment, G4double anEnergy);
+  // not used for evaporation
+  virtual G4double EmissionProbability(const G4Fragment& fragment,
+				       G4double maxKineticEnergy);
 
   void Dump() const;
 
-  inline G4int GetZ_asInt(void) const;
-	
-  inline G4int GetA_asInt(void) const;
-	
-  inline G4double GetZ(void) const;
-	
-  inline G4double GetA(void) const;
-
   inline G4double GetSpin(void) const;
 
-  //  inline G4double GetNormalization(void) const;
-    
   inline void SetCoulomBarrier(const G4VCoulombBarrier * aCoulombBarrierStrategy);
 
   inline G4double GetCoulombBarrier(const G4Fragment& fragment) const; 
@@ -108,9 +100,6 @@ private:
   G4PairingCorrection* fPairCorr;
     
   G4VLevelDensityParameter * theEvapLDPptr;
-	
-  G4int theA;
-  G4int theZ;
     
   // Spin is fragment spin
   G4double Spin;
@@ -133,36 +122,11 @@ protected:
 
 };
 
-inline G4int G4GEMProbability::GetZ_asInt(void) const 
-{ 
-  return theZ; 
-}
-	
-inline G4int G4GEMProbability::GetA_asInt(void) const 
-{ 
-  return theA;
-}
-	
-inline G4double G4GEMProbability::GetZ(void) const 
-{ 
-  return theZ; 
-}
-	
-inline G4double G4GEMProbability::GetA(void) const 
-{ 
-  return theA;
-}
-
 inline G4double G4GEMProbability::GetSpin(void) const 
 { 
   return Spin; 
 }
-/*
-inline G4double G4GEMProbability::GetNormalization(void) const 
-{ 
-  return Normalization; 
-}
-*/  
+
 inline void 
 G4GEMProbability::SetCoulomBarrier(const G4VCoulombBarrier * aCoulombBarrierStrategy)
 {
@@ -204,10 +168,10 @@ inline G4double G4GEMProbability::CalcAlphaParam(const G4Fragment & fragment) co
   //JMQ 190709 values according to Furihata's paper (based on notes added 
   //on proof in Dostrovskii's paper)
   G4double res;
-  if(GetZ_asInt() == 0) {
-    res = 0.76+1.93/fG4pow->Z13(fragment.GetA_asInt()-GetA_asInt());
+  if(theZ == 0) {
+    res = 0.76+1.93/fG4pow->Z13(fragment.GetA_asInt()-theA);
   } else {
-    res = 1.0 + CCoeficient(fragment.GetZ_asInt()-GetZ_asInt());
+    res = 1.0 + CCoeficient(fragment.GetZ_asInt()-theZ);
   }
   return res;
 }
@@ -218,8 +182,8 @@ G4GEMProbability::CalcBetaParam(const G4Fragment & fragment) const
   //JMQ 190709 values according to Furihata's paper (based on notes added 
   //on proof in Dostrovskii's paper)
   G4double res;
-  if(GetZ_asInt() == 0) {
-    res = (1.66/fG4pow->Z23(fragment.GetA_asInt()-GetA_asInt())-0.05)*CLHEP::MeV/
+  if(theZ == 0) {
+    res = (1.66/fG4pow->Z23(fragment.GetA_asInt()-theA)-0.05)*CLHEP::MeV/
 	   CalcAlphaParam(fragment);
   } else {
     res = -GetCoulombBarrier(fragment);

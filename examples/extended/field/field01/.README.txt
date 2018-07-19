@@ -6,10 +6,61 @@
 /*! \page Examplefield01 Example field01
 
  Example enabling investigation of tracking in a magnetic field.
- Electromagnetic processes also included.
 
 	
-\section field01_s1 GEOMETRY DEFINITION
+  The key capabilities of this example are creting a uniform magnetic
+  field interactively using the field messenger.
+
+  The capabilities are demonstrated in the field.in file:
+  \verbatim
+     /field/setStepperType 4
+     /field/setMinStep 0.1 mm  
+     /field/update
+  \endverbatim
+
+   There are several potential choices of the stepper type. Here are some suggestions:
+   \verbatim
+   ===========================================================================
+   Number  Name of Stepper      Comments
+   ===========================================================================
+   Recommended - new in Geant4 10.3-beta:
+   
+     15 - Dormand Prince 745 : well-known and very efficient embedded method
+                               Highly recommended in literature, including
+                               Hairer & Wanner, & even Numerical Recipes
+                               Used in several established RK code (e.g. DOPRI5)
+   ===========================================================================     
+   Good choices for reasonably smooth fields:
+
+      8 - Cash Karp RKF 45   : Old 'embedded' RK method - fairly robust,
+                               Uses a pair 4th & 5th order formulae; 
+                               the difference is the error estimate.
+                               Faster than old 'simple' that use two half
+                               steps to estimate error.         
+                               Available since Geant4 1.0
+
+     45 - BogackiShampine45  : More efficient embedded 4/5 pair
+                               Used in many applications, including
+                               RKSUITE suite.
+                               New in Geant4 10.3-beta:
+
+   ===========================================================================     
+    Default - good choice for unknown fields:
+    
+      4 - ClassicalRK4       : original Runge-Kutta method, very robust but slower )
+                             ( obtains error estimate by doing 2 half steps )
+
+   ===========================================================================
+    Good choices for non-smooth fields (with kinks, abrupt changes):
+    
+      3 - SimpleHeum         : low   order, with error obtained from half-steps
+     23 - BogackiShampine23  : lower order embedded method  (new in 10.3-beta)
+   ===========================================================================       
+  \endverbatim
+
+\section field01_s1 Background Information    
+  
+\subsection field01_s1_sub1 GEOMETRY DEFINITION
  
  The "absorber" is a solid made of a given material.                
 
@@ -27,7 +78,7 @@
  but all the parameters can be changed via
  the commands defined in the F01DetectorMessenger class.
  	
-\section field01_s2 AN EVENT : THE PRIMARY GENERATOR
+\subsection field01_s1_sub2 AN EVENT : THE PRIMARY GENERATOR
  
  The primary kinematic consists of a single particle (proton, Ekin = 1 GeV)
  which hits the
@@ -38,7 +89,7 @@
 
  A RUN is a set of events.
  	
-\section field01_s3 DETECTOR RESPONSE
+\subsection field01_s1_sub3 DETECTOR RESPONSE
 
   The spatial distribution of charged particles transported in magnetic
   field is envistigated.
@@ -52,16 +103,14 @@
   Therefore  the absorber is declared
   'sensitive detector' (SD), see F01CalorimeterSD, which means they can contribute to the hit.
  				
-\section field01_s4 PHYSICS DEMO
+\subsection field01_s1_sub4 PHYSICS LIST
  
  The particle's type and the physic processes which will be available
- in this example are set in F01PhysicsList class.
+ in this example are set in the FTFP_BERT physics list. This physics list 
+ requires data files for electromagnetic and hadronic processes.
+ See more on installation of the datasets in Geant4 Installation Guide,
 
- The  messenger classes, F01PhysicsListMessenger, introduce interactive commands . Using these
- commands the geometry of the detector, the data of the primary
- particle, etc. can be changed.
-
-\section field01_s5 HOW TO START ?
+\subsection field01_s1_sub5 HOW TO START ?
  
   - Execute field01 in 'batch' mode from macro file e.g.
 \verbatim

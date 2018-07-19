@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: DetectorConstruction.hh 98772 2016-08-09 14:25:31Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,33 +63,31 @@ public:
      
 public:
   
-  const G4VPhysicalVolume* GetWorld()      {return pWorld;};
-  const G4VPhysicalVolume* GetBox()        {return pBox;};
+  const G4VPhysicalVolume* GetWorld()      {return fWorld;};
+  const G4VPhysicalVolume* GetBox()        {return fBox;};
                      
-  G4double           GetWorldSize()  {return worldSize;};                          
-  G4double           GetBoxSizeXY()  {return boxSizeXY;};
-  G4double           GetBoxSizeZ()   {return boxSizeZ;};
-  G4Material*        GetMaterial()   {return aMaterial;};
+  G4double           GetWorldSize()  {return fWorldSize;};                          
+  G4double           GetBoxSizeXY()  {return fBoxSizeXY;};
+  G4double           GetBoxSizeZ()   {return fBoxSizeZ;};
+  G4Material*        GetMaterial()   {return fTargetMaterial;};
      
   void               PrintParameters();
                        
 private:
   
-  G4VPhysicalVolume*    pWorld;  
-  G4VPhysicalVolume*    pBox;
+  G4VPhysicalVolume*    fWorld;  
+  G4VPhysicalVolume*    fBox;
      
-  G4double              boxSizeXY;
-  G4double              boxSizeZ;
-  G4double              worldSize;
-  G4Material*           aMaterial;
-  G4Material*           wMaterial;     
+  G4double              fBoxSizeXY;
+  G4double              fBoxSizeZ;
+  G4double              fWorldSize;
+  G4Material*           fTargetMaterial;
+  G4Material*           fWorldMaterial;     
      
-  DetectorMessenger* detectorMessenger;
+  DetectorMessenger* fMessenger;
 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #endif
-

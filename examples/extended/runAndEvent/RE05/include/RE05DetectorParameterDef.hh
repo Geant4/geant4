@@ -23,55 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05DetectorParameterDef.hh 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id: RE05DetectorParameterDef.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05DetectorParameterDef.hh
 /// \brief Definition of the RE05DetectorParameterDef class
 //
 
-     G4double expHall_x;
-     G4double expHall_y;
-     G4double expHall_z;
+     G4double fExpHall_x;
+     G4double fExpHall_y;
+     G4double fExpHall_z;
 
-     G4double trkTubs_rmax;
-     G4double trkTubs_rmin;
-     G4double trkTubs_dz;
-     G4double trkTubs_sphi;
-     G4double trkTubs_dphi;
+     G4double fTrkTubs_rmax;
+     G4double fTrkTubs_rmin;
+     G4double fTrkTubs_dz;
+     G4double fTrkTubs_sphi;
+     G4double fTrkTubs_dphi;
 
-     G4int notrkLayers;
-     G4double tracker_radius[5];
-     G4double tracker_thick;
-     G4double tracker_length[5];
+     G4int fNotrkLayers;
+     G4double fTracker_radius[5];
+     G4double fTracker_thick;
+     G4double fTracker_length[5];
 
-     G4double caloTubs_rmax;
-     G4double caloTubs_rmin;
-     G4double caloTubs_dz;
-     G4double caloTubs_sphi;
-     G4double caloTubs_dphi;
+     G4double fCaloTubs_rmax;
+     G4double fCaloTubs_rmin;
+     G4double fCaloTubs_dz;
+     G4double fCaloTubs_sphi;
+     G4double fCaloTubs_dphi;
 
-     G4int nocaloLayers;
-     G4double absorber_thick;
-     G4double scinti_thick;
+     G4int fNocaloLayers;
+     G4double fAbsorber_thick;
+     G4double fScinti_thick;
 
-     G4int segmentsinZ;
-     G4double caloRing_rmax;
-     G4double caloRing_rmin;
-     G4double caloRing_dz;
-     G4double caloRing_sphi;
-     G4double caloRing_dphi;
+     G4int fSegmentsinZ;
+     G4double fCaloRing_rmax;
+     G4double fCaloRing_rmin;
+     G4double fCaloRing_dz;
+     G4double fCaloRing_sphi;
+     G4double fCaloRing_dphi;
 
-     G4int segmentsinPhi;
-     G4double caloCell_rmax;
-     G4double caloCell_rmin;
-     G4double caloCell_dz;
-     G4double caloCell_sphi;
-     G4double caloCell_dphi;
+     G4int fSegmentsinPhi;
+     G4double fCaloCell_rmax;
+     G4double fCaloCell_rmin;
+     G4double fCaloCell_dz;
+     G4double fCaloCell_sphi;
+     G4double fCaloCell_dphi;
 
-     G4int nomucounter;
-     G4double muBox_radius;
-     G4double muBox_width;
-     G4double muBox_thick;
-     G4double muBox_length;
-
-
+     G4int fNomucounter;
+     G4double fMuBox_radius;
+     G4double fMuBox_width;
+     G4double fMuBox_thick;
+     G4double fMuBox_length;

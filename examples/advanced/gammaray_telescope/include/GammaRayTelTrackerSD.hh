@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerSD.hh 66508 2012-12-19 10:16:45Z gcosmo $
+// $Id: GammaRayTelTrackerSD.hh 110147 2018-05-16 12:20:41Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -67,8 +67,8 @@ private:
   GammaRayTelTrackerHitsCollection*  TrackerCollection;      
   GammaRayTelDetectorConstruction* Detector;
 
-  G4int (*ThitXID);
-  G4int (*ThitYID);
+  G4int* ThitXID;
+  G4int* ThitYID;
   
   G4int NbOfTKRLayers;
   G4int NbOfTKRStrips;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4HepRepFileSceneHandler.hh 99152 2016-09-07 08:04:30Z gcosmo $
 //
 //
 // Joseph Perl  27th January 2002
@@ -75,12 +75,17 @@ public:
   void AddSolid(const G4Torus&);
   void AddSolid(const G4Polycone&);
   void AddSolid(const G4Polyhedra&);
+  void AddSolid(const G4Orb&);
+  void AddSolid(const G4Ellipsoid&);
   void AddSolid(const G4VSolid&);
   void AddCompound (const G4VTrajectory&);
   void InitTrajectory();
   void AddCompound (const G4VHit&);
   void InitHit();
   void AddCompound (const G4THitsMap<G4double>& hits) {
+    G4VSceneHandler::AddCompound(hits);
+  }
+  void AddCompound (const G4THitsMap<G4StatDouble>& hits) {
     G4VSceneHandler::AddCompound(hits);
   }
   void AddCompound (const G4VDigi& digi) {

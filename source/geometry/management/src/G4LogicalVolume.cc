@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc 102288 2017-01-20 10:57:03Z gcosmo $
+// $Id: G4LogicalVolume.cc 103096 2017-03-15 15:21:33Z gcosmo $
 //
 // 
 // class G4LogicalVolume Implementation
@@ -191,6 +191,15 @@ InitialiseWorker( G4LogicalVolume* /*pMasterObject*/,
 }
 
 // ********************************************************************
+// Clean
+// ********************************************************************
+//
+void G4LogicalVolume::Clean()
+{
+  subInstanceManager.FreeSlave();
+}
+
+// ********************************************************************
 // TerminateWorker
 //
 // This method is similar to the destructor. It is used by each worker
@@ -231,6 +240,15 @@ void G4LogicalVolume::AssignFieldManager( G4FieldManager *fldMgr)
 {
   G4MT_fmanager= fldMgr;
   if(G4Threading::IsMasterThread())  fFieldManager = fldMgr;
+}
+
+// ********************************************************************
+// IsExtended
+// ********************************************************************
+//
+G4bool G4LogicalVolume::IsExtended() const
+{
+  return false;
 }
 
 // ********************************************************************

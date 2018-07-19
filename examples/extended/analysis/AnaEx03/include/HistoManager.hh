@@ -26,7 +26,7 @@
 /// \file analysis/AnaEx03/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id: HistoManager.hh 92321 2015-08-27 14:53:09Z gcosmo $
+// $Id: HistoManager.hh 98059 2016-07-01 16:23:33Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,7 @@ namespace AIDA {
  class ITuple;
 } 
 
-const G4int MaxHisto = 4;
+const G4int kMaxHisto = 4;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -70,7 +70,7 @@ class HistoManager
     AIDA::IAnalysisFactory*  fAF;        
     AIDA::ITree*             fTree;
     
-    AIDA::IHistogram1D*      fHisto[MaxHisto];            
+    AIDA::IHistogram1D*      fHisto[kMaxHisto];            
     AIDA::ITuple*            fNtuple1;    
     AIDA::ITuple*            fNtuple2;    
 };

@@ -31,24 +31,22 @@
 #include <cmath>
 
 #include "CCalSteppingAction.hh"
+#include "CCalRunAction.hh"
+#include "CCalAnalysis.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "G4StepPoint.hh"
 #include "G4ThreeVector.hh"
+#include "G4RunManager.hh"
 
 #include "CCalAnalysis.hh"
 
-
-
-CCalSteppingAction::CCalSteppingAction(){
-
-  CCalAnalysis* analysis = CCalAnalysis::getInstance();
-  timeHistoMaxBin=analysis->maxbin();
-
-  int i; 
-  for (i=0; i<200; i++) {timeDeposit[i] = 0.;}
-  for (i=0; i<70;  i++) {LateralProfile[i] = 0.;}
+CCalSteppingAction::CCalSteppingAction() : 
+  runAct(nullptr)
+{
+  for (int i=0; i<200; i++) {timeDeposit[i] = 0.;}
+  for (int i=0; i<70;  i++) {LateralProfile[i] = 0.;}
 
 }
 
@@ -58,8 +56,16 @@ CCalSteppingAction::~CCalSteppingAction(){
 }
   
 
-void CCalSteppingAction::UserSteppingAction(const G4Step* aStep){
+void CCalSteppingAction::UserSteppingAction(const G4Step* aStep)
+{
+  //thread-local run action
+  if (!runAct) 
+    runAct = 
+      dynamic_cast<const CCalRunAction*>
+      (G4RunManager::GetRunManager()->GetUserRunAction());
 
+  
+  timeHistoMaxBin=runAct->maxbin();
   G4StepPoint*  PostStepPoint= aStep->GetPostStepPoint(); 
   G4StepPoint*  PreStepPoint= aStep->GetPreStepPoint(); 
   int TSliceID;
@@ -82,10 +88,52 @@ void CCalSteppingAction::UserSteppingAction(const G4Step* aStep){
 
 void CCalSteppingAction::endOfEvent(){
 
-  CCalAnalysis* analysis = CCalAnalysis::getInstance();
-  analysis->InsertLateralProfile(LateralProfile);  
-  analysis->InsertTime(timeDeposit); 
-  
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+   G4double totalFilledProfileHcal = 0.0;
+
+   static G4int IDlateralProfile = -1;
+    if (IDlateralProfile < 0)
+      IDlateralProfile = man->GetH1Id("h500");
+
+  for (G4int i=0; i<70; i++) {    
+    man->FillH1(IDlateralProfile+i,LateralProfile[i]);
+#ifdef debug
+    G4cout << "Fill Profile Hcal histo " << i << " with " << LateralProfile[i] << G4endl;
+#endif
+    totalFilledProfileHcal += LateralProfile[i];          
+  }
+ 
+#ifdef debug
+    G4cout << "CCalAnalysis::InsertLateralProfile: Total filled Profile Hcal"
+	   << " histo " << totalFilledProfileHcal << G4endl;
+#endif
+    
+    static G4int IDTimeHist = -1;
+    if (IDTimeHist < 0)
+      IDTimeHist = man->GetH1Id("h300");
+    G4double totalFilledTimeProfile = 0.0;
+    for (G4int j=0; j<timeHistoMaxBin; j++) 
+    {     
+      man->FillH1(IDTimeHist+j,timeDeposit[j]);
+#ifdef debug
+      G4cout << "Fill Time slice histo " << j << " with " << timeDeposit[j] << G4endl;
+#endif
+      totalFilledTimeProfile += timeDeposit[j];
+      
+      static G4int IDTimeProfile = -1;
+      if (IDTimeProfile < 0)
+	IDTimeProfile = man->GetH1Id("h901");
+      G4double t = j + 0.5;
+      man->FillH1(IDTimeProfile+1,t,timeDeposit[j]);
+#ifdef debug
+      G4cout << "Fill Time profile histo 1 with " << t << " " << x << G4endl;
+#endif    
+    }
+  #ifdef debug
+    G4cout << "CCalAnalysis::InsertTime: Total filled Time profile histo " 
+	   << totalFilledTimeProfile << G4endl;
+#endif
+
   int i=0;
   for (i=0; i<70; i++){LateralProfile[i] = 0.;}
   for (i=0; i<200; i++){timeDeposit[i] = 0.;}

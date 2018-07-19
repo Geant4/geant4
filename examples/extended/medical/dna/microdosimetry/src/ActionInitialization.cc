@@ -86,4 +86,3 @@ void ActionInitialization::Build() const
   SetUserAction(new SteppingAction());
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.hh 86646 2014-11-14 13:29:39Z gcosmo $
+// $Id: G4ElasticHNScattering.hh 100828 2016-11-02 15:25:59Z gcosmo $
 
 #ifndef G4ElasticHNScattering_h
 #define G4ElasticHNScattering_h 1
@@ -49,7 +49,6 @@ class G4ExcitedString;
 
 
 class G4ElasticHNScattering {
-
   public:
     G4ElasticHNScattering();
     virtual ~G4ElasticHNScattering();
@@ -62,7 +61,7 @@ class G4ElasticHNScattering {
     const G4ElasticHNScattering& operator=( const G4ElasticHNScattering& right );
     int operator==( const G4ElasticHNScattering& right ) const;
     int operator!=( const G4ElasticHNScattering& right ) const;
-
 };
 
 #endif
+

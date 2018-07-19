@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflash.cc 94396 2015-11-13 13:37:16Z gcosmo $
+// $Id: ExGflash.cc 110276 2018-05-17 14:46:47Z gcosmo $
 //
 /// \file parameterisations/gflash/ExGflash.cc
 /// \brief Main program of the parameterisations/gflash example
@@ -31,7 +31,7 @@
 // Created by Joanna Weng 26.11.2004
 
 // G4 includes 
-#include "G4Timer.hh"
+#include "G4Types.hh"
 #include "G4ios.hh"
 #include "G4Timer.hh"
 #include "G4UImanager.hh"
@@ -44,24 +44,24 @@
 
 // my project 
 #include "ExGflashDetectorConstruction.hh"
-#include "ExGflashPhysics.hh"
 #include "ExGflashActionInitialization.hh"
 
 #include "FTFP_BERT.hh"
-#include "G4VModularPhysicsList.hh"
+#include "G4FastSimulationPhysics.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {   
+  // Instantiate G4UIExecutive if interactive mode
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // timer to see GFlash performance
   G4Timer timer;
   timer.Start();
@@ -92,33 +92,42 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new ExGflashDetectorConstruction);
 
   // G4cout<<"# GFlash Example: Physics "<<G4endl;
+  // -- Select a physics list:
   G4VModularPhysicsList* physicsList = new FTFP_BERT();
-  physicsList->RegisterPhysics(new ExGflashPhysics());
+  // -- Create a fast simulation physics constructor, used to augment
+  // -- the above physics list to allow for fast simulation:
+  G4FastSimulationPhysics* fastSimulationPhysics = new G4FastSimulationPhysics();
+  // -- We now configure the fastSimulationPhysics object.
+  // -- The gflash model (GFlashShowerModel, see ExGflashDetectorConstruction.cc)
+  // -- is applicable to e+ and e- : we augment the physics list for these
+  // -- particles (by adding a G4FastSimulationManagerProcess with below's
+  // -- calls), this will make the fast simulation to be activated:
+  fastSimulationPhysics->ActivateFastSimulation("e-");
+  fastSimulationPhysics->ActivateFastSimulation("e+");
+  // -- Register this fastSimulationPhysics to the physicsList,
+  // -- when the physics list will be called by the run manager
+  // -- (will happen at initialization of the run manager)
+  // -- for physics process construction, the fast simulation
+  // -- configuration will be applied as well.
+  physicsList->RegisterPhysics( fastSimulationPhysics );
   runManager->SetUserInitialization(physicsList);
 
   // Action initialization:
   runManager->SetUserInitialization(new ExGflashActionInitialization);
 
-#ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
-  
+
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   UImanager->ApplyCommand("/run/verbose 0");
   runManager->Initialize();
   UImanager->ApplyCommand("/Step/Verbose 0");
   
-  if (argc==1)   // Define UI terminal for interactive mode  
+  if (ui)   // Define UI terminal for interactive mode
   { 
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-    UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
+    UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();
     delete ui;
-#endif
   }
   else           // Batch mode
   { 
@@ -126,9 +135,7 @@ int main(int argc,char** argv)
     UImanager->ApplyCommand("/control/execute "+s);
   }
   
-  #ifdef G4VIS_USE
   delete visManager;
-  #endif  
   delete runManager;
   
   timer.Stop();

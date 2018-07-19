@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleB3b.cc 94031 2015-11-05 11:54:38Z ihrivnac $
+// $Id: exampleB3b.cc 109713 2018-05-08 13:37:44Z gcosmo $
 //
-/// \file exampleB3.cc
-/// \brief Main program of the B3 example
+/// \file exampleB3b.cc
+/// \brief Main program of the B3b example
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -59,25 +61,25 @@ int main(int argc,char** argv)
   // Choose the Random engine
   //
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
-     
+
   // Construct the default run manager
   //
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
 #else
   G4RunManager* runManager = new G4RunManager;
-#endif  
+#endif
 
   // Set mandatory initialization classes
   //
   runManager->SetUserInitialization(new B3DetectorConstruction);
   //
   runManager->SetUserInitialization(new B3PhysicsList);
-    
+
   // Set user action initialization
   //
-  runManager->SetUserInitialization(new B3bActionInitialization());  
-  
+  runManager->SetUserInitialization(new B3bActionInitialization());
+
   // Initialize visualization
   //
   G4VisManager* visManager = new G4VisExecutive;
@@ -90,13 +92,13 @@ int main(int argc,char** argv)
 
   // Process macro or start UI session
   //
-  if ( ! ui ) { 
+  if ( ! ui ) {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
-  else { 
+  else {
     // interactive mode
     UImanager->ApplyCommand("/control/execute init_vis.mac");
     ui->SessionStart();
@@ -105,7 +107,7 @@ int main(int argc,char** argv)
 
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
-  // owned and deleted by the run manager, so they should not be deleted 
+  // owned and deleted by the run manager, so they should not be deleted
   // in the main() program !
 
   delete visManager;

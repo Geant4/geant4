@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/src/RMC01PrimaryGeneratorAction.cc
 /// \brief Implementation of the RMC01PrimaryGeneratorAction class
 //
-// $Id: RMC01PrimaryGeneratorAction.cc 71233 2013-06-12 13:16:05Z gcosmo $
+// $Id: RMC01PrimaryGeneratorAction.cc 98774 2016-08-09 14:28:06Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01PrimaryGeneratorAction
@@ -40,7 +40,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RMC01PrimaryGeneratorAction.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

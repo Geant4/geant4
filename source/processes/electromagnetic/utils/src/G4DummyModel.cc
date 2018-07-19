@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DummyModel.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4DummyModel.cc 97432 2016-06-03 07:23:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -51,7 +51,10 @@
 
 G4DummyModel::G4DummyModel(const G4String& nam)
   : G4VMscModel(nam)
-{}
+{
+  // Dummy model by default cover all energies
+  SetLowEnergyLimit(0.0);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -37,7 +37,6 @@
 
 #include "G4ExcitedStringVector.hh"
 #include "G4KineticTrackVector.hh"
-#include "G4PomeronCrossSection.hh"
 #include "G4ParticleTable.hh"
 #include "G4Fancy3DNucleus.hh"
 #include "G4VPartonStringModel.hh"
@@ -73,10 +72,6 @@ private:
    ParticipantType theParticipants;
    G4DiffractiveStringBuilder theDiffractiveStringBuilder;
    G4SoftStringBuilder theSoftStringBuilder;
-
-private:
-   // cash theCurrentVelocity for lorentztrafo HPW 
-   G4ThreeVector theCurrentVelocity;
 
    };
 

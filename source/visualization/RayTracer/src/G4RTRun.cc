@@ -34,7 +34,6 @@
 ///////////////////////
 
 #include "G4RTRun.hh"
-#include "G4RTRun.hh"
 #include "G4TheMTRayTracer.hh"
 
 #include "G4Colour.hh"

@@ -39,15 +39,16 @@ energy spectrum of secondary particles.
 This example is focused on neutronHP physics, especially neutron transport,
 including thermal scattering.
 
-\link ExampleHadr05 Hadr05 \endlink
-
-This example demonstrates the usage of G4GenericPhysicsList to build 
-the concrete physics list at the run time.
-
 \link ExampleHadr06 Hadr06 \endlink
 
 This example demonstrates survey of energy deposition and particle's flux from 
 a hadronic cascade.
+
+\link ExampleHadr07 Hadr07 \endlink
+
+Survey energy deposition and particle's flux from an hadronic cascade.
+Use PhysicsConstructor objects rather than predefined G4 PhysicsLists.
+Show how to plot a depth dose profile in a rectangular box.
 
 \link ExampleFissionFragment FissionFragment \endlink
 
@@ -56,6 +57,18 @@ neutron_hp model. It will demostrate the capability for fission product
 containmentby the cladding in a water moderated sub-critical assembly. It could
 also be further extended to calculate the effective multiplication factor of
 the subcritical assembly for various loading schemes.
+
+\link ExampleNeutronSource NeutronSource \endlink
+
+NeutronSource is an example of neutrons production. It illustrates the cooperative work
+of nuclear reactions and radioactive decay processes.
+It survey energy deposition and particle's flux.
+It uses PhysicsConstructor objects.
+
+The example Hadr05, which demonstrated the usage of G4GenericPhysicsList to build 
+the concrete physics list at the run time, has been repleced in Geant4 10.4  by 
+extended/physicslists/genericPL the generic physics list was demonstrated in the 
+extended/hadronic/Hadr05 example.
 
 */
 

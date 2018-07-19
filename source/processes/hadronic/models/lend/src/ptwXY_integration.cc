@@ -516,7 +516,8 @@ ptwXPoints *ptwXY_groupTwoFunctions( ptwXYPoints *ptwXY1, ptwXYPoints *ptwXY2, p
 err:
     ptwXY_free( ff );
     if( gg != NULL ) ptwXY_free( gg );
-    if( f != NULL ) ptwXY_free( ff );
+    // Coverity #63063
+    if( f != NULL ) ptwXY_free( f );
     if( g != NULL ) ptwXY_free( g );
     if( groupedData != NULL ) ptwX_free( groupedData );
     return( NULL );

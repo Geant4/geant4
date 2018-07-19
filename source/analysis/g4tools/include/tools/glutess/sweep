@@ -1166,7 +1166,13 @@ inline/*static*/ void static_DoneEdgeDict( GLUtesselator *tess )
      */
     if( ! reg->sentinel ) {
       assert( reg->fixUpperEdge );
-      assert( ++fixedEdges == 1 );
+    //G.Barrand : fix a Coverity diagnostic : begin :
+    //assert( ++fixedEdges == 1 );
+#ifndef NDEBUG
+      fixedEdges++;
+#endif
+      assert( fixedEdges == 1 );
+    //G.Barrand : end.
     }
     assert( reg->windingNumber == 0 );
     static_DeleteRegion( tess, reg );

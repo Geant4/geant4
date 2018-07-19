@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.hh 93682 2015-10-28 10:09:49Z gcosmo $
+// $Id: G4NeutronElasticXS.hh 110543 2018-05-29 13:38:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -47,7 +47,9 @@
 
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
+#include "G4Threading.hh"
 #include <vector>
+#include <iostream>
 
 const G4int MAXZEL = 93;
 
@@ -60,9 +62,9 @@ class G4HadronNucleonXsc;
 
 class G4NeutronElasticXS : public G4VCrossSectionDataSet
 {
-public: // With Description
+public: 
 
-  G4NeutronElasticXS();
+  explicit G4NeutronElasticXS();
 
   virtual ~G4NeutronElasticXS();
     
@@ -74,7 +76,7 @@ public: // With Description
 
   virtual
   G4double GetElementCrossSection(const G4DynamicParticle*, 
-				  G4int Z, const G4Material* mat=0); 
+				  G4int Z, const G4Material* mat=nullptr); 
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&);
@@ -83,7 +85,7 @@ public: // With Description
 
 private: 
 
-  void Initialise(G4int Z, G4DynamicParticle* dp = 0, const char* = 0);
+  void Initialise(G4int Z, G4DynamicParticle* dp, const char*);
 
   G4NeutronElasticXS & operator=(const G4NeutronElasticXS &right);
   G4NeutronElasticXS(const G4NeutronElasticXS&);
@@ -93,11 +95,14 @@ private:
 
   const G4ParticleDefinition* proton;
 
-  static std::vector<G4PhysicsVector*>* data;
+  static G4PhysicsVector* data[MAXZEL];
   static G4double  coeff[MAXZEL];
 
   G4bool  isMaster;
 
+#ifdef G4MULTITHREADED
+  static G4Mutex neutronElasticXSMutex;
+#endif
 };
 
 #endif

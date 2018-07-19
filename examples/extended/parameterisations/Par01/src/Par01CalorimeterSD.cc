@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par01/src/Par01CalorimeterSD.cc
+/// \brief Implementation of the Par01CalorimeterSD class
 //
-// $Id: Par01CalorimeterSD.cc 90093 2015-05-13 11:59:54Z gcosmo $
+//
+// $Id: Par01CalorimeterSD.cc 100936 2016-11-03 11:07:41Z gcosmo $
 //
 
 #include "Par01CalorimeterSD.hh"
@@ -36,6 +39,8 @@
 #include "G4ParticleDefinition.hh"
 #include "G4SDManager.hh"
 #include "G4ios.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par01CalorimeterSD::Par01CalorimeterSD( G4String name,
                                         G4int nCells,
@@ -49,10 +54,14 @@ Par01CalorimeterSD::Par01CalorimeterSD( G4String name,
   fCellID = new G4int[fNumberOfCells];
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01CalorimeterSD::~Par01CalorimeterSD()
 {
   delete [] fCellID;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
@@ -63,6 +72,8 @@ void Par01CalorimeterSD::Initialize(G4HCofThisEvent*)
       fCellID[j] = -1;
     }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool Par01CalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
@@ -97,6 +108,8 @@ G4bool Par01CalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Par01CalorimeterSD::EndOfEvent(G4HCofThisEvent*HCE)
 {
   if(fHCID<0)
@@ -104,13 +117,19 @@ void Par01CalorimeterSD::EndOfEvent(G4HCofThisEvent*HCE)
   HCE->AddHitsCollection( fHCID, fCalCollection );
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Par01CalorimeterSD::clear()
 {
 } 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Par01CalorimeterSD::DrawAll()
 {
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01CalorimeterSD::PrintAll()
 {

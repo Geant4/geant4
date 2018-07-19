@@ -1,0 +1,614 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_markers
+#define tools_sg_markers
+
+#include "node"
+
+#include "sf_enum"
+#include "mf"
+#include "render_action"
+#include "pick_action"
+#include "bbox_action"
+#include "../mathf"
+#include "../lina/vec2f"
+#include "../lina/geom2"
+
+namespace tools {
+namespace sg {
+
+class markers : public node {
+  TOOLS_NODE(markers,tools::sg::markers,node)
+public:
+  sf_enum<marker_style> style;
+  mf<float> xyzs; //[x,y,z]
+  sf<float> size; //horizontal size in pixels.
+public:
+  virtual const std::vector<field_desc>& node_fields() const {
+    TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::markers)
+    static std::vector<field_desc> s_v;
+    if(s_v.empty()) {
+      s_v = parent::node_fields();
+      TOOLS_ADD_FIELD_DESC(style)
+      TOOLS_ADD_FIELD_DESC(xyzs)
+      TOOLS_ADD_FIELD_DESC(size)
+    }
+    return s_v;
+  }
+private:
+  void add_fields(){
+    add_field(&style);
+    add_field(&xyzs);
+    add_field(&size);
+  }
+public:
+  virtual void render(render_action& a_action) {
+    size_t num = xyzs.size()/3;
+    if(!num) return;
+
+    const state& state = a_action.state();
+
+    const std::vector<float>& _xyzs = xyzs.values();
+
+    std::vector<float> pts;
+
+    float sx = size.value()/float(state.m_ww); //in [-1,1]
+    float hsx = sx*0.5f;
+
+    float sy = size.value()/float(state.m_wh); //in [-1,1]
+    float hsy = sy*0.5f;
+    
+    float rad  = hsx;
+    float hsx2 = hsx*0.5f;
+    float hsy2 = hsy*0.5f;
+
+    float x,y,z,w;
+
+    bool filled = false;
+    if(style.value()==marker_circle_line) {
+      unsigned int segs = 16;
+      float _cos[16];float _sin[16];
+      float dtheta = ftwo_pi()/float(segs);
+      float theta = dtheta;
+     {for(unsigned int i=0;i<segs;i++,theta+=dtheta) {_cos[i] = rad*fcos(theta);_sin[i] = rad*fsin(theta);}}
+      float xprev,yprev,xnext,ynext;
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+	xprev = x+rad;
+	yprev = y;
+        for(unsigned int i=0;i<segs;i++) {
+          xnext = x+_cos[i];
+	  ynext = y+_sin[i];
+          _add(pts,xprev,yprev,z);
+          _add(pts,xnext,ynext,z);
+	  xprev = xnext;
+	  yprev = ynext;
+        }
+      }
+      
+    } else if(style.value()==marker_circle_filled) {
+  //} else if((style.value()==marker_circle_filled)||(style.value()==marker_dot)) {
+      filled = true;
+      unsigned int segs = 16;
+      float _cos[16];float _sin[16];
+      float dtheta = ftwo_pi()/float(segs);
+      float theta = dtheta;
+     {for(unsigned int i=0;i<segs;i++,theta+=dtheta) {_cos[i] = rad*fcos(theta);_sin[i] = rad*fsin(theta);}}
+      float xprev,yprev,xnext,ynext;
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+	xprev = x+rad;
+	yprev = y;
+        for(unsigned int i=0;i<segs;i++) {
+          xnext = x+_cos[i];
+	  ynext = y+_sin[i];
+          _add(pts,x    ,y    ,z);
+          _add(pts,xprev,yprev,z);
+          _add(pts,xnext,ynext,z);
+	  xprev = xnext;
+	  yprev = ynext;
+        }
+      }
+      
+    } else if(style.value()==marker_square_line) {
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x-hsx,y-hsy,z);
+        _add(pts, x+hsx,y-hsy,z);
+	
+        _add(pts, x+hsx,y-hsy,z);
+        _add(pts, x+hsx,y+hsy,z);
+	
+        _add(pts, x+hsx,y+hsy,z);
+        _add(pts, x-hsx,y+hsy,z);
+	
+        _add(pts, x-hsx,y+hsy,z);
+        _add(pts, x-hsx,y-hsy,z);
+      }      
+  //} else if(style.value()==marker_square_filled) {
+    } else if((style.value()==marker_square_filled)||(style.value()==marker_dot)) {
+      filled = true;
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x-hsx,y-hsy,z);
+        _add(pts, x+hsx,y-hsy,z);
+        _add(pts, x+hsx,y+hsy,z);
+	
+        _add(pts, x-hsx,y-hsy,z);
+        _add(pts, x+hsx,y+hsy,z);
+        _add(pts, x-hsx,y+hsy,z);
+      }
+      
+    } else if(style.value()==marker_triangle_up_line) {
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x-hsx,y-hsy,z);
+        _add(pts, x+hsx,y-hsy,z);
+	
+        _add(pts, x+hsx,y-hsy,z);
+        _add(pts, x    ,y+hsy,z);
+	
+        _add(pts, x    ,y+hsy,z);
+        _add(pts, x-hsx,y-hsy,z);
+      }
+    } else if(style.value()==marker_triangle_up_filled) {
+      filled = true;
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x-hsx,y-hsy,z);
+        _add(pts, x+hsx,y-hsy,z);
+        _add(pts, x    ,y+hsy,z);
+      }
+      
+    } else if(style.value()==marker_triangle_down_line) {
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x-hsx,y+hsy,z);
+        _add(pts, x    ,y-hsy,z);
+	
+        _add(pts, x    ,y-hsy,z);
+	_add(pts, x+hsx,y+hsy,z);
+	
+	_add(pts, x+hsx,y+hsy,z);
+        _add(pts, x-hsx,y+hsy,z);
+      }
+    } else if(style.value()==marker_triangle_down_filled) {
+      filled = true;
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x-hsx,y+hsy,z);
+        _add(pts, x    ,y-hsy,z);
+        _add(pts, x+hsx,y+hsy,z);
+      }
+      
+    } else if(style.value()==marker_diamond_line) {
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x    ,y-hsy,z);
+        _add(pts, x+hsx,    y,z);
+	
+        _add(pts, x+hsx,    y,z);
+        _add(pts, x    ,y+hsy,z);
+	
+        _add(pts, x    ,y+hsy,z);
+	_add(pts, x-hsx,y    ,z);
+	
+	_add(pts, x-hsx,y    ,z);
+        _add(pts, x    ,y-hsy,z);
+      }
+    } else if(style.value()==marker_diamond_filled) {
+      filled = true;
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x    ,y-hsy,z);
+        _add(pts, x+hsx,    y,z);
+        _add(pts, x    ,y+hsy,z);
+	
+        _add(pts, x    ,y+hsy,z);
+        _add(pts, x-hsx,y    ,z);
+        _add(pts, x    ,y-hsy,z);
+      }
+      
+    } else if(style.value()==marker_swiss_cross_line) {
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x-hsx2,y-hsy,z);
+        _add(pts, x+hsx2,y-hsy,z);
+	
+        _add(pts, x+hsx2,y-hsy ,z);
+        _add(pts, x+hsx2,y-hsy2,z);
+
+        _add(pts, x+hsx2,y-hsy2,z);
+        _add(pts, x+hsx ,y-hsy2,z);
+	
+        _add(pts, x+hsx ,y-hsy2,z);
+        _add(pts, x+hsx ,y+hsy2,z);
+
+        _add(pts, x+hsx ,y+hsy2,z);
+        _add(pts, x+hsx2,y+hsy2,z);
+
+        _add(pts, x+hsx2,y+hsy2,z);
+        _add(pts, x+hsx2,y+hsy ,z);
+
+        _add(pts, x+hsx2,y+hsy ,z);
+        _add(pts, x-hsx2,y+hsy ,z);
+
+        _add(pts, x-hsx2,y+hsy ,z);
+        _add(pts, x-hsx2,y+hsy2,z);
+
+        _add(pts, x-hsx2,y+hsy2,z);
+        _add(pts, x-hsx ,y+hsy2,z);
+
+        _add(pts, x-hsx ,y+hsy2,z);
+        _add(pts, x-hsx ,y-hsy2,z);
+
+        _add(pts, x-hsx ,y-hsy2,z);
+        _add(pts, x-hsx2,y-hsy2,z);
+
+        _add(pts, x-hsx2,y-hsy2,z);
+        _add(pts, x-hsx2,y-hsy, z);
+      }
+    } else if(style.value()==marker_swiss_cross_filled) {
+      filled = true;
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x-hsx2,y-hsy,z);
+        _add(pts, x+hsx2,y-hsy,z);
+        _add(pts, x+hsx2,y+hsy,z);
+
+        _add(pts, x+hsx2,y+hsy,z);
+        _add(pts, x-hsx2,y+hsy,z);
+        _add(pts, x-hsx2,y-hsy,z);
+
+        _add(pts, x-hsx ,y-hsy2,z);
+        _add(pts, x+hsx ,y-hsy2,z);
+        _add(pts, x+hsx ,y+hsy2,z);
+
+        _add(pts, x+hsx ,y+hsy2,z);
+        _add(pts, x-hsx ,y+hsy2,z);
+        _add(pts, x-hsx ,y-hsy2,z);
+      }
+
+    } else if(style.value()==marker_david_star_line) {
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x-hsx,y-hsy2,z);
+        _add(pts, x+hsx,y-hsy2,z);
+	
+        _add(pts, x+hsx,y-hsy2,z);
+        _add(pts, x    ,y+hsy ,z);
+
+        _add(pts, x    ,y+hsy ,z);
+        _add(pts, x-hsx,y-hsy2,z);
+
+        _add(pts, x+hsx,y+hsy2,z);
+        _add(pts, x-hsx,y+hsy2,z);
+	
+        _add(pts, x-hsx,y+hsy2,z);
+        _add(pts, x    ,y-hsy ,z);
+
+        _add(pts, x    ,y-hsy ,z);
+        _add(pts, x+hsx,y+hsy2,z);
+      }
+    } else if(style.value()==marker_david_star_filled) {
+      filled = true;
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x-hsx,y-hsy2,z);
+        _add(pts, x+hsx,y-hsy2,z);
+        _add(pts, x    ,y+hsy ,z);
+
+        _add(pts, x+hsx,y+hsy2,z);
+        _add(pts, x-hsx,y+hsy2,z);
+        _add(pts, x    ,y-hsy ,z);
+      }
+
+    } else if(style.value()==marker_penta_star_line) {
+      float _cos[5];float _sin[5];
+      float dtheta = ftwo_pi()/5.0f;
+      float theta = fhalf_pi();
+     {for(unsigned int i=0;i<5;i++,theta+=dtheta) {_cos[i] = rad*fcos(theta);_sin[i] = rad*fsin(theta);}}
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x+_cos[0],y+_sin[0] ,z);
+        _add(pts, x+_cos[2],y+_sin[2] ,z);
+	
+        _add(pts, x+_cos[2],y+_sin[2] ,z);
+        _add(pts, x+_cos[4],y+_sin[4] ,z);
+	
+        _add(pts, x+_cos[4],y+_sin[4] ,z);
+        _add(pts, x+_cos[1],y+_sin[1] ,z);
+	
+        _add(pts, x+_cos[1],y+_sin[1] ,z);
+        _add(pts, x+_cos[3],y+_sin[3] ,z);
+
+        _add(pts, x+_cos[3],y+_sin[3] ,z);
+        _add(pts, x+_cos[0],y+_sin[0] ,z);
+      }
+    } else if(style.value()==marker_penta_star_filled) {
+      filled = true;
+      float _cos[5];float _sin[5];
+      float dtheta = ftwo_pi()/5.0f;
+      float theta = fhalf_pi();
+     {for(unsigned int i=0;i<5;i++,theta+=dtheta) {_cos[i] = rad*fcos(theta);_sin[i] = rad*fsin(theta);}}
+      vec2f i3;
+     {vec2f p1(_cos[2],_sin[2]);
+      vec2f q1(_cos[4],_sin[4]);
+      vec2f p2(_cos[3],_sin[3]);
+      vec2f q2(_cos[0],_sin[0]);
+      if(!intersect(p1,q1,p2,q2,i3)) {}}
+      vec2f i4;
+     {vec2f p1(_cos[1],_sin[1]);
+      vec2f q1(_cos[4],_sin[4]);
+      vec2f p2(_cos[3],_sin[3]);
+      vec2f q2(_cos[0],_sin[0]);
+      if(!intersect(p1,q1,p2,q2,i4)) {}}
+      vec2f i0;
+     {vec2f p1(_cos[1],_sin[1]);
+      vec2f q1(_cos[4],_sin[4]);
+      vec2f p2(_cos[0],_sin[0]);
+      vec2f q2(_cos[2],_sin[2]);
+      if(!intersect(p1,q1,p2,q2,i0)) {}}
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x+_cos[0],y+_sin[0] ,z);
+        _add(pts, x+_cos[2],y+_sin[2] ,z);
+        _add(pts, x+ i3.x(),y+ i3.y() ,z);
+
+        _add(pts, x+_cos[1],y+_sin[1] ,z);
+        _add(pts, x+_cos[3],y+_sin[3] ,z);
+        _add(pts, x+ i4.x(),y+ i4.y() ,z);
+	
+        _add(pts, x+ i0.x(),y+ i0.y() ,z);
+        _add(pts, x+_cos[2],y+_sin[2] ,z);
+        _add(pts, x+_cos[4],y+_sin[4] ,z);
+      }
+
+    } else if(style.value()==marker_plus) {
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x-hsx,y,z);
+        _add(pts, x+hsx,y,z);
+        _add(pts, x    ,y-hsy,z);
+        _add(pts, x    ,y+hsy,z);      
+      }
+    } else if(style.value()==marker_asterisk) {
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x    ,y-hsy ,z);
+        _add(pts, x    ,y+hsy ,z);      
+        _add(pts, x-hsx,y-hsy2,z);
+        _add(pts, x+hsx,y+hsy2,z);
+        _add(pts, x-hsx,y+hsy2,z);
+        _add(pts, x+hsx,y-hsy2,z);
+      }
+    } else if(style.value()==marker_star) {
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x    ,y-hsy ,z);
+        _add(pts, x    ,y+hsy ,z);      
+        _add(pts, x-hsx,y-hsy2,z);
+        _add(pts, x+hsx,y+hsy2,z);
+        _add(pts, x-hsx,y+hsy2,z);
+        _add(pts, x+hsx,y-hsy2,z);
+        _add(pts, x-hsx,y     ,z);
+        _add(pts, x+hsx,y     ,z);
+      }
+    } else if(style.value()==marker_minus) {
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x-hsx,y,z);
+        _add(pts, x+hsx,y,z);
+      }
+    } else { //marker_cross.
+      std::vector<float>::const_iterator it;
+      for(it=_xyzs.begin();it!=_xyzs.end();){
+        x = *it;it++;
+        y = *it;it++;
+        z = *it;it++;
+        a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+        _add(pts, x-hsx,y-hsy,z);
+        _add(pts, x+hsx,y+hsy,z);
+        _add(pts, x+hsx,y-hsy,z);
+        _add(pts, x-hsx,y+hsy,z);      
+      }
+    }
+
+    a_action.load_matrices_to_identity();
+
+    //Same logic as Inventor SoLightModel.model = BASE_COLOR.
+    a_action.set_lighting(false);
+    a_action.draw_vertex_array(filled?gl::triangles():gl::lines(),pts);
+    a_action.set_lighting(a_action.state().m_GL_LIGHTING);
+    a_action.load_matrices_from_state();
+  }
+
+  virtual void pick(pick_action& a_action) {
+    size_t num = xyzs.size()/3;
+    if(!num) return;
+
+    state& state = a_action.state();
+
+    const std::vector<float>& _xyzs = xyzs.values();
+
+    std::vector<float> pts;
+
+    float sx = size.value()/float(state.m_ww); //in [-1,1]
+    float hsx = sx*0.5f;
+
+    float sy = size.value()/float(state.m_wh); //in [-1,1]
+    float hsy = sy*0.5f;
+
+    float x,y,z,w;
+
+    std::vector<float>::const_iterator it;
+    for(it=_xyzs.begin();it!=_xyzs.end();){
+      x = *it;it++;
+      y = *it;it++;
+      z = *it;it++;
+
+      a_action.project_point(x,y,z,w); //in [-1,1][-1,1]
+
+      _add(pts, x-hsx,y-hsy,z);  //in [-1,1][-1,1]
+      _add(pts, x+hsx,y+hsy,z);
+      _add(pts, x+hsx,y-hsy,z);
+      _add(pts, x-hsx,y+hsy,z);      
+    }
+
+    a_action.set_matrices_to_identity();
+    a_action.add__lines(*this,pts);	
+    a_action.set_matrices_from_state();
+  }
+
+  virtual void bbox(bbox_action& a_action) {
+    const std::vector<float>& _xyzs = xyzs.values();
+    float x,y,z;
+    std::vector<float>::const_iterator it;  
+    for(it=_xyzs.begin();it!=_xyzs.end();){
+      x = *it;it++;
+      y = *it;it++;
+      z = *it;it++;
+      a_action.add_one_point(x,y,z);
+    }
+  }
+public:
+  markers()
+  :parent()
+  ,style(marker_cross)
+  ,size(10)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  virtual ~markers(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  markers(const markers& a_from)
+  :parent(a_from)
+  ,style(a_from.style)
+  ,xyzs(a_from.xyzs)
+  ,size(a_from.size)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    add_fields();
+  }
+  markers& operator=(const markers& a_from){
+    parent::operator=(a_from);
+    style = a_from.style;
+    xyzs = a_from.xyzs;
+    size = a_from.size;
+    return *this;
+  }
+public:
+  template <class VEC>
+  void add(const VEC& a_v) {
+    xyzs.add(a_v.x());
+    xyzs.add(a_v.y());
+    xyzs.add(a_v.z());
+  }
+  void add(float a_x,float a_y,float a_z) {
+    xyzs.add(a_x);
+    xyzs.add(a_y);
+    xyzs.add(a_z);
+  }
+  size_t number() const {return xyzs.size()/3;}
+  void clear() {xyzs.clear();}
+protected:
+  void _add(std::vector<float>& a_v,float a_x,float a_y,float a_z) {
+    a_v.push_back(a_x);
+    a_v.push_back(a_y);
+    a_v.push_back(a_z);
+  }
+};
+
+}}
+
+#endif

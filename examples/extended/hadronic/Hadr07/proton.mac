@@ -1,0 +1,29 @@
+# $Id: multiLayers.mac 74917 2013-10-24 10:44:43Z ihrivnac $
+#
+# multiLayers
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setNbOfAbsor  4
+/testhadr/det/setAbsor 1 Water   1 cm
+/testhadr/det/setAbsor 2 Water   1 cm
+/testhadr/det/setAbsor 3 Water   1 cm
+/testhadr/det/setAbsor 4 Water   1 cm
+/testhadr/det/setSizeYZ  4 cm
+#
+/run/setCut 1 km
+#
+/run/initialize
+/process/list
+#
+/testhadr/gun/setDefault
+/gun/particle proton
+/gun/energy 1 GeV
+#
+###/analysis/setFileName proton
+###/analysis/h1/set 10 100 0. 40. mm		#edep profile
+#
+###/control/execute vis.mac
+/tracking/verbose 1
+/run/beamOn

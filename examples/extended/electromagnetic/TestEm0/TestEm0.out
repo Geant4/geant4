@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 
 ***** Table : Nb of materials = 19 *****
@@ -29,7 +31,7 @@
 
 
  Material: H2liquid    density: 70.800 mg/cm3  RadL:   8.923 m    Nucl.Int.Length:   4.944 m  
-                       Imean:  19.200 eV 
+                       Imean:  19.200 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -38,7 +40,7 @@
 
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.356 cm 
-                       Imean:  78.000 eV 
+                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -68,7 +70,7 @@
 
 
  Material:      BGO    density:  7.100 g/cm3   RadL:   1.123 cm   Nucl.Int.Length:  22.806 cm 
-                       Imean: 473.785 eV 
+                       Imean: 473.785 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
@@ -90,7 +92,7 @@
 
 
  Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm 
-                       Imean: 166.000 eV 
+                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.980 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
@@ -98,7 +100,7 @@
 
 
  Material:  Silicon    density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.663 cm 
-                       Imean: 173.000 eV 
+                       Imean: 173.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.090 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -108,7 +110,7 @@
 
 
  Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.078 cm 
-                       Imean: 188.000 eV 
+                       Imean: 188.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.950 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
@@ -118,7 +120,7 @@
 
 
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm 
-                       Imean: 286.000 eV 
+                       Imean: 286.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.850 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
@@ -129,7 +131,7 @@
 
 
  Material:   Copper    density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.588 cm 
-                       Imean: 322.000 eV 
+                       Imean: 322.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Cu (Cu)   Z = 29.0   N =    64   A = 63.550 g/mole
          --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance: 69.170 %
@@ -138,7 +140,7 @@
 
 
  Material: Germanium    density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.431 cm 
-                       Imean: 350.000 eV 
+                       Imean: 350.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ge (Ge)   Z = 32.0   N =    73   A = 72.610 g/mole
          --->  Isotope:  Ge70   Z = 32   N =  70   A =  69.92 g/mole   abundance: 20.840 %
@@ -150,7 +152,7 @@
 
 
  Material:   Silver    density: 10.500 g/cm3   RadL:   8.543 mm   Nucl.Int.Length:  15.868 cm 
-                       Imean: 470.000 eV 
+                       Imean: 470.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ag (Ag)   Z = 47.0   N =   108   A = 107.870 g/mole
          --->  Isotope: Ag107   Z = 47   N = 107   A = 106.90 g/mole   abundance: 51.839 %
@@ -159,7 +161,7 @@
 
 
  Material: Tungsten    density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.312 cm 
-                       Imean: 727.000 eV 
+                       Imean: 727.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: W (W)   Z = 74.0   N =   184   A = 183.850 g/mole
          --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:  0.120 %
@@ -171,7 +173,7 @@
 
 
  Material:     Lead    density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm 
-                       Imean: 823.000 eV 
+                       Imean: 823.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Pb (Pb)   Z = 82.0   N =   207   A = 207.190 g/mole
          --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:  1.400 %
@@ -182,7 +184,7 @@
 
 
  Material:  Uranium    density: 18.950 g/cm3   RadL:   3.166 mm   Nucl.Int.Length:  11.446 cm 
-                       Imean: 890.000 eV 
+                       Imean: 890.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: U (U)   Z = 92.0   N =   238   A = 238.030 g/mole
          --->  Isotope:  U234   Z = 92   N = 234   A = 234.04 g/mole   abundance:  0.005 %
@@ -192,7 +194,7 @@
 
 
  Material:      ams    density:  7.409 g/cm3   RadL:   8.996 mm   Nucl.Int.Length:  25.515 cm 
-                       Imean: 691.183 eV 
+                       Imean: 691.183 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Lead (Pb)   Z = 82.0   N =   207   A = 207.190 g/mole
          --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:  1.400 %
@@ -257,6 +259,81 @@
 
 
 
+PhysicsList::AddPhysicsList: <emstandard_opt3>
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+LPM effect enabled                                 1
+Spline of EM tables enabled                        1
+Apply cuts on all EM processes                     0
+Use integral approach for tracking                 1
+X-section factor for integral approach             0.8
+Min kinetic energy for tables                      10 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins in tables                           260
+Number of bins per decade of a table               20
+Verbose level                                      0
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary is added to the list of secondary        100 TeV
+Lowest triplet kinetic energy                      1 MeV
+5D gamma conversion model type                     0
+5D gamma conversion model on isolated ion          0
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Lowest e+e- kinetic energy                         100 eV 
+Lowest muon/hadron kinetic energy                  1 keV
+Fluctuations of dE/dx are enabled                  1
+Use built-in Birks satuaration                     0
+Build CSDA range enabled                           1
+Use cut as a final range enabled                   1
+Enable angular generator interface                 0
+Factor of cut reduction for sub-cutoff method      1
+Max kinetic energy for CSDA tables                 1 GeV
+Linear loss limit 0.01
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           3
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     1
+Urban msc model lateral displacement alg96         1
+Msc lateral displacement beyond geometry safety    0
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Skin parameter for msc step limitation of e+-      1
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Upper energy limit for e+- multiple scattering     100 MeV
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
+Fluorescence enabled                               1
+Fluorescence Bearden data files enabled            0
+Auger electron production enabled                  0
+Auger cascade enabled                              0
+PIXE atomic de-excitation enabled                  0
+De-excitation module ignores cuts                  0
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
+======                 DNA Physics Parameters                  ========
+=======================================================================
+Use fast sampling in DNA models                    0
+Use Stationary option in DNA models                0
+Use DNA with multiple scattering of e-             0
+Use DNA e- solvation model type                    3
+=======================================================================
 
 ========= Table of registered couples ==============================
 
@@ -272,19 +349,19 @@ Index : 0     used in the geometry : Yes
 
  gamma (300 keV) in Germanium (density: 5.323 g/cm3    radiation length: 2.30121 cm )
 
-  processes :                	         phot		        compt		         conv		        total
+  processes :                	         phot		        compt		         conv		         Rayl		        total
  
-  cross section per atom    : 	      1.71686 barn  	      11.0976 barn  	            0 pbarn 	      12.8145 barn  
+  cross section per atom    : 	      1.72573 barn  	      11.0976 barn  	            0 pbarn 	      767.816 mbarn 	      13.5911 barn  
 
  
-  compCrossSectionPerVolume : 	     0.075796 cm^-1	     0.489937 cm^-1	            0 cm^-1	     0.565733 cm^-1
-  cross section per volume : 	     0.075796 cm^-1	     0.489921 cm^-1	            0 cm^-1	     0.565717 cm^-1
-  cross section per mass   : 	      1.42393 mm2/g 	      9.20385 mm2/g 	            0 um2/mg	      10.6278 mm2/g 
+  compCrossSectionPerVolume : 	    0.0761873 cm^-1	     0.489937 cm^-1	            0 cm^-1	    0.0338975 cm^-1	     0.600022 cm^-1
+  cross section per volume : 	    0.0761873 cm^-1	     0.489937 cm^-1	            0 cm^-1	    0.0339048 cm^-1	     0.600029 cm^-1
+  cross section per mass   : 	      1.43129 mm2/g 	      9.20415 mm2/g 	            0 um2/mg	      636.949 um2/mg	      11.2724 mm2/g 
  
-  mean free path           : 	      13.1933 cm 	      2.04115 cm 	 5.82593e+288 pc 	      1.76767 cm 
-        (g/cm2)            : 	       70.228 g/cm2 	       10.865 g/cm2 	 2.88022e+285 kg/cm2	       9.4093 g/cm2 
+  mean free path           : 	      13.1255 cm 	      2.04108 cm 	 5.82593e+288 pc 	      29.4944 cm 	      1.66659 cm 
+        (g/cm2)            : 	      69.8672 g/cm2 	      10.8647 g/cm2 	 2.88022e+285 kg/cm2	      156.998 g/cm2 	      8.87124 g/cm2 
 
--------------------------------------------------------------
+-----------------------------------------------------------
 
 
 ========= Table of registered couples ==============================
@@ -309,28 +386,28 @@ Index : 1     used in the geometry : Yes
   Range cuts : 	 gamma      100 um 	 e-      100 um 
  Energy cuts : 	 gamma  1.11344 keV	 e-  85.1138 keV
 
-  Max_energy _transferable  : 10 MeV (4.93186 cm )
+  Max_energy _transferable  : 5 MeV (2.53529 cm )
 
-  processes :                	        eIoni		        eBrem		        total
+  processes :                	        eIoni		        eBrem		    ePairProd		        total
  
-  compCrossSectionPerVolume : 	     0.994761 cm^-1	     0.325102 cm^-1	      1.31986 cm^-1
-  cross section per volume : 	     0.994763 cm^-1	     0.324959 cm^-1	      1.31972 cm^-1
-  cross section per mass   : 	      99.4763 mm2/g 	      32.4959 mm2/g 	      1.31972 cm2/g 
+  compCrossSectionPerVolume : 	     0.994761 cm^-1	     0.325102 cm^-1	            0 cm^-1	      1.31986 cm^-1
+  cross section per volume : 	     0.994761 cm^-1	     0.325094 cm^-1	            0 cm^-1	      1.31985 cm^-1
+  cross section per mass   : 	      99.4761 mm2/g 	      32.5094 mm2/g 	            0 um2/mg	      1.31985 cm2/g 
  
-  mean free path           : 	      1.00526 cm 	      3.07731 cm 	      7.57735 mm 
-        (g/cm2)            : 	      1.00526 g/cm2 	      3.07731 g/cm2 	      757.735 mg/cm2
+  mean free path           : 	      1.00527 cm 	      3.07604 cm 	 5.82593e+288 pc 	      7.57659 mm 
+        (g/cm2)            : 	      1.00527 g/cm2 	      3.07604 g/cm2 	 2.88022e+285 kg/cm2	      757.659 mg/cm2
 
  
-  restricted dE/dx         : 	      1.61328 MeV/cm	      25.6439 eV/cm 	       1.6133 MeV/cm
-      (MeV/g/cm2)          : 	      1.61328 MeV*cm2/g	      25.6439  eV*cm2/g	       1.6133 MeV*cm2/g
+  restricted dE/dx         : 	      1.61328 MeV/cm	      25.6439 eV/cm 	            0 eV/cm 	       1.6133 MeV/cm
+      (MeV/g/cm2)          : 	      1.61328 MeV*cm2/g	      25.6439  eV*cm2/g	            0  eV*cm2/g	       1.6133 MeV*cm2/g
  
-  unrestricted dE/dx       : 	      1.99147 MeV/cm	      181.698 keV/cm	      2.17317 MeV/cm
-      (MeV/g/cm2)          : 	      1.99147 MeV*cm2/g	      181.698 keV*cm2/g	      2.17317 MeV*cm2/g
+  unrestricted dE/dx       : 	      1.99147 MeV/cm	      181.698 keV/cm	            0 eV/cm 	      2.17317 MeV/cm
+      (MeV/g/cm2)          : 	      1.99147 MeV*cm2/g	      181.698 keV*cm2/g	            0  eV*cm2/g	      2.17317 MeV*cm2/g
  
-  range from restrict dE/dx: 	 6.07227 cm  ( 6.07227 g/cm2 )
-  range from full dE/dx    : 	 4.93186 cm  ( 4.93186 g/cm2 )
+  range from restrict dE/dx: 	 6.07217 cm  ( 6.07217 g/cm2 )
+  range from full dE/dx    : 	 4.93182 cm  ( 4.93182 g/cm2 )
  
-  transport mean free path : 	 2.82437 mm  ( 282.437 mg/cm2)
+  transport mean free path : 	 27.9107 cm  ( 27.9107 g/cm2 )
  
   critical energy (Rossi)  : 	 78.7732 MeV
   Moliere radius           : 	0.269193 X0 =  9.71583 cm 

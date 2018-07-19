@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularDissociation.cc 93936 2015-11-04 09:37:59Z gcosmo $
+// $Id: G4DNAMolecularDissociation.cc 101354 2016-11-15 08:27:51Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -79,9 +79,9 @@ G4DNAMolecularDissociation(const G4String& processName,
 
 G4DNAMolecularDissociation::~G4DNAMolecularDissociation()
 {
-  DecayDisplacementMap::iterator it = fDecayDisplacementMap.begin();
+  DisplacementMap::iterator it = fDisplacementMap.begin();
 
-  for(; it != fDecayDisplacementMap.end(); it++)
+  for(; it != fDisplacementMap.end(); it++)
   {
     if(it->second)
     {
@@ -89,7 +89,7 @@ G4DNAMolecularDissociation::~G4DNAMolecularDissociation()
       it->second = 0;
     }
   }
-  fDecayDisplacementMap.clear();
+  fDisplacementMap.clear();
 }
 
 //______________________________________________________________________________
@@ -99,7 +99,7 @@ G4DNAMolecularDissociation(const G4DNAMolecularDissociation &right) :
     G4VITRestDiscreteProcess(right)
 {
   fDecayAtFixedTime = right.fDecayAtFixedTime;
-  fDecayDisplacementMap = right.fDecayDisplacementMap;
+  fDisplacementMap = right.fDisplacementMap;
   fVerbose = right.fVerbose;
 }
 
@@ -213,10 +213,10 @@ G4VParticleChange* G4DNAMolecularDissociation::DecayIt(const G4Track& track,
       vector<G4ThreeVector> ProductsDisplacement(nbProducts);
       G4ThreeVector theMotherMoleculeDisplacement;
 
-      DecayDisplacementMap::iterator it =
-          fDecayDisplacementMap.find(moleculeDefinition);
+      DisplacementMap::iterator it =
+          fDisplacementMap.find(moleculeDefinition);
 
-      if(it != fDecayDisplacementMap.end())
+      if(it != fDisplacementMap.end())
       {
         G4VMolecularDecayDisplacer* displacer = it->second;
         ProductsDisplacement = displacer->GetProductsDisplacement(decayChannel);
@@ -259,36 +259,45 @@ G4VParticleChange* G4DNAMolecularDissociation::DecayIt(const G4Track& track,
         G4ThreeVector displacement = theMotherMoleculeDisplacement
             + ProductsDisplacement[j];
         double mag_displacement = displacement.mag();
-        G4ThreeVector displacement_direction = displacement / mag_displacement;
-
+        G4ThreeVector displacement_direction =
+          displacement/(mag_displacement+1e-30);
+        
         double prNewSafety = DBL_MAX;
 
+        //double step =
         navigator->CheckNextStep(track.GetPosition(),
                                  displacement_direction,
                                  mag_displacement,
-                                 prNewSafety); // returns a value
+                                 prNewSafety);
 
-        if(prNewSafety < mag_displacement) mag_displacement = prNewSafety;
+        //if(prNewSafety < mag_displacement || step < mag_displacement)
+        mag_displacement = min(prNewSafety*0.8, mag_displacement);
 
-//        const G4AffineTransform& transform = navigator
-//            ->GetGlobalToLocalTransform();
-//
-//        G4ThreeVector localPoint =
-//            transform.TransformPoint(track.GetPosition());
-//
-//        if(track.GetTouchable()->GetSolid()->Inside(localPoint) != EInside::kInside)
-//        {
-//          G4Exception("G4DNAMolecularDissociation::DecayIt",
-//                      "OUTSIDE_OF_MOTHER_VOLUME",
-//                      FatalException,
-//                      "Product has been placed outside of the volume "
-//                      "containing the mother molecule");
-//        }
+        G4ThreeVector product_pos = track.GetPosition()
+                       + displacement_direction * mag_displacement;
+        
+        const G4AffineTransform& transform = navigator
+            ->GetGlobalToLocalTransform();
+
+        G4ThreeVector localPoint =
+          transform.TransformPoint(product_pos); //track.GetPosition());
+
+        if(track.GetTouchable()->GetSolid()->Inside(localPoint) !=
+           EInside::kInside)
+        {
+          G4cout << "Mother volume: "
+                 << track.GetTouchable()->GetVolume()->GetName()
+                 << G4endl;
+          G4Exception("G4DNAMolecularDissociation::DecayIt",
+                      "OUTSIDE_OF_MOTHER_VOLUME",
+                      FatalException,
+                      "Product has been placed outside of the volume "
+                      "containing the mother molecule");
+        }
 
         G4Track* secondary =
             product->BuildTrack(track.GetGlobalTime(),
-                                track.GetPosition() + displacement_direction
-                                    * mag_displacement);
+                                product_pos);
 
         secondary->SetTrackStatus(fAlive);
 #ifdef G4VERBOSE
@@ -335,7 +344,7 @@ void G4DNAMolecularDissociation::
 SetDecayDisplacer(const G4ParticleDefinition* molDef,
                   G4VMolecularDecayDisplacer* aDisplacer)
 {
-  fDecayDisplacementMap[molDef] = aDisplacer;
+  fDisplacementMap[molDef] = aDisplacer;
 }
 
 //______________________________________________________________________________
@@ -344,7 +353,25 @@ G4VMolecularDecayDisplacer*
 G4DNAMolecularDissociation::
 GetDecayDisplacer(const G4ParticleDefinition* molDef)
 {
-  return fDecayDisplacementMap[molDef];
+  return fDisplacementMap[molDef];
+}
+
+//______________________________________________________________________________
+
+void G4DNAMolecularDissociation::
+SetDisplacer(const G4ParticleDefinition* molDef,
+                  G4VMolecularDecayDisplacer* aDisplacer)
+{
+  fDisplacementMap[molDef] = aDisplacer;
+}
+
+//______________________________________________________________________________
+
+G4VMolecularDecayDisplacer*
+G4DNAMolecularDissociation::
+GetDisplacer(const G4ParticleDefinition* molDef)
+{
+  return fDisplacementMap[molDef];
 }
 
 //______________________________________________________________________________

@@ -3,7 +3,7 @@
 /quad/setG2 15.763169
 /quad/setG3 9.3653612
 /quad/setG4 -5.912425
+/setCoef 1
 /displayProfile 1
-/quad/update
 /beam/emission 1
 /run/beamOn 32

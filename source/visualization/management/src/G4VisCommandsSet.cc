@@ -32,10 +32,49 @@
 #include "G4VisCommandsSet.hh"
 
 #include "G4UIcommand.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAString.hh"
-#include <cctype>
 #include <sstream>
+
+////////////// /vis/set/arrow3DLineSegmentsPerCircle ////////////////////////////////////
+
+G4VisCommandSetArrow3DLineSegmentsPerCircle::G4VisCommandSetArrow3DLineSegmentsPerCircle ()
+{
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAnInteger("/vis/set/arrow3DLineSegmentsPerCircle", this);
+  fpCommand->SetGuidance
+  ("Defines number of line segments per circle for drawing 3D arrows"
+   " for future \"/vis/scene/add/\" commands.");
+  fpCommand->SetParameterName ("number", omitable = true);
+  fpCommand->SetDefaultValue (6);
+  fpCommand->SetRange("number >= 3");
+}
+
+G4VisCommandSetArrow3DLineSegmentsPerCircle::~G4VisCommandSetArrow3DLineSegmentsPerCircle ()
+{
+  delete fpCommand;
+}
+
+G4String G4VisCommandSetArrow3DLineSegmentsPerCircle::GetCurrentValue (G4UIcommand*)
+{
+  return G4String();
+}
+
+void G4VisCommandSetArrow3DLineSegmentsPerCircle::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  fCurrentArrow3DLineSegmentsPerCircle = fpCommand->GetNewIntValue(newValue);
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout <<
+    "Number of line segments per circle for drawing 3D arrows for future"
+    "\n  \"/vis/scene/add/\" commands has been set to "
+	   << fCurrentArrow3DLineSegmentsPerCircle
+	   << G4endl;
+  }
+}
 
 ////////////// /vis/set/colour ////////////////////////////////////
 
@@ -47,6 +86,7 @@ G4VisCommandSetColour::G4VisCommandSetColour ()
     ("Defines colour and opacity for future \"/vis/scene/add/\" commands.");
   fpCommand->SetGuidance
     ("(Except \"/vis/scene/add/text\" commands - see \"/vis/set/textColour\".)");
+  fpCommand->SetGuidance(ConvertToColourGuidance());
   fpCommand->SetGuidance("Default: white and opaque.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("red", 's', omitable = true);
@@ -85,22 +125,7 @@ void G4VisCommandSetColour::SetNewValue (G4UIcommand*, G4String newValue)
   std::istringstream iss(newValue);
   iss >> redOrString >> green >> blue >> opacity;
 
-  G4Colour colour(1,1,1,1);  // Default white and opaque.
-  if (std::isalpha(redOrString(0))) {
-    if (!G4Colour::GetColour(redOrString, colour)) {
-      if (verbosity >= G4VisManager::warnings) {
-	G4cout << "WARNING: Colour \"" << redOrString
-	       << "\" not found.  Defaulting to white and opaque."
-	       << G4endl;
-      }
-    }
-  } else {
-    colour = G4Colour
-      (G4UIcommand::ConvertToDouble(redOrString), green, blue);
-  }
-  // Add opacity
-  fCurrentColour = G4Colour
-    (colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+  ConvertToColour(fCurrentColour, redOrString, green, blue, opacity);
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout <<
@@ -156,6 +181,7 @@ G4VisCommandSetTextColour::G4VisCommandSetTextColour ()
   fpCommand = new G4UIcommand("/vis/set/textColour", this);
   fpCommand->SetGuidance
     ("Defines colour and opacity for future \"/vis/scene/add/text\" commands.");
+  fpCommand->SetGuidance(ConvertToColourGuidance());
   fpCommand->SetGuidance("Default: blue and opaque.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("red", 's', omitable = true);
@@ -194,22 +220,7 @@ void G4VisCommandSetTextColour::SetNewValue (G4UIcommand*, G4String newValue)
   std::istringstream iss(newValue);
   iss >> redOrString >> green >> blue >> opacity;
 
-  G4Colour colour(0,0,1,1);  // Default blue and opaque.
-  if (std::isalpha(redOrString(0))) {
-    if (!G4Colour::GetColour(redOrString, colour)) {
-      if (verbosity >= G4VisManager::warnings) {
-	G4cout << "WARNING: Text colour \"" << redOrString
-	       << "\" not found.  Defaulting to blue and opaque."
-	       << G4endl;
-      }
-    }
-  } else {
-    colour = G4Colour
-      (G4UIcommand::ConvertToDouble(redOrString), green, blue);
-  }
-  // Add opacity
-  fCurrentTextColour = G4Colour
-    (colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+  ConvertToColour(fCurrentTextColour, redOrString, green, blue, opacity);
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout <<

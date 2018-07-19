@@ -27,17 +27,17 @@
 /// \brief Implementation of the RE01TrackInformation class
 //
 //
-// $Id: RE01TrackInformation.cc 75295 2013-10-30 09:32:52Z gcosmo $
+// $Id: RE01TrackInformation.cc 97671 2016-06-07 08:25:00Z gcosmo $
 //
 
 #include "RE01TrackInformation.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"    
 
-G4ThreadLocal G4Allocator<RE01TrackInformation> * aTrackInformationAllocator = 0;
-//G4Allocator<RE01TrackInformation> aTrackInformationAllocator;
+G4ThreadLocal G4Allocator<RE01TrackInformation> *
+                                   aTrackInformationAllocator = 0;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01TrackInformation::RE01TrackInformation()
   : G4VUserTrackInformation()
 {
@@ -54,9 +54,10 @@ RE01TrackInformation::RE01TrackInformation()
     fSourceMomentum = G4ThreeVector(0.,0.,0.);
     fSourceEnergy = 0.;
     fSourceTime = 0.;
+    fSuspendedStepID = -1;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01TrackInformation::RE01TrackInformation(const G4Track* aTrack)
   : G4VUserTrackInformation()
 {
@@ -73,9 +74,10 @@ RE01TrackInformation::RE01TrackInformation(const G4Track* aTrack)
     fSourceMomentum = G4ThreeVector(0.,0.,0.);
     fSourceEnergy = 0.;
     fSourceTime = 0.;
+    fSuspendedStepID = -1;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01TrackInformation
 ::RE01TrackInformation(const RE01TrackInformation* aTrackInfo)
   : G4VUserTrackInformation()
@@ -93,13 +95,14 @@ RE01TrackInformation
     fSourceMomentum = aTrackInfo->fSourceMomentum;
     fSourceEnergy = aTrackInfo->fSourceEnergy;
     fSourceTime = aTrackInfo->fSourceTime;
+    fSuspendedStepID = -1;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01TrackInformation::~RE01TrackInformation()
 {;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01TrackInformation& RE01TrackInformation
 ::operator =(const RE01TrackInformation& aTrackInfo)
 {
@@ -116,11 +119,12 @@ RE01TrackInformation& RE01TrackInformation
     fSourceMomentum = aTrackInfo.fSourceMomentum;
     fSourceEnergy = aTrackInfo.fSourceEnergy;
     fSourceTime = aTrackInfo.fSourceTime;
+    fSuspendedStepID = -1;
 
     return *this;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01TrackInformation::SetSourceTrackInformation(const G4Track* aTrack)
 {
     fSourceTrackID = aTrack->GetTrackID();
@@ -131,7 +135,7 @@ void RE01TrackInformation::SetSourceTrackInformation(const G4Track* aTrack)
     fSourceTime = aTrack->GetGlobalTime();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01TrackInformation::Print() const
 {
     G4cout 

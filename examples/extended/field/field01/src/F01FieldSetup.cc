@@ -27,7 +27,7 @@
 /// \brief Implementation of the F01FieldSetup class
 //
 //
-// $Id: F01FieldSetup.cc 90341 2015-05-26 08:38:36Z gcosmo $
+// $Id: F01FieldSetup.cc 104350 2017-05-26 07:20:25Z gcosmo $
 //
 //   User Field setup class implementation.
 //
@@ -60,6 +60,11 @@
 #include "G4NystromRK4.hh"
 #include "G4HelixMixedStepper.hh"
 #include "G4ExactHelixStepper.hh"
+
+// Newest steppers - from Release 10.3-beta (June 2013)
+#include "G4BogackiShampine23.hh"
+#include "G4BogackiShampine45.hh"
+#include "G4DormandPrince745.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -131,21 +136,22 @@ F01FieldSetup::~F01FieldSetup()
 
 void F01FieldSetup::CreateStepperAndChordFinder()
 {
+  delete fChordFinder;
+  fChordFinder= nullptr;
+   
   // Update field
-
-  G4cout<< " F01FieldSetup::CreateStepperAndChordFinder() called "
-        << " to reset Stepper."  << G4endl;
+  G4cout << " F01FieldSetup::CreateStepperAndChordFinder() called. " << G4endl
+         << "                 1. Creating Stepper."  << G4endl;
 
   SetStepper();
   G4cout<<"The minimal step is equal to "<<fMinStep/mm<<" mm"<<G4endl;
 
-  fFieldManager->SetDetectorField(fMagneticField );
-
-  if (fChordFinder) delete fChordFinder;
-
+  G4cout  << "                 2. Creating ChordFinder."  << G4endl;
   fChordFinder = new G4ChordFinder( fMagneticField, fMinStep,fStepper );
 
+  G4cout  << "                 3. Updating Field Manager."  << G4endl;  
   fFieldManager->SetChordFinder( fChordFinder );
+  fFieldManager->SetDetectorField(fMagneticField );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -214,10 +220,27 @@ void F01FieldSetup::SetStepper()
       fStepper = new G4NystromRK4( fEquation );
       G4cout<<" G4NystromRK4 Stepper is chosen"<<G4endl;
       break;
-    default: // fStepper = 4;
+    case 14:      
+    case 23:
+      fStepper = new G4BogackiShampine23( fEquation );
+      G4cout<<"G4BogackiShampine23 Stepper is chosen"<<G4endl;
+      break;
+    case 15:
+    case 45:       
+      fStepper = new G4BogackiShampine45( fEquation );
+      G4cout<<"G4BogackiShampine45 Stepper is chosen"<<G4endl;
+      break;
+    case 457:
+    case 745:
+      fStepper = new G4DormandPrince745( fEquation );
+      G4cout<<"G4DormandPrince745 Stepper is chosen"<<G4endl;
+      break;
+    default:
       fStepper = new G4ClassicalRK4( fEquation );
       G4cout<<"G4ClassicalRK4 Stepper (default) is chosen"<<G4endl;
-      break;
+      // fStepper = new G4DormandPrince745( fEquation );
+      // G4cout<<"G4DormandPrince745 (default) Stepper is chosen"<<G4endl;
+      break;      
   }
 }
 

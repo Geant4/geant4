@@ -71,7 +71,6 @@ class TSRun : public G4Run
 {
 public:
     typedef std::map<G4int, G4double> MutexHitsMap_t;
-    typedef std::vector<G4atomic<G4double>*> AtomicHitsSum_t;
 
 public:
     TSRun(const G4String&);
@@ -95,7 +94,6 @@ private:
     std::vector<G4String> fCollNames;
     std::vector<G4int> fCollIDs;
     std::vector<G4THitsMap<G4double>*> fRunMaps;
-    static AtomicHitsSum_t fAtomicRunSums;
     static std::vector<G4TAtomicHitsMap<G4double>*> fAtomicRunMaps;
     static std::map<G4String, MutexHitsMap_t> fMutexRunMaps;
 

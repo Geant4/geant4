@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyMaterial.hh 69765 2013-05-14 10:11:22Z gcosmo $
+// $Id: BrachyMaterial.hh 100821 2016-11-02 15:21:34Z gcosmo $
 //
 //    **********************************
 //    *                                *
@@ -62,6 +62,7 @@ private:
   G4Material* matH2O;
   G4Material* soft;
   G4Material* matsteel;
+  G4Material* mat304steel;
   G4Material* gold;
   G4Material* matI; 
   G4Material* ceramic;

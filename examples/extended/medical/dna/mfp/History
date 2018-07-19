@@ -1,0 +1,28 @@
+$Id: History 85260 2014-10-27 08:53:35Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    mfp History file
+                    --------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+09-05-18 B. Morgan (mfp-V10-04-01)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+26-02-18  R. Hatcher    (mfp-V10-04-00)
+- Use G4RegisterPhysicsConstructors.icc to ensure G4PhysicsConstructorRegisty
+  is filled when using static libraries
+
+15-06-17 SI (mfp-V10-03-00)
+- created
+

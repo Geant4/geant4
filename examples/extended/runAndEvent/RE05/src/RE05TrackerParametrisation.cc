@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05TrackerParametrisation.cc 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id: RE05TrackerParametrisation.cc 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/src/RE05TrackerParametrisation.cc
 /// \brief Implementation of the RE05TrackerParametrisation class
@@ -36,15 +36,22 @@
 #include "G4Tubs.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05TrackerParametrisation::RE05TrackerParametrisation()
+: G4VPVParameterisation()
 {
 
 #include "RE05DetectorParameterDef.icc"
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05TrackerParametrisation::~RE05TrackerParametrisation()
-{;}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05TrackerParametrisation::ComputeTransformation
 (const G4int, G4VPhysicalVolume* physVol) const
@@ -53,12 +60,16 @@ void RE05TrackerParametrisation::ComputeTransformation
   physVol->SetTranslation(origin);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RE05TrackerParametrisation::ComputeDimensions
 (G4Tubs& trackerLayer, const G4int copyNo, const G4VPhysicalVolume*) const
 {
-  trackerLayer.SetInnerRadius(tracker_radius[copyNo]);
-  trackerLayer.SetOuterRadius(tracker_radius[copyNo]+tracker_thick);
-  trackerLayer.SetZHalfLength(tracker_length[copyNo]);
-  trackerLayer.SetStartPhiAngle(trkTubs_sphi,false);
-  trackerLayer.SetDeltaPhiAngle(trkTubs_dphi);
+  trackerLayer.SetInnerRadius(fTracker_radius[copyNo]);
+  trackerLayer.SetOuterRadius(fTracker_radius[copyNo]+fTracker_thick);
+  trackerLayer.SetZHalfLength(fTracker_length[copyNo]);
+  trackerLayer.SetStartPhiAngle(fTrkTubs_sphi,false);
+  trackerLayer.SetDeltaPhiAngle(fTrkTubs_dphi);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

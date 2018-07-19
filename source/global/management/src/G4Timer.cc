@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Timer.cc 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4Timer.cc 110674 2018-06-07 10:30:11Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@
 #include "G4Timer.hh"
 #include "G4ios.hh"
 
-#undef times
+#include <iomanip>
 
 // Global error function
 #include "G4ExceptionSeverity.hh"
@@ -86,16 +86,31 @@ void G4Exception(const char* originOfException,
 // Print timer status n std::ostream
 std::ostream& operator << (std::ostream& os, const G4Timer& t)
 {
+    // so fixed doesn't propagate
+    std::stringstream ss;
+    ss << std::fixed;
     if (t.IsValid())
+    {
+        ss << "User=" << t.GetUserElapsed()
+           << "s Real=" << t.GetRealElapsed()
+           << "s Sys=" << t.GetSystemElapsed() << "s";
+#ifdef G4MULTITHREADED
+            // avoid possible FPE error
+        if(t.GetRealElapsed() > 1.0e-6)
         {
-            os << "User=" << t.GetUserElapsed()
-               << "s Real=" << t.GetRealElapsed()
-               << "s Sys=" << t.GetSystemElapsed() << "s";
+            double cpu_util = (t.GetUserElapsed()+t.GetRealElapsed()) /
+                              t.GetRealElapsed() * 100.0;
+            ss << std::setprecision(1);
+            ss << " [Cpu=" << std::setprecision(1) << cpu_util << "%]";
         }
+#endif
+    }
     else
-        {
-            os << "User=****s Real=****s Sys=****s";
-        }
+    {
+        ss << "User=****s Real=****s Sys=****s";
+    }
+    os << ss.str();
+
     return os;
 }
 
@@ -111,8 +126,8 @@ G4double G4Timer::GetRealElapsed() const
       G4Exception("G4Timer::GetRealElapsed()", "InvalidCondition",
                   FatalException, "Timer not stopped or times not recorded!");
     }
-    G4double diff=fEndRealTime-fStartRealTime;
-    return diff/sysconf(_SC_CLK_TCK);
+    std::chrono::duration<double> diff=fEndRealTime-fStartRealTime;
+    return diff.count();
 }
 
 

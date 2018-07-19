@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPartialDetectorConstruction.cc 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id: DicomPartialDetectorConstruction.cc 101301 2016-11-14 11:19:22Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomPartialDetectorConstruction.cc
 /// \brief Implementation of the DicomPartialDetectorConstruction class
@@ -341,20 +341,20 @@ void DicomPartialDetectorConstruction::ReadVoxelDensitiesPartial( std::ifstream&
           = newMateDens.find( matdens );
           if( mppite != newMateDens.end() ){
             matInfo* mi = (*mppite).second;
-            mi->sumdens += dens1;
-            mi->nvoxels++;
-            fMateIDs[copyNo] = fOriginalMaterials.size()-1 + mi->id;
+            mi->fSumdens += dens1;
+            mi->fNvoxels++;
+            fMateIDs[copyNo] = fOriginalMaterials.size()-1 + mi->fId;
           //  G4cout << copyNo << " mat new again "
           //<< fOriginalMaterials.size()-1 + mi->id << " " << mi->id << G4endl;
           } else {
             matInfo* mi = new matInfo;
-            mi->sumdens = dens1;
-            mi->nvoxels = 1;
-            mi->id = newMateDens.size()+1;
+            mi->fSumdens = dens1;
+            mi->fNvoxels = 1;
+            mi->fId = newMateDens.size()+1;
             newMateDens[matdens] = mi;
-            fMateIDs[copyNo] = fOriginalMaterials.size()-1 + mi->id;
+            fMateIDs[copyNo] = fOriginalMaterials.size()-1 + mi->fId;
             //          G4cout << copyNo << " mat new first "
-            //          << fOriginalMaterials.size()-1 + mi->id << G4endl;
+            //          << fOriginalMaterials.size()-1 + mi->fId << G4endl;
           }
           copyNo++;
         //        G4cout << ix << " " << iy << " " << iz
@@ -376,7 +376,7 @@ void DicomPartialDetectorConstruction::ReadVoxelDensitiesPartial( std::ifstream&
   //---- Build and add new materials
   std::map< std::pair<G4Material*,G4int>, matInfo* >::iterator mppite;
   for( mppite= newMateDens.begin(); mppite != newMateDens.end(); mppite++ ){
-    G4double averdens = (*mppite).second->sumdens/(*mppite).second->nvoxels;
+    G4double averdens = (*mppite).second->fSumdens/(*mppite).second->fNvoxels;
     G4double saverdens = G4int(1000.001*averdens)/1000.;
     G4cout << "GmReadPhantomGeometry::ReadVoxelDensities AVER DENS " 
            << averdens << " -> " << saverdens << " -> " 
@@ -386,7 +386,7 @@ void DicomPartialDetectorConstruction::ReadVoxelDensitiesPartial( std::ifstream&
     G4cout << "GmReadPhantomGeometry::ReadVoxelDensities AVER DENS " 
            << averdens << " -> "  << saverdens << " -> " 
            << G4UIcommand::ConvertToString(saverdens) << " Nvoxels "
-    <<(*mppite).second->nvoxels << G4endl;
+    <<(*mppite).second->fNvoxels << G4endl;
     G4String mateName = ((*mppite).first).first->GetName() + "_" +
     G4UIcommand::ConvertToString(saverdens);
     fPhantomMaterials.push_back( BuildMaterialWithChangingDensity( 

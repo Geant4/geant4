@@ -6,8 +6,6 @@
 
 #include "sf"
 
-#include "enums" //hjust,vjust
-
 namespace tools {
 namespace sg {
 

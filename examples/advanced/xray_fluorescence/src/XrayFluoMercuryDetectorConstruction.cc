@@ -59,7 +59,7 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
-
+#include "G4SDManager.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
@@ -432,7 +432,7 @@ G4VPhysicalVolume* XrayFluoMercuryDetectorConstruction::ConstructApparate()
   // Visualization attributes
   
 
-  logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
+  logicWorld->SetVisAttributes (G4VisAttributes::GetInvisible());
   G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   G4VisAttributes * yellow= new G4VisAttributes( G4Colour(255/255. ,255/255. ,51/255. ));
   G4VisAttributes * red= new G4VisAttributes( G4Colour(255/255. , 0/255. , 0/255. ));
@@ -452,7 +452,7 @@ G4VPhysicalVolume* XrayFluoMercuryDetectorConstruction::ConstructApparate()
   //logicWorld->SetVisAttributes (simpleBoxVisAtt);
   
   logicPixel->SetVisAttributes(red);
-  logicHPGe->SetVisAttributes(G4VisAttributes::Invisible);
+  logicHPGe->SetVisAttributes(G4VisAttributes::GetInvisible());
   
   logicMercury->SetVisAttributes(darkGray);
   
@@ -484,7 +484,7 @@ void XrayFluoMercuryDetectorConstruction::ConstructSDandField()
       XrayFluoSD* SD = new XrayFluoSD ("HPGeSD",this);
       HPGeSD.Put( SD );
     }
-  
+  G4SDManager::GetSDMpointer()->AddNewDetector(HPGeSD.Get());
   if (logicPixel)    
     SetSensitiveDetector(logicPixel,HPGeSD.Get());
 }

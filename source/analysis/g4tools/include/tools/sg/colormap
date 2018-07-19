@@ -30,32 +30,32 @@ public:
   }
   virtual ~base_colormap(){}
 public:
-  unsigned int colorn() const {return m_colors.size();}
-  unsigned int valn() const {return m_values.size();}
-  colorf color(unsigned int a_index) const {
-    unsigned int n = m_colors.size();
+  size_t colorn() const {return m_colors.size();}
+  size_t valn() const {return m_values.size();}
+  colorf color(size_t a_index) const {
+    size_t n = m_colors.size();
     if(a_index>=n) return colorf(0.5F,0.5F,0.5F);
     return m_colors[a_index];
   }
-  float value(unsigned int a_index) const {
-    unsigned int n = m_values.size();
+  float value(size_t a_index) const {
+    size_t n = m_values.size();
     if(a_index>=n) return 0;
     return m_values[a_index];
   }
 public:
   // helper :
-  void set_colors(void(*aGet)(float,colorf&),unsigned int a_ncell) {
+  void set_colors(void(*aGet)(float,colorf&),size_t a_ncell) {
     m_colors.clear();
     m_colors.resize(a_ncell);
     if(!a_ncell) return;
     float d = 1.0F/(a_ncell-1);
-    for(unsigned int index=0;index<a_ncell;index++) {
+    for(size_t index=0;index<a_ncell;index++) {
       aGet(d*index,m_colors[index]);
     }
   }
 
   void set_PAW_coloring() {
-    unsigned int _valn = m_values.size();
+    size_t _valn = m_values.size();
     if(_valn==1) {
       m_values[0] = take_log(m_values[0]);
     } else if(_valn>=2) {
@@ -64,7 +64,7 @@ public:
       float vmin = take_log(m_values[0]);
       float vmax = take_log(m_values[_valn-1]);
       float dv = (vmax-vmin)/(_valn-1);
-      for(unsigned int count=0;count<_valn;count++) {
+      for(size_t count=0;count<_valn;count++) {
         m_values[count] = vmin + dv * count;
       }
     }
@@ -121,8 +121,8 @@ protected:
     //      black 10 cyan 50 green 100 orange 200 blue 300 pink 400 red
     std::vector<std::string> ws;
     words(aString," ",false,ws);
-    int wordn = ws.size();
-    int number = wordn/2;
+    size_t wordn = ws.size();
+    size_t number = wordn/2;
     if(number<=0) {
       aValues.clear();
       aColors.clear();
@@ -144,7 +144,7 @@ protected:
         // <col> <num> <col> ... <num> <col>
         aValues.resize(number);
         aColors.resize(number+1);
-        for(int count=0;count<number;count++) {
+        for(size_t count=0;count<number;count++) {
          {const std::string& word = ws[2*count];
           if(!sg::find_color(a_cmaps,word,aColors[count])) {
             a_out << "by_value_colormap::set_by_value :"
@@ -179,7 +179,7 @@ protected:
         // <num> <col> <num> ... <col> <num>
         aValues.resize(number+1);
         aColors.resize(number);
-        for(int count=0;count<number;count++) {
+        for(size_t count=0;count<number;count++) {
          {const std::string& word = ws[2*count];
           if(!to(word,aValues[count]))  {
             a_out << "by_value_colormap::set_by_value :"
@@ -238,8 +238,8 @@ protected:
     // colors[4] blue
     // colors[5] pink
     // colors[6] red
-    unsigned int _valn = aValues.size();
-    if(!_valn) {a_col = colorf::black();return;}
+    size_t _valn = aValues.size();
+    if(!_valn) {a_col = colorf_black();return;}
     if(aColors.size()==(_valn+1)) {
       // col0 val0 col1 val1 col2 val2 col3
       if(aValue<aValues[0]) {
@@ -263,9 +263,9 @@ protected:
       }
       if(aValue<aValues[0]) {a_col = aColors[0];return;}
       if(aValue>=aValues[_valn-1]) {a_col = aColors[aColors.size()-1];return;}
-      a_col = colorf::black();
+      a_col = colorf_black();
     } else {
-      a_col = colorf::black();
+      a_col = colorf_black();
     }
   }
   
@@ -283,7 +283,7 @@ public:
     else return 0;
   }
 public:
-  grey_scale_colormap(float a_min,float a_max,unsigned int a_ncell){
+  grey_scale_colormap(float a_min,float a_max,size_t a_ncell){
     m_values.resize(2);
     m_values[0] = a_min;
     m_values[1] = a_max;
@@ -315,7 +315,7 @@ public:
     else return 0;
   }
 public:
-  grey_scale_inverse_colormap(float a_min,float a_max,unsigned int a_ncell){
+  grey_scale_inverse_colormap(float a_min,float a_max,size_t a_ncell){
     m_values.resize(2);
     m_values[0] = a_min;
     m_values[1] = a_max;
@@ -348,7 +348,7 @@ public:
     else return 0;
   }
 public:
-  violet_to_red_colormap(float a_min,float a_max,unsigned int a_ncell){
+  violet_to_red_colormap(float a_min,float a_max,size_t a_ncell){
     set(a_min,a_max,a_ncell);
   }
   violet_to_red_colormap(const violet_to_red_colormap& aFrom):base_colormap(aFrom){}
@@ -358,7 +358,7 @@ public:
   }
   virtual ~violet_to_red_colormap(){}
 public:
-  void set(float a_min,float a_max,unsigned int a_ncell){
+  void set(float a_min,float a_max,size_t a_ncell){
     m_values.resize(2);
     m_values[0] = a_min;
     m_values[1] = a_max;

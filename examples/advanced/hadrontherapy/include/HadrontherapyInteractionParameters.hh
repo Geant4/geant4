@@ -33,18 +33,6 @@
 #include "G4NistMaterialBuilder.hh"
 #include "G4NistElementBuilder.hh"
 
-#ifdef G4ANALYSIS_USE_ROOT 
-#include "TROOT.h"
-#include "TCanvas.h"
-#include "TFile.h"
-#include "TH1F.h" 
-#include "TH2F.h"
-#include "TGraph.h"
-#include "TLegend.h"
-#include "TLegendEntry.h"
-#include "TStyle.h"
-#endif
-
 class HadrontherapyDetectorConstruction;
 class HadrontherapyParameterMessenger; 
 class G4ParticleDefinition;
@@ -67,9 +55,7 @@ public:
 			const G4ParticleDefinition*, 
 			const G4Material*, 
 			G4double density = 0.);
-#ifdef G4ANALYSIS_USE_ROOT 
-  void PlotStopping(const G4String&);
-#endif
+
   void ListOfNistMaterials (const G4String& vararg);
   void BeamOn();
   bool ParseArg (const G4String& vararg);	
@@ -84,11 +70,6 @@ private:
   HadrontherapyParameterMessenger* pMessenger; 
   bool beamFlag;
 
-#ifdef G4ANALYSIS_USE_ROOT 
-  TCanvas *theRootCanvas;
-  TGraph *theRootGraph;
-  TAxis *axisX, *axisY;
-#endif
   G4double kinEmin, kinEmax, npoints;
   G4String particle, material, filename; 
   G4double dedxtot, density;

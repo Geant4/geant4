@@ -194,7 +194,7 @@ namespace HepGeom {
   public:
     /**
      * Global identity transformation. */
-    static const Transform3D Identity;
+    DLL_API static const Transform3D Identity;
 
     // Helper class for implemention of C-style subscripting r[i][j] 
     class Transform3D_row {

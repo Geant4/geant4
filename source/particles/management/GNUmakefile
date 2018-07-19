@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
+# $Id: GNUmakefile 99159 2016-09-07 08:11:50Z gcosmo $
 # ----------------------------------------------------------------
 # GNUmakefile for particle management library.  G.Cosmo, 4/4/97.
 # ----------------------------------------------------------------
@@ -22,3 +22,7 @@ CPPFLAGS += \
 
 
 include $(G4INSTALL)/config/common.gmk
+
+ifdef G4NucleiProperties_USE_OLD_AME_TABLE
+   CPPFLAGS += -DG4NucleiProperties_USE_OLD_AME_TABLE
+endif

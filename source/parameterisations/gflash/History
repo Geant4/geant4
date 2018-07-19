@@ -1,4 +1,4 @@
-$Id: History 102305 2017-01-20 14:20:07Z gcosmo $
+$Id: History 108069 2017-12-19 15:27:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,16 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-Nov 2nd, 2016, M. Verderi (gflash-V10-01-02)
------------------------
-- Fixed memory leak in GVFlashShowerParameterisation.
+Dec 19th, 2017, G.Cosmo (gflash-V10-04-00)
+- Fixed self-consistency in GVFlashHomoShowerTuning header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
 
-Jul 7th, 2016, G. Cosmo
+Nov 2nd, 2016, M. Verderi (gflash-V10-02-02)
 -----------------------
-- Removed redundant condition in GFlashHitMaker::make().
+- Removend redundant condition in GFlashHitMaker::make().
   Addressing problem report #1876.
 
-Jun 6th, 2016, M. Verderi (gflash-V10-01-01)
+Jul 7th, 2016, G. Cosmo (gflash-V10-02-01)
+-----------------------
+- Removend redundant condition in GFlashHitMaker::make().
+  Addressing problem report #1876.
+
+Jun 6th, 2016, M. Verderi (gflash-V10-02-00)
 -------------------------
 - Fix bug 1867: missing G4VSensitiveDetector include in G4VGFlashSensitiveDetector.
 

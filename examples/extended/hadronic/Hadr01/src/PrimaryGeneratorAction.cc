@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.cc 70761 2013-06-05 12:30:51Z gcosmo $
+// $Id: PrimaryGeneratorAction.cc 109185 2018-04-03 07:20:46Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -69,7 +69,8 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   if(fHisto->DefaultBeamPosition()) {
-    G4double zVertex = -(5.0*mm + fHisto->Length());
+    static const G4double offset = 2*CLHEP::mm;
+    G4double zVertex = -(offset + 0.5*fHisto->Length());
     fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
   }
   fParticleGun->GeneratePrimaryVertex(anEvent);

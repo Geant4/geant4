@@ -51,7 +51,9 @@
 #include "Randomize.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#ifdef G4UI_USE_QT
 #include "G4UIQt.hh"
+#endif
 #include "CommandLineParser.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

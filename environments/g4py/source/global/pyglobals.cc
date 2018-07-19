@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyglobals.cc 76884 2013-11-18 12:54:03Z gcosmo $
+// $Id: pyglobals.cc 107590 2017-11-24 11:59:22Z gcosmo $
 // ====================================================================
 //   pyglobals.cc
 //
@@ -65,9 +65,8 @@ typedef std::vector<G4int>    G4intVector;
 typedef std::vector<G4double> G4doubleVector;
 typedef std::vector<G4String> G4StringVector;
 typedef std::vector<G4ThreeVector> G4ThreeVectorVector;
-#if G4VERSION_NUMBER >= 830
 typedef std::vector<G4TwoVector> G4TwoVectorVector;
-#endif
+
 }
 
 using namespace pyglobals;
@@ -96,11 +95,8 @@ void export_globals()
     .def(vector_indexing_suite<G4ThreeVectorVector>())
     ;
 
-#if G4VERSION_NUMBER >= 830
   class_<G4TwoVectorVector> ("G4StringVector", "2-vector vector")
     .def(vector_indexing_suite<G4TwoVectorVector>())
     ;
-#endif
 
 }
-

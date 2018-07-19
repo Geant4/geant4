@@ -42,14 +42,11 @@ target_link_libraries(LXe ${Geant4_LIBRARIES} )
 set(LXe_SCRIPTS
     LXe.out
     LXe.in
-    defaults.mac
     cerenkov.mac
     wls.mac
     photon.mac
     reviewEvent.mac
     gui.mac
-    icons.mac
-    run.png
     vis.mac
    )
 

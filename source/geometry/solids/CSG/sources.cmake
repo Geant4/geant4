@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 92393 2015-08-31 14:07:30Z gcosmo $
+# $Id: sources.cmake 109330 2018-04-11 08:42:02Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -44,8 +44,6 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4CutTubs.icc
         G4Orb.hh
         G4Orb.icc
-        G4OTubs.hh
-        G4OTubs.icc
         G4Para.hh
         G4Para.icc
         G4Sphere.hh
@@ -60,7 +58,9 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4Tubs.icc
         G4UBox.hh
         G4UCons.hh
+        G4UCutTubs.hh
         G4UOrb.hh
+        G4UPara.hh
         G4USphere.hh
         G4UTorus.hh
         G4UTrap.hh
@@ -72,7 +72,6 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4Cons.cc
         G4CutTubs.cc
         G4Orb.cc
-        G4OTubs.cc
         G4Para.cc
         G4Sphere.cc
         G4Torus.cc
@@ -81,7 +80,9 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4Tubs.cc
         G4UBox.cc
         G4UCons.cc
+        G4UCutTubs.cc
         G4UOrb.cc
+        G4UPara.cc
         G4USphere.cc
         G4UTorus.cc
         G4UTrap.cc
@@ -94,13 +95,12 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4hepnumerics
         G4intercoms
         G4volumes
-        G4GeomUSolids
     GLOBAL_DEPENDENCIES
         G4global
         G4graphics_reps
         G4intercoms
     LINK_LIBRARIES
-        ${USOLIDS_LIBRARIES}
+        ${VECGEOM_LIBRARIES}
 )
 
 # List any source specific properties here

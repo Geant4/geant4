@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4aEventAction.cc 75604 2013-11-04 13:17:26Z gcosmo $
+// $Id: B4aEventAction.cc 100946 2016-11-03 11:28:08Z gcosmo $
 // 
 /// \file B4aEventAction.cc
 /// \brief Implementation of the B4aEventAction class
@@ -73,13 +73,13 @@ void B4aEventAction::EndOfEventAction(const G4Event* event)
   //
 
   // get analysis manager
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  auto analysisManager = G4AnalysisManager::Instance();
 
   // fill histograms
-  analysisManager->FillH1(1, fEnergyAbs);
-  analysisManager->FillH1(2, fEnergyGap);
-  analysisManager->FillH1(3, fTrackLAbs);
-  analysisManager->FillH1(4, fTrackLGap);
+  analysisManager->FillH1(0, fEnergyAbs);
+  analysisManager->FillH1(1, fEnergyGap);
+  analysisManager->FillH1(2, fTrackLAbs);
+  analysisManager->FillH1(3, fTrackLGap);
   
   // fill ntuple
   analysisManager->FillNtupleDColumn(0, fEnergyAbs);
@@ -90,8 +90,8 @@ void B4aEventAction::EndOfEventAction(const G4Event* event)
   
   // Print per event (modulo n)
   //
-  G4int eventID = event->GetEventID();
-  G4int printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
+  auto eventID = event->GetEventID();
+  auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
   if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
     G4cout << "---> End of event: " << eventID << G4endl;     
 

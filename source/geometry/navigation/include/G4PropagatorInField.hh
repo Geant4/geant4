@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: G4PropagatorInField.hh 90009 2015-05-08 07:42:39Z gcosmo $
+// $Id: G4PropagatorInField.hh 110728 2018-06-11 06:12:39Z gcosmo $
 //
 //
 // Class G4PropagatorInField 
@@ -199,9 +199,13 @@ class G4PropagatorInField
                                    G4double      stepTrial,
                              const G4FieldTrack& aFieldTrack);
 
-   void ReportLoopingParticle( G4int count, double StepTaken, G4VPhysicalVolume* pPhysVol);
-   void ReportStuckParticle( G4int noZeroSteps, G4double proposedStep, G4double lastTriedStep,
-                             G4VPhysicalVolume* physVol );   
+   void ReportLoopingParticle( G4int count,  G4double StepTaken,
+                               G4double stepRequest, const char* methodName,
+                               G4ThreeVector      momentumVec,                               
+                               G4VPhysicalVolume* physVol);
+   void ReportStuckParticle( G4int noZeroSteps, G4double proposedStep,
+                            G4double lastTriedStep, G4VPhysicalVolume* physVol);
+                             
  private:
    // ----------------------------------------------------------------------
    //  DATA Members

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.cc 94091 2015-11-05 15:13:52Z gcosmo $
+// $Id: G4PDGCodeChecker.cc 105720 2017-08-16 12:38:10Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -325,6 +325,8 @@ G4int G4PDGCodeChecker::CheckForDiQuarks()
 /////////////
 G4int G4PDGCodeChecker::CheckForQuarks()
 {
+  quark1 = std::abs(code);
+
   if ( std::abs(quark1)>NumberOfQuarkFlavor ) {
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
@@ -337,8 +339,6 @@ G4int G4PDGCodeChecker::CheckForQuarks()
     return 0;
 
   } 
-
-  quark1 = std::abs(code);
 
   // Fill Quark Contents
   if (code>0){

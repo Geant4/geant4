@@ -1,0 +1,76 @@
+//$Id$
+
+///\file "medical/dna/slowing/.README.txt"
+///\brief Example slowing README page
+
+/*! \page ExampleSlowing Example slowing
+
+\author S. Incerti, M. Karamitros (a, *) \n
+a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan  \n
+(CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France \n
+* e-mail:incerti@cenbg.in2p3.fr \n
+
+\section slowing_s1 INTRODUCTION.                                                    
+                                                                       
+The slowing example shows how to simulate slowing down spectra for electrons
+in liquid water using the Geant4-DNA physics processes and models. 
+
+This example is provided by the Geant4-DNA collaboration.
+
+It is described in S. Incerti et al. (2017), NIMB.
+
+The Geant4-DNA processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+
+\section slowing_s2 GEOMETRY SET-UP.
+ 
+The geometry is a cube (World) made of liquid water (G4_WATER
+material). Electrons are shot from the center of the volume.
+
+\section slowing_s3 SET-UP 
+                                                                        
+Make sure G4LEDATA points to the low energy electromagnetic data files.
+
+The code can be compiled with cmake.
+
+It works in MT mode.
+
+\section slowing_s4 HOW TO RUN THE EXAMPLE                                         
+
+In batch mode, run:
+
+./slowing slowing.in
+
+The macro slowing.in shows how to use/define:
+- number of threads
+- Geant4-DNA physics constructors
+- tracking cut
+- atomic deexcitation
+- histograms
+
+\section slowing_s5 PHYSICS
+
+All Geant4-DNA physics constructors can be used.
+
+\section slowing_s6 SIMULATION OUTPUT AND RESULT ANALYSIS                                    
+
+The output results consists in a slowing.root file containing 3 histograms
+of slowing down spectrum Phi/D (unit is /cm2/eV/Gy) as a function of energy
+(log (E/eV)) for:
+- all electrons (histogram number 1)
+- primary electrons (histogram number 2)
+- secondary electrons (histogram number 3)
+
+This file can be easily analyzed using the provided ROOT macro 
+file plot.C (root plot.C).
+
+---------------------------------------------------------------------------
+
+Should you have any enquiry, please do not hesitate to contact: 
+incerti@cenbg.in2p3.fr
+*/

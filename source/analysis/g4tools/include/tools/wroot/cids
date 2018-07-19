@@ -1,0 +1,24 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_cids
+#define tools_wroot_cids
+
+// same logic as in rroot/cids.
+
+#include "../cid"
+
+namespace tools {
+namespace wroot {
+
+inline cid base_cid()           {return 100;} //must be > cids in ../cids.
+
+inline cid leaf_string_cid()    {return base_cid()+11;}
+inline cid leaf_element_cid()   {return base_cid()+12;}
+inline cid leaf_object_cid()    {return base_cid()+13;}
+
+inline cid base_leaf_cid()      {return base_cid()+20;} //+12=32
+
+}}
+
+#endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc 93409 2015-10-21 13:26:27Z gcosmo $
+// $Id: G4PhysicsVector.icc 98864 2016-08-15 11:53:26Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -42,25 +42,25 @@
 //---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::operator[](const size_t binNumber) const
+ G4double G4PhysicsVector::operator[](const size_t index) const
 {
-  return  dataVector[binNumber];
+  return  dataVector[index];
 }
 
 //---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::operator()(const size_t binNumber) const
+ G4double G4PhysicsVector::operator()(const size_t index) const
 {
-  return dataVector[binNumber];
+  return dataVector[index];
 }
 
 //---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::Energy(const size_t binNumber) const
+ G4double G4PhysicsVector::Energy(const size_t index) const
 {
-  return binVector[binNumber];
+  return binVector[index];
 }
 
 //---------------------------------------------------------------
@@ -77,15 +77,6 @@ inline
  size_t G4PhysicsVector::GetVectorLength() const
 {
   return numberOfNodes;
-}
-
-//---------------------------------------------------------------
-
-inline
- G4double G4PhysicsVector::GetValue(G4double theEnergy, G4bool&) const 
-{
-  size_t idx=0;
-  return Value(theEnergy, idx);
 }
 
 //------------------------------------------------
@@ -137,18 +128,16 @@ inline
 inline 
  G4double G4PhysicsVector::Interpolation(size_t idx, G4double e) const
 {
-  G4double res;
-  if(useSpline) { res = SplineInterpolation(idx, e); }
-  else          { res = LinearInterpolation(idx, e); }
-  return res;
+  return useSpline ? SplineInterpolation(idx, e) : LinearInterpolation(idx, e);
 }
 
 //---------------------------------------------------------------
 
 inline 
- void G4PhysicsVector::PutValue(size_t binNumber, G4double theValue)
+ void G4PhysicsVector::PutValue(size_t index, G4double theValue)
 {
-  dataVector[binNumber] = theValue;
+  if(index >= numberOfNodes) { PrintPutValueError(index); }  
+  dataVector[index] = theValue;
 }
 
 //---------------------------------------------------------------
@@ -156,10 +145,7 @@ inline
 inline 
  G4bool G4PhysicsVector::IsFilledVectorExist() const
 {
-  G4bool status=false;
-
-  if(numberOfNodes > 0) { status=true; }
-  return status;
+  return (numberOfNodes > 0) ? true : false;
 }
 
 //---------------------------------------------------------------
@@ -195,13 +181,13 @@ void G4PhysicsVector::SetVerboseLevel(G4int value)
 }
 
 //---------------------------------------------------------------
-
+/*
 inline
-G4int G4PhysicsVector::GetVerboseLevel(G4int)
+G4int G4PhysicsVector::GetVerboseLevel() const 
 {
    return verboseLevel;
 }
-
+*/
 //---------------------------------------------------------------
 
 inline 
@@ -244,6 +230,15 @@ inline size_t G4PhysicsVector::FindBin(G4double e, size_t idx) const
 
 inline
  G4double G4PhysicsVector::Value(G4double theEnergy) const
+{
+  size_t idx=0;
+  return Value(theEnergy, idx);
+}
+
+//---------------------------------------------------------------
+
+inline
+ G4double G4PhysicsVector::GetValue(G4double theEnergy, G4bool&) const 
 {
   size_t idx=0;
   return Value(theEnergy, idx);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedGammaConversionModel.hh 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedGammaConversionModel.hh 96114 2016-03-16 18:51:33Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,18 +60,18 @@ class G4PolarizedGammaConversionModel : public G4BetheHeitlerModel
 
 public:
 
-  G4PolarizedGammaConversionModel(const G4ParticleDefinition* p = 0, 
+  explicit G4PolarizedGammaConversionModel(const G4ParticleDefinition* p = nullptr, 
 		      const G4String& nam = "polConv");
 
   virtual ~G4PolarizedGammaConversionModel();
  
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   inline const G4Element* SelectedAtom();
 

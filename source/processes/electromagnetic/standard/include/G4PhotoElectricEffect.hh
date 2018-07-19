@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4PhotoElectricEffect.hh 106717 2017-10-20 09:41:27Z gcosmo $
 //
 //------------------ G4PhotoElectricEffect physics process ------------------
 //                   by Michel Maire, 24 May 1996
@@ -81,20 +81,23 @@ class G4PhotoElectricEffect : public G4VEmProcess
 {
 public:  // with description
 
-  G4PhotoElectricEffect(const G4String& processName ="phot",
-			G4ProcessType type = fElectromagnetic);
+  explicit G4PhotoElectricEffect(const G4String& processName ="phot",
+				 G4ProcessType type = fElectromagnetic);
 
   virtual ~G4PhotoElectricEffect();
 
   // true for Gamma only.
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&) final;
 
   // Print few lines of informations about the process: validity range,
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
+
+  // print documentation in html format
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:
 

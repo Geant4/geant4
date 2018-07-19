@@ -1,8 +1,7 @@
 /run/verbose 1
 /tracking/storeTrajectory 1
-/gun/sourceGen false
-/control/execute emlowe.mac
 /run/initialize
+/gun/sourceGen false
 /gps/particle e-
 /gps/direction 0 0 -1
 /gps/pos/type Plane

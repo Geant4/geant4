@@ -138,7 +138,7 @@ public:
   ,rstrings()
   ,num_spaces(4)
 
-  ,color(colorf::black())
+  ,color(colorf_black())
   ,font(font_hershey())
   ,encoding(encoding_PAW())
   ,line_width(1)

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/include/G4ScreenedNuclearRecoil.hh
 /// \brief Definition of the G4ScreenedNuclearRecoil class
 //
-// $Id: G4ScreenedNuclearRecoil.hh 91266 2015-06-29 06:48:42Z gcosmo $
+// $Id: G4ScreenedNuclearRecoil.hh 98273 2016-07-04 17:57:34Z gcosmo $
 //
 //
 // G4ScreenedNuclearRecoil.hh,v 1.24 2008/05/01 19:58:59 marcus Exp
@@ -215,22 +215,22 @@ public:
      /// \brief Construct the process and set some physics parameters for it.
      /// \param processName the name to assign the process
      /// \param ScreeningKey the name of a screening function to use.  
-     /// \The default functions are "zbl" (recommended for soft scattering),
-     /// \"lj" (recommended for backscattering) and "mol" (Moliere potential)
+     /// The default functions are "zbl" (recommended for soft scattering),
+     /// "lj" (recommended for backscattering) and "mol" (Moliere potential)
      /// \param GenerateRecoils if frue, ions struck by primary are converted 
-     /// \into new moving particles.
+     /// into new moving particles.
      /// If false, energy is deposited, but no new moving ions are created.
      /// \param RecoilCutoff energy below which no new moving particles will be
-     /// \created, even if a GenerateRecoils is true.
-     /// \Also, a moving primary particle will be stopped if its energy falls
-     /// \below this limit.
+     /// created, even if a GenerateRecoils is true.
+     /// Also, a moving primary particle will be stopped if its energy falls
+     /// below this limit.
      /// \param PhysicsCutoff the energy transfer to which screening tables are
-     /// \ calucalted.  
-     /// \There is no really
-     /// \compelling reason to change it from the 10.0 eV default.  
-     /// \However, see the paper on running this
-     /// \in thin targets for further discussion, and its interaction 
-     /// \with SetMFPScaling()
+     /// calucalted.  
+     /// There is no really
+     /// compelling reason to change it from the 10.0 eV default.  
+     /// However, see the paper on running this
+     /// in thin targets for further discussion, and its interaction 
+     /// with SetMFPScaling()
      
      G4ScreenedNuclearRecoil(const G4String& processName = "ScreenedElastic",
                 const G4String &ScreeningKey="zbl", G4bool GenerateRecoils=1, 
@@ -256,7 +256,7 @@ public:
      /// \param aParticleType the type of particle to build tables for 
      virtual void DumpPhysicsTable(const G4ParticleDefinition& aParticleType);
      /// \brief deterine if the moving particle is within  the strong force
-     /// \range of the selected nucleus
+     /// range of the selected nucleus
      /// \param A the nucleon number of the beam
      /// \param A1 the nucleon number of the target
      /// \param apsis the distance of closest approach
@@ -274,15 +274,15 @@ public:
      // clear all data tables to allow changing energy cutoff, materials, etc.
 
      /// \brief set the upper energy beyond which this process has no 
-     /// \cross section
+     /// cross section
      ///
-     /// \This funciton is used to coordinate this process with G4MSC. 
-     /// \Typically, G4MSC should 
-     ///  \not be allowed to operate in a range which overlaps that of this 
-     ///  \process.  The criterion which is most reasonable
-     /// \is that the transition should be somewhere in the modestly 
-     /// \relativistic regime (500 MeV/u for example).
-     /// \param energy energy per nucleon for the cutoff
+     /// This funciton is used to coordinate this process with G4MSC. 
+     /// Typically, G4MSC should 
+     /// not be allowed to operate in a range which overlaps that of this 
+     /// process.  The criterion which is most reasonable
+     /// is that the transition should be somewhere in the modestly 
+     /// relativistic regime (500 MeV/u for example).
+     /// param energy energy per nucleon for the cutoff
      
      void SetMaxEnergyForScattering(G4double energy) {processMaxEnergy=energy;}
      
@@ -291,7 +291,7 @@ public:
      
      /// \brief enable or disable all energy deposition by this process
      /// \param flag if true, enable deposition of energy (the default). 
-     /// \If false, disable deposition.
+     /// If false, disable deposition.
      
      void AllowEnergyDeposition(G4bool flag) {registerDepositedEnergy=flag;}
      
@@ -299,11 +299,11 @@ public:
      G4bool GetAllowEnergyDeposition() const {return registerDepositedEnergy;}
      
      /// \brief enable or disable the generation of recoils.  
-     /// \If recoils are disabled, the energy they would have received is just
-     /// \deposited.
-     /// \param flag if true, create recoil ions in cases in which the energy 
-     /// \is above the recoilCutoff.  
-     /// \If false, just deposit the energy.
+     /// If recoils are disabled, the energy they would have received is just
+     /// deposited.
+     /// param flag if true, create recoil ions in cases in which the energy 
+     /// is above the recoilCutoff.  
+     /// If false, just deposit the energy.
      
      void EnableRecoils(G4bool flag) { generateRecoils=flag; }
      

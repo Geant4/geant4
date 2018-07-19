@@ -1,0 +1,160 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id$
+//
+// Author: Ivana Hrivnacova, 20/07/2017 (ivana@ipno.in2p3.fr)
+
+#include "G4Hdf5NtupleManager.hh"
+#include "G4Hdf5FileManager.hh"
+
+#include "tools/hdf5/h2file"
+
+//_____________________________________________________________________________
+template <typename T>
+inline
+G4bool G4Hdf5AnalysisManager::WriteHn(const std::vector<T*>& htVector,
+                                      const std::vector<G4HnInformation*>& hnVector,
+                                      const G4String& /*directoryName*/,
+                                      const G4String& hnType)
+{
+  for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
+    auto info = hnVector[i];
+    auto activation = info->GetActivation();
+    auto name = info->GetName();
+    // skip writing if inactivated
+    if ( fState.GetIsActivation() && ( ! activation ) ) continue;
+    auto ht = htVector[i];
+#ifdef G4VERBOSE
+    if ( fState.GetVerboseL3() ) 
+      fState.GetVerboseL3()->Message("write", hnType, name);
+#endif
+    auto directory =  fFileManager->GetHistoDirectory();
+    // Do nothing if there is no directory
+    if ( directory < 0 ) return false;
+
+    G4bool result
+      = tools::hdf5::write_histo(G4cout, directory, name, *ht);
+    if ( ! result ) {
+      G4ExceptionDescription description;
+      description << "      " << "saving " << hnType << " " << name << " failed";
+      G4Exception("G4Hdf5AnalysisManager::Write()",
+                "Analysis_W022", JustWarning, description);
+      return false;       
+    } 
+    fFileManager->LockHistoDirectoryName();
+  }
+
+  return true;
+}
+
+//_____________________________________________________________________________
+template <typename T>
+inline
+G4bool G4Hdf5AnalysisManager::WritePn(const std::vector<T*>& htVector,
+                                      const std::vector<G4HnInformation*>& hnVector,
+                                      const G4String& /*directoryName*/,
+                                      const G4String& hnType)
+{
+  for ( G4int i=0; i<G4int(htVector.size()); ++i ) {
+    auto info = hnVector[i];
+    auto activation = info->GetActivation();
+    auto name = info->GetName();
+    // skip writing if inactivated
+    if ( fState.GetIsActivation() && ( ! activation ) ) continue;
+    auto ht = htVector[i];
+#ifdef G4VERBOSE
+    if ( fState.GetVerboseL3() ) 
+      fState.GetVerboseL3()->Message("write", hnType, name);
+#endif
+    auto directory =  fFileManager->GetHistoDirectory();
+    // Do nothing if there is no directory
+    if ( directory < 0 ) return false;
+
+    G4bool result
+      = tools::hdf5::write_profile(G4cout, directory, name, *ht);
+    if ( ! result ) {
+      G4ExceptionDescription description;
+      description << "      " << "saving " << hnType << " " << name << " failed";
+      G4Exception("G4Hdf5AnalysisManager::Write()",
+                "Analysis_W022", JustWarning, description);
+      return false;       
+    } 
+    fFileManager->LockHistoDirectoryName();
+  }
+
+  return true;
+}
+
+//_____________________________________________________________________________
+inline
+G4bool G4Hdf5AnalysisManager::IsOpenFileImpl() const
+{
+  return fFileManager->IsOpenFile();
+}
+
+//_____________________________________________________________________________
+inline
+tools::hdf5::ntuple* G4Hdf5AnalysisManager::GetNtuple() const
+{
+  return fNtupleManager->GetNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+tools::hdf5::ntuple* G4Hdf5AnalysisManager::GetNtuple(G4int ntupleId) const
+{
+  return fNtupleManager->GetNtuple(ntupleId);
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hdf5::ntuple*>::iterator G4Hdf5AnalysisManager::BeginNtuple()
+{
+  return fNtupleManager->BeginNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hdf5::ntuple*>::iterator G4Hdf5AnalysisManager::EndNtuple()
+{
+  return fNtupleManager->EndNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hdf5::ntuple*>::const_iterator 
+G4Hdf5AnalysisManager::BeginConstNtuple() const
+{
+  return fNtupleManager->BeginConstNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::hdf5::ntuple*>::const_iterator 
+G4Hdf5AnalysisManager::EndConstNtuple() const
+{
+  return fNtupleManager->EndConstNtuple();
+}  

@@ -1,4 +1,5 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+
+$Id: History 108856 2018-03-12 07:41:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +15,36 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+11-03-18 mma (testem0-V10-04-00)
+- Testem0.cc : remove G4UI_USE
+
+07-11-17 D.Sawkey (testem0-V10-03-01)
+- RunAction: write html documentation of physics list if envvars
+    G4PhysListName, G4PhysListDocDir set
+
+19-06-17 mma  (testem0-V10-03-00)
+- RunAction : update max energy for CSDARange table
+
+14-10-16 G.Folger (testem0-V10-02-06)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+19-09-16 V.Ivant (testem0-V10-02-05)
+- DetectorConstruction - do not re-create geometry when change 
+  material 
+
+26-08-16 V.Ivant (testem0-V10-02-04)
+- RunAction.cc - fixed computation of Tmax
+- PhysicsList - removed hardcoded enabling of CSDA range table
+- TestEm0.in added UI commands enabling print of list of EM 
+    parameters and enabling computation of CSDA range
+
+26-07-16 mma  (testem0-V10-02-03)
+- coding convention : rm double blanck lines
+
+12-04-16 mma  (testem0-V10-02-02)
+- PhysicsList: use G4EmParameters
 
 14-10-16 G.Folger
 - remove direct use of theParticleIterator, use GetParticleTableIterator().

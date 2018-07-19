@@ -1,4 +1,4 @@
-$Id: History 95541 2016-02-12 14:33:23Z gcosmo $
+$Id: History 109792 2018-05-09 08:22:58Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,99 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-05-18 Ben Morgan (rdecay01-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+06-04-18 mma (rdecay01-V10-04-01)
+- rdecay01.cc : set visualisation only in interactive session.
+
+15-03-18 mma (rdecay01-V10-04-00)
+- rdecay01.cc : remove G4UI_USE and G4VIS_USE
+
+06-11-17  mma (rdecay01-V10-03-13)
+- PhysicsList::ConstructProcess() : couple SetARM() and SetAugerCascade()
+
+24-10-17  mma (rdecay01-V10-03-12)
+- PhysicsList : SetCorrelatedGamma(false)
+
+11-08-17  mma (rdecay01-V10-03-11)
+- TrackingAction : count primary ion
+
+31-07-17  mma (rdecay01-V10-03-10)
+- EndOfRun - print time life > 0 only
+
+06-07-17  Vladimir Ivanchenko (rdecay01-V10-03-09)
+- PhysicsList - enable simulation of correlated gamma decay;
+  added several macro files
+
+20-06-17  Dennis Wright (rdecay01-V10-03-08)
+- /UserData/UserRadData_z98.a238 : fix format of file so that it is read 
+  properly by G4RadioactiveDecay
+
+10-04-17 mma  (rdecay01-V10-03-07)
+- BeginOfRunAction() : remove SetRandomNumberStore()
+
+06-03-17 mma (rdecay01-V10-03-06)
+- TrackingAction.cc : simplify get meanLife
+
+27-02-17 V.Ivanchenko (rdecay01-V10-03-05)
+- PhysicsList - use time limit from G4IonTable for de-excitation module
+
+25-02-17 mma (rdecay01-V10-03-04)
+- Run.cc : print mean time life
+
+05-01-17 mma (rdecay01-V10-03-03)
+- update UserData/PhotonEvaporation-readme
+
+05-01-17 mma (rdecay01-V10-03-02)
+- update UserData, Cf238.mac, No252.mac
+
+30-12-16 mma (rdecay01-V10-03-01)
+- PhysicsList : SetStoreAllLevels(true)
+				
+14-12-16 vi, mma (rdecay01-V10-03-00)
+- PhysicsList : read new PhotonEvaporation data set
+                set AugerCascade via G4EmParameters
+
+26-10-16 mma (rdecay01-V10-02-08)
+- add neutron.mac proton.mac
+
+04-07-16 I. Hrivnacova
+- Fixes for Doxygen documentation
+
+16-06-16 V.Ivanchenko (rdecay01-V10-02-07)
+- PhysicsList::ConstructProcess - return back initialisation of 
+    atomic de-excitation
+
+15-06-16 dwright (rdecay01-V10-02-06)
+- initialize atomic deexcitation in PhysicsList::ConstructProcess
+  instead of in G4RadioactiveDecay to avoid overwriting initializtion in EM
+
+09-06-16 mma (rdecay01-V10-02-05)
+- world size = 2 cm
+- gun direction : along x
+
+16-05-16 mma (rdecay01-V10-02-04)
+- complete printing of activity of each nuclide.
+
+11-05-16 mma (rdecay01-V10-02-03)
+- survey activity of each nuclide in a given time window.
+  Classes modified : Run, TrackingAction, TrackingMessenger. Added timWindow.mac
+
+31-01-16 mma (rdecay01-V10-02-02)
+- Run::EndOfRun() : improve printout
+
+08-12-15 dwright (rdecay01-V10-02-01)
+- PhysicsList : SetLevelTolerance (1*eV) : needed to fix crash in system testing 
+  There appears to already be a level Ni60[1332.510] stored somewhere instead of
+  Ni60[1332.514].  Setting the tolerance to 1 eV gets the right level.
+
+06-12-15 mma (rdecay01-V10-02-00)
+- PhysicsList : SetLevelTolerance (10*eV)
+- update references : it1.mac it2.mac
 	 
 31-01-16 mma (rdecay01-V10-01-07)
 - Run::EndOfRun() : improve printout

@@ -33,9 +33,7 @@ print "CMethod(1,10.)=", a.CMethod(1,10.)
 print "CMethod(1,10.,100.)=", a.CMethod(1,10.,100.)
 
 print ""
-print "*** ERRORS!! ***"
-a.AMethod(1,2,3)  # error
-
-
-
-
+try:
+  a.AMethod(1,2,3)  # error
+except:
+  print "*** ERRORS!! ***"

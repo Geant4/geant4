@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 78723 2014-01-20 10:32:17Z gcosmo $
+// $Id: DetectorConstruction.cc 108967 2018-03-19 15:37:52Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,9 +55,8 @@
 
 DetectorConstruction::DetectorConstruction()
  : G4VUserDetectorConstruction(),
-   fAbsorMaterial(0),
-   fAbsor(0),
-   fDetectorMessenger(0)
+   fAbsorMaterial(nullptr),
+   fAbsor(nullptr)
 {
   // default parameter values
   fAbsorRadius = 3*cm;
@@ -77,13 +76,6 @@ DetectorConstruction::~DetectorConstruction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VPhysicalVolume* DetectorConstruction::Construct()
-{
-  return ConstructVolumes();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void DetectorConstruction::DefineMaterials()
 { 
   G4NistManager* man = G4NistManager::Instance();
@@ -92,34 +84,34 @@ void DetectorConstruction::DefineMaterials()
   man->FindOrBuildMaterial("G4_Si");
   man->FindOrBuildMaterial("G4_Fe");
   man->FindOrBuildMaterial("G4_Ge");
+  man->FindOrBuildMaterial("G4_Gd");
   man->FindOrBuildMaterial("G4_W");
   man->FindOrBuildMaterial("G4_Pb");
   
   man->FindOrBuildMaterial("G4_AIR");
   man->FindOrBuildMaterial("G4_WATER");
+  man->FindOrBuildMaterial("G4_ALUMINUM_OXIDE");
   
- ///G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  ///G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
-G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
+G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  G4GeometryManager::GetInstance()->OpenGeometry();
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
-                   
   // Absorber
   //
   G4Sphere* 
   sAbsor = new G4Sphere("Absorber",                           //name
                      0., fAbsorRadius, 0., twopi, 0., pi);    //size
 
+  fSpheres.push_back(sAbsor);
+
   G4LogicalVolume*
   lAbsor = new G4LogicalVolume(sAbsor,                        //solid
                                      fAbsorMaterial,          //material
                                     "Absorber");              //name
+  fLVolumes.push_back(lAbsor);
                                    
   fAbsor = new G4PVPlacement(0,                         //no rotation
                              G4ThreeVector(),           //at (0,0,0)
@@ -137,11 +129,14 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
     G4Sphere*
     sLayer = new G4Sphere("Layer", (i-1)*fLayerThickness, i*fLayerThickness,
                           0., twopi, 0., pi);
+
+    fSpheres.push_back(sLayer);
                  
     G4LogicalVolume* 
     lLayer = new G4LogicalVolume(sLayer,                //shape
                                  fAbsorMaterial,        //material
                                  "Layer");              //name
+    fLVolumes.push_back(lLayer);
                                  
              new G4PVPlacement(0,                      //no rotation
                                G4ThreeVector(),        //at (0,0,0)
@@ -178,8 +173,20 @@ void DetectorConstruction::PrintParameters()
 
 void DetectorConstruction::SetRadius(G4double value)
 {
+  // geometry was already constructed - scale radii of all spheres
+  if(fAbsor) {
+    G4double scale = value/fAbsorRadius;
+    for (auto solid : fSpheres) { 
+      if(scale > 1.0) {
+        solid->SetOuterRadius(solid->GetOuterRadius()*scale); 
+        solid->SetInnerRadius(solid->GetInnerRadius()*scale);
+      } else { 
+        solid->SetInnerRadius(solid->GetInnerRadius()*scale);
+        solid->SetOuterRadius(solid->GetOuterRadius()*scale); 
+      }
+    }
+  }
   fAbsorRadius = value;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -188,8 +195,16 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
-  if (pttoMaterial) fAbsorMaterial = pttoMaterial;
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
+
+  if (pttoMaterial && pttoMaterial != fAbsorMaterial) {
+    fAbsorMaterial = pttoMaterial;
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+
+    // geometry was already constructed - only change material
+    if(fAbsor) {
+      for (auto lv : fLVolumes) { lv->SetMaterial(fAbsorMaterial); }
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -197,7 +212,6 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 void DetectorConstruction::SetNbOfLayers(G4int value)
 {
   fNbOfLayers = value;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();   
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

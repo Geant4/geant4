@@ -1,4 +1,4 @@
-# $Id: multiLayers.mac 74997 2013-10-25 10:52:13Z gcosmo $
+# $Id: multiLayers.mac 96172 2016-03-22 09:19:11Z gcosmo $
 #
 # multiLayers
 #
@@ -17,6 +17,7 @@
 #
 /run/initialize
 #
+/testem/gun/setDefault
 /gun/particle gamma
 /gun/energy 6 MeV
 #

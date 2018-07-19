@@ -1,4 +1,4 @@
-$Id: History 92497 2015-09-02 07:23:12Z gcosmo $
+$Id: History 110101 2018-05-15 11:31:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,37 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 15, 2018 J.Allison - fieldex02-V10-04-01
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- F02RunAction.cc: Remove vis commands.
+
+May 09, 2018 B.Morgan - fieldex02-V10-04-00
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+May 24, 2017 J.Apostolakis   - fieldex02-V10-03-02
+- Fixed F02ElectricFieldSetup UpdateIntegrator() method (avoid double
+    deletion of driver - done by chord finder already. )
+
+May 17, 2017 J.Apostolakis   - fieldex02-V10-03-00, 01
+- Fixed F02ElectricFieldSetup Update...() method.
+  * Now all old objects are deleted first, and then new objects are created.
+  * Renamed UpdateStepper() to UpdateIntegrator() to clarify its role
+
+November 19, 2016 A.Dotti   - fieldex02-V10-02-03
+- explicit set of SD to manager
+
+November 02, 2016 L.Garnier - fieldex02-V10-02-02
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+July 04, 2016 - I. Hrivnacova - fieldex02-V10-02-01
+- Fix for Doxygen documentation
+
+July 01, 2015 - I. Hrivnacova - fieldex02-V10-02-00
+- Replaced F02PhysicsList with FTFP_BERT with G4StepLimiterPhysics
 
 September 01, 2015 - I. Hrivnacova - fieldex02-V10-01-02
 - Removed F02EventActionMessenger class, now obsolete, and 

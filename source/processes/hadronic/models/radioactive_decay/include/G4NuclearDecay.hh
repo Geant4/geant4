@@ -37,6 +37,7 @@
 
 #include "G4VDecayChannel.hh"
 #include "G4RadioactiveDecayMode.hh"
+#include "G4IonTable.hh"
 
 
 class G4NuclearDecay : public G4VDecayChannel
@@ -44,13 +45,16 @@ class G4NuclearDecay : public G4VDecayChannel
   public:
     G4NuclearDecay(const G4String& channelName,
                    const G4RadioactiveDecayMode& mode,
-                   const G4double& excitation);
+                   const G4double& excitation,
+                   const G4Ions::G4FloatLevelBase& floatingLevel);
 
     virtual ~G4NuclearDecay();
 
     G4RadioactiveDecayMode GetDecayMode() {return theMode;}
 
     G4double GetDaughterExcitation() {return daughterEx;}
+
+    G4Ions::G4FloatLevelBase GetFloatingLevel() {return floatingLevel;}
 
     G4ParticleDefinition* GetDaughterNucleus() {return GetDaughter(0);}
 
@@ -65,6 +69,7 @@ class G4NuclearDecay : public G4VDecayChannel
   private:
     // Needed for variance reduction mode
     const G4double daughterEx;
+    const G4Ions::G4FloatLevelBase floatingLevel;
     G4double halflifeThreshold;
 };
 #endif

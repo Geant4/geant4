@@ -29,21 +29,27 @@
 //
 // Author: 2013 P. Arce
 //
+// Modified
+// 12.04.2017 A.Dotti move to new design with base class
+//
 //----------------------------------------------------------------------------
 //
 #ifndef G4VDeuteronBuilder_h
 #define G4VDeuteronBuilder_h
 
+#include "G4PhysicsBuilderInterface.hh"
+
 class G4DeuteronInelasticProcess;
 class G4HadronElasticProcess;
 
-class G4VDeuteronBuilder
+class G4VDeuteronBuilder : public G4PhysicsBuilderInterface
 {
 public:
-  G4VDeuteronBuilder();
-  virtual ~G4VDeuteronBuilder();
+  G4VDeuteronBuilder() = default;
+  virtual ~G4VDeuteronBuilder() {} 
   virtual void Build(G4HadronElasticProcess * aP) = 0;
   virtual void Build(G4DeuteronInelasticProcess * aP) = 0;
+  using G4PhysicsBuilderInterface::Build; //Prevent compilation warning
 };
 
 #endif

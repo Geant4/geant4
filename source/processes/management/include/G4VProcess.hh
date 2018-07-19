@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh 73928 2013-09-17 08:00:50Z gcosmo $
+// $Id: G4VProcess.hh 105271 2017-07-18 07:35:12Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -354,6 +354,9 @@ class G4VProcess
  public: // with description
    virtual void  DumpInfo() const;
    // dump out process information    
+
+   virtual void ProcessDescription(std::ostream& outfile) const;
+   // write out to html file for automatic documentation
 
  public: // with description
    void  SetVerboseLevel(G4int value);

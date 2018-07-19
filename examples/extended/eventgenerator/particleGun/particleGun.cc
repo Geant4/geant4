@@ -27,11 +27,13 @@
 /// \brief Main program of the eventgenerator/particleGun example
 //
 //
-// $Id: particleGun.cc 85032 2014-10-23 10:04:32Z gcosmo $
-// 
+// $Id: particleGun.cc 109733 2018-05-08 14:05:09Z gcosmo $
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
+#include "G4Types.hh"
+
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
 #else
@@ -46,21 +48,20 @@
 #include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
 
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 int main(int argc,char** argv) {
- 
+
+  //detect interactive mode (if no arguments) and define UI session
+  G4UIExecutive* ui = 0;
+  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
+
   // Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
@@ -73,51 +74,38 @@ int main(int argc,char** argv) {
   G4RunManager* runManager = new G4RunManager;
 #endif
 
-  // set mandatory initialization classes
-  //
+  //set mandatory initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
-  
+
   runManager->SetUserInitialization(new ActionInitialization);
 
-  // get the pointer to the User Interface manager 
-    G4UImanager* UI = G4UImanager::GetUIpointer();  
+  //initialize visualization
+  G4VisManager* visManager = nullptr;
 
-#ifdef G4VIS_USE
-     G4VisManager* visManager = new G4VisExecutive;
-     visManager->Initialize();
-#endif
+  //get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (argc!=1)   // batch mode  
-    { 
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);  
-    }
-    
-  else           // define visualization and UI terminal for interactive mode 
-    { 
-#ifdef G4UI_USE
-     G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-#ifdef G4VIS_USE
-     UI->ApplyCommand("/control/execute vis.mac");          
-#endif
-     ui->SessionStart();
-     delete ui;
-#endif
-     
-#ifdef G4VIS_USE
-     delete visManager;
-#endif     
-    }
+  if (ui)  {
+   //interactive mode
+   visManager = new G4VisExecutive;
+   visManager->Initialize();
+   UImanager->ApplyCommand("/control/execute vis.mac");
+   ui->SessionStart();
+   delete ui;
+  }
+  else  {
+   //batch mode
+   G4String command = "/control/execute ";
+   G4String fileName = argv[1];
+   UImanager->ApplyCommand(command+fileName);
+  }
 
-  // job termination
-  //
+  //job termination
+  delete visManager;
   delete runManager;
-
-  return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 

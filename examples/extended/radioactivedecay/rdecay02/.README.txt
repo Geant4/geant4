@@ -43,9 +43,7 @@
 	        /grdm/noVolumes
 	        /grdm/selectVolume Target
 
-     - Hadronic processes:
-	 Hadronic processes are not registered by default.
-	 To register them, uncomment physics constructors in PhysicsList.cc
+     - Hadronic processes
 
 \section rdecay02_s3 EVENT: THE PRIMARY GENERATOR
   

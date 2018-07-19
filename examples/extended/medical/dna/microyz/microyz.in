@@ -1,20 +1,28 @@
-/run/numberOfThreads 4
-#/run/numberOfThreads 8
-
+#/run/numberOfThreads 2
+/run/numberOfThreads 8
+#
+/tracking/verbose 0
+#
+#/microyz/phys/addPhysics  dna	        
+/microyz/phys/addPhysics  dna_opt2	        
+#/microyz/phys/addPhysics  dna_opt4	        
+#/microyz/phys/addPhysics  dna_opt6	        
+#
 /run/initialize
-
-#/gun/particle e-
-/gun/particle proton
-#/gun/particle hydrogen
-#/gun/particle alpha
-#/gun/particle alpha+
-#/gun/particle helium
-#/gun/particle ion
-#/gun/ion 14 28
-
-/gun/energy 62 MeV
-
-/process/em/auger false
-
-/run/beamOn 1
-#/run/beamOn 80
+#
+/process/em/fluo true
+/process/em/auger true
+/process/em/augerCascade true
+/process/em/pixe true
+/process/em/deexcitationIgnoreCut true 
+#
+/gun/particle e-
+#
+/gun/energy 1 keV
+#
+/run/printProgress 100
+#
+/process/inactivate e-_G4DNAVibExcitation
+/process/inactivate e-_G4DNAAttachment
+#
+/run/beamOn 1000

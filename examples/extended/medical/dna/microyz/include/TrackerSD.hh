@@ -25,11 +25,10 @@
 //
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// shall cite the following Geant4-DNA collaboration publications:
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
-//
-// $Id: TrackerSD.hh 69706 2013-05-13 09:12:40Z gcosmo $
 //
 /// \file TrackerSD.hh
 /// \brief Definition of the TrackerSD class
@@ -46,8 +45,8 @@
 /// Tracker sensitive detector class
 ///
 /// The hits are accounted in hits in ProcessHits() function which is called
-/// by Geant4 kernel at each step. A hit is created with each step with non zero 
-/// energy deposit.
+/// by Geant4 kernel at each step. A hit is created with each step with 
+/// non zero energy deposit.
 
 class TrackerSD : public G4VSensitiveDetector
 {

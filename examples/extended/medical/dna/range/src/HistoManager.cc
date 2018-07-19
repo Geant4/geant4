@@ -25,12 +25,6 @@
 //
 /// \file medical/dna/range/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
-//
-//
-// $Id: HistoManager.cc 72238 2013-07-12 08:40:30Z gcosmo $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
@@ -61,7 +55,6 @@ void HistoManager::Book()
   analysisManager->SetFileName(fFileName);
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetActivation(true);
-  // enable inactivation of histograms
 
   // Define histograms start values
   const G4int kMaxHisto = 4;
@@ -85,4 +78,3 @@ void HistoManager::Book()
     analysisManager->SetH1Activation(ih, false);
   }
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

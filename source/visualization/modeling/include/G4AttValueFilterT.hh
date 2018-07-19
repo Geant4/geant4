@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttValueFilterT.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4AttValueFilterT.hh 108059 2017-12-19 15:13:34Z gcosmo $
 //
 // Templated class for G4AttValue filters.
 //
@@ -32,6 +32,7 @@
 #ifndef G4ATTVALUEFILTERT_HH
 #define G4ATTVALUEFILTERT_HH
 
+#include "G4AttValue.hh"
 #include "G4VAttValueFilter.hh"
 #include "G4ConversionFatalError.hh"
 #include "G4ConversionUtils.hh"

@@ -27,19 +27,17 @@
 #include "G4VBiasingOperator.hh"
 #include "G4VBiasingOperation.hh"
 #include "G4ParticleChangeForOccurenceBiasing.hh"
-#include "G4ParticleChange.hh"
 #include "G4ParticleChangeForNothing.hh"
 #include "G4VBiasingInteractionLaw.hh"
 #include "G4InteractionLawPhysical.hh"
 #include "G4ProcessManager.hh"
 #include "G4BiasingAppliedCase.hh"
+#include "G4ParallelGeometriesLimiterProcess.hh"
 
 G4Cache<G4bool>                     G4BiasingProcessInterface::fResetInteractionLaws;// = true;
 G4Cache<G4bool>                     G4BiasingProcessInterface::fCommonStart;//          = true;
 G4Cache<G4bool>                     G4BiasingProcessInterface::fCommonEnd;//            = true;
 G4Cache<G4bool>                     G4BiasingProcessInterface::fDoCommonConfigure;
-G4MapCache< const G4ProcessManager*, G4BiasingProcessSharedData* > G4BiasingProcessInterface::fSharedDataMap;
-
 
 G4BiasingProcessInterface::G4BiasingProcessInterface(G4String name)
   :  G4VProcess                           ( name    ),
@@ -66,15 +64,16 @@ G4BiasingProcessInterface::G4BiasingProcessInterface(G4String name)
      fPreviousBiasingInteractionLaw       ( nullptr ),
      fPhysicalInteractionLaw              ( nullptr ),
      fOccurenceBiasingParticleChange      ( nullptr ),
+     fDummyParticleChange                 ( nullptr ),
      fIamFirstGPIL                        ( false   ),
      fProcessManager                      ( nullptr ),
      fSharedData                          ( nullptr )
 {
   for (G4int i = 0 ; i < 8 ; i++)  fFirstLastFlags[i] = false;
   fResetInteractionLaws.Put( true );
-  fCommonStart.Put(true);
-  fCommonEnd.Put(true);
-  fDoCommonConfigure.Put(true);
+  fCommonStart         .Put( true );
+  fCommonEnd           .Put( true );
+  fDoCommonConfigure   .Put( true );
 }
 
 
@@ -83,31 +82,32 @@ G4BiasingProcessInterface::G4BiasingProcessInterface(G4VProcess* wrappedProcess,
 						     G4String useThisName)
   : G4VProcess( useThisName != "" ? useThisName : "biasWrapper("+wrappedProcess->GetProcessName()+")",
 	       wrappedProcess->GetProcessType()),
-    fCurrentTrack                   ( nullptr ),
+    fCurrentTrack                         ( nullptr            ),
     fPreviousStepSize (-1.0), fCurrentMinimumStep( -1.0 ), fProposedSafety ( -1.0),
             fOccurenceBiasingOperation( nullptr ),         fFinalStateBiasingOperation( nullptr ),         fNonPhysicsBiasingOperation( nullptr ),
     fPreviousOccurenceBiasingOperation( nullptr ), fPreviousFinalStateBiasingOperation( nullptr ), fPreviousNonPhysicsBiasingOperation( nullptr ),
-    fWrappedProcess                 ( wrappedProcess     ),
-    fIsPhysicsBasedBiasing          ( true               ),
-    fWrappedProcessIsAtRest         ( wrappedIsAtRest    ),
-    fWrappedProcessIsAlong          ( wrappedIsAlongStep ),
-    fWrappedProcessIsPost           ( wrappedIsPostStep  ),
-    fWrappedProcessPostStepGPIL     ( -1.0               ),
-    fBiasingPostStepGPIL            ( -1.0               ),
-    fWrappedProcessInteractionLength( -1.0               ),
-    fWrappedProcessForceCondition   ( NotForced          ),
-    fBiasingForceCondition          ( NotForced          ),
-    fWrappedProcessAlongStepGPIL    ( -1.0               ),
-    fBiasingAlongStepGPIL           ( -1.0               ),
-    fWrappedProcessGPILSelection    ( NotCandidateForSelection ),
-    fBiasingGPILSelection           ( NotCandidateForSelection ),
-    fBiasingInteractionLaw          ( nullptr            ),
-    fPreviousBiasingInteractionLaw  ( nullptr            ),
-    fPhysicalInteractionLaw         ( nullptr            ),
-    fOccurenceBiasingParticleChange ( nullptr            ),
-    fIamFirstGPIL                   ( false              ),
-    fProcessManager                 ( nullptr            ),
-    fSharedData                     ( nullptr            )
+    fResetWrappedProcessInteractionLength ( false              ),
+    fWrappedProcess                       ( wrappedProcess     ),
+    fIsPhysicsBasedBiasing                ( true               ),
+    fWrappedProcessIsAtRest               ( wrappedIsAtRest    ),
+    fWrappedProcessIsAlong                ( wrappedIsAlongStep ),
+    fWrappedProcessIsPost                 ( wrappedIsPostStep  ),
+    fWrappedProcessPostStepGPIL           ( -1.0               ),
+    fBiasingPostStepGPIL                  ( -1.0               ),
+    fWrappedProcessInteractionLength      ( -1.0               ),
+    fWrappedProcessForceCondition         ( NotForced          ),
+    fBiasingForceCondition                ( NotForced          ),
+    fWrappedProcessAlongStepGPIL          ( -1.0               ),
+    fBiasingAlongStepGPIL                 ( -1.0               ),
+    fWrappedProcessGPILSelection          ( NotCandidateForSelection ),
+    fBiasingGPILSelection                 ( NotCandidateForSelection ),
+    fBiasingInteractionLaw                ( nullptr            ),
+    fPreviousBiasingInteractionLaw        ( nullptr            ),
+    fPhysicalInteractionLaw               ( nullptr            ),
+    fOccurenceBiasingParticleChange       ( nullptr            ),
+    fIamFirstGPIL                         ( false              ),
+    fProcessManager                       ( nullptr            ),
+    fSharedData                           ( nullptr            )
 {
   for (G4int i = 0 ; i < 8 ; i++)  fFirstLastFlags[i] = false;
   fResetInteractionLaws.Put( true );
@@ -121,7 +121,6 @@ G4BiasingProcessInterface::G4BiasingProcessInterface(G4VProcess* wrappedProcess,
   fPhysicalInteractionLaw         = new            G4InteractionLawPhysical("PhysicalInteractionLawFor("+GetProcessName()+")");
   // -- instantiate particle change wrapper for occurence biaising:
   fOccurenceBiasingParticleChange = new G4ParticleChangeForOccurenceBiasing("biasingPCfor"+GetProcessName());
-  fParticleChange                 = new                    G4ParticleChange();
   // -- instantiate a "do nothing" particle change:
   fDummyParticleChange            = new          G4ParticleChangeForNothing();
 }
@@ -132,7 +131,6 @@ G4BiasingProcessInterface::~G4BiasingProcessInterface()
 {
   if ( fPhysicalInteractionLaw  != 0   ) delete fPhysicalInteractionLaw;
   if ( fOccurenceBiasingParticleChange ) delete fOccurenceBiasingParticleChange;
-  if ( fParticleChange                 ) delete fParticleChange;
   if ( fDummyParticleChange            ) delete fDummyParticleChange;
 }
 
@@ -140,8 +138,8 @@ G4BiasingProcessInterface::~G4BiasingProcessInterface()
 const G4BiasingProcessSharedData* G4BiasingProcessInterface::GetSharedData( const G4ProcessManager* mgr )
 {
   G4MapCache< const G4ProcessManager*, 
-	      G4BiasingProcessSharedData* >::const_iterator itr =  fSharedDataMap.Find( mgr );
-  if ( itr != fSharedDataMap.End( ) )
+	      G4BiasingProcessSharedData* >::const_iterator itr =   G4BiasingProcessSharedData::fSharedDataMap.Find( mgr );
+  if ( itr !=  G4BiasingProcessSharedData::fSharedDataMap.End( ) )
     {
       return (*itr).second;
     }
@@ -169,7 +167,7 @@ void G4BiasingProcessInterface::StartTracking(G4Track* track)
   if ( fCommonStart.Get() )
     {
       fCommonStart.Put( false );// = false;
-      fCommonEnd.Put(true);//   = true;
+      fCommonEnd  .Put( true  );// = true;
       
       fSharedData-> fCurrentBiasingOperator = 0;
       fSharedData->fPreviousBiasingOperator = 0;
@@ -192,8 +190,8 @@ void G4BiasingProcessInterface::EndTracking()
   // -- Inform operators of end of tracking:
   if ( fCommonEnd.Get() )
     {
-      fCommonEnd.Put( false );//   = false;
-      fCommonStart.Put( true );//  = true;
+      fCommonEnd  .Put( false );// = false;
+      fCommonStart.Put( true  );// = true;
       
       for ( size_t optr = 0 ; optr < ( G4VBiasingOperator::GetBiasingOperators() ).size() ; optr ++)
 	( G4VBiasingOperator::GetBiasingOperators() )[optr]->EndTracking( );
@@ -208,30 +206,96 @@ G4double G4BiasingProcessInterface::PostStepGetPhysicalInteractionLength( const 
 									  G4double           previousStepSize,
 									  G4ForceCondition*         condition )
 {
-  // ---------------------------------------------------------------------------------------------
-  // -- The "biasing master" takes care for all biasing processes of update of biasing operators
-  // -- and invokes all PostStepGPIL of physical wrapped processes (anticipate stepping manager
-  // -- call ! ) so that all cross-sections are updated with current step, and available right
-  // -- away to the biasing operator.
-  // ---------------------------------------------------------------------------------------------
+
+  // ---------------------------------------------------------------------------------------------------
+  // -- The "biasing process master" takes care of updating the biasing operator, and for all biasing
+  // -- processes it invokes the PostStepGPIL of physical wrapped processes (anticipate stepping manager
+  // -- call ! ) to make all cross-sections updated with current step, and hence available before the
+  // -- first call to the biasing operator.
+  // ---------------------------------------------------------------------------------------------------
   if ( fIamFirstGPIL )
     {
-      // -- Update previous biasing operator:
+      // -- Update previous biasing operator, and assume the operator stays the same by
+      // -- default and that it is not left at the beginning of this step. These
+      // -- assumptions might be wrong if there is a volume change (in paralllel or
+      // -- mass geometries) in what case the flags will be updated.
       fSharedData->fPreviousBiasingOperator = fSharedData->fCurrentBiasingOperator;
-      // -- If new volume, get possible new biasing operator:
-      // ----------------------------------------------------
-      // -- [Note : bug with this first step ! Does not work if previous step was concurrently limited with geometry. Might make use of safety at last point ?]
-      G4bool  firstStepInVolume = ( (track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary) || (track.GetCurrentStepNumber() == 1) );
       fSharedData->fIsNewOperator           = false;
       fSharedData->fLeavingPreviousOperator = false;
+      // -- If new volume, either in mass or parallel geometries, get possible new biasing operator:
+      // -------------------------------------------------------------------------------------------
+      // -- Get biasing operator in parallel geometries:
+      G4bool firstStepInParallelVolume = false;
+      if ( fSharedData->fParallelGeometriesLimiterProcess )
+	{
+	  G4VBiasingOperator* newParallelOperator( nullptr );
+	  G4bool firstStep = ( track.GetCurrentStepNumber() == 1 );
+	  size_t iParallel = 0;
+	  for ( auto wasLimiting : fSharedData->fParallelGeometriesLimiterProcess->GetWasLimiting() )
+	    {
+	      if ( firstStep || wasLimiting )
+		{
+		  firstStepInParallelVolume = true;
+		  
+		  auto tmpParallelOperator = G4VBiasingOperator::GetBiasingOperator( (fSharedData->fParallelGeometriesLimiterProcess->GetCurrentVolumes()[iParallel])
+										     ->GetLogicalVolume()                                                             );
+		  if ( newParallelOperator )
+		    {
+		      if ( tmpParallelOperator )
+			{
+			  G4ExceptionDescription ed;
+			  ed << " Several biasing operators are defined at the same place in parallel geometries ! Found:\n";
+			  ed << "    - `" << newParallelOperator->GetName() << "' and \n";
+			  ed << "    - `" << tmpParallelOperator->GetName() << "'.\n";
+			  ed << " Keeping `" << newParallelOperator->GetName() << "'. Behavior not guaranteed ! Please consider having only one operator at a place. " << G4endl;
+			  G4Exception(" G4BiasingProcessInterface::PostStepGetPhysicalInteractionLength(...)",
+				      "BIAS.GEN.30",
+				      JustWarning,
+				      ed);
+			}
+		    }
+		  else newParallelOperator = tmpParallelOperator;
+		}
+	      iParallel++;
+	    }
+	  fSharedData->fParallelGeometryOperator = newParallelOperator;
+	} // -- end of " if ( fSharedData->fParallelGeometriesLimiterProcess )"
+
+      // -- Get biasing operator in mass geometry:
+      // -- [§§ Note : bug with this first step ? Does not work if previous step was concurrently limited with geometry. Might make use of safety at last point ?]
+      G4bool  firstStepInVolume = ( (track.GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary) || (track.GetCurrentStepNumber() == 1) );
+      //      fSharedData->fIsNewOperator           = false;
+      //      fSharedData->fLeavingPreviousOperator = false;
       if ( firstStepInVolume )
 	{
 	  G4VBiasingOperator* newOperator = G4VBiasingOperator::GetBiasingOperator( track.GetVolume()->GetLogicalVolume() );
+	  fSharedData->fMassGeometryOperator = newOperator;
+	  if ( ( newOperator != nullptr ) && ( fSharedData->fParallelGeometryOperator != nullptr ) )
+	    {
+	      G4ExceptionDescription ed;
+	      ed << " Biasing operators are defined at the same place in mass and parallel geometries ! Found:\n";
+	      ed << "    - `" << fSharedData->fParallelGeometryOperator->GetName() << "' in parallel geometry and \n";
+	      ed << "    - `" << newOperator->GetName() << "' in mass geometry.\n";
+	      ed << " Keeping `" << fSharedData->fParallelGeometryOperator->GetName() << "'. Behavior not guaranteed ! Please consider having only one operator at a place. " << G4endl;
+	      G4Exception(" G4BiasingProcessInterface::PostStepGetPhysicalInteractionLength(...)",
+			  "BIAS.GEN.31",
+			  JustWarning,
+			  ed);
+	    }
+	}
+
+      // -- conclude the operator selection, giving priority to parallel geometry (as told in exception message BIAS.GEN.30):
+      if ( firstStepInVolume || firstStepInParallelVolume )
+	{
+	  G4VBiasingOperator*           newOperator = fSharedData->fParallelGeometryOperator;
+	  if ( newOperator == nullptr ) newOperator = fSharedData->fMassGeometryOperator;
+	  
 	  fSharedData->fCurrentBiasingOperator = newOperator ;
+
 	  if ( newOperator != fSharedData->fPreviousBiasingOperator )
 	    {
-	      fSharedData->fLeavingPreviousOperator = ( fSharedData->fPreviousBiasingOperator != 0 ) ;
-	      fSharedData->fIsNewOperator           = ( newOperator != 0 );
+	      fSharedData->fLeavingPreviousOperator = ( fSharedData->fPreviousBiasingOperator != nullptr ) ;
+	      fSharedData->fIsNewOperator           = ( newOperator != nullptr );
 	    }
 	}
       
@@ -243,13 +307,14 @@ G4double G4BiasingProcessInterface::PostStepGetPhysicalInteractionLength( const 
       // --   fWrappedProcessForceCondition    ,
       // --   fWrappedProcessInteractionLength
       // -- updated.
-      if ( fSharedData->fCurrentBiasingOperator != 0 )
+      if ( fSharedData->fCurrentBiasingOperator != nullptr )
 	{
 	  for ( size_t i = 0 ; i < (fSharedData->fPhysicsBiasingProcessInterfaces).size(); i++ )
 	    (fSharedData->fPhysicsBiasingProcessInterfaces)[i]->InvokeWrappedProcessPostStepGPIL( track, previousStepSize, condition );
 	}
-    }
+    } // -- end of "if ( fIamFirstGPIL )"
 
+  
 
   // -- Remember previous operator and proposed operations, if any, and reset:
   // -------------------------------------------------------------------------
@@ -323,8 +388,6 @@ G4double G4BiasingProcessInterface::PostStepGetPhysicalInteractionLength( const 
   	  return DBL_MAX;
   	}
     }
-
-  
 
   // --------------------------------------------------
   // -- A biasing operator exists. Proceed with
@@ -509,6 +572,7 @@ G4double           G4BiasingProcessInterface::AlongStepGetPhysicalInteractionLen
 										    G4double&            proposedSafety, 
 										    G4GPILSelection*          selection)
 {
+  
   // -- for helper methods:
   fCurrentMinimumStep = currentMinimumStep;
   fProposedSafety     = proposedSafety;
@@ -584,6 +648,7 @@ G4double           G4BiasingProcessInterface::AlongStepGetPhysicalInteractionLen
 G4VParticleChange* G4BiasingProcessInterface::AlongStepDoIt(const G4Track& track,
 							    const G4Step&   step)
 {
+  
   // ---------------------------------------
   // -- case outside of volume with biasing:
   // ---------------------------------------
@@ -739,12 +804,12 @@ void G4BiasingProcessInterface::SetProcessManager(const G4ProcessManager* mgr)
   else                        G4VProcess::SetProcessManager(mgr);
 
   // -- initialize fSharedData pointer:
-  if ( fSharedDataMap.Find(mgr) == fSharedDataMap.End() )
+  if (  G4BiasingProcessSharedData::fSharedDataMap.Find(mgr) == G4BiasingProcessSharedData::fSharedDataMap.End() )
     {
       fSharedData =  new G4BiasingProcessSharedData( mgr );
-      fSharedDataMap[mgr] = fSharedData;
+      G4BiasingProcessSharedData::fSharedDataMap[mgr] = fSharedData;
     }
-  else fSharedData = fSharedDataMap[mgr] ;
+  else fSharedData =  G4BiasingProcessSharedData::fSharedDataMap[mgr] ;
   // -- augment list of co-operating processes:
   fSharedData->       fBiasingProcessInterfaces.push_back( this );
   fSharedData-> fPublicBiasingProcessInterfaces.push_back( this );
@@ -854,16 +919,20 @@ G4bool G4BiasingProcessInterface::IsFirstPostStepGPILInterface(G4bool physOnly) 
   const G4ProcessVector* pv = fProcessManager->GetPostStepProcessVector(typeGPIL);
   G4int thisIdx(-1);
   for (G4int i = 0; i < pv->size(); i++ ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
+  if ( thisIdx < 0 ) return false; // -- to ignore pure along processes
   for ( size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); i++ )
     {
       if ( (fSharedData->fBiasingProcessInterfaces)[i]->fIsPhysicsBasedBiasing || !physOnly )
 	{
 	  G4int thatIdx(-1);
 	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
-	  if ( thisIdx >  thatIdx )
+	  if ( thatIdx >= 0 ) // -- to ignore pure along processes
 	    {
-	      isFirst = false;
-	      break;
+	      if ( thisIdx >  thatIdx )
+		{
+		  isFirst = false;
+		  break;
+		}
 	    }
 	}
     }
@@ -877,16 +946,20 @@ G4bool G4BiasingProcessInterface::IsLastPostStepGPILInterface(G4bool physOnly) c
   const G4ProcessVector* pv = fProcessManager->GetPostStepProcessVector(typeGPIL);
   G4int thisIdx(-1);
   for (G4int i = 0; i < pv->size(); i++ ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
+  if ( thisIdx < 0 ) return false; // -- to ignore pure along processes
   for ( size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); i++ )
     {
       if ( (fSharedData->fBiasingProcessInterfaces)[i]->fIsPhysicsBasedBiasing || !physOnly )
 	{
 	  G4int thatIdx(-1);
 	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
-	  if ( thisIdx <  thatIdx )
+	  if ( thatIdx >= 0 ) // -- to ignore pure along processes
 	    {
-	      isLast = false;
-	      break;
+	      if ( thisIdx <  thatIdx )
+		{
+		  isLast = false;
+		  break;
+		}
 	    }
 	}
     }
@@ -900,16 +973,20 @@ G4bool G4BiasingProcessInterface::IsFirstPostStepDoItInterface(G4bool physOnly) 
   const G4ProcessVector* pv = fProcessManager->GetPostStepProcessVector(typeDoIt);
   G4int thisIdx(-1);
   for (G4int i = 0; i < pv->size(); i++ ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
+  if ( thisIdx < 0 ) return false; // -- to ignore pure along processes
   for ( size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); i++ )
     {
       if ( (fSharedData->fBiasingProcessInterfaces)[i]->fIsPhysicsBasedBiasing || !physOnly )
 	{
 	  G4int thatIdx(-1);
 	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
-	  if ( thisIdx >  thatIdx )
+	  if ( thatIdx >= 0 ) // -- to ignore pure along processes
 	    {
-	      isFirst = false;
-	      break;
+	      if ( thisIdx >  thatIdx )
+		{
+		  isFirst = false;
+		  break;
+		}
 	    }
 	}
     }
@@ -923,16 +1000,20 @@ G4bool G4BiasingProcessInterface::IsLastPostStepDoItInterface(G4bool physOnly) c
   const G4ProcessVector* pv = fProcessManager->GetPostStepProcessVector(typeDoIt);
   G4int thisIdx(-1);
   for (G4int i = 0; i < pv->size(); i++ ) if ( (*pv)(i) == this ) { thisIdx = i; break; }
+  if ( thisIdx < 0 ) return false; // -- to ignore pure along processes
   for ( size_t i = 0; i < (fSharedData->fBiasingProcessInterfaces).size(); i++ )
     {
       if ( (fSharedData->fBiasingProcessInterfaces)[i]->fIsPhysicsBasedBiasing || !physOnly )
 	{
 	  G4int thatIdx(-1);
-	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }	  
-	  if ( thisIdx <  thatIdx )
+	  for (G4int j = 0; j < pv->size(); j++ ) if ( (*pv)(j) == (fSharedData->fBiasingProcessInterfaces)[i] ) { thatIdx = j; break; }
+	  if ( thatIdx >= 0 ) // -- to ignore pure along processes
 	    {
-	      isLast = false;
-	      break;
+	      if ( thisIdx <  thatIdx )
+		{
+		  isLast = false;
+		  break;
+		}
 	    }
 	}
     }

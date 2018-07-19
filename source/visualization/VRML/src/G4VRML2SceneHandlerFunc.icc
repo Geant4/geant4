@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandlerFunc.icc 97698 2016-06-07 10:26:53Z gcosmo $
+// $Id: G4VRML2SceneHandlerFunc.icc 101714 2016-11-22 08:53:13Z gcosmo $
 //
 // G4VRML2SceneHandlerFunc.icc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -595,9 +595,10 @@ void G4VRML2SCENEHANDLER::VRMLEndModeling()
 	}
 }
 
-void      G4VRML2SCENEHANDLER::SendMarkerColor ( const G4VMarker& mark ) 
+void      G4VRML2SCENEHANDLER::SendMarkerColor ( const G4VMarker& marker )
 {
-	const G4Color& color = GetColor( mark );
+	fpVisAttribs = marker.GetVisAttributes();
+	const G4Color& color = GetColor();
 
 	fDest << "\t\t"     << "appearance Appearance {" << "\n";
 	fDest << "\t\t\t"   <<      "material Material {" << "\n";

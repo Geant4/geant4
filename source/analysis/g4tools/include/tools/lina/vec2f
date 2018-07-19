@@ -6,6 +6,7 @@
 
 #include "vec2"
 #include "../S_STRING"
+#include <cmath>
 
 namespace tools {
 
@@ -53,6 +54,22 @@ public: //operators
   vec2f operator-() const {
     return vec2f(-m_data[0],-m_data[1]);
   }
+public:
+#define TOOLS_VEC2F_MORE_PREC
+#ifdef TOOLS_VEC2F_MORE_PREC
+  float length() const {
+    return float(::sqrt(m_data[0]*m_data[0]+m_data[1]*m_data[1]));
+  }
+  float normalize() {
+    float norme = length();
+    if(!norme) return 0;
+    divide(norme);
+    return norme;
+  }
+#else
+  float length() const {return parent::length(::sqrtf);}
+  float normalize() {return parent::normalize(::sqrtf);}
+#endif
 public: //iv2sg
   bool equals(const vec2f& a_v,const float a_epsil) const {
     //if(a_epsil<0.0f))

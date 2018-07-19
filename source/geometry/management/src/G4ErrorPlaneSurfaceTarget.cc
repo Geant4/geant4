@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPlaneSurfaceTarget.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ErrorPlaneSurfaceTarget.cc 107408 2017-11-10 13:35:09Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -148,8 +148,7 @@ G4double G4ErrorPlaneSurfaceTarget::
 GetDistanceFromPoint( const G4ThreeVector& pt ) const
 {
   G4ThreeVector vec = point() - pt;
-  G4double alpha = std::acos( vec * normal() / vec.mag() / normal().mag() );
-  G4double dist = std::fabs(vec.mag() * std::cos( alpha ));
+  G4double dist = std::fabs(vec * normal() / normal().mag());
   
 #ifdef G4VERBOSE
   if(G4ErrorPropagatorData::verbose() >= 3 )

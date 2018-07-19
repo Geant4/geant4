@@ -33,87 +33,24 @@
 #ifndef G4CsvRNtupleManager_h
 #define G4CsvRNtupleManager_h 1
 
-#include "G4VRNtupleManager.hh"
+#include "G4TRNtupleManager.hh"
 #include "globals.hh"
 
 #include "tools/rcsv_ntuple"
 
-#include <vector>
-
-struct G4CsvRNtupleDescription;
-
-class G4CsvRNtupleManager : public G4VRNtupleManager
+class G4CsvRNtupleManager : public G4TRNtupleManager<tools::rcsv::ntuple>
 {
   friend class G4CsvAnalysisReader;
 
   protected:
     explicit G4CsvRNtupleManager(const G4AnalysisManagerState& state);
     virtual ~G4CsvRNtupleManager();
-
-    // Methods to manipulate ntuples  
-    G4bool IsEmpty() const;
-    G4bool Reset();
-
-    // Access methods
-    tools::rcsv::ntuple* GetNtuple() const;
-    tools::rcsv::ntuple* GetNtuple(G4int ntupleId) const;
-
-    // Functions independent from the output type 
-    //
-    // Methods to read ntuple from a file
-    G4int SetNtuple(G4CsvRNtupleDescription* rntupleDescription);
-    // Methods for ntuple with id = FirstNtupleId                     
-    virtual G4bool SetNtupleIColumn(const G4String& columnName, 
-                            G4int& value);
-    virtual G4bool SetNtupleFColumn(const G4String& columnName, 
-                            G4float& value);
-    virtual G4bool SetNtupleDColumn(const G4String& columnName, 
-                            G4double& value);
-    virtual G4bool SetNtupleSColumn(const G4String& columnName, 
-                            G4String& value);
-    // Bind the ntuple columns of vector type
-    virtual G4bool SetNtupleIColumn(const G4String& columnName, 
-                            std::vector<G4int>& vector);
-    virtual G4bool SetNtupleFColumn(const G4String& columnName, 
-                            std::vector<G4float>& vector);
-    virtual G4bool SetNtupleDColumn(const G4String& columnName, 
-                            std::vector<G4double>& vector);
-    // Methods for ntuple with id > FirstNtupleId                     
-    virtual G4bool SetNtupleIColumn(G4int ntupleId, 
-                            const G4String& columnName, G4int& value);
-    virtual G4bool SetNtupleFColumn(G4int ntupleId, 
-                            const G4String& columnName, G4float& value);
-    virtual G4bool SetNtupleDColumn(G4int ntupleId, 
-                            const G4String& columnName, G4double& value);
-    virtual G4bool SetNtupleSColumn(G4int ntupleId, 
-                            const G4String& columnName, G4String& value);
-    // Bind the ntuple columns of vector type
-    virtual G4bool SetNtupleIColumn(G4int ntupleId, const G4String& columnName, 
-                            std::vector<G4int>& vector);
-    virtual G4bool SetNtupleFColumn(G4int ntupleId, const G4String& columnName, 
-                            std::vector<G4float>& vector);
-    virtual G4bool SetNtupleDColumn(G4int ntupleId, const G4String& columnName, 
-                            std::vector<G4double>& vector);
-    virtual G4bool GetNtupleRow();
-    virtual G4bool GetNtupleRow(G4int ntupleId) ;
-    
-    // Access methods
-    virtual G4int GetNofNtuples() const;
   
   private:
-    // methods
-    G4CsvRNtupleDescription*  GetNtupleInFunction(G4int id, 
-                                         G4String function,
-                                         G4bool warn = true) const;
-
-    // data members
-    std::vector<G4CsvRNtupleDescription*> fNtupleVector;
+    // Methods from the templated base class
+    //
+    virtual G4bool GetTNtupleRow(G4TRNtupleDescription<tools::rcsv::ntuple>* ntupleDescription) final;
 };    
-
-// inline functions
-
-inline G4int G4CsvRNtupleManager::GetNofNtuples() const
-{ return fNtupleVector.size(); }
 
 #endif
 

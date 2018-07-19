@@ -50,8 +50,8 @@
 RunAction::RunAction()
  : G4UserRunAction()
 {
-  timer = new G4Timer();
-  timer->Start();
+  fTimer = new G4Timer();
+  fTimer->Start();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,29 +65,17 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4int id = aRun->GetRunID();
   G4cout << "### Run " << id << " start" << G4endl;
-  timer->Stop();
-  G4cout << "RunAction::BeginOfRunAction:  "  << *timer << G4endl;
+  fTimer->Stop();
+  G4cout << "RunAction::BeginOfRunAction:  "  << *fTimer << G4endl;
 
-  delete timer;
-  timer = new G4Timer();
-  timer->Start();
+  delete fTimer;
+  fTimer = new G4Timer();
+  fTimer->Start();
   G4NuclearLevelData::GetInstance();
-  timer->Stop();
-  G4cout << "NuclearData:  "  << *timer << G4endl;
+  fTimer->Stop();
+  G4cout << "NuclearData:  "  << *fTimer << G4endl;
 
   (HistoManager::GetPointer())->BeginOfRun();
-
-#ifdef G4VIS_USE
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-    UI->ApplyCommand("/vis/scene/notifyHandlers");
-  }
-#endif
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,12 +85,6 @@ void RunAction::EndOfRunAction(const G4Run*)
 
   G4cout << "RunAction: End of run actions are started" << G4endl;
   (HistoManager::GetPointer())->EndOfRun();
-
-#ifdef G4VIS_USE
-  if (G4VVisManager::GetConcreteInstance())
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-#endif
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

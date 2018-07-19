@@ -55,9 +55,7 @@ target_link_libraries(exampleB2bTBB ${Geant4_LIBRARIES} ${TBB_LIBRARIES})
 set(EXAMPLEB2B_SCRIPTS
   exampleB2b.out
   exampleB2.in
-  icons.mac
   gui.mac
-  run.png
   init.mac
   init_vis.mac
   tbb.mac

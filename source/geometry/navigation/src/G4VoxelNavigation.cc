@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc 102290 2017-01-20 11:19:44Z gcosmo $
+// $Id: G4VoxelNavigation.cc 99915 2016-10-11 09:24:43Z gcosmo $
 //
 //
 // class G4VoxelNavigation Implementation

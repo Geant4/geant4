@@ -1,0 +1,31 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_smath
+#define tools_smath
+
+#include <string>
+#include "S_STRING"
+
+namespace tools {
+
+TOOLS_GLOBAL_STRING(sqrt)
+TOOLS_GLOBAL_STRING(cos)
+TOOLS_GLOBAL_STRING(pow)
+TOOLS_GLOBAL_STRING(mod)
+TOOLS_GLOBAL_STRING(psi)
+TOOLS_GLOBAL_STRING(gamma)
+TOOLS_GLOBAL_STRING(mu)
+TOOLS_GLOBAL_STRING(upper_delta)
+TOOLS_GLOBAL_STRING(h_bar)
+
+inline const std::string& s_partial_derivative() {
+  static const std::string s_v("partiald");
+  return s_v;
+}
+
+}
+
+#endif
+
+

@@ -27,7 +27,7 @@
 /// \brief Implementation of the MCTruthManager class
 //
 //
-// $Id: MCTruthManager.cc 73446 2013-08-27 11:32:59Z gcosmo $
+// $Id: MCTruthManager.cc 103182 2017-03-21 10:36:09Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -37,16 +37,26 @@
 // Author: Witold POKORSKI (Witold.Pokorski@cern.ch)
 //
 // --------------------------------------------------------------
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include "MCTruthManager.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 static MCTruthManager* instance = 0;
 
-MCTruthManager::MCTruthManager() : event(0), config(0) 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+MCTruthManager::MCTruthManager() : fEvent(0), fConfig(0) 
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 MCTruthManager::~MCTruthManager() 
 {} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 MCTruthManager* MCTruthManager::GetInstance()
 {
@@ -57,13 +67,17 @@ MCTruthManager* MCTruthManager::GetInstance()
   return instance;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void MCTruthManager::NewEvent()
 {
   // first delete the old event
-  delete event;
+  delete fEvent;
   // and now instaciate a new one
-  event = new HepMC::GenEvent();
+  fEvent = new HepMC::GenEvent();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void MCTruthManager::AddParticle(G4LorentzVector& momentum,
                                  G4LorentzVector& prodpos, 
@@ -76,7 +90,7 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
   particle->suggest_barcode(partID);
   // we initialize the 'segmentations' map
   // for the moment particle is not 'segmented' 
-  segmentations[partID] = 1;
+  fSegmentations[partID] = 1;
 
   // we create the GenVertex corresponding to the end point of the track
   HepMC::GenVertex* endvertex = new HepMC::GenVertex(endpos);
@@ -84,13 +98,13 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
   // barcode of the endvertex = - barcode of the track
   endvertex->suggest_barcode(-partID);
   endvertex->add_particle_in(particle);
-  event->add_vertex(endvertex);
+  fEvent->add_vertex(endvertex);
   
   if(motherID) // not a primary
   {
     // here we could try to improve speed by searching only through particles which 
     // belong to the given primary tree
-    HepMC::GenParticle* mother = event->barcode_to_particle(motherID);
+    HepMC::GenParticle* mother = fEvent->barcode_to_particle(motherID);
     //
     if(mother)
     {
@@ -147,7 +161,7 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
             // minus the daughter particle barcode
             //
             childvtx->suggest_barcode(-500000-partID);
-            event->add_vertex(childvtx);
+            fEvent->add_vertex(childvtx);
             
             HepMC::GenParticle* dummypart =
                new HepMC::GenParticle(G4LorentzVector(),-999999);
@@ -166,7 +180,7 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
           // the right 'segment' to add the new daugther.
           // We use Time coordinate to locate the place for the new vertex
 
-          G4int number_of_segments = segmentations[motherID];
+          G4int number_of_segments = fSegmentations[motherID];
           G4int segment = 0;
 
           // we loop through the segments
@@ -178,7 +192,7 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
             if (segment == number_of_segments) 
               G4cerr << "Problem!!!! Time coordinates incompatible!" << G4endl;
             
-            mother = event->barcode_to_particle(segment*10000000 + motherID);
+            mother = fEvent->barcode_to_particle(segment*10000000 + motherID);
           }
           
           // now, we 'split' the appropriate 'segment' of the mother particle
@@ -186,7 +200,7 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
           //
           HepMC::GenVertex* childvtx = new HepMC::GenVertex(prodpos);
           childvtx->add_particle_out(particle);
-          event->add_vertex(childvtx);
+          fEvent->add_vertex(childvtx);
 
           // we first detach the mother from its original vertex
           //
@@ -202,12 +216,12 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
           // original barcode
           //
           HepMC::GenParticle* mothertwo = new HepMC::GenParticle(*mother);
-          mothertwo->suggest_barcode(segmentations[motherID]*10000000
+          mothertwo->suggest_barcode(fSegmentations[motherID]*10000000
                                     + mother->barcode());
 
           // we also reset the barcodes of the vertices
           //
-          orig_mother_end_vtx->suggest_barcode(-segmentations[motherID]
+          orig_mother_end_vtx->suggest_barcode(-fSegmentations[motherID]
                                                *10000000 - mother->barcode());
           childvtx->suggest_barcode(-mother->barcode());
 
@@ -221,7 +235,7 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
 
           // and finally ... the increase the 'segmentation counter'
           //
-          segmentations[motherID] = segmentations[motherID]+1;
+          fSegmentations[motherID] = fSegmentations[motherID]+1;
         }
       }
     }
@@ -238,28 +252,32 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
   {
     HepMC::GenVertex* primaryvtx = new HepMC::GenVertex(prodpos);
     primaryvtx->add_particle_out(particle);
-    event->add_vertex(primaryvtx);
+    fEvent->add_vertex(primaryvtx);
 
     // add id to the list of primaries
     //
-    primarybarcodes.push_back(partID);
+    fPrimarybarcodes.push_back(partID);
   } 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void MCTruthManager::PrintEvent()
 {
-  event->print();
+  fEvent->print();
 
   // looping over primaries and print the decay tree for each of them
   //
-  for(std::vector<int>::const_iterator primarybar=primarybarcodes.begin();
-      primarybar!=primarybarcodes.end();primarybar++)
+  for(std::vector<int>::const_iterator primarybar=fPrimarybarcodes.begin();
+      primarybar!=fPrimarybarcodes.end();primarybar++)
   {
-    printTree(event->barcode_to_particle(*primarybar), " | ");
+    PrintTree(fEvent->barcode_to_particle(*primarybar), " | ");
   }
 }
 
-void MCTruthManager::printTree(HepMC::GenParticle* particle, G4String offset)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void MCTruthManager::PrintTree(HepMC::GenParticle* particle, G4String offset)
 {
   G4cout << offset << "---  barcode: " << particle->barcode() << " pdg: " 
          << particle->pdg_id() << " energy: " << particle->momentum().e() 
@@ -284,6 +302,8 @@ void MCTruthManager::printTree(HepMC::GenParticle* particle, G4String offset)
         deltaoffset = " | ";
       }
 
-    printTree((*it), offset + deltaoffset);
+    PrintTree((*it), offset + deltaoffset);
   } 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

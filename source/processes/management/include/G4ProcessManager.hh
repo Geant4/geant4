@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.hh 71231 2013-06-12 13:06:28Z gcosmo $
+// $Id: G4ProcessManager.hh 107935 2017-12-14 09:04:59Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -284,7 +284,10 @@ class G4ProcessManager
       G4ParticleDefinition*  GetParticleType() const;
       // get the particle type 
       void SetParticleType(const G4ParticleDefinition*);
-      // set the particle type 
+      // set the particle type
+
+      G4VProcess* GetProcess (const G4String&) const;
+      // get process by process name
 
       void StartTracking(G4Track* aTrack=0);
       void EndTracking();

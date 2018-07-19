@@ -27,31 +27,33 @@
 //                              GEANT 4 - Hadrontherapy example
 //      ----------------------------------------------------------------------------
 //
+//                                      MAIN AUTHORS
+//                                  ====================
+//                             G.A.P. Cirrone(a)*, F.Romano(a)
 //
-//                      ==========>      WEB LINK   <==========
+//                 *Corresponding author, email to pablo.cirrone@lns.infn.it
 //
-//                     http://www.lns.infn.it/link/Hadrontherapy
+//                                          WEB
+//                                      ===========
+//                       http://www.lns.infn.it/link/Hadrontherapy
 //
-//                      ==========>    MAIN AUTHORS <==========
 //
-//                       G.A.P. Cirrone(a)*, F.Romano(a), A. Tramontana (a,f)
-//
-//                      ==========>   PAST AUTHORS  <==========
+//                      ==========>   PAST CONTRIBUTORS  <==========
 //
 //                      R. Calcagno(a), G.Danielsen (b), F.Di Rosa(a),
 //                      S.Guatelli(c), A.Heikkinen(b), P.Kaitaniemi(b),
-//                      A.Lechner(d), S.E.Mazzaglia(a),  M.G.Pia(e), G.Russo(a),
-//                      M.Russo(a), A.Varisano(a)
+//                      A.Lechner(d), S.E.Mazzaglia(a),  M.G.Pia(e),
+//                      G.Russo(a), M.Russo(a), A. Tramontana (a),
+//                      A.Varisano(a)
 //
-//
-//              (a) Laboratori Nazionali del Sud of the INFN, Catania, Italy
+//              (a) Laboratori Nazionali del Sud of INFN, Catania, Italy
 //              (b) Helsinki Institute of Physics, Helsinki, Finland
 //              (c) University of Wallongong, Australia
-//              (d) CERN, (CH)
-//              (e) INFN Section of Genova, genova, Italy
-//              (f) Physics and Astronomy Department, Universituy of Catania, Catania, Italy
+//              (d) CERN, Geneve, Switzwerland
+//              (e) INFN Section of Genova, Genova, Italy
+//              (f) Physics and Astronomy Department, Univ. of Catania, Catania, Italy
 //
-//          *Corresponding author, email to pablo.cirrone@lns.infn.it
+//
 // ----------------------------------------------------------------------------
 
 #include "G4RunManager.hh"
@@ -69,7 +71,6 @@
 #include "G4UImessenger.hh"
 #include "globals.hh"
 #include "HadrontherapySteppingAction.hh"
-#include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyGeometryController.hh"
 #include "HadrontherapyGeometryMessenger.hh"
 #include "HadrontherapyInteractionParameters.hh"
@@ -88,8 +89,6 @@
 
 #include "HadrontherapyActionInitialization.hh"
 
-//************************MT*********************
-
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
@@ -101,44 +100,41 @@
 //////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc ,char ** argv)
 {
+    
     // Set the Random engine
-    CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
-   
-  // Only if an initial random seed is needed
-    G4int seed =1414159599;// time(0);
-  CLHEP::HepRandom::setTheSeed(seed);    
-  // G4cout << "******************************************************************"<< seed << G4endl;
-
-    //************************MT*********************
+    // The following guarantees random generation also for different runs
+    // in multithread
+    CLHEP::RanluxEngine defaultEngine( 1234567, 4 );
+    G4Random::setTheEngine( &defaultEngine );
+    G4int seed = time( NULL );
+    G4Random::setTheSeed( seed );
+    
 #ifdef G4MULTITHREADED
     
     G4MTRunManager* runManager = new G4MTRunManager;
-    //runManager->SetNumberOfThreads(2); // Is equal to 2 by default, it can be setted also with the macro command: /run/numberOfThread 2
 #else
     G4RunManager* runManager = new G4RunManager;
 #endif
     
-    //************************MT*********************
-    //   G4RunManager* runManager = new G4RunManager;
     
     // Geometry controller is responsible for instantiating the
     // geometries. All geometry specific setup tasks are now in class
     // HadrontherapyGeometryController.
     HadrontherapyGeometryController *geometryController = new HadrontherapyGeometryController();
-	
+    
     // Connect the geometry controller to the G4 user interface
     HadrontherapyGeometryMessenger *geometryMessenger = new HadrontherapyGeometryMessenger(geometryController);
-	
+    
     G4ScoringManager *scoringManager = G4ScoringManager::GetScoringManager();
     scoringManager->SetVerboseLevel(1);
     
-	
+    
     // Initialize the default Hadrontherapy geometry
     geometryController->SetGeometry("default");
-	
+    
     // Initialize command based scoring
     G4ScoringManager::GetScoringManager();
-	
+    
     // Initialize the physics
     G4PhysListFactory factory;
     G4VModularPhysicsList* phys = 0;
@@ -167,33 +163,15 @@ int main(int argc ,char ** argv)
     
     //************************MT
     runManager->SetUserInitialization(new HadrontherapyActionInitialization);
-    //************************MT
     
     
-    //************************MT: DA SPOSTARE IN hADRONTHERAPYACTIONiNITIALIZATION.CC*********************
-    /*
-     // Initialize the primary particles
-     HadrontherapyPrimaryGeneratorAction *pPrimaryGenerator = new HadrontherapyPrimaryGeneratorAction();
-     runManager -> SetUserAction(pPrimaryGenerator);
-     
-     // Optional UserActions: run, event, stepping
-     HadrontherapyRunAction* pRunAction = new HadrontherapyRunAction();
-     runManager -> SetUserAction(pRunAction);
-     
-     HadrontherapyEventAction* pEventAction = new HadrontherapyEventAction();
-     runManager -> SetUserAction(pEventAction);
-     
-     HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(pRunAction);
-     runManager -> SetUserAction(steppingAction);
-     */
+    
     // Interaction data: stopping powers
     HadrontherapyInteractionParameters* pInteraction = new HadrontherapyInteractionParameters(true);
-	
+    
     // Initialize analysis
     HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
-#ifdef G4ANALYSIS_USE_ROOT
-    analysis -> book();
-#endif
+    
     
     // Get the pointer to the visualization manager
 #ifdef G4VIS_USE
@@ -204,47 +182,32 @@ int main(int argc ,char ** argv)
     // Get the pointer to the User Interface manager
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
     
-    // If no macro file is passed as argument,
-    // the User Interface is called
-    if (argc==1)
+    if (argc == 1)   // Define UI session for interactive mode.
     {
 #ifdef G4UI_USE
         G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
+        G4cout << " UI session starts ..." << G4endl;
         
-        if(factory.IsReferencePhysList(physName))
-        {
-            UImanager->ApplyCommand("/control/execute macro/defaultMacroWithReferencePhysicsList.mac");
-        }
-        else
-        {
-            UImanager->ApplyCommand("/control/execute macro/defaultMacro.mac");
-        }
+        UImanager -> ApplyCommand("/control/execute macro/defaultMacro.mac");
         
-#endif
-        ui->SessionStart();
+        
+        ui -> SessionStart();
         delete ui;
 #endif
     }
-    // Batch mode: the following commands are called when a macro file
-    // is passed as argument
-    else
+    else           // Batch mode
     {
         G4String command = "/control/execute ";
         G4String fileName = argv[1];
-        UImanager->ApplyCommand(command+fileName);
+        UImanager -> ApplyCommand(command+fileName);
     }
     
     // Job termination
-    // Store dose & fluence data to ASCII & ROOT files
     if ( HadrontherapyMatrix * pMatrix = HadrontherapyMatrix::GetInstance() )
     {
-        pMatrix -> TotalEnergyDeposit();
+        // pMatrix -> TotalEnergyDeposit();
         pMatrix -> StoreDoseFluenceAscii();
-#ifdef G4ANALYSIS_USE_ROOT
         
-        pMatrix -> StoreDoseFluenceRoot();
-#endif
     }
     
     if (HadrontherapyLet *let = HadrontherapyLet::GetInstance())
@@ -252,16 +215,8 @@ int main(int argc ,char ** argv)
         {
             let -> LetOutput(); 	// Calculate let
             let -> StoreLetAscii(); // Store it
-#ifdef G4ANALYSIS_USE_ROOT
-            
-            let -> StoreLetRoot();
-#endif
         }
     
-    
-#ifdef G4ANALYSIS_USE_ROOT
-    if (analysis -> IsTheTFile()) analysis -> flush();     // Finalize & write the root file
-#endif
     
     
 #ifdef G4VIS_USE

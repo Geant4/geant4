@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/src/Histo.cc
 /// \brief Implementation of the Histo class
 //
-// $Id: Histo.cc 70761 2013-06-05 12:30:51Z gcosmo $
+// $Id: Histo.cc 107541 2017-11-22 08:24:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,10 +49,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Histo::Histo()
-: fManager(0),
-  fMessenger(0),
+: fManager(nullptr),
   fHistName("test"),
-  fHistType("root"),
   fTupleName("tuple"),
   fTupleTitle("test"),
   fNHisto(0),
@@ -82,7 +80,7 @@ void Histo::Book()
   fManager = G4RootAnalysisManager::Instance(); 
 
   // Creating a tree mapped to a new hbook file.
-  G4String nam = fHistName + "." + fHistType;
+  G4String nam = fHistName + ".root";
 
   // Open file histogram file
   if(!fManager->OpenFile(nam)) {
@@ -136,9 +134,6 @@ void Histo::Book()
 void Histo::Save()
 {
   if(!(fHistoActive || fNtupleActive)) { return; }
-
-  // Creating a tree mapped to a new hbook file.
-  G4String nam = fHistName + "." + fHistType;
 
   // Write histogram file
   if(!fManager->Write()) {
@@ -351,17 +346,6 @@ void Histo::SetFileName(const G4String& nam)
 {
   fHistName = nam;
   fHistoActive = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Histo::SetFileType(const G4String& nam) 
-{
-  if(nam == "root" || nam == "ROOT" )   { fHistType = "root"; }
-  else if(nam == "xml" || nam == "XML") { fHistType = "xml"; }
-  else if(nam == "ascii" || nam == "ASCII" || 
-          nam == "Csv" || nam == "csv" || nam == "CSV") 
-    { fHistType = "ascii"; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

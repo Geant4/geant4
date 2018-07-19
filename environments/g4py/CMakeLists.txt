@@ -11,6 +11,8 @@ set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
 # debug mode
 set(DEBUG FALSE CACHE BOOL "Debug Mode (Debug On)")
 
+enable_testing()
+
 #------------------------------------------------------------------------------
 # Do not edit below
 #------------------------------------------------------------------------------
@@ -66,4 +68,4 @@ add_subdirectory(site-modules)
 add_subdirectory(examples)
 
 # tests
-add_subdirectory(tests EXCLUDE_FROM_ALL)
+add_subdirectory(tests)

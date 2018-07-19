@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc 89953 2015-05-06 08:09:12Z gcosmo $
+// $Id: G4UIcommand.cc 108081 2017-12-21 07:53:54Z gcosmo $
 //
 // 
 
@@ -37,17 +37,20 @@
 #include "G4Tokenizer.hh"
 #include "G4ios.hh"
 #include <sstream>
+#include <iomanip>
 
 G4UIcommand::G4UIcommand()
   : messenger(0), toBeBroadcasted(false), toBeFlushed(false), workerThreadOnly(false),
-    bp(0), token(IDENTIFIER), paramERR(0)
+    commandFailureCode(0), failureDescription(""),
+    bp(0), token(IDENTIFIER),paramERR(0)
 {
 }
 
 G4UIcommand::G4UIcommand(const char * theCommandPath,
      G4UImessenger * theMessenger, G4bool tBB)
 :messenger(theMessenger),toBeBroadcasted(tBB),toBeFlushed(false), workerThreadOnly(false),
-token(IDENTIFIER),paramERR(0)
+    commandFailureCode(0), failureDescription(""),
+    bp(0), token(IDENTIFIER),paramERR(0)
 {
   G4String comStr = theCommandPath;
   if(!theMessenger)
@@ -386,7 +389,10 @@ G4String G4UIcommand::ConvertToString(G4int intValue)
 G4String G4UIcommand::ConvertToString(G4double doubleValue)
 {
   std::ostringstream os;
-  os << doubleValue;
+  if(G4UImanager::DoublePrecisionStr())
+  { os << std::setprecision(17) << doubleValue; }
+  else
+  { os << doubleValue; }
   G4String vl = os.str();
   return vl;
 }
@@ -397,7 +403,10 @@ G4String G4UIcommand::ConvertToString(G4double doubleValue,const char* unitName)
   G4double uv = ValueOf(unitName);
 
   std::ostringstream os;
-  os << doubleValue/uv << " " << unitName;
+  if(G4UImanager::DoublePrecisionStr())
+  { os << std::setprecision(17) << doubleValue/uv << " " << unitName; }
+  else
+  { os << doubleValue/uv << " " << unitName; }
   G4String vl = os.str();
   return vl;
 }
@@ -405,7 +414,10 @@ G4String G4UIcommand::ConvertToString(G4double doubleValue,const char* unitName)
 G4String G4UIcommand::ConvertToString(G4ThreeVector vec)
 {
   std::ostringstream os;
-  os << vec.x() << " " << vec.y() << " " << vec.z();
+  if(G4UImanager::DoublePrecisionStr())
+  { os << std::setprecision(17) << vec.x() << " " << vec.y() << " " << vec.z(); }
+  else
+  { os << vec.x() << " " << vec.y() << " " << vec.z(); }
   G4String vl = os.str();
   return vl;
 }
@@ -416,8 +428,10 @@ G4String G4UIcommand::ConvertToString(G4ThreeVector vec,const char* unitName)
   G4double uv = ValueOf(unitName);
 
   std::ostringstream os;
-  os << vec.x()/uv << " " << vec.y()/uv << " " << vec.z()/uv
-     << " " << unitName;
+  if(G4UImanager::DoublePrecisionStr())
+  { os << std::setprecision(17) << vec.x()/uv << " " << vec.y()/uv << " " << vec.z()/uv << " " << unitName; }
+  else
+  { os << vec.x()/uv << " " << vec.y()/uv << " " << vec.z()/uv << " " << unitName; }
   G4String vl = os.str();
   return vl;
 }

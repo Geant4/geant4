@@ -1,6 +1,6 @@
 # exN03Vis13.loop
 /vis/viewer/pan {dz} 0 mm
-/vis/ogl/set/endTime {endTime} ns {timeRange} ns
+/vis/viewer/set/timeWindow/endTime {endTime} ns {timeRange} ns
 # Force refresh here (since auto-refresh switched off in main mac).
 /vis/viewer/refresh
 # Print eps file

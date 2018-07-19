@@ -40,6 +40,15 @@
 #include "G4HadronElastic.hh"
 #include "G4ParticleHPElastic.hh"
 #include "G4ParticleHPElasticData.hh"
+#include "G4SystemOfUnits.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsPHP);
+//
+G4ThreadLocal G4bool G4HadronElasticPhysicsPHP::wasActivated = false;
+G4ThreadLocal G4HadronElasticPhysics* G4HadronElasticPhysicsPHP::mainElasticBuilder = 0;
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"

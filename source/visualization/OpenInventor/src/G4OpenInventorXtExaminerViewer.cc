@@ -81,8 +81,11 @@
 #include <Inventor/sensors/SoTimerSensor.h>   // Animation
 #include <Inventor/sensors/SoNodeSensor.h>    // Detect start of run
 #include "saveViewPt.h"
-#include "console.h"
-#include "favorites.h"
+#include "pickext.h"
+#include "pickref.h"
+#include "wireframe.h"
+//#include "console.h"
+//#include "favorites.h"
 
 #include "Geant4_SoPolyhedron.h"
 //#include "G4RunManager.hh"
@@ -687,6 +690,7 @@ void G4OpenInventorXtExaminerViewer::createViewerButtons(Widget parent,
    int n;
    Arg args[6];
    Widget saveViewPtButton, abbrOutputButton, pickRefPathButton;
+   Widget switchWireFrameButton;
 
    // Create original buttons
    SoXtExaminerViewer::createViewerButtons(parent, buttonlist);
@@ -746,14 +750,22 @@ void G4OpenInventorXtExaminerViewer::createViewerButtons(Widget parent,
                                               xmToggleButtonWidgetClass, parent, XmNindicatorOn, False, NULL);
    XtAddCallback(abbrOutputButton, XmNdisarmCallback, G4OpenInventorXtExaminerViewer::abbrOutputCB,
                  this);
-   Pixmap consolexpm, consolexpm_ins;
-   consolexpm = SoXtInternal::createPixmapFromXpm(abbrOutputButton,
-                                                  console_xpm);
-   consolexpm_ins = SoXtInternal::createPixmapFromXpm(abbrOutputButton,
-                                                      console_xpm, TRUE);
+   Pixmap pickextxpm, pickextxpm_ins;
+   pickextxpm = SoXtInternal::createPixmapFromXpm(abbrOutputButton,
+                                                  pickext_xpm);
+   pickextxpm_ins = SoXtInternal::createPixmapFromXpm(abbrOutputButton,
+                                                      pickext_xpm, TRUE);
    XtVaSetValues(abbrOutputButton, XmNlabelType, XmPIXMAP, XmNlabelPixmap,
-                 consolexpm, XmNselectPixmap, consolexpm, XmNlabelInsensitivePixmap,
-                 consolexpm_ins, XmNselectInsensitivePixmap, consolexpm_ins, NULL);
+                 pickextxpm, XmNselectPixmap, pickextxpm, XmNlabelInsensitivePixmap,
+                 pickextxpm_ins, XmNselectInsensitivePixmap, pickextxpm_ins, NULL);
+   //   Pixmap consolexpm, consolexpm_ins;
+   // consolexpm = SoXtInternal::createPixmapFromXpm(abbrOutputButton,
+   //                                                console_xpm);
+   // consolexpm_ins = SoXtInternal::createPixmapFromXpm(abbrOutputButton,
+   //                                                    console_xpm, TRUE);
+   // XtVaSetValues(abbrOutputButton, XmNlabelType, XmPIXMAP, XmNlabelPixmap,
+   //               consolexpm, XmNselectPixmap, consolexpm, XmNlabelInsensitivePixmap,
+   //               consolexpm_ins, XmNselectInsensitivePixmap, consolexpm_ins, NULL);
    buttonlist->append(abbrOutputButton);
 
    // Button for selecting the beam that will act as reference path
@@ -761,16 +773,31 @@ void G4OpenInventorXtExaminerViewer::createViewerButtons(Widget parent,
                                                parent, NULL);
    XtAddCallback(pickRefPathButton, XmNactivateCallback,
                  G4OpenInventorXtExaminerViewer::pickRefPathCB, this);
-   Pixmap favoritesxpm, favoritesxpm_ins;
-   favoritesxpm = SoXtInternal::createPixmapFromXpm(pickRefPathButton,
-                                                    favorites_xpm);
-   favoritesxpm_ins = SoXtInternal::createPixmapFromXpm(pickRefPathButton,
-                                                        favorites_xpm, TRUE);
+   Pixmap pickrefxpm, pickrefxpm_ins;
+   pickrefxpm = SoXtInternal::createPixmapFromXpm(pickRefPathButton,
+                                                    pickref_xpm);
+   pickrefxpm_ins = SoXtInternal::createPixmapFromXpm(pickRefPathButton,
+                                                        pickref_xpm, TRUE);
    XtVaSetValues(pickRefPathButton, XmNlabelType, XmPIXMAP, XmNlabelPixmap,
-       favoritesxpm, XmNselectPixmap, favoritesxpm, XmNlabelInsensitivePixmap,
-       favoritesxpm_ins, XmNselectInsensitivePixmap, favoritesxpm_ins, NULL);
+       pickrefxpm, XmNselectPixmap, pickrefxpm, XmNlabelInsensitivePixmap,
+       pickrefxpm_ins, XmNselectInsensitivePixmap, pickrefxpm_ins, NULL);
+
    buttonlist->append(pickRefPathButton);
 
+   // Toggle button for switching in and out of wireframe mode
+   switchWireFrameButton = XtVaCreateManagedWidget("Wireframe",
+         xmToggleButtonWidgetClass, parent,  XmNindicatorOn, False, NULL);
+   XtAddCallback(switchWireFrameButton, XmNvalueChangedCallback,
+                 G4OpenInventorXtExaminerViewer::switchWireFrameCB, this);
+   Pixmap wireframe, wireframe_ins;
+   wireframe = SoXtInternal::createPixmapFromXpm(switchWireFrameButton,
+                                                 wireframe_xpm);
+   wireframe_ins = SoXtInternal::createPixmapFromXpm(switchWireFrameButton,
+                                                     wireframe_xpm, TRUE);
+   XtVaSetValues(switchWireFrameButton, XmNlabelType, XmPIXMAP, XmNlabelPixmap,
+              wireframe, XmNselectPixmap, wireframe, XmNlabelInsensitivePixmap,
+              wireframe_ins, XmNselectInsensitivePixmap, wireframe_ins, NULL);
+   buttonlist->append(switchWireFrameButton);
 }
 
 
@@ -815,16 +842,14 @@ void G4OpenInventorXtExaminerViewer::afterRealizeHook()
          fileOut.open(fileName.c_str(), std::ios::in);
          fileOut.seekp(0, std::ios::end); // For appending new data to the end
          constructListsDialog(getParentWidget(), this, NULL); // Pop up listsDialog
-
          if (viewPtList.size()) {
             // FWJ disabled auto-selection of first viewpoint.
             // Initial view should be user-controllable & not forced
-            //            setViewPt();
+            //    setViewPt();
             XtSetSensitive(nextViewPtButton, True);
             XtSetSensitive(prevViewPtButton, True);
          }
       }
-
       fileIn.close();
    } else {
       // Creates a new default bookmark file
@@ -972,12 +997,13 @@ void G4OpenInventorXtExaminerViewer::moveCamera(float dist, bool lookdown)
             distance = dist;
       }
 
-      if (cam->isOfType(SoOrthographicCamera::getClassTypeId())) {
-         if (!dist)
-            distance = (prevPt - cam->position.getValue()).length();
-         else
-            distance = dist;
-      }
+      // FWJ distance not relevant -- use focalDistance
+      // if (cam->isOfType(SoOrthographicCamera::getClassTypeId())) {
+      //    if (!dist)
+      //       distance = (prevPt - cam->position.getValue()).length();
+      //    else
+      //       distance = dist;
+      // }
 
 
       float x,y,z;
@@ -988,14 +1014,14 @@ void G4OpenInventorXtExaminerViewer::moveCamera(float dist, bool lookdown)
          camPosNew = p2 - (camDir*distance);
       }
       if (cam->isOfType(SoOrthographicCamera::getClassTypeId())) {
-         camPosNew = p2 - (camDir);
+         // FWJ maintain focal distance
+         camPosNew = p2 - (camDir*cam->focalDistance.getValue());
+         //         camPosNew = p2 - (camDir);
       }
 
       cam->position = camPosNew;
       cam->pointAt(p2, camUpVec);
-      // FWJ Disabled: zooms out the Persp camera much too far
-      // and can't recover by zooming in!
-      //      cam->focalDistance = (p2 - camPosNew).length();
+      cam->focalDistance = (p2 - camPosNew).length();
 
       p2.getValue(x,y,z);
       camPosNew.getValue(x,y,z);
@@ -1219,7 +1245,7 @@ void G4OpenInventorXtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
          if(attHolder && attHolder->GetAttDefs().size()) {
             std::string strTrajPoint = "G4TrajectoryPoint:";
             std::ostringstream oss;
-            G4String t1, t2, t3, t4;
+            G4String t1, t1Ch, t2, t3, t4;
             for (size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
                //               G4cout << "Getting index " << i << " from attHolder" << G4endl;
                // No, returns a vector!   G4AttValue* attValue = attHolder->GetAttValues()[i];
@@ -1228,20 +1254,21 @@ void G4OpenInventorXtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
                for (iValue = vals->begin(); iValue != vals->end(); ++iValue) {
                   const G4String& valueName = iValue->GetName();
                   const G4String& value = iValue->GetValue();
-                  //                  G4cout << "  valueName = " << valueName << G4endl;
-                  //                  G4cout << "  value = " << value << G4endl;
+                  // G4cout << "  valueName = " << valueName << G4endl;
+                  // G4cout << "  value = " << value << G4endl;
                   // LINE 1
                   if (valueName == "PN") t1 = value;
                   if (valueName == "Ch") {
                      if (atof(value.c_str()) > 0)
-                        t1 += "    +";
+                        t1Ch = "    +";
                      else
-                        t1 += "    ";
-                     t1 += value;
+                        t1Ch = "    ";
+                     t1Ch += value;
                   }
                   if (valueName == "PDG") {
                      t1 += "    ";
                      t1 += value;
+                     t1 += t1Ch;
                      This->mouseOverTextLogName->string.setValue(t1);
                   }
                   //                  G4cout << "  t1 = " << t1 << G4endl;
@@ -1262,7 +1289,8 @@ void G4OpenInventorXtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
                      t3 += "    P (" + value1 + ")";
                   }
                   if (valueName == "IMag") {
-                     t3 += " " + value;
+                     t3 += " " + value + "/c";
+                     //                     t3 += " " + value;
                      This->mouseOverTextMaterial->string.setValue(t3);
                   }
                   // LINE 4
@@ -2052,9 +2080,12 @@ void G4OpenInventorXtExaminerViewer::findAndSetRefPath()
 
                   // Check if next character is a number, 
                   // in which case we don't have Track ID 1
-                  const char * nextChar = 
-                     oss.str().substr(idx + findStr.size() + 1,1).c_str();
-                  if(std::isdigit(nextChar[0]))
+                  // FWJ attempt to fix Coverity issue.
+                  char nextChar = oss.str().at(idx+findStr.size()+1);
+                  // const char * nextChar = 
+                  // oss.str().substr(idx + findStr.size() + 1,1).c_str();
+                  if(std::isdigit(nextChar))
+                  // if(std::isdigit(nextChar[0]))
                      break;	//Not a primary track, continue with next track
 
                   coords = this->getCoordsNode(path);
@@ -2345,7 +2376,15 @@ void G4OpenInventorXtExaminerViewer::sortElements()
    for(itEl = this->sceneElements.begin(), elementIndex = 0;
        itEl != this->sceneElements.end(); ++itEl, ++elementIndex){
       bAction.apply(itEl->path);
-      elementCoord = bAction.getBoundingBox().getCenter();
+
+      // FWJ sceneElement already has a center
+      elementCoord = itEl->center;
+      // ... and this sometimes returns an empty box!
+      //      elementCoord = bAction.getBoundingBox().getCenter();
+      //      if (bAction.getBoundingBox().isEmpty()) {
+      //         G4cout << "sortElements: Box is empty!" << G4endl;
+      //         G4cout << "   element name=" << itEl->name << G4endl;
+      //      }
 
       int index;
       distanceToTrajectory(elementCoord, el.smallestDistance, el.closestPoint, index);
@@ -2447,7 +2486,7 @@ void G4OpenInventorXtExaminerViewer::constructListsDialog(Widget w,
                                              XtPointer client_data,
                                              XtPointer)
 {
-   G4cout << "DEBUG constructListsDialog w = " << w << G4endl;
+   // G4cout << "DEBUG constructListsDialog w = " << w << G4endl;
    G4OpenInventorXtExaminerViewer * This = (G4OpenInventorXtExaminerViewer *) client_data;
    if (This->listsDialog) {
       return;
@@ -2480,7 +2519,7 @@ void G4OpenInventorXtExaminerViewer::constructListsDialog(Widget w,
    // This is unnecessary because the parent is passed in
    //   topShell = SoXt::getShellWidget(This->getParentWidget());
    topShell = w;
-   G4cout << "DEBUG PARENT (topShell) FOR AUX WINDOW = " << topShell << G4endl;
+   // G4cout << "DEBUG PARENT (topShell) FOR AUX WINDOW = " << topShell << G4endl;
 
    // Shell Dialog
    std::string dialogNameStr = This->fileName.substr(This->fileName.rfind('/') + 1);
@@ -2794,18 +2833,24 @@ void G4OpenInventorXtExaminerViewer::lookAtSceneElementCB(Widget,
             SbVec3f p1, pN;
             This->currentState = BEAMLINE;
             This->prevParticleDir = SbVec3f(0,0,0); //so that moveCamera() knows sets default parameters
-
+            
             p1 = This->prevPt = This->refParticleTrajectory[0];
             pN = This->refParticleTrajectory[This->refParticleTrajectory.size() - 1];
             This->distance = (pN - p1).length() / 10;
 
-            // FWJ Restore the default height instead of hard-wired value
-            if (cam->isOfType(SoOrthographicCamera::getClassTypeId()))
-               ((SoOrthographicCamera *) cam)->height.setValue(This->defaultHeight);
-            // ((SoOrthographicCamera *) cam)->height.setValue(10000.0f);
-            else if (cam->isOfType(SoPerspectiveCamera::getClassTypeId()))
-               ((SoPerspectiveCamera *) cam)->heightAngle.setValue(
-                                                                   This->defaultHeightAngle);
+            // FWJ Rather than switching to a default height, it is more flexible
+            // to keep the same height(magnification) while moving the camera.
+            // if (cam->isOfType(SoOrthographicCamera::getClassTypeId())) {
+            //    ((SoOrthographicCamera *) cam)->height.setValue(This->defaultHeight);
+            // // FWJ Restore the default height instead of hard-wired value
+            // // ((SoOrthographicCamera *) cam)->height.setValue(10000.0f);
+            // }
+            // else if (cam->isOfType(SoPerspectiveCamera::getClassTypeId()))
+
+            // FWJ required to avoid extreme perspective after camera move:
+            if (cam->isOfType(SoPerspectiveCamera::getClassTypeId()))
+               ((SoPerspectiveCamera*)cam)->heightAngle.setValue(This->defaultHeightAngle);
+
          } else {
             if (cam->isOfType(SoPerspectiveCamera::getClassTypeId()))
                This->distance = (This->prevPt - cam->position.getValue()).length();
@@ -2824,11 +2869,11 @@ void G4OpenInventorXtExaminerViewer::lookAtSceneElementCB(Widget,
          XtFree(value);
 
       }
+      
       else{
          This->offsetFromCenter.setValue(0, 0, 1);
          This->distance = 50;// small number since using viewAll() for default zoom
          This->upVector.setValue(0, 1, 0);
-
          This->moveCamera(This->distance);
          cam->viewAll(path, This->getViewportRegion());
       }
@@ -3005,11 +3050,11 @@ void G4OpenInventorXtExaminerViewer::saveViewPtCB(Widget w,
    XmString label = XmStringCreateLocalized((char *) "Name the viewpoint:");
 
    XtSetArg(args[n], XmNselectionLabelString, label);	n++;
-   XtSetArg(args[n], XmNautoUnmanage, False);	n++; 	//prevent the dialog from closing
-   //automatically, in case the name
-   //is wrong
-
-   nameViewPtDialog = XmCreatePromptDialog(parent, (char *) "Save Viewpoint",
+// Prevent the dialog from closing automatically, in case the name is wrong
+   XtSetArg(args[n], XmNautoUnmanage, False);	n++;
+// FWJ
+   XtSetArg(args[n], XmNtitle, "Save Bookmark"); n++;
+   nameViewPtDialog = XmCreatePromptDialog(parent, String("Save Bookmark"),
                                            args, n);
 
    XmStringFree(label);
@@ -3078,8 +3123,9 @@ void G4OpenInventorXtExaminerViewer::abbrOutputCB(Widget,
                                    XtPointer client_data,
                                    XtPointer)
 {
-   G4OpenInventorXtExaminerViewer * This = 
+   G4OpenInventorXtExaminerViewer * This =
       (G4OpenInventorXtExaminerViewer *) client_data;
+// G4cout << "DISARMCALLBACK abbrOutputFlag=" << This->abbrOutputFlag << G4endl;
    This->abbrOutputFlag = !(This->abbrOutputFlag);
 }
 
@@ -3096,6 +3142,24 @@ void G4OpenInventorXtExaminerViewer::pickRefPathCB(Widget,
       This->setViewing(false);
    This->setComponentCursor(SoXtCursor(SoXtCursor::CROSSHAIR));
    This->pickRefPathFlag = true;
+}
+
+
+void G4OpenInventorXtExaminerViewer::switchWireFrameCB(Widget w,
+                                    XtPointer client_data,
+                                    XtPointer)
+{
+   G4OpenInventorXtExaminerViewer* This = 
+      (G4OpenInventorXtExaminerViewer*)client_data;
+   //   xmToggleButton theToggleButton = (xmToggleButton)w;
+   if (XmToggleButtonGetState(w)) {
+         This->setDrawStyle(SoXtViewer::STILL, SoXtViewer::VIEW_LINE);
+         This->setDrawStyle(SoXtViewer::INTERACTIVE, SoXtViewer::VIEW_LINE);
+      } else {
+         This->setDrawStyle(SoXtViewer::STILL, SoXtViewer::VIEW_AS_IS);
+         This->setDrawStyle(SoXtViewer::INTERACTIVE,
+                            SoXtViewer::VIEW_SAME_AS_STILL);
+      }
 }
 
 
@@ -3289,9 +3353,19 @@ void G4OpenInventorXtExaminerViewer::deleteViewPt(char *vpName)
    fileIn.clear();
    fileIn.close();
 
-   remove(fileName.c_str());
-   rename("temporaryFile.txt", fileName.c_str());
-
+   // FWJ check return status
+   int istat = remove(fileName.c_str());
+   if (istat == -1) {
+      char dialogName[] = "Warning";
+      warningMsgDialog("Error removing bookmarks file", dialogName,
+                       NULL);
+   }
+   istat = rename("temporaryFile.txt", fileName.c_str());
+   if (istat == -1) {
+      char dialogName[] = "Warning";
+      warningMsgDialog("Error renaming bookmarks file", dialogName,
+                       NULL);
+   }
    fileOut.open(fileName.c_str(), std::ios::in);
    fileOut.seekp(0, std::ios::end);
 
@@ -4303,28 +4377,29 @@ void G4OpenInventorXtExaminerViewer::renameBookmarkCB(Widget,
    int end = vpNameStr.find_last_not_of(' ');
    vpNameStr = vpNameStr.substr(beg, end - beg + 1);
    const int nVPName = vpNameStr.size() + 1;
-   vpName = new char[nVPName];
-   strncpy(vpName, vpNameStr.c_str(), nVPName);
+   char* vpName1 = new char[nVPName];
+   strncpy(vpName1, vpNameStr.c_str(), nVPName);
 
    int size = This->viewPtList.size();
    for (int i = 0; i < size; i++) {
-      if (!strcmp(vpName, This->viewPtList[i].viewPtName)) {
+      if (!strcmp(vpName1, This->viewPtList[i].viewPtName)) {
 
          String dialogName = (char *) "Existing Viewpoint";
          std::string msg = "'";
-         msg += vpName;
+         msg += vpName1;
          msg += "' already exists. Choose a different name";
 
          This->warningMsgDialog(msg, dialogName, NULL);
+         delete[] vpName1;
          return;
       }
    }
 
-   XmString vpNameXmStr = XmStringCreateLocalized(vpName);
+   XmString vpNameXmStr = XmStringCreateLocalized(vpName1);
 
    if (XmListGetSelectedPos(This->myViewPtList, &pos_list, &pos_cnt)) {
       XmListReplaceItemsPos(This->myViewPtList, &vpNameXmStr, 1, pos_list[0]);
-      This->renameViewPt(vpName);
+      This->renameViewPt(vpName1);
       XtFree((char *) pos_list);
    }
 
@@ -4332,6 +4407,7 @@ void G4OpenInventorXtExaminerViewer::renameBookmarkCB(Widget,
       This->scheduleRedraw();
 
    XmStringFree(vpNameXmStr);
+   delete[] vpName1;
 }
 
 

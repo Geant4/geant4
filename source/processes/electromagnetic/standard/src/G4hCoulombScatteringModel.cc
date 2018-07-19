@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hCoulombScatteringModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
+// $Id: G4hCoulombScatteringModel.cc 104802 2017-06-19 07:11:40Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,23 +73,23 @@ G4hCoulombScatteringModel::G4hCoulombScatteringModel(G4bool combined)
     cosThetaMax(-1.0),
     isCombined(combined)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
   fNistManager = G4NistManager::Instance();
   theIonTable  = G4ParticleTable::GetParticleTable()->GetIonTable();
   theProton    = G4Proton::Proton();
-  currentMaterial = 0; 
+  currentMaterial = nullptr; 
   fixedCut = -1.0;
 
-  pCuts = 0;
+  pCuts = nullptr;
 
-  recoilThreshold = 0.*keV; // by default does not work
+  recoilThreshold = 0.0; // by default does not work
 
-  particle = 0;
-  currentCouple = 0;
-  wokvi = new G4WentzelVIRelXSection(combined);
+  particle = nullptr;
+  currentCouple = nullptr;
+  wokvi = new G4WentzelVIRelXSection();
 
   currentMaterialIndex = 0;
-  mass = proton_mass_c2;
+  mass = CLHEP::proton_mass_c2;
   elecRatio = 0.0;
 }
 
@@ -106,13 +106,19 @@ void G4hCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
 					   const G4DataVector& cuts)
 {
   SetupParticle(part);
-  currentCouple = 0;
+  currentCouple = nullptr;
 
-  if(isCombined) {
-    cosThetaMin = 1.0;
-    G4double tet = PolarAngleLimit();
-    if(tet >= pi)      { cosThetaMin = -1.0; }
-    else if(tet > 0.0) { cosThetaMin = cos(tet); }
+  // defined theta limit between single and multiple scattering 
+  isCombined = true;
+  G4double tet = PolarAngleLimit();
+
+  if(tet <= 0.0) { 
+    cosThetaMin = 1.0; 
+    isCombined = false; 
+  } else if(tet >= CLHEP::pi) { 
+    cosThetaMin = -1.0; 
+  } else { 
+    cosThetaMin = cos(tet); 
   }
 
   wokvi->Initialise(part, cosThetaMin);
@@ -165,9 +171,8 @@ G4hCoulombScatteringModel::MinPrimaryEnergy(const G4Material* material,
 
   // select lightest element
   G4int Z = 300;
-  for (G4int j=0; j<nelm; ++j) {        
-    G4int iz = G4lrint((*theElementVector)[j]->GetZ());
-    if(iz < Z) { Z = iz; }
+  for (G4int j=0; j<nelm; ++j) {
+    Z = std::min(Z,(*theElementVector)[j]->GetZasInt());
   }
   G4int A = G4lrint(fNistManager->GetAtomicMassAmu(Z));
   G4double targetMass = G4NucleiProperties::GetNuclearMass(A, Z);
@@ -194,21 +199,20 @@ G4double G4hCoulombScatteringModel::ComputeCrossSectionPerAtom(
   if(kinEnergy <= 0.0) { return cross; }
   DefineMaterial(CurrentCouple());
 
-  G4int iz = G4int(Z);
-  G4double tmass = proton_mass_c2;
-  if(1 < iz) {
-    tmass = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-  }
+  G4int iz = G4lrint(Z);
+  G4double tmass = (1 == iz) ? proton_mass_c2 :
+    fNistManager->GetAtomicMassAmu(iz)*amu_c2; 
+  wokvi->SetTargetMass(tmass);
+
   G4double costmin = 
-    wokvi->SetupKinematic(kinEnergy, currentMaterial, cutEnergy, tmass);
+    wokvi->SetupKinematic(kinEnergy, currentMaterial);
+
   if(cosThetaMax < costmin) {
-    G4double cut = cutEnergy;
-    if(fixedCut > 0.0) { cut = fixedCut; }
+    G4double cut = (0.0 < fixedCut) ? fixedCut : cutEnergy;
     costmin = wokvi->SetupTarget(iz, cut);
-    G4double costmax = cosThetaMax; 
-    if(iz == 1 && costmax < 0.0 && particle == theProton) { 
-      costmax = 0.0; 
-    }
+    G4double costmax = 
+      (1 == iz && particle == theProton && cosThetaMax < 0.0) 
+      ? 0.0 : cosThetaMax; 
     if(costmin > costmax) {
       cross = wokvi->ComputeNuclearCrossSection(costmin, costmax)
 	+ wokvi->ComputeElectronCrossSection(costmin, costmax);
@@ -239,23 +243,22 @@ void G4hCoulombScatteringModel::SampleSecondaries(
   DefineMaterial(couple);
 
   // Choose nucleus
+  G4double cut = (0.0 < fixedCut) ? fixedCut : cutEnergy;
+
   const G4Element* elm = SelectRandomAtom(couple,particle,
-					  kinEnergy,cutEnergy,kinEnergy);
+					  kinEnergy,cut,kinEnergy);
 
-  G4double Z = elm->GetZ();
-
-  G4int iz = G4int(Z);
+  G4int iz = elm->GetZasInt();
   G4int ia = SelectIsotopeNumber(elm);
   G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
-  wokvi->SetupKinematic(kinEnergy, currentMaterial, cutEnergy, mass2);
-  G4double costmin = wokvi->SetupTarget(iz, cutEnergy);
-  G4double costmax = cosThetaMax; 
-  if(iz == 1 && costmax < 0.0 && particle == theProton) { 
-    costmax = 0.0; 
-  }
- 
+  wokvi->SetTargetMass(mass2);
+  wokvi->SetupKinematic(kinEnergy, currentMaterial);
+  G4double costmin = wokvi->SetupTarget(iz, cut);
+  G4double costmax = (1 == iz && particle == theProton && cosThetaMax < 0.0) 
+    ? 0.0 :  cosThetaMax; 
   if(costmin <= costmax) { return; }
+
   G4double cross = wokvi->ComputeNuclearCrossSection(costmin, costmax);
   G4double ecross = wokvi->ComputeElectronCrossSection(costmin, costmax);
   G4double ratio = ecross/(cross + ecross);
@@ -295,10 +298,7 @@ void G4hCoulombScatteringModel::SampleSecondaries(
   G4double edep = 0.0;
 
   G4double tcut = recoilThreshold;
-  if(pCuts) { 
-    tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); 
-    //G4cout<<" tcut eV "<<tcut/eV<<endl;
-  }
+  if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
  
   if(trec > tcut) {
     G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);

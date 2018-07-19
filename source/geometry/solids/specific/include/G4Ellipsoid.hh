@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Ellipsoid.hh 104316 2017-05-24 13:04:23Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -86,6 +86,7 @@ class G4Ellipsoid : public G4VSolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
@@ -130,9 +131,6 @@ class G4Ellipsoid : public G4VSolid
 
   protected:  // without description
  
-    G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pT,
-                                                   G4int& noPV) const;
-
     mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 

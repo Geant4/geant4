@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManagerStore.hh 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4FieldManagerStore.hh 103228 2017-03-22 14:52:32Z gcosmo $
 //
 // class G4FieldManagerStore
 //
@@ -65,13 +65,15 @@ class G4FieldManagerStore : public std::vector<G4FieldManager*>
       // Remove the logical volume from the collection.
     static G4FieldManagerStore* GetInstance();
       // Get a ptr to the unique G4FieldManagerStore, creating it if necessary.
+    static G4FieldManagerStore* GetInstanceIfExist();
+      // Get a ptr to the unique G4FieldManagerStore.
     static void Clean();
       // Delete all volumes from the store.
 
     void ClearAllChordFindersState();
       // Looping over all field managers, call each one to reset step estimate
 
-    virtual ~G4FieldManagerStore();
+    ~G4FieldManagerStore();
       // Destructor: takes care to delete allocated field managers.
 
   protected:

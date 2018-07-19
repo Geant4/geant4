@@ -65,6 +65,8 @@ double G4UniformRand()
 #define G4endl std::endl
 #endif
 
+#include "G4Exp.hh"
+
 class G4DNASmoluchowskiDiffusion
 {
 public:
@@ -121,14 +123,14 @@ public:
   static double GetDifferential(double sTransform)
   {
     static double constant = -4./std::sqrt(3.141592653589793);
-    return sTransform*sTransform*std::exp(-sTransform*sTransform)*constant; // -4*sTransform*sTransform*exp(-sTransform*sTransform)/sqrt(3.141592653589793)
+    return sTransform*sTransform*G4Exp(-sTransform*sTransform)*constant; // -4*sTransform*sTransform*exp(-sTransform*sTransform)/sqrt(3.141592653589793)
   }
 
   static double GetDensityProbability(double r, double _time, double D)
   {
     static double my_pi = 3.141592653589793;
     static double constant = 4.*my_pi/std::pow(4.*my_pi, 1.5);
-    return r*r/std::pow(D * _time,1.5)*std::exp(-r*r/(4. * D * _time))*constant;
+    return r*r/std::pow(D * _time,1.5)*G4Exp(-r*r/(4. * D * _time))*constant;
   }
 
   //====================================================
@@ -302,7 +304,7 @@ public:
   static double GetCumulativeProbability(double sTransform)
   {
     static double constant = 2./std::sqrt(3.141592653589793);
-    return erfc(sTransform) + constant*sTransform*std::exp(-sTransform*sTransform);
+    return erfc(sTransform) + constant*sTransform*G4Exp(-sTransform*sTransform);
   }
 
   double GetInverseProbability(double proba) // returns sTransform

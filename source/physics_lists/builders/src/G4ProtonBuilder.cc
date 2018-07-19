@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ProtonBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
+// $Id: G4ProtonBuilder.cc 103801 2017-04-27 13:59:03Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +34,7 @@
 // Modified:
 // 16.11.2005 G.Folger: don't  keep processes as data members, but new these
 // 13.06.2006 G.Folger: (re)move elastic scatterring 
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -61,9 +62,13 @@
    theProtonInelastic=new G4ProtonInelasticProcess;
  }
 
- G4ProtonBuilder::
- ~G4ProtonBuilder() 
- {
+ void G4ProtonBuilder::RegisterMe(G4PhysicsBuilderInterface* aB) {
+   auto bld = dynamic_cast<G4VProtonBuilder*>(aB);
+   if ( bld != nullptr ) {
+       theModelCollections.push_back(bld);
+   } else {
+       G4PhysicsBuilderInterface::RegisterMe(aB);
+   }
  }
 
  // 2002 by J.P. Wellisch

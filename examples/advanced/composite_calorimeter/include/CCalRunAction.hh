@@ -43,7 +43,13 @@ public:
   virtual void BeginOfRunAction(const G4Run* aRun);    
   virtual void EndOfRunAction(const G4Run* aRun);    
 
+  void Book();
+  G4int maxbin() const {return numberOfTimeSlices;}
 
+private:
+  G4int numberOfTimeSlices;
+  
+  
 };
 
 #endif

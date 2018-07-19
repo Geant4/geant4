@@ -1,81 +1,63 @@
 
 The photo-evaporation database contains nuclear deexcitation data starting 
-from a given nuclear level. Each file contains data for a given isotope, 
-identified by Z and A.
+from a given nuclear level including information on spin of a state and
+angular moment of a transition in a directory
 
-The database must first be downloaded from
-
-http://geant4.web.cern.ch/geant4/support/download.shtml
-
-and stored in a local directory.  The environment variable 
-G4LEVELGAMMADATA must then be set to point to this directory.
+correlated_gamma of this dataset 
  
 **************************************************
 
-Each line describes a de-excitation *step* from a given energy level to a lower 
-one (which might be the ground state). It contains data for gamma de-excitation
-and internal conversion. Notice that if multiple de-excitation 
-channels are allowed for the starting energy level, these channels will be 
-described in more lines (all having the same starting level).
+A file is divided into sublock, each representing a level of the isotope.
+All levels included the ground state are listed.
+Each sublock level start by a line defining the characteristic of the level.
+Followed by lines defining the gamma transition from this level to lower levels.
 
+The line defining an energy level of the isotope contains 6 columns:
+1) An integer defining the order index of the level starting by 0  for the ground state
 
-Each line contains 17 columns:
+2) A string  defining floating level  (-,+X,+Y,+Z,+U,+V,+W,+R,+S,+T,+A,+B,+C)
+   - string means that it is a non floating level.
+       
+3) Excitation energy of the level (keV)
 
-1) Energy of the starting nuclear level (keV)
-   As mentioned before, it is possible to have more lines describing the same 
-   starting level, in the case where multiple de-excitation schemes are
-   allowed.
-	
-2) Energy of the transition (keV)
-   This is the energy difference between the initial and the final level.
+4) Level half-life (s). A -1 half-life means a stable ground state.
 
-3) Gamma transition probability (Ig in %)
-   Note1: if the probability is less than  minProbability = 1e-8%, it is forced
-          to be 1e-8%.
-   Note2: see column 7 how total branching ratio is computed.	  
+5) JPi information of the level. The sign gives the parity. A value of 99 is used when the Jpi is 
+   missing in the the ENSDF files.
+        
+6) n_gammas= Number of possible gammas deexcitation channel from the level.
+    n_gammas=O means that no gamma deexcitation is given in ENSDF data for this level.
 
-4) Polarity 
-   Spin-parity variation in the transition
-   [never used in real simulation]
+After the line defining a level, a serie of n_gammas lines defined the different
+n_gammas gamma deexcitation.The information contains in a gamma line is the following:
 
-5) Level half-life (s)
+1) The order number of the daughter level.
 
-6) Angular Momentum
-   Spin of the initial level
-   [never used in real simulation]
+2) The energy of the gamma transition.
 
-7) Total internal conversion coefficient : alpha = Ic/Ig
+3) The relative gamma emission intensity. 
+
+4) The multipolarity number with 1,2,3,4,5,6,7 representing E1,M1,E2,M2,E3,M3  monopole transition
+   and  100*Nx+Ny representing multipolarity transition with Ny and Ny taking the value 1,2,3,4,5,6,7 
+   referring to   E1,M1,E2,M2,E3,M3,.. For example a M1+E2 transition would be written 203.
+  
+ 
+5) The multipolarity mixing ratio. O means that either the transition is a E1,M1,E2,M2 transition 
+   or the multipolarity mixing ratio is not given in ENSDF.
+  
+6) Total internal conversion coefficient : alpha = Ic/Ig
    Note1: total transition is the sum of gamma de-excitation and internal
           conversion. Therefore total branching ratio is proportional to 
-	  (1+alpha)*Ig
+          (1+alpha)*Ig
    Note2: total branching ratios from a given level do not always sum up to 
-	  100%. They are re-normalized internally.    
+          100%. They are re-normalized internally.    
    Note3: relative probabilities for gamma de-excitation and internal conversion
           are 1/(1+alpha) and alpha/(1+alpha) respectively
-
-8-17) Partial conversion probabilities for
-	K-shell
-	L1-3 shells
-	M1-5 shells
-	Outer shells (shellID = 9 is used, when applicable)
-
-Note: if the nuclear excitation energy does not match any of the known levels,
-      the *nearest* level is always considered.  In G4RadioactiveDecay, 
-      metastable states are treated correctly if the excitation energy is 
-      within 2.0 keV of the values in $G4RADIOACTIVEDATA.
-
-      For instance: take file $G4LEVELGAMMADATA/z28.a60 (Ni-60)
-      Co-60 radioactive decay populates the 1332.5080-keV level of 
-      Ni-60 (0.12%) or the 2505.7480-keV level of Ni-60 (99.88%).
-
-      Deexcitation from the 2505.7480-keV level is described in lines 
-      6-8 of $G4LEVELGAMMADATA/z28.a60 (Ni-60)
-      Here, internal conversion coefficients are negligeable (column 7)
-      Therefore the nucleus will release
-      1) 347 keV with 7.6e-3% probability, ending up in the 2158-keV level 
-      (following de-excitation hence takes place, lines 2-4 of the file)
-      2) 1173 keV with 100% probability, ending up in the 1332-keV 
-      excited state (following de-excitation hence takes place, line 1)
-      3) 2505 keV with 2e-6% probability ending up in the ground state.
-
+7-16) Given only if total internal conversion coefficient alpha is not 0 
+        Partial conversion probabilities for
+                K-shell
+                L1-3 shells
+                M1-5 shells
+                Outer shells (shellID = 9 is used, when applicable)
+   
 

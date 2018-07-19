@@ -25,7 +25,7 @@
 //
 // $Id: G4ITStepManager.hh 60427 2012-07-11 16:34:35Z matkara $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -62,7 +62,6 @@
 #include "G4VStateDependent.hh"
 #include "G4ITReaction.hh"
 
-
 class G4ITTrackingManager;
 class G4ITModelProcessor;
 class G4ITStepProcessor;
@@ -71,9 +70,6 @@ class G4UserTimeStepAction;
 class G4SchedulerMessenger;
 class G4ITTrackingInteractivity;
 class G4ITGun;
-
-
-
 
 #ifndef compTrackPerID__
 #define compTrackPerID__
@@ -86,10 +82,8 @@ class G4ITGun;
   };
 #endif
 
-
 /**
- * G4ITStepManager enables to synchronize in time
- * the step of tracks.
+ * G4Scheduler synchronizes (in time) track stepping
  */
 class G4Scheduler :
     public G4VScheduler,
@@ -130,15 +124,15 @@ public:
 
   void SetEndTime(const double);
 
+  /* Two tracks below the time tolerance are supposed to be
+   * in the same time slice
+   */
   inline void SetTimeTolerance(double);
-  // Two tracks below the time tolerance are supposed to be
-  // in the same time slice
   inline double GetTimeTolerance() const;
 
   inline void SetMaxZeroTimeAllowed(int);
   inline int GetMaxZeroTimeAllowed() const;
 
-  //==
   inline G4ITModelHandler* GetModelHandler();
 
   inline void SetTimeSteps(std::map<double, double>*);
@@ -162,11 +156,13 @@ public:
 
   inline G4ITStepStatus GetStatus() const;
 
+  /* 1 : Reaction information
+   * 2 : (1) + time step information
+   * 3 : (2) + step info for individual tracks
+   * 4 : (2) + trackList processing info + pushed and killed track info
+   */
   inline void SetVerbose(int);
-  // 1 : Reaction information
-  // 2 : (1) + time step information
-  // 3 : (2) + step info for individual tracks
-  // 4 : (2) + trackList processing info + pushed and killed track info
+  
   inline int GetVerbose() const;
 
   inline void WhyDoYouStop();
@@ -189,7 +185,6 @@ public:
   {
     fMaxTimeStep = maxTimeStep;
   }
-
 
   inline double GetMaxTimeStep() const
   {

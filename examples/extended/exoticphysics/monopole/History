@@ -1,4 +1,4 @@
-$Id: History 92500 2015-09-02 07:26:32Z gcosmo $
+$Id: History 110255 2018-05-17 14:15:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,38 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-May-2018 J.Allison (monopole-V10-04-02)
+- Remove G4UI_USE and G4VIS_USE.
+- Move instantiation of G4UIExecutive to start of main.
+- Add runManager->Initialize().
+
+8 May 2018: B. Morgan (monopole-V10-04-01)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+8 March 2018: J. Apostolakis   (monopole-V10-04-00)
+- As equations of motion do not use Electric field, changed
+  G4MonopoleEquation to use G4MagneticField (instead of 
+   G4ElectroMagneticField.)
+  This is needed due to correction of inheritance in 
+     magfield-V10-04-00 which is a co-working tag.
+
+21 November 17: V.Ivantchenko (monopole-V10-03-04)
+- Simplified histograms defition and filling
+
+20 November 17: V.Ivantchenko (monopole-V10-03-03)
+- Fixed lost functionality of histograms and monopole parameter
+  definitions
+
+26 October 17: D. Sorokin (monopole-V10-03-01)
+- G4MonopoleTransportation.cc - build fix
+
+23 June 17: S. Elles (monopole-V10-03-00)
+- add MT interface
+- switch ActionInitialization, Run and RunAction classes
+- switch to G4AnalysisManager
 
 01 September 15: I. Hrivnacova (monopole-V10-01-00)
 - Removed EventAction and EventActionMessenger classes, now obsolete, and 

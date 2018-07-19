@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronOccupancy.cc 79357 2014-02-25 10:06:54Z gcosmo $
+// $Id: G4ElectronOccupancy.cc 110257 2018-05-17 14:20:12Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -40,7 +40,11 @@
 #include "G4ElectronOccupancy.hh"
 #include <sstream>
 
-G4ThreadLocal G4Allocator<G4ElectronOccupancy> *aElectronOccupancyAllocator = 0;
+G4Allocator<G4ElectronOccupancy>*& aElectronOccupancyAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4ElectronOccupancy>* _instance = nullptr;
+    return _instance;
+}
 
 G4ElectronOccupancy::G4ElectronOccupancy(G4int sizeOrbit )
   : theSizeOfOrbit(sizeOrbit)

@@ -84,6 +84,103 @@ namespace G4INCL {
        * \return the slope of the angular distribution
        */
       virtual G4double calculateNNAngularSlope(G4double energyCM, G4int iso);
+	  
+      /// \brief Cross sections for mesonic resonance production - piN Channel
+      virtual G4double piNToEtaN(Particle const * const p1, Particle const * const p2);
+      virtual G4double piNToOmegaN(Particle const * const p1, Particle const * const p2);
+      virtual G4double piNToEtaPrimeN(Particle const * const p1, Particle const * const p2);
+			
+			   /// \brief Cross sections for mesonic resonance absorption on nucleon - pipiN Channel
+      virtual G4double etaNToPiPiN(Particle const * const p1, Particle const * const p2);			
+      virtual G4double omegaNToPiPiN(Particle const * const p1, Particle const * const p2);	  
+			
+      /// \brief Cross sections for mesonic resonance absorption on nucleon - piN Channel
+      virtual G4double etaNToPiN(Particle const * const p1, Particle const * const p2);
+      virtual G4double omegaNToPiN(Particle const * const p1, Particle const * const p2);
+      virtual G4double etaPrimeNToPiN(Particle const * const p1, Particle const * const p2);
+	  
+	     /// \brief Cross section for Eta production - NN entrance channel
+      virtual G4double NNToNNEta(Particle const * const particle1, Particle const * const particle2);
+			
+		   	/// \brief Cross section for Eta production  (exclusive) - NN entrance channel
+		   	virtual G4double NNToNNEtaExclu(Particle const * const particle1, Particle const * const particle2);
+	  
+		   	/// \brief Cross section for X pion production - NNEta Channel
+			   virtual G4double NNToNNEtaxPi(const G4int xpi, Particle const * const p1, Particle const * const p2);
+	  
+		   	/// \brief Cross section for N-Delta-Eta production - NNEta Channel
+		   	virtual G4double NNToNDeltaEta(Particle const * const p1, Particle const * const p2);			
+	  
+      /// \brief Cross section for Eta production - NN entrance channel
+      virtual G4double NNToNNOmega(Particle const * const particle1, Particle const * const particle2);
+			
+      /// \brief Cross section for Eta production  (exclusive) - NN entrance channel
+      virtual G4double NNToNNOmegaExclu(Particle const * const particle1, Particle const * const particle2);
+	  
+      /// \brief Cross section for X pion production - NNEta Channel
+      virtual G4double NNToNNOmegaxPi(const G4int xpi, Particle const * const p1, Particle const * const p2);
+	  
+      /// \brief Cross section for N-Delta-Eta production - NNEta Channel
+      virtual G4double NNToNDeltaOmega(Particle const * const p1, Particle const * const p2);
+      
+      
+      /// \brief elastic scattering for Nucleon-Strange Particles cross sections
+      virtual G4double NYelastic(Particle const * const p1, Particle const * const p2);
+      virtual G4double NKbelastic(Particle const * const p1, Particle const * const p2);
+      virtual G4double NKelastic(Particle const * const p1, Particle const * const p2);
+      
+      /// \brief Nucleon-Nucleon to Stange particles cross sections
+      virtual G4double NNToNLK(Particle const * const p1, Particle const * const p2);
+      virtual G4double NNToNSK(Particle const * const p1, Particle const * const p2);
+      virtual G4double NNToNLKpi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NNToNSKpi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NNToNLK2pi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NNToNSK2pi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NNToNNKKb(Particle const * const p1, Particle const * const p2);
+      
+      virtual G4double NNToMissingStrangeness(Particle const * const p1, Particle const * const p2);
+      
+      /// \brief Nucleon-Delta to Stange particles cross sections
+      virtual G4double NDeltaToNLK(Particle const * const p1, Particle const * const p2);
+      virtual G4double NDeltaToNSK(Particle const * const p1, Particle const * const p2);
+      virtual G4double NDeltaToDeltaLK(Particle const * const p1, Particle const * const p2);
+      virtual G4double NDeltaToDeltaSK(Particle const * const p1, Particle const * const p2);
+      
+      virtual G4double NDeltaToNNKKb(Particle const * const p1, Particle const * const p2);
+      
+      /// \brief Nucleon-Pion to Stange particles cross sections
+      virtual G4double NpiToLK(Particle const * const p1, Particle const * const p2);
+      virtual G4double NpiToSK(Particle const * const p1, Particle const * const p2);
+		virtual G4double p_pimToSzKz(Particle const * const p1, Particle const * const p2);
+		virtual G4double p_pimToSmKp(Particle const * const p1, Particle const * const p2);
+		virtual G4double p_pizToSzKp(Particle const * const p1, Particle const * const p2);
+      virtual G4double NpiToLKpi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NpiToSKpi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NpiToLK2pi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NpiToSK2pi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NpiToNKKb(Particle const * const p1, Particle const * const p2);
+      
+      virtual G4double NpiToMissingStrangeness(Particle const * const p1, Particle const * const p2);
+      
+      /// \brief Nucleon-Hyperon cross sections
+      virtual G4double NLToNS(Particle const * const p1, Particle const * const p2);
+      virtual G4double NSToNL(Particle const * const p1, Particle const * const p2);
+      virtual G4double NSToNS(Particle const * const p1, Particle const * const p2);
+      
+      /// \brief Nucleon-Kaon quasi-elastic and inelastic cross sections
+      virtual G4double NKToNK(Particle const * const p1, Particle const * const p2);
+      virtual G4double NKToNKpi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NKToNK2pi(Particle const * const p1, Particle const * const p2);
+      
+      /// \brief Nucleon-antiKaon quasi-elastic and inelastic cross sections
+      virtual G4double NKbToNKb(Particle const * const p1, Particle const * const p2);
+      virtual G4double NKbToSpi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NKbToLpi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NKbToS2pi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NKbToL2pi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NKbToNKbpi(Particle const * const p1, Particle const * const p2);
+      virtual G4double NKbToNKb2pi(Particle const * const p1, Particle const * const p2);
+
 
     protected:
       /// \brief Maximum number of outgoing pions in NN collisions
@@ -174,13 +271,20 @@ namespace G4INCL {
       G4double piNIne(Particle const * const p1, Particle const * const p2);
       G4double piNTot(Particle const * const p1, Particle const * const p2);
       G4double piNTopiN(Particle const * const p1, Particle const * const p2);
-
+      G4double piPluspIne(Particle const * const p1, Particle const * const p2);
+	  G4double piMinuspIne(Particle const * const p1, Particle const * const p2);
+      G4double piPluspOnePi(Particle const * const p1, Particle const * const p2);
+	  G4double piMinuspOnePi(Particle const * const p1, Particle const * const p2);
+      G4double piPluspTwoPi(Particle const * const p1, Particle const * const p2);
+	  G4double piMinuspTwoPi(Particle const * const p1, Particle const * const p2);
+	  
       /// \brief Cross section for One (more) pion production - piN entrance channel
       virtual G4double piNOnePi(Particle const * const p1, Particle const * const p2);
-
+	  
       /// \brief Cross section for Two (more) pion production - piN entrance channel
       virtual G4double piNTwoPi(Particle const * const p1, Particle const * const p2);
-
+	  
+	  
   };
 }
 

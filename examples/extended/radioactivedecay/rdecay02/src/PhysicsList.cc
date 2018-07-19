@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/PhysicsList.cc
+/// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
 // $Id: PhysicsList.cc 70268 2013-05-28 14:17:50Z maire $
@@ -35,9 +35,11 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 
-
-#include "EmStandardPhysics.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4EmParameters.hh"
 #include "G4DecayPhysics.hh"
+#include "G4NuclideTable.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
 #include "G4HadronElasticPhysicsHP.hh"
@@ -48,7 +50,6 @@
 #include "G4IonElasticPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4IonINCLXXPhysics.hh"
-#include "GammaPhysics.hh"
 
 // particles
 
@@ -80,10 +81,20 @@ PhysicsList::PhysicsList()
   new G4UnitDefinition("hour",   "h",   "Time", hour);
   new G4UnitDefinition("day",    "d",   "Time", day);
   new G4UnitDefinition("year",   "y",   "Time", year);
+
+  // Mandatory for G4NuclideTable
+  // Half-life threshold must be set small or many short-lived isomers 
+  // will not be assigned life times (default to 0) 
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
+  G4NuclideTable::GetInstance()->SetLevelTolerance(1.0*eV);
           
   // EM physics
-  RegisterPhysics(new EmStandardPhysics());
-  
+  RegisterPhysics(new G4EmStandardPhysics());
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetAugerCascade(true);
+  param->SetStepFunction(1., 1*CLHEP::mm);
+  param->SetStepFunctionMuHad(1., 1*CLHEP::mm);
+
   // Decay
   RegisterPhysics(new G4DecayPhysics());
 
@@ -91,23 +102,26 @@ PhysicsList::PhysicsList()
   RegisterPhysics(new G4RadioactiveDecayPhysics());
             
   // Hadron Elastic scattering
-  ////RegisterPhysics( new G4HadronElasticPhysicsHP(verb) );
+  RegisterPhysics( new G4HadronElasticPhysicsHP(verb) );
   
   // Hadron Inelastic physics
-  ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
+  RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));        
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
   
   // Ion Elastic scattering
-  ///RegisterPhysics( new G4IonElasticPhysics(verb));
+  RegisterPhysics( new G4IonElasticPhysics(verb));
       
   // Ion Inelastic physics
-  ////RegisterPhysics( new G4IonPhysics(verb));
+  RegisterPhysics( new G4IonPhysics(verb));
   ////RegisterPhysics( new G4IonINCLXXPhysics(verb));
     
   // Gamma-Nuclear Physics
-  ////RegisterPhysics( new GammaPhysics("gamma"));
+  G4EmExtraPhysics* gnuc = new G4EmExtraPhysics(verb);
+  gnuc->ElectroNuclear(false);
+  gnuc->MuonNuclear(false);
+  RegisterPhysics(gnuc);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

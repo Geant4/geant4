@@ -13,7 +13,7 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 ifdef SPACE_VERBOSE
-  CPPFLAGS += -DSPACE_VERBOSE_USE
+  CPPFLAGS += -DULTRA_VERBOSE_USE
 endif
 ifdef ULTRA_MIRROR_USE
   CPPFLAGS += -DULTRA_MIRROR_USE

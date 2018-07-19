@@ -6,7 +6,6 @@ add_library(
   ${_TARGET} SHARED
   pyG4CrossSectionHandler.cc
   pyG4EmCalculator.cc
-  pyG4LossTableManager.cc
   pyG4ProcVector.cc
   pyG4ProcessManager.cc
   pyG4ProcessTable.cc

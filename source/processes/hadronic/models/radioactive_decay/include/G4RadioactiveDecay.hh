@@ -62,20 +62,20 @@
 #include "globals.hh"
 #include "G4VRestDiscreteProcess.hh"
 #include "G4ParticleChangeForRadDecay.hh"
-// #include "G4RadioactiveDecaymessenger.hh"  
 
 #include "G4NucleusLimits.hh"
-#include "G4RadioactiveDecayRate.hh"
-#include "G4RadioactiveDecayRateVector.hh"
-#include "G4RIsotopeTable.hh"
+#include "G4RadioactiveDecayRatesToDaughter.hh"
+#include "G4RadioactiveDecayChainsFromParent.hh"
 #include "G4RadioactivityTable.hh"
 #include "G4ThreeVector.hh"
 #include "G4Threading.hh"
 
+class G4Fragment;
 class G4RadioactiveDecaymessenger;
+class G4PhotonEvaporation;
 
-typedef std::vector<G4RadioactiveDecayRateVector> G4RadioactiveDecayRateTable;
-typedef std::vector<G4RadioactiveDecayRate> G4RadioactiveDecayRates;
+typedef std::vector<G4RadioactiveDecayChainsFromParent> G4RadioactiveDecayParentChainTable;
+typedef std::vector<G4RadioactiveDecayRatesToDaughter> G4RadioactiveDecayRates;
 typedef std::map<G4String, G4DecayTable*> DecayTableMap;
 
 
@@ -95,6 +95,8 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 
     G4RadioactiveDecay(const G4String& processName="RadioactiveDecay");
     ~G4RadioactiveDecay();
+
+    virtual void ProcessDescription(std::ostream& outFile) const;
 
     // Return true if the specified isotope is
     //  1) defined as "nucleus" and
@@ -136,16 +138,16 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     // descendants of the specified isotope are ready.
     // used in VR decay mode only
 
-    void AddDecayRateTable(const G4ParticleDefinition&);
+    void CalculateChainsFromParent(const G4ParticleDefinition&);
     // Calculates the coefficient and decay time table for all the descendents
     // of the specified isotope.  Adds the calculated table to the private data
-    // member "theDecayRateTableVector".
+    // member "theParentChainTable".
     // used in VR decay mode only 
 
-    void GetDecayRateTable(const G4ParticleDefinition&);
+    void GetChainsFromParent(const G4ParticleDefinition&);
     // Used to retrieve the coefficient and decay time table for all the
-    // descendants of the specified isotope from "theDecayRateTableVector"
-    // and place it in "theDecayRateTable".
+    // descendants of the specified isotope from "theParentChainTable"
+    // and place it in "chainsFromParent".
     // used in VR decay mode only 
 
     void SetDecayRate(G4int,G4int,G4double, G4int, std::vector<G4double>,
@@ -164,7 +166,6 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     // Allow the user to replace the radio-active decay data provided in Geant4
     // by its own data file for a given isotope
 
-
     inline void  SetVerboseLevel(G4int value) {verboseLevel = value;}
     // Sets the VerboseLevel which controls duggering display
 
@@ -181,34 +182,36 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     // Returns theNucleusLimits which specifies the range of isotopes
     // the G4RadioactiveDecay applies
 
+    // Controls whether G4RadioactiveDecay runs in analogue mode or
+    // variance reduction mode.  SetBRBias, SetSplitNuclei and
+    // SetSourceTimeProfile all turn off analogue mode and use VR mode
     inline void SetAnalogueMonteCarlo (G4bool r ) { 
-      AnalogueMC  = r; 
+      AnalogueMC = r; 
       if (!AnalogueMC) halflifethreshold = 1e-6*CLHEP::s;
     }
-    // Controls whether G4RadioactiveDecay runs in analogue mode or
-    // variance reduction mode.
 
-    inline void SetFBeta (G4bool r ) { FBeta  = r; }
     // Controls whether G4RadioactiveDecay uses fast beta simulation mode
+    // Currently does nothing - kept for backward compatibility
+    inline void SetFBeta (G4bool r ) { FBeta  = r; }
 
-    inline G4bool IsAnalogueMonteCarlo () {return AnalogueMC;}
     // Returns true if the simulation is an analogue Monte Carlo, and false if
     // any of the biassing schemes have been selected.
+    inline G4bool IsAnalogueMonteCarlo () {return AnalogueMC;}
 
-    inline void SetBRBias (G4bool r) {
+     // Sets whether branching ration bias scheme applies.
+    inline void SetBRBias(G4bool r) {
       BRBias = r;
       SetAnalogueMonteCarlo(0);
      }
-     // Sets whether branching ration bias scheme applies.
 
-    inline void SetSplitNuclei (G4int r) {
+    // Sets the number of times a nucleus will decay when biased
+    inline void SetSplitNuclei(G4int r) {
       NSplit = r;
       SetAnalogueMonteCarlo(0);
     }
-    // Sets the N number for the Nuclei spliting bias scheme
 
+    //  Returns the nuclear splitting number
     inline G4int GetSplitNuclei () {return NSplit;}
-    //  Returns the N number used for the Nuclei spliting bias scheme
 
     inline void SetDecayDirection(const G4ThreeVector& theDir) {
       forceDecayDirection = theDir.unit();
@@ -224,21 +227,20 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 
     inline G4double GetDecayHalfAngle() const {return forceDecayHalfAngle;}
 
+    // Force direction (random within half-angle) for "visible" daughters
+    // (applies to electrons, positrons, gammas, neutrons, protons or alphas)
     inline void SetDecayCollimation(const G4ThreeVector& theDir,
                                     G4double halfAngle = 0.*CLHEP::deg) {
       SetDecayDirection(theDir);
       SetDecayHalfAngle(halfAngle);
     }
 
-    // Force direction (random within half-angle) for "visible" daughters
-    // (applies to electrons, positrons, gammas, neutrons, protons or alphas)
-
     void BuildPhysicsTable(const G4ParticleDefinition &);
-
-  protected:
 
     G4VParticleChange* DecayIt(const G4Track& theTrack,
                                const G4Step&  theStep);
+
+  protected:
 
     G4DecayProducts* DoDecay(const G4ParticleDefinition& theParticleDef);
 
@@ -253,18 +255,29 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4double GetMeanLifeTime(const G4Track& theTrack,
                              G4ForceCondition* condition);
 
-    G4double GetTaoTime(const G4double, const G4double);
+    G4double ConvolveSourceTimeProfile(const G4double, const G4double);
 
     G4double GetDecayTime();
 
     G4int GetDecayTimeBin(const G4double aDecayTime);
 
+    //Add gamma,Xray,conversion,and auger electrons for bias mode
+    void AddDeexcitationSpectrumForBiasMode(G4ParticleDefinition* apartDef,
+                                            G4double weight,
+                                            G4double currenTime,
+                                            std::vector<double>& weights_v,
+                                            std::vector<double>& times_v,
+                                            std::vector<G4DynamicParticle*>& secondaries_v);
+
   private:
+
+    void StreamInfo(std::ostream& os, const G4String& endline);
 
     G4RadioactiveDecay(const G4RadioactiveDecay &right);
     G4RadioactiveDecay & operator=(const G4RadioactiveDecay &right);
 
     G4RadioactiveDecaymessenger* theRadioactiveDecaymessenger;
+    G4PhotonEvaporation* photonEvaporation;
 
     G4NucleusLimits theNucleusLimits;
 
@@ -293,17 +306,20 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     std::vector<G4String> ValidVolumes;
     bool isAllVolumesMode;
 
-    G4RadioactiveDecayRate theDecayRate;
+    G4RadioactiveDecayRatesToDaughter ratesToDaughter;
     G4RadioactiveDecayRates theDecayRateVector;
-    G4RadioactiveDecayRateVector theDecayRateTable;
-    G4RadioactiveDecayRateTable theDecayRateTableVector;
+    G4RadioactiveDecayChainsFromParent chainsFromParent;
+    G4RadioactiveDecayParentChainTable theParentChainTable;
 
     // for the radioactivity tables
     std::vector<G4RadioactivityTable*> theRadioactivityTables;
     G4int decayWindows[100];
     static const G4double levelTolerance;
 
-    //User define radioactive decay data files replacing some files in the G4RADECAY database
+    // Radioactive decay database directory path 
+    G4String dirPath;
+
+    // User-defined radioactive decay data files
     std::map<G4int, G4String> theUserRadioactiveDataFiles;
 
     // Library of decay tables

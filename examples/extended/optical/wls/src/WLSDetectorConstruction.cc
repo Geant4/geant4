@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSDetectorConstruction.cc 84718 2014-10-20 07:40:45Z gcosmo $
+// $Id: WLSDetectorConstruction.cc 104079 2017-05-10 14:51:06Z gcosmo $
 //
 /// \file optical/wls/src/WLSDetectorConstruction.cc
 /// \brief Implementation of the WLSDetectorConstruction class
@@ -53,6 +53,7 @@
 
 #include "G4RunManager.hh"
 
+#include "G4SDManager.hh"
 #include "WLSDetectorConstruction.hh"
 #include "WLSDetectorMessenger.hh"
 #include "WLSMaterials.hh"
@@ -441,6 +442,7 @@ void WLSDetectorConstruction::ConstructFiber()
 
      logicPlacement = logicClad2;
      physiPlacement = physiClad2;
+     break;
 
     case 1:
 
@@ -481,6 +483,7 @@ void WLSDetectorConstruction::ConstructFiber()
 
      logicPlacement = logicClad1;
      physiPlacement = physiClad1;
+     break;
 
     default:
 
@@ -690,6 +693,7 @@ void WLSDetectorConstruction::ConstructSDandField()
   if (!fmppcSD.Get()) {
      G4String mppcSDName = "WLS/PhotonDet";
      WLSPhotonDetSD* mppcSD = new WLSPhotonDetSD(mppcSDName);
+     G4SDManager::GetSDMpointer()->AddNewDetector(mppcSD);
      fmppcSD.Put(mppcSD);
   }
   SetSensitiveDetector("PhotonDet_LV", fmppcSD.Get(), true);

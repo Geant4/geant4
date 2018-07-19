@@ -45,6 +45,11 @@ class G4ParticleHPParticleYield
     spontPrompt = true;
     hasPromptData = false;
     hasDelayedData = false;
+
+   targetMass = 0.0;
+   theSpontPrompt = 0.0;
+   spontDelayed = true;
+   theSpontDelayed = 0.0;
   }
   ~G4ParticleHPParticleYield(){}
   

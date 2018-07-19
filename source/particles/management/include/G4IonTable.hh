@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh 95470 2016-02-12 09:02:26Z gcosmo $
+// $Id: G4IonTable.hh 99621 2016-09-29 10:14:44Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -134,13 +134,24 @@ class G4IonTable
    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int lvl=0);
    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L, G4int lvl);
    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4double E, G4int J=0);
-   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L,
-				G4double E, G4int J=0);
+   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4double E, 
+                                G4Ions::G4FloatLevelBase flb, G4int J=0);
+   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4double E, 
+                                char flbChar, G4int J=0);
+   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L, G4double E,
+				G4int J=0);
+   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L, G4double E,
+				G4Ions::G4FloatLevelBase flb, G4int J=0);
+   G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L, G4double E,
+				char flbChar, G4int J=0);
    //   Z: Atomic Number
    //   A: Atomic Mass (nn + np +nlambda)
    //   L: Number of Lmabda
    //   E: Excitaion energy
    //   lvl:  Isomer Level 0: ground state)
+   //   flb:  Floating level base (enum defined in G4Ions.hh)
+   //   flbChar:  Floating level base denoted by a character
+   //             (<null>,X,Y,Z,U,V,W,R,S,T,A,B,C,D,E)
    //   J: Total Angular momentum (in unit of 1/2) : not used
 
    G4ParticleDefinition* GetIon(G4int encoding);
@@ -151,13 +162,24 @@ class G4IonTable
    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int lvl=0);
    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L, G4int lvl);
    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E, G4int J=0);
-   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L,
-				 G4double E, G4int J=0);
+   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E,
+                                 G4Ions::G4FloatLevelBase flb, G4int J=0);
+   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E,
+                                 char flbChar, G4int J=0);
+   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L, G4double E,
+				 G4int J=0);
+   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L, G4double E,
+				 G4Ions::G4FloatLevelBase flb, G4int J=0);
+   G4ParticleDefinition* FindIon(G4int Z, G4int A, G4int L, G4double E,
+				 char flbChar, G4int J=0);
    //   Z: Atomic Number
    //   A: Atomic Mass (nn + np +nlambda)
    //   L: Number of Lmabda
    //   E: Excitaion energy
    //   lvl:  Isomer Level 0: ground state)
+   //   flb:  Floating level base (enum defined in G4Ions.hh)
+   //   flbChar:  Floating level base denoted by a character
+   //             (<null>,X,Y,Z,U,V,W,R,S,T,A,B,C,D,E)
    //   J: Total Angular momentum (in unit of 1/2) : not used
 
    static G4bool        IsIon(const G4ParticleDefinition*);
@@ -168,8 +190,10 @@ class G4IonTable
 
 
    const G4String&  GetIonName(G4int Z, G4int A, G4int lvl=0) const;
-   const G4String&  GetIonName(G4int Z, G4int A, G4double E) const;
-   const G4String&  GetIonName(G4int Z, G4int A, G4int L, G4double E) const;
+   const G4String&  GetIonName(G4int Z, G4int A, G4double E,
+          G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float) const;
+   const G4String&  GetIonName(G4int Z, G4int A, G4int L, G4double E,
+          G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float) const;
    const G4String&  GetIonName(G4int Z, G4int A, G4int L, G4int  lvl) const;
    // get ion name
   
@@ -210,7 +234,9 @@ class G4IonTable
    //  lvl is isomer level
  
    G4double   GetLifeTime(const G4ParticleDefinition*) const;
-   G4double   GetLifeTime(G4int Z, G4int A, G4double E) const;
+   G4double   GetLifeTime(G4int Z, G4int A, G4double E,
+                G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float) const;
+   G4double   GetLifeTime(G4int Z, G4int A, G4double E, char flbChar) const;
    // Returns a life time of an ion. -1 for stable ion, and -1001 for ion
    // that is not listed in G4NuclideTable.
    
@@ -240,12 +266,13 @@ class G4IonTable
  protected:
    G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int lvl=0);
    G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int L, G4int lvl);
-   G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4double E, G4int J=0);
+   G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4double E,
+                                         G4Ions::G4FloatLevelBase flb, G4int J=0);
    G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int L,
-				 G4double E, G4int J=0);
+				 G4double E, G4Ions::G4FloatLevelBase flb, G4int J=0);
 
-   G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4double E);
-   G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int L, G4double E);
+   G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4double E, G4Ions::G4FloatLevelBase flb);
+   G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int L, G4double E, G4Ions::G4FloatLevelBase flb);
    G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int lvl=0);
    G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int L, G4int lvl);
 
@@ -263,7 +290,7 @@ class G4IonTable
 
    // Create Ion 
    
-   G4IsotopeProperty* FindIsotope(G4int Z, G4int A, G4double E) const;
+   G4IsotopeProperty* FindIsotope(G4int Z, G4int A, G4double E, G4Ions::G4FloatLevelBase flb) const;
    G4IsotopeProperty* FindIsotope(G4int Z, G4int A, G4int  lvl) const; 
    // Ask properties of isotopes to this G4VIsotopeTable 
    
@@ -305,6 +332,10 @@ class G4IonTable
 
  private:
    G4int n_error;
+
+ public:
+   G4ParticleDefinition* GetMuonicAtom(G4Ions const*);
+   G4ParticleDefinition* GetMuonicAtom(G4int Z, G4int A);
 
 #ifdef G4MULTITHREADED
  public:

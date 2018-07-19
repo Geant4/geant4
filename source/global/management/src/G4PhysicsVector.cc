@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc 93409 2015-10-21 13:26:27Z gcosmo $
+// $Id: G4PhysicsVector.cc 98864 2016-08-15 11:53:26Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -58,20 +58,18 @@
 
 // --------------------------------------------------------------
 
-G4PhysicsVector::G4PhysicsVector(G4bool)
+G4PhysicsVector::G4PhysicsVector(G4bool val)
  : type(T_G4PhysicsVector),
    edgeMin(0.), edgeMax(0.), numberOfNodes(0),
-   useSpline(false), 
+   useSpline(val), 
    dBin(0.), baseBin(0.),
    verboseLevel(0)
-{
-}
+{}
 
 // --------------------------------------------------------------
 
-G4PhysicsVector::~G4PhysicsVector() 
-{
-}
+G4PhysicsVector::~G4PhysicsVector()
+{}
 
 // --------------------------------------------------------------
 
@@ -157,7 +155,7 @@ G4double G4PhysicsVector::GetLowEdgeEnergy(size_t binNumber) const
 
 // --------------------------------------------------------------
 
-G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
+G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii) const
 {
   // Ascii mode
   if (ascii)
@@ -205,15 +203,7 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     // contents
     G4int siz=0;
     fIn >> siz;
-    if (fIn.fail())  { return false; }
-    if (siz<=0)
-    {
-#ifdef G4VERBOSE  
-      G4cerr << "G4PhysicsVector::Retrieve():";
-      G4cerr << " Invalid vector size: " << siz << G4endl;
-#endif
-      return false;
-    }
+    if (fIn.fail() || siz<=0) { return false; }
 
     binVector.reserve(siz);
     dataVector.reserve(siz);
@@ -273,6 +263,16 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 
 // --------------------------------------------------------------
 
+void G4PhysicsVector::DumpValues(G4double unitE, G4double unitV) const
+{
+   for (size_t i = 0; i < numberOfNodes; ++i)
+   {
+     G4cout << binVector[i]/unitE << "   " << dataVector[i]/unitV << G4endl;
+   }
+}
+
+// --------------------------------------------------------------------
+
 void 
 G4PhysicsVector::ScaleVector(G4double factorE, G4double factorV)
 {
@@ -284,8 +284,8 @@ G4PhysicsVector::ScaleVector(G4double factorE, G4double factorV)
   }
   secDerivative.clear();
 
-  edgeMin *= factorE;
-  edgeMax *= factorE;
+  edgeMin = binVector[0];
+  edgeMax = binVector[n-1];
 }
 
 // --------------------------------------------------------------
@@ -526,6 +526,18 @@ G4double G4PhysicsVector::FindLinearEnergy(G4double rand) const
     res += (y - dataVector[bin])*(binVector[bin+1] - res)/del;  
   }
   return res;
+}
+
+//---------------------------------------------------------------
+
+void G4PhysicsVector::PrintPutValueError(size_t index)
+{
+  G4ExceptionDescription ed;
+  ed << "Vector type " << type << " length= " << numberOfNodes 
+     << " an attempt to put data at index= " << index;
+  G4Exception("G4PhysicsVector::PutValue()","gl0005",FatalException,
+	      ed,"Memory overwritten");
+  
 }
 
 //---------------------------------------------------------------

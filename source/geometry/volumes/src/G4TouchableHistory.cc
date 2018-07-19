@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.cc 86527 2014-11-13 15:06:24Z gcosmo $
+// $Id: G4TouchableHistory.cc 110271 2018-05-17 14:41:15Z gcosmo $
 //
 // 
 // class G4TouchableHistory Implementation
@@ -33,7 +33,11 @@
 
 #include "G4TouchableHistory.hh"
 
-G4ThreadLocal G4Allocator<G4TouchableHistory> *aTouchableHistoryAllocator = 0;
+G4Allocator<G4TouchableHistory>*& aTouchableHistoryAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4TouchableHistory>* _instance = nullptr;
+    return _instance;
+}
 
 G4TouchableHistory::G4TouchableHistory()
   : frot(G4RotationMatrix()),
@@ -46,10 +50,10 @@ G4TouchableHistory::G4TouchableHistory()
 
 G4TouchableHistory::G4TouchableHistory( const G4NavigationHistory &history )
   : fhistory(history)
-{ 
-  G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
-  ftlate = tf.NetTranslation();
-  frot = tf.NetRotation();
+{
+  const G4AffineTransform& tf = fhistory.GetTopTransform();
+  ftlate = tf.InverseNetTranslation();
+  frot = tf.InverseNetRotation();
 }
 
 G4TouchableHistory::~G4TouchableHistory()

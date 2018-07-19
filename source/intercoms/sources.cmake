@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 80403 2014-04-16 07:56:30Z gcosmo $
+# $Id: sources.cmake 106172 2017-09-15 13:03:57Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -57,6 +57,7 @@ GEANT4_DEFINE_MODULE(NAME G4intercoms
         G4UnitsMessenger.hh
         G4VFlavoredParallelWorld.hh
         G4VGlobalFastSimulationManager.hh
+        icomsdefs.hh
     SOURCES
         G4LocalThreadCoutMessenger.cc
         G4GenericMessenger.cc

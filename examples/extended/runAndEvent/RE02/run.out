@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 <<< Geant4 Physics List simulation engine: QGS_BIC 2.0
 
@@ -49,16 +51,18 @@ Registering model factories...
 You have successfully registered the following model factories.
 Registered model factories:
   generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
   drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
 
 Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
   attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -66,9 +70,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
 
 The materials defined are : 
 
@@ -102,7 +104,7 @@ The materials defined are :
 
 
  Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.375 cm 
-                       Imean:  78.000 eV 
+                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -117,7 +119,7 @@ The materials defined are :
 
 
  Material:    G4_Pb    density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.248 cm 
-                       Imean: 823.000 eV 
+                       Imean: 823.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Pb (Pb)   Z = 82.0   N =   207   A = 207.217 g/mole
          --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:  1.400 %
@@ -190,364 +192,370 @@ gamma
 /run/beamOn 10
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
-      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
+      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
-      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
+       Klein-Nishina :  Emin=        0 eV    Emax=      100 TeV
 
 conv:   for  gamma    SubType= 14  BuildTable= 1
-      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=      100 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
-        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
 
 eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=      100 TeV
 
 eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
 
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from 100 MeV to 10 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
-        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=      100 TeV
 
 eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+            eplus2gg :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from 100 MeV to 10 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for proton    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
 
 hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
-      Used Lambda table of anti_proton
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 ionIoni:   for  alpha    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV
 
 msc:   for anti_proton    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
 
 hBrems:   for  anti_proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  anti_proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for kaon+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV
 
 hBrems:   for  kaon+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  kaon+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV
 
 hBrems:   for  kaon-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  kaon-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of kaon+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 muIoni:   for  mu+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
-        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=      100 TeV
 
 muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+              MuBrem :  Emin=        0 eV    Emax=      100 TeV
 
 muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+          muPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for mu-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 muIoni:   for  mu-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
-        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=      100 TeV
 
 muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+              MuBrem :  Emin=        0 eV    Emax=      100 TeV
 
 muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+          muPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of mu+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  pi+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV
 
 hBrems:   for  pi+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  pi+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  pi+, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  pi-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV
 
 hBrems:   for  pi-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  pi-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of pi+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -566,8 +574,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:            Binary Cascade: 0 eV  ---> 9.9 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: nCapture
         Model:               nRadCapture: 0 eV  ---> 100 TeV
@@ -747,6 +753,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon+Inelastic
@@ -764,6 +771,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon-Inelastic
@@ -814,7 +822,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
         Model:                      QGSB: 12 GeV ---> 100 TeV
@@ -839,7 +846,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
         Model:                      QGSB: 12 GeV ---> 100 TeV
@@ -872,8 +878,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:                      FTFB: 9.5 GeV ---> 25 GeV
         Model:            Binary Cascade: 0 eV  ---> 9.9 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for triton
@@ -889,6 +893,25 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
+=======================================================================
+======       Pre-compound/De-excitation Physics Parameters     ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
+Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation
+Number of de-excitation channels                    8
+Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
+Level density (1/MeV)                               0.1
+Time limit for long lived isomeres (ns)             1e+12
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
+Electron internal conversion ID                     2
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
+=======================================================================
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -965,20 +988,23 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.14    -1.34   -1e+03     0.356        0        0         0       World initStep
-    1    -2.14    -1.34     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -2.14    -1.34     -198     0.356        0        2       802 PhantomSens Transportation
-    3    -2.14    -1.34     -196     0.356        0        2       804 PhantomSens Transportation
-    4    -2.14    -1.34     -194     0.356        0        2       806 PhantomSens Transportation
-    5    -2.14    -1.34     -192         0    0.088      1.7       808 PhantomSens phot
+    0     -3.7     1.18   -1e+03     0.356        0        0         0       World initStep
+    1     -3.7     1.18     -200     0.356        0      800       800 PhantomSens Transportation
+    2     -3.7     1.18     -198     0.356        0        2       802 PhantomSens Transportation
+    3     -3.7     1.18     -196     0.356        0        2       804 PhantomSens Transportation
+    4     -3.7     1.18     -194     0.356        0        2       806 PhantomSens Transportation
+    5     -3.7     1.18     -192     0.356        0        2       808 PhantomSens Transportation
+    6     -3.7     1.18     -190     0.356        0        2       810 PhantomSens Transportation
+    7     -3.7     1.18     -188         0   0.0883     1.64       812 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.14    -1.34     -192     0.268        0        0         0 PhantomSens initStep
-    1    -2.14    -1.34     -192         0    0.268    0.126     0.126 PhantomSens eIoni
+    0     -3.7     1.18     -188     0.268        0        0         0 PhantomSens initStep
+    1     -3.7     1.17     -188     0.113    0.154   0.0848    0.0848 PhantomSens eBrem
+    2     -3.7     1.17     -188         0    0.113   0.0335     0.118 PhantomSens eIoni
 >>> Event 0
 
 *********************************************************************************************************
@@ -986,17 +1012,24 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.942     2.25   -1e+03     0.356        0        0         0       World initStep
-    1    0.942     2.25     -200     0.356        0      800       800 PhantomSens Transportation
-    2    0.942     2.25     -199         0    0.088     1.15       801 PhantomSens phot
+    0    -4.93     3.97   -1e+03     0.356        0        0         0       World initStep
+    1    -4.93     3.97     -200     0.356        0      800       800 PhantomSens Transportation
+    2    -4.93     3.97     -198     0.356        0        2       802 PhantomSens Transportation
+    3    -4.93     3.97     -196     0.356        0        2       804 PhantomSens Transportation
+    4    -4.93     3.97     -194     0.356        0        2       806 PhantomSens Transportation
+    5    -4.93     3.97     -192     0.356        0        2       808 PhantomSens Transportation
+    6    -4.93     3.97     -191         0   0.0883     1.16       809 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.942     2.25     -199     0.268        0        0         0 PhantomSens initStep
-    1    0.942     2.25     -199         0    0.268    0.126     0.126 PhantomSens eIoni
+    0    -4.93     3.97     -191     0.268        0        0         0 PhantomSens initStep
+    1    -4.91     3.97     -191     0.248   0.0199   0.0241    0.0241 PhantomSens msc
+    2     -4.9     3.97     -191     0.206   0.0414   0.0208     0.045 PhantomSens msc
+    3    -4.89     3.97     -191     0.173   0.0336   0.0199    0.0649 PhantomSens msc
+    4    -4.89     3.97     -191         0    0.173   0.0651      0.13 PhantomSens eIoni
 >>> Event 1
 
 *********************************************************************************************************
@@ -1004,18 +1037,35 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.433     2.32   -1e+03     0.356        0        0         0       World initStep
-    1   -0.433     2.32     -200     0.356        0      800       800 PhantomSens Transportation
-    2   -0.433     2.32     -198     0.356        0        2       802 PhantomSens Transportation
-    3   -0.433     2.32     -198         0    0.088    0.394       802 PhantomSens phot
+    0    0.111    -1.23   -1e+03     0.356        0        0         0       World initStep
+    1    0.111    -1.23     -200     0.356        0      800       800 PhantomSens Transportation
+    2    0.111    -1.23     -198     0.274        0     1.97       802 PhantomSens compt
+    3    0.101    -1.19     -198     0.274        0   0.0463       802 PhantomSens Transportation
+    4 -4.16e-17   -0.831     -198     0.274        0     0.46       802 PhantomSens Transportation
+    5 -0.00553   -0.811     -198         0   0.0883   0.0251       803 PhantomSens phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.00553   -0.811     -198     0.186        0        0         0 PhantomSens initStep
+    1 -0.00546   -0.811     -198     0.183  0.00292  0.00366   0.00366 PhantomSens msc
+    2 -0.00519   -0.811     -198      0.17   0.0124  0.00382   0.00749 PhantomSens msc
+    3 -0.00673   -0.812     -198     0.158    0.012  0.00375    0.0112 PhantomSens msc
+    4 -0.00966   -0.812     -198     0.151  0.00715  0.00424    0.0155 PhantomSens msc
+    5   -0.014   -0.812     -198     0.143  0.00825  0.00554     0.021 PhantomSens msc
+    6  -0.0164   -0.817     -198     0.137  0.00626   0.0078    0.0288 PhantomSens msc
+    7  -0.0204   -0.816     -198    0.0954   0.0413  0.00982    0.0386 PhantomSens msc
+    8  -0.0208   -0.815     -198         0   0.0954   0.0254    0.0641 PhantomSens eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.433     2.32     -198     0.268        0        0         0 PhantomSens initStep
-    1   -0.435     2.32     -198         0    0.268    0.126     0.126 PhantomSens eIoni
+    0    0.111    -1.23     -198    0.0821        0        0         0 PhantomSens initStep
+    1    0.112    -1.23     -198         0   0.0821   0.0199    0.0199 PhantomSens eIoni
 >>> Event 2
 
 *********************************************************************************************************
@@ -1023,28 +1073,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     4.48  -0.0793   -1e+03     0.356        0        0         0       World initStep
-    1     4.48  -0.0793     -200     0.356        0      800       800 PhantomSens Transportation
-    2     4.48  -0.0793     -198     0.356        0        2       802 PhantomSens Transportation
-    3     4.48  -0.0793     -198     0.302        0     0.26       802 PhantomSens compt
-    4     4.53        0     -198     0.302        0    0.142       802 PhantomSens Transportation
-    5     5.12    0.896     -196         0    0.088     1.61       804 PhantomSens phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     5.12    0.896     -196     0.214        0        0         0 PhantomSens initStep
-    1     5.13    0.899     -196         0    0.214   0.0903    0.0903 PhantomSens eIoni
+    0     4.99     3.83   -1e+03     0.356        0        0         0       World initStep
+    1     4.99     3.83     -200     0.356        0      800       800 PhantomSens Transportation
+    2     4.99     3.83     -198         0   0.0883     1.56       802 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     4.48  -0.0793     -198    0.0539        0        0         0 PhantomSens initStep
-    1     4.48  -0.0798     -198         0   0.0539   0.0101    0.0101 PhantomSens eIoni
+    0     4.99     3.83     -198     0.268        0        0         0 PhantomSens initStep
+    1     4.98     3.83     -198         0    0.268    0.126     0.126 PhantomSens eIoni
 >>> Event 3
 
 *********************************************************************************************************
@@ -1052,27 +1091,44 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.459     2.59   -1e+03     0.356        0        0         0       World initStep
-    1   -0.459     2.59     -200     0.356        0      800       800 PhantomSens Transportation
-    2   -0.459     2.59     -198     0.356        0        2       802 PhantomSens Transportation
-    3   -0.459     2.59     -197      0.25        0    0.701       803 PhantomSens compt
-    4   -0.972      2.6     -197         0    0.088    0.558       803 PhantomSens phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.972      2.6     -197     0.162        0        0         0 PhantomSens initStep
-    1   -0.975      2.6     -197         0    0.162   0.0591    0.0591 PhantomSens eIoni
+    0    -3.87    -0.34   -1e+03     0.356        0        0         0       World initStep
+    1    -3.87    -0.34     -200     0.356        0      800       800 PhantomSens Transportation
+    2    -3.87    -0.34     -198         0   0.0883     1.97       802 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.459     2.59     -197     0.106        0        0         0 PhantomSens initStep
-    1   -0.458     2.59     -197         0    0.106   0.0299    0.0299 PhantomSens eIoni
+    0    -3.87    -0.34     -198     0.268        0        0         0 PhantomSens initStep
+    1    -3.87   -0.342     -198     0.246   0.0221   0.0158    0.0158 PhantomSens msc
+    2    -3.86   -0.338     -198      0.23   0.0158  0.00956    0.0254 PhantomSens msc
+    3    -3.86   -0.335     -198     0.223  0.00676  0.00503    0.0304 PhantomSens msc
+    4    -3.87   -0.333     -198     0.215  0.00821   0.0047    0.0351 PhantomSens msc
+    5    -3.87   -0.332     -198     0.202   0.0124  0.00568    0.0408 PhantomSens msc
+    6    -3.87   -0.332     -198     0.196  0.00645  0.00422     0.045 PhantomSens msc
+    7    -3.87   -0.333     -198     0.186  0.00951   0.0034    0.0484 PhantomSens Transportation
+    8    -3.87   -0.335     -198     0.182  0.00466  0.00311    0.0515 PhantomSens msc
+    9    -3.87   -0.337     -198     0.174  0.00792  0.00306    0.0546 PhantomSens msc
+   10    -3.87   -0.337     -198     0.174 3.42e-05 6.07e-05    0.0547 PhantomSens Transportation
+   11    -3.87   -0.337     -198      0.17  0.00347  0.00238     0.057 PhantomSens msc
+   12    -3.87   -0.335     -198     0.165  0.00541  0.00263    0.0597 PhantomSens msc
+   13    -3.87   -0.335     -198     0.164 0.000914  0.00265    0.0623 PhantomSens msc
+   14    -3.87   -0.335     -198      0.16  0.00392   0.0027     0.065 PhantomSens msc
+   15    -3.87   -0.335     -198     0.158  0.00225  0.00153    0.0665 PhantomSens Transportation
+   16    -3.87   -0.335     -198     0.156  0.00233  0.00204    0.0686 PhantomSens msc
+   17    -3.87   -0.333     -198     0.149  0.00642  0.00276    0.0713 PhantomSens msc
+   18    -3.87   -0.331     -198     0.147  0.00198  0.00241    0.0737 PhantomSens msc
+   19    -3.87    -0.33     -198     0.146  0.00127  0.00179    0.0755 PhantomSens msc
+   20    -3.87   -0.329     -198     0.145  0.00134  0.00213    0.0777 PhantomSens msc
+   21    -3.87   -0.329     -198     0.136  0.00848   0.0024    0.0801 PhantomSens msc
+   22    -3.87   -0.328     -198     0.133  0.00265  0.00301    0.0831 PhantomSens msc
+   23    -3.88   -0.327     -198     0.115   0.0186  0.00479    0.0879 PhantomSens msc
+   24    -3.88   -0.326     -198     0.101   0.0137  0.00723    0.0951 PhantomSens msc
+   25    -3.88   -0.329     -198    0.0923  0.00882  0.00407    0.0991 PhantomSens msc
+   26    -3.88    -0.33     -198    0.0857  0.00665  0.00453     0.104 PhantomSens msc
+   27    -3.88    -0.33     -198    0.0585   0.0271  0.00432     0.108 PhantomSens msc
+   28    -3.88    -0.33     -198         0   0.0585   0.0115      0.12 PhantomSens eIoni
 >>> Event 4
 
 *********************************************************************************************************
@@ -1080,17 +1136,31 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.97    -3.42   -1e+03     0.356        0        0         0       World initStep
-    1     2.97    -3.42     -200     0.356        0      800       800 PhantomSens Transportation
-    2     2.97    -3.42     -198         0    0.088     1.59       802 PhantomSens phot
+    0    -2.73     4.47   -1e+03     0.356        0        0         0       World initStep
+    1    -2.73     4.47     -200     0.356        0      800       800 PhantomSens Transportation
+    2    -2.73     4.47     -198     0.356        0        2       802 PhantomSens Transportation
+    3    -2.73     4.47     -197     0.276        0     1.24       803 PhantomSens compt
+    4       -2     4.32     -196     0.276        0    0.914       804 PhantomSens Transportation
+    5    -1.97     4.31     -196         0   0.0883    0.033       804 PhantomSens phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -1.97     4.31     -196     0.188        0        0         0 PhantomSens initStep
+    1    -1.97      4.3     -196     0.177   0.0112   0.0121    0.0121 PhantomSens msc
+    2    -1.98     4.29     -196     0.158   0.0185   0.0147    0.0268 PhantomSens msc
+    3    -1.97     4.28     -196     0.132   0.0266   0.0135    0.0402 PhantomSens msc
+    4    -1.97     4.29     -196         0    0.132   0.0425    0.0828 PhantomSens eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.97    -3.42     -198     0.268        0        0         0 PhantomSens initStep
-    1     2.97    -3.42     -198         0    0.268    0.126     0.126 PhantomSens eIoni
+    0    -2.73     4.47     -197    0.0797        0        0         0 PhantomSens initStep
+    1    -2.73     4.47     -197         0   0.0797    0.019     0.019 PhantomSens eIoni
 >>> Event 5
 
 *********************************************************************************************************
@@ -1098,26 +1168,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.18     2.92   -1e+03     0.356        0        0         0       World initStep
-    1    -2.18     2.92     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -2.18     2.92     -198     0.151        0      1.6       802 PhantomSens compt
-    3    -2.17     2.91     -198         0    0.088   0.0572       802 PhantomSens phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.17     2.91     -198    0.0628        0        0         0 PhantomSens initStep
-    1    -2.17     2.91     -198         0   0.0628   0.0129    0.0129 PhantomSens eIoni
+    0     2.95    0.115   -1e+03     0.356        0        0         0       World initStep
+    1     2.95    0.115     -200     0.356        0      800       800 PhantomSens Transportation
+    2     2.95    0.115     -198         0   0.0883     1.94       802 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.18     2.92     -198     0.205        0        0         0 PhantomSens initStep
-    1    -2.18     2.92     -198         0    0.205   0.0847    0.0847 PhantomSens eIoni
+    0     2.95    0.115     -198     0.268        0        0         0 PhantomSens initStep
+    1     2.95    0.134     -198     0.232   0.0362   0.0352    0.0352 PhantomSens msc
+    2     2.94    0.141     -198     0.186   0.0459    0.024    0.0592 PhantomSens msc
+    3     2.93    0.146     -198         0    0.186   0.0726     0.132 PhantomSens eIoni
 >>> Event 6
 
 *********************************************************************************************************
@@ -1125,26 +1188,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.345    -1.13   -1e+03     0.356        0        0         0       World initStep
-    1   -0.345    -1.13     -200     0.356        0      800       800 PhantomSens Transportation
-    2   -0.345    -1.13     -198     0.168        0     1.76       802 PhantomSens compt
-    3   -0.125   -0.968     -198         0    0.088    0.344       802 PhantomSens phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.125   -0.968     -198    0.0803        0        0         0 PhantomSens initStep
-    1   -0.124   -0.968     -198         0   0.0803   0.0192    0.0192 PhantomSens eIoni
+    0     1.09    0.406   -1e+03     0.356        0        0         0       World initStep
+    1     1.09    0.406     -200     0.356        0      800       800 PhantomSens Transportation
+    2     1.09    0.406     -198     0.356        0        2       802 PhantomSens Transportation
+    3     1.09    0.406     -197         0  0.00382     1.19       803 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.345    -1.13     -198     0.188        0        0         0 PhantomSens initStep
-    1   -0.346    -1.13     -198         0    0.188   0.0739    0.0739 PhantomSens eIoni
+    0     1.09    0.406     -197     0.352        0        0         0 PhantomSens initStep
+    1     1.09    0.407     -197         0    0.352    0.188     0.188 PhantomSens eIoni
 >>> Event 7
 
 *********************************************************************************************************
@@ -1152,29 +1207,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.13    0.304   -1e+03     0.356        0        0         0       World initStep
-    1    -2.13    0.304     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -2.13    0.304     -198     0.356        0        2       802 PhantomSens Transportation
-    3    -2.13    0.304     -197     0.301        0    0.796       803 PhantomSens compt
-    4       -2    0.364     -197     0.301        0    0.218       803 PhantomSens Transportation
-    5    -1.96     0.38     -197         0    0.088   0.0573       803 PhantomSens phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -1.96     0.38     -197     0.213        0        0         0 PhantomSens initStep
-    1    -1.96    0.379     -197     0.168   0.0444   0.0297    0.0297 PhantomSens msc
-    2    -1.96    0.376     -197         0    0.168   0.0624    0.0921 PhantomSens eIoni
+    0    -3.82    0.385   -1e+03     0.356        0        0         0       World initStep
+    1    -3.82    0.385     -200     0.356        0      800       800 PhantomSens Transportation
+    2    -3.82    0.385     -198     0.356        0        2       802 PhantomSens Transportation
+    3    -3.82    0.385     -198         0   0.0883    0.409       802 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.13    0.304     -197    0.0552        0        0         0 PhantomSens initStep
-    1    -2.14    0.304     -197         0   0.0552   0.0105    0.0105 PhantomSens eIoni
+    0    -3.82    0.385     -198     0.268        0        0         0 PhantomSens initStep
+    1    -3.82     0.39     -198         0    0.268    0.126     0.126 PhantomSens eIoni
 >>> Event 8
 
 *********************************************************************************************************
@@ -1182,96 +1226,48 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -1.99   -0.942   -1e+03     0.356        0        0         0       World initStep
-    1    -1.99   -0.942     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -1.99   -0.942     -198         0    0.088     1.54       802 PhantomSens phot
+    0     3.83    -4.92   -1e+03     0.356        0        0         0       World initStep
+    1     3.83    -4.92     -200     0.356        0      800       800 PhantomSens Transportation
+    2     3.83    -4.92     -198         0   0.0883     1.89       802 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -1.99   -0.942     -198     0.268        0        0         0 PhantomSens initStep
-    1    -1.99   -0.946     -198     0.253   0.0147  0.00872   0.00872 PhantomSens msc
-    2    -1.99   -0.951     -198     0.247   0.0059  0.00675    0.0155 PhantomSens msc
-    3    -1.99   -0.956     -198      0.24  0.00722  0.00588    0.0214 PhantomSens msc
-    4    -1.98   -0.953     -198     0.208   0.0325  0.00741    0.0288 PhantomSens msc
-    5    -1.98    -0.95     -198       0.2  0.00793   0.0111    0.0399 PhantomSens msc
-    6    -1.97   -0.944     -198     0.195  0.00451   0.0117    0.0516 PhantomSens msc
-    7    -1.98   -0.937     -198     0.166   0.0297   0.0154     0.067 PhantomSens msc
-    8    -1.98   -0.936     -198     0.146   0.0198    0.011    0.0781 PhantomSens msc
-    9    -1.99   -0.932     -198     0.129   0.0168   0.0121    0.0902 PhantomSens msc
-   10    -1.99   -0.934     -198     0.118   0.0109  0.00821    0.0984 PhantomSens msc
-   11    -1.99   -0.935     -198     0.108  0.00956  0.00603     0.104 PhantomSens msc
-   12    -1.99   -0.934     -198    0.0924   0.0161  0.00505     0.109 PhantomSens msc
-   13    -1.99   -0.937     -198    0.0795   0.0129  0.00505     0.115 PhantomSens msc
-   14    -1.99   -0.939     -198    0.0561   0.0234  0.00505      0.12 PhantomSens msc
-   15    -1.99    -0.94     -198         0   0.0561   0.0108      0.13 PhantomSens eIoni
+    0     3.83    -4.92     -198     0.268        0        0         0 PhantomSens initStep
+    1     3.83    -4.91     -198         0    0.268    0.126     0.126 PhantomSens eIoni
 >>> Event 9
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.000000s Real=0.004206s Sys=0.000000s
  PrimitiveScorer RUN PhantomSD,totalEDep
- Number of entries 10
-  copy no.: 970200  Run Value : 0.356
-  copy no.: 989603  Run Value : 0.356
-  copy no.: 989800  Run Value : 0.712
-  copy no.: 990401  Run Value : 0.05394182216018539
-  copy no.: 1009601  Run Value : 0.0552461286491831
-  copy no.: 1009801  Run Value : 0.3007538713508169
-  copy no.: 1010401  Run Value : 0.3020581778398146
-  copy no.: 1029600  Run Value : 0.356
-  copy no.: 1029801  Run Value : 0.712
-  copy no.: 1030000  Run Value : 0.356
+ Number of entries 13
  PrimitiveScorer RUN PhantomSD,protonEDep
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,protonNStep
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,chargedPassCellFlux
- Number of entries 0
+ Number of entries 2
  PrimitiveScorer RUN PhantomSD,chargedCellFlux
- Number of entries 10
-  copy no.: 970200  Run Value : 0.01579545990714856
-  copy no.: 989603  Run Value : 0.01579545990714856
-  copy no.: 989800  Run Value : 0.02793730827856024
-  copy no.: 990401  Run Value : 0.001261629842865205
-  copy no.: 1009601  Run Value : 0.001311691248042601
-  copy no.: 1009801  Run Value : 0.01151826529071254
-  copy no.: 1010401  Run Value : 0.01128527936501595
-  copy no.: 1029600  Run Value : 0.01220049314686011
-  copy no.: 1029801  Run Value : 0.02691678446910657
-  copy no.: 1030000  Run Value : 0.01579545990714856
+ Number of entries 13
  PrimitiveScorer RUN PhantomSD,chargedSurfFlux
- Number of entries 0
+ Number of entries 1
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr000
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr001
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr002
- Number of entries 14
-  copy no.: 970200  Run Value : 0.25
-  copy no.: 989600  Run Value : 0.25
-  copy no.: 989601  Run Value : 0.25
-  copy no.: 989602  Run Value : 0.25
-  copy no.: 989603  Run Value : 0.25
-  copy no.: 989800  Run Value : 0.5
-  copy no.: 990400  Run Value : 0.25
-  copy no.: 990401  Run Value : 0.25
-  copy no.: 1009600  Run Value : 0.25
-  copy no.: 1009601  Run Value : 0.25
-  copy no.: 1029600  Run Value : 0.25
-  copy no.: 1029800  Run Value : 0.5
-  copy no.: 1029801  Run Value : 0.5
-  copy no.: 1030000  Run Value : 0.25
+ Number of entries 21
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr003
  Number of entries 0
 =============================================================
  Number of event processed : 10
 =============================================================
 #Z Cell#       totalEDep      protonEDep protonNStep  chargedPassCellFlux     chargedCellFlux     chargedSurfFlux    gammaSurfCurr000    gammaSurfCurr001    gammaSurfCurr002    gammaSurfCurr003
-     0             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-     1             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+     0             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+     1           356 keV           0 eV            0               0 /cm22.346201943946124 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
      2             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
      3             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
      4             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
@@ -1484,6 +1480,7 @@ RunManager is deleting RunManagerKernel.
 G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
+TransportationManager deleted.
 Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00769 MB

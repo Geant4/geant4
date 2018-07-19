@@ -27,6 +27,15 @@ inline bool s2time(const std::string& a_string,time_t& a_time) {
   return true;
 }
 
+inline bool time2s(std::string& a_s) {
+  time_t d;
+  if(::time(&d)==(time_t)-1) {a_s.clear();return false;}
+  char* _cstr = ::ctime(&d);
+  _cstr[24] = '\0';
+  a_s = _cstr;
+  return true;
+}
+
 }
 
 #endif

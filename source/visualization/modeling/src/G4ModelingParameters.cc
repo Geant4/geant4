@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc 85020 2014-10-23 09:52:52Z gcosmo $
+// $Id: G4ModelingParameters.cc 109510 2018-04-26 07:15:57Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -39,6 +39,7 @@
 #include "G4VSolid.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
+#include "G4UnitsTable.hh"
 
 G4ModelingParameters::G4ModelingParameters ():
   fWarning               (true),
@@ -49,6 +50,7 @@ G4ModelingParameters::G4ModelingParameters ():
   fDensityCulling        (false),
   fVisibleDensity        (0.01 * g / cm3),
   fCullCovered           (false),
+  fCBDAlgorithmNumber    (0),
   fExplodeFactor         (1.),
   fNoOfSides             (24),
   fpSectionSolid         (0),
@@ -74,6 +76,7 @@ G4ModelingParameters::G4ModelingParameters
   fDensityCulling (isDensityCulling),
   fVisibleDensity (visibleDensity),
   fCullCovered    (isCullingCovered),
+  fCBDAlgorithmNumber(0),
   fExplodeFactor  (1.),
   fNoOfSides      (noOfSides),
   fpSectionSolid  (0),
@@ -193,6 +196,16 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
   if (mp.fCullCovered) os << "on";
   else                os << "off";
 
+  os << "\n  Colour by density: ";
+  if (mp.fCBDAlgorithmNumber <= 0) {
+    os << "inactive";
+  } else {
+    os << "Algorithm " << mp.fCBDAlgorithmNumber << ", Parameters:";
+    for (auto p: mp.fCBDParameters) {
+      os << ' ' << G4BestUnit(p,"Volumic Mass");
+    }
+  }
+
   os << "\n  Explode factor: " << mp.fExplodeFactor
      << " about centre: " << mp.fExplodeCentre;
 
@@ -211,13 +224,13 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
 
   os << "\n  Vis attributes modifiers: ";
   const std::vector<G4ModelingParameters::VisAttributesModifier>& vams =
-    mp.fVisAttributesModifiers;
+  mp.fVisAttributesModifiers;
   if (vams.empty()) {
     os << "None";
   } else {
     os << vams;
   }
-  
+
   return os;
 }
 
@@ -231,6 +244,7 @@ G4bool G4ModelingParameters::operator !=
       (fCullInvisible          != mp.fCullInvisible)          ||
       (fDensityCulling         != mp.fDensityCulling)         ||
       (fCullCovered            != mp.fCullCovered)            ||
+      (fCBDAlgorithmNumber     != mp.fCBDAlgorithmNumber)     ||
       (fExplodeFactor          != mp.fExplodeFactor)          ||
       (fExplodeCentre          != mp.fExplodeCentre)          ||
       (fNoOfSides              != mp.fNoOfSides)              ||
@@ -243,17 +257,14 @@ G4bool G4ModelingParameters::operator !=
   if (fDensityCulling &&
       (fVisibleDensity != mp.fVisibleDensity)) return true;
 
+  if (fCBDAlgorithmNumber > 0) {
+    if (fCBDParameters.size() != mp.fCBDParameters.size()) return true;
+    else if (fCBDParameters != mp.fCBDParameters) return true;
+  }
+
   if (fVisAttributesModifiers != mp.fVisAttributesModifiers)
     return true;
 
-  return false;
-}
-
-G4bool G4ModelingParameters::PVNameCopyNo::operator!=
-(const G4ModelingParameters::PVNameCopyNo& rhs) const
-{
-  if (fName != rhs.fName) return true;
-  if (fCopyNo != rhs.fCopyNo) return true;
   return false;
 }
 
@@ -296,7 +307,9 @@ G4bool G4ModelingParameters::VisAttributesModifier::operator!=
       break;
     case G4ModelingParameters::VASForceAuxEdgeVisible:
       if (fVisAtts.IsForceAuxEdgeVisible() !=
-          rhs.fVisAtts.IsForceAuxEdgeVisible())
+          rhs.fVisAtts.IsForceAuxEdgeVisible() ||
+          fVisAtts.IsForcedAuxEdgeVisible() !=
+          rhs.fVisAtts.IsForcedAuxEdgeVisible())
         return true;
       break;
     case G4ModelingParameters::VASForceLineSegmentsPerCircle:
@@ -308,16 +321,51 @@ G4bool G4ModelingParameters::VisAttributesModifier::operator!=
   return false;
 }
 
+G4bool G4ModelingParameters::PVNameCopyNo::operator!=
+(const G4ModelingParameters::PVNameCopyNo& rhs) const
+{
+  if (fName != rhs.fName) return true;
+  if (fCopyNo != rhs.fCopyNo) return true;
+  return false;
+}
+
 std::ostream& operator <<
 (std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath& path)
 {
-//  os << "Touchable path: physical-volume-name:copy-number pairs:\n  ";
+  os << "Touchable path: physical-volume-name:copy-number pairs:\n  ";
   G4ModelingParameters::PVNameCopyNoPathConstIterator i;
   for (i = path.begin(); i != path.end(); ++i) {
     if (i != path.begin()) {
-      os << ", ";
+      os << ',';
     }
     os << i->GetName() << ':' << i->GetCopyNo();
+  }
+  return os;
+}
+
+const G4String& G4ModelingParameters::PVPointerCopyNo::GetName() const
+{
+  return fpPV->GetName();
+}
+
+G4bool G4ModelingParameters::PVPointerCopyNo::operator!=
+(const G4ModelingParameters::PVPointerCopyNo& rhs) const
+{
+  if (fpPV != rhs.fpPV) return true;
+  if (fCopyNo != rhs.fCopyNo) return true;
+  return false;
+}
+
+std::ostream& operator <<
+(std::ostream& os, const G4ModelingParameters::PVPointerCopyNoPath& path)
+{
+  os << "Touchable path: physical-volume-pointer:copy-number pairs:\n  ";
+  G4ModelingParameters::PVPointerCopyNoPathConstIterator i;
+  for (i = path.begin(); i != path.end(); ++i) {
+    if (i != path.begin()) {
+      os << ',';
+    }
+    os << '(' << (void*)(i->GetPVPointer()) << ')' << i->GetName() << ':' << i->GetCopyNo();
   }
   return os;
 }
@@ -327,12 +375,12 @@ std::ostream& operator <<
  const std::vector<G4ModelingParameters::VisAttributesModifier>& vams)
 {
   std::vector<G4ModelingParameters::VisAttributesModifier>::const_iterator
-    iModifier;
+  iModifier;
   for (iModifier = vams.begin();
        iModifier != vams.end();
        ++iModifier) {
     const G4ModelingParameters::PVNameCopyNoPath& vamPath =
-      iModifier->GetPVNameCopyNoPath();
+    iModifier->GetPVNameCopyNoPath();
     os << '\n' << vamPath;
     const G4VisAttributes& vamVisAtts = iModifier->GetVisAttributes();
     const G4Colour& c = vamVisAtts.GetColour();
@@ -394,11 +442,18 @@ std::ostream& operator <<
         }
         break;
       case G4ModelingParameters::VASForceAuxEdgeVisible:
-        os << " forceAuxEdgeVisible ";
+        os << " forceAuxEdgeVisible: ";
+        if (!vamVisAtts.IsForceDrawingStyle()) {
+          os << "not ";
+        }
+        os << " forced";
         if (vamVisAtts.IsForceAuxEdgeVisible()) {
-          os << "true";
-        } else {
-          os << "false";
+          os << ": ";
+          if (vamVisAtts.IsForcedAuxEdgeVisible()) {
+            os << "true";
+          } else {
+            os << "false";
+          }
         }
         break;
       case G4ModelingParameters::VASForceLineSegmentsPerCircle:

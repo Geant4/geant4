@@ -26,9 +26,20 @@
 // Please cite the following papers if you use this software
 // Nucl.Instrum.Meth.B260:20-27, 2007
 // IEEE TNS 51, 4:1395-1401, 2004
+//
+// Based on purging magnet advanced example
+//
 
 #include "TabulatedField3D.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Exp.hh"
+
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex myTabulatedField3DLock = G4MUTEX_INITIALIZER;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -57,6 +68,12 @@ TabulatedField3D::TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4floa
   
   if (fModel==2)
   {
+  //
+  //This is a thread-local class and we have to avoid that all workers open the 
+  //file at the same time
+  G4AutoLock lock(&myTabulatedField3DLock);
+  //
+
   const char * filename ="OM50.grid";
   
   double lenUnit= mm;
@@ -79,11 +96,13 @@ TabulatedField3D::TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4floa
   fYField.resize( fNx );
   fZField.resize( fNx );
   int ix, iy, iz;
-  for (ix=0; ix<fNx; ix++) {
+  for (ix=0; ix<fNx; ix++) 
+  {
     fXField[ix].resize(fNy);
     fYField[ix].resize(fNy);
     fZField[ix].resize(fNy);
-    for (iy=0; iy<fNy; iy++) {
+    for (iy=0; iy<fNy; iy++) 
+    {
       fXField[ix][iy].resize(fNz);
       fYField[ix][iy].resize(fNz);
       fZField[ix][iy].resize(fNz);
@@ -93,11 +112,15 @@ TabulatedField3D::TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4floa
   // Read in the data
   double xval,yval,zval,bx,by,bz;
   double permeability; // Not used in this example.
-  for (ix=0; ix<fNx; ix++) {
-    for (iy=0; iy<fNy; iy++) {
-      for (iz=0; iz<fNz; iz++) {
+  for (ix=0; ix<fNx; ix++) 
+  {
+    for (iy=0; iy<fNy; iy++) 
+    {
+      for (iz=0; iz<fNz; iz++) 
+      {
         file >> xval >> yval >> zval >> bx >> by >> bz >> permeability;
-        if ( ix==0 && iy==0 && iz==0 ) {
+        if ( ix==0 && iy==0 && iz==0 ) 
+	{
           fMinix = xval * lenUnit;
           fMiniy = yval * lenUnit;
           fMiniz = zval * lenUnit;
@@ -110,6 +133,10 @@ TabulatedField3D::TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4floa
   }
   file.close();
 
+  //
+  lock.unlock();
+  //
+
   fMaxix = xval * lenUnit;
   fMaxiy = yval * lenUnit;
   fMaxiz = zval * lenUnit;
@@ -117,6 +144,7 @@ TabulatedField3D::TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4floa
   G4cout << "\n ---> ... done reading " << endl;
 
   // G4cout << " Read values of field from file " << filename << endl; 
+
   G4cout << " ---> assumed the order:  x, y, z, Bx, By, Bz "
 	 << "\n ---> Min values x,y,z: " 
 	 << fMinix/cm << " " << fMiniy/cm << " " << fMiniz/cm << " cm "
@@ -126,12 +154,14 @@ TabulatedField3D::TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4floa
   fDx = fMaxix - fMinix;
   fDy = fMaxiy - fMiniy;
   fDz = fMaxiz - fMiniz;
+
   G4cout << "\n ---> Dif values x,y,z (range): " 
 	 << fDx/cm << " " << fDy/cm << " " << fDz/cm << " cm in z "
 	 << "\n-----------------------------------------------------------" << endl;
 
   
   // Table normalization
+
   for (ix=0; ix<fNx; ix++) 
   {
     for (iy=0; iy<fNy; iy++) 
@@ -143,7 +173,7 @@ TabulatedField3D::TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4floa
         fYField[ix][iy][iz] = (fYField[ix][iy][iz]/197.736);
         fZField[ix][iy][iz] = (fZField[ix][iy][iz]/197.736);
 
-	}
+      }
     }
   }
 
@@ -157,6 +187,11 @@ TabulatedField3D::TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4floa
 void TabulatedField3D::GetFieldValue(const double point[4],
 				      double *Bfield ) const
 { 
+  //G4cout << fGradient1 << G4endl;
+  //G4cout << fGradient2 << G4endl;
+  //G4cout << fGradient3 << G4endl;
+  //G4cout << fGradient4 << G4endl;
+  //G4cout << "---------" << G4endl;
 
   G4double coef, G0;
   G0 = 0;
@@ -167,6 +202,7 @@ void TabulatedField3D::GetFieldValue(const double point[4],
 //******************************************************************
 
 // MAP
+
 if (fModel==2)
 {
   Bfield[0] = 0.0;
@@ -224,9 +260,15 @@ if (fModel==2)
     
     // The indices of the nearest tabulated point whose coordinates
     // are all less than those of the given point
-    int xindex = static_cast<int>(xdindex);
-    int yindex = static_cast<int>(ydindex);
-    int zindex = static_cast<int>(zdindex);
+    
+    //int xindex = static_cast<int>(xdindex);
+    //int yindex = static_cast<int>(ydindex);
+    //int zindex = static_cast<int>(zdindex);
+
+    // SI 15/12/2016: modified according to bugzilla 1879
+    int xindex = static_cast<int>(std::floor(xdindex));
+    int yindex = static_cast<int>(std::floor(ydindex));
+    int zindex = static_cast<int>(std::floor(zdindex));
     
     // Interpolated field
     Bfield[0] =
@@ -434,22 +476,22 @@ if (fModel==3)
   for (G4int i=0;i<5; i++) // LOOP ON MAGNETS
   {
  
-	if (i<2) // (if Doublet)
-	{	
+	 if (i<2) // (if Doublet)
+	 {	
 	   zoprime = lineZ + i*140*mm; // centre of magnet nbr i 
 	   x_local = x; 
 	   y_local = y; 
 	   z_local = (z - zoprime);
-	}
-	else    // else the current magnet is in the triplet
-	{
+	 }
+	 else    // else the current magnet is in the triplet
+	 {
 	   zoprime = lineZ + i*140*mm +(3150-40)*mm;
 
 	   x_local = x; 
 	   y_local = y; 
 	   z_local = (z - zoprime);
 	
-	}					
+	 }					
 	 
 	 if ( z_local < -z2[i] || z_local > z2[i])  // Outside the fringing field
 	 {
@@ -481,23 +523,23 @@ if (fModel==3)
 
 	  P2 = 2*c2[i]/a0[i]/a0[i]; 	// d2P/fDz2
 
-	  cte = 1 + std::exp(c0[i]);   // (1+e^c0)
+	  cte = 1 + G4Exp(c0[i]);   // (1+e^c0)
 
-	  K1 = -cte*P1*std::exp(P0)/( (1+std::exp(P0))*(1+std::exp(P0)) );  // see (11) p1397 TNS 51
+	  K1 = -cte*P1*G4Exp(P0)/( (1+G4Exp(P0))*(1+G4Exp(P0)) );  // see (11) p1397 TNS 51
 
-	  K2 = -cte*std::exp(P0)*(					// see (12) p1397 TNS 51
-	   P2/( (1+std::exp(P0))*(1+std::exp(P0)) )
-	   +2*P1*K1/(1+std::exp(P0))/cte
-	   +P1*P1/(1+std::exp(P0))/(1+std::exp(P0))
+	  K2 = -cte*G4Exp(P0)*(					// see (12) p1397 TNS 51
+	   P2/( (1+G4Exp(P0))*(1+G4Exp(P0)) )
+	   +2*P1*K1/(1+G4Exp(P0))/cte
+	   +P1*P1/(1+G4Exp(P0))/(1+G4Exp(P0))
 	   );                                                            
  
-	  K3 = -cte*std::exp(P0)*(				// see (13) p1397 TNS 51	
-	   (3*P2*P1+P1*P1*P1)/(1+std::exp(P0))/(1+std::exp(P0))
-	   +4*K1*(P1*P1+P2)/(1+std::exp(P0))/cte
-	   +2*P1*(K1*K1/cte/cte+K2/(1+std::exp(P0))/cte)
+	  K3 = -cte*G4Exp(P0)*(				// see (13) p1397 TNS 51	
+	   (3*P2*P1+P1*P1*P1)/(1+G4Exp(P0))/(1+G4Exp(P0))
+	   +4*K1*(P1*P1+P2)/(1+G4Exp(P0))/cte
+	   +2*P1*(K1*K1/cte/cte+K2/(1+G4Exp(P0))/cte)
 	   );
 	  
-	  G0 = gradient[i]*cte/(1+std::exp(P0));    	// G = G0*K(z) see (7) p1397 TNS 51
+	  G0 = gradient[i]*cte/(1+G4Exp(P0));    	// G = G0*K(z) see (7) p1397 TNS 51
 	  G1 = gradient[i]*K1;				// dG/fDz
 	  G2 = gradient[i]*K2;				// d2G/fDz2
 	  G3 = gradient[i]*K3;				// d3G/fDz3

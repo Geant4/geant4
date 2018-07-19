@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh 93264 2015-10-14 09:30:04Z gcosmo $
+// $Id: G4VEmProcess.hh 109178 2018-04-03 07:13:58Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -103,13 +103,16 @@ public:
   // Virtual methods to be implemented in concrete processes
   //------------------------------------------------------------------------
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override = 0;
 
-  virtual void PrintInfo() = 0;
+  // obsolete
+  virtual void PrintInfo() {};
 
-  virtual void ProcessDescription(std::ostream& outFile) const; // = 0;
+  virtual void ProcessDescription(std::ostream& outFile) const override;
 
 protected:
+
+  virtual void StreamProcessInfo(std::ostream&, G4String) const {};
 
   virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
 
@@ -127,28 +130,29 @@ protected:
 public:
 
   // Initialise for build of tables
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&) override;
 
   // Build physics table during initialisation
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
   // Called before tracking of each new G4Track
-  virtual void StartTracking(G4Track*);
+  virtual void StartTracking(G4Track*) override;
 
   // implementation of virtual method, specific for G4VEmProcess
   virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
-                             G4ForceCondition* condition);
+                             G4ForceCondition* condition) override;
 
   // implementation of virtual method, specific for G4VEmProcess
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, 
+                                          const G4Step&) override;
 
   // Store PhysicsTable in a file.
   // Return false in case of failure at I/O
   virtual G4bool StorePhysicsTable(const G4ParticleDefinition*,
                                    const G4String& directory,
-                                   G4bool ascii = false);
+                                   G4bool ascii = false) override;
 
   // Retrieve Physics from a file.
   // (return true if the Physics Table can be build by using file)
@@ -157,7 +161,7 @@ public:
   // should be placed under the directory specifed by the argument.
   virtual G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
                                       const G4String& directory,
-                                      G4bool ascii);
+                                      G4bool ascii) override;
 
   //------------------------------------------------------------------------
   // Specific methods for Discrete EM post step simulation 
@@ -220,25 +224,29 @@ public:
    
   // Add model for region, smaller value of order defines which
   // model will be selected for a given energy interval  
-  void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
+  void AddEmModel(G4int, G4VEmModel*, const G4Region* region = nullptr);
 
-  // return the assigned model
-  G4VEmModel* EmModel(G4int index = 1) const;
-
-  // Assign a model to a process
-  void SetEmModel(G4VEmModel*, G4int index = 1);
+  // Assign a model to a process local list, to enable the list in run time 
+  // the derived process should execute AddEmModel(..) for all such models
+  void SetEmModel(G4VEmModel*, G4int index = 0);
       
+  // return a model from the local list
+  G4VEmModel* EmModel(size_t index = 0) const;
+
   // Define new energy range for the model identified by the name
   void UpdateEmModel(const G4String&, G4double, G4double);
 
   // Access to models
+  G4int GetNumberOfModels() const;
+  G4int GetNumberOfRegionModels(size_t couple_index) const;
+  G4VEmModel* GetRegionModel(G4int idx, size_t couple_index) const;
   G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
 
-  // access atom on which interaction happens
-  const G4Element* GetCurrentElement() const;
-
-  // access to active model
+  // Access to active model
   inline const G4VEmModel* GetCurrentModel() const;
+
+  // Access to the current G4Element
+  const G4Element* GetCurrentElement() const;
 
   // Biasing parameters
   void SetCrossSectionBiasingFactor(G4double f, G4bool flag = true);
@@ -264,7 +272,7 @@ protected:
 
   virtual G4double GetMeanFreePath(const G4Track& track,
                                    G4double previousStepSize,
-                                   G4ForceCondition* condition);
+                                   G4ForceCondition* condition) override;
 
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 
@@ -290,6 +298,10 @@ protected:
 
   inline size_t CurrentMaterialCutsCoupleIndex() const;
 
+  inline const G4MaterialCutsCouple* MaterialCutsCouple() const;
+
+  inline G4bool ApplyCuts() const;
+
   inline G4double GetGammaEnergyCut();
 
   inline G4double GetElectronEnergyCut();
@@ -308,7 +320,8 @@ private:
 
   void BuildLambdaTable();
 
-  void PrintInfoProcess(const G4ParticleDefinition&);
+  void StreamInfo(std::ostream& outFile, const G4ParticleDefinition&,
+                  G4String endOfLine=G4String("\n")) const;
 
   void FindLambdaMax();
 
@@ -326,18 +339,15 @@ private:
 
   inline G4double ComputeCurrentLambda(G4double kinEnergy);
 
-  // copy constructor and hide assignment operator
-  G4VEmProcess(G4VEmProcess &);
-  G4VEmProcess & operator=(const G4VEmProcess &right);
+  // hide copy constructor and assignment operator
+  G4VEmProcess(G4VEmProcess &) = delete;
+  G4VEmProcess & operator=(const G4VEmProcess &right) = delete;
 
   // ======== Parameters of the class fixed at construction =========
 
   G4LossTableManager*          lManager;
   G4EmParameters*              theParameters;  
   G4EmModelManager*            modelManager;
-  G4EmBiasingManager*          biasManager;
-  const G4ParticleDefinition*  theGamma;
-  const G4ParticleDefinition*  theElectron;
   const G4ParticleDefinition*  thePositron;
   const G4ParticleDefinition*  secondaryParticle;
 
@@ -371,6 +381,7 @@ private:
   G4double                     maxKinEnergy;
   G4double                     lambdaFactor;
   G4double                     biasFactor;
+  G4double                     massRatio;
 
   G4bool                       integral;
   G4bool                       applyCuts;
@@ -380,26 +391,35 @@ private:
   G4bool                       actMaxKinEnergy;
   G4bool                       actBinning;
   G4bool                       actSpline;
+  G4bool                       isIon;
 
   // ======== Cashed values - may be state dependent ================
 
 protected:
 
+  G4EmBiasingManager*          biasManager;
+  const G4ParticleDefinition*  theGamma;
+  const G4ParticleDefinition*  theElectron;
   G4ParticleChangeForGamma     fParticleChange;
+  std::vector<G4DynamicParticle*> secParticles;
+  const G4MaterialCutsCouple*  currentCouple;
+
+  G4int                        mainSecondaries;
+  G4int                        secID;  
+  G4int                        fluoID;  
+  G4int                        augerID;  
+  G4int                        biasID;  
 
 private:
-
-  std::vector<G4DynamicParticle*> secParticles;
 
   G4VEmModel*                  currentModel;  
 
   const G4ParticleDefinition*  particle;
   const G4ParticleDefinition*  currentParticle;
 
-  // cash
+  // cache
   const G4Material*            baseMaterial;
   const G4Material*            currentMaterial;
-  const G4MaterialCutsCouple*  currentCouple;
   size_t                       currentCoupleIndex;
   size_t                       basedCoupleIndex;
 
@@ -409,19 +429,27 @@ private:
   G4double                     fFactor;
   G4bool                       biasFlag;
   G4bool                       weightFlag;
-
-  G4int                        mainSecondaries;
-  G4int                        secID;  
-  G4int                        fluoID;  
-  G4int                        augerID;  
-  G4int                        biasID;  
 };
 
 // ======== Run time inline methods ================
 
+inline G4bool G4VEmProcess::ApplyCuts() const 
+{
+  return applyCuts;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline size_t G4VEmProcess::CurrentMaterialCutsCoupleIndex() const 
 {
   return currentCoupleIndex;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline const G4MaterialCutsCouple* G4VEmProcess::MaterialCutsCouple() const
+{
+  return currentCouple;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

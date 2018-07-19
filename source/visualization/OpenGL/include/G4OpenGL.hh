@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL.hh 85263 2014-10-27 08:58:31Z gcosmo $
+// $Id: G4OpenGL.hh 101714 2016-11-22 08:53:13Z gcosmo $
 //
 // G.Barrand.
 
@@ -40,12 +40,28 @@
 
 
  #ifdef G4VIS_BUILD_OPENGLX_DRIVER
- #  include <GL/gl.h>
- #endif
+   #ifndef  G4VIS_BUILD_OPENGLQT_DRIVER
+     #  include <GL/gl.h>
+   #else
+     #ifdef __MACH__
+       #include <OpenGL/gl.h>
+     #else
+       #include <GL/gl.h>
+     #endif
+   #endif
+#endif
 
  #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
- #    include <GL/gl.h>
- #endif
+  #ifndef  G4VIS_BUILD_OPENGLQT_DRIVER
+    #  include <GL/gl.h>
+  #else
+    #ifdef __MACH__
+      #include <OpenGL/gl.h>
+    #else
+      #include <GL/gl.h>
+    #endif
+  #endif
+#endif
 
  #ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
  #    include <GL/gl.h>

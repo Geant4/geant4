@@ -1,4 +1,4 @@
-$Id: History 97466 2016-06-03 09:59:34Z gcosmo $
+$Id: History 110274 2018-05-17 14:44:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,19 +17,101 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Apr 20, 2016, G.Cosmo (digits_hits-V10-01-02)
+May 17th, 2018 J. Madsen (digits_hits-V10-04-01)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+January 19, 2018 M. Asai (digits_hits-V10-04-00)
+- G4ScoringMessenger G4ScoreQuantityMessenger:
+- UI command returns an error message if a command is refused due
+  to incorrect parameter(s).
+- This tag requires intercoms-V10-04-01 tag.
+
+August 1, 2017 M. Asai (digits_hits-V10-03-02)
+- G4SDStructure.cc : fix propagating warning flag. Addressing bug
+  report #1993.
+
+May 2, 2017 J. Madsen (digits_hits-V10-03-01)
+- Update to G4THitsMap to fix issue where G4Colour was
+  using G4THitsMap<G4StatDouble> and the allocation
+  was causing += to white instead of += to black
+  
+April 20, 2017 J. Madsen (digit_hits-V10-03-00)
+- Files modified : hits/include/G4THitsMap.hh
+- Extension of the G4THitsMap class + bug fix
+  - Renamed G4THitsMap to G4VTHitsMap
+    - although G4VTHitsMap is not a pure virtual class
+      it has an additional template parameter for the map
+      type, so it is not intended to be used directly
+  - Made G4VTHitsMap more generic in accepting the type
+    of data stored (with more generic template overloads not
+    specific to G4double and G4StatDouble)
+  - Fixed a bug in initializing G4StatDouble entries
+    - G4StatDouble(0) is not the same as G4StatDouble().
+      The former starts off with a count = 1, and the
+      latter starts with a count = 0.
+  - Added G4THitsMap
+    - deriving from G4VTHitsMap and having the same
+      functionality as before
+  - Added G4THitsMultiMap
+    - which functions like G4THitsMap but all entries are
+      stored
+  - Added G4THitsUnorderedMap
+    - which functions like G4THitsMap but uses an
+      unordered_map
+  - Added G4THitsUnorderedMultiMap
+    - which functions like G4THitsMap but stores all
+      entries in an unordered multimap
+  - typedef for map_type, value_type, iterator, and const_iterator
+    for future generic usage
+    - e.g. replacing
+      std::map<G4int, G4double*> theMap = this->GetMap()
+      with
+      map_type theMap = this->GetMap()
+  - defined begin(), end(), cbegin(), cend() so now
+    G4VTHitsMap can be used in range-based loops
+    - e.g. for(auto itr : hitMap) { ... }
+  
+Nov 15, 2016, A.Dotti (digits_hits-V10-02-09,-10)
+- Fix bug #1908, remove implicit addition to manager of 
+  SD passed via G4MultiSD proxy
+
+Sep 8, 2016, G.Cosmo (digits_hits-V10-02-08)
+- G4THitsMap, G4VScoringMesh : further clean up with C++11 template
+
+Sep 7, 2016, G.Cosmo (digits_hits-V10-02-07)
+- Fixed utils/GNUmakefile for missing dependency on global/HEPNumerics,
+  now required.
+
+Sep 6, 2016, M.Asai (digits_hits-V10-02-06)
+- Further refinements.
+
+Sep 2, 2016, M.Asai (digits_hits-V10-02-05)
+- Built-in scorer now uses G4StatDouble.
+  Files modified :
+        utils/include/G4ScoringBox.hh
+        utils/include/G4ScoringCylinder.hh
+        utils/include/G4VScoringMesh.hh
+        utils/sources.cmake
+        utils/src/G4ScoringBox.cc
+        utils/src/G4ScoringCylinder.cc
+        utils/src/G4VScoreWriter.cc
+        utils/src/G4VScoringMesh.cc
+
+Apr 20, 2016, G.Cosmo (digits_hits-V10-02-04)
 - Fixed shadowing compilation warnings in G4VScoringMesh for 'ps'.
 
-Apr 15, 2016, G.Cosmo
-- Fixed typo in printing on cout in G4SDManager::AddNewDetector().
+Apr 15, 2016, G.Cosmo (digits_hits-V10-02-03)
+- Fixed type in printing on cout in G4SDManager::AddNewDetector().
 
-Dec 18, 2015, M.Asai
+Dec 18, 2015, M.Asai (digits_hits-V10-02-02)
 - While-loop check.
 
-Dec 8, 2015, M.Asai
+Dec 8, 2015, M.Asai (digits_hits-V10-02-01)
 - Further code clean up with C++11 features
 
-Dec 7, 2015, M.Asai
+Dec 7, 2015, M.Asai (digits_hits-V10-02-00)
 - Code clean up with C++11 features
 
 Sept 4, 2015, A.Dotti (digits_hits-V10-01-01)

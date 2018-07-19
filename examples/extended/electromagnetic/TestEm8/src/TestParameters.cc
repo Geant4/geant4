@@ -46,7 +46,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TestParameters* TestParameters::fManager = 0;
+TestParameters* TestParameters::fManager = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,6 +69,9 @@ TestParameters::TestParameters()
   fNormFactor  = 1.0;
   fEnergySmear = 0.0;
   fPositionZ   = 0.0;
+  fBeamEnergy  = 0.0;
+
+  fParticle = nullptr;
 
   // normalisation to PAI
   fFactorALICE = 325;
@@ -192,6 +195,34 @@ void TestParameters::SetPositionZ(G4double val)
 G4double TestParameters::GetPositionZ() const
 {
   return fPositionZ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TestParameters::SetBeamEnergy(G4double val)
+{
+  fBeamEnergy = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double TestParameters::GetBeamEnergy() const
+{
+  return fBeamEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TestParameters::SetBeamParticle(const G4ParticleDefinition* ptr)
+{
+  fParticle = ptr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const G4ParticleDefinition* TestParameters::GetBeamParticle() const
+{
+  return fParticle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

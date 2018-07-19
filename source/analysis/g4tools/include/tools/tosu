@@ -1,0 +1,51 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_tosu
+#define tools_tosu
+
+// have a "sprintf(%u)" without #include.
+// It is used in platform.
+
+namespace tools {
+
+inline void toss(const char* a_from,char a_s[],unsigned int& a_l) {
+  char* s = (char*)a_from;
+  a_l = 0;
+  char* pos = a_s;
+  while(*s) {
+    *pos = *s;pos++;
+    a_l++;
+    s++;
+  }
+  *pos = 0;
+}
+
+template <class T>  //T must be an unsigned number type.
+inline void tosu(T a_i,char a_s[],unsigned int& a_l) {
+  //assume a_s is sufficently allocated (32 is ok).
+  a_l = 0;
+ {char* pos = a_s;
+  T i = a_i;
+  while(true) {
+    if(i<=9) {*pos = '0'+char(i);pos++;a_l++;*pos=0;pos++;break;}
+    T r = i % 10;
+    *pos = '0'+char(r);pos++;
+    a_l++;
+    i = i/10;
+  }}
+  //strrev(s);
+ {unsigned int hl = a_l/2;
+  char* beg = a_s;
+  char* end = a_s+a_l-1;
+  for(unsigned int i=0;i<hl;i++) {
+    char c = *end;
+    *end = *beg;      
+    *beg = c;
+    beg++;end--;  
+  }}
+}
+
+}
+
+#endif

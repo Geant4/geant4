@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TargetSD.hh 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: TargetSD.hh 103469 2017-04-11 07:29:36Z gcosmo $
 //
 /// \file medical/GammaTherapy/include/TargetSD.hh
 /// \brief Definition of the TargetSD class
@@ -50,7 +50,6 @@
 class G4Step;
 class G4TouchableHistory;
 class G4HCofThisEvent;
-class Histo;
 
 class TargetSD : public G4VSensitiveDetector
 {
@@ -70,7 +69,6 @@ private:
   TargetSD(const TargetSD & right);
   const TargetSD & operator = (const TargetSD & right);
 
-  Histo* fHisto;
   G4int  fEvno;
 };
 

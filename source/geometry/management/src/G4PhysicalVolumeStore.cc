@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.cc 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4PhysicalVolumeStore.cc 103235 2017-03-22 15:53:48Z gcosmo $
 //
 // G4PhysicalVolumeStore
 //
@@ -64,7 +64,8 @@ G4PhysicalVolumeStore::G4PhysicalVolumeStore()
 //
 G4PhysicalVolumeStore::~G4PhysicalVolumeStore()
 {
-  Clean();
+  Clean();  // Delete all volumes in the store
+  G4VPhysicalVolume::Clean();  // Delete allocated sub-instance data
 }
 
 // ***************************************************************************
@@ -75,7 +76,7 @@ void G4PhysicalVolumeStore::Clean()
 {
   // Do nothing if geometry is closed
   //
-  if (G4GeometryManager::GetInstance()->IsGeometryClosed())
+  if (G4GeometryManager::IsGeometryClosed())
   {
     G4cout << "WARNING - Attempt to delete the physical volume store"
            << " while geometry closed !" << G4endl;
@@ -90,13 +91,12 @@ void G4PhysicalVolumeStore::Clean()
 
   size_t i=0;
   G4PhysicalVolumeStore* store = GetInstance();
-  std::vector<G4VPhysicalVolume*>::iterator pos;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Physical Volumes ... ";
 #endif
 
-  for(pos=store->begin(); pos!=store->end(); pos++)
+  for(iterator pos=store->begin(); pos!=store->end(); pos++)
   {
     if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
     if (*pos) { delete *pos; }

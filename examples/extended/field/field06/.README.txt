@@ -36,11 +36,11 @@ Classes Used
  G4Electron and G4AntiNeutrinoE
 \verbatim
  RegisterPhysics(new G4DecayPhysics());
- RegisterPhysics(new F06ExtraPhysics());
+ RegisterPhysics(new G4StepLimiterPhysics());
 
  G4VModularPhysicsList::ConstructProcess();
 \endverbatim
- F06ExtraPhysics defines G4StepLimiter and G4UserSpecialCuts
+ G4StepLimiterPhysics defines G4StepLimiter and G4UserSpecialCuts
 
 \section field06_s5 User Action Classes
 

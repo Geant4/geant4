@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStringFragmentation.cc 67999 2013-03-13 11:14:32Z gcosmo $
+// $Id: G4VStringFragmentation.cc 100828 2016-11-02 15:25:59Z gcosmo $
 //
 // G4VStringFragmentation
 #include "G4VStringFragmentation.hh"
@@ -43,7 +43,8 @@ G4VStringFragmentation::~G4VStringFragmentation()
 
 const G4VStringFragmentation & G4VStringFragmentation::operator=(const G4VStringFragmentation &)
 {
-  throw G4HadronicException(__FILE__, __LINE__, "G4VStringFragmentation::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, 
+                            "G4VStringFragmentation::operator= meant to not be accessable");
   return *this;
 }
 

@@ -98,11 +98,11 @@ template <class T>
 inline std::string tos(const std::vector<T>& a_vals,
                        const std::string& a_sep = "\n",
                        bool a_sep_at_end = false) {
-  unsigned int number = a_vals.size();
+  size_t number = a_vals.size();
   if(number<=0) return "";
   std::string result;
   number--;
-  for(unsigned int index=0;index<number;index++) {
+  for(size_t index=0;index<number;index++) {
     result += tos(a_vals[index]);
     result += a_sep;
   }

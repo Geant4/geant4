@@ -105,13 +105,13 @@ protected: //gstos
   virtual unsigned int create_gsto(std::ostream&,sg::gl_manager& a_mgr) {
     std::vector<float> gsto_data;
 
-   {unsigned int npts = m_segs.size()/2;  //2 coords
-    unsigned int ngsto = npts*3;     //3 coords.
-    unsigned int sz = gsto_data.size();
+   {size_t npts = m_segs.size()/2;  //2 coords
+    size_t ngsto = npts*3;     //3 coords.
+    size_t sz = gsto_data.size();
     gsto_data.resize(sz+ngsto);
-    float* pxyz = tools::vec_data<float>(gsto_data)+sz;    
-    const float* data = tools::vec_data<float>(m_segs);
-    tools::gl::cvt_2to3(npts,data,pxyz);}
+    float* pxyz = vec_data<float>(gsto_data)+sz;    
+    const float* data = vec_data<float>(m_segs);
+    gl::cvt_2to3(npts,data,pxyz);}
 
     m_gsto_sz = gsto_data.size();
 
@@ -130,7 +130,7 @@ public:
       unsigned int _id = get_gsto_id(a_action.out(),a_action.gl_manager());
       if(_id) {        
         a_action.begin_gsto(_id);
-        a_action.draw_gsto_v(tools::gl::lines(),m_gsto_sz/3,0);
+        a_action.draw_gsto_v(gl::lines(),m_gsto_sz/3,0);
         a_action.end_gsto();
         return;
   
@@ -143,7 +143,7 @@ public:
     }
 
     // immediate rendering :
-    a_action.draw_vertex_array_xy(tools::gl::lines(),m_segs);         
+    a_action.draw_vertex_array_xy(gl::lines(),m_segs);         
   }
 
   virtual void pick(pick_action& a_action) {
@@ -244,7 +244,7 @@ public:
         float XL = 0;
         string_segs(false,*it,a_height,a_encoding,a_font,XL,Y,dummy,false);
         Y -= Y_ADVANCE;
-        width = tools::mx(width,XL);
+        width = mx<float>(width,XL);
       }
               
       a_mn_x = 0;
@@ -254,7 +254,7 @@ public:
       a_mx_y = HEIGHT;
       a_mx_z = 0;
     } else {
-      tools::box_3f_make_empty(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z);
+      box_3f_make_empty(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z);
     }
   }
 
@@ -272,7 +272,7 @@ public:
     float XL = 0;
     string_segs(false,a_s,a_height,a_encoding,a_font,XL,Y,dummy,false);
     Y -= Y_ADVANCE;
-    width = tools::mx(width,XL);
+    width = mx<float>(width,XL);
 
     a_mn_x = 0;
     a_mn_y = -_descent(a_height);
@@ -367,11 +367,11 @@ protected:
       float cwidth;
       int number;
       if (a_font==sg::greek) {
-        tools::hershey::greek_char_points(*it,a_height,number,max_point,xp,yp,cwidth);
+        hershey::greek_char_points(*it,a_height,number,max_point,xp,yp,cwidth);
       } else if (a_font==sg::special) {
-        tools::hershey::special_char_points(*it,a_height,number,max_point,xp,yp,cwidth);
+        hershey::special_char_points(*it,a_height,number,max_point,xp,yp,cwidth);
       } else {
-        tools::hershey::latin_char_points(*it,a_height,number,max_point,xp,yp,cwidth);
+        hershey::latin_char_points(*it,a_height,number,max_point,xp,yp,cwidth);
       }
 
       float advance = cwidth + a_height * 0.01F;
@@ -389,7 +389,7 @@ protected:
                              float a_scale,bool a_bar,
                              float& a_mn_x,float& a_mn_y,float& a_mn_z,
                              float& a_mx_x,float& a_mx_y,float& a_mx_z){
-    tools::box_3f_make_empty(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z);
+    box_3f_make_empty(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z);
 
     const unsigned int mx_poly = 4;
     const unsigned int mx_point = 160;
@@ -401,11 +401,11 @@ protected:
     int number;
     float width;
     if (a_font==sg::greek) {
-      tools::hershey::greek_char_points(a_char,a_scale,number,max_point,xp,yp,width);
+      hershey::greek_char_points(a_char,a_scale,number,max_point,xp,yp,width);
     } else if (a_font==sg::special) {
-      tools::hershey::special_char_points(a_char,a_scale,number,max_point,xp,yp,width);
+      hershey::special_char_points(a_char,a_scale,number,max_point,xp,yp,width);
     } else {
-      tools::hershey::latin_char_points(a_char,a_scale,number,max_point,xp,yp,width);
+      hershey::latin_char_points(a_char,a_scale,number,max_point,xp,yp,width);
     }
 
     float ymax = 0;
@@ -415,13 +415,11 @@ protected:
       int pointn  = max_point[ipoly];
       if(pointn>0) {
         for(int count=0;count<pointn-1;count++) {
-          ymax = tools::mx(ymax,yp[ipoint]);
-          tools::box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,
-                                  xp[ipoint],yp[ipoint],0);
+          ymax = mx<float>(ymax,yp[ipoint]);
+          box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,xp[ipoint],yp[ipoint],0);
 
-          ymax = tools::mx(ymax,yp[ipoint+1]);
-          tools::box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,
-                                  xp[ipoint+1],yp[ipoint+1],0);
+          ymax = mx<float>(ymax,yp[ipoint+1]);
+          box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,xp[ipoint+1],yp[ipoint+1],0);
 
           ipoint ++;
         }
@@ -432,10 +430,8 @@ protected:
     if(a_bar) { //Draw a bar on top of the character.
       float xbar = 0;
       float ybar = ymax * 1.3F;
-      tools::box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,
-                              xbar,ybar,0);
-      tools::box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,
-                              xbar+width,ybar,0);
+      box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,xbar,ybar,0);
+      box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,xbar+width,ybar,0);
     }
   }
 
@@ -510,11 +506,11 @@ protected:
     int number;
     float width;
     if (a_font==sg::greek) {
-      tools::hershey::greek_char_points(a_char,a_scale,number,max_point,xp,yp,width);
+      hershey::greek_char_points(a_char,a_scale,number,max_point,xp,yp,width);
     } else if (a_font==sg::special) {
-      tools::hershey::special_char_points(a_char,a_scale,number,max_point,xp,yp,width);
+      hershey::special_char_points(a_char,a_scale,number,max_point,xp,yp,width);
     } else {
-      tools::hershey::latin_char_points(a_char,a_scale,number,max_point,xp,yp,width);
+      hershey::latin_char_points(a_char,a_scale,number,max_point,xp,yp,width);
     }
     if(!aGEN_POINTS) return width;
   
@@ -526,12 +522,12 @@ protected:
       pointn  = max_point[ipoly];
       if(pointn>0) {
         for(int count=0;count<pointn-1;count++) {
-          ymax = tools::mx(ymax,yp[ipoint]);
+          ymax = mx<float>(ymax,yp[ipoint]);
           if(a_fill_segs) {
             a_segs.push_back(aX+xp[ipoint]);
             a_segs.push_back(aY+yp[ipoint]);
           }
-          ymax = tools::mx(ymax,yp[ipoint+1]);
+          ymax = mx<float>(ymax,yp[ipoint+1]);
           if(a_fill_segs) {
             a_segs.push_back(aX+xp[ipoint+1]);
             a_segs.push_back(aY+yp[ipoint+1]);
@@ -689,7 +685,7 @@ protected:
 
 protected:
   std::vector<float> m_segs; //list of [begin,end]
-  unsigned int m_gsto_sz;
+  size_t m_gsto_sz;
 };
 
 }}

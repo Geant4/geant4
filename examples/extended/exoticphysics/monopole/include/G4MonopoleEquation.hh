@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/G4MonopoleEquation.hh
 /// \brief Definition of the G4MonopoleEquation class
 //
-// $Id: G4MonopoleEquation.hh 69705 2013-05-13 09:09:52Z gcosmo $
+// $Id: G4MonopoleEquation.hh 108824 2018-03-09 11:05:41Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,13 +49,14 @@
 #define G4MONOPOLEEQUATION_hh
 
 #include "G4EquationOfMotion.hh"
-#include "G4ElectroMagneticField.hh"
+// #include "G4ElectroMagneticField.hh"
+#include "G4MagneticField.hh"
 
 class G4MonopoleEquation : public G4EquationOfMotion
 {
 public:  // with description
 
-  G4MonopoleEquation(G4ElectroMagneticField *emField );
+  G4MonopoleEquation(G4MagneticField *emField );
 
   ~G4MonopoleEquation();
 

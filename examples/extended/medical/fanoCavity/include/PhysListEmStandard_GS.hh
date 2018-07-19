@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/PhysListEmStandard_GS.hh
 /// \brief Definition of the PhysListEmStandard_GS class
 //
-// $Id: PhysListEmStandard_GS.hh 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: PhysListEmStandard_GS.hh 98764 2016-08-09 14:12:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,11 +63,4 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-
-
 

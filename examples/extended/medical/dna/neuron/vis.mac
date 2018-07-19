@@ -1,0 +1,180 @@
+# Use this open statement to create an OpenGL view:
+#/vis/open OGL 600x400-0+0
+# WARNING= A viewer is created in the main function of this program
+/vis/ogl/set/displayListLimit 9999999999		
+#
+# Use this open statement to create a .prim file suitable for
+# viewing in DAWN:
+#/vis/open DAWNFILE
+#
+# Use this open statement to create a .heprep file suitable for
+# viewing in HepRApp:
+#/vis/open HepRepFile
+#
+# Use this open statement to create a .wrl file suitable for
+# viewing in a VRML viewer:
+#/vis/open VRML2FILE
+#
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+#
+# Draw geometry:
+/vis/drawVolume
+#
+# Specify view angle:
+/vis/viewer/set/viewpointThetaPhi 20. 30.
+#/vis/viewer/set/viewpointVector 1 0 0
+/vis/viewer/set/lightsVector 1 5 30
+#
+# Specify zoom value:
+#/vis/viewer/zoom 2.
+#
+# Specify style (surface, wireframe, auxiliary edges,...)
+#/vis/viewer/set/style wireframe
+#/vis/viewer/set/auxiliaryEdge true
+#/vis/viewer/set/lineSegmentsPerCircle 100
+#
+# Draw coordinate axes:
+#/vis/scene/add/axes 0 0 0 1 m
+#
+# Draw smooth trajectories at end of event, showing trajectory points
+# as markers 2 pixels wide:
+/vis/scene/add/trajectories rich smooth
+/vis/modeling/trajectories/create/drawByCharge
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSize 1
+#/vis/modeling/trajectories/drawByParticleID-0/default/setLineColour cyan
+/vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsColour red
+#/vis/viewer/set/globalLineWidthScale 2
+#/vis/viewer/rebuild
+  
+### Acceptable colours (black blue cyan gray green brown magenta red white yellow)
+/vis/modeling/trajectories/drawByParticleID-0/set e- red
+/vis/modeling/trajectories/drawByParticleID-0/set proton black
+/vis/modeling/trajectories/drawByParticleID-0/set alpha black 
+/vis/modeling/trajectories/drawByParticleID-0/set helium black 
+/vis/modeling/trajectories/drawByParticleID-0/set Fe56 black	
+/vis/modeling/trajectories/drawByParticleID-0/set C12 black
+/vis/modeling/trajectories/drawByParticleID-0/set gamma yellow  
+/vis/modeling/trajectories/drawByParticleID-0/set e+ red 
+#### molecular species in water radiolysis
+/vis/modeling/trajectories/drawByParticleID-0/set e_aq blue	
+/vis/modeling/trajectories/drawByParticleID-0/set OH  magenta  	
+/vis/modeling/trajectories/drawByParticleID-0/set H3O green 	
+/vis/modeling/trajectories/drawByParticleID-0/set H gray	
+/vis/modeling/trajectories/drawByParticleID-0/set OH- cyan	
+/vis/modeling/trajectories/drawByParticleID-0/set H_2 black	
+/vis/modeling/trajectories/drawByParticleID-0/set H2O2 brown	
+#
+# Draw hits at end of event:
+#/vis/scene/add/hits
+#
+##/vis/modeling/trajectories/drawByParticleID-0/default/setDrawAuxPts true
+#/vis/modeling/trajectories/drawByParticleID-0/default/setAuxPtsSize 5
+#/vis/modeling/trajectories/list
+
+#/vis/modeling/trajectories/drawByParticleID-0/default/setTimeSliceInterval 0.1 ns	# ???
+
+#/vis/modeling/trajectories/select drawByCharge-0
+
+# Use to draw just selected types of radicals
+#/vis/filtering/trajectories/create/particleFilter
+#/vis/filtering/trajectories/particleFilter-0/add e-
+#/vis/filtering/trajectories/particleFilter-0/add e_aq
+#/vis/filtering/trajectories/particleFilter-0/add OH
+#/vis/filtering/trajectories/particleFilter-0/add H3O
+#/vis/filtering/trajectories/particleFilter-0/add H
+#/vis/filtering/trajectories/particleFilter-0/add OH-
+#/vis/filtering/trajectories/particleFilter-0/add H_2
+#/vis/filtering/trajectories/particleFilter-0/add H2O2
+#/vis/ogl/set/startTime 1 ns
+#/vis/ogl/set/endTime 10 ns
+
+#
+# To invert the above, drawing all particles except gammas,
+# keep the above two lines but also add:
+#/vis/filtering/trajectories/particleFilter-0/invert true
+#
+# Many other options are available with /vis/modeling and /vis/filtering.
+# For example, to select colour by particle ID:
+#/vis/modeling/trajectories/create/drawByParticleID
+#/vis/modeling/trajectories/drawByParticleID-0/set e- blue
+#
+# To superimpose all of the events from a given run:
+/vis/scene/endOfEventAction accumulate
+#
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+
+# Decorations
+# Name
+#/vis/set/textColour green
+#/vis/set/textLayout right
+# or, if your system does not support right-adjustment
+#/vis/scene/add/text2D 0.9 -0.9 12
+#/vis/set/textLayout    # Revert to normal (left adjusted) layout
+#/vis/set/textColour    # Revert to default text colour (blue)
+#
+# Axes, scale, etc.
+/vis/scene/add/scale   # Simple scale line
+#/vis/scene/add/eventID # Drawn at end of event or particle tracks
+#/vis/scene/add/date    # Date stamp
+#/vis/scene/add/logo2D  # Simple logo of Geant4
+#/vis/scene/add/logo    # 3D logo
+#/vis/scene/add/axes -120 -140 -15 50 um   # Simple axes: x=red, y=green, z=blue.
+# Frame
+#/vis/set/colour red	# enable
+#/vis/set/lineWidth 2	# enable
+#/vis/scene/add/frame   # Simple frame arond the view
+#/vis/set/colour        # Revert to default colour (white)
+#/vis/set/lineWidth     # Revert to default line width (1.)
+#
+# Attach text to one edge of Shape1, with a small, fixed offset
+#/vis/set/textColour magenta
+#/vis/scene/add/text -38 -125 -0.45 um 25 4 4 Soma
+# Attach text to one corner of Shape2, with a small, fixed offset
+#/vis/set/textColour blue
+#/vis/scene/add/text -5 110 0 um 20 4 4 Dendrites 
+#/vis/set/textColour black
+#/vis/scene/add/text -40 -140 0 um 15 4 4 Axons
+#/vis/set/textColour red
+#/vis/scene/add/text 5 -40 0 um 10 4 4 Dendritic Spines
+#
+# To get nice view
+#/vis/geometry/set/visibility World 0 false #changement
+#/vis/geometry/set/visibility Envelope 0 false #changement
+#/vis/viewer/set/style wireframe #surface
+#/vis/viewer/set/hiddenMarker true
+#/vis/viewer/set/viewpointThetaPhi 95 170
+#/tracking/storeTrajectory 3
+
+#
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+#
+# For file-based drivers, use this to create an empty detector view:
+#/vis/viewer/flush
+
+#/vis/set/textLayout centre
+#/vis/scene/add/scale 50 um #x red #manual 80 -110 0 um
+#/vis/viewer/set/targetPoint -1 -21.7 0 um
+#/vis/viewer/zoomTo 50
+/vis/viewer/set/background white
+# set print mode to vectored
+#/vis/ogl/set/printMode vectored
+# set print size larger than screen
+#/vis/ogl/set/printSize 20 20
+# print
+#/vis/ogl/printEPS 
+#
+# https://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/ForApplicationDeveloper/html/ch08s07.html
+#/vis/modeling/trajectories/drawByAttribute-0/addValue muIon_key muIoni
+#/vis/modeling/trajectories/drawByAttribute-0/addValue eIon_key  eIoni

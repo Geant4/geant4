@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4EmMultiModel.hh 95681 2016-02-18 09:44:18Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,19 +61,19 @@ class G4EmMultiModel :  public G4VEmModel
 
 public:
 
-  G4EmMultiModel(const G4String& nam = "MultiModel");
+  explicit G4EmMultiModel(const G4String& nam = "MultiModel");
 
   virtual ~G4EmMultiModel();
 
   void AddModel(G4VEmModel*);
 
   virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&);
+			  const G4DataVector&) final;
 
   virtual G4double ComputeDEDX(const G4MaterialCutsCouple*,
 			       const G4ParticleDefinition*,
 			       G4double kineticEnergy,
-			       G4double cutEnergy);
+			       G4double cutEnergy) final;
 
   // main method to compute cross section per atom
   virtual 
@@ -82,19 +82,19 @@ public:
 				      G4double Z,
 				      G4double A = 0., /* amu */
 				      G4double cutEnergy = 0.0,
-				      G4double maxEnergy = DBL_MAX);
+				      G4double maxEnergy = DBL_MAX) final;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double tmax);
+				 G4double tmax) final;
 
 private: 
 
   //  hide assignment operator
-  G4EmMultiModel & operator=(const  G4EmMultiModel &right);
-  G4EmMultiModel(const  G4EmMultiModel&);
+  G4EmMultiModel & operator=(const  G4EmMultiModel &right) = delete;
+  G4EmMultiModel(const  G4EmMultiModel&) = delete;
 
   G4int                         nModels;
   std::vector<G4VEmModel*>      model;

@@ -6,22 +6,27 @@
 
 #include "vec4"
 #include "../S_STRING"
+#include <cmath>
 
 namespace tools {
 
 class vec4f : public vec4<float> {
+  typedef vec4<float> parent;
 public:
   TOOLS_SCLASS(tools::vec4f) //for stype()
 public:
-  vec4f():vec4<float>() {}
-  vec4f(const float a_vec[4]):vec4<float>(a_vec) {}
-  vec4f(const float& a0,const float& a1,const float& a2,const float& a3)
-  :vec4<float>(a0,a1,a2,a3){}
+  vec4f():parent() {}
+  vec4f(const float a_vec[4]):parent(a_vec) {}
+#ifdef TOOLS_MEM
+  vec4f(const float& a0,const float& a1,const float& a2,const float& a3,bool a_inc = true):parent(a0,a1,a2,a3,a_inc){}
+#else
+  vec4f(const float& a0,const float& a1,const float& a2,const float& a3):parent(a0,a1,a2,a3){}
+#endif
   virtual ~vec4f() {}
 public:
-  vec4f(const vec4f& a_from):vec4<float>(a_from){}
+  vec4f(const vec4f& a_from):parent(a_from){}
   vec4f& operator=(const vec4f& a_from){
-    vec4<float>::operator=(a_from);
+    parent::operator=(a_from);
     return *this;
   }
 public: //operators
@@ -60,6 +65,22 @@ public: //operators
   vec4f operator-() const {
     return vec4f(-m_data[0],-m_data[1],-m_data[2],-m_data[3]);
   }
+public:
+#define TOOLS_VEC4F_MORE_PREC
+#ifdef TOOLS_VEC4F_MORE_PREC
+  float length() const {
+    return float(::sqrt(m_data[0]*m_data[0]+m_data[1]*m_data[1]+m_data[2]*m_data[2]+m_data[3]*m_data[3]));
+  }
+  float normalize() {
+    float norme = length();
+    if(!norme) return 0;
+    divide(norme);
+    return norme;
+  }
+#else
+  float length() const {return parent::length(::sqrtf);}
+  float normalize() {return parent::normalize(::sqrtf);}
+#endif
 };
 
 }

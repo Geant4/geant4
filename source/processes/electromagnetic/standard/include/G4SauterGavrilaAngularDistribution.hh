@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SauterGavrilaAngularDistribution.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4SauterGavrilaAngularDistribution.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,22 +57,23 @@ class G4SauterGavrilaAngularDistribution : public G4VEmAngularDistribution
 
 public:
 
-  G4SauterGavrilaAngularDistribution();
+  explicit G4SauterGavrilaAngularDistribution();
 
   virtual ~G4SauterGavrilaAngularDistribution();
 
   virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
                                          G4double e = 0.0,
                                          G4int shellId = 0,
-                                         const G4Material* mat = 0);
+                                         const G4Material* mat = 0) final;
 
-  void PrintGeneratorInformation() const;
+  virtual void PrintGeneratorInformation() const final;
 
 private:
 
   // hide assignment operator 
-  G4SauterGavrilaAngularDistribution & operator=(const  G4SauterGavrilaAngularDistribution &right);
-  G4SauterGavrilaAngularDistribution(const  G4SauterGavrilaAngularDistribution&);
+  G4SauterGavrilaAngularDistribution & operator=
+  (const  G4SauterGavrilaAngularDistribution &right) = delete;
+  G4SauterGavrilaAngularDistribution(const  G4SauterGavrilaAngularDistribution&) = delete;
 
 };
 

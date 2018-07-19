@@ -53,7 +53,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B03PhysicsList::B03PhysicsList():  G4VUserPhysicsList()
+B03PhysicsList::B03PhysicsList(G4String parallelname):  
+G4VUserPhysicsList(),
+fBiasWorldName(parallelname)
 {
   fParaWorldName.clear();
   SetVerboseLevel(1);  
@@ -269,10 +271,7 @@ void B03PhysicsList::ConstructEM()
 // -- generator models
 #include "G4TheoFSGenerator.hh"
 #include "G4ExcitationHandler.hh"
-#include "G4Evaporation.hh"
 #include "G4CompetitiveFission.hh"
-#include "G4FermiBreakUp.hh"
-#include "G4StatMF.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4Fancy3DNucleus.hh"
 #include "G4CascadeInterface.hh"
@@ -304,17 +303,8 @@ void B03PhysicsList::ConstructHad()
   G4TheoFSGenerator* theTheoModel = new G4TheoFSGenerator;
   G4TheoFSGenerator* antiBHighEnergyModel = new G4TheoFSGenerator;
        
-  // all models for treatment of thermal nucleus 
-  G4Evaporation* theEvaporation = new G4Evaporation;
-  G4FermiBreakUp* theFermiBreakUp = new G4FermiBreakUp;
-  G4StatMF* theMF = new G4StatMF;
-
   // Evaporation logic
   G4ExcitationHandler* theHandler = new G4ExcitationHandler;
-  theHandler->SetEvaporation(theEvaporation);
-  theHandler->SetFermiModel(theFermiBreakUp);
-  theHandler->SetMultiFragmentation(theMF);
-  theHandler->SetMaxAandZForFermiBreakUp(12, 6);
   theHandler->SetMinEForMultiFrag(3*MeV);
         
   // Pre equilibrium stage 
@@ -673,25 +663,26 @@ void B03PhysicsList::AddScoringProcess(){
 #include "G4IStore.hh"
 void B03PhysicsList::AddBiasingProcess(){
 
-  
   G4cout << " Preparing Importance Sampling with GhostWorld " 
          << fBiasWorldName << G4endl;
-  fGeomSampler->SetParallel(true); // parallelworld
+  
   G4IStore* iStore = G4IStore::GetInstance(fBiasWorldName);
-  fGeomSampler->SetWorld(iStore->GetParallelWorldVolumePointer());
+  G4GeometrySampler fGeomSampler(fBiasWorldName,"neutron");
+  fGeomSampler.SetParallel(true); // parallelworld
+  // fGeomSampler.SetWorld(iStore->GetParallelWorldVolumePointer());
   //  fGeomSampler->PrepareImportanceSampling(G4IStore::
   //                              GetInstance(fBiasWorldName), 0);
   static G4bool first = true;
   if(first) {
-    fGeomSampler->PrepareImportanceSampling(iStore, 0);
+    fGeomSampler.PrepareImportanceSampling(iStore, 0);
 
-    fGeomSampler->Configure();
+    fGeomSampler.Configure();
     G4cout << " GeomSampler Configured!!! " << G4endl;
     first = false;
   }
 
 #ifdef G4MULTITHREADED 
-    fGeomSampler->AddProcess();
+  if(!G4Threading::IsMasterThread()) fGeomSampler.AddProcess();
 #else
   G4cout << " Running in singlethreaded mode!!! " << G4endl;
 #endif

@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.hh 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: DetectorMessenger.hh 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,21 +52,20 @@ class DetectorMessenger: public G4UImessenger
     DetectorMessenger(DetectorConstruction* );
    ~DetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
   
-    DetectorConstruction*      Detector;
+    DetectorConstruction*      fDetector;
     
-    G4UIdirectory*             testemDir;
-    G4UIdirectory*             detDir;    
-    G4UIcmdWithAString*        MaterCmd;
-    G4UIcmdWithADoubleAndUnit* SizeXYCmd;
-    G4UIcmdWithADoubleAndUnit* SizeZCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIdirectory*             fTestemDir;
+    G4UIdirectory*             fDetDir;    
+    G4UIcmdWithAString*        fMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fSizeXYCmd;
+    G4UIcmdWithADoubleAndUnit* fSizeZCmd;
+    G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

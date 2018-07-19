@@ -49,7 +49,7 @@ class G4LENDFissionCrossSection : public G4LENDCrossSection
       //G4LENDFissionCrossSection()
       //{;};
       G4LENDFissionCrossSection( G4ParticleDefinition* pd )
-      :G4LENDCrossSection("LENDEFissionCrossSection")
+      :G4LENDCrossSection("LENDFissionCrossSection")
       {
          proj = pd; 
          //name = "LEND Fission Cross Section for ";

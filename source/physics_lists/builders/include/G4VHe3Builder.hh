@@ -29,21 +29,27 @@
 //
 // Author: 2013 P. Arce
 //
+// Modified:
+// 12.04.2017 A.Dotti move to new design with base class
+//
 //----------------------------------------------------------------------------
 //
 #ifndef G4VHe3Builder_h
 #define G4VHe3Builder_h
 
+#include "G4PhysicsBuilderInterface.hh"
+
 class G4He3InelasticProcess;
 class G4HadronElasticProcess;
 
-class G4VHe3Builder
+class G4VHe3Builder : public G4PhysicsBuilderInterface
 {
 public:
-  G4VHe3Builder();
-  virtual ~G4VHe3Builder();
+  G4VHe3Builder() = default;
+  virtual ~G4VHe3Builder() {} 
   virtual void Build(G4HadronElasticProcess * aP) = 0;
   virtual void Build(G4He3InelasticProcess * aP) = 0;
+  using G4PhysicsBuilderInterface::Build; //Prevent compiler warning
 };
 
 #endif

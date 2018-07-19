@@ -46,6 +46,9 @@ class G4PionDecayMakeSpin : public G4Decay
     //  Destructor
     virtual ~G4PionDecayMakeSpin();
 
+    virtual void ProcessDescription(std::ostream& outFile) const override;
+    //
+
   private:
 
     //  copy constructor
@@ -57,7 +60,7 @@ class G4PionDecayMakeSpin : public G4Decay
   protected:
 
     virtual void DaughterPolarization(const G4Track& aTrack,
-                              G4DecayProducts* products);
+                              G4DecayProducts* products) override;
 };
 
 #endif

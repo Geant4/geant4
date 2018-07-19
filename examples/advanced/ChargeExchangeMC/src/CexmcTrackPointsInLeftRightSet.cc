@@ -52,8 +52,8 @@
 
 
 CexmcTrackPointsInLeftRightSet::CexmcTrackPointsInLeftRightSet(
-                        const G4String &  name, const CexmcSetup *  setup ) :
-    CexmcTrackPoints( name ), setup( setup )
+                        const G4String &  name, const CexmcSetup *  setup_ ) :
+    CexmcTrackPoints( name ), setup( setup_ )
 {
 }
 

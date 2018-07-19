@@ -27,7 +27,7 @@
 /// \brief Implementation of the ExP01DetectorConstruction class
 //
 //
-// $Id: ExP01DetectorConstruction.cc 71791 2013-06-24 14:08:28Z gcosmo $
+// $Id: ExP01DetectorConstruction.cc 98770 2016-08-09 14:22:25Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -262,7 +262,7 @@ G4VPhysicalVolume* ExP01DetectorConstruction::Construct()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-void ExP01DetectorConstruction::setTargetMaterial(G4String materialName)
+void ExP01DetectorConstruction::SetTargetMaterial(G4String materialName)
 {
   // search the material by its name 
   G4Material* pttoMaterial = G4Material::GetMaterial(materialName);  
@@ -276,7 +276,7 @@ void ExP01DetectorConstruction::setTargetMaterial(G4String materialName)
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExP01DetectorConstruction::setChamberMaterial(G4String materialName)
+void ExP01DetectorConstruction::SetChamberMaterial(G4String materialName)
 {
   // search the material by its name 
   G4Material* pttoMaterial = G4Material::GetMaterial(materialName);  

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.cc 81373 2014-05-27 13:06:32Z gcosmo $
+// $Id: G4PrimaryParticle.cc 110257 2018-05-17 14:20:12Z gcosmo $
 //
 
 #include "G4PrimaryParticle.hh"
@@ -34,7 +34,11 @@
 #include "G4ios.hh"
 #include "G4VUserPrimaryParticleInformation.hh"
 
-G4ThreadLocal G4Allocator<G4PrimaryParticle> *aPrimaryParticleAllocator = 0;
+G4Allocator<G4PrimaryParticle>*& aPrimaryParticleAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4PrimaryParticle>* _instance = nullptr;
+    return _instance;
+}
 
 G4PrimaryParticle::G4PrimaryParticle()
 :PDGcode(0),G4code(0),

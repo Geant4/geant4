@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/G4ScreenedNuclearRecoil.cc
 /// \brief Implementation of the G4ScreenedNuclearRecoil class
 //
-// $Id: G4ScreenedNuclearRecoil.cc 91266 2015-06-29 06:48:42Z gcosmo $
+// $Id: G4ScreenedNuclearRecoil.cc 110821 2018-06-15 12:53:27Z gcosmo $
 //
 //
 // Class Description
@@ -999,7 +999,7 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey,
                                                    G4double recoilCutoff)
 {                        
         static const size_t sigLen=200; 
-        // since sigma doesn't matter much, a very coarse table will do      
+        // since sigma doesn't matter much, a very coarse table will do 
         G4DataVector energies(sigLen);
         G4DataVector data(sigLen);
         
@@ -1007,9 +1007,6 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey,
         // use standardized values for mass for building tables
         
         const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-        if (materialTable == 0) { return; }
-  //G4Exception("mhmNativeCrossSection::LoadData - no MaterialTable found)");
-        
         G4int nMaterials = G4Material::GetNumberOfMaterials();
         
         for (G4int im=0; im<nMaterials; im++)
@@ -1068,7 +1065,7 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey,
                 // this will be phi(x)/(x*eps) when c2eps is correctly set
                 x0func->set_domain(1e-6*angstrom/au, 0.9999*screen->xmax()/au); 
                 // needed for inverse function
-                // use the c2_inverse_function interface for the root finder...
+                // use the c2_inverse_function interface for the root finder
                 // it is more efficient for an ordered 
                 // computation of values.
                 G4_c2_ptr x0_solution(c2.inverse_function(x0func));
@@ -1114,9 +1111,10 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey,
                   G4double x0=0;
                   try {
                     x0=x0_solution(2*q-q*q);
-                  } catch(c2_exception e) {
-                    //G4Exception(G4String("G4ScreenedNuclearRecoil: failure 
-                    //in inverse solution to generate MFP Tables: ")+e.what());
+                  } catch(c2_exception& e) {
+                    G4Exception("G4ScreenedNuclearRecoil::LoadData",
+                      "em0003",FatalException,
+                      "failure in inverse solution to generate MFP tables");
                   }
                   G4double betasquared=x0*x0 - x0*phiau(x0)/eps;        
                   G4double sigma=pi*betasquared*au*au;

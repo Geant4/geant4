@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc 75600 2013-11-04 13:03:02Z gcosmo $
+// $Id: G4VProcess.cc 105271 2017-07-18 07:35:12Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -48,6 +48,7 @@
 #include "G4MaterialTable.hh"
 #include "G4ElementTable.hh"
 #include "G4ElementVector.hh"
+#include "G4Log.hh"
 
 G4VProcess::G4VProcess(const G4String& aName, G4ProcessType   aType )
                   : aProcessManager(0),
@@ -94,7 +95,7 @@ G4VProcess::G4VProcess(const G4VProcess& right)
 
 void G4VProcess::ResetNumberOfInteractionLengthLeft()
 {
-  theNumberOfInteractionLengthLeft =  -std::log( G4UniformRand() );
+  theNumberOfInteractionLengthLeft =  -1.*G4Log( G4UniformRand() );
   theInitialNumberOfInteractionLength = theNumberOfInteractionLengthLeft; 
 }
 
@@ -182,7 +183,11 @@ void G4VProcess::DumpInfo() const
   G4cout << " : SubType[" << theProcessSubType << "]"<< G4endl;
 }
 
-
+void G4VProcess::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << "This process has not yet been described\n";
+}
+ 
 const G4String&  G4VProcess::GetPhysicsTableFileName(const G4ParticleDefinition* particle,
 						     const G4String& directory,
 						     const G4String& tableName,

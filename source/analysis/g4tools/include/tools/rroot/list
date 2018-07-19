@@ -1,0 +1,211 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_list
+#define tools_rroot_list
+
+#include "object"
+#include "../vmanip"
+#include "../scast"
+#include "cids"
+
+namespace tools {
+namespace rroot {
+
+class obj_list : public virtual iro, public std::vector<iro*> {
+  static const std::string& s_store_class() {
+    static const std::string s_v("TList");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::obj_list");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<obj_list>(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return obj_list_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<obj_list>(this,a_class)) {return p;}
+    else return 0;
+  }
+  //virtual void* cast(cid) const {return obj_list_cid();}
+public:
+  virtual iro* copy() const {return new obj_list(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    _clear();
+
+    short v;
+    unsigned int s, c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+
+    //::printf("debug : obj_list::stream : version %d, byte count %d\n",v,c);
+
+   {uint32 id,bits;
+    if(!Object_stream(a_buffer,id,bits)) return false;}
+
+    std::string name;
+    if(!a_buffer.read(name)) return false;
+    int nobjects;
+    if(!a_buffer.read(nobjects)) return false;
+
+    //::printf("debug : obj_list : name \"%s\", nobject %d\n",
+    //    name.c_str(),nobjects);
+
+    ifac::args args;
+    for (int i=0;i<nobjects;i++) {
+      //::printf("debug : obj_list :    n=%d i=%d ...\n",nobjects,i);
+
+      iro* obj;
+      bool created;
+      if(!a_buffer.read_object(m_fac,args,obj,created)){
+        a_buffer.out() << "tools::rroot::obj_list::stream : can't read object." << std::endl;
+        return false;
+      }
+
+      unsigned char nch;
+      if(!a_buffer.read(nch)) return false;
+      if(nch) {
+        char readOption[256];
+        if(!a_buffer.read_fast_array(readOption,nch)) return false;
+        readOption[nch] = 0;
+      }
+      if(obj) {
+        if(created) {
+	  if(m_owner) {
+            push_back(obj);
+	  } else { //who manage this object ?
+            if(m_warn) {
+	      a_buffer.out() << "tools::rroot::obj_list::stream :"
+                             << " warning : created object of class " << sout(obj->s_cls()) << " not managed."
+                             << std::endl;
+            }
+            push_back(obj);
+	  }
+	} else { //someone else may manage this object.
+	  if(m_owner) {
+            a_buffer.out() << "tools::rroot::obj_list::stream : not created object can't be manage here." << std::endl;
+            return false;
+	  } else {
+            push_back(obj);
+	  }
+	}
+      }
+    }
+
+    return a_buffer.check_byte_count(s,c,s_store_class());
+  }
+public:
+  obj_list(ifac& a_fac,bool a_owner,bool a_warn) //a_warn used if a_owner=false.
+  :m_fac(a_fac)
+  ,m_owner(a_owner)
+  ,m_warn(a_warn)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~obj_list(){
+    _clear();
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  obj_list(const obj_list& a_from)
+  :iro(a_from)
+  ,std::vector<iro*>()
+  ,m_fac(a_from.m_fac)
+  ,m_owner(a_from.m_owner)
+  ,m_warn(a_from.m_warn)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  obj_list& operator=(const obj_list&){return *this;}
+protected:
+  void _clear() {
+    if(m_owner) {
+      safe_clear<iro>(*this);
+    } else {
+      std::vector<iro*>::clear();
+    }
+  }
+protected:
+  ifac& m_fac;
+  bool m_owner;
+  bool m_warn;
+};
+
+class hash_list : public obj_list {
+  static const std::string& s_store_class() {
+    static const std::string s_v("THashList");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::hash_list");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<hash_list>(this,a_class)) return p;
+    return obj_list::cast(a_class);
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return hash_list_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<hash_list>(this,a_class)) {return p;}
+    return obj_list::cast(a_class);
+  }
+public:
+  virtual bool stream(buffer& a_buffer) {
+    uint32 startpos = a_buffer.length();
+    unsigned int s, c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return false;
+
+    //if(!obj_list::stream(a_buffer)) return false;
+
+    a_buffer.set_offset(startpos+c+sizeof(unsigned int));
+    if(!a_buffer.check_byte_count(s,c,s_store_class())) return false;
+    return true;
+  }
+
+public:
+  hash_list(ifac& a_fac,bool a_owner,bool a_warn) //a_warn used if a_owner=false.
+  :obj_list(a_fac,a_owner,a_warn)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~hash_list(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  hash_list(const hash_list& a_from):iro(a_from),obj_list(a_from){}
+  hash_list& operator=(const hash_list&){return *this;}
+};
+
+inline bool dummy_TList_pointer_stream(buffer& a_buffer,ifac& a_fac,bool a_owner,bool a_warn) {
+  obj_list l(a_fac,a_owner,a_warn);
+  return l.stream(a_buffer);
+}
+inline bool dummy_THashList_pointer_stream(buffer& a_buffer,ifac& a_fac,bool a_owner,bool a_warn) {
+  hash_list l(a_fac,a_owner,a_warn);
+  return l.stream(a_buffer);
+}
+
+}}
+
+#endif

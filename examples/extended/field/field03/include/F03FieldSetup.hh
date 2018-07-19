@@ -27,7 +27,7 @@
 /// \brief Definition of the F03FieldSetup class
 //
 //
-// $Id: F03FieldSetup.hh 77294 2013-11-22 11:01:00Z gcosmo $
+// $Id: F03FieldSetup.hh 109870 2018-05-09 12:39:45Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +61,7 @@ public:
 
   void SetStepperType( G4int i ) { fStepperType = i; }
 
-  void SetStepper();
+  void CreateSteppers();
 
   void SetMinStep(G4double s) { fMinStep = s; }
 

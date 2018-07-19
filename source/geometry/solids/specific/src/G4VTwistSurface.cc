@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.cc 102296 2017-01-20 13:21:03Z gcosmo $
+// $Id: G4VTwistSurface.cc 104105 2017-05-11 08:23:18Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -172,8 +172,8 @@ G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector &me,
      = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
    G4RotationMatrix unitrot;
-   static const G4RotationMatrix rottol    = unitrot.rotateZ(0.5*kAngTolerance);
-   static const G4RotationMatrix invrottol = unitrot.rotateZ(-1.*kAngTolerance);
+   const G4RotationMatrix rottol    = unitrot.rotateZ(0.5*kAngTolerance);
+   const G4RotationMatrix invrottol = unitrot.rotateZ(-1.*kAngTolerance);
 
    if (fAmIOnLeftSide.me == me 
        && fAmIOnLeftSide.vec == vec

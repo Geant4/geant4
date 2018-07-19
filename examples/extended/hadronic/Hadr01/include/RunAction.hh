@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 92421 2015-09-01 07:38:57Z gcosmo $
+// $Id: RunAction.hh 100811 2016-11-02 15:05:20Z gcosmo $
 //
 
 #ifndef RunAction_h
@@ -64,10 +64,10 @@ public: // With description
   // In this method histogramms are booked
 
   virtual void EndOfRunAction(const G4Run*);
-  // In this method bookHisto method is called in which histogramms are filled
+  // In this method BookHisto method is called in which histogramms are filled
 
 private:
-  G4Timer* timer;
+  G4Timer* fTimer;
 };
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BinaryPiKBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
+// $Id: G4BinaryPiKBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 //
 // Modified:
 // 02.04.2009 V.Ivanchenko remove add cross section, string builderis reponsible 
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -54,14 +55,6 @@ G4BinaryPiKBuilder()
   theModel->SetMaxEnergy(theMax); 
 }
 
-G4BinaryPiKBuilder::
-~G4BinaryPiKBuilder() 
-{
-}
-
-void G4BinaryPiKBuilder::
-Build(G4HadronElasticProcess * ) {}
-
 void G4BinaryPiKBuilder::
 Build(G4PionPlusInelasticProcess * aP)
 {
@@ -76,26 +69,6 @@ Build(G4PionMinusInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-}
-
-void G4BinaryPiKBuilder::
-Build(G4KaonPlusInelasticProcess * )
-{
-}
-
-void G4BinaryPiKBuilder::
-Build(G4KaonMinusInelasticProcess * )
-{
-}
-
-void G4BinaryPiKBuilder::
-Build(G4KaonZeroLInelasticProcess * )
-{
-}
-
-void G4BinaryPiKBuilder::
-Build(G4KaonZeroSInelasticProcess * )
-{
 }
 
 // 2002 by J.P. Wellisch

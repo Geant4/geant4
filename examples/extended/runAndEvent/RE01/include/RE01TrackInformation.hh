@@ -27,7 +27,7 @@
 /// \brief Definition of the RE01TrackInformation class
 //
 //
-// $Id: RE01TrackInformation.hh 75295 2013-10-30 09:32:52Z gcosmo $
+// $Id: RE01TrackInformation.hh 97671 2016-06-07 08:25:00Z gcosmo $
 //
 
 #ifndef RE01TrackInformation_h
@@ -60,6 +60,8 @@ public:
   inline G4int GetTrackingStatus() const {return fTrackingStatus;}
   inline void  SetTrackingStatus(G4int i) {fTrackingStatus = i;}
   inline G4int GetSourceTrackID() const {return fSourceTrackID;}
+  inline void  SetSuspendedStepID(G4int i) {fSuspendedStepID = i;}
+  inline G4int GetSuspendedStepID() const {return fSuspendedStepID;}
 
 private:
   // Information of the primary track at the primary vertex
@@ -75,7 +77,7 @@ private:
   //                      to calorimeter
   //                = 0 : track which or ancester of which has reached to 
   //                      calorimeter
-  //                = 2 : track or its ancester had once reached to calorimeter 
+  //                = 2 : track or its ancester had reached to calorimeter 
   //                      and then escaped from it
   // Information of the track which reached to the calorimeter boundary at the 
   // boundary surface. 
@@ -86,11 +88,11 @@ private:
   G4ThreeVector         fSourceMomentum;
   G4double              fSourceEnergy;
   G4double              fSourceTime;
-
+  G4int                 fSuspendedStepID;
 };
 
-extern G4ThreadLocal G4Allocator<RE01TrackInformation> * aTrackInformationAllocator;
-//extern  G4Allocator<RE01TrackInformation> aTrackInformationAllocator;
+extern G4ThreadLocal
+ G4Allocator<RE01TrackInformation> * aTrackInformationAllocator;
 
 inline void* RE01TrackInformation::operator new(size_t)
 {

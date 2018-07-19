@@ -71,6 +71,18 @@
 
 #include "G4StepLimiter.hh"
 
+// Constructors
+#include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4RadioactiveDecayPhysics.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
+#include "G4HadronPhysicsQGSP_BERT_HP.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronElasticPhysicsHP.hh"
+#include "G4IonElasticPhysics.hh"
+#include "G4IonBinaryCascadePhysics.hh"
+#include "G4DecayPhysics.hh"
+
 #include <set>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,26 +99,17 @@ TSPhysicsList* TSPhysicsList::Instance()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TSPhysicsList::TSPhysicsList()
-: fEmPhysics_opt4(new G4EmStandardPhysics_option4),
-  fDecayPhysics(new G4DecayPhysics),
-  fRadDecayPhysics(new G4RadioactiveDecayPhysics),
-  fHadronInelasticPhysics(new G4HadronPhysicsQGSP_BERT_HP),
-  fHadronElasticPhysics(new G4HadronElasticPhysicsHP),
-  fIonElasticPhysics(new G4IonElasticPhysics),
-  fIonBinaryCascadePhysics(new G4IonBinaryCascadePhysics),
-  fDefaultCutValue(1.*CLHEP::mm)
+: fDefaultCutValue(1.*CLHEP::mm)
 {
   fgInstance = this;
 
-  fConstructors.push_back(fEmPhysics_opt4);
-  fConstructors.push_back(fDecayPhysics);
-  fConstructors.push_back(fRadDecayPhysics);
-  fConstructors.push_back(fHadronInelasticPhysics);
-  fConstructors.push_back(fHadronElasticPhysics);
-  fConstructors.push_back(fIonElasticPhysics);
-  fConstructors.push_back(fIonBinaryCascadePhysics);
-
-
+  fConstructors.push_back(new G4EmStandardPhysics_option4);
+  fConstructors.push_back(new G4DecayPhysics);
+  fConstructors.push_back(new G4RadioactiveDecayPhysics);
+  fConstructors.push_back(new G4HadronPhysicsQGSP_BERT_HP);
+  fConstructors.push_back(new G4HadronElasticPhysicsHP);
+  fConstructors.push_back(new G4IonElasticPhysics);
+  fConstructors.push_back(new G4IonBinaryCascadePhysics);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

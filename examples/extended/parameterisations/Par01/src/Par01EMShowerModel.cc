@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par01/src/Par01EMShowerModel.cc
+/// \brief Implementation of the Par01EMShowerModel class
 //
-// $Id: Par01EMShowerModel.cc 90093 2015-05-13 11:59:54Z gcosmo $
+//
+// $Id: Par01EMShowerModel.cc 101151 2016-11-08 08:06:16Z gcosmo $
 //
 #include "Par01EMShowerModel.hh"
 #include "Par01EnergySpot.hh"
@@ -41,6 +44,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01EMShowerModel::Par01EMShowerModel(G4String modelName, G4Region* envelope)
 : G4VFastSimulationModel(modelName, envelope)
 {
@@ -52,6 +57,8 @@ Par01EMShowerModel::Par01EMShowerModel(G4String modelName, G4Region* envelope)
   fNaviSetup         = false;
   fCsI               = 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par01EMShowerModel::Par01EMShowerModel(G4String modelName)
 : G4VFastSimulationModel(modelName)
@@ -65,11 +72,15 @@ Par01EMShowerModel::Par01EMShowerModel(G4String modelName)
   fCsI               = 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01EMShowerModel::~Par01EMShowerModel()
 {
   delete fFakeStep;
   delete fpNavigator;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool Par01EMShowerModel::IsApplicable(const G4ParticleDefinition& particleType)
 {
@@ -79,11 +90,15 @@ G4bool Par01EMShowerModel::IsApplicable(const G4ParticleDefinition& particleType
     &particleType == G4Gamma::GammaDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4bool Par01EMShowerModel::ModelTrigger(const G4FastTrack& fastTrack)
 {
   // Applies the parameterisation above 100 MeV:
   return fastTrack.GetPrimaryTrack()->GetKineticEnergy() > 100*MeV;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01EMShowerModel::DoIt(const G4FastTrack& fastTrack, 
                      G4FastStep& fastStep)
@@ -100,6 +115,8 @@ void Par01EMShowerModel::DoIt(const G4FastTrack& fastTrack,
   BuildDetectorResponse();
   
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01EMShowerModel::Explode(const G4FastTrack& fastTrack)
 {
@@ -174,6 +191,7 @@ void Par01EMShowerModel::Explode(const G4FastTrack& fastTrack)
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01EMShowerModel::BuildDetectorResponse()
 {
@@ -181,7 +199,7 @@ void Par01EMShowerModel::BuildDetectorResponse()
   for (size_t i = 0; i < feSpotList.size(); i++)
     {
       // Draw the energy spot:
-      feSpotList[i].Draw();
+      //      feSpotList[i].Draw();
       //      feSpotList[i].Print();
       
       // "converts" the energy spot into the fake
@@ -190,6 +208,7 @@ void Par01EMShowerModel::BuildDetectorResponse()
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01EMShowerModel::AssignSpotAndCallHit(const Par01EnergySpot &eSpot)
 {
@@ -218,6 +237,7 @@ void Par01EMShowerModel::AssignSpotAndCallHit(const Par01EnergySpot &eSpot)
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01EMShowerModel::FillFakeStep(const Par01EnergySpot &eSpot)
 {

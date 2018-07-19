@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc 97616 2016-06-06 12:37:57Z gcosmo $
+// $Id: G4EmCalculator.cc 108306 2018-02-02 13:10:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -54,6 +54,8 @@
 //            10 keV to 1 keV (V. Ivanchenko)
 // 15.03.2007 Add ComputeEnergyCutFromRangeCut methods (V.Ivanchenko)
 // 21.04.2008 Updated computations for ions (V.Ivanchenko)
+// 02.02.2018 Fix the MCS (i.e. transport mean free path) case in
+//            GetCrossSectionPerVolume (M. Novak) 
 //
 // Class Description:
 //
@@ -107,6 +109,7 @@ G4EmCalculator::G4EmCalculator()
   currentLambda      = nullptr;
   currentModel       = nullptr;
   currentProcess     = nullptr;
+  curProcess         = nullptr;
   loweModel          = nullptr;
   chargeSquare       = 1.0;
   massRatio          = 1.0;
@@ -279,27 +282,42 @@ G4double G4EmCalculator::GetCrossSectionPerVolume(G4double kinEnergy,
   const G4MaterialCutsCouple* couple = FindCouple(mat,region);
 
   if(couple && UpdateParticle(p, kinEnergy)) {
-    G4int idx = couple->GetIndex();
-    FindLambdaTable(p, processName, kinEnergy);
+    if(FindEmModel(p, processName, kinEnergy)) {
+      G4int idx      = couple->GetIndex();
+      G4int procType = -1;
+      FindLambdaTable(p, processName, kinEnergy, procType);
 
-    if(currentLambda) {
-      G4double e = kinEnergy*massRatio;
-      res = (((*currentLambda)[idx])->Value(e))*chargeSquare;
-    } else {
-      res = ComputeCrossSectionPerVolume(kinEnergy, p, processName, mat, 
-                                         kinEnergy);
+      G4VEmProcess* emproc = FindDiscreteProcess(p, processName);
+      if(emproc) {
+	      res = emproc->CrossSectionPerVolume(kinEnergy, couple);
+      } else if(currentLambda) {
+        // special tables are built for Msc models (procType is set in FindLambdaTable
+        if(procType==2) {
+          G4VMscModel* mscM = static_cast<G4VMscModel*>(currentModel);
+          mscM->SetCurrentCouple(couple);
+          G4double tr1Mfp   = mscM->GetTransportMeanFreePath(p, kinEnergy);
+          if (tr1Mfp<DBL_MAX) {
+            res = 1./tr1Mfp;
+          }
+        } else {  
+          G4double e = kinEnergy*massRatio;
+          res = (((*currentLambda)[idx])->Value(e))*chargeSquare;
+        } 
+      } else {
+      	res = ComputeCrossSectionPerVolume(kinEnergy, p, processName, mat, kinEnergy);
+      }
+      if(verbose>0) {
+      	G4cout << "G4EmCalculator::GetXSPerVolume: E(MeV)= " << kinEnergy/MeV
+      	       << " cross(cm-1)= " << res*cm
+      	       << "  " <<  p->GetParticleName()
+      	       << " in " <<  mat->GetName();
+      	if(verbose>1) 
+      	  G4cout << "  idx= " << idx << "  Escaled((MeV)= " 
+      		 << kinEnergy*massRatio 
+      		 << "  q2= " << chargeSquare; 
+      	G4cout << G4endl;
+      } 
     }
-    if(verbose>0) {
-      G4cout << "G4EmCalculator::GetXSPerVolume: E(MeV)= " << kinEnergy/MeV
-             << " cross(cm-1)= " << res*cm
-             << "  " <<  p->GetParticleName()
-             << " in " <<  mat->GetName();
-      if(verbose>1) 
-        G4cout << "  idx= " << idx << "  Escaled((MeV)= " 
-               << kinEnergy*massRatio 
-               << "  q2= " << chargeSquare; 
-      G4cout << G4endl;
-    } 
   }
   return res;
 }
@@ -582,8 +600,15 @@ G4double G4EmCalculator::ComputeNuclearDEDX(G4double kinEnergy,
                                       const G4ParticleDefinition* p,
                                       const G4Material* mat)
 {
-
-  G4double res = corr->NuclearDEDX(p, mat, kinEnergy, false);
+  G4double res = 0.0;
+  G4VEmProcess* nucst = FindDiscreteProcess(p, "nuclearStopping");
+  if(nucst) {
+    G4VEmModel* mod = nucst->GetModelByIndex();
+    if(mod) {
+      mod->SetFluctuationFlag(false);
+      res = mod->ComputeDEDXPerVolume(mat, p, kinEnergy);
+    }
+  }  
 
   if(verbose > 1) {
     G4cout <<  p->GetParticleName() << " E(MeV)= " << kinEnergy/MeV
@@ -641,17 +666,18 @@ G4double G4EmCalculator::ComputeCrossSectionPerAtom(
 {
   G4double res = 0.0;
   if(UpdateParticle(p, kinEnergy)) {
-    CheckMaterial(G4lrint(Z));
+    G4int iz = G4lrint(Z);
+    CheckMaterial(iz);
     if(FindEmModel(p, processName, kinEnergy)) {
       G4double e = kinEnergy;
       G4double aCut = std::max(cut, theParameters->LowestElectronEnergy()); 
       if(baseParticle) {
         e *= kinEnergy*massRatio;
-        currentModel->InitialiseForElement(baseParticle, G4lrint(Z));
+        currentModel->InitialiseForElement(baseParticle, iz);
         res = currentModel->ComputeCrossSectionPerAtom(
               baseParticle, e, Z, A, aCut) * chargeSquare;
       } else {
-        currentModel->InitialiseForElement(p, G4lrint(Z));
+        currentModel->InitialiseForElement(p, iz);
         res = currentModel->ComputeCrossSectionPerAtom(p, e, Z, A, aCut);
       }
       if(verbose>0) {
@@ -896,7 +922,7 @@ const G4MaterialCutsCouple* G4EmCalculator::FindCouple(
                             const G4Material* material,
                             const G4Region* region)
 {
-  const G4MaterialCutsCouple* couple = 0;
+  const G4MaterialCutsCouple* couple = nullptr;
   SetupMaterial(material);
   if(currentMaterial) {
     // Access to materials
@@ -958,12 +984,12 @@ G4bool G4EmCalculator::UpdateCouple(const G4Material* material, G4double cut)
 
 void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
                                      const G4String& processName,
-                                     G4double kinEnergy)
+                                     G4double kinEnergy, G4int& proctype)
 {
   // Search for the process
   if (!currentLambda || p != lambdaParticle || processName != lambdaName) {
     lambdaName     = processName;
-    currentLambda  = 0;
+    currentLambda  = nullptr;
     lambdaParticle = p;
 
     const G4ParticleDefinition* part = p;
@@ -971,12 +997,13 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
 
     // Search for energy loss process
     currentName = processName;
-    currentModel = 0;
-    loweModel = 0;
+    currentModel = nullptr;
+    loweModel = nullptr;
 
     G4VEnergyLossProcess* elproc = FindEnLossProcess(part, processName);
     if(elproc) {
       currentLambda = elproc->LambdaTable();
+      proctype      = 0;
       if(currentLambda) {
         isApplicable = true;
         if(verbose>1) { 
@@ -984,6 +1011,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
                  << G4endl;
         }
       }
+      curProcess = elproc;
       return;
     }
 
@@ -991,12 +1019,14 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
     G4VEmProcess* proc = FindDiscreteProcess(part, processName);
     if(proc) {
       currentLambda = proc->LambdaTable();
+      proctype      = 1;
       if(currentLambda) {
         isApplicable = true;
         if(verbose>1) { 
           G4cout << "G4VEmProcess is found out: " << currentName << G4endl;
         }
       }
+      curProcess = proc;
       return;
     }
 
@@ -1004,6 +1034,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
     G4VMultipleScattering* msc = FindMscProcess(part, processName);
     if(msc) {
       currentModel = msc->SelectModel(kinEnergy,0);
+      proctype     = 2;
       if(currentModel) {
         currentLambda = currentModel->GetCrossSectionTable();
         if(currentLambda) {
@@ -1014,6 +1045,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
           }
         }
       }
+      curProcess = msc;
     }
   }
 }
@@ -1045,8 +1077,8 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
 
   // Search for energy loss process
   currentName = processName;
-  currentModel = 0;
-  loweModel = 0;
+  currentModel = nullptr;
+  loweModel = nullptr;
   size_t idx   = 0;
 
   G4VEnergyLossProcess* elproc = FindEnLossProcess(part, processName);
@@ -1075,7 +1107,7 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
       G4double eth = currentModel->LowEnergyLimit();
       if(eth > 0.0) {
         loweModel = proc->SelectModelForMaterial(eth - CLHEP::eV, idx);
-        if(loweModel == currentModel) { loweModel = 0; }
+        if(loweModel == currentModel) { loweModel = nullptr; }
         else { 
           loweModel->InitialiseForMaterial(part, currentMaterial);
           loweModel->SetupForMaterial(part, currentMaterial, eth - CLHEP::eV); 
@@ -1089,11 +1121,11 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
     G4VMultipleScattering* proc = FindMscProcess(part, processName);
     if(proc) {
       currentModel = proc->SelectModel(kinEnergy, idx);
-      loweModel = 0;
+      loweModel = nullptr;
     }
   }
   if(currentModel) {
-    if(loweModel == currentModel) { loweModel = 0; }
+    if(loweModel == currentModel) { loweModel = nullptr; }
     isApplicable = true;
     currentModel->InitialiseForMaterial(part, currentMaterial);
     if(loweModel) {
@@ -1121,7 +1153,7 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
 G4VEnergyLossProcess* G4EmCalculator::FindEnergyLossProcess(
                       const G4ParticleDefinition* p)
 {
-  G4VEnergyLossProcess* elp = 0;
+  G4VEnergyLossProcess* elp = nullptr;
   G4String partname =  p->GetParticleName();
   const G4ParticleDefinition* part = p;
   
@@ -1275,7 +1307,7 @@ void G4EmCalculator::CheckMaterial(G4int Z)
   if(currentMaterial) {
     size_t nn = currentMaterial->GetNumberOfElements();
     for(size_t i=0; i<nn; ++i) { 
-      if(Z == G4lrint(currentMaterial->GetElement(i)->GetZ())) {
+      if(Z == currentMaterial->GetElement(i)->GetZasInt()) {
         isFound = true;
         break;
       }

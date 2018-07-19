@@ -53,7 +53,10 @@ char *G4GIDI_Misc_Z_A_m_ToName( int iZ, int iA, int im ) {
     else {
         sprintf( S, "%s%d", Z, iA );
         if( im != 0 ) {
-            sprintf( mS, "_m%d", im );
+            //sprintf( mS, "_m%d", im );
+            //TK 170509
+            //Fix inconsistency of name of excited isomer  between data and code
+            sprintf( mS, "m%d", im );
             strcat( S, mS );
         }
     }

@@ -1,4 +1,4 @@
-$Id: History 102420 2017-01-26 10:41:33Z gcosmo $
+$Id: History 110480 2018-05-25 07:25:18Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,289 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-1st June 2016  Laurent Garnier (opengl-V10-01-15)
+24 May 2015  John Allison (opengl-V10-04-06)
+- G4OpenGLStoredQtSceneHandler.cc, G4OpenGLQtViewer.cc:
+  o Fix gcc-8 warnings.
+- G4OpenGLStoredSceneHandler.cc: Cosmetic.
+
+25 April 2015  John Allison (opengl-V10-04-05)
+- G4OpenGLStoredViewer::CompareForKernelVisit,
+  G4OpenGLStoredQtViewer::CompareForKernelVisit:
+  o Implement comparison for "colour by density".
+
+24 April 2017  John Allison  (opengl-V10-04-04)
+- Migrate to greps-V10-04-04.
+
+13 February 2018 Jonathan Madsen (opengl-V10-04-03)
+- Replaced explicit usage of G4Mutex locking/unlocking with
+  G4AutoLock pointers initialized with std::defer_lock as this
+  enables one to avoid any deadlock or non-locked condition_variable
+  waits by using G4AutoLock::owns_mutex()
+
+12 February 2018 Jonathan Madsen (opengl-V10-04-02)
+- Updated G4CONDITIONWAIT(...) to new C++11 requirements
+- Found probable bug in G4OpenGLQtViewer with condition wait -- not locked
+  prior to entering condition, which is an undefined behavior. Adapted
+  G4AutoLock to accept std::defer_lock_t (doesn't lock upon construction)
+  to prevent deadlock that occurs when the mutex is locked
+
+8th January 2017  John Allison  (opengl-V10-04-01)
+- Merged timemovebranch:
+  o Moved time window parameters from G4OpenGLStoredViewer to
+    G4ViewParameters. Now one can interpolate time window parameters (using
+    /vis/viewer/interpolate) and make a movie of particles moving through time.
+  o See vis-V10-04-00 History for more details.
+
+14th December 2017  John Allison  (opengl-V10-04-00)
+- G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal:
+  o Remove glDrawBuffer(GL_FRONT), which seems to cause problems
+    for the case of display list memory being exceeded.
+
+7th November 2017  John Allison  (opengl-V10-03-04)
+- G4OpenGLViewer.cc, G4OpenGLQtViewer.cc:
+  o Refine content of output of picking.
+
+1st September 2017  Laurent Garnier (opengl-V10-03-03)
+- Add patch affecting repaint for external applications. See bugzilla #1959.
+
+23rd May 2017  John Allison (opengl-V10-03-02)
+- Hopefully fix gcc-7.1 warnings.
+
+16th May 2017  Laurent Garnier
+- Fix DEV-262 bug. Picking was not working for retina display due to a screen factor *2
+
+23rd April 2017  John Allison
+- G4OpenGLXViewer.cc: Reverted to XA_RGB_BEST_MAP.
+- G4OpenGLViewer.cc:
+  o Minor improvement to picking (suppressing "no hits" message).
+  o Minor code clean-uo.
+
+18th January 2017  Laurent Garnier
+- Merge John's picking branch
+ o G4OpenGLViewer, G4OpenGLQtViewer, G4OpenGLSceneHandler, G4OpenGLStoredQtViewer, G4OpenGLViewer
+
+G4OpenGLQtViewer.cc: Change labels of picking points in pick info box
+
+17th January 2017  Laurent Garnier
+- G4OpenGLQtViewer.cc: Change labels of picking points in pick info box
+
+12th January 2017  John Allison (opengl-V10-03-01)
+- G4OpenGLImmediate/StoredQtViewer::ShowView: Tidied.
+- G4OpenGLSceneHandler::ScaledFlush: Tidied.
+
+6th January 2017  John Allison (opengl-V10-03-00)
+- G4OpenGLSceneHandler.cc: Fixed bug in ScaledFlush.
+
+21th November 2016  Laurent Garnier (opengl-V10-02-26)
+- Go back on the glCheckFramebufferStatus(): comment out this command
+
+21th November 2016  Laurent Garnier (opengl-V10-02-25)
+- Fix the glCheckFramebufferStatus() :
+  o G4OpenGLViewer : Check only if Qt driver AND (NOT X + NOT XM + NOT WIN32)
+  o G4OpenGLStoredQtViewer,G4OpenGLImmediateQtViewer :
+    Remove unnecessary "#if GL_EXT_framebuffer_object"
+- G4OpenGL.hh: Avoid the case where an XM and Qt OpenGL viewer came with both OpenGL from
+  XM and Qt
+  
+20th November 2016  John Allison (opengl-V10-02-24)
+- G4OpenGLStoredViewer.cc: Removed check on previous colour in
+  DrawDisplayLists that was intended to avoid unnecessary calls
+  to glColor but which in some circumstances prevented necessary
+  calls.  Now glColor is called for all display lists, which is
+  probably less demanding than checking in the first place.  Fixes
+  the same problem as tag opengl-V10-02-22.
+
+19th November 2016  Laurent Garnier (opengl-V10-02-23)
+- G4OpenGLViewer.cc:  add isFramebufferReady() method
+- G4OpenGLStoredViewer.cc/G4OpenGLViewer.hh/G4OpenGLImmediateQtViewer.cc/G4OpenGLStoredQtViewer.cc:
+  o Fix the gray/white/black screen when launching a new viewer.
+  o Fix DEV-176 and perhaps a few others
+
+19th November 2016  Laurent Garnier (opengl-V10-02-22)
+- G4OpenGLStoredViewer.cc :  Fis a color problem on transparent volumes (DEV-261)
+
+17th November 2016  Laurent Garnier (opengl-V10-02-21)
+- G4OpenGL.hh: Avoid the case where an X and Qt OpenGL viewer came with both OpenGL from
+  X and Qt
+
+4th November 2016  Laurent Garnier
+- G4OpenGLQtViewer:
+  o memory leak issue FIXED (very rare case)
+- G4OpenGLViewerMessenger:
+  o Fix a "variable never used" issue
+
+4th November 2016  Laurent Garnier (opengl-V10-02-20 co-works with interfaces-V10-02-09)
+- G4OpenGLQtViewer/G4OpenGLImmediateQtViewer/G4OpenGLStoredQtViewer:
+ o Add a Qt signal/slot connection between the UI and QGLViewer. Allow us to better manage interaction between them
+ o Remove (multiple) scene tree from a tab to put it in a single, auto-update widget
+ o Remove (multiple) viewer properties from a tab to put it in a outside dialog
+ o Remove (multiple) pick infos from a tab to put it in a outside dialog
+ o Lot of remaning in order to do previous work
+ o Fix a bad signal/slot connection for the filter of the scene tree (perhaps a bug in some cases)
+
+23rd September 2016  John Allison (opengl-V10-02-19)
+- G4OpenGLSceneHandler::ScaledFlush: Tidied.
+
+21st September 2016  Gabriele Cosmo (opengl-V10-02-18)
+- Fixed GNUMakefile for missing include dependencies...
+
+21st September 2016  John Allison (opengl-V10-02-17)
+- Fix warnings on Windows.
+
+21st September 2016  John Allison (opengl-V10-02-16)
+- Introduced /vis/ogl/flushAt.
+
+19th September 2016  John Allison (opengl-V10-02-15)
+- Needs modeling-V10-02-13 and visman-V10-02-27
+- Adapted to the move of Vis Attributes Modifiers back to G4ModelingParameters.
+- G4OpenGLQtViewer:
+  o Added 
+  // Flag to indicate that action was initiated by interaction (mouse
+  // click) on the scene tree.  It is used and reset in
+  // G4OpenGLStoredQtViewer::CompareForKernelVisit to prevent rebuild
+  // in this case.
+  bool fMouseOnSceneTree;
+- G4OpenGLStoredQtViewer::CompareForKernelVisit:
+  o Added this to handle scene tree interaction better:
+  // Don't check VisAttributesModifiers if this comparison has been
+  // initiated by a mouse interaction on the scene tree.
+  if (fMouseOnSceneTree) {
+    // Reset the flag.
+    fMouseOnSceneTree = false;
+  } else {
+    // Not initiated by a mouse so compare for kernel visit.
+    if (lastVP.GetVisAttributesModifiers() !=
+           fVP.GetVisAttributesModifiers()) {
+      return true;
+    }
+  }
+
+15th September 2016  John Allison (opengl-V10-02-14)
+- G4OpenGLStoredQtViewer:
+  o Re-instated G4OpenGLStoredQtViewer::CompareForKernelVisit:
+    Now ignores changes in Vis Attributes modifiers (as before).
+- G4OpenGLQtViewer:
+  o Uses G4VViewer::TouchableSetVisibility and TouchableSetColour.
+
+12th September 2016  John Allison (opengl-V10-02-13)
+- G4OpenGLQtViewer.cc: Added calls to SetTouchable.
+
+11th September 2016  John Allison (opengl-V10-02-12)
+- GetColour/GetColor no longer takes an argument.
+- Make sure applicable vis attributes are obtained.
+  // Get and check applicable vis attributes.
+  //   fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
+  // Note: the vis attributes may have been modified by the viewer.  See
+  // code in G4VViewer::GetApplicableVisAttributes.
+
+9th September 2016  John Allison (opengl-V10-02-11)
+- Needs modeling-V10-02-11 and visman-V10-02-22.
+- Moved Vis Attributes Modifiers (VAMs) from G4ModelingParameters
+  to G4ViewParameters.
+
+8th September 2016  John Allison
+- G4OpenGLStoredQtViewer:
+  o G4OpenGLStoredQtViewer::CompareForKernelVisit:
+    . Now simply invokes G4OpenGLStoredViewer::CompareForKernelVisit.
+  o Fix bug:
+    if (kernelVisitWasNeeded) {  // was fNeedKernelVisit
+      displaySceneTreeComponent();
+    }
+
+7th September 2016  John Allison
+- Fixed visibility check.  Now correctly updates VAMs (Vis Attribute
+  Modifiers) when user clicks on visibility buttons.
+- G4OpenGLQtViewer.cc:
+  o G4OpenGLQtViewer::setCheckComponent sets the VAMs.
+  o G4OpenGLQtViewer::sceneTreeComponentSelected becomes empty.
+
+31st August 2016  John Allison (opengl-V10-02-10)
+- Fix G4Orb and G4Ellipsoid hiding warnings.
+
+14th August 2016  John Allison (opengl-V10-02-09)
+- G4OpenGLSceneHandler.cc and G4OpenGLViewer.cc:
+  o Improved comments.
+
+16th June 2016  John Allison  (opengl-V10-02-08)
+- G4OpenGLViewer.cc: g4GluLookAt and g4GluPickMatrix:
+  o Changed GLfloat to GLdouble.  Fixes a problem with projections
+    of scenes with very large, e.g., galactic, size.
+
+14th June 2016  John Allison  (opengl-V10-02-07)
+- G4OpenGLXmWindowHandlingCallbacks.cc: Commented out some code in
+  void G4OpenGLXmViewer::expose_callback (Widget w, 
+                                          XtPointer clientData, 
+                                          XtPointer) 
+{ ...
+//??????????????????????????? This might be a problem in MT mode.
+//  glXMakeCurrent (pView->dpy, XtWindow(pView->glxarea), pView->cxMaster);
+//  pView->SetView ();
+//  pView->ClearView ();
+//  pView->DrawView ();
+//???????????????????????????? Commented out 14/06/16  JA
+}
+  This was causing SetView to be called from the Xt loop from the vis
+  thread in MT mode.  It didn't like that.  It does seem to be required,
+  but keep it there, commented, for now.
+
+7th June 2016  Laurent Garnier
+- G4OpenGLQtViewer: Better quality movie generation (change parameters)
+
+1st June 2016  Laurent Garnier
 - G4OpenGLWin32Viewer :Fixed compilation warnings on Win32 about LONG_PTR
+
+1st June 2016  John Allison  (opengl-V10-02-06)
+- G4OpenGLXViewer.cc: Fixed bug in GetPickDetails (wrong placement
+  of std::ostringstream oss;).
+
+30th May 2016  John Allison  (opengl-V10-02-05)
+- G4OpenGLXViewer.cc:
+  o G4OpenGLXViewer::SetView: Added thread awareness regarding
+    glXMakeCurrent.  NOTE: This will have to be done for Win32
+    for multithreading on Windows.
+- Tidying of outdated comments.
+
+2nd May 2016  John Allison  (opengl-V10-02-04)
+- G4OpenGLXmViewer.cc: Added glXWaitGL (); glFlush (); to ShowView
+  to ensure all items get flushed to screen, even when
+  eventsDrawInterval is set >1.
+- G4OpenGLSceneHandler.hh: Made Get/SetEventsDrawInterval static
+  to match static members changed in opengl-V10-02-03.
+
+23rd April 2016  John Allison  (opengl-V10-02-03)
+- /vis/ogl/set/eventsDrawInterval and /vis/ogl/set/displayListLimit:
+  Fixed some inconsistencies.
+  o G4OpenGLViewerMessenger.cc: eventsDrawInterval now applies also
+    to immediate mode.
+  o G4OpenGLSceneHandler.hh/cc: Made fEventsDrawInterval and
+    fEventsWaitingToBeFlushed static so that they apply to all
+    OGL scene handlers.
+  o G4OpenGLImmediateSceneHandler.cc: Fixed bug in EndPrimitives2D -
+    now calls ScaledFlush.
+  o G4OpenGLStoredSceneHandler.cc: Simply moved static variable
+    implementations to near top of file.
+
+10th February 2016 Andrea Dotti (opengl-V10-02-00)
+- Fix typo for macro G4CONDITIONBROADCAST (requires global-V10-02-03)
+
+27th January 2016  John Allison
+- CompareForKernelVisit:
+  Tested for total vis attributes modifiers instead of just for size.
+
+26th January 2016  John Allison
+- G4OpenGLViewer::getRealPrintFilename:
+  o fExportFilename contains filled characters:
+    << setw(4) << setfill('0') << fExportFilenameIndex
+    so that files can easily be referenced in alphanumeric order.
+
+14th January 2016  John Allison
+- Fix for notifying multiple OGL X views:
+  o Added glXMakeCurrent(dpy,win,cxMaster) to G4OpenGLXViewer::SetView.
+
+11th December 2015  Laurent Garnier
+- G4OpenGLQtViewer: Add the "F" key to test flytrough    
+- G4OpenGLViewer: Fix a problem in picking, does not clean correctly
+    an outupt stream buffer  
 
 5th November 2015  Laurent Garnier (opengl-V10-01-13)
 - G4OpenGLViewer: Fix warning with VC14

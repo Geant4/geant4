@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
-// 
+//
 // If you use this example, please cite the following publication:
 // Rad. Prot. Dos. 133 (2009) 2-11
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
   #include "G4MTRunManager.hh"
@@ -59,9 +61,9 @@ int main(int argc,char** argv) {
   }
 
   // Choose the Random engine
-  
+
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
-  
+
   // Construct the default run manager
 
 #ifdef G4MULTITHREADED
@@ -72,18 +74,18 @@ int main(int argc,char** argv) {
 #endif
 
   // Set mandatory user initialization classes
-  
+
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  
+
   runManager->SetUserInitialization(new PhysicsList);
-    
+
   // User action initialization
-  
+
   runManager->SetUserInitialization(new ActionInitialization(detector));
-  
+
   // Initialize G4 kernel
-  
+
   runManager->Initialize();
 
 #ifdef G4VIS_USE
@@ -91,25 +93,25 @@ int main(int argc,char** argv) {
   visManager->Initialize();
 #endif
 
-  // Get the pointer to the User Interface manager 
-  
-  // Get the pointer to the User Interface manager 
+  // Get the pointer to the User Interface manager
+
+  // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  
+
   // Process macro or start UI session
   //
-  if ( ! ui ) { 
+  if ( ! ui ) {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
   }
-  else { 
+  else {
     // interactive mode
     UImanager->ApplyCommand("/control/execute vis.mac");
     ui->SessionStart();
     delete ui;
-  }  
+  }
 
 #ifdef G4VIS_USE
   delete visManager;
@@ -117,6 +119,6 @@ int main(int argc,char** argv) {
   delete runManager;
 
   return 0;
-  
+
 }
 

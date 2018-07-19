@@ -82,8 +82,8 @@ void G4MicroElecInelastic::InitialiseProcess(const G4ParticleDefinition* p)
     SetBuildTableFlag(false);
     G4String name = p->GetParticleName();
 
-    if(!EmModel(1)) SetEmModel(new G4DummyModel(), 1);
-    AddEmModel(2, EmModel(1));   
+    if(!EmModel()) SetEmModel(new G4DummyModel());
+    AddEmModel(2, EmModel());   
   } 
 }
 

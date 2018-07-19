@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B3PhysicsList.cc 66536 2012-12-19 14:32:36Z ihrivnac $
+// $Id: B3PhysicsList.cc 102186 2017-01-09 13:35:29Z gcosmo $
 //
 /// \file B3PhysicsList.cc
 /// \brief Implementation of the B3PhysicsList class
@@ -31,8 +31,8 @@
 #include "B3PhysicsList.hh"
 
 #include "G4DecayPhysics.hh"
-#include "G4RadioactiveDecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
+#include "G4RadioactiveDecayPhysics.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -43,11 +43,11 @@ B3PhysicsList::B3PhysicsList()
   // Default physics
   RegisterPhysics(new G4DecayPhysics());
 
-  // Radioactive decay
-  RegisterPhysics(new G4RadioactiveDecayPhysics());
-
   // EM physics
   RegisterPhysics(new G4EmStandardPhysics());
+
+  // Radioactive decay
+  RegisterPhysics(new G4RadioactiveDecayPhysics());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

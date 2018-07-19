@@ -1,4 +1,4 @@
-$Id: History 102321 2017-01-23 09:51:59Z gcosmo $
+$Id: History 108673 2018-02-27 07:30:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,24 +7,107 @@ $Id: History 102321 2017-01-23 09:51:59Z gcosmo $
 
                   Hadronic physics-list/lists History
                   -----------------------------
-This file should be used  to briefly summarize all major modifications 
+This file should be used  to briefly summarize all major modifications
 introduced in the code and keeptrack of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12-October-2016 G.Folger
+26-Februrary-2018 R. Hatcher (phys-list-V10-04-00)
+- cowork with phys-ctor-fact-V10-04-00
+- Use new G4RegisterPhysicsConstructors.icc to ensure that for static builds
+  G4PhysicsConstructorRegistry is populated.
+- No longer register ShieldingLEND as a wrapper, but use explicit one
+
+07-November-2017 T. Koi (phys-list-V10-03-08)
+- Add ShieldingLEND as a new physics list
+  co-working with phys-ctor-hinelastic-V10-03-06
+
+07-November-2017 V.Ivanchenko  (phys-lists-V10-03-07)
+- G4PhysListFactory - added messenger with two commands to enable
+    radioactive decay or optical physics
+
+02-November-2017 R. Hatcher (phys-list-V10-03-06)
+- Add FTFQGSP_BERT to G4RegisterPhysLists.icc to make available to the
+  new g4alt::G4PhysListFactory
+
+16-October-2017 A.Ribon  (phys-lists-V10-03-05)
+- FTFQGSP_BERT - created a new, experimental physics list which is similar
+    to FTFP_BERT, but with QGS fragmentation of strings (instead of the
+    Lund string fragmentation).
+
+09-October-2017 V.Ivanchenko  (phys-lists-V10-03-04)
+- LBE.icc - fixed initialisation of G4RadioactiveDecay
+
+14-July-2017 Robert Hatcher               (phys-lists-V10-03-03)
+- Add __SS option to g4alt::G4PhysListFactory
+- allow g4alt factory to use bare phys constructor names as things to
+    replace/add as well as the shorter predefined extensions (e.g. "EMX")
+- whitespace cleanup
+
+19-April-2017 V.Ivanchenko  (phys-lists-V10-03-02)
+- G4PhysListFactory - fixed  EM option "__SS" - problem report #1966
+
+21-March-2017 Koi, Tatsumi (phys-lists-V10-03-01)
+- Fix problem of LBE physics list on radioactive decay model
+
+07-February-2017 V.Ivanchenko  (phys-lists-V10-03-00)
+- G4PhysListFactory - add single scattering EM option (required by
+    several user groups), one need to add "__SS" to the reference
+    physics list name
+
+12-October-2016 G.Folger  (phys-lists-V10-02-10)
 - remove direct use of theParticleIterator, get this from G4ParticleTable.
     fix required by clang39 on Windows and MAC
 
-26-May-2016, Alberto Ribon                (phys-lists-V10-01-15)
+29-Sep-2016, Robert Hatcher               (phys-lists-V10-02-09)
+- Reviewed changes in current context, propose w/ minimal changes
+
+03-Jun-2016, Robert Hatcher               (phys-lists-V10-02-08)
+- Require use of declaring and referencing macros to have
+  a trailing semicolon; for case where macro expands to a
+  namespace block, deal with eating up the ";"
+
+26-May-2016, Robert Hatcher               (phys-lists-V10-02-07)
+- Fix issue where G4PhysListRegistry didn't properly exit if
+  a requested extension didn't exist in its list.
+- Add G4_REFERENCE_PHYSLIST_FACTORY[_NS] for pulling in lists
+  from static libraries.
+
+26-May-2016, Alberto Ribon                (phys-lists-V10-02-06)
 - QGSP_BIC_AllHP : use new, specialized ion constructor, G4IonPhysicsPHP.
 
-06-Apr-2016, Alberto Ribon                (phys-lists-V10-01-14)
+10-May-2016, Robert Hatcher               (phys-lists-V10-02-05)
+- mv src/G4RegisterPhysLists.cc to include/G4RegisterPhysLists.icc
+  so that it gets compiled as part of the G4PhysListRegistry compilation
+  unit.  This ensures that all the physics lists declared to the
+  registry are referenced by it such that the linker will include
+  them if libraries are built statically, even when the loader
+  doesn't force whole-archive (not possible for MS Visual Studio) loading.
+- Fix exception label so it is unique.
+
+06-Apr-2016, Alberto Ribon                (phys-lists-V10-02-04)
 - FTFP_BERT_ATL : created new, experimental physics list for ATLAS,
   similar to FTFP_BERT but with the transition between BERT and FTFP
   in the energy region [9, 12] GeV.
+
+09-Mar-2016, Alberto Ribon                (phys-lists-V10-02-03)
+- FTFP_BERT_TRV : Use GS multiple scattering with the most precise
+  "error-free" stepping. This is done for the purpose of studying
+  the impact of multiple scattering on hadronic showers.
+
+23-Feb-2016, Alberto Ribon                (phys-lists-V10-02-02)
+- FTFP_BERT_TRV : Use GS multiple scattering with the more precise option,
+  (Opt3), instead of the default (Opt0). This is done for the purpose of
+  studying the impact of multiple scattering on hadronic showers.
+
+14-Jan-2016, Alberto Ribon                (phys-lists-V10-02-01)
+- Re-submitting the previous tag (that was rejected).
+
+04-Dec-2015, Alberto Ribon                (phys-lists-V10-02-00)
+- FTFP_BERT_TRV : Switch on (again) the low-mass diffraction dissociation
+  used in G4HadronHElasticPhysics
 
 05-Nov-2015, Alberto Ribon                (phys-lists-V10-01-13)
 - Removed neutron_hp/ .
@@ -51,8 +134,8 @@ introduced in the code and keeptrack of all tags.
   the low-mass diffraction dissociation used in G4HadronHElasticPhysics
 
 18-Sep-2015, V.Ivanchenko               (phys-lists-V10-01-07)
-- G4PhysListFactory - added extra EM option "_GS" where 
-    G4GoudsmithSoundersonMscModel is used for e+-  
+- G4PhysListFactory - added extra EM option "_GS" where
+    G4GoudsmithSoundersonMscModel is used for e+-
 
 10-Jun-2015, V.Ivanchenko               (phys-lists-V10-01-06)
 - FTFP_BERT_TRV - uses G4EmStandardPhysicsGS
@@ -61,7 +144,7 @@ introduced in the code and keeptrack of all tags.
 22-May-2015, Robert Hatcher             (phys-lists-V10-01-05)
 - g4alt::G4PhysListFactory should now work with G4GenericPhysicsList
   on clang (3.4 and 3.5) and vc12
-- cowork with tags "intercoms-V10-01-02", "emdna-V10-01-19", 
+- cowork with tags "intercoms-V10-01-02", "emdna-V10-01-19",
   "emstand-V10-01-16", "hadr-cohe-V10-01-07", and "hadr-inclxx-V10-01-00"
 
 22-May-2015, Robert Hatcher             (phys-lists-V10-01-04)
@@ -121,8 +204,8 @@ introduced in the code and keeptrack of all tags.
 - Increased cuts in LBE physics list to 1 micrometer (from 1 nanometer).
 
 15-Oct-2014, Alex Howard           (phys-lists-V10-00-07)
-- Bugfix 1591 for LBE 
-- removed Bertini Cascade from alphas, deuterons and tritons and replaced with 
+- Bugfix 1591 for LBE
+- removed Bertini Cascade from alphas, deuterons and tritons and replaced with
   BinaryLightIonReaction
 - Replaced G4MuonMinusCaptureAtRest with G4MuonMinusCapture
 
@@ -130,7 +213,7 @@ introduced in the code and keeptrack of all tags.
 - Extended Shielding code to also include ShieldingM variant
 
 10-Jun-2014, V.Ivanchenko               (phys-lists-V10-00-05)
-- INCLXXPhysicsListHelper - for the case of HP set cut on proton to 
+- INCLXXPhysicsListHelper - for the case of HP set cut on proton to
   zero to simulate all recoils from elastic scattering
 
 06-Jun-2014, Alberto Ribon              (phys-lists-V10-00-04)
@@ -138,7 +221,7 @@ introduced in the code and keeptrack of all tags.
   made yesterday by Krzysztof and Vladimir I.
 
 05-Jun-2014, V.Ivanchenko
-- FTFP_BERT_HP, QGSP_BIC_HP, QGSP_BERT_HP - set cut on proton to 
+- FTFP_BERT_HP, QGSP_BIC_HP, QGSP_BERT_HP - set cut on proton to
   zero to simulate all recoils from elastic scattering
 
 05-Jun-2014, Krzysztof Genser
@@ -152,11 +235,11 @@ introduced in the code and keeptrack of all tags.
 - Include new (experimental) physics lists ShieldingM and NuBeam
 
 03-Feb-2014, Luciano Pandola            (phys-lists-V10-00-01)
-- Registered model in LBE.icc to handle neutron capture above 20 MeV 
- (Bug Report 1562) 
+- Registered model in LBE.icc to handle neutron capture above 20 MeV
+ (Bug Report 1562)
 
 29-Jan-2014, Gunter Folger              (phys-lists-V10-00-00)
-- Removed electromagnetic/dna, cascade/{evaporation,utils}, and 
+- Removed electromagnetic/dna, cascade/{evaporation,utils}, and
    isotope_productionfrom sources.cmake
 
 07-Nov-2013, Tatsumi Koi                (phys-lists-V09-06-20)
@@ -180,7 +263,7 @@ introduced in the code and keeptrack of all tags.
 
 06-Sep-2013, Luciano Pandola            (phys-lists-V09-06-14)
 - LBE.icc, add missing #include of G4HadronCaptureProcess
-(gave compilation error to user application using LBE) 
+(gave compilation error to user application using LBE)
 
 21-Aug-2013, Vladimir Ivantchenko       (phys-lists-V09-06-13)
 - LBE - removed forgotten header
@@ -193,7 +276,7 @@ introduced in the code and keeptrack of all tags.
 
 27-Mar-2013, Andrea Dotti		(phys-lists-V09-06-10)
 - Adding mechanism for splitting class of base class G4VUserPhysicsList
-  for LBE physics list (needed for G4MT). 
+  for LBE physics list (needed for G4MT).
   Co-working with tag in run category
 
 28-Mar-2013, Alberto Ribon              (phys-lists-V09-06-09)
@@ -226,6 +309,6 @@ introduced in the code and keeptrack of all tags.
 - move G4PhysListFactory from constructor/factory to lists.
 
 10-Jan-2013, Gunter Folger              (phys-lists-V09-06-00)
-- new directory structure introduced. 
-   lists directory only keeps physics lists, hadronic constructors moved to 
+- new directory structure introduced.
+   lists directory only keeps physics lists, hadronic constructors moved to
    constructors/hadron_inelastic

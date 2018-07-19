@@ -50,14 +50,15 @@ Run::Run(DetectorConstruction* detector)
 : G4Run(),
   fDetector(detector),
   fParticle(0), fEkin(0.),  
-  fEdeposit(0.),  fEdeposit2(0.),
   fTrackLen(0.),  fTrackLen2(0.),
   fProjRange(0.), fProjRange2(0.),
   fNbOfSteps(0), fNbOfSteps2(0),
   fStepSize(0.),  fStepSize2(0.)
 {
-  for (G4int i=0; i<3; ++i) fStatus[i] = 0;
-  for (G4int i=0; i<MaxAbsor; ++i) {
+  for (G4int i=0; i<3; ++i) { fStatus[i] = 0; fTotEdep[i] = 0.; }
+  fTotEdep[1] = joule;
+  for (G4int i=0; i<kMaxAbsor; ++i) {
+    fEdeposit[i] = 0.; fEmin[i] = joule; fEmax[i] = 0.;
     fCsdaRange[i] = 0.; fXfrontNorm[i] = 0.;
   }  
 }
@@ -77,12 +78,25 @@ void Run::SetPrimary (G4ParticleDefinition* particle, G4double energy)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::AddEdep (G4double e)        
+void Run::AddEdep (G4int i, G4double e)        
 {
-  fEdeposit  += e;
-  fEdeposit2 += e*e;
+  if (e > 0.) {
+    fEdeposit[i]  += e;
+    if (e < fEmin[i]) fEmin[i] = e;
+    if (e > fEmax[i]) fEmax[i] = e;
+  }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::AddTotEdep (G4double e)        
+{
+  if (e > 0.) {
+    fTotEdep[0]  += e;
+    if (e < fTotEdep[1]) fTotEdep[1] = e;
+    if (e > fTotEdep[2]) fTotEdep[2] = e;
+  }
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
     
 void Run::AddTrackLength (G4double t) 
@@ -155,8 +169,6 @@ void Run::Merge(const G4Run* run)
   fEkin     = localRun->fEkin;
 
   // accumulate sums
-  fEdeposit   += localRun->fEdeposit;
-  fEdeposit2  += localRun->fEdeposit2;
   fTrackLen   += localRun->fTrackLen;  
   fTrackLen2  += localRun->fTrackLen2;
   fProjRange  += localRun->fProjRange; 
@@ -168,11 +180,24 @@ void Run::Merge(const G4Run* run)
   
   G4int nbOfAbsor = fDetector->GetNbOfAbsor();
   for (G4int i=1; i<=nbOfAbsor; ++i) {
+    fEdeposit[i]  += localRun->fEdeposit[i];
     fCsdaRange[i]  = localRun->fCsdaRange[i]; 
     fXfrontNorm[i] = localRun->fXfrontNorm[i];
+    // min, max
+    G4double min,max;
+    min = localRun->fEmin[i]; max = localRun->fEmax[i];
+    if (fEmin[i] > min) fEmin[i] = min;
+    if (fEmax[i] < max) fEmax[i] = max;
   } 
    
   for (G4int i=0; i<3; ++i)  fStatus[i] += localRun->fStatus[i];
+  
+  // total Edep
+  fTotEdep[0] += localRun->fTotEdep[0];
+  G4double min,max;
+  min = localRun->fTotEdep[1]; max = localRun->fTotEdep[2];
+if (fTotEdep[1] > min) fTotEdep[1] = min;
+if (fTotEdep[2] < max) fTotEdep[2] = max;
 
   G4Run::Merge(run); 
 } 
@@ -190,7 +215,7 @@ void Run::EndOfRun()
   G4String partName = fParticle->GetParticleName();
   G4int nbOfAbsor   = fDetector->GetNbOfAbsor();
   
-  G4cout << "\n ======================== run summary =====================\n";  
+  G4cout << "\n ======================== run summary =====================\n";
   G4cout 
     << "\n The run is " << numberOfEvent << " "<< partName << " of "
     << G4BestUnit(fEkin,"Energy") 
@@ -198,28 +223,43 @@ void Run::EndOfRun()
   for (G4int i=1; i<= nbOfAbsor; i++) {
      G4Material* material = fDetector->GetAbsorMaterial(i);
      G4double thickness = fDetector->GetAbsorThickness(i);
-     G4double density = material->GetDensity();    
-     G4cout << std::setw(20) << G4BestUnit(thickness,"Length") << " of "
+     G4double density = material->GetDensity();
+     G4cout << std::setw(5) << i
+            << std::setw(10) << G4BestUnit(thickness,"Length") << " of "
             << material->GetName() << " (density: " 
             << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
-    }         
+  }         
 
   if (numberOfEvent == 0) {
     G4cout.setf(mode,std::ios::floatfield);
     G4cout.precision(prec);  
     return;
   }
-      
-  fEdeposit /= numberOfEvent; fEdeposit2 /= numberOfEvent;
-  G4double rms = fEdeposit2 - fEdeposit*fEdeposit;        
-  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
+  
+  G4cout.precision(3);
+  G4double rms (0);
+  
+  for (G4int i=1; i<= nbOfAbsor; i++) {
+     fEdeposit[i] /= numberOfEvent;
 
-  G4cout.precision(3);       
-  G4cout 
-    << "\n Total Energy deposited        = " << G4BestUnit(fEdeposit,"Energy")
-    << " +- "                                << G4BestUnit( rms,"Energy")
-    << G4endl;
-              
+     G4cout 
+       << "\n Edep in absorber " << i << " = " 
+       << G4BestUnit(fEdeposit[i],"Energy")
+       << "\t(" << G4BestUnit(fEmin[i], "Energy")
+       << "-->" << G4BestUnit(fEmax[i], "Energy")
+       << ")";
+  }
+  G4cout << G4endl;
+
+  if (nbOfAbsor > 1) {
+    fTotEdep[0] /= numberOfEvent;
+    G4cout 
+      << "\n Edep in all absorbers = " << G4BestUnit(fTotEdep[0],"Energy")
+      << "\t(" << G4BestUnit(fTotEdep[1], "Energy")
+      << "-->" << G4BestUnit(fTotEdep[2], "Energy")
+      << ")" << G4endl;
+  }
+  
   //compute track length of primary track
   //
   fTrackLen /= numberOfEvent; fTrackLen2 /= numberOfEvent;

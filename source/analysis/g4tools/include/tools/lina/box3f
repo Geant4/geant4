@@ -27,6 +27,9 @@ public:
     m_min.set_value( num_max(),  num_max(),  num_max());
     m_max.set_value(-num_max(), -num_max(), -num_max());
   }
+  bool get_cube_size(float& a_dx,float& a_dy,float& a_dz) const {
+    return parent::get_cube_size(a_dx,a_dy,a_dz,::sqrtf);
+  }
 };
 
 }

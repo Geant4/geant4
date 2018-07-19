@@ -114,16 +114,25 @@ tools::histo::p1d* CreateToolsP1(const G4String& title,
         << "    Linear binning will be applied with given (nbins, xmin, xmax) values";
       G4Exception("G4P1ToolsManager::CreateP1",
                 "Analysis_W013", JustWarning, description);
-    }              
-    return new tools::histo::p1d(title, 
+    } 
+    if ( ymin == 0. && ymax == 0.) {            
+      return new tools::histo::p1d(title, 
+                                 nbins, xfcn(xmin/xunit), xfcn(xmax/xunit));
+    } else { 
+      return new tools::histo::p1d(title, 
                                  nbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
                                  yfcn(ymin/yunit), yfcn(ymax/yunit));
+    }
   }
   else {
     // Compute edges
     std::vector<G4double> edges;
     ComputeEdges(nbins, xmin, xmax, xunit, xfcn, xbinScheme, edges);
-    return new tools::histo::p1d(title, edges, yfcn(ymin/yunit), yfcn(ymax/yunit)); 
+    if ( ymin == 0. && ymax == 0.) {            
+      return new tools::histo::p1d(title, edges);
+    } else {
+      return new tools::histo::p1d(title, edges, yfcn(ymin/yunit), yfcn(ymax/yunit)); 
+    }
   }
 }     
 
@@ -174,15 +183,23 @@ void ConfigureToolsP1(tools::histo::p1d* p1d,
         << "    Linear binning will be applied with given (nbins, xmin, xmax) values";
       G4Exception("G4P1ToolsManager::SetP1",
                 "Analysis_W013", JustWarning, description);
-    }              
-    p1d->configure(nbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
-                   yfcn(ymin/yunit), yfcn(ymax/yunit));
+    }
+    if ( ymin == 0. && ymax == 0. ) {
+      p1d->configure(nbins, xfcn(xmin/xunit), xfcn(xmax/xunit));
+    } else {             
+      p1d->configure(nbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
+                     yfcn(ymin/yunit), yfcn(ymax/yunit));
+    }
   }
   else {
     // Compute bins
     std::vector<G4double> edges;
     ComputeEdges(nbins, xmin, xmax, xunit, xfcn, xbinScheme, edges);
-    p1d->configure(edges,  yfcn(ymin/yunit), yfcn(ymax/yunit));
+    if ( ymin == 0. && ymax == 0. ) {
+      p1d->configure(edges);
+    } else {             
+      p1d->configure(edges, yfcn(ymin/yunit), yfcn(ymax/yunit));
+    }
   }
 }     
 
@@ -203,8 +220,13 @@ void ConfigureToolsP1(tools::histo::p1d* p1d,
   std::vector<G4double> newEdges;
   ComputeEdges(edges, xunit, xfcn, newEdges);
 
-  p1d->configure(newEdges, yfcn(ymin/yunit), yfcn(ymax/yunit));
+  if ( ymin == 0. && ymax == 0. ) {
+    p1d->configure(newEdges);
+  } else {
+    p1d->configure(newEdges, yfcn(ymin/yunit), yfcn(ymax/yunit));
+  }
 }
+
 }
 
 // 
@@ -223,7 +245,7 @@ void G4P1ToolsManager::AddP1Information(const G4String& name,
   hnInformation->AddDimension(xunitName, xfcnName, xbinScheme);
   hnInformation->AddDimension(yunitName, yfcnName, G4BinScheme::kLinear);
 }  
-                                        
+
 // 
 // protected methods
 //
@@ -430,7 +452,7 @@ G4double G4P1ToolsManager::GetP1Xmin(G4int id) const
 // Returns xmin value with applied unit and profile function
 
   auto p1d = GetTInFunction(id, "GetP1Xmin");
-  if ( ! p1d ) return 0;
+  if ( ! p1d ) return 0.;
   
   return GetMin(*p1d, kX);
 }  
@@ -439,7 +461,7 @@ G4double G4P1ToolsManager::GetP1Xmin(G4int id) const
 G4double G4P1ToolsManager::GetP1Xmax(G4int id) const
 {
   auto p1d = GetTInFunction(id, "GetP1Xmax");
-  if ( ! p1d ) return 0;
+  if ( ! p1d ) return 0.;
   
   return GetMax(*p1d, kX);
 }  
@@ -448,7 +470,7 @@ G4double G4P1ToolsManager::GetP1Xmax(G4int id) const
 G4double G4P1ToolsManager::GetP1XWidth(G4int id) const
 {
   auto p1d = GetTInFunction(id, "GetP1XWidth", true, false);
-  if ( ! p1d ) return 0;
+  if ( ! p1d ) return 0.;
   
   return GetWidth(*p1d, kX, fHnManager->GetHnType());
 }  
@@ -459,7 +481,7 @@ G4double G4P1ToolsManager::GetP1Ymin(G4int id) const
 // Returns xmin value with applied unit and profile function
 
   auto p1d = GetTInFunction(id, "GetP1Ymin");
-  if ( ! p1d ) return 0;
+  if ( ! p1d ) return 0.;
   
   return p1d->min_v();
 }  
@@ -468,7 +490,7 @@ G4double G4P1ToolsManager::GetP1Ymin(G4int id) const
 G4double G4P1ToolsManager::GetP1Ymax(G4int id) const
 {
   auto p1d = GetTInFunction(id, "GetP1Ymax");
-  if ( ! p1d ) return 0;
+  if ( ! p1d ) return 0.;
   
   return p1d->max_v();
 }  

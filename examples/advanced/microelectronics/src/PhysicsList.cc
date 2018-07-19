@@ -148,7 +148,8 @@ void PhysicsList::ConstructEM()
 
       // STANDARD msc is active in the world
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      pmanager->AddProcess(msc, -1, 1, 1);
+      msc->AddEmModel(1, new G4UrbanMscModel());
+      pmanager->AddProcess(msc, -1, 1, -1);
 
       // STANDARD ionisation is active in the world
       G4eIonisation* eion = new G4eIonisation();
@@ -173,7 +174,8 @@ void PhysicsList::ConstructEM()
 
       // STANDARD msc is active in the world 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      pmanager->AddProcess(msc, -1, 1, 1);
+      msc->AddEmModel(1, new G4UrbanMscModel());
+      pmanager->AddProcess(msc, -1, 1, -1);
 
       // STANDARD ionisation is active in the world 
       G4hIonisation* hion = new G4hIonisation();
@@ -188,7 +190,9 @@ void PhysicsList::ConstructEM()
     } else if (particleName == "GenericIon") { 
 
       // STANDARD msc is active in the world 
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      G4hMultipleScattering* msc = new G4hMultipleScattering();
+      msc->AddEmModel(1, new G4UrbanMscModel());
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, -1);
 
       // STANDARD ionisation is active in the world 
       G4ionIonisation* hion = new G4ionIonisation();
@@ -222,7 +226,7 @@ void PhysicsList::ConstructEM()
   em_config->SetExtraEmModel("e-","msc",msc,"Target");
   
   mod = new G4MollerBhabhaModel();
-  mod->SetActivationLowEnergyLimit(99.99*MeV);
+  mod->SetActivationLowEnergyLimit(100*MeV);
   em_config->SetExtraEmModel("e-","eIoni",mod,"Target",0.0,10*TeV, new G4UniversalFluctuation());
 
   // ---> MicroElec processes activated
@@ -241,16 +245,19 @@ void PhysicsList::ConstructEM()
   // Inactivate following STANDARD processes 
     
   mod = new G4BraggModel();
-  mod->SetActivationHighEnergyLimit(0.499);
+  mod->SetActivationHighEnergyLimit(50*keV);
   em_config->SetExtraEmModel("proton","hIoni",mod,"Target",0.0,2*MeV, new G4IonFluctuations());
     
   mod = new G4BetheBlochModel();
-  mod->SetActivationLowEnergyLimit(0.99*GeV);
-  em_config->SetExtraEmModel("proton","hIoni",mod,"Target",2*MeV,100*GeV, new G4IonFluctuations());
+  mod->SetActivationLowEnergyLimit(10*GeV);
+  em_config->SetExtraEmModel("proton","hIoni",mod,"Target",2*MeV,10*TeV, new G4IonFluctuations());
 			     
   // ---> MicroElec processes activated  
   mod = new G4MicroElecInelasticModel(); 
-  em_config->SetExtraEmModel("proton","p_G4MicroElecInelastic",mod,"Target",50*keV,10*GeV);
+  mod->SetActivationLowEnergyLimit(50*keV);
+  em_config->SetExtraEmModel("proton","p_G4MicroElecInelastic",mod,"Target",0.0,10*GeV);
+  em_config->SetExtraEmModel("proton","p_G4MicroElecInelastic",new G4DummyModel,
+			     "Target",10*GeV,10*TeV);
 
  // *** ion
 
@@ -260,16 +267,20 @@ void PhysicsList::ConstructEM()
   // Inactivate following STANDARD processes 
 
   mod = new G4BraggIonModel();
-  mod->SetActivationHighEnergyLimit(49.9*keV);
+  mod->SetActivationHighEnergyLimit(50*keV);
   em_config->SetExtraEmModel("GenericIon","ionIoni",mod,"Target",0.0,2*MeV, new G4IonFluctuations());
  
   mod = new G4BetheBlochModel();
-  mod->SetActivationLowEnergyLimit(0.99*GeV);
-  em_config->SetExtraEmModel("GenericIon","ionIoni",mod,"Target",2*MeV,100*GeV, new G4IonFluctuations());
+  mod->SetActivationLowEnergyLimit(10*GeV);
+  em_config->SetExtraEmModel("GenericIon","ionIoni",mod,"Target",2*MeV,10*TeV, new G4IonFluctuations());
    
   // ---> MicroElec processes activated
   mod = new G4MicroElecInelasticModel(); 
-  em_config->SetExtraEmModel("GenericIon","ion_G4MicroElecInelastic",mod,"Target",50*keV,10*GeV);
+  mod->SetActivationLowEnergyLimit(50*keV);
+  em_config->SetExtraEmModel("GenericIon","ion_G4MicroElecInelastic",mod,
+			     "Target",0.0,10*GeV);
+  em_config->SetExtraEmModel("GenericIon","ion_G4MicroElecInelastic",new G4DummyModel,
+			     "Target",10*GeV,10*TeV);
 
   // Deexcitation
   //

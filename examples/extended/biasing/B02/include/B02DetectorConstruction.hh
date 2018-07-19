@@ -27,7 +27,7 @@
 /// \brief Definition of the B02DetectorConstruction class
 //
 //
-// $Id: B02DetectorConstruction.hh 77475 2013-11-25 09:38:51Z gcosmo $
+// $Id: B02DetectorConstruction.hh 98774 2016-08-09 14:28:06Z gcosmo $
 //
 
 #ifndef B02DetectorConstruction_hh
@@ -62,16 +62,11 @@ public:
 
   //  virtual void ConstructSDandField();
 
-  inline G4VIStore* GetGeomStore(){return aIstore;};
-
 private:
   std::vector< G4LogicalVolume * > fLogicalVolumeVector;
   std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
 
   G4VPhysicalVolume* fWorldVolume;
-
-  G4VIStore *aIstore;
-
 };
 
 #endif

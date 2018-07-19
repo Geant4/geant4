@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardPhysics_option3.hh 66704 2013-01-10 18:20:17Z gunter $
+// $Id: G4EmStandardPhysics_option3.hh 105735 2017-08-16 12:59:43Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,6 +45,7 @@
 #define G4EmStandardPhysics_option3_h 1
 
 #include "G4VPhysicsConstructor.hh"
+#include "G4EmParticleList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,10 +53,8 @@
 class G4EmStandardPhysics_option3 : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysics_option3(G4int ver = 1);
 
-  // obsolete
-  G4EmStandardPhysics_option3(G4int ver, const G4String& name);
+  explicit G4EmStandardPhysics_option3(G4int ver=1, const G4String& name="");
 
   virtual ~G4EmStandardPhysics_option3();
 
@@ -64,6 +63,7 @@ public:
 
 private:
   G4int  verbose;
+  G4EmParticleList partList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

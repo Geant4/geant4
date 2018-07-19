@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pow.hh 93311 2015-10-16 10:16:37Z gcosmo $
+// $Id: G4Pow.hh 109086 2018-03-26 08:20:25Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -64,7 +64,7 @@ class G4Pow
     // Fast computation of Z^1/3
     //
     inline G4double Z13(G4int Z) const;
-    inline G4double A13(G4double A) const;
+           G4double A13(G4double A) const;
 
     // Fast computation of Z^2/3
     //
@@ -101,6 +101,9 @@ class G4Pow
 
     G4Pow();
 
+    G4double A13Low(const G4double, const bool) const;
+    G4double A13High(const G4double, const bool) const;
+
     inline G4double logBase(G4double x) const;
 
     static G4Pow* fpInstance;
@@ -109,12 +112,14 @@ class G4Pow
     const G4int    max2;
 
     G4double maxA;
+    G4double maxLowA;
     G4double maxA2;
     G4double maxAexp;
 
     G4DataVector ener;
     G4DataVector logen;
     G4DataVector pz13;
+    G4DataVector lowa13;
     G4DataVector lz;
     G4DataVector lz2;
     G4DataVector fexp;
@@ -127,28 +132,6 @@ class G4Pow
 inline G4double G4Pow::Z13(G4int Z) const
 {
   return pz13[Z];
-}
-
-inline G4double G4Pow::A13(G4double A) const
-{
-  G4double res = 0.0;
-  if(A > 0.0) 
-  {
-    G4double a = (1.0 <= A) ? A : 1.0/A;
-    if(1.0 > A) { a = 1.0/A; }
-    if(a <= maxA)
-    {
-      G4int i = G4int(a + 0.5);
-      G4double x = (a/G4double(i) - 1.0)*onethird;
-      res = pz13[i]*(1.0 + x - x*x*(1.0 - 1.66666666*x));
-      if(1.0 > A) { res = 1.0/res; }
-    }
-    else
-    {
-      res = std::pow(A, onethird); 
-    }
-  }
-  return res;
 }
 
 inline G4double G4Pow::Z23(G4int Z) const

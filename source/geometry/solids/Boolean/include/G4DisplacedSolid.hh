@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.hh 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4DisplacedSolid.hh 104316 2017-05-24 13:04:23Z gcosmo $
 //
 //
 // class G4DisplacedSolid
@@ -75,6 +75,8 @@ class G4DisplacedSolid : public G4VSolid
     // It also has all the methods that a solid requires, eg.
 
     EInside Inside( const G4ThreeVector& p ) const ; 
+
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,

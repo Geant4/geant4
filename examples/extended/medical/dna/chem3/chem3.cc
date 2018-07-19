@@ -32,7 +32,7 @@
 //
 // $Id$
 //
-/// \file main.cc
+/// \file chem3.cc
 /// \brief Chem3 example
 
 #include "DetectorConstruction.hh"
@@ -49,7 +49,9 @@
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
+#ifdef G4UI_USE_QT
 #include "G4UIQt.hh"
+#endif
 #include "CommandLineParser.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

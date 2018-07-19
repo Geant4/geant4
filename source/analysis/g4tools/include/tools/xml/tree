@@ -115,8 +115,8 @@ public:
   }
 
   bool is_attribute(const std::string& a_name) const {
-    unsigned int number = m_atbs.size();
-    for(unsigned int index=0;index<number;index++) {
+    size_t number = m_atbs.size();
+    for(size_t index=0;index<number;index++) {
       if(m_atbs[index].first==a_name) return true;
     }
     return false;
@@ -129,8 +129,8 @@ public:
   
   bool attribute_value(const std::string& a_atb,std::string& a_value) const {
     a_value.clear();
-    unsigned int linen = m_atbs.size();
-    for(unsigned int count=0;count<linen;count++) {
+    size_t linen = m_atbs.size();
+    for(size_t count=0;count<linen;count++) {
       if(m_atbs[count].first==a_atb) {
         a_value = m_atbs[count].second;
         return true;
@@ -160,8 +160,8 @@ public:
   bool remove_attribute(const std::string& a_name){
     //TOOLS_STL : to be checked :
     std::vector<atb>::iterator it = m_atbs.begin();
-    unsigned int linen = m_atbs.size();
-    for(unsigned int count=0;count<linen;count++,++it) {
+    size_t linen = m_atbs.size();
+    for(size_t count=0;count<linen;count++,++it) {
       if(m_atbs[count].first==a_name) {
         m_atbs.erase(it);
         return true; //Found and removed.
@@ -202,8 +202,8 @@ public:
           << " dataInt : " << m_data_int
           << std::endl;
   
-   {unsigned int atbn = m_atbs.size();
-    for(unsigned int index=0;index<atbn;index++) {
+   {size_t atbn = m_atbs.size();
+    for(size_t index=0;index<atbn;index++) {
       a_out << " attribute : " << sout(m_atbs[index].first) << " " 
             << sout(m_atbs[index].second) << std::endl;
     }}
@@ -235,11 +235,9 @@ public:
     }
     return false;
   }
-  
+
   template <class T>
-  bool element_atb_value(const std::string& a_elem,
-                         const std::string& a_atb,
-                         T& a_value) const {
+  bool element_atb_value(const std::string& a_elem,const std::string& a_atb,T& a_value) const {
     std::string sv;
     if(!element_atb_value(a_elem,a_atb,sv)) {a_value=T();return false;}
     return to<T>(sv,a_value);
@@ -323,14 +321,14 @@ public:
     empty_visitor* visitor = (empty_visitor*)a_tag;
   
    {const std::vector<atb>& atbs = a_tree.attributes();
-    unsigned int atbn = atbs.size();       
-    for(unsigned int index=0;index<atbn;index++) {
-      const std::string& atb = atbs[index].first;
+    size_t atbn = atbs.size();       
+    for(size_t index=0;index<atbn;index++) {
+      const std::string& _atb = atbs[index].first;
       const std::string& atbv = atbs[index].second;
       if(atbv.empty()) {
         visitor->f_out << "check_item :"
             << " for XML item " << sout(a_tree.tag_name())
-            << ", attribute " << sout(atb) << " has an empty value."
+            << ", attribute " << sout(_atb) << " has an empty value."
             << std::endl;
         visitor->m_status = false;
       }
@@ -339,14 +337,14 @@ public:
    {tools_lforcit(ielem*,a_tree.m_childs,it) {
     if(element* _elem = id_cast<ielem,element>(*(*it))) {
       const std::vector<atb>& atbs = _elem->attributes();
-      unsigned int atbn = atbs.size();       
-      for(unsigned int index=0;index<atbn;index++) {
-        const std::string& atb = atbs[index].first;
+      size_t atbn = atbs.size();       
+      for(size_t index=0;index<atbn;index++) {
+        const std::string& _atb = atbs[index].first;
         const std::string& atbv = atbs[index].second;
         if(atbv.empty()) {
           visitor->f_out << "ItemM::check_item :"
               << " for XML item " << sout(a_tree.tag_name())
-              << ", attribute " << sout(atb) << " has an empty value."
+              << ", attribute " << sout(_atb) << " has an empty value."
               << std::endl;
           visitor->m_status = false;
         }
@@ -403,7 +401,7 @@ public:
   }
 
   tree* find_item(const std::string& a_name) const {
-   {unsigned int linen = m_atbs.size();
+   {size_t linen = m_atbs.size();
     for(unsigned int count=0;count<linen;count++) {
       if(m_atbs[count].first=="name") {
         if(m_atbs[count].second==a_name) return const_cast<tree*>(this);
@@ -524,10 +522,10 @@ public:
   
   void replace(const std::string& a_old,const std::string& a_new) {
     // Used by the obuild template system.
-   {unsigned int atbn = m_atbs.size();
-    for(unsigned int index=0;index<atbn;index++) {
+   {size_t atbn = m_atbs.size();
+    for(size_t index=0;index<atbn;index++) {
       std::string& value = m_atbs[index].second;
-      tools::replace(value,a_old,a_new);
+      replace_(value,a_old,a_new);
     }}
   
     tools_lforit(ielem*,m_childs,it) {
@@ -628,8 +626,8 @@ public:
 
     // begin tag :
     a_out << a_spaces << "<" << m_tag_name;
-   {unsigned int atbn = m_atbs.size();
-    for(unsigned int index=0;index<atbn;index++) {
+   {size_t atbn = m_atbs.size();
+    for(size_t index=0;index<atbn;index++) {
       a_out << " " << m_atbs[index].first << "="
             << sout(m_atbs[index].second);
     }}
@@ -643,8 +641,8 @@ public:
       bool isCallback = false;
   
       a_out << a_spaces << "  <" << _elem->name();
-      unsigned int atbn = atbs.size();
-      for(unsigned int index=0;index<atbn;index++) {
+      size_t atbn = atbs.size();
+      for(size_t index=0;index<atbn;index++) {
         a_out << " " << atbs[index].first << "="
               << sout(atbs[index].second);
         if(atbs[index].first=="exec") isCallback = true;
@@ -659,11 +657,11 @@ public:
             a_out << value;
           } else {
             a_out << std::endl;
-            tools::replace(value,"\\n\\","@OnX@");
-            tools::replace(value,"@OnX@","\\n\\\n");
-            tools::strip(value,tools::trailing,' ');
+            replace_(value,"\\n\\","@OnX@");
+            replace_(value,"@OnX@","\\n\\\n");
+            strip(value,trailing,' ');
             a_out << value;
-            unsigned int l = value.size();
+            size_t l = value.size();
             if(l && value[l-1]!='\n') a_out << std::endl;
             a_out << a_spaces << "  ";
           }
@@ -682,8 +680,8 @@ public:
                             const std::string& a_atb,
                             const std::string& a_value,int a_index = 0){
     if(a_elem.empty()) {
-      unsigned int linen = m_atbs.size();
-      for(unsigned int count=0;count<linen;count++) {
+      size_t linen = m_atbs.size();
+      for(size_t count=0;count<linen;count++) {
         if(m_atbs[count].first==a_atb) {
           m_atbs[count].second = a_value;
           return true;
@@ -802,7 +800,7 @@ public:
   bool element_value_boolean(const std::string& a_name,bool& a_value) const {
     std::string value;
     if(!element_value(a_name,value)) return false;
-    return tools::to(value,a_value);
+    return to(value,a_value);
   }
 
   void update_tree(const tree& a_old) {

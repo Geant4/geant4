@@ -25,11 +25,10 @@
 //
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// shall cite the following Geant4-DNA collaboration publications:
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
-//
-// $Id: TrackerHit.cc 69706 2013-05-13 09:12:40Z gcosmo $
 //
 /// \file TrackerHit.cc
 /// \brief Implementation of the TrackerHit class
@@ -51,7 +50,8 @@ TrackerHit::TrackerHit()
  : G4VHit(),
    fTrackID(-1),
    fEdep(0.),
-   fPos(G4ThreeVector())
+   fPos(G4ThreeVector()),
+   fIncidentEnergy(0.)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,6 +66,7 @@ TrackerHit::TrackerHit(const TrackerHit& right)
   fTrackID   = right.fTrackID;
   fEdep      = right.fEdep;
   fPos       = right.fPos;
+  fIncidentEnergy = right.fIncidentEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,6 +76,7 @@ const TrackerHit& TrackerHit::operator=(const TrackerHit& right)
   fTrackID   = right.fTrackID;
   fEdep      = right.fEdep;
   fPos       = right.fPos;
+  fIncidentEnergy      = right.fIncidentEnergy;
 
   return *this;
 }
@@ -113,6 +115,8 @@ void TrackerHit::Print()
      << std::setw(7) << G4BestUnit(fEdep,"Energy")
      << " Position: "
      << std::setw(7) << G4BestUnit( fPos,"Length")
+     << "IncidentEnergy: "
+     << std::setw(7) << G4BestUnit(fIncidentEnergy,"Energy")
      << G4endl;
 }
 

@@ -67,8 +67,6 @@ class G4ParticleChangeForMSC;
 class G4SafetyHelper;
 class G4LossTableManager;
 
-static const G4double c_highland = 13.6*CLHEP::MeV ;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4UrbanMscModel : public G4VMscModel
@@ -76,33 +74,35 @@ class G4UrbanMscModel : public G4VMscModel
 
 public:
 
-  G4UrbanMscModel(const G4String& nam = "UrbanMsc");
+  explicit G4UrbanMscModel(const G4String& nam = "UrbanMsc");
 
   virtual ~G4UrbanMscModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
 
-  void StartTracking(G4Track*);
+  virtual void StartTracking(G4Track*) override;
 
-  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition* particle,
-                                      G4double KineticEnergy,
-                                      G4double AtomicNumber,
-                                      G4double AtomicWeight=0., 
-                                      G4double cut =0.,
-                                      G4double emax=DBL_MAX);
+  virtual G4double 
+  ComputeCrossSectionPerAtom(const G4ParticleDefinition* particle,
+			     G4double KineticEnergy,
+			     G4double AtomicNumber,
+			     G4double AtomicWeight=0., 
+			     G4double cut =0.,
+			     G4double emax=DBL_MAX) override;
 
-  G4ThreeVector& SampleScattering(const G4ThreeVector&, G4double safety);
+  virtual G4ThreeVector& SampleScattering(const G4ThreeVector&, 
+					  G4double safety) override;
 
-  G4double ComputeTruePathLengthLimit(const G4Track& track,
-                                      G4double& currentMinimalStep);
+  virtual G4double 
+  ComputeTruePathLengthLimit(const G4Track& track,
+			     G4double& currentMinimalStep) override;
 
-  G4double ComputeGeomPathLength(G4double truePathLength);
+  virtual G4double ComputeGeomPathLength(G4double truePathLength) override;
 
-  G4double ComputeTrueStepLength(G4double geomStepLength);
+  virtual G4double ComputeTrueStepLength(G4double geomStepLength) override;
 
   G4double ComputeTheta0(G4double truePathLength, G4double KineticEnergy);
-
-  inline void SetNewDisplacementFlag(G4bool);
 
 private:
 
@@ -121,8 +121,8 @@ private:
   inline G4double SimpleScattering(G4double xmeanth, G4double x2meanth);
 
   //  hide assignment operator
-  G4UrbanMscModel & operator=(const  G4UrbanMscModel &right);
-  G4UrbanMscModel(const  G4UrbanMscModel&);
+  G4UrbanMscModel & operator=(const  G4UrbanMscModel &right) = delete;
+  G4UrbanMscModel(const  G4UrbanMscModel&) = delete;
 
   CLHEP::HepRandomEngine*     rndmEngineMod;
 
@@ -178,7 +178,7 @@ private:
   G4bool   insideskin;
 
   G4bool   latDisplasmentbackup ;
-  G4bool   displacementFlag;
+  G4bool   dispAlg96;
 
   G4double rangecut;
   G4double drr,finalr;
@@ -187,13 +187,6 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4UrbanMscModel::SetNewDisplacementFlag(G4bool val)
-{
-  displacementFlag = val;
-}
 
 inline
 void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
@@ -207,45 +200,40 @@ void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-inline
-G4double G4UrbanMscModel::Randomizetlimit()
+
+inline G4double G4UrbanMscModel::Randomizetlimit()
 {
-  G4double temptlimit = tlimit;
+  G4double res = tlimitmin;
   if(tlimit > tlimitmin)
   {
-    do {
-         temptlimit = G4RandGauss::shoot(rndmEngineMod,tlimit,0.3*tlimit);
-         // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
-       } while ((temptlimit < tlimitmin) ||
-                (temptlimit > 2.*tlimit-tlimitmin));
+    res = G4RandGauss::shoot(rndmEngineMod,tlimit,0.1*(tlimit-tlimitmin));
+    res = std::max(res, tlimitmin);
   }
-  else temptlimit = tlimitmin;
-
-  return temptlimit;
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-inline
-void G4UrbanMscModel::UpdateCache()                                   
+
+inline void G4UrbanMscModel::UpdateCache()                                   
 {
-    lnZ = G4Log(Zeff);
-    // correction in theta0 formula
-    G4double w = G4Exp(lnZ/6.);
-    G4double facz = 0.990395+w*(-0.168386+w*0.093286) ;
-    coeffth1 = facz*(1. - 8.7780e-2/Zeff);
-    coeffth2 = facz*(4.0780e-2 + 1.7315e-4*Zeff);
+  lnZ = G4Log(Zeff);
+  // correction in theta0 formula
+  G4double w = G4Exp(lnZ/6.);
+  G4double facz = 0.990395+w*(-0.168386+w*0.093286) ;
+  coeffth1 = facz*(1. - 8.7780e-2/Zeff);
+  coeffth2 = facz*(4.0780e-2 + 1.7315e-4*Zeff);
 
-    // tail parameters
-    G4double Z13 = w*w;
-    coeffc1  = 2.3785    - Z13*(4.1981e-1 - Z13*6.3100e-2);
-    coeffc2  = 4.7526e-1 + Z13*(1.7694    - Z13*3.3885e-1);
-    coeffc3  = 2.3683e-1 - Z13*(1.8111    - Z13*3.2774e-1);
-    coeffc4  = 1.7888e-2 + Z13*(1.9659e-2 - Z13*2.6664e-3);
+  // tail parameters
+  G4double Z13 = w*w;
+  coeffc1  = 2.3785    - Z13*(4.1981e-1 - Z13*6.3100e-2);
+  coeffc2  = 4.7526e-1 + Z13*(1.7694    - Z13*3.3885e-1);
+  coeffc3  = 2.3683e-1 - Z13*(1.8111    - Z13*3.2774e-1);
+  coeffc4  = 1.7888e-2 + Z13*(1.9659e-2 - Z13*2.6664e-3);
 
-    Z2   = Zeff*Zeff;
-    Z23  = Z13*Z13;               
+  Z2   = Zeff*Zeff;
+  Z23  = Z13*Z13;               
                                               
-    Zold = Zeff;
+  Zold = Zeff;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -259,12 +247,9 @@ G4double G4UrbanMscModel::SimpleScattering(G4double xmeanth, G4double x2meanth)
   G4double prob = (a+2.)*xmeanth/a;
 
   // sampling
-  G4double cth = 1.;
-  if(rndmEngineMod->flat() < prob) {
-    cth = -1.+2.*G4Exp(G4Log(rndmEngineMod->flat())/(a+1.));
-  } else {
-    cth = -1.+2.*rndmEngineMod->flat();
-  }
+  G4double rdm = rndmEngineMod->flat();
+  G4double cth = (rndmEngineMod->flat() < prob)
+    ? -1.+2.*G4Exp(G4Log(rdm)/(a+1.)) : -1.+2.*rdm;
   return cth;
 }
 

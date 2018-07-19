@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file GB02/src/GB02DetectorConstruction.cc
+/// \brief Implementation of the GB02DetectorConstruction class
+//
 #include "GB02DetectorConstruction.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -42,7 +45,6 @@
 
 #include "GB02BOptrMultiParticleForceCollision.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB02DetectorConstruction::GB02DetectorConstruction()
@@ -59,7 +61,6 @@ G4VPhysicalVolume* GB02DetectorConstruction::Construct()
 {
   G4Material*   worldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
   G4Material* defaultMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_lN2");
-
 
   G4VSolid* solidWorld = new G4Box("World", 10*m, 10*m, 10*m );
   
@@ -97,6 +98,7 @@ G4VPhysicalVolume* GB02DetectorConstruction::Construct()
   return physiWorld;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GB02DetectorConstruction::ConstructSDandField()
 {
@@ -114,3 +116,5 @@ void GB02DetectorConstruction::ConstructSDandField()
          << " to logical volume " << logicTest->GetName()
          << G4endl;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -42,16 +42,19 @@
 #ifndef G4UTORUS_HH
 #define G4UTORUS_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UTorus.hh"
+#include <volumes/UnplacedTorus2.h>
 
 #include "G4Polyhedron.hh"
 
-class G4UTorus : public G4USolid
+class G4UTorus : public G4UAdapter<vecgeom::UnplacedTorus2>
 {
+  using Shape_t = vecgeom::UnplacedTorus2;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedTorus2>;
+
   public:  // with description
 
     G4UTorus(const G4String& pName,
@@ -67,13 +70,15 @@ class G4UTorus : public G4USolid
 
     G4VSolid* Clone() const;
 
-    inline UTorus* GetShape() const;
-
     G4double GetRmin() const;
     G4double GetRmax() const;
     G4double GetRtor() const;
     G4double GetSPhi() const;
     G4double GetDPhi() const;
+    G4double GetSinStartPhi() const;
+    G4double GetCosStartPhi() const;
+    G4double GetSinEndPhi  () const;
+    G4double GetCosEndPhi  () const;
 
     void SetRmin(G4double arg);
     void SetRmax(G4double arg);
@@ -85,6 +90,13 @@ class G4UTorus : public G4USolid
                           G4double arg3, G4double arg4, G4double arg5);
 
     inline G4GeometryType GetEntityType() const;
+
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pmin, G4double& pmax) const;
 
     G4Polyhedron* CreatePolyhedron() const;
 
@@ -103,11 +115,6 @@ class G4UTorus : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UTorus* G4UTorus::GetShape() const
-{
-  return (UTorus*) fShape;
-}
 
 inline G4GeometryType G4UTorus::GetEntityType() const
 {

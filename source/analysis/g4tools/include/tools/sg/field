@@ -69,7 +69,10 @@ protected:
   static const std::string s_node_class(#a__class);
 
 #define TOOLS_ADD_FIELD_DESC(a__field) \
-  s_v.push_back(tools::sg::field_desc(s_node_class+"."+#a__field,this->a__field.s_cls(),(char*)((tools::sg::field*)&(this->a__field))-(char*)((tools::sg::node*)this))); 
+  s_v.push_back(tools::sg::field_desc(s_node_class+"."+#a__field,this->a__field.s_cls(),(char*)((tools::sg::field*)&(this->a__field))-(char*)((tools::sg::node*)this),true)); 
+
+#define TOOLS_ADD_FIELD_DESC_NOT_EDITABLE(a__field) \
+  s_v.push_back(tools::sg::field_desc(s_node_class+"."+#a__field,this->a__field.s_cls(),(char*)((tools::sg::field*)&(this->a__field))-(char*)((tools::sg::node*)this),false)); 
 
 #define TOOLS_ADD_FIELD_DESC_ENUM(a__key) s_v.back().add_enum(#a__key,a__key);
 #define TOOLS_ADD_FIELD_DESC_OPT(a__value) s_v.back().add_opt(a__value);

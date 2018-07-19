@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109976 2018-05-14 07:11:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-28.11.2016   G.Folger
+10.05.2018   B.Morgan,  tag xraytel-V10-04-00
+             Include G4Types before use of G4MULTITHREADED. For forward
+             compatibility with move to #defines over -D for G4 preprocessor
+             symbols.
+
+28.11.2016   G.Folger,  tag xraytel-V10-02-00
              Remove direct use of theParticleIterator, use GetParticleTableIterator().
               fix required by clang39 on Linux and MAC
 

@@ -1,0 +1,25 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_serrno
+#define tools_serrno
+
+#include <cerrno>
+#include <cstring>
+#include <sstream>
+
+namespace tools {
+
+inline void serrno(std::string& a_s) {
+   std::ostringstream strm;
+   strm << (int)errno;
+   a_s  = " error : ";
+   a_s += strm.str();
+   a_s += " : ";
+   a_s += strerror(errno);
+   a_s += ".";
+}
+
+}
+
+#endif

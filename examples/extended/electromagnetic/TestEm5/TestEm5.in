@@ -1,4 +1,4 @@
-# $Id: TestEm5.in 85279 2014-10-27 09:19:21Z gcosmo $
+# $Id: TestEm5.in 107964 2017-12-14 13:11:17Z gcosmo $
 #
 # macro file for TestEm5.cc
 #
@@ -15,9 +15,11 @@
 #
 /run/setCut 7 um
 #
-/run/initialize
 #/process/em/verbose 1
 /process/em/workerVerbose 0
+#/process/eLoss/fluct false
+#
+/run/initialize
 #
 /testem/gun/setDefault
 /gun/particle pi+ 

@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 86418 2014-11-11 10:39:38Z gcosmo $
+// $Id: SteppingAction.cc 98772 2016-08-09 14:25:31Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,8 +42,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det,
-                               PrimaryGeneratorAction* prim, RunAction* RuAct)
- : detector(det), primary(prim), runAction(RuAct)
+                               PrimaryGeneratorAction* prim, RunAction* ruAct)
+ : G4UserSteppingAction(),
+   fDetector(det), fPrimary(prim), fRunAction(ruAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,10 +60,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4StepPoint* endPoint = aStep->GetPostStepPoint();
   
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
-  runAction->CountProcesses(procName);
+  fRunAction->CountProcesses(procName);
 
-  if (prePoint->GetTouchableHandle()->GetVolume()==detector->GetBox() &&
-      endPoint->GetTouchableHandle()->GetVolume()==detector->GetWorld()) {
+  if (prePoint->GetTouchableHandle()->GetVolume()==fDetector->GetBox() &&
+      endPoint->GetTouchableHandle()->GetVolume()==fDetector->GetWorld()) {
     G4Track* aTrack = aStep->GetTrack();   
     const G4ParticleDefinition* part = 
       aTrack->GetDynamicParticle()->GetDefinition();
@@ -72,7 +73,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     G4double kinEnergy = endPoint->GetKineticEnergy();
 
     G4ThreeVector beamDirection = 
-      primary->GetParticleGun()->GetParticleMomentumDirection();
+      fPrimary->GetParticleGun()->GetParticleMomentumDirection();
     G4double polZ = endPoint->GetPolarization().z();
 
     G4double costheta = direction*beamDirection;
@@ -83,10 +84,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       direction*G4PolarizationHelper::GetParticleFrameY(beamDirection);
 
     G4double phi=std::atan2(ydir,xdir);
-    runAction->FillData(part,kinEnergy,costheta,phi,polZ);
+    fRunAction->FillData(part,kinEnergy,costheta,phi,polZ);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

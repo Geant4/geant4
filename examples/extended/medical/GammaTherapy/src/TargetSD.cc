@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TargetSD.cc 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: TargetSD.cc 103508 2017-04-11 14:16:19Z gcosmo $
 //
 /// \file medical/GammaTherapy/src/TargetSD.cc
 /// \brief Implementation of the TargetSD class
@@ -43,12 +43,12 @@
 #include "TargetSD.hh"
 
 #include "G4RunManager.hh"
+#include "Run.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Track.hh"
 #include "G4Positron.hh"
 #include "globals.hh"
-#include "Histo.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Step.hh"
@@ -57,7 +57,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 TargetSD::TargetSD(const G4String& name)
- : G4VSensitiveDetector(name), fHisto(Histo::GetPointer()), fEvno(0)
+ : G4VSensitiveDetector(name), fEvno(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -69,8 +69,10 @@ TargetSD::~TargetSD()
 
 void TargetSD::Initialize(G4HCofThisEvent*)
 {
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   ++fEvno;
-  if(0 < fHisto->GetVerbose()) {
+  if(run->GetVerbose()) {
     G4cout << "TargetSD: Begin Of Event # " << fEvno << G4endl;
   }
 }
@@ -79,8 +81,10 @@ void TargetSD::Initialize(G4HCofThisEvent*)
 
 G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   const G4Track* track = aStep->GetTrack();
-  if(track->GetTrackID() == 1) { fHisto->AddStepInTarget(); }
+  if(track->GetTrackID() == 1) { run->AddStepInTarget(); }
   return true;
 }
 

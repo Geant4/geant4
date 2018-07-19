@@ -24,6 +24,10 @@
 
 #include "xml/styles"
 
+#ifdef TOOLS_USE_PNG
+#include <tools/png>
+#endif
+
 namespace tools {
 
 class viewplot : public sg::viewer {
@@ -139,15 +143,15 @@ public:
     m_plots.adjust_size(width(),height());
   }
 
-  bool write(const std::string& a_file) {
+  bool write(const std::string& a_file,bool a_anonymous = false) {
     sg::render_zb action(m_mgr,m_out,width(),height());
-    colorf clear_color = colorf::white();
+    colorf clear_color = colorf_white();
     action.zbuffer().clear_color_buffer(0);
     action.add_color(clear_color.r(),clear_color.g(),clear_color.b());
     action.zbuffer().clear_depth_buffer();
     sg().render(action);
     wps wps(m_out);
-    if(!wps.open_file(a_file)) {
+    if(!wps.open_file(a_file,a_anonymous)) {
       m_out << "tools::viewplot::write : can't open " << a_file << "." << std::endl;
       return false;
     }
@@ -159,8 +163,8 @@ public:
     return true;
   }
 
-  bool open_file(const std::string& a_file) {
-    if(!m_wps.open_file(a_file)) {
+  bool open_file(const std::string& a_file,bool a_anonymous = false) {
+    if(!m_wps.open_file(a_file,a_anonymous)) {
       m_out << "tools::viewplot::open_file : can't open " << a_file << "." << std::endl;
       return false;
     }
@@ -168,7 +172,7 @@ public:
   }
   bool write_page() {
     sg::render_zb action(m_mgr,m_out,width(),height());
-    colorf clear_color = colorf::white();
+    colorf clear_color = colorf_white();
     action.zbuffer().clear_color_buffer(0);
     action.add_color(clear_color.r(),clear_color.g(),clear_color.b());
     action.zbuffer().clear_depth_buffer();
@@ -183,6 +187,42 @@ public:
 
   const xml::styles& styles() const {return m_styles;}
   xml::styles& styles() {return m_styles;}
+
+#ifdef TOOLS_USE_PNG
+  bool write_png(const std::string& a_file) {
+    sg::render_zb action(m_mgr,m_out,m_ww,m_wh);
+    colorf clear_color = colorf_white();
+    action.zbuffer().clear_color_buffer(0);
+    action.add_color(clear_color.r(),clear_color.g(),clear_color.b());
+    action.zbuffer().clear_depth_buffer();
+    sg().render(action);
+
+    unsigned int bpp = 3;
+    uchar* buffer = new unsigned char[m_ww*m_wh*bpp];
+    if(!buffer) {
+      m_out << "tools::viewplot::write_png : can't alloc buffer." << std::endl;
+      return false;
+    }
+    unsigned char* pos = buffer;
+    sg::render_zb::VCol r,g,b;
+    for(unsigned int row=0;row<m_wh;row++) {
+      for(unsigned int col=0;col<m_ww;col++) {
+        sg::render_zb::get_rgb(&action,col,m_wh-row-1,r,g,b);
+        *pos = (uchar)(255.0F*r);pos++;
+        *pos = (uchar)(255.0F*g);pos++;
+        *pos = (uchar)(255.0F*b);pos++;
+      }    
+    }    
+
+    bool status = exlib::png::write(m_out,a_file,buffer,m_ww,m_wh,bpp);
+    if(!status) {
+      m_out << "tools::viewplot::write_png : can't write " << a_file << "." << std::endl;
+    }
+    delete [] buffer;
+    return status;
+  }
+#endif
+
 protected:
   void create_sg(unsigned int a_cols,unsigned int a_rows) {
     m_sg.clear();

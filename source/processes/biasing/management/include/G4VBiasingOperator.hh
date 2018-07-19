@@ -123,16 +123,6 @@
 // for operation(s) which have been applied during the step. One of the two following
 // methods is called:
 //
-// - In case of at most a single biasing operation was applied by the process, report in cases of:
-//    - a non-physics biasing operation applied, biasingCase == BAC_NonPhysics ;
-//    - physics-based biasing:
-//      - the operator requested no occurence, nor final state biasing, and did let the
-//        physics process go : biasingCase ==  BAC_None;
-//      - an occurence biasing, where operation denied the application of the PostStepDoIt(..)
-//        of the physics process (proposing a weight for this),
-//      biasingCase == BAC_DenyInteraction ;
-//    -
-//
 // virtual void OperationApplied( const G4BiasingProcessInterface*                callingProcess,
 //                                G4BiasingAppliedCase                               biasingCase,
 // 				  G4VBiasingOperation*                          operationApplied,
@@ -142,9 +132,6 @@
 //    - physics-based biasing:
 //      - the operator requested no biasing operations, and did let the physics
 //        process go : biasingCase ==  BAC_None;
-//      - an occurence biasing was proposed, which operation purpose was to deny the
-//        application of the PostStepDoIt(..) of the physics process (proposing a
-//        weight for this) : biasingCase == BAC_DenyInteraction ;
 //      - a single final state biasing was proposed, with no concomittant occurence:
 //        biasingCase ==  BAC_FinalState;
 // The operation applied and final state passed to the tracking (particleChangeProduced) are
@@ -157,14 +144,15 @@
 //				  G4VBiasingOperation*                finalStateOperationApplied,
 //                                const G4VParticleChange*                particleChangeProduced );
 // This method is called in case an occurence biasing operation has been applied during the step.
-// Depending on if the occurence operation was applied alone and together with a final state
-// operation, the biasingCase will take values:
+// The biasingCase value is then the one of the final state biasing, if any : depending on if the
+// occurence operation was applied alone and together with a final state operation, the
+// biasingCase will take values:
 //     - occurence biasing alone : biasingCase == BAC_None ;
 //       in which case finalStateOperationApplied == 0;
 //     - occurence biasing + final state biasing : biasingCase ==  BAC_FinalState;
 // The particleChangeProduced is the one *before* application of the weight for occurence : hence
-// either the particle change of the physics process, or the physics process one, biased the final
-// state biasing operation.
+// either the particle change of the (analog) physics process, or the biased final state, resulting
+// from the biasing by the finalStateOperationApplied operation.
 //
 //   
 //      ----------------G4VBiasingOperation ----------------
@@ -239,8 +227,8 @@ protected:
   virtual G4VBiasingOperation* ProposeFinalStateBiasingOperation( const G4Track* track, const G4BiasingProcessInterface* callingProcess ) = 0;
   
 protected:
-  // -- optionnal methods for further information passed to the operator:
-  // --------------------------------------------------------------------
+  // -- optional methods for further information passed to the operator:
+  // -------------------------------------------------------------------
   // ---- report to operator about the operation applied, the biasingCase value provides the case of biasing applied:
   virtual void OperationApplied( const G4BiasingProcessInterface* callingProcess, G4BiasingAppliedCase               biasingCase,
 				 G4VBiasingOperation*           operationApplied, const G4VParticleChange* particleChangeProduced );
@@ -255,6 +243,27 @@ protected:
   // ---- method to inform operator that its biasing control is over (exit volume, or end of tracking):
   // ---- [Called at the beginning of next step, or at the end of tracking.]
   virtual void ExitBiasing( const G4Track* track, const G4BiasingProcessInterface* callingProcess );
+
+  
+protected:
+  // -----------------------------------
+  // -- Delegation to an other operator:
+  // -----------------------------------
+  // -- An operator may wish to select a sequence of operations already implemented in an
+  // -- existing biasing operator. In this case, this operator can delegate its work to
+  // -- the "delegated" one by calling DelegateTo( G4VBiasingOperation* delegated );
+  // -- §§ Should we have:
+  // -- §§    - a "step delegation" -where the delegation is made for the current step only-
+  // -- §§    - a long delegation where the delegation can hold over several steps, as long as
+  // -- §§      the scheme is not completed. [let's call it "scheme delegation"]
+  // -- §§      In this case the "execution/delegated" operator might switch off back the
+  // -- §§      delegation from the "delegator" when it knows it has done its work.
+  // -- §§ Add a private SetDelegator( G4VBiasingOperator* ) method, call on the delegated
+  // -- §§ operator.
+  // -- §§ For a step long delegation, the ReportOperationApplied should be used to "unset"
+  // -- §§ the delegation. For a scheme long delegation, the delegater operator will unset
+  // -- §§ itself has delegation. Likely to happen in the ReportOperationApplied as well,
+  // -- §§ but not sure it is mandatory though.
 
 
 public:

@@ -37,11 +37,12 @@
 
 #include "G4FermiPhaseSpaceDecay.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4RandomDirection.hh"
 #include "G4HadronicException.hh"
 
 G4FermiPhaseSpaceDecay::G4FermiPhaseSpaceDecay()
 {
-  g4pow = G4Pow::GetInstance();
+  g4calc = G4Pow::GetInstance();
 }
 
 G4FermiPhaseSpaceDecay::~G4FermiPhaseSpaceDecay()
@@ -80,7 +81,7 @@ G4FermiPhaseSpaceDecay::KopylovNBodyDecay(G4double M,
       PFragMagCM = PtwoBody(Mass,mr[k],RestMass);
       
       // Create a unit vector with a random direction isotropically distributed
-      G4ThreeVector RandVector(IsotropicVector(PFragMagCM, rndmEngine));
+      G4ThreeVector RandVector = PFragMagCM*G4RandomDirection();
 
       PFragCM.setVect(RandVector);
       PFragCM.setE(std::sqrt(PFragMagCM*PFragMagCM + mr[k]*mr[k]));

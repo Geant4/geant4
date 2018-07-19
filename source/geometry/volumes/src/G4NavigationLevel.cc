@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.cc 86527 2014-11-13 15:06:24Z gcosmo $
+// $Id: G4NavigationLevel.cc 110271 2018-05-17 14:41:15Z gcosmo $
 //
 // 30.09.97 J.Apostolakis Initial version. 
 //                    
@@ -32,7 +32,11 @@
 
 #include "G4NavigationLevel.hh"
 
-G4ThreadLocal G4Allocator<G4NavigationLevel> *aNavigationLevelAllocator = 0;
+G4Allocator<G4NavigationLevel>*& aNavigationLevelAllocator()
+{
+    G4ThreadLocalStatic G4Allocator<G4NavigationLevel>* _instance = nullptr;
+    return _instance;
+}
 
 G4NavigationLevel::G4NavigationLevel( G4VPhysicalVolume* pPhysVol,
                                 const G4AffineTransform& afTransform,

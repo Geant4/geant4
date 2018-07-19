@@ -23,19 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundEmissionFactory.cc 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4VPreCompoundEmissionFactory.cc 96603 2016-04-25 13:29:51Z gcosmo $
 //
 // by V. Lara
 
 #include "G4VPreCompoundEmissionFactory.hh"
 
 G4VPreCompoundEmissionFactory::G4VPreCompoundEmissionFactory() 
-  : fragvector(0) 
+  : fragvector(nullptr) 
 {}
 
 G4VPreCompoundEmissionFactory::~G4VPreCompoundEmissionFactory()
 {
-  if (fragvector != 0)
+  if (fragvector != nullptr)
     std::for_each(fragvector->begin(), fragvector->end(), 
 		  DeleteFragment());
   delete fragvector;

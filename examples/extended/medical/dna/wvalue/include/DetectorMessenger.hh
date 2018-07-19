@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/include/DetectorMessenger.hh
+/// \file medical/dna/wvalue/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
-//
-// $Id: DetectorMessenger.hh 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
@@ -38,6 +33,7 @@
 #include "G4UImessenger.hh"
 
 class DetectorConstruction;
+
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
@@ -63,8 +59,6 @@ private:
   G4UIcmdWithADoubleAndUnit* fRadiusCmd;
   G4UIcmdWithADoubleAndUnit* fTrackingCutCmd;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

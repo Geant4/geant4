@@ -244,7 +244,7 @@ private:
 
   G4int fInTkin;
   G4double fOldTkin;
-  static const G4double theNuclNuclData[18][6];
+  static const G4double theNuclNuclData[19][6];
   static const G4double thePiKaNuclData[8][6];
   G4HadronNucleonXsc* fHadrNuclXsc;
 };
@@ -368,9 +368,9 @@ inline void G4hhElastic::SetParametersCMS(G4double plab)
     }
     else // in approximation between array points
     {
-      for( i = 0; i < 18; i++ ) if( sCMS <= theNuclNuclData[i][0]*CLHEP::GeV ) break;
+      for( i = 0; i < 19; i++ ) if( sCMS <= theNuclNuclData[i][0]*CLHEP::GeV ) break;
       if( i == 0 ) i++;
-      if( i == 18 ) i--;
+      if( i == 19 ) i--;
 
       sl = theNuclNuclData[i-1][0]*CLHEP::GeV;
       sh = theNuclNuclData[i][0]*CLHEP::GeV;

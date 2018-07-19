@@ -25,15 +25,9 @@
 //
 /// \file medical/dna/svalue/src/Run.cc
 /// \brief Implementation of the Run class
-//
-// $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Run.hh"
 #include "DetectorConstruction.hh"
-
 #include "HistoManager.hh"
 #include "PrimaryGeneratorAction.hh"
 
@@ -52,12 +46,12 @@ Run::Run(const DetectorConstruction* detector)
   fProjRange(0.), fProjRange2(0.),
   fNbOfSteps(0), fNbOfSteps2(0),
   fStepSize(0.),  fStepSize2(0.)
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::~Run()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -238,5 +232,3 @@ void Run::EndOfRun()
   fclose (myFile);
   
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

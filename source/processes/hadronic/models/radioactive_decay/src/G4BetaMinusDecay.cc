@@ -33,7 +33,6 @@
 
 #include "G4BetaMinusDecay.hh"
 #include "G4BetaDecayCorrections.hh"
-#include "G4IonTable.hh"
 #include "G4ThreeVector.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
@@ -45,8 +44,9 @@
 G4BetaMinusDecay::G4BetaMinusDecay(const G4ParticleDefinition* theParentNucleus,
                                    const G4double& branch, const G4double& e0,
                                    const G4double& excitationE,
+                                   const G4Ions::G4FloatLevelBase& flb,
                                    const G4BetaDecayType& betaType)
- : G4NuclearDecay("beta- decay", BetaMinus, excitationE), endpointEnergy(e0)
+ : G4NuclearDecay("beta- decay", BetaMinus, excitationE, flb), endpointEnergy(e0)
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent 
   SetBR(branch);
@@ -56,7 +56,7 @@ G4BetaMinusDecay::G4BetaMinusDecay(const G4ParticleDefinition* theParentNucleus,
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
   G4int daughterZ = theParentNucleus->GetAtomicNumber() + 1;
   G4int daughterA = theParentNucleus->GetAtomicMass();
-  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE) );
+  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE, flb) );
   SetDaughter(1, "e-");
   SetDaughter(2, "anti_nu_e");
 
@@ -81,58 +81,65 @@ G4DecayProducts* G4BetaMinusDecay::DecayIt(G4double)
   G4double parentMass = G4MT_parent->GetPDGMass();
   G4double eMass = G4MT_daughters[1]->GetPDGMass();
   G4double nucleusMass = G4MT_daughters[0]->GetPDGMass();
-
   // Set up final state
   // parentParticle is set at rest here because boost with correct momentum 
   // is done later
   G4DynamicParticle parentParticle(G4MT_parent, G4ThreeVector(0,0,0), 0.0);
   G4DecayProducts* products = new G4DecayProducts(parentParticle);
 
-  // Electron, neutrino and daughter nucleus energies
-  G4double eKE = endpointEnergy*spectrumSampler->shoot(G4Random::getTheEngine() );
-  G4double eMomentum = std::sqrt(eKE*(eKE + 2.*eMass) );
+  if (spectrumSampler) {
+    // Electron, neutrino and daughter nucleus energies
+    G4double eKE = endpointEnergy*spectrumSampler->shoot(G4Random::getTheEngine() );
+    G4double eMomentum = std::sqrt(eKE*(eKE + 2.*eMass) );
 
-  G4double cosThetaENu = 2.*G4UniformRand() - 1.;
-  G4double eTE = eMass + eKE;
-  G4double nuEnergy = ((endpointEnergy - eKE)*(parentMass + nucleusMass - eTE)
-          - eMomentum*eMomentum)/(parentMass - eTE + eMomentum*cosThetaENu)/2.;
+    G4double cosThetaENu = 2.*G4UniformRand() - 1.;
+    G4double eTE = eMass + eKE;
+    G4double nuEnergy = ((endpointEnergy - eKE)*(parentMass + nucleusMass - eTE)
+            - eMomentum*eMomentum)/(parentMass - eTE + eMomentum*cosThetaENu)/2.;
 
-  // Electron 4-vector, isotropic angular distribution
-  G4double cosTheta = 2.*G4UniformRand() - 1.0;
-  G4double sinTheta = std::sqrt(1.0 - cosTheta*cosTheta);
+    // Electron 4-vector, isotropic angular distribution
+    G4double cosTheta = 2.*G4UniformRand() - 1.0;
+    G4double sinTheta = std::sqrt(1.0 - cosTheta*cosTheta);
 
-  G4double phi = twopi*G4UniformRand()*rad;
-  G4double sinPhi = std::sin(phi);
-  G4double cosPhi = std::cos(phi);
+    G4double phi = twopi*G4UniformRand()*rad;
+    G4double sinPhi = std::sin(phi);
+    G4double cosPhi = std::cos(phi);
 
-  G4ParticleMomentum eDirection(sinTheta*cosPhi, sinTheta*sinPhi, cosTheta);
-  G4DynamicParticle* dynamicElectron
-    = new G4DynamicParticle(G4MT_daughters[1], eDirection*eMomentum);
-  products->PushProducts(dynamicElectron);
+    G4ParticleMomentum eDirection(sinTheta*cosPhi, sinTheta*sinPhi, cosTheta);
+    G4DynamicParticle* dynamicElectron
+      = new G4DynamicParticle(G4MT_daughters[1], eDirection*eMomentum);
+    products->PushProducts(dynamicElectron);
 
-  // Neutrino 4-vector
-  G4double sinThetaENu = std::sqrt(1.0 - cosThetaENu*cosThetaENu);
-  phi = twopi*G4UniformRand()*rad;
-  G4double sinPhiNu = std::sin(phi);
-  G4double cosPhiNu = std::cos(phi);
+    // Neutrino 4-vector
+    G4double sinThetaENu = std::sqrt(1.0 - cosThetaENu*cosThetaENu);
+    phi = twopi*G4UniformRand()*rad;
+    G4double sinPhiNu = std::sin(phi);
+    G4double cosPhiNu = std::cos(phi);
 
-  G4ParticleMomentum nuDirection;
-  nuDirection.setX(sinThetaENu*cosPhiNu*cosTheta*cosPhi -
-                   sinThetaENu*sinPhiNu*sinPhi + cosThetaENu*sinTheta*cosPhi);
-  nuDirection.setY(sinThetaENu*cosPhiNu*cosTheta*sinPhi +
-                   sinThetaENu*sinPhiNu*cosPhi + cosThetaENu*sinTheta*sinPhi);
-  nuDirection.setZ(-sinThetaENu*cosPhiNu*sinTheta + cosThetaENu*cosTheta);
+    G4ParticleMomentum nuDirection;
+    nuDirection.setX(sinThetaENu*cosPhiNu*cosTheta*cosPhi -
+                     sinThetaENu*sinPhiNu*sinPhi + cosThetaENu*sinTheta*cosPhi);
+    nuDirection.setY(sinThetaENu*cosPhiNu*cosTheta*sinPhi +
+                     sinThetaENu*sinPhiNu*cosPhi + cosThetaENu*sinTheta*sinPhi);
+    nuDirection.setZ(-sinThetaENu*cosPhiNu*sinTheta + cosThetaENu*cosTheta);
 
-  G4DynamicParticle* dynamicNeutrino
-    = new G4DynamicParticle(G4MT_daughters[2], nuDirection*nuEnergy);
-  products->PushProducts(dynamicNeutrino);
+    G4DynamicParticle* dynamicNeutrino
+      = new G4DynamicParticle(G4MT_daughters[2], nuDirection*nuEnergy);
+    products->PushProducts(dynamicNeutrino);
 
-  // Daughter nucleus 4-vector
-  // p_D = - p_e - p_nu
-  G4DynamicParticle* dynamicDaughter =
-    new G4DynamicParticle(G4MT_daughters[0],
-                          -eDirection*eMomentum - nuDirection*nuEnergy);
-  products->PushProducts(dynamicDaughter);
+    // Daughter nucleus 4-vector
+    // p_D = - p_e - p_nu
+    G4DynamicParticle* dynamicDaughter =
+      new G4DynamicParticle(G4MT_daughters[0],
+                            -eDirection*eMomentum - nuDirection*nuEnergy);
+    products->PushProducts(dynamicDaughter);
+
+  } else {
+    // electron energy below threshold -> no decay
+    G4DynamicParticle* noDecay =
+      new G4DynamicParticle(G4MT_parent, G4ThreeVector(0,0,0), 0.0);
+    products->PushProducts(noDecay);
+  }
 
   // Check energy conservation against Q value, not nuclear masses
   /*
@@ -157,18 +164,18 @@ G4BetaMinusDecay::SetUpBetaSpectrumSampler(const G4int& daughterZ,
                                            const G4int& daughterA,
                                            const G4BetaDecayType& betaType)
 {
-  G4double e0 = endpointEnergy/0.510999;
+  G4double e0 = endpointEnergy/CLHEP::electron_mass_c2;
   G4BetaDecayCorrections corrections(daughterZ, daughterA);
-
-  // Array to store spectrum pdf
-  G4int npti = 100;
-  G4double* pdf = new G4double[npti];
-
-  G4double e;  // Total electron energy in units of electron mass
-  G4double p;  // Electron momentum in units of electron mass
-  G4double f;  // Spectral shape function
+  spectrumSampler = 0;
 
   if (e0 > 0) {
+    // Array to store spectrum pdf
+    G4int npti = 100;
+    G4double* pdf = new G4double[npti];
+
+    G4double e;  // Total electron energy in units of electron mass
+    G4double p;  // Electron momentum in units of electron mass
+    G4double f;  // Spectral shape function
     for (G4int ptn = 0; ptn < npti; ptn++) {
       // Calculate simple phase space
       e = 1. + e0*(G4double(ptn) + 0.5)/G4double(npti);
@@ -182,10 +189,9 @@ G4BetaMinusDecay::SetUpBetaSpectrumSampler(const G4int& daughterZ,
       f *= corrections.ShapeFactor(betaType, p, e0-e+1.);
       pdf[ptn] = f;
     }
-
     spectrumSampler = new G4RandGeneral(pdf, npti);
+    delete[] pdf;
   }
-  delete[] pdf;
 }
 
 

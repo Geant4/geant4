@@ -79,8 +79,8 @@ namespace G4INCL {
     s02pzHC(-1.0579999999999967036,11.113999999999994089,-8.5259999999999990196,2.0051666666666666525),
     s02pmHC(2.4009000000012553286,-7.7680000000013376183,20.619000000000433505,-16.429666666666723928,5.2525708333333363472,-0.58969166666666670206),
     s12mzHC(-0.21858699999999976269,1.9148999999999999722,-0.31727500000000001065,-0.027695000000000000486)
-  {
-  }
+	{
+	}
 
   G4double CrossSectionsMultiPions::NNElastic(Particle const * const part1, Particle const * const part2) {
 
@@ -121,21 +121,25 @@ namespace G4INCL {
       */
 
       G4double plab = 0.001*KinematicsUtils::momentumInLab(s, ParticleTable::effectiveNucleonMass, ParticleTable::effectiveNucleonMass);
+      G4double sigma = 0.;
 
       if (i == 0) {  // pn
         if (plab < 0.446) {
           G4double alp=std::log(plab);
-          return 6.3555*std::exp(-3.2481*alp-0.377*alp*alp);
+          sigma = 6.3555*std::exp(-3.2481*alp-0.377*alp*alp);
         }
         else if (plab < 0.851) {
-          return 33.+196.*std::pow(std::fabs(plab-0.95),2.5);
+          sigma = 33.+196.*std::pow(std::fabs(plab-0.95),2.5);
         }
         else if (plab <= 2.0) {
-          return 31./std::sqrt(plab);
+          sigma = 31./std::sqrt(plab);
         }
         else {
-          return 77./(plab+1.5);
+          sigma = 77./(plab+1.5);
         }
+        //if(plab < 0.9 && plab > 0.802) sigma -= 0.1387*std::exp(-std::pow((plab-0.861),2)/0.0006861); //correction if totalcx-sumcx < 0.1
+        //if(plab < 1.4 && plab > 1.31) sigma -= 0.1088*std::exp(-std::pow((plab-1.35),2)/0.00141); //correction if totalcx-sumcx < 0.1
+        return sigma;
       }
       else {  // pp and nn
         if (plab < 0.440) {
@@ -318,7 +322,8 @@ namespace G4INCL {
         }
 
 // channel T=0
-        snnpit=2*(s01pz+2*s11pm)-snnpit1;
+//        snnpit=s01pz+2*s11pm-snnpit1; //modif 2*(s01pz+2*s11pm)-snnpit1;
+        snnpit = 2*(s01pz+2*s11pm)-snnpit1;
         if (snnpit < 1.e-8) snnpit=0.;
         return snnpit;
     }
@@ -346,7 +351,7 @@ namespace G4INCL {
         G4double s02pm=0.;
         G4double s12mz=0.;
 
-        if (iso==0 && plab<3.3) {
+        if (iso==0 && plab<3.33) {
             snn2pit = xsiso - NNOnePiOrDelta(ener, iso, xsiso);
             if (snn2pit < 1.e-8) snn2pit=0.;
             return snn2pit;
@@ -409,6 +414,7 @@ namespace G4INCL {
         }
 
 // channel T=0
+//        snn2pit=3*(0.5*s02pm+0.5*s12mz-0.5*s02pz-s12zz);	//modif snn2pit=3*(s02pm+0.5*s12mz-0.5*s02pz-s12zz);
         snn2pit=3*(s02pm+0.5*s12mz-0.5*s02pz-s12zz);
         if (snn2pit < 1.e-8) snn2pit=0.;
         return snn2pit;
@@ -450,7 +456,7 @@ namespace G4INCL {
         // Cross section for nucleon-nucleon directly producing one pion
 
         const G4int iso=ParticleTable::getIsospin(particle1->getType()) + ParticleTable::getIsospin(particle2->getType());
-        if (iso!=0)
+        if (iso!=0) // If pp or nn we choose to always pass by the N-N to N-Delta channel
           return 0.;
 
         const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2);
@@ -520,7 +526,7 @@ namespace G4INCL {
       if(s<6.25E6)
         return 0.;
       const G4double sigma = NNTot(particle1, particle2) - NNElastic(particle1, particle2) - NNOnePiOrDelta(particle1, particle2) - NNTwoPi(particle1, particle2) - NNThreePi(particle1, particle2);
-      return ((sigma>0.) ? sigma : 0.);
+      return ((sigma>1.e-9) ? sigma : 0.);
     }
 
     G4double CrossSectionsMultiPions::NNToxPiNN(const G4int xpi, Particle const * const particle1, Particle const * const particle2) {
@@ -547,7 +553,7 @@ namespace G4INCL {
     // HE and LE pi- p and pi+ n
     G4double ramass = 0.0;
 
-    if(x <= 1306.0) {
+    if(x <= 1306.78) {
        G4double y = x*x;
        G4double q2;
        q2=(y-std::pow(1076.0, 2))*(y-std::pow(800.0, 2))/(4.0*y);
@@ -623,61 +629,53 @@ namespace G4INCL {
   }
 
 
-  G4double CrossSectionsMultiPions::piNIne(Particle const * const particle1, Particle const * const particle2) {
-    //      piN inelastic cross section (Delta excluded)
-
-    const Particle *pion;
-    const Particle *nucleon;
-    if(particle1->isNucleon()) {
-      nucleon = particle1;
-      pion = particle2;
-    } else {
-      pion = particle1;
-      nucleon = particle2;
-    }
+	G4double CrossSectionsMultiPions::piNIne(Particle const * const particle1, Particle const * const particle2) {
+		//      piN inelastic cross section (Delta excluded)
+		
+		const Particle *pion;
+		const Particle *nucleon;
+		if(particle1->isNucleon()) {
+			nucleon = particle1;
+			pion = particle2;
+		} else {
+			pion = particle1;
+			nucleon = particle2;
+		}
 // assert(pion->isPion());
-
-    const G4double pLab = KinematicsUtils::momentumInLab(pion, nucleon);
-
-    // these limits correspond to sqrt(s)=1230 and 20000 MeV
-    if(pLab>212677. || pLab<296.367)
-      return 0.0;
-
-    const G4int ipit3 = ParticleTable::getIsospin(pion->getType());
-    const G4int ind2t3 = ParticleTable::getIsospin(nucleon->getType());
-    const G4int cg = 4 + ind2t3*ipit3;
+		
+		const G4double pLab = KinematicsUtils::momentumInLab(pion, nucleon);
+		
+		// these limits correspond to sqrt(s)=1230 and 20000 MeV
+		if(pLab>212677. || pLab<296.367)
+			return 0.0;
+		
+		const G4int ipit3 = ParticleTable::getIsospin(pion->getType());
+		const G4int ind2t3 = ParticleTable::getIsospin(nucleon->getType());
+		const G4int cg = 4 + ind2t3*ipit3;
 // assert(cg==2 || cg==4 || cg==6);
-
-    const G4double p1=1e-3*pLab;
-    const G4double p2=std::log(p1);
-    G4double xpipp = 0.0;
-    G4double xpimp = 0.0;
-
-    if(cg!=2) {
-      // x-section pi+ p inelastique :
-      if(p1<=0.75)
-        xpipp=17.965*std::pow(p1, 5.4606);
-      else
-        xpipp=24.3-12.3*std::pow(p1, -1.91)+0.324*p2*p2-2.44*p2;
-      if(cg==6)
-        // cas pi+ p et pi- n
-        return xpipp;
-    }
-
-    // x-section pi- p inelastique :
-    if(p1 <= 0.4731)
-      xpimp=0;
-    else
-      xpimp=26.6-7.18*std::pow(p1, -1.86)+0.327*p2*p2-2.81*p2;
-    if(xpimp<0.)
-      xpimp=0;
-
-    if(cg==2) // cas pi- p et pi+ n
-      return xpimp;
-    else // cas pi0 p et pi0 n
-      return 0.5*(xpipp+xpimp);
-  }
-
+		
+//		const G4double p1=1e-3*pLab;
+//		const G4double p2=std::log(p1);
+		G4double xpipp = 0.0;
+		G4double xpimp = 0.0;
+		
+		if(cg!=2) {
+			// x-section pi+ p inelastique :
+			xpipp=piPluspIne(pion,nucleon);
+			
+			if(cg==6) // cas pi+ p et pi- n
+				return xpipp;
+		}
+		
+		// x-section pi- p inelastique :
+		xpimp=piMinuspIne(pion,nucleon);
+		
+		if(cg==2) // cas pi- p et pi+ n
+			return xpimp;
+		else      // cas pi0 p et pi0 n
+			return 0.5*(xpipp+xpimp);
+	}
+	
   G4double CrossSectionsMultiPions::piNToDelta(Particle const * const particle1, Particle const * const particle2) {
     //      piN Delta production
 
@@ -807,10 +805,12 @@ namespace G4INCL {
   }
 
   G4double CrossSectionsMultiPions::elastic(Particle const * const p1, Particle const * const p2) {
-    if(!p1->isPion() && !p2->isPion()){
+//    if(!p1->isPion() && !p2->isPion()){
+	  if((p1->isNucleon()||p1->isDelta()) && (p2->isNucleon()||p2->isDelta())){
       return NNElastic(p1, p2);
       }
-    else if (p1->isNucleon() || p2->isNucleon()){
+//    else if (p1->isNucleon() || p2->isNucleon()){
+	else if ((p1->isNucleon() && p2->isPion()) || (p2->isNucleon() && p1->isPion())){
       G4double pielas = piNTot(p1,p2) - piNIne(p1,p2) - piNToDelta(p1,p2);
         if (pielas < 0.){
             pielas = 0.;
@@ -850,132 +850,750 @@ namespace G4INCL {
         //
         //     pion-Nucleon producing xpi pions cross sections
         //
+		const Particle *pion;
+		const Particle *nucleon;
+		if(particle1->isNucleon()) {
+			nucleon = particle1;
+			pion = particle2;
+		} else {
+			pion = particle1;
+			nucleon = particle2;
+		}
 // assert(xpi>1 && xpi<=nMaxPiPiN);
 // assert((particle1->isNucleon() && particle2->isPion()) || (particle1->isPion() && particle2->isNucleon()));
-        if (xpi == 2)
-            return piNOnePi(particle1,particle2);
-        else if (xpi == 3)
-            return piNTwoPi(particle1,particle2);
+        const G4double plab = KinematicsUtils::momentumInLab(pion,nucleon);
+		if (xpi == 2) {
+			G4double OnePi=piNOnePi(particle1,particle2);
+			if (OnePi < 1.e-09) OnePi = 0.;
+            return OnePi;
+        }
+        else if (xpi == 3){
+			G4double TwoPi=piNTwoPi(particle1,particle2);
+			if (TwoPi < 1.e-09) TwoPi = 0.;									
+            return TwoPi;
+        }
         else if (xpi == 4) {
-            const G4double piNThreePi = piNIne(particle1,particle2) - piNOnePi(particle1,particle2) - piNTwoPi(particle1,particle2);
+            G4double piNThreePi = piNIne(particle1,particle2) - piNOnePi(particle1,particle2) - piNTwoPi(particle1,particle2);
+            if (piNThreePi < 1.e-09 || plab < 2000.) piNThreePi = 0.;									
             return piNThreePi;
         } else // should never reach this point
           return 0.0;
     }
 
-    G4double CrossSectionsMultiPions::piNOnePi(Particle const * const particle1, Particle const * const particle2) {
-      const Particle *pion;
-      const Particle *nucleon;
-      if(particle1->isNucleon()) {
-        nucleon = particle1;
-        pion = particle2;
-      } else {
-        pion = particle1;
-        nucleon = particle2;
-      }
+	G4double CrossSectionsMultiPions::piNOnePi(Particle const * const particle1, Particle const * const particle2) {
+		const Particle *pion;
+		const Particle *nucleon;
+		if(particle1->isNucleon()) {
+			nucleon = particle1;
+			pion = particle2;
+		} else {
+			pion = particle1;
+			nucleon = particle2;
+		}
 // assert(pion->isPion());
-
-      const G4double pLab = KinematicsUtils::momentumInLab(pion, nucleon);
-
-      // this limit corresponds to sqrt(s)=1230 MeV
-      if(pLab<296.367)
-        return 0.0;
-
-      const G4int ipi = ParticleTable::getIsospin(pion->getType());
-      const G4int ind2 = ParticleTable::getIsospin(nucleon->getType());
-      const G4int cg = 4 + ind2*ipi;
+		
+		const G4double pLab = KinematicsUtils::momentumInLab(pion, nucleon);
+		
+		// this limit corresponds to sqrt(s)=1230 MeV
+		if(pLab<296.367)
+			return 0.0;
+		
+		const G4int ipi = ParticleTable::getIsospin(pion->getType());
+		const G4int ind2 = ParticleTable::getIsospin(nucleon->getType());
+		const G4int cg = 4 + ind2*ipi;
 // assert(cg==2 || cg==4 || cg==6);
+		
+		//	const G4double p1=1e-3*pLab;
+		G4double tamp6=0.;
+		G4double tamp2=0.;
+		const G4double elas = elastic(particle1, particle2);
+		
+		//   X-SECTION PI+ P INELASTIQUE :
+		if(cg != 2) {
+			tamp6=piPluspOnePi(particle1,particle2);
+			if (cg == 6){ //   CAS PI+ P ET PI- N
+				if(tamp6 >= elas && pLab < 410.) tamp6 = elas;
+				return tamp6;
+			}
+		}
+		
+		//   X-SECTION PI- P INELASTIQUE :
+		tamp2=piMinuspOnePi(particle1,particle2);
+		if (tamp2 < 0.0) tamp2=0;
+		
+		if (cg == 2) //   CAS PI- P ET PI+ N
+			return tamp2;
+		else {       //   CAS PI0 P ET PI0 N
+			G4double s1pin = 0.5*(tamp6+tamp2);
+			const G4double inelastic = piNIne(particle1, particle2);
+			if(s1pin >= elas && pLab < 410.) s1pin = 0.;
+			if (s1pin > inelastic)
+				s1pin = inelastic;
+			return s1pin;
+		}
+	}
+	
+	G4double CrossSectionsMultiPions::piNTwoPi(Particle const * const particle1, Particle const * const particle2) {
+		//
+		//     pion-nucleon interaction, producing 2 pions
+		//     fit from Landolt-Bornstein multiplied by factor determined with evaluation of total xs
+		//
+		
+		const Particle *pion;
+		const Particle *nucleon;
+		if(particle1->isNucleon()) {
+			nucleon = particle1;
+			pion = particle2;
+		} else {
+			pion = particle1;
+			nucleon = particle2;
+		}
+// assert(pion->isPion());
+		
+		const G4double pLab = KinematicsUtils::momentumInLab(pion, nucleon);
+		const G4double elas = elastic(pion, nucleon);
+		
+		// this limit corresponds to sqrt(s)=1230 MeV
+		if(pLab<296.367)
+			return 0.0;
+		
+		const G4int ipi = ParticleTable::getIsospin(pion->getType());
+		const G4int ind2 = ParticleTable::getIsospin(nucleon->getType());
+		const G4int cg = 4 + ind2*ipi;
+// assert(cg==2 || cg==4 || cg==6);
+		
+		G4double tamp6=0.;
+		G4double tamp2=0.;
+		
+		//   X-SECTION PI+ P INELASTIQUE :
+		if(cg!=2) {
+			tamp6=piPluspTwoPi(particle1,particle2);
+			if(cg==6){ //   CAS PI+ P ET PI- N
+				if(tamp6 >= elas && pLab < 410.) tamp6 = 0.;
+				return tamp6;}
+		}
+		
+		//   X-SECTION PI- P INELASTIQUE :
+		tamp2=piMinuspTwoPi(particle1,particle2);
+		
+		if(cg==2) //   CAS PI- P ET PI+ N
+			return tamp2;
+		else {    //   CAS PI0 P ET PI0 N
+			const G4double s2pin=0.5*(tamp6+tamp2);
+			return s2pin;
+		}
+	}
+	
+	G4double CrossSectionsMultiPions::piPluspIne(Particle const * const particle1, Particle const * const particle2) {
+		//      piPlusP inelastic cross section (Delta excluded)
+		
+		const Particle *pion;
+		const Particle *nucleon;
+		if(particle1->isNucleon()) {
+			nucleon = particle1;
+			pion = particle2;
+		} else {
+			pion = particle1;
+			nucleon = particle2;
+		}
+// assert(pion->isPion());
+		
+		const G4double pLab = KinematicsUtils::momentumInLab(pion, nucleon);
+		
+		// these limits correspond to sqrt(s)=1230 and 20000 MeV
+		if(pLab>212677. || pLab<296.367)
+			return 0.0;
+		
+//		const G4int ipit3 = ParticleTable::getIsospin(pion->getType());
+//		const G4int ind2t3 = ParticleTable::getIsospin(nucleon->getType());
+//		const G4int cg = 4 + ind2t3*ipit3;
+//		assert(cg==2 || cg==4 || cg==6);
+		
+		const G4double p1=1e-3*pLab;
+		const G4double p2=std::log(p1);
+		G4double xpipp = 0.0;
+		
+		// x-section pi+ p inelastique :
+		if(p1<=0.75)
+			xpipp=17.965*std::pow(p1, 5.4606);
+		else
+			xpipp=24.3-12.3*std::pow(p1, -1.91)+0.324*p2*p2-2.44*p2;
+		// cas pi+ p et pi- n
+		return xpipp;
+		
+	}
 
-      const G4double p1=1e-3*pLab;
-      G4double tamp6=0.;
-      G4double tamp2=0.;
+	G4double CrossSectionsMultiPions::piMinuspIne(Particle const * const particle1, Particle const * const particle2) {
+		//      piMinusp inelastic cross section (Delta excluded)
+		
+		const Particle *pion;
+		const Particle *nucleon;
+		if(particle1->isNucleon()) {
+			nucleon = particle1;
+			pion = particle2;
+		} else {
+			pion = particle1;
+			nucleon = particle2;
+		}
+// assert(pion->isPion());
+		
+		const G4double pLab = KinematicsUtils::momentumInLab(pion, nucleon);
+		
+		// these limits correspond to sqrt(s)=1230 and 20000 MeV
+		if(pLab>212677. || pLab<296.367)
+			return 0.0;
+		
+//		const G4int ipit3 = ParticleTable::getIsospin(pion->getType());
+//		const G4int ind2t3 = ParticleTable::getIsospin(nucleon->getType());
+//		const G4int cg = 4 + ind2t3*ipit3;
+//		assert(cg==2 || cg==4 || cg==6);
+		
+		const G4double p1=1e-3*pLab;
+		const G4double p2=std::log(p1);
+		G4double xpimp = 0.0;
+		
+		// x-section pi- p inelastique :
+		if(p1 <= 0.4731)
+			xpimp=0;
+		else
+			xpimp=26.6-7.18*std::pow(p1, -1.86)+0.327*p2*p2-2.81*p2;
+		if(xpimp<0.)
+			xpimp=0;
+		
+		// cas pi- p et pi+ n
+		return xpimp;
+		
+	}
 
-      //   X-SECTION PI+ P INELASTIQUE :
-      if(cg != 2) {
-        if(pLab < 1532.52) // corresponds to sqrt(s)=1946 MeV
-          tamp6=piNIne(particle1, particle2);
-        else
-          tamp6=0.204+18.2*std::pow(p1, -1.72)+6.33*std::pow(p1, -1.13);
-        if (cg == 6) //   CAS PI+ P ET PI- N
-          return tamp6;
-      }
+	G4double CrossSectionsMultiPions::piPluspOnePi(Particle const * const particle1, Particle const * const particle2) {
+		const Particle *pion;
+		const Particle *nucleon;
+		if(particle1->isNucleon()) {
+			nucleon = particle1;
+			pion = particle2;
+		} else {
+			pion = particle1;
+			nucleon = particle2;
+		}
+// assert(pion->isPion());
+		
+		const G4double pLab = KinematicsUtils::momentumInLab(pion, nucleon);
+		
+		// this limit corresponds to sqrt(s)=1230 MeV
+		if(pLab<296.367)
+			return 0.0;
+		
+		//	const G4int ipi = ParticleTable::getIsospin(pion->getType());
+		//	const G4int ind2 = ParticleTable::getIsospin(nucleon->getType());
+		//	const G4int cg = 4 + ind2*ipi;
+		//	assert(cg==2 || cg==4 || cg==6);
+		
+		const G4double p1=1e-3*pLab;
+		G4double tamp6=0.;
+		
+		//   X-SECTION PI+ P INELASTIQUE :
+		if(pLab < 1532.52) // corresponds to sqrt(s)=1946 MeV
+			tamp6=piPluspIne(particle1, particle2);
+		else
+			tamp6=0.204+18.2*std::pow(p1, -1.72)+6.33*std::pow(p1, -1.13);
+		
+		//   CAS PI+ P ET PI- N
+		return tamp6;
+		
+	}
 
-      //   X-SECTION PI- P INELASTIQUE :
-      if (pLab < 1228.06) // corresponds to sqrt(s)=1794 MeV
-        tamp2=piNIne(particle1, particle2);
-      else
-        tamp2=9.04*std::pow(p1, -1.17)+18.*std::pow(p1, -1.21); // tamp2=9.04*std::pow(p1, -1.17)+(13.5*std::pow(p1, -1.21))*4./3.;
-      if (tamp2 < 0.0) tamp2=0;
+	G4double CrossSectionsMultiPions::piMinuspOnePi(Particle const * const particle1, Particle const * const particle2) {
+		const Particle *pion;
+		const Particle *nucleon;
+		if(particle1->isNucleon()) {
+			nucleon = particle1;
+			pion = particle2;
+		} else {
+			pion = particle1;
+			nucleon = particle2;
+		}
+// assert(pion->isPion());
+		
+		const G4double pLab = KinematicsUtils::momentumInLab(pion, nucleon);
+		
+		// this limit corresponds to sqrt(s)=1230 MeV
+		if(pLab<296.367)
+			return 0.0;
+		
+		//	const G4int ipi = ParticleTable::getIsospin(pion->getType());
+		//	const G4int ind2 = ParticleTable::getIsospin(nucleon->getType());
+		//	const G4int cg = 4 + ind2*ipi;
+		//	assert(cg==2 || cg==4 || cg==6);
+		
+		const G4double p1=1e-3*pLab;
+		G4double tamp2=0.;
+		
+		//   X-SECTION PI- P INELASTIQUE :
+		if (pLab < 1228.06) // corresponds to sqrt(s)=1794 MeV
+			tamp2=piMinuspIne(particle1, particle2);
+		else
+			tamp2=9.04*std::pow(p1, -1.17)+18.*std::pow(p1, -1.21); // tamp2=9.04*std::pow(p1, -1.17)+(13.5*std::pow(p1, -1.21))*4./3.;
+		if (tamp2 < 0.0) tamp2=0;
+		
+		//   CAS PI- P ET PI+ N
+		return tamp2;
+	}
 
-      if (cg == 2) //   CAS PI- P ET PI+ N
-        return tamp2;
-      else {
-        //   CAS PI0 P ET PI0 N
-        G4double s1pin = 0.5*(tamp6+tamp2);
-        const G4double inelastic = piNIne(particle1, particle2);
-        if (s1pin > inelastic)
-          s1pin = inelastic;
-        return s1pin;
-      }
+	G4double CrossSectionsMultiPions::piPluspTwoPi(Particle const * const particle1, Particle const * const particle2) {
+		//
+		//     pion-nucleon interaction, producing 2 pions
+		//     fit from Landolt-Bornstein multiplied by factor determined with evaluation of total xs
+		//
+		
+		const Particle *pion;
+		const Particle *nucleon;
+		if(particle1->isNucleon()) {
+			nucleon = particle1;
+			pion = particle2;
+		} else {
+			pion = particle1;
+			nucleon = particle2;
+		}
+// assert(pion->isPion());
+		
+		const G4double pLab = KinematicsUtils::momentumInLab(pion, nucleon);
+		
+		// this limit corresponds to sqrt(s)=1230 MeV
+		if(pLab<296.367)
+			return 0.0;
+		
+		//	const G4int ipi = ParticleTable::getIsospin(pion->getType());
+		//	const G4int ind2 = ParticleTable::getIsospin(nucleon->getType());
+		//	const G4int cg = 4 + ind2*ipi;
+		//	assert(cg==2 || cg==4 || cg==6);
+		
+		const G4double p1=1e-3*pLab;
+		G4double tamp6=0.;
+		
+		//   X-SECTION PI+ P INELASTIQUE :
+		if(pLab < 2444.7) // corresponds to sqrt(s)=2344 MeV
+			tamp6=piPluspIne(particle1, particle2)-piPluspOnePi(particle1, particle2);
+		else
+			tamp6=1.59+25.5*std::pow(p1, -1.04); // tamp6=(0.636+10.2*std::pow(p1, -1.04))*15./6.;
+		
+		//   CAS PI+ P ET PI- N
+		return tamp6;
+	}
+	
+    G4double CrossSectionsMultiPions::piMinuspTwoPi(Particle const * const particle1, Particle const * const particle2) {
+	//
+	//     pion-nucleon interaction, producing 2 pions
+	//     fit from Landolt-Bornstein multiplied by factor determined with evaluation of total xs
+	//
+	
+	const Particle *pion;
+	const Particle *nucleon;
+	if(particle1->isNucleon()) {
+		nucleon = particle1;
+		pion = particle2;
+	} else {
+		pion = particle1;
+		nucleon = particle2;
+	}
+// assert(pion->isPion());
+	
+	const G4double pLab = KinematicsUtils::momentumInLab(pion, nucleon);
+	
+	// this limit corresponds to sqrt(s)=1230 MeV
+	if(pLab<296.367)
+		return 0.0;
+	
+	//	const G4int ipi = ParticleTable::getIsospin(pion->getType());
+	//	const G4int ind2 = ParticleTable::getIsospin(nucleon->getType());
+	//	const G4int cg = 4 + ind2*ipi;
+	//	assert(cg==2 || cg==4 || cg==6);
+	
+	const G4double p1=1e-3*pLab;
+	G4double tamp2=0.;
+	
+	//   X-SECTION PI- P INELASTIQUE :
+	if(pLab<2083.63) // corresponds to sqrt(s)=2195 MeV
+		tamp2=piMinuspIne(particle1, particle2)-piMinuspOnePi(particle1, particle2);
+	else
+		tamp2=2.457794117647+18.066176470588*std::pow(p1, -0.92); // tamp2=(0.619+4.55*std::pow(p1, -0.92))*135./34.;
+	
+	//   CAS PI- P ET PI+ N
+	return tamp2;
+}
+
+
+
+	
+    G4double CrossSectionsMultiPions::piNToEtaN(Particle const * const, Particle const * const) {
+		//
+		//     Pion-Nucleon producing Eta cross sections
+		//
+        return 0.;
+    }
+	
+    G4double CrossSectionsMultiPions::piNToOmegaN(Particle const * const, Particle const * const) {
+		//
+		//     Pion-Nucleon producing Omega cross sections
+		//
+        return 0.;
+    }
+	
+    G4double CrossSectionsMultiPions::piNToEtaPrimeN(Particle const * const, Particle const * const) {
+		//
+		//     Pion-Nucleon producing EtaPrime cross sections
+		//
+        return 0.;
+    }
+	
+    G4double CrossSectionsMultiPions::etaNToPiN(Particle const * const, Particle const * const) {
+		//
+		//     Eta-Nucleon producing Pion cross sections
+		//
+		      return 0.;
     }
 
-    G4double CrossSectionsMultiPions::piNTwoPi(Particle const * const particle1, Particle const * const particle2) {
-      //
-      //     pion-nucleon interaction, producing 2 pions
-      //     fit from Landolt-Bornstein multiplied by factor determined with evaluation of total xs
-      //
+	
+	   G4double CrossSectionsMultiPions::etaNToPiPiN(Particle const * const, Particle const * const) {
+		//
+		//     Eta-Nucleon producing Two Pions cross sections
+		//
+		      return 0.;
+	   }
+	
+	
+    G4double CrossSectionsMultiPions::omegaNToPiN(Particle const * const, Particle const * const) {
+		//
+		//     Omega-Nucleon producing Pion cross sections
+		//
+        return 0.;
+    }
+	
+    G4double CrossSectionsMultiPions::omegaNToPiPiN(Particle const * const, Particle const * const) {
+		//
+		//     Omega-Nucleon producing Two Pions cross sections
+		//
+        return 0.;
+    }
+	
+    G4double CrossSectionsMultiPions::etaPrimeNToPiN(Particle const * const, Particle const * const) {
+		//
+		//     EtaPrime-Nucleon producing Pion cross sections
+		//
+        return 0.;
+    }
+	
+    G4double CrossSectionsMultiPions::NNToNNEta(Particle const * const, Particle const * const) {
+		//
+		//     Nucleon-Nucleon producing Eta cross sections
+		//
+        return 0.;
+    }
+	
+	G4double CrossSectionsMultiPions::NNToNNEtaExclu(Particle const * const, Particle const * const) {
+		//
+		//     Nucleon-Nucleon producing Eta cross sections
+		//
+	    return 0.;
+	   }
+	
+	G4double CrossSectionsMultiPions::NNToNNEtaxPi(const G4int, Particle const * const, Particle const * const) {
+	    return 0.;
+	   }
 
-      const Particle *pion;
-      const Particle *nucleon;
-      if(particle1->isNucleon()) {
-        nucleon = particle1;
-        pion = particle2;
-      } else {
-        pion = particle1;
-        nucleon = particle2;
-      }
-// assert(pion->isPion());
+   	G4double CrossSectionsMultiPions::NNToNDeltaEta(Particle const * const, Particle const * const) {
+		//
+		//     Nucleon-Nucleon producing N-Delta-Eta cross sections
+		//
+		return 0.;
+		}
 
-      const G4double pLab = KinematicsUtils::momentumInLab(pion, nucleon);
-
-      // this limit corresponds to sqrt(s)=1230 MeV
-      if(pLab<296.367)
-        return 0.0;
-
-      const G4int ipi = ParticleTable::getIsospin(pion->getType());
-      const G4int ind2 = ParticleTable::getIsospin(nucleon->getType());
-      const G4int cg = 4 + ind2*ipi;
-// assert(cg==2 || cg==4 || cg==6);
-
-      const G4double p1=1e-3*pLab;
-      G4double tamp6=0.;
-      G4double tamp2=0.;
-
-      //   X-SECTION PI+ P INELASTIQUE :
-      if(cg!=2) {
-        if(pLab < 2444.7) // corresponds to sqrt(s)=2344 MeV
-          tamp6=piNIne(particle1, particle2)-piNOnePi(particle1, particle2);
-        else
-          tamp6=1.59+25.5*std::pow(p1, -1.04); // tamp6=(0.636+10.2*std::pow(p1, -1.04))*15./6.;
-
-        if(cg==6) //   CAS PI+ P ET PI- N
-          return tamp6;
-      }
-
-      //   X-SECTION PI- P INELASTIQUE :
-      if(pLab<2083.63) // corresponds to sqrt(s)=2195 MeV
-        tamp2=piNIne(particle1, particle2)-piNOnePi(particle1, particle2);
-      else
-        tamp2=2.457794117647+18.066176470588*std::pow(p1, -0.92); // tamp2=(0.619+4.55*std::pow(p1, -0.92))*135./34.;
-
-      if(cg==2) //   CAS PI- P ET PI+ N
-        return tamp2;
-      else {
-        //   CAS PI0 P ET PI0 N
-        const G4double s2pin=0.5*(tamp6+tamp2);
-        return s2pin;
-      }
+    G4double CrossSectionsMultiPions::NNToNNOmega(Particle const * const, Particle const * const) {
+		//
+		//     Nucleon-Nucleon producing Omega cross sections
+		//
+     return 0.;
+    }
+	
+    G4double CrossSectionsMultiPions::NNToNNOmegaExclu(Particle const * const, Particle const * const) {
+		//
+		//     Nucleon-Nucleon producing Omega cross sections
+		//
+     return 0.;
+    }
+	
+    G4double CrossSectionsMultiPions::NNToNNOmegaxPi(const G4int, Particle const * const, Particle const * const) {
+     return 0.;
+    }
+ 
+    G4double CrossSectionsMultiPions::NNToNDeltaOmega(Particle const * const, Particle const * const) {
+  //
+  //     Nucleon-Nucleon producing N-Delta-Omega cross sections
+  //
+     return 0.;
     }
 
+
+
+
+    G4double CrossSectionsMultiPions::NYelastic(Particle const * const , Particle const * const ) {
+        //
+        //      Hyperon-Nucleon elastic cross sections
+        //
+		return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NKelastic(Particle const * const , Particle const * const ) {
+        //
+        //      Kaon-Nucleon elastic cross sections
+        //
+		return 0.;
+	}
+
+    G4double CrossSectionsMultiPions::NKbelastic(Particle const * const , Particle const * const ) {
+        //
+        //      antiKaon-Nucleon elastic cross sections
+        //
+		return 0.;
+	}
+
+
+	G4double CrossSectionsMultiPions::NNToNLK(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon producing N-Lambda-Kaon cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NNToNSK(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon producing N-Sigma-Kaon cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NNToNLKpi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon producing N-Lambda-Kaon-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NNToNSKpi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon producing N-Sigma-Kaon-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NNToNLK2pi(Particle const * const, Particle const * const) {
+        //
+        //     Nucleon-Nucleon producing N-Lambda-Kaon-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NNToNSK2pi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon producing N-Sigma-Kaon-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NNToNNKKb(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon producing Nucleon-Nucleon-Kaon-antiKaon cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NNToMissingStrangeness(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon missing strangeness production cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NDeltaToNLK(Particle const * const, Particle const * const) {
+        // Nucleon-Delta producing Nucleon Lambda Kaon cross section
+        return 0;
+    }
+    G4double CrossSectionsMultiPions::NDeltaToNSK(Particle const * const, Particle const * const) {
+        // Nucleon-Delta producing Nucleon Sigma Kaon cross section
+        return 0;
+    }
+    G4double CrossSectionsMultiPions::NDeltaToDeltaLK(Particle const * const, Particle const * const) {
+        // Nucleon-Delta producing Delta Lambda Kaon cross section
+        return 0;
+    }
+    G4double CrossSectionsMultiPions::NDeltaToDeltaSK(Particle const * const, Particle const * const) {
+        // Nucleon-Delta producing Delta Sigma Kaon cross section
+        return 0;
+    }
+    
+    G4double CrossSectionsMultiPions::NDeltaToNNKKb(Particle const * const, Particle const * const) {
+        // Nucleon-Delta producing Nucleon-Nucleon Kaon antiKaon cross section
+        return 0;
+    }
+
+
+    G4double CrossSectionsMultiPions::NpiToLK(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Lambda-Kaon cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NpiToSK(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Sigma-Kaon cross sections
+        //
+        return 0.;
+    }
+    G4double CrossSectionsMultiPions::p_pimToSmKp(Particle const * const, Particle const * const) {
+        return 0.;
+    }
+    G4double CrossSectionsMultiPions::p_pimToSzKz(Particle const * const, Particle const * const) {
+        return 0.;
+    }
+    G4double CrossSectionsMultiPions::p_pizToSzKp(Particle const * const, Particle const * const) {
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NpiToLKpi(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Lambda-Kaon-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NpiToSKpi(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Sigma-Kaon-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NpiToLK2pi(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Lambda-Kaon-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NpiToSK2pi(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Lambda-Kaon-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NpiToNKKb(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Nucleon-Kaon-antiKaon cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NpiToMissingStrangeness(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon missing strangeness production cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NLToNS(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Hyperon multiplet changing cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NSToNL(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Sigma quasi-elastic cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NSToNS(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Sigma quasi-elastic cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NKToNK(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Kaon quasi-elastic cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NKToNKpi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Kaon producing Nucleon-Kaon-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NKToNK2pi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Kaon producing Nucleon-Kaon-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NKbToNKb(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon quasi-elastic cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NKbToSpi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon producing Sigma-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NKbToLpi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon producing Lambda-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NKbToS2pi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon producing Sigma-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NKbToL2pi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon producing Lambda-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NKbToNKbpi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon producing Nucleon-antiKaon-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsMultiPions::NKbToNKb2pi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon producing Nucleon-antiKaon-2pion cross sections
+        //
+        return 0.;
+    }
+
+
+
+	
 } // namespace G4INCL
 

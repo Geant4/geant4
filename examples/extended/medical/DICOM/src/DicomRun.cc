@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomRun.cc 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id: DicomRun.cc 106196 2017-09-19 04:19:33Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomRun.cc
 /// \brief Implementation of the DicomRun class

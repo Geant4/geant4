@@ -68,23 +68,26 @@ RunActionMaster::BeginOfRunAction(const G4Run*)
 void
 RunActionMaster::EndOfRunAction(const G4Run* arun)
 {
-  //This is executed by master thread. Workers have already
-  //merged their histograms into this master threads
-  G4int rank = G4MPImanager::GetManager()-> GetRank();
+  //This is executed by master thread only. Worker threads have already
+  //merged their results into this master threads.
 
-  //Save histograms before MPI merging
-  if (rank == 0)
-    {
-      G4String fname("dose-rank000");
-      Analysis* myana = Analysis::GetAnalysis();
-      myana-> Save(fname);
-    }
+  //We are going to merge the results via MPI for:
+  // 1. User-defined "Run" object
+  // 2. Command line scorers, if exists
+  // 3. G4Analysis objects
 
-  G4cout << "======================================";
-  G4cout <<  "===========" << G4endl;
+  // For debugging purposes in the following we write out results twice:
+  // BEFORE and AFTER the merging, so that rank 0 actually
+  // writes two files, the one called "*rank000*" will contain the partial
+  // results only from rank #0,
+  // the file *merged* contains the reduction from all ranks.
+  // It should be very easy to adapt this code
+
+  const G4int rank = G4MPImanager::GetManager()-> GetRank();
+
+  G4cout << "=====================================================" << G4endl;
   G4cout << "Start EndOfRunAction for master thread in rank: " << rank<<G4endl;
-  G4cout << "======================================";
-  G4cout << "===========" << G4endl;
+  G4cout << "=====================================================" << G4endl;
 
   //Merging of G4Run object:
   //All ranks > 0 merge to rank #0
@@ -105,41 +108,99 @@ RunActionMaster::EndOfRunAction(const G4Run* arun)
   }
 
   //Merge of scorers
-  //ver = 0;
-  if (G4ScoringManager::GetScoringManagerIfExist())
-    {
-      G4MPIscorerMerger sm(G4ScoringManager::GetScoringManagerIfExist());
+  ver = 0;
+  if (G4ScoringManager::GetScoringManagerIfExist()) {
+      const auto scor = G4ScoringManager::GetScoringManager();
+      G4MPIscorerMerger sm(scor);
       sm.SetVerbosity(ver);
-      sm.Merge();
-    }
+      //Debug!
+      auto debugme = [&scor](){
+        for ( size_t idx = 0 ; idx < scor->GetNumberOfMesh() ; ++idx) {
+            const auto m = scor->GetMesh(idx);
+            const MeshScoreMap& map = m->GetScoreMap();
+            std::for_each(map.begin(),map.end(),
+              [](const MeshScoreMap::value_type& e) {
+                G4cout<<e.first<<"("<<e.second<<"):"<<G4endl;
+                const auto data = e.second->GetMap();
+                for( auto it = data->begin() ; it != data->end() ; ++it ) {
+                    G4cout<<it->first<<" => G4StatDouble(n,sum_w,sum_w2,sum_wx,sum_wx2): "
+                    <<it->second->n()<<" "<<it->second->sum_w()<<" "
+                    <<it->second->sum_w2()<<" "<<it->second->sum_wx()<<" "
+                    <<it->second->sum_wx2()<<G4endl;
+                }
+            });
+        }
+      };
+      //Debug!
+      if ( ver > 4 ) {
+          G4cout<<"Before merging: Meshes dump"<<G4endl;
+          debugme();
+      }
+      //Write partial scorers from single ranks *before* merging
+      //Do not rely on UI command to write out scorers, because rank-specific
+      //files will have same file name: need to add rank # to file name
+      if ( true ) {
+       for ( size_t idx = 0 ; idx < scor->GetNumberOfMesh() ; ++idx) {
+              const auto m = scor->GetMesh(idx);
+              const auto& mn = m->GetWorldName();
+              std::ostringstream fname;
+              fname<<"scorer-"<<mn<<"-rank"<<rank<<".csv";
+              scor->DumpAllQuantitiesToFile(mn,fname.str());
+       }
+      }
 
+      //Now reduce all scorers to rank #0
+      sm.Merge();
+
+      //Debug!
+      if ( ver > 4 ) {
+          G4cout<<"After merging: Meshes dump"<<G4endl;
+          debugme();
+      }
+      //For rank #0 write out the merged files
+      if ( rank == 0 ) {
+        for ( size_t idx = 0 ; idx < scor->GetNumberOfMesh() ; ++idx) {
+            const auto m = scor->GetMesh(idx);
+            const auto& mn = m->GetWorldName();
+            std::ostringstream fname;
+            fname<<"scorer-"<<mn<<"-merged.csv";
+            scor->DumpAllQuantitiesToFile(mn,fname.str());
+        }
+    }
+  }
+
+  //Save histograms *before* MPI merging for rank #0
+  if (rank == 0)
+    {
+      G4String fname("dose-rank0");
+      Analysis* myana = Analysis::GetAnalysis();
+      myana-> Save(fname);
+    }
   //Merge of g4analysis objects
   ver=0;
   G4MPIhistoMerger hm(G4AnalysisManager::Instance());
   hm.SetVerbosity(ver);
   hm.Merge();
 
-  G4cout << "======================================";
-  G4cout <<  "==========" << G4endl;
-  G4cout << "End EndOfRunAction for master thread in rank: " << rank << G4endl;
-  G4cout << "======================================";
-  G4cout <<  "==========" << G4endl;
-
   //Save g4analysis objects to a file
   //NB: It is important that the save is done *after* MPI-merging of histograms
 
-  //One can save all ranks or just rank0: remember in case of all ranks,
-  //the file of rank0 contains the sum of everything
+  //One can save all ranks or just rank0, chane the if
   if (true /*rank == 0*/)
     {
-      char str[64];
-      sprintf(str, "dose-rank%03d", rank);
-      G4String fname(str);
-      if (rank == 0)
-        fname = "dose-merged";
+      std::ostringstream fname;
+      fname<<"dose-rank"<<rank;
+      if (rank == 0) {
+        fname.str("dose-merged");
+      }
       Analysis* myana = Analysis::GetAnalysis();
-      myana-> Save(fname);
+      myana-> Save(fname.str());
     }
     Analysis* myana = Analysis::GetAnalysis();
     myana-> Close();
+
+    G4cout << "===================================================" << G4endl;
+    G4cout << "End EndOfRunAction for master thread in rank: " << rank << G4endl;
+    G4cout << "===================================================" << G4endl;
+
 }

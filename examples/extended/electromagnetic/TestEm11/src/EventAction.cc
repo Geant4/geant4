@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 74997 2013-10-25 10:52:13Z gcosmo $
+// $Id: EventAction.cc 98749 2016-08-09 13:43:36Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,8 +42,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction()
-:G4UserEventAction(), fTotalEdep(0.)
+EventAction::EventAction(DetectorConstruction* det)
+:G4UserEventAction(), fDetector(det)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,25 +55,34 @@ EventAction::~EventAction()
 
 void EventAction::BeginOfEventAction(const G4Event*)
 {
- //energy deposited per event
- fTotalEdep = 0.;
+  //energy deposited per event
+  for (G4int k=0; k<kMaxAbsor; k++) { fEdepAbsor[k] = 0.0; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
+  //get Run
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  
   //plot energy deposited per event
   //
-  if (fTotalEdep > 0.) {
-    Run* run 
-       = static_cast<Run*>(
-           G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-    run->AddEdep(fTotalEdep);
-    G4AnalysisManager::Instance()->FillH1(2,fTotalEdep);
-  }  
+  G4double TotalEdep(0.);
+  for (G4int k=1; k<=fDetector->GetNbOfAbsor(); k++) {
+    if (fEdepAbsor[k] > 0.) {
+      run->AddEdep(k,fEdepAbsor[k]);
+      G4AnalysisManager::Instance()->FillH1(10 + k, fEdepAbsor[k]);
+      TotalEdep += fEdepAbsor[k];
+    }
+  }
+  
+  if (TotalEdep > 0.) {
+    run->AddTotEdep(TotalEdep);  
+    G4AnalysisManager::Instance()->FillH1(2,TotalEdep);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

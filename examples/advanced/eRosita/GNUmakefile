@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.2 2010-11-29 10:00:05 gcosmo Exp $
+# $Id: GNUmakefile 107473 2017-11-15 08:02:34Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -9,7 +9,8 @@ name := eRosita
 
 G4TARGET := $(name)
 G4EXLIB := true
-SUBDIRS := physics application
+SUBDIRS := application
+#SUBDIRS := physics application
 
 # ifdef G4ANALYSIS_USE
 #  SUBDIRS += analysis

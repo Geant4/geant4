@@ -31,27 +31,31 @@
 //
 // Author: 2013 P. Arce
 //
+// Modified
+// 12.04.2017 A.Dotti move to new design with base class
+//
 //----------------------------------------------------------------------------
 //
 #ifndef G4TritonBuilder_h
 #define G4TritonBuilder_h 1
 
+#include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
 #include "G4TritonInelasticProcess.hh"
 #include "G4VTritonBuilder.hh"
-
 #include <vector>
 
-class G4TritonBuilder
+class G4TritonBuilder : public G4PhysicsBuilderInterface
 {
   public: 
     G4TritonBuilder();
-    virtual ~G4TritonBuilder();
+    virtual ~G4TritonBuilder() {}
 
-  public: 
-    void Build();
-    void RegisterMe(G4VTritonBuilder * aB) {theModelCollections.push_back(aB);}
+    virtual void Build() final override;
+    virtual void RegisterMe(G4PhysicsBuilderInterface * aB) final override;
+
+    using G4PhysicsBuilderInterface::Build; //Prevent compiler warning
 
   private:
     G4TritonInelasticProcess * theTritonInelastic;

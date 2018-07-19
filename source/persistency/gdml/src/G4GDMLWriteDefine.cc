@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteDefine.cc 93077 2015-10-02 14:38:25Z gcosmo $
+// $Id: G4GDMLWriteDefine.cc 108895 2018-03-15 10:27:25Z gcosmo $
 //
 // class G4GDMLWriteDefine Implementation
 //
@@ -130,8 +130,9 @@ Position_vectorWrite(xercesc::DOMElement* element, const G4String& tag,
 
 void G4GDMLWriteDefine::DefineWrite(xercesc::DOMElement* element)
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Writing definitions..." << G4endl;
-
+#endif
    defineElement = NewElement("define");
    element->appendChild(defineElement);
 }

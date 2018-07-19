@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/HistoManager.cc
+/// \file HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
 // $Id: HistoManager.cc 83882 2014-09-22 11:09:30Z maire $
@@ -101,10 +101,18 @@ void HistoManager::Book()
                  nbins, vmin, vmax);
   analysis->SetH1Activation(id, false);  
 
-  id = analysis->CreateH1("H16","Decay emission spectrum (MeV)",
+  id = analysis->CreateH1("H16","Decay emission spectrum (0 - 10 MeV)",
                  nbins, vmin, vmax);
   analysis->SetH1Activation(id, false);  
-    
+  
+  id = analysis->CreateH1("H17","Decay emission spectrum (0 - 1 MeV)",
+                 nbins, vmin, vmax);
+  analysis->SetH1Activation(id, false);
+
+  id = analysis->CreateH1("H18","Decay emission spectrum (0 - 0.1 MeV)",
+                 nbins, vmin, vmax);
+  analysis->SetH1Activation(id, false);
+  
   // nTuples
   //
   ////analysis->SetNtupleDirectoryName("ntuple");

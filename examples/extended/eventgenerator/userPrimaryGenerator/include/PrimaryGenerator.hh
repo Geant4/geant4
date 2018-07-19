@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/userPrimaryGenerator/include/PrimaryGenerator.hh
+/// \file PrimaryGenerator.hh
 /// \brief Definition of the PrimaryGenerator class
 //
 //

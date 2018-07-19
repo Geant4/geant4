@@ -37,8 +37,8 @@ public:
   Run();
   virtual ~Run() {}
   void Merge(const G4Run*);
-  G4int GetCounter() const { return aDummyCounter; }
+  G4int GetCounter() const { return fDummyCounter; }
 private:
-  G4int aDummyCounter;
+  G4int fDummyCounter;
 };
 #endif //RUN_HH

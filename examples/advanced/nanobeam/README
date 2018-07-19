@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README 73614 2013-09-02 10:16:16Z gcosmo $
+$Id: README 103554 2017-04-18 09:03:46Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -81,12 +81,12 @@ The macro file default.mac is read by default.
 Several macro files are provided:
 
 1) for the computation of intrinsic aberration coefficients :
-coef-square.mac : using square magnetic field model (=default.mac)
+coef-square.mac : using square magnetic field model 
 coef-map.mac : using 3D map magnetic field model
 coef-enge.mac : using Enge's analytical field model
 
 2) for the simulation of the beam image with a realistic emittance :
-image-square.mac : using square magnetic field model
+image-square.mac : using square magnetic field model (=default.mac)
 image-map.mac : using 3D map magnetic field model
 image-enge.mac : using Enge's analytical field model
 
@@ -104,7 +104,6 @@ The code can be run in MT mode, for high statistics image simulation.
 Do not use MT for aberration coefficients calculation (32 rays only are shot).
 The switch to MT can be made in nanobeam.cc.
 
-
 ---->5. PHYSICS
 
 The example runs with protons with fluctuating energies around 3 MeV.
@@ -118,8 +117,9 @@ ROOT macro file plot.C:
 * be sure to have ROOT installed on your machine
 * be sure to be in the directory where ROOT output files are generated
 * copy plot.C into this directory
-* launch ROOT by typing root
-* under your ROOT session, type in : .X plot.C to execute the macro file
+* launch ROOT by typing root, then under your ROOT session, type in : .X plot.C 
+  to execute the macro file
+* or type directly: root plot.X
 
 This macro file shows :
 - the beam profile along the nanobeam line (only for the computation of intrinsic 

@@ -278,79 +278,7 @@ public:
     return true;
   }
 
-  bool contract(unsigned int a_factor,img<T>& a_res,bool a_force_res_owner = true) const {
-    // a_factor pixels are contracted in one.
-    if(a_factor==1) {
-      if(a_force_res_owner) {
-        a_res.copy(m_w,m_h,m_n,m_buffer);
-      } else {
-        a_res.set(m_w,m_h,m_n,m_buffer,false);
-      }
-      return true;
-    }
-    if(!a_factor) {
-      a_res.make_empty();
-      return false;
-    }
-  
-    unsigned int nw = m_w/a_factor;
-    unsigned int nh = m_h/a_factor;
-    unsigned int sz = nh*nw*m_n;
-    if(!sz) {
-      a_res.make_empty();
-      return false;
-    }
-  
-    T* nb = new T[sz];
-    if(!nb) {
-      a_res.make_empty();
-      return false;
-    }
-
-    //T* npos = nb;
-    //for(unsigned int ipix=0;ipix<sz;ipix++) {*npos = 125;npos++;}
-
-    double* pixels = new double[m_n]; //for mean value.
-    if(!pixels) {
-      delete [] nb;
-      a_res.make_empty();
-      return false;
-    }
-    unsigned int nfac = a_factor*a_factor;
-
-    for(unsigned int j=0;j<nh;j++) {
-      for(unsigned int i=0;i<nw;i++) {
-
-        // take mean value of a_factor*a_factor pixels :  
-        for(unsigned int ipix=0;ipix<m_n;ipix++) pixels[ipix] = 0;
-            
-        for(unsigned int fr=0;fr<a_factor;fr++) {
-          for(unsigned int fc=0;fc<a_factor;fc++) {
-            T* pos = m_buffer + (j*a_factor+fr)*(m_w*m_n) +(i*a_factor+fc)*m_n;
-            for(unsigned int ipix=0;ipix<m_n;ipix++) {
-              pixels[ipix] += double(*pos);pos++;
-            }
-          }
-        }
-        for(unsigned int ipix=0;ipix<m_n;ipix++) {
-          pixels[ipix] /= double(nfac);
-        }
-
-        //position in the result image.
-        T* npos = nb + j * (nw * m_n) + i*m_n;
-        for(unsigned int ipix=0;ipix<m_n;ipix++) {
-          *npos = T(pixels[ipix]);npos++;
-        }
-      }
-    }
-
-    delete [] pixels;
-
-    a_res.set(nw,nh,m_n,nb,true);
-    return true;
-  }
-
-  bool contract(unsigned int a_w,unsigned int a_h,img<T>& a_res,bool a_force_res_owner = true) const {
+  bool contract_raw(unsigned int a_w,unsigned int a_h,img<T>& a_res,bool a_force_res_owner = true) const {
     if((a_w==m_w)&&(a_h==m_h)) {
       if(a_force_res_owner) {
         a_res.copy(m_w,m_h,m_n,m_buffer);
@@ -415,6 +343,129 @@ public:
     return true;
   }
 
+  bool contract(unsigned int a_w,unsigned int a_h,img<T>& a_res,bool a_force_res_owner = true) const {
+    //optimized version of contract_raw().
+
+    if((a_w==m_w)&&(a_h==m_h)) {
+      if(a_force_res_owner) {
+        a_res.copy(m_w,m_h,m_n,m_buffer);
+      } else {
+        a_res.set(m_w,m_h,m_n,m_buffer,false);
+      }
+      return true;
+    }
+  
+    size_t sz = a_h*a_w*m_n;
+    if(!sz) {
+      a_res.make_empty();
+      return false;
+    }
+  
+    T* rb = new T[sz];
+    if(!rb) {
+      a_res.make_empty();
+      return false;
+    }
+
+    double* pixels = new double[m_n]; //for mean value.
+    if(!pixels) {
+      delete [] rb;
+      a_res.make_empty();
+      return false;
+    }
+   {for(unsigned int ipix=0;ipix<m_n;ipix++) pixels[ipix] = 0;}
+
+    unsigned int wfac = (unsigned int)(double(m_w)/double(a_w));
+    unsigned int hfac = (unsigned int)(double(m_h)/double(a_h));
+    if(!wfac) wfac = 1;
+    if(!hfac) hfac = 1;
+
+    double wfac_hfac = wfac*hfac;
+
+    //::printf("debug : %d %d, %d %d\n",a_h,a_w,hfac,wfac);
+
+    T* hpos;T* pos;T* hrpos;T* rpos;T* hhpos;T* _pos;double* ppos;
+    unsigned int i,j,fr,fc,ipix,i0;
+    unsigned int astride = a_w * m_n;
+    unsigned int mstride = m_w * m_n;
+    unsigned int wfacstride = wfac * m_n;
+
+    for(j=0;j<a_h;j++) {
+      hrpos = rb + j * astride;
+      hhpos = m_buffer + j*hfac*mstride;
+      for(i=0;i<a_w;i++) {
+
+        // take mean value of wfac*hfac pixels :  
+
+        i0 = i*wfacstride;
+
+        hpos = hhpos;
+        for(fr=0;fr<hfac;fr++,hpos+=mstride) {
+          _pos = hpos + i0;
+          for(fc=0;fc<wfac;fc++,_pos+=m_n) {
+            pos = _pos;
+            ppos = pixels;
+            for(ipix=0;ipix<m_n;ipix++,pos++,ppos++) {
+              *ppos += double(*pos)/wfac_hfac;
+//              *ppos += double(*pos); //NOTE : doing the wfac_hfac division in the below loop is slower !
+            }
+          }
+        }
+
+        //position in the result image.
+        rpos = hrpos + i*m_n;
+        ppos = pixels;
+        for(ipix=0;ipix<m_n;ipix++,rpos++,ppos++) {
+          *rpos = T(*ppos);
+//          *rpos = T((*ppos)/wfac_hfac); //slower !
+          *ppos = 0;
+        }
+      }
+    }
+
+    delete [] pixels;
+
+    a_res.set(a_w,a_h,m_n,rb,true);
+    return true;
+  }
+
+  bool contract(unsigned int a_factor,img<T>& a_res,bool a_force_res_owner = true) const {
+    // a_factor pixels are contracted in one.
+    unsigned int nw = m_w/a_factor;
+    unsigned int nh = m_h/a_factor;
+    return contract(nw,nh,a_res,a_force_res_owner);
+  }
+
+  template <class TTO>
+  bool convert(img<TTO>& a_res) const {
+    a_res.make_empty();
+
+    unsigned int sz = m_w*m_h*m_n;
+    if(!sz) return false;
+
+    TTO* _buffer = new TTO[sz];
+    if(!_buffer) return false;
+
+    unsigned int i,j,ipix,imn;
+    unsigned int mwn = m_w*m_n;    
+    T* _pos;T* pos;
+    TTO* _rpos;TTO* rpos;
+
+    for(j=0;j<m_h;j++) {
+      _pos = m_buffer + j*mwn;
+      _rpos = _buffer + j*mwn;
+      for(i=0;i<m_w;i++) {
+        imn = i*m_n;
+        pos = _pos + imn;
+        rpos = _rpos + imn;  
+        for(ipix=0;ipix<m_n;ipix++,pos++,rpos++) *rpos = *pos;  
+      }
+    }
+  
+    a_res.set(m_w,m_h,m_n,_buffer,true);  
+    return true;
+  }
+
   bool get_part(unsigned int a_sx,unsigned int a_sy,unsigned int a_sw,unsigned int a_sh,img<T>& a_res) const {
 
     if((a_sx>=m_w)||(a_sy>=m_h)){
@@ -423,8 +474,8 @@ public:
     }
   
     // 012345
-    unsigned int rw = tools::mn<unsigned int>(m_w-a_sx,a_sw); 
-    unsigned int rh = tools::mn<unsigned int>(m_h-a_sy,a_sh); 
+    unsigned int rw = min_of<unsigned int>(m_w-a_sx,a_sw); 
+    unsigned int rh = min_of<unsigned int>(m_h-a_sy,a_sh); 
     unsigned int sz = rh*rw*m_n;
     if(!sz) {
       a_res.make_empty();
@@ -767,34 +818,39 @@ public:
       return false;
     }
   
-    //unsigned int wbwn = wbw*an;
-    unsigned int awn = aw*an;
-    unsigned int rwn = rw*an;
-    
     bool has_border = a_bw||a_bh?true:false;
     if(has_border) {
       ::memset(rb,a_bc,rsz*sizeof(T));
     }
 
+    //optimize :
+    //unsigned int wbwn = wbw*an;
+    unsigned int awn = aw*an;
+    unsigned int rwn = rw*an;
+    unsigned int i,j,r;
+    //unsigned int c;
+    T* tile;T* pos;T* ptile;T* _pos;
+
     //copy tiles :  
     unsigned int index = 0;
-    for(unsigned int j=0;j<a_rows;j++) {
-      for(unsigned int i=0;i<a_cols;i++) {
-        T* tile = a_imgs[index].buffer();
+    for(j=0;j<a_rows;j++) {
+      for(i=0;i<a_cols;i++) {
+        // index = a_cols*j+i
+        tile = a_imgs[index].buffer();
   
-/*
-        if(has_border) {
-          for(unsigned int r=0;r<hbh;r++) {
-            T* pos = rb + (j*hbh+r)*rwn + i*wbwn;
-            ::memset(pos,a_bc,wbwn*sizeof(T));
-          }
-        }
-*/
+        //if(has_border) {
+        //  for(unsigned int r=0;r<hbh;r++) {
+        //    T* pos = rb + (j*hbh+r)*rwn + i*wbwn;
+        //    ::memset(pos,a_bc,wbwn*sizeof(T));
+        //  }
+        //}
   
-       {for(unsigned int r=0;r<ah;r++) {
-          T* pos = rb + (j*hbh+r+a_bh)*rwn + (i*wbw+a_bw)*rn;
-          T* ptile = tile+r*awn;        
-          for(unsigned int c=0;c<awn;c++) *pos++ = *ptile++;
+        _pos = rb + (j*hbh+a_bh)*rwn + (i*wbw+a_bw)*rn;
+       {for(r=0;r<ah;r++) {
+//          pos = _pos + r*rwn;
+//          ptile = tile + r*awn;        
+//          for(c=0;c<awn;c++,pos++,ptile++) *pos = *ptile;
+          ::memcpy(_pos+r*rwn,tile+r*awn,awn*sizeof(T)); //optimize. (bof, we do not gain a lot).
         }}
   
         index++;

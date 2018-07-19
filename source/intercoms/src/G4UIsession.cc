@@ -24,18 +24,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIsession.cc 67965 2013-03-13 09:35:29Z gcosmo $
+// $Id: G4UIsession.cc 98731 2016-08-09 10:49:49Z gcosmo $
 //
 // 
 // ---------------------------------------------------------------------
 
 #include "G4UIsession.hh"
 
-G4UIsession::G4UIsession() {;}
+G4int G4UIsession::inSession = 0;
+G4UIsession::G4UIsession() : ifBatch(0) 
+{
+ inSession++;
+}
 
-G4UIsession::~G4UIsession() {;}
+G4UIsession::G4UIsession(G4int iBatch) : ifBatch(iBatch) 
+{;}
 
-G4UIsession * G4UIsession::SessionStart() { return NULL; }
+G4UIsession::~G4UIsession() 
+{ if(!ifBatch) { inSession--; } }
+
+G4UIsession * G4UIsession::SessionStart() { return nullptr; }
 
 void G4UIsession::PauseSessionStart(const G4String&) {;}
 

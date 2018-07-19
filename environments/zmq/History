@@ -1,0 +1,15 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                       G4ZMQ History file
+                       ---------------------
+
+ZeroMQ Interface for Geant4
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+24 Nov. 2017 K. Murakami
+ - First release for ZeroMQ interface (experimental)

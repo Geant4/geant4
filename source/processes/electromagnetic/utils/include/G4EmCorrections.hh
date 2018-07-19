@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh 91745 2015-08-04 11:51:12Z gcosmo $
+// $Id: G4EmCorrections.hh 108386 2018-02-09 15:38:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,20 +60,20 @@
 #include "G4ionEffectiveCharge.hh"
 #include "G4Material.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4NistManager.hh"
 
 class G4VEmModel;
 class G4PhysicsVector;
 class G4IonTable;
 class G4MaterialCutsCouple;
 class G4LPhysicsFreeVector;
+class G4Pow;
 
 class G4EmCorrections
 {
 
 public:
 
-  G4EmCorrections(G4int verb);
+  explicit G4EmCorrections(G4int verb);
 
   virtual ~G4EmCorrections();
 
@@ -134,11 +134,6 @@ public:
                           const G4Material*,
                           G4double kineticEnergy);
 
-  G4double NuclearDEDX(const G4ParticleDefinition*,
-                       const G4Material*,
-                       G4double kineticEnergy,
-                       G4bool fluct = true);
-
   void AddStoppingData(G4int Z, G4int A, const G4String& materialName,
                        G4PhysicsVector* dVector);
 
@@ -160,9 +155,10 @@ public:
                                       G4double kineticEnergy);
 
   // ionisation models for ions
-  inline void SetIonisationModels(G4VEmModel* m1 = 0, G4VEmModel* m2 = 0);
+  inline void SetIonisationModels(G4VEmModel* m1 = nullptr, 
+                                  G4VEmModel* m2 = nullptr);
 
-  inline G4int GetNumberOfStoppingVectors();
+  inline G4int GetNumberOfStoppingVectors() const;
 
   inline void SetVerbose(G4int verb);
 
@@ -180,68 +176,40 @@ private:
 
   G4double LShell(G4double theta, G4double eta);
 
-  G4int Index(G4double x, G4double* y, G4int n);
+  G4int Index(G4double x, const G4double* y, G4int n) const;
 
   G4double Value(G4double xv, G4double x1, G4double x2, 
-                 G4double y1, G4double y2);
+                 G4double y1, G4double y2) const;
 
   G4double Value2(G4double xv, G4double yv, G4double x1, G4double x2,
-                  G4double y1, G4double y2,
-                  G4double z11, G4double z21, G4double z12, G4double z22);
-
-  G4double NuclearStoppingPower(G4double e, G4double z1, G4double z2,
-                                            G4double m1, G4double m2);
+                  G4double y1, G4double y2, G4double z11, G4double z21, 
+		  G4double z12, G4double z22) const;
 
   // hide assignment operator
-  G4EmCorrections & operator=(const G4EmCorrections &right);
-  G4EmCorrections(const G4EmCorrections&);
+  G4EmCorrections & operator=(const G4EmCorrections &right) = delete;
+  G4EmCorrections(const G4EmCorrections&) = delete;
 
-  static const G4double inveplus;
+  G4Pow* g4calc;
 
-  G4double     ed[104];
-  G4double     a[104];
-  G4double     theZieglerFactor;
-  G4double     alpha2;
-  G4bool       lossFlucFlag;
+  static const G4double ZD[11];
+  static const G4double UK[20];
+  static const G4double VK[20];
+  static G4double ZK[20];
+  static const G4double Eta[29];
+  static G4double CK[20][29];
+  static G4double CL[26][28];
+  static const G4double UL[26];
+  static G4double VL[26];
 
-  G4int        verbose;
+  static G4LPhysicsFreeVector* BarkasCorr;
+  static G4LPhysicsFreeVector* ThetaK;
+  static G4LPhysicsFreeVector* ThetaL;
 
-  G4int        nK;
-  G4int        nL;
-  G4int        nEtaK;
-  G4int        nEtaL;
-
-  G4double     COSEB[14];
-  G4double     COSXI[14];
-  G4double     ZD[11];
-
-  G4double     TheK[20];
-  G4double     SK[20];
-  G4double     TK[20];
-  G4double     UK[20];
-  G4double     VK[20];
-  G4double     ZK[20];
-
-  G4double     TheL[26];
-  G4double     SL[26];
-  G4double     TL[26];
-  G4double     UL[26];
-  G4double     VL[26];
-
-  G4double     Eta[29];
-  G4double     CK[20][29];
-  G4double     CL[26][28];
-  G4double     HM[53];
-  G4double     HN[31];
-  G4double     Z23[100];
-
-  G4LPhysicsFreeVector* BarkasCorr;
-  G4LPhysicsFreeVector* ThetaK;
-  G4LPhysicsFreeVector* ThetaL;
+  G4double alpha2;
 
   std::vector<const G4Material*> currmat;
   std::map< G4int, std::vector<G4double> > thcorr;
-  size_t        ncouples;
+  size_t       ncouples;
 
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* curParticle;
@@ -250,11 +218,15 @@ private:
   const G4ElementVector*      theElementVector;
   const G4double*             atomDensity;
 
-  G4int     numberOfElements;
+  G4PhysicsVector*            curVector;
+
+  G4IonTable*  ionTable;
+  G4VEmModel*  ionLEModel;
+  G4VEmModel*  ionHEModel;
+
   G4double  kinEnergy;
   G4double  mass;
   G4double  massFactor;
-  G4double  formfact;
   G4double  eth;
   G4double  tau;
   G4double  gamma;
@@ -267,14 +239,16 @@ private:
   G4double  q2;
   G4double  eCorrMin;
   G4double  eCorrMax;
+
+  G4int     verbose;
+
+  G4int     nK;
+  G4int     nL;
+  G4int     nEtaK;
+  G4int     nEtaL;
+
   G4int     nbinCorr;
-
-  G4ionEffectiveCharge  effCharge;
-
-  G4NistManager*        nist;
-  G4IonTable*           ionTable;
-  G4VEmModel*           ionLEModel;
-  G4VEmModel*           ionHEModel;
+  G4int     numberOfElements;
 
   // Ion stopping data
   G4int                       nIons;
@@ -288,10 +262,13 @@ private:
 
   std::vector<const G4Material*> materialList;
   std::vector<G4PhysicsVector*>  stopData;
-  G4PhysicsVector*               curVector;
+
+  G4bool    isMaster;
+  G4ionEffectiveCharge  effCharge;
 };
 
-inline G4int G4EmCorrections::Index(G4double x, G4double* y, G4int n)
+inline G4int 
+G4EmCorrections::Index(G4double x, const G4double* y, G4int n) const
 {
   G4int iddd = n-1;
   // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
@@ -300,7 +277,7 @@ inline G4int G4EmCorrections::Index(G4double x, G4double* y, G4int n)
 }
 
 inline G4double G4EmCorrections::Value(G4double xv, G4double x1, G4double x2,
-                                       G4double y1, G4double y2)
+                                       G4double y1, G4double y2) const
 {
   return y1 + (y2 - y1)*(xv - x1)/(x2 - x1);
 }
@@ -309,7 +286,7 @@ inline G4double G4EmCorrections::Value2(G4double xv, G4double yv,
                                         G4double x1, G4double x2,
                                         G4double y1, G4double y2,
                                         G4double z11, G4double z21, 
-                                        G4double z12, G4double z22)
+                                        G4double z12, G4double z22) const
 {
   return (z11*(x2-xv)*(y2-yv) + z22*(xv-x1)*(yv-y1) +
           0.5*(z12*((x2-xv)*(yv-y1)+(xv-x1)*(y2-yv))+
@@ -324,7 +301,7 @@ G4EmCorrections::SetIonisationModels(G4VEmModel* mod1, G4VEmModel* mod2)
   if(mod2) { ionHEModel = mod2; }
 }
 
-inline G4int G4EmCorrections::GetNumberOfStoppingVectors()
+inline G4int G4EmCorrections::GetNumberOfStoppingVectors() const
 {
   return nIons;
 }
@@ -343,35 +320,6 @@ G4EmCorrections::EffectiveChargeSquareRatio(const G4ParticleDefinition* p,
                                             G4double kineticEnergy)
 {
   return effCharge.EffectiveChargeSquareRatio(p,mat,kineticEnergy);
-}
-
-inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
-                                             const G4Material* mat,
-                                             G4double kineticEnergy)
-{
-  if(kineticEnergy != kinEnergy || p != particle) {
-    particle = p;
-    kinEnergy = kineticEnergy;
-    mass  = p->GetPDGMass();
-    tau   = kineticEnergy / mass;
-    gamma = 1.0 + tau;
-    bg2   = tau * (tau+2.0);
-    beta2 = bg2/(gamma*gamma);
-    beta  = std::sqrt(beta2);
-    ba2   = beta2/alpha2;
-    G4double ratio = CLHEP::electron_mass_c2/mass;
-    tmax  = 2.0*CLHEP::electron_mass_c2*bg2 
-      /(1. + 2.0*gamma*ratio + ratio*ratio);
-    charge  = p->GetPDGCharge()*inveplus;
-    if(charge > 1.5) { charge = effCharge.EffectiveCharge(p,mat,kinEnergy); }
-    q2 = charge*charge;
-  }
-  if(mat != material) {
-    material = mat;
-    theElementVector = material->GetElementVector();
-    atomDensity  = material->GetAtomicNumDensityVector(); 
-    numberOfElements = material->GetNumberOfElements();
-  }
 }
 
 inline void G4EmCorrections::SetVerbose(G4int verb)

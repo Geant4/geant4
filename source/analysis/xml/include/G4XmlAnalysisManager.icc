@@ -52,6 +52,9 @@ G4bool G4XmlAnalysisManager::WriteT(const std::vector<T*>& htVector,
     G4String path = "/";
     path.append(directoryName);
     std::shared_ptr<std::ofstream> hnFile = fFileManager->GetHnFile();
+    // Do nothing if there is no file
+    if ( ! hnFile.get() ) return false;
+
     G4bool result
       = tools::waxml::write(*hnFile, *ht, path, name);
     if ( ! result ) {

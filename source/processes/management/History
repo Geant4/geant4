@@ -1,4 +1,4 @@
-$Id: History 92125 2015-08-18 14:35:23Z gcosmo $
+$Id: History 108134 2018-01-09 13:29:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,34 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+- Dec. 26, 2017  Makoto Asai (procman-V10-04-02)
+- G4ProcessManagerMessenger, G4ProcessTableMessenger :
+  UI command returns an error message if a command is refused due
+  to incorrect parameter(s).
+- This tag requires intercoms-V10-04-01 tag.
+
+- Dec. 18, 2017  Makoto Asai (procman-V10-04-01)
+- Following UI commands are now forbidden for G4State_GeomClosed or
+  G4State_EventProc application states.
+   - /process/activate
+   - /process/inactivate
+   - /particle/process/activate
+   - /particle/process/inactivate
+   
+- Dec. 13, 2017  Michel Maire  (procman-V10-04-00)
+- Add method 
+  G4VProcess* G4ProcessManager::GetProcess(const G4String& processName) const;
+  to get a process from its name
+
+- Jul. 17, 2017  Dennis Wright  (procman-V10-03-02)
+- Add method 
+  virtual void G4VProcess::ProcessDescription(std::ostream& outfile) const;
+  so that all processes can output a description to html documentation
+
+- Apr. 26, 2017  H.Kurashige (procman-V10-03-01)
+- Use G4Log in G4VProcess
+
 - Aug. 18, 2015  H.Kurashige (procman-V10-01-03)
 - Clean up source codes for messsengers
 

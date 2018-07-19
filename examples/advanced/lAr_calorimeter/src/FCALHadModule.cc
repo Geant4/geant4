@@ -135,7 +135,7 @@ G4LogicalVolume * FCALHadModule::Construct()
   LogicalHadModule->SetSmartless(FCAL2HadSmart);
   
   LogicalHadModule->SetVisAttributes(ColorOfCopper);
-  //  LogicalHadModule->SetVisAttributes(G4VisAttributes::Invisible);
+  //  LogicalHadModule->SetVisAttributes(G4VisAttributes::GetInvisible());
 
 
   //-----------------------------------------
@@ -152,7 +152,7 @@ G4LogicalVolume * FCALHadModule::Construct()
 		      LogicalHadModule, 0, 0);
 
   LogicalWAbsorber->SetVisAttributes(ColorOfTungsten);
-  // LogicalWAbsorber->SetVisAttributes(G4VisAttributes::Invisible);
+  // LogicalWAbsorber->SetVisAttributes(G4VisAttributes::GetInvisible());
 
 
   // -----------------
@@ -172,7 +172,7 @@ G4LogicalVolume * FCALHadModule::Construct()
 		      "CuPlateBPhysical", LogicalHadModule, 0, 0);
 
   LogicalCuPlate->SetVisAttributes(ColorOfCopper);
-  //  LogicalCuPlate->SetVisAttributes(G4VisAttributes::Invisible);
+  //  LogicalCuPlate->SetVisAttributes(G4VisAttributes::GetInvisible());
 
   //------------------------------------------
   // Had Module (F2)  Main and A/B Cable Troff 
@@ -209,9 +209,9 @@ G4LogicalVolume * FCALHadModule::Construct()
     }
 
   LogicalF2TroffMain->SetVisAttributes(ColorOfCopper);
-  //  LogicalF2TroffMain->SetVisAttributes(G4VisAttributes::Invisible);
+  //  LogicalF2TroffMain->SetVisAttributes(G4VisAttributes::GetInvisible());
   LogicalF2TroffAB->SetVisAttributes(ColorOfCopper);
-  // LogicalF2TroffAB->SetVisAttributes(G4VisAttributes::Invisible);
+  // LogicalF2TroffAB->SetVisAttributes(G4VisAttributes::GetInvisible());
 
 
    //----------------------
@@ -225,7 +225,7 @@ G4LogicalVolume * FCALHadModule::Construct()
                           "F2LArGapLogical");
 
      LogicalF2LArGap->SetVisAttributes(ColorOfLarg);
-   // LogicalF2LArGap->SetVisAttributes(G4VisAttributes::Invisible);
+   // LogicalF2LArGap->SetVisAttributes(G4VisAttributes::GetInvisible());
 
     G4Tubs * SolidF2Rod =
       new G4Tubs("F2RodSolid", F2RodRmin, F2RodRmax, F2RodLenght, F2RodStartPhi, F2RodDphi);
@@ -235,7 +235,7 @@ G4LogicalVolume * FCALHadModule::Construct()
       new G4PVPlacement(0,G4ThreeVector(),LogicalF2Rod,"F2RodPhysical",LogicalF2LArGap,0, 0);
 
     LogicalF2Rod->SetVisAttributes(ColorOfTungsten);
-    // LogicalF2Rod->SetVisAttributes(G4VisAttributes::Invisible);
+    // LogicalF2Rod->SetVisAttributes(G4VisAttributes::GetInvisible());
 
     //---------------------------------
     // Electrod (Rod + LArg) placement
@@ -248,7 +248,7 @@ G4LogicalVolume * FCALHadModule::Construct()
     };
 
     LogicalF2LArGap->SetVisAttributes(ColorOfLarg);
-    // LogicalF2LArGap->SetVisAttributes(G4VisAttributes::Invisible);
+    // LogicalF2LArGap->SetVisAttributes(G4VisAttributes::GetInvisible());
 
 
     // Sensitive Volumes

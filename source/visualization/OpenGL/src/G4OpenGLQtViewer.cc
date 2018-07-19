@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc 91686 2015-07-31 09:40:08Z gcosmo $
+// $Id: G4OpenGLQtViewer.cc 110480 2018-05-25 07:25:18Z gcosmo $
 //
 // 
 // G4OpenGLQtViewer : Class to provide Qt specific
@@ -57,6 +57,7 @@
 #include <CLHEP/Units/SystemOfUnits.h>
 
 #include <typeinfo>
+#include <mutex>
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -94,15 +95,14 @@
 #include <qcursor.h>
 #include <qthread.h>
 
-#ifdef G4MULTITHREADED
 #include "G4Threading.hh"
-#endif
 
 namespace
 {
-#ifdef G4MULTITHREADED
   G4Mutex mWaitForVisSubThreadQtOpenGLContextMoved = G4MUTEX_INITIALIZER;
   G4Mutex mWaitForVisSubThreadQtOpenGLContextInitialized = G4MUTEX_INITIALIZER;
+  // avoid unused variable warning
+#ifdef G4MULTITHREADED
   G4Condition c1_VisSubThreadQtOpenGLContextInitialized = G4CONDITION_INITIALIZER;
   G4Condition c2_VisSubThreadQtOpenGLContextMoved = G4CONDITION_INITIALIZER;
 #endif
@@ -154,32 +154,14 @@ void G4OpenGLQtViewer::CreateMainWindow (
         fWinSize_y = fVP.GetWindowSizeHintY();
 
         isTabbedView = fUiQt->AddTabWidget((QWidget*)fGLWidget,name);
+        QObject::connect(fUiQt->GetViewerTabWidget(),
+                         SIGNAL(currentChanged(int)),
+                         this,
+                         SLOT(currentTabActivated(int)));
+
+
       }
-      fUISceneTreeComponentsTBWidget = fUiQt->GetSceneTreeComponentsTBWidget();
-      
-      // activate scene tree
-      fUiQt->GetViewersWidget()->setCurrentWidget(fUISceneTreeComponentsTBWidget);
-      
-      // initialize scene tree / viewer properties / picking
-      fSceneTreeWidget = new QWidget();
-      QVBoxLayout* layoutSceneTree = new QVBoxLayout();
-      fSceneTreeWidget->setStyleSheet ("padding: 0px ");
-      
-      fSceneTreeWidget->setLayout(layoutSceneTree);
-      fSceneTreeWidget->layout()->setContentsMargins(5,5,5,5);
-      
-      if (fUISceneTreeComponentsTBWidget != NULL) {
-        fUISceneTreeComponentsTBWidget->addTab(fSceneTreeWidget,QString(GetName().data()));
-      }
-      
-      // not available for Immediate mode
-      if (dynamic_cast<G4OpenGLStoredQtViewer*> (this)) {
-        createSceneTreeComponent();
-      }
-      
-      createViewerPropertiesComponent();
-      createPickingComponent();
-      
+      createSceneTreeWidget();
       // activate them
     }
   }
@@ -187,9 +169,10 @@ void G4OpenGLQtViewer::CreateMainWindow (
   if (!isTabbedView) { // we have to do a dialog
 
     QWidget *glDialogWidget = getParentWidget();
-    if (glDialogWidget != NULL) {
-      glWidget->setParent(glDialogWidget);
+    if (glDialogWidget == NULL) {
+      return;
     }
+    glWidget->setParent(glDialogWidget);
     QHBoxLayout *mainLayout = new QHBoxLayout();
     
     mainLayout->setMargin(0);
@@ -230,7 +213,9 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,G4OpenGLViewer (scene)
   ,fGLWidget(NULL)
   ,fRecordFrameNumber(0)
+  ,fMouseOnSceneTree(false)
   ,fContextMenu(0)
+  ,fLastPickPoint(-1,-1)
   ,fDeltaDepth(0.01)
   ,fDeltaZoom(0.05)
   ,fHoldKeyEvent(false)
@@ -248,26 +233,27 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fNbMaxFramesPerSec(100)
   ,fNbMaxAnglePerSec(360)
   ,fLaunchSpinDelay(100)
-  ,fUISceneTreeComponentsTBWidget(NULL)
+  ,fUISceneTreeWidget(NULL)
+  ,fUIViewerPropertiesWidget(NULL)
+  ,fUIPickInfosWidget(NULL)
   ,fNoKeyPress(true)
   ,fAltKeyPress(false)
   ,fControlKeyPress(false)
   ,fShiftKeyPress(false)
   ,fBatchMode(false)
   ,fCheckSceneTreeComponentSignalLock(false)
+  ,fViewerPropertiesTableWidgetIsInit(false)
   ,fSceneTreeComponentTreeWidget(NULL)
-  ,fOldSceneTreeComponentTreeWidget(NULL)
   ,fSceneTreeWidget(NULL)
   ,fPVRootNodeCreate(false)
   ,fFilterOutput(NULL)
-  ,fViewerPropertiesButton(NULL)
   ,fNbRotation(0)
   ,fTimeRotation(0)
   ,fTouchableVolumes("Touchables")
   ,fShortcutsDialog(NULL)
-  ,fSceneTreeComponentTreeWidgetInfos(NULL)
-  ,fSceneTreeComponentPickingInfos(NULL)
-  ,fSceneTreeComponentPickingScrollArea(NULL)
+  ,fViewerPropertiesTableWidget(NULL)
+  ,fPickInfosWidget(NULL)
+  ,fPickInfosScrollArea(NULL)
   ,fTreeWidgetInfosIgnoredCommands(0)
   ,fSceneTreeDepthSlider(NULL)
   ,fSceneTreeDepth(1)
@@ -284,6 +270,12 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fLastHighlightName(0)
   ,fIsDeleting(false)
 {
+    lWaitForVisSubThreadQtOpenGLContextInitialized
+            = new G4AutoLock(mWaitForVisSubThreadQtOpenGLContextInitialized,
+                             std::defer_lock);
+    lWaitForVisSubThreadQtOpenGLContextMoved
+            = new G4AutoLock(mWaitForVisSubThreadQtOpenGLContextMoved,
+                             std::defer_lock);
 
   // launch Qt if not
   if (QCoreApplication::instance () == NULL) {
@@ -518,9 +510,6 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
 	delete wItem;
       }
     }
-    if (fUISceneTreeComponentsTBWidget != NULL) {
-      fUISceneTreeComponentsTBWidget->removeTab(fUISceneTreeComponentsTBWidget->indexOf(fSceneTreeWidget));
-    }
   }
 
   // Delete the open/close icons
@@ -528,6 +517,10 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
   delete fTreeIconClosed;
 
   G4cout <<removeTempFolder().toStdString().c_str() <<G4endl;
+
+  delete lWaitForVisSubThreadQtOpenGLContextInitialized;
+  delete lWaitForVisSubThreadQtOpenGLContextMoved;
+
 }
 
 
@@ -1307,9 +1300,15 @@ void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *evnt)
  */
 void G4OpenGLQtViewer::G4MouseReleaseEvent(QMouseEvent *evnt)
 {
+  GLint viewport[4];
+  glGetIntegerv(GL_VIEWPORT, viewport);
+
+  // factorX == factorY
+  double factorX =  ((double)viewport[2]/fGLWidget->width());
+  double factorY =  ((double)viewport[3]/fGLWidget->height());
   fSpinningDelay = fLastEventTime->elapsed();
-  QPoint delta = (fLastPos3-fLastPos1);
-  
+  QPoint delta = (fLastPos3-fLastPos1)*factorX;
+
   // reset cursor state
   fGLWidget->setCursor(QCursor(Qt::ArrowCursor));
   
@@ -1317,72 +1316,8 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent(QMouseEvent *evnt)
     if ((delta.x() != 0) || (delta.y() != 0)) {
       return;
     }
-    std::vector < G4OpenGLViewerPickMap* >  pickMap = GetPickDetails(evnt->pos().x(),evnt->pos().y());
-    
-    // remove all previous widgets
-    QLayoutItem * wItem;
-    while ((wItem = fSceneTreeComponentPickingInfos->layout()->takeAt(0)) != 0) {
-      delete wItem->widget();
-      delete wItem;
-    }
-    
-    // Create a new signalMapper
-    delete fSignalMapperPicking;
-    fSignalMapperPicking = new QSignalMapper(this);
-    
-    // parse all pick results
-    for (unsigned int a=0; a< pickMap.size(); a++) {
-      // Add a box inside the pick viewer box
-      std::ostringstream label;
-      label << "Hit number:" << a << ", PickName: " << pickMap[a]->getPickName();
-      
-      QPushButton* pickCoutButton = new QPushButton(label.str().c_str());
-      pickCoutButton->setStyleSheet ("text-align: left; padding: 1px; border: 0px;");
-      pickCoutButton->setIcon(*fTreeIconClosed);
-      fSceneTreeComponentPickingInfos->layout()->addWidget(pickCoutButton);
-      
-      QStringList newStr;
-      
-      // Add to stringList
-      newStr = QStringList(QString(pickMap[a]->print().data()).trimmed());
-      
-      QTextEdit* ed = new QTextEdit();
-      ed->setFontFamily("Courier");
-      ed->setFontPointSize(12);
-      ed->setReadOnly(true);
-      fSceneTreeComponentPickingInfos->layout()->addWidget(ed);
-      ed->setVisible((false));
-      ed->append(newStr.join(""));
-      
-      connect(pickCoutButton, SIGNAL(clicked()), fSignalMapperPicking, SLOT(map()));
-      fSignalMapperPicking->setMapping(pickCoutButton,fSceneTreeComponentPickingInfos->layout()->count()-1);
-    }
-    
-    connect(fSignalMapperPicking, SIGNAL(mapped(int)),this, SLOT(toggleSceneTreeComponentPickingCout(int)));
-    
-    // add a label to push everything up!
-    QLabel * pushUp = new QLabel("");
-    QSizePolicy vPolicy = QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
-    vPolicy.setVerticalStretch(10);
-    pushUp->setSizePolicy(vPolicy);
-    fSceneTreeComponentPickingInfos->layout()->addWidget(pushUp);
-    
-    // highlight the first one :
-    
-    // first un-highlight the last selected
-    changeColorAndTransparency(fLastHighlightName,fLastHighlightColor);
-    
-    if (pickMap.size() > 0 ) {
-      // get the new one
-      fLastHighlightName = pickMap[0]->getPickName();
-      fLastHighlightColor = getColorForPoIndex(fLastHighlightName);
-      // set the new one
-      changeColorAndTransparency(fLastHighlightName,G4Color(1,1,1,1));
-      updateQWidget();
-    }
-    // set picking cout visible
-    fSceneTreeComponentPickingScrollArea->setVisible(true);
-    
+    updatePickInfosWidget(evnt->pos().x()*factorX,evnt->pos().y()*factorY);
+
   } else if (fSpinningDelay < fLaunchSpinDelay ) {
     if ((delta.x() == 0) && (delta.y() == 0)) {
       return;
@@ -1657,7 +1592,6 @@ void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * evnt)
     else if (evnt->key() == Qt::Key_Plus) { // go forward
       moveScene(0,0,-1,false);
     }
-
     // escaped from full screen
     if (evnt->key() == Qt::Key_Escape) {
       toggleFullScreen(false);
@@ -2217,7 +2151,7 @@ bool G4OpenGLQtViewer::exportImage(std::string name, int width, int height) {
     setExportSize(width, height);
   }
   // first, try to do it with generic function
-  if (G4OpenGLViewer::exportImage()) {
+  if (G4OpenGLViewer::exportImage(name, width, height)) {
     return true;
 
   // Then try Qt saving functions
@@ -2258,7 +2192,7 @@ bool G4OpenGLQtViewer::generateMpegEncoderParameters () {
   fprintf (fp,"# Pattern affects speed, quality and compression. See the User's Guide\n");
   fprintf (fp,"# for more info.\n");
   fprintf (fp,"\n");
-  fprintf (fp,"PATTERN		IBBPBBPBBPBBPBBP\n");
+  fprintf (fp,"PATTERN		I\n");
   fprintf (fp,"OUTPUT		%s\n",getSaveFileName().toStdString().c_str());
   fprintf (fp,"\n");
   fprintf (fp,"# You must specify the type of the input files.  The choices are:\n");
@@ -2267,13 +2201,6 @@ bool G4OpenGLQtViewer::generateMpegEncoderParameters () {
   fprintf (fp,"#\n");
   fprintf (fp,"BASE_FILE_FORMAT	PPM\n");
   fprintf (fp,"\n");
-  fprintf (fp,"#\n");
-  fprintf (fp,"# if YUV format (or using parallel version), must provide width and height\n");
-  fprintf (fp,"# YUV_SIZE	widthxheight\n");
-  fprintf (fp,"# this option is ignored if BASE_FILE_FORMAT is not YUV and you're running\n");
-  fprintf (fp,"# on just one machine\n");
-  fprintf (fp,"#\n");
-  fprintf (fp,"YUV_SIZE	352x240\n");
   fprintf (fp,"\n");
   fprintf (fp,"# If you are using YUV, there are different supported file formats.\n");
   fprintf (fp,"# EYUV or UCB are the same as previous versions of this encoder.\n");
@@ -2307,7 +2234,7 @@ bool G4OpenGLQtViewer::generateMpegEncoderParameters () {
   fprintf (fp,"#\n");
   fprintf (fp,"# later, will add more flexible GOP signalling\n");
   fprintf (fp,"#\n");
-  fprintf (fp,"GOP_SIZE	16\n");
+  fprintf (fp,"GOP_SIZE	1\n");
   fprintf (fp,"\n");
   fprintf (fp,"# number of slices in a frame\n");
   fprintf (fp,"#\n");
@@ -2315,6 +2242,7 @@ bool G4OpenGLQtViewer::generateMpegEncoderParameters () {
   fprintf (fp,"# (which is the height divided by 16)\n");
   fprintf (fp,"#\n");
   fprintf (fp,"SLICES_PER_FRAME	1\n");
+  fprintf (fp,"PIXEL HALF");
   fprintf (fp,"\n");
   fprintf (fp,"# directory to get all input files from (makes this file easier to read)\n");
   fprintf (fp,"INPUT_DIR	%s\n",fMovieTempFolderPath.toStdString().c_str());
@@ -2535,24 +2463,59 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
 }
 
 
+void G4OpenGLQtViewer::createSceneTreeWidget() {
+  fUISceneTreeWidget = fUiQt->GetSceneTreeWidget();
+  
+  if (!fUISceneTreeWidget) {
+    return;
+  }
+  
+  // do not remove previous widgets, hide them!
+  QLayoutItem * wItem;
+  bool found = false;
+  if (fUISceneTreeWidget->layout()->count() ) {
+    for(int idx = 0; idx < fUISceneTreeWidget->layout()->count(); idx++){
+      wItem = fUISceneTreeWidget->layout()->itemAt(idx);
+      if (fSceneTreeWidget) {
+        if(dynamic_cast<QWidget *>(wItem->widget())) {
+          if (wItem->widget()->windowTitle() == fSceneTreeWidget->windowTitle()) {
+            wItem->widget()->show();
+            found = true;
+          } else {
+            wItem->widget()->hide();
+          }
+        }
+      } else {
+        wItem->widget()->hide();
+      }
+    }
+  }
+
+  if (!found) {
+    // initialize scene tree / viewer properties / picking
+    fSceneTreeWidget = new QWidget();
+    QVBoxLayout* layoutSceneTree = new QVBoxLayout();
+    fSceneTreeWidget->setStyleSheet ("padding: 0px ");
+    
+    fSceneTreeWidget->setLayout(layoutSceneTree);
+    fSceneTreeWidget->layout()->setContentsMargins(5,5,5,5);
+    fSceneTreeWidget->setWindowTitle(QString(GetName().data()));
+
+    if (fUISceneTreeWidget != NULL) {
+      fUISceneTreeWidget->layout()->addWidget(fSceneTreeWidget);
+    }
+    
+    // not available for Immediate mode
+    if (dynamic_cast<G4OpenGLStoredQtViewer*> (this)) {
+      createSceneTreeComponent();
+    }
+  }
+}
+
+
 void G4OpenGLQtViewer::createSceneTreeComponent(){
   
-  QGroupBox *groupBox = new QGroupBox("");
-  QVBoxLayout *vbox = new QVBoxLayout;
-  
-  fSceneTreeViewerButton = new QPushButton("Scene tree");
-  fSceneTreeViewerButton->setStyleSheet ("text-align: left; padding: 2px; border:0px; background:#e0e5ef;");
-  fSceneTreeViewerButton->setIcon(*fTreeIconOpen);
-  
-  vbox->addWidget(fSceneTreeViewerButton);
-  connect(fSceneTreeViewerButton,SIGNAL(clicked()),this, SLOT(toggleSceneTreeViewerInfos()));
-  
-  fSceneTreeViewerInfos = new QWidget();
-  fSceneTreeViewerInfos->setStyleSheet ("padding: 0px ");
-  fSceneTreeViewerInfos->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
-  
-  QVBoxLayout* vLayout = new QVBoxLayout();
-  fSceneTreeViewerInfos->setLayout (vLayout);
+  QLayout* vLayout = fSceneTreeWidget->layout();
   
   // Search line
   QWidget* coutButtonWidget = new QWidget();
@@ -2583,7 +2546,6 @@ void G4OpenGLQtViewer::createSceneTreeComponent(){
   
   // reduce margins
   vLayout->setContentsMargins(0,0,0,0);
-  vbox->setContentsMargins(1,1,1,1);
 
 
   fSceneTreeComponentTreeWidget = new QTreeWidget();
@@ -2636,15 +2598,9 @@ void G4OpenGLQtViewer::createSceneTreeComponent(){
   helpLayout->setContentsMargins(0,0,0,0);
 
   vLayout->addWidget(helpWidget);
-  QSizePolicy vPolicy = fSceneTreeViewerInfos->sizePolicy();
-  vPolicy.setVerticalStretch(4);
-
-  vbox->addWidget(fSceneTreeViewerInfos);
-
-  groupBox->setLayout(vbox);
-  fSceneTreeWidget->layout()->addWidget(groupBox);
   
   connect( fSceneTreeDepthSlider, SIGNAL( valueChanged(int) ), this, SLOT( changeDepthInSceneTree(int) ) );
+  connect( fFilterOutput, SIGNAL( textEdited ( const QString &) ), this, SLOT(changeSearchSelection()));
   fTreeItemModels.clear();
   
   fPVRootNodeCreate = false;
@@ -2655,37 +2611,68 @@ void G4OpenGLQtViewer::createSceneTreeComponent(){
 }
 
 
-void G4OpenGLQtViewer::createViewerPropertiesComponent() {
+void G4OpenGLQtViewer::createViewerPropertiesWidget() {
   
-  // add properties
-  QGroupBox *groupBox = new QGroupBox("");
-  QVBoxLayout *vbox = new QVBoxLayout;
-  fViewerPropertiesButton = new QPushButton("Viewer properties");
-  fViewerPropertiesButton->setStyleSheet ("text-align: left; padding: 2px; border:0px; background:#e0e5ef;");
+  // Get the pointer to the Viewer Properties widget
+  fUIViewerPropertiesWidget = fUiQt->GetViewerPropertiesWidget();
 
-  fViewerPropertiesButton->setIcon(*fTreeIconOpen);
-  
-  vbox->addWidget(fViewerPropertiesButton);
-  connect(fViewerPropertiesButton,SIGNAL(clicked()),this, SLOT(toggleSceneTreeComponentTreeWidgetInfos()));
+  if (!fUIViewerPropertiesWidget) {
+    return;
+  }
+
+  // remove previous widgets
+  QLayoutItem * wItem;
+  if (fUIViewerPropertiesWidget->layout()->count()) {
+    while ((wItem = fUIViewerPropertiesWidget->layout()->takeAt(0)) != 0) {
+      delete wItem->widget();
+      delete wItem;
+    }
+  }
+
+  // add properties
+  QGroupBox *groupBox = new QGroupBox();
+  groupBox->setTitle(GetName().data());
+  QVBoxLayout *vbox = new QVBoxLayout;
   
   // add properties content
-  fSceneTreeComponentTreeWidgetInfos = new QTableWidget();
-  fSceneTreeComponentTreeWidgetInfos->setStyleSheet ("padding: 0px ");
-  vbox->addWidget(fSceneTreeComponentTreeWidgetInfos);
-  vbox->setContentsMargins(1,1,1,1);
+  fViewerPropertiesTableWidget = new QTableWidget();
 
-  groupBox->setLayout(vbox);
-  fSceneTreeWidget->layout()->addWidget(groupBox);
-  QSizePolicy vPolicy = fSceneTreeComponentTreeWidgetInfos->sizePolicy();
+  QSizePolicy vPolicy = fViewerPropertiesTableWidget->sizePolicy();
   vPolicy.setVerticalStretch(4);
   
-  connect(fSceneTreeComponentTreeWidgetInfos, SIGNAL(itemChanged(QTableWidgetItem*)),this, SLOT(tableWidgetViewerSetItemChanged(QTableWidgetItem *)));
+  vbox->addWidget(fViewerPropertiesTableWidget);
+  groupBox->setLayout(vbox);
+  fUIViewerPropertiesWidget->layout()->addWidget(groupBox);
+
+  connect(fViewerPropertiesTableWidget, SIGNAL(itemChanged(QTableWidgetItem*)),this, SLOT(tableWidgetViewerSetItemChanged(QTableWidgetItem *)));
   
-  updateSceneTreeComponentTreeWidgetInfos();
+  updateViewerPropertiesTableWidget();
+
+  QDialog* dial = static_cast<QDialog*> (fUIViewerPropertiesWidget->parent());
+  if (dial) {
+    // change name
+    dial->setWindowTitle(QString("Viewer properties - ")+GetName());
+  }
 }
 
 
-void G4OpenGLQtViewer::createPickingComponent(){
+void G4OpenGLQtViewer::createPickInfosWidget(){
+  
+  // Get the pointer to the Pick infos widget
+  fUIPickInfosWidget = fUiQt->GetPickInfosWidget();
+  
+  if (!fUIPickInfosWidget) {
+    return;
+  }
+  
+  // remove previous widgets
+  QLayoutItem * wItem;
+  if (fUIPickInfosWidget->layout()->count()) {
+    while ((wItem = fUIPickInfosWidget->layout()->takeAt(0)) != 0) {
+      delete wItem->widget();
+      delete wItem;
+    }
+  }
   
   QGroupBox *groupBox = new QGroupBox("");
   QVBoxLayout *vbox = new QVBoxLayout;
@@ -2694,54 +2681,34 @@ void G4OpenGLQtViewer::createPickingComponent(){
   QWidget *pickingInfoWidget = new QWidget();
   QHBoxLayout *pickingInfoLayout = new QHBoxLayout();
   
-  fViewerPickingButton = new QPushButton("Picking informations");
-  fViewerPickingButton->setStyleSheet ("text-align: left; padding: 2px; border:0px; background:#e0e5ef;");
-  fViewerPickingButton->setIcon(*fTreeIconOpen);
-
-  // initialise picking infos
-  
-  QCheckBox * activatePicking = new QCheckBox("Picking mode active");
-  if (fVP.IsPicking()) {
-    activatePicking->setCheckState(Qt::Checked);
-  } else {
-    activatePicking->setCheckState(Qt::Unchecked);
-  }
-  activatePicking->setToolTip("Enable picking allow you to display properties of a selected object on the scene");
-  connect(activatePicking, SIGNAL(clicked()), this, SLOT(togglePicking()));
-
-  pickingInfoLayout->addWidget(fViewerPickingButton);
-  pickingInfoLayout->addWidget(activatePicking);
-
   pickingInfoWidget->setStyleSheet ("padding-left: 0px; border:0px;");
   pickingInfoWidget->setLayout(pickingInfoLayout);
   
   vbox->addWidget(pickingInfoWidget);
-  connect(fViewerPickingButton,SIGNAL(clicked()),this, SLOT(toggleSceneTreeComponentPickingInfos()));
-
   // add picking content
   
-  fSceneTreeComponentPickingScrollArea = new QScrollArea();
-  fSceneTreeComponentPickingScrollArea->setWidgetResizable(true);
+  fPickInfosScrollArea = new QScrollArea();
+  fPickInfosScrollArea->setWidgetResizable(true);
 
   
-  fSceneTreeComponentPickingInfos = new QWidget();
-  fSceneTreeComponentPickingInfos->setStyleSheet ("padding: 0px ");
+  fPickInfosWidget = new QWidget();
+  fPickInfosWidget->setStyleSheet ("padding: 0px ");
   
   QVBoxLayout* vLayout = new QVBoxLayout();
-  fSceneTreeComponentPickingInfos->setLayout (vLayout);
-  fSceneTreeComponentPickingScrollArea->setWidget(fSceneTreeComponentPickingInfos);
+  fPickInfosWidget->setLayout (vLayout);
+  fPickInfosScrollArea->setWidget(fPickInfosWidget);
   
-  QSizePolicy vPolicy = fSceneTreeComponentPickingInfos->sizePolicy();
+  QSizePolicy vPolicy = fPickInfosWidget->sizePolicy();
   vPolicy.setVerticalStretch(4);
-  vbox->addWidget(fSceneTreeComponentPickingScrollArea);
+  vbox->addWidget(fPickInfosScrollArea);
   pickingInfoLayout->setContentsMargins(0,0,0,0);
   vLayout->setContentsMargins(0,0,0,0);
   vbox->setContentsMargins(1,1,1,1);
 
   groupBox->setLayout(vbox);
-  fSceneTreeWidget->layout()->addWidget(groupBox);
-  connect( fFilterOutput, SIGNAL( textEdited ( const QString &) ), this, SLOT(changeSearchSelection()));
+  fUIPickInfosWidget->layout()->addWidget(groupBox);
   
+  updatePickInfosWidget(fLastPickPoint.x(),fLastPickPoint.y());
 }
 
 
@@ -2749,13 +2716,24 @@ void G4OpenGLQtViewer::createPickingComponent(){
 // and set the same status to all his childs
 void G4OpenGLQtViewer::setCheckComponent(QTreeWidgetItem* item,bool check)
 {
+  if (item) {
+
+    const PVPath& fullPath = fTreeItemModels[item->data(0,Qt::UserRole).toInt()];
+    // If a physical volume
+    if (fullPath.size() > 0) {
+      SetTouchable(fullPath);
+      TouchableSetVisibility(fullPath, check);
+      fMouseOnSceneTree = true;
+    }
+  }
+
   if (item != NULL) {
     if (check) {
       item->setCheckState(0,Qt::Checked);
     } else {
       item->setCheckState(0,Qt::Unchecked);
     }
-      updatePositivePoIndexSceneTreeWidgetQuickMap(item->data(0,Qt::UserRole).toInt(),item);
+    updatePositivePoIndexSceneTreeWidgetQuickMap(item->data(0,Qt::UserRole).toInt(),item);
     int nChildCount = item->childCount();
     for (int i = 0; i < nChildCount; i++) {
       setCheckComponent(item->child(i),check);
@@ -2854,8 +2832,7 @@ void G4OpenGLQtViewer::addPVSceneTreeElement(const G4String& model, G4PhysicalVo
   // Create the "volume" node if not
   //  if (fSceneTreeComponentTreeWidget->topLevelItemCount () == 0) {
   if (!fPVRootNodeCreate) {
-    const G4VisAttributes* visAttr = GetApplicableVisAttributes(pPVModel->GetFullPVPath().at(0).GetPhysicalVolume()->GetLogicalVolume()->GetVisAttributes());
-    const G4Colour& color = visAttr->GetColour();
+    const G4Colour& color = fSceneHandler.GetColour();
     
     fModelShortNameItem = createTreeWidgetItem(pPVModel->GetFullPVPath(),
                                                modelShortName,
@@ -2993,8 +2970,7 @@ bool G4OpenGLQtViewer::parseAndInsertInSceneTree(
 
   int currentPVCopyNb = fullPath.at(fullPathIndex).GetCopyNo();
 
-  const G4VisAttributes* visAttr = GetApplicableVisAttributes(fullPath.at(fullPathIndex).GetPhysicalVolume()->GetLogicalVolume()->GetVisAttributes());
-  const G4Colour& color = visAttr->GetColour();
+  const G4Colour& color = fSceneHandler.GetColour();
 
   // look in all children in order to get if their is already a
   // child corresponding:
@@ -3317,8 +3293,8 @@ void G4OpenGLQtViewer::addNonPVSceneTreeElement(
     const G4Text& g4Text = dynamic_cast<const G4Text&>(visible);
     color = fSceneHandler.GetTextColour(g4Text);
   }
-  catch (std::bad_cast) {
-    color = fSceneHandler.GetColour(visible);
+  catch (const std::bad_cast&) {
+    color = fSceneHandler.GetColour();
   }
   if (modelShortName == "") {
     return ;
@@ -3521,22 +3497,7 @@ void G4OpenGLQtViewer::sceneTreeComponentItemChanged(QTreeWidgetItem* item, int)
 
 
 void G4OpenGLQtViewer::sceneTreeComponentSelected() {
-  /*
-  if (fSceneTreeComponentTreeWidget) {
-    if (! fSceneTreeComponentTreeWidget->selectedItems().isEmpty ()) {
-      QTreeWidgetItem* item = fSceneTreeComponentTreeWidget->selectedItems ().first();
-      if (item) {
-
-        const PVPath& fullPath = fTreeItemModels[item->data(0,Qt::UserRole).toInt()];
-        if (fullPath.size() > 0) {
-	  const G4VisAttributes* visAttr2 = GetApplicableVisAttributes(fullPath.at(fullPath.size()-1).GetPhysicalVolume()->GetLogicalVolume()->GetVisAttributes());
-	}
-      }
-    }
-  }
-  */
 }
-
 
 void G4OpenGLQtViewer::changeDepthInSceneTree (int val){
 
@@ -3614,21 +3575,9 @@ void G4OpenGLQtViewer::changeColorAndTransparency(GLuint index, G4Color color) {
     const PVPath& fullPath = fTreeItemModels[iPO];
     // If a physical volume
     if (fullPath.size()) {
-      
-      // Instantiate a working copy of a G4VisAttributes object...
-      G4VisAttributes workingVisAtts;
-      // and set the colour.
-      workingVisAtts.SetColour(color);
-      
-      // Add a vis atts modifier to the view parameters...
-      fVP.AddVisAttributesModifier
-      (G4ModelingParameters::VisAttributesModifier
-       (workingVisAtts,
-        G4ModelingParameters::VASColour,
-        fullPath));
-      // G4ModelingParameters::VASColour tells G4PhysicalVolumeModel that it is
-      // the colour that should be picked out and merged with the touchable's
-      // normal vis attributes.
+      SetTouchable(fullPath);
+      TouchableSetColour(fullPath, color);
+      fMouseOnSceneTree = true;
     }
   }
 }
@@ -3660,6 +3609,7 @@ G4OpenGLQtViewer::GetPrivateVisAttributesModifiers() const
 
   privateVisAttributesModifiers.clear();
 
+// I don't think we need this.  (JA Sep 2016).
 //  // For each modified touchable...
 //  std::map<int,PVPath>::const_iterator i;
 //  for (i = fTreeItemModels.begin();
@@ -3833,16 +3783,6 @@ void G4OpenGLQtViewer::clearTreeWidget(){
   // be careful about calling this twice
 
   if (fSceneTreeComponentTreeWidget) {
-
-    if (fOldSceneTreeComponentTreeWidget == NULL) {
-      fOldSceneTreeComponentTreeWidget = new QTreeWidget();
-    }
-    // clear old scene tree
-    int tmp = fOldSceneTreeComponentTreeWidget->topLevelItemCount();
-    while (tmp > 0) {
-      delete fOldSceneTreeComponentTreeWidget->takeTopLevelItem (0);
-      tmp = fOldSceneTreeComponentTreeWidget->topLevelItemCount();
-    }
 
     if (fSceneTreeComponentTreeWidget->topLevelItemCount () > 0) {
 
@@ -4071,11 +4011,11 @@ QTreeWidgetItem* G4OpenGLQtViewer::getOldTreeWidgetItem(int POindex){
 */
 void G4OpenGLQtViewer::displaySceneTreeComponent() {
   // no UI
-  if (fUISceneTreeComponentsTBWidget == NULL) {
+  if (fUISceneTreeWidget == NULL) {
     return; 
   }
   if (fSceneTreeComponentTreeWidget == NULL) {
-    return; 
+    return;
   }
 
   // sort tree items
@@ -4190,13 +4130,29 @@ void G4OpenGLQtViewer::updateToolbarAndMouseContextMenu(){
 }
 
 /**
- Update the scene tree info component widget
+ Update the scene tree widget
+ */
+void G4OpenGLQtViewer::updateSceneTreeWidget() {
+  // Ensure case where closing a UI tab close the widget
+  if (!fSceneTreeWidget) {
+    createSceneTreeWidget();
+  }
+}
+
+
+  /**
+ Update the viewer properties component widget
  Clear it only if the number of command is less than the previous table widget row count
  */
-void G4OpenGLQtViewer::updateSceneTreeComponentTreeWidgetInfos() {
+void G4OpenGLQtViewer::updateViewerPropertiesTableWidget() {
   
-  if (!fSceneTreeComponentTreeWidgetInfos) {
+  if (!isCurrentWidget()) {
     return;
+  }
+  
+  // Ensure case where closing a UI tab close the widget
+  if (!fViewerPropertiesTableWidget) {
+    createViewerPropertiesWidget();
   }
   int treeWidgetInfosIgnoredCommands = 0;
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -4208,19 +4164,19 @@ void G4OpenGLQtViewer::updateSceneTreeComponentTreeWidgetInfos() {
   }
 
   // clear old table
-  if ((path->GetCommandEntry()-fTreeWidgetInfosIgnoredCommands) != fSceneTreeComponentTreeWidgetInfos->rowCount()) {
-    fSceneTreeComponentTreeWidgetInfos->clear();
+  if ((path->GetCommandEntry()-fTreeWidgetInfosIgnoredCommands) != fViewerPropertiesTableWidget->rowCount()) {
+    fViewerPropertiesTableWidget->clear();
   }
   
-  fSceneTreeComponentTreeWidgetInfos->blockSignals(true);
+  fViewerPropertiesTableWidget->blockSignals(true);
   // TODO : Could be optimized by comparing current command to old commands. That should not change so much
 
-  fSceneTreeComponentTreeWidgetInfos->setColumnCount (2);
-  fSceneTreeComponentTreeWidgetInfos->setRowCount (path->GetCommandEntry()-fTreeWidgetInfosIgnoredCommands);
-  fSceneTreeComponentTreeWidgetInfos->setHorizontalHeaderLabels(QStringList() << tr("Property")
+  fViewerPropertiesTableWidget->setColumnCount (2);
+  fViewerPropertiesTableWidget->setRowCount (path->GetCommandEntry()-fTreeWidgetInfosIgnoredCommands);
+  fViewerPropertiesTableWidget->setHorizontalHeaderLabels(QStringList() << tr("Property")
                                                         << tr("Value"));
-  fSceneTreeComponentTreeWidgetInfos->verticalHeader()->setVisible(false);
-  fSceneTreeComponentTreeWidgetInfos->setAlternatingRowColors (true);
+  fViewerPropertiesTableWidget->verticalHeader()->setVisible(false);
+  fViewerPropertiesTableWidget->setAlternatingRowColors (true);
   
   // For the moment, we do only command that have a "set" command in UI
   
@@ -4428,16 +4384,16 @@ void G4OpenGLQtViewer::updateSceneTreeComponentTreeWidgetInfos() {
       QTableWidgetItem *paramItem;
       
       // already present ?
-      QList<QTableWidgetItem *>	list = fSceneTreeComponentTreeWidgetInfos->findItems (commandTmp->GetCommandName().data(),Qt::MatchExactly);
+      QList<QTableWidgetItem *>	list = fViewerPropertiesTableWidget->findItems (commandTmp->GetCommandName().data(),Qt::MatchExactly);
       if (list.size() == 1) {
         nameItem = list.first();
-        paramItem = fSceneTreeComponentTreeWidgetInfos->item(nameItem->row(),1);
+        paramItem = fViewerPropertiesTableWidget->item(nameItem->row(),1);
         
       } else {
         nameItem = new QTableWidgetItem();
         paramItem = new QTableWidgetItem();
-        fSceneTreeComponentTreeWidgetInfos->setItem(a-treeWidgetInfosIgnoredCommands, 0, nameItem);
-        fSceneTreeComponentTreeWidgetInfos->setItem(a-treeWidgetInfosIgnoredCommands, 1, paramItem);
+        fViewerPropertiesTableWidget->setItem(a-treeWidgetInfosIgnoredCommands, 0, nameItem);
+        fViewerPropertiesTableWidget->setItem(a-treeWidgetInfosIgnoredCommands, 1, paramItem);
         
         // Set Guidance
         QString guidance;
@@ -4449,7 +4405,7 @@ void G4OpenGLQtViewer::updateSceneTreeComponentTreeWidgetInfos() {
         nameItem->setToolTip(guidance);
         paramItem->setToolTip(GetCommandParameterList(commandTmp));
         
-        fSceneTreeComponentTreeWidgetInfos->setRowHeight(a-treeWidgetInfosIgnoredCommands,15);
+        fViewerPropertiesTableWidget->setRowHeight(a-treeWidgetInfosIgnoredCommands,15);
       }
       
       // set current name and parameters
@@ -4465,48 +4421,181 @@ void G4OpenGLQtViewer::updateSceneTreeComponentTreeWidgetInfos() {
   }
   // remove empty content row
   for (int i=0; i<treeWidgetInfosIgnoredCommands; i++) {
-    fSceneTreeComponentTreeWidgetInfos->removeRow (fSceneTreeComponentTreeWidgetInfos->rowCount() - 1);
+    fViewerPropertiesTableWidget->removeRow (fViewerPropertiesTableWidget->rowCount() - 1);
   }
 
-  fSceneTreeComponentTreeWidgetInfos->resizeColumnToContents(0);
-  fSceneTreeComponentTreeWidgetInfos->horizontalHeader()->setStretchLastSection(true);
-  fSceneTreeComponentTreeWidgetInfos->blockSignals(false);
+  // The resize should done only at creation
+  if (!fViewerPropertiesTableWidgetIsInit) {
+    fViewerPropertiesTableWidgetIsInit = true;
+    
+    fViewerPropertiesTableWidget->resizeColumnsToContents();
+    
+    int x = fViewerPropertiesTableWidget->horizontalHeader()->length();
+    int y = fViewerPropertiesTableWidget->verticalHeader()->length()+ fViewerPropertiesTableWidget->horizontalHeader()->sizeHint().height() + 2;
+    
+    //  fViewerPropertiesTableWidget->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    //  fViewerPropertiesTableWidget->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    
+    // resize to fit content
+    QDialog* dial = static_cast<QDialog*> (fUIViewerPropertiesWidget->parent());
+    if (dial) {
+      dial->resize(x+56,y+46); // more or less (margins) ...
+    }
+  }
+  fViewerPropertiesTableWidget->blockSignals(false);
 
   fTreeWidgetInfosIgnoredCommands = treeWidgetInfosIgnoredCommands;
 }
 
 
-
-void G4OpenGLQtViewer::toggleSceneTreeViewerInfos() {
-  if (! fSceneTreeViewerButton) {
+/**
+ Update the pick infos component widget
+ */
+void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
+  fLastPickPoint = QPoint(aX,aY);
+  
+  if (!isCurrentWidget()) {
     return;
   }
-  fSceneTreeViewerInfos->setVisible(!fSceneTreeViewerInfos->isVisible());
-  if (fSceneTreeViewerInfos->isVisible()) {
-    fSceneTreeViewerButton->setIcon(*fTreeIconOpen);
-  } else {
-    fSceneTreeViewerButton->setIcon(*fTreeIconClosed);
+  // Ensure case where closing a UI tab close the widget
+  if (!fPickInfosWidget) {
+    createPickInfosWidget();
   }
-}
 
-
-void G4OpenGLQtViewer::toggleSceneTreeComponentTreeWidgetInfos() {
-  fSceneTreeComponentTreeWidgetInfos->setVisible(!fSceneTreeComponentTreeWidgetInfos->isVisible());
-  if (fSceneTreeComponentTreeWidgetInfos->isVisible()) {
-    fViewerPropertiesButton->setIcon(*fTreeIconOpen);
+  const std::vector < G4OpenGLViewerPickMap* > & pickMapVector = GetPickDetails(aX,aY);
+  
+  // remove all previous widgets
+  if (fPickInfosWidget) {
+    QLayoutItem * wItem;
+    if (fPickInfosWidget->layout()->count()) {
+      while ((wItem = fPickInfosWidget->layout()->takeAt(0)) != 0) {
+        delete wItem->widget();
+        delete wItem;
+      }
+    }
   } else {
-    fViewerPropertiesButton->setIcon(*fTreeIconClosed);
+    // Ensure case where closing a UI tab close the widget
+    if (!fPickInfosWidget) {
+      createPickInfosWidget();
+    }
   }
-}
 
+  // Create a new signalMapper
+  delete fSignalMapperPicking;
+  fSignalMapperPicking = new QSignalMapper(this);
+  
+  // parse all pick results
+  G4int nPickedObjectsWithAttributes = 0;
+  for (unsigned int a=0; a< pickMapVector.size(); a++) {
+    const auto& pickMap = pickMapVector[a];
+    // Add a box inside the pick viewer box
+    std::ostringstream label;
+    std::ostringstream content;
+    std::string txt = pickMap->getAttributes()[0].data();
+    if (pickMapVector[a]->getAttributes().size()) {
+      ++nPickedObjectsWithAttributes;
 
-void G4OpenGLQtViewer::toggleSceneTreeComponentPickingInfos() {
-  fSceneTreeComponentPickingScrollArea->setVisible(!fSceneTreeComponentPickingScrollArea->isVisible());
-  if (fViewerPickingButton->isVisible()) {
-    fViewerPickingButton->setIcon(*fTreeIconOpen);
-  } else {
-    fViewerPickingButton->setIcon(*fTreeIconClosed);
+      std::size_t pos1 = txt.find(':');
+      std::string storeKey = txt.substr(0,pos1);
+
+      if (storeKey == "G4PhysicalVolumeModel") {
+
+        label << "Volume:";
+        std::size_t pos2 = txt.find(':',pos1+1);
+        std::size_t pos3 = txt.find('\n',pos2+1);
+        label << txt.substr(pos2+1,pos3-pos2-1);
+
+      } else if (storeKey == "G4TrajectoriesModel") {
+
+        label << "Trajectory:";
+        std::size_t pos2 = txt.find(':',pos1+1);
+        std::size_t pos3 = txt.find('\n',pos2+1);
+        label << " Run:" << txt.substr(pos2+1,pos3-pos2-1);
+        std::size_t pos4 = txt.find(':',pos3+1);
+        std::size_t pos5 = txt.find('\n',pos4+1);
+        label << ", Event:" << txt.substr(pos4+1,pos5-pos4-1);
+
+      } else {
+
+        label << "Hit number:" << a << ", PickName: " << pickMap->getPickName();
+
+      }
+
+      // Accumulate all content with the same pickname
+      content << pickMap->print().data();
+      G4int thisPickName = pickMap->getPickName();
+      while (++a < pickMapVector.size()) {
+        const auto& a_pickMap = pickMapVector[a];
+        if (a_pickMap->getPickName() == thisPickName) {
+          content << a_pickMap->print().data();
+        } else {
+          a--;
+          break;
+        }
+      }
+
+      QPushButton* pickCoutButton = new QPushButton(label.str().c_str());
+      pickCoutButton->setStyleSheet ("text-align: left; padding: 1px; border: 0px;");
+      pickCoutButton->setIcon(*fTreeIconClosed);
+      fPickInfosWidget->layout()->addWidget(pickCoutButton);
+
+      QStringList newStr;
+
+      // Add to stringList
+      newStr = QStringList(QString(content.str().c_str()).trimmed());
+
+      QTextEdit* ed = new QTextEdit();
+      ed->setFontFamily("Courier");
+      ed->setFontPointSize(12);
+      ed->setReadOnly(true);
+      fPickInfosWidget->layout()->addWidget(ed);
+      ed->setVisible((false));
+      ed->append(newStr.join(""));
+
+      connect(pickCoutButton, SIGNAL(clicked()), fSignalMapperPicking, SLOT(map()));
+      fSignalMapperPicking->setMapping(pickCoutButton,fPickInfosWidget->layout()->count()-1);
+    }
   }
+  
+  connect(fSignalMapperPicking, SIGNAL(mapped(int)),this, SLOT(toggleSceneTreeComponentPickingCout(int)));
+  
+  // add a label to push everything up!
+  QLabel * pushUp = new QLabel("");
+  QSizePolicy vPolicy = QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+  vPolicy.setVerticalStretch(10);
+  pushUp->setSizePolicy(vPolicy);
+  fPickInfosWidget->layout()->addWidget(pushUp);
+  
+  // highlight the first one :
+  
+  // first un-highlight the last selected
+  changeColorAndTransparency(fLastHighlightName,fLastHighlightColor);
+  
+  if (pickMapVector.size() > 0 ) {
+    // get the new one
+    fLastHighlightName = pickMapVector[0]->getPickName();
+    fLastHighlightColor = getColorForPoIndex(fLastHighlightName);
+    // set the new one
+    changeColorAndTransparency(fLastHighlightName,G4Color(1,1,1,1));
+    
+    updateQWidget();
+  }
+  QDialog* dial = static_cast<QDialog*> (fUIPickInfosWidget->parent());
+  if (dial) {
+    // change name
+    std::ostringstream oss;
+    if (nPickedObjectsWithAttributes == 0) {
+      oss << "No object";
+    } else if (nPickedObjectsWithAttributes == 1) {
+      oss << "1 object";
+    } else {
+      oss << nPickedObjectsWithAttributes << " objects";
+    }
+    oss << " selected - " << GetName();
+    dial->setWindowTitle(oss.str().c_str());
+  }
+  // set picking cout visible
+  fPickInfosScrollArea->setVisible(true);
 }
 
 
@@ -4515,8 +4604,8 @@ void G4OpenGLQtViewer::toggleSceneTreeComponentPickingCout(int pickItem) {
   QWidget* w;
   // close other items, it could take too much space
   
-  for (int a=0; a<fSceneTreeComponentPickingInfos->layout()->count(); a++) {
-    w = fSceneTreeComponentPickingInfos->layout()->itemAt(a)->widget();
+  for (int a=0; a<fPickInfosWidget->layout()->count(); a++) {
+    w = fPickInfosWidget->layout()->itemAt(a)->widget();
     QTextEdit* ed = dynamic_cast<QTextEdit*>(w);
     QPushButton* button;
     if (ed) {
@@ -4526,7 +4615,7 @@ void G4OpenGLQtViewer::toggleSceneTreeComponentPickingCout(int pickItem) {
         w->setVisible(false);
       }
       if (a >= 1) {
-        button = dynamic_cast<QPushButton*>(fSceneTreeComponentPickingInfos->layout()->itemAt(a-1)->widget());
+        button = dynamic_cast<QPushButton*>(fPickInfosWidget->layout()->itemAt(a-1)->widget());
         if (button) {
           if (button->isVisible()) {
             button->setIcon(*fTreeIconOpen);
@@ -4540,21 +4629,41 @@ void G4OpenGLQtViewer::toggleSceneTreeComponentPickingCout(int pickItem) {
 }
 
 
+void G4OpenGLQtViewer::currentTabActivated(int currentTab) {
+  if (fUiQt->GetViewerTabWidget()->tabText(currentTab) == GetName())  {
+    createViewerPropertiesWidget();
+    createPickInfosWidget();
+    createSceneTreeWidget();
+  }
+}
+
+
 void G4OpenGLQtViewer::tableWidgetViewerSetItemChanged(QTableWidgetItem * item) {
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI != NULL)  {
-    QTableWidgetItem* previous = fSceneTreeComponentTreeWidgetInfos->item(fSceneTreeComponentTreeWidgetInfos->row(item),0);
+    QTableWidgetItem* previous = fViewerPropertiesTableWidget->item(fViewerPropertiesTableWidget->row(item),0);
     if (previous) {
-      fSceneTreeComponentTreeWidgetInfos->blockSignals(true);
+      fViewerPropertiesTableWidget->blockSignals(true);
       UI->ApplyCommand((std::string("/vis/viewer/set/")
                         + previous->text().toStdString()
                         + " "
                         + item->text().toStdString()).c_str());
-      fSceneTreeComponentTreeWidgetInfos->blockSignals(false);
+      fViewerPropertiesTableWidget->blockSignals(false);
     }
   }
 }
 
+bool G4OpenGLQtViewer::isCurrentWidget(){
+  G4Qt* interactorManager = G4Qt::getInstance ();
+  if (!interactorManager->IsExternalApp()) {
+
+    // Prevent from repainting a hidden tab (the current tab name has to be the one of th GL viewer)
+    if ( GetName() != fUiQt->GetViewerTabWidget()->tabText(fUiQt->GetViewerTabWidget()->currentIndex()).toStdString().c_str()) {
+      return false;
+    }
+  }
+  return true;
+}
 
 /**   Build the parameter list parameters in a QString<br>
  Reimplement partialy the G4UIparameter.cc
@@ -4609,7 +4718,9 @@ void G4OpenGLQtViewer::DoneWithMasterThread()
   // Called by Main Thread !
   
   // Useful to avoid two vis thread at the same time
-  G4MUTEXLOCK(&mWaitForVisSubThreadQtOpenGLContextInitialized);
+  //G4MUTEXLOCK(&mWaitForVisSubThreadQtOpenGLContextInitialized);
+  if(!lWaitForVisSubThreadQtOpenGLContextInitialized->owns_lock())
+      lWaitForVisSubThreadQtOpenGLContextInitialized->lock();
 }
 
 void G4OpenGLQtViewer::SwitchToVisSubThread()
@@ -4625,10 +4736,15 @@ void G4OpenGLQtViewer::SwitchToVisSubThread()
   SetQGLContextVisSubThread(QThread::currentThread());
   
   // - Wait for the vis thread to set its QThread
-  G4CONDTIONBROADCAST(&c1_VisSubThreadQtOpenGLContextInitialized);
-  
+  G4CONDITIONBROADCAST(&c1_VisSubThreadQtOpenGLContextInitialized);
+  // a condition without a locked mutex is an undefined behavior.
+  // we check if the mutex owns the lock, and if not, we lock it
+  if(!lWaitForVisSubThreadQtOpenGLContextMoved->owns_lock())
+      lWaitForVisSubThreadQtOpenGLContextMoved->lock();
+
   // Unlock the vis thread if it is Qt Viewer
-  G4CONDITIONWAIT(&c2_VisSubThreadQtOpenGLContextMoved, &mWaitForVisSubThreadQtOpenGLContextMoved);
+  G4CONDITIONWAIT(&c2_VisSubThreadQtOpenGLContextMoved,
+                  lWaitForVisSubThreadQtOpenGLContextMoved);
 
   // make context current
   qGLW->makeCurrent();
@@ -4661,7 +4777,10 @@ void G4OpenGLQtViewer::SwitchToMasterThread()
   }
 
   // Useful to avoid two vis thread at the same time
-  G4MUTEXUNLOCK(&mWaitForVisSubThreadQtOpenGLContextInitialized);
+  //G4MUTEXUNLOCK(&mWaitForVisSubThreadQtOpenGLContextInitialized);
+  if(lWaitForVisSubThreadQtOpenGLContextInitialized->owns_lock())
+      lWaitForVisSubThreadQtOpenGLContextInitialized->unlock();
+
   qGLW->makeCurrent();
 }
 
@@ -4674,9 +4793,14 @@ void G4OpenGLQtViewer::MovingToVisSubThread(){
     return;
   }
 
-  // - Wait for the vis sub thread to set its QThread
-  G4CONDITIONWAIT( &c1_VisSubThreadQtOpenGLContextInitialized, &mWaitForVisSubThreadQtOpenGLContextInitialized);
+  // a condition without a locked mutex is an undefined behavior.
+  // we check if the mutex owns the lock, and if not, we lock it
+  if(!lWaitForVisSubThreadQtOpenGLContextInitialized->owns_lock())
+      lWaitForVisSubThreadQtOpenGLContextInitialized->lock();
 
+  // - Wait for the vis sub thread to set its QThread
+  G4CONDITIONWAIT(&c1_VisSubThreadQtOpenGLContextInitialized,
+                  lWaitForVisSubThreadQtOpenGLContextInitialized);
 
   // Set current QThread for the way back
   SetQGLContextMainThread(QThread::currentThread());
@@ -4687,7 +4811,7 @@ void G4OpenGLQtViewer::MovingToVisSubThread(){
   qGLW->context()->moveToThread(fQGLContextVisSubThread);
 #endif
   
-  G4CONDTIONBROADCAST(&c2_VisSubThreadQtOpenGLContextMoved);
+  G4CONDITIONBROADCAST(&c2_VisSubThreadQtOpenGLContextMoved);
 }
 
 #endif

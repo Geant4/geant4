@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP_BERT_TRV.icc 92960 2015-09-23 08:41:04Z gcosmo $
+// $Id: FTFP_BERT_TRV.icc 96038 2016-03-09 13:13:59Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -70,6 +70,9 @@
 
 #include "G4WarnPLStatus.hh"
 
+#include "G4EmParameters.hh"
+
+
 template<class T> TFTFP_BERT_TRV<T>::TFTFP_BERT_TRV(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
@@ -84,7 +87,9 @@ template<class T> TFTFP_BERT_TRV<T>::TFTFP_BERT_TRV(G4int ver):  T()
   exp.Experimental("FTFP_BERT_TRV");
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysicsGS(ver) );
+  G4EmStandardPhysicsGS* gsPhysics = new G4EmStandardPhysicsGS( ver );
+  G4EmParameters::Instance()->SetMscStepLimitType( fUseSafety );
+  this->RegisterPhysics( gsPhysics );
 
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics(ver) );
@@ -93,7 +98,7 @@ template<class T> TFTFP_BERT_TRV<T>::TFTFP_BERT_TRV(G4int ver):  T()
   this->RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering
-  this->RegisterPhysics( new G4HadronHElasticPhysics(ver, false) );
+  this->RegisterPhysics( new G4HadronHElasticPhysics(ver, true) );
 
    // Hadron Physics
   this->RegisterPhysics(  new G4HadronPhysicsFTFP_BERT_TRV(ver));

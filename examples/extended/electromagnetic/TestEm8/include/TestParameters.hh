@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/include/HistoManager.hh
-/// \brief Definition of the HistoManager class
+/// \file electromagnetic/TestEm8/include/TestParameters.hh
+/// \brief Definition of the TestParameters class
 //
 // $Id: HistoManager.hh 78549 2014-01-07 09:42:35Z gcosmo $
 //
@@ -50,13 +50,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "globals.hh"
-#include "G4DataVector.hh"
-#include "G4StatDouble.hh"
+#include "G4ParticleDefinition.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-//class RunAction;
-//class G4Step;
 
 class TestParameters
 {
@@ -106,9 +102,16 @@ public: // Without description
 
   G4double GetPositionZ() const;
 
+  void SetBeamEnergy(G4double val);
+
+  G4double GetBeamEnergy() const;
+
+  void SetBeamParticle(const G4ParticleDefinition*);
+
+  const G4ParticleDefinition* GetBeamParticle() const;
+
 private:
 
-  // MEMBERS
   static TestParameters* fManager;
 
   G4double fMaxEnergy;
@@ -116,10 +119,13 @@ private:
   G4double fNormFactor;
   G4double fEnergySmear;
   G4double fPositionZ;
+  G4double fBeamEnergy;
 
   G4int fBinsE; 
   G4int fBinsCluster;
   G4int fMaxCluster;
+
+  const G4ParticleDefinition* fParticle;
 };
 
 #endif

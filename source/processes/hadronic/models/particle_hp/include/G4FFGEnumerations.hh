@@ -33,6 +33,8 @@
 #ifndef G4FFGENUMAERATIONS_HH
 #define	G4FFGENUMAERATIONS_HH
 
+#include "G4Types.hh"
+
 /** G4FFGEnumerations is a namespace that contains all the enumerations that
  *  are used in the fission fragment generator code.
  */

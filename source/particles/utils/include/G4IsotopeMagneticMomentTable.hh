@@ -84,7 +84,8 @@ public:
   // abstract base class G4VIstopeTable.  We don't use this fuction in this
   // implementation, instead we use the next function.
   //
-  virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E);
+  virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,
+            G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float);
   virtual G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int lvl=0);
   //
   //   again it will replace the pure virtual one in the abstract base class.
@@ -92,6 +93,8 @@ public:
   //   Z: Atomic Number
   //   A: Atomic Mass
   //   E: Excitaion energy
+  //   flb: floating level base (enum defined in G4Ions.hh)
+  //          -- currently ignored
   //    or
   //    G4int  level: isomer level
   // 

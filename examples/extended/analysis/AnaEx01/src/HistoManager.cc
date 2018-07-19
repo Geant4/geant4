@@ -27,7 +27,7 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// $Id: HistoManager.cc 92443 2015-09-01 13:56:16Z gcosmo $
+// $Id: HistoManager.cc 105494 2017-07-28 09:02:56Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -56,6 +56,7 @@ void HistoManager::Book()
   // in HistoManager.hh
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetVerboseLevel(1);
+  analysisManager->SetNtupleMerging(true);
       
   // Create directories 
   analysisManager->SetHistoDirectoryName("histo");
@@ -185,5 +186,3 @@ void HistoManager::PrintStatistic()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

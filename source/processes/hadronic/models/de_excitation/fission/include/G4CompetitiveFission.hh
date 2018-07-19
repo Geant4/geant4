@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.hh 89550 2015-04-17 08:38:15Z gcosmo $
+// $Id: G4CompetitiveFission.hh 107060 2017-11-01 15:00:04Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -48,10 +48,8 @@ class G4CompetitiveFission : public G4VEvaporationChannel
 {
 public:
   
-  G4CompetitiveFission();
+  explicit G4CompetitiveFission();
   virtual ~G4CompetitiveFission();
-
-  virtual G4FragmentVector * BreakUp(const G4Fragment &theNucleus);
 
   virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
@@ -91,12 +89,10 @@ private:
 
   inline G4double AsymmetricRatio(G4int A, G4double A11);
 
-  inline G4ThreeVector IsotropicVector(G4double Magnitude);
-
-  G4CompetitiveFission(const G4CompetitiveFission &right);
-  const G4CompetitiveFission & operator=(const G4CompetitiveFission &right);
-  G4bool operator==(const G4CompetitiveFission &right) const;
-  G4bool operator!=(const G4CompetitiveFission &right) const;
+  G4CompetitiveFission(const G4CompetitiveFission &right) = delete;
+  const G4CompetitiveFission & operator=(const G4CompetitiveFission &right) = delete;
+  G4bool operator==(const G4CompetitiveFission &right) const = delete;
+  G4bool operator!=(const G4CompetitiveFission &right) const = delete;
 
   // Maximal Kinetic Energy that can be carried by fragment
   G4double MaximalKineticEnergy;
@@ -186,18 +182,6 @@ G4double G4CompetitiveFission::SymmetricRatio(G4int A, G4double A11)
 {
   G4double A0 = G4double(A);
   return Ratio(A0,A11,5.32,A0*0.5);
-}
-
-inline
-G4ThreeVector G4CompetitiveFission::IsotropicVector(G4double Magnitude)
-{
-  G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-  G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
-  G4double Phi = CLHEP::twopi*G4UniformRand();
-  G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
-		       Magnitude*std::sin(Phi)*SinTheta,
-		       Magnitude*CosTheta);
-  return Vector;
 }
 
 #endif

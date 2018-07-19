@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc 94428 2015-11-16 12:40:02Z gcosmo $
+// $Id: G4OpenGLViewer.cc 108131 2018-01-09 13:23:26Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -60,6 +60,7 @@
 
 #include <sstream>
 #include <string>
+#include <iomanip>
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
@@ -73,24 +74,6 @@ background (G4Colour(0.,0.,0.)),
 transparency_enabled (true),
 antialiasing_enabled (false),
 haloing_enabled (false),
-fStartTime(-DBL_MAX),
-fEndTime(DBL_MAX),
-fFadeFactor(0.),
-fDisplayHeadTime(false),
-fDisplayHeadTimeX(-0.9),
-fDisplayHeadTimeY(-0.9),
-fDisplayHeadTimeSize(24.),
-fDisplayHeadTimeRed(0.),
-fDisplayHeadTimeGreen(1.),
-fDisplayHeadTimeBlue(1.),
-fDisplayLightFront(false),
-fDisplayLightFrontX(0.),
-fDisplayLightFrontY(0.),
-fDisplayLightFrontZ(0.),
-fDisplayLightFrontT(0.),
-fDisplayLightFrontRed(0.),
-fDisplayLightFrontGreen(1.),
-fDisplayLightFrontBlue(0.),
 fRot_sens(1.),
 fPan_sens(0.01),
 fWinSize_x(0),
@@ -195,9 +178,12 @@ void G4OpenGLViewer::InitializeGLView ()
   }
 #endif
   
-
-  fWinSize_x = fVP.GetWindowSizeHintX();
-  fWinSize_y = fVP.GetWindowSizeHintY();
+  if (fWinSize_x == 0) {
+    fWinSize_x = fVP.GetWindowSizeHintX();
+  }
+  if (fWinSize_y == 0) {
+    fWinSize_y = fVP.GetWindowSizeHintY();
+  }
 
   glClearColor (0.0, 0.0, 0.0, 0.0);
   glClearDepth (1.0);
@@ -220,6 +206,11 @@ void G4OpenGLViewer::InitializeGLView ()
 
 void G4OpenGLViewer::ClearView () {
   ClearViewWithoutFlush();
+
+  if(!isFramebufferReady()) {
+    return;
+  }
+
   glFlush();
 }
 
@@ -227,11 +218,9 @@ void G4OpenGLViewer::ClearView () {
 void G4OpenGLViewer::ClearViewWithoutFlush () {
   // Ready for clear ?
   // See : http://lists.apple.com/archives/mac-opengl/2012/Jul/msg00038.html
-#if GL_EXT_framebuffer_object
-//  if ( glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_UNDEFINED) {
-//    return;
-//  }
-#endif
+  if(!isFramebufferReady()) {
+    return;
+  }
   
   glClearColor (background.GetRed(),
                 background.GetGreen(),
@@ -376,31 +365,30 @@ void G4OpenGLViewer::SetView () {
   // Light position is "true" light direction, so must come after gluLookAt.
   glLightfv (GL_LIGHT0, GL_POSITION, lightPosition);
 
-  // OpenGL no longer seems to reconstruct clipped edges, so, when the
-  // BooleanProcessor is up to it, abandon this and use generic
-  // clipping in G4OpenGLSceneHandler::CreateSectionPolyhedron.  Also,
-  // force kernel visit on change of clipping plane in
-  // G4OpenGLStoredViewer::CompareForKernelVisit.
-  //if (fVP.IsSection () ) {  // pair of back to back clip planes.
-  if (false) {  // pair of back to back clip planes.
-    const G4Plane3D& sp = fVP.GetSectionPlane ();
-    double sArray[4];
-    sArray[0] = sp.a();
-    sArray[1] = sp.b();
-    sArray[2] = sp.c();
-    sArray[3] = sp.d() + radius * 1.e-05;
-    glClipPlane (GL_CLIP_PLANE0, sArray);
-    glEnable (GL_CLIP_PLANE0);
-    sArray[0] = -sp.a();
-    sArray[1] = -sp.b();
-    sArray[2] = -sp.c();
-    sArray[3] = -sp.d() + radius * 1.e-05;
-    glClipPlane (GL_CLIP_PLANE1, sArray);
-    glEnable (GL_CLIP_PLANE1);
-  } else {
-    glDisable (GL_CLIP_PLANE0);
-    glDisable (GL_CLIP_PLANE1);
-  }
+  // The idea is to use back-to-back clipping planes.  This can cut an object
+  // down to just a few pixels, which can make it difficult to see.  So, for
+  // now, comment this out and use the generic (Boolean) method, via
+  // G4VSolid* G4OpenGLSceneHandler::CreateSectionSolid ()
+  // { return G4VSceneHandler::CreateSectionSolid(); }
+//  if (fVP.IsSection () ) {  // pair of back to back clip planes.
+//    const G4Plane3D& sp = fVP.GetSectionPlane ();
+//    double sArray[4];
+//    sArray[0] = sp.a();
+//    sArray[1] = sp.b();
+//    sArray[2] = sp.c();
+//    sArray[3] = sp.d() + radius * 1.e-05;
+//    glClipPlane (GL_CLIP_PLANE0, sArray);
+//    glEnable (GL_CLIP_PLANE0);
+//    sArray[0] = -sp.a();
+//    sArray[1] = -sp.b();
+//    sArray[2] = -sp.c();
+//    sArray[3] = -sp.d() + radius * 1.e-05;
+//    glClipPlane (GL_CLIP_PLANE1, sArray);
+//    glEnable (GL_CLIP_PLANE1);
+//  } else {
+//    glDisable (GL_CLIP_PLANE0);
+//    glDisable (GL_CLIP_PLANE1);
+//  }
 
   // What we call intersection of cutaways is easy in OpenGL.  You
   // just keep cutting.  Unions are more tricky - you have to have
@@ -487,23 +475,28 @@ void G4OpenGLViewer::HaloingSecondPass () {
 
 G4String G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
 {
-  std::vector < G4OpenGLViewerPickMap* >  pickMap = GetPickDetails(x,y);
+  const std::vector < G4OpenGLViewerPickMap* > & pickMap = GetPickDetails(x,y);
   G4String txt = "";
   if (pickMap.size() == 0) {
-    txt += "Too many hits.  Zoom in to reduce overlaps.";;
+//        txt += "No hits recorded.";;
   } else {
-    for (unsigned int a=0; a< pickMap.size(); a++) {
-      txt += pickMap[a]->print();
+    for (unsigned int a=0; a < pickMap.size(); a++) {
+      if (pickMap[a]->getAttributes().size() > 0) {
+        txt += pickMap[a]->print();
+      }
     }
   }
   return txt;
 }
 
-std::vector < G4OpenGLViewerPickMap* > G4OpenGLViewer::GetPickDetails(GLdouble x, GLdouble y)
+const std::vector < G4OpenGLViewerPickMap* > & G4OpenGLViewer::GetPickDetails(GLdouble x, GLdouble y)
 {
-  std::vector < G4OpenGLViewerPickMap* > pickMapVector;
+  static std::vector < G4OpenGLViewerPickMap* > pickMapVector;
+  for (auto pickMap: pickMapVector) {
+    delete pickMap;
+  }
+  pickMapVector.clear();
   
-  std::ostringstream oss;
   const G4int BUFSIZE = 512;
   GLuint selectBuffer[BUFSIZE];
   glSelectBuffer(BUFSIZE, selectBuffer);
@@ -517,6 +510,12 @@ std::vector < G4OpenGLViewerPickMap* > G4OpenGLViewer::GetPickDetails(GLdouble x
   glLoadIdentity();
   GLint viewport[4];
   glGetIntegerv(GL_VIEWPORT, viewport);
+/*  G4cout
+  << "viewport, x,y: "
+  << viewport[0] << ',' << viewport[1] << ',' << viewport[2] << ',' << viewport[3]
+  << ", " << x << ',' << y
+  << G4endl;
+*/
   fIsGettingPickInfos = true;
   // Define 5x5 pixel pick area
   g4GluPickMatrix(x, viewport[3] - y, 5., 5., viewport);
@@ -525,11 +524,13 @@ std::vector < G4OpenGLViewerPickMap* > G4OpenGLViewer::GetPickDetails(GLdouble x
   DrawView();
   GLint hits = glRenderMode(GL_RENDER);
   fIsGettingPickInfos = false;
+  if (hits < 0) {
+    G4cout << "Too many hits.  Zoom in to reduce overlaps." << G4endl;
+    goto restoreMatrices;
+  }
   if (hits > 0) {
-    
     GLuint* p = selectBuffer;
     for (GLint i = 0; i < hits; ++i) {
-      G4OpenGLViewerPickMap* pickMap = new G4OpenGLViewerPickMap();
       GLuint nnames = *p++;
       // This bit of debug code or...
       //GLuint zmin = *p++;
@@ -540,11 +541,7 @@ std::vector < G4OpenGLViewerPickMap* > G4OpenGLViewer::GetPickDetails(GLdouble x
       p++;
       p++;
       for (GLuint j = 0; j < nnames; ++j) {
-        oss.clear();
         GLuint name = *p++;
-        pickMap->setHitNumber(i);
-        pickMap->setSubHitNumber(j);
-        pickMap->setPickName(name);
 	std::map<GLuint, G4AttHolder*>::iterator iter =
 	  fOpenGLSceneHandler.fPickMap.find(name);
 	if (iter != fOpenGLSceneHandler.fPickMap.end()) {
@@ -552,19 +549,33 @@ std::vector < G4OpenGLViewerPickMap* > G4OpenGLViewer::GetPickDetails(GLdouble x
 	  if(attHolder && attHolder->GetAttDefs().size()) {
 	    for (size_t iAtt = 0;
 		 iAtt < attHolder->GetAttDefs().size(); ++iAtt) {
+              std::ostringstream oss;
 	      oss << G4AttCheck(attHolder->GetAttValues()[iAtt],
                                 attHolder->GetAttDefs()[iAtt]);
+              G4OpenGLViewerPickMap* pickMap = new G4OpenGLViewerPickMap();
+//              G4cout
+//              << "i,j, attHolder->GetAttDefs().size(): "
+//              << i << ',' << j
+//              << ", " << attHolder->GetAttDefs().size()
+//              << G4endl;
+//              G4cout << "G4OpenGLViewer::GetPickDetails: " << oss.str() << G4endl;
               pickMap->addAttributes(oss.str());
+              pickMap->setHitNumber(i);
+              pickMap->setSubHitNumber(j);
+              pickMap->setPickName(name);
+              pickMapVector.push_back(pickMap);
             }
           }
         }
       }
-      pickMapVector.push_back(pickMap);
     }
   }
+
+restoreMatrices:
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
+
   return pickMapVector;
 }
 
@@ -756,6 +767,32 @@ bool G4OpenGLViewer::isGl2psWriting() {
 }
 
 
+G4bool G4OpenGLViewer::isFramebufferReady() {
+  bool check = false;
+#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+  check = true;
+#endif
+#ifdef G4VIS_BUILD_OPENGLX_DRIVER
+  check = false;
+#endif
+#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
+  check = false;
+#endif
+#ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
+  check = false;
+#endif
+
+#if GL_ARB_framebuffer_object
+  if (check) {
+//    if ( glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_UNDEFINED) {
+//      return false;
+//    }
+  }
+#endif
+    return true;
+}
+
+
 /* Draw Gl2Ps text if needed
  */
 void G4OpenGLViewer::DrawText(const G4Text& g4text)
@@ -861,8 +898,8 @@ bool G4OpenGLViewer::printGl2PS() {
 
   // no need to redraw at each new primitive for printgl2PS
   G4OpenGLSceneHandler& oglSceneHandler = dynamic_cast<G4OpenGLSceneHandler&>(fSceneHandler);
-  G4int drawInterval = oglSceneHandler.GetEventsDrawInterval();
-  oglSceneHandler.SetEventsDrawInterval(1000); // some big value but not too big to not crash memory
+  G4OpenGLSceneHandler::FlushAction originalFlushAction = oglSceneHandler.GetFlushAction();
+  oglSceneHandler.SetFlushAction(G4OpenGLSceneHandler::never);
 
   if (!fGL2PSAction) return false;
 
@@ -931,7 +968,7 @@ bool G4OpenGLViewer::printGl2PS() {
   fWinSize_x = X;
   fWinSize_y = Y;
 
-  oglSceneHandler.SetEventsDrawInterval(drawInterval);
+  oglSceneHandler.SetFlushAction(originalFlushAction);
 
   // Reset for next time (useful is size change)
   //  fPrintSizeX = 0;
@@ -1036,7 +1073,7 @@ std::string G4OpenGLViewer::getRealPrintFilename() {
   if (fExportFilenameIndex != -1) {
     temp += std::string("_");
     std::ostringstream os;
-    os << fExportFilenameIndex;
+    os << std::setw(4) << std::setfill('0') << fExportFilenameIndex;
     std::string nb_str = os.str();
     temp += nb_str;
   }
@@ -1291,9 +1328,9 @@ bool G4OpenGLViewer::setExportImageFormat(std::string format, bool quiet) {
 void G4OpenGLViewer::g4GluPickMatrix(GLdouble x, GLdouble y, GLdouble width, GLdouble height,
                      GLint viewport[4])
   {
-    GLfloat mat[16];
-    GLfloat sx, sy;
-    GLfloat tx, ty;
+    GLdouble mat[16];
+    GLdouble sx, sy;
+    GLdouble tx, ty;
     
     sx = viewport[2] / width;
     sy = viewport[3] / height;
@@ -1319,7 +1356,7 @@ void G4OpenGLViewer::g4GluPickMatrix(GLdouble x, GLdouble y, GLdouble width, GLd
     M(3, 3) = 1.0;
 #undef M
     
-    glMultMatrixf(mat);
+    glMultMatrixd(mat);
 }
 
 
@@ -1335,9 +1372,9 @@ void G4OpenGLViewer::g4GluLookAt( GLdouble eyex, GLdouble eyey, GLdouble eyez,
                         centerz,
                         GLdouble upx, GLdouble upy, GLdouble upz )
 {
-	GLfloat mat[16];
-	GLfloat x[3], y[3], z[3];
-	GLfloat mag;
+	GLdouble mat[16];
+	GLdouble x[3], y[3], z[3];
+	GLdouble mag;
   
 	/* Make rotation matrix */
   
@@ -1404,10 +1441,10 @@ void G4OpenGLViewer::g4GluLookAt( GLdouble eyex, GLdouble eyey, GLdouble eyez,
 	M(3, 2) = 0.0;
 	M(3, 3) = 1.0;
 #undef M
-	glMultMatrixf(mat);
+	glMultMatrixd(mat);
   
 	/* Translate Eye to Origin */
-	glTranslatef(-eyex, -eyey, -eyez);
+	glTranslated(-eyex, -eyey, -eyez);
 }
 
 void G4OpenGLViewer::g4GlOrtho (GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar) {
@@ -1474,13 +1511,9 @@ void G4OpenGLViewer::setVboDrawer(G4OpenGLVboDrawer* drawer) {
 
 G4String G4OpenGLViewerPickMap::print() {
   std::ostringstream txt;
-
-  txt << fName;
-
-  txt << "Hit: " << fHitNumber << ", Sub-hit: " << fSubHitNumber << ", PickName: " << fPickName << "\n";
-  
   for (unsigned int a=0; a<fAttributes.size(); a++) {
-    txt << fAttributes[a] << "\n";
+    txt << fAttributes[a];
+    if (a < fAttributes.size() - 1) txt << "\n";
   }
   return txt.str();
 }

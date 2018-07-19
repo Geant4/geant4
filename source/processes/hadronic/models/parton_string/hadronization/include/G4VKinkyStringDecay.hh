@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VKinkyStringDecay.hh 69569 2013-05-08 13:19:50Z gcosmo $
+// $Id: G4VKinkyStringDecay.hh 102048 2016-12-19 09:02:38Z gcosmo $
 //  Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -38,34 +38,32 @@
 
 #include "G4VLongitudinalStringDecay.hh"
 
-//*********************************************************************************************** 
+//*****************************************************************************************
 
 class G4VKinkyStringDecay 
-    {
-
-// Constructors   
-public:
+{
+  public:
     G4VKinkyStringDecay(G4VLongitudinalStringDecay* theModal);
-   virtual ~G4VKinkyStringDecay() {};
+    virtual ~G4VKinkyStringDecay() {};
 
-// 
-public:
+  public:
     G4KineticTrackVector* FragmentString(const G4ExcitedString& String);
     virtual G4double GetLightConeGluonZ(G4double zmin, G4double zmax);
     void SetLongitudinalStringDecay(G4VLongitudinalStringDecay*);
 
-private:
-   G4VLongitudinalStringDecay* theLongitudinalStringDecay;  
+  private:
+    G4VLongitudinalStringDecay* theLongitudinalStringDecay;  
    
-   };
+};
 
 //*****************************************************************************************
 
 inline void G4VKinkyStringDecay::SetLongitudinalStringDecay(G4VLongitudinalStringDecay* theModal)
-   {
+{
    theLongitudinalStringDecay = theModal;
-   }
+}
 
-//*****************************************************************************************************
+//*****************************************************************************************
 
 #endif
+

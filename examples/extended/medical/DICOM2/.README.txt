@@ -1,0 +1,13 @@
+
+///\file "DICOM2/.README.txt"
+///\brief Example DICOM2 README page
+
+/*! \page ExampleDICOM2 Example DICOM2
+
+ This example demonstrates how to inherit from the DICOM example.
+ For more information of the DICOM problem, see the documentation
+ for the DICOM example
+
+*/
+
+	

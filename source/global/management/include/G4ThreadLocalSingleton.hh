@@ -139,8 +139,8 @@ G4ThreadLocalSingleton<T>::G4ThreadLocalSingleton() : G4Cache<T*>() {
 
 template<class T>
 G4ThreadLocalSingleton<T>::~G4ThreadLocalSingleton() {
-  G4MUTEXDESTROY(listm);
   Clear();
+  G4MUTEXDESTROY(listm);
 }
 
 template<class T>

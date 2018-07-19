@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/include/G4AdjointPhysicsList.hh
 /// \brief Definition of the G4AdjointPhysicsList class
 //
-// $Id: G4AdjointPhysicsList.hh 71233 2013-06-12 13:16:05Z gcosmo $
+// $Id: G4AdjointPhysicsList.hh 101303 2016-11-14 11:21:18Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:             G4AdjointPhysicsList
@@ -95,6 +95,7 @@ class G4AdjointPhysicsList: public G4VUserPhysicsList
 
   private:
    G4AdjointPhysicsMessenger* fPhysicsMessenger;
+   G4bool fUse_forced_interaction;
    G4bool fUse_eionisation;
    G4bool fUse_pionisation;
    G4bool fUse_brem;
@@ -114,6 +115,4 @@ class G4AdjointPhysicsList: public G4VUserPhysicsList
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
 

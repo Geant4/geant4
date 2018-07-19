@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFacet.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VFacet.hh 95801 2016-02-25 10:59:41Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -81,7 +81,7 @@ class G4VFacet
     virtual G4bool Intersect (const G4ThreeVector&, const G4ThreeVector &,
                               const G4bool , G4double &, G4double &,
                                     G4ThreeVector &) = 0;
-    virtual G4double GetArea() = 0;
+    virtual G4double GetArea() const = 0;
     virtual G4ThreeVector GetPointOnFace() const = 0;
 
     void ApplyTranslation (const G4ThreeVector v);

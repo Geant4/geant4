@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: wls.cc 78066 2013-12-03 11:08:36Z gcosmo $
+// $Id: wls.cc 110278 2018-05-17 14:48:26Z gcosmo $
 //
 /// \file optical/wls/wls.cc
 /// \brief Main program of the optical/wls example
@@ -33,6 +33,8 @@
 #ifndef WIN32
 #include <unistd.h>
 #endif
+
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -49,13 +51,8 @@
 
 #include "WLSActionInitialization.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 // argc holds the number of arguments (including the name) on the command line
 // -> it is ONE when only the name is  given !!!
@@ -64,8 +61,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) 
+int main(int argc,char** argv)
 {
+  // Instantiate G4UIExecutive if interactive mode
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
 #ifdef G4MULTITHREADED
   G4MTRunManager * runManager = new G4MTRunManager;
 #else
@@ -93,7 +96,7 @@ int main(int argc,char** argv)
          G4cout << "Physics List used is " <<  physName << G4endl;
          break;
        case ':':       /* -p without operand */
-         fprintf(stderr, 
+         fprintf(stderr,
                          "Option -%c requires an operand\n", optopt);
          break;
        case '?':
@@ -113,14 +116,12 @@ int main(int argc,char** argv)
   // User action initialization
   runManager->SetUserInitialization(new WLSActionInitialization(detector));
 
-#ifdef G4VIS_USE
   // Initialize visualization
   //
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
-#endif
 
   // Get the pointer to the User Interface manager
 
@@ -149,23 +150,16 @@ int main(int argc,char** argv)
 #endif
   else  {
      // Define (G)UI terminal for interactive mode
-#ifdef G4UI_USE
-     G4UIExecutive * ui = new G4UIExecutive(argc,argv);
-#ifdef G4VIS_USE
      UImanager->ApplyCommand("/control/execute init.in");
-#endif
      if (ui->IsGUI())
         UImanager->ApplyCommand("/control/execute gui.mac");
      ui->SessionStart();
      delete ui;
-#endif
   }
 
   // job termination
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
 
   return 0;

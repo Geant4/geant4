@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: 
+// $Id:
 //
 //
 // -------------------------------------------------------------------
@@ -37,14 +37,14 @@
 // Author  R. Hatcher  2014-10-15
 //
 // Modifications:  based on G4PhysicsConstructorRegistry
-// 
+//
 //
 // Class Description
 // This is a singleton keeping pointers to all physics lists
 // Class Description - End
 
-#ifndef G4PhysListRegistry_h
-#define G4PhysListRegistry_h 1
+#ifndef G4PhysListRegistry_hh
+#define G4PhysListRegistry_hh 1
 
 #include <vector>
 #include <map>
@@ -59,17 +59,16 @@ class G4PhysListRegistry
 public:
 
   static G4PhysListRegistry* Instance();
-  // access 
-  
+  // access
+
   ~G4PhysListRegistry();
-   
+
   void AddFactory(G4String name, G4VBasePhysListStamper*);
   void AddPhysicsExtension(G4String name, G4String procname);
   // mapping from extension name to actual physics contructor process name
 
   G4VModularPhysicsList* GetModularPhysicsList(const G4String& name);
   G4VModularPhysicsList* GetModularPhysicsListFromEnv();
-
 
   G4bool IsReferencePhysList(G4String nam) const;
 
@@ -80,9 +79,15 @@ public:
   void PrintAvailablePhysLists() const;
 
   G4bool DeconstructPhysListName(const G4String& name, G4String& plBase,
-                                 std::vector<G4String>& physExt, 
+                                 std::vector<G4String>& physExt,
                                  std::vector<G4int>& replace,
                                  G4int verbose=0) const;
+
+  G4bool FindLongestMatch(const G4String& workName,
+                          const G4String& searchName,
+                          const std::vector<G4String>& validNames,
+                          G4String& bestMatch,
+                          G4int verbose=0) const;
 
   inline void  SetVerbose(G4int val) { verbose = val; }
   inline G4int GetVerbose() const { return verbose; }
@@ -112,7 +117,7 @@ private:
   G4String systemDefault; /// use this if user hasn't set userDefault
                           /// or attempts to set the userDefault=""
 
-  // Make these mutable and update them on each request because the map might 
+  // Make these mutable and update them on each request because the map might
   // have been updated by the addition of new entries
   // The only reason to have them at all is that that original interface
   // returned a const reference and so we can't pass back a local object

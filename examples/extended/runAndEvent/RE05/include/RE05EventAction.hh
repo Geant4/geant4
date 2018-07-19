@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05EventAction.hh 68698 2013-04-05 08:41:22Z gcosmo $
+// $Id: RE05EventAction.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05EventAction.hh
 /// \brief Definition of the RE05EventAction class
@@ -46,9 +46,9 @@ class RE05EventAction : public G4UserEventAction
     virtual void EndOfEventAction(const G4Event*);
 
   private:
-    G4int trackerCollID;
-    G4int calorimeterCollID;
-    G4int muonCollID;
+    G4int fTrackerCollID;
+    G4int fCalorimeterCollID;
+    G4int fMuonCollID;
 };
 
 #endif

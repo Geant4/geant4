@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh 102288 2017-01-20 10:57:03Z gcosmo $
+// $Id: G4Region.hh 103096 2017-03-15 15:21:33Z gcosmo $
 //
 // class G4Region
 //
@@ -225,6 +225,9 @@ class G4Region
 
     static const G4RegionManager& GetSubInstanceManager();
       // Returns the private data instance manager. 
+
+    static void Clean();
+      // Clear memory allocated by sub-instance manager.
 
     inline void UsedInMassGeometry(G4bool val=true);
     inline void UsedInParallelGeometry(G4bool val=true);

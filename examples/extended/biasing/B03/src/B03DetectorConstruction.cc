@@ -135,19 +135,6 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
   Concrete->AddElement(elC , fractionmass= 0.001);
    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   /////////////////////////////
   // world cylinder volume
   ////////////////////////////
@@ -177,7 +164,6 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
   name = "shieldWorld";
   fWorldVolume = new G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log
                                   ,name, 0, false, 0);
-
 
   // creating 18 slobs of 10 cm thick concrete
 

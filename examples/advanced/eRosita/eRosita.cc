@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: eRosita.cc 107473 2017-11-15 08:02:34Z gcosmo $
 //
 // 
 
@@ -69,7 +69,7 @@ int main(int argc,char** argv)
    
   // User Action classes
   //
-  G4VUserPrimaryGeneratorAction* genAction = new eRositaPrimaryGeneratorAction(detector);
+  G4VUserPrimaryGeneratorAction* genAction = new eRositaPrimaryGeneratorAction();
   runManager->SetUserAction(genAction);
   //
   G4UserRunAction* runAction = new eRositaRunAction;

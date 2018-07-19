@@ -6,7 +6,7 @@
 /control/verbose 1
 /control/saveHistory
 /run/verbose 1
-#/control/execute emstd.mac
+/control/execute physics.mac
 
 /run/initialize
 

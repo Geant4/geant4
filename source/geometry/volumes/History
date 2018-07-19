@@ -1,4 +1,4 @@
-$Id: History 102270 2017-01-19 14:42:29Z gcosmo $
+$Id: History 110402 2018-05-22 11:35:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,26 +17,48 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-January 10th, 2017 G.Cosmo                - geomvol-V10-01-06
+May 22nd, 2018 J.Allison                  - geomvol-V10-04-02
+- G4PVPlacement::CheckOverlaps: Add copy number to G4Exception printing.
+
+May 17th, 2018 J.Madsen                   - geomvol-V10-04-01
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+May 9th, 2018 E.Tcherniaev                - geomvol-V10-04-00
+- Replaced use of Inverse() from G4AffineTransform with new dedicated
+  methods, to avoid creation of temporaries in G4TouchableHistory,
+  G4PVPlacement and G4PVParameterised.
+
+September 15th, 2017 G.Cosmo              - geomvol-V10-03-02
+- G4GeometryWorkspacePool: use DLL export flag for static thread-local
+  symbol of the workspace.
+
+March 10th, 2017 G.Cosmo                  - geomvol-V10-03-01
+- G4GeometryWorkspacePool: implemented CleanUpAndDestroyAllWorkspaces(),
+  to be called by worker threads. Removed declaration (i.e. not implemented)
+  of protected method ReleaseAndDestroyWorkspace().
+
+January 10th, 2017 G.Cosmo                - geomvol-V10-03-00
 - Correction in G4NavigationHistory default constructor to use
   GetLevels() instead of GetNewLevels() from G4NavigationHistoryPool,
   to favor re-use of already allocated space.
   Thanks to M.Karamitros for spotting this.
 
-October 21st, 2016 G.Cosmo
+October 21st, 2016 G.Cosmo                - geomvol-V10-02-03
 - Moved initialisation of G4GeomSplitter thread-local data to be inline
   along with generic template type.
   Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
-September 20th, 2016 G.Cosmo
+September 20th, 2016 G.Cosmo              - geomvol-V10-02-02
 - Explicitly initialise G4GeomSplitter offset in G4GeometryWorkspace
   translation unit.
   Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
-May 13th, 2016 G.Cosmo
+May 13th, 2016 G.Cosmo                    - geomvol-V10-02-01
 - Updated unit tests build scripts.
 
-April 8th, 2016 G.Cosmo
+April 8th, 2016 G.Cosmo                   - geomvol-V10-02-00
 - G4NavigationHistory: corrected printout in streaming operator.
 
 October 15th, 2015 G.Cosmo                - geomvol-V10-01-05

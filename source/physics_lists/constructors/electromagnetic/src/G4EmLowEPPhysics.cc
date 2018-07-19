@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLowEPPhysics.cc 102321 2017-01-23 09:51:59Z gcosmo $
+// $Id: G4EmLowEPPhysics.cc 109526 2018-04-30 07:11:52Z gcosmo $
 
 #include "G4EmLowEPPhysics.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4ParticleTable.hh"
 
 // *** Processes and models
 
@@ -55,6 +56,7 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4LivermoreBremsstrahlungModel.hh"
 #include "G4Generator2BS.hh"
+#include "G4BetheHeitler5DModel.hh"
 
 // e+
 #include "G4eplusAnnihilation.hh"
@@ -77,6 +79,7 @@
 #include "G4ionIonisation.hh"
 #include "G4alphaIonisation.hh"
 #include "G4IonParametrisedLossModel.hh"
+#include "G4LindhardSorensenIonModel.hh"
 #include "G4NuclearStopping.hh"
 
 // msc models
@@ -123,23 +126,6 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmLowEPPhysics);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmLowEPPhysics::G4EmLowEPPhysics(G4int ver)
-  : G4VPhysicsConstructor("G4EmLowEPPhysics"), verbose(ver)
-{
-  G4EmParameters* param = G4EmParameters::Instance();
-  param->SetDefaults();
-  param->SetVerbose(verbose);
-  param->SetMinEnergy(100*eV);
-  param->SetMaxEnergy(10*TeV);
-  param->SetLowestElectronEnergy(100*eV);
-  param->SetNumberOfBinsPerDecade(20);
-  param->ActivateAngularGeneratorForIonisation(true);
-  param->SetFluo(true);
-  SetPhysicsType(bElectromagnetic);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4EmLowEPPhysics::G4EmLowEPPhysics(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmLowEPPhysics"), verbose(ver)
 {
@@ -147,7 +133,6 @@ G4EmLowEPPhysics::G4EmLowEPPhysics(G4int ver, const G4String&)
   param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(100*eV);
-  param->SetMaxEnergy(10*TeV);
   param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
@@ -189,10 +174,6 @@ void G4EmLowEPPhysics::ConstructParticle()
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
-
-  // dna
-  G4EmModelActivator mact;
-  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -214,42 +195,33 @@ void G4EmLowEPPhysics::ConstructProcess()
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
   mumsc->SetEmModel(new G4LowEWentzelVIModel());
-  G4hMultipleScattering* hmsc = new G4hMultipleScattering();
-  hmsc->SetEmModel(new G4LowEWentzelVIModel());
-  G4hMultipleScattering* pmsc = new G4hMultipleScattering();
-  pmsc->SetEmModel(new G4LowEWentzelVIModel());
   G4hMultipleScattering* pimsc = new G4hMultipleScattering();
   pimsc->SetEmModel(new G4LowEWentzelVIModel());
   G4hMultipleScattering* kmsc = new G4hMultipleScattering();
   kmsc->SetEmModel(new G4LowEWentzelVIModel());
+
+  G4hMultipleScattering* hmsc = new G4hMultipleScattering();
+  hmsc->SetEmModel(new G4LowEWentzelVIModel());
 
   // nuclear stopping
   G4NuclearStopping* ionnuc = new G4NuclearStopping();
   G4NuclearStopping* pnuc = new G4NuclearStopping();
 
   // Add Livermore EM Processes
-  auto myParticleIterator=GetParticleIterator();
-  myParticleIterator->reset();
-
-  while( (*myParticleIterator)() ){
-  
-    G4ParticleDefinition* particle = myParticleIterator->value();
-    G4String particleName = particle->GetParticleName();
-    
-    if(verbose > 1)
-      G4cout << "### " << GetPhysicsName() << " instantiates for " 
-	     << particleName << G4endl;
-
+  G4ParticleTable* table = G4ParticleTable::GetParticleTable();
+  for(const auto& particleName : partList.PartNames()) {
+    G4ParticleDefinition* particle = table->FindParticle(particleName);
+    if (!particle) { continue; }
     if (particleName == "gamma") {
 
       // Photoelectric effect - Livermore model only
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      thePhotoElectricEffect->SetEmModel(new G4LivermorePhotoElectricModel(), 1);
+      thePhotoElectricEffect->SetEmModel(new G4LivermorePhotoElectricModel());
       ph->RegisterProcess(thePhotoElectricEffect, particle);
 
       // Compton scattering - Livermore model above 20 MeV, Monarsh's model below 
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      theComptonScattering->SetEmModel(new G4LivermoreComptonModel(),1);
+      theComptonScattering->SetEmModel(new G4LivermoreComptonModel());
       G4LowEPComptonModel* theLowEPComptonModel = 
 	new G4LowEPComptonModel();
       theLowEPComptonModel->SetHighEnergyLimit(20*MeV);
@@ -258,7 +230,7 @@ void G4EmLowEPPhysics::ConstructProcess()
 
       // gamma conversion - Livermore model below 80 GeV
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      theGammaConversion->SetEmModel(new G4LivermoreGammaConversionModel(),1);
+      theGammaConversion->SetEmModel(new G4BetheHeitler5DModel());
       ph->RegisterProcess(theGammaConversion, particle);
 
       // default Rayleigh scattering is Livermore
@@ -269,7 +241,7 @@ void G4EmLowEPPhysics::ConstructProcess()
 
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->SetEmModel(new G4LowEWentzelVIModel(), 1);
+      msc->SetEmModel(new G4LowEWentzelVIModel());
 
       // Ionisation - Livermore should be used only for low energies
       G4eIonisation* eIoni = new G4eIonisation();
@@ -284,7 +256,7 @@ void G4EmLowEPPhysics::ConstructProcess()
       G4VEmModel* theBrem = new G4SeltzerBergerModel();
       theBrem->SetHighEnergyLimit(1*GeV);
       theBrem->SetAngularDistribution(new G4Generator2BS());
-      eBrem->SetEmModel(theBrem, 1);
+      eBrem->SetEmModel(theBrem);
  
       // register processes
       ph->RegisterProcess(msc, particle);
@@ -295,7 +267,7 @@ void G4EmLowEPPhysics::ConstructProcess()
 
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->SetEmModel(new G4LowEWentzelVIModel(), 1);
+      msc->SetEmModel(new G4LowEWentzelVIModel());
 
       // Standard ionisation 
       G4eIonisation* eIoni = new G4eIonisation();
@@ -306,7 +278,7 @@ void G4EmLowEPPhysics::ConstructProcess()
       G4VEmModel* theBrem = new G4SeltzerBergerModel();
       theBrem->SetHighEnergyLimit(1*GeV);
       theBrem->SetAngularDistribution(new G4Generator2BS());
-      eBrem->SetEmModel(theBrem, 1);
+      eBrem->SetEmModel(theBrem);
 
       // register processes
       ph->RegisterProcess(msc, particle);
@@ -324,7 +296,6 @@ void G4EmLowEPPhysics::ConstructProcess()
       ph->RegisterProcess(muIoni, particle);
       ph->RegisterProcess(mub, particle);
       ph->RegisterProcess(mup, particle);
-      //ph->RegisterProcess(new G4CoulombScattering(), particle);
 
     } else if (particleName == "alpha" ||
                particleName == "He3" ) {
@@ -339,7 +310,12 @@ void G4EmLowEPPhysics::ConstructProcess()
     } else if (particleName == "GenericIon") {
       
       G4ionIonisation* ionIoni = new G4ionIonisation();
-      ionIoni->SetEmModel(new G4IonParametrisedLossModel());
+      G4VEmModel* mod1 = new G4IonParametrisedLossModel();
+      G4VEmModel* mod2 = new G4LindhardSorensenIonModel();
+      mod1->SetHighEnergyLimit(20*MeV);
+      mod2->SetLowEnergyLimit(20*MeV);
+      ionIoni->SetEmModel(mod1);
+      ionIoni->SetEmModel(mod2);
       ionIoni->SetStepFunction(0.1, 1*um);
 
       ph->RegisterProcess(hmsc, particle);
@@ -371,6 +347,8 @@ void G4EmLowEPPhysics::ConstructProcess()
     } else if (particleName == "proton" ||
 	       particleName == "anti_proton") {
 
+      G4hMultipleScattering* pmsc = new G4hMultipleScattering();
+      pmsc->SetEmModel(new G4LowEWentzelVIModel());
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
 
@@ -424,8 +402,7 @@ void G4EmLowEPPhysics::ConstructProcess()
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 
-  G4EmModelActivator mact;
-  mact.ConstructProcess();
+  G4EmModelActivator mact(GetPhysicsName());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

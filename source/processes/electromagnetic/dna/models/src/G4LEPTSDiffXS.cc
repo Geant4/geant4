@@ -36,7 +36,7 @@ using namespace std;
 #include "CLHEP/Units/PhysicalConstants.h"
 
 #include "G4LEPTSDiffXS.hh"
-
+#include "G4Exp.hh"
 
 G4LEPTSDiffXS::G4LEPTSDiffXS(string file) {
   fileName = file;
@@ -68,7 +68,7 @@ void G4LEPTSDiffXS::readDXS( ) {
   //G4cout << "Reading2 " << fileName << G4endl;
 
   //NumAng = 181;
-  fscanf(fp, "%d %d %s", &NumAng, &NumEn, DXSTypeName);
+  (void) fscanf(fp, "%d %d %s", &NumAng, &NumEn, DXSTypeName);
   if( !strcmp(DXSTypeName, "KTC") )     DXSType = 2;  // read DXS & calculate KT
   else if( !strcmp(DXSTypeName, "KT") ) DXSType = 1;  // read DXS & KT
   else                                  DXSType = 0;
@@ -77,7 +77,7 @@ void G4LEPTSDiffXS::readDXS( ) {
   //       << "DXSType " << DXSTypeName << " " << DXSType << G4endl;
 
   for (G4int eBin=1; eBin<=NumEn; eBin++){
-    fscanf(fp,"%f ",&data);
+    (void) fscanf(fp,"%f ",&data);
     Eb[eBin] = (G4double)data;
   }
 
@@ -87,10 +87,10 @@ void G4LEPTSDiffXS::readDXS( ) {
   if(DXSType==1) {
     G4cout << "DXSTYpe 1" << G4endl;
     for (G4int aBin=0;aBin<NumAng;aBin++){
-      fscanf(fp,"%f ",&data);
+      (void) fscanf(fp,"%f ",&data);
       DXS[0][aBin]=(G4double)data;
       for (G4int eBin=1;eBin<=NumEn;eBin++){
-	fscanf(fp,"%f %f ",&data2, &data);
+	(void) fscanf(fp,"%f %f ",&data2, &data);
 	DXS[eBin][aBin]=(G4double)data;
 	KT[eBin][aBin]=(G4double)data2;
       }
@@ -99,7 +99,7 @@ void G4LEPTSDiffXS::readDXS( ) {
   else {
     for(G4int aBin=0; aBin<NumAng; aBin++){
       for(G4int eBin=0; eBin<=NumEn; eBin++){
-	fscanf(fp,"%f ",&data);
+	(void) fscanf(fp,"%f ",&data);
 	DXS[eBin][aBin] = (G4double)data;
       }
     }
@@ -197,7 +197,7 @@ void G4LEPTSDiffXS::InterpolateCDXS() {  // *10 angles, linear
 	  ICDXS[eBin][ia] = (y1*(x2-x) + y2*(x-x1))/(x2-x1);
 	}
 	else {           //log-log ordenada
-	  ICDXS[eBin][ia] = exp( (log(y1)*log(x2/x)+log(y2)*log(x/x1))/log(x2/x1) );
+	  ICDXS[eBin][ia] = G4Exp( (log(y1)*log(x2/x)+log(y2)*log(x/x1))/log(x2/x1) );
 	}
 
 	IKT[eBin][ia] = (z1*(x2-x) + z2*(x-x1))/(x2-x1);

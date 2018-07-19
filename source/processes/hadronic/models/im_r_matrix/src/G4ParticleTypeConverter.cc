@@ -211,10 +211,9 @@ G4ParticleTypeConverter::G4ParticleTypeConverter()
 }
 
 
-G4ParticleTypeConverter::GenericType G4ParticleTypeConverter::GetGenericType(const G4ParticleDefinition* const aParticleDef) 
+G4ParticleTypeConverter::GenericType G4ParticleTypeConverter::GetGenericType(const G4ParticleDefinition* const aParticleDef) const
 {
-  size_t i=0;
-  for(i=0;i<defMap.size(); i++)
+  for(size_t i=0;i<defMap.size(); i++)
   {
     if(defMap[i].first == aParticleDef) return defMap[i].second;
   }
@@ -224,14 +223,12 @@ G4ParticleTypeConverter::GenericType G4ParticleTypeConverter::GetGenericType(con
 //  throw G4HadronicException(__FILE__, __LINE__, "G4ParticleTypeConverter: unknown particle type!");
 }
  
-
-G4ParticleTypeConverter::GenericType G4ParticleTypeConverter::GetGenericType(const G4KineticTrack& aTrack) 
+G4ParticleTypeConverter::GenericType G4ParticleTypeConverter::GetGenericType(const G4KineticTrack& aTrack) const
 { 
   return GetGenericType(aTrack.GetDefinition()); 
 }
 
-
-G4int G4ParticleTypeConverter::GetUrqmdItyp(G4ParticleTypeConverter::GenericType ) 
+G4int G4ParticleTypeConverter::GetUrqmdItyp(G4ParticleTypeConverter::GenericType ) const
 {
   //if (uMap.find(gType)!=uMap.end())
   // hpw return uMap.operator[](gType); 
@@ -240,9 +237,8 @@ G4int G4ParticleTypeConverter::GetUrqmdItyp(G4ParticleTypeConverter::GenericType
   return 0;
 }
 
-
 const G4ParticleDefinition* G4ParticleTypeConverter::FindIso3State(const G4ParticleTypeConverter::GenericType gType,
-								   const G4int isospin3) 
+								   const G4int isospin3) const
 {
   MapIterator iter;
   for (iter = defMap.begin(); iter!=defMap.end(); ++iter) {
@@ -255,5 +251,5 @@ const G4ParticleDefinition* G4ParticleTypeConverter::FindIso3State(const G4Parti
     }
   }
 //  G4cout << "FindIso3State: can't find " << static_cast<G4int>(gType) << " with iso3 " << isospin3 << G4endl;
-  return NULL;
+  return nullptr;
 }

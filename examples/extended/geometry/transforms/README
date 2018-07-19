@@ -1,4 +1,4 @@
-$Id: README 68023 2013-03-13 13:40:16Z gcosmo $
+$Id: README 99889 2016-10-10 12:20:17Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -33,7 +33,7 @@ $Id: README 68023 2013-03-13 13:40:16Z gcosmo $
 
  The method of placement can be selected interactively via the command
  (see DetectorMessenger):
- /placement/setMethod method (see debug.mac)
+ /placement/setMethod method (see transfoms.in)
 
       
  2- Physics list
@@ -42,7 +42,7 @@ $Id: README 68023 2013-03-13 13:40:16Z gcosmo $
          	
  3- Primary generator
     ----------------- 
- Default kinematic is a geantino, at rest, at coordinate origin.
+ Default kinematic is a geantino at coordinate origin.
  Can be changed with particleGun commands.
          	
  4- Physics
@@ -62,12 +62,11 @@ $Id: README 68023 2013-03-13 13:40:16Z gcosmo $
  	% transforms
  	....
  	Idle>   ---> type your commands. For instance:
-	Idle> /control/execute debug.mac 
-	....
-	Idle> /placement/setMethod WithInverseMatrix 		
+	Idle> /placement/setMethod WithInverseMatrix
+	Idle> /tracking/verbose 1 		
 	Idle> /run/beamOn 1
 	....				
  	Idle> exit
  		
   - execute transforms in 'batch' mode from macro files
- 	% transforms   debug.mac	
+ 	% transforms   transforms.in	

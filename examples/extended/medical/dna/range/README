@@ -19,15 +19,14 @@ in liquid water using the Geant4-DNA physics processes and models.
 
 It is adapted from svalue.
 
-*** It is a preliminary version which might be buggy ***
-
 This example is provided by the Geant4-DNA collaboration.
 
 These processes and models are further described at:
 http://geant4-dna.org
 
 Any report or published results obtained using the Geant4-DNA software shall 
-cite the following Geant4-DNA collaboration publication:
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
 Med. Phys. 37 (2010) 4692-4708
 
 ---->1. GEOMETRY SET-UP.
@@ -68,7 +67,7 @@ as protons, hydrogen, alpha particles and their charge states, is specific.
 
 ---->4. PHYSICS
 
-You can select Geant4-DNA physics in range.in.
+You can select Geant4-DNA physics constructor in range.in.
 
 A tracking cut can be applied if requested.
 
@@ -82,6 +81,8 @@ The output results consist in a text file (range.txt), containing :
 - rms of projected length of primary particle (in nm)
 - penetration of primary particle (in nm)
 - rms of penetration of primary particle (in nm)
+
+Note: rms values correspond to standard deviation.
 
 Results in this file can be displayed using the ROOT macro plot.C:
 root plot.C

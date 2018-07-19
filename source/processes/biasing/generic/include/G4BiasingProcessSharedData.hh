@@ -47,15 +47,18 @@
 #define G4BiasingProcessSharedData_h
 
 #include "globals.hh"
+#include "G4Cache.hh"
 #include <vector>
 
 class G4VBiasingOperator;
 class G4BiasingProcessInterface;
 class G4ProcessManager;
+class G4ParallelGeometriesLimiterProcess;
 
 class G4BiasingProcessSharedData {
 
 friend class G4BiasingProcessInterface;
+friend class G4ParallelGeometriesLimiterProcess;
 
 public:
   // -------------------------
@@ -63,24 +66,30 @@ public:
   // -------------------------
   // -- The biasing process interface objects sharing this shared data class:
   const std::vector< const G4BiasingProcessInterface* >&           GetBiasingProcessInterfaces() const
-  {return           fPublicBiasingProcessInterfaces;}
+  { return           fPublicBiasingProcessInterfaces; }
   const std::vector< const G4BiasingProcessInterface* >&    GetPhysicsBiasingProcessInterfaces() const
-  {return    fPublicPhysicsBiasingProcessInterfaces;}
+  { return    fPublicPhysicsBiasingProcessInterfaces; }
   const std::vector< const G4BiasingProcessInterface* >& GetNonPhysicsBiasingProcessInterfaces() const
-  {return fPublicNonPhysicsBiasingProcessInterfaces;}
-
+  { return fPublicNonPhysicsBiasingProcessInterfaces; }
+  
+  // -- The possible geometry limiter process:
+  const G4ParallelGeometriesLimiterProcess*                GetParallelGeometriesLimiterProcess() const
+  { return fParallelGeometriesLimiterProcess; }
   
 
 private:
   // -- Methods used by the G4BiasingProcessInterface objects, thanks to class friendness.
   // -- Object is created by G4BiasingProcessInterface object:
   G4BiasingProcessSharedData( const G4ProcessManager* mgr)
-    : fProcessManager         (mgr),
-      fCurrentBiasingOperator (0),
-      fPreviousBiasingOperator(0),
-      fIsNewOperator          (true),
-      fLeavingPreviousOperator(false)
-  {} 
+    : fProcessManager                  (mgr),
+      fCurrentBiasingOperator          ( nullptr ),
+      fPreviousBiasingOperator         ( nullptr ),
+      fParallelGeometryOperator        ( nullptr ),
+      fMassGeometryOperator            ( nullptr ),
+      fIsNewOperator                   (true),
+      fLeavingPreviousOperator         (false),
+      fParallelGeometriesLimiterProcess( nullptr )
+  {}
   ~G4BiasingProcessSharedData() {}
   // -- biasing operators:
   void                 CurrentBiasingOperator( G4VBiasingOperator* );
@@ -94,18 +103,32 @@ private:
   // -- biasing operators:
   G4VBiasingOperator*   fCurrentBiasingOperator;
   G4VBiasingOperator*  fPreviousBiasingOperator;
+  G4VBiasingOperator* fParallelGeometryOperator;
+  G4VBiasingOperator*     fMassGeometryOperator;
   // -- 
   G4bool                         fIsNewOperator;
   G4bool               fLeavingPreviousOperator;
 
-  // -- biaising process interfaces sharing this object:
-  std::vector < G4BiasingProcessInterface* >                 fBiasingProcessInterfaces;
-  std::vector < G4BiasingProcessInterface* >          fPhysicsBiasingProcessInterfaces;
-  std::vector < G4BiasingProcessInterface* >       fNonPhysicsBiasingProcessInterfaces;
+  // -- biasing process interfaces sharing this object:
+  std::vector < G4BiasingProcessInterface* >                       fBiasingProcessInterfaces;
+  std::vector < G4BiasingProcessInterface* >                fPhysicsBiasingProcessInterfaces;
+  std::vector < G4BiasingProcessInterface* >             fNonPhysicsBiasingProcessInterfaces;
   // -- the same ones, for public use:
   std::vector < const G4BiasingProcessInterface* >           fPublicBiasingProcessInterfaces;
   std::vector < const G4BiasingProcessInterface* >    fPublicPhysicsBiasingProcessInterfaces;
   std::vector < const G4BiasingProcessInterface* > fPublicNonPhysicsBiasingProcessInterfaces;
+
+  // -- possible process limiting step on parallel geometries:
+  G4ParallelGeometriesLimiterProcess*                      fParallelGeometriesLimiterProcess;
+
+  
+  // -- thread local:
+  // -- Map between process managers and shared data. This map is made of
+  // -- pointers of G4BiasingSharedData instead of objects themselves :
+  // -- each process needs to keep a valid pointer of a shared data object
+  // -- but a map of object will make pointers invalid when map is increased.
+  static G4MapCache< const G4ProcessManager*, 
+		     G4BiasingProcessSharedData* >         fSharedDataMap;
 
 };
 

@@ -66,44 +66,44 @@ class G4PAIPhotModel : public G4VEmModel, public G4VEmFluctuationModel
 
 public:
 
-  G4PAIPhotModel(const G4ParticleDefinition* p = 0, const G4String& nam = "PAI");
+  explicit G4PAIPhotModel(const G4ParticleDefinition* p = nullptr, 
+			  const G4String& nam = "PAI");
 
-  virtual ~G4PAIPhotModel();
+  ~G4PAIPhotModel() final;
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) final;
 
-  virtual void InitialiseLocal(const G4ParticleDefinition*, 
-                               G4VEmModel* masterModel);
+  void InitialiseLocal(const G4ParticleDefinition*, 
+                       G4VEmModel* masterModel) final;
 
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-			       const G4ParticleDefinition*,
-			       G4double kineticEnergy,
-			       G4double cutEnergy);
+  G4double MinEnergyCut(const G4ParticleDefinition*,
+                        const G4MaterialCutsCouple* couple) final;
 
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-				const G4ParticleDefinition*,
-				G4double kineticEnergy,
-				G4double cutEnergy,
-				G4double maxEnergy);
+  G4double ComputeDEDXPerVolume(const G4Material*,
+		                const G4ParticleDefinition*,
+			        G4double kineticEnergy,
+			        G4double cutEnergy) final;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+  G4double CrossSectionPerVolume(const G4Material*,
+			         const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy,
+				 G4double maxEnergy) final;
+
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) final;
 
-  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
-				      const G4DynamicParticle*,
-				      G4double,
-				      G4double,
-				      G4double);
+  G4double SampleFluctuations(const G4MaterialCutsCouple*,
+			      const G4DynamicParticle*,
+			      G4double, G4double, G4double) final;
 
-  virtual G4double Dispersion(    const G4Material*,
-				  const G4DynamicParticle*,
-				  G4double,
-				  G4double);
+  G4double Dispersion(const G4Material*, const G4DynamicParticle*,
+		      G4double, G4double) final;
 
-  void DefineForRegion(const G4Region* r);
+  void DefineForRegion(const G4Region* r) final;
 
   inline G4PAIPhotData* GetPAIPhotData();
 
@@ -116,7 +116,7 @@ public:
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-			      G4double kinEnergy);
+				      G4double kinEnergy) final;
 
 private:
 
@@ -125,8 +125,8 @@ private:
   inline void SetParticle(const G4ParticleDefinition* p);
 
   // hide assignment operator 
-  G4PAIPhotModel & operator=(const  G4PAIPhotModel &right);
-  G4PAIPhotModel(const  G4PAIPhotModel&);
+  G4PAIPhotModel & operator=(const  G4PAIPhotModel &right) = delete;
+  G4PAIPhotModel(const  G4PAIPhotModel&) = delete;
 
   G4int                       fVerbose; 
 
@@ -143,6 +143,7 @@ private:
   G4double fMass;
   G4double fRatio;
   G4double fChargeSquare;
+  G4double fLowestTcut;
 };
 
 inline G4PAIPhotData* G4PAIPhotModel::GetPAIPhotData()

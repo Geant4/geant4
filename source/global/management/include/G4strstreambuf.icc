@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.icc 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4strstreambuf.icc 103661 2017-04-20 14:57:11Z gcosmo $
 // ====================================================================
 //   G4strstreambuf.icc
 //
@@ -119,6 +119,13 @@ inline void G4strstreambuf::SetDestination(G4coutDestination* dest)
   destination= dest;
 }
 
+///////////////////////////////////////////////////////////////////
+inline G4coutDestination* G4strstreambuf::GetDestination() const
+{
+  return destination;
+}
+///////////////////////////////////////////////////////////////////
+
 
 /////////////////////////////////////////////
 inline G4int G4strstreambuf::ReceiveString ()
@@ -127,21 +134,24 @@ inline G4int G4strstreambuf::ReceiveString ()
   G4String stringToSend(buffer);
   G4int result= 0;
 
-  if(this == &G4coutbuf && destination != 0) {
-    result=  destination-> ReceiveG4cout(stringToSend);
-
-  } else if(this == &G4cerrbuf && destination != 0) {
-    result=  destination-> ReceiveG4cerr(stringToSend);
-
-  } else if(this == &G4coutbuf && destination == 0) {
+  if(this == &G4coutbuf && destination != 0)
+  {
+    result=  destination-> ReceiveG4cout_(stringToSend);
+  }
+  else if(this == &G4cerrbuf && destination != 0)
+  {
+    result=  destination-> ReceiveG4cerr_(stringToSend);
+  }
+  else if(this == &G4coutbuf && destination == 0)
+  {
     std::cout << stringToSend << std::flush;
     result= 0;
-
-  } else if(this == &G4cerrbuf && destination == 0) {
+  }
+  else if(this == &G4cerrbuf && destination == 0)
+  {
     std::cerr << stringToSend << std::flush;
     result= 0;
   }
 
   return result;
 }
-

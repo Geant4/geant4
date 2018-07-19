@@ -1,4 +1,4 @@
-$Id: History 97625 2016-06-06 13:35:58Z gcosmo $
+$Id: History 110870 2018-06-22 12:14:16Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -15,7 +15,137 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-5-May-2016 V. Uzhinsky    (hadr-string-diff-V10-01-15)
+22-Jun-2018 A. Ribon          (hadr-string-diff-V10-04-10)
+-  G4DiffractiveExcitation, G4FTFAnnihilation, G4FTFModel : technical
+   change to avoid silent problems of symbol resolutions leading to
+   segmentation faults (without useful debugging information).
+   No change in the random sequence.
+
+20-Jun-2018 A. Ribon          (hadr-string-diff-V10-04-09)
+-  G4FTFAnnihilation : fix (by Vladimir Uzhinsky) to get flat cos(theta)
+   and phi distributions for antiproton annihilation at rest.
+   Added also a protection for the evaluation of rapidity.
+
+12-Jun-2018 A. Ribon          (hadr-string-diff-V10-04-08)
+-  G4FTFAnnihilation : code improvement of the Annihilate method
+   (no changes in physics output, but with possible differences 
+    in the the random sequence, due to numerical effects caused by
+    re-ordering of operations).
+
+05-Jun-2018 A. Ribon          (hadr-string-diff-V10-04-07)
+-  G4FTFModel, G4DiffractiveExcitation : small code improvements
+   (no changes in physics output, but with possible differences 
+    in the the random sequence, due to numerical effects caused by
+    re-ordering of operations).
+
+31-May-2018 A. Ribon          (hadr-string-diff-V10-04-06)
+-  G4DiffractiveExcitation : code improvement of the ExciteParticipants method
+   (no changes in the random sequence).
+
+24-May-2018 A. Ribon          (hadr-string-diff-V10-04-05)
+-  G4FTFModel : small technical fix (replaced "class" with "struct" in the
+   header file) to the previous tag to avoid a compilation warning on Mac.
+
+24-May-2018 A. Ribon          (hadr-string-diff-V10-04-04)
+-  G4FTFModel : code improvement of the AdjustNucleons method
+   (no changes in the random sequence except for the trivial fix on the
+    "NumberOfTries" counter, which was increased twice).
+
+22-Mar-2018 J. Yarba          (hadr-string-diff-V10-04-03)
+- Turn to false switches for A-dep in nuclear destruction for baryon projectile 
+  (lines 136 and 138 in G4FTFParameters.cc)
+- Uncomment checks for these switches in the code (lines 1158-1161 & 1172-1175 
+  in G4FTFParameters.cc) 
+
+19-Dec-2017 V. Uzhinsky       (hadr-string-diff-V10-04-02)
+-  Correct calculation of nuclear residual excitation energy is implemented.
+   Fine tuning of the model parameters has been dome.
+
+12-Dec-2017 V. Uzhinsky       (hadr-string-diff-V10-04-01)
+-  Cleaned and merged version of FTF (merged "stable" and developer versions).
+
+07-Dec-2017 A. Ribon          (hadr-string-diff-V10-04-00)
+-  Brought back the development version of FTF 
+   (as it was in hadr-string-diff-V10-03-05).
+
+20-Nov-2017 A. Ribon          (hadr-string-diff-V10-03-10)
+- G4FTFAnnihilation : improved anisotropy of secondary pions in annihilation.
+
+08-Nov-2017 A. Ribon          (hadr-string-diff-V10-03-09)
+-  Minor clean-up and indentation: no changes in the random sequence.
+
+1-Nov-2017 J. Yarba           (hadr-string-diff-V10-03-08)
+- Backported FTF/diffraction configuration interface 
+  - for now, only baryon projectile
+- Affected classes: G4FTFParameters, G4FTFModel 
+
+27-Oct-2017 A. Ribon          (hadr-string-diff-V10-03-07)
+- G4FTFAnnihilation : fixed unphysical neutrons at rest seen in annihilation.
+- G4DiffractiveExcitation : added protection and improved kinematics.
+
+26-Oct-2017 A. Ribon          (hadr-string-diff-V10-03-06)
+- Brought back the stable, production FTF (as in 10.3).
+
+23-Oct-2017 V. Uzhinsky       (hadr-string-diff-V10-03-05)
+- Bug is erased for nucleus-nucleus interactions in G4FTFParticipants.
+
+23-Oct-2017 V. Uzhinsky       (hadr-string-diff-V10-03-04)
+- Projectile diffraction is arrowed in Pi + A interactions.
+- Isotrophy of annihilation events is introduced.
+
+
+4-Aug-2017 J. Yarba       (hadr-string-diff-V10-03-03)
+- Introduce additional separate parameters for projectile and target destruction
+- Refine naming of variables/classes
+
+1-Aug-2017 J. Yarba       (hadr-string-diff-V10-03-02)
+- Initial set of FTF configurable parameters is implemented (only baryon projectile for now)
+- Results of several tests (process and/or physics list level) before and after code updates
+  appear to be identical
+
+21-Jul-2017 V. Uzhinsky       (hadr-string-diff-V10-03-01)
+-  After implementation of the rotating strings in the LUND string fragmentation
+   process probability parameterizations were improved for Pi - Nucleon interactions.
+   Good results are obtained for HARP Collaboration data (p/Pi+/Pi- + A
+   at 3, 5, 8, 12 GeV/c) and for Pi N inclusive reactions.
+
+14-Dec-2016 A. Ribon       (hadr-string-diff-V10-03-00)
+-  After the release G4 10.3, with "stable" version, this tag brings back
+   the "development" version, similar (although not identical because
+   of some code clean-up) to G4 10.2.ref10.
+
+29-June-2016 V. Uzhinsky   (hadr-string-diff-V10-02-07)
+       Pt of nucleon involved in the reggeon cascade
+       was returned to original values. Attempts to improve
+       proton spectra in p+C at 158 GeV/c were not successful.
+
+27-June-2016 V. Uzhinsky   (hadr-string-diff-V10-02-06)
+       Fine tuning of G4FTFParameters.cc.
+ 
+13-June-2016 V. Uzhinsky   (hadr-string-diff-V10-02-05)
+       Cleaned version of G4DiffractiveExcitation.cc
+
+ 1-June-2016 V. Uzhinsky   (hadr-string-diff-V10-02-04)
+       Fine tuning of G4DiffractiveExcitation.cc of FTFmodel has been done
+       to describe NA49 exp. data, especially, <Pt> on Xf.
+
+28-May-2016 V. Uzhinsky    (hadr-string-diff-V10-02-03)
+-      Various <Pt^2> for diffr. and non-diffr. interactions were introduced
+       in G4FTFModel.cc for NA49 and NA61/SHINE exp. data.
+
+23-May-2016 V. Uzhinsky    (hadr-string-diff-V10-02-02)
+-      Tunning of FTF model parameters has been done.
+ 
+17-May-2016 V. Uzhinsky    (hadr-string-diff-V10-02-01)
+-  FTF model was essential improved: 
+       Smearing of Delta-isobar mass was introduced;
+       Delta-isobars are now treated as a kinetic track;
+       Parameterisation the quark exchange process with excitation is improved also.
+   Na61/SHINE exp. data on Pi+, Pi-, K+, K- and protons in PP interactions at
+   20, 31, 40, 80 and 158 GeV/c are described. The ratio of <Strane Q>/<Normal Q>
+   in PP interactions is reproduced. The kink in AA interactions does not described.
+
+5-May-2016 V. Uzhinsky    (hadr-string-diff-V10-02-00)
 - A bug was fixed in G4FTFModel for nucleus-nucleus interactions
     if ( G4UniformRand() < 
        ( 1.0 - target->GetSoftCollisionCount()     / MaxNumOfInelCollisions )  *  // Uzhi March 2015

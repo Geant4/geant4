@@ -1,4 +1,4 @@
-$Id: History 102321 2017-01-23 09:51:59Z gcosmo $
+$Id: History 110587 2018-05-31 12:05:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,21 +14,84 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12-October-2016 G.Folger
+31-May-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-00)
+- G4HadronInelasticQBBC - use G4ParticleInelasticXS both for neutrons
+    and protons
+
+7-Nov-2017, Tatsumi Koi (phys-ctor-hinelastic-V10-03-06) 
+- Adding G4HadronPhysicsShieldingLEND
+
+6-Nov-2017, Tatsumi Koi (phys-ctor-hinelastic-V10-03-05) 
+- Fix registration of cross section data set in G4HadronPhysicsShielding
+
+16-Oct-2017, Alberto Ribon (phys-ctor-hinelastic-V10-03-04) 
+- G4HadronPhysicsFTFQGSP_BERT : fixing trivial compiler warnings
+  of the previous tag.
+
+16-Oct-2017, Alberto Ribon (phys-ctor-hinelastic-V10-03-03) 
+- G4HadronPhysicsFTFQGSP_BERT : new hadron physics similar to
+  G4HadronPhysicsFTFP_BERT, but with QGS fragmentation of strings
+  (instead of the Lund string fragmentation).
+
+28-Jul-2017, Andrea Dotti (phys-ctor-hinelastic-V10-03-02)
+- Refactoring of QGSP_BERT, QGSP_BIC w/ variants
+
+26-Jul-2017, Andrea Dotti
+- Refactoring code of all FTFP_BERT variant, FTF_BIC and QGS_BIC
+
+14-Jul-2017, Andrea Dotti               (phys-ctor-hinelastic-V10-03-01)
+- Refactoring of code of FTFP_BERT and register physics builders
+
+09-Feb-2017, Makoto Asai                (phys-ctor-hinelastic-V10-03-00)
+- Print-out of the transition energy region between FTFP and BERT 
+  in the physics lists FTFP_BERT_HP and G4HadronPhysicsFTFP_BERT_HP
+  is made only for the master thread.
+
+07-Dec-2016, Alberto Ribon              (phys-ctor-hinelastic-V10-02-10)
+- G4HadronPhysicsFTFP_BERT_HP : changed the transition energy region
+  between FTFP and BERT in the physics list FTFP_BERT_HP to [3, 12] GeV,
+  exactly as it is now in FTFP_BERT.
+
+01-Dec-2016, Alberto Ribon              (phys-ctor-hinelastic-V10-02-09)
+- G4HadronPhysicsFTFP_BERT : changed the transition energy region
+  between FTFP and BERT in the physics list FTFP_BERT to [3, 12] GeV
+  (for pions, kaons, protons and neutrons; for hyperons, left as it
+   has always been, i.e. [2, 6] GeV).
+
+24-Nov-2016, Alberto Ribon              (phys-ctor-hinelastic-V10-02-08)
+- G4HadronPhysicsFTFP_BERT : changed the transition energy region
+  between FTFP and BERT in the physics list FTFP_BERT : now it is
+  between [2, 6] GeV.
+	 
+18-Nov-2016, Alberto Ribon              (phys-ctor-hinelastic-V10-02-07)
+- G4HadronPhysicsFTFP_BERT : changed the transition energy region
+  between FTFP and BERT in the physics list FTFP_BERT : now it is
+  between the large interval [3, 12] GeV (instead of [4, 5] GeV).
+
+04-Nov-2016, Alberto Ribon              (phys-ctor-hinelastic-V10-02-06)
+- Written first draft of the README
+
+17-October-2016 M.Maire   (phys-ctor-hinelastic-V10-02-05)
+- add README
+
+12-October-2016 G.Folger  (phys-ctor-hinelastic-V10-02-04)
 - replace direct use of aParticleIterator by GetParticleIterator().
   fix required by clang39 on Windows and MAC
 
-26-May-2016, A. Ribon                   (phys-ctor-hinelastic-V10-01-08, 07)
+30-Aug-2016, V.Ivanchenko               (phys-ctor-hinelastic-V10-02-03)
+- G4HadronPhysicsQBBC : use G4 de-excitation for the Bertini cascade 
+
+26-May-2016, A. Ribon                   (phys-ctor-hinelastic-V10-02-02)
 - G4HadronPhysicsQGSP_BIC_AllHP : treat only proton with ParticleHP in
   this class, and move the others (deuteron, triton, 3He, alpha) to
   the new class G4IonPhysicsPHP.
 
-06-Apr-2016, A. Ribon                   (phys-ctor-hinelastic-V10-01-06)
+06-Apr-2016, A. Ribon                   (phys-ctor-hinelastic-V10-02-01)
 - G4HadronPhysicsFTFP_BERT_ATL : created new constructor for ATLAS, similar
   to G4HadronPhysicsFTFP_BERT but with the transition between BERT and FTFP
   in the energy region [9, 12] GeV.
 
-04-Dec-2015, A. Ribon
+04-Dec-2015, A. Ribon                   (phys-ctor-hinelastic-V10-02-00)
 - G4HadronPhysicsQGSP_BIC_AllHP : activate ParticleHP for deuteron,
   triton, He3 and alpha.
 

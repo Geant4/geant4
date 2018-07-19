@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GFlashHitMaker.cc 102305 2017-01-20 14:20:07Z gcosmo $
+// $Id: GFlashHitMaker.cc 98338 2016-07-07 08:20:39Z gcosmo $
 //
 //
 // ------------------------------------------------------------

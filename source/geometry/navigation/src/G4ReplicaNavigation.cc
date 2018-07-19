@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc 102290 2017-01-20 11:19:44Z gcosmo $
+// $Id: G4ReplicaNavigation.cc 109826 2018-05-09 10:55:30Z gcosmo $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -826,9 +826,9 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
       exiting = true;
       validExitNormal = normalOutStc.validConvex; // false; -> Old,Conservative
 
-      exitNormalStc= normalOutStc;
-      exitNormalStc.exitNormal= history.GetTopTransform().Inverse().
-                                TransformAxis(normalOutStc.exitNormal);
+      exitNormalStc = normalOutStc;
+      exitNormalStc.exitNormal =
+        history.GetTopTransform().InverseTransformAxis(normalOutStc.exitNormal);
       calculatedExitNormal= true;
     }
   }
@@ -865,9 +865,9 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
        
         // As step is limited by this level, must set Exit Normal
         //
-        G4ThreeVector localExitNorm= normalOutStc.exitNormal;
-        G4ThreeVector globalExitNorm=
-            GlobalToLocal.Inverse().TransformAxis(localExitNorm);
+        G4ThreeVector localExitNorm = normalOutStc.exitNormal;
+        G4ThreeVector globalExitNorm =
+          GlobalToLocal.InverseTransformAxis(localExitNorm);
 
         exitNormalStc= normalOutStc; // Normal, convex, calculated, side
         exitNormalStc.exitNormal= globalExitNorm;
@@ -914,8 +914,8 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   }
   if( motherDeterminedStep)
   {
-     G4ThreeVector globalExitNormalTop=
-        globalToLocalTop.Inverse().TransformAxis(exitVectorMother);
+     G4ThreeVector globalExitNormalTop =
+       globalToLocalTop.InverseTransformAxis(exitVectorMother);
      
      exitNormalStc= motherNormalStc;
      exitNormalStc.exitNormal= globalExitNormalTop;
@@ -1077,7 +1077,7 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
 #ifdef DAUGHTER_NORMAL_ALSO
           // This norm can be calculated later, if needed daughter is available
           localExitNorm = sampleSolid->SurfaceNormal(samplePoint);
-          daughtNormRepCrd = sampleTf.Inverse().TransformAxis(localExitNorm);
+          daughtNormRepCrd = sampleTf.InverseTransformAxis(localExitNorm);
 #endif
           
 #ifdef G4VERBOSE
@@ -1135,8 +1135,8 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
     //   GlobalToLastDepth.Inverse().TransformAxis(daughtNormRepCrd);
     // ==> Can calculate it, but have no way to transmit it to caller (for now)
 
-    exitNormalVector=globalToLocalTop.Inverse().TransformAxis(daughtNormGlobal);
-    validExitNormal= false; // Entering daughter - never convex for parent
+    exitNormalVector = globalToLocalTop.InverseTransformAxis(daughtNormGlobal);
+    validExitNormal = false; // Entering daughter - never convex for parent
 
     calculatedExitNormal= true;
   }

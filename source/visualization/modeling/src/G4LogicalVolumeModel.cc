@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeModel.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4LogicalVolumeModel.cc 110480 2018-05-25 07:25:18Z gcosmo $
 //
 // 
 // John Allison  26th July 1999.
@@ -47,6 +47,7 @@ G4LogicalVolumeModel::G4LogicalVolumeModel
  G4bool                      booleans,
  G4bool                      voxels,
  G4bool                      readout,
+ G4bool                      checkOverlaps,
  const G4Transform3D&        modelTransformation,
  const G4ModelingParameters* pMP):
   // Instantiate a G4PhysicalVolumeModel with a G4PVPlacement to
@@ -70,7 +71,8 @@ G4LogicalVolumeModel::G4LogicalVolumeModel
   fpLV (pLV),
   fBooleans (booleans),
   fVoxels (voxels),
-  fReadout (readout)
+  fReadout (readout),
+  fCheckOverlaps(checkOverlaps)
 {
   fType = "G4LogicalVolumeModel";
   fGlobalTag = fpLV -> GetName ();
@@ -123,6 +125,15 @@ void G4LogicalVolumeModel::DescribeYourselfTo
 	pvModel.SetModelingParameters(fpMP);
 	pvModel.DescribeYourselfTo(sceneHandler);
       }
+    }
+  }
+
+  if (fCheckOverlaps) {
+    G4LogicalVolume* lv = fpTopPV->GetLogicalVolume();
+    G4int nSisters = lv->GetNoDaughters();
+    for (G4int iSister = 0; iSister < nSisters; ++iSister) {
+      G4PVPlacement* placement = dynamic_cast<G4PVPlacement*>(lv->GetDaughter(iSister));
+      if (placement) placement->CheckOverlaps();
     }
   }
 }

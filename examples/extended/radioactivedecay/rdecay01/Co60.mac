@@ -7,6 +7,7 @@
 /tracking/verbose 2
 /run/beamOn 1
 #
+/control/cout/ignoreThreadsExcept 0
 /tracking/verbose 0
 #
 /analysis/setFileName Co60

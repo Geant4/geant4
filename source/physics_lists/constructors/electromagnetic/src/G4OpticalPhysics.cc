@@ -70,7 +70,11 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
     fExcitationRatio(0.0),
     fProfile("delta"),
     fFiniteRiseTime(false),
-    fScintillationByParticleType(false)
+    fScintillationByParticleType(false),
+    fScintillationTrackInfo(false),
+    fInvokeSD(true),
+    fCerenkovStackPhotons(true),
+    fScintillationStackPhotons(true)
 {
   verboseLevel = verbose;
   fMessenger = new G4OpticalPhysicsMessenger(this);
@@ -202,17 +206,24 @@ namespace UIhelpers {
         sccmd3.SetParameterName("ratio",false);
         //sccmd3.SetRange("ratio>=0.&&ratio<=1.");//LIMITATION: w/ DeclareMethod range checking does not work
         sccmd3.SetStates(G4State_Idle);
+
         G4GenericMessenger::Command& sccmd4 = mess->DeclareMethod("setByParticleType",
                                                                   &G4Scintillation::SetScintillationByParticleType,
                                                                   "Activate/Inactivate scintillation process by particle type");
         sccmd4.SetParameterName("flag", false);
         sccmd4.SetStates(G4State_Idle);
+
+        G4GenericMessenger::Command& sccmd5 = mess->DeclareMethod("setTrackInfo",
+                                                                  &G4Scintillation::SetScintillationTrackInfo,
+                                                                  "Activate/Inactivate scintillation track info");
+        sccmd5.SetParameterName("flag", false);
+        sccmd5.SetStates(G4State_Idle);
         
-        G4GenericMessenger::Command& sccmd5 = mess->DeclareMethod("setTrackSecondariesFirst",
+        G4GenericMessenger::Command& sccmd6 = mess->DeclareMethod("setTrackSecondariesFirst",
                                                                   &G4Scintillation::SetTrackSecondariesFirst,
                                                                   "Set option to track secondaries before finishing their parent track");
-        sccmd5.SetParameterName("flag",false);
-        sccmd5.SetStates(G4State_Idle);
+        sccmd6.SetParameterName("flag",false);
+        sccmd6.SetStates(G4State_Idle);
         
         buildCommands(ScintillationProcess,DIR_CMDS"/scintillation/",GUIDANCE" for scintillation process.");
     }
@@ -282,6 +293,7 @@ void G4OpticalPhysics::ConstructProcess()
 
   G4OpBoundaryProcess* OpBoundaryProcess = new G4OpBoundaryProcess();
   UIhelpers::buildCommands(OpBoundaryProcess,DIR_CMDS"/boundary/",GUIDANCE" for boundary process");
+  OpBoundaryProcess->SetInvokeSD(fInvokeSD);
   OpProcesses[kBoundary] = OpBoundaryProcess;
 
   G4OpWLS* OpWLSProcess = new G4OpWLS();
@@ -311,7 +323,9 @@ void G4OpticalPhysics::ConstructProcess()
   ScintillationProcess->SetScintillationExcitationRatio(fExcitationRatio);
   ScintillationProcess->SetFiniteRiseTime(fFiniteRiseTime);
   ScintillationProcess->SetScintillationByParticleType(fScintillationByParticleType);
+  ScintillationProcess->SetScintillationTrackInfo(fScintillationTrackInfo);
   ScintillationProcess->SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kScintillation]);
+  ScintillationProcess->SetStackPhotons(fScintillationStackPhotons);
   G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
   ScintillationProcess->AddSaturation(emSaturation);
   UIhelpers::buildCommands(ScintillationProcess);
@@ -321,6 +335,7 @@ void G4OpticalPhysics::ConstructProcess()
   CerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotons);
   CerenkovProcess->SetMaxBetaChangePerStep(fMaxBetaChange);
   CerenkovProcess->SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kCerenkov]);
+  CerenkovProcess->SetStackPhotons(fCerenkovStackPhotons);
   UIhelpers::buildCommands(CerenkovProcess);
   OpProcesses[kCerenkov] = CerenkovProcess;
 
@@ -416,6 +431,13 @@ void G4OpticalPhysics::
   //G4Scintillation::SetScintillationByParticleType(scintillationByParticleType);
 }
 
+void G4OpticalPhysics::
+             SetScintillationTrackInfo(G4bool scintillationTrackInfo)
+{
+  fScintillationTrackInfo = scintillationTrackInfo;
+  //G4Scintillation::SetScintillationTrackInfo(scintillationTrackInfo);
+}
+
 void G4OpticalPhysics::SetTrackSecondariesFirst(G4OpticalProcessIndex index,
                                                 G4bool trackSecondariesFirst)
 {
@@ -433,7 +455,22 @@ void G4OpticalPhysics::SetFiniteRiseTime(G4bool finiteRiseTime)
 {
   fFiniteRiseTime = finiteRiseTime;
   //G4Scintillation::SetFiniteRiseTime(finiteRiseTime);
-} 
+}
+
+void G4OpticalPhysics::SetInvokeSD(G4bool invokeSD)
+{
+  fInvokeSD = invokeSD;
+}
+
+void G4OpticalPhysics::SetCerenkovStackPhotons(G4bool stackingFlag)
+{
+  fCerenkovStackPhotons = stackingFlag;
+}
+
+void G4OpticalPhysics::SetScintillationStackPhotons(G4bool stackingFlag)
+{
+  fScintillationStackPhotons = stackingFlag;
+}
 
 void G4OpticalPhysics::Configure(G4OpticalProcessIndex index, G4bool isUse)
 {

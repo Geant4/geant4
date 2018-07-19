@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01DetectorConstruction.hh
 /// \brief Definition of the RE01DetectorConstruction class
 //
-// $Id: RE01DetectorConstruction.hh 75295 2013-10-30 09:32:52Z gcosmo $
+// $Id: RE01DetectorConstruction.hh 97383 2016-06-02 09:56:35Z gcosmo $
 //
 
 #ifndef RE01DetectorConstruction_h
@@ -37,7 +37,6 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
-class G4VReadOutGeometry;
 
 class RE01DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -54,7 +53,6 @@ private:
 
   G4LogicalVolume * fTrackerLayer_log;
   G4LogicalVolume * fCalorimeter_log;
-  G4VReadOutGeometry * fCalorimeterRO;
 };
 
 #endif

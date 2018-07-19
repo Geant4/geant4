@@ -19,21 +19,21 @@ using the Geant4-DNA physics processes and models.
 
 It is adapted from TestEm12.
 
-*** It is a preliminary version which might be buggy ***
-
 This example is provided by the Geant4-DNA collaboration.
 
 These processes and models are further described at:
 http://geant4-dna.org
 
 Any report or published results obtained using the Geant4-DNA software shall 
-cite the following Geant4-DNA collaboration publication:
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
 Med. Phys. 37 (2010) 4692-4708
 
 ---->1. GEOMETRY SET-UP.
  
 The geometry is a 10-nm radius sphere of liquid water (G4_WATER
-material). Particles are shot randomly inside the sphere.
+material). Particles are shot randomly inside the sphere. Surrounding
+medium is not considered.
 
 Radius of the sphere, particle type and energy can be controlled by the 
 svalue.in macro file.
@@ -60,7 +60,7 @@ The svalue.in macro allows a full control of the simulation.
 
 ---->4. PHYSICS
 
-You can select Geant4-DNA physics in svalue.in.
+You can select Geant4-DNA physics constructor in svalue.in.
 
 A tracking cut can be applied if requested.
 
@@ -71,6 +71,10 @@ The output results consist in a text file (s.txt), containing :
 - the energy of incident particles (in eV)
 - the S value (in Gy/Bq.s)
 - the rms on S value (in Gy/Bq.s)
+
+One can use the plot.C ROOT macro file to display results.
+
+Note: rms values correspond to standard deviation.
 
 ---------------------------------------------------------------------------
 

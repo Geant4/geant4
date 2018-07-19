@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc 91726 2015-08-03 15:41:36Z gcosmo $
+// $Id: G4eeToTwoGammaModel.cc 109177 2018-04-03 06:55:14Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -87,11 +87,10 @@ using namespace std;
 G4eeToTwoGammaModel::G4eeToTwoGammaModel(const G4ParticleDefinition*,
                                          const G4String& nam)
   : G4VEmModel(nam),
-    pi_rcl2(pi*classic_electr_radius*classic_electr_radius),
-    isInitialised(false)
+    pi_rcl2(pi*classic_electr_radius*classic_electr_radius)
 {
   theGamma = G4Gamma::Gamma();
-  fParticleChange = 0;
+  fParticleChange = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -104,17 +103,14 @@ G4eeToTwoGammaModel::~G4eeToTwoGammaModel()
 void G4eeToTwoGammaModel::Initialise(const G4ParticleDefinition*,
                                      const G4DataVector&)
 {
-  if(isInitialised) { return; }
+  if(fParticleChange) { return; }
   fParticleChange = GetParticleChangeForGamma();
-  isInitialised = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4eeToTwoGammaModel::ComputeCrossSectionPerElectron(
-                                       const G4ParticleDefinition*,
-                                       G4double kineticEnergy,
-				       G4double, G4double)
+G4double 
+G4eeToTwoGammaModel::ComputeCrossSectionPerElectron(G4double kineticEnergy)
 {
   // Calculates the cross section per electron of annihilation into two photons
   // from the Heilter formula.
@@ -135,13 +131,13 @@ G4double G4eeToTwoGammaModel::ComputeCrossSectionPerElectron(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4eeToTwoGammaModel::ComputeCrossSectionPerAtom(
-                                    const G4ParticleDefinition* p,
+                                    const G4ParticleDefinition*,
                                     G4double kineticEnergy, G4double Z,
 				    G4double, G4double, G4double)
 {
   // Calculates the cross section per atom of annihilation into two photons
   
-  G4double cross = Z*ComputeCrossSectionPerElectron(p,kineticEnergy);
+  G4double cross = Z*ComputeCrossSectionPerElectron(kineticEnergy);
   return cross;  
 }
 
@@ -149,18 +145,21 @@ G4double G4eeToTwoGammaModel::ComputeCrossSectionPerAtom(
 
 G4double G4eeToTwoGammaModel::CrossSectionPerVolume(
 					const G4Material* material,
-					const G4ParticleDefinition* p,
+					const G4ParticleDefinition*,
 					      G4double kineticEnergy,
 					      G4double, G4double)
 {
   // Calculates the cross section per volume of annihilation into two photons
   
   G4double eDensity = material->GetElectronDensity();
-  G4double cross = eDensity*ComputeCrossSectionPerElectron(p,kineticEnergy);
+  G4double cross = eDensity*ComputeCrossSectionPerElectron(kineticEnergy);
   return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+// Polarisation of gamma according to M.H.L.Pryce and J.C.Ward, 
+// Nature 4065 (1947) 435.
 
 void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 					    const G4MaterialCutsCouple*,
@@ -168,30 +167,37 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 					    G4double,
 					    G4double)
 {
-  G4double PositKinEnergy = dp->GetKineticEnergy();
+  G4double posiKinEnergy = dp->GetKineticEnergy();
   G4DynamicParticle *aGamma1, *aGamma2;
 
   CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
    
   // Case at rest
-  if(PositKinEnergy == 0.0) {
+  if(posiKinEnergy == 0.0) {
     G4double cost = 2.*rndmEngine->flat()-1.;
     G4double sint = sqrt((1. - cost)*(1. + cost));
-    G4double phi  = twopi * G4UniformRand();
+    G4double phi  = twopi * rndmEngine->flat();
     G4ThreeVector dir(sint*cos(phi), sint*sin(phi), cost);
     phi = twopi * rndmEngine->flat();
-    G4ThreeVector pol(cos(phi), sin(phi), 0.0);
+    G4double cosphi = cos(phi);
+    G4double sinphi = sin(phi);
+    G4ThreeVector pol(cosphi, sinphi, 0.0);
     pol.rotateUz(dir);
     aGamma1 = new G4DynamicParticle(theGamma, dir, electron_mass_c2);
     aGamma1->SetPolarization(pol.x(),pol.y(),pol.z());
     aGamma2 = new G4DynamicParticle(theGamma,-dir, electron_mass_c2);
-    aGamma1->SetPolarization(-pol.x(),-pol.y(),-pol.z());
-
+    pol.set(-sinphi, cosphi, 0.0);
+    pol.rotateUz(dir);
+    aGamma2->SetPolarization(pol.x(),pol.y(),pol.z());
+    /*
+    G4cout << "Annihilation at rest fly: e0= "  << " dir= " <<  dir 
+	   << G4endl;
+    */
   } else {
 
-    G4ThreeVector PositDirection = dp->GetMomentumDirection();
+    G4ThreeVector posiDirection = dp->GetMomentumDirection();
 
-    G4double tau     = PositKinEnergy/electron_mass_c2;
+    G4double tau     = posiKinEnergy/electron_mass_c2;
     G4double gam     = tau + 1.0;
     G4double tau2    = tau + 2.0;
     G4double sqgrate = sqrt(tau/tau2)*0.5;
@@ -220,7 +226,7 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     G4double cost = (epsil*tau2-1.)/(epsil*sqg2m1);
     if(std::abs(cost) > 1.0) {
       G4cout << "### G4eeToTwoGammaModel WARNING cost= " << cost
-	     << " positron Ekin(MeV)= " << PositKinEnergy
+	     << " positron Ekin(MeV)= " << posiKinEnergy
 	     << " gamma epsil= " << epsil
 	     << G4endl;
       if(cost > 1.0) cost = 1.0;
@@ -233,40 +239,49 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     // kinematic of the created pair
     //
 
-    G4double TotalAvailableEnergy = PositKinEnergy + 2.0*electron_mass_c2;
-    G4double Phot1Energy = epsil*TotalAvailableEnergy;
+    G4double totalEnergy = posiKinEnergy + 2.0*electron_mass_c2;
+    G4double phot1Energy = epsil*totalEnergy;
 
-    G4ThreeVector Phot1Direction(sint*cos(phi), sint*sin(phi), cost);
-    Phot1Direction.rotateUz(PositDirection);
-    aGamma1 = new G4DynamicParticle (theGamma,Phot1Direction, Phot1Energy);
-    phi = twopi * G4UniformRand();
-    G4ThreeVector pol1(cos(phi), sin(phi), 0.0);
-    pol1.rotateUz(Phot1Direction);
-    aGamma1->SetPolarization(pol1.x(),pol1.y(),pol1.z());
+    G4ThreeVector phot1Direction(sint*cos(phi), sint*sin(phi), cost);
+    phot1Direction.rotateUz(posiDirection);
+    aGamma1 = new G4DynamicParticle (theGamma,phot1Direction, phot1Energy);
+    phi = twopi * rndmEngine->flat();
+    G4double cosphi = cos(phi);
+    G4double sinphi = sin(phi);
+    G4ThreeVector pol(cosphi, sinphi, 0.0);
+    pol.rotateUz(phot1Direction);
+    aGamma1->SetPolarization(pol.x(),pol.y(),pol.z());
 
-    G4double Phot2Energy =(1.-epsil)*TotalAvailableEnergy;
-    G4double PositP= sqrt(PositKinEnergy*(PositKinEnergy+2.*electron_mass_c2));
-    G4ThreeVector dir = PositDirection*PositP - Phot1Direction*Phot1Energy;
-    G4ThreeVector Phot2Direction = dir.unit();
+    G4double phot2Energy =(1.-epsil)*totalEnergy;
+    G4double posiP= sqrt(posiKinEnergy*(posiKinEnergy+2.*electron_mass_c2));
+    G4ThreeVector dir = posiDirection*posiP - phot1Direction*phot1Energy;
+    G4ThreeVector phot2Direction = dir.unit();
 
     // create G4DynamicParticle object for the particle2
-    aGamma2 = new G4DynamicParticle (theGamma,Phot2Direction, Phot2Energy);
+    aGamma2 = new G4DynamicParticle (theGamma, phot2Direction, phot2Energy);
 
     //!!! likely problematic direction to be checked
-    aGamma2->SetPolarization(-pol1.x(),-pol1.y(),-pol1.z());
-  }
-  /*
-    G4cout << "Annihilation in fly: e0= " << PositKinEnergy
-    << " m= " << electron_mass_c2
-    << " e1= " << Phot1Energy 
-    << " e2= " << Phot2Energy << " dir= " <<  dir 
-    << " -> " << Phot1Direction << " " 
-    << Phot2Direction << G4endl;
-  */
+    pol.set(-sinphi, cosphi, 0.0);
+    pol.rotateUz(phot1Direction);
+    cost = pol*phot2Direction;
+    pol -= cost*phot2Direction;
+    pol = pol.unit();
+    aGamma2->SetPolarization(pol.x(),pol.y(),pol.z());
+    /*
+    G4cout << "Annihilation on fly: e0= " << posiKinEnergy
+	   << " m= " << electron_mass_c2
+	   << " e1= " << phot1Energy 
+	   << " e2= " << phot2Energy << " dir= " <<  dir 
+	   << " -> " << phot1Direction << " " 
+	   << phot2Direction << G4endl;
+    */
+  }  
  
   vdp->push_back(aGamma1);
   vdp->push_back(aGamma2);
-  fParticleChange->SetProposedKineticEnergy(0.);
+
+  // kill primary positron
+  fParticleChange->SetProposedKineticEnergy(0.0);
   fParticleChange->ProposeTrackStatus(fStopAndKill);
 }
 

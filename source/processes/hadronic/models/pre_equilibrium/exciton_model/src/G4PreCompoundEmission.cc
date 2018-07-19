@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.cc 90337 2015-05-26 08:34:27Z gcosmo $
+// $Id: G4PreCompoundEmission.cc 108685 2018-02-27 07:58:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -49,20 +49,24 @@
 #include "G4Exp.hh"
 #include "G4Log.hh"
 #include "Randomize.hh"
-#include "G4PreCompoundParameters.hh"
+#include "G4RandomDirection.hh"
 #include "G4PreCompoundEmissionFactory.hh"
 #include "G4HETCEmissionFactory.hh"
 #include "G4HadronicException.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
 
 G4PreCompoundEmission::G4PreCompoundEmission()
 {
   theFragmentsFactory = new G4PreCompoundEmissionFactory();
   theFragmentsVector = 
     new G4PreCompoundFragmentVector(theFragmentsFactory->GetFragmentVector());
-  g4pow = G4Pow::GetInstance();
-  G4PreCompoundParameters param;
-  fLevelDensity = param.GetLevelDensity();
-  fFermiEnergy  = param.GetFermiEnergy();
+  g4calc = G4Pow::GetInstance();
+  G4DeexPrecoParameters* param = 
+    G4NuclearLevelData::GetInstance()->GetParameters() ;
+  fLevelDensity = param->GetLevelDensity();
+  fFermiEnergy  = param->GetFermiEnergy();
+  fUseAngularGenerator = param->UseAngularGen();
 }
 
 G4PreCompoundEmission::~G4PreCompoundEmission()
@@ -101,7 +105,7 @@ G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
   // Choose a Fragment for emission
   G4VPreCompoundFragment * thePreFragment = 
     theFragmentsVector->ChooseFragment();
-  if (thePreFragment == 0)
+  if (thePreFragment == nullptr)
     {
       G4cout << "G4PreCompoundEmission::PerformEmission : "
 	     << "I couldn't choose a fragment\n"
@@ -115,16 +119,17 @@ G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
 
   // Kinetic Energy of emitted fragment
   G4double kinEnergy = thePreFragment->SampleKineticEnergy(aFragment);
-  //  if(kinEnergy < MeV) {
-  //  G4cout << "Chosen fragment: " << G4endl;
-  //  G4cout << *thePreFragment << G4endl;
-  //  G4cout << "Ekin= " << kinEnergy << G4endl;
-    // }
-  if(kinEnergy < 0.0) { kinEnergy = 0.0; }
+  kinEnergy = std::max(kinEnergy, 0.0);
   
   // Calculate the fragment momentum (three vector)
-  AngularDistribution(thePreFragment,aFragment,kinEnergy);
-  
+  if(fUseAngularGenerator) {
+    AngularDistribution(thePreFragment,aFragment,kinEnergy);
+  } else {
+    G4double pmag = 
+      std::sqrt(kinEnergy*(kinEnergy + 2.0*thePreFragment->GetNuclearMass()));
+    theFinalMomentum = pmag*G4RandomDirection();
+  }
+
   // Mass of emittef fragment
   G4double EmittedMass = thePreFragment->GetNuclearMass();
   // Now we can calculate the four momentum 
@@ -165,9 +170,9 @@ G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
   G4ReactionProduct * MyRP = thePreFragment->GetReactionProduct();
 
   //  if(kinEnergy < MeV) {
-  //  G4cout << "G4PreCompoundEmission::Fragment emitted" << G4endl;
-  //  G4cout << *thePreFragment << G4endl;
-    // }
+  //G4cout << "G4PreCompoundEmission::Fragment emitted" << G4endl;
+  //G4cout << *thePreFragment << G4endl;
+  // }
   return MyRP;
 }
 
@@ -265,8 +270,8 @@ G4double G4PreCompoundEmission::rho(G4int p, G4int h, G4double gg,
   if ( E - Aph < 0.0) { return 0.0; }
   
   G4double logConst =  (p+h)*G4Log(gg) 
-    - g4pow->logfactorial(p+h-1) - g4pow->logfactorial(p) 
-    - g4pow->logfactorial(h);
+    - g4calc->logfactorial(p+h-1) - g4calc->logfactorial(p) 
+    - g4calc->logfactorial(h);
 
   // initialise values using j=0
 

@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109866 2018-05-09 12:22:46Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,12 +14,54 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B.Morgan (testem3-V10-04-06)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
 
-14-10-16 G.Folger
+29-03-18 V.Ivant (testem3-V10-04-05)
+- TestEm3.cc - small optimisation
+
+27-03-18 mma (testem3-V10-04-04)
+- remove radioactive.mac
+
+26-03-18 V.Ivant (testem3-V10-04-03)
+- DetectorConstruction - fixed initialisation
+
+23-03-18 V.Ivant (testem3-V10-04-02)
+- StepMax - use thread safe instantiation, mesenger merged with 
+    PhysicsListMessenger
+- DetectorConstruction - improved method names, not allow to clear 
+    geometry between runs
+- PhysicsList - make Opt0 default, removed local instantiation of G4Decay
+- Use MixMax default random number generator 
+
+13-03-18 mma (testem3-V10-04-01)
+- testem1.cc : remove G4UI_USE and G4VIS_USE
+
+14-12-17 V.Ivant (testem3-V10-04-00)
+- corrected TestEm3.in to optimise output
+
+14-10-16 G.Folger (testem3-V10-02-06)
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
-  fix required by clang39 on Linux and MAC
+    fix required by clang39 on Linux and MAC
 
-10-12-15 V.Ivant (testem3-V10-01-05)
+22-07-16 mma  (testem3-V10-02-05)
+- apply coding conventions
+
+04-07-16 I. Hrivnacova  (testem3-V10-02-04)
+- Fixes for Doxygen documentation
+
+10-02-16 mma (testem3-V10-02-03)
+- update radioactive.mac again
+
+06-02-16 mma (testem3-V10-02-02)
+- update radioactive.mac
+
+29-01-16 mma (testem3-V10-02-01)
+- Physicsist: add radioactiveDecay process (not active by default)
+
+10-12-15 V.Ivant (testem3-V10-02-00)
 - H.Burkhardt fixed root macro allowing to work both with root5 and 6
     
 28-10-15 D.Sawkey (testem3-V10-01-04)

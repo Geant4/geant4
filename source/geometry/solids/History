@@ -1,4 +1,4 @@
-$Id: History 93153 2015-10-08 11:54:58Z gcosmo $
+$Id: History 104316 2017-05-24 13:04:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May, 24th, 2017,  G.Cosmo               -  geomsolids-V10-03-00
+- Renamed ambiguous name Extent() in all solids and G4U* wrappers to
+  BoundingLimits(). Change required in order to avoid signature conflict
+  with VecGeom in G4U* wrappers.
+  Requires tag geommng-V10-03-16.
+- Includes tags: geom-specific-V10-03-06, geom-csg-V10-03-19,
+  geom-bool-V10-03-04 and geom-solids-tests-V10-03-01.
 
 October, 7th, 2015,  G.Cosmo            -  geomsolids-V10-01-00
 - Includes tags: geom-bool-V10-01-02, geom-csg-V10-01-08 and

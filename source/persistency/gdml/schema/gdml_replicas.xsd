@@ -65,12 +65,11 @@
   </xs:complexType>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <xs:complexType name="directionType">
-    <xs:complexContent>
-      <xs:restriction base="QuantityVectorType">
-	<xs:attribute default="mm" type="xs:string" name="unit"/>
-	<xs:attribute default="cartesian" type="xs:string" name="type"/>
-      </xs:restriction>
-    </xs:complexContent>
+    <xs:attribute default="0.0" name="x" type="ExpressionOrIDREFType"></xs:attribute>
+    <xs:attribute default="0.0" name="y" type="ExpressionOrIDREFType"></xs:attribute>
+    <xs:attribute default="0.0" name="z" type="ExpressionOrIDREFType"></xs:attribute>
+    <xs:attribute default="0.0" name="phi" type="ExpressionOrIDREFType"></xs:attribute>
+    <xs:attribute default="0.0" name="rho" type="ExpressionOrIDREFType"></xs:attribute>
   </xs:complexType>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <xs:element name="direction" type="directionType"/>

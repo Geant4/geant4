@@ -7,6 +7,7 @@
 #include "ifac"
 #include "branch_element"
 #include "../sout"
+#include "iobject"
 
 namespace tools {
 namespace rroot {
@@ -16,10 +17,17 @@ inline const std::string& TTree_cls(){
   return s_v;  
 }
 
-class tree {
+class tree : public virtual iobject {
 public:
   static const std::string& s_class() {
     static const std::string s_v("tools::rroot::tree");
+    return s_v;
+  }
+public: //iobject
+  virtual const std::string& name() const {return m_name;}
+  virtual const std::string& title() const {return m_title;}
+  virtual const std::string& store_class_name() const {
+    static const std::string s_v("TTree");
     return s_v;
   }
 public:
@@ -29,7 +37,7 @@ public:
   ,m_out(a_file.out())
   ,m_name("")
   ,m_title("")
-  ,m_branches(a_fac,true)
+  ,m_branches(a_fac,true,true)
   ,m_entries(0)
   {
 #ifdef TOOLS_MEM
@@ -43,28 +51,29 @@ public:
   }
 protected:
   tree(const tree& a_from)
-  :m_file(a_from.m_file)
+  :iobject(a_from)
+  ,m_file(a_from.m_file)
   ,m_fac(a_from.m_fac)
   ,m_out(a_from.m_out)
-  ,m_branches(m_fac,false)
+  ,m_branches(m_fac,false,true)
   {}
   tree& operator=(const tree&){return *this;}
 public:
+  std::ostream& out() const {return m_out;}
+  
   ifile& file() {return m_file;}
-
-  const std::string& name() const {return m_name;}
-  const std::string& title() const {return m_title;}
+  ifac& fac() {return m_fac;}
 
   const std::vector<branch*>& branches() const {return m_branches;}
 
-  bool find_entry(uint32 a_entry,uint32& a_nbytes) {
+  bool find_entry(uint64 a_entry,uint32& a_nbytes) {
     a_nbytes = 0;
     if(a_entry>=m_entries) return false;
     int nbytes = 0;
     //fReadEntry = a_entry;
     tools_vforit(branch*,m_branches,it) {
       uint32 n;
-      if(!(*it)->find_entry(a_entry,n)) return false;
+      if(!(*it)->find_entry(m_file,a_entry,n)) return false;
       nbytes += n;
     }
     a_nbytes = nbytes;
@@ -81,38 +90,37 @@ public:
     _dump_branches(a_out,m_branches,a_spaces+a_indent,a_indent);
   }
  
-  branch* find_branch(const std::string& a_name,
-                             bool a_recursive = false) const {
+  branch* find_branch(const std::string& a_name,bool a_recursive = false) const {
     return _find_branch(m_branches,a_name,a_recursive);
   }
 
-  std::vector<base_leaf*> find_leaves(){
-    std::vector<base_leaf*> leaves;
-    _find_leaves(m_branches,leaves);
-    return leaves;
+  base_leaf* find_leaf(const std::string& a_name,bool a_recursive = false) const {
+    return _find_leaf(m_branches,a_name,a_recursive);
   }
  
-  std::vector<branch*> find_branches(){
-    std::vector<branch*> _branches;
-    _find_branches(m_branches,_branches);
-    return _branches;
+  void find_leaves(std::vector<base_leaf*>& a_leaves) const {
+    a_leaves.clear();
+    _find_leaves(m_branches,a_leaves);
   }
  
-  //branch* find_leaf_branch(base_leaf* a_leaf){
-  //  return _find_leaf_branch(m_branches,a_leaf);
-  //}
+  void find_branches(std::vector<branch*>& a_branches) const {
+    a_branches.clear();
+    _find_branches(m_branches,a_branches);
+  }
  
-  bool show(std::ostream& a_out,uint32 a_entry){
+  branch* find_leaf_branch(const base_leaf& a_leaf) const {return _find_leaf_branch(m_branches,a_leaf);}
+ 
+  bool show(std::ostream& a_out,uint64 a_entry){
     a_out << "======> EVENT:" << a_entry << std::endl;
     tools_vforit(branch*,m_branches,it) {
-      if(!(*it)->show(a_out,a_entry)) return false;
+      if(!(*it)->show(a_out,m_file,a_entry)) return false;
     }
     return true;
   }
 
   uint64 entries() const {return m_entries;}
 
-  bool stream(buffer& a_buffer){
+  virtual bool stream(buffer& a_buffer) { //virtual for iobject.
     //uint64 m_tot_bytes;
     //uint64 m_zip_bytes;
     //uint64 m_saved_bytes;
@@ -286,11 +294,11 @@ public:
     // We read leaves in order to keep streaming synchronisation.
     // In fact m_leaves are references to existing leaves read by 
     // the branches in the upper line of code.
-    //::printf("debug : tree : read leaves : begin\n");
-   {ObjArray<base_leaf> m_leaves(m_fac,true);
-    branch b(m_file,m_fac);
+    //::printf("debug : tree : read leaves : begin\n");    
+   {obj_array<base_leaf> m_leaves(m_fac,a_buffer.map_objs()?false:true,true);
+    //branch b(m_out,m_fac);
     ifac::args args;
-    args[ifac::arg_branch()] = &b;
+    //args[ifac::arg_branch()] = &b;
     if(!m_leaves.stream(a_buffer,args)) {
       m_out << "tools::rroot::tree::stream : "
             << "can't read leaves."
@@ -399,11 +407,9 @@ protected:
     }
   }
 
-  branch* _find_branch(const std::vector<branch*>& a_bs,
-                              const std::string& a_name,
-                              bool a_recursive) const {
+  static branch* _find_branch(const std::vector<branch*>& a_bs,const std::string& a_name,bool a_recursive) {
     tools_vforcit(branch*,a_bs,it) {
-      if(tools::rcmp((*it)->name(),a_name)) return *it;
+      if(rcmp((*it)->name(),a_name)) return *it;
       if(a_recursive) {
         branch* br = _find_branch((*it)->branches(),a_name,a_recursive);
         if(br) return br;
@@ -412,40 +418,41 @@ protected:
     return 0;
   }
 
-  void _find_leaves(const std::vector<branch*>& a_bs,
-                           std::vector<base_leaf*>& a_leaves){
+  static base_leaf* _find_leaf(const std::vector<branch*>& a_bs,const std::string& a_name,bool a_recursive) {
     tools_vforcit(branch*,a_bs,it) {
-     {const std::vector<base_leaf*>& lvs = (*it)->leaves();
-      tools_vforcit(base_leaf*,lvs,itl) {
-        a_leaves.push_back(*itl);
-      }}
+      tools_vforcit(base_leaf*,(*it)->leaves(),itl) {
+        if(rcmp((*itl)->name(),a_name)) return *itl;
+      }
+      if(a_recursive) {
+        base_leaf* lf = _find_leaf((*it)->branches(),a_name,a_recursive);
+        if(lf) return lf;
+      }
+    }
+    return 0;
+  }
 
+  static void _find_leaves(const std::vector<branch*>& a_bs,std::vector<base_leaf*>& a_leaves) {
+    tools_vforcit(branch*,a_bs,it) {
+      tools_vforcit(base_leaf*,(*it)->leaves(),itl) a_leaves.push_back(*itl);
       _find_leaves((*it)->branches(),a_leaves);
     }
   }
 
-  void _find_branches(const std::vector<branch*>& a_bs,
-                      std::vector<branch*>& a_branches){
+  static void _find_branches(const std::vector<branch*>& a_bs,std::vector<branch*>& a_branches){
     tools_vforcit(branch*,a_bs,it) {
       a_branches.push_back(*it);
       _find_branches((*it)->branches(),a_branches);
     }
   }
 
-  //branch* _find_leaf_branch(const std::vector<branch*>& a_bs,
-  //                                 base_leaf* a_leaf){
-  //  std::vector<branch*>::const_iterator it;
-  //  for(it=a_bs.begin();it!=a_bs.end();++it) {
-  //   {const std::vector<base_leaf*>& lvs = (*it)->leaves();
-  //    std::vector<base_leaf*>::const_iterator itl;
-  //    for(itl=lvs.begin();itl!=lvs.end();++itl) {
-  //      if(*itl==a_leaf) return *it;
-  //    }}
-  //   {branch* br = _find_leaf_branch((*it)->branches(),a_leaf);
-  //    if(br) return br;}
-  //  }
-  //  return 0;
-  //}
+  static branch* _find_leaf_branch(const std::vector<branch*>& a_bs,const base_leaf& a_leaf) {
+    tools_vforcit(branch*,a_bs,itb) {
+      tools_vforcit(base_leaf*,(*itb)->leaves(),itl) {if(*itl==&a_leaf) return *itb;}
+     {branch* br = _find_leaf_branch((*itb)->branches(),a_leaf);
+      if(br) return br;}
+    }
+    return 0;
+  }
 protected:
   ifile& m_file;
   ifac& m_fac;
@@ -454,7 +461,7 @@ protected:
   std::string m_name;
   std::string m_title;
 
-  ObjArray<branch> m_branches;
+  obj_array<branch> m_branches;
   uint64 m_entries;   // Number of entries
 };
 

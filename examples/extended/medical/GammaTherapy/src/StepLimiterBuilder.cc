@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StepLimiterBuilder.cc 102356 2017-01-23 16:22:42Z gcosmo $
+// $Id: StepLimiterBuilder.cc 100264 2016-10-17 08:09:54Z gcosmo $
 //
 /// \file medical/GammaTherapy/src/StepLimiterBuilder.cc
 /// \brief Implementation of the StepLimiterBuilder class

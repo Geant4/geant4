@@ -68,8 +68,10 @@ namespace G4INCL {
 #endif
         Ap(0),
         Zp(0),
+        Sp(0),
         At(0),
         Zt(0),
+        St(0),
         Ep((Float_t)0.0),
         nShots(0),
         geometricCrossSection((Float_t)0.0),
@@ -107,10 +109,14 @@ namespace G4INCL {
       Short_t Ap;
       /** \brief Projectile charge number given as input */
       Short_t Zp;
+      /** \brief Projectile strangeness number given as input */
+      Short_t Sp;
       /** \brief Target mass number given as input */
       Short_t At;
       /** \brief Target charge number given as input */
       Short_t Zt;
+      /** \brief Target strangeness number given as input */
+      Short_t St;
       /** \brief Projectile kinetic energy given as input */
       Float_t Ep;
       /** \brief Number of shots */

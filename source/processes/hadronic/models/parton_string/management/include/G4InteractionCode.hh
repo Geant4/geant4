@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InteractionCode.hh 67999 2013-03-13 11:14:32Z gcosmo $
+// $Id: G4InteractionCode.hh 100828 2016-11-02 15:25:59Z gcosmo $
 //
 #ifndef G4InteractionCode_h
 #define G4InteractionCode_h 1
@@ -32,7 +32,6 @@
 
 class G4InteractionCode
 {
-
   public:
     G4InteractionCode(G4String & aCode);
 
@@ -40,7 +39,6 @@ class G4InteractionCode
     G4String GetCode();
 
   private:
-
     G4String theCode;
 };
 
@@ -55,3 +53,4 @@ inline G4String G4InteractionCode::GetCode()
 }
 
 #endif
+

@@ -45,6 +45,8 @@
 #ifndef G4INCLALLOCATIONPOOL_HH
 #define G4INCLALLOCATIONPOOL_HH
 
+#if defined(INCL_USE_ALLOCATION_POOL) || defined(INCLXX_IN_GEANT4_MODE)
+
 #include <stack>
 #include <new>
 #include <cstddef>
@@ -108,5 +110,9 @@ namespace G4INCL {
       ::G4INCL::AllocationPool<T> &allocator = ::G4INCL::AllocationPool<T>::getInstance(); \
       allocator.recycleObject(static_cast<T *>(a)); \
     }
+
+#else // defined(INCL_USE_ALLOCATION_POOL) || defined(INCLXX_IN_GEANT4_MODE)
+#define INCL_DECLARE_ALLOCATION_POOL(T)
+#endif
 
 #endif // G4INCLALLOCATIONPOOL_HH

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh 85249 2014-10-27 08:28:57Z gcosmo $
+// $Id: G4UImanager.hh 110270 2018-05-17 14:38:26Z gcosmo $
 //
 
 #ifndef G4UImanager_h
@@ -34,8 +34,10 @@
 
 #include <vector>
 #include <fstream>
+#include "icomsdefs.hh"
 #include "G4VStateDependent.hh"
 #include "G4UIcommandStatus.hh"
+
 class G4UIcommandTree;
 class G4UIcommand;
 class G4UIsession;
@@ -145,9 +147,9 @@ class G4UImanager : public G4VStateDependent
   //    void Interact(const char * promptCharacters);
 
   private:
-      static G4ThreadLocal G4UImanager * fUImanager;
-      static G4ThreadLocal G4bool fUImanagerHasBeenKilled;
-      static G4UImanager * fMasterUImanager;
+      G4ICOMS_DLL static G4UImanager*& fUImanager(); // thread-local
+      G4ICOMS_DLL static G4bool& fUImanagerHasBeenKilled(); // thread-local
+      G4ICOMS_DLL static G4UImanager*& fMasterUImanager();
       G4UIcommandTree * treeTop;
       G4UIsession * session;
       G4UIsession * g4UIWindow;
@@ -263,7 +265,7 @@ class G4UImanager : public G4VStateDependent
         if(val&&!bridges)
         {
            bridges = new std::vector<G4UIbridge*>;
-           fMasterUImanager = this;
+           fMasterUImanager() = this;
         }
       }
       inline void SetIgnoreCmdNotFound(G4bool val)
@@ -282,7 +284,7 @@ class G4UImanager : public G4VStateDependent
   private:
       G4int threadID;
       G4MTcoutDestination* threadCout;
-      static G4int igThreadID;
+      G4ICOMS_DLL static G4int igThreadID;
 
   public:
       void SetCoutFileName(const G4String& fileN = "G4cout.txt", G4bool ifAppend = true);
@@ -293,6 +295,12 @@ class G4UImanager : public G4VStateDependent
       void SetThreadIgnoreInit(G4bool flg = true);
       inline G4MTcoutDestination* GetThreadCout() {return threadCout;};
  
+  private:
+      G4ICOMS_DLL static G4bool doublePrecisionStr;
+
+  public:
+      static void UseDoublePrecisionStr(G4bool val);
+      static G4bool DoublePrecisionStr();
 };
 
 #endif

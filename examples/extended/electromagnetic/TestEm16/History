@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 109859 2018-05-09 12:16:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,37 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-05-18 B.Morgan (testem16-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+09-04-18 mma (testem16-V10-04-01)
+- testem16.cc : set visualisation only in interactive mode
+
+20-03-18 mma (testem16-V10-04-00)
+- testem16.cc : remove G4UI_USE and G4VIS_USE
+
+02-11-16 L.Garnier (testem16-V10-02-04)
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+14-10-16 G.Folger (testem16-V10-02-03)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+26-07-16 V.Ivant  (testem16-V10-02-02)
+- H.Burkhardt added gui buttons, icons.mac, gui.mac
+
+04-07-16 I. Hrivnacova  (testem16-V10-02-01)
+- Fixes for Doxygen documentation
+
+09-12-15 V.Ivant (testem16-V10-02-00)
+01-12-15 V.Ivant (testem16-V10-01-02)
+- H.Burkhardt fixed root macro allowing to work both with root5 and 6;
+  added run01_prot.mac - demonstrating synkrotron radiation for FCC
+
+10-12-14 V.Ivant (testem16-V10-01-01)
+- Fixed vis.mac and READMY
 
 14-10-16 G.Folger
 - remove direct use of theParticleIterator, use GetParticleTableIterator().

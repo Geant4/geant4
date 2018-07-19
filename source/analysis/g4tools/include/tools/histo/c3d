@@ -55,10 +55,9 @@ public:
                        const std::vector<double>&);
   const histo::h3d& histogram() const;
   bool fill_histogram(histo::h3d& a_histo) const {
-    unsigned int number = m_xs.size();
-    for(unsigned int index=0;index<number;index++) {
-      if(!a_histo.fill(m_xs[index],m_ys[index],m_zs[index],m_ws[index]))
-        return false;
+    size_t number = m_xs.size();
+    for(size_t index=0;index<number;index++) {
+      if(!a_histo.fill(m_xs[index],m_ys[index],m_zs[index],m_ws[index])) return false;
     }
     return true;
   }
@@ -73,7 +72,7 @@ public:
   }
 public:
   c3d();
-  c3d(const std::string&,int=-1);
+  c3d(const std::string&,int=base_cloud::UNLIMITED());
   virtual ~c3d(){delete m_histo;}
 public:
   c3d(const c3d& a_from)
@@ -307,8 +306,8 @@ bool c3d::scale(double a_scale) {
   if(m_histo) {
     return m_histo->scale(a_scale);
   } else {
-    unsigned int number = m_ws.size();
-    for(unsigned int index=0;index<number;index++) m_ws[index] *= a_scale;
+    size_t number = m_ws.size();
+    for(size_t index=0;index<number;index++) m_ws[index] *= a_scale;
     m_Sw *= a_scale;
     m_Sxw *= a_scale;
     m_Sx2w *= a_scale;
@@ -403,13 +402,13 @@ bool c3d::fill(double aX,double aY,double aZ,double aW){
 
 inline
 bool c3d::convert( 
- const std::vector<double>& aEdgesX
-,const std::vector<double>& aEdgesY
-,const std::vector<double>& aEdgesZ
+ const std::vector<double>& a_edges_x
+,const std::vector<double>& a_edges_y
+,const std::vector<double>& a_edges_z
 ) { 
   if(m_histo) return true;
   m_histo = new histo::h3d(base_cloud::title(),
-                           aEdgesX,aEdgesY,aEdgesZ);
+                           a_edges_x,a_edges_y,a_edges_z);
   if(!m_histo) return false;
   bool status = fill_histogram(*m_histo);
   clear();
@@ -423,7 +422,7 @@ double c3d::sum_of_weights() const {
 
 inline
 unsigned int c3d::entries() const { 
-  return m_histo ? m_histo->all_entries() : m_ws.size();
+  return m_histo ? m_histo->all_entries() : (unsigned int)m_ws.size();
 }
 
 inline

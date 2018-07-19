@@ -7,9 +7,32 @@
                            History file
                            ------------
 
-28.11.2016 - G. Folger
+10.05.2018 - B. Morgan (air_shower-V10-04-00)
+       Include G4Types before use of G4MULTITHREADED. For forward
+       compatibility with move to #defines over -D for G4 preprocessor
+       symbols.
+
+09.03.2017 - G. Cosmo (air_shower-V10-03-00)
+	     Updated setup for visualization in main() and Visualisation.mac.
+
+21.11.2016 - G. Cosmo (air_shower-V10-02-03)
+	     Fixed compilation warning for unused variable in
+             UltraDetectorConstruction.
+
+19.11.2016 - A. Dotti (air_shower-V10-02-02)
+	     Explicit set of SD to manager
+
+16.11.2016 - B. Tome
+	     Use modular physics lists.
+	     Remove drawing of step points from Visualisation.mac
+	     Update History, README, CMakeLists.txt and GNUmakefile.
+
+28.11.2016 - G. Folger  (air_shower-V10-02-01)
              Replace direct use of theParticleIterator by GetParticleIterator().
-             fix required by clang39 on Windows and MAC
+               fix required by clang39 on Windows and MAC
+
+03.03.2016 - L. Pandola (air_shower-V10-02-00)
+             Replace std::log with G4Log
 
 14.04.2015 - G. Cosmo   (air_shower-V10-01-02)
              Replaced call to obsolete GetDz() for G4Tubs to GetZHalfLength()

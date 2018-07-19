@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1SceneHandler.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4VRML1SceneHandler.hh 99152 2016-09-07 08:04:30Z gcosmo $
 //
 // G4VRML1SceneHandler.hh
 // Yasuhide Sawada & Satoshi Tanaka
@@ -69,7 +69,13 @@ public:
         void AddSolid ( const G4Polyhedra& polyhedra) {
           G4VSceneHandler::AddSolid (polyhedra);
         }
-	void AddSolid(const G4VSolid&);
+        void AddSolid ( const G4Orb& orb ) {
+          G4VSceneHandler::AddSolid (orb);
+        }
+        void AddSolid ( const G4Ellipsoid& ellipsoid) {
+          G4VSceneHandler::AddSolid (ellipsoid);
+        }
+        void AddSolid(const G4VSolid&);
         void AddCompound ( const G4VTrajectory& traj) {
           G4VSceneHandler::AddCompound(traj);
         }
@@ -80,6 +86,9 @@ public:
           G4VSceneHandler::AddCompound(digi);
         }
         void AddCompound ( const G4THitsMap<G4double> & hits) {
+	  G4VSceneHandler::AddCompound(hits);
+	}
+        void AddCompound ( const G4THitsMap<G4StatDouble> & hits) {
 	  G4VSceneHandler::AddCompound(hits);
 	}
 

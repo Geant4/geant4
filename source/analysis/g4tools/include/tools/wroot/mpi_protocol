@@ -1,0 +1,17 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_mpi_protocol
+#define tools_wroot_mpi_protocol
+
+#include "../typedefs"
+
+namespace tools {
+namespace wroot {
+
+inline uint32 mpi_protocol_basket() {return 1;}
+inline uint32 mpi_protocol_end_fill() {return 2;}
+
+}}
+
+#endif

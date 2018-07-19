@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc 95428 2016-02-10 15:00:35Z gcosmo $
+// $Id: G4NistMaterialBuilder.cc 105820 2017-08-22 08:03:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -88,8 +88,7 @@ G4NistMaterialBuilder::G4NistMaterialBuilder(G4NistElementBuilder* eb, G4int vb)
   verbose(vb),
   nMaterials(0),
   nComponents(0),
-  nCurrent(0),
-  first(true)
+  nCurrent(0)
 {
   Initialise();
 }
@@ -102,59 +101,47 @@ G4NistMaterialBuilder::~G4NistMaterialBuilder()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
-                                                       G4bool iso,
-						       G4bool warning)
+                                                       G4bool, G4bool warning)
 {
-  if(first) {
-    if(verbose > 0) {
-      G4cout << "### NIST DataBase for Materials is used" << G4endl;
-    }
-    first = false;
-  }
-
-  G4String name = matname;
-  if("G4_NYLON-6/6" == matname)  { name = "G4_NYLON-6-6"; }
-  if("G4_NYLON-6/10" == matname) { name = "G4_NYLON-6-10";}
-
   if(verbose > 1) {
-    G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial " << name << G4endl;
+    G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial " 
+	   << matname << G4endl;
   }
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  G4int nmat = theMaterialTable->size();
+  G4Material* mat = FindMaterial(matname);
+  if(mat != nullptr) { return mat; }
+  G4String name = matname;
+  if(name == "G4_NYLON-6/6" || name == "G4_NYLON-6/10") {
+    if("G4_NYLON-6/6" == matname)  { name = "G4_NYLON-6-6"; }
+    else { name = "G4_NYLON-6-10";}
+    mat = FindMaterial(name);
+  }
+  return (mat == nullptr) ? BuildNistMaterial(name, warning) : mat; 
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Material* G4NistMaterialBuilder::BuildNistMaterial(const G4String& name, 
+						     G4bool warning)
+{
+  G4Material* mat = nullptr;
   // Check if name inside DB
-  G4Material* mat = 0;
-
-  // Check the list of all materials
-  if (nmat > 0) {
-    for (G4int i=0; i<nmat; ++i) {
-      if(name == ((*theMaterialTable)[i])->GetName()) {
-        mat = (*theMaterialTable)[i];
-	return mat;
-      }
-    }
-  }
-
   for (G4int i=0; i<nMaterials; ++i) {
 
     if (name == names[i]) {
 #ifdef G4MULTITHREADED
-      G4MUTEXLOCK(&G4NistMaterialBuilder::nistMaterialMutex);
+      G4MUTEXLOCK(&nistMaterialMutex);
 #endif
       if(matIndex[i] == -1) { 
 	// Build new Nist material 
-	if(!iso && (warning || verbose > 0)) {
-	  G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial warning for "
-		 << name 
-		 << " - since Geant4 9.6 isotopes are always built" << G4endl;
-	}
 	mat = BuildMaterial(i); 
       } else { 
 	// Nist material was already built
+	const G4MaterialTable* theMaterialTable = 
+	  G4Material::GetMaterialTable();
 	mat = (*theMaterialTable)[matIndex[i]]; 
       }
 #ifdef G4MULTITHREADED
-      G4MUTEXUNLOCK(&G4NistMaterialBuilder::nistMaterialMutex);
+      G4MUTEXUNLOCK(&nistMaterialMutex);
 #endif
       return mat;
     }
@@ -173,8 +160,10 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
 G4Material* 
 G4NistMaterialBuilder::FindOrBuildSimpleMaterial(G4int Z, G4bool warn)
 {
-  G4Material* mat = 0;
-  if(Z >= 1 && Z <= 98) { mat = FindOrBuildMaterial(names[Z-1], true, warn); }
+  G4Material* mat = FindSimpleMaterial(Z);
+  if(mat == nullptr) {
+    mat = BuildNistMaterial(names[Z], warn); 
+  }
   return mat;  
 }
 
@@ -241,8 +230,9 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i)
   G4double exc1 = exc0;
   if(chFormulas[i] != "") {
     mat->SetChemicalFormula(chFormulas[i]);
-    exc1 = ion->FindMeanExcitationEnergy(chFormulas[i]);
+    exc1 = ion->FindMeanExcitationEnergy(mat);
   }
+  // If exists, NIST DB data always overwrites other data 
   if(ionPotentials[i] > 0.0) { exc1 = ionPotentials[i]; }
   if(exc0 != exc1) { ion->SetMeanExcitationEnergy(exc1); }
 
@@ -442,10 +432,10 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
   G4int Z = 0;
   for (G4int i=0; i<els; ++i) {
     Z = elmBuilder->GetZ(elm[i]);
-    massPerMole += nbAtoms[i] * elmBuilder->GetAtomicMassAmu(Z) * amu_c2;
+    massPerMole += nbAtoms[i]*elmBuilder->GetAtomicMassAmu(Z)*CLHEP::amu_c2;
   }
 
-  G4double dens = massPerMole / (Avogadro*k_Boltzmann*temp/pres);
+  G4double dens = massPerMole/(CLHEP::Avogadro*CLHEP::k_Boltzmann*temp/pres);
 
   if (els == 1) { AddMaterial(name,dens,Z,0.,els,state,stp); }
   else {
@@ -487,8 +477,8 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
 
   names.push_back(nameMat);
   chFormulas.push_back("");
-  densities.push_back(dens*g/cm3);
-  ionPotentials.push_back(pot*eV);
+  densities.push_back(dens*CLHEP::g/CLHEP::cm3);
+  ionPotentials.push_back(pot*CLHEP::eV);
   states.push_back(state);
   components.push_back(ncomp);
   indexes.push_back(nComponents);
@@ -557,7 +547,7 @@ void G4NistMaterialBuilder::ListNistSimpleMaterials() const
   G4cout << "=======================================================" << G4endl;
   G4cout << " Z   Name   density(g/cm^3)  I(eV)                     " << G4endl;
   G4cout << "=======================================================" << G4endl;
-  for (G4int i=0; i<nElementary; ++i) {DumpElm(i);}
+  for (G4int i=1; i<nElementary; ++i) {DumpElm(i);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -570,6 +560,7 @@ void G4NistMaterialBuilder::ListNistCompoundMaterials() const
   G4cout << " Ncomp             Name      density(g/cm^3)  I(eV) ChFormula" << G4endl;
   G4cout << "=============================================================" << G4endl;
   for (G4int i=nElementary; i<nNIST; ++i) {DumpMix(i);}
+  DumpMix(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -732,6 +723,11 @@ void G4NistMaterialBuilder::Initialise()
 void G4NistMaterialBuilder::NistSimpleMaterials()
 {
   // density in g/cm3, mean ionisation potential in eV
+
+  AddMaterial("G4_WATER", 1.0,0, 78., 2);
+  AddElementByAtomCount("H" ,  2);
+  AddElementByAtomCount("O" ,  1);
+  chFormulas[nMaterials-1] = "H_2O";
 
   AddMaterial("G4_H" ,  8.37480e-5,  1,  19.2, 1, kStateGas);
   AddMaterial("G4_He",  1.66322e-4,  2,  41.8, 1, kStateGas);
@@ -1828,11 +1824,6 @@ void G4NistMaterialBuilder::NistCompoundMaterials2()
   AddElementByWeightFraction( 6, 0.280555);
   AddElementByWeightFraction( 9, 0.710028);
 
-  AddMaterial("G4_WATER", 1.0,0, 78., 2);
-  AddElementByAtomCount("H" ,  2);
-  AddElementByAtomCount("O" ,  1);
-  chFormulas[nMaterials-1] = "H_2O";
-
   AddMaterial("G4_WATER_VAPOR", 0.000756182, 0, 71.6, 2, kStateGas);
   AddElementByAtomCount("H" ,  2);
   AddElementByAtomCount("O" ,  1);
@@ -1928,15 +1919,28 @@ void G4NistMaterialBuilder::SpaceMaterials()
   AddMaterial("G4_NEOPRENE" , 1.23, 0, 0.0, 3);   // POLYCLOROPRENE
   AddElementByAtomCount("C", 4);
   AddElementByAtomCount("H", 5);
-  AddElementByAtomCount("Cl", 1);
+  AddElementByAtomCount("Cl",1);
 
   nSpace = nMaterials;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/**
+  Build biochemical materials used in G4DNA Applications.
+  Materials are defined in bonded and unbonded forms according to the
+  following schema:
+  G4_MATERIAL: Molecule in its free state
+  G4_DNA_MATERIAL: Molecule, considering atoms lost in bonding
+*/
+
 void G4NistMaterialBuilder::BioChemicalMaterials()
 {
+  // BEGIN MATERIALS IN THEIR UNBONDED FORM
+
+  // G4_ADENINE, G4_GUANINE are defined in
+  // G4NistMaterialBuilder::NistCompoundMaterials()
+
   AddMaterial("G4_CYTOSINE", 1.55, 0, 72., 4);
   AddElementByAtomCount("H", 5);
   AddElementByAtomCount("C", 4);
@@ -1955,13 +1959,31 @@ void G4NistMaterialBuilder::BioChemicalMaterials()
   AddElementByAtomCount("N", 2);
   AddElementByAtomCount("O", 2);
 
-  // DNA_Nucleobase (Nucleobase-1H)
+  AddMaterial("G4_DEOXYRIBOSE", 1, 0, 72, 3);
+  AddElementByAtomCount("H", 10);
+  AddElementByAtomCount("C", 5);
+  AddElementByAtomCount("O", 3);
+
+  // END UNBONDED MATERIALS / BEGIN BONDED MATERIALS
+
+  // Deoxyribose loses 3 OH groups in bonding to bond with PO4 and a base pair
+  AddMaterial("G4_DNA_DEOXYRIBOSE", 1, 0, 72., 3);
+  AddElementByAtomCount("H", 7);
+  AddElementByAtomCount("C", 5);
+  AddElementByAtomCount("O", 1);
+
+  // Typically there are no H atoms considered in the Phosphate group
+  AddMaterial("G4_DNA_PHOSPHATE", 1, 0, 72., 2);
+  AddElementByAtomCount("P", 1);
+  AddElementByAtomCount("O", 4);
+
+  // GATCU bases bonded to a deoxyribose (they drop one H)
   AddMaterial("G4_DNA_ADENINE", 1, 0, 72., 3);
   AddElementByAtomCount("H",4 );
   AddElementByAtomCount("C",5 );
   AddElementByAtomCount("N",5 );
 
-  AddMaterial("G4_DNA_GUANINE", 1, 0, 72. ,4);
+  AddMaterial("G4_DNA_GUANINE", 1, 0, 72., 4);
   AddElementByAtomCount("H",4 );
   AddElementByAtomCount("C",5 );
   AddElementByAtomCount("N",5 );
@@ -1985,75 +2007,8 @@ void G4NistMaterialBuilder::BioChemicalMaterials()
   AddElementByAtomCount("N", 2);
   AddElementByAtomCount("O", 2);
 
-  // DNA_Nucleoside (Nucleoside-3H)
-  AddMaterial("G4_DNA_ADENOSINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 5);
-  AddElementByAtomCount("O", 4);
+  // END BONDED MATERIALS
 
-  AddMaterial("G4_DNA_GUANOSINE", 1, 0, 72. ,4);
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 5);
-  AddElementByAtomCount("O", 5);
-
-  AddMaterial("G4_DNA_CYTIDINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 9);
-  AddElementByAtomCount("N", 3);
-  AddElementByAtomCount("O", 5);
-
-  AddMaterial("G4_DNA_URIDINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 9);
-  AddElementByAtomCount("C", 9);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 6);
-
-  AddMaterial("G4_DNA_METHYLURIDINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 11);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 6);
-
-  AddMaterial("G4_DNA_MONOPHOSPHATE", 1, 0, 72., 2);
-  AddElementByAtomCount("P", 1);
-  AddElementByAtomCount("O", 3);
-
-  AddMaterial("G4_DNA_A", 1, 0, 72., 5);  //Adenine base
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 5);
-  AddElementByAtomCount("O", 7);
-  AddElementByAtomCount("P", 1);
-
-  AddMaterial("G4_DNA_G", 1, 0, 72. ,5); //Guanine base 
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 5);
-  AddElementByAtomCount("O", 8);
-  AddElementByAtomCount("P", 1);
-
-  AddMaterial("G4_DNA_C", 1, 0, 72., 5); // Cytosine base
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 9);
-  AddElementByAtomCount("N", 3);
-  AddElementByAtomCount("O", 8);
-  AddElementByAtomCount("P", 1);
-
-  AddMaterial("G4_DNA_U", 1, 0, 72., 5); // Uracil base
-  AddElementByAtomCount("H", 9);
-  AddElementByAtomCount("C", 9);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 9);
-  AddElementByAtomCount("P", 1);
-
-  AddMaterial("G4_DNA_MU", 1, 0, 72., 5);  // MethaUracil base
-  AddElementByAtomCount("H", 11);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 9);
-  AddElementByAtomCount("P", 1);
   /*
   // Complete 70 kg body of adult men from en.wikipedia.org/ see References there
   AddMaterial("G4_BODY", 1.8, 0, 78, 12);

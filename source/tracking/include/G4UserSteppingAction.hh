@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSteppingAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4UserSteppingAction.hh 95247 2016-02-02 09:36:27Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -61,7 +61,7 @@ public: // with description
    virtual ~G4UserSteppingAction();
 
 // Member functions
-   void SetSteppingManagerPointer(G4SteppingManager* pValue);
+   virtual void SetSteppingManagerPointer(G4SteppingManager* pValue);
    virtual void UserSteppingAction(const G4Step*){;}
 
 //-----------

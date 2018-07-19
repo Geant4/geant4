@@ -35,10 +35,9 @@
 /// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
-#include "G4Run.hh"
-//#include "G4UnitsTable.hh"
-//#include "G4SystemOfUnits.hh"
 #include "Analysis.hh"
+
+#include "G4Run.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,10 +66,6 @@ void RunAction::BeginOfRunAction(const G4Run*)
       << " analysis manager"
       << G4endl;
 
-  // Create directories 
-  
-  //analysisManager->SetHistoDirectoryName("histograms");
-  //analysisManager->SetNtupleDirectoryName("ntuple");
   analysisManager->SetVerboseLevel(1);
   
   // Open an output file
@@ -89,11 +84,17 @@ void RunAction::BeginOfRunAction(const G4Run*)
   analysisManager->CreateNtupleDColumn("totalEnergyDeposit");
   analysisManager->CreateNtupleDColumn("stepLength");
   analysisManager->CreateNtupleDColumn("kineticEnergyDifference");
-  analysisManager->CreateNtupleIColumn("event");
+  analysisManager->CreateNtupleDColumn("kineticEnergy");
+  analysisManager->CreateNtupleDColumn("cosTheta");
+  analysisManager->CreateNtupleIColumn("eventID");
+  analysisManager->CreateNtupleIColumn("trackID");
+  analysisManager->CreateNtupleIColumn("parentID");
+  analysisManager->CreateNtupleIColumn("stepID");
   analysisManager->FinishNtuple();
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4int nofEvents = aRun->GetNumberOfEvent();

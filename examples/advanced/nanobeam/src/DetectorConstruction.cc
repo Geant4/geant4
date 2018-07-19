@@ -25,11 +25,22 @@
 //
 // Please cite the following paper if you use this software
 // Nucl.Instrum.Meth.B260:20-27, 2007
+//
+// Based on purging magnet advanced example.
+//
 
 #include "DetectorConstruction.hh"
+
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
+#include "G4RunManager.hh" 
+
+// Field
+#include "G4Mag_UsualEqRhs.hh"
+#include "G4TransportationManager.hh"
+#include "G4ClassicalRK4.hh"
+#include "G4PropagatorInField.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -40,16 +51,15 @@ G4ThreadLocal TabulatedField3D* DetectorConstruction::fField = 0;
 DetectorConstruction::DetectorConstruction()
 { 
  fDetectorMessenger = new DetectorMessenger(this);
- fGradientsInitialized=false;
  
- //Default values (square field, coef calculation, profile)
+ // Default values (square field, coef calculation, profile)
  
  fModel=1;
  fG1=-11.964623; 
  fG2=16.494652; 
  fG3=9.866770; 
  fG4=-6.244493; 
- fCoef=1; 
+ fCoef=0; 
  fProfile=1; 
  fGrid=0;
 
@@ -88,6 +98,7 @@ void DetectorConstruction::DefineMaterials()
   man->SetVerbose(1);
 
   //
+  
   G4cout << G4endl << *(G4Material::GetMaterialTable()) << G4endl;
 
   // Default materials in setup.
@@ -237,7 +248,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
 void DetectorConstruction::SetG1(G4float value)
 {
-  fG1 = value;
+  fG1 = value; 
+  G4RunManager::GetRunManager()->ReinitializeGeometry();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -245,6 +257,7 @@ void DetectorConstruction::SetG1(G4float value)
 void DetectorConstruction::SetG2(G4float value)
 {
   fG2 = value;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -252,6 +265,7 @@ void DetectorConstruction::SetG2(G4float value)
 void DetectorConstruction::SetG3(G4float value)
 {
   fG3 = value;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -259,33 +273,25 @@ void DetectorConstruction::SetG3(G4float value)
 void DetectorConstruction::SetG4(G4float value)
 {
   fG4 = value;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetModel(G4int modelChoice)
 {
-if (modelChoice==1) fModel=1;
-if (modelChoice==2) fModel=2;
-if (modelChoice==3) fModel=3;
+  if (modelChoice==1) fModel=1;
+  if (modelChoice==2) fModel=2;
+  if (modelChoice==3) fModel=3;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();   
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#include "G4RunManager.hh" 
- 
-void DetectorConstruction::UpdateGeometry()
-{
-  fGradientsInitialized=true;
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
-}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetCoef(G4int val)
 {
   fCoef=val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -300,6 +306,7 @@ G4int DetectorConstruction::GetCoef()
 void DetectorConstruction::SetProfile(G4int myProfile)
 {
   fProfile=myProfile;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -307,35 +314,49 @@ void DetectorConstruction::SetProfile(G4int myProfile)
 void DetectorConstruction::SetGrid(G4int myGrid)
 {
   fGrid=myGrid;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::ConstructSDandField()
 {
-//  static G4bool fieldIsInitialized = false;
-//  if(!fieldIsInitialized && fGradientsInitialized)
+      fField = new TabulatedField3D(fG1, fG2, fG3, fG4, fModel); 
+   
+      //This is thread-local
+      G4FieldManager* fFieldMgr = 
+	G4TransportationManager::GetTransportationManager()->GetFieldManager();
+           
+      G4Mag_UsualEqRhs* fEquation = new G4Mag_UsualEqRhs (fField);
 
-  if(!fField) fField = new TabulatedField3D(fG1, fG2, fG3, fG4, fModel); 
-  
-  fEquation = new G4Mag_UsualEqRhs (fField);
+      G4ClassicalRK4* fStepper = new G4ClassicalRK4 (fEquation);
 
-  fStepper = new G4ClassicalRK4 (fEquation);
+      G4ChordFinder* fChordFinder = new G4ChordFinder(fField,1e-9*m,fStepper);
 
-  fFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  fChordFinder = new G4ChordFinder(fField,1e-9*m,fStepper);
-
-  fFieldMgr->SetChordFinder(fChordFinder);
-  fFieldMgr->SetDetectorField(fField);    
-  fFieldMgr->GetChordFinder()->SetDeltaChord(1e-9*m);
-  fFieldMgr->SetDeltaIntersection(1e-9*m);
-  fFieldMgr->SetDeltaOneStep(1e-9*m);     
+      fFieldMgr->SetChordFinder(fChordFinder);
+      fFieldMgr->SetDetectorField(fField);    
+ 
+      fFieldMgr->GetChordFinder()->SetDeltaChord(1e-9*m);
+      fFieldMgr->SetDeltaIntersection(1e-9*m);
+      fFieldMgr->SetDeltaOneStep(1e-9*m);     
       
-  fPropInField =
-    G4TransportationManager::GetTransportationManager()->GetPropagatorInField();
-  fPropInField->SetMinimumEpsilonStep(1e-11);
-  fPropInField->SetMaximumEpsilonStep(1e-10);
+      // To avoid G4MagIntegratorDriver::OneGoodStep:Stepsize underflows in Stepper
+      
+      if (fCoef==1)
+      {
+        G4PropagatorInField* fPropInField =
+          G4TransportationManager::GetTransportationManager()->GetPropagatorInField();
+        fPropInField->SetMinimumEpsilonStep(1e-11);
+        fPropInField->SetMaximumEpsilonStep(1e-10); 
+
+      } 
+      else
+      {
+        G4PropagatorInField* fPropInField =
+          G4TransportationManager::GetTransportationManager()->GetPropagatorInField();
+        fPropInField->SetMinimumEpsilonStep(1e-9);
+        fPropInField->SetMaximumEpsilonStep(1e-8);
+      }
 
 }
 

@@ -8,7 +8,7 @@
  Test for investigation of tracking in electric field 
  and field dependent electromagnetic processes.
 
-\section field02_s1 FIELD DEFINITION
+\section field02_s0 FIELD DEFINITION
  The field is a constant electric field.
 
  Technical note: in order to use any electric field, it is
@@ -59,14 +59,12 @@
  Therefore  the absorber is declared
  'sensitive detector' (SD), , see F02CalorimeterSD, which means they can contribute to the hit.
  				
-\section field02_s4 PHYSICS DEMO
+\section field02_s4 PHYSICS LIST
  
-  The particle's type and the physic processes which will be available
-  in this example are set in F02PhysicsList class.
- 
-  The  messenger classes, F02PhysicsListMessenger, introduce interactive commands . Using these
-  commands the geometry of the detector, the data of the primary
-  particle, etc. can be changed.
+ The particle's type and the physic processes which will be available
+ in this example are set in the FTFP_BERT physics list. This physics list 
+ requires data files for electromagnetic and hadronic processes.
+ See more on installation of the datasets in Geant4 Installation Guide,
  	
 \section field02_s5 HOW TO START ?
  

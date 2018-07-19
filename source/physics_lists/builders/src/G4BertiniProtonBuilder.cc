@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniProtonBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4BertiniProtonBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 //
 // Modified:
 // 02.04.2009 V.Ivanchenko remove add cross section, string builderis reponsible 
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -48,16 +49,6 @@ G4BertiniProtonBuilder()
   theMin = 0;
   theMax=9.9*GeV;
   theModel = new G4CascadeInterface;
-}
-
-G4BertiniProtonBuilder::
-~G4BertiniProtonBuilder() 
-{
-}
-
-void G4BertiniProtonBuilder::
-Build(G4HadronElasticProcess * )
-{
 }
 
 void G4BertiniProtonBuilder::

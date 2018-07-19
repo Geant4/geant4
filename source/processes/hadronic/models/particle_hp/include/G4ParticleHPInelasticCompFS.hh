@@ -40,6 +40,8 @@
 #include "G4ParticleHPDeExGammas.hh"
 #include "G4Nucleus.hh"
 
+#include "G4NRESP71M03.hh"
+
 class G4ParticleHPInelasticCompFS : public G4ParticleHPFinalState
 {
   public:
@@ -112,8 +114,8 @@ protected:
   G4ParticleHPDeExGammas theGammas;
   G4String gammaPath;
   
-  G4double theCurrentA;
-  G4double theCurrentZ;
+  //G4double theCurrentA;
+  //G4double theCurrentZ;
 
    protected:
       std::vector < G4double >  QI;
@@ -122,6 +124,9 @@ protected:
    private:
       //                       proj                 targ                 had                  mu of had   
       void two_body_reaction ( G4DynamicParticle* , G4DynamicParticle* , G4DynamicParticle* , G4double mu ); 
+
+      G4NRESP71M03 nresp71_model;
+      G4bool use_nresp71_model( const G4ParticleDefinition* aDefinition, const G4int it , const G4ReactionProduct& theTarget , G4ReactionProduct& boosted);
 
 };
 #endif

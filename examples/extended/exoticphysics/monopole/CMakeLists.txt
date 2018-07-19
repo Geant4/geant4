@@ -40,7 +40,7 @@ target_link_libraries(monopole ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(monopole_SCRIPTS
-    monopole.in monopole.out vis.mac
+    monopole.in vis.mac
   )
 
 foreach(_script ${monopole_SCRIPTS})

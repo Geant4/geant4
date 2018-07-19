@@ -51,4 +51,3 @@ class B02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
 #endif
 
-

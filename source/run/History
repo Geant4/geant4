@@ -1,4 +1,4 @@
-$Id: History 102339 2017-01-23 13:22:48Z gcosmo $
+$Id: History 110726 2018-06-11 06:05:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,31 +17,268 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 21, 2016 G.Cosmo (run-V10-01-19)
+June 8th, 2018, J. Madsen (run-V10-04-09)
+- Fixed compilation warnings related to TIMEMORY_AUTO_TIMER macros on Windows
+
+June 6th, 2018, J. Madsen (run-V10-04-08)
+- Added TiMemory auto-timer macros to some key functions in
+  G4RunManager, G4RunManagerKernel, G4MTRunManager, and G4MTRunManagerKernel
+- Added TiMemory libraries and includes to sources.cmake
+
+May 17th, 2018, J. Madsen (run-V10-04-07)
+- updated "thread-local-static-var" model to
+  "function-returning-thread-local-static-reference" model
+  which fixes Windows DLL + MT
+
+April 3, 2018, M. Asai (run-V10-04-06)
+- G4ExceptionHandler: Add track/step/volume information when 
+  exception happens while event is in process.
+
+February 27, 2018, G. Cosmo (run-V10-04-05)
+- G4RunManagerKernel: updated also MT banner.
+
+February 26, 2018, M. Asai (run-V10-04-04)
+- G4RunManagerKernel: two general papers are added to the banner.
+
+February 21 2018 Jonathan Madsen (run-V10-04-03)
+- Replace pthread-style <void*(void*)> function signatures with
+  <void(G4WorkerThread*)> as it is now unnecessary
+ 
+February 12 2018 Jonathan Madsen (run-V10-04-02)
+- Removed WIN32 conditional for G4THREADCREATE in
+  G4UnserWorkerThreadInitialization (no longer needed)
+- Changed G4Thread to G4NativeThread when setting pin affinity in
+  G4WorkerThread
+
+February 9, 2018, M. Asai (run-V10-04-01)
+- G4RunManagerKernel.cc :
+  Application state is set to G4State_Init while application is in
+  RunInitialization().
+- Co-working with global-V10-04-01.
+
+December 26, 2017, M. Asai (run-V10-04-00)
+- G4UserPhysicsListMessenger : 
+  UI command returns an error message if a command is refused due
+  to incorrect parameter(s).
+- This tag requires intercoms-V10-04-01 tag.
+
+November 21, 2017, G. Cosmo (run-V10-03-16)
+- Fixed compilation warning on clang compiler.
+
+November 20, 2017, M. Asai (run-V10-03-13, -14, -15)
+- Delete G4RNGHelper singleton object at the end of program.
+
+September 12, 2017, K.L.Genser (run-V10-03-12)
+- G4PhysicsListHelper added MuAtomicCapture & DecayMuAtom
+
+June 1, 2017, A.Dotti (run-V10-03-11)
+- Prevent adding multiple times the same SD to the same LV via
+  G4VUserDetectorConsturction::SetSensitiveDetector.
+  In case skip and issue a warning.
+
+May 3, 2017, A. Dotti (run-V10-03-10)
+- Transfor G4VPhysicsConstructor split-class to be all pointers
+  (assessing valgrind report)
+
+April 26, 2017, A. Dotti (run-V10-03-08, -09)
+- New design of physics lists for cleanup of memory in MT
+- Introduced new class G4PhysicsBuilderInterface from which 
+  all physics_lists/builders inherit
+  Worker threads now call G4VUserPhysicsList::TerminateWorker
+  to clean up physics list thread-specific objects
+- G4VPhysicsConstructor holds list of TLS builders
+- Coworking tag phys-builders-V10-03-03
+ 
+April 21, 2017, M. Asai (run-V10-03-07)
+- G4MTRunManager.cc, G4WorkerRunManager.cc : protect against null 
+  pointer for SetUserAction() method.
+
+March 24, 2017, M. Asai (run-V10-03-06)
+- G4RunManagerKernel : remove unnecessary warning message.
+- G4RunManager : notify Vis manager when world volune is re-initialized.
+
+March 23, 2017, G. Cosmo (run-V10-03-05)
+- Added deletion of field-manager store and geometry manager thread-local
+  singletons in G4RunManagerKernel destructor.
+
+March 17, 2017, G. Cosmo (run-V10-03-04, 03)
+- Delete G4TransportationManager and G4PathFinder singletons in
+  G4RunManagerKernel, clearing static leaks at exit.
+
+March 13, 2017, G. Cosmo (run-V10-03-02)
+- G4WorkerThread: use CleanUpAndDestroyAllWorkspaces() from workspace pools
+  in DestroyGeometryAndPhysicsVector(). Minor code cleanup.
+
+February 9, 2017, M. Asai (run-V10-03-01)
+- Banner on worker RunManager will no longer be printed.
+
+December 22, 2016, L. Desorgher (run-V10-03-00)
+- Modifications to solve bug with reverse track splitting.
+  Works with tag tracking-V10-03-00.
+  - Add G4AdjointSimManager::ResetDidOneAdjPartReachExtSourceDuringEvent()
+  - Use G4AdjointSimManager::ResetDidOneAdjPartReachExtSourceDuringEvent() in 
+                G4AdjointPrimaryGeneratorAction. 
+
+November 15, 2016 A. Dotti (run-V10-02-38,-39)
+- Fix bug #1908: create unique names with logVol pointer value
+  for G4MultiSD and avoid to register target SD implictly
+
+November 7, 2016, G.Folger (run-V10-02-37)
+- remove #define for aParticleIterator from G4VPhysicsConstructor.hh 
+   Move the #define for theParticleIterator to G4VUserPhysicsList.cc
+	
+October 21, 2016, A.Dotti (run-V10-02-36)
+- Partially revert back previous tag to solve deadlocks.
+  G4MTRunManager::GetNumberOfActiveThreads() returns size of the
+  threads pool. This number may be different from
+  G4Threading::GetNumberOfWorkerThreads() that instead returns the 
+  number of threads currently in running state (during start 
+  of threads)
+
+October 21, 2016 G.Cosmo (run-V10-02-35)
 - Moved initialisation of G4VUPLSplitter thread-local data to be inline
   along with generic template type. Removed explicit initialisation of
   thread-local data from workspaces, as now happening inline in
   G4TWorkspacePool.
   Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+- Requires tags "global-V10-02-30" and "particles-V10-02-30".
 
-October 14, 2016, G.Cosmo
+October 12, 2016, A.Dotti (run-V10-02-34)
+- Use G4Threading::GetNumberOfWorkerThreads method.
+  Requires global-V10-02-28
+
+
+October 14, 2016, G.Cosmo (run-V10-02-33, 32)
 - Again trying fixing G4RNGHelper inlining issue.
 
-October 13, 2016, G.Cosmo
+October 13, 2016, G.Cosmo (run-V10-02-31)
 - Explicitly initialise G4VUPLSplitter data in G4PhysicsListWorkspace.
 - Moved static GetInstance() method in G4RNGHelper to be not inline.
 - Grouped #include statements in G4WorkerThread.cc.
 
-October 12, 2016, G.Folger
+October 12, 2016, G.Folger (run-V10-02-30)
 - Add method GetParticleIterator in G4VUserPhysicsList
    and make these methods const and protected in both classes 
    ... fix for compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
-October 11, 2016, G.Folger
+October 11, 2016, G.Folger (run-V10-02-29)
 - Add method GetParticleIterator in G4VPhysicsConstructor
   Start to fix for compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
-Jan 27th, 2016 M.Asai (run-V10-01-17)
+October 3, 2016, M.Asai (run-V10-02-27, -28)
+- G4GunManagerKernel: G4Exception is replaced with G4cout when the world
+  volume is assigned at PreInit or Idle state.
+
+September 21, 2016, G.Cosmo
+- Restored trunk to "run-V10-02-25".
+  Modifications done in previous tags cause duplicate symbols in generation
+  of the dynamic library on Mac... A cleaner solution needs to be applied in
+  order to take also into account improper use of splitters symbols by
+  derived physics-lists and custom physics-lists in examples and tests.
+
+September 20, 2016, G.Cosmo (run-V10-02-26)
+- Explicitly initialise templated data in G4PhysicsListWorkspace,
+  G4VUserPhysicsList, G4WorkerThread, G4WorkerRunManager and
+  G4MTRunManager translation units.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+September 14, 2016, M.Asai (run-V10-02-25)
+- Geant4 is now in G4State_Init state while initialization phase.
+  This is enforced even if the user uses only the G4GunManagerKernel.
+
+September 13, 2016, M.Asai (run-V10-02-24)
+- Geant4 is now in G4State_Init state while G4RunManager::Initialize().
+
+September 7, 2016, G.Cosmo (run-V10-02-23)
+- Fixed GNUmakefile for missing dependency on global/HEPNumerics, now required.
+
+September 2, 2016 M.Asai (run-V10-02-22)
+- sources.cmake : add global/HEPNumerics 
+
+August 4, 2016 M.Asai (run-V10-02-21)
+- G4WorkerRunManager.cc : minor printout improvement.
+
+July 29, 30, 2016 M.Asai      (run-V10-02-19, -20)
+- Fix G4UnitDefinition to be properly shared by all threads.
+  Addressed to Bug report #1869.
+
+July 22, 2016 M.Asai      (run-V10-02-16, -17 and -18)
+- Fix G4UnitsTable to be properly shared by all threads.
+  Addressed to Bug report #1869.
+
+July 21, 2016 L.Desorgher  (run-V10-02-15)
+- Remove compilation warnings in  G4AdjointPrimaryGeneratorAction.
+ 
+July 21, 2016 L.Desorgher  (run-V10-02-14)
+- Modification of G4AdjointSimManager, G4AdjointPrimaryGeneratorAction
+ and G4AdjointSimMessenger for the implementation of the 
+ splitting of the reverse MC tracking.
+
+July 7, 2016 G.Cosmo     (run-V10-02-13)
+- Removed redundant check in G4VUPLSplitter::UseWorkArea().
+  Addressing problem report #1876.
+
+June 1, 2016 M.Asai      (run-V10-02-12)
+- G4PhysicsListHelper.cc: Fix the default process ordering parameters
+  for G4UnknownDecay that should not have AtRest.
+
+June 1, 2016 L.Desorgher (run-V10-02-11)
+- G4AdjointSimManager correction in the use of run actions to avoid 
+  infinite loop during an adjoint simulation.
+- G4AdjointPrimaryGenerationAction. Remove 3 times spliting of 
+  primary adjoint gamma.
+
+Apr 15rd, 2016 V.Ivanchenko(run-V10-02-10)
+- G4PhysicsListHelper - disable msc PostStep
+
+Feb 23rd, 2016 A.Dotti	   (run-V10-02-09)
+- minor typos correction in output
+
+Feb 22nd, 2016 A.Dotti     (run-V10-02-08)
+- Introduce new UI command: /run/workersProcessCmds to trigger
+  execution of UI commands by workers even without a /run/beamOn
+  C++ API is G4MTRunManager::RequestWorkersProcessCommandsStack()
+- When workers are terminated they execute the UI commands issued
+  after the last /run/beamOn
+
+Feb 18th, 2016 A.Dotti     (run-V10-02-07)
+- Fix compilation in WIN attempt #1
+
+Feb 18th, 2016 A.Dotti	   (run-V10-02-06)
+- Use new class G4MTBarrier to implement synchronization points.
+
+Feb 9th, 2016 A.Dotti      (run-V10-02-05)
+- Fix typo of G4CONDITIONBORADCAST (requires global-V10-02-03)
+- use scoped enum for G4MTRunManager:: WorkerAcitonRequest and
+  add PROCESSUI action
+- add G4MTRunManager::GetNumberActiveThreads() method
+- Introduced skeleton for new functionality to force workers to 
+  execute UI commands w/o beamOn (not functioning yet)
+
+Feb 5th, 2016 P.Gumplinger (run-V10-02-04)
+- fix val-grind memory leakage check tool error in G4RunMessenger
+
+Feb 1st, 2016 A.Dotti (run-V10-02-03)
+- removing automatic handling of multi-user actions 
+   in G4RunManager::SetUserAction(XYZ) (tag run-V10-02-01) since
+  reverse MC needs ability to replace user-actions. 
+  if needed, multiple user-actions must be instantiated and handled by
+  user code 
+
+Jan 29th, 2016 A.Dotti (run-V10-02-02)
+- Renaming all MT related exception to have code matching pattern:
+  Run01[0-9]{2} current maximum number Run0127 
+  (JIRA TASK: DEV-74)
+
+Jan 19th, 2016 A.Dotti (run-V10-02-01)
+- Adding G4MultiRunAction to allow multiple run actions in a single
+  job. 
+- Adding G4MultiPrimaryAction to allow multiple user-primary generation
+  actions in a single job
+- Adding hangling of multiple actions. Requires event-V10-02-01 and
+  tracking-V10-02-00
+
+Jan 27th, 2016 M.Asai (run-V10-02-00)
 - G4PhysicsListHelper: add entry for G4ParallelWorldProcess
 - G4RunManager, G4WorkerRunManager: change process order index of
   G4ParallelWorldProcess to 9900 to make sure it is registered

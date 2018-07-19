@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DICOM.cc 83429 2014-08-21 15:47:32Z gcosmo $
+// $Id: DICOM.cc 110379 2018-05-22 07:45:15Z gcosmo $
 //
 /// \file medical/DICOM/DICOM.cc
 /// \brief Main program of the medical/DICOM example
@@ -41,8 +41,8 @@
 // fax (418) 691 5268
 //
 // + Université Laval, Québec (QC) Canada
-//*******************************************************//
-
+// *******************************************************
+#include "G4Types.hh"
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -62,131 +62,143 @@
 
 #include "DicomActionInitialization.hh"
 
+#ifdef G4_DCMTK
+#include "DicomFileMgr.hh"
+#else
 #include "DicomHandler.hh"
+#endif
+
 #include "DicomIntersectVolume.hh"
 #include "QGSP_BIC.hh"
 #include "G4tgrMessenger.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+
+#include "Shielding.hh"
 
 //=================================================================================
 
 int main(int argc,char** argv)
 {
+  // Instantiate G4UIExecutive if interactive mode
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
 
-    new G4tgrMessenger;
-    char* part = getenv( "DICOM_PARTIAL_PARAM" );
-    G4bool bPartial = FALSE;
-    if( part && G4String(part) == "1" ) {
-        bPartial = TRUE;
-    }
+  new G4tgrMessenger;
+  char* part = getenv( "DICOM_PARTIAL_PARAM" );
+  G4bool bPartial = FALSE;
+  if( part && G4String(part) == "1" ) {
+    bPartial = TRUE;
+  }
 
-    CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-    CLHEP::HepRandom::setTheSeed(24534575684783);
-    long seeds[2];
-    seeds[0] = 534524575674523;
-    seeds[1] = 526345623452457;
-    CLHEP::HepRandom::setTheSeeds(seeds);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  CLHEP::HepRandom::setTheSeed(24534575684783);
+  long seeds[2];
+  seeds[0] = 534524575674523;
+  seeds[1] = 526345623452457;
+  CLHEP::HepRandom::setTheSeeds(seeds);
 
-    // Construct the default run manager
+  // Construct the default run manager
 #ifdef G4MULTITHREADED
-    char* nthread_c = getenv("DICOM_NTHREADS");
+  char* nthread_c = getenv("DICOM_NTHREADS");
 
-    unsigned nthreads = 4;
-    unsigned env_threads = 0;
-    
-    if(nthread_c) { env_threads = G4UIcommand::ConvertToDouble(nthread_c); }
-    if(env_threads > 0) { nthreads = env_threads; }
+  unsigned nthreads = 4;
+  unsigned env_threads = 0;
 
-    G4MTRunManager* runManager = new G4MTRunManager;
-    runManager->SetNumberOfThreads(nthreads);
+  if(nthread_c) { env_threads = G4UIcommand::ConvertToDouble(nthread_c); }
+  if(env_threads > 0) { nthreads = env_threads; }
 
-    G4cout << "\n\n\tDICOM running in multithreaded mode with " << nthreads 
-          << " threads\n\n" << G4endl;
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(nthreads);
 
-    
+  G4cout << "\n\n\tDICOM running in multithreaded mode with " << nthreads
+         << " threads\n\n" << G4endl;
+
+
 #else
-    G4RunManager* runManager = new G4RunManager;
-    G4cout << "\n\n\tDICOM running in serial mode\n\n" << G4endl;
+  G4RunManager* runManager = new G4RunManager;
+  G4cout << "\n\n\tDICOM running in serial mode\n\n" << G4endl;
 
 #endif
-    
-    DicomDetectorConstruction* theGeometry = 0;
-    DicomHandler* dcmHandler = 0;
 
-    if( !bPartial ){
-        // Treatment of DICOM images before creating the G4runManager
-        dcmHandler = new DicomHandler;
-        dcmHandler->CheckFileFormat();
+  DicomDetectorConstruction* theGeometry = 0;
 
-        // Initialisation of physics, geometry, primary particles ...
-        char* nest = getenv( "DICOM_NESTED_PARAM" );
-        if( nest && G4String(nest) == "1" ) {
-            theGeometry = new DicomNestedParamDetectorConstruction();
-        } else {
-            theGeometry = new DicomRegularDetectorConstruction();
-        }
+#ifdef G4_DCMTK
+  DicomFileMgr* theFileMgr = 0;
+#else
+  DicomHandler* dcmHandler = 0;
+#endif
+
+  if( !bPartial ){
+#ifdef G4_DCMTK
+
+    theFileMgr = DicomFileMgr::GetInstance();
+    theFileMgr->Convert("Data.dat");
+
+#else
+    // Treatment of DICOM images before creating the G4runManager
+    dcmHandler = new DicomHandler;
+    dcmHandler->CheckFileFormat();
+#endif
+
+    // Initialisation of physics, geometry, primary particles ...
+    char* nest = getenv( "DICOM_NESTED_PARAM" );
+    if( nest && G4String(nest) == "1" ) {
+      theGeometry = new DicomNestedParamDetectorConstruction();
     } else {
-        theGeometry = new DicomPartialDetectorConstruction();
-    }    
-    runManager->SetUserInitialization(theGeometry);
-
-    std::vector<G4String>* MyConstr = new std::vector<G4String>;
-    MyConstr->push_back("G4EmStandardPhysics");
-    G4VModularPhysicsList* phys = new G4GenericPhysicsList(MyConstr);
-    runManager->SetUserInitialization(phys);
-
-    // Set user action classes
-    runManager->SetUserInitialization(new DicomActionInitialization());
-
-    runManager->Initialize();
-
-    new DicomIntersectVolume();
-
-#ifdef G4VIS_USE
-    // visualisation manager
-    G4VisManager* visManager = new G4VisExecutive;
-    visManager->Initialize();
-#endif
-
-
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-
-    if (argc==1)
-    {
-#ifdef G4UI_USE
-        G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-        UImanager->ApplyCommand("/control/execute vis.mac");
-#endif
-        ui->SessionStart();
-        delete ui;
-#endif
+      theGeometry = new DicomRegularDetectorConstruction();
     }
-    else
+  } else {
+    theGeometry = new DicomPartialDetectorConstruction();
+  }
+  runManager->SetUserInitialization(theGeometry);
+
+  //    std::vector<G4String>* MyConstr = new std::vector<G4String>;
+  //    MyConstr->push_back("G4EmStandardPhysics");
+  //    G4VModularPhysicsList* phys = new G4GenericPhysicsList(MyConstr);
+  G4VModularPhysicsList* phys = new Shielding();
+  runManager->SetUserInitialization(phys);
+
+  // Set user action classes
+  runManager->SetUserInitialization(new DicomActionInitialization());
+
+  runManager->Initialize();
+
+  new DicomIntersectVolume();
+
+  // visualisation manager
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
+
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+  if (ui)
     {
-        G4String command = "/control/execute ";
-        G4String fileName = argv[1];
-        UImanager->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand("/control/execute vis.mac");
+      ui->SessionStart();
+      delete ui;
     }
-    
-    delete runManager;
-    
-#ifdef G4VIS_USE
-    delete visManager;
+  else
+    {
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UImanager->ApplyCommand(command+fileName);
+    }
+
+  delete visManager;
+  delete runManager;
+
+  if( !bPartial ) {
+#ifdef G4_DCMTK
+    delete theFileMgr;
+#else
+    delete dcmHandler;
 #endif
-    
-    if( !bPartial ) { delete dcmHandler; }
-    
-    return 0;
+  }
+
+  return 0;
 }
-
-
 

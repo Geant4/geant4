@@ -168,7 +168,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
      "world_phys", world_log, NULL, false,0);
 
   //  G4VisAttributes* world_vat= new G4VisAttributes(white);
-  world_log->SetVisAttributes(G4VisAttributes::Invisible);
+  world_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   //world_vat->SetVisibility(true);
   //world_vat->SetVisibility(false);
   //world_log->SetVisAttributes(world_vat);
@@ -187,7 +187,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
      lab_log, world_phys, false,0);
 
   G4VisAttributes* lab_vat= new G4VisAttributes(white);
-  //  lab_log->SetVisAttributes(G4VisAttributes::Invisible);
+  //  lab_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   //  lab_vat->SetVisibility(true);
   lab_vat->SetVisibility(false);
   lab_log->SetVisAttributes(lab_vat);
@@ -217,7 +217,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
      "LN2jacket_phys", LN2jacket_log, lab_phys, false,0);
 
   G4VisAttributes* LN2jacket_vat = new G4VisAttributes(lgrey);
-  // LN2jacket_log->SetVisAttributes(G4VisAttributes::Invisible);
+  // LN2jacket_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   // LN2jacket_vat->SetVisibility(true);
   LN2jacket_log->SetVisAttributes(LN2jacket_vat);
 
@@ -234,7 +234,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   LN2vacuum_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),
      "LN2vacuum_phys", LN2vacuum_log, LN2jacket_phys, false,0);
 
-  LN2vacuum_log->SetVisAttributes(G4VisAttributes::Invisible);
+  LN2vacuum_log->SetVisAttributes(G4VisAttributes::GetInvisible());
 
   // LN2 vessel: ************************************************************
 
@@ -252,7 +252,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
      "LN2vessel_phys", LN2vessel_log, LN2vacuum_phys, false,0);
 
   G4VisAttributes* LN2vessel_vat = new G4VisAttributes(lgrey);
-  // LN2vessel_log->SetVisAttributes(G4VisAttributes::Invisible);
+  // LN2vessel_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   // LN2vessel_vat->SetVisibility(true);
   LN2vessel_log->SetVisAttributes(LN2vessel_vat);
 
@@ -283,7 +283,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
      "jacket_phys", jacket_log, lab_phys, false,0);
 
   G4VisAttributes* jacket_vat = new G4VisAttributes(grey);
-  // jacket_log->SetVisAttributes(G4VisAttributes::Invisible);
+  // jacket_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   jacket_log->SetVisAttributes(jacket_vat);
 
 
@@ -304,7 +304,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
     (0, G4ThreeVector(0.,0.,-topjacketflangePosZ + PosZ),
      "bottomjacketflange_phys", jacketflange_log, lab_phys, false,0);
 
-  // jacketflange_log->SetVisAttributes(G4VisAttributes::Invisible);
+  // jacketflange_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   jacketflange_log->SetVisAttributes(jacket_vat);
 
   // vacuum **************************************************************
@@ -319,7 +319,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
      "vacuum_phys", vacuum_log, jacket_phys, false,0);
 
   // G4VisAttributes* vacuum_vat= new G4VisAttributes(lgrey);
-  vacuum_log->SetVisAttributes(G4VisAttributes::Invisible);
+  vacuum_log->SetVisAttributes(G4VisAttributes::GetInvisible());
 
 
   // copper cooling jacket volume: **************************************
@@ -347,7 +347,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
      "coppertop_phys", coppertop_log, vacuum_phys, false,0);
 
   G4VisAttributes* copper_vat = new G4VisAttributes(orange);
-  //  copper_log->SetVisAttributes(G4VisAttributes::Invisible);
+  //  copper_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   copper_log->SetVisAttributes(copper_vat);
   coppertop_log->SetVisAttributes(copper_vat);
 
@@ -441,7 +441,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4VisAttributes* vessel_vat     = new G4VisAttributes(grey);
   G4VisAttributes* pmtvessel_vat  = new G4VisAttributes(yellow);
   G4VisAttributes* pmtvessel_vat2 = new G4VisAttributes(green);
-  //  vessel_log->SetVisAttributes(G4VisAttributes::Invisible);
+  //  vessel_log->SetVisAttributes(G4VisAttributes::GetInvisible());
   //  vessel_vat->SetForceSolid(true);
   //  pmtvessel_vat->SetForceSolid(true);
   //  pmtvessel_vat2->SetForceSolid(true);
@@ -1009,7 +1009,8 @@ void DMXDetectorConstruction::ConstructSDandField()
       G4String name="/DMXDet/LXeSD";
       DMXScintSD* aSD = new DMXScintSD(name);
       LXeSD.Put(aSD);
-    }                                                           
+    }
+  G4SDManager::GetSDMpointer()->AddNewDetector(LXeSD.Get());  
   if (LXe_log)    
     SetSensitiveDetector(LXe_log,LXeSD.Get());
 
@@ -1019,7 +1020,7 @@ void DMXDetectorConstruction::ConstructSDandField()
       DMXPmtSD* aSD = new DMXPmtSD(name);
       pmtSD.Put(aSD);
     }
-  
+  G4SDManager::GetSDMpointer()->AddNewDetector(pmtSD.Get()); 
   if (phcath_log)
     SetSensitiveDetector(phcath_log,pmtSD.Get());
 

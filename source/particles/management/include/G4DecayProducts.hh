@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.hh 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4DecayProducts.hh 108369 2018-02-09 08:39:32Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -92,8 +92,6 @@ class G4DecayProducts
     void DumpInfo() const;
 
     typedef std::vector<G4DynamicParticle*>  G4DecayProductVector;
-  protected:
-    enum {MaxNumberOfProducts = 64};
 
   private: 
     G4int                               numberOfProducts;

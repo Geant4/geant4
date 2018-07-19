@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ThreadsafeScorers/atomics/G4TAtomicHitsMap.hh
+/// \file parallel/ThreadsafeScorers/include/G4TAtomicHitsMap.hh
 /// \brief Definition of the G4TAtomicHitsMap class
 //
 //
@@ -153,16 +153,14 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 template <typename T>
 G4TAtomicHitsMap<T>::G4TAtomicHitsMap()
-  : theCollection(new container_type),
-    fMutex(G4MUTEX_INITIALIZER)
+  : theCollection(new container_type)
 { }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 template <typename T>
 G4TAtomicHitsMap<T>::G4TAtomicHitsMap(G4String detName,
                                       G4String colNam)
   : G4VHitsCollection(detName,colNam),
-    theCollection(new container_type),
-    fMutex(G4MUTEX_INITIALIZER)
+    theCollection(new container_type)
 { }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 template <typename T>
@@ -172,7 +170,6 @@ G4TAtomicHitsMap<T>::~G4TAtomicHitsMap()
       delete itr->second;
 
   delete theCollection;
-  G4MUTEXDESTROY(fMutex);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 template <typename T>

@@ -5,16 +5,18 @@
 
 /*! \page ExampleTestEm18 Example TestEm18
 
- This example allows to study the energy lost by a charged particle in a
- single layer, due to ionization and bremsstrahlung. Results are compared to
- 'reference' values.
+ This example allows to study the various contributions of the energy lost 
+ by a charged particle in a single layer of an homogeneous material.
+ See any textbook of interactions of charged particles with matter, in particular :
+   1- geant4.web.cern.ch --> UserSupport --> Physics Reference Manual
+   2- lappweb.in2p3.fr/~maire/tutorials/index.html
 	
 \section TestEm18_s1 GEOMETRY DEFINITION
  
- It is a single box of homogeneous medium.
+ It is a simple cubic box of homogeneous material.
  Two parameters define the geometry :
      - the material of the box,
-     - the (full) size of the box.
+     - the thickness of the box.
  
  The default geometry (1 cm of water) is constructed in DetectorConstruction,
  but the above parameters can be changed interactively via the commands
@@ -24,7 +26,7 @@
  
  The physics list, PhysicsList, contains the 'standard' electromagnetic processes.
  However the MultipleScattering is not registered, in order to focuse on
- fluctuations due to energy loss alone.
+ fluctuations of to energy loss alone.
 	 	 
 \section TestEm18_s3 BEAM
  
@@ -34,28 +36,39 @@
  build-in commands of G4ParticleGun class.
  	
 \section TestEm18_s4 RUN
- 
- During the tracking of the incident particle, the secondary particles 
- are immediately killed, after that their energy has been registered
- (see StackingAction).
- Therefore, we study here the total energy lost by the incident particle,
- not the energy deposited in a layer of finite thickness.
- 
- At RunAction::EndOfRunAction(), the above results are compared with 'reference' values,
- i.e. the values read from EnergyLoss tables.
+
+ During the tracking of the incident particle, by default, the secondary 
+ particles are immediately killed, after that their energy has been registered
+ (see SteppingAction and StackingAction).
+ Therefore, we study here the various components of the total energy lost
+ by the incident particle, not the energy deposited in a layer of finite
+ thickness.
+ With the option /testEm/trackSecondaries one can compute and plot the energy
+ deposited in the layer. See edep.mac
+
+ At EndOfRun, the above results are compared with 'reference' values,
+ i.e. the input data read from EnergyLoss and Range tables.
+ See reference 2 : Energy-Range relation, slide 4.
 
 \section TestEm18_s5 HISTOGRAMS
          
- The test contains 6 built-in 1D histograms, which are managed by
+ The test contains 13 built-in 1D histograms, which are managed by
  G4AnalysisManager and its messenger.
- 
- - 1 :  continuous energy loss along primary track
- - 2 :  energy from secondaries
- - 3 :  total energy lost by primary track (1+2)
- - 4 :  energy spectrum of e-+
- - 5 :  energy spectrum of gamma
- - 6 :  step size of primary track
-      
+
+           1  step size of primary track
+           2  energy locally deposited along primary track
+           3  energy transfered to secondaries by ionisation
+           4  energy transfered to secondaries by Bremsstrahlung
+           5  energy transfered to secondaries by (e+,e-) production
+           6  total energy transfered to secondaries
+           7  total energy lost by primary track
+           8  total energy lost by primary track from energy balance
+           9  energy continuously deposited along secondary tracks
+          10  total energy deposited
+          11  energy spectrum of gamma
+          12  energy spectrum of e-
+          13  energy spectrum of e+
+
  The histograms are defined in HistoManager.
      
  The histos can be activated individually with the command :

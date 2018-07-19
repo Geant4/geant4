@@ -122,7 +122,7 @@ G4ReactionProduct * G4ParticleHPLabAngularEnergy::Sample(G4double anEnergy, G4do
    //if ( it == 0 || it == nEnergies-1 ) // it marks the energy bin
    if ( it == 0 ) // it marks the energy bin
    {
-if(it==0) G4cout << "080808 Something unexpected is happen in G4ParticleHPLabAngularEnergy " << G4endl;
+     G4cout << "080808 Something unexpected is happen in G4ParticleHPLabAngularEnergy " << G4endl;
      // integrate the prob for each costh, and select theta.
      G4double * running = new G4double [nCosTh[it]];
      running[0]=0;

@@ -1,4 +1,4 @@
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 110644 2018-06-04 16:51:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,59 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+04-06-18 mma (testem11-V10-04-03)
+- SteppingAction.cc : Photoelectric, edep at end of step
+
+09-05-18 B.Morgan (testem11-V10-04-02)
+- Include G4Types before use of G4MULTITHREADED. For forward
+  compatibility with move to #defines over -D for G4 preprocessor
+  symbols.
+
+09-04-18 mma (testem11-V10-04-01)
+- testem11.cc : set visualisation only in interactive mode
+
+19-03-18 mma (testem11-V10-04-00)
+- testem11.cc : remove G4UI_USE and G4VIS_USE
+
+19-04-17 mma  (testem11-V10-03-00)
+- BeginOfRunAction() : remove SetRandomNumberStore(true)
+
+24-10-16 mma  (testem11-V10-02-09)
+- add alpha.mac ionC12.mac
+
+14-10-16 G.Folger (testem11-V10-02-08)
+- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+28-07-16 mma  (testem11-V10-02-07)
+- coding conventions : kMaxAbsor
+
+04-07-16 I. Hrivnacova  (testem11-V10-02-06)
+- Fixes for Doxygen documentation
+
+08-04-16 mma  (testem11-V10-02-05)
+- PhysicsList, PhysListEmStandard: remove G4EmProcessOptions.hh
+
+08-04-16 mma  (testem11-V10-02-04)
+- PhysicsList: use G4EmParameters
+
+06-04-16 mma  (testem11-V10-02-03)
+- update PhysicsList
+- remove G4DiscreteScattering
+
+21-03-16 mma  (testem11-V10-02-02)
+- PrimaryGeneratorMessenger : restaure command SetDefaultKinematic
+  update all macros
+
+22-02-16 mma  (testem11-V10-02-01)
+- PhysicsList: add radioactiveDecay process
+- macro radioactive.mac
+- Run : compute energy deposit per absorber
+- PrimaryGenerator : restaure SetDefaultKinematic()
+
+10-12-15 V.Ivant (testem11-V10-02-00)
+- H.Burkhardt fixed root macro allowing to work both with root5 and 6
 
 14-10-16 G.Folger
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().

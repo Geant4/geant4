@@ -1,4 +1,4 @@
-$Id: README 66241 2012-12-13 18:34:42Z gunter $
+$Id: README 94932 2015-12-18 09:21:29Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,95 +8,82 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
                             TestEm10 
                             --------
 
-    Test for investigation of ionisation in thin absorbers, transition 
-    and synchrotron radiations. Default setup for "TestEm10.in" and "TestEm10.large_N.in" is 
-    the experiment for XTR with NIM A294 (1990) 465-472 (fig. 11) setup
+    Test for investigation of transition radiation. 
+    Default setup for "TestEm10.in" and "TestEm10.large_N.in" is the simplified 
+    setup for ALICE XTR test beam (~2004), defined in DetectorSimpleALICE class.
 
 
- 0- INTRODUCTION
-	
-	The parameterisations models can be changed simply with:
-
-	Idle> /XTRdetector/setModel i (i = 1 to 10)
-
-	It is NOT needed (and not recommended) to issue the command
-	/XTRdetector/update if just the model is changed.
-
-	See macro file "TestEm10.in" for an example.
-
-	
  1- GEOMETRY DEFINITION
  
- 	The "absorber" is a tube made of a given material.                
- 	
- 	Three parameters define the absorber :
- 	- the material of the absorber,
-	- the thickness of an absorber,
- 	- the transverse size of the absorber (the input face is a square). 
-    
-        The volume "World" contains the "absorber". 
-        In this test the parameters of the "World" can be changed , too.
+    The geometry setup includes "radiator" and "absorber" volumes
+    of a box shape.
 
- 	In addition a transverse uniform magnetic field can be applied.
+    The "radiator" material is defined as a mixture of a gas and foil material
+    and the "absorber" contains a gas material.
+
+    Several geometry setups are defined in the classes 
+    DetectorSetupX, 
+    where SetupX = ALICE06, Bari05, Barr90, Construction, Harris73, Messenger, SimpleALICE, Watase86
  	
- 	The default geometry is constructed in DetectorConstruction class,
- 	but all the parameters can be changed via
- 	the commands defined in the DetectorMessenger class.
+ 	The default setup, SimpleALICE, can be changed via UI command:
+    /XTRdetector/setup setup
+       where setup = simpleALICE, alice06, bari05, harris73, watase86, barr90
  	
- 2- AN EVENT : THE PRIMARY GENERATOR
+ 2- PRIMARY GENERATOR
  
  	The primary kinematic consists of a single particle which hits the
  	absorber perpendicular to the input face. The type of the particle
  	and its energy are set in the PrimaryGeneratorAction class, and can
- 	be changed via the G4 build-in commands of ParticleGun class (see
+ 	be changed via the G4 build-in commands of G4ParticleGun class (see
  	the macros provided with this example).
- 	
- 	A RUN is a set of events.
  	
  3- DETECTOR RESPONSE
 
-        Here we test G4PAIionisation , G4IonisationByLogicalVolume and 
-        transition radiation processes
- 
- 	A HIT is a record, event per event , of all the 
- 	informations needed to simulate and analyse the detector response.
+ 	In this example the total energy deposited in the "absorber" volume 
+    is accounted in SensitevDetector class, and a spectrum of XTR gamma
+    particles, all secondary gamma particles and all secondary e- 
+    particleas is accounted in StackingAction class.
  	
- 	In this example a CalorHit is defined as a set of 2 informations:
- 	- the total energy deposit in the absorber,
- 	- the total tracklength of all charged particles in the absorber,  
- 	
- 	Therefore  the absorber is declared
- 	'sensitive detector' (SD), which means they can contribute to the hit.
- 	
- 	At the end of a run, from the histogram(s), one can study 
-	different physics quantities such as :
-                                - angle distribution,
-				- energy deposit,
- 				- transmission/backscattering,
- 				-  ...
-        
-        The test contains 10 built-in histograms, which can be activated by
-        interactive commands (see the macros runxx.mac for details).
-
-        The histogram files can be viewed using PAW e.g with the commands 
-
-                paw> h/file 1 geant4.plot01 or g4.p11
-                paw> option stat
-                paw> h/pl 1
-
-
- 				
- 4- PHYSICS DEMO
- 
+ 4- PHYSICS
+    
  	The particle's type and the physic processes which will be available
  	in this example are set in PhysicsList class.
- 	
- 	The  messenger classes introduce interactive commands . Using these
-        commands the geometry of the detector, the data of the primary
-        particle, the limits of the histograms , etc. can be changed.
- 	
+    The trasition radiation process is defined in the
+    TransitionRadiationPhysics builder.
+ 	 	
+    The transition radiator models can be changed simply with:
 
- 5- HOW TO START ?
+    Idle> /emphyslist/setXTRModel modelName
+
+    See macro files "*.mac" for different setups providede with the example.
+
+ 5 - HISTOGRAMS
+
+    Testem10 produces several histo which are saved as testem10.root by default.
+    Content of these histo:  
+        1: Energy deposit in absorber
+        2: XTR Gamma spectrum
+        3: Secondary Gamma spectrum
+        4: Secondary e- spectrum
+        5: Energy deposit in absorber with the same histogram parameters
+           as in the previous version of this example (Geant4 version <=10.2)
+        
+     The histograms are managed by G4AnalysisManager class and its Messenger. 
+     The histos can be individually activated with the command :
+     /analysis/h1/set id nbBins  valMin valMax unit 
+     where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+     
+     One can control the name of the histograms file with the command:
+     /analysis/setFileName  name  (default testem1)
+     
+     It is possible to choose the format of the histogram file : root (default),
+     hbook, xml, csv, by using namespace in HistoManager.hh 
+       
+     It is also possible to print selected histograms on an ascii file:
+     /analysis/h1/setAscii id
+     All selected histos will be written on a file name.ascii  (default testem1)
+
+ 6- HOW TO START ?
  
  	- execute TestEm10 in 'batch' mode from macro files e.g.
  		% TestEm10   run11.mac
@@ -106,29 +93,3 @@ $Id: README 66241 2012-12-13 18:34:42Z gunter $
 		....
 		Idle> type your commands
 		....
-		
- List of the built-in histograms
- -------------------------------
-
-        1.   number of (tracking) steps/event
-        2.   energy deposit distribution in the absorber (in MeV)
-        3.   angle distribution of the primary particle at the exit
-             of the absorber (deg)
-        4.   distribution of the lateral displacement at exit(mm)
-        5.   kinetic energy of the transmitted primaries (MeV)
-        6.   angle distribution of the backscattered primaries (deg)
-        7.   kinetic energy of the backscattered primary particles (MeV)
-        8.   kinetic energy of the charged secondary particles (MeV)
-        9.   z distribution of the secondary charged vertices (mm)
-       10.   kinetic energy of the photons escaping the absorber (MeV)
-
-
- Using histograms
- ---------------- 
-
-By default the histograms are not activated. To activate histograms
-the environment variable G4ANALYSIS_USE should be defined. For instance
-uncomment the flag G4ANALYSIS_USE in GNUmakefile.
-
-To use histograms any of implementations of AIDA interfaces should
-be available. See InstallAida.txt

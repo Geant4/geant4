@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc 73164 2013-08-21 08:55:28Z gcosmo $
+// $Id: G4Navigator.icc 110048 2018-05-15 06:28:03Z gcosmo $
 //
 // 
 // class G4Navigator Inline implementation
@@ -52,8 +52,7 @@ G4ThreeVector G4Navigator::GetCurrentLocalCoordinate() const
 inline
 G4ThreeVector G4Navigator::ComputeLocalAxis(const G4ThreeVector& pVec) const
 {
-  return (fHistory.GetTopTransform().IsRotated())
-         ? fHistory.GetTopTransform().TransformAxis(pVec) : pVec ;
+  return fHistory.GetTopTransform().TransformAxis(pVec);
 }
 
 // ********************************************************************
@@ -66,7 +65,7 @@ inline
 G4ThreeVector
 G4Navigator::ComputeLocalPoint(const G4ThreeVector& pGlobalPoint) const
 {
-  return ( fHistory.GetTopTransform().TransformPoint(pGlobalPoint) ) ;
+  return fHistory.GetTopTransform().TransformPoint(pGlobalPoint);
 }
 
 // ********************************************************************
@@ -193,9 +192,7 @@ const G4AffineTransform& G4Navigator::GetGlobalToLocalTransform() const
 inline
 const G4AffineTransform G4Navigator::GetLocalToGlobalTransform() const
 {
-  G4AffineTransform  tempTransform;
-  tempTransform = fHistory.GetTopTransform().Inverse(); 
-  return tempTransform;
+  return fHistory.GetTopTransform().Inverse(); 
 }
 
 // ********************************************************************
@@ -207,8 +204,7 @@ const G4AffineTransform G4Navigator::GetLocalToGlobalTransform() const
 inline
 G4ThreeVector G4Navigator::NetTranslation() const
 {
-  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
-  return tf.NetTranslation();
+  return fHistory.GetTopTransform().InverseNetTranslation();
 }
 
 // ********************************************************************
@@ -220,8 +216,7 @@ G4ThreeVector G4Navigator::NetTranslation() const
 inline
 G4RotationMatrix G4Navigator::NetRotation() const
 {
-  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
-  return tf.NetRotation();
+  return fHistory.GetTopTransform().InverseNetRotation();
 }
 
 // ********************************************************************
@@ -233,10 +228,10 @@ G4RotationMatrix G4Navigator::NetRotation() const
 inline
 G4GRSVolume* G4Navigator::CreateGRSVolume() const
 {
-  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
+  const G4AffineTransform& tf = fHistory.GetTopTransform();
   return new G4GRSVolume(fHistory.GetTopVolume(),
-                         tf.NetRotation(),
-                         tf.NetTranslation());
+                         tf.InverseNetRotation(),
+                         tf.InverseNetTranslation());
 }
 
 // ********************************************************************
@@ -248,10 +243,10 @@ G4GRSVolume* G4Navigator::CreateGRSVolume() const
 inline
 G4GRSSolid* G4Navigator::CreateGRSSolid() const
 {
-  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
+  const G4AffineTransform& tf = fHistory.GetTopTransform();
   return new G4GRSSolid(fHistory.GetTopVolume()->GetLogicalVolume()->GetSolid(),
-                        tf.NetRotation(),
-                        tf.NetTranslation());
+                        tf.InverseNetRotation(),
+                        tf.InverseNetTranslation());
 }
 
 // ********************************************************************

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc 102292 2017-01-20 11:27:42Z gcosmo $
+// $Id: G4SubtractionSolid.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -134,7 +134,35 @@ G4SubtractionSolid::operator = (const G4SubtractionSolid& rhs)
   return *this;
 }  
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void
+G4SubtractionSolid::BoundingLimits(G4ThreeVector& pMin,
+                                   G4ThreeVector& pMax) const
+{
+  // Since it is unclear how the shape of the first solid will be changed
+  // after subtraction, just return its original bounding box.
+  //
+  fPtrSolidA->BoundingLimits(pMin,pMax);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4SubtractionSolid::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
 // Calculate extent under transform and specified limit
      
@@ -194,8 +222,11 @@ G4ThreeVector
 G4SubtractionSolid::SurfaceNormal( const G4ThreeVector& p ) const 
 {
   G4ThreeVector normal;
-  EInside insideThis= Inside(p); 
-  if( insideThis == kOutside )
+
+  EInside InsideA = fPtrSolidA->Inside(p);
+  EInside InsideB = fPtrSolidB->Inside(p); 
+
+  if( InsideA == kOutside )
   {
 #ifdef G4BOOLDEBUG
     G4cout << "WARNING - Invalid call [1] in "
@@ -207,46 +238,41 @@ G4SubtractionSolid::SurfaceNormal( const G4ThreeVector& p ) const
            << "  Point p is outside !" << G4endl;
     G4cerr << "          p = " << p << G4endl;
 #endif
+    normal = fPtrSolidA->SurfaceNormal(p) ;
   }
-  else
-  { 
-    EInside InsideA = fPtrSolidA->Inside(p); 
-    EInside InsideB = fPtrSolidB->Inside(p); 
-
-    if( InsideA == kSurface && 
-        InsideB != kInside      ) 
+  else if( InsideA == kSurface && 
+           InsideB != kInside      ) 
+  {
+    normal = fPtrSolidA->SurfaceNormal(p) ;
+  }
+  else if( InsideA == kInside && 
+           InsideB != kOutside    )
+  {
+    normal = -fPtrSolidB->SurfaceNormal(p) ;
+  }
+  else 
+  {
+    if ( fPtrSolidA->DistanceToOut(p) <= fPtrSolidB->DistanceToIn(p) )
     {
       normal = fPtrSolidA->SurfaceNormal(p) ;
     }
-    else if( InsideA == kInside && 
-             InsideB != kOutside    )
+    else
     {
       normal = -fPtrSolidB->SurfaceNormal(p) ;
     }
-    else 
-    {
-      if ( fPtrSolidA->DistanceToOut(p) <= fPtrSolidB->DistanceToIn(p) )
-      {
-        normal = fPtrSolidA->SurfaceNormal(p) ;
-      }
-      else
-      {
-        normal = -fPtrSolidB->SurfaceNormal(p) ;
-      }
 #ifdef G4BOOLDEBUG
-      if(insideThis == kInside)
-      {
-        G4cout << "WARNING - Invalid call [2] in "
+    if(Inside(p) == kInside)
+    {
+      G4cout << "WARNING - Invalid call [2] in "
              << "G4SubtractionSolid::SurfaceNormal(p)" << G4endl
              << "  Point p is inside !" << G4endl;
-        G4cout << "          p = " << p << G4endl;
-        G4cerr << "WARNING - Invalid call [2] in "
+      G4cout << "          p = " << p << G4endl;
+      G4cerr << "WARNING - Invalid call [2] in "
              << "G4SubtractionSolid::SurfaceNormal(p)" << G4endl
              << "  Point p is inside !" << G4endl;
-        G4cerr << "          p = " << p << G4endl;
-      }
-#endif
+      G4cerr << "          p = " << p << G4endl;
     }
+#endif
   }
   return normal;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4VisCommandsViewer.hh 109510 2018-04-26 07:15:57Z gcosmo $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -115,6 +115,18 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
+class G4VisCommandViewerClearVisAttributesModifiers: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerClearVisAttributesModifiers ();
+  virtual ~G4VisCommandViewerClearVisAttributesModifiers ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerClearVisAttributesModifiers (const G4VisCommandViewerClearVisAttributesModifiers&);
+  G4VisCommandViewerClearVisAttributesModifiers& operator = (const G4VisCommandViewerClearVisAttributesModifiers&);
+  G4UIcmdWithoutParameter* fpCommand;
+};
+
 class G4VisCommandViewerClone: public G4VVisCommandViewer {
 public:
   G4VisCommandViewerClone ();
@@ -125,6 +137,18 @@ private:
   G4VisCommandViewerClone (const G4VisCommandViewerClone&);
   G4VisCommandViewerClone& operator =
   (const G4VisCommandViewerClone&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandViewerColourByDensity: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerColourByDensity ();
+  virtual ~G4VisCommandViewerColourByDensity ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerColourByDensity (const G4VisCommandViewerColourByDensity&);
+  G4VisCommandViewerColourByDensity& operator = (const G4VisCommandViewerColourByDensity&);
   G4UIcommand* fpCommand;
 };
 
@@ -180,6 +204,18 @@ private:
   G4VisCommandViewerFlush (const G4VisCommandViewerFlush&);
   G4VisCommandViewerFlush& operator = (const G4VisCommandViewerFlush&);
   G4UIcmdWithAString* fpCommand;
+};
+
+class G4VisCommandViewerInterpolate: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerInterpolate ();
+  virtual ~G4VisCommandViewerInterpolate ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerInterpolate (const G4VisCommandViewerInterpolate&);
+  G4VisCommandViewerInterpolate& operator = (const G4VisCommandViewerInterpolate&);
+  G4UIcommand* fpCommand;
 };
 
 class G4VisCommandViewerList: public G4VVisCommandViewer {

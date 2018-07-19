@@ -326,7 +326,8 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   }
 
   // Rotate event to put Z axis along original projectile direction
-  output->rotateEvent(bulletInLabFrame);
+  // Removed by DHW to fix bug #1990
+  // output->rotateEvent(bulletInLabFrame);
 
   copyOutputToHadronicResult();
 
@@ -464,12 +465,14 @@ G4bool G4CascadeInterface::createBullet(const G4HadProjectile& aTrack) {
 
   // Code momentum and energy -- Bertini wants z-axis and GeV units
   G4LorentzVector projectileMomentum = aTrack.Get4Momentum()/GeV;
-  
+
   // Rotation/boost to get from z-axis back to original frame
-  bulletInLabFrame = G4LorentzRotation::IDENTITY;	// Initialize
-  bulletInLabFrame.rotateZ(-projectileMomentum.phi());
-  bulletInLabFrame.rotateY(-projectileMomentum.theta());
-  bulletInLabFrame.invert();
+  // According to bug report #1990 this rotation is unnecessary and causes
+  // irreproducibility.  Verifed and fixed by DHW 27 Nov 2017
+  // bulletInLabFrame = G4LorentzRotation::IDENTITY;	// Initialize
+  // bulletInLabFrame.rotateZ(-projectileMomentum.phi());
+  // bulletInLabFrame.rotateY(-projectileMomentum.theta());
+  // bulletInLabFrame.invert();
 
   G4LorentzVector momentumBullet(0., 0., projectileMomentum.rho(),
 				 projectileMomentum.e());

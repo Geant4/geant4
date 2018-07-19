@@ -45,6 +45,7 @@ G4ParticleHPManager::G4ParticleHPManager()
 ,NEGLECT_DOPPLER(false)
 ,DO_NOT_ADJUST_FINAL_STATE(false)
 ,PRODUCE_FISSION_FRAGMENTS(false)
+,USE_NRESP71_MODEL(false)
 ,theElasticCrossSections(NULL)
 ,theCaptureCrossSections(NULL)
 //,theInelasticCrossSections(NULL)
@@ -66,6 +67,7 @@ G4ParticleHPManager::G4ParticleHPManager()
    if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) || getenv("G4PHP_NEGLECT_DOPPLER") ) NEGLECT_DOPPLER = true;
    if ( getenv( "G4NEUTRONHP_SKIP_MISSING_ISOTOPES" ) ) SKIP_MISSING_ISOTOPES = true;
    if ( getenv( "G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS" ) ) PRODUCE_FISSION_FRAGMENTS = true;
+   if ( getenv( "G4PHP_USE_NRESP71_MODEL" ) ) USE_NRESP71_MODEL = true;
 }
 G4ParticleHPManager::~G4ParticleHPManager()
 {
@@ -99,6 +101,7 @@ void G4ParticleHPManager::CloseReactionWhiteBoard()
 #include <fstream>
 void G4ParticleHPManager::GetDataStream( G4String filename , std::istringstream& iss ) 
 {
+   //if ( getenv( "TEST04" ) && filename != "INVALID" ) G4cout << "Reading " << filename << G4endl;
    G4String* data=NULL;
    G4String compfilename(filename);
    compfilename += ".z";

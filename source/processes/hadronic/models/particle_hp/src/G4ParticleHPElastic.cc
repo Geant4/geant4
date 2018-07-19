@@ -73,14 +73,17 @@
   
   G4ParticleHPElastic::~G4ParticleHPElastic()
   {
-     //delete [] theElastic;
-     if ( theElastic != NULL ) {
-        for ( std::vector<G4ParticleHPChannel*>::iterator 
-              it = theElastic->begin() ; it != theElastic->end() ; it++ ) {
-           delete *it;
+    //the vectror is shared among threads, only master deletes
+    if ( ! G4Threading::IsWorkerThread() ) {
+        //delete [] theElastic;
+        if ( theElastic != NULL ) {
+            for ( std::vector<G4ParticleHPChannel*>::iterator
+                it = theElastic->begin() ; it != theElastic->end() ; it++ ) {
+                delete *it;
+            }
+            theElastic->clear();
         }
-        theElastic->clear();
-     }
+    }
   }
   
   #include "G4ParticleHPThermalBoost.hh"

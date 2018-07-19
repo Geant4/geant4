@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFFragment.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4StatMFFragment.hh 107060 2017-11-01 15:00:04Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -78,13 +78,13 @@ public:
 	
     G4int GetZ(void) const {return theZ;}
 	
-    void SetPosition(const G4ThreeVector aPosition) {_position = aPosition;}
+    void SetPosition(const G4ThreeVector& aPosition) {_position = aPosition;}
 	
-    G4ThreeVector GetPosition(void) {return _position;}
+    G4ThreeVector& GetPosition(void) {return _position;}
 	
-    void SetMomentum(const G4ThreeVector aMomentum) {_momentum = aMomentum;}
+    void SetMomentum(const G4ThreeVector& aMomentum) {_momentum = aMomentum;}
 
-    G4ThreeVector GetMomentum(void) {return _momentum;}
+    G4ThreeVector& GetMomentum(void) {return _momentum;}
 
     G4Fragment * GetFragment(const G4double T);
 	

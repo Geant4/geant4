@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh 80048 2014-03-31 12:47:09Z gcosmo $
+// $Id: G4Polyhedra.hh 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -108,6 +108,12 @@ class G4Polyhedra : public G4VCSGfaceted
                          const G4ThreeVector &v ) const;
   G4double DistanceToIn( const G4ThreeVector &p ) const;
   
+  void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+  G4bool CalculateExtent(const EAxis pAxis,
+                         const G4VoxelLimits& pVoxelLimit,
+                         const G4AffineTransform& pTransform,
+                         G4double& pmin, G4double& pmax) const;
+
   void ComputeDimensions(       G4VPVParameterisation* p,
                           const G4int n,
                           const G4VPhysicalVolume* pRep);
@@ -126,12 +132,16 @@ class G4Polyhedra : public G4VCSGfaceted
 
   // Accessors
 
-  inline G4int GetNumSide()     const;
-  inline G4double GetStartPhi() const;
-  inline G4double GetEndPhi()   const;
-  inline G4bool IsOpen()        const;
-  inline G4bool IsGeneric()     const;
-  inline G4int GetNumRZCorner() const;
+  inline G4int GetNumSide()        const;
+  inline G4double GetStartPhi()    const;
+  inline G4double GetEndPhi()      const;
+  inline G4double GetSinStartPhi() const;
+  inline G4double GetCosStartPhi() const;
+  inline G4double GetSinEndPhi()   const;
+  inline G4double GetCosEndPhi()   const;
+  inline G4bool IsOpen()           const;
+  inline G4bool IsGeneric()        const;
+  inline G4int GetNumRZCorner()    const;
   inline G4PolyhedraSideRZ GetCorner( const G4int index ) const;
 
   inline G4PolyhedraHistorical* GetOriginalParameters() const;

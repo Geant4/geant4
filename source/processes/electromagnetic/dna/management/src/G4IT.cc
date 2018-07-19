@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IT.cc 94218 2015-11-09 08:24:48Z gcosmo $
+// $Id: G4IT.cc 103042 2017-03-10 11:50:07Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -56,20 +56,25 @@ G4IT* GetIT(const G4Track& track)
   return (dynamic_cast<G4IT*>(track.GetUserInformation()));
 }
 
+template<>
+G4KDNode<G4IT>::~G4KDNode(){
+  fPoint->SetNode(nullptr);
+}
+
 //------------------------------------------------------------------------------
 //
 // Constructors / Destructors
 //
 G4IT::G4IT() :
     G4VUserTrackInformation("G4IT"),
-    fpTrack(0),
-    fpPreviousIT(0),
-    fpNextIT(0),
+    fpTrack(nullptr),
+    fpPreviousIT(nullptr),
+    fpNextIT(nullptr),
     fpTrackingInformation(new G4TrackingInformation())
 {
-  fpITBox = 0;
-  fpKDNode = 0;
-  fpTrackNode = 0;
+  fpITBox = nullptr;
+  fpKDNode = nullptr;
+  fpTrackNode = nullptr;
   fParentID_A = 0;
   fParentID_B = 0;
 }
@@ -77,14 +82,14 @@ G4IT::G4IT() :
 // Use only by inheriting classes
 G4IT::G4IT(const G4IT& /*right*/) :
     G4VUserTrackInformation("G4IT"),
-    fpTrack(0),
-    fpPreviousIT(0),
-    fpNextIT(0),
+    fpTrack(nullptr),
+    fpPreviousIT(nullptr),
+    fpNextIT(nullptr),
     fpTrackingInformation(new G4TrackingInformation())
 {
-  fpITBox = 0;
-  fpKDNode = 0;
-  fpTrackNode = 0;
+  fpITBox = nullptr;
+  fpKDNode = nullptr;
+  fpTrackNode = nullptr;
   fParentID_A = 0;
   fParentID_B = 0;
 }
@@ -104,15 +109,15 @@ G4IT& G4IT::operator=(const G4IT& right)
 
   if (this == &right) return *this;
 
-  fpTrack = 0;
-  fpITBox = 0;
-  fpPreviousIT = 0;
-  fpNextIT = 0;
-  fpKDNode = 0;
+  fpTrack = nullptr;
+  fpITBox = nullptr;
+  fpPreviousIT = nullptr;
+  fpNextIT = nullptr;
+  fpKDNode = nullptr;
   fParentID_A = 0;
   fParentID_B = 0;
-  fpTrackingInformation = 0;
-  fpTrackNode = 0;
+  fpTrackingInformation = nullptr;
+  fpTrackNode = nullptr;
 
   return *this;
 }
@@ -125,8 +130,8 @@ G4IT::G4IT(G4Track * aTrack) :
 {
   fpITBox = 0;
   fpTrack = aTrack;
-  fpKDNode = 0;
-  fpTrackNode = 0;
+  fpKDNode = nullptr;
+  fpTrackNode = nullptr;
   fParentID_A = 0;
   fParentID_B = 0;
   RecordCurrentPositionNTime();
@@ -137,18 +142,19 @@ void G4IT::TakeOutBox()
   if(fpITBox)
   {
     fpITBox->Extract(this);
+    fpITBox = nullptr;
   }
 
   if(fpTrackNode)
   {
     delete fpTrackNode;
-    fpTrackNode = 0;
+    fpTrackNode = nullptr;
   }
 
   if(fpKDNode)
   {
     InactiveNode(fpKDNode);
-    fpKDNode = 0;
+    fpKDNode = nullptr;
   }
 }
 
@@ -159,7 +165,7 @@ G4IT::~G4IT()
   if(fpTrackingInformation)
   {
     delete fpTrackingInformation;
-    fpTrackingInformation = 0;
+    fpTrackingInformation = nullptr;
   }
 
 // Note :
@@ -198,8 +204,6 @@ G4bool G4IT::operator!=(const G4IT& right) const
 {
   return !(this->operator==(right));
 }
-
-
 
 double G4IT::operator[](int i) const
 {

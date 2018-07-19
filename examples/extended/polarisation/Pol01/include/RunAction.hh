@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 86418 2014-11-11 10:39:38Z gcosmo $
+// $Id: RunAction.hh 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,11 +60,11 @@ class RunAction : public G4UserRunAction
     void PrintResults(G4int totalNumberOfEvents);
     void Clear();
   private:
-    G4int currentNumber;
-    G4int totalNumber, totalNumber2;
-    G4double sumEnergy, sumEnergy2;
-    G4double sumPolarization, sumPolarization2;
-    G4double sumCosTheta, sumCosTheta2;
+    G4int fCurrentNumber;
+    G4int fTotalNumber, fTotalNumber2;
+    G4double fSumEnergy, fSumEnergy2;
+    G4double fSumPolarization, fSumPolarization2;
+    G4double fSumCosTheta, fSumCosTheta2;
   };
 
 public:
@@ -72,8 +72,8 @@ public:
   RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
   virtual ~RunAction();
 
-  void BeginOfRunAction(const G4Run*);
-  void   EndOfRunAction(const G4Run*);
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void   EndOfRunAction(const G4Run*);
 
   void CountProcesses(G4String);
 
@@ -92,20 +92,19 @@ private:
   const G4ParticleDefinition* fElectron;
   const G4ParticleDefinition* fPositron;
 
-  DetectorConstruction*   detector;
-  PrimaryGeneratorAction* primary;
-  ProcessesCount*         ProcCounter;
+  DetectorConstruction*   fDetector;
+  PrimaryGeneratorAction* fPrimary;
+  ProcessesCount*         fProcCounter;
 
   G4AnalysisManager*      fAnalysisManager;
   
-  G4int totalEventCount;
+  G4int fTotalEventCount;
 
-  ParticleStatistics photonStats;
-  ParticleStatistics electronStats;
-  ParticleStatistics positronStats;
+  ParticleStatistics fPhotonStats;
+  ParticleStatistics fElectronStats;
+  ParticleStatistics fPositronStats;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

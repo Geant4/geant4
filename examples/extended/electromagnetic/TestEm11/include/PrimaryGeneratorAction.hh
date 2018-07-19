@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: PrimaryGeneratorAction.hh 98749 2016-08-09 13:43:36Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     PrimaryGeneratorAction(DetectorConstruction*);    
    ~PrimaryGeneratorAction();
 
-  public:  
+  public:
+    void SetDefaultKinematic();  
     void SetRndmBeam(G4double val)  {fRndmBeam = val;}   
     virtual void GeneratePrimaries(G4Event*);
          
@@ -66,5 +67,4 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
 

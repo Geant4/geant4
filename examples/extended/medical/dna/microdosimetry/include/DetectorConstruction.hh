@@ -64,6 +64,7 @@ public:
   G4Region* GetTargetRegion() {return fpRegion;}
                          
 private:
+
   G4Material*        fpWaterMaterial;
   G4Region*          fpRegion;
 

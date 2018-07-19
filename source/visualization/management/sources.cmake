@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 93026 2015-09-30 16:07:07Z gcosmo $
+# $Id: sources.cmake 99176 2016-09-07 09:46:36Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -33,6 +33,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/graphics_reps/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
@@ -127,6 +128,7 @@ GEANT4_DEFINE_MODULE(NAME G4vis_management
         G4geometrymng
         G4globman
         G4graphics_reps
+        G4hepnumerics
         G4hits
         G4intercoms
         G4magneticfield

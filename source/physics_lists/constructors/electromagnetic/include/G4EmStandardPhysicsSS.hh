@@ -43,6 +43,7 @@
 #define G4EmStandardPhysicsSS_h 1
 
 #include "G4VPhysicsConstructor.hh"
+#include "G4EmParticleList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +51,8 @@
 class G4EmStandardPhysicsSS : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysicsSS(G4int ver = 1);
+
+  explicit G4EmStandardPhysicsSS(G4int ver = 1);
 
   virtual ~G4EmStandardPhysicsSS();
 
@@ -59,6 +61,7 @@ public:
 
 private:
   G4int  verbose;
+  G4EmParticleList partList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

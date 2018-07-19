@@ -28,7 +28,8 @@
 
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyLet.hh"
-#include "HadrontherapyAnalysisManager.hh"
+
+#include "HadrontherapyMatrix.hh"
 #include "HadrontherapyInteractionParameters.hh"
 #include "HadrontherapyPrimaryGeneratorAction.hh"
 #include "HadrontherapyMatrix.hh"
@@ -208,56 +209,77 @@ void HadrontherapyLet::StoreLetAscii()
 			ofs << G4endl;
             
 			// Write data
+            
+            
+            G4AnalysisManager*  LetFragmentTuple = G4AnalysisManager::Instance();
+            
+            LetFragmentTuple->SetVerboseLevel(1);
+            LetFragmentTuple->SetFirstHistoId(1);
+            LetFragmentTuple->SetFirstNtupleId(1);
+            LetFragmentTuple ->OpenFile("Let");
+            
+            
+            LetFragmentTuple ->CreateNtuple("coordinate", "Let");
+            
+            
+            LetFragmentTuple ->CreateNtupleIColumn("i");//1
+            LetFragmentTuple ->CreateNtupleIColumn("j");//2
+            LetFragmentTuple ->CreateNtupleIColumn("k");//3
+            LetFragmentTuple ->CreateNtupleDColumn("TotalLetD");//4
+            LetFragmentTuple ->CreateNtupleIColumn("A");//5
+            LetFragmentTuple ->CreateNtupleIColumn("Z");//6
+            LetFragmentTuple ->CreateNtupleDColumn("IonLETD");//7
+            LetFragmentTuple ->FinishNtuple();
+            
+            
 			for(G4int i = 0; i < numberOfVoxelAlongX; i++)
 				for(G4int j = 0; j < numberOfVoxelAlongY; j++)
 					for(G4int k = 0; k < numberOfVoxelAlongZ; k++)
 					{
-						G4int v = matrix -> Index(i, j, k);
-						// row write
+						LetFragmentTuple->FillNtupleIColumn(1,0, i);
+                        LetFragmentTuple->FillNtupleIColumn(1,1, j);
+                        LetFragmentTuple->FillNtupleIColumn(1,2, k);
+                        
+                        G4int v = matrix -> Index(i, j, k);
+                        
 						for (size_t l=0; l < ionLetStore.size(); l++)
 						{
 							// Write only not identically null data lines
-							if(ionLetStore[l].letDN)
+							
+                            
+                            if(ionLetStore[l].letDN)
 							{
 								ofs << G4endl;
 								ofs << i << '\t' << j << '\t' << k << '\t';
-                                
 								ofs << std::setw(width) << totalLetD[v]/(keV/um);
+                                
+                                LetFragmentTuple->FillNtupleDColumn(1,3, totalLetD[v]/(keV/um));
+                                
+                                
 								for (size_t ll=0; ll < ionLetStore.size(); ll++)
 								{
 									ofs << std::setw(width) << ionLetStore[ll].letDN[v]/(keV/um) ;
-								}
+                                    
+                                    LetFragmentTuple->FillNtupleIColumn(1,4, ionLetStore[ll].A);
+                                    LetFragmentTuple->FillNtupleIColumn(1,5, ionLetStore[ll].Z);
+                                    
+                                    
+                                    LetFragmentTuple->FillNtupleDColumn(1,6, ionLetStore[ll].letDN[v]/(keV/um));
+                                    LetFragmentTuple->AddNtupleRow(1);
+                                    
+                                
+                                }
 								break;
 							}
 						}
 					}
 			ofs.close();
-            G4cout << "Let is being written to " << filename << G4endl;
-		}
+            
+            LetFragmentTuple->Write();
+            LetFragmentTuple->CloseFile();
+        }
         
 	}
-}
 
-void HadrontherapyLet::StoreLetRoot()
-{
-#ifdef G4ANALYSIS_USE_ROOT
-    
-    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
-    
-    for(G4int i = 0; i < numberOfVoxelAlongX; i++)
-        for(G4int j = 0; j < numberOfVoxelAlongY; j++) 
-            for(G4int k = 0; k < numberOfVoxelAlongZ; k++) 
-            {
-                G4int v = matrix -> Index(i, j, k);
-                for (size_t ion=0; ion < ionLetStore.size(); ion++)
-                {
-                    
-                    analysis -> FillLetFragmentTuple( i, j, k, ionLetStore[ion].A, ionLetStore[ion].Z, ionLetStore[ion].letDN[v]);
-                    
-                    
-                }
-            }
-    
-#endif
-}
+ }
 

@@ -43,7 +43,10 @@ class G4ParticleHPNBodyPhaseSpace : public G4VParticleHPEnergyAngular
 {
   public:
   
-  G4ParticleHPNBodyPhaseSpace(){}
+  G4ParticleHPNBodyPhaseSpace(){
+   theTotalMass = 0.0;
+   theTotalCount = 0;
+  }
   ~G4ParticleHPNBodyPhaseSpace(){}
   
   public:

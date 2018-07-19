@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/src/Run.cc
+/// \file electromagnetic/TestEm1/src/Run.cc
 /// \brief Implementation of the Run class
 //
 // $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
@@ -38,6 +38,7 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4EmCalculator.hh"
+#include "G4ProductionCutsTable.hh"
 
 #include <iomanip>
 
@@ -140,8 +141,8 @@ void Run::EndOfRun()
          << G4BestUnit(fEkin,"Energy") << " through " 
          << G4BestUnit(fDetector->GetSize(),"Length") << " of "
          << material->GetName() << " (density: " 
-         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;           
-  
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+
   if (numberOfEvent == 0) { G4cout.precision(dfprec);   return;}   
 
   G4double dNbOfEvents = double(numberOfEvent);  

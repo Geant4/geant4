@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tokenizer.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4Tokenizer.hh 102049 2016-12-19 09:04:20Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -50,7 +50,7 @@ class G4Tokenizer
 public:
   G4Tokenizer(const G4String& stn):string2tokenize(stn),actual(0){}
 
-  G4SubString operator()(const char* str=" \t\n",size_t l=0)
+  G4String operator()(const char* str=" \t\n",size_t l=0)
     {
       size_t i,j,tmp;
       G4bool hasws=false;

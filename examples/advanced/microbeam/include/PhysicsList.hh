@@ -50,24 +50,16 @@ public:
   PhysicsList();
   virtual ~PhysicsList();
 
-  void ConstructParticle();
+  virtual void ConstructParticle();
+
+  virtual void ConstructProcess();
     
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-        
   void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
     
   void AddStepMax();       
   G4StepLimiter* GetStepMaxProcess() {return fStepMaxProcess;};
 
 private:
-
-  G4double fCutForGamma;
-  G4double fCutForElectron;
-  G4double fCutForPositron;
 
   G4String               fEmName;
   G4VPhysicsConstructor* fEmPhysicsList;
@@ -77,8 +69,6 @@ private:
 
   PhysicsListMessenger* fMessenger;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

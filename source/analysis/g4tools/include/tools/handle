@@ -27,21 +27,31 @@ public:
     mem::increment(s_class().c_str());
 #endif
   }
+  base_handle(const std::string& a_class):m_class(a_class){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
   virtual ~base_handle(){
 #ifdef TOOLS_MEM
     mem::decrement(s_class().c_str());
 #endif
   }
 protected:
-  base_handle(base_handle&){
+  base_handle(base_handle& a_from):m_class(a_from.m_class){
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
   }
 private:
-  //base_handle(const base_handle&){}
-  //base_handle& operator=(const base_handle&){return *this;}
-  base_handle& operator=(base_handle&){return *this;}
+  base_handle& operator=(base_handle& a_from){
+    m_class = a_from.m_class;
+    return *this;
+  }
+public:
+  const std::string& object_class() const {return m_class;}
+private:
+  std::string m_class;
 };
 
 template <class T>
@@ -52,9 +62,8 @@ public:
   virtual base_handle* copy() {return new handle<T>(*this);}
   virtual void disown() {m_owner = false;}
 public:  
-  handle(T* a_obj,bool a_owner = true)
-  :parent()
-  ,m_obj(a_obj),m_owner(a_owner){}
+  handle(T* a_obj,bool a_owner = true):parent(),m_obj(a_obj),m_owner(a_owner){}
+  handle(const std::string& a_class,T* a_obj,bool a_owner = true):parent(a_class),m_obj(a_obj),m_owner(a_owner){}
   virtual ~handle(){if(m_owner) delete m_obj;}
 private:
   handle(handle& a_from):parent(a_from){

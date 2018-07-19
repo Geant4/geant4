@@ -374,7 +374,7 @@ G4double G4H1ToolsManager::GetH1Xmin(G4int id) const
 // Returns xmin value with applied unit and histogram function
 
   auto h1d = GetTInFunction(id, "GetH1Xmin");
-  if ( ! h1d ) return 0;
+  if ( ! h1d ) return 0.;
   
   return GetMin(*h1d, kX);
 }  
@@ -383,7 +383,7 @@ G4double G4H1ToolsManager::GetH1Xmin(G4int id) const
 G4double G4H1ToolsManager::GetH1Xmax(G4int id) const
 {
   auto h1d = GetTInFunction(id, "GetH1Xmax");
-  if ( ! h1d ) return 0;
+  if ( ! h1d ) return 0.;
   
   return GetMax(*h1d, kX);
 }  
@@ -392,7 +392,7 @@ G4double G4H1ToolsManager::GetH1Xmax(G4int id) const
 G4double G4H1ToolsManager::GetH1Width(G4int id) const
 {
   auto h1d = GetTInFunction(id, "GetH1XWidth", true, false);
-  if ( ! h1d ) return 0;
+  if ( ! h1d ) return 0.;
   
   return GetWidth(*h1d, kX, fHnManager->GetHnType());
 }  

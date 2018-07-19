@@ -82,7 +82,9 @@ G4LMsdGenerator::IsApplicable( const G4HadProjectile& aTrack,
   if( ( aTrack.GetDefinition() == G4Proton::Proton() || 
 	aTrack.GetDefinition() == G4Neutron::Neutron()  ) && 
         targetNucleus.GetA_asInt() >= 1 &&
-        aTrack.GetKineticEnergy() > 1800*CLHEP::MeV ) //  750*CLHEP::MeV )   
+      // aTrack.GetKineticEnergy() > 1800*CLHEP::MeV 
+        aTrack.GetKineticEnergy() > 300*CLHEP::MeV 
+    ) //  750*CLHEP::MeV )   
   {
     applied = true;
   }
@@ -116,7 +118,7 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
   const G4HadProjectile* aParticle = &aTrack;
   G4double eTkin = aParticle->GetKineticEnergy();
 
-  if( eTkin <= 1.*CLHEP::GeV ) 
+  if( eTkin <= 1.*CLHEP::GeV && aTrack.GetDefinition() != G4Proton::Proton()) 
   {
     theParticleChange.SetEnergyChange(eTkin);
     theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
@@ -147,7 +149,7 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
   G4ParticleMomentum p1unit = p1.unit();
 
   G4double Mx = SampleMx(aParticle); // in GeV
-  G4double t  = 0.; // SampleT( aParticle, Mx); // in GeV
+  G4double t  = SampleT( aParticle, Mx); // in GeV
 
   Mx *= CLHEP::GeV;
 
@@ -254,11 +256,11 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
 
   // G4cout<<fPDGencoding<<", "<<ddPart->GetParticleName()<<", "<<ddPart->GetPDGMass()<<" MeV; lvRes = "<<lvRes<<G4endl;
 
-    G4DynamicParticle * aRes = new G4DynamicParticle( ddPart, lvRes);
-    theParticleChange.AddSecondary(aRes); // simply return resonance
+  // G4DynamicParticle * aRes = new G4DynamicParticle( ddPart, lvRes);
+  //  theParticleChange.AddSecondary(aRes); // simply return resonance
 
 
-  /*
+  
   // Recursive decay using methods of G4KineticTrack
 
   G4KineticTrack ddkt( ddPart, 0., G4ThreeVector(0.,0.,0.), lvRes);
@@ -271,13 +273,14 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
     G4DynamicParticle * aNew = 
       new G4DynamicParticle( ddktv->operator[](i)->GetDefinition(),
                              ddktv->operator[](i)->Get4Momentum());
+
     // G4cout<<"       "<<i<<", "<<aNew->GetDefinition()->GetParticleName()<<", "<<aNew->Get4Momentum()<<G4endl;
 
     theParticleChange.AddSecondary(aNew);
     delete ddktv->operator[](i);
   }
   delete ddktv;
-  */  
+   
   return &theParticleChange;
 }
 
@@ -306,7 +309,8 @@ G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)
     if( aParticle->GetDefinition() == G4Proton::Proton() )
     {        
       Mx = 1.44;
-      fPDGencoding = 12212;
+      // fPDGencoding = 12212;
+      fPDGencoding = 2214;
     }
     else if( aParticle->GetDefinition() == G4Neutron::Neutron() ) 
     {
@@ -343,7 +347,8 @@ G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)
     if( aParticle->GetDefinition() == G4Proton::Proton() ) 
     {       
       Mx = 1.52;
-      fPDGencoding = 2124;
+      // fPDGencoding = 2124;
+      fPDGencoding = 2214;
     }
     else if( aParticle->GetDefinition() == G4Neutron::Neutron() ) 
     {
@@ -380,7 +385,8 @@ G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)
     if( aParticle->GetDefinition() == G4Proton::Proton() ) 
     {       
       Mx = 1.68;
-      fPDGencoding = 12216;
+      // fPDGencoding = 12216;
+      fPDGencoding = 2214;
     }
     else if( aParticle->GetDefinition() == G4Neutron::Neutron() ) 
     {
@@ -415,7 +421,8 @@ G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)
   if(fPDGencoding == 0)
   {
       Mx = 1.44;
-      fPDGencoding = 12212;   
+      // fPDGencoding = 12212;   
+      fPDGencoding = 2214;
   } 
   G4ParticleDefinition* myResonance = 
   G4ParticleTable::GetParticleTable()->FindParticle( fPDGencoding );

@@ -65,23 +65,26 @@ public: // with description
    virtual void PreUserTrackingAction(const G4Track*);
    virtual void PostUserTrackingAction(const G4Track*);
    void RegisterAtEndOfAdjointTrack();
+   void ClearEndOfAdjointTrackInfoVectors();
 
 //inline methods
    inline void SetUserForwardTrackingAction(G4UserTrackingAction* anAction){
 	   	   	               theUserFwdTrackingAction = anAction;}
-   inline G4ThreeVector GetPositionAtEndOfLastAdjointTrack(){ return last_pos;}
-   inline G4ThreeVector GetDirectionAtEndOfLastAdjointTrack(){ return last_direction;}
-   inline G4double GetEkinAtEndOfLastAdjointTrack(){ return last_ekin;}
-   inline G4double GetEkinNucAtEndOfLastAdjointTrack(){ return last_ekin_nuc;}
-   inline G4double GetWeightAtEndOfLastAdjointTrack(){return last_weight;}
-   inline G4double GetCosthAtEndOfLastAdjointTrack(){return last_cos_th;}
+   inline G4ThreeVector GetPositionAtEndOfLastAdjointTrack(size_t i=0){ return last_pos_vec[i];}
+   inline G4ThreeVector GetDirectionAtEndOfLastAdjointTrack(size_t i=0){ return last_direction_vec[i];}
+   inline G4double GetEkinAtEndOfLastAdjointTrack(size_t i=0){ return last_ekin_vec[i];}
+   inline G4double GetEkinNucAtEndOfLastAdjointTrack(size_t i=0){ return last_ekin_nuc_vec[i];}
+   inline G4double GetWeightAtEndOfLastAdjointTrack(size_t i=0){return last_weight_vec[i];}
+   inline G4double GetCosthAtEndOfLastAdjointTrack(size_t i=0){return last_cos_th_vec[i];}
    inline const G4String& GetFwdParticleNameAtEndOfLastAdjointTrack(){return last_fwd_part_name;}
-   inline G4int GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(){return last_fwd_part_PDGEncoding;}
+   inline G4int GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(size_t i=0){return last_fwd_part_PDGEncoding_vec[i];}
    inline G4bool GetIsAdjointTrackingMode(){return is_adjoint_tracking_mode;}
-   inline G4int GetLastFwdParticleIndex(){
-             return last_fwd_part_index;};
+   inline G4int GetLastFwdParticleIndex(size_t i=0){
+             return last_fwd_part_index_vec[i];};
+   inline size_t GetNbOfAdointTracksReachingTheExternalSurface(){return last_pos_vec.size();}
    inline void SetListOfPrimaryFwdParticles( std::vector<G4ParticleDefinition*>*
             aListOfParticles){pListOfPrimaryFwdParticles=aListOfParticles;}
+
 
 private:
    G4AdjointSteppingAction* theAdjointSteppingAction;
@@ -101,7 +104,14 @@ private:
    G4int  last_fwd_part_index;
    std::vector<G4ParticleDefinition*>* pListOfPrimaryFwdParticles;
 
-
+   std::vector<G4ThreeVector> last_pos_vec;
+   std::vector<G4ThreeVector> last_direction_vec;
+   std::vector<G4double>  last_ekin_vec;
+   std::vector<G4double>  last_ekin_nuc_vec;
+   std::vector<G4double>  last_cos_th_vec;
+   std::vector<G4double> last_weight_vec;
+   std::vector<G4int> last_fwd_part_PDGEncoding_vec;
+   std::vector<G4int> last_fwd_part_index_vec;
 
 };
 

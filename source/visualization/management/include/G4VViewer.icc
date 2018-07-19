@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.icc 90651 2015-06-05 13:30:54Z gcosmo $
+// $Id: G4VViewer.icc 101714 2016-11-22 08:53:13Z gcosmo $
 //
 // 
 // John Allison  30th December 1996
@@ -70,6 +70,16 @@ inline const std::vector<G4ModelingParameters::VisAttributesModifier>*
 
 inline void G4VViewer::SetDefaultViewParameters (const G4ViewParameters& vp) {
   fDefaultVP = vp;
+}
+
+inline const G4VisAttributes* G4VViewer::GetApplicableVisAttributes
+(const G4VisAttributes* pVisAttribs) const
+{
+  // If pVisAttribs is zero, pick up the default vis attributes from
+  // the view parameters.
+  if (!pVisAttribs)
+  pVisAttribs = GetViewParameters().GetDefaultVisAttributes();
+  return pVisAttribs;
 }
 
 inline void G4VViewer::SetNeedKernelVisit (G4bool need) {

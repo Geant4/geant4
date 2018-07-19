@@ -1,0 +1,106 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_mpi_ntuple_row_wise
+#define tools_wroot_mpi_ntuple_row_wise
+
+// MPI pntuple. It uses the inlib/impi interface.
+
+#include "base_pntuple_row_wise"
+#include "mpi_basket_add"
+#include "impi_ntuple"
+
+#include "../S_STRING"
+#include "../forit"
+
+namespace tools {
+namespace wroot {
+
+class mpi_ntuple_row_wise : public base_pntuple_row_wise, public virtual impi_ntuple {
+  typedef base_pntuple_row_wise parent;
+public:
+  virtual bool add_row(impi& a_mpi,int a_dest,int a_tag) {
+    if(m_cols.empty()) return false;
+    tools_vforit(icol*,m_cols,it) (*it)->add();
+    mpi_basket_add _badd(a_mpi,a_dest,a_tag,m_id,0);
+    if(!m_row_wise_branch.pfill(_badd)) return false;
+    tools_vforit(icol*,m_cols,it) (*it)->set_def();
+    return true;
+  }
+  
+  virtual bool end_fill(impi& a_mpi,int a_dest,int a_tag) {
+    mpi_basket_add _badd(a_mpi,a_dest,a_tag,m_id,0);
+    if(!m_row_wise_branch.end_pfill(_badd)) return false;    
+
+    a_mpi.pack_reset();
+    if(!a_mpi.pack(mpi_protocol_end_fill())) return false;
+    if(!a_mpi.pack(m_id)) return false;
+    if(!end_leaves(a_mpi)) return false;
+    if(!a_mpi.send_buffer(a_dest,a_tag)) return false;
+
+    return true;
+  }
+  
+public:
+  mpi_ntuple_row_wise(uint32 a_id,std::ostream& a_out,
+                      bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
+                      const std::string& a_name,const std::string& a_title,
+                      uint32 a_basket_size,
+                      bool a_verbose)
+  :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_name,a_title,a_basket_size,a_verbose)
+  ,m_id(a_id)
+  {}
+  mpi_ntuple_row_wise(uint32 a_id,std::ostream& a_out,
+                      bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
+                      uint32 a_basket_size,
+		      const ntuple_booking& a_bkg,bool a_verbose)
+  :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_basket_size,a_bkg,a_verbose)
+  ,m_id(a_id)
+  {}
+  virtual ~mpi_ntuple_row_wise() {}
+protected:
+  mpi_ntuple_row_wise(const mpi_ntuple_row_wise& a_from):impi_ntuple(a_from),parent(a_from){}
+  mpi_ntuple_row_wise& operator=(const mpi_ntuple_row_wise& a_from){parent::operator=(a_from);return *this;}
+protected:
+  bool end_leaves(impi& a_mpi) const {
+    
+#include "MPI_SET_MAX.icc"
+    
+    tools_vforcit(base_leaf*,m_row_wise_branch.leaves(),pit) {
+      base_leaf* _pleaf = *pit;
+      
+      bool set_done = false;
+      
+      TOOLS_WROOT_MPI_NTUPLE_LEAF_SET_LENGTH_MAX(char)
+      TOOLS_WROOT_MPI_NTUPLE_LEAF_SET_LENGTH_MAX(short)
+      TOOLS_WROOT_MPI_NTUPLE_LEAF_SET_LENGTH_MAX(int)
+      TOOLS_WROOT_MPI_NTUPLE_LEAF_SET_LENGTH_MAX(float)
+      TOOLS_WROOT_MPI_NTUPLE_LEAF_SET_LENGTH_MAX(double)
+      
+      TOOLS_WROOT_MPI_NTUPLE_LEAF_STD_VECTOR_SET_LENGTH_MAX(char)
+      TOOLS_WROOT_MPI_NTUPLE_LEAF_STD_VECTOR_SET_LENGTH_MAX(short)
+      TOOLS_WROOT_MPI_NTUPLE_LEAF_STD_VECTOR_SET_LENGTH_MAX(int)
+      TOOLS_WROOT_MPI_NTUPLE_LEAF_STD_VECTOR_SET_LENGTH_MAX(float)
+      TOOLS_WROOT_MPI_NTUPLE_LEAF_STD_VECTOR_SET_LENGTH_MAX(double)
+
+      TOOLS_WROOT_MPI_NTUPLE_LEAF_STRING_SET_LENGTH_MAX
+
+      if(!set_done) {
+        m_out << "tools::wroot::mpi_ntuple_column_wise::end_leaves :"
+	      << " leaf " << _pleaf->name() << " with cid " << _pleaf->id_cls() << " not treated." << std::endl;
+	return false;
+      }
+    }
+    
+#undef TOOLS_WROOT_MPI_NTUPLE_SET_MAX
+#undef TOOLS_WROOT_MPI_NTUPLE_STRING_SET_MAX
+
+    return true;
+  }
+protected:
+  uint32 m_id;
+};
+
+}}
+
+#endif

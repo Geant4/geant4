@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDStructure.cc 97466 2016-06-03 09:59:34Z gcosmo $
+// $Id: G4SDStructure.cc 105753 2017-08-16 13:46:21Z gcosmo $
 //
 
 // G4SDStructure
@@ -176,7 +176,7 @@ G4VSensitiveDetector* G4SDStructure::FindSensitiveDetector(G4String aName, G4boo
     }
     else
     {
-      return tgtSDS->FindSensitiveDetector(aName);
+      return tgtSDS->FindSensitiveDetector(aName,warning);
     }
   }
   else

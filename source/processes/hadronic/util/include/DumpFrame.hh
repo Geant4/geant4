@@ -26,6 +26,9 @@
 #ifndef DumpFrame_h
 #define DumpFrame_h
 
+#include "G4FastVector.hh"
+#include "G4ReactionProduct.hh"
+
 class DumpFrames
 {
 public:

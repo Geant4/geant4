@@ -26,12 +26,14 @@
 /// \file electromagnetic/TestEm18/src/PhysListEmStandard.cc
 /// \brief Implementation of the PhysListEmStandard class
 //
-// $Id: PhysListEmStandard.cc 102356 2017-01-23 16:22:42Z gcosmo $
+// $Id: PhysListEmStandard.cc 108015 2017-12-19 09:06:35Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard.hh"
+
+#include "G4BuilderType.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4PhysicsListHelper.hh"
@@ -67,7 +69,19 @@
 
 PhysListEmStandard::PhysListEmStandard(const G4String& name)
    :  G4VPhysicsConstructor(name)
-{}
+{
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
+  param->SetMinEnergy(10*eV);
+  param->SetMaxEnergy(10*TeV);
+  param->SetNumberOfBinsPerDecade(10);
+  param->SetBuildCSDARange(true);
+  param->SetMaxEnergyForCSDARange(10*TeV);
+  SetPhysicsType(bElectromagnetic);
+  
+  param->SetVerbose(0);
+  param->Dump();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -78,7 +92,7 @@ PhysListEmStandard::~PhysListEmStandard()
 
 void PhysListEmStandard::ConstructProcess()
 {
-  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  G4PhysicsListHelper* list = G4PhysicsListHelper::GetPhysicsListHelper();
   
   // Add standard EM Processes
   //
@@ -90,36 +104,36 @@ void PhysListEmStandard::ConstructProcess()
      
     if (particleName == "gamma") {
 
-      ////ph->RegisterProcess(new G4RayleighScattering, particle);      
-      ph->RegisterProcess(new G4PhotoElectricEffect, particle);      
-      G4ComptonScattering* cs   = new G4ComptonScattering;
-      cs->SetEmModel(new G4KleinNishinaModel());
-      ph->RegisterProcess(cs, particle);
-      ph->RegisterProcess(new G4GammaConversion, particle);
+      ////list->RegisterProcess(new G4RayleighScattering, particle);
+      list->RegisterProcess(new G4PhotoElectricEffect, particle);
+      G4ComptonScattering* compt   = new G4ComptonScattering;
+      compt->SetEmModel(new G4KleinNishinaModel());
+      list->RegisterProcess(compt, particle);
+      list->RegisterProcess(new G4GammaConversion, particle);
      
     } else if (particleName == "e-") {
 
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      
-      ph->RegisterProcess(eIoni,                   particle);
-      ph->RegisterProcess(new G4eBremsstrahlung(), particle);      
+      list->RegisterProcess(eIoni,                   particle);
+      list->RegisterProcess(new G4eBremsstrahlung(), particle);
             
     } else if (particleName == "e+") {
 
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      
-      ph->RegisterProcess(eIoni,                     particle);
-      ph->RegisterProcess(new G4eBremsstrahlung(),   particle);
-      ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+      list->RegisterProcess(eIoni,                     particle);
+      list->RegisterProcess(new G4eBremsstrahlung(),   particle);
+      list->RegisterProcess(new G4eplusAnnihilation(), particle);
                   
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
 
       G4MuIonisation* muIoni = new G4MuIonisation();
       muIoni->SetStepFunction(0.1, 50*um);      
-      ph->RegisterProcess(muIoni,                   particle);
-      ph->RegisterProcess(new G4MuBremsstrahlung(), particle);
-      ph->RegisterProcess(new G4MuPairProduction(), particle);
+      list->RegisterProcess(muIoni,                   particle);
+      list->RegisterProcess(new G4MuBremsstrahlung(), particle);
+      list->RegisterProcess(new G4MuPairProduction(), particle);
                    
     } else if( particleName == "proton" ||
                particleName == "pi-" ||
@@ -127,42 +141,39 @@ void PhysListEmStandard::ConstructProcess()
   
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.1, 20*um);
-      ph->RegisterProcess(hIoni,                   particle);
-      ph->RegisterProcess(new G4hBremsstrahlung(), particle);
-      ph->RegisterProcess(new G4hPairProduction(), particle);            
+      list->RegisterProcess(hIoni,                   particle);
+      list->RegisterProcess(new G4hBremsstrahlung(), particle);
+      list->RegisterProcess(new G4hPairProduction(), particle);
      
     } else if( particleName == "alpha" || 
                particleName == "He3"    ) {
 
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetStepFunction(0.1, 1*um);
-      ph->RegisterProcess(ionIoni,                 particle);
-      ph->RegisterProcess(new G4NuclearStopping(), particle);      
+      list->RegisterProcess(ionIoni,                 particle);
+      list->RegisterProcess(new G4NuclearStopping(), particle);
             
     } else if( particleName == "GenericIon" ) {
  
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
       ionIoni->SetStepFunction(0.1, 1*um);
-      ph->RegisterProcess(ionIoni,                 particle);
-      ph->RegisterProcess(new G4NuclearStopping(), particle);                   
+      list->RegisterProcess(ionIoni,                 particle);
+      list->RegisterProcess(new G4NuclearStopping(), particle);
       
     } else if ((!particle->IsShortLived()) &&
                (particle->GetPDGCharge() != 0.0) && 
                (particle->GetParticleName() != "chargedgeantino")) {
                
       //all others charged particles except geantino
-      ph->RegisterProcess(new G4hIonisation(),    particle);
+      list->RegisterProcess(new G4hIonisation(),    particle);
     }
   }
     
   // Deexcitation
   //
-  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  de->SetFluo(true);
-  de->SetAuger(false);   
-  de->SetPIXE(false);  
-  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+  G4VAtomDeexcitation* deex = new G4UAtomicDeexcitation();
+  G4LossTableManager::Instance()->SetAtomDeexcitation(deex);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

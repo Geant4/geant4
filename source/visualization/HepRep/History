@@ -1,4 +1,4 @@
-.$Id: History 94590 2015-11-25 11:12:46Z gcosmo $
+.$Id: History 106384 2017-10-09 09:34:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,32 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+14th September 2017  John Allison  (vis-HepRep-V10-03-01)
+- G4HepRepMessenger.cc: Fix Coverity warning.
+
+23rd May 2017  John Allison  (vis-HepRep-V10-03-00)
+- Fixes for gcc-7.1 warnings.
+
+18th November 2016  John Allison (vis-HepRep-V10-02-04)
+- Fixed the GetColour() problem.
+
+17th November 2016  Joseph Perl (vis-HepRep-V10-02-03)
+- G4HepRepFileSceneHandler.cc: restore color to trajectories.
+
+7th November 2016  John Allison (vis-HepRep-V10-02-02)
+- G4HepRepFileSceneHandler.cc:1504: Fixed Coverity warning.
+
+11th September 2016  John Allison (vis-HepRep-V10-02-01)
+- GetColour/GetColor no longer takes an argument.
+- Make sure applicable vis attributes are obtained.
+  // Get and check applicable vis attributes.
+  //   fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
+  // Note: the vis attributes may have been modified by the viewer.  See
+  // code in G4VViewer::GetApplicableVisAttributes.
+
+31st August 2016  John Allison (vis-HepRep-V10-02-00)
+- Fix G4Orb and G4Ellipsoid hiding warnings.
 
 25th November 2015 Laurent Garnier (vis-HepRep-V10-01-02)
 - Fix a warning on int64 on VC15

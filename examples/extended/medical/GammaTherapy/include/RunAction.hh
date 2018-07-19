@@ -23,19 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: RunAction.hh 103888 2017-05-03 08:07:13Z gcosmo $
 //
 /// \file medical/GammaTherapy/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
 #ifndef RunAction_h
 #define RunAction_h 1
-
-// -------------------------------------------------------------
-//
-//      GEANT4 
-//
-// -------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -45,23 +39,32 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+class Run;
+class DetectorConstruction;
+class PrimaryGeneratorAction;
+class HistoManager;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
 class RunAction : public G4UserRunAction
 {
 public: 
 
-  RunAction();
+  RunAction(DetectorConstruction*, PrimaryGeneratorAction* prim);
   virtual  ~RunAction();
  
-  void BeginOfRunAction(const G4Run*);
-  // In this method histogramms are booked
+  virtual G4Run* GenerateRun();    
 
+  void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run*);
-  // In this method bookHisto method is called in which histogramms are filled
 
 private:
 
-  RunAction & operator=(const RunAction &right);
-  RunAction(const RunAction&);
+  DetectorConstruction*   fDetector;
+  PrimaryGeneratorAction* fPrimary;
+  Run*                    fRun;        
+  HistoManager*           fHistoManager;
 
 };
 

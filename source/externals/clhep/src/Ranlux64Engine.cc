@@ -422,10 +422,10 @@ void Ranlux64Engine::setSeed(long seed, int lux) {
   } 
   // are we on a 64bit machine?
   if( sizeof(long) >= 8 ) {
-     long topbits1, topbits2;
+     int64_t topbits1, topbits2;
 #ifdef WIN32
-     topbits1 = ( seed >> 32) & 0xffff ;
-     topbits2 = ( seed >> 48) & 0xffff ;
+     topbits1 = ( (int64_t) seed >> 32) & 0xffff ;
+     topbits2 = ( (int64_t) seed >> 48) & 0xffff ;
 #else
      topbits1 = detail::rshift<32>(seed) & 0xffff ;
      topbits2 = detail::rshift<48>(seed) & 0xffff ;

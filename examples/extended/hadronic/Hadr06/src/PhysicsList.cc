@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/PhysicsList.cc
+/// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
 // $Id: PhysicsList.cc 70268 2013-05-28 14:17:50Z maire $
@@ -42,9 +42,11 @@
 #include "G4HadronPhysicsINCLXX.hh"
 #include "G4IonPhysics.hh"
 #include "G4IonINCLXXPhysics.hh"
-#include "GammaPhysics.hh"
+#include "G4StoppingPhysics.hh"
+#include "GammaNuclearPhysics.hh"
 
-#include "EmStandardPhysics.hh"
+#include "ElectromagneticPhysics.hh"
+#include "G4EmStandardPhysics.hh"
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
@@ -66,26 +68,30 @@ PhysicsList::PhysicsList()
   RegisterPhysics( new HadronElasticPhysicsHP(verb) );
   
   // Hadron Inelastic Physics
-  ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
-  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
+  RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
+  ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));        
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
   
   // Ion Physics
   RegisterPhysics( new G4IonPhysics(verb));
   ////RegisterPhysics( new G4IonINCLXXPhysics(verb));
-    
+  
+  // stopping Particles
+  RegisterPhysics( new G4StoppingPhysics(verb));
+      
   // Gamma-Nuclear Physics
-  RegisterPhysics( new GammaPhysics("gamma"));
+  RegisterPhysics( new GammaNuclearPhysics("gamma"));
   
   // EM physics
-  RegisterPhysics(new EmStandardPhysics());
+  RegisterPhysics(new ElectromagneticPhysics());
+  ////RegisterPhysics(new G4EmStandardPhysics());
   
   // Decay
   RegisterPhysics(new G4DecayPhysics());
 
   // Radioactive decay
-  RegisterPhysics(new G4RadioactiveDecayPhysics());      
+  RegisterPhysics(new G4RadioactiveDecayPhysics());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

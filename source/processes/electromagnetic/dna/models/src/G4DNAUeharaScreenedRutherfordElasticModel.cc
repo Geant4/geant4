@@ -27,26 +27,27 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4DNAMolecularMaterial.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
+// #define UEHARA_VERBOSE
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DNAUeharaScreenedRutherfordElasticModel::G4DNAUeharaScreenedRutherfordElasticModel(const G4ParticleDefinition*,
-                                                                                     const G4String& nam) :
+G4DNAUeharaScreenedRutherfordElasticModel::
+G4DNAUeharaScreenedRutherfordElasticModel(const G4ParticleDefinition*,
+                                          const G4String& nam) :
     G4VEmModel(nam), isInitialised(false)
 {
-  //  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
   fpWaterDensity = 0;
-
-  killBelowEnergy = 9 * eV; // As in Geant4-DNA Screened Rutherford model
-  lowEnergyLimit = 0 * eV;
-  intermediateEnergyLimit = 200 * eV; // Switch between two final state models
-  highEnergyLimit = 10 * keV;
-  SetLowEnergyLimit(lowEnergyLimit);
-  SetHighEnergyLimit(highEnergyLimit);
+  intermediateEnergyLimit = 200. * eV; // Switch between two final state models
+  
+  SetLowEnergyLimit(9.*eV);
+//  SetHighEnergyLimit(10.*keV);
+  SetHighEnergyLimit(1.*MeV);
 
   verboseLevel = 0;
   // Verbosity scale:
@@ -56,13 +57,17 @@ G4DNAUeharaScreenedRutherfordElasticModel::G4DNAUeharaScreenedRutherfordElasticM
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
-  if (verboseLevel > 0)
+#ifdef UEHARA_VERBOSE
+  if (verboseLevel)
   {
-    G4cout << "Screened Rutherford Elastic model is constructed " << G4endl<< "Energy range: "
-    << lowEnergyLimit / eV << " eV - "
-    << highEnergyLimit / MeV << " MeV"
-    << G4endl;
+    G4cout << "Screened Rutherford Elastic model is constructed " << G4endl
+           << "Energy range: "
+           << LowEnergyLimit() / eV << " eV - "
+           << HighEnergyLimit() / MeV << " MeV"
+           << G4endl;
   }
+#endif
+  
   fParticleChangeForGamma = 0;
 
   // Selection of computation method
@@ -72,150 +77,172 @@ G4DNAUeharaScreenedRutherfordElasticModel::G4DNAUeharaScreenedRutherfordElasticM
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DNAUeharaScreenedRutherfordElasticModel::~G4DNAUeharaScreenedRutherfordElasticModel()
+G4DNAUeharaScreenedRutherfordElasticModel::
+~G4DNAUeharaScreenedRutherfordElasticModel()
 {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNAUeharaScreenedRutherfordElasticModel::Initialise(const G4ParticleDefinition* /*particle*/,
-                                                           const G4DataVector& /*cuts*/)
+void
+G4DNAUeharaScreenedRutherfordElasticModel::
+Initialise(const G4ParticleDefinition* particle,
+           const G4DataVector& /*cuts*/)
 {
-
-    if (verboseLevel > 3)
-      G4cout << "Calling G4DNAUeharaScreenedRutherfordElasticModel::Initialise()"
-             << G4endl;
-
-    // Energy limits
-
-    if (LowEnergyLimit() < lowEnergyLimit)
-    {
-      G4cout << "G4DNAUeharaScreenedRutherfordElasticModel: low energy limit increased from " <<
-      LowEnergyLimit()/eV << " eV to " << lowEnergyLimit/eV << " eV" << G4endl;
-      SetLowEnergyLimit(lowEnergyLimit);
-    }
-
-    if (HighEnergyLimit() > highEnergyLimit)
-    {
-      G4cout << "G4DNAUeharaScreenedRutherfordElasticModel: high energy limit decreased from " <<
-      HighEnergyLimit()/MeV << " MeV to " << highEnergyLimit/MeV << " MeV" << G4endl;
-      SetHighEnergyLimit(highEnergyLimit);
-    }
-
-    // Constants for final state by Brenner & Zaider
-    // March 25th, 2014 - Vaclav Stepan, Sebastien Incerti
-    // Added clear for MT 
-
-    betaCoeff.clear();
-    betaCoeff.push_back(7.51525);
-    betaCoeff.push_back(-0.41912);
-    betaCoeff.push_back(7.2017E-3);
-    betaCoeff.push_back(-4.646E-5);
-    betaCoeff.push_back(1.02897E-7);
-
-    deltaCoeff.clear();
-    deltaCoeff.push_back(2.9612);
-    deltaCoeff.push_back(-0.26376);
-    deltaCoeff.push_back(4.307E-3);
-    deltaCoeff.push_back(-2.6895E-5);
-    deltaCoeff.push_back(5.83505E-8);
-
-    gamma035_10Coeff.clear();
-    gamma035_10Coeff.push_back(-1.7013);
-    gamma035_10Coeff.push_back(-1.48284);
-    gamma035_10Coeff.push_back(0.6331);
-    gamma035_10Coeff.push_back(-0.10911);
-    gamma035_10Coeff.push_back(8.358E-3);
-    gamma035_10Coeff.push_back(-2.388E-4);
-
-    gamma10_100Coeff.clear();
-    gamma10_100Coeff.push_back(-3.32517);
-    gamma10_100Coeff.push_back(0.10996);
-    gamma10_100Coeff.push_back(-4.5255E-3);
-    gamma10_100Coeff.push_back(5.8372E-5);
-    gamma10_100Coeff.push_back(-2.4659E-7);
-
-    gamma100_200Coeff.clear();
-    gamma100_200Coeff.push_back(2.4775E-2);
-    gamma100_200Coeff.push_back(-2.96264E-5);
-    gamma100_200Coeff.push_back(-1.20655E-7);
-
-    //
-
-    if( verboseLevel>0 )
-    {
-      G4cout << "Screened Rutherford elastic model is initialized " << G4endl
-      << "Energy range: "
-      << LowEnergyLimit() / eV << " eV - "
-      << HighEnergyLimit() / MeV << " MeV"
-      << G4endl;
-    }
-
-    // Initialize water density pointer
-    fpWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
-
-    if (isInitialised)
-    { return;}
-    fParticleChangeForGamma = GetParticleChangeForGamma();
-    isInitialised = true;
-
+#ifdef UEHARA_VERBOSE
+  if (verboseLevel > 3)
+  {
+    G4cout << "Calling G4DNAUeharaScreenedRutherfordElasticModel::Initialise()"
+    << G4endl;
   }
+#endif
+  
+  if(particle->GetParticleName() != "e-")
+  {
+    G4Exception("*** WARNING: the G4DNAUeharaScreenedRutherfordElasticModel is "
+                "not intented to be used with another particle than the electron",
+                "",FatalException,"") ;
+  }
+  
+  // Energy limits
+  if(LowEnergyLimit() < 9.*CLHEP::eV)
+  {
+    G4Exception("*** WARNING : the G4DNAUeharaScreenedRutherfordElasticModel "
+                "class is not validated below 9 eV",
+                "",JustWarning,"") ;
+  }
+  
+  if (HighEnergyLimit() > 10.*CLHEP::keV)
+  {
+    G4Exception("*** WARNING: the G4DNAUeharaScreenedRutherfordElasticModel "
+                "class is used above 10 keV",
+                "",JustWarning,"") ;
+  }
+  
+#ifdef UEHARA_VERBOSE
+  if( verboseLevel>0 )
+  {
+    G4cout << "Screened Rutherford elastic model is initialized " << G4endl
+    << "Energy range: "
+    << LowEnergyLimit() / eV << " eV - "
+    << HighEnergyLimit() / MeV << " MeV"
+    << G4endl;
+  }
+#endif
+  
+  if (isInitialised){ return; }
+
+  // Constants for final state by Brenner & Zaider
+  // Note: the instantiation must be placed after if (isInitialised)
+  
+  betaCoeff=
+  {
+    7.51525,
+    -0.41912,
+    7.2017E-3,
+    -4.646E-5,
+    1.02897E-7};
+
+  deltaCoeff=
+  {
+    2.9612,
+    -0.26376,
+    4.307E-3,
+    -2.6895E-5,
+    5.83505E-8};
+
+  gamma035_10Coeff=
+  {
+    -1.7013,
+    -1.48284,
+    0.6331,
+    -0.10911,
+    8.358E-3,
+    -2.388E-4};
+
+  gamma10_100Coeff =
+  {
+    -3.32517,
+    0.10996,
+    -4.5255E-3,
+    5.8372E-5,
+    -2.4659E-7};
+
+  gamma100_200Coeff=
+  {
+    2.4775E-2,
+    -2.96264E-5,
+    -1.20655E-7};
+  
+  // Initialize water density pointer
+  fpWaterDensity =
+   G4DNAMolecularMaterial::Instance()->
+    GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
+  
+  fParticleChangeForGamma = GetParticleChangeForGamma();
+  isInitialised = true;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4DNAUeharaScreenedRutherfordElasticModel::CrossSectionPerVolume(const G4Material* material,
-                                                                          const G4ParticleDefinition* particleDefinition,
-                                                                          G4double ekin,
-                                                                          G4double,
-                                                                          G4double)
+G4double
+G4DNAUeharaScreenedRutherfordElasticModel::
+CrossSectionPerVolume(const G4Material* material,
+                      const G4ParticleDefinition* /*particleDefinition*/,
+                      G4double ekin,
+                      G4double,
+                      G4double)
 {
+#ifdef UEHARA_VERBOSE
   if (verboseLevel > 3)
   {
     G4cout
-        << "Calling CrossSectionPerVolume() of G4DNAUeharaScreenedRutherfordElasticModel"
-        << G4endl;
+    << "Calling CrossSectionPerVolume() of G4DNAUeharaScreenedRutherfordElasticModel"
+    << G4endl;
   }
-
+#endif
+  
   // Calculate total cross section for model
-
-  G4double sigma=0;
-
+  
+  G4double sigma = 0.;
   G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
-
+  
+  // Use activation boundaries instead
+  //if(ekin > HighEnergyLimit() || ekin < LowEnergyLimit()) return 0.;
+  
   if(waterDensity!= 0.0)
-  //if (material == nistwater || material->GetBaseMaterial() == nistwater)
   {
-
-    if (ekin < highEnergyLimit)
-    {
-      if (ekin < killBelowEnergy) return DBL_MAX;
-
-      G4double z = 7.42; // FROM PMB 37 (1992) 1841-1858 p1842
-      G4double n = ScreeningFactor(ekin,z);
-      G4double crossSection = RutherfordCrossSection(ekin, z);
-      sigma = pi * crossSection / (n * (n + 1.));
-    }
-
+    G4double z = 7.42; // FROM PMB 37 (1992) 1841-1858 p1842
+    G4double n = ScreeningFactor(ekin,z);
+    G4double crossSection = RutherfordCrossSection(ekin, z);
+    sigma = pi * crossSection / (n * (n + 1.));
+    
+#ifdef UEHARA_VERBOSE
     if (verboseLevel > 2)
     {
       G4cout << "__________________________________" << G4endl;
-      G4cout << "=== G4DNAUeharaScreenedRutherfordElasticModel - XS INFO START" << G4endl;
-      G4cout << "=== Kinetic energy(eV)=" << ekin/eV << " particle : " << particleDefinition->GetParticleName() << G4endl;
-      G4cout << "=== Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-      G4cout << "=== Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
-      //      G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
-      G4cout << "=== G4DNAUeharaScreenedRutherfordElasticModel - XS INFO END" << G4endl;
+      G4cout << "=== G4DNAUeharaScreenedRutherfordElasticModel - XS INFO START"
+             << G4endl;
+      G4cout << "=== Kinetic energy(eV)=" << ekin/eV
+            << " particle : " << particleDefinition->GetParticleName() << G4endl;
+      G4cout << "=== Cross section per water molecule (cm^2)=" << sigma/cm/cm
+             << G4endl;
+      G4cout << "=== Cross section per water molecule (cm^-1)="
+             << sigma*waterDensity/(1./cm) << G4endl;
+      G4cout << "=== G4DNAUeharaScreenedRutherfordElasticModel - XS INFO END"
+             << G4endl;
     }
-
+#endif
   }
 
-  return sigma*material->GetAtomicNumDensityVector()[1];
+  return sigma*waterDensity;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNAUeharaScreenedRutherfordElasticModel::RutherfordCrossSection(G4double k,
-                                                                           G4double z)
+G4double
+G4DNAUeharaScreenedRutherfordElasticModel::RutherfordCrossSection(G4double k,
+                                                                  G4double z)
 {
   //
   //                               e^4         /      K + m_e c^2      \^2
@@ -267,71 +294,68 @@ G4double G4DNAUeharaScreenedRutherfordElasticModel::ScreeningFactor(G4double k,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNAUeharaScreenedRutherfordElasticModel::SampleSecondaries(std::vector<
-                                                                      G4DynamicParticle*>* /*fvect*/,
-                                                                  const G4MaterialCutsCouple* /*couple*/,
-                                                                  const G4DynamicParticle* aDynamicElectron,
-                                                                  G4double,
-                                                                  G4double)
+void
+G4DNAUeharaScreenedRutherfordElasticModel::
+SampleSecondaries(std::vector<G4DynamicParticle*>* /*fvect*/,
+                  const G4MaterialCutsCouple* /*couple*/,
+                  const G4DynamicParticle* aDynamicElectron,
+                  G4double,
+                  G4double)
 {
-
+#ifdef UEHARA_VERBOSE
   if (verboseLevel > 3)
   {
     G4cout
         << "Calling SampleSecondaries() of G4DNAUeharaScreenedRutherfordElasticModel"
         << G4endl;
   }
+#endif
 
   G4double electronEnergy0 = aDynamicElectron->GetKineticEnergy();
 
-  if (electronEnergy0 < killBelowEnergy)
-  {
-    fParticleChangeForGamma->SetProposedKineticEnergy(0.);
-    fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
-    fParticleChangeForGamma->ProposeLocalEnergyDeposit(electronEnergy0);
-    return;
-  }
-
   G4double cosTheta = 0.;
 
-  if (electronEnergy0>= killBelowEnergy && electronEnergy0 < highEnergyLimit)
+  if (electronEnergy0<intermediateEnergyLimit)
   {
-    if (electronEnergy0<intermediateEnergyLimit)
-    {
-      if (verboseLevel > 3) G4cout << "---> Using Brenner & Zaider model" << G4endl;
-      cosTheta = BrennerZaiderRandomizeCosTheta(electronEnergy0);
-    }
-
-    if (electronEnergy0>=intermediateEnergyLimit)
-    {
-      if (verboseLevel > 3) G4cout << "---> Using Screened Rutherford model" << G4endl;
-      G4double z = 7.42;  // FROM PMB 37 (1992) 1841-1858 p1842
-      cosTheta = ScreenedRutherfordRandomizeCosTheta(electronEnergy0,z);
-    }
-
-    G4double phi = 2. * pi * G4UniformRand();
-
-    G4ThreeVector zVers = aDynamicElectron->GetMomentumDirection();
-    G4ThreeVector xVers = zVers.orthogonal();
-    G4ThreeVector yVers = zVers.cross(xVers);
-
-    G4double xDir = std::sqrt(1. - cosTheta*cosTheta);
-    G4double yDir = xDir;
-    xDir *= std::cos(phi);
-    yDir *= std::sin(phi);
-
-    G4ThreeVector zPrimeVers((xDir*xVers + yDir*yVers + cosTheta*zVers));
-
-    fParticleChangeForGamma->ProposeMomentumDirection(zPrimeVers.unit());
-
-    fParticleChangeForGamma->SetProposedKineticEnergy(electronEnergy0);
+#ifdef UEHARA_VERBOSE
+    if (verboseLevel > 3)
+      G4cout << "---> Using Brenner & Zaider model" << G4endl;
+#endif
+    cosTheta = BrennerZaiderRandomizeCosTheta(electronEnergy0);
   }
-
+  else //if (electronEnergy0>=intermediateEnergyLimit)
+  {
+#ifdef UEHARA_VERBOSE
+    if (verboseLevel > 3)
+      G4cout << "---> Using Screened Rutherford model" << G4endl;
+#endif
+    G4double z = 7.42;  // FROM PMB 37 (1992) 1841-1858 p1842
+    cosTheta = ScreenedRutherfordRandomizeCosTheta(electronEnergy0,z);
+  }
+  
+  G4double phi = 2. * pi * G4UniformRand();
+  
+  G4ThreeVector zVers = aDynamicElectron->GetMomentumDirection();
+  G4ThreeVector xVers = zVers.orthogonal();
+  G4ThreeVector yVers = zVers.cross(xVers);
+  
+  G4double xDir = std::sqrt(1. - cosTheta*cosTheta);
+  G4double yDir = xDir;
+  xDir *= std::cos(phi);
+  yDir *= std::sin(phi);
+  
+  G4ThreeVector zPrimeVers((xDir*xVers + yDir*yVers + cosTheta*zVers));
+  
+  fParticleChangeForGamma->ProposeMomentumDirection(zPrimeVers.unit());
+  
+  fParticleChangeForGamma->SetProposedKineticEnergy(electronEnergy0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4DNAUeharaScreenedRutherfordElasticModel::BrennerZaiderRandomizeCosTheta(G4double k)
+G4double
+G4DNAUeharaScreenedRutherfordElasticModel::
+BrennerZaiderRandomizeCosTheta(G4double k)
 {
   //  d sigma_el                         1                                 beta(K)
   // ------------ (K) ~ --------------------------------- + ---------------------------------
@@ -345,8 +369,8 @@ G4double G4DNAUeharaScreenedRutherfordElasticModel::BrennerZaiderRandomizeCosThe
 
   k /= eV;
 
-  G4double beta = std::exp(CalculatePolynomial(k, betaCoeff));
-  G4double delta = std::exp(CalculatePolynomial(k, deltaCoeff));
+  G4double beta = G4Exp(CalculatePolynomial(k, betaCoeff));
+  G4double delta = G4Exp(CalculatePolynomial(k, deltaCoeff));
   G4double gamma;
 
   if (k > 100.)
@@ -357,48 +381,106 @@ G4double G4DNAUeharaScreenedRutherfordElasticModel::BrennerZaiderRandomizeCosThe
   {
     if (k > 10)
     {
-      gamma = std::exp(CalculatePolynomial(k, gamma10_100Coeff));
-    } else
+      gamma = G4Exp(CalculatePolynomial(k, gamma10_100Coeff));
+    }
+    else
     {
-      gamma = std::exp(CalculatePolynomial(k, gamma035_10Coeff));
+      gamma = G4Exp(CalculatePolynomial(k, gamma035_10Coeff));
     }
   }
 
   // ***** Original method
   
-  if (!fasterCode)
+  if (fasterCode == false)
   {
-
-  G4double oneOverMax = 1.
-      / (1. / (4. * gamma * gamma)
-          + beta / ((2. + 2. * delta) * (2. + 2. * delta)));
-
-  G4double cosTheta = 0.;
-  G4double leftDenominator = 0.;
-  G4double rightDenominator = 0.;
-  G4double fCosTheta = 0.;
-
-  do
-  {
-    cosTheta = 2. * G4UniformRand()- 1.;
-
-    leftDenominator = (1. + 2.*gamma - cosTheta);
-    rightDenominator = (1. + 2.*delta + cosTheta);
-    if ( (leftDenominator * rightDenominator) != 0. )
+    G4double oneOverMax = 1.
+    / (1. / (4. * gamma * gamma)
+       + beta / ((2. + 2. * delta) * (2. + 2. * delta)));
+    
+    G4double cosTheta = 0.;
+    G4double leftDenominator = 0.;
+    G4double rightDenominator = 0.;
+    G4double fCosTheta = 0.;
+    
+    do
     {
-      fCosTheta = oneOverMax * (1./(leftDenominator*leftDenominator) + beta/(rightDenominator*rightDenominator));
+      cosTheta = 2. * G4UniformRand()- 1.;
+      
+      leftDenominator = (1. + 2.*gamma - cosTheta);
+      rightDenominator = (1. + 2.*delta + cosTheta);
+      if ( (leftDenominator * rightDenominator) != 0. )
+      {
+        fCosTheta = oneOverMax * (1./(leftDenominator*leftDenominator)
+                                  + beta/(rightDenominator*rightDenominator));
+      }
     }
-  }
-  while (fCosTheta < G4UniformRand());
-
-  return cosTheta;
+    while (fCosTheta < G4UniformRand());
+    
+    return cosTheta;
   }
 
   // ***** Alternative method using cumulative probability
 
-  if (fasterCode)
+  else // if (fasterCode)
   {
+
+   // 
+   // modified by Shogo OKADA @ KEK, JP, 2016.2.27(Sat.)
+   // 
+   // An integral of differential cross-section formula shown above this member function
+   // (integral variable: cos(theta), integral interval: [-1, x]) is as follows:
+   // 
+   //          1.0 + x                beta * (1 + x)
+   // I = --------------------- + ----------------------   (1)
+   //      (a - x) * (a + 1.0)      (b + x) * (b - 1.0)
+   //
+   // where a = 1.0 + 2.0 * gamma(K), b = 1.0 + 2.0 * delta(K)
+   // 
+   // Then, a cumulative probability (cp) is as follows:
+   // 
+   //  cp       1.0 + x                beta * (1 + x)      
+   // ---- = --------------------- + ----------------------  (2)
+   //  S      (a - x) * (a + 1.0)      (b + x) * (b - 1.0) 
+   //
+   // where 1/S is the integral of differnetical cross-section (1) on interval [-1, 1]
+   // 
+   //   1           2.0                     2.0 * beta
+   //  --- = ----------------------- + -----------------------   (3)
+   //   S     (a - 1.0) * (a + 1.0)     (b + 1.0) * (b - 1.0)
+   //
+   // x is calculated from the quadratic equation derived from (2) and (3):
+   //
+   // A * x^2 + B * x + C = 0
+   //
+   // where A, B, anc C are coefficients of the equation:
+   //  A = S * {(b - 1.0) - beta * (a + 1.0)} + cp * (a + 1.0) * (b - 1.0),
+   //  B = S * {(b - 1.0) * (b + 1.0) + beta * (a - 1.0) * (a + 1.0)} - cp * (a + 1.0) * (b - 1.0) * (a - b)
+   //  C = S * {b * (b - 1.0) + beta * a * (a + 1.0)} - cp * (a + 1.0) * (b - 1.0) * ab
+   //
+   
+   // sampling cumulative probability
+   G4double cp = G4UniformRand();
+  
+   G4double a = 1.0 + 2.0 * gamma;
+   G4double b = 1.0 + 2.0 * delta;
+   G4double a1 = a - 1.0;
+   G4double a2 = a + 1.0;
+   G4double b1 = b - 1.0;
+   G4double b2 = b + 1.0;
+   G4double c1 = a - b;
+   G4double c2 = a * b;
+
+   G4double S = 2.0 / (a1 * a2) + 2.0 * beta / (b1 * b2); S = 1.0 / S;
  
+   // coefficients for the quadratic equation
+   G4double A = S * (b1 - beta * a2) + cp * a2 * b1;
+   G4double B = S * (b1 * b2 + beta * a1 * a2) - cp * a2 * b1 * c1;
+   G4double C = S * (b * b1 + beta * a * a2) - cp * a2 * b1 * c2;
+  
+   // calculate cos(theta)
+   return (-1.0 * B + std::sqrt(B * B - 4.0 * A * C)) / (2.0 * A);
+ 
+   /*
    G4double cosTheta = -1;
    G4double cumul = 0;
    G4double value = 0;
@@ -434,6 +516,7 @@ G4double G4DNAUeharaScreenedRutherfordElasticModel::BrennerZaiderRandomizeCosThe
    }
 
    return cosTheta;
+   */
   }
  
   return 0.;
@@ -442,9 +525,10 @@ G4double G4DNAUeharaScreenedRutherfordElasticModel::BrennerZaiderRandomizeCosThe
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNAUeharaScreenedRutherfordElasticModel::CalculatePolynomial(G4double k,
-                                                                        std::vector<
-                                                                            G4double>& vec)
+G4double
+G4DNAUeharaScreenedRutherfordElasticModel::
+CalculatePolynomial(G4double k,
+                    std::vector<G4double>& vec)
 {
   // Sum_{i=0}^{size-1} vector_i k^i
   //
@@ -466,8 +550,10 @@ G4double G4DNAUeharaScreenedRutherfordElasticModel::CalculatePolynomial(G4double
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4DNAUeharaScreenedRutherfordElasticModel::ScreenedRutherfordRandomizeCosTheta(G4double k,
-                                                                                        G4double z)
+G4double
+G4DNAUeharaScreenedRutherfordElasticModel::
+ScreenedRutherfordRandomizeCosTheta(G4double k,
+                                    G4double z)
 {
 
   //  d sigma_el                sigma_Ruth(K)
@@ -476,67 +562,93 @@ G4double G4DNAUeharaScreenedRutherfordElasticModel::ScreenedRutherfordRandomizeC
   //
   // We extract cos(theta) distributed as (1 + 2 n(K) - cos(theta))^-2
   //
-  // Maximum is for theta=0: 1/(4 n(K)^2) (When n(K) is positive, that is always satisfied within the validity of the process)
+  // Maximum is for theta=0: 1/(4 n(K)^2) (When n(K) is positive, that is always
+  // satisfied within the validity of the process)
   //
   // Phys. Med. Biol. 45 (2000) 3171-3194
-
+  
   // ***** Original method
-
-  if (!fasterCode)
+  
+  if (fasterCode == false)
   {
-
-   G4double n = ScreeningFactor(k, z);
-
-   G4double oneOverMax = (4. * n * n);
-
-   G4double cosTheta = 0.;
-   G4double fCosTheta;
-
-   do
-   {
-     cosTheta = 2. * G4UniformRand()- 1.;
-     fCosTheta = (1 + 2.*n - cosTheta);
-     if (fCosTheta !=0.) fCosTheta = oneOverMax / (fCosTheta*fCosTheta);
-   }
-   while (fCosTheta < G4UniformRand());
-
-   return cosTheta;
+    G4double n = ScreeningFactor(k, z);
+    
+    G4double oneOverMax = (4. * n * n);
+    
+    G4double cosTheta = 0.;
+    G4double fCosTheta;
+    
+    do
+    {
+      cosTheta = 2. * G4UniformRand()- 1.;
+      fCosTheta = (1 + 2.*n - cosTheta);
+      if (fCosTheta !=0.) fCosTheta = oneOverMax / (fCosTheta*fCosTheta);
+    }
+    while (fCosTheta < G4UniformRand());
+    
+    return cosTheta;
   }
-
+  
   // ***** Alternative method using cumulative probability
-  if (fasterCode)
+  else // if (fasterCode)
   {
-
-   G4double cosTheta = -1;
-   G4double cumul = 0;
-   G4double value = 0;
-   G4double n = ScreeningFactor(k, z);
-   G4double fCosTheta;
-
-   // Number of integration steps in the -1,1 range
-   G4int iMax=200;
-
-   G4double random = G4UniformRand();
-
-   // Cumulate differential cross section
-   for (G4int i=0; i<iMax; i++)
-   {
-   cosTheta = -1 + i*2./(iMax-1);
-   fCosTheta = (1 + 2.*n - cosTheta);
-   if (fCosTheta !=0.) cumul = cumul + 1./(fCosTheta*fCosTheta);
-   }
-
-   // Select cosTheta
-   for (G4int i=0; i<iMax; i++)
-   {
-   cosTheta = -1 + i*2./(iMax-1);
-   fCosTheta = (1 + 2.*n - cosTheta);
-   if (cumul !=0.) value = value + (1./(fCosTheta*fCosTheta)) / cumul;
-   if (random < value) break;
-   }
-   return cosTheta;
+    
+    //
+    // modified by Shogo OKADA @ KEK, JP, 2016.2.27(Sat.)
+    //
+    // The cumulative probability (cp) is calculated by integrating
+    // the differential cross-section fomula with cos(theta):
+    //
+    //         n(K) * (1.0 + cos(theta))
+    //  cp = ---------------------------------
+    //         1.0 + 2.0 * n(K) - cos(theta)
+    //
+    // Then, cos(theta) is as follows:
+    //
+    //               cp * (1.0 + 2.0 * n(K)) - n(K)
+    // cos(theta) = --------------------------------
+    //                       n(k) + cp
+    //
+    // where, K is kinetic energy, n(K) is screeing factor, and cp is cumulative probability
+    //
+    
+    G4double n = ScreeningFactor(k, z);
+    G4double cp = G4UniformRand();
+    G4double numerator = cp * (1.0 + 2.0 * n) - n;
+    G4double denominator = n + cp;
+    return numerator / denominator;
+    
+    /*
+     G4double cosTheta = -1;
+     G4double cumul = 0;
+     G4double value = 0;
+     G4double n = ScreeningFactor(k, z);
+     G4double fCosTheta;
+     
+     // Number of integration steps in the -1,1 range
+     G4int iMax=200;
+     
+     G4double random = G4UniformRand();
+     
+     // Cumulate differential cross section
+     for (G4int i=0; i<iMax; i++)
+     {
+     cosTheta = -1 + i*2./(iMax-1);
+     fCosTheta = (1 + 2.*n - cosTheta);
+     if (fCosTheta !=0.) cumul = cumul + 1./(fCosTheta*fCosTheta);
+     }
+     
+     // Select cosTheta
+     for (G4int i=0; i<iMax; i++)
+     {
+     cosTheta = -1 + i*2./(iMax-1);
+     fCosTheta = (1 + 2.*n - cosTheta);
+     if (cumul !=0.) value = value + (1./(fCosTheta*fCosTheta)) / cumul;
+     if (random < value) break;
+     }
+     return cosTheta;
+     */
   }
  
   return 0.;
 }
-

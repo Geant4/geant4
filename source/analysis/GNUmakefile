@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 94591 2015-11-25 11:13:33Z gcosmo $
+# $Id: GNUmakefile 99561 2016-09-27 07:04:12Z gcosmo $
 # --------------------------------------------------------------
 #
 
@@ -18,8 +18,8 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-SUBDIRS  = g4tools management hntools csv root xml parameters
-SUBLIBS  = G4tools G4analysismng G4hntools G4csv G4root G4xml G4parameters
+SUBDIRS  = g4tools management hntools csv root xml accumulables
+SUBLIBS  = G4tools G4analysismng G4hntools G4csv G4root G4xml G4accumulables
 
 include $(G4INSTALL)/config/globlib.gmk
 

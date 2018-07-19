@@ -47,7 +47,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
-#include "CLHEP/Units/SystemOfUnits.h"
+#include <CLHEP/Units/SystemOfUnits.h>
 
 static const G4String nameNIST[74] = {
   "G4_A-150_TISSUE", "G4_ACETYLENE","G4_ADIPOSE_TISSUE_ICRP","G4_Ag","G4_AIR",
@@ -85,6 +85,27 @@ static const G4int molecularIndex[numberOfMolecula] = {
   6, 16, 36, 52, 55, 54, 56, 62, 21, 71, 72, 13};
 
 static const G4double fac = CLHEP::MeV*CLHEP::cm2/CLHEP::g;
+
+static const G4double mvx = CLHEP::MeV;
+
+static const G4double T0[78] = { 
+    0.001*mvx, 0.0015*mvx, 0.002*mvx, 0.0025*mvx, 0.003*mvx, 
+    0.004*mvx, 0.005*mvx,  0.006*mvx, 0.007*mvx,  0.008*mvx,
+    0.009*mvx, 0.01*mvx,   0.0125*mvx,0.015*mvx,  0.0175*mvx, 
+    0.02*mvx,  0.0225*mvx, 0.025*mvx, 0.0275*mvx, 0.03*mvx, 
+    0.035*mvx, 0.04*mvx,   0.045*mvx, 0.05*mvx,   0.055*mvx, 
+    0.06*mvx,  0.065*mvx,  0.07*mvx,  0.075*mvx,  0.08*mvx, 
+    0.085*mvx, 0.09*mvx,   0.095*mvx, 0.1*mvx,    0.125*mvx, 
+    0.15*mvx,  0.175*mvx,  0.2*mvx,   0.225*mvx,  0.25*mvx, 
+    0.275*mvx, 0.3*mvx,    0.35*mvx,  0.4*mvx,    0.45*mvx,  
+    0.5*mvx,   0.55*mvx,   0.6*mvx,   0.65*mvx,   0.7*mvx, 
+    0.75*mvx,  0.8*mvx,    0.85*mvx,  0.9*mvx,    0.95*mvx,  
+    1.*mvx,    1.25*mvx,   1.5*mvx,   1.75*mvx,   2.*mvx,   
+    2.25*mvx,  2.5*mvx,    2.75*mvx,  3.*mvx,     3.5*mvx, 
+    4.*mvx,    4.5*mvx,    5.*mvx,    5.5*mvx,    6.*mvx, 
+   6.5*mvx,    7.*mvx,     7.5*mvx,   8.*mvx,     8.5*mvx, 
+    9.*mvx,     9.5*mvx,   10.*mvx  }; 
+
 
 #endif
 

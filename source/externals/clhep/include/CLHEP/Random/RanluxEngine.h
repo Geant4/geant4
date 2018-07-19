@@ -91,6 +91,8 @@ public:
   int getLuxury() const { return luxury; }
   // Gets the luxury level.
 
+  operator double();       // Returns same as flat()
+  operator float();        // less precise flat, faster if possible
   operator unsigned int(); // 32-bit flat, but slower than double or float
 
   virtual std::ostream & put (std::ostream & os) const;

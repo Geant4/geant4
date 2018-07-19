@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
+$Id: History 110147 2018-05-16 12:20:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,8 +9,32 @@ $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
                           History file
                           ------------
 
-28.10.2016 - G. Folger
-             Remove direct use of aParticleIterator, use GetParticleTableIterator().
+16.05.2018 - L. Pandola, Tag gammaraytel-V10-04-04
+             Fix compiler warning on gcc8.1
+
+15.05.2018 - B. Morgan, Tag gammaraytel-V10-04-03
+             Include G4Types before use of G4MULTITHREADED. For forward
+             compatibility with move to #defines over -D for G4 preprocessor
+             symbols.
+
+13.05.2018 - L. Pandola, Tag gammaraytel-V10-04-02
+	     Fix more warnings on clang
+
+10.05.2018 - L. Pandola, Tag gammaraytel-V10-04-01
+             Fix warning on clang
+
+08.05.2018 - F. Longo and L. Pandola, Tag gammaraytel-V10-04-00
+	     Fix problems reported by Valgrind (bug report #1981)
+
+19.11.2016 - A. Dotti gammaraytel-V10-02-02
+	     explicit set of SDs to manager
+
+31.10.2016 - F. Longo and L. Pandola, Tag  gammaraytel-V10-02-01
+	     Extended physics list to give the possibility to handle 
+	     polarized gamma-rays.
+
+28.10.2016 - G. Folger, Tag gammaraytel-V10-02-00
+            Remove direct use of aParticleIterator, use GetParticleTableIterator().
              fix required by clang39 on Linux and MAC
 
 27.10.2015 - A. Ribon, Tag gammaraytel-V10-01-00 

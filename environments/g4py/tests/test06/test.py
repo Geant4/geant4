@@ -48,8 +48,8 @@ print myx.PVMethod()
 
 print ""
 x= test06.XBase()
-print "*** Runtime ERROR will occur!" \
-      " because pure virtual function is called."
-x.PVMethod()
-
-
+try:
+  x.PVMethod()
+except:
+  print "*** Runtime ERROR occured!" \
+        " because pure virtual function is called."

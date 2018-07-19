@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4TwoVector.cc 76884 2013-11-18 12:54:03Z gcosmo $
+// $Id: pyG4TwoVector.cc 107590 2017-11-24 11:59:22Z gcosmo $
 // ====================================================================
 //   pyG4TwoVector.cc
 //
@@ -31,8 +31,6 @@
 // ====================================================================
 #include <boost/python.hpp>
 #include "G4Version.hh"
-
-#if G4VERSION_NUMBER >= 830
 #include "G4TwoVector.hh"
 
 using namespace boost::python;
@@ -53,15 +51,11 @@ BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isOrthogonal, isOrthogonal, 1, 2)
 
 using namespace pyG4TwoVector;
 
-#endif
-
 // ====================================================================
 // module definition
 // ====================================================================
 void export_G4TwoVector()
 {
-#if G4VERSION_NUMBER >= 830
-
   class_<G4TwoVector>("G4TwoVector", "general 2-vector")
     // constructors
     .def(init<G4double>())
@@ -112,8 +106,4 @@ void export_G4TwoVector()
     .def(self >= self)
     .def(self <= self)
     ;
-#endif
-
 }
-
-

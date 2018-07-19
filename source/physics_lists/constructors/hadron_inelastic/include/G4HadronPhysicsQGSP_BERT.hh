@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsQGSP_BERT.hh 93617 2015-10-27 09:00:41Z gcosmo $
+// $Id: G4HadronPhysicsQGSP_BERT.hh 105736 2017-08-16 13:01:11Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,27 +49,10 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-#include "G4PiKBuilder.hh"
-#include "G4FTFPPiKBuilder.hh"
-#include "G4QGSPPiKBuilder.hh"
-#include "G4BertiniPiKBuilder.hh"
-
-#include "G4ProtonBuilder.hh"
-#include "G4FTFPProtonBuilder.hh"
-#include "G4QGSPProtonBuilder.hh"
-#include "G4BertiniProtonBuilder.hh"
-
-#include "G4NeutronBuilder.hh"
-#include "G4FTFPNeutronBuilder.hh"
-#include "G4QGSPNeutronBuilder.hh"
-#include "G4BertiniNeutronBuilder.hh"
-
-#include "G4HyperonFTFPBuilder.hh"
-#include "G4AntiBarionBuilder.hh"
-#include "G4FTFPAntiBarionBuilder.hh"
+#include "G4Cache.hh"
 
 class G4ComponentGGHadronNucleusXsc;
-
+class G4VCrossSectionDataSet;
 
 class G4HadronPhysicsQGSP_BERT : public G4VPhysicsConstructor
 {
@@ -78,43 +61,42 @@ class G4HadronPhysicsQGSP_BERT : public G4VPhysicsConstructor
     G4HadronPhysicsQGSP_BERT(const G4String& name, G4bool quasiElastic=true);
     virtual ~G4HadronPhysicsQGSP_BERT();
 
-  public: 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+    virtual void ConstructParticle() override;
+    virtual void ConstructProcess() override;
+    virtual void TerminateWorker() override;
 
-    void SetQuasiElastic(G4bool value) {QuasiElastic = value;}; 
-
-  private:
+  protected:
+    G4bool QuasiElasticFTF;
+    G4bool QuasiElasticQGS;
     void CreateModels();
+    virtual void Neutron();
+    virtual void Proton();
+    virtual void Pion();
+    virtual void Kaon() { /*Done together w/ Pion*/ }
+    virtual void Others();
+    virtual void DumpBanner() {}
+    //This contains extra configurataion specific to this PL
+    virtual void ExtraConfiguration();
 
-    struct ThreadPrivate {
-      G4NeutronBuilder * theNeutrons;
-      G4FTFPNeutronBuilder * theFTFPNeutron;
-      G4QGSPNeutronBuilder * theQGSPNeutron;
-      G4BertiniNeutronBuilder * theBertiniNeutron;
-    
-      G4PiKBuilder * thePiK;
-      G4FTFPPiKBuilder * theFTFPPiK;
-      G4QGSPPiKBuilder * theQGSPPiK;
-      G4BertiniPiKBuilder * theBertiniPiK;
-    
-      G4ProtonBuilder * thePro;
-      G4FTFPProtonBuilder * theFTFPPro;
-      G4QGSPProtonBuilder * theQGSPPro; 
-      G4BertiniProtonBuilder * theBertiniPro;
-    
-      G4HyperonFTFPBuilder * theHyperon;
+    G4double minQGSP_proton;
+    G4double minQGSP_neutron;
+    G4double minQGSP_pik;
+    G4double minFTFP_proton;
+    G4double minFTFP_neutron;
+    G4double minFTFP_pik;
+    G4double maxFTFP_proton;
+    G4double maxFTFP_neutron;
+    G4double maxFTFP_pik;
+    G4double minBERT_proton;
+    G4double minBERT_neutron;
+    G4double minBERT_pik;
+    G4double maxBERT_proton;
+    G4double maxBERT_neutron;
+    G4double maxBERT_pik;
 
-      G4AntiBarionBuilder * theAntiBaryon;
-      G4FTFPAntiBarionBuilder * theFTFPAntiBaryon; 
-
-      G4ComponentGGHadronNucleusXsc * xsKaon;
-      G4VCrossSectionDataSet * xsNeutronInelasticXS;
-      G4VCrossSectionDataSet * xsNeutronCaptureXS;
-    };
-    static G4ThreadLocal ThreadPrivate* tpdata;
-
-    G4bool QuasiElastic;
+    //Thread-private data write them here to delete them
+    G4VectorCache<G4VCrossSectionDataSet*> xs_ds;
+    G4Cache<G4ComponentGGHadronNucleusXsc*> xs_k;
 };
 
 #endif

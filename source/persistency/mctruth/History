@@ -15,7 +15,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-6 July, 16  G.Cosmo (mctruth-V10-01-00)
+6 July, 16  G.Cosmo (mctruth-V10-02-00)
 - Fixed typo in G4PersistencyCenterMessenger::GetCurrentValue() in
   selection of verbose mode.
   Addressing problem report #1876

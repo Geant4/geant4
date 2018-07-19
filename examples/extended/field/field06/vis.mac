@@ -8,18 +8,14 @@
 /control/saveHistory
 /run/verbose 2
 #
-# create empty scene
-#
-/vis/scene/create
-#
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
 #
 # Use this open statement instead for OpenGL in immediate mode.
 /vis/open OGL 600x600-0+0
 #
-# Output an empty detector
-#/vis/viewer/flush
+# Draw detector
+/vis/drawVolume
 #
 # Draw trajectories at end of event, showing trajectory points as
 # markers of size 2 pixels

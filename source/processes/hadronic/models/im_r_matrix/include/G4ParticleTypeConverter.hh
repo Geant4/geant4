@@ -46,14 +46,14 @@ public:
 
   G4ParticleTypeConverter();
 
-  GenericType GetGenericType(const G4ParticleDefinition* const aParticleDef);
-  GenericType GetGenericType(const G4KineticTrack& aTrack);
-  GenericType GetGenericType(const G4String& aParticleName);
+  GenericType GetGenericType(const G4ParticleDefinition* const aParticleDef) const;
+  GenericType GetGenericType(const G4KineticTrack& aTrack) const;
+  GenericType GetGenericType(const G4String& aParticleName) const;
 
-  G4int GetUrqmdItyp(GenericType gType);
-  G4int GetUrqmdItyp(const G4ParticleDefinition* aParticleDef);
+  G4int GetUrqmdItyp(GenericType gType) const;
+  G4int GetUrqmdItyp(const G4ParticleDefinition* aParticleDef) const;
 
-  const G4ParticleDefinition* FindIso3State(const GenericType gType, const G4int isospin3);
+  const G4ParticleDefinition* FindIso3State(const GenericType gType, const G4int isospin3) const;
 
 private:
 

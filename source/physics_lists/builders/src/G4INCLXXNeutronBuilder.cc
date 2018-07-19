@@ -63,27 +63,5 @@ Build(G4NeutronInelasticProcess * aP)
   aP->RegisterMe(theModel);
   aP->AddDataSet((G4NeutronInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronInelasticXS::Default_Name()));
 }
-
-G4INCLXXNeutronBuilder::
-~G4INCLXXNeutronBuilder() 
-{
-  //delete theModel;
-}
-
-void G4INCLXXNeutronBuilder::
-Build(G4HadronElasticProcess * )
-{
-}
-
-void G4INCLXXNeutronBuilder::
-Build(G4HadronFissionProcess * )
-{
-}
-
-void G4INCLXXNeutronBuilder::
-Build(G4HadronCaptureProcess * )
-{
-}
-
 // 2011 by P. Kaitaniemi
 

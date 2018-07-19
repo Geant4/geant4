@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.cc 78955 2014-02-05 09:45:46Z gcosmo $
+// $Id: G4VisExtent.cc 102801 2017-02-22 15:17:53Z gcosmo $
 //
 // 
 // A.Walkden 28/11/95
@@ -34,8 +34,6 @@
 #include "G4VisExtent.hh"
 
 #include "G4ios.hh"
-
-const G4VisExtent G4VisExtent::NullExtent;  // Default extent is null.
 
 G4VisExtent::G4VisExtent (G4double xmin, G4double xmax, 
                           G4double ymin, G4double ymax, 

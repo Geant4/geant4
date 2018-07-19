@@ -32,7 +32,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyMaterial.cc 69765 2013-05-14 10:11:22Z gcosmo $
+// $Id: BrachyMaterial.cc 100821 2016-11-02 15:21:34Z gcosmo $
 //
 #include "globals.hh"
 #include "Randomize.hh"  
@@ -183,16 +183,26 @@ void BrachyMaterial::DefineMaterials()
   matsteel->AddElement(elCr, 0.19);
   matsteel->AddElement(elNi, 0.10);
   matsteel->AddElement(elFe, 0.68);
+
+ //Define Stainless-steel-304 - Flexi source
+  d = 7.999*g/cm3 ;
+  mat304steel = new G4Material("Stainless steel 304",d,6);
+  mat304steel->AddElement(elMn, 0.02);
+  mat304steel->AddElement(elSi, 0.01);
+  mat304steel->AddElement(elCr, 0.19);
+  mat304steel->AddElement(elNi, 0.10);
+  mat304steel->AddElement(elFe, 0.6792);
+  mat304steel->AddElement(elC, 0.0008);
  
-  //gold(chimica degli elementi N.N Greenwood,A.Earnshaw)
+  //gold 
   A = 196.97*g/mole;
   d = 19.32*g/cm3;
   gold = new G4Material("gold",Z = 79.,A,d);
 
-  //IodiumCore(chimica degli elementi N.N Greenwood,A.Earnshaw)
+  //Iodine Core
   A = 124.9*g/mole;
   d = 4.862*g/cm3;
-  matI = new G4Material("Iodium",Z = 53.,A,d);
+  matI = new G4Material("Iodine",Z = 53.,A,d);
 
   //ceramic(Medical Physics, May 2000)
   d = 2.88*g/cm3;

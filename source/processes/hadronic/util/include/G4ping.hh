@@ -26,7 +26,8 @@
 #ifndef G4ping_h
 #define G4ping_h
 
-#include "G4String.hh"
+#include <vector>
+
 #include "globals.hh"
 #include "G4LorentzVector.hh"
 

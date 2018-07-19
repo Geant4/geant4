@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.cc 85013 2014-10-23 09:45:07Z gcosmo $
+// $Id: G4hhIonisation.cc 106715 2017-10-20 09:39:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,8 +63,8 @@
 
 G4hhIonisation::G4hhIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
-    theParticle(0),
-    theBaseParticle(0),
+    theParticle(nullptr),
+    //theBaseParticle(nullptr),
     isInitialised(false)
 {
   SetStepFunction(0.1, 0.1*mm);
@@ -73,7 +73,7 @@ G4hhIonisation::G4hhIonisation(const G4String& name)
   SetSecondaryParticle(G4Electron::Electron());
   mass = 0.0;
   ratio = 0.0;
-  flucModel = 0;
+  flucModel = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -130,7 +130,7 @@ void G4hhIonisation::InitialiseEnergyLossProcess(
   G4int bin = G4lrint(param->NumberOfBinsPerDecade()*std::log10(emax/emin));
   SetDEDXBinning(bin);
 
-  G4VEmModel* em = 0; 
+  G4VEmModel* em = nullptr; 
   if(part->GetPDGCharge() > 0.0) { em = new G4BraggNoDeltaModel(); }
   else { em = new G4ICRU73NoDeltaModel(); }
   em->SetLowEnergyLimit(emin);
@@ -140,6 +140,7 @@ void G4hhIonisation::InitialiseEnergyLossProcess(
   em = new G4BetheBlochNoDeltaModel();
   em->SetLowEnergyLimit(eth);
   em->SetHighEnergyLimit(emax);
+  SetEmModel(em);
   AddEmModel(1, em, flucModel);
 
   if(verboseLevel>1) {
@@ -154,6 +155,15 @@ void G4hhIonisation::PrintInfo()
 {
   G4cout << "      Delta-ray will not be produced; "
 	 << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hhIonisation::ProcessDescription(std::ostream& out) const
+{
+  out << "No description available.";
+  out << "<br>\n";
+  G4VEnergyLossProcess::ProcessDescription(out);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

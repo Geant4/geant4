@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/include/RMC01AnalysisManagerMessenger.hh
 /// \brief Definition of the RMC01AnalysisManagerMessenger class
 //
-// $Id: RMC01AnalysisManagerMessenger.hh 71233 2013-06-12 13:16:05Z gcosmo $
+// $Id: RMC01AnalysisManagerMessenger.hh 98774 2016-08-09 14:28:06Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:           RMC01AnalysisManagerMessenger
@@ -41,7 +41,6 @@
 //                 17-11-2009 creation by L. Desorgher
 //
 //-------------------------------------------------------------
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

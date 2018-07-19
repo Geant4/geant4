@@ -26,7 +26,7 @@
 /// \file medical/GammaTherapy/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.cc 82277 2014-06-13 14:40:54Z gcosmo $
+// $Id: PhysicsListMessenger.cc 103469 2017-04-11 07:29:36Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,6 +65,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete fListCmd;
   delete fVerbCmd;
   delete fPhysDir;  
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

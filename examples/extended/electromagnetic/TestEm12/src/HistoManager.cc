@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/src/HistoManager.cc
+/// \file electromagnetic/TestEm12/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
 //
-// $Id: HistoManager.cc 72238 2013-07-12 08:40:30Z gcosmo $
+// $Id: HistoManager.cc 98278 2016-07-04 18:02:20Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

@@ -96,11 +96,17 @@ namespace G4INCL {
     /// \brief Get the target charge number.
     G4int getTargetZ() const { return targetSpecies.theZ; }
 
+    /// \brief Get the target strangess number.
+    G4int getTargetS() const { return targetSpecies.theS; }
+
     /// \brief Set target mass number
     void setTargetA(G4int A) { targetSpecies.theA = A; }
 
     /// \brief Set target charge number
     void setTargetZ(G4int Z) { targetSpecies.theZ = Z; }
+
+    /// \brief Set target strangess number
+    void setTargetS(G4int S) { targetSpecies.theS = S; }
 
     /// \brief Get the projectile type
     ParticleType getProjectileType() const { return projectileSpecies.theType; }
@@ -353,6 +359,15 @@ namespace G4INCL {
 
     G4bool getInverseKinematics() const { return inverseKinematics; }
 
+    /// \brief Get the decay time threshold time
+    G4double getDecayTimeThreshold() const { return decayTimeThreshold; }
+
+    /// \brief Set decay time threshold time
+    void setDecayTimeThreshold(const G4double t) { decayTimeThreshold=t; }
+
+    /// \brief Get the bias
+    G4double getBias() const { return bias; }
+
   private:
 
     G4int verbosity;
@@ -429,6 +444,8 @@ namespace G4INCL {
     G4double fermiMomentum;
 
     G4double cutNN;
+    
+    G4double bias;
 
 #ifdef INCL_ROOT_USE
     std::string rootSelectionString;
@@ -470,6 +487,8 @@ namespace G4INCL {
 #endif
 
     G4bool inverseKinematics;
+
+    G4double decayTimeThreshold;
 
     friend class ::ConfigParser;
   };

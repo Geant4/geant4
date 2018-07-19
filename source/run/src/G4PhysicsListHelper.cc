@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsListHelper.cc 97917 2016-06-23 07:12:01Z gcosmo $
+// $Id: G4PhysicsListHelper.cc 106147 2017-09-14 06:38:11Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -676,7 +676,7 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processSubType  = 10;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     =  1;
-  tmp.ordering[2]     =  1;
+  tmp.ordering[2]     = -1;
   tmp.isDuplicable =  false;
   theTable->push_back(tmp);
   sizeOfTable +=1;  
@@ -991,6 +991,16 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   theTable->push_back(tmp);
   sizeOfTable +=1;  
 
+  tmp.processTypeName = "MuAtomicCapture";
+  tmp.processType     = 4;
+  tmp.processSubType  = 132;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
   tmp.processTypeName =  "HadFission";
   tmp.processType     = 4;
   tmp.processSubType  = 141;
@@ -1064,6 +1074,16 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processTypeName =  "DecayUnKnown";
   tmp.processType     = 6;
   tmp.processSubType  = 211;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "DecayMuAtom";
+  tmp.processType     = 6;
+  tmp.processSubType  = 221;
   tmp.ordering[0]     =  1000;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     =  1000;

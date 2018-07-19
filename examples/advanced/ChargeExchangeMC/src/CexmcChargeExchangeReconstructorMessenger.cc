@@ -51,8 +51,8 @@
 
 CexmcChargeExchangeReconstructorMessenger::
         CexmcChargeExchangeReconstructorMessenger(
-                        CexmcChargeExchangeReconstructor *  reconstructor ) :
-            reconstructor( reconstructor ), useTableMass( NULL ),
+                        CexmcChargeExchangeReconstructor *  reconstructor_ ) :
+            reconstructor( reconstructor_ ), useTableMass( NULL ),
             useMassCut( NULL ), mCutOPCenter( NULL ), mCutNOPCenter( NULL ),
             mCutOPWidth( NULL ), mCutNOPWidth( NULL ), mCutAngle( NULL ),
             useAbsorbedEnergyCut( NULL ), aeCutCLCenter( NULL ),

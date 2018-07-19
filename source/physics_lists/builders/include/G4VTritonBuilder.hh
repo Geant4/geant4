@@ -29,21 +29,27 @@
 //
 // Author: 2013 P. Arce
 //
+// Modified
+// 12.04.2017 A.Dotti move to new design with base class
+//
 //----------------------------------------------------------------------------
 //
 #ifndef G4VTritonBuilder_h
 #define G4VTritonBuilder_h
 
+#include "G4PhysicsBuilderInterface.hh"
+
 class G4TritonInelasticProcess;
 class G4HadronElasticProcess;
 
-class G4VTritonBuilder
+class G4VTritonBuilder : public G4PhysicsBuilderInterface
 {
 public:
-  G4VTritonBuilder();
-  virtual ~G4VTritonBuilder();
+  G4VTritonBuilder() = default;
+  virtual ~G4VTritonBuilder() {}
   virtual void Build(G4HadronElasticProcess * aP) = 0;
   virtual void Build(G4TritonInelasticProcess * aP) = 0;
+  using G4PhysicsBuilderInterface::Build; //Prevent compiler warning
 };
 
 #endif

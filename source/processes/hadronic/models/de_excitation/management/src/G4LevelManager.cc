@@ -41,21 +41,101 @@
 // -------------------------------------------------------------------
 
 #include "G4LevelManager.hh"
+#include "G4HadronicException.hh"
+#include <iomanip>
 
-G4LevelManager::G4LevelManager(const std::vector<G4float>& energies,
-			       const std::vector<G4float>& lifetime,
-			       const std::vector<G4float>& lifetimegamma,
+G4String G4LevelManager::fFloatingLevels[] = {
+  "-", "+X", "+Y", "+Z", "+U", "+V", "+W", "+R", "+S", "+T", "+A", "+B", "+C"};
+
+G4LevelManager::G4LevelManager(size_t ntrans,
+                               const std::vector<G4double>& energies,
 			       const std::vector<G4int>& spin,
 			       const std::vector<const G4NucLevel*>& levels)
-  : fLevelEnergy(energies),fLifeTime(lifetime),
-    fLifeTimeGamma(lifetimegamma),fSpin(spin),fLevels(levels)
+  : nTransitions(0)
 { 
-  nTransitions = fLevelEnergy.size() - 1; 
-  //G4cout << "New G4LevelManager N= " << nTransitions << " " << fLevelEnergy.size() 
-  //	 << " <" << this << ">" << G4endl;
+  if(0 < ntrans) {
+    nTransitions = ntrans - 1;
+    fLevelEnergy.reserve(ntrans);
+    fSpin.reserve(ntrans);
+    fLevels.reserve(ntrans);
+    for(size_t i=0; i<ntrans; ++i) {
+      fLevelEnergy.push_back(energies[i]);
+      fSpin.push_back(spin[i]);
+      fLevels.push_back(levels[i]);
+    }
+    //G4cout << "New G4LevelManager N= " << nTransitions << " " 
+    //<< fLevelEnergy.size() << " <" << this << ">" << G4endl;
+  }
 }
 
 G4LevelManager::~G4LevelManager()
 {
   for(size_t i=0; i<=nTransitions; ++i) { delete fLevels[i]; }
+}
+
+size_t  
+G4LevelManager::NearestLevelIndex(G4double energy, size_t index) const
+{
+  //G4cout<< "index= " << index << " max= " << nTransitions << " exc= " << ener 
+  //	 << " Emax= " << fLevelEnergy[nTransitions] << G4endl;
+  size_t idx = std::min(index, nTransitions);
+  static const G4double tolerance = 1.0f-6;
+  if(0 == nTransitions || std::abs(energy - fLevelEnergy[idx]) <= tolerance) {
+    return idx;
+  }
+  // ground state
+  if(energy <= fLevelEnergy[1]*0.5)  
+    { idx = 0; }
+  // take top level
+  else if((fLevelEnergy[nTransitions] + fLevelEnergy[nTransitions-1])*0.5 <= energy) 
+    { idx = nTransitions; }
+
+  // if shortcuts are not working, make binary search
+  else {
+    idx = std::lower_bound(fLevelEnergy.begin(), fLevelEnergy.end(), energy)
+      - fLevelEnergy.begin() - 1;
+    if(energy - fLevelEnergy[idx] > fLevelEnergy[idx+1] - energy) { ++idx; }
+    //G4cout << "E= " << energy << " " << fLevelEnergy[idx-1] 
+    //<< " " << fLevelEnergy[idx] << G4endl;
+  }
+  return idx;
+}
+
+const G4String& G4LevelManager::FloatingType(size_t i) const
+{
+#ifdef G4VERBOSE
+  if(i > nTransitions) { PrintError(i, "Meta"); }
+#endif
+  return fFloatingLevels[fSpin[i]/100000]; 
+}
+
+#ifdef G4VERBOSE
+void G4LevelManager::PrintError(size_t idx, const G4String& ss) const
+{
+  G4String sss = "G4LevelManager::"+ss+"()";
+  G4ExceptionDescription ed;
+  ed << "Index of a level " << idx << " > " 
+     << nTransitions << " (number of levels)";
+  G4Exception(sss,"had061",JustWarning,ed,"stop run");
+  throw G4HadronicException(__FILE__, __LINE__,"FATAL Hadronic Exception");
+}  
+#endif
+
+void G4LevelManager::StreamInfo(std::ostream& out) const
+{
+  for(size_t i=0; i<=nTransitions; ++i) {
+    G4int prec = out.precision(6);
+    out << std::setw(6) << i << ". " 
+	<< std::setw(8) << fLevelEnergy[i];
+    if(fLevels[i]) {
+	out << std::setw(8) << fLevels[i]->GetTimeGamma()
+	    << std::setw(4) << fLevels[i]->NumberOfTransitions()
+	    << std::setw(4) << SpinTwo(i)
+	    << std::setw(4) << Parity(i)
+	    << std::setw(4) << FloatingLevel(i);
+    }
+    out << "\n";
+    out.precision(prec);
+    if(fLevels[i]) { fLevels[i]->StreamInfo(out); }
+  }
 }

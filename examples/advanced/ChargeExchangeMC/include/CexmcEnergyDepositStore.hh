@@ -51,29 +51,29 @@
 
 struct  CexmcEnergyDepositStore
 {
-    CexmcEnergyDepositStore( G4double  monitorED,
-                             G4double  vetoCounterEDLeft,
-                             G4double  vetoCounterEDRight,
-                             G4double  calorimeterEDLeft,
-                             G4double  calorimeterEDRight,
-                             G4int     calorimeterEDLeftMaxX,
-                             G4int     calorimeterEDLeftMaxY,
-                             G4int     calorimeterEDRightMaxX,
-                             G4int     calorimeterEDRightMaxY,
+    CexmcEnergyDepositStore( G4double  monitorED_,
+                             G4double  vetoCounterEDLeft_,
+                             G4double  vetoCounterEDRight_,
+                             G4double  calorimeterEDLeft_,
+                             G4double  calorimeterEDRight_,
+                             G4int     calorimeterEDLeftMaxX_,
+                             G4int     calorimeterEDLeftMaxY_,
+                             G4int     calorimeterEDRightMaxX_,
+                             G4int     calorimeterEDRightMaxY_,
                              const CexmcEnergyDepositCalorimeterCollection &
-                                       calorimeterEDLeftCollection,
+                                       calorimeterEDLeftCollection_,
                              const CexmcEnergyDepositCalorimeterCollection &
-                                       calorimeterEDRightCollection ) :
-        monitorED( monitorED ), vetoCounterEDLeft( vetoCounterEDLeft ),
-        vetoCounterEDRight( vetoCounterEDRight ),
-        calorimeterEDLeft( calorimeterEDLeft ),
-        calorimeterEDRight( calorimeterEDRight ),
-        calorimeterEDLeftMaxX( calorimeterEDLeftMaxX ),
-        calorimeterEDLeftMaxY( calorimeterEDLeftMaxY ),
-        calorimeterEDRightMaxX( calorimeterEDRightMaxX ),
-        calorimeterEDRightMaxY( calorimeterEDRightMaxY ),
-        calorimeterEDLeftCollection( calorimeterEDLeftCollection ),
-        calorimeterEDRightCollection( calorimeterEDRightCollection )
+                                       calorimeterEDRightCollection_ ) :
+        monitorED( monitorED_ ), vetoCounterEDLeft( vetoCounterEDLeft_ ),
+        vetoCounterEDRight( vetoCounterEDRight_ ),
+        calorimeterEDLeft( calorimeterEDLeft_ ),
+        calorimeterEDRight( calorimeterEDRight_ ),
+        calorimeterEDLeftMaxX( calorimeterEDLeftMaxX_ ),
+        calorimeterEDLeftMaxY( calorimeterEDLeftMaxY_ ),
+        calorimeterEDRightMaxX( calorimeterEDRightMaxX_ ),
+        calorimeterEDRightMaxY( calorimeterEDRightMaxY_ ),
+        calorimeterEDLeftCollection( calorimeterEDLeftCollection_ ),
+        calorimeterEDRightCollection( calorimeterEDRightCollection_ )
     {}
 
     void *  operator new( size_t  size );

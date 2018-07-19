@@ -48,8 +48,8 @@
 
 
 CexmcPhysicsManagerMessenger::CexmcPhysicsManagerMessenger(
-                                    CexmcPhysicsManager *  physicsManager ) :
-    physicsManager( physicsManager ), setMaxILCorrection( NULL )
+                                    CexmcPhysicsManager *  physicsManager_ ) :
+    physicsManager( physicsManager_ ), setMaxILCorrection( NULL )
 {
     setMaxILCorrection = new G4UIcmdWithADoubleAndUnit(
         ( CexmcMessenger::physicsDirName + "setMaxILCorrection" ).c_str(),

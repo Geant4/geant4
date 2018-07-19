@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.cc 86865 2014-11-19 14:41:25Z gcosmo $
+// $Id: G4VisCommandsGeometrySet.cc 104123 2017-05-11 13:51:32Z gcosmo $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -36,7 +36,6 @@
 #include "G4UImanager.hh"
 
 #include <sstream>
-#include <cctype>
 
 void G4VVisCommandGeometrySet::Set
 (G4String requestedName,
@@ -155,21 +154,7 @@ void G4VisCommandGeometrySetColour::SetNewValue
   std::istringstream iss(newValue);
   iss >> name >> requestedDepth >> redOrString >> green >> blue >> opacity;
   G4Colour colour(1,1,1,1);  // Default white and opaque.
-  const size_t iPos0 = 0;
-  if (std::isalpha(redOrString[iPos0])) {
-    if (!G4Colour::GetColour(redOrString, colour)) {
-      if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
-        G4cout << "WARNING: Colour \"" << redOrString
-               << "\" not found.  Defaulting to white and opaque."
-               << G4endl;
-      }
-    }
-  } else {
-    colour = G4Colour(G4UIcommand::ConvertToDouble(redOrString), green, blue);
-  }
-  colour = G4Colour
-    (colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
-
+  ConvertToColour(colour, redOrString, green, blue, opacity);
   G4VisCommandGeometrySetColourFunction setColour(colour);
   Set(name, setColour, requestedDepth);
 }
@@ -194,7 +179,7 @@ G4VisCommandGeometrySetDaughtersInvisible::G4VisCommandGeometrySetDaughtersInvis
     ("Depth of propagation (-1 means unlimited depth).");
   fpCommand->SetParameter(parameter);
   parameter = new G4UIparameter("daughtersInvisible", 'b', omitable = true);
-  parameter->SetDefaultValue(false);
+  parameter->SetDefaultValue(true);
   fpCommand->SetParameter(parameter);
 }
 
@@ -267,7 +252,7 @@ G4VisCommandGeometrySetForceAuxEdgeVisible::G4VisCommandGeometrySetForceAuxEdgeV
     ("Depth of propagation (-1 means unlimited depth).");
   fpCommand->SetParameter(parameter);
   parameter = new G4UIparameter("forceAuxEdgeVisible", 'b', omitable = true);
-  parameter->SetDefaultValue(false);
+  parameter->SetDefaultValue(true);
   fpCommand->SetParameter(parameter);
 }
 
@@ -322,8 +307,8 @@ G4VisCommandGeometrySetForceLineSegmentsPerCircle::G4VisCommandGeometrySetForceL
   fpCommand->SetParameter(parameter);
   parameter = new G4UIparameter("lineSegmentsPerCircle", 'd', omitable = true);
   parameter->SetGuidance
-    ("< 0 means not forced, i.e., under control of viewer.");
-  parameter->SetDefaultValue(-1);
+    ("<= 0 means not forced, i.e., under control of viewer.");
+  parameter->SetDefaultValue(0);
   fpCommand->SetParameter(parameter);
 }
 
@@ -373,7 +358,7 @@ G4VisCommandGeometrySetForceSolid::G4VisCommandGeometrySetForceSolid()
     ("Depth of propagation (-1 means unlimited depth).");
   fpCommand->SetParameter(parameter);
   parameter = new G4UIparameter("forceSolid", 'b', omitable = true);
-  parameter->SetDefaultValue(false);
+  parameter->SetDefaultValue(true);
   fpCommand->SetParameter(parameter);
 }
 
@@ -424,7 +409,7 @@ G4VisCommandGeometrySetForceWireframe::G4VisCommandGeometrySetForceWireframe()
     ("Depth of propagation (-1 means unlimited depth).");
   fpCommand->SetParameter(parameter);
   parameter = new G4UIparameter("forceWireframe", 'b', omitable = true);
-  parameter->SetDefaultValue(false);
+  parameter->SetDefaultValue(true);
   fpCommand->SetParameter(parameter);
 }
 

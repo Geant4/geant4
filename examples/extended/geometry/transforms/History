@@ -14,7 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+	 
+11-03-18 mma (exTransforms-V10-04-00)
+- transforms.cc : remove G4UI_USE and G4VIS_USE
+
+12-10-16 mma (exTransforms-V10-02-04)
+- remove again debug.mac
+
+09-10-16 mma (exTransforms-V10-02-02, 03)
+- restaure debug.mac
+
+08-10-16 mma (exTransforms-V10-02-01)
+- rename debug.mac to transforms.in
+
+04-07-16 I. Hrivnacova  (exTransforms-V10-02-00)
+- Fixes for Doxygen documentation
+
 24-07-15 mma (exTransforms-V10-01-00)
 - vis.mac: draw axis.
 

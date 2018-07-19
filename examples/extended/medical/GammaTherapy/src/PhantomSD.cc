@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhantomSD.cc 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: PhantomSD.cc 103469 2017-04-11 07:29:36Z gcosmo $
 //
 /// \file medical/GammaTherapy/src/PhantomSD.cc
 /// \brief Implementation of the PhantomSD class
@@ -41,7 +41,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "PhantomSD.hh"
-#include "Histo.hh"
+#include "G4RunManager.hh"
+#include "Run.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Step.hh"
@@ -50,8 +51,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 PhantomSD::PhantomSD(const G4String& name)
- : G4VSensitiveDetector(name), fHisto(Histo::GetPointer()),
-   fShiftZ(0.0),fCounter(0)
+  : G4VSensitiveDetector(name), fShiftZ(0.0),fCounter(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -63,8 +63,11 @@ PhantomSD::~PhantomSD()
 
 void PhantomSD::Initialize(G4HCofThisEvent*)
 {
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
   ++fCounter;
-  if(0 < fHisto->GetVerbose()) {
+  if(run->GetVerbose()) {
     G4cout << "PhantomSD: Begin Of Event # " << fCounter << G4endl;
   }
 }
@@ -73,6 +76,10 @@ void PhantomSD::Initialize(G4HCofThisEvent*)
 
 G4bool PhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
+
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
   G4double edep = aStep->GetTotalEnergyDeposit();
 
   // only if there is energy deposition
@@ -93,9 +100,9 @@ G4bool PhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     G4double z0 = 0.5*(z1 + z2);
     G4double r0 = std::sqrt(x0*x0 + y0*y0);
 
-    fHisto->AddPhantomStep(edep,r1,z1,r2,z2,r0,z0);
+    run->AddPhantomStep(edep,r1,z1,r2,z2,r0,z0);
 
-    if(1 < fHisto->GetVerbose()) {
+    if(run->GetVerbose()) {
       G4cout << "PhantomSD: energy = " << edep/MeV
              << " MeV is deposited at the step at r1,z1= " << r1 << " " << z1
              << "; r2,z2= " << r2 <<  " " << z2 << G4endl;

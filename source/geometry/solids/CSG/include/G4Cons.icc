@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.icc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Cons.icc 100820 2016-11-02 15:18:48Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -74,6 +74,30 @@ inline
 G4double G4Cons::GetDeltaPhiAngle() const
 {
   return fDPhi;
+}
+
+inline
+G4double G4Cons::GetSinStartPhi() const
+{
+  return sinSPhi;
+}
+
+inline
+G4double G4Cons::GetCosStartPhi() const
+{
+  return cosSPhi;
+}
+
+inline
+G4double G4Cons::GetSinEndPhi() const
+{
+  return sinEPhi;
+}
+
+inline
+G4double G4Cons::GetCosEndPhi() const
+{
+  return cosEPhi;
 }
 
 inline

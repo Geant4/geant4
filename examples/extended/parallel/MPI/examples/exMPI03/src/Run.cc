@@ -26,14 +26,18 @@
 #include "Run.hh"
 #include <atomic>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace {
   std::atomic_int g_ctr(0);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 Run::Run() {
-  aDummyCounter = g_ctr++;
+  fDummyCounter = g_ctr++;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void Run::Merge(const G4Run* other ) {
   G4Run::Merge(other);
-  aDummyCounter += static_cast<const Run*>(other)->aDummyCounter;
+  fDummyCounter += static_cast<const Run*>(other)->fDummyCounter;
 }

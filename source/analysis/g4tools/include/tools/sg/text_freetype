@@ -61,6 +61,8 @@ namespace sg {
 class text_freetype : public tools::sg::base_freetype {
   TOOLS_NODE(text_freetype,tools::sg::text_freetype,tools::sg::base_freetype)
 protected:
+  TOOLS_CLASS_STRING(TOOLS_FONT_PATH)
+protected:
   enum wndg_type {
     wndg_ccw,
     wndg_cw,
@@ -72,8 +74,8 @@ protected: //gstos
 
    {tools_vforcit(line_t,m_lines,it) {
       const line_t& item = *it;
-      unsigned int pos = item.first;
-      unsigned int num = item.second;
+      size_t pos = item.first;
+      size_t num = item.second;
 
       if(num<2) {
         a_out << "tools::sg::text_freetype::create_gsto :"
@@ -86,10 +88,10 @@ protected: //gstos
 
       // data is a line_strip(), convert it to lines.
 
-      unsigned int nsegs = num-1;
+      size_t nsegs = num-1;
 
-      unsigned int ngsto = nsegs*2*3; //3 = have a z (Windows GL).
-      unsigned int sz = gsto_data.size();
+      size_t ngsto = nsegs*2*3; //3 = have a z (Windows GL).
+      size_t sz = gsto_data.size();
       gsto_data.resize(sz+ngsto);
       float* pxyz = tools::vec_data<float>(gsto_data)+sz;
   
@@ -100,8 +102,8 @@ protected: //gstos
 
    {tools_vforcit(gl_triangle_t,m_triangles,it) {
       const std::pair<GLUenum,triangle_t>& item = *it;
-      unsigned int pos = item.second.first;
-      unsigned int num = item.second.second;
+      size_t pos = item.second.first;
+      size_t num = item.second.second;
 
       if(num<3) {
         a_out << "tools::sg::text_freetype::create_gsto :"
@@ -115,10 +117,10 @@ protected: //gstos
 
       if((*it).first==tools::gl::triangles()) {
 
-        unsigned int ntri = num/3;
+        size_t ntri = num/3;
 
-        unsigned int ngsto = ntri*3*3;
-        unsigned int sz = gsto_data.size();
+        size_t ngsto = ntri*3*3;
+        size_t sz = gsto_data.size();
         gsto_data.resize(sz+ngsto);
         float* pxyz = tools::vec_data<float>(gsto_data)+sz;
   
@@ -126,10 +128,10 @@ protected: //gstos
 
       } else if((*it).first==tools::gl::triangle_fan()) {
 
-        unsigned int ntri = num-2;
+        size_t ntri = num-2;
 
-        unsigned int ngsto = ntri*3*3;
-        unsigned int sz = gsto_data.size();
+        size_t ngsto = ntri*3*3;
+        size_t sz = gsto_data.size();
         gsto_data.resize(sz+ngsto);
         float* pxyz = tools::vec_data<float>(gsto_data)+sz;
   
@@ -137,10 +139,10 @@ protected: //gstos
 
       } else if((*it).first==tools::gl::triangle_strip()) {
 
-        unsigned int ntri = num-2;
+        size_t ntri = num-2;
 
-        unsigned int ngsto = ntri*3*3;
-        unsigned int sz = gsto_data.size();
+        size_t ngsto = ntri*3*3;
+        size_t sz = gsto_data.size();
         gsto_data.resize(sz+ngsto);
         float* pxyz = tools::vec_data<float>(gsto_data)+sz;
   
@@ -182,7 +184,7 @@ public:
       unsigned int _id = get_gsto_id(a_action.out(),a_action.gl_manager());
       if(_id) {
         a_action.begin_gsto(_id);
-        unsigned int sz_tris = m_gsto_sz-m_gsto_lines_sz;
+        size_t sz_tris = m_gsto_sz-m_gsto_lines_sz;
         if(m_gsto_lines_sz) {
           a_action.set_line_smooth(true);
           a_action.draw_gsto_v(tools::gl::lines(),m_gsto_lines_sz/3,0);
@@ -217,8 +219,8 @@ public:
 
    {tools_vforcit(line_t,m_lines,it) {
       const line_t& item = *it;
-      unsigned int pos = item.first;
-      unsigned int num = item.second;
+      size_t pos = item.first;
+      size_t num = item.second;
       if(!num) continue;
       //a_out << "tools::sg::text_freetype::render :"
       //      << " num points " << num
@@ -236,8 +238,8 @@ public:
     ///////////////////////////////////////////////////////////
    {tools_vforcit(gl_triangle_t,m_triangles,it) {
       const std::pair<GLUenum,triangle_t>& item = *it;
-      unsigned int pos = item.second.first;
-      unsigned int num = item.second.second;
+      size_t pos = item.second.first;
+      size_t num = item.second.second;
       if(!num) continue;
       //a_out << "tools::sg::text_freetype::render :"
       //      << " num points " << num
@@ -293,8 +295,8 @@ public:
 
    {tools_vforcit(line_t,m_lines,it) {
       const line_t& item = *it;
-      unsigned int pos = item.first;
-      unsigned int num = item.second;
+      size_t pos = item.first;
+      size_t num = item.second;
       const float* data = tools::vec_data<float>(m_xys)+pos;
       if(a_action.add__line_strip_xy(*this,2*num,data,true)) return;
     }}
@@ -305,8 +307,8 @@ public:
     ///////////////////////////////////////////////////////////
    {tools_vforcit(gl_triangle_t,m_triangles,it) {
       const std::pair<GLUenum,triangle_t>& item = *it;
-      unsigned int pos = item.second.first;
-      unsigned int num = item.second.second;
+      size_t pos = item.second.first;
+      size_t num = item.second.second;
       const float* data = tools::vec_data<float>(m_xys)+pos;
       if(a_action.add__primitive_xy(*this,item.first,2*num,data,true)) return;
     }}
@@ -321,12 +323,12 @@ public:
 
    {tools_vforcit(line_t,m_lines,it) {
       const line_t& item = *it;
-      unsigned int num = item.second;
+      size_t num = item.second;
       const float* data = tools::vec_data<float>(m_xys)+item.first;
 
       float px,py,pz;
       float* pos = (float*)data;
-      for(unsigned int index=0;index<num;index++) {
+      for(size_t index=0;index<num;index++) {
         px = *pos;pos++;
         py = *pos;pos++;
         pz = 0;
@@ -340,12 +342,12 @@ public:
     ///////////////////////////////////////////////////////////
    {tools_vforcit(gl_triangle_t,m_triangles,it) {
       const std::pair<GLUenum,triangle_t>& item = *it;
-      unsigned int num = item.second.second;
+      size_t num = item.second.second;
       const float* data = tools::vec_data<float>(m_xys)+item.second.first;
 
       float px,py,pz;
       float* pos = (float*)data;
-      for(unsigned int index=0;index<num;index++) {
+      for(size_t index=0;index<num;index++) {
         px = *pos;pos++;
         py = *pos;pos++;
         pz = 0;
@@ -567,18 +569,18 @@ protected:
 
      {tools_vforit(line_t,m_lines,it) {
         line_t& item = *it;
-        unsigned int pos = item.first;
-        unsigned int npt = item.second;
+        size_t pos = item.first;
+        size_t npt = item.second;
         float* data = tools::vec_data<float>(m_xys)+pos+1;
-        for(unsigned int i=0;i<npt;i++,data+=2) *data -= 0.5F * szy;
+        for(size_t i=0;i<npt;i++,data+=2) *data -= 0.5F * szy;
       }}
 
      {tools_vforit(gl_triangle_t,m_triangles,it) {
         std::pair<GLUenum,triangle_t>& item = *it;
-        unsigned int pos = item.second.first;
-        unsigned int npt = item.second.second;
+        size_t pos = item.second.first;
+        size_t npt = item.second.second;
         float* data = tools::vec_data<float>(m_xys)+pos+1;
-        for(unsigned int i=0;i<npt;i++,data+=2) *data -= 0.5F * szy;
+        for(size_t i=0;i<npt;i++,data+=2) *data -= 0.5F * szy;
       }}
 
     } else if(vjust==tools::sg::top) {
@@ -589,18 +591,18 @@ protected:
 
      {tools_vforit(line_t,m_lines,it) {
         line_t& item = *it;
-        unsigned int pos = item.first;
-        unsigned int npt = item.second;
+        size_t pos = item.first;
+        size_t npt = item.second;
         float* data = tools::vec_data<float>(m_xys)+pos+1;
-        for(unsigned int i=0;i<npt;i++,data+=2) *data -= szy;
+        for(size_t i=0;i<npt;i++,data+=2) *data -= szy;
       }}
 
      {tools_vforit(gl_triangle_t,m_triangles,it) {
         std::pair<GLUenum,triangle_t>& item = *it;
-        unsigned int pos = item.second.first;
-        unsigned int npt = item.second.second;
+        size_t pos = item.second.first;
+        size_t npt = item.second.second;
         float* data = tools::vec_data<float>(m_xys)+pos+1;
-        for(unsigned int i=0;i<npt;i++,data+=2) *data -= szy;
+        for(size_t i=0;i<npt;i++,data+=2) *data -= szy;
       }}
 
     }
@@ -620,7 +622,7 @@ protected:
         //a_out << line << std::endl;
         m_trans_x = 0;
         m_trans_y = yline;
-        unsigned int ibeg = m_lines.size(); //for hjust.
+        size_t ibeg = m_lines.size(); //for hjust.
         tools_sforcit(line,it) {
           if(!char_outline_2_gl(a_out,*it + m_encoding_offset)) return;
         }
@@ -628,22 +630,22 @@ protected:
 
        {float sx = m_trans_x;
         if(hjust==tools::sg::center) {
-          unsigned int num = m_lines.size();
-          for(unsigned int index=ibeg;index<num;index++) {
+          size_t num = m_lines.size();
+          for(size_t index=ibeg;index<num;index++) {
             line_t& item = m_lines[index];
-            unsigned int pos = item.first;
-            unsigned int npt = item.second;
+            size_t pos = item.first;
+            size_t npt = item.second;
             float* data = tools::vec_data<float>(m_xys)+pos;
-            for(unsigned int i=0;i<npt;i++,data+=2) *data -= 0.5F * sx;
+            for(size_t i=0;i<npt;i++,data+=2) *data -= 0.5F * sx;
           }
         } else if(hjust==tools::sg::right) {
-          unsigned int num = m_lines.size();
-          for(unsigned int index=ibeg;index<num;index++) {
+          size_t num = m_lines.size();
+          for(size_t index=ibeg;index<num;index++) {
             line_t& item = m_lines[index];
-            unsigned int pos = item.first;
-            unsigned int npt = item.second;
+            size_t pos = item.first;
+            size_t npt = item.second;
             float* data = tools::vec_data<float>(m_xys)+pos;
-            for(unsigned int i=0;i<npt;i++,data+=2) *data -= sx;
+            for(size_t i=0;i<npt;i++,data+=2) *data -= sx;
           }
         }}
       }
@@ -655,7 +657,7 @@ protected:
         //a_out << line << std::endl;
         m_trans_x = 0;
         m_trans_y = yline;
-        unsigned int ibeg = m_lines.size(); //for hjust.
+        size_t ibeg = m_lines.size(); //for hjust.
         tools_vforcit(unichar,line,it) {
           if(!char_outline_2_gl(a_out,*it)) return;
         }  
@@ -663,22 +665,22 @@ protected:
 
        {float sx = m_trans_x;
         if(hjust==tools::sg::center) {
-          unsigned int num = m_lines.size();
-          for(unsigned int index=ibeg;index<num;index++) {
+          size_t num = m_lines.size();
+          for(size_t index=ibeg;index<num;index++) {
             line_t& item = m_lines[index];
-            unsigned int pos = item.first;
-            unsigned int npt = item.second;
+            size_t pos = item.first;
+            size_t npt = item.second;
             float* data = tools::vec_data<float>(m_xys)+pos;
-            for(unsigned int i=0;i<npt;i++,data+=2) *data -= 0.5F*sx;
+            for(size_t i=0;i<npt;i++,data+=2) *data -= 0.5F*sx;
           }
         } else if(hjust==tools::sg::center) {
-          unsigned int num = m_lines.size();
-          for(unsigned int index=ibeg;index<num;index++) {
+          size_t num = m_lines.size();
+          for(size_t index=ibeg;index<num;index++) {
             line_t& item = m_lines[index];
-            unsigned int pos = item.first;
-            unsigned int npt = item.second;
+            size_t pos = item.first;
+            size_t npt = item.second;
             float* data = tools::vec_data<float>(m_xys)+pos;
-            for(unsigned int i=0;i<npt;i++,data+=2) *data -= sx;
+            for(size_t i=0;i<npt;i++,data+=2) *data -= sx;
           }
         }}
       }
@@ -739,8 +741,7 @@ protected:
     m_trans_x += float(m_face->glyph->advance.x)*m_scale;
     m_trans_y += float(m_face->glyph->advance.y)*m_scale;
 
-   {wndg_type wdg =
-      ((outline.flags & FT_OUTLINE_REVERSE_FILL)?wndg_ccw:wndg_cw);
+   {wndg_type wdg = ((outline.flags & FT_OUTLINE_REVERSE_FILL)?wndg_ccw:wndg_cw);
     if(m_wndg==wndg_not_done) {
       m_wndg = wdg;
     } else if(m_wndg!=wdg) {
@@ -769,13 +770,23 @@ protected:
     FT_Pos face_height = m_face->size->metrics.height; //FT_Pos (long)
 
     m_tobj = gluNewTess();
-    ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_BEGIN_DATA,  (Func)begin_cbk);
-    ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_END_DATA,    (Func)end_cbk);
-    ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_VERTEX_DATA, (Func)vertex_cbk);
-    ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_COMBINE_DATA,(Func)combine_cbk);
-    ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_ERROR_DATA,  (Func)error_cbk);
-    ::gluTessProperty(m_tobj,(GLUenum)GLU_TESS_WINDING_RULE,
-                      GLU_TESS_WINDING_ODD);
+
+    //::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_BEGIN_DATA,  (Func)begin_cbk);
+    //::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_END_DATA,    (Func)end_cbk);
+    //::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_VERTEX_DATA, (Func)vertex_cbk);
+    //::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_COMBINE_DATA,(Func)combine_cbk);
+    //::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_ERROR_DATA,  (Func)error_cbk);
+
+    // NOTE : the gluTessCallback_<enum>() functions are tools/glutess specific.
+    //        They had been introduced to avoid g++-8.1.0 warnings :
+    //          warnings : cast between incompatible function types.
+    ::gluTessCallback_GLU_TESS_BEGIN_DATA   (m_tobj,begin_cbk);
+    ::gluTessCallback_GLU_TESS_END_DATA     (m_tobj,end_cbk);
+    ::gluTessCallback_GLU_TESS_VERTEX_DATA  (m_tobj,vertex_cbk);
+    ::gluTessCallback_GLU_TESS_COMBINE_DATA (m_tobj,combine_cbk);
+    ::gluTessCallback_GLU_TESS_ERROR_DATA   (m_tobj,error_cbk);
+
+    ::gluTessProperty(m_tobj,(GLUenum)GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
 
     //::gluTessProperty(m_tobj, GLU_TESS_TOLERANCE, 0);
     //::gluTessNormal(m_tobj, 0.0f, 0.0f, -1.0f);
@@ -787,7 +798,7 @@ protected:
         //a_out << line << std::endl;
         m_trans_x = 0;
         m_trans_y = yline;
-        unsigned int ibeg = m_triangles.size(); //for hjust.
+        size_t ibeg = m_triangles.size(); //for hjust.
         tools_sforcit(line,it) {
           if(!char_triangles_2_gl(a_out,*it + m_encoding_offset)) {
             ::gluDeleteTess(m_tobj);
@@ -799,22 +810,22 @@ protected:
 
        {float sx = m_trans_x;
         if(hjust==tools::sg::center) {
-          unsigned int num = m_triangles.size();
-          for(unsigned int index=ibeg;index<num;index++) {
+          size_t num = m_triangles.size();
+          for(size_t index=ibeg;index<num;index++) {
             std::pair<GLUenum,triangle_t>& item = m_triangles[index];
-            unsigned int pos = item.second.first;
-            unsigned int npt = item.second.second;
+            size_t pos = item.second.first;
+            size_t npt = item.second.second;
             float* data = tools::vec_data<float>(m_xys)+pos;
-            for(unsigned int i=0;i<npt;i++,data+=2) *data -= sx*0.5f;
+            for(size_t i=0;i<npt;i++,data+=2) *data -= sx*0.5f;
           } 
         } else if(hjust==tools::sg::right) {
-          unsigned int num = m_triangles.size();
-          for(unsigned int index=ibeg;index<num;index++) {
+          size_t num = m_triangles.size();
+          for(size_t index=ibeg;index<num;index++) {
             std::pair<GLUenum,triangle_t>& item = m_triangles[index];
-            unsigned int pos = item.second.first;
-            unsigned int npt = item.second.second;
+            size_t pos = item.second.first;
+            size_t npt = item.second.second;
             float* data = tools::vec_data<float>(m_xys)+pos;
-            for(unsigned int i=0;i<npt;i++,data+=2) *data -= sx;
+            for(size_t i=0;i<npt;i++,data+=2) *data -= sx;
           } 
         }}
       }
@@ -825,7 +836,7 @@ protected:
         //a_out << line << std::endl;
         m_trans_x = 0;
         m_trans_y = yline;
-        unsigned int ibeg = m_triangles.size(); //for hjust.
+        size_t ibeg = m_triangles.size(); //for hjust.
         tools_vforcit(unichar,line,it) {
           if(!char_triangles_2_gl(a_out,*it)) {
             ::gluDeleteTess(m_tobj);
@@ -837,22 +848,22 @@ protected:
 
        {float sx = m_trans_x;
         if(hjust==tools::sg::center) {
-          unsigned int num = m_triangles.size();
-          for(unsigned int index=ibeg;index<num;index++) {
+          size_t num = m_triangles.size();
+          for(size_t index=ibeg;index<num;index++) {
             std::pair<GLUenum,triangle_t>& item = m_triangles[index];
-            unsigned int pos = item.second.first;
-            unsigned int npt = item.second.second;
+            size_t pos = item.second.first;
+            size_t npt = item.second.second;
             float* data = tools::vec_data<float>(m_xys)+pos;
-            for(unsigned int i=0;i<npt;i++,data+=2) *data -= sx*0.5f;
+            for(size_t i=0;i<npt;i++,data+=2) *data -= sx*0.5f;
           } 
         } else if(hjust==tools::sg::right) {
-          unsigned int num = m_triangles.size();
-          for(unsigned int index=ibeg;index<num;index++) {
+          size_t num = m_triangles.size();
+          for(size_t index=ibeg;index<num;index++) {
             std::pair<GLUenum,triangle_t>& item = m_triangles[index];
-            unsigned int pos = item.second.first;
-            unsigned int npt = item.second.second;
+            size_t pos = item.second.first;
+            size_t npt = item.second.second;
             float* data = tools::vec_data<float>(m_xys)+pos;
-            for(unsigned int i=0;i<npt;i++,data+=2) *data -= sx;
+            for(size_t i=0;i<npt;i++,data+=2) *data -= sx;
           } 
         }}
       }
@@ -934,8 +945,7 @@ protected:
     m_trans_x += float(m_face->glyph->advance.x)*m_scale;
     m_trans_y += float(m_face->glyph->advance.y)*m_scale;
 
-   {wndg_type wdg =
-      ((outline.flags & FT_OUTLINE_REVERSE_FILL)?wndg_ccw:wndg_cw);
+   {wndg_type wdg = ((outline.flags & FT_OUTLINE_REVERSE_FILL)?wndg_ccw:wndg_cw);
     if(m_wndg==wndg_not_done) {
       m_wndg = wdg;
     } else if(m_wndg!=wdg) {
@@ -1313,8 +1323,8 @@ protected:
 
     float gx,gy;
 
-    unsigned int num = self.m_steps - 1;
-    for(unsigned int i=0;i<num;i++) {
+    size_t num = self.m_steps - 1;
+    for(size_t i=0;i<num;i++) {
       fromx += dfx;
       fromy += dfy;
 
@@ -1413,8 +1423,8 @@ protected:
     // from = starting point.
     float gx,gy;
 
-    unsigned int num = self.m_steps - 1;
-    for(unsigned int i=0;i<num;i++) {
+    size_t num = self.m_steps - 1;
+    for(size_t i=0;i<num;i++) {
       fromx += dfx;
       fromy += dfy;
 
@@ -1540,14 +1550,20 @@ protected:
             << std::endl;
       return;
     }
+    
     std::string file;
-    if(!tools::find_with_path(a_out,"TOOLS_FONT_PATH",font.value(),file)) {
-      a_out << "tools::sg::text_freetype::load_face :"
-            << " font file not found for font " 
-            << tools::sout(font.value()) << "."
-            << std::endl;
-      return;
-    }
+    
+    //if(tools::file::exists(font.value())) { //look in current directory.
+    //  file = font.value(); //ok
+    //} else if(!inlib::find_with_dirs(a_out,font_dirs.values(),font.value(),file,false)) {
+      if(!tools::find_with_env(a_out,s_TOOLS_FONT_PATH(),font.value(),file,false)) {
+        a_out << "tools::sg::text_freetype::load_face :"
+              << " font file not found for font " 
+              << tools::sout(font.value()) << "."
+              << std::endl;
+        return;
+      }
+    //}
 
     if(m_verbose) {
       a_out << "tools::sg::text_freetype::load_face :"
@@ -1887,7 +1903,7 @@ protected:
   float m_last_x,m_last_y;
   float m_scale;
   float m_trans_x,m_trans_y;
-  unsigned int m_steps;
+  size_t m_steps;
   float m_delta;
   float m_delta2;
   float m_delta3;
@@ -1896,7 +1912,7 @@ protected:
   ////////////////////////////////////////////////////////
   /// outline lines //////////////////////////////////////
   ////////////////////////////////////////////////////////
-  typedef std::pair<unsigned int,unsigned int> line_t; //pos in m_xys.
+  typedef std::pair<size_t,size_t> line_t; //pos in m_xys.
   typedef std::vector<line_t> lines_t;
   lines_t m_lines;
   ////////////////////////////////////////////////////////
@@ -1905,23 +1921,21 @@ protected:
   GLUtesselator* m_tobj;
   bool m_contour_open;
   std::vector<double*> m_glutess_trids;
-  unsigned int m_glutess_trids_num;
+  size_t m_glutess_trids_num;
   std::vector<double*> m_combine_trids;
-  unsigned int m_combine_trids_num;
+  size_t m_combine_trids_num;
   GLUenum m_mode;
-  typedef std::pair<unsigned int,unsigned int> triangle_t; //pos in m_xys.
+  typedef std::pair<size_t,size_t> triangle_t; //pos in m_xys.
   typedef std::pair<GLUenum,triangle_t> gl_triangle_t;
   typedef std::vector<gl_triangle_t> triangles_t;
   triangles_t m_triangles;
   size_t m_pos;
-  unsigned int m_gsto_lines_sz;
-  unsigned int m_gsto_sz;
+  size_t m_gsto_lines_sz;
+  size_t m_gsto_sz;
   wndg_type m_wndg;
 
 };
 
 }}
-
-//exlib_build_use inlib freetype inlib_glutess
 
 #endif

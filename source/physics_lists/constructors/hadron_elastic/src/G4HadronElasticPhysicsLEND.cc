@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysicsLEND.cc 71037 2013-06-10 09:20:54Z gcosmo $
+// $Id: G4HadronElasticPhysicsLEND.cc 107437 2017-11-13 07:37:11Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -94,13 +94,14 @@ void G4HadronElasticPhysicsLEND::ConstructProcess()
 
   G4LENDElastic* lend = new G4LENDElastic( G4Neutron::Neutron() );
   if ( evaluation.size() > 0 ) lend->ChangeDefaultEvaluation( evaluation );
-  //lend->AllowNaturalAbundanceTarget();
-  lend->AllowAnyCandidateTarget();
+  lend->AllowNaturalAbundanceTarget();
+  //lend->AllowAnyCandidateTarget();
+  lend->DumpLENDTargetInfo(true);
   hel->RegisterMe(lend);
   G4LENDElasticCrossSection* lend_XS = new G4LENDElasticCrossSection( G4Neutron::Neutron() );
   if ( evaluation.size() > 0 ) lend_XS->ChangeDefaultEvaluation( evaluation );
-  //lend_XS->AllowNaturalAbundanceTarget();
-  lend_XS->AllowAnyCandidateTarget();
+  lend_XS->AllowNaturalAbundanceTarget();
+  //lend_XS->AllowAnyCandidateTarget();
   hel->AddDataSet( lend_XS );
 
   if(verbose > 1) {

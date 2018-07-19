@@ -39,7 +39,7 @@ add_subdirectory(common)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(clGeometry clGeometry.cc ${sources} ${headers})
-target_link_libraries(clGeometry ${common_prefix}common ${Geant4_LIBRARIES} G3toG4)
+target_link_libraries(clGeometry ${common_prefix}common ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -47,7 +47,7 @@ target_link_libraries(clGeometry ${common_prefix}common ${Geant4_LIBRARIES} G3to
 # relies on these scripts being in the current working directory.
 #
 set(clGeometry_SCRIPTS
-    clGeometry.in clGeometry.out init.mac init_vis.mac vis.mac
+    clGeometry.in clGeometry.out init_vis.mac vis.mac
   )
 
 foreach(_script ${clGeometry_SCRIPTS})

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredSceneHandler.hh 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4XXXStoredSceneHandler.hh 99152 2016-09-07 08:04:30Z gcosmo $
 //
 // 
 // John Allison  7th March 2006
@@ -71,12 +71,17 @@ public:
   {G4VSceneHandler::AddSolid(polycone);}
   void AddSolid(const G4Polyhedra& polyhedra)
   {G4VSceneHandler::AddSolid(polyhedra);}
+  void AddSolid(const G4Orb& orb)
+  {G4VSceneHandler::AddSolid(orb);}
+  void AddSolid(const G4Ellipsoid& ellipsoid)
+  {G4VSceneHandler::AddSolid(ellipsoid);}
   void AddSolid(const G4VSolid& solid)
   {G4VSceneHandler::AddSolid(solid);}
   // More optional functions...
   // void AddCompound(const G4VTrajectory&);
   // void AddCompound(const G4VHit&);
   // void AddCompound(const G4THitsMap<G4double>&);
+  // void AddCompound(const G4THitsMap<G4StatDouble>&);
   void PreAddSolid(const G4Transform3D& objectTransformation,
 		   const G4VisAttributes&);
   void PostAddSolid();

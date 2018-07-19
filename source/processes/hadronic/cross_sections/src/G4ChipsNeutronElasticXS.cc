@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChipsNeutronElasticXS.cc 93080 2015-10-02 14:45:31Z gcosmo $
+// $Id: G4ChipsNeutronElasticXS.cc 109482 2018-04-24 14:47:28Z gcosmo $
 //
 //
 // G4 Physics class: G4ChipsNeutronElasticXS for nA elastic cross sections
@@ -1669,8 +1669,13 @@ G4double G4ChipsNeutronElasticXS::GetPTables(G4double LP, G4double ILP, G4int PD
         }
         if(nfound) 
         {
-          G4cout<<"-Warning-G4ChipsNeutronElasticXS::CalcCS: Z="<<tgZ<<", N="<<tgN
-                <<" isotope is not implemented in CHIPS"<<G4endl; // Put default values:
+          //AR-24Apr2018 Switch to allow transuranic elements (in this case to avoid a harmless warning)
+          const G4bool isHeavyElementAllowed = true; 
+          if ( ! isHeavyElementAllowed ) {
+            G4cout<<"-Warning-G4ChipsNeutronElasticXS::CalcCS: Z="<<tgZ<<", N="<<tgN
+                  <<" isotope is not implemented in CHIPS"<<G4endl; 
+          }
+          // Put default values:
           lastPAR[ 4]=5.2E-7;                                              // p4
           lastPAR[ 7]=22.;                                                 // p7
           lastPAR[ 8]=.00026;                                              // p8
@@ -1994,7 +1999,10 @@ G4double G4ChipsNeutronElasticXS::GetTabValues(G4double lp, G4int PDG, G4int tgZ
                                                      G4int tgN)
 {
   if(PDG!=2112) G4cout<<"*Warning*G4ChipsNeutronElasticXS::GetTaV:PDG="<<PDG<<G4endl;
-  if(tgZ<0 || tgZ>92)
+
+  //AR-24Apr2018 Switch to allow transuranic elements
+  const G4bool isHeavyElementAllowed = true;
+  if(tgZ<0 || ( !isHeavyElementAllowed && tgZ>92))
   {
     G4cout<<"*Warning*G4QNElasticCrS::GetTabValue: (1-92) No isotopes for Z="<<tgZ<<G4endl;
     return 0.;

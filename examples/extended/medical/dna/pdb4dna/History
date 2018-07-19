@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+18-04-2018 S. Incerti tag pdb4dna-V10-04-00
+- Fix to analysis.C
+
+23.02.2017 I. Hrivnacova        tag pdb4dna-V10-03-00
+- fixed compilation (G4UIQt.hh include)
+
+09.07.2016 S.Incerti            tag pdb4dna-V10-02-02
+- updated README
+
+05.07.2016 M.Karamitros         tag pdb4dna-V10-02-01
+- DBL_MAX->INT_MAX
+- Prevent warnings when -Wmaybe-uninitialized with gcc > 4.6
+
+04.07.2016 I.Hrivnacova         tag pdb4dna-V10-02-00
+- Fixes for Doxygen documentation
+
 05.05.2015 S.I.                 tag pdb4dna-V10-01-02
 - renamed affiche as Affiche in PDBresidue.hh
 - cleaned for coding guidelines

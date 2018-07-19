@@ -46,7 +46,8 @@ class G4BetaMinusDecay : public G4NuclearDecay
   public:
     G4BetaMinusDecay(const G4ParticleDefinition* theParentNucleus,
                      const G4double& theBR, const G4double& endpointE,
-                     const G4double& ex, const G4BetaDecayType& type);
+                     const G4double& ex, const G4Ions::G4FloatLevelBase& flb,
+                     const G4BetaDecayType& type);
 
     virtual ~G4BetaMinusDecay();
 

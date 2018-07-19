@@ -16,14 +16,14 @@
 /testem/target1Z              5.5 mm
 /testem/target2Z              6.5 mm
 #
-#/testem/histoName            cu_w_st.paw
-#
 #/testem/stepMax              0.5 mm
 #
 /gun/particle e-
 /gun/energy 50.0 MeV
 #
 /run/initialize
+#
+/analysis/setFileName            cu_w_st
 #
 /run/setCut         0.1 mm
 #
