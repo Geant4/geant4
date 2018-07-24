@@ -211,6 +211,9 @@ void G4CascadeParamMessenger::SetNewValue(G4UIcommand* cmd, G4String arg) {
   if (cmd == nucGammaQDCmd)
     theParams->G4NUCMODEL_GAMMAQD = strdup(arg.c_str());
 
+  if (cmd == nucPotentialThickness)
+    theParams->G4NUCMODEL_POTENTIAL_THICKNESS = strdup(arg.c_str());
+
   if (cmd == coalDPmax2Cmd)
     theParams->DPMAX_2CLUSTER = strdup(arg.c_str());
 
