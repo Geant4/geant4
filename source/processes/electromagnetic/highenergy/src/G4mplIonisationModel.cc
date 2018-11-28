@@ -202,7 +202,7 @@ G4double G4mplIonisationModel::ComputeDEDXAhlen(const G4Material* material,
 
   dedx += 0.5 * k - B[nmpl];
 
-  // density effect correction
+  // Sternheimer 3-part approximate density effect correction
   G4double deltam;
   G4double x = log(bg2) / twoln10;
   if ( x >= x0den ) {

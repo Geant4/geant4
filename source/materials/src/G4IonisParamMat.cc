@@ -38,6 +38,7 @@
 // 27-09-07, add computation of parameters for ions (V.Ivanchenko)
 // 04-03-08, remove reference to G4NistManager. Add fBirks constant (mma)
 // 30-10-09, add G4DensityEffectData class and density effect computation (VI)
+// 16-01-19, add exact computation of the density effect (M. Strait)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -48,6 +49,8 @@
 #include "G4Pow.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4DensityEffectCalc.hh"
+#include "G4AtomicShells.hh"
 
 G4DensityEffectData* G4IonisParamMat::fDensityData = nullptr;
 
@@ -69,6 +72,7 @@ G4IonisParamMat::G4IonisParamMat(const G4Material* material)
   fD0density = 0.0;
   fAdjustmentFactor = 1.0;
   if(fDensityData == nullptr) { fDensityData = new G4DensityEffectData(); }
+  fCalcDensity = nullptr;
 
   // compute parameters
   ComputeMeanParameters();
@@ -113,6 +117,7 @@ G4IonisParamMat::G4IonisParamMat(__void__&)
   twoln10 = 2.*G4Pow::GetInstance()->logZ(10);
 
   if(fDensityData == nullptr) { fDensityData = new G4DensityEffectData(); }
+  fCalcDensity = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -213,8 +218,6 @@ void G4IonisParamMat::ComputeDensityEffect()
     }
   }
 
-  //G4cout<<"DensityEffect for "<<fMaterial->GetName()<<"  "<< idx << G4endl; 
-
   if(idx >= 0) {
 
     // Take parameters for the density effect correction from
@@ -230,11 +233,6 @@ void G4IonisParamMat::ComputeDensityEffect()
     fD0density = fDensityData->GetDelta0density(idx);
     fPlasmaEnergy = fDensityData->GetPlasmaEnergy(idx);
     fAdjustmentFactor = fDensityData->GetAdjustmentFactor(idx);
-
-    // parameter C is computed and not taken from Sternheimer tables
-    //fCdensity = 1. + 2*G4Log(fMeanExcitationEnergy/fPlasmaEnergy);
-    //G4cout << "IonisParamMat: " << fMaterial->GetName() 
-    //	   << "  Cst= " << Cdensity << " C= " << fCdensity << G4endl;
 
     // correction on nominal density
     fCdensity  += corr;
@@ -279,9 +277,6 @@ void G4IonisParamMat::ComputeDensityEffect()
       //
       fMdensity = 3.;
       fX1density = 4.0;
-      //static const G4double ClimiG[] = {10.,10.5,11.,11.5,12.25,13.804};
-      //static const G4double X0valG[] = {1.6,1.7,1.8,1.9,2.0,2.0};
-      //static const G4double X1valG[] = {4.0,4.0,4.0,4.0,4.0,5.0};
 
       if(fCdensity < 10.) {
 	fX0density = 1.6; 
@@ -311,7 +306,6 @@ void G4IonisParamMat::ComputeDensityEffect()
   // change parameters if the gas is not in STP.
   // For the correction the density(STP) is needed. 
   // Density(STP) is calculated here : 
-  
     
   if (State == kStateGas) { 
     G4double Density  = fMaterial->GetDensity();
@@ -333,19 +327,6 @@ void G4IonisParamMat::ComputeDensityEffect()
     fAdensity = twoln10*(Xa-fX0density)
       /std::pow((fX1density-fX0density),fMdensity);
   }
-  /*  
-  G4cout << "G4IonisParamMat: density effect data for <" 
-         << fMaterial->GetName() 
-	 << "> " << G4endl;
-  G4cout << "Eplasma(eV)= " << fPlasmaEnergy/eV
-	 << " rho= " << fAdjustmentFactor
-	 << " -C= " << fCdensity 
-	 << " x0= " << fX0density
-	 << " x1= " << fX1density
-	 << " a= " << fAdensity
-	 << " m= " << fMdensity
-	 << G4endl;
-  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -488,6 +469,88 @@ void G4IonisParamMat::SetDensityEffectParameters(const G4Material* bmat)
 #endif
 }
 
+void G4IonisParamMat::SetSternheimerExactDensityEffect()
+{
+  std::vector<G4int> Z;
+  std::vector<double> numberfracs;
+
+  const bool isconductor =
+       fMaterial->GetMaterialPropertiesTable() != nullptr
+   && fMaterial->GetMaterialPropertiesTable()->ConstPropertyExists("conductor")
+   && fMaterial->GetMaterialPropertiesTable()->GetConstProperty("conductor");
+
+  if(fCalcDensity != nullptr) delete fCalcDensity;
+  fCalcDensity = new G4DensityEffectCalcData;
+  memset(fCalcDensity, 0, sizeof(G4DensityEffectCalcData));
+
+  fCalcDensity->nlev = 0;
+  for(unsigned int i = 0; i < fMaterial->GetNumberOfElements(); i++){
+    Z.push_back(fMaterial->GetElement(i)->GetZ());
+    fCalcDensity->nlev += G4AtomicShells::GetNumberOfShells(Z[i]);
+  }
+
+  // The last level is the conduction level.  If this is *not* a conductor,
+  // make a dummy conductor level with zero electrons in it.
+  if(!isconductor) fCalcDensity->nlev++;
+
+  for(unsigned int i = 0; i < fMaterial->GetNumberOfElements(); i++)
+    numberfracs.push_back(fMaterial->GetVecNbOfAtomsPerVolume()[i]/
+                          fMaterial->GetTotNbOfAtomsPerVolume());
+
+  fCalcDensity->sternf = (double *)malloc(sizeof(double) * fCalcDensity->nlev);
+  fCalcDensity->levE   = (double *)malloc(sizeof(double) * fCalcDensity->nlev);
+  memset(fCalcDensity->levE, 0, sizeof(double)*fCalcDensity->nlev);
+
+  int sh = 0;
+  for(unsigned int j = 0; j < fMaterial->GetNumberOfElements(); j++){
+    // The last subshell is considered to contain the conduction
+    // electrons. Sternheimer 1984 says "the lowest chemical valance of
+    // the element" is used to set the number of conduction electrons.
+    // I'm not sure if that means the highest subshell or the whole
+    // shell, but in any case, he also says that the choice is arbitrary
+    // and offers a possible alternative. This is one of the sources of
+    // uncertainty in the model.
+    const int nshell = G4AtomicShells::GetNumberOfShells(Z[j]);
+    for(int i = 0; i < nshell; i++){
+      // For conductors, put *all* top shell electrons into the conduction
+      // band, regardless of element.
+      const int lev = i < nshell-1 || !isconductor? sh: fCalcDensity->nlev-1;
+      fCalcDensity->sternf[lev] += numberfracs[j] *
+        double(G4AtomicShells::GetNumberOfElectrons(Z[j], i))/Z[j];
+      fCalcDensity->levE[lev] = G4AtomicShells::GetBindingEnergy(Z[j], i)/eV;
+      sh++;
+    }
+  }
+
+  if(!isconductor){
+    fCalcDensity->sternf[fCalcDensity->nlev-1] = 0; // No electrons
+    fCalcDensity->levE[fCalcDensity->nlev-1] = 1; // dummy value
+  }
+  else{
+    fCalcDensity->levE[fCalcDensity->nlev-1] = 0;
+  }
+
+  double sumZ = 0, sumA = 0;
+  for(unsigned int i = 0; i < fMaterial->GetNumberOfElements(); i++){
+    sumA += numberfracs[i] * fMaterial->GetElement(i)->GetAtomicMassAmu();
+    sumZ += numberfracs[i] * fMaterial->GetElement(i)->GetZ();
+  }
+
+  fCalcDensity->plasmaE = 28.816 * sqrt(fMaterial->GetDensity()/(g/cm3)
+    * sumZ/sumA);
+  fCalcDensity->meanexcite = fMeanExcitationEnergy/eV;
+
+  // In case of a fit failure, SetupFermiDeltaCalc prints a warning.
+  // We then delete fCalcDensity so it won't be used.
+  if(!SetupFermiDeltaCalc(fCalcDensity)){
+    free(fCalcDensity->sternf);
+    free(fCalcDensity->levE);
+    delete fCalcDensity;
+    fCalcDensity = nullptr;
+    fCalcDensityFailure = true;
+  }
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4Material* mat) const
@@ -574,3 +637,49 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4Material* mat) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
+G4double G4IonisParamMat::DensityCorrection(G4double x)
+{
+  // If we are set up to calculate the density effect precisely,
+  // do that.  Otherwise, fall back to Sternheimer 3-part approximations.
+  if(fCalcDensity == nullptr && !fCalcDensityFailure)
+    SetSternheimerExactDensityEffect();
+
+  // x = log10(beta*gamma)
+  G4double approx = 0.0;
+  if(x < fX0density) {
+    if(fD0density > 0.0)
+      approx = fD0density*G4Exp(twoln10*(x - fX0density));
+  }
+  else if(x >= fX1density) {
+    approx = twoln10*x - fCdensity;
+  }
+  else{
+    approx = twoln10*x - fCdensity
+        + fAdensity*G4Exp(G4Log(fX1density - x)*fMdensity);
+  }
+
+  if(fCalcDensity != nullptr){
+    const double exact = DoFermiDeltaCalc(fCalcDensity, x);
+    if(approx > 0 && exact < 0){
+      G4cerr << "Error: Sternheimer fit failed for "
+        << fMaterial->GetName() << ". x = " << x << ": Delta = "
+        << exact << " exact " << approx  << " approx" << G4endl;
+      return approx;
+    }
+
+    // Fall back to approx if exact and approx are very different, under the
+    // assumption that this means the exact calculation has gone haywire
+    // somehow, with the exception of the case where approx is negative.  I
+    // have seen this clearly-wrong result occur for substances with extremely
+    // low density (1e-25 g/cc).
+    if(approx >= 0 && fabs(exact - approx) > 1){
+      G4cerr << "Error: Sternheimer exact, " << exact << ", and approx, "
+        << approx << " are too different for "
+        << fMaterial->GetName() << ", x = " << x << G4endl;
+      return approx;
+    }
+    return exact;
+  }
+
+  return approx;
+}

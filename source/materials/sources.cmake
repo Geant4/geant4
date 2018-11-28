@@ -73,6 +73,7 @@ GEANT4_DEFINE_MODULE(NAME G4materials
 			G4UCNMicroRoughnessHelper.hh
 			G4VIonDEDXTable.hh
 			G4VMaterialExtension.hh
+			G4DensityEffectCalc.hh
     SOURCES
 			G4AtomicBond.cc
 			G4AtomicFormFactor.cc
@@ -105,6 +106,7 @@ GEANT4_DEFINE_MODULE(NAME G4materials
 			G4UCNMaterialPropertiesTable.cc
 			G4UCNMicroRoughnessHelper.cc
 			G4VIonDEDXTable.cc
+			G4DensityEffectCalc.cc
     GRANULAR_DEPENDENCIES
         G4globman
         G4intercoms

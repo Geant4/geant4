@@ -50,6 +50,7 @@
 #include "G4Log.hh"
 #include "G4Exp.hh"
 #include "G4Threading.hh"
+#include "G4DensityEffectCalc.hh"
 
 class G4Material;                        // forward declaration
 class G4DensityEffectData;
@@ -77,7 +78,7 @@ public:
   inline
   G4double  GetTaul()                   const {return fTaul;};
     
-  // parameters of the density correction:
+  // parameters of the Sternheimer 3-part approximate density correction:
   inline
   G4double  GetPlasmaEnergy()           const {return fPlasmaEnergy;};
   inline
@@ -95,16 +96,48 @@ public:
   inline
   G4double  GetD0density()              const {return fD0density;};
 
-  // user defined density correction parameterisation
+  // user defined density correction parameterisation.  These values are
+  // only used if the more precise Sternheimer exact form cannot be
+  // calculated.
   void SetDensityEffectParameters(G4double cd, G4double md, G4double ad,
                                   G4double x0, G4double x1, G4double d0);
 
-  // defined density correction parameterisation via base material
+  // defined density correction parameterisation via base material.
+  // These values are only used if the more precise Sternheimer exact form
+  // cannot be calculated.
   void SetDensityEffectParameters(const G4Material* bmat);
-    
+
+  /// Use the exact form of the density effect intead of the parameterization
+  ///
+  /// The "Sternheimer exact" form is calculated as described in
+  ///
+  /// R.M. Sternheimer et al. "Density Effect For The Ionization Loss
+  /// of Charged Particles in Various Substances"
+  /// Atom. Data Nucl. Data Tabl. 30 (1984) 261-271.
+  ///
+  /// It is not really the exact form, which requires detailed optical
+  /// data to compute, but it is a better approximation than the popular
+  /// parameterization introduced in Sternheimer's 1952 paper and used
+  /// in the 1984 paper (among others).  If there were a significant
+  /// number of substances for which the truly exact form could be
+  /// calculated, I'd add another function SetExactDensityEffect().
+  /// Alas, the list is only perhaps aluminum, water, and silicon.
+  ///
+  /// When this function is called, the atomic data for the material is
+  /// used to set up the calculation. This involves finding a root of an
+  /// equation and can fail. If it fails, this function returns false,
+  /// a warning message will be printed, and we will fall back to the
+  /// parameterization as though this function had not been called.
+  ///
+  /// Important for users:
+  /// The effect is different for insulators and conductors. Materials are
+  /// assumed to be non-conductors by default. To make a conductor:
+  /// GetMaterialPropertiesTable()->AddConstProperty("conductor", 1)
+  void SetSternheimerExactDensityEffect();
+
   // compute density correction as a function of the kinematic variable
   // x = log10(beta*gamma)  
-  inline G4double DensityCorrection(G4double x);
+  G4double DensityCorrection(G4double x);
 
   static G4DensityEffectData* GetDensityEffectData();
 
@@ -158,7 +191,9 @@ private:
   // Compute mean parameters : ExcitationEnergy,Shell corretion vector ...
   void ComputeMeanParameters();
 
-  // Compute parameters for the density effect
+  // Compute Sternheimer 3-part approximation parameters for the density
+  // effect.  These are only used if the more precise Sternheimer exact form
+  // cannot be used.
   void ComputeDensityEffect();
 
   // Compute parameters for the energy fluctuation model
@@ -184,13 +219,21 @@ private:
   G4double* fShellCorrectionVector;         // shell correction coefficients
   G4double  fTaul;                          // lower limit of Bethe-Bloch formula
 
-  // parameters of the density correction
+  // parameters of the Sternheimer approximate 3-part density correction
   G4double fCdensity;                      // mat.constant
   G4double fMdensity;                      // exponent
   G4double fAdensity;                      //
   G4double fX0density;                     //
   G4double fX1density;                     //
   G4double fD0density;
+
+  // Stores atomic data necessary for computing the Sternheimer exact
+  // density effect, as well as intermediate stages of the computation.
+  G4DensityEffectCalcData * fCalcDensity;
+
+  // If the computation of the Sternheimer exact density effect fails,
+  // this flag is set to prevent wasting time on repeated failures.
+  G4bool fCalcDensityFailure = false;
 
   G4double fPlasmaEnergy;
   G4double fAdjustmentFactor;
@@ -225,16 +268,4 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-inline G4double G4IonisParamMat::DensityCorrection(G4double x)
-{
-  // x = log10(beta*gamma)  
-  G4double y = 0.0;
-  if(x < fX0density) {
-    if(fD0density > 0.0) { y = fD0density*G4Exp(twoln10*(x - fX0density)); }
-  } else if(x >= fX1density) { y = twoln10*x - fCdensity; }
-  else {y = twoln10*x - fCdensity + fAdensity*G4Exp(G4Log(fX1density - x)*fMdensity);}
-  return y;
-}
-
 #endif
