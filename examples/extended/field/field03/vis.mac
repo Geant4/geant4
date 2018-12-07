@@ -1,25 +1,6 @@
-# Macro file for the initialization phase of field03
+# Macro file for the visualization setting in the initialization phase 
+# of the field03 example.
 #
-# It creates the default geometry (simple absorber cylinder )        
-#
-/tracking/verbose 1
-/run/verbose 1
-#
-#
-#
-/field/setStepperType 4
-/field/setMinStep 10 mm
-/field/setFieldZ 1.0 kG
-#
-/field/update
-#
-/run/initialize
-#
-/run/particle/dumpCutValues
-#
-/gun/particle e-
-/gun/energy 500.0 MeV
-
 # Use this open statement to create an OpenGL view:
 /vis/open OGL 600x600-0+0
 #
@@ -43,11 +24,8 @@
 # Draw geometry:
 /vis/drawVolume
 #
-# Specify view angle:
-/vis/viewer/set/viewpointThetaPhi 40. 10.
-#
 # Specify zoom value:
-/vis/viewer/zoom 2.
+#/vis/viewer/zoom 2.
 #
 # Specify style (surface or wireframe):
 #/vis/viewer/set/style wireframe
@@ -80,7 +58,24 @@
 #/vis/modeling/trajectories/drawByParticleID-0/set e- blue
 #
 # To superimpose all of the events from a given run:
-#/vis/scene/endOfEventAction accumulate
+/vis/scene/endOfEventAction accumulate
+#
+# field03 specific setting
+#
+# To get nice view
+#/vis/geometry/set/visibility World 0 false
+/vis/geometry/set/colour World 0 1 1 1 .3       # gray
+/vis/geometry/set/colour Absorber 0 0 0 1 .3    # blue
+/vis/geometry/set/colour Radiator 0 0 1 0 .3    # green
+/vis/geometry/set/colour RadSlice 0 1 1 0 .3    # yellow
+/vis/viewer/set/style surface
+/vis/viewer/set/hiddenMarker true
+#
+# Specify view angle:
+/vis/viewer/set/viewpointThetaPhi 40. 10.
+#
+# Draw magnetic field
+#/vis/scene/add/magneticField 1
 #
 # Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true

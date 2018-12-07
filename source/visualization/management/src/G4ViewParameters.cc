@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc 109510 2018-04-26 07:15:57Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -1003,7 +1002,7 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
     os
     << "\n  Light front position: "
     << v.fDisplayLightFrontX/mm << ' ' << v.fDisplayLightFrontY/mm
-    << v.fDisplayLightFrontZ/mm << " mm"
+    << ' ' << v.fDisplayLightFrontZ/mm << " mm"
     << "\n  Light front time:     " << v.fDisplayLightFrontT/ns << " ns"
     << "\n  Light front colour:   " << v.fDisplayLightFrontRed
     << ' ' << v.fDisplayLightFrontGreen << ' ' << v.fDisplayLightFrontBlue;

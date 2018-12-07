@@ -1,4 +1,3 @@
-// $Id: Doxymodules_g3tog4.h 76473 2013-11-11 10:35:14Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_g3tog4.h

@@ -197,8 +197,6 @@ endif()
 # Smart pointers are a library implementation feature
 # Hashed containers are a library implementation feature
 # Random numbers are a library implementation feature?
-# - Thread local? Yes, though on AppleClang platforms, see this:
-  #http://stackoverflow.com/questions/28094794/why-does-apple-clang-disallow-c11-thread-local-when-official-clang-supports
 # An example of where a workaround is needed
 # Rest of concurrency a library implementation feature
 

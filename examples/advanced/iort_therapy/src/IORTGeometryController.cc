@@ -33,14 +33,13 @@
 //   (b) IBFM-CNR , Segrate (Milano), Italy
 //   (c) LATO (Laboratorio di Tecnologie Oncologiche), Cefalù, Italy
 //   (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
-//   (e) University of Wallongong, Australia
+//   (e) University of Wollongong, Australia
 //
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "IORTGeometryController.hh"
 #include "IORTDetectorConstruction.hh"
-#include "IORTInteractionParameters.hh"
 #include "Collimator40BeamLine.hh"
 #include "Collimator50BeamLine.hh"
 #include "Collimator60BeamLine.hh"

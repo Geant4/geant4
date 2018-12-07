@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc 104317 2017-05-24 13:08:38Z gcosmo $
 //
 // class G4VSolid
 //
@@ -32,6 +31,7 @@
 //
 // History:
 //
+//  10.10.18 E.Tcherniaev, more robust EstimateSurfaceArea() based on distance
 //  06.12.02 V.Grichine, restored original conditions in ClipPolygon()
 //  10.05.02 V.Grichine, ClipPolygon(): clip only other axis and limited voxels
 //  15.04.02 V.Grichine, bug fixed in ClipPolygon(): clip only one axis
@@ -153,7 +153,7 @@ G4ThreeVector G4VSolid::GetPointOnSurface() const
 {
     std::ostringstream message;
     message << "Not implemented for solid: "
-            << this->GetEntityType() << " !" << G4endl
+            << GetEntityType() << " !" << G4endl
             << "Returning origin.";
     G4Exception("G4VSolid::GetPointOnSurface()", "GeomMgt1001",
                 JustWarning, message);
@@ -214,9 +214,9 @@ G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
 
   // min max extents of pSolid along X,Y,Z
 
-  this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
-  this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
-  this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
+  CalculateExtent(kXAxis,limit,origin,minX,maxX);
+  CalculateExtent(kYAxis,limit,origin,minY,maxY);
+  CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
 
   // limits
 
@@ -230,7 +230,7 @@ G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
     py = minY-halfepsilon+(maxY-minY+epsilon)*G4UniformRand();
     pz = minZ-halfepsilon+(maxZ-minZ+epsilon)*G4UniformRand();
     p  = G4ThreeVector(px,py,pz);
-    in = this->Inside(p);
+    in = Inside(p);
     if(in != kOutside) iInside++;    
   }
   volume = (maxX-minX+epsilon)*(maxY-minY+epsilon)
@@ -254,64 +254,131 @@ G4double G4VSolid::GetSurfaceArea()
   return EstimateSurfaceArea(stat,ell);
 }
 
-////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
-// Estimate surface area based on Inside(), DistanceToIn(), and
-// DistanceToOut() methods. Accuracy is limited by the statistics
-// defined by the first argument. Implemented by Mikhail Kosov.
+// Calculate surface area by estimating volume of a thin shell
+// surrounding the surface using Monte-Carlo method.
+// Input parameters:
+//    nstat - statistics (number of random points)
+//    eps   - shell thinkness
 
-G4double G4VSolid::EstimateSurfaceArea(G4int nStat, G4double ell) const
+G4double G4VSolid::EstimateSurfaceArea(G4int nstat, G4double ell) const
 {
-  G4int inside=0;
-  G4double px,py,pz,minX,maxX,minY,maxY,minZ,maxZ,surf;
-  G4ThreeVector p;
-  EInside in;
-
-  // values needed for CalculateExtent signature
-
-  G4VoxelLimits limit;                // Unlimited
-  G4AffineTransform origin;
-
-  // min max extents of pSolid along X,Y,Z
-
-  this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
-  this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
-  this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
-
-  // limits
-
-  if(nStat < 100) { nStat = 100; }
-
-  G4double dX=maxX-minX;
-  G4double dY=maxY-minY;
-  G4double dZ=maxZ-minZ;
-  if(ell<=0.)          // Automatic definition of skin thickness
+  static const G4double s2 = 1./std::sqrt(2.);
+  static const G4double s3 = 1./std::sqrt(3.);
+  static const G4ThreeVector directions[64] =
   {
-    G4double minval=dX;
-    if(dY<dX) { minval=dY; }
-    if(dZ<minval) { minval=dZ; }
-    ell=.01*minval;
-  }
+    G4ThreeVector(  0,  0,  0), G4ThreeVector( -1,  0,  0), // (  ,  ,  ) ( -,  ,  )
+    G4ThreeVector(  1,  0,  0), G4ThreeVector( -1,  0,  0), // ( +,  ,  ) (-+,  ,  )
+    G4ThreeVector(  0, -1,  0), G4ThreeVector(-s2,-s2,  0), // (  , -,  ) ( -, -,  )
+    G4ThreeVector( s2, -s2, 0), G4ThreeVector(  0, -1,  0), // ( +, -,  ) (-+, -,  )
 
-  G4double dd=2*ell;
-  minX-=ell; minY-=ell; minZ-=ell; dX+=dd; dY+=dd; dZ+=dd;
+    G4ThreeVector(  0,  1,  0), G4ThreeVector( -s2, s2, 0), // (  , +,  ) ( -, +,  )
+    G4ThreeVector( s2, s2,  0), G4ThreeVector(  0,  1,  0), // ( +, +,  ) (-+, +,  )
+    G4ThreeVector(  0, -1,  0), G4ThreeVector( -1,  0,  0), // (  ,-+,  ) ( -,-+,  )
+    G4ThreeVector(  1,  0,  0), G4ThreeVector( -1,  0,  0), // ( +,-+,  ) (-+,-+,  )
 
-  for(G4int i = 0; i < nStat; i++ )
+    G4ThreeVector(  0,  0, -1), G4ThreeVector(-s2,  0,-s2), // (  ,  , -) ( -,  , -)
+    G4ThreeVector( s2,  0,-s2), G4ThreeVector(  0,  0, -1), // ( +,  , -) (-+,  , -)
+    G4ThreeVector(  0,-s2,-s2), G4ThreeVector(-s3,-s3,-s3), // (  , -, -) ( -, -, -)
+    G4ThreeVector( s3,-s3,-s3), G4ThreeVector(  0,-s2,-s2), // ( +, -, -) (-+, -, -)
+
+    G4ThreeVector(  0, s2,-s2), G4ThreeVector(-s3, s3,-s3), // (  , +, -) ( -, +, -)
+    G4ThreeVector( s3, s3,-s3), G4ThreeVector(  0, s2,-s2), // ( +, +, -) (-+, +, -)
+    G4ThreeVector(  0,  0, -1), G4ThreeVector(-s2,  0,-s2), // (  ,-+, -) ( -,-+, -)
+    G4ThreeVector( s2,  0,-s2), G4ThreeVector(  0,  0, -1), // ( +,-+, -) (-+,-+, -)
+
+    G4ThreeVector(  0,  0,  1), G4ThreeVector(-s2,  0, s2), // (  ,  , +) ( -,  , +)
+    G4ThreeVector( s2,  0, s2), G4ThreeVector(  0,  0,  1), // ( +,  , +) (-+,  , +)
+    G4ThreeVector(  0,-s2, s2), G4ThreeVector(-s3,-s3, s3), // (  , -, +) ( -, -, +)
+    G4ThreeVector( s3,-s3, s3), G4ThreeVector(  0,-s2, s2), // ( +, -, +) (-+, -, +)
+
+    G4ThreeVector(  0, s2, s2), G4ThreeVector(-s3, s3, s3), // (  , +, +) ( -, +, +)
+    G4ThreeVector( s3, s3, s3), G4ThreeVector(  0, s2, s2), // ( +, +, +) (-+, +, +)
+    G4ThreeVector(  0,  0,  1), G4ThreeVector(-s2,  0, s2), // (  ,-+, +) ( -,-+, +)
+    G4ThreeVector( s2,  0, s2), G4ThreeVector(  0,  0,  1), // ( +,-+, +) (-+,-+, +)
+
+    G4ThreeVector(  0,  0, -1), G4ThreeVector( -1,  0,  0), // (  ,  ,-+) ( -,  ,-+)
+    G4ThreeVector(  1,  0,  0), G4ThreeVector( -1,  0,  0), // ( +,  ,-+) (-+,  ,-+)
+    G4ThreeVector(  0, -1,  0), G4ThreeVector(-s2,-s2,  0), // (  , -,-+) ( -, -,-+)
+    G4ThreeVector( s2, -s2, 0), G4ThreeVector(  0, -1,  0), // ( +, -,-+) (-+, -,-+)
+
+    G4ThreeVector(  0,  1,  0), G4ThreeVector( -s2, s2, 0), // (  , +,-+) ( -, +,-+)
+    G4ThreeVector( s2, s2,  0), G4ThreeVector(  0,  1,  0), // ( +, +,-+) (-+, +,-+)
+    G4ThreeVector(  0, -1,  0), G4ThreeVector( -1,  0,  0), // (  ,-+,-+) ( -,-+,-+)
+    G4ThreeVector(  1,  0,  0), G4ThreeVector( -1,  0,  0), // ( +,-+,-+) (-+,-+,-+)
+  };
+
+  G4ThreeVector bmin, bmax;
+  BoundingLimits(bmin, bmax);
+
+  G4double dX = bmax.x() - bmin.x();
+  G4double dY = bmax.y() - bmin.y();
+  G4double dZ = bmax.z() - bmin.z();
+  
+  // Define statistics and shell thickness
+  //
+  G4int npoints = (nstat < 1000) ? 1000 : nstat;
+  G4double coeff = 0.5 / std::cbrt(G4double(npoints));
+  G4double eps = (ell > 0) ? ell : coeff * std::min(std::min(dX, dY), dZ);
+  G4double del = 1.8 * eps; // shold be more than sqrt(3.)
+
+  G4double minX = bmin.x() - eps;
+  G4double minY = bmin.y() - eps;
+  G4double minZ = bmin.z() - eps;
+
+  G4double dd = 2. * eps;
+  dX += dd;
+  dY += dd;
+  dZ += dd;
+
+  // Calculate surface area
+  //
+  G4int icount = 0;
+  for(G4int i = 0; i < npoints; ++i)
   {
-    px = minX+dX*G4UniformRand();
-    py = minY+dY*G4UniformRand();
-    pz = minZ+dZ*G4UniformRand();
-    p  = G4ThreeVector(px,py,pz);
-    in = this->Inside(p);
-    if(in != kOutside)
+    G4double px = minX + dX*G4UniformRand();
+    G4double py = minY + dY*G4UniformRand();
+    G4double pz = minZ + dZ*G4UniformRand();
+    G4ThreeVector p  = G4ThreeVector(px, py, pz);
+    EInside in = Inside(p);
+    G4double dist = 0;
+    if (in == kInside)
     {
-      if  (DistanceToOut(p)<ell) { inside++; }
+      if (DistanceToOut(p) >= eps) continue;
+      G4int icase = 0;
+      if (Inside(G4ThreeVector(px-del, py, pz)) != kInside) icase += 1;
+      if (Inside(G4ThreeVector(px+del, py, pz)) != kInside) icase += 2;
+      if (Inside(G4ThreeVector(px, py-del, pz)) != kInside) icase += 4;
+      if (Inside(G4ThreeVector(px, py+del, pz)) != kInside) icase += 8;
+      if (Inside(G4ThreeVector(px, py, pz-del)) != kInside) icase += 16;
+      if (Inside(G4ThreeVector(px, py, pz+del)) != kInside) icase += 32;
+      if (icase == 0) continue;
+      G4ThreeVector v = directions[icase];
+      dist = DistanceToOut(p, v);
+      G4ThreeVector n = SurfaceNormal(p + v*dist);
+      dist *= v.dot(n);
     }
-    else if(DistanceToIn(p)<ell) { inside++; }
+    else if (in == kOutside)
+    {
+      if (DistanceToIn(p) >= eps) continue;
+      G4int icase = 0;
+      if (Inside(G4ThreeVector(px-del, py, pz)) != kOutside) icase += 1;
+      if (Inside(G4ThreeVector(px+del, py, pz)) != kOutside) icase += 2;
+      if (Inside(G4ThreeVector(px, py-del, pz)) != kOutside) icase += 4;
+      if (Inside(G4ThreeVector(px, py+del, pz)) != kOutside) icase += 8;
+      if (Inside(G4ThreeVector(px, py, pz-del)) != kOutside) icase += 16;
+      if (Inside(G4ThreeVector(px, py, pz+del)) != kOutside) icase += 32;
+      if (icase == 0) continue;
+      G4ThreeVector v = directions[icase];
+      dist = DistanceToIn(p, v);
+      if (dist == kInfinity) continue;
+      G4ThreeVector n = SurfaceNormal(p + v*dist);
+      dist *= -(v.dot(n));
+    }
+    if (dist < eps) icount++;
   }
-  // @@ The conformal correction can be upgraded
-  surf = dX*dY*dZ*inside/dd/nStat;
-  return surf;
+  return dX*dY*dZ*icount/npoints/dd;
 }
 
 ///////////////////////////////////////////////////////////////////////////

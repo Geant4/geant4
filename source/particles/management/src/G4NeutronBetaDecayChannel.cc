@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronBetaDecayChannel.cc 95906 2016-03-02 10:56:50Z gcosmo $
-// GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -216,8 +214,9 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4double pPz = -p-eNu*cosn;
   G4double pP  = std::sqrt(eP*(eP+2.*daughtermass[2]));
   G4ThreeVector direction2(pPx/pP*std::cos(phin), pPx/pP*std::sin(phin), pPz/pP);
+  direction2 = rm * direction2;
     G4DynamicParticle * daughterparticle2 
-         = new G4DynamicParticle( G4MT_daughters[2], direction2);
+         = new G4DynamicParticle( G4MT_daughters[2], direction2*pP);
   products->PushProducts(daughterparticle2);
  
 

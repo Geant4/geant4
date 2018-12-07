@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.hh 73435 2013-08-27 11:06:54Z gcosmo $
 //
 //
 // class G4PhantomParameterisation

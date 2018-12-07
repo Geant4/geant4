@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTransportation.hh 100802 2016-11-02 14:55:27Z gcosmo $
 //
 /// \brief This class is a slightly modified version of G4Transportation
 ///        initially written by John Apostolakis and colleagues (1997)

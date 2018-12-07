@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh 103219 2017-03-22 11:30:15Z gcosmo $
 //
 // class G4TransportationManager
 //

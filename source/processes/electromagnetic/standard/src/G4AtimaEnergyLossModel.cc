@@ -33,13 +33,17 @@
 // Creation date: 16.01.2018
 //
 // Modifications:
-//
+// 09/10/2018: Solved bug in the determination of the material atomic number
 //
 // Class Description:
 //
-// This model calculates the stopping power of heavy ions (Z>2) according 
+// This model calculates the stopping power of ions according 
 // to the ATIMA code developed at GSI, Darmstadt, Germany.
-// http://web-docs.gsi.de/~weick/atima/
+// For details: http://web-docs.gsi.de/~weick/atima/
+//
+// Helmut Weick, GSI (responsible for fortran version)
+// Andrej Prochazka, GSI (responsible for C version)
+// Christoph Scheidenberger, GSI (project coordination)
 //
 // -------------------------------------------------------------------
 //
@@ -255,7 +259,7 @@ G4double G4AtimaEnergyLossModel::ComputeDEDXPerVolume(const G4Material* material
 {
   //Call to ATIMA Stopping Power function
   G4double zt = material->GetIonisation()->GetZeffective();
-  zt = std::max(zt,93.); 
+  zt = std::min(zt,93.); 
   G4double at = nist->GetAtomicMassAmu(G4lrint(zt));
   G4double dedx = StoppingPower(p->GetPDGMass(), p->GetPDGCharge(), 
     kineticEnergy/(MeV), at, zt) *material->GetDensity()/(g/cm3);

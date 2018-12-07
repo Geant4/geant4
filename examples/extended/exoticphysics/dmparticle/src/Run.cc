@@ -26,7 +26,6 @@
 /// \file exoticphysics/dmparticle/src/Run.cc
 /// \brief Implementation of the Run class
 //
-// $Id$
 
 #include "Run.hh"
 #include "G4Step.hh"

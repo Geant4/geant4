@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DormandPrince745.cc 107470 2017-11-15 07:14:28Z gcosmo $
 //
 // Class description:
 //
@@ -336,25 +335,24 @@ G4double G4DormandPrince745::DistChord2() const
 
 G4double G4DormandPrince745::DistChord() const
 {
-    //Coefficients for halfway interpolation
+    // Coefficients were taken from Some Practical Runge-Kutta Formulas by Lawrence F. Shampine, page 149, c*
     const G4double
-    hf1 = 5783653.0/57600000.0 ,
-    hf2 = 0. ,
-    hf3 = 466123.0/1192500.0 ,
-    hf4 = -41347.0/1920000.0 ,
-    hf5 = 16122321.0/339200000.0 ,
-    hf6 = -7117.0/20000.0,
-    hf7 = 183.0/10000.0 ;
+        hf1 = 6025192743.0 / 30085553152.0,
+        hf2 = 0.0,
+        hf3 = 51252292925.0 / 65400821598.0,
+        hf4 = - 2691868925.0 / 45128329728.0,
+        hf5 = 187940372067.0 / 1594534317056.0,
+        hf6 = - 1776094331.0 / 19743644256.0,
+        hf7 = 11237099.0 / 235043384.0;
 
-    for(int i=0; i<3; i++){
-       fMidVector[i] = fLastInitialVector[i] + fLastStepLength*(
-                    hf1*fInitialDyDx[i] + hf2*ak2[i] + hf3*ak3[i] + hf4*ak4[i] +
-                    hf5*ak5[i] + hf6*ak6[i] + hf7*ak7[i] );
+    for(G4int i = 0; i < 3; ++i) {
+       fMidVector[i] = fLastInitialVector[i] + 0.5 * fLastStepLength * 
+           (hf1 * fInitialDyDx[i] + hf2 * ak2[i] + hf3 * ak3[i] + 
+            hf4 * ak4[i] + hf5 * ak5[i] + hf6 * ak6[i] + hf7 * ak7[i]);
     }
      
     // Use stored values of Initial and Endpoint + new Midpoint to evaluate
     //  distance of Chord
-
     return DistLine( fLastInitialVector, fMidVector, fLastFinalVector);
 }
 

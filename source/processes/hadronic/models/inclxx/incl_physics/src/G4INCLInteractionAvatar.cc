@@ -179,10 +179,10 @@ namespace G4INCL {
     // If there is no Nucleus, just return
     if(!theNucleus) return;
 
-    // Mark pions that have been created outside their well (we will force them
+    // Mark pions and kaons that have been created outside their well (we will force them
     // to be emitted later).
     for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
-      if((*i)->isPion() && (*i)->getPosition().mag() > theNucleus->getSurfaceRadius(*i)) {
+      if(((*i)->isPion() || (*i)->isKaon() || (*i)->isAntiKaon()) && (*i)->getPosition().mag() > theNucleus->getSurfaceRadius(*i)) {
         (*i)->makeParticipant();
         (*i)->setOutOfWell();
         fs->addOutgoingParticle(*i);
@@ -294,12 +294,12 @@ namespace G4INCL {
     std::vector<G4int> newBiasCollisionVector;
     newBiasCollisionVector = ModifiedAndDestroyed.getParticleListBiasVector();
     if(std::fabs(weight-1.) > 1E-6){
-	  newBiasCollisionVector.push_back(Particle::nextBiasedCollisionID);
-	  Particle::FillINCLBiasVector(1./weight);
-	  weight = 1.; //Should be reinitialized in case of next collision non baised
-	}
+      newBiasCollisionVector.push_back(Particle::nextBiasedCollisionID);
+      Particle::FillINCLBiasVector(1./weight);
+      weight = 1.; // useless?
+    }
     for(ParticleIter i=modifiedAndCreated.begin(), e=modifiedAndCreated.end(); i!=e; ++i ) {
-	  (*i)->setBiasCollisionVector(newBiasCollisionVector);
+      (*i)->setBiasCollisionVector(newBiasCollisionVector);
       if(!(*i)->isOutOfWell()) {
         // Decide if the particle should be made into a spectator
         // (Back to spectator)
@@ -432,14 +432,14 @@ namespace G4INCL {
         (*i)->setPotentialEnergy(0.);
 
 //jcd      if(shouldUseLocalEnergy && !(*i)->isPion()) { // This translates AECSVT's loops 1, 3 and 4
-            if(shouldUseLocalEnergy && !(*i)->isPion() && !(*i)->isEta() && !(*i)->isOmega() &&
-                                       !(*i)->isKaon() && !(*i)->isAntiKaon() &&!(*i)->isLambda() && !(*i)->isSigma()) { // This translates AECSVT's loops 1, 3 and 4
+        if(shouldUseLocalEnergy && !(*i)->isPion() && !(*i)->isEta() && !(*i)->isOmega() &&
+           !(*i)->isKaon() && !(*i)->isAntiKaon()  && !(*i)->isSigma() && !(*i)->isLambda()) { // This translates AECSVT's loops 1, 3 and 4
 // assert(theNucleus); // Local energy without a nucleus doesn't make sense
-        const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
-        G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
-        G4double locEOld;
-        G4double deltaLocE = InteractionAvatar::locEAccuracy + 1E3;
-        for(G4int iterLocE=0;
+         const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
+         G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
+         G4double locEOld;
+         G4double deltaLocE = InteractionAvatar::locEAccuracy + 1E3;
+         for(G4int iterLocE=0;
             deltaLocE>InteractionAvatar::locEAccuracy && iterLocE<InteractionAvatar::maxIterLocE;
             ++iterLocE) {
           locEOld = locE;
@@ -448,8 +448,27 @@ namespace G4INCL {
           theNucleus->updatePotentialEnergy(*i); // ...update its potential energy...
           locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // ...and recompute locE.
           deltaLocE = std::abs(locE-locEOld);
+         }
         }
-      }
+
+//jlrs  For lambdas and nuclei with masses higher than 19 also local energy
+        if(shouldUseLocalEnergy && (*i)->isLambda() && theNucleus->getA()>19) {
+// assert(theNucleus); // Local energy without a nucleus doesn't make sense
+         const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
+         G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy
+         G4double locEOld;
+         G4double deltaLocE = InteractionAvatar::locEAccuracy + 1E3;
+         for(G4int iterLocE=0;
+            deltaLocE>InteractionAvatar::locEAccuracy && iterLocE<InteractionAvatar::maxIterLocE;
+            ++iterLocE) {
+          locEOld = locE;
+          (*i)->setEnergy(energy + locE); // Update the energy of the particle...
+          (*i)->adjustMomentumFromEnergy();
+          theNucleus->updatePotentialEnergy(*i); // ...update its potential energy...
+          locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // ...and recompute locE.
+          deltaLocE = std::abs(locE-locEOld);
+         }
+        }
     }
   }
 

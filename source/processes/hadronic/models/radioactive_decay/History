@@ -13,8 +13,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-8 May 2018  Laurent Desorgher  radioactive_decay-V10-04-03
----------------------------------------------------------
+
+ 5 December 2018  Gabriele Cosmo  radioactive_decay-V10-04-04
+-------------------------------------------------------------
+- G4RadioactiveDecay: enable printout of parameters with G4VERBOSE in
+  BuildPhysicsTable().
+
+ 8 May 2018  Laurent Desorgher  radioactive_decay-V10-04-03
+-----------------------------------------------------------
 - G4ECCapture, G4RadioactiveDecay, G4RadioactiveDecayMode
     -Add the electron capture channel from the N Shell :
 

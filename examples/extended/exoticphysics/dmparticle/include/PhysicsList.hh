@@ -26,7 +26,6 @@
 /// \file exoticphysics/dmparticle/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 92047 2015-08-14 07:23:37Z gcosmo $
 //
 /////////////////////////////////////////////////
 //

@@ -27,7 +27,6 @@
 /// \brief Definition of the TSActionInitialization class
 //
 //
-// $Id: TSActionInitialization.hh 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 /// Standard ActionInitialization class creating a RunAction instance for the

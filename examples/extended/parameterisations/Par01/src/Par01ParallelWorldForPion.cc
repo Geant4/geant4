@@ -26,7 +26,6 @@
 /// \file Par01/src/Par01ParallelWorldForPion.cc
 /// \brief Implementation of the Par01ParallelWorldForPion class
 //
-// $Id: Par01ParallelWorldForPion.cc 100936 2016-11-03 11:07:41Z gcosmo $
 //
 #include "Par01ParallelWorldForPion.hh"
 #include "Par01PionShowerModel.hh"

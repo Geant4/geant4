@@ -26,7 +26,6 @@
 /// \file optical/OpNovice2/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc 77288 2013-11-22 10:52:58Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,18 +85,24 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fSurfaceMatPropVectorCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   fSurfaceMatPropVectorCmd->SetToBeBroadcasted(false);
 
-  fBoxMatPropVectorCmd = new G4UIcmdWithAString("/opnovice2/boxProperty", this);
-  fBoxMatPropVectorCmd->SetGuidance("Set material property vector for ");
-  fBoxMatPropVectorCmd->SetGuidance("the box.");
-  fBoxMatPropVectorCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-  fBoxMatPropVectorCmd->SetToBeBroadcasted(false);
+  fTankMatPropVectorCmd =
+    new G4UIcmdWithAString("/opnovice2/boxProperty", this);
+  fTankMatPropVectorCmd->SetGuidance("Set material property vector for ");
+  fTankMatPropVectorCmd->SetGuidance("the box.");
+  fTankMatPropVectorCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  fTankMatPropVectorCmd->SetToBeBroadcasted(false);
 
-  fBoxMatConstPropVectorCmd =
+  fTankMatConstPropVectorCmd =
     new G4UIcmdWithAString("/opnovice2/boxConstProperty", this);
-  fBoxMatConstPropVectorCmd->SetGuidance("Set material constant property ");
-  fBoxMatConstPropVectorCmd->SetGuidance("for the box.");
-  fBoxMatConstPropVectorCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-  fBoxMatConstPropVectorCmd->SetToBeBroadcasted(false);
+  fTankMatConstPropVectorCmd->SetGuidance("Set material constant property ");
+  fTankMatConstPropVectorCmd->SetGuidance("for the box.");
+  fTankMatConstPropVectorCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  fTankMatConstPropVectorCmd->SetToBeBroadcasted(false);
+
+  fTankMaterialCmd = new G4UIcmdWithAString("/opnovice2/boxMaterial", this);
+  fTankMaterialCmd->SetGuidance("Set material of box.");
+  fTankMaterialCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  fTankMaterialCmd->SetToBeBroadcasted(false);
 
   fWorldMatPropVectorCmd =
     new G4UIcmdWithAString("/opnovice2/worldProperty", this);
@@ -114,6 +119,11 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
     AvailableForStates(G4State_PreInit, G4State_Idle);
   fWorldMatConstPropVectorCmd->SetToBeBroadcasted(false);
 
+  fWorldMaterialCmd = new G4UIcmdWithAString("/opnovice2/worldMaterial", this);
+  fWorldMaterialCmd->SetGuidance("Set material of world.");
+  fWorldMaterialCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  fWorldMaterialCmd->SetToBeBroadcasted(false);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,10 +135,12 @@ DetectorMessenger::~DetectorMessenger()
   delete fSurfaceModelCmd;
   delete fSurfaceSigmaAlphaCmd;
   delete fSurfaceMatPropVectorCmd;
-  delete fBoxMatPropVectorCmd;
-  delete fBoxMatConstPropVectorCmd;
+  delete fTankMatPropVectorCmd;
+  delete fTankMatConstPropVectorCmd;
+  delete fTankMaterialCmd;
   delete fWorldMatPropVectorCmd;
   delete fWorldMatConstPropVectorCmd;
+  delete fWorldMaterialCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -311,7 +323,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     fDetector->SetSurfaceSigmaAlpha(
       G4UIcmdWithADouble::GetNewDoubleValue(newValue));
   }
-  else if (command == fBoxMatPropVectorCmd) {
+  else if (command == fTankMatPropVectorCmd) {
     // got a string. need to convert it to physics vector.
     // string format is property name, then pairs of energy, value  
     // specify units for each value, eg 3.0*eV
@@ -333,7 +345,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     } 
     const char* c = prop.c_str();
 
-    fDetector->AddBoxMPV(c, mpv);
+    fDetector->AddTankMPV(c, mpv);
   }
   else if (command == fWorldMatPropVectorCmd) {
     // Convert string to physics vector
@@ -378,7 +390,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     fDetector->AddSurfaceMPV(c, mpv);
   }
 
-  else if (command == fBoxMatConstPropVectorCmd) {
+  else if (command == fTankMatConstPropVectorCmd) {
     // Convert string to physics vector
     // string format is property name, then value
     // space delimited
@@ -389,7 +401,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     instring >> tmp;
     G4double val = G4UIcommand::ConvertToDouble(tmp);
     const char* c = prop.c_str();
-    fDetector->AddBoxMPCV(c, val);
+    fDetector->AddTankMPCV(c, val);
   }
   else if (command == fWorldMatConstPropVectorCmd) {
     // Convert string to physics vector
@@ -402,7 +414,13 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     instring >> tmp;
     G4double val = G4UIcommand::ConvertToDouble(tmp);
     const char* c = prop.c_str();
-    fDetector->AddBoxMPCV(c, val);
+    fDetector->AddTankMPCV(c, val);
+  }
+  else if (command == fWorldMaterialCmd) {
+    fDetector->SetWorldMaterial(newValue);
+  }
+  else if (command == fTankMaterialCmd) {
+    fDetector->SetTankMaterial(newValue);
   }
 }
 

@@ -27,7 +27,6 @@
 /// \brief Implementation of the F03SteppingVerbose class
 //
 //
-// $Id: F03SteppingVerbose.cc 76602 2013-11-13 08:33:35Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $ID$
 /// \file Runc.cc 
 /// \brief Implementation of the Run class
 

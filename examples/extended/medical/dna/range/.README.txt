@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/dna/range/.README.txt"
 ///\brief Example range README page

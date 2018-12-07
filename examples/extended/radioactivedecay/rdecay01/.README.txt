@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "radioactivedecay/rdecay01/.README.txt"
 ///\brief Example rdecay01 README page

@@ -91,10 +91,9 @@ void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
                     G4int j = ((*CHC)[h]) -> GetYID();
                     G4int k = ((*CHC)[h]) -> GetZID();
                     G4double energyDeposit = ((*CHC)[h]) -> GetEdep();
-                    matrix -> Fill(i, j, k, energyDeposit/MeV);              
+                    matrix -> Fill(i, j, k, energyDeposit/MeV);
                 }
             }
         }
     }
 }
-

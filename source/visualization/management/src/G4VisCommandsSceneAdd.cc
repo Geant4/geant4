@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc 110480 2018-05-25 07:25:18Z gcosmo $
 // /vis/scene/add commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -44,7 +43,7 @@
 #include "G4TextModel.hh"
 #include "G4ArrowModel.hh"
 #include "G4AxesModel.hh"
-#include "G4PhysicalVolumeSearchScene.hh"
+#include "G4PhysicalVolumesSearchScene.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ApplicationState.hh"
@@ -166,7 +165,8 @@ void G4VisCommandSceneAddArrow::SetNewValue (G4UIcommand*, G4String newValue)
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 ////////////// /vis/scene/add/arrow2D ///////////////////////////////////////
@@ -228,7 +228,8 @@ void G4VisCommandSceneAddArrow2D::SetNewValue (G4UIcommand*, G4String newValue)
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 G4VisCommandSceneAddArrow2D::Arrow2D::Arrow2D
@@ -375,7 +376,8 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 ////////////// /vis/scene/add/date ///////////////////////////////////////
@@ -462,7 +464,8 @@ void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 void G4VisCommandSceneAddDate::Date::operator()
@@ -529,7 +532,8 @@ void G4VisCommandSceneAddDigis::SetNewValue (G4UIcommand*, G4String) {
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 ////////////// /vis/scene/add/eventID ///////////////////////////////////////
@@ -608,7 +612,8 @@ void G4VisCommandSceneAddEventID::SetNewValue (G4UIcommand*, G4String newValue)
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 void G4VisCommandSceneAddEventID::EventID::operator()
@@ -772,7 +777,8 @@ void G4VisCommandSceneAddExtent::SetNewValue (G4UIcommand*, G4String newValue)
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 G4VisCommandSceneAddExtent::Extent::Extent
@@ -841,7 +847,8 @@ void G4VisCommandSceneAddFrame::SetNewValue (G4UIcommand*, G4String newValue)
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 void G4VisCommandSceneAddFrame::Frame::operator()
@@ -928,7 +935,8 @@ void G4VisCommandSceneAddFrame::Frame::operator()
       }
     }
     else G4VisCommandsSceneAddUnsuccessful(verbosity);
-    UpdateVisManagerScene (currentSceneName);
+
+    CheckSceneAndNotifyHandlers (pScene);
   }
   
 ////////////// /vis/scene/add/hits ///////////////////////////////////////
@@ -973,7 +981,8 @@ void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand*, G4String) {
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 ////////////// /vis/scene/add/line ///////////////////////////////////////
@@ -1046,7 +1055,8 @@ void G4VisCommandSceneAddLine::SetNewValue (G4UIcommand*, G4String newValue)
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 G4VisCommandSceneAddLine::Line::Line
@@ -1130,7 +1140,8 @@ void G4VisCommandSceneAddLine2D::SetNewValue (G4UIcommand*, G4String newValue)
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 G4VisCommandSceneAddLine2D::Line2D::Line2D
@@ -1328,7 +1339,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
     return;
   }
 
-  UpdateVisManagerScene (currentSceneName);
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 
@@ -1633,7 +1644,8 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 G4VisCommandSceneAddLogo::G4Logo::G4Logo
@@ -1796,7 +1808,8 @@ void G4VisCommandSceneAddLogo2D::SetNewValue (G4UIcommand*, G4String newValue)
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 void G4VisCommandSceneAddLogo2D::Logo2D::operator()
@@ -1891,7 +1904,8 @@ void G4VisCommandSceneAddMagneticField::SetNewValue
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 ////////////// /vis/scene/add/psHits ///////////////////////////////////////
@@ -1949,7 +1963,8 @@ void G4VisCommandSceneAddPSHits::SetNewValue
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 ////////////// /vis/scene/add/scale //////////////////////////////////
@@ -2328,7 +2343,8 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 
@@ -2424,7 +2440,8 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 
@@ -2514,7 +2531,8 @@ void G4VisCommandSceneAddText2D::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 G4VisCommandSceneAddText2D::G4Text2D::G4Text2D(const G4Text& text):
@@ -2583,6 +2601,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     }
     return;
   }
+  const G4String& currentSceneName = pScene -> GetName ();
 
   G4bool smooth = false;
   G4bool rich = false;
@@ -2636,9 +2655,19 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     }
   }
 
-  G4VModel* model = new G4TrajectoriesModel();
-  const G4String& currentSceneName = pScene -> GetName ();
-  pScene -> AddEndOfEventModel (model, warn);
+  const auto& eoeList = pScene->GetEndOfEventModelList();
+  auto eoeModel = eoeList.begin();
+  for (; eoeModel != eoeList.end(); ++eoeModel) {
+    const auto* actualModel = eoeModel->fpModel;
+    if (dynamic_cast<const G4TrajectoriesModel*>(actualModel)) break;
+  }
+  if (eoeModel == eoeList.end()) {
+    // No trajectories model exists in the scene so create a new one...
+    G4VModel* model = new G4TrajectoriesModel();
+    pScene -> AddEndOfEventModel (model, warn);
+  }  // ...else it already exists and there is no need to add a new one
+  // because G4TrajectoriesModel simply describes trajectories in the
+  // trajectories store whatever the type.
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Default trajectory type " << defaultTrajectoryType
@@ -2653,7 +2682,8 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
       "\n  reversed with \"/tracking/storeTrajectory 0\"."
 	   << G4endl;
   }
-  UpdateVisManagerScene (currentSceneName);
+
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 ////////////// /vis/scene/add/userAction ///////////////////////////////////
@@ -2736,8 +2766,7 @@ void G4VisCommandSceneAddUserAction::SetNewValue
     return;
   }
 
-  const G4String& currentSceneName = pScene -> GetName ();
-  UpdateVisManagerScene (currentSceneName);
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 void G4VisCommandSceneAddUserAction::AddVisAction
@@ -2778,14 +2807,16 @@ void G4VisCommandSceneAddUserAction::AddVisAction
     successful = pScene -> AddEndOfRunModel (model, warn);
     break;
   }
-  if (successful && verbosity >= G4VisManager::confirmations) {
-    const G4String& currentSceneName = pScene -> GetName ();
-    G4cout << "User Vis Action added to scene \""
-	   << currentSceneName << "\"";
-    if (verbosity >= G4VisManager::parameters) {
-      G4cout << "\n  with extent " << extent;
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      const G4String& currentSceneName = pScene -> GetName ();
+      G4cout << "User Vis Action added to scene \""
+      << currentSceneName << "\"";
+      if (verbosity >= G4VisManager::parameters) {
+        G4cout << "\n  with extent " << extent;
+      }
+      G4cout << G4endl;
     }
-    G4cout << G4endl;
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
 }
@@ -2801,10 +2832,18 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
     ("If physical-volume-name is \"world\" (the default), the top of the"
      "\nmain geometry tree (material world) is added.  If \"worlds\", the"
      "\ntop of all worlds - material world and parallel worlds, if any - are"
-     "\nadded.  Otherwise a search of all worlds is made, taking the first"
-     "\nmatching occurence only.  To see a representation of the geometry"
-     "\nhierarchy of the worlds, try \"/vis/drawTree [worlds]\" or one of the"
-     "\ndriver/browser combinations that have the required functionality, e.g., HepRep.");
+     "\nadded.  Otherwise a search of all worlds is made.");
+  fpCommand -> SetGuidance
+    ("In the last case (a search of all worlds) all physical volume names are"
+     "\nmatched against the first argument of this command.  If this is of the"
+     "\nform \"/regexp/\", where regexp is a regular expression (see C++ regex),"
+     "\nthe physical volume name is matched against regexp by the usual rules"
+     "\nof regular expression matching. Otherwise an exact match is required."
+     "\nFor example, \"/Shap/\" matches \"Shape1\" and \"Shape2\".");
+  fpCommand -> SetGuidance
+    ("It may help to see a textual representation of the geometry hierarchy of"
+     "\nthe worlds. Try \"/vis/drawTree [worlds]\" or one of the driver/browser"
+     "\ncombinations that have the required functionality, e.g., HepRep.");
   fpCommand -> SetGuidance
     ("If clip-volume-type is specified, the subsequent parameters are used to"
      "\nto define a clipping volume.  For example,"
@@ -2903,6 +2942,20 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   param1 *= unit; param2 *= unit; param3 *= unit;
   param4 *= unit; param5 *= unit; param6 *= unit;
 
+  G4VSolid* clippingSolid = nullptr;
+  if (clipVolumeType == "box") {
+    const G4double dX = (param2 - param1) / 2.;
+    const G4double dY = (param4 - param3) / 2.;
+    const G4double dZ = (param6 - param5) / 2.;
+    const G4double x0 = (param2 + param1) / 2.;
+    const G4double y0 = (param4 + param3) / 2.;
+    const G4double z0 = (param6 + param5) / 2.;
+    clippingSolid = new G4DisplacedSolid
+    ("_displaced_clipping_box",
+     new G4Box("_clipping_box",dX,dY,dZ),
+     G4Translate3D(x0,y0,z0));
+  }
+
   G4TransportationManager* transportationManager =
     G4TransportationManager::GetTransportationManager ();
 
@@ -2941,26 +2994,16 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     return;
   }
 
-  std::vector<G4PhysicalVolumeModel*> models;
-  std::vector<G4VPhysicalVolume*> foundVolumes;
-  G4VPhysicalVolume* foundWorld = 0;
-  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
-  typedef std::vector<PVNodeID> PVPath;
-  PVPath foundFullPVPath;
-  std::vector<G4int> foundDepths;
-  std::vector<G4Transform3D> transformations;
+  std::vector<G4PhysicalVolumesSearchScene::Findings> findingsVector;
 
   if (name == "world") {
 
-    models.push_back
-      (new G4PhysicalVolumeModel (world, requestedDepthOfDescent));
-    foundVolumes.push_back(world);
-    foundDepths.push_back(0);
-    transformations.push_back(G4Transform3D());
+    findingsVector.push_back
+    (G4PhysicalVolumesSearchScene::Findings(world,world));
 
   } else if (name == "worlds") {
 
-    if (nWorlds == 0) {
+    if (nWorlds <= 1) {
       if (verbosity >= G4VisManager::warnings) {
 	G4cout <<
 	  "WARNING: G4VisCommandSceneAddVolume::SetNewValue:"
@@ -2972,106 +3015,78 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     std::vector<G4VPhysicalVolume*>::iterator iterWorld =
       transportationManager->GetWorldsIterator();
     for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
-      models.push_back
-	(new G4PhysicalVolumeModel (*iterWorld, requestedDepthOfDescent));
-      foundVolumes.push_back(*iterWorld);
-      foundDepths.push_back(0);
-      transformations.push_back(G4Transform3D());
+      findingsVector.push_back
+      (G4PhysicalVolumesSearchScene::Findings
+       (*iterWorld,*iterWorld));
     }
 
   } else {  // Search all worlds...
-    
+
     std::vector<G4VPhysicalVolume*>::iterator iterWorld =
       transportationManager->GetWorldsIterator();
     for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
       G4PhysicalVolumeModel searchModel (*iterWorld);  // Unlimited depth.
       G4ModelingParameters mp;  // Default - no culling.
       searchModel.SetModelingParameters (&mp);
-      G4PhysicalVolumeSearchScene searchScene (&searchModel, name, copyNo);
+      G4PhysicalVolumesSearchScene searchScene (&searchModel, name, copyNo);
       searchModel.DescribeYourselfTo (searchScene);  // Initiate search.
-      G4VPhysicalVolume* foundVolume = searchScene.GetFoundVolume ();
-      if (foundVolume) {
-	foundWorld = *iterWorld;
-	foundVolumes.push_back(foundVolume);
-        foundFullPVPath = searchScene.GetFoundFullPVPath();
-        foundDepths.push_back(searchScene.GetFoundDepth());
-	transformations.push_back(searchScene.GetFoundTransformation());
-	break;
+      for (const auto& findings: searchScene.GetFindings()) {
+        findingsVector.push_back(findings);
       }
     }
+  }
 
-    if (foundVolumes.size()) {
-      for (size_t i = 0; i < foundVolumes.size(); ++i) {
-        G4PhysicalVolumeModel* foundPVModel = new G4PhysicalVolumeModel
-        (foundVolumes[i], requestedDepthOfDescent, transformations[i]);
-        foundFullPVPath.pop_back();  // "Base" is "Found - 1".
-        foundPVModel->SetBaseFullPVPath(foundFullPVPath);
-	models.push_back(foundPVModel);
+  for (const auto& findings: findingsVector) {
+    // Set copy number from search findings to cope with replicas.
+    findings.fpFoundPV->SetCopyNo(findings.fFoundPVCopyNo);
+    // Create a physical volume model...
+    G4PhysicalVolumeModel* foundPVModel = new G4PhysicalVolumeModel
+    (findings.fpFoundPV,
+     requestedDepthOfDescent,
+     findings.fFoundObjectTransformation,
+     0, // No modelling parameters (these are set later by the scene handler).
+     false,  // Do not use full extent - only use non-culled extent.
+     findings.fFoundBasePVPath);
+    if (clippingSolid) {
+      foundPVModel->SetClippingSolid(clippingSolid);
+      foundPVModel->SetClippingMode(clippingMode);
+    }
+    // ...and add it to the scene.
+    G4bool successful = pScene->AddRunDurationModel(foundPVModel,warn);
+    if (successful) {
+      if (verbosity >= G4VisManager::confirmations) {
+        G4cout << "\"" << findings.fpFoundPV->GetName()
+        << "\", copy no. " << findings.fFoundPVCopyNo
+        << ",\n  found in searched volume \""
+        << findings.fpSearchPV->GetName()
+        << "\" at depth " << findings.fFoundDepth
+        << ",\n  base path: \"" << findings.fFoundBasePVPath
+        << "\",\n  with a requested depth of further descent of ";
+        if (requestedDepthOfDescent < 0) {
+          G4cout << "<0 (unlimited)";
+        }
+        else {
+          G4cout << requestedDepthOfDescent;
+        }
+        G4cout << ",\n  has been added to scene \"" << pScene->GetName() << "\"."
+        << G4endl;
       }
     } else {
-      if (verbosity >= G4VisManager::errors) {
-	G4cerr << "ERROR: Volume \"" << name << "\"";
-	if (copyNo >= 0) {
-	  G4cerr << ", copy no. " << copyNo << ",";
-	}
-	G4cerr << " not found." << G4endl;
-      }
-      return;
+      G4VisCommandsSceneAddUnsuccessful(verbosity);
     }
   }
 
-  if (clipVolumeType == "box") {
-    const G4double dX = (param2 - param1) / 2.;
-    const G4double dY = (param4 - param3) / 2.;
-    const G4double dZ = (param6 - param5) / 2.;
-    const G4double x0 = (param2 + param1) / 2.;
-    const G4double y0 = (param4 + param3) / 2.;
-    const G4double z0 = (param6 + param5) / 2.;
-    G4VSolid* clippingSolid =
-      new G4DisplacedSolid
-      ("_displaced_clipping_box",
-       new G4Box("_clipping_box",dX,dY,dZ),
-       G4Translate3D(x0,y0,z0));
-    for (size_t i = 0; i < foundVolumes.size(); ++i) {
-      models[i]->SetClippingSolid(clippingSolid);
-      models[i]->SetClippingMode(clippingMode);
-    }
-  }  // If any other shape consider NumberOfRotationSides!!!!!!!!!!!
-
-  const G4String& currentSceneName = pScene -> GetName ();
-  G4bool failure = true;
-  for (size_t i = 0; i < foundVolumes.size(); ++i) {
-    G4bool successful = pScene -> AddRunDurationModel (models[i], warn);
-    if (successful) {
-      failure = false;
-      if (verbosity >= G4VisManager::confirmations) {
-	G4cout << "First occurrence of \""
-	       << foundVolumes[i] -> GetName ()
-	       << "\"";
-	if (copyNo >= 0) {
-	  G4cout << ", copy no. " << copyNo << ",";
-	}
-	G4cout << "\n  found ";
-	if (foundWorld)
-	  G4cout << "in world \"" << foundWorld->GetName() << "\" ";
-	G4cout << "at depth " << foundDepths[i]
-	       << ",\n  with a requested depth of further descent of ";
-	if (requestedDepthOfDescent < 0) {
-	  G4cout << "<0 (unlimited)";
-	}
-	else {
-	  G4cout << requestedDepthOfDescent;
-	}
-	G4cout << ",\n  has been added to scene \"" << currentSceneName << "\"."
-	       << G4endl;
+  if (findingsVector.empty()) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr << "ERROR: Volume \"" << name << "\"";
+      if (copyNo >= 0) {
+        G4cerr << ", copy no. " << copyNo << ",";
       }
+      G4cerr << " not found." << G4endl;
     }
-  }
-
-  if (failure) {
     G4VisCommandsSceneAddUnsuccessful(verbosity);
     return;
   }
 
-  UpdateVisManagerScene (currentSceneName);
+  CheckSceneAndNotifyHandlers(pScene);
 }

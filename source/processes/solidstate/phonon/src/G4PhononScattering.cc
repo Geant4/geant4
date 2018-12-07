@@ -26,7 +26,6 @@
 /// \file processes/phonon/src/G4PhononScattering.cc
 /// \brief Implementation of the G4PhononScattering class
 //
-// $Id: G4PhononScattering.cc 76499 2013-11-12 05:33:22Z mkelsey $
 //
 // 20131111  Add verbose output for MFP calculation
 

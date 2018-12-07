@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4EllipticalCone.cc 81291 2014-05-26 09:31:19Z gcosmo $
 // ====================================================================
 //   pyG4EllipticalCone.cc
 //

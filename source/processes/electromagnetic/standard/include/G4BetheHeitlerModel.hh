@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.hh 110527 2018-05-29 06:09:58Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -36,15 +35,12 @@
 //
 // Creation date: 19.04.2005
 //
-// Modifications:
-// 02-02-06 Remove InitialiseCrossSectionPerAtom();
-// 28-05-18 New version with improved screening function approximation, improved
-//          efficiency, documentation and cleanup (M. Novak)   
+// Modifications by Vladimir Ivanchenko, Michel Maire, Mihaly Novak
 //
 // Class Description:
 //
 // Implementation of gamma convertion to e+e- in the field of a nucleus 
-// 
+// For details see Physics Reference Manual
 
 // -------------------------------------------------------------------
 //

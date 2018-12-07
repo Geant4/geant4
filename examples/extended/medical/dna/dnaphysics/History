@@ -4,10 +4,24 @@
 
                        Package History file
                        --------------------
+
+7 Nov 18 I. Hrivnacova - tag dnaphysics-V10-04-04
+- Updated plot.C for reading ntuples merged with row-wise mode
+  (now default)
+
+17 Aug 18 S. Incerti - tag dnaphysics-V10-04-03
+- updated README
+
+26 Jul 18 S. Incerti - tag dnaphysics-V10-04-02
+- activated ntuple merging
+
+22 Jul 18 S. Incerti - tag dnaphysics-V10-04-01
+- removed obsolete RanecuEngine
+
 9 May 18 B. Morgan - tag dnaphysics-V10-04-00
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor
-  symbols.
+  symbols
 
 7 Nov 17 S. Incerti - tag dnaphysics-V10-03-15
 - updated plot.C

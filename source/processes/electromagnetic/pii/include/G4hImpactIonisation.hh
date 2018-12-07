@@ -27,7 +27,6 @@
 // ------------------------------------------------------------
 // G4hImpactIonisation
 //
-// $Id: G4hImpactIonisation.hh 70904 2013-06-07 10:34:25Z gcosmo $
 //
 // Author: Maria Grazia Pia (MariaGrazia.Pia@ge.infn.it)
 //

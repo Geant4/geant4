@@ -157,7 +157,6 @@ namespace G4INCL {
   if(particle1->isDelta()) particle1->setMass(xmdel);
   if(particle2->isDelta()) particle2->setMass(xmdel);
   
-  
   const ThreeVector &rcolnucleon1 = particle1->getPosition();
   const ThreeVector &rcolnucleon2 = particle2->getPosition();
   const ThreeVector rcol = (rcolnucleon1+rcolnucleon2)*0.5;
@@ -176,6 +175,7 @@ namespace G4INCL {
    particle1->setHelicity(0.0);
   else
    particle1->setHelicity(ctet*ctet);
+  
   fs->addModifiedParticle(particle1);
   fs->addModifiedParticle(particle2);
   

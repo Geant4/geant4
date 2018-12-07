@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/dna/svalue/.README.txt"
 ///\brief Example svalue README page

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SeltzerBergerModel.hh 98737 2016-08-09 12:51:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -38,12 +37,18 @@
 //
 // Modifications:
 //
+// 24.07.2018 Introduced possibility to use sampling tables to sample the
+//            emitted photon energy (instead of using rejectio) from the Seltzer-
+//            Berger scalled DCS for bremsstrahlung photon emission. Using these
+//            sampling tables option gives faster(30-70%) final state generation
+//            than the original rejection but takes some extra memory (+ ~6MB in
+//            the case of the full CMS detector). (M Novak)
 //
 // Class Description:
 //
 // Implementation of the bremssrahlung energy spectrum using
 // 1. S.M. Seltzer and M.J. Berger Nucl. Instr. Meth. B12 (1985) 95
-// 2. S.M. Seltzer and M.J. Berger Atomic data and Nuclear Data 
+// 2. S.M. Seltzer and M.J. Berger Atomic data and Nuclear Data
 //    Tables 35 (1986) 345
 // Cross section computation in the base class G4eBremsstrahlungRelModel
 
@@ -57,28 +62,34 @@
 #include "globals.hh"
 
 class G4Physics2DVector;
+class G4SBBremTable;
 
 class G4SeltzerBergerModel : public G4eBremsstrahlungRelModel
 {
 
 public:
 
-  explicit G4SeltzerBergerModel(const G4ParticleDefinition* p = nullptr, 
-				const G4String& nam = "eBremSB");
+  explicit G4SeltzerBergerModel(const G4ParticleDefinition* p = nullptr,
+                                const G4String& nam = "eBremSB");
 
   virtual ~G4SeltzerBergerModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
+  virtual void Initialise(const G4ParticleDefinition*,
+                          const G4DataVector&) override;
 
-  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z) override;
+  virtual void InitialiseForElement(const G4ParticleDefinition*,
+                                    G4int Z) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double cutEnergy,
-				 G4double maxEnergy) override;
+                                 const G4MaterialCutsCouple*,
+                                 const G4DynamicParticle*,
+				                         G4double cutEnergy,
+                                 G4double maxEnergy) override;
 
-  inline void SetBicubicInterpolationFlag(G4bool);
+  virtual void SetupForMaterial(const G4ParticleDefinition*,
+                                const G4Material*,G4double) override;
+
+  inline void  SetBicubicInterpolationFlag(G4bool val) { fIsUseBicubicInterpolation = val; }
 
 protected:
 
@@ -88,27 +99,30 @@ protected:
 
 private:
 
-  void ReadData(G4int Z, const char* path = 0);
+  void ReadData(G4int izet, const char* path = nullptr);
 
-  // hide assignment operator
+  G4double SampleEnergyTransfer(const G4double kineticEnergy, const G4double cut,
+                                const G4double emax);
+
+  // hide assignment operator and cctr
   G4SeltzerBergerModel & operator=(const  G4SeltzerBergerModel &right) = delete;
   G4SeltzerBergerModel(const  G4SeltzerBergerModel&) = delete;
 
-  static G4Physics2DVector* dataSB[101];
-  static G4double ylimit[101];
-  static G4double expnumlim;
-  G4int  nwarn;
-  size_t idx;
-  size_t idy;
-  G4bool useBicubicInterpolation;
+private:
+
+  static constexpr G4int    gMaxZet       = 101;
+  static constexpr G4double gExpNumLimit  = -12.;
+  static G4double           gYLimitData[gMaxZet];
+  static G4Physics2DVector* gSBDCSData[gMaxZet];
+  static G4SBBremTable*     gSBSamplingTable;
+
+  G4bool                    fIsUseBicubicInterpolation;
+  G4bool                    fIsUseSamplingTables;
+
+  G4int                     fNumWarnings;
+
+  size_t                    fIndx;
+  size_t                    fIndy;
 };
-
-inline void G4SeltzerBergerModel::SetBicubicInterpolationFlag(G4bool val)
-{
-  useBicubicInterpolation = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 #endif

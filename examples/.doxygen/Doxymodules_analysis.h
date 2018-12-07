@@ -1,4 +1,3 @@
-// $Id: Doxymodules_analysis.h 86514 2014-11-13 09:10:24Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_analysis.h
@@ -54,5 +53,39 @@
 
 /** @} */
 
+/** @defgroup extended_analysis_B3aScoreWriter B3aScoreWriter
+ *  Analysis example B3aScoreWriter
+ *  @ingroup extended_analysis
+ *  @{
+ */
+
+  class B3DetectorConstruction {};
+  class B3PhysicsList {};
+  class B3PrimaryGeneratorAction {};
+  class B3StackingAction {};
+  class B3aActionInitialization {};
+  class B3aEventAction {};
+  class B3aRunAction {};
+  class G4ScoreNtupleWriter {};     
+  class G4ScoreNtupleWriterMessenger {};
+
+/** @} */
+
+/** @defgroup extended_analysis_B4dScoreWriter B4dScoreWriter
+ *  Analysis example B4dScoreWriter
+ *  @ingroup extended_analysis
+ *  @{
+ */
+
+  class B4Analysis {};
+  class B4PrimaryGeneratorAction {};
+  class B4RunAction {};
+  class B4dActionInitialization {};
+  class B4dDetectorConstruction {};
+  class B4dEventAction {};
+  class G4ScoreNtupleWriter {};      
+  class G4ScoreNtupleWriterMessenger {};
+
+/** @} */
 
 /** @} */

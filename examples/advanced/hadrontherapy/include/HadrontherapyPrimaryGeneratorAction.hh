@@ -41,39 +41,38 @@ class G4Event;
 class HadrontherapyPrimaryGeneratorMessenger;
 class HadrontherapyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-public:
-  HadrontherapyPrimaryGeneratorAction();    
-  ~HadrontherapyPrimaryGeneratorAction();
-  
-public:
-  // Methods to change the parameters of primary particle generation 
-  // interactively
- void GeneratePrimaries(G4Event*);
-  static G4bool ReadFile;
-
+    public:
+    HadrontherapyPrimaryGeneratorAction();
+    ~HadrontherapyPrimaryGeneratorAction();
+    
+    public:
+    // Methods to change the parameters of primary particle generation
+    // interactively
+    void GeneratePrimaries(G4Event*);
+    static G4bool ReadFile;
+    
     inline void setNewSource(G4bool Varbool){NewSource= Varbool;};
-  G4String PathSource;
-  G4bool Readfile;
+    G4String PathSource;
+    G4bool Readfile;
     G4bool NewSource;
-inline void setCalculatedPhaseSpaceFileIN(G4String val){calculatedPhaseSpaceFileIN=val;}
-  
+    inline void setCalculatedPhaseSpaceFileIN(G4String val){calculatedPhaseSpaceFileIN=val;}
     
-private:
-  void SetDefaultPrimaryParticle();
-
     
-G4String calculatedPhaseSpaceFileIN;
-void setGunCalculatedPhaseSpace();
+    private:
+    void SetDefaultPrimaryParticle();
+    
+    
+    G4String calculatedPhaseSpaceFileIN;
+    void setGunCalculatedPhaseSpace();
     
     HadrontherapyPrimaryGeneratorMessenger *PrimaryGeneratorMessenger;
-   G4ParticleGun *particleGuns;
- 
-
-private:
-  G4GeneralParticleSource* particleGun;
-  G4double sigmaX;
-      std::ifstream in;
-      std::ofstream ofs;
+    G4ParticleGun *particleGuns;
+    
+    
+    private:
+    G4GeneralParticleSource* particleGun;
+    G4double sigmaX;
+    std::ofstream ofs;
     
 };
 

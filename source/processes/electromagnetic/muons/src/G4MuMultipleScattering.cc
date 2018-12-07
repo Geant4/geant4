@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.cc 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -80,24 +79,23 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MuMultipleScattering::StreamProcessInfo(std::ostream& out,
-                                               G4String endOfLine) const
+void G4MuMultipleScattering::StreamProcessInfo(std::ostream& out) const
 {
   out << "      RangeFactor= " << RangeFactor()
       << ", step limit type: " << StepLimitType()
       << ", lateralDisplacement: " << LateralDisplasmentFlag()
       << ", polarAngleLimit(deg)= " << PolarAngleLimit()/degree
-      << endOfLine;
+      << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuMultipleScattering::ProcessDescription(std::ostream& out) const
 {
-  out << "<strong>"
-  "Muon multiple scattering</strong>. Simulates combined effects of <br>"
-  "elastic scattering at the end of the step, to save computing time. May<br>"
-  "be combined with Coulomb scattering in a 'mixed' scattering algorithm.";
+  out << 
+  "  Muon multiple scattering. Simulates combined effects of elastic\n" <<
+  "    scattering at the end of the step, to save computing time. May be\n" <<
+  "    combined with Coulomb scattering in a 'mixed' scattering algorithm.";
   G4VMultipleScattering::ProcessDescription(out);
 }
 

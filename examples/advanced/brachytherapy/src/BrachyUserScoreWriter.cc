@@ -33,7 +33,8 @@ Original code from geant4/examples/extended/runAndEvent/RE03, by M. Asai
 #include <map>
 #include <fstream>
 #include "BrachyUserScoreWriter.hh"
-#include "G4SystemOfUnits.hh"
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #ifdef ANALYSIS_USE  
 #include "BrachyAnalysisManager.hh"
@@ -113,7 +114,7 @@ for(int x = 0; x < fNMeshSegments[0]; x++) {
         G4int numberOfVoxel_z =fNMeshSegments[2];
         // If the voxel width is changed in the macro file, 
         // the voxel width variable must be updated
-        G4double voxelWidth = 0.25 *mm;
+        G4double voxelWidth = 0.25 *CLHEP::mm;
         //
         G4double xx = ( - numberOfVoxel_x + 1+ 2*x )* voxelWidth/2;
         G4double yy = ( - numberOfVoxel_y + 1+ 2*y )* voxelWidth/2;
@@ -126,13 +127,15 @@ for(int x = 0; x < fNMeshSegments[0]; x++) {
          // Print in the ASCII output file the information
  
          ofile << xx << "  " << yy << "  " << zz <<"  " 
-               <<(value->second->sum_wx())/keV << G4endl;
+               <<(value->second->sum_wx())/CLHEP::keV << G4endl;
 
 #ifdef ANALYSIS_USE          
         // Save the same information in the output analysis file
        BrachyAnalysisManager* analysis = BrachyAnalysisManager::GetInstance();
    
-       if(zz> -0.125 *mm && zz < 0.125*mm) analysis -> FillH2WithEnergyDeposition(xx,yy, (value->second->sum_wx())/keV);
+       if(zz> -0.125 *CLHEP::mm && zz < 0.125*CLHEP::mm)
+         analysis -> FillH2WithEnergyDeposition(xx,yy,
+                       (value->second->sum_wx())/CLHEP::keV);
 #endif
 }}}} 
 

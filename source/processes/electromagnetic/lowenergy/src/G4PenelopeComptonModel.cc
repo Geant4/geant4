@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc 99415 2016-09-21 09:05:43Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -570,15 +569,23 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	      for (size_t j=nBefore;j<nAfter;j++) //loop on products
 		{
 		  G4double itsEnergy = ((*fvect)[j])->GetKineticEnergy();
-		  localEnergyDeposit -= itsEnergy;
-		  if (((*fvect)[j])->GetParticleDefinition() == G4Gamma::Definition())
-		    energyInFluorescence += itsEnergy;
-		  else if (((*fvect)[j])->GetParticleDefinition() == G4Electron::Definition())
-		    energyInAuger += itsEnergy;
-
+		  if (itsEnergy < localEnergyDeposit) // valid secondary, generate it
+		    {
+		      localEnergyDeposit -= itsEnergy;
+		      if (((*fvect)[j])->GetParticleDefinition() == G4Gamma::Definition())
+			energyInFluorescence += itsEnergy;
+		      else if (((*fvect)[j])->GetParticleDefinition() == 
+			       G4Electron::Definition())
+			energyInAuger += itsEnergy;
+		    }
+		  else //invalid secondary: takes more than the available energy: delete it
+		    {
+		      delete (*fvect)[j];
+		      (*fvect)[j] = nullptr;
+		    }
 		}
 	    }
-
+	  
 	}
     }
 
@@ -663,11 +670,10 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   fvect->push_back(electron);
 
 
-  if (localEnergyDeposit < 0)
+  if (localEnergyDeposit < 0) //Should not be: issue a G4Exception (warning)
     {
-      G4cout << "WARNING-"
-	     << "G4PenelopeComptonModel::SampleSecondaries - Negative energy deposit"
-	     << G4endl;
+      G4Exception("G4PenelopeComptonModel::SampleSecondaries()",
+		   "em2099",JustWarning,"WARNING: Negative local energy deposit");
       localEnergyDeposit=0.;
     }
   fParticleChange->ProposeLocalEnergyDeposit(localEnergyDeposit);

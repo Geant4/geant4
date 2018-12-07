@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh 110870 2018-06-22 12:14:16Z gcosmo $
-// GEANT4 tag $Name:  $
 //
 // Class Description
 // Final state production code for hadron inelastic scattering above 3 GeV

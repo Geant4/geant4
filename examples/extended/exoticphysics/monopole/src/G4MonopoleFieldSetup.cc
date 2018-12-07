@@ -26,7 +26,6 @@
 /// \file exoticphysics/monopole/src/G4MonopoleFieldSetup.cc
 /// \brief Implementation of the G4MonopoleFieldSetup class
 //
-// $Id: G4MonopoleFieldSetup.cc 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +81,7 @@ G4MonopoleFieldSetup::G4MonopoleFieldSetup()
    fStepper(0),
    fMonopoleStepper(0),
    fMinStep(0.0),
-   fZmagFieldValue(0.),
+   fZmagFieldValue(0.2*tesla),
    fMonopoleFieldMessenger(0)
 {
 
@@ -118,30 +117,31 @@ G4MonopoleFieldSetup::~G4MonopoleFieldSetup()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-void G4MonopoleFieldSetup::SetMagField(G4double fieldValue, 
-                                       bool checkIfAlreadyDefined)
+void G4MonopoleFieldSetup::SetZMagFieldValue (G4double val)
 {
-  if(checkIfAlreadyDefined&&fMagneticField){
-    //    G4double fieldSet[4], fValue;
-    //    fMagneticField->GetFieldValue(fieldSet, &fValue);
-    return;
-  }
+  //set new magnetic field value and rebuild the field
+  fZmagFieldValue = val;
 
+  ConstructMagField();
+}
 
-  fZmagFieldValue = fieldValue;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4MonopoleFieldSetup::ConstructMagField()
+{
   //apply a global uniform magnetic field along Z axis  
   if (fMagneticField) { delete fMagneticField; }  //delete the existing magn field
 
   if (fZmagFieldValue != 0.)     // create a new one if non nul
     {
+      // G4cout << "Go to create new field ..." << G4endl;
       fMagneticField = new G4UniformMagField(G4ThreeVector(0., 0., 
                                                            fZmagFieldValue));        
       InitialiseAll();
     }
    else
     {
+      // G4cout << "Set field = 0 ..." << G4endl;
       fMagneticField = 0;
     }
 

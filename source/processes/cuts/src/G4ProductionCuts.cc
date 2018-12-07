@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.cc 73044 2013-08-15 09:44:11Z gcosmo $
-// GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 //
 // --------------------------------------------------------------
@@ -37,10 +35,10 @@
 #include "G4ProductionCutsTable.hh"
 #include <iomanip>
 
-G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::gammaDef = 0;
-G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::electDef = 0;
-G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::positDef = 0;
-G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::protonDef = 0;
+G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::gammaDef = nullptr;
+G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::electDef = nullptr;
+G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::positDef = nullptr;
+G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::protonDef = nullptr;
 
 G4ProductionCuts::G4ProductionCuts() :
   isModified(true)
@@ -111,10 +109,10 @@ G4int  G4ProductionCuts::GetIndex(const G4ParticleDefinition* ptcl)
 { 
   if(!ptcl) return -1;
   // In the first call, pointers are set 
-  if(gammaDef==0  && ptcl->GetParticleName()=="gamma")  { gammaDef = (G4ParticleDefinition*) ptcl; }
-  if(electDef==0  && ptcl->GetParticleName()=="e-")     { electDef = (G4ParticleDefinition*) ptcl; }
-  if(positDef==0  && ptcl->GetParticleName()=="e+")     { positDef = (G4ParticleDefinition*) ptcl; }
-  if(protonDef==0 && ptcl->GetParticleName()=="proton") { protonDef = (G4ParticleDefinition*) ptcl; }
+  if(gammaDef==nullptr  && ptcl->GetParticleName()=="gamma")  { gammaDef = (G4ParticleDefinition*) ptcl; }
+  if(electDef==nullptr  && ptcl->GetParticleName()=="e-")     { electDef = (G4ParticleDefinition*) ptcl; }
+  if(positDef==nullptr  && ptcl->GetParticleName()=="e+")     { positDef = (G4ParticleDefinition*) ptcl; }
+  if(protonDef==nullptr && ptcl->GetParticleName()=="proton") { protonDef = (G4ParticleDefinition*) ptcl; }
 
   G4int index;
   if(ptcl==(const G4ParticleDefinition*) gammaDef)       { index = 0;  }

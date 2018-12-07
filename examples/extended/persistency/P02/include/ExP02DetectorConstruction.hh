@@ -26,7 +26,6 @@
 /// \file persistency/P02/include/ExP02DetectorConstruction.hh
 /// \brief Definition of the ExP02DetectorConstruction class
 //
-// $Id: ExP02DetectorConstruction.hh 71569 2013-06-18 10:13:24Z gcosmo $
 //
 #ifndef ExP02DetectorConstruction_H
 #define ExP02DetectorConstruction_H 1

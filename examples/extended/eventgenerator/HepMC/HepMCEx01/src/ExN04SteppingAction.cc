@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04SteppingAction.cc
 /// \brief Implementation of the ExN04SteppingAction class
 //
-// $Id: ExN04SteppingAction.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #include "G4SteppingManager.hh"
@@ -41,6 +40,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04SteppingAction::ExN04SteppingAction()
+ : G4UserSteppingAction()
 {
 }
 

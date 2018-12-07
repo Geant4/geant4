@@ -26,7 +26,6 @@
 /// \file particles/phonons/src/G4PhononTransFast.cc
 /// \brief Implementation of the G4PhononTransFast class
 //
-// $Id: G4PhononTransFast.cc 102841 2017-02-27 13:00:47Z gcosmo $
 //
 
 #include "G4PhononTransFast.hh"

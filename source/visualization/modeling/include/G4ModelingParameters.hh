@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh 109510 2018-04-26 07:15:57Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -40,7 +39,6 @@
 #include "G4VisExtent.hh"
 #include "G4VisAttributes.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4PhysicalVolumeModel.hh"
 
 #include <vector>
 #include <utility>
@@ -81,11 +79,6 @@ public: // With description
     // Normal constructor
     PVNameCopyNo(G4String name, G4int copyNo)
     : fName(name), fCopyNo(copyNo) {}
-    // Constructor from G4PhysicalVolumeModel::G4PhysicalVolumeNodeID
-    PVNameCopyNo
-    (const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& nodeID)
-    : fName(nodeID.GetPhysicalVolume()->GetName())
-    , fCopyNo(nodeID.GetCopyNo()) {}
     const G4String& GetName() const {return fName;}
     G4int GetCopyNo() const {return fCopyNo;}
     G4bool operator!=(const PVNameCopyNo&) const;
@@ -102,11 +95,6 @@ public: // With description
     // Normal constructor
     PVPointerCopyNo(G4VPhysicalVolume* pPV, G4int copyNo)
     : fpPV(pPV), fCopyNo(copyNo) {}
-    // Constructor from G4PhysicalVolumeModel::G4PhysicalVolumeNodeID
-    PVPointerCopyNo
-    (const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& nodeID)
-    : fpPV(nodeID.GetPhysicalVolume())
-    , fCopyNo(nodeID.GetCopyNo()) {}
     const G4String& GetName() const;
     const G4VPhysicalVolume* GetPVPointer() const {return fpPV;}
     G4int GetCopyNo() const {return fCopyNo;}
@@ -126,10 +114,6 @@ public: // With description
      VisAttributesSignifier signifier,
      const PVNameCopyNoPath& path):
     fVisAtts(visAtts), fSignifier(signifier), fPVNameCopyNoPath(path) {}
-    VisAttributesModifier
-    (const G4VisAttributes& visAtts,
-     VisAttributesSignifier signifier,
-     const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path);
     const G4VisAttributes& GetVisAttributes() const
     {return fVisAtts;}
     VisAttributesSignifier GetVisAttributesSignifier() const

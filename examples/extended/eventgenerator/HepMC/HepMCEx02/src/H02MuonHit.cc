@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx02/src/H02MuonHit.cc
 /// \brief Implementation of the H02MuonHit class
 //
-//   $Id: H02MuonHit.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 #include <iomanip>
 #include "G4Circle.hh"
@@ -40,7 +39,8 @@ G4Allocator<H02MuonHit> H02MuonHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02MuonHit::H02MuonHit()
-  : moduleID(-1)
+  : G4VHit(), 
+    fModuleID(-1), fPname(), fMomentum(), fPosition(), fTof(0.)
 {
 }
 
@@ -48,8 +48,8 @@ H02MuonHit::H02MuonHit()
 H02MuonHit::H02MuonHit(G4int imod, G4String aname,
                      const G4ThreeVector& pxyz,
                      const G4ThreeVector& xyz, G4double atof)
-  : moduleID(imod), pname(aname), momentum(pxyz),
-    position(xyz), tof(atof)
+  : fModuleID(imod), fPname(aname), fMomentum(pxyz),
+    fPosition(xyz), fTof(atof)
 {
 }
 
@@ -68,11 +68,11 @@ H02MuonHit::H02MuonHit(const H02MuonHit& right)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 const H02MuonHit& H02MuonHit::operator=(const H02MuonHit& right)
 {
-  moduleID= right.moduleID;
-  pname= right.pname;
-  momentum= right.momentum;
-  position= right.position;
-  tof= right.tof;
+  fModuleID= right.fModuleID;
+  fPname= right.fPname;
+  fMomentum= right.fMomentum;
+  fPosition= right.fPosition;
+  fTof= right.fTof;
 
   return *this;
 }
@@ -90,12 +90,12 @@ void H02MuonHit::Draw()
 
   G4VVisManager* pVVisManager= G4VVisManager::GetConcreteInstance();
   if(pVVisManager) {
-    G4Circle circle(position);
+    G4Circle circle(fPosition);
     circle.SetScreenSize(5.);
     circle.SetFillStyle(G4Circle::filled);
 
     G4Color color, goodColor(1.,0.,0.), badColor(0.,0.,1.);
-    if(momentum.perp()>pt_min) color=goodColor;
+    if(fMomentum.perp()>pt_min) color=goodColor;
     else color=badColor;
 
     G4VisAttributes attribs(color);
@@ -107,15 +107,15 @@ void H02MuonHit::Draw()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void H02MuonHit::Print()
 {
-  G4int id= moduleID;
+  G4int id= fModuleID;
   G4String tag="B";
-  if(moduleID >=10) {
+  if(fModuleID >=10) {
     id -=10;
     tag="E";
   }
-  G4cout << tag << id << " :" << std::setw(12) << pname.c_str()
-         << " : pT=" << std::setprecision(3)  << momentum.perp()/GeV
-         << " : TOF=" << std::setprecision(3) << tof/ns
-         << " : x="  << std::setprecision(3) << position*(1./m)
+  G4cout << tag << id << " :" << std::setw(12) << fPname.c_str()
+         << " : pT=" << std::setprecision(3)  << fMomentum.perp()/GeV
+         << " : TOF=" << std::setprecision(3) << fTof/ns
+         << " : x="  << std::setprecision(3) << fPosition*(1./m)
          << G4endl;
 }

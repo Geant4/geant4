@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,11 +48,8 @@
 
 class G4HadronicInteraction;
 class G4VCrossSectionDataSet;
-class G4VComponentCrossSection;
 class G4FTFBuilder;
-class G4BinaryLightIonReaction;
 class G4ParticleHPInelasticData;
-
 
 class G4IonPhysicsPHP : public G4VPhysicsConstructor {
   public:
@@ -72,27 +68,12 @@ class G4IonPhysicsPHP : public G4VPhysicsConstructor {
 
     void AddProcess( const G4String&, G4ParticleDefinition*, 
                      G4ParticleHPInelasticData*, G4HadronicInteraction*, 
-                     G4BinaryLightIonReaction*, G4HadronicInteraction* );
+                     G4HadronicInteraction*, G4HadronicInteraction*,
+		     G4VCrossSectionDataSet*);
 
-    static G4ThreadLocal G4VCrossSectionDataSet*    theNuclNuclData; 
-    static G4ThreadLocal G4VComponentCrossSection*  theGGNuclNuclXS;
-    static G4ThreadLocal G4ParticleHPInelasticData* theDeuteronHPInelasticData;
-    static G4ThreadLocal G4ParticleHPInelasticData* theTritonHPInelasticData;
-    static G4ThreadLocal G4ParticleHPInelasticData* theHe3HPInelasticData;
-    static G4ThreadLocal G4ParticleHPInelasticData* theAlphaHPInelasticData;
-
-    static G4ThreadLocal G4BinaryLightIonReaction* theIonBC1;
-    static G4ThreadLocal G4BinaryLightIonReaction* theIonBC2;
-    static G4ThreadLocal G4HadronicInteraction*    theFTFP;
     static G4ThreadLocal G4FTFBuilder*             theBuilder;
-    static G4ThreadLocal G4HadronicInteraction*    modelDeuteronPHP;
-    static G4ThreadLocal G4HadronicInteraction*    modelTritonPHP;
-    static G4ThreadLocal G4HadronicInteraction*    modelHe3PHP;
-    static G4ThreadLocal G4HadronicInteraction*    modelAlphaPHP;
 
     G4int  verbose;
-    static G4ThreadLocal G4bool wasActivated;
 };
-
 
 #endif

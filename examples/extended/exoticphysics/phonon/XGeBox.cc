@@ -26,7 +26,6 @@
 /// \file exoticphysics/phonon/XGeBox.cc
 /// \brief Main program of the exoticphysics/phonon example
 //
-// $Id: XGeBox.cc 110254 2018-05-17 14:14:23Z gcosmo $
 //
 
 #include "G4Types.hh"

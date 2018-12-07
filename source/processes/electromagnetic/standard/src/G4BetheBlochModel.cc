@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc 109480 2018-04-24 14:46:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,6 +64,7 @@
 #include "G4LossTableManager.hh"
 #include "G4EmCorrections.hh"
 #include "G4ParticleChangeForLoss.hh"
+#include "G4ICRU90StoppingData.hh"
 #include "G4Log.hh"
 #include "G4DeltaAngle.hh"
 
@@ -76,8 +76,14 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition*,
                                      const G4String& nam)
   : G4VEmModel(nam),
     particle(nullptr),
+    fICRU90(nullptr),
+    currentMaterial(nullptr),
+    baseMaterial(nullptr),
     tlimit(DBL_MAX),
     twoln10(2.0*G4Log(10.0)),
+    fAlphaTlimit(CLHEP::GeV),
+    fProtonTlimit(10*CLHEP::GeV),
+    iICRU90(-1),
     isIon(false)
 {
   fParticleChange = nullptr;
@@ -107,6 +113,11 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
 
   // always false before the run
   SetDeexcitationFlag(false);
+
+  if(IsMaster() && G4EmParameters::Instance()->UseICRU90Data()) {
+    if(!fICRU90) { fICRU90 = nist->GetICRU90StoppingData(); } 
+    else if(particle->GetPDGMass() < GeV) { fICRU90->Initialise(); }
+  }
 
   if(nullptr == fParticleChange) {
     fParticleChange = GetParticleChangeForLoss();
@@ -217,9 +228,8 @@ G4double G4BetheBlochModel::ComputeCrossSectionPerAtom(
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
-  G4double cross = Z*ComputeCrossSectionPerElectron
-                                         (p,kineticEnergy,cutEnergy,maxEnergy);
-  return cross;
+  return
+    Z*ComputeCrossSectionPerElectron(p,kineticEnergy,cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -231,10 +241,8 @@ G4double G4BetheBlochModel::CrossSectionPerVolume(
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
-  G4double eDensity = material->GetElectronDensity();
-  G4double cross = eDensity*ComputeCrossSectionPerElectron
-                                         (p,kineticEnergy,cutEnergy,maxEnergy);
-  return cross;
+  return material->GetElectronDensity()
+    *ComputeCrossSectionPerElectron(p,kineticEnergy,cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -251,14 +259,41 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
   G4double gam   = tau + 1.0;
   G4double bg2   = tau * (tau+2.0);
   G4double beta2 = bg2/(gam*gam);
+  G4double xc    = cutEnergy/tmax;
 
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double eexc2 = eexc*eexc;
 
   G4double eDensity = material->GetElectronDensity();
 
+  // added ICRU90 stopping data for limited list of materials
+  if(fICRU90) {
+    if(material != currentMaterial) {
+      currentMaterial = material;
+      baseMaterial = material->GetBaseMaterial() 
+	? material->GetBaseMaterial() : material;
+      iICRU90 = fICRU90->GetIndex(baseMaterial);
+    }
+    if(iICRU90 >= 0) {
+      G4double e = kineticEnergy*proton_mass_c2/mass;
+      G4double dedx = 0.0;
+      if(chargeSquare > 1.1 && e < fAlphaTlimit) {
+	dedx = fICRU90->GetElectronicDEDXforAlpha(iICRU90, e)
+	  *material->GetDensity()*0.25;
+      } else if(chargeSquare < 1.1 && e < fProtonTlimit) {
+	dedx = fICRU90->GetElectronicDEDXforProton(iICRU90, e)
+	  *material->GetDensity();
+      }
+      if(dedx > 0.0) {
+	dedx += (G4Log(xc) + (1.0 - xc)*beta2)*twopi_mc2_rcl2
+	  *eDensity/beta2;
+	return std::max(chargeSquare*dedx, 0.0);
+      }
+    } 
+  }
+  // general Bethe-Bloch formula
   G4double dedx = G4Log(2.0*electron_mass_c2*bg2*cutEnergy/eexc2)
-                - (1.0 + cutEnergy/tmax)*beta2;
+                - (1.0 + xc)*beta2;
 
   if(0.0 < spin) {
     G4double del = 0.5*cutEnergy/(kineticEnergy + mass);
@@ -299,8 +334,8 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
                                              G4double length)
 {
   if(isIon) {
-    const G4ParticleDefinition* p = dp->GetDefinition();
     const G4Material* mat = couple->GetMaterial();
+    const G4ParticleDefinition* p = dp->GetDefinition();
     G4double preKinEnergy = dp->GetKineticEnergy();
     G4double e = preKinEnergy - eloss*0.5;
     if(e < preKinEnergy*0.75) { e = preKinEnergy*0.75; }
@@ -308,11 +343,15 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
     GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
     G4double qfactor = q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor;
-    G4double highOrder = length*corr->IonHighOrderCorrections(p,couple,e);
+
+    // no high order correction for ICRU90 data
+    baseMaterial = mat->GetBaseMaterial() ? mat->GetBaseMaterial() : mat;
+    G4double highOrder = 0.0;
+    if(!fICRU90 || fICRU90->GetIndex(baseMaterial) < 0) {
+      highOrder = length*corr->IonHighOrderCorrections(p,couple,e);
+    }
     G4double elossnew  = eloss*qfactor + highOrder;
-    if(elossnew > preKinEnergy)   { elossnew = preKinEnergy; }
-    else if(elossnew < eloss*0.5) { elossnew = eloss*0.5; }
-    eloss = elossnew;
+    eloss = std::max(std::min(elossnew,preKinEnergy),eloss*0.5);
     //G4cout << "G4BetheBlochModel::CorrectionsAlongStep: e= " << preKinEnergy
     //           << " qfactor= " << qfactor 
     //           << " highOrder= " << highOrder << " (" 

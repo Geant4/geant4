@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombBarrier.cc 100690 2016-10-31 11:25:43Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -60,7 +59,9 @@ G4CoulombBarrier::~G4CoulombBarrier()
 
 G4double G4CoulombBarrier::GetCoulombBarrier(G4int ARes, G4int ZRes, G4double) const 
 {
-  return CLHEP::elm_coupling*(GetZ()*ZRes)/(GetR0()*g4calc->Z13(ARes) + GetRho());
+  //  return BarrierPenetrationFactor(GetA())* 
+  return
+    CLHEP::elm_coupling*(GetZ()*ZRes)/(GetR0()*g4calc->Z13(ARes) + GetRho());
 }
 
 G4double G4CoulombBarrier::BarrierPenetrationFactor(G4int aZ) const 

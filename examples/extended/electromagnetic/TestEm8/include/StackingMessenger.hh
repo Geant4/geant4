@@ -26,8 +26,6 @@
 /// \file electromagnetic/TestEm8/include/StackingMessenger.hh
 /// \brief Definition of the StackingMessenger class
 //
-// $Id: StackingMessenger.hh,v 1.6 2006-09-25 17:06:29 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

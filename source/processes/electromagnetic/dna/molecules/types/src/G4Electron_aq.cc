@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Electron_aq.cc 101790 2016-11-28 15:33:44Z gcosmo $
 //
 // Author: Mathieu Karamitors 
 //

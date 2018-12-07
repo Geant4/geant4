@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc 107319 2017-11-08 16:29:22Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -70,6 +69,8 @@
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmStandardPhysicsGS.hh"
 #include "G4EmStandardPhysicsSS.hh"
+#include "G4EmStandardPhysicsWVI.hh"
+#include "G4EmLowEPPhysics.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4PhysListFactoryMessenger.hh"
@@ -89,8 +90,9 @@ G4PhysListFactory::G4PhysListFactory()
     listnames_hadr.push_back(ss[i]);
   }
 
-  nlists_em = 9;
-  G4String s1[9] = {"","_EMV","_EMX","_EMY","_EMZ","_LIV","_PEN","__GS","__SS"};
+  nlists_em = 12;
+  G4String s1[12] = {"","_EMV","_EMX","_EMY","_EMZ","_LIV","_PEN",
+		     "__GS","__SS","_EM0","_WVI","__LE"};
   for(size_t i=0; i<nlists_em; ++i) {
     listnames_em.push_back(s1[i]);
   }
@@ -202,6 +204,12 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
 	p->ReplacePhysics(new G4EmStandardPhysicsGS(verbose)); 
       } else if(8 == em_opt) {
 	p->ReplacePhysics(new G4EmStandardPhysicsSS(verbose)); 
+      } else if(9 == em_opt) {
+	p->ReplacePhysics(new G4EmStandardPhysics(verbose)); 
+      } else if(10 == em_opt) {
+	p->ReplacePhysics(new G4EmStandardPhysicsWVI(verbose)); 
+      } else if(11 == em_opt) {
+	p->ReplacePhysics(new G4EmLowEPPhysics(verbose)); 
       }
     }
     p->SetVerboseLevel(ver);

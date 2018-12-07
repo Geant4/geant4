@@ -1,0 +1,37 @@
+#
+/run/numberOfThreads 8
+#
+/process/em/deexcitationIgnoreCut true
+/process/em/fluo true
+/process/em/pixe true
+/process/em/auger true
+/process/em/augerCascade true
+#
+/svalue/det/setWorldMat G4_Galactic
+/svalue/det/setCytoMat G4_Galactic
+/svalue/det/setNuclMat G4_Galactic
+#/svalue/det/setWorldMat G4_WATER
+#/svalue/det/setCytoMat G4_WATER
+#/svalue/det/setNuclMat G4_WATER
+#
+/svalue/det/setNuclRadius 5 um
+/svalue/det/setCytoThickness 5 um
+#
+/svalue/det/setTrackingCut 12 eV
+#
+/svalue/phys/addPhysics  dna_opt2	        
+#
+/run/initialize
+#
+/gun/particle ion
+/gun/ion 53 131
+#
+/analysis/setFileName iodine131
+/analysis/h1/set  0 100 0 1 MeV          #e- track energy
+/analysis/h1/set  1 100 1e-6 1 MeV log10 #e- track energy (log)
+/analysis/h1/set  2 100 0 1 MeV          #gamma track energy
+/analysis/h1/set  3 100 1e-6 1 MeV log10 #gamma track energy (log)
+#
+/tracking/verbose 0
+/run/printProgress 10000
+/run/beamOn 100000000

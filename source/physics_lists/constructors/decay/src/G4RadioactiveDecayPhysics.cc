@@ -50,7 +50,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4RadioactiveDecayPhysics);
 G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(G4int)
 :  G4VPhysicsConstructor("G4RadioactiveDecay")
 {
-  G4EmParameters::Instance()->SetAugerCascade(true);
+  G4EmParameters::Instance()->AddPhysics("World","G4RadioactiveDecay");
   G4DeexPrecoParameters* deex = G4NuclearLevelData::GetInstance()->GetParameters();
   deex->SetStoreICLevelData(true);
   deex->SetMaxLifeTime(G4NuclideTable::GetInstance()->GetThresholdOfHalfLife()

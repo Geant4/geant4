@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -123,7 +123,7 @@ Rayl:   for  gamma    SubType= 11  BuildTable= 1
 
 e-_G4DNAElectronSolvation:   for  e-    SubType= 58  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAOneStepThermalizationModel :  Emin=        0 eV    Emax=      7.4 eV 
+DNAOneStepThermalizationModel_Meesungnoen2002 :  Emin=        0 eV    Emax=      7.4 eV 
 
 e-_G4DNAElastic:   for  e-    SubType= 51  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -162,8 +162,8 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGenUrban
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======

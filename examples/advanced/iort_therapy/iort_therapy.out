@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,7 +12,6 @@
                              WWW : http://geant4.org/
 **************************************************************
 
-... open Root analysis file : DoseDistribution.root - done
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -63,44 +62,45 @@ Some /vis commands (optionally) take a string to specify colour.
 /tracking/verbose 0
 /run/verbose 1
 /event/verbose 0
-/Physics/addPhysics emstandard_opt3
-/Physics/addPhysics Em_extra_physics
+/Physics/addPhysics standard_opt3
+THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardPhysics_option3
 /run/initialize
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : DIGIHIT1001
-      issued by : G4VReadOutGeometry
-The concept and the functionality of Readout Geometry has been merged
-into Parallel World. This G4VReadOutGeometry is kept for the sake of
-not breaking the commonly-used interface in the sensitive detector class.
-But this functionality of G4VReadOutGeometry class is no longer tested
-and thus may not be working well. We strongly recommend our customers to
-migrate to Parallel World scheme.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Instantiating new Read Out Geometry "DetectorROGeometry"
-Registering new DetectorSD "Detector"
-IORTMatrix: Memory space to store physical dose into 12600000 voxels has been allocated 
+The Detector has been built --- Add a scoring mesh for it  in the GUI if appropriate (similar to the phantom one)
 /run/geometryModified
 The (X,Y,Z) dimensions of the phantom are : (20 cm ,20 cm ,20 cm )
 The (X,Y,Z) dimensions of the detector are : (7 cm ,15 cm ,15 cm )
 Displacement between Phantom and World is: DX= 4.5 cm DY= 0 fm DZ= 0 fm 
-The (X,Y,Z) sizes of the Voxels are: (500 um ,500 um ,500 um )
-The number of Voxels along (X,Y,Z) is: (140,300,300)
- G4PhysicsListHelper::AddTransportation()--- G4CoupledTransportation is used 
+--- G4CoupledTransportation is used 
 ### G4EmConfigurator::AddModels n= 0
-PhysicsList::SetCuts:CutLength : 10 um 
+PhysicsList::SetCuts:CutLength : 100 um 
 /Physics/setDetectorCuts 0.01 mm
 /Physics/setCuts 0.01 mm
 /Step/waterPhantomStepMax 0.01 mm
 /beam/energy/meanEnergy 9.9 MeV
+The mean Kinetic energy of the incident beam has been changed to (MeV):9.9
 /beam/energy/sigmaEnergy 500 keV
+The sigma of the kinetic energy of the incident beam has been changed to (MeV):0.5
 /beam/position/Xposition -862.817 mm
 /event/printEventNumber 1000
+/score/create/boxMesh boxMesh_1
+/score/mesh/boxSize 10. 10. 10. cm
+/score/mesh/nBin 300 300 300
+.... G4ScoringMessenger::MeshBinCommand - G4ScoringBox
+/score/mesh/translate/xyz 4.5 0. 0. cm
+/score/quantity/doseDeposit dose Gy
+/score/close
+/score/list
+G4ScoringManager has 1 scoring meshes.
+G4ScoringBox : boxMesh_1 --- Shape: Box mesh
+ Size (x, y, z): (10, 10, 10) [cm]
+ # of segments: (300, 300, 300)
+ displacement: (4.5, 0, 0) [cm]
+ registered primitve scorers : 
+   0  dose
 /DeleteProtectionDisc/delete
 /run/geometryModified
-/run/beamOn 2
+/run/beamOn 2000
+/run/geometryModified
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 2 regions:
           DefaultRegionForTheWorld  1  0  0
@@ -140,7 +140,7 @@ eIoni:   for  e-    SubType= 2
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=      100 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=      100 TeV   deltaVI
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -167,7 +167,7 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=      100 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=      100 TeV   deltaVI
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -198,8 +198,8 @@ hIoni:   for  proton    SubType= 2
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV   deltaVI
 
 hBrems:   for  proton    SubType= 3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -244,8 +244,8 @@ ionIoni:   for  alpha    SubType= 2
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV   deltaVI
+          BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV   deltaVI
 
 nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -261,8 +261,8 @@ hIoni:   for  anti_proton    SubType= 2
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV   deltaVI
 
 hBrems:   for  anti_proton    SubType= 3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -291,8 +291,8 @@ hIoni:   for  kaon+    SubType= 2
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV   deltaVI
 
 hBrems:   for  kaon+    SubType= 3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -317,8 +317,8 @@ hIoni:   for  kaon-    SubType= 2
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV   deltaVI
 
 hBrems:   for  kaon-    SubType= 3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -343,8 +343,8 @@ muIoni:   for  mu+    SubType= 2
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=      100 TeV
 
 muBrems:   for  mu+    SubType= 3
@@ -370,8 +370,8 @@ muIoni:   for  mu-    SubType= 2
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=      100 TeV
 
 muBrems:   for  mu-    SubType= 3
@@ -387,69 +387,6 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=      100 TeV
 
-====================================================================
-                  HADRONIC PROCESSES SUMMARY (verbose level 1)
-
----------------------------------------------------
-                           Hadronic Processes for e+
-
-  Process: positronNuclear
-        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
-     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for e-
-
-  Process: electronNuclear
-        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
-     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for gamma
-
-  Process: photonNuclear
-        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
-        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
-     Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for mu+
-
-  Process: muonNuclear
-        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
-     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
-
----------------------------------------------------
-                           Hadronic Processes for mu-
-
-  Process: muonNuclear
-        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
-     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
-
-================================================================
-=======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
-=======================================================================
-Type of pre-compound inverse x-section              3
-Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
-Type of de-excitation inverse x-section             3
-Type of de-excitation factory                       Evaporation
-Number of de-excitation channels                    8
-Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
-Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1e+12
-Internal e- conversion flag                         1
-Store e- internal conversion data                   0
-Electron internal conversion ID                     2
-Correlated gamma emission flag                      0
-Max 2J for sampling of angular correlations         10
-=======================================================================
-
 msc:   for pi+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -460,8 +397,8 @@ hIoni:   for  pi+    SubType= 2
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV   deltaVI
 
 hBrems:   for  pi+    SubType= 3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -486,8 +423,8 @@ hIoni:   for  pi-    SubType= 2
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV   deltaVI
 
 hBrems:   for  pi-    SubType= 3
       dE/dx and range tables from 10 eV  to 100 TeV in 260 bins
@@ -506,43 +443,43 @@ hPairProd:   for  pi-    SubType= 4
 
 Index : 0     used in the geometry : Yes
  Material : G4_AIR
- Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 keV
+ Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Galactic
- Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 keV
+ Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : G4_Ti
- Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  1.28664 keV    e-  42.9443 keV    e+  42.0872 keV proton 1 keV
+ Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
+ Energy thresholds :  gamma  1.28664 keV    e-  42.9443 keV    e+  42.0872 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes
  Material : G4_PLEXIGLASS
- Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  990 eV     e-  18.2368 keV    e+  17.8256 keV proton 1 keV
+ Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
+ Energy thresholds :  gamma  990 eV     e-  18.2368 keV    e+  17.8256 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 4     used in the geometry : Yes
  Material : G4_Al
- Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  990 eV     e-  34.1725 keV    e+  33.9436 keV proton 1 keV
+ Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
+ Energy thresholds :  gamma  990 eV     e-  34.1725 keV    e+  33.9436 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 5     used in the geometry : Yes
  Material : G4_WATER
- Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 10 um 
- Energy thresholds :  gamma  990 eV     e-  14.0874 keV    e+  14.0874 keV proton 1 keV
+ Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 100 um 
+ Energy thresholds :  gamma  990 eV     e-  14.0874 keV    e+  14.0874 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -559,18 +496,18 @@ Index : 6     used in the geometry : Yes
 Run 0 starts ...
 
 ---> Begin of Event: 0
+
+---> Begin of Event: 1000
  Run terminated.
 Run Summary
-  Number of events processed : 2
-  User=0.050000s Real=0.049744s Sys=0.000000s
-Dose is being written to Dose.out
-... write Root file : DoseDistribution.root - done
-... close Root file : DoseDistribution.root - done
+  Number of events processed : 2000
+  User=12.400000s Real=13.946527s Sys=0.180000s
+/score/dumpQuantityToFile boxMesh_1 dose dose.out
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 12 of which, static: 1
-Dynamic pools deleted: 11 / Total memory freed: 0.18 MB
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 0.17 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

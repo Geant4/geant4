@@ -27,7 +27,6 @@
 /// \brief Implementation of the RE02PSEnergyDeposit class
 //
 //
-// $Id: RE02PSEnergyDeposit.cc 72957 2013-08-14 14:27:23Z gcosmo $
 //
 // RE02PSEnergyDeposit
 #include "RE02PSEnergyDeposit.hh"

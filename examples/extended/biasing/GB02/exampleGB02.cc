@@ -26,7 +26,6 @@
 /// \file GB02/exampleGB02.cc
 /// \brief Main program of the GB02 example
 //
-// $Id: $
 //
 
 #include "G4Types.hh"

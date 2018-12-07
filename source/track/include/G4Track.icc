@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc 110263 2018-05-17 14:28:14Z gcosmo $
 //
 //-----------------------------------------------------------------
 // Definitions of inline functions
@@ -110,10 +109,13 @@ extern G4TRACK_DLL G4Allocator<G4Track>*& aTrackAllocator();
 
 // proper time
    inline G4double G4Track::GetProperTime() const
-   { return fpDynamicParticle->GetProperTime(); }
+   { 
+     if (fpDynamicParticle != nullptr) {return fpDynamicParticle->GetProperTime();} 
+     else                              {return 0.0;} 
+   }
 
    inline void G4Track::SetProperTime(const G4double aValue)
-   { fpDynamicParticle->SetProperTime(aValue); }
+   { if (fpDynamicParticle != nullptr) fpDynamicParticle->SetProperTime(aValue); }
       // Proper time of the current track
 
 // velocity
@@ -132,28 +134,44 @@ extern G4TRACK_DLL G4Allocator<G4Track>*& aTrackAllocator();
 
 // volume
    inline G4VPhysicalVolume* G4Track::GetVolume() const
-   { if ( fpTouchable ==0 ) return 0; 
-     return fpTouchable->GetVolume(); }
+   { 
+     if ( fpTouchable == 0 ) {return nullptr;} 
+     else {return fpTouchable->GetVolume(); }
+   }
 
    inline G4VPhysicalVolume* G4Track::GetNextVolume() const
-   {  if ( fpNextTouchable ==0 ) return 0; 
-     return fpNextTouchable->GetVolume(); }
+   {  
+     if ( fpNextTouchable == 0 ) {return nullptr;} 
+     else { return fpNextTouchable->GetVolume(); }
+   }
 
 // material
    inline 
     const G4MaterialCutsCouple* G4Track::GetMaterialCutsCouple() const
-   { return fpStep->GetPreStepPoint()->GetMaterialCutsCouple(); }
+    { 
+      if ( fpStep==nullptr ) {return nullptr;}
+      else {return fpStep->GetPreStepPoint()->GetMaterialCutsCouple(); }
+   }
 
    inline 
     const G4MaterialCutsCouple* G4Track::GetNextMaterialCutsCouple() const
-   { return fpStep->GetPostStepPoint()->GetMaterialCutsCouple(); }
+    { 
+      if ( fpStep==nullptr ) {return nullptr;}
+      else   {return fpStep->GetPostStepPoint()->GetMaterialCutsCouple(); }
+    }
 
 // material
    inline G4Material* G4Track::GetMaterial() const
-   { return fpStep->GetPreStepPoint()->GetMaterial(); }
+    { 
+      if ( fpStep==nullptr ) {return nullptr;}
+      else { return fpStep->GetPreStepPoint()->GetMaterial(); }
+    }
 
    inline G4Material* G4Track::GetNextMaterial() const
-   { return fpStep->GetPostStepPoint()->GetMaterial(); }
+    { 
+      if ( fpStep==nullptr ) {return nullptr;}
+      else   { return fpStep->GetPostStepPoint()->GetMaterial(); }
+    }
 
 
 // touchable
@@ -186,34 +204,60 @@ extern G4TRACK_DLL G4Allocator<G4Track>*& aTrackAllocator();
 
 // kinetic energy
    inline G4double G4Track::GetKineticEnergy() const
-   { return fpDynamicParticle->GetKineticEnergy(); }
+   { 
+     if (fpDynamicParticle != nullptr) {return fpDynamicParticle->GetKineticEnergy();}
+     else { return 0.0; }
+   }
 
    inline void G4Track::SetKineticEnergy(const G4double aValue)
-   { fpDynamicParticle->SetKineticEnergy(aValue); }
+   { 
+      if (fpDynamicParticle != nullptr) { fpDynamicParticle->SetKineticEnergy(aValue); }
+   }
 
 // total energy
    inline G4double G4Track::GetTotalEnergy() const
-   { return fpDynamicParticle->GetTotalEnergy(); }
+   { 
+     if (fpDynamicParticle != nullptr) {return fpDynamicParticle->GetTotalEnergy();}
+     else { return 0.0; }
+   }
 
 // momentum
    inline G4ThreeVector G4Track::GetMomentum() const
-   { return fpDynamicParticle->GetMomentum(); }
+   { 
+     if (fpDynamicParticle != nullptr) {return fpDynamicParticle->GetMomentum();}
+     const G4ThreeVector zerovector;
+     return zerovector; 
+   }
 
 // momentum (direction)
-  inline const G4ThreeVector& G4Track::GetMomentumDirection() const
-   { return fpDynamicParticle->GetMomentumDirection(); }
+   inline const G4ThreeVector& G4Track::GetMomentumDirection() const
+   { 
+     if (fpDynamicParticle != nullptr) {return fpDynamicParticle->GetMomentumDirection();}
+     static const G4ThreeVector zerovector;
+     return zerovector; 
+   }
 
    inline void G4Track::SetMomentumDirection(const G4ThreeVector& aValue)
-   { fpDynamicParticle->SetMomentumDirection(aValue) ;}
+   { 
+     if (fpDynamicParticle != nullptr) {fpDynamicParticle->SetMomentumDirection(aValue);}
+   }
 
 // polarization
    inline const G4ThreeVector& G4Track::GetPolarization() const
-   { return fpDynamicParticle->GetPolarization(); }
+   { 
+     if (fpDynamicParticle != nullptr) {return fpDynamicParticle->GetPolarization();}
+     static const G4ThreeVector zerovector;
+     return zerovector; 
+   }
 
    inline void G4Track::SetPolarization(const G4ThreeVector& aValue)
-   { fpDynamicParticle->SetPolarization(aValue.x(),
-                                        aValue.y(),
-                                        aValue.z()); }
+   { 
+     if (fpDynamicParticle != nullptr) {
+        fpDynamicParticle->SetPolarization(aValue.x(),
+                                           aValue.y(),
+                                           aValue.z()); 
+     }
+   } 
 
 // track status
    inline G4TrackStatus G4Track::GetTrackStatus() const

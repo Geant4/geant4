@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh 106714 2017-10-20 09:38:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -178,7 +177,6 @@ public:
 
   // Automatic documentation
   void DumpModelList(std::ostream& out, G4int verb);
-  void DumpModelList(std::ostream& out, G4int verb, G4String endOfLine);
 
   // Select model for given material cuts couple index
   inline G4VEmModel* SelectModel(G4double& energy, size_t& index);

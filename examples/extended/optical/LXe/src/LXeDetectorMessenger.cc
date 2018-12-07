@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeDetectorMessenger.cc 104474 2017-06-01 07:35:19Z gcosmo $
 //
 /// \file optical/LXe/src/LXeDetectorMessenger.cc
 /// \brief Implementation of the LXeDetectorMessenger class
@@ -135,6 +134,13 @@ LXeDetectorMessenger::LXeDetectorMessenger(LXeDetectorConstruction* detector)
   fWLSScintYield->AvailableForStates(G4State_PreInit,G4State_Idle);
   fWLSScintYield->SetToBeBroadcasted(false);
 
+  fSaveThresholdCmd = new G4UIcmdWithAnInteger("/LXe/saveThreshold",this);
+  fSaveThresholdCmd->
+SetGuidance("Set the photon count threshold for saving the random number seed");
+  fSaveThresholdCmd->SetParameterName("photons",true);
+  fSaveThresholdCmd->SetDefaultValue(4500);
+  fSaveThresholdCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   fDefaultsCmd = new G4UIcommand("/LXe/detector/defaults",this);
   fDefaultsCmd->SetGuidance("Set all detector geometry values to defaults.");
   fDefaultsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
@@ -160,6 +166,7 @@ LXeDetectorMessenger::~LXeDetectorMessenger()
   delete fReflectivityCmd;
   delete fMainScintYield;
   delete fWLSScintYield;
+  delete fSaveThresholdCmd;
   delete fDefaultsCmd;
 }
 
@@ -208,6 +215,9 @@ void LXeDetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   }
   else if (command == fWLSScintYield){
     fLXeDetector->SetWLSScintYield(fWLSScintYield->GetNewDoubleValue(newValue));
+  }
+  else if( command == fSaveThresholdCmd ){
+    fLXeDetector->SetSaveThreshold(fSaveThresholdCmd->GetNewIntValue(newValue));
   }
   else if (command == fDefaultsCmd){
     fLXeDetector->SetDefaults();

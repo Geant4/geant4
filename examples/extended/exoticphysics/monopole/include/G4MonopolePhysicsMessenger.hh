@@ -26,7 +26,6 @@
 /// \file exoticphysics/monopole/include/G4MonopolePhysicsMessenger.hh
 /// \brief Definition of the G4MonopolePhysicsMessenger class
 //
-// $Id: G4MonopolePhysicsMessenger.hh 68036 2013-03-13 14:13:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,10 +59,6 @@ private:
     
   G4UIdirectory*             fPhysicsDir;    
   G4UIcommand*               fPhysicsCmd;
-  G4UIcmdWithADouble*        fMCmd;
-  G4UIcmdWithADouble*        fZCmd;
-  G4UIcmdWithADoubleAndUnit* fMassCmd;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

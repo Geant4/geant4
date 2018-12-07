@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id:$
 //
 // 
 // Implementation for G4UOrb wrapper class

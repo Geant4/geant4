@@ -40,11 +40,11 @@
 //#define debug
 //#define ddebug
 
-CCalStackingAction::CCalStackingAction(): isInitialized(false) {}
-
+CCalStackingAction::CCalStackingAction()
+  : fTimeLimit(10000*CLHEP::ns),isInitialized(false) 
+{}
 
 CCalStackingAction::~CCalStackingAction(){}
-
 
 void CCalStackingAction::PrepareNewEvent(){
 
@@ -52,7 +52,6 @@ void CCalStackingAction::PrepareNewEvent(){
   stage = firstStage;
   nurgent = 0;
   acceptSecondaries = 1;
-
 }
 
 void CCalStackingAction::initialize(){
@@ -94,37 +93,26 @@ void CCalStackingAction::initialize(){
     G4cout << "CCalStackingAction::initialize: Could not get SD Manager !" 
 	   << G4endl;
 #endif
-  }
-   
+  }   
 }
 
 G4ClassificationOfNewTrack CCalStackingAction::ClassifyNewTrack(const G4Track* aTrack){
 
   G4ClassificationOfNewTrack classification=fKill;
-  int parentID = aTrack->GetParentID();
+  G4int parentID = aTrack->GetParentID();
 #ifdef ddebug
   G4TrackStatus status = aTrack->GetTrackStatus();
   G4cout << "Classifying track " << aTrack->GetTrackID()
 	 << " with status " << aTrack->GetTrackStatus() << G4endl;  
 #endif
     
-  if (parentID < 0) {
-#ifdef debug     
-    G4cout << "Killing track " << aTrack->GetTrackID() 
-	   << " from previous event. Should not happen" << G4endl;
-    G4cout << "returning classification= " << classification << G4endl;
-#endif
-    return classification= fKill;
-  }
-   
-  if (aTrack->GetDefinition()->GetParticleName() == "gamma" && 
-      aTrack->GetKineticEnergy() < 1.*eV) {
+  if (aTrack->GetGlobalTime() > fTimeLimit) {
 #ifdef debug
     G4cout << "Kills particle " << aTrack->GetDefinition()->GetParticleName() 
 	   << " of energy " << aTrack->GetKineticEnergy()/MeV << " MeV" 
 	   << G4endl;
 #endif
-    return classification= fKill;
+    return classification = fKill;
   }
     
   if (stage<end) {

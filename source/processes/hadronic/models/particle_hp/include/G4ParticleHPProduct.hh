@@ -51,15 +51,17 @@ enum G4HPMultiMethod { G4HPMultiPoisson, G4HPMultiBetweenInts };
 
 class G4ParticleHPProduct
 {
-
-   struct toBeCached {
+   struct toBeCached
+   {
       G4ReactionProduct* theProjectileRP;
       G4ReactionProduct* theTarget;
       G4int theCurrentMultiplicity;
-      toBeCached() : theProjectileRP(NULL),theTarget(NULL),theCurrentMultiplicity(-1) {};
+      toBeCached()
+        : theProjectileRP(0), theTarget(0), theCurrentMultiplicity(-1) {}
    };
 
-  public:
+public:
+
   G4ParticleHPProduct()
   {
     theDist = 0;
@@ -67,7 +69,8 @@ class G4ParticleHPProduct
     fCache.Put( val );
 
     char * method = getenv( "G4PHP_MULTIPLICITY_METHOD" );
-    if( method )  {
+    if( method )
+    {
       if( G4String(method) == "Poisson" ) {
 	theMultiplicityMethod = G4HPMultiPoisson;
       } else if( G4String(method) == "BetweenInts" ) {
@@ -75,7 +78,9 @@ class G4ParticleHPProduct
       } else {
 	throw G4HadronicException(__FILE__, __LINE__, ("multiplicity method unknown to G4ParticleHPProduct" + G4String(method)).c_str());
       }
-    } else {
+    }
+    else
+    {
       theMultiplicityMethod = G4HPMultiPoisson;
     }
     theMassCode = 0.0;
@@ -85,6 +90,7 @@ class G4ParticleHPProduct
     theActualStateQValue = 0.0;
     theDistLaw = -1;
   }
+
   ~G4ParticleHPProduct()
   { 
     if(theDist != 0) delete theDist;
@@ -94,15 +100,21 @@ class G4ParticleHPProduct
   {
     aDataFile >> theMassCode>>theMass>>theIsomerFlag>>theDistLaw
               >> theGroundStateQValue>>theActualStateQValue;
-    if( getenv("G4PHPTEST") )     G4cout << " G4ParticleHPProduct :: Init MassCode " << theMassCode << " " << theMass << " theActualStateQValue " << theActualStateQValue << G4endl;// GDEB
-    if( getenv("G4PHPTEST") )     G4cout << " G4ParticleHPProduct :: Init theActualStateQValue " << theActualStateQValue << G4endl;// GDEB
+    if( getenv("G4PHPTEST") )
+      G4cout << " G4ParticleHPProduct :: Init MassCode "
+             << theMassCode << " " << theMass << " theActualStateQValue "
+             << theActualStateQValue << G4endl;// GDEB
+    if( getenv("G4PHPTEST") )
+      G4cout << " G4ParticleHPProduct :: Init theActualStateQValue "
+             << theActualStateQValue << G4endl;// GDEB
     theGroundStateQValue*= CLHEP::eV;
     theActualStateQValue*= CLHEP::eV;
     theYield.Init(aDataFile, CLHEP::eV);
     theYield.Hash();
     if(theDistLaw==0)
     {
-      // distribution not known, use E-independent, isotropic angular distribution
+      // distribution not known, use E-independent, isotropic
+      // angular distribution
       theDist = new G4ParticleHPIsotropic;
     }
     else if(theDistLaw == 1)
@@ -174,9 +186,15 @@ class G4ParticleHPProduct
     fCache.Get().theTarget = aTarget; 
   }
   
-  inline G4ReactionProduct * GetTarget() { return fCache.Get().theTarget; }
+  inline G4ReactionProduct * GetTarget()
+  {
+    return fCache.Get().theTarget;
+  }
   
-  inline G4ReactionProduct * GetProjectileRP() { return fCache.Get().theProjectileRP; }
+  inline G4ReactionProduct * GetProjectileRP()
+  {
+    return fCache.Get().theProjectileRP;
+  }
   
   inline G4double MeanEnergyOfThisInteraction() 
   { 
@@ -193,35 +211,32 @@ class G4ParticleHPProduct
     return result;
   }
   
-  inline G4double GetQValue() { return theActualStateQValue; }
+  inline G4double GetQValue()
+  {
+    return theActualStateQValue;
+  }
 
   //TK120515 For migration of frameFlag (MF6 LCT) = 3 in
   //G4ParticleHPEnAngCorrelation
-  G4double GetMassCode(){return theMassCode;};
-  G4double GetMass(){return theMass;};
+  G4double GetMassCode() {return theMassCode;}
+  G4double GetMass() {return theMass;}
 
-   private:
+private:
    
-   // data members
+  // data members
 
-   G4double theMassCode;
-   G4double theMass;
-   G4int theIsomerFlag;
-   G4double theGroundStateQValue;
-   G4double theActualStateQValue;
-   G4int theDistLaw;  // redundant
-   G4ParticleHPVector theYield;
-   G4VParticleHPEnergyAngular *  theDist;
+  G4double theMassCode;
+  G4double theMass;
+  G4int theIsomerFlag;
+  G4double theGroundStateQValue;
+  G4double theActualStateQValue;
+  G4int theDistLaw;  // redundant
+  G4ParticleHPVector theYield;
+  G4VParticleHPEnergyAngular *  theDist;
    
-   // Utility quantities
-   
-   //G4ReactionProduct * theTarget;
-   //G4ReactionProduct * theProjectileRP;
-
-   // cashed values
-   
-   //G4int theCurrentMultiplicity;
-   G4Cache<toBeCached> fCache;
+  // cashed values
+  //
+  G4Cache<toBeCached> fCache;
 
   G4HPMultiMethod theMultiplicityMethod;  
 };

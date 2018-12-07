@@ -25,7 +25,6 @@
 //
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04TrackerParametrisation.hh
 /// \brief Definition of the ExN04TrackerParametrisation class
-// $Id: ExN04TrackerParametrisation.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 //
 
@@ -53,39 +52,39 @@ class G4Trap;
 class G4Trd;
 
 class ExN04TrackerParametrisation : public G4VPVParameterisation {
-public:
+  public:
 
-  ExN04TrackerParametrisation();
-  virtual ~ExN04TrackerParametrisation();
-  void ComputeTransformation(const G4int copyNo,
-                             G4VPhysicalVolume* physVol) const;
-  void ComputeDimensions(G4Tubs& trackerLayer, const G4int copyNo,
-                         const G4VPhysicalVolume* physVol) const;
+    ExN04TrackerParametrisation();
+    virtual ~ExN04TrackerParametrisation();
+    virtual void ComputeTransformation(const G4int copyNo,
+                           G4VPhysicalVolume* physVol) const;
+    virtual void ComputeDimensions(G4Tubs& trackerLayer, const G4int copyNo,
+                           const G4VPhysicalVolume* physVol) const;
 
   private:  // Dummy declarations to get rid of warnings ...
-    void ComputeDimensions(G4Trd&,const G4int,
+    virtual void ComputeDimensions(G4Trd&,const G4int,
                            const G4VPhysicalVolume*) const {}
-    void ComputeDimensions(G4Trap&,const G4int,
+    virtual void ComputeDimensions(G4Trap&,const G4int,
                            const G4VPhysicalVolume*) const {}
-    void ComputeDimensions(G4Cons&,const G4int,
+    virtual void ComputeDimensions(G4Cons&,const G4int,
                            const G4VPhysicalVolume*) const {}
-    void ComputeDimensions(G4Orb&,const G4int,
+    virtual void ComputeDimensions(G4Orb&,const G4int,
                            const G4VPhysicalVolume*) const {}
-    void ComputeDimensions(G4Sphere&,const G4int,
+    virtual void ComputeDimensions(G4Sphere&,const G4int,
                            const G4VPhysicalVolume*) const {}
-    void ComputeDimensions(G4Ellipsoid&,const G4int,
+    virtual void ComputeDimensions(G4Ellipsoid&,const G4int,
                            const G4VPhysicalVolume*) const {}
-    void ComputeDimensions(G4Torus&,const G4int,
+    virtual void ComputeDimensions(G4Torus&,const G4int,
                            const G4VPhysicalVolume*) const {}
-    void ComputeDimensions(G4Para&, const G4int,
+    virtual void ComputeDimensions(G4Para&, const G4int,
                            const G4VPhysicalVolume*) const {}
-    void ComputeDimensions(G4Hype&, const G4int,
+    virtual void ComputeDimensions(G4Hype&, const G4int,
                            const G4VPhysicalVolume*) const {}
-    void ComputeDimensions(G4Box&,const G4int,
+    virtual void ComputeDimensions(G4Box&,const G4int,
                            const G4VPhysicalVolume*) const {}
-    void ComputeDimensions(G4Polycone&,const G4int,
+    virtual void ComputeDimensions(G4Polycone&,const G4int,
                            const G4VPhysicalVolume*) const {}
-    void ComputeDimensions(G4Polyhedra&, const G4int,
+    virtual void ComputeDimensions(G4Polyhedra&, const G4int,
                            const G4VPhysicalVolume*) const {}
 
 #include "ExN04DetectorParameterDef.hh"

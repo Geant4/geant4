@@ -1,4 +1,3 @@
-$Id: History 70477 2013-05-31 08:35:08Z ahoward $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep 11th, 2018, M. Verderi - GB03-V10-04-02
+- Bug fix in GB03BOptnSplitOrKillOnBoundary.cc in
+  the computation of the killing probability.
 
 May 20th, 2018 J. Allison - GB03-V10-04-01
 - Remove G4UI_USE and G4VIS_USE.

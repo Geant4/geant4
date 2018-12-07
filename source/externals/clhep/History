@@ -1,4 +1,3 @@
-$Id:$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 July 2018 - G.Cosmo
+- Removed not implemented constructor declaration in MixMaxRng.
 
 24 May 2018 - G.Cosmo
 - Fixed compilation warnings from gcc-8.1.0 when using -Woverloaded-virtual

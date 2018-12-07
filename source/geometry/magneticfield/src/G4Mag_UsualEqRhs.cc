@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.cc 69699 2013-05-13 08:50:30Z gcosmo $
 //
 //
 //  This is the 'standard' right-hand side for the equation of motion

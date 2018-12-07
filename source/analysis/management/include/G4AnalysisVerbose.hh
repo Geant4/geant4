@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisVerbose.hh 92688 2015-09-14 07:01:13Z gcosmo $
 
 // Utility class for analysis category messages.
 

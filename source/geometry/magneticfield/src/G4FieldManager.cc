@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.cc 108823 2018-03-09 11:03:44Z gcosmo $
 //
 // -------------------------------------------------------------------
 
@@ -33,6 +32,10 @@
 #include "G4MagneticField.hh"
 #include "G4ChordFinder.hh"
 #include "G4FieldManagerStore.hh"
+#include "G4SystemOfUnits.hh"
+
+G4double G4FieldManager::fDefault_Delta_One_Step_Value= 0.01 *    millimeter;
+G4double G4FieldManager::fDefault_Delta_Intersection_Val= 0.001 * millimeter;
 
 G4FieldManager::G4FieldManager(G4Field       *detectorField, 
 			       G4ChordFinder *pChordFinder, 
@@ -41,15 +44,11 @@ G4FieldManager::G4FieldManager(G4Field       *detectorField,
    : fDetectorField(detectorField), 
      fChordFinder(pChordFinder), 
      fAllocatedChordFinder(false),
-     fEpsilonMinDefault(5.0e-5), 
-     fEpsilonMaxDefault(0.001),
-     fDefault_Delta_One_Step_Value(0.01),    // mm
-     fDefault_Delta_Intersection_Val(0.001), // mm
+     fDelta_One_Step_Value(   fDefault_Delta_One_Step_Value ), 
+     fDelta_Intersection_Val( fDefault_Delta_Intersection_Val ),     
      fEpsilonMin( fEpsilonMinDefault ),
      fEpsilonMax( fEpsilonMaxDefault)
 { 
-   fDelta_One_Step_Value= fDefault_Delta_One_Step_Value;
-   fDelta_Intersection_Val= fDefault_Delta_Intersection_Val;
    if ( detectorField )
      fFieldChangesEnergy= detectorField->DoesFieldChangeEnergy();
    else
@@ -61,17 +60,13 @@ G4FieldManager::G4FieldManager(G4Field       *detectorField,
 
 G4FieldManager::G4FieldManager(G4MagneticField *detectorField)
    : fDetectorField(detectorField), fAllocatedChordFinder(true),
-     fEpsilonMinDefault(5.0e-5), 
-     fEpsilonMaxDefault(0.001),
-     fFieldChangesEnergy(false), 
-     fDefault_Delta_One_Step_Value(0.01),    // mm
-     fDefault_Delta_Intersection_Val(0.001), // mm
+     fFieldChangesEnergy(false),
+     fDelta_One_Step_Value(   fDefault_Delta_One_Step_Value ), 
+     fDelta_Intersection_Val( fDefault_Delta_Intersection_Val ),
      fEpsilonMin( fEpsilonMinDefault ),
-     fEpsilonMax( fEpsilonMaxDefault)
+     fEpsilonMax( fEpsilonMaxDefault )
 {
    fChordFinder= new G4ChordFinder( detectorField );
-   fDelta_One_Step_Value= fDefault_Delta_One_Step_Value;
-   fDelta_Intersection_Val= fDefault_Delta_Intersection_Val;
    // Add to store
    G4FieldManagerStore::Register(this);
 }
@@ -104,8 +99,8 @@ G4FieldManager* G4FieldManager::Clone() const
         //Copy values of other variables
         aFM->fEpsilonMax = this->fEpsilonMax;
         aFM->fEpsilonMin = this->fEpsilonMin;
-        aFM->fDefault_Delta_Intersection_Val = this->fDefault_Delta_Intersection_Val;
-        aFM->fDefault_Delta_One_Step_Value = this->fDefault_Delta_One_Step_Value;
+        // aFM->fDefault_Delta_Intersection_Val = this->fDefault_Delta_Intersection_Val; // now static
+        // aFM->fDefault_Delta_One_Step_Value = this->fDefault_Delta_One_Step_Value;   // now static
         aFM->fDelta_Intersection_Val = this->fDelta_Intersection_Val;
         aFM->fDelta_One_Step_Value = this->fDelta_One_Step_Value;
         //TODO: Should we really add to the store the cloned FM? Who will use this?

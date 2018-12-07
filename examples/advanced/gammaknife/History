@@ -6,8 +6,10 @@ francesco.romano@lns.infn.it
          ====================================================
              History file of the GammaKnife application
          ====================================================
+18.10.2018 S. Guatelli  Tag: gammaknife-V10-04-01
+           - G4VIS_USE and G4UI_USE deleted
 
-10.05.2018 B.Morgan        Tag: gammeknife-V10-04-00
+10.05.2018 B.Morgan        Tag: gammaknife-V10-04-00
            - Include G4Types before use of G4MULTITHREADED. For forward
              compatibility with move to #defines over -D for G4 preprocessor
              symbols.

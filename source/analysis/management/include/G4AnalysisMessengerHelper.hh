@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisMessengerHelper.hh 66310 2012-12-17 11:56:35Z ihrivnac $
 
 // The helper class for histogram and profiles messengers.
 // It implements reusable commands in /analysis/[hn|pn] directory.

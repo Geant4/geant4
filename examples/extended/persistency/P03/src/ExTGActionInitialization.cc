@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGActionInitialization.cc 74184 2013-09-30 14:05:02Z ihrivnac $
 //
 /// \file persistency/P03/src/ExTGActionInitialization.cc
 /// \brief Implementation of the ExTGActionInitialization class

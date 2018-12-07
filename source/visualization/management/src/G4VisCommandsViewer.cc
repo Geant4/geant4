@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc 109510 2018-04-26 07:15:57Z gcosmo $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -52,6 +51,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <cstdio>
 #ifdef WIN32
 #include <regex>
 #include <filesystem>
@@ -572,30 +572,30 @@ G4VisCommandViewerColourByDensity::G4VisCommandViewerColourByDensity () {
    "\nThen parameters for the algorithm assumed to be densities in that unit.");
   fpCommand -> SetGuidance
   ("Algorithm 1: Simple algorithm takes 3 parameters: d0, d1 and d2."
-   "\nVolumes with density < d0 are invisible."
-   "\nVolumes with d0 <= density < d1 have colour on range red->green."
-   "\nVolumes with d1 <= density < d2 have colour on range green->blue."
-   "\nVolumes with density > d2 are blue.");
+   "\n  Volumes with density < d0 are invisible."
+   "\n  Volumes with d0 <= density < d1 have colour on range red->green."
+   "\n  Volumes with d1 <= density < d2 have colour on range green->blue."
+   "\n  Volumes with density > d2 are blue.");
   G4UIparameter* parameter;
   parameter  =  new G4UIparameter("n",'i',omitable = true);
-  parameter  -> SetDefaultValue  (0);
   parameter  -> SetGuidance      ("Algorithm number (or \"0\" to switch off).");
+  parameter  -> SetDefaultValue  (1);
   fpCommand->SetParameter(parameter);
   parameter  =  new G4UIparameter("unit",'s',omitable = true);
-  parameter  -> SetDefaultValue  ("g/cm3");
   parameter  -> SetGuidance      ("Unit of following densities, e.g., \"g/cm3\".");
+  parameter  -> SetDefaultValue  ("g/cm3");
   fpCommand->SetParameter(parameter);
   parameter  =  new G4UIparameter("d0",'d',omitable = true);
-  parameter  -> SetDefaultValue  (0.);
-  parameter  -> SetGuidance      ("Density parameter 0.");
+  parameter  -> SetGuidance      ("Density parameter 0");
+  parameter  -> SetDefaultValue  (0.5);
   fpCommand->SetParameter(parameter);
   parameter  =  new G4UIparameter("d1",'d',omitable = true);
-  parameter  -> SetDefaultValue  (0.);
-  parameter  -> SetGuidance      ("Density parameter 1.");
+  parameter  -> SetGuidance      ("Density parameter 1");
+  parameter  -> SetDefaultValue  (3.0);
   fpCommand->SetParameter(parameter);
   parameter  =  new G4UIparameter("d2",'d',omitable = true);
-  parameter  -> SetDefaultValue  (0.);
   parameter  -> SetGuidance      ("Density parameter 2.");
+  parameter  -> SetDefaultValue  (10.0);
   fpCommand->SetParameter(parameter);
 }
 
@@ -1189,7 +1189,7 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
 
 #ifndef WIN32
 
-  // Execute pattern and get resulting list of filles
+  // Execute pattern and get resulting list of files
   G4String shellCommand = "echo " + pattern;
   FILE *filelist = popen(shellCommand.c_str(), "r");
   if (!filelist) {
@@ -1205,12 +1205,14 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
   // Build view vector of way points
   const size_t BUFLENGTH = 999999;
   char buf[BUFLENGTH];
-  fgets(buf, BUFLENGTH, filelist);
-  std::istringstream fileliststream(buf);
-  while (fileliststream >> pathname
-         && safetyCount++ < safety) {  // Loop checking, 16.02.2016, J.Allison
-    uiManager->ApplyCommand("/control/execute " + pathname);
-    viewVector.push_back(currentViewer->GetViewParameters());
+  char* result = std::fgets(buf, BUFLENGTH, filelist);
+  if (result) {
+    std::istringstream fileliststream(result);
+    while (fileliststream >> pathname
+           && safetyCount++ < safety) {  // Loop checking, 16.02.2016, J.Allison
+      uiManager->ApplyCommand("/control/execute " + pathname);
+      viewVector.push_back(currentViewer->GetViewParameters());
+    }
   }
   pclose(filelist);
 
@@ -1654,10 +1656,10 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
       }
       return;
     }
-    // Scene has changed.  UpdateVisManagerScene issues
+    // Scene has changed.  CheckSceneAndNotifyHandlers issues
     // /vis/scene/notifyHandlers, which does a refresh anyway, so the
     // ordinary refresh becomes part of the else phrase...
-    UpdateVisManagerScene(scene->GetName());
+    CheckSceneAndNotifyHandlers(scene);
   } else {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."

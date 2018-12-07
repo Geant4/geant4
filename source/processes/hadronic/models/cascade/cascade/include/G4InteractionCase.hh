@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InteractionCase.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100518  M. Kelsey -- Why use std::pair<> at all?  Never exported; just
 //		store pointers.  Add clear() function.  Move code from

@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $ID$
 /// \file SteppingAction.cc 
 /// \brief Implementation of the SteppingAction class
 

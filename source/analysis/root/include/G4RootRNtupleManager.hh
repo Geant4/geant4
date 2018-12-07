@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootRNtupleManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Manager class for Root read ntuples.
 // It implements functions specific to Root read ntuples.

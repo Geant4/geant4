@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc 108737 2018-03-02 13:49:56Z gcosmo $
-// GEANT4 tag $Name: geant4-09-03-ref-06 $
 //
 // 
 // G4PAIxSection.cc -- class implementation file

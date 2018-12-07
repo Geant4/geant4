@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// $Id: G4DigiFilterFactories.hh 68043 2013-03-13 14:27:49Z gcosmo $
 //
 //
 // Digi filter model factories creating filters

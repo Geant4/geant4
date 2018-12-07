@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm17/src/MuCrossSections.cc
 /// \brief Implementation of the MuCrossSections class
 //
-// $Id: MuCrossSections.cc 67148 2013-02-01 18:16:32Z vnivanch $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

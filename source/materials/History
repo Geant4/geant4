@@ -1,4 +1,3 @@
-$Id: History 108515 2018-02-16 07:15:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-10-18 V.Ivanchenko (materials-V10-04-10)
+18-10-18 V.Ivanchenko (materials-V10-04-09)
+- G4ICRU90StoppingData - fixed initialisation
+
+01-10-18 V.Ivanchenko (materials-V10-04-08)
+- G4ICRU90StoppingData, G4NistManager - added destruction of ICRU90
+    data
+
+27-09-18 V.Ivanchenko (materials-V10-04-07)
+- G4ICRU90StoppingData - added extra inline methods
+
+25-09-18 V.Ivanchenko (materials-V10-04-06)
+- G4ICRU90StoppingData - new class for ICRU90 data
+- G4NistManager - added method to access G4ICRU90StoppingData; removed
+    check forcing instantiation only in the master thread
+
+14-09-18 D.H. Wright (materials-V10-04-05)
+- sources.cmake: replace G4AtomicShells_EADL with G4AtomicShells_XDB_EADL
+
+13-09-18 D.H. Wright (materials-V10-04-04)
+- G4AtomicShells_EADL.hh, .cc deleted.
+- G4AtomicShells_XDB_EADL.hh, .cc added.  New files use experimental
+   binding energy data from X-ray Data Book (XDB) where available and
+   theoretical values otherwise.
 
 15-02-18 D.Sawkey (materials-V10-04-03)
 - G4MaterialPropertiesTable: Restore return of nullptr if material property

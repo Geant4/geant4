@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.cc 99159 2016-09-07 08:11:50Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -41,7 +40,6 @@
 
 #include "G4NucleiProperties.hh"
 
-#include "G4NucleiPropertiesTableAME03.hh"
 #include "G4NucleiPropertiesTableAME12.hh"
 #include "G4NucleiPropertiesTheoreticalTable.hh"
 #include "G4ParticleTable.hh"
@@ -55,15 +53,10 @@ G4ThreadLocal G4double G4NucleiProperties::mass_deuteron = -1.;
 G4ThreadLocal G4double G4NucleiProperties::mass_triton = -1.;
 G4ThreadLocal G4double G4NucleiProperties::mass_alpha = -1.;
 G4ThreadLocal G4double G4NucleiProperties::mass_He3 = -1.;
-#ifndef G4NucleiProperties_USE_OLD_AME_TABLE
-G4bool G4NucleiProperties::use_old_evaluation = false;
-#else
-G4bool G4NucleiProperties::use_old_evaluation = true;
-#endif
 
 G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 {
-  G4double mass=0.0;
+  G4double mass =0.0;
 
   if (std::fabs(A - G4int(A)) > 1.e-10) {
     mass = NuclearMass(A,Z);
@@ -82,19 +75,24 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 G4double G4NucleiProperties::GetNuclearMass(const G4int A, const G4int Z)
 {
   if (mass_proton  <= 0.0 ) {
-    const G4ParticleDefinition * nucleus = 0;
+    const G4ParticleDefinition * nucleus = nullptr;
     nucleus = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
-    if (nucleus!=0) mass_proton = nucleus->GetPDGMass();
+    if (nucleus!=nullptr) mass_proton = nucleus->GetPDGMass();
+
     nucleus = G4ParticleTable::GetParticleTable()->FindParticle("neutron"); // neutron 
-    if (nucleus!=0) mass_neutron = nucleus->GetPDGMass();
+    if (nucleus!=nullptr) mass_neutron = nucleus->GetPDGMass();
+
     nucleus = G4ParticleTable::GetParticleTable()->FindParticle("deuteron"); // deuteron 
-    if (nucleus!=0) mass_deuteron = nucleus->GetPDGMass();
+    if (nucleus!=nullptr) mass_deuteron = nucleus->GetPDGMass();
+
     nucleus = G4ParticleTable::GetParticleTable()->FindParticle("triton"); // triton 
-    if (nucleus!=0) mass_triton = nucleus->GetPDGMass();
+    if (nucleus!=nullptr) mass_triton = nucleus->GetPDGMass();
+
     nucleus = G4ParticleTable::GetParticleTable()->FindParticle("alpha"); // alpha 
-    if (nucleus!=0) mass_alpha = nucleus->GetPDGMass();
+    if (nucleus!=nullptr) mass_alpha = nucleus->GetPDGMass();
+
     nucleus = G4ParticleTable::GetParticleTable()->FindParticle("He3"); // He3 
-    if (nucleus!=0) mass_He3 = nucleus->GetPDGMass();
+    if (nucleus!=nullptr) mass_He3 = nucleus->GetPDGMass();
 
   }
 
@@ -127,19 +125,9 @@ G4double G4NucleiProperties::GetNuclearMass(const G4int A, const G4int Z)
   }
   
   if (mass < 0.) {
-    G4bool inAMETable = false;
-    if ( ! use_old_evaluation ) {
-       inAMETable = G4NucleiPropertiesTableAME12::IsInTable(Z,A);
-    } else {
-       inAMETable = G4NucleiPropertiesTableAME03::IsInTable(Z,A);
-    }
-    if ( inAMETable ) {
+    if ( G4NucleiPropertiesTableAME12::IsInTable(Z,A) ) {
       // AME table
-      if ( ! use_old_evaluation ) {
-         mass = G4NucleiPropertiesTableAME12::GetNuclearMass(Z,A);
-      } else {
-         mass = G4NucleiPropertiesTableAME03::GetNuclearMass(Z,A);
-      }
+      mass = G4NucleiPropertiesTableAME12::GetNuclearMass(Z,A);
     } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)){
       // Theoretical table
       mass = G4NucleiPropertiesTheoreticalTable::GetNuclearMass(Z,A);
@@ -171,11 +159,7 @@ G4bool G4NucleiProperties::IsInStableTable(const G4int A, const int Z)
     return false;
   } 
 
-  if ( ! use_old_evaluation ) {
-    return G4NucleiPropertiesTableAME12::IsInTable(Z,A);
-  } else {
-    return G4NucleiPropertiesTableAME03::IsInTable(Z,A);
-  }
+  return G4NucleiPropertiesTableAME12::IsInTable(Z,A);
 }
 
 G4double G4NucleiProperties::GetMassExcess(const G4double A, const G4double Z)
@@ -198,19 +182,9 @@ G4double G4NucleiProperties::GetMassExcess(const G4int A, const G4int Z)
     
   } else {
 
-    G4bool inAMETable = false;
-    if ( ! use_old_evaluation ) {
-       inAMETable = G4NucleiPropertiesTableAME12::IsInTable(Z,A);
-    } else {
-       inAMETable = G4NucleiPropertiesTableAME03::IsInTable(Z,A);
-    }
-    if (inAMETable){
+    if ( G4NucleiPropertiesTableAME12::IsInTable(Z,A) ){
       // AME table
-      if ( ! use_old_evaluation ) {
-         return G4NucleiPropertiesTableAME12::GetMassExcess(Z,A);
-      } else {
-         return G4NucleiPropertiesTableAME03::GetMassExcess(Z,A);
-      }
+      return G4NucleiPropertiesTableAME12::GetMassExcess(Z,A);
     } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)){
       return G4NucleiPropertiesTheoreticalTable::GetMassExcess(Z,A);
     } else {
@@ -238,18 +212,8 @@ G4double G4NucleiProperties::GetAtomicMass(const G4double A, const G4double Z)
   } else {
     G4int iA = G4int(A);
     G4int iZ = G4int(Z);
-    G4bool inAMETable = false;
-    if ( ! use_old_evaluation ) {
-       inAMETable = G4NucleiPropertiesTableAME12::IsInTable(Z,A);
-    } else {
-       inAMETable = G4NucleiPropertiesTableAME03::IsInTable(Z,A);
-    }
-    if (inAMETable) {
-      if ( ! use_old_evaluation ) {
-        return G4NucleiPropertiesTableAME12::GetAtomicMass(Z,A);
-      } else {
-        return G4NucleiPropertiesTableAME03::GetAtomicMass(Z,A);
-      }
+    if ( G4NucleiPropertiesTableAME12::IsInTable(Z,A) ) {
+      return G4NucleiPropertiesTableAME12::GetAtomicMass(Z,A);
     } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(iZ,iA)){
       return G4NucleiPropertiesTheoreticalTable::GetAtomicMass(iZ,iA);
     } else {
@@ -277,24 +241,13 @@ G4double G4NucleiProperties::GetBindingEnergy(const G4int A, const G4int Z)
     return 0.0;
 
   } else {
-    G4bool inAMETable = false;
-    if ( ! use_old_evaluation ) {
-       inAMETable = G4NucleiPropertiesTableAME12::IsInTable(Z,A);
-    } else {
-       inAMETable = G4NucleiPropertiesTableAME03::IsInTable(Z,A);
-    }
-    if (inAMETable) {
-      if ( ! use_old_evaluation ) {
-        return G4NucleiPropertiesTableAME12::GetBindingEnergy(Z,A);
-      } else {
-        return G4NucleiPropertiesTableAME03::GetBindingEnergy(Z,A);
-      }
+    if ( G4NucleiPropertiesTableAME12::IsInTable(Z,A) ) {
+      return G4NucleiPropertiesTableAME12::GetBindingEnergy(Z,A);
     } else if (G4NucleiPropertiesTheoreticalTable::IsInTable(Z,A)) {
       return G4NucleiPropertiesTheoreticalTable::GetBindingEnergy(Z,A);
     }else {
       return BindingEnergy(A,Z);
     }
-
   }
 }
 
@@ -306,18 +259,10 @@ G4double G4NucleiProperties::MassExcess(G4double A, G4double Z)
 
 G4double  G4NucleiProperties::AtomicMass(G4double A, G4double Z)
 {
-  //const G4double hydrogen_mass_excess;
-  //const G4double neutron_mass_excess;  
   G4double hydrogen_mass_excess;
   G4double neutron_mass_excess;  
-  if ( ! use_old_evaluation ) {
-    hydrogen_mass_excess = G4NucleiPropertiesTableAME12::GetMassExcess(1,1);
-    neutron_mass_excess = G4NucleiPropertiesTableAME12::GetMassExcess(0,1);
-  } else {
-    hydrogen_mass_excess = G4NucleiPropertiesTableAME03::GetMassExcess(1,1);
-    neutron_mass_excess = G4NucleiPropertiesTableAME03::GetMassExcess(0,1);
-  }
-
+  hydrogen_mass_excess = G4NucleiPropertiesTableAME12::GetMassExcess(1,1);
+  neutron_mass_excess = G4NucleiPropertiesTableAME12::GetMassExcess(0,1);
   G4double mass =
       (A-Z)*neutron_mass_excess + Z*hydrogen_mass_excess - BindingEnergy(A,Z) + A*amu_c2;
 
@@ -361,7 +306,3 @@ G4double  G4NucleiProperties::BindingEnergy(G4double A, G4double Z)
   return -binding*MeV;
 }
 
-void G4NucleiProperties::UseOldAMETable( G4bool val )
-{
-   use_old_evaluation = val;
-}

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // Manager class for Hdf5 ntuples 
 //
@@ -69,6 +68,9 @@ class G4Hdf5NtupleManager : public G4TNtupleManager<tools::hdf5::ntuple>
     // Access to ntuple vector (needed for Write())
     const std::vector<NtupleDescriptionType*>& GetNtupleDescriptionVector() const;
 
+    // Utility function  
+    void CreateTNtuple(NtupleDescriptionType*  ntupleDescription, G4bool warn);
+
     // Methods from the templated base class
     //
     virtual void CreateTNtuple(
@@ -78,7 +80,8 @@ class G4Hdf5NtupleManager : public G4TNtupleManager<tools::hdf5::ntuple>
                     NtupleDescriptionType* ntupleDescription) final;
 
     virtual void FinishTNtuple(
-                    NtupleDescriptionType* ntupleDescription) final;
+                    NtupleDescriptionType* ntupleDescription,
+                    G4bool fromBooking) final;
 
     // data members
     //

@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/include/RE04SteppingAction.hh
 /// \brief Definition of the RE04SteppingAction class
 //
-// $Id: $
 //
 #ifndef RE04SteppingAction_h
 #define RE04SteppingAction_h 1

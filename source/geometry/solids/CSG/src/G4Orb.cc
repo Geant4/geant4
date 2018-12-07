@@ -22,7 +22,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc 105834 2017-08-23 08:14:34Z gcosmo $
 //
 // class G4Orb
 //
@@ -309,21 +308,21 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   if (D < 0) return kInfinity; // no intersection
 
   G4double sqrtD = std::sqrt(D);
-  G4double tmin = -pv - sqrtD;
+  G4double dist = -pv - sqrtD;
 
   // Avoid rounding errors due to precision issues seen on 64 bits systems.
   // Split long distances and recompute
   //
   G4double Dmax = 32*fRmax; 
-  if (tmin > Dmax)
+  if (dist > Dmax)
   {
-    G4double tadd = tmin - Dmax + fRmax;
-    tadd += DistanceToIn(p + tadd*v, v);
-    return (tadd >= kInfinity) ? kInfinity : tadd;
+    dist  = dist - 1.e-8*dist - fRmax; // to stay outside after the move
+    dist += DistanceToIn(p + dist*v, v);
+    return (dist >= kInfinity) ? kInfinity : dist;
   }
 
   if (sqrtD*2 <= halfRmaxTol) return kInfinity; // touch
-  return (tmin < halfRmaxTol) ? 0. : tmin;
+  return (dist < halfRmaxTol) ? 0. : dist;
 }
 
 //////////////////////////////////////////////////////////////////////////

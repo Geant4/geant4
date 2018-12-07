@@ -64,7 +64,8 @@ namespace G4INCL {
 		ParticleType KaonType;
 		const G4double rdm = Random::shoot();
 		// pp->pS+K0 (1/4)
-        // pp->pS0K+ (1/8)
+        // pp->pS0K+ (1/8) // HEM
+        // pp->pS0K+ (1/4) // Data
         // pp->nS+K+ (1)
         
         // pn->nS+K0 (1/4)
@@ -133,9 +134,8 @@ namespace G4INCL {
 		Particle *kaon = new Particle(KaonType,zero,rcol);
 		list.push_back(kaon);
 		
-		PhaseSpaceGenerator::generateBiased(sqrtS, list, 0, angularSlope);
-		
-		INCL_DEBUG("NNToNSK " << (kaon->getMomentum().theta()) * 180. / G4INCL::Math::pi << '\n');
+		if(Random::shoot()<0.5) PhaseSpaceGenerator::generateBiased(sqrtS, list, 0, angularSlope);
+		else PhaseSpaceGenerator::generateBiased(sqrtS, list, 1, angularSlope);
 		
 		fs->addModifiedParticle(particle1);
 		fs->addModifiedParticle(particle2);

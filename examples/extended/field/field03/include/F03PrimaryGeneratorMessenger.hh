@@ -27,7 +27,6 @@
 /// \brief Definition of the F03PrimaryGeneratorMessenger class
 //
 //
-// $Id: F03PrimaryGeneratorMessenger.hh 76602 2013-11-13 08:33:35Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

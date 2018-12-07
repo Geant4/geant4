@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclParamMomDst.cc 67863 2013-03-11 19:00:21Z mkelsey $
 // Author:  Michael Kelsey (SLAC)
 // Date:    7 March 2013
 //

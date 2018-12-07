@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04DetectorMessenger.cc 78551 2014-01-07 09:45:08Z gcosmo $
 //
 /// \file field/field04/src/F04DetectorMessenger.cc
 /// \brief Implementation of the F04DetectorMessenger class

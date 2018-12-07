@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -100,7 +99,7 @@ void G4HadronPhysicsNuBeam::Proton()
   // this is the new "custom" proton builder, tentatively for NuBeam
   //
   // no need to set the min energy because it's set in the ProBuilder (at 100GeV)
-  // ... and theMax will be set 100TeV via Build()
+  // ... and theMax will be set via Build()
   //
   // also explicitly set quasi-elastic key ON for QGS
   // (it should be OFF for FTF, controlled by QuasiElastic)

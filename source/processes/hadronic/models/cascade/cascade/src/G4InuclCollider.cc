@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc 71769 2013-06-21 21:23:50Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
@@ -234,8 +233,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   G4int itry = 0;
   while (itry < itry_max) {	/* Loop checking 08.06.2015 MHK */
     itry++;
-    if (verboseLevel > 2)
-      G4cout << " InuclCollider itry " << itry << G4endl;
+    if (verboseLevel > 2) G4cout << " InuclCollider itry " << itry << G4endl;
 
     globalOutput.reset();		// Clear buffers for this attempt
     output.reset();
@@ -315,7 +313,6 @@ void G4InuclCollider::rescatter(G4InuclParticle* bullet,
 
 
 // De-excite nuclear fragment to ground state
-
 void G4InuclCollider::deexcite(const G4Fragment& fragment,
 			       G4CollisionOutput& globalOutput) {
   if (fragment.GetA_asInt() <= 1) return;	// Nothing real to be de-excited
@@ -329,8 +326,8 @@ void G4InuclCollider::deexcite(const G4Fragment& fragment,
 
     DEXoutput.reset();
     theDeexcitation->deExcite(fragment, DEXoutput);
-  } while (!validateOutput(fragment, DEXoutput) && (++itry < itry_max));
 
+  } while (!validateOutput(fragment, DEXoutput) && (++itry < itry_max));
   // Add de-excitation products to output buffer
   globalOutput.add(DEXoutput);
 }

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootAnalysisManager.cc 106985 2017-10-31 10:07:18Z gcosmo $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -80,7 +79,7 @@ G4bool G4RootAnalysisManager::IsInstance()
 G4RootAnalysisManager::G4RootAnalysisManager(G4bool isMaster)
  : G4ToolsAnalysisManager("Root", isMaster),
    fNofNtupleFiles(0),
-   fNtupleRowWise(true),
+   fNtupleRowWise(false),
    fNtupleMergeMode(G4NtupleMergeMode::kNone),
    fNtupleManager(nullptr),
    fSlaveNtupleManager(nullptr),
@@ -107,7 +106,7 @@ G4RootAnalysisManager::G4RootAnalysisManager(G4bool isMaster)
   // Merging may require user code migration as analysis manager
   // must be created both on master and workers.
   auto mergeNtuples = false;
-  SetNtupleMergingMode(mergeNtuples, fNofNtupleFiles);
+  SetNtupleMergingMode(mergeNtuples, fNofNtupleFiles, fNtupleRowWise);
 
   // Create ntuple managers
   CreateNtupleManagers();
@@ -126,7 +125,8 @@ G4RootAnalysisManager::~G4RootAnalysisManager()
 
 //_____________________________________________________________________________
 void G4RootAnalysisManager::SetNtupleMergingMode(G4bool mergeNtuples, 
-                                                 G4int nofNtupleFiles)
+                                                 G4int nofNtupleFiles,
+                                                 G4bool rowWise)
 
 {
 #ifdef G4VERBOSE
@@ -167,12 +167,12 @@ void G4RootAnalysisManager::SetNtupleMergingMode(G4bool mergeNtuples,
   G4String mergingMode;
   if ( ( ! mergeNtuples ) || ( ! canMerge ) ) {
     fNtupleMergeMode = G4NtupleMergeMode::kNone;
-    mergingMode = "G4NtupleMergeMode::kNone";      
+    mergingMode = "G4NtupleMergeMode::kNone";
   }
   else {
     // Set the number of reduced ntuple files
-    // G4int nofThreads = G4Threading::GetNumberOfThreads();
     fNofNtupleFiles = nofNtupleFiles;
+    fNtupleRowWise = rowWise;
   
     // Check the number of reduced ntuple files
     // if ( fNofNtupleFiles < 0 || fNofNtupleFiles > nofThreads ) {
@@ -260,7 +260,7 @@ void G4RootAnalysisManager::CreateNtupleManagers()
   switch ( fNtupleMergeMode )
   {
     case G4NtupleMergeMode::kNone:
-      fNtupleManager = new G4RootNtupleManager(fState);
+      fNtupleManager = new G4RootNtupleManager(fState, 0, fNtupleRowWise);
       fNtupleManager->SetFileManager(fFileManager);
       SetNtupleManager(fNtupleManager);
       break;
@@ -467,6 +467,22 @@ G4bool G4RootAnalysisManager::WriteNtuple()
 }
     
 //_____________________________________________________________________________
+G4bool G4RootAnalysisManager::ResetNtuple()
+{
+// Reset histograms and ntuple
+
+  auto finalResult = true;
+  
+  if ( fNtupleMergeMode == G4NtupleMergeMode::kNone || 
+       fNtupleMergeMode == G4NtupleMergeMode::kMain )  {
+    auto result = fNtupleManager->Reset(false);
+    finalResult = result && finalResult;
+  }  
+
+  return finalResult;
+}
+
+//_____________________________________________________________________________
 G4bool G4RootAnalysisManager::Reset()
 {
 // Reset histograms and ntuple
@@ -476,13 +492,8 @@ G4bool G4RootAnalysisManager::Reset()
   auto result = G4ToolsAnalysisManager::Reset();
   finalResult = finalResult && result;
   
-  if ( fNtupleMergeMode == G4NtupleMergeMode::kNone || 
-       fNtupleMergeMode == G4NtupleMergeMode::kMain )  {
-    result = fNtupleManager->Reset(false);
-    finalResult = result && finalResult;
-  }  
-
-  finalResult = finalResult && result;
+  result = ResetNtuple();
+  finalResult = result && finalResult;
   
   return finalResult;
 }
@@ -510,6 +521,7 @@ G4bool G4RootAnalysisManager::OpenFileImpl(const G4String& fileName)
     finalResult = finalResult && result;
     
     fNtupleManager->SetNtupleDirectory(fFileManager->GetNtupleDirectory());
+
     fNtupleManager->CreateNtuplesFromBooking();
 
 #ifdef G4VERBOSE
@@ -607,7 +619,7 @@ G4bool G4RootAnalysisManager::WriteImpl()
 }
 
 //_____________________________________________________________________________
-G4bool G4RootAnalysisManager::CloseFileImpl()
+G4bool G4RootAnalysisManager::CloseFileImpl(G4bool reset)
 {
   auto finalResult = true;
 
@@ -615,13 +627,18 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
     // the ntuple decription vector is cleared on Reset()
     // in kNoMergeAfterOpen ntuple manager mode 
 
-  // reset data
-  auto result = Reset();
+  auto result = true;
+  if ( reset ) {
+    result = Reset();
+  } else {
+    // ntuple must be reset 
+    result = ResetNtuple();
+  }
   if ( ! result ) {
-      G4ExceptionDescription description;
-      description << "      " << "Resetting data failed";
-      G4Exception("G4RootAnalysisManager::Write()",
-                "Analysis_W021", JustWarning, description);
+    G4ExceptionDescription description;
+    description << "      " << "Resetting data failed";
+    G4Exception("G4RootAnalysisManager::CloseFile()",
+              "Analysis_W021", JustWarning, description);
   } 
   finalResult = finalResult && result;
 
@@ -672,10 +689,9 @@ void G4RootAnalysisManager::SetNtupleMerging(G4bool mergeNtuples,
 {
   // Keep basketSize in file manager
   fFileManager->SetBasketSize(basketSize);
-  fNtupleRowWise = rowWise;
 
   // Set ntuple merging mode 
-  SetNtupleMergingMode(mergeNtuples, nofNtupleFiles);
+  SetNtupleMergingMode(mergeNtuples, nofNtupleFiles, rowWise);
 
   // Clear existing managers
   ClearNtupleManagers();  
@@ -683,3 +699,19 @@ void G4RootAnalysisManager::SetNtupleMerging(G4bool mergeNtuples,
   // Re-create managers
   CreateNtupleManagers();
 }
+
+//_____________________________________________________________________________
+void G4RootAnalysisManager::SetNtupleRowWise(G4bool rowWise)
+{
+  // Do nothing if the mode is not changed
+  if ( fNtupleRowWise == rowWise ) return;
+
+  fNtupleRowWise = rowWise;
+
+  // Clear existing managers
+  ClearNtupleManagers();  
+
+  // Re-create managers
+  CreateNtupleManagers();
+}
+

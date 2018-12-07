@@ -38,6 +38,8 @@ Author: Susanna Guatelli
 #include "G4EmConfigurator.hh"
 #include "globals.hh"
 
+class BrachyPhysicsListMessenger;
+
 // Modular physics used in this application
 class BrachyPhysicsList: public G4VModularPhysicsList
 {
@@ -45,15 +47,17 @@ public:
   BrachyPhysicsList();
   ~BrachyPhysicsList();
   void ConstructParticle(); 
- // void AddPhysicsList(const G4String& name);
+  void AddPhysicsList(const G4String& name);
   void ConstructProcess();
 
 protected:
   void SetCuts();
 
 private:
-  G4VPhysicsConstructor* emPhysicsList;
-  G4VPhysicsConstructor* decPhysicsList;
-  G4VPhysicsConstructor* radDecayPhysicsList;
+  G4VPhysicsConstructor* fEmPhysicsList;
+  G4VPhysicsConstructor* fDecPhysicsList;
+  G4VPhysicsConstructor* fRadDecayPhysicsList;
+  BrachyPhysicsListMessenger* fMessenger;
+  G4String fEmName;
 };
 #endif

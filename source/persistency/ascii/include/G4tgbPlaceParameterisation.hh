@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParameterisation.hh 66363 2012-12-18 09:12:54Z gcosmo $
 //
 //
 // class G4tgbPlaceParamSquare

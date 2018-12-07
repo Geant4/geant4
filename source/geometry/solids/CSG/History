@@ -1,4 +1,3 @@
-$Id: History 109684 2018-05-08 10:37:49Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 13, 2018 E.Tcherniaev geom-csg-V10-04-07
+- G4Orb: improved check if point is too far in DistanceToIn(p,v).
+- G4Torus: added check if point is too far in DistanceToIn(p,v).
+  Addressing problem report #2100.
+
+November 12, 2018 E.Tcherniaev geom-csg-V10-04-06
+- G4Cons: fix in GetPointOnSurface() when sampling on inner and outer
+  conical surfaces.
+
+September 13, 2018 G.Cosmo geom-csg-V10-04-05
+- G4UTorus: removed leftover use of UVector3 and replaced with U3Vector.
+
+August 10, 2018 A.Gheata geom-csg-V10-04-04
+- Make G4UTrd wrapper inheriting from vecgeom::GenericUnplacedTrd,
+  following the latest changes in VecGeom.
 
 May 7, 2018 G.Cosmo geom-csg-V10-04-03
 - Make G4UCons wrapper inheriting from vecgeom::GenericUnplacedCone,

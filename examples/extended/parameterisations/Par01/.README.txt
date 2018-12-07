@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "parameterisations/Par01/.README.txt"
 ///\brief Example Par01 README page

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManagerMessenger.cc 108134 2018-01-09 13:29:12Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -61,12 +60,12 @@
 
 G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
                         :theParticleTable(pTable),
-			 currentParticle(0),
-			 currentProcess(0),
-			 theManager(0),
-                         theProcessList(0)
+			 currentParticle(nullptr),
+			 currentProcess(nullptr),
+			 theManager(nullptr),
+                         theProcessList(nullptr)
 {
-  if ( theParticleTable == 0) theParticleTable = G4ParticleTable::GetParticleTable();
+  if ( theParticleTable == nullptr) theParticleTable = G4ParticleTable::GetParticleTable();
 
   //Commnad   /particle/process
   thisDirectory = new G4UIdirectory("/particle/process/");
@@ -129,8 +128,8 @@ G4ParticleDefinition* G4ProcessManagerMessenger::SetCurrentParticle()
   G4String particleName = G4UImanager::GetUIpointer()->GetCurrentStringValue("/particle/select");
 
   currentParticle = theParticleTable->FindParticle(particleName);
-  if (currentParticle == 0) {
-    theManager = 0;
+  if (currentParticle == nullptr) {
+    theManager = nullptr;
     G4cout << "G4ProcessManagerMessenger::SetCurrentParticle() ";
     G4cout << particleName << " not found " << G4endl;
   } else {
@@ -143,7 +142,7 @@ G4ParticleDefinition* G4ProcessManagerMessenger::SetCurrentParticle()
 void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
   G4ExceptionDescription ed;
-  if (SetCurrentParticle()==0) {
+  if (SetCurrentParticle()== nullptr) {
       ed << "Particle is not selected yet !! Command ignored.";
       command->CommandFailed(ed);
       return;
@@ -155,7 +154,7 @@ void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newVa
        theManager->DumpInfo();
     } else if ( index < theManager->GetProcessListLength()){
       currentProcess =  (*theProcessList)(index);
-      if (currentProcess == 0) {
+      if (currentProcess == nullptr) {
 	ed << " no process at index of " << index
 	   << " in the Process Vector";
         command->CommandFailed(ed);
@@ -165,7 +164,7 @@ void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newVa
     } else {
       ed << " illegal index !!! ";
       command->CommandFailed(ed);
-      currentProcess = 0;
+      currentProcess = nullptr;
     } 
  
   } else if( command==activateCmd ) {
@@ -190,7 +189,7 @@ void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newVa
       
     } else if ( index < theManager->GetProcessListLength()){
       currentProcess =  (*theProcessList)(index);
-      if (currentProcess == 0) {
+      if (currentProcess == nullptr) {
 	ed << " no process at index of " << index
 	   << " in the Process Vector";
         command->CommandFailed(ed);
@@ -200,7 +199,7 @@ void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newVa
     } else {
       ed << " illegal index !!! ";
       command->CommandFailed(ed);
-      currentProcess = 0;
+      currentProcess = nullptr;
     } 
   }
 }
@@ -208,7 +207,7 @@ void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newVa
 
 G4String G4ProcessManagerMessenger::GetCurrentValue(G4UIcommand * command)
 {
-  if(SetCurrentParticle() == 0) return "";
+  if(SetCurrentParticle() == nullptr) return "";
 
   if( command==verboseCmd ){
     //Commnad   /particle/process/Verbose

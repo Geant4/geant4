@@ -27,7 +27,6 @@
 /// \brief Implementation of the F01CalorimeterSD class
 //
 //
-// $Id: F01CalorimeterSD.cc 76248 2013-11-08 11:19:52Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

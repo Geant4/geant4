@@ -122,13 +122,14 @@ G4MPIscorerMerger::~G4MPIscorerMerger() {
 
 void G4MPIscorerMerger::Merge() {
   DMSG(0, "G4MPIscorerMerger::Merge called");
-  const unsigned int myrank = MPI::COMM_WORLD.Get_rank();
-  commSize = MPI::COMM_WORLD.Get_size();
+  const unsigned int myrank = G4MPImanager::GetManager()->GetRank();
+  commSize = G4MPImanager::GetManager()->GetActiveSize();
   if ( commSize == 1 ) {
       DMSG(1,"Comm world size is 1, nothing to do");
       return;
   }
-  comm = MPI::COMM_WORLD.Dup();
+  const MPI::Intracomm* parentComm = G4MPImanager::GetManager()->GetComm();
+  comm = parentComm->Dup();
   DestroyBuffer();
 
   //ANDREA:->

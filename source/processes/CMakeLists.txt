@@ -8,7 +8,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt 106468 2017-10-11 08:11:47Z gcosmo $
 #------------------------------------------------------------------------------
 
 # Add allocation export symbol for the EM category

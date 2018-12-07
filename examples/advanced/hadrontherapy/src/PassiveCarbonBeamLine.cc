@@ -210,7 +210,7 @@ void PassiveCarbonBeamLine::SetDefaultDimensions()
     kaptonWindowMaterial = kaptonNist;
     
     // Material of ripple filter
-    rippleFilterMaterial = PMMANist;
+    rippleFilterMaterial = airNist;
     rippleFilterBoxMaterial = airNist;
     
     // Materials of the monitor chamber
@@ -386,7 +386,7 @@ void PassiveCarbonBeamLine::VacuumToAirInterface()
     // --------------------------//
     // A thin foil performing a first scattering
     // of the original beam
-    
+
     firstScatteringFoilXSize = 0.015 *mm;
     firstScatteringFoilYSize = 52.5 *mm;
     firstScatteringFoilZSize = 52.5 *mm;
@@ -406,7 +406,7 @@ void PassiveCarbonBeamLine::VacuumToAirInterface()
                                                  false, 0);
     
     logicFirstScatteringFoil -> SetVisAttributes(skyBlue);
-    
+
     // -------------------//
     // THE KAPTON WINDOWS //
     //--------------------//
@@ -432,11 +432,18 @@ void PassiveCarbonBeamLine::VacuumToAirInterface()
                                           physiVacuumZone, false,	0);
     
     logicKaptonWindow -> SetVisAttributes(darkOrange3);
+
+
+
+
+
+
 }
 /////////////////////////////////////////////////////////////////////////////
 void PassiveCarbonBeamLine::HadrontherapyRippleFilter()
 {
-    
+
+
     G4double defaultRippleFilterXPosition = -1638.0*mm;
     G4double ripple_position=(defaultRippleFilterXPosition);
     G4double RF_x = 200.0 * mm;
@@ -541,14 +548,14 @@ void PassiveCarbonBeamLine::HadrontherapyRippleFilter()
         
         copyNumber++;
     }
-    
-}
+
+   }
 
 
 /////////////////////////////////////////////////////////////////////////////
 void PassiveCarbonBeamLine::HadrontherapyPMMACollimator()
 {
-    
+
     // ----------------------//
     //   PMMA COLLIMATOR     //
     // ----------------------//
@@ -619,13 +626,14 @@ void PassiveCarbonBeamLine::HadrontherapyPMMACollimator()
     
     logicPMMACollimator -> SetVisAttributes(yellow);
     
-    
+
     
     
 }
 /////////////////////////////////////////////////////////////////////////////
 void PassiveCarbonBeamLine::HadrontherapyBeamMonitoring()
 {
+
     // ----------------------------
     //       MONITOR CHAMBER
     // ----------------------------
@@ -711,7 +719,7 @@ void PassiveCarbonBeamLine::HadrontherapyBeamMonitoring()
                                                 physiFirstMonitorLayer1, false, 0);
     
     logicFirstMonitorLayer3 -> SetVisAttributes(white);
-    
+
 }
 
 /////////////////////////////////////////////////////////////////////////////

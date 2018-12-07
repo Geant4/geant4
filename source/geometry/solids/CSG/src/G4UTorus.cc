@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id:$
 //
 // Implementation for G4UTorus wrapper class
 //
@@ -258,7 +257,7 @@ void G4UTorus::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
   //
   if (checkBBox)
   {
-    UVector3 vmin, vmax;
+    U3Vector vmin, vmax;
     Base_t::Extent(vmin,vmax);
     if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
         std::abs(pMin.y()-vmin.y()) > kCarTolerance ||

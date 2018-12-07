@@ -61,7 +61,7 @@ How to start?
 
   - execute LXe in 'interactive' mode with visualization, e.g.
     $ ./LXe
-    The type commands, for instance
+    Then type commands, for instance
     Session: /run/beamOn 1
 
 

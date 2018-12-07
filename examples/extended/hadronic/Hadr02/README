@@ -7,6 +7,7 @@
 
 	       Example and DMJET: V.Ivanchenko, A.Ivanchenko, 
 		 UrQMD: Kh Abdel-Waged et al, A. Dotti
+                 CRMC: A. Ribon (with contributions by T. Pierog and A. Tykhonov)
                        CERN, Geneva, Switzerland
         	     Geant4 Associate International
 		University of Bordeaux, CENBG/IN2P3/CNRS
@@ -24,6 +25,9 @@ for the KACST/NCMP. UrQMD model by S.A.Bass et al. Prog.Part.Nucl.Phys. 41 (1998
 and M.Bleicher et al. J.Phys. G25 (1999) 1859.
 UrQMD can be used only for ion-ion physics or for all hadronic inelastic interactions.
 
+The interface to the Cosmic Ray Monte Carlo (CRMC) allows to use generators -
+such as EPOS, DPMJET, SIBYLL etc. - for hadron-nucleus and nucleus-nucleus collisions
+at very high energies.
 
 	                  INSTALLATION
 
@@ -77,6 +81,81 @@ UrQMD physics list can be used in any application, releavant headers and source 
 should be copied in your application source tree, together with the urqmd1_3 sub-directory.
 Your application makefile should also be modified following the example of the makefile for this 
 example.
+
+                           ACTIVATION OF CRMC INTERFACE                        
+
+The CRMC (Cosmic Ray Monte Carlo) interface is NOT provided with Geant4 code-base.
+Moreover, the CRMC code that is publicly available in: https://github.com/alisw/crmc
+is not appropriate for Geant4 (because CRMC assumes that a large number of
+interactions of the same type - i.e. hadron projectile type, projectile energy,
+and target nucleus - should be simulated, whereas for Geant4 we need from CRMC
+the simulation of one, single hadron-nucleus interaction, for different types of
+interaction at each call).
+A modified version of the CRMC interface for Geant4 applications has been kindly
+prepared by Tanguy Pierog (IKP), and can be obtained via the following command:
+  svn co https://devel-ik.fzk.de/svn/mc/crmc/branches/geant4
+but you need to contact him (email: Tanguy.Pierog@kit.edu ) to get the access
+permission (i.e. a username and password to access this repository).
+
+We are pleased to acknowledge here also the contribution of Andrii Tykhonov
+(Universite' de Geneve, and member of the DAMPE Collaboration) who made the
+first prototype interface between Geant4 and CRMC, and shared his expertise
+and implementation with us. 
+
+Assuming that this special version of CRMC is installed in the subdirectory
+crmc_interface/ , you need first to build it : please look at the README file,
+crmc_interface/README for detailed instructions on how to build it. In short:
+
+1. Install ROOT
+2. Install HepMC (and define the corresponding environmental variable HEPMC_PREFIX)
+3. Define the following environmental variables:
+   export HEP_ROOT=${HEPMC_PREFIX}
+   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${HEP_ROOT}/lib
+   export CPATH=${CPATH}:${PWD}/Build/src
+   export CPATH=${CPATH}:${PWD}/src
+   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${PWD}/crmc_interface/Build/lib
+4. cd crmc_interface/
+5. mkdir Build/ ; cd Build/   # Subdirectory where to build and install CRMC
+6. cmake ../
+7. make
+8. make install   # Yes, you need also to install it (in the same directory)!
+
+After you have built CRMC you can build the Hadr02 application that uses it as follows:
+
+1. Define the following environmental variable (in addition to the environmental
+   variables defined above, needed to build CRMC):
+   export G4_USE_CRMC=1
+2. cd /your-geant4/examples/extended/hadronic/Hadr02
+2. mkdir Build/ ; cd Build/   #  Subdirectory where to build Hadr02
+3. cmake -DG4_USE_CRMC=ON -DCRMCROOT=${PWD}/crmc_interface/ \
+         -DCMAKE_PREFIX_PATH=/your/geant4/installation ../
+4. make
+
+To run the application:
+
+1. Define the following environmental variable (besides the previous ones):
+   export PHYSLIST=CRMC_FTFP_BERT
+2. cd /your-geant4/examples/extended/hadronic/Hadr02/Build
+3. ./Hadr02 crmc.in
+
+which runs the special "CRMC_FTFP_BERT" physics list, defined in this example,
+which consists of using the standard FTFP_BERT physics list for hadrons of
+kinetic energies below 100 GeV, while using CRMC above 110 GeV : in the interval
+between 100 and 110 GeV, there is the transition between FTFP and CRMC (which
+means that one of these two models is randomly chosen for each interaction,
+with a probability which is 100% (0%) for FTFP (CRMC) at 100 GeV, and
+decreases (grows) linearly to 0% (100%) for FTFP (CRMC) at 110 GeV.
+Which of the MC generators of CRMC is actually used is specified in the file:
+  include/G4CRMCModel.hh
+(search for string "***LOOKHERE***" : these are the available choices:
+ EPOS LHC (0) - the default - , EPOS 1.99 (1), SIBYLL 2.3c (6), and
+ DPMJET 3 (12) ).
+
+Notice that we use CRMC only for inelastic final-state of pion- , kaon- ,
+proton- , neutron- and ion-nuclear interactions, whereas for the rest
+(i.e. elastic and inelastic cross sections, elastic final-state interactions,
+hyperon- , antihyperon- , antinucleon- and light anti-ion nuclear interactions)
+we use Geant4 FTFP_BERT.
 
                            GEOMETRY
 

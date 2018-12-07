@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGAntiKZeroInelastic.cc 109779 2018-05-09 08:08:28Z gcosmo $
 //
  
 #include "G4RPGAntiKZeroInelastic.hh"

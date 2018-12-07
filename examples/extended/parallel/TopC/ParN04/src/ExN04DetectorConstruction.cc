@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN04DetectorConstruction.cc 78055 2013-12-03 08:27:48Z gcosmo $
 //
 /// \file parallel/ParN04/src/ExN04DetectorConstruction.cc
 /// \brief Implementation of the ExN04DetectorConstruction class

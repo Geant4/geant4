@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option1.cc 109526 2018-04-30 07:11:52Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -32,16 +31,6 @@
 // Author:      V.Ivanchenko 09.11.2005
 //
 // Modified:
-// 19.12.2005 V.Ivanchenko StepFunction for electrons (1.0, 1.0*mm)
-// 21.06.2006 V.Ivanchenko use recent msc with step limitation off
-// 23.06.2006 V.Ivanchenko set dRoverRange = 0.8 for e- and e+
-// 13.11.2006 V.Ivanchenko use G4hMultipleScattering
-// 23.11.2006 V.Ivanchenko remove mscStepLimit option and improve cout
-// 13.02.2007 V.Ivanchenko set skin=0.0
-// 15.05.2007 V.Ivanchenko rename to _option1
-// 21.04.2008 V.Ivanchenko add long-lived D and B mesons
-// 19.11.2010 V.Ivanchenko added WentzelVI model for muons;
-//                         disable ApplyCut option for compatibility with 9.2 
 //
 //----------------------------------------------------------------------------
 //
@@ -106,6 +95,7 @@
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
 #include "G4EmModelActivator.hh"
+#include "G4GammaGeneralProcess.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -122,6 +112,7 @@ G4EmStandardPhysics_option1::G4EmStandardPhysics_option1(G4int ver,
   param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetApplyCuts(true);
+  //param->SetGeneralProcessActive(true);
   param->SetMscRangeFactor(0.2);
   param->SetMscStepLimitType(fMinimal);
   SetPhysicsType(bElectromagnetic);
@@ -171,6 +162,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  G4LossTableManager* man = G4LossTableManager::Instance();
 
   // muon & hadron bremsstrahlung and pair production
   G4MuBremsstrahlung* mub = new G4MuBremsstrahlung();
@@ -209,10 +201,20 @@ void G4EmStandardPhysics_option1::ConstructProcess()
 
       G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
       pee->SetEmModel(new G4LivermorePhotoElectricModel());
-      ph->RegisterProcess(pee, particle);
 
-      ph->RegisterProcess(new G4ComptonScattering(), particle);
-      ph->RegisterProcess(new G4GammaConversion(), particle);
+      if(G4EmParameters::Instance()->GeneralProcessActive()) {
+        G4GammaGeneralProcess* sp = new G4GammaGeneralProcess();
+        sp->AddEmProcess(pee);
+        sp->AddEmProcess(new G4ComptonScattering());
+        sp->AddEmProcess(new G4GammaConversion());
+        man->SetGammaGeneralProcess(sp);
+	ph->RegisterProcess(sp, particle);
+
+      } else {
+	ph->RegisterProcess(pee, particle);
+	ph->RegisterProcess(new G4ComptonScattering(), particle);
+	ph->RegisterProcess(new G4GammaConversion(), particle);
+      }
 
     } else if (particleName == "e-") {
 
@@ -353,8 +355,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
 
   // Deexcitation
   //
-  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+  man->SetAtomDeexcitation(new G4UAtomicDeexcitation());
 
   G4EmModelActivator mact(GetPhysicsName());
 }

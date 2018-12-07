@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //         V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)

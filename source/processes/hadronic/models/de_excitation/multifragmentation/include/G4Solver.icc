@@ -69,7 +69,7 @@ G4bool G4Solver<Function>::Bisection(Function & theFunction)
 	    fb=fc;
 	}
     }
-    G4cerr << "G4Solver::Bisection: Excedded maximum number of iterations whithout convegence." << G4endl;
+    G4cerr << "G4Solver::Bisection: Exceeded maximum number of iterations without convergence." << G4endl;
     return false;
 }
 
@@ -121,7 +121,7 @@ G4bool G4Solver<Function>::RegulaFalsi(Function & theFunction)
 	    fa=fc;
 	}
     }
-    G4cerr << "G4Solver::Bisection: Excedded maximum number of iterations whithout convegence." << G4endl;
+    G4cerr << "G4Solver::Bisection: Exceeded maximum number of iterations without convergence." << G4endl;
     return false;
 
 }	

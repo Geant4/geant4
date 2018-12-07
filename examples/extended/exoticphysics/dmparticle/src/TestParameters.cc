@@ -26,7 +26,6 @@
 /// \file exoticphysics/dmparticle/src/TestParameters.cc
 /// \brief Implementation of the TestParameters class
 //
-// $Id: TestParameters.cc 78707 2014-01-17 16:02:01Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

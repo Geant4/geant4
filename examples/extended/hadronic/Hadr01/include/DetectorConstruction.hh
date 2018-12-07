@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr01/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 109185 2018-04-03 07:20:46Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //

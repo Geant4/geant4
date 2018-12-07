@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTransportationManager.hh 100802 2016-11-02 14:55:27Z gcosmo $
 //
 /// \brief {Duplicated version of G4TransportationManager.
 ///         This class just contains the pointer to the navigator object of the

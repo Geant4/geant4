@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomHandler.hh 92820 2015-09-17 15:22:14Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomHandler.hh
 /// \brief Definition of the DicomHandler class
@@ -88,6 +87,9 @@ public:
     
     void CheckFileFormat();
     
+    static G4String GetDicomDataPath();
+    static G4String GetDicomDataFile();
+
 private:
     template <class Type> void GetValue(char *, Type &);
     

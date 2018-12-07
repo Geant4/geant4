@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04RunAction.cc
 /// \brief Implementation of the ExN04RunAction class
 //
-// $Id: ExN04RunAction.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #include "G4Run.hh"
@@ -35,6 +34,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04RunAction::ExN04RunAction()
+ : G4UserRunAction()
 {
 }
 

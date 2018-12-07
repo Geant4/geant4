@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FermiPair.hh 85677 2014-11-03 17:44:12Z vnivanch $
 //
 // FermiBreakUp de-excitation model
 // by V. Ivanchenko (July 2016)

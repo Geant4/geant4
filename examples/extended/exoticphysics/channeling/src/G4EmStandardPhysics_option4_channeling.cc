@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option4_channeling.cc 99938 2016-10-12 08:06:52Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

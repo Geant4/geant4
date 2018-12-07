@@ -32,7 +32,6 @@
 //    *                   *
 //    *********************
 //
-// $Id: PurgMag.cc 109979 2018-05-14 07:13:42Z gcosmo $
 //
 // Comments: Main program for the Purgin Magnet example.
 //
@@ -47,18 +46,12 @@
 
 #include "G4UImanager.hh"
 #include "Randomize.hh"
-
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
-
 #include "PurgMagDetectorConstruction.hh"
 #include "PurgMagPhysicsList.hh"
 #include "PurgMagActionInitializer.hh"
+#include "PurgMagAnalysisManager.hh"
 
 int main(int argc,char** argv) {
 
@@ -78,12 +71,9 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new PurgMagPhysicsList);
   runManager->SetUserInitialization(new PurgMagActionInitializer());
 
-
-#ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
 
   //Initialize G4 kernel
   runManager->Initialize();
@@ -94,14 +84,10 @@ int main(int argc,char** argv) {
 
   if (argc==1)   // Define UI session for interactive mode.
     {
-#ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
       UImanager->ApplyCommand("/control/execute vis.mac");
-#endif
       ui->SessionStart();
       delete ui;
-#endif
     }
   else           // Batch mode
     {
@@ -110,10 +96,14 @@ int main(int argc,char** argv) {
       UImanager->ApplyCommand(command+fileName);
     }
 
+  // Save histograms
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->Write();
+  man->CloseFile();
+
   // job termination
-#ifdef G4VIS_USE
   delete visManager;
-#endif
+
   delete runManager;
 
   return 0;

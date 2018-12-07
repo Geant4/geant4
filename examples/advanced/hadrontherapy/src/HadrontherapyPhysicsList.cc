@@ -28,7 +28,7 @@
 //
 //
 //    ******      SUGGESTED PHYSICS FOR ACCURATE SIMULATIONS    *********
-//    ******            IN MEDICAL PHYSICS APPLI    CATIONS         *********
+//    ******            IN MEDICAL PHYSICS APPLICATIONS         *********
 //
 // 'HADRONTHERAPY_1' and 'HADRONTHERAPY_2' are both suggested;
 // It can be activated inside any macro file using the command:
@@ -65,6 +65,7 @@
 #include "G4ParallelWorldPhysics.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4AutoDelete.hh"
+#include "G4HadronPhysicsQGSP_BIC_AllHP.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
@@ -75,7 +76,7 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
     cutForElectron  = defaultCutValue;
     cutForPositron  = defaultCutValue;
     
-    pMessenger = new HadrontherapyPhysicsListMessenger(this);    
+    pMessenger = new HadrontherapyPhysicsListMessenger(this);
     SetVerboseLevel(1);
     decay_List = new G4DecayPhysics();
     // Elecromagnetic physics
@@ -102,7 +103,7 @@ HadrontherapyPhysicsList::~HadrontherapyPhysicsList()
 void HadrontherapyPhysicsList::ConstructParticle()
 {
     decay_List -> ConstructParticle();
-
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -114,7 +115,7 @@ void HadrontherapyPhysicsList::ConstructProcess()
     
     decay_List -> ConstructProcess();
     emPhysicsList -> ConstructProcess();
-
+    
     
     //em_config.AddModels();
     

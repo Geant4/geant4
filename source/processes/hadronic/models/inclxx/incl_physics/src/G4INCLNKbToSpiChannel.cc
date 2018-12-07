@@ -139,7 +139,7 @@ namespace G4INCL {
 		if(WhichChannel == 0) max = 865;
 		else if(std::abs(WhichChannel) == 1) max = 1845;
 		else{
-			INCL_WARN("Bad channel choosed in Kb N To Sigma pi angulard distribution determination. Return an isotropic distribution.\n");
+			INCL_WARN("Bad channel chosen in Kb N To Sigma pi angular distribution determination. Return an isotropic distribution.\n");
 			return Random::normVector();
 		}
 		

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNATransformElectronModel.cc 96861 2016-05-13 13:43:04Z gcosmo $
 //
 #include "G4DNATransformElectronModel.hh"
 #include "G4SystemOfUnits.hh"

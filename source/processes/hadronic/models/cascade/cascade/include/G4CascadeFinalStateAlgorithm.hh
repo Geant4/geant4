@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 // Author:  Michael Kelsey (SLAC)
 // Date:    15 April 2013
 //

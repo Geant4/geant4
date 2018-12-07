@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh 76411 2013-11-09 21:48:43Z ldesorgh $
 //
 /// \file eventgenerator/exgps/include/RunAction.hh
 /// \brief Definition of the RunAction class

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc 110513 2018-05-28 07:37:38Z gcosmo $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -32,6 +31,7 @@
 
 #include "G4VisManager.hh"
 #include "G4UImanager.hh"
+#include "G4UIcommandTree.hh"
 #include "G4UIcmdWithAString.hh"
 
 #include <sstream>
@@ -198,48 +198,31 @@ void G4VisCommandDrawView::SetNewValue(G4UIcommand*, G4String newValue) {
   UImanager->SetVerboseLevel(keepVerbose);
 }
 
-////////////// /vis/specify ///////////////////////////////////////
+////////////// /vis/drawLogicalVolume ///////////////////////////////////////
 
 G4VisCommandDrawLogicalVolume::G4VisCommandDrawLogicalVolume() {
-  G4bool omitable;
   fpCommand = new G4UIcommand("/vis/drawLogicalVolume", this);
   fpCommand->SetGuidance
-  ("Draws logical volume with Boolean components, voxels and readout geometry.");
+  ("Draws logical volume with additional components.");
   fpCommand->SetGuidance
   ("Synonymous with \"/vis/specify\".");
   fpCommand->SetGuidance
   ("Creates a scene consisting of this logical volume and asks the"
-   "\n  current viewer to draw it to the specified depth of descent"
-   "\n  showing boolean components (if any), voxels (if any),"
-   "\n  readout geometry (if any), local axes and overlaps (if any),"
-   "\n  under control of the appropriate flag.");
-  fpCommand->SetGuidance
-  ("Note: voxels are not constructed until start of run - /run/beamOn."
-   "\n  (For voxels without a run, \"/run/beamOn 0\".)");
-  fpCommand->SetGuidance("The scene becomes current.");
-  G4UIparameter* parameter;
-  parameter = new G4UIparameter("logical-volume-name", 's', omitable = false);
-  fpCommand->SetParameter(parameter);
-  parameter = new G4UIparameter("depth-of-descent", 'i', omitable = true);
-  parameter->SetDefaultValue(1);
-  fpCommand->SetParameter(parameter);
-  parameter = new G4UIparameter("booleans-flag", 'b', omitable = true);
-  parameter->SetDefaultValue(true);
-  fpCommand->SetParameter(parameter);
-  parameter = new G4UIparameter("voxels-flag", 'b', omitable = true);
-  parameter->SetDefaultValue(true);
-  fpCommand->SetParameter(parameter);
-  parameter = new G4UIparameter("readout-flag", 'b', omitable = true);
-  parameter->SetDefaultValue(true);
-  fpCommand->SetParameter(parameter);
-  parameter = new G4UIparameter("axes-flag", 'b', omitable = true);
-  parameter->SetDefaultValue(true);
-  parameter -> SetGuidance ("Set \"false\" to suppress axes.");
-  fpCommand->SetParameter(parameter);
-  parameter = new G4UIparameter("check-overlap-flag", 'b', omitable = true);
-  parameter->SetDefaultValue(true);
-  parameter -> SetGuidance ("Set \"false\" to suppress overlap check.");
-  fpCommand->SetParameter(parameter);
+   "\n  current viewer to draw it. The scene becomes current.");
+  const G4UIcommandTree* tree = G4UImanager::GetUIpointer()->GetTree();
+  const G4UIcommand* addLogVolCmd = tree->FindPath("/vis/scene/add/logicalVolume");
+  // Pick up guidance from /vis/scene/add/logicalVolume
+  G4int nGuideEntries = addLogVolCmd->GetGuidanceEntries();
+  for (G4int i = 0; i < nGuideEntries; ++i) {
+    const G4String& guidance = addLogVolCmd->GetGuidanceLine(i);
+    fpCommand->SetGuidance(guidance);
+  }
+  // Pick up parameters from /vis/scene/add/logicalVolume
+  G4int nParEntries = addLogVolCmd->GetParameterEntries();
+  for (G4int i = 0; i < nParEntries; ++i) {
+    G4UIparameter* parameter = new G4UIparameter(*(addLogVolCmd->GetParameter(i)));
+    fpCommand->SetParameter(parameter);
+  }
 }
 
 G4VisCommandDrawLogicalVolume::~G4VisCommandDrawLogicalVolume() {
@@ -254,11 +237,46 @@ void G4VisCommandDrawLogicalVolume::SetNewValue(G4UIcommand*, G4String newValue)
   if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
-  // UImanager->ApplyCommand(G4String("/geometry/print " + newValue));
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  const G4ViewParameters& currentViewParams = currentViewer->GetViewParameters();
+  G4bool keepAutoRefresh = currentViewParams.IsAutoRefresh();
+  if (keepAutoRefresh) UImanager->ApplyCommand("/vis/viewer/set/autoRefresh false");
   UImanager->ApplyCommand("/vis/scene/create");
   UImanager->ApplyCommand(G4String("/vis/scene/add/logicalVolume " + newValue));
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
+  G4ViewParameters::DrawingStyle keepDrawingStyle = currentViewParams.GetDrawingStyle();
+  if(keepDrawingStyle != G4ViewParameters::wireframe) UImanager->ApplyCommand("/vis/viewer/set/style wireframe");
+  G4bool keepMarkerNotHidden = currentViewParams.IsMarkerNotHidden();
+  if (!keepMarkerNotHidden) UImanager->ApplyCommand("/vis/viewer/set/hiddenMarker false");
+  if (keepAutoRefresh) UImanager->ApplyCommand("/vis/viewer/set/autoRefresh true");
   UImanager->SetVerboseLevel(keepVerbose);
+  if (verbosity >= G4VisManager::warnings) {
+    if (keepDrawingStyle != currentViewParams.GetDrawingStyle()) {
+      G4cout
+      << "Drawing style changed to wireframe. To restore previous style:";
+      G4String style, edge;
+      switch (keepDrawingStyle) {
+        case G4ViewParameters::wireframe:
+          style = "wireframe"; edge = "false"; break;
+        case G4ViewParameters::hlr:
+          style = "wireframe"; edge = "true"; break;
+        case G4ViewParameters::hsr:
+          style = "surface"; edge = "false"; break;
+        case G4ViewParameters::hlhsr:
+          style = "surface"; edge = "true"; break;
+      }
+      G4cout
+      << "\n  /vis/viewer/set/style " + style
+      << "\n  /vis/viewer/set/hiddenEdge " + edge
+      << G4endl;
+    }
+    if (keepMarkerNotHidden != currentViewParams.IsMarkerNotHidden()) {
+      G4cout
+      << "Markers changed to \"not hidden\". To restore previous condition:"
+      << "\n  /vis/viewer/set/hiddenmarker true"
+      << G4endl;
+    }
+  }
   static G4bool warned = false;
   if (verbosity >= G4VisManager::confirmations && !warned) {
     G4cout <<
@@ -272,21 +290,24 @@ void G4VisCommandDrawLogicalVolume::SetNewValue(G4UIcommand*, G4String newValue)
 ////////////// /vis/drawVolume ///////////////////////////////////////
 
 G4VisCommandDrawVolume::G4VisCommandDrawVolume() {
-  G4bool omitable;
-  fpCommand = new G4UIcmdWithAString("/vis/drawVolume", this);
+  fpCommand = new G4UIcommand("/vis/drawVolume", this);
   fpCommand->SetGuidance
-    ("Creates a scene containing this physical volume and asks the"
-     "\ncurrent viewer to draw it.  The scene becomes current.");
-  fpCommand -> SetGuidance 
-    ("If physical-volume-name is \"world\" (the default), the main geometry"
-     "\ntree (material world) is drawn.  If \"worlds\", all worlds - material"
-     "\nworld and parallel worlds, if any - are drawn.  Otherwise a search of"
-     "\nall worlds is made, taking the first matching occurence only.  To see"
-     "\na representation of the geometry hierarchy of the worlds, try"
-     "\n\"/vis/drawTree worlds\" or one of the driver/browser combinations"
-     "\nthat have the required functionality, e.g., HepRepFile/HepRApp.");
-  fpCommand->SetParameterName("physical-volume-name", omitable = true);
-  fpCommand->SetDefaultValue("world");
+  ("Creates a scene containing this physical volume and asks the"
+   "\ncurrent viewer to draw it.  The scene becomes current.");
+  const G4UIcommandTree* tree = G4UImanager::GetUIpointer()->GetTree();
+  const G4UIcommand* addVolCmd = tree->FindPath("/vis/scene/add/volume");
+  // Pick up guidance from /vis/scene/add/volume
+  G4int nGuideEntries = addVolCmd->GetGuidanceEntries();
+  for (G4int i = 0; i < nGuideEntries; ++i) {
+    const G4String& guidance = addVolCmd->GetGuidanceLine(i);
+    fpCommand->SetGuidance(guidance);
+  }
+  // Pick up parameters from /vis/scene/add/volume
+  G4int nParEntries = addVolCmd->GetParameterEntries();
+  for (G4int i = 0; i < nParEntries; ++i) {
+    G4UIparameter* parameter = new G4UIparameter(*(addVolCmd->GetParameter(i)));
+    fpCommand->SetParameter(parameter);
+  }
 }
 
 G4VisCommandDrawVolume::~G4VisCommandDrawVolume() {

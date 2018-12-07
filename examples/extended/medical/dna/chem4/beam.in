@@ -1,10 +1,9 @@
-# $Id $
 #
 #/control/verbose 2
 #/run/numberOfThreads 10
 
-#/run/initialize
-
+/process/dna/e-SolvationSubType Ritchie1994
+/run/initialize
 /primaryKiller/eLossMin 1 keV # primary is killed if deposited E is greater than this value
 /primaryKiller/eLossMax 2 keV # event is aborted if deposited E is greated than this value
 /gun/position  0 0 0

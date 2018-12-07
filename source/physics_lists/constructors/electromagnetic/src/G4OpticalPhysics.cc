@@ -169,7 +169,7 @@ namespace UIhelpers {
     void buildCommands( G4OpWLS* op )
     {
         //Build UI commands for WLS
-        G4GenericMessenger* mess = new G4GenericMessenger(op,DIR_CMDS"/wls/",GUIDANCE" for WLS process.");
+        G4GenericMessenger* mess = new G4GenericMessenger(op,DIR_CMDS"/wls/",GUIDANCE"WLS process.");
         G4AutoDelete::Register(mess);
         //Here, more correctly DeclareProperty should be used, but to do that, I would need public/friend
         //access of G4GenericMessenger to private members of G4Scintillation. Thus I use the approach
@@ -179,13 +179,13 @@ namespace UIhelpers {
         wlscmd1.SetParameterName("profile",false);
         wlscmd1.SetCandidates("delta exponential");
         wlscmd1.SetStates(G4State_Idle);
-        buildCommands(op,DIR_CMDS"/wls/",GUIDANCE" for WLS process.");
+        buildCommands(op,DIR_CMDS"/wls/",GUIDANCE"WLS process.");
     }
     
     void buildCommands(G4Scintillation* ScintillationProcess)
     {
         //Build UI commands for scintillation
-        G4GenericMessenger* mess = new G4GenericMessenger(ScintillationProcess,DIR_CMDS"/scintillation/",GUIDANCE" for scintillation process.");
+        G4GenericMessenger* mess = new G4GenericMessenger(ScintillationProcess,DIR_CMDS"/scintillation/",GUIDANCE"scintillation process.");
         G4AutoDelete::Register(mess);
         G4GenericMessenger::Command& sccmd1 = mess->DeclareMethod("setFiniteRiseTime",
                                                                   &G4Scintillation::SetFiniteRiseTime,
@@ -225,13 +225,13 @@ namespace UIhelpers {
         sccmd6.SetParameterName("flag",false);
         sccmd6.SetStates(G4State_Idle);
         
-        buildCommands(ScintillationProcess,DIR_CMDS"/scintillation/",GUIDANCE" for scintillation process.");
+        buildCommands(ScintillationProcess,DIR_CMDS"/scintillation/",GUIDANCE"scintillation process.");
     }
     
     void buildCommands(G4Cerenkov* CerenkovProcess)
     {
         //BUild UI commands for cerenkov
-        G4GenericMessenger* mess = new G4GenericMessenger(CerenkovProcess,DIR_CMDS"/cerenkov/",GUIDANCE" for Cerenkov process.");
+        G4GenericMessenger* mess = new G4GenericMessenger(CerenkovProcess,DIR_CMDS"/cerenkov/",GUIDANCE"Cerenkov process.");
         G4AutoDelete::Register(mess);
         G4GenericMessenger::Command& cecmd1 = mess->DeclareMethod("setMaxPhotons",
                                                                   &G4Cerenkov::SetMaxNumPhotonsPerStep,
@@ -253,7 +253,7 @@ namespace UIhelpers {
         cecmd3.SetParameterName("flag",false);
         cecmd3.SetStates(G4State_Idle);
         
-        buildCommands(CerenkovProcess,DIR_CMDS"/cerenkov/",GUIDANCE" for Cerenkov process.");
+        buildCommands(CerenkovProcess,DIR_CMDS"/cerenkov/",GUIDANCE"Cerenkov process.");
     }
 }
 
@@ -280,19 +280,19 @@ void G4OpticalPhysics::ConstructProcess()
   // Add Optical Processes
 
   G4OpAbsorption* OpAbsorptionProcess  = new G4OpAbsorption();
-  UIhelpers::buildCommands(OpAbsorptionProcess,DIR_CMDS"/absorption/",GUIDANCE" for absorption process");
+  UIhelpers::buildCommands(OpAbsorptionProcess,DIR_CMDS"/absorption/",GUIDANCE"absorption process");
   OpProcesses[kAbsorption] = OpAbsorptionProcess;
 
   G4OpRayleigh* OpRayleighScatteringProcess = new G4OpRayleigh();
-  UIhelpers::buildCommands(OpRayleighScatteringProcess,DIR_CMDS"/rayleigh/",GUIDANCE" for Reyleigh scattering process");
+  UIhelpers::buildCommands(OpRayleighScatteringProcess,DIR_CMDS"/rayleigh/",GUIDANCE"Rayleigh scattering process");
   OpProcesses[kRayleigh] = OpRayleighScatteringProcess;
     
   G4OpMieHG* OpMieHGScatteringProcess = new G4OpMieHG();
-  UIhelpers::buildCommands(OpMieHGScatteringProcess,DIR_CMDS"/mie/",GUIDANCE" for Mie cattering process");
+  UIhelpers::buildCommands(OpMieHGScatteringProcess,DIR_CMDS"/mie/",GUIDANCE"Mie scattering process");
   OpProcesses[kMieHG] = OpMieHGScatteringProcess;
 
   G4OpBoundaryProcess* OpBoundaryProcess = new G4OpBoundaryProcess();
-  UIhelpers::buildCommands(OpBoundaryProcess,DIR_CMDS"/boundary/",GUIDANCE" for boundary process");
+  UIhelpers::buildCommands(OpBoundaryProcess,DIR_CMDS"/boundary/",GUIDANCE"boundary process");
   OpBoundaryProcess->SetInvokeSD(fInvokeSD);
   OpProcesses[kBoundary] = OpBoundaryProcess;
 

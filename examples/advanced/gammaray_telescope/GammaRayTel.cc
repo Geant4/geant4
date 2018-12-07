@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc 110103 2018-05-15 11:33:34Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -49,13 +48,9 @@
 
 #include "G4UImanager.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
 
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "GammaRayTelDetectorConstruction.hh"
 #include "GammaRayTelPhysicsList.hh"
@@ -97,11 +92,9 @@ int main(int argc, char** argv)
   GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
 
   // Set visualization and user interface
-#ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
 
   // Initialize G4 kernel
   //  runManager->Initialize();
@@ -116,7 +109,6 @@ int main(int argc, char** argv)
     }
   else
     {
-#ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       if (ui->IsGUI())
 	{
@@ -125,12 +117,9 @@ int main(int argc, char** argv)
 	  ui->SessionStart();
 	}
       delete ui;
-#endif
     }
   // Job termination
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete analysis;
   delete runManager;
   return 0;

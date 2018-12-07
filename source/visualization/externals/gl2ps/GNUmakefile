@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 110519 2018-05-28 07:53:49Z gcosmo $
 # -------------------------------------------------------------
 # GNUmakefile for gl2ps.  Laurent Garnier, 6/2/09.
 

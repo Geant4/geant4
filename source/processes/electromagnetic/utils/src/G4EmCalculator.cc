@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc 108306 2018-02-02 13:10:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -36,28 +35,8 @@
 //
 // Creation date: 28.06.2004
 //
-// Modifications:
-// 12.09.2004 Add verbosity (V.Ivanchenko)
-// 17.11.2004 Change signature of methods, add new methods (V.Ivanchenko)
-// 08.04.2005 Major optimisation of internal interfaces (V.Ivantchenko)
-// 08.05.2005 Use updated interfaces (V.Ivantchenko)
-// 23.10.2005 Fix computations for ions (V.Ivantchenko)
-// 11.01.2006 Add GetCSDARange (V.Ivantchenko)
-// 26.01.2006 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
-// 14.03.2006 correction in GetCrossSectionPerVolume (mma)
-//            suppress GetCrossSectionPerAtom
-//            elm->GetA() in ComputeCrossSectionPerAtom
-// 22.03.2006 Add ComputeElectronicDEDX and ComputeTotalDEDX (V.Ivanchenko)
-// 13.05.2006 Add Corrections for ion stopping (V.Ivanchenko)
-// 29.09.2006 Uncomment computation of smoothing factor (V.Ivanchenko)
-// 27.10.2006 Change test energy to access lowEnergy model from 
-//            10 keV to 1 keV (V. Ivanchenko)
-// 15.03.2007 Add ComputeEnergyCutFromRangeCut methods (V.Ivanchenko)
-// 21.04.2008 Updated computations for ions (V.Ivanchenko)
-// 02.02.2018 Fix the MCS (i.e. transport mean free path) case in
-//            GetCrossSectionPerVolume (M. Novak) 
 //
-// Class Description:
+// Class Description: V.Ivanchenko & M.Novak
 //
 // -------------------------------------------------------------------
 //
@@ -289,7 +268,7 @@ G4double G4EmCalculator::GetCrossSectionPerVolume(G4double kinEnergy,
 
       G4VEmProcess* emproc = FindDiscreteProcess(p, processName);
       if(emproc) {
-	      res = emproc->CrossSectionPerVolume(kinEnergy, couple);
+	res = emproc->CrossSectionPerVolume(kinEnergy, couple);
       } else if(currentLambda) {
         // special tables are built for Msc models (procType is set in FindLambdaTable
         if(procType==2) {
@@ -408,7 +387,8 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
     if(FindEmModel(p, processName, kinEnergy)) {
 
       // Special case of ICRU'73 model
-      if(currentModel->GetName() == "ParamICRU73") {
+      const G4String& mname = currentModel->GetName();  
+      if(mname  == "ParamICRU73" || mname == "LinhardSorensen" || mname == "Atima") {
         res = currentModel->ComputeDEDXPerVolume(mat, p, kinEnergy, cut);
         if(verbose > 1) { 
 	  G4cout <<  " ICRU73 ion E(MeV)= " << kinEnergy << " "; 

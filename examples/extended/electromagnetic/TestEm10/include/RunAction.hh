@@ -27,7 +27,6 @@
 /// \brief Definition of the RunAction class
 //
 //
-// $Id: RunAction.hh 94932 2015-12-18 09:21:29Z gcosmo $
 //
 // 
 

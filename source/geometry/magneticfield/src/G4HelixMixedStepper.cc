@@ -62,13 +62,14 @@
 #include "G4LineSection.hh"
 
 G4HelixMixedStepper::
-G4HelixMixedStepper(G4Mag_EqRhs *EqRhs, G4int stepperNumber,
-                    G4double angleThreshold)
+G4HelixMixedStepper(G4Mag_EqRhs *EqRhs,
+                    G4int        stepperNumber,
+                    G4double     angleThreshold)
   : G4MagHelicalStepper(EqRhs), fNumCallsRK4(0), fNumCallsHelix(0)
 {
    SetVerbose(1);
    if( angleThreshold < 0.0 ){
-     fAngle_threshold= 0.33*pi;
+     fAngle_threshold= (1.0/3.0)*pi;
    }else{
      fAngle_threshold= angleThreshold;
    }
@@ -102,29 +103,30 @@ void G4HelixMixedStepper::Stepper(  const G4double  yInput[7],
   const G4double *pIn = yInput+3;
   G4ThreeVector initVelocity= G4ThreeVector( pIn[0], pIn[1], pIn[2]);
   G4double      velocityVal = initVelocity.mag();
-  G4double R_1;
-  G4double Ang_curve;
+
+  const G4double R_1=std::abs(GetInverseCurve(velocityVal,Bmag));  // curv= inverse Radius
+  G4double Ang_curve= R_1 * Step;
+  // SetAngCurve(Ang_curve);
+  // SetCurve(std::abs(1/R_1)); // Move below, to avoid un-needed division if RK used
   
-  R_1=std::abs(GetInverseCurve(velocityVal,Bmag));
-  Ang_curve=R_1*Step;
-  SetAngCurve(Ang_curve);
-  SetCurve(std::abs(1/R_1));
-  
-  if(Ang_curve< fAngle_threshold){
+  if(Ang_curve< fAngle_threshold)
+  {
     fNumCallsRK4++;
     fRK4Stepper->Stepper(yInput,dydx,Step,yOut,yErr);
   }
   else
   {
-    fNumCallsHelix++;
-    const G4int    nvar    = 6 ;
-    const G4int    nvarMax = 8 ;    
-    G4int          i;
+    constexpr G4int  nvar    = 6 ;
+    constexpr G4int  nvarMax = 8 ;
     G4double       yTemp[nvarMax], yIn[nvarMax], yTemp2[nvarMax];
     G4ThreeVector  Bfld_midpoint;
-
+    
+    SetAngCurve(Ang_curve);
+    SetCurve(std::abs(1.0/R_1));
+    fNumCallsHelix++;
+    
     //  Saving yInput because yInput and yOut can be aliases for same array
-    for(i=0;i<nvar;i++) yIn[i]=yInput[i];
+    for(G4int i=0;i<nvar;i++) yIn[i]=yInput[i];
     
     G4double halfS = Step * 0.5;
     // 1. Do first half step and full step
@@ -142,7 +144,7 @@ void G4HelixMixedStepper::Stepper(  const G4double  yInput[7],
     
     // 3. Estimate the integration error
     //    should be (nearly) zero if Bfield= constant
-    for(i=0;i<nvar;i++) {
+    for(G4int i=0;i<nvar;i++) {
       yErr[i] = yOut[i] - yTemp2[i] ;
     }
   }
@@ -287,8 +289,8 @@ G4HelixMixedStepper::SetupStepper(G4Mag_EqRhs* pE, G4int StepperNumber)
       case 0:
       case -1:
       default:
-        pStepper = new G4ClassicalRK4( pE );
-        if (fVerbose>0) G4cout << "G4ClassicalRK4 (Default)";
+         pStepper = new G4DormandPrince745( pE ); // Was G4ClassicalRK4( pE );
+        if (fVerbose>0) G4cout << "G4DormandPrince745 (Default)";
         break;
     }
   if(fVerbose>0)

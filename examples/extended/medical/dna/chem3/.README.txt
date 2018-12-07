@@ -1,4 +1,3 @@
-//$Id$
 -----------------------------------------
 ///\file "medical/dna/chem3/.README.txt"
 ///\brief ExampleChem3 README page

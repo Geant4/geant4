@@ -47,8 +47,6 @@ G4DNAIonElasticModel::G4DNAIonElasticModel (const G4ParticleDefinition*,
                                             const G4String& nam) :
     G4VEmModel(nam), isInitialised(false)
 {
-  //nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
-
   killBelowEnergy = 100 * eV;
   lowEnergyLimit = 0 * eV;
   highEnergyLimit = 1 * MeV;
@@ -70,6 +68,7 @@ G4DNAIonElasticModel::G4DNAIonElasticModel (const G4ParticleDefinition*,
     << highEnergyLimit / MeV << " MeV"
     << G4endl;
   }
+  
   fParticleChangeForGamma = 0;
   fpMolWaterDensity = 0;
   fpTableData = 0;
@@ -150,7 +149,7 @@ G4DNAIonElasticModel::Initialise (
   )
   {
     // For total cross section of p,h
-    fParticle_Mass = 1.;
+    fParticle_Mass = 1.;   
     totalXSFile = "dna/sigma_elastic_proton_HTran";
 
     // For final state
@@ -165,8 +164,8 @@ G4DNAIonElasticModel::Initialise (
       (particleDefinition == instance->GetIon("alpha++") && alphaplusplusDef)
   )
   {
-    fParticle_Mass = 4.;
     // For total cross section of he,he+,he++
+    fParticle_Mass = 4.;    
     totalXSFile = "dna/sigma_elastic_alpha_HTran";
 
     // For final state
@@ -236,8 +235,7 @@ G4DNAIonElasticModel::Initialise (
   fpMolWaterDensity = G4DNAMolecularMaterial::Instance()->
   GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
 
-  if (isInitialised)
-  { return;}
+  if (isInitialised) return;
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;
 }
@@ -261,37 +259,33 @@ G4DNAIonElasticModel::CrossSectionPerVolume (const G4Material* material,
 
   G4double waterDensity = (*fpMolWaterDensity)[material->GetIndex()];
 
-  if(waterDensity!= 0.0)
+  const G4String& particleName = p->GetParticleName();
+
+  if (ekin <= highEnergyLimit)
   {
-    const G4String& particleName = p->GetParticleName();
+    //SI : XS must not be zero otherwise sampling of secondaries method ignored
+    if (ekin < killBelowEnergy) return DBL_MAX;
+    //
 
-    if (ekin < highEnergyLimit)
+    if (fpTableData != 0) 
     {
-      //SI : XS must not be zero otherwise sampling of secondaries method ignored
-      if (ekin < killBelowEnergy) return DBL_MAX;
-      //
-
-      if (fpTableData != 0) // MK: is this check necessary?
-      {
-        sigma = fpTableData->FindValue(ekin);
-      }
-      else
-      {
-        G4Exception("G4DNAIonElasticModel::ComputeCrossSectionPerVolume","em0002",
-            FatalException,"Model not applicable to particle type.");
-      }
+      sigma = fpTableData->FindValue(ekin);
     }
-
-    if (verboseLevel > 2)
+    else
     {
-      G4cout << "__________________________________" << G4endl;
-      G4cout << "G4DNAIonElasticModel - XS INFO START" << G4endl;
-      G4cout << "Kinetic energy(eV)=" << ekin/eV << " particle : " << particleName << G4endl;
-      G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-      G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
-      G4cout << "G4DNAIonElasticModel - XS INFO END" << G4endl;
+      G4Exception("G4DNAIonElasticModel::ComputeCrossSectionPerVolume","em0002",
+          FatalException,"Model not applicable to particle type.");
     }
+  }
 
+  if (verboseLevel > 2)
+  {
+    G4cout << "__________________________________" << G4endl;
+    G4cout << "G4DNAIonElasticModel - XS INFO START" << G4endl;
+    G4cout << "Kinetic energy(eV)=" << ekin/eV << " particle : " << particleName << G4endl;
+    G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
+    G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
+    G4cout << "G4DNAIonElasticModel - XS INFO END" << G4endl;
   }
 
   return sigma*waterDensity;
@@ -321,7 +315,7 @@ G4DNAIonElasticModel::SampleSecondaries (
     return;
   }
 
-  if (particleEnergy0>= killBelowEnergy && particleEnergy0 < highEnergyLimit)
+  if (particleEnergy0>= killBelowEnergy && particleEnergy0 <= highEnergyLimit)
   {
     G4double water_mass = 18.;
 
@@ -386,6 +380,10 @@ G4DNAIonElasticModel::Theta (G4ParticleDefinition * /*particleDefinition*/,
   G4double xs12 = 0;
   G4double xs21 = 0;
   G4double xs22 = 0;
+
+  // Protection against out of boundary access
+  if (k==eTdummyVec.back()) k=k*(1.-1e-12);
+  //
 
   std::vector<G4double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),
                                                       eTdummyVec.end(), k);

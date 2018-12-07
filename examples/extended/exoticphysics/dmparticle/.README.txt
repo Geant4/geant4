@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "exoticphysics/dmparticle/.README.txt"
 ///\brief Example dmparticle README page

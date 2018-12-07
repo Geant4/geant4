@@ -13,6 +13,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 26, 2018 D.Sawkey (OpNovice2-V10-04-07)
+ - SteppingAction.cc: fix Histo in multithreaded
+ - HistoManager.hh: add commented g4csv include
+
+September 20, 2018 D.Sawkey (OpNovice2-V10-04-06)
+- add scintillation and Cerenkov GetNumPhotons to SteppingAction
+
+August 16, 2018 D.Sawkey (OpNovice2-V10-04-05)
+- messenger command to allow different materials for tank, world
+- fix initialization of material property tables
+
 June 2, 2018 D.Sawkey (OpNovice2-V10-04-04)
 - fix GNUmakefile
 

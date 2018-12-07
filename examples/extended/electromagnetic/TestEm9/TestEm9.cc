@@ -27,7 +27,6 @@
 /// \brief Main program of the electromagnetic/TestEm9 example
 //
 //
-// $Id: TestEm9.cc 109278 2018-04-09 08:51:05Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

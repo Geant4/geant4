@@ -1,4 +1,3 @@
-$Id: History 71654 2013-06-19 18:20:04Z maire $
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -13,6 +12,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07-10-18 mma (NeutronSource-V10-04-07)
+- PhysicsList : use G4IonElasticPhysics and G4IonPhysicsXS
+
+07-08-18 mma (NeutronSource-V10-04-06)
+- PhysicsList::ConstructProcess() : activate the use of GetHadronicModel(modelName)
+
+17-07-18 mma (NeutronSource-V10-04-05)
+- PhysicsList::ConstructProcess() : example to use GetHadronicModel(modelName)
+
+05-07-18 mma (NeutronSource-V10-04-04)
+- PhysicsList : modifications to use method ConstructProcess()
+
+25-06-18 mma (NeutronSource-V10-04-03)
+- envHadronic : add env variables for particleHP (PHP)
+
 09-05-18 B. Morgan (NeutronSource-V10-04-02)
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

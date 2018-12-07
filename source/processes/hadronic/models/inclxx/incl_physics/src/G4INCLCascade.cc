@@ -375,6 +375,9 @@ namespace G4INCL {
     // Fill in the event information
     theEventInfo.stoppingTime = propagationModel->getCurrentTime();
 
+    // The event bias
+    theEventInfo.eventBias = (Double_t) Particle::getTotalBias();
+    
     // Forced CN?
     if(nucleus->getTryCompoundNucleus()) {
       INCL_DEBUG("Trying compound nucleus" << '\n');
@@ -409,16 +412,13 @@ namespace G4INCL {
       // Capture antiKaons and Sigmas and produce Lambda instead
       theEventInfo.absorbedStrangeParticle = nucleus->decayInsideStrangeParticles();
       
-      // Emit antiKaons and Sigmas still inside the nucleus
+      // Emit strange particles still inside the nucleus
       nucleus->emitInsideStrangeParticles();
       theEventInfo.emitKaon = nucleus->emitInsideKaon();
-      // Should be activated only for geant4
+
 #ifdef INCLXX_IN_GEANT4_MODE
       theEventInfo.emitLambda = nucleus->emitInsideLambda();
 #endif // INCLXX_IN_GEANT4_MODE
-
-      // The event bias
-      theEventInfo.eventBias = (Double_t) Particle::getTotalBias();
       
       // Check if the nucleus contains deltas
       theEventInfo.deltasInside = nucleus->containsDeltas();
@@ -520,8 +520,8 @@ namespace G4INCL {
     // should actually take it into account!
     ThreeVector theCNMomentum = nucleus->getIncomingMomentum();
     ThreeVector theCNSpin = nucleus->getIncomingAngularMomentum();
-    const G4double theTargetMass = ParticleTable::getTableMass(theEventInfo.At, theEventInfo.Zt);
-    G4int theCNA=theEventInfo.At, theCNZ=theEventInfo.Zt;
+    const G4double theTargetMass = ParticleTable::getTableMass(theEventInfo.At, theEventInfo.Zt, theEventInfo.St);
+    G4int theCNA=theEventInfo.At, theCNZ=theEventInfo.Zt, theCNS=theEventInfo.St;
     Cluster * const theProjectileRemnant = nucleus->getProjectileRemnant();
     G4double theCNEnergy = theTargetMass + theProjectileRemnant->getEnergy();
 
@@ -529,7 +529,7 @@ namespace G4INCL {
     ParticleList const &initialProjectileComponents = theProjectileRemnant->getParticles();
     std::vector<Particle *> shuffledComponents(initialProjectileComponents.begin(), initialProjectileComponents.end());
     // Shuffle the list of potential participants
-    std::random_shuffle(shuffledComponents.begin(), shuffledComponents.end(), Random::getAdapter());
+    std::shuffle(shuffledComponents.begin(), shuffledComponents.end(), Random::getAdapter());
 
     G4bool success = true;
     G4bool atLeastOneNucleonEntering = false;
@@ -557,6 +557,7 @@ namespace G4INCL {
           // Add the particle to the CN
           theCNA++;
           theCNZ += (*p)->getZ();
+          theCNS += (*p)->getS();
           break;
         case PauliBlockedFS:
         case NoEnergyConservationFS:
@@ -575,6 +576,7 @@ namespace G4INCL {
 // assert(theCNA==nucleus->getA());
 // assert(theCNA<=theEventInfo.At+theEventInfo.Ap);
 // assert(theCNZ<=theEventInfo.Zt+theEventInfo.Zp);
+// assert(theCNS>=theEventInfo.St+theEventInfo.Sp);
 
     // Update the kinematics of the CN
     theCNEnergy -= theProjectileRemnant->getEnergy();
@@ -588,7 +590,7 @@ namespace G4INCL {
     theCNSpin -= theProjectileRemnant->getAngularMomentum();
 
     // Compute the excitation energy of the CN
-    const G4double theCNMass = ParticleTable::getTableMass(theCNA,theCNZ);
+    const G4double theCNMass = ParticleTable::getTableMass(theCNA,theCNZ,theCNS);
     const G4double theCNInvariantMassSquared = theCNEnergy*theCNEnergy-theCNMomentum.mag2();
     if(theCNInvariantMassSquared<0.) {
       // Negative invariant mass squared, return a transparent
@@ -601,6 +603,7 @@ namespace G4INCL {
       INCL_DEBUG("CN excitation energy is negative, forcing a transparent" << '\n'
             << "  theCNA = " << theCNA << '\n'
             << "  theCNZ = " << theCNZ << '\n'
+            << "  theCNS = " << theCNS << '\n'
             << "  theCNEnergy = " << theCNEnergy << '\n'
             << "  theCNMomentum = (" << theCNMomentum.getX() << ", "<< theCNMomentum.getY() << ", "  << theCNMomentum.getZ() << ")" << '\n'
             << "  theCNExcitationEnergy = " << theCNExcitationEnergy << '\n'
@@ -613,6 +616,7 @@ namespace G4INCL {
       INCL_DEBUG("CN excitation energy is positive, forcing a CN" << '\n'
             << "  theCNA = " << theCNA << '\n'
             << "  theCNZ = " << theCNZ << '\n'
+            << "  theCNS = " << theCNS << '\n'
             << "  theCNEnergy = " << theCNEnergy << '\n'
             << "  theCNMomentum = (" << theCNMomentum.getX() << ", "<< theCNMomentum.getY() << ", "  << theCNMomentum.getZ() << ")" << '\n'
             << "  theCNExcitationEnergy = " << theCNExcitationEnergy << '\n'
@@ -620,6 +624,7 @@ namespace G4INCL {
             );
       nucleus->setA(theCNA);
       nucleus->setZ(theCNZ);
+      nucleus->setS(theCNS);
       nucleus->setMomentum(theCNMomentum);
       nucleus->setEnergy(theCNEnergy);
       nucleus->setExcitationEnergy(theCNExcitationEnergy);
@@ -632,6 +637,9 @@ namespace G4INCL {
       // Take care of any remaining etas and/or omegas
       G4double timeThreshold=theConfig->getDecayTimeThreshold();
       theEventInfo.forcedPionResonancesOutside = nucleus->decayOutgoingPionResonances(timeThreshold);
+      
+      // Take care of any remaining Kaons
+      theEventInfo.emitKaon = nucleus->emitInsideKaon();
         
       // Cluster decay
       theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() | nucleus->decayMe();
@@ -662,10 +670,13 @@ namespace G4INCL {
     const G4double pLongBalance = theBalance.momentum.getZ();
     const G4double pTransBalance = theBalance.momentum.perp();
     if(theBalance.Z != 0) {
-      INCL_ERROR("Violation of charge conservation! ZBalance = " << theBalance.Z << '\n');
+      INCL_ERROR("Violation of charge conservation! ZBalance = " << theBalance.Z << " eventNumber=" << theEventInfo.eventNumber << '\n');
     }
     if(theBalance.A != 0) {
       INCL_ERROR("Violation of baryon-number conservation! ABalance = " << theBalance.A << " Emit Lambda=" << theEventInfo.emitLambda << " eventNumber=" << theEventInfo.eventNumber << '\n');
+    }
+    if(theBalance.S != 0) {
+      INCL_ERROR("Violation of strange-number conservation! SBalance = " << theBalance.S << " eventNumber=" << theEventInfo.eventNumber << '\n');
     }
     G4double EThreshold, pLongThreshold, pTransThreshold;
     if(afterRecoil) {

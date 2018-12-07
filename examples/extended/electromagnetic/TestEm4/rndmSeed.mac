@@ -1,4 +1,3 @@
-# $Id: rndmSeed.mac 75839 2013-11-06 17:27:26Z gcosmo $
 #
 # This macro illustrates how to save and reset the random number seed
 #

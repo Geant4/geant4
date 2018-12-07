@@ -11,7 +11,6 @@
 #
 # Generated on : 30/9/2010
 #
-# $Id: sources.cmake 71942 2013-06-28 19:08:11Z mkelsey $
 #
 # 20110725  M. Kelsey -- Update HEADERS and SOURCES with new code
 # 20110919  M. Kelsey -- Add G4CascadeCoalescence

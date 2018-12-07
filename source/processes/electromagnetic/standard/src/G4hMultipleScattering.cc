@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.cc 107365 2017-11-09 10:54:29Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -82,8 +81,7 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4hMultipleScattering::StreamProcessInfo(std::ostream& out,
-                                              G4String endOfLine) const
+void G4hMultipleScattering::StreamProcessInfo(std::ostream& out) const
 {
   out << "      RangeFactor= " << RangeFactor()
       << ", stepLimitType: " << StepLimitType()
@@ -91,7 +89,7 @@ void G4hMultipleScattering::StreamProcessInfo(std::ostream& out,
   if(StepLimitType() == fUseDistanceToBoundary) {
     out  << ", skin= " << Skin() << ", geomFactor= " << GeomFactor();
   }  
-  out << endOfLine;
+  out << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,10 +97,9 @@ void G4hMultipleScattering::StreamProcessInfo(std::ostream& out,
 void G4hMultipleScattering::ProcessDescription(std::ostream& out) const
 {
   out << 
-  "<strong>"
-  "Hadron multiple scattering</strong>. Simulates combined effects of <br>"
-  "elastic scattering at the end of the step, to save computing time. May<br>"
-  "be combined with Coulomb scattering in a 'mixed' scattering algorithm.";
+  "  Hadron multiple scattering. Simulates combined effects of elastic \n" <<
+  "    scattering at the end of the step, to save computing time. May\n"<<
+  "    be combined with Coulomb scattering in a 'mixed' scattering algorithm.";
   G4VMultipleScattering::ProcessDescription(out);
 }
 

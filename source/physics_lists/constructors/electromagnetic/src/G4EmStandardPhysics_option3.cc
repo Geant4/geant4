@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc 109526 2018-04-30 07:11:52Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -126,9 +125,14 @@ G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver,
   param->SetMinEnergy(10*eV);
   param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
+  param->ActivateAngularGeneratorForIonisation(true);
+  param->SetUseMottCorrection(true);  
+  param->SetStepFunction(0.2, 100*um);
+  param->SetStepFunctionMuHad(0.2, 50*um);
   param->SetMscStepLimitType(fUseDistanceToBoundary);
   param->SetMuHadLateralDisplacement(true);
-  //param->SetLateralDisplacementAlg96(false);
+  param->SetLateralDisplacementAlg96(true);
+  //param->SetUseICRU90Data(true);
   param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
@@ -193,6 +197,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
   // nuclear stopping
   G4NuclearStopping* pnuc = new G4NuclearStopping();
+  pnuc->SetMaxKinEnergy(MeV);
 
   // Add standard EM Processes
   G4ParticleTable* table = G4ParticleTable::GetParticleTable();
@@ -217,7 +222,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       G4eMultipleScattering* msc = new G4eMultipleScattering();
 
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);
 
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
       G4SeltzerBergerModel* br1 = new G4SeltzerBergerModel();
@@ -239,7 +243,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       G4eMultipleScattering* msc = new G4eMultipleScattering();
 
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);      
 
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
       G4SeltzerBergerModel* br1 = new G4SeltzerBergerModel();
@@ -262,7 +265,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
       G4MuIonisation* muIoni = new G4MuIonisation();
-      muIoni->SetStepFunction(0.2, 50*um);          
 
       ph->RegisterProcess(mumsc, particle);
       ph->RegisterProcess(muIoni, particle);
@@ -295,7 +297,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       G4hMultipleScattering* pimsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.2, 50*um);
 
       ph->RegisterProcess(pimsc, particle);
       ph->RegisterProcess(hIoni, particle);
@@ -307,7 +308,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       G4hMultipleScattering* kmsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.2, 50*um);
 
       ph->RegisterProcess(kmsc, particle);
       ph->RegisterProcess(hIoni, particle);
@@ -319,7 +319,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       G4hMultipleScattering* pmsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.2, 50*um);
 
       ph->RegisterProcess(pmsc, particle);
       ph->RegisterProcess(hIoni, particle);
@@ -363,9 +362,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       ph->RegisterProcess(pnuc, particle);
     }
   }
-    
-  // Nuclear stopping
-  pnuc->SetMaxKinEnergy(MeV);
     
   // Deexcitation
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();

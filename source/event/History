@@ -1,4 +1,3 @@
-$Id: History 110273 2018-05-17 14:43:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 9th, 2018 G. Cosmo (event-V10-04-08)
+- Fixed printout typos.
 
 May 17th, 2018 J. Madsen (event-V10-04-07)
 - updated "thread-local-static-var" model to

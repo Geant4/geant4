@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04ElementField.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 /// \file field/field04/src/F04ElementField.cc
 /// \brief Implementation of the F04ElementField class

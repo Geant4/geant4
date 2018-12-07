@@ -1,4 +1,3 @@
-$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30 November 2018:  I. Hrivnacova (exOptical-V10-04-02)
+- Fixed link in .README.txt
+
+9 November 2018:  I. Hrivnacova (exOptical-V10-04-01)
+- Added new OpNovice2 example in CMake and README's
 
 29 May 2018 Daren Sawkey (exOptical-V10-04-00)
 - Include new example OpNovice2.

@@ -57,7 +57,7 @@ G4CrossSectionFactoryRegistry::G4CrossSectionFactoryRegistry(const G4CrossSectio
 G4CrossSectionFactoryRegistry& G4CrossSectionFactoryRegistry::operator=(const G4CrossSectionFactoryRegistry&)
 {
     G4Exception("G4CrossSectionFactoryRegistry::G4CrossSectionFactoryRegistry",
-                "CrossSection004",FatalException,"Use of assignement operator not allowed");
+                "CrossSection004",FatalException,"Use of assignment operator not allowed");
     return *this;
 }
 

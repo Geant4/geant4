@@ -1,4 +1,3 @@
-$Id$
 
 ///\file "optical/wls/.README.txt"
 ///\brief Example wls README page

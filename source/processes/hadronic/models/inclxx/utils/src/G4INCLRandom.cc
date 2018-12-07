@@ -111,14 +111,11 @@ namespace G4INCL {
       return r;
     }
 
+#ifndef INCLXX_IN_GEANT4_MODE
     G4double gauss(G4double sigma) {
-      return G4RandGauss::shoot(0.,sigma);
-    }
-
-    G4double gaussWithMemory(G4double sigma) {
       // generate a Gaussian random number with standard deviation sigma
       // uses the flat() and flat0() methods
-      static G4ThreadLocal G4bool generated = false;
+/*      static G4ThreadLocal G4bool generated = false;
       static G4ThreadLocal G4double u, v;
 
       if( !generated )
@@ -132,9 +129,36 @@ namespace G4INCL {
       {
         generated = false;
         return sigma*std::sqrt(-2*std::log(u))*std::sin(v);
-      }
+      }*/
+      
+      return sigma*std::sqrt(-2*std::log(shoot0()))*std::cos(Math::twoPi*shoot());
     }
+#else
+      G4double gauss(G4double sigma) {
+          return G4RandGauss::shoot(0.,sigma);
+      }
+      
+      G4double gaussWithMemory(G4double sigma) {
+          // generate a Gaussian random number with standard deviation sigma
+          // uses the flat() and flat0() methods
+          static G4ThreadLocal G4bool generated = false;
+          static G4ThreadLocal G4double u, v;
+          
+          if( !generated )
+          {
+              u = shoot0();
+              v = Math::twoPi*shoot();
+              generated = true;
+              return sigma*std::sqrt(-2*std::log(u))*std::cos(v);
+          }
+          else
+          {
+              generated = false;
+              return sigma*std::sqrt(-2*std::log(u))*std::sin(v);
+          }
+      }
 
+#endif
     ThreeVector normVector(G4double norm) {
 
       const G4double ctheta = (1.-2.*shoot());
@@ -161,9 +185,15 @@ namespace G4INCL {
       G4double factor = 1.-corrCoeff*corrCoeff;
       if(factor<=0.)
         factor=0.;
-      const G4double x = gaussWithMemory(sigma) + x0;
-      const G4double y = corrCoeff * x + gaussWithMemory(sigma*std::sqrt(factor)) + x0;
-      return std::make_pair(x, y);
+#ifndef INCLXX_IN_GEANT4_MODE
+      const G4double x = gauss(sigma) + x0;
+      const G4double y = corrCoeff * x + gauss(sigma*std::sqrt(factor)) + x0;
+#else
+       const G4double x = gaussWithMemory(sigma) + x0;
+       const G4double y = corrCoeff * x + gaussWithMemory(sigma*std::sqrt(factor)) + x0;
+        
+#endif
+       return std::make_pair(x, y);
     }
 
     std::pair<G4double,G4double> correlatedUniform(const G4double corrCoeff) {
@@ -222,10 +252,6 @@ namespace G4INCL {
       else
         setGenerator(NULL);
 #endif // INCLXX_IN_GEANT4_MODE
-    }
-
-    G4int Adapter::operator()(const G4int n) const {
-      return shootInteger(n);
     }
 
     Adapter const &getAdapter() {

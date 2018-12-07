@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 103926 2017-05-03 13:43:27Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -77,10 +76,12 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4PhysicalVolumeMassScene.hh
         G4PhysicalVolumeModel.hh
         G4PhysicalVolumeSearchScene.hh
+        G4PhysicalVolumesSearchScene.hh
         G4PseudoScene.hh
         G4ScaleModel.hh
         G4TextModel.hh
-        G4TouchableDumpScene.hh
+        G4TouchablePropertiesScene.hh
+        G4TouchableUtils.hh
         G4TrajectoriesModel.hh
         G4TrajectoryChargeFilter.hh
         G4TrajectoryDrawByAttribute.hh
@@ -121,9 +122,11 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4PhysicalVolumeMassScene.cc
         G4PhysicalVolumeModel.cc
         G4PhysicalVolumeSearchScene.cc
+        G4PhysicalVolumesSearchScene.cc
         G4ScaleModel.cc
         G4TextModel.cc
-        G4TouchableDumpScene.cc
+        G4TouchablePropertiesScene.cc
+        G4TouchableUtils.cc
         G4TrajectoriesModel.cc
         G4TrajectoryChargeFilter.cc
         G4TrajectoryDrawByAttribute.cc

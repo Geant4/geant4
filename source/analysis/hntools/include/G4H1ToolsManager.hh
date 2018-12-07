@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4H1ToolsManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Manager class for tools::histo::h1d.
 // It implements functions specific to the H1 type

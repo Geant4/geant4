@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXe.cc 110190 2018-05-17 10:50:30Z allison $
 //
 /// \file optical/OpNovice2/OpNovice2.cc
 /// \brief Main program of the optical/OpNovice2 example

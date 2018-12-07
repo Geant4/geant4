@@ -8,41 +8,23 @@
 #########################
 # Set of the verboses
 #
-/control/verbose 1
+/control/verbose 0
 /tracking/verbose 0
-/run/verbose 1
+/run/verbose 0
 /event/verbose 0
 
 ##########################
 # Set of the physic models
 #
+#/Physics/addPhysics QGSP_BIC_EMY
+
 /Physics/addPhysics HADRONTHERAPY_1
-/run/numberOfThreads 4
+/run/numberOfThreads 1
 
 ##########################
 # Initialisation procedure
 #
 /run/initialize
-
-##########################
-# Visualisation
-#
-/vis/open OGLI 600x600-0+0
-
-# Disable auto refresh and quieten vis messages whilst scene and
-# trajectories are established:
-/vis/viewer/set/autoRefresh false
-#/vis/verbose errors
-
-/vis/drawVolume
-/vis/viewer/set/viewpointThetaPhi 30 140 deg
-#/vis/viewer/zoom 1
-#/vis/viewer/pan -10  0 cm
-/vis/scene/add/trajectories smooth
-/vis/scene/endOfEventAction accumulate
-
-/vis/viewer/set/autoRefresh true
-/vis/verbose warnings
 
 ####################################################
 # Set here the CUT and the STEP MAX for the tracking.
@@ -50,13 +32,17 @@
 #
 # Set cuts OUTSIDE the detector
 #
-/run/setCut 1 mm
+/run/setCut 1 m
 
 # Set cuts ONLY inside the detector
 #
 /run/setCutForRegion DetectorLog 0.1 mm
 
-/Step/waterPhantomStepMax 0.1 mm
+
+/run/setCutForAGivenParticle e- 0.1 mm
+/run/setCutForAGivenParticle e+ 0.1 mm
+/run/setCutForAGivenParticle proton 0.1 mm
+#/Step/waterPhantomStepMax 0.1 mm
 
 #########################
 # Set the primary particle type,
@@ -69,6 +55,8 @@
 /gps/pos/radius 0. mm
 /gps/pos/sigma_r 2. mm
 /gps/particle proton
+#/gps/particle ion
+#/gps/ion 6 12 6
 /gps/pos/type Beam
 
 # the incident surface is in the y-z plane
@@ -87,8 +75,10 @@
 # the beam energy is in gaussian profile
 #
 /gps/ene/type Gauss
-/gps/ene/mono 62.4 MeV
-/gps/ene/sigma 0.25 MeV
+/gps/ene/mono 60.0 MeV
+#/gps/ene/sigma 0.25 MeV
+#/gps/ene/mono 744 MeV
+#/gps/ene/sigma 0.740 MeV
 
 ###################################################
 #		DETECTOR DESCRIPTION
@@ -124,11 +114,12 @@
 # Start of the run
 #
 # If secondary particles dose & fluence are needed
-#/analysis/secondary true
-#/analysis/computeLet
+/analysis/secondary true
+/analysis/computeLet
 
 # Default material is water liquid
-#/changePhantom/material G4_PLEXIGLASS
+/changePhantom/material G4_WATER
 
 /run/printProgress 1000
-/run/beamOn 100000
+/run/beamOn 1000
+/tracking/verbose 0

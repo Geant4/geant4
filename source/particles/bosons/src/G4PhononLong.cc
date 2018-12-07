@@ -26,7 +26,6 @@
 /// \file particles/src/G4PhononLong.cc
 /// \brief Implementation of the G4PhononLong class
 //
-// $Id: G4PhononLong.cc 102841 2017-02-27 13:00:47Z gcosmo $
 //
 
 #include "G4PhononLong.hh"

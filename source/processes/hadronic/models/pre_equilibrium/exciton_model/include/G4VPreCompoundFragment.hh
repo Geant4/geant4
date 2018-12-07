@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundFragment.hh 100378 2016-10-19 15:03:27Z gcosmo $
 //
 // J. M. Quesada (August 2008).  
 // Based  on previous work by V. Lara
@@ -48,8 +47,10 @@
 #include "G4Fragment.hh"
 #include "G4VCoulombBarrier.hh"
 #include "G4ReactionProduct.hh"
-#include "G4DeexPrecoParameters.hh"
 #include "G4Pow.hh"
+
+class G4NuclearLevelData;
+class G4DeexPrecoParameters;
 
 class G4VPreCompoundFragment
 {
@@ -138,6 +139,7 @@ private:
   
 protected:
 
+  G4NuclearLevelData* fNucData;
   G4DeexPrecoParameters* theParameters;
   G4Pow* g4calc;
 

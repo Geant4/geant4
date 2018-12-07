@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Scatterer.hh,v 1.5 2006-06-29 20:35:58 gunter Exp $ //
 //
 //
 // removing a auther spec that was part of a template.

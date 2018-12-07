@@ -24,13 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.cc 74051 2013-09-20 09:39:41Z gcosmo $
 //
 // 
 // Abstract interface for GEANT4 Visualization Manager.
 // John Allison 19/Oct/1996.
 
 #include "G4VVisManager.hh"
+
+G4VVisManager::G4VVisManager ()
+: fDrawOverlapsFlag(false)
+{}
 
 G4VVisManager::~G4VVisManager () {}
 

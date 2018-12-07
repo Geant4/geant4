@@ -37,7 +37,6 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorAction.cc 84280 2014-10-13 07:21:10Z gcosmo $
 //
 
 #include "globals.hh"
@@ -47,7 +46,8 @@
 #include "G4Event.hh"
 #include "G4GeneralParticleSource.hh"
 #include "G4RunManager.hh"
-#include "G4SystemOfUnits.hh"
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #ifdef ANALYSIS_USE
 #include "BrachyAnalysisManager.hh"
@@ -75,7 +75,7 @@ void BrachyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
  { 
  BrachyAnalysisManager* analysis = BrachyAnalysisManager::GetInstance();
  G4double energy = gun -> GetParticleEnergy();
- analysis -> FillPrimaryParticleHistogram(energy/keV);
+ analysis -> FillPrimaryParticleHistogram(energy/CLHEP::keV);
 }
 #endif 
 }

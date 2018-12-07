@@ -26,7 +26,6 @@
 /// \file exoticphysics/monopole/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,6 +44,7 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+#include "G4StateManager.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4NistManager.hh"
@@ -66,17 +66,13 @@ DetectorConstruction::DetectorConstruction()
    fWorldMaterial(0),           
    fAbsorMaterial(0),
    fLogAbsor(0),
-   fMonFieldSetup(0),
-   fZMagFieldValue(0.),
+   fMonFieldSetup(),
    fDetectorMessenger(0)
 {
   // default parameter values
   fAbsorSizeX = fAbsorSizeYZ = 10 * cm;
   fWorldSizeX = fWorldSizeYZ = 1.2 * fAbsorSizeX;
   fMaxStepSize = 5 * mm;
-
-  //  fMonFieldSetup = G4MonopoleFieldSetup::GetMonopoleFieldSetup();
-  fMonFieldSetup = new G4MonopoleFieldSetup();
 
   SetMaterial("G4_Al");
   fWorldMaterial = 
@@ -161,7 +157,9 @@ void DetectorConstruction::SetSizeX(G4double value)
   if(value > 0.0) {
     fAbsorSizeX = value; 
     fWorldSizeX = 1.2 * fAbsorSizeX;
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+    if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+      G4RunManager::GetRunManager()->ReinitializeGeometry();
+    }
   }
 }
   
@@ -172,7 +170,9 @@ void DetectorConstruction::SetSizeYZ(G4double value)
   if(value > 0.0) {
     fAbsorSizeYZ = value; 
     fWorldSizeYZ = 1.2 * fAbsorSizeYZ;
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+    if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+      G4RunManager::GetRunManager()->ReinitializeGeometry();
+    }
   }
 }  
 
@@ -195,65 +195,18 @@ void DetectorConstruction::SetMaterial(const G4String& namemat)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-// void DetectorConstruction::SetMagField(G4double fieldValue)
-// {
-//   fMonFieldSetup->SetMagField(fieldValue);
-
-//   //apply a global uniform magnetic field along Z axis
-//   G4FieldManager * fieldMgr = 
-//     G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    
-//   if (fMagField) { delete fMagField; }    //delete the existing magn field
-
-//   if (fieldValue != 0.)                   // create a new one if non nul
-//     {
-//       fMagField = new G4UniformMagField(G4ThreeVector(0., 0., fieldValue));
-//       fieldMgr->SetDetectorField(fMagField);
-//       fieldMgr->CreateChordFinder(fMagField);
-//     }
-//    else
-//     {
-//       fMagField = 0;
-//       fieldMgr->SetDetectorField(fMagField);
-//     }
-// }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void DetectorConstruction::ConstructSDandField()
 {
-
   // Define magnetic field
-  bool bNewFieldValue = false;
-  if ( fFieldMessenger.Get() != 0 ) {
-    G4ThreeVector fieldSet =  fFieldMessenger.Get()->GetFieldValue();
-    if(fieldSet.z()!=fZMagFieldValue) bNewFieldValue = true;
+  if ( ! fMonFieldSetup.Get() ) {
+    G4MonopoleFieldSetup* fieldSetup
+      = new G4MonopoleFieldSetup();
+    G4AutoDelete::Register(fieldSetup); // Kernel will delete the F01FieldSetup
+    fMonFieldSetup.Put(fieldSetup);
   }
-  else bNewFieldValue = true;
-
-  // Monopole particule specific magnetic field
-  if(bNewFieldValue&&fZMagFieldValue!=0.)
-    fMonFieldSetup->SetMagField(fZMagFieldValue, true);
-
-  if ( bNewFieldValue ) { 
-    // Create global magnetic field messenger.
-    // Uniform magnetic field is then created automatically if
-    // the field value is not zero.
-
-    if(fZMagFieldValue!=0.)
-      {
-        G4ThreeVector fieldValue = G4ThreeVector(0.,0.,fZMagFieldValue);
-        G4GlobalMagFieldMessenger* msg =  
-                              new G4GlobalMagFieldMessenger(fieldValue);
-        msg->SetVerboseLevel(1);
-        G4AutoDelete::Register(msg);
-        fFieldMessenger.Put( msg );        
-      }
-  }
-  
+  fMonFieldSetup.Get()->ConstructMagField(); // add field value
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -262,13 +215,6 @@ void DetectorConstruction::SetMaxStepSize(G4double step)
 {
   fMaxStepSize = step;
   if(fLogAbsor) { fLogAbsor->SetUserLimits(new G4UserLimits(fMaxStepSize)); }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

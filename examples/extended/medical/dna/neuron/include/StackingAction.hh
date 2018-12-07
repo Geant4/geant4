@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $Id$
 //
 /// \file StackingAction.hh
 /// \brief Definition of the StackingAction class

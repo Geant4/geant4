@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $Id$
 //
 /// \file ITTrackingAction.hh 
 /// \brief Implementation of the ITTrackingAction class

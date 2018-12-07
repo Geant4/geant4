@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "parameterisations/gflash/.README.txt"
 ///\brief Example gflash README page

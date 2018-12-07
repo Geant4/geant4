@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALTestbeamSetupSD.cc 89572 2015-04-20 07:18:15Z gcosmo $
 //
 // 
 

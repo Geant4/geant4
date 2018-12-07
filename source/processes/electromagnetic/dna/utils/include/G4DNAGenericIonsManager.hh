@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAGenericIonsManager.hh 73124 2013-08-19 07:53:33Z gcosmo $
 
 #ifndef   G4DNAGENERICIONSMANAGER_HH
  #define  G4DNAGENERICIONSMANAGER_HH 1

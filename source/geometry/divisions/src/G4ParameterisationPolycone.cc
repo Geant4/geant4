@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.cc 92635 2015-09-09 13:39:54Z gcosmo $
 //
 // class G4ParameterisationPolycone Implementation file
 //

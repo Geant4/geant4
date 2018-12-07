@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowBiasing.hh 69650 2013-05-10 00:43:17Z asaim $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

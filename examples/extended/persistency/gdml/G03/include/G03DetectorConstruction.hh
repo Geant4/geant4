@@ -27,7 +27,6 @@
 /// \brief Definition of the G03DetectorConstruction class
 //
 //
-// $Id: G03DetectorConstruction.hh 69987 2013-05-21 12:33:52Z gcosmo $
 //
 // Class G03DetectorConstruction
 //

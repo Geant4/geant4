@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "field/field03/.README.txt"
 ///\brief Example field03 README page
@@ -8,20 +7,26 @@
  Example of tracking in magnetic field where field associated
  to selected logical volumes varies.
 
+ A global and a local magnetic field are defined in the F03FieldSetup class,  which object
+ is created in the ConstructSDandField() function in the F03DetectorConstruction
+ class. The local magnetic field is set to the "Radiator" volume.
+ The interactive commands are implemented in F03FieldMessenger.
 	
 \section field03_s1 GEOMETRY DEFINITION
  
- The "absorber" is a solid made of a given material.                
+ The "Absorber" is a solid made of a given material.                
  
  Three parameters define the absorber :
  - the material of the absorber,
 	- the thickness of an absorber,
  - the transverse size of the absorber (the input face is a square). 
     
- The volume "World" contains the "absorber". 
+ The volume "World" contains the "Absorber". 
  In this test the parameters of the "World" can be changed , too.
 
- In addition a transverse uniform magnetic field can be applied.
+ A transverse global uniform magnetic field can be applied.
+ In addition, the "Radiator" volume, which is placed in geometry next 
+ to the absorber, has a local magnetic field.
  
  The default geometry is constructed in F03DetectorConstruction class,
  but all the parameters can be changed via
@@ -35,6 +40,10 @@
  be changed via the G4 build-in commands of G4ParticleGun class (see
  the macros provided with this example).
  
+ It is also possible to change the position of the primary particle vertex
+ or activate its randomization via the commands defined in  the
+ F01PrimaryGeneratorMessenger class.
+
  A RUN is a set of events.
  
 \section field03_s3 DETECTOR RESPONSE
@@ -62,14 +71,14 @@
  
  - Execute field03 in 'batch' mode from macro files e.g.
 \verbatim
-% field03 field03.in
+% ./field03 field03.in
 \endverbatim
 		
  - Execute field03 in 'interactive' mode with visualization e.g.
 \verbatim
-% field03
+% ./field03
 ....
-Idle> /control/execute vis.mac
+Idle> /run/beamOn 1
 ....
 \endverbatim
 

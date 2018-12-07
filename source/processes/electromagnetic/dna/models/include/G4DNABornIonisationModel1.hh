@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel1.hh 81398 2014-05-28 09:53:02Z vnivanch $
 //
 
 #ifndef G4DNABornIonisationModel1_h

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
@@ -216,7 +215,8 @@ void G4TNtupleManager<TNTUPLE>::CreateNtuplesFromBooking()
     CreateTNtupleFromBooking(ntupleDescription);
 
     // finish created ntuple
-    FinishTNtuple(ntupleDescription);
+    auto fromBooking = true;
+    FinishTNtuple(ntupleDescription, fromBooking);
 
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL3() ) 
@@ -340,7 +340,8 @@ void G4TNtupleManager<TNTUPLE>::FinishNtuple(
   // if ( ! ntuple )  return;   
       // The test has to be now done in the FinishTNtuple implementations
 
-  FinishTNtuple(ntupleDescription);
+  auto fromBooking = false;
+  FinishTNtuple(ntupleDescription, fromBooking);
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) {
@@ -413,10 +414,10 @@ G4bool G4TNtupleManager<TNTUPLE>::AddNtupleRow(
   }         
 
 #ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) {
+  if ( fState.GetVerboseL2() ) {
     G4ExceptionDescription description;
     description << " ntupleId " << ntupleId;  
-    fState.GetVerboseL4()->Message("add", "ntuple row", description);
+    fState.GetVerboseL2()->Message("add", "ntuple row", description);
   }  
 #endif
 

@@ -1,4 +1,3 @@
-$Id: History 110280 2018-05-17 14:50:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 10, 2018 V.Ivanchenko (LXe-V10-04-11)
+- LXeDetectorConstruction - removed definition of random number
+  directory from the code, user may define thisvia UI command
+
+November 09, 2018 V.Ivanchenko (LXe-V10-04-10)
+- Fixed MT issue - random directory should not be set via Event
+  action, this functionality is moved to DetectorConstruction
+
+October 26, 2018 D. Sawkey (LXe-V10-04-09)
+- Restore .README.txt
+- removed unneeded direction named random
 
 May 17, 2018 J. Allison (LXe-V10-04-08)
 - LXe.cc: Removed remaining G4UI_USE and G4VIS_USE.

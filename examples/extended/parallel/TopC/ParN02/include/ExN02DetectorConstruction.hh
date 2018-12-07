@@ -27,7 +27,6 @@
 /// \brief Definition of the ExN02DetectorConstruction class
 //
 //
-// $Id: ExN02DetectorConstruction.hh 78055 2013-12-03 08:27:48Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

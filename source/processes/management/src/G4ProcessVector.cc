@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessVector.cc 71231 2013-06-12 13:06:28Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -49,7 +48,7 @@ G4ProcessVector::G4ProcessVector(size_t siz)
 }
 
 G4ProcessVector::G4ProcessVector(const G4ProcessVector& right)
-  :pProcVector(0)
+  :pProcVector(nullptr)
 {
   pProcVector = new G4ProcVector();
   
@@ -67,7 +66,7 @@ G4ProcessVector::~G4ProcessVector()
 {
   // delete pProcVector
   //
-  if (pProcVector != 0 ){
+  if (pProcVector != nullptr ){
     pProcVector->clear();
     delete pProcVector;
   }
@@ -79,7 +78,7 @@ G4ProcessVector & G4ProcessVector::operator=(const G4ProcessVector & right)
 {
   if (this != &right){
     // delete pProcVector
-    if (pProcVector != 0 ){
+    if (pProcVector != nullptr ){
       pProcVector->clear();
       delete pProcVector;
     }

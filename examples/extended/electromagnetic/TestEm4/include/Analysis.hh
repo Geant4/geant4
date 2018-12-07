@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Analysis.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file electromagnetic/TestEm4/include/Analysis.hh
 /// \brief Selection of the analysis technology

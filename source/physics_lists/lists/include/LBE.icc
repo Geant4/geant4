@@ -68,6 +68,8 @@
 // Builder for all stopping processes
 #include "G4StoppingPhysics.hh"
 
+#include "G4HadronicParameters.hh"
+
 // Constructor /////////////////////////////////////////////////////////////
 template<class T> TLBE<T>::TLBE(G4int ver) :T() 
 {
@@ -603,7 +605,7 @@ template<class T> TLBE<T>::~TLBE()
   // Inelastic scattering
   const G4double theFTFMin0 =    0.0*CLHEP::GeV;
   const G4double theFTFMin1 =    4.0*CLHEP::GeV;
-  const G4double theFTFMax =   100.0*CLHEP::TeV;
+  const G4double theFTFMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   const G4double theBERTMin0 =   0.0*CLHEP::GeV;
   const G4double theBERTMin1 =  19.0*CLHEP::MeV;
   const G4double theBERTMax =    5.0*CLHEP::GeV;

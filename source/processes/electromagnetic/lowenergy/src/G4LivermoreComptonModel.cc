@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.cc 84216 2014-10-10 14:51:51Z gcosmo $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Author: Alexander Bagulya

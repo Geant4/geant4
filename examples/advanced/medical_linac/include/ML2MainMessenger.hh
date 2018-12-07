@@ -84,7 +84,10 @@ private:
 	G4UIcmdWithAString * fileExperimentalData, * fileExperimentalDataOut;
 	G4UIcmdWithAnInteger *saving_in_Selected_Voxels_every_events;
 	G4UIcmdWithAnInteger *saving_in_ROG_Voxels_every_events;
-	G4UIcmdWithAnInteger *max_N_particles_in_PhSp_File, *nMaxLoop; 
+	G4UIcmdWithAnInteger *max_N_particles_in_PhSp_File, *nMaxLoop;
+        G4UIcmdWithAnInteger *fVoxelsXCmd;// Select number of voxels
+        G4UIcmdWithAnInteger *fVoxelsYCmd;// Select number of voxels
+        G4UIcmdWithAnInteger *fVoxelsZCmd;// Select number of voxels 
 };
 
 #endif

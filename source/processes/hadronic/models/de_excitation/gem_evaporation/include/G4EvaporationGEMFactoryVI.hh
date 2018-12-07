@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationGEMFactoryVI.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // GEM de-excitation model
 // by V. Ivanchenko (July 2016)

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc 105820 2017-08-22 08:03:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,6 +59,7 @@
 #include "G4NistManager.hh"
 #include "G4NistMessenger.hh"
 #include "G4Isotope.hh"
+#include "G4Threading.hh"
 
 G4NistManager* G4NistManager::instance = nullptr;
 #ifdef G4MULTITHREADED
@@ -111,7 +111,8 @@ G4NistManager::~G4NistManager()
   //  G4cout << "NistManager: end isotope destruction" << G4endl;
   delete messenger;
   delete matBuilder;
-  delete elmBuilder;  
+  delete elmBuilder;
+  delete fICRU90;
   // G4cout << "NistManager: end destruction" << G4endl;
 }
 
@@ -203,15 +204,8 @@ void G4NistManager::SetVerbose(G4int val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Threading.hh"
-
 G4NistManager::G4NistManager()
 {
-  if(G4Threading::IsWorkerThread() == true) { 
-    G4Exception ("G4NistMaterial::G4NistManager()", "mat090", FatalException, 
-                 "Attempt to instantiate G4NistManager in worker thread");
-  }
-
   nElements  = 0;
   nMaterials = 0;
   verbose    = 0;
@@ -230,6 +224,25 @@ G4NistManager::G4NistManager()
   }
   POWERA27[0] = 1.0;
   LOGAZ[0]    = 0.0;
+  fICRU90 = nullptr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ICRU90StoppingData* G4NistManager::GetICRU90StoppingData()
+{
+  if (!fICRU90) {
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&nistManagerMutex);
+    if (!fICRU90) {
+#endif
+      fICRU90 = new G4ICRU90StoppingData();
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&nistManagerMutex);
+#endif
+  }
+  return fICRU90;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

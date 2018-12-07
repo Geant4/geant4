@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4TritonCoulombBarrier.hh 97097 2016-05-25 07:50:31Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)

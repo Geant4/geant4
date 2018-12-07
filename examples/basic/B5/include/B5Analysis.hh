@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5Analysis.hh 66536 2012-12-19 14:32:36Z ihrivnac $
 //
 /// \file B5Analysis.hh
 /// \brief Selection of the analysis technology

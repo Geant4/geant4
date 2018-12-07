@@ -26,7 +26,6 @@
 /// \file exoticphysics/dmparticle/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id$
 
 #include "PrimaryGeneratorAction.hh"
 #include "DetectorConstruction.hh"

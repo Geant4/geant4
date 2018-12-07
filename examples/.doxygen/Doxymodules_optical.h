@@ -1,4 +1,3 @@
-// $Id: Doxymodules_optical.h 104750 2017-06-15 08:47:26Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_optical.h
@@ -26,6 +25,15 @@
   class OpNoviceStackingAction {};
   class OpNoviceSteppingAction {};
   class OpNoviceSteppingVerbose {}; 
+
+/** @} */
+
+/** @defgroup extended_optical_OpNovice2 OpNovice2
+ *  The OpNovice2 example classes have their
+ *  <a href="../html_OpNovice2/html/index.html">standalone documentation </a>
+ *  @ingroup extended_optical
+ *  @{
+ */
 
 /** @} */
 

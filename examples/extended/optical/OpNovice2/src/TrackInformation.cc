@@ -27,7 +27,6 @@
 /// \brief Implementation of the TrackInformation class
 //
 //
-// $Id: TrackInformation.cc 97671 2016-06-07 08:25:00Z gcosmo $
 //
 
 #include "TrackInformation.hh"

@@ -27,7 +27,6 @@
 /// \brief Definition of the PhysListEmStandard class
 //
 //
-// $Id: PhysListEmStandard.hh 98757 2016-08-09 13:58:01Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -22,17 +22,7 @@
 ##########################
 # Set of the physic models
 #
-/Physics/addPhysics emstandard_opt3                     # Electromagnetic model
-/Physics/addPhysics Em_extra_physics			
-#/Physics/addPhysics Elastic                             # Hadronic elastic model
-#/Physics/addPhysics decay
-#/Physics/addPhysics radioactive_decay
-#/Physics/addPhysics Stopping_physics
-#/Physics/addPhysics Neutron_tracking_cut
-#/Physics/addPhysics binary                              # Hadronic inelastic model
-
-#/Physics/addPhysics local_ion_ion_inelastic            # Optional Hadronic inelastic model for ions (local physic list)
-#/Physics/addPackage QGSP_BIC_EMY
+/Physics/addPhysics standard_opt3                     # Electromagnetic model
 
 ##########################
 #       Geometry         #
@@ -102,7 +92,19 @@
 #/InsertProtectionDisc/insert
 
 #/changePhantom/update
-
+# Scoring mesh is used to calculate
+#  the dose in the phantom
+/score/create/boxMesh boxMesh_1
+#
+/score/mesh/boxSize 10. 10. 10. cm
+/score/mesh/nBin 300 300 300
+/score/mesh/translate/xyz 4.5 0. 0. cm 
+/score/quantity/doseDeposit dose Gy
+#
+/score/close
+#
+/score/list  
 /DeleteProtectionDisc/delete
+/run/beamOn  2000
+/score/dumpQuantityToFile boxMesh_1 dose dose.out
 
-/run/beamOn  2

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExErrorDetectorMessenger.hh 68019 2013-03-13 13:32:43Z gcosmo $
 //
 /// \file errorpropagation/include/ExErrorDetectorMessenger.hh
 /// \brief Definition of the ExErrorDetectorMessenger class

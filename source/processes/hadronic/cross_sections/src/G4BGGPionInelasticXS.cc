@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionInelasticXS.cc 110543 2018-05-29 13:38:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -53,6 +52,8 @@
 #include "G4NistManager.hh"
 #include "G4Pow.hh"
 
+#include "G4HadronicParameters.hh"
+
 G4BGGPionInelasticXS::G4BGGPionInelasticXS(const G4ParticleDefinition* p) 
  : G4VCrossSectionDataSet("Barashenkov-Glauber-Gribov")
 {
@@ -61,23 +62,23 @@ G4BGGPionInelasticXS::G4BGGPionInelasticXS(const G4ParticleDefinition* p)
   fLowEnergy = 20.*MeV;
   fSAIDHighEnergyLimit = 2.6*GeV;
   SetMinKinEnergy(0.0);
-  SetMaxKinEnergy(100*TeV);
+  SetMaxKinEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
 
   for (G4int i = 0; i < 93; i++) {
     theGlauberFac[i] = 0.0;
     theCoulombFac[i] = 0.0;
     theA[i] = 1;
   }
-  fPion = 0;
-  fGlauber = 0;
-  fHadron  = 0;
-  fSAID    = 0;
+  fPion = nullptr;
+  fGlauber = nullptr;
+  fHadron  = nullptr;
+  fSAID    = nullptr;
 
   fG4pow   = G4Pow::GetInstance();
 
   particle = p;
   theProton= G4Proton::Proton();
-  isPiplus = false;
+  isPiplus = (p == G4PionPlus::PionPlus()) ? true : false;
   isInitialized = false;
   SetForAllAtomsAndEnergies(true);
 }
@@ -86,10 +87,7 @@ G4BGGPionInelasticXS::G4BGGPionInelasticXS(const G4ParticleDefinition* p)
 
 G4BGGPionInelasticXS::~G4BGGPionInelasticXS()
 {
-  delete fSAID;
   delete fHadron;
-  delete fPion;
-  delete fGlauber;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,11 +102,11 @@ G4BGGPionInelasticXS::IsElementApplicable(const G4DynamicParticle*, G4int,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4BGGPionInelasticXS::IsIsoApplicable(const G4DynamicParticle*, 
-					     G4int Z, G4int A,  
+					     G4int Z, G4int,  
 					     const G4Element*,
 					     const G4Material*)
 {
-  return (1 == Z && 2 >= A);
+  return (1 == Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -121,16 +119,14 @@ G4BGGPionInelasticXS::GetElementCrossSection(const G4DynamicParticle* dp,
 
   G4double cross = 0.0;
   G4double ekin = dp->GetKineticEnergy();
-  G4int Z = ZZ;
+  G4int Z = std::min(ZZ, 92);
   if(1 == Z) {
     cross = 1.0115*GetIsoCrossSection(dp,1,1);
   } else {
-    if(Z > 92) { Z = 92; }
-
     if(ekin <= fLowEnergy && !isPiplus) {
       cross = theCoulombFac[Z];
     } else if(ekin <= 2*MeV && isPiplus) {
-      cross = theCoulombFac[Z]*CoulombFactor(ekin, Z);  
+      cross = theCoulombFac[Z]*CoulombFactor(ekin, Z);
     } else if(ekin > fGlauberEnergy) {
       cross = theGlauberFac[Z]*fGlauber->GetInelasticGlauberGribov(dp, Z, theA[Z]);
     } else {
@@ -160,14 +156,10 @@ G4BGGPionInelasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
   // this method should be called only for Z = 1
 
   G4double cross = 0.0;
-  G4double ekin = dp->GetKineticEnergy();
-
-  if(ekin <= fSAIDHighEnergyLimit) {
-    cross = fSAID->GetInelasticIsotopeCrossSection(particle, ekin, 1, 1);
-  } else {
-    fHadron->GetHadronNucleonXscPDG(dp, theProton);
-    cross = (theCoulombFac[1]/ekin + 1)*fHadron->GetInelasticHadronNucleonXsc();
-  } 
+  if(1 == Z) {
+    fHadron->GetHadronNucleonXscNS(dp, theProton);
+    cross = fHadron->GetInelasticHadronNucleonXsc();
+  }
   cross *= A;
 
   if(verboseLevel > 1) {
@@ -202,12 +194,9 @@ void G4BGGPionInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   fPion    = new G4UPiNuclearCrossSection();
   fGlauber = new G4ComponentGGHadronNucleusXsc();
   fHadron  = new G4HadronNucleonXsc();
-  fSAID    = new G4ComponentSAIDTotalXS();
 
   fPion->BuildPhysicsTable(*particle);
   fGlauber->BuildPhysicsTable(*particle);
-
-  if(particle == G4PionPlus::PionPlus()) { isPiplus = true; }
 
   G4ThreeVector mom(0.0,0.0,1.0);
   G4DynamicParticle dp(particle, mom, fGlauberEnergy);
@@ -215,7 +204,6 @@ void G4BGGPionInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   G4NistManager* nist = G4NistManager::Instance();
 
   G4double csup, csdn;
-  G4int A;
 
   if(verboseLevel > 0) {
     G4cout << "### G4BGGPionInelasticXS::Initialise for "
@@ -224,13 +212,12 @@ void G4BGGPionInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 	   << G4endl;
   }
 
-  for(G4int iz=2; iz<93; iz++) {
-
-    A = G4lrint(nist->GetAtomicMassAmu(iz));
+  for(G4int iz=2; iz<93; ++iz) {
+    G4int A = G4lrint(nist->GetAtomicMassAmu(iz));
     theA[iz] = A;
 
     csup = fGlauber->GetInelasticGlauberGribov(&dp, iz, A);
-    csdn = fPion->GetInelasticCrossSection(&dp, iz, theA[iz]);
+    csdn = fPion->GetInelasticCrossSection(&dp, iz, A);
 
     theGlauberFac[iz] = csdn/csup;
     if(verboseLevel > 0) {
@@ -238,25 +225,20 @@ void G4BGGPionInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 	     << " factor= " << theGlauberFac[iz] << G4endl; 
     }
   }
-  dp.SetKineticEnergy(fSAIDHighEnergyLimit);
-  fHadron->GetHadronNucleonXscPDG(&dp, theProton);
-  theCoulombFac[1] = fSAIDHighEnergyLimit*
-    (fSAID->GetInelasticIsotopeCrossSection(particle,fSAIDHighEnergyLimit,1,1)
-     /fHadron->GetInelasticHadronNucleonXsc() - 1);
+  theCoulombFac[1] = 1.0;
+  G4double elim = (isPiplus) ? 2*MeV : fLowEnergy; 
+  dp.SetKineticEnergy(elim);
 
-  if(isPiplus) { 
-    dp.SetKineticEnergy(2*MeV);
-    for(G4int iz=2; iz<93; iz++) {
+  for(G4int iz=2; iz<93; ++iz) {
+    if(isPiplus) { 
       theCoulombFac[iz] = fPion->GetInelasticCrossSection(&dp, iz, theA[iz])
-	/CoulombFactor(2*MeV,iz); 
-    }
-
-  } else {
-    dp.SetKineticEnergy(fLowEnergy);
-    //fHadron->GetHadronNucleonXscNS(&dp, theProton);
-    //theCoulombFac[1] = theGlauberFac[1]*fHadron->GetInelasticHadronNucleonXsc();
-    for(G4int iz=2; iz<93; iz++) {
+	/CoulombFactor(elim, iz); 
+    } else {
       theCoulombFac[iz] = fPion->GetInelasticCrossSection(&dp, iz, theA[iz]);
+    }
+    if(verboseLevel > 0) {
+      G4cout << "Z= " << iz <<  "  A= " << theA[iz] 
+	     << " CoulombFactor= " << theCoulombFac[iz] << G4endl; 
     }
   }
 }

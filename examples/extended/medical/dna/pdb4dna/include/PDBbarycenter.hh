@@ -37,7 +37,6 @@
 // november 2013
 // --------------------------------------------------------------
 //
-// $Id$
 //
 /// \file PDBbarycenter.hh
 /// \brief Definition of the Barycenter class

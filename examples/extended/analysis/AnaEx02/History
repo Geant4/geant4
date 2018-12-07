@@ -1,4 +1,3 @@
-$Id: History 107645 2017-11-28 14:26:13Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +13,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-10-18 G. Cosmo (AnaEx02-V10-04-01)
+- Added missing include of G4SteateManager.hh in DetectorConstruction source.
+
+05-07-18 I. Hrivnacova (AnaEx02-V10-04-00)
+- Macro & commands review:
+  - Removed obsolete /N03 top command directory
+  - Added protection against warnings issued from ReinitializeGeometry() if 
+    called in PreInit phase
+  - Added test for all commands defined in this example in AnaEx01.in
+  - Updated README files
 
 28-11-17 B. Morgan (AnaEx02-V10-03-01)
 - Replace ROOT_INCLUDE_DIR with ROOT_INCLUDE_DIRS

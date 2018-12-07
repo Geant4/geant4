@@ -24,16 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.cc 70225 2013-05-27 10:10:15Z gcosmo $
 //
 
 #include "G4Run.hh"
 #include "G4Event.hh"
 #include "G4RunManager.hh"
+#include "G4StatAnalysis.hh"
 
 G4Run::G4Run()
 :runID(0),numberOfEvent(0),numberOfEventToBeProcessed(0),HCtable(0),DCtable(0)
-{ eventVector = new std::vector<const G4Event*>; }
+{
+    eventVector = new std::vector<const G4Event*>;
+    // this is for FOM in G4StatAnalysis
+    G4StatAnalysis::ResetCpuClock();
+}
 
 G4Run::~G4Run()
 {

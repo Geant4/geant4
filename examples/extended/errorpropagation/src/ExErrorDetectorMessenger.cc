@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExErrorDetectorMessenger.cc 68019 2013-03-13 13:32:43Z gcosmo $
 //
 /// \file ExErrorDetectorMessenger.cc
 /// \brief Implementation of the ExErrorDetectorMessenger class

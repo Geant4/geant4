@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleiModel.hh 71940 2013-06-28 19:04:44Z mkelsey $
-// GEANT4 tag: $Name:  $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
 //		move ctor to .cc file
@@ -307,6 +305,7 @@ private:
   const G4double fermiMomentum;
   const G4double R_nucleon;
   const G4double gammaQDscale;		// Gamma/cluster scattering rescaling
+  const G4double potentialThickness;    // Defaulted to 1.0
 
   // Cutoffs for extreme values
   static const G4double small;

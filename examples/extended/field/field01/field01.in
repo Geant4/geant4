@@ -1,5 +1,5 @@
 #
-# Macro file for the initialization phase of field01
+# Macro file for the test of field01 example
 #
 # It creates the default geometry (simple absorber cylinder )        
 #
@@ -9,17 +9,26 @@
 # ******  Start of initialisation of classes for field propagation 
 # Change the type of stepper used to integrate the ODE of motion
 #
-#/field/setStepperType 45
+# Recommended and default since Geant4 10.4 (Dec 2017) - Dormand Prince (7) 4/5
+/field/setStepperType 745
+# High efficiency 5th order embedded stepper - Tsitouras 
+# /field/setStepperType 145
+# Higher order Dormand Prince stepper - 6th order (for smoothest fields & long steps)
+# /field/setStepperType 56
 #
-# Recommended - new in Geant4 10.3-beta:
-#  15 - Dormand Prince 745 : well-known and very efficient embedded method
-#                            Highly recommended in literature, e.g. Hairer,
-#                               Numerical Recipes
-#                            Used in several RK programs (e.g. DOPRI5 code)
+#
+# Different types of steppers can be chosen for integration in B-field:
+# 
+# 745 - Dormand Prince 745 : established, efficient embedded method
+#                           recommended in literature, e.g. Hairer, Numerical Recipes
+#                           Used in several RK programs (e.g. DOPRI5 code)
+#
+#  45 - Bogacki Shampine 4/5 : more efficient 4/5 embedded stepper
+#  13 - Nystrom RK4          : stepper with few field calls & analytic estimate of error
 #
 # Good choices for reasonably smooth fields - available since Geant4 1.0
 #   8 - Cash Karp RKF 45   : 'embedded' RK method - 4th/5th faster, robust
-#                             ( uses difference of 4th & 5th order for error estimate )
+#                            ( uses difference of 4th & 5th order for error estimate )
 #
 # Default - good choice for unknown fields
 #   4 - ClassicalRK4       : original Runge-Kutta method, very robust but slower )
@@ -67,14 +76,29 @@
 # Change the value of the B-field
 #
 /field/update
-/field/setFieldZ 1.0 kG
-#
-#
+/field/setField 0.1 0 0 tesla
+/run/beamOn 1
 #
 /gun/energy 500.0 MeV
-/tracking/verbose 1
-/run/beamOn 1
-
 /tracking/verbose 0
 /run/printProgress 10
 /run/beamOn 100
+#
+# Test commands defined in this example
+/control/verbose 2
+#
+/calor/setAbsMat Xe20CO2      # default Air
+/calor/setWorldMat Kr20CO2    # default Air
+/calor/setAbsThick  0.8 mm    # default 1 mm
+/calor/setAbsRad 1900 mm      # default 20000.*mm
+/calor/setAbsZpos  20990 mm   # default 21990.0*mm
+/calor/setWorldZ  45000 mm    # default 44000.*mm
+/calor/setWorldR  23000 mm    # default 22000.*mm
+/field/setFieldZ 1.0 kG       # default field 3*tesla in X-direction 
+#
+/gun/random   on       # default "off"
+/gun/xvertex  100 mm   # default 0
+/gun/yvertex  100 mm   # default 0
+/gun/zvertex  100 mm   # default 0
+#
+/run/beamOn 1

@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm8/src/Run.cc
 /// \brief Implementation of the Run class
 //
-// $Id: Run.cc 75577 2013-11-04 12:03:26Z vnivanch $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

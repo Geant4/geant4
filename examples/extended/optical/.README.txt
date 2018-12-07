@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "optical/.README.txt"
 ///\brief Examples optical README page
@@ -14,6 +13,12 @@ Simulation of optical photons generation and transport.
 Defines optical surfaces and exercises optical physics processes
 (Cerenkov, Scintillation, Absorption, Rayleigh, ...). Uses stacking
 mechanism to count the secondary particles generated.
+
+\link ExampleOpNovice2 OpNovice2 \endlink
+
+Investigate optical properties and parameters. Details of optical
+photon boundary interactions on a surface are recorded. Details 
+of optical photon generation and transport are recorded.
 
 \link ExampleLXe LXe \endlink
 

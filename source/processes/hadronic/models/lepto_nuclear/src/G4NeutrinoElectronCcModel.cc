@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutrinoElectronCcModel.cc 91806 2015-08-06 12:20:45Z gcosmo $
 //
 // Geant4 Header : G4NeutrinoElectronCcModel
 //
@@ -40,6 +39,7 @@
 #include "G4AntiNeutrinoE.hh"
 #include "G4MuonMinus.hh"
 #include "G4TauMinus.hh"
+#include "G4HadronicParameters.hh"
 
 using namespace std;
 using namespace CLHEP;
@@ -48,7 +48,7 @@ G4NeutrinoElectronCcModel::G4NeutrinoElectronCcModel(const G4String& name)
   : G4HadronicInteraction(name)
 {
   SetMinEnergy( 0.0*GeV );
-  SetMaxEnergy( 100.*TeV );
+  SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   SetMinEnergy(1.e-6*eV);  
 
   theNeutrinoE = G4NeutrinoE::NeutrinoE();

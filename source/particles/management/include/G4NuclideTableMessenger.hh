@@ -46,10 +46,7 @@
 class G4NuclideTable;
 
 class G4UIdirectory;
-//class G4UIcmdWithoutParameter;
-//class G4UIcmdWithABool;
 class G4UIcmdWithADoubleAndUnit;
-//class G4UIcmdWithAnInteger; 
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
@@ -70,7 +67,6 @@ class G4NuclideTableMessenger: public G4UImessenger
     G4NuclideTable* theNuclideTable;
 
     G4UIdirectory *             thisDirectory;
-    //G4UIcmdWithoutParameter *   dumpCmd;
     G4UIcmdWithADoubleAndUnit * lifetimeCmd; 
     G4UIcmdWithADoubleAndUnit * lToleranceCmd; 
 };

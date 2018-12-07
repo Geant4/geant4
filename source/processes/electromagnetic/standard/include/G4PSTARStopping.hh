@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PSTARStopping.hh 96934 2016-05-18 09:10:41Z gcosmo $
 
 #ifndef G4PSTARStopping_h
 #define G4PSTARStopping_h 1
@@ -98,7 +97,7 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4int G4PSTARStopping:: GetIndex (const G4Material* mat) const
+inline G4int G4PSTARStopping::GetIndex (const G4Material* mat) const
 {  
   G4int idx = -1;
   for (G4int i=0; i<nvectors; ++i){

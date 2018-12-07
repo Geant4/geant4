@@ -1,0 +1,4 @@
+/run/initialize
+/detector/reflection specular
+/control/execute Source.mac
+/run/beamOn 100

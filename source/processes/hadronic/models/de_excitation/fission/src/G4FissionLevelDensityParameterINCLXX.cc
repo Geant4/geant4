@@ -24,34 +24,31 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionLevelDensityParameterINCLXX.cc 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by D. Mancusi (6th October 2014)
 //
 
 #include "G4FissionLevelDensityParameterINCLXX.hh"
-#include "G4HadronicException.hh"
-
+#include "G4NuclearLevelData.hh"
 
 G4FissionLevelDensityParameterINCLXX::G4FissionLevelDensityParameterINCLXX() :
-  afanLow(1.02),
-  afanHigh(1.02),
+  afanLow(1.03),
+  afanHigh(1.05),
   ZLow(84),
   ZHigh(89)
 {
   UpdateAfanSlope();
+  fNucData = G4NuclearLevelData::GetInstance();
 }
 
 G4FissionLevelDensityParameterINCLXX::~G4FissionLevelDensityParameterINCLXX()
 {}
 
-
 G4double G4FissionLevelDensityParameterINCLXX::
 LevelDensityParameter(G4int A, G4int Z, G4double U) const 
 {
-  G4double EvapLDP = 
-    theEvaporationLevelDensityParameter.LevelDensityParameter(A,Z,U);
+  G4double EvapLDP = fNucData->GetLevelDensity(Z, A, U); 
 
   if(Z >= ZHigh)     { EvapLDP *= afanHigh; }
   else if(Z <= ZLow) { EvapLDP *= afanLow; }
@@ -63,7 +60,7 @@ LevelDensityParameter(G4int A, G4int Z, G4double U) const
 
 void G4FissionLevelDensityParameterINCLXX::UpdateAfanSlope() {
   if(ZHigh!=ZLow)
-    afanSlope = (afanHigh-afanLow)/((double)(ZHigh-ZLow));
+    afanSlope = (afanHigh-afanLow)/((G4double)(ZHigh-ZLow));
   else
     afanSlope = 0.;
 }

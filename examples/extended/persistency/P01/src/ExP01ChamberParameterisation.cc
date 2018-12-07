@@ -27,7 +27,6 @@
 /// \brief Implementation of the ExP01ChamberParameterisation class
 //
 //
-// $Id: ExP01ChamberParameterisation.cc 82130 2014-06-11 09:26:44Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

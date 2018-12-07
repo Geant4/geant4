@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttValueFilterT.hh 108059 2017-12-19 15:13:34Z gcosmo $
 //
 // Templated class for G4AttValue filters.
 //

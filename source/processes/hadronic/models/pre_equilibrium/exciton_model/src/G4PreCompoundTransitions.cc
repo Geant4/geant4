@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.cc 96603 2016-04-25 13:29:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,11 +58,10 @@
 G4PreCompoundTransitions::G4PreCompoundTransitions() 
 {
   proton = G4Proton::Proton();
-  G4DeexPrecoParameters* param = 
-    G4NuclearLevelData::GetInstance()->GetParameters() ;
+  fNuclData = G4NuclearLevelData::GetInstance();
+  G4DeexPrecoParameters* param = fNuclData->GetParameters();
   FermiEnergy = param->GetFermiEnergy();
   r0 = param->GetTransitionsR0();
-  aLDP = param->GetLevelDensity();
 }
 
 G4PreCompoundTransitions::~G4PreCompoundTransitions() 
@@ -99,6 +97,7 @@ CalculateProbability(const G4Fragment & aFragment)
   // OPT=2 Transitions are calculated according to Gupta's formulae
   //
   static const G4double sixdpi2 = 6.0/CLHEP::pi2;
+  G4double GE = sixdpi2*U*fNuclData->GetLevelDensity(Z,A,U);
   if (useCEMtr) {
     // Relative Energy (T_{rel})
     G4double RelativeEnergy = 1.6*FermiEnergy + U/G4double(N);
@@ -165,7 +164,6 @@ CalculateProbability(const G4Fragment & aFragment)
     //   TransitionProb1 *= factor;
     
     // GE = g*E where E is Excitation Energy
-    G4double GE = sixdpi2*aLDP*A*U;
     G4double Fph = G4double(P*P+H*H+P-3*H)*0.25;
     
     if(!useNGB) { 
@@ -176,7 +174,7 @@ CalculateProbability(const G4Fragment & aFragment)
       static const G4double plimit = 100;
 
       //JMQ/AH  bug fixed: if (U-Fph < 0.0) 
-      if (GE-Fph1 > 0.0) { 
+      if (GE > Fph1) { 
         G4double x0 = GE-Fph;
 	G4double x1 = (N+1)*G4Log(x0/(GE-Fph1));
 	if(x1 < plimit) {
@@ -198,8 +196,7 @@ CalculateProbability(const G4Fragment & aFragment)
     TransitionProb1 = std::max(0.0, U*(4.2e+12 - 3.6e+10*U/G4double(N+1)))
       /(16*CLHEP::c_light); 
 
-    if (!useNGB && N > 1) {
-      G4double GE = sixdpi2*aLDP*A*U; 
+    if (!useNGB && N > 1) { 
       TransitionProb2 = ((N-1)*(N-2)*P*H)*TransitionProb1/(GE*GE);  
     }
   }

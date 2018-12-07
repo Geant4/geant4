@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleRE05.cc 110007 2018-05-14 08:23:07Z gcosmo $
 //
 /// \file RE05/exampleRE05.cc
 /// \brief Main program of the RE05 example

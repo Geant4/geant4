@@ -27,7 +27,6 @@
 /// \brief Definition of the ExN02TrackerSD class
 //
 //
-// $Id: ExN02TrackerSD.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

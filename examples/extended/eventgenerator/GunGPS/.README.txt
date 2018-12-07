@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "eventgenerator/GunGPS/.README.txt"
 ///\brief Example GunGPS README page

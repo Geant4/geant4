@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc 110572 2018-05-30 13:08:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -475,16 +474,7 @@ void G4VEmModel::SetCrossSectionTable(G4PhysicsTable* p, G4bool isLocal)
 
 void  G4VEmModel::ModelDescription(std::ostream& outFile) const
 {
-  ModelDescription(outFile, G4String("\n")); 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void  G4VEmModel::ModelDescription(std::ostream& outFile,
-                                   G4String endOfLine) const
-{
-  outFile << "The description for this model has not been written yet."
-          << endOfLine;
+  outFile << "The description for this model has not been written yet.\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

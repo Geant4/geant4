@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc 101714 2016-11-22 08:53:13Z gcosmo $
 //
 
 #include <CLHEP/Units/PhysicalConstants.h>

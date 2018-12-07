@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryWorkspace.cc 100429 2016-10-21 13:00:52Z gcosmo $
 //
 // 
 // Class G4GeometryWorkspace - implementation
@@ -49,7 +48,11 @@
 namespace
 {
   G4Mutex solidclone = G4MUTEX_INITIALIZER;
+  G4GeometryWorkspace::pool_type thePool;
 }
+
+G4GeometryWorkspace::pool_type*
+G4GeometryWorkspace::GetPool() { return &thePool; }
 
 // ----------------------------------------------------------------------
 //

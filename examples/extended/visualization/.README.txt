@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "visualization/.README.txt"
 ///\brief Examples visualization README page

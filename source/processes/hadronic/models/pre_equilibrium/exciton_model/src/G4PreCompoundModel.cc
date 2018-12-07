@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc 108685 2018-02-27 07:58:38Z gcosmo $
 //
 // by V. Lara
 //
@@ -75,9 +74,10 @@ G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler* ptr)
   //G4cout << "### NEW PrecompoundModel " << this << G4endl;
   if(!ptr) { SetExcitationHandler(new G4ExcitationHandler()); }
 
+  fNuclData = G4NuclearLevelData::GetInstance();
   proton = G4Proton::Proton();
   neutron = G4Neutron::Neutron();
-  fLevelDensity = fLimitEnergy = 0.0;
+  fLimitEnergy = 0.0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -105,11 +105,8 @@ void G4PreCompoundModel::InitialiseModel()
 
   //G4cout << "G4PreCompoundModel::InitialiseModel() started" << G4endl;
 
-  G4DeexPrecoParameters* param = 
-    G4NuclearLevelData::GetInstance()->GetParameters();
-  
-  // 12/pi2 factor is used in real computation
-  fLevelDensity = param->GetLevelDensity()*12.0/CLHEP::pi2;
+  G4DeexPrecoParameters* param = fNuclData->GetParameters();
+
   fLimitEnergy  = param->GetPrecoLowEnergy();
 
   useSCO = param->UseSoftCutoff();
@@ -220,13 +217,16 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
   
   // main loop  
   G4int count = 0;
+  static const G4double ldfact = 12.0/CLHEP::pi2;
   static const G4int countmax = 1000;
   for (;;) {
     //G4cout << "### PreCompound loop over fragment" << G4endl;
     //G4cout << aFragment << G4endl;
+    G4double U = aFragment.GetExcitationEnergy();
+    Z = aFragment.GetZ_asInt();
+    A = aFragment.GetA_asInt();
     G4int EquilibriumExcitonNumber = 
-      G4lrint(std::sqrt(aFragment.GetExcitationEnergy()
-			*aFragment.GetA_asInt()*fLevelDensity));
+      G4lrint(std::sqrt(ldfact*U*fNuclData->GetLevelDensity(Z, A, U)));
     //   
     //    G4cout<<"Neq="<<EquilibriumExcitonNumber<<G4endl;
     //
@@ -273,9 +273,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
       //                        approximation (critical exciton number)
       //V.Ivanchenko (May 2011) added check on number of nucleons
       //                        to send a fragment to FermiBreakUp
-      if(!go_ahead || P1 <= P2+P3 || 
-	 aFragment.GetZ_asInt() < minZ || aFragment.GetA_asInt() < minA ||
-	 (aFragment.GetExcitationEnergy() <= fLimitEnergy*aFragment.GetA_asInt()))
+      if(!go_ahead || P1 <= P2+P3 || Z < minZ || A < minA || U <= fLimitEnergy*A)
 	{
 	  //G4cout<<"#4 EquilibriumEmission"<<G4endl; 
 	  PerformEquilibriumEmission(aFragment,Result);
@@ -416,8 +414,8 @@ void G4PreCompoundModel::ModelDescription(std::ostream& outFile) const
     <<	"holes h.\n"
     <<	"At the preequilibrium stage of reaction, we follow the exciton model approach in ref. [1],\n"
     <<	"taking into account the competition among all possible nuclear transitions\n"
-    <<	"with ∆n = +2, −2, 0 (which are deﬁned by their associated transition probabilities) and\n"
-    <<	"the emission of neutrons, protons, deutrons, thritium and helium nuclei (also defined by\n"
+    <<	"with ∆n = +2, −2, 0 (which are defined by their associated transition probabilities) and\n"
+    <<	"the emission of neutrons, protons, deuterons, thritium and helium nuclei (also defined by\n"
     <<	"their associated emission  probabilities according to exciton model)\n"
     <<	"\n"
     <<	"[1] K.K. Gudima, S.G. Mashnik, V.D. Toneev, Nucl. Phys. A401 329 (1983)\n"

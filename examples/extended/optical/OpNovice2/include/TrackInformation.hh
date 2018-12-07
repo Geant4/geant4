@@ -27,7 +27,6 @@
 /// \brief Definition of the TrackInformation class
 //
 //
-// $Id: RE01TrackInformation.hh 97671 2016-06-07 08:25:00Z gcosmo $
 //
 
 #ifndef TrackInformation_h

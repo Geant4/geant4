@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.hh 110543 2018-05-29 13:38:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -39,7 +38,7 @@
  
 // Class Description:
 // This is a base class for neutron elastic hadronic cross section based on
-// data files from G4NEUTRONXSDATA data set 
+// data files from G4PARTICLEXSDATA data set 
 // Class Description - End
 
 #ifndef G4NeutronElasticXS_h

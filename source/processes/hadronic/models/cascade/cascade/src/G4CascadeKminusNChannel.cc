@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 
 #include "G4CascadeKminusNChannel.hh"
@@ -34,12 +33,12 @@ namespace {
   // Outgoing particle types of a given multiplicity
 
   static const G4int kmn2bfs[5][2] =
-    {{neu,kmi}, {pim,lam}, {pim,s0}, {pi0,sm}, {k0,xim}}; 
+    {{kmi,neu}, {pim,lam}, {pim,s0}, {pi0,sm}, {k0,xim}}; 
 
   static const G4int kmn3bfs[15][3] =
-    {{pro,pim,kmi}, {neu,pi0,kmi}, {neu,pim,k0b}, {pim,pi0,lam}, {pim,pim,sp},
+    {{kmi,pro,pim}, {kmi,neu,pi0}, {k0b,neu,pim}, {pim,pi0,lam}, {pim,pim,sp},
      {pim,pi0,s0},  {pi0,pi0,sm},  {pip,pim,sm},  {kmi,k0,lam},  {kmi,k0,s0},
-     {k0,k0b,sm},   {kpl,kmi,sm},  {pim,k0,xi0},  {pi0,k0,xim},  {pim,kpl,xim}};
+     {k0,k0b,sm},   {kpl,kmi,sm},  {k0,pim,xi0},  {k0,pi0,xim},  {kpl,pim,xim}};
 
   static const G4int kmn4bfs[34][4] =
     {{pro,pim,pi0,kmi}, {pro,pim,pim,k0b}, {neu,pi0,pi0,kmi}, {neu,pip,pim,kmi},

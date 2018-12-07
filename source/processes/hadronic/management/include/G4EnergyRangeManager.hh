@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.hh 98067 2016-07-01 16:33:54Z gcosmo $
 //
  // Hadronic Process: Energy Range Manager
  // original by H.P. Wellisch

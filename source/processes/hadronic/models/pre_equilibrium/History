@@ -14,9 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+09-Nov-2018 G.Cosmo hadr-pre-V10-04-02
+- G4PreCompoundModel: fixed printout typos.
+
+18-Oct-2018 V.Ivanchenko hadr-pre-V10-04-01
+- G4VPreCompoundFragment, G4HETCChargedFragment, G4HETCFragment, 
+  G4HETCNeutron, G4PreCompoundFragment, G4PreCompoundIon, 
+  G4PreCompoundNucleon, G4PreCompoundModel, G4PreCompoundEmission,
+  G4PreCompoundTransitions, G4GNASHTransitions - updaed usage
+    of level density parameterisation according de-excitation
+    sub-library
+
 26-Feb-2018 V.Ivanchenko hadr-pre-V10-04-00
 - G4PreCompoundEmission, G4PreCompoundFragment, G4PreCompoundNucleon
-    fxied computations for OPT=1,2
+    fixed computations for OPT=1,2
 - G4PreCompoundModel - fixed initialisation
 - G4PreCompoundFragmentVector - moved inlined methods to the source
 

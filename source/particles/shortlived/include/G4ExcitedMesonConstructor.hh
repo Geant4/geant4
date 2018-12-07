@@ -30,7 +30,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesonConstructor.hh 67971 2013-03-13 10:13:24Z gcosmo $
 //
 // 
 // --------------------------------------------------------------

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 /*
-Author: Susanna Guatelli
+Author: Susanna Guatelli, University of Wollongong, Australia
 */
 // The class G4HumanPhantomAnalysisManager creates and manages ntuples
 

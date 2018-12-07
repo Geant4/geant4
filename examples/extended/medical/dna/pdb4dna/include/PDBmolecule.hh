@@ -37,7 +37,6 @@
 // november 2013
 // --------------------------------------------------------------
 //
-// $Id$
 //
 /// \file PDBmolecule.hh
 /// \brief Definition of the PDBmolecule class

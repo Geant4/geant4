@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.hh 107062 2017-11-01 15:01:02Z gcosmo $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
@@ -46,6 +45,7 @@
 
 class G4VPreCompoundEmissionFactory;
 class G4Pow;
+class G4NuclearLevelData;
 
 class G4PreCompoundEmission
 {
@@ -86,7 +86,8 @@ private:
   //==============
 
   G4Pow* g4calc;
-  G4double fLevelDensity;
+  G4NuclearLevelData* fNuclData;
+
   G4double fFermiEnergy;
 
   // A vector with the allowed emission fragments 

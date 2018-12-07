@@ -1,4 +1,3 @@
-$Id: History 110139 2018-05-16 07:33:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,43 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Dec   4, 2018 J.Apostolakis   - fieldex01-V10-04-06
+- Corrections to use arguments of methods in F01RunAction. 
+  Fixes compilation warnings.
+- Added information to README, .README.txt about new choice of
+   FSAL drivers and choices to control killing of particles looping
+   in low density medium with strong field.
+
+Dec   3, 2018 J.Apostolakis   - fieldex01-V10-04-05
+- field01.cc: Added code to demonstrate use of G4PhysicsListHelper's
+  UseLowLooperThresholds / UseHighLooperThresholds method
+- Added F01RunAction class to demonstrate fine grained control
+  of G4(Coupled)Transportation's parameters for (killing) looping
+  tracks.  ( Tracks which take too many iterations to finish
+  integration - typically due to electrons in vacuum, but also
+  can affect other charged particles. )
+- field01.cc, F01FieldSetup and F01DetectorConstruction:
+  enable use of FSAL stepper and driver. ( To use it uncomment line
+  in field01.cc )
+
+Nov  12, 2018 J.Apostolakis   - fieldex01-V10-04-04
+- Improved README, .README.txt and field01.in updating information
+  on steppers.  Noted that DoPri5 (Dormand Prince 7 4/5) is now
+  the default stepper, and proposed G4NystromRK4 as a fast alternative.
+
+July 27, 2018 I.Hrivnacova - fieldex01-V10-04-02,03
+- Added command:
+   /field/setField  Bx By Bz unit
+- Macro review and code clean-up:
+  - Removed EventAction, RunAction, RunActionMessenger
+    used only for storing random numbers, already available in kernel
+  - Separated other than visualization settings from vis.mac in a 
+    new init_vis.mac
+  - Added test for commands defined in the example at the end 
+    of field01.in macro
+  - Improved visualization of geometry
+  - Added "beamOn 10" button in gui.mac
+  - Updated README files
 
 May 15, 2018 J.Allison - fieldex01-V10-04-01
 - Remove G4UI_USE and G4VIS_USE.

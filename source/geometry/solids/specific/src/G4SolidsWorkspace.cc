@@ -33,6 +33,14 @@
 
 #include "G4AutoLock.hh"
 
+namespace
+{
+  G4SolidsWorkspace::pool_type thePool;
+}
+
+G4SolidsWorkspace::pool_type*
+G4SolidsWorkspace::GetPool() { return &thePool; }
+
 G4SolidsWorkspace::G4SolidsWorkspace(G4bool verbose)
    : fVerbose(verbose)
 {

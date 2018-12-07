@@ -1,0 +1,24 @@
+# Time (ps)    Gvalue Error
+#Shiraishi H, Katsumura Y, Hiroishi D, Ishigure K and Washio M 1988 Pulse-radiolysis study on the yield of hydrated electron at elevated temperatures J. Phys. Chem. 92 3011–7
+	5000	3.45	0.2
+	70000	2.93	0.2
+	300000	2.67	0.15
+
+			
+#Sumiyoshi T and Katayama M 1982 The yield of hydrated electrons at 30 picoseconds Chem. Lett. 11 1887–90
+	30	4.8	0.3
+
+			
+#Wolff R K, Bronskill M J, Aldrich J E and Hunt J W 1973 Picosecond pulse radiolysis. IV. Yield of the solvated electron at 30 picoseconds J. Phys. Chem. 77 1350–5
+	30	4	0.2
+	100000	2.67	0.1
+
+			
+#Buxton G V 1972 Nanosecond pulse radiolysis of aqueous solutions containing proton and hydroxyl radical scavengers Proc. R. Soc. A 328 1972
+	7000	3.556	0.084
+	45000	3.052	0.084
+	120000	2.8	0.08
+
+
+# Muroya Y et al 2005 A re-evaluation of the initial yield of the hydrated electron in the picosecond time range Radiat. Phys. Chem. 72 169–72
+	20	4.1	0.2

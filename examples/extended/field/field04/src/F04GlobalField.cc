@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04GlobalField.cc 96981 2016-05-19 09:42:40Z gcosmo $
 //
 /// \file field/field04/src/F04GlobalField.cc
 /// \brief Implementation of the F04GlobalField class

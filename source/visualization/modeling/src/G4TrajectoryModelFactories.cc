@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryModelFactories.cc 98766 2016-08-09 14:17:17Z gcosmo $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 

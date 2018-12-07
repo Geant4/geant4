@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/electronScattering2/.README.txt"
 ///\brief Example electronScattering2 README page

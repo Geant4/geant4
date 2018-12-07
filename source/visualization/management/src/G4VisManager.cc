@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc 110513 2018-05-28 07:37:38Z gcosmo $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -82,8 +81,8 @@
 #include "G4MTRunManager.hh"
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
-#include "G4GeometryWorkspacePool.hh"
-#include "G4SolidsWorkspacePool.hh"
+#include "G4GeometryWorkspace.hh"
+#include "G4SolidsWorkspace.hh"
 #include <deque>
 #include <typeinfo>
 #ifdef G4VIS_USE_STD11
@@ -464,26 +463,6 @@ void G4VisManager::RegisterMessengers () {
   
   G4UIcommand* directory;
   
-  // *Basic* top level commands were instantiated in the constructor
-  // so that they can be used immediately after instantiation of the
-  // vis manager.  Other top level and lower level commands are
-  // instantiated here.
-  
-  // Other top level commands...
-  RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
-  RegisterMessenger(new G4VisCommandDrawOnlyToBeKeptEvents);
-  RegisterMessenger(new G4VisCommandEnable);
-  RegisterMessenger(new G4VisCommandList);
-  RegisterMessenger(new G4VisCommandReviewKeptEvents);
-  
-  // Compound commands...
-  RegisterMessenger(new G4VisCommandDrawTree);
-  RegisterMessenger(new G4VisCommandDrawView);
-  RegisterMessenger(new G4VisCommandDrawLogicalVolume);
-  RegisterMessenger(new G4VisCommandDrawVolume);
-  RegisterMessenger(new G4VisCommandOpen);
-  RegisterMessenger(new G4VisCommandSpecify);
-  
   directory = new G4UIdirectory ("/vis/geometry/");
   directory -> SetGuidance("Operations on vis attributes of Geant4 geometry.");
   fDirectoryList.push_back (directory);
@@ -617,6 +596,23 @@ void G4VisManager::RegisterMessengers () {
   fDirectoryList.push_back (directory);
   RegisterMessenger(new G4VisCommandsViewerSet);
   
+  // *Basic* top level commands were instantiated in the constructor
+  // so that they can be used immediately after instantiation of the
+  // vis manager.  Other top level commands, including "compound commands"
+  // (i.e., commands that invoke other commands) are instantiated here.
+
+  RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
+  RegisterMessenger(new G4VisCommandDrawOnlyToBeKeptEvents);
+  RegisterMessenger(new G4VisCommandDrawTree);
+  RegisterMessenger(new G4VisCommandDrawView);
+  RegisterMessenger(new G4VisCommandDrawLogicalVolume);
+  RegisterMessenger(new G4VisCommandDrawVolume);
+  RegisterMessenger(new G4VisCommandEnable);
+  RegisterMessenger(new G4VisCommandList);
+  RegisterMessenger(new G4VisCommandOpen);
+  RegisterMessenger(new G4VisCommandReviewKeptEvents);
+  RegisterMessenger(new G4VisCommandSpecify);
+
   // List manager commands
   RegisterMessenger(new G4VisCommandListManagerList< G4VisModelManager<G4VTrajectoryModel> >
 		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));
@@ -1761,8 +1757,8 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
 //  << G4Threading::G4GetThreadId() << std::endl;
 
   // Set up geometry and navigation for a thread
-  G4GeometryWorkspacePool::GetInstance()->CreateAndUseWorkspace();
-  G4SolidsWorkspacePool::GetInstance()->CreateAndUseWorkspace();
+  G4GeometryWorkspace::GetPool()->CreateAndUseWorkspace();
+  G4SolidsWorkspace::GetPool()->CreateAndUseWorkspace();
   G4Navigator* navigator =
   G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
   navigator->SetWorldVolume

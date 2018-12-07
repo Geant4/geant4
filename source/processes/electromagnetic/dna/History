@@ -14,6 +14,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+01-09-2018, SI, tag emdna-V10-04-10
+renamed tag
+
+01-09-2018, SI, tag emdna-v10-04-09
+- bugzilla 2084
+https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2084
+
+30-07-2018, SI, tag emdna-V10-04-08
+- included upper energy limit of models (2)
+
+29-07-2018, SI, tag emdna-V10-04-07
+- included upper energy limit of models
+
+01-07-2018, SI, tag emdna-V10-04-06
+- added protection in Auger emission
+
+30-06-2018, MS, ZF, SI tag emdna-V10-04-05
+- updated Si mass in G4DNAGenericIonsManager
+
 22-06-2018, SI tag emdna-V10-04-04
 - fixed warnings in lepts models
 

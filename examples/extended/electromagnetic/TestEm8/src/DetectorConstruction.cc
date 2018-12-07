@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm8/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 109102 2018-03-27 07:38:33Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //

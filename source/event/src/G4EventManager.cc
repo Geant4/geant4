@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc 104522 2017-06-02 07:19:30Z gcosmo $
 //
 //
 //
@@ -117,7 +116,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
     currentEvent->SetRandomNumberStatusForProcessing(randomNumberStatusToG4Event); 
   }
 
-  // Reseting Navigator has been moved to G4EventManager, so that resetting
+  // Resetting Navigator has been moved to G4EventManager, so that resetting
   // is now done for every event.
   G4ThreeVector center(0,0,0);
   G4Navigator* navigator =

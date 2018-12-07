@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPPiKBuilder.hh 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -55,7 +54,7 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
-#include "G4VCrossSectionDataSet.hh"
+
 
 class G4QGSPPiKBuilder : public G4VPiKBuilder
 {
@@ -76,7 +75,6 @@ class G4QGSPPiKBuilder : public G4VPiKBuilder
     using G4VPiKBuilder::Build; //Prevent compiler warning
 
   private:
-    G4VCrossSectionDataSet* thePiData;
     G4TheoFSGenerator * theModel;
     G4GeneratorPrecompoundInterface * theCascade;
     G4QGSModel< G4QGSParticipants > * theStringModel;
@@ -84,7 +82,6 @@ class G4QGSPPiKBuilder : public G4VPiKBuilder
     G4QuasiElasticChannel * theQuasiElastic;
     G4QGSMFragmentation * theQGSM;
     G4double theMin;
-
 };
 
 // 2002 by J.P. Wellisch

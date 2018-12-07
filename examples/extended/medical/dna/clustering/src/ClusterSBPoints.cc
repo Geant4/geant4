@@ -31,7 +31,6 @@
 //
 // Authors: Henri Payno and Yann Perrot
 //
-// $Id$
 //
 /// \file ClusterSBPoints.cc
 /// \brief Implementation of the ClusterSBPoints class

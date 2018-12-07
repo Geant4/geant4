@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.hh 69469 2013-05-05 21:42:35Z ihrivnac $
 //
 /// \file optical/OpNovice2/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
@@ -46,6 +45,8 @@ class SteppingAction : public G4UserSteppingAction
     // method from the base class
     virtual void UserSteppingAction(const G4Step*);
 
+  private:
+    G4int fVerbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

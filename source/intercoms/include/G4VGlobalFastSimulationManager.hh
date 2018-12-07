@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGlobalFastSimulationManager.hh 106172 2017-09-15 13:03:57Z gcosmo $
 //
 // 
 // Abstract interface for GEANT4 Global Fast Simulation Manager.

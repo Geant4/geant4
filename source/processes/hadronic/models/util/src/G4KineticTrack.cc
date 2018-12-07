@@ -505,7 +505,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
   if(!theDecayTable)
   {
     G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
-    G4cerr << "  particle definiton has no decay table associated."<<G4endl;
+    G4cerr << "  particle definition has no decay table associated."<<G4endl;
     G4cerr << "  particle was "<<thisDefinition->GetParticleName()<<G4endl;
     return 0;
   }

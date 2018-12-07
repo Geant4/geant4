@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "exoticphysics/ucn/.README.txt"
 ///\brief Example ucn README page

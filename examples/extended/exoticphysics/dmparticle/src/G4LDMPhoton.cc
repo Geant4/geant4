@@ -26,7 +26,6 @@
 /// \file exoticphysics/dmparticle/src/G4LDMPhoton.cc
 /// \brief Implementation of the G4LDMPhoton class
 //
-// $Id: G4LDMPhoton.cc 66817 2013-01-12 16:16:08Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

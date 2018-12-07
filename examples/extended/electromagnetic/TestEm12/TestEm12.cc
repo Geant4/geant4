@@ -26,10 +26,10 @@
 /// \file electromagnetic/TestEm12/TestEm12.cc
 /// \brief Main program of the electromagnetic/TestEm12 example
 //
-// $Id: TestEm12.cc 109862 2018-05-09 12:18:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "G4Types.hh"
 
 #ifdef G4MULTITHREADED

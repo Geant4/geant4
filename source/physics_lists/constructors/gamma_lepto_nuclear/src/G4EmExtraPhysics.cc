@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.cc 66704 2013-01-10 18:20:17Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -75,6 +74,8 @@
 #include "G4NeutrinoElectronTotXsc.hh"
 #include "G4NeutrinoElectronCcModel.hh"
 #include "G4NeutrinoElectronNcModel.hh"
+#include "G4GammaGeneralProcess.hh"
+#include "G4LossTableManager.hh"
 
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
@@ -95,6 +96,7 @@ G4bool G4EmExtraPhysics::gmumuActivated = false;
 G4bool G4EmExtraPhysics::pmumuActivated = false;
 G4bool G4EmExtraPhysics::phadActivated  = false;
 G4bool G4EmExtraPhysics::fNuActivated  = false;
+G4bool G4EmExtraPhysics::fNuETotXscActivated  = false;
 
 G4double G4EmExtraPhysics::gmumuFactor  = 1.0;
 G4double G4EmExtraPhysics::pmumuFactor  = 1.0;
@@ -204,6 +206,11 @@ void G4EmExtraPhysics::NeutrinoActivated(G4bool val)
   fNuActivated = val;
 }
 
+void G4EmExtraPhysics::NuETotXscActivated(G4bool val)
+{
+  fNuETotXscActivated = val;
+}
+
 void G4EmExtraPhysics::SetNuEleCcBias(G4double bf)
 {
   if(bf > 0.0) fNuEleCcBias = bf;
@@ -260,9 +267,9 @@ void G4EmExtraPhysics::ConstructProcess()
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
   if(gnActivated) {
     if ( gLENDActivated != true ) {
-    theGNPhysics = new G4BertiniElectroNuclearBuilder(eActivated);
+      theGNPhysics = new G4BertiniElectroNuclearBuilder(eActivated);
     } else {
-    theGNPhysics = new G4LENDBertiniGammaElectroNuclearBuilder(eActivated);
+      theGNPhysics = new G4LENDBertiniGammaElectroNuclearBuilder(eActivated);
     }
     theGNPhysics->Build();
   }
@@ -276,7 +283,13 @@ void G4EmExtraPhysics::ConstructProcess()
   if(gmumuActivated) {
     theGammaToMuMu = new G4GammaConversionToMuons();
     theGammaToMuMu->SetCrossSecFactor(gmumuFactor);
-    ph->RegisterProcess(theGammaToMuMu, gamma);
+    G4GammaGeneralProcess* sp = 
+      (G4GammaGeneralProcess*)G4LossTableManager::Instance()->GetGammaGeneralProcess();
+    if(sp) {
+      sp->AddMMProcess(theGammaToMuMu);
+    } else {
+      ph->RegisterProcess(theGammaToMuMu, gamma);
+    }
   }  
   if(pmumuActivated) {
     thePosiToMuMu = new G4AnnihiToMuPair();
@@ -312,11 +325,18 @@ void G4EmExtraPhysics::ConstructProcess()
   if( fNuActivated )
   {
     theNuEleProcess = new G4NeutrinoElectronProcess(fNuDetectorName);
-    theNuEleProcess->SetBiasingFactors(fNuEleCcBias,fNuEleNcBias);
-
     theNuEleTotXsc = new G4NeutrinoElectronTotXsc();
-    theNuEleTotXsc->SetBiasingFactors(fNuEleCcBias,fNuEleNcBias);
 
+    if(fNuETotXscActivated)
+    {
+      G4double bftot = std::max(fNuEleCcBias,fNuEleNcBias);
+      theNuEleProcess->SetBiasingFactor(bftot);
+    }
+    else
+    {
+      theNuEleProcess->SetBiasingFactors(fNuEleCcBias,fNuEleNcBias);
+      theNuEleTotXsc->SetBiasingFactors(fNuEleCcBias,fNuEleNcBias);
+    }
     theNuEleProcess->AddDataSet(theNuEleTotXsc);
 
     G4NeutrinoElectronCcModel* ccModel = new G4NeutrinoElectronCcModel();

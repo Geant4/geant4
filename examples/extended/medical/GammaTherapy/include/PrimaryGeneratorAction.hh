@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh 103662 2017-04-20 14:58:33Z gcosmo $
 //
 /// \file medical/GammaTherapy/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class

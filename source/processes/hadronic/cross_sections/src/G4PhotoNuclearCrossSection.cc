@@ -1489,47 +1489,116 @@ static const G4double* SH[nHA]={
     SH0,SH1,SH2,SH3,SH4,SH5,SH6,SH7,SH8,SH9,SH10,SH11,SH12,SH13};
 
 
+
+// Bug 2092 fix (ejc3) Init deuteron_GDR ptr to null
 G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection()
-: G4VCrossSectionDataSet(Default_Name()), lastZ(0), lastSig(0), lastGDR(0), lastHEN(0), lastE(0), lastTH(0), lastSP(0),
-mNeut(G4NucleiProperties::GetNuclearMass(1,0)), mProt(G4NucleiProperties::GetNuclearMass(1,1))
+ : G4VCrossSectionDataSet(Default_Name()), lastZ(0), lastSig(0), lastGDR(0),
+   lastHEN(0), lastE(0), lastTH(0), lastSP(0), deuteron_GDR(0), deuteron_HR(0),
+   deuteron_TH(0), deuteron_SP(0),
+   mNeut(G4NucleiProperties::GetNuclearMass(1,0)),
+   mProt(G4NucleiProperties::GetNuclearMass(1,1))
 {
-    nistmngr = G4NistManager::Instance();
+  SetForAllAtomsAndEnergies(true);
+  nistmngr = G4NistManager::Instance();
     
-    for (G4int i=0;i<120;i++)
-    {
-        GDR.push_back(0);
-        HEN.push_back(0);
-        spA.push_back(0);
-        eTH.push_back(0);
-    }
+  for (G4int i = 0; i < 120; i++) {
+    GDR.push_back(0);
+    HEN.push_back(0);
+    spA.push_back(0);
+    eTH.push_back(0);
+  }
 }
+
 
 G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
 {
-    std::vector<G4double*>::iterator posi;
-    for(posi=GDR.begin(); posi<GDR.end(); posi++)
+  std::vector<G4double*>::iterator posi;
+  for (posi = GDR.begin(); posi < GDR.end(); posi++)
     { delete [] *posi; }
-    GDR.clear();
-    for(posi=HEN.begin(); posi<HEN.end(); posi++)
+  GDR.clear();
+  for (posi = HEN.begin(); posi < HEN.end(); posi++)
     { delete [] *posi; }
-    HEN.clear();
+  HEN.clear();
 }
+
 
 void
 G4PhotoNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) const
 {
-    outFile << "G4PhotoNuclearCrossSection provides the total inelastic\n"
-    << "cross section for photon interactions with nuclei.  The\n"
-    << "cross section is a parameterization of data which covers\n"
-    << "all incident gamma energies.\n";
+  outFile << "G4PhotoNuclearCrossSection provides the total inelastic\n"
+          << "cross section for photon interactions with nuclei.  The\n"
+          << "cross section is a parameterization of data which covers\n"
+          << "all incident gamma energies.\n";
 }
+
+
+// Method added to fix Bug 2092 (ejc3)
+G4bool
+G4PhotoNuclearCrossSection::IsIsoApplicable(const G4DynamicParticle*, 
+                                            G4int Z, G4int A,
+                                            const G4Element*, 
+                                            const G4Material*)
+{
+  // explicitly allow deuterium
+  if (Z == 1 && A == 2) return true;
+  return false;
+}
+
 
 G4bool
 G4PhotoNuclearCrossSection::IsElementApplicable(const G4DynamicParticle* /*particle*/,
                                                 G4int /*Z*/, const G4Material*)
 {
-    return true;
+  return true;
 }
+
+// Method added to fix Bug 2092 (ejc3)
+G4double
+G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
+                                               G4int Z, G4int A,
+                                               const G4Isotope*,
+                                               const G4Element*,
+                                               const G4Material* mat)
+{
+  // if not deuterium, go back to old style
+  if (!(Z == 1 && A == 2)) return GetElementCrossSection(aPart, Z, mat);
+
+  // Otherwise, follow a similar routine
+  const G4double Energy = aPart->GetKineticEnergy()/MeV;
+  if (Energy < THmin) return 0.;
+  G4double sigma = 0.;
+
+  // init the XS table if need be
+  if (deuteron_GDR == NULL) {
+    deuteron_TH = ThresholdEnergy(1,1); // threshold calculation is correct
+    deuteron_GDR = new G4double[nL];    // direct copies
+    for (G4int i = 0 ; i < nL ; i++) deuteron_GDR[i] = SL[0][i];   // A = 2 -> SL0
+    deuteron_HR = new G4double[nH];
+    for (G4int i = 0 ; i < nH ; i++) deuteron_HR[i] = SH[1][i];    // A = 2 -> SH1
+    deuteron_SP = 1;                    // as would be assigned for proton
+  }
+
+  // =================== now the "magic" formula ===================
+  if (Energy < deuteron_TH) {
+    return 0.;
+
+  } else if (Energy < Emin) {  // GDR region (approximated in E, not in lnE)
+    sigma = EquLinearFit(Energy,nL,THmin,dE,deuteron_GDR);
+
+  } else if (Energy < Emax) {                  // High Energy region
+    G4double lE = G4Log(Energy);
+    sigma = EquLinearFit(lE,nH,milE,dlE,deuteron_HR);
+
+  } else {           // UHE region (calculation, but not so frequent)
+    G4double lE = G4Log(Energy);
+    sigma = deuteron_SP*(poc*(lE-pos)+shd*std::exp(-reg*lE));
+  }
+  // End of "sigma" calculation
+    
+  if(sigma < 0.) return 0.;
+  return sigma*millibarn;
+}
+
 
 // The main member function giving the gamma-A cross section
 // (E in GeV, CS in mb) <-??????? GeV ??????? (WP)

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleiModel.cc 71989 2013-07-02 17:12:22Z mkelsey $
 //
 // For the best approximation to a physical-units model, set the following:
 //	setenv G4NUCMODEL_XSEC_SCALE   0.1
@@ -211,16 +210,21 @@ const G4double G4NucleiModel::kaon_vp       = 0.015;
 const G4double G4NucleiModel::hyperon_vp    = 0.030;
 
 namespace {
-  const G4double kebins[] =
-    {  0.0,  0.01, 0.013, 0.018, 0.024, 0.032, 0.042, 0.056, 0.075, 0.1,
-       0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
-       2.4,  3.2,  4.2,   5.6,   7.5,   10.0,  13.0,  18.0,  24.0, 32.0 };
+  // Quasideuteron absorption cross section is taken to be the 
+  // deuteron photo-disintegration cross section (gam + D -> p + n)
+  // Values taken from smooth curve drawn through data from 2.4 - 500 MeV, 
+  // plus angle integration of JLab data from 0.5 - 3 GeV
+  //    M. Mirazita et al., Phys. Rev. C 70, 014005 (2004)
+  // Points above 3 GeV are extrapolated.
+  const G4double kebins[] = {
+      0.0,  0.0024, 0.0032, 0.0042, 0.0056, 0.0075, 0.01,  0.024, 0.075, 0.1,
+      0.13, 0.18,   0.24,   0.32,   0.42,   0.56,   0.75,  1.0,   1.3,   1.8,
+      2.4,  3.2,    4.2,    5.6,    7.5,   10.0,   13.0,  18.0,  24.0,  32.0 };
 
-  const G4double gammaQDxsec[30] =
-    { 2.8,    1.3,    0.89,   0.56,   0.38,   0.27,   0.19,   0.14,   0.098,
-      0.071, 0.054,  0.0003, 0.0007, 0.0027, 0.0014, 0.001,  0.0012, 0.0005,
-      0.0003, 0.0002,0.0002, 0.0002, 0.0002, 0.0002, 0.0001, 0.0001, 0.0001,
-      0.0001, 0.0001, 0.0001 };
+  const G4double gammaQDxsec[30] = {
+     0.0,     0.7,    2.0,    2.2,    2.1,    1.8,    1.3,     0.4,     0.098,   0.071,
+     0.055,   0.055,  0.065,  0.045,  0.017,  0.007,  2.37e-3, 6.14e-4, 1.72e-4, 4.2e-5,
+     1.05e-5, 3.0e-6, 7.0e-7, 1.3e-7, 2.3e-8, 3.2e-9, 4.9e-10, 0.0,     0.0,     0.0 };
 }
 
 
@@ -240,6 +244,7 @@ G4NucleiModel::G4NucleiModel()
     fermiMomentum(G4CascadeParameters::fermiScale()),
     R_nucleon(G4CascadeParameters::radiusTrailing()),
     gammaQDscale(G4CascadeParameters::gammaQDScale()),
+    potentialThickness(1.0),
     neutronEP(neutron), protonEP(proton) {}
 
 G4NucleiModel::G4NucleiModel(G4int a, G4int z)
@@ -257,6 +262,7 @@ G4NucleiModel::G4NucleiModel(G4int a, G4int z)
     fermiMomentum(G4CascadeParameters::fermiScale()),
     R_nucleon(G4CascadeParameters::radiusTrailing()),
     gammaQDscale(G4CascadeParameters::gammaQDScale()),
+    potentialThickness(1.0),
     neutronEP(neutron), protonEP(proton) {
   generateModel(a,z);
 }
@@ -276,6 +282,7 @@ G4NucleiModel::G4NucleiModel(G4InuclNuclei* nuclei)
     fermiMomentum(G4CascadeParameters::fermiScale()),
     R_nucleon(G4CascadeParameters::radiusTrailing()),
     gammaQDscale(G4CascadeParameters::gammaQDScale()),
+    potentialThickness(1.0),
     neutronEP(neutron), protonEP(proton) {
   generateModel(nuclei);
 }
@@ -1123,8 +1130,10 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   G4int type = cparticle.getParticle().type();
   
   G4double r = pos.mag();
+  G4double p = mom.vect().mag();           // NAT
   G4double pr = pos.dot(mom.vect()) / r;
-  
+  G4double pperp2 = p*p - pr*pr;           // NAT
+
   G4int next_zone = cparticle.movingInsideNuclei() ? zone - 1 : zone + 1;
 
   // NOTE:  dv is the height of the wall seen by the particle  
@@ -1135,29 +1144,46 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   	   << getPotential(type,next_zone) << G4endl;
   }
 
-  G4double qv = dv * dv + 2.0 * dv * mom.e() + pr * pr;
-  
-  G4double p1r = 0.;
-  
+  G4double qv = dv*dv + 2.0*dv*mom.e() + pr*pr;
+  //  G4double qv = dv*dv + 2.0*dv*mom.m() + pr*pr;    // more correct? NAT
+  G4double p1r = 0.; 
+
+  // Perpendicular contribution to pr^2 after penetrating     // NAT
+  // potential, to leading order in thickness                 // NAT
+  G4double qperp = 2.0*pperp2*potentialThickness/r;           // NAT 
+
   if (verboseLevel > 3) {
     G4cout << " type " << type << " zone " << zone << " next " << next_zone
 	   << " qv " << qv << " dv " << dv << G4endl;
   }
 
-  if (qv <= 0.0) { 	// reflection
+  G4bool adjustpperp = false;                                   // NAT
+  G4double smallish = 0.001;                                    // NAT
+
+//  if (qv <= 0.0) { 	// reflection
+  if (qv <= 0.0 && qv+qperp <=0 ) {     // reflection         // NAT
     if (verboseLevel > 3) G4cout << " reflects off boundary" << G4endl;
     p1r = -pr;
     cparticle.incrementReflectionCounter();
-  } else {		// transition
+//  } else {            // transition
+
+  } else if (qv > 0.0) {		// standard transition  // NAT
     if (verboseLevel > 3) G4cout << " passes thru boundary" << G4endl;
     p1r = std::sqrt(qv);
     if (pr < 0.0) p1r = -p1r;
+    cparticle.updateZone(next_zone);
+    cparticle.resetReflection();
+
+  } else {   // transition via transverse kinetic energy (allowed for thick walls)  // NAT
+    if (verboseLevel > 3) G4cout << " passes thru boundary due to angular momentum" << G4endl;
+    p1r = smallish * pr; // don't want exactly tangent momentum
+    adjustpperp = true;
 
     cparticle.updateZone(next_zone);
     cparticle.resetReflection();
   }
   
-  G4double prr = (p1r - pr) / r;  
+  G4double prr = (p1r - pr)/r;  // change to radial momentum, divided by r
   
   if (verboseLevel > 3) {
     G4cout << " prr " << prr << " delta px " << prr*pos.x() << " py "
@@ -1165,7 +1191,17 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
 	   << std::fabs(prr*r) << G4endl;
   }
 
-  mom.setVect(mom.vect() + pos*prr);
+  if (adjustpperp) {                       // NAT
+    G4ThreeVector old_pperp = mom.vect() - pos*(pr/r);
+    G4double new_pperp_mag = std::sqrt(pperp2 + qv - p1r*p1r);
+    // new total momentum found by rescaling p_perp
+    mom.setVect(old_pperp * new_pperp_mag/std::sqrt(pperp2));
+    // add a small radial component to make sure that we propagate into new zone
+    mom.setVect(mom.vect() + pos*p1r/r);
+  } else {
+    mom.setVect(mom.vect() + pos*prr);
+  }
+
   cparticle.updateParticleMomentum(mom);
 }
 
@@ -1885,7 +1921,8 @@ G4NucleiModel::generateInteractionLength(const G4CascadParticle& cparticle,
 
 G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
   if (!useQuasiDeuteron(type)) {
-    G4cerr << " absorptionCrossSection only valid for incident pions" << G4endl;
+    G4cerr << "absorptionCrossSection() only valid for incident pions or gammas" 
+           << G4endl;
     return 0.;
   }
 
@@ -1900,8 +1937,6 @@ G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
     else if (ke < 1.0) csec = 3.6735 * (1.0-ke)*(1.0-ke);     
   }
 
-  // Photon cross-section is binned from parametrization by Mi. Kossov
-  // See below for initialization of gammaQDinterp, gammaQDxsec
   if (type == photon) {
     csec = gammaQDinterp.interpolate(ke, gammaQDxsec) * gammaQDscale;
   }

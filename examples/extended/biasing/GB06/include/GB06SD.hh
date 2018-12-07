@@ -26,7 +26,6 @@
 /// \file GB06/include/GB06SD.hh
 /// \brief Definition of the GB06SD class
 //
-// $Id: GB06SD.hh $
 //
 
 #ifndef GB06SD_h

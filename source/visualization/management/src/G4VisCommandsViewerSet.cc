@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc 109510 2018-04-26 07:15:57Z gcosmo $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -512,8 +511,8 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
    "\nTo prevent them beating the light front at all:"
    "\n  /vis/viewer/set/timeWindow/displayLightFront true -90 0 0 mm -0.01 ns");
   fpCommandTimeWindowDisplayLightFront->SetGuidance(timeWindowGuidance);
-  parameter = new G4UIparameter ("displayLightFront", 'b', omitable = false);
-  parameter->SetDefaultValue(false);
+  parameter = new G4UIparameter ("displayLightFront", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
   fpCommandTimeWindowDisplayLightFront->SetParameter(parameter);
   parameter = new G4UIparameter ("originX", 'd', omitable = true);
   parameter->SetDefaultValue(0.);

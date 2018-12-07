@@ -1,4 +1,3 @@
-# $Id: fanoCavity.in 106553 2017-10-13 06:40:50Z gcosmo $
 #
 /control/verbose 1
 /control/cout/ignoreThreadsExcept 0

@@ -58,8 +58,6 @@
   o G4LindhardSorensenIonModel, G4LindhardSorensenData: new relativistic ion 
     ionisation model.
   o Introduced switch in cross-sections to allow transuranic elements.
-  o Implemented simple algorithm in visualization to allow colouring of
-    detector elements based on materials density.
   o Removed unnecessary checks of process manager for generic ion and muonic
     atom in G4SteppingManager.
   o Implemented simple algorithm in visualization to allow colouring of
@@ -839,8 +837,6 @@ List of features and fixes included in this Beta release since 10.4.p02:
       o Use MixMax default random number generator.
       o Removed obsloete class PhysListEmStandardSSM.
       o PhysicsList: make Opt4 default, removed local instantiation of G4Decay.
-      o Corrected input macros to optimise output.
-    + extended/electromagnetic/TestEm5
       o Corrected input macros to optimise output.
     + extended/electromagnetic/TestEm7
       o SteppingAction: added edep at end of step for photo-electric.

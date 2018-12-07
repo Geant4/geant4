@@ -26,7 +26,6 @@
 /// \file persistency/P03/include/ExTGRCLineProcessor.hh
 /// \brief Definition of the ExTGRCLineProcessor class
 //
-// $Id: ExTGRCLineProcessor.hh 68025 2013-03-13 13:43:46Z gcosmo $
 
 #ifndef ExTGRCLineProcessor_H
 #define ExTGRCLineProcessor_H 1

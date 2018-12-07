@@ -27,7 +27,6 @@
 /// \brief Definition of the HistoManager class
 //
 //
-// $Id: HistoManager.hh 76464 2013-11-11 10:22:56Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +38,7 @@
 
 #include "g4root.hh"
 //#include "g4xml.hh"
+//#include "g4csv.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

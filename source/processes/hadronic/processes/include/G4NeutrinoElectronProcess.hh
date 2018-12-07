@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoElectronProcess.hh 90262 2015-05-22 09:03:22Z gcosmo $
 //
 // Geant4 Neutrino Electron Scattering Process -- header file
 // 
@@ -70,7 +69,8 @@ public:
   virtual void ProcessDescription(std::ostream& outFile) const;
 
   void SetBiasingFactors(G4double bfCc, G4double bfNc);
-
+  void SetBiasingFactor(G4double bf);
+  G4double GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *);
 private:
 
   // hide assignment operator as private 
@@ -82,7 +82,7 @@ private:
   G4LogicalVolume* fEnvelope;
   G4String fEnvelopeName;
   G4NeutrinoElectronTotXsc* fTotXsc;
-  G4double fNuEleCcBias, fNuEleNcBias;
+  G4double fNuEleCcBias, fNuEleNcBias, fNuEleTotXscBias;
   G4SafetyHelper* safetyHelper;
 };
 

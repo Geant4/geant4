@@ -60,7 +60,7 @@ G4MPIsession::G4MPIsession(G4VUIshell* ashell)
     if( ashell ) {
       shell_ = ashell;
     } else {
-      if ( g4mpi_-> GetSize() == 1 && ::tcsh_build ) shell_ = new G4UItcsh;
+      if ( g4mpi_-> GetTotalSize() == 1 && ::tcsh_build ) shell_ = new G4UItcsh;
       else shell_ = new G4UIcsh;
     }
   } else {

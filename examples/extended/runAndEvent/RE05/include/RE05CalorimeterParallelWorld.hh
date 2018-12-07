@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05CalorimeterParallelWorld.hh 68698 2013-04-05 08:41:22Z gcosmo $
 //
 /// \file RE05/include/RE05CalorimeterParallelWorld.hh
 /// \brief Definition of the RE05CalorimeterParallelWorld class

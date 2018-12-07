@@ -56,14 +56,18 @@ namespace G4INCL {
 	
 	void NKbToNKbpiChannel::fillFinalState(FinalState *fs) {
 		
-        // p K0b -> p K0b pi0 (1/2)
-        // p K0b -> p K- pi+ (1)
-        // p K0b -> n K0b pi+ (1/2)
+        // ratio
+        // p K- (28)    p K0b (20)
         //
-        // p K- -> p K- pi0 (1/2)
-        // p K- -> p K0b pi- (2/3)
-        // p K- -> n K- pi+ (3/4)
-        // p K- -> n K0b pi0 (2)
+        // p K- -> p K- pi0      (6)*
+        // p K- -> p K0b pi-     (7)*
+        // p K- -> n K- pi+      (9)*
+        // p K- -> n K0b pi0     (6)
+        //
+        // p K0b -> p K0b pi0    (4)
+        // p K0b -> p K- pi+     (10)*
+        // p K0b -> n K0b pi+    (6)*
+        //
         
 		Particle *nucleon;
 		Particle *kaon;
@@ -86,27 +90,27 @@ namespace G4INCL {
 		ParticleType PionType;
 		
 		if(iso == 2 || iso == -2){
-			if(rdm*4. < 1.){
+			if(rdm*5. < 1.){
 				PionType = PiZero;
 			}
-			else if(rdm*4. < 3.){
-				PionType = ParticleTable::getPionType(iso);
-				kaon->setType(ParticleTable::getAntiKaonType(-iso/2));
-			}
-			else{
+			else if(rdm*2. < 1.){
 				PionType = ParticleTable::getPionType(iso);
 				nucleon->setType(ParticleTable::getNucleonType(-iso/2));
 			}
+			else{
+				PionType = ParticleTable::getPionType(iso);
+				kaon->setType(ParticleTable::getAntiKaonType(-iso/2));
+			}
 		}
 		else{
-			if(rdm*47. < 6.){
+			if(rdm*28. < 6.){
 				PionType = PiZero;
 			}
-			else if(rdm*47. < 14.){
+			else if(rdm*28. < 13.){
 				kaon->setType(ParticleTable::getAntiKaonType(iso_n));
 				PionType = ParticleTable::getPionType(-2*iso_n);
 			}
-			else if(rdm*47. < 23.){
+			else if(rdm*28. < 22.){
 				nucleon->setType(ParticleTable::getNucleonType(-iso_n));
 				PionType = ParticleTable::getPionType(2*iso_n);
 			}

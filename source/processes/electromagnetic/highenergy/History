@@ -1,4 +1,3 @@
-$Id: History 109567 2018-05-02 07:04:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 Sept 2018: D.Sawkey (emhighenergy-V10-04-02)
+- G4eeToHadrons, G4eeToHadronsMultiModel, G4hBremsstrahlung, G4hPairProduction,
+  G4hhIonisation, G4mplIonisation: automatic documentation format now rST
 
 01 May 2018: V.Ivant (emhighenergy-V10-04-01)
 - G4eeToHadronsMultiModel - cleanup of headers

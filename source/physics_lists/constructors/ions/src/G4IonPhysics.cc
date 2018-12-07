@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonPhysics.cc 80671 2014-05-06 13:59:16Z gcosmo $
-// GEANT4 tag $Name: $
 //
 //---------------------------------------------------------------------------
 //
@@ -60,6 +58,8 @@
 #include "G4BuilderType.hh"
 #include "G4HadronicInteractionRegistry.hh"
 
+#include "G4HadronicParameters.hh"
+
 using namespace std;
 
 // factory
@@ -67,20 +67,14 @@ using namespace std;
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4IonPhysics);
 
-G4ThreadLocal G4bool G4IonPhysics::wasActivated = false;
-G4ThreadLocal G4BinaryLightIonReaction* G4IonPhysics::theIonBC = 0;
-G4ThreadLocal G4HadronicInteraction*  G4IonPhysics::theFTFP = 0;
-G4ThreadLocal G4VCrossSectionDataSet* G4IonPhysics::theNuclNuclData = 0; 
-G4ThreadLocal G4VComponentCrossSection*  G4IonPhysics::theGGNuclNuclXS = 0;
-G4ThreadLocal G4FTFBuilder* G4IonPhysics::theBuilder;
+G4ThreadLocal G4FTFBuilder* G4IonPhysics::theBuilder=nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4IonPhysics::G4IonPhysics(G4int ver)
-  : G4VPhysicsConstructor("ionInelasticFTFP_BIC"),verbose(ver)
+  : G4IonPhysics("ionInelasticFTFP_BIC")
 {
-  SetPhysicsType(bIons);
-  if(verbose > 1) { G4cout << "### G4IonPhysics" << G4endl; }
+  verbose = ver;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,20 +83,18 @@ G4IonPhysics::G4IonPhysics(const G4String& nname)
   : G4VPhysicsConstructor(nname),verbose(1)
 {
   SetPhysicsType(bIons);
-  if(verbose > 1) { G4cout << "### G4IonPhysics" << G4endl; }
+  if(verbose > 1) { G4cout << "### IonPhysics: " << nname << G4endl; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4IonPhysics::~G4IonPhysics()
 {
-  //Explictly setting pointers to zero is actually needed.
-  //These are static variables, in case we restart threads we need to re-create objects
-  delete theBuilder; theBuilder = 0;
-  delete theGGNuclNuclXS; theGGNuclNuclXS = 0;
-  delete theNuclNuclData; theNuclNuclData = 0;
-  delete theIonBC; theIonBC = 0;
-  delete theFTFP; theFTFP = 0;
+  // Explictly setting pointers to zero is actually needed.
+  // These are static variables, in case we restart threads 
+  // we need to re-create objects
+  delete theBuilder; 
+  theBuilder = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -118,10 +110,7 @@ void G4IonPhysics::ConstructParticle()
 
 void G4IonPhysics::ConstructProcess()
 {
-  if(wasActivated) { return; }
-  wasActivated = true;
-
-  G4double emax = 100.*TeV;
+  G4double emax = G4HadronicParameters::Instance()->GetMaxEnergy();
 
   G4HadronicInteraction* p =
     G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
@@ -129,24 +118,33 @@ void G4IonPhysics::ConstructProcess()
   if(!thePreCompound) { thePreCompound = new G4PreCompoundModel; }
 
   // Binary Cascade
-  theIonBC = new G4BinaryLightIonReaction(thePreCompound);
+  G4HadronicInteraction* theIonBC = 
+    new G4BinaryLightIonReaction(thePreCompound);
   theIonBC->SetMinEnergy(0.0);
   theIonBC->SetMaxEnergy(4*GeV);
 
   // FTFP
-  theBuilder = new G4FTFBuilder("FTFP",thePreCompound);
-  theFTFP = theBuilder->GetModel();
-  theFTFP->SetMinEnergy(2*GeV);
-  theFTFP->SetMaxEnergy(emax);
+  G4HadronicInteraction* theFTFP = nullptr;
+  if(emax > theIonBC->GetMaxEnergy()) {
+    theBuilder = new G4FTFBuilder("FTFP",thePreCompound);
+    theFTFP = theBuilder->GetModel();
+    theFTFP->SetMinEnergy(2*GeV);
+    theFTFP->SetMaxEnergy(emax);
+  }
 
-  theNuclNuclData = 
-    new G4CrossSectionInelastic( theGGNuclNuclXS = new G4ComponentGGNuclNuclXsc() );
+  G4CrossSectionInelastic* theNuclNuclData = 
+    new G4CrossSectionInelastic(new G4ComponentGGNuclNuclXsc());
 
-  AddProcess("dInelastic", G4Deuteron::Deuteron(),false);
-  AddProcess("tInelastic",G4Triton::Triton(),false);
-  AddProcess("He3Inelastic",G4He3::He3(),true);
-  AddProcess("alphaInelastic", G4Alpha::Alpha(),true);
-  AddProcess("ionInelastic",G4GenericIon::GenericIon(),true);
+  AddProcess("dInelastic", G4Deuteron::Deuteron(),theIonBC,theFTFP,
+	     theNuclNuclData);
+  AddProcess("tInelastic",G4Triton::Triton(),theIonBC,theFTFP,
+	     theNuclNuclData);
+  AddProcess("He3Inelastic",G4He3::He3(),theIonBC,theFTFP,
+	     theNuclNuclData);
+  AddProcess("alphaInelastic", G4Alpha::Alpha(),theIonBC,theFTFP,
+	     theNuclNuclData);
+  AddProcess("ionInelastic",G4GenericIon::GenericIon(),theIonBC,theFTFP,
+	     theNuclNuclData);
 
   if(verbose > 1) {
     G4cout << "G4IonPhysics::ConstructProcess done! " 
@@ -157,17 +155,19 @@ void G4IonPhysics::ConstructProcess()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4IonPhysics::AddProcess(const G4String& name, 
-					       G4ParticleDefinition* part, 
-					       G4bool )//isIon)
+			      G4ParticleDefinition* part,
+			      G4HadronicInteraction* theIonBC,
+			      G4HadronicInteraction* theFTFP,
+			      G4VCrossSectionDataSet* xs)
 {
   G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, part);
   G4ProcessManager* pManager = part->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
     
-  hadi->AddDataSet(theNuclNuclData);
+  hadi->AddDataSet(xs);
     
   hadi->RegisterMe(theIonBC);
-  hadi->RegisterMe(theFTFP);
+  if(theFTFP) { hadi->RegisterMe(theFTFP); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc 107058 2017-11-01 14:54:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -36,39 +35,8 @@
 //
 // Creation date: 26.06.1996
 //
-// Modifications:
+// Modified by Michel Maire, Vladimir Ivanchenko, Andreas Schaelicke  
 //
-// 26-09-96 extension of the total crosssection above 100 GeV, M.Maire
-//  1-10-96 new type G4OrderedTable; ComputePartialSumSigma(), M.Maire
-// 16-10-96 DoIt() call to the non static GetEnergyCuts(), L.Urban
-// 13-12-96 Sign corrected in grejmax and greject
-//          error definition of screenvar, L.Urban
-// 20-03-97 new energy loss+ionisation+brems scheme, L.Urban
-// 07-04-98 remove 'tracking cut' of the diffracted particle, MMa
-// 13-08-98 new methods SetBining() PrintInfo()
-// 03-03-99 Bug fixed in LPM effect, L.Urban
-// 10-02-00 modifications , new e.m. structure, L.Urban
-// 07-08-00 new cross section/en.loss parametrisation, LPM flag , L.Urban
-// 21-09-00 corrections in the LPM implementation, L.Urban
-// 28-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 09-08-01 new methods Store/Retrieve PhysicsTable (mma)
-// 17-09-01 migration of Materials to pure STL (mma)
-// 21-09-01 completion of RetrievePhysicsTable() (mma)
-// 29-10-01 all static functions no more inlined (mma)
-// 08-11-01 particleMass becomes a local variable
-// 30-04-02 V.Ivanchenko update to new design
-// 23-12-02 Change interface in order to move to cut per region (VI)
-// 26-12-02 Secondary production moved to derived classes (VI)
-// 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
-// 08-08-03 STD substitute standard  (V.Ivanchenko)
-// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
-// 04-11-04 add gamma threshold (V.Ivanchenko)
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-// 22-05-06 Use gammaThreshold from manager (V.Ivantchenko)
-// 15-01-07 use SetEmModel() from G4VEnergyLossProcess (mma)
-//          use RelEmModel above 1GeV (AS &  VI)  
-// 13-11-08 reenable LPM switch (A.Schaelicke)
 // -------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -122,11 +90,11 @@ G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 
     G4double emin = param->MinKinEnergy();
     G4double emax = param->MaxKinEnergy();
-    G4double energyLimit = std::min(emax, GeV);
     G4VEmFluctuationModel* fm = nullptr;
 
     if (!EmModel(0)) { SetEmModel(new G4SeltzerBergerModel()); }
     EmModel(0)->SetLowEnergyLimit(emin);
+    G4double energyLimit = std::min(EmModel(0)->HighEnergyLimit(), GeV);
     EmModel(0)->SetHighEnergyLimit(energyLimit);
     EmModel(0)->SetSecondaryThreshold(param->BremsstrahlungTh());
     EmModel(0)->SetLPMFlag(false);
@@ -146,8 +114,7 @@ G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlung::StreamProcessInfo(std::ostream& out,
-                                          G4String endOfLine) const
+void G4eBremsstrahlung::StreamProcessInfo(std::ostream& out) const
 {
   if(EmModel(0)) {
     G4EmParameters* param = G4EmParameters::Instance();
@@ -157,7 +124,7 @@ void G4eBremsstrahlung::StreamProcessInfo(std::ostream& out,
     if(eth < DBL_MAX) { 
       out << ",  VertexHighEnergyTh(GeV)= " << eth/GeV; 
     }
-    out << endOfLine;
+    out << G4endl;
   }
 }
 
@@ -165,7 +132,7 @@ void G4eBremsstrahlung::StreamProcessInfo(std::ostream& out,
 
 void G4eBremsstrahlung::ProcessDescription(std::ostream& out) const
 {
-  out << "<strong>Bremsstrahlung</strong>";
+  out << "  Bremsstrahlung";
   G4VEnergyLossProcess::ProcessDescription(out);
 }
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootNtupleManager.cc 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -45,7 +44,8 @@ G4RootNtupleManager::G4RootNtupleManager(const G4AnalysisManagerState& state,
    fCreateMode(G4NtupleCreateMode::kUndefined),
    fFileManager(nullptr),
    fNtupleDirectory(nullptr),
-   fMainNtupleManagers()
+   fMainNtupleManagers(),
+   fRowWise(rowWise)
 {
   for ( G4int i=0; i<nofMainManagers; ++i) {
     fMainNtupleManagers.push_back(
@@ -64,7 +64,8 @@ G4RootNtupleManager::~G4RootNtupleManager()
 //_____________________________________________________________________________
 void G4RootNtupleManager::SetCreateMode()
 {
-// Set create mode if not yet defined
+// Set create mode if not yet defined, or reset it if ntuples are defined both
+// before and after open file 
 
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL4() ) 
@@ -93,6 +94,18 @@ void G4RootNtupleManager::SetCreateMode()
       }
     }
   }
+  
+  if ( fCreateMode == G4NtupleCreateMode::kNoMergeBeforeOpen &&
+    fFileManager->GetNtupleFile(0) )  {
+    fCreateMode = G4NtupleCreateMode::kNoMergeAfterOpen;
+    createMode = "G4NtupleCreateMode::kNoMergeAfterOpen";
+  }
+
+  if ( fCreateMode == G4NtupleCreateMode::kMainBeforeOpen &&
+       fFileManager->GetNtupleFile(0) )  {
+    fCreateMode = G4NtupleCreateMode::kMainAfterOpen;
+    createMode = "G4NtupleCreateMode::kMainAfterOpen";
+  }
 
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL2() ) 
@@ -116,7 +129,7 @@ void  G4RootNtupleManager::CreateTNtuple(
   
   ntupleDescription->fNtuple
     = new tools::wroot::ntuple(
-            *fNtupleDirectory, ntupleDescription->fNtupleBooking);
+            *fNtupleDirectory, ntupleDescription->fNtupleBooking, fRowWise);
   
   auto basketSize = fFileManager->GetBasketSize();
   ntupleDescription->fNtuple->set_basket_size(basketSize);
@@ -150,12 +163,15 @@ void G4RootNtupleManager::CreateTNtupleFromBooking(
 
 //_____________________________________________________________________________
 void G4RootNtupleManager::FinishTNtuple(
-  G4TNtupleDescription<tools::wroot::ntuple>* ntupleDescription)
+  G4TNtupleDescription<tools::wroot::ntuple>* ntupleDescription,
+  G4bool fromBooking)
 {
 // Create main ntuples
 
   // Set create mode if not yet defined
-  SetCreateMode();
+  if ( ! fromBooking ) {
+    SetCreateMode();
+  }
 
   // Create ntuple if file is open
   if ( fCreateMode == G4NtupleCreateMode::kNoMergeAfterOpen ) {

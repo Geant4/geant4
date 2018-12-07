@@ -27,7 +27,6 @@
 /// \brief Implementation of the B03ImportanceDetectorConstruction class
 //
 //
-// $Id: B03ImportanceDetectorConstruction.cc 70093 2013-05-23 09:03:57Z gcosmo $
 //
 
 #include "globals.hh"

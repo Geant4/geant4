@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.cc 68795 2013-04-05 13:24:46Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -57,9 +56,9 @@ G4Step::G4Step()
      fpSteppingControlFlag(NormalCondition),
      fFirstStepInVolume(false),
      fLastStepInVolume(false),
-     fSecondary(0),
-     nSecondaryByLastStep(0), secondaryInCurrentStep(),
-     fpVectorOfAuxiliaryPointsPointer(0)
+     fSecondary(nullptr),
+     nSecondaryByLastStep(0), secondaryInCurrentStep(nullptr),
+     fpVectorOfAuxiliaryPointsPointer(nullptr)
 {
   fpPreStepPoint  = new G4StepPoint();
   fpPostStepPoint = new G4StepPoint();
@@ -72,15 +71,19 @@ G4Step::~G4Step()
 /////////////////
 {
   delete fpPreStepPoint;
+  fpPreStepPoint = nullptr;
   delete fpPostStepPoint;
+  fpPostStepPoint = nullptr;
 
   secondaryInCurrentStep->clear();
   delete secondaryInCurrentStep;
+  secondaryInCurrentStep = nullptr;
 
-  if (fSecondary !=0 ) {
+  if (fSecondary != nullptr ) {
     fSecondary->clear();
     delete fSecondary;
   }
+  fSecondary = nullptr;
 }
 
 // Copy Counstructor and assignment operator
@@ -99,22 +102,24 @@ G4Step::G4Step(const G4Step& right)
      secondaryInCurrentStep(right.secondaryInCurrentStep),
      fpVectorOfAuxiliaryPointsPointer(right.fpVectorOfAuxiliaryPointsPointer)
 {
-  if (right.fpPreStepPoint !=0) {
+  if (right.fpPreStepPoint != nullptr) {
     fpPreStepPoint  = new G4StepPoint(*(right.fpPreStepPoint));
   } else {
     fpPreStepPoint  = new G4StepPoint();
   }
-  if (right.fpPostStepPoint !=0) {
+  if (right.fpPostStepPoint != nullptr) {
     fpPostStepPoint  = new G4StepPoint(*(right.fpPostStepPoint));
   } else {
     fpPostStepPoint  = new G4StepPoint();
   }
-
-  if (right.fSecondary !=0) {
+ 
+  if (right.fSecondary != nullptr) {
     fSecondary = new G4TrackVector(*(right.fSecondary));
   } else {
     fSecondary = new G4TrackVector();
   }
+
+  // secondaryInCurrentStep is cleared 
   secondaryInCurrentStep = new std::vector<CT>;
 }
 
@@ -134,24 +139,36 @@ G4Step& G4Step::operator=(const G4Step & right)
     secondaryInCurrentStep = right.secondaryInCurrentStep;
     fpVectorOfAuxiliaryPointsPointer = right.fpVectorOfAuxiliaryPointsPointer;
 
-    if (fpPreStepPoint !=0 ) delete fpPreStepPoint;
-    if (right.fpPreStepPoint !=0) {
+    if (fpPreStepPoint != nullptr ) delete fpPreStepPoint;
+    if (right.fpPreStepPoint != nullptr) {
       fpPreStepPoint  = new G4StepPoint(*(right.fpPreStepPoint));
     } else {
       fpPreStepPoint  = new G4StepPoint();
     }
-    if (fpPostStepPoint !=0 ) delete fpPostStepPoint;
-    if (right.fpPostStepPoint !=0) {
+    if (fpPostStepPoint !=nullptr ) delete fpPostStepPoint;
+    if (right.fpPostStepPoint != nullptr) {
       fpPostStepPoint  = new G4StepPoint(*(right.fpPostStepPoint));
     } else {
       fpPostStepPoint  = new G4StepPoint();
     }
-    if (right.fSecondary !=0) {
+    
+    if (fSecondary != nullptr ) {
+      fSecondary->clear();
+      delete fSecondary;
+    }
+    if (right.fSecondary != nullptr) {
       fSecondary = new G4TrackVector(*(right.fSecondary));
     } else {
       fSecondary = new G4TrackVector();
     }
-  }
+    
+    // secondaryInCurrentStep is not copied 
+    if ( secondaryInCurrentStep != nullptr ) {
+      secondaryInCurrentStep->clear();
+      delete secondaryInCurrentStep;
+    }
+    secondaryInCurrentStep = new std::vector<CT>;
+   }
   return *this;
 }
 

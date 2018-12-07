@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.cc 97520 2016-06-03 14:23:17Z gcosmo $
 //
 
 #include "G4DNAScreenedRutherfordElasticModel.hh"
@@ -36,20 +35,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
-//#define SR_VERBOSE
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DNAScreenedRutherfordElasticModel::
 G4DNAScreenedRutherfordElasticModel(const G4ParticleDefinition*,
                                     const G4String& nam) :
-    G4VEmModel(nam), isInitialised(false)
+G4VEmModel(nam), isInitialised(false)
 {
   fpWaterDensity = 0;
 
   lowEnergyLimit = 0 * eV;
   intermediateEnergyLimit = 200 * eV; // Switch between two final state models
   highEnergyLimit = 1. * MeV;
+  
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
 
@@ -213,34 +212,31 @@ CrossSectionPerVolume(const G4Material* material,
   G4double sigma=0.;
   G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
 
-  if(waterDensity!= 0.0)
+  if(ekin <= HighEnergyLimit() && ekin >= LowEnergyLimit())
   {
-    if(ekin < HighEnergyLimit() && ekin >= LowEnergyLimit())
-    {
-      G4double z = 10.;
-      G4double n = ScreeningFactor(ekin,z);
-      G4double crossSection = RutherfordCrossSection(ekin, z);
-      sigma = pi * crossSection / (n * (n + 1.));
-    }
-
-#ifdef SR_VERBOSE
-    if (verboseLevel > 2)
-    {
-      G4cout << "__________________________________" << G4endl;
-      G4cout << "=== G4DNAScreenedRutherfordElasticModel - XS INFO START"
-             << G4endl;
-      G4cout << "=== Kinetic energy(eV)=" << ekin/eV
-             << " particle : " << particleDefinition->GetParticleName()
-             << G4endl;
-      G4cout << "=== Cross section per water molecule (cm^2)=" << sigma/cm/cm
-             << G4endl;
-      G4cout << "=== Cross section per water molecule (cm^-1)="
-             << sigma*waterDensity/(1./cm) << G4endl;
-      G4cout << "=== G4DNAScreenedRutherfordElasticModel - XS INFO END"
-             << G4endl;
-    }
-#endif
+    G4double z = 10.;
+    G4double n = ScreeningFactor(ekin,z);
+    G4double crossSection = RutherfordCrossSection(ekin, z);
+    sigma = pi * crossSection / (n * (n + 1.));
   }
+
+#ifdef SR_VERBOSE 
+  if (verboseLevel > 2)
+  {
+    G4cout << "__________________________________" << G4endl;
+    G4cout << "=== G4DNAScreenedRutherfordElasticModel - XS INFO START"
+           << G4endl;
+    G4cout << "=== Kinetic energy(eV)=" << ekin/eV
+           << " particle : " << particleDefinition->GetParticleName()
+           << G4endl;
+    G4cout << "=== Cross section per water molecule (cm^2)=" << sigma/cm/cm
+           << G4endl;
+    G4cout << "=== Cross section per water molecule (cm^-1)="
+           << sigma*waterDensity/(1./cm) << G4endl;
+    G4cout << "=== G4DNAScreenedRutherfordElasticModel - XS INFO END"
+           << G4endl;
+  }
+#endif
 
   return sigma*waterDensity;
 }
@@ -321,44 +317,41 @@ SampleSecondaries(std::vector<G4DynamicParticle*>* /*fvect*/,
   G4double electronEnergy0 = aDynamicElectron->GetKineticEnergy();
   G4double cosTheta = 0.;
 
-  // if (electronEnergy0 < highEnergyLimit)
+  if (electronEnergy0<intermediateEnergyLimit)
   {
-    if (electronEnergy0<intermediateEnergyLimit)
-    {
 #ifdef SR_VERBOSE
-      if (verboseLevel > 3)
+    if (verboseLevel > 3)
       {G4cout << "---> Using Brenner & Zaider model" << G4endl;}
 #endif
-      cosTheta = BrennerZaiderRandomizeCosTheta(electronEnergy0);
-    }
+    cosTheta = BrennerZaiderRandomizeCosTheta(electronEnergy0);
+  }
 
-    if (electronEnergy0>=intermediateEnergyLimit)
-    {
+  if (electronEnergy0>=intermediateEnergyLimit)
+  {
 #ifdef SR_VERBOSE
-      if (verboseLevel > 3)
+    if (verboseLevel > 3)
       {G4cout << "---> Using Screened Rutherford model" << G4endl;}
 #endif
-      G4double z = 10.;
-      cosTheta = ScreenedRutherfordRandomizeCosTheta(electronEnergy0,z);
-    }
-
-    G4double phi = 2. * pi * G4UniformRand();
-
-    G4ThreeVector zVers = aDynamicElectron->GetMomentumDirection();
-    G4ThreeVector xVers = zVers.orthogonal();
-    G4ThreeVector yVers = zVers.cross(xVers);
-
-    G4double xDir = std::sqrt(1. - cosTheta*cosTheta);
-    G4double yDir = xDir;
-    xDir *= std::cos(phi);
-    yDir *= std::sin(phi);
-
-    G4ThreeVector zPrimeVers((xDir*xVers + yDir*yVers + cosTheta*zVers));
-
-    fParticleChangeForGamma->ProposeMomentumDirection(zPrimeVers.unit());
-
-    fParticleChangeForGamma->SetProposedKineticEnergy(electronEnergy0);
+    G4double z = 10.;
+    cosTheta = ScreenedRutherfordRandomizeCosTheta(electronEnergy0,z);
   }
+
+  G4double phi = 2. * pi * G4UniformRand();
+
+  G4ThreeVector zVers = aDynamicElectron->GetMomentumDirection();
+  G4ThreeVector xVers = zVers.orthogonal();
+  G4ThreeVector yVers = zVers.cross(xVers);
+
+  G4double xDir = std::sqrt(1. - cosTheta*cosTheta);
+  G4double yDir = xDir;
+  xDir *= std::cos(phi);
+  yDir *= std::sin(phi);
+
+  G4ThreeVector zPrimeVers((xDir*xVers + yDir*yVers + cosTheta*zVers));
+
+  fParticleChangeForGamma->ProposeMomentumDirection(zPrimeVers.unit());
+
+  fParticleChangeForGamma->SetProposedKineticEnergy(electronEnergy0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

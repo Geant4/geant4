@@ -23,19 +23,10 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Add options 
 #
-option(ULTRA_MIRROR_USE "Use of mirrors" ON)
-if(ULTRA_MIRROR_USE)
-  add_definitions(-DULTRA_MIRROR_USE)
-endif()
 
 option(ULTRA_VERBOSE "Set verbosity" OFF)
 if(ULTRA_VERBOSE)
   add_definitions(-DULTRA_VERBOSE)
-endif()
-
-option(ULTRA_GROUND_USE "Use ground" OFF)
-if(ULTRA_GROUND_USE)
-  add_definitions(-DULTRA_GROUND_USE)
 endif()
 
 #----------------------------------------------------------------------------
@@ -58,7 +49,7 @@ target_link_libraries(Ultra ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(air_shower_SCRIPTS
-    UltraMacro.mac Visualisation.mac
+    UltraMacro.mac OpenVis.mac VisDirect.mac Direct.mac Mirror.mac Ground.mac Source.mac
   )
 
 foreach(_script ${air_shower_SCRIPTS})

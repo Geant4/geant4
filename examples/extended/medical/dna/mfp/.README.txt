@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/dna/mfp/.README.txt"
 ///\brief Example mfp README page

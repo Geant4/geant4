@@ -24,14 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh 87695 2014-12-17 09:35:24Z gcosmo $
 //
 // 
 // Andrew Walkden  7th February 1997
 // G4OpenGLXViewer : Class to provide XWindows specific
 //                   functionality for OpenGL in GEANT4
 
-#ifdef G4VIS_BUILD_OPENGLX_DRIVER
+#if defined (G4VIS_BUILD_OPENGLX_DRIVER) || defined (G4VIS_USE_OPENGLX)
 
 #ifndef G4OPENGLXVIEWER_HH
 #define G4OPENGLXVIEWER_HH

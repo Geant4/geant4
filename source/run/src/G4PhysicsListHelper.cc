@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsListHelper.cc 106147 2017-09-14 06:38:11Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -207,7 +206,7 @@ void G4PhysicsListHelper::CheckParticleList() const
 void G4PhysicsListHelper::AddTransportation()
 {
   G4int verboseLevelTransport = 0;
-
+  
 #ifdef G4VERBOSE
   if (verboseLevel >2){
     G4cout << "G4PhysicsListHelper::AddTransportation()  "<< G4endl;
@@ -219,17 +218,21 @@ void G4PhysicsListHelper::AddTransportation()
   
   if ( nParaWorld>0 || 
        useCoupledTransportation || 
-       G4ScoringManager::GetScoringManagerIfExist()) {
-#ifdef G4VERBOSE
+       G4ScoringManager::GetScoringManagerIfExist())
+  {
+    auto coupledTransport= new G4CoupledTransportation(verboseLevelTransport);
+    if( theLooperThresholds == 0 ) coupledTransport->SetLowLooperThresholds();
+    if( theLooperThresholds == 2 ) coupledTransport->SetHighLooperThresholds();
+    theTransportationProcess = coupledTransport;
+
     if (verboseLevel >0) {
-      G4cout << " G4PhysicsListHelper::AddTransportation()"
-	     << "--- G4CoupledTransportation is used " 
-	     << G4endl;
+      G4cout << "--- G4CoupledTransportation is used "  << G4endl;
     }
-#endif
-    theTransportationProcess = new G4CoupledTransportation(verboseLevelTransport);    
   } else {
-    theTransportationProcess = new G4Transportation(verboseLevelTransport);
+    auto simpleTransport = new G4Transportation(verboseLevelTransport);
+    if( theLooperThresholds == 0 ) simpleTransport->SetLowLooperThresholds();
+    if( theLooperThresholds == 2 ) simpleTransport->SetHighLooperThresholds();
+    theTransportationProcess = simpleTransport;
   }
  
   // loop over all particles in G4ParticleTable
@@ -671,6 +674,16 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   theTable->push_back(tmp);
   sizeOfTable +=1;  
 
+  tmp.processTypeName = "ElectronSuper";
+  tmp.processType     = 2;
+  tmp.processSubType  =  9;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     =  1;
+  tmp.ordering[2]     =  1;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
   tmp.processTypeName = "Msc";
   tmp.processType     = 2;
   tmp.processSubType  = 10;
@@ -724,6 +737,16 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processTypeName = "ConvToMuMu";
   tmp.processType     = 2;
   tmp.processSubType  = 15;
+  tmp.ordering[0]     = -1;
+  tmp.ordering[1]     = -1;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName = "GammaSuper";
+  tmp.processType     = 2;
+  tmp.processSubType  = 16;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     =  1000;

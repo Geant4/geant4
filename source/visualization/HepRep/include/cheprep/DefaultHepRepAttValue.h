@@ -10,7 +10,6 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DefaultHepRepAttValue.h 66870 2013-01-14 23:38:59Z adotti $
  */
 namespace cheprep {
 

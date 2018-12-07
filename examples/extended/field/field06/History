@@ -1,4 +1,3 @@
-// $Id: History 110099 2018-05-15 11:29:56Z gcosmo $
 // ------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 27, 2018 I.Hrivnacova - fieldex06-V10-04-01
+- Macro review and code clean-up:
+  - Separated other than visualization settings from vis.mac in a 
+    new init_vis.mac
+  - Added "beamOn 10" button in gui.mac
+  - Updated README files
 
 May 15, 2018 J.Allison - fieldex06-V10-04-00
 - Add #include "G4Types.hh".

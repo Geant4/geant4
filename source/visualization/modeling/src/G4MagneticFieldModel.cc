@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticFieldModel.cc 101958 2016-12-12 08:04:35Z gcosmo $
 //
 // 
 // John Allison  17th August 2013
@@ -62,6 +61,11 @@ G4MagneticFieldModel::G4MagneticFieldModel
   std::ostringstream oss;
   oss << ':' << fNDataPointsPerMaxHalfScene
   << ':' << fArrow3DLineSegmentsPerCircle;
+  if (fRepresentation == Representation::fullArrow) {
+    oss << " full arrow";
+  } else if (fRepresentation == Representation::lightArrow) {
+    oss << " light arrow";
+  }
   fGlobalDescription = fType + oss.str();
 }
 

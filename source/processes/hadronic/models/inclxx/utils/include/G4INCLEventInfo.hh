@@ -67,6 +67,7 @@ namespace G4INCL {
     struct EventInfo {
       EventInfo() :
         nParticles(0),
+        eventBias((Float_t)0.0),
         nRemnants(0),
         projectileType(0),
         At(0),
@@ -76,7 +77,6 @@ namespace G4INCL {
         Zp(0),
         Sp(0),
         Ep((Float_t)0.0),
-        eventBias((Float_t)0.0),
         impactParameter((Float_t)0.0),
         nCollisions(0),
         stoppingTime((Float_t)0.0),
@@ -172,6 +172,8 @@ namespace G4INCL {
       Int_t PDGCode[maxSizeParticles];
       /** \brief Particle weight due to the bias */
       Float_t ParticleBias[maxSizeParticles];
+      /** \brief Event bias */
+      Float_t eventBias;
       /** \brief Particle kinetic energy [MeV] */
       Float_t EKin[maxSizeParticles];
       /** \brief Particle momentum, x component [MeV/c] */
@@ -256,8 +258,6 @@ namespace G4INCL {
       Short_t Sp;
       /** \brief Projectile kinetic energy given as input */
       Float_t Ep;
-      /** \brief Event bias */
-      Float_t eventBias;
       /** \brief Impact parameter [fm] */
       Float_t impactParameter;
       /** \brief Number of accepted two-body collisions */
@@ -348,6 +348,7 @@ namespace G4INCL {
       /** \brief Reset the EventInfo members */
       void reset() {
         nParticles = 0;
+        eventBias = (Float_t)0.0;
         history.clear();
         nRemnants = 0;
         projectileType = 0;
@@ -358,7 +359,6 @@ namespace G4INCL {
         Zp = 0;
         Sp = 0;
         Ep = (Float_t)0.0;
-        eventBias = (Float_t)0.0;
         impactParameter = (Float_t)0.0;
         nCollisions = 0;
         stoppingTime = (Float_t)0.0;

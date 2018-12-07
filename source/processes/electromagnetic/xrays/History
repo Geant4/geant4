@@ -1,4 +1,3 @@
-$Id: History 110268 2018-05-17 14:35:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 September 18: D. Sawkey (xrays-V10-04-05)
+- G4Cerenkov, G4Scintillation. Reset fNumPhotons to 0 correctly each step.
+  Fixes bug 2056.
+
+3 August 18: D. Sawkey (xrays-V10-04-04)
+- G4Cerenkov. Add protection against infinite loops due to very small
+  steps. Fixes bug 1992.
 
 17 May 18: J. Madsen (xrays-V10-04-03)
 - updated "thread-local-static-var" model to

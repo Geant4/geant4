@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.cc 106384 2017-10-09 09:34:51Z gcosmo $
 //
 #include "G4HepRepMessenger.hh"
 

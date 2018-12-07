@@ -35,8 +35,8 @@
 
 #include "globals.hh"
 
-
-#define G4INCLHFB_hh
+#ifndef G4INCLHFB_hh
+#define G4INCLHFB_hh 1
 
 #include <string>
 #include <vector>
@@ -44,19 +44,21 @@
 
 #include "G4INCLParticleType.hh"
 
-
 namespace G4INCL {
 
+    const G4int TableZSize = 120;
+    const G4int TableASize = 290;
+
   namespace HFB {
-
-    const G4int nTableZSize = 120;
-    const G4int nTableASize = 290;
-    const G4int pTableZSize = 120;
-    const G4int pTableASize = 290;
-
+#ifdef INCLXX_IN_GEANT4_MODE
+    void initialize();
+#else
+    void initialize(const std::string &path);
+#endif
     /// \brief Get the radius and diffuseness parameters from HFB calculations
     G4double getRadiusParameterHFB(const ParticleType t, const G4int A, const G4int Z);
     G4double getSurfaceDiffusenessHFB(const ParticleType t, const G4int A, const G4int Z);
-
   }
 }
+
+#endif

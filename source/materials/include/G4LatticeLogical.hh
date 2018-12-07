@@ -26,7 +26,6 @@
 /// \file materials/include/G4LatticeLogical.hh
 /// \brief Definition of the G4LatticeLogical class
 //
-// $Id: G4LatticeLogical.hh 76883 2013-11-18 12:50:08Z gcosmo $
 //
 // 20131114  Add verbosity for diagnostic output
 // 20131115  Expose maximum array dimensions for use by LatticeReader

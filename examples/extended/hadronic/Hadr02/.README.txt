@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "hadronic/Hadr02/.README.txt"
 ///\brief Example Hadr02 README page

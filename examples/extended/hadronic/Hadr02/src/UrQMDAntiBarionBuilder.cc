@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr02/src/UrQMDAntiBarionBuilder.cc
 /// \brief Implementation of the UrQMDAntiBarionBuilder class
 //
-// $Id: UrQMDAntiBarionBuilder.cc $
 //
 //---------------------------------------------------------------------------
 //
@@ -44,6 +43,7 @@
 #include "G4ProcessManager.hh"
 #include "G4ComponentAntiNuclNuclearXS.hh"  // For anti-ions
 #include "G4CrossSectionInelastic.hh"
+#include "G4HadronicParameters.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +52,7 @@ UrQMDAntiBarionBuilder::UrQMDAntiBarionBuilder()
 {
   //Set-up UrQMD model
   fMin =   0.0*MeV;
-  fMax = 100.0*TeV;
+  fMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   fModel = new G4UrQMD1_3Model();
   fModel->SetMinEnergy( fMin );
   fModel->SetMaxEnergy( fMax );

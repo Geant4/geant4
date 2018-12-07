@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.hh 99076 2016-09-01 12:40:47Z gcosmo $
 //
 // 
 // John Allison  12th September 2004

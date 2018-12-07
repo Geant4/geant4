@@ -23,8 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 37 (2010) 4692-4708
+// Phys. Med. 31 (2015) 861-874
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/svalue/include/TrackingAction.hh
 /// \brief Definition of the TrackingAction class
+
+#include "MyFile.hh"
 
 #ifndef TrackingAction_h
 #define TrackingAction_h 1
@@ -32,20 +41,37 @@
 #include "G4UserTrackingAction.hh"
 #include "globals.hh"
 
-class PrimaryGeneratorAction;
+#ifdef MYFILE
+ class MyPrimaryGeneratorActionFromFile;
+#else
+ class PrimaryGeneratorAction;
+#endif
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(PrimaryGeneratorAction*);
+
+#ifdef MYFILE
+ TrackingAction(MyPrimaryGeneratorActionFromFile*);
+#else
+ TrackingAction(PrimaryGeneratorAction*);
+#endif
    ~TrackingAction() {};
    
+    virtual void PreUserTrackingAction(const G4Track*);   
     virtual void PostUserTrackingAction(const G4Track*);
     
   private:
-    PrimaryGeneratorAction* fPrimary;
+   
+#ifdef MYFILE
+ MyPrimaryGeneratorActionFromFile* fPrimary;
+#else
+  PrimaryGeneratorAction* fPrimary;
+#endif
+
 };
 
 #endif

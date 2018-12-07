@@ -27,7 +27,6 @@
 /// \brief Implementation of the Par01CalorimeterHit class
 //
 //
-// $Id: Par01CalorimeterHit.cc 101151 2016-11-08 08:06:16Z gcosmo $
 //
 
 #include "Par01CalorimeterHit.hh"

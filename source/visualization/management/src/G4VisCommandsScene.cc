@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc 87360 2014-12-01 16:07:16Z gcosmo $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -185,8 +184,7 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
     return;
   }
 
-  const G4String& currentSceneName = pScene -> GetName ();
-  UpdateVisManagerScene (currentSceneName);
+  CheckSceneAndNotifyHandlers (pScene);
 }
 
 ////////////// /vis/scene/create ///////////////////////////////////////
@@ -819,5 +817,6 @@ void G4VisCommandSceneSelect::SetNewValue (G4UIcommand*, G4String newValue) {
     G4cout << "Scene \"" << selectName
 	   << "\" selected." << G4endl;
   }
-  UpdateVisManagerScene (selectName);
+
+  CheckSceneAndNotifyHandlers (sceneList [iScene]);
 }

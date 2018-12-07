@@ -5,6 +5,13 @@
 
                        Package History file
                        --------------------
+
+27 Nov 2018 V. Ivanchenko - tag neuron-V10-04-03
+- Fixed nightly problem in PhysicsList
+
+22 Jul 18 S. Incerti - tag neuron-V10-04-02
+- removed obsolete RanecuEngine
+
 09 May 2018 - B. Morgan - tag neuron-V10-04-01
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

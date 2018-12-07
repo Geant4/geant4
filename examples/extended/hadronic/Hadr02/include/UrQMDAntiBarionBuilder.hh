@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr02/include/UrQMDAntiBarionBuilder.hh
 /// \brief Definition of the UrQMDAntiBarionBuilder class
 //
-// $Id: $ 
 //
 //---------------------------------------------------------------------------
 //

@@ -26,7 +26,6 @@
 #ifndef G4Reggeons_h
 #define G4Reggeons_h 1
 //
-// $Id: G4Reggeons.hh 96940 2016-05-18 09:44:20Z ribon $
 //
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -46,7 +45,6 @@
 
 class G4Reggeons
 {
-
   public:
   	G4Reggeons(const G4ParticleDefinition * );
 
@@ -94,9 +92,9 @@ class G4Reggeons
         G4double Freggeon_Alpha, Freggeon_Alphaprime, Freggeon_Gamma, Freggeon_Rsquare, Freggeon_C, FParity;
         G4double Wreggeon_Alpha, Wreggeon_Alphaprime, Wreggeon_Gamma, Wreggeon_Rsquare, Wreggeon_C, WParity;
 
-	G4double C_pomeron;                              // = pomeron_Cpr * pomeron_Ctr             // Uzhi Oct. 2016
-	G4double Cpr_pomeron;                            // shower enhancement in projectile vertex // Uzhi Oct. 2016
-	G4double Ctr_pomeron;                            // shower enhancement in target     vertex // Uzhi Oct. 2016
+	G4double C_pomeron;                              // = pomeron_Cpr * pomeron_Ctr
+	G4double Cpr_pomeron;                            // shower enhancement in projectile vertex
+	G4double Ctr_pomeron;                            // shower enhancement in target     vertex
 
 	G4double Sint=0.;
 
@@ -106,4 +104,5 @@ class G4Reggeons
 	G4double Xelastic, Xpr_Diff, Xtr_Diff, XDDiff; 
         G4double Xinel   , Xnd, XndP, XndR;
 };
+
 #endif

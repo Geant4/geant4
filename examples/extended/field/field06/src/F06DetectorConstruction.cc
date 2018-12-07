@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F06DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 /// \file field/field06/src/F06DetectorConstruction.cc
 /// \brief Implementation of the F06DetectorConstruction class

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MoleculeCounter.cc 101354 2016-11-15 08:27:51Z gcosmo $
 //
 
 #include <iomanip>

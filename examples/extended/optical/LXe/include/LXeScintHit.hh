@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeScintHit.hh 72250 2013-07-12 08:59:26Z gcosmo $
 //
 /// \file optical/LXe/include/LXeScintHit.hh
 /// \brief Definition of the LXeScintHit class

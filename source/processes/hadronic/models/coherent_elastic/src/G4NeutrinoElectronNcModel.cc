@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutrinoElectronNcModel.cc 91806 2015-08-06 12:20:45Z gcosmo $
 //
 // Geant4 Header : G4NeutrinoElectronNcModel
 //
@@ -37,6 +36,7 @@
 #include "G4IonTable.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
+#include "G4HadronicParameters.hh"
 
 using namespace std;
 using namespace CLHEP;
@@ -45,7 +45,7 @@ G4NeutrinoElectronNcModel::G4NeutrinoElectronNcModel(const G4String& name)
   : G4HadronElastic(name)
 {
   SetMinEnergy( 0.0*GeV );
-  SetMaxEnergy( 100.*TeV );
+  SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   SetLowestEnergyLimit(1.e-6*eV);  
 
   theElectron = G4Electron::Electron();

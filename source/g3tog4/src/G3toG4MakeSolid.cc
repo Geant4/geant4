@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4MakeSolid.cc 67982 2013-03-13 10:36:03Z gcosmo $
 //
 // modified by I.Hrivnacova, V.Berejnoi 27 Sep 99 
 

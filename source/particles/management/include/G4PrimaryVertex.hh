@@ -24,11 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.hh 110257 2018-05-17 14:20:12Z gcosmo $
 //
 //
-
-
+// class description:
+//
+// This is the class which represents a primary vertex. The object of this
+// class is set to G4Event object by G4VPrimaryGenerator concrete class.
+// This class object has one or more G4PrimaryParticle objects as primary
+// particles.
+// --------------------------------------------------------------------
 #ifndef G4PrimaryVertex_h
 #define G4PrimaryVertex_h 1
 
@@ -39,13 +43,6 @@
 #include "G4PrimaryParticle.hh"
 
 class G4VUserPrimaryVertexInformation;
-
-// class description:
-//
-//  This is the class which represents a primary vertex. The ofject of this
-// class is set to G4Event objct by G4VPrimaryGenerator concrete class.
-// This class object has one or more G4PrimaryParticle objects as primary
-// particles.
 
 class G4PrimaryVertex 
 {

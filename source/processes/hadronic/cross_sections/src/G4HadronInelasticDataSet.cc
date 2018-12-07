@@ -23,27 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticDataSet.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // G4 Physics class: HadronInelasticDataSet for cross sections
 // F.W. Jones, TRIUMF, 19-MAY-98
+//
+// Modified: V.Ivanchenko
+//
 
 #include "G4HadronInelasticDataSet.hh"
+#include "G4HadronCrossSections.hh"
 #include "G4DynamicParticle.hh"
 #include "G4NistManager.hh"
-#include "G4HadTmpUtil.hh"
 #include <iostream>
 
-
 G4HadronInelasticDataSet::G4HadronInelasticDataSet(const G4String& nam)
- : G4VCrossSectionDataSet(nam)
+  : G4VCrossSectionDataSet(nam), theZ(0),fInelasticXS(0.0),
+    fKinEnergy(0.0),fParticle(nullptr)
 {
-  theHadronCrossSections = G4HadronCrossSections::Instance(); 
+  fGheishaXS = G4HadronCrossSections::Instance(); 
+  fNIST = G4NistManager::Instance();
 }
 
-
 G4HadronInelasticDataSet::~G4HadronInelasticDataSet() {}
-
 
 void G4HadronInelasticDataSet::CrossSectionDescription(std::ostream& outFile) const
 {
@@ -54,20 +55,25 @@ void G4HadronInelasticDataSet::CrossSectionDescription(std::ostream& outFile) co
           << "of inelastic scattering data.\n";
 }
 
-
 G4bool
-G4HadronInelasticDataSet::IsElementApplicable(const G4DynamicParticle* aParticle, 
-					      G4int /*Z*/,
-					      const G4Material*)
+G4HadronInelasticDataSet::IsElementApplicable(const G4DynamicParticle*, 
+					      G4int, const G4Material*)
 {
-  return theHadronCrossSections->IsApplicable(aParticle);
+  return true;
 }
 
 G4double
-G4HadronInelasticDataSet::GetElementCrossSection(const G4DynamicParticle* aParticle, 
-						 G4int Z, 
-						 const G4Material*)
+G4HadronInelasticDataSet::GetElementCrossSection(
+         const G4DynamicParticle* aParticle, G4int Z, const G4Material*)
 {
-  G4int A = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
-  return theHadronCrossSections->GetInelasticCrossSection(aParticle, Z, A);
+  G4double ekin = aParticle->GetKineticEnergy();
+  const G4ParticleDefinition* pd = aParticle->GetDefinition();
+  if(Z != theZ || ekin != fKinEnergy || pd != fParticle) {
+    theZ = Z;
+    fKinEnergy = ekin;
+    fParticle = pd;
+    G4int A = G4lrint(fNIST->GetAtomicMassAmu(Z));
+    fInelasticXS = fGheishaXS->GetElasticCrossSection(aParticle, Z, A);
+  }
+  return fInelasticXS;
 }

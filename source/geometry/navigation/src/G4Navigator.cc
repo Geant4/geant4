@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc 2012-11-01 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation

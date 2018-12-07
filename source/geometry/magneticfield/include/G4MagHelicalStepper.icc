@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.icc 66356 2012-12-18 09:02:32Z gcosmo $
 //
 // Linear Step in regions of no field
 //
@@ -41,9 +40,8 @@ G4MagHelicalStepper::LinearStep( const G4double  yIn[],
   // G4double  h_div_momentum = 1.0 / momentum_val ;
 
   for( G4int i = 0; i < 3; i++ ) {
-    yDir[i]   = inv_momentum * yIn[i+3];
+    yDir[i]   = inv_momentum * yIn[i+3];     
     yLinear[i]   = yIn[i] + h * yDir[i];
-    // yLinear[i]   = yIn[i] + h_div_momentum * yIn[i+3];
     yLinear[i+3] = yIn[i+3];
   }
 }
@@ -59,49 +57,46 @@ G4MagHelicalStepper::MagFieldEvaluate(const G4double y[],
 
 inline G4double
 G4MagHelicalStepper::GetInverseCurve(const G4double Momentum,
-                                      const G4double Bmag)   
+                                     const G4double Bmag)
 {
+  constexpr G4double chargeFactor = 1.0 / (CLHEP::eplus*CLHEP::c_light);
   
-  G4double  inv_momentum = 1.0 / Momentum ;
-  G4double particleCharge = fPtrMagEqOfMot->FCof() / (CLHEP::eplus*CLHEP::c_light); 
-  G4double fCoefficient = -fUnitConstant  * particleCharge*inv_momentum;
- 
-  return  fCoefficient*Bmag;
+  G4double  inv_momentum  = 1.0 / Momentum ;
+  G4double particleCharge = fPtrMagEqOfMot->FCof() * chargeFactor;
+  G4double fCoefficient   = -fUnitConstant  * particleCharge * inv_momentum;
+
+  return  fCoefficient * Bmag;
 }
+
 inline void G4MagHelicalStepper:: SetAngCurve(const G4double Ang)
 {                                                
-fAngCurve=Ang; 
-    
+  fAngCurve=Ang;
 }
 
 inline G4double G4MagHelicalStepper:: GetAngCurve() const 
 {
-return fAngCurve;  
-
+  return fAngCurve;
 }
 
 inline void G4MagHelicalStepper:: SetCurve(const G4double Curve)
 {
- frCurve=Curve;  
+  frCurve=Curve;  
 }
 
 inline G4double G4MagHelicalStepper:: GetCurve() const 
 {
-return frCurve;  
-
+  return frCurve;  
 }
 
 inline void G4MagHelicalStepper:: SetRadHelix(const G4double Rad)
 {
- frHelix=Rad;  
+  frHelix=Rad;  
 }
 
 inline G4double G4MagHelicalStepper:: GetRadHelix() const 
 {
-return frHelix;  
-
+  return frHelix;  
 }
-
 
 
 

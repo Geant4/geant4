@@ -26,7 +26,6 @@
 /// \file exoticphysics/dmparticle/include/TargetSD.hh
 /// \brief Definition of the TargetSD class
 //
-// $Id$
 //
 /////////////////////////////////////////////////
 //

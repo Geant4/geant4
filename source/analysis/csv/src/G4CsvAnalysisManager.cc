@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CsvAnalysisManager.cc 93815 2015-11-02 11:32:20Z gcosmo $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -357,7 +356,7 @@ G4bool G4CsvAnalysisManager::WriteImpl()
 }
 
 //_____________________________________________________________________________
-G4bool G4CsvAnalysisManager::CloseFileImpl()
+G4bool G4CsvAnalysisManager::CloseFileImpl(G4bool reset)
 {
   auto finalResult = true;
 
@@ -372,13 +371,17 @@ G4bool G4CsvAnalysisManager::CloseFileImpl()
   finalResult = finalResult && result;
 
   // reset data
-  result = Reset();
+  if ( reset ) {
+    result = Reset();
+  } else {
+    // ntuple must be reset 
+    result = fNtupleManager->Reset(true);
+  }
   if ( ! result ) {
     G4ExceptionDescription description;
     description << "      " << "Resetting data failed";
     G4Exception("G4CsvAnalysisManager::CloseFile()",
               "Analysis_W021", JustWarning, description);
-    result = false;       
   } 
   finalResult = finalResult && result;
 

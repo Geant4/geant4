@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr01/include/Histo.hh
 /// \brief Definition of the Histo class
 //
-// $Id: Histo.hh 107541 2017-11-22 08:24:57Z gcosmo $
 
 #ifndef Histo_h
 #define Histo_h 1

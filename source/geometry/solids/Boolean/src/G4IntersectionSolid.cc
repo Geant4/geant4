@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -208,29 +207,14 @@ G4IntersectionSolid::CalculateExtent(const EAxis pAxis,
 
 EInside G4IntersectionSolid::Inside(const G4ThreeVector& p) const
 {
-  EInside positionA = fPtrSolidA->Inside(p) ;
+  EInside positionA = fPtrSolidA->Inside(p);
+  if(positionA == kOutside) return positionA; //outside A
 
-  if( positionA == kOutside ) return kOutside ;
+  EInside positionB = fPtrSolidB->Inside(p);
+  if(positionA == kInside)  return positionB;
 
-  EInside positionB = fPtrSolidB->Inside(p) ;
-  
-  if(positionA == kInside && positionB == kInside)
-  {
-    return kInside ;
-  }
-  else
-  {
-    if((positionA == kInside && positionB == kSurface) ||
-       (positionB == kInside && positionA == kSurface) ||
-       (positionA == kSurface && positionB == kSurface)   )
-    {
-      return kSurface ;
-    }
-    else
-    {
-      return kOutside ;
-    }
-  }
+  if(positionB == kOutside) return positionB; // outside B
+  return kSurface;                            // surface A & B
 }
 
 //////////////////////////////////////////////////////////////

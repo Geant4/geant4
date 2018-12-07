@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Dicom2ActionInitialization.cc $
 //
 /// \file Dicom2ActionInitialization.cc
 /// \brief Implementation of the Dicom2ActionInitialization class
 
 #include "Dicom2ActionInitialization.hh"
 #include "Dicom2PrimaryGeneratorAction.hh"
-#include "DicomRunAction.hh"
+#include "DicomPrimaryGeneratorAction.hh"
+#include "Dicom2RunAction.hh"
 #include "DicomEventAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,21 +48,19 @@ Dicom2ActionInitialization::~Dicom2ActionInitialization()
 
 void Dicom2ActionInitialization::BuildForMaster() const
 {
-    DicomRunAction* runAction = new DicomRunAction;
-    SetUserAction(runAction);
+    // DICOM2 overload
+    SetUserAction(new Dicom2RunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Dicom2ActionInitialization::Build() const
 {
+    // DICOM2 overload
+    SetUserAction(new Dicom2RunAction);
     SetUserAction(new Dicom2PrimaryGeneratorAction);
-
-    DicomRunAction* runAction = new DicomRunAction;
-    SetUserAction(runAction);
-  
-    DicomEventAction* eventAction = new DicomEventAction();
-    SetUserAction(eventAction);
+    // from original DICOM
+    SetUserAction(new DicomEventAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

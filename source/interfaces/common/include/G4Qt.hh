@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.hh 70674 2013-06-04 07:36:41Z gcosmo $
 //
 //  To unify Qt event treatment between 
 // G4/interfaces Qt sessions and G4/visualizations Qt drivers.

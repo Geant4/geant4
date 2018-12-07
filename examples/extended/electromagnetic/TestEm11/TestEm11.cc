@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm11/TestEm11.cc
 /// \brief Main program of the electromagnetic/TestEm11 example
 //
-// $Id: TestEm11.cc 110644 2018-06-04 16:51:03Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

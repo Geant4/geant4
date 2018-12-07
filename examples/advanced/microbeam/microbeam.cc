@@ -42,10 +42,7 @@
 
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
-
-#ifdef G4VIS_USE
-  #include "G4VisExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
@@ -60,15 +57,11 @@ int main(int argc,char** argv) {
     ui = new G4UIExecutive(argc, argv);
   }
 
-  // Choose the Random engine
-
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
-
   // Construct the default run manager
 
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-  // runManager->SetNumberOfThreads(2);
+  //runManager->SetNumberOfThreads(1);
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif
@@ -88,12 +81,10 @@ int main(int argc,char** argv) {
 
   runManager->Initialize();
 
-#ifdef G4VIS_USE
+  // Visualization
+
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
-
-  // Get the pointer to the User Interface manager
 
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -113,9 +104,7 @@ int main(int argc,char** argv) {
     delete ui;
   }
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
 
   return 0;

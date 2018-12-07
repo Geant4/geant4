@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ToolsAnalysisManager.cc 91116 2015-06-20 12:33:45Z ihrivnac $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -59,6 +58,9 @@ G4ToolsAnalysisManager::G4ToolsAnalysisManager(const G4String& type, G4bool isMa
   SetH3Manager(fH3Manager);
   SetP1Manager(fP1Manager);
   SetP2Manager(fP2Manager);
+
+  // Plot manager
+  SetPlotManager(std::make_shared<G4PlotManager>(fState));
 }
 
 //_____________________________________________________________________________
@@ -78,20 +80,19 @@ G4bool G4ToolsAnalysisManager::PlotImpl()
 
   auto finalResult = true;
 
-  // Create plotter
-  G4PlotManager plotManager(fState);
-  plotManager.OpenFile(fVFileManager->GetPlotFileName());
+  // Open output file
+  fPlotManager->OpenFile(fVFileManager->GetPlotFileName());
 
   // H1
   auto result 
-    = plotManager.PlotAndWrite<tools::histo::h1d>(fH1Manager->GetH1Vector(), 
-                                                  fH1Manager->GetHnVector());
+    = fPlotManager->PlotAndWrite<tools::histo::h1d>(fH1Manager->GetH1Vector(), 
+                                                    fH1Manager->GetHnVector());
   finalResult = finalResult && result;
 
   // H2
   result 
-    = plotManager.PlotAndWrite<tools::histo::h2d>(fH2Manager->GetH2Vector(), 
-                                                  fH2Manager->GetHnVector());
+    = fPlotManager->PlotAndWrite<tools::histo::h2d>(fH2Manager->GetH2Vector(), 
+                                                    fH2Manager->GetHnVector());
   finalResult = finalResult && result;
 
   // H3
@@ -99,14 +100,15 @@ G4bool G4ToolsAnalysisManager::PlotImpl()
 
   // P1
   result 
-    = plotManager.PlotAndWrite<tools::histo::p1d>(fP1Manager->GetP1Vector(), 
-                                                  fP1Manager->GetHnVector());
+    = fPlotManager->PlotAndWrite<tools::histo::p1d>(fP1Manager->GetP1Vector(), 
+                                                    fP1Manager->GetHnVector());
   finalResult = finalResult && result;
 
   // P2
   // not yet available in tools
 
-  result = plotManager.CloseFile();
+  // Close output file
+  result = fPlotManager->CloseFile();
   finalResult = finalResult && result;
 
   return finalResult;

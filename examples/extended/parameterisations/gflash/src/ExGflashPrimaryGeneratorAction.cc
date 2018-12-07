@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashPrimaryGeneratorAction.cc 94396 2015-11-13 13:37:16Z gcosmo $
 //
 /// \file parameterisations/gflash/src/ExGflashPrimaryGeneratorAction.cc
 /// \brief Implementation of the ExGflashPrimaryGeneratorAction class

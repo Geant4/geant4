@@ -1,4 +1,3 @@
-$Id$
 
 ///\file "optical/OpNovice/.README.txt"
 ///\brief Example OpNovice README page
@@ -24,6 +23,10 @@ examples/extended/optical/LXe and wls
    - *** G4OpAbsorption      ***
    - *** G4OpRayleigh        ***
    - *** G4OpBoundaryProcess ***
+
+ A messenger command allows to define interactivly the 
+ verbose level and the maximum number of Cerenkov photons per step
+ (see for instance OpNovice.in)
 
 \section ExampleOpNovice_s3 G4VUserDetectorConstruction 
 

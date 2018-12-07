@@ -1,0 +1,14 @@
+#
+# Macro file for the initialization phase of "exampleN03.cc"
+# when running in interactive mode
+#
+# Sets some default verbose
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+#
+# Initialize G4 kernel
+/run/initialize
+#
+# Visualization setting
+/control/execute vis.mac

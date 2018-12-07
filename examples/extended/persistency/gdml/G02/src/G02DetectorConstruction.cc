@@ -27,7 +27,6 @@
 /// \brief Implementation of the G02DetectorConstruction class
 //
 //
-// $Id: G02DetectorConstruction.cc 104689 2017-06-12 12:17:25Z gcosmo $
 //
 // Class G02DetectorConstruction implementation
 //

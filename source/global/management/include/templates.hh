@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: templates.hh 103661 2017-04-20 14:57:11Z gcosmo $
 //
 // 
 // -*- C++ -*-
@@ -162,5 +161,46 @@ inline int G4rint(double ad)
 {
   return (ad>0) ? static_cast<int>(ad+1) : static_cast<int>(ad);
 }
+
+//-----------------------------
+
+//  Use the following function to get rid of "unused parameter" warnings
+//  Example:
+//
+//      #ifdef SOME_CONDITION
+//          void doSomething(int val)
+//          {
+//              something = val;
+//          }
+//      #else
+//          void doSomething(int)
+//          { }
+//      #endif
+//
+//  can be simplified to:
+//
+//          void doSomething(int val)
+//          {
+//      #ifdef SOME_CONDITION
+//              something = val;
+//      #else
+//              G4ConsumeParameters(val);
+//      #endif
+//          }
+//
+//  or:
+//
+//          void doSomething(int val)
+//          {
+//      #ifdef SOME_CONDITION
+//              something = val;
+//      #endif
+//              // function call does nothing -- will be "optimized" out
+//              G4ConsumeParameters(val);
+//          }
+//
+template <typename _Tp, typename... _Args>
+inline void G4ConsumeParameters(_Tp, _Args...)
+{ }
 
 #endif // templates_h

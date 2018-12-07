@@ -1,4 +1,5 @@
 # The iridium source is the default option
+/run/initialize
 /control/verbose 1
 /tracking/verbose 0
 /run/verbose 0

@@ -41,33 +41,31 @@ class CCalStackingAction : public G4UserStackingAction {
 
   friend class CCalSensAssign;
   
-private:
-  CCalStackingAction();
 public:
+
+  CCalStackingAction();
   ~CCalStackingAction();
 
-public:
   virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
   virtual void NewStage();
   virtual void PrepareNewEvent();
       
-public:
   enum stageLevel {firstStage, end} ; 
   enum {maxNumberOfSD = 30};
 
-private:
-  stageLevel stage;
-  int numberOfSD;
-  G4String SDName[maxNumberOfSD];
-  int nurgent;
-  int acceptSecondaries;
-  CCaloSD* theCaloSD[maxNumberOfSD];
-  G4bool isInitialized;
 private:
   void initialize();    
   G4bool trackStartsInCalo(const G4Track* atrack);
   void setPrimaryID(G4int id);
       
+  G4double fTimeLimit;
+  stageLevel stage;
+  G4int numberOfSD;
+  G4String SDName[maxNumberOfSD];
+  G4int nurgent;
+  G4int acceptSecondaries;
+  CCaloSD* theCaloSD[maxNumberOfSD];
+  G4bool isInitialized;
 };
 
 #endif

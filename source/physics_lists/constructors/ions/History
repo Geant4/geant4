@@ -1,4 +1,3 @@
-$Id: History 101029 2016-11-04 08:40:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +12,26 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-September-2018, Vladimir Ivanchenko  (phys-ctor-ions-V10-04-04)
+03-September-2018, Vladimir Ivanchenko  (phys-ctor-ions-V10-04-03)
+- Major revision of all ion builders: reduced number of TLS variables;
+  simplified class constructors;
+  for QMD, INCLXX, XS enable combined list of de-excitation channels;
+  use max energy from G4HadronicParameters and do not instantiate FTFP
+  model if this energy is below max energy of the cascade;
+  G4IonBinaryCascadePhysics is now identical to G4IonPhysics
+
+06-August-2018, Alberto Ribon           (phys-ctor-ions-V10-04-02)
+- G4IonPhysics, G4IonBinaryCascadePhysics, G4IonPhysicsPHP : replaced the 
+  explicit high-energy limit of hadronic physics with the one from 
+  G4HadronicParameters .
+
+29-July-2018, Vladimir Ivanchenko       (phys-ctor-ions-V10-04-01)
+29-July-2018, Vladimir Ivanchenko       (phys-ctor-ions-V10-04-00)
+- G4IonPhysics - clean-up, removed unnecessary statics
+- G4IonPhysicsXS - new constructor in which PartiicleXS cross sections
+    are used for light ions
 
 03-Nov-2016, Alberto Ribon              (phys-ctor-ions-V10-02-02)
 - Written first draft of the README

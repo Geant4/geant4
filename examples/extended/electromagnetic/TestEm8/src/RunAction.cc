@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm8/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 110166 2018-05-16 15:54:41Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

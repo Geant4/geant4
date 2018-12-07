@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 /// \file GunPrimaryGeneratorAction.hh
 /// \brief Definition of the GunPrimaryGeneratorAction class

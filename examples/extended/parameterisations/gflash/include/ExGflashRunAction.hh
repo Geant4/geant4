@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashRunAction.hh 94396 2015-11-13 13:37:16Z gcosmo $
 //
 /// \file parameterisations/gflash/include/ExGflashRunAction.hh
 /// \brief Definition of the ExGflashRunAction class

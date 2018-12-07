@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux3D.cc 67992 2013-03-13 10:59:57Z gcosmo $
 //
 // G4PSFlatSurfaceFlux3D
 #include "G4PSFlatSurfaceFlux3D.hh"

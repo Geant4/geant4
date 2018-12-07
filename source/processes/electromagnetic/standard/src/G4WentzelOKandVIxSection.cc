@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc 109683 2018-05-08 10:36:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -108,7 +107,9 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection(G4bool comb) :
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4WentzelOKandVIxSection::~G4WentzelOKandVIxSection()
-{}
+{
+  delete fMottXSection;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

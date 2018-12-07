@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChipsPionMinusElasticXS.cc 109482 2018-04-24 14:47:28Z gcosmo $
 //
 //
 // G4 Physics class: G4ChipsPionMinusElasticXS for pA elastic cross sections

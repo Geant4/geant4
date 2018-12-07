@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearStopping.cc 107058 2017-11-01 14:54:12Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -151,7 +150,7 @@ void G4NuclearStopping::PrintInfo()
 
 void G4NuclearStopping::ProcessDescription(std::ostream& out) const
 {
-  out << "<strong>Nuclear stopping</strong>";
+  out << "  Nuclear stopping";
   G4VEmProcess::ProcessDescription(out);
 }
 

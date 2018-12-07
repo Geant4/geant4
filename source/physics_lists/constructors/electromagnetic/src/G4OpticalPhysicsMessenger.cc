@@ -82,6 +82,11 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
     fDir2 = new G4UIdirectory("/process/optical/",toBeBroadcasted);
     fDir2->SetGuidance("Commands related to the optical physics simulation engine.");
 
+    CreateDirectory("/process/optical/defaults/cerenkov/", "Cerenkov process commands");
+    CreateDirectory("/process/optical/defaults/scintillation/", "Scintillation process commands");
+    CreateDirectory("/process/optical/defaults/wls/", "Wave length shifting process commands");
+    CreateDirectory("/process/optical/defaults/boundary/", "Boundary scattering commands");
+
     fActivateProcessCmd= new G4UIcommand("/process/optical/processActivation", this);
     fActivateProcessCmd->SetGuidance("Activate/deactivate the specified optical process");
     G4UIparameter* par = new G4UIparameter("proc_name",'s',false);

@@ -1,4 +1,3 @@
- $Id$
 
 ///\file "eventgenerator/pythia/decayer6/.README.txt"
 ///\brief Example decayer6 page

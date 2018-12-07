@@ -32,7 +32,6 @@
 //                  (accepted in Phys. Med. Biol) 
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $Id$
 //
 /// \file splitting.cc
 /// \brief Main program of the splitting example
@@ -65,10 +64,6 @@ int main(int argc,char** argv)
     if ( argc == 1 ) {
       ui = new G4UIExecutive(argc, argv);
     }
-
-    // Set the Seed
-    CLHEP::RanecuEngine defaultEngine(1234567);
-    G4Random::setTheEngine(&defaultEngine);
 
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager= new G4MTRunManager;

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEmissionProbability.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
@@ -75,7 +74,6 @@ protected:
   G4int fVerbose;
   G4int theZ;
   G4int theA;
-  G4double LevelDensity;
 
   G4Pow*   fG4pow;
   G4PairingCorrection* fPairCorr;

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXViewer.cc 97241 2016-05-30 12:06:54Z gcosmo $
 //
 // 
 // Andrew Walkden  7th February 1997

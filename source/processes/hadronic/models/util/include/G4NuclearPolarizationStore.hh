@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearPolarizationStore.hh 96490 2016-04-19 06:57:04Z gcosmo $
 //
 // Created:
 // 03 July 2017 V.Ivanchenko

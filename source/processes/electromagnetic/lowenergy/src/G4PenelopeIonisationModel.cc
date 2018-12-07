@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc 99415 2016-09-21 09:05:43Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -43,6 +42,7 @@
 // 07 Oct 2013   L. Pandola Migration to MT      
 // 23 Jun 2015   L. Pandola Keep track of the PIXE flag, to avoid double-production of 
 //                           atomic de-excitation (bug #1761)                  
+// 29 Aug 2018   L. Pandola Fix bug causing energy non-conservation
 //
 
 #include "G4PenelopeIonisationModel.hh"
@@ -629,16 +629,25 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
 	  fAtomDeexcitation->GenerateParticles(fvect,shell,Z,index);
 	  size_t nAfter = fvect->size(); 
       
-	  if (nAfter > nBefore) //actual production of fluorescence
+	  if (nAfter>nBefore) //actual production of fluorescence
 	    {
 	      for (size_t j=nBefore;j<nAfter;j++) //loop on products
 		{
 		  G4double itsEnergy = ((*fvect)[j])->GetKineticEnergy();
-		  localEnergyDeposit -= itsEnergy;
-		  if (((*fvect)[j])->GetParticleDefinition() == G4Gamma::Definition())
-		    energyInFluorescence += itsEnergy;
-		  else if (((*fvect)[j])->GetParticleDefinition() == G4Electron::Definition())
-		    energyInAuger += itsEnergy;
+                  if (itsEnergy < localEnergyDeposit) // valid secondary, generate it
+                    {
+		      localEnergyDeposit -= itsEnergy;
+		      if (((*fvect)[j])->GetParticleDefinition() == G4Gamma::Definition())
+		        energyInFluorescence += itsEnergy;
+		      else if (((*fvect)[j])->GetParticleDefinition() == G4Electron::Definition())
+		        energyInAuger += itsEnergy;
+                    }
+                  else //invalid secondary: takes more than the available energy: delete it
+		    {
+		      delete (*fvect)[j];
+		      (*fvect)[j] = nullptr;
+		    }
+		    
 		}
 	    }
 	}
@@ -665,11 +674,10 @@ void G4PenelopeIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*
       energySecondary = 0;
     }
 
-  if (localEnergyDeposit < 0)
+  if (localEnergyDeposit < 0) //Should not be: issue a G4Exception (warning)
     {
-      G4cout << "WARNING-" 
-	     << "G4PenelopeIonisationModel::SampleSecondaries - Negative energy deposit"
-	     << G4endl;
+      G4Exception("G4PenelopeIonisationModel::SampleSecondaries()",
+		  "em2099",JustWarning,"WARNING: Negative local energy deposit");
       localEnergyDeposit=0.;
     }
   fParticleChange->ProposeLocalEnergyDeposit(localEnergyDeposit);

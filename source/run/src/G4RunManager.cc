@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc 110726 2018-06-11 06:05:16Z gcosmo $
 //
 // 
 
@@ -56,6 +55,7 @@
 #include "G4VVisManager.hh"
 #include "G4Material.hh"
 #include "G4SDManager.hh"
+#include "G4VScoreNtupleWriter.hh"
 #include "G4UImanager.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParallelWorldProcessStore.hh"
@@ -94,7 +94,8 @@ G4RunManager::G4RunManager()
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
  storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
  currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
- numberOfEventProcessed(0),selectMacro(""),fakeRun(false)
+ numberOfEventProcessed(0),selectMacro(""),fakeRun(false),
+ isScoreNtupleWriter(false)
 {
   if(fRunManager)
   {
@@ -134,7 +135,8 @@ G4RunManager::G4RunManager( RMType rmType )
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
  storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
  currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
- numberOfEventProcessed(0),selectMacro(""),fakeRun(false)
+ numberOfEventProcessed(0),selectMacro(""),fakeRun(false),
+ isScoreNtupleWriter(false)
 {
   //This version of the constructor should never be called in sequential mode!
 #ifndef G4MULTITHREADED
@@ -338,7 +340,13 @@ void G4RunManager::RunInitialization()
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
   if(fSDM)
   { currentRun->SetHCtable(fSDM->GetHCtable()); }
-  
+
+  if ( G4VScoreNtupleWriter::Instance() ) {
+    auto hce = fSDM->PrepareNewEvent();
+    isScoreNtupleWriter = G4VScoreNtupleWriter::Instance()->Book(hce);
+    delete hce;
+  }    
+
   std::ostringstream oss;
     G4Random::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
@@ -350,6 +358,9 @@ void G4RunManager::RunInitialization()
   if(printModulo>=0 || verboseLevel>0)
   { G4cout << "### Run " << currentRun->GetRunID() << " starts." << G4endl; }
   if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
+
+  if (isScoreNtupleWriter) 
+  { G4VScoreNtupleWriter::Instance()->OpenFile(); } 
 
   if(storeRandomNumberStatus) {
       G4String fileN = "currentRun";
@@ -492,6 +503,9 @@ void G4RunManager::RunTermination()
     if(userRunAction) userRunAction->EndOfRunAction(currentRun);
     G4VPersistencyManager* fPersM = G4VPersistencyManager::GetPersistencyManager();
     if(fPersM) fPersM->Store(currentRun);
+    // write & close analysis output
+    if (isScoreNtupleWriter) 
+    { G4VScoreNtupleWriter::Instance()->Write(); }
     runIDCounter++;
   }
 
@@ -805,6 +819,12 @@ void G4RunManager::ConstructScoringWorlds()
 
 void G4RunManager::UpdateScoring()
 {
+  if (isScoreNtupleWriter) 
+  {
+    G4VScoreNtupleWriter::Instance()
+      ->Fill(currentEvent->GetHCofThisEvent(), currentEvent->GetEventID());
+  }
+
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
   if(!ScM) return;
   G4int nPar = ScM->GetNumberOfMesh();
@@ -929,6 +949,7 @@ void G4RunManager::GeometryHasBeenModified(G4bool prop)
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
+#include "G4AssemblyStore.hh"
 #include "G4SolidStore.hh"
 #include "G4RegionStore.hh"
 
@@ -938,10 +959,11 @@ void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
   {
     if(verboseLevel>0)
     { 
-      G4cout<<"#### G4PhysicalVolumeStore, G4LogicalVolumeStore and G4SolidStore\n"
-            <<"#### are wiped out."<<G4endl; 
+      G4cout << "#### Assemblies, Volumes and Solids Stores are wiped out."
+             << G4endl; 
     }
     G4GeometryManager::GetInstance()->OpenGeometry();
+    G4AssemblyStore::GetInstance()->Clean();
     G4PhysicalVolumeStore::GetInstance()->Clean();
     G4LogicalVolumeStore::GetInstance()->Clean();
     G4SolidStore::GetInstance()->Clean();

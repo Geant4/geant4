@@ -378,7 +378,7 @@ G4double G4PolynomialPDF::GetX(G4double p, G4double x1, G4double x2,
       }
       if(ddxPower==-1 && bisect) {
 	if(fVerbose > 0) {
-	  G4cout << "G4PolynomialPDF::GetX() WARNING: Bisceting and trying again..." 
+	  G4cout << "G4PolynomialPDF::GetX() WARNING: Biseting and trying again..." 
 		 << G4endl;
 	}
         return Bisect(p, x1, x2);

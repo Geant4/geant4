@@ -1,4 +1,3 @@
-$Id: History 110587 2018-05-31 12:05:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +12,69 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-November-2018, Alberto Ribon    (phys-ctor-hinelastic-V10-04-14)
+- README : updated information.
+- G4HadronPhysicsFTFQGSP_BERT : use BGG pion cross section, consistently
+  with all other physics lists.
+
+22-November-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-13)
+- G4HadronInelasticQBBC - use BGG proton inelastic
+
+22-November-2018, Alberto Ribon    (phys-ctor-hinelastic-V10-04-12)
+- G4HadronPhysicsShielding, G4HadronPhysicsShieldingLEND : rewritten
+  to avoid memory leaks.
+
+16-November-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-11)
+- G4HadronInelasticQBBC - fixed neutron x-section
+
+17-October-2018, Alberto Ribon     (phys-ctor-hinelastic-V10-04-10)
+- G4HadronPhysicsFTFP_BERT_TRV : for hyperon inelastic cross sections,
+  replaced Chips cross sections with Glauber-Gribov ones.
+
+16-July-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-09)
+- G4HadronInelasticQBBC - removed statics class memebers
+
+06-August-2018, Alberto Ribon      (phys-ctor-hinelastic-V10-04-08)
+- G4HadronPhysicsFTFP_BERT_HP, G4HadronPhysicsINCLXX, 
+  G4HadronPhysicsShielding, G4HadronPhysicsQGSP_BIC_AllHP,
+  G4HadronPhysicsNuBeam, G4HadronPhysicsShieldingLEND,
+  G4HadronPhysicsQGSP_BERT_HP, G4HadronPhysicsQGSP_BIC_HP,
+  G4HadronPhysicsFTFQGSP_BERT, G4HadronInelasticQBBC :
+  replaced the explicit high-energy limit of hadronic physics with
+  the one from G4HadronicParameters .
+
+28-July-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-07)
+- in all hadronic builders implement fix for #2057, remove possible 
+  double deletion of objects end of run
+
+25-July-2018, Alberto Ribon        (phys-ctor-hinelastic-V10-04-06)
+- G4HadronPhysicsQGSP_BIC_AllHP : rewritten the physics constructor
+  for QGSP_BIC_AllHP, consistently with QGSP_BIC_HP (this fixes the
+  problem of two fully overlapping neutron-capture models).
+
+21-July-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-05)
+- G4VHadronPhysics - added extra method
+- G4HadronInelasticQBBC, G4HadronPhysicsFTFP_BERT, 
+  G4HadronPhysicsQGSP_BIC_AllHP, G4HadronPhysicsQGS_BIC - do not fill 
+    internal structure for cross sections
+
+20-July-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-04)
+- G4HadronPhysicsQGSP_BIC, G4HadronPhysicsQGSP_BIC_HP,
+  G4HadronPhysicsQGSP_BIC_AllHP - fixed C++11 keyward
+- G4HadronInelasticQBBC - restore from 02
+
+18-July-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-03)
+- G4HadronInelasticQBBC - removed static members
+
+18-July-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-02)
+- G4HadronInelasticQBBC, G4HadronPhysicsFTFP_BERT, G4HadronPhysicsQGSP_BIC
+    clean-up model and cross section configurations for neutrons
+
+18-July-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-01)
+- G4HadronPhysicsQGSP_BIC, G4HadronPhysicsQGSP_BIC_HP,
+  G4HadronPhysicsQGSP_BIC_AllHP - fixed configuration of capture
+    and fission models and cross sections; address problem #2057
 
 31-May-2018, Vladimir Ivantchenko (phys-ctor-hinelastic-V10-04-00)
 - G4HadronInelasticQBBC - use G4ParticleInelasticXS both for neutrons

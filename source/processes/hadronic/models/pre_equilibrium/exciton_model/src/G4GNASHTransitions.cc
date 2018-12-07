@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GNASHTransitions.cc 96603 2016-04-25 13:29:51Z gcosmo $
 //
 // 20.08.2010 V.Ivanchenko move constructor and destructor to the source 
 
@@ -51,9 +50,10 @@ CalculateProbability(const G4Fragment & aFragment)
   G4double P = aFragment.GetNumberOfParticles();
   G4double H = aFragment.GetNumberOfHoles();
   G4double N = P + H;
-  G4double A = aFragment.GetA_asInt();
+  G4int Z = aFragment.GetZ_asInt();
+  G4int A = aFragment.GetA_asInt();
 
-  G4double theMatrixElement(k*N/(A*A*A*E));
+  G4double theMatrixElement(k*N/((A*A*A)*E));
   G4double x = E/(N*CLHEP::MeV);
   static const G4double xf = std::sqrt(2.0/7.0);
   if ( x < 2.0)      { x *= xf;   }
@@ -61,7 +61,7 @@ CalculateProbability(const G4Fragment & aFragment)
   else if ( x > 15.0){ x *= std::sqrt(15.0/x); }
   theMatrixElement *= x;
 
-  G4double gg =  (6.0/pi2)*theParameters->GetLevelDensity()*A;
+  G4double gg =  (6.0/pi2)*G4NuclearLevelData::GetInstance()->GetLevelDensity(Z,A,E);
 
   G4double Epauli = ((P+1.0)*(P+1.0) + (H+1.0)*(H+1.0) + (P+1.0) - 3.0*(H-1.0))*0.25;
 

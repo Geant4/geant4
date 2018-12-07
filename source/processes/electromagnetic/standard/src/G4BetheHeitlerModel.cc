@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc 110939 2018-06-27 12:02:21Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -36,17 +35,7 @@
 //
 // Creation date: 15.03.2005
 //
-// Modifications:
-// 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
-// 24-06-05 Increase number of bins to 200 (V.Ivantchenko)
-// 16-11-05 replace shootBit() by G4UniformRand()  mma
-// 04-12-05 SetProposedKineticEnergy(0.) for the killed photon (mma)
-// 20-02-07 SelectRandomElement is called for any initial gamma energy 
-//          in order to have selected element for polarized model (VI)
-// 25-10-10 Removed unused table, added element selector (VI) 
-// 28-05-18 New version with improved screening function approximation, improved
-//          efficiency, documentation and cleanup. Corrected call to selecting 
-//          target atom in the final state sampling. (M. Novak)   
+// Modifications by Vladimir Ivanchenko, Michel Maire, Mihaly Novak
 //
 // Class Description:
 //
@@ -65,11 +54,8 @@
 #include "G4Exp.hh"
 #include "G4ModifiedTsai.hh"
 
-
 const G4int G4BetheHeitlerModel::gMaxZet = 120; 
 std::vector<G4BetheHeitlerModel::ElementData*> G4BetheHeitlerModel::gElementData;
-
-
 
 G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*, 
                                          const G4String& nam)
@@ -81,8 +67,6 @@ G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
   SetAngularDistribution(new G4ModifiedTsai());
 }
 
-
-
 G4BetheHeitlerModel::~G4BetheHeitlerModel()
 {
   if (IsMaster()) {
@@ -93,8 +77,6 @@ G4BetheHeitlerModel::~G4BetheHeitlerModel()
     gElementData.clear(); 
   }
 }
-
-
 
 void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition* p, 
                                      const G4DataVector& cuts)
@@ -108,15 +90,11 @@ void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition* p,
   }
 }
 
-
-
 void G4BetheHeitlerModel::InitialiseLocal(const G4ParticleDefinition*, 
                                           G4VEmModel* masterModel)
 {
   SetElementSelectors(masterModel->GetElementSelectors());
 }
-
-
 
 // Calculates the microscopic cross section in GEANT4 internal units.
 // A parametrized formula from L. Urban is used to estimate
@@ -181,8 +159,6 @@ G4BetheHeitlerModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   xSection = std::max(xSection, 0.); 
   return xSection;
 }
-
-
 
 // The secondaries e+e- energies are sampled using the Bethe - Heitler
 // cross sections with Coulomb correction.
@@ -315,8 +291,6 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);   
 }
-
-
 
 // should be called only by the master and at initialisation
 void G4BetheHeitlerModel::InitialiseElementData() 

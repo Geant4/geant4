@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm15/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 110439 2018-05-23 11:24:51Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -127,18 +126,17 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     G4ThreeVector PolaGamma  = PrePoint->GetPolarization();
 
     G4double Eplus=-1;
-    // G4double Eminus=-1;
-    // G4double Erecoil=-1;
     G4ThreeVector Pplus, Pminus, Precoil;
-    //G4int recPDG;
 
     const G4TrackVector* secondary = fpSteppingManager->GetSecondary();
 
+    //No conversion , E < threshold
+    if ((*secondary).size() == 0) return;
+  
     for (size_t lp=0; lp< std::min((*secondary).size(),size_t(2) ); lp++) {
       if ((*secondary)[lp]->GetDefinition()==G4Electron::ElectronDefinition()) {
-        // Eminus = (*secondary)[lp]->GetTotalEnergy();
         Pminus = (*secondary)[lp]->GetMomentum();
-      } //else {
+      }
       if ((*secondary)[lp]->GetDefinition()==G4Positron::PositronDefinition()) {
         Eplus  = (*secondary)[lp]->GetTotalEnergy();
         Pplus  = (*secondary)[lp]->GetMomentum();
@@ -146,38 +144,24 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     }
 
     if ( (*secondary).size() >= 3 ) {
-      // Erecoil  = (*secondary)[2]->GetTotalEnergy();
       Precoil  = (*secondary)[2]->GetMomentum();
-      // recPDG = (*secondary)[2]->GetDynamicParticle()->GetPDGcode();
     } else {
-      // Erecoil  = 0.0;
       Precoil  = G4ThreeVector();
-      // recPDG = 0;
     }
 
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     
     // Fill Histograms
     
-    G4ThreeVector gammadir = PGamma.unit(); // gamma direction
-    
-    G4ThreeVector z = gammadir;
+    G4ThreeVector z = PGamma.unit(); // gamma direction
     G4ThreeVector x(1.,0.,0.);
     
     // pola perpendicular to direction
+
     if ( PolaGamma.mag() != 0.0 ) {
       x = PolaGamma.unit();
     } else { // Pola = 0 case
-      // Direction (z) is unitary vector
-      //  (projection to plane) p_proj = p - (p o d)/(d o d) x d
-      if ( x.howOrthogonal(z) != 0) {
-        x = x - x.dot(z) * z;
-      }
-      if (x.mag() != 0.0 ) {
-        x = x.unit();
-      } else {
-        x.set(0.0,0.0,1.0);
-      }
+      x = z.orthogonal().unit();
     }
 
     G4ThreeVector y = z;
@@ -191,18 +175,14 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     analysisManager->FillH1(10,angleE);
  
     analysisManager->FillH1(11,std::log10(Precoil.mag()));
-    //analysisManager->FillH1(12,Precoil.rotateUz(gammadir).phi());
     analysisManager->FillH1(12,Precoil.transform(WtoG).phi());
     
-    //    G4double phiPlus =  Pplus.rotateUz(gammadir).phi();
-    //   G4double phiMinus =  Pminus.rotateUz(gammadir).phi();
     G4double phiPlus =  Pplus.transform(WtoG).phi();
     G4double phiMinus =  Pminus.transform(WtoG).phi();
     analysisManager->FillH1(13,phiPlus);
     analysisManager->FillH1(14,std::cos(phiPlus + phiMinus) * -2.0);
     analysisManager->FillH1(15,Eplus/EGamma);
     
-    //G4double phiPola =  PolaGamma.rotateUz(gammadir).phi();
     G4double phiPola =  PolaGamma.transform(WtoG).phi();
     analysisManager->FillH1(16, phiPola);
   }

@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.1.3 FATAL_ERROR)
 
 set(name ts_scorers)
-project(ThreadsafeScorers)
+project(ThreadsafeScorers C CXX)
 
 find_package(Geant4 REQUIRED ui_all vis_all)
 include(${Geant4_USE_FILE})
@@ -34,3 +34,7 @@ foreach(_macro ${macros})
                   COPYONLY)
 endforeach()
 
+#----------------------------------------------------------------------------
+# Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
+#
+install(TARGETS ${name} DESTINATION bin)

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // Author: Ivana Hrivnacova, 20/07/2017 (ivana@ipno.in2p3.fr)
 
@@ -352,7 +351,7 @@ G4bool G4Hdf5AnalysisManager::WriteImpl()
 }
 
 //_____________________________________________________________________________
-G4bool G4Hdf5AnalysisManager::CloseFileImpl()
+G4bool G4Hdf5AnalysisManager::CloseFileImpl(G4bool reset)
 {
   auto finalResult = true;
 
@@ -360,14 +359,20 @@ G4bool G4Hdf5AnalysisManager::CloseFileImpl()
   auto result = fFileManager->CloseFile();
   finalResult = finalResult && result;
 
-  // reset data
-  result = Reset();
+  if ( reset ) {
+    // reset data
+    result = Reset();
+  } else {
+    // ntuple must be reset 
+    result = fNtupleManager->Reset(true);
+  }
   if ( ! result ) {
       G4ExceptionDescription description;
       description << "      " << "Resetting data failed";
       G4Exception("G4Hdf5AnalysisManager::CloseFile()",
                 "Analysis_W021", JustWarning, description);
-  } 
+  }
+
   lock.unlock();
   finalResult = finalResult && result;
 

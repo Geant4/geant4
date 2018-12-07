@@ -1,0 +1,39 @@
+/Physics/addPhysics QGSP_BIC_EMY
+/geometrySetup/selectGeometry Carbon
+/run/initialize
+
+/run/setCut 1 mm
+/run/setCutForRegion DetectorLog 1 km
+
+/Step/waterPhantomStepMax 10 um
+
+/gps/particle ion
+/gps/ion 6 12 6
+/gps/position 0. 0. 0. cm
+/gps/ene/type Gauss
+/gps/ene/mono 2244 MeV
+/gps/direction 1 0 0
+
+/changePhantom/size 40 40 40 cm
+/changePhantom/position 20 0 0 cm
+/changePhantom/material G4_WATER
+
+/changeDetector/voxelSize .02 40 40 mm
+/changeDetector/size 120 40 40 mm
+/changeDetector/displacement 0 18 18 cm    # With respect to the phantom
+
+/changePhantom/update
+
+/event/printEventNumber 100
+
+### RBE (CHO cell line)
+/rbe/calculation 1
+/rbe/verbose 2
+/rbe/loadLemTable data/rbe/CHOScholz1997_LEM.csv
+/rbe/cellLine CHO
+
+/rbe/doseScale 320000
+# Dose scale should be: 2e7 / nEvents * voxelSizeInCm2
+
+/run/printProgress 100
+/run/beamOn 1000

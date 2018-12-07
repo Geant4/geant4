@@ -27,7 +27,6 @@
 /// \brief Implementation of the F03FieldSetup class
 //
 //
-// $Id: F03FieldSetup.cc 109870 2018-05-09 12:39:45Z gcosmo $
 //
 //
 //   Field Setup class implementation.
@@ -210,7 +209,7 @@ void F03FieldSetup::CreateSteppers()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F03FieldSetup::SetFieldValue(G4double fieldStrength)
+void F03FieldSetup::SetFieldZValue(G4double fieldStrength)
 {
   G4ThreeVector fieldSetVec(0.0, 0.0, fieldStrength);
   SetFieldValue( fieldSetVec );
@@ -246,6 +245,33 @@ void F03FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void F03FieldSetup::SetLocalFieldValue(G4ThreeVector fieldVector)
+{
+  if(fLocalMagneticField) delete fLocalMagneticField;
+
+  if(fieldVector != G4ThreeVector(0.,0.,0.))
+  {
+    fLocalMagneticField = new  G4UniformMagField(fieldVector);
+  }
+  else
+  {
+    // If the new field's value is Zero, then
+    // setting the pointer to zero ensures
+    // that it is not used for propagation.
+    fLocalMagneticField = 0;
+  }
+
+  // Either
+  //   - UpdateField() to reset all (ChordFinder, Equation);
+  // UpdateField();
+  //     or simply update the field manager & equation of motion
+  //     with pointer to new field
+  GetLocalFieldManager()->SetDetectorField(fLocalMagneticField);
+  fEquation->SetFieldObj( fLocalMagneticField );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4FieldManager* F03FieldSetup::GetGlobalFieldManager()
 {
   return G4TransportationManager::GetTransportationManager()
@@ -254,12 +280,14 @@ G4FieldManager* F03FieldSetup::GetGlobalFieldManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreeVector F03FieldSetup::GetConstantFieldValue()
+G4ThreeVector F03FieldSetup::GetConstantFieldValue(G4MagneticField* magneticField) const
 {
+  if ( ! magneticField ) return G4ThreeVector();
+
   static G4double fieldValue[6],  position[4];
   position[0] = position[1] = position[2] = position[3] = 0.0;
 
-  fMagneticField->GetFieldValue( position, fieldValue);
+  magneticField->GetFieldValue( position, fieldValue);
   G4ThreeVector fieldVec(fieldValue[0], fieldValue[1], fieldValue[2]);
 
   return fieldVec;

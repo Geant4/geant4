@@ -27,7 +27,6 @@
 /// \brief Main program of the extensibleFactory example
 //
 //
-// $Id: extensibleFactory.cc 106244 2017-11-02 01:58:00Z rhatcher $
 //
 // -------------------------------------------------------------
 //      extensibleFactory

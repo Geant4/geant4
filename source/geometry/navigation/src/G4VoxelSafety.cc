@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VoxelSafety.cc,v $
 //
 //  Author:  John Apostolakis
 //  First version:  31 May 2010

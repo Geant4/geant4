@@ -1,0 +1,122 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+//
+//
+// class G4BFieldIntegrationDriver
+//
+// Class description:
+//
+// Specialized integration driver for pure magnetic field
+
+// History:
+// - Created. D.Sorokin
+// --------------------------------------------------------------------
+
+
+#include "globals.hh"
+#include "G4GeometryTolerance.hh"
+#include "G4FieldTrack.hh"
+#include "G4FieldUtils.hh"
+
+namespace internal {
+
+G4Mag_EqRhs* toMagneticEquation(G4EquationOfMotion* equation)
+{
+    auto e = dynamic_cast<G4Mag_EqRhs*>(equation);
+
+    if (!e) {
+        G4Exception("G4BFieldIntegrationDriver::G4BFieldIntegrationDriver",
+                    "GeomField0003", FatalErrorInArgument,
+                    "Works only with G4Mag_EqRhs");
+    }
+
+    return e;
+}
+
+} // internal
+
+
+template <class T>
+G4BFieldIntegrationDriver<T>::G4BFieldIntegrationDriver(G4double hminimum,
+                                                        T* pStepper,
+                                                        G4int numComponents, 
+                                                        G4int statisticsVerbose)
+    : G4IntegrationDriver<T>(hminimum, pStepper, numComponents, statisticsVerbose)
+    , fallbackThreshold(pi / 3.)
+    , fequation(internal::toMagneticEquation(pStepper->GetEquationOfMotion()))
+    , fallbackStepper(fequation)
+{
+}
+
+template <class T>
+bool G4BFieldIntegrationDriver<T>::QuickAdvance(G4FieldTrack& fieldTrack,
+                                                const G4double dydx[],
+                                                G4double hstep,
+                                                G4double inverseCurvatureRadius,
+                                                G4double& dchord_step,
+                                                G4double& dyerr)
+{
+    if (hstep * inverseCurvatureRadius < fallbackThreshold) {
+        return G4IntegrationDriver<T>::QuickAdvance(
+            fieldTrack, dydx, hstep, inverseCurvatureRadius, dchord_step, dyerr);
+    }
+
+    G4IntegrationDriver<T>::IncrementQuickAdvanceCalls();
+
+    G4double yError[G4FieldTrack::ncompSVEC],
+             yIn[G4FieldTrack::ncompSVEC],
+             yOut[G4FieldTrack::ncompSVEC];
+
+    fieldTrack.DumpToArray(yIn);
+
+    fallbackStepper.Stepper(yIn, dydx, hstep, yOut, yError);
+    dchord_step = fallbackStepper.DistChord();
+    dyerr = field_utils::absoluteError(yOut, yError, hstep);
+
+    fieldTrack.LoadFromArray(yOut, fallbackStepper.GetNumberOfVariables());
+    fieldTrack.SetCurveLength(fieldTrack.GetCurveLength() + hstep);
+
+    return true;
+}
+
+template <class T>
+void G4BFieldIntegrationDriver<T>::SetEquationOfMotion(G4EquationOfMotion* equation)
+{
+    G4IntegrationDriver<T>::SetEquationOfMotion(equation);
+    fequation = internal::toMagneticEquation(equation);
+}
+
+template <class T>
+G4double G4BFieldIntegrationDriver<T>::GetInverseCurvatureRadius(const G4FieldTrack& track,
+                                                                 G4double field[]) const
+{
+    const G4double Bmag = std::sqrt(field[0] * field[0] + field[1] * field[1] + field[2] * field[2]);
+    const G4double momentum = track.GetMomentum().mag();
+    const G4double particleCharge = fequation->FCof() / (CLHEP::eplus * CLHEP::c_light);
+
+    return std::abs(field_utils::inverseCurvatureRadius(particleCharge, momentum, Bmag));
+}

@@ -209,7 +209,7 @@ namespace G4INCL {
             }
         }
 
-        std::random_shuffle(isosp,isosp+npion,Random::getAdapter());
+        std::shuffle(isosp,isosp+npion,Random::getAdapter());
         inter2Part(0.5);
     }
 

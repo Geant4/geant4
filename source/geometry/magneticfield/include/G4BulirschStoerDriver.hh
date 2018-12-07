@@ -23,7 +23,6 @@
 // ********************************************************************
 //
 //
-// $Id: $
 //
 // Helper namespace 'magneticfield'
 //
@@ -43,9 +42,12 @@
 
 #include "G4IntegrationDriver.hh"
 #include "G4BulirschStoer.hh"
+#include "G4ChordFinderDelegate.hh"
 
 template <>
-class G4IntegrationDriver<G4BulirschStoer>: public G4VIntegrationDriver {
+class G4IntegrationDriver<G4BulirschStoer>: 
+    public G4VIntegrationDriver,
+    public G4ChordFinderDelegate<G4IntegrationDriver<G4BulirschStoer>> {
 public:
     G4IntegrationDriver(
         G4double hminimum,
@@ -58,6 +60,21 @@ public:
     G4IntegrationDriver(const G4IntegrationDriver&) = delete;
     G4IntegrationDriver& operator=(const G4IntegrationDriver&) = delete;
 
+    virtual G4double AdvanceChordLimited(G4FieldTrack& track,
+                                         G4double hstep,
+                                         G4double eps,
+                                         G4double chordDistance) override
+    {
+        return ChordFinderDelegate::AdvanceChordLimitedImpl(track, hstep, eps, chordDistance);
+    }
+
+    virtual void OnStartTracking() override
+    {
+        ChordFinderDelegate::ResetStepEstimate();
+    }
+
+    virtual void OnComputeStep() override {};
+
     virtual G4bool AccurateAdvance(
         G4FieldTrack& track,
         G4double stepLen,
@@ -68,6 +85,7 @@ public:
         G4FieldTrack& y_val,
         const G4double dydx[],
         G4double hstep,
+        G4double inverseCurvatureRadius,
         G4double& missDist,
         G4double& dyerr) override;
 
@@ -83,6 +101,11 @@ public:
     virtual void GetDerivatives(
         const G4FieldTrack& track,
         G4double dydx[]) const override;
+
+    virtual void GetDerivatives(
+        const G4FieldTrack& track,
+        G4double dydx[],
+        G4double field[]) const override;
 
     virtual void SetVerboseLevel(G4int level) override;
     virtual G4int GetVerboseLevel() const override;
@@ -121,6 +144,8 @@ private:
     G4double derivs[2][6][G4FieldTrack::ncompSVEC];
 
     const G4int interval_sequence[2];
+
+    using ChordFinderDelegate = G4ChordFinderDelegate<G4IntegrationDriver<G4BulirschStoer>>;
 };
 
 #include "G4BulirschStoerDriver.icc"

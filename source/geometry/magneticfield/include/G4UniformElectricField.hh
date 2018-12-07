@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.hh 96751 2016-05-04 09:39:38Z gcosmo $
 //
 // 
 // class G4UniformElectricField

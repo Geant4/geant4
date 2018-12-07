@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -62,7 +62,7 @@ Some /vis commands (optionally) take a string to specify colour.
 *** /run/numberOfThreads command is issued in sequential mode.
 Command is ignored.
 WARNING: There is no world volume!
-PhysicsList::RegisterConstructor: <G4EmDNAPhysics_option2>
+PhysicsList::AddPhysicsList: <dna_opt2>
 
 ---------------------------------------------------------
 ---> The Absorber is a sphere of 10 m   radius of G4_WATER made of
@@ -153,8 +153,8 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGenUrban
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -254,10 +254,10 @@ DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      100 MeV
 
  The run is 10000 e- of 10.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAAttachment = 1	e-_G4DNAElastic = 9055	e-_G4DNAExcitation = 10	e-_G4DNAVibExcitation = 934
+ Process calls frequency --->	e-_G4DNAAttachment = 1	e-_G4DNAElastic = 8998	e-_G4DNAExcitation = 12	e-_G4DNAVibExcitation = 989
 
- MeanFreePath:	2.18 Ang +- 2.17 Ang			massic: 0.00 mg/cm2
- CrossSection:	45893658.21 cm^-1 			massic: 45893658.21 cm2/g
+ MeanFreePath:	2.19 Ang +- 2.16 Ang			massic: 0.00 mg/cm2
+ CrossSection:	45756518.22 cm^-1 			massic: 45756518.22 cm2/g
 
  mean energy of charged secondaries: 0.00 eV 	mass_energy_transfer coef: 0.00 cm2/g
 
@@ -265,295 +265,295 @@ DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      100 MeV
 
  The run is 10000 e- of 20.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 8464	e-_G4DNAExcitation = 98	e-_G4DNAIonisation = 448	e-_G4DNAVibExcitation = 990
+ Process calls frequency --->	e-_G4DNAElastic = 8413	e-_G4DNAExcitation = 87	e-_G4DNAIonisation = 452	e-_G4DNAVibExcitation = 1048
 
- MeanFreePath:	2.95 Ang +- 2.89 Ang			massic: 0.00 mg/cm2
- CrossSection:	33844696.90 cm^-1 			massic: 33844696.90 cm2/g
+ MeanFreePath:	2.95 Ang +- 2.96 Ang			massic: 0.00 mg/cm2
+ CrossSection:	33852720.96 cm^-1 			massic: 33852720.96 cm2/g
 
- mean energy of charged secondaries: 0.10 eV 	mass_energy_transfer coef: 172793.30 cm2/g
+ mean energy of charged secondaries: 0.11 eV 	mass_energy_transfer coef: 187674.03 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 30.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 7591	e-_G4DNAExcitation = 119	e-_G4DNAIonisation = 1247	e-_G4DNAVibExcitation = 1043
+ Process calls frequency --->	e-_G4DNAElastic = 7493	e-_G4DNAExcitation = 153	e-_G4DNAIonisation = 1318	e-_G4DNAVibExcitation = 1036
 
- MeanFreePath:	3.47 Ang +- 3.45 Ang			massic: 0.00 mg/cm2
- CrossSection:	28826444.32 cm^-1 			massic: 28826444.32 cm2/g
+ MeanFreePath:	3.46 Ang +- 3.44 Ang			massic: 0.00 mg/cm2
+ CrossSection:	28934283.45 cm^-1 			massic: 28934283.45 cm2/g
 
- mean energy of charged secondaries: 0.59 eV 	mass_energy_transfer coef: 562678.72 cm2/g
+ mean energy of charged secondaries: 0.64 eV 	mass_energy_transfer coef: 617546.41 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 40.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 6704	e-_G4DNAExcitation = 126	e-_G4DNAIonisation = 1931	e-_G4DNAVibExcitation = 1239
+ Process calls frequency --->	e-_G4DNAElastic = 6520	e-_G4DNAExcitation = 123	e-_G4DNAIonisation = 2110	e-_G4DNAVibExcitation = 1247
 
- MeanFreePath:	3.94 Ang +- 3.94 Ang			massic: 0.00 mg/cm2
- CrossSection:	25404724.62 cm^-1 			massic: 25404724.62 cm2/g
+ MeanFreePath:	3.92 Ang +- 3.92 Ang			massic: 0.00 mg/cm2
+ CrossSection:	25529450.98 cm^-1 			massic: 25529450.98 cm2/g
 
- mean energy of charged secondaries: 1.36 eV 	mass_energy_transfer coef: 864971.53 cm2/g
+ mean energy of charged secondaries: 1.54 eV 	mass_energy_transfer coef: 982549.57 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 50.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 5943	e-_G4DNAExcitation = 145	e-_G4DNAIonisation = 2778	e-_G4DNAVibExcitation = 1134
+ Process calls frequency --->	e-_G4DNAElastic = 5975	e-_G4DNAExcitation = 126	e-_G4DNAIonisation = 2682	e-_G4DNAVibExcitation = 1217
 
- MeanFreePath:	4.21 Ang +- 4.21 Ang			massic: 0.00 mg/cm2
- CrossSection:	23732590.88 cm^-1 			massic: 23732590.88 cm2/g
+ MeanFreePath:	4.21 Ang +- 4.22 Ang			massic: 0.00 mg/cm2
+ CrossSection:	23743723.63 cm^-1 			massic: 23743723.63 cm2/g
 
- mean energy of charged secondaries: 2.47 eV 	mass_energy_transfer coef: 1172634.51 cm2/g
+ mean energy of charged secondaries: 2.45 eV 	mass_energy_transfer coef: 1161723.39 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 60.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 5414	e-_G4DNAExcitation = 138	e-_G4DNAIonisation = 3259	e-_G4DNAVibExcitation = 1189
+ Process calls frequency --->	e-_G4DNAElastic = 5385	e-_G4DNAExcitation = 155	e-_G4DNAIonisation = 3231	e-_G4DNAVibExcitation = 1229
 
- MeanFreePath:	4.47 Ang +- 4.46 Ang			massic: 0.00 mg/cm2
- CrossSection:	22368556.89 cm^-1 			massic: 22368556.89 cm2/g
+ MeanFreePath:	4.51 Ang +- 4.47 Ang			massic: 0.00 mg/cm2
+ CrossSection:	22182247.06 cm^-1 			massic: 22182247.06 cm2/g
 
- mean energy of charged secondaries: 3.36 eV 	mass_energy_transfer coef: 1250878.55 cm2/g
+ mean energy of charged secondaries: 3.31 eV 	mass_energy_transfer coef: 1223217.68 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 70.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 4994	e-_G4DNAExcitation = 121	e-_G4DNAIonisation = 3533	e-_G4DNAVibExcitation = 1352
+ Process calls frequency --->	e-_G4DNAElastic = 4979	e-_G4DNAExcitation = 122	e-_G4DNAIonisation = 3495	e-_G4DNAVibExcitation = 1404
 
- MeanFreePath:	4.66 Ang +- 4.72 Ang			massic: 0.00 mg/cm2
- CrossSection:	21448399.76 cm^-1 			massic: 21448399.76 cm2/g
+ MeanFreePath:	4.67 Ang +- 4.63 Ang			massic: 0.00 mg/cm2
+ CrossSection:	21404238.22 cm^-1 			massic: 21404238.22 cm2/g
 
- mean energy of charged secondaries: 4.05 eV 	mass_energy_transfer coef: 1240337.01 cm2/g
+ mean energy of charged secondaries: 3.93 eV 	mass_energy_transfer coef: 1202032.70 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 80.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 4627	e-_G4DNAExcitation = 127	e-_G4DNAIonisation = 3662	e-_G4DNAVibExcitation = 1584
+ Process calls frequency --->	e-_G4DNAElastic = 4494	e-_G4DNAExcitation = 115	e-_G4DNAIonisation = 3809	e-_G4DNAVibExcitation = 1582
 
- MeanFreePath:	4.69 Ang +- 4.70 Ang			massic: 0.00 mg/cm2
- CrossSection:	21305482.84 cm^-1 			massic: 21305482.84 cm2/g
+ MeanFreePath:	4.77 Ang +- 4.71 Ang			massic: 0.00 mg/cm2
+ CrossSection:	20979406.62 cm^-1 			massic: 20979406.62 cm2/g
 
- mean energy of charged secondaries: 4.45 eV 	mass_energy_transfer coef: 1184326.86 cm2/g
+ mean energy of charged secondaries: 4.67 eV 	mass_energy_transfer coef: 1225412.55 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 90.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 4359	e-_G4DNAExcitation = 119	e-_G4DNAIonisation = 4051	e-_G4DNAVibExcitation = 1471
+ Process calls frequency --->	e-_G4DNAElastic = 4440	e-_G4DNAExcitation = 105	e-_G4DNAIonisation = 4026	e-_G4DNAVibExcitation = 1429
 
- MeanFreePath:	5.04 Ang +- 5.04 Ang			massic: 0.00 mg/cm2
- CrossSection:	19822746.15 cm^-1 			massic: 19822746.15 cm2/g
+ MeanFreePath:	4.98 Ang +- 4.98 Ang			massic: 0.00 mg/cm2
+ CrossSection:	20065025.76 cm^-1 			massic: 20065025.76 cm2/g
 
- mean energy of charged secondaries: 5.25 eV 	mass_energy_transfer coef: 1155620.11 cm2/g
+ mean energy of charged secondaries: 5.21 eV 	mass_energy_transfer coef: 1160670.54 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 100.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 4989	e-_G4DNAExcitation = 146	e-_G4DNAIonisation = 4865
+ Process calls frequency --->	e-_G4DNAElastic = 4225	e-_G4DNAExcitation = 126	e-_G4DNAIonisation = 4139	e-_G4DNAVibExcitation = 1510
 
- MeanFreePath:	6.06 Ang +- 6.03 Ang			massic: 0.00 mg/cm2
- CrossSection:	16511212.17 cm^-1 			massic: 16511212.17 cm2/g
+ MeanFreePath:	5.20 Ang +- 5.14 Ang			massic: 0.00 mg/cm2
+ CrossSection:	19240811.79 cm^-1 			massic: 19240811.79 cm2/g
 
- mean energy of charged secondaries: 6.67 eV 	mass_energy_transfer coef: 1101501.57 cm2/g
+ mean energy of charged secondaries: 5.66 eV 	mass_energy_transfer coef: 1088598.88 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 200.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 4143	e-_G4DNAExcitation = 122	e-_G4DNAIonisation = 5735
+ Process calls frequency --->	e-_G4DNAElastic = 4216	e-_G4DNAExcitation = 128	e-_G4DNAIonisation = 5656
 
- MeanFreePath:	8.43 Ang +- 8.52 Ang			massic: 0.00 mg/cm2
- CrossSection:	11857765.02 cm^-1 			massic: 11857765.02 cm2/g
+ MeanFreePath:	8.48 Ang +- 8.48 Ang			massic: 0.00 mg/cm2
+ CrossSection:	11794399.23 cm^-1 			massic: 11794399.23 cm2/g
 
- mean energy of charged secondaries: 10.68 eV 	mass_energy_transfer coef: 633020.08 cm2/g
+ mean energy of charged secondaries: 10.62 eV 	mass_energy_transfer coef: 626275.24 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 300.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 4147	e-_G4DNAExcitation = 116	e-_G4DNAIonisation = 5737
+ Process calls frequency --->	e-_G4DNAElastic = 3999	e-_G4DNAExcitation = 128	e-_G4DNAIonisation = 5873
 
- MeanFreePath:	1.07 nm  +- 1.06 nm 			massic: 0.00 mg/cm2
- CrossSection:	9371921.75 cm^-1 			massic: 9371921.75 cm2/g
+ MeanFreePath:	1.08 nm  +- 1.08 nm 			massic: 0.00 mg/cm2
+ CrossSection:	9275774.10 cm^-1 			massic: 9275774.10 cm2/g
 
- mean energy of charged secondaries: 12.16 eV 	mass_energy_transfer coef: 379815.92 cm2/g
+ mean energy of charged secondaries: 12.60 eV 	mass_energy_transfer coef: 389559.52 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 400.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 4011	e-_G4DNAExcitation = 88	e-_G4DNAIonisation = 5901
+ Process calls frequency --->	e-_G4DNAElastic = 4016	e-_G4DNAExcitation = 109	e-_G4DNAIonisation = 5875
 
- MeanFreePath:	1.29 nm  +- 1.30 nm 			massic: 0.00 mg/cm2
- CrossSection:	7775016.11 cm^-1 			massic: 7775016.11 cm2/g
+ MeanFreePath:	1.29 nm  +- 1.29 nm 			massic: 0.00 mg/cm2
+ CrossSection:	7752712.27 cm^-1 			massic: 7752712.27 cm2/g
 
- mean energy of charged secondaries: 13.53 eV 	mass_energy_transfer coef: 263060.08 cm2/g
+ mean energy of charged secondaries: 13.37 eV 	mass_energy_transfer coef: 259209.32 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 500.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3941	e-_G4DNAExcitation = 91	e-_G4DNAIonisation = 5968
+ Process calls frequency --->	e-_G4DNAElastic = 3958	e-_G4DNAExcitation = 106	e-_G4DNAIonisation = 5936
 
- MeanFreePath:	1.50 nm  +- 1.51 nm 			massic: 0.00 mg/cm2
- CrossSection:	6661260.63 cm^-1 			massic: 6661260.63 cm2/g
+ MeanFreePath:	1.50 nm  +- 1.52 nm 			massic: 0.00 mg/cm2
+ CrossSection:	6649475.49 cm^-1 			massic: 6649475.49 cm2/g
 
- mean energy of charged secondaries: 14.61 eV 	mass_energy_transfer coef: 194657.12 cm2/g
+ mean energy of charged secondaries: 14.59 eV 	mass_energy_transfer coef: 194080.54 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 600.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3940	e-_G4DNAExcitation = 105	e-_G4DNAIonisation = 5955
+ Process calls frequency --->	e-_G4DNAElastic = 3953	e-_G4DNAExcitation = 103	e-_G4DNAIonisation = 5944
 
- MeanFreePath:	1.70 nm  +- 1.68 nm 			massic: 0.00 mg/cm2
- CrossSection:	5892391.08 cm^-1 			massic: 5892391.08 cm2/g
+ MeanFreePath:	1.71 nm  +- 1.74 nm 			massic: 0.00 mg/cm2
+ CrossSection:	5840394.38 cm^-1 			massic: 5840394.38 cm2/g
 
- mean energy of charged secondaries: 14.65 eV 	mass_energy_transfer coef: 143825.84 cm2/g
+ mean energy of charged secondaries: 15.04 eV 	mass_energy_transfer coef: 146371.91 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 700.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3947	e-_G4DNAExcitation = 89	e-_G4DNAIonisation = 5964
+ Process calls frequency --->	e-_G4DNAElastic = 3996	e-_G4DNAExcitation = 91	e-_G4DNAIonisation = 5913
 
- MeanFreePath:	1.88 nm  +- 1.88 nm 			massic: 0.00 mg/cm2
- CrossSection:	5306172.40 cm^-1 			massic: 5306172.40 cm2/g
+ MeanFreePath:	1.90 nm  +- 1.90 nm 			massic: 0.00 mg/cm2
+ CrossSection:	5252511.80 cm^-1 			massic: 5252511.80 cm2/g
 
- mean energy of charged secondaries: 16.28 eV 	mass_energy_transfer coef: 123406.75 cm2/g
+ mean energy of charged secondaries: 15.88 eV 	mass_energy_transfer coef: 119173.09 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 800.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3898	e-_G4DNAExcitation = 115	e-_G4DNAIonisation = 5987
+ Process calls frequency --->	e-_G4DNAElastic = 3974	e-_G4DNAExcitation = 112	e-_G4DNAIonisation = 5914
 
- MeanFreePath:	2.09 nm  +- 2.12 nm 			massic: 0.00 mg/cm2
- CrossSection:	4780769.39 cm^-1 			massic: 4780769.39 cm2/g
+ MeanFreePath:	2.09 nm  +- 2.09 nm 			massic: 0.00 mg/cm2
+ CrossSection:	4791411.14 cm^-1 			massic: 4791411.14 cm2/g
 
- mean energy of charged secondaries: 16.83 eV 	mass_energy_transfer coef: 100590.96 cm2/g
+ mean energy of charged secondaries: 16.29 eV 	mass_energy_transfer coef: 97570.43 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 900.00 eV  through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3964	e-_G4DNAExcitation = 82	e-_G4DNAIonisation = 5954
+ Process calls frequency --->	e-_G4DNAElastic = 3848	e-_G4DNAExcitation = 85	e-_G4DNAIonisation = 6067
 
- MeanFreePath:	2.28 nm  +- 2.25 nm 			massic: 0.00 mg/cm2
- CrossSection:	4391412.23 cm^-1 			massic: 4391412.23 cm2/g
+ MeanFreePath:	2.27 nm  +- 2.28 nm 			massic: 0.00 mg/cm2
+ CrossSection:	4404031.08 cm^-1 			massic: 4404031.08 cm2/g
 
- mean energy of charged secondaries: 16.35 eV 	mass_energy_transfer coef: 79755.64 cm2/g
+ mean energy of charged secondaries: 16.38 eV 	mass_energy_transfer coef: 80133.05 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 1.00 keV through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3913	e-_G4DNAExcitation = 113	e-_G4DNAIonisation = 5974
+ Process calls frequency --->	e-_G4DNAElastic = 3853	e-_G4DNAExcitation = 98	e-_G4DNAIonisation = 6049
 
- MeanFreePath:	2.47 nm  +- 2.51 nm 			massic: 0.00 mg/cm2
- CrossSection:	4054990.37 cm^-1 			massic: 4054990.37 cm2/g
+ MeanFreePath:	2.45 nm  +- 2.44 nm 			massic: 0.00 mg/cm2
+ CrossSection:	4087224.14 cm^-1 			massic: 4087224.14 cm2/g
 
- mean energy of charged secondaries: 17.55 eV 	mass_energy_transfer coef: 71183.04 cm2/g
+ mean energy of charged secondaries: 17.74 eV 	mass_energy_transfer coef: 72510.38 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 2.00 keV through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3890	e-_G4DNAExcitation = 109	e-_G4DNAIonisation = 6001
+ Process calls frequency --->	e-_G4DNAElastic = 3833	e-_G4DNAExcitation = 81	e-_G4DNAIonisation = 6086
 
- MeanFreePath:	4.30 nm  +- 4.28 nm 			massic: 0.00 mg/cm2
- CrossSection:	2323491.13 cm^-1 			massic: 2323491.13 cm2/g
+ MeanFreePath:	4.28 nm  +- 4.24 nm 			massic: 0.00 mg/cm2
+ CrossSection:	2338485.76 cm^-1 			massic: 2338485.76 cm2/g
 
- mean energy of charged secondaries: 18.81 eV 	mass_energy_transfer coef: 21856.53 cm2/g
+ mean energy of charged secondaries: 20.28 eV 	mass_energy_transfer coef: 23709.54 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 3.00 keV through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3763	e-_G4DNAExcitation = 104	e-_G4DNAIonisation = 6133
+ Process calls frequency --->	e-_G4DNAElastic = 3837	e-_G4DNAExcitation = 87	e-_G4DNAIonisation = 6076
 
- MeanFreePath:	5.96 nm  +- 5.95 nm 			massic: 0.00 mg/cm2
- CrossSection:	1678813.51 cm^-1 			massic: 1678813.51 cm2/g
+ MeanFreePath:	5.93 nm  +- 5.91 nm 			massic: 0.00 mg/cm2
+ CrossSection:	1685255.53 cm^-1 			massic: 1685255.53 cm2/g
 
- mean energy of charged secondaries: 22.12 eV 	mass_energy_transfer coef: 12378.94 cm2/g
+ mean energy of charged secondaries: 22.94 eV 	mass_energy_transfer coef: 12888.63 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 4.00 keV through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3835	e-_G4DNAExcitation = 99	e-_G4DNAIonisation = 6066
+ Process calls frequency --->	e-_G4DNAElastic = 3948	e-_G4DNAExcitation = 90	e-_G4DNAIonisation = 5962
 
- MeanFreePath:	7.50 nm  +- 7.49 nm 			massic: 0.00 mg/cm2
- CrossSection:	1333914.74 cm^-1 			massic: 1333914.74 cm2/g
+ MeanFreePath:	7.53 nm  +- 7.47 nm 			massic: 0.00 mg/cm2
+ CrossSection:	1327179.03 cm^-1 			massic: 1327179.03 cm2/g
 
- mean energy of charged secondaries: 22.68 eV 	mass_energy_transfer coef: 7562.35 cm2/g
+ mean energy of charged secondaries: 21.95 eV 	mass_energy_transfer coef: 7283.50 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 5.00 keV through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3786	e-_G4DNAExcitation = 99	e-_G4DNAIonisation = 6115
+ Process calls frequency --->	e-_G4DNAElastic = 3781	e-_G4DNAExcitation = 89	e-_G4DNAIonisation = 6130
 
- MeanFreePath:	8.98 nm  +- 8.99 nm 			massic: 0.00 mg/cm2
- CrossSection:	1113066.44 cm^-1 			massic: 1113066.44 cm2/g
+ MeanFreePath:	9.06 nm  +- 9.06 nm 			massic: 0.00 mg/cm2
+ CrossSection:	1103224.89 cm^-1 			massic: 1103224.89 cm2/g
 
- mean energy of charged secondaries: 24.31 eV 	mass_energy_transfer coef: 5411.75 cm2/g
+ mean energy of charged secondaries: 23.00 eV 	mass_energy_transfer coef: 5075.28 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 6.00 keV through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3757	e-_G4DNAExcitation = 86	e-_G4DNAIonisation = 6157
+ Process calls frequency --->	e-_G4DNAElastic = 3735	e-_G4DNAExcitation = 112	e-_G4DNAIonisation = 6153
 
- MeanFreePath:	10.59 nm  +- 10.57 nm 			massic: 0.00 mg/cm2
- CrossSection:	943930.78 cm^-1 			massic: 943930.78 cm2/g
+ MeanFreePath:	10.59 nm  +- 10.55 nm 			massic: 0.00 mg/cm2
+ CrossSection:	944104.06 cm^-1 			massic: 944104.06 cm2/g
 
- mean energy of charged secondaries: 24.24 eV 	mass_energy_transfer coef: 3813.28 cm2/g
+ mean energy of charged secondaries: 24.51 eV 	mass_energy_transfer coef: 3856.45 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 7.00 keV through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3652	e-_G4DNAExcitation = 94	e-_G4DNAIonisation = 6254
+ Process calls frequency --->	e-_G4DNAElastic = 3669	e-_G4DNAExcitation = 91	e-_G4DNAIonisation = 6240
 
- MeanFreePath:	12.23 nm  +- 12.20 nm 			massic: 0.00 mg/cm2
- CrossSection:	817557.63 cm^-1 			massic: 817557.63 cm2/g
+ MeanFreePath:	12.33 nm  +- 12.22 nm 			massic: 0.00 mg/cm2
+ CrossSection:	810987.39 cm^-1 			massic: 810987.39 cm2/g
 
- mean energy of charged secondaries: 25.85 eV 	mass_energy_transfer coef: 3019.58 cm2/g
+ mean energy of charged secondaries: 24.57 eV 	mass_energy_transfer coef: 2846.37 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 8.00 keV through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3571	e-_G4DNAExcitation = 93	e-_G4DNAIonisation = 6336
+ Process calls frequency --->	e-_G4DNAElastic = 3600	e-_G4DNAExcitation = 102	e-_G4DNAIonisation = 6298
 
- MeanFreePath:	13.87 nm  +- 13.82 nm 			massic: 0.00 mg/cm2
- CrossSection:	720826.32 cm^-1 			massic: 720826.32 cm2/g
+ MeanFreePath:	13.83 nm  +- 13.53 nm 			massic: 0.00 mg/cm2
+ CrossSection:	722866.49 cm^-1 			massic: 722866.49 cm2/g
 
- mean energy of charged secondaries: 27.61 eV 	mass_energy_transfer coef: 2487.37 cm2/g
+ mean energy of charged secondaries: 25.43 eV 	mass_energy_transfer coef: 2297.50 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 9.00 keV through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3517	e-_G4DNAExcitation = 86	e-_G4DNAIonisation = 6397
+ Process calls frequency --->	e-_G4DNAElastic = 3550	e-_G4DNAExcitation = 98	e-_G4DNAIonisation = 6352
 
- MeanFreePath:	15.29 nm  +- 15.46 nm 			massic: 0.00 mg/cm2
- CrossSection:	654016.89 cm^-1 			massic: 654016.89 cm2/g
+ MeanFreePath:	15.26 nm  +- 15.11 nm 			massic: 0.00 mg/cm2
+ CrossSection:	655182.91 cm^-1 			massic: 655182.91 cm2/g
 
- mean energy of charged secondaries: 25.82 eV 	mass_energy_transfer coef: 1876.51 cm2/g
+ mean energy of charged secondaries: 28.13 eV 	mass_energy_transfer coef: 2047.73 cm2/g
 
  ======================== run summary =====================
 
  The run is 10000 e- of 10.00 keV through a sphere of radius 10.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Process calls frequency --->	e-_G4DNAElastic = 3527	e-_G4DNAExcitation = 90	e-_G4DNAIonisation = 6383
+ Process calls frequency --->	e-_G4DNAElastic = 3484	e-_G4DNAExcitation = 84	e-_G4DNAIonisation = 6432
 
- MeanFreePath:	16.90 nm  +- 16.82 nm 			massic: 0.00 mg/cm2
- CrossSection:	591805.67 cm^-1 			massic: 591805.67 cm2/g
+ MeanFreePath:	16.99 nm  +- 17.28 nm 			massic: 0.00 mg/cm2
+ CrossSection:	588506.89 cm^-1 			massic: 588506.89 cm2/g
 
- mean energy of charged secondaries: 26.79 eV 	mass_energy_transfer coef: 1585.45 cm2/g
+ mean energy of charged secondaries: 26.29 eV 	mass_energy_transfer coef: 1547.32 cm2/g

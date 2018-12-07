@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx02/include/H02MuonHit.hh
 /// \brief Definition of the H02MuonHit class
 //
-//   $Id: H02MuonHit.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 #ifndef H02_MUON_HIT_H
 #define H02_MUON_HIT_H
@@ -71,29 +70,29 @@ public:
   virtual void Print();
 
 private:
-  G4int moduleID;
-  G4String pname;
-  G4ThreeVector momentum;
-  G4ThreeVector position;
-  G4double tof;
+  G4int fModuleID;
+  G4String fPname;
+  G4ThreeVector fMomentum;
+  G4ThreeVector fPosition;
+  G4double fTof;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-inline void H02MuonHit::SetModuleID(G4int i) { moduleID=i; }
-inline G4int H02MuonHit::GetModuleID() const { return moduleID; }
+inline void H02MuonHit::SetModuleID(G4int i) { fModuleID=i; }
+inline G4int H02MuonHit::GetModuleID() const { return fModuleID; }
 
-inline void H02MuonHit::SetParticle(G4String aname) { pname=aname; }
-inline G4String H02MuonHit::GetParticle() const { return pname; }
+inline void H02MuonHit::SetParticle(G4String aname) { fPname=aname; }
+inline G4String H02MuonHit::GetParticle() const { return fPname; }
 
 inline void H02MuonHit::SetMomentum(const G4ThreeVector& pxyz)
-{ momentum=pxyz; }
-inline G4ThreeVector H02MuonHit::GetMomentum() const { return momentum; }
+{ fMomentum=pxyz; }
+inline G4ThreeVector H02MuonHit::GetMomentum() const { return fMomentum; }
 
-inline void H02MuonHit::SetPosition(const G4ThreeVector& xyz) { position=xyz; }
-inline G4ThreeVector H02MuonHit::GetPosition() const { return position; }
+inline void H02MuonHit::SetPosition(const G4ThreeVector& xyz) { fPosition=xyz; }
+inline G4ThreeVector H02MuonHit::GetPosition() const { return fPosition; }
 
-inline void H02MuonHit::SetTOF(G4double atof) { tof=atof; }
-inline G4double H02MuonHit::GetTOF() const { return tof; }
+inline void H02MuonHit::SetTOF(G4double atof) { fTof=atof; }
+inline G4double H02MuonHit::GetTOF() const { return fTof; }
 
 typedef G4THitsCollection<H02MuonHit> H02MuonHitsCollection;
 extern G4Allocator<H02MuonHit> H02MuonHitAllocator;

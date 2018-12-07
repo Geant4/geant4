@@ -27,7 +27,6 @@
 /// \brief Main program of the persistency/P01 example
 //
 //
-// $Id: exampleP01.cc 110382 2018-05-22 07:48:02Z gcosmo $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

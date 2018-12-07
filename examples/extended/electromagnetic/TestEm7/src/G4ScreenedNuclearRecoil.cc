@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm7/src/G4ScreenedNuclearRecoil.cc
 /// \brief Implementation of the G4ScreenedNuclearRecoil class
 //
-// $Id: G4ScreenedNuclearRecoil.cc 110821 2018-06-15 12:53:27Z gcosmo $
 //
 //
 // Class Description

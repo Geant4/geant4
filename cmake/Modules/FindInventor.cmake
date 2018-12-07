@@ -213,24 +213,48 @@ if(UNIX)
     PATHS ${INVENTOR_LIB_SEARCH_PATH}
     )
 
-  # try to find SoXt debug lib (priority paths)
-  #FIND_LIBRARY(INVENTOR_SOXT_LIBRARY_DEBUG
-  #  NAMES soxt1d
-  #  PATHS ${SOXT_PREFIX}/lib
-  #  $ENV{COINDIR}/lib
-  #  NO_DEFAULT_PATH
-  #  )
+  #
+  #  SoQt
+  #
+  #  notes:
+  #  - SoQt is detected by soqt-config script (as expected by
+  #    Coin's SoQt on Linux/Unix) and on standard system locations
+  #
 
-  # try to find SoXt debug lib (regular paths)
-  #FIND_LIBRARY(INVENTOR_SOXT_LIBRARY_DEBUG
-  #  NAMES soxt1d
-  #  PATHS ${INVENTOR_LIB_SEARCH_PATH}
-  #  )
+  # soqt-config tells much of SoQt installation (if present)
+  execute_process (COMMAND soqt-config --prefix
+    OUTPUT_VARIABLE SOQT_PREFIX
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-  # SoXt debug library defaults to non-debug lib
-  #IF(NOT INVENTOR_SOXT_LIBRARY_DEBUG)
-  #  IF(INVENTOR_SOXT_LIBRARY)
-  #    SET(INVENTOR_SOXT_LIBRARY_DEBUG INVENTOR_SOXT_LIBRARY)
-  #  ENDIF(INVENTOR_SOXT_LIBRARY)
-  #ENDIF(NOT INVENTOR_SOXT_LIBRARY_DEBUG)
+  # try to find Inventor includes (priority paths from coin-config and COINDIR)
+  FIND_PATH(INVENTOR_SOQT_INCLUDE_DIR Inventor/Qt/SoQt.h
+    ${SOQT_PREFIX}/include
+    $ENV{COINDIR}/include
+    NO_DEFAULT_PATH
+  )
+
+  # try to find Inventor includes (system paths)
+  FIND_PATH(INVENTOR_SOQT_INCLUDE_DIR Inventor/Qt/SoQt.h
+    /usr/local/include
+    /usr/include
+    /sw/include
+    /opt/local/include
+    /opt/csw/include
+    /opt/include
+  )
+
+  # try to find SoQt lib (priority paths)
+  FIND_LIBRARY(INVENTOR_SOQT_LIBRARY
+    NAMES soqt1 SoQt
+    PATHS ${SOQT_PREFIX}/lib
+    $ENV{COINDIR}/lib
+    NO_DEFAULT_PATH
+    )
+
+  # try to find SoQt lib (regular paths)
+  FIND_LIBRARY(INVENTOR_SOQT_LIBRARY
+    NAMES soqt1 SoQt
+    PATHS ${INVENTOR_LIB_SEARCH_PATH}
+    )
+
 endif()

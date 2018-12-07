@@ -26,7 +26,6 @@
 /// \file GB01/include/GB01BOptrMultiParticleChangeCrossSection.hh
 /// \brief Definition of the GB01BOptrMultiParticleChangeCrossSection class
 //
-// $Id: $
 //-----------------------------------------------------------------
 //
 // GB01BOptrMultiParticleChangeCrossSection

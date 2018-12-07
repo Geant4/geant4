@@ -240,7 +240,7 @@ namespace G4INCL {
     // masses and sum of masses
     masses.resize(nParticles);
     sumMasses.resize(nParticles);
-    std::transform(particles.begin(), particles.end(), masses.begin(), std::mem_fun(&Particle::getMass));
+    std::transform(particles.begin(), particles.end(), masses.begin(), std::mem_fn(&Particle::getMass));
     std::partial_sum(masses.begin(), masses.end(), sumMasses.begin());
 
     // sanity check

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunActionMaster.hh 66587 2012-12-21 11:06:44Z ihrivnac $
 //
 /// @file RunActionMaster.hh
 /// @brief Describe run actions

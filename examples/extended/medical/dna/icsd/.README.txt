@@ -1,4 +1,3 @@
-//$Id $
 
 ///\file "medical/dna/icsd/.README.txt"
 ///\brief Example icsd README page

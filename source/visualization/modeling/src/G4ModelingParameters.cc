@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc 109510 2018-04-26 07:15:57Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -90,25 +89,25 @@ G4ModelingParameters::~G4ModelingParameters ()
   delete fpCutawaySolid;
 }
 
-G4ModelingParameters::VisAttributesModifier::VisAttributesModifier
-(const G4VisAttributes& visAtts,
- G4ModelingParameters::VisAttributesSignifier signifier,
- const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path):
-fVisAtts(visAtts), fSignifier(signifier)
-{
-  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
-  typedef std::vector<PVNodeID> PVPath;
-  typedef PVPath::const_iterator PVPathConstIterator;
-  PVPathConstIterator i;
-  for (i = path.begin();
-       i != path.end();
-       ++i) {
-    fPVNameCopyNoPath.push_back
-    (PVNameCopyNo
-     (i->GetPhysicalVolume()->GetName(),
-      i->GetCopyNo()));
-  }
-}
+//G4ModelingParameters::VisAttributesModifier::VisAttributesModifier
+//(const G4VisAttributes& visAtts,
+// G4ModelingParameters::VisAttributesSignifier signifier,
+// const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path):
+//fVisAtts(visAtts), fSignifier(signifier)
+//{
+//  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+//  typedef std::vector<PVNodeID> PVPath;
+//  typedef PVPath::const_iterator PVPathConstIterator;
+//  PVPathConstIterator i;
+//  for (i = path.begin();
+//       i != path.end();
+//       ++i) {
+//    fPVNameCopyNoPath.push_back
+//    (PVNameCopyNo
+//     (i->GetPhysicalVolume()->GetName(),
+//      i->GetCopyNo()));
+//  }
+//}
 
 void G4ModelingParameters::SetVisibleDensity (G4double visibleDensity) {
   const G4double reasonableMaximum = 10.0 * g / cm3;

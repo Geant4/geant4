@@ -27,7 +27,6 @@
 /// \brief Definition of the G4TAtomicHitsMap class
 //
 //
-// $Id: G4TAtomicHitsMap.hh 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 /// This is an implementation of G4THitsMap<T> where the underlying
@@ -130,6 +129,8 @@ public:
   {
     return theCollection->size();
   }
+
+  virtual size_t size() const { return theCollection->size(); }
 
 public:
   iterator begin() { return theCollection->begin(); }

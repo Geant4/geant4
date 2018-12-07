@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CollisionOutput.cc 71954 2013-06-29 04:40:40Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Introduced bug checking i3 for valid tuning pair
@@ -64,6 +63,8 @@
 #include "G4CollisionOutput.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4CascadParticle.hh"
+#include "G4CascadeParameters.hh"
+#include "G4Electron.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4LorentzRotation.hh"
@@ -252,18 +253,26 @@ G4int G4CollisionOutput::getTotalCharge() const {
 
   G4int charge = 0;
   G4int i(0);
-  for(i=0; i < numberOfOutgoingParticles(); i++) {
-    charge += G4int(outgoingParticles[i].getCharge());
+
+  if (G4CascadeParameters::usePreCompound() ) {
+    // Possible to have internal conversion electron 
+    for (i = 0; i < numberOfOutgoingParticles(); i++)
+      if (outgoingParticles[i].getDefinition() != G4Electron::Electron() )
+        charge += G4int(outgoingParticles[i].getCharge());
+  } else {
+    for (i = 0; i < numberOfOutgoingParticles(); i++)
+      charge += G4int(outgoingParticles[i].getCharge());
   }
-  for(i=0; i < numberOfOutgoingNuclei(); i++) {
+
+  for (i = 0; i < numberOfOutgoingNuclei(); i++)
     charge += G4int(outgoingNuclei[i].getCharge());
-  }
-  for(i=0; i < numberOfFragments(); i++) {
+
+  for (i = 0; i < numberOfFragments(); i++)
     charge += recoilFragments[i].GetZ_asInt();
-  }
 
   return charge;
 }
+
 
 G4int G4CollisionOutput::getTotalBaryonNumber() const {
   if (verboseLevel > 1)

@@ -38,31 +38,30 @@
 #include "G4RunManager.hh"
 #include "G4ParticleGun.hh"
 #include "HadrontherapySteppingAction.hh"
-
-
 #include "HadrontherapyAnalysisFileMessenger.hh"
 #include "G4SystemOfUnits.hh"
 #include <time.h>
 
-HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::instance = 0;
-HadrontherapyAnalysisManager::HadrontherapyAnalysisManager()
+HadrontherapyAnalysis* HadrontherapyAnalysis::instance = 0;
+/////////////////////////////////////////////////////////////////////////////
 
-
+HadrontherapyAnalysis::HadrontherapyAnalysis()
 {
     fMess = new HadrontherapyAnalysisFileMessenger(this);
 }
-HadrontherapyAnalysisManager::~HadrontherapyAnalysisManager()
+
+/////////////////////////////////////////////////////////////////////////////
+HadrontherapyAnalysis::~HadrontherapyAnalysis()
 {
     delete fMess;
 }
 
-HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::GetInstance(){
+/////////////////////////////////////////////////////////////////////////////
+HadrontherapyAnalysis* HadrontherapyAnalysis::GetInstance(){
     
-    if (instance == 0) instance = new HadrontherapyAnalysisManager;
+  if (instance == 0) instance = new HadrontherapyAnalysis;
     return instance;
 }
-
-
 
 HadrontherapyMatrix* HadrontherapyMatrix::instance = NULL;
 G4bool HadrontherapyMatrix::secondary = false;
@@ -73,6 +72,8 @@ HadrontherapyMatrix* HadrontherapyMatrix::GetInstance()
 {
     return instance;
 }
+
+/////////////////////////////////////////////////////////////////////////////
 // This STATIC method delete (!) the old matrix and rewrite a new object returning a pointer to it
 // TODO A check on the parameters is required!
 HadrontherapyMatrix* HadrontherapyMatrix::GetInstance(G4int voxelX, G4int voxelY, G4int voxelZ, G4double mass)
@@ -83,11 +84,10 @@ HadrontherapyMatrix* HadrontherapyMatrix::GetInstance(G4int voxelX, G4int voxelY
     return instance;
 }
 
-
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyMatrix::HadrontherapyMatrix(G4int voxelX, G4int voxelY, G4int voxelZ, G4double mass):
 stdFile("Dose.out"),
 doseUnit(gray)
-
 {
     // Number of the voxels of the phantom
     // For Y = Z = 1 the phantom is divided in slices (and not in voxels)
@@ -155,7 +155,7 @@ void HadrontherapyMatrix::Initialize()
 /////////////////////////////////////////////////////////////////////////////
 // Print generated nuclides list
 
-
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyMatrix::PrintNuclides()
 {
     for (size_t i=0; i<ionStore.size(); i++)
@@ -187,7 +187,6 @@ G4int* HadrontherapyMatrix::GetHitTrack(G4int i, G4int j, G4int k)
 // If fluence parameter is true (default value is FALSE) then fluence at voxel (i, j, k) is increased.
 // The energyDeposit parameter fill the dose matrix for voxel (i,j,k)
 /////////////////////////////////////////////////////////////////////////////
-
 G4bool HadrontherapyMatrix::Fill(G4int trackID,
                                  G4ParticleDefinition* particleDef,
                                  G4int i, G4int j, G4int k,
@@ -273,8 +272,6 @@ G4bool HadrontherapyMatrix::Fill(G4int trackID,
 ////////////////////////////////////////////////////////////////////////////
 //
 // General method to store matrix data to filename
-
-
 void HadrontherapyMatrix::StoreMatrix(G4String file, void* data, size_t psize)
 {
     if (data)
@@ -311,6 +308,7 @@ void HadrontherapyMatrix::StoreMatrix(G4String file, void* data, size_t psize)
     }
 }
 
+/////////////////////////////////////////////////////////////////////////////
 // Store fluence per single ion in multiple files
 void HadrontherapyMatrix::StoreFluenceData()
 {
@@ -318,6 +316,8 @@ void HadrontherapyMatrix::StoreFluenceData()
         StoreMatrix(ionStore[i].name + "_Fluence.out", ionStore[i].fluence, sizeof(unsigned int));
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////
 // Store dose per single ion in multiple files
 void HadrontherapyMatrix::StoreDoseData()
 {
@@ -328,16 +328,13 @@ void HadrontherapyMatrix::StoreDoseData()
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// Store dose for all ions into a single file and into ntuples.
-// Please note that this function is called via messenger commands
+////////////////////////////////////////////////////////////////////////
+// Store dose into a single file
+// or in histograms. Please note that this function is called via
+// messenger commands
 // defined in the HadrontherapyAnalysisFileMessenger.cc class file
-
-
 void HadrontherapyMatrix::StoreDoseFluenceAscii(G4String file)
 {
-    
-    
 #define width 15L
     filename = (file=="") ? stdFile:file;
     
@@ -373,50 +370,22 @@ void HadrontherapyMatrix::StoreDoseFluenceAscii(G4String file)
             ofs << G4endl;
         }
         
-  
-        G4AnalysisManager* Analysis = G4AnalysisManager::Instance();
-        
-        Analysis ->SetVerboseLevel(1);
-        Analysis ->SetFirstHistoId(1);
-        Analysis ->SetFirstNtupleId(1);
-        Analysis ->OpenFile("Dose");
-        
-        
-        Analysis ->CreateNtuple("coordinate", "dose");
-        
-        Analysis ->CreateNtupleIColumn("i");//1
-        Analysis ->CreateNtupleIColumn("j");//2
-        Analysis ->CreateNtupleIColumn("k");//3
-        Analysis ->CreateNtupleDColumn("totaldose");//6
-        Analysis ->CreateNtupleIColumn("A");//4
-        Analysis ->CreateNtupleIColumn("Z");//5
-        Analysis ->CreateNtupleDColumn("Iondose");//6
-        Analysis ->CreateNtupleDColumn("fluence");//7
-        Analysis ->FinishNtuple();
-        
-        
-        
         // Write data
         for(G4int i = 0; i < numberOfVoxelAlongX; i++)
             for(G4int j = 0; j < numberOfVoxelAlongY; j++)
                 for(G4int k = 0; k < numberOfVoxelAlongZ; k++)
                 {
                     G4int n = Index(i, j, k);
-                    // Write only not identically null data lines
                     
-                    
-                    Analysis->FillNtupleIColumn(1,0, i);
-                    Analysis->FillNtupleIColumn(1,1, j);
-                    Analysis->FillNtupleIColumn(1,2, k);
                     if (matrix[n])
                     {
                         ofs << G4endl;
                         ofs << i << '\t' << j << '\t' << k << '\t';
+                        
                         // Total dose
                         ofs << std::setw(width) << (matrix[n]/massOfVoxel)/doseUnit;
                        
                         
-                        Analysis->FillNtupleDColumn(1,3, (matrix[n]/massOfVoxel)/doseUnit);
                         if (secondary)
                         {
                             for (size_t l=0; l < ionStore.size(); l++)
@@ -425,30 +394,18 @@ void HadrontherapyMatrix::StoreDoseFluenceAscii(G4String file)
                                 ofs << std::setw(width) << ionStore[l].dose[n]/massOfVoxel/doseUnit <<
                                 std::setw(width) << ionStore[l].fluence[n];
                                 
-                                
-                                Analysis->FillNtupleIColumn(1,4, ionStore[l].A);
-                                Analysis->FillNtupleIColumn(1,5, ionStore[l].Z);
-                                
-                                Analysis->FillNtupleDColumn(1,6, ionStore[l].dose[n]/massOfVoxel/doseUnit);
-                                Analysis->FillNtupleDColumn(1,7, ionStore[l].fluence[n]);
-                                Analysis->AddNtupleRow(1);
-                                
-                                
-                                
                             }
                         }
                     }
                 }
         ofs.close();
-        
-        Analysis->Write();
-        Analysis->CloseFile();
     }
     
     
 
 }
-void HadrontherapyMatrix::Fill(G4int i, G4int j, G4int k, 
+//////////////////////////////////////////////////////////////////////////////
+void HadrontherapyMatrix::Fill(G4int i, G4int j, G4int k,
                                G4double energyDeposit)
 {
     if (matrix)

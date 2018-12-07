@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ElementVector.cc 66892 2013-01-17 10:57:59Z gunter $
 // ====================================================================
 //   pyG4ElementVector.cc
 //

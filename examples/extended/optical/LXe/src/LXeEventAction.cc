@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeEventAction.cc 110138 2018-05-16 07:31:43Z gcosmo $
 //
 /// \file optical/LXe/src/LXeEventAction.cc
 /// \brief Implementation of the LXeEventAction class
@@ -35,6 +34,7 @@
 #include "LXeTrajectory.hh"
 #include "LXeRun.hh"
 #include "LXeHistoManager.hh"
+#include "LXeDetectorConstruction.hh"
 
 #include "G4EventManager.hh"
 #include "G4SDManager.hh"
@@ -50,8 +50,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeEventAction::LXeEventAction()
-  : fSaveThreshold(0),fScintCollID(-1),fPMTCollID(-1),fVerbose(0),
+LXeEventAction::LXeEventAction(const LXeDetectorConstruction* det)
+  : fDetector(det),fScintCollID(-1),fPMTCollID(-1),fVerbose(0),
    fPMTThreshold(1),fForcedrawphotons(false),fForcenophotons(false)
 {
   fEventMessenger = new LXeEventMessenger(this);
@@ -237,22 +237,11 @@ void LXeEventAction::EndOfEventAction(const G4Event* anEvent){
   run->IncBoundaryAbsorption(fBoundaryAbsorptionCount);
   run->IncHitsAboveThreshold(fPMTsAboveThreshold);
 
-
   //If we have set the flag to save 'special' events, save here
-  if (fSaveThreshold && 
-        (fPhotonCount_Scint + fPhotonCount_Ceren <= fSaveThreshold))
+  if(fPhotonCount_Scint + fPhotonCount_Ceren <= fDetector->GetSaveThreshold())
+  {
     G4RunManager::GetRunManager()->rndmSaveThisEvent();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void LXeEventAction::SetSaveThreshold(G4int save){
-/*Sets the save threshold for the random number seed. If the number of photons
-generated in an event is lower than this, then save the seed for this event
-in a file called run###evt###.rndm
-*/
-  fSaveThreshold=save;
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
-  //  G4UImanager::GetUIpointer()->ApplyCommand("/random/setSavingFlag 1");
-}

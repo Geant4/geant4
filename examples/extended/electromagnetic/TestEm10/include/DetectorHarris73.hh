@@ -27,7 +27,6 @@
 /// \brief Definition of the DetectorHarris73 class
 //
 //
-// $Id: DetectorHarris73.hh 72513 2013-07-24 20:37:54Z gum $
 //
 // Setup from F. Harris et al NIM 107 (1973) 413-422 (fig.5b)
 

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.hh 108131 2018-01-09 13:23:26Z gcosmo $
 //
 //
 // Andrew Walkden  7th February 1997
@@ -32,7 +31,7 @@
 //                              an OpenGL viewer, for inheritance by
 //                              derived (X, Xm...) classes.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
 
 #ifndef G4OPENGLSTOREDVIEWER_HH
 #define G4OPENGLSTOREDVIEWER_HH

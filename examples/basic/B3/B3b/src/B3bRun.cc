@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B3bRun.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file B3bRun.cc
 /// \brief Implementation of the B3bRun class
@@ -46,7 +45,8 @@ B3bRun::B3bRun()
    fCollID_patient(-1),
    fPrintModulo(10000),
    fGoodEvents(0),
-   fSumDose(0.)
+   fSumDose(0.),
+   fStatDose()
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,6 +109,7 @@ void B3bRun::RecordEvent(const G4Event* event)
     dose = *(itr->second);
   }
   fSumDose += dose;
+  fStatDose += dose;
   
   G4Run::RecordEvent(event);      
 }  
@@ -120,7 +121,7 @@ void B3bRun::Merge(const G4Run* aRun)
   const B3bRun* localRun = static_cast<const B3bRun*>(aRun);
   fGoodEvents += localRun->fGoodEvents;
   fSumDose    += localRun->fSumDose;
-
+  fStatDose   += localRun->fStatDose;
   G4Run::Merge(aRun); 
 } 
 

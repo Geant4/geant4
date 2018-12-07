@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr02/include/UrQMD.icc
 /// \brief Implementation of the UrQMD class inline functions
 //
-// $Id: UrQMD.icc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

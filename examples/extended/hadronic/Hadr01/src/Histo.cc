@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr01/src/Histo.cc
 /// \brief Implementation of the Histo class
 //
-// $Id: Histo.cc 107541 2017-11-22 08:24:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

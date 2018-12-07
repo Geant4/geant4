@@ -27,7 +27,6 @@
 /// \brief Implementation of the B01PrimaryGeneratorAction class
 //
 //
-// $Id: B01PrimaryGeneratorAction.cc 98774 2016-08-09 14:28:06Z gcosmo $
 //
 
 #include "globals.hh"

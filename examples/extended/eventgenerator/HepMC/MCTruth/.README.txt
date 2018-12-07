@@ -1,4 +1,3 @@
-$Id$
 
 ///\file "eventgenerator/HepMC/MCTruth/.README.txt"
 ///\brief Example MCTruth README page

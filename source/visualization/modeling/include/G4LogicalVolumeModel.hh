@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeModel.hh 110480 2018-05-25 07:25:18Z gcosmo $
 //
 // 
 // John Allison  26th July 1999.
@@ -86,6 +85,7 @@ protected:
   G4bool fVoxels;    // Flag for drawing voxels.
   G4bool fReadout;   // Flag for drawing readout geometry.
   G4bool fCheckOverlaps;   // Flag for checking overlaps.
+  G4bool fOverlapsPrinted; // To avoid multiple printing.
 
 };
 

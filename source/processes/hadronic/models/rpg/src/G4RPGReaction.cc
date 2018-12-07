@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGReaction.cc 94406 2015-11-13 14:52:40Z gcosmo $
 //
 
 #include <iostream>

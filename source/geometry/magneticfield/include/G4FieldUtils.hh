@@ -23,7 +23,6 @@
 // ********************************************************************
 //
 //
-// $Id: $
 //
 // Helper namespace 'field_utils'
 //
@@ -38,6 +37,7 @@
 #ifndef G4FIELD_UTILS_HH
 #define G4FIELD_UTILS_HH
 
+#include "G4FieldTrack.hh"
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
 
@@ -70,11 +70,32 @@ G4double getValue2(const ArrayType& array, Value3D value);
 template <typename ArrayType>
 G4ThreeVector makeVector(const ArrayType& array, Value3D value);
 
+G4double absoluteError(
+    const G4double y[],
+    const G4double yerr[],
+    G4double hstep);
+
+G4double relativeError2(
+    const G4double y[],
+    const G4double yerr[],
+    G4double hstep,
+    G4double errorTolerance);
+
 G4double relativeError(
     const G4double y[],
     const G4double yerr[],
-    const G4double hstep,
-    const G4double errorTolerance = 1);
+    G4double hstep,
+    G4double errorTolerance);
+
+template <typename SourceArray, typename TargetArray>
+void setValue(const SourceArray& src, Value1D value, TargetArray& trg);
+
+template <typename SourceArray, typename TargetArray, typename ...TargetArrays>
+void setValue(const SourceArray& src, Value1D value, TargetArray& trg, TargetArrays&... trgs);
+
+void copy(G4double dst[], const G4double src[], size_t size = G4FieldTrack::ncompSVEC);
+
+G4double inverseCurvatureRadius(G4double particleCharge, G4double momentum, G4double BField);
 
 } // field_utils
 

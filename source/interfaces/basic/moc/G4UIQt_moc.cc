@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'G4UIQt.hh'
 **
-** Created: Tue Jun 26 10:20:28 2018
+** Created: Thu Dec 6 15:41:02 2018
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!

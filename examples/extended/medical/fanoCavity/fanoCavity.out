@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -138,7 +138,6 @@
 
 
 
-DEBUG
 /control/cout/ignoreThreadsExcept 0
 /run/verbose 1
 /testem/phys/addPhysics standard_opt3
@@ -162,13 +161,13 @@ phot:   for  gamma    SubType= 12  BuildTable= 0
        PhotoElectric :  Emin=        0 eV    Emax=       10 GeV   AngularGenSauterGavrila
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
-      Lambda table from 100 eV  to 1 MeV, 20 bins per decade, spline: 1
+      Lambda table from 10 eV  to 1 MeV, 20 bins per decade, spline: 1
       LambdaPrime table from 1 MeV to 10 GeV in 80 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
      myKlein-Nishina :  Emin=        0 eV    Emax=       10 GeV
 
 conv:   for  gamma    SubType= 14  BuildTable= 1
-      Lambda table from 1.022 MeV to 10 GeV, 28 bins per decade, spline: 1
+      Lambda table from 1.022 MeV to 10 GeV, 25 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       10 GeV   AngularGenUrban
 
@@ -178,12 +177,12 @@ msc:   for e-    SubType= 10
             UrbanMsc :  Emin=        0 eV    Emax=       10 GeV  Table with 160 bins Emin=    100 eV    Emax=     10 GeV
 
 eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
+      dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
       Lambda tables from threshold to 10 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
       myMollerBhabha :  Emin=        0 eV    Emax=       10 GeV
-      CSDA range table up to 10 GeV in 160 bins
+      CSDA range table up to 10 GeV in 180 bins
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
@@ -191,12 +190,12 @@ msc:   for e+    SubType= 10
             UrbanMsc :  Emin=        0 eV    Emax=       10 GeV  Table with 160 bins Emin=    100 eV    Emax=     10 GeV
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
+      dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
       Lambda tables from threshold to 10 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
       myMollerBhabha :  Emin=        0 eV    Emax=       10 GeV
-      CSDA range table up to 10 GeV in 160 bins
+      CSDA range table up to 10 GeV in 180 bins
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -208,13 +207,13 @@ msc:   for proton    SubType= 10
             UrbanMsc :  Emin=        0 eV    Emax=       10 GeV  Table with 160 bins Emin=    100 eV    Emax=     10 GeV
 
 hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
+      dE/dx and range tables from 10 eV  to 10 GeV in 180 bins
       Lambda tables from threshold to 10 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 GeV
-      CSDA range table up to 10 GeV in 160 bins
+      CSDA range table up to 10 GeV in 180 bins
 
 ========= Table of registered couples ==============================
 
@@ -246,17 +245,17 @@ Index : 2     used in the geometry : Yes
 --> Event 0 starts.
 --> Event 1000 starts.
 
- ---> NbofEvents= 1000   NbOfelectr= 70442   Tkin= 588.205 keV (0.000 %)   NbOfelec in cav= 5091   Dose/EnFluence= 32.195 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 71082   Tkin= 588.277 keV (0.000 %)   NbOfelec in cav= 4722   Dose/EnFluence= 30.900 cm2/g (0.000 %)
 --> Event 2000 starts.
 
- ---> NbofEvents= 2000   NbOfelectr= 141266   Tkin= 587.984 keV (-0.037 %)   NbOfelec in cav= 9922   Dose/EnFluence= 31.701 cm2/g (-1.536 %)
+ ---> NbofEvents= 2000   NbOfelectr= 141526   Tkin= 587.828 keV (-0.076 %)   NbOfelec in cav= 9600   Dose/EnFluence= 29.141 cm2/g (-5.694 %)
 --> Event 3000 starts.
 
- ---> NbofEvents= 3000   NbOfelectr= 211448   Tkin= 588.253 keV (0.046 %)   NbOfelec in cav= 14912   Dose/EnFluence= 32.618 cm2/g (2.893 %)
+ ---> NbofEvents= 3000   NbOfelectr= 212220   Tkin= 587.778 keV (-0.009 %)   NbOfelec in cav= 14253   Dose/EnFluence= 29.234 cm2/g (0.320 %)
  Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=14.460000s Real=14.672463s Sys=0.010000s
+  User=15.020000s Real=15.536507s Sys=0.010000s
 
  ======================== run summary ======================
 
@@ -266,31 +265,31 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 281415  Transportation= 79810  msc= 2531286  eIoni= 1702830
+ Process calls frequency --->  compt= 282544  Transportation= 78222  msc= 2595336  eIoni= 1723309
 
  Gamma crossSections in wall material :  compt= 63.464 cm2/g   --> total= 63.464 cm2/g
 
- Mean energy of secondary e- = 588.2369 keV +- 0.1031 %  (--> range in wall material = 2.2211 mm )
- Mass_energy_transfer coef: 29.8654 cm2/g
+ Mean energy of secondary e- = 587.9970 keV +- 0.1030 %  (--> range in wall material = 2.2199 mm )
+ Mass_energy_transfer coef: 29.8532 cm2/g
 
- StoppingPower in wall   = 1.9644 MeV*cm2/g
-               in cavity = 1.9830 MeV*cm2/g
+ StoppingPower in wall   = 1.9645 MeV*cm2/g
+               in cavity = 1.9831 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 19810	 Energy = 9.9952 GeV
-      Exit  --> nbParticles = 19803	 Energy = 9.9932 GeV
+      Enter --> nbParticles = 19198	 Energy = 9.7592 GeV
+      Exit  --> nbParticles = 19191	 Energy = 9.7554 GeV
 
- Total edep in cavity = 14.0644 MeV +- 3.5936 %	 Total charged trackLength = 54.6517 m     (mean value = 2.7588 mm )
- Total dose in cavity = 22.3842 MeV/mg
- Dose/EnergyFluence   = 31.6449 cm2/g
+ Total edep in cavity = 13.5943 MeV +- 3.9081 %	 Total charged trackLength = 53.6346 m     (mean value = 2.7938 mm )
+ Total dose in cavity = 21.6361 MeV/mg
+ Dose/EnergyFluence   = 30.5873 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 1.05958 +- 0.03809
+ (Dose/EnergyFluence)/Mass_energy_transfer = 1.02459 +- 0.04006
 
- StepSize of ch. tracks in wall   = 110.5535 um  +- 70.1348 um 	 (nbSteps/track = 15.1420)
- StepSize of ch. tracks in cavity = 1.2129 mm  +- 1.1560 mm 	 (nbSteps/track = 2.2745)
+ StepSize of ch. tracks in wall   = 110.2714 um  +- 70.4853 um 	 (nbSteps/track = 15.2569)
+ StepSize of ch. tracks in cavity = 682.5567 um  +- 734.3644 um 	 (nbSteps/track = 4.0931)
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.067 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.069 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragment.hh 100691 2016-10-31 11:26:25Z gcosmo $
 //
 //  J. M. Quesada (August 2008).  
 //  Based  on previous work by V. Lara

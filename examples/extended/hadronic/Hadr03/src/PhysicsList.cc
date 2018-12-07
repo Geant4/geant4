@@ -26,7 +26,6 @@
 /// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 108917 2018-03-16 07:18:27Z gcosmo $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -36,6 +35,7 @@
 #include "G4UnitsTable.hh"
 
 #include "G4HadronElasticPhysicsHP.hh"
+#include "G4HadronElasticPhysicsXS.hh"
 
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
 #include "G4HadronPhysicsQGSP_BIC_HP.hh"
@@ -44,7 +44,7 @@
 #include "G4HadronPhysicsINCLXX.hh"
 
 #include "G4IonElasticPhysics.hh"
-#include "G4IonPhysics.hh"
+#include "G4IonPhysicsXS.hh"
 #include "G4IonQMDPhysics.hh"
 #include "G4IonPhysicsPHP.hh"
 #include "G4IonINCLXXPhysics.hh"
@@ -77,11 +77,12 @@ PhysicsList::PhysicsList()
   // Hadron Elastic scattering
   //
   RegisterPhysics( new G4HadronElasticPhysicsHP(verb));
+  ///RegisterPhysics( new G4HadronElasticPhysicsXS(verb));  
 
   // Hadron Inelastic physics
   //
-  RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
-  ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
+  ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
+  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_AllHP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
@@ -92,7 +93,7 @@ PhysicsList::PhysicsList()
   
   // Ion Inelastic physics
   //
-  RegisterPhysics( new G4IonPhysics(verb));
+  RegisterPhysics( new G4IonPhysicsXS(verb));
   ////RegisterPhysics( new G4IonPhysicsPHP(verb));
   ////RegisterPhysics( new G4IonQMDPhysics(verb));
   ////RegisterPhysics( new G4IonINCLXXPhysics(verb));
@@ -100,6 +101,7 @@ PhysicsList::PhysicsList()
   // Gamma physics
   //
   RegisterPhysics( new GammaNuclearPhysics("gamma"));
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -134,7 +136,7 @@ void PhysicsList::ConstructParticle()
 
 void PhysicsList::SetCuts()
 {
-  SetCutValue(0.*mm, "proton");
+   SetCutValue(0.*mm, "proton");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

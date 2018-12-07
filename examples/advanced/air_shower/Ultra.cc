@@ -69,10 +69,8 @@ int main(int argc,char** argv) {
 #endif
 
   // UserInitialization classes - mandatory
-  UltraDetectorConstruction* detector = new UltraDetectorConstruction;
-  UltraPhysicsList* list = new UltraPhysicsList();
-  runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(list);
+  runManager->SetUserInitialization(new UltraDetectorConstruction);
+  runManager->SetUserInitialization(new UltraPhysicsList());
 
   // UserAction classes - optional
   runManager->SetUserInitialization(new UltraActionInitializer());
@@ -94,7 +92,7 @@ int main(int argc,char** argv) {
   // Define (G)UI for interactive mode
   if(argc==1)
   {
-    UImanager->ApplyCommand("/control/execute Visualisation.mac");
+    UImanager->ApplyCommand("/control/execute VisDirect.mac");
     ui->SessionStart();
     delete ui;
   }

@@ -27,7 +27,6 @@
 /// \brief Implementation of the HistoManagerMessenger class
 //
 //
-// $Id: HistoManagerMessenger.cc 70747 2013-06-05 11:56:02Z ihrivnac $
 //
 //
 /////////////////////////////////////////////////////////////////////////

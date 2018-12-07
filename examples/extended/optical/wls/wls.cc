@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: wls.cc 110278 2018-05-17 14:48:26Z gcosmo $
 //
 /// \file optical/wls/wls.cc
 /// \brief Main program of the optical/wls example

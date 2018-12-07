@@ -27,7 +27,6 @@
 /// \brief Definition of the HistoManager class
 //
 //
-// $Id: HistoManager.hh 76416 2013-11-10 16:49:03Z maire $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

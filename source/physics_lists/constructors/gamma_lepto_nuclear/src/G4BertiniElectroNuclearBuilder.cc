@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniElectroNuclearBuilder.cc 104018 2017-05-08 07:32:45Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,7 +48,10 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4ProcessManager.hh"
+#include "G4GammaGeneralProcess.hh"
+#include "G4LossTableManager.hh"
 
+#include "G4HadronicParameters.hh"
 
 G4BertiniElectroNuclearBuilder::G4BertiniElectroNuclearBuilder(G4bool eNucl) : 
   thePhotoNuclearProcess(nullptr), theElectronNuclearProcess(nullptr), 
@@ -57,8 +59,7 @@ G4BertiniElectroNuclearBuilder::G4BertiniElectroNuclearBuilder(G4bool eNucl) :
   theGammaReaction(nullptr), theModel(nullptr), theCascade(nullptr), 
   theStringModel(nullptr), theFragmentation(nullptr), theStringDecay(nullptr), 
   wasActivated(false), eActivated(eNucl)
-{
-}
+{}
 
 G4BertiniElectroNuclearBuilder::~G4BertiniElectroNuclearBuilder() 
 {
@@ -93,14 +94,21 @@ void G4BertiniElectroNuclearBuilder::Build()
   theModel->SetHighEnergyGenerator(theStringModel);
 
   G4ProcessManager * aProcMan = nullptr;
-  
-  aProcMan = G4Gamma::Gamma()->GetProcessManager();
+
   theGammaReaction->SetMaxEnergy(3.5*GeV);
   thePhotoNuclearProcess->RegisterMe(theGammaReaction);
   theModel->SetMinEnergy(3.*GeV);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   thePhotoNuclearProcess->RegisterMe(theModel);
-  aProcMan->AddDiscreteProcess(thePhotoNuclearProcess);
+  
+  G4GammaGeneralProcess* sp = 
+    (G4GammaGeneralProcess*)G4LossTableManager::Instance()->GetGammaGeneralProcess();
+  if(sp) {
+    sp->AddHadProcess(thePhotoNuclearProcess);
+  } else {
+    aProcMan = G4Gamma::Gamma()->GetProcessManager();
+    aProcMan->AddDiscreteProcess(thePhotoNuclearProcess);
+  }
 
   if(eActivated) {  
     aProcMan = G4Electron::Electron()->GetProcessManager();

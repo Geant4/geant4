@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointForcedInteractionForGamma.cc 87443 2014-12-04 12:26:31Z gunter $
 //
 #include "G4AdjointForcedInteractionForGamma.hh"
 #include "G4SystemOfUnits.hh"

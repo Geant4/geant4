@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/dna/.README.txt"
 ///\brief Examples dna README page
@@ -48,6 +47,7 @@ are used in a Target volume, declared as a Region.
    - \link ExampleChem2  chem2 \endlink   Usage of TimeStepAction in the chemistry module.
    - \link ExampleChem3  chem3 \endlink   Activate the full interactivity with the chemistry module.
    - \link ExampleChem4  chem4 \endlink   Simulation of radiochemical yields with the chemistry module.
+   - \link ExampleChem5  chem5 \endlink   Variation of chem4, using the contructors G4EmDNAPhysics_option8 and G4EmDNAChemistry_option1.
 
 \section dna_s2 Geometry and other   
    - \link ExamplePdb4dna  pdb4dna \endlink   Usage of the Protein Data Bank (PDB) file format to build geometries.

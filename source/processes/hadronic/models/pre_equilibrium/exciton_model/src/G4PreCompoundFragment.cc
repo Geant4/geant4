@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragment.cc 108685 2018-02-27 07:58:38Z gcosmo $
 //
 // J. M. Quesada (August 2008).  
 // Based  on previous work by V. Lara
@@ -37,6 +36,7 @@
 #include "G4PreCompoundFragment.hh"
 #include "G4KalbachCrossSection.hh"
 #include "G4ChatterjeeCrossSection.hh"
+#include "G4DeexPrecoParameters.hh"
 #include "Randomize.hh"
 
 G4PreCompoundFragment::G4PreCompoundFragment(const G4ParticleDefinition* p,
@@ -97,6 +97,7 @@ IntegrateEmissionProbability(G4double low, G4double up,
   G4double sum = probmax;
   for (G4int i=1; i<nbins; ++i) {
     e += del;
+
     G4double y = ProbabilityDistributionFunction(e, aFragment); 
     probmax = std::max(probmax, y);
     sum += y;
@@ -111,7 +112,7 @@ IntegrateEmissionProbability(G4double low, G4double up,
 G4double G4PreCompoundFragment::CrossSection(G4double ekin) const
 {
   G4double res;
-  if(OPTxs == 0) { 
+  if(OPTxs == 0 || (OPTxs == 4 && theMaxKinEnergy < 10.)) { 
     res = GetOpt0(ekin);
 
   } else if(OPTxs <= 2) { 
@@ -133,7 +134,7 @@ G4double G4PreCompoundFragment::GetOpt0(G4double ekin) const
   G4double r0 = theParameters->GetR0()*theResA13;
   // cross section is now given in mb (r0 is in mm) for the sake of consistency
   //with the rest of the options
-  return 1.e+25*CLHEP::pi*r0*r0*theResA13*GetAlpha()*(1.+GetBeta()/ekin);
+  return 1.e+25*CLHEP::pi*r0*r0*theResA13*GetAlpha()*(1.0 + GetBeta()/ekin);
 }
 
 G4double G4PreCompoundFragment::SampleKineticEnergy(const G4Fragment& fragment) 

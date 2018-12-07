@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmDNAPhysics_option1.cc 73244 2013-08-22 13:12:17Z gcosmo $
 
 #include "G4EmDNAPhysics_option1.hh"
 

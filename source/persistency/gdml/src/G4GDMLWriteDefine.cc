@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteDefine.cc 108895 2018-03-15 10:27:25Z gcosmo $
 //
 // class G4GDMLWriteDefine Implementation
 //

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeWLSFiber.hh 108789 2018-03-07 08:42:56Z gcosmo $
 //
 /// \file optical/LXe/include/LXeWLSFiber.hh
 /// \brief Definition of the LXeWLSFiber class

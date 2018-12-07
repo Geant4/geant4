@@ -33,7 +33,7 @@
 //   (b) IBFM-CNR , Segrate (Milano), Italy
 //   (c) LATO (Laboratorio di Tecnologie Oncologiche), Cefalù, Italy
 //   (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
-//   (e) University of Wallongong, Australia
+//   (e) University of Wollongong, Australia
 //
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,8 +45,6 @@
 #include "globals.hh"
 
 class G4Run;
-class IORTAnalysisManager;
-class IORTDetectorConstruction;
 class IORTRunMessenger;
 class IORTFactory;
 
@@ -59,19 +57,6 @@ public:
 public:
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run* );
-  void SelectEnergy(G4int); 
-
-  void AddEMProcess();
-  // Counts the number of electromagnetic processes
-  // of primary particles in the phantom
-
-  void AddHadronicProcess();
-  // Counts the number of hadronic processes 
-  // of primary particles in the phantom
-
-private:  
-  G4int electromagnetic;
-  G4int hadronic;
 };
 #endif
 

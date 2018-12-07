@@ -26,7 +26,6 @@
 /// \file exoticphysics/dmparticle/include/TestParameters.hh
 /// \brief Definition of the TestParameters class
 //
-// $Id$
 //
 //---------------------------------------------------------------------------
 //

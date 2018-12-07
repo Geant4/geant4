@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 
 #include "G4CascadeKzeroPChannel.hh"
@@ -34,10 +33,10 @@ namespace {
   // Outgoing particle types of a given multiplicity
  
   static const G4int k0p2bfs[2][2] =
-    {{pro,k0}, {neu,kpl}};
+    {{k0,pro}, {kpl,neu}};
  
   static const G4int k0p3bfs[8][3] =
-    {{pro,pi0,k0}, {neu,pip,k0}, {neu,pi0,kpl}, {pro,pim,kpl},
+    {{k0,pro,pi0}, {k0,neu,pip}, {kpl,neu,pi0}, {kpl,pro,pim},
      {kpl,k0,lam}, {kpl,k0,s0},  {kpl,kpl,sm},  {k0,k0,sp}};
 
   static const G4int k0p4bfs[20][4] =

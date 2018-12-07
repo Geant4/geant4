@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc 98864 2016-08-15 11:53:26Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -219,7 +218,7 @@ inline size_t G4PhysicsVector::FindBin(G4double e, size_t idx) const
     id = 0; 
   } else if(e >= binVector[numberOfNodes-2]) { 
     id = numberOfNodes - 2; 
-  } else if(idx >= numberOfNodes || e < binVector[idx] 
+  } else if(idx >= numberOfNodes-2 || e < binVector[idx] 
             || e > binVector[idx+1]) { 
     id = FindBinLocation(e); 
   }

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'G4OpenGLQtViewer.hh'
 **
-** Created: Tue Jun 5 13:55:33 2018
+** Created: Thu Dec 6 15:42:15 2018
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!

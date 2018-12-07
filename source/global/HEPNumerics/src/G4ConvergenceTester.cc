@@ -283,81 +283,107 @@ void G4ConvergenceTester::calc_stat_history()
 {
 //   G4cout << "i/16  till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int" << G4endl;
 
-   if ( history_grid [ 0 ] == 0 ) {
-      showHistory=false;
-      return; 
-   } 
+    if ( history_grid [ 0 ] == 0 ) {
+        showHistory=false;
+        return;
+    }
 
-   G4int i;
-   for ( i = 1 ; i <=  noBinOfHistory  ; i++ )
-   {
+    for (G4int i = 0 ; i < noBinOfHistory; ++i )
+    {
 
-      G4int ith = history_grid [ i-1 ];
+        G4int ith = history_grid [ i ];
 
-      G4int nonzero_till_ith = 0;
-      G4double xi;
-      G4double mean_till_ith = 0.0;  
-      std::map< G4int , G4double >::iterator it;
+        G4int nonzero_till_ith = 0;
+        G4double xi;
+        G4double mean_till_ith = 0.0;
+        std::map< G4int , G4double >::iterator it;
 
-      for ( it = nonzero_histories.begin() ; it !=nonzero_histories.end() ; it++ )
-      {
-         if ( it->first <= ith )
-         {
-            xi = it->second;
-            mean_till_ith += xi;
-            nonzero_till_ith++; 
-         }
-      }
+        for(const auto& itr : nonzero_histories)
+        {
+            if( itr.first <= ith )
+            {
+                xi = itr.second;
+                mean_till_ith += xi;
+                nonzero_till_ith++;
+            }
+        }
 
-      if ( nonzero_till_ith == 0 ) continue; 
+        if ( nonzero_till_ith == 0 )
+            continue;
 
-      mean_till_ith = mean_till_ith / ( ith+1 ); 
-      mean_history [ i-1 ] = mean_till_ith;
+        mean_till_ith = mean_till_ith / ( ith+1 );
+        mean_history [ i ] = mean_till_ith;
 
-      G4double sum_x2_till_ith = 0.0;
-      G4double var_till_ith = 0.0;
-      G4double vov_till_ith = 0.0;
-      G4double shift_till_ith = 0.0;
-  
-      for ( it = nonzero_histories.begin() ; it !=nonzero_histories.end() ; it++ )
-      {
-         if ( it->first <= ith )
-         {
-         xi = it->second;
-         sum_x2_till_ith += xi * xi; 
-         var_till_ith += ( xi - mean_till_ith ) * ( xi - mean_till_ith );
-         shift_till_ith += ( xi - mean_till_ith ) * ( xi - mean_till_ith ) * ( xi - mean_till_ith );
-         vov_till_ith += ( xi - mean_till_ith ) * ( xi - mean_till_ith ) * ( xi - mean_till_ith ) * ( xi - mean_till_ith );
-         }
-      }
+        G4double sum_x2_till_ith = 0.0;
+        G4double var_till_ith = 0.0;
+        G4double vov_till_ith = 0.0;
+        G4double shift_till_ith = 0.0;
 
-      var_till_ith += ( (ith+1) - nonzero_till_ith ) * mean_till_ith * mean_till_ith;
-      vov_till_ith += ( (ith+1) - nonzero_till_ith ) * mean_till_ith * mean_till_ith * mean_till_ith * mean_till_ith ;
+        for(const auto& itr : nonzero_histories)
+        {
+            if ( itr.first <= ith )
+            {
+                xi = itr.second;
+                sum_x2_till_ith += std::pow( xi, 2.0 );
+                var_till_ith    += std::pow( xi - mean_till_ith, 2.0 ) ;
+                shift_till_ith  += std::pow( xi - mean_till_ith, 3.0 );
+                vov_till_ith    += std::pow( xi - mean_till_ith, 4.0 );
+            }
+        }
 
+        var_till_ith += ((ith+1) - nonzero_till_ith) * std::pow(mean_till_ith, 2.0);
+        vov_till_ith += ((ith+1) - nonzero_till_ith) * std::pow(mean_till_ith, 4.0);
 
-      if ( var_till_ith == 0 ) continue; 
-      vov_till_ith = vov_till_ith / ( var_till_ith * var_till_ith ) - 1.0 / (ith+1); 
-      vov_history [ i-1 ] = vov_till_ith;
+        G4double sum_till_ith =  mean_till_ith * (ith+1);
 
-      var_till_ith = var_till_ith / ( ith+1 - 1 );
-      var_history [ i-1 ] = var_till_ith;
+        if(!(std::fabs(var_till_ith) > 0.0))
+            continue;
+        if(!(std::fabs(mean_till_ith) > 0.0))
+            continue;
+        if(!(std::fabs(sum_till_ith) > 0.0))
+            continue;
 
-      sd_history [ i-1 ] = std::sqrt( var_till_ith );
-      r_history [ i-1 ] = std::sqrt( var_till_ith ) / mean_till_ith / std::sqrt ( 1.0*(ith+1) );
+        vov_till_ith = vov_till_ith
+                       / std::pow( var_till_ith, 2.0 ) - 1.0 / (ith+1);
+        vov_history [ i ] = vov_till_ith;
 
-      fom_history [ i-1 ] = 1 / ( r_history [ i-1 ] *  r_history [ i-1 ] ) / cpu_time [ ith ];
-   
-      shift_till_ith += ( (ith+1) - nonzero_till_ith ) * mean_till_ith * mean_till_ith * mean_till_ith * ( -1 );
-      shift_till_ith = shift_till_ith / ( 2 * var_till_ith * (ith+1) );
-      shift_history [ i-1 ] = shift_till_ith;
+        var_till_ith = var_till_ith / ( ith+1 - 1 );
+        var_history [ i ] = var_till_ith;
+        sd_history [ i ] = std::sqrt( var_till_ith );
+        r_history  [ i ] = std::sqrt( var_till_ith )
+                             / mean_till_ith
+                             / std::sqrt ( 1.0*(ith+1) );
 
-      e_history [ i-1 ] = 1.0*nonzero_till_ith / (ith+1);
-      r2eff_history [ i-1 ] = ( 1 - e_history [ i-1 ] ) / (  e_history [ i-1 ] * (ith+1) );
+        if(std::fabs(cpu_time [ ith ]) > 0.0 && std::fabs(r_history [ i ]) > 0.0)
+        {
+            fom_history [ i ] = 1.0
+                                  / std::pow( r_history [ i ], 2.0 )
+                                  / cpu_time [ ith ];
+        }
+        else
+        {
+            fom_history [ i ] = 0.0;
+        }
 
-      G4double sum_till_ith =  mean_till_ith * (ith+1); 
-      r2int_history [ i-1 ] = ( sum_x2_till_ith ) / ( sum_till_ith * sum_till_ith ) - 1 / ( e_history [ i-1 ] * (ith+1) );
+        shift_till_ith += ((ith+1) - nonzero_till_ith) *
+                          std::pow(mean_till_ith, 3.0) * ( -1.0 );
+        shift_till_ith = shift_till_ith
+                         / ( 2 * var_till_ith * (ith+1) );
+        shift_history [ i ] = shift_till_ith;
 
-   }
+        e_history [ i ] = 1.0 * nonzero_till_ith
+                            / (ith+1);
+        if(std::fabs(e_history [ i ]) > 0.0)
+        {
+            r2eff_history [ i ] = ( 1 - e_history [ i ] )
+                                    / ( e_history [ i ] * (ith+1) );
+
+            r2int_history [ i ] = ( sum_x2_till_ith )
+                                    / std::pow( sum_till_ith, 2.0 ) - 1
+                                    / ( e_history [ i ] * (ith+1) );
+        }
+
+    }
 
 }
 
@@ -382,29 +408,29 @@ void G4ConvergenceTester::ShowResult(std::ostream& out)
    out << std::setw(20) << "VOV = "<< std::setw(13) << vov << G4endl;
    out << std::setw(20) << "FOM = "<< std::setw(13) << fom << G4endl;
 
-   out << std::setw(20) << "THE LARGEST SCORE = " << std::setw(13) << largest << " and it happend at " << largest_score_happened << "th event" << G4endl;
+   out << std::setw(20) << "THE LARGEST SCORE = " << std::setw(13) << largest << " and it happened at " << largest_score_happened << "th event" << G4endl;
    if ( mean!=0 ) {
-      out << std::setw(20) << "Affected Mean = " << std::setw(13) << mean_1 << " and its ratio to orignal is " << mean_1/mean << G4endl;
+      out << std::setw(20) << "Affected Mean = " << std::setw(13) << mean_1 << " and its ratio to original is " << mean_1/mean << G4endl;
    } else {
       out << std::setw(20) << "Affected Mean = " << std::setw(13) << mean_1 << G4endl;
    }
    if ( var!=0 ) {
-      out << std::setw(20) << "Affected VAR = " << std::setw(13) << var_1 << " and its ratio to orignal is " << var_1/var << G4endl;
+      out << std::setw(20) << "Affected VAR = " << std::setw(13) << var_1 << " and its ratio to original is " << var_1/var << G4endl;
    } else {
       out << std::setw(20) << "Affected VAR = " << std::setw(13) << var_1 << G4endl;
    }
    if ( r!=0 ) {
-      out << std::setw(20) << "Affected R = " << std::setw(13) << r_1 << " and its ratio to orignal is " << r_1/r << G4endl;
+      out << std::setw(20) << "Affected R = " << std::setw(13) << r_1 << " and its ratio to original is " << r_1/r << G4endl;
    } else {
       out << std::setw(20) << "Affected R = " << std::setw(13) << r_1 << G4endl;
    }
    if ( shift!=0 ) {
-      out << std::setw(20) << "Affected SHIFT = " << std::setw(13) << shift_1 << " and its ratio to orignal is " << shift_1/shift << G4endl;
+      out << std::setw(20) << "Affected SHIFT = " << std::setw(13) << shift_1 << " and its ratio to original is " << shift_1/shift << G4endl;
    } else {
       out << std::setw(20) << "Affected SHIFT = " << std::setw(13) << shift_1 << G4endl;
    }
    if ( fom!=0 ) {
-      out << std::setw(20) << "Affected FOM = " << std::setw(13) << fom_1 << " and its ratio to orignal is " << fom_1/fom << G4endl;
+      out << std::setw(20) << "Affected FOM = " << std::setw(13) << fom_1 << " and its ratio to original is " << fom_1/fom << G4endl;
    } else {
       out << std::setw(20) << "Affected FOM = " << std::setw(13) << fom_1 << G4endl;
    }

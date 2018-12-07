@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CsvNtupleManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Class template for ntuple managers for all output types.
 //
@@ -47,13 +46,13 @@ class G4TNtupleManager : public G4BaseNtupleManager {
 
   protected:
     // Methods to manipulate ntuples  
-    void CreateNtuplesFromBooking();  
+    virtual void CreateNtuplesFromBooking();
     G4bool IsEmpty() const;
-    G4bool Reset(G4bool deleteNtuple);
+    virtual G4bool Reset(G4bool deleteNtuple);
 
     // Methods to create ntuples
     //
-    virtual G4int CreateNtuple(const G4String& name, const G4String& title) final;
+    virtual G4int CreateNtuple(const G4String& name, const G4String& title) override;
 
     // Create columns in the last created ntuple (from base class)
     using G4BaseNtupleManager::CreateNtupleIColumn;
@@ -84,7 +83,7 @@ class G4TNtupleManager : public G4BaseNtupleManager {
     virtual G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value) final;
     virtual G4bool FillNtupleSColumn(G4int ntupleId, G4int columnId, 
                                      const G4String& value) final;
-    virtual G4bool AddNtupleRow(G4int ntupleId) final;
+    virtual G4bool AddNtupleRow(G4int ntupleId) override;
 
     // Activation option
     //
@@ -117,9 +116,8 @@ class G4TNtupleManager : public G4BaseNtupleManager {
                     G4TNtupleDescription<TNTUPLE>* ntupleDescription) = 0;
 
     virtual void FinishTNtuple(
-                    G4TNtupleDescription<TNTUPLE>* ntupleDescription) = 0;
-    
-    void FinishTNtupleNew(G4TNtupleDescription<TNTUPLE>* ntupleDescription);
+                    G4TNtupleDescription<TNTUPLE>* ntupleDescription,
+                    G4bool fromBooking) = 0;
 
     // Common implementation
     //

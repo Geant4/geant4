@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 108684 2018-02-27 07:56:59Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -53,7 +52,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_util
         G4CookShellCorrections.hh
         G4CoulombBarrier.hh
         G4DeuteronCoulombBarrier.hh
-        G4EvaporationLevelDensityParameter.hh
         G4He3CoulombBarrier.hh
         G4KalbachCrossSection.hh
         G4NeutronCoulombBarrier.hh
@@ -76,7 +74,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_util
         G4CookShellCorrections.cc
         G4CoulombBarrier.cc
         G4DeuteronCoulombBarrier.cc
-        G4EvaporationLevelDensityParameter.cc
         G4He3CoulombBarrier.cc
         G4KalbachCrossSection.cc
         G4NeutronCoulombBarrier.cc

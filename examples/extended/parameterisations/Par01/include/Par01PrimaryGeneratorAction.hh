@@ -27,7 +27,6 @@
 /// \brief Definition of the Par01PrimaryGeneratorAction class
 //
 //
-// $Id: Par01PrimaryGeneratorAction.hh 100936 2016-11-03 11:07:41Z gcosmo $
 //
 
 #ifndef Par01PrimaryGeneratorAction_h

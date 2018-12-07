@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmDNAPhysicsActivator.hh 66704 2013-01-10 18:20:17Z gunter $
 
 #ifndef G4EmDNAPhysicsActivator_h
 #define G4EmDNAPhysicsActivator_h 1

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsFTFP_BERT_TRV.cc 105736 2017-08-16 13:01:11Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,10 +41,21 @@
 #include "G4PiKBuilder.hh"
 #include "G4FTFPPiKBuilder.hh"
 #include "G4BertiniPiKBuilder.hh"
+#include "G4ComponentGGHadronNucleusXsc.hh"
+#include "G4CrossSectionInelastic.hh"
+#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4NeutronInelasticXS.hh"
+#include "G4NeutronCaptureXS.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
+
+#include "G4CrossSectionDataSetRegistry.hh"
+
+#include "G4PhysListUtil.hh"
+#include "G4Threading.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -98,3 +108,31 @@ void G4HadronPhysicsFTFP_BERT_TRV::Pion()
 void G4HadronPhysicsFTFP_BERT_TRV::Kaon() {
   //Use combined with pions
 }
+
+
+void G4HadronPhysicsFTFP_BERT_TRV::ExtraConfiguration()
+{
+  //Modify XS for kaons and hyperons
+  auto ggComponent = new G4ComponentGGHadronNucleusXsc();
+  G4VCrossSectionDataSet* ggxs = new G4CrossSectionInelastic(ggComponent);
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(ggxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(ggxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(ggxs);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(ggxs);
+  G4PhysListUtil::FindInelasticProcess(G4Lambda::Lambda())->AddDataSet(ggxs);
+  G4PhysListUtil::FindInelasticProcess(G4SigmaMinus::SigmaMinus())->AddDataSet(ggxs);
+  G4PhysListUtil::FindInelasticProcess(G4SigmaPlus::SigmaPlus())->AddDataSet(ggxs);
+  G4PhysListUtil::FindInelasticProcess(G4XiMinus::XiMinus())->AddDataSet(ggxs);
+  G4PhysListUtil::FindInelasticProcess(G4XiZero::XiZero())->AddDataSet(ggxs);
+  G4PhysListUtil::FindInelasticProcess(G4OmegaMinus::OmegaMinus())->AddDataSet(ggxs);
+
+  //Modify Neutrons
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(neutron);
+  if(inel) { inel->AddDataSet(new G4NeutronInelasticXS()); }
+  G4HadronicProcess* capture = G4PhysListUtil::FindCaptureProcess(neutron);
+  if (capture) {
+    capture->RegisterMe(new G4NeutronRadCapture());
+  }
+}
+

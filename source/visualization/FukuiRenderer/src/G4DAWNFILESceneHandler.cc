@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc 110513 2018-05-28 07:37:38Z gcosmo $
 //
 // Satoshi TANAKA
 // DAWNFILE scene.

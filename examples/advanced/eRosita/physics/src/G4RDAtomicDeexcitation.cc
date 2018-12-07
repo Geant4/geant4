@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDAtomicDeexcitation.cc,v 1.11 
-// GEANT4 tag $Name: geant4-09-01-ref-00 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)

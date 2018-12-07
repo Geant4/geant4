@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundDeexcitation.cc 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
 // a final state with evaporated particles and (possibly) a stable nucleus.
@@ -93,20 +92,25 @@ void G4PreCompoundDeexcitation::deExcite(const G4Fragment& fragment,
   if (verboseLevel)
     G4cout << " >>> G4PreCompoundDeexcitation::deExcite" << G4endl;
 
-  if (verboseLevel > 1) G4cout << fragment << G4endl;
+  if (verboseLevel > 1)
+    G4cout << fragment << G4endl;
 
   G4ReactionProductVector* precompoundProducts = 0;
 
-  // FIXME: in principle, the explosion(...) stuff should also 
-  //        handle properly the case of Z=0 (neutron blob) 
   if (explosion(fragment) && theExcitationHandler) {
+    // FIXME: in principle, the explosion(...) stuff should also
+    // handle properly the case of Z=0 (neutron blob)
     if (verboseLevel) G4cout << " calling BreakItUp" << G4endl;
     precompoundProducts = theExcitationHandler->BreakItUp(fragment);
+
   } else {
     if (verboseLevel) G4cout << " calling DeExcite" << G4endl;
     // NOTE:  DeExcite() interface takes a *non-const* reference
+    // Make a non-const copy of original G4Fragment; otherwise it may be
+    // changed by DeExcite()
+    G4Fragment originalFragment(fragment);
     precompoundProducts =
-      theDeExcitation->DeExcite(const_cast<G4Fragment&>(fragment));
+      theDeExcitation->DeExcite(originalFragment);
   }
 
   // Transfer output of de-excitation back into Bertini objects

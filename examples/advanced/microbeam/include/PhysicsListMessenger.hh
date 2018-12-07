@@ -23,44 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
-// Med. Phys. 37 (2010) 4692-4708
-// The Geant4-DNA web site is available at http://geant4-dna.org
-// 
-// If you use this example, please cite the following publication:
-// Rad. Prot. Dos. 133 (2009) 2-11
+/// \file electromagnetic/TestEm5/include/PhysicsListMessenger.hh
+/// \brief Definition of the PhysicsListMessenger class
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysicsListMessenger_h
 #define PhysicsListMessenger_h 1
 
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class PhysicsList;
 class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysicsListMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    PhysicsListMessenger(PhysicsList* );
-    virtual ~PhysicsListMessenger();
+  PhysicsListMessenger(PhysicsList* );
+ ~PhysicsListMessenger();
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
+
+  inline G4double GetMaxChargedStep() const { return fMaxChargedStep; }
     
-  private:
+private:
   
-    PhysicsList* fPhysicsList;
+  PhysicsList*               fPhysicsList;
     
-    G4UIdirectory*             fPhysDir;        
-    G4UIcmdWithAString*        fListCmd;
-    
+  G4UIdirectory*             fPhysDir;    
+  G4UIcmdWithAString*        fListCmd;    
+  G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
+  G4double                   fMaxChargedStep;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

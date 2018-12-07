@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CsvNtupleManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Manager class for CSV ntuples.
 //
@@ -74,7 +73,8 @@ class G4CsvNtupleManager : public G4TNtupleManager<tools::wcsv::ntuple>
                     NtupleDescriptionType*  ntupleDescription) final;
 
     virtual void FinishTNtuple(
-                    NtupleDescriptionType*  ntupleDescription) final;
+                    NtupleDescriptionType*  ntupleDescription,
+                    G4bool fromBooking) final;
     
     G4bool WriteHeader(NtupleType* ntuple) const;
 

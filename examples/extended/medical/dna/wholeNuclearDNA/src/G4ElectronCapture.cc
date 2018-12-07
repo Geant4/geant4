@@ -43,7 +43,6 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
-// $ID$
 /// \file G4ElectronCapture.cc
 /// \brief Implementation of the G4ElectronCapture class
 

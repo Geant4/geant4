@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/dna/spower/.README.txt"
 ///\brief Example spower README page

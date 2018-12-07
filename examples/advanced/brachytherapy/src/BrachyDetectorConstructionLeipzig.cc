@@ -38,7 +38,6 @@
 //    *******************************************
 //
 //
-// $Id: BrachyDetectorConstructionLeipzig.cc 69765 2013-05-14 10:11:22Z gcosmo $
 //
 // Code by S. Guatelli
 //

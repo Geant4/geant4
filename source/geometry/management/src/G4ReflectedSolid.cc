@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc 104317 2017-05-24 13:08:38Z gcosmo $
 //
 //
 // Implementation for G4ReflectedSolid class

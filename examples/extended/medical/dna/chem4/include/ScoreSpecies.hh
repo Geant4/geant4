@@ -30,7 +30,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $Id$
 //
 #ifndef CHEM4_ScoreSpecies_h
 #define CHEM4_ScoreSpecies_h 1

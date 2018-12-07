@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 //---------------------------------------------------------------------------
 // Author: Alberto Ribon
@@ -62,12 +61,14 @@
 
 #include "G4ProcessManager.hh"
 #include "G4BGGNucleonInelasticXS.hh"
-#include "G4PiNuclearCrossSection.hh"
+#include "G4BGGPionInelasticXS.hh"
 #include "G4CrossSectionPairGG.hh"
 #include "G4ComponentAntiNuclNuclearXS.hh"
 #include "G4CrossSectionInelastic.hh"
 
 #include "G4PhysListUtil.hh"
+
+#include "G4HadronicParameters.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -192,7 +193,7 @@ void G4HadronPhysicsFTFQGSP_BERT::CreateModels()
   // FTF for neutrons, protons, pions, and kaons
   theModel1 = new G4TheoFSGenerator( "FTFP" );
   theModel1->SetMinEnergy( minFTFP );
-  theModel1->SetMaxEnergy( 100.0*TeV );
+  theModel1->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   theModel1->SetTransport( theCascade );
   theModel1->SetHighEnergyGenerator( theStringModel );
  
@@ -204,7 +205,7 @@ void G4HadronPhysicsFTFQGSP_BERT::CreateModels()
   // FTF for hyperons
   theModel2 = new G4TheoFSGenerator( "FTFP" );
   theModel2->SetMinEnergy( 2.0*GeV );
-  theModel2->SetMaxEnergy( 100.0*TeV );
+  theModel2->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   theModel2->SetTransport( theCascade );
   theModel2->SetHighEnergyGenerator( theStringModel );
   
@@ -216,17 +217,17 @@ void G4HadronPhysicsFTFQGSP_BERT::CreateModels()
   // FTF for Antibaryons  
   theModel3 = new G4TheoFSGenerator( "FTFP" );
   theModel3->SetMinEnergy( 0.0*GeV );
-  theModel3->SetMaxEnergy( 100.0*TeV );
+  theModel3->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   theModel3->SetTransport( theCascade );
   theModel3->SetHighEnergyGenerator( theStringModel );
 
   // Neutron Capture
   theNeutronCaptureModel = new G4NeutronRadCapture;
   theNeutronCaptureModel->SetMinEnergy( 0.0 );
-  theNeutronCaptureModel->SetMaxEnergy( 100.0*TeV );
+  theNeutronCaptureModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
 
   // Cross sections
-  thePiXS = new G4CrossSectionPairGG( new G4PiNuclearCrossSection, 91*GeV );
+  thePiXS = new G4BGGPionInelasticXS( G4PionMinus::Definition() );
   theAntiNucleonXS = new G4CrossSectionInelastic( new G4ComponentAntiNuclNuclearXS );
   theKaonXS = new G4CrossSectionInelastic( new G4ComponentGGHadronNucleusXsc );
   theChipsHyperonInelasticXS = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet( G4ChipsHyperonInelasticXS::Default_Name() );
@@ -274,7 +275,6 @@ void G4HadronPhysicsFTFQGSP_BERT::ConstructProcess()
   aProcMan->AddDiscreteProcess( theNeutronInelastic );
   theNeutronCaptureProcess = new G4HadronCaptureProcess();
   theNeutronCaptureProcess->RegisterMe( theNeutronCaptureModel );
-  theNeutronCaptureProcess->AddDataSet( theNeutronCaptureXS );
   aProcMan->AddDiscreteProcess( theNeutronCaptureProcess );
 
   theProtonInelastic = new G4ProtonInelasticProcess();

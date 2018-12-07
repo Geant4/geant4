@@ -141,12 +141,12 @@ namespace G4INCL {
     } else if(pS=="k0s" || pS=="kshort" || pS=="ks" || pS=="kaonshort") {
       theA = 0;
       theZ = 0;
-      theS = -99;
+//    theS not defined
       theType = G4INCL::KShort;
     } else if(pS=="k0l" || pS=="klong" || pS=="kl" || pS=="kaonlong") {
       theA = 0;
       theZ = 0;
-      theS = 99;
+//    theS not defined
       theType = G4INCL::KLong;
     } else if(pS=="d" || pS=="deuteron") {
       theA = 2;
@@ -210,6 +210,7 @@ namespace G4INCL {
 
   void ParticleSpecies::parseNuclide(std::string const &pS) {
     theType = Composite;
+    theS = 0; // no hypernuclei projectile or target for now
 
     // Allowed characters
     const std::string separators("-_");

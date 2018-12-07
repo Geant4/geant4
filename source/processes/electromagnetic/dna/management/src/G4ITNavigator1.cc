@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITNavigator1.cc 96977 2016-05-19 09:38:02Z gcosmo $
 // 
 // class G4ITNavigator1 Implementation
 //

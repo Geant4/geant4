@@ -27,7 +27,6 @@
 /// \brief Definition of the ExN02TrackerHit class
 //
 //
-// $Id: ExN02TrackerHit.hh 66241 2012-12-13 18:34:42Z gunter $
 // 
 // --------------------------------------------------------------
 

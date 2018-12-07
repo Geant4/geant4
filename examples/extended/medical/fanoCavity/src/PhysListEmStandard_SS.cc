@@ -26,7 +26,6 @@
 /// \file medical/fanoCavity/src/PhysListEmStandard_SS.cc
 /// \brief Implementation of the PhysListEmStandard_SS class
 //
-// $Id: PhysListEmStandard_SS.cc 103180 2017-03-21 10:33:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,10 +66,9 @@ PhysListEmStandard_SS::PhysListEmStandard_SS(const G4String& name,
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
   param->SetVerbose(1);
-  param->SetMinEnergy(100*eV);
+  param->SetMinEnergy(10*eV);
   param->SetMaxEnergy(10*GeV);
-  param->SetNumberOfBinsPerDecade(20);
-  param->SetLowestElectronEnergy(1*eV);
+  param->SetLowestElectronEnergy(10*eV);
   param->SetBuildCSDARange(true);
   param->SetMaxEnergyForCSDARange(10*GeV);
   param->SetMscThetaLimit(0.0);

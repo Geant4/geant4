@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDAugerData.cc v1.0
 // 
 //
 // Author: Alfonso Mmantero (Alfonso.Mantero@ge.infn.it)

@@ -17,4 +17,4 @@
 #/LXe/forceDrawPhotons true #/LXe/forceDrawNoPhotons false
 /run/beamOn 1
 /process/optical/scintillation/setTrackSecondariesFirst false
-/run/beamOn 1
+/run/beamOn 10

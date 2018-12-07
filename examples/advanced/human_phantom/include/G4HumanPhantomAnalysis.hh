@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
-// Author: S. Guatelli, susanna@uow.edu.au
+// Author: S. Guatelli, University of Wollongong susanna@uow.edu.au
 /// \file G4HumanPhantomAnalysis.hh
 /// \brief Selection of the analysis technology
 

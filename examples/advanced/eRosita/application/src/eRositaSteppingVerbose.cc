@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaSteppingVerbose.cc 107396 2017-11-10 08:28:08Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -25,7 +25,6 @@
 //
 #ifndef G4CASCADE_COLLIDER_BASE_HH
 #define G4CASCADE_COLLIDER_BASE_HH
-// $Id: G4CascadeColliderBase.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and
 //		provide conservation-checking here, with wrapper function

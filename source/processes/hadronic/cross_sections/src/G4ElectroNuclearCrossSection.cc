@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectroNuclearCrossSection.cc 109482 2018-04-24 14:47:28Z gcosmo $
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
@@ -42,6 +41,7 @@
 #include <iostream>
 
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4ElectroNuclearCrossSection.hh"
 
@@ -2178,11 +2178,12 @@ static const G4double* P2[nN]={P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P210,P211
 //
 
 G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection():G4VCrossSectionDataSet(Default_Name()),
-currentN(0), currentZ(0), lastZ(0),
-lastE(0), lastSig(0), lastG(0), lastL(0), mNeut(G4NucleiProperties::GetNuclearMass(1,0)), mProt(G4NucleiProperties::GetNuclearMass(1,1))
+currentN(0), currentZ(0), lastZ(0),lastE(0), lastSig(0), lastG(0), lastL(0), 
+mNeut(neutron_mass_c2), mProt(proton_mass_c2)
 {
+    SetForAllAtomsAndEnergies(true);
     //Initialize caches
-  lastUsedCacheEl = new cacheEl_t();
+    lastUsedCacheEl = new cacheEl_t();
     nistmngr = G4NistManager::Instance();
     
     for (G4int i=0;i<120;i++)

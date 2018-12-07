@@ -62,24 +62,23 @@
     theNeutron.SetMomentum( incidentParticle->Get4Momentum().vect() );
     theNeutron.SetKineticEnergy( eKinetic );
 
-// prepare target
+    // Prepare target
     G4ReactionProduct theTarget; 
     G4Nucleus aNucleus;
     G4double eps = 0.0001;
-    if(targetMass<500*MeV)
-      targetMass = ( G4NucleiProperties::GetNuclearMass( static_cast<G4int>(theBaseA+eps) , static_cast<G4int>(theBaseZ+eps) )) /
-                     G4Neutron::Neutron()->GetPDGMass();
+    if (targetMass < 500*MeV) targetMass =
+      (G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps) )) /
+          G4Neutron::Neutron()->GetPDGMass();
     G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
     G4double temperature = theTrack.GetMaterial()->GetTemperature();
     theTarget = aNucleus.GetBiasedThermalNucleus(targetMass, neutronVelocity, temperature);
-   theTarget.SetDefinition( G4IonTable::GetIonTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) );  //TESTPHP
-
-// go to nucleus rest system
-    theNeutron.Lorentz(theNeutron, -1*theTarget);
+    theTarget.SetDefinitionAndUpdateE( G4IonTable::GetIonTable()->GetIon(G4int(theBaseZ), G4int(theBaseA), 0.0) );
+    
+    // Put neutron in nucleus rest system
+    theNeutron.Lorentz(theNeutron, theTarget);
     eKinetic = theNeutron.GetKineticEnergy();
 
-// dice the photons
-
+    // Sample the photons
     G4ReactionProductVector * thePhotons = 0;
     if ( HasFSData() && !G4ParticleHPManager::GetInstance()->GetUseOnlyPhotoEvaporation() ) 
     { 
@@ -97,7 +96,7 @@
     }
     else
     {
-       //NDL does not have final state data or forced to use PhotoEvaporation model
+      //NDL does not have final state data or forced to use PhotoEvaporation model
       G4ThreeVector aCMSMomentum = theNeutron.GetMomentum()+theTarget.GetMomentum();
       G4LorentzVector p4(aCMSMomentum, theTarget.GetTotalEnergy() + theNeutron.GetTotalEnergy());
       G4Fragment nucleus(static_cast<G4int>(theBaseA+1), static_cast<G4int>(theBaseZ) ,p4);
@@ -119,11 +118,10 @@
         // T. K. comment out below line
         //theOne->SetDefinition( G4Gamma::Gamma() );
         G4IonTable* theTable = G4IonTable::GetIonTable();
-        if( (*it)->GetMomentum().mag() > 10*MeV ) theOne->SetDefinition( theTable->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0 ) );
+        if ( (*it)->GetMomentum().mag() > 10*MeV)
+          theOne->SetDefinition(theTable->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0) );
 
-        //if ( (*i)->GetExcitationEnergy() > 0 )
-        if ( (*it)->GetExcitationEnergy() > 1.0e-2*eV )
-        {
+        if ( (*it)->GetExcitationEnergy() > 1.0e-2*eV) {
            G4double ex = (*it)->GetExcitationEnergy();
            G4ReactionProduct* aPhoton = new G4ReactionProduct;
            aPhoton->SetDefinition( G4Gamma::Gamma() ); 
@@ -133,15 +131,13 @@
         }
 
         theOne->SetMomentum( (*it)->GetMomentum().vect() * ( (*it)->GetMomentum().t() - (*it)->GetExcitationEnergy() ) / (*it)->GetMomentum().t() ) ;
-        //theOne->SetTotalEnergy( (*i)->GetMomentum().t() - (*i)->GetExcitationEnergy() ); //will be calculated from momentum 
         thePhotons->push_back(theOne);
         delete *it;
       } 
       delete products;
     }
 
-// add them to the final state
-
+    // Add them to the final state
     G4int nPhotons = 0;
     nPhotons=thePhotons->size();
 
@@ -151,13 +147,15 @@
 //101203 TK
     if ( nPhotons == 0 )
     {
-       G4ReactionProduct * theOne = new G4ReactionProduct;
+       G4ReactionProduct* theOne = new G4ReactionProduct;
        theOne->SetDefinition( G4Gamma::Gamma() ); 
-       G4double theta = pi*G4UniformRand();
+       // Bug #1745 DHW G4double theta = pi*G4UniformRand();
+       G4double costheta = 2.*G4UniformRand()-1.;
+       G4double theta = std::acos(costheta);
        G4double phi = twopi*G4UniformRand();
        G4double sinth = std::sin(theta);
-       G4ThreeVector direction( sinth*std::cos(phi), sinth*std::sin(phi), std::cos(theta) );
-       theOne->SetMomentum( direction ) ;
+       G4ThreeVector direction(sinth*std::cos(phi), sinth*std::sin(phi), costheta);
+       theOne->SetMomentum(direction);
        thePhotons->push_back(theOne);
        nPhotons++; // 0 -> 1
     }
@@ -179,7 +177,7 @@
     // back to lab system
     for(i=0; i<nPhotons; i++)
     {
-      thePhotons->operator[](i)->Lorentz(*(thePhotons->operator[](i)), theTarget);
+      thePhotons->operator[](i)->Lorentz(*(thePhotons->operator[](i)), -1*theTarget);
     }
     
     // Recoil, if only one gamma
@@ -269,11 +267,13 @@
           for ( G4int j = 0 ; j < nPhotons - nNonZero - 1 ; j++ )
           {
              //Isotopic in LAB OK?
-             G4double theta = pi*G4UniformRand();
+             // Bug # 1745 DHW G4double theta = pi*G4UniformRand();
+             G4double costheta = 2.*G4UniformRand()-1.;
+             G4double theta = std::acos(costheta);
              G4double phi = twopi*G4UniformRand();
              G4double sinth = std::sin(theta);
              G4double en = vEPhoton[j];
-             G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
+             G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*costheta);
               
              p_photons += G4LorentzVector ( tempVector, tempVector.mag() );
              G4DynamicParticle * theOne = new G4DynamicParticle;

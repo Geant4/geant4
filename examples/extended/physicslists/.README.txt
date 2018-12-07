@@ -1,4 +1,3 @@
-//$Id: .README.txt 107196 2017-11-03 20:26:31Z rhatcher $
 
 ///\file "physicslists/.README.txt"
 ///\brief Examples physicslists README page

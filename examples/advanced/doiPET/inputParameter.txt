@@ -1,0 +1,46 @@
+#The following are intrinsic parameters for the detector. #https://link.springer.com/article/10.1007/s12194-013-0231-4
+#For theoretical look-up table (equally spaced position response), the out most reflector value is set to be 0
+
+#Reflector pattern for layer 1
+reflectorLayer1_Tangential:	1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1
+reflectorLayer1_Axial:	1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1
+#
+#Reflector pattern for layer 2
+reflectorLayer2_Tangential:	1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1
+reflectorLayer2_Axial:	0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0
+#
+#Reflector pattern for layer 3
+reflectorLayer3_Tangential:	0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0
+reflectorLayer3_Axial:	1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 
+#
+#Reflector pattern for layer 4
+reflectorLayer4_Tangential:	0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0
+reflectorLayer4_Axial:	0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0
+
+#Give the time units in nano seconds (ns)
+block_DeadTime: 256 ns
+
+#Dead on the multiplexed crystals are not applied
+module_DeadTime: 0 ns
+
+#choose type of resolution
+fixedResolution: false
+	
+crystalResolutionMin: 0.13
+crystalResolutionMax: 0.17
+
+#Reference energy in keV
+crystalEnergyRef: 511 keV
+
+crystalQuantumEfficiency: 0.905
+
+#The number of pixels in 2D position histogram of the response
+numberOfPixel_2D_Pixel: 32 32
+
+#Energy window in keV
+lowerThreshold: 400 keV
+upperThreshold: 600 keV 
+
+#Choose the type of output: "singlesOutput" or "coincidenceOutput"
+TypeOfOutput: coincidenceOutput
+

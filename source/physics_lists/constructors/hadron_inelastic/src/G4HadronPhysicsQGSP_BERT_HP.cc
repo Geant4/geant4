@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsQGSP_BERT_HP.cc 105736 2017-08-16 13:01:11Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -71,6 +70,8 @@
 
 #include "G4PhysListUtil.hh"
 
+#include "G4HadronicParameters.hh"
+
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -110,49 +111,29 @@ void G4HadronPhysicsQGSP_BERT_HP::Neutron()
   neu->Build();
 }
 
-
 void G4HadronPhysicsQGSP_BERT_HP::ExtraConfiguration()
 {
   //Modify XS for kaons
   auto xsk = new G4ComponentGGHadronNucleusXsc();
-  xs_k.Put(xsk);
   G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(xsk);
-  xs_ds.Push_back(kaonxs);
   G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
   G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
   G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
   G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
 
   // --- Neutrons ---
-  G4HadronicProcess* capture = 0;
-  G4HadronicProcess* fission = 0;
-  G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
-  G4ProcessVector*  pv = pmanager->GetProcessList();
-  for ( size_t i=0; i < static_cast<size_t>(pv->size()); ++i ) {
-    if ( fCapture == ((*pv)[i])->GetProcessSubType() ) {
-      capture = static_cast<G4HadronicProcess*>((*pv)[i]);
-    } else if ( fFission == ((*pv)[i])->GetProcessSubType() ) {
-      fission = static_cast<G4HadronicProcess*>((*pv)[i]);
-    }
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  G4HadronicProcess* capture = G4PhysListUtil::FindCaptureProcess(neutron);
+  if (capture) {
+    G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
+    theNeutronRadCapture->SetMinEnergy( minBERT_neutron ); 
+    capture->RegisterMe( theNeutronRadCapture );
   }
-  if ( ! capture ) {
-    capture = new G4HadronCaptureProcess("nCapture");
-    pmanager->AddDiscreteProcess(capture);
+  G4HadronicProcess* fission = G4PhysListUtil::FindFissionProcess(neutron);
+  if (fission) {
+    G4LFission* theNeutronLEPFission = new G4LFission();
+    theNeutronLEPFission->SetMinEnergy( minBERT_neutron );
+    theNeutronLEPFission->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
+    fission->RegisterMe( theNeutronLEPFission );
   }
-  auto xs_n_in = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
-  xs_ds.Push_back(xs_n_in);//TODO: Is this needed? Who owns the pointer?
-  capture->AddDataSet( xs_n_in );
-  auto xs_n_hp = new G4ParticleHPCaptureData;
-  xs_ds.Push_back(xs_n_hp);//TODO: Is this needed? Original code does not need this
-  capture->AddDataSet( xs_n_hp );
-  G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture();
-  theNeutronRadCapture->SetMinEnergy( minBERT_neutron );
-  capture->RegisterMe( theNeutronRadCapture );
-  if ( ! fission ) {
-    fission = new G4HadronFissionProcess("nFission");
-    pmanager->AddDiscreteProcess(fission);
-  }
-  G4LFission* theNeutronLEPFission = new G4LFission();
-  theNeutronLEPFission->SetMinEnergy( minBERT_neutron );
-  fission->RegisterMe( theNeutronLEPFission );
 }

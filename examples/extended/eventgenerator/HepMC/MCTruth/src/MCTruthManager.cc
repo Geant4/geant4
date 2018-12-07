@@ -27,7 +27,6 @@
 /// \brief Implementation of the MCTruthManager class
 //
 //
-// $Id: MCTruthManager.cc 103182 2017-03-21 10:36:09Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -38,25 +37,25 @@
 //
 // --------------------------------------------------------------
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "MCTruthManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 static MCTruthManager* instance = 0;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 MCTruthManager::MCTruthManager() : fEvent(0), fConfig(0) 
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 MCTruthManager::~MCTruthManager() 
 {} 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 MCTruthManager* MCTruthManager::GetInstance()
 {
@@ -67,7 +66,7 @@ MCTruthManager* MCTruthManager::GetInstance()
   return instance;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void MCTruthManager::NewEvent()
 {
@@ -77,7 +76,7 @@ void MCTruthManager::NewEvent()
   fEvent = new HepMC::GenEvent();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void MCTruthManager::AddParticle(G4LorentzVector& momentum,
                                  G4LorentzVector& prodpos, 
@@ -260,7 +259,7 @@ void MCTruthManager::AddParticle(G4LorentzVector& momentum,
   } 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void MCTruthManager::PrintEvent()
 {
@@ -275,7 +274,7 @@ void MCTruthManager::PrintEvent()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void MCTruthManager::PrintTree(HepMC::GenParticle* particle, G4String offset)
 {
@@ -306,4 +305,4 @@ void MCTruthManager::PrintTree(HepMC::GenParticle* particle, G4String offset)
   } 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

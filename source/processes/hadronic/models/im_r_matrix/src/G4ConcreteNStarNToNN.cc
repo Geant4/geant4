@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConcreteNStarNToNN.cc,v 1.2 2006-06-29 20:40:03 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"

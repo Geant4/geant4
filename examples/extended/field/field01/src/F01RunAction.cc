@@ -23,65 +23,111 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/field01/src/F01RunAction.cc
-/// \brief Implementation of the F01RunAction class
-//
-//
-// $Id: F01RunAction.cc 110139 2018-05-16 07:33:34Z gcosmo $
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #include "F01RunAction.hh"
-#include "F01RunMessenger.hh"
-
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 
-#include "Randomize.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Electron.hh"
+#include "G4ProcessManager.hh"
+#include "G4Transportation.hh"
+#include "G4CoupledTransportation.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F01RunAction::F01RunAction()
-  : G4UserRunAction(),
-    fMessenger(0),
-    fSaveRndm(0)
-{
-  fMessenger = new F01RunMessenger(this);
+F01RunAction::F01RunAction() {
+  theWarningEnergy   =   1.0 * CLHEP::kiloelectronvolt;  // Arbitrary 
+  theImportantEnergy =  10.0 * CLHEP::kiloelectronvolt;  // Arbitrary 
+  theNumberOfTrials  =   15;  // Arbitrary
+  // Applications should determine these thresholds according to
+  //  - physics requirements, and 
+  //  - the computing cost of continuing integration for looping tracks
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+F01RunAction::~F01RunAction() {}
 
-F01RunAction::~F01RunAction()
-{
-  delete fMessenger;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void F01RunAction::BeginOfRunAction( const G4Run* aRun ) {
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+
+  G4cout << " Calling F01RunAction::ChangeLooperParameters() " << G4endl;
+  ChangeLooperParameters( G4Electron::Definition() );
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void F01RunAction::BeginOfRunAction(const G4Run*)
+void F01RunAction::
+ChangeLooperParameters(const G4ParticleDefinition* particleDef )
 {
-  // save Rndm status
-  if (fSaveRndm > 0)
-  {
-      G4Random::showEngineStatus();
-      G4Random::saveEngineStatus("beginOfRun.rndm");
+  if( particleDef == nullptr )
+     particleDef = G4Electron::Definition();
+  auto transportPair= findTransportation( particleDef );
+  auto transport = transportPair.first;
+  auto coupledTransport = transportPair.second;
+
+  if( transport != nullptr )
+  { 
+     // Change the values of the looping particle parameters of Transportation 
+     if( theWarningEnergy   >= 0.0 )
+        transport->SetThresholdWarningEnergy(  theWarningEnergy ); 
+     if( theImportantEnergy >= 0.0 )
+        transport->SetThresholdImportantEnergy(  theImportantEnergy ); 
+     if( theNumberOfTrials  > 0 )
+        transport->SetThresholdTrials( theNumberOfTrials );
+  }
+  else if( coupledTransport != nullptr )
+  { 
+     // Change the values for Coupled Transport
+     if( theWarningEnergy   >= 0.0 )
+        coupledTransport->SetThresholdWarningEnergy(  theWarningEnergy ); 
+     if( theImportantEnergy >= 0.0 )
+        coupledTransport->SetThresholdImportantEnergy(  theImportantEnergy ); 
+     if( theNumberOfTrials  > 0 )
+        coupledTransport->SetThresholdTrials( theNumberOfTrials );
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void F01RunAction::EndOfRunAction(const G4Run*)
-{
-  // save Rndm status
+void F01RunAction::EndOfRunAction( const G4Run* ) {
+  if( theVerboseLevel > 1 )
+     G4cout << G4endl << G4endl
+            << " ###########  Track Statistics for Transportation process(es) "
+            << " ########### " << G4endl
+            << " ############################################## "
+            << " ####################### " << G4endl << G4endl;
 
-  if (fSaveRndm == 1)
-  {
-    G4Random::showEngineStatus();
-    G4Random::saveEngineStatus("endOfRun.rndm");
-  }
+  auto transportPair= findTransportation( G4Electron::Definition() );
+  auto transport = transportPair.first;
+  auto coupledTransport = transportPair.second;
+  if( transport)             {        transport->PrintStatistics(G4cout); }
+  else if( coupledTransport) { coupledTransport->PrintStatistics(G4cout); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+std::pair<G4Transportation*, G4CoupledTransportation*>
+F01RunAction::findTransportation( const G4ParticleDefinition* particleDef,
+                                  bool reportError )
+{
+  const auto *partPM=  particleDef->GetProcessManager();
+    
+  G4VProcess* partTransport = partPM->GetProcess("Transportation");
+  auto transport= dynamic_cast<G4Transportation*>(partTransport);
+
+  partTransport = partPM->GetProcess("CoupledTransportation");
+  auto coupledTransport=
+     dynamic_cast<G4CoupledTransportation*>(partTransport);
+
+  if( reportError && !transport && !coupledTransport )
+  {
+     G4cerr << "Unable to find Transportation process for particle type "
+            << particleDef->GetParticleName()
+            << "  ( PDG code = " << particleDef->GetPDGEncoding() << " ) "
+            << G4endl;
+  }
+  
+  return
+     std::make_pair( transport, coupledTransport );
+         // <G4Transportation*, G4CoupledTransportation*>  
+}

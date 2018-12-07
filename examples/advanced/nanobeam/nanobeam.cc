@@ -33,8 +33,6 @@
 #endif
 
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
@@ -84,14 +82,7 @@ int main(int argc,char** argv) {
   
   if (argc==1)   // Define UI session for interactive mode.
   { 
-#ifdef _WIN32
-    G4UIsession * session = new G4UIterminal();
-#else
-    G4UIsession * session = new G4UIterminal(new G4UItcsh);
-#endif
     UImanager->ApplyCommand("/control/execute default.mac");    
-    session->SessionStart();
-    delete session;
   }
   else           // Batch mode
   { 

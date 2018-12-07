@@ -26,7 +26,6 @@
 // Authors: S. Meylan and C. Villagrasa (IRSN, France)
 // Models come from
 // M. Bug et al, Rad. Phys and Chem. 130, 459-479 (2017)
-// $Id: G4DNAPTBAugerModel.cc,v 1.11
 // 
 //
 // -------------------------------------------------------------------

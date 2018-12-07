@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $Id$
 //
 /// \file StackingAction.cc
 /// \brief Implementation of the StackingAction class

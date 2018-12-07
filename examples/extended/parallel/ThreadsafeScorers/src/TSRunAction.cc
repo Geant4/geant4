@@ -27,7 +27,6 @@
 /// \brief Implementation of the TSRunAction class
 //
 //
-// $Id: TSRunAction.cc 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 //
@@ -45,6 +44,7 @@
 
 #include "TSRun.hh"
 #include "TSDetectorConstruction.hh"
+#include "G4StatAnalysis.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,6 +73,8 @@ void TSRunAction::BeginOfRunAction(const G4Run* aRun)
     G4RunManager::GetRunManager()->SetPrintProgress((evts_to_process > 100)
                                                     ? evts_to_process/100
                                                     : 1);
+    if(IsMaster())
+        G4PrintEnv();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -108,105 +110,174 @@ void TSRunAction::EndOfRunAction(const G4Run* aRun)
       std::vector<G4double> units { CLHEP::eV, CLHEP::keV, 1, 1 };
       std::vector<G4String> unitstr { "keV", "steps" };
 
-      for(unsigned i = 0; i < primScorerNames.size(); ++i)
-      {
-        for(unsigned j = 0; j < fnames.size(); ++j)
-        {
-          //----------------------------------------------------------------//
-          auto print = [] (std::ostream& fout,
+      //----------------------------------------------------------------------//
+      // lambda to print double value
+      auto print = [] (std::ostream& fout,
               G4int first, G4double second,
               G4double unit1, G4double unit2, G4String unit2str)
-          {
-            if(fout)
+      {
+          if(fout)
               fout <<  first
                     << "     "  << second/unit1
                     << G4endl;
 
-            G4cout
-                << "    " << std::setw(10) << first
-                << "    " << std::setw(15) << std::setprecision(6)
-                << std::fixed << second/unit2 << " " << unit2str
-                << G4endl;
-            G4cout.unsetf(std::ios::fixed);
-          };
-          //----------------------------------------------------------------//
-
-          fname = fnames.at(j) + "_" + primScorerNames.at(i) + ".out";
-          fileout.open(fname);
-          G4cout << separator.str() << G4endl;
-          G4cout << " opened file " << fname << " for output" << G4endl;
-          G4cout << separator.str() << G4endl;
-
-          G4bool valid = true;
-          if(j == 0)
+          G4cout
+                  << "    " << std::setw(10) << first
+                  << "    " << std::setw(15) << std::setprecision(6)
+                  << std::fixed << second/unit2 << " " << unit2str
+                  << G4endl;
+          G4cout.unsetf(std::ios::fixed);
+      };
+      //----------------------------------------------------------------------//
+      // lambda to print statistics
+      auto stat_print = [] (std::ostream& fout,
+              G4int first, G4StatAnalysis* stat, G4ConvergenceTester* conv,
+              G4double unit1, G4double unit2, G4String unit2str)
+      {
+          if(!stat || !conv)
+              return;
+          auto fsecond = (*stat);
+          auto psecond = (*stat);
+          fsecond /= unit1;
+          psecond /= unit2;
+          if(fout)
           {
-            G4THitsMap<G4double>* hitmap
-                = tsRun->GetHitsMap(fName + "/" + primScorerNames.at(i));
-            if(hitmap && hitmap->GetMap()->size() != 0)
-            {
-              for(auto itr = hitmap->GetMap()->begin();
-                  itr != hitmap->GetMap()->end(); itr++)
-              {
-                IDs.insert(itr->first);
-                std::get<0>(fTypeCompare[primScorerNames.at(i)][itr->first])
-                    = *itr->second/units.at(i);
-                print(fileout, itr->first, *itr->second,
-                      units.at(i), units.at(i+1), unitstr.at(i));
-              }
-            } else {
-              valid = false;
-            }
-            if(!valid)
-            {
-              G4Exception("TSRunAction", "000", JustWarning,
-                          G4String(primScorerNames.at(i) +
-                                   " HitsMap is either not "
-                                   "created or the HitsMap was empty").c_str());
-            }
-          } else {
-            G4TAtomicHitsMap<G4double>* hitmap
-                = tsRun->GetAtomicHitsMap(fName + "/" +
-                                          primScorerNames.at(i));
-            if(hitmap && hitmap->GetMap()->size() != 0)
-            {
-              for(auto itr = hitmap->GetMap()->begin();
-                  itr != hitmap->GetMap()->end(); itr++)
-              {
-                IDs.insert(itr->first);
-                std::get<1>(fTypeCompare[primScorerNames.at(i)][itr->first])
-                    = *itr->second/units.at(i);
-                print(fileout, itr->first, *itr->second,
-                      units.at(i), units.at(i+1), unitstr.at(i));
-              }
-            } else {
-              valid = false;
-            }
-            if(!valid)
-            {
-              G4Exception("TSRunAction", "001", JustWarning,
-                          G4String(primScorerNames.at(i) +
-                                   " HitsMap is either not "
-                                   "created or the HitsMap was empty").c_str());
-            }
+              fout << first << "     "  << fsecond << G4endl;
+              conv->ShowResult(fout);
           }
+          std::stringstream ss;
+          ss << "    " << std::setw(10) << first
+             << "    " << std::setw(15) << std::setprecision(6)
+             << std::fixed << psecond << " " << unit2str;
+          // skip print of ConvergenceTester to stdout
+          G4cout << ss.str() << G4endl;
+      };
+      //----------------------------------------------------------------------//
 
-          fileout.close();
-          G4cout << separator.str() << G4endl;
-          G4cout << " closed file " << fname << " for output" << G4endl;
+      for(unsigned i = 0; i < primScorerNames.size(); ++i)
+      {
+        for(unsigned j = 0; j < fnames.size(); ++j)
+        {
+            fname = fnames.at(j) + "_" + primScorerNames.at(i) + ".out";
+            fileout.open(fname);
+            G4cout << separator.str() << G4endl;
+            G4cout << " opened file " << fname << " for output" << G4endl;
+            G4cout << separator.str() << G4endl;
+
+            G4bool valid = true;
+            if(j == 0)
+            {
+                G4THitsMap<G4double>* hitmap
+                        = tsRun->GetHitsMap(fName + "/" + primScorerNames.at(i));
+                G4StatContainer<G4StatAnalysis>* statmap
+                        = tsRun->GetStatMap(fName + "/" + primScorerNames.at(i));
+                G4StatContainer<G4ConvergenceTester>* convmap
+                        = tsRun->GetConvMap(fName + "/" + primScorerNames.at(i));
+
+                if(hitmap && hitmap->size() != 0)
+                {
+                    for(auto itr = hitmap->begin(); itr != hitmap->end(); itr++)
+                    {
+                        if(!hitmap->GetObject(itr))
+                            continue;
+                        IDs.insert(itr->first);
+                        std::get<0>(fTypeCompare[primScorerNames.at(i)][itr->first])
+                                = *itr->second/units.at(i);
+                        print(fileout, itr->first, *itr->second,
+                              units.at(i), units.at(i+1), unitstr.at(i));
+                    }
+                }
+                else
+                {
+                    valid = false;
+                }
+
+                if(statmap && statmap->size() != 0 &&
+                   convmap && convmap->size() != 0)
+                {
+                    auto stat_fname = "stat_" + fname;
+                    std::ofstream statout;
+                    statout.open(stat_fname);
+                    for(auto itr = statmap->begin(); itr != statmap->end(); itr++)
+                    {
+                        G4int _f = statmap->GetIndex(itr);
+                        G4StatAnalysis* _s = statmap->GetObject(itr);
+                        G4ConvergenceTester* _c = convmap->GetObject(_f);
+                        stat_print(statout, _f, _s, _c,
+                                   units.at(i), units.at(i+1), unitstr.at(i));
+                    }
+                    statout.close();
+                }
+                else
+                {
+                    std::stringstream ss;
+                    ss << " StatMap/ConvMap is either not "
+                       << "created or the StatMap/ConvMap was empty";
+                    if(statmap)
+                        ss << " (StatMap size == " << statmap->size() << ")";
+                    if(convmap)
+                        ss << " (ConvMap size == " << convmap->size() << ")";
+
+                    G4Exception("TSRunAction", "002", JustWarning,
+                                G4String(primScorerNames.at(i) +
+                                         ss.str()).c_str());
+                }
+
+                if(!valid)
+                {
+                    G4Exception("TSRunAction", "000", JustWarning,
+                                G4String(primScorerNames.at(i) +
+                                         " HitsMap is either not "
+                                         "created or the HitsMap was empty").c_str());
+                }
+            }
+            else
+            {
+                G4TAtomicHitsMap<G4double>* hitmap
+                        = tsRun->GetAtomicHitsMap(fName + "/" +
+                                                  primScorerNames.at(i));
+                if(hitmap && hitmap->size() != 0)
+                {
+                    for(auto itr = hitmap->begin(); itr != hitmap->end(); itr++)
+                    {
+                        IDs.insert(itr->first);
+                        std::get<1>(fTypeCompare[primScorerNames.at(i)][itr->first])
+                                = *itr->second/units.at(i);
+                        print(fileout, itr->first, *itr->second,
+                              units.at(i), units.at(i+1), unitstr.at(i));
+                    }
+                }
+                else
+                {
+                    valid = false;
+                }
+
+                if(!valid)
+                {
+                    G4Exception("TSRunAction", "001", JustWarning,
+                                G4String(primScorerNames.at(i) +
+                                         " HitsMap is either not "
+                                         "created or the HitsMap was empty").c_str());
+                }
+            }
+
+            fileout.close();
+            G4cout << separator.str() << G4endl;
+            G4cout << " closed file " << fname << " for output" << G4endl;
         }
         // add the mutex data
         TSRun::MutexHitsMap_t* hitmap
-            = tsRun->GetMutexHitsMap(fName + "/" +
-                                     primScorerNames.at(i));
+                = tsRun->GetMutexHitsMap(fName + "/" +
+                                         primScorerNames.at(i));
         if(hitmap && hitmap->size() != 0)
         {
-          for(auto itr = hitmap->begin();
-              itr != hitmap->end(); itr++)
-          {
-            IDs.insert(itr->first);
-            std::get<2>(fTypeCompare[primScorerNames.at(i)][itr->first])
-                = itr->second/units.at(i);
-          }
+            for(auto itr = hitmap->begin();
+                itr != hitmap->end(); itr++)
+            {
+                IDs.insert(itr->first);
+                std::get<2>(fTypeCompare[primScorerNames.at(i)][itr->first])
+                        = itr->second/units.at(i);
+            }
         }
 
       }
@@ -223,70 +294,69 @@ void TSRunAction::EndOfRunAction(const G4Run* aRun)
       G4cout << " opened file " << fname << " for difference output" << G4endl;
       G4cout << separator.str() << G4endl;
 
-      fileout
-          << "    " << std::setw(10) << "ID"
-          << "    "
-          << std::setw(30) << std::setprecision(12) << std::fixed
-          << "MFD value"
-          << "    "
-          << std::setw(30) << std::setprecision(12) << std::fixed
-          << "Atomic Hits Map value"
-          << "    "
-          << std::setw(30) << std::setprecision(8) << std::scientific
-          << "Difference"
-          << "    "
-          << std::setw(30) << std::setprecision(8) << std::scientific
-          << "Diff (MFD - MUTEXED)"
-          << "    "
-          << std::setw(30) << std::setprecision(8) << std::scientific
-          << "Diff (ATOM_HIT_MAP - MUTEXED)"
-          << G4endl << G4endl;
+      fileout << "    " << std::setw(10) << "ID"
+              << "    "
+              << std::setw(30) << std::setprecision(12) << std::fixed
+              << "MFD value"
+              << "    "
+              << std::setw(30) << std::setprecision(12) << std::fixed
+              << "Atomic Hits Map value"
+              << "    "
+              << std::setw(30) << std::setprecision(8) << std::scientific
+              << "Difference"
+              << "    "
+              << std::setw(30) << std::setprecision(8) << std::scientific
+              << "Diff (MFD - MUTEXED)"
+              << "    "
+              << std::setw(30) << std::setprecision(8) << std::scientific
+              << "Diff (ATOM_HIT_MAP - MUTEXED)"
+              << G4endl << G4endl;
 
       for(auto itr1 = fTypeCompare.begin();
           itr1 != fTypeCompare.end(); ++itr1)
       {
-        fileout << "\n\nType = " << itr1->first << "\n" << G4endl;
-        for(auto itr2 = itr1->second.begin();
-            itr2 != itr1->second.end(); ++itr2)
-        {
-          G4double d01
-              = std::fabs(std::get<0>(itr2->second) -
-                          std::get<1>(itr2->second));
-          G4double d02
-              = std::fabs(std::get<0>(itr2->second) -
-                          std::get<2>(itr2->second));
-          G4double d03
-              = std::fabs(std::get<1>(itr2->second) -
-                          std::get<2>(itr2->second));
-
-
-          auto _print_diff = [&] (const G4double& _dval)
+          fileout << "\n\nType = " << itr1->first << "\n" << G4endl;
+          for(auto itr2 = itr1->second.begin();
+              itr2 != itr1->second.end(); ++itr2)
           {
-            if(_dval > 0.0)
-              fileout << std::setprecision(8) << std::scientific
-                      << std::setw(30) << _dval << "    ";
-            else
-              fileout << std::setprecision(1) << std::fixed
-                      << std::setw(30) << _dval << "    ";
-          };
+              G4double d01
+                      = std::fabs(std::get<0>(itr2->second) -
+                                  std::get<1>(itr2->second));
+              G4double d02
+                      = std::fabs(std::get<0>(itr2->second) -
+                                  std::get<2>(itr2->second));
+              G4double d03
+                      = std::fabs(std::get<1>(itr2->second) -
+                                  std::get<2>(itr2->second));
 
-          fileout
-              << "    " << std::setw(10) << itr2->first
-              << "    "
-              << std::setw(30) << std::setprecision(12) << std::fixed
-              << std::get<0>(itr2->second)
-              << "    "
-              << std::setw(30) << std::setprecision(12) << std::fixed
-              << std::get<1>(itr2->second)
-              << "    ";
 
-          _print_diff(d01);
-          _print_diff(d02);
-          _print_diff(d03);
+              auto _print_diff = [&] (const G4double& _dval)
+              {
+                  if(_dval > 0.0)
+                      fileout << std::setprecision(8) << std::scientific
+                              << std::setw(30) << _dval << "    ";
+                  else
+                      fileout << std::setprecision(1) << std::fixed
+                              << std::setw(30) << _dval << "    ";
+              };
 
-          fileout << G4endl;
+              fileout
+                      << "    " << std::setw(10) << itr2->first
+                      << "    "
+                      << std::setw(30) << std::setprecision(12) << std::fixed
+                      << std::get<0>(itr2->second)
+                      << "    "
+                      << std::setw(30) << std::setprecision(12) << std::fixed
+                      << std::get<1>(itr2->second)
+                      << "    ";
 
-        }
+              _print_diff(d01);
+              _print_diff(d02);
+              _print_diff(d03);
+
+              fileout << G4endl;
+
+          }
       }
 
       fileout.close();

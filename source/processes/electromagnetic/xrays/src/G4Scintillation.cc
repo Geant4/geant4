@@ -23,7 +23,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc 108423 2018-02-13 11:18:13Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -205,6 +204,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 {
         aParticleChange.Initialize(aTrack);
+        fNumPhotons = 0;
 
         const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
         const G4Material* aMaterial = aTrack.GetMaterial();

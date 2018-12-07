@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeRunAction.cc 109784 2018-05-09 08:14:08Z gcosmo $
 //
 /// \file optical/LXe/src/LXeRunAction.cc
 /// \brief Implementation of the LXeRunAction class

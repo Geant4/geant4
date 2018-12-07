@@ -45,55 +45,45 @@ G4ThreadLocal EMField* DetectorConstruction::fField = nullptr;
 
 DetectorConstruction::DetectorConstruction()
   
-  :fDefaultMaterial(NULL),fCollimatorMaterial(NULL),fBoiteMaterial(NULL),
-   fCathodeMaterial(NULL),fVerreMaterial(NULL),fVerre2Material(NULL),   
-   fKgmMaterial(NULL),fBoite2Material(NULL),fBoite3Material(NULL),
-   fNucleusMaterial1(NULL),fCytoplasmMaterial1(NULL),
-   fNucleusMaterial2(NULL),fCytoplasmMaterial2(NULL),
-   fNucleusMaterial3(NULL),fCytoplasmMaterial3(NULL),
-   fPhysiWorld(NULL),fLogicWorld(NULL),fSolidWorld(NULL),
-   fPhysiVol(NULL),fLogicVol(NULL),fSolidVol(NULL),
-   fPhysiBoite(NULL),fLogicBoite(NULL),fSolidBoite(NULL),
-   fPhysiYoke1(NULL),fLogicYoke1(NULL),fSolidYoke1(NULL),
-   fPhysi1Gap(NULL),fLogic1Gap(NULL),fSolid1Gap(NULL),
-   fPhysi2Gap(NULL),fLogic2Gap(NULL),fSolid2Gap(NULL), 
-   fPhysi3Gap(NULL),fLogic3Gap(NULL),fSolid3Gap(NULL),
-   fPhysiYoke2(NULL),fLogicYoke2(NULL),fSolidYoke2(NULL),
-   fPhysi4Gap(NULL),fLogic4Gap(NULL),fSolid4Gap(NULL),
-   fPhysi5Gap(NULL),fLogic5Gap(NULL),fSolid5Gap(NULL), 
-   fPhysiBoiteIso(NULL),fLogicBoiteIso(NULL),fSolidBoiteIso(NULL),
-   fPhysiCathode(NULL),fLogicCathode(NULL),fSolidCathode(NULL), 
-   fPhysiIso(NULL),fLogicIso(NULL),fSolidIso(NULL),
-   fPhysiVerre(NULL),fLogicVerre(NULL),fSolidVerre(NULL),
-   fPhysiBoite2(NULL),fLogicBoite2(NULL),fSolidBoite2(NULL),
-   fPhysiBoite3(NULL),fLogicBoite3(NULL),fSolidBoite3(NULL),
-   fPhysiKgm(NULL),fLogicKgm(NULL),fSolidKgm(NULL),
-   fPhysiVerre2(NULL),fLogicVerre2(NULL),fSolidVerre2(NULL),
-   fPhysiPhantom(NULL),fLogicPhantom(NULL),fSolidPhantom(NULL)
+  :fDefaultMaterial(nullptr),fCollimatorMaterial(nullptr),fBoiteMaterial(nullptr),
+   fCathodeMaterial(nullptr),fVerreMaterial(nullptr),fVerre2Material(nullptr),   
+   fKgmMaterial(nullptr),fBoite2Material(nullptr),fBoite3Material(nullptr),
+   fNucleusMaterial1(nullptr),fCytoplasmMaterial1(nullptr),
+   fNucleusMaterial2(nullptr),fCytoplasmMaterial2(nullptr),
+   fNucleusMaterial3(nullptr),fCytoplasmMaterial3(nullptr),
+   fPhysiWorld(nullptr),fLogicWorld(nullptr),fSolidWorld(nullptr),
+   fPhysiVol(nullptr),fLogicVol(nullptr),fSolidVol(nullptr),
+   fPhysiBoite(nullptr),fLogicBoite(nullptr),fSolidBoite(nullptr),
+   fPhysiYoke1(nullptr),fLogicYoke1(nullptr),fSolidYoke1(nullptr),
+   fPhysi1Gap(nullptr),fLogic1Gap(nullptr),fSolid1Gap(nullptr),
+   fPhysi2Gap(nullptr),fLogic2Gap(nullptr),fSolid2Gap(nullptr), 
+   fPhysi3Gap(nullptr),fLogic3Gap(nullptr),fSolid3Gap(nullptr),
+   fPhysiYoke2(nullptr),fLogicYoke2(nullptr),fSolidYoke2(nullptr),
+   fPhysi4Gap(nullptr),fLogic4Gap(nullptr),fSolid4Gap(nullptr),
+   fPhysi5Gap(nullptr),fLogic5Gap(nullptr),fSolid5Gap(nullptr), 
+   fPhysiBoiteIso(nullptr),fLogicBoiteIso(nullptr),fSolidBoiteIso(nullptr),
+   fPhysiCathode(nullptr),fLogicCathode(nullptr),fSolidCathode(nullptr), 
+   fPhysiIso(nullptr),fLogicIso(nullptr),fSolidIso(nullptr),
+   fPhysiVerre(nullptr),fLogicVerre(nullptr),fSolidVerre(nullptr),
+   fPhysiBoite2(nullptr),fLogicBoite2(nullptr),fSolidBoite2(nullptr),
+   fPhysiBoite3(nullptr),fLogicBoite3(nullptr),fSolidBoite3(nullptr),
+   fPhysiKgm(nullptr),fLogicKgm(nullptr),fSolidKgm(nullptr),
+   fPhysiVerre2(nullptr),fLogicVerre2(nullptr),fSolidVerre2(nullptr),
+   fPhysiPhantom(nullptr),fLogicPhantom(nullptr),fSolidPhantom(nullptr)
   
 {
   fWorldSizeXY=fWorldSizeZ=0;
+  DefineMaterials();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorConstruction::~DetectorConstruction()
 {
-  delete fDefaultMaterial;
-  delete fCollimatorMaterial;
-  delete fBoiteMaterial;
-  delete fCathodeMaterial;
-  delete fVerreMaterial;
-  delete fVerre2Material;
-  delete fKgmMaterial;
-  delete fBoite2Material;
-  delete fBoite3Material;
-  delete fNucleusMaterial1;
-  delete fCytoplasmMaterial1;
-  delete fNucleusMaterial2;
-  delete fCytoplasmMaterial2;
-  delete fNucleusMaterial3;
-  delete fCytoplasmMaterial3;
+  if(fField) {
+    delete fField;
+    fField = nullptr;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -101,7 +91,7 @@ DetectorConstruction::~DetectorConstruction()
 G4VPhysicalVolume* DetectorConstruction::Construct()
   
 {
-  DefineMaterials();
+  if(fPhysiWorld) { return fPhysiWorld; }
   return ConstructLine();
 }
 
@@ -109,7 +99,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::DefineMaterials()
 { 
-
   G4String name, symbol;             
   G4double density;            
   
@@ -328,7 +317,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
   				 G4ThreeVector(),	//at (0,0,0)
                                  "World",		//its name
                                  fLogicWorld,		//its logical volume
-                                 NULL,			//its mother  volume
+                                 nullptr,		//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
 
@@ -644,36 +633,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
   G4cout << " ==========> Voxel size Y (um)=" << fMyCellParameterisation->GetPixelSizeY()/um << G4endl;
   G4cout << " ==========> Voxel size Z (um)=" << fMyCellParameterisation->GetPixelSizeZ()/um << G4endl; 
   G4cout << G4endl; 
-				    		    
-  // USER LIMITS ON STEP LENGTH
-  
-/*
-  fLogicWorld->SetUserLimits(new G4UserLimits(100*mm));
-  fLogicVol->SetUserLimits(new G4UserLimits(100*mm));
-  fLogicBoite->SetUserLimits(new G4UserLimits(10*mm));
-*/
-
-/*
-  logicPhantom->SetUserLimits (new G4UserLimits(0.5*micrometer));
-  logic1Gap->SetUserLimits (new G4UserLimits(5*micrometer));
-  logic2Gap->SetUserLimits (new G4UserLimits(5*micrometer));
-  logic3Gap->SetUserLimits (new G4UserLimits(5*micrometer));
-  logic4Gap->SetUserLimits (new G4UserLimits(5*micrometer));
-  logic5Gap->SetUserLimits (new G4UserLimits(5*micrometer));
-  logicBoiteIso->SetUserLimits (new G4UserLimits(200.*micrometer));
-  logicCathode->SetUserLimits (new G4UserLimits(100.*micrometer));
-  logicIso->SetUserLimits (new G4UserLimits(100.*micrometer));
-  logicVerre->SetUserLimits (new G4UserLimits(0.02*micrometer));
-  logicBoite2->SetUserLimits (new G4UserLimits(10*micrometer));
-  logicBoite3->SetUserLimits (new G4UserLimits(0.2*micrometer));
-  logicKgm->SetUserLimits (new G4UserLimits(1*micrometer));
-  logicVerre2->SetUserLimits (new G4UserLimits(10*micrometer));
-*/
-
-  // Relaxed 
-  fLogicWorld->SetUserLimits(new G4UserLimits(10*mm));
-  fLogicVol->SetUserLimits(new G4UserLimits(10*mm));
-  fLogicBoite->SetUserLimits(new G4UserLimits(1*mm));
 
   // VISUALISATION ATTRIBUTES (for phantom, see in Parameterisation class)
   
@@ -735,7 +694,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
 
 void DetectorConstruction::ConstructSDandField()
 {
-  if(!fField) fField = new EMField(); 
+  if(!fField) { fField = new EMField(); }
   
   G4EqMagElectricField* fEquation = new G4EqMagElectricField(fField);
   G4MagIntegratorStepper* fStepper = new G4ClassicalRK4 (fEquation,8);

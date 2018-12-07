@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file optical/wls/src/WLSActionInitialization.cc
 /// \brief Implementation of the WLSActionInitialization class

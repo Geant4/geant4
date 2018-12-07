@@ -10,6 +10,7 @@ project(chem4)
 find_package(ROOT COMPONENTS Gui QUIET)
 #message(STATUS ROOT_USE_FILE " ${ROOT_USE_FILE}")
 if(ROOT_FOUND AND ROOT_USE_FILE)
+  set(BUILD_CHEM4_PLOT ON)
   add_subdirectory(plot)
 else()
   message("-- G4 Examples : The chem4/plot requires ROOT built with GUI via CMake, plot is disabled")
@@ -65,6 +66,9 @@ foreach(_script ${CHEM4_SCRIPTS})
     )
 endforeach()
 
+source_group("macros" FILES ${CHEM4_SCRIPTS})
+target_sources(chem4 PUBLIC ${CHEM4_SCRIPTS})
+
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
@@ -74,5 +78,9 @@ install(TARGETS chem4 DESTINATION bin )
 # For internal Geant4 use - but has no effect if you build this
 # example standalone
 #
-project(chem4_proj)
-add_custom_target(chem4_proj DEPENDS chem4 plotG)
+#project(chem4_proj)
+#add_custom_target(chem4_proj DEPENDS chem4 plotG)
+
+if(BUILD_CHEM4_PLOT)
+  add_dependencies(plotG chem4)
+endif()

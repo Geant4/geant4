@@ -30,7 +30,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $Id$
 //
 /// \file chem4.cc
 /// \brief Chem4 example
@@ -54,7 +53,7 @@
 
 /*
  * WARNING : Geant4 was initially not intended for this kind of application
- * This code is delivered as a prototype
+ * This code is delivered as a prototype 
  * We will be happy to hear from you, do not hesitate to send your feedback and
  * communicate on the difficulties you may encounter
  * The user interface may change in the next releases since a reiteration of the
@@ -116,10 +115,7 @@ int main(int argc, char** argv)
   runManager->SetUserInitialization(new PhysicsList());
   runManager->SetUserInitialization(new DetectorConstruction());
   runManager->SetUserInitialization(new ActionInitialization());
-  
-  // Initialize G4 kernel
-  runManager->Initialize();
-  
+
   // Initialize visualization
   G4VisManager* visManager = new G4VisExecutive();
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.

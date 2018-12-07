@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToNNstar.cc,v 1.5 2010-03-12 15:45:18 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToNNstar.hh"

@@ -27,7 +27,6 @@
 /// \brief Implementation of the PrimaryGeneratorAction4 class
 //
 //
-// $Id: PrimaryGeneratorAction4.cc 83897 2014-09-22 14:46:00Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

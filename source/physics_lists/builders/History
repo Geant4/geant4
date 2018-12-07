@@ -1,4 +1,3 @@
- $Id: History 66704 2013-01-10 18:20:17Z gunter $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +12,35 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-Nov-2018, Alberto Ribon          (phys-builders-V10-04-03)
+-  G4QGSBinaryPionBuilder, G4QGSBinaryPiKBuilder, G4QGSPPiKBuilder, 
+   G4FTFPPionBuilder, G4BertiniPiKBuilder, G4FTFPPiKBuilder, 
+   G4BertiniPionBuilder, G4FTFBinaryPiKBuilder, G4BinaryPiKBuilder,
+   G4INCLXXPionBuilder, G4FTFBinaryPionBuilder, G4BinaryPionBuilder,
+   G4QGSPPionBuilder : use Barashenkov-Glauber-Gribov inelastic cross section
+   for pions. This allows to avoid to use Gheisha cross sections for pion
+   inelastic on Hydrogen target.
+
+21-Nov-2018, Alberto Ribon          (phys-builders-V10-04-02)
+- G4INCLXXPionBuilder : for inelastic pion cross sections at high energies,
+  use Glauber-Gribov instead of Barashenkov, as for all the other builders.
+
+17-Aug-2018, Vladimir Ivanchenko    (phys-builders-V10-04-01)
+- G4FTFBinaryPiKBuilder, G4HyperonFTFPBuilder - improved deletion
+- OrderingParameterTable - added gamma and e- processes
+
+06-Aug-2018, Alberto Ribon	    (phys-builders-V10-04-00)
+- G4FTFBinaryKaonBuilder, G4QGSPPionBuilder, G4FTFPProtonBuilder, 
+  G4FTFPPiKBuilder, G4QGSPLundStrFragmProtonBuilder, G4FTFPKaonBuilder,
+  G4FTFPNeutronBuilder, G4QGSPProtonBuilder, G4QGSPKaonBuilder, 
+  G4QGSBinaryPionBuilder, G4FTFBinaryPiKBuilder, G4FTFBinaryNeutronBuilder,
+  G4QGSBinaryProtonBuilder, G4QGSBinaryPiKBuilder, G4HyperonFTFPBuilder,
+  G4FTFPAntiBarionBuilder, G4QGSBinaryKaonBuilder, G4FTFBinaryPionBuilder,
+  G4QGSBinaryNeutronBuilder, G4QGSPPiKBuilder, G4FTFPPionBuilder,
+  G4QGSPNeutronBuilder, G4FTFBinaryProtonBuilder : 
+  replaced the explicit high-energy limit of hadronic physics with the one
+  from G4HadronicParameters .
 
 7-Nov-2017, T. Koi	(phys-builders-V10-03-06)
 - G4NeutronLENDBuilder: Modify setting of selection of target data

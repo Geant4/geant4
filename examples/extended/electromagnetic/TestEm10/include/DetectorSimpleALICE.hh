@@ -27,7 +27,6 @@
 /// \brief Definition of the DetectorSimpleALICE class
 //
 //
-// $Id: DetectorSimpleALICE.hh 72513 2013-07-24 20:37:54Z gum $
 //
 // Simplified setup for ALICE XTR test beam (~2004). 
 // Runs by : Test salice.mac

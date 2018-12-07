@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $Id$
 //
 /// \file ITSteppingAction.hh
 /// \brief Definition of the ITSteppingAction class

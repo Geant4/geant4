@@ -23,26 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file PhysicsList.cc
+/// \file medical/dna/range/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
-#include "G4PhysicsConstructorRegistry.hh"
-// G4RegisterPhysicsConstructors.icc is necessary for static builds
-#define REGREF PhysicsList
-#include "G4RegisterPhysicsConstructors.icc"
-#include "G4RunManager.hh"
+#include "G4EmDNAPhysics_stationary.hh"
+#include "G4EmDNAPhysics_stationary_option2.hh"
+#include "G4EmDNAPhysics_stationary_option4.hh"
+#include "G4EmDNAPhysics_stationary_option6.hh"
+
+#include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UserSpecialCuts.hh"
+
+// particles
+
+#include "G4BosonConstructor.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BosonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
+#include "G4DNAGenericIonsManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() :
-    G4VModularPhysicsList(), fMessenger(0)
+    G4VModularPhysicsList(), 
+    fEmPhysicsList(0), fMessenger(0)
 {
   fMessenger = new PhysicsListMessenger(this);
 
   SetVerboseLevel(1);
+
+  // EM physics
+  fEmPhysicsList = new G4EmDNAPhysics_stationary_option2();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,41 +68,85 @@ PhysicsList::PhysicsList() :
 PhysicsList::~PhysicsList()
 {
   delete fMessenger;
+  delete fEmPhysicsList;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::ConstructParticle()
+{
+    G4BosonConstructor  pBosonConstructor;
+    pBosonConstructor.ConstructParticle();
+
+    G4LeptonConstructor pLeptonConstructor;
+    pLeptonConstructor.ConstructParticle();
+
+    G4MesonConstructor pMesonConstructor;
+    pMesonConstructor.ConstructParticle();
+
+    G4BaryonConstructor pBaryonConstructor;
+    pBaryonConstructor.ConstructParticle();
+
+    G4IonConstructor pIonConstructor;
+    pIonConstructor.ConstructParticle();
+
+    G4ShortLivedConstructor pShortLivedConstructor;
+    pShortLivedConstructor.ConstructParticle();
+
+    G4DNAGenericIonsManager* genericIonsManager;
+    genericIonsManager=G4DNAGenericIonsManager::Instance();
+    genericIonsManager->GetIon("alpha++");
+    genericIonsManager->GetIon("alpha+");
+    genericIonsManager->GetIon("helium");
+    genericIonsManager->GetIon("hydrogen");  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructProcess()
 {
-  // physics constructors
+  // transportation
   //
-  if(G4VModularPhysicsList::GetPhysics(0) == 0) return;
-
-  G4VModularPhysicsList::ConstructProcess();
+  AddTransportation();
+  
+  // electromagnetic physics list
+  //
+  fEmPhysicsList->ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::RegisterConstructor(const G4String& name)
+void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel > -1)
-  {
-    G4cout << "PhysicsList::RegisterConstructor: <" << name << ">" << G4endl;
+  if (verboseLevel>-1) {
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
   if (name == fEmName) return;
 
-  fEmName = name;
-
-  G4VPhysicsConstructor* physics = G4PhysicsConstructorRegistry::Instance()->
-      GetPhysicsConstructor(name);
-
-  RegisterPhysics(physics);
-
-  if(physics)
-  {
-    physics->ConstructParticle();
+  if (name == "dna_stat") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_stationary();
   }
-
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  else if (name == "dna_stat_opt2") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_stationary_option2();
+  }
+  else if (name == "dna_stat_opt4") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_stationary_option4();
+  }
+  else if (name == "dna_stat_opt6") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_stationary_option6();
+  }
+  else {
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
+           << " is not defined"
+           << G4endl;
+  }
 }

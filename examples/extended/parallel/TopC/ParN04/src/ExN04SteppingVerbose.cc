@@ -27,7 +27,6 @@
 /// \brief Implementation of the ExN04SteppingVerbose class
 //
 //
-// $Id: ExN04SteppingVerbose.cc 78055 2013-12-03 08:27:48Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

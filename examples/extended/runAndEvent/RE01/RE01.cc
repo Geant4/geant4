@@ -27,7 +27,6 @@
 /// \brief Main program of the runAndEvent/RE01 example
 //
 //
-// $Id: $
 //
 //
 // --------------------------------------------------------------

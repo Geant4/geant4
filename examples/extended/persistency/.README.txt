@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "persistency/.README.txt"
 ///\brief Examples persistency README page

@@ -24,15 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4HumanPhantomPhysicsList.hh 84279 2014-10-13 07:19:58Z gcosmo $
 //
-// Authors: S. Guatelli, G. Guerrieri and M. G. Pia 
-//
-//    ******************************************
-//    *                                        *
-//    *      G4HumanPhantomPhysicsList.hh      *
-//    *                                        *
-//    ******************************************
+// Previous authors: G. Guerrieri, S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors (since 2007): S. Guatelli,University of Wollongong, Australia
+// Contributions by F. Ambroglini INFN Perugia, Italy
 
 #ifndef G4HumanPhantomPhysicsList_h
 #define G4HumanPhantomPhysicsList_h 1

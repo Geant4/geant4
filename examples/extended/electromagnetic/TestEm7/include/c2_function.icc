@@ -35,7 +35,6 @@
  *\version c2_function.cc 488 2012-04-04 11:30:21Z marcus 
  */
  
- // $Id$
  //
 
 #include <iostream>

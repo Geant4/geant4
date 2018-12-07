@@ -51,7 +51,7 @@ ifeq ($(G4SYSTEM),Linux-clang)
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
   endif
-  G4RUNPATHOPTION := -Wl,-rpath 
+  G4RUNPATHOPTION := -Wl,-rpath, 
   G4STATIC_MODE += -Wl,--whole-archive
   G4NOSTATIC_MODE += -Wl,--no-whole-archive
   CC := clang

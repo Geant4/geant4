@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: DMXAnalysisManager.hh
-// GEANT4 tag $Name:
 //
 // Author: Alex Howard (alexander.howard@cern.ch)
 //

@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+22 Jul 18 - tag slowing-V10-04-02 - S. Incerti 
+- removed obsolete RanecuEngine
+
 13 June 2018 - tag slowing-V10-04-01 - S. Incerti
 - updated slowing.in
 

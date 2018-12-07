@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx02/src/H02MuonSD.cc
 /// \brief Implementation of the H02MuonSD class
 //
-//   $Id: H02MuonSD.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
@@ -38,7 +37,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 H02MuonSD::H02MuonSD(G4String name)
-  : G4VSensitiveDetector(name)
+  : G4VSensitiveDetector(name),
+    fHitCollection(0)
 {
   G4String HCname;
   collectionName.insert("muonHit");
@@ -53,10 +53,10 @@ H02MuonSD::~H02MuonSD()
 void H02MuonSD::Initialize(G4HCofThisEvent* HCE)
 {
   static int HCID=-1;
-  hitCollection= new H02MuonHitsCollection(SensitiveDetectorName,
+  fHitCollection= new H02MuonHitsCollection(SensitiveDetectorName,
                                           collectionName[0]);
   if(HCID<0) HCID= GetCollectionID(0);
-  HCE-> AddHitsCollection(HCID, hitCollection);
+  HCE-> AddHitsCollection(HCID, fHitCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,7 +79,7 @@ G4bool H02MuonSD::ProcessHits(G4Step* astep, G4TouchableHistory*)
 
   H02MuonHit* aHit=
     new H02MuonHit(id, particle-> GetParticleName(), vmom, vpos, tof);
-  hitCollection-> insert(aHit);
+  fHitCollection-> insert(aHit);
   return true;
 
 }
@@ -102,8 +102,8 @@ void H02MuonSD::DrawAll()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void H02MuonSD::PrintAll()
 {
-  G4int nHit= hitCollection-> entries();
+  G4int nHit= fHitCollection-> entries();
   G4cout << "------------------------------------------" << G4endl
          << "*** Muon System Hit (#hits=" << nHit << ")" << G4endl;
-  hitCollection-> PrintAllHits();
+  fHitCollection-> PrintAllHits();
 }

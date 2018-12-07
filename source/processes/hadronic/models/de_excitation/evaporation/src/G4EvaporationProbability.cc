@@ -50,6 +50,8 @@
 
 using namespace std;
 
+static const G4double explim = 160.;
+
 G4EvaporationProbability::G4EvaporationProbability(G4int anA, G4int aZ, 
 						   G4double aGamma, 
 						   G4VCoulombBarrier*) 
@@ -97,10 +99,12 @@ G4double G4EvaporationProbability::TotalProbability(
   Mass = fragMass + U;
   delta0 = std::max(0.0, fPairCorr->GetPairingCorrection(fragA,fragZ));
   delta1 = std::max(0.0, fPairCorr->GetPairingCorrection(resA,resZ));
+  //delta0 = fLevelData->GetPairingCorrection(fragZ,fragA);
+  //delta1 = fLevelData->GetPairingCorrection(resZ,resA);
   resMass = G4NucleiProperties::GetNuclearMass(resA, resZ);
   resA13 = fG4pow->Z13(resA);
-  a0 = LevelDensity*fragA;
-  /*      
+  a0 = fLevelData->GetLevelDensity(fragZ,fragA,U);
+  /*  
   G4cout << "G4EvaporationProbability: Z= " << theZ << " A= " << theA 
 	 << " resZ= " << resZ << " resA= " << resA 
 	 << " fragZ= " << fragZ << " fragA= " << fragA 
@@ -110,7 +114,7 @@ G4double G4EvaporationProbability::TotalProbability(
   if(U < delta0 || maxEnergy <= minEnergy) { return 0.0; }
    
   G4double Width = 0.0;
-  if (OPTxs==0) {
+  if (OPTxs==0 || (OPTxs==4 && U < 10. + delta0)) {
 
     G4double SystemEntropy = 2.0*std::sqrt(a0*(U-delta0));
 								  
@@ -121,14 +125,13 @@ G4double G4EvaporationProbability::TotalProbability(
     G4double Beta = CalcBetaParam(fragment);
 
     // to be checked where to use a0, where - a1	
-    G4double a1 = LevelDensity*resA;
+    G4double a1 = fLevelData->GetLevelDensity(resZ,resA,U);
     G4double GlobalFactor = Gamma*Alpha*partMass*RN2*resA13*resA13/(a1*a1);
     
     G4double maxea = maxEnergy*a1;
     G4double Term1 = Beta*a1 - 1.5 + maxea;
     G4double Term2 = (2.0*Beta*a1-3.0)*std::sqrt(maxea) + 2*maxea;
 	
-    static const G4double explim = 350.;
     G4double ExpTerm1 = (SystemEntropy <= explim) ? G4Exp(-SystemEntropy) : 0.0;
 	
     G4double ExpTerm2 = 2.*std::sqrt(maxea) - SystemEntropy;
@@ -145,8 +148,6 @@ G4double G4EvaporationProbability::TotalProbability(
     }
     // if Coulomb barrier cutoff is superimposed for all cross sections 
     // then the limit is the Coulomb Barrier
-    //Width = IntegrateEmissionProbability(minEnergy, maxEnergy, 
-    //					 CoulombBarrier);
     Width = IntegrateProbability(minEnergy, maxEnergy, CoulombBarrier);
   }
   return Width;
@@ -168,12 +169,16 @@ G4double G4EvaporationProbability::ComputeProbability(G4double K, G4double cb)
   */
   if(E1 < 0.0) { return 0.0; }
 
-  G4double a1 = LevelDensity*resA;
-  G4double Prob = pcoeff*G4Exp(2.0*(std::sqrt(a1*E1) - std::sqrt(a0*E0)))
-    *K*CrossSection(K, cb);
-
-  //G4cout << "Evap prob: " << Prob << "  fVerbose= " << fVerbose << G4endl;
-  return Prob;
+  G4double a1 = fLevelData->GetLevelDensity(resZ,resA,U);
+  G4double xs = CrossSection(K, cb); 
+  G4double prob = pcoeff*G4Exp(2.0*(std::sqrt(a1*E1) - std::sqrt(a0*E0)))*K*xs;
+  /*
+  G4cout << "Evap prob: " << prob << " FragZ= " << fragZ << " FragA= " << fragA
+  	 << " Z= " << theZ << "  A= " << theA  
+	 << "\n      K= " << K << " E0= " << E0 << " E1= " << E1 
+	 << " cb= " << cb << " xsec= " << xs << G4endl;
+  */
+  return prob;
 }
 
 G4double 
@@ -204,7 +209,7 @@ G4EvaporationProbability::SampleKineticEnergy(G4double minKinEnergy,
   G4double T = 0.0;
   CLHEP::HepRandomEngine* rndm = G4Random::getTheEngine();
   static const G4int nmax = 100;
-  if (OPTxs==0) {
+  if (OPTxs==0 || (OPTxs==4 && U < 10. + delta0)) {
     // JMQ:
     // It uses Dostrovsky's approximation for the inverse reaction cross
     // in the probability for fragment emission
@@ -213,8 +218,7 @@ G4EvaporationProbability::SampleKineticEnergy(G4double minKinEnergy,
     
     G4double Rb = 4.0*a0*maxKinEnergy;
     G4double RbSqrt = std::sqrt(Rb);
-    G4double PEX1 = 0.0;
-    if (RbSqrt < 160.0) { PEX1 = G4Exp(-RbSqrt); }
+    G4double PEX1 = (RbSqrt < explim) ? G4Exp(-RbSqrt) : 0.0;
     G4double Rk = 0.0;
     G4double FRk = 0.0;
     G4int nn = 0;
@@ -236,7 +240,7 @@ G4EvaporationProbability::SampleKineticEnergy(G4double minKinEnergy,
       // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
     } while (FRk < rndm->flat());
     
-    T = maxKinEnergy * (1.0-Rk*Rk) + minKinEnergy;
+    T = std::max(maxKinEnergy * (1.0-Rk*Rk), 0.0) + minKinEnergy;
 
   } else { 
 

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -195,8 +195,10 @@
 =======================================================================
 LPM effect enabled                                 1
 Spline of EM tables enabled                        1
+Enable creation and use of sampling tables         0
 Apply cuts on all EM processes                     0
 Use integral approach for tracking                 1
+Use general process                                0
 X-section factor for integral approach             0.8
 Min kinetic energy for tables                      10 eV 
 Max kinetic energy for tables                      10 TeV
@@ -217,9 +219,10 @@ Step function for muons/hadrons                    (0.2, 0.1 mm)
 Lowest e+e- kinetic energy                         1 keV
 Lowest muon/hadron kinetic energy                  1 keV
 Fluctuations of dE/dx are enabled                  1
+Use ICRU90 data                                    0
 Use built-in Birks satuaration                     0
 Build CSDA range enabled                           1
-Use cut as a final range enabled                   1
+Use cut as a final range enabled                   0
 Enable angular generator interface                 0
 Factor of cut reduction for sub-cutoff method      1
 Max kinetic energy for CSDA tables                 10 TeV
@@ -339,7 +342,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=2.390000s Real=2.393938s Sys=0.000000s
+  User=2.720000s Real=2.892390s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -406,16 +409,16 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=3.740000s Real=3.748299s Sys=0.000000s
+  User=3.750000s Real=3.837973s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 1000000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 538445	eBrem = 281621	eIoni = 179934
+ Process calls frequency --->	Transportation = 538417	eBrem = 281462	eIoni = 180121
 
- Nb of incident particles unaltered after 1 cm  of Water : 538445 over 1000000 incident particles.  Ratio = 53.844 %
- ---> CrossSection per volume:	0.61907 cm^-1 	CrossSection per mass: 61.907 mm2/g 
+ Nb of incident particles unaltered after 1 cm  of Water : 538417 over 1000000 incident particles.  Ratio = 53.842 %
+ ---> CrossSection per volume:	0.61912 cm^-1 	CrossSection per mass: 61.912 mm2/g 
 
  Verification from G4EmCalculator: 
 	eBrem= 37.788 mm2/g 	eIoni= 24.166 mm2/g 	total= 61.954 mm2/g 
@@ -423,7 +426,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 465323437, 45964080
+ Current couple of seeds = 529833460, 760419036
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

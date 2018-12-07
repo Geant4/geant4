@@ -14,6 +14,68 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 November 2018  Gabriele Cosmo (hadr-hpp-V10-04-11)
+-----------------------------------------------------
+- Fixed potential leaks in G4ParticleHPPhotonDist, G4ParticleHPContAngularPar
+  and G4ParticleHPFinalState for use of pointers cached in G4Cache.
+- Minor code cleanup and formatting. Modified:
+  G4VParticleHPEnergyAngular.hh, G4ParticleHPContAngularPar.hh.cc,
+  G4ParticleHPAngular.hh, G4ParticleHPFinalState.hh.cc,
+  G4ParticleHPFSFissionFS.hh, G4ParticleHPContEnergyAngular.hh,
+  G4ParticleHPPhotonDist.hh, G4ParticleHPFissionBaseFS.hh,
+  G4ParticleHPProduct.hh, G4ParticleHPEnAngCorrelation.hh.
+
+9 November 2018  Gabriele Cosmo (hadr-hpp-V10-04-10)
+----------------------------------------------------
+- G4ParticleHPThermalScattering: fixed printout typo.
+
+4 November 2018  Dennis Wright (hadr-hpp-V10-04-09)
+---------------------------------------------------
+- G4ParticleHPElasticFS::ApplyYourself(): use correct reference frames for
+  calculation of projectile and target momenta.  Correction made for cases
+  when cos(Theta) is given in lab frame and in center of momentum frame.
+  Partial fix of momentum non-conservation bug report #1918. 
+ 
+22 October 2018  Dennis Wright (hadr-hpp-V10-04-08)
+---------------------------------------------------
+- G4ParticleHPCaptureFS::ApplyYourself(): Lorentz boost of neutron into target
+  frane was backwards - reverse it.  Also replace SetDefinition() with 
+  SetDefinitionAndUpdateE() in line 75.  Fixes bug report #1919.
+
+11 October 2018  Gabriele Cosmo (hadr-hpp-V10-04-07)
+----------------------------------------------------
+- Fixed definition of singletons for G4ParticleHPManager and
+  G4ParticleHPThreadLocalManager and some code cleanup.
+  Made G4ParticleHPThreadLocalManager a G4ThreadlLocalSingleton to avoid
+  memory leaks generated each time a thread creates the instance.
+- Fixed bug for double allocation of G4ParticleHPReactionWhiteBoard in
+  G4ParticleHPThreadLocalManager::OpenReactionWhiteBoard().
+
+4 September 2018  Dennis Wright (hadr-hpp-V10-04-06)
+----------------------------------------------------
+- Bug 2026:  Fix provided by Artem Zontikov.  
+  Solves memory leaks in G4ParticleHPContEnergyAngular::Sample() and 
+  G4ParticleHPContAngularPar::cacheInit()  
+
+24 August 2018  Dennis Wright (hadr-hpp-V10-04-05)
+--------------------------------------------------
+- Fix bug 1789: gamma level mismatch in G4ParticleHPInelasticCompFS.cc
+  Not a complete fix because gamma data comes from ENSDF and does not
+  necessarily match excitations in ENDF.  
+
+24 August 2018  Dennis Wright (hadr-hpp-V10-04-04)
+--------------------------------------------------
+- Fix bug 1745: incorrect sampling of isotropic distribution in 
+   G4ParticleHPPhotonDist.cc
+   G4ParticleHPCaptureFS.cc
+   G4ParticleHPFissionFS.cc
+   G4ParticleHPIsotropic.cc
+
+27 July 2018 Vladimir Ivantchenko (hadr-hpp-V10-04-03)
+-----------------------------------------------------
+- G4ParticleHPElementData - removed unnecessary inheritance from
+    GHEISHA data class G4HadronicCrossSection
+
 9 May 2018 Alberto Ribon (hadr-hpp-V10-04-02)
 ---------------------------------------------------
 - G4ENDFTapeRead, G4FissionProductYieldDist : fixed warnings in gcc 8

@@ -458,80 +458,66 @@ void G4EmDNAChemistry::ConstructReactionTable(G4DNAMolecularReactionTable*
 
 void G4EmDNAChemistry::ConstructProcess()
 {
-  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  auto pPhysicsListHelper = G4PhysicsListHelper::GetPhysicsListHelper();
 
   //===============================================================
   // Extend vibrational to low energy
   // Anyway, solvation of electrons is taken into account from 7.4 eV
   // So below this threshold, for now, no accurate modeling is done
   //
-  G4VProcess* process =
-      G4ProcessTable::GetProcessTable()->
-        FindProcess("e-_G4DNAVibExcitation", "e-");
+  G4VProcess* pProcess = G4ProcessTable::GetProcessTable()->
+                                   FindProcess("e-_G4DNAVibExcitation", "e-");
 
-  if (process)
+  if (pProcess != nullptr)
   {
-    G4DNAVibExcitation* vibExcitation = (G4DNAVibExcitation*) process;
-    G4VEmModel* model = vibExcitation->EmModel();
-    G4DNASancheExcitationModel* sancheExcitationMod =
-        dynamic_cast<G4DNASancheExcitationModel*>(model);
-    if(sancheExcitationMod)
+    G4DNAVibExcitation* pVibExcitation = (G4DNAVibExcitation*) pProcess;
+    G4VEmModel* pModel = pVibExcitation->EmModel();
+    G4DNASancheExcitationModel* pSancheExcitationMod =
+        dynamic_cast<G4DNASancheExcitationModel*>(pModel);
+    if(pSancheExcitationMod != nullptr)
     {
-      sancheExcitationMod->ExtendLowEnergyLimit(0.025 * eV);
+      pSancheExcitationMod->ExtendLowEnergyLimit(0.025 * eV);
     }
   }
 
   //===============================================================
-  // *** Electron Solvatation ***
+  // Electron Solvatation
   //
-  process =
-  G4ProcessTable::GetProcessTable()->
-  FindProcess("e-_G4DNAElectronSolvation", "e-");
+  pProcess = G4ProcessTable::GetProcessTable()->FindProcess("e-_G4DNAElectronSolvation", "e-");
   
-  if (process == 0)
+  if (pProcess == nullptr)
   {
-    ph->RegisterProcess(
-        new G4DNAElectronSolvation("e-_G4DNAElectronSolvation"),
-        G4Electron::Definition());
+    pPhysicsListHelper->RegisterProcess(new G4DNAElectronSolvation("e-_G4DNAElectronSolvation"),
+                                        G4Electron::Definition());
   }
 
   //===============================================================
   // Define processes for molecules
   //
-  G4MoleculeTable* theMoleculeTable = G4MoleculeTable::Instance();
-  G4MoleculeDefinitionIterator iterator =
-      theMoleculeTable->GetDefintionIterator();
+  G4MoleculeTable* pMoleculeTable = G4MoleculeTable::Instance();
+  G4MoleculeDefinitionIterator iterator = pMoleculeTable->GetDefintionIterator();
   iterator.reset();
   while (iterator())
   {
-    G4MoleculeDefinition* moleculeDef = iterator.value();
+    G4MoleculeDefinition* pMoleculeDef = iterator.value();
 
-    if (moleculeDef != G4H2O::Definition())
+    if (pMoleculeDef != G4H2O::Definition())
     {
-      // G4cout << "Brownian motion added for : "
-      //        << moleculeDef->GetName() << G4endl;
-      G4DNABrownianTransportation* brown = new G4DNABrownianTransportation();
-      //   brown->SetVerboseLevel(4);
-      ph->RegisterProcess(brown, moleculeDef);
+      G4DNABrownianTransportation* pBrownianTransport = new G4DNABrownianTransportation();
+      pPhysicsListHelper->RegisterProcess(pBrownianTransport, pMoleculeDef);
     }
     else
     {
-      moleculeDef->GetProcessManager()
-                      ->AddRestProcess(new G4DNAElectronHoleRecombination(), 2);
-      G4DNAMolecularDissociation* dissociationProcess =
-          new G4DNAMolecularDissociation("H2O_DNAMolecularDecay");
-      dissociationProcess->SetDecayDisplacer(
-          moleculeDef, new G4DNAWaterDissociationDisplacer);
-      dissociationProcess->SetVerboseLevel(1);
-//      ph->RegisterProcess(dissociationProcess, moleculeDef);
+      pMoleculeDef->GetProcessManager()
+                  ->AddRestProcess(new G4DNAElectronHoleRecombination(), 2);
+      G4DNAMolecularDissociation* pDissociationProcess = new G4DNAMolecularDissociation("H2O_DNAMolecularDecay");
+      pDissociationProcess->SetDecayDisplacer(pMoleculeDef,
+                                              new G4DNAWaterDissociationDisplacer);
+      pDissociationProcess->SetVerboseLevel(1);
 
-      moleculeDef->GetProcessManager()
-                ->AddRestProcess(dissociationProcess, 1);
+      pMoleculeDef->GetProcessManager()
+                  ->AddRestProcess(pDissociationProcess, 1);
     }
-    /*
-     * Warning : end of particles and processes are needed by
-     * EM Physics builders
-     */
   }
 
   G4DNAChemistryManager::Instance()->Initialize();
@@ -542,26 +528,10 @@ void G4EmDNAChemistry::ConstructProcess()
 void G4EmDNAChemistry::ConstructTimeStepModel(G4DNAMolecularReactionTable*
                                               reactionTable)
 {
-
-  //=========================================
-  // Diffusion controlled reaction model
-  //=========================================
-  /**
-   * The reaction model defines how to compute the reaction range between
-   * molecules
-   */
-
-  G4VDNAReactionModel* reactionRadiusComputer =
-      new G4DNASmoluchowskiReactionModel();
+  G4VDNAReactionModel* reactionRadiusComputer = new G4DNASmoluchowskiReactionModel();
   reactionTable->PrintTable(reactionRadiusComputer);
 
-  /**
-   * The StepByStep model tells the step manager how to behave before and
-   * after each step, how to compute the time steps.
-   */
-
-  G4DNAMolecularStepByStepModel* stepByStep =
-      new G4DNAMolecularStepByStepModel();
+  G4DNAMolecularStepByStepModel* stepByStep = new G4DNAMolecularStepByStepModel();
   stepByStep->SetReactionModel(reactionRadiusComputer);
 //  ((G4DNAMoleculeEncounterStepper*) stepByStep->GetTimeStepper())->
 //  SetVerbose(5);

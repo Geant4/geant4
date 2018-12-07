@@ -28,7 +28,6 @@
 //
 // NOTE:  This reader class for logical lattices should be moved to
 //	  materials/ after the 10.0 release (and this comment removed).
-// $Id: G4LatticeReader.cc 76799 2013-11-15 20:30:53Z mkelsey $
 //
 // 20131106  M.Kelsey -- Add const to getenv() to avoid compiler warning.
 // 20131112  Throw exception if input file fails.

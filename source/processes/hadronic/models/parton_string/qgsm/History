@@ -1,4 +1,3 @@
-$Id: History 108334 2018-02-05 15:18:30Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +13,24 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+20-Nov-2018 A. Ribon                     (hadr-qgsm-V10-04-08)
+-  Minor clean-up and indentation: no changes in the random sequence.
+
+05-Nov-2018 V. Uzhinsky                  (hadr-qgsm-V10-04-07)
+-  Actions needed at bad situation in QGSM when it cannot generate strings
+   are introduced. See "Uzhi Nov. 2018".
+
+25-Oct-2018 V. Uzhinsky                  (hadr-qgsm-V10-04-06)
+-  G4Reggeons.cc : Cross sections of K-meson - nucleon interactions are
+   improved. Pomeron and 2 non-vacuum exchanges are accounted. Initial 
+   parameters for Kaons are taken from Kaidalov's paper (1976).
+
+   Gamma-nucleon cross sections are improved due to simple tunning of
+   parameters.
+
+12-Oct-2018 A. Ribon                     (hadr-qgsm-V10-04-05)
+-  G4Reggeons : Coverity fix of uninitialized variables.
 
 05-Feb-2018 A. Ribon                     (hadr-qgsm-V10-04-04)
 -  G4QGSParticipants : introduced protection against negative squared mass

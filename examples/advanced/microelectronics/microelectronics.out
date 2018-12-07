@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -133,7 +133,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
-      Stopping Power data for 17 ion/material pairs 
+      Stopping Power data for 17 ion/material pairs
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
@@ -192,13 +192,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
-##### Create analysis manager   0x1e87ee0
+##### Create analysis manager   0xe79df0
 Using Root analysis manager
 ... open Root analysis file : microelectronics.root - done
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.003147s Sys=0.010000s
+  User=0.000000s Real=0.002559s Sys=0.000000s
 ... write Root file : microelectronics.root - done
 ... close Root file : microelectronics.root - done
 Number and type of particles created outside region "Target" :
@@ -245,13 +245,13 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 1 starts.
-##### Create analysis manager   0x1e87ee0
+##### Create analysis manager   0xe79df0
 Using Root analysis manager
 ... open Root analysis file : microelectronics.root - done
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000048s Sys=0.000000s
+  User=0.000000s Real=0.000049s Sys=0.000000s
 ... write Root file : microelectronics.root - done
 ... close Root file : microelectronics.root - done
 Number and type of particles created outside region "Target" :

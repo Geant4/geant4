@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEmissionProbability.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -38,8 +37,7 @@
 #include "Randomize.hh"
 
 G4VEmissionProbability::G4VEmissionProbability(G4int Z, G4int A)
-  :OPTxs(3),fVerbose(0),theZ(Z),theA(A), 
-   LevelDensity(0.1),elimit(CLHEP::MeV),accuracy(0.02) 
+  :OPTxs(3),fVerbose(0),theZ(Z),theA(A),elimit(CLHEP::MeV),accuracy(0.02) 
 {
   fG4pow = G4Pow::GetInstance();
   fPairCorr = G4NuclearLevelData::GetInstance()->GetPairingCorrection();
@@ -54,7 +52,6 @@ void G4VEmissionProbability::Initialise()
 {
   G4DeexPrecoParameters* param = G4NuclearLevelData::GetInstance()->GetParameters();
   OPTxs = param->GetDeexModelType();
-  LevelDensity = param->GetLevelDensity();
 }
 
 void G4VEmissionProbability::ResetIntegrator(size_t nbin, G4double de, G4double eps)

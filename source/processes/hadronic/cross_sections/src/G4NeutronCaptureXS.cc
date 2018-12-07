@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.cc 110787 2018-06-14 06:43:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -275,7 +274,7 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 
     // check environment variable 
     // Build the complete string identifying the file with the data set
-    char* path = getenv("G4NEUTRONXSDATA");
+    char* path = getenv("G4PARTICLEXSDATA");
 
     // Access to elements
     const G4ElementTable* theElmTable = G4Element::GetElementTable();
@@ -298,10 +297,10 @@ G4NeutronCaptureXS::Initialise(G4int Z, const char* p)
 
   // check environment variable 
   if(!p) {
-    path = getenv("G4NEUTRONXSDATA");
+    path = getenv("G4PARTICLEXSDATA");
     if (!path) {
       G4Exception("G4NeutronCaptureXS::Initialise(..)","had013",FatalException,
-                  "Environment variable G4NEUTRONXSDATA is not defined");
+                  "Environment variable G4PARTICLEXSDATA is not defined");
       return;
     }
   }
@@ -337,7 +336,7 @@ G4NeutronCaptureXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
       ed << "Data file <" << ost.str().c_str()
 	 << "> is not opened!";
       G4Exception("G4NeutronCaptureXS::RetrieveVector(..)","had014",
-		  FatalException, ed, "Check G4NEUTRONXSDATA");
+		  FatalException, ed, "Check G4PARTICLEXSDATA");
     }
   } else {
     if(verboseLevel > 1) {
@@ -351,7 +350,7 @@ G4NeutronCaptureXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
       ed << "Data file <" << ost.str().c_str()
 	 << "> is not retrieved!";
       G4Exception("G4NeutronCaptureXS::RetrieveVector(..)","had015",
-		  FatalException, ed, "Check G4NEUTRONXSDATA");
+		  FatalException, ed, "Check G4PARTICLEXSDATA");
     }
   }
   return v;

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc 107920 2017-12-13 08:06:00Z gcosmo $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //
@@ -218,6 +217,7 @@ namespace G4TrajectoryDrawerUtils {
     
     if (myContext.GetDrawLine()) {
       G4VisAttributes trajectoryLineAttribs(myContext.GetLineColour());
+      trajectoryLineAttribs.SetLineWidth(myContext.GetLineWidth());
       trajectoryLineAttribs.SetVisibility(myContext.GetLineVisible());
       trajectoryLine.SetVisAttributes(&trajectoryLineAttribs);
 
@@ -264,6 +264,7 @@ namespace G4TrajectoryDrawerUtils {
 
     if (myContext.GetDrawLine()) {
       G4VisAttributes trajectoryLineAttribs(myContext.GetLineColour());
+      trajectoryLineAttribs.SetLineWidth(myContext.GetLineWidth());
       trajectoryLineAttribs.SetVisibility(myContext.GetLineVisible());
 
       for (size_t i = 1; i < trajectoryLine.size(); ++i ) {

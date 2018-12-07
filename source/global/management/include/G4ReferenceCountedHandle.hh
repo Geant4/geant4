@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReferenceCountedHandle.hh 110251 2018-05-17 14:09:28Z gcosmo $
 //
 // 
 // Class G4ReferenceCountedHandle

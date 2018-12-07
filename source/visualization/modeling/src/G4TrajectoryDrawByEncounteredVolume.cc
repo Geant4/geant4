@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByEncounteredVolume.cc 95107 2016-01-26 12:41:11Z allison $
 //
 // John Allison February 2016, based on
 // G4TrajectoryDrawByVolume.hh  Jane Tinslay March 2006

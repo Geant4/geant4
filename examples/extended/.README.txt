@@ -1,4 +1,3 @@
-$Id$
 
 ///\file "extended/.README.txt"
 ///\brief Geant4 Extended Examples README page

@@ -39,7 +39,6 @@
 //
 //----------------------------------------------------------------------------
 //
-// $ID$
 /// \file G4ElectronCapture.cc
 /// \brief Implementation of the G4ElectronCapture class
 

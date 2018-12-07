@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelActivator.hh 1651 2015-05-02 16:40:24Z vnivanch $
-// GEANT4 tag $Name$
 //
 //---------------------------------------------------------------------------
 //
@@ -78,6 +76,8 @@ private:
                              G4double, G4double);
 
   G4bool HasMsc(G4ProcessManager*) const;
+
+  G4VMscModel* GetGSModel();
 
   G4EmModelActivator & operator=(const G4EmModelActivator &right) = delete;
   G4EmModelActivator(const G4EmModelActivator&) = delete;

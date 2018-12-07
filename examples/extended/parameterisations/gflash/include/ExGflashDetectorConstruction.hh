@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashDetectorConstruction.hh 98248 2016-07-04 17:25:20Z gcosmo $
 //
 /// \file parameterisations/gflash/include/ExGflashDetectorConstruction.hh
 /// \brief Definition of the ExGflashDetectorConstruction class

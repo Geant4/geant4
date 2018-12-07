@@ -46,81 +46,46 @@
 #define G4BOGACKI_SHAMPINE23_H
 
 #include "G4MagIntegratorStepper.hh"
+#include "G4FieldTrack.hh"
 
 class G4BogackiShampine23 : public G4MagIntegratorStepper{
+  public:
+ 	  G4BogackiShampine23(G4EquationOfMotion* EqRhs,
+                        G4int numberOfVariables = 6);
 
+    virtual void Stepper(const G4double yInput[],
+                         const G4double dydx[],
+                         G4double hstep,
+                         G4double yOutput[],
+                         G4double yError[]) override;
 
- public:
- 	//constructor
- 	G4BogackiShampine23( G4EquationOfMotion *EqRhs,
-                     G4int numberOfVariables = 6,
-                     G4bool primary= true ) ;
+    void Stepper(const G4double yInput[],
+                 const G4double dydx[],
+                 G4double hstep,
+                 G4double yOutput[],
+                 G4double yError[],
+                 G4double dydxOutput[]);
 
- 	//destructor
- 	~G4BogackiShampine23() ;
-
- 	//Stepper
- 	 void Stepper(const G4double y[],
-                  const G4double dydx[],
-                        G4double h,
-                        G4double yout[],
-                        G4double yerr[] ) ;
-
-    G4double  DistChord()   const;
-    G4int IntegratorOrder() const { return 2; }
-    G4double *getLastDydx();
-
- private:   
     G4BogackiShampine23(const G4BogackiShampine23&) = delete;
-    G4BogackiShampine23& operator=(const G4BogackiShampine23&) = delete;
+    G4BogackiShampine23& operator = (const G4BogackiShampine23&) = delete;
 
- private:
+    virtual G4double DistChord() const override;
+    virtual G4int IntegratorOrder() const  override { return 3; }
 
-    G4double *ak2, *ak3, *ak4, *yTemp, *yIn;
-      // for storing intermediate 'k' values in stepper
-    G4double *pseudoDydx_for_DistChord;
-    
-    G4double fLastStepLength;
-    G4double *fLastInitialVector, *fLastFinalVector,
-             *fLastDyDx, *fMidVector, *fMidError;
-      // for DistChord calculations
+  private:
+    void makeStep(const G4double yInput[],
+                  const G4double dydx[],
+                  const G4double hstep,
+                  G4double yOutput[],
+                  G4double* dydxOutput = nullptr,
+                  G4double* yError = nullptr) const;
 
-    G4BogackiShampine23* fAuxStepper;
-
-//	G4int No_of_vars;
-//	G4double hinit, tinit, tmax, *yinit;
-//	double hmax, hmin, safe_const, err0, Step_factor;
-//	void (*derivs)(double, double *, double *);
+    G4double fyIn[G4FieldTrack::ncompSVEC],
+             fdydx[G4FieldTrack::ncompSVEC],
+             fyOut[G4FieldTrack::ncompSVEC],
+             fdydxOut[G4FieldTrack::ncompSVEC];
+    G4double fhstep = -1.0;
 
 };
 
-#endif /* G4BogackiShampine23 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif

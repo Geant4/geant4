@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh 74265 2013-10-02 14:41:20Z gcosmo $
 // 
 /// \file RunAction.hh
 /// \brief Definition of the RunAction class

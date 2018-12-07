@@ -28,7 +28,6 @@
 //
 // NOTE:  This reader class for logical lattices should be moved to
 //	  materials/ after the 10.0 release (and this comment removed).
-// $Id: G4LatticeReader.hh 76799 2013-11-15 20:30:53Z mkelsey $
 //
 // 20131115  Move ctor, dtor implementations to .cc file.
 

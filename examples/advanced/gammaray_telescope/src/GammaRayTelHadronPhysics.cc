@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelHadronPhysics.cc 76280 2013-11-08 12:54:34Z gcosmo $
 //
 
 #include <iomanip>   
@@ -34,6 +33,7 @@
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ShortLivedConstructor.hh"
+#include "G4HadronicParameters.hh"
 
 
 GammaRayTelHadronPhysics::GammaRayTelHadronPhysics(const G4String& name)
@@ -69,7 +69,7 @@ void GammaRayTelHadronPhysics::ConstructProcess()
   const G4double theBERTMin =   0.0*GeV;
   const G4double theBERTMax =   5.0*GeV;
   const G4double theFTFMin =    4.0*GeV;
-  const G4double theFTFMax =  100.0*TeV;
+  const G4double theFTFMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   
   theStringModel = new G4FTFModel;
   theStringDecay = new G4ExcitedStringDecay( new G4LundStringFragmentation );

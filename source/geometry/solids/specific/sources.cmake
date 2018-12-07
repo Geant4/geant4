@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 109328 2018-04-11 08:40:09Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -70,7 +69,6 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4ReduciblePolygon.hh
         G4SolidExtentList.hh
         G4SolidsWorkspace.hh
-        G4SolidsWorkspacePool.hh
         G4SurfBits.hh
         G4TessellatedGeometryAlgorithms.hh
         G4TessellatedSolid.hh
@@ -128,7 +126,6 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4ReduciblePolygon.cc
         G4SolidExtentList.cc
         G4SolidsWorkspace.cc
-        G4SolidsWorkspacePool.cc
         G4SurfBits.cc
         G4TessellatedGeometryAlgorithms.cc
         G4TessellatedSolid.cc

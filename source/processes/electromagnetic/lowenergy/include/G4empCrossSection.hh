@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4empCrossSection.hh 83410 2014-08-21 15:17:53Z gcosmo $
 //
 //         
 //

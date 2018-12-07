@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc 68023 2013-03-13 13:40:16Z gcosmo $
 //
 /// \file DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class

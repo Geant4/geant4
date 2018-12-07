@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleB4d.cc 100946 2016-11-03 11:28:08Z gcosmo $
 //
 /// \file exampleB4d.cc
 /// \brief Main program of the B4d example
@@ -38,7 +37,6 @@
 #endif
 
 #include "G4UImanager.hh"
-#include "G4UIcommand.hh"
 #include "FTFP_BERT.hh"
 
 #include "Randomize.hh"

@@ -27,7 +27,6 @@
 /// \brief Definition of the SteppingAction class
 //
 //
-// $Id: SteppingAction.hh 98242 2016-07-04 16:57:39Z gcosmo $
 //
 // 
 

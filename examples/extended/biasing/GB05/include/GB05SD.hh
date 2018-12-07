@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GB05SD.hh $
 //
 /// \file GB05SD.hh
 /// \brief Definition of the GB05SD class

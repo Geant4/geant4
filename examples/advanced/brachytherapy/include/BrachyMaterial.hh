@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyMaterial.hh 100821 2016-11-02 15:21:34Z gcosmo $
 //
 //    **********************************
 //    *                                *
@@ -32,7 +31,7 @@
 //    *                                *
 //    **********************************
 //
-//Code developed by: Susanna Guatelli
+//Code developed by: Susanna Guatelli, Albert Le
 //
 // This class manages the elements and materials
 //
@@ -69,5 +68,6 @@ private:
   G4Material*Vacuum; 
   G4Material* bone;
   G4Material* muscle;
+  G4Material* matAg;
 };
 #endif

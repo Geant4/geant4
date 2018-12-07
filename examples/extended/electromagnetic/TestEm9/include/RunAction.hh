@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm9/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 100809 2016-11-02 15:02:53Z gcosmo $
 //
 #ifndef RunAction_h
 #define RunAction_h 1

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FragmentingString.hh 107869 2017-12-07 14:46:39Z gcosmo $
 //
 
 #ifndef G4FragmentingString_h
@@ -49,7 +48,6 @@ class G4ExcitedString;
 
 class G4FragmentingString 
 {
-
   public:
      
       G4FragmentingString(const G4FragmentingString &right);
@@ -96,16 +94,15 @@ class G4FragmentingString
       G4bool    StableIsQuark();
       G4bool    FourQuarkString(void) const;
 
-G4LorentzVector   GetPstring();
-G4LorentzVector   GetPleft();
-void              SetPleft(G4LorentzVector a4momentum);
-G4LorentzVector   GetPright();
-void              SetPright(G4LorentzVector a4momentum);
-void              LorentzRotate(const G4LorentzRotation & rotation);
-G4LorentzRotation TransformToCenterOfMass();
-G4LorentzRotation TransformToAlignedCms();
-void              Boost(G4ThreeVector& Velocity);
-
+      G4LorentzVector   GetPstring();
+      G4LorentzVector   GetPleft();
+      void              SetPleft(G4LorentzVector a4momentum);
+      G4LorentzVector   GetPright();
+      void              SetPright(G4LorentzVector a4momentum);
+      void              LorentzRotate(const G4LorentzRotation & rotation);
+      G4LorentzRotation TransformToCenterOfMass();
+      G4LorentzRotation TransformToAlignedCms();
+      void              Boost(G4ThreeVector& Velocity);
 
   private:
 
@@ -164,10 +161,10 @@ void G4FragmentingString::LorentzRotate(const G4LorentzRotation & rotation)
      SetPleft(rotation*Pleft);
      SetPright(rotation*Pright);
      Pstring = Pleft+Pright;
-Ptleft =Pleft.vect();  Ptleft.setZ(0.);
-Ptright=Pright.vect(); Ptright.setZ(0.);
-Pplus =Pstring.plus();
-Pminus=Pstring.minus();
+     Ptleft =Pleft.vect();  Ptleft.setZ(0.);
+     Ptright=Pright.vect(); Ptright.setZ(0.);
+     Pplus =Pstring.plus();
+     Pminus=Pstring.minus();
 }
 
 inline
@@ -179,10 +176,10 @@ G4LorentzRotation G4FragmentingString::TransformToCenterOfMass()
      Pleft   *= toCMS;
      Pright  *= toCMS;
      Pstring *= toCMS;
-Ptleft =Pleft.vect();  Ptleft.setZ(0.);
-Ptright=Pright.vect(); Ptright.setZ(0.);
-Pplus =Pstring.plus();
-Pminus=Pstring.minus();
+     Ptleft =Pleft.vect();  Ptleft.setZ(0.);
+     Ptright=Pright.vect(); Ptright.setZ(0.);
+     Pplus =Pstring.plus();
+     Pminus=Pstring.minus();
      return toCMS;
 }
 
@@ -200,10 +197,10 @@ G4LorentzRotation G4FragmentingString::TransformToAlignedCms()
      Pright  *= toAlignedCms;
      Pstring *= toAlignedCms;
 
-Ptleft  = G4ThreeVector(0.,0.,0.);
-Ptright = G4ThreeVector(0.,0.,0.);
-Pplus  = Pstring.plus();
-Pminus = Pstring.minus();
+     Ptleft  = G4ThreeVector(0.,0.,0.);
+     Ptright = G4ThreeVector(0.,0.,0.);
+     Pplus  = Pstring.plus();
+     Pminus = Pstring.minus();
 
      return toAlignedCms;
 }

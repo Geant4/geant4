@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysicsLEND.hh 71037 2013-06-10 09:20:54Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -39,36 +38,28 @@
 #ifndef G4HadronElasticPhysicsLEND_h
 #define G4HadronElasticPhysicsLEND_h 1
 
-#include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
+#include "G4HadronElasticPhysics.hh"
 
-class G4HadronElasticPhysics;
-
-class G4HadronElasticPhysicsLEND : public G4VPhysicsConstructor
+class G4HadronElasticPhysicsLEND : public G4HadronElasticPhysics
 {
 public: 
 
-  G4HadronElasticPhysicsLEND(G4int ver = 1,G4String evaluation=""); 
+  explicit G4HadronElasticPhysicsLEND(G4int ver = 1, 
+				      const G4String& eval=""); 
 
   virtual ~G4HadronElasticPhysicsLEND();
-
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
  
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+  void ConstructProcess() final;
 
 private:
 
-  G4HadronElasticPhysicsLEND(G4HadronElasticPhysicsLEND &);
-  G4HadronElasticPhysicsLEND & operator=(const G4HadronElasticPhysicsLEND &right);
+  G4HadronElasticPhysicsLEND(G4HadronElasticPhysicsLEND &) = delete;
+  G4HadronElasticPhysicsLEND & operator=
+  (const G4HadronElasticPhysicsLEND &right) = delete;
 
-  G4int    verbose;
-  static G4ThreadLocal G4bool   wasActivated;
-  static G4ThreadLocal G4HadronElasticPhysics* mainElasticBuilder;
   G4String evaluation;
 };
 

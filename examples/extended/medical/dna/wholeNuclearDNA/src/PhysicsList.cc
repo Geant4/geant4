@@ -31,7 +31,6 @@
 // [2] Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $ID$
 /// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 

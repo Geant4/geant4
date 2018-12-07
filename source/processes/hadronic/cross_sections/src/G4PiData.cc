@@ -54,9 +54,7 @@ G4PiData::G4PiData(const G4double * aT, const G4double * aIn,
 
 G4bool G4PiData::AppliesTo(G4double kineticEnergy)
 {
-  G4bool result = true;
-  if(kineticEnergy>back().first) result = false;
-  return result;
+  return (kineticEnergy<=back().first);
 }
 
 //////////////////////////////////////////////////////////////////////////

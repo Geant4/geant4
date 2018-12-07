@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/DICOM/.README.txt"
 ///\brief ExampleDICOM README page
@@ -125,6 +124,16 @@ DICOM
        3) THE DICOM_HEAD uses the OLD version of the Metadata files (see point 4a)
        Note 1: The Conversion of Hounsfield numbers to materials (point 5) is not used. The material is associated to the voxel in the Detector Construction 
                without using the calibration curve.This happens because the DICOM project has already been segmented and cleaned from artefacts (see publication).
+
+\section DICOM_s5 Metadata file:
+
+The old version of "Data.dat" is found in "Data.dat.old", when the project is configured with DICOM_USE_DCMTK=OFF,
+"Data.dat.old" is copied into the binary directory at "Data.dat".
+  - i.e. cp ${PROJECT_SOURCE_DIR}/Data.dat.old ${PROJECT_BINARY_DIR}/Data.dat
+
+The new version of "Data.dat" is found in "Data.dat.new", when the project is configured with DICOM_USE_DCMTK=ON,
+"Data.dat.new" is copied into the binary directory as "Data.dat".
+  - i.e. cp ${PROJECT_SOURCE_DIR}/Data.dat.new ${PROJECT_BINARY_DIR}/Data.dat
 
 \section DICOM_s5a Metadata file, OLD version:
 

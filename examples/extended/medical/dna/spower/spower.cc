@@ -38,6 +38,7 @@
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
+
 #include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
 
@@ -57,9 +58,6 @@ int main(int argc,char** argv) {
   if ( argc == 1 ) {
     ui = new G4UIExecutive(argc, argv);
   }
-
-  //choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   //construct the default run manager
 #ifdef G4MULTITHREADED

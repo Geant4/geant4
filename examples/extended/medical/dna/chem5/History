@@ -1,0 +1,30 @@
+--------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example chem5 History file
+                    -----------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+26 Nov 2018 -  V. Ivanchenko      - chem5-V10-04-03
+- Fixed nightly problem
+
+08 Nov 2018 -  I. Hrivnacova      - chem5-V10-04-02
+- Updated History 
+
+07 Nov 2018 -  Jose Ramos-Mendez  - chem5-V10-04-01
+- Fix missing header
+
+07 Nov 2018 -  Jose Ramos-Mendez  - chem5-V10-04-00
+- First version
+
+26 Sept 2018 - Jose Ramos-Mendez 
+- created

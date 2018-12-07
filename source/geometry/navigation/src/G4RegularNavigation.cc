@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc 109826 2018-05-09 10:55:30Z gcosmo $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation

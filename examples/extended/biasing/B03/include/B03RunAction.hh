@@ -27,7 +27,6 @@
 /// \brief Definition of the B03RunAction class
 //
 //
-// $Id: B03RunAction.hh 72862 2013-08-05 08:26:38Z ahoward $
 // 
 
 #ifndef B03RunAction_h

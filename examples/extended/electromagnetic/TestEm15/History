@@ -1,4 +1,3 @@
-$Id: History 110788 2018-06-14 06:45:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +13,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+
+23-10-2018 IgS (testem15-V10-04-08)
+- cosmetics in DetectorConstruction and SteppingAction.cc
+
+24-07-2018 IgS (testem15-V10-04-07)
+- SteppingAction.cc : no conversion case protection,
+use CLHEP::Hep3Vector::orthogonal() for coordinate axis definition
+- DetectorConstruction.cc : G4NistManager to allow predefined Geant4 materials
+         
 13-06-18 mma  (testem15-V10-04-06)
 - PhysicsList: add G4EmStandardPhysicsWVI, GS, SS
 

@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "analysis/AnaEx03/.README.OpenScientist.txt"
 ///\brief Example AnaEx03 README.OpenScientist page

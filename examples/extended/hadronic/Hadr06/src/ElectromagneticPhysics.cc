@@ -26,8 +26,6 @@
 /// \file ElectromagneticPhysics.cc
 /// \brief Implementation of the ElectromagneticPhysics class
 //
-// $Id: ElectromagneticPhysics.cc 71570 2013-06-18 10:14:44Z gcosmo $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

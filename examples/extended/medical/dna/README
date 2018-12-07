@@ -46,6 +46,8 @@ This directory contains a set of Geant4-DNA examples.
    - chem2   Usage of TimeStepAction in the chemistry module.
    - chem3   Activate the full interactivity with the chemistry module.
    - chem4   Simulation of radiochemical yields with the chemistry module.
+   - chem5   Variation of chem4, using the contructors G4EmDNAPhysics_option8 and 
+             G4EmDNAChemistry_option1    
 
    - pdb4dna         
        Usage of the Protein Data Bank (PDB) file format to build geometries.

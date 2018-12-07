@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmExtraPhysics.hh 66704 2013-01-10 18:20:17Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -84,6 +83,7 @@ public:
   void PositronToHadronsFactor(G4double val);
 
   void NeutrinoActivated(G4bool val);
+  void NuETotXscActivated(G4bool val);
   void SetNuEleCcBias(G4double bf);
   void SetNuEleNcBias(G4double bf);
   void SetNuNucleusBias(G4double bf);
@@ -101,6 +101,7 @@ private:
   static G4bool pmumuActivated;
   static G4bool phadActivated;
   static G4bool fNuActivated;
+  static G4bool fNuETotXscActivated;
 
   static G4double gmumuFactor;
   static G4double pmumuFactor;

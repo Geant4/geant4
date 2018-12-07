@@ -1,0 +1,23 @@
+#
+# Macro file of "exampleB3.cc"
+# To be run preferably in batch, without graphics:
+# % exampleB3 run3.mac
+#
+/score/writerType root
+/score/writerVerbose 1
+#
+#/run/numberOfWorkers 4
+/run/initialize
+#
+/control/verbose 2
+/run/printProgress 10000
+#
+/run/beamOn 40000
+#
+# change beta source
+#
+/gun/particle ion
+/gun/ion 6 11
+/score/writerFileName scoring_run2.root
+#
+/run/beamOn 40000

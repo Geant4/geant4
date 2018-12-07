@@ -498,7 +498,8 @@ G4int maxEnergyIndex = 0;
           G4double phi = twopi*G4UniformRand();
           G4double sinth = std::sin(theta);
           G4double en = thePhotons->operator[](i)->GetTotalEnergy();
-          G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
+          // DHW G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
+          G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*costheta );
           thePhotons->operator[](i)->SetMomentum( tempVector ) ;
 	}
 	else if(tabulationType==1)

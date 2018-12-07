@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr02/include/TargetSD.hh
 /// \brief Definition of the TargetSD class
 //
-// $Id: TargetSD.hh 81932 2014-06-06 15:39:45Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //

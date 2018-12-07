@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //  Last Modification : 04/Oct/11 P. Mato - making use of G4TrackStack with value semantics
 ///

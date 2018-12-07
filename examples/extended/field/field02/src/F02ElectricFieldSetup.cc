@@ -27,7 +27,6 @@
 /// \brief Implementation of the F02ElectricFieldSetup class
 //
 //
-// $Id: F02ElectricFieldSetup.cc 109871 2018-05-09 12:40:14Z gcosmo $
 //
 //   User Field class implementation.
 //
@@ -250,7 +249,7 @@ void F02ElectricFieldSetup::CreateStepper()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F02ElectricFieldSetup::SetFieldValue(G4double fieldValue)
+void F02ElectricFieldSetup::SetFieldZValue(G4double fieldValue)
 {
   // Set the value of the Global Field to fieldValue along Z
 

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // 
 // class G4Torus
@@ -948,7 +947,37 @@ G4ThreeVector G4Torus::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
                                 const G4ThreeVector& v ) const
 {
+  // Get bounding box of full torus
+  //
+  G4double boxDx  = fRtor + fRmax;
+  G4double boxDy  = boxDx;
+  G4double boxDz  = fRmax;
+  G4double boxMax = boxDx;
+  G4double boxMin = boxDz;
 
+  // Check if point is traveling away
+  //
+  G4double distX = std::abs(p.x()) - boxDx;
+  G4double distY = std::abs(p.y()) - boxDy;
+  G4double distZ = std::abs(p.z()) - boxDz;
+  if (distX >= -halfCarTolerance && p.x()*v.x() >= 0) return kInfinity;
+  if (distY >= -halfCarTolerance && p.y()*v.y() >= 0) return kInfinity;
+  if (distZ >= -halfCarTolerance && p.z()*v.z() >= 0) return kInfinity;
+
+  // Calculate safety distance to bounding box
+  // If point is too far, move it closer and calculate distance
+  //
+  G4double Dmax = 32*boxMax; 
+  G4double safe = std::max(std::max(distX,distY),distZ);
+  if (safe > Dmax)
+  {
+    G4double dist = safe - 1.e-8*safe - boxMin; // to stay outside after the move
+    dist += DistanceToIn(p + dist*v, v);
+    return (dist >= kInfinity) ? kInfinity : dist;
+  }
+
+  // Find intersection with torus
+  //
   G4double snxt=kInfinity, sphi=kInfinity; // snxt = default return value
 
   G4double  sd[4] ;

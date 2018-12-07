@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm8/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 106960 2017-10-31 08:35:19Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

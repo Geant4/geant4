@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MagIntegratorStepper.hh 107059 2017-11-01 14:58:16Z gcosmo $
 //
 //
 // class G4MagIntegratorStepper
@@ -59,7 +58,7 @@ class G4MagIntegratorStepper
                             bool               isFSAL= false
                             // , G4int       methodOrder
                            );
-     virtual ~G4MagIntegratorStepper();
+     virtual ~G4MagIntegratorStepper() = default;
        // Constructor and destructor. No actions.
 
      virtual  void  Stepper(  const G4double y[],
@@ -76,19 +75,20 @@ class G4MagIntegratorStepper
        // Estimate the maximum distance of a chord from the true path
        // over the segment last integrated.
 
-     virtual void ComputeRightHandSide( const G4double y[], G4double dydx[] ); 
-       // Must compute the RightHandSide as in the method below
-       // Optionally can cache the input y[] and the dydx[] values computed.
-
      inline void NormaliseTangentVector( G4double vec[6] );
        // Simple utility function to (re)normalise 'unit velocity' vector.
 
      inline void NormalisePolarizationVector( G4double vec[12] );
        // Simple utility function to (re)normalise 'unit spin' vector.
 
-     inline void RightHandSide( const double y[], double dydx[] ) const;
+     inline void RightHandSide( const G4double y[], G4double dydx[] ) const;
        // Utility method to supply the standard Evaluation of the
        // Right Hand side of the associated equation.
+
+     inline void RightHandSide(const G4double y[],
+                               G4double dydx[],
+                               G4double field[]) const;
+       // Calculate dydx and field at point y. 
 
      inline G4int  GetNumberOfVariables() const;
        // Get the number of variables that the stepper will integrate over.
@@ -103,9 +103,11 @@ class G4MagIntegratorStepper
      G4int IntegrationOrder() { return fIntegrationOrder; }
        //  Replacement method - using new data member
    
-     inline G4EquationOfMotion *GetEquationOfMotion(); 
+     inline G4EquationOfMotion* GetEquationOfMotion();
+     inline const G4EquationOfMotion* GetEquationOfMotion() const;
        // As some steppers (eg RKG3) require other methods of Eq_Rhs
        // this function allows for access to them.
+
      inline void SetEquationOfMotion(G4EquationOfMotion* newEquation); 
 
      inline unsigned long GetfNoRHSCalls(){ return fNoRHSCalls; }

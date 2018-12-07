@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx02/include/H02DetectorConstruction.hh
 /// \brief Definition of the H02DetectorConstruction class
 //
-//   $Id: H02DetectorConstruction.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef H02_DETECTOR_CONSTRUCTION_H

@@ -26,7 +26,6 @@
 /// \file exoticphysics/phonon/include/XActionInitialization.hh
 /// \brief Definition of the XActionInitialization class
 //
-// $Id$
 //
 
 #ifndef XActionInitialization_h

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FermiFragmentsPoolVI.cc,v 1.5 2006-06-29 20:13:13 gunter Exp $
 //
 // FermiBreakUp de-excitation model
 // by V. Ivanchenko (July 2016)
@@ -45,10 +44,10 @@ G4FermiFragmentsPoolVI::G4FermiFragmentsPoolVI()
   tolerance = (G4float)param->GetMinExcitation();
   timelim   = (G4float)param->GetMaxLifeTime();
 
-  elim = 10*CLHEP::MeV;
+  elim = param->GetFBUEnergyLimit();
   elimf= (G4float)elim;
 
-  fragment_pool.reserve(399);
+  fragment_pool.reserve(991);
   funstable.reserve(80);
 
   Initialise();
@@ -247,13 +246,15 @@ void G4FermiFragmentsPoolVI::Initialise()
   }
   // prepare structures per A for normal fragments
   static const size_t lfmax[maxA] = {
-    0, 2, 1, 2, 1, 2, 6, 14, 16, 22, 45, 53, 37, 44, 33, 58, 63};
+    0, 2, 1, 2, 1, 2, 8, 19, 28, 56, 70, 104, 74, 109, 143, 212, 160};
+  // 0, 2, 1, 2, 1, 2, 6, 14, 16, 22, 45, 53, 37, 44, 33, 58, 63};
   for(G4int A=1; A<maxA; ++A) {
     list_f[A].reserve(lfmax[A]);
     list_c[A].reserve(lfmax[A]);
   }
   static const size_t lfch[maxA] = {
-    0, 0, 0, 0, 0, 1, 2, 5, 6, 3, 12, 8, 4, 10, 1, 8, 6};
+    0, 0, 0, 0, 0, 1, 4, 8, 8, 15, 33, 48, 36, 27, 66, 69, 39};
+  //  0, 0, 0, 0, 0, 1, 2, 5, 6, 3, 12, 8, 4, 10, 1, 8, 6};
   G4int nfrag = fragment_pool.size();
   for(G4int i=0; i<nfrag; ++i) {
     const G4FermiFragment* f = fragment_pool[i];
@@ -265,6 +266,7 @@ void G4FermiFragmentsPoolVI::Initialise()
 
   // list of unphysical fragments
   static const size_t lfun[maxA] = {
+
     0, 0, 2, 2, 4, 4, 6, 6, 6, 6, 6, 6, 7, 6, 7, 6, 6};
   for(G4int A=1; A<maxA; ++A) {
     list_g[A].reserve(lfun[A]);
@@ -397,23 +399,6 @@ void G4FermiFragmentsPoolVI::Initialise()
       */
       // check if this is the list of stable pairs
       G4FermiPair* fpair = nullptr;
-      /*
-      G4int kmax = list_f[A].size();
-      for(G4int k=0; k<kmax; ++k) {
-	const G4FermiFragment* f3 = (list_f[A])[k];
-        if(Z == f3->GetZ() && f3->IsStable() && 
-	   (list_c[A])[k]->GetNumberOfChannels() == 0 && 
-	   f3->GetTotalEnergy() >= minE) 
-	  {
-	    if(!fpair) { 
-	      fpair = new G4FermiPair(f1, f2); 
-	      list_u[A].push_back(fpair);
-	    }
-	    (list_c[A])[k]->AddChannel(fpair); 
-	  }
-      }
-      if(fpair) { continue; }
-      */
       // check unphysics list
       G4int kmax = list_g[A].size();
       for(G4int k=0; k<kmax; ++k) {

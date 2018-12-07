@@ -158,7 +158,7 @@ namespace G4INCL {
       // to the leading nucleon. The selected phase-space parameter corresponds
       // to the running maximum cluster mass.
       if(size < clusterPhaseSpaceCut[runningMaxClusterAlgorithmMass]) {
-	consideredPartners[nConsidered] = *i;
+	      consideredPartners[nConsidered] = *i;
         // Keep trace of how much energy is carried by cascading nucleons. This
         // is used to stop the clustering algorithm as soon as possible.
         if(!(*i)->isTargetSpectator())
@@ -194,7 +194,7 @@ namespace G4INCL {
 // assert(std::count(isInRunningConfiguration, isInRunningConfiguration+nConsidered, true)==0);
 
     // Start the cluster search!
-    findClusterStartingFrom(1, theLeadingParticle->getZ());
+    findClusterStartingFrom(1, theLeadingParticle->getZ(), 0);
 
     // Again, make sure that all the elements of isInRunningConfiguration have
     // been reset to false. This is a sanity check.
@@ -219,11 +219,12 @@ namespace G4INCL {
     return psSpace * psMomentum * clusterPosFact2[oldA + 1];
   }
 
-  void ClusteringModelIntercomparison::findClusterStartingFrom(const G4int oldA, const G4int oldZ) {
+  void ClusteringModelIntercomparison::findClusterStartingFrom(const G4int oldA, const G4int oldZ, const G4int oldS) {
     const G4int newA = oldA + 1;
     const G4int oldAMinusOne = oldA - 1;
     G4int newZ;
     G4int newN;
+    G4int newS;
 
     // Look up the phase-space cut
     const G4double phaseSpaceCut = clusterPhaseSpaceCut[newA];
@@ -260,10 +261,11 @@ namespace G4INCL {
 
       // Z and A of the new cluster
       newZ = oldZ + candidateNucleon.Z;
+      newS = oldS + candidateNucleon.S;
       newN = newA - newZ;
 
       // Skip this nucleon if we already have too many protons or neutrons
-      if(newZ > clusterZMaxAll || newN > clusterNMaxAll)
+      if(newZ > clusterZMaxAll || newN > clusterNMaxAll || newS>0)
         continue;
 
       // Compute the phase space factor for a new cluster which
@@ -343,8 +345,8 @@ namespace G4INCL {
         // Note: sqc is real kinetic energy, not the square of the kinetic energy!
         const G4double sqc = KinematicsUtils::invariantMass(runningEnergies[newA],
             runningMomenta[newA]);
-        const G4double sqct = (sqc - 2.*newZ*protonMass - 2.*(newA-newZ)*neutronMass
-             + ParticleTable::getRealMass(newA, newZ))
+        const G4double sqct = (sqc - 2.*newZ*protonMass - 2.*(newA+newS-newZ)*neutronMass + 2.*newS*lambdaMass
+             + ParticleTable::getRealMass(newA, newZ, newS))
           *clusterPosFact[newA];
 
         if(sqct < sqtot) {
@@ -353,6 +355,7 @@ namespace G4INCL {
           sqtot = sqct;
           selectedA = newA;
           selectedZ = newZ;
+          selectedS = newS;
 
           // Store the running configuration in a ParticleList
           for(G4int j=0; j<oldA; ++j)
@@ -364,8 +367,8 @@ namespace G4INCL {
       }
 
       // The method recursively calls itself for the next mass
-      if(newA < runningMaxClusterAlgorithmMass && newA+1 < theNucleus->getA()) {
-	findClusterStartingFrom(newA, newZ);
+      if(newA < runningMaxClusterAlgorithmMass && newA+1 < theNucleus->getA() && newS<=0) {
+	findClusterStartingFrom(newA, newZ, newS);
       }
 
       // Reset the running configuration flag and the cascading energy pool
@@ -376,7 +379,7 @@ namespace G4INCL {
 
   G4bool ClusteringModelIntercomparison::clusterCanEscape(Nucleus const * const n, Cluster const * const c) {
     // Forbid emission of the whole nucleus
-    if(c->getA()>=n->getA())
+    if(c->getA()>=n->getA() || c->getS()>0)
       return false;
 
     // Check the escape angle of the cluster

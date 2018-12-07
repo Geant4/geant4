@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVDivisionFactory.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // class G4VPVDivisionFactory Implementation file
 //

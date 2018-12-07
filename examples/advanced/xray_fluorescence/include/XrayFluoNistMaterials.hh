@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoDetectorConstruction.hh
-// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //

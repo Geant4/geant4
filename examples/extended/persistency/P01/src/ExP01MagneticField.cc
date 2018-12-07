@@ -27,7 +27,6 @@
 /// \brief Implementation of the ExP01MagneticField class
 //
 //
-// $Id: ExP01MagneticField.cc 68025 2013-03-13 13:43:46Z gcosmo $
 //  
 //   User Field class implementation.
 //

@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm3/include/Run.hh
 /// \brief Definition of the Run class
 //
-// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

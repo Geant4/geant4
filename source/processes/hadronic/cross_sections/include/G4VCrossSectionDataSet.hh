@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 // -------------------------------------------------------------------
 //
@@ -59,8 +58,8 @@
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4DynamicParticle.hh"
 #include "G4Element.hh"
-#include "G4HadTmpUtil.hh"
 #include <iostream>
 
 class G4DynamicParticle;

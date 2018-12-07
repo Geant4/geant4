@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaEventAction.cc 107396 2017-11-10 08:28:08Z gcosmo $
 //
 
 #include "eRositaEventAction.hh"

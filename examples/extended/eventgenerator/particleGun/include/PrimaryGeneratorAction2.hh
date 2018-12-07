@@ -27,7 +27,6 @@
 /// \brief Definition of the PrimaryGeneratorAction2 class
 //
 //
-// $Id: PrimaryGeneratorAction2.hh 99713 2016-10-03 07:35:42Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

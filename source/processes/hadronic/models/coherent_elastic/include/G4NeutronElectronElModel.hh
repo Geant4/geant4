@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronElectronElModel.hh 90228 2015-05-21 08:49:57Z gcosmo $
 //
 // Geant4 Header : G4NeutronElectronElModel
 //

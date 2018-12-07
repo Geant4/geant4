@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootNtupleManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Manager class for Root ntuples.
 // It implements functions specific to Root ntuples.
@@ -67,11 +66,13 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple>
 {
   friend class G4RootAnalysisManager;
   friend class G4RootMainNtupleManager;
+  friend class G4RootMpiAnalysisManager;
+  friend class G4RootMpiNtupleManager;
 
   public:
-    explicit G4RootNtupleManager(const G4AnalysisManagerState& state, 
-                                 G4int nofMainManagers = 0,
-                                 G4bool rowWise = true);
+    explicit G4RootNtupleManager(const G4AnalysisManagerState& state,
+                                 G4int nofMainManagers,
+                                 G4bool rowWise);
     virtual ~G4RootNtupleManager();
 
    private:
@@ -93,13 +94,14 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple>
                     NtupleDescriptionType*  ntupleDescription) final;
 
     virtual void FinishTNtuple(
-                    NtupleDescriptionType*  ntupleDescription) final;
+                    NtupleDescriptionType*  ntupleDescription,
+                    G4bool fromBooking) final;
 
     virtual G4bool Reset(G4bool deleteNtuple);
 
     // Method for merging
     //
-    G4bool Merge();
+    virtual G4bool Merge();
 
     // Access functions
     //
@@ -117,6 +119,7 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple>
     std::shared_ptr<G4RootFileManager> fFileManager;
     tools::wroot::directory*  fNtupleDirectory;
     std::vector<G4RootMainNtupleManager*>  fMainNtupleManagers;
+    G4bool fRowWise;
 };    
 
 // inline functions

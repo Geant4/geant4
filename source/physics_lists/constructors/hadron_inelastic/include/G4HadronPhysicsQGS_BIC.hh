@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsQGS_BIC.hh 105736 2017-08-16 13:01:11Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -56,7 +55,6 @@ class G4HadronPhysicsQGS_BIC : public G4VPhysicsConstructor
 
     virtual void ConstructParticle() override;
     virtual void ConstructProcess() override;
-    virtual void TerminateWorker() override;
 
   protected:
     void CreateModels();
@@ -70,9 +68,6 @@ class G4HadronPhysicsQGS_BIC : public G4VPhysicsConstructor
     virtual void ExtraConfiguration();
     
     //Thread-private data
-    G4VectorCache<G4VCrossSectionDataSet*> xs_ds;
-    G4Cache<G4ComponentGGHadronNucleusXsc*> xs_k;
-
     G4double maxFTF_neutron;
     G4double maxFTF_proton;
     G4double minFTF_neutron;

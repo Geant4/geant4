@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationCons.hh 73433 2013-08-27 11:05:39Z gcosmo $
 //
 // classes G4ParameterisationConsRho,
 //         G4ParameterisationConsPhi,

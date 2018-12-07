@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "B5/.README.txt"
 ///\brief Example B5 README page

@@ -24,12 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmTextField.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 //Text field class. Inherits from G4OpenGLXmVWidgetComponent
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
+#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
 
 #ifndef G4OPENGLXMTEXTFIELD_HH
 #define G4OPENGLXMTEXTFIELD_HH

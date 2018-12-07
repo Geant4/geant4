@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 99176 2016-09-07 09:46:36Z gcosmo $
 # -------------------------------------------------------------
 # GNUmakefile for visualization library.  John Allison, 5/7/95.
 

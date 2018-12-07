@@ -1,4 +1,3 @@
-$Id: History 110402 2018-05-22 11:35:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 9th, 2018 G.Cosmo                 - geomvol-V10-04-05, 04
+- Added G4AssemblyStore singleton class for assembly structures bookeeping,
+  to address the specific use-case of allowing identification of assembly
+  envelopes.
+
+July 12th, 2018 G.Cosmo                   - geomvol-V10-04-03
+- Removed G4GeometryWorkspacePool class. Adapted G4GeometryWorkspace to
+  use templated class G4TWorkspacePool.
+- Coworks with tags in geometry/solids/specific, run and
+  visualization/management.
 
 May 22nd, 2018 J.Allison                  - geomvol-V10-04-02
 - G4PVPlacement::CheckOverlaps: Add copy number to G4Exception printing.

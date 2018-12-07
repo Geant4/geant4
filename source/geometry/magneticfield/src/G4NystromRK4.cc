@@ -24,261 +24,206 @@
 // ********************************************************************
 //
 //
-// $Id: G4NystromRK4.cc 110753 2018-06-12 15:44:03Z gcosmo $
 //
 // History:
 // - Created:      I.Gavrilenko    15.05.2009   (as G4AtlasRK4)
 // - Adaptations:  J.Apostolakis  May-Nov 2009
 // -------------------------------------------------------------------
 
-#include <iostream>
 #include "G4NystromRK4.hh"
 
-//////////////////////////////////////////////////////////////////
-// Constructor - with optional distance ( has default value)
-//////////////////////////////////////////////////////////////////
+#include "G4Exception.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4FieldUtils.hh"
+#include "G4LineSection.hh"
 
-G4NystromRK4::G4NystromRK4(G4Mag_EqRhs* magEqRhs, G4double distanceConstField)
-  : G4MagIntegratorStepper(magEqRhs, 6),            // number of variables
-    m_fEq( magEqRhs ),
-    m_magdistance( distanceConstField ),
-    m_cof( 0.0 ),
-    m_mom( 0.0 ),
-    m_imom( 0.0 ),
-    m_cachedMom( false )
+using namespace field_utils;
+
+namespace {
+
+G4bool notEquals(G4double p1, G4double p2)
 {
-  m_fldPosition[0]  = m_iPoint[0] = m_fPoint[0] = m_mPoint[0] = 9.9999999e+99 ;
-  m_fldPosition[1]  = m_iPoint[1] = m_fPoint[1] = m_mPoint[1] = 9.9999999e+99 ;
-  m_fldPosition[2]  = m_iPoint[2] = m_fPoint[2] = m_mPoint[2] = 9.9999999e+99 ;
-  m_fldPosition[3]  = -9.9999999e+99;
-  m_lastField[0] = m_lastField[1] = m_lastField[2] = 0.0;
-
-  m_magdistance2 = distanceConstField*distanceConstField;
-}
-
-////////////////////////////////////////////////////////////////
-// Destructor
-////////////////////////////////////////////////////////////////
-
-G4NystromRK4::~G4NystromRK4()
-{
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// Integration in one  step 
-///////////////////////////////////////////////////////////////////////////////
-
-void 
-G4NystromRK4::Stepper (const G4double P[],
-                       const G4double dPdS[],
-                             G4double Step, G4double Po[], G4double Err[])
-{
-  const G4double perMillion = 1.0e-6;
-  G4double R[4] = {   P[0],   P[1] ,    P[2],  P[7] };   // x, y, z, t
-  G4double A[3] = {dPdS[0], dPdS[1], dPdS[2]};
-
-  m_iPoint[0]=R[0]; m_iPoint[1]=R[1]; m_iPoint[2]=R[2];
-
-  constexpr G4double one_sixth= 1./6.;
-  const G4double S  =     Step   ;
-  const G4double S5 =  .5*Step   ;
-  const G4double S4 = .25*Step   ;
-  const G4double S6 =     Step * one_sixth;   // Step / 6.;
-  
-  // Ensure that the location and cached field value are correct
-  getField( R );
-
-  // Ensure that the momentum is set correctly.
-
-  // - Quick check momentum magnitude (squared) against previous value
-  G4double newmom2 = (P[3]*P[3]+P[4]*P[4]+P[5]*P[5]); 
-  G4double oldmom2 = m_mom * m_mom;
-  if( std::fabs(newmom2 - oldmom2) > perMillion * oldmom2 )
-  {
-     m_mom   = std::sqrt(newmom2) ;
-     m_imom  = 1./m_mom;
-     m_cof   = m_fEq->FCof()*m_imom;
+    return std::fabs(p1 - p2) > perMillion * p2;
   }
+   constexpr G4int INTEGRATED_COMPONENTS = 6;
+} // namespace
 
-#ifdef  G4DEBUG_FIELD
-  CheckCachedMomemtum( P, m_mom );
-  CheckFieldPosition( P, m_fldPosition );
-#endif
-  
-  // Point 1
-  //
-  G4double K1[3] = { m_imom*dPdS[3], m_imom*dPdS[4], m_imom*dPdS[5] };
-  
-  // Point2
-  //
-  G4double p[4] = {R[0]+S5*(A[0]+S4*K1[0]),
-		   R[1]+S5*(A[1]+S4*K1[1]),
-		   R[2]+S5*(A[2]+S4*K1[2]),
-		   P[7]                   }; 
-  getField(p);
 
-  G4double A2[3] = {A[0]+S5*K1[0],A[1]+S5*K1[1],A[2]+S5*K1[2]};
-  G4double K2[3] = {(A2[1]*m_lastField[2]-A2[2]*m_lastField[1])*m_cof,
-		    (A2[2]*m_lastField[0]-A2[0]*m_lastField[2])*m_cof,
-		    (A2[0]*m_lastField[1]-A2[1]*m_lastField[0])*m_cof};
- 
-  m_mPoint[0]=p[0]; m_mPoint[1]=p[1]; m_mPoint[2]=p[2];
-
-  // Point 3 with the same magnetic field
-  //
-  G4double A3[3] = {A[0]+S5*K2[0],A[1]+S5*K2[1],A[2]+S5*K2[2]};
-  G4double K3[3] = {(A3[1]*m_lastField[2]-A3[2]*m_lastField[1])*m_cof,
-		    (A3[2]*m_lastField[0]-A3[0]*m_lastField[2])*m_cof,
-		    (A3[0]*m_lastField[1]-A3[1]*m_lastField[0])*m_cof};
-  
-  // Point 4
-  //
-  p[0] = R[0]+S*(A[0]+S5*K3[0]);
-  p[1] = R[1]+S*(A[1]+S5*K3[1]);
-  p[2] = R[2]+S*(A[2]+S5*K3[2]);             
-
-  getField(p);
-  
-  G4double A4[3] = {A[0]+S*K3[0],A[1]+S*K3[1],A[2]+S*K3[2]};
-  G4double K4[3] = {(A4[1]*m_lastField[2]-A4[2]*m_lastField[1])*m_cof,
-		    (A4[2]*m_lastField[0]-A4[0]*m_lastField[2])*m_cof,
-		    (A4[0]*m_lastField[1]-A4[1]*m_lastField[0])*m_cof};
-  
-  // New position
-  //
-  Po[0] = P[0]+S*(A[0]+S6*(K1[0]+K2[0]+K3[0]));
-  Po[1] = P[1]+S*(A[1]+S6*(K1[1]+K2[1]+K3[1]));
-  Po[2] = P[2]+S*(A[2]+S6*(K1[2]+K2[2]+K3[2]));
-
-  m_fPoint[0]=Po[0]; m_fPoint[1]=Po[1]; m_fPoint[2]=Po[2];
-
-  // New direction
-  //
-  Po[3] = A[0]+S6*(K1[0]+K4[0]+2.*(K2[0]+K3[0]));
-  Po[4] = A[1]+S6*(K1[1]+K4[1]+2.*(K2[1]+K3[1]));
-  Po[5] = A[2]+S6*(K1[2]+K4[2]+2.*(K2[2]+K3[2]));
-
-  // Errors
-  //
-  Err[3] = S*std::fabs(K1[0]-K2[0]-K3[0]+K4[0]);
-  Err[4] = S*std::fabs(K1[1]-K2[1]-K3[1]+K4[1]);
-  Err[5] = S*std::fabs(K1[2]-K2[2]-K3[2]+K4[2]);
-  Err[0] = S*Err[3]                       ;
-  Err[1] = S*Err[4]                       ;
-  Err[2] = S*Err[5]                       ;
-  Err[3]*= m_mom                          ;
-  Err[4]*= m_mom                          ;
-  Err[5]*= m_mom                          ;
-
-  // Normalize momentum
-  //
-  G4double normF = m_mom/std::sqrt(Po[3]*Po[3]+Po[4]*Po[4]+Po[5]*Po[5]);
-  Po [3]*=normF; Po[4]*=normF; Po[5]*=normF; 
-
-  // Pass Energy, time unchanged -- time is not integrated !!
-  Po[6]=P[6]; Po[7]=P[7];
+G4NystromRK4::G4NystromRK4(G4Mag_EqRhs* equation, G4double distanceConstField)
+    : G4MagIntegratorStepper(equation, INTEGRATED_COMPONENTS),
+      fMomentum(0),
+      fMomentum2(0),
+      fInverseMomentum(0),
+      fCoefficient(0)
+{
+    if (distanceConstField > 0)
+    {
+        SetDistanceForConstantField(distanceConstField);
+    }
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
-// Estimate the maximum distance from the curve to the chord
-///////////////////////////////////////////////////////////////////////////////
-
-G4double 
-G4NystromRK4::DistChord() const 
+void G4NystromRK4::Stepper(const G4double y[],
+                           const G4double dydx[],
+                           G4double hstep, 
+                           G4double yOut[], 
+                           G4double yError[])
 {
-  G4double ax = m_fPoint[0]-m_iPoint[0];  
-  G4double ay = m_fPoint[1]-m_iPoint[1];  
-  G4double az = m_fPoint[2]-m_iPoint[2];
-  G4double dx = m_mPoint[0]-m_iPoint[0]; 
-  G4double dy = m_mPoint[1]-m_iPoint[1]; 
-  G4double dz = m_mPoint[2]-m_iPoint[2];
-  G4double d2 = (ax*ax+ay*ay+az*az)    ; 
+    fInitialPoint = { y[0], y[1], y[2] };
 
-  if(d2!=0.)
-  {
-    G4double ds = (ax*dx+ay*dy+az*dz)/d2;
-    dx         -= (ds*ax)               ;
-    dy         -= (ds*ay)               ;
-    dz         -= (ds*az)               ;
-  }
-  return std::sqrt(dx*dx+dy*dy+dz*dz);
+    G4double field[3];
+
+    constexpr G4double one_sixth= 1./6.;
+    const G4double S5 = 0.5 * hstep;
+    const G4double S4 = .25 * hstep;
+    const G4double S6 = hstep * one_sixth;
+   
+    const G4double momentum2 = getValue2(y, Value3D::Momentum);
+    if (notEquals(momentum2, fMomentum2))
+    {
+        fMomentum = std::sqrt(momentum2);
+        fMomentum2 = momentum2;
+        fInverseMomentum  = 1. / fMomentum;
+        fCoefficient = GetFCof() * fInverseMomentum;
+    }
+    
+    // Point 1
+    const G4double K1[3] = { 
+        fInverseMomentum * dydx[3], 
+        fInverseMomentum * dydx[4], 
+        fInverseMomentum * dydx[5]
+    };
+    
+    // Point2
+    G4double p[4] = {
+        y[0] + S5 * (dydx[0] + S4 * K1[0]),
+        y[1] + S5 * (dydx[1] + S4 * K1[1]),
+        y[2] + S5 * (dydx[2] + S4 * K1[2]),
+        y[7]
+    };
+
+    GetFieldValue(p, field);
+  
+    const G4double A2[3] = {
+        dydx[0] + S5 * K1[0],
+        dydx[1] + S5 * K1[1],
+        dydx[2] + S5 * K1[2]
+    };
+
+    const G4double K2[3] = {
+        (A2[1] * field[2] - A2[2] * field[1]) * fCoefficient,
+        (A2[2] * field[0] - A2[0] * field[2]) * fCoefficient,
+        (A2[0] * field[1] - A2[1] * field[0]) * fCoefficient
+    };
+
+    fMidPoint = { p[0], p[1], p[2] };
+
+    // Point 3 with the same magnetic field
+    const G4double A3[3] = {
+        dydx[0] + S5 * K2[0],
+        dydx[1] + S5 * K2[1],
+        dydx[2] + S5 * K2[2]
+    };
+
+    const G4double K3[3] = {
+        (A3[1] * field[2] - A3[2] * field[1]) * fCoefficient,
+        (A3[2] * field[0] - A3[0] * field[2]) * fCoefficient,
+        (A3[0] * field[1] - A3[1] * field[0]) * fCoefficient
+    };
+
+    // Point 4
+    p[0] = y[0] + hstep * (dydx[0] + S5 * K3[0]);
+    p[1] = y[1] + hstep * (dydx[1] + S5 * K3[1]);
+    p[2] = y[2] + hstep * (dydx[2] + S5 * K3[2]);             
+
+    GetFieldValue(p, field);
+  
+    const G4double A4[3] = {
+        dydx[0] + hstep * K3[0],
+        dydx[1] + hstep * K3[1],
+        dydx[2] + hstep * K3[2]
+    };
+
+    const G4double K4[3] = {
+        (A4[1] * field[2] - A4[2] * field[1]) * fCoefficient,
+        (A4[2] * field[0] - A4[0] * field[2]) * fCoefficient,
+        (A4[0] * field[1] - A4[1] * field[0]) * fCoefficient
+    };
+  
+    // New position
+    yOut[0] = y[0] + hstep * (dydx[0] + S6 * (K1[0] + K2[0] + K3[0]));
+    yOut[1] = y[1] + hstep * (dydx[1] + S6 * (K1[1] + K2[1] + K3[1]));
+    yOut[2] = y[2] + hstep * (dydx[2] + S6 * (K1[2] + K2[2] + K3[2]));
+    // New direction
+    yOut[3] = dydx[0] + S6 * (K1[0] + K4[0] + 2. * (K2[0] + K3[0]));
+    yOut[4] = dydx[1] + S6 * (K1[1] + K4[1] + 2. * (K2[1] + K3[1]));
+    yOut[5] = dydx[2] + S6 * (K1[2] + K4[2] + 2. * (K2[2] + K3[2]));
+    // Pass Energy, time unchanged -- time is not integrated !!
+    yOut[6] = y[6]; 
+    yOut[7] = y[7];
+
+    fEndPoint = { yOut[0], yOut[1], yOut[2] };
+
+    // Errors
+    yError[3] = hstep * std::fabs(K1[0] - K2[0] - K3[0] + K4[0]);
+    yError[4] = hstep * std::fabs(K1[1] - K2[1] - K3[1] + K4[1]);
+    yError[5] = hstep * std::fabs(K1[2] - K2[2] - K3[2] + K4[2]);
+    yError[0] = hstep * yError[3];
+    yError[1] = hstep * yError[4];
+    yError[2] = hstep * yError[5];
+    yError[3] *= fMomentum;
+    yError[4] *= fMomentum;
+    yError[5] *= fMomentum;
+
+    // Normalize momentum
+    const G4double normF = fMomentum / getValue(yOut, Value3D::Momentum);
+    yOut[3] *= normF; 
+    yOut[4] *= normF; 
+    yOut[5] *= normF; 
+
+    // My trial code:
+    // G4double endMom2 = yOut[3]*yOut[3]+yOut[4]*yOut[4]+yOut[5]*yOut[5];
+    // G4double normF = std::sqrt( startMom2 / endMom2 );  
+}
+        
+G4double G4NystromRK4::DistChord() const 
+{
+    return G4LineSection::Distline(fMidPoint, fInitialPoint, fEndPoint);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Derivatives calculation - caching the momentum value
-///////////////////////////////////////////////////////////////////////////////
-
-void 
-G4NystromRK4::ComputeRightHandSide(const G4double P[],G4double dPdS[])
+void G4NystromRK4::SetDistanceForConstantField(G4double length)
 {
-  G4double P4vec[4]= { P[0], P[1], P[2], P[7] }; // Time is P[7]
-  getField(P4vec);
-  m_mom   = std::sqrt(P[3]*P[3]+P[4]*P[4]+P[5]*P[5])     ; 
-  m_imom  = 1./m_mom                                ;
-  m_cof   = m_fEq->FCof()*m_imom                    ;
-  m_cachedMom = true                                ; // Caching the value
-  dPdS[0] = P[3]*m_imom                             ; // dx /ds
-  dPdS[1] = P[4]*m_imom                             ; // dy /ds
-  dPdS[2] = P[5]*m_imom                             ; // dz /ds
-  dPdS[3] = m_cof*(P[4]*m_lastField[2]-P[5]*m_lastField[1]) ; // dPx/ds
-  dPdS[4] = m_cof*(P[5]*m_lastField[0]-P[3]*m_lastField[2]) ; // dPy/ds
-  dPdS[5] = m_cof*(P[3]*m_lastField[1]-P[4]*m_lastField[0]) ; // dPz/ds
+    if (!GetField())
+    {
+        G4Exception("G4NystromRK4::SetDistanceForConstantField","Nystrom 001",
+                    JustWarning, "Provided field is not G4CachedMagneticField. Changing field type.");
+
+        fCachedField = std::unique_ptr<G4CachedMagneticField>(
+            new G4CachedMagneticField(
+                dynamic_cast<G4MagneticField*>(GetEquationOfMotion()->GetFieldObj()), 
+                length));
+
+        GetEquationOfMotion()->SetFieldObj(fCachedField.get());
+    }
+
+    GetField()->SetConstDistance(length);
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Check that the location is (almost) unmoved from 'last' field evaluation
-////////////////////////////////////////////////////////////////////////////
-
-G4bool
-G4NystromRK4::CheckFieldPosition( const G4double Position[3],
-                                  const G4double lastPosition[3] )
+G4double G4NystromRK4::GetDistanceForConstantField() const
 {
-  G4bool ok= true;
-  G4double dx = Position[0] - lastPosition[0];
-  G4double dy = Position[1] - lastPosition[1];
-  G4double dz = Position[2] - lastPosition[2];
-  G4double distMag2 = dx*dx+dy*dy+dz*dz;
-  if( distMag2 > m_magdistance2)
-  {
-     const G4double allowedDist = std::sqrt( m_magdistance2 );
-     G4double dist= std::sqrt( distMag2 );
-     std::ostringstream message;
-     message << "Moved from correct field position by " << dist
-             << "( larger than allowed = " << allowedDist << " ) ";
-     G4Exception("G4NystromRK4::CheckFieldPosition()",
-                 "GeomField1001", JustWarning, message);
-     ok= false;
-  }
-  return ok;
+    if (!GetField())
+    {
+        return 0;
+    }
+
+    return GetField()->GetConstDistance(); 
 }
 
-////////////////////////////////////////////////////
-// Check magnitude of momentum against saved value
-////////////////////////////////////////////////////
-
-G4bool G4NystromRK4::CheckCachedMomemtum( const G4double PosMom[6],
-                                                G4double savedMom )
+G4CachedMagneticField* G4NystromRK4::GetField()
 {
-  constexpr G4double perThousand = 1.0e-3;
-  G4bool ok= true;
-  G4double new_mom2= (PosMom[3]*PosMom[3]
-                     +PosMom[4]*PosMom[4]
-                     +PosMom[5]*PosMom[5]);
-  G4double new_mom=  std::sqrt(new_mom2); 
-  if( std::fabs(new_mom - savedMom ) > perThousand * savedMom )
-  {
-     std::ostringstream message;
-     message << "Momentum magnitude is invalid / has changed !" << G4endl
-             << " new value    (p-mag) = "  << new_mom << G4endl
-             << " cached value (p-mag) = "  << savedMom;
-     if( savedMom > 0.0 )
-     {
-       message << "; ratio (new/old) = " << new_mom / savedMom;
-     }
-     G4Exception("G4NystromRK4::CheckCachedMomemtum()",
-                 "GeomField1001", JustWarning, message);
-     ok= false;
-  }
-  return ok;
+    return dynamic_cast<G4CachedMagneticField*>(GetEquationOfMotion()->GetFieldObj());
+}
+
+const G4CachedMagneticField* G4NystromRK4::GetField() const
+{
+    return const_cast<G4NystromRK4*>(this)->GetField();
 }

@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 109040 2018-03-22 11:23:25Z gcosmo $
 
 name := G4RayTracer
 

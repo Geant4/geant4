@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmParametersMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -61,6 +60,7 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWith3VectorAndUnit;
 class G4EmParameters;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,6 +109,9 @@ private:
   G4UIcmdWithABool*          dnamscCmd;
   G4UIcmdWithABool*          sharkCmd;
   G4UIcmdWithABool*          onIsolatedCmd;
+  G4UIcmdWithABool*          sampleTCmd;
+  G4UIcmdWithABool*          icru90Cmd;
+  G4UIcmdWithABool*          dirSplitCmd;
 
   G4UIcmdWithADouble*        minSubSecCmd;
   G4UIcmdWithADoubleAndUnit* minEnCmd;
@@ -128,6 +131,7 @@ private:
   G4UIcmdWithADouble*        fgCmd;
   G4UIcmdWithADouble*        skinCmd;
   G4UIcmdWithADouble*        screCmd;
+  G4UIcmdWithADoubleAndUnit* dirSplitRadiusCmd;
 
   G4UIcmdWithAnInteger*      dedxCmd;
   G4UIcmdWithAnInteger*      lamCmd;
@@ -159,6 +163,7 @@ private:
   G4UIcommand*               bsCmd;
   G4UIcmdWithAString*        nffCmd;
 
+  G4UIcmdWith3VectorAndUnit* dirSplitTargetCmd;
 };
 
 #endif

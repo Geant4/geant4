@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQt.cc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // OpenGLImmediateQt graphics system factory.

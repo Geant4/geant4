@@ -27,7 +27,6 @@
 /// \brief Implementation of the B03PrimaryGeneratorAction class
 //
 //
-// $Id: B03PrimaryGeneratorAction.cc 70222 2013-05-27 10:07:27Z ihrivnac $
 //
 
 #include "globals.hh"

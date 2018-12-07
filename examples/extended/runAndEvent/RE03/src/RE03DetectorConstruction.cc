@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE03/src/RE03DetectorConstruction.cc
 /// \brief Implementation of the RE03DetectorConstruction class
 //
-// $Id: RE03DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 
 #include "RE03DetectorConstruction.hh"

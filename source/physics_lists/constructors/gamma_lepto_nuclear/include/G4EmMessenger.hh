@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmMessenger.hh 66704 2013-01-10 18:20:17Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,7 +34,7 @@
 // 09.11.2005 V.Ivanchenko edit to provide a standard
 // 19.06.2006 V.Ivanchenko add mu-nuclear process
 // 31.01.2018 V.Grichine, activation of neutrino-electron process
-//
+// 03.10.2018 V Grichine activation of total nneutrino-electron process 
 //----------------------------------------------------------------------------
 //
 
@@ -73,6 +72,7 @@ private:
   G4UIcmdWithABool*   thePMM;
   G4UIcmdWithABool*   thePH;
   G4UIcmdWithABool*   theNu;
+  G4UIcmdWithABool*   theNuETX;
 
   G4UIcmdWithADouble* theGMM1;
   G4UIcmdWithADouble* thePMM1;

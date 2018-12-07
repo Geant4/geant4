@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04SteppingActionMessenger.hh 73014 2013-08-15 08:54:47Z gcosmo $
 //
 /// \file field/field04/include/F04SteppingActionMessenger.hh
 /// \brief Definition of the F04SteppingActionMessenger class

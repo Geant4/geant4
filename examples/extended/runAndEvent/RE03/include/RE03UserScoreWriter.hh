@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE03/include/RE03UserScoreWriter.hh
 /// \brief Definition of the RE03UserScoreWriter class
 //
-// $Id: $
 //
 
 #ifndef RE03UserScoreWriter_h

@@ -28,9 +28,7 @@
 #include "G4MTRunManager.hh"
 
 #include "G4GeometryWorkspace.hh"
-#include "G4GeometryWorkspacePool.hh"
 #include "G4SolidsWorkspace.hh"
-#include "G4SolidsWorkspacePool.hh"
 #include "G4ParticlesWorkspace.hh"
 #include "G4PhysicsListWorkspace.hh"
 
@@ -63,22 +61,21 @@ G4int G4WorkerThread::GetNumberThreads() const
 
 void G4WorkerThread::BuildGeometryAndPhysicsVector()
 {
-    // Initialise all split classes in the geometry
+    // Initialise all split classes
     // with copy of data from master thread
 
-    G4GeometryWorkspacePool::GetInstance()->CreateAndUseWorkspace();
-    G4SolidsWorkspacePool::GetInstance()->CreateAndUseWorkspace();
+    G4GeometryWorkspace::GetPool()->CreateAndUseWorkspace();
+    G4SolidsWorkspace::GetPool()->CreateAndUseWorkspace();
     G4ParticlesWorkspace::GetPool()->CreateAndUseWorkspace();
     G4PhysicsListWorkspace::GetPool()->CreateAndUseWorkspace();
 }
 
 void G4WorkerThread::DestroyGeometryAndPhysicsVector()
 {
-    // Initialise all split classes in the geometry
-    // with copy of data from master thread
+    // Clear all split classes
 
-    G4GeometryWorkspacePool::GetInstance()->CleanUpAndDestroyAllWorkspaces();
-    G4SolidsWorkspacePool::GetInstance()->CleanUpAndDestroyAllWorkspaces();
+    G4GeometryWorkspace::GetPool()->CleanUpAndDestroyAllWorkspaces();
+    G4SolidsWorkspace::GetPool()->CleanUpAndDestroyAllWorkspaces();
     G4ParticlesWorkspace::GetPool()->CleanUpAndDestroyAllWorkspaces();    
     G4PhysicsListWorkspace::GetPool()->CleanUpAndDestroyAllWorkspaces();
 }
@@ -158,10 +155,10 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
     // Step-1: Clean the workspace
     //===========================
     G4GeometryWorkspace* geomWorkspace =
-      G4GeometryWorkspacePool::GetInstance()->GetWorkspace();
+      G4GeometryWorkspace::GetPool()->GetWorkspace();
     geomWorkspace->DestroyWorkspace();
     G4SolidsWorkspace* solidWorkspace =
-      G4SolidsWorkspacePool::GetInstance()->GetWorkspace();
+      G4SolidsWorkspace::GetPool()->GetWorkspace();
     solidWorkspace->DestroyWorkspace();
     
     //===========================

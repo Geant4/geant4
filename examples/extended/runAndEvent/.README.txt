@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "runAndEvent/.README.txt"
 ///\brief Examples runAndEvent README page

@@ -26,7 +26,6 @@
 /// \file GB06/src/GB06ParallelWorldForSlices.cc
 /// \brief Implementation of the GB06ParallelWorldForSlices class
 //
-// $Id: $
 //
 #include "GB06ParallelWorldForSlices.hh"
 

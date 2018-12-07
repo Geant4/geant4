@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.cc 108010 2017-12-19 08:59:48Z gcosmo $
-// GEANT4 tag $Name:  $
 //
 
 // ------------------------------------------------------------
@@ -47,11 +45,11 @@
 G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron() 
 {
   PartonIndex = -1;
-  G4LorentzVector tmp=G4LorentzVector(0.,0.,0.,0.);            // Uzhi 16 Oct. 2017
+  G4LorentzVector tmp=G4LorentzVector(0.,0.,0.,0.);
   Parton[0] = new G4Parton( 1 );
   Parton[1] = new G4Parton(-1 );
 
-  Parton[0]->Set4Momentum(tmp); Parton[1]->Set4Momentum(tmp);  // Uzhi 16 Oct. 2017
+  Parton[0]->Set4Momentum(tmp); Parton[1]->Set4Momentum(tmp);
 }
 
 
@@ -87,8 +85,7 @@ G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron( const G4VKineticNucl
 
 //============================================================================
 
-G4DiffractiveSplitableHadron::~G4DiffractiveSplitableHadron() {
-}
+G4DiffractiveSplitableHadron::~G4DiffractiveSplitableHadron() {}
 
 
 //============================================================================
@@ -108,8 +105,8 @@ void G4DiffractiveSplitableHadron::SplitUp() {
   Parton[0] = new G4Parton( stringStart );
   Parton[1] = new G4Parton( stringEnd );
 
-  G4LorentzVector tmp=G4LorentzVector(0.,0.,0.,0.);            // Uzhi 16 Oct. 2017
-  Parton[0]->Set4Momentum(tmp); Parton[1]->Set4Momentum(tmp);  // Uzhi 16 Oct. 2017
+  G4LorentzVector tmp=G4LorentzVector(0.,0.,0.,0.);
+  Parton[0]->Set4Momentum(tmp); Parton[1]->Set4Momentum(tmp);
 
   /*                                        // Inversion of a string
   if ( G4UniformRand() < 1.75 ) {  //0.75
@@ -152,9 +149,8 @@ G4Parton* G4DiffractiveSplitableHadron::GetNextAntiParton() {
 void G4DiffractiveSplitableHadron::SetFirstParton( G4int PDGcode ) {
   delete Parton[0];
   Parton[0] = new G4Parton( PDGcode );
-  G4LorentzVector tmp=G4LorentzVector(0.,0.,0.,0.);            // Uzhi 16 Oct. 2017
-  Parton[0]->Set4Momentum(tmp);                                // Uzhi 16 Oct. 2017
-
+  G4LorentzVector tmp=G4LorentzVector(0.,0.,0.,0.);
+  Parton[0]->Set4Momentum(tmp);
 }
 
 
@@ -163,8 +159,8 @@ void G4DiffractiveSplitableHadron::SetFirstParton( G4int PDGcode ) {
 void G4DiffractiveSplitableHadron::SetSecondParton( G4int PDGcode ) {
   delete Parton[1];
   Parton[1] = new G4Parton( PDGcode );
-  G4LorentzVector tmp=G4LorentzVector(0.,0.,0.,0.);            // Uzhi 16 Oct. 2017
-  Parton[1]->Set4Momentum(tmp);                                // Uzhi 16 Oct. 2017
+  G4LorentzVector tmp=G4LorentzVector(0.,0.,0.,0.);
+  Parton[1]->Set4Momentum(tmp);
 }
 
 
@@ -176,7 +172,7 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
 
   if ( absPDGcode < 1000 ) {  //--------------------  Meson -------------
     G4int heavy(0), light(0);
-    if(!((absPDGcode == 111)||(absPDGcode == 221)||(absPDGcode == 331)))
+    if (!((absPDGcode == 111)||(absPDGcode == 221)||(absPDGcode == 331)))
     {                          // Ordinary mesons =======================
      heavy = absPDGcode/100;
      light = (absPDGcode % 100)/10;
@@ -188,8 +184,8 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
     } 
     else 
     {                         // Pi0, Eta, Eta' =======================
-     if( G4UniformRand() < 0.5 ) {heavy = 1; light = -1;}
-     else                        {heavy = 2; light = -2;}
+     if ( G4UniformRand() < 0.5 ) {heavy = 1; light = -1;}
+     else                         {heavy = 2; light = -2;}
     }
     if ( G4UniformRand() < 0.5 ) {
       *aEnd = heavy;
@@ -204,42 +200,41 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
     G4int j10   = (PDGcode % 100)/10;
 
     G4double SuppresUUDDSS=1.0/2.0;
-    if((j1000 == j100) && (j1000 == j10)) SuppresUUDDSS=1.; 
+    if ((j1000 == j100) && (j1000 == j10)) SuppresUUDDSS=1.; 
 
-//
     const G4int maxNumberOfLoops = 1000;
     G4int loopCounter = 0;
     do
     {
       G4double random = G4UniformRand();
 
-      if(random < 0.33333)
+      if (random < 0.33333)
       {
-        if(( j100 == j10 ) && ( G4UniformRand() > SuppresUUDDSS )) continue;
+        if (( j100 == j10 ) && ( G4UniformRand() > SuppresUUDDSS )) continue;
         *aEnd = j1000;
-        if( j100 == j10 )             {*bEnd = Diquark( j100, j10, 1 );}
+        if ( j100 == j10 )             {*bEnd = Diquark( j100, j10, 1 );}
         else
-          if( G4UniformRand() > 0.25) {*bEnd = Diquark( j100, j10, 0 );}
+          if ( G4UniformRand() > 0.25) {*bEnd = Diquark( j100, j10, 0 );}
           else                        {*bEnd = Diquark( j100, j10, 1 );}
         break;
        }
-       else if(random < 0.66667)
+       else if (random < 0.66667)
        {
-        if(( j1000 == j10 ) && ( G4UniformRand() > SuppresUUDDSS )) continue;
+        if (( j1000 == j10 ) && ( G4UniformRand() > SuppresUUDDSS )) continue;
         *aEnd = j100;
-        if( j1000 == j10 )            {*bEnd = Diquark( j1000, j10, 1 );}
+        if ( j1000 == j10 )            {*bEnd = Diquark( j1000, j10, 1 );}
         else
-          if( G4UniformRand() > 0.25) {*bEnd = Diquark( j1000, j10, 0 );}
+          if ( G4UniformRand() > 0.25) {*bEnd = Diquark( j1000, j10, 0 );}
           else                        {*bEnd = Diquark( j1000, j10, 1 );}
         break;
        }
        else
        {
-        if(( j1000 == j100 ) && ( G4UniformRand() > SuppresUUDDSS )) continue;
+        if (( j1000 == j100 ) && ( G4UniformRand() > SuppresUUDDSS )) continue;
         *aEnd = j10;
-        if( j1000 == j100 )           {*bEnd = Diquark( j1000, j100, 1 );}
+        if ( j1000 == j100 )           {*bEnd = Diquark( j1000, j100, 1 );}
         else
-          if( G4UniformRand() > 0.25) {*bEnd = Diquark( j1000, j100, 0 );}
+          if ( G4UniformRand() > 0.25) {*bEnd = Diquark( j1000, j100, 0 );}
           else                        {*bEnd = Diquark( j1000, j100, 1 );}
         break;
        }
@@ -248,35 +243,6 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
     if ( loopCounter >= maxNumberOfLoops ) {
       *aEnd = j10; *bEnd = Diquark( j1000, j100, 1 );  // Just something acceptable, without any physics consideration.
     }
-
-    /*
-    if ( std::abs( j100 ) >= std::abs( j10 ) ) {
-      if ( random < udspin1 ) {
-        *aEnd = j1000;
-        *bEnd = Diquark( j100, j10, 1 );
-      } else if ( random < udspin1 + uuspin1 ) {
-        *aEnd = j10;
-        *bEnd = Diquark( j1000, j100, 1 );
-      } else {
-        *aEnd = j100;
-        // Careful, there is no diquark q1=q2, (q1 q2)0, possible for Omega-
-        *bEnd = Diquark( j1000, j10, j1000 != j100 ? 0 : 1 );
-      }
-    } else {
-      // Lambda-like hadrons have two lightest quarks in spin 0
-      if ( random < udspin1 ) {
-        *aEnd = j1000;
-        // as above, but with charmed baryons
-        *bEnd = Diquark( j100, j10, j100 != j10 ? 0 : 10 );
-      } else if ( random < udspin1 + uuspin1 ) {
-        *aEnd = j10;
-        *bEnd = Diquark( j1000, j100, 1 );
-      } else {
-        *aEnd = j100;
-        *bEnd = Diquark( j1000, j10, 1 );
-      }
-    }
-    */
 
   }
 }

@@ -14,6 +14,37 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+08 November 2018 V. Ivanchenko (hadr-man-V10-04-12)
+07 November 2018 V. Ivanchenko (hadr-man-V10-04-10)
+06 November 2018 V. Ivanchenko (hadr-man-V10-04-09)
+---------------------------------------------------
+- G4HadronicProcess - added check if secondary particle is on the mass
+    shell, if its mass differ from the PDG mass more for 1.5 MeV then mass
+    is forced to the mass shell, energy concerved, but momentum is changed
+
+20 August 2018 V. Ivanchenko (hadr-man-V10-04-08)
+---------------------------------------------------
+- G4HadronicInteractionWrapper - removed as obsolete class
+
+10 August 2018 A. Ribon (hadr-man-V10-04-07)
+---------------------------------------------------
+- sources.cmake, G4HadronicParameters : moved away class G4HadronicParameters
+  in hadronic/util/ to avoid circular dependency between hadronic/management/
+  and hadronic/cross_sections/ (the former has to depend on the latter, but
+  not vice versa; hadronic/util/ does not depend on either).
+
+6 August 2018 A. Ribon (hadr-man-V10-04-06)
+---------------------------------------------------
+- G4HadronicParameters : created new singleton to keep global hadronic
+  parameters. For the time being, it has only the high-energy limit of
+  hadronic physics (instead of spreading this value in many different
+  files, as done up to now). The default value is set to 100 TeV.
+
+14 July 2018 M.Maire (hadr-man-V10-04-05)
+---------------------------------------------------
+- add function G4HadronicProcess::GetHadronicModel(modelName)
+  which return a G4HadronicInteraction*
+
 8 June 2018 J. Yarba (hadr-man-V10-04-04)
 ---------------------------------------------------
 - G4HadronicProcess - use correct return type when calling CheckResult

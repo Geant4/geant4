@@ -27,7 +27,6 @@
 /// \brief Definition of the DetectorMessenger class
 //
 //
-// $Id: DetectorMessenger.hh 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 // 
 

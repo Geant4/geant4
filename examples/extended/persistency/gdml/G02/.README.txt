@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "persistency/gdml/G02/.README.txt"
 ///\brief Example G02 README page

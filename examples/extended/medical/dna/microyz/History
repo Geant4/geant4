@@ -5,6 +5,19 @@
                        Package History file
                        --------------------
 
+07/11/18 - tag microyz-V10-04-03 - I. Hrivnacova 
+updated plot.C for reading ntuples merged with row-wise mode
+(now default)
+
+09/09/18 - tag microyz-V10-04-02 - S. Incerti
+updated plot.C
+
+26/07/18 - tag microyz-V10-04-01 - S. Incerti
+added ntuple merging
+
+22/07/18 - tag microyz-V10-04-00 - S. Incerti
+removed obsolete RanecuEngine
+
 24/07/2017 - tag microyz-V10-03-01 - S.Incerti
 update of README*
 

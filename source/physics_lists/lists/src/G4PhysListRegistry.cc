@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id:
 //
 // -------------------------------------------------------------------
 //
@@ -72,6 +71,7 @@ G4PhysListRegistry* G4PhysListRegistry::Instance()
   }
 
   // common EM overrides
+  theInstance->AddPhysicsExtension("EM0","G4EmStandardPhysics");
   theInstance->AddPhysicsExtension("EMV","G4EmStandardPhysics_option1");
   theInstance->AddPhysicsExtension("EMX","G4EmStandardPhysics_option2");
   theInstance->AddPhysicsExtension("EMY","G4EmStandardPhysics_option3");
@@ -80,7 +80,7 @@ G4PhysListRegistry* G4PhysListRegistry::Instance()
   theInstance->AddPhysicsExtension("PEN","G4EmPenelopePhysics");
   // the GS EM extension originally required double underscores
   // support either one or two as __GS is confusing to users
-  // same for __SS 
+  // same for __SS
   theInstance->AddPhysicsExtension("GS","G4EmStandardPhysicsGS");
   theInstance->AddPhysicsExtension("_GS","G4EmStandardPhysicsGS");
   theInstance->AddPhysicsExtension("SS","G4EmStandardPhysicsSS");
@@ -436,4 +436,3 @@ void G4PhysListRegistry::PrintAvailablePhysLists() const
          << "   to use ReplacePhysics() (\"_\") or RegisterPhysics() (\"+\")."
          << G4endl;
 }
-

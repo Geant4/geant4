@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntegrationDriver.cc 109569 2018-05-02 07:08:33Z gcosmo $
 //
 // class G4VIntegrationDriver
 //
@@ -48,7 +47,13 @@
 
 void G4VIntegrationDriver::RenewStepperAndAdjust(G4MagIntegratorStepper *)
 {
-   G4Exception("G4VIntegrationDriver::RenewStepperAndAdjust", "Geometry001", FatalException,
-               "This method exists only for the original G4MagIntegratorDriver class.  "
-               " Not defined for other classes derived from G4VIntegrationDriver");
+    G4Exception("G4VIntegrationDriver::RenewStepperAndAdjust", "Geometry001", FatalException,
+                "This method exists only for the original G4MagIntegratorDriver class.  "
+                " Not defined for other classes derived from G4VIntegrationDriver");
+}
+
+G4double G4VIntegrationDriver::GetInverseCurvatureRadius(const G4FieldTrack& /*track*/,
+                                                         G4double /*field*/[]) const
+{
+    return UNKNOWN_CURVATURE_RADIUS;
 }

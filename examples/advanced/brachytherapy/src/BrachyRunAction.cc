@@ -38,7 +38,6 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyRunAction.cc 100821 2016-11-02 15:21:34Z gcosmo $
 //
 
 #include "BrachyRunAction.hh"

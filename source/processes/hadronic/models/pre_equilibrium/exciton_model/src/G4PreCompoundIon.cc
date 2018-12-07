@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundIon.cc 100378 2016-10-19 15:03:27Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +41,8 @@
 
 #include "G4PreCompoundIon.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
 
 G4PreCompoundIon::
 G4PreCompoundIon(const G4ParticleDefinition* part,
@@ -69,8 +70,8 @@ ProbabilityDistributionFunction(G4double eKin,
   G4int N = P + H;
 
   static const G4double sixoverpi2 = 6.0/CLHEP::pi2;
-  G4double g0 = sixoverpi2*theFragA*theParameters->GetLevelDensity();
-  G4double g1 = sixoverpi2*theResA*theParameters->GetLevelDensity();
+  G4double g0 = sixoverpi2*fNucData->GetLevelDensity(theFragZ, theFragA, U);
+  G4double g1 = sixoverpi2*fNucData->GetLevelDensity(theResZ, theResA, 0.0);
 
   G4double gj = g1;
 

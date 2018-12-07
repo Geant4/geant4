@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // Manager class for Xml read ntuples.
 // It implements functions specific to Xml read ntuples.

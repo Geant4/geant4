@@ -56,7 +56,7 @@ if(DICOM_USE_DCMTK)
 endif()
 
 #----------------------------------------------------------------------------
-# Download DICOM_HEAD data 
+# Download DICOM_HEAD data
 #
 # enable option if environment variable set (backwards-compat)
 if(DICOM_USE_HEAD)
@@ -70,8 +70,8 @@ endif()
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${PROJECT_SOURCE_DIR}/dicomReader/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
+                    ${PROJECT_SOURCE_DIR}/dicomReader/include
                     ${Geant4_INCLUDE_DIR}
                     ${DCMTK_INCLUDE_DIRS})
                     
@@ -95,7 +95,7 @@ dicom_build_library(
 
 # DICOM-library-target is set in dicom_build_library
 add_executable(DICOM DICOM.cc)
-target_link_libraries(DICOM ${DICOM-library-target})
+target_link_libraries(DICOM DICOM::library)
 
 
 #----------------------------------------------------------------------------
@@ -105,90 +105,141 @@ target_link_libraries(DICOM ${DICOM-library-target})
 #
 
 # the macros
-set(DICOM_MACROS
-    run.mac vis.mac
-    )
+set(DICOM_MACROS run.mac vis.mac)
 
 # original set of DICOM data
-    set(DICOM_SCRIPTS
-     1.dcm 2.dcm 3.dcm 
-     1.g4  2.g4 3.g4 
-     1.g4dcm 2.g4dcm 3.g4dcm
-     ColourMap.dat CT2Density.dat 
-     Data.dat 
-   )
+set(DICOM_SCRIPTS
+    1.dcm 2.dcm 3.dcm
+    1.g4  2.g4 3.g4
+    1.g4dcm 2.g4dcm 3.g4dcm
+    ColourMap.dat CT2Density.dat
+    Data.dat.new Data.dat.old
+    Data.dat.new_dens Data.partial.dat
+)
  
 # new DICOM data (in share directory)
 set(DICOM_SHARE
     AltData.dat SixSlice.dat
     IM-0003-0001.dcm IM-0003-0003.dcm IM-0003-0005.dcm IM-0003-0007.dcm IM-0003-0009.dcm
     IM-0003-0002.dcm IM-0003-0004.dcm IM-0003-0006.dcm IM-0003-0008.dcm IM-0003-0010.dcm
-  )
+)
 
+# copy over scripts
 foreach(_script ${DICOM_SCRIPTS})
-  configure_file(
-    ${PROJECT_SOURCE_DIR}/${_script}
-    ${PROJECT_BINARY_DIR}/${_script}
-    COPYONLY
-    )
+    configure_file(
+        ${PROJECT_SOURCE_DIR}/${_script}
+        ${PROJECT_BINARY_DIR}/${_script}
+        COPYONLY)
 endforeach()
 
-foreach(_script ${DICOM_SHARE})
-  configure_file(
-    ${PROJECT_SOURCE_DIR}/share/${_script}
-    ${PROJECT_BINARY_DIR}/${_script}
-    COPYONLY
-    )
-endforeach()
-
-foreach(_script ${DICOM_MACROS})
-  configure_file(
-    ${PROJECT_SOURCE_DIR}/${_script}
-    ${PROJECT_BINARY_DIR}/${_script}
-    COPYONLY
-    )
-endforeach()
-
+# copy either Data.dat.old or Data.dat.new to Data.dat based on build settings
 if(DICOM_USE_DCMTK)
-    set_source_files_properties(
-        ${sources}
-        PROPERTIES COMPILE_DEFINITIONS G4_DCMTK
-    )
+    configure_file(${PROJECT_SOURCE_DIR}/Data.dat.new
+        ${PROJECT_BINARY_DIR}/Data.dat COPYONLY)
+else()
+    configure_file(${PROJECT_SOURCE_DIR}/Data.dat.old
+        ${PROJECT_BINARY_DIR}/Data.dat COPYONLY)
 endif()
+
+# copy over files in share
+foreach(_script ${DICOM_SHARE})
+    configure_file(
+        ${PROJECT_SOURCE_DIR}/share/${_script}
+        ${PROJECT_BINARY_DIR}/${_script}
+        COPYONLY)
+endforeach()
+
+# copy over macros
+foreach(_script ${DICOM_MACROS})
+    configure_file(
+        ${PROJECT_SOURCE_DIR}/${_script}
+        ${PROJECT_BINARY_DIR}/${_script}
+        COPYONLY)
+endforeach()
+
+# ensure files have correct compile definitions
+if(DICOM_USE_DCMTK)
+    set_source_files_properties( ${sources}
+        PROPERTIES COMPILE_DEFINITIONS G4_DCMTK)
+endif()
+
+#----------------------------------------------------------------------------
+# Configuration for export and installation
+#
+include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
+
+#----------------------------------------------------------------------------
+# Configuration for build tree
+#
+export(TARGETS ${${PROJECT_NAME}_INSTALL_LIBRARIES}
+    FILE ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Build.cmake)
+
+set(PROJECT_TARGETS_FILE ${PROJECT_NAME}Build.cmake)
+set(PACKAGE_INCLUDE_INSTALL_DIR ${PROJECT_SOURCE_DIR}/include)
+set(PACKAGE_INIT
+"macro(set_and_check _var _file)
+    set(\${_var} \"\${_file}\")
+    if(NOT EXISTS \"\${_file}\")
+        message(FATAL_ERROR \"File or directory \${_file} referenced by variable \${_var} does not exist !\")
+    endif()
+endmacro()
+
+macro(check_required_components _NAME)
+    foreach(comp \${\${_NAME}_FIND_COMPONENTS})
+        if(NOT \${_NAME}_\${comp}_FOUND)
+            if(\${_NAME}_FIND_REQUIRED_\${comp})
+                set(\${_NAME}_FOUND FALSE)
+            endif()
+        endif()
+    endforeach()
+endmacro()
+")
+
+configure_file(
+    ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
+    ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake @ONLY)
+
+write_basic_package_version_file(
+    ${CMAKE_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    VERSION ${Geant4_VERSION}
+    COMPATIBILITY SameMajorVersion )
+
+unset(PACKAGE_INIT)
 
 #----------------------------------------------------------------------------
 # Install the project under CMAKE_INSTALL_PREFIX
 #
 # by default install the package configuration to the Geant4 installation tree
-set(${PROJECT_NAME}_DIR lib/Geant4-${Geant4_VERSION} CACHE PATH "${PROJECT_NAME} installation")
+set(${PROJECT_NAME}_DIR ${CMAKE_INSTALL_LIBDIR}/Geant4-${Geant4_VERSION}
+    CACHE PATH "${PROJECT_NAME} installation")
 
 install(FILES ${headers} DESTINATION include/${PROJECT_NAME})
 install(TARGETS DICOM DESTINATION bin)
 install(TARGETS ${${PROJECT_NAME}_INSTALL_LIBRARIES}
-    DESTINATION lib EXPORT ${PROJECT_NAME}Targets)
+    DESTINATION ${CMAKE_INSTALL_LIBDIR} EXPORT ${PROJECT_NAME}Targets)
 install(EXPORT ${PROJECT_NAME}Targets DESTINATION ${${PROJECT_NAME}_DIR})
 
+set(PROJECT_TARGETS_FILE ${PROJECT_NAME}Targets.cmake)
 set(INCLUDE_INSTALL_DIR include/${PROJECT_NAME})
-set(LIB_INSTALL_DIR lib)
+set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
 
-include(CMakePackageConfigHelpers)
 configure_package_config_file(
     ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+    ${CMAKE_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}Config.cmake
     INSTALL_DESTINATION ${${PROJECT_NAME}_DIR}
-    PATH_VARS INCLUDE_INSTALL_DIR)
+    PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
 
 write_basic_package_version_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+    ${CMAKE_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}ConfigVersion.cmake
     VERSION ${Geant4_VERSION}
     COMPATIBILITY SameMajorVersion )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+install(FILES ${CMAKE_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}Config.cmake
+    ${CMAKE_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}ConfigVersion.cmake
     DESTINATION ${${PROJECT_NAME}_DIR} )
 
-set(MSG "\nDICOM settings:")
-set(MSG "${MSG}\n    - DICOM_USE_DCMTK: ${DICOM_USE_DCMTK}")
-set(MSG "${MSG}\n    - DICOM_USE_HEAD: ${DICOM_USE_HEAD}")
-set(MSG "${MSG}\n")
+set(MSG "DICOM settings:")
+set(MSG "${MSG}\n   - DICOM_USE_DCMTK: ${DICOM_USE_DCMTK}")
+set(MSG "${MSG}\n   - DICOM_USE_HEAD: ${DICOM_USE_HEAD}")
 message(STATUS "${MSG}")

@@ -26,7 +26,6 @@
 /// \file biasing/ReverseMC01/include/RMC01AdjointEventAction.hh
 /// \brief Definition of the RMC01AdjointEventAction class
 //
-// $Id: RMC01AdjointEventAction.hh 71233 2013-06-12 13:16:05Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:            RMC01AdjointEventAction

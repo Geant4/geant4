@@ -41,17 +41,6 @@ G4VFSALIntegrationStepper::G4VFSALIntegrationStepper(G4EquationOfMotion* Equatio
 {
 }
 
-G4VFSALIntegrationStepper::~G4VFSALIntegrationStepper()
-{
-}
-
-void G4VFSALIntegrationStepper::ComputeRightHandSide( const G4double y[], G4double dydx[] ) 
-{
-  this->RightHandSide( y, dydx );
-//	fEquation_Rhs->RightHandSide(y, dydx);
-//        increasefNORHSCalls();
-}
-
 void G4VFSALIntegrationStepper::increasefNORHSCalls(){
     //    std::cout<<"Yeah, I was called!";
     fNoRHSCalls++;

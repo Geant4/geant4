@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleIntegration.cc 69546 2013-05-08 09:50:34Z gcosmo $
 //
 // Implementation file for simple integration methods
 //

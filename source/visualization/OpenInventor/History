@@ -1,4 +1,3 @@
-$Id: History 110811 2018-06-15 07:09:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +18,31 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+22 August 2018  Gabriele Cosmo (openinventor-V10-04-08)
+- sources.cmake: make OIQT driver installation optional when QT is
+  selected for CMake configuration (SoQt library is not mandatory
+  for Inventor). Requires introduction of GEANT4_USE_INVENTOR_QT flag
+  in main CMake module of Geant4 for optional build associated to Qt.
+  Corrected paths for Moc sources and added INVENTOR_SOQT_LIBRARY
+  to link list.
+
+20 August 2018  John Allison (openinventor-V10-04-07)
+- sources.cmake: Fix spelling mistake.
+
+20 August 2018  John Allison (openinventor-V10-04-06)
+- sources.cmake: Protected Qt files with if(GEANT4_USE_QT).
+
+19 August 2018  Frederick Jones
+- Added missing G4VIS_BUILD_OIQT_DRIVER to G4OpenInventorQt.hh
+  and G4OpenInventorQtExaminerViewer.hh.
+
+17 August 2018  John Allison
+- G4OpenInventorQtViewer constructor: Initialise fViewer to keep Coverity happy.
+
+11 August 2018  John Allison (openinventor-V10-04-05)
+- Consolidate Fred's updates.
+- Update sources.cmake for CDash.
 
 15 June 2018  Fred Jones (openinventor-V10-04-03)
 - Fixed compilation warnings for casts on gcc-8.1.

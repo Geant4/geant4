@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ElectronActionInitialization.cc 70916 2013-06-07 12:00:42Z jjacquem $
 //
 /// \file ElectronActionInitialization.cc
 /// \brief Implementation of the ElectronActionInitialization class

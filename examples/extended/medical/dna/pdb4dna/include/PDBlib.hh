@@ -37,7 +37,6 @@
 // november 2013
 // --------------------------------------------------------------
 //
-// $Id$
 //
 /// \file PDBlib.hh
 /// \brief Definition of the PDBlib class

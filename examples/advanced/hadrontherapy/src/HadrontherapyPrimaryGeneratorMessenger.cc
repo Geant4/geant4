@@ -37,15 +37,54 @@
 #include "G4UIcmdWithABool.hh"
 
 HadrontherapyPrimaryGeneratorMessenger::HadrontherapyPrimaryGeneratorMessenger(
-                                             HadrontherapyPrimaryGeneratorAction* HadrontherapyGun)
+                                                                               HadrontherapyPrimaryGeneratorAction* HadrontherapyGun)
 :HadrontherapyAction(HadrontherapyGun)
 {
-   
+    
+    changeTheSource = new G4UIdirectory("/primaryParticleData/");
+    changeTheSource -> SetGuidance("Command to change the source");
+    
+    NewSource = new G4UIcmdWithABool("/primaryParticleData/NewSource",this);
+    NewSource -> SetParameterName("NewSource ", true);
+    NewSource -> SetDefaultValue("false");
+    NewSource -> SetGuidance("Set if you want read a .txt file"
+                             "\n[usage]: /primaryParticleData/NewSource [true/false]");
+    NewSource -> AvailableForStates(G4State_Idle, G4State_PreInit);
+    
+    
+    calculatedPhaseSpaceFileIN=new G4UIcmdWithAString("/primaryParticleData/calculatedPhaseSpaceFileIN",this);
+    calculatedPhaseSpaceFileIN->SetDefaultValue("");
+    calculatedPhaseSpaceFileIN->SetGuidance("full path and file name of the phase space file to be used as particle generator");
+    
+    
+    
 }
 
 HadrontherapyPrimaryGeneratorMessenger::~HadrontherapyPrimaryGeneratorMessenger()
 {
+    
+    delete NewSource;
+    delete changeTheSource;
+    delete calculatedPhaseSpaceFileIN;
+    
+    
+}
 
+
+void HadrontherapyPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String NewValue)
+
+{
+    if (command == calculatedPhaseSpaceFileIN)
+    {
+        HadrontherapyAction->setCalculatedPhaseSpaceFileIN(NewValue);
+    }
+    
+    if (command == NewSource)
+    {
+        HadrontherapyAction->setNewSource(NewSource->GetNewBoolValue(NewValue));
+        
+    }
+    
 }
 
 

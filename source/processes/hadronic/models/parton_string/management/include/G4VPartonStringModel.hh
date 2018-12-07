@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.hh 100828 2016-11-02 15:25:59Z gcosmo $
 //
 #ifndef G4VPartonStringModel_h
 #define G4VPartonStringModel_h 1

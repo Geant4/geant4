@@ -56,7 +56,7 @@ namespace G4INCL {
 
     }
 
-    NuclearDensity const *createDensity(const G4int A, const G4int Z) {
+    NuclearDensity const *createDensity(const G4int A, const G4int Z, const G4int S) {
       if(!nuclearDensityCache)
         nuclearDensityCache = new std::map<G4int,NuclearDensity const *>;
 
@@ -65,9 +65,10 @@ namespace G4INCL {
       if(mapEntry == nuclearDensityCache->end()) {
         InterpolationTable *rpCorrelationTableProton = createRPCorrelationTable(Proton, A, Z);
         InterpolationTable *rpCorrelationTableNeutron = createRPCorrelationTable(Neutron, A, Z);
-        if(!rpCorrelationTableProton || !rpCorrelationTableNeutron)
+        InterpolationTable *rpCorrelationTableLambda = createRPCorrelationTable(Lambda, A, Z);
+        if(!rpCorrelationTableProton || !rpCorrelationTableNeutron || !rpCorrelationTableLambda)
           return NULL;
-        NuclearDensity const *density = new NuclearDensity(A, Z, rpCorrelationTableProton, rpCorrelationTableNeutron);
+        NuclearDensity const *density = new NuclearDensity(A, Z, S, rpCorrelationTableProton, rpCorrelationTableNeutron, rpCorrelationTableLambda);
         (*nuclearDensityCache)[nuclideID] = density;
         return density;
       } else {
@@ -76,7 +77,7 @@ namespace G4INCL {
     }
 
     InterpolationTable *createRPCorrelationTable(const ParticleType t, const G4int A, const G4int Z) {
-// assert(t==Proton || t==Neutron);
+// assert(t==Proton || t==Neutron || t==Lambda);
 
       if(!rpCorrelationTableCache)
         rpCorrelationTableCache = new std::map<G4int,InterpolationTable*>;
@@ -123,7 +124,7 @@ namespace G4INCL {
     }
 
     InterpolationTable *createRCDFTable(const ParticleType t, const G4int A, const G4int Z) {
-// assert(t==Proton || t==Neutron);
+// assert(t==Proton || t==Neutron || t==Lambda);
 
       if(!rCDFTableCache)
         rCDFTableCache = new std::map<G4int,InterpolationTable*>;
@@ -168,7 +169,7 @@ namespace G4INCL {
     }
 
     InterpolationTable *createPCDFTable(const ParticleType t, const G4int A, const G4int Z) {
-// assert(t==Proton || t==Neutron);
+// assert(t==Proton || t==Neutron || t==Lambda);
 
       if(!pCDFTableCache)
         pCDFTableCache = new std::map<G4int,InterpolationTable*>;
@@ -204,7 +205,7 @@ namespace G4INCL {
     }
 
     void addRPCorrelationToCache(const G4int A, const G4int Z, const ParticleType t, InterpolationTable * const table) {
-// assert(t==Proton || t==Neutron);
+// assert(t==Proton || t==Neutron || t==Lambda);
 
       if(!rpCorrelationTableCache)
         rpCorrelationTableCache = new std::map<G4int,InterpolationTable*>;

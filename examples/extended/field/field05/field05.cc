@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: field05.cc 110102 2018-05-15 11:32:36Z gcosmo $
 //
 /// \file field/field05/field05.cc
 /// \brief Main program of the field/field05 example
@@ -96,10 +95,6 @@ int main(int argc,char** argv)
   // User action initialization
   runManager->SetUserInitialization(new F05ActionInitialization());
 
-  // Initialize G4 kernel
-  //
-  runManager->Initialize();
-
   // Initialize visualization
   //
   G4VisManager* visManager = new G4VisExecutive;
@@ -119,7 +114,7 @@ int main(int argc,char** argv)
   }
   else
   {  // interactive mode : define UI session
-     UImanager->ApplyCommand("/control/execute vis.mac");
+     UImanager->ApplyCommand("/control/execute init_vis.mac");
      if (ui->IsGUI())
         UImanager->ApplyCommand("/control/execute gui.mac");
      ui->SessionStart();

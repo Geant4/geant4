@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh 106717 2017-10-20 09:41:27Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -95,8 +94,7 @@ public:
 protected:
 
   // Print out of the class parameters
-  virtual void StreamProcessInfo(std::ostream& outFile,
-                             G4String endOfLine=G4String("\n")) const override;
+  virtual void StreamProcessInfo(std::ostream& outFile) const override;
 
   virtual void 
   InitialiseEnergyLossProcess(const G4ParticleDefinition*,

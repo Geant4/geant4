@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04SteppingAction.hh
 /// \brief Definition of the ExN04SteppingAction class
 //
-// $Id: ExN04SteppingAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef ExN04SteppingAction_H

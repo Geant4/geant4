@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,8 +12,6 @@
                              WWW : http://geant4.org/
 **************************************************************
 
-### G4PhysListFactory WARNING:  environment variable PHYSLIST is not defined
-    Default Physics Lists FTFP_BERT is instantiated
 G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 <<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
 
@@ -67,12 +65,23 @@ End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
 "/vis/list" to see available colours.
-/monopole/setup 
+/control/cout/ignoreThreadsExcept 0
+/run/verbose 0
+/tracking/verbose 0
+/testex/det/setMat G4_Si
+/testex/det/setSizeX 10 cm
+/testex/det/setSizeYZ 20 cm
+/testex/det/setStepSize 0.2 mm
+/testex/run/binSize 0.2 mm
+/process/em/verbose 1
+/run/physicsModified
+/run/initialize
 
 ---------------------------------------------------------
----> The Absorber is 10 cm  of G4_Al
+---> The Absorber is 10 cm  of G4_Si
 
 ---------------------------------------------------------
+G4MonopoleEquation::G4MonopoleEquation
 
  FTFP_BERT : new threshold between BERT and FTFP is over the interval 
  for pions :   3 to 12 GeV
@@ -81,22 +90,6 @@ Some /vis commands (optionally) take a string to specify colour.
  for neutron : 3 to 12 GeV
 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
-/control/execute /mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/10-04-ref-06_branch/10-04-ref-06_branch/examples/extended/exoticphysics/monopole/monopole.in
-/control/verbose 1
-/control/cout/ignoreThreadsExcept 0
-/run/verbose 0
-/testex/run/verbose 1
-/tracking/verbose 0
-/testex/det/setMat G4_Si
-/testex/det/setSizeX 10 cm
-/run/geometryModified
-/testex/det/setSizeYZ 20 cm
-/run/geometryModified
-/testex/det/setStepSize 0.2 mm
-/testex/run/binSize 0.2 mm
-/process/em/verbose 1
-/run/physicsModified
-/run/initialize
 /particle/select monopole
 /particle/process/dump
 G4ProcessManager:  particle[monopole]
@@ -119,6 +112,8 @@ G4ProcessManager:  particle[monopole]
   index                 -1:      -1:      -1:      -1:       0:       2:
   parameter             -1:      -1:      -1:      -1:    1000:    1000:
 /run/printProgress 10
+/testex/fld/setField 0.2 tesla
+G4MonopoleEquation::G4MonopoleEquation
 /gun/particle monopole
 /gun/energy 100 GeV
 /run/beamOn 100
@@ -165,8 +160,8 @@ eBrem:   for  e-    SubType= 3
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGenUrban
 
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
@@ -192,8 +187,8 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGenUrban
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -246,7 +241,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
-      Stopping Power data for 17 ion/material pairs 
+      Stopping Power data for 17 ion/material pairs
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
@@ -499,18 +494,15 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: neutronInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
-     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
 
   Process: nCapture
         Model:               nRadCapture: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
 
   Process: nKiller
 
@@ -520,7 +512,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
         Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
-     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -528,13 +520,13 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
         Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
-     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -547,7 +539,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: alphaInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
         Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
-     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -556,12 +548,12 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: anti_He3Inelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: hFritiofCaptureAtRest
@@ -572,12 +564,12 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: anti_alphaInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: hFritiofCaptureAtRest
@@ -588,12 +580,12 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: anti_deuteronInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: hFritiofCaptureAtRest
@@ -607,7 +599,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -616,12 +608,12 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: anti_protonInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: hFritiofCaptureAtRest
@@ -632,12 +624,12 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
         Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: anti_tritonInelastic
         Model:                      FTFP: 0 eV /n ---> 100 TeV/n
-     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: hFritiofCaptureAtRest
@@ -652,7 +644,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: dInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
         Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
-     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -661,7 +653,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: positronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for e-
@@ -669,7 +660,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for gamma
@@ -678,20 +668,19 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for kaon+
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 12 GeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
      Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -700,13 +689,13 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 12 GeV
-     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 100 TeV
      Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -752,10 +741,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: pi+Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 12 GeV
-     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
-                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+     Cr_sctns: Barashenkov-Glauber-Gribov: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi-
@@ -768,10 +754,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: pi-Inelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 12 GeV
-     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
-                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
-                           below 91 GeV, Glauber-Gribov above 
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+     Cr_sctns: Barashenkov-Glauber-Gribov: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
 
@@ -780,8 +763,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
-     Cr_sctns:      ChipsProtonElasticXS: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
 
   Process: protonInelastic
         Model:                      FTFP: 3 GeV ---> 100 TeV
@@ -798,30 +780,30 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: tInelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
         Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
-     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
-=======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
-=======================================================================
-Type of pre-compound inverse x-section              3
-Pre-compound model active                           1
-Pre-compound low energy (MeV)                       0.1
-Type of de-excitation inverse x-section             3
-Type of de-excitation factory                       Evaporation
-Number of de-excitation channels                    8
-Min excitation energy (keV)                         0.01
-Min energy per nucleon for multifragmentation (MeV) 1e+05
-Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1e+12
-Internal e- conversion flag                         1
-Store e- internal conversion data                   0
-Electron internal conversion ID                     2
-Correlated gamma emission flag                      0
-Max 2J for sampling of angular correlations         10
-=======================================================================
 ### Run 0 starts.
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_Galactic
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : G4_Si
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  5.87535 keV    e-  424.726 keV    e+  410.692 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 0 start.
 ... open Root analysis file : monopole.root - done
 --> Event 0 starts.
@@ -836,67 +818,67 @@ Max 2J for sampling of angular correlations         10
 --> Event 90 starts.
 
  The run consists of 100 monopole of 100 GeV through 10 cm  of G4_Si (density: 2.33 g/cm3 )
- Projected Range= 7.7466 cm    rms= 106.12 um 
+ Projected Range= 7.7514 cm    rms= 99.391 um 
 
 ### Stopping Powers
- E(MeV)= 0.001  dedxp(MeV/mm)= 24.465 dedxmp(MeV/mm)= 1.2659
- E(MeV)= 0.0012589  dedxp(MeV/mm)= 27.276 dedxmp(MeV/mm)= 1.4204
- E(MeV)= 0.0015849  dedxp(MeV/mm)= 30.767 dedxmp(MeV/mm)= 1.5937
- E(MeV)= 0.0019953  dedxp(MeV/mm)= 34.558 dedxmp(MeV/mm)= 1.7881
- E(MeV)= 0.0025119  dedxp(MeV/mm)= 38.769 dedxmp(MeV/mm)= 2.0063
- E(MeV)= 0.0031623  dedxp(MeV/mm)= 43.491 dedxmp(MeV/mm)= 2.2511
- E(MeV)= 0.0039811  dedxp(MeV/mm)= 48.814 dedxmp(MeV/mm)= 2.5258
- E(MeV)= 0.0050119  dedxp(MeV/mm)= 54.773 dedxmp(MeV/mm)= 2.834
- E(MeV)= 0.0063096  dedxp(MeV/mm)= 61.455 dedxmp(MeV/mm)= 3.1798
- E(MeV)= 0.0079433  dedxp(MeV/mm)= 68.933 dedxmp(MeV/mm)= 3.5678
- E(MeV)= 0.01  dedxp(MeV/mm)= 77.356 dedxmp(MeV/mm)= 4.0031
- E(MeV)= 0.012589  dedxp(MeV/mm)= 85.192 dedxmp(MeV/mm)= 4.4916
- E(MeV)= 0.015849  dedxp(MeV/mm)= 93.469 dedxmp(MeV/mm)= 5.0397
- E(MeV)= 0.019953  dedxp(MeV/mm)= 101.92 dedxmp(MeV/mm)= 5.6546
- E(MeV)= 0.025119  dedxp(MeV/mm)= 110.26 dedxmp(MeV/mm)= 6.3445
- E(MeV)= 0.031623  dedxp(MeV/mm)= 117.88 dedxmp(MeV/mm)= 7.1187
- E(MeV)= 0.039811  dedxp(MeV/mm)= 123.92 dedxmp(MeV/mm)= 7.9873
- E(MeV)= 0.050119  dedxp(MeV/mm)= 127.47 dedxmp(MeV/mm)= 8.9619
- E(MeV)= 0.063096  dedxp(MeV/mm)= 127.65 dedxmp(MeV/mm)= 10.055
- E(MeV)= 0.079433  dedxp(MeV/mm)= 124.16 dedxmp(MeV/mm)= 11.282
- E(MeV)= 0.1  dedxp(MeV/mm)= 117.53 dedxmp(MeV/mm)= 12.659
- E(MeV)= 0.12589  dedxp(MeV/mm)= 108.93 dedxmp(MeV/mm)= 14.204
- E(MeV)= 0.15849  dedxp(MeV/mm)= 99.664 dedxmp(MeV/mm)= 15.937
- E(MeV)= 0.19953  dedxp(MeV/mm)= 90.588 dedxmp(MeV/mm)= 17.881
- E(MeV)= 0.25119  dedxp(MeV/mm)= 82.081 dedxmp(MeV/mm)= 20.063
- E(MeV)= 0.31623  dedxp(MeV/mm)= 74.169 dedxmp(MeV/mm)= 22.511
- E(MeV)= 0.39811  dedxp(MeV/mm)= 66.763 dedxmp(MeV/mm)= 25.258
- E(MeV)= 0.50119  dedxp(MeV/mm)= 59.742 dedxmp(MeV/mm)= 28.34
- E(MeV)= 0.63096  dedxp(MeV/mm)= 53.434 dedxmp(MeV/mm)= 31.798
- E(MeV)= 0.79433  dedxp(MeV/mm)= 47.062 dedxmp(MeV/mm)= 35.678
- E(MeV)= 1  dedxp(MeV/mm)= 40.845 dedxmp(MeV/mm)= 40.031
- E(MeV)= 1.2589  dedxp(MeV/mm)= 35.325 dedxmp(MeV/mm)= 44.916
- E(MeV)= 1.5849  dedxp(MeV/mm)= 30.422 dedxmp(MeV/mm)= 50.396
- E(MeV)= 1.9953  dedxp(MeV/mm)= 26.068 dedxmp(MeV/mm)= 56.545
- E(MeV)= 2.5119  dedxp(MeV/mm)= 22.267 dedxmp(MeV/mm)= 63.444
- E(MeV)= 3.1623  dedxp(MeV/mm)= 18.934 dedxmp(MeV/mm)= 71.185
- E(MeV)= 3.9811  dedxp(MeV/mm)= 16.043 dedxmp(MeV/mm)= 79.871
- E(MeV)= 5.0119  dedxp(MeV/mm)= 13.589 dedxmp(MeV/mm)= 89.528
- E(MeV)= 6.3096  dedxp(MeV/mm)= 11.42 dedxmp(MeV/mm)= 91.388
- E(MeV)= 7.9433  dedxp(MeV/mm)= 9.608 dedxmp(MeV/mm)= 94.03
- E(MeV)= 10  dedxp(MeV/mm)= 8.0524 dedxmp(MeV/mm)= 97.584
- E(MeV)= 12.589  dedxp(MeV/mm)= 6.6936 dedxmp(MeV/mm)= 102.2
- E(MeV)= 15.849  dedxp(MeV/mm)= 5.5755 dedxmp(MeV/mm)= 108.06
- E(MeV)= 19.953  dedxp(MeV/mm)= 4.6616 dedxmp(MeV/mm)= 115.36
- E(MeV)= 25.119  dedxp(MeV/mm)= 3.9107 dedxmp(MeV/mm)= 124.33
- E(MeV)= 31.623  dedxp(MeV/mm)= 3.2703 dedxmp(MeV/mm)= 135.25
- E(MeV)= 39.811  dedxp(MeV/mm)= 2.7356 dedxmp(MeV/mm)= 148.41
- E(MeV)= 50.119  dedxp(MeV/mm)= 2.2882 dedxmp(MeV/mm)= 164.17
- E(MeV)= 63.096  dedxp(MeV/mm)= 1.9184 dedxmp(MeV/mm)= 182.94
- E(MeV)= 79.433  dedxp(MeV/mm)= 1.6121 dedxmp(MeV/mm)= 205.18
- E(MeV)= 100  dedxp(MeV/mm)= 1.3599 dedxmp(MeV/mm)= 231.43
- E(MeV)= 125.89  dedxp(MeV/mm)= 1.153 dedxmp(MeV/mm)= 262.3
- E(MeV)= 158.49  dedxp(MeV/mm)= 0.98406 dedxmp(MeV/mm)= 298.49
- E(MeV)= 199.53  dedxp(MeV/mm)= 0.84666 dedxmp(MeV/mm)= 340.8
- E(MeV)= 251.19  dedxp(MeV/mm)= 0.73555 dedxmp(MeV/mm)= 390.13
- E(MeV)= 316.23  dedxp(MeV/mm)= 0.64633 dedxmp(MeV/mm)= 447.53
- E(MeV)= 398.11  dedxp(MeV/mm)= 0.57535 dedxmp(MeV/mm)= 514.18
- E(MeV)= 501.19  dedxp(MeV/mm)= 0.51956 dedxmp(MeV/mm)= 591.42
+ E(MeV)= 0.001  dedxp(MeV/mm)= 24.465 dedxmp(MeV/mm)= -8.0876e-16
+ E(MeV)= 0.0012589  dedxp(MeV/mm)= 27.276 dedxmp(MeV/mm)= -9.0745e-16
+ E(MeV)= 0.0015849  dedxp(MeV/mm)= 30.767 dedxmp(MeV/mm)= -1.0182e-15
+ E(MeV)= 0.0019953  dedxp(MeV/mm)= 34.558 dedxmp(MeV/mm)= -1.1424e-15
+ E(MeV)= 0.0025119  dedxp(MeV/mm)= 38.769 dedxmp(MeV/mm)= -1.2818e-15
+ E(MeV)= 0.0031623  dedxp(MeV/mm)= 43.491 dedxmp(MeV/mm)= -1.4382e-15
+ E(MeV)= 0.0039811  dedxp(MeV/mm)= 48.814 dedxmp(MeV/mm)= -1.6137e-15
+ E(MeV)= 0.0050119  dedxp(MeV/mm)= 54.773 dedxmp(MeV/mm)= -1.8106e-15
+ E(MeV)= 0.0063096  dedxp(MeV/mm)= 61.455 dedxmp(MeV/mm)= -2.0315e-15
+ E(MeV)= 0.0079433  dedxp(MeV/mm)= 68.933 dedxmp(MeV/mm)= -2.2794e-15
+ E(MeV)= 0.01  dedxp(MeV/mm)= 77.356 dedxmp(MeV/mm)= -2.5575e-15
+ E(MeV)= 0.012589  dedxp(MeV/mm)= 85.192 dedxmp(MeV/mm)= -2.8696e-15
+ E(MeV)= 0.015849  dedxp(MeV/mm)= 93.469 dedxmp(MeV/mm)= -3.2197e-15
+ E(MeV)= 0.019953  dedxp(MeV/mm)= 101.92 dedxmp(MeV/mm)= -3.6126e-15
+ E(MeV)= 0.025119  dedxp(MeV/mm)= 110.26 dedxmp(MeV/mm)= -4.0534e-15
+ E(MeV)= 0.031623  dedxp(MeV/mm)= 117.88 dedxmp(MeV/mm)= -4.548e-15
+ E(MeV)= 0.039811  dedxp(MeV/mm)= 123.92 dedxmp(MeV/mm)= -5.103e-15
+ E(MeV)= 0.050119  dedxp(MeV/mm)= 127.47 dedxmp(MeV/mm)= -5.7256e-15
+ E(MeV)= 0.063096  dedxp(MeV/mm)= 127.65 dedxmp(MeV/mm)= -6.4242e-15
+ E(MeV)= 0.079433  dedxp(MeV/mm)= 124.16 dedxmp(MeV/mm)= -7.2081e-15
+ E(MeV)= 0.1  dedxp(MeV/mm)= 117.53 dedxmp(MeV/mm)= -8.0876e-15
+ E(MeV)= 0.12589  dedxp(MeV/mm)= 108.93 dedxmp(MeV/mm)= -9.0745e-15
+ E(MeV)= 0.15849  dedxp(MeV/mm)= 99.664 dedxmp(MeV/mm)= -1.0182e-14
+ E(MeV)= 0.19953  dedxp(MeV/mm)= 90.588 dedxmp(MeV/mm)= -1.1424e-14
+ E(MeV)= 0.25119  dedxp(MeV/mm)= 82.081 dedxmp(MeV/mm)= -1.2818e-14
+ E(MeV)= 0.31623  dedxp(MeV/mm)= 74.169 dedxmp(MeV/mm)= -1.4382e-14
+ E(MeV)= 0.39811  dedxp(MeV/mm)= 66.763 dedxmp(MeV/mm)= -1.6137e-14
+ E(MeV)= 0.50119  dedxp(MeV/mm)= 59.742 dedxmp(MeV/mm)= -1.8106e-14
+ E(MeV)= 0.63096  dedxp(MeV/mm)= 53.434 dedxmp(MeV/mm)= -2.0315e-14
+ E(MeV)= 0.79433  dedxp(MeV/mm)= 47.062 dedxmp(MeV/mm)= -2.2794e-14
+ E(MeV)= 1  dedxp(MeV/mm)= 40.845 dedxmp(MeV/mm)= -2.5575e-14
+ E(MeV)= 1.2589  dedxp(MeV/mm)= 35.325 dedxmp(MeV/mm)= -2.8696e-14
+ E(MeV)= 1.5849  dedxp(MeV/mm)= 30.422 dedxmp(MeV/mm)= -3.2197e-14
+ E(MeV)= 1.9953  dedxp(MeV/mm)= 26.068 dedxmp(MeV/mm)= -3.6126e-14
+ E(MeV)= 2.5119  dedxp(MeV/mm)= 22.267 dedxmp(MeV/mm)= -4.0533e-14
+ E(MeV)= 3.1623  dedxp(MeV/mm)= 18.934 dedxmp(MeV/mm)= -4.5479e-14
+ E(MeV)= 3.9811  dedxp(MeV/mm)= 16.043 dedxmp(MeV/mm)= -5.1028e-14
+ E(MeV)= 5.0119  dedxp(MeV/mm)= 13.589 dedxmp(MeV/mm)= 0.026437
+ E(MeV)= 6.3096  dedxp(MeV/mm)= 11.42 dedxmp(MeV/mm)= 3.1012
+ E(MeV)= 7.9433  dedxp(MeV/mm)= 9.608 dedxmp(MeV/mm)= 7.106
+ E(MeV)= 10  dedxp(MeV/mm)= 8.0524 dedxmp(MeV/mm)= 12.19
+ E(MeV)= 12.589  dedxp(MeV/mm)= 6.6936 dedxmp(MeV/mm)= 18.525
+ E(MeV)= 15.849  dedxp(MeV/mm)= 5.5755 dedxmp(MeV/mm)= 26.308
+ E(MeV)= 19.953  dedxp(MeV/mm)= 4.6616 dedxmp(MeV/mm)= 35.767
+ E(MeV)= 25.119  dedxp(MeV/mm)= 3.9107 dedxmp(MeV/mm)= 47.162
+ E(MeV)= 31.623  dedxp(MeV/mm)= 3.2703 dedxmp(MeV/mm)= 60.794
+ E(MeV)= 39.811  dedxp(MeV/mm)= 2.7356 dedxmp(MeV/mm)= 77.004
+ E(MeV)= 50.119  dedxp(MeV/mm)= 2.2882 dedxmp(MeV/mm)= 96.188
+ E(MeV)= 63.096  dedxp(MeV/mm)= 1.9184 dedxmp(MeV/mm)= 118.8
+ E(MeV)= 79.433  dedxp(MeV/mm)= 1.6121 dedxmp(MeV/mm)= 145.34
+ E(MeV)= 100  dedxp(MeV/mm)= 1.3599 dedxmp(MeV/mm)= 176.42
+ E(MeV)= 125.89  dedxp(MeV/mm)= 1.153 dedxmp(MeV/mm)= 212.71
+ E(MeV)= 158.49  dedxp(MeV/mm)= 0.98406 dedxmp(MeV/mm)= 254.96
+ E(MeV)= 199.53  dedxp(MeV/mm)= 0.84666 dedxmp(MeV/mm)= 304.07
+ E(MeV)= 251.19  dedxp(MeV/mm)= 0.73555 dedxmp(MeV/mm)= 361.04
+ E(MeV)= 316.23  dedxp(MeV/mm)= 0.64633 dedxmp(MeV/mm)= 426.99
+ E(MeV)= 398.11  dedxp(MeV/mm)= 0.57535 dedxmp(MeV/mm)= 503.21
+ E(MeV)= 501.19  dedxp(MeV/mm)= 0.51956 dedxmp(MeV/mm)= 591.16
  E(MeV)= 630.96  dedxp(MeV/mm)= 0.47644 dedxmp(MeV/mm)= 631.06
  E(MeV)= 794.33  dedxp(MeV/mm)= 0.44387 dedxmp(MeV/mm)= 669.72
  E(MeV)= 1000  dedxp(MeV/mm)= 0.42068 dedxmp(MeV/mm)= 708.41
@@ -945,3 +927,11 @@ Range table for G4_Si
 ... close Root file : monopole.root - done
 Graphics systems deleted.
 Visualization Manager deleting...
+G4Integration Driver Stats: #QuickAdvance 1518074 - #AccurateAdvance 8563 #good steps 14225 #bad steps 2
+G4ChordFinder statistics report: 
+  No trials: 1517124  No Calls: 1516624  Max-trial: 3
+  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
+G4Integration Driver Stats: #QuickAdvance 1715737 - #AccurateAdvance 601 #good steps 5666 #bad steps 0
+G4ChordFinder statistics report: 
+  No trials: 1715185  No Calls: 1715084  Max-trial: 3
+  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98

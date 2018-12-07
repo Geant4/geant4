@@ -27,7 +27,6 @@
 /// \brief Implementation of the G4BlineTracer class
 //
 //
-// $Id: G4BlineTracer.cc 109623 2018-05-03 13:05:02Z gcosmo $
 //
 //
 // --------------------------------------------------------------------

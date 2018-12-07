@@ -55,24 +55,19 @@ class G4UIcmdWithAString;
 
 class ML2PhysicsListMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    ML2PhysicsListMessenger(ML2PhysicsList* );
-   ~ML2PhysicsListMessenger();
+  ML2PhysicsListMessenger(ML2PhysicsList* );
+  virtual ~ML2PhysicsListMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
   
   ML2PhysicsList* pPhysicsList;
     
   G4UIdirectory*             physDir;        
-  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-  G4UIcmdWithADoubleAndUnit* allCutCmd;    
   G4UIcmdWithAString*        pListCmd;
-  G4UIcmdWithAString* packageListCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

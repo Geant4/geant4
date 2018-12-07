@@ -23,6 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 37 (2010) 4692-4708
+// Phys. Med. 31 (2015) 861-874
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/svalue/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 
@@ -49,7 +56,8 @@ EventAction::~EventAction()
 void EventAction::BeginOfEventAction(const G4Event*)
 {    
  //energy deposited per event
- fTotalEdep = 0.;   
+ fCytoEdep = 0.;   
+ fNuclEdep = 0.;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,17 +66,31 @@ void EventAction::EndOfEventAction(const G4Event*)
 {
   //plot energy deposited per event
   //
-  if (fTotalEdep > 0.) {
+  if (fCytoEdep > 0.) {
     
     Run* run
     = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
     
-    run->AddEdep(fTotalEdep);
+    run->AddCytoEdep(fCytoEdep);
     
-    //G4cout << "*** Edep cumulated (eV) = " << run->GetEdep()/eV << G4endl;
+    //G4cout << "*** Edep cumulated in cytoplasm (eV) = " << run->GetCytoEdep()/eV << G4endl;
     
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
-    analysisManager->FillH1(2,fTotalEdep);
+    analysisManager->FillH1(5,fCytoEdep);
   }  
+
+  if (fNuclEdep > 0.) {
+    
+    Run* run
+    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+    
+    run->AddNuclEdep(fNuclEdep);
+    
+    //G4cout << "*** Edep cumulated in nucleus (eV) = " << run->GetNuclEdep()/eV << G4endl;
+    
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+    analysisManager->FillH1(6,fNuclEdep);
+  }  
+
 }
 

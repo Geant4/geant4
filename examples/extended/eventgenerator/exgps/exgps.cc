@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exgps.cc 109734 2018-05-08 14:06:33Z gcosmo $
 //
 /// \file eventgenerator/exgps/exgps.cc
 /// \brief Main program of the eventgenerator/exgps example

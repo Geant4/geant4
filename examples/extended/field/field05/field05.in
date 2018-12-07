@@ -1,5 +1,14 @@
+#
+# Macro file for the test of field05 example
+#
+# Set some default verbose
 #/run/verbose 1
 /control/verbose 2
 #/event/verbose 1
 #/tracking/verbose 1
+#
+# Initialize G4 kernel
+/run/initialize
+#
+# Run one event
 /run/beamOn 1

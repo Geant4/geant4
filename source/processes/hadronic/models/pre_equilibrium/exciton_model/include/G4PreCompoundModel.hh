@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.hh 106233 2017-09-22 21:34:41Z gcosmo $
 //
 // by V. Lara
 //
@@ -58,6 +57,7 @@
 
 class G4PreCompoundEmission;
 class G4VPreCompoundTransitions;
+class G4NuclearLevelData;
 class G4ParticleDefinition;
 
 class G4PreCompoundModel : public G4VPreCompoundModel
@@ -115,11 +115,11 @@ private:
 
   G4PreCompoundEmission*     theEmission;
   G4VPreCompoundTransitions* theTransition;
+  G4NuclearLevelData*        fNuclData;
 
   const G4ParticleDefinition* proton;
   const G4ParticleDefinition* neutron;
 
-  G4double fLevelDensity;
   G4double fLimitEnergy;
 
   //for the rest of external choices

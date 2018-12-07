@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluo.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Alfonso Mantero (alfonso.mantero@ge.infn.it)
 //

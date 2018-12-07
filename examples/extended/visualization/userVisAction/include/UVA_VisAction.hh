@@ -27,7 +27,6 @@
 /// \brief Definition of the UVA_VisAction class
 //
 //
-// $Id: UVA_VisAction.hh 66378 2012-12-18 09:45:21Z gcosmo $
 
 #ifndef UVA_VISACTION_HH
 #define UVA_VISACTION_HH

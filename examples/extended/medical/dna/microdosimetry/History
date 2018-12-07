@@ -1,5 +1,4 @@
 -------------------------------------------------------------------
-$Id: History 73136 2013-08-19 14:28:09Z sincerti $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +7,10 @@ $Id: History 73136 2013-08-19 14:28:09Z sincerti $
 
                        Package History file
                        --------------------
+
+22-07-18 S. Incerti - microdosimetry-V10-04-01
+- removed obsolete RanecuEngine.
+
 09-05-18 B.Morgan - microdosimetry-V10-04-00
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

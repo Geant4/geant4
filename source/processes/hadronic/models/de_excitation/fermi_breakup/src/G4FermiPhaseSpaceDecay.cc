@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.hh,v 1.13 2010-11-17 16:20:31 vnivanch Exp $
 //
 // Hadronic Process: Phase space decay for the Fermi BreakUp model
 // by V. Lara
@@ -36,9 +35,13 @@
 //          - Reduced usage of exotic std functions  
 
 #include "G4FermiPhaseSpaceDecay.hh"
-#include "G4SystemOfUnits.hh"
+
 #include "G4RandomDirection.hh"
-#include "G4HadronicException.hh"
+#include "G4Pow.hh"
+
+#include <CLHEP/Units/SystemOfUnits.h>
+#include <CLHEP/Units/PhysicalConstants.h>
+#include <CLHEP/Random/RandomEngine.h>
 
 G4FermiPhaseSpaceDecay::G4FermiPhaseSpaceDecay()
 {
@@ -48,22 +51,25 @@ G4FermiPhaseSpaceDecay::G4FermiPhaseSpaceDecay()
 G4FermiPhaseSpaceDecay::~G4FermiPhaseSpaceDecay()
 {}
 
-std::vector<G4LorentzVector*>*
-G4FermiPhaseSpaceDecay::KopylovNBodyDecay(G4double M, 
-					  const std::vector<G4double>& mr) const
+std::vector<G4LorentzVector*>* G4FermiPhaseSpaceDecay::Decay(G4double M, 
+                               const std::vector<G4double>& mr) const
   // Calculates momentum for N fragments (Kopylov's method of sampling is used)
 {
   size_t N = mr.size();
 
   std::vector<G4LorentzVector*>* P = 
-    new std::vector<G4LorentzVector*>(N, 0);
+    new std::vector<G4LorentzVector*>(N, nullptr);
 
   G4double mtot = 0.0;
   for(size_t k=0; k<N; ++k) { mtot += mr[k]; }
+
   G4double mu = mtot;
   G4double PFragMagCM = 0.0;
-  G4double Mass = M;
+
+  // Primary mass is above the sum of mass of components
+  G4double Mass = std::max(M, mtot + CLHEP::eV);
   G4double T = Mass-mtot;
+
   G4LorentzVector PFragCM(0.0,0.0,0.0,0.0);
   G4LorentzVector PRestCM(0.0,0.0,0.0,0.0);
   G4LorentzVector PRestLab(0.0,0.0,0.0,Mass);
@@ -89,14 +95,13 @@ G4FermiPhaseSpaceDecay::KopylovNBodyDecay(G4double M,
       PRestCM.setVect(-RandVector);
       PRestCM.setE(std::sqrt(PFragMagCM*PFragMagCM + RestMass*RestMass));
 
-
       G4ThreeVector BoostV = PRestLab.boostVector();
 
       PFragCM.boost(BoostV);
+      (*P)[k] = new G4LorentzVector(PFragCM);
+
       PRestCM.boost(BoostV);
       PRestLab = PRestCM;
-
-      (*P)[k] = new G4LorentzVector(PFragCM);
       
       Mass = RestMass;
     }
@@ -106,17 +111,20 @@ G4FermiPhaseSpaceDecay::KopylovNBodyDecay(G4double M,
   return P;
 }
 
-void 
-G4FermiPhaseSpaceDecay::DumpProblem(G4double E, G4double P1, G4double P2, 
-				    G4double P) const
+G4double G4FermiPhaseSpaceDecay::BetaKopylov(G4int K, 
+                     CLHEP::HepRandomEngine* rndmEngine) const
 {
-  G4cout << "G4FermiPhaseSpaceDecay:  problem of decay of M(GeV)= " << E/GeV 
-	 << " on M1(GeV)= " << P1/GeV << " and  M2(GeV)= " << P2/GeV
-	 << " P(MeV)= " << P/MeV << " < 0" << G4endl;
-  // exception only if the problem is numerically significant
-  if(P < -CLHEP::eV) {
-    throw G4HadronicException(__FILE__, __LINE__,"Error in decay kinematics");
-  }
+  G4int N = 3*K - 5;
+  G4double xN = (G4double)N;
+  G4double xN1= (G4double)(N + 1);
+  G4double F;
+  // VI variant
+  G4double Fmax = std::sqrt(g4calc->powN(xN/xN1,N)/xN1); 
+  G4double chi;
+  do {
+    chi = rndmEngine->flat();
+    F = std::sqrt(g4calc->powN(chi,N)*(1-chi));      
+    // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
+   } while ( Fmax*rndmEngine->flat() > F);  
+  return chi;
 }
-
-

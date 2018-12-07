@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc 91806 2015-08-06 12:20:45Z gcosmo $
 //
 // Geant4 Header : G4HadronElastic
 //
@@ -43,22 +42,21 @@
 #include "G4Pow.hh"
 #include "G4Exp.hh"
 #include "G4Log.hh"
+#include "G4HadronicParameters.hh"
 
 
 G4HadronElastic::G4HadronElastic(const G4String& name) 
   : G4HadronicInteraction(name)
 {
   SetMinEnergy( 0.0*GeV );
-  SetMaxEnergy( 100.*TeV );
+  SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   lowestEnergyLimit= 1.e-6*eV;  
 
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
   theDeuteron = G4Deuteron::Deuteron();
   theAlpha    = G4Alpha::Alpha();
-  //Description();
 }
-
 
 G4HadronElastic::~G4HadronElastic()
 {}
@@ -75,7 +73,6 @@ void G4HadronElastic::ModelDescription(std::ostream& outFile) const
             << "incident energies.\n";
 
 }
-
 
 G4HadFinalState* G4HadronElastic::ApplyYourself(
 		 const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
@@ -125,25 +122,10 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4double t    = SampleInvariantT(theParticle, plab, Z, A);
   G4double phi  = G4UniformRand()*CLHEP::twopi;
   G4double cost = 1. - 2.0*t/tmax;
-  G4double sint;
+  if(cost > 1.0) { cost = 1.0; }
+  else if(cost < -1.0) { cost = -1.0; }
+  G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
 
-  // problem in sampling
-  if(cost > 1.0 || cost < -1.0) {
-    //if(verboseLevel > 0) {
-      G4cout << "G4HadronElastic WARNING (1 - cost)= " << 1 - cost
-	     << " after scattering of " 
-	     << aParticle->GetDefinition()->GetParticleName()
-	     << " p(GeV/c)= " << plab/GeV
-	     << " on an ion Z= " << Z << " A= " << A
-	     << G4endl;
-      //}
-    cost = 1.0;
-    sint = 0.0;
-
-    // normal situation
-  } else  {
-    sint = std::sqrt((1.0-cost)*(1.0+cost));
-  }    
   if (verboseLevel>1) {
     G4cout << " t= " << t << " tmax(GeV^2)= " << tmax/(GeV*GeV) 
 	   << " Pcms(GeV)= " << momentumCMS/GeV << " cos(t)=" << cost 
@@ -158,27 +140,26 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   G4double eFinal = nlv1.e() - m1;
   if (verboseLevel > 1) {
-    G4cout <<" m= " << m1 << " Efin(MeV)= " << eFinal 
+    G4cout <<"G4HadronElastic: m= " << m1 << " Efin(MeV)= " << eFinal 
 	   << " Proj: 4-mom " << lv1 << " Final: " << nlv1 
 	   << G4endl;
   }
-  if(eFinal <= lowestEnergyLimit) {
-    if(eFinal < 0.0 && verboseLevel > 0) {
-      G4cout << "G4HadronElastic WARNING Efinal= " << eFinal
-	     << " after scattering of " 
-	     << aParticle->GetDefinition()->GetParticleName()
-	     << " p(GeV/c)= " << plab/GeV
-	     << " on an ion Z= " << Z << " A= " << A
-	     << G4endl;
-    }
-    theParticleChange.SetEnergyChange(0.0);
-    nlv1 = G4LorentzVector(0.0,0.0,0.0,m1);
 
+  // precision lost in kinematics, only energy is changed
+  if (eFinal <= 0.0) {
+    G4double mom = nlv1.mag();
+    if(mom == 0.0) {
+      nlv1.set(0.0,0.0,0.0,m1);
+      theParticleChange.SetEnergyChange(0.0);
+    } else {
+      eFinal = mom*mom/(std::sqrt(m1*m1 + mom*mom) + m1);
+      theParticleChange.SetEnergyChange(eFinal);
+      theParticleChange.SetMomentumChange(nlv1.vect().unit());
+    }
   } else {
     theParticleChange.SetMomentumChange(nlv1.vect().unit());
     theParticleChange.SetEnergyChange(eFinal);
-  }  
-
+  }
   lv -= nlv1;
   G4double erec =  lv.e() - mass2;
   if (verboseLevel > 1) {
@@ -188,7 +169,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   }
  
   if(erec > GetRecoilEnergyThreshold()) {
-    G4ParticleDefinition * theDef = 0;
+    G4ParticleDefinition * theDef = nullptr;
     if(Z == 1 && A == 1)       { theDef = theProton; }
     else if (Z == 1 && A == 2) { theDef = theDeuteron; }
     else if (Z == 1 && A == 3) { theDef = G4Triton::Triton(); }

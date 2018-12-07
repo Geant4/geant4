@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsDefault.hh,v 1.3 2006-06-29 21:28:34 gunter Exp $
 
 // /vis/viewer/default commands - John Allison  30th October 2011
 

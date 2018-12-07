@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh 108810 2018-03-08 15:04:30Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -38,17 +37,7 @@
 //
 // Modifications:
 //
-// 23-12-02 V.Ivanchenko change interface in order to moveto cut per region
-// 24-01-03 Make models region aware (V.Ivanchenko)
-// 13-02-03 Add name (V.Ivanchenko)
-// 12-11-03 Fix for GenericIons (V.Ivanchenko)
-// 24-03-05 Add G4EmCorrections (V.Ivanchenko)
-// 11-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
-// 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
-// 11-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
-// 12-08-08 Added methods GetParticleCharge, GetChargeSquareRatio, 
-//          CorrectionsAlongStep needed for ions(V.Ivanchenko)
-
+// Modified by Michel Maire and Vladimir Ivanchenko
 //
 // Class Description:
 //
@@ -68,6 +57,7 @@
 
 class G4EmCorrections;
 class G4ParticleChangeForLoss;
+class G4ICRU90StoppingData;
 
 class G4BetheBlochModel : public G4VEmModel
 {
@@ -155,6 +145,9 @@ private:
   G4EmCorrections*            corr;
   G4ParticleChangeForLoss*    fParticleChange;
   G4NistManager*              nist;
+  G4ICRU90StoppingData*       fICRU90;
+  const G4Material*           currentMaterial;
+  const G4Material*           baseMaterial;
 
   G4double mass;
   G4double tlimit;
@@ -165,6 +158,10 @@ private:
   G4double formfact;
   G4double twoln10;
   G4double corrFactor;
+  G4double fAlphaTlimit;
+  G4double fProtonTlimit;
+
+  G4int    iICRU90;
   G4bool   isIon;
 };
 

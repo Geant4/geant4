@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListUtil.hh 66704 2013-01-10 18:20:17Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -46,13 +45,17 @@
 
 class G4PhysListUtil
 {
+public:
 
-  public:
-    static G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
+  static G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
 
-  private:
-          // no instance needed
-  	G4PhysListUtil();
-	~G4PhysListUtil();
+  static G4HadronicProcess* FindCaptureProcess(const G4ParticleDefinition*);
+
+  static G4HadronicProcess* FindFissionProcess(const G4ParticleDefinition*);
+
+private:
+  // no instance needed
+  G4PhysListUtil();
+  ~G4PhysListUtil();
 };
 #endif

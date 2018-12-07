@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.cc 103096 2017-03-15 15:21:33Z gcosmo $
 //
 // 
 // class G4VPhysicalVolume Implementation

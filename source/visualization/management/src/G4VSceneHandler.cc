@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc 109510 2018-04-26 07:15:57Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -615,6 +614,13 @@ void G4VSceneHandler::ProcessScene () {
 
   if (!fpScene) return;
 
+  if (fpScene->GetExtent() == G4VisExtent::GetNullExtent()) {
+    G4Exception
+    ("G4VSceneHandler::ProcessScene",
+     "visman0106", JustWarning,
+     "The scene has no extent.");
+  }
+
   G4VisManager* visManager = G4VisManager::GetInstance();
 
   if (!visManager->GetConcreteInstance()) return;
@@ -646,19 +652,20 @@ void G4VSceneHandler::ProcessScene () {
 
     for (size_t i = 0; i < runDurationModelList.size (); i++) {
       if (runDurationModelList[i].fActive) {
-	G4VModel* pModel = runDurationModelList[i].fpModel;
+        fpModel = runDurationModelList[i].fpModel;
 	// Note: this is not the place to take action on
 	// pModel->GetTransformation().  The model must take care of
 	// this in pModel->DescribeYourselfTo(*this).  See, for example,
 	// G4PhysicalVolumeModel and /vis/scene/add/logo.
-	pModel -> SetModelingParameters (pMP);
-	SetModel (pModel);  // Store for use by derived class.
-	pModel -> DescribeYourselfTo (*this);
-	pModel -> SetModelingParameters (0);
+	fpModel -> SetModelingParameters (pMP);
+	fpModel -> DescribeYourselfTo (*this);
+	fpModel -> SetModelingParameters (0);
       }
     }
 
+    fpModel = 0;
     delete pMP;
+
     EndModeling ();
   }
 
@@ -742,15 +749,14 @@ void G4VSceneHandler::DrawEvent(const G4Event* event)
     pMP->SetEvent(event);
     for (size_t i = 0; i < nModels; i++) {
       if (EOEModelList[i].fActive) {
-	G4VModel* pModel = EOEModelList[i].fpModel;
-	pModel -> SetModelingParameters(pMP);
-	SetModel (pModel);
-	pModel -> DescribeYourselfTo (*this);
-	pModel -> SetModelingParameters(0);
+	fpModel = EOEModelList[i].fpModel;
+	fpModel -> SetModelingParameters(pMP);
+	fpModel -> DescribeYourselfTo (*this);
+	fpModel -> SetModelingParameters(0);
       }
     }
+    fpModel = 0;
     delete pMP;
-    SetModel (0);
   }
 }
 
@@ -764,15 +770,14 @@ void G4VSceneHandler::DrawEndOfRunModels()
     pMP->SetEvent(0);
     for (size_t i = 0; i < nModels; i++) {
       if (EORModelList[i].fActive) {
-	G4VModel* pModel = EORModelList[i].fpModel;
-	pModel -> SetModelingParameters(pMP);
-	SetModel (pModel);
-	pModel -> DescribeYourselfTo (*this);
-	pModel -> SetModelingParameters(0);
+        fpModel = EORModelList[i].fpModel;
+	fpModel -> SetModelingParameters(pMP);
+	fpModel -> DescribeYourselfTo (*this);
+	fpModel -> SetModelingParameters(0);
       }
     }
+    fpModel = 0;
     delete pMP;
-    SetModel (0);
   }
 }
 

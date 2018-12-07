@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VInteractorManager.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 // G.Barrand
 
@@ -68,7 +67,7 @@ public:
   void           SecondaryLoopPostActions        ();
   void           RequireExitSecondaryLoop        (int); 
   void           DispatchEvent                   (void*);
-  void           SecondaryLoop                   (); 
+  virtual void   SecondaryLoop                   ();
   int            GetExitSecondaryLoopCode        ();
   void           PutStringInResourceDatabase     (char*);
   virtual G4bool Inited                          () = 0;

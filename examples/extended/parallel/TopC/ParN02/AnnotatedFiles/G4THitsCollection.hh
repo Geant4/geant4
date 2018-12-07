@@ -27,7 +27,6 @@
 /// \brief Definition of the G4THitsCollection class
 //
 //
-// $Id: G4THitsCollection.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 
 #ifndef G4THitsCollection_h

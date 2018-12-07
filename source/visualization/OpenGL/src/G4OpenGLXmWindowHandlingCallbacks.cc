@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmWindowHandlingCallbacks.cc 98766 2016-08-09 14:17:17Z gcosmo $
 //
 // 
 // Andrew Walkden  16th June 1997

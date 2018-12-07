@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterface.cc 71719 2013-06-21 00:01:54Z mkelsey $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
@@ -733,7 +732,7 @@ G4bool G4CascadeInterface::retryInelasticNucleus() const {
 	 << "\n retryInelasticNucleus: AND collision type (COULOMB_DEV) "
 	 << ((npart+nfrag > 2) ? "INELASTIC (t)" : "ELASTIC (f)")
 #else
-	 << "\n retryInelasticNucleus: AND collsion type "
+	 << "\n retryInelasticNucleus: AND collision type "
 	 << ((npart+nfrag < 3) ? "ELASTIC (t)" : "INELASTIC (f)")
 	 << "\n retryInelasticNucleus: AND Leading particle bullet "
 	 << ((firstOut == bullet->getDefinition()) ? "YES (t)" : "NO (f)")

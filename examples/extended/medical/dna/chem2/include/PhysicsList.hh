@@ -28,9 +28,9 @@
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // J. Comput. Phys. 274 (2014) 841-882
+// Phys. Med. Biol. 63(10) (2018) 105014-12pp
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $Id$
 //
 /// \file PhysicsList.hh
 /// \brief Definition of the PhysicsList class
@@ -41,13 +41,25 @@
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
+class G4VPhysicsConstructor;
 class G4EmDNAChemistry;
+class G4EmDNAChemistry_option1;
 
-class PhysicsList : public G4VModularPhysicsList
+class PhysicsList: public G4VModularPhysicsList
 {
-public:
-  PhysicsList();
-  virtual ~PhysicsList();
-  void RegisterConstructor(const G4String& name);
+  public:
+    explicit PhysicsList();
+    ~PhysicsList() override;
+
+    void ConstructParticle() override;
+    void ConstructProcess() override;
+
+    void RegisterConstructor(const G4String& name);
+
+  private:
+    G4VPhysicsConstructor*    fEmDNAPhysicsList;
+    G4EmDNAChemistry*         fEmDNAChemistryList;
+    G4EmDNAChemistry_option1* fEmDNAChemistryList1;
+    G4String                  fPhysDNAName;
 };
 #endif

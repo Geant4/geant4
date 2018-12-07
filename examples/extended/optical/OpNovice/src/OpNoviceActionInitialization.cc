@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: OpNoviceActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file OpNoviceActionInitialization.cc
 /// \brief Implementation of the OpNoviceActionInitialization class

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BaseAnalysisManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Base class for the object managers.
 // It handles first object ID and its lock and provides common utility methods.

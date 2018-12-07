@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleB5.cc 70284 2013-05-28 17:26:43Z perl $
 //
 /// \file exampleB5.cc
 /// \brief Main program of the analysis/B5 example

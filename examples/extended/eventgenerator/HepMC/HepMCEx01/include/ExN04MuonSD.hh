@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04MuonSD.hh
 /// \brief Definition of the ExN04MuonSD class
 //
-// $Id: ExN04MuonSD.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef ExN04MuonSD_h
@@ -44,16 +43,16 @@ public:
   ExN04MuonSD(G4String name);
   ~ExN04MuonSD();
 
-  void Initialize(G4HCofThisEvent* HCE);
-  G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
-  void EndOfEvent(G4HCofThisEvent* HCE);
-  void clear();
-  void DrawAll();
-  void PrintAll();
+  virtual void Initialize(G4HCofThisEvent* HCE);
+  virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist);
+  virtual void EndOfEvent(G4HCofThisEvent* HCE);
+  virtual void clear();
+  virtual void DrawAll();
+  virtual void PrintAll();
 
 private:
-  ExN04MuonHitsCollection * muonCollection;
-  G4double positionResolution;
+  ExN04MuonHitsCollection * fMuonCollection;
+  G4double fPositionResolution;
 
 };
 

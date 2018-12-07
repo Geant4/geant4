@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -72,6 +71,8 @@
 #include "G4LossTableManager.hh"
 #include "G4EmCorrections.hh"
 #include "G4DeltaAngle.hh"
+#include "G4ICRU90StoppingData.hh"
+#include "G4NistManager.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
 
@@ -83,11 +84,14 @@ G4PSTARStopping* G4BraggModel::fPSTAR = nullptr;
 
 G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
-    particle(0),
-    currentMaterial(0),
+    particle(nullptr),
+    fICRU90(nullptr),
+    currentMaterial(nullptr),
+    baseMaterial(nullptr),
     protonMassAMU(1.007276),
     iMolecula(-1),
     iPSTAR(-1),
+    iICRU90(-1),
     isIon(false)
 {
   fParticleChange = nullptr;
@@ -123,6 +127,11 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
   if(IsMaster()) {
     if(nullptr == fPSTAR)  { fPSTAR = new G4PSTARStopping(); }
     if(particle->GetPDGMass() < GeV) { fPSTAR->Initialise(); }
+    if(G4EmParameters::Instance()->UseICRU90Data()) {
+      if(!fICRU90) { 
+	fICRU90 = G4NistManager::Instance()->GetICRU90StoppingData(); 
+      } else if(particle->GetPDGMass() < GeV) { fICRU90->Initialise(); }
+    }
   }
 
   if(nullptr == fParticleChange) {
@@ -193,31 +202,27 @@ G4double G4BraggModel::ComputeCrossSectionPerElectron(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4BraggModel::ComputeCrossSectionPerAtom(
-                                           const G4ParticleDefinition* p,
-                                                 G4double kineticEnergy,
-                                                 G4double Z, G4double,
-                                                 G4double cutEnergy,
-                                                 G4double maxEnergy)
+G4double 
+G4BraggModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition* p,
+                                         G4double kineticEnergy,
+                                         G4double Z, G4double,
+                                         G4double cutEnergy,
+                                         G4double maxEnergy)
 {
-  G4double cross = Z*ComputeCrossSectionPerElectron
-                                         (p,kineticEnergy,cutEnergy,maxEnergy);
-  return cross;
+  return 
+    Z*ComputeCrossSectionPerElectron(p,kineticEnergy,cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4BraggModel::CrossSectionPerVolume(
-                                           const G4Material* material,
-                                           const G4ParticleDefinition* p,
-                                                 G4double kineticEnergy,
-                                                 G4double cutEnergy,
-                                                 G4double maxEnergy)
+G4double G4BraggModel::CrossSectionPerVolume(const G4Material* material,
+                                             const G4ParticleDefinition* p,
+                                             G4double kineticEnergy,
+                                             G4double cutEnergy,
+                                             G4double maxEnergy)
 {
-  G4double eDensity = material->GetElectronDensity();
-  G4double cross = eDensity*ComputeCrossSectionPerElectron
-                                         (p,kineticEnergy,cutEnergy,maxEnergy);
-  return cross;
+  return material->GetElectronDensity()
+    *ComputeCrossSectionPerElectron(p,kineticEnergy,cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -351,12 +356,10 @@ G4double G4BraggModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4BraggModel::HasMaterial(const G4Material*)
+void G4BraggModel::HasMaterial(const G4Material* mat)
 {
-  return false;
-  /*
-  G4String chFormula = material->GetChemicalFormula();
-  if("" == chFormula) { return false; }
+  const G4String& chFormula = mat->GetChemicalFormula();
+  if(chFormula.empty()) { return; }
 
   // ICRU Report N49, 1993. Power's model for H
   static const size_t numberOfMolecula = 11;
@@ -369,18 +372,17 @@ G4bool G4BraggModel::HasMaterial(const G4Material*)
   // Search for the material in the table
   for (size_t i=0; i<numberOfMolecula; ++i) {
     if (chFormula == molName[i]) {
-      iPSTAR = fPSTAR->GetIndex(matName[i]);  
-      break;
+      iMolecula = i;  
+      return;
     }
   }
-  return (iPSTAR >= 0);
-  */
+  return;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggModel::StoppingPower(const G4Material* material,
-                                           G4double kineticEnergy) 
+                                     G4double kineticEnergy) 
 {
   G4double ionloss = 0.0 ;
 
@@ -453,10 +455,8 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
                                                G4double kineticEnergy) const
 {
   G4double ionloss ;
-  G4int i = G4lrint(z)-1 ;  // index of atom
-  if(i < 0)  i = 0 ;
-  if(i > 91) i = 91 ;
-  
+  G4int i = std::min(std::max(G4lrint(z)-1,0),91);  // index of atom
+
   // The data and the fit from: 
   // ICRU Report 49, 1993. Ziegler's type of parametrisations.
   // Proton kinetic energy for parametrisation (keV/amu)  
@@ -605,29 +605,42 @@ G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy)
   // check DB
   if(material != currentMaterial) {
     currentMaterial = material;
+    baseMaterial = material->GetBaseMaterial() 
+      ? material->GetBaseMaterial() : material;
     iPSTAR    = -1;
     iMolecula = -1;
-    if( !HasMaterial(material) ) { iPSTAR = fPSTAR->GetIndex(material); }
-
+    iICRU90 = fICRU90 ? fICRU90->GetIndex(baseMaterial) : -1;
+    
+    if(iICRU90 < 0) { 
+      iPSTAR = fPSTAR->GetIndex(baseMaterial); 
+      if(iPSTAR < 0) { HasMaterial(baseMaterial); }
+    }
     //G4cout << "%%% " <<material->GetName() << "  iMolecula= " 
-    //           << iMolecula << "  iPSTAR= " << iPSTAR << G4endl; 
-
+    //       << iMolecula << "  iPSTAR= " << iPSTAR 
+    //       << "  iICRU90= " << iICRU90<< G4endl; 
   }
 
+  // ICRU90 parameterisation
+  if(iICRU90 >= 0) {
+    return fICRU90->GetElectronicDEDXforProton(iICRU90, kineticEnergy)
+      *material->GetDensity();
+  }
+  // PSTAR parameterisation
+  if( iPSTAR >= 0 ) {
+    return fPSTAR->GetElectronicDEDX(iPSTAR, kineticEnergy)
+      *material->GetDensity();
+
+  } 
   const G4int numberOfElements = material->GetNumberOfElements();
   const G4double* theAtomicNumDensityVector =
                                  material->GetAtomicNumDensityVector();
   
-  if( iPSTAR >= 0 ) {
-    return 
-      fPSTAR->GetElectronicDEDX(iPSTAR, kineticEnergy)*material->GetDensity();
 
-  } else if(iMolecula >= 0) {
-
-    eloss = StoppingPower(material, kineticEnergy)*
+  if(iMolecula >= 0) {
+    eloss = StoppingPower(baseMaterial, kineticEnergy)*
                           material->GetDensity()/amu;
 
-  // Pure material ICRU49 paralmeterisation
+    // Pure material ICRU49 paralmeterisation
   } else if(1 == numberOfElements) {
 
     G4double z = material->GetZ();

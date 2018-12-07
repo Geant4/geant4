@@ -33,7 +33,7 @@
 //   (b) IBFM-CNR , Segrate (Milano), Italy
 //   (c) LATO (Laboratorio di Tecnologie Oncologiche), Cefalù, Italy
 //   (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
-//   (e) University of Wallongong, Australia
+//   (e) University of Wollongong, Australia
 //
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +43,6 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class IORTMatrix;
 class IORTEventActionMessenger;
 
 class IORTEventAction : public G4UserEventAction
@@ -68,8 +67,6 @@ public:
 
 private: 
   G4String drawFlag; //Visualisation flag
-  G4int hitsCollectionID;
-  //IORTMatrix *matrix; 
   G4int printModulo;  
   IORTEventActionMessenger* pointerEventMessenger;
 };

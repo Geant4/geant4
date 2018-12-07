@@ -57,6 +57,7 @@ namespace G4INCL {
       const ThreeVector collisionAxis = pInVec/pIn;
       const ThreeVector pMomVec = biasMe->getMomentum();
       const G4double pMom = pMomVec.mag();
+      if(pMom ==0.) return;
       const G4double pMomCosAng = pMomVec.dot(collisionAxis)/pMom;
       const G4double pMomAng = Math::arcCos(pMomCosAng); // Angle between the original axis of the dominant particle and is new one after generate
 
@@ -101,7 +102,8 @@ namespace G4INCL {
       biasMe = particles[index];
       const ThreeVector pInVec = biasMe->getMomentum();
       generate(sqrtS, particles);
-      bias(particles, pInVec, slope);
+      // Extremely rare event try to bias with vector null
+      if(pInVec.mag() != 0.) bias(particles, pInVec, slope);
     }
 
     void setPhaseSpaceGenerator(IPhaseSpaceGenerator *g) {

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.hh 110586 2018-05-31 12:01:42Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -111,7 +110,10 @@ public:
 
   // access to the list of hadronic interactions
   std::vector<G4HadronicInteraction*>& GetHadronicInteractionList();
-          
+
+  // access to an hadronic interaction by name
+  G4HadronicInteraction* GetHadronicModel(const G4String&);
+  
   // get inverse cross section per volume
   G4double GetMeanFreePath(const G4Track &aTrack, G4double, 
 			   G4ForceCondition *) override;

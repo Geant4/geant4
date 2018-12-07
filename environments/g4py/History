@@ -11,6 +11,10 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 Nov. 2017 K. Murakami
+ - update for 10.5 release
+ - fix CMAKE_INSTALL_PREFIX does not work (id 1924)
+
 24 Nov. 2017 K. Murakami
  - update for 10.4 release
 

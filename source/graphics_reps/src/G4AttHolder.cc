@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttHolder.cc 66376 2012-12-18 09:42:59Z gcosmo $
 
 #include "G4AttHolder.hh"
 

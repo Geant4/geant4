@@ -27,7 +27,6 @@
 /// \brief Definition of the TSPrimaryGeneratorAction class
 //
 //
-// $Id: TSPrimaryGeneratorAction.hh 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 /// Simple PrimaryGeneratorAction that produces a -Z surface flux of 1 MeV

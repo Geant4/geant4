@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 // ---------------------------------------------------------------
 // GEANT 4 class header file
@@ -38,6 +37,7 @@
 #ifndef G4Threading_hh
 #define G4Threading_hh
 
+#include "globals.hh"
 #include "G4Types.hh"
 
 #include <chrono>
@@ -53,9 +53,9 @@
     std::this_thread::sleep_for(std::chrono::seconds( tick ))
 
 // will be used in the future when migrating threading to task-based style
-//template <typename _Tp> using G4Future = std::future<_Tp>;
-//template <typename _Tp> using G4SharedFuture = std::shared_future<_Tp>;
-//template <typename _Tp> using G4Promise = std::promise<_Tp>;
+template <typename _Tp> using G4Future = std::future<_Tp>;
+template <typename _Tp> using G4SharedFuture = std::shared_future<_Tp>;
+template <typename _Tp> using G4Promise = std::promise<_Tp>;
 
 //
 //          NOTE ON GEANT4 SERIAL BUILDS AND MUTEX/UNIQUE_LOCK
@@ -81,8 +81,8 @@
 //
 
 // global mutex types
-typedef std::mutex G4Mutex;
-typedef std::recursive_mutex G4RecursiveMutex;
+using G4Mutex = std::mutex;
+using G4RecursiveMutex = std::recursive_mutex;
 
 // mutex macros
 #define G4MUTEX_INITIALIZER {}
@@ -99,10 +99,10 @@ template <typename _Tp> using G4Future = std::future<_Tp>;
 template <typename _Tp> using G4SharedFuture = std::shared_future<_Tp>;
 
 // Some useful types
-typedef void* G4ThreadFunReturnType;
-typedef void* G4ThreadFunArgType;
-typedef G4int (*thread_lock)(G4Mutex*);
-typedef G4int (*thread_unlock)(G4Mutex*);
+using G4ThreadFunReturnType = void*;
+using G4ThreadFunArgType = void*;
+using thread_lock = G4int(*)(G4Mutex*);  // typedef G4int (*thread_lock)(G4Mutex*);
+using thread_unlock = G4int(*)(G4Mutex*);  // typedef G4int (*thread_unlock)(G4Mutex*);
 
 // Helper function for getting a unique static mutex for a specific
 // class or type
@@ -152,8 +152,8 @@ G4RecursiveMutex& G4TypeRecursiveMutex(const unsigned int& _n = 0)
     //==========================================
 
     // global thread types
-    typedef std::thread G4Thread;
-    typedef std::thread::native_handle_type G4NativeThread;
+    using G4Thread = std::thread;
+    using G4NativeThread = std::thread::native_handle_type;
 
     // mutex macros
     #define G4MUTEXLOCK(mutex) { (mutex)->lock(); }
@@ -163,7 +163,7 @@ G4RecursiveMutex& G4TypeRecursiveMutex(const unsigned int& _n = 0)
     #define G4THREADJOIN(worker) (worker).join()
 
     // std::thread::id does not cast to integer
-    typedef std::thread::id G4Pid_t;
+    using G4Pid_t = std::thread::id;
 
     // Instead of previous macro taking one argument, define function taking
     // unlimited arguments
@@ -177,10 +177,11 @@ G4RecursiveMutex& G4TypeRecursiveMutex(const unsigned int& _n = 0)
     //
     // See G4MTRunManager for example on how to use these
     //
-    typedef std::condition_variable G4Condition;
+    using G4Condition = std::condition_variable;
     #define G4CONDITION_INITIALIZER {}
     #define G4CONDITIONWAIT(cond, lock) (cond)->wait(*lock);
     #define G4CONDITIONWAITLAMBDA(cond, lock, lambda) (cond)->wait(*lock, lambda);
+    #define G4CONDITIONNOTIFY(cond) (cond)->notify_one();
     #define G4CONDITIONBROADCAST(cond) (cond)->notify_all();
     //
     // we don't define above globally so single-threaded code does not get
@@ -196,8 +197,8 @@ G4RecursiveMutex& G4TypeRecursiveMutex(const unsigned int& _n = 0)
     class G4DummyThread
     {
     public:
-        typedef G4int                   native_handle_type;
-        typedef std::thread::id         id;
+        using native_handle_type = G4int;
+        using id = std::thread::id;
 
     public:
         // does nothing
@@ -226,8 +227,8 @@ G4RecursiveMutex& G4TypeRecursiveMutex(const unsigned int& _n = 0)
     };
 
     // global thread types
-    typedef G4DummyThread G4Thread;
-    typedef G4DummyThread::native_handle_type G4NativeThread;
+    using G4Thread = G4DummyThread;
+    using G4NativeThread = G4DummyThread::native_handle_type;
 
     // mutex macros
     #define G4MUTEXLOCK(mutex) ;;
@@ -236,7 +237,7 @@ G4RecursiveMutex& G4TypeRecursiveMutex(const unsigned int& _n = 0)
     // Macro to join thread
     #define G4THREADJOIN(worker) ;;
 
-    typedef G4int G4Pid_t;
+    using G4Pid_t = G4int;
 
     // Instead of previous macro taking one argument, define function taking
     // unlimited arguments
@@ -246,13 +247,21 @@ G4RecursiveMutex& G4TypeRecursiveMutex(const unsigned int& _n = 0)
         *worker = G4Thread(func, std::forward<_Args>(args)...);
     }
 
-    typedef G4int G4Condition;
+    using G4Condition = G4int;
     #define G4CONDITION_INITIALIZER 1
-    #define G4CONDITIONWAIT( cond, mutex ) { (*cond)++; }
-    #define G4CONDITIONWAITLAMBDA( cond, mutex, lambda ) { (*cond)++; }
-    #define G4CONDITIONBROADCAST( cond ) { (*cond)++; }
+    #define G4CONDITIONWAIT(cond, mutex) G4ConsumeParameters(cond, mutex);
+    #define G4CONDITIONWAITLAMBDA(cond, mutex, lambda) G4ConsumeParameters(cond, mutex, lambda);
+    #define G4CONDITIONNOTIFY(cond) G4ConsumeParameters(cond);
+    #define G4CONDITIONBROADCAST(cond) G4ConsumeParameters(cond);
 
 #endif //G4MULTITHREADING
+
+//============================================================================//
+
+// Define here after G4Thread has been typedef
+using G4ThreadId = G4Thread::id;
+
+//============================================================================//
 
 namespace G4Threading
 {

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.hh 73433 2013-08-27 11:05:39Z gcosmo $
 //
 // classes G4ParameterisationTrdX
 //         G4ParameterisationTrdY

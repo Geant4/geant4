@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $Id$
 //
 /// \file ActionInitialization.hh
 /// \brief Definition of the ActionInitialization class

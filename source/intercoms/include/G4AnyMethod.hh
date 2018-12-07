@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImessenger.hh,v 1.9 2006-06-29 19:08:19 gunter Exp $
 //
 // See http://www.boost.org/libs/any for Documentation.
 // Copyright Kevlin Henney, 2000, 2001, 2002. All rights reserved.

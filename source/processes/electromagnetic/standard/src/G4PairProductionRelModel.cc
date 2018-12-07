@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.cc 110939 2018-06-27 12:02:21Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -110,8 +109,6 @@ std::vector<G4PairProductionRelModel::ElementData*> G4PairProductionRelModel::gE
 // LPM supression functions evaluated at initialisation time
 G4PairProductionRelModel::LPMFuncs G4PairProductionRelModel::gLPMFuncs;
 
-
-
 // CTR
 G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
                                                    const G4String& nam)
@@ -122,7 +119,6 @@ G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
 {
   SetAngularDistribution(new G4ModifiedTsai());
 }
-
 
 // DTR
 G4PairProductionRelModel::~G4PairProductionRelModel()
@@ -137,11 +133,10 @@ G4PairProductionRelModel::~G4PairProductionRelModel()
     if (fIsUseLPMCorrection) {
       gLPMFuncs.fLPMFuncG.clear();
       gLPMFuncs.fLPMFuncPhi.clear();
+      gLPMFuncs.fIsInitialized = false;
     }
   }
 }
-
-
 
 void G4PairProductionRelModel::Initialise(const G4ParticleDefinition* p,
                                           const G4DataVector& cuts)
@@ -161,8 +156,6 @@ void G4PairProductionRelModel::Initialise(const G4ParticleDefinition* p,
   }
 }
 
-
-
 void G4PairProductionRelModel::InitialiseLocal(const G4ParticleDefinition*,
                                                G4VEmModel* masterModel)
 {
@@ -171,10 +164,8 @@ void G4PairProductionRelModel::InitialiseLocal(const G4ParticleDefinition*,
   }
 }
 
-
-
 G4double G4PairProductionRelModel::ComputeXSectionPerAtom(G4double gammaEnergy, 
-                                                            G4double Z)
+                                                          G4double Z)
 {
   G4double xSection = 0.0;
   // check if LPM suppression needs to be used
@@ -210,7 +201,6 @@ G4double G4PairProductionRelModel::ComputeXSectionPerAtom(G4double gammaEnergy,
   xSection = std::max(2.*xSection*dInterv, 0.);
   return xSection;
 }
-
 
 // DCS WITHOUT LPM SUPPRESSION
 // Computes DCS value for a given target element (Z), initial gamma energy (Eg), 
@@ -256,7 +246,6 @@ G4double G4PairProductionRelModel::ComputeDXSectionPerAtom(G4double pEnergy,
   // ds/dEt=ds/deps deps/dEt with deps/dEt=1/Eg 
   return std::max(xSection, 0.0)/gammaEnergy;
 }
-
 
 // DCS WITH POSSIBLE LPM SUPPRESSION
 // Computes DCS value for a given target element (Z), initial gamma energy (Eg), 
@@ -310,8 +299,6 @@ G4double G4PairProductionRelModel::ComputeRelDXSectionPerAtom(G4double pEnergy,
   return std::max(fXiS*xSection, 0.0)/gammaEnergy;
 }
 
-
-
 G4double
 G4PairProductionRelModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
       G4double gammaEnergy, G4double Z, G4double, G4double, G4double)
@@ -335,14 +322,11 @@ G4PairProductionRelModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*
   return std::max(crossSection, 0.);
 }
 
-
 void G4PairProductionRelModel::SetupForMaterial(const G4ParticleDefinition*,
                                                 const G4Material* mat, G4double)
 {
   fLPMEnergy = mat->GetRadlen()*gLPMconstant;
 }
-
-
 
 void
 G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
@@ -484,8 +468,6 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   fParticleChange->ProposeTrackStatus(fStopAndKill);
 }
 
-
-
 // should be called only by the master and at initialisation
 void G4PairProductionRelModel::InitialiseElementData() 
 {
@@ -527,8 +509,6 @@ void G4PairProductionRelModel::InitialiseElementData()
   }
 }
 
-
-
 // s goes up to 2 with ds = 0.01 be default 
 void G4PairProductionRelModel::InitLPMFunctions() {
   if (!gLPMFuncs.fIsInitialized) {
@@ -542,8 +522,6 @@ void G4PairProductionRelModel::InitLPMFunctions() {
     gLPMFuncs.fIsInitialized = true;
   }
 }
-
-
 
 // used only at initialisation time
 void G4PairProductionRelModel::ComputeLPMGsPhis(G4double &funcGS, G4double &funcPhiS, const G4double varShat) {
@@ -585,8 +563,6 @@ void G4PairProductionRelModel::ComputeLPMGsPhis(G4double &funcGS, G4double &func
   }
 }
 
-
-
 // used at run-time to get some pre-computed LPM function values
 void G4PairProductionRelModel::GetLPMFunctions(G4double &lpmGs, 
                                                G4double &lpmPhis, 
@@ -606,8 +582,6 @@ void G4PairProductionRelModel::GetLPMFunctions(G4double &lpmGs,
     lpmGs   = 1.0-0.0230655/ss;
   }
 }
-
-
 
 void G4PairProductionRelModel::ComputeLPMfunctions(G4double &funcXiS, 
                  G4double &funcGS, G4double &funcPhiS, const G4double eps, 

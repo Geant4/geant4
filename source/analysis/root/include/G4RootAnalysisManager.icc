@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootAnalysisManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 #include "G4RootNtupleManager.hh"
 #include "G4RootFileManager.hh"

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGAntiXiZeroInelastic.hh 79697 2014-03-12 13:10:09Z gcosmo $
 //
 //
 // Author: D. H. Wright

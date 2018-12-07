@@ -27,7 +27,6 @@
 /// \brief Definition of the DetectorBarr90 class
 //
 //
-// $Id: DetectorBarr90.hh 72513 2013-07-24 20:37:54Z gum $
 //
 // Setuo from G.D. Barr et al NIM A294 (1990) 465-472 (fig.11)
 

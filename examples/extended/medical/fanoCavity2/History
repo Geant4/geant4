@@ -1,4 +1,3 @@
-$Id: History 109989 2018-05-14 07:24:50Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-11-18 V. Ivanchenko (fano2-V10-04-04)
+- PhysListEmStandard_option3 - use the same lateral displacement as in 
+  physics_list library
+
+08-11-18 V. Ivanchenko (fano2-V10-04-03)
+- PhysListEmStandard_GS, PhysListEmStandard_SS, PhysListEmStandard_WVI, 
+  PhysListEmStandard_option0, PhysListEmStandard_option3,
+  PhysListEmStandard_option4 - use the same set of parameters as in 
+  physics_list library
+
 09-05-18 B. Morgan (fano2-V10-04-02)
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

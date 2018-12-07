@@ -26,7 +26,6 @@
 /// \file exoticphysics/dmparticle/src/StackingMessenger.cc
 /// \brief Implementation of the StackingMessenger class
 //
-// $Id: StackingMessenger.cc,v 1.5 2006-09-25 17:06:29 maire Exp $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

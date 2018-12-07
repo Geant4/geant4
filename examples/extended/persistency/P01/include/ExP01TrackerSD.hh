@@ -27,7 +27,6 @@
 /// \brief Definition of the ExP01TrackerSD class
 //
 //
-// $Id: ExP01TrackerSD.hh 71111 2013-06-11 10:51:02Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,3 @@
-$Id: History 101654 2016-11-21 08:52:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct 19, 2018. S. Guatelli tag human_phantom-V10-04-00
+- G4VIS_USE and G4UI_USE deleted
+- authorship of the example updated
 
 Nov 19, 2016, A. Dotti tag human_phantom-V10-02-02
 - explicit set of SD to manager

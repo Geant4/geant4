@@ -1,12 +1,49 @@
  -------------------------------------------------------------------------------
 History File, 2004/02/27 G.A.P. Cirrone, Created
 cirrone@lns.infn.it
-http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 -------------------------------------------------------------------------------
  
          ====================================================
              History file of the Hadrontherapy application
          ====================================================
+
+09.11.2018 G.Cosmo; Tag: hadrontherapy-V10-04-09
+      - HadrontherapyDetectorConstruction: fixed typos in printout.
+
+31.08.2018 G.A.P.Cirrone; Tag: hadrontherapy-V10-04-08
+      - Updated user interface initialisation in hadrontherapy.cc
+
+21.08.2018 G.A.P.Cirrone; Tag: hadrontherapy-V10-04-07
+      - Try to fix another compilation error on Windows related to the visualisation
+
+19.08.2018 G.A.P.Cirrone, G.Petringa, Z.Mei; Tag: hadrontherapy-V10-04-06
+      - Fixed compilation erors in Windows
+      - LET class completely renewed with new calculation approaches      
+
+10.08.2018 G.A.P.Cirrone; hadrontherapy-V10-04-05
+      - Trying to fix compilation error under Windows	
+
+09.08.2018 G.A.P.Cirrone; Tag: hadrontherapy-V10-04-04
+      - Updated History file;
+      - Corrected the pow use in the RBE class trying so solve a compilation problem under Windows	
+
+Tag: hadrontherapy-V10-04-03: History file not updated
+Tag: hadrontherapy-V10-04-02: History file not updated
+
+24.06.2018 G.A.P.Cirrone, G. Petringa; Tag: hadrontherapy-V10-04-01
+      - Main file  cleaned;
+      - The defaultMacro_vis.mac macro file was added: now, if no macro file is provided,
+        the main will run defaultMacro.mac or defaultMacro_vis.mac depending
+        if visualisation is activated or not
+      - Added the function DefineMaterial() in DetectorConstruction to define materials
+        either not contained in the NIST database
+      - Added the Phase Space: PrimaryGenerator and DetectorSD modified
+      - Added HadrontherapyRBE.cc;
+	  - Removed g4analysis for LET and dose
+	  - In HadrontherapyDetectorSD Added histograms for the energy deposited
+	    and kinetic energy in the phantom slices;
+	  - TrentoProtonPassiveBeamLine changed in TIFPAProtonPassiveBeamLine
 
 22.05.2018 G.Cosmo; Tag: hadrontherapy-V10-04-00
 	  - Replaced obsolete use if G4VisAttributes::Invisible with
@@ -36,12 +73,15 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
  
 28.03.2017 L. Pandola, G.Petringa, G.A.P.Cirrone, G. Cuttone; Tag: hadrontherapy-V10-03-05
 	    - G4SetCuts definition added in the PhysicsList
+
 27.03.2017 G.Petringa, G.A.P.Cirrone, G. Cuttone; Tag: hadrontherapy-V10-03-04
 	    - Carbon beamline geometry corrected and updated and corresponding code 
-               revised;
+              revised;
             - G4Region definition corrected
+
 22.03.2017 G.Petringa, G.A.P.Cirrone; Tag: hadrontherapy-V10-03-03
-            - Fixed cmakelist error 
+            - Fixed cmakelist error
+ 
 19.03.2017 G.Petringa, G.A.P.Cirrone; Tag: hadrontherapy-V10-03-02
 	    - Carbon beam line geometry corrected and new modulators added 
 07.02.2017 G.A.P.Cirrone, G.Petringa; Tag: hadrontherapy-V10-03-01
@@ -67,12 +107,16 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
            - Lock for the file reading, to avoid simultaneous accesses.
 24.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-06
            - Removed /vis/ command call for batch mode.
+
 22.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-05
            - Bug solved. Removed MasterGPS in HadrontherapyActionInitialization.cc
+
 21.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-04
            - Testing of the laser driven beam line.
+
 20.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-03
            - Fixed timeout problem and other things which caused failure of tag V10-00-02
+
 16.10.2014 G.A.P. Cirrone; F. Romano; A. Tramontana; Tag: hadrontherapy-V10-00-02
 	   -ConstructSDandField() has been added in LaserDrivenBeamLine.cc. Master GPS temporary added in HadrontherapyActionInitialization.cc
            - Add the no fringing field maps for the quadrupole system. Different macro commands for the LaserDrivenBeamLine has been updated.

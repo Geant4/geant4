@@ -1,4 +1,3 @@
-$Id: $
 -------------------------------------------------------------------
 
 
@@ -84,8 +83,10 @@ $Id: $
 
  G4HadronPhysicsFTFP_BERT_TRV
  ----------------------------
- Similar to G4HadronPhysicsFTFP_BERT, with the only difference that the
- transition between FTFP and BERT is in the interval [2 , 4] GeV.
+ Similar to G4HadronPhysicsFTFP_BERT, with only two differences:
+ -  the transition between FTFP and BERT is in the interval [2 , 4] GeV;
+ -  the inelastic cross sections for hyperons is Glauber-Gribov 
+    (instead of Chips).
 
 
  G4HadronPhysicsFTF_BIC
@@ -95,6 +96,12 @@ $Id: $
  -  BIC is used (instead of BERT) below 5 GeV;
  -  FTF is still used above 4 GeV, but it is coupled with BIC (instead of
     Precompound/de-excitation)
+
+
+ G4HadronPhysicsFTFQGSP_BERT
+ ---------------------------
+ Similar to G4HadronPhysicsFTFP_BERT, but with QGS fragmentation of strings
+ (instead of the Lund string fragmentation).
 
  
  G4HadronPhysicsINCLXX
@@ -331,7 +338,13 @@ $Id: $
    - cross section: Chips
    - final-state:   FTFP for all energies
 
+
+ G4HadronPhysicsShieldingLEND
+ ----------------------------
+ Similar to G4HadronPhysicsShielding, except that LEND is used for neutrons
+ below 20 MeV instead of NeutronHP.
  
+
  G4VHadronPhysics
  ----------------
  Utility class which provides useful methods.

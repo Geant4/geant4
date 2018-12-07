@@ -27,7 +27,6 @@
 /// \brief Implementation of the RE02DetectorConstruction class
 //
 //
-// $Id: RE02DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
  
 #include "RE02DetectorConstruction.hh"

@@ -26,7 +26,6 @@
 /// \file exoticphysics/phonon/include/XPrimaryGeneratorAction.hh
 /// \brief Definition of the XPrimaryGeneratorAction class
 //
-// $Id: XPrimaryGeneratorAction.hh 84197 2014-10-10 14:33:03Z gcosmo $
 //
 
 #ifndef XPrimaryGeneratorAction_h

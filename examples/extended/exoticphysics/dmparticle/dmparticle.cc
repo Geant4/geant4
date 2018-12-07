@@ -26,7 +26,6 @@
 /// \file exoticphysics/dmparticle/dmparticle.cc
 /// \brief Main program of the exoticphysics/dmparticle example
 //
-// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

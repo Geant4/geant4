@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BinaryPionBuilder.hh 103593 2017-04-19 08:10:21Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,8 +46,8 @@
 #include "G4NeutronInelasticProcess.hh"
 #include "G4VPionBuilder.hh"
 
-#include "G4VCrossSectionDataSet.hh"
 #include "G4BinaryCascade.hh"   
+
 
 class G4BinaryPionBuilder : public G4VPionBuilder
 {
@@ -65,7 +64,6 @@ class G4BinaryPionBuilder : public G4VPionBuilder
 
     using G4VPionBuilder::Build; //Prevent compiler warning
   private:
-    G4VCrossSectionDataSet * thePiData;
     G4BinaryCascade * theModel;    
     G4double theMin;
     G4double theMax;

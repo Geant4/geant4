@@ -1,4 +1,3 @@
-$Id: History 108062 2017-12-19 15:18:27Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +13,16 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+20-Nov2018 A. Ribon       hadr-partonstring-mgt-V10-04-03
+-  Minor clean-up: no changes in the random sequence.
+
+05-Nov-2018 G. V. Uzhinsky      hadr-partonstring-mgt-V10-04-02
+- If something is bad in QGSM, G4VPartonStringModel.cc will return initial
+  particle/nucleus. See line 150:
+  if(strings->size() == 0) {Success=false; continue;}
+  FTF instead of vector "strings" returns 0! Thus, a corresponding changes
+  are introduced in FTF.
 
 19-Dec-2017 G. Cosmo      hadr-partonstring-mgt-V10-04-01
 - Fixed self-consistency in G4VertexCode header (missing #include).

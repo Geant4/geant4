@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MaterialPropertiesIndex.hh 103256 2017-03-23 08:53:38Z gcosmo $
 //
 // File:        G4MaterialPropertiesIndex.hh
 // Description: Indices and Names for G4MaterialProperties

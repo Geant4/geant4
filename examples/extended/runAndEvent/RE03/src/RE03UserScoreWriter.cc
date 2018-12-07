@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE03/src/RE03UserScoreWriter.cc
 /// \brief Implementation of the RE03UserScoreWriter class
 //
-// $Id: RE03UserScoreWriter.cc 99162 2016-09-07 08:14:24Z gcosmo $
 //
 
 #include "RE03UserScoreWriter.hh"

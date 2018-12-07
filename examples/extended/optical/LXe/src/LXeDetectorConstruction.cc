@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeDetectorConstruction.cc 110138 2018-05-16 07:31:43Z gcosmo $
 //
 /// \file optical/LXe/src/LXeDetectorConstruction.cc
 /// \brief Implementation of the LXeDetectorConstruction class
@@ -77,6 +76,7 @@ LXeDetectorConstruction::LXeDetectorConstruction()
 
   fN = fO = fC = fH = nullptr;
 
+  fSaveThreshold = 0;
   SetDefaults();
 
   DefineMaterials();
@@ -242,22 +242,8 @@ void LXeDetectorConstruction::DefineMaterials(){
 
 G4VPhysicalVolume* LXeDetectorConstruction::Construct(){
 
-  if (fExperimentalHall_phys) {
-     G4GeometryManager::GetInstance()->OpenGeometry();
-     G4PhysicalVolumeStore::GetInstance()->Clean();
-     G4LogicalVolumeStore::GetInstance()->Clean();
-     G4SolidStore::GetInstance()->Clean();
-     G4LogicalSkinSurface::CleanSurfaceTable();
-     G4LogicalBorderSurface::CleanSurfaceTable();
-  }
+  if (fExperimentalHall_phys) { return fExperimentalHall_phys; }
 
-  return ConstructDetector();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VPhysicalVolume* LXeDetectorConstruction::ConstructDetector()
-{
   //The experimental hall walls are all 1m away from housing walls
   G4double expHall_x = fScint_x+fD_mtl+1.*m;
   G4double expHall_y = fScint_y+fD_mtl+1.*m;
@@ -357,9 +343,6 @@ void LXeDetectorConstruction::ConstructSDandField() {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetDimensions(G4ThreeVector dims) {
-  //this->fScint_x=dims[0];
-  //this->fScint_y=dims[1];
-  //this->fScint_z=dims[2];
   fScint_x=dims[0];
   fScint_y=dims[1];
   fScint_z=dims[2];
@@ -369,7 +352,6 @@ void LXeDetectorConstruction::SetDimensions(G4ThreeVector dims) {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetHousingThickness(G4double d_mtl) {
-  //this->fD_mtl=d_mtl;
   fD_mtl=d_mtl;
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
@@ -377,7 +359,6 @@ void LXeDetectorConstruction::SetHousingThickness(G4double d_mtl) {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetNX(G4int nx) {
-  //this->fNx=nx;
   fNx=nx;
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
@@ -385,7 +366,6 @@ void LXeDetectorConstruction::SetNX(G4int nx) {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetNY(G4int ny) {
-  //this->fNy=ny;
   fNy=ny;
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
@@ -393,7 +373,6 @@ void LXeDetectorConstruction::SetNY(G4int ny) {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetNZ(G4int nz) {
-  //this->fNz=nz;
   fNz=nz;
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
@@ -401,7 +380,6 @@ void LXeDetectorConstruction::SetNZ(G4int nz) {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeDetectorConstruction::SetPMTRadius(G4double outerRadius_pmt) {
-  //this->fOuterRadius_pmt=outerRadius_pmt;
   fOuterRadius_pmt=outerRadius_pmt;
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
@@ -486,3 +464,16 @@ void LXeDetectorConstruction::SetMainScintYield(G4double y) {
 void LXeDetectorConstruction::SetWLSScintYield(G4double y) {
   fMPTPStyrene->AddConstProperty("SCINTILLATIONYIELD",y/MeV);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXeDetectorConstruction::SetSaveThreshold(G4int save){
+/*Sets the save threshold for the random number seed. If the number of photons
+generated in an event is lower than this, then save the seed for this event
+in a file called run###evt###.rndm
+*/
+  fSaveThreshold=save;
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

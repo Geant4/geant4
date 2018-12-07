@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DefaultLinearColorMap.cc 89031 2015-03-18 08:40:48Z gcosmo $
 //
 
 #include "G4DefaultLinearColorMap.hh"

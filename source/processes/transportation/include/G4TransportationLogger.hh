@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationLogger.hh 110824 2018-06-15 13:25:52Z gcosmo $
 //
 // 
 // class G4TransportationLogger
@@ -60,6 +59,9 @@ class G4TransportationLogger
                              G4int           numTrials,                            
                              G4long          noCalls,
                              const char*     methodName) const;
+
+    // Print the thresholds' values
+    void ReportLooperThresholds( const char* className );
    
   public:  // without description
 

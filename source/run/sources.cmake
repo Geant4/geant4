@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 110673 2018-06-07 10:28:33Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -165,7 +164,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4tracking
         G4transportation
         G4volumes
-	G4specsolids
+        G4specsolids
     GLOBAL_DEPENDENCIES
         G4digits_hits
         G4event

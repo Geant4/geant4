@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PlotManager.cc 85314 2014-10-27 14:33:08Z ihrivnac $
 
 // Author: Ivana Hrivnacova, 02/06/2015  (ivana@ipno.in2p3.fr)
 
@@ -145,9 +144,6 @@ bool load_embeded_styles(tools::xml::styles& a_styles) {
 // static data
 //
 
-//_____________________________________________________________________________
-G4PlotParameters G4PlotManager::fgPlotParameters;
-
 //
 // ctors, dtor
 //
@@ -155,6 +151,7 @@ G4PlotParameters G4PlotManager::fgPlotParameters;
 //_____________________________________________________________________________
 G4PlotManager::G4PlotManager(const G4AnalysisManagerState& state)
  : fState(state),
+   fPlotParameters(),
    fViewer(nullptr),
    fFileName()
 {
@@ -172,10 +169,10 @@ G4PlotManager::G4PlotManager(const G4AnalysisManagerState& state)
   // unsigned int wh = (unsigned int)(float(ww)*A4*0.80);
   static tools::sg::text_freetype ttf;
   fViewer.reset(new tools::viewplot(G4cout, ttf,
-                                    fgPlotParameters.GetColumns(),
-                                    fgPlotParameters.GetRows(), 
-                                    fgPlotParameters.GetWidth(), 
-                                    fgPlotParameters.GetHeight()));
+                                    fPlotParameters.GetColumns(),
+                                    fPlotParameters.GetRows(), 
+                                    fPlotParameters.GetWidth(), 
+                                    fPlotParameters.GetHeight()));
   fViewer->plots().view_border = false;
   load_embeded_styles(fViewer->styles());
   fViewer->styles().add_colormap("default",tools::sg::style_default_colormap());
@@ -187,10 +184,10 @@ G4PlotManager::G4PlotManager(const G4AnalysisManagerState& state)
     G4cout << "... using low resolution with Hershey fonts" << G4endl;
 #endif
   fViewer.reset(new tools::viewplot(G4cout, 
-                                    fgPlotParameters.GetColumns(), 
-                                    fgPlotParameters.GetRows(), 
-                                    fgPlotParameters.GetWidth(), 
-                                    fgPlotParameters.GetHeight()));
+                                    fPlotParameters.GetColumns(), 
+                                    fPlotParameters.GetRows(), 
+                                    fPlotParameters.GetWidth(), 
+                                    fPlotParameters.GetHeight()));
   fViewer->plots().view_border = false;
 #endif
 }
@@ -213,7 +210,7 @@ G4bool G4PlotManager::WritePage()
 
 #if defined(TOOLS_USE_FREETYPE)
   HD_style(fViewer->plots(), 5);
-  regions_style(fViewer->plots(), fgPlotParameters.GetScale());
+  regions_style(fViewer->plots(), fPlotParameters.GetScale());
 #endif
 
   G4bool result = fViewer->write_page();

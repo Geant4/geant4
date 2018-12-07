@@ -27,7 +27,6 @@
 /// \brief Implementation of the UVA_VisAction class
 //
 //
-// $Id: UVA_VisAction.cc 80449 2014-04-22 08:35:50Z gcosmo $
 
 #include "UVA_VisAction.hh"
 

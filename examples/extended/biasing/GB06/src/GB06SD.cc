@@ -26,7 +26,6 @@
 /// \file GB06/src/GB06SD.cc
 /// \brief Implementation of the GB06SD class
 //
-// $Id: GB06SD.cc $
 //
 
 #include "GB06SD.hh"

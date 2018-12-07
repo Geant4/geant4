@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.hh 104525 2017-06-02 07:22:58Z gcosmo $
 //
 //  
 // class G4FieldManager
@@ -188,27 +187,27 @@ class G4FieldManager
 					    // create fChordFinder ?
      // INVARIANTS of tracking  ---------------------------------------
      // 
-     //  1. CONSTANTS 
-     const G4double  fEpsilonMinDefault;   // Can be 1.0e-5 to 1.0e-10 ...
-     const G4double  fEpsilonMaxDefault;   // Can be 1.0e-3 to 1.0e-8 ...
+     //  1. 'CONSTANTS' - default values for accuracy parameters
+     const G4double  fEpsilonMinDefault= 5.0e-5; // Expected:  5.0e-5 to 1.0e-10 ...
+     const G4double  fEpsilonMaxDefault= 1.0e-3; // Expected:  1.0e-3 to 1.0e-8 ...
+
+     //  Default values for accuracy parameters
+     static G4double  fDefault_Delta_One_Step_Value;   // = 0.01 *  millimeter;
+     static G4double  fDefault_Delta_Intersection_Val; // = 0.001 * millimeter;;
 
      //  2. CHARACTERISTIC of field
      G4bool          fFieldChangesEnergy;
 
-     //  3. PARAMETERS 
+     //  3. PARAMETERS that determine the accuracy of integration or intersection
      // 
      //     Values for the required accuracies
      G4double  fDelta_One_Step_Value;      //  for one tracking/physics step
      G4double  fDelta_Intersection_Val;    //  for boundary intersection
 
-     G4double  fDefault_Delta_One_Step_Value;   // = 0.25 * mm;
-     G4double  fDefault_Delta_Intersection_Val; // = 0.1 * mm;
-
      //     Values for the small possible relative accuracy of a step
      //     (corresponding to the greatest possible integration accuracy)
      G4double  fEpsilonMin; 
      G4double  fEpsilonMax;
-
 };
 
 // Our current design and implementation expect that a particular

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // The manager class for batch plotting.
 
@@ -64,11 +63,9 @@ class G4PlotManager
     G4int  GetNofPlotsPerPage() const;
     G4bool WritePage();
 
-    // static data members
-    static G4PlotParameters fgPlotParameters;
-
     // data members
     const G4AnalysisManagerState& fState;
+    G4PlotParameters fPlotParameters;
     std::unique_ptr<tools::viewplot>  fViewer;
     G4String  fFileName;
 };
@@ -77,7 +74,7 @@ class G4PlotManager
 
 //_____________________________________________________________________________
 inline G4int  G4PlotManager::GetNofPlotsPerPage() const
-{ return fgPlotParameters.GetColumns()*fgPlotParameters.GetRows(); }
+{ return fPlotParameters.GetColumns()*fPlotParameters.GetRows(); }
 
 
 //_____________________________________________________________________________
@@ -89,7 +86,7 @@ inline G4bool G4PlotManager::PlotAndWrite(const std::vector<T*>& htVector,
 
   fViewer->plots().init_sg(); 
     //it will recreate the sg::plotters and then reset the styles on new ones.
-  fViewer->set_cols_rows(fgPlotParameters.GetColumns(), fgPlotParameters.GetRows());
+  fViewer->set_cols_rows(fPlotParameters.GetColumns(), fPlotParameters.GetRows());
   fViewer->plots().set_current_plotter(0);
 
   G4bool finalResult = true;
@@ -109,7 +106,7 @@ inline G4bool G4PlotManager::PlotAndWrite(const std::vector<T*>& htVector,
 
     // plot this object
     fViewer->plot(*ht);
-    fViewer->set_current_plotter_style(fgPlotParameters.GetStyle());
+    fViewer->set_current_plotter_style(fPlotParameters.GetStyle());
 
     // set color (only blue for the time being)
     tools::sg::plotter& plotter = fViewer->plots().current_plotter();

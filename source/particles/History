@@ -1,4 +1,3 @@
-$Id: History 110258 2018-05-17 14:20:46Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 09 Nov 2018 Gabriele Cosmo (particles-V10-04-12)
+- G4PrimaryVertex: fixed typo in class description.
+
+- 08 Sep 2018 Hisaya Kurashige (particles-V10-04-11)
+- fix a bug in G4NeutronBetaDecay (problem#2088)
+
+- 31 Aug 2018 Hisaya Kurashige (particles-V10-04-10)
+- change UI command directory for G4NuclideTable
+
+- 15 Aug 2018 Hisaya Kurashige (particles-V10-04-09)
+- remove obsolete G4NucleiPropertiesTableAME03
+
+- 14 Aug 2018 Hisaya Kurashige (particles-V10-04-08)
+- fix compiler warning in G4ParticleTable
+
+- 14 Aug 2018 Hisaya Kurashige (particles-V10-04-06)
+- clean up source codes under management
+
+- 8 Aug 2018 Hisaya Kurashige (particles-V10-04-04)
+- Fixed bugs(bug report #2072) in muon decay channel with spin
 
 - 17 May 2018 Jonathan Madsen (particles-V10-04-03)
 - updated "thread-local-static-var" model to

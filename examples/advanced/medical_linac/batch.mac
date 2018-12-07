@@ -5,6 +5,13 @@
 
 #/OnlyVisio true                                       # switch the visualization mode
 
+###  Experimental comparison and convergence
+
+/convergence/bCompareExp false                         # to compare the data with an experimental file data
+/convergence/nMaxLoop 2 # it is used if /convergence/bCompareExp is false
+/convergence/fileExperimentalData VoxelsTest.txt       # name of the experimental file
+/convergence/maxNumberOfEvents 5                       # maximum number of events at least in one experimental voxel
+/convergence/fileExperimentalDataOut VoxelsTest_Out # full path and name of the experimental file results
 
 ### Phase space
 
@@ -15,16 +22,9 @@
 /general/PhaseSpaceOutFile PhSp_Acc1                   # full file name of the phase space
 /general/bForcePhaseSpaceBeforeJaws true
 
-### Simulation oputput
- 
-/general/bSaveROG true                                 # true if save the ROG volume
-/general/ROGOutFile ROG_Out  # full path of the ROG file name
-
-
 ### Number of primary events
 
-/general/nBeam 100000                                  # number of events to run
-
+/general/nBeam 50000                                  # number of events to run
 
 ### NUMBER STORED  
 
@@ -33,14 +33,13 @@
 /general/saving_in_ROG_Voxels_every_events 10000      # maximum particle number stored before saving - for ROG
 /general/max_N_particles_in_PhSp_File 10000000            # maximum particle number stored in the phase space file
 
-
 ### Primary generator 
 
 /primaryParticleData/nMaxParticlesInRamPhaseSpace 1000 # maximum particle number loaded from the phase space file each time
 /primaryParticleData/nIdenticalParticles 1             # number of identical particles generated in the primary generator  
-/primaryParticleData/GunMeanEnegy 6 MeV                # mean energy of the primary particles 
-/primaryParticleData/GunStdEnegy 0.127 MeV             # std energy of the primary particles 
-/primaryParticleData/GunRadious 0.5 mm                 # radious primary particles beam
+/primaryParticleData/GunMeanEnergy 6 MeV                # mean energy of the primary particles 
+/primaryParticleData/GunStdEnergy 0.127 MeV             # std energy of the primary particles 
+/primaryParticleData/GunRadius 0.5 mm                 # radious primary particles beam
 /primaryParticleData/sourceTypeName randomTarget       # type of particle generator source
 /primaryParticleData/calculatedPhaseSpaceFileIN PhSp_Acc1_1.txt # full path and file name of the phase space file to be used as particle generator
 
@@ -59,11 +58,12 @@
 /accelerator/rotationX 0 deg  # angles of rotation along X  [deg]
 /accelerator/rotationX 45 deg  # angles of rotation along X  [deg]
 
-### Physic
+### Physics
 
-#/physic/addPhysics standard_opt3 			# Standard Electromagnetic models
-/physic/addPhysics LowE_Livermore  		        # Lowenergy-Livermore Electromagnetic models
-#/physic/addPackage QGSP_BIC    		        # use of the Package Physic lists
+#/physics/addPhysics standard_opt3 
+/physics/addPhysics LowE_Livermore 
+
+/control/verbose 2
 
 ####################	INFO   ######################################
 

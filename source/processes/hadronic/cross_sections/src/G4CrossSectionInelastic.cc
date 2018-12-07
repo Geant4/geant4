@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionInelastic.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +49,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
 #include "G4NistManager.hh"
+#include "G4HadronicParameters.hh"
 
 G4CrossSectionInelastic::G4CrossSectionInelastic(G4VComponentCrossSection* c,
 						 G4int zmin, G4int zmax, 
@@ -86,6 +86,7 @@ G4CrossSectionInelastic::GetElementCrossSection(const G4DynamicParticle* p,
 void G4CrossSectionInelastic::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
   component->BuildPhysicsTable(p);
+  SetMaxKinEnergy(G4HadronicParameters::Instance()->GetMaxEnergy());
 }
 
 void G4CrossSectionInelastic::DumpPhysicsTable(const G4ParticleDefinition& p)
@@ -93,9 +94,9 @@ void G4CrossSectionInelastic::DumpPhysicsTable(const G4ParticleDefinition& p)
   component->DumpPhysicsTable(p);
 }
 
-void
-G4CrossSectionInelastic::CrossSectionDescription(std::ostream& /*outFile*/) const
+void 
+G4CrossSectionInelastic::CrossSectionDescription(std::ostream& outFile) const
 {
-  component->Description();
+  component->Description(outFile);
 }
 

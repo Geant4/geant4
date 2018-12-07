@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FSALIntegrationDriver.icc 110753 2018-06-12 15:44:03Z gcosmo $
 //
 //
 // class G4FSALIntegrationDriver
@@ -38,26 +37,23 @@
 // - Created. D.Sorokin
 // --------------------------------------------------------------------
 
-#include "globals.hh"
-#include "G4GeometryTolerance.hh"
-#include "G4FieldTrack.hh"
 #include "G4FieldUtils.hh"
-
-#include <cassert>
 
 
 template <class T>
 G4FSALIntegrationDriver<T>::
 G4FSALIntegrationDriver ( G4double hminimum, T* pStepper,
                           G4int numComponents, G4int statisticsVerbose )
-    : fSmallestFraction(1e-12),
-      fNoTotalSteps(0),
-      fNoBadSteps(0),
-      fNoGoodSteps(0),
+    : Base(pStepper),
+      fMinimumStep(hminimum),
+      fSmallestFraction(1e-12),
       fVerboseLevel(statisticsVerbose),
-      fNoQuickAvanceCalls(0)
+      fNoQuickAvanceCalls(0),
+      fNoAccurateAdvanceCalls(0),
+      fNoAccurateAdvanceBadSteps(0),
+      fNoAccurateAdvanceGoodSteps(0)
 {
-    if (numComponents != pStepper->GetNumberOfVariables())
+    if (numComponents != Base::GetStepper()->GetNumberOfVariables())
     {
         std::ostringstream message;
         message << "Driver's number of integrated components "
@@ -67,10 +63,6 @@ G4FSALIntegrationDriver ( G4double hminimum, T* pStepper,
         G4Exception("G4FSALIntegrationDriver","GeomField0002",
                     FatalException, message);
     }
-    RenewStepperAndAdjust(pStepper);
-    fMinimumStep = hminimum;
-    fMaxStepBase = 250;
-    fMaxNoSteps = fMaxStepBase / pIntStepper->IntegratorOrder();
 }
 
 template <class T>
@@ -80,7 +72,9 @@ G4FSALIntegrationDriver<T>::~G4FSALIntegrationDriver()
     if( fVerboseLevel > 0 )
        G4cout << "G4FSALIntegration Driver Stats: "
               << "#QuickAdvance " << fNoQuickAvanceCalls
-              << " - #AccurateAdvance " << fNoTotalSteps << G4endl;
+              << " - #AccurateAdvance " << fNoAccurateAdvanceCalls << G4endl
+              << "#good steps " << fNoAccurateAdvanceGoodSteps << " "
+              << "#bad steps " << fNoAccurateAdvanceBadSteps << G4endl;
 #endif
 }
 
@@ -94,18 +88,19 @@ G4bool G4FSALIntegrationDriver<T>::
 AccurateAdvance( G4FieldTrack& track, G4double hstep,
                  G4double eps, G4double hinitial )
 {
+    ++fNoAccurateAdvanceCalls;
+
     if (hstep < GetMinimumStep())
     {
         G4double dchord_step = 0, dyerr = 0;
         G4double dydx[G4FieldTrack::ncompSVEC];
-        GetDerivatives(track, dydx);
-        return QuickAdvance(track, dydx, hstep, dchord_step, dyerr);
+        Base::GetDerivatives(track, dydx);
+        return QuickAdvance(track, dydx, hstep, Base::UNKNOWN_CURVATURE_RADIUS, dchord_step, dyerr);
     }
 
     G4bool succeeded = false;
 
     G4double hnext, hdid;
-
 
     G4double y[G4FieldTrack::ncompSVEC], dydx[G4FieldTrack::ncompSVEC];
 
@@ -122,9 +117,9 @@ AccurateAdvance( G4FieldTrack& track, G4double hstep,
         h = hinitial;
     }
 
-    pIntStepper->RightHandSide(y, dydx);
+    Base::GetStepper()->RightHandSide(y, dydx);
 
-    for (G4int iter = 0; iter < fMaxNoSteps; ++iter)
+    for (G4int iter = 0; iter < Base::GetMaxNoSteps(); ++iter)
     {
         const G4ThreeVector StartPos =
             field_utils::makeVector(y, field_utils::Value3D::Position);
@@ -148,34 +143,11 @@ AccurateAdvance( G4FieldTrack& track, G4double hstep,
 
     if (succeeded)
     {
-        track.LoadFromArray(y, pIntStepper->GetNumberOfVariables());
+        track.LoadFromArray(y, Base::GetStepper()->GetNumberOfVariables());
         track.SetCurveLength(track.GetCurveLength() + curveLength);
     }
 
     return succeeded;
-}
-
-// Step failed; compute the size of retrial Step.
-template <class T>
-G4double G4FSALIntegrationDriver<T>::
-ShrinkStepSize(G4double h, G4double error) const
-{
-    if (error > errorConstraintShrink)
-    {
-        return max_stepping_decrease * h;
-    }
-    return GetSafety() * h * std::pow(error, GetPshrnk());
-}
-
-// Compute size of next Step
-template<class T>
-G4double G4FSALIntegrationDriver<T>::
-GrowStepSize(G4double h, G4double error) const
-{
-    if (error < errorConstraintGrow) {
-        return max_stepping_increase * h;
-    }
-    return GetSafety() * h * std::pow(error, GetPgrow());
 }
 
 // Driver for one Runge-Kutta Step with monitoring of local truncation error
@@ -193,13 +165,15 @@ GrowStepSize(G4double h, G4double error) const
 //
 template <class T>
 void G4FSALIntegrationDriver<T>::
-OneGoodStep( G4double y[], G4double dydx[],
-             G4double& curveLength,   // InOut
-             G4double htry, G4double eps_rel_max,
-             G4double& hdid,          // Out
-             G4double& hnext )        // Out
+OneGoodStep(G4double y[], 
+            G4double dydx[],
+            G4double& curveLength,   // InOut
+            G4double htry, 
+            G4double eps_rel_max,
+            G4double& hdid,         // Out
+            G4double& hnext)        // Out
 {
-    G4double error = DBL_MAX;
+    G4double error2 = DBL_MAX;
 
     G4double yError[G4FieldTrack::ncompSVEC],
              yOut[G4FieldTrack::ncompSVEC],
@@ -215,19 +189,19 @@ OneGoodStep( G4double y[], G4double dydx[],
     {
         ++tot_no_trials;
 
-        pIntStepper->Stepper(y, dydx, hstep, yOut, yError, dydxOut);
-        error = field_utils::relativeError(y, yError, hstep, eps_rel_max);
+        Base::GetStepper()->Stepper(y, dydx, hstep, yOut, yError, dydxOut);
+        error2 = field_utils::relativeError2(y, yError, hstep, eps_rel_max);
 
         // Step succeeded.
-        if (error <= 1)  break;
+        if (error2 <= 1)  break;
 
-        hstep = ShrinkStepSize(hstep, error);
+        hstep = Base::ShrinkStepSize2(hstep, error2);
     }
 
-    hnext = GrowStepSize(hstep, error);
+    hnext = Base::GrowStepSize2(hstep, error2);
     curveLength += (hdid = hstep);
 
-    for(G4int k = 0; k < pIntStepper->GetNumberOfVariables(); ++k)
+    for(G4int k = 0; k < Base::GetStepper()->GetNumberOfVariables(); ++k)
     {
         y[k] = yOut[k];
         dydx[k] = dydxOut[k];
@@ -237,7 +211,8 @@ OneGoodStep( G4double y[], G4double dydx[],
 template <class T>
 G4bool G4FSALIntegrationDriver<T>::
 QuickAdvance( G4FieldTrack& fieldTrack, const G4double dydxIn[],
-              G4double hstep, G4double& dchord_step, G4double& dyerr )
+              G4double hstep, G4double /*inverseCurvatureRadius*/,
+              G4double& dchord_step, G4double& dyerr )
 {
     ++fNoQuickAvanceCalls;
 
@@ -268,35 +243,15 @@ QuickAdvance( G4FieldTrack& fieldTrack, const G4double dydxIn[],
 
     fieldTrack.DumpToArray(yIn);
 
-    pIntStepper->Stepper(yIn, dydxIn, hstep, yOut, yError, dydxOut);
-    dchord_step = pIntStepper->DistChord();
+    Base::GetStepper()->Stepper(yIn, dydxIn, hstep, yOut, yError, dydxOut);
+    dchord_step = Base::GetStepper()->DistChord();
 
-    fieldTrack.LoadFromArray(yOut, pIntStepper->GetNumberOfVariables());
+    fieldTrack.LoadFromArray(yOut, Base::GetStepper()->GetNumberOfVariables());
     fieldTrack.SetCurveLength(fieldTrack.GetCurveLength() + hstep);
 
-    dyerr = field_utils::relativeError(yOut, yError, hstep) * hstep;
+    dyerr = field_utils::absoluteError(yOut, yError, hstep);
 
     return true;
-}
-
-template <class T>
-G4double G4FSALIntegrationDriver<T>::
-ComputeNewStepSize( G4double  errMaxNorm,    // max error  (normalised)
-                    G4double  hstepCurrent ) // current step size
-{
-    if (errMaxNorm > 1)
-    {
-        return ShrinkStepSize(hstepCurrent, errMaxNorm);
-    }
-    else if(errMaxNorm >= 0)
-    {
-        return GrowStepSize(hstepCurrent, errMaxNorm);
-    }
-
-    G4Exception("G4FSALIntegrationDriver::ConputeNewStepSize", "GeomField0003",
-                FatalException, "Error is negative!");
-
-    return max_stepping_increase * hstepCurrent;
 }
 
 template <class T>
@@ -318,24 +273,13 @@ void G4FSALIntegrationDriver<T>::SetSmallestFraction(G4double newFraction)
 }
 
 template <class T>
-void G4FSALIntegrationDriver<T>::GetDerivatives(
-    const G4FieldTrack& track, G4double dydx[]) const
-{
-    G4double y[G4FieldTrack::ncompSVEC];
-    track.DumpToArray(y);
-    pIntStepper->RightHandSide(y, dydx);
-}
-
-template <class T>
 void G4FSALIntegrationDriver<T>::CheckStep(
     const G4ThreeVector& posIn, const G4ThreeVector& posOut, G4double hdid)
 {
-    ++fNoTotalSteps;
-
     const G4double endPointDist = (posOut - posIn).mag();
     if (endPointDist >= hdid * (1. + perMillion))
     {
-        ++fNoBadSteps;
+        ++fNoAccurateAdvanceBadSteps;
 #ifdef G4DEBUG_FIELD
         // Issue a warning only for gross differences -
         // we understand how small difference occur.
@@ -349,127 +293,20 @@ void G4FSALIntegrationDriver<T>::CheckStep(
     }
     else
     {
-       ++fNoGoodSteps;
+       ++fNoAccurateAdvanceGoodSteps;
     }
-}
-
-template <class T>
-void G4FSALIntegrationDriver<T>::UpdateErrorConstraints()
-{
-    errorConstraintShrink = std::pow(
-            max_stepping_decrease / GetSafety(), 1. / GetPshrnk());
-
-    errorConstraintGrow = std::pow(
-            max_stepping_increase / GetSafety(), 1. / GetPgrow());
 }
 
 template <class T>
 inline G4double G4FSALIntegrationDriver<T>::GetMinimumStep() const
 {
     return fMinimumStep;
-} 
-
-template <class T>
-inline G4double G4FSALIntegrationDriver<T>::GetSafety() const
-{
-    return safety;
-}
-
-template <class T>
-inline G4double G4FSALIntegrationDriver<T>::GetPshrnk() const
-{
-    return pshrnk;
-} 
-
-template <class T>
-G4double G4FSALIntegrationDriver<T>::GetPgrow() const
-{
-    return pgrow;
 }
 
 template <class T>
 void G4FSALIntegrationDriver<T>::SetMinimumStep(G4double minimumStepLength)
 {
     fMinimumStep = minimumStepLength;
-} 
-
-template <class T>
-void G4FSALIntegrationDriver<T>::ReSetParameters(G4double new_safety)
-{
-    safety = new_safety;
-    pshrnk = -1.0 / pIntStepper->IntegratorOrder();
-    pgrow  = -1.0 / (1.0 + pIntStepper->IntegratorOrder());
-    UpdateErrorConstraints();
-}
-
-template <class T>
-void G4FSALIntegrationDriver<T>::SetSafety(G4double val)
-{ 
-    safety = val;
-    UpdateErrorConstraints();
-}
-
-template <class T>
-void G4FSALIntegrationDriver<T>::
-RenewStepperAndAdjust(G4MagIntegratorStepper* stepper)
-{  
-   T* ourStepper= dynamic_cast<T*>(stepper);
-   if ( ourStepper )
-   {
-      RenewStepperAndAdjustStrict( ourStepper );
-   }
-   else
-   {
-      G4Exception("G4FSALIntegrationDriver::RenewStepperAndAdjust()",
-                  "GeomField0002", FatalException,
-     "The type of the stepper provided is incorrect for this templated driver");
-   }
-}
-
-template <class T>
-void G4FSALIntegrationDriver<T>::RenewStepperAndAdjustStrict(T* stepper)
-{  
-    pIntStepper = stepper;
-    ReSetParameters();
-}
-
-template <class T>
-const T* G4FSALIntegrationDriver<T>::GetStepperOfPreciseType() const
-{
-    return pIntStepper;
-}
-
-template <class T>
-T* G4FSALIntegrationDriver<T>::GetStepperOfPreciseType()
-{
-    return pIntStepper;
-}
-
-template <class T>
-const G4MagIntegratorStepper* G4FSALIntegrationDriver<T>::GetStepper() const
-{
-    return nullptr;  // pIntStepper;
-    // It can only return 'pIntStepper' if it is a compatible type    
-}
-
-template <class T>
-G4MagIntegratorStepper* G4FSALIntegrationDriver<T>::GetStepper()
-{
-    return nullptr;
-    // It can only return 'pIntStepper' if it is a compatible type
-}
-
-
-template <class T>
-G4int G4FSALIntegrationDriver<T>::GetMaxNoSteps() const
-{
-    return fMaxNoSteps;
-}
-
-template <class T>
-void G4FSALIntegrationDriver<T>::SetMaxNoSteps(G4int val)
-{
-    fMaxNoSteps = val;
 }
 
 template <class T>
@@ -488,17 +325,10 @@ template <class T>
 G4double G4FSALIntegrationDriver<T>::GetSmallestFraction() const
 {
     return fSmallestFraction;
-} 
-
-template <class T>
-G4EquationOfMotion* G4FSALIntegrationDriver<T>::GetEquationOfMotion()
-{
-    return pIntStepper->GetEquationOfMotion();
 }
 
 template <class T>
-void G4FSALIntegrationDriver<T>::
-SetEquationOfMotion(G4EquationOfMotion* equation)
+void G4FSALIntegrationDriver<T>::IncrementQuickAdvanceCalls()
 {
-    pIntStepper->SetEquationOfMotion(equation);
+    ++fNoQuickAvanceCalls;
 }

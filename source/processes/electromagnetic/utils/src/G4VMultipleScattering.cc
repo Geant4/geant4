@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc 107364 2017-11-09 10:53:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -350,15 +349,14 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VMultipleScattering::StreamInfo(std::ostream& outFile, 
-                  const G4ParticleDefinition& part, G4String endOfLine) const
+                  const G4ParticleDefinition& part, G4bool rst) const
 {
-  outFile << endOfLine << GetProcessName() << ": ";
-	if (endOfLine != G4String("<br>\n")) {
-		outFile << "  for " << part.GetParticleName();
-	}
-	outFile  << "    SubType= " << GetProcessSubType() << endOfLine;
-  StreamProcessInfo(outFile, endOfLine);
-  modelManager->DumpModelList(outFile, verboseLevel, endOfLine);
+  G4String indent = (rst ? "  " : "");
+  outFile << G4endl << indent << GetProcessName() << ": ";
+  if (!rst) outFile << "  for " << part.GetParticleName();
+  outFile  << "    SubType= " << GetProcessSubType() << G4endl;
+  StreamProcessInfo(outFile);
+  modelManager->DumpModelList(outFile, verboseLevel);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -733,7 +731,7 @@ void G4VMultipleScattering::SetIonisation(G4VEnergyLossProcess* p)
 void G4VMultipleScattering::ProcessDescription(std::ostream& outFile) const
 {
   if(firstParticle) {
-    StreamInfo(outFile, *firstParticle, G4String("<br>\n"));
+    StreamInfo(outFile, *firstParticle, true);
   }
 }
 

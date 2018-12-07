@@ -1,5 +1,4 @@
 
-//$Id$
 
 ///\file "radioactivedecay/Activation/.README.txt"
 ///\brief Example Activation README page

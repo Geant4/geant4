@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeParamMessenger.cc 72016 2013-07-03 16:24:15Z mkelsey $
 // Define simple UI commands as alternative to environment variables
 //
 // 20130304  M. Kelsey -- Add flag to collect and display cascade structure
@@ -51,6 +50,7 @@
 G4CascadeParamMessenger::G4CascadeParamMessenger(G4CascadeParameters* params)
   : G4UImessenger(), theParams(params), cmdDir(0), localCmdDir(false) {
   // NOTE: Put under same top-level tree as EM
+  CreateDirectory("/process/had/","Hadronic processes");
   CreateDirectory("/process/had/cascade/","Bertini-esque cascade parameters");
 
   verboseCmd = CreateCommand<G4UIcmdWithAnInteger>("verbose",

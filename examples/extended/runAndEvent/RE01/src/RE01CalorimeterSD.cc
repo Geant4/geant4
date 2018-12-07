@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE01/src/RE01CalorimeterSD.cc
 /// \brief Implementation of the RE01CalorimeterSD class
 //
-// $Id: RE01CalorimeterSD.cc 97383 2016-06-02 09:56:35Z gcosmo $
 //
 
 #include "RE01CalorimeterSD.hh"

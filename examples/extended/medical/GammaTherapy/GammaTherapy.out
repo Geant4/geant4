@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -199,8 +199,8 @@ eBrem:   for  e-    SubType= 3
       Lambda tables from threshold to 10 GeV, 10 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 GeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 GeV   AngularGenUrban
 
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 10 GeV, 10 bins per decade, spline: 1
@@ -226,8 +226,8 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 10 GeV, 10 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 GeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=       10 GeV   AngularGenUrban
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -280,7 +280,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 10 eV  to 10 GeV in 90 bins
       Lambda tables from threshold to 10 GeV, 10 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
-      Stopping Power data for 17 ion/material pairs 
+      Stopping Power data for 17 ion/material pairs
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 GeV
@@ -583,32 +583,32 @@ Index : 5     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.340000s Real=4.362015s Sys=0.010000s
+  User=4.070000s Real=4.266298s Sys=0.000000s
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         33.05
-Average number of gamma                      19.55
-Average number of e+                         0.7574
-Average number of steps in the phantom       11.46
+Average number of e-                         33.5
+Average number of gamma                      19.69
+Average number of e+                         0.7775
+Average number of steps in the phantom       11.71
 Average number of e- steps in the target     17.98
-Average number of g  produced in the target  18.72
-Average number of e- produced in the target  20.88
-Average number of g produced in the phantom  0.4867
-Average number of e- produced in the phantom 5.845
-Total fGamma fluence in front of the phantom 7.921 MeV 
+Average number of g  produced in the target  18.83
+Average number of e- produced in the target  21.09
+Average number of g produced in the phantom  0.5008
+Average number of e- produced in the phantom 5.991
+Total fGamma fluence in front of the phantom 7.965 MeV 
 ========================================================
 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 657129918, 8953711
+ Current couple of seeds = 1044967642, 1076671597
 ----------------------------------------
 #
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.063 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.06 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

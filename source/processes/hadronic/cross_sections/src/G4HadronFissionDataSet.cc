@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronFissionDataSet.cc 68720 2013-04-05 09:18:58Z gcosmo $
 //
 //
 // G4 Physics class: HadronFissionDataSet for cross sections

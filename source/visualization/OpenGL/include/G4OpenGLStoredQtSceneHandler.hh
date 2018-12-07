@@ -24,12 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.32 2010-11-10 17:10:49 allison Exp $
 //
 // 
 // Laurent Garnier  27th October 2011
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
 
 #ifndef G4OPENGLSTOREDQTSCENEHANDLER_HH
 #define G4OPENGLSTOREDQTSCENEHANDLER_HH

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 // ---------------------------------------------------------------
 // GEANT 4 class header file
@@ -36,17 +35,17 @@
 //    are used by one of the G4Cache classes.
 //
 //    G4Cache is a container of the cached value.
-//    Not memory efficient, but CPU efficient (constant time access)
+//    Not memory efficient, but CPU efficient (constant time access).
 //    A different version with a map instead of a vector should be
 //    memory efficient and less CPU efficient (log-time access).
 //    If really a lot of these objects are used
-//    we may want to consider the map version to save some memory
+//    we may want to consider the map version to save some memory.
 //
 //    These are simplified "split-classes" without any
 //    copy-from-master logic. Each cached object is associated
 //    a unique identified (an integer), that references an instance
 //    of the cached value (of template type VALTYPE) in a
-//    static TLS data structure
+//    static TLS data structure.
 //
 //    In case the cache is used for a cached object the object class
 //    has to provide a default constructor. Alternatively pointers to
@@ -58,8 +57,8 @@
 //    21 Oct 2013: A. Dotti - First implementation
 //
 // Todos: - Understand if map based class can be more efficent than
-//          vector one
-//        - Evaluate use of specialized allocator for TLS "new"
+//          vector one.
+//        - Evaluate use of specialized allocator for TLS "new".
 // ------------------------------------------------------------
 
 #ifndef G4CacheDetails_hh
@@ -68,13 +67,6 @@
 #include <vector>
 #include "G4Threading.hh"
 #include "globals.hh"
-
-#ifdef g4cdebug
-  #include <iostream>
-  #include <sstream>
-  using std::cout;
-  using std::endl;
-#endif
 
 // A TLS storage for a cache of type VALTYPE
 //
@@ -141,28 +133,28 @@ template<> class G4CacheReference<G4double>
 };
 
 
-//================================
-// Implementation details follow
-//================================
-
 //======= Implementation: G4CacheReference<V>
 //===========================================
 
 template<class V>
 void G4CacheReference<V>::Initialize( unsigned int id )
 {
-#ifdef g4cdebug
-  if ( cache() == 0 )
-    cout<<"Generic template"<<endl;
-#endif
-
   // Create cache container
   if ( cache() == 0 )
+  {
+#ifdef g4cdebug
+    std::cout << "Generic template container..." << std::endl;
+#endif
     cache() = new cache_container;
+  }
   if ( cache()->size() <= id )
+  {
     cache()->resize(id+1,static_cast<V*>(0));
+  }
   if ( (*cache())[id] == 0 )
+  {
     (*cache())[id]=new V;
+  }
 }
 
 template<class V>
@@ -171,7 +163,8 @@ void G4CacheReference<V>::Destroy( unsigned int id, G4bool last )
   if ( cache() )
   {
 #ifdef g4cdebug
-    cout<<"Destroying element"<<id<<" is last?"<<last<<endl;
+    std::cout << "V: Destroying element "<< id
+              << " is last? " << last << std::endl;
 #endif
     if ( cache()->size() < id )
     {
@@ -186,11 +179,18 @@ void G4CacheReference<V>::Destroy( unsigned int id, G4bool last )
     }
     if ( cache()->size() > id && (*cache())[id] )
     {
+#ifdef g4cdebug
+      std::cout << "V: Destroying element " << id
+                << " size: " << cache()->size() << std::endl;
+#endif
       delete (*cache())[id];
       (*cache())[id]=0;
     }
     if (last)
     {
+#ifdef g4cdebug
+      std::cout << "V: Destroying LAST element!" << std::endl;
+#endif
       delete cache();
       cache() = 0;
     }
@@ -217,14 +217,17 @@ G4CacheReference<V>::cache()
 template<class V>
 void G4CacheReference<V*>::Initialize( unsigned int id )
 {
+  if ( cache() == 0 )
+  {
 #ifdef g4cdebug
-  if ( cache() == 0 )
-    cout<<"Pointer template"<<endl;
+    std::cout << "Pointer template container..." << std::endl;
 #endif
-  if ( cache() == 0 )
     cache() = new cache_container;
+  }
   if ( cache()->size() <= id )
+  {
     cache()->resize(id+1,static_cast<V*>(0));
+  }
 }
 
 template<class V>
@@ -233,8 +236,8 @@ inline void G4CacheReference<V*>::Destroy( unsigned int id , G4bool last )
   if ( cache() )
   {
 #ifdef g4cdebug
-    cout << "Destroying element" << id << " is last?" << last
-         << "-Pointer template specialization-" << endl;
+    std::cout << "V*: Destroying element " << id << " is last? " << last
+              << std::endl;
 #endif
     if ( cache()->size() < id )
     {
@@ -250,11 +253,18 @@ inline void G4CacheReference<V*>::Destroy( unsigned int id , G4bool last )
     if ( cache()->size() > id && (*cache())[id] )
     {
       // Ownership is for client
-      // delete (*cache)[id];
+      // delete (*cache())[id];
+#ifdef g4cdebug
+      std::cout << "V*: Resetting element " << id
+                << " size: " << cache()->size() << std::endl;
+#endif
       (*cache())[id]=0;
     }
     if (last )
     {
+#ifdef g4cdebug
+      std::cout << "V*: Deleting LAST element!" << std::endl;
+#endif
       delete cache();
       cache() = 0;
     }
@@ -280,26 +290,26 @@ G4CacheReference<V*>::cache()
 
 void G4CacheReference<G4double>::Initialize( unsigned int id )
 {
-#ifdef g4cdebug
-  cout<<"Specialized template for G4double"<<endl;
-#endif
   if ( cache() == 0 )
+  {
+#ifdef g4cdebug
+    std::cout << "Specialized template for G4double container..." << std::endl;
+#endif
     cache() = new cache_container;
+  }
   if ( cache()->size() <= id )
+  {
     cache()->resize(id+1,static_cast<G4double>(0));
+  }
 }
 
-#ifdef g4cdebug
-void G4CacheReference<G4double>::Destroy( unsigned int id , G4bool last)
-#else
 void G4CacheReference<G4double>::Destroy( unsigned int /*id*/ , G4bool last)
-#endif
 {
   if ( cache() && last )
   {
 #ifdef g4cdebug
-    cout << "Destroying element" << id << " is last?" << last
-         << "-Pointer template specialization-" << endl;
+    std::cout << "DB: Destroying LAST element! Is it last? " << last
+              << std::endl;
 #endif
     delete cache();
     cache() = 0;

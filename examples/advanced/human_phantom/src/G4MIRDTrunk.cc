@@ -23,16 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
-// 
-// Based on code developed by the undergraduate student G. Guerrieri 
-// Note: this is a preliminary beta-version of the code; an improved 
-// version will be distributed in the next Geant4 public release, compliant
-// with the design in a forthcoming publication, and subject to a 
-// design and code review.
 //
-#include "G4MIRDTrunk.hh"
+// Previous authors: G. Guerrieri, S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors (since 2007): S. Guatelli, University of Wollongong, Australia
+// 
+// Contribution: F. Ambroglini INFN Perugia, Italy
+// 
 
+#include "G4MIRDTrunk.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"

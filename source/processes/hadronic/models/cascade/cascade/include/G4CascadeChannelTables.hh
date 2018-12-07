@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeChannelTables.hh 69336 2013-04-30 20:20:23Z mkelsey $
 //
 // Factory class to return pointer to Bertini cross-section table based on
 // collision initial state (hadron type codes).

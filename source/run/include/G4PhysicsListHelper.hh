@@ -70,7 +70,12 @@ class G4PhysicsListHelper
    
    //  Set flag for using CoupledTransportation
    void UseCoupledTransportation(G4bool vl=true);
- 
+
+   //  Change the thresholds for killing looping tracks of the
+   //    transportation (simple or coupled.)
+   void UseHighLooperThresholds() { theLooperThresholds= 2;}
+   void UseLowLooperThresholds()  { theLooperThresholds= 0;}
+   
   /////////////////////////////////////////////////////////////////
   public:
     // check consistencies of list of particles 
@@ -104,6 +109,7 @@ class G4PhysicsListHelper
     G4ParticleTable::G4PTblDicIterator* aParticleIterator;
 
     G4bool useCoupledTransportation;
+    G4int  theLooperThresholds= 1; //  0 = Low,  1 = default, 2 = high
     G4VProcess* theTransportationProcess;
  
     G4int verboseLevel;

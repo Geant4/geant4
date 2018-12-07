@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryEncounteredVolumeFilter.cc 95107 2016-01-26 12:41:11Z allison $
 //
 // Filter trajectories according to encountered volume name. Only registered 
 // volumes will pass the filter.

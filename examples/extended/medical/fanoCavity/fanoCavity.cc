@@ -26,7 +26,6 @@
 /// \file medical/fanoCavity/fanoCavity.cc
 /// \brief Main program of the medical/fanoCavity example
 //
-// $Id: fanoCavity.cc 109990 2018-05-14 07:25:51Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,21 +63,18 @@ int main(int argc,char** argv) {
   G4UIExecutive* ui = nullptr;
   if (argc == 1) ui = new G4UIExecutive(argc,argv);
 
-  //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-
   //Construct the default run manager
 #ifdef G4MULTITHREADED
-    G4MTRunManager* runManager = new G4MTRunManager;
-    G4int nThreads = 2;
-    if (argc==3) {
-      int iTmp = G4UIcommand::ConvertToInt(argv[2]);
-      nThreads = (iTmp<0)? G4Threading::G4GetNumberOfCores() : iTmp;
-    }
-    runManager->SetNumberOfThreads(nThreads);
+  G4MTRunManager* runManager = new G4MTRunManager;
+  G4int nThreads = 2;
+  if (argc==3) {
+    int iTmp = G4UIcommand::ConvertToInt(argv[2]);
+    nThreads = (iTmp<0)? G4Threading::G4GetNumberOfCores() : iTmp;
+  }
+  runManager->SetNumberOfThreads(nThreads);
 #else
-    G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    G4RunManager* runManager = new G4RunManager;
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+  G4RunManager* runManager = new G4RunManager;
 #endif
 
   //set mandatory initialization classes

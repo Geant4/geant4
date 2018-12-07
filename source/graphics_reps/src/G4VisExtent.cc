@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.cc 102801 2017-02-22 15:17:53Z gcosmo $
 //
 // 
 // A.Walkden 28/11/95
@@ -57,6 +56,11 @@ G4VisExtent::G4VisExtent (const G4Point3D& centre, G4double radius):
 }
 
 G4VisExtent::~G4VisExtent () {}
+
+const G4VisExtent& G4VisExtent::GetNullExtent () {
+  static const G4VisExtent nullExtent = G4VisExtent();
+  return nullExtent;
+}
 
 const G4Point3D& G4VisExtent::GetExtentCentre () const {
   if (!fCentreCached) {

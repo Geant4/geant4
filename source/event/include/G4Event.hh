@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh 110273 2018-05-17 14:43:43Z gcosmo $
 //
 //
 // class description:
@@ -142,7 +141,7 @@ class G4Event
       { grips--;
         if(grips<0)
         { G4Exception("G4Event::Release()","EVENT91001",FatalException,
-                      "Number of grips becames negative. This cannot be correct."); }
+                      "Number of grips became negative. This cannot be correct."); }
       }
       inline G4int GetNumberOfGrips() const
       { return grips; }

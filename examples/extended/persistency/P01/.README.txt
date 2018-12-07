@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "persistency/P01/.README.txt"
 ///\brief Example P01 README page

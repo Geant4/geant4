@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsFTFP_BERT.hh 105736 2017-08-16 13:01:11Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -67,7 +66,7 @@ class G4HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
     // ExtraConfiguation
     virtual void ConstructProcess() override;
 
-    virtual void TerminateWorker() override;
+  //    virtual void TerminateWorker() override;
   protected:
     G4bool QuasiElastic;
     //This calls the specific ones for the different particles in order
@@ -89,10 +88,6 @@ class G4HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
     G4double maxBERT_proton;
     G4double minFTFP_neutron;
     G4double maxBERT_neutron;
-
-    //Thread-private data write them here to delete them
-    G4VectorCache<G4VCrossSectionDataSet*> xs_ds;
-    G4Cache<G4ComponentGGHadronNucleusXsc*> xs_k;
 };
 
 #endif

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByOriginVolume.cc 96316 2016-04-06 07:23:44Z gcosmo $
 //
 // Jane Tinslay March 2006
 

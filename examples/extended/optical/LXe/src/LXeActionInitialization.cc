@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file LXeActionInitialization.cc
 /// \brief Implementation of the LXeActionInitialization class
@@ -31,6 +30,7 @@
 #include "LXeActionInitialization.hh"
 
 #include "LXePrimaryGeneratorAction.hh"
+#include "LXeDetectorConstruction.hh"
 
 #include "LXeRunAction.hh"
 #include "LXeEventAction.hh"
@@ -40,8 +40,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeActionInitialization::LXeActionInitialization()
- : G4VUserActionInitialization()
+LXeActionInitialization::LXeActionInitialization(
+   const LXeDetectorConstruction* det)
+  : G4VUserActionInitialization(), fDetector(det)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,7 +63,7 @@ void LXeActionInitialization::Build() const
 {
   SetUserAction(new LXePrimaryGeneratorAction());
 
-  LXeEventAction* eventAction = new LXeEventAction();
+  LXeEventAction* eventAction = new LXeEventAction(fDetector);
   SetUserAction(eventAction);
   SetUserAction(new LXeStackingAction(eventAction));
 

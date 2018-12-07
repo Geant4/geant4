@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/src/RE04SteppingAction.cc
 /// \brief Implementation of the RE04SteppingAction class
 //
-// $Id: $
 //
 #include "RE04SteppingAction.hh"
 

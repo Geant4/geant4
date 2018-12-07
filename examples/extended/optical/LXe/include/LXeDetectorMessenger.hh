@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeDetectorMessenger.hh 77486 2013-11-25 10:14:16Z gcosmo $
 //
 /// \file optical/LXe/include/LXeDetectorMessenger.hh
 /// \brief Definition of the LXeDetectorMessenger class
@@ -72,6 +71,7 @@ class LXeDetectorMessenger: public G4UImessenger
     G4UIcommand*                 fDefaultsCmd;
     G4UIcmdWithADouble*          fMainScintYield;
     G4UIcmdWithADouble*          fWLSScintYield;
+    G4UIcmdWithAnInteger*        fSaveThresholdCmd;
 };
 
 #endif

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 
 #ifndef G4_CASCADE_KZEROBARP_CHANNEL_HH

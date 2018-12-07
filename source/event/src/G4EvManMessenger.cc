@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvManMessenger.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 // --------------------------------------------------------------------
 
@@ -54,8 +53,8 @@ G4EvManMessenger::G4EvManMessenger(G4EventManager * fEvMan)
 
   storeEvtCmd = new G4UIcmdWithoutParameter("/event/keepCurrentEvent",this);
   storeEvtCmd->SetGuidance("Store the current event to G4Run object instead of deleting it at the end of event.");
-  storeEvtCmd->SetGuidance("Stored event is available through G4Run until the begining of next run.");
-  storeEvtCmd->SetGuidance("Given the potential large memory size of G4Event and its datamember objects stored in G4Event,");
+  storeEvtCmd->SetGuidance("Stored event is available through G4Run until the beginning of next run.");
+  storeEvtCmd->SetGuidance("Given the potential large memory size of G4Event and its data-member objects stored in G4Event,");
   storeEvtCmd->SetGuidance("the user must be careful and responsible for not to store too many G4Event objects.");
   storeEvtCmd->AvailableForStates(G4State_EventProc);
 }

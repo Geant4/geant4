@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.10 2006/06/29 16:24:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02-ref-04 $
 //
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)

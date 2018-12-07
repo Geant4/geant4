@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: UltraActionInitializer.hh 66241 2012-12-13 18:34:42Z gunter $
-// GEANT4 tag $Name:  $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,7 +31,6 @@
 #define UltraActionInitializer_h 1
 
 #include "G4VUserActionInitialization.hh"
-class G4GeneralParticleSource;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,8 +43,9 @@ public:
   
   void Build() const;
   void BuildForMaster() const;
+
 private:
-    G4GeneralParticleSource* masterGPS;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

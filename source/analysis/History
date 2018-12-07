@@ -1,4 +1,3 @@
-$Id: History 110515 2018-05-28 07:39:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,43 @@ committal in the SVN repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 28, 2018 I. Hrivnacova (analysis-V10-04-10)
+- Use the same mutex in Root pntuple add_row and end_fill.
+  This should fix occassional failures of tests in MT mode.
+  
+November 21, 2018 I. Hrivnacova (analysis-V10-04-09)
+- Added G4RootAnalysisManager::SetNtupleRowWise(G4bool rowWise):
+  this allows to choose rowWise/columnWise mode also in sequential mode
+- Added "boolean reset" argument in G4AnalysisManager::CloseFile() function:
+  this allows to close a file without resetting data 
+  (used in MPI example)
+- Allow overriding selected functions in G4RootAnalysisManager, G4RootNtupleManager 
+  and G4TNtupleManager: needed for an external implementation of MPI ntuple merging 
+  in MPI examples
+
+November 9, 2018 G. Cosmo (analysis-V10-04-08)
+- tools/hatcher.icc: fixed printout typos.
+
+November 7, 2018 I. Hrivnacova (analysis-V10-04-07)
+- Fixed creating ntuples after OpenFile for other then Root formats
+
+October 11, 2018 I. Hrivnacova (analysis-V10-04-06)
+- Switched the default Root ntuple merge mode to rowWise
+- Added friend class declarations to allow an implementation
+  of MPI ntuple merging in the MPI example
+
+October 11, 2018 I. Hrivnacova (analysis-V10-04-05)
+- Modified management of plotting:
+  G4PlotManager is now instantiated with G4AnalysisManager what makes 
+  possible to remove static G4PlotParameters.
+  (This fixes the problem report ##2083.)
+
+September 12, 2018 I. Hrivnacova (analysis-V10-04-04)
+- Fixed the default value of rowWise argument (false)
+  in G4RootAnalysisManager::SetNtupleMerging().
+- Updated G4TNtupleManager::FinishTNtuple to support creating ntuples
+  both before and after OpenFile.
 
 May 25, 2018 I. Hrivnacova (analysis-V10-04-03)
 - Updated to g4tools 4.2.3 (Guy Barrand):

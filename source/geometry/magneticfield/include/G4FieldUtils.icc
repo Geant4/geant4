@@ -22,7 +22,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 //    Implementation by Dmitry Sorokin - GSoC 2017
 //       Work supported by Google as part of Google Summer of Code 2017.
@@ -70,6 +69,21 @@ G4ThreeVector makeVector(const ArrayType& array, Value3D value)
 {
     const auto begin = internal::getFirstIndex(value);
     return G4ThreeVector(array[begin], array[begin + 1], array[begin + 2]);
+}
+
+template <typename SourceArray, typename TargetArray>
+void setValue(const SourceArray& src, Value1D value, TargetArray& trg)
+{
+    const auto begin = internal::getFirstIndex(value);
+    trg[begin] = src[begin];
+}
+
+template <typename SourceArray, typename TargetArray, typename ...TargetArrays>
+void setValue(const SourceArray& src, Value1D value, TargetArray& trg, TargetArrays&... trgs)
+{
+    const auto begin = internal::getFirstIndex(value);
+    trg[begin] = src[begin];
+    setValue(src, value, trgs...);
 }
 
 } // field_utils

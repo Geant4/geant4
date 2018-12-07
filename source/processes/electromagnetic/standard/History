@@ -1,4 +1,3 @@
-$Id: History 110934 2018-06-26 08:11:04Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,8 +17,126 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+26 November 18:  V.Ivanchenko (emstand-V10-04-54)
+- G4WentzelOKandVIxSection - fixed destructor
+
+23 November 18:  V.Ivanchenko (emstand-V10-04-53)
+- G4eplusTo2GammaOKVIModel - fixed trivial Coverity warning
+
+07 November 18:  V.Ivanchenko (emstand-V10-04-52)
+- G4BetheHeitler5DModel - (I.Semeniouk) added protection to boost
+    computation responsible for numerical problem
+
+05 November 18:  V.Ivanchenko (emstand-V10-04-51)
+- G4eplusTo2GammaOKVIModel, G4eplusTo3GammaOKVIModel - make consistent
+    definition of cross section for 2-gamma and 3-gamma models, use
+    cuts for gamma in sampling of 3-gamma final state
+
+02 November 18:  V.Ivanchenko (emstand-V10-04-50)
+- G4SeltzerBergerModel, G4eBremsstrahlungRelModel - use by default
+    G4ModifiedTsai generator instead of G4DipBustGenerator
+
+26 October 18:  V.Ivanchenko (emstand-V10-04-49)
+- G4BetheHeitler5DModel - (I.Semeniouk) cleaned up comments
+
+24 October 18:  V.Ivanchenko (emstand-V10-04-48)
+- G4BetheBlochModel, G4BraggIonModel - fixed usage of ICRU90 data
+
+16 October 18: D.Sawkey (emstand-V10-04-47)
+- G4eplusAnnihilation: set weights for directional splitting
+
+10 October 18:  V.Ivanchenko (emstand-V10-04-46)
+- G4UrbanMscModel - L.Urban added correction to get better 
+    backscattering at low energy
+- G4LindhardSorensenData, G4LindhardSorensenIonModel - correction
+    of dEdx computation
+
+09 October 18: V.Ivanchenko (emstand-V10-04-45)
+- G4eplusAnnihilation - back to emstand-V10-04-42
+
+09 October 18: J.L. Rodriguez-Sanchez (emstand-V10-04-44)
+- G4AtimaEnergyLossModel, G4AtimaFluctuations - fixed some errors 
+  and added some cosmetic modifications
+
+02 October 18: D.Sawkey (emstand-V10-04-43)
+- G4eplusAnnihilation - enable directional splitting
+
+01 October 18: V.Ivanchenko (emstand-V10-04-42)
+- G4BraggModel, G4BraggIonModel - minor optimisation
+- G4LindhardSorensenData - limit parameterisation to interval
+    of validity
+
+27 September 18: V.Ivanchenko (emstand-V10-04-41)
+- G4BraggModel, G4BraggIonModel, G4BetheBlochModel - added
+    optional possibility to use ICRU90 data
+- G4LindhardSorensenData - fixed interpolation of corrections for 
+    large energies
+- G4LindhardSorensenIonModel, G4PSTARStopping - minor cleanup
+
+21 September 18: V.Ivanchenko (emstand-V10-04-40)
+- G4GammaConversion, G4eBremsstrahlung, G4hIonisation - use upper 
+    energy limit for low-energy model from PhysicsList instead of 
+    hard-coding values
+- G4ionIonisation - apply correction to energy loss only to BetheBloch
+    ionisation model
+- G4ComptonScattering, G4PhotoElectricEffect, G4eIonisation,
+  G4eplusAnnihilation, G4BetheBlochModel - improved comments
+
+17 September 18: D. Sawkey (emstand-V10-04-39)
+- G4CoulombScattering, G4eBremsstrahlung, G4[e,h]MultipleScattering,
+  G4eplusAnnihilation, G4[e,h,ion,alpha]Ionisation, G4ComptonScattering,
+  G4NuclearStopping, G4PhotoElectricEffect,
+  : change auto-generated documentation format to rST
+
+14 September 18: V.Ivanchenko (emstand-V10-04-38)
+- G4eSingleCoulombScatteringModel - fixed problem #2090
+
+31 August 18: V.Ivanchenko (emstand-V10-04-37)
+- G4LindhardSorensenIonModel - fixed numerical problem in computation 
+    of correction 
+
+29 August 18: L.Urban (emstand-V10-04-36)
+- G4UrbanMscModel - correction in order to get better backscattering
+   for low energy
+
+17 August 18: V.Ivanchenko (emstand-V10-04-35)
+- G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel - added
+    extra protections on argument of std::acos avoiding crash due to
+    precision lost; clean-up and formats of code; one run time method 
+    is moved inlined; initialisation methods are moved to the source 
+
+17 August 18: V.Ivanchenko (emstand-V10-04-34)
+17 August 18: V.Ivanchenko (emstand-V10-04-33)
+- G4MottCoefficients class is removed because big inefficiency was reported
+    by Grigory Latyshev 
+- G4MottData.hh static data file is created instead
+- G4ScreeningMottCrossSection - use G4MottData and improved time consuming 
+  computations
+
+12 August 18: M. Novak (emstand-V10-04-32)
+- G4SBBremTable - fixed compiler warning 
+- G4eBremssrahlungRelModel, G4PairProductionRelModel - fixed possible out-of-
+   bound vector access introduced in the previous tag.
+- G4SeltzerBergerModel - added extra protections for data per Z access    
+
+10 August 18: M. Novak (emstand-V10-04-31)
+- G4DipBustGenerator - optimisation, speedup: using G4Pow::A13
+- G4SeltzerBergerModel - extended model with optional sampling tables for fast
+  run time sampling of the emitted photon energy from the Seltzer-Berger scalled
+  DCS instead of using the rejection. The sampling tables are hadled by the new
+  G4SBBremTable class. There is a 40-60 % model speedup with some additional
+  memory consumption.
+- G4eBremsstrahlungRelModel - improved LPM function approximation, code cleanup
+  and optimization.
+
+27 July 18: V.Ivanchenko (emstand-V10-04-30)
+- G4BetheHeitler5DModel - (I.Semeniouk) inverted CDF for X generation,
+  code cleanup; bug fix: Polarization vector not normalized in coordinate
+  transformation; removed empty lines
+- G4BetheHeitlerModel, G4PairProductionRelModel - removed empty lines
+
 25 June 18: V.Ivanchenko (emstand-V10-04-29)
-- G4LindhardSorensenData - fixed Coverity warnings on read beyond 
+- G4LindhardSorensenData - fixed Coverity warnings on read beyond
     the array boundary
 
 15 June 18: V.Ivanchenko (emstand-V10-04-28)
@@ -27,14 +144,14 @@ committal in the CVS repository !
     on read/write out of the array boundary
 
 11 June 18: M.Novak (emstand-V10-04-27)
-- G4PairProductionRelModel, G4BetheHeitler5DModel - fixed computation of cross 
-  section in the new version of the high energy model. Fixed triplet production 
-  below treshold in the 5D model by I. Semeniouk.   
- 
+- G4PairProductionRelModel, G4BetheHeitler5DModel - fixed computation of cross
+  section in the new version of the high energy model. Fixed triplet production
+  below treshold in the 5D model by I. Semeniouk.
+
 11 June 18: V.Ivanchenko (emstand-V10-04-26)
 - G4AtimaEnergyLossModel, G4AtimaFluctuations - fixed data handling in the
   new ion ionisation, which were identified by Coverity code analysis
-  
+
 04 June 18: M. Novak (emstand-V10-04-25)
 - G4BetheHeitler5DModel - optimization of the final state sampling (M. Novak)
 
@@ -42,12 +159,12 @@ committal in the CVS repository !
 - G4GoudsmitSaundersonTable - fix gcc-8 warnings regarding.
 
 28 May 18: M. Novak (emstand-V10-04-23)
-- G4BetheHeitlerModel, G4PairProductionRelModel, G4BetheHeitler5DModel - new 
-    versions of G4BetheHeitlerModel, G4PairProductionRelModel with improved 
-    screening function approximation, improved LPM function apporximation, 
-    efficiency, documentation and cleanup. Corrected call to selecting target 
-    atom in final state sampling. Follow up changes in the derived 
-    G4BetheHeitler5DModel. 
+- G4BetheHeitlerModel, G4PairProductionRelModel, G4BetheHeitler5DModel - new
+    versions of G4BetheHeitlerModel, G4PairProductionRelModel with improved
+    screening function approximation, improved LPM function apporximation,
+    efficiency, documentation and cleanup. Corrected call to selecting target
+    atom in final state sampling. Follow up changes in the derived
+    G4BetheHeitler5DModel.
 
 23 May 18: V.Ivanchenko (emstand-V10-04-22)
 - G4BetheHeitlerModel - use G4ModifiedTsai angular generator
@@ -66,13 +183,13 @@ committal in the CVS repository !
 - G4LindhardSorensenData - fixed Coverity warning
 
 02 May 18: V.Ivanchenko (emstand-V10-04-17)
-- G4ScreeningMottCrossSection - added extra method for more effective 
-    computation of the Mott correction 
+- G4ScreeningMottCrossSection - added extra method for more effective
+    computation of the Mott correction
 - G4WentzelOKandVIxSection - added Mott corrections to e+-
 - G4NISTStoppingData - cleanup header
 
 24 April 18: V.Ivanchenko (emstand-V10-04-16)
-- G4LindhardSorensenIonModel,G4LindhardSorensenData - new relativistic ion 
+- G4LindhardSorensenIonModel,G4LindhardSorensenData - new relativistic ion
     ionisation model
 - G4BetheBlochModel - minor cleanup
 
@@ -106,24 +223,24 @@ committal in the CVS repository !
 09 February 18: V.Ivanchenko (emstand-V10-04-04)
 - G4eBremsstrahlungRelModel, G4PairProductionRelModel, G4PAIySection,
   G4PAIxSection, G4ICRU73QOModel - inline method which use static constants
-    are moved to source, improved formatting of the code 
+    are moved to source, improved formatting of the code
 
 02 February 18: M.Novak (emstand-V10-04-03)
-- G4GoudsmitSaundersonMscModel - implemented interface method for macroscopic 
+- G4GoudsmitSaundersonMscModel - implemented interface method for macroscopic
   1st trans. x-section computation CrossSectionPerVolume (used only for testing)
-- G4GSMottCorrection, G4GSPWACorrections - fixed initialization of 1st moment 
+- G4GSMottCorrection, G4GSPWACorrections - fixed initialization of 1st moment
   correction factor
 
-21 December 17: V.Ivanchenko (emstand-V10-04-02) 
+21 December 17: V.Ivanchenko (emstand-V10-04-02)
 - G4WentzelOKandVIxSection - fixed formfactor for proton
-- G4BetheBlochModel - use formfactor for projectile ion in 
-  formulation of NIM A 488 (2002) 282; this is needed further 
+- G4BetheBlochModel - use formfactor for projectile ion in
+  formulation of NIM A 488 (2002) 282; this is needed further
   evalution, so the tag is not proposed
 
 09 December 17: V.Ivanchenko (emstand-V10-04-01)
 - G4PairProductionRelModel - fixed misuse of G4Pow (A13(..) should
     be used instead of Z13(..)), add initialisation of an element
-    cache before sampling of final state (partly fix problem #2017) 
+    cache before sampling of final state (partly fix problem #2017)
 
 08 November 17: D.Sawkey (emstand-V10-03-51)
 - G4CoulombScattering, G4eMultipleScattering, G4hMultipleScattering
@@ -135,7 +252,7 @@ committal in the CVS repository !
 03 November 17: V.Ivanchenko (emstand-V10-03-49)
 - G4UrbanMscModel - renamed displacementFlag to dispAlg96, if its
     value "true" then the old lateral displacment algorithm is used,
-    else a new one is applied. This change was needed to avoid 
+    else a new one is applied. This change was needed to avoid
     missunderstanding of the flag effect
 
 02 November 17: V.Ivanchenko (emstand-V10-03-48)
@@ -152,14 +269,14 @@ committal in the CVS repository !
 - G4GSPWACorrections - fix data read problem
 
 30 October 17: M.Novak (emstand-V10-03-45)
-- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable, 
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable,
   G4GSMottCorrection, G4GSPWACorrections, G4PWATotalXsecTable
-    - new form of PWA corrections in the GS MSC model that is 
-      active now both for e- and e+ (the G4PWATotalXsecTable 
+    - new form of PWA corrections in the GS MSC model that is
+      active now both for e- and e+ (the G4PWATotalXsecTable
       class is replaced with G4GSPWACorrections)
-    - improved scattering power correction computation in case 
+    - improved scattering power correction computation in case
       Mott-correction
-    - changed MSC step limit flag conventions in the GS model  
+    - changed MSC step limit flag conventions in the GS model
 
 25 October 17: V.Ivanchenko (emstand-V10-03-44)
 - G4NuclearStopping - use activation limit for energy per nucleon
@@ -167,12 +284,12 @@ committal in the CVS repository !
 19 October 17: D.Sawkey (emstand-V10-03-43)
 - G4alphaIonisation, G4ComptonScattering, G4CoulombScattering,
   G4eBremsstrahlung, G4eIonisation, G4eMultipleScattering,
-  G4ePlusAnnihilation, G4GammaConversion, G4hIonisation, 
+  G4ePlusAnnihilation, G4GammaConversion, G4hIonisation,
   G4hMultipleScattering, G4ionIonisation, G4NuclearStopping,
   G4PhotoElectricEffect: add dummy ProcessDescription
 
 16 October 17: V.Ivanchenko (emstand-V10-03-42)
-- G4BetheHeitlerModel, G4PairProductionRelModel - use G4Pow in both 
+- G4BetheHeitlerModel, G4PairProductionRelModel - use G4Pow in both
     classes instead of G4NistManager for fast math computations
 
 12 October 17: V.Ivanchenko (emstand-V10-03-41)
@@ -197,11 +314,11 @@ committal in the CVS repository !
 - G4UniversalFluctuation - added correction for small cuts
 
 22 September 17: M.Novak (emstand-V10-03-35)
-- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable, 
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable,
   G4GSMottCorrection - further improvments to GS Mott-correction.
 
 20 September 17: V.Ivanchenko (emstand-V10-03-34)
-- G4UniversalFluctuation2017 - removed temporary class 
+- G4UniversalFluctuation2017 - removed temporary class
 - G4PAIModel. G4PAIPhotModel - MinEnergyCut() is set to 12.5 eV, because
     of results of D. Pfeiffer study of gaseous detector simulations
 
@@ -223,14 +340,14 @@ committal in the CVS repository !
 
 25 August 17: M.Novak (emstand-V10-03-26)
 - G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable - added
-    option to apply Mott-correction to the default GS model. The 
-    new class G4GSMottCorrection handles the Mott-correction to the 
-    angular distributions as well as correction factors to elastic, 
+    option to apply Mott-correction to the default GS model. The
+    new class G4GSMottCorrection handles the Mott-correction to the
+    angular distributions as well as correction factors to elastic,
     mfp, first and second moments.
 
 24 August 17: V.Ivanchenko (emstand-V10-03-25)
-- G4PAIModel. G4PAIPhotModel - added implementation of virtual 
-    method MinEnergyCut(..), always return 25 eV, because PAI models 
+- G4PAIModel. G4PAIPhotModel - added implementation of virtual
+    method MinEnergyCut(..), always return 25 eV, because PAI models
     does not applicable for smaller energy transfers
 
 10 August 17: V.Ivanchenko (emstand-V10-03-24)
@@ -238,17 +355,17 @@ committal in the CVS repository !
     particles
 
 03 August 17: V.Ivanchenko (emstand-V10-03-23)
-- G4MottCoefficients, G4ScreeningMottCrossSection, 
+- G4MottCoefficients, G4ScreeningMottCrossSection,
   G4eSingleCoulombScatteringModel - Mauro Tacconi updated the model
     making as fast as the default single scattering
 - G4ComptonScattering, G4CoulombScattering, G4GammaConversion,
   G4PhotoElectricEffect, G4WentzelOKandVIxSection, G4WentzelVIModel,
   G4alphaIonisation, G4eIonisation, G4hIonisation, G4ionIonisation,
   G4eBremsstrahlung, G4eMultipleScattering, G4hMultipleScattering
-    make coherent model initialisation  
+    make coherent model initialisation
 
 16 June 17: V.Ivanchenko (emstand-V10-03-22)
-- G4eCoulombScatteringModel, G4WentzelVIModel, 
+- G4eCoulombScatteringModel, G4WentzelVIModel,
   G4hCoulombScatteringModel - fixed problem of computation
     of cross section introduced in emstand-V10-03-11
 
@@ -269,17 +386,17 @@ committal in the CVS repository !
     in angular sampling
 
 01 June 17: V.Ivanchenko (emstand-V10-03-17)
-- G4WentzelVIRelModel - fixed typo responsible for numerical crash 
+- G4WentzelVIRelModel - fixed typo responsible for numerical crash
 
 31 May 17: V.Ivanchenko (emstand-V10-03-16)
-- G4BetheHeitlerModel, G4PairProductionRelModel - code cleanup and 
+- G4BetheHeitlerModel, G4PairProductionRelModel - code cleanup and
     speedup, replaced remain log,exp by G4Log and G4Exp
 
 31 May 17: V.Ivanchenko (emstand-V10-03-15)
-- G4eBremsstrahlungRelModel - use new interface to triplet model 
+- G4eBremsstrahlungRelModel - use new interface to triplet model
 
 29 May 17: V.Ivanchenko (emstand-V10-03-14)
-- G4UniversalFluctuation, G4UniversalFluctuation2017 - L.Urban fixed 
+- G4UniversalFluctuation, G4UniversalFluctuation2017 - L.Urban fixed
     numerical problem for very small steps for all particle types
 
 26 May 17: V.Ivanchenko (emstand-V10-03-13)
@@ -294,8 +411,8 @@ committal in the CVS repository !
     cloned from recent G4UniversalFluctuation (ref-04)
 
 23 May 17: V.Ivanchenko (emstand-V10-03-11)
-- G4WentzelOKandVIxSection, G4eCoulombScatteringModel, 
-  G4WentzelVIModel, G4hCoulombScatteringModel - code and interface cleanup 
+- G4WentzelOKandVIxSection, G4eCoulombScatteringModel,
+  G4WentzelVIModel, G4hCoulombScatteringModel - code and interface cleanup
   G4WentzelVIRelModel - use inheritance from G4WentzelVIModel
   G4WentzelVIRelXSection - use inheritance from G4WentzelOKandVIxSection
 
@@ -304,9 +421,9 @@ committal in the CVS repository !
    better FWHM values
 
 4 May 17: V.Ivanchenko (emstand-V10-03-09)
-- G4SauterGavrilaAngularDistribution - Marilena Bandieramonte 
+- G4SauterGavrilaAngularDistribution - Marilena Bandieramonte
     introduced more efficient algorithm of sampling using
-    Penelope-2014 prescription; expected that simulation will be 
+    Penelope-2014 prescription; expected that simulation will be
     faster
 
 3 May 17: V.Ivanchenko (emstand-V10-03-08)
@@ -320,16 +437,16 @@ committal in the CVS repository !
 28 April 17: M.Novak (emstand-V10-03-06)
 - G4GoudsmitSaundersonTable new representation of the GS angular
     distributions (data size reduced from 16MB down to 5 MB)
-    
+
 22 April 17: L.Urban (emstand-V10-03-05)
 - G4UniversalFluctuation correction to get results closer to data
 
 27 March 17: L.Urban (emstand-V10-03-04)
-- G4UniversalFluctuation correction in order to get better E_mp and 
+- G4UniversalFluctuation correction in order to get better E_mp and
   FWHM in the case of small steps
 
 24 March 17: V.Ivanchenko (emstand-V10-03-03)
-- G4WentzelOKandVIxSection, G4WentzelVIRelXSection - added 
+- G4WentzelOKandVIxSection, G4WentzelVIRelXSection - added
     "ScreeningFactor" parameter to study accuracy of scattering models
 
 20 March 17: F.Hariri (emstand-V10-03-02)

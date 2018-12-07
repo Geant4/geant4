@@ -18,5 +18,5 @@
 #/control/execute vis.mac
 
 ### Simulate ten events
-/run/beamOn 10
+/run/beamOn 20
 

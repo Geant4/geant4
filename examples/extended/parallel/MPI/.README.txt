@@ -224,4 +224,15 @@ differences:
   how to merge scorers
 - MT is enabled.
 
+\link exMPI04 exMPI04 (merging of ntuples via MPI)  \endlink
+
+This example is the same as exMPI03 with added ntuple.
+- It uses g4tools for histogramming and ntuples.
+- It shows how to merge, using g4tools, ntuples via MPI in sequential mode,
+  so that the entire statistics is accumulated in a single output file.
+- If MT is enabled, the ntuples are merged from threads to 
+  files per ranks.
+- Combined MT + MPI merging is not yet supported.
+- Merging ntuples is actually supported only with Root output format.
+
 */

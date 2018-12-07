@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.cc 97598 2016-06-06 07:19:46Z gcosmo $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
 // order method (giving fifth-order accuracy) for the solution of an ODE.
@@ -149,7 +148,7 @@ G4CashKarpRKF45::Stepper(const G4double yInput[],
  // Initialise time to t0, needed when it is not updated by the integration.
  //        [ Note: Only for time dependent fields (usually electric) 
  //                  is it neccessary to integrate the time.] 
- yOut[7] = yTemp[7]   = yIn[7]; 
+ yOut[7] = yTemp[7]   = yIn[7] = yInput[7]; 
 
  const G4int numberOfVariables= this->GetNumberOfVariables(); 
  // The number of variables to be integrated over

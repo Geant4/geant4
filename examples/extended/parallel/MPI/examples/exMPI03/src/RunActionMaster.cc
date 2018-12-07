@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunActionMaster.cc 82310 2014-06-14 00:27:39Z adotti $
 //
 /// @file RunActionMaster.cc
 /// @brief Describe run actions
@@ -175,6 +174,7 @@ RunActionMaster::EndOfRunAction(const G4Run* arun)
       G4String fname("dose-rank0");
       Analysis* myana = Analysis::GetAnalysis();
       myana-> Save(fname);
+      myana-> Close(false); // close file withour resetting data
     }
   //Merge of g4analysis objects
   ver=0;

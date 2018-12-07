@@ -1,4 +1,3 @@
-# $Id: CMakeLists.txt 86065 2014-11-07 08:51:15Z gcosmo $
 
 #----------------------------------------------------------------------------
 # Setup the project
@@ -16,11 +15,17 @@ if(WITH_GEANT4_UIVIS)
 else()
   find_package(Geant4 REQUIRED)
 endif()
-if(NOT DEFINED DICOM_DIR OR NOT DICOM_DIR)
-    set(DICOM_DIR ${Geant4_DIR} CACHE PATH
-        "Location of DICOM project config files" FORCE)
-endif(NOT DEFINED DICOM_DIR OR NOT DICOM_DIR)
-message(STATUS "Using DICOM_DIR=${DICOM_DIR}...")
+
+# append CMAKE_PREFIX_PATH to help find DICOM in recommended installation
+# location (${Geant4_DIR}) and the location found when testing
+if(NOT DEFINED DICOM_DIR)
+    # recommended installation place
+    list(APPEND CMAKE_PREFIX_PATH ${Geant4_DIR})
+    # found here when internally testing
+    list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_BINARY_DIR}/../DICOM")
+endif()
+
+# find DICOM package
 find_package(DICOM REQUIRED)
 
 #----------------------------------------------------------------------------
@@ -57,7 +62,7 @@ set(DICOM_SCRIPTS
     1.g4  2.g4 3.g4
     1.g4dcm 2.g4dcm 3.g4dcm
     ColourMap.dat CT2Density.dat
-    Data.dat Data.dat.new Data.dat.old
+    Data.dat.new Data.dat.old
     Data.dat.new_dens Data.partial.dat
 )
 
@@ -67,6 +72,14 @@ foreach(_script ${DICOM_SCRIPTS})
         ${PROJECT_BINARY_DIR}/${_script}
         COPYONLY)
 endforeach()
+
+if(DICOM_USE_DCMTK)
+    configure_file(${PROJECT_SOURCE_DIR}/data/Data.dat.new
+        ${PROJECT_BINARY_DIR}/Data.dat COPYONLY)
+else()
+    configure_file(${PROJECT_SOURCE_DIR}/data/Data.dat.old
+        ${PROJECT_BINARY_DIR}/Data.dat COPYONLY)
+endif()
 
 foreach(_script ${DICOM_MACROS})
     configure_file(

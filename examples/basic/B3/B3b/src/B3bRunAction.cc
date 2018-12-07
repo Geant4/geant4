@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B3bRunAction.cc 94031 2015-11-05 11:54:38Z ihrivnac $
 //
 /// \file B3bRunAction.cc
 /// \brief Implementation of the B3bRunAction class
@@ -100,7 +99,8 @@ void B3bRunAction::EndOfRunAction(const G4Run* run)
   //
   const B3bRun* b3Run = static_cast<const B3bRun*>(run);
   G4int nbGoodEvents = b3Run->GetNbGoodEvents();
-  G4double sumDose   = b3Run->GetSumDose();                           
+  G4double sumDose   = b3Run->GetSumDose();
+  G4StatAnalysis statDose = b3Run->GetStatDose();
         
   //print
   //
@@ -120,9 +120,11 @@ void B3bRunAction::EndOfRunAction(const G4Run* run)
      << G4endl
      << "  The run was " << nofEvents << " "<< partName;
   }      
+  statDose /= gray;
   G4cout
      << "; Nb of 'good' e+ annihilations: " << nbGoodEvents  << G4endl
-     << " Total dose in patient : " << G4BestUnit(sumDose,"Dose") << G4endl  
+     << " Total dose in patient : " << G4BestUnit(sumDose, "Dose") << G4endl
+     << " Total dose in patient : " << statDose << " Gy" << G4endl
      << "------------------------------------------------------------" << G4endl 
      << G4endl;
 }

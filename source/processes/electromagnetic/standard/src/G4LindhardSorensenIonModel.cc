@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LindhardSorensenIonModel.cc 108805 2018-03-07 18:58:45Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -167,7 +166,8 @@ G4LindhardSorensenIonModel::ComputeCrossSectionPerElectron(
                                                   G4double maxKinEnergy)        
 {
   G4double cross = 0.0;
-  G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
+  // take into account formfactor
+  G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy),tlimit);
   G4double maxEnergy = std::min(tmax,maxKinEnergy);
   if(cutEnergy < maxEnergy) {
 
@@ -199,9 +199,7 @@ G4double G4LindhardSorensenIonModel::ComputeCrossSectionPerAtom(
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
-  G4double cross = Z*ComputeCrossSectionPerElectron
-                                         (p,kineticEnergy,cutEnergy,maxEnergy);
-  return cross;
+  return Z*ComputeCrossSectionPerElectron(p,kineticEnergy,cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -213,10 +211,8 @@ G4double G4LindhardSorensenIonModel::CrossSectionPerVolume(
                                                  G4double cutEnergy,
                                                  G4double maxEnergy)
 {
-  G4double eDensity = material->GetElectronDensity();
-  G4double cross = eDensity*ComputeCrossSectionPerElectron
-                                         (p,kineticEnergy,cutEnergy,maxEnergy);
-  return cross;
+  return material->GetElectronDensity()
+    *ComputeCrossSectionPerElectron(p,kineticEnergy,cutEnergy,maxEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -227,6 +223,7 @@ G4LindhardSorensenIonModel::ComputeDEDXPerVolume(const G4Material* material,
                                                  G4double kineticEnergy,
                                                  G4double cut)
 {
+  // formfactor is taken into account in CorrectionsAlongStep(..)
   G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
   G4double cutEnergy = std::min(cut,tmax);
 
@@ -289,11 +286,11 @@ G4LindhardSorensenIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* cou
   G4double beta2 = tau * (tau+2.0)/(gam*gam);
   G4double deltaL0 = 
     2.0*corr->BarkasCorrection (p, couple->GetMaterial(), e)*(charge-1.)/charge;
-  G4double deltaL = lsdata->GetDeltaL(Zin, tau); 
+  G4double deltaL = lsdata->GetDeltaL(Zin, gam); 
 
   G4double elossnew = 
     eloss + twopi_mc2_rcl2*chargeSquare*eDensity*(deltaL+deltaL0)*length/beta2;
-  /*
+  /*  
   G4cout << "G4LindhardSorensenIonModel::CorrectionsAlongStep: E(GeV)= " 
          << preKinEnergy/GeV << " eloss(MeV)= " << eloss
 	 << " L= " << eloss*beta2/(twopi_mc2_rcl2*chargeSquare*eDensity*length)
@@ -316,13 +313,15 @@ void G4LindhardSorensenIonModel::SampleSecondaries(
                                           G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy);
+  // take into account formfactor
+  G4double tmax = 
+    std::min(MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy),tlimit);
 
   G4double maxKinEnergy = std::min(maxEnergy,tmax);
   if(minKinEnergy >= maxKinEnergy) { return; }
 
-  //G4cout << "G4LindhardSorensenIonModel::SampleSecondaries Emin= " << minKinEnergy
-  //         << " Emax= " << maxKinEnergy << G4endl;
+  //G4cout << "G4LindhardSorensenIonModel::SampleSecondaries Emin= " 
+  // << minKinEnergy << " Emax= " << maxKinEnergy << G4endl;
 
   G4double totEnergy     = kineticEnergy + mass;
   G4double etot2         = totEnergy*totEnergy;
@@ -434,7 +433,8 @@ G4LindhardSorensenIonModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
   G4double tau  = kinEnergy/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
-  return std::min(tmax,tlimit);
+  // formfactor is not taken into account
+  return tmax;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

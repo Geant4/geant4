@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "biasing/ReverseMC01/.README.txt"
 ///\brief Example ReverseMC01 README page

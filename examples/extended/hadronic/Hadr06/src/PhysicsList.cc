@@ -26,7 +26,6 @@
 /// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 70268 2013-05-28 14:17:50Z maire $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -38,9 +37,11 @@
 #include "HadronElasticPhysicsHP.hh"
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
 #include "G4HadronPhysicsQGSP_BIC_HP.hh"
+#include "G4HadronPhysicsQGSP_BIC_AllHP.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronPhysicsINCLXX.hh"
-#include "G4IonPhysics.hh"
+#include "G4IonElasticPhysics.hh"
+#include "G4IonPhysicsXS.hh"
 #include "G4IonINCLXXPhysics.hh"
 #include "G4StoppingPhysics.hh"
 #include "GammaNuclearPhysics.hh"
@@ -63,18 +64,23 @@ PhysicsList::PhysicsList()
   new G4UnitDefinition( "millielectronVolt", "meV", "Energy", 1.e-3*eV);   
   new G4UnitDefinition( "mm2/g",  "mm2/g", "Surface/Mass", mm2/g);
   new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
-    
+  
   // Hadron Elastic scattering
   RegisterPhysics( new HadronElasticPhysicsHP(verb) );
   
   // Hadron Inelastic Physics
-  RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
-  ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
-  ////RegisterPhysics( new G4HadronInelasticQBBC(verb));        
+  ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
+  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
+  ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_AllHP(verb));
+  ////RegisterPhysics( new G4HadronInelasticQBBC(verb));
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
   
-  // Ion Physics
-  RegisterPhysics( new G4IonPhysics(verb));
+  // Ion Elastic scattering
+  //
+  RegisterPhysics( new G4IonElasticPhysics(verb));
+  
+  // Ion Inelastic physics
+  RegisterPhysics( new G4IonPhysicsXS(verb));
   ////RegisterPhysics( new G4IonINCLXXPhysics(verb));
   
   // stopping Particles

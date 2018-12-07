@@ -1,4 +1,3 @@
-$Id: History 85260 2014-10-27 08:53:35Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-07-18 S. Incerti (range-V10-04-01)
+- removed obsolete RanecuEngine
+
 09-05-18 B. Morgan (range-V10-04-00)
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

@@ -27,7 +27,6 @@
 /// \brief Implementation of the B02ActionInitialization class
 //
 //
-// $Id: B02ActionInitialization.cc 66780 2013-01-12 14:56:35Z gcosmo $
 //
 
 #include "B02ActionInitialization.hh"

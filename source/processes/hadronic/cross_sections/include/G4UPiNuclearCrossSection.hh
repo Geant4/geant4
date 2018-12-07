@@ -38,7 +38,6 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DataVector.hh"
-#include "G4HadTmpUtil.hh"
 #include "globals.hh"
 #include <vector>
 

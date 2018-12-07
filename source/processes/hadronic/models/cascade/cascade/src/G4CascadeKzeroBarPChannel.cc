@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 
 #include "G4CascadeKzeroBarPChannel.hh"
@@ -34,12 +33,12 @@ namespace {
   // Outgoing particle types of a given multiplicity
 
   static const G4int kzbp2bfs[5][2] =
-    {{pro,k0b}, {pip,lam}, {pip,s0}, {pi0,sp}, {kpl,xi0}};
+    {{k0b,pro}, {pip,lam}, {pip,s0}, {pi0,sp}, {kpl,xi0}};
 
   static const G4int kzbp3bfs[15][3] =
-    {{neu,pip,k0b}, {pro,pi0,k0b}, {pro,pip,kmi}, {pip,pi0,lam}, {pip,pip,sm},
+    {{k0b,neu,pip}, {k0b,pro,pi0}, {kmi,pro,pip}, {pip,pi0,lam}, {pip,pip,sm},
      {pip,pi0,s0},  {pi0,pi0,sp},  {pip,pim,sp},  {kpl,k0b,lam}, {kpl,k0b,s0},
-     {kpl,kmi,sp},  {k0,k0b,sp},   {pip,kpl,xim}, {pi0,kpl,xi0}, {pip,k0,xi0}};
+     {kpl,kmi,sp},  {k0,k0b,sp},   {kpl,pip,xim}, {kpl,pi0,xi0}, {k0,pip,xi0}};
 
   static const G4int kzbp4bfs[34][4] =
     {{neu,pip,pi0,k0b}, {neu,pip,pip,kmi}, {pro,pi0,pi0,k0b}, {pro,pip,pim,k0b},

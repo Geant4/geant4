@@ -1,4 +1,3 @@
-$Id: README 99607 2016-09-28 13:33:42Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -104,7 +103,7 @@ $Id: README 99607 2016-09-28 13:33:42Z gcosmo $
  The format of the histogram file can be : root (default),
  xml, csv. Include correct g4nnn.hh in HistoManager.hh 
  
-  6- How to build
+ 6- How to build
  --------------- 
 
  An additional step is needed when building the example with GNUmake
@@ -116,4 +115,26 @@ $Id: README 99607 2016-09-28 13:33:42Z gcosmo $
  This will copy the files from shared in the example include and src;
  to remove these files:
   % gmake clean_setup
- 
+
+ 7- How to run
+ --------------
+
+  - Execute AnaEx01 in the 'interactive mode' with visualization
+      % ./AnaEx01
+    and type in the commands from run.mac line by line:  
+      Idle> /control/verbose 2
+      Idle> /tracking/verbose 1
+      Idle> /run/beamOn 10 
+      Idle> ...
+      Idle> exit
+    or
+      Idle> /control/execute run.mac
+      ....
+      Idle> exit
+
+  - Execute AnaEx01  in the 'batch' mode from macro files
+    (without visualization)
+      % ./AnaEx01 run.mac
+      % ./AnaEx01 run.mac > run.out
+
+  The AnaEx01.in macro is used in Geant4 testing.

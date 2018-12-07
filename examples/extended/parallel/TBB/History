@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25th Oct 2018 J. Madsen     (tbbex-V10-04-01)
+- Updated TBB example to work with migration from POSIX threads to C++11 threads
+
+02 May 2018  J.Allison  (tbbex-V10-04-00)
+- Removed G4VIS_USE and G4UI_USE.
+- Moved instantiation of G4UIExecutive to start of main.
+
 19th Nov 2016 A. Dotti	    (tbbex-V10-02-03)
 - Explict set of SD to manager
 

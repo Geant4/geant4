@@ -1,4 +1,3 @@
-$Id: History 110653 2018-06-05 11:49:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +22,167 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+14 November 2018  John Allison  (vis-V10-04-25)
+- modeling-V10-04-18: Fix Coverity warning.
+
+14 November 2018  John Allison  (vis-V10-04-24)
+- visman-V10-04-28: /vis/scene/add/userAction, /vis/drawLogicalVolume:
+  o Minor bug fixes.
+
+09 November 2018  Gabriele Cosmo
+- raytracer-V10-04-04: G4RTMessenger: fixed printout typos.
+
+08 November 2018  John Allison  (vis-V10-04-23)
+- modeling-V10-04-17: G4LogicalVolumeModel.cc:
+  o Overlap checking now in text and drawing.
+- visman-V10-04-26: /vis/scene/add/logicalVolume:
+  o Overlap checking now in text and drawing.
+
+07 November 2018  John Allison  (vis-V10-04-22)
+- modeling-V10-04-16:
+  o Overlap checking only in text output at present.
+- visman-V10-04-25: /vis/scene/add/logicalVolume:
+  o Overlap checking only in text output at present.
+
+24 October 2018  John Allison  (vis-V10-04-21)
+- modeling-V10-04-15: Extensive revision of handling of touchables.
+- visman-V10-04-24:
+  o Conform to modeling-V10-04-15.
+  o Add /vis/touchable/findPath.
+  o Improve several other facilities for accessing touchables.
+- raytracer-V10-04-03: Conform to modeling-V10-04-15.
+
+19 October 2018  John Allison
+- Requires greps-V10-04-08.
+- visman-V10-04-23: Simplify scene checking and fix minor bug.
+
+17 October 2018  John Allison  (vis-V10-04-20)
+- modeling-V10-04-14: Attempt fix for Windows compiler error.
+- visman-V10-04-22:
+  /vis/scene/add/volume (and, consequently, /vis/drawVolume):
+  Improve guidance: Describe the use of a regular expression.
+  If physical-volume-name is "world" (the default), the top of the
+  main geometry tree (material world) is added.  If "worlds", the
+  top of all worlds - material world and parallel worlds, if any - are
+  added.  Otherwise a search of all worlds is made.
+  In the last case (a search of all worlds) all physical volume names are
+  matched against the first argument of this command.  If this is of the
+  form "/regexp/", where regexp is a regular expression (see C++ regex),
+  the physical volume name is matched against regexp by the usual rules
+  of regular expression matching. Otherwise an exact match is required.
+  For example, "/Shap/" matches "Shape1" and "Shape2".
+
+15 October 2018  John Allison  (vis-V10-04-19)
+- Requires greps-V10-04-07.
+- modeling-V10-04-13: Add regex search.
+  o Match the string with the required match. The latter can be of the form
+    "/regexp/", where regexp is a regular expression (see C++ regex),
+    or a plain string, in which case there must be an exact match.
+- visman-V10-04-21: Tidy.
+
+8 October 2018  John Allison  (vis-V10-04-17)
+- visman-V10-04-20: Fix bug in visman-V10-04-19.
+
+6 October 2018  John Allison  (vis-V10-04-16)
+- modeling-V10-04-12: Improve description of G4TrajectoriesModel.
+- visman-V10-04-19:
+  o G4VisManager.cc: Move creation of top level commands to end so that
+    they may pick up guidance and parameters from invoked commands.
+  o /vis/drawVolume and /vis/draw/logicalVolume:
+    . Pick up guidance and parameters from /vis/scene/add/...
+  o /vis/scene/add/trajectories: avoid adding new model if one exists.
+    . If no trajectories model exists in the scene create a new one...
+      ...else it already exists and there is no need to add a new one
+      because G4TrajectoriesModel simply describes trajectories in the
+      trajectories store whatever the type.
+
+5 October 2018  John Allison  (vis-V10-04-15)
+- opengl-V10-04-10: Open header files to users. In all header files, change
+#ifdef G4VIS_BUILD_OPENGL_DRIVER
+  to
+#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
+  and similarly for OPENGLX, XM, QT, WT and WIN32. This is so that a user
+  may include the OpenGL headers and use the OpenGL library. This will be
+  useful if a user (or a developer) wishes to write a new vis driver
+  based on the existing OpenGL code.
+
+11 September 2018  John Allison
+- modeling-V10-04-11: Initialise line width.
+- opengl-V10-04-09: Fix shadowing of variable in namespace CLHEP.
+
+10 September 2018  John Allison  (vis-V10-04-14)
+- modeling-V10-04-10 and visman-V10-04-18:
+  o /vis/drawVolume and /vis/scene/add/volume now draw ALL occurrences of
+    a physical volume.
+
+3 September 2018  John Allison
+- modeling-V10-04-09: G4PhysicalVolumeSearchScene:Tidy.
+
+31 August 2018  John Allison
+- modeling-V10-04-08: Add setLineWidth for trajectory models.
+
+29 August 2018  John Allison  (vis-V10-04-13)
+- modeling-V10-04-07:
+  o G4LogicalVolumeModel:
+    . Add overlap checking (printing only for now).
+    . Avoid multiple printing of overlaps. Print only first time for
+      a given instantiation of G4LogicalVolume.
+  o Add G4TouchableGlobalTransformScene:
+    . Return a pointer to the global transform of a touchable.
+  o Add G4TouchableUtils:
+    . Implement G4TouchableUtils::FindGlobalTransform. (Uses
+      G4TouchableGlobalTransformScene.) Typical use:
+        G4ModelingParameters::PVNameCopyNoPath path;
+        // Specify the complete path of the touchable by a succession of
+        // name,copyNo pairs or pointer,copyNo pairs.
+        path.push_back(G4ModelingParameters::PVNameCopyNo("World",0));
+        path.push_back(G4ModelingParameters::PVNameCopyNo("Envelope",0));
+        .. etc., until touchable completely specified
+        const G4Transform3D* pGlobalTransform =
+        G4TouchableUtils::FindGlobalTransform(path);
+- visman-V10-04-17:
+  o Fix bug for multiple worlds in /vis/touchable/dump.
+
+20 August 2018  John Allison  (vis-V10-04-12)
+- openinventor-V10-04-07: Fix spelling mistake.
+
+20 August 2018  Frederick Jones and John Allison  (vis-V10-04-11)
+- openinventor-V10-04-06: Minor bug fixes.
+
+14 August 2018  John Allison
+- visman-V10-04-16: Reinstate G4VViewer::G4Spline.
+
+12 August 2018  John Allison  (vis-V10-04-10)
+- opengl-V10-04-08: Small bug fixes, including light front.
+- visman-V10-04-15: Small bug fix in G4ViewParameters operator<<.
+
+11 August 2018  John Allison  (vis-V10-04-09)
+- opengl-V10-04-07:
+  o Disable GL_LIGHTING for 3D markers.
+- openinventor-V10-04-05:
+  o Consolidate Fred's work. Add to sources.cmake.
+- visman-V10-04-14:
+  o Remove G4VViewer::G4Spline.
+  o /vis/viewer/set/timeWindow/displayLightFront: change defaults.
+  o /vis/viewer/colourByDensity: change defaults.
+
+24 July 2018  John Allison  (vis-V10-04-08)
+- visman-V10-04-13:
+  o /vis/viewer/interpolate: Fix gcc-8 warnings.
+  o /vis/viewer/colourByDensity: Change defaults:
+    . Algorithm 1 is default.
+    . gm/cm3 is default unit.
+    . Subsequent parameters are not omitable.
+
+13 July 2018  Gabriele Cosmo
+- gMocren-V10-04-01: Fixed remaining gcc-8 compilation warnings.
+
+15 June 2018  Fred Jones
+- openinventor-V10-04-03: Fix gcc8.1 warnings for casts.
+
+11 June 2018  John Allison
+- modeling-V10-04-06: Fix Coverity warning.
 
 05 June 2018  John Allison  (vis-V10-04-07)
 - openinventor-V10-04-02: Fix compilation error.

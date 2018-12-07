@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 99154 2016-09-07 08:06:30Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -46,6 +45,7 @@ GEANT4_DEFINE_MODULE(NAME G4detutils
     HEADERS
         G4DefaultLinearColorMap.hh
         G4ScoreLogColorMap.hh
+        G4VScoreNtupleWriter.hh
         G4ScoreQuantityMessenger.hh
         G4ScoringBox.hh
         G4ScoringCylinder.hh
@@ -57,6 +57,7 @@ GEANT4_DEFINE_MODULE(NAME G4detutils
     SOURCES
         G4DefaultLinearColorMap.cc
         G4ScoreLogColorMap.cc
+        G4VScoreNtupleWriter.cc
         G4ScoreQuantityMessenger.cc
         G4ScoreQuantityMessengerQCmd.cc
         G4ScoringBox.cc

@@ -337,6 +337,7 @@ private:
   int rotCnt;  // # of steps rotation is split into
 
   static void getViewPtNameCB(Widget, XtPointer, XtPointer);
+  static void getViewPtNameCancelCB(Widget, XtPointer, XtPointer);
   std::string viewPtAutoName();
 
   ////////////////////////ANIM_SPEED_INDICATOR///////////////////////

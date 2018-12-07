@@ -1,4 +1,3 @@
-// $Id: Doxymodules_parallel.h 94627 2015-11-30 08:17:35Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_parallel.h

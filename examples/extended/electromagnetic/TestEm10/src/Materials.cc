@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Materials.cc 94932 2015-12-18 09:21:29Z gcosmo $
 //
 /// \file electromagnetic/TestEm10/src/Materials.cc
 /// \brief Implementation of the Materials class

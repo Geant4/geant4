@@ -4,6 +4,10 @@
 
                        Package History file
                        --------------------
+
+22 Jul 2018 S. Incerti - wholeNuclearDNA-V10-04-01
+- removed obsolete RanecuEngine
+
 09 May 2018 - B. Morgan - wholeNuclearDNA-V10-04-00
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

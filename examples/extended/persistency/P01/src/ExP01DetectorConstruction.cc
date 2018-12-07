@@ -27,7 +27,6 @@
 /// \brief Implementation of the ExP01DetectorConstruction class
 //
 //
-// $Id: ExP01DetectorConstruction.cc 98770 2016-08-09 14:22:25Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

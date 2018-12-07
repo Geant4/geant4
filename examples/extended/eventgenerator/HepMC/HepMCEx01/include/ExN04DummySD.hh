@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04DummySD.hh
 /// \brief Definition of the ExN04DummySD class
 //
-// $Id: ExN04DummySD.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 // Dummy sensitive used only to flag sensitivity
@@ -44,12 +43,12 @@ public:
   ExN04DummySD();
   ~ExN04DummySD() {}
 
-  void Initialize(G4HCofThisEvent*) {}
-  G4bool ProcessHits(G4Step*,G4TouchableHistory*) {return false;}
-  void EndOfEvent(G4HCofThisEvent*) {}
-  void clear() {}
-  void DrawAll() {}
-  void PrintAll() {}
+  virtual void Initialize(G4HCofThisEvent*) {}
+  virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*) {return false;}
+  virtual void EndOfEvent(G4HCofThisEvent*) {}
+  virtual void clear() {}
+  virtual void DrawAll() {}
+  virtual void PrintAll() {}
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

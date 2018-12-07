@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.cc 107318 2017-11-08 16:27:32Z gcosmo $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -147,7 +146,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 
     strings = GetStrings();
 
-    if(strings == 0) {Success=false; continue;}
+    if (strings->size() == 0) { Success=false; continue; }
 
     G4double stringEnergy(0);
     SumStringMom=G4LorentzVector(0.,0.,0.,0.);

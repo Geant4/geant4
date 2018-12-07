@@ -26,7 +26,6 @@
 /// \file optical/OpNovice2/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.hh 77288 2013-11-22 10:52:58Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,12 +70,14 @@ class DetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*        fSurfaceMatPropVectorCmd;
 
     // the box 
-    G4UIcmdWithAString*        fBoxMatPropVectorCmd;
-    G4UIcmdWithAString*        fBoxMatConstPropVectorCmd;
+    G4UIcmdWithAString*        fTankMatPropVectorCmd;
+    G4UIcmdWithAString*        fTankMatConstPropVectorCmd;
+    G4UIcmdWithAString*        fTankMaterialCmd;
 
     // the world
     G4UIcmdWithAString*        fWorldMatPropVectorCmd;
     G4UIcmdWithAString*        fWorldMatConstPropVectorCmd;
+    G4UIcmdWithAString*        fWorldMaterialCmd;
 
 };
 

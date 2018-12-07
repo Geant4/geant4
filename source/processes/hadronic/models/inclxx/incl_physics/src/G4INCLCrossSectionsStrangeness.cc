@@ -734,13 +734,19 @@ namespace G4INCL {
         //
         // XS from K. Tsushima, A. Sibirtsev, A. W. Thomas, and G. Q. Li. Phys.Rev.C 59, 369
         // 
+        // ratio
         // D++ n -> p L K+ (3)
         //
         // D+  p -> p L K+ (1)
         //
         // D+  n -> p L K0 (1)
         // D+  n -> n L K+ (1)
-        //return 0.;
+        
+        G4double a = 4.169;
+        G4double b = 2.227;
+        G4double c = 2.511;
+        G4double n_channel = 4.; // number of channel divided by 2. Here 8/2
+        
 // assert((p1->isNucleon() && p2->isResonance()) || (p2->isNucleon() && p1->isResonance()));
         
         const G4int iso = ParticleTable::getIsospin(p1->getType()) + ParticleTable::getIsospin(p2->getType());
@@ -753,7 +759,7 @@ namespace G4INCL {
         
         if(s <= s0) return 0.;
         
-        sigma = 4.*4.169*std::pow(s/s0-1,2.227)*std::pow(s0/s,2.511);
+        sigma = n_channel*a*std::pow(s/s0-1,b)*std::pow(s0/s,c);
         
         //const G4double pLab = sdt::sqrt(s*s/(4*ParticleTable::effectiveNucleonMass2)-s)*0.001;
         //sigma = 3*1.11875*std::pow((pLab-2.3508),1.0951)/std::pow((pLab+2.3508),2.0958); // NDelta sim to NN
@@ -774,6 +780,7 @@ namespace G4INCL {
         //
         // XS from K. Tsushima, A. Sibirtsev, A. W. Thomas, and G. Q. Li. Phys.Rev.C 59, 369 ( X 1.25 (124/99) for isospin consideration)
         //
+        // ratio
         // D++ p -> p S+ K+ (6)
         //
         // D++ n -> p S+ K0 (3) ****
@@ -789,6 +796,11 @@ namespace G4INCL {
         // D+  n -> n S+ K0 (2)
         // D+  n -> n S0 K+ (2)
         
+        G4double a = 39.54;
+        G4double b = 2.799;
+        G4double c = 6.303;
+        G4double n_channel = 11.;
+        
 // assert((p1->isNucleon() && p2->isResonance()) || (p2->isNucleon() && p1->isResonance()));
         
         G4double sigma = 0.;
@@ -800,7 +812,7 @@ namespace G4INCL {
         if(s <= s0)
             return 0.;
         
-        sigma = 11.*39.54*std::pow(s/s0-1,2.799)*std::pow(s0/s,6.303);
+        sigma = n_channel*a*std::pow(s/s0-1,b)*std::pow(s0/s,c);
         
         //const G4double pLab = sdt::sqrt(s*s/(4*ParticleTable::effectiveNucleonMass2)-s)*0.001;
         //sigma = 22./12./2. * 4.75*6.38*std::pow(pLab-2.593,2.1)/std::pow(pLab,4.162); // NDelta sim to NN
@@ -832,7 +844,11 @@ namespace G4INCL {
         //
         // D+  n -> L K+ D0  (4)
         // D+  n -> L K0 D+  (2)
-        //return 0.;
+        
+        G4double a = 2.679;
+        G4double b = 2.280;
+        G4double c = 5.086;
+        G4double n_channel = 7.;
         
 // assert((p1->isNucleon() && p2->isResonance()) || (p2->isNucleon() && p1->isResonance()));
         
@@ -843,7 +859,7 @@ namespace G4INCL {
         if(s <= s0)
             return 0.;
         
-        G4double sigma = 7.*2.679*std::pow(s/s0-1,2.280)*std::pow(s0/s,5.086);
+        G4double sigma = n_channel*a*std::pow(s/s0-1,b)*std::pow(s0/s,c);
         
         if(iso == 0)// D+  n
             sigma *= 6./22.;
@@ -889,7 +905,11 @@ namespace G4INCL {
         // D+  n -> S+ K0 D0  (i)*	(2)*
         // D+  n -> S0 K0 D+  (j)*	(1)*
         // D+  n -> S- K0 D++ (k)*	(2)*
-        //return 0.;
+        
+        G4double a = 8.407;
+        G4double b = 2.743;
+        G4double c = 21.18;
+        G4double n_channel = 19.;
         
 // assert((p1->isNucleon() && p2->isResonance()) || (p2->isNucleon() && p1->isResonance()));
         
@@ -900,7 +920,7 @@ namespace G4INCL {
         if(s <= s0)
             return 0.;
         
-        G4double sigma = 19.*21.18*std::pow(s/s0-1,2.743)*std::pow(s0/s,8.407);
+        G4double sigma = n_channel*a*std::pow(s/s0-1,b)*std::pow(s0/s,c);
         
         if(iso == 0)// D+  n
             sigma *= 13./48.;
@@ -951,13 +971,13 @@ namespace G4INCL {
             return 0.;
         
         if(iso == 0)// D+  n
-            sigma = 8* 14. * 5./19. * 0.3 *std::pow(1.-2.872*2.872/(ener*ener),3.)*std::pow(2.872*2.872/(ener*ener),0.8);
+            sigma = 8* 22./60. * 3. *std::pow(1.-2.872*2.872/(ener*ener),3.)*std::pow(2.872*2.872/(ener*ener),0.8);
         else if (ParticleTable::getIsospin(p1->getType()) == ParticleTable::getIsospin(p2->getType()))// D+  p
-            sigma = 7* 14. * 5./19. * 0.3 *std::pow(1.-2.872*2.872/(ener*ener),3.)*std::pow(2.872*2.872/(ener*ener),0.8);
+            sigma = 7* 22./60. * 3. *std::pow(1.-2.872*2.872/(ener*ener),3.)*std::pow(2.872*2.872/(ener*ener),0.8);
         else if (std::abs(iso) == 2)// D++ n
-            sigma = 9* 14. * 5./19. * 0.3 *std::pow(1.-2.872*2.872/(ener*ener),3.)*std::pow(2.872*2.872/(ener*ener),0.8);
+            sigma = 9* 22./60. * 3. *std::pow(1.-2.872*2.872/(ener*ener),3.)*std::pow(2.872*2.872/(ener*ener),0.8);
         else // D++ p
-            sigma = 6* 14. * 5./19. * 0.3 *std::pow(1.-2.872*2.872/(ener*ener),3.)*std::pow(2.872*2.872/(ener*ener),0.8);
+            sigma = 6* 22./60. * 3. *std::pow(1.-2.872*2.872/(ener*ener),3.)*std::pow(2.872*2.872/(ener*ener),0.8);
         
         return sigma;
     }
@@ -1893,17 +1913,17 @@ namespace G4INCL {
         //      Nucleon-antiKaon producing Nucleon-antiKaon-pion cross sections
         //
         // ratio
-        // p K0b (2)    p K- (4)
+        // p K- (28)    p K0b (20)
         //
-        // p K0b -> p K0b pi0 (1/2)
-        // p K0b -> p K- pi+ (1)*
-        // p K0b -> n K0b pi+ (1/2)*
-        // p K- -> p K- pi0 (1/2)*
-        // p K- -> p K0b pi- (2/3)*
-        // p K- -> n K- pi+ (3/4)*
-        // p K- -> n K0b pi0 (2)
+        // p K- -> p K- pi0      (6)*
+        // p K- -> p K0b pi-     (7)*
+        // p K- -> n K- pi+      (9)*
+        // p K- -> n K0b pi0     (6)
+        // p K0b -> p K0b pi0    (4)
+        // p K0b -> p K- pi+     (10)*
+        // p K0b -> n K0b pi+    (6)*
+        //
         
-        // 
 // assert((p1->isNucleon() && p2->isAntiKaon()) || (p1->isAntiKaon() && p2->isNucleon()));
         
         G4double sigma=0.;
@@ -1927,9 +1947,9 @@ namespace G4INCL {
             return 0.;
         
         if(iso == 0)
-            sigma = 2. * 101.3*std::pow(pLab-0.526,5.846)/std::pow(pLab,8.343);
+            sigma = 28. * 10.13*std::pow(pLab-0.526,5.846)/std::pow(pLab,8.343);
         else
-            sigma = 4. * 101.3*std::pow(pLab-0.526,5.846)/std::pow(pLab,8.343);
+            sigma = 20. * 10.13*std::pow(pLab-0.526,5.846)/std::pow(pLab,8.343);
         
         return sigma;
     }

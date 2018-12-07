@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePairProduction.cc 84953 2014-10-22 15:08:57Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -111,8 +110,7 @@ void G4ePairProduction::InitialiseEnergyLossProcess(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ePairProduction::StreamProcessInfo(std::ostream& out,
-                                          G4String endOfLine) const
+void G4ePairProduction::StreamProcessInfo(std::ostream& out) const
 {
   G4ElementData* ed = EmModel(0)->GetElementData();
   if(ed) {
@@ -123,7 +121,7 @@ void G4ePairProduction::StreamProcessInfo(std::ostream& out,
 	    << "x" << pv->GetLengthX() << "; from "
 	    << G4Exp(pv->GetY(0))/GeV << " GeV to " 
 	    << G4Exp(pv->GetY(pv->GetLengthY()-1))/TeV 
-	    << " TeV " << endOfLine;
+	    << " TeV " << G4endl;
 	break;
       }
     }
@@ -134,7 +132,7 @@ void G4ePairProduction::StreamProcessInfo(std::ostream& out,
 
 void G4ePairProduction::ProcessDescription(std::ostream& out) const
 {
-  out << "<strong>Pair production</strong>";
+  out << "  Pair production";
   G4VEnergyLossProcess::ProcessDescription(out);
 }
 

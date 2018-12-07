@@ -55,9 +55,8 @@ public:
   MixMaxRng(std::istream& is);
   MixMaxRng();
   MixMaxRng(long seed);
-  MixMaxRng(int rowIndex, int colIndex);
   ~MixMaxRng();
-  // Constructor and destructor.
+  // Constructors and destructor.
 
   MixMaxRng(const MixMaxRng& rng);
   MixMaxRng& operator=(const MixMaxRng& rng);

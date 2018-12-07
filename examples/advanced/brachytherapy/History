@@ -1,5 +1,4 @@
 -------------------------------------------------------------------
-$Id: History 109983 2018-05-14 07:17:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +7,31 @@ $Id: History 109983 2018-05-14 07:17:24Z gcosmo $
 
                       Category History file
                       ---------------------
+
+30.11.2018 - G. Cosmo;brachy-V10-04-07.
+             Fixed compilation warning for shadowing variables/parameters
+             in BrachyAnalysisManager, BrachyPrimaryGeneratorAction and
+             BrachyUserScoreWriter.
+
+29.11.2018 - G. Folger;brachy-V10-04-06.
+             Fix Visualisation.mac to leave verbosity at errors
+	      (warning is a 'magic' word failing a test
+	      
+29.11.2018 - G. Folger;brachy-V10-04-05.
+             Attempt to use Root optionally in CMakeLists.txt.
+	     
+28.11.2018 - S. Guatelli;brachy-V10-04-04. 
+             Added directory test_macro and included more ROOT analysis files.
+
+25.10.2018 - S. Guatelli;brachy-V10-04-03. CMakeList updated
+
+24.10.2018 - S. Guatelli;brachy-V10-04-02.
+             Included macros for the regression testing of Geant4.
+             Option to switch EM physics list included
+
+04.09.2018 - S. Guatelli and A. Le;brachy-V10-04-01.
+             Included new brachy source (I-125 Oncura 6711 source). 
+             G4_VIS_USE and G4_UI_USE deleted.
 
 10.05.2018 - B. Morgan; brachy-V10-04-00
              Include G4Types before use of G4MULTITHREADED. For forward

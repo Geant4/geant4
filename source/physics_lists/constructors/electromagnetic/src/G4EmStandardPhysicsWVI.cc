@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysicsWVI.cc 78932 2014-02-04 12:30:52Z vnivanch $
 //
 //---------------------------------------------------------------------------
 //
@@ -82,6 +81,11 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4alphaIonisation.hh"
+#include "G4AtimaEnergyLossModel.hh"
+#include "G4AtimaFluctuations.hh"
+#include "G4IonParametrisedLossModel.hh"
+#include "G4BraggIonModel.hh"
+#include "G4NuclearStopping.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4Gamma.hh"
@@ -101,6 +105,7 @@
 #include "G4Alpha.hh"
 #include "G4GenericIon.hh"
 
+
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
 #include "G4EmModelActivator.hh"
@@ -118,10 +123,14 @@ G4EmStandardPhysicsWVI::G4EmStandardPhysicsWVI(G4int ver)
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
   param->SetVerbose(verbose);
+  param->SetMinEnergy(10*eV);
   param->SetLowestElectronEnergy(10*eV);
-  //param->SetLatDisplacementBeyondSafety(true);
-  param->SetMuHadLateralDisplacement(true);
+  param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
+  param->SetStepFunction(0.2, 100*um);
+  param->SetStepFunctionMuHad(0.2, 50*um);
+  param->SetUseMottCorrection(true);
+  param->SetMuHadLateralDisplacement(true);
   param->SetMscThetaLimit(0.15);
   param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
@@ -200,6 +209,10 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
 
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
+  // nuclear stopping
+  G4NuclearStopping* pnuc = new G4NuclearStopping();
+  pnuc->SetMaxKinEnergy(MeV);
+
   // Add standard EM Processes
   G4ParticleTable* table = G4ParticleTable::GetParticleTable();
   for(const auto& particleName : partList.PartNames()) {
@@ -255,11 +268,19 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4ionIonisation(), particle);
+      ph->RegisterProcess(pnuc, particle);
 
     } else if (particleName == "GenericIon") {
 
+      G4ionIonisation* ionIoni = new G4ionIonisation();
+      ionIoni->SetEmModel(new G4BraggIonModel(),0);
+      ionIoni->SetEmModel(new G4AtimaEnergyLossModel(),1);
+      ionIoni->SetFluctModel(new G4AtimaFluctuations());
+      ionIoni->SetStepFunction(0.1, 1*um);
+
       ph->RegisterProcess(hmsc, particle);
-      ph->RegisterProcess(new G4ionIonisation(), particle);
+      ph->RegisterProcess(ionIoni, particle);
+      ph->RegisterProcess(pnuc, particle);
 
     } else if (particleName == "pi+" ||
                particleName == "pi-" ) {
@@ -326,6 +347,7 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
 
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
+      ph->RegisterProcess(pnuc, particle);
     }
   }
 

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.hh 107869 2017-12-07 14:46:39Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -38,40 +37,60 @@
 
 //******************************************************************************
 class G4QGSMFragmentation:public G4VLongitudinalStringDecay
-   {
-public:
-      G4QGSMFragmentation();
-      ~G4QGSMFragmentation();
-      virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
+{
+  public:
+    G4QGSMFragmentation();
+    ~G4QGSMFragmentation();
+    virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
 
   private:
-     // not implemented to protect/forbid use
-   G4QGSMFragmentation(const G4QGSMFragmentation &right);
-   const G4QGSMFragmentation & operator=(const G4QGSMFragmentation &right);
-   int operator==(const G4QGSMFragmentation &right) const;
-   int operator!=(const G4QGSMFragmentation &right) const;
+    // not implemented to protect/forbid use
+    G4QGSMFragmentation(const G4QGSMFragmentation &right);
+    const G4QGSMFragmentation & operator=(const G4QGSMFragmentation &right);
+    int operator==(const G4QGSMFragmentation &right) const;
+    int operator!=(const G4QGSMFragmentation &right) const;
 
   private:
-   virtual G4double GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding,  G4ParticleDefinition* pHadron, G4double Px, G4double Py);      
+    void SetMinMasses();
+    void SetMinimalStringMass(const G4FragmentingString  * const string);
+    void SetMinimalStringMass2(const G4double aValue);	
 
-   virtual void Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom, G4double AntiMass, G4double InitialMass); 
-   virtual G4bool StopFragmenting(const G4FragmentingString  * const string);
-   virtual G4bool IsFragmentable(const G4FragmentingString * const string);
+    virtual G4bool StopFragmenting(const G4FragmentingString  * const string);
+    virtual G4bool IsFragmentable(const G4FragmentingString * const string);
 
-   virtual G4KineticTrack * Splitup(G4FragmentingString *string,              // Uzhi 28 June 2016
-                            G4FragmentingString *&newString);
+    virtual G4bool SplitLast(G4FragmentingString * string, 
+	 	             G4KineticTrackVector * LeftVector, 
+                             G4KineticTrackVector * RightVector);
 
-   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, 
-                                        G4FragmentingString * string,     // Uzhi
-                                        G4FragmentingString * newString); // Uzhi
-   virtual G4bool SplitLast(G4FragmentingString * string, 
-		    G4KineticTrackVector * LeftVector,
-		    G4KineticTrackVector * RightVector);
+    virtual void Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom,
+                                 G4double AntiMass, G4double InitialMass); 
 
-   virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay, // Uzhi June 2014
-                                         G4ParticleDefinition *&created);
+    virtual G4KineticTrack * Splitup(G4FragmentingString *string, 
+                                     G4FragmentingString *&newString);
+
+    virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, 
+                                         G4FragmentingString * string, 
+                                         G4FragmentingString * newString);
+
+    virtual G4double GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding, 
+                                   G4ParticleDefinition* pHadron, G4double Px, G4double Py);
+
+    virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay,
+                                                  G4ParticleDefinition *&created);
 
   private:
+    // ------ For estimation of a minimal string mass ---------------
+    G4double Mass_of_light_quark;
+    G4double Mass_of_heavy_quark;
+    G4double Mass_of_string_junction;
+
+    G4double minMassQQbarStr[3][3];
+    G4double minMassQDiQStr[3][3][3];
+
+    // ------ An estimated minimal string mass ----------------------
+    G4double MinimalStringMass;
+    G4double MinimalStringMass2;
+
     // model parameters
     const G4double arho; 
     const G4double aphi;  
@@ -84,5 +103,4 @@ public:
 
 // Class G4QGSMFragmentation 
 #endif
-
 

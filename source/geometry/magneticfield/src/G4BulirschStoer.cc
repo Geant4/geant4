@@ -23,7 +23,6 @@
 // ********************************************************************
 //
 //
-// $Id: $
 //
 // G4BulirschStoer class implementation
 // Based on bulirsch_stoer.hpp from boost
@@ -38,12 +37,14 @@
 
 namespace
 {
-  const G4double STEPFAC1 = 0.65;
-  const G4double STEPFAC2 = 0.94;
-  const G4double STEPFAC3 = 0.02;
-  const G4double STEPFAC4 = 4.0;
-  const G4double KFAC1 = 0.8;
-  const G4double KFAC2 = 0.9;
+  constexpr G4double STEPFAC1 = 0.65;
+  constexpr G4double STEPFAC2 = 0.94;
+  constexpr G4double STEPFAC3 = 0.02;
+  constexpr G4double STEPFAC4 = 4.0;
+  constexpr G4double KFAC1 = 0.8;
+  constexpr G4double KFAC2 = 0.9;
+  constexpr G4double inv_STEPFAC1 = 1.0 / STEPFAC1;
+  constexpr G4double inv_STEPFAC4 = 1.0 / STEPFAC4;
 } // namespace
 
 G4BulirschStoer::G4BulirschStoer(G4EquationOfMotion* equation,
@@ -262,18 +263,19 @@ G4BulirschStoer::calc_h_opt(G4double h , G4double error , size_t k) const
 {
   /* calculates the optimal step size for a given error and stage number */
 
-  G4double expo =  1.0 / (2 * k + 1);
-  G4double facmin = std::pow(STEPFAC3, expo);
+  const G4double expo =  1.0 / (2 * k + 1);
+  const G4double facmin = std::pow(STEPFAC3, expo);
   G4double fac;
 
+  G4double facminInv= 1.0 / facmin;
   if (error == 0.0)
   {
-    fac = 1.0 / facmin;
+    fac = facminInv;
   }
   else
   {
-    fac = STEPFAC2 / std::pow(error / STEPFAC1 , expo);
-    fac = std::max(facmin / STEPFAC4, std::min(1.0 / facmin, fac));
+    fac = STEPFAC2 * std::pow(error * inv_STEPFAC1 , -expo);
+    fac = std::max(facmin * inv_STEPFAC4, std::min( facminInv, fac));
   }
 
   return h * fac;
@@ -325,17 +327,17 @@ G4bool G4BulirschStoer::should_reject(G4double error, G4int k) const
   if(k == m_current_k_opt - 1)
   {
     const G4double d = G4double(m_interval_sequence[m_current_k_opt]
-                              * m_interval_sequence[m_current_k_opt+1])
-                     / G4double(m_interval_sequence[0]
-                              * m_interval_sequence[0]);
+                              * m_interval_sequence[m_current_k_opt+1]);
+    const G4double e = G4double(m_interval_sequence[0]);
+    const G4double e2 = e*e; 
     // step will fail, criterion 17.3.17 in NR
-    return error > d * d;
+    return error * e2 * e2 > d * d;  //  was return error > dOld * dOld; (where dOld= d/e; )
   }
   else if(k == m_current_k_opt)
   {
-    const G4double d = G4double(m_interval_sequence[m_current_k_opt])
-                     / G4double(m_interval_sequence[0]);
-    return error > d * d;
+    const G4double d = G4double(m_interval_sequence[m_current_k_opt]);
+    const G4double e = G4double(m_interval_sequence[0]);
+    return error * e * e > d * d; //  was return error > dOld * dOld; (where dOld= d/e; )
   }
   else
   {

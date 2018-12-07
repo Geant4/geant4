@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ThermalNeutrons.hh 70995 2013-06-09 00:56:34Z adotti $
 //
 //---------------------------------------------------------------------------
 //
@@ -46,10 +45,10 @@
 class G4ThermalNeutrons : public G4VHadronPhysics {
 
 public:
-  G4ThermalNeutrons(G4int ver);
+  explicit G4ThermalNeutrons(G4int ver);
   virtual ~G4ThermalNeutrons();
 
-  virtual void ConstructProcess();
+  void ConstructProcess() override;
 
 private:
   G4int               verbose;

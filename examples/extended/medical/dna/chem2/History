@@ -14,6 +14,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28.11.2018 V. Ivanchenko        tag chem2-V10-04-02
+-----------------------------------------------------
+- Fixed nightly problem by change initial parameters in beam.in and
+  minor clean-up in chem1.cc
+
+27.11.2018 V. Ivanchenko        tag chem2-V10-04-01
+-----------------------------------------------------
+- Fixed nightly problem in PhysicsList by removing G4PhysicsConstructorRegisty
+
 26.02.2018 R. Hatcher           tag chem2-V10-04-00
 -----------------------------------------------------
 - Use G4RegisterPhysicsConstructors.icc to ensure G4PhysicsConstructorRegisty

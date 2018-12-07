@@ -33,14 +33,18 @@
 // Creation date: 16.01.2018
 //
 // Modifications:
-//
+// 09/10/2018: Deleted Titeica's correction at high energies
 //
 //
 // Class Description:
 //
-// This model calculates the energy-loss fluctuations according to ATIMA code
+// This model calculates the energy-loss fluctuations according to the ATIMA code
 // developed at GSI, Darmstadt, Germany.
-// http://web-docs.gsi.de/~weick/atima/
+// For details: http://web-docs.gsi.de/~weick/atima/
+//
+// Helmut Weick, GSI (responsible for fortran version)
+// Andrej Prochazka, GSI (responsible for C version)
+// Christoph Scheidenberger, GSI (project coordination)
 //
 // -------------------------------------------------------------------
 //
@@ -185,7 +189,8 @@ G4double G4AtimaFluctuations::Dispersion(const G4Material* mat,
     G4double factor = 4.8184e-3*g4calc->powA(zp+zt,8.0/3.0)/at;
     sse = std::min(f*(X+cor), factor*beta2/fine_structure/fine_structure);
   }else{
-    sse = f*(X+cor);
+   // sse = f*(X+cor); 
+    sse = f*X;//09/10/2018
   }
   //
   return sse*length/(cm)*mat->GetDensity()/(g/cm3);

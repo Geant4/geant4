@@ -27,7 +27,6 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 // 
 
@@ -45,6 +44,7 @@
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
 
+#include "G4StateManager.hh"
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -308,7 +308,9 @@ void DetectorConstruction::SetAbsorberThickness(G4double val)
 {
   // change Absorber thickness and recompute the calorimeter parameters
   fAbsorberThickness = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -317,7 +319,9 @@ void DetectorConstruction::SetGapThickness(G4double val)
 {
   // change Gap thickness and recompute the calorimeter parameters
   fGapThickness = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -326,7 +330,9 @@ void DetectorConstruction::SetCalorSizeYZ(G4double val)
 {
   // change the transverse size and recompute the calorimeter parameters
   fCalorSizeYZ = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -334,7 +340,9 @@ void DetectorConstruction::SetCalorSizeYZ(G4double val)
 void DetectorConstruction::SetNbOfLayers(G4int val)
 {
   fNbOfLayers = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

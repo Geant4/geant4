@@ -26,7 +26,6 @@
 /// \file RE06/include/RE06Run.hh
 /// \brief Definition of the RE06Run class
 //
-// $Id: RE06Run.hh 75123 2013-10-28 09:53:28Z gcosmo $
 //
 
 #ifndef RE06Run_h

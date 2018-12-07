@@ -1,0 +1,397 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+//
+//
+// class G4ChordFinderDelegate
+//
+// Class description:
+//
+// Implementation of common algorithm of finding step size 
+// with distance to chord less then provided value. 
+
+// History:
+// - Created. D.Sorokin
+// --------------------------------------------------------------------
+
+#include <iomanip>
+
+template <class Driver>
+G4ChordFinderDelegate<Driver>::~G4ChordFinderDelegate()
+{
+#ifdef G4VERBOSE
+    if (GetDriver().GetVerboseLevel() > 0)
+    {
+        PrintStatistics();
+    }
+#endif
+}
+
+template <class Driver>
+void G4ChordFinderDelegate<Driver>::ResetStepEstimate()
+{
+    fLastStepEstimate_Unconstrained = DBL_MAX;  
+}
+
+template <class Driver>
+Driver& G4ChordFinderDelegate<Driver>::GetDriver()
+{
+    return static_cast<Driver&>(*this);
+}
+
+template <class Driver>
+G4double G4ChordFinderDelegate<Driver>::
+AdvanceChordLimitedImpl(G4FieldTrack& yCurrent, G4double stepMax, 
+                        G4double epsStep, G4double chordDistance)
+{
+    G4double dyErr;
+    G4FieldTrack yEnd = yCurrent;
+    G4double nextStep;
+
+    const G4double stepPossible = FindNextChord(yCurrent, stepMax, epsStep, chordDistance, yEnd, dyErr, nextStep);
+
+    if (dyErr < epsStep * stepPossible)
+    {
+         // Accept this accuracy.
+         yCurrent = yEnd;
+         return stepPossible;
+    }
+
+    // Advance more accurately to "end of chord"
+    const G4double startCurveLen = yCurrent.GetCurveLength();
+    const G4bool goodAdvance = GetDriver().AccurateAdvance(yCurrent, stepPossible, epsStep, nextStep);
+
+    return goodAdvance ? stepPossible : yCurrent.GetCurveLength() - startCurveLen;
+}
+
+// Returns Length of Step taken
+template <class T>
+G4double G4ChordFinderDelegate<T>::
+FindNextChord(const G4FieldTrack& yStart,
+              G4double stepMax,
+              G4double epsStep,
+              G4double chordDistance,
+              G4FieldTrack& yEnd, // Endpoint
+              G4double& dyErrPos, // Error of endpoint
+              G4double& stepForAccuracy)
+{
+    //  1.)  Try to "leap" to end of interval
+    //  2.)  Evaluate if resulting chord gives d_chord that is good enough.
+    // 2a.)  If d_chord is not good enough, find one that is.
+
+    G4double dydx[G4FieldTrack::ncompSVEC];
+    G4double field[G4Field::MAX_NUMBER_OF_COMPONENTS];
+  
+    G4bool validEndPoint = false;
+    G4double dChordStep, lastStepLength;
+
+    GetDriver().GetDerivatives(yStart, dydx, field);
+    const G4double inverseRadius = GetDriver().GetInverseCurvatureRadius(yStart, field);
+
+    const G4double safetyFactor = fFirstFraction; //  0.975 or 0.99 ? was 0.999
+
+    G4double stepTrial = std::min(stepMax, safetyFactor * fLastStepEstimate_Unconstrained);
+
+    G4double newStepEst_Uncons = 0.0; 
+    G4double stepForChord;
+
+    G4int noTrials = 1;
+    constexpr G4int maxTrials = 75; // Avoid endless loop for bad convergence 
+    for (; noTrials < maxTrials; ++noTrials)
+    {
+        yEnd = yStart; // Always start from initial point  
+        GetDriver().QuickAdvance(yEnd, dydx, stepTrial, inverseRadius, dChordStep, dyErrPos);
+        lastStepLength = stepTrial; 
+
+        validEndPoint = dChordStep < chordDistance;
+        stepForChord = NewStep(stepTrial, dChordStep, chordDistance, newStepEst_Uncons);
+
+        if (validEndPoint)
+        {
+            break;
+        }
+
+        if (stepTrial <= 0.0)
+        {
+            stepTrial = stepForChord;
+        }
+        else if (stepForChord <= stepTrial)
+        {
+            // Reduce by a fraction, possibly up to 20% 
+            stepTrial = std::min( stepForChord, fFractionLast * stepTrial);
+        }
+        else
+        {
+            stepTrial *= 0.1;
+        }
+    }
+
+    if (noTrials >= maxTrials)
+    {
+        std::ostringstream message;
+        message << "Exceeded maximum number of trials= " << maxTrials << G4endl
+                << "Current sagita dist= " << dChordStep << G4endl
+                << "Max sagita dist= " << chordDistance << G4endl
+                << "Step sizes (actual and proposed): " << G4endl
+                << "Last trial =         " << lastStepLength  << G4endl
+                << "Next trial =         " << stepTrial  << G4endl
+                << "Proposed for chord = " << stepForChord  << G4endl;
+        G4Exception("G4ChordFinder::FindNextChord()", "GeomField0003",
+                    JustWarning, message);
+    }
+
+    if (newStepEst_Uncons > 0.0)
+    {
+        fLastStepEstimate_Unconstrained = newStepEst_Uncons;
+    }
+
+    AccumulateStatistics(noTrials);
+
+
+    // Calculate the step size required for accuracy, if it is needed
+    G4double dyErr_relative = dyErrPos / (epsStep * lastStepLength);
+    stepForAccuracy = dyErr_relative > 1 ? 
+        GetDriver().ComputeNewStepSize(dyErr_relative, lastStepLength) : 0;
+
+  return stepTrial; 
+}
+
+// Is called to estimate the next step size, even for successful steps,
+// in order to predict an accurate 'chord-sensitive' first step
+// which is likely to assist in more performant 'stepping'.
+template <class T>
+G4double G4ChordFinderDelegate<T>::
+NewStep(G4double stepTrialOld, 
+        G4double dChordStep, // Curr. dchord achieved
+        G4double fDeltaChord,
+        G4double& stepEstimate_Unconstrained)  
+{
+    G4double stepTrial;
+
+    if (dChordStep > 0.0)
+    {
+        stepEstimate_Unconstrained =
+            stepTrialOld * std::sqrt(fDeltaChord / dChordStep);
+        stepTrial = fFractionNextEstimate * stepEstimate_Unconstrained;
+    }
+    else
+    {
+        // Should not update the Unconstrained Step estimate: incorrect!
+        stepTrial =  stepTrialOld * 2.; 
+    }
+
+    if (stepTrial <= 0.001 * stepTrialOld)
+    {
+        if (dChordStep > 1000.0 * fDeltaChord)
+        {
+            stepTrial = stepTrialOld * 0.03;   
+        }
+        else
+        {
+            if (dChordStep > 100. * fDeltaChord)
+            {
+                stepTrial = stepTrialOld * 0.1;   
+            }
+            else   // Try halving the length until dChordStep OK
+            {
+                stepTrial = stepTrialOld * 0.5;   
+            }
+        }
+    }
+    else if (stepTrial > 1000.0 * stepTrialOld)
+    {
+        stepTrial = 1000.0 * stepTrialOld;
+    }
+
+    if (stepTrial == 0.0)
+    {
+        stepTrial= 0.000001;
+    }
+
+    // A more sophisticated chord-finder could figure out a better
+    // stepTrial, from dChordStep and the required d_geometry
+    //   e.g.
+    //      Calculate R, r_helix (eg at orig point)
+    //      if( stepTrial < 2 pi  R )
+    //          stepTrial = R arc_cos( 1 - fDeltaChord / r_helix )
+    //      else    
+    //          ??
+
+    return stepTrial;
+}
+
+template <class T>
+void G4ChordFinderDelegate<T>::AccumulateStatistics(G4int noTrials) 
+{
+    fTotalNoTrials += noTrials; 
+    ++fNoCalls; 
+      
+    if (noTrials > fmaxTrials) 
+    { 
+        fmaxTrials = noTrials; 
+    }
+}
+
+template <class T>
+void G4ChordFinderDelegate<T>::PrintStatistics()
+{
+    // Print Statistics
+    G4cout << "G4ChordFinder statistics report: \n"
+           << "  No trials: " << fTotalNoTrials
+           << "  No Calls: "  << fNoCalls
+           << "  Max-trial: " <<  fmaxTrials << "\n"
+           << "  Parameters: " 
+           << "  fFirstFraction "  << fFirstFraction
+           << "  fFractionLast "   << fFractionLast
+           << "  fFractionNextEstimate " << fFractionNextEstimate
+           << G4endl; 
+}
+
+template <class T>
+G4int G4ChordFinderDelegate<T>::GetNoCalls()
+{
+    return fNoCalls;
+}
+
+template <class T>
+G4int G4ChordFinderDelegate<T>::GetNoTrials()
+{
+    return fTotalNoTrials;
+}
+
+template <class T>
+G4int G4ChordFinderDelegate<T>::GetNoMaxTrials()
+{
+    return fmaxTrials;
+}
+
+template <class T>
+void G4ChordFinderDelegate<T>::SetFractions_Last_Next(G4double fractLast, 
+                                                      G4double fractNext)
+{
+    // Use -1.0 as request for Default.
+    if (fractLast == -1.0) fractLast = 1.0;   // 0.9;
+    if (fractNext == -1.0) fractNext = 0.98;  // 0.9; 
+
+    // fFirstFraction  = 0.999; // Orig 0.999 A safe value, range: ~ 0.95 - 0.999
+    if (GetDriver().GetVerboseLevel() > 0)
+    { 
+        G4cout << " ChordFnd> Trying to set fractions: "
+               << " first " << fFirstFraction
+               << " last " <<  fractLast
+               << " next " <<  fractNext
+               << G4endl;
+    } 
+
+    if (fractLast > 0 && fractLast <= 1) 
+    {
+        fFractionLast = fractLast;
+    } else
+    {
+        std::ostringstream message;
+        message << "Invalid fraction Last = " << fractLast
+                << "; must be  0 <  fractionLast <= 1 ";
+        G4Exception("G4ChordFinderDelegate::SetFractions_Last_Next()",
+                    "GeomField1001", JustWarning, message);
+    }
+    if (fractNext > 0. && fractNext < 1)
+    {
+        fFractionNextEstimate = fractNext;
+    } else
+    {
+        std::ostringstream message;
+        message << "Invalid fraction Next = " << fractNext
+                << "; must be  0 <  fractionNext < 1 ";
+        G4Exception("G4ChordFinderDelegate::SetFractions_Last_Next()",
+                    "GeomField1001", JustWarning, message);
+    }
+}
+
+template <class T>
+void G4ChordFinderDelegate<T>::SetFirstFraction(G4double fractFirst)
+{
+    fFirstFraction = fractFirst;
+}
+
+template <class T>
+G4double G4ChordFinderDelegate<T>::GetFirstFraction()
+{
+    return fFirstFraction;
+}
+
+template <class T>
+G4double G4ChordFinderDelegate<T>::GetFractionLast()
+{
+    return fFractionLast;
+}
+
+template <class T>
+G4double G4ChordFinderDelegate<T>::GetFractionNextEstimate()
+{
+    return fFractionNextEstimate;
+}
+
+template <class T>
+G4double G4ChordFinderDelegate<T>::GetLastStepEstimateUnc()
+{
+    return fLastStepEstimate_Unconstrained;   
+}
+
+template <class T>
+void G4ChordFinderDelegate<T>::SetLastStepEstimateUnc(G4double stepEst)
+{
+    fLastStepEstimate_Unconstrained = stepEst;
+}
+
+template <class T>
+void G4ChordFinderDelegate<T>::TestChordPrint(G4int noTrials, 
+                                              G4int lastStepTrial, 
+                                              G4double dChordStep,
+                                              G4double fDeltaChord,
+                                              G4double nextStepTrial)
+{
+     G4int oldprec= G4cout.precision(5);
+     G4cout << " ChF/fnc: notrial " << std::setw( 3) << noTrials 
+            << " this_step= "       << std::setw(10) << lastStepTrial;
+     if( std::fabs( (dChordStep / fDeltaChord) - 1.0 ) < 0.001 )
+     {
+       G4cout.precision(8);
+     }
+     else
+     {
+       G4cout.precision(6);
+     }
+     G4cout << " dChordStep=  " << std::setw(12) << dChordStep;
+     if( dChordStep > fDeltaChord ) { G4cout << " d+"; }
+     else                           { G4cout << " d-"; }
+     G4cout.precision(5);
+     G4cout <<  " new_step= "       << std::setw(10)
+            << fLastStepEstimate_Unconstrained
+            << " new_step_constr= " << std::setw(10)
+            << lastStepTrial << G4endl;
+     G4cout << " nextStepTrial = " << std::setw(10) << nextStepTrial << G4endl;
+     G4cout.precision(oldprec);
+}

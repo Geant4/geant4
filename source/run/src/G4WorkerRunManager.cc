@@ -44,6 +44,7 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4VVisManager.hh"
 #include "G4SDManager.hh"
+#include "G4VScoreNtupleWriter.hh"
 #include "G4VScoringMesh.hh"
 #include "G4Timer.hh"
 #include "G4TiMemory.hh"
@@ -175,6 +176,13 @@ void G4WorkerRunManager::RunInitialization()
   if(fSDM)
   { currentRun->SetHCtable(fSDM->GetHCtable()); }
 
+  if ( G4VScoreNtupleWriter::Instance() )
+  {
+    auto hce = fSDM->PrepareNewEvent();
+    isScoreNtupleWriter = G4VScoreNtupleWriter::Instance()->Book(hce);
+    delete hce;
+  }
+
   std::ostringstream oss;
     G4Random::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
@@ -189,6 +197,10 @@ void G4WorkerRunManager::RunInitialization()
            << G4Threading::G4GetThreadId() << "." << G4endl;
   }
   if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
+
+  if (isScoreNtupleWriter)  {
+    G4VScoreNtupleWriter::Instance()->OpenFile();
+  }
 
   if(storeRandomNumberStatus) {
       G4String fileN = "currentRun";
@@ -643,7 +655,7 @@ void G4WorkerRunManager::DoWork()
     else
     {
       G4ExceptionDescription d;
-      d<<"Cannot continue, this worker has been requested an unknwon action: "
+      d<<"Cannot continue, this worker has been requested an unknown action: "
        <<static_cast<std::underlying_type<G4MTRunManager::WorkerActionRequest>::type>(nextAction);
       G4Exception("G4WorkerRunManager::DoWork","Run0104",FatalException,d);
     }

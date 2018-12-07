@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4LinInterpolator.cc 70904 2013-06-07 10:34:25Z gcosmo $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

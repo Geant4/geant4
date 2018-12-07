@@ -104,6 +104,21 @@ public:
    */
   void DeexcitationAblaxx(G4int nucleusA, G4int nucleusZ, G4double excitationEnergy, G4double angularMomentum, G4double momX, G4double momY, G4double momZ, G4int eventnumber);
 
+  /**
+   * Main interface to the de-excitation code for hyper-nuclei.
+   *
+   * @param nucleusA mass number of the nucleus
+   * @param nucleusZ charge number of the nucleus
+   * @param excitationEnergy excitation energy of the nucleus
+   * @param angularMomentum angular momentum of the nucleus (produced as output by INCL)
+   * @param momX momentum x-component
+   * @param momY momentum y-component
+   * @param momZ momentum z-component
+   * @param eventnumber number of the event
+   * @param nucleusS is the strange number
+   */
+  void DeexcitationAblaxx(G4int nucleusA, G4int nucleusZ, G4double excitationEnergy, G4double angularMomentum, G4double momX, G4double momY, G4double momZ, G4int eventnumber, G4int nucleusS);
+
   // Evaporation
 public:
   /**
@@ -152,7 +167,7 @@ public:
   /**
    * Calculation of fissility parameter
    */
-  G4double fissility(int a,int z, int optxfis);
+  G4double fissility(G4int a, G4int z, G4int ny, G4double sn, G4double slam, G4int optxfis);
 
   /**
    * Main evaporation routine.
@@ -160,13 +175,14 @@ public:
   void evapora(G4double zprf, G4double aprf, G4double *ee_par, G4double jprf, 
 	       G4double *zf_par, G4double *af_par, G4double *mtota_par,
 	       G4double *vleva_par, G4double *vxeva_par, G4double *vyeva_par,
-	       G4int *ff_par, G4int *fimf_par, G4double *fzimf, G4double *faimf, G4double *tkeimf_par,G4double *jprfout,G4int *inttype_par, G4int *inum_par,G4double EV_TEMP[200][5],G4int *iev_tab_temp_par);
+	       G4int *ff_par, G4int *fimf_par, G4double *fzimf, G4double *faimf, G4double *tkeimf_par,G4double *jprfout,G4int *inttype_par, G4int *inum_par,G4double EV_TEMP[200][6],G4int *iev_tab_temp_par, G4int *nblam0);
+
 
   /**
    * Calculation of particle emission probabilities.
    */
-  void direct(G4double zprf,G4double a, G4double ee, G4double jprf, G4double *probp_par, G4double *probd_par, G4double *probt_par, G4double *probn_par, G4double *probhe_par, G4double *proba_par, G4double *probg_par,G4double *probimf_par, G4double *probf_par, G4double *ptotl_par, G4double *sn_par, G4double *sbp_par,  G4double *sbd_par,  G4double *sbt_par, G4double *sbhe_par, G4double *sba_par, G4double *ecn_par, G4double *ecp_par,G4double *ecd_par,G4double *ect_par,G4double *eche_par, G4double *eca_par, G4double *ecg_par, G4double *bp_par, G4double *bd_par, G4double *bt_par, G4double *bhe_par, G4double *ba_par,G4double *sp,G4double *sd,G4double *st,G4double *she,G4double *sa, G4double * ef, G4double *ts1, G4int inttype, G4int inum, G4int itest, G4int *sortie, G4double *tcn,
-G4double *jprfn, G4double *jprfp, G4double *jprfd, G4double *jprft, G4double *jprfhe, G4double *jprfa, G4double *tsum);
+  void direct(G4double zprf, G4double a, G4double ee, G4double jprf, G4double *probp_par, G4double *probd_par, G4double *probt_par, G4double *probn_par, G4double *probhe_par, G4double *proba_par, G4double *probg_par,G4double *probimf_par,G4double *probf_par,G4double *problamb0_par, G4double *ptotl_par, G4double *sn_par, G4double *sbp_par, G4double *sbd_par, G4double *sbt_par, G4double *sbhe_par, G4double *sba_par,G4double *slamb0_par, G4double *ecn_par, G4double *ecp_par, G4double *ecd_par, G4double *ect_par,G4double *eche_par,G4double *eca_par, G4double *ecg_par,  G4double *eclamb0_par, G4double *bp_par, G4double *bd_par, G4double *bt_par, G4double *bhe_par, G4double *ba_par,G4double *sp_par,G4double *sd_par,G4double *st_par,G4double *she_par,G4double *sa_par, G4double *ef_par,G4double *ts1_par, G4int, G4int inum, G4int itest, G4int *sortie, G4double *tcn,G4double *jprfn_par, G4double *jprfp_par, G4double *jprfd_par, G4double *jprft_par, G4double *jprfhe_par, G4double *jprfa_par, G4double *jprflamb0_par, G4double *tsum_par, G4int NbLam0);
+
 
   /**
    * Calculation of fission and the particle emission probabilities after fission.
@@ -174,9 +190,10 @@ G4double *jprfn, G4double *jprfp, G4double *jprfd, G4double *jprft, G4double *jp
 void fission(G4double AF,G4double ZF,G4double EE,G4double JPRF,
         G4double *VX1_FISSION,G4double *VY1_FISSION,G4double *VZ1_FISSION,
         G4double *VX2_FISSION,G4double *VY2_FISSION,G4double *VZ2_FISSION,
-        G4int *ZFP1,G4int *AFP1,G4int *ZFP2,G4int *AFP2,G4int *imode, 
+        G4int *ZFP1,G4int *AFP1,G4int *SFP1,G4int *ZFP2,G4int *AFP2,G4int *SFP2,G4int *imode, 
         G4double *VX_EVA_SC, G4double *VY_EVA_SC, G4double *VZ_EVA_SC,
-        G4double EV_TEMP[200][5],G4int *IEV_TAB_FIS);
+        G4double EV_TEMP[200][6],G4int *IEV_TAB_FIS,G4int *NbLam0);
+
 
   /**
    * Calculation of lorentz's boost
@@ -186,7 +203,7 @@ void lorentz_boost(G4double VXRIN,G4double VYRIN,G4double VZRIN,G4double VXIN,G4
   /**
    * Calculation of unstable nuclei
    */
-void unstable_nuclei(G4int AFP,G4int ZFP,G4int *AFPNEW,G4int *ZFPNEW,G4int &IOUNSTABLE,G4double VX,G4double VY,G4double VZ,G4double *VP1X,G4double *VP1Y,G4double *VP1Z,G4double BU_TAB_TEMP[200][5],G4int *ILOOP);
+void unstable_nuclei(G4int AFP,G4int ZFP,G4int *AFPNEW,G4int *ZFPNEW,G4int &IOUNSTABLE,G4double VX,G4double VY,G4double VZ,G4double *VP1X,G4double *VP1Y,G4double *VP1Z,G4double BU_TAB_TEMP[200][6],G4int *ILOOP);
 
   /**
    * Calculation of unstable nuclei tke
@@ -213,7 +230,7 @@ void AMOMENT(G4double AABRA,G4double APRF,G4int IMULTIFR,G4double *PX,G4double *
    * Calculation of particle emission between the saddle and scission point.
    */
   void evap_postsaddle(G4double A, G4double Z, G4double E_scission_pre, G4double *E_scission_post, G4double *A_scission, G4double *Z_scission,
-G4double &vx_eva,G4double &vy_eva,G4double &vz_eva);
+G4double &vx_eva,G4double &vy_eva,G4double &vz_eva,G4int *NbLam0_par);
 
   /**
    * Calculation of imfs.
@@ -251,7 +268,8 @@ void unbound(G4double SN,G4double SP,G4double  SD,G4double ST,G4double SHE,G4dou
   void fissionDistri(G4double &a,G4double &z,G4double &e,
 		   G4double &a1,G4double &z1,G4double &e1,G4double &v1,
 		   G4double &a2,G4double &z2,G4double &e2,G4double &v2,
-                   G4double &vx_eva_sc,G4double &vy_eva_sc,G4double &vz_eva_sc);
+                   G4double &vx_eva_sc,G4double &vy_eva_sc,
+                   G4double &vz_eva_sc,G4int *NbLam0_par);
 
   /**
    * Calculation of even-odd effects in fission.
@@ -263,10 +281,10 @@ void unbound(G4double SN,G4double SP,G4double  SD,G4double ST,G4double SHE,G4dou
    */
   G4double umass(G4double z,G4double n,G4double beta);
   G4double ecoul(G4double z1,G4double n1,G4double beta1,G4double z2,G4double n2,G4double beta2,G4double d);
-  G4double Uwash(double E, double Ecrit,double Freduction,double gamma);
-  G4double frldm(double z,double n,double beta);
-  G4double eflmac_profi(double a,double z);
-  G4double gausshaz(int k, double xmoy, double sig);
+  G4double Uwash(G4double E, G4double Ecrit,G4double Freduction,G4double gamma);
+  G4double frldm(G4double z,G4double n,G4double beta);
+  G4double eflmac_profi(G4double a,G4double z);
+  G4double gausshaz(G4int k, G4double xmoy, G4double sig);
   G4double haz(G4int k);
 
   /**
@@ -328,7 +346,7 @@ void unbound(G4double SN,G4double SP,G4double  SD,G4double ST,G4double SHE,G4dou
    * RELATIVE TO THE SPHERICAL CONFIGURATION                           
    * BASED ON  MYERS, DROPLET MODEL FOR ARBITRARY SHAPES               
    */
-  G4double bipol(int iflag, G4double y);
+  G4double bipol(G4int iflag, G4double y);
 
   /**
    * THIS SUBROUTINE RETURNS THE BARRIER HEIGHT BFIS, THE              
@@ -431,6 +449,17 @@ void unbound(G4double SN,G4double SP,G4double  SD,G4double ST,G4double SHE,G4dou
    * Fill the data array for INCL
    */
   void FillData(G4int IMULTBU,G4int IEV_TAB);
+
+  /**
+   * Separation energies of lambda
+   */
+  G4double gethyperseparation(G4double A, G4double Z, G4int ny);
+
+  /**
+   * Separation energies of for other particles for hypernuclei
+   */
+  G4double getdeltabinding(G4double a,G4int nblamb);
+  G4double gethyperbinding(G4double A, G4double Z, G4int ny);
     
 public:
   // Utils
@@ -458,7 +487,7 @@ private:
   G4int ilast;
   G4double T_freeze_out_in;
   G4int IEV_TAB_SSC;
-  G4double BU_TAB[200][11],EV_TAB[200][5],EV_TAB_SSC[200][5];
+  G4double BU_TAB[200][12],EV_TAB[200][6],EV_TAB_SSC[200][6];
   G4int gammaemission;
   G4double T_freeze_out;
   G4Pace *pace;
@@ -471,7 +500,8 @@ private:
   G4Fiss *fiss;
   G4Opt *opt;
   G4Volant *volant;
-  G4VarNtp *varntp;  
+  G4VarNtp *varntp;
+  G4int Ainit,Zinit,Sinit;
 #ifndef ABLAXX_IN_GEANT4_MODE
   G4INCL::Config *theConfig;
 #endif

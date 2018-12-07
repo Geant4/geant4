@@ -40,13 +40,15 @@ using namespace std;
 G4DNAUeharaScreenedRutherfordElasticModel::
 G4DNAUeharaScreenedRutherfordElasticModel(const G4ParticleDefinition*,
                                           const G4String& nam) :
-    G4VEmModel(nam), isInitialised(false)
+G4VEmModel(nam), isInitialised(false)
 {
   fpWaterDensity = 0;
-  intermediateEnergyLimit = 200. * eV; // Switch between two final state models
+  
+  // Switch between two final state models
+  intermediateEnergyLimit = 200. * eV; 
   
   SetLowEnergyLimit(9.*eV);
-//  SetHighEnergyLimit(10.*keV);
+  
   SetHighEnergyLimit(1.*MeV);
 
   verboseLevel = 0;
@@ -105,6 +107,7 @@ Initialise(const G4ParticleDefinition* particle,
   }
   
   // Energy limits
+
   if(LowEnergyLimit() < 9.*CLHEP::eV)
   {
     G4Exception("*** WARNING : the G4DNAUeharaScreenedRutherfordElasticModel "
@@ -207,33 +210,27 @@ CrossSectionPerVolume(const G4Material* material,
   G4double sigma = 0.;
   G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
   
-  // Use activation boundaries instead
-  //if(ekin > HighEnergyLimit() || ekin < LowEnergyLimit()) return 0.;
-  
-  if(waterDensity!= 0.0)
-  {
-    G4double z = 7.42; // FROM PMB 37 (1992) 1841-1858 p1842
-    G4double n = ScreeningFactor(ekin,z);
-    G4double crossSection = RutherfordCrossSection(ekin, z);
-    sigma = pi * crossSection / (n * (n + 1.));
+  G4double z = 7.42; // FROM PMB 37 (1992) 1841-1858 p1842
+  G4double n = ScreeningFactor(ekin,z);
+  G4double crossSection = RutherfordCrossSection(ekin, z);
+  sigma = pi * crossSection / (n * (n + 1.));
     
 #ifdef UEHARA_VERBOSE
-    if (verboseLevel > 2)
-    {
-      G4cout << "__________________________________" << G4endl;
-      G4cout << "=== G4DNAUeharaScreenedRutherfordElasticModel - XS INFO START"
-             << G4endl;
-      G4cout << "=== Kinetic energy(eV)=" << ekin/eV
-            << " particle : " << particleDefinition->GetParticleName() << G4endl;
-      G4cout << "=== Cross section per water molecule (cm^2)=" << sigma/cm/cm
-             << G4endl;
-      G4cout << "=== Cross section per water molecule (cm^-1)="
-             << sigma*waterDensity/(1./cm) << G4endl;
-      G4cout << "=== G4DNAUeharaScreenedRutherfordElasticModel - XS INFO END"
-             << G4endl;
-    }
-#endif
+  if (verboseLevel > 2)
+  {
+    G4cout << "__________________________________" << G4endl;
+    G4cout << "=== G4DNAUeharaScreenedRutherfordElasticModel - XS INFO START"
+           << G4endl;
+    G4cout << "=== Kinetic energy(eV)=" << ekin/eV
+           << " particle : " << particleDefinition->GetParticleName() << G4endl;
+    G4cout << "=== Cross section per water molecule (cm^2)=" << sigma/cm/cm
+           << G4endl;
+    G4cout << "=== Cross section per water molecule (cm^-1)="
+           << sigma*waterDensity/(1./cm) << G4endl;
+    G4cout << "=== G4DNAUeharaScreenedRutherfordElasticModel - XS INFO END"
+           << G4endl;
   }
+#endif
 
   return sigma*waterDensity;
 }

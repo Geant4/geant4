@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePairProduction.hh 72895 2013-08-09 11:34:16Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -76,8 +75,7 @@ public:
 protected:
 
   // Print out of the class parameters
-  virtual void StreamProcessInfo(std::ostream& outFile,
-                             G4String endOfLine=G4String("\n")) const override;
+  virtual void StreamProcessInfo(std::ostream& outFile) const override;
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					   const G4ParticleDefinition*) override;

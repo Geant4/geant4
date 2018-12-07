@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // 
 // Class G4AssemblyVolume - implementation
@@ -32,6 +31,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4AssemblyVolume.hh"
+#include "G4AssemblyStore.hh"
 #include "G4PVPlacement.hh"
 #include "G4RotationMatrix.hh"
 #include "G4AffineTransform.hh"
@@ -51,6 +51,20 @@ G4AssemblyVolume::G4AssemblyVolume()
   InstanceCountPlus();
   SetAssemblyID( GetInstanceCount() );
   SetImprintsCount( 0 );
+  G4AssemblyStore* aStore = G4AssemblyStore::GetInstance();
+  if (aStore->GetAssembly(fAssemblyID,false))
+  {
+    std::ostringstream message;
+    message << "The assembly has NOT been registered !" << G4endl
+            << "          Assembly " << fAssemblyID
+            << " already existing in store !" << G4endl;
+    G4Exception("G4AssemblyVolume::G4AssemblyVolume()", "GeomVol1001",
+                JustWarning, message);
+  }
+  else
+  {
+    aStore->Register(this);
+  }
 }
 
 // Composing constructor
@@ -64,6 +78,20 @@ G4AssemblyVolume::G4AssemblyVolume( G4LogicalVolume* volume,
   SetAssemblyID( GetInstanceCount() );
   SetImprintsCount( 0 );
   AddPlacedVolume(volume, translation, rotation);
+  G4AssemblyStore* aStore = G4AssemblyStore::GetInstance();
+  if (aStore->GetAssembly(fAssemblyID,false))
+  {
+    std::ostringstream message;
+    message << "The assembly has NOT been registered !" << G4endl
+            << "          Assembly " << fAssemblyID
+            << " already existing in store !" << G4endl;
+    G4Exception("G4Assembly::G4Assembly()", "GeomVol1001",
+                JustWarning, message);
+  }
+  else
+  {
+    aStore->Register(this);
+  }
 }
 
 // Destructor
@@ -94,6 +122,7 @@ G4AssemblyVolume::~G4AssemblyVolume()
   }
   fPVStore.clear();
   InstanceCountMinus();
+  G4AssemblyStore::GetInstance()->DeRegister(this);
 }
 
 // Add and place the given volume according to the specified
@@ -353,17 +382,17 @@ unsigned int G4AssemblyVolume::GetInstanceCount() const
   return G4AssemblyVolume::fsInstanceCounter;
 }
 
-void         G4AssemblyVolume::SetInstanceCount( unsigned int value )
+void G4AssemblyVolume::SetInstanceCount( unsigned int value )
 {
   G4AssemblyVolume::fsInstanceCounter = value;
 }
 
-void         G4AssemblyVolume::InstanceCountPlus()
+void G4AssemblyVolume::InstanceCountPlus()
 {
   G4AssemblyVolume::fsInstanceCounter++;
 }
 
-void         G4AssemblyVolume::InstanceCountMinus()
+void G4AssemblyVolume::InstanceCountMinus()
 {
   G4AssemblyVolume::fsInstanceCounter--;
 }

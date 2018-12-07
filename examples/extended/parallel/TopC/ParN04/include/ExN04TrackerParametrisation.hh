@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN04TrackerParametrisation.hh 73404 2013-08-27 10:05:02Z gcosmo $
 //
 /// \file parallel/ParN04/include/ExN04TrackerParametrisation.hh
 /// \brief Definition of the ExN04TrackerParametrisation class

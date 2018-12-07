@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByEncounteredVolume.hh 66264 2012-12-14 10:17:44Z allison $
 //
 // Class Description:
 // Trajectory model which colours a trajectory according to

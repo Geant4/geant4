@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntegrationDriver.icc 106739 2017-10-20 14:45:37Z dmsoroki $
 //
 //
 // class G4IntegrationDriver
@@ -38,27 +37,23 @@
 // - Created. D.Sorokin
 // --------------------------------------------------------------------
 
-
-#include "globals.hh"
-#include "G4GeometryTolerance.hh"
-#include "G4FieldTrack.hh"
 #include "G4FieldUtils.hh"
-
-#include <cassert>
 
 
 template <class T>
 G4IntegrationDriver<T>::
 G4IntegrationDriver ( G4double hminimum, T* pStepper,
                       G4int numComponents, G4int statisticsVerbose )
-    : fSmallestFraction(1e-12),
-      fNoTotalSteps(0),
-      fNoBadSteps(0),
-      fNoGoodSteps(0),
+    : G4RKIntegrationDriver<T>(pStepper),
+      fMinimumStep(hminimum),
+      fSmallestFraction(1e-12),
       fVerboseLevel(statisticsVerbose),
-      fNoQuickAvanceCalls(0)
+      fNoQuickAvanceCalls(0),
+      fNoAccurateAdvanceCalls(0),
+      fNoAccurateAdvanceBadSteps(0),
+      fNoAccurateAdvanceGoodSteps(0)
 {
-    if (numComponents != pStepper->GetNumberOfVariables())
+    if (numComponents != Base::GetStepper()->GetNumberOfVariables())
     {
         std::ostringstream message;
         message << "Driver's number of integrated components "
@@ -68,52 +63,67 @@ G4IntegrationDriver ( G4double hminimum, T* pStepper,
         G4Exception("G4IntegrationDriver","GeomField0002",
                     FatalException, message);
     }
-    RenewStepperAndAdjustStrict(pStepper);
-    fMinimumStep = hminimum;
-    fMaxStepBase = 250;
-    fMaxNoSteps = fMaxStepBase / pIntStepper->IntegratorOrder();
 }
 
 template <class T>
 G4IntegrationDriver<T>::~G4IntegrationDriver()
 {
 #ifdef G4VERBOSE
-    if( fVerboseLevel > 0 )
+    if (fVerboseLevel > 0)
        G4cout << "G4Integration Driver Stats: "
               << "#QuickAdvance " << fNoQuickAvanceCalls
-              << " - #AccurateAdvance " << fNoTotalSteps << G4endl;
+              << " - #AccurateAdvance " << fNoAccurateAdvanceCalls << " "
+              << "#good steps " << fNoAccurateAdvanceGoodSteps << " "
+              << "#bad steps " << fNoAccurateAdvanceBadSteps << G4endl;
 #endif
-    delete pIntStepper;
 }
 
 // Runge-Kutta driver with adaptive stepsize control. Integrate starting
-// values at y_current over hstep x2 with accuracy eps.
-// On output ystart is replaced by values at the end of the integration
-// interval. RightHandSide is the right-hand side of ODE system.
+// values at y_current over hstep x2 with accuracy eps. 
+// On output ystart is replaced by values at the end of the integration 
+// interval. RightHandSide is the right-hand side of ODE system. 
 // The source is similar to odeint routine from NRC p.721-722 .
-//
 template <class T>
 G4bool G4IntegrationDriver<T>::
-AccurateAdvance( G4FieldTrack& track, G4double hstep,
-                 G4double eps, G4double hinitial )
+AccurateAdvance(G4FieldTrack& track, G4double hstep,
+                G4double eps, G4double hinitial)
 {
-    if (hstep < GetMinimumStep())
+    ++fNoAccurateAdvanceCalls;
+
+    if (hstep == 0.0)
     {
-        G4double dchord_step = 0, dyerr = 0;
-        G4double dydx[G4FieldTrack::ncompSVEC];
-        GetDerivatives(track, dydx);
-        return QuickAdvance(track, dydx, hstep, dchord_step, dyerr);
+        std::ostringstream message;
+        message << "Proposed step is zero; hstep = " << hstep << " !";
+        G4Exception("G4IntegrationDriver::AccurateAdvance()", 
+                    "GeomField1001", JustWarning, message);
+        return true; 
     }
 
-    G4bool succeeded = false;
+    if (hstep < 0)
+    {
+        std::ostringstream message;
+        message << "Invalid run condition." << G4endl
+                << "Proposed step is negative; hstep = " << hstep << "." << G4endl
+                << "Requested step cannot be negative! Aborting event.";
+        G4Exception("G4IntegrationDriver::AccurateAdvance()", 
+                    "GeomField0003", EventMustBeAborted, message);
+        return false;
+    }
+
     G4double hnext, hdid;
 
-    G4double y[G4FieldTrack::ncompSVEC], dydx[G4FieldTrack::ncompSVEC];
+    G4double dydx[G4FieldTrack::ncompSVEC];
+    G4bool succeeded = true, lastStepSucceeded;
+
+    G4int noFullIntegr = 0, noSmallIntegr = 0;
+
+    G4double y[G4FieldTrack::ncompSVEC];
     track.DumpToArray(y);
 
-    // hstep somtimes is too small. No need to add large curveLength.
-    G4double curveLength = 0;
-    G4double endCurveLength = hstep;
+    const G4double startCurveLength = track.GetCurveLength();
+    const G4double endCurveLength = startCurveLength + hstep;
+    const G4double hThreshold = 
+        std::min(eps * hstep, fSmallestFraction * startCurveLength);
 
     G4double h = hstep;
     if (hinitial > perMillion * hstep && hinitial < hstep)
@@ -121,59 +131,72 @@ AccurateAdvance( G4FieldTrack& track, G4double hstep,
         h = hinitial;
     }
 
-    for (G4int iter = 0; iter < fMaxNoSteps; ++iter) {
+    G4double curveLength = startCurveLength;
+
+    for (G4int nstp = 0; nstp < Base::GetMaxNoSteps(); ++nstp)
+    {
         const G4ThreeVector StartPos =
             field_utils::makeVector(y, field_utils::Value3D::Position);
 
-        pIntStepper->/*Compute*/RightHandSide(y, dydx);
+        Base::GetStepper()->RightHandSide(y, dydx);
+   
+        if (h > GetMinimumStep())
+        {
+            OneGoodStep(y, dydx, curveLength, h, eps, hdid, hnext);
+            lastStepSucceeded = (hdid == h);   
+        }
+        else
+        {
+            G4FieldTrack yFldTrk('0');
+            G4double dchord_step, dyerr, dyerr_len;
+            yFldTrk.LoadFromArray(y, Base::GetStepper()->GetNumberOfVariables()); 
+            yFldTrk.SetCurveLength(curveLength);
 
-        OneGoodStep(y, dydx, curveLength, h, eps, hdid, hnext);
+            QuickAdvance(yFldTrk, dydx, h, Base::UNKNOWN_CURVATURE_RADIUS, dchord_step, dyerr_len);
+
+            yFldTrk.DumpToArray(y);
+         
+            if (h == 0.0)
+            {
+                G4Exception("G4IntegrationDriver::AccurateAdvance()",
+                            "GeomField0003", FatalException,
+                            "Integration Step became Zero!"); 
+            }
+            dyerr = dyerr_len / h;
+            hdid = h;
+            curveLength += hdid;
+            hnext = Base::ComputeNewStepSize(dyerr / eps, h);
+            lastStepSucceeded = (dyerr <= eps);
+        }
+
+        if (lastStepSucceeded)  { noFullIntegr++; }
+        else                    { noSmallIntegr++; }
 
         const G4ThreeVector EndPos =
             field_utils::makeVector(y, field_utils::Value3D::Position);
 
         CheckStep(EndPos, StartPos, hdid);
 
-        G4double restCurveLength = endCurveLength - curveLength;
-        if (restCurveLength < GetSmallestFraction() * hstep)
+        //  Avoid numerous small last steps
+        if (h < hThreshold || curveLength >= endCurveLength)
         {
-            succeeded = true;
-            break;
+            break; 
         }
 
-        h = std::min(hnext, restCurveLength);
+        h = std::max(hnext, GetMinimumStep());
+        if (curveLength + h > endCurveLength)
+        {
+            h = endCurveLength - curveLength;
+        }
     }
+    // Have we reached the end ?
+    // --> a better test might be x-endCurveLength > an_epsilon
+    succeeded = (curveLength >= endCurveLength);  // If it was a "forced" last step
 
-    if (succeeded)
-    {
-        track.LoadFromArray(y, pIntStepper->GetNumberOfVariables());
-        track.SetCurveLength(track.GetCurveLength() + curveLength);
-    }
+    track.LoadFromArray(y, Base::GetStepper()->GetNumberOfVariables());
+    track.SetCurveLength(curveLength);
 
     return succeeded;
-}
-
-// Step failed; compute the size of retrial Step.
-template <class T> G4double G4IntegrationDriver<T>::
-ShrinkStepSize(G4double h, G4double error) const
-{
-    if (error > errorConstraintShrink)
-    {
-        return max_stepping_decrease * h;
-    }
-    return GetSafety() * h * std::pow(error, GetPshrnk());
-}
-
-// Compute size of next Step
-//
-template<class T> G4double G4IntegrationDriver<T>::
-GrowStepSize(G4double h, G4double error) const
-{
-    if (error < errorConstraintGrow)
-    {
-        return max_stepping_increase * h;
-    }
-    return GetSafety() * h * std::pow(error, GetPgrow());
 }
 
 // Driver for one Runge-Kutta Step with monitoring of local truncation error
@@ -182,121 +205,97 @@ GrowStepSize(G4double h, G4double error) const
 // starting value of the independent variable x . Also input are stepsize
 // to be attempted htry, and the required accuracy eps. On output y and x
 // are replaced by their new values, hdid is the stepsize that was actually
-// accomplished, and hnext is the estimated next stepsize.
+// accomplished, and hnext is the estimated next stepsize. 
 // This is similar to the function rkqs from the book:
 // Numerical Recipes in C: The Art of Scientific Computing (NRC), Second
 // Edition, by William H. Press, Saul A. Teukolsky, William T.
 // Vetterling, and Brian P. Flannery (Cambridge University Press 1992),
 // 16.2 Adaptive StepSize Control for Runge-Kutta, p. 719
-//
 template <class T>
-void G4IntegrationDriver<T>::
-OneGoodStep( G4double y[], const G4double dydx[],
-             G4double& curveLength,   // InOut
-             G4double htry, G4double eps_rel_max,
-             G4double& hdid,          // Out
-             G4double& hnext)         // Out
+void G4IntegrationDriver<T>::OneGoodStep(G4double y[],           // InOut
+                                         const G4double dydx[],
+                                         G4double& curveLength,  // InOut
+                                         G4double htry,
+                                         G4double eps_rel_max,
+                                         G4double& hdid,      // Out
+                                         G4double& hnext)    // Out
+
 {
-    G4double error = DBL_MAX;
+    G4double error2 = DBL_MAX;
 
-    G4double yerror[G4FieldTrack::ncompSVEC], ytemp[G4FieldTrack::ncompSVEC];
+    G4double yerr[G4FieldTrack::ncompSVEC], ytemp[G4FieldTrack::ncompSVEC];
 
-    // Set stepsize to the initial trial value
-    G4double hstep = htry;
+    G4double h = htry;
 
-    static G4ThreadLocal G4int tot_no_trials = 0;
-    const G4int max_trials = 100;
+    static G4ThreadLocal G4int tot_no_trials = 0; 
+    const G4int max_trials = 100; 
 
     for (G4int iter = 0; iter < max_trials; ++iter)
     {
-        ++tot_no_trials;
+        tot_no_trials++;
 
-        pIntStepper->Stepper(y, dydx, hstep, ytemp, yerror);
-        error = field_utils::relativeError(y, yerror, hstep, eps_rel_max);
+        Base::GetStepper()->Stepper(y, dydx, h, ytemp, yerr); 
+        error2 = field_utils::relativeError2(y, yerr, std::max(h, fMinimumStep), eps_rel_max);
+    
+        if (error2 <= 1.0)
+        {
+            break; 
+        }
 
-        // Step succeeded.
-        if (error <= 1)  break;
+        h = Base::ShrinkStepSize2(h, error2);
 
-        hstep = ShrinkStepSize(hstep, error);
+        G4double xnew = curveLength + h;
+        if(xnew == curveLength)
+        {
+            std::ostringstream message;
+            message << "Stepsize underflow in Stepper !" << G4endl
+                    << "- Step's start x=" << curveLength << " and end x= " << xnew 
+                    << " are equal !! " << G4endl
+                    << "  Due to step-size= " << h 
+                    << ". Note that input step was " << htry;
+            G4Exception("G4IntegrationDriver::OneGoodStep()",
+                        "GeomField1001", JustWarning, message);
+            break;
+        }
     }
 
-    hnext = GrowStepSize(hstep, error);
-    curveLength += (hdid = hstep);
+    hnext = Base::GrowStepSize2(h, error2);
+    curveLength += (hdid = h);
 
-    for(G4int k = 0; k < pIntStepper->GetNumberOfVariables(); ++k)
-    {
-        y[k] = ytemp[k];
-    }
+    field_utils::copy(y, ytemp, Base::GetStepper()->GetNumberOfVariables());
 }
 
 template <class T>
 G4bool G4IntegrationDriver<T>::
-QuickAdvance( G4FieldTrack& fieldTrack, const G4double dydx[],
-              G4double hstep, G4double& dchord_step, G4double& dyerr )
+QuickAdvance(G4FieldTrack& track,         // INOUT
+             const G4double dydx[],  
+             G4double hstep,
+             G4double /*inverseCurvatureRadius*/,
+             G4double& dchord_step,
+             G4double& dyerr)
 {
     ++fNoQuickAvanceCalls;
 
-    if (hstep == 0)
-    {
-        std::ostringstream message;
-        message << "Proposed step is zero; hstep = " << hstep << " !";
-        G4Exception("G4IntegrationDriver ::QuickAdvance()",
-                    "GeomField1001", JustWarning, message);
-        return true;
-    }
-    if (hstep < 0)
-    {
-        std::ostringstream message;
-        message << "Invalid run condition." << G4endl
-                << "Proposed step is negative; hstep = "
-                << hstep << "." << G4endl
-                << "Requested step cannot be negative! Aborting event.";
-        G4Exception("G4IntegrationDriver ::QuickAdvance()",
-                    "GeomField0003", EventMustBeAborted, message);
-        return false;
-    }
+    G4double yIn[G4FieldTrack::ncompSVEC], 
+             yOut[G4FieldTrack::ncompSVEC],
+             yError[G4FieldTrack::ncompSVEC]; 
 
-    G4double yError[G4FieldTrack::ncompSVEC],
-             yIn[G4FieldTrack::ncompSVEC],
-             yOut[G4FieldTrack::ncompSVEC];
+    track.DumpToArray(yIn);
 
-    fieldTrack.DumpToArray(yIn);
+    Base::GetStepper()->Stepper(yIn, dydx, hstep, yOut, yError); 
 
-    pIntStepper->Stepper(yIn, dydx, hstep, yOut, yError);
-    dchord_step = pIntStepper->DistChord();
-
-    fieldTrack.LoadFromArray(yOut, pIntStepper->GetNumberOfVariables());
-    fieldTrack.SetCurveLength(fieldTrack.GetCurveLength() + hstep);
-
-    dyerr = field_utils::relativeError(yOut, yError, hstep) * hstep;
+    dchord_step = Base::GetStepper()->DistChord();
+    dyerr = field_utils::absoluteError(yOut, yError, hstep);
+    track.LoadFromArray(yOut, Base::GetStepper()->GetNumberOfVariables());
+    track.SetCurveLength(track.GetCurveLength() + hstep);
 
     return true;
 }
 
 template <class T>
-G4double G4IntegrationDriver<T>::
-ComputeNewStepSize( G4double  errMaxNorm,    // max error  (normalised)
-                    G4double  hstepCurrent ) // current step size
-{
-    if (errMaxNorm > 1)
-    {
-        return ShrinkStepSize(hstepCurrent, errMaxNorm);
-    }
-    else if (errMaxNorm >= 0)
-    {
-        return GrowStepSize(hstepCurrent, errMaxNorm);
-    }
-
-    G4Exception("G4IntegrationDriver::ConputeNewStepSize", "GeomField0003",
-                FatalException, "Error is negative!");
-
-    return max_stepping_increase * hstepCurrent;
-}
-
-template <class T>
 void G4IntegrationDriver<T>::SetSmallestFraction(G4double newFraction)
 {
-    if( newFraction > 1.e-16 && newFraction < 1e-8 )
+    if (newFraction > 1.e-16 && newFraction < 1e-8)
     {
         fSmallestFraction = newFraction;
     }
@@ -313,24 +312,13 @@ void G4IntegrationDriver<T>::SetSmallestFraction(G4double newFraction)
 
 template <class T>
 void G4IntegrationDriver<T>::
-GetDerivatives( const G4FieldTrack& track, G4double dydx[] ) const
-{
-    G4double y[G4FieldTrack::ncompSVEC];
-    track.DumpToArray(y);
-    pIntStepper->RightHandSide(y, dydx);
-}
-
-template <class T>
-void G4IntegrationDriver<T>::
 CheckStep( const G4ThreeVector& posIn,
            const G4ThreeVector& posOut, G4double hdid)
 {
-    ++fNoTotalSteps;
-
     const G4double endPointDist = (posOut - posIn).mag();
     if (endPointDist >= hdid * (1. + perMillion))
     {
-        ++fNoBadSteps;
+        ++fNoAccurateAdvanceBadSteps;
 #ifdef G4DEBUG_FIELD
         // Issue a warning only for gross differences -
         // we understand how small difference occur.
@@ -344,18 +332,8 @@ CheckStep( const G4ThreeVector& posIn,
     }
     else
     {
-       ++fNoGoodSteps;
+       ++fNoAccurateAdvanceGoodSteps;
     }
-}
-
-template <class T>
-void G4IntegrationDriver<T>::UpdateErrorConstraints()
-{
-    errorConstraintShrink = std::pow(
-            max_stepping_decrease / GetSafety(), 1. / GetPshrnk());
-
-    errorConstraintGrow = std::pow(
-            max_stepping_increase / GetSafety(), 1. / GetPgrow());
 }
 
 template <class T>
@@ -365,97 +343,16 @@ inline G4double G4IntegrationDriver<T>::GetMinimumStep() const
 } 
 
 template <class T>
-inline G4double G4IntegrationDriver<T>::GetSafety() const
-{
-    return safety;
-}
-
-template <class T>
-inline G4double G4IntegrationDriver<T>::GetPshrnk() const
-{
-    return pshrnk;
-} 
-
-template <class T>
-G4double G4IntegrationDriver<T>::GetPgrow() const
-{
-    return pgrow;
-}
-
-template <class T>
 void G4IntegrationDriver<T>::SetMinimumStep(G4double minimumStepLength)
 {
     fMinimumStep = minimumStepLength;
 } 
 
 template <class T>
-void G4IntegrationDriver<T>::ReSetParameters(G4double new_safety)
-{
-    safety = new_safety;
-    pshrnk = -1.0 / pIntStepper->IntegratorOrder();
-    pgrow  = -1.0 / (1.0 + pIntStepper->IntegratorOrder());
-    UpdateErrorConstraints();
-}
-
-template <class T>
-void G4IntegrationDriver<T>::SetSafety(G4double val)
-{ 
-    safety = val;
-    UpdateErrorConstraints();
-}
-
-template <class T> void G4IntegrationDriver<T>::
-RenewStepperAndAdjust(G4MagIntegratorStepper* stepper)
-{  
-   T* ourStepper= dynamic_cast<T*>(stepper);
-   if ( ourStepper )
-   {
-      RenewStepperAndAdjustStrict( ourStepper );
-   }
-   else
-   {
-      G4Exception("G4IntegrationDriver::RenewStepperAndAdjust()",
-                  "GeomField0002", FatalException,
-     "The type of the stepper provided is incorrect for this templated driver");
-   }
-}
-
-template <class T>
-void G4IntegrationDriver<T>::RenewStepperAndAdjustStrict(T* stepper)
-{  
-    pIntStepper = stepper;
-    ReSetParameters();
-}
-
-template <class T>
-const T* G4IntegrationDriver<T>::GetStepper() const
-{
-    return pIntStepper;
-}
-
-template <class T>
-T* G4IntegrationDriver<T>::GetStepper()
-{
-    return pIntStepper;
-}
-
-template <class T>
-G4int G4IntegrationDriver<T>::GetMaxNoSteps() const
-{
-    return fMaxNoSteps;
-}
-
-template <class T>
-void G4IntegrationDriver<T>::SetMaxNoSteps(G4int val)
-{
-    fMaxNoSteps = val;
-}
-
-template <class T>
 G4int G4IntegrationDriver<T>::GetVerboseLevel() const
 {
     return fVerboseLevel;
-} 
+}
 
 template <class T>
 void G4IntegrationDriver<T>::SetVerboseLevel(G4int newLevel)
@@ -467,16 +364,10 @@ template <class T>
 G4double G4IntegrationDriver<T>::GetSmallestFraction() const
 {
     return fSmallestFraction;
-} 
-
-template <class T>
-G4EquationOfMotion* G4IntegrationDriver<T>::GetEquationOfMotion()
-{
-    return pIntStepper->GetEquationOfMotion();
 }
 
 template <class T>
-void G4IntegrationDriver<T>::SetEquationOfMotion(G4EquationOfMotion* equation)
+void G4IntegrationDriver<T>::IncrementQuickAdvanceCalls()
 {
-    pIntStepper->SetEquationOfMotion(equation);
+    ++fNoQuickAvanceCalls;
 }

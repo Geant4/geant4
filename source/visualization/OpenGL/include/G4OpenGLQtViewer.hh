@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh 108601 2018-02-26 10:03:17Z gcosmo $
 //
 // 
 // G4OpenGLQtViewer : Class to provide WindowsNT specific
@@ -32,7 +31,7 @@
 //
 // 30/06/2014 : M.Kelsey : Change QPixmap objects to pointers
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
 
 #ifndef G4OPENGLQTVIEWER_HH
 #define G4OPENGLQTVIEWER_HH

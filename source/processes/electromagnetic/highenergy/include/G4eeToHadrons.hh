@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.hh 106715 2017-10-20 09:39:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,8 +72,7 @@ public:
 protected:
 
   // Print out of the class parameters
-  virtual void StreamProcessInfo(std::ostream& outFile,
-                             G4String endOfLine=G4String("\n")) const override;
+  virtual void StreamProcessInfo(std::ostream& outFile) const override;
 
   virtual void InitialiseProcess(const G4ParticleDefinition*) override;
 

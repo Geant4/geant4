@@ -24,24 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc 110805 2018-06-15 06:52:15Z gcosmo $
 //
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
+//
 // =======================================================================
-// Modified:
-//   10 Jan  2015, M.Kelsey: Use G4DynamicParticle mass, NOT PDGMass
-//            13 May  2006, J. Apostolakis: Revised for parallel navigation (PathFinder)
-//            19 Jan  2006, P.MoraDeFreitas: Fix for suspended tracks (StartTracking)
-//            11 Aug  2004, M.Asai: Add G4VSensitiveDetector* for updating stepPoint.
-//            21 June 2003, J.Apostolakis: Calling field manager with 
-//                            track, to enable it to configure its accuracy
-//            13 May  2003, J.Apostolakis: Zero field areas now taken into
-//                            account correclty in all cases (thanks to W Pokorski).
-//            29 June 2001, J.Apostolakis, D.Cote-Ahern, P.Gumplinger: 
-//                          correction for spin tracking   
-//            20 Febr 2001, J.Apostolakis:  update for new FieldTrack
-//            22 Sept 2000, V.Grichine:     update of Kinetic Energy
 // Created:  19 March 1997, J. Apostolakis
 // =======================================================================
 
@@ -75,7 +62,7 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verbosity )
     fTransportEndPosition(0.0, 0.0, 0.0),
     fTransportEndMomentumDir(0.0, 0.0, 0.0),
     fTransportEndKineticEnergy(0.0), 
-    fTransportEndSpin(0.0, 0.0, 0.0), // fTransportEndPolarization(0.0, 0.0, 0.0),
+    fTransportEndSpin(0.0, 0.0, 0.0),
     fMomentumChanged(false), 
     fEndGlobalTimeComputed(false),
     fCandidateEndGlobalTime(0.0),
@@ -87,10 +74,6 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verbosity )
     fMassGeometryLimitedStep( false ), 
     fAnyGeometryLimitedStep( false ), 
     fEndpointDistance( -1.0 ), 
-    fThreshold_Warning_Energy( 1.0 * CLHEP::kiloelectronvolt ),  //  Old value: 100 * MeV ),  
-    fThreshold_Important_Energy( 1.0 * MeV ), //  Old value: 250 * MeV ), 
-    fThresholdTrials( 10 ), 
-    fNoLooperTrials( 0 ),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
     fFirstStepInMassVolume( true ),
     fFirstStepInAnyVolume( true )
@@ -113,16 +96,20 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verbosity )
     G4cout << " Navigator Id obtained in G4CoupledTransportation constructor " 
            << fNavigatorId << G4endl;
     G4cout << " Reports First/Last in " 
-         << (fSignifyStepInAnyVolume ? " any " : " mass " ) << " geometry " << G4endl;
+           << (fSignifyStepInAnyVolume ? " any " : " mass " )
+           << " geometry " << G4endl;
   }
   fPathFinder=  G4PathFinder::GetInstance(); 
   fpSafetyHelper = transportMgr->GetSafetyHelper();  // New 
 
   fpLogger = new G4TransportationLogger("G4Transportation", verbosity);
-  fpLogger->SetThresholds( GetThresholdWarningEnergy(), GetThresholdImportantEnergy(),
-                           GetThresholdTrials() );
+
+  SetHighLooperThresholds();
+  // Use the old defaults: Warning = 100 MeV, Important = 250 MeV, No Trials = 10;
   
-  // Following assignment is to fix small memory leak from simple use of 'new'
+  PushThresholdsToLogger();
+  // Should be done by Set methods in SetHighLooperThresholds -- making sure
+  
   static G4ThreadLocal G4TouchableHandle* pNullTouchableHandle = 0;
   if ( !pNullTouchableHandle)  { pNullTouchableHandle = new G4TouchableHandle; }
   fCurrentTouchableHandle = *pNullTouchableHandle;
@@ -136,16 +123,33 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verbosity )
 
 G4CoupledTransportation::~G4CoupledTransportation()
 {
+  if( fSumEnergyKilled > 0.0 )
+  {
+     PrintStatistics( G4cout );
+  }
   delete fpLogger;
+}
 
-  if( (verboseLevel > 0) || (fSumEnergyKilled > 0.0 ) )
+//////////////////////////////////////////////////////////////////////////
+
+void
+G4CoupledTransportation::PrintStatistics( std::ostream& outStr) const
+{ 
+  if( fSumEnergyKilled > 0.0 )
   { 
-    G4cout << " G4CoupledTransportation: Statistics for looping particles "
+    outStr << " G4CoupledTransportation: Statistics for looping particles "
            << G4endl;
-    G4cout << "   Sum of energy of loopers killed: "
+    outStr << "   Sum of energy of loopers killed: "
            <<  fSumEnergyKilled / MeV << " MeV " << G4endl;
-    G4cout << "   Max energy of loopers killed: "
+    outStr << "   Max energy of loopers killed: "
            <<  fMaxEnergyKilled / MeV << " MeV " << G4endl;
+
+
+    outStr << "   Max energy of loopers 'saved':  " << fMaxEnergySaved << G4endl;
+    outStr << "   Sum of energy of loopers 'saved': "
+           <<  fSumEnergySaved << G4endl;
+    outStr << "   Sum of energy of unstable loopers 'saved': "
+           << fSumEnergyUnstableSaved << G4endl;
   } 
 }
 
@@ -164,12 +168,12 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                              G4GPILSelection* selection )
 {
   G4double geometryStepLength; 
-  G4double startMassSafety= 0.0;   //  estimated safety for start point (mass geometry)
-  G4double startFullSafety= 0.0;   //  estimated safety for start point (all geometries)
-  G4double safetyProposal= -1.0;   //  local copy of proposal 
+  G4double startMassSafety= 0.0; // estimated safety for start point (mass geometry)
+  G4double startFullSafety= 0.0; // estimated safety for start point (all geometries)
+  G4double safetyProposal= -1.0; // local copy of proposal 
 
   G4ThreeVector  EndUnitMomentum ;
-  G4double       lengthAlongCurve=0.0 ;
+  G4double       lengthAlongCurve = 0.0 ;
  
   fParticleIsLooping = false ;
 
@@ -189,10 +193,11 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
 #ifdef G4DEBUG_TRANSPORT
   G4cout << "  CoupledTransport::AlongStep GPIL:  "
-         << "  1st-step:  any= "  <<fFirstStepInAnyVolume  << " ( geom= " << fAnyGeometryLimitedStep << " ) "
-         <<           " mass= " << fFirstStepInMassVolume << " ( geom= " << fMassGeometryLimitedStep << " ) " 
+         << "  1st-step:  any= "  <<fFirstStepInAnyVolume  << " ( geom= "
+         << fAnyGeometryLimitedStep << " ) "
+         <<           " mass= " << fFirstStepInMassVolume << " ( geom= "
+         << fMassGeometryLimitedStep << " ) " 
          << "  newTrack= " << fNewTrack << G4endl;
-  // G4cout << " fLastStep-in-Vol= "  << fLastStepInVolume << G4endl;
 #endif
   
   // fLastStepInVolume= false;
@@ -224,18 +229,19 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   startMassSafety = 0.0; 
   startFullSafety= 0.0; 
 
-  //  Recall that FullSafety <= MassSafety 
+  // Recall that FullSafety <= MassSafety 
   // Original: if( MagSqShift < sqr(fPreviousMassSafety) ) {
-  if( MagSqShift < sqr(fPreviousFullSafety) )   // Revision proposed by Alex H, 2 Oct 07
+  if( MagSqShift < sqr(fPreviousFullSafety) )
   {
      G4double mag_shift= std::sqrt(MagSqShift); 
      startMassSafety = std::max( (fPreviousMassSafety - mag_shift), 0.0); 
      startFullSafety = std::max( (fPreviousFullSafety - mag_shift), 0.0);
        // Need to be consistent between full safety with Mass safety
-       //   in order reproduce results in simple case  --> use same calculation method
+       // in order reproduce results in simple case
+       // --> use same calculation method
 
      // Only compute full safety if massSafety > 0.  Else it remains 0
-     //   startFullSafety = fPathFinder->ComputeSafety( startPosition ); 
+     // startFullSafety = fPathFinder->ComputeSafety( startPosition ); 
   }
 
   // Is the particle charged or has it a magnetic moment?
@@ -246,8 +252,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
   fMassGeometryLimitedStep = false ; //  Set default - alex
   fAnyGeometryLimitedStep = false; 
-
-  // fEndGlobalTimeComputed = false ;
 
   // There is no need to locate the current volume. It is Done elsewhere:
   //   On track construction 
@@ -265,11 +269,13 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   if( fieldMgr != 0 )
   {
      // Message the field Manager, to configure it for this track
+     //
      fieldMgr->ConfigureForTrack( &track );
-     // Here it can transition from a null field-ptr to a finite field 
 
+     // Here it can transition from a null field-ptr to a finite field.
      // If the field manager has no field ptr, the field is zero 
-     //     by definition ( = there is no field ! )
+     // by definition ( = there is no field ! )
+     //
      ptrField= fieldMgr->GetDetectorField();
  
      if( ptrField != 0)
@@ -291,10 +297,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
  
      G4ChargeState chargeState(particleCharge, // Charge can change (dynamic)
                                magneticMoment,
-                               pParticleDef->GetPDGSpin() ); 
-     // For insurance, could set it again
-     // chargeState.SetPDGSpin( pParticleDef->GetPDGSpin() );
-
+                               pParticleDef->GetPDGSpin() );
      if( equationOfMotion )
      {
         equationOfMotion->SetChargeMomentumMass( chargeState,
@@ -312,16 +315,16 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   }
 
   G4ThreeVector polarizationVec  = track.GetPolarization() ;
-  G4FieldTrack  aFieldTrack = G4FieldTrack( startPosition, 
-                                            track.GetGlobalTime(), // Lab.
-                                            track.GetMomentumDirection(),
-                                            track.GetKineticEnergy(),
-                                            restMass,
-                                            particleCharge, 
-                                            polarizationVec, 
-                                            pParticleDef->GetPDGMagneticMoment(),
-                                            0.0,  // Length along track
-                                            pParticleDef->GetPDGSpin() ) ;
+  G4FieldTrack  aFieldTrack = G4FieldTrack(startPosition, 
+                                           track.GetGlobalTime(), // Lab.
+                                           track.GetMomentumDirection(),
+                                           track.GetKineticEnergy(),
+                                           restMass,
+                                           particleCharge, 
+                                           polarizationVec, 
+                                           pParticleDef->GetPDGMagneticMoment(),
+                                           0.0,  // Length along track
+                                           pParticleDef->GetPDGSpin() ) ;
   G4int stepNo= track.GetCurrentStepNumber(); 
 
   ELimited limitedStep; 
@@ -349,7 +352,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
       if( limitedStep == kUnique || limitedStep == kSharedTransport )
       {
-         fMassGeometryLimitedStep = true ;
+        fMassGeometryLimitedStep = true ;
       }
       
       fAnyGeometryLimitedStep = (fPathFinder->GetNumberGeometriesLimitingStep() != 0);
@@ -357,13 +360,13 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 #ifdef G4DEBUG_TRANSPORT
       if( fMassGeometryLimitedStep && !fAnyGeometryLimitedStep )
       {
-         std::ostringstream message;
-         message << " ERROR in determining geometries limiting the step" << G4endl;
-         message << "  Limiting:  mass=" << fMassGeometryLimitedStep
-                 << " any= " << fAnyGeometryLimitedStep << G4endl;
-         message << "Incompatible conditions - by which geometries was it limited ?"<<G4endl;
-         G4Exception("G4CoupledTransportation::AlongStepGetPhysicalInteractionLength()", 
-                     "PathFinderConfused", FatalException, message); 
+        std::ostringstream message;
+        message << " ERROR in determining geometries limiting the step" << G4endl;
+        message << "  Limiting:  mass=" << fMassGeometryLimitedStep
+                << " any= " << fAnyGeometryLimitedStep << G4endl;
+        message << "Incompatible conditions - by which geometries was it limited ?";
+        G4Exception("G4CoupledTransportation::AlongStepGetPhysicalInteractionLength()", 
+                    "PathFinderConfused", FatalException, message); 
       }
 #endif
 
@@ -450,7 +453,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
           fEndGlobalTimeComputed    = true;
   
           // was ( fCandidateEndGlobalTime != track.GetGlobalTime() );
-          // a cleaner way is to have FieldTrack knowing whether time is updated
+          // a cleaner way is to have FieldTrack knowing whether time
+          // is updated
       }
       else
       {
@@ -492,12 +496,12 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   // Calculate the safety
 
   safetyProposal= startFullSafety;   // used to be startMassSafety
-    // Changed to accomodate processes that cannot update the safety -- JA 22 Nov 06
+    // Changed to accomodate processes that cannot update the safety
 
   // Update safety for the end-point, if becomes negative at the end-point.
 
   if(   (startFullSafety < fEndpointDistance ) 
-        && ( particleCharge != 0.0 ) )  // Only needed to prepare for Mult Scat.
+        && ( particleCharge != 0.0 ) )  // Only needed to prepare for MSC
    //   && !fAnyGeometryLimitedStep ) // To-Try: No safety update if at boundary
   {
       G4double endFullSafety =
@@ -523,7 +527,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       //
       safetyProposal = endFullSafety + fEndpointDistance;
           //  --> was endMassSafety
-      // Changed to accomodate processes that cannot update the safety -- JA 22 Nov 06
+      // Changed to accomodate processes that cannot update the safety
 
 #ifdef G4DEBUG_TRANSPORT 
       G4int prec= G4cout.precision(12) ;
@@ -539,8 +543,10 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   {
       G4int prec= G4cout.precision(12) ;
       G4cout << "***CoupledTransportation::AlongStepGPIL ** " << G4endl  ;
-      G4cout << "  Quick Safety estimate at endpoint "  << fTransportEndPosition
-             << "   gives safety endpoint value = " << startFullSafety - fEndpointDistance
+      G4cout << "  Quick Safety estimate at endpoint "
+             << fTransportEndPosition
+             << "   gives safety endpoint value = "
+             << startFullSafety - fEndpointDistance
              << "  using start-point value " << startFullSafety 
              << "  and endpointDistance " << fEndpointDistance << G4endl; 
       G4cout.precision(prec); 
@@ -565,14 +571,11 @@ G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
   noCallsCT_ASDI++;
 
   fParticleChange.Initialize(track) ;
-      // sets all its members to the value of corresponding members in G4Track
+    // sets all its members to the value of corresponding members in G4Track
 
   //  Code specific for Transport
   //
   fParticleChange.ProposePosition(fTransportEndPosition) ;
-  // G4cout << " G4CoupledTransportation::AlongStepDoIt" 
-  //     << " proposes position = " << fTransportEndPosition  
-  //     << " and end momentum direction  = " << fTransportEndMomentumDir <<  G4endl;
   fParticleChange.ProposeMomentumDirection(fTransportEndMomentumDir) ;
   fParticleChange.ProposeEnergy(fTransportEndKineticEnergy) ;
   fParticleChange.SetMomentumChanged(fMomentumChanged) ;
@@ -602,35 +605,23 @@ G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
      if (finalVelocity > 0.0)
      {
         // deltaTime = stepLength/finalVelocity ;
-        G4double meanInverseVelocity = 0.5 * ( initialInverseVel + finalInverseVel );
+        G4double meanInverseVelocity = 0.5
+                                     * (initialInverseVel + finalInverseVel);
         deltaTime = stepLength * meanInverseVelocity ;
-        // G4cout << " dt = s * mean(1/v) , with " << "  s = " << stepLength
-        //     << "  mean(1/v)= "  << meanInverseVelocity << G4endl;
      }
      else
      {
         deltaTime = stepLength * initialInverseVel ;
-        // G4cout << " dt = s / initV "  << "  s = "   << stepLength
-        //        << " 1 / initV= " << initialInverseVel << G4endl; 
-     }  //  Could do with better estimate for final step (finalVelocity = 0) ?
+      }  //  Could do with better estimate for final step (finalVelocity = 0) ?
 
      fCandidateEndGlobalTime   = startTime + deltaTime ;
      fParticleChange.ProposeLocalTime(  track.GetLocalTime() + deltaTime) ;
-
-     // G4cout << " Calculated global time from start = " << startTime << " and "
-     //        << " delta time = " << deltaTime << G4endl;
   }
   else
   {
      deltaTime = fCandidateEndGlobalTime - startTime ;
      fParticleChange.ProposeGlobalTime( fCandidateEndGlobalTime ) ;
-     // G4cout << " Calculated global time from candidate end time = "
-     //    << fCandidateEndGlobalTime << " and start time = " << startTime << G4endl;
   }
-
-  // G4cout << " G4CoupledTransportation::AlongStepDoIt  "
-  // << " flag whether computed time = " << fEndGlobalTimeComputed  << " and " 
-  // << " is proposes end time " << fCandidateEndGlobalTime << G4endl; 
 
   // Now Correct by Lorentz factor to get "proper" deltaTime
   
@@ -647,30 +638,68 @@ G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
   {
      G4double endEnergy= fTransportEndKineticEnergy;
 
-     if( (endEnergy < fThreshold_Important_Energy) 
-          || (fNoLooperTrials >= fThresholdTrials ) )
+     const G4ParticleDefinition* particleType= 
+         track.GetDynamicParticle() -> GetParticleDefinition();
+     G4bool stable = particleType->GetPDGStable();
+     
+     G4bool candidateForEnd = (endEnergy < fThreshold_Important_Energy) 
+                           || (fNoLooperTrials >= fThresholdTrials) ;
+                                 
+     if( candidateForEnd && stable )
      {
+        const G4int electronPDG= 11; // G4Electron::G4Electron()->GetPDGEncoding();
+        G4int particlePDG= particleType->GetPDGEncoding();
+
         // Kill the looping particle 
         //
         fParticleChange.ProposeTrackStatus( fStopAndKill )  ;
 
-        // 'Bare' statistics
-        fSumEnergyKilled += endEnergy; 
-        if( endEnergy > fMaxEnergyKilled) { fMaxEnergyKilled= endEnergy; }
+        // Simple statistics
+        fSumEnergyKilled += endEnergy;
+        fSumEnerSqKilled = endEnergy * endEnergy;
+        fNumLoopersKilled++;
+ 
+        if( endEnergy > fMaxEnergyKilled ) {
+          fMaxEnergyKilled = endEnergy;
+          fMaxEnergyKilledPDG = particlePDG; 
+        }
+        
+        if(  particleType->GetPDGEncoding() != electronPDG )
+        {
+           fSumEnergyKilled_NonElectron += endEnergy;
+           fSumEnerSqKilled_NonElectron += endEnergy * endEnergy;
+           fNumLoopersKilled_NonElectron++;
+           
+           if( endEnergy > fMaxEnergyKilled_NonElectron )
+           {
+              fMaxEnergyKilled_NonElectron = endEnergy;
+              fMaxEnergyKilled_NonElecPDG =  particlePDG;
+           }
+        }
 
         if( endEnergy > fThreshold_Warning_Energy )
         {
-          fpLogger->ReportLoopingTrack( track, stepData, fNoLooperTrials, noCallsCT_ASDI, methodName );
+          fpLogger->ReportLoopingTrack( track, stepData, fNoLooperTrials,
+                                        noCallsCT_ASDI, methodName );
         }
+
         fNoLooperTrials=0; 
       }
       else
       { 
-        fNoLooperTrials ++; 
+        fNoLooperTrials ++;
+
+        fMaxEnergySaved = std::max( endEnergy, fMaxEnergySaved);
+        if( fNoLooperTrials == 1 ) {
+          fSumEnergySaved += endEnergy;
+          if ( !stable )
+             fSumEnergyUnstableSaved += endEnergy;
+        }
 #ifdef G4VERBOSE
         if( verboseLevel > 2 )
         {
-          G4cout << "  ** G4CoupledTransportation::AlongStepDoIt(): Particle looping -  " << G4endl
+          G4cout << "  ** G4CoupledTransportation::AlongStepDoIt():"
+                 << " Particle is looping but is saved ..."  << G4endl
                  << "   Number of trials (this track) = " << fNoLooperTrials
                  << G4endl
                  << "   Steps by this track: " << track.GetCurrentStepNumber()
@@ -687,8 +716,7 @@ G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
   }
 
   // Another (sometimes better way) is to use a user-limit maximum Step size
-  // to alleviate this problem .. 
-
+  // to alleviate this problem ..
   // Add smooth curved trajectories to particle-change
   //
   // fParticleChange.SetPointerToVectorOfAuxiliaryPoints
@@ -726,7 +754,8 @@ ReportMove( G4ThreeVector OldVector, G4ThreeVector NewVector,
            << G4endl;
     G4cerr << "Endpoint has moved between value expected from TransportEndPosition "
            << " and value from Track in PostStepDoIt. " << G4endl
-           << "Change of " << Quantity << " is " << moveVec.mag() / mm << " mm long, "
+           << "Change of " << Quantity << " is " << moveVec.mag() / mm
+           << " mm long, "
            << " and its vector is " << (1.0/mm) * moveVec << " mm " << G4endl
            << "Endpoint of ComputeStep was " << OldVector
            << " and current position to locate is " << NewVector << G4endl;
@@ -761,7 +790,8 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
   if( ( verboseLevel > 0 )
      && ((fTransportEndPosition - track.GetPosition()).mag2() >= 1.0e-16) )
   {
-     ReportMove( track.GetPosition(), fTransportEndPosition, "End of Step Position" ); 
+     ReportMove( track.GetPosition(), fTransportEndPosition,
+                 "End of Step Position" ); 
      G4cerr << " Problem in G4CoupledTransportation::PostStepDoIt " << G4endl; 
   }
 
@@ -772,7 +802,8 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
   {
      G4cout << " Calling PathFinder::Locate() from " 
             << " G4CoupledTransportation::PostStepDoIt " << G4endl;
-     G4cout << "  fAnyGeometryLimitedStep is " << fAnyGeometryLimitedStep << G4endl;
+     G4cout << "  fAnyGeometryLimitedStep is " << fAnyGeometryLimitedStep
+            << G4endl;
 
   }
 #endif
@@ -844,7 +875,8 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
 
 #ifdef G4DEBUG_NAVIGATION  
   G4cout << "  CoupledTransport::AlongStep GPIL:  "
-         << " last-step:  any= "  << fAnyGeometryLimitedStep << " . ..... x . " 
+         << " last-step:  any= "  << fAnyGeometryLimitedStep
+         << " . ..... x . " 
          <<            " mass= " <<  fMassGeometryLimitedStep
          << G4endl;
 #endif
@@ -869,8 +901,8 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
 
   fParticleChange.SetMaterialInTouchable( (G4Material *) pNewMaterial ) ;
   fParticleChange.SetSensitiveDetectorInTouchable( (G4VSensitiveDetector *) pNewSensitiveDetector ) ;
-             // "temporarily" until Get/Set Material of ParticleChange, 
-             // and StepPoint can be made const. 
+    // "temporarily" until Get/Set Material of ParticleChange, 
+    // and StepPoint can be made const. 
 
   const G4MaterialCutsCouple* pNewMaterialCutsCouple = 0;
   if( pNewVol != 0 )
@@ -897,7 +929,7 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
 
 /////////////////////////////////////////////////////////////////////////////
 // New method takes over the responsibility to reset the state of 
-//   G4CoupledTransportation object:
+// G4CoupledTransportation object:
 //      - at the start of a new track,  and
 //      - on the resumption of a suspended track. 
 //
@@ -960,7 +992,8 @@ G4CoupledTransportation::StartTracking(G4Track* aTrack)
 #ifdef G4DEBUG_TRANSPORT
   if( verboseLevel > 1 )
   {
-    G4cout << " Returning touchable handle " << fCurrentTouchableHandle << G4endl;
+    G4cout << " Returning touchable handle " << fCurrentTouchableHandle
+           << G4endl;
   }
 #endif
 
@@ -975,7 +1008,8 @@ void
 G4CoupledTransportation::EndTracking()
 {
   G4TransportationManager::GetTransportationManager()->InactivateAll();
-  fPathFinder->EndTrack();   //  Resets TransportationManager to use ordinary Navigator
+  fPathFinder->EndTrack(); 
+    // Resets TransportationManager to use ordinary Navigator
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -993,26 +1027,33 @@ ReportInexactEnergy(G4double startEnergy, G4double endEnergy)
     if( (no_large_ediff% warnModulo) == 0 )
     {
       no_warnings++;
-      G4cout << "WARNING - G4CoupledTransportation::AlongStepGetPIL() " 
-             << "   Energy change in Step is above 1^-3 relative value. " << G4endl
-             << "   Relative change in 'tracking' step = " 
-             << std::setw(15) << (endEnergy-startEnergy)/startEnergy << G4endl
-             << "     Starting E= " << std::setw(12) << startEnergy / MeV << " MeV " << G4endl
-             << "     Ending   E= " << std::setw(12) << endEnergy   / MeV << " MeV " << G4endl;       
-      G4cout << " Energy has been corrected -- however, review"
-             << " field propagation parameters for accuracy."  << G4endl;
-      if( (verboseLevel > 2 ) || (no_warnings<4) || (no_large_ediff == warnModulo * moduloFactor) )
+      std::ostringstream message;
+      message << "Energy change in Step is above 1^-3 relative value. "
+              << G4endl
+              << "   Relative change in 'tracking' step = " 
+              << std::setw(15) << (endEnergy-startEnergy)/startEnergy
+              << G4endl
+              << "   Starting E= " << std::setw(12) << startEnergy / MeV
+              << " MeV " << G4endl
+              << "   Ending   E= " << std::setw(12) << endEnergy   / MeV
+              << " MeV " << G4endl
+              << "Energy has been corrected -- however, review"
+              << " field propagation parameters for accuracy." << G4endl;
+      if ( (verboseLevel > 2 ) || (no_warnings<4)
+        || (no_large_ediff == warnModulo * moduloFactor) )
       {
-        G4cout << " These include EpsilonStepMax(/Min) in G4FieldManager "
-               << " which determine fractional error per step for integrated quantities. " << G4endl
-               << " Note also the influence of the permitted number of integration steps."
-               << G4endl;
+        message << "These include EpsilonStepMax(/Min) in G4FieldManager,"
+                << G4endl
+                << "which determine fractional error per step for integrated quantities."
+                << G4endl
+                << "Note also the influence of the permitted number of integration steps."
+                << G4endl;
       }
-      G4cerr << "ERROR - G4CoupledTransportation::AlongStepGetPIL()" << G4endl
-             << "        Bad 'endpoint'. Energy change detected"
-             << " and corrected. " 
-             << " Has occurred already "
-             << no_large_ediff << " times." << G4endl;
+      message << "Bad 'endpoint'. Energy change detected and corrected."
+              << G4endl
+              << "Has occurred already " << no_large_ediff << " times.";
+      G4Exception("G4CoupledTransportation::AlongStepGetPIL()", 
+                  "EnergyChange", JustWarning, message);
       if( no_large_ediff == warnModulo * moduloFactor )
       {
         warnModulo *= moduloFactor;
@@ -1029,4 +1070,53 @@ G4bool G4CoupledTransportation::EnableUseMagneticMoment(G4bool useMoment)
   fUseMagneticMoment= useMoment;
   G4Transportation::fUseMagneticMoment= useMoment;
   return lastValue;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+void G4CoupledTransportation::SetHighLooperThresholds()
+{
+  // Setting old 'high' values for thresholds - old values, potentially appropriate
+  //   for the energy frontier HEP experiments
+  SetThresholdWarningEnergy(    100.0 * CLHEP::MeV );  //  Warn above this energy
+  SetThresholdImportantEnergy(  250.0 * CLHEP::MeV );  //  Give a few trial above this E); 
+
+  G4int maxTrials = 10;
+  SetThresholdTrials( maxTrials );
+
+  if( verboseLevel )  ReportLooperThresholds();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void G4CoupledTransportation::SetLowLooperThresholds() // Values for low-E applications
+{
+  // These values were the default in Geant4 10.5 - beta
+  SetThresholdWarningEnergy(     1.0 * CLHEP::keV ); // Warn above this En
+  SetThresholdImportantEnergy(   1.0 * CLHEP::MeV ); // Extra trials above it
+
+  G4int maxTrials = 30; //  A new value - was 10
+  SetThresholdTrials( maxTrials );
+  
+  if( verboseLevel )  ReportLooperThresholds();  
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+void
+G4CoupledTransportation::ReportMissingLogger( const char* methodName )
+{
+   const char* message= "Logger object missing from G4CoupledTransportation";
+   G4String classAndMethod= G4String("G4CoupledTransportation") + G4String( methodName );
+   G4Exception(classAndMethod, "Missing Logger", JustWarning, message);
+
+   if( verboseLevel )  ReportLooperThresholds();  
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+void
+G4CoupledTransportation::ReportLooperThresholds()
+{
+   PushThresholdsToLogger();  // To be absolutely certain they are in sync
+   fpLogger->ReportLooperThresholds("G4CoupledTransportation");
 }

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.24 2009-03-09 12:42:00 allison Exp $
 
 // /vis/set - John Allison  21st March 2012
 // Set quantities for use in appropriate future commands.
@@ -35,6 +34,8 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4TouchablePropertiesScene.hh"
+#include "G4TransportationManager.hh"
 #include <sstream>
 
 ////////////// /vis/set/arrow3DLineSegmentsPerCircle ////////////////////////////////////
@@ -392,12 +393,41 @@ void G4VisCommandSetTouchable::SetNewValue (G4UIcommand*, G4String newValue)
     (G4ModelingParameters::PVNameCopyNo(name,copyNo));
     iBegin = newValue.find_first_not_of(' ',iEnd);
   }
-  
-  fCurrentTouchablePath = currentTouchablePath;
-  
-  if (verbosity >= G4VisManager::confirmations) {
-    G4cout    << fCurrentTouchablePath
-    << G4endl;
+
+  // Check validity
+  G4bool successful = false;
+  G4TransportationManager* transportationManager =
+  G4TransportationManager::GetTransportationManager ();
+  size_t nWorlds = transportationManager->GetNoWorlds();
+  std::vector<G4VPhysicalVolume*>::iterator iterWorld =
+  transportationManager->GetWorldsIterator();
+  for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
+    G4PhysicalVolumeModel pvModel (*iterWorld);  // Unlimited depth.
+    G4ModelingParameters mp;  // Default - no culling.
+    pvModel.SetModelingParameters (&mp);
+    G4TouchablePropertiesScene scene (&pvModel,currentTouchablePath);
+    pvModel.DescribeYourselfTo (scene);  // Initiate geometry tree traversal.
+    if (scene.GetFoundTouchableProperties().fpTouchablePV) {
+      successful = true;
+      fCurrentTouchableProperties = scene.GetFoundTouchableProperties();
+      break;  // Found, so no need to scan more worlds.
+    }
+  }
+
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout <<
+      "Current touchable: " << fCurrentTouchableProperties.fTouchablePath
+      << G4endl;
+      return;
+    }
+  } else {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<
+      "WARNING: G4VisCommandSetTouchable::SetNewValue"
+      "\n  Touchable not found."
+      << G4endl;
+      return;
+    }
   }
 }
-

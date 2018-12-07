@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc 110572 2018-05-30 13:08:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -198,7 +197,8 @@ G4LossTableManager::G4LossTableManager()
   emElectronIonPair = nullptr;
   atomDeexcitation = nullptr;
   subcutProducer = nullptr;
-  gammaShark = nullptr;
+  gGeneral = nullptr;
+  eGeneral = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -1059,25 +1059,20 @@ void G4LossTableManager::DumpHtml()
   // Automatic generation of html documentation page for physics lists
   // List processes and models for the most important
   // particles in descending order of importance
+  // NB. for model names with length > 18 characters the .rst file needs
+  //  to be edited by hand. Or modify G4EmModelManager::DumpModelList
 
   char* dirName = getenv("G4PhysListDocDir");
-  char* physListName = getenv("G4PhysListName");
-  if (dirName && physListName) {
-    G4String pathName = G4String(dirName) + "/" + G4String(physListName) 
-                                          + ".html";
+  char* physList = getenv("G4PhysListName");
+  if (dirName && physList) {
+    G4String physListName = G4String(physList);
+    G4String pathName = G4String(dirName) + "/" + physListName + ".rst";
 
     std::ofstream outFile;
     outFile.open(pathName);
    
-    outFile << "<html>\n";
-    outFile << "<head>\n";
-    outFile << "<title>Physics List Summary</title>\n";
-    outFile << "</head>\n";
-    outFile << "<body>\n";
-    outFile << "<h2> Summary of Electromagnetic Processes, Models and Cross "
-            << "Sections for Physics List "
-            << G4String(physListName) << "</h2>\n";
-    outFile << "<ul>\n";
+    outFile << physListName << G4endl;
+    outFile << std::string(physListName.length(), '=') << G4endl;
 
     std::vector<G4ParticleDefinition*> particles {
         G4Gamma::Gamma(),
@@ -1095,9 +1090,10 @@ void G4LossTableManager::DumpHtml()
       GetMultipleScatteringVector();
     
     for (auto theParticle : particles) {
-      outFile << "<li><h3>" << theParticle->GetParticleName() << "</h3><ul>\n";
+      outFile << G4endl << "**" << theParticle->GetParticleName()
+              << "**" << G4endl << G4endl << " .. code-block:: none" << G4endl;
 
-			G4ProcessManager* pm = theParticle->GetProcessManager();
+      G4ProcessManager* pm = theParticle->GetProcessManager();
       G4ProcessVector*  pv = pm->GetProcessList();
       G4int plen = pm->GetProcessListLength();
 
@@ -1105,9 +1101,8 @@ void G4LossTableManager::DumpHtml()
         for (G4int i = 0; i < plen; ++i) {
           G4VProcess* proc = (*pv)[i];
           if (proc == emproc) {
-            outFile << "<li>\n";
+            outFile << G4endl;
             proc->ProcessDescription(outFile);
-            outFile << "</li>\n";
             break;
           }
         }
@@ -1117,9 +1112,8 @@ void G4LossTableManager::DumpHtml()
         for (G4int i = 0; i < plen; ++i) {
           G4VProcess* proc = (*pv)[i];
           if (proc == mscproc) {
-            outFile << "<li>\n";
+            outFile << G4endl;
             proc->ProcessDescription(outFile);
-            outFile << "</li>\n";
             break;
           }
         }
@@ -1129,19 +1123,13 @@ void G4LossTableManager::DumpHtml()
         for (G4int i = 0; i < plen; ++i) {
           G4VProcess* proc = (*pv)[i];
           if (proc == enlossproc) {
-            outFile << "<li>\n";
+            outFile << G4endl;
             proc->ProcessDescription(outFile);
-            outFile << "</li>\n";
             break;
           }
         }
       }
-      outFile << "</ul>\n";
-      outFile << "</li>\n";
     }
-    outFile << "</ul>\n";
-    outFile << "</body>\n";
-    outFile << "</html>\n";
     outFile.close();
   }
 }

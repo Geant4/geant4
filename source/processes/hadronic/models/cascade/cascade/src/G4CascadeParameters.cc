@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeParameters.cc 72016 2013-07-03 16:24:15Z mkelsey $
 // Encapsulate all user-configurable parameters with associated envvars
 //
 // 20120912  M. Kelsey -- Add interface to support UI commands

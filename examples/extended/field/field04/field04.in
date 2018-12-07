@@ -1,5 +1,5 @@
 #
-# Macro file for the initialization phase of field04
+# Macro file for the test of field04 example
 #
 #/run/verbose 1
 /control/verbose 2
@@ -78,3 +78,9 @@
 #
 /run/beamOn 10
 #
+/field04/SetTransferR  0.3 m
+/field04/SetTransferZ 15.0 m
+/field04/SetTransferP 0.0 m
+#
+/run/beamOn 1
+

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc 110480 2018-05-25 07:25:18Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -395,7 +394,7 @@ end_of_display_list_reuse_test:
       // For permanent objects, colour is kept in the PO, so should
       // *not* be in the display list.  This is so that sub-classes
       // may implement colour modifications according to their own
-      // criteria, e.g., scen tree slider in Qt.  But for now set
+      // criteria, e.g., scene tree slider in Qt.  But for now set
       // colour for immediate display.
       if (transparency_enabled) {
         glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
@@ -442,7 +441,11 @@ end_of_display_list_reuse_test:
     glMultMatrixd (oglt.GetGLMatrix ());
     glDisable (GL_LIGHTING);
   } else {
-    glEnable (GL_LIGHTING);
+    if (isMarker) {
+      glDisable (GL_LIGHTING);
+    } else {
+      glEnable (GL_LIGHTING);
+    }
   }
 
   return true;

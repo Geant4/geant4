@@ -26,7 +26,6 @@
 /// \file materials/src/G4LatticeManager.cc
 /// \brief Implementation of the G4LatticeManager class
 //
-// $Id: G4LatticeManager.cc 84149 2014-10-08 18:04:16Z mkelsey $
 //
 // 20131113  Delete lattices in (new) registry, not in lookup maps
 // 20141008  Change to global singleton; must be shared across worker threads

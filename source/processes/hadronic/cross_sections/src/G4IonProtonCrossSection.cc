@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonProtonCrossSection.cc 90447 2015-05-29 07:41:53Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -39,29 +38,28 @@
 
 #include "G4IonProtonCrossSection.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4ProtonInelasticCrossSection.hh"
+#include "G4ParticleInelasticXS.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
-#include "G4HadTmpUtil.hh"
+#include "G4Proton.hh"
 
 using namespace std;
 
 G4IonProtonCrossSection::G4IonProtonCrossSection() 
-  : G4VCrossSectionDataSet("AxenWellischIonH") 
+  : G4VCrossSectionDataSet("InvProtonXS") 
 {
-  theForward = new G4ProtonInelasticCrossSection();
+  theForward = new G4ParticleInelasticXS(G4Proton::Proton());
 }
 
 G4IonProtonCrossSection::~G4IonProtonCrossSection()
 {}
 
 G4bool 
-G4IonProtonCrossSection::IsElementApplicable(const G4DynamicParticle* dp, 
-					     G4int Z, const G4Material*)
+G4IonProtonCrossSection::IsElementApplicable(const G4DynamicParticle*, 
+ 					     G4int Z, const G4Material*)
 {
-  return ((1 == Z) && (dp->GetDefinition()->GetPDGCharge()/eplus > 1.5)); 
+  return (1 == Z); 
 }
-
 
 G4double 
 G4IonProtonCrossSection::GetElementCrossSection(
@@ -70,16 +68,22 @@ G4IonProtonCrossSection::GetElementCrossSection(
 {
   const G4ParticleDefinition* p = dp->GetDefinition();
   G4double e = dp->GetKineticEnergy()*CLHEP::proton_mass_c2/p->GetPDGMass();
-  return 
-    theForward->GetProtonCrossSection(e, G4lrint(p->GetPDGCharge()/eplus));
+  G4int Z = p->GetAtomicNumber();
+  G4int A = p->GetAtomicMass();
+  return theForward->IsoCrossSection(e, Z, A);
 }
+
+void G4IonProtonCrossSection::BuildPhysicsTable(const G4ParticleDefinition& part)
+{
+  theForward->BuildPhysicsTable(part);
+} 
 
 void 
 G4IonProtonCrossSection::CrossSectionDescription(std::ostream& outFile) const
 {
   outFile << "G4IonProtonCrossSection calculates the inelastic cross section\n"
           << "for any ion projectile with Z >=2 only on hydrogen target.\n"
-          << "It uses the inverse kinematics and the Axen-Wellisch\n"
-          << "inelastic cross section (G4ProtonInelasticCrossSection).\n"; 
+          << "It uses the inverse kinematics and the G4ParticleInelasticXS\n"
+          << "cross section.\n"; 
 }
 

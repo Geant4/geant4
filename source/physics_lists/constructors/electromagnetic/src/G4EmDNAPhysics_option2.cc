@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmDNAPhysics_option2.cc 82360 2014-06-17 15:16:30Z gcosmo $
 
 // SI: This constructor uses speedup options of DNA models
 

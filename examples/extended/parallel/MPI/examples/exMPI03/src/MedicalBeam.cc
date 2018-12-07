@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MedicalBeam.cc 76431 2013-11-10 20:28:49Z kmura $
 //
 /// @file MedicalBeam.cc
 /// @brief Define beam profile as primary generator

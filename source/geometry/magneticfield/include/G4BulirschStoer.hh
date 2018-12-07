@@ -23,7 +23,6 @@
 // ********************************************************************
 //
 //
-// $Id: $
 //
 // Description:
 // G4BulirschStoer class implementation by Dmitry Sorokin

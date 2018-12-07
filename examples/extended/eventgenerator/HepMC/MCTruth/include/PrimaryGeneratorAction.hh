@@ -27,7 +27,6 @@
 /// \brief Definition of the PrimaryGeneratorAction class
 //
 //
-// $Id: PrimaryGeneratorAction.hh 73446 2013-08-27 11:32:59Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -55,11 +54,11 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   public:
 
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
 
   private:
 
-    G4ParticleGun* particleGun;
+    G4ParticleGun* fParticleGun;
 };
 
 #endif

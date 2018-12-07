@@ -27,7 +27,6 @@
 /// \brief Implementation of the G02RunAction class
 //
 //
-// $Id: G02RunAction.cc 110383 2018-05-22 07:48:53Z gcosmo $
 //
 // Class G02RunAction implementation
 //

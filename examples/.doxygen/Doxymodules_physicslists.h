@@ -1,4 +1,3 @@
-// $Id: Doxymodules_physicslists.h 107673 2017-11-28 15:28:12Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_physicslists.h

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1136,3 +1136,7 @@ Magnetic field is active, fieldValue = (0 0 1 T ).
 ... close Root file : DefaultOutput.root - done
 Graphics systems deleted.
 Visualization Manager deleting...
+G4Integration Driver Stats: #QuickAdvance 9000 - #AccurateAdvance 6000 #good steps 6000 #bad steps 0
+G4ChordFinder statistics report: 
+  No trials: 8000  No Calls: 4000  Max-trial: 3
+  Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98

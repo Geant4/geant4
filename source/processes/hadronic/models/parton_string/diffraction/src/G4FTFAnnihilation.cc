@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFAnnihilation.cc 110870 2018-06-22 12:14:16Z gcosmo $
 //
 
 // ------------------------------------------------------------
@@ -1067,7 +1066,7 @@ void G4FTFAnnihilation::UnpackBaryon( G4int IdPDG, G4int& Q1, G4int& Q2, G4int& 
 
 G4FTFAnnihilation::G4FTFAnnihilation( const G4FTFAnnihilation& ) {
   throw G4HadronicException( __FILE__, __LINE__, 
-                             "G4FTFAnnihilation copy contructor not meant to be called" );
+                             "G4FTFAnnihilation copy constructor not meant to be called" );
 }
 
 

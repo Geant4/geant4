@@ -102,9 +102,14 @@ namespace G4INCL {
       vDeltaMinus = std::max(separationEnergyDeltaMinus + tinyMargin, 2.*vDeltaZero - vDeltaPlus);
       
       vSigmaMinus = -16.; // Repulsive potential, from Eur. Phys.J.A. (2016) 52:21
-      vSigmaZero = -16.; // hypothesis: same potential for each sigma
+      vSigmaZero = -16.;  // hypothesis: same potential for each sigma
       vSigmaPlus = -16.;
+
       vLambda = 28.;
+      const G4double asy = (theA - 2.*theZ)/theA;
+      if(asy>0.11)vLambda = 56.549-678.73*asy+4905.35*std::pow(asy,2.)-9789.1*std::pow(asy,3.); // Jose Luis Rodriguez-Sanchez et al., Rapid Communication PRC
+
+      const G4double theLambdaSeparationEnergy = ParticleTable::getSeparationEnergy(Lambda,theA,theZ);
 
       separationEnergy[PiPlus] = theProtonSeparationEnergy - theNeutronSeparationEnergy;
       separationEnergy[PiZero] = 0.;
@@ -115,16 +120,18 @@ namespace G4INCL {
       separationEnergy[EtaPrime] = 0.;
       separationEnergy[Photon]   = 0.;
       
-      separationEnergy[Lambda]		= theNeutronSeparationEnergy;
-      separationEnergy[SigmaPlus]	= theProtonSeparationEnergy;
-      separationEnergy[SigmaZero]	= theNeutronSeparationEnergy;
-      separationEnergy[SigmaMinus]	= 2*theNeutronSeparationEnergy - theProtonSeparationEnergy;
-      separationEnergy[KPlus]		= theProtonSeparationEnergy - theNeutronSeparationEnergy;
-      separationEnergy[KZero]		= 0.;
-      separationEnergy[KZeroBar]	= 0.;
-      separationEnergy[KMinus]		= theNeutronSeparationEnergy - theProtonSeparationEnergy;
-      separationEnergy[KShort]		= 0.;
-      separationEnergy[KLong]		= 0.;
+      separationEnergy[Lambda]		= theLambdaSeparationEnergy;
+      separationEnergy[SigmaPlus]	= theProtonSeparationEnergy + theLambdaSeparationEnergy - theNeutronSeparationEnergy;
+      separationEnergy[SigmaZero]	= theLambdaSeparationEnergy;
+      separationEnergy[SigmaMinus]	= theNeutronSeparationEnergy + theLambdaSeparationEnergy - theProtonSeparationEnergy;
+
+      separationEnergy[KPlus]		= theProtonSeparationEnergy - theLambdaSeparationEnergy;
+      separationEnergy[KZero]		= (theNeutronSeparationEnergy - theLambdaSeparationEnergy);
+      separationEnergy[KZeroBar]	= (theLambdaSeparationEnergy - theNeutronSeparationEnergy);
+      separationEnergy[KMinus]		= 2.*theNeutronSeparationEnergy - theProtonSeparationEnergy-theLambdaSeparationEnergy;
+
+      separationEnergy[KShort]		= (theNeutronSeparationEnergy - theLambdaSeparationEnergy);
+      separationEnergy[KLong]		= (theNeutronSeparationEnergy - theLambdaSeparationEnergy);
 
       fermiEnergy[DeltaPlusPlus] = vDeltaPlusPlus - separationEnergy[DeltaPlusPlus];
       fermiEnergy[DeltaPlus] = vDeltaPlus - separationEnergy[DeltaPlus];
@@ -132,7 +139,10 @@ namespace G4INCL {
       fermiEnergy[DeltaMinus] = vDeltaMinus - separationEnergy[DeltaMinus];
       
       fermiEnergy[Lambda] = vLambda - separationEnergy[Lambda];
-      fermiMomentum[Lambda]=std::sqrt(std::pow(fermiEnergy[Lambda]+ml,2.0)-ml*ml);
+      if (fermiEnergy[Lambda] <= 0.)
+         fermiMomentum[Lambda]=0.;
+      else
+         fermiMomentum[Lambda]=std::sqrt(std::pow(fermiEnergy[Lambda]+ml,2.0)-ml*ml);
 
       fermiEnergy[SigmaPlus] = vSigmaPlus - separationEnergy[SigmaPlus];
       fermiEnergy[SigmaZero] = vSigmaZero - separationEnergy[SigmaZero];

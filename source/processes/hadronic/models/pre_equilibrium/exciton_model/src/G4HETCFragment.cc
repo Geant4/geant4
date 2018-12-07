@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCFragment.cc 100378 2016-10-19 15:03:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -32,6 +31,8 @@
 //            the source, use G4Pow
  
 #include "G4HETCFragment.hh"
+#include "G4DeexPrecoParameters.hh"
+#include "G4NuclearLevelData.hh"
 #include "G4PhysicalConstants.hh"
 
 G4HETCFragment::
@@ -74,8 +75,9 @@ IntegrateEmissionProbability(G4double & Low, G4double & Up,
   G4int Pb = P - theA;
   G4int Nb = Pb + H;
   if (Nb <= 0.0) { return 0.0; }
-  G4double ga = (6.0/pi2)*theFragA*theParameters->GetLevelDensity();
-  G4double gb = (6.0/pi2)*theResA*theParameters->GetLevelDensity();
+
+  G4double ga = (6.0/pi2)*fNucData->GetLevelDensity(theFragZ,theFragA,U);
+  G4double gb = (6.0/pi2)*fNucData->GetLevelDensity(theResZ,theResA,U);
 
   G4double A  = G4double(P*P+H*H+P-3*H)/(4.0*ga);
   G4double Ab = G4double(Pb*Pb+H*H+Pb-3*H)/(4.0*gb);

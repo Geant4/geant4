@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CsvNtupleManager.cc 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -92,9 +91,12 @@ void G4CsvNtupleManager::CreateTNtupleFromBooking(
 
 //_____________________________________________________________________________
 void G4CsvNtupleManager::FinishTNtuple(
-  G4TNtupleDescription<tools::wcsv::ntuple>* ntupleDescription)
+  G4TNtupleDescription<tools::wcsv::ntuple>* ntupleDescription,
+  G4bool /*fromBooking*/)
 {
-  if ( ! ntupleDescription->fNtuple ) return;
+  if ( ! ntupleDescription->fNtuple ) {
+    CreateTNtupleFromBooking(ntupleDescription);
+  }
 
   // Write header if ntuple already exists
   if ( ! WriteHeader(ntupleDescription->fNtuple) ) {

@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "biasing/.README.txt"
 ///\brief Examples biasing README page

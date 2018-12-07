@@ -1,4 +1,3 @@
-//$Id$
 -----------------------------------------
 ///\file "medical/dna/splitting/.README.txt"
 ///\brief ExampleSplitting README page

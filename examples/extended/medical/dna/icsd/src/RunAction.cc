@@ -30,54 +30,37 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $Id$
 //
 /// \file RunAction.cc
 /// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
-#include "G4RunManager.hh"
 #include "Analysis.hh"
+
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction()
 : G4UserRunAction()
 { 
-    // set printing event number per each 10 events
-    //G4RunManager::GetRunManager()->SetPrintProgress(10);
-}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::BeginOfRunAction(const G4Run*)
-{ 
-    // inform the runManager to save random number seed
-    G4RunManager::GetRunManager()->SetRandomNumberStore(false);
-
-    // book histograms, ntuple
+   // book histograms, ntuple
 
     // create analysis manager
     // the choice of analysis technology is done via selection of a namespace
     // in Analysis.hh
 
     G4cout << "##### Create analysis manager " << "  " << this << G4endl;
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    auto analysisManager = G4AnalysisManager::Instance();
+
+    analysisManager->SetNtupleMerging(true);
 
     G4cout << "Using " << analysisManager->GetType()
            << " analysis manager"
            << G4endl;
 
     analysisManager->SetVerboseLevel(1);
-
-    // open an output file
-    G4String fileName = "ICSD";
-    analysisManager->OpenFile(fileName);
 
     // creating ntuple
     analysisManager->SetFirstNtupleId(1);
@@ -95,7 +78,25 @@ void RunAction::BeginOfRunAction(const G4Run*)
     analysisManager->CreateNtupleDColumn(2,"y");
     analysisManager->CreateNtupleDColumn(2,"z");
     analysisManager->CreateNtupleDColumn(2,"totalEnergyDeposit");
-    analysisManager->FinishNtuple(2);
+    analysisManager->FinishNtuple(2);}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RunAction::~RunAction()
+{
+    delete G4AnalysisManager::Instance();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::BeginOfRunAction(const G4Run*)
+{ 
+    auto analysisManager = G4AnalysisManager::Instance();
+
+    // open an output file
+    G4String fileName = "ICSD";
+    analysisManager->OpenFile(fileName);
+
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -103,16 +104,12 @@ void RunAction::EndOfRunAction(const G4Run* )
 {
     // print histogram statistics
 
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    auto analysisManager = G4AnalysisManager::Instance();
 
     // save histograms
 
     analysisManager->Write();
     analysisManager->CloseFile();
-
-    // complete cleanup
-
-    delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

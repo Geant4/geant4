@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 107319 2017-11-08 16:29:22Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -135,8 +134,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
 	QGSP_BERT.icc
 	QGSP_BIC.hh
 	QGSP_BIC_HP.hh
-	QGSP_BIC_HP.icc
-	QGSP_BIC.icc
+        QGSP_BIC_AllHP.hh
 	QGSP_FTFP_BERT.hh
 	QGSP_FTFP_BERT.icc
         INCLXXPhysicsListHelper.hh
@@ -146,19 +144,19 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         FTFP_INCLXX.hh
         FTFP_INCLXX_HP.hh
 	Shielding.hh
-	Shielding.icc
 	ShieldingLEND.hh
-	ShieldingLEND.icc
         G4PhysListRegistry.hh
         G4PhysListStamper.hh
         G4PhysListFactoryAlt.hh
-        QGSP_BIC_AllHP.hh
-        QGSP_BIC_AllHP.icc
         G4RegisterPhysLists.icc
     SOURCES
         G4PhysListFactory.cc
         G4PhysListFactoryMessenger.cc
         QBBC.cc
+	QGSP_BIC.cc
+	QGSP_BIC_HP.cc
+        QGSP_BIC_AllHP.cc
+	Shielding.cc
         G4PhysListRegistry.cc
         G4PhysListFactoryAlt.cc
     GRANULAR_DEPENDENCIES

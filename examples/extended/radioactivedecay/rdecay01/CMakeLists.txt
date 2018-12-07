@@ -41,7 +41,8 @@ target_link_libraries(rdecay01 ${Geant4_LIBRARIES} )
 #
 set(rdecay01_SCRIPTS
     alpha.mac Cf238.mac Co60.mac debug.mac Gd158.mac electronicCapture.mac fullChain.mac neutron.mac
-    proton.mac No252.mac Po212.mac Ra228.mac rdecay01.in singleDecay.mac timeWindow.mac vis.mac
+    proton.mac No252.mac Po212.mac Ra228.mac rdecay01.in singleDecay.mac timeWindow.mac
+    timeWindowBiased.mac timeWindowBiased.data vis.mac
   )
 
 foreach(_script ${rdecay01_SCRIPTS})

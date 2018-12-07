@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclParticleNames.hh 69638 2013-05-09 04:26:00Z mkelsey $
 //
 // Defines enums to map G4InuclElementaryParticle type codes to human
 // readable names.  Meant to replace similar local enums scattered through

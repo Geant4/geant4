@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFAnnihilation.hh 110870 2018-06-22 12:14:16Z gcosmo $
 
 #ifndef G4FTFAnnihilation_h
 #define G4FTFAnnihilation_h 1

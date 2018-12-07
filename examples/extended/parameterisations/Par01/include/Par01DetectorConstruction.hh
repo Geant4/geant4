@@ -27,7 +27,6 @@
 /// \brief Definition of the Par01DetectorConstruction class
 //
 //
-// $Id: Par01DetectorConstruction.hh 100936 2016-11-03 11:07:41Z gcosmo $
 //
 #ifndef Par01DetectorConstruction_h
 #define Par01DetectorConstruction_h 1

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Dicom2PrimaryGeneratorAction.hh $
 //
 /// \file Dicom2PrimaryGeneratorAction.hh
 /// \brief Definition of the Dicom2PrimaryGeneratorAction class
@@ -38,6 +37,7 @@
 class G4ParticleGun;
 class G4Event;
 class G4Box;
+class G4VPhysicalVolume;
 
 /// The primary generator action class with particle gun.
 ///
@@ -57,8 +57,12 @@ public:
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
   
 private:
-    G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
-    G4Box* fEnvelopeBox;
+    G4ParticleGun*      fParticleGun; // pointer a to G4 gun class
+    G4Box*              fEnvelopeBox;
+    G4VPhysicalVolume*  fEnvelopeVol;
+    G4ThreeVector       fPosCenter;
+    G4ThreeVector       fPosDelta;
+    G4double            fGeomFactor;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

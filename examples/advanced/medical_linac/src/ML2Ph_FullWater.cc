@@ -41,39 +41,97 @@
 //*******************************************************//
 
 #include "ML2Ph_FullWater.hh"
+#include "ML2Ph_FullWaterMessenger.hh"
+
 #include "G4SystemOfUnits.hh"
+#include "G4LogicalVolume.hh"
+#include "G4PVPlacement.hh"
+#include "G4SDManager.hh"
+#include "G4PVReplica.hh"
+
 
 CML2Ph_FullWater::CML2Ph_FullWater()
 {
-	// phantom size and position
-	halfSize.set(150.*mm,150.*mm,150.*mm);
-	// phantom position
-	centre.set(0.,0.,0.);
+  // phantom size and position
+  halfSize.set(150.*mm,150.*mm,150.*mm);
+  // phantom position
+  centre.set(0.,0.,0.);
+  
+  fPhantomSize.setX(300.*mm);
+  fPhantomSize.setY(300.*mm);
+  fPhantomSize.setZ(300.*mm);
+  fullWaterMessenger = new CML2Ph_FullWaterMessenger(this);
 }
 
 CML2Ph_FullWater::~CML2Ph_FullWater(void)
 {
 }
+
 void CML2Ph_FullWater::writeInfo()
 {
-	std::cout<<"\n\n\tcentre of the phantom: " <<centre/mm<<" [mm]"<< G4endl;
-	std::cout<<"\thalf thickness of the phantom: " <<halfSize/mm<<" [mm]\n"<< G4endl;
+	G4cout<<"\n\n\tcentre of the phantom: " <<centre/mm<<" [mm]"<< G4endl;
+	G4cout<<"\thalf thickness of the phantom: " <<halfSize/mm<<" [mm]\n"<< G4endl;
 }
-bool CML2Ph_FullWater::Construct(G4VPhysicalVolume *PWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG)
+bool CML2Ph_FullWater::Construct(G4VPhysicalVolume *PWorld, G4int nx, G4int ny, G4int nz)
 {
-	PVWorld=PWorld;
 
-	bool bCreated=false;
-	G4Material *WATER=G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
-	G4Box *fullWaterPhantomBox = new G4Box("fullWaterPhantomBox", halfSize.getX(), halfSize.getY(), halfSize.getZ());
-	G4LogicalVolume *fullWaterPhantomLV = new G4LogicalVolume(fullWaterPhantomBox, WATER, "fullWaterPhantomLV", 0, 0, 0);
-	fullWaterPhantomPV = new G4PVPlacement(0, centre, "fullWaterPhantomPV", fullWaterPhantomLV, PVWorld, false, 0);
+ PVWorld=PWorld;
 
-	// Region for cuts
-	G4Region *regVol= new G4Region("fullWaterPhantomR");
-	G4ProductionCuts* cuts = new G4ProductionCuts;
-	cuts->SetProductionCut(0.1*mm);
-	regVol->SetProductionCuts(cuts);
+ bool bCreated=false;
+ G4Material *WATER=G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
+ G4Box *fullWaterPhantomBox = new G4Box("fullWaterPhantomBox", halfSize.getX(), halfSize.getY(), halfSize.getZ());
+ G4LogicalVolume *fullWaterPhantomLV = new G4LogicalVolume(fullWaterPhantomBox, WATER, "fullWaterPhantomLV", 0, 0, 0);
+ fullWaterPhantomPV = new G4PVPlacement(0, centre, "fullWaterPhantomPV", fullWaterPhantomLV, PVWorld, false, 0);
+
+ 
+  G4int nxCells = nx;
+  G4int nyCells = ny;
+  G4int nzCells = nz;
+
+  G4cout << "VoxelX, voxelY, Voxelz = " << nx << ", " << ny <<  ", " << nz << "; " << G4endl;
+
+  G4ThreeVector sensSize;
+  sensSize.setX(fPhantomSize.x()/(G4double)nxCells);
+  sensSize.setY(fPhantomSize.y()/(G4double)nyCells);
+  sensSize.setZ(fPhantomSize.z()/(G4double)nzCells);
+
+  // The phantom is voxelised in 3D
+
+  G4String yRepName("RepY");
+
+  G4VSolid* solYRep = new G4Box(yRepName,fPhantomSize.x()/2.,sensSize.y()/2.,fPhantomSize.z()/2.);
+
+  G4LogicalVolume* logYRep = new G4LogicalVolume(solYRep,WATER,yRepName);
+ 
+  new G4PVReplica(yRepName,logYRep,fullWaterPhantomLV,kYAxis,ny,sensSize.y());
+
+  G4String xRepName("RepX");
+
+  G4VSolid* solXRep = new G4Box(xRepName,sensSize.x()/2.,sensSize.y()/2.,fPhantomSize.z()/2.);
+  
+  G4LogicalVolume* logXRep = new G4LogicalVolume(solXRep,WATER,xRepName);
+  
+  new G4PVReplica(xRepName,logXRep,logYRep,kXAxis,nx,sensSize.x());
+ 
+  G4String zVoxName("phantomSens");
+ 
+  G4VSolid* solVoxel = new G4Box(zVoxName,sensSize.x()/2.,sensSize.y()/2.,sensSize.z()/2.);
+  
+  G4LogicalVolume* LVPhantomSens = new G4LogicalVolume(solVoxel,WATER,zVoxName); // This is the Sensitive Volume
+
+  new G4PVReplica(zVoxName,LVPhantomSens,logXRep,kZAxis,nz,sensSize.z());
+//..............................................
+  // Phantom segmentation using Parameterisation
+  //..............................................
+ 
+  G4cout << "  Water Phantom Size " << fPhantomSize/mm       << G4endl;
+  G4cout << "  Segmentation  ("<< nx<<","<<ny<<","<<nz<<")"<< G4endl;
+  
+  // Region for cuts
+  G4Region *regVol= new G4Region("fullWaterPhantomR");
+  G4ProductionCuts* cuts = new G4ProductionCuts;
+  cuts->SetProductionCut(0.1*mm);
+  regVol->SetProductionCuts(cuts);
 
 	fullWaterPhantomLV->SetRegion(regVol);
 	regVol->AddRootLogicalVolume(fullWaterPhantomLV);
@@ -84,20 +142,15 @@ bool CML2Ph_FullWater::Construct(G4VPhysicalVolume *PWorld, G4int saving_in_ROG_
 // 	simpleAlSVisAtt->SetForceSolid(true);
 	fullWaterPhantomLV->SetVisAttributes(simpleAlSVisAtt);
 
-	// Sensitive detector 
-	sensDet=new CML2SDWithVoxels("Water phantom", saving_in_ROG_Voxels_every_events, seed, ROGOutFile, bSaveROG, G4ThreeVector(0.,0.,0.), halfSize, 100, 100, 100);
-	G4SDManager *SDManager=G4SDManager::GetSDMpointer();
-	SDManager->AddNewDetector(sensDet);
-	
-	// Read Out Geometry
-	CML2ReadOutGeometry *ROG = new CML2ReadOutGeometry();
-	ROG->setBuildData(PVWorld->GetFrameTranslation(), halfSize, 100, 100, 100);
-	ROG->BuildROGeometry();
-	sensDet->SetROgeometry(ROG);
-	fullWaterPhantomLV->SetSensitiveDetector(sensDet);
+	G4MultiFunctionalDetector* myScorer = new G4MultiFunctionalDetector("PhantomSD");
+	G4SDManager::GetSDMpointer()->AddNewDetector(myScorer);
+	LVPhantomSens->SetSensitiveDetector(myScorer);
+       
+	G4VPrimitiveScorer * totalDose = new G4PSDoseDeposit3D("TotalDose", nx,ny,nz);
+	myScorer->RegisterPrimitive(totalDose);
+	G4cout << "scorer registered: totalDose" << G4endl;
 
 	bCreated=true;
 	return bCreated;
 }
-
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // The base class for read Ntuple manager. 
 // It defines functions independent from the output type. 

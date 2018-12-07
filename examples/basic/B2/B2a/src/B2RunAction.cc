@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B2RunAction.cc 75214 2013-10-29 16:04:42Z gcosmo $
 //
 /// \file B2RunAction.cc
 /// \brief Implementation of the B2RunAction class

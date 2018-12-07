@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// $Id: G4TrajectoryFilterFactories.hh 98766 2016-08-09 14:17:17Z gcosmo $
 //
 //
 // Trajectory filter model factories creating filters

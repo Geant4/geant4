@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc 110257 2018-05-17 14:20:12Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -439,7 +438,7 @@ void G4ParticleDefinition::SetParticleDefinitionID(G4int id)
   if(id<0)
   {
     g4particleDefinitionInstanceID = subInstanceManager.CreateSubInstance(); 
-    G4MT_pmanager = 0;
+    G4MT_pmanager = nullptr;
   }
   else
   {

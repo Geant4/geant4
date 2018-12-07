@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr00/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.hh 106244 2017-09-26 01:58:00Z gcosmo $
 //
 //
 /////////////////////////////////////////////////////////////////////////

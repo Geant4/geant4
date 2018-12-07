@@ -37,21 +37,13 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
-#ifdef G4VIS_USE
-  #include "G4VisExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
-#ifdef G4UI_USE
-  #include "G4UIExecutive.hh"
-#endif
-
+#include "G4UIExecutive.hh"
 
 int main(int argc,char** argv) {
 
-#ifdef G4VIS_USE
-  G4VisManager *visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif        
+  G4VisManager *visManager = nullptr;
 
   G4RunManager * runManager = new G4RunManager;
   runManager->SetUserInitialization(new CCalDetectorConstruction);
@@ -70,16 +62,19 @@ int main(int argc,char** argv) {
   // Define (G)UI terminal for interactive mode
   if (argc==1) {  // No arguments - interactive assumed.
 
-#ifdef G4UI_USE
+    visManager = new G4VisExecutive;
+    visManager->Initialize();     
+
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-    if (ui->IsGUI())
+    if (ui->IsGUI()) {
       // Customize the menubar with a macro file :
-      UImanager->ApplyCommand("/control/execute gui.mac");     
+      UImanager->ApplyCommand("/control/execute gui.mac");
+    }
     G4cout <<" Run initializing ..."<<G4endl;
     UImanager->ApplyCommand("/process/verbose 0");
     UImanager->ApplyCommand("/run/verbose 2");
     UImanager->ApplyCommand("/run/initialize");
-#ifdef G4VIS_USE
+
     // Create empty scene
     G4String visCommand = "/vis/scene/create";
     UImanager->ApplyCommand(visCommand);
@@ -95,11 +90,10 @@ int main(int argc,char** argv) {
     UImanager->ApplyCommand(visCommand);
     visCommand = "/tracking/storeTrajectory 1";
     UImanager->ApplyCommand(visCommand);
-#endif
+
     G4cout <<"Now, please, apply beamOn command..."<<G4endl;
     ui->SessionStart();
     delete ui;
-#endif
 
   } else {
 
@@ -107,7 +101,6 @@ int main(int argc,char** argv) {
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);
-
   }
 
   //Close-out analysis:
@@ -118,10 +111,6 @@ int main(int argc,char** argv) {
   // Complete clean-up
   delete G4AnalysisManager::Instance();
   delete runManager;
-  
-#ifdef G4VIS_USE
   delete visManager;
-#endif
-  
   return 0;
 }

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFSALIntegrationStepper.hh
 //
 // class G4VFSALIntegrationStepper
 //
@@ -57,7 +56,7 @@ class G4VFSALIntegrationStepper
                               G4int              numIntegrationVariables,
                               G4int              numStateVariables=12);
     
-     virtual ~G4VFSALIntegrationStepper();
+     virtual ~G4VFSALIntegrationStepper() = default;
        // Constructor and destructor. No actions.
 
      virtual  void  Stepper(  const G4double y[],
@@ -74,10 +73,6 @@ class G4VFSALIntegrationStepper
      virtual  G4double  DistChord() const = 0; 
        // Estimate the maximum distance of a chord from the true path
        // over the segment last integrated.
-
-     virtual void ComputeRightHandSide( const G4double y[], G4double dydx[] ); 
-       // Must compute the RightHandSide as in the method below
-       // Optionally can cache the input y[] and the dydx[] values computed.
     
 //     virtual G4bool isFSAL() const = 0;
 //    	//Return true if the stepper uses FSAL (First Same As Last)

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc 107058 2017-11-01 14:54:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -36,35 +35,7 @@
 //
 // Creation date: 20.03.1997
 //
-// Modifications:
-//
-// 07-04-98 remove 'tracking cut' of the ionizing particle, mma
-// 04-09-98 new methods SetBining() PrintInfo()
-// 07-09-98 Cleanup
-// 02-02-99 correction inDoIt , L.Urban
-// 10-02-00 modifications , new e.m. structure, L.Urban
-// 28-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 09-08-01 new methods Store/Retrieve PhysicsTable (mma)
-// 13-08-01 new function ComputeRestrictedMeandEdx()  (mma)
-// 17-09-01 migration of Materials to pure STL (mma)
-// 21-09-01 completion of RetrievePhysicsTable() (mma)
-// 29-10-01 all static functions no more inlined (mma)
-// 07-11-01 particleMass and Charge become local variables
-// 26-03-02 change access to cuts in BuildLossTables (V.Ivanchenko)
-// 30-04-02 V.Ivanchenko update to new design
-// 23-12-02 Change interface in order to move to cut per region (VI)
-// 26-12-02 Secondary production moved to derived classes (VI)
-// 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
-// 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
-// 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
-// 08-08-03 STD substitute standard  (V.Ivanchenko)
-// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-// 12-08-05 SetStepLimits(0.2, 0.1*mm) (mma)
-// 02-09-05 Return SetStepLimits(1, 1*mm) (V.Ivantchenko)
-// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
-// 14-01-07 use SetEmModel() and SetFluctModel() from G4VEnergyLossProcess (mma)
+// Modified by Michel Maire and Vladimir Ivanchenko
 //
 // -------------------------------------------------------------------
 //
@@ -144,7 +115,7 @@ void G4eIonisation::PrintInfo()
 
 void G4eIonisation::ProcessDescription(std::ostream& out) const
 {
-  out << "<strong>Ionisation</strong>";
+  out << "  Ionisation";
   G4VEnergyLossProcess::ProcessDescription(out);
 }
 

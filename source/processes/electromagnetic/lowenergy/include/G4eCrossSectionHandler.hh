@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCrossSectionHandler.cc,v 1.21 2009-09-27 10:47:42 sincerti Exp $
 //
 // Author: Vladimir Ivanchenko
 //

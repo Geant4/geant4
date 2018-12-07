@@ -27,7 +27,6 @@
 /// \brief Implementation of the PhysicsListMessenger class
 //
 //
-// $Id: PhysicsListMessenger.cc 107541 2017-11-22 08:24:57Z gcosmo $
 //
 //
 /////////////////////////////////////////////////////////////////////////

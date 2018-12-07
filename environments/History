@@ -1,4 +1,3 @@
-$Id: History 107590 2017-11-24 11:59:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-envs-V10-03-01 / Nov. 24 K.Murakami
+envs-V10-04-01 / Nov. 30, 2018 K.Murakami
+ - g4py, updated for 10.5 release
+ - g4py, fix CMAKE_INSTALL_PREFIX does not work (id 1924) 
+
+envs-V10-03-01 / Nov. 24, 2017 K.Murakami
  - g4py, updated for 10.4 release
  - zmq, new ZeroMQ interface (experimental)
 

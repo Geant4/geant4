@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 /// \file HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //

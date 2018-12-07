@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc 72239 2013-07-12 08:41:30Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

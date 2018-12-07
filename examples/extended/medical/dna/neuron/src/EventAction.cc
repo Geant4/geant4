@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $Id$
 //
 /// \file EventAction.cc
 /// \brief Implementation of the EventAction class

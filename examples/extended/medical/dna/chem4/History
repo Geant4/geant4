@@ -1,4 +1,3 @@
-$Id $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +13,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 Nov 2018 - Vladimir Ivanchenko- chem4-V10-04-02
+- Fixed nightly problem in PhysicsList
+
+19 Nov 2018 - Ivana Hrivnacova   - chem4-V10-04-01
+- Fixed Cmake build
 
 26 Feb 2018 - R. Hatcher         - chem4-V10-04-00
 - Use G4RegisterPhysicsConstructors.icc to ensure G4PhysicsConstructorRegisty

@@ -47,16 +47,17 @@
 #ifndef G4SOLIDSWORKSPACE_HH
 #define G4SOLIDSWORKSPACE_HH
 
+#include "G4TWorkspacePool.hh"
 #include "G4VSolid.hh"
 
 #include "G4PolyconeSide.hh"
 #include "G4PolyhedraSide.hh"
 
-// #include "G4AutoLock.hh"
-
 class G4SolidsWorkspace
 {
   public: 
+
+      typedef G4TWorkspacePool<G4SolidsWorkspace> pool_type;
       G4SolidsWorkspace(G4bool verbose=false);
      ~G4SolidsWorkspace();
 
@@ -69,11 +70,15 @@ class G4SolidsWorkspace
 
      void   SetVerbose(G4bool v) { fVerbose=v; } 
      G4bool GetVerbose()  { return fVerbose;   } 
-  
+
+     static pool_type* GetPool();
+
  protected:  // Implementation methods
+
       void   InitialiseSolids();
 
  private:
+
       // Helper pointers - can be per instance or shared
       G4PlSideManager *fpPolyconeSideSIM;
       G4PhSideManager *fpPolyhedraSideSIM;

@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04CalorimeterParametrisation.cc
 /// \brief Implementation of the ExN04CalorimeterParametrisation class
 //
-// $Id: ExN04CalorimeterParametrisation.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #include "G4SystemOfUnits.hh"
@@ -37,6 +36,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04CalorimeterParametrisation::ExN04CalorimeterParametrisation()
+  : G4VPVParameterisation()
 {
 #include "ExN04DetectorParameterDef.icc"
 }

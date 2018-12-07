@@ -27,7 +27,6 @@
 /// \brief Definition of the ExP01DetectorMessenger class
 //
 //
-// $Id: ExP01DetectorMessenger.hh 71791 2013-06-24 14:08:28Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

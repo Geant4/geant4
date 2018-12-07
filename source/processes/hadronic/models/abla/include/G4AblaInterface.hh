@@ -68,10 +68,10 @@ private:
   G4long eventNumber;
 
   /// \brief Convert an Abla particle to a G4DynamicParticle
-  G4ReactionProduct *toG4Particle(G4int A, G4int Z, G4double kinE, G4double px, G4double py, G4double pz) const;
+  G4ReactionProduct *toG4Particle(G4int A, G4int Z, G4int S, G4double kinE, G4double px, G4double py, G4double pz) const;
 
-  /// \brief Convert A and Z to a G4ParticleDefinition
-  G4ParticleDefinition *toG4ParticleDefinition (G4int A, G4int Z) const;
+  /// \brief Convert A, Z and S to a G4ParticleDefinition
+  G4ParticleDefinition *toG4ParticleDefinition (G4int A, G4int Z, G4int S) const;
 
 };
 

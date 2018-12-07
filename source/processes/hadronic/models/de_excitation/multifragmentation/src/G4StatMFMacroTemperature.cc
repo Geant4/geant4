@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTemperature.cc 100379 2016-10-19 15:05:35Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -34,7 +33,7 @@
 //          Mishustin (FIAS, Frankfurt, INR, Moscow and Kurchatov Institute, 
 //          Moscow, pshenich@fias.uni-frankfurt.de) make algorithm closer to
 //          original MF model
-// 16.04.10 V.Ivanchenko improved logic of solving equation for tempetature
+// 16.04.10 V.Ivanchenko improved logic of solving equation for temperature
 //          to protect code from rare unwanted exception; moved constructor 
 //          and destructor to source  
 // 28.10.10 V.Ivanchenko defined members in constructor and cleaned up

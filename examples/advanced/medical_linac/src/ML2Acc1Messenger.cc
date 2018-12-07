@@ -43,6 +43,8 @@
 
 #include "ML2Acc1Messenger.hh"
 #include "ML2Acc1.hh"
+#include "ML2Accelerator.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"

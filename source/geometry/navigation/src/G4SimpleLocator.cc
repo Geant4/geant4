@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleLocator.cc 96743 2016-05-03 08:01:33Z gcosmo $
 //
 // Class G4SimpleLocator implementation
 //

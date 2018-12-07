@@ -1,4 +1,3 @@
-$Id: $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+9 November 2018:  I. Hrivnacova (exExoticphysics-V10-04-00)
+- Added new dmparticle example in CMake and README's
 
 27 November 2014: I. Hrivnacova (exExoticphysics-V10-00-02)
 - Minor fixes in top README, .README

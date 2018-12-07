@@ -26,7 +26,6 @@
 /// \file medical/fanoCavity/src/PhysListEmStandard_WVI.cc
 /// \brief Implementation of the PhysListEmStandard_WVI class
 //
-// $Id: PhysListEmStandard_WVI.cc 103180 2017-03-21 10:33:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,13 +70,14 @@ PhysListEmStandard_WVI::PhysListEmStandard_WVI(const G4String& name,
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
   param->SetVerbose(1);
-  param->SetMinEnergy(100*eV);
+  param->SetMinEnergy(10*eV);
   param->SetMaxEnergy(10*GeV);
   param->SetNumberOfBinsPerDecade(20);
-  param->SetLowestElectronEnergy(1*eV);
+  param->SetLowestElectronEnergy(10*eV);
+  param->SetStepFunction(0.2, 100*um);
   param->SetBuildCSDARange(true);
   param->SetMaxEnergyForCSDARange(10*GeV);
-  param->SetMscThetaLimit(0.2);
+  param->SetMscThetaLimit(0.15);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -118,40 +118,39 @@ void PhysListEmStandard_WVI::ConstructProcess()
 
       G4MuMultipleScattering* eMsc = new G4MuMultipleScattering();
       G4WentzelVIModel* wvi = new G4WentzelVIModel();
-      //wvi->SetFixedCut(50*eV);
-      eMsc->SetEmModel(wvi,1); 
+      eMsc->SetEmModel(wvi); 
 
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetEmModel(new MyMollerBhabhaModel(), 1);
+      eIoni->SetEmModel(new MyMollerBhabhaModel());
 
       G4CoulombScattering* cs = new G4CoulombScattering();
       G4eCoulombScatteringModel* single = new G4eCoulombScatteringModel();
       cs->SetEmModel(single, 1);
 
-      pmanager->AddProcess(eMsc, -1, 1, 1);
-      pmanager->AddProcess(eIoni,-1, 2, 2);
-      pmanager->AddProcess(cs,   -1,-1, 3);
+      pmanager->AddProcess(eMsc, -1, 1,-1);
+      pmanager->AddProcess(eIoni,-1, 2, 1);
+      pmanager->AddProcess(cs,   -1,-1, 2);
                   
     } else if (particleName == "e+") {
       //positron
 
       G4MuMultipleScattering* pMsc = new G4MuMultipleScattering();
-      pMsc->AddEmModel(1, new G4WentzelVIModel());
+      pMsc->SetEmModel(new G4WentzelVIModel());
       G4eIonisation* pIoni = new G4eIonisation();
       pIoni->SetEmModel(new MyMollerBhabhaModel);
                                
-      pmanager->AddProcess(pMsc,                      -1, 1, 1);
-      pmanager->AddProcess(pIoni,                     -1, 2, 2);
-      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 3);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 4);
+      pmanager->AddProcess(pMsc,                      -1, 1,-1);
+      pmanager->AddProcess(pIoni,                     -1, 2, 1);
+      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 2);
+      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);
                    
     } else if( particleName == "proton" ) {
       //proton
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       msc->AddEmModel(1, new G4WentzelVIModel());
-      pmanager->AddProcess(msc,                       -1, 1, 1);
-      pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);      
+      pmanager->AddProcess(msc,                       -1, 1,-1);
+      pmanager->AddProcess(new G4hIonisation,         -1, 2, 1);
+      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 2);      
     }
   }
 }

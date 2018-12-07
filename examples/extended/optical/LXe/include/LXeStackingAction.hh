@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeStackingAction.hh 109652 2018-05-04 08:49:34Z gcosmo $
 //
 /// \file optical/LXe/include/LXeStackingAction.hh
 /// \brief Definition of the LXeStackingAction class

@@ -1,0 +1,15 @@
+# Macro file for the initialization of example field04
+# in interactive session
+#
+#
+# Set some verbose
+/control/verbose 1
+/run/verbose 1
+#/event/verbose 2
+#/tracking/verbose 1
+#
+# Initialize Geant4
+/run/initialize
+#
+# Visualization setting
+/control/execute vis.mac

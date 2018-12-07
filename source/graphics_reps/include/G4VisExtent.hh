@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.hh 102801 2017-02-22 15:17:53Z gcosmo $
 //
 // 
 // A.Walkden 28/11/95
@@ -60,7 +59,9 @@ public: // With description
                G4double zmin = 0., G4double zmax = 0.);
   G4VisExtent (const G4Point3D& centre, G4double radius);
   ~G4VisExtent ();
+  static const G4VisExtent& GetNullExtent ();
   G4bool operator != (const G4VisExtent& e) const;
+  G4bool operator == (const G4VisExtent& e) const {return !operator!=(e);}
   G4double  GetXmin         () const;
   G4double  GetXmax         () const;
   G4double  GetYmin         () const;

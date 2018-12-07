@@ -41,55 +41,114 @@
 //*******************************************************//
 
 
+#include "G4ios.hh"
 #include "ML2RunAction.hh"
+#include "ML2Run.hh"
+#include "G4THitsMap.hh"
+#include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"   
 
-CML2RunAction::CML2RunAction(CML2Convergence *conv, G4int nB, G4bool bOV)
+CML2RunAction::CML2RunAction(CML2Convergence *conv, G4int nB, G4bool bOV, G4int voxelX, G4int voxelY, G4int voxelZ): fNx(voxelX), fNy(voxelY), fNz(voxelZ)
 {
-    bRotationTranslationFilesNames=true;
-    convergence=conv;
-    nBeam=nB;
-    bOnlyVisio=bOV;
-    nLoop=0;
+    bRotationTranslationFileNames = true;
+    convergence = conv;
+    nBeam = nB;
+    bOnlyVisio = bOV;
+    nLoop = 0;
+
+
+  fSDName.push_back(G4String("PhantomSD"));
 }
 
 CML2RunAction::~CML2RunAction(void)
 {
+ fSDName.clear();
 }
-void CML2RunAction::BeginOfRunAction(const G4Run *)
+
+G4Run* CML2RunAction::GenerateRun()
 {
+  // SUSANNA
+  // Generate new RUN object, which is specially
+  // dedicated for MultiFunctionalDetector scheme.
+  return new ML2Run(fSDName);
+}
+
+void CML2RunAction::BeginOfRunAction(const G4Run * aRun)
+{
+ G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+
     G4String fullName;
-    if (bRotationTranslationFilesNames)
-    {fullName=CML2AcceleratorConstruction::GetInstance()->getCurrentRotationString()+
-                CML2PhantomConstruction::GetInstance()->getCurrentTranslationString();}
+    if (bRotationTranslationFileNames)
+    {
+    	fullName = CML2AcceleratorConstruction::GetInstance()->getCurrentRotationString()+
+    			CML2PhantomConstruction::GetInstance()->getCurrentTranslationString();
+    }
     else
-    {fullName="";}
-    CML2PhantomConstruction::GetInstance()->setNewName(fullName);
+    {
+    	fullName = "";
+    }
+//    CML2PhantomConstruction::GetInstance()->setNewName(fullName);
 
     CML2AcceleratorConstruction::GetInstance()->writeInfo();
     CML2PhantomConstruction::GetInstance()->writeInfo();
 
-    std::cout<<"*********************************************"<<'\n';
-    if (convergence->getNMaxLoops()<0 || bOnlyVisio)
+
+    G4cout << "*********************************************" << G4endl;
+    if (convergence -> getNMaxLoops() < 0 || bOnlyVisio)
     {
-        std::cout << "loop n. "<<++nLoop <<'\n';
+        G4cout << "loop n. " << ++nLoop << G4endl;
+        G4cout << "Launched " << nBeam << " random primary particles" << G4endl;
     }
     else
     {
-        std::cout << "loop n. "<<++nLoop<<"/" <<convergence->getNMaxLoops() <<'\n';
+    	G4cout << "loop n. " << ++nLoop << "/" << convergence->getNMaxLoops() << G4endl;
+    	G4cout << "Launched " << nBeam << " random primary particles" << G4endl;
     }
     if (!bOnlyVisio)
-    {std::cout << "Launched "<< nBeam <<" random primary particles" << '\n';}
-    std::cout<<"*********************************************"<<'\n';
+    {
+    	G4cout <<"Launched " << nBeam << " random primary particles" << G4endl;
+    }
+    G4cout<<"*********************************************"<<'\n';
     MyTime.Start();
 }
-void CML2RunAction::EndOfRunAction(const G4Run *)
+void CML2RunAction::EndOfRunAction(const G4Run * aRun)
 {
-    CML2WorldConstruction::GetInstance()->savePhantomData();
-    CML2WorldConstruction::GetInstance()->savePhaseSpaceData();
+
+   if(!IsMaster()) return;
+
+  ML2Run* ml2Run = (ML2Run*)aRun;
+  //--- Dump all socred quantities involved in RE02Run.
+  ml2Run->DumpAllScorer();
+  //---
+
+  //---------------------------------------------
+  // Dump accumulated quantities for this RUN.
+  //  (Display only central region of x-y plane)
+  //---------------------------------------------
+  G4THitsMap<G4double>* totDose  = ml2Run->GetHitsMap("PhantomSD/TotalDose");
+
+  G4int ix;  
+  G4int iy;
+  G4int iz;
+
+  std::ofstream  file("totDose.txt");
+  for ( iz = 0; iz < fNz; iz++){   
+    for ( iy = 0; iy < fNy; iy++){ 
+      for (ix = 0; ix < fNx; ix++){ 
+        G4double* TotD = (*totDose)[CopyNo(ix,iy,iz)];
+        if ( !TotD ) TotD = new G4double(0.0);
+        if (TotD!=0) file << ix << " "<<iy<<" "<<iz<<" "<< *TotD/gray << G4endl;
+      }
+    }
+  }
+  file.close();
+
+  //  CML2WorldConstruction::GetInstance()->savePhantomData();
+  //  CML2WorldConstruction::GetInstance()->savePhaseSpaceData();
     convergence->saveResults();
 
     MyTime.Stop();
-    loopElapsedTime=MyTime.GetUserElapsed();
-    std::cout << "loop elapsed time [s] : "<< loopElapsedTime << '\n';
-    std::cout <<'\n';
+    loopElapsedTime = MyTime.GetUserElapsed();
+
+    G4cout << "loop elapsed time [s] : " << loopElapsedTime << '\n' << G4endl;
 }

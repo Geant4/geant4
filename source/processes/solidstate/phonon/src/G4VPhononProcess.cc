@@ -26,7 +26,6 @@
 /// \file processes/phonon/src/G4VPhononProcess.cc
 /// \brief Implementation of the G4VPhononProcess base class
 //
-// $Id: G4VPhononProcess.cc 76777 2013-11-15 16:20:56Z mkelsey $
 //
 // 20131111  Add verbosity to report creating secondaries
 

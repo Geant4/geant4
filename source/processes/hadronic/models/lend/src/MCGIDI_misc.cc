@@ -99,7 +99,7 @@ int MCGIDI_miscNameToZAm( statusMessageReporting *smr, const char *name, int *Z,
 
     for( p = name, q = s; ( *p != 0 ) && !isdigit( *p ) && ( *p != '_' ); p++, q++ ) *q = *p;   /* '_' only for "natural". */
     if( *p == 0 ) {
-        smr_setReportError2( smr, smr_unknownID, 0, "unsupport particle name = '%s'", name );
+        smr_setReportError2( smr, smr_unknownID, 0, "unsupported particle name = '%s'", name );
         return( 1 );
     }
     *q = 0;

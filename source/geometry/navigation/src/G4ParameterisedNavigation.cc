@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc 90050 2015-05-11 14:34:51Z gcosmo $
 //
 //
 // class G4ParameterisedNavigation Implementation

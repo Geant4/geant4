@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryPionBuilder.hh 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -53,7 +52,7 @@
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
-#include "G4VCrossSectionDataSet.hh"
+
 
 class G4FTFBinaryPionBuilder : public G4VPionBuilder
 {
@@ -76,8 +75,6 @@ class G4FTFBinaryPionBuilder : public G4VPionBuilder
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
-
-    G4VCrossSectionDataSet* thePiData;
     G4double theMin;
     G4double theMax;
 };

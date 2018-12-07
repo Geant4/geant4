@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSSteppingAction.hh 99622 2016-09-29 10:16:04Z gcosmo $
 //
 /// \file optical/wls/include/WLSSteppingAction.hh
 /// \brief Definition of the WLSSteppingAction class

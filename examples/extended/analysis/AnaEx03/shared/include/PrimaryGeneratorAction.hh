@@ -27,7 +27,6 @@
 /// \brief Definition of the PrimaryGeneratorAction class
 //
 //
-// $Id: PrimaryGeneratorAction.hh 98243 2016-07-04 16:58:38Z gcosmo $
 //
 // 
 

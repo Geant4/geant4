@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "dna/microyz/.README.txt"
 ///\brief Example microyz README page

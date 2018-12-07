@@ -142,6 +142,10 @@ namespace G4INCL {
           case PiMinus:
           case KPlus:
           case KMinus:
+          case KZero:
+          case KZeroBar:
+          case KShort:
+          case KLong:
           case SigmaPlus:
           case SigmaZero:
           case SigmaMinus:
@@ -149,7 +153,8 @@ namespace G4INCL {
             break;
           case Composite:
             S += (*i)->getZ() * thePotential->getSeparationEnergy(Proton)
-              + ((*i)->getA() - (*i)->getZ()) * thePotential->getSeparationEnergy(Neutron);
+              + ((*i)->getA() + (*i)->getS() - (*i)->getZ()) * thePotential->getSeparationEnergy(Neutron) 
+              - (*i)->getS() * thePotential->getSeparationEnergy(Lambda);
             break;
           default:
             break;
@@ -209,7 +214,7 @@ namespace G4INCL {
 
     /** \brief Force the phase-space decay of the Nucleus.
      *
-     * Only applied if Z==0 or Z==A.
+     * Only applied if Z==0 or N==0.
      *
      * \return true if the nucleus was forced to decay.
      */
@@ -487,6 +492,7 @@ namespace G4INCL {
     /// \brief The number of entering kaons
     G4int theNkaonplusInitial;
     G4int theNkaonminusInitial;
+    
     G4double initialInternalEnergy;
     ThreeVector incomingAngularMomentum, incomingMomentum;
     ThreeVector initialCenterOfMass;

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4H2Messenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
 
 // The messenger class for H2 management.
 // It implements commands in /analysis/h2 directory.

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.hh 106723 2017-10-20 09:50:34Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -139,7 +138,6 @@ private:
   G4double fStep;
   G4double fMaxLifeTime;
 
-  G4double LevelDensity;
   G4double Tolerance;
 
   G4bool   fICM;

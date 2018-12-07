@@ -26,7 +26,6 @@
 /// \file RE06/src/RE06SteppingVerbose.cc
 /// \brief Implementation of the RE06SteppingVerbose class
 //
-// $Id: RE06SteppingVerbose.cc 84600 2014-10-17 07:43:51Z gcosmo $
 //
 
 #include "RE06SteppingVerbose.hh"

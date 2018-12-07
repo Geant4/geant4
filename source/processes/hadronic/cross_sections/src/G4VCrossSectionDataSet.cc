@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.cc 110787 2018-06-14 06:43:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -42,17 +41,16 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
-#include "G4DynamicParticle.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4Isotope.hh"
 #include "G4NistManager.hh"
 #include "G4HadronicException.hh"
-#include "G4HadTmpUtil.hh"
 #include "Randomize.hh"
+#include "G4HadronicParameters.hh"
 
 G4VCrossSectionDataSet::G4VCrossSectionDataSet(const G4String& nam) :
-  verboseLevel(0),minKinEnergy(0.0),maxKinEnergy(100*TeV),
+  verboseLevel(0),minKinEnergy(0.0),maxKinEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() ),
   isForAllAtomsAndEnergies(false),name(nam) 
 {
   registry = G4CrossSectionDataSetRegistry::Instance();

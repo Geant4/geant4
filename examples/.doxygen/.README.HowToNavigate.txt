@@ -1,4 +1,3 @@
-$Id$
 
 ///\file ".README.HowToNavigate.txt"
 ///\brief Examples How To Navigate README page

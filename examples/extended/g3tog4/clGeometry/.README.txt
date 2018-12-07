@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "g3tog4/clGeometry/.README.txt"
 ///\brief Example clGeometry README page

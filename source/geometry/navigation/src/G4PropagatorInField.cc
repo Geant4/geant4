@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc 110728 2018-06-11 06:12:39Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PropagatorInField Implementation
@@ -148,6 +147,8 @@ G4PropagatorInField::ComputeStep(
                 G4double&          currentSafety,                // IN/OUT
                 G4VPhysicalVolume* pPhysVol)
 {  
+  GetChordFinder()->OnComputeStep();
+
   // If CurrentProposedStepLength is too small for finding Chords
   // then return with no action (for now - TODO: some action)
   //

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationDefaultGEMFactory.hh 96402 2016-04-12 07:30:48Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by J. M. Quesada (July 2009) on base of V. Lara code

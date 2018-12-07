@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4LorentzVector.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 #ifndef G4LorentzVector_hh
 #define G4LorentzVector_hh

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc 97392 2016-06-02 10:10:32Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -62,6 +61,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#ifdef G4MULTITHREADED
+G4Mutex G4EnergyLossForExtrapolator::extrapolatorMutex = G4MUTEX_INITIALIZER;
+#endif
+
 G4TablesForExtrapolator* G4EnergyLossForExtrapolator::tables = nullptr;
 
 G4EnergyLossForExtrapolator::G4EnergyLossForExtrapolator(G4int verb)
@@ -87,6 +90,24 @@ G4EnergyLossForExtrapolator::G4EnergyLossForExtrapolator(G4int verb)
     = idxInvRangeProton = idxMscElectron = 0;
  
   electron = positron = proton = muonPlus = muonMinus = nullptr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4EnergyLossForExtrapolator::~G4EnergyLossForExtrapolator()
+{
+  if(tables) {
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&extrapolatorMutex);
+    if (tables) {
+#endif
+      delete tables;
+      tables = nullptr;
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&extrapolatorMutex);
+#endif
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -324,30 +345,24 @@ void G4EnergyLossForExtrapolator::Initialisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4AutoLock.hh"
-namespace { G4Mutex G4EnergyLossForExtrapolatorMutex = G4MUTEX_INITIALIZER; }
-
 void G4EnergyLossForExtrapolator::BuildTables()
 {
-  G4AutoLock l(&G4EnergyLossForExtrapolatorMutex);
-
   if(!tables) {
-    if(verbose > 0) {
-      G4cout << "### G4EnergyLossForExtrapolator::BuildTables for "
-	     << nmat << " materials Nbins= " << nbins 
-	     << " Emin(MeV)= " << emin << "  Emax(MeV)= " << emax << G4endl;
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&extrapolatorMutex);
+    if (!tables) {
+#endif
+      if(verbose > 0) {
+	G4cout << "### G4EnergyLossForExtrapolator::BuildTables for "
+	       << nmat << " materials Nbins= " << nbins 
+	       << " Emin(MeV)= " << emin << "  Emax(MeV)= " << emax << G4endl;
+      }
+      tables = new G4TablesForExtrapolator(verbose, nbins, emin, emax);
+#ifdef G4MULTITHREADED
     }
-    tables = new G4TablesForExtrapolator(verbose, nbins, emin, emax);
+    G4MUTEXUNLOCK(&extrapolatorMutex);
+#endif
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4EnergyLossForExtrapolator::~G4EnergyLossForExtrapolator()
-{
-  G4AutoLock l(&G4EnergyLossForExtrapolatorMutex);
-  delete tables;
-  tables = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

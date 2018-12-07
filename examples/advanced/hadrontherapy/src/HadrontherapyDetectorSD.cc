@@ -71,8 +71,7 @@ G4VSensitiveDetector(name)
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorSD::~HadrontherapyDetectorSD()
-{
-}
+{}
 
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorSD::Initialize(G4HCofThisEvent*)
@@ -92,12 +91,12 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
     
     // Get kinetic energy
     G4Track * theTrack = aStep  ->  GetTrack();
-    G4double kineticEnergy =  theTrack -> GetKineticEnergy();
     
     G4ParticleDefinition *particleDef = theTrack -> GetDefinition();
     //Get particle name
     G4String particleName =  particleDef -> GetParticleName();
     
+    // Get particle PDG code
     G4int pdg = particleDef ->GetPDGEncoding();
     
     // Get unique track_id (in an event)
@@ -119,13 +118,15 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
     G4TouchableHandle touchPreStep = PreStep->GetTouchableHandle();
     G4VPhysicalVolume* volumePre = touchPreStep->GetVolume();
     G4String namePre = volumePre->GetName();
-    //G4double eKin = aStep -> GetPreStepPoint() -> GetKineticEnergy();
+    
+    
+    
     
     
     HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
     HadrontherapyLet* let = HadrontherapyLet::GetInstance();
     
-   	G4int* hitTrack = matrix -> GetHitTrack(i,j,k);
+    G4int* hitTrack = matrix -> GetHitTrack(i,j,k);
     
     
     //  ******************** let ***************************
@@ -133,17 +134,50 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
     {
         if ( !(Z==0 && A==1) ) // All but not neutrons
         {
-            if( energyDeposit>0. && DX >0. )
+            if( energyDeposit>0. && DX >0. )// calculate only energy deposit
             {
-                if (pdg !=22) // not gamma
+                if (pdg !=22 && pdg !=11) // not gamma and electrons
                 {
-                    let -> FillEnergySpectrum(trackID, particleDef,energyDeposit, DX, i, j, k);
+                    
+                    // Get the pre-step kinetic energy
+                    G4double eKinPre = aStep -> GetPreStepPoint() -> GetKineticEnergy();
+                    // Get the post-step kinetic energy
+                    G4double eKinPost = aStep -> GetPostStepPoint() -> GetKineticEnergy();
+                    // Get the step average kinetic energy
+                    G4double eKinMean = (eKinPre + eKinPost) * 0.5;
+                    
+                    // get the material
+                    G4Material * materialStep = aStep -> GetPreStepPoint() -> GetMaterial();
+                    
+                    // get the secondary paticles
+                    G4Step fstep = *theTrack -> GetStep();
+                    // store all the secondary partilce in current step
+                    const std::vector<const G4Track*> * secondary = fstep.GetSecondaryInCurrentStep();
+                    
+                    size_t SecondarySize = (*secondary).size();
+                    G4double EnergySecondary = 0.;
+                    
+                    // get secondary electrons energy deposited
+                    if (SecondarySize) // calculate only secondary particles
+                    {
+                        for (size_t numsec = 0; numsec< SecondarySize ; numsec ++)
+                        {
+                            //Get the PDG code of every secondaty particles in current step
+                            G4int PDGSecondary=(*secondary)[numsec]->GetDefinition()->GetPDGEncoding();
+                            
+                            if(PDGSecondary == 11) // calculate only secondary electrons
+                            {
+                                // calculate the energy deposit of secondary electrons in current step
+                                EnergySecondary += (*secondary)[numsec]->GetKineticEnergy();
+                            }
+                        }
+                        
+                    }
+                    
+                    // call the let filldatas function to calculate let
+                    let -> FillEnergySpectrum(trackID, particleDef, eKinMean, materialStep,
+                                              energyDeposit,EnergySecondary,DX, i, j, k);
                 }
-                else if (kineticEnergy > 50.*keV) // gamma cut
-                {
-                    let -> FillEnergySpectrum(trackID, particleDef,energyDeposit, DX, i , j, k);
-                }
-                
             }
         }
     }
@@ -181,7 +215,7 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* )
              * Create a hit with the information of position is in the detector
              */
             HadrontherapyDetectorHit* detectorHit = new HadrontherapyDetectorHit();
-            detectorHit -> SetEdepAndPosition(i, j, k, energyDeposit); 
+            detectorHit -> SetEdepAndPosition(i, j, k, energyDeposit);
             HitsCollection -> insert(detectorHit);
         }
     }
@@ -194,8 +228,8 @@ void HadrontherapyDetectorSD::EndOfEvent(G4HCofThisEvent* HCE)
     
     static G4int HCID = -1;
     if(HCID < 0)
-    { 
-        HCID = GetCollectionID(0); 
+    {
+        HCID = GetCollectionID(0);
     }
     
     HCE -> AddHitsCollection(HCID,HitsCollection);

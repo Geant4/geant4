@@ -1,4 +1,3 @@
-$Id: History 108179 2018-01-18 08:53:39Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +13,26 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+20-Nov-2018 A. Ribon         (had-hadronization-V10-04-07)
+-  Corrected only the History file (no other changes).
+
+20-Nov-2018 A. Ribon         (had-hadronization-V10-04-06)
+-  Minor clean-up and indentation: no changes in the random sequence.
+
+26-Oct-2018 V. Uzhinsky      (had-hadronization-V10-04-05)
+-  G4LundStringFragmentation : tuning of strange - anti-strange probability
+   production as a function of energy to describe NA61/SHINE 31 GeV/c p-C 
+   data on K+ / K- production. Decreased also the Lambda0 production for 
+   NA61/SHINE 158 GeV/c and 31 GeV/c p-C : for the former good agreement,
+   while for the latter the simulation underestimates the data.
+-  G4QGSMFragmentation : new algorithm for last string decay a-la Lund
+   is implemented. Improved the algorithm to stop the fragmentation.
+   Tuning of parameters with NA49 and NA61/SHINE data was performed.
+
+04-Oct-2018 A. Ribon         (had-hadronization-V10-04-04)
+-  Coverity fix and general clean-up: no changes in the physics, nor
+   to the random sequence.
 
 18-Jan-2018 A. Ribon         (had-hadronization-V10-04-03)
 -  G4VLongitudinalStringDecay : removed useless caching in the method

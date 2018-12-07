@@ -32,7 +32,7 @@ inline bool hatcher::check_polyline(vec3f* listPoints,unsigned int aNumber){
 
   if ((int)aNumber-firstOffset <3) {
 #ifdef TOOLS_HATCHER_DEBUG
-    ::printf("hatcher::check_polyline : ERROR the polygone you give have not enought points!\n\n");
+    ::printf("hatcher::check_polyline : ERROR the polygon you give has not enough points!\n\n");
 #endif
     return false;
   }
@@ -273,7 +273,7 @@ inline bool hatcher::compute_polyline (vec3f* tabPoints,unsigned int aNumber) {
     return true;
   } else {
 #ifdef TOOLS_HATCHER_DEBUG 
-    ::printf("hatcher::drawStripPolyline : WARNING there is a case witch was not done in the algotithm...possibly some drawing problems.\n\n");
+    ::printf("hatcher::drawStripPolyline : WARNING there is a case which was not done in the algorithm...possibly some drawing problems.\n\n");
 #endif
 
   }

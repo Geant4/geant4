@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 110674 2018-06-07 10:30:11Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -31,24 +30,39 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         templates.hh
         tls.hh
         G4Allocator.hh
+        G4AutoDelete.hh
+        G4ios.hh
+        G4coutDestination.hh
+        G4coutFormatters.hh
+        G4strstreambuf.hh
         G4strstreambuf.icc
         G4AllocatorPool.hh
         G4AllocatorList.hh
         G4ApplicationState.hh
         G4AutoLock.hh
+        G4BuffercoutDestination.hh
+        G4Cache.hh
+        G4CacheDetails.hh
         G4DataVector.hh
         G4DataVector.icc
+        G4EnvironmentUtils.hh
         G4ErrorPropagatorData.hh
         G4ErrorPropagatorData.icc
         G4Evaluator.hh
         G4Exception.hh
         G4ExceptionSeverity.hh
         G4Exp.hh
+        G4FilecoutDestination.hh
         G4FPEDetection.hh
         G4FastVector.hh
         G4GeometryTolerance.hh
+        G4LockcoutDestination.hh
         G4Log.hh
         G4LPhysicsFreeVector.hh
+        G4MasterForwardcoutDestination.hh
+        G4MTBarrier.hh
+        G4MTcoutDestination.hh
+        G4MulticoutDestination.hh
         G4OrderedTable.hh
         G4PhysicalConstants.hh
         G4PhysicsFreeVector.hh
@@ -76,46 +90,42 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4String.icc
         G4SystemOfUnits.hh
         G4Threading.hh
+        G4ThreadLocalSingleton.hh
         G4ThreeVector.hh
+        G4TiMemory.hh
         G4Timer.hh
         G4Timer.icc
         G4Tokenizer.hh
+        G4TWorkspacePool.hh
         G4TwoVector.hh
         G4Types.hh
         G4UnitsTable.hh
         G4UnitsTable.icc
         G4UserLimits.hh
         G4UserLimits.icc
+        G4Version.hh
         G4VExceptionHandler.hh
         G4VNotifier.hh
         G4VStateDependent.hh
-        G4Version.hh
-        G4coutDestination.hh
-        G4ios.hh
-        G4strstreambuf.hh
-        G4MTcoutDestination.hh
-        G4CacheDetails.hh
-        G4Cache.hh
-        G4ThreadLocalSingleton.hh
-        G4AutoDelete.hh
-        G4TWorkspacePool.hh
-        G4MTBarrier.hh
-        G4coutFormatters.hh
-        G4MulticoutDestination.hh
-        G4LockcoutDestination.hh
-        G4MasterForwardcoutDestination.hh
-        G4FilecoutDestination.hh
-        G4BuffercoutDestination.hh
-        G4TiMemory.hh
     SOURCES
         G4Allocator.cc
         G4AllocatorPool.cc
         G4AllocatorList.cc
+        G4BuffercoutDestination.cc
+        G4CacheDetails.cc
+        G4coutDestination.cc
+        G4coutFormatters.cc
         G4DataVector.cc
         G4ErrorPropagatorData.cc
         G4Exception.cc
+        G4FilecoutDestination.cc
         G4GeometryTolerance.cc
+        G4ios.cc
+        G4LockcoutDestination.cc
         G4LPhysicsFreeVector.cc
+        G4MasterForwardcoutDestination.cc
+        G4MTBarrier.cc
+        G4MTcoutDestination.cc
         G4OrderedTable.cc
         G4PhysicsFreeVector.cc
         G4PhysicsLinearVector.cc
@@ -135,16 +145,6 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4VExceptionHandler.cc
         G4VNotifier.cc
         G4VStateDependent.cc
-        G4coutDestination.cc
-        G4ios.cc
-        G4MTcoutDestination.cc
-        G4CacheDetails.cc
-        G4MTBarrier.cc
-        G4coutFormatters.cc
-        G4LockcoutDestination.cc
-        G4MasterForwardcoutDestination.cc
-        G4FilecoutDestination.cc
-        G4BuffercoutDestination.cc
     GRANULAR_DEPENDENCIES
     GLOBAL_DEPENDENCIES
     LINK_LIBRARIES

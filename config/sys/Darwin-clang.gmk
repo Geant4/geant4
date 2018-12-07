@@ -10,6 +10,7 @@ ifeq ($(G4SYSTEM),Darwin-clang)
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
   CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
   CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
+  CPPFLAGS  += -DGL_SILENCE_DEPRECATION
   G4USE_STD11 := 1
   ifdef G4USE_STD14
     CPPFLAGS  += -std=c++14
@@ -47,7 +48,7 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     FCFLAGS   += -O2 -g
     CCFLAGS   += -O2 -g
   endif
-  G4RUNPATHOPTION := -Wl,-rpath 
+  G4RUNPATHOPTION := -Wl,-rpath, 
 #  G4STATIC_MODE += -Wl,-force_load
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
@@ -84,12 +85,12 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif
   ifndef OGLLIBS
-    QTGLPATH  := $(shell test -f /System/Library/Frameworks/OpenGL.framework/OpenGL && echo "/System/Library/Frameworks/OpenGL.framework")
-    ifeq ($(QTGLPATH),/System/Library/Frameworks/OpenGL.framework)
-      OGLLIBS := -F/System/Library/Frameworks -framework OpenGL -framework AGL 
-      ifeq ($(G4VIS_USE_OPENGLX),1)
-        OGLLIBS += -L$(OGLHOME)/lib -lGLU -lGL
-      endif
+    OGLPATH  := $(shell test -f /Library/Frameworks/OpenGL.framework/OpenGL && echo "/Library/Frameworks/OpenGL.framework")
+    ifneq ($(OGLPATH),/Library/Frameworks/OpenGL.framework)
+      OGLPATH  := $(shell test -f /System/Library/Frameworks/OpenGL.framework/OpenGL && echo "/System/Library/Frameworks/OpenGL.framework")
+    endif
+    ifneq ($(OGLPATH),)
+      OGLLIBS := -F$(OGLPATH)/.. -framework OpenGL -framework AGL 
     else
       OGLLIBS := -L$(OGLHOME)/lib -lGLU -lGL
     endif

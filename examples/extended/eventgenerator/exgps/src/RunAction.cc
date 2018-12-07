@@ -27,7 +27,6 @@
 /// \brief Implementation of the RunAction class
 //
 //
-// $Id: RunAction.cc 76411 2013-11-09 21:48:43Z ldesorgh $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

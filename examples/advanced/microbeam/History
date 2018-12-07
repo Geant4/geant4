@@ -1,5 +1,4 @@
 -------------------------------------------------------------------
-$Id: History 70524 2013-05-31 16:36:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +7,21 @@ $Id: History 70524 2013-05-31 16:36:26Z gcosmo $
 
                        Package History file
                        --------------------
+
+04 Sep 2018 - S. Incerti - tag microbeam-V10-04-04
+- updated visualization
+
+22 July 2018 - V.Ivanchenko - tag microbeam-V10-04-03
+- DetectorConstruction - removed user limits per volume
+- microbeam.cc - use default random engine
+
+22 July 2018 - V.Ivanchenko - tag microbeam-V10-04-02
+- PhysicsListMessenger - the default step limit is set to 1 mm
+
+20 July 2018 - V.Ivanchenko - tag microbeam-V10-04-01
+- StepMax - take thread safe class from EM extended examples
+- PhysicsList, PhysicsListMessenger - use StepMax
+- DetectorConstruction - protect from double initialisation
 
 10 May 2018 - B. Morgan - tag microbeam-V10-04-00
 - Include G4Types before use of G4MULTITHREADED. For forward

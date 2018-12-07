@@ -1,4 +1,3 @@
-//$Id$
 -----------------------------------------
 ///\file "medical/dna/clustering/.README.txt"
 ///\brief Exampleclustering README page

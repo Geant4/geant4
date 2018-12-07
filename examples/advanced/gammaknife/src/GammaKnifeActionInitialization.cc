@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GammaKnifeActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file GammaKnifeActionInitialization.cc
 /// \brief Implementation of the GammaKnifeActionInitialization class

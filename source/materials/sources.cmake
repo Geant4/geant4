@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 106115 2017-09-13 10:16:51Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -33,9 +32,7 @@ GEANT4_DEFINE_MODULE(NAME G4materials
 			G4AtomicBond.hh
 			G4AtomicFormFactor.hh
 			G4AtomicShells.hh
-			G4AtomicShells_EADL.hh 
-			G4AtomicShells_EADL.hh 
-			G4AtomicShells_EADL.hh 
+			G4AtomicShells_XDB_EADL.hh 
 			G4CrystalAtomBase.hh
 			G4CrystalBravaisLattices.h
 			G4CrystalLatticeSystems.h
@@ -48,6 +45,7 @@ GEANT4_DEFINE_MODULE(NAME G4materials
 			G4ElementVector.hh
 			G4ExtDEDXTable.hh
 			G4ExtendedMaterial.hh
+			G4ICRU90StoppingData.hh
 			G4IonisParamElm.hh
 			G4IonisParamMat.hh
 			G4IonStoppingData.hh
@@ -77,9 +75,7 @@ GEANT4_DEFINE_MODULE(NAME G4materials
 			G4AtomicBond.cc
 			G4AtomicFormFactor.cc
 			G4AtomicShells.cc
-			G4AtomicShells_EADL.cc 
-			G4AtomicShells_EADL.cc 
-			G4AtomicShells_EADL.cc 
+			G4AtomicShells_XDB_EADL.cc 
 			G4CrystalExtension.cc
 			G4CrystalUnitCell.cc
 			G4DensityEffectData.cc
@@ -87,6 +83,7 @@ GEANT4_DEFINE_MODULE(NAME G4materials
 			G4ElementData.cc
 			G4ExtDEDXTable.cc
 			G4ExtendedMaterial.cc
+			G4ICRU90StoppingData.cc
 			G4IonisParamElm.cc
 			G4IonisParamMat.cc
 			G4IonStoppingData.cc

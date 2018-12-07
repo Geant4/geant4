@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -106,8 +106,8 @@ eBrem:   for  e-    SubType= 3
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGenUrban
 ========== Computation of cross section matrices for adjoint models ==========
 Build adjoint cross section matrices for Inv_eIon_model
 Build adjoint cross section matrices for AdjointeBremModel
@@ -321,11 +321,11 @@ nb event 175000
 1%  Precision reached!
  Run terminated.
 Run Summary
-  Run Aborted after 175384 events processed.
-  User=89.130000s Real=89.553164s Sys=0.070000s
+  Run Aborted after 175814 events processed.
+  User=78.020000s Real=79.058161s Sys=0.070000s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.00162731
-error[MeV] = 1.62731e-05
+normalised edep [MeV] = 0.0016228
+error[MeV] = 1.62274e-05
 
 ----> Histogram Tree is saved in adjoint_sim.root
 Graphics systems deleted.
@@ -333,6 +333,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 1
-Dynamic pools deleted: 11 / Total memory freed: 28 MB
+Dynamic pools deleted: 11 / Total memory freed: 29 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

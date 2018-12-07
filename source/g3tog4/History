@@ -1,7 +1,9 @@
-$Id: History 104024 2017-05-08 14:44:25Z gcosmo $
 --------------------------------------------------------------------
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V10-04-00 9-November-2018 G.Cosmo
+- G3Division: fixed printout typo.
 
 g3tog4-V10-03-00 8-May-2017 G.Cosmo
 - Fixed compilation warning on gcc-7.1 in

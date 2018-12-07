@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeData.icc 71890 2013-06-27 22:14:13Z mkelsey $
 //
 // 20100803  M. Kelsey -- Move implementations to this .icc file.  Use name
 //		string to report output

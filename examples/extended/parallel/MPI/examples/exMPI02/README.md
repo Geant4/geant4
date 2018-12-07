@@ -41,4 +41,4 @@ Follow these commands,
     > make
     > make install
 
-Repalce mpicxx with your MPI-compiler wrapper
+Replace mpicxx with your MPI-compiler wrapper.

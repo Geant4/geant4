@@ -27,7 +27,6 @@
 /// \brief Definition of the DetectorWatase86 class
 //
 //
-// $Id: DetectorWatase86.hh 72513 2013-07-24 20:37:54Z gum $
 //
 // Setup from Y. Watase et al, NIM A248  (1986) 379-388 (fig.7; Li, e-, 2 Gev/c)
 

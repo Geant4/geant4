@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMeltonAttachmentModel.cc 98733 2016-08-09 10:51:58Z gcosmo $
 //
 
 // Created by Z. Francis
@@ -43,7 +42,7 @@ using namespace std;
 
 G4DNAMeltonAttachmentModel::G4DNAMeltonAttachmentModel(const G4ParticleDefinition*,
                                                        const G4String& nam) :
-    G4VEmModel(nam), isInitialised(false)
+G4VEmModel(nam), isInitialised(false)
 {
   fpWaterDensity = 0;
 
@@ -97,7 +96,7 @@ void G4DNAMeltonAttachmentModel::Initialise(const G4ParticleDefinition* particle
       << "Calling G4DNAMeltonAttachmentModel::Initialise()" << G4endl;
 #endif
 
-  // ONLY ELECTRON
+  // Only electron
   
   if(particle->GetParticleName() != "e-")
   {
@@ -145,7 +144,7 @@ void G4DNAMeltonAttachmentModel::Initialise(const G4ParticleDefinition* particle
   G4String fileElectron("dna/sigma_attachment_e_melton");
 
   fData = new G4DNACrossSectionDataSet(new G4LogLogInterpolation(),
-                                     eV, scaleFactor);
+                                        eV, scaleFactor);
   fData->LoadData(fileElectron);
 
 
@@ -169,10 +168,8 @@ void G4DNAMeltonAttachmentModel::Initialise(const G4ParticleDefinition* particle
   fpWaterDensity = G4DNAMolecularMaterial::Instance()->
       GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
 
-  if (isInitialised)
-  {
-    return;
-  }
+  if (isInitialised) return;
+
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;
 }
@@ -199,30 +196,24 @@ G4DNAMeltonAttachmentModel::CrossSectionPerVolume(const G4Material* material,
 
   G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
 
-  if(waterDensity != 0.0)
-  {
-    if (ekin >= LowEnergyLimit() && ekin < HighEnergyLimit())
-      // necessaire ?
-    {
-      sigma = fData->FindValue(ekin);
-    }
-
+  if (ekin >= LowEnergyLimit() && ekin <= HighEnergyLimit())
+    sigma = fData->FindValue(ekin);
+    
 #ifdef MELTON_VERBOSE
-    if (verboseLevel > 2)
-    {
-      G4cout << "__________________________________" << G4endl;
-      G4cout << "=== G4DNAMeltonAttachmentModel - XS INFO START" << G4endl;
-      G4cout << "--- Kinetic energy(eV)=" << ekin/eV
-            << " particle : " << particleDefinition->GetParticleName()
-            << G4endl;
-      G4cout << "--- Cross section per water molecule (cm^2)="
-             << sigma/cm/cm << G4endl;
-      G4cout << "--- Cross section per water molecule (cm^-1)="
-             << sigma*waterDensity/(1./cm) << G4endl;
-      G4cout << "--- G4DNAMeltonAttachmentModel - XS INFO END" << G4endl;
-    }
+  if (verboseLevel > 2)
+  {
+    G4cout << "__________________________________" << G4endl;
+    G4cout << "=== G4DNAMeltonAttachmentModel - XS INFO START" << G4endl;
+    G4cout << "--- Kinetic energy(eV)=" << ekin/eV
+           << " particle : " << particleDefinition->GetParticleName()
+           << G4endl;
+    G4cout << "--- Cross section per water molecule (cm^2)="
+           << sigma/cm/cm << G4endl;
+    G4cout << "--- Cross section per water molecule (cm^-1)="
+           << sigma*waterDensity/(1./cm) << G4endl;
+    G4cout << "--- G4DNAMeltonAttachmentModel - XS INFO END" << G4endl;
+  }
 #endif
-  } // if water
 
   return sigma*waterDensity;
 }

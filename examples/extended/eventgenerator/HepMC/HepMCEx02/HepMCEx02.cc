@@ -27,12 +27,13 @@
 /// \brief Main program of the eventgenerator/HepMC/HepMCEx02 example
 //
 //
-// $Id: HepMCEx02.cc 73446 2013-08-27 11:32:59Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
 //      GEANT 4 - example of HepMC-interface
 // --------------------------------------------------------------
+
+#include "G4Types.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -43,16 +44,17 @@
 #include "H02EventAction.hh"
 #include "H02SteppingAction.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 int main(int argc, char** argv)
 {
+  // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   G4RunManager* runManager= new G4RunManager;
 
   // User Initialization classes (mandatory)
@@ -76,42 +78,28 @@ int main(int argc, char** argv)
   G4UserSteppingAction* stepping_action = new H02SteppingAction;
   runManager-> SetUserAction(stepping_action);
 
-#ifdef G4VIS_USE
-  // Initialize visualization package
-  //
   G4VisManager* visManager= new G4VisExecutive;
   visManager-> Initialize();
   G4cout << G4endl;
-#endif
 
  //get the pointer to the User Interface manager   
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-  if (argc!=1) { // batch mode
-#ifdef G4VIS_USE
+  if (!ui) { // batch mode
     visManager-> SetVerboseLevel("quiet");
-#endif
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager-> ApplyCommand(command+fileName);    
   } else {  // interactive mode : define UI session
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     ui-> SessionStart();
     delete ui;
-#endif
   }
 
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
-
   delete runManager;
-
-  return 0;
 }
 

@@ -95,7 +95,7 @@ namespace G4INCL {
 #endif
     rpCorrelationCoefficient = 0.98;
     rpCorrelationCoefficientProton = 0.5;
-    rpCorrelationCoefficientNeutron = 0.74;
+    rpCorrelationCoefficientNeutron = 0.73;
     neutronSkin = 0.;
     neutronHalo = 0.;
     refraction=false;

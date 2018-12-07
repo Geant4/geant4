@@ -1,0 +1,62 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Example B3aScoreWriter
+                            ----------------------
+
+This example demonstrates saving the Geant4 scorers hits in form of ntuples in a Root 
+file using Geant4 analysis tools. 
+
+The example is completely based on basic B3a example, the storing hits is activated 
+in the main () function with instantiating G4ScoreNtupleWriter. 
+
+The G4ScoreNtupleWriter and G4ScoreNtupleWriterMessenger classses are provided in
+the 'scoreWriter' directory in this example. These classes are fully independent from 
+the example classes and they can be reused in any Geant4 application.
+
+The Geant4 UI command defined in G4ScoreNtupleWriterMessenger can be used to choose
+the output file type, the file name and the level of verbosity:
+
+  /score/writerType root
+  /score/fileName name
+  /score/writerVerbose 1
+
+How to build
+--------------- 
+
+An additional step is needed when building the example with GNUmake
+due to using the extra 'scoreWriter' directory: 
+
+  % cd path_to_B3aScoreWriter/B3aScoreWriter
+  % gmake setup
+  % gmake
+
+ This will copy the files from scoreWriter in the example include and src;
+ to remove these files:
+  % gmake clean_setup
+
+How to run
+-------------
+
+- Execute exampleB3aExt in the 'interactive mode' with visualization
+    % ./exampleB3aExt
+  and type in the commands from run1.mac line by line:  
+    Idle> /run/initialize
+    Idle> /control/verbose 2
+    Idle> /tracking/verbose 2
+    Idle> /run/beamOn 1 
+    Idle> ...
+    Idle> exit
+  or
+    Idle> /control/execute run1.mac
+    ....
+    Idle> exit
+- Execute exampleB3aExt in the 'batch' mode from macro files 
+ (without visualization)
+    % ./exampleB3aExt run2.mac
+    % ./exampleB3aExt exampleB3aExt.in > exampleB3.out
+  
+See the B3 example README for the further documentation of the basic B3 example.

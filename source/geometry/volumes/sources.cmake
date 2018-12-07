@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 80876 2014-05-14 08:51:07Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -35,11 +34,11 @@ GEANT4_DEFINE_MODULE(NAME G4volumes
     HEADERS
         G4AssemblyTriplet.hh
         G4AssemblyTriplet.icc
+        G4AssemblyStore.hh
         G4AssemblyVolume.hh
         G4AssemblyVolume.icc
         G4EnhancedVecAllocator.hh
         G4GeometryWorkspace.hh
-        G4GeometryWorkspacePool.hh
         G4GRSSolid.hh
         G4GRSSolid.icc
         G4GRSSolidHandle.hh
@@ -65,9 +64,9 @@ GEANT4_DEFINE_MODULE(NAME G4volumes
         G4TouchableHistory.icc
         G4TouchableHistoryHandle.hh
     SOURCES
+        G4AssemblyStore.cc
         G4AssemblyVolume.cc
         G4GeometryWorkspace.cc
-        G4GeometryWorkspacePool.cc
         G4GRSSolid.cc
         G4GRSVolume.cc
         G4LogicalBorderSurface.cc

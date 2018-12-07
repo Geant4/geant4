@@ -36,8 +36,10 @@
 //
 #ifndef G4ParticleHPPhotonDist_h
 #define G4ParticleHPPhotonDist_h 1
-#include "globals.hh"
+
 #include <fstream>
+
+#include "globals.hh"
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4ParticleHPVector.hh"
@@ -83,8 +85,7 @@ public:
      distribution = 0;
      probs = 0;
      partials = 0;
-     //actualMult = 0;
-     actualMult.Put( NULL );
+     actualMult.Put( 0 );
 
      theLevelEnergies = 0;
      theTransitionProbabilities = 0;
@@ -106,10 +107,10 @@ public:
      delete [] distribution;
      delete [] probs;
 
-     if ( theLegendre != NULL )
+     if ( theLegendre != 0 )
      {
         for ( G4int i = 0 ; i < (nDiscrete2-nIso) ; i++ )
-           if ( theLegendre[i] != NULL ) delete[] theLegendre[i]; 
+           if ( theLegendre[i] != 0 ) delete[] theLegendre[i]; 
 
         delete [] theLegendre;
      }
@@ -122,15 +123,10 @@ public:
         delete [] partials;
      }
 
-     //delete [] actualMult;
-
-     // delete theLevelEnergies;
-     // delete theTransitionProbabilities;
-     // delete thePhotonTransitionFraction;
-// TKDB
      delete [] theLevelEnergies;
      delete [] theTransitionProbabilities;
      delete [] thePhotonTransitionFraction;
+     if (actualMult.Get() != 0) delete actualMult.Get();
   }
   
   G4bool InitMean(std::istream & aDataFile);
@@ -178,7 +174,6 @@ private:
    G4ParticleHPVector *  probs; // probabilities for the partial distributions.
    G4ParticleHPPartial ** partials; // the partials, parallel to the above
 
-   //G4int * actualMult;
    G4Cache< std::vector<G4int>* > actualMult;
    
     // for transition prob arrays start

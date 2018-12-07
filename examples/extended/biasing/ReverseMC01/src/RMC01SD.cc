@@ -26,7 +26,6 @@
 /// \file biasing/ReverseMC01/src/RMC01SD.cc
 /// \brief Implementation of the RMC01SD class
 //
-// $Id: RMC01SD.cc 98774 2016-08-09 14:28:06Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01SD

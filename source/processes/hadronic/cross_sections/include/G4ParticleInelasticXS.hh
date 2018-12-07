@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticleInelasticXS.hh 93605 2015-10-27 08:14:57Z ribon $
 //
 // -------------------------------------------------------------------
 //
@@ -39,9 +38,9 @@
 
 // Class Description:
 // This is a base class for n,p,d,t,he3,he4 inelastic hadronic cross 
-// section based on data files from G4NEUTRONXSDATA data set
+// section based on data files from G4PARTICLEXSDATA data set
 // and Glauber-Gribov model for high energy 
-// Class Description - End
+//
  
 #ifndef G4ParticleInelasticXS_h
 #define G4ParticleInelasticXS_h 1
@@ -62,6 +61,7 @@ class G4PhysicsVector;
 class G4ComponentGGHadronNucleusXsc;
 class G4ComponentGGNuclNuclXsc;
 class G4HadronNucleonXsc;
+class G4NistManager;
 
 class G4ParticleInelasticXS : public G4VCrossSectionDataSet
 {
@@ -96,13 +96,13 @@ public:
 
   virtual void CrossSectionDescription(std::ostream&) const;
 
+  G4double IsoCrossSection(G4double ekin, G4int Z, G4int A);
+
 private: 
 
   void Initialise(G4int Z, G4DynamicParticle* dp, const char*);
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
-
-  G4double IsoCrossSection(G4double ekin, G4int Z, G4int A);
 
   G4ParticleInelasticXS & operator=(const G4ParticleInelasticXS &right);
   G4ParticleInelasticXS(const G4ParticleInelasticXS&);
@@ -110,6 +110,7 @@ private:
   G4ComponentGGHadronNucleusXsc* ggXsection;
   G4ComponentGGNuclNuclXsc* nnXsection;
   G4HadronNucleonXsc* fNucleon;
+  G4NistManager* fNist;
 
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* proton;

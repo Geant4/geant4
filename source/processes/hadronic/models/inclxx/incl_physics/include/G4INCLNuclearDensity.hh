@@ -53,7 +53,7 @@ namespace G4INCL {
 
   class NuclearDensity {
   public:
-    NuclearDensity(const G4int A, const G4int Z, InterpolationTable const * const rpCorrelationTableProton, InterpolationTable const * const rpCorrelationTableNeutron);
+    NuclearDensity(const G4int A, const G4int Z, const G4int S, InterpolationTable const * const rpCorrelationTableProton, InterpolationTable const * const rpCorrelationTableNeutron, InterpolationTable const * const rpCorrelationTableLambda);
     ~NuclearDensity();
 
     /// \brief Copy constructor
@@ -106,6 +106,9 @@ namespace G4INCL {
     /// \brief Get the charge number.
     G4int getZ() const { return theZ; }
 
+    /// \brief Get the strange number.
+    G4int getS() const { return theS; }
+
     G4double getProtonNuclearRadius() const { return theProtonNuclearRadius; }
     void setProtonNuclearRadius(const G4double r) { theProtonNuclearRadius = r; }
 
@@ -114,7 +117,7 @@ namespace G4INCL {
     /** \brief Initialize the transmission radius. */
     void initializeTransmissionRadii();
 
-    G4int theA, theZ;
+    G4int theA, theZ, theS;
     G4double theMaximumRadius;
     /// \brief Represents INCL4.5's R0 variable
     G4double theProtonNuclearRadius;

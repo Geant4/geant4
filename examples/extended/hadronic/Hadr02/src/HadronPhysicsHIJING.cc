@@ -26,8 +26,6 @@
 /// \file hadronic/Hadr02/src/HadronPhysicsHIJING.cc
 /// \brief Implementation of the HadronPhysicsHIJING class
 //
-// $Id: HadronPhysicsHIJING.cc,v 1.4 2010-06-15 11:03:50 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //

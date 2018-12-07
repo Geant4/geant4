@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
 // 20100407  M. Kelsey -- Replace std::vector<> returns with data members.

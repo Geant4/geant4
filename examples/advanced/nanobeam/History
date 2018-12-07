@@ -1,5 +1,4 @@
 -------------------------------------------------------------------
-$Id: History 103568 2017-04-18 11:07:44Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +7,15 @@ $Id: History 103568 2017-04-18 11:07:44Z gcosmo $
 
                        Package History file
                        --------------------
+
+09 Sep 2018- S.Incerti - tag nanobeam-V10-04-02
+- updated default.mac
+
+04 Sep 2018- S.Incerti - tag nanobeam-V10-04-01
+- simplified UI session
+
+01 Jul 2018- S.Incerti - tag nanobeam-V10-04-00
+- relaxed EM field settings
 
 17 Apr 2017 - S.Incerti - tag nanobeam-V10-03-03
 - changed EM field settings for MT

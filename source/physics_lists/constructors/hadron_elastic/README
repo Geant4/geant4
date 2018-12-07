@@ -1,4 +1,3 @@
-$Id: $
 -------------------------------------------------------------------
 
 
@@ -31,7 +30,7 @@ $Id: $
  ----------------------
  Hadron nuclear elastic process for all hadrons:
  - proton
-   - cross section: Chips
+   - cross section: Barashenkov-Glauber-Gribov
    - final-state:   Chips
  - neutron:
    - cross section: G4NeutronElasticXS           
@@ -40,7 +39,7 @@ $Id: $
    - cross section: Barashenkov-Glauber-Gribov
    - final-state:   Starkov's model above 1 GeV, Gheisha below.
  - kaons
-   - cross section: Gheisha
+   - cross section: Glauber-Gribov
    - final-state:   Gheisha
  - hyperons, anti-hyperons, deuteron, triton, alpha
    - cross section: Gheisha
@@ -67,8 +66,7 @@ $Id: $
  
  G4HadronElasticPhysicsXS
  ------------------------
- As G4HadronElasticPhysics, with only difference in the proton elastic
- cross section: Barashenkov-Glauber-Gribov is used (instead of Chips).
+ Now exactly as G4HadronElasticPhysics.
 
  G4HadronHElasticPhysics
  -----------------------
@@ -82,11 +80,11 @@ $Id: $
    - cross section: Barashenkov-Glauber-Gribov
    - final-state:   Diffuse model, except for Hydrogen where Chips is used
  - kaons, hyperons, anti-hyperons
-   - cross section: Chips
-   - final-state:   Chips
- - deuteron, triton, He3, alpha
    - cross section: Glauber-Gribov
-   - final-state:   Gheisha
+   - final-state:   Chips
+ - deuteron, triton, He3, alpha, and generic ions
+   - cross section: Glauber-Gribov
+   - final-state:   Diffuse
  - anti_proton, anti_neutron
    - cross section: Galoyan-Uzhinsky-Glauber-Gribov
    - final-state:   Galoyan-Uzhinsky model above 100 MeV/nucleon,

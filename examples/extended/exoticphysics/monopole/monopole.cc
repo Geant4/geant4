@@ -26,7 +26,6 @@
 /// \file exoticphysics/monopole/monopole.cc
 /// \brief Main program of the exoticphysics/monopole example
 //
-// $Id: monopole.cc 110255 2018-05-17 14:15:38Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,11 +54,51 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) {
+namespace {
+  void PrintUsage() {
+    G4cerr 
+      << " Usage: " << G4endl
+      << " exampleB4a [-m macro ] [-s setupMonopole] [-t nThreads]" << G4endl
+      << "   Note: " << G4endl
+      << "    -s should be followed by a composed string, eg. \'1 0 100 GeV\'" << G4endl
+      << "    -t option is available only for multi-threaded mode." << G4endl
+      << G4endl;
+  }
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+int main(int argc,char** argv) 
+{
+  // Evaluate arguments
+  //
+  if ( argc > 7 ) {
+    PrintUsage();
+    return 1;
+  }
+
+  G4String macro;
+  G4String setupMonopole;
+#ifdef G4MULTITHREADED
+  G4int nThreads = 0;
+#endif
+  for ( G4int i=1; i<argc; i=i+2 ) {
+    if      ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
+    else if ( G4String(argv[i]) == "-s" ) setupMonopole = argv[i+1];
+#ifdef G4MULTITHREADED
+    else if ( G4String(argv[i]) == "-t" ) {
+      nThreads = G4UIcommand::ConvertToInt(argv[i+1]);
+    }
+#endif
+    else {
+      PrintUsage();
+      return 1;
+    }
+  }  
+  
   // Instantiate G4UIExecutive if interactive mode
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) {
+  if ( ! macro.size() ) {
     ui = new G4UIExecutive(argc, argv);
   }
 
@@ -69,7 +108,9 @@ int main(int argc,char** argv) {
   // Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(2);
+  if ( nThreads > 0 ) { 
+    runManager->SetNumberOfThreads(nThreads);
+  }  
   G4cout << "===== Monopole is started with "
          <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
 #else
@@ -79,25 +120,26 @@ int main(int argc,char** argv) {
   //create physicsList
   // Physics List is defined via environment variable PHYSLIST
   G4PhysListFactory factory;
-  G4VModularPhysicsList* phys = factory.ReferencePhysList();
+  G4VModularPhysicsList* phys = factory.GetReferencePhysList("FTFP_BERT");
 
   // monopole physics is added
   G4MonopolePhysics * theMonopole = new G4MonopolePhysics();
+
+  //get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  // Setup monopole
+  if ( setupMonopole.size() )  {
+    UImanager->ApplyCommand("/control/verbose 1");
+    UImanager->ApplyCommand("/monopole/setup " + setupMonopole);
+  }
+
+  // regsiter monopole physics
   phys->RegisterPhysics(theMonopole);
   runManager->SetUserInitialization(phys);
 
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive();
   visManager->Initialize();
-
-  //get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-  // Setup monopole
-  G4String s = "";
-  if(argc > 2) { s = argv[2]; }
-  UImanager->ApplyCommand("/control/verbose 1");
-  UImanager->ApplyCommand("/monopole/setup "+s);
 
   // set detector construction
   DetectorConstruction* det = new DetectorConstruction();
@@ -106,20 +148,19 @@ int main(int argc,char** argv) {
   // set user action classes
   runManager->SetUserInitialization(new ActionInitialization(det));
 
-  runManager->Initialize();
-
-  if (ui)   // Define UI terminal for interactive mode
-    {
-      UImanager->ApplyCommand("/control/execute vis.mac");
-      ui->SessionStart();
-      delete ui;
-    }
-  else if (argc>1) // Batch mode with 1 or more files
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
-    }
+  // Process macro or start UI session
+  //
+  if ( macro.size() ) {
+    // batch mode
+    G4String command = "/control/execute ";
+    UImanager->ApplyCommand(command+macro);
+  }
+  else  {  
+    // interactive mode : define UI session
+    UImanager->ApplyCommand("/control/execute init_vis.mac");
+    ui->SessionStart();
+    delete ui;
+  }
 
   delete visManager;
 

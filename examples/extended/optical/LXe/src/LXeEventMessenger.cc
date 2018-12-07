@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeEventMessenger.cc 110138 2018-05-16 07:31:43Z gcosmo $
 //
 /// \file optical/LXe/src/LXeEventMessenger.cc
 /// \brief Implementation of the LXeEventMessenger class
@@ -40,13 +39,6 @@
 LXeEventMessenger::LXeEventMessenger(LXeEventAction* event)
  : fLXeEvent(event)
 {
-  fSaveThresholdCmd = new G4UIcmdWithAnInteger("/LXe/saveThreshold",this);
-  fSaveThresholdCmd->
-SetGuidance("Set the photon count threshold for saving the random number seed");
-  fSaveThresholdCmd->SetParameterName("photons",true);
-  fSaveThresholdCmd->SetDefaultValue(4500);
-  fSaveThresholdCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   fVerboseCmd = new G4UIcmdWithAnInteger("/LXe/eventVerbose",this);
   fVerboseCmd->SetGuidance("Set the verbosity of event data.");
   fVerboseCmd->SetParameterName("verbose",true);
@@ -69,7 +61,6 @@ SetGuidance("Set the photon count threshold for saving the random number seed");
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeEventMessenger::~LXeEventMessenger(){
-  delete fSaveThresholdCmd;
   delete fVerboseCmd;
   delete fPmtThresholdCmd;
   delete fForceDrawPhotonsCmd;
@@ -79,10 +70,7 @@ LXeEventMessenger::~LXeEventMessenger(){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeEventMessenger::SetNewValue(G4UIcommand* command, G4String newValue){
-  if( command == fSaveThresholdCmd ){
-    fLXeEvent->SetSaveThreshold(fSaveThresholdCmd->GetNewIntValue(newValue));
-  }
-  else if( command == fVerboseCmd ){
+  if( command == fVerboseCmd ){
     fLXeEvent->SetEventVerbose(fVerboseCmd->GetNewIntValue(newValue));
   }
   else if( command == fPmtThresholdCmd ){

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh 108386 2018-02-09 15:38:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -223,9 +222,6 @@ public:
 
   // for automatic documentation
   virtual void ModelDescription(std::ostream& outFile) const;
-  
-  virtual void ModelDescription(std::ostream& outFile,
-                                G4String endOfLine) const; 
 
 protected:
 
@@ -529,7 +525,7 @@ G4double G4VEmModel::ComputeMeanFreePath(const G4ParticleDefinition* part,
                                          G4double emax)
 {
   G4double cross = CrossSectionPerVolume(material,part,ekin,emin,emax);
-  return cross > 0.0 ? 1./cross : DBL_MAX;
+  return (cross > 0.0) ? 1./cross : DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -827,4 +823,3 @@ inline void G4VEmModel::SetLocked(G4bool val)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #endif
-

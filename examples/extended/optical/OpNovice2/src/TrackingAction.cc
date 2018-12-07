@@ -26,7 +26,6 @@
 /// \file optical/OpNovice2/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id: TrackingAction.cc 66379 2012-12-18 09:46:33Z gcosmo $
 //
 
 #include "TrackingAction.hh"

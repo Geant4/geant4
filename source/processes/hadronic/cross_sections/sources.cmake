@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 110654 2018-06-05 11:51:50Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -47,6 +46,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4BGGNucleonInelasticXS.hh
 	G4BGGPionElasticXS.hh
 	G4BGGPionInelasticXS.hh
+	G4BarashenkovData.hh
 	G4ChipsAntiBaryonElasticXS.hh
 	G4ChipsAntiBaryonInelasticXS.hh
 	G4ChipsComponentXS.hh

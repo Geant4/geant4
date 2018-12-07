@@ -1,0 +1,18 @@
+# Macro file for example B4
+# 
+# To be run preferably in batch, without graphics:
+# % exampleB4[a,b,c,d] run2.mac
+#
+#/run/numberOfWorkers 4
+/run/initialize
+#
+# Default kinemtics: 
+# electron 50 MeV in direction (0.,0.,1.)
+# 1000 events
+#
+/score/writerType root
+/score/writerVerbose 1
+#
+/run/printProgress 100
+/run/beamOn 1000
+

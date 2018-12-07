@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc 108423 2018-02-13 11:18:13Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -206,7 +205,7 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   // particle beta
   G4double beta = (pPreStepPoint->GetBeta() + pPostStepPoint->GetBeta())*0.5;
 
-  fNumPhotons = 0;
+  //fNumPhotons = 0;  // in PostStepGetPhysicalInteractionLength()
 
   G4double MeanNumberOfPhotons = 
                      GetAverageNumberOfPhotons(charge,beta,aMaterial,Rindex);
@@ -496,6 +495,7 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
 {
   *condition = NotForced;
   G4double StepLimit = DBL_MAX;
+  fNumPhotons = 0;
 
   const G4Material* aMaterial = aTrack.GetMaterial();
   G4int materialIndex = aMaterial->GetIndex();
@@ -550,10 +550,12 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
                                                                couple);
 
   G4double Step = Range - RangeMin;
-//  if (Step < 1.*um ) return StepLimit;
 
-  if (Step > 0. && Step < StepLimit) StepLimit = Step; 
+  // If the step is smaller than 1e-16 mm, it may happen that the particle
+  // does not move. See bug 1992. 
+  if (Step < 1.e-16*mm) return StepLimit;
 
+  if (Step < StepLimit) StepLimit = Step; 
   // If user has defined an average maximum number of photons to
   // be generated in a Step, then calculate the Step length for
   // that number of photons. 

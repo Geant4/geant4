@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LevelManager.cc 88375 2015-02-16 17:31:21Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -41,13 +40,16 @@
 // -------------------------------------------------------------------
 
 #include "G4LevelManager.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4ShellCorrection.hh"
 #include "G4HadronicException.hh"
+#include "G4Pow.hh"
 #include <iomanip>
 
 G4String G4LevelManager::fFloatingLevels[] = {
   "-", "+X", "+Y", "+Z", "+U", "+V", "+W", "+R", "+S", "+T", "+A", "+B", "+C"};
 
-G4LevelManager::G4LevelManager(size_t ntrans,
+G4LevelManager::G4LevelManager(G4int Z, G4int A, size_t ntrans,
                                const std::vector<G4double>& energies,
 			       const std::vector<G4int>& spin,
 			       const std::vector<const G4NucLevel*>& levels)
@@ -65,6 +67,27 @@ G4LevelManager::G4LevelManager(size_t ntrans,
     }
     //G4cout << "New G4LevelManager N= " << nTransitions << " " 
     //<< fLevelEnergy.size() << " <" << this << ">" << G4endl;
+  }
+  // J. Nucl. Sci. Tech. 31(2): 151-162 (1994)
+  fShellCorrection = G4NuclearLevelData::GetInstance()->
+    GetShellCorrection()->GetShellCorrection(A,Z);
+  G4double del = 12./std::sqrt((G4double)A);
+  G4int N = A - Z;
+  G4int In = N - (N/2)*2; 
+  G4int Iz = Z - (Z/2)*2;
+  G4double a13 = 1.0/G4Pow::GetInstance()->Z13(A);
+  if(In == 0 && Iz == 0) {
+    fPairingCorrection = 2*del;
+    fLevelDensity = 0.067946*A*(1.0 + 4.1277*a13);
+  } else if(In == 0 && Iz == 1) {
+    fPairingCorrection = del;
+    fLevelDensity = 0.053061*A*(1.0 + 7.1862*a13);
+  } else if(In == 1 && Iz == 0) {
+    fPairingCorrection = del;
+    fLevelDensity = 0.060920*A*(1.0 + 3.8767*a13);
+  } else {
+    fPairingCorrection = 0.0;
+    fLevelDensity = 0.065291*A*(1.0 + 4.4505*a13);
   }
 }
 

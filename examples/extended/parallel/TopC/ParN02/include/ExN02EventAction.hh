@@ -27,7 +27,6 @@
 /// \brief Definition of the ExN02EventAction class
 //
 //
-// $Id: ExN02EventAction.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

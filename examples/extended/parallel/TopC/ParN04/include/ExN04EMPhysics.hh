@@ -27,7 +27,6 @@
 /// \brief Definition of the ExN04EMPhysics class
 //
 //
-// $Id: ExN04EMPhysics.hh 78055 2013-12-03 08:27:48Z gcosmo $
 //
 // 
 // ------------------------------------------------------------

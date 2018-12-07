@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $ID$
 /// \file ActionInitialization.cc 
 /// \brief Implementation of the ActionInitialization class
 

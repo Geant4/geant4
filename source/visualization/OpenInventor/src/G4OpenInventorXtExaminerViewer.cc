@@ -3060,7 +3060,9 @@ void G4OpenInventorXtExaminerViewer::saveViewPtCB(Widget w,
    XmStringFree(label);
    XtAddCallback(nameViewPtDialog, XmNokCallback, getViewPtNameCB, This);
    XtAddCallback(nameViewPtDialog, XmNcancelCallback,
-                 (XtCallbackProc) XtDestroyWidget, NULL);
+                 getViewPtNameCancelCB, This);
+   // Coverity gcc8 bad cast warning
+   //            (XtCallbackProc) XtDestroyWidget, NULL);
 
    Widget text = XtNameToWidget(nameViewPtDialog, "Text");
    XtVaSetValues(text, XmNmaxLength, This->MAX_VP_NAME, NULL);
@@ -3219,6 +3221,13 @@ void G4OpenInventorXtExaminerViewer::getViewPtNameCB(Widget w,
 
    }
 }
+
+void G4OpenInventorXtExaminerViewer::getViewPtNameCancelCB(Widget w,
+                                        XtPointer,
+                                        XtPointer)
+{
+   XtUnmanageChild(w);
+}   
 
 
 // Saves current camera parameters to a viewpoint file.

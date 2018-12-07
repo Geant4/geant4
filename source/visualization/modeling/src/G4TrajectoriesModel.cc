@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc 98852 2016-08-15 07:03:35Z gcosmo $
 //
 // 
 // John Allison  26th August 1998.
@@ -53,7 +52,7 @@ G4TrajectoriesModel::G4TrajectoriesModel ()
 ,fEventID(-1)
 {
   fType = "G4TrajectoriesModel";
-  fGlobalTag = "G4TrajectoriesModel for all trajectories.";
+  fGlobalTag = "G4TrajectoriesModel for any type of trajectory";
   fGlobalDescription = fGlobalTag;
 }
 

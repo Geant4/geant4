@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicTransitionManager.hh,v 1.2 ????
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)

@@ -27,7 +27,6 @@
 /// \brief Main program of the analysis/AnaEx03 example
 //
 //
-// $Id: AnaEx01.cc,v 1.15 2010-11-08 10:38:44 maire Exp $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

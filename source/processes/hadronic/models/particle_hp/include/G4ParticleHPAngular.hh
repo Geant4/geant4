@@ -32,9 +32,10 @@
 #ifndef G4ParticleHPAngular_h
 #define G4ParticleHPAngular_h 1
 
+#include <fstream>
+
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream>
 #include "G4ReactionProduct.hh"
 #include "Randomize.hh"
 #include "G4ParticleHPLegendreStore.hh"
@@ -43,50 +44,54 @@
 
 class G4ParticleHPAngular
 {
-
-   struct toBeCached {
+   struct toBeCached
+   {
       const G4ReactionProduct* theProjectileRP;
       const G4ReactionProduct* theTarget;
-      toBeCached() : theProjectileRP(NULL),theTarget(NULL) {};
+      toBeCached() : theProjectileRP(0),theTarget(0) {}
    };
 
-    public:
+public:
     
   G4ParticleHPAngular()
   {
-//TKDB110511
-    //theAngularDistributionType = 0;
-    //theIsoFlag = false;
     theIsoFlag = true;
-// TKDB
-      theCoefficients = 0;
-      theProbArray = 0;
-      toBeCached val;
-      fCache.Put( val );
+    theCoefficients = 0;
+    theProbArray = 0;
+    toBeCached val;
+    fCache.Put( val );
       
-      theAngularDistributionType = 0;
-      frameFlag = 0;
-      targetMass = 0.0;
+    theAngularDistributionType = 0;
+    frameFlag = 0;
+    targetMass = 0.0;
   } 
 
   ~G4ParticleHPAngular()
-   {
-// TKDB
-      delete theCoefficients;
-      delete theProbArray;
-   }
+  {
+    delete theCoefficients;
+    delete theProbArray;
+  }
   
   void Init(std::istream & aDataFile);
   
   void SampleAndUpdate(G4ReactionProduct & anIncidentParticle);
     
-  void SetTarget(const G4ReactionProduct & aTarget) { fCache.Get().theTarget = &aTarget; }
+  void SetTarget(const G4ReactionProduct & aTarget)
+  {
+    fCache.Get().theTarget = &aTarget;
+  }
 
-  void SetProjectileRP(const G4ReactionProduct & anIncidentParticleRP) { fCache.Get().theProjectileRP = &anIncidentParticleRP; }
+  void SetProjectileRP(const G4ReactionProduct & anIncidentParticleRP)
+  {
+    fCache.Get().theProjectileRP = &anIncidentParticleRP;
+  }
 
-  inline G4double GetTargetMass() { return targetMass; }
+  inline G4double GetTargetMass()
+  {
+    return targetMass;
+  }
 
-  private:
+private:
   
   // the type of distribution; currently 
   // isotropic (0), 
@@ -101,16 +106,12 @@ class G4ParticleHPAngular
   
   G4ParticleHPLegendreStore * theCoefficients; // the legendre coefficients
 
-  G4ParticleHPPartial * theProbArray; // the probability array p,costh for energy
+  G4ParticleHPPartial * theProbArray;
+    // the probability array p,costh for energy
 
-  private:
-  
   G4double targetMass;
 
-  //G4ReactionProduct theTarget;
-  //G4ReactionProduct theProjectileRP;
-     G4Cache<toBeCached> fCache;
-
+  G4Cache<toBeCached> fCache;
 };
 
 #endif

@@ -1,5 +1,4 @@
 # --------------------------------------------------------------
-# $Id$
 # GNUmakefile for Bertini cascade library.
 #
 # 20130225  Remove evaporation and utils subdirectories

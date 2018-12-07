@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: testBlineTracer.cc 109623 2018-05-03 13:05:02Z gcosmo $
 // 
 /// \file testBlineTracer.cc
 /// \brief Test program for the G4BlineTracer class

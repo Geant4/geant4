@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RayleighScattering.cc 107118 2017-11-02 15:10:19Z gcosmo $
 //
 // 
 // 19-12-2008, first implementation, Luciano Pandola 
@@ -81,7 +80,7 @@ void G4RayleighScattering::PrintInfo()
 
 void G4RayleighScattering::ProcessDescription(std::ostream& out) const
 {
-  out << "<strong>Rayleigh scattering</strong>";
+  out << "  Rayleigh scattering";
   G4VEmProcess::ProcessDescription(out);
 }
 

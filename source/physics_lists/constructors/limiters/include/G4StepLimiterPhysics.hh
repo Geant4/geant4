@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepLimiterPhysics.hh 107562 2017-11-22 15:39:24Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,7 +26,6 @@
 /// \file TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id: TrackingAction.cc 105733 2017-08-16 12:56:18Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -185,7 +184,8 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //  
   if (!nbtrk) {
     run->EventTiming(time);                     //total time of life
-    analysis->FillH1(8,time);
+    G4double weight = track->GetWeight();
+    analysis->FillH1(8,time,weight);
     fTime_end = DBL_MAX;
   }
   

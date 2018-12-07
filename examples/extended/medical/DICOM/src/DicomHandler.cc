@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomHandler.cc 107363 2017-11-09 10:51:28Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomHandler.cc
 /// \brief Implementation of the DicomHandler class
@@ -66,6 +65,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DicomHandler* DicomHandler::fInstance = 0;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DicomHandler* DicomHandler::Instance()
@@ -74,6 +74,54 @@ DicomHandler* DicomHandler::Instance()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4String DicomHandler::GetDicomDataPath()
+{
+    // default is current directory
+    G4String driverPath = ".";
+    // check environment
+    const char* path = getenv("DICOM_PATH");
+
+    if(path)
+    {
+        // if is set in environment
+        return G4String(path);
+    }
+    else
+    {
+        // if DICOM_USE_HEAD, look for data installation
+#ifdef DICOM_USE_HEAD
+        G4cerr << "Warning! DICOM was compiled with DICOM_USE_HEAD option but "
+               << "the DICOM_PATH was not set!" << G4endl;
+        G4String datadir = G4GetEnv<G4String>("G4ENSDFSTATEDATA", "");
+        if(datadir.length() > 0)
+        {
+            auto _last = datadir.rfind("/");
+            if(_last != std::string::npos)
+                datadir.erase(_last);
+            driverPath = datadir + "/DICOM1.1/DICOM_HEAD_TEST";
+            int rc = setenv("DICOM_PATH", driverPath.c_str(), 0);
+            G4cerr << "\t --> Using '" << driverPath << "'..." << G4endl;
+            G4ConsumeParameters(rc);
+        }
+#endif
+    }
+    return driverPath;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4String DicomHandler::GetDicomDataFile()
+{
+#if defined(DICOM_USE_HEAD) && defined(G4_DCMTK)
+    return GetDicomDataPath() + "/Data.dat.new";
+#else
+    return GetDicomDataPath() + "/Data.dat";
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifdef DICOM_USE_HEAD
 DicomHandler::DicomHandler()
 :DATABUFFSIZE(8192), LINEBUFFSIZE(5020), FILENAMESIZE(512),
@@ -87,10 +135,9 @@ DicomHandler::DicomHandler()
  fNbrequali(0),fValueDensity(NULL),fValueCT(NULL),fReadCalibration(false),
  fMergedSlices(NULL),fCt2DensityFile("null.dat")
 {
-fMergedSlices = new DicomPhantomZSliceMerged;
-G4String path = getenv("DICOM_PATH");
-fDriverFile= path+"/Data.dat";
-G4cout << "Reading the DICOM_HEAD project " <<fDriverFile << G4endl;
+    fMergedSlices = new DicomPhantomZSliceMerged;
+    fDriverFile = GetDicomDataFile();
+    G4cout << "Reading the DICOM_HEAD project " << fDriverFile << G4endl;
 }
 #else
 DicomHandler::DicomHandler()
@@ -161,9 +208,10 @@ G4int DicomHandler::ReadFile(FILE* dicom, char* filename2)
       
       // beginning of the pixels
       if(tagDictionary == 0x7FE00010) {
-        // Folling 2 fread's are modifications to original DICOM example 
-        //(Jonathan Madsen)
-        rflag = std::fread(buffer,2,1,dicom);   // Reserved 2 bytes
+        // Following 2 fread's are modifications to original DICOM example
+        // (Jonathan Madsen)
+        if(!fImplicitEndian)
+            rflag = std::fread(buffer,2,1,dicom);   // Reserved 2 bytes
         // (not used for pixels)
         rflag = std::fread(buffer,4,1,dicom);   // Element Length  
         // (not used for pixels)
@@ -405,7 +453,7 @@ void DicomHandler::GetInformation(G4int & tagDictionary, char * data)
         G4String datas(data);
         int iss = datas.find('\\');
         fPixelSpacingX = atof( datas.substr(0,iss).c_str() );
-        fPixelSpacingY = atof( datas.substr(iss+2,datas.length()).c_str() );
+        fPixelSpacingY = atof( datas.substr(iss+1,datas.length()).c_str() );
 
     } else if(tagDictionary == 0x00200037 ) { // Image Orientation ( not used )
         std::printf("[0x00200037] Image Orientation (Phantom) -> %s\n", data);
@@ -982,8 +1030,7 @@ void DicomHandler::CheckFileFormat()
     for( G4int i = 1; i <= fNFiles; i++ ) 
     { // Begin loop on filenames
      rflag = std::fscanf(lecturePref,"%s",inputFile);
-      G4String path=getenv("DICOM_PATH");
-      path = path+"/"; 
+      G4String path = GetDicomDataPath() + "/";
     
      std::sprintf(name,"%s.dcm",inputFile);
      //Writes the results to a character string buffer.

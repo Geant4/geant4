@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.hh 107060 2017-11-01 15:00:04Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -110,8 +109,6 @@ private:
   // For Level Density calculation
   G4bool MyOwnLevelDensity;
   G4VLevelDensityParameter * theLevelDensityPtr;
-  G4double LevelDensityParameter;
-
   G4PairingCorrection* pairingCorrection;
 
   G4FissionParameters theParam;
@@ -144,11 +141,6 @@ G4CompetitiveFission::SetLevelDensityParameter(G4VLevelDensityParameter* aLevelD
 inline G4double G4CompetitiveFission::GetFissionBarrier(void) const 
 { 
   return FissionBarrier; 
-}
-
-inline G4double G4CompetitiveFission::GetLevelDensityParameter(void) const 
-{ 
-  return LevelDensityParameter; 
 }
 
 inline G4double G4CompetitiveFission::GetMaximalKineticEnergy(void) const 

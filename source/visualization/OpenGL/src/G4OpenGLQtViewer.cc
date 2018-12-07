@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc 110480 2018-05-25 07:25:18Z gcosmo $
 //
 // 
 // G4OpenGLQtViewer : Class to provide Qt specific

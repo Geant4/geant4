@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04PrimaryGeneratorAction.hh
 /// \brief Definition of the ExN04PrimaryGeneratorAction class
 //
-// $Id: ExN04PrimaryGeneratorAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef EXN04_PRIMARY_GENERATOR_ACTION_H
@@ -54,42 +53,42 @@ public:
   G4String GetGeneratorName() const;
 
 private:
-  G4VPrimaryGenerator* particleGun;
-  G4VPrimaryGenerator* hepmcAscii;
-  G4VPrimaryGenerator* pythiaGen;
+  G4VPrimaryGenerator* fParticleGun;
+  G4VPrimaryGenerator* fHepmcAscii;
+  G4VPrimaryGenerator* fPythiaGen;
 
-  G4VPrimaryGenerator* currentGenerator;
-  G4String currentGeneratorName;
-  std::map<G4String, G4VPrimaryGenerator*> gentypeMap;
+  G4VPrimaryGenerator* fCurrentGenerator;
+  G4String fCurrentGeneratorName;
+  std::map<G4String, G4VPrimaryGenerator*> fGentypeMap;
 
-  ExN04PrimaryGeneratorMessenger* messenger;
+  ExN04PrimaryGeneratorMessenger* fMessenger;
 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 inline void ExN04PrimaryGeneratorAction::SetGenerator(G4VPrimaryGenerator* gen)
 {
-  currentGenerator = gen;
+  fCurrentGenerator = gen;
 }
 
 inline void ExN04PrimaryGeneratorAction::SetGenerator(G4String genname)
 {
   std::map<G4String, G4VPrimaryGenerator*>::iterator pos =
-                                            gentypeMap.find(genname);
-  if ( pos != gentypeMap.end() ) {
-    currentGenerator = pos->second;
-    currentGeneratorName = genname;
+                                            fGentypeMap.find(genname);
+  if ( pos != fGentypeMap.end() ) {
+    fCurrentGenerator = pos->second;
+    fCurrentGeneratorName = genname;
   }
 }
 
 inline G4VPrimaryGenerator* ExN04PrimaryGeneratorAction::GetGenerator() const
 {
-  return currentGenerator;
+  return fCurrentGenerator;
 }
 
 inline G4String ExN04PrimaryGeneratorAction::GetGeneratorName() const
 {
-  return currentGeneratorName;
+  return fCurrentGeneratorName;
 }
 
 #endif

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc 109510 2018-04-26 07:15:57Z gcosmo $
 //
 //
 // Andrew Walkden  7th February 1997
@@ -322,11 +321,6 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
               }
               G4OpenGLTransform3D oglt (to.fTransform);
               glMultMatrixd (oglt.GetGLMatrix ());
-              if (transparency_enabled) {
-                glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
-              } else {
-                glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
-              }
               // This text is from a TODL. We don't want to create a new TODL.
               AddPrimitiveForASingleFrame(to.fpG4TextPlus->fG4Text);
               if (to.fpG4TextPlus->fProcessing2D) {
@@ -461,9 +455,11 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
       if (circleRadius > 0.) {
         G4Circle lightFront(circleCentre);
         lightFront.SetWorldRadius(circleRadius);
-        glColor3d(fDisplayLightFrontRed,
-                  fDisplayLightFrontGreen,
-                  fDisplayLightFrontBlue);
+        G4VisAttributes visAtts(G4Colour
+         (fDisplayLightFrontRed,
+          fDisplayLightFrontGreen,
+          fDisplayLightFrontBlue));
+        lightFront.SetVisAttributes(visAtts);
         AddPrimitiveForASingleFrame(lightFront);
       }
     }

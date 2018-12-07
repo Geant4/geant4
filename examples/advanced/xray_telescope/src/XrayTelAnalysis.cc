@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.cc 81195 2014-05-22 14:49:13Z gcosmo $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
 //         (copied from his UserAnalyser class)

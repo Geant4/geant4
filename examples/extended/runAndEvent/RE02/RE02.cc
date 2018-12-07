@@ -27,7 +27,6 @@
 /// \brief Main program of the runAndEvent/RE02 example
 //
 //
-// $Id: RE02.cc 109785 2018-05-09 08:15:23Z gcosmo $
 //
 // 
 

@@ -135,11 +135,11 @@ class G4DataQuestionaire
 	    */
 	    break;
           case neutronxs:
-	    if(!getenv("G4NEUTRONXSDATA") )
+	    if(!getenv("G4PARTICLEXSDATA") )
 	    {
-	      desc << "G4NEUTRONXS are needed."<<G4endl
-	           << "Please set the environmental variable G4NEUTRONXSDATA"<<G4endl
-	      	   << "to point to your G4NEUTRONXS directory."<<G4endl
+	      desc << "G4PARTICLEXSDATA are needed."<<G4endl
+	           << "Please set the environmental variable G4PARTICLEXSDATA"<<G4endl
+	      	   << "to point to your G4PARTICLEXS directory."<<G4endl
 	      	   << "Data are available from the Geant4 download page."<<G4endl<<G4endl;
 	      fail=true;
 	    }

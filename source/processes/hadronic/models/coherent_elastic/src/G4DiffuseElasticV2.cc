@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElasticV2.cc 93440 2015-10-22 14:11:41Z gcosmo $
 //
 //
 // Physics model class G4DiffuseElasticV2 
@@ -68,6 +67,8 @@
 
 #include "G4Exp.hh"
 
+#include "G4HadronicParameters.hh"
+
 /////////////////////////////////////////////////////////////////////////
 //
 
@@ -76,7 +77,7 @@ G4DiffuseElasticV2::G4DiffuseElasticV2()
   : G4HadronElastic("DiffuseElasticV2"), fParticle(0)
 {
   SetMinEnergy( 0.01*MeV );
-  SetMaxEnergy( 100.*TeV );
+  SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
 
   verboseLevel         = 0;
   lowEnergyRecoilLimit = 100.*keV;  
@@ -88,8 +89,7 @@ G4DiffuseElasticV2::G4DiffuseElasticV2()
   theProton    = G4Proton::Proton();
   theNeutron   = G4Neutron::Neutron();
 
-  fEnergyBin = 250;  // Increased from 200 to 250 to keep the same bin size when extending
-                     // the upper limit of validity of the model from 1 TeV to 100 TeV. 
+  fEnergyBin = 300;  // Increased from the original 200 to have no wider log-energy-bins up to 10 PeV  
   fAngleBin  = 200;
 
   fEnergyVector =  new G4PhysicsLogVector( theMinEnergy, theMaxEnergy, fEnergyBin );

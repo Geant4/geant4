@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPolarizedCrossSection.hh 68046 2013-03-13 14:31:38Z gcosmo $
 //
 // File name:     G4VPolarizedCrossSection
 //

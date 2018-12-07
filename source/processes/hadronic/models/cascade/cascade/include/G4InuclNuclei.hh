@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclNuclei.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use

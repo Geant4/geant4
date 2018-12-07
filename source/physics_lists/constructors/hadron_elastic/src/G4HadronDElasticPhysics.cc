@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronDElasticPhysics.cc 99978 2016-10-13 07:28:13Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -85,7 +84,6 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronDElasticPhysics);
 
-G4ThreadLocal G4bool G4HadronDElasticPhysics::wasActivated = false;
 G4HadronDElasticPhysics::G4HadronDElasticPhysics(G4int ver)
   : G4VPhysicsConstructor("hElasticDIFFUSE"), verbose(ver)
 {
@@ -114,9 +112,6 @@ void G4HadronDElasticPhysics::ConstructParticle()
 
 void G4HadronDElasticPhysics::ConstructProcess()
 {
-  if(wasActivated) return;
-  wasActivated = true;
-
   const G4double elimitAntiNuc = 100.1*MeV;
   if(verbose > 1) {
     G4cout << "### HadronDElasticPhysics Construct Processes " 
@@ -135,7 +130,8 @@ void G4HadronDElasticPhysics::ConstructProcess()
   G4HadronElastic* lhep2 = new G4HadronElastic();
   lhep2->SetMaxEnergy(elimitAntiNuc);
 
-  G4DiffuseElastic* model = 0;
+  G4DiffuseElastic* model = nullptr;
+  G4HadronElasticProcess* hel = nullptr;
 
   auto myParticleIterator=GetParticleIterator();
   myParticleIterator->reset();
@@ -161,7 +157,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
        pname == "triton"    
        ) {
       
-      G4HadronElasticProcess* hel = new G4HadronElasticProcess();
+      hel = new G4HadronElasticProcess();
       hel->RegisterMe(lhep0);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
@@ -171,7 +167,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
 
     } else if(pname == "proton") {   
 
-      G4HadronElasticProcess* hel = new G4HadronElasticProcess();
+      hel = new G4HadronElasticProcess();
       hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
       //hel->AddDataSet(new G4CHIPSElasticXS());
       model = new G4DiffuseElastic();
@@ -185,7 +181,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
 
     } else if(pname == "neutron") {   
 
-      G4HadronElasticProcess* hel = new G4HadronElasticProcess();
+      hel = new G4HadronElasticProcess();
       hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronElasticXS::Default_Name()));
       model = new G4DiffuseElastic();
       hel->RegisterMe(lhep1);
@@ -199,7 +195,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
 
     } else if (pname == "pi+" || pname == "pi-") { 
 
-      G4HadronElasticProcess* hel = new G4HadronElasticProcess();
+      hel = new G4HadronElasticProcess();
       hel->AddDataSet(new G4BGGPionElasticXS(particle));
       model = new G4DiffuseElastic();
       hel->RegisterMe(lhep1);
@@ -212,7 +208,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
 
     } else if(pname == "kaon-") {
       
-      G4HadronElasticProcess* hel = new G4HadronElasticProcess();
+      hel = new G4HadronElasticProcess();
       hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusElasticXS::Default_Name()));
       model = new G4DiffuseElastic();
       hel->RegisterMe(lhep1);
@@ -224,7 +220,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
       }
     } else if(pname == "kaon+") {
       
-      G4HadronElasticProcess* hel = new G4HadronElasticProcess();
+      hel = new G4HadronElasticProcess();
       hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusElasticXS::Default_Name()));
       model = new G4DiffuseElastic();
       hel->RegisterMe(lhep1);
@@ -238,7 +234,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
 	      pname == "kaon0L" 
 	      ) {
       
-      G4HadronElasticProcess* hel = new G4HadronElasticProcess();
+      hel = new G4HadronElasticProcess();
       hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroElasticXS::Default_Name()));
       model = new G4DiffuseElastic();
       hel->RegisterMe(lhep1);
@@ -255,7 +251,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
        pname == "anti_triton"    ||
        pname == "anti_He3"       ) {
 
-      G4HadronElasticProcess* hel = new G4HadronElasticProcess();
+      hel = new G4HadronElasticProcess();
       hel->AddDataSet(anucxs);
       hel->RegisterMe(lhep2);
       hel->RegisterMe(anuc);

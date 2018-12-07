@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeGamNChannel.hh 67796 2013-03-08 06:18:39Z mkelsey $
-// GEANT4 tag: $Name: not supported by cvs2svn $
 
 #ifndef G4_CASCADE_GAMN_CHANNEL_HH
 #define G4_CASCADE_GAMN_CHANNEL_HH

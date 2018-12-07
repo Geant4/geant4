@@ -1,4 +1,3 @@
-$Id: History 110279 2018-05-17 14:49:17Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 31, 2018 I. Hrivnacova (OpNovice-V10-04-02)
+- Macro review: 
+  - Added test for /OpNovice/phys/cerenkovMaxPhotons command at the end 
+    of OpNovice.in macro
+  - Updated README files
 
 May 17, 2018 J. Allison (OpNovice-V10-04-01)
 - Remove G4UI_USE and G4VIS_USE.

@@ -23,14 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MagIntegratorStepper.icc 107059 2017-11-01 14:58:16Z gcosmo $
 //
 
 inline
 G4EquationOfMotion* G4MagIntegratorStepper::GetEquationOfMotion()
 {
-  return  fEquation_Rhs;
+  return fEquation_Rhs;
 } 
+
+inline
+const G4EquationOfMotion* G4MagIntegratorStepper::GetEquationOfMotion() const
+{
+  return fEquation_Rhs;
+}
 
 inline void
  G4MagIntegratorStepper::SetEquationOfMotion(G4EquationOfMotion* newEquation)
@@ -59,6 +64,15 @@ void G4MagIntegratorStepper::RightHandSide( const  double y[], double dydx[] ) c
 {
   fEquation_Rhs-> RightHandSide(y, dydx);
   fNoRHSCalls++; // IncrementRHSCalls();
+}
+
+inline
+void G4MagIntegratorStepper::RightHandSide(const G4double y[],
+                                           G4double dydx[],
+                                           G4double field[]) const
+{
+  fEquation_Rhs->EvaluateRhsReturnB(y, dydx, field);
+  fNoRHSCalls++;
 }
 
 inline

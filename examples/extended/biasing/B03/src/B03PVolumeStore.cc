@@ -27,7 +27,6 @@
 /// \brief Implementation of the B03PVolumeStore class
 //
 //
-// $Id: B03PVolumeStore.cc 70074 2013-05-22 21:01:50Z ahoward $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------

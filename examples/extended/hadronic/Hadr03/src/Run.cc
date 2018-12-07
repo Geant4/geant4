@@ -26,7 +26,6 @@
 /// \file Run.cc
 /// \brief Implementation of the Run class
 //
-// $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,8 +49,10 @@ Run::Run(DetectorConstruction* det)
   fSumTrack(0.), fSumTrack2(0.),
   fTargetXXX(false)
 {
-  for (G4int i=0; i<3; i++) { fPbalance[i] = 0. ; } 
+  for (G4int i=0; i<3; i++) { fPbalance[i] = 0. ; }
   for (G4int i=0; i<3; i++) { fNbGamma[i] = 0 ; }
+  fPbalance[1] = DBL_MAX;
+  fNbGamma[1]  = 10000;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -165,10 +166,21 @@ void Run::Merge(const G4Run* run)
   // accumulate sums
   //
   fTotalCount   += localRun->fTotalCount;
-  fGammaCount   += localRun->fGammaCount;   
+  fGammaCount   += localRun->fGammaCount;
   fSumTrack += localRun->fSumTrack;
-  fSumTrack2 += localRun->fSumTrack2;    
+  fSumTrack2 += localRun->fSumTrack2;
 
+  fPbalance[0] += localRun->fPbalance[0];
+  G4double min,max;
+  min = localRun->fPbalance[1]; max = localRun->fPbalance[2];
+  if (fPbalance[1] > min) fPbalance[1] = min;
+  if (fPbalance[2] < max) fPbalance[2] = max;
+
+  fNbGamma[0] += localRun->fNbGamma[0];
+  G4int nbmin, nbmax; 
+  nbmin = localRun->fNbGamma[1]; nbmax = localRun->fNbGamma[2];
+  if (fNbGamma[1] > nbmin) fNbGamma[1] = nbmin;
+  if (fNbGamma[2] < nbmax) fNbGamma[2] = nbmax;
   
   //map: processes count
   std::map<G4String,G4int>::const_iterator itp;

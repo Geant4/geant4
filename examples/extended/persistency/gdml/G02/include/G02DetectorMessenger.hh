@@ -27,7 +27,6 @@
 /// \brief Definition of the G02DetectorMessenger class
 //
 //
-// $Id: G02DetectorMessenger.hh 68025 2013-03-13 13:43:46Z gcosmo $
 //
 // Class G02DetectorMessenger
 //

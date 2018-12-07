@@ -41,9 +41,9 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
 
-  # Remove superfluous "unused argument" "warnings" from Clang
+  # Remove superfluous "unused argument" and "GL deprecation" "warnings" from Clang
   if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-    set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} -Qunused-arguments")
+    set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} -Qunused-arguments -DGL_SILENCE_DEPRECATION")
   endif()
 
   # Though it should be the default, always use libc++ with AppleClang

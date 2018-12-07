@@ -27,7 +27,6 @@
 /// \brief Implementation of the DetectorBari05 class
 //
 //
-// $Id: DetectorBari05.cc 72517 2013-07-24 23:01:29Z gum $
 //
 //
 

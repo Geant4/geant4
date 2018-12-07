@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,6 +12,8 @@
                              WWW : http://geant4.org/
 **************************************************************
 
+##### Create analysis manager   0x17a9930
+Using Root analysis manager
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -144,7 +146,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 1 GeV, 31 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PenConversion :  Emin=        0 eV    Emax=        1 GeV
+       PenConversion :  Emin=        0 eV    Emax=       20 MeV
+        BetheHeitler :  Emin=       20 MeV   Emax=        1 GeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 20 bins per decade, spline: 0
@@ -223,8 +226,8 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 1 GeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             PenIoni :  Emin=        0 eV    Emax=        1 MeV
-        MollerBhabha :  Emin=        1 MeV   Emax=        1 GeV   deltaVI
+             PenIoni :  Emin=        0 eV    Emax=      100 keV
+        MollerBhabha :  Emin=      100 keV   Emax=        1 GeV   deltaVI
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
@@ -258,7 +261,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           BetheBloch :  Emin=      100 MeV   Emax=        1 GeV   deltaVI
 
@@ -280,9 +283,6 @@ CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        1 MeV   Emax=        1 GeV
-
-nuclearStopping:   for  proton    SubType= 8  BuildTable= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 
 proton_G4DNAElastic:   for  proton    SubType= 51  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -320,7 +320,6 @@ ionIoni:   for  GenericIon    SubType= 2
 
 nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 GenericIon_G4DNAIonisation:   for  GenericIon    SubType= 53  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -335,7 +334,7 @@ msc:   for alpha    SubType= 10
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           BetheBloch :  Emin=   100.69 MeV   Emax=        1 GeV   deltaVI
 
@@ -370,7 +369,7 @@ msc:   for alpha+    SubType= 10
 hIoni:   for  alpha+    SubType= 2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           BetheBloch :  Emin=   100.69 MeV   Emax=        1 GeV   deltaVI
 
@@ -407,7 +406,7 @@ msc:   for anti_proton    SubType= 10
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=        2 MeV   Emax=        1 GeV   deltaVI
@@ -430,9 +429,6 @@ CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=        1 GeV
-
-nuclearStopping:   for  anti_proton    SubType= 8  BuildTable= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 
 helium_G4DNAElastic:   for  helium    SubType= 51  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -482,7 +478,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
           BetheBloch :  Emin=  1.05231 MeV   Emax=        1 GeV   deltaVI
@@ -514,7 +510,7 @@ msc:   for kaon-    SubType= 10
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
           BetheBloch :  Emin=  1.05231 MeV   Emax=        1 GeV   deltaVI
@@ -546,7 +542,7 @@ msc:   for mu+    SubType= 10
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
@@ -578,7 +574,7 @@ msc:   for mu-    SubType= 10
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
@@ -610,7 +606,7 @@ msc:   for pi+    SubType= 10
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
           BetheBloch :  Emin=  297.505 keV   Emax=        1 GeV   deltaVI
@@ -642,7 +638,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 1 GeV in 140 bins
       Lambda tables from threshold to 1 GeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
           BetheBloch :  Emin=  297.505 keV   Emax=        1 GeV   deltaVI
@@ -696,13 +692,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
-##### Create analysis manager   0x1c43fc0
-Using Root analysis manager
 ... open Root analysis file : dna.root - done
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=5.500000s Real=5.574781s Sys=0.040000s
+  User=5.550000s Real=5.849137s Sys=0.030000s
 ... write Root file : dna.root - done
 ... close Root file : dna.root - done
 Graphics systems deleted.
@@ -724,8 +718,8 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.361 MB
-Pool ID '7G4Track', size : 0.722 MB
+Pool ID '17G4DynamicParticle', size : 0.364 MB
+Pool ID '7G4Track', size : 0.728 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0

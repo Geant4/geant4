@@ -1,11 +1,10 @@
-$Id: History 110183 2018-05-17 10:26:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-              Hadronic physics-list/constructors/factory History
+              physics-list/constructors/electromagnetic History
               --------------------------------------------------
 This file should be used  to briefly summarize all major modifications 
 introduced in the code and keeptrack of all tags.
@@ -13,6 +12,81 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 November 2018, V.Ivanchenko (phys-ctor-em-V10-04-21)
+- G4EmStandardPhysics_option2 - use the same models and parameters as 
+    in LHCb EM physics constructor
+
+26 November 2018, V.Ivanchenko (phys-ctor-em-V10-04-20)
+- G4EmDNAChemistry, G4EmDNAChemistry_option1 - fixed typo in headers
+
+15 November 2018, V.Ivanchenko (phys-ctor-em-V10-04-19)
+- G4EmStandardPhysics_option3 - use Alg96 lateral displacement sampling
+  (address issue reported in HyperNews/geant4/get/emprocess/1516.html)
+
+9 November 2018, V.Ivanchenko (phys-ctor-em-V10-04-18)
+- G4EmLivermorePhysics - return back 5D gamma conversion model
+
+8 November 2018, S. Incerti (phys-ctor-em-V10-04-17)
+- G4EmDNAPhysics_option7: fix for electron models combination
+
+2 November 2018, V.Ivanchenko (phys-ctor-em-V10-04-16)
+- G4EmStandardPhysics_option4, G4EmStandardPhysics_option3 - cleaned up
+    definition of nuclear stopping process
+- G4EmStandardPhysicsWVI - use Opt3 parameters, use new ATENA ion
+    stopping model
+- G4EmLowEPPhysics - use Opt3 parameters, use Lindhard-Sorensen ion
+    stopping model, use ICRU90 stopping for protons and alpha
+
+27 October 2018, V.Ivanchenko (phys-ctor-em-V10-04-15)
+- G4EmLivermorePhysics - fixed nightly problem
+
+26 October 2018, D.Sawkey (phys-ctor-em-V10-04-14)
+- G4OpticalPhysicsMessenger, G4OpticalPhysics: fix documentation (bug #2020)
+
+26 October 2018, V.Ivanchenko (phys-ctor-em-V10-04-13)
+- G4EmStandardPhysics_option1 - disabled general gamma process 
+- G4EmLivermorePhysics, G4EmPenelopePhysics - set stepping function
+    parameters for muons and hadrons to (0.2,50*um)
+- G4EmStandardPhysics_option3 - set stepping function parameters for muons 
+    and hadrons to (0.2,50*um), enable Mott corrections, use the most recent 
+    version of lateral displacement for the Urban model
+- G4EmStandardPhysics_option4 - set stepping function parameters for muons 
+    and hadrons to (0.1,20*um)
+
+01 October 2018, V.Ivanchenko (phys-ctor-em-V10-04-12)
+- G4EmParticles - extended list of particle (Bc+-, OmegaB, XiB,
+    SigmaB)
+
+26 September 2018, V.Ivanchenko (phys-ctor-em-V10-04-11)
+- G4GammaGeneralProcess - a new class
+- G4EmStandardPhysics, G4EmStandardPhysics_option1,
+  G4EmStandardPhysics_option4 - renamed gamma general process class
+
+20-September-2018 J. Ramos-Mendez (phys-ctor-em-V10-04-10)
+- Addition of G4EmDNAPhysics_option8, G4EmDNAChemistry_option1
+
+20-September-2018 V.Ivanchenko (phys-ctor-em-V10-04-09)
+- G4EmStandardPhysics_option4, G4EmLivermorePhysics, 
+  G4EmPenelopePhysics, G4EmPolarizedLivermorePhysics - use the same 
+  GS msc model configuration and the same configurations for hadrons 
+  and ions
+- G4EmLowEPPhysics - use the same configurations for hadrons
+
+22-August-2018 V.Ivanchenko (phys-ctor-em-V10-04-08)
+- G4GammaSuperProcess fixed for gamma-nuclear process
+
+18-August-2018 V.Ivanchenko (phys-ctor-em-V10-04-07)
+- G4GammaSuperProcess, G4EmStandardPhysics, 
+- G4EmStandardPhysics_option1, G4EmStandardPhysics_option4 
+    updated usage of gamma super process
+
+30-July-2018 V.Ivanchenko (phys-ctor-em-V10-04-06)
+28-July-2018 V.Ivanchenko (phys-ctor-em-V10-04-04)
+- G4GammaSuperProcess - new class
+- G4EmStandardPhysics_option1 - enable gamma super process
+- G4EmStandardPhysics - added possibility to use gamma super process
+- G4EmLowEPPhysics - added bremsstrahlung and pair production for ions
 
 17-May-2018 V.Ivanchenko (phys-ctor-em-V10-04-03)
 - G4EmModelActivator - fixed GS and Opt3 configurations

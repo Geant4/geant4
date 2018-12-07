@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.hh 107869 2017-12-07 14:46:39Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -56,7 +55,7 @@ private:
     int operator!=(const G4LundStringFragmentation &right) const;
 
 private:
-   void SetMinMasses();   // Uzhi 23 Dec. 2016
+   void SetMinMasses();
    void SetMinimalStringMass(const G4FragmentingString  * const string);
    void SetMinimalStringMass2(const G4double aValue);	
 
@@ -89,9 +88,8 @@ private:
                                          G4ParticleDefinition *&created);
 
 private:
-   // Internal methods introduced to improve the code structure (AR Nov 2011)
 
-   G4bool Loop_toFragmentString(const G4ExcitedString & theStringInCMS, // * &
+   G4bool Loop_toFragmentString(const G4ExcitedString & theStringInCMS,
                                 G4KineticTrackVector * & LeftVector, 
                                 G4KineticTrackVector * & RightVector);
 
@@ -114,7 +112,7 @@ private:
    G4int SampleState(void); 
 
 private:
-// ------ For estimation of a minimal string mass ---------------
+   // ------ For estimation of a minimal string mass ---------------
    G4double Mass_of_light_quark;
    G4double Mass_of_heavy_quark;
    G4double Mass_of_string_junction;
@@ -122,11 +120,9 @@ private:
    G4double minMassQQbarStr[3][3];
    G4double minMassQDiQStr[3][3][3];
 
-// ------ An estimated minimal string mass ----------------------
+   // ------ An estimated minimal string mass ----------------------
    G4double MinimalStringMass;
    G4double MinimalStringMass2;
-// ------ Minimal invariant mass used at a string fragmentation -
-   G4double WminLUND;		    
 
    G4int          Meson[3][3][6];
    G4double MesonWeight[3][3][6];
@@ -136,7 +132,7 @@ private:
 
    G4double Prob_QQbar[3];
 
-// ------ To improve the code structure
+   // ------ To improve the code structure
    G4ParticleDefinition * FS_LeftHadron[35], * FS_RightHadron[35];
    G4double FS_Weight[35];
    G4int NumberOf_FS;
@@ -145,6 +141,6 @@ private:
 
 //**************************************************************************************************************
 // Class G4LundStringFragmentation 
-#endif
 
+#endif
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04DetectorConstruction.cc 78551 2014-01-07 09:45:08Z gcosmo $
 //
 /// \file field/field04/src/F04DetectorConstruction.cc
 /// \brief Implementation of the F04DetectorConstruction class
@@ -51,6 +50,7 @@
 #include "G4PhysicalVolumeStore.hh"
 
 #include "G4RunManager.hh"
+#include "G4StateManager.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -354,7 +354,10 @@ void F04DetectorConstruction::SetDegraderMaterial(const G4String materialChoice)
 void F04DetectorConstruction::SetWorldSizeZ(G4double val)
 {
   fWorldSizeZ = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -362,7 +365,9 @@ void F04DetectorConstruction::SetWorldSizeZ(G4double val)
 void F04DetectorConstruction::SetWorldSizeR(G4double val)
 {
   fWorldSizeR = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -370,7 +375,9 @@ void F04DetectorConstruction::SetWorldSizeR(G4double val)
 void F04DetectorConstruction::SetCaptureMgntRadius(G4double val)
 {
   fCaptureMgntRadius = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -378,7 +385,9 @@ void F04DetectorConstruction::SetCaptureMgntRadius(G4double val)
 void F04DetectorConstruction::SetCaptureMgntLength(G4double val)
 {
   fCaptureMgntLength = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -386,7 +395,9 @@ void F04DetectorConstruction::SetCaptureMgntLength(G4double val)
 void F04DetectorConstruction::SetCaptureMgntB1(G4double val)
 {
   fCaptureMgntB1 = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -394,7 +405,9 @@ void F04DetectorConstruction::SetCaptureMgntB1(G4double val)
 void F04DetectorConstruction::SetCaptureMgntB2(G4double val)
 {
   fCaptureMgntB2 = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -402,7 +415,9 @@ void F04DetectorConstruction::SetCaptureMgntB2(G4double val)
 void F04DetectorConstruction::SetTransferMgntRadius(G4double val)
 {
   fTransferMgntRadius = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -410,7 +425,9 @@ void F04DetectorConstruction::SetTransferMgntRadius(G4double val)
 void F04DetectorConstruction::SetTransferMgntLength(G4double val)
 {
   fTransferMgntLength = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -418,7 +435,9 @@ void F04DetectorConstruction::SetTransferMgntLength(G4double val)
 void F04DetectorConstruction::SetTransferMgntB(G4double val)
 {
   fTransferMgntB = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -426,7 +445,9 @@ void F04DetectorConstruction::SetTransferMgntB(G4double val)
 void F04DetectorConstruction::SetTransferMgntPos(G4double val)
 {
   fTransferMgntPos = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -434,7 +455,9 @@ void F04DetectorConstruction::SetTransferMgntPos(G4double val)
 void F04DetectorConstruction::SetTargetRadius(G4double val)
 {
   fTargetRadius = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -442,7 +465,9 @@ void F04DetectorConstruction::SetTargetRadius(G4double val)
 void F04DetectorConstruction::SetTargetThickness(G4double val)
 {
   fTargetThickness = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -450,7 +475,9 @@ void F04DetectorConstruction::SetTargetThickness(G4double val)
 void F04DetectorConstruction::SetTargetPos(G4double val)
 {
   fTargetPos = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -458,7 +485,9 @@ void F04DetectorConstruction::SetTargetPos(G4double val)
 void F04DetectorConstruction::SetTargetAngle(G4int val)
 {
   fTargetAngle = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -466,7 +495,9 @@ void F04DetectorConstruction::SetTargetAngle(G4int val)
 void F04DetectorConstruction::SetDegraderRadius(G4double val)
 {
   fDegraderRadius = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -474,7 +505,9 @@ void F04DetectorConstruction::SetDegraderRadius(G4double val)
 void F04DetectorConstruction::SetDegraderThickness(G4double val)
 {
   fDegraderThickness = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -482,7 +515,9 @@ void F04DetectorConstruction::SetDegraderThickness(G4double val)
 void F04DetectorConstruction::SetDegraderPos(G4double val)
 {
   fDegraderPos = val;
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
+  if ( G4StateManager::GetStateManager()->GetCurrentState() != G4State_PreInit ) {
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

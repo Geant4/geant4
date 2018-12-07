@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ChargeExchangePhysics.cc 99978 2016-10-13 07:28:13Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -53,8 +52,6 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4ChargeExchangePhysics);
 
-G4ThreadLocal G4bool G4ChargeExchangePhysics::wasActivated = false;
-
 G4ChargeExchangePhysics::G4ChargeExchangePhysics(G4int ver)
   : G4VPhysicsConstructor("chargeExchange"), verbose(ver)
 {
@@ -62,8 +59,7 @@ G4ChargeExchangePhysics::G4ChargeExchangePhysics(G4int ver)
 }
 
 G4ChargeExchangePhysics::~G4ChargeExchangePhysics()
-{
-}
+{}
 
 void G4ChargeExchangePhysics::ConstructParticle()
 {
@@ -77,9 +73,6 @@ void G4ChargeExchangePhysics::ConstructParticle()
 
 void G4ChargeExchangePhysics::ConstructProcess()
 {
-  if(wasActivated) return;
-  wasActivated = true;
-
   G4ChargeExchange* model = new G4ChargeExchange();
 
   if(verbose > 1) {

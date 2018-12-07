@@ -100,6 +100,7 @@ namespace G4INCL {
       rpCorrelated(rhs.rpCorrelated),
       uncorrelatedMomentum(rhs.uncorrelatedMomentum),
       theParticleBias(rhs.theParticleBias),
+      theNKaon(rhs.theNKaon),
       theHelicity(rhs.theHelicity),
       emissionTime(rhs.emissionTime),
       outOfWell(rhs.outOfWell),
@@ -115,6 +116,8 @@ namespace G4INCL {
           thePropagationMomentum = &theMomentum;
         // ID intentionally not copied
         ID = nextID++;
+        
+        theBiasCollisionVector = rhs.theBiasCollisionVector;
       }
 
   protected:
@@ -150,6 +153,10 @@ namespace G4INCL {
       std::swap(theMass, rhs.theMass);
       std::swap(rpCorrelated, rhs.rpCorrelated);
       std::swap(uncorrelatedMomentum, rhs.uncorrelatedMomentum);
+      
+      std::swap(theParticleBias, rhs.theParticleBias);
+      std::swap(theBiasCollisionVector, rhs.theBiasCollisionVector);
+
     }
 
   public:
@@ -260,12 +267,12 @@ namespace G4INCL {
         case KShort:
           theA = 0;
           theZ = 0;
-          theS = -99;
+//        theS should not be defined
           break;
         case KLong:
           theA = 0;
           theZ = 0;
-          theS = 99;
+//        theS should not be defined
           break;
         case KMinus:
           theA = 0;
@@ -476,7 +483,7 @@ namespace G4INCL {
           break;
 
         case Composite:
-          return ParticleTable::getINCLMass(theA,theZ);
+          return ParticleTable::getINCLMass(theA,theZ,theS);
           break;
 
         default:
@@ -519,7 +526,7 @@ namespace G4INCL {
           break;
 
         case Composite:
-          return ParticleTable::getTableMass(theA,theZ);
+          return ParticleTable::getTableMass(theA,theZ,theS);
           break;
 
         default:
@@ -562,7 +569,7 @@ namespace G4INCL {
           break;
 
         case Composite:
-          return ParticleTable::getRealMass(theA,theZ);
+          return ParticleTable::getRealMass(theA,theZ,theS);
           break;
 
         default:
@@ -593,22 +600,24 @@ namespace G4INCL {
      * \return the correction
      */
     G4double getEmissionQValueCorrection(const G4int AParent, const G4int ZParent) const {
+      const G4int SParent = 0;
       const G4int ADaughter = AParent - theA;
       const G4int ZDaughter = ZParent - theZ;
+      const G4int SDaughter = 0;
 
       // Note the minus sign here
       G4double theQValue;
       if(isCluster())
-        theQValue = -ParticleTable::getTableQValue(theA, theZ, ADaughter, ZDaughter);
+        theQValue = -ParticleTable::getTableQValue(theA, theZ, theS, ADaughter, ZDaughter, SDaughter);
       else {
-        const G4double massTableParent = ParticleTable::getTableMass(AParent,ZParent);
-        const G4double massTableDaughter = ParticleTable::getTableMass(ADaughter,ZDaughter);
+        const G4double massTableParent = ParticleTable::getTableMass(AParent,ZParent,SParent);
+        const G4double massTableDaughter = ParticleTable::getTableMass(ADaughter,ZDaughter,SDaughter);
         const G4double massTableParticle = getTableMass();
         theQValue = massTableParent - massTableDaughter - massTableParticle;
       }
 
-      const G4double massINCLParent = ParticleTable::getINCLMass(AParent,ZParent);
-      const G4double massINCLDaughter = ParticleTable::getINCLMass(ADaughter,ZDaughter);
+      const G4double massINCLParent = ParticleTable::getINCLMass(AParent,ZParent,SParent);
+      const G4double massINCLDaughter = ParticleTable::getINCLMass(ADaughter,ZDaughter,SDaughter);
       const G4double massINCLParticle = getINCLMass();
 
       // The rhs corresponds to the INCL Q-value
@@ -631,14 +640,18 @@ namespace G4INCL {
      * \return the correction
      */
     G4double getTransferQValueCorrection(const G4int AFrom, const G4int ZFrom, const G4int ATo, const G4int ZTo) const {
+      const G4int SFrom = 0;
+      const G4int STo = 0;
       const G4int AFromDaughter = AFrom - theA;
       const G4int ZFromDaughter = ZFrom - theZ;
+      const G4int SFromDaughter = 0;
       const G4int AToDaughter = ATo + theA;
       const G4int ZToDaughter = ZTo + theZ;
-      const G4double theQValue = ParticleTable::getTableQValue(AToDaughter,ZToDaughter,AFromDaughter,ZFromDaughter,AFrom,ZFrom);
+      const G4int SToDaughter = 0;
+      const G4double theQValue = ParticleTable::getTableQValue(AToDaughter,ZToDaughter,SToDaughter,AFromDaughter,ZFromDaughter,SFromDaughter,AFrom,ZFrom,SFrom);
 
-      const G4double massINCLTo = ParticleTable::getINCLMass(ATo,ZTo);
-      const G4double massINCLToDaughter = ParticleTable::getINCLMass(AToDaughter,ZToDaughter);
+      const G4double massINCLTo = ParticleTable::getINCLMass(ATo,ZTo,STo);
+      const G4double massINCLToDaughter = ParticleTable::getINCLMass(AToDaughter,ZToDaughter,SToDaughter);
       /* Note that here we have to use the table mass in the INCL Q-value. We
        * cannot use theMass, because at this stage the particle is probably
        * still off-shell; and we cannot use getINCLMass(), because it leads to
@@ -649,6 +662,83 @@ namespace G4INCL {
       // The rhs corresponds to the INCL Q-value for particle absorption
       return theQValue - (massINCLToDaughter-massINCLTo-massINCLParticle);
     }
+
+    /**\brief Computes correction on the emission Q-value for hypernuclei
+     *
+     * Computes the correction that must be applied to INCL particles in
+     * order to obtain the correct Q-value for particle emission from a given
+     * nucleus. For absorption, the correction is obviously equal to minus
+     * the value returned by this function.
+     *
+     * \param AParent the mass number of the emitting nucleus
+     * \param ZParent the charge number of the emitting nucleus
+     * \param SParent the strangess number of the emitting nucleus
+     * \return the correction
+     */
+    G4double getEmissionQValueCorrection(const G4int AParent, const G4int ZParent, const G4int SParent) const {
+      const G4int ADaughter = AParent - theA;
+      const G4int ZDaughter = ZParent - theZ;
+      const G4int SDaughter = SParent - theS;
+
+      // Note the minus sign here
+      G4double theQValue;
+      if(isCluster())
+        theQValue = -ParticleTable::getTableQValue(theA, theZ, theS, ADaughter, ZDaughter, SDaughter);
+      else {
+        const G4double massTableParent = ParticleTable::getTableMass(AParent,ZParent,SParent);
+        const G4double massTableDaughter = ParticleTable::getTableMass(ADaughter,ZDaughter,SDaughter);
+        const G4double massTableParticle = getTableMass();
+        theQValue = massTableParent - massTableDaughter - massTableParticle;
+      }
+
+      const G4double massINCLParent = ParticleTable::getINCLMass(AParent,ZParent,SParent);
+      const G4double massINCLDaughter = ParticleTable::getINCLMass(ADaughter,ZDaughter,SDaughter);
+      const G4double massINCLParticle = getINCLMass();
+
+      // The rhs corresponds to the INCL Q-value
+      return theQValue - (massINCLParent-massINCLDaughter-massINCLParticle);
+    }
+
+    /**\brief Computes correction on the transfer Q-value for hypernuclei
+     *
+     * Computes the correction that must be applied to INCL particles in
+     * order to obtain the correct Q-value for particle transfer from a given
+     * nucleus to another.
+     *
+     * Assumes that the receving nucleus is INCL's target nucleus, with the
+     * INCL separation energy.
+     *
+     * \param AFrom the mass number of the donating nucleus
+     * \param ZFrom the charge number of the donating nucleus
+     * \param SFrom the strangess number of the donating nucleus
+     * \param ATo the mass number of the receiving nucleus
+     * \param ZTo the charge number of the receiving nucleus
+     * \param STo the strangess number of the receiving nucleus
+     * \return the correction
+     */
+    G4double getTransferQValueCorrection(const G4int AFrom, const G4int ZFrom, const G4int SFrom, const G4int ATo, const G4int ZTo , const G4int STo) const {
+      const G4int AFromDaughter = AFrom - theA;
+      const G4int ZFromDaughter = ZFrom - theZ;
+      const G4int SFromDaughter = SFrom - theS;
+      const G4int AToDaughter = ATo + theA;
+      const G4int ZToDaughter = ZTo + theZ;
+      const G4int SToDaughter = STo + theS;
+      const G4double theQValue = ParticleTable::getTableQValue(AToDaughter,ZToDaughter,SFromDaughter,AFromDaughter,ZFromDaughter,SToDaughter,AFrom,ZFrom,SFrom);
+
+      const G4double massINCLTo = ParticleTable::getINCLMass(ATo,ZTo,STo);
+      const G4double massINCLToDaughter = ParticleTable::getINCLMass(AToDaughter,ZToDaughter,SToDaughter);
+      /* Note that here we have to use the table mass in the INCL Q-value. We
+       * cannot use theMass, because at this stage the particle is probably
+       * still off-shell; and we cannot use getINCLMass(), because it leads to
+       * violations of global energy conservation.
+       */
+      const G4double massINCLParticle = getTableMass();
+
+      // The rhs corresponds to the INCL Q-value for particle absorption
+      return theQValue - (massINCLToDaughter-massINCLTo-massINCLParticle);
+    }
+
+
 
     /** \brief Get the the particle invariant mass.
      *
@@ -952,6 +1042,16 @@ namespace G4INCL {
 	  this->theBiasCollisionVector = BiasCollisionVector;
 	  this->setParticleBias(Particle::getBiasFromVector(BiasCollisionVector));
 	  }
+    
+    /** \brief Number of Kaon inside de nucleus
+     * 
+     * Put in the Particle class in order to calculate the
+     * "correct" mass of composit particle.
+     * 
+     */
+     
+    G4int getNumberOfKaon() const { return theNKaon; };
+    void setNumberOfKaon(const G4int NK) { theNKaon = NK; }
   
   public:
     /** \brief Time ordered vector of all bias applied
@@ -996,6 +1096,8 @@ namespace G4INCL {
     G4double uncorrelatedMomentum;
     
     G4double theParticleBias;
+    /// \brief The number of Kaons inside the nucleus (update during the cascade)
+    G4int theNKaon;
 
   private:
     G4double theHelicity;

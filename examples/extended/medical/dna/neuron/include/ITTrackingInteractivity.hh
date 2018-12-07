@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $Id$
 //
 /// \file ITTrackingInteractivity.hh
 /// \brief Definition of the ITTrackingInteractivity class

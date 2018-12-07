@@ -26,7 +26,6 @@
 /// \file RE06/exampleRE06.cc
 /// \brief Main program of the RE06 example
 //
-// $Id: exampleRE06.cc 109972 2018-05-14 07:07:04Z gcosmo $
 //
 // --------------------------------------------------------------
 //      GEANT 4 - example RE06

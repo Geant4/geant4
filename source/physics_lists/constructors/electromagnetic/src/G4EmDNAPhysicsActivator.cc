@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmDNAPhysicsActivator.cc 97499 2016-06-03 12:02:26Z matkara $
 // add elastic scattering processes of proton, hydrogen, helium, alpha+, alpha++
 
 #include "G4EmDNAPhysicsActivator.hh"
@@ -352,10 +351,10 @@ void G4EmDNAPhysicsActivator::ConstructProcess()
     // When chemistry is activated: G4DNAElectronSolvation turns the electron
     // to a solvated electron, otherwise it kills the electron at the
     // corresponding high energy limit of the model
-    G4DNAElectronSolvation* solvatation = 
+    G4DNAElectronSolvation* pSolvatation =
       new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
-    solvatation->AddEmModel(0, new G4DummyModel());
-    eman->AddDiscreteProcess(solvatation);
+    pSolvatation->SetEmModel(G4DNASolvationModelFactory::GetMacroDefinedModel());
+    eman->AddDiscreteProcess(pSolvatation);
   }
   
   G4LowECapture* pcap = new G4LowECapture(pmin);
@@ -399,9 +398,11 @@ void G4EmDNAPhysicsActivator::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmDNAPhysicsActivator::AddElectronModels0(const G4String& reg, 
-						 G4LowECapture* ecap, G4bool emsc, 
-						 G4double elowest, G4double elimel)
+void G4EmDNAPhysicsActivator::AddElectronModels0(const G4String& reg,
+                                                 G4LowECapture* ecap,
+                                                 G4bool emsc,
+                                                 G4double elowest,
+                                                 G4double elimel)
 { 
   G4EmConfigurator* em_config = 
     G4LossTableManager::Instance()->EmConfigurator();

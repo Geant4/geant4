@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSetup.cc 108895 2018-03-15 10:27:25Z gcosmo $
 //
 // class G4GDMLReadSetup Implementation
 //

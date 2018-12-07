@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 // Author:  Dennis Wright (SLAC)
 // Date:    6 January 2014
 //

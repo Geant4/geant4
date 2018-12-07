@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSDiffractiveExcitation.hh 107867 2017-12-07 14:44:07Z gcosmo $
 
 #ifndef G4QGSDiffractiveExcitation_h
 #define G4QGSDiffractiveExcitation_h 1
@@ -50,24 +49,16 @@ class G4ExcitedString;
 
 class G4QGSDiffractiveExcitation 
 {
-
-public:
-
+  public:
 	G4QGSDiffractiveExcitation();
 	virtual ~G4QGSDiffractiveExcitation();
 
 	virtual G4bool ExciteParticipants (G4VSplitableHadron * aPartner, 
-                                           G4VSplitableHadron * bPartner,        // Uzhi Oct. 2016
-                                           G4bool ProjectileDiffraction=TRUE) const;  // Uzhi Oct. 2016   , G4bool ProjectileDiffraction
+                                           G4VSplitableHadron * bPartner,
+                                           G4bool ProjectileDiffraction=TRUE) const;
 	virtual G4ExcitedString * String(G4VSplitableHadron * aHadron, G4bool isProjectile) const;
 
-	//      void SetPtWidth(G4double aValue) { widthOfPtSquare = aValue*aValue; }
-	//      void SetExtraMass(G4double aValue) { minExtraMass = aValue; }
-	//      void SetMinimumMass(G4double aValue) { minmass = aValue; }
-
-
-private:
-
+  private:
 	G4QGSDiffractiveExcitation(const G4QGSDiffractiveExcitation &right);
 
 	G4double ChooseP(G4double Pmin, G4double Pmax) const;
@@ -77,8 +68,6 @@ private:
 	const G4QGSDiffractiveExcitation & operator=(const G4QGSDiffractiveExcitation &right);
 	int operator==(const G4QGSDiffractiveExcitation &right) const;
 	int operator!=(const G4QGSDiffractiveExcitation &right) const;
-
-private:
 };
 
 #endif

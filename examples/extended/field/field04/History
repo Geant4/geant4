@@ -1,4 +1,3 @@
-// $Id:$
 // ------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 27, 2018 I.Hrivnacova - fieldex04-V10-04-02
+- Macro review and code clean-up:
+  - Modify handling program according to basic examples
+  - Separated other than visualization settings from vis.mac in a 
+    new init_vis.mac and added 'startPhase' program argument
+  - Added test for commands defined in the example at the end 
+    of field04.in macro
+  - Removed SetCut functions and commands from the physics list and
+    physics list messenger (available in G4 kernel) 
+  - Fixed warnings when geometry parameters are set in PreInit phase
+  - Improved visualization of geometry
+  - Added "beamOn 10" button in gui.mac
+  - Updated README files
 
 May 15, 2018 J.Allison - fieldex04-V10-04-01
 - Remove G4UI_USE and G4VIS_USE.

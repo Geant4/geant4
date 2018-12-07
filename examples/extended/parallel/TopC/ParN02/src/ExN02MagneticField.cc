@@ -27,7 +27,6 @@
 /// \brief Implementation of the ExN02MagneticField class
 //
 //
-// $Id: ExN02MagneticField.cc 66241 2012-12-13 18:34:42Z gunter $
 //  
 //   User Field class implementation.
 //

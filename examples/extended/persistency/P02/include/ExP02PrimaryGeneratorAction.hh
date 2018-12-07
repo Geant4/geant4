@@ -26,7 +26,6 @@
 /// \file persistency/P02/include/ExP02PrimaryGeneratorAction.hh
 /// \brief Definition of the ExP02PrimaryGeneratorAction class
 //
-// $Id: ExP02PrimaryGeneratorAction.hh 71727 2013-06-21 07:55:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

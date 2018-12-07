@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticProcess.cc 110545 2018-05-29 13:40:55Z gcosmo $
 //
 // Geant4 Hadron Elastic Scattering Process 
 // 

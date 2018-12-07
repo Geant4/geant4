@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh 110286 2018-05-18 09:40:01Z gcosmo $
 //
 //
 // Global Constants and typedefs
@@ -68,5 +67,8 @@
 
 // Global error function
 #include "G4Exception.hh"
+
+// Global utility functions
+#include "G4EnvironmentUtils.hh"
 
 #endif /* GLOBALS_HH */

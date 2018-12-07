@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.cc 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -68,7 +67,7 @@ G4bool G4DataVector::Store(std::ofstream& fOut, G4bool ascii)
   } 
 
   // Binary Mode
-  size_t sizeV = size(); 
+  G4int sizeV = G4int(size()); 
   fOut.write((char*)(&sizeV), sizeof sizeV);
 
   G4double* value = new G4double[sizeV];

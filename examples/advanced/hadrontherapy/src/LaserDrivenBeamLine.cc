@@ -48,7 +48,6 @@
 #include "G4Material.hh"
 //
 #include "G4FieldManager.hh"
-#include "G4MagIntegratorDriver.hh"
 #include "G4MagIntegratorStepper.hh"
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4ExplicitEuler.hh"
@@ -69,9 +68,10 @@
 #include "G4HelixSimpleRunge.hh"
 #include "G4CashKarpRKF45.hh"
 #include "G4RKG3_Stepper.hh"
+#include "G4MagIntegratorDriver.hh"
 #include "G4SubtractionSolid.hh"
 
-// 
+//
 #include "G4UniformElectricField.hh"
 #include "G4ElectricField.hh"
 #include "HadrontherapyElectricTabulatedField3D.hh"
@@ -81,7 +81,7 @@
 //G4bool LaserDrivenBeamLine::doCalculation = false;
 /////////////////////////////////////////////////////////////////////////////
 LaserDrivenBeamLine::LaserDrivenBeamLine():
-  hadrontherapydetectorconstruction(0), physicTreatmentRoom(0),
+hadrontherapydetectorconstruction(0), physicTreatmentRoom(0),
 PFirstTriplet(0),PSecondTriplet(0),PThirdTriplet(0),PFourthTriplet(0), physicFirstQuad(0),physicSecondQuad(0),physicThirdQuad(0),physicFourthQuad(0),
 solidExternalChamber(0),logicExternalChamber(0),physicExternalChamber(0),
 solidInternalChamber(0),logicInternalChamber(0),physicInternalChamber(0),
@@ -97,7 +97,7 @@ solidExternalMagnet_4(0),logicExternalMagnet_4(0),physicExternalMagnet_4(0),phys
 solidMagnet_4(0),logicMagnet_4(0),physicMagnet_4Right(0),physicMagnet_4Left(0),
 solidExternalSlit(0), logicExternalSlit(0), physicExternalSlit(0),
 solidInternalSlit(0),logicInternalSlit(0),physicInternalSlit(0),
-  physicExitPipe(0),physicExitWindow(0),physicExithole(0),physicEntrancePipe(0),physicEntrancehole(0) 
+physicExitPipe(0),physicExitWindow(0),physicExithole(0),physicEntrancePipe(0),physicEntrancehole(0)
 {
     laserDrivenMessenger = new LaserDrivenBeamLineMessenger(this);
     
@@ -116,7 +116,7 @@ solidInternalSlit(0),logicInternalSlit(0),physicInternalSlit(0),
 LaserDrivenBeamLine::~LaserDrivenBeamLine()
 {
     //delete laserDrivenMessenger;
-    delete hadrontherapydetectorconstruction;    
+    delete hadrontherapydetectorconstruction;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -131,10 +131,10 @@ G4VPhysicalVolume* LaserDrivenBeamLine::Construct()
     //***************************** PW ***************************************
     if (!hadrontherapydetectorconstruction)
         
-    //***************************** PW ***************************************
+        //***************************** PW ***************************************
         
-    // HadrontherapyDetectorConstruction builds ONLY the phantom and the detector with its associated ROGeometry
-    hadrontherapydetectorconstruction = new HadrontherapyDetectorConstruction(physicTreatmentRoom);
+        // HadrontherapyDetectorConstruction builds ONLY the phantom and the detector with its associated ROGeometry
+        hadrontherapydetectorconstruction = new HadrontherapyDetectorConstruction(physicTreatmentRoom);
     G4cout<<"HadrontherapyDetectorConstruction"<<G4endl;
     //***************************** PW ***************************************
     
@@ -152,11 +152,11 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     white -> SetVisibility(true);
     white -> SetForceSolid(true);
     white -> SetForceWireframe(true);
-	
+    
     blue = new G4VisAttributes(G4Colour(0. ,0. ,1.));
     blue -> SetVisibility(true);
     //blue -> SetForceSolid(true);
-	
+    
     gray = new G4VisAttributes( G4Colour(0.5, 0.5, 0.5, 0.5 ));
     gray-> SetVisibility(true);
     gray-> SetForceSolid(true);
@@ -165,11 +165,11 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     red-> SetVisibility(true);
     red-> SetForceSolid(true);
     //red -> SetForceWireframe(true);
-	
+    
     yellow = new G4VisAttributes(G4Colour(1., 1., 0., 0.2));
     yellow-> SetVisibility(true);
     yellow-> SetForceSolid(true);
-	
+    
     green = new G4VisAttributes( G4Colour(25/255. , 255/255. ,  25/255., 0.4));
     green -> SetVisibility(true);
     green -> SetForceWireframe(true);
@@ -178,11 +178,11 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     black = new G4VisAttributes( G4Colour(255/255. , 255/255.,  255/255.));
     black -> SetVisibility(true);
     black -> SetForceSolid(true);
-	
+    
     darkGreen = new G4VisAttributes( G4Colour(0/255. , 100/255. ,  0/255.));
     darkGreen -> SetVisibility(true);
     darkGreen -> SetForceSolid(true);
-	
+    
     darkOrange3 = new G4VisAttributes( G4Colour(205/255. , 102/255. ,  000/255., 0.7));
     darkOrange3 -> SetVisibility(true);
     darkOrange3 -> SetForceSolid(true);
@@ -213,7 +213,7 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     
     G4double defaultStartAngleExitWindow = 0.0 *deg;
     startAngleExitWindow = defaultStartAngleExitWindow;
-	
+    
     G4double defaultSpanningAngleExitWindow = 360.*deg;
     spanningAngleExitWindow = defaultSpanningAngleExitWindow;
     ////////////////////////////// Exit pipe ////////////////////////////////
@@ -237,28 +237,28 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     
     G4double defaultStartAngleExitPipe = 0.0 *deg;
     startAngleExitPipe = defaultStartAngleExitPipe;
-	
+    
     G4double defaultSpanningAngleExitPipe = 360.*deg;
     spanningAngleExitPipe = defaultSpanningAngleExitPipe;
     //////////////////////////////////////////////// Vacuum chamber //////////////////////////////
-    G4double defaultExternalChamberXSize = 79.6*cm; 
+    G4double defaultExternalChamberXSize = 79.6*cm;
     externalChamberXSize = defaultExternalChamberXSize;
-	
+    
     G4double defaultExternalChamberYSize = 50. *cm;
     externalChamberYSize = defaultExternalChamberYSize;
-
+    
     G4double defaultExternalChamberZSize = 50. *cm;
     externalChamberZSize = defaultExternalChamberZSize;
-	
+    
     G4double defaultExternalChamberXPosition = -(externalChamberXSize/2.+ExitPipeheight/2.)+ ExitPipeXPosition;
     externalChamberXPosition = defaultExternalChamberXPosition;
-	
+    
     G4double defaultExternalChamberYPosition = 0.0 *mm;
     externalChamberYPosition = defaultExternalChamberYPosition;
-	
+    
     G4double defaultExternalChamberZPosition = 0.0 *mm;
     externalChamberZPosition = defaultExternalChamberZPosition;
-	
+    
     // Defaults of the internal chamber dimensions
     // The position of its center is in the center
     // of the internal chamber while the dimension are
@@ -268,10 +268,10 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     
     G4double defaultInternalChamberXSize =externalChamberXSize - 2*VaccumChamberWallThickness;
     internalChamberXSize = defaultInternalChamberXSize;
-	
+    
     G4double defaultInternalChamberYSize =externalChamberYSize - 2*VaccumChamberWallThickness;
     internalChamberYSize = defaultInternalChamberYSize;
-	
+    
     G4double defaultInternalChamberZSize = externalChamberZSize - 2*VaccumChamberWallThickness;
     internalChamberZSize = defaultInternalChamberZSize;
     /////////////////////// Exit hole in vessel ///////////////////////////////////////////////
@@ -295,7 +295,7 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     
     G4double defaultStartAngleExithole = 0.0 *deg;
     startAngleExithole= defaultStartAngleExithole;
-	
+    
     G4double defaultSpanningAngleExithole = 360.*deg;
     spanningAngleExithole = defaultSpanningAngleExithole;
     /////////////////////////////////Final collimator //////////////////////////////
@@ -311,21 +311,21 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     
     defaultFinalCollimatorThickness = 3.0 *mm;
     FinalCollimatorThickness = defaultFinalCollimatorThickness;
- 	
+    
     defaultStartAngleFinalCollimator = 0.0 *deg;
     startAngleFinalCollimator = defaultStartAngleFinalCollimator;
-	
+    
     defaultSpanningAngleFinalCollimator = 360.*deg;
     spanningAngleFinalCollimator = defaultSpanningAngleFinalCollimator;
-  	
+    
     defaultFinalCollimatorXPosition = internalChamberXSize/2.-ExitholeToFinalCollimator-FinalCollimatorThickness/2.;
     collimatorFinalBox_XPosition=defaultFinalCollimatorXPosition;
     FinalcollimatorXPosition = 0.0*mm; //HOLE IN THE FINAL COLLIMATOR
-	
+    
     defaultFinalCollimatorYPosition = 0.0*mm;
     collimatorFinalBox_YPosition=defaultFinalCollimatorYPosition;
     FinalcollimatorYPosition = defaultFinalCollimatorYPosition;
-	
+    
     defaultFinalCollimatorZPosition = 0.0*mm;
     collimatorFinalBox_ZPosition=0.0*mm;
     FinalcollimatorZPosition =defaultFinalCollimatorZPosition;
@@ -357,17 +357,17 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     externalMagnet_4XSize = defaultExternalMagnet_XSize;
     externalMagnet_4YSize = defaultExternalMagnet_YSize;
     externalMagnet_4ZSize = defaultExternalMagnet_ZSize;
-	
+    
     Magnet_4XSize=defaultMagnet_XSize;
     Magnet_4YSize=defaultMagnet_YSize;
     Magnet_4ZSize=defaultMagnet_ZSize;
     
     G4double defaultExternalMagnet_4XPosition = -(FinalCollimatorThickness/2.+FinalCollimatorToMagnet4+defaultExternalMagnet_XSize/2.)+ collimatorFinalBox_XPosition;
     externalMagnet_4XPosition = defaultExternalMagnet_4XPosition;
-	
+    
     externalMagnet_4YPosition = defaultExternalMagnet_YPosition;
     externalMagnet_4ZPosition = defaultExternalMagnet_ZPosition;
-	
+    
     Magnet_4XPosition=externalMagnet_4XPosition;
     Magnet_4YPosition=0.0*mm;
     Magnet_4ZPosition=(defaultExternalMagnet_ZSize+defaultMagnet_ZSize)/2.;
@@ -386,11 +386,11 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     
     G4double defaultExternalMagnet_3XPosition =-(Magnet4ToMagnet3+defaultExternalMagnet_XSize/2.+defaultExternalMagnet_XSize/2.)+externalMagnet_4XPosition;
     externalMagnet_3XPosition = defaultExternalMagnet_3XPosition;
-	
+    
     externalMagnet_3YPosition =defaultExternalMagnet_YPosition;
     externalMagnet_3ZPosition = defaultExternalMagnet_ZPosition;
     
-	
+    
     Magnet_3XPosition=externalMagnet_3XPosition;
     Magnet_3YPosition=0.0*mm;
     Magnet_3ZPosition=(defaultExternalMagnet_ZSize+defaultMagnet_ZSize)/2.;
@@ -409,10 +409,10 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     
     G4double defaultExternalMagnet_2XPosition =-(Magnet3ToMagnet2+defaultExternalMagnet_XSize/2.+defaultExternalMagnet_XSize/2.)+externalMagnet_3XPosition;
     externalMagnet_2XPosition = defaultExternalMagnet_2XPosition;
-	
+    
     externalMagnet_2YPosition = defaultExternalMagnet_YPosition;
     externalMagnet_2ZPosition = defaultExternalMagnet_ZPosition;
-	
+    
     Magnet_2XPosition=externalMagnet_2XPosition;
     Magnet_2YPosition=0.0*mm;
     Magnet_2ZPosition=(defaultExternalMagnet_ZSize+defaultMagnet_ZSize)/2.;
@@ -431,48 +431,48 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     
     G4double defaultExternalMagnet_1XPosition = -(Magnet2ToMagnet1+defaultExternalMagnet_XSize/2.+defaultExternalMagnet_XSize/2.)+externalMagnet_2XPosition;
     externalMagnet_1XPosition = defaultExternalMagnet_1XPosition;
-	
+    
     externalMagnet_1YPosition = defaultExternalMagnet_YPosition;
     externalMagnet_1ZPosition = defaultExternalMagnet_ZPosition;
-	
+    
     Magnet_1XPosition=defaultExternalMagnet_1XPosition;
     Magnet_1YPosition=0.0*mm;
     Magnet_1ZPosition=(defaultExternalMagnet_ZSize+defaultMagnet_ZSize)/2.;
     
     // Defaults of the external part of the Slit
-    G4double defaultExternalSlitXSize = 8.0 *mm; 
+    G4double defaultExternalSlitXSize = 8.0 *mm;
     externalSlitXSize = defaultExternalSlitXSize;
-	
+    
     G4double defaultExternalSlitYSize = 82. *mm;
     externalSlitYSize = defaultExternalSlitYSize;
-	
+    
     G4double defaultExternalSlitZSize = 210. *mm;
     externalSlitZSize = defaultExternalSlitZSize;
-	
+    
     G4double defaultExternalSlitXPosition = -(Magnet3ToMagnet2/2.+defaultExternalMagnet_XSize/2.)+externalMagnet_3XPosition;
     externalSlitXPosition = defaultExternalSlitXPosition;
-	
+    
     G4double defaultExternalSlitYPosition = 0.0 *mm;
     externalSlitYPosition = defaultExternalSlitYPosition;
-	
+    
     G4double defaultExternalSlitZPosition = 0.0 *mm;
     externalSlitZPosition = defaultExternalSlitZPosition;
-	
+    
     // Defaults of the internal part of the Slit:
     internalSlitXSize = defaultExternalSlitXSize;
-	
+    
     G4double defaultInternalSlitYSize = 3 *mm;
     internalSlitYSize = defaultInternalSlitYSize;
-	
+    
     G4double defaultInternalSlitZSize = 3 *mm;
     internalSlitZSize = defaultInternalSlitZSize;
-	
+    
     G4double defaultInternalSlitXPosition = 0.0 *mm;
     internalSlitXPosition = defaultInternalSlitXPosition;
-	
+    
     G4double defaultInternalSlitYPosition = 0.0 *mm;
     internalSlitYPosition = defaultInternalSlitYPosition;
-	
+    
     G4double defaultInternalSlitZPosition = 40.0 *mm;
     internalSlitZPosition = defaultInternalSlitZPosition;
     
@@ -482,33 +482,33 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     defaultInnerRadiusCollimator = 0.0 *mm;
     innerRadiusCollimator = defaultInnerRadiusCollimator;
     
-    defaultOuterRadiusCollimator = 2.5 *mm; 
+    defaultOuterRadiusCollimator = 2.5 *mm;
     outerRadiusCollimator = defaultOuterRadiusCollimator;
     
     thicknessCollimator = defaultThicknessCollimator;
-	
+    
     defaultStartAngleCollimator = 0.0 *deg;
     startAngleCollimator = defaultStartAngleCollimator;
-	
+    
     defaultSpanningAngleCollimator = 360.*deg;
     spanningAngleCollimator = defaultSpanningAngleCollimator;
     
-    G4double defultMagnet1ToFirstCollimator=25.*mm; 
+    G4double defultMagnet1ToFirstCollimator=25.*mm;
     Magnet1ToFirstCollimator=defultMagnet1ToFirstCollimator;
     
     defaultCollimatorXPosition = -(thicknessCollimator/2.+Magnet1ToFirstCollimator+defaultExternalMagnet_XSize/2.)+externalMagnet_1XPosition;
     collimatorBox_XPosition=defaultCollimatorXPosition;
     collimatorXPosition = 0.0*mm;
-  	
+    
     defaultCollimatorYPosition = 0.0*mm;
     collimatorBox_YPosition=defaultCollimatorYPosition;
     collimatorYPosition = 0.0*mm;
-	
+    
     defaultCollimatorZPosition = 0.0*mm;
     collimatorBox_ZPosition=defaultCollimatorZPosition;
     collimatorZPosition = 0.*mm;
     
-    collimatorBoxYSize=82.0* mm; 
+    collimatorBoxYSize=82.0* mm;
     collimatorBoxZSize=210.0* mm;
     
     //////////////////// Entrance Hole //////////////////////////////////
@@ -523,10 +523,10 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     
     G4double defaultEntranceholeXPosition=-(externalChamberXSize/2.-EntranceholeThickness/2.);
     EntranceholeXPosition=defaultEntranceholeXPosition;
-
+    
     G4double defaultEntranceholeQuadXPosition=+(externalChamberXSize/2.-EntranceholeThickness/2.);
     EntranceholeQuadXPosition=defaultEntranceholeQuadXPosition;
-
+    
     G4double defaultEntranceholeYPosition=0.;
     EntranceholeYPosition=defaultEntranceholeYPosition;
     
@@ -535,7 +535,7 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     
     G4double defaultStartAngleEntrancehole= 0.0 *deg;
     startAngleEntrancehole= defaultStartAngleEntrancehole;
-	
+    
     G4double defaultSpanningAngleEntrancehole= 360.*deg;
     spanningAngleEntrancehole=defaultSpanningAngleEntrancehole;
     
@@ -561,18 +561,18 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     
     G4double defaultStartAngleEntrancePipe= 0.0 *deg;
     startAngleEntrancePipe= defaultStartAngleEntrancePipe;
-	
+    
     G4double defaultSpanningAngleEntrancePipe= 360.*deg;
     spanningAngleEntrancePipe=defaultSpanningAngleEntrancePipe;
     
-   /////////////////////////////////////Quadrupole//////////////////////////////////
+    /////////////////////////////////////Quadrupole//////////////////////////////////
     G4double defaultQuadChamberWallPosX=-(externalChamberXSize/2.)-EntrancePipeheight/2.+EntrancePipeXPosition;
     QuadChamberWallPosX=defaultQuadChamberWallPosX;
     G4double defaultQuadChamberWallPosY=0.0*cm;
     QuadChamberWallPosY=defaultQuadChamberWallPosY;
     G4double defaultQuadChamberWallPosZ=0.0*cm;
     QuadChamberWallPosZ=defaultQuadChamberWallPosZ;
-
+    
     G4double defaultInnerRadiusQuad=10.0*mm;
     InnerRadiusQuad=defaultInnerRadiusQuad;
     
@@ -593,10 +593,10 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     
     G4double defaultStartAngleQuad = 0.0 *deg;
     startAngleQuad = defaultStartAngleQuad;
-	
+    
     G4double defaultSpanningAngleQuad = 360.*deg;
     spanningAngleQuad = defaultSpanningAngleQuad;
-
+    
     G4double distancefromQuadChamber=100.0*mm;
     G4double defaultFourthQuadXPosition= internalChamberXSize/2.-distancefromQuadChamber-FourthQuadThickness/2.;
     FourthQuadXPosition=defaultFourthQuadXPosition;
@@ -606,22 +606,22 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     G4double defaultThirdQuadXPosition=-ThirdQuadThickness/2.-distanceFQuadTQuad-FourthQuadThickness/2.+FourthQuadXPosition;
     ThirdQuadXPosition=defaultThirdQuadXPosition;
     ThirdQXPosition=0.0*mm;
-
+    
     G4double distanceTQuadSQuad=100.0*mm;
     G4double defaultSecondQuadXPosition=-SecondQuadThickness/2.-distanceTQuadSQuad-ThirdQuadThickness/2.+ThirdQuadXPosition;
     SecondQuadXPosition=defaultSecondQuadXPosition;
     SecondQXPosition=0.0*mm;
-
+    
     G4double distanceSQuadFQuad=100.0*mm;
     G4double defaultFirstQuadXPosition=-FirstQuadThickness/2.-distanceSQuadFQuad-SecondQuadThickness/2.+SecondQuadXPosition;
     FirstQuadXPosition=defaultFirstQuadXPosition;
     FirstQXPosition=0.0*mm;
- 
+    
     G4double defaultQuadYPosition=0.0*mm;
     QuadYPosition=defaultQuadYPosition;
     QYPosition=defaultQuadYPosition;
     
-    G4double defaultQuadTZPosition= 0.*mm; 
+    G4double defaultQuadTZPosition= 0.*mm;
     QuadZPosition=defaultQuadTZPosition;
     G4double defaultQuadZPosition=0.0*mm;
     QZPosition=defaultQuadZPosition;
@@ -640,7 +640,7 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     G4Material* kaptonNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON", isotopes);
     //G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER", isotopes);
     G4Material* stainless_steelNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_STAINLESS-STEEL", isotopes);
-	
+    
     // Elements and compunds not pre-defined in Geant4
     G4double d; // Density
     G4int nComponents;// Number of components
@@ -664,7 +664,7 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     new G4Material("dummyMat", 1., 1.*g/mole, 1.*g/cm3);
     
     //***************************** PW ***************************************
-	
+    
     // MATERIAL ASSIGNMENT
     MotherMaterial=vacuum;
     QuadMaterial=ironNist;
@@ -676,23 +676,23 @@ void LaserDrivenBeamLine::SetDefaultDimensions()
     FinalcollimatorHoleMaterial=vacuum;
     WindowMaterial=kaptonNist;
     PipeMaterial=stainless_steelNist;
-	
+    
     externalMagnet_1Material = ironNist;
     externalMagnet_2Material = ironNist;
     externalMagnet_3Material = ironNist;
     externalMagnet_4Material = ironNist;
-	
+    
     externalSlitMaterial = brass;
     internalSlitMaterial =vacuum;
-
- //FC Material 
- 
+    
+    //FC Material
+    
     KaptonEntranceWindowMaterial=kaptonNist;
     GuardRingMaterial=stainless_steelNist;
     FaradayCupBottomMaterial=aluminiumNist;
     CupMaterial=FaradayCupBottomMaterial;
     MassRingMaterial=GuardRingMaterial;
-
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -701,7 +701,7 @@ void LaserDrivenBeamLine::ConstructLaserDrivenBeamLine()
     // -----------------------------
     // Treatment room - World volume
     //------------------------------
-	
+    
     const G4double worldX = 800.0 *cm;
     const G4double worldY = 400.0 *cm;
     const G4double worldZ = 400.0 *cm;
@@ -710,14 +710,14 @@ void LaserDrivenBeamLine::ConstructLaserDrivenBeamLine()
                                    worldX,
                                    worldY,
                                    worldZ);
-	
+    
     logicTreatmentRoom = new G4LogicalVolume(solidTreatmentRoom,
                                              MotherMaterial,
                                              "logicTreatmentRoom",
                                              0,
                                              0,
                                              0);
-	
+    
     physicTreatmentRoom = new G4PVPlacement(0,
                                             G4ThreeVector(),
                                             "physicalTreatmentRoom",
@@ -725,486 +725,486 @@ void LaserDrivenBeamLine::ConstructLaserDrivenBeamLine()
                                             0,
                                             false,
                                             0);
-	
-	
+    
+    
     // The treatment room is invisible in the Visualisation
     logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::GetInvisible());
-     
+    
     // The various components of the energyselector are constructed calling
     // the following methods
     
     // This method constructs the chamber where the energyselector is located
     EnergySelectorChamber();
     // This method construct the exit window
-    ExitWindow();   
+    ExitWindow();
     // This method construct the exit pipe
-    ExitPipe();	
+    ExitPipe();
     // This method construct the exit hole
     Exithole();
-	
+    
     // This method constructs a circular collimator of variable thickness and
     // aperture. It is placed befor the magnet to collimate particles caming from the
     // plasma;
     Collimator();
-	
+    
     // This method constructs the magnet 1 and its associated magnetic field
     Magnet_1();
-	
+    
     // This method constructs the magnet 2 and its associated magnetic field
-     Magnet_2();
+    Magnet_2();
     
     // This method constructs the magnet 3 and its associated magnetic field
-     Magnet_3();
+    Magnet_3();
     
     // This method constructs the magnet 4 and its associated magnetic field
-     Magnet_4();
-	
-    // The selection slit is a square hole moveable inside a metallic plate
-     Slit();
+    Magnet_4();
     
-     FinalCollimator();
-   
-     // This method construct the quadrupoles
-      Quadrupole();
-     // This method construct the entrance hole
-      Entrancehole();
+    // The selection slit is a square hole moveable inside a metallic plate
+    Slit();
+    
+    FinalCollimator();
+    
+    // This method construct the quadrupoles
+    Quadrupole();
+    // This method construct the entrance hole
+    Entrancehole();
     // This method construct the entrance pipe
-     EntrancePipe();
-
-     FaradayCup();
-
+    EntrancePipe();
+    
+    FaradayCup();
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void LaserDrivenBeamLine::ConstructSDandField()
-{ 
-     G4double minEps=1.0e-5;  //   Minimum & value for smallest steps
-     G4double maxEps=1.0e-4;
+{
+    G4double minEps=1.0e-5;  //   Minimum & value for smallest steps
+    G4double maxEps=1.0e-4;
     G4bool allLocal = true;
-     // G4int nvar = 8;  For pure magnetic field, the number of integration variables is the default!
-
- //....oooOO0OOooo..........ENERGY SELECTOR SYSTEM FIELD..........oooOO0OOooo....        
-     if(logicInternalChamber){G4double xOffset =(internalChamberXSize/2.0)+externalSlitXPosition;
-     PurgMagField = new HadrontherapyMagneticField3D("field/ESSMagneticField.TABLE", xOffset);
-     pFieldMgr =new G4FieldManager();  
-     pFieldMgr -> SetDetectorField(PurgMagField);  
-     G4cout << "DeltaStep "<< pFieldMgr -> GetDeltaOneStep()/mm <<"mm" <<endl;
-     pFieldMgr -> CreateChordFinder(PurgMagField); 
-     fEquation = new G4Mag_UsualEqRhs(PurgMagField);     
-     fstepper = new G4ClassicalRK4(fEquation);
-     //////fstepper = new G4HelixImplicitEuler(fEquation);     
-     pIntgrDriver = new G4MagInt_Driver(1*mm,fstepper,fstepper-> GetNumberOfVariables());    
-     //the first parameter is the minimum step
-     pChordFinder = new G4ChordFinder(pIntgrDriver);
-     pFieldMgr->SetChordFinder(pChordFinder);
-     pFieldMgr->SetMinimumEpsilonStep(minEps);
-     pFieldMgr->SetMaximumEpsilonStep(maxEps);
-     pFieldMgr->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
-     logicInternalChamber -> SetFieldManager(pFieldMgr, allLocal);} 
- //....oooOO0OOooo..........QUADS FIELDS..........oooOO0OOooo....  
- //....oooOO0OOooo..........FOURTH QUAD FIELD..........oooOO0OOooo....        
-     if(LFourthTriplet){G4double xOffsetFQ =-(QuadChamberWallPosX+FourthQuadXPosition);
-     PurgMagFieldQuadFourth = new HadrontherapyMagneticField3D("field/Quad80MagneticField.TABLE", xOffsetFQ);
-     pFieldMgrQuadFourth =  new G4FieldManager();
-     pFieldMgrQuadFourth -> SetDetectorField(PurgMagFieldQuadFourth);
-     
-     pFieldMgrQuadFourth -> CreateChordFinder(PurgMagFieldQuadFourth);
-     fEquationQuadFourth = new G4Mag_UsualEqRhs(PurgMagFieldQuadFourth);     
-     fstepperQuadFourth = new G4ClassicalRK4(fEquationQuadFourth);     
-     pIntgrDriverQuadFourth = new G4MagInt_Driver(1*mm,fstepperQuadFourth,fstepperQuadFourth-> GetNumberOfVariables());    
-     //the first parameter is the minimum step
-     pChordFinderQuadFourth = new G4ChordFinder(pIntgrDriverQuadFourth);
-     pFieldMgrQuadFourth->SetChordFinder(pChordFinderQuadFourth);
-     pFieldMgrQuadFourth->SetMinimumEpsilonStep(minEps);
-     pFieldMgrQuadFourth->SetMaximumEpsilonStep(maxEps);
-     pFieldMgrQuadFourth->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
-      LFourthTriplet -> SetFieldManager(pFieldMgrQuadFourth, allLocal);}
- //....oooOO0OOooo..........THIRD QUAD FIELD..........oooOO0OOooo....           
-    if(LThirdTriplet){ G4double xOffsetTQ =-(QuadChamberWallPosX+ThirdQuadXPosition);
-     PurgMagFieldQuadThird = new HadrontherapyMagneticField3D("field/Quad40MagneticField.TABLE", xOffsetTQ);
-     pFieldMgrQuadThird =  new G4FieldManager();
-     pFieldMgrQuadThird -> SetDetectorField(PurgMagFieldQuadThird);     
-     pFieldMgrQuadThird -> CreateChordFinder(PurgMagFieldQuadThird);
-     fEquationQuadThird = new G4Mag_UsualEqRhs(PurgMagFieldQuadThird);
-     fstepperQuadThird = new G4ClassicalRK4(fEquationQuadThird);     
-     pIntgrDriverQuadThird = new G4MagInt_Driver(1*mm,fstepperQuadThird,fstepperQuadThird-> GetNumberOfVariables());    
-     //the first parameter is the minimum step
-     pChordFinderQuadThird = new G4ChordFinder(pIntgrDriverQuadThird);
-     pFieldMgrQuadThird->SetChordFinder(pChordFinderQuadThird);   
-     pFieldMgrQuadThird->SetMinimumEpsilonStep(minEps);
-     pFieldMgrQuadThird->SetMaximumEpsilonStep(maxEps);
-     pFieldMgrQuadThird->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
-     LThirdTriplet -> SetFieldManager(pFieldMgrQuadThird, allLocal);}
- //....oooOO0OOooo..........SECOND QUAD FIELD..........oooOO0OOooo....        
-     if(LSecondTriplet){G4double xOffsetSQ =-(QuadChamberWallPosX+SecondQuadXPosition);
-     PurgMagFieldQuadSecond = new HadrontherapyMagneticField3D("field/Quad40MagneticField.TABLE", xOffsetSQ);
-     pFieldMgrQuadSecond =  new G4FieldManager();
-     pFieldMgrQuadSecond -> SetDetectorField(PurgMagFieldQuadSecond);     
-     pFieldMgrQuadSecond -> CreateChordFinder(PurgMagFieldQuadSecond);
-     fEquationQuadSecond = new G4Mag_UsualEqRhs(PurgMagFieldQuadSecond);     
-     fstepperQuadSecond = new G4ClassicalRK4(fEquationQuadSecond);     
-     pIntgrDriverQuadSecond = new G4MagInt_Driver(1*mm,fstepperQuadSecond,fstepperQuadSecond-> GetNumberOfVariables());    
-     //the first parameter is the minimum step
-     pChordFinderQuadSecond = new G4ChordFinder(pIntgrDriverQuadSecond);
-     pFieldMgrQuadSecond->SetChordFinder(pChordFinderQuadSecond);   
-     pFieldMgrQuadSecond->SetMinimumEpsilonStep(minEps);
-     pFieldMgrQuadSecond->SetMaximumEpsilonStep(maxEps);
-     pFieldMgrQuadSecond->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
-     LSecondTriplet -> SetFieldManager(pFieldMgrQuadSecond, allLocal);}
- //....oooOO0OOooo..........FIRST QUAD FIELD..........oooOO0OOooo....           
-     if(LFirstTriplet) {G4double xOffsetFirstQ =-(QuadChamberWallPosX+FirstQuadXPosition);
-     PurgMagFieldQuadFirst = new HadrontherapyMagneticField3D("field/Quad80MagneticField.TABLE", xOffsetFirstQ);
-     pFieldMgrQuadFirst =  new G4FieldManager();
-     pFieldMgrQuadFirst -> SetDetectorField(PurgMagFieldQuadFirst);     
-     pFieldMgrQuadFirst -> CreateChordFinder(PurgMagFieldQuadFirst);
-     fEquationQuadFirst = new G4Mag_UsualEqRhs(PurgMagFieldQuadFirst);    
-     fstepperQuadFirst = new G4ClassicalRK4(fEquationQuadFirst);     
-     pIntgrDriverQuadFirst = new G4MagInt_Driver(1*mm,fstepperQuadFirst,fstepperQuadFirst-> GetNumberOfVariables());    
-     //the first parameter is the minimum step
-     pChordFinderQuadFirst = new G4ChordFinder(pIntgrDriverQuadFirst);
-     pFieldMgrQuadFirst->SetChordFinder(pChordFinderQuadFirst);   
-     pFieldMgrQuadFirst->SetMinimumEpsilonStep(minEps);
-     pFieldMgrQuadFirst->SetMaximumEpsilonStep(maxEps);
-     pFieldMgrQuadFirst->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
-    LFirstTriplet -> SetFieldManager(pFieldMgrQuadFirst, allLocal);}
- //....oooOO0OOooo..........FARADAY CUP FIELD..........oooOO0OOooo....        
-     if(logicVirtualMag) {G4double exOffset= -20*cm;
-    G4double eyOffset= 0*cm;
-    G4double ezOffset= 0*cm;
-    G4FieldManager *pEFieldmanager = new G4FieldManager();      
-    G4ElectricField *ElectricField = new HadrontherapyElectricTabulatedField3D("field/ElectricFieldFC-600V.TABLE", exOffset, eyOffset, ezOffset);
-    // UNIFORM FIELD
-    // G4ElectroMagneticField* ElectricField = new G4UniformElectricField(G4ThreeVector(0.0, 10.0*volt/m, 0.0)); //G4UniformElectricField
-    // The following is only for global field in the whole geometry
-    //pEFieldmanager = G4TransportationManager::GetTransportationManager() -> GetFieldManager();
-
-    const G4int nvarElectric=8;  // The Equation of motion for Electric (or combined Electric/Magnetic)
-                                 // field requires 8 integration variables
+    // G4int nvar = 8;  For pure magnetic field, the number of integration variables is the default!
     
-    G4EqMagElectricField *fLocalEquation = new G4EqMagElectricField(ElectricField);    
-    G4MagIntegratorStepper* fLocalStepper = new G4ClassicalRK4(fLocalEquation, nvarElectric); 
-    G4MagInt_Driver  *pIntgrDriver_E = new G4MagInt_Driver(0.02*mm, fLocalStepper, fLocalStepper -> GetNumberOfVariables() );
-    G4ChordFinder *fLocalChordFinder = new G4ChordFinder(pIntgrDriver_E);
-    pEFieldmanager -> SetDetectorField(ElectricField);
-    pEFieldmanager -> SetChordFinder(fLocalChordFinder);
-   //G4double deltainter=0.0001*mm;
-   //G4double missdist=0.1*mm;
-   //pEFieldmanager->SetDeltaIntersection(deltainter);
-   //fLocalChordFinder->SetDeltaChord(missdist);
-   pEFieldmanager->SetMinimumEpsilonStep(minEps);
-   pEFieldmanager->SetMaximumEpsilonStep(maxEps);
-   pEFieldmanager->SetDeltaOneStep( 0.5e-3 * mm );   
-   //pEFieldmanager -> SetFieldChangesEnergy(true);    
-    logicVirtualMag -> SetFieldManager(pEFieldmanager, allLocal);}
- //....oooOO0OOooo....................oooOO0OOooo....        
-  G4cout<<" //....oooOO0OOooo.......... FIELDS HAVE BEEN IMPLEMENTED..........oooOO0OOooo...."<<G4endl;
-  return; 
+    //....oooOO0OOooo..........ENERGY SELECTOR SYSTEM FIELD..........oooOO0OOooo....
+    if(logicInternalChamber){G4double xOffset =(internalChamberXSize/2.0)+externalSlitXPosition;
+        PurgMagField = new HadrontherapyMagneticField3D("field/ESSMagneticField.TABLE", xOffset);
+        pFieldMgr =new G4FieldManager();
+        pFieldMgr -> SetDetectorField(PurgMagField);
+        G4cout << "DeltaStep "<< pFieldMgr -> GetDeltaOneStep()/mm <<"mm" <<endl;
+        pFieldMgr -> CreateChordFinder(PurgMagField);
+        fEquation = new G4Mag_UsualEqRhs(PurgMagField);
+        fstepper = new G4ClassicalRK4(fEquation);
+        //////fstepper = new G4HelixImplicitEuler(fEquation);
+        pIntgrDriver = new G4MagInt_Driver(1*mm,fstepper,fstepper-> GetNumberOfVariables());
+        //the first parameter is the minimum step
+        pChordFinder = new G4ChordFinder(pIntgrDriver);
+        pFieldMgr->SetChordFinder(pChordFinder);
+        pFieldMgr->SetMinimumEpsilonStep(minEps);
+        pFieldMgr->SetMaximumEpsilonStep(maxEps);
+        pFieldMgr->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
+        logicInternalChamber -> SetFieldManager(pFieldMgr, allLocal);}
+    //....oooOO0OOooo..........QUADS FIELDS..........oooOO0OOooo....
+    //....oooOO0OOooo..........FOURTH QUAD FIELD..........oooOO0OOooo....
+    if(LFourthTriplet){G4double xOffsetFQ =-(QuadChamberWallPosX+FourthQuadXPosition);
+        PurgMagFieldQuadFourth = new HadrontherapyMagneticField3D("field/Quad80MagneticField.TABLE", xOffsetFQ);
+        pFieldMgrQuadFourth =  new G4FieldManager();
+        pFieldMgrQuadFourth -> SetDetectorField(PurgMagFieldQuadFourth);
+        
+        pFieldMgrQuadFourth -> CreateChordFinder(PurgMagFieldQuadFourth);
+        fEquationQuadFourth = new G4Mag_UsualEqRhs(PurgMagFieldQuadFourth);
+        fstepperQuadFourth = new G4ClassicalRK4(fEquationQuadFourth);
+        pIntgrDriverQuadFourth = new G4MagInt_Driver(1*mm,fstepperQuadFourth,fstepperQuadFourth-> GetNumberOfVariables());
+        //the first parameter is the minimum step
+        pChordFinderQuadFourth = new G4ChordFinder(pIntgrDriverQuadFourth);
+        pFieldMgrQuadFourth->SetChordFinder(pChordFinderQuadFourth);
+        pFieldMgrQuadFourth->SetMinimumEpsilonStep(minEps);
+        pFieldMgrQuadFourth->SetMaximumEpsilonStep(maxEps);
+        pFieldMgrQuadFourth->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
+        LFourthTriplet -> SetFieldManager(pFieldMgrQuadFourth, allLocal);}
+    //....oooOO0OOooo..........THIRD QUAD FIELD..........oooOO0OOooo....
+    if(LThirdTriplet){ G4double xOffsetTQ =-(QuadChamberWallPosX+ThirdQuadXPosition);
+        PurgMagFieldQuadThird = new HadrontherapyMagneticField3D("field/Quad40MagneticField.TABLE", xOffsetTQ);
+        pFieldMgrQuadThird =  new G4FieldManager();
+        pFieldMgrQuadThird -> SetDetectorField(PurgMagFieldQuadThird);
+        pFieldMgrQuadThird -> CreateChordFinder(PurgMagFieldQuadThird);
+        fEquationQuadThird = new G4Mag_UsualEqRhs(PurgMagFieldQuadThird);
+        fstepperQuadThird = new G4ClassicalRK4(fEquationQuadThird);
+        pIntgrDriverQuadThird = new G4MagInt_Driver(1*mm,fstepperQuadThird,fstepperQuadThird-> GetNumberOfVariables());
+        //the first parameter is the minimum step
+        pChordFinderQuadThird = new G4ChordFinder(pIntgrDriverQuadThird);
+        pFieldMgrQuadThird->SetChordFinder(pChordFinderQuadThird);
+        pFieldMgrQuadThird->SetMinimumEpsilonStep(minEps);
+        pFieldMgrQuadThird->SetMaximumEpsilonStep(maxEps);
+        pFieldMgrQuadThird->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
+        LThirdTriplet -> SetFieldManager(pFieldMgrQuadThird, allLocal);}
+    //....oooOO0OOooo..........SECOND QUAD FIELD..........oooOO0OOooo....
+    if(LSecondTriplet){G4double xOffsetSQ =-(QuadChamberWallPosX+SecondQuadXPosition);
+        PurgMagFieldQuadSecond = new HadrontherapyMagneticField3D("field/Quad40MagneticField.TABLE", xOffsetSQ);
+        pFieldMgrQuadSecond =  new G4FieldManager();
+        pFieldMgrQuadSecond -> SetDetectorField(PurgMagFieldQuadSecond);
+        pFieldMgrQuadSecond -> CreateChordFinder(PurgMagFieldQuadSecond);
+        fEquationQuadSecond = new G4Mag_UsualEqRhs(PurgMagFieldQuadSecond);
+        fstepperQuadSecond = new G4ClassicalRK4(fEquationQuadSecond);
+        pIntgrDriverQuadSecond = new G4MagInt_Driver(1*mm,fstepperQuadSecond,fstepperQuadSecond-> GetNumberOfVariables());
+        //the first parameter is the minimum step
+        pChordFinderQuadSecond = new G4ChordFinder(pIntgrDriverQuadSecond);
+        pFieldMgrQuadSecond->SetChordFinder(pChordFinderQuadSecond);
+        pFieldMgrQuadSecond->SetMinimumEpsilonStep(minEps);
+        pFieldMgrQuadSecond->SetMaximumEpsilonStep(maxEps);
+        pFieldMgrQuadSecond->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
+        LSecondTriplet -> SetFieldManager(pFieldMgrQuadSecond, allLocal);}
+    //....oooOO0OOooo..........FIRST QUAD FIELD..........oooOO0OOooo....
+    if(LFirstTriplet) {G4double xOffsetFirstQ =-(QuadChamberWallPosX+FirstQuadXPosition);
+        PurgMagFieldQuadFirst = new HadrontherapyMagneticField3D("field/Quad80MagneticField.TABLE", xOffsetFirstQ);
+        pFieldMgrQuadFirst =  new G4FieldManager();
+        pFieldMgrQuadFirst -> SetDetectorField(PurgMagFieldQuadFirst);
+        pFieldMgrQuadFirst -> CreateChordFinder(PurgMagFieldQuadFirst);
+        fEquationQuadFirst = new G4Mag_UsualEqRhs(PurgMagFieldQuadFirst);
+        fstepperQuadFirst = new G4ClassicalRK4(fEquationQuadFirst);
+        pIntgrDriverQuadFirst = new G4MagInt_Driver(1*mm,fstepperQuadFirst,fstepperQuadFirst-> GetNumberOfVariables());
+        //the first parameter is the minimum step
+        pChordFinderQuadFirst = new G4ChordFinder(pIntgrDriverQuadFirst);
+        pFieldMgrQuadFirst->SetChordFinder(pChordFinderQuadFirst);
+        pFieldMgrQuadFirst->SetMinimumEpsilonStep(minEps);
+        pFieldMgrQuadFirst->SetMaximumEpsilonStep(maxEps);
+        pFieldMgrQuadFirst->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
+        LFirstTriplet -> SetFieldManager(pFieldMgrQuadFirst, allLocal);}
+    //....oooOO0OOooo..........FARADAY CUP FIELD..........oooOO0OOooo....
+    if(logicVirtualMag) {G4double exOffset= -20*cm;
+        G4double eyOffset= 0*cm;
+        G4double ezOffset= 0*cm;
+        G4FieldManager *pEFieldmanager = new G4FieldManager();
+        G4ElectricField *ElectricField = new HadrontherapyElectricTabulatedField3D("field/ElectricFieldFC-600V.TABLE", exOffset, eyOffset, ezOffset);
+        // UNIFORM FIELD
+        // G4ElectroMagneticField* ElectricField = new G4UniformElectricField(G4ThreeVector(0.0, 10.0*volt/m, 0.0)); //G4UniformElectricField
+        // The following is only for global field in the whole geometry
+        //pEFieldmanager = G4TransportationManager::GetTransportationManager() -> GetFieldManager();
+        
+        const G4int nvarElectric=8;  // The Equation of motion for Electric (or combined Electric/Magnetic)
+        // field requires 8 integration variables
+        
+        G4EqMagElectricField *fLocalEquation = new G4EqMagElectricField(ElectricField);
+        G4MagIntegratorStepper* fLocalStepper = new G4ClassicalRK4(fLocalEquation, nvarElectric);
+        G4MagInt_Driver  *pIntgrDriver_E = new G4MagInt_Driver(0.02*mm, fLocalStepper, fLocalStepper -> GetNumberOfVariables() );
+        G4ChordFinder *fLocalChordFinder = new G4ChordFinder(pIntgrDriver_E);
+        pEFieldmanager -> SetDetectorField(ElectricField);
+        pEFieldmanager -> SetChordFinder(fLocalChordFinder);
+        //G4double deltainter=0.0001*mm;
+        //G4double missdist=0.1*mm;
+        //pEFieldmanager->SetDeltaIntersection(deltainter);
+        //fLocalChordFinder->SetDeltaChord(missdist);
+        pEFieldmanager->SetMinimumEpsilonStep(minEps);
+        pEFieldmanager->SetMaximumEpsilonStep(maxEps);
+        pEFieldmanager->SetDeltaOneStep( 0.5e-3 * mm );
+        //pEFieldmanager -> SetFieldChangesEnergy(true);
+        logicVirtualMag -> SetFieldManager(pEFieldmanager, allLocal);}
+    //....oooOO0OOooo....................oooOO0OOooo....
+    G4cout<<" //....oooOO0OOooo.......... FIELDS HAVE BEEN IMPLEMENTED..........oooOO0OOooo...."<<G4endl;
+    return;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void LaserDrivenBeamLine::FaradayCup()
 {
-/// FC sizes ///
-
-G4double InnerRadiusFC=25*mm;
-G4double OuterRadiusFC=45*mm;
-G4double MassRingThickness=5*mm;
-G4double GuardRingThickness=180*mm;
-G4double FaradayCupBottomThickness=120*mm;
-G4double CupThickness=10*cm;
-G4double KaptonEntranceWindowThickness=25*um;
-
-/// Virtual Volumes ///
-
-G4double VirtualWindowThickness=1.*um ;
-G4double VirtualMiddleThickness= 1.*um ;
-G4double VirtualBottomThickness= 1. *um ;
-G4double VirtualOverBottomThickness=1. *um ;
-G4double VirtualLateralLength=FaradayCupBottomThickness+CupThickness+VirtualBottomThickness;
-
-
-//// Position ////
-
-G4double virtualMagPosX=31*cm; 
-G4double FC_XOffset=20*cm; 
-G4double KaptonEntranceWindowPosX=-virtualMagPosX+KaptonEntranceWindowThickness/2+FC_XOffset;
-G4double MassRingPosX=KaptonEntranceWindowPosX+KaptonEntranceWindowThickness/2+MassRingThickness/2;
-G4double VirtualWindowPosX=MassRingPosX+MassRingThickness/2+VirtualWindowThickness/2;
-G4double GuardRingPosX=MassRingPosX+MassRingThickness/2+GuardRingThickness/2+2*mm; 
-G4double VirtualMiddlePosX=GuardRingPosX+GuardRingThickness/2+VirtualMiddleThickness/2;
-G4double FaradayCupBottomPosX=GuardRingPosX+GuardRingThickness/2+FaradayCupBottomThickness/2+1*cm;
-G4double VirtualBottomPosX=FaradayCupBottomPosX+FaradayCupBottomThickness/2+VirtualBottomThickness/2;
-G4double CupPosX=VirtualBottomPosX+VirtualBottomThickness/2+CupThickness/2;
-G4double VirtualOverBottomPosX=CupPosX+CupThickness/2+VirtualOverBottomThickness/2;
-G4double VirtualLateralPosX=GuardRingPosX+GuardRingThickness/2+1*cm+(FaradayCupBottomThickness+CupThickness+VirtualBottomThickness)/2;
-  G4double phi = 90. *deg;
-  G4RotationMatrix rm;
-  rm.rotateY(phi);
+    /// FC sizes ///
     
-  virtualMag= new G4Box("virtualMag", 31.*cm, 6*cm, 6*cm );
- 
+    G4double InnerRadiusFC=25*mm;
+    G4double OuterRadiusFC=45*mm;
+    G4double MassRingThickness=5*mm;
+    G4double GuardRingThickness=180*mm;
+    G4double FaradayCupBottomThickness=120*mm;
+    G4double CupThickness=10*cm;
+    G4double KaptonEntranceWindowThickness=25*um;
+    
+    /// Virtual Volumes ///
+    
+    G4double VirtualWindowThickness=1.*um ;
+    G4double VirtualMiddleThickness= 1.*um ;
+    G4double VirtualBottomThickness= 1. *um ;
+    G4double VirtualOverBottomThickness=1. *um ;
+    G4double VirtualLateralLength=FaradayCupBottomThickness+CupThickness+VirtualBottomThickness;
+    
+    
+    //// Position ////
+    
+    G4double virtualMagPosX=31*cm;
+    G4double FC_XOffset=20*cm;
+    G4double KaptonEntranceWindowPosX=-virtualMagPosX+KaptonEntranceWindowThickness/2+FC_XOffset;
+    G4double MassRingPosX=KaptonEntranceWindowPosX+KaptonEntranceWindowThickness/2+MassRingThickness/2;
+    G4double VirtualWindowPosX=MassRingPosX+MassRingThickness/2+VirtualWindowThickness/2;
+    G4double GuardRingPosX=MassRingPosX+MassRingThickness/2+GuardRingThickness/2+2*mm;
+    G4double VirtualMiddlePosX=GuardRingPosX+GuardRingThickness/2+VirtualMiddleThickness/2;
+    G4double FaradayCupBottomPosX=GuardRingPosX+GuardRingThickness/2+FaradayCupBottomThickness/2+1*cm;
+    G4double VirtualBottomPosX=FaradayCupBottomPosX+FaradayCupBottomThickness/2+VirtualBottomThickness/2;
+    G4double CupPosX=VirtualBottomPosX+VirtualBottomThickness/2+CupThickness/2;
+    G4double VirtualOverBottomPosX=CupPosX+CupThickness/2+VirtualOverBottomThickness/2;
+    G4double VirtualLateralPosX=GuardRingPosX+GuardRingThickness/2+1*cm+(FaradayCupBottomThickness+CupThickness+VirtualBottomThickness)/2;
+    G4double phi = 90. *deg;
+    G4RotationMatrix rm;
+    rm.rotateY(phi);
+    
+    virtualMag= new G4Box("virtualMag", 31.*cm, 6*cm, 6*cm );
+    
     logicVirtualMag= new G4LogicalVolume( virtualMag,
                                          internalChamberMaterial,
                                          "LVirtualMag",
                                          0,0,0);
-   physicVirtualMag = new G4PVPlacement(0,
-                                         G4ThreeVector(virtualMagPosX, 0.*cm, 0*mm), 
+    physicVirtualMag = new G4PVPlacement(0,
+                                         G4ThreeVector(virtualMagPosX, 0.*cm, 0*mm),
                                          "PVirtualMag",
                                          logicVirtualMag,
                                          physicTreatmentRoom,
                                          true, 0);
     
-	
-   logicVirtualMag -> SetVisAttributes(blue);
-   
-                      //// BeveledCylinder ////
-
-  G4RotationMatrix *Rot= new G4RotationMatrix;
-  Rot->rotateX(14*deg);
-  G4ThreeVector trans(0.,22.5*mm,-15*mm);
-  Cylinder= new G4Tubs("cylinder",20*mm,22.5*mm,90*mm,0.,2*pi);
-  Box= new G4Box("Box",22.5*mm,22.5*mm,90*mm);
- 
-  G4SubtractionSolid* BeveledCylinder=new G4SubtractionSolid("Cylinder-Box",
-                                                              Cylinder,
-                                                              Box,
-                                                              Rot,
-                                                              trans);
-
-  logicBeveledCylinder= new G4LogicalVolume                   (BeveledCylinder,
-                                                              GuardRingMaterial,
-                                                             "LBeveledCylinder",
-                                                              0,0,0);
-
-  physicBeveledCylinder =new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(GuardRingPosX,0,0)),
-                                                             "physicBeveledCylinder",
-                                                              logicBeveledCylinder,
-                                                              physicVirtualMag,
-                                                              true,0);
-
-  logicBeveledCylinder->SetVisAttributes(green);
-
-
-                                     ///// KaptonEntranceWindow /////
-
-  KaptonEntranceWindow= new G4Tubs("KaptonEntranceWindow",
-                                                         0,
-                                                         OuterRadiusFC,
-                                                         KaptonEntranceWindowThickness/2,
-                                                         0*deg,360*deg);
-
-  logicKaptonEntranceWindow=new G4LogicalVolume(          KaptonEntranceWindow,
-							  // internalChamberMaterial, for track control
-                                                        KaptonEntranceWindowMaterial, 
-                                                        "LKaptonEntranceWindow",
-                                                         0,0,0);
-        
-  physicKaptonEntranceWindow=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(KaptonEntranceWindowPosX,0,0)),
-                                                          "PhysicEntranceWindow",
-                                                          logicKaptonEntranceWindow,
-                                                          physicVirtualMag,true,0);
-  logicKaptonEntranceWindow -> SetVisAttributes(gray);
-
-                                        ////// MassRing /////
-
-  MassRing=new G4Tubs ("MassRing",
-                                                         InnerRadiusFC,
-                                                         OuterRadiusFC,
-                                                         MassRingThickness/2,
-                                                         0*deg,360*deg);
-
-  logicMassRing=new G4LogicalVolume(                      MassRing,
-                                                         MassRingMaterial,
-                                                        "logicMassRing",
-                                                         0,0,0);
-
-  physicMassRing=new G4PVPlacement(                       G4Transform3D(rm,G4ThreeVector(MassRingPosX,0,0)),
+    
+    logicVirtualMag -> SetVisAttributes(blue);
+    
+    //// BeveledCylinder ////
+    
+    G4RotationMatrix *Rot= new G4RotationMatrix;
+    Rot->rotateX(14*deg);
+    G4ThreeVector trans(0.,22.5*mm,-15*mm);
+    Cylinder= new G4Tubs("cylinder",20*mm,22.5*mm,90*mm,0.,2*pi);
+    Box= new G4Box("Box",22.5*mm,22.5*mm,90*mm);
+    
+    G4SubtractionSolid* BeveledCylinder=new G4SubtractionSolid("Cylinder-Box",
+                                                               Cylinder,
+                                                               Box,
+                                                               Rot,
+                                                               trans);
+    
+    logicBeveledCylinder= new G4LogicalVolume                   (BeveledCylinder,
+                                                                 GuardRingMaterial,
+                                                                 "LBeveledCylinder",
+                                                                 0,0,0);
+    
+    physicBeveledCylinder =new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(GuardRingPosX,0,0)),
+                                             "physicBeveledCylinder",
+                                             logicBeveledCylinder,
+                                             physicVirtualMag,
+                                             true,0);
+    
+    logicBeveledCylinder->SetVisAttributes(green);
+    
+    
+    ///// KaptonEntranceWindow /////
+    
+    KaptonEntranceWindow= new G4Tubs("KaptonEntranceWindow",
+                                     0,
+                                     OuterRadiusFC,
+                                     KaptonEntranceWindowThickness/2,
+                                     0*deg,360*deg);
+    
+    logicKaptonEntranceWindow=new G4LogicalVolume(          KaptonEntranceWindow,
+                                                  // internalChamberMaterial, for track control
+                                                  KaptonEntranceWindowMaterial,
+                                                  "LKaptonEntranceWindow",
+                                                  0,0,0);
+    
+    physicKaptonEntranceWindow=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(KaptonEntranceWindowPosX,0,0)),
+                                                 "PhysicEntranceWindow",
+                                                 logicKaptonEntranceWindow,
+                                                 physicVirtualMag,true,0);
+    logicKaptonEntranceWindow -> SetVisAttributes(gray);
+    
+    ////// MassRing /////
+    
+    MassRing=new G4Tubs ("MassRing",
+                         InnerRadiusFC,
+                         OuterRadiusFC,
+                         MassRingThickness/2,
+                         0*deg,360*deg);
+    
+    logicMassRing=new G4LogicalVolume(                      MassRing,
+                                      MassRingMaterial,
+                                      "logicMassRing",
+                                      0,0,0);
+    
+    physicMassRing=new G4PVPlacement(                       G4Transform3D(rm,G4ThreeVector(MassRingPosX,0,0)),
+                                     
+                                     "PhysicMassRing",logicMassRing,
+                                     
+                                     physicVirtualMag,
+                                     true,0);
+    logicMassRing -> SetVisAttributes(green);
+    
+    
+    
+    
+    ///// VirtualWindow /////
+    
+    
+    VirtualWindow=new G4Tubs("VirtualWindow",
+                             0,
+                             OuterRadiusFC,
+                             VirtualWindowThickness/2,
+                             0*deg,360*deg);
+    
+    logicVirtualWindow=new G4LogicalVolume(                 VirtualWindow,
+                                           internalChamberMaterial,
+                                           "logicVirtualWindow",
+                                           0,0,0);
+    
+    physicVirtualWindow=new G4PVPlacement(                   G4Transform3D(rm,G4ThreeVector(VirtualWindowPosX,0,0)),
+                                          
+                                          "PhysicVirtualWindow",
+                                          logicVirtualWindow,
+                                          physicVirtualMag,
+                                          true,0);
+    logicVirtualWindow->SetVisAttributes (G4VisAttributes::GetInvisible());
+    
+    ///// GuardRing /////
+    
+    GuardRing=new G4Tubs ("GuardRing",
+                          InnerRadiusFC,
+                          OuterRadiusFC,
+                          GuardRingThickness/2,
+                          0*deg,360*deg);
+    
+    logicGuardRing=new G4LogicalVolume(                      GuardRing,
+                                       GuardRingMaterial,
+                                       "logicGuardRing",
+                                       0,0,0);
+    
+    physicGuardRing=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(GuardRingPosX,0,0)),
                                       
-                                                         "PhysicMassRing",logicMassRing,
-                                                         
-                                                          physicVirtualMag,
-                                                          true,0);
-  logicMassRing -> SetVisAttributes(green);
-
-
-
-
-                                       ///// VirtualWindow /////
-
-
-  VirtualWindow=new G4Tubs("VirtualWindow", 
-                                                        0,
-                                                        OuterRadiusFC,
-                                                        VirtualWindowThickness/2,
-                                                        0*deg,360*deg);
-                                                  
-  logicVirtualWindow=new G4LogicalVolume(                 VirtualWindow,
-                                                         internalChamberMaterial,
-                                                        "logicVirtualWindow",
-                                                         0,0,0);
-
-  physicVirtualWindow=new G4PVPlacement(                   G4Transform3D(rm,G4ThreeVector(VirtualWindowPosX,0,0)),
-
-                                                         "PhysicVirtualWindow",
-                                                          logicVirtualWindow,
-                                                          physicVirtualMag,
-                                                          true,0);
-  logicVirtualWindow->SetVisAttributes (G4VisAttributes::GetInvisible());
-
-                                          ///// GuardRing /////
-
-  GuardRing=new G4Tubs ("GuardRing",
-                                                          InnerRadiusFC,
-                                                          OuterRadiusFC,
-                                                          GuardRingThickness/2,
-                                                          0*deg,360*deg); 
- 
-  logicGuardRing=new G4LogicalVolume(                      GuardRing,
-                                                          GuardRingMaterial,
-                                                         "logicGuardRing",
-                                                          0,0,0);
-
-  physicGuardRing=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(GuardRingPosX,0,0)),
-                                                        
-                                                          "PhysicGuardRing", logicGuardRing,
-                                                         
-                                                          physicVirtualMag,
-                                                          true,0);
-  logicGuardRing -> SetVisAttributes(red);
-
-
-                                        /////VirtualMiddle /////
-
-
-  VirtualMiddle=new G4Tubs ("VirtualMiddle",
-                                                          0,
-                                                          OuterRadiusFC,
-                                                          VirtualMiddleThickness/2,
-                                                          0*deg,360*deg); 
-
-  logicVirtualMiddle=new G4LogicalVolume(                      VirtualMiddle,
-                                                         internalChamberMaterial,
-                                                        "logicVirtualMiddle",
-                                                         0,0,0);
-
-  physicVirtualMiddle=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(VirtualMiddlePosX,0,0)),
-                                                        
-                                                          "PhysicVirtualMiddle", logicVirtualMiddle,
-                                                         
-                                                          physicVirtualMag,
-                                                          true,0);
-
-  logicVirtualMiddle->SetVisAttributes (G4VisAttributes::GetInvisible());
-
-                                     ///// FaradayCupBottom /////
-
-  FaradayCupBottom=new G4Tubs ("FaradayCupBottom",
-                                                          InnerRadiusFC,
-                                                          OuterRadiusFC,
-                                                          FaradayCupBottomThickness/2,
-                                                          0*deg,360*deg); 
-
-  logicFaradayCupBottom=new G4LogicalVolume(             FaradayCupBottom,
-                                                         FaradayCupBottomMaterial,
-                                                        "logicFaradayCupBottom",
-                                                         0,0,0);
-
-  physicFaradayCupBottom=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(FaradayCupBottomPosX,0,0)),
-                                                         "PhysicFaradayCupBottom",logicFaradayCupBottom,
-                                                          physicVirtualMag,
-                                                          true,0);
-  logicFaradayCupBottom -> SetVisAttributes(yellow);
-
-
-                                     ///// Virtual Bottom //////
-
-  VirtualBottom=new G4Tubs ("VirtualBottom",
-                                                          0,
-                                                          OuterRadiusFC,
-                                                          VirtualBottomThickness/2,
-                                                          0*deg,360*deg); 
-
-  logicVirtualBottom=new G4LogicalVolume(                  VirtualBottom,
-                                                         internalChamberMaterial,
-                                                        "logicVirtualBottom",
-                                                         0,0,0);
-
-  physicVirtualBottom=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(VirtualBottomPosX,0,0)),
-                                                         "PhysicVirtualBottom",
-                                                          logicVirtualBottom,
-                                                          physicVirtualMag,
-                                                          true,0);
-
-  logicVirtualBottom->SetVisAttributes (G4VisAttributes::GetInvisible());
-
-                                           ///// Cup /////
-
-  Cup=new G4Tubs ("Cup",
-                                                          0,
-                                                          OuterRadiusFC,
-                                                          CupThickness/2,
-                                                          0*deg,360*deg); 
-
- logicCup=new G4LogicalVolume(                           Cup,
-                                                         CupMaterial,
-                                                        "logicCup",
-                                                         0,0,0);
-
- physicCup=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(CupPosX,0,0)),
-                                                          "PhysicCup", logicCup,
-                                                        
-                                                          physicVirtualMag,
-                                                          true,0);
-
- logicCup -> SetVisAttributes(darkGreen);
-
-
-                                        ///// Virtual OverBottom /////
-
- VirtualOverBottom=new G4Tubs ("VirtualOverBottom",
-                                                          0,
-                                                          OuterRadiusFC,
-                                                          VirtualOverBottomThickness/2,
-                                                          0*deg,360*deg); 
-
- logicVirtualOverBottom=new G4LogicalVolume(             VirtualOverBottom,
-                                                         internalChamberMaterial,
-                                                        "logicVirtualOverBottom",
-                                                         0,0,0);
-
- physicVirtualOverBottom=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(VirtualOverBottomPosX,0,0)),        
-                                                         "PhysicVirtualOverBottom",logicVirtualOverBottom,
-                                                         
-                                                          physicVirtualMag,
-                                                          true,0);
-logicVirtualOverBottom->SetVisAttributes (G4VisAttributes::GetInvisible());
-
-
-                                          ///// Virtual Lateral /////
- 
-
- VirtualLateral=new G4Tubs ("VirtualLateral",
-                                                          OuterRadiusFC,
-                                                          OuterRadiusFC+1*um,// the VirtualLateralThickness is 1*um
-                                                          VirtualLateralLength/2,
-                                                          0*deg,360*deg); 
-
-logicVirtualLateral=new G4LogicalVolume(                  VirtualLateral,
-                                                          internalChamberMaterial,
-                                                         "logicVirtualLateral",
-                                                          0,0,0);
-
- physicVirtualLateral=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(VirtualLateralPosX,0,0)),
-                                                         "VirtualLateral",logicVirtualLateral,
-                                                         
-                                                          physicVirtualMag,
-                                                          true,0);
-
-
-
-   logicVirtualLateral->SetVisAttributes (G4VisAttributes::GetInvisible());
- }
+                                      "PhysicGuardRing", logicGuardRing,
+                                      
+                                      physicVirtualMag,
+                                      true,0);
+    logicGuardRing -> SetVisAttributes(red);
+    
+    
+    /////VirtualMiddle /////
+    
+    
+    VirtualMiddle=new G4Tubs ("VirtualMiddle",
+                              0,
+                              OuterRadiusFC,
+                              VirtualMiddleThickness/2,
+                              0*deg,360*deg);
+    
+    logicVirtualMiddle=new G4LogicalVolume(                      VirtualMiddle,
+                                           internalChamberMaterial,
+                                           "logicVirtualMiddle",
+                                           0,0,0);
+    
+    physicVirtualMiddle=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(VirtualMiddlePosX,0,0)),
+                                          
+                                          "PhysicVirtualMiddle", logicVirtualMiddle,
+                                          
+                                          physicVirtualMag,
+                                          true,0);
+    
+    logicVirtualMiddle->SetVisAttributes (G4VisAttributes::GetInvisible());
+    
+    ///// FaradayCupBottom /////
+    
+    FaradayCupBottom=new G4Tubs ("FaradayCupBottom",
+                                 InnerRadiusFC,
+                                 OuterRadiusFC,
+                                 FaradayCupBottomThickness/2,
+                                 0*deg,360*deg);
+    
+    logicFaradayCupBottom=new G4LogicalVolume(             FaradayCupBottom,
+                                              FaradayCupBottomMaterial,
+                                              "logicFaradayCupBottom",
+                                              0,0,0);
+    
+    physicFaradayCupBottom=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(FaradayCupBottomPosX,0,0)),
+                                             "PhysicFaradayCupBottom",logicFaradayCupBottom,
+                                             physicVirtualMag,
+                                             true,0);
+    logicFaradayCupBottom -> SetVisAttributes(yellow);
+    
+    
+    ///// Virtual Bottom //////
+    
+    VirtualBottom=new G4Tubs ("VirtualBottom",
+                              0,
+                              OuterRadiusFC,
+                              VirtualBottomThickness/2,
+                              0*deg,360*deg);
+    
+    logicVirtualBottom=new G4LogicalVolume(                  VirtualBottom,
+                                           internalChamberMaterial,
+                                           "logicVirtualBottom",
+                                           0,0,0);
+    
+    physicVirtualBottom=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(VirtualBottomPosX,0,0)),
+                                          "PhysicVirtualBottom",
+                                          logicVirtualBottom,
+                                          physicVirtualMag,
+                                          true,0);
+    
+    logicVirtualBottom->SetVisAttributes (G4VisAttributes::GetInvisible());
+    
+    ///// Cup /////
+    
+    Cup=new G4Tubs ("Cup",
+                    0,
+                    OuterRadiusFC,
+                    CupThickness/2,
+                    0*deg,360*deg);
+    
+    logicCup=new G4LogicalVolume(                           Cup,
+                                 CupMaterial,
+                                 "logicCup",
+                                 0,0,0);
+    
+    physicCup=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(CupPosX,0,0)),
+                                "PhysicCup", logicCup,
+                                
+                                physicVirtualMag,
+                                true,0);
+    
+    logicCup -> SetVisAttributes(darkGreen);
+    
+    
+    ///// Virtual OverBottom /////
+    
+    VirtualOverBottom=new G4Tubs ("VirtualOverBottom",
+                                  0,
+                                  OuterRadiusFC,
+                                  VirtualOverBottomThickness/2,
+                                  0*deg,360*deg);
+    
+    logicVirtualOverBottom=new G4LogicalVolume(             VirtualOverBottom,
+                                               internalChamberMaterial,
+                                               "logicVirtualOverBottom",
+                                               0,0,0);
+    
+    physicVirtualOverBottom=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(VirtualOverBottomPosX,0,0)),
+                                              "PhysicVirtualOverBottom",logicVirtualOverBottom,
+                                              
+                                              physicVirtualMag,
+                                              true,0);
+    logicVirtualOverBottom->SetVisAttributes (G4VisAttributes::GetInvisible());
+    
+    
+    ///// Virtual Lateral /////
+    
+    
+    VirtualLateral=new G4Tubs ("VirtualLateral",
+                               OuterRadiusFC,
+                               OuterRadiusFC+1*um,// the VirtualLateralThickness is 1*um
+                               VirtualLateralLength/2,
+                               0*deg,360*deg);
+    
+    logicVirtualLateral=new G4LogicalVolume(                  VirtualLateral,
+                                            internalChamberMaterial,
+                                            "logicVirtualLateral",
+                                            0,0,0);
+    
+    physicVirtualLateral=new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(VirtualLateralPosX,0,0)),
+                                           "VirtualLateral",logicVirtualLateral,
+                                           
+                                           physicVirtualMag,
+                                           true,0);
+    
+    
+    
+    logicVirtualLateral->SetVisAttributes (G4VisAttributes::GetInvisible());
+}
 
 /////////////////////////////////////////////////////////////////////////////
 void LaserDrivenBeamLine::Quadrupole()
@@ -1217,91 +1217,91 @@ void LaserDrivenBeamLine::Quadrupole()
     SQuadChamberWall = new G4Box("solidQuadChamberWall",externalChamberXSize/2., externalChamberYSize/2.,externalChamberZSize/2.);
     
     LQuadChamberWall = new G4LogicalVolume(SQuadChamberWall, externalChamberMaterial,"logicQuadChamberWall");
-	
-    PQuadChamberWall = new G4PVPlacement(0, G4ThreeVector(QuadChamberWallPosX, QuadChamberWallPosY, QuadChamberWallPosZ),
-                                       "physQuadChamberWall", LQuadChamberWall,physicTreatmentRoom, false, 0);
     
-
+    PQuadChamberWall = new G4PVPlacement(0, G4ThreeVector(QuadChamberWallPosX, QuadChamberWallPosY, QuadChamberWallPosZ),
+                                         "physQuadChamberWall", LQuadChamberWall,physicTreatmentRoom, false, 0);
+    
+    
     SQuadChamber = new G4Box("solidQuadChamber", internalChamberXSize/2., internalChamberYSize/2.,internalChamberZSize/2.);
     
     LQuadChamber = new G4LogicalVolume(SQuadChamber, internalChamberMaterial,"logicQuadChamber");
-	
+    
     PQuadChamber = new G4PVPlacement(0, G4ThreeVector(0.0, 0.0, 0.0),
-                                       "physQuadChamber", LQuadChamber,PQuadChamberWall, false, 0);
-
-    LQuadChamberWall -> SetVisAttributes(red);	
+                                     "physQuadChamber", LQuadChamber,PQuadChamberWall, false, 0);
+    
+    LQuadChamberWall -> SetVisAttributes(red);
     LQuadChamber -> SetVisAttributes(white);
- ///////////----------------------------Fourth Quadrupole----------------------------/////////
+    ///////////----------------------------Fourth Quadrupole----------------------------/////////
     SFourthTriplet = new G4Tubs("SolidTQuad", InnerRadiusTriplet, ExternalRadiusQuad,((FourthQuadThickness/2.)+1*mm),
-                               startAngleQuad, spanningAngleQuad);
-	
+                                startAngleQuad, spanningAngleQuad);
+    
     LFourthTriplet = new G4LogicalVolume(SFourthTriplet, internalChamberMaterial,"LogicTQuad", 0, 0, 0);
-	
+    
     PFourthTriplet = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(FourthQuadXPosition, QuadYPosition, QuadZPosition)),
-                                      "PhysFourthTQuad", LFourthTriplet, PQuadChamber, false, 0);
+                                       "PhysFourthTQuad", LFourthTriplet, PQuadChamber, false, 0);
     
     solidFourthQuad = new G4Tubs("SolidQuad", InnerRadiusQuad, ExternalRadiusQuad, FourthQuadThickness/2.,
-                                startAngleQuad, spanningAngleQuad);
-	
+                                 startAngleQuad, spanningAngleQuad);
+    
     logicFourthQuad = new G4LogicalVolume(solidFourthQuad, QuadMaterial, "LogicQuad", 0, 0, 0);
-	
+    
     physicFourthQuad = new G4PVPlacement(0, G4ThreeVector(FourthQXPosition, QYPosition, QZPosition),
-                                        "PhysFourthQuad",logicFourthQuad, PFourthTriplet, false, 0);
+                                         "PhysFourthQuad",logicFourthQuad, PFourthTriplet, false, 0);
     
     LFourthTriplet -> SetVisAttributes(yellow);
     logicFourthQuad -> SetVisAttributes(green);
-///////////----------------------------Third Quadrupole----------------------------/////////
+    ///////////----------------------------Third Quadrupole----------------------------/////////
     SThirdTriplet = new G4Tubs("SolidTTQuad", InnerRadiusTriplet, ExternalRadiusQuad, (ThirdQuadThickness/2.)+1*mm,
                                startAngleQuad, spanningAngleQuad);
-	
+    
     LThirdTriplet = new G4LogicalVolume(SThirdTriplet, internalChamberMaterial,"LogicTTQuad", 0, 0, 0);
-	
+    
     PThirdTriplet = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(ThirdQuadXPosition, QuadYPosition, QuadZPosition)),
                                       "PhysThirdTQuad",LThirdTriplet,PQuadChamber, false, 0);
     
     solidThirdQuad = new G4Tubs("SolidTQuad", InnerRadiusQuad, ExternalRadiusQuad, ThirdQuadThickness/2.,
                                 startAngleQuad, spanningAngleQuad);
-	
+    
     logicThirdQuad = new G4LogicalVolume(solidThirdQuad, QuadMaterial, "LogicTQuad", 0, 0, 0);
-	
+    
     physicThirdQuad = new G4PVPlacement(0, G4ThreeVector(ThirdQXPosition, QYPosition, QZPosition),
                                         "PhysThirdQuad",logicThirdQuad, PThirdTriplet, false, 0);
     
     LThirdTriplet -> SetVisAttributes(yellow);
     logicThirdQuad -> SetVisAttributes(green);
- ///////////----------------------------Second Quadrupole----------------------------/////////
+    ///////////----------------------------Second Quadrupole----------------------------/////////
     SSecondTriplet = new G4Tubs("SolidTSQuad", InnerRadiusTriplet, ExternalRadiusQuad, (SecondQuadThickness/2.)+1*mm,
                                 startAngleQuad, spanningAngleQuad);
-	
+    
     LSecondTriplet = new G4LogicalVolume(SSecondTriplet, internalChamberMaterial,"LogicTSQuad", 0, 0, 0);
-	
+    
     PSecondTriplet = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(SecondQuadXPosition, QuadYPosition, QuadZPosition)),
                                        "PhysSecondTQuad", LSecondTriplet, PQuadChamber, false, 0);
-
+    
     solidSecondQuad = new G4Tubs("SolidSQuad", InnerRadiusQuad, ExternalRadiusQuad, SecondQuadThickness/2.,
                                  startAngleQuad, spanningAngleQuad);
-	
+    
     logicSecondQuad = new G4LogicalVolume(solidSecondQuad, QuadMaterial, "LogicSQuad", 0, 0, 0);
-	
+    
     physicSecondQuad = new G4PVPlacement(0, G4ThreeVector(SecondQXPosition, QYPosition, QZPosition),
                                          "PhysSecondQuad", logicSecondQuad, PSecondTriplet, false, 0);
     
     LSecondTriplet -> SetVisAttributes(yellow);
     logicSecondQuad -> SetVisAttributes(green);
- ///////////----------------------------First Quadrupole----------------------------/////////
+    ///////////----------------------------First Quadrupole----------------------------/////////
     SFirstTriplet = new G4Tubs("SolidTQuad", InnerRadiusTriplet, ExternalRadiusQuad, (FirstQuadThickness/2.)+1*mm,
                                startAngleQuad, spanningAngleQuad);
-	
+    
     LFirstTriplet = new G4LogicalVolume(SFirstTriplet, internalChamberMaterial,"LogicTQuad", 0, 0, 0);
-	
+    
     PFirstTriplet = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(FirstQuadXPosition, QuadYPosition, QuadZPosition)),
                                       "PhysFirstTQuad", LFirstTriplet, PQuadChamber, false, 0);
     
     solidFirstQuad = new G4Tubs("SolidQuad", InnerRadiusQuad, ExternalRadiusQuad, FirstQuadThickness/2.,
                                 startAngleQuad, spanningAngleQuad);
-	
+    
     logicFirstQuad = new G4LogicalVolume(solidFirstQuad, QuadMaterial, "LogicQuad", 0, 0, 0);
-	
+    
     physicFirstQuad = new G4PVPlacement(0, G4ThreeVector(FirstQXPosition, QYPosition, QZPosition),
                                         "PhysFirstQuad",logicFirstQuad, PFirstTriplet, false, 0);
     
@@ -1315,16 +1315,16 @@ void LaserDrivenBeamLine::EnergySelectorChamber()
     // The whole energyselector is mounted inside a
     // a vacuum chamber  (called 'ExternalChamber')
     // inside which a vacuum box is inserted.
-	
+    
     solidExternalChamber = new G4Box("ExternalChamber",
                                      externalChamberXSize/2.0,
                                      externalChamberYSize/2.0,
                                      externalChamberZSize/2.0);
-	
+    
     logicExternalChamber = new G4LogicalVolume(solidExternalChamber,
                                                externalChamberMaterial,
                                                "ExternalChamber");
-	
+    
     physicExternalChamber = new G4PVPlacement(0,
                                               G4ThreeVector(externalChamberXPosition,
                                                             externalChamberYPosition,
@@ -1334,7 +1334,7 @@ void LaserDrivenBeamLine::EnergySelectorChamber()
                                               physicTreatmentRoom,
                                               false,
                                               0);
-	
+    
     // Visualisation of the External part
     logicExternalChamber -> SetVisAttributes(red);
     
@@ -1343,11 +1343,11 @@ void LaserDrivenBeamLine::EnergySelectorChamber()
                                      internalChamberXSize/2.0,
                                      internalChamberYSize/2.0,
                                      internalChamberZSize/2.0);
-	
+    
     logicInternalChamber = new G4LogicalVolume(solidInternalChamber,
                                                internalChamberMaterial,
                                                "LInternalChamber");
-	
+    
     physicInternalChamber = new G4PVPlacement(0,
                                               G4ThreeVector(0,0,0),
                                               "InternalChamber",
@@ -1365,21 +1365,21 @@ void LaserDrivenBeamLine::EntrancePipe()
     G4double phi = 90. *deg;
     G4RotationMatrix rm;
     rm.rotateY(phi);
-	
+    
     solidEntrancePipe = new G4Tubs("EntrancePipe",
                                    InnerRadiusEntrancePipe,
                                    ExternalRadiusEntrancePipe,
                                    EntrancePipeheight/2.,
                                    startAngleEntrancePipe,
                                    spanningAngleEntrancePipe);
-	
+    
     logicEntrancePipe = new G4LogicalVolume(solidEntrancePipe,
                                             PipeMaterial,
                                             "EntrancePipe",
                                             0,
                                             0,
                                             0);
-	
+    
     physicEntrancePipe = new G4PVPlacement(G4Transform3D(rm,
                                                          G4ThreeVector(EntrancePipeXPosition,
                                                                        EntrancePipeYPosition,
@@ -1389,7 +1389,7 @@ void LaserDrivenBeamLine::EntrancePipe()
                                            physicTreatmentRoom,
                                            false,
                                            0);
-	
+    
     logicEntrancePipe -> SetVisAttributes(red);
     
 }
@@ -1401,31 +1401,31 @@ void LaserDrivenBeamLine::Entrancehole()
     G4double phi = 90. *deg;
     G4RotationMatrix rm;
     rm.rotateY(phi);
-	
+    
     solidEntrancehole = new G4Tubs("Entrancehole",
                                    InnerRadiusEntrancehole,
                                    ExternalRadiusEntrancehole,
                                    EntranceholeThickness/2.,
                                    startAngleEntrancehole,
                                    spanningAngleEntrancehole);
-	
+    
     logicEntrancehole = new G4LogicalVolume(solidEntrancehole,
                                             internalChamberMaterial,
                                             "Entrancehole",
                                             0,
                                             0,
                                             0);
-    //the hole in the energy selector chamber	
+    //the hole in the energy selector chamber
     physicEntranceholeESSChamber = new G4PVPlacement(G4Transform3D(rm,
-                                                         G4ThreeVector(EntranceholeXPosition,
-                                                                       EntranceholeYPosition,
-                                                                       EntranceholeZPosition)),
-                                           "Entrancehole",
-                                           logicEntrancehole,
-                                           physicExternalChamber,
-                                           false,
-                                           0);
-    //the hole in the quadrupoles chamber	
+                                                                   G4ThreeVector(EntranceholeXPosition,
+                                                                                 EntranceholeYPosition,
+                                                                                 EntranceholeZPosition)),
+                                                     "Entrancehole",
+                                                     logicEntrancehole,
+                                                     physicExternalChamber,
+                                                     false,
+                                                     0);
+    //the hole in the quadrupoles chamber
     physicEntrancehole = new G4PVPlacement(G4Transform3D(rm,
                                                          G4ThreeVector(EntranceholeQuadXPosition,
                                                                        EntranceholeYPosition,
@@ -1435,7 +1435,7 @@ void LaserDrivenBeamLine::Entrancehole()
                                            PQuadChamberWall,
                                            false,
                                            0);
-	
+    
     logicEntrancehole -> SetVisAttributes(skyBlue);
     
     
@@ -1449,14 +1449,14 @@ void LaserDrivenBeamLine::Collimator()
     rm.rotateY(phi);
     //8x82x210 mm are the collimator default dimensions
     solidCollimator = new G4Box("collimator",
-				thicknessCollimator/2.0,
+                                thicknessCollimator/2.0,
                                 collimatorBoxYSize/2.0,
                                 collimatorBoxZSize/2.0);
     
     logicCollimator = new G4LogicalVolume(solidCollimator,
                                           collimatorMaterial,
                                           "collimator");
-	
+    
     physicCollimator = new G4PVPlacement(0,
                                          G4ThreeVector(collimatorBox_XPosition,
                                                        collimatorBox_YPosition,
@@ -1475,14 +1475,14 @@ void LaserDrivenBeamLine::Collimator()
                                      thicknessCollimator/2.,
                                      startAngleCollimator,
                                      spanningAngleCollimator);
-	
+    
     logicCollimatorHole = new G4LogicalVolume(solidCollimatorHole,
                                               collimatorHoleMaterial,
                                               "CollimatorHole",
                                               0,
                                               0,
                                               0);
-	
+    
     physicCollimatorHole = new G4PVPlacement(G4Transform3D(rm,
                                                            G4ThreeVector(collimatorXPosition,
                                                                          collimatorYPosition,
@@ -1492,7 +1492,7 @@ void LaserDrivenBeamLine::Collimator()
                                              physicCollimator,
                                              false,
                                              0);
-	
+    
     logicCollimatorHole -> SetVisAttributes(skyBlue);
 }
 
@@ -1504,11 +1504,11 @@ void LaserDrivenBeamLine::Magnet_1()
                                       externalMagnet_1XSize/2.0,
                                       externalMagnet_1YSize/2.0,
                                       externalMagnet_1ZSize/2.0);
-	
+    
     logicExternalMagnet_1 = new G4LogicalVolume(solidExternalMagnet_1,
                                                 externalMagnet_1Material,
                                                 "LogicExternalMagnet_1");
-	
+    
     physicExternalMagnet_1 = new G4PVPlacement(0,
                                                G4ThreeVector(externalMagnet_1XPosition,
                                                              externalMagnet_2YPosition,
@@ -1536,11 +1536,11 @@ void LaserDrivenBeamLine::Magnet_1()
                               Magnet_1XSize/2.0,
                               Magnet_1YSize/2.0,
                               Magnet_1ZSize/2.0);
-	
+    
     logicMagnet_1 = new G4LogicalVolume(solidMagnet_1,
                                         externalMagnet_1Material,
                                         "LogicMagnet_1");
-	
+    
     physicMagnet_1Right = new G4PVPlacement(0,
                                             G4ThreeVector(Magnet_1XPosition,Magnet_1YPosition,
                                                           Magnet_1ZPosition),
@@ -1565,16 +1565,16 @@ void LaserDrivenBeamLine::Magnet_1()
 // Magnet number 2
 void LaserDrivenBeamLine::Magnet_2()
 { // The position of the external part are given as respect the external chamber.
-	
+    
     solidExternalMagnet_2 = new G4Box("SolidExternalMagnet_2",
                                       externalMagnet_2XSize/2.0,
                                       externalMagnet_2YSize/2.0,
                                       externalMagnet_2ZSize/2.0);
-	
+    
     logicExternalMagnet_2 = new G4LogicalVolume(solidExternalMagnet_2,
                                                 externalMagnet_2Material,
                                                 "LogicExternalMagnet_2");
-	
+    
     physicExternalMagnet_2 = new G4PVPlacement(0,
                                                G4ThreeVector(externalMagnet_2XPosition,
                                                              externalMagnet_2YPosition,
@@ -1597,17 +1597,17 @@ void LaserDrivenBeamLine::Magnet_2()
     
    	
     logicExternalMagnet_2 -> SetVisAttributes(gray);
-	
+    
     // The right and left part of the magnet
     solidMagnet_2 = new G4Box("SolidMagnet_2",
                               Magnet_2XSize/2.0,
                               Magnet_2YSize/2.0,
                               Magnet_2ZSize/2.0);
-	
+    
     logicMagnet_2 = new G4LogicalVolume(solidMagnet_2,
                                         externalMagnet_2Material,
                                         "LogicMagnet_2");
-	
+    
     physicMagnet_2Right = new G4PVPlacement(0,
                                             G4ThreeVector(Magnet_2XPosition,Magnet_2YPosition,
                                                           (Magnet_2ZPosition)+32*mm),
@@ -1618,7 +1618,7 @@ void LaserDrivenBeamLine::Magnet_2()
                                             0);
     physicMagnet_2Left = new G4PVPlacement(0,
                                            G4ThreeVector(Magnet_2XPosition,Magnet_2YPosition,
-							 (-(Magnet_2ZPosition)+32*mm)),
+                                                         (-(Magnet_2ZPosition)+32*mm)),
                                            "PhysicMagnet_2Left",
                                            logicMagnet_2,
                                            physicInternalChamber,
@@ -1631,16 +1631,16 @@ void LaserDrivenBeamLine::Magnet_2()
 // Magnet number 3
 void LaserDrivenBeamLine::Magnet_3()
 { // The position of the external part are given as respect the external chamber.
-	
+    
     solidExternalMagnet_3 = new G4Box("SolidExternalMagnet_3",
                                       externalMagnet_3XSize/2.0,
                                       externalMagnet_3YSize/2.0,
                                       externalMagnet_3ZSize/2.0);
-	
+    
     logicExternalMagnet_3 = new G4LogicalVolume(solidExternalMagnet_3,
                                                 externalMagnet_3Material,
                                                 "LogicExternalMagnet_3");
-	
+    
     physicExternalMagnet_3 = new G4PVPlacement(0,
                                                G4ThreeVector((externalMagnet_3XPosition),
                                                              externalMagnet_3YPosition,
@@ -1654,7 +1654,7 @@ void LaserDrivenBeamLine::Magnet_3()
     physicExternalMagnet_3Down = new G4PVPlacement(0,
                                                    G4ThreeVector((externalMagnet_3XPosition),
                                                                  -externalMagnet_3YPosition,
-                                                                  (externalMagnet_3ZPosition+32*mm)),
+                                                                 (externalMagnet_3ZPosition+32*mm)),
                                                    "PhysicExternalMagnet_3Down",
                                                    logicExternalMagnet_3,
                                                    physicInternalChamber,
@@ -1668,11 +1668,11 @@ void LaserDrivenBeamLine::Magnet_3()
                               Magnet_3XSize/2.0,
                               Magnet_3YSize/2.0,
                               Magnet_3ZSize/2.0);
-	
+    
     logicMagnet_3 = new G4LogicalVolume(solidMagnet_3,
                                         externalMagnet_3Material,
                                         "LogicMagnet_3");
-	
+    
     physicMagnet_3Right = new G4PVPlacement(0,
                                             G4ThreeVector(Magnet_3XPosition,Magnet_3YPosition,
                                                           (Magnet_3ZPosition+32*mm)),
@@ -1697,16 +1697,16 @@ void LaserDrivenBeamLine::Magnet_3()
 // Magnet number 4
 void LaserDrivenBeamLine::Magnet_4()
 { // The position of the external part are given as respect the external chamber.
-	
+    
     solidExternalMagnet_4 = new G4Box("SolidExternalMagnet_4",
                                       externalMagnet_4XSize/2.0,
                                       externalMagnet_4YSize/2.0,
                                       externalMagnet_4ZSize/2.0);
-	
+    
     logicExternalMagnet_4 = new G4LogicalVolume(solidExternalMagnet_4,
                                                 externalMagnet_4Material,
                                                 "LogicExternalMagnet_4");
-	
+    
     physicExternalMagnet_4 = new G4PVPlacement(0,
                                                G4ThreeVector(externalMagnet_4XPosition,
                                                              externalMagnet_4YPosition,
@@ -1728,17 +1728,17 @@ void LaserDrivenBeamLine::Magnet_4()
                                                    0);
    	
     logicExternalMagnet_4 -> SetVisAttributes(gray);
-	
+    
     // The right and left part of the magnet
     solidMagnet_4 = new G4Box("SolidMagnet_4",
                               Magnet_4XSize/2.0,
                               Magnet_4YSize/2.0,
                               Magnet_4ZSize/2.0);
-	
+    
     logicMagnet_4 = new G4LogicalVolume(solidMagnet_4,
                                         externalMagnet_4Material,
                                         "LogicMagnet_4");
-	
+    
     physicMagnet_4Right = new G4PVPlacement(0,
                                             G4ThreeVector(Magnet_4XPosition,Magnet_4YPosition,
                                                           Magnet_4ZPosition),
@@ -1766,11 +1766,11 @@ void LaserDrivenBeamLine::Slit()
                                   externalSlitXSize/2.0,
                                   externalSlitYSize/2.0,
                                   externalSlitZSize/2.0);
-	
+    
     logicExternalSlit = new G4LogicalVolume(solidExternalSlit,
                                             externalSlitMaterial,
                                             "ExternalSlit");
-	
+    
     physicExternalSlit = new G4PVPlacement(0,
                                            G4ThreeVector(externalSlitXPosition,
                                                          externalSlitYPosition,
@@ -1787,11 +1787,11 @@ void LaserDrivenBeamLine::Slit()
                                   internalSlitXSize/2.0,
                                   internalSlitYSize/2.0,
                                   internalSlitZSize/2.0);
-	
+    
     logicInternalSlit = new G4LogicalVolume(solidInternalSlit,
                                             internalSlitMaterial,
                                             "InternalSlit");
-	
+    
     physicInternalSlit = new G4PVPlacement(0,
                                            G4ThreeVector(internalSlitXPosition,
                                                          internalSlitYPosition,
@@ -1812,16 +1812,16 @@ void LaserDrivenBeamLine::FinalCollimator()
     G4double phi = 90. *deg;
     G4RotationMatrix rm;
     rm.rotateY(phi);
-	
+    
     solidFinalCollimator = new G4Box("collimatorFinal",
                                      collimatorFinalBoxXSize/2.0,
                                      collimatorFinalBoxYSize/2.0,
                                      collimatorFinalBoxZSize/2.0);
-	
+    
     logicFinalCollimator = new G4LogicalVolume(solidFinalCollimator,
                                                FinalcollimatorMaterial,
                                                "collimatorFinal");
-	
+    
     physicFinalCollimator = new G4PVPlacement(0,
                                               G4ThreeVector(collimatorFinalBox_XPosition,
                                                             collimatorFinalBox_YPosition,
@@ -1839,14 +1839,14 @@ void LaserDrivenBeamLine::FinalCollimator()
                                          FinalCollimatorThickness/2.,
                                          startAngleFinalCollimator,
                                          spanningAngleFinalCollimator);
-  	
+    
     logicFinalCollimatorHole = new G4LogicalVolume(solidFinalCollimatorHole,
                                                    FinalcollimatorHoleMaterial,
                                                    "FinalCollimatorHole",
                                                    0,
                                                    0,
                                                    0);
-	
+    
     physicFinalCollimatorHole = new G4PVPlacement(G4Transform3D(rm,
                                                                 G4ThreeVector(FinalcollimatorXPosition,
                                                                               FinalcollimatorYPosition,
@@ -1865,21 +1865,21 @@ void LaserDrivenBeamLine::ExitWindow()
     G4double phi = 90. *deg;
     G4RotationMatrix rm;
     rm.rotateY(phi);
-	
+    
     solidExitWindow = new G4Tubs("ExitWindow",
                                  InnerRadiusExitWindow,
                                  ExternalRadiusExitWindow,
                                  ExitWindowThickness/2.,
                                  startAngleExitWindow,
                                  spanningAngleExitWindow);
-	
+    
     logicExitWindow = new G4LogicalVolume(solidExitWindow,
                                           WindowMaterial,
                                           "ExitWindow",
                                           0,
                                           0,
                                           0);
-	
+    
     physicExitWindow = new G4PVPlacement(G4Transform3D(rm,
                                                        G4ThreeVector(ExitWindowXPosition,
                                                                      ExitWindowYPosition,
@@ -1889,7 +1889,7 @@ void LaserDrivenBeamLine::ExitWindow()
                                          physicTreatmentRoom,
                                          false,
                                          0);
-	
+    
     logicExitWindow -> SetVisAttributes(skyBlue);
     
 }
@@ -1901,21 +1901,21 @@ void LaserDrivenBeamLine::ExitPipe()
     G4double phi = 90. *deg;
     G4RotationMatrix rm;
     rm.rotateY(phi);
-	
+    
     solidExitPipe = new G4Tubs("ExitPipe",
                                InnerRadiusExitPipe,
                                ExternalRadiusExitPipe,
                                ExitPipeheight/2.,
                                startAngleExitPipe,
                                spanningAngleExitPipe);
-	
+    
     logicExitPipe = new G4LogicalVolume(solidExitPipe,
                                         PipeMaterial,
                                         "ExitPipe",
                                         0,
                                         0,
                                         0);
-	
+    
     physicExitPipe = new G4PVPlacement(G4Transform3D(rm,
                                                      G4ThreeVector(ExitPipeXPosition,
                                                                    ExitPipeYPosition,
@@ -1925,7 +1925,7 @@ void LaserDrivenBeamLine::ExitPipe()
                                        physicTreatmentRoom,
                                        false,
                                        0);
-	
+    
     logicExitPipe -> SetVisAttributes(red);
     
 }
@@ -1937,21 +1937,21 @@ void LaserDrivenBeamLine::Exithole()
     G4double phi = 90. *deg;
     G4RotationMatrix rm;
     rm.rotateY(phi);
-	
+    
     solidExithole = new G4Tubs("Exithole",
                                InnerRadiusExithole,
                                ExternalRadiusExithole,
                                ExitholeThickness/2.,
                                startAngleExithole,
                                spanningAngleExithole);
-	
+    
     logicExithole = new G4LogicalVolume(solidExithole,
                                         internalChamberMaterial,
                                         "Exithole",
                                         0,
                                         0,
                                         0);
-	
+    
     physicExithole = new G4PVPlacement(G4Transform3D(rm,
                                                      G4ThreeVector(ExitholeXPosition,
                                                                    ExitholeYPosition,
@@ -1961,7 +1961,7 @@ void LaserDrivenBeamLine::Exithole()
                                        physicExternalChamber,
                                        false,
                                        0);
-	
+    
     logicExithole -> SetVisAttributes(skyBlue);
     
 }
@@ -1971,36 +1971,36 @@ void LaserDrivenBeamLine::Exithole()
 void LaserDrivenBeamLine::RemoveESS()
 {
     if(physicMagnet_1Left) {delete physicMagnet_1Left; delete physicMagnet_1Right; delete logicMagnet_1; delete solidMagnet_1;}
-     if(physicExternalMagnet_1Down){delete physicExternalMagnet_1Down; delete physicExternalMagnet_1; delete logicExternalMagnet_1; delete solidExternalMagnet_1;}
-     if(physicMagnet_2Left){delete physicMagnet_2Left; delete physicMagnet_2Right; delete logicMagnet_2; delete solidMagnet_2;}
-     if(physicExternalMagnet_2Down){ delete physicExternalMagnet_2Down; delete physicExternalMagnet_2; delete logicExternalMagnet_2; delete solidExternalMagnet_2; }
-     if(physicMagnet_3Left){delete physicMagnet_3Left; delete physicMagnet_3Right; delete logicMagnet_3; delete solidMagnet_3; }
-     if(physicExternalMagnet_3Down){delete physicExternalMagnet_3Down; delete physicExternalMagnet_3; delete logicExternalMagnet_3; delete solidExternalMagnet_3; }
-     if(physicMagnet_4Left) {delete physicMagnet_4Left; delete physicMagnet_4Right; delete logicMagnet_4; delete solidMagnet_4; }
-     if(physicExternalMagnet_4Down){delete physicExternalMagnet_4Down; delete physicExternalMagnet_4; delete logicExternalMagnet_4; delete solidExternalMagnet_4; }
-     if(physicCollimatorHole){delete physicCollimatorHole; delete logicCollimatorHole; delete solidCollimatorHole; }
-     if(physicCollimator) {delete physicCollimator; delete logicCollimator; delete solidCollimator; }
-     if(physicFinalCollimatorHole) {delete physicFinalCollimatorHole; delete logicFinalCollimatorHole; delete solidFinalCollimatorHole; }
-     if(physicFinalCollimator){delete physicFinalCollimator; delete logicFinalCollimator; delete solidFinalCollimator; }
-     if(physicInternalSlit){ delete physicInternalSlit; delete logicInternalSlit; delete solidInternalSlit; }
-     if(physicExternalSlit){delete physicExternalSlit; delete logicExternalSlit; delete solidExternalSlit; }
-     if(physicExithole){delete physicExithole; delete logicExithole; delete solidExithole;}
-     if(physicExitWindow){delete physicExitWindow; delete logicExitWindow; delete solidExitWindow;}
-     if(physicExitPipe){delete physicExitPipe; delete logicExitPipe; delete solidExitPipe;}
-     if(physicEntranceholeESSChamber){delete physicEntranceholeESSChamber;}
-     if(physicInternalChamber){delete physicInternalChamber; delete logicInternalChamber; delete solidInternalChamber;}
-     if(physicExternalChamber) {delete physicExternalChamber; delete logicExternalChamber; delete solidExternalChamber;}
-     if(pFieldMgr) {delete pFieldMgr;}
-     
-
+    if(physicExternalMagnet_1Down){delete physicExternalMagnet_1Down; delete physicExternalMagnet_1; delete logicExternalMagnet_1; delete solidExternalMagnet_1;}
+    if(physicMagnet_2Left){delete physicMagnet_2Left; delete physicMagnet_2Right; delete logicMagnet_2; delete solidMagnet_2;}
+    if(physicExternalMagnet_2Down){ delete physicExternalMagnet_2Down; delete physicExternalMagnet_2; delete logicExternalMagnet_2; delete solidExternalMagnet_2; }
+    if(physicMagnet_3Left){delete physicMagnet_3Left; delete physicMagnet_3Right; delete logicMagnet_3; delete solidMagnet_3; }
+    if(physicExternalMagnet_3Down){delete physicExternalMagnet_3Down; delete physicExternalMagnet_3; delete logicExternalMagnet_3; delete solidExternalMagnet_3; }
+    if(physicMagnet_4Left) {delete physicMagnet_4Left; delete physicMagnet_4Right; delete logicMagnet_4; delete solidMagnet_4; }
+    if(physicExternalMagnet_4Down){delete physicExternalMagnet_4Down; delete physicExternalMagnet_4; delete logicExternalMagnet_4; delete solidExternalMagnet_4; }
+    if(physicCollimatorHole){delete physicCollimatorHole; delete logicCollimatorHole; delete solidCollimatorHole; }
+    if(physicCollimator) {delete physicCollimator; delete logicCollimator; delete solidCollimator; }
+    if(physicFinalCollimatorHole) {delete physicFinalCollimatorHole; delete logicFinalCollimatorHole; delete solidFinalCollimatorHole; }
+    if(physicFinalCollimator){delete physicFinalCollimator; delete logicFinalCollimator; delete solidFinalCollimator; }
+    if(physicInternalSlit){ delete physicInternalSlit; delete logicInternalSlit; delete solidInternalSlit; }
+    if(physicExternalSlit){delete physicExternalSlit; delete logicExternalSlit; delete solidExternalSlit; }
+    if(physicExithole){delete physicExithole; delete logicExithole; delete solidExithole;}
+    if(physicExitWindow){delete physicExitWindow; delete logicExitWindow; delete solidExitWindow;}
+    if(physicExitPipe){delete physicExitPipe; delete logicExitPipe; delete solidExitPipe;}
+    if(physicEntranceholeESSChamber){delete physicEntranceholeESSChamber;}
+    if(physicInternalChamber){delete physicInternalChamber; delete logicInternalChamber; delete solidInternalChamber;}
+    if(physicExternalChamber) {delete physicExternalChamber; delete logicExternalChamber; delete solidExternalChamber;}
+    if(pFieldMgr) {delete pFieldMgr;}
+    
+    
     
     G4cout << "****************************************************" << G4endl;
     G4cout << "************ The ESS has been disabled *************"  << G4endl;
     G4cout << "****************************************************" << G4endl;
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-        #ifdef G4VIS_USE
-	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
-        #endif    
+#ifdef G4VIS_USE
+    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+#endif
 }
 // Change via external macro command the diameter of the first collimator
 void LaserDrivenBeamLine::SetFirstCollimatorRadius(G4double valueR)
@@ -2008,9 +2008,9 @@ void LaserDrivenBeamLine::SetFirstCollimatorRadius(G4double valueR)
     G4double radius = valueR;
     solidCollimatorHole -> SetOuterRadius(radius);
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-        #ifdef G4VIS_USE
-	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
-        #endif
+#ifdef G4VIS_USE
+    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+#endif
     G4cout << "The first collimator aperture has been modified to "<< valueR/mm <<"mm in diameter" << G4endl;
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -2021,9 +2021,9 @@ void LaserDrivenBeamLine::SetFirstCollimatorThickness(G4double valueC)
     solidCollimator -> SetXHalfLength(thickness);
     solidCollimatorHole -> SetZHalfLength(thickness);
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-        #ifdef G4VIS_USE
-	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
-        #endif
+#ifdef G4VIS_USE
+    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+#endif
     G4cout << "The first collimator thickness has been modified to "<< valueC/mm <<" mm in thickness" << G4endl;
 }
 
@@ -2032,9 +2032,9 @@ void LaserDrivenBeamLine::SetFirstCollimatorPositionZ(G4double valueQ)
 {
     physicCollimatorHole -> SetTranslation(G4ThreeVector(0., 0., valueQ));
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-        #ifdef G4VIS_USE
-	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
-        #endif
+#ifdef G4VIS_USE
+    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+#endif
     G4cout << "The first collimator has been translated to "<< valueQ/mm <<"mm (along the z axis)" << G4endl;
 }
 
@@ -2044,9 +2044,9 @@ void LaserDrivenBeamLine::SetSecondCollimatorRadius(G4double value)
     G4double radius = value;
     solidFinalCollimatorHole -> SetOuterRadius(radius);
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-        #ifdef G4VIS_USE
-	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
-        #endif
+#ifdef G4VIS_USE
+    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+#endif
     G4cout << "The second collimator aperture has been modified to "<< value/mm <<"mm in diameter" << G4endl;
 }
 
@@ -2058,9 +2058,9 @@ void LaserDrivenBeamLine::SetSecondCollimatorThickness(G4double value)
     solidFinalCollimator -> SetXHalfLength(thickness);
     solidFinalCollimatorHole -> SetZHalfLength(thickness);
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-        #ifdef G4VIS_USE
-	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
-        #endif
+#ifdef G4VIS_USE
+    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+#endif
     G4cout << "The second collimator thickness has been modified to "<< value/mm <<" mm in thickness" << G4endl;
 }
 
@@ -2069,9 +2069,9 @@ void LaserDrivenBeamLine::SetSecondCollimatorPositionZ(G4double value)
 {
     physicFinalCollimatorHole -> SetTranslation(G4ThreeVector(0., 0., value));
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-        #ifdef G4VIS_USE
-	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
-        #endif
+#ifdef G4VIS_USE
+    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+#endif
     G4cout << "The second collimator has been translated to "<< value/mm <<"mm (along the z axis)" << G4endl;
 }
 // THE SLIT MESSENGERS
@@ -2094,9 +2094,9 @@ void LaserDrivenBeamLine::SetThicknessSlit(G4double value)
         solidExternalSlit -> SetXHalfLength(dimension);
         solidInternalSlit -> SetXHalfLength(dimension);
         G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-        #ifdef G4VIS_USE
-	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
-        #endif
+#ifdef G4VIS_USE
+        G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+#endif
         G4cout <<"The thickness of the slit is:" << ((solidExternalSlit -> GetXHalfLength())*2.)/mm
         << G4endl;
     }
@@ -2108,9 +2108,9 @@ void LaserDrivenBeamLine::SetSlitHoleDimensionY(G4double value)
     G4double hole = value/2;
     solidInternalSlit -> SetYHalfLength(hole);
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-        #ifdef G4VIS_USE
-	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
-        #endif
+#ifdef G4VIS_USE
+    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+#endif
     G4cout << "The hole of the Slit has been changed in the Y direction to "<< value/mm <<" mm" <<G4endl;
 }
 
@@ -2121,9 +2121,9 @@ void LaserDrivenBeamLine::SetSlitHoleDimensionZ(G4double value)
     G4double hole = value/2;
     solidInternalSlit -> SetZHalfLength(hole);
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-        #ifdef G4VIS_USE
-	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
-        #endif
+#ifdef G4VIS_USE
+    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+#endif
     G4cout << "The hole of the Slit has been changed in the Z direction to "<< value/mm <<" mm" <<G4endl;
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -2132,9 +2132,9 @@ void LaserDrivenBeamLine::SetSlitHolePositionZ(G4double value)
 {
     physicInternalSlit -> SetTranslation(G4ThreeVector(0., 0., value));
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-        #ifdef G4VIS_USE
-	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
-        #endif
+#ifdef G4VIS_USE
+    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+#endif
     G4cout << "The hole of the slit has been translated to "<< value/mm <<" mm (along the Z axis)" <<G4endl;
 }
 
@@ -2143,26 +2143,26 @@ void LaserDrivenBeamLine::SetSlitHolePositionZ(G4double value)
 // Disable via external macro command all quadrupoles
 void LaserDrivenBeamLine::RemoveQuads()
 {
- if(physicFirstQuad) 
- {delete solidFirstQuad; delete logicFirstQuad; delete physicFirstQuad;delete SFirstTriplet; delete LFirstTriplet; delete PFirstTriplet;}    
- if(physicSecondQuad) 
- {delete solidSecondQuad; delete logicSecondQuad; delete physicSecondQuad;delete SSecondTriplet; delete LSecondTriplet; 	delete PSecondTriplet;}    
- if(physicThirdQuad)  
-{delete solidThirdQuad; delete logicThirdQuad; delete physicThirdQuad;delete SThirdTriplet; delete LThirdTriplet; 	delete PThirdTriplet;}    
-    if(physicFourthQuad) 
- {delete solidFourthQuad; delete logicFourthQuad; delete physicFourthQuad;delete SFourthTriplet; delete LFourthTriplet; 	delete PFourthTriplet;}        
-     if(pFieldMgrQuadFourth) {delete pFieldMgrQuadFourth;}
-     if(pFieldMgrQuadThird) {delete pFieldMgrQuadThird;}
-     if(pFieldMgrQuadSecond) {delete pFieldMgrQuadSecond;}
-     if(pFieldMgrQuadFirst) {delete pFieldMgrQuadFirst;}
-   
+    if(physicFirstQuad)
+    {delete solidFirstQuad; delete logicFirstQuad; delete physicFirstQuad;delete SFirstTriplet; delete LFirstTriplet; delete PFirstTriplet;}
+    if(physicSecondQuad)
+    {delete solidSecondQuad; delete logicSecondQuad; delete physicSecondQuad;delete SSecondTriplet; delete LSecondTriplet; 	delete PSecondTriplet;}
+    if(physicThirdQuad)
+    {delete solidThirdQuad; delete logicThirdQuad; delete physicThirdQuad;delete SThirdTriplet; delete LThirdTriplet; 	delete PThirdTriplet;}
+    if(physicFourthQuad)
+    {delete solidFourthQuad; delete logicFourthQuad; delete physicFourthQuad;delete SFourthTriplet; delete LFourthTriplet; 	delete PFourthTriplet;}
+    if(pFieldMgrQuadFourth) {delete pFieldMgrQuadFourth;}
+    if(pFieldMgrQuadThird) {delete pFieldMgrQuadThird;}
+    if(pFieldMgrQuadSecond) {delete pFieldMgrQuadSecond;}
+    if(pFieldMgrQuadFirst) {delete pFieldMgrQuadFirst;}
+    
     
     G4cout << "******************************************************************" << G4endl;
     G4cout << "************ The Quadrupoles system has been disabled *************"  << G4endl;
     G4cout << "******************************************************************" << G4endl;
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-        #ifdef G4VIS_USE
-	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
-        #endif
+#ifdef G4VIS_USE
+    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+#endif
 }
 

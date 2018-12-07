@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.hh 92859 2015-09-18 07:58:30Z gcosmo $
 //
 
 #ifndef G4DNAMillerGreenExcitationModel_h

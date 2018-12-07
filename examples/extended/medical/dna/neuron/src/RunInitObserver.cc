@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $ID$
 /// \file RunInitObserver.cc
 /// \brief Implementation of the RunInitObserver class
 

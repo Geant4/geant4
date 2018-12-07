@@ -31,7 +31,6 @@
 //
 // Authors: Henri Payno and Yann Perrot
 //
-// $Id$
 //
 /// \file SBPoint.hh
 /// \brief Definition of the SBPoint class

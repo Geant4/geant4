@@ -1,4 +1,3 @@
-$Id: History 80987 2014-05-19 10:50:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 9, 2018, G.Cosmo (readout-V10-04-00)
+- G4DigiManager: fixed printout typos.
 
 May 16, 2014, A.Dotti (readout-V10-00-00)
 - Coverity fixes

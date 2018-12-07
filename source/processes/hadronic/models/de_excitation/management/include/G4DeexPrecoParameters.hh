@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DeexPrecoParameters.hh 68028 2013-03-13 13:48:15Z gcosmo $
 //
 // 15.03.2016 V.Ivanchenko 
 //
@@ -72,6 +71,8 @@ public:
 
   inline G4double GetTransitionsR0() const;
 
+  inline G4double GetFBUEnergyLimit() const;
+
   inline G4double GetFermiEnergy() const;
 
   inline G4double GetPrecoLowEnergy() const;
@@ -114,6 +115,8 @@ public:
 
   inline G4bool GetInternalConversionFlag() const;
 
+  inline G4bool GetLevelDensityFlag() const;
+
   inline G4bool StoreICLevelData() const;
 
   inline G4DeexChannelType GetDeexChannelsType() const;
@@ -125,6 +128,8 @@ public:
   void SetR0(G4double);
 
   void SetTransitionsR0(G4double);
+
+  void SetFBUEnergyLimit(G4double);
 
   void SetFermiEnergy(G4double);
 
@@ -173,6 +178,8 @@ public:
 
   void SetInternalConversionFlag(G4bool);
 
+  void SetLevelDensityFlag(G4bool);
+
   void SetDeexChannelsType(G4DeexChannelType);
 
   // obsolete method (has no effect)
@@ -199,6 +206,9 @@ private:
 
   // Nuclear radius r0 for transitions
   G4double fTransitionsR0;
+
+  // upper limit of level energy for Fermi Break-up model
+  G4double fFBUEnergyLimit;
 
   // Fermi energy level
   G4double fFermiEnergy;
@@ -241,6 +251,7 @@ private:
   G4bool fCorrelatedGamma;
   G4bool fStoreAllLevels;
   G4bool fInternalConversion;
+  G4bool fLD;
 
   // type of a set of e-exitation channels
   G4DeexChannelType fDeexChannelType;   
@@ -263,6 +274,11 @@ inline G4double G4DeexPrecoParameters::GetR0() const
 inline G4double G4DeexPrecoParameters::GetTransitionsR0() const
 { 
   return fTransitionsR0; 
+}
+
+inline G4double G4DeexPrecoParameters::GetFBUEnergyLimit() const
+{
+  return fFBUEnergyLimit;
 }
 
 inline G4double G4DeexPrecoParameters::GetFermiEnergy() const
@@ -373,6 +389,11 @@ inline G4bool G4DeexPrecoParameters::StoreICLevelData() const
 inline G4bool G4DeexPrecoParameters::GetInternalConversionFlag() const
 {
   return fInternalConversion;
+}
+
+inline G4bool G4DeexPrecoParameters::GetLevelDensityFlag() const
+{
+  return fLD;
 }
 
 inline G4DeexChannelType G4DeexPrecoParameters::GetDeexChannelsType() const

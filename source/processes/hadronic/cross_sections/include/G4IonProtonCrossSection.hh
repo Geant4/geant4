@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonProtonCrossSection.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -53,7 +52,7 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
 
-class G4ProtonInelasticCrossSection;
+class G4ParticleInelasticXS;
 
 class G4IonProtonCrossSection : public G4VCrossSectionDataSet
 {
@@ -73,6 +72,9 @@ public:
   G4double GetElementCrossSection(const G4DynamicParticle* aPart, 
 				  G4int Z, const G4Material*);
 
+  virtual
+  void BuildPhysicsTable(const G4ParticleDefinition&); 
+
   virtual void CrossSectionDescription(std::ostream&) const;
 
 private: // Without Description
@@ -80,7 +82,7 @@ private: // Without Description
   G4IonProtonCrossSection & operator=(const G4IonProtonCrossSection &right);
   G4IonProtonCrossSection(const G4IonProtonCrossSection&);
 
-  G4ProtonInelasticCrossSection* theForward;
+  G4ParticleInelasticXS* theForward;
 
 };
 

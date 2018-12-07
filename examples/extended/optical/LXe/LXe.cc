@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXe.cc 110280 2018-05-17 14:50:16Z gcosmo $
 //
 /// \file optical/LXe/LXe.cc
 /// \brief Main program of the optical/LXe example
@@ -46,7 +45,6 @@
 #include "G4EmStandardPhysics_option4.hh"
 
 #include "LXeDetectorConstruction.hh"
-
 #include "LXeActionInitialization.hh"
 
 #include "G4VisExecutive.hh"
@@ -56,10 +54,9 @@
 
 int main(int argc, char** argv)
 {
-
   //detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = nullptr;
-  if (argc == 1) ui = new G4UIExecutive(argc,argv);
+  if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
 
 #ifdef G4MULTITHREADED
   G4MTRunManager * runManager = new G4MTRunManager;
@@ -70,8 +67,8 @@ int main(int argc, char** argv)
 #else
   G4RunManager * runManager = new G4RunManager;
 #endif
-
-  runManager->SetUserInitialization(new LXeDetectorConstruction());
+  LXeDetectorConstruction* det = new LXeDetectorConstruction();
+  runManager->SetUserInitialization(det);
 
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
   physicsList->ReplacePhysics(new G4EmStandardPhysics_option4());
@@ -90,7 +87,7 @@ int main(int argc, char** argv)
   physicsList->RegisterPhysics(opticalPhysics);
   runManager->SetUserInitialization(physicsList);
 
-  runManager->SetUserInitialization(new LXeActionInitialization());
+  runManager->SetUserInitialization(new LXeActionInitialization(det));
 
   //initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
@@ -99,16 +96,15 @@ int main(int argc, char** argv)
   //get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (ui)  {
+  if (ui) {
     //interactive mode
     UImanager->ApplyCommand("/control/execute vis.mac");
     if (ui->IsGUI()) {
-     UImanager->ApplyCommand("/control/execute gui.mac");
+      UImanager->ApplyCommand("/control/execute gui.mac");
     }
     ui->SessionStart();
     delete ui;
-  }
-  else  {
+  } else {
     //batch mode  
     G4String command = "/control/execute ";
     G4String fileName = argv[1];

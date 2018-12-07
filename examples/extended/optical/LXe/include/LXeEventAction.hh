@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeEventAction.hh 109784 2018-05-09 08:14:08Z gcosmo $
 //
 /// \file optical/LXe/include/LXeEventAction.hh
 /// \brief Definition of the LXeEventAction class
@@ -38,20 +37,19 @@
 #include "G4ThreeVector.hh"
 
 class G4Event;
+class LXeDetectorConstruction;
 
 class LXeEventAction : public G4UserEventAction
 {
   public:
 
-    LXeEventAction();
+    LXeEventAction(const LXeDetectorConstruction*);
     virtual ~LXeEventAction();
 
   public:
 
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
-
-    void SetSaveThreshold(G4int );
 
     void SetEventVerbose(G4int v){fVerbose=v;}
 
@@ -95,24 +93,20 @@ class LXeEventAction : public G4UserEventAction
     void IncPMTSAboveThreshold(){fPMTsAboveThreshold++;}
     G4int GetPMTSAboveThreshold(){return fPMTsAboveThreshold;}
 
-
-
   private:
 
     LXeEventMessenger* fEventMessenger;
+    const LXeDetectorConstruction* fDetector;
 
-    G4int              fSaveThreshold;
+    G4int fScintCollID;
+    G4int fPMTCollID;
 
-    G4int              fScintCollID;
-    G4int              fPMTCollID;
+    G4int fVerbose;
 
-    G4int              fVerbose;
-
-    G4int              fPMTThreshold;
+    G4int fPMTThreshold;
 
     G4bool fForcedrawphotons;
     G4bool fForcenophotons;
-
 
     G4int fHitCount;
     G4int fPhotonCount_Scint;
@@ -132,9 +126,6 @@ class LXeEventAction : public G4UserEventAction
     G4double fEdepMax;
 
     G4int fPMTsAboveThreshold;
-
-
-
 };
 
 #endif

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc 109122 2018-03-28 13:08:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -32,12 +31,6 @@
 // Author:      V.Ivanchenko 09.11.2005
 //
 // Modified:
-// 05.12.2005 V.Ivanchenko add controlled verbosity
-// 13.11.2006 V.Ivanchenko use G4hMultipleScattering
-// 23.11.2006 V.Ivanchenko remove mscStepLimit option and improve cout
-// 13.02.2007 V.Ivanchenko use G4hMultipleScattering for muons
-// 13.02.2007 V.Ivanchenko set skin=0.0
-// 21.04.2008 V.Ivanchenko add long-lived D and B mesons
 //
 //----------------------------------------------------------------------------
 //
@@ -103,6 +96,7 @@
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
 #include "G4EmModelActivator.hh"
+#include "G4GammaGeneralProcess.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -164,6 +158,7 @@ void G4EmStandardPhysics::ConstructProcess()
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
   }
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  G4LossTableManager* man = G4LossTableManager::Instance();
 
   // muon & hadron bremsstrahlung and pair production
   G4MuBremsstrahlung* mub = new G4MuBremsstrahlung();
@@ -202,11 +197,22 @@ void G4EmStandardPhysics::ConstructProcess()
 
       G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
       pee->SetEmModel(new G4LivermorePhotoElectricModel());
-      ph->RegisterProcess(pee, particle);
 
-      ph->RegisterProcess(new G4ComptonScattering(), particle);
-      ph->RegisterProcess(new G4GammaConversion(), particle);
-      ph->RegisterProcess(new G4RayleighScattering(), particle);
+      if(G4EmParameters::Instance()->GeneralProcessActive()) {
+        G4GammaGeneralProcess* sp = new G4GammaGeneralProcess();
+        sp->AddEmProcess(pee);
+        sp->AddEmProcess(new G4ComptonScattering());
+        sp->AddEmProcess(new G4GammaConversion());
+        sp->AddEmProcess(new G4RayleighScattering());
+        man->SetGammaGeneralProcess(sp);
+	ph->RegisterProcess(sp, particle);
+
+      } else {
+	ph->RegisterProcess(pee, particle);
+	ph->RegisterProcess(new G4ComptonScattering(), particle);
+	ph->RegisterProcess(new G4GammaConversion(), particle);
+	ph->RegisterProcess(new G4RayleighScattering(), particle);
+      }
 
     } else if (particleName == "e-") {
 
@@ -341,8 +347,7 @@ void G4EmStandardPhysics::ConstructProcess()
 
   // Deexcitation
   //
-  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+  man->SetAtomDeexcitation(new G4UAtomicDeexcitation());
 
   G4EmModelActivator mact(GetPhysicsName());
 }

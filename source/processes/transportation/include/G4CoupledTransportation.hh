@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.hh 110805 2018-06-15 06:52:15Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -111,6 +110,11 @@ class G4CoupledTransportation : public G4VProcess
      inline void SetThresholdImportantEnergy( G4double newEnImp ); 
      inline void SetThresholdTrials(G4int newMaxTrials ); 
 
+     void SetHighLooperThresholds(); // Shortcut method - old values (meant for HEP)
+     void SetLowLooperThresholds(); // Set low thresholds - for low-E applications   
+     void PushThresholdsToLogger(); // Inform logger of current thresholds
+     void ReportLooperThresholds(); // Print values of looper thresholds
+   
      // Get/Set parameters for killing loopers: 
      //   Above 'important' energy a 'looping' particle in field will 
      //   *NOT* be abandoned, except after fThresholdTrials attempts.
@@ -152,6 +156,8 @@ class G4CoupledTransportation : public G4VProcess
      G4VParticleChange* AtRestDoIt( const G4Track&, const G4Step&)
        { return 0; }      // No operation in AtRestDoIt
 
+     void PrintStatistics( std::ostream& outStr) const;
+   
   protected:
 
      G4bool DoesGlobalFieldExist();
@@ -163,10 +169,8 @@ class G4CoupledTransportation : public G4VProcess
      void ReportMove( G4ThreeVector OldVector, G4ThreeVector NewVector,
                       const G4String& Quantity );
    
-     // void ReportLoopingTrack( .. ) -> Moved to Logger class
-       // Warn about dropping of tracks that repeatedly exceed number of
-       // iterations for propagaton in field
-
+     void ReportMissingLogger(const char * methodName);
+   
   private:
 
      G4Navigator*         fMassNavigator;
@@ -219,22 +223,33 @@ class G4CoupledTransportation : public G4VProcess
 
      // Thresholds for looping particles: 
      // 
-     G4double fThreshold_Warning_Energy;     //  Warn above this energy
-     G4double fThreshold_Important_Energy;   //  Hesitate above this
-     G4int    fThresholdTrials;              //    for this no of trials
+     G4double fThreshold_Warning_Energy = 1.0 * CLHEP::keV;   //  Warn above this energy
+     G4double fThreshold_Important_Energy = 1.0 * CLHEP::MeV; //  Give a few trial above this E
+     G4int    fThresholdTrials = 10;       //  Number of trials an important looper survives   
        // Above 'important' energy a 'looping' particle in field will 
        // *NOT* be abandoned, except after fThresholdTrials attempts.
 
      // Counter for steps in which particle reports 'looping',
      // if it is above 'Important' Energy
      //
-     G4int    fNoLooperTrials; 
+     G4int fNoLooperTrials=0;
 
      // Statistics for tracks abandoned
      //
-     G4double fSumEnergyKilled;
-     G4double fMaxEnergyKilled;
-
+     G4double fSumEnergyKilled= 0.0;
+     G4double fSumEnerSqKilled= 0.0;
+     G4double fMaxEnergyKilled= -1.0;
+     G4int    fMaxEnergyKilledPDG= 0;
+     unsigned long fNumLoopersKilled= 0;
+     G4double fSumEnergyKilled_NonElectron= 0.0;
+     G4double fSumEnerSqKilled_NonElectron= 0.0;
+     G4double fMaxEnergyKilled_NonElectron= -1.0;
+     G4int    fMaxEnergyKilled_NonElecPDG= 0;
+     unsigned long fNumLoopersKilled_NonElectron= 0;
+     G4double fSumEnergySaved=  0.0;
+     G4double fMaxEnergySaved= -1.0;
+     G4double fSumEnergyUnstableSaved = 0.0;
+   
      G4SafetyHelper* fpSafetyHelper;  // To pass it the safety value obtained
      G4TransportationLogger* fpLogger;  // Reports issues / raises warnings
    

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc 107058 2017-11-01 14:54:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -36,48 +35,8 @@
 //
 // Creation date: 30.05.1997
 //
-// Modifications:
+// Modified by Laszlo Urban, Michel Maire and Vladimir Ivanchenko
 //
-// corrected by L.Urban on 24/09/97
-// several bugs corrected by L.Urban on 13/01/98
-// 07-04-98 remove 'tracking cut' of the ionizing particle, mma
-// 22-10-98 cleanup L.Urban
-// 02-02-99 bugs fixed , L.Urban
-// 29-07-99 correction in BuildLossTable for low energy, L.Urban
-// 10-02-00 modifications , new e.m. structure, L.Urban
-// 10-08-00 V.Ivanchenko change BuildLambdaTable, in order to
-//          simulate energy losses of ions; correction to
-//          cross section for particles with spin 1 is inserted as well
-// 28-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
-// 14-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma)
-// 29-08-01 PostStepDoIt: correction for spin 1/2 (instead of 1) (mma)
-// 17-09-01 migration of Materials to pure STL (mma)
-// 25-09-01 completion of RetrievePhysicsTable() (mma)
-// 29-10-01 all static functions no more inlined
-// 08-11-01 Charge renamed zparticle; added to the dedx
-// 27-03-02 Bug fix in scaling of lambda table (V.Ivanchenko)
-// 09-04-02 Update calculation of tables for GenericIons (V.Ivanchenko)
-// 30-04-02 V.Ivanchenko update to new design
-// 04-12-02 Add verbose level definition (VI)
-// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
-// 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
-// 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
-// 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
-// 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
-// 04-08-03 Set integral=false to be default (V.Ivanchenko)
-// 08-08-03 STD substitute standard  (V.Ivanchenko)
-// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
-// 27-05-04 Set integral to be a default regime (V.Ivanchenko) 
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-// 24-03-05 Optimize internal interfaces (V.Ivantchenko)
-// 12-08-05 SetStepLimits(0.2, 0.1*mm) (mma)
-// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivanchenko)
-// 26-05-06 scale negative particles from pi- and pbar,
-//          positive from pi+ and p (VI)
-// 14-01-07 use SetEmModel() and SetFluctModel() from G4VEnergyLossProcess (mma)
-// 12-09-08 Removed CorrectionsAlongStep (VI)
-// 27-05-10 Added G4ICRU73QOModel for anti-protons (VI)
 //
 // -------------------------------------------------------------------
 //
@@ -226,7 +185,7 @@ void G4hIonisation::PrintInfo()
 
 void G4hIonisation::ProcessDescription(std::ostream& out) const
 {
-  out << "<strong>Ionisation</strong>";
+  out << "  Ionisation";
   G4VEnergyLossProcess::ProcessDescription(out);
 }
 

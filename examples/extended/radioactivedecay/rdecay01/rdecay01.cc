@@ -27,7 +27,6 @@
 /// \brief Main program of the radioactivedecay/rdecay01 example
 //
 //
-// $Id: rdecay01.cc 109792 2018-05-09 08:22:58Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

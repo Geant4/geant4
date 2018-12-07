@@ -26,7 +26,6 @@
 /// \file PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 98265 2016-07-04 17:47:54Z gcosmo $
 //
 
 #ifndef PhysicsList_h

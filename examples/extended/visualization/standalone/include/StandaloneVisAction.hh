@@ -27,7 +27,6 @@
 /// \brief Definition of the StandaloneVisAction class
 //
 //
-// $Id: StandaloneVisAction.hh 69587 2013-05-08 14:26:03Z gcosmo $
 
 #ifndef STANDALONEVISACTION_HH
 #define STANDALONEVISACTION_HH

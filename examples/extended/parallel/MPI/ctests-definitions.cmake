@@ -107,4 +107,28 @@ geant4_add_test(mpi-ex03
   LABELS MPI
   )
 
+# - Build/Test exMPI04
+# variable to simplify paths
+set(G4MPI_EX04_BINDIR ${G4MPI_CTESTS_BASE_OUTPUT_DIR}/exMPI04)
 
+geant4_add_test(mpi-ex04-sequential
+  SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/examples/exMPI04
+  BINARY_DIR ${G4MPI_EX04_BINDIR}
+  PROJECT exMPI04
+  BUILD exMPI04
+  COMMAND ${G4MPI_EX04_BINDIR}/exMPI04 run.mac
+  WORKING_DIRECTORY ${G4MPI_EX04_BINDIR}
+  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+  DEPENDS mpi-libg4mpi
+  LABELS MPI
+  )
+# Needs G4mpi
+set_property(TEST mpi-ex04-sequential APPEND PROPERTY ENVIRONMENT G4mpi_DIR=${G4mpi_DIR})
+
+geant4_add_test(mpi-ex04
+  COMMAND ${MPIEXEC} -n 3 ${G4MPI_EX04_BINDIR}/exMPI04 run.mac
+  WORKING_DIRECTORY ${G4MPI_EX04_BINDIR}
+  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+  DEPENDS mpi-ex04-sequential
+  LABELS MPI
+  )

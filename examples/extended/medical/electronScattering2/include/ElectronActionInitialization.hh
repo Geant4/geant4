@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ElectronActionInitialization.hh 70266 2013-05-28 12:57:34Z jjacquem $
 //
 /// \file ElectronActionInitialization.hh
 /// \brief Definition of the ElectronActionInitialization class

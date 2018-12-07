@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4StateManager.cc 66892 2013-01-17 10:57:59Z gunter $
 // ====================================================================
 //   pyG4StateManager.cc
 //
@@ -42,13 +41,14 @@ void export_G4StateManager()
   class_<G4StateManager, boost::noncopyable>
     ("G4StateManager", "state manager", no_init)
     .def("GetStateManager",    &G4StateManager::GetStateManager,
-	 "Get an instance of G4StateManager",
+	       "Get an instance of G4StateManager",
          return_value_policy<reference_existing_object>())
     .staticmethod("GetStateManager")
     // ---
-    .def("GetCurrentState",    &G4StateManager::GetCurrentState)
-    .def("GetPreviousState",   &G4StateManager::GetPreviousState)
+    .def("GetCurrentState",    &G4StateManager::GetCurrentState,
+         return_value_policy<copy_const_reference>())
+    .def("GetPreviousState",   &G4StateManager::GetPreviousState,
+         return_value_policy<copy_const_reference>())
     .def("GetStateString",     &G4StateManager::GetStateString)
     ;
 }
-

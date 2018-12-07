@@ -1,4 +1,3 @@
-$Id: History 110932 2018-06-26 08:06:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-26 Jone, 2018 K. Murakami (intercoms-V10-04-03)
+23 July, 2018 M. Asai (intercoms-V10-04-04)
+- G4UIcommand.cc : adding comparison of two variables. Addressing to
+  Bug report #2068.
+
+26 June, 2018 K. Murakami (intercoms-V10-04-03)
 - G4G4InteractorMessenger.cc ::fix compilation warning for -Wunused-result
 
 17 May, 2018 J. Madsen (intercoms-V10-04-02)

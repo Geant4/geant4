@@ -23,7 +23,6 @@
 // ********************************************************************
 //
 //
-// $Id: $
 //
 //    G4ModifiedMidpoint implementation
 //    Based on modified_midpoint.hpp from boost
@@ -33,6 +32,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "G4ModifiedMidpoint.hh"
+#include "G4FieldUtils.hh"
+
+using namespace field_utils;
 
 G4ModifiedMidpoint::G4ModifiedMidpoint( G4EquationOfMotion* equation,
                                         G4int nvar, G4int steps )
@@ -51,8 +53,10 @@ void G4ModifiedMidpoint::DoStep( const G4double yIn[], const G4double dydyIn[],
 {
   G4double y0[G4FieldTrack::ncompSVEC];
   G4double y1[G4FieldTrack::ncompSVEC];
-  G4double dydx[G4FieldTrack::ncompSVEC];
   G4double yTemp[G4FieldTrack::ncompSVEC];
+  setValue(yIn, Value1D::LabTime, y0, y1, yTemp, yOut);
+
+  G4double dydx[G4FieldTrack::ncompSVEC];
 
   const G4double h = hstep / fsteps;
   const G4double h2 = 2 * h;
@@ -96,6 +100,7 @@ void G4ModifiedMidpoint::DoStep( const G4double yIn[], const G4double dydxIn[],
   G4double y0[G4FieldTrack::ncompSVEC];
   G4double y1[G4FieldTrack::ncompSVEC];
   G4double yTemp[G4FieldTrack::ncompSVEC];
+  setValue(yIn, Value1D::LabTime, y0, y1, yTemp, yMid, yOut);
 
   const G4double h = hstep / fsteps;
   const G4double h2 = 2 * h;

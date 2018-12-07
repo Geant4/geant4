@@ -27,7 +27,6 @@
 /// \brief Implementation of the Par01PionShowerModel class
 //
 //
-// $Id: Par01PionShowerModel.cc 101151 2016-11-08 08:06:16Z gcosmo $
 //
 #include "Par01PionShowerModel.hh"
 #include "Par01EnergySpot.hh"

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc 110753 2018-06-12 15:44:03Z gcosmo $
 //
 // 
 //
@@ -203,10 +202,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
     yFldTrkStart.SetCurveLength(x);
 #endif
 
-    // Old method - inline call to Equation of Motion
-    //   pIntStepper->RightHandSide( y, dydx );
-    // New method allows to cache field, or state (eg momentum magnitude)
-    pIntStepper->ComputeRightHandSide( y, dydx );
+    pIntStepper->RightHandSide( y, dydx );
     fNoTotalSteps++;
 
     // Perform the Integration
@@ -231,7 +227,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
       yFldTrk.LoadFromArray(y, fNoIntegrationVariables); 
       yFldTrk.SetCurveLength( x );
 
-      QuickAdvance( yFldTrk, dydx, h, dchord_step, dyerr_len ); 
+      QuickAdvance( yFldTrk, dydx, h, UNKNOWN_CURVATURE_RADIUS, dchord_step, dyerr_len );
       //-----------------------------------------------------
 
       yFldTrk.DumpToArray(y);    
@@ -653,6 +649,7 @@ G4bool  G4MagInt_Driver::QuickAdvance(
                             G4FieldTrack& y_posvel,         // INOUT
                             const G4double     dydx[],  
                                   G4double     hstep,       // In
+                                  G4double     /*inverseCurvatureRadius*/,
                                   G4double&    dchord_step,
                                   G4double&    dyerr )
 {
@@ -1007,7 +1004,17 @@ GetDerivatives(const G4FieldTrack& y_curr, G4double* dydx) const
 {
     G4double ytemp[G4FieldTrack::ncompSVEC];
     y_curr.DumpToArray(ytemp);
-    GetStepper()->RightHandSide(ytemp, dydx);
+    pIntStepper->RightHandSide(ytemp, dydx);  // Avoid virtual call for GetStepper
+    // Was: GetStepper()->ComputeRightHandSide(ytemp, dydx);
+}
+
+void G4MagInt_Driver::GetDerivatives(const G4FieldTrack& track,
+                                     G4double dydx[],
+                                     G4double field[]) const
+{
+    G4double ytemp[G4FieldTrack::ncompSVEC];
+    track.DumpToArray(ytemp);
+    pIntStepper->RightHandSide(ytemp, dydx, field);
 }
 
 G4EquationOfMotion* G4MagInt_Driver::GetEquationOfMotion()

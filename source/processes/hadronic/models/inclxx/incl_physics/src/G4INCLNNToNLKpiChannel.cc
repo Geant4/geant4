@@ -134,9 +134,8 @@ namespace G4INCL {
 		list.push_back(kaon);
 		list.push_back(pion);
 		
-		PhaseSpaceGenerator::generateBiased(sqrtS, list, 0, angularSlope);
-		
-		INCL_DEBUG("NNToNLKpi " << (kaon->getMomentum().theta()) * 180. / G4INCL::Math::pi << '\n');
+		if(Random::shoot()<0.5) PhaseSpaceGenerator::generateBiased(sqrtS, list, 0, angularSlope);
+		else PhaseSpaceGenerator::generateBiased(sqrtS, list, 1, angularSlope);
 		
 		fs->addModifiedParticle(particle1);
 		fs->addModifiedParticle(particle2);

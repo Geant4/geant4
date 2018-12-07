@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFermiBreakUpVI.cc,v 1.5 2006-06-29 20:13:13 gunter Exp $
 //
 // FermiBreakUp de-excitation model
 // by V. Ivanchenko (July 2016)

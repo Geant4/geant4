@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/dna/wvalue/.README.txt"
 ///\brief Example wvalue README page

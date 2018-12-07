@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmBiasingManager.hh 95657 2016-02-17 13:03:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -96,9 +95,9 @@ public:
 				 const G4Track& track,
 				 G4VEmModel* currentModel,
 				 G4ParticleChangeForGamma* pParticleChange,
-				 G4double& eloss, 
-   				 G4int coupleIdx,  
-				 G4double tcut, 
+				 G4double& eloss,
+				 G4int coupleIdx,
+				 G4double tcut,
 				 G4double safety = 0.0);
 
   // for G4VEnergyLossProcess 
@@ -107,7 +106,7 @@ public:
 				 G4VEmModel* currentModel,
 				 G4ParticleChangeForLoss* pParticleChange,
 				 G4double& eloss, 
-   				 G4int coupleIdx,  
+   			 G4int coupleIdx,  
 				 G4double tcut, 
 				 G4double safety = 0.0);
 
@@ -121,6 +120,17 @@ public:
 
   inline void ResetForcedInteraction();
 
+  G4bool CheckDirection(G4ThreeVector pos, G4ThreeVector momdir) const;
+
+  G4bool  GetDirectionalSplitting() { return fDirectionalSplitting; }
+  void    SetDirectionalSplitting(G4bool v) { fDirectionalSplitting = v; }
+
+  void SetDirectionalSplittingTarget(G4ThreeVector v) 
+    { fDirectionalSplittingTarget = v; }
+  void SetDirectionalSplittingRadius(G4double r) 
+    { fDirectionalSplittingRadius = r; }
+  G4double GetWeight(G4int i);
+
 private:
 
   void ApplyRangeCut(std::vector<G4DynamicParticle*>& vd,
@@ -133,6 +143,19 @@ private:
 			  G4VEmModel* currentModel, 
 			  G4int index,
 			  G4double tcut);
+
+  void ApplyDirectionalSplitting(std::vector<G4DynamicParticle*>& vd,
+        const G4Track& track,
+        G4VEmModel* currentModel, 
+        G4int index,
+        G4double tcut,
+        G4ParticleChangeForGamma* partChange);
+
+  void ApplyDirectionalSplitting(std::vector<G4DynamicParticle*>& vd,
+        const G4Track& track,
+        G4VEmModel* currentModel, 
+        G4int index,
+        G4double tcut);
 
   inline G4double ApplyRussianRoulette(std::vector<G4DynamicParticle*>& vd,
 				       G4int index); 
@@ -158,10 +181,18 @@ private:
   G4VEnergyLossProcess*         eIonisation;
 
   const G4ParticleDefinition*  theElectron;
+  const G4ParticleDefinition*  theGamma;
 
   G4double fSafetyMin;
   G4double currentStepLimit;
   G4bool   startTracking;
+
+  G4double      fWeight;
+
+  G4bool        fDirectionalSplitting;
+  G4ThreeVector fDirectionalSplittingTarget;
+  G4double      fDirectionalSplittingRadius;
+  std::vector<G4double> fDirectionalSplittingWeights;
 };
 
 inline G4bool 

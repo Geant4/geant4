@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGNeutronInelastic.cc 92494 2015-09-02 07:19:42Z gcosmo $
 //
  
 #include "G4RPGNeutronInelastic.hh"

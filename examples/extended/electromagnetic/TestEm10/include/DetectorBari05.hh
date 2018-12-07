@@ -27,7 +27,6 @@
 /// \brief Definition of the DetectorBari05 class
 //
 //
-// $Id: DetectorBari05.hh 72513 2013-07-24 20:37:54Z gum $
 //
 // Setup for Bari INFN XTR test beam (~2004) at CERN. With He beam-pipe
 // M. Brigida et al, NIM A550 (2005) 157-168

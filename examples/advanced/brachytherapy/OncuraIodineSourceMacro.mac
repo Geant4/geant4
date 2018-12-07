@@ -1,0 +1,39 @@
+/run/initialize
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+#### Define the geometry of the Oncura I-125 source
+/source/switch Oncura
+# Generation of primary field
+# Generate radioactive decay of iodine
+/gps/particle ion 
+/gps/ion 53 125 53 0.
+/gps/energy 0. keV
+/gps/pos/type Surface
+/gps/pos/shape Cylinder
+/gps/pos/radius 0.247 mm
+/gps/pos/halfz 1.397 mm
+/gps/pos/centre 0. 0. 0. mm 
+
+# Scoring mesh is used to calculate
+# the energy deposition in the phantom
+/score/create/boxMesh boxMesh_5
+#
+#
+# the voxels are 0.25 mm wide.
+/score/mesh/boxSize 10.0125 10.0125 0.0125 cm
+/score/mesh/nBin 801 801 1
+#
+#
+/score/quantity/energyDeposit eDep
+#
+/score/close
+#
+/score/list                                             
+/run/beamOn  1000
+#
+# Dump scores to a file
+#
+/score/dumpQuantityToFile boxMesh_5 eDep EnergyDeposition_Oncura.out
+#

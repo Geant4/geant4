@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclParticle.cc 71719 2013-06-21 00:01:54Z mkelsey $
 //
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.
 // 20110721  M. Kelsey -- Add model ID as optional ctor argument (so subclasses

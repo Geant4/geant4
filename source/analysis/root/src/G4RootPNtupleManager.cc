@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 // Author: Ivana Hrivnacova, 04/10/2016  (ivana@ipno.in2p3.fr)
 
@@ -36,9 +35,8 @@
 
 // mutex in a file scope
 namespace {
-  //Mutex to lock master manager when adding ntuple row
-  G4Mutex addRowMutex = G4MUTEX_INITIALIZER;
-  G4Mutex endFillMutex = G4MUTEX_INITIALIZER;
+  //Mutex to lock master manager when adding ntuple row and ending fill
+  G4Mutex pntupleMutex = G4MUTEX_INITIALIZER;
 }
 
 //_____________________________________________________________________________
@@ -366,7 +364,7 @@ G4bool G4RootPNtupleManager::AddNtupleRow(G4int ntupleId)
   auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "AddNtupleRow");
   if ( ! ntupleDescription ) return false;
   
-  G4AutoLock lock(&addRowMutex);
+  G4AutoLock lock(&pntupleMutex);
   lock.unlock();
   mutex toolsLock(lock);
   auto result 
@@ -407,7 +405,7 @@ G4bool G4RootPNtupleManager::Merge()
     }  
 #endif
   
-    G4AutoLock lock(&endFillMutex);
+    G4AutoLock lock(&pntupleMutex);
     lock.unlock();
     mutex toolsLock(lock);
     auto result 

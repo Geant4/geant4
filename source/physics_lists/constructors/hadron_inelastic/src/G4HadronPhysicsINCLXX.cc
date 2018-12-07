@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsINCLXX.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -87,12 +86,16 @@
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
 #include "G4NeutronCaptureXS.hh"
+#include "G4NeutronInelasticXS.hh"
 #include "G4ParticleHPCaptureData.hh"
 #include "G4LFission.hh"
 
 #include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4PhysListUtil.hh"
+#include "G4ProcessManager.hh"
+
+#include "G4HadronicParameters.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -251,18 +254,7 @@ void G4HadronPhysicsINCLXX::Others()
 }
 
 G4HadronPhysicsINCLXX::~G4HadronPhysicsINCLXX()
-{
-  delete xs_k.Get();
-  std::for_each( xs_ds.Begin(), xs_ds.End(),[](G4VCrossSectionDataSet* el){delete el;});
-}
-
-void G4HadronPhysicsINCLXX::TerminateWorker()
-{
-  delete xs_k.Get();
-  std::for_each( xs_ds.Begin(), xs_ds.End(),[](G4VCrossSectionDataSet* el){ delete el;});
-  xs_ds.Clear();
-  G4VPhysicsConstructor::TerminateWorker();
-}
+{}
 
 void G4HadronPhysicsINCLXX::ConstructParticle()
 {
@@ -281,54 +273,36 @@ void G4HadronPhysicsINCLXX::ConstructParticle()
 
 void G4HadronPhysicsINCLXX::ConstructProcess()
 {
-  //if ( tpdata == 0 ) tpdata = new ThreadPrivate;
   CreateModels();
   ExtraConfiguration();
 }
 
-#include "G4ProcessManager.hh"
 void G4HadronPhysicsINCLXX::ExtraConfiguration()
 {
   // --- Kaons ---
   auto xsk = new G4ComponentGGHadronNucleusXsc();
-  xs_k.Put(xsk);
   G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(xsk);
-  xs_ds.Push_back(kaonxs);
   G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
   G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
   G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
   G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
 
   // --- Neutrons ---
-  G4HadronicProcess* capture = 0;
-  G4HadronicProcess* fission = 0;
-  G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
-  G4ProcessVector*  pv = pmanager->GetProcessList();
-  for ( size_t i=0; i < static_cast<size_t>(pv->size()); ++i ) {
-    if ( fCapture == ((*pv)[i])->GetProcessSubType() ) {
-      capture = static_cast<G4HadronicProcess*>((*pv)[i]);
-    } else if ( fFission == ((*pv)[i])->GetProcessSubType() ) {
-      fission = static_cast<G4HadronicProcess*>((*pv)[i]);
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  G4HadronicProcess* capture = G4PhysListUtil::FindCaptureProcess(neutron);
+  if (capture) {
+    G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
+    capture->RegisterMe(theNeutronRadCapture);
+    if ( withNeutronHP ) {
+      capture->AddDataSet( new G4ParticleHPCaptureData );
+      theNeutronRadCapture->SetMinEnergy( 19.9*MeV ); 
     }
   }
-  if ( ! capture ) {
-    capture = new G4HadronCaptureProcess("nCapture");
-    pmanager->AddDiscreteProcess(capture);
-  }
-  auto xs_n_in = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
-  xs_ds.Push_back(xs_n_in);//TODO: Is this needed? Who owns the pointer?
-  capture->AddDataSet(xs_n_in);
-  G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
-  capture->RegisterMe( theNeutronRadCapture );
-  if ( withNeutronHP ) {
-    capture->AddDataSet( new G4ParticleHPCaptureData );
-    theNeutronRadCapture->SetMinEnergy( 19.9*MeV ); 
-    if ( ! fission ) {
-      fission = new G4HadronFissionProcess("nFission");
-      pmanager->AddDiscreteProcess(fission);
-    }
+  G4HadronicProcess* fission = G4PhysListUtil::FindFissionProcess(neutron);
+  if (fission && withNeutronHP) {
     G4LFission* theNeutronLEPFission = new G4LFission();
     theNeutronLEPFission->SetMinEnergy( 19.9*MeV );
+    theNeutronLEPFission->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
     fission->RegisterMe( theNeutronLEPFission );
   }
 }

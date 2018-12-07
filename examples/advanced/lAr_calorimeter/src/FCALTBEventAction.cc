@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALTBEventAction.cc 84602 2014-10-17 07:46:09Z gcosmo $
 //
 // 
 
@@ -101,7 +100,7 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
   man->FillH1(1,NTracksOutOfWorld);
 
   NSecondaries = StepAction->GetSecondaries(0,0);
-  G4cout << "N Scondaries " << NSecondaries << G4endl;   
+  G4cout << "N Secondaries " << NSecondaries << G4endl;   
     
   man->FillH1(2,NSecondaries);
 

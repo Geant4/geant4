@@ -24,14 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh 99440 2016-09-22 08:34:04Z gcosmo $
 //
 //
 // Andrew Walkden  27th March 1996
 // OpenGL scene handler - base for immediate mode and stored mode classes to
 //                        inherit from.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
 
 #ifndef G4OPENGLSCENEHANDLER_HH
 #define G4OPENGLSCENEHANDLER_HH
@@ -124,12 +123,12 @@ public:
   void drawVBOArray(std::vector<double> vertices);
   
   // Buffers used to access vertex and indices elements
-#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
-  GLuint fVertexBufferObject;
-  GLuint fIndicesBufferObject;
-#else
+#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
   Wt::WGLWidget::Buffer fVertexBufferObject;
   Wt::WGLWidget::Buffer fIndicesBufferObject;
+#else
+  GLuint fVertexBufferObject;
+  GLuint fIndicesBufferObject;
 #endif // G4VIS_BUILD_OPENGLWT_DRIVER
   
 #endif //G4OPENGL_VERSION_2

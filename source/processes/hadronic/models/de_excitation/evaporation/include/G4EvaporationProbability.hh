@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationProbability.hh 103162 2017-03-20 09:40:58Z gcosmo $
 //
 //J.M. Quesada (August2008). Based on:
 //
@@ -34,8 +33,6 @@
 #define G4EvaporationProbability_h 1
 
 #include "G4VEmissionProbability.hh"
-#include "G4VLevelDensityParameter.hh"
-#include "G4EvaporationLevelDensityParameter.hh"
 
 class G4VCoulombBarrier;
 class G4NuclearLevelData;

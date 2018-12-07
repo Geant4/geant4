@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsINCLXX.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -75,7 +74,6 @@ class G4HadronPhysicsINCLXX : public G4VPhysicsConstructor
   public: 
     virtual void ConstructParticle() override;
     virtual void ConstructProcess() override;
-    virtual void TerminateWorker() override;
 
     void SetQuasiElastic(G4bool value) {QuasiElastic = value;}; 
 
@@ -92,9 +90,6 @@ class G4HadronPhysicsINCLXX : public G4VPhysicsConstructor
     G4bool QuasiElastic;
     G4bool withNeutronHP;
     G4bool withFTFP;
-    //Thread-private data write them here to delete them
-    G4VectorCache<G4VCrossSectionDataSet*> xs_ds;
-    G4Cache<G4ComponentGGHadronNucleusXsc*> xs_k;
 };
 
 #endif

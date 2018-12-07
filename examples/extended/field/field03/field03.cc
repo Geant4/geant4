@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: field03.cc 110100 2018-05-15 11:30:23Z gcosmo $
 //
 /// \file field/field03/field03.cc
 /// \brief Main program of the field/field03 example
@@ -112,9 +111,9 @@ int main(int argc,char** argv)
     }
   else
     {
+     UImanager->ApplyCommand("/control/execute init_vis.mac");
      if (ui->IsGUI())
        UImanager->ApplyCommand("/control/execute gui.mac");
-     UImanager->ApplyCommand("/control/execute vis.mac");
      ui->SessionStart();
      delete ui;
     }

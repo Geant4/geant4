@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GB06ActionInitialization.cc $
 //
 /// \file GB06ActionInitialization.cc
 /// \brief Implementation of the GB06ActionInitialization class

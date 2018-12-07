@@ -31,7 +31,9 @@
 ##########################
 # Set of the physic models
 #
-/Physics/addPhysics QGSP_BIC_EMY
+/Physics/addPhysics HADRONTHERAPY_1
+/run/numberOfThreads 7
+
  
 ##########################
 # Initialisation procedure
@@ -41,17 +43,16 @@
 ##########################
 # Visualisation 
 #
-/vis/scene/create
-/vis/open OGLI
-/vis/viewer/flush
-/vis/viewer/set/viewpointThetaPhi 50 130 deg
-/vis/scene/add/axes 0 0 0 0.1 m
-/vis/viewer/zoom 1
-/vis/viewer/panTo -80  40 cm
-/vis/scene/add/trajectories
-/vis/viewer/update
-/vis/scene/endOfEventAction accumulate
-/vis/viewer/set/hiddenMarker 1
+#/vis/open OGLI 600x600-0+0
+#/vis/viewer/flush
+#/vis/viewer/set/viewpointThetaPhi 50 130 deg
+#/vis/scene/add/axes 0 0 0 0.1 m
+#/vis/viewer/zoom 1
+#/vis/viewer/panTo -80  40 cm
+#/vis/scene/add/trajectories
+#/vis/viewer/update
+#/vis/scene/endOfEventAction accumulate
+#/vis/viewer/set/hiddenMarker 1
 #########################
 # Set the primary particle type,
 # energy and position along the X direction
@@ -91,9 +92,12 @@
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
 #
-#/Physics/setDetectorCuts 0.001 mm
-#/Physics/setCuts 1 mm
-/Step/waterPhantomStepMax 0.005 mm 
+/run/setCutForRegion DetectorLog 0.1 mm
+
+# Cut for the rest of the volume
+/run/setCut 1 mm
+
+#/Step/waterPhantomStepMax 0.1 mm 
 
 /changePhantom/size 40 40 40  cm
 /changePhantom/position 20 0 0 cm
@@ -124,7 +128,15 @@
 /modulator/innerRadius 2.5 cm
 /modulator/outRadius 9.5 cm
 ############################################################
-/event/printEventNumber 1000
+
+#########################
+# Start of the run
+#
+# If secondary particles dose & fluence are needed
+/analysis/secondary true
+/analysis/computeLet
+
+/run/printProgress 1000
 
 # START OF THE MODULATOR ROTATION
 # IT CONSISTS IN A COMPLETE ROTATION 

@@ -40,8 +40,7 @@
 
 class G4QGSMSplitableHadron : public G4VSplitableHadron
 {
-
-public:
+  public:
 	G4QGSMSplitableHadron();
 	G4QGSMSplitableHadron(const G4ReactionProduct & aPrimary);
 	G4QGSMSplitableHadron(const G4ReactionProduct & aPrimary, G4bool Direction);
@@ -50,17 +49,17 @@ public:
 
 	virtual ~G4QGSMSplitableHadron();
 
-private:
+  private:
 	const G4QGSMSplitableHadron & operator=(const G4QGSMSplitableHadron &right);
 
-public:
+  public:
 	virtual void SplitUp();
-	virtual void SetFirstParton(G4int PDGcode);  // Uzhi 24.11.10
-	virtual void SetSecondParton(G4int PDGcode);  // Uzhi 24.11.10
+	virtual void SetFirstParton(G4int PDGcode);
+	virtual void SetSecondParton(G4int PDGcode);
 	virtual G4Parton * GetNextParton();
 	virtual G4Parton * GetNextAntiParton();
 
-private:
+  private:
 	void InitParameters();
 	void DiffractiveSplitUp();
 	void SoftSplitUp();
@@ -71,23 +70,21 @@ private:
 	G4Parton * BuildSeaQuark(G4bool isAntiQuark, G4int aPDGCode, G4int nSeaPair);
 	G4double SampleX(G4double anXmin, G4int nSea, G4int theTotalSea, G4double aBeta);
 
-private:
+  private:
 	// aggregated data
-	G4bool Direction; // FALSE is target. - candidate for more detailed design. @@@@ HPW
+	G4bool Direction; // FALSE is target. - candidate for more detailed design.
 
 	std::deque<G4Parton *> Color;
 	std::deque<G4Parton *> AntiColor;
-//std::deque<G4Parton *>::iterator iP;      // Uzhi
-//std::deque<G4Parton *>::iterator iAP;     // Uzhi
-unsigned int iP;                            // Uzhi 5.06.2015
-unsigned int iAP;                           // Uzhi 5.06.2015
-private:
+        unsigned int iP;
+        unsigned int iAP;
 
+  private:
 	// associated classes
 	G4MesonSplitter theMesonSplitter;
 	G4BaryonSplitter theBaryonSplitter;
 
-private:
+  private:
 	// model parameters
 	G4double alpha;
 	G4double beta;
@@ -121,5 +118,4 @@ inline void G4QGSMSplitableHadron::SetFirstParton(G4int PDGcode)
 inline void G4QGSMSplitableHadron::SetSecondParton(G4int PDGcode)
 {PDGcode++;}
 #endif
-
 

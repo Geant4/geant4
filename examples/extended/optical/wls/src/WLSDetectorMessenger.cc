@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSDetectorMessenger.cc 84595 2014-10-17 07:33:27Z gcosmo $
 //
 /// \file optical/wls/src/WLSDetectorMessenger.cc
 /// \brief Implementation of the WLSDetectorMessenger class

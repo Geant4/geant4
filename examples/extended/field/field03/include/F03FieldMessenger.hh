@@ -27,7 +27,6 @@
 /// \brief Definition of the F03FieldMessenger class
 //
 //
-// $Id: F03FieldMessenger.hh 76602 2013-11-13 08:33:35Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,6 +41,7 @@ class F03FieldSetup;
 class G4UIdirectory;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +61,9 @@ class F03FieldMessenger: public G4UImessenger
     G4UIdirectory*             fFieldDir;
 
     G4UIcmdWithAnInteger*      fStepperCmd;
-    G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
+    G4UIcmdWithADoubleAndUnit* fMagFieldZCmd;
+    G4UIcmdWith3VectorAndUnit* fMagFieldCmd;
+    G4UIcmdWith3VectorAndUnit* fLocalMagFieldCmd;
     G4UIcmdWithADoubleAndUnit* fMinStepCmd;
     G4UIcmdWithoutParameter*   fUpdateCmd;
 };

@@ -52,7 +52,6 @@
  * @see G4INCLXXNeutronBuilder
  */
 
-class G4VCrossSectionDataSet;
 
 class G4INCLXXPionBuilder : public G4VPionBuilder
 {
@@ -69,7 +68,6 @@ class G4INCLXXPionBuilder : public G4VPionBuilder
 
     using G4VPionBuilder::Build; //Prevent compiler warning
   private:
-    G4VCrossSectionDataSet* thePiData;
     G4INCLXXInterface * theModel;    
     G4double theMin;
     G4double theMax;

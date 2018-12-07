@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFSALIntegrationStepper.icc 97387 2016-06-02 10:03:42Z gcosmo $
 //
 
 inline

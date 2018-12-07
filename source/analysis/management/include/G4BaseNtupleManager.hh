@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // The base class for Ntuple managers. 
 // It implements commen functions independent from the output type. 

@@ -214,8 +214,6 @@ namespace G4INCL {
 		
 		PhaseSpaceGenerator::generateBiased(sqrtS, list, list.size()-1, angularSlope);
 		
-		INCL_DEBUG("piN Missing " << (pion_initial->getMomentum().theta()) * 180. / G4INCL::Math::pi << '\n');
-		
 		fs->addModifiedParticle(pion_initial);
 		fs->addModifiedParticle(nucleon_initial);
 		for(Int_t i=0; i<nbr_pions; i++) fs->addCreatedParticle(list[i]);

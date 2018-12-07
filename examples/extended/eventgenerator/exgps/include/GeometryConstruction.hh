@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GeometryConstruction.hh 71200 2013-06-12 08:19:59Z ihrivnac $
 //
 /// \file eventgenerator/exgps/include/GeometryConstruction.hh
 /// \brief Definition of the GeometryConstruction class

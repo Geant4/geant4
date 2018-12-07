@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAnalysisManager.cc 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Author: Ivana Hrivnacova, 09/07/2013  (ivana@ipno.in2p3.fr)
 
@@ -47,6 +46,7 @@ using namespace G4Analysis;
 G4VAnalysisManager::G4VAnalysisManager(const G4String& type, G4bool isMaster)
  : fState(type, isMaster),
    fVFileManager(nullptr),
+   fPlotManager(nullptr),
    fMessenger(G4Analysis::make_unique<G4AnalysisMessenger>(this)),
    fH1HnManager(nullptr),
    fH2HnManager(nullptr),
@@ -124,6 +124,12 @@ void G4VAnalysisManager::SetNtupleManager(G4VNtupleManager* ntupleManager)
 void G4VAnalysisManager::SetFileManager(std::shared_ptr<G4VFileManager> fileManager)
 {
   fVFileManager = fileManager;
+}  
+
+//_____________________________________________________________________________
+void G4VAnalysisManager::SetPlotManager(std::shared_ptr<G4PlotManager> plotManager)
+{
+  fPlotManager = plotManager;
 }  
 
 //_____________________________________________________________________________
@@ -217,9 +223,9 @@ G4bool G4VAnalysisManager::Write()
 }  
 
 //_____________________________________________________________________________
-G4bool G4VAnalysisManager::CloseFile()
+G4bool G4VAnalysisManager::CloseFile(G4bool reset)
 {
-  return CloseFileImpl();
+  return CloseFileImpl(reset);
 }  
 
 //_____________________________________________________________________________

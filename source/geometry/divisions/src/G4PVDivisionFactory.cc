@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivisionFactory.cc 68718 2013-04-05 09:16:24Z gcosmo $
 //
 // class G4PVDivisionFactory Implementation file
 //

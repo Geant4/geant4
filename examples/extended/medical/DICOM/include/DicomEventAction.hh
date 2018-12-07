@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomEventAction.hh 73076 2013-08-16 07:45:30Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomEventAction.hh
 /// \brief Definition of the DicomEventAction class

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionPairGG.cc 94961 2016-01-08 16:31:48Z gcosmo $
-// $ GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Class G4CrossSectionPairGG
 //
@@ -46,7 +44,6 @@
 #include "G4NistManager.hh"
 #include "G4ComponentGGHadronNucleusXsc.hh"
 
-
 G4CrossSectionPairGG::G4CrossSectionPairGG(G4VCrossSectionDataSet* low,
       G4double Etransit) :
       G4VCrossSectionDataSet("G4CrossSectionPairGG"), theLowX(low), ETransition(
@@ -57,8 +54,6 @@ G4CrossSectionPairGG::G4CrossSectionPairGG(G4VCrossSectionDataSet* low,
 }
 
 G4CrossSectionPairGG::~G4CrossSectionPairGG() {
-   delete theHighX;
-   // The cross section registry will delete theLowX
 }
 
 void G4CrossSectionPairGG::CrossSectionDescription(

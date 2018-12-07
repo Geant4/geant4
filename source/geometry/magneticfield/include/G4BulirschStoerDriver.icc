@@ -29,7 +29,7 @@
 G4IntegrationDriver<G4BulirschStoer>::G4IntegrationDriver(
     G4double hminimum,
     G4BulirschStoer* stepper,
-    G4int numberOfComponents,
+    G4int, // numberOfComponents,
     G4int statisticsVerbosity)
         : fMinimumStep(hminimum)
         , fVerbosity(statisticsVerbosity)
@@ -146,7 +146,7 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(
             yFldTrk.LoadFromArray(yCurrent, G4FieldTrack::ncompSVEC);
             yFldTrk.SetCurveLength(curveLength);
 
-            QuickAdvance(yFldTrk, dydxCurrent, h, dchord_step, dyerr_len);
+            QuickAdvance(yFldTrk, dydxCurrent, h, -1, dchord_step, dyerr_len);
 
             yFldTrk.DumpToArray(yCurrent);
 
@@ -243,6 +243,7 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::QuickAdvance(
     G4FieldTrack& track,
     const G4double dydx[],
     G4double hstep,
+    G4double /*inverseCurvatureRadius*/,
     G4double& missDist,
     G4double& dyerr)
 {
@@ -279,7 +280,7 @@ G4bool G4IntegrationDriver<G4BulirschStoer>::QuickAdvance(
         yError[i] = yOut[i] - yOut2[i];
     }
 
-    dyerr = hstep * field_utils::relativeError(yOut, yError, hstep);
+    dyerr = field_utils::absoluteError(yOut, yError, hstep);
 
 
     //copy non-integrated variables to output array
@@ -327,6 +328,16 @@ void G4IntegrationDriver<G4BulirschStoer>::GetDerivatives(
     G4double y[G4FieldTrack::ncompSVEC];
     track.DumpToArray(y);
     GetEquationOfMotion()->RightHandSide(y, dydx);
+}
+
+void G4IntegrationDriver<G4BulirschStoer>::GetDerivatives(
+    const G4FieldTrack& track,
+    G4double dydx[],
+    G4double field[]) const
+{
+    G4double y[G4FieldTrack::ncompSVEC];
+    track.DumpToArray(y);
+    GetEquationOfMotion()->EvaluateRhsReturnB(y, dydx, field);  
 }
 
 void G4IntegrationDriver<G4BulirschStoer>::SetVerboseLevel(G4int level)

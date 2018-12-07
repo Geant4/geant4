@@ -1,4 +1,3 @@
-$Id:$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 July 2018 - G.Cosmo (externals-V10-04-06)
+- CLHEP: removed not implemented constructor declaration in MixMaxRng.
+- Includes tag zlib-V10-04-03.
 
 24 May 2018 - G.Cosmo (externals-V10-04-05)
 - CLHEP: fixed compilation warnings from gcc-8.1.0 when using

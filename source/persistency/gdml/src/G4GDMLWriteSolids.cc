@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc 108895 2018-03-15 10:27:25Z gcosmo $
 //
 // class G4GDMLWriteSolids Implementation
 //
@@ -1037,8 +1036,9 @@ OpticalSurfaceWrite(xercesc::DOMElement* solElement,
    xercesc::DOMElement* optElement = NewElement("opticalsurface");
    G4OpticalSurfaceModel smodel = surf->GetModel();
    G4double sval = (smodel==glisur) ? surf->GetPolish() : surf->GetSigmaAlpha();
+   const G4String& name = GenerateName(surf->GetName(), surf);
 
-   optElement->setAttributeNode(NewAttribute("name", surf->GetName()));
+   optElement->setAttributeNode(NewAttribute("name", name));
    optElement->setAttributeNode(NewAttribute("model", smodel));
    optElement->setAttributeNode(NewAttribute("finish", surf->GetFinish()));
    optElement->setAttributeNode(NewAttribute("type", surf->GetType()));

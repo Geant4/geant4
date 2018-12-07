@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc 103236 2017-03-22 15:54:40Z gcosmo $
 //
 //
 // G4TransportationManager 

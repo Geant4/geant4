@@ -14,6 +14,23 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 November 2018 V.Ivanchenko (hadr-stopping-V10-04-03)
+ --------------------------------------------------------------------
+- G4MuonMinusBoundDecay: fixed Coverity warning in GetMuonDecayRate,
+    removed forbidden creation of G4Element in any model class
+
+08 October 2018 K.L. Genser   (hadr-stopping-V10-04-02)
+ --------------------------------------------------------------------
+- G4MuonMinusBoundDecay: changed the calculation used in GetMuonDecayRate,
+  inspired by the bug report 2049
+  added another GetMuonDecayRate function using A, muon and nucleus
+  masses in addtion to Z to accomodate the more accurate formula
+
+06 August 2018 A. Ribon       (hadr-stopping-V10-04-01)
+--------------------------------------------------------------------
+- G4HadronicAbsorptionFritiof : replaced the explicit high-energy limit
+  of hadronic physics with the one from G4HadronicParameters .
+
 09 May 2018 A. Ribon          (hadr-stopping-V10-04-00)
 --------------------------------------------------------------------
 - G4HadronStoppingProcess, G4MuonicAtomDecay : fixed warnings in gcc 8

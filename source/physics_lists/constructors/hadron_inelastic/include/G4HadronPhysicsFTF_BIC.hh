@@ -22,7 +22,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsFTF_BIC.hh 105736 2017-08-16 13:01:11Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -58,7 +57,7 @@ class G4HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
 
     virtual void ConstructParticle() override;
     virtual void ConstructProcess() override;
-    virtual void TerminateWorker() override;
+
   protected:
     G4bool QuasiElastic;
     //This calls the specific ones for the different particles in order
@@ -76,10 +75,6 @@ class G4HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
     G4double maxBERT_kaon; //Bertini for kaons
     G4double maxBIC_proton;
     G4double maxBIC_neutron;
-   
-    //Thread-private data
-    G4VectorCache<G4VCrossSectionDataSet*> xs_ds;
-    G4Cache<G4ComponentGGHadronNucleusXsc*> xs_k;
 };
 
 #endif

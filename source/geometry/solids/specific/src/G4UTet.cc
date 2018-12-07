@@ -15,26 +15,20 @@
 // * use.  Please see the license in the file  LICENSE  and URL above *
 // * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * Vanderbilt University Free Electron Laser Center                 *
-// * Vanderbilt University, Nashville, TN, USA                        *
-// * Development supported by:                                        *
-// * United States MFEL program  under grant FA9550-04-1-0045         *
-// * and NASA under contract number NNG04CT05P                        *
-// * Written by Marcus H. Mendenhall and Robert A. Weller.            *
-// *                                                                  *
-// * Contributed to the Geant4 Core, January, 2005.                   *
-// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id:$
 //
 // 
 // Implementation for G4UTet wrapper class
 // --------------------------------------------------------------------
 
 #include "G4Tet.hh"
-#if 0
 #include "G4UTet.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
@@ -59,13 +53,40 @@ G4UTet::G4UTet(const G4String& pName,
                      G4ThreeVector p2,
                      G4ThreeVector p3,
                      G4ThreeVector p4, G4bool* degeneracyFlag)
-  : G4USolid(pName, new UTet(pName,
-                             UVector3(anchor.x(),anchor.y(),anchor.z()),
-                             UVector3(p2.x(), p2.y(), p2.z()),
-                             UVector3(p3.x(), p3.y(), p3.z()),
-                             UVector3(p4.x(), p4.y(), p4.z()),
-                             degeneracyFlag))
+  : Base_t(pName, U3Vector(anchor.x(),anchor.y(),anchor.z()),
+                  U3Vector(p2.x(), p2.y(), p2.z()),
+                  U3Vector(p3.x(), p3.y(), p3.z()),
+                  U3Vector(p4.x(), p4.y(), p4.z()))
 {
+  G4double fXMin=std::min(std::min(std::min(anchor.x(), p2.x()),p3.x()),p4.x());
+  G4double fXMax=std::max(std::max(std::max(anchor.x(), p2.x()),p3.x()),p4.x());
+  G4double fYMin=std::min(std::min(std::min(anchor.y(), p2.y()),p3.y()),p4.y());
+  G4double fYMax=std::max(std::max(std::max(anchor.y(), p2.y()),p3.y()),p4.y());
+  G4double fZMin=std::min(std::min(std::min(anchor.z(), p2.z()),p3.z()),p4.z());
+  G4double fZMax=std::max(std::max(std::max(anchor.z(), p2.z()),p3.z()),p4.z());
+
+  G4ThreeVector fMiddle=G4ThreeVector(fXMax+fXMin,fYMax+fYMin,fZMax+fZMin)*0.5;
+  G4double fMaxSize=std::max(std::max(std::max((anchor-fMiddle).mag(),
+                                               (p2-fMiddle).mag()),
+                                      (p3-fMiddle).mag()),
+                             (p4-fMiddle).mag());
+  // fV<x><y> is vector from vertex <y> to vertex <x>
+  //
+  G4ThreeVector fV21=p2-anchor;
+  G4ThreeVector fV31=p3-anchor;
+  G4ThreeVector fV41=p4-anchor;
+
+  // make sure this is a correctly oriented set of points for the tetrahedron
+  //
+  G4double signed_vol=fV21.cross(fV31).dot(fV41);
+  G4bool degenerate=std::fabs(signed_vol) < 1e-9*fMaxSize*fMaxSize*fMaxSize;
+
+  if(degeneracyFlag) *degeneracyFlag=degenerate;
+  else if (degenerate)
+  {
+    G4Exception("G4UTet::G4UTet()", "GeomSolids0002", FatalException,
+                "Degenerate tetrahedron not allowed.");
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -74,7 +95,7 @@ G4UTet::G4UTet(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4UTet::G4UTet( __void__& a )
-  : G4USolid(a)
+  : Base_t(a)
 {
 }
 
@@ -91,7 +112,7 @@ G4UTet::~G4UTet()
 // Copy constructor
 //
 G4UTet::G4UTet(const G4UTet& rhs)
-  : G4USolid(rhs)
+  : Base_t(rhs)
 {
 }
 
@@ -108,7 +129,7 @@ G4UTet& G4UTet::operator = (const G4UTet& rhs)
 
    // Copy base class data
    //
-   G4USolid::operator=(rhs);
+   Base_t::operator=(rhs);
 
    return *this;
 }
@@ -119,9 +140,10 @@ G4UTet& G4UTet::operator = (const G4UTet& rhs)
 //
 std::vector<G4ThreeVector> G4UTet::GetVertices() const
 {
-  std::vector<UVector3> vec = GetShape()->GetVertices();
+  std::vector<U3Vector> vec(4);
+  Base_t::GetVertices(vec[0], vec[1], vec[2], vec[3]);
   std::vector<G4ThreeVector> vertices;
-  for (unsigned int i=0; i<vec.size(); ++i)
+  for (unsigned int i=0; i<4; ++i)
   {
     G4ThreeVector v(vec[i].x(), vec[i].y(), vec[i].z());
     vertices.push_back(v);
@@ -135,8 +157,8 @@ std::vector<G4ThreeVector> G4UTet::GetVertices() const
 
 void G4UTet::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
-  UVector3 vmin, vmax;
-  GetShape()->Extent(vmin,vmax);
+  U3Vector vmin, vmax;
+  Base_t::Extent(vmin,vmax);
   pMin.set(vmin.x(),vmin.y(),vmin.z());
   pMax.set(vmax.x(),vmax.y(),vmax.z());
 
@@ -182,15 +204,15 @@ G4UTet::CalculateExtent(const EAxis pAxis,
 
   // Set bounding envelope (benv) and calculate extent
   //
-  std::vector<UVector3> vec = GetShape()->GetVertices();
+  std::vector<G4ThreeVector> vec = GetVertices();
 
   G4ThreeVectorList anchor(1);
-  anchor[0].set(vec[0].x(),vec[0].y(),vec[0].z());
+  anchor[0] = vec[0];
 
   G4ThreeVectorList base(3);
-  base[0].set(vec[1].x(),vec[1].y(),vec[1].z());
-  base[1].set(vec[2].x(),vec[2].y(),vec[2].z());
-  base[2].set(vec[3].x(),vec[3].y(),vec[3].z());
+  base[0] = vec[1];
+  base[1] = vec[2];
+  base[2] = vec[3];
 
   std::vector<const G4ThreeVectorList *> polygons(2);
   polygons[0] = &anchor;
@@ -209,7 +231,7 @@ G4Polyhedron* G4UTet::CreatePolyhedron() const
 {
   G4int index = 0;
   G4double array[12];
-  GetShape()->GetParametersList(index, array);
+  Base_t::GetParametersList(index, array);
 
   G4Polyhedron *ph=new G4Polyhedron;
   G4double xyz[4][3];
@@ -225,4 +247,3 @@ G4Polyhedron* G4UTet::CreatePolyhedron() const
 }
 
 #endif  // G4GEOM_USE_USOLIDS
-#endif

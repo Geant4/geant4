@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSStackingAction.hh 69561 2013-05-08 12:25:56Z gcosmo $
 //
 /// \file optical/wls/include/WLSStackingAction.hh
 /// \brief Definition of the WLSStackingAction class

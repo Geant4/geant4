@@ -26,7 +26,6 @@
 /// \file RE06/include/RE06SteppingVerbose.hh
 /// \brief Definition of the RE06SteppingVerbose class
 //
-// $Id: RE06SteppingVerbose.hh 66526 2012-12-19 13:41:33Z ihrivnac $
 //
 
 class RE06SteppingVerbose;

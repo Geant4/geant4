@@ -11,7 +11,6 @@
 #
 # Generated on : 29/9/2010
 #
-# $Id: sources.cmake 109569 2018-05-02 07:08:33Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -28,7 +27,9 @@ include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 #
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4magneticfield
-    HEADERS
+    HEADERS 
+        G4BFieldIntegrationDriver.hh
+        G4BFieldIntegrationDriver.icc
         G4BogackiShampine23.hh
         G4BogackiShampine45.hh
         G4BulirschStoer.hh
@@ -40,7 +41,8 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4ChargeState.hh
         G4ChordFinder.hh
         G4ChordFinder.icc
-        G4ChordFinderSaf.hh
+        G4ChordFinderDelegate.hh
+        G4ChordFinderDelegate.icc
         G4ClassicalRK4.hh
         G4ConstRK4.hh
         G4DELPHIMagField.hh
@@ -82,6 +84,8 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4ImplicitEuler.hh
         G4IntegrationDriver.hh
         G4IntegrationDriver.icc
+        G4InterpolationDriver.hh
+        G4InterpolationDriver.icc
         G4LineCurrentMagField.hh
         G4LineSection.hh
         G4MagErrorStepper.hh
@@ -100,12 +104,15 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4MonopoleEq.hh
         G4MagneticField.hh
         G4NystromRK4.hh
+        G4NystromRK4.icc
         G4QuadrupoleMagField.hh
         G4RepleteEofM.hh
         G4RKG3_Stepper.hh
         G4RK547FEq1.hh
         G4RK547FEq2.hh
         G4RK547FEq3.hh
+        G4RKIntegrationDriver.hh
+        G4RKIntegrationDriver.icc
         G4SimpleHeum.hh
         G4SimpleRunge.hh
         G4TrialsCounter.hh
@@ -123,7 +130,6 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4CashKarpRKF45.cc
         G4ChargeState.cc
         G4ChordFinder.cc
-        G4ChordFinderSaf.cc
         G4ClassicalRK4.cc
         G4ConstRK4.cc
         G4DELPHIMagField.cc

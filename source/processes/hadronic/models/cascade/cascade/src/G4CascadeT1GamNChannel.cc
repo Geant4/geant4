@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeT1GamNChannel.cc 67796 2013-03-08 06:18:39Z mkelsey $
-// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 
 #include "G4CascadeGamPChannel.hh"
@@ -35,11 +33,11 @@ using namespace G4InuclParticleNames;
 namespace {
   // gamma p : Outgoing particle types of a given multiplicity
   static const G4int gamp2bfs[6][2] =
-  {{gam,pro}, {pro,pi0}, {neu,pip}, {lam,kpl}, {s0, kpl}, {sp,k0}};
+  {{gam,pro}, {pi0,pro}, {pip,neu}, {kpl,lam}, {kpl,s0}, {k0,sp}};
 
   static const G4int gamp3bfs[6][3] =
-  {{pro,pip,pim}, {pro,pi0,pi0}, {neu,pip,pi0},
-   {pro,kpl,kmi},  {pro,k0,k0b},  {neu,kpl,k0b}};
+  {{pip,pro,pim}, {pi0,pro,pi0}, {pip,neu,pi0},
+   {kpl,pro,kmi}, {k0,pro,k0b},  {kpl,neu,k0b}};
 
   static const G4int gamp4bfs[4][4] =
   {{pro,pip,pim,pi0}, {pro,pi0,pi0,pi0}, {neu,pip,pip,pim}, {neu,pip,pi0,pi0}};

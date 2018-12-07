@@ -1,0 +1,99 @@
+#==========================- Pre-initialisation parameters -=========================
+
+########### Image Quality Phantom ####################
+#choose the type of phantom
+/changePhantom/setPhantom NEMA_imageQualityPhantom_wholeBody 
+
+#set the activity in the phantom
+/change/Activity 3840000 becquerel #3840000 becquerel
+
+#Set the halflife of the isotope in units of second
+/change/HalfLife 6586.2 s #Halflife of F-18
+
+/run/initialize
+/run/verbose 2
+
+
+#### the activity distribution of the hot source to the background (BG) is 4:1. The activity distribution ratio is done by considering the volume of the phantoms
+
+#hotsphere1, diameter = 10 mm
+/gps/source/intensity 3
+/gps/particle ion
+/gps/ion 9 18 0 0 # F-18
+/gps/energy 0 keV
+/gps/pos/type Volume
+/gps/pos/shape Sphere
+/gps/pos/centre 28.6 49.5367 0  mm 
+/gps/pos/radius 5 mm
+/gps/ang/type iso
+
+#hotsphere2, diameter = 13 mm
+/gps/source/add 6.591
+/gps/ion 9 18 0 0 # F-18
+/gps/energy 0 keV
+/gps/pos/type Volume
+/gps/pos/shape Sphere
+/gps/pos/centre -28.6 49.5367 0  mm 
+/gps/pos/radius 6.5 mm
+/gps/ang/type iso
+
+
+#hotsphere3, diameter = 17 mm
+/gps/source/add 14.739
+/gps/ion 9 18 0 0 # F-18
+/gps/energy 0 keV
+/gps/pos/type Volume
+/gps/pos/shape Sphere
+/gps/pos/centre -57.2 0 0  mm 
+/gps/pos/radius 8.5 mm
+/gps/ang/type iso
+
+
+#hotsphere4, diameter = 22 mm 
+/gps/source/add 31.944
+/gps/ion 9 18 0 0 # F-18
+/gps/energy 0 keV
+/gps/pos/type Volume
+/gps/pos/shape Sphere
+/gps/pos/centre -28.6 -49.5367 0  mm 
+/gps/pos/radius 11 mm
+/gps/ang/type iso
+
+
+
+################ activity for body phantom ###################
+/gps/source/add 18576.41
+/gps/particle ion
+/gps/ion 9 18 0 0 # F-18
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+
+#The body phantom is shifted by 68 mm, 
+/gps/pos/centre 0 0 -23 mm 
+/gps/pos/radius 187 mm #increase the diameter
+/gps/pos/halfz  88.5 mm
+/gps/ang/type iso
+
+
+########## activity for test phantom (line source) ###########
+#the same intensity as body phantom
+
+/gps/source/add 31579.9 
+/gps/particle ion
+/gps/ion 9 18 0 0 # F-18
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+
+#The line source shifted by +418 mm in z direction and 45 mm in the y direction toward the patient bed
+/gps/pos/centre 0 -45 432.5 mm 
+/gps/pos/radius 1.6 mm
+/gps/pos/halfz  350 mm
+/gps/ang/type iso
+
+
+#/random/setSeeds  1 2 
+
+/run/beamOn 836431791 #15 minuts scan
+
+
+

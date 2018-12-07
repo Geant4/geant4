@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.hh 99159 2016-09-07 08:11:50Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -78,9 +77,6 @@ public:  // With Description
   static G4double GetMassExcess(const G4int A, const G4int Z);
   static G4double GetMassExcess(const G4double A, const G4double Z);
 
-  //Swich AME table in use
-  static void UseOldAMETable( G4bool val = true );
-
 private:
   // hidie methods to enforce using GetNuclearMass
   // Give mass of Atom A,Z
@@ -109,7 +105,6 @@ private:
   static G4ThreadLocal G4double mass_triton;
   static G4ThreadLocal G4double mass_alpha;
   static G4ThreadLocal G4double mass_He3;
-  static G4bool use_old_evaluation;
  	
 };
 

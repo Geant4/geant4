@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh 109510 2018-04-26 07:15:57Z gcosmo $
 
 // /vis/viewer commands - John Allison  25th October 1998
 

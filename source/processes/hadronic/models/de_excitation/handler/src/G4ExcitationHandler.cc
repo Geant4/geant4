@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc 104984 2017-07-03 15:13:37Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -146,7 +145,7 @@ void G4ExcitationHandler::Initialise()
     theFermiModel->Initialise();
     theEvaporation->InitialiseChannels();
   }
-  param->Dump();
+  if(fVerbose > 0) { param->Dump(); }
 }
 
 void G4ExcitationHandler::SetEvaporation(G4VEvaporation* ptr, G4bool flag)
@@ -203,10 +202,12 @@ void G4ExcitationHandler::SetDeexChannelsType(G4DeexChannelType val)
     evap->SetGEMChannel();
   }
   evap->InitialiseChannels();
-  if(G4Threading::IsMasterThread()) {
-    G4cout << "Number of de-excitation channels is changed to      " 
-	   << theEvaporation->GetNumberOfChannels();
-    if(fVerbose > 0) { G4cout << " " << this; }
+  if(fVerbose > 0) {
+    if(G4Threading::IsMasterThread()) {
+      G4cout << "Number of de-excitation channels is changed to: " 
+	     << theEvaporation->GetNumberOfChannels();
+      G4cout << " " << this;
+    }
     G4cout << G4endl; 
   }
 }

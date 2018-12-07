@@ -36,7 +36,6 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstructionI.cc 100821 2016-11-02 15:21:34Z gcosmo $
 //
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"

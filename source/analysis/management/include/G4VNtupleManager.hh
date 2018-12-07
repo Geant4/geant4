@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VNtupleManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // The pure abstract base class for Ntuple manager. 
 // It defines functions independent from the output type. 

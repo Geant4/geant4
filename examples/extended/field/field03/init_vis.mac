@@ -1,0 +1,25 @@
+# Macro file for the initialization of example field03
+# in interactive session
+#
+# It creates the default geometry (simple absorber cylinder )        
+#
+/tracking/verbose 1
+/run/verbose 1
+#
+#
+#
+/field/setStepperType 4
+/field/setMinStep 10 mm
+#/field/setFieldZ 1.0 kG
+#
+/field/update
+#
+/run/initialize
+#
+/run/particle/dumpCutValues
+#
+/gun/particle e-
+/gun/energy 500.0 MeV
+
+# Visualization setting
+/control/execute vis.mac

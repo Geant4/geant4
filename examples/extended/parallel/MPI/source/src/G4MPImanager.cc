@@ -40,6 +40,7 @@
 #include "G4MPIrandomSeedGenerator.hh"
 #include "G4MPIsession.hh"
 #include "G4MPIstatus.hh"
+#include "G4MPIextraWorker.hh"
 
 G4MPImanager* G4MPImanager::g4mpi_ = NULL;
 
@@ -65,9 +66,12 @@ void Wait(G4int ausec)
 } // end of namespace
 
 // --------------------------------------------------------------------------
-G4MPImanager::G4MPImanager()
-  : verbose_(0), qfcout_(false), qinitmacro_(false), qbatchmode_(false),
-    thread_id_(0), master_weight_(1.)
+G4MPImanager::G4MPImanager(int nof_extra_workers)
+  : verbose_(0), 
+    COMM_G4COMMAND_(MPI_COMM_NULL), processing_comm_(MPI_COMM_NULL), 
+    collecting_comm_(MPI_COMM_NULL), all_comm_(MPI_COMM_NULL),
+    qfcout_(false), qinitmacro_(false), qbatchmode_(false),
+    thread_id_(0), master_weight_(1.), nof_extra_workers_(nof_extra_workers)
 {
   //MPI::Init();
   MPI::Init_thread(MPI::THREAD_SERIALIZED);
@@ -75,9 +79,12 @@ G4MPImanager::G4MPImanager()
 }
 
 // --------------------------------------------------------------------------
-G4MPImanager::G4MPImanager(int argc, char** argv)
-  : verbose_(0), qfcout_(false), qinitmacro_(false), qbatchmode_(false),
-    thread_id_(0), master_weight_(1.)
+G4MPImanager::G4MPImanager(int argc, char** argv, int nof_extra_workers)
+  : verbose_(0), 
+    COMM_G4COMMAND_(MPI_COMM_NULL), processing_comm_(MPI_COMM_NULL), 
+    collecting_comm_(MPI_COMM_NULL), all_comm_(MPI_COMM_NULL),
+    qfcout_(false), qinitmacro_(false), qbatchmode_(false),
+    thread_id_(0), master_weight_(1.), nof_extra_workers_(nof_extra_workers)
 {
   //MPI::Init(argc, argv);
   MPI::Init_thread(argc, argv, MPI::THREAD_SERIALIZED);
@@ -94,7 +101,24 @@ G4MPImanager::~G4MPImanager()
   delete messenger_;
   delete session_;
 
-  COMM_G4COMMAND_.Free();
+  if ( nof_extra_workers_ ) {
+    MPI_Group_free(&world_group_);
+    MPI_Group_free(&processing_group_);
+    MPI_Group_free(&collecting_group_);
+    MPI_Group_free(&all_group_);
+    if (processing_comm_ != MPI_COMM_NULL) {
+      MPI_Comm_free(&processing_comm_);
+    }
+    if (collecting_comm_ != MPI_COMM_NULL) {
+      MPI_Comm_free(&collecting_comm_);
+    }
+    if (all_comm_ != MPI_COMM_NULL) {
+      MPI_Comm_free(&all_comm_);
+    }
+  }
+  else {
+    COMM_G4COMMAND_.Free();
+  }
 
   MPI::Finalize();
 }
@@ -110,8 +134,21 @@ G4MPImanager* G4MPImanager::GetManager()
 }
 
 // --------------------------------------------------------------------------
+void G4MPImanager::SetExtraWorker(G4VMPIextraWorker* extraWorker)
+{
+  if ( ! nof_extra_workers_ ) {
+    G4Exception("G4MPImanager::SetExtraWorker()", "MPI001",
+      FatalException, "Number of extra workers >0 must be set first.");
+  }
+
+  extra_worker_ = extraWorker;
+}
+
+// --------------------------------------------------------------------------
 void G4MPImanager::Initialize()
 {
+  // G4cout << "G4MPImanager::Initialize" << G4endl;
+
   if ( g4mpi_ != NULL ) {
     G4Exception("G4MPImanager::Initialize()", "MPI002",
                 FatalException, "G4MPImanager is already instantiated.");
@@ -120,13 +157,60 @@ void G4MPImanager::Initialize()
   g4mpi_ = this;
 
   // get rank information
-  size_ = MPI::COMM_WORLD.Get_size();
+  world_size_ = MPI::COMM_WORLD.Get_size();
+  if ( world_size_ - nof_extra_workers_ <= 0 ) {
+    G4Exception("G4MPImanager::SetExtraWorker()", "MPI001",
+    JustWarning, "Cannot reserve extra ranks: the MPI size is not sufficient.");
+    nof_extra_workers_ = 0;
+  }
+  size_ = world_size_ - nof_extra_workers_;
   rank_ = MPI::COMM_WORLD.Get_rank();
   is_master_ = (rank_ == kRANK_MASTER);
   is_slave_ = (rank_ != kRANK_MASTER);
+  is_extra_worker_ = false;
 
-  // initialize MPI communicator
-  COMM_G4COMMAND_ = MPI::COMM_WORLD.Dup();
+  if ( nof_extra_workers_ ) {
+    // G4cout << "Extra workers requested" << G4endl;
+
+    // Define three groups of workers: processing, collecting and all;
+    // if no extra workers are declared, all world ranks are processing ranks
+
+    // MPI_Group world_group;
+    MPI_Comm_group(MPI_COMM_WORLD, &world_group_);
+    
+    // Group 1 - processing ranks
+    int* ranks1 =  new int[size_];
+    for (int i=0; i<size_; i++) ranks1[i] = i;
+    // Construct a group containing all of the processing ranks in world_group
+    MPI_Group_incl(world_group_, size_, ranks1, &processing_group_);
+    
+    // Group 2 - collecting ranks
+    int* ranks2 =  new int[nof_extra_workers_];
+    for (int i=0; i<nof_extra_workers_; i++) ranks2[i] = (world_size_ - nof_extra_workers_)  + i;
+    // Construct a group containing all of the collecting ranks in world_group
+    MPI_Group_incl(world_group_, nof_extra_workers_, ranks2, &collecting_group_);
+    
+    // Group 3 - all ranks
+    int* ranks3 = new int[world_size_];
+    for (int i=0; i<world_size_; i++) ranks3[i] = i;
+    // Construct a group containing all of the processing ranks in world_group
+    MPI_Group_incl(world_group_, world_size_, ranks3, &all_group_);
+
+    // Create new communicators based on the groups
+    MPI_Comm_create_group(MPI_COMM_WORLD, processing_group_, 0, &processing_comm_);
+    MPI_Comm_create_group(MPI_COMM_WORLD, collecting_group_, 0, &collecting_comm_);
+    MPI_Comm_create_group(MPI_COMM_WORLD, all_group_, 0, &all_comm_);
+
+    // COMM_G4COMMAND_ = processing_comm_ copy
+    COMM_G4COMMAND_ = MPI::Intracomm(processing_comm_);
+
+  } else {
+    // G4cout << "No extra workers requested" << G4endl;
+    // initialize MPI communicator
+    COMM_G4COMMAND_ = MPI::COMM_WORLD.Dup();
+  }
+
+  is_extra_worker_ = (collecting_comm_ != MPI_COMM_NULL);
 
   // new G4MPI stuffs
   messenger_ = new G4MPImessenger();
@@ -134,9 +218,21 @@ void G4MPImanager::Initialize()
   session_ = new G4MPIsession;
   status_ = new G4MPIstatus;
 
-  // default seed generator is random generator.
-  seed_generator_ = new G4MPIrandomSeedGenerator;
-  DistributeSeeds();
+  if ( ! is_extra_worker_ ) {
+    // default seed generator is random generator.
+    seed_generator_ = new G4MPIrandomSeedGenerator;
+    DistributeSeeds();
+  }
+
+  // print status of this worker
+  // G4cout << this << " world_size_ " << world_size_ << G4endl;
+  // G4cout << this << " size_ " << size_ << G4endl;
+  // G4cout << this << " nof_extra_workers_  " << nof_extra_workers_  << G4endl;
+  // G4cout << this << " is_master_ " << is_master_ << G4endl;
+  // G4cout << this << " is_slave_ " << is_slave_ << G4endl;
+  // G4cout << this << " is_extra_worker_ " << is_extra_worker_ << G4endl;
+  // G4cout << this << " is_processing_worker_ " 
+  //        <<  (processing_comm_ != MPI_COMM_NULL) << G4endl;
 }
 
 // --------------------------------------------------------------------------
@@ -286,6 +382,9 @@ void G4MPImanager::ShowStatus()
 // ====================================================================
 void G4MPImanager::DistributeSeeds()
 {
+  // Do nothing if not processing worker
+  if ( is_extra_worker_ ) return;
+
   std::vector<G4long> seed_list = seed_generator_-> GetSeedList();
   G4Random::setTheSeed(seed_list[rank_]);
 }
@@ -415,6 +514,9 @@ void G4MPImanager::JoinBeamOnThread()
 // ====================================================================
 G4String G4MPImanager::BcastCommand(const G4String& command)
 {
+  // Do nothing if not processing worker
+  if (is_extra_worker_) return G4String("exit");
+
   enum { kBUFF_SIZE = 512 };
   static char sbuff[kBUFF_SIZE];
   command.copy(sbuff, kBUFF_SIZE);
@@ -459,6 +561,8 @@ void G4MPImanager::ExecuteMacroFile(const G4String& fname, G4bool qbatch)
 // --------------------------------------------------------------------------
 void G4MPImanager::BeamOn(G4int nevent, G4bool qdivide)
 {
+  // G4cout << "G4MPImanager::BeamOn " << nevent << G4endl;
+
 #ifndef G4MULTITHREADED
   G4RunManager* runManager = G4RunManager::GetRunManager();
 #endif
@@ -466,7 +570,7 @@ void G4MPImanager::BeamOn(G4int nevent, G4bool qdivide)
   if ( qdivide ) { // events are divided
     G4double ntot = master_weight_ + size_ - 1.;
     G4int nproc = G4int(nevent/ntot);
-    G4int nproc0 = nevent - nproc*(size_-1);
+    G4int nproc0 = nevent - nproc*(size_ - 1);
 
     if ( verbose_ > 0 && is_master_ ) {
       G4cout << "#events in master=" << nproc0 << " / "
@@ -510,11 +614,25 @@ void G4MPImanager::BeamOn(G4int nevent, G4bool qdivide)
 // --------------------------------------------------------------------------
 void G4MPImanager::WaitBeamOn()
 {
+  // G4cout << "G4MPImanager::WaitBeamOn" << G4endl;
+
+  // Extra worker
+  if (is_extra_worker_) {
+    if ( extra_worker_ ) {
+      G4cout << "Calling extra_worker " << G4endl;
+      extra_worker_->BeamOn();
+    } else {
+       G4cout << " !!!! extra_worker_ is not defined " << G4endl;
+    }
+    return;
+  }
+
   G4int buff = 0;
   if ( qbatchmode_ ) {  // valid only in batch mode
     if ( is_master_ ) {
       // receive from each slave
       for (G4int islave = 1; islave < size_; islave++) {
+        // G4cout << "calling Irecv for islave " << islave << G4endl; 
         MPI::Request request = COMM_G4COMMAND_.Irecv(&buff, 1, MPI::INT,
                                                      islave, kTAG_G4STATUS);
         while(! request.Test()) {
@@ -523,6 +641,7 @@ void G4MPImanager::WaitBeamOn()
       }
     } else {
       buff = 1;
+      // G4cout << "calling send for i " << kRANK_MASTER << G4endl; 
       COMM_G4COMMAND_.Send(&buff, 1, MPI::INT, kRANK_MASTER, kTAG_G4STATUS);
     }
   }

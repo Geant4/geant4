@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmParticleList 99930 2016-10-11 16:34:52Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -50,7 +49,9 @@ G4EmParticleList::G4EmParticleList()
 "anti_sigma_c+","anti_sigma_c++",  "anti_sigma+",   "anti_sigma-","anti_triton",
    "anti_xi_c+",      "anti_xi-",     "deuteron",     "lambda_c+",     "omega-",
      "sigma_c+",     "sigma_c++",       "sigma+",        "sigma-",       "tau+",
-         "tau-",        "triton",        "xi_c+",           "xi-"
+	 "tau-",        "triton",        "xi_c+",           "xi-",        "Bc+",
+	  "Bc-",      "omega_b-","anti_omega_b-",      "sigma_b+",   "sigma_b-",
+"anti_sigma_b+", "anti_sigma_b-",        "xi_b-",    "anti_xi_b-"
     };
 }
 

@@ -26,7 +26,6 @@
 /// \file exoticphysics/monopole/src/G4MonopolePhysics.cc
 /// \brief Implementation of the G4MonopolePhysics class
 //
-// $Id: G4MonopolePhysics.cc 107526 2017-11-21 07:17:43Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -115,7 +114,8 @@ void G4MonopolePhysics::ConstructProcess()
 
   // dedicated trasporation 
   if(magn != 0.0) {
-    pmanager->RemoveProcess(0);
+    G4int idxt(0);
+    pmanager->RemoveProcess(idxt);
     pmanager->AddProcess(new G4MonopoleTransportation(fMpl),-1, 0, 0);
   }
 
@@ -140,6 +140,10 @@ void G4MonopolePhysics::ConstructProcess()
 
 void G4MonopolePhysics::SetMagneticCharge(G4double val)
 {
+  if ( fMpl ) {
+    G4cerr << "Cannot set value. Monopole particle was already constructed." << G4endl;
+  }
+
   fMagCharge = val;
 }
 
@@ -147,6 +151,10 @@ void G4MonopolePhysics::SetMagneticCharge(G4double val)
 
 void G4MonopolePhysics::SetElectricCharge(G4double val)
 {
+  if ( fMpl ) {
+    G4cerr << "Cannot set value. Monopole particle was already constructed." << G4endl;
+  }
+
   fElCharge = val;
 }
 
@@ -154,6 +162,10 @@ void G4MonopolePhysics::SetElectricCharge(G4double val)
 
 void G4MonopolePhysics::SetMonopoleMass(G4double mass)
 {
+  if ( fMpl ) {
+    G4cerr << "Cannot set value. Monopole particle was already constructed." << G4endl;
+  }
+
   fMonopoleMass = mass;
 }
 

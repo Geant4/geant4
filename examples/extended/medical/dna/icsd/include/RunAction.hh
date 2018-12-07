@@ -30,7 +30,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $Id: RunAction.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file RunAction.hh
 /// \brief Definition of the RunAction class

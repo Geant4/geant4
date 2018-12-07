@@ -1,4 +1,3 @@
-$Id: README 78303 2013-12-11 10:50:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,6 +28,10 @@ G4VUserPhysicsList
                                  *** G4OpRayleigh        ***
                                  *** G4OpBoundaryProcess ***
 
+ ==> A messenger command allows to define interactivly the 
+     verbose level and the maximum number of Cerenkov photons per step
+     (see for instance OpNovice.in)
+
 G4VUserDetectorConstruction
 ---------------------------
 
@@ -44,7 +47,7 @@ G4VUserPrimaryGeneratorAction
 
  ==> Use G4ParticleGun to shoot a charge particle into a Cerenkov radiator
  
- ==> A messenger command allows to define interactivly the polarization of an
+ ==> A messenger command allows to define interactively the polarization of an
      primary optical photon (see for instance optPhoton.mac)
  
 G4UserRunAction

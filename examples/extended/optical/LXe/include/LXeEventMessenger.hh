@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeEventMessenger.hh 68752 2013-04-05 10:23:47Z gcosmo $
 //
 /// \file optical/LXe/include/LXeEventMessenger.hh
 /// \brief Definition of the LXeEventMessenger class
@@ -51,7 +50,6 @@ class LXeEventMessenger: public G4UImessenger
   private:
 
     LXeEventAction*        fLXeEvent;
-    G4UIcmdWithAnInteger*  fSaveThresholdCmd;
     G4UIcmdWithAnInteger*  fVerboseCmd;
     G4UIcmdWithAnInteger*  fPmtThresholdCmd;
     G4UIcmdWithABool*      fForceDrawPhotonsCmd;

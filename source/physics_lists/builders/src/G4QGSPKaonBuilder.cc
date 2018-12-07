@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -41,12 +40,13 @@
 #include "G4ChipsKaonPlusInelasticXS.hh"
 #include "G4ChipsKaonZeroInelasticXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
+#include "G4HadronicParameters.hh"
 
 G4QGSPKaonBuilder::
 G4QGSPKaonBuilder(G4bool quasiElastic) 
 {
   theMin = 12.0*GeV;
-  theMax = 100.0*TeV;
+  theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("QGSP");
 
   theStringModel = new G4QGSModel< G4QGSParticipants >;

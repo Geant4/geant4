@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashSensitiveDetector.hh 94396 2015-11-13 13:37:16Z gcosmo $
 //
 /// \file parameterisations/gflash/include/ExGflashSensitiveDetector.hh
 /// \brief Definition of the ExGflashSensitiveDetector class

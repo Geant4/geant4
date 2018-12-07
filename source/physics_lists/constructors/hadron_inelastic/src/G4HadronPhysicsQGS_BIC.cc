@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsQGS_BIC.cc 105736 2017-08-16 13:01:11Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -113,19 +112,7 @@ G4HadronPhysicsQGS_BIC::G4HadronPhysicsQGS_BIC(const G4String& name, G4bool /* q
 }
 
 G4HadronPhysicsQGS_BIC::~G4HadronPhysicsQGS_BIC()
-{
-   delete xs_k.Get();
-   std::for_each( xs_ds.Begin(),xs_ds.End(),
-                  [](G4VCrossSectionDataSet* el){delete el;});
-}
-
-void G4HadronPhysicsQGS_BIC::TerminateWorker()
-{
-  delete xs_k.Get();
-  std::for_each( xs_ds.Begin(), xs_ds.End(),[](G4VCrossSectionDataSet* el){ delete el;});
-  xs_ds.Clear();
-  G4VPhysicsConstructor::TerminateWorker();
-}
+{}
 
 void G4HadronPhysicsQGS_BIC::CreateModels()
 {
@@ -220,7 +207,6 @@ void G4HadronPhysicsQGS_BIC::Kaon()
   k->Build();
 }
 
-
 void G4HadronPhysicsQGS_BIC::Others()
 {
   auto hyp = new G4HyperonFTFPBuilder;
@@ -263,34 +249,19 @@ void G4HadronPhysicsQGS_BIC::ExtraConfiguration()
 {
   // --- Kaons ---
   auto xsk = new G4ComponentGGHadronNucleusXsc();
-  xs_k.Put(xsk);
   G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(xsk);
-  xs_ds.Push_back(kaonxs);
   G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
   G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
   G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
   G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
 
   // --- Neutrons ---
-  auto xs_n_in = (G4NeutronInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronInelasticXS::Default_Name());
-  xs_ds.Push_back(xs_n_in); //TODO: Is this needed? Who owns the pointer?
-  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(xs_n_in);
-
-  G4HadronicProcess* capture = 0;
-  G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
-  G4ProcessVector*  pv = pmanager->GetProcessList();
-  for ( size_t i=0; i < static_cast<size_t>(pv->size()); ++i ) {
-    if ( fCapture == ((*pv)[i])->GetProcessSubType() ) {
-      capture = static_cast<G4HadronicProcess*>((*pv)[i]);
-    }
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess(neutron);
+  if(inel) { inel->AddDataSet(new G4NeutronInelasticXS()); }
+  G4HadronicProcess* capture = G4PhysListUtil::FindCaptureProcess(neutron);
+  if (capture) {
+    capture->RegisterMe(new G4NeutronRadCapture());
   }
-  if ( ! capture ) {
-    capture = new G4HadronCaptureProcess("nCapture");
-    pmanager->AddDiscreteProcess(capture);
-  }
-  auto xs_n_c = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
-  xs_ds.Push_back(xs_n_c); //TODO: Who owns this?
-  capture->AddDataSet(xs_n_c);
-  capture->RegisterMe(new G4NeutronRadCapture());
 }
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGLambdaInelastic.cc 94214 2015-11-09 08:18:05Z gcosmo $
 //
  
 #include "G4RPGLambdaInelastic.hh"

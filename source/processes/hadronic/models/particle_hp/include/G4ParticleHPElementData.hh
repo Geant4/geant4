@@ -51,7 +51,8 @@
 #include "G4StableIsotopes.hh"
 #include "G4Neutron.hh"
 
-class G4ParticleHPElementData : public G4HadronCrossSections
+//class G4ParticleHPElementData : public G4HadronCrossSections
+class G4ParticleHPElementData
 {
 public:
 

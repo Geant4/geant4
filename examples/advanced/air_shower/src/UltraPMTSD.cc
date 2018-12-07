@@ -117,9 +117,9 @@ G4bool UltraPMTSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4cout << "*******************************" << G4endl;
   G4cout << "             PMT HIT           " << G4endl;
   G4cout << "  Volume:                      " << thisVolume << G4endl;
-  G4cout << "  Photon energy (eV) :         " << kineticEnergy/eV << G4endl;
+  G4cout << "  Photon energy (eV) :         " << kineticEnergy/CLHEP::eV << G4endl;
   G4cout << "  POSITION (mm) :              " 
-	 << HitPosition.x()/mm << " " << HitPosition.y()/mm << " " << HitPosition.z()/mm << G4endl;
+	 << HitPosition.x()/CLHEP::mm << " " << HitPosition.y()/CLHEP::mm << " " << HitPosition.z()/CLHEP::mm << G4endl;
   G4cout << "*******************************" << G4endl;
 #endif
 

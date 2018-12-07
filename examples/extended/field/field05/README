@@ -32,7 +32,7 @@
      http://research.kek.jp/people/hiromi/MyHomePage/G-2_work_files/SpinStudyinEMfieldByGeant4.pdf
 
 
-     Credit goes to Hiromi Iinuma from KEK
+     Credit goes to Hiromi Iinuma from KEK.
 
 **************
 *Classes Used*
@@ -57,19 +57,11 @@
 
  4- PHYSICS
 
-    RegisterPhysics(new G4DecayPhysics());
+    RegisterPhysics(new G4SpinDecayPhysics());
     RegisterPhysics(new G4StepLimiterPhysics());
 
-    G4VModularPhysicsList::ConstructParticle();
-
-    and replace muon decay modes with those with spin:
-        G4MuonDecayChannelWithSpin
-        G4MuonRadiativeDecayChannelWithSpin
-    and replace G4Decay with
-        G4DecayWithSpin process for the muon
-        G4PionDecayMakeSpin process for the pion
-
-    G4StepLimiterPhysics defines G4StepLimiter and G4UserSpecialCuts
+    G4SpinDecayPhysics defines muon decay modes with spin,
+    G4StepLimiterPhysics defines G4StepLimiter and G4UserSpecialCuts.
 
  5- User Action Classes
 
@@ -79,10 +71,10 @@
 
  6- HOW TO START ?
 
-        - execute field05 in 'batch' mode from macro files e.g.
+        - Execute field05 in 'batch' mode from macro files e.g.
                 % field05 field05.in > field.out &
 
-        - execute field05 in 'interactive' mode with visualization e.g.
+        - Execute field05 in 'interactive' mode with visualization e.g.
                 % field05
                 ....
                 Idle> type your commands, for example:

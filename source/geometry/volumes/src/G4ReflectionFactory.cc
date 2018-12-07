@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc 66872 2013-01-15 01:25:57Z japost $
 //
 // 
 // Class G4ReflectionFactory Implementation

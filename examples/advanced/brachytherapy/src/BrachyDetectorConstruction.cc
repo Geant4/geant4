@@ -27,7 +27,7 @@
 //                 GEANT 4 - Brachytherapy example
 // --------------------------------------------------------------
 //
-// Code developed by:S. Guatelli, D. Cutajar
+// Code developed by: S. Guatelli, D. Cutajar, A. Le
 // Past developers: S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano
 //
 //
@@ -57,6 +57,7 @@
 #include "BrachyFactoryTG186.hh"
 #include "BrachyFactoryI.hh"
 #include "BrachyFactoryFlexi.hh"
+#include "BrachyFactoryOncura6711.hh"
 #include "BrachyDetectorMessenger.hh"
 #include "BrachyDetectorConstruction.hh"
 
@@ -129,6 +130,9 @@ void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
    case 4:
       factory = new BrachyFactoryFlexi();
       break;
+   case 5:
+   	  factory = new BrachyFactoryOncura6711();
+   	  break;
    default:
       factory = new BrachyFactoryFlexi();
       break;
@@ -144,16 +148,29 @@ void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
 
 void BrachyDetectorConstruction::SelectBrachytherapicSeed(G4String val)
 {
-  if (val == "Iodine") detectorChoice = 1;
-  else{
-       if(val=="Leipzig") detectorChoice = 2;
-       else{
-            if(val=="TG186") detectorChoice = 3;
-             else{ 
-		  if(val=="Flexi") detectorChoice = 4;
-                  else G4cout << val <<  "is not available!!!!"  <<G4endl;              
-            }
-       }
+	if (val == "Iodine") 
+		detectorChoice = 1;
+  		else
+  		{
+       		if(val=="Leipzig") 
+       			detectorChoice = 2;
+       			else
+       			{
+	            	if(val=="TG186") 
+	            		detectorChoice = 3;
+	             		else
+             			{ 
+		  					if(val=="Flexi") 
+		  						detectorChoice = 4;
+		  						else
+		  						{
+		  							if(val=="Oncura") 
+		  								detectorChoice = 5;
+		  		                  		else 
+		  		                  			G4cout << val <<  "is not available!!!!"  << G4endl;  
+		  						}            
+            			}
+       	}		
   }
  G4cout << "Now the source is " << val << G4endl;
 }

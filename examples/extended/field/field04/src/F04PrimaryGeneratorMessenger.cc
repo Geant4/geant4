@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04PrimaryGeneratorMessenger.cc 77884 2013-11-29 08:41:11Z gcosmo $
 //
 /// \file field/field04/src/F04PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the F04PrimaryGeneratorMessenger class

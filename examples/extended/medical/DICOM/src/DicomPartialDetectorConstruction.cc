@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPartialDetectorConstruction.cc 101301 2016-11-14 11:19:22Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomPartialDetectorConstruction.cc
 /// \brief Implementation of the DicomPartialDetectorConstruction class
@@ -65,8 +64,7 @@ DicomPartialDetectorConstruction::DicomPartialDetectorConstruction()
    fDimZ(0),
    fOffsetX(0),
    fOffsetY(0),
-   fOffsetZ(0),
-   fMateIDs(0)
+   fOffsetZ(0)
 {
 }
 
@@ -146,8 +144,8 @@ void DicomPartialDetectorConstruction::ReadPhantomData()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomPartialDetectorConstruction::ReadPhantomDataFile(
-const G4String& fname)
+void DicomPartialDetectorConstruction::
+ReadPhantomDataFile(const G4String& fname)
 {
   //  G4String filename = "phantom.g4pdcm";
 #ifdef G4VERBOSE
@@ -169,13 +167,13 @@ const G4String& fname)
     fin >> nmate >> stemp;
     G4cout << "DicomPartialDetectorConstruction::ReadPhantomData reading nmate "
     << ii << " = " << nmate << " mate " << stemp << G4endl;
-    if( ii != nmate ) 
+    if( ii != nmate )
       G4Exception("DicomPartialDetectorConstruction::ReadPhantomData",
                   "",
                   FatalErrorInArgument,
                   "Material number should be in increasing order: \
                           wrong material number ");
-    
+
   }
 
   fin >> fNVoxelX >> fNVoxelY >> fNVoxelZ;
@@ -199,7 +197,7 @@ const G4String& fname)
   //  G4bool* isFilled = new G4bool[fNVoxelX*fNVoxelY*fNVoxelZ];
   //  fFilledIDs = new size_t[fNVoxelZ*fNVoxelY+1];
   //?  fFilledIDs.insert(0);
-  int ifxmin1, ifxmax1;
+  G4int ifxmin1, ifxmax1;
   for( G4int iz = 0; iz < fNVoxelZ; iz++ ) {
     std::map< G4int, G4int > ifmin, ifmax;
     for( G4int iy = 0; iy < fNVoxelY; iy++ ) {
@@ -210,9 +208,9 @@ const G4String& fname)
       ifmax[iy] = ifxmax1;
       G4int ifxdiff = ifxmax1-ifxmin1+1;
       if( ifxmax1 == -1 && ifxmin1 == -1 ) ifxdiff = 0;
-      fFilledIDs.insert(std::pair<size_t,size_t>(ifxdiff+fNVoxels-1, ifxmin1));
-      G4cout << "DicomPartialDetectorConstruction::ReadPhantomData insert " 
-             << " FilledIDs "  << ifxdiff+fNVoxels-1 << " min " << ifxmin1 
+      fFilledIDs.insert(std::pair<G4int,G4int>(ifxdiff+fNVoxels-1, ifxmin1));
+      G4cout << "DicomPartialDetectorConstruction::ReadPhantomData insert "
+             << " FilledIDs "  << ifxdiff+fNVoxels-1 << " min " << ifxmin1
              << " N= " << fFilledIDs.size() << G4endl;
       //filledIDs[iz*fNVoxelY+iy+1] = ifxmax1-ifxmin1+1;
       for( G4int ix = 0; ix < fNVoxelX; ix++ ) {
@@ -225,7 +223,7 @@ const G4String& fname)
     fFilledMins[iz] = ifmin;
     fFilledMaxs[iz] = ifmax;
   }
-  
+
   //--- Read material IDs
   G4int mateID1;
   fMateIDs = new size_t[fNVoxelX*fNVoxelY*fNVoxelZ];
@@ -261,7 +259,8 @@ const G4String& fname)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomPartialDetectorConstruction::ReadVoxelDensitiesPartial( std::ifstream& fin )
+void DicomPartialDetectorConstruction::
+ReadVoxelDensitiesPartial( std::ifstream& fin )
 {
     std::map<G4int, std::pair<G4double,G4double> > densiMinMax;
     std::map<G4int, std::pair<G4double,G4double> >::iterator mpite;
@@ -277,7 +276,7 @@ void DicomPartialDetectorConstruction::ReadVoxelDensitiesPartial( std::ifstream&
     std::map<G4int,G4double> densityDiffs;
     if( densityDiff != -1. ) {
         for( size_t ii = 0; ii < fOriginalMaterials.size(); ii++ ){
-            densityDiffs[ii] = densityDiff; //currently all materials 
+            densityDiffs[ii] = densityDiff; //currently all materials
             //with same step
         }
     }else {
@@ -293,7 +292,7 @@ void DicomPartialDetectorConstruction::ReadVoxelDensitiesPartial( std::ifstream&
   std::map< std::pair<G4Material*,G4int>, matInfo* > newMateDens;
 
   G4double dens1;
-  size_t ifxmin1, ifxmax1;
+  G4int ifxmin1, ifxmax1;
 
   //---- Read the material densities
   G4int copyNo = 0;
@@ -306,14 +305,14 @@ void DicomPartialDetectorConstruction::ReadVoxelDensitiesPartial( std::ifstream&
       for( G4int ix = 0; ix < fNVoxelX; ix++ ) {
         if( ix >= G4int(ifxmin1) && ix <= G4int(ifxmax1) ) {
           fin >> dens1;
-        //--- store the minimum and maximum density for each material 
+        //--- store the minimum and maximum density for each material
           //(just for printing)
           mpite = densiMinMax.find( fMateIDs[copyNo] );
           if( dens1 < (*mpite).second.first ) (*mpite).second.first = dens1;
           if( dens1 > (*mpite).second.second ) (*mpite).second.second = dens1;
 
           //--- Get material from original list of material in file
-          int mateID = fMateIDs[copyNo];
+          G4int mateID = fMateIDs[copyNo];
           G4Material* mate = fOriginalMaterials[mateID];
           //        G4cout << copyNo << " mateID " << mateID << G4endl;
           //--- Check if density is equal to the original material density
@@ -330,7 +329,7 @@ void DicomPartialDetectorConstruction::ReadVoxelDensitiesPartial( std::ifstream&
 
           if( densityDiff != -1.) {
             densityBin = (G4int(dens1/densityDiffs[mateID]));
-            newMateName = 
+            newMateName =
               mate->GetName()+G4UIcommand::ConvertToString(densityBin);
           }
 
@@ -378,18 +377,18 @@ void DicomPartialDetectorConstruction::ReadVoxelDensitiesPartial( std::ifstream&
   for( mppite= newMateDens.begin(); mppite != newMateDens.end(); mppite++ ){
     G4double averdens = (*mppite).second->fSumdens/(*mppite).second->fNvoxels;
     G4double saverdens = G4int(1000.001*averdens)/1000.;
-    G4cout << "GmReadPhantomGeometry::ReadVoxelDensities AVER DENS " 
-           << averdens << " -> " << saverdens << " -> " 
+    G4cout << "GmReadPhantomGeometry::ReadVoxelDensities AVER DENS "
+           << averdens << " -> " << saverdens << " -> "
            << G4int(1000*averdens) << " " << G4int(1000*averdens)/1000 << " "
            <<  G4int(1000*averdens)/1000. << G4endl;
 
-    G4cout << "GmReadPhantomGeometry::ReadVoxelDensities AVER DENS " 
-           << averdens << " -> "  << saverdens << " -> " 
+    G4cout << "GmReadPhantomGeometry::ReadVoxelDensities AVER DENS "
+           << averdens << " -> "  << saverdens << " -> "
            << G4UIcommand::ConvertToString(saverdens) << " Nvoxels "
     <<(*mppite).second->fNvoxels << G4endl;
     G4String mateName = ((*mppite).first).first->GetName() + "_" +
     G4UIcommand::ConvertToString(saverdens);
-    fPhantomMaterials.push_back( BuildMaterialWithChangingDensity( 
+    fPhantomMaterials.push_back( BuildMaterialWithChangingDensity(
                                   (*mppite).first.first,
     averdens, mateName ) );
   }
@@ -474,14 +473,13 @@ void DicomPartialDetectorConstruction::ConstructPhantom()
 
   G4PVParameterised * phantom_phys = 0;
   if( OptimAxis == "kUndefined" ) {
-    phantom_phys = 
+    phantom_phys =
       new G4PVParameterised(voxelName,phantom_logic,fContainer_logic,
                             kUndefined, fNVoxels, fPartialPhantomParam);
   } else   if( OptimAxis == "kXAxis" ) {
     //    G4cout << " optim kX " << G4endl;
-    phantom_phys = 
+    phantom_phys =
       new G4PVParameterised(voxelName,phantom_logic,fContainer_logic,
-                            // kXAxis, fNVoxelX*fNVoxelY*fNVoxelZ, fPartialPhantomParam);
                             kXAxis, fNVoxels, fPartialPhantomParam);
     fPartialPhantomParam->SetSkipEqualMaterials(bSkipEqualMaterials);
   } else {

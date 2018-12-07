@@ -1,5 +1,4 @@
 -------------------------------------------------------------------
-$Id: History 110147 2018-05-16 12:20:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +7,14 @@ $Id: History 110147 2018-05-16 12:20:41Z gcosmo $
 
                           History file
                           ------------
+
+21.10.2018 - F. Romano, Tag gammaraytel-V10-04-06
+             - G4VIS_USE and G4UI_USE deleted
+
+09.09.2018 - A. Ribon, Tag gammaraytel-V10-04-05
+             GammaRayTelHadronPhysics , GammaRayTelIonPhysics : replaced the
+             explicit high-energy limit of hadronic physics with the one from
+             G4HadronicParameters .
 
 16.05.2018 - L. Pandola, Tag gammaraytel-V10-04-04
              Fix compiler warning on gcc8.1

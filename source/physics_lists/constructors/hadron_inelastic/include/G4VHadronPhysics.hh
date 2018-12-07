@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VHadronPhysics.hh 71043 2013-06-10 09:29:56Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -40,6 +39,7 @@
 
 #include "G4VPhysicsConstructor.hh"
 #include "G4VHadronModelBuilder.hh"
+#include "G4CrossSectionInelastic.hh"
 #include "globals.hh"
 #include <vector>
 
@@ -82,6 +82,8 @@ public:
   void AddCaptureCrossSection(G4VCrossSectionDataSet*);
 
   void AddFissionCrossSection(G4VCrossSectionDataSet*);
+
+  G4CrossSectionInelastic* InelasticXS(const G4String& componentName);
 
 protected:
 

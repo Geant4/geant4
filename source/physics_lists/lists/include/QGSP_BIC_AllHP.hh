@@ -33,29 +33,25 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TQGSP_BIC_AllHP_h
-#define TQGSP_BIC_AllHP_h 1
+#ifndef QGSP_BIC_AllHP_h
+#define QGSP_BIC_AllHP_h 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class TQGSP_BIC_AllHP: public T
+class QGSP_BIC_AllHP : public G4VModularPhysicsList
 {
 public:
-  TQGSP_BIC_AllHP(G4int ver = 1);
-  virtual ~TQGSP_BIC_AllHP();
-  
-public:
-  // SetCuts() 
-  virtual void SetCuts();
+  QGSP_BIC_AllHP(G4int ver = 1);
+  virtual ~QGSP_BIC_AllHP();
 
 private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
+
+  // copy constructor and hide assignment operator
+  QGSP_BIC_AllHP(QGSP_BIC_AllHP &);
+  QGSP_BIC_AllHP& operator=(const QGSP_BIC_AllHP &right);
+
 };
-#include "QGSP_BIC_AllHP.icc"
-typedef TQGSP_BIC_AllHP<G4VModularPhysicsList> QGSP_BIC_AllHP;
 
 #endif
 

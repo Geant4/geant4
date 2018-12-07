@@ -34,7 +34,6 @@
 // particle HP model for n with E < 20 MeV
 
 #include "G4HadronElasticPhysicsPHP.hh"
-#include "G4HadronElasticPhysics.hh"
 #include "G4Neutron.hh"
 #include "G4HadronicProcess.hh"
 #include "G4HadronElastic.hh"
@@ -47,44 +46,31 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsPHP);
 //
-G4ThreadLocal G4bool G4HadronElasticPhysicsPHP::wasActivated = false;
-G4ThreadLocal G4HadronElasticPhysics* G4HadronElasticPhysicsPHP::mainElasticBuilder = 0;
 
 G4HadronElasticPhysicsPHP::G4HadronElasticPhysicsPHP(G4int ver)
-  : G4VPhysicsConstructor("hElasticPhysics_PHP"), verbose(ver)
+  : G4HadronElasticPhysics(ver, "hElasticPhysics_PHP")
 {
   if(verbose > 1) { 
     G4cout << "### G4HadronElasticPhysicsPHP: " << GetPhysicsName() 
 	   << G4endl; 
   }
-  mainElasticBuilder = new G4HadronElasticPhysics(verbose);
 }
 
 G4HadronElasticPhysicsPHP::~G4HadronElasticPhysicsPHP()
-{
-  delete mainElasticBuilder; mainElasticBuilder = 0;
-}
-
-void G4HadronElasticPhysicsPHP::ConstructParticle()
-{
-  // G4cout << "G4HadronElasticPhysics::ConstructParticle" << G4endl;
-  mainElasticBuilder->ConstructParticle();
-}
+{}
 
 void G4HadronElasticPhysicsPHP::ConstructProcess()
 {
-  if(wasActivated) { return; }
-  wasActivated = true;
-  //Needed because this is a TLS object and this method is called by all threads
-  if ( ! mainElasticBuilder ) mainElasticBuilder = new G4HadronElasticPhysics(verbose);
-  mainElasticBuilder->ConstructProcess();
+  G4HadronElasticPhysics::ConstructProcess();
 
-  mainElasticBuilder->GetNeutronModel()->SetMinEnergy(19.5*MeV);
-
-  G4HadronicProcess* hel = mainElasticBuilder->GetNeutronProcess();
-  G4ParticleHPElastic* hp = new G4ParticleHPElastic();
-  hel->RegisterMe(hp);
-  hel->AddDataSet(new G4ParticleHPElasticData());
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  G4HadronElastic* he = GetElasticModel(neutron);
+  G4HadronicProcess* hel = GetElasticProcess(neutron);
+  if(he && hel) { 
+    he->SetMinEnergy(19.5*MeV); 
+    hel->RegisterMe(new G4ParticleHPElastic());
+    hel->AddDataSet(new G4ParticleHPElasticData());
+  }
 
   if(verbose > 1) {
     G4cout << "### HadronElasticPhysicsHP is constructed " 

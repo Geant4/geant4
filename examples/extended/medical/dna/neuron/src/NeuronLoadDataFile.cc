@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $Id: 
 // 
 /// \file NeuronLoadDataFile.cc
 /// \brief Implementation of the NeuronLoadDataFile class

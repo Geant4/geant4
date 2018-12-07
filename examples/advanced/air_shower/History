@@ -7,6 +7,22 @@
                            History file
                            ------------
 
+09.11.2018 - B. Tome (air_shower-V10-04-04)
+             Allow to remove reflecting surface. 
+
+09.11.2018 - B. Tome (air_shower-V10-04-03)
+             Add UltraMacro.mac to CMakeLists.txt            
+
+09.11.2018 - B. Tome (air_shower-V10-04-02)
+	     Reorganise macros. Add new macros.
+             Reorganise and simplify code in UltraDetectorConstruction. 
+             Geometry can now be changed in the same interactive session. 
+
+08.11.2018 - B. Tome (air_shower-V10-04-01)
+       Drop detector configuration through preprocessor directives. Use detector messenger instead.
+       New macros for visualisation, replacing preprocessor options.
+       No default PrimaryGeneratorAction in UserActionInitialization.
+
 10.05.2018 - B. Morgan (air_shower-V10-04-00)
        Include G4Types before use of G4MULTITHREADED. For forward
        compatibility with move to #defines over -D for G4 preprocessor

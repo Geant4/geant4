@@ -26,7 +26,6 @@
 /// \file exoticphysics/dmparticle/src/G4LDMHi.cc
 /// \brief Implementation of the G4LDMHi class
 //
-// $Id: G4LDMHi.cc 66817 2013-01-12 16:16:08Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

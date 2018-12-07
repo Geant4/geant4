@@ -6,7 +6,10 @@ cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project(Geant4Py)
 #------------------------------------------------------------------------------
 # installation prefixes for libraries
-set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX  ${PROJECT_SOURCE_DIR} CACHE
+      STRING "Install prefix" FORCE)
+endif()
 
 # debug mode
 set(DEBUG FALSE CACHE BOOL "Debug Mode (Debug On)")

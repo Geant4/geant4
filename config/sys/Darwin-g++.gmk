@@ -13,6 +13,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
   CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
   CXXFLAGS  += -fno-trapping-math -ftree-vectorize -fno-math-errno
+  CPPFLAGS  += -DGL_SILENCE_DEPRECATION
   G4USE_STD11 := 1
   ifdef G4USE_STD14
     CPPFLAGS  += -std=c++14
@@ -53,8 +54,8 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
   endif
-  G4RUNPATHOPTION := -Wl,-rpath 
-  G4STATIC_MODE += -Wl,-force_load
+  G4RUNPATHOPTION := -Wl,-rpath, 
+#  G4STATIC_MODE += -Wl,-force_load
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   LDFLAGS += -bind_at_load
@@ -92,18 +93,29 @@ ifeq ($(G4SYSTEM),Darwin-g++)
 #   OGLFLAGS := -I$(OGLHOME)/Headers 
   endif
   ifndef OGLLIBS
-    QTGLPATH  := $(shell test -f /System/Library/Frameworks/OpenGL.framework/OpenGL && echo "/System/Library/Frameworks/OpenGL.framework")
-    ifeq ($(QTGLPATH),/System/Library/Frameworks/OpenGL.framework)
+    OGLPATH  := $(shell test -f /Library/Frameworks/OpenGL.framework/OpenGL && echo "/Library/Frameworks/OpenGL.framework")
+    ifneq ($(OGLPATH),/Library/Frameworks/OpenGL.framework)
+      OGLPATH  := $(shell test -f /System/Library/Frameworks/OpenGL.framework/OpenGL && echo "/System/Library/Frameworks/OpenGL.framework")
+    endif
+    ifneq ($(OGLPATH),)
+      OGLLIBS := -F$(OGLPATH)/.. -framework OpenGL -framework AGL 
+    else
+      OGLLIBS := -L$(OGLHOME)/lib -lGLU -lGL
+    endif
+  endif
+  ifndef OGLLIBS
+    OGLPATH  := $(shell test -f /Library/Frameworks/OpenGL.framework/OpenGL && echo "/Library/Frameworks/OpenGL.framework")
+    ifneq ($(OGLPATH),/Library/Frameworks/OpenGL.framework)
+      OGLPATH  := $(shell test -f /System/Library/Frameworks/OpenGL.framework/OpenGL && echo "/System/Library/Frameworks/OpenGL.framework")
+    endif
+    ifneq ($(OGLPATH),)
       DARWIN_VERSION = $(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/')
       ifeq ($(DARWIN_VERSION),9)
         # the following lines are for building on MacOSX 10.5 "Leopard"
-        OGLLIBS := -Wl,$(QTGLPATH)/Versions/A/Libraries/libGL.dylib -L$(OGLHOME)/lib -lGLU -lGL
+        OGLLIBS := -Wl,$(OGLPATH)/Libraries/libGL.dylib -L$(OGLHOME)/lib -lGLU -lGL
       else
         # the following lines are for building on MacOSX > 10.5
-        OGLLIBS := -F/System/Library/Frameworks -framework OpenGL -framework AGL 
-        ifeq ($(G4VIS_USE_OPENGLX),1)
-          OGLLIBS += -L$(OGLHOME)/lib -lGLU -lGL
-        endif
+        OGLLIBS := -F$(OGLPATH)/.. -framework OpenGL -framework AGL 
       endif
     else
       OGLLIBS := -L$(OGLHOME)/lib -lGLU -lGL

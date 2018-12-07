@@ -1,4 +1,3 @@
-$Id: History 109713 2018-05-08 13:37:44Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +13,26 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30/11/18 I. Hrivnacova (exampleB3-V10-04-05)
+- Moved the previous update from B3b in B3 documentation
+  and removed obsolete README files from B3a and B3b. 
+
+16/11/18 J. Madsen (exampleB3-V10-04-04)
+- Updated documentation for example B3b
+
+13/11/18 J. Madsen (exampleB3-V10-04-03)
+- Added StatAnalysis to example B3b according to Lund agreement
+  to demonstrate statistical computations in a basic example
+
+30/10/18 I. Hrivnacova (exampleB3-V10-04-02)
+- Removed usage of G4ScoreNtupleWriter; 
+  will be demonstrated in a new extended analysis example
+
+26/10/18 I. Hrivnacova (exampleB3-V10-04-01)
+- Activated storing hits in Root file using new G4ScoreNtupleWriter
+- Replaced explicit printing of Run ID with /run/printProgress
+- Updated README
 
 08/05/18 B. Morgan     (exampleB3-V10-04-00)
 - Include G4Types before use of G4MULTITHREADED. For forward

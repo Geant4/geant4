@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniPionBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,12 +42,12 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4CrossSectionDataSetRegistry.hh"
+#include "G4BGGPionInelasticXS.hh"
+
 
 G4BertiniPionBuilder::
 G4BertiniPionBuilder() 
  {
-   thePiData = (G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name());
    theMin = 0*GeV;
    theMax = 9.9*GeV;
    theModel = new G4CascadeInterface;
@@ -59,17 +58,19 @@ G4BertiniPionBuilder()
 void G4BertiniPionBuilder::
 Build(G4PionPlusInelasticProcess * aP)
  {
-   aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
+   aP->AddDataSet( new G4BGGPionInelasticXS( G4PionPlus::Definition() ) );
+   aP->RegisterMe(theModel);
  }
 
 void G4BertiniPionBuilder::
 Build(G4PionMinusInelasticProcess * aP)
  {
-   aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
+   aP->AddDataSet( new G4BGGPionInelasticXS( G4PionMinus::Definition() ) );
+   aP->RegisterMe(theModel);
  }
 
 

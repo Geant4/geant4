@@ -24,7 +24,6 @@
 *     ********************************************************************
 *    
 *    
-*     $Id: jshape.F 67982 2013-03-13 10:36:03Z gcosmo $
 *    
 *     
 *--   Author : Jouko Vuoskoski, CERN, Jouko.Vuoskoski@cern.ch

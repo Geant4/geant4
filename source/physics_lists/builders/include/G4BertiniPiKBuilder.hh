@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniPiKBuilder.hh 103593 2017-04-19 08:10:21Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,9 +46,8 @@
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronInelasticProcess.hh"
 #include "G4VPiKBuilder.hh"
-
-#include "G4PiNuclearCrossSection.hh"
 #include "G4CascadeInterface.hh"   
+
 
 class G4BertiniPiKBuilder : public G4VPiKBuilder
 {
@@ -71,11 +69,9 @@ class G4BertiniPiKBuilder : public G4VPiKBuilder
     using G4VPiKBuilder::Build; //Prevent Compilation warning
 
   private:
-    G4PiNuclearCrossSection* thePiData;
     G4CascadeInterface * theModel;    
     G4double theMin;
     G4double theMax;
-
 };
 
 // 2002 by J.P. Wellisch

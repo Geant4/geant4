@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $ID$
 /// \file TrackingAction.hh
 /// \brief Definition of the TrackingAction class
 

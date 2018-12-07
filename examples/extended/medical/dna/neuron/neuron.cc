@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $ID$
 /// \file neuron.cc
 /// \brief Implementation of the neuron example
 //
@@ -71,9 +70,6 @@ int main(int argc,char** argv)
   // run time in Geant4
   G4Timer *timer = new G4Timer();
   timer->Start();
-
-  // Choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   //////////
   // Parse options given in commandLine

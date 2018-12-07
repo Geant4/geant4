@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,6 +12,8 @@
                              WWW : http://geant4.org/
 **************************************************************
 
+##### Create analysis manager   0x954250
+Using Root analysis manager
 e-_G4DNAPTBAugerModel is constructed
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
@@ -33,8 +35,6 @@ e-_excitation_interaction :  Emin=        0 eV    Emax=      100 TeV
 e-_G4DNAIonisation:   for  e-    SubType= 53  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 e-_ionisation_interaction :  Emin=        0 eV    Emax=      100 TeV
-##### Create analysis manager   0x1588640
-Using Root analysis manager
 ... open Root analysis file : ICSD.root - done
 ... write Root file : ICSD.root - done
 ... close Root file : ICSD.root - done

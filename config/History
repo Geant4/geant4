@@ -1,4 +1,3 @@
-svn log $Id: History 109363 2018-04-12 15:17:01Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +14,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28th September 2018 Gabriele Cosmo  (config-V10-04-09)
+- Added -DGL_SILENCE_DEPRECATION to CPPFLAGS to Darwin setups to silence
+  deprecation compilation warnings on MacOS 10.14 Mojave.
+
+18th September 2018 Gabriele Cosmo  (config-V10-04-08)
+- Cleanup settings for GL in Darwin-clang.gmk and Darwin-g++.gmk.
+
+12th September 2018 Gabriele Cosmo  (config-V10-04-07)
+- Withdraw changes of last tag for Linux-g++ and corrected use of
+  G4RUNPATHOPTION in binmake.gmk for installed kernel libraries.
+
+7th September 2018 Gabriele Cosmo  (config-V10-04-06)
+- Fixed setting of G4RUNPATHOPTION in Darwin/Linux-clang/g++ and binmake.cmk.
+  Addressing problem report #2086.
 
 12th April 2018 Gabriele Cosmo  (config-V10-04-05)
 - WIN32-VC.gmk: updated obsolete configuration for Qt5.

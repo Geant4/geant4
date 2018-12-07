@@ -11,6 +11,8 @@
 /testem/det/setAbsYZ    1 mm
 #
 /testem/phys/addPhysics dna_opt2
+#/testem/phys/addPhysics dna_opt4
+#/testem/phys/addPhysics dna_opt6
 #
 /run/setCut 1 nm
 #

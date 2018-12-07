@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4AllocatorPool.hh 67970 2013-03-13 10:10:06Z gcosmo $
 //
 // 
 // -------------------------------------------------------------------
@@ -56,6 +55,11 @@ class G4AllocatorPool
     ~G4AllocatorPool();
       // Destructor. Return storage to the free store
 
+    G4AllocatorPool(const G4AllocatorPool& right);
+      // Copy constructor
+    G4AllocatorPool& operator= (const G4AllocatorPool& right);
+      // Equality operator
+
     inline void* Alloc();
       // Allocate one element
     inline void  Free( void* b );
@@ -74,11 +78,6 @@ class G4AllocatorPool
       // Increase default page size by a given factor
 
   private:
-
-    G4AllocatorPool(const G4AllocatorPool& right);
-      // Provate copy constructor
-    G4AllocatorPool& operator= (const G4AllocatorPool& right);
-      // Private equality operator
 
     struct G4PoolLink
     {

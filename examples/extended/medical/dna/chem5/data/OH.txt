@@ -1,0 +1,33 @@
+# Time ps  G-value  Error
+# Laverne J A 2000 OH radicals and oxidizing products in the gamma radiolysis of water Radiat. Res. 153 196–200 
+1534.2	4.379	0.219
+4150.7	3.783	0.189
+11529.7	3.381	0.169
+27464.6	2.938	0.147
+28896.3	2.855	0.143
+65531.3	2.882	0.144
+74443.1	2.785	0.139
+137567.8	2.799	0.140
+177612.7	2.716	0.136
+296275.8	2.716	0.136
+493692.5	2.467	0.123
+605750.9	2.439	0.122
+1305359.2	2.494	0.125
+3116830	2.605	0.130
+4127176.7	2.453	0.123
+
+
+# Jonah C D and Miller J R 1977 Yield and decay of the hydroxyl radical from 200 ps to 3 ns J. Phys. Chem. 81 1974–6 
+200	4.72	0.16
+3000	3.52	0.32
+
+
+# Jay-Gerin J-P and Ferradini C 2000 A new estimate of the ⋅OH radical yield at early times in the radiolysis of liquid water Chem. Phys. Lett. 317:388-91
+100	4.6	0.25
+
+
+# El Omar A K et al 2011 Time-dependent radiolytic yield of O radical studied by picosecond pulse radiolysis J. Phys. Chem. A 115 12212–6  
+10   4.8  0.12
+200  4.4  0.12
+
+

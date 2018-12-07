@@ -27,7 +27,6 @@
 /// \brief Definition of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.hh 99373 2016-09-20 07:13:41Z gcosmo $
 //
 // 
 

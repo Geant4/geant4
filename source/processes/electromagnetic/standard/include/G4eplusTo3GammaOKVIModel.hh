@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusTo3GammaOKVIModel.hh 96909 2016-05-17 10:16:09Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -32,14 +31,14 @@
 //
 // File name:     G4eplusTo3GammaOKVIModel
 //
-// Author:        Vladimir Ivanchenko and Omrane Kadri 
+// Authors:  Andrei Alkin, Vladimir Ivanchenko, Omrame Kadri
 //
 // Creation date: 29.03.2018
 //
 //
 // Class Description:
 //
-// Implementation of e+ annihilation into 2 gamma
+// Implementation of e+ annihilation into 3 gamma
 
 // -------------------------------------------------------------------
 //
@@ -65,6 +64,8 @@ public:
 			  const G4DataVector&) final;
 
   G4double ComputeCrossSectionPerElectron(G4double kinEnergy);
+
+
   
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -85,6 +86,14 @@ public:
 				 const G4DynamicParticle*,
 				 G4double tmin = 0.0,
 				 G4double maxEnergy = DBL_MAX) final;
+
+  G4double ComputeF(G4double fr1, G4double fr2, G4double fr3, G4double kinEnergy);
+
+  G4double ComputeF0(G4double fr1, G4double fr2, G4double fr3);
+
+  G4double ComputeFS(G4double fr1, G4double fr2, G4double fr3, G4double kinEnergy);
+
+  inline void SetDelta(G4double val) { if(val > 0.0) { fDelta = val; } };
   
 private:
 
@@ -93,12 +102,12 @@ private:
   (const  G4eplusTo3GammaOKVIModel &right) = delete;
   G4eplusTo3GammaOKVIModel(const  G4eplusTo3GammaOKVIModel&) = delete;
 
-  G4double pi_rcl2;
-  G4double energyTh;
-  G4ParticleDefinition*  theGamma;
+  G4double fDelta;
+  const G4ParticleDefinition*  theGamma;
   G4ParticleChangeForGamma* fParticleChange;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 
 #endif

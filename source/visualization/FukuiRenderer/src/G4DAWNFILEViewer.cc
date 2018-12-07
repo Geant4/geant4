@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.cc 66870 2013-01-14 23:38:59Z adotti $
 //
 // Satoshi TANAKA
 // DAWNFILE view - opens window, hard copy, etc.

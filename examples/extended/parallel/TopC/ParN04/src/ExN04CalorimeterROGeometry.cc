@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN04CalorimeterROGeometry.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 /// \file parallel/ParN04/src/ExN04CalorimeterROGeometry.cc
 /// \brief Implementation of the ExN04CalorimeterROGeometry class

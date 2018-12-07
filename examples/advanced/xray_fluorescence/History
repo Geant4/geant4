@@ -1,6 +1,4 @@
-# $Id: History 109977 2018-05-14 07:12:10Z gcosmo $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-09-04-ref-00 $
 # -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09.11.2018 Gabiele Cosmo   Tag: XrayFluo-V10-04-01
+- XrayFluoMercuryDetectorMessenger: fixed typo in printout.
 
 10.05.2018 Ben Morgan      Tag: XrayFluo-V10-04-00
 - Include G4Types before use of G4MULTITHREADED. For forward

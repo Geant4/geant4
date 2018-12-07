@@ -1,4 +1,3 @@
-$Id: History 107233 2017-11-06 11:52:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,38 @@ and keep track of all category-tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12.11.2018    V.Ivanchenko tag medical_linac-V10-04-08
+              ML2AcceleratorConstructionMessenger,
+              ML2PhantomConstructionMessenger - should not
+                 trigger /run/beamOn during detector construction
+
+09.11.2018    V.Ivanchenko tag medical_linac-V10-04-07
+              do not explicitly delete singletons, add extra 
+              initialisation
+
+08.11.2018    V.Ivanchenko tag medical_linac-V10-04-06
+07.11.2018    V.Ivanchenko tag medical_linac-V10-04-05
+              simplification of PhysicsList - attempt to fix
+              problems at Windows
+
+25.10.2018    S. Guatelli tag medical_linac-V10-04-04
+              compilation warnings deleted
+
+22.10.2018    S. Guatelli tag medical_linac-V10-04-03
+              acc1.mac added in CMakeList.txt
+
+19.10.2018    S. Guatelli tag medical_linac-V10-04-02
+              warning deleted
+
+10.10.2018    S. Guatelli tag medical_linac-V10-04-01
+              typos in macros deleted. Nloop=10 if the exp data are not provided
+
+07.09.2018    S. Guatelli tag medical_linac-V10-04-00
+              Directory MacroAndData included
+              Migration from RO Geometry to Multifunctional Detector  
+              Phase Space creation deleted. This needs to be implemented again
+              G4VIS_USE and G4UI_USE deleted 
 
 06.11.2017    L.Pandola tag medical_linac-V10-03-02
               re-tag, fix directory

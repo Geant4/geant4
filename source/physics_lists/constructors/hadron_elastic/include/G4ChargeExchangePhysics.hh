@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ChargeExchangePhysics.hh 71037 2013-06-10 09:20:54Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,27 +41,25 @@
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
-class G4ChargeExchange;
-
 class G4ChargeExchangePhysics : public G4VPhysicsConstructor
 {
 public: 
-  G4ChargeExchangePhysics(G4int ver = 0);
+  explicit G4ChargeExchangePhysics(G4int ver = 0);
   virtual ~G4ChargeExchangePhysics();
 
 public: 
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated
-  virtual void ConstructParticle();
+  void ConstructParticle() override;
  
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+  void ConstructProcess() override;
+
 private:
 
   G4int    verbose;
-  static G4ThreadLocal G4bool   wasActivated;
 };
 
 

@@ -15,20 +15,15 @@
 // * use.  Please see the license in the file  LICENSE  and URL above *
 // * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * Vanderbilt University Free Electron Laser Center                 *
-// * Vanderbilt University, Nashville, TN, USA                        *
-// * Development supported by:                                        *
-// * United States MFEL program  under grant FA9550-04-1-0045         *
-// * and NASA under contract number NNG04CT05P.                       *
-// * Written by Marcus H. Mendenhall and Robert A. Weller.            *
-// *                                                                  *
-// * Contributed to the Geant4 Core, January, 2005.                   *
-// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id:$
 //
 //
 // --------------------------------------------------------------------
@@ -46,16 +41,19 @@
 #ifndef G4UTET_HH
 #define G4UTET_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UTet.hh"
+#include <volumes/UnplacedTet.h>
 
 #include "G4Polyhedron.hh"
 
-class G4UTet : public G4USolid
+class G4UTet : public G4UAdapter<vecgeom::UnplacedTet>
 {
+
+  using Shape_t = vecgeom::UnplacedTet;
+  using Base_t = G4UAdapter<vecgeom::UnplacedTet>;
 
   public:  // with description
 
@@ -67,8 +65,6 @@ class G4UTet : public G4USolid
                  G4bool *degeneracyFlag=0);
 
    ~G4UTet();
-
-    inline UTet* GetShape() const;
 
     inline G4GeometryType GetEntityType() const;
 
@@ -99,11 +95,6 @@ class G4UTet : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UTet* G4UTet::GetShape() const
-{
-  return (UTet*) fShape;
-}
 
 inline G4GeometryType G4UTet::GetEntityType() const
 {

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4RunManagerKernel.cc 86749 2014-11-17 15:03:05Z gcosmo $
 // ====================================================================
 //   pyG4RunManagerKernel.cc
 //

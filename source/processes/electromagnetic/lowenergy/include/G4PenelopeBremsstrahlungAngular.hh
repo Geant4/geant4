@@ -25,7 +25,6 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4PenelopeBremsstrahlungAngular.hh 74452 2013-10-07 15:08:00Z gcosmo $
 //
 // Author: L.Pandola
 //

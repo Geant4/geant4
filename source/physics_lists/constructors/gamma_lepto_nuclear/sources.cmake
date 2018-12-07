@@ -11,7 +11,6 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 106950 2017-10-31 08:26:27Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -39,6 +38,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/builders/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/factory/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/electromagnetic/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/highenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/utils/include)
@@ -152,6 +152,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_glnuclear
         G4optical
         G4partman
         G4phys_builders
+        G4phys_ctor_em
         G4phys_ctor_factory
         G4procman
         G4run

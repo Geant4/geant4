@@ -26,7 +26,6 @@
 /// \file exoticphysics/monopole/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 107534 2017-11-21 13:13:36Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,8 +56,6 @@ public:
   virtual void EndOfRunAction(const G4Run*);
 
   void SetBinSize(G4double size);
-  inline void SetVerbose(G4int verbose) { fVerboseLevel = verbose;}
-  inline G4int GetVerbose()             { return fVerboseLevel;}
 
 private:  
 
@@ -70,7 +67,6 @@ private:
   RunActionMessenger*     fMessenger;
 
   G4double                fBinLength;
-  G4int                   fVerboseLevel;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

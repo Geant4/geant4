@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DICOM.cc 110379 2018-05-22 07:45:15Z gcosmo $
 //
 /// \file medical/DICOM/DICOM.cc
 /// \brief Main program of the medical/DICOM example
@@ -40,7 +39,7 @@
 // tel (418) 525-4444 #6720
 // fax (418) 691 5268
 //
-// + Université Laval, Québec (QC) Canada
+// + Universitï¿½ Laval, Quï¿½bec (QC) Canada
 // *******************************************************
 #include "G4Types.hh"
 
@@ -63,9 +62,9 @@
 #include "DicomActionInitialization.hh"
 
 #ifdef G4_DCMTK
-#include "DicomFileMgr.hh"
+#   include "DicomFileMgr.hh"
 #else
-#include "DicomHandler.hh"
+#   include "DicomHandler.hh"
 #endif
 
 #include "DicomIntersectVolume.hh"
@@ -77,7 +76,7 @@
 
 #include "Shielding.hh"
 
-//=================================================================================
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {

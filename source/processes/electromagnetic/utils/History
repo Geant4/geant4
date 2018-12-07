@@ -1,4 +1,3 @@
-$Id: History 110572 2018-05-30 13:08:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,65 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 October 18: D.Sawkey (emutils-V10-04-25)
+- G4EmBiasingManager - fix Valgrind warning
+
+26 October 18: V.Ivant (emutils-V10-04-24)
+- G4EmParameters - fixed typo in printout
+
+16 October 18: D.Sawkey (emutils-V10-04-23)
+- G4EmBiasingManager, G4VEmProcess, G4VEnergyLossProcess - move logic
+    for directional splitting to G4EmBiasingManager
+
+03 October 18: D.Sawkey (emutils-V10-04-22)
+- G4EmBiasingManager, G4EmParameters, G4EmParametersMessenger,
+  G4VEnergyLossProcess, G4VEmProcess - enable directional splitting
+
+26 September 18: V.Ivant (emutils-V10-04-21)
+- G4EmParameters, G4EmProcessSubType, G4LossTableManager - renamed
+    general process classes
+- G4EmParametersMessenger - fixed UI command name, which enables 
+    usage of the ICRU90 data (Lucas Norberto Burigo)
+
+17 September 18: D.Sawkey (emutils-V10-04-20)
+- G4EmModelManager, G4VEmModel, G4VEmProcess, G4VEnergyLossProcess,
+  G4VMultipleScattering: Auto-generated documentation no in rST format
+
+31 August 18: V.Ivant (emutils-V10-04-19)
+- G4EmCalculator - fixed computation dEdx for ions
+
+14 August 18: V.Ivant (emutils-V10-04-18)
+14 August 18: V.Ivant (emutils-V10-04-16)
+- G4EmParameters, G4EmParametersMessenger - added extra parameter
+    to enable usage of ICRU90 data; fixed DNA parameters;
+    added checks of EM physics type 
+- G4VEmProcess, G4VEnergyLossProcess - take out attempt of 
+    optimisation introduced previously, return back to 10.4 logic
+
+27 July 18: V.Ivant (emutils-V10-04-15)
+- G4EmParameters - added extra protection to avoid simulteneous
+    definition of options, which should not be enabled together
+- G4VEmProcess - clean-up StorePhysicsTable(..) methods; introduce
+    isTheMaster flag
+- G4EmDataHandler - added public interfaces
+
+25 July 18: V.Ivant (emutils-V10-04-14)
+- G4VEmProcess, G4VEnergyLossProcess - attempt optimise number of 
+    calls to cross sections
+- G4EmParameters, G4EmParametersMessenger - added extra parameters
+- G4EmElementSelector - optimisation
+
+13 July 18: V.Ivant (emutils-V10-04-13)
+- G4VEmProcess, G4VEnergyLossProcess - move few class members from 
+    private to protected, introduced check on energy change between
+    steps with factorDeltaE, allowing skip recomputation of cross 
+    section at a step
+- G4EmDataHandler - added methods  
+
+12 July 18: V.Ivant (emutils-V10-04-12)
+- G4EmParameters, G4EmParameterMessenger, G4LossTableManager - minor
+  update of interfaces
 
 30 May 18: V.Ivant (emutils-V10-04-11)
 30 May 18: V.Ivant (emutils-V10-04-10)

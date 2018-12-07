@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // class G4Paraboloid
 //

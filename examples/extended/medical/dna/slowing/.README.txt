@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "medical/dna/slowing/.README.txt"
 ///\brief Example slowing README page

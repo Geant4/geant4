@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsShieldingLEND.cc 107250 2017-11-07 01:37:11Z tkoi $
 //
 //---------------------------------------------------------------------------
 //
@@ -51,9 +50,32 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
+#include "G4PionBuilder.hh"
+#include "G4BertiniPionBuilder.hh"
+#include "G4FTFPPionBuilder.hh"
+
+#include "G4KaonBuilder.hh"
+#include "G4BertiniKaonBuilder.hh"
+#include "G4FTFPKaonBuilder.hh"
+
+#include "G4ProtonBuilder.hh"
+#include "G4BertiniProtonBuilder.hh"
+#include "G4FTFPNeutronBuilder.hh"
+#include "G4FTFPProtonBuilder.hh"
+
+#include "G4NeutronBuilder.hh"
+#include "G4BertiniNeutronBuilder.hh"
+#include "G4FTFPNeutronBuilder.hh"
+#include "G4NeutronPHPBuilder.hh"
+
+#include "G4HyperonFTFPBuilder.hh"
+#include "G4AntiBarionBuilder.hh"
+#include "G4FTFPAntiBarionBuilder.hh"
+
 #include "G4ParticleHPBGGNucleonInelasticXS.hh"
 #include "G4ParticleHPJENDLHEInelasticData.hh"
 #include "G4ParticleHPInelasticData.hh"
+#include "G4NeutronLENDBuilder.hh"
 
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
@@ -68,19 +90,18 @@
 #include "G4LFission.hh"
 
 #include "G4CrossSectionDataSetRegistry.hh"
-
 #include "G4PhysListUtil.hh"
+#include "G4HadronicParameters.hh"
+#include "G4ProcessManager.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsShieldingLEND);
 
-G4ThreadLocal G4HadronPhysicsShieldingLEND::ThreadPrivate* 
-G4HadronPhysicsShieldingLEND::tpdata = 0;
 
 G4HadronPhysicsShieldingLEND::G4HadronPhysicsShieldingLEND( G4int )
-    :  G4VPhysicsConstructor("hInelastic Shielding")
+    :  G4VPhysicsConstructor("hInelastic ShieldingLEND")
     , useLEND_(false)
     , evaluation_()
     , minFTFPEnergy_(9.5*GeV)
@@ -107,68 +128,19 @@ G4HadronPhysicsShieldingLEND::G4HadronPhysicsShieldingLEND(const G4String& name,
     , minNonHPNeutronEnergy_(19.9*MeV)
 {}
 
-#include "G4NeutronLENDBuilder.hh"
-void G4HadronPhysicsShieldingLEND::CreateModels()
-{
-  G4bool quasiElasticFTF= false;   // Use built-in quasi-elastic (not add-on)
-
-  tpdata->theNeutrons=new G4NeutronBuilder( true ); // Fission on
-  tpdata->theFTFPNeutron=new G4FTFPNeutronBuilder(quasiElasticFTF);
-  tpdata->theFTFPNeutron->SetMinEnergy(minFTFPEnergy_);
-  tpdata->theNeutrons->RegisterMe(tpdata->theFTFPNeutron);
-  tpdata->theNeutrons->RegisterMe(tpdata->theBertiniNeutron=new G4BertiniNeutronBuilder);
-  tpdata->theBertiniNeutron->SetMinEnergy(minNonHPNeutronEnergy_);
-  tpdata->theBertiniNeutron->SetMaxEnergy(maxBertiniEnergy_);
-  tpdata->theNeutrons->RegisterMe(tpdata->theLENeutron=new G4NeutronLENDBuilder( evaluation_ ));
-
-  tpdata->thePro=new G4ProtonBuilder;
-  tpdata->theFTFPPro=new G4FTFPProtonBuilder(quasiElasticFTF);
-  tpdata->theFTFPPro->SetMinEnergy(minFTFPEnergy_);
-  tpdata->thePro->RegisterMe(tpdata->theFTFPPro);
-  tpdata->thePro->RegisterMe(tpdata->theBertiniPro=new G4BertiniProtonBuilder);
-  tpdata->theBertiniPro->SetMaxEnergy(maxBertiniEnergy_);
-
-  tpdata->thePiK=new G4PiKBuilder;
-  tpdata->theFTFPPiK=new G4FTFPPiKBuilder(quasiElasticFTF);
-  tpdata->theFTFPPiK->SetMinEnergy(minFTFPEnergy_);
-  tpdata->thePiK->RegisterMe(tpdata->theFTFPPiK);
-  tpdata->thePiK->RegisterMe(tpdata->theBertiniPiK=new G4BertiniPiKBuilder);
-  tpdata->theBertiniPiK->SetMaxEnergy(maxBertiniEnergy_);
-
-  tpdata->theHyperon=new G4HyperonFTFPBuilder;
-    
-  tpdata->theAntiBaryon=new G4AntiBarionBuilder;
-  tpdata->theAntiBaryon->RegisterMe(tpdata->theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasticFTF));
-}
 
 G4HadronPhysicsShieldingLEND::~G4HadronPhysicsShieldingLEND()
+{}
+
+
+void G4HadronPhysicsShieldingLEND::DumpBanner()
 {
-  if (!tpdata) return;
-
-  delete tpdata->theNeutrons;
-  delete tpdata->theBertiniNeutron;
-  delete tpdata->theFTFPNeutron;
-  //delete tpdata->theHPNeutron;
-  delete tpdata->theLENeutron;
-    
-  delete tpdata->thePiK;
-  delete tpdata->theBertiniPiK;
-  delete tpdata->theFTFPPiK;
-    
-  delete tpdata->thePro;
-  delete tpdata->theBertiniPro;
-  delete tpdata->theFTFPPro;    
-    
-  delete tpdata->theHyperon;
-  delete tpdata->theAntiBaryon;
-  delete tpdata->theFTFPAntiBaryon;
-
-  delete tpdata->theBGGxsNeutron;
-  delete tpdata->theNeutronHPJENDLHEInelastic;
-  delete tpdata->theBGGxsProton;
-
-  delete tpdata; tpdata=0;
+  G4cout << G4endl
+         << " ShieldingLEND : threshold between BERT and FTFP is over the interval : "
+         << minFTFPEnergy_/GeV << " to " << maxBertiniEnergy_/GeV  << " GeV" << G4endl
+         << G4endl;
 }
+
 
 void G4HadronPhysicsShieldingLEND::ConstructParticle()
 {
@@ -185,62 +157,141 @@ void G4HadronPhysicsShieldingLEND::ConstructParticle()
   pIonConstructor.ConstructParticle();
 }
 
-#include "G4ProcessManager.hh"
+
+void G4HadronPhysicsShieldingLEND::CreateModels()
+{
+  Neutron();
+  Proton();
+  Pion();
+  Kaon();
+  Others();
+}
+
+
+void G4HadronPhysicsShieldingLEND::Neutron()
+{
+  auto neu = new G4NeutronBuilder( true );
+  AddBuilder( neu );
+  auto ftfpn = new G4FTFPNeutronBuilder( false );
+  AddBuilder( ftfpn );
+  neu->RegisterMe( ftfpn );
+  ftfpn->SetMinEnergy( minFTFPEnergy_ );
+  auto bertn = new G4BertiniNeutronBuilder;
+  AddBuilder( bertn );
+  neu->RegisterMe( bertn );
+  bertn->SetMinEnergy( minNonHPNeutronEnergy_ );
+  bertn->SetMaxEnergy( maxBertiniEnergy_ );
+  auto lendn = new G4NeutronLENDBuilder( evaluation_ );
+  AddBuilder( lendn );
+  neu->RegisterMe( lendn );
+  neu->Build();
+}
+
+
+void G4HadronPhysicsShieldingLEND::Proton()
+{
+  auto pro = new G4ProtonBuilder;
+  AddBuilder( pro );
+  auto ftfpp = new G4FTFPProtonBuilder( false );
+  AddBuilder( ftfpp );
+  pro->RegisterMe( ftfpp );
+  ftfpp->SetMinEnergy( minFTFPEnergy_ );
+  auto bertp = new G4BertiniProtonBuilder;
+  AddBuilder( bertp );
+  pro->RegisterMe( bertp );
+  bertp->SetMaxEnergy( maxBertiniEnergy_ );
+  pro->Build();
+}
+
+
+void G4HadronPhysicsShieldingLEND::Pion()
+{
+  auto pi = new G4PionBuilder;
+  AddBuilder( pi );
+  auto ftfppi = new G4FTFPPionBuilder( false );
+  AddBuilder( ftfppi );
+  pi->RegisterMe( ftfppi );
+  ftfppi->SetMinEnergy( minFTFPEnergy_ );
+  auto bertpi = new G4BertiniPionBuilder;
+  AddBuilder( bertpi );
+  pi->RegisterMe( bertpi );
+  bertpi->SetMaxEnergy( maxBertiniEnergy_ );
+  pi->Build();
+}
+
+
+void G4HadronPhysicsShieldingLEND::Kaon()
+{
+  auto k = new G4KaonBuilder;
+  AddBuilder( k );
+  auto ftfpk = new G4FTFPKaonBuilder( false );
+  AddBuilder( ftfpk );
+  k->RegisterMe( ftfpk );
+  ftfpk->SetMinEnergy( minFTFPEnergy_ );
+  auto bertk  = new G4BertiniKaonBuilder;
+  AddBuilder( bertk );
+  k->RegisterMe( bertk );
+  bertk->SetMaxEnergy( maxBertiniEnergy_ );
+  k->Build();
+}
+
+
+void G4HadronPhysicsShieldingLEND::Others()
+{
+  // Hyperons
+  auto hyp = new G4HyperonFTFPBuilder;
+  AddBuilder( hyp );
+  hyp->Build();
+
+  // Antibaryons
+  auto abar = new G4AntiBarionBuilder;
+  AddBuilder( abar );
+  auto ftfpabar = new G4FTFPAntiBarionBuilder( false );
+  AddBuilder( ftfpabar );
+  abar->RegisterMe( ftfpabar );
+  abar->Build();
+}
+
+
 void G4HadronPhysicsShieldingLEND::ConstructProcess()
 {
-  if ( tpdata == 0 ) tpdata = new ThreadPrivate;
+  if ( G4Threading::IsMasterThread() ) {
+    DumpBanner();
+  }
   CreateModels();
-
-  tpdata->thePro->Build();
-  tpdata->theNeutrons->Build();
-    
-  tpdata->theBGGxsNeutron = 0; //set explictly to zero or destructor may fail
-  tpdata->theNeutronHPJENDLHEInelastic=new G4ParticleHPJENDLHEInelasticData;
-  //Register the G4ParticleHPJENDLHEInelasticData as the 2nd priority.
-  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->GetCrossSectionDataStore()->AddDataSet(tpdata->theNeutronHPJENDLHEInelastic,1);
-    
-  tpdata->theBGGxsProton=0;
-
-  tpdata->thePiK->Build();
-
-  // --- Kaons ---
-  tpdata->xsKaon = new G4ComponentGGHadronNucleusXsc();
-  G4VCrossSectionDataSet * kaonxs = new G4CrossSectionInelastic(tpdata->xsKaon);
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(kaonxs);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(kaonxs);
-
-  tpdata->theHyperon->Build();
-  tpdata->theAntiBaryon->Build();
-
-  // --- Neutrons ---
-  G4HadronicProcess* capture = 0;
-  G4HadronicProcess* fission = 0;
-  G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
-  G4ProcessVector*  pv = pmanager->GetProcessList();
-  for ( size_t i=0; i < static_cast<size_t>(pv->size()); ++i ) {
-    if ( fCapture == ((*pv)[i])->GetProcessSubType() ) {
-      capture = static_cast<G4HadronicProcess*>((*pv)[i]);
-    } else if ( fFission == ((*pv)[i])->GetProcessSubType() ) {
-      fission = static_cast<G4HadronicProcess*>((*pv)[i]);
-    }
-  }
-  if ( ! capture ) {
-    capture = new G4HadronCaptureProcess("nCapture");
-    pmanager->AddDiscreteProcess(capture);
-  }
-  tpdata->xsNeutronCaptureXS = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
-  //Register the G4NeutronCaptureXS data as the 2nd priority.
-  capture->GetCrossSectionDataStore()->AddDataSet(tpdata->xsNeutronCaptureXS,1);
-  G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
-  theNeutronRadCapture->SetMinEnergy( minNonHPNeutronEnergy_ ); 
-  capture->RegisterMe( theNeutronRadCapture );
-  if ( ! fission ) {
-    fission = new G4HadronFissionProcess("nFission");
-    pmanager->AddDiscreteProcess(fission);
-  }
-  G4LFission* theNeutronLEPFission = new G4LFission();
-  theNeutronLEPFission->SetMinEnergy( minNonHPNeutronEnergy_ );
-  fission->RegisterMe( theNeutronLEPFission );
+  ExtraConfiguration();
 }
+
+
+void G4HadronPhysicsShieldingLEND::ExtraConfiguration()
+{
+  // Modify cross sections for kaons
+  auto xsk = new G4ComponentGGHadronNucleusXsc();
+  G4VCrossSectionDataSet* kaonxs = new G4CrossSectionInelastic( xsk );
+  G4PhysListUtil::FindInelasticProcess( G4KaonMinus::KaonMinus() )->AddDataSet( kaonxs );
+  G4PhysListUtil::FindInelasticProcess( G4KaonPlus::KaonPlus() )->AddDataSet( kaonxs );
+  G4PhysListUtil::FindInelasticProcess( G4KaonZeroShort::KaonZeroShort() )->AddDataSet( kaonxs );
+  G4PhysListUtil::FindInelasticProcess( G4KaonZeroLong::KaonZeroLong() )->AddDataSet( kaonxs );
+
+  // Modify neutrons
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  G4HadronicProcess* inel = G4PhysListUtil::FindInelasticProcess( neutron );
+  if ( inel ) {
+    // Register the G4ParticleHPJENDLHEInelasticData as the 2nd priority.
+    inel->GetCrossSectionDataStore()->AddDataSet( new G4ParticleHPJENDLHEInelasticData, 1 );
+  }
+  G4HadronicProcess* capture = G4PhysListUtil::FindCaptureProcess( neutron );
+  if ( capture ) {
+    G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture;
+    theNeutronRadCapture->SetMinEnergy( minNonHPNeutronEnergy_ ); 
+    capture->RegisterMe( theNeutronRadCapture );
+  }
+  G4HadronicProcess* fission = G4PhysListUtil::FindFissionProcess( neutron );
+  if ( fission ) {
+    G4LFission* theNeutronLEPFission = new G4LFission;
+    theNeutronLEPFission->SetMinEnergy( minNonHPNeutronEnergy_ );
+    theNeutronLEPFission->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
+    fission->RegisterMe( theNeutronLEPFission );
+  }
+}
+

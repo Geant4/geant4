@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleB3a.cc 109713 2018-05-08 13:37:44Z gcosmo $
 //
 /// \file exampleB3a.cc
 /// \brief Main program of the B3a example

@@ -32,7 +32,6 @@
 // they reach a boundary. If the other side of the 
 // boundary was Al, a hit is registered.
 //  
-// $Id: G4PhononReflection.cc 76799 2013-11-15 20:30:53Z mkelsey $
 //
 // 20131115  Throw exception if track's polarization state is invalid.
 

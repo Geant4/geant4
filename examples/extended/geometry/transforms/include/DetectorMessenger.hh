@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh 68726 2013-04-05 09:35:20Z gcosmo $
 //
 /// \file DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class

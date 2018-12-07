@@ -27,7 +27,6 @@
 /// \brief Definition of the EventAction class
 //
 //
-// $Id: EventAction.hh 98242 2016-07-04 16:57:39Z gcosmo $
 //
 // 
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
-// 
+// Previous authors: G. Guerrieri, S. Guatelli, and M. G. Pia, INFN Genova, Italy
+// Authors (since 2007): S. Guatelli, University of Wollongong, Australia
 //
 
 #include <map>

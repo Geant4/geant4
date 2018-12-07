@@ -1,4 +1,3 @@
-$Id: History 81444 2014-05-28 14:28:20Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +7,10 @@ $Id: History 81444 2014-05-28 14:28:20Z gcosmo $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+9th November 2018 I. Hrivnacova (analysisExample-V10-04-00)
+- Added new B3aScoreWriter, B4dScoreWriter examples
+  in CMake and README's
 
 28th May 2014 I. Hrivnacova (analysisExample-V10-00-00)
 - Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03, 

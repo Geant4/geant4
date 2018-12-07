@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronRadCapture.cc 88191 2015-02-02 17:27:37Z gcosmo $
 //
 //
 // Physics model class G4NeutronRadCapture 
@@ -51,6 +50,7 @@
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 #include "G4RandomDirection.hh"
+#include "G4HadronicParameters.hh"
 
 G4NeutronRadCapture::G4NeutronRadCapture() 
   : G4HadronicInteraction("nRadCapture"),
@@ -59,7 +59,7 @@ G4NeutronRadCapture::G4NeutronRadCapture()
   lowestEnergyLimit = 10*CLHEP::eV;
   minExcitation = 0.1*CLHEP::keV;
   SetMinEnergy( 0.0*CLHEP::GeV );
-  SetMaxEnergy( 100.*CLHEP::TeV );
+  SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
 
   electron = G4Electron::Electron();
   icID = -1;

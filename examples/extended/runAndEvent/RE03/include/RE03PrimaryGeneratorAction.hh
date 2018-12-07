@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE03/include/RE03PrimaryGeneratorAction.hh
 /// \brief Definition of the RE03PrimaryGeneratorAction class
 //
-// $Id: RE03PrimaryGeneratorAction.hh 68026 2013-03-13 13:45:22Z gcosmo $
 //
 
 #ifndef RE03PrimaryGeneratorAction_h

@@ -27,7 +27,6 @@
 /// \brief Implementation of the RE02PSCellFlux class
 //
 //
-// $Id: RE02PSCellFlux.cc 72957 2013-08-14 14:27:23Z gcosmo $
 //
 // RE02PSCellFlux
 #include "RE02PSCellFlux.hh"

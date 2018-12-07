@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonElasticPhysics.hh 73281 2013-08-23 08:21:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -41,34 +40,32 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
-#include "G4HadronicProcess.hh"
 
 class G4IonElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
 
-  G4IonElasticPhysics(G4int ver = 0); 
+  explicit G4IonElasticPhysics(G4int ver = 0); 
 
   virtual ~G4IonElasticPhysics();
 
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated
-  virtual void ConstructParticle();
+  void ConstructParticle() override;
  
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+  void ConstructProcess() override;
 
 private:
 
   // copy constructor and hide assignment operator
-  G4IonElasticPhysics(G4IonElasticPhysics &);
-  G4IonElasticPhysics & operator=(const G4IonElasticPhysics &right);
+  G4IonElasticPhysics(G4IonElasticPhysics &) = delete;
+  G4IonElasticPhysics & operator=
+  (const G4IonElasticPhysics &right) = delete;
 
   G4int    verbose;
-  static G4ThreadLocal G4bool   wasActivated;
-
 };
 
 #endif

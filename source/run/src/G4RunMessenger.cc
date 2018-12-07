@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc 95634 2016-02-17 08:05:21Z gcosmo $
 //
 
 #include "G4RunMessenger.hh"
@@ -194,7 +193,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   optCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   brkBoECmd = new G4UIcmdWithABool("/run/breakAtBeginOfEvent",this);
-  brkBoECmd->SetGuidance("Set a break point at the begining of every event.");
+  brkBoECmd->SetGuidance("Set a break point at the beginning of every event.");
   brkBoECmd->SetParameterName("flag",true);
   brkBoECmd->SetDefaultValue(true);
   
@@ -268,8 +267,8 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   
   savingFlagCmd = new G4UIcmdWithABool("/random/setSavingFlag",this);
   savingFlagCmd->SetGuidance("The randomNumberStatus will be saved at :");
-  savingFlagCmd->SetGuidance("begining of run (currentRun.rndm) and "
-                             "begining of event (currentEvent.rndm) ");  
+  savingFlagCmd->SetGuidance("beginning of run (currentRun.rndm) and "
+                             "beginning of event (currentEvent.rndm) ");  
   savingFlagCmd->SetParameterName("flag",true);
   savingFlagCmd->SetDefaultValue(true);
   

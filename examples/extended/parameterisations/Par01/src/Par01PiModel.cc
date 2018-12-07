@@ -27,7 +27,6 @@
 /// \brief Implementation of the Par01PiModel class
 //
 //
-// $Id: Par01PiModel.cc 101151 2016-11-08 08:06:16Z gcosmo $
 //
 #include "Par01PiModel.hh"
 

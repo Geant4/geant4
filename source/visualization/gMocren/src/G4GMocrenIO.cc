@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenIO.cc 110513 2018-05-28 07:37:38Z gcosmo $
 //
 //
 // File I/O manager class for writing or reading calcuated dose

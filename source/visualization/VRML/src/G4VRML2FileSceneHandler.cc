@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.cc 110513 2018-05-28 07:37:38Z gcosmo $
 //
 // G4VRML2FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada

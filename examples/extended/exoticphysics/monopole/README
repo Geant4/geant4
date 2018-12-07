@@ -1,4 +1,3 @@
-$Id: README 78110 2013-12-03 14:57:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -37,19 +36,21 @@ monopole.
 
      The default geometry is constructed in DetectorConstruction class,
      but all of the above parameters can be changed interactively via
-     the commands defined in the DetectorMessenger class. After changing
-     material and/or dimentions one must update the detector construction:
-        /testex/det/update
+     the commands defined in the DetectorMessenger class. 
+
+     In addition, a global, uniform, and transverse magnetic field can be applied
+     via G4MonopoleFieldSetup class, with the default z-value 0.2 tesla.
+     This value can be changed via UI command:
+        /testex/fld/setField 0.2 tesla
 
  2- PHYSICS LIST
 
-    Physics Lists include standard QGSP physics and additional builder
-		for monopole physics.
-    To define monopole parameters an extra string should be provided
-      a) interactive mode by UI command:
-         /monopole/setup 2 0 200 GeV (magnetic number, electric number, mass)
-      b) batch mode:
-         monopole file.mac '2 0 200 GeV'  
+    The physics list includes standard FTFP_BERT physics and the additional builder
+    or monopole physics.
+    To define monopole parameters an extra string should be provided via 
+    the program arguments:
+         ./monopole -s '2 0 200 GeV'              # in the interactive mode
+         ./monopole -m file.mac -s '2 0 200 GeV'  # in the batch mode
 
  3- AN EVENT : THE PRIMARY GENERATOR
 
@@ -58,33 +59,37 @@ monopole.
      and its energy are set in the PrimaryGeneratorAction class, and can
      changed via the G4 build-in commands of ParticleGun class (see
      the macros provided with this example).
-     The default is monopole 100 GeV
-
-     In addition one can define randomly the impact point of the incident
-     particle. The corresponding interactive command is built in
-     PrimaryGeneratorMessenger class.
-
-     A RUN is a set of events.
-
+     The default is monopole 100 GeV.
 
  4- VISUALIZATION
 
-     The Visualization Manager is set in the main() for interactive session.
-     The initialisation of the drawing is done via the command
-       /control/execute vis.mac
+     The Visualization Manager is set in the main() for interactive session,
+     the initial parameters of the program are defined in the init_vis.mac macro
+     which then executes the visualisation macro, vis.mac.
 
      The detector has a default view which is a longitudinal view of the box.
      
      The tracks are drawn at the end of event, and erased at the end of run.
 
 
- 5- HOW TO START ?
+ 5- HOW TO RUN ?
 
-     - execute Test  in 'batch' mode from macro files
- 	% monopole  monopole.in
+    This example handles the program arguments in a similar way as the basic 
+    B4 example.
+    It can be run with the following optional arguments:
+    % ./monopole [-m macro ] [-s setupMonopole] [-t nThreads]
+    
+    The -s option was already explained in the Physics list section. 
+    The -t option is available only in multi-threading mode
+    and it allows the user to override the Geant4 default number of 
+    threads. The number of threads can be also set via G4FORCENUMBEROFTHREADS
+    environment variable which has the top priority.
+ 
+     - Execute program  in the 'batch' mode from macro files
+ 	% ./monopole  -m monopole.in [-s setupMonopole]
 
-     - execute Test  in 'interactive mode' with visualization
- 	% monopole
+     - Execute program  in the 'interactive mode' with visualization
+ 	% ./monopole [-s setupMonopole]
  		....
  	Idle> type your commands
  		....

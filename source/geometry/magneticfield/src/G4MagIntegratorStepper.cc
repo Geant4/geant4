@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorStepper.cc 105015 2017-07-04 11:44:23Z gcosmo $
 //
 // --------------------------------------------------------------------
 
@@ -48,11 +47,4 @@ G4MagIntegratorStepper::G4MagIntegratorStepper(G4EquationOfMotion* Equation,
 {
 }
 
-G4MagIntegratorStepper::~G4MagIntegratorStepper()
-{
-}
 
-void G4MagIntegratorStepper::ComputeRightHandSide( const G4double y[], G4double dydx[] ) 
-{
-  this->RightHandSide( y, dydx );
-}

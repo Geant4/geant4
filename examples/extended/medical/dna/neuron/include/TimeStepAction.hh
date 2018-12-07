@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $Id$
 //
 /// \file TimeStepAction.hh
 /// \brief Definition of the TimeStepAction class

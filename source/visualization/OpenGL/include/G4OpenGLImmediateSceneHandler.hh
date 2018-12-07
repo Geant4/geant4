@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh 80466 2014-04-23 12:07:25Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
 // G4OpenGLImmediateSceneHandler - no Display lists.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
 
 #ifndef G4OPENGLIMMEDIATESCENEHANDLER_HH
 #define G4OPENGLIMMEDIATESCENEHANDLER_HH

@@ -51,22 +51,23 @@ CML2Convergence::CML2Convergence(G4int seed, G4int saveEvents,
               G4bool bComp, G4int maxNumEvents, G4int nRecycling, G4int maxLoops)
     :ML2ExpVoxels(0)
 {
-    nGeometry=0;
-    nMaxLoops=maxLoops;
-    idCurrentLoop=nMaxLoops;
-    bCompareExp=bComp;
-    nAccumulatedEvents=0;
-    if (bCompareExp){nMaxLoops=-1;};
-    fileExperimentalData=FileExperimentalData;
+    nGeometry = 0;
+    nMaxLoops = maxLoops;
+    idCurrentLoop = nMaxLoops;
+    bCompareExp = bComp;
+    nAccumulatedEvents = 0;
+    if (bCompareExp){nMaxLoops =-1;};
+    fileExperimentalData = FileExperimentalData;
 
-    // if the flag compareExp if true and the experimental data is given create the class CML2ExpVoxels
+    // if the flag compareExp if true and the experimental data is given, create the class CML2ExpVoxels
     if (bCompareExp && fileExperimentalData!="")
     {
-        ML2ExpVoxels=new CML2ExpVoxels(bCompareExp, saveEvents, seed, FileExperimentalData, FileExperimentalDataOut);
+        ML2ExpVoxels = new CML2ExpVoxels(bCompareExp, saveEvents, seed, FileExperimentalData, FileExperimentalDataOut);
         if (!ML2ExpVoxels->loadData())
         {
+            nMaxLoops =10;
             ML2ExpVoxels=0;
-            std::cout <<"I don't have any convergence criteria set, I'll do " << nMaxLoops << " loop(s) for each rotation"<< G4endl;
+            G4cout << "I don't have any convergence criteria set, I'll do " << nMaxLoops << " loop(s) for each rotation" << G4endl;
         }
         else
         {
@@ -122,10 +123,10 @@ G4bool CML2Convergence::convergenceCriteria()
         else
         {bStopRun = false;}
     }
-    std::cout <<"\n ++++++++++++++++++++ \n";
-    std::cout <<"current geometry: " << nGeometry;
-    std::cout << "\nNumber of events accumulated in the current geometry:"<<
+    G4cout <<"\n ++++++++++++++++++++ "  << G4endl;
+    G4cout <<"current geometry: " << nGeometry;
+    G4cout << "\nNumber of events accumulated in the current geometry:"<<
                  nEventsAccumulated<<"\nNumber of events to be accumulated:" <<
-                maxNumberOfEvents<< "\n -------------------------\n";
+                maxNumberOfEvents<< "\n -------------------------\n" << G4endl;
     return bStopRun;
 }

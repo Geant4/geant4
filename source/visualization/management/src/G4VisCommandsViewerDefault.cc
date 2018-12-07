@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsDefault.cc,v 1.4 2007-01-05 16:29:38 allison Exp $
 
 // /vis/default commands - John Allison  30th October 2011
 

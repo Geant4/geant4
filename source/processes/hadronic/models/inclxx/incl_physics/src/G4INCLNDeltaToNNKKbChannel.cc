@@ -176,7 +176,8 @@ namespace G4INCL {
 		list.push_back(kaon);
 		list.push_back(antikaon);
 		
-		PhaseSpaceGenerator::generateBiased(sqrtS, list, 0, angularSlope);
+		if(Random::shoot()<0.5) PhaseSpaceGenerator::generateBiased(sqrtS, list, 0, angularSlope);
+		else PhaseSpaceGenerator::generateBiased(sqrtS, list, 1, angularSlope);
 		
 		fs->addModifiedParticle(particle1);
 		fs->addModifiedParticle(particle2);

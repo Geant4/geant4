@@ -52,7 +52,6 @@
 // All rights reserved.
 // UCRL-CODE-224807
 //
-// $Id: G4LLNLFission.hh 67966 2013-03-13 09:38:38Z gcosmo $
 //
 
 #include "G4Types.hh"

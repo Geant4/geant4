@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4EquationOfMotion.hh 71664 2013-06-20 08:36:05Z gcosmo $
 //
 //
 // class G4EquationOfMotion
@@ -89,12 +88,10 @@ class G4EquationOfMotion
        // Not protected, because G4RKG3_Stepper uses it directly.
 
      const G4Field* GetFieldObj() const;
+     G4Field* GetFieldObj();
      void           SetFieldObj(G4Field* pField);
 
   private:
-     // const int G4maximum_number_of_field_components = 24;
-     enum { G4maximum_number_of_field_components = 24 } ;
-
      G4Field *itsField;
 
 };

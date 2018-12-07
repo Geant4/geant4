@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.cc 66872 2013-01-15 01:25:57Z japost $
 //
 //---------------------------------------------------------------
 //
@@ -76,7 +75,7 @@ G4VSteppingVerbose::G4VSteppingVerbose()
                 "Only one SteppingVerbose class can be instantiated.");
   }
 }
-G4VSteppingVerbose::~G4VSteppingVerbose(){;}
+G4VSteppingVerbose::~G4VSteppingVerbose() { fInstance = 0; }
 
 //////////////////////////////////////////////////////////////////
 void G4VSteppingVerbose::SetManager(G4SteppingManager* const fMan)

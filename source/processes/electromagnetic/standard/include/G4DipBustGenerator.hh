@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DipBustGenerator.hh 110415 2018-05-23 06:44:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -32,14 +31,14 @@
 //
 // File name:  G4DipBustGenerator
 //
-// Author: Vladimir Grichine    
+// Author: Vladimir Grichine
 // Creation date: 17 May 2011
 //
-// Modifications: 
-// 
+// Modifications:
 //
-// Bremsstrahlung Angular Distribution Generation 
-// suggested the dipole approximation in the rest frame of electron 
+//
+// Bremsstrahlung Angular Distribution Generation
+// suggested the dipole approximation in the rest frame of electron
 // busted in the laboratory frame.
 //
 // -------------------------------------------------------------------
@@ -83,7 +82,7 @@ private:
 
   G4double SampleCosTheta(G4double kinEnergy);
 
-  // hide assignment operator 
+  // hide assignment operator
   G4DipBustGenerator & operator=(const  G4DipBustGenerator &right) = delete;
   G4DipBustGenerator(const  G4DipBustGenerator&) = delete;
 

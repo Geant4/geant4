@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronDElasticPhysics.hh 71037 2013-06-10 09:20:54Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -46,26 +45,26 @@ class G4HadronDElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
 
-  G4HadronDElasticPhysics(G4int ver = 1);
+  explicit G4HadronDElasticPhysics(G4int ver = 1);
 
   virtual ~G4HadronDElasticPhysics();
 
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated
-  virtual void ConstructParticle();
+  void ConstructParticle() override;
  
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+  void ConstructProcess() override;
 
 private:
 
-  G4HadronDElasticPhysics(G4HadronDElasticPhysics &);
-  G4HadronDElasticPhysics & operator=(const G4HadronDElasticPhysics &right);
+  G4HadronDElasticPhysics(G4HadronDElasticPhysics &) = delete;
+  G4HadronDElasticPhysics & operator=
+  (const G4HadronDElasticPhysics &right) = delete;
 
-  G4int    verbose;
-  static G4ThreadLocal G4bool   wasActivated;
+  G4int verbose;
 };
 
 

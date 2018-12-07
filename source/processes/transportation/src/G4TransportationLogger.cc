@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationLogger.cc 110824 2018-06-15 13:25:52Z gcosmo $
 //
 //
 // class G4TransportationLogger Implementation
@@ -68,6 +67,22 @@ SetThresholds( G4double newEnWarn, G4double importantEnergy,
    SetThresholdWarningEnergy( newEnWarn );
    SetThresholdImportantEnergy( importantEnergy );
    SetThresholdTrials(newMaxTrials );
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+void
+G4TransportationLogger::ReportLooperThresholds( const char* className )
+{
+   G4cout << className << ":  Current values for thresholds related to "
+          << " the killing of looping tracks: " << G4endl
+          <<  "    Warning Energy   = " << GetThresholdWarningEnergy() / CLHEP::MeV << " MeV "
+          <<  "  ( below this tracks are killed without warning ) " << G4endl
+          <<  "    Important Energy = " << GetThresholdImportantEnergy() / CLHEP::MeV
+          <<  "  ( above this tracks are given multiple chances ) " << G4endl
+          <<  "    Extra Trials     = " << GetThresholdTrials()
+          << " 'important' tracks, i.e. those above 'important' energy "
+          << G4endl;
 }
 
 // ********************************************************************

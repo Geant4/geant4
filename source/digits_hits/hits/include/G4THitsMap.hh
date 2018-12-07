@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4THitsMap.hh 103976 2017-05-05 12:22:53Z gcosmo $
 //
 #ifndef G4THitsMap_h
 #define G4THitsMap_h 1
@@ -34,8 +33,6 @@
 
 #include <map>
 #include <unordered_map>
-
-class G4StatDouble;
 
 // class description:
 //
@@ -100,7 +97,7 @@ public: // with description
     this_type& operator+=(const G4VTHitsMap<U, MapU_t>& right) const
     {
         MapU_t* aHitsMap = right.GetMap();
-        for(auto itr = aHitsMap->begin(); itr != aHitsMap->end(); itr++)
+        for(auto itr = aHitsMap->begin(); itr != aHitsMap->end(); ++itr)
             add<U, map_type>(itr->first, *(itr->second));
         return (this_type&)(*this);
     }
@@ -112,6 +109,43 @@ public: // with description
     //  These two methods invokes Draw() and Print() methods of all of
     //  hit objects stored in this map, respectively.
 
+public:
+    // Generic iteration
+    inline Map_t* GetContainer() const
+    { return (Map_t*) theCollection; }
+
+    inline typename Map_t::size_type size()
+    { return GetContainer()->size(); }
+
+    inline typename Map_t::size_type GetIndex(iterator itr)
+    { return itr->first; }
+
+    inline typename Map_t::size_type GetIndex(const_iterator itr) const
+    { return itr->first; }
+
+    template <typename MapU_t = Map_t, enable_if_t< !is_mmap_t(MapU_t), int> = 0>
+    inline T* GetObject(G4int idx) const
+    { return (GetContainer()->count(idx) != 0) ? (*GetContainer())[idx] : nullptr; }
+
+    template <typename MapU_t = Map_t, enable_if_t< is_mmap_t(MapU_t), int> = 0>
+    inline T* GetObject(G4int idx) const
+    {
+        return (GetContainer()->count(idx) != 0) ? GetContainer()->find(idx)->second : nullptr;
+    }
+
+    inline T* GetObject(iterator itr) const
+    { return itr->second; }
+
+    inline const T* GetObject(const_iterator itr) const
+    { return itr->second; }
+
+    iterator begin()              { return GetContainer()->begin(); }
+    iterator end()                { return GetContainer()->end(); }
+    const_iterator begin() const  { return GetContainer()->begin(); }
+    const_iterator end() const    { return GetContainer()->end(); }
+    const_iterator cbegin() const { return GetContainer()->cbegin(); }
+    const_iterator cend() const   { return GetContainer()->cend(); }
+
 public: // with description
     //  Returns a pointer to a concrete hit object.
     inline Map_t* GetMap() const
@@ -122,13 +156,6 @@ public: // with description
     { return ((Map_t*)theCollection)->size(); }
     //  Returns the number of hit objects stored in this map
     inline void clear();
-
-    iterator begin()              { return GetMap()->begin(); }
-    iterator end()                { return GetMap()->end(); }
-    const_iterator begin() const  { return GetMap()->begin(); }
-    const_iterator end() const    { return GetMap()->end(); }
-    const_iterator cbegin() const { return GetMap()->cbegin(); }
-    const_iterator cend() const   { return GetMap()->cend(); }
 
 public:
     virtual G4VHit* GetHit(size_t) const {return 0;}

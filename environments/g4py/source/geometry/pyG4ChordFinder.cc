@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ChordFinder.cc 107590 2017-11-24 11:59:22Z gcosmo $
 // ====================================================================
 //   pyG4ChordFinder.cc
 //
@@ -61,7 +60,6 @@ void export_G4ChordFinder()
     .def("GetDeltaChord",   &G4ChordFinder::GetDeltaChord)
     .def("SetDeltaChord",   &G4ChordFinder::SetDeltaChord)
     // ---
-    .def("PrintStatistics", &G4ChordFinder::PrintStatistics)
     .def("SetVerbose",      &G4ChordFinder::SetVerbose, f_SetVerbose())
     ;
 }

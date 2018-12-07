@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoSimulation.cc
 //
 // Author: Elena Guardincerri
 //

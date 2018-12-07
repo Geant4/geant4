@@ -14,6 +14,84 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 December 2018 Gabriele Cosmo (hadr-deex-V10-04-19)
+- G4ExcitationHandler: added protection to verbosity printouts in
+  SetDeexChannelsType() and Initialise() methods.
+
+20 November 2018 Vladimir Ivanchenko (hadr-deex-V10-04-18)
+- G4LevelReader - (L.Desorgher) fAlphaMax is changed from
+    1.e+6 to 1.e+15 (needed for correct IC probability of some
+    isotopes)
+
+13 November 2018 Vladimir Ivanchenko (hadr-deex-V10-04-17)
+- G4PhotonEvaporation - improved debug printout
+
+09 November 2018 Gabriele Cosmo (hadr-deex-V10-04-16)
+- Fixed few printout typos.
+
+05 November 2018 Vladimir Ivanchenko (hadr-deex-V10-04-15)
+- G4UnstableFragmentBreakUp - fixed Coverity warning
+
+26 October 2018 Vladimir Ivanchenko (hadr-deex-V10-04-14)
+- G4CompetitiveFission, G4FissionLevelDensityParameter,
+  G4FissionLevelDensityParameterINCLXX, G4FissionProbability -
+    tuned fission parameters
+- G4DeexPrecoParameters -  default level density parameter 0.075
+- G4LevelManager - added a member and Get method for shell correction
+
+22 October 2018 Vladimir Ivanchenko (hadr-deex-V10-04-13)
+22 October 2018 Vladimir Ivanchenko (hadr-deex-V10-04-12)
+- Fixed GNUmakefile and source.cmake
+- G4NuclearLevelData - fixed new methods and use data from recent 
+    gamma levels
+
+21 October 2018 Vladimir Ivanchenko (hadr-deex-V10-04-11)
+19 October 2018 Vladimir Ivanchenko (hadr-deex-V10-04-09)
+- G4DeexPrecoParameters - default level density parameter is reduced from
+    0.1 to 0.08
+- removed circular dependence between de-excitation sub-packages 
+  introduced in previous tag
+
+18 October 2018 Vladimir Ivanchenko (hadr-deex-V10-04-08)
+- G4LevelManager, G4NuclearLevelData, G4LevelReader - added intialisation 
+    of level density and pairing correction per isotope, added 
+    possibility to choose between two parameterisations of level
+    density
+- G4EvaporationProbability, G4CompetitiveFission, G4VEmissionProbability,
+  G4PhotonEvaporation - coherent use of the same parameterisation of
+     level density and pairing correction between all models
+- G4FissionLevelDensityParameter, G4FissionLevelDensityParameterINCLXX,
+  G4EvaporationLevelDensityParameter, G4CoulombBarrier, 
+  G4PairingCorrection - clean up according G4NuclearLevelData
+- G4DeexPrecoParameters - default level density parameter is reduced from
+    0.1 to 0.09
+
+08 October 2018 Vladimir Ivanchenko (hadr-deex-V10-04-07)
+- G4DeexPrecoParameters - added extra parameter for the FBU model
+- G4EvaporationProbability - added option 4 for de-excitation
+- G4LevelReader - change fatal exception by warning for problematic 
+    level index
+- G4FermiFragmentsPoolVI - extended number of FBU fragments from 
+    399 to 991 and corresponding number of reaction channels
+
+19 September 2018 Vladimir Ivanchenko (hadr-deex-V10-04-06)
+- G4DeexPrecoParameters - set default deexcitation "evaporation+GEM"
+
+24 August 2018 Vladimir Ivanchenko (hadr-deex-V10-04-05)
+- G4LevelReader - attempt to fix problems #1986 and #2076 by
+    change of hadling of internal convertion data
+
+06 August 2018 Alberto Ribon (hadr-deex-V10-04-04)
+- G4NeutronRadCapture : replaced the explicit high-energy limit of
+  hadronic physics with the one from G4HadronicParameters .
+- Changed the GNUmakefile to allow the new dependency on
+  processes/hadronic/management/include/, where the class 
+  G4HadronicParameters is defined.
+
+06 July 2018 Vladimir Ivanchenko (hadr-deex-V10-04-03)
+- G4FermiPhaseSpaceDecay - moved long method from inline to source;
+    added a protection for low mass of initial state
+
 26 February 2018 Vladimir Ivanchenko (hadr-deex-V10-04-02)
 26 February 2018 Vladimir Ivanchenko (hadr-deex-V10-04-01)
 - G4ChatterjeeCrossSection, G4KalbachCrossSection - moved

@@ -26,7 +26,6 @@
 /// \file biasing/ReverseMC01/include/RMC01AnalysisManagerMessenger.hh
 /// \brief Definition of the RMC01AnalysisManagerMessenger class
 //
-// $Id: RMC01AnalysisManagerMessenger.hh 98774 2016-08-09 14:28:06Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:           RMC01AnalysisManagerMessenger

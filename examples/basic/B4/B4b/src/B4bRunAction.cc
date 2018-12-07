@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4bRunAction.cc 68835 2013-04-06 07:12:41Z asaim $
 //
 /// \file B4bRunAction.cc
 /// \brief Implementation of the B4bRunAction class

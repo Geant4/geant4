@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITNavigator2.cc 79045 2014-02-12 13:57:26Z matkara $
 // 
 // class G4ITNavigator2 Implementation
 //

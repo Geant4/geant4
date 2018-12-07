@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE01/src/RE01Field.cc
 /// \brief Implementation of the RE01Field class
 //
-// $Id: RE01Field.cc 66379 2012-12-18 09:46:33Z gcosmo $
 //
 
 #include "RE01Field.hh"

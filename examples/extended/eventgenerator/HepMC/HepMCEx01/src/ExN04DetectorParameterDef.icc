@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04DetectorParameterDef.icc
 /// \brief The file with detector paremeter definistions
 //
-// $Id$
 //
 
 fexpHall_x = 600.*cm;

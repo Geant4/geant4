@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh 108131 2018-01-09 13:23:26Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
 // OpenGL viewer - opens window, hard copy, etc.
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#if defined (G4VIS_BUILD_OPENGL_DRIVER) || defined (G4VIS_USE_OPENGL)
 
 #ifndef G4OPENGLVIEWER_HH
 #define G4OPENGLVIEWER_HH
@@ -252,7 +251,7 @@ private :
   
 #ifdef G4OPENGL_VERSION_2
 public:
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
   inline Wt::WGLWidget::Program getShaderProgram() {
     return fShaderProgram;
   }
@@ -275,19 +274,19 @@ public:
   inline GLuint getShaderViewModelMatrix() {
     return fmvMatrixUniform;
   }
-#endif
+#endif // G4VIS_BUILD_OPENGLWT_DRIVER
 
 protected :
   
   // define the keyword shader to handle it in a better way for OpenGL and WebGL
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
 #define Shader Wt::WGLWidget::Shader
 #else
 #define Shader GLuint
-#endif
-  
+#endif // G4VIS_BUILD_OPENGLWT_DRIVER
+
   // define some attributes and variables for OpenGL and WebGL
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLWT_DRIVER) || defined (G4VIS_USE_OPENGLWT)
   Wt::WGLWidget::Program fShaderProgram;
   
   // Program and related variables
@@ -309,8 +308,8 @@ protected :
   GLuint fmvMatrixUniform;
   GLuint fnMatrixUniform;
   GLuint ftMatrixUniform;
-#endif
-  
+#endif // G4VIS_BUILD_OPENGLWT_DRIVER
+
 #endif
 };
 

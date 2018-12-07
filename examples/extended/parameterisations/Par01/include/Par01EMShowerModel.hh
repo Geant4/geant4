@@ -27,7 +27,6 @@
 /// \brief Definition of the Par01EMShowerModel class
 //
 //
-// $Id: Par01EMShowerModel.hh 100936 2016-11-03 11:07:41Z gcosmo $
 //
 // 
 //----------------------------------------------

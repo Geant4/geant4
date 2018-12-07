@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh 90756 2015-06-09 07:43:33Z gcosmo $
 //
 // G4ElasticHadrNucleusHe.hh
 

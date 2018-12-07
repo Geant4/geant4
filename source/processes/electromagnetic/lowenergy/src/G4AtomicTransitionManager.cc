@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicTransitionManager.cc,v 1.2 ????
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)

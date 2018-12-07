@@ -27,7 +27,6 @@
 /// \brief Implementation of the B03DetectorConstruction class
 //
 //
-// $Id: B03DetectorConstruction.cc 70238 2013-05-27 11:59:40Z gcosmo $
 //
 #include "G4Types.hh"
 #include "globals.hh"

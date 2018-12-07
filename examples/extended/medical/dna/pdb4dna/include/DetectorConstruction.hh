@@ -37,7 +37,6 @@
 // november 2013
 // --------------------------------------------------------------
 //
-// $Id$
 //
 /// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class

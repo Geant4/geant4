@@ -27,7 +27,6 @@
 /// \brief Definition of the F02ElectricFieldSetup class
 //
 //
-// $Id: F02ElectricFieldSetup.hh 104216 2017-05-18 13:45:22Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,7 +68,7 @@ public:
   void SetMinStep(G4double s) { fMinStep = s ; }
 
   void SetFieldValue(G4ThreeVector fieldVector);
-  void SetFieldValue(G4double      fieldValue);
+  void SetFieldZValue(G4double      fieldValue);
   G4ThreeVector GetConstantFieldValue();
    // Set/Get Field strength in Geant4 units
 

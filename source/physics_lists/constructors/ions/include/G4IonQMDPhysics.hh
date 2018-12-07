@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonQMDPhysics.hh 71042 2013-06-10 09:28:44Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -51,7 +50,6 @@ class G4BinaryLightIonReaction;
 class G4QMDReaction;
 class G4FTFBuilder;
 class G4VCrossSectionDataSet;
-class G4VComponentCrossSection;
 
 class G4IonQMDPhysics : public G4VPhysicsConstructor
 {
@@ -75,30 +73,16 @@ private:
 		  G4ParticleDefinition*, 
 		  G4BinaryLightIonReaction*,
 		  G4QMDReaction*,
-		  G4HadronicInteraction*);
+		  G4HadronicInteraction*,
+		  G4VCrossSectionDataSet*);
 
-  static G4ThreadLocal std::vector<G4HadronInelasticProcess*>* p_list;
-  static G4ThreadLocal std::vector<G4HadronicInteraction*>* model_list;
+  static G4ThreadLocal G4FTFBuilder* theFTFPBuilder;
 
-  static G4ThreadLocal G4VCrossSectionDataSet* theNuclNuclData; 
-  static G4ThreadLocal G4VComponentCrossSection* theGGNuclNuclXS;
-
-  static G4ThreadLocal G4BinaryLightIonReaction* theIonBC;
-  static G4ThreadLocal G4HadronicInteraction* theFTFP;
-  static G4ThreadLocal G4FTFBuilder* theBuilder;
-  static G4ThreadLocal  G4QMDReaction* theQMD;
-
-  G4double eminBIC;
- 
   G4double eminQMD;
   G4double emaxQMD;
-
-  G4double emaxFTFP;
-
   G4double overlap;
    
   G4int  verbose;
-  static G4ThreadLocal G4bool wasActivated;
 };
 
 

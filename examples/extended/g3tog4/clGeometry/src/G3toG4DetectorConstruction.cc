@@ -27,7 +27,6 @@
 /// \brief Implementation of the G3toG4DetectorConstruction class
 //
 //
-// $Id: G3toG4DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 //--------------------------------------------------------------------------
 // G3toG4DetectorConstruction. Most the work is Done in

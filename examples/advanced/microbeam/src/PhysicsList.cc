@@ -36,7 +36,7 @@
 #include "PhysicsListMessenger.hh"
 
 #include "G4SystemOfUnits.hh"
-#include "G4StepLimiter.hh"
+#include "StepMax.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
@@ -164,20 +164,17 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
-
-  fStepMaxProcess = new G4StepLimiter();
+  StepMax* stepMaxProcess = new StepMax(fMessenger);
 
   auto particleIterator=GetParticleIterator();
-  
   particleIterator->reset();
-  
   while ((*particleIterator)()){
-      G4ParticleDefinition* particle = particleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fStepMaxProcess->IsApplicable(*particle) && pmanager)
+    if (stepMaxProcess->IsApplicable(*particle))
       {
-	pmanager ->AddDiscreteProcess(fStepMaxProcess);
+        pmanager ->AddDiscreteProcess(stepMaxProcess);
       }
   }
 }

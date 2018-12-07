@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.cc 110727 2018-06-11 06:08:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -387,20 +386,15 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
       const G4ParticleDefinition* particleDefinition = dynamicParticle->GetParticleDefinition();
       if ( particleDefinition == G4KaonZero::Definition() || 
            particleDefinition == G4AntiKaonZero::Definition() ) {
-        G4ParticleDefinition* newParticleDefinition = G4KaonZeroShort::Definition();
-        if ( G4UniformRand() > 0.5 ) newParticleDefinition = G4KaonZeroLong::Definition();
-        G4double dynamicMass = dynamicParticle->GetMass();
-        dynamicParticle->SetDefinition( newParticleDefinition );
-        dynamicParticle->SetMass( dynamicMass );               
+        G4ParticleDefinition* newPart;
+	if( G4UniformRand() > 0.5 ) { newPart = G4KaonZeroShort::Definition(); }
+	else { newPart = G4KaonZeroLong::Definition(); }
+        dynamicParticle->SetDefinition( newPart );
         G4ExceptionDescription ed;
         ed << " Hadronic model " << theInteraction->GetModelName() << G4endl;
         ed << " created " << particleDefinition->GetParticleName() << G4endl;
-        ed << " -> forced to be " << newParticleDefinition->GetParticleName() << G4endl;
+        ed << " -> forced to be " << newPart->GetParticleName() << G4endl;
         G4Exception( "G4HadronicProcess::PostStepDoIt", "had007", JustWarning, ed );
-        //if ( std::abs( dynamicMass - particleDefinition->GetPDGMass() ) > 0.1*CLHEP::eV ) {
-        //  G4cout << "\t dynamicMass=" << dynamicMass << " != PDGMass=" 
-        //         << particleDefinition->GetPDGMass() << G4endl;
-        //}
       }
     }
   }
@@ -501,13 +495,37 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
   if (nSec > 0) { 
     G4double time0 = aT.GetGlobalTime();
     for (G4int i = 0; i < nSec; ++i) {
-      G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
+      G4DynamicParticle* dynamicParticle = aR->GetSecondary(i)->GetParticle();
+      G4LorentzVector theM = dynamicParticle->Get4Momentum();
       theM.rotate(rotation, it);
       theM *= aR->GetTrafoToLab();
-      aR->GetSecondary(i)->GetParticle()->Set4Momentum(theM);
+      const G4ParticleDefinition* part = dynamicParticle->GetDefinition();
+      G4double mass = part->GetPDGMass();
+      G4double dmass= theM.mag();
+      // check if secondary is on the mass shell
+      if(std::abs(dmass - mass) > 1.5*CLHEP::MeV || theM.e() < mass) {
+	if(G4HadronicProcess_debug_flag) {
+	  G4ExceptionDescription ed;
+	  ed << "TrackID= "<< aT.GetTrackID()
+	     << "  " << aT.GetParticleDefinition()->GetParticleName()
+	     << " Target Z= " << targetNucleus.GetZ_asInt() << "  A= "
+	     << targetNucleus.GetA_asInt() 
+	     << " Ekin(GeV)= " << aT.GetKineticEnergy()/CLHEP::GeV
+	     << "\n  Secondary is out of mass shell: " << part->GetParticleName()
+	     << "  Ekin(MeV)= " << theM.e() - mass 
+	     << " DeltaMass(MeV)= " << dmass - mass << G4endl;
+	  G4Exception("G4HadronicProcess::FillResults", "had012", JustWarning, ed);
+	}
+        G4double e = std::max(theM.e(), mass);
+        G4double mom = std::sqrt((e - mass)*(e + mass));
+        G4ThreeVector v = theM.vect().unit();
+        theM.set(v.x()*mom,v.y()*mom,v.z()*mom,e);
+      }
+      dynamicParticle->Set4Momentum(theM);
+      dynamicParticle->SetMass(mass);               
 
-      if(idxIC == aR->GetSecondary(i)->GetCreatorModelType()) 
-	{ ++nICelectrons; }
+      G4int idxModel = aR->GetSecondary(i)->GetCreatorModelType(); 
+      if(idxIC == idxModel) { ++nICelectrons; }
       
       // time of interaction starts from zero
       G4double time = aR->GetSecondary(i)->GetTime();
@@ -516,20 +534,9 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
       // take into account global time
       time += time0;
 
-      G4Track* track = new G4Track(aR->GetSecondary(i)->GetParticle(),
-                                   time, aT.GetPosition());
-      track->SetCreatorModelIndex(aR->GetSecondary(i)->GetCreatorModelType());
+      G4Track* track = new G4Track(dynamicParticle, time, aT.GetPosition());
+      track->SetCreatorModelIndex(idxModel);
       G4double newWeight = fWeight*aR->GetSecondary(i)->GetWeight();
-      // G4cout << "#### ParticleDebug "
-      // <<GetProcessName()<<" "
-      //<<aR->GetSecondary(i)->GetParticle()->GetDefinition()->GetParticleName()
-      //<<" "<<aScaleFactor<<" "
-      // <<XBiasSurvivalProbability()<<" "
-      // <<XBiasSecondaryWeight()<<" "
-      // <<aT.GetWeight()<<" "
-      // <<aR->GetSecondary(i)->GetWeight()<<" "
-      // <<aR->GetSecondary(i)->GetParticle()->Get4Momentum()<<" "
-      // <<G4endl;
       track->SetWeight(newWeight);
       track->SetTouchableHandle(aT.GetTouchableHandle());
       theTotalResult->AddSecondary(track);
@@ -538,7 +545,7 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
         if (e <= 0.0) {
           G4ExceptionDescription ed;
           DumpState(aT,"Secondary has zero energy",ed);
-          ed << "Secondary " << track->GetDefinition()->GetParticleName()
+          ed << "Secondary " << part->GetParticleName()
              << G4endl;
           G4Exception("G4HadronicProcess::FillResults", "had011", 
 		      JustWarning,ed);
@@ -839,4 +846,15 @@ std::vector<G4HadronicInteraction*>&
 G4HadronicProcess::GetHadronicInteractionList()
 { 
   return theEnergyRangeManager.GetHadronicInteractionList(); 
+}
+
+G4HadronicInteraction*
+G4HadronicProcess::GetHadronicModel(const G4String& modelName)
+{ 
+  std::vector<G4HadronicInteraction*>& list
+        = theEnergyRangeManager.GetHadronicInteractionList();
+  for (size_t li=0; li<list.size(); li++) {
+    if (list[li]->GetModelName() == modelName) return list[li];
+  }
+  return nullptr;
 }

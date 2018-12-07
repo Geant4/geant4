@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DeexPrecoParameters.cc 68028 2013-03-13 13:48:15Z gcosmo $
 //
 // 15.03.2016 V.Ivanchenko 
 //
@@ -60,11 +59,12 @@ void G4DeexPrecoParameters::SetDefaults()
   fStateManager = G4StateManager::GetStateManager();
   theMessenger = new G4DeexParametersMessenger(this);
 
-  fLevelDensity = 0.10/CLHEP::MeV;
+  fLevelDensity = 0.075/CLHEP::MeV;
   fR0 = 1.5*CLHEP::fermi;
   fTransitionsR0 = 0.6*CLHEP::fermi;
+  fFBUEnergyLimit = 20.0*CLHEP::MeV; 
   fFermiEnergy = 35.0*CLHEP::MeV; 
-  fPrecoLowEnergy = 0.1*CLHEP::MeV; 
+  fPrecoLowEnergy = 0.1*CLHEP::MeV;
   fPhenoFactor = 1.0; 
   fMinExcitation = 10*CLHEP::eV;
   fMaxLifeTime = 1000*CLHEP::second;
@@ -84,7 +84,8 @@ void G4DeexPrecoParameters::SetDefaults()
   fCorrelatedGamma = false;
   fStoreAllLevels = false;
   fInternalConversion = true;
-  fDeexChannelType = fEvaporation;
+  fLD = true;
+  fDeexChannelType = fCombined;
   fInternalConversionID = 
     G4PhysicsModelCatalog::Register("e-InternalConvertion");
 #ifdef G4MULTITHREADED
@@ -94,55 +95,61 @@ void G4DeexPrecoParameters::SetDefaults()
 
 void G4DeexPrecoParameters::SetLevelDensity(G4double val)
 {
-  if(IsLocked()) { return; }
+  if(IsLocked() || val <= 0.0) { return; }
   fLevelDensity = val/CLHEP::MeV;
 }
 
 void G4DeexPrecoParameters::SetR0(G4double val)
 {
-  if(IsLocked()) { return; }
+  if(IsLocked() || val <= 0.0) { return; }
   fR0 = val;
 }
 
 void G4DeexPrecoParameters::SetTransitionsR0(G4double val)
 {
-  if(IsLocked()) { return; }
+  if(IsLocked() || val <= 0.0) { return; }
   fTransitionsR0 = val;
+}
+
+void G4DeexPrecoParameters::SetFBUEnergyLimit(G4double val)
+{
+  if(IsLocked() || val <= 0.0) { return; }
+  fFBUEnergyLimit = val;
 }
 
 void G4DeexPrecoParameters::SetFermiEnergy(G4double val)
 {
-  if(IsLocked()) { return; }
+  if(IsLocked() || val <= 0.0) { return; }
   fFermiEnergy = val;
 }
 
 void G4DeexPrecoParameters::SetPrecoLowEnergy(G4double val)
 {
-  if(IsLocked()) { return; }
+  if(IsLocked() || val < 0.0) { return; }
   fPrecoLowEnergy = val;
 }
 
 void G4DeexPrecoParameters::SetPhenoFactor(G4double val)
 {
-  if(IsLocked()) { return; }
+  if(IsLocked() || val <= 0.0) { return; }
   fPhenoFactor = val;
 }
 
 void G4DeexPrecoParameters::SetMinExcitation(G4double val)
 {
-  if(IsLocked()) { return; }
+  if(IsLocked() || val < 0.0) { return; }
   fMinExcitation = val;
 }
 
 void G4DeexPrecoParameters::SetMaxLifeTime(G4double val)
 {
-  if(IsLocked()) { return; }
+  if(IsLocked() || val < 0.0) { return; }
   fMaxLifeTime = val;
 }
 
 void G4DeexPrecoParameters::SetMinExPerNucleounForMF(G4double val)
 {
-  if(IsLocked()) { return; }
+  if(IsLocked() || val < 0.0) { return; }
   fMinExPerNucleounForMF = val;
 }
 
@@ -242,6 +249,12 @@ void G4DeexPrecoParameters::SetInternalConversionFlag(G4bool val)
   fInternalConversion = val;
 }
 
+void G4DeexPrecoParameters::SetLevelDensityFlag(G4bool val)
+{
+  if(IsLocked()) { return; }
+  fLD = val;
+}
+
 void G4DeexPrecoParameters::SetDeexChannelsType(G4DeexChannelType val)
 {
   if(IsLocked()) { return; }
@@ -269,8 +282,11 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
      << fMinExcitation/CLHEP::keV << "\n";
   os << "Min energy per nucleon for multifragmentation (MeV) " 
      << fMinExPerNucleounForMF/CLHEP::MeV << "\n";
+  os << "Limit excitation energy for Fermi BreakUp (MeV)     " 
+     << fFBUEnergyLimit/CLHEP::MeV << "\n";
   os << "Level density (1/MeV)                               " 
      << fLevelDensity*CLHEP::MeV << "\n";
+  os << "Model of level density flag                         " << fLD << "\n";
   os << "Time limit for long lived isomeres (ns)             " 
      << fMaxLifeTime/CLHEP::ns << "\n";
   os << "Internal e- conversion flag                         " 

@@ -27,7 +27,6 @@
 /// \brief Implementation of the F03FieldMessenger class
 //
 //
-// $Id: F03FieldMessenger.cc 96980 2016-05-19 09:41:22Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +37,7 @@
 #include "F03FieldSetup.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -49,7 +49,9 @@ F03FieldMessenger::F03FieldMessenger(F03FieldSetup* fieldSetup)
    fEMfieldSetup(fieldSetup),
    fFieldDir(0),
    fStepperCmd(0),
+   fMagFieldZCmd(0),
    fMagFieldCmd(0),
+   fLocalMagFieldCmd(0),
    fMinStepCmd(0),
    fUpdateCmd(0)
 {
@@ -68,12 +70,24 @@ F03FieldMessenger::F03FieldMessenger(F03FieldSetup* fieldSetup)
   fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
   fUpdateCmd->AvailableForStates(G4State_Idle);
  
-  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);
-  fMagFieldCmd->SetGuidance("Define magnetic field.");
-  fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  fMagFieldCmd->SetParameterName("Bz",false,false);
+  fMagFieldZCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);
+  fMagFieldZCmd->SetGuidance("Define global magnetic field.");
+  fMagFieldZCmd->SetGuidance("Global magnetic field will be in Z direction.");
+  fMagFieldZCmd->SetParameterName("Bz",false,false);
+  fMagFieldZCmd->SetDefaultUnit("tesla");
+  fMagFieldZCmd->AvailableForStates(G4State_Idle);
+ 
+  fMagFieldCmd = new G4UIcmdWith3VectorAndUnit("/field/setField",this);
+  fMagFieldCmd->SetGuidance("Define global magnetic field.");
+  fMagFieldCmd->SetParameterName("Bx","By","Bz",false,false);
   fMagFieldCmd->SetDefaultUnit("tesla");
   fMagFieldCmd->AvailableForStates(G4State_Idle);
+ 
+  fLocalMagFieldCmd = new G4UIcmdWith3VectorAndUnit("/field/setLocalField",this);
+  fLocalMagFieldCmd->SetGuidance("Define local magnetic field.");
+  fLocalMagFieldCmd->SetParameterName("Blx","Bly","Blz",false,false);
+  fLocalMagFieldCmd->SetDefaultUnit("tesla");
+  fLocalMagFieldCmd->AvailableForStates(G4State_Idle);
  
   fMinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);
   fMinStepCmd->SetGuidance("Define minimal step");
@@ -88,7 +102,9 @@ F03FieldMessenger::F03FieldMessenger(F03FieldSetup* fieldSetup)
 F03FieldMessenger::~F03FieldMessenger()
 {
   delete fStepperCmd;
+  delete fMagFieldZCmd;
   delete fMagFieldCmd;
+  delete fLocalMagFieldCmd;
   delete fMinStepCmd;
   delete fFieldDir;
   delete fUpdateCmd;
@@ -102,12 +118,27 @@ void F03FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
     fEMfieldSetup->SetStepperType(fStepperCmd->GetNewIntValue(newValue));
   if( command == fUpdateCmd )
     fEMfieldSetup->UpdateField();
+  if( command == fMagFieldZCmd )
+  {
+    fEMfieldSetup->SetFieldZValue(fMagFieldZCmd->GetNewDoubleValue(newValue));
+    // Check the value
+    G4cout << "Set global field value to " <<
+      fEMfieldSetup->GetGlobalFieldValue() / gauss << " Gauss " << G4endl;
+  }
   if( command == fMagFieldCmd )
   {
-    fEMfieldSetup->SetFieldValue(fMagFieldCmd->GetNewDoubleValue(newValue));
+    fEMfieldSetup->SetFieldValue(fMagFieldCmd->GetNew3VectorValue(newValue));
     // Check the value
-    G4cout << "Set field value to " <<
-      fEMfieldSetup->GetConstantFieldValue() / gauss << " Gauss " << G4endl;
+    G4cout << "Set global field value to " <<
+      fEMfieldSetup->GetGlobalFieldValue() / gauss << " Gauss " << G4endl;
+  }
+  if( command == fLocalMagFieldCmd )
+  {
+    fEMfieldSetup->SetLocalFieldValue(fLocalMagFieldCmd->GetNew3VectorValue(newValue));
+    fEMfieldSetup->UpdateField();
+    // Check the value
+    G4cout << "Set local field value to " <<
+      fEMfieldSetup->GetLocalFieldValue() / gauss << " Gauss " << G4endl;
   }
   if( command == fMinStepCmd )
     fEMfieldSetup->SetMinStep(fMinStepCmd->GetNewDoubleValue(newValue));

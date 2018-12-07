@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh 99668 2016-09-30 08:02:13Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -63,8 +62,9 @@
 #define G4PHYSICALVOLUMEMODEL_HH
 
 #include "G4VModel.hh"
-#include "G4VTouchable.hh"
+#include "G4ModelingParameters.hh"
 
+#include "G4VTouchable.hh"
 #include "G4Transform3D.hh"
 #include "G4Plane3D.hh"
 #include <iostream>
@@ -87,6 +87,7 @@ public: // With description
 
   enum ClippingMode {subtraction, intersection};
 
+  // Nested class for identifying physical volume nodes.
   class G4PhysicalVolumeNodeID {
   public:
     G4PhysicalVolumeNodeID
@@ -114,8 +115,8 @@ public: // With description
     G4Transform3D fTransform;
     G4bool fDrawn;
   };
-  // Nested class for identifying physical volume nodes.
 
+  // Nested class for handling nested parameterisations.
   class G4PhysicalVolumeModelTouchable: public G4VTouchable {
   public:
     G4PhysicalVolumeModelTouchable
@@ -129,14 +130,24 @@ public: // With description
   private:
     const std::vector<G4PhysicalVolumeNodeID>& fFullPVPath;
   };
-  // Nested class for handling nested parameterisations.
+
+  // Nested struct for encapsulating touchable properties
+  struct TouchableProperties {
+    TouchableProperties(): fpTouchablePV(nullptr) {}
+    G4ModelingParameters::PVNameCopyNoPath fTouchablePath;
+    G4VPhysicalVolume*                     fpTouchablePV;
+    G4Transform3D                          fTouchableGlobalTransform;
+    std::vector<G4PhysicalVolumeNodeID>    fTouchableBaseFullPVPath;
+  };
 
   G4PhysicalVolumeModel
   (G4VPhysicalVolume* = 0,
    G4int requestedDepth = UNLIMITED,
    const G4Transform3D& modelTransformation = G4Transform3D(),
    const G4ModelingParameters* = 0,
-   G4bool useFullExtent = false);
+   G4bool useFullExtent = false,
+   const std::vector<G4PhysicalVolumeNodeID>& baseFullPVPath =
+   std::vector<G4PhysicalVolumeNodeID>());
 
   virtual ~G4PhysicalVolumeModel ();
 
@@ -159,10 +170,13 @@ public: // With description
   {return fpClippingSolid;}
 
   G4int GetCurrentDepth() const {return fCurrentDepth;}
-  // Current depth of geom. hierarchy.
+  // Current depth in geom. hierarchy.
 
   G4VPhysicalVolume* GetCurrentPV() const {return fpCurrentPV;}
   // Current physical volume.
+
+  G4int GetCurrentPVCopyNo() const {return fCurrentPVCopyNo;}
+  // Current copy number.
 
   G4LogicalVolume* GetCurrentLV() const {return fpCurrentLV;}
   // Current logical volume.
@@ -172,6 +186,13 @@ public: // With description
 
   G4Transform3D* GetCurrentTransform() const {return fpCurrentTransform;}
   // Current transform.
+
+  const std::vector<G4PhysicalVolumeNodeID>& GetBaseFullPVPath() const
+  {return fBaseFullPVPath;}
+  // Base for this G4PhysicalVolumeModel. It can be empty, which would be the
+  // case for the world volume. But the user may create a G4PhysicalVolumeModel
+  // for a volume anywhere in the tree, in which case the user must provide
+  // the transform (in the constructor) and the base path (SetBaseFullPVPath).
 
   const std::vector<G4PhysicalVolumeNodeID>& GetFullPVPath() const
   {return fFullPVPath;}
@@ -185,7 +206,11 @@ public: // With description
   // Path of the current drawn (non-culled) touchable in terms of
   // drawn (non-culled) ancesters.  It is a vector of physical volume
   // node identifiers corresponding to the geometry hierarchy actually
-  // selected, i.e., not culled.
+  // selected, i.e., with "culled" volumes NOT included.
+
+  static G4ModelingParameters::PVNameCopyNoPath GetPVNameCopyNoPath
+  (const std::vector<G4PhysicalVolumeNodeID>&);
+  // Converts
 
   const std::map<G4String,G4AttDef>* GetAttDefs() const;
   // Attribute definitions for current solid.
@@ -199,13 +224,6 @@ public: // With description
   // G4XXXStoredSceneHandler::PreAddSolid for how to access and
   // G4VTrajectory::ShowTrajectory for an example of the use of
   // G4Atts.
-  
-  void SetBaseFullPVPath
-    (const std::vector<G4PhysicalVolumeNodeID>&
-     baseFullPVPath) {
-      fBaseFullPVPath = baseFullPVPath;
-      fFullPVPath = baseFullPVPath;
-  }
 
   void SetRequestedDepth (G4int requestedDepth) {
     fRequestedDepth = requestedDepth;
@@ -261,12 +279,13 @@ protected:
   G4bool             fUseFullExtent; // ...if requested.
   G4int              fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume* fpCurrentPV;    // Current physical volume.
+  G4int              fCurrentPVCopyNo; // Current copy number.
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
   G4Material*    fpCurrentMaterial;  // Current material.
   G4Transform3D* fpCurrentTransform; // Current transform.
-  std::vector<G4PhysicalVolumeNodeID> fBaseFullPVPath;
-  std::vector<G4PhysicalVolumeNodeID> fFullPVPath;
-  std::vector<G4PhysicalVolumeNodeID> fDrawnPVPath;
+  std::vector<G4PhysicalVolumeNodeID> fBaseFullPVPath; // Base. May be empty.
+  std::vector<G4PhysicalVolumeNodeID> fFullPVPath;     // Starts from base.
+  std::vector<G4PhysicalVolumeNodeID> fDrawnPVPath;    // Omits culled volumes.
   mutable G4bool     fAbort;         // Abort all further traversing.
   mutable G4bool     fCurtailDescent;// Can be set to curtail descent.
   G4VSolid*          fpClippingSolid;

@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/src/RE04DetectorContruction.cc
 /// \brief Implementation of the RE04DetectorContruction class
 //
-// $Id: $
 //
 #include "RE04DetectorConstruction.hh"
 

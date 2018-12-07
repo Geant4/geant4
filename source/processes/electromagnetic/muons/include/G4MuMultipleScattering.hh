@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.hh 108424 2018-02-13 11:19:25Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -75,8 +74,7 @@ public:    // with description
 protected:
 
   // Print out of the class parameters
-  virtual void StreamProcessInfo(std::ostream& outFile,
-                             G4String endOfLine=G4String("\n")) const override;
+  virtual void StreamProcessInfo(std::ostream& outFile) const override;
 
   // This function initialise models
   void InitialiseProcess(const G4ParticleDefinition*) override;

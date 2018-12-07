@@ -1,4 +1,3 @@
-$Id: History 72222 2013-07-11 17:28:43Z mkelsey $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +13,75 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+19 November 2018  Dennis Wright (hadr-casc-V10-04-12)
+-----------------------------------------------------
+- fix bug # 2096: non-conservation in precompound interface
+ Four problems fixed:
+
+ G4PreCompoundDeexcitation::deExcite: do not use const reference as
+ input to theDeExcitation->DeExcite(G4Fragment) because G4PreCompound
+ can change the fragment and upset the energy balance
+ 
+ G4CollisionOutput::getTotalCharge: subtract electron charges in case
+ of internal conversion in G4PreCompound
+
+ G4CascadeCheckBalance::collide(const G4Fragment& fragment,
+                                G4CollisionOutput& output):
+ Convert fragment momentum given in MeV to GeV (Bertini units)
+ and remove electrom masses from energy balance when internal conversion 
+ occurs
+
+09 November 2018  Gabriele Cosmo (hadr-casc-V10-04-11)
+------------------------------------------------------
+- Fixed few printout typos.
+
+25 October 2018  Makoto Asai (hadr-casc-V10-04-10)
+--------------------------------------------------
+- G4CascadeParamMessenger.cc : add description to /process/had/
+  directory. Addressing to bug report #2020.
+
+27 September 2018  Dennis Wright  (hadr-casc-V10-04-09)
+-------------------------------------------------------
+- G4NucleiModel::boundaryTransition : fix by Natalia Toro (SLAC) to
+  prevent glancing incidence at shell boundaries from reflecting too
+  many times
+ 
+19 September 2018  Dennis Wright  (hadr-casc-V10-04-08)
+-------------------------------------------------------
+- G4CascadeT11pizNChannel.cc, G4CascadeT31piNChannel.cc,
+  G4CascadeT33piNChannel.cc : re-order particle types in final state 
+    arrays so that pion is first and nucleon is second.  Two body final
+    state methods assume this.    
+
+- G4CascadeKminusNChannel.cc, G4CascadeKminusPChannel.cc,
+  G4CascadeKplusNChannel.cc, G4CascadeKplusPChannel.cc,
+  G4CascadeKzeroBarNChannel.cc, G4CascadeKzeroBarPChannel.cc,
+  G4CascadeKzeroNChannel.cc, G4CascadeKzeroPChannel.cc :
+    same as above but re-order only for two- and three-body final states.
+
+- G4CascadeT1GamNChannel.cc : re-order final state particle types so that
+  mesons are first in two- and three-body cases
+
+17 September 2018  Dennis Wright  (hadr-casc-V10-04-07)
+-------------------------------------------------------
+- G4NucleiModel: replace Kossov parameterization of gammaQDxsec with new
+  values coming from smooth line through deuteron photo-disintegration
+  data which include 2004 JLab data up to 3 GeV.
+
+ 6 July 2018  Vladimir Ivanchenko (hadr-casc-V10-04-06)
+------------------------------------------------------
+- G4GDecay3 - fixed problem reported by CMS due to wrong kinematics
+    in the final state by removing loop check; adding protection
+    for low value of mother mass
+
+ 7 June 2018  Dennis Wright  (hadr-casc-V10-04-05)
+--------------------------------------------------
+- G4CascadePPChannel, G4CascadeNPChannel, G4CascadeNNChannel: extend strange
+    pair production channels to 6, 7, 8 and 9-body final states  
+
+- G4CascadeT11pizNChannel.cc : fix qnum conservation problem in 8-body final
+    states
 
  2 May 2018  Dennis Wright  (hadr-casc-V10-04-04)
 -------------------------------------------------

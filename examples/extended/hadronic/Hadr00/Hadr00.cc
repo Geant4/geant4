@@ -27,7 +27,6 @@
 /// \brief Main program of the hadronic/Hadr00 example
 //
 //
-// $Id: Hadr00.cc 109182 2018-04-03 07:18:45Z gcosmo $
 //
 // -------------------------------------------------------------
 //      GEANT4 Hadr00

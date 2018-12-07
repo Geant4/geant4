@@ -27,7 +27,6 @@
 /// \brief Main of the ThreadsafeScorers example
 //
 //
-// $Id: ts_scorers.cc 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 /// ts_scorers example shows how to use global scorers. The benefit of using
@@ -66,6 +65,9 @@
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 #include "G4TiMemory.hh"
+
+// for std::system(const char*)
+#include <cstdlib>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -139,12 +141,31 @@ int main(int argc, char** argv)
 #ifdef GEANT4_USE_TIMEMORY
     G4cout << "\nOutputting TiMemory results...\n" << G4endl;
     tim::manager* manager = tim::manager::instance();
+#   if defined(G4MULTITHREADED)
+    // TiMemory by default will report master + workers
+    manager->set_get_num_threads_func(
+                [=]() { return runmanager->GetNumberOfThreads(); });
+#   endif
     manager->write_report(std::cout, true);
     std::string fname = argv[0];
     std::string rfname = fname + ".txt";
     std::string sfname = fname + ".json";
     manager->write_report(rfname);
     manager->write_serialization(sfname);
+    if(std::system(nullptr))
+    {
+        std::stringstream ss;
+        ss << "timemory-plotter -f " << sfname << " -t \"ThreadSafe Scorers\" "
+           << "-o plots -e --timing-fields cpu wall sys";
+        int ret = std::system(ss.str().c_str());
+        if(ret != 0)
+        {
+            G4ExceptionDescription desc;
+            desc << "Error generating plots with command: '"
+                 << ss.str() << "'";
+            G4Exception("ThreadsafeScorers::main", "0001", JustWarning, desc);
+        }
+    }
 #endif
 
     // Job termination

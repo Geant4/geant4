@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file ExGflashActionInitialization.cc
 /// \brief Implementation of the ExGflashActionInitialization class

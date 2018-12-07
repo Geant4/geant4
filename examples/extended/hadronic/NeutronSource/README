@@ -1,4 +1,3 @@
-$Id: README 69174 2013-04-21 20:38:15Z maire $
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -40,7 +39,7 @@ $Id: README 69174 2013-04-21 20:38:15Z maire $
    
   "Full" set of physics processes are registered, but via PhysicsConstructor
   objects rather than complete pre-defined G4 physics lists. This alternative 
-  way gives more freedom to register physics.
+  way may give more freedom to register physics.
   
   Physics constructors are either constructors provided in Geant4 (with G4 prefix)
   or 'local'. They include : HadronElastic, HadronInelastic, IonsInelastic, GammaNuclear,
@@ -56,6 +55,8 @@ $Id: README 69174 2013-04-21 20:38:15Z maire $
   In perticular, no step constraint is imposed for energy loss mechanism (ionisation and brems).
   This is enough when spatial distribution of deposited energy do not need
   to be accurate (see param->SetStepFunction(1., 1*mm)).
+
+  In PhysicsList::ConstructProcess() we give an example of how to access hadronic models.
 
   Several hadronic physics options are controlled by environment variables.
   To trigger them, an envHadronic.csh has been added in this example.

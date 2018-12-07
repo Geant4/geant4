@@ -7,6 +7,9 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
+09.11.2018 - G.Cosmo, Tag ChargeExchangeMC-V10-04-00
+             CexmcException: fixed typo in printout.
+
 29.11.2017 - B.Morgan, Tag ChargeExchangeMC-V10-03-08
              Use full path to ROOT Qt library, if found
 

@@ -26,7 +26,6 @@
 /// \file exoticphysics/monopole/src/G4MonopolePhysicsMessenger.cc
 /// \brief Implementation of the G4MonopolePhysicsMessenger class
 //
-// $Id: G4MonopolePhysicsMessenger.cc 107526 2017-11-21 07:17:43Z gcosmo $
 //
 //  12.07.10  S.Burdin (changed the magnetic and electric charge variables 
 //            from integer to double)
@@ -75,24 +74,6 @@ G4MonopolePhysicsMessenger::G4MonopolePhysicsMessenger(G4MonopolePhysics* p)
   fPhysicsCmd->SetParameter(unit);
   qmag->SetDefaultValue("GeV");
   fPhysicsCmd->AvailableForStates(G4State_PreInit);
-
-  fMCmd = new G4UIcmdWithADouble("/monopole/magCharge",this);
-  fMCmd->SetGuidance("Set monopole magnetic charge number");
-  fMCmd->SetParameterName("Qmag",false);
-  fMCmd->AvailableForStates(G4State_PreInit);
-
-  fZCmd = new G4UIcmdWithADouble("/monopole/elCharge",this);
-  fZCmd->SetGuidance("Set monopole electric charge number");
-  fZCmd->SetParameterName("Qel",false);
-  fZCmd->AvailableForStates(G4State_PreInit);
-
-  fMassCmd = new G4UIcmdWithADoubleAndUnit("/monopole/Mass",this);
-  fMassCmd->SetGuidance("Set monopole fMass");
-  fMassCmd->SetParameterName("Mass",false);
-  fMassCmd->SetRange("Mass>0.");
-  fMassCmd->SetUnitCategory("Energy");
-  fMassCmd->AvailableForStates(G4State_PreInit);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -100,9 +81,6 @@ G4MonopolePhysicsMessenger::G4MonopolePhysicsMessenger(G4MonopolePhysics* p)
 G4MonopolePhysicsMessenger::~G4MonopolePhysicsMessenger()
 {
   delete fPhysicsCmd;
-  delete fMCmd;
-  delete fZCmd;
-  delete fMassCmd;
   delete fPhysicsDir;  
 }
 
@@ -122,15 +100,6 @@ void G4MonopolePhysicsMessenger::SetNewValue(G4UIcommand* command,
      fPhys->SetElectricCharge(q);
      fPhys->SetMonopoleMass(mass*vUnit);
    }
-  if (command == fMCmd) {
-    fPhys->SetMagneticCharge(fMCmd->GetNewDoubleValue(newValue));
-  }
-  if (command == fZCmd) {
-    fPhys->SetElectricCharge(fZCmd->GetNewDoubleValue(newValue));
-  }
-  if (command == fMassCmd) {
-    fPhys->SetMonopoleMass(fMassCmd->GetNewDoubleValue(newValue));
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

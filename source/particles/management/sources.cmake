@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 106143 2017-09-14 06:34:42Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -52,7 +51,6 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4MuonRadiativeDecayChannelWithSpin.hh
         G4NeutronBetaDecayChannel.hh
         G4NucleiProperties.hh
-        G4NucleiPropertiesTableAME03.hh
         G4NucleiPropertiesTableAME12.hh
         G4NucleiPropertiesTheoreticalTable.hh
         G4NuclideTable.hh
@@ -101,7 +99,6 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4MuonRadiativeDecayChannelWithSpin.cc
         G4NeutronBetaDecayChannel.cc
         G4NucleiProperties.cc
-        G4NucleiPropertiesTableAME03.cc
         G4NucleiPropertiesTableAME12.cc
         G4NucleiPropertiesTheoreticalTableA.cc
         G4NucleiPropertiesTheoreticalTableB.cc
@@ -138,12 +135,5 @@ GEANT4_DEFINE_MODULE(NAME G4partman
 	LINK_LIBRARIES
 	)
 
-      # List any source specific properties here
-      if("$ENV{G4NucleiProperties_USE_OLD_AME_TABLE}")
-	set_source_files_properties(
-	  ${G4partman_SOURCES}
-	  PROPERTIES COMPILE_DEFINITIONS G4NucleiProperties_USE_OLD_AME_TABLE
-	  )
-      endif()
 
 

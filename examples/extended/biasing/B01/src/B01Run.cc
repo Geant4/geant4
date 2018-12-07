@@ -27,7 +27,6 @@
 /// \brief Implementation of the B01Run class
 //
 //
-// $Id: B01Run.cc 98774 2016-08-09 14:28:06Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

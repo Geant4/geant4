@@ -28,7 +28,6 @@
 //
 
 //
-// $Id: DetectorConstruction.cc 99373 2016-09-20 07:13:41Z gcosmo $
 //
 // 
 

@@ -24,12 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtExportDialog.hh 82764 2014-07-08 14:24:04Z gcosmo $
-// GEANT4 tag $Name: 
 //
 // 
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
 
 #ifndef G4OPENGLQTEXPORTDIALOG_HH
 #define G4OPENGLQTEXPORTDIALOG_HH

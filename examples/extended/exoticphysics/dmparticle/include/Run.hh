@@ -27,7 +27,6 @@
 /// \file exoticphysics/dmparticle/include/Run.hh
 /// \brief Definition of the Run class
 //
-// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

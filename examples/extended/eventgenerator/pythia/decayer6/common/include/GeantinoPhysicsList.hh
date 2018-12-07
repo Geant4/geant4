@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 // 
 /// \file GeantinoPhysicsList.hh
 /// \brief Definition of the GeantinoPhysicsList class

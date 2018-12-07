@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $ID$
 /// \file DetectorConstruction.cc 
 /// \brief Implementation of the DetectorConstruction class
 

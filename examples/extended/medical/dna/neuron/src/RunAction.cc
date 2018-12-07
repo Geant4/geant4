@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $ID$
 /// \file RunAction.cc
 /// \brief Implementation of the RunAction class
 

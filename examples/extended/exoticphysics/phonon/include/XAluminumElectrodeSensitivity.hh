@@ -26,7 +26,6 @@
 /// \file exoticphysics/phonon/include/XAluminumElectrodeSensitivity.hh
 /// \brief Definition of the XAluminumElectrodeSensitivity class
 //
-// $Id: XAluminumElectrodeSensitivity.hh 92176 2015-08-20 13:07:22Z gcosmo $
 //
 // 20150818  Improve MT compatibility; hits collection should not be static
 

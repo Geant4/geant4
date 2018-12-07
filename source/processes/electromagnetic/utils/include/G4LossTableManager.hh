@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh 110572 2018-05-30 13:08:12Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -96,7 +95,6 @@ class G4EmConfigurator;
 class G4ElectronIonPair;
 class G4VMultipleScattering;
 class G4VEmProcess;
-class G4GammaShark;
 
 class G4LossTableManager
 {
@@ -239,9 +237,13 @@ public:
 
   inline G4LossTableBuilder* GetTableBuilder();
 
-  inline void SetGammaShark(G4GammaShark*); 
+  inline void SetGammaGeneralProcess(G4VEmProcess*); 
 
-  inline G4GammaShark* GetGammaShark(); 
+  inline G4VEmProcess* GetGammaGeneralProcess(); 
+
+  inline void SetElectronGeneralProcess(G4VEnergyLossProcess*); 
+
+  inline G4VEnergyLossProcess* GetElectronGeneralProcess(); 
 
 private:
 
@@ -306,11 +308,11 @@ private:
   G4VAtomDeexcitation*        atomDeexcitation;
   G4VSubCutProducer*          subcutProducer;
 
-  G4EmParameters* theParameters;
-  G4GammaShark* gammaShark;
+  G4EmParameters*       theParameters;
+  G4VEmProcess*         gGeneral;
+  G4VEnergyLossProcess* eGeneral;
 
   G4int verbose;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -429,15 +431,36 @@ inline G4LossTableBuilder* G4LossTableManager::GetTableBuilder()
   return tableBuilder;
 }
 
-inline void G4LossTableManager::SetGammaShark(G4GammaShark* ptr)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4LossTableManager::SetGammaGeneralProcess(G4VEmProcess* ptr)
 {
-  gammaShark = ptr;
+  gGeneral = ptr;
 } 
 
-inline G4GammaShark* G4LossTableManager::GetGammaShark()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VEmProcess* G4LossTableManager::GetGammaGeneralProcess()
 {
-  return gammaShark;
+  return gGeneral;
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline 
+void G4LossTableManager::SetElectronGeneralProcess(G4VEnergyLossProcess* ptr)
+{
+  eGeneral = ptr;
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VEnergyLossProcess* G4LossTableManager::GetElectronGeneralProcess()
+{
+  return eGeneral;
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
 

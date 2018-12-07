@@ -26,7 +26,6 @@
 /// \file processes/phonon/include/G4PhononTrackMap.hh
 /// \brief Definition of the G4PhononTrackMap base class
 //
-// $Id: G4PhononTrackMap.hh 76492 2013-11-11 17:15:04Z mkelsey $
 //
 // 20131111  Move implementation of Clear() to .cc file
 

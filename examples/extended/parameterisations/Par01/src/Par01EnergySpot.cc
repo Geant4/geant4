@@ -27,7 +27,6 @@
 /// \brief Implementation of the Par01EnergySpot class
 //
 //
-// $Id: Par01EnergySpot.cc 100936 2016-11-03 11:07:41Z gcosmo $
 //
 #include "Par01EnergySpot.hh"
 

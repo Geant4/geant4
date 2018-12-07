@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04PrimaryGeneratorMessenger.hh
 /// \brief Definition of the ExN04PrimaryGeneratorMessenger class
 //
-// $Id: ExN04PrimaryGeneratorMessenger.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef EXN04_PRIMARY_GENERATOR_MESSENGER_H
@@ -48,15 +47,15 @@ public:
   ExN04PrimaryGeneratorMessenger(ExN04PrimaryGeneratorAction* genaction);
   ~ExN04PrimaryGeneratorMessenger();
 
-  void SetNewValue(G4UIcommand* command, G4String newValues);
-  G4String GetCurrentValue(G4UIcommand* command);
+  virtual void SetNewValue(G4UIcommand* command, G4String newValues);
+  virtual G4String GetCurrentValue(G4UIcommand* command);
 
 private:
-  ExN04PrimaryGeneratorAction* primaryAction;
+  ExN04PrimaryGeneratorAction* fPrimaryAction;
 
-  G4UIdirectory* dir;
-  G4UIdirectory* mydetdir;
-  G4UIcmdWithAString* select;
+  G4UIdirectory* fDir;
+  G4UIdirectory* fMyDetDir;
+  G4UIcmdWithAString* fSelect;
 
 };
 

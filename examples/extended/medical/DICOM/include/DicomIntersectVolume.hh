@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomIntersectVolume.hh 74809 2013-10-22 09:49:26Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomIntersectVolume.hh
 /// \brief Definition of the DicomIntersectVolume class

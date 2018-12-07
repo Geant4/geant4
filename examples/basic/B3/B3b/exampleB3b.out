@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -207,6 +207,7 @@ Checking overlaps for volume Patient ... OK!
 G4SDManager::AddNewCollection : the collection <crystal/edep> is registered at 1
 G4SDManager::AddNewCollection : the collection <patient/dose> is registered at 2
 #
+/run/printProgress 1000
 /run/beamOn 10000
 =======================================================================
 ======       Radioactive Decay Physics Parameters              ========
@@ -219,16 +220,28 @@ Max 2J for sampling of angular correlations       10
 Atomic de-excitation enabled                      1
 Auger electron emission enabled                   1
 Auger cascade enabled                             1
-Check EM cuts disabled for atomic de-excitation   0
+Check EM cuts disabled for atomic de-excitation   1
 Use Bearden atomic level energies                 0
 =======================================================================
+### Run 0 starts.
 ### Run 0 start.
+--> Event 0 starts.
 
 ---> end of event: 0
+--> Event 1000 starts.
+--> Event 2000 starts.
+--> Event 3000 starts.
+--> Event 4000 starts.
+--> Event 5000 starts.
+--> Event 6000 starts.
+--> Event 7000 starts.
+--> Event 8000 starts.
+--> Event 9000 starts.
 
 --------------------End of Global Run-----------------------
-  The run was 10000 events  Nb of 'good' e+ annihilations: 1344
- Total dose in patient : 290.282 picoGy 
+  The run was 10000 events  Nb of 'good' e+ annihilations: 1276
+ Total dose in patient : 289.186 picoGy 
+ Total dose in patient : 2.89186e-10 [sigma: 1.74469e-14 | error: 0.00603313 | coeff: 0.00603313 | eff: 1 | fom: 27473.6 | r2int: 3.6395e-05 | r2eff: 0 | hits: 10000 ] Gy
 ------------------------------------------------------------
 
 Graphics systems deleted.

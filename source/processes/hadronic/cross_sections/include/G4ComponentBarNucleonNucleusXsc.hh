@@ -30,6 +30,8 @@
 // Preprint JINR P2-89-770, p. 12, Dubna 1989 (scanned version from KEK)
 // Based on G4NucleonNuclearCrossSection class
 //
+// Modifications: 16.08.2018 V.Ivanchenko major revision
+//
 
 #ifndef G4ComponentBarNucleonNucleusXsc_h
 #define G4ComponentBarNucleonNucleusXsc_h
@@ -41,8 +43,6 @@
 
 #include "globals.hh"
 #include "G4PiData.hh"
-#include "G4HadTmpUtil.hh"
-
 
 class G4ComponentBarNucleonNucleusXsc : public G4VComponentCrossSection
 {
@@ -51,10 +51,6 @@ public:
   
   G4ComponentBarNucleonNucleusXsc();
   virtual ~G4ComponentBarNucleonNucleusXsc();
-
-
-
-  // virtual interface methods
 
   virtual
   G4double GetTotalIsotopeCrossSection(const G4ParticleDefinition* aParticle,
@@ -85,128 +81,30 @@ public:
   G4double GetElasticIsotopeCrossSection(const G4ParticleDefinition* aParticle,
 					 G4double kinEnergy, 
 					 G4int Z, G4int );
+
+  void ComputeCrossSections(const G4ParticleDefinition* aParticle,
+			    G4double kinEnergy, G4int Z);
  
+  G4bool IsElementApplicable(const G4DynamicParticle* aParticle, G4int Z);
 
+  virtual void CrossSectionDescription(std::ostream&) const;
 
-  // virtual 
-  G4bool IsElementApplicable(const G4DynamicParticle* aParticle,
-			     G4int Z); // , const G4Material* mat = 0);
+  inline G4double GetElementCrossSection(const G4DynamicParticle* aParticle, G4int Z); 
+  inline G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, G4int Z);
 
-  // virtual 
-  G4double GetElementCrossSection(const G4DynamicParticle* aParticle, 
-				  G4int Z); // , const G4Material* mat = 0);
-
-  // virtual 
-  void CrossSectionDescription(std::ostream&) const;
-
-  inline G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
-					 G4int Z);
-
-  inline G4double GetTotalXsc()  { return fTotalXsc;   };
-  inline G4double GetElasticXsc(){ return fElasticXsc; };
+  inline G4double GetTotalXsc()     { return fTotalXsc;   };
+  inline G4double GetElasticXsc()   { return fElasticXsc; };
+  inline G4double GetInelasticXsc() { return fInelasticXsc; };
   
 private:
 
   G4double Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2);
 
-// add Hydrogen from PDG group.
-
-static const G4double e1[44];
-
-static const G4double he_m_t[44];
-static const G4double he_m_in[44];
-static const G4double he_p_in[44];
-
-static const G4double be_m_t[44];
-static const G4double be_m_in[44];
-static const G4double be_p_in[44];
-
-static const G4double c_m_t[44];
-static const G4double c_m_in[44];
-static const G4double c_p_in[44];
-
-
-static const G4double e2[44];
-
-static const G4double n_m_t[44];
-static const G4double n_m_in[44];
-static const G4double n_p_in[44];
-
-static const G4double o_m_t[44];
-static const G4double o_m_in[44];
-static const G4double o_p_in[44];
-
-static const G4double na_m_t[44];
-static const G4double na_m_in[44];
-static const G4double na_p_in[44];
-
-
-static const G4double e3[45];
-
-// static const G4double e3_1[31];
-
-static const G4double al_m_t[45];
-static const G4double al_m_in[45];
-static const G4double al_p_in[45];
-
-static const G4double si_m_t[45];
-static const G4double si_m_in[45];
-static const G4double si_p_in[45];
-
-static const G4double ca_m_t[45];
-static const G4double ca_m_in[45];
-static const G4double ca_p_in[45];
-
-
-static const G4double e4[47];
-
-static const G4double fe_m_t[47];
-static const G4double fe_m_in[47];
-static const G4double fe_p_in[47];
-
-static const G4double cu_m_t[47];
-static const G4double cu_m_in[47];
-static const G4double cu_p_in[47];
-
-static const G4double mo_m_t[47];
-static const G4double mo_m_in[47];
-static const G4double mo_p_in[47];
-
-
-static const G4double e5[48];
-
-static const G4double cd_m_t[48];
-static const G4double cd_m_in[48];
-static const G4double cd_p_in[48];
-
-static const G4double sn_m_t[48];
-static const G4double sn_m_in[48];
-static const G4double sn_p_in[48];
-
-static const G4double w_m_t[48];
-static const G4double w_m_in[48];
-static const G4double w_p_in[48];
-
-static const G4double e6[46];
-
-// static const G4double e7[46];
-
-static const G4double pb_m_t[46];
-static const G4double pb_m_in[46];
-static const G4double pb_p_in[46];
-
-static const G4double u_m_t[46];
-static const G4double u_m_in[46];
-static const G4double u_p_in[46];
-
-// vectors for treatment
-
-std::vector< G4int >     theZ;
-std::vector< G4PiData* > thePipData;
-std::vector< G4PiData* > thePimData;
+  std::vector< G4int >     theZ;
+  std::vector< G4PiData* > thePipData;
+  std::vector< G4PiData* > thePimData;
 
   // cross sections
-
   G4double fTotalXsc;
   G4double fInelasticXsc;
   G4double fElasticXsc;
@@ -215,13 +113,24 @@ std::vector< G4PiData* > thePimData;
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theNeutron;
 
+  static G4double theA[93];
+  static G4double A75[93];
+
 };
+
+inline
+G4double G4ComponentBarNucleonNucleusXsc::GetElementCrossSection(
+         const G4DynamicParticle* dp, G4int Z)
+{
+  ComputeCrossSections(dp->GetDefinition(), dp->GetKineticEnergy(),Z);
+  return fInelasticXsc;
+}
 
 inline
 G4double G4ComponentBarNucleonNucleusXsc::GetElasticCrossSection(
          const G4DynamicParticle* dp, G4int Z)
 {
-  fInelasticXsc = GetElementCrossSection(dp, Z);
+  ComputeCrossSections(dp->GetDefinition(), dp->GetKineticEnergy(),Z);
   return fElasticXsc;
 }
 

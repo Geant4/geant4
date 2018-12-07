@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GraphicsSystemList.cc 66373 2012-12-18 09:41:34Z gcosmo $
 
 #include "G4GraphicsSystemList.hh"
 

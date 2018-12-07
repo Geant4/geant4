@@ -5,7 +5,7 @@
 #
 # All text after a double hash (##) is considered a comment and is placed in
 # front of the TAG it is preceding.
-#
+#  
 # All text after a single hash (#) is considered a comment and will be ignored.
 # The format is:
 # TAG = value [value, ...]
@@ -152,7 +152,7 @@ FULL_PATH_NAMES        = YES
 # will be relative from the directory where doxygen is started.
 # This tag requires that the tag FULL_PATH_NAMES is set to YES.
 
-STRIP_FROM_PATH        = /Users/ivana/work/packages/geant4/geant4-10-04-cand-01/examples/
+STRIP_FROM_PATH        = /Users/ivana/work/packages/geant4/geant4_ref/examples/
 
 # The STRIP_FROM_INC_PATH tag can be used to strip a user-defined part of the
 # path mentioned in the documentation of a class, which tells the reader which
@@ -799,6 +799,9 @@ INPUT                  = Doxymain.h \
                          ../extended/analysis/AnaEx03/.README.AIDA.txt \
                          ../extended/analysis/AnaEx03/.README.OpenScientist.txt \
                          ../extended/analysis/B1Con \
+                         ../extended/analysis/B3aScoreWriter/.README.txt \
+                         ../extended/analysis/B3aScoreWriter/scoreWriter \
+                         ../extended/analysis/B4dScoreWriter/.README.txt \
                          ../extended/biasing \
                          ../extended/electromagnetic/.README.txt \
                          ../extended/electromagnetic/TestEm0/.README.txt \
@@ -853,6 +856,7 @@ INPUT                  = Doxymain.h \
                          ../extended/hadronic/NeutronSource/.README.txt \
                          ../extended/medical/.README.txt \
                          ../extended/medical/DICOM \
+                         ../extended/medical/DICOM2 \
                          ../extended/medical/electronScattering/.README.txt \
                          ../extended/medical/electronScattering2/.README.txt \
                          ../extended/medical/fanoCavity/.README.txt \
@@ -863,6 +867,7 @@ INPUT                  = Doxymain.h \
                          ../extended/medical/dna/chem2/.README.txt \
                          ../extended/medical/dna/chem3/.README.txt \
                          ../extended/medical/dna/chem4/.README.txt \
+                         ../extended/medical/dna/chem5/.README.txt \
                          ../extended/medical/dna/clustering/.README.txt \
                          ../extended/medical/dna/dnaphysics/.README.txt \
                          ../extended/medical/dna/icsd/.README.txt \
@@ -877,7 +882,11 @@ INPUT                  = Doxymain.h \
                          ../extended/medical/dna/svalue/.README.txt \
                          ../extended/medical/dna/wholeNuclearDNA/.README.txt \
                          ../extended/medical/dna/wvalue/.README.txt \
-                         ../extended/optical \
+                         ../extended/optical/.README.txt \
+                         ../extended/optical/LXe \
+                         ../extended/optical/OpNovice \
+                         ../extended/optical/OpNovice2/.README.txt \
+                         ../extended/optical/wls \
                          ../extended/parallel/.README.txt \
                          ../extended/parallel/MPI/.README.txt \
                          ../extended/parallel/MPI/examples/exMPI01/.README.txt \
@@ -2271,7 +2280,7 @@ SKIP_FUNCTION_MACROS   = YES
 # the path). If a tag file is not located in the directory in which doxygen is
 # run, you must also specify the path to the tagfile here.
 
-TAGFILES               = geant4.tag=http://www-geant4.kek.jp/Reference/10.02
+#TAGFILES               = geant4.tag=http://www-geant4.kek.jp/Reference/10.02
 
 # When a file name is specified after GENERATE_TAGFILE, doxygen will create a
 # tag file that is based on the input files it reads. See section "Linking to

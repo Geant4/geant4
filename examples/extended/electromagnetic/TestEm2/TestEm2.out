@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -188,8 +188,8 @@ eBrem:   for  e-    SubType= 3
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGenUrban
 
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
@@ -215,8 +215,8 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGenUrban
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -269,7 +269,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
-      Stopping Power data for 17 ion/material pairs 
+      Stopping Power data for 17 ion/material pairs
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
@@ -541,37 +541,37 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.920000s Real=2.937130s Sys=0.000000s
+  User=2.850000s Real=2.942669s Sys=0.000000s
 
  ===== SUMMARY ===== 
 
  Total number of events:        100
- Mean number of charged steps:  7243.27
- Mean number of neutral steps:  4104.09
+ Mean number of charged steps:  7239.71
+ Mean number of neutral steps:  4099.85
 
- energy deposit :   94.89 % E0 +-    1.11 % E0
- charged traklen:  483.88 radl +-    5.68 radl
- neutral traklen: 4233.34 radl +-  119.48 radl
+ energy deposit :   94.95 % E0 +-    0.94 % E0
+ charged traklen:  484.18 radl +-    5.04 radl
+ neutral traklen: 4205.51 radl +-  126.08 radl
 
- 90.00 % confinement: radius = 2.96 radl  (2.64 cm )
+ 90.00 % confinement: radius = 2.93 radl  (2.62 cm )
 
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94885  delEdep= -0.000149558 nrms= -0.182388
-Erms: 0.0110611  delErms= 0.00286108 nrms= 3.48912
+Edep: 0.949472  delEdep= 0.000471952 nrms= 0.575551
+Erms: 0.00939419  delErms= 0.00119419 nrms= 1.45633
 <<<<END>>>>   IS ACCEPTED
 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={813669451166920716, 915193248309464868, 2019028336631320324, 725375911233882969, 621752734653241375, 1140962754503444046, 619630234792985507, 1718169589993349277, 1815988620821611100, 1931397531447879596, 1259925193533438907, 347741036259688487, 1562667380514912651, 575501281937601346, 1248915206512850464, 2125251310845429716, 1584232443418017805} counter= 11sumtot= 272815183652793595
+N=17 V[N]={2190176847188726962, 284808319687426819, 1522983791198480650, 859341387997770223, 413306040217046219, 1404079503871567763, 1584008655829615797, 399855323794275113, 382306046830638793, 259428528721343839, 1261913582880192934, 1042325389412414942, 1511936439208651595, 177427239016089672, 456387940659368154, 2039721287502751714, 1363779749589451903} counter= 13sumtot= 1012885009109955435
 ---------------------------------------
 ... write Root file : testem2.root - done
 ... close Root file : testem2.root - done
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.066 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.059 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

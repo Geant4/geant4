@@ -25,7 +25,6 @@
 //
 //
 //
-// $Id: G4MagHelicalStepper.hh 93806 2015-11-02 11:21:01Z gcosmo $
 //
 //
 //

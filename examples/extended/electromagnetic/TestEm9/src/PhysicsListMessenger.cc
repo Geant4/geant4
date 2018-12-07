@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm9/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.cc 82278 2014-06-13 14:42:11Z gcosmo $
 //
 // 
 

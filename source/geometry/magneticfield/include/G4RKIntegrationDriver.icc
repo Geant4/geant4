@@ -1,0 +1,233 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+//
+//
+// class G4RKIntegrationDriver
+//
+// Class description:
+//
+// Driver class which controls the integration error of a 
+// Runge-Kutta stepper 
+
+// History:
+// - Created. D.Sorokin
+// --------------------------------------------------------------------
+
+
+#include "globals.hh"
+
+template <class T>
+G4RKIntegrationDriver<T>::G4RKIntegrationDriver(T* pStepper)
+{
+    RenewStepperAndAdjustImpl(pStepper);
+    fMaxStepBase = 250;
+    fMaxNoSteps = fMaxStepBase / pIntStepper->IntegratorOrder();
+}
+
+// Step failed; compute the size of retrial Step.
+template <class T> G4double G4RKIntegrationDriver<T>::
+ShrinkStepSize(G4double h, G4double error) const
+{
+    if (error > errorConstraintShrink)
+    {
+        return max_stepping_decrease * h;
+    }
+    return GetSafety() * h * std::pow(error, GetPshrnk());
+}
+
+template <class T> G4double G4RKIntegrationDriver<T>::
+ShrinkStepSize2(G4double h, G4double error2) const
+{
+    if (error2 > errorConstraintShrink * errorConstraintShrink)
+    {
+        return max_stepping_decrease * h;
+    }
+    return GetSafety() * h * std::pow(error2, 0.5 * GetPshrnk());
+}
+
+// Compute size of next Step
+template<class T> G4double G4RKIntegrationDriver<T>::
+GrowStepSize(G4double h, G4double error) const
+{
+    if (error < errorConstraintGrow)
+    {
+        return max_stepping_increase * h;
+    }
+    return GetSafety() * h * std::pow(error, GetPgrow());
+}
+
+template<class T> G4double G4RKIntegrationDriver<T>::
+GrowStepSize2(G4double h, G4double error2) const
+{
+    if (error2 < errorConstraintGrow * errorConstraintGrow)
+    {
+        return max_stepping_increase * h;
+    }
+    return GetSafety() * h * std::pow(error2, 0.5 * GetPgrow());
+}
+
+template <class T>
+G4double G4RKIntegrationDriver<T>::
+ComputeNewStepSize( G4double  errMaxNorm,    // max error  (normalised)
+                    G4double  hstepCurrent ) // current step size
+{
+    if (errMaxNorm > 1)
+    {
+        return ShrinkStepSize(hstepCurrent, errMaxNorm);
+    }
+    else if (errMaxNorm >= 0)
+    {
+        return GrowStepSize(hstepCurrent, errMaxNorm);
+    }
+
+    G4Exception("G4RKIntegrationDriver::ComputeNewStepSize", "GeomField0003",
+                FatalException, "Error is negative!");
+
+    return max_stepping_increase * hstepCurrent;
+}
+
+template <class T>
+void G4RKIntegrationDriver<T>::
+GetDerivatives( const G4FieldTrack& track, G4double dydx[] ) const
+{
+    G4double y[G4FieldTrack::ncompSVEC];
+    track.DumpToArray(y);
+    pIntStepper->RightHandSide(y, dydx);
+}
+
+template <class T>
+void G4RKIntegrationDriver<T>::GetDerivatives(const G4FieldTrack& track,
+                                              G4double dydx[], 
+                                              G4double field[]) const
+{
+    G4double y[G4FieldTrack::ncompSVEC];
+    track.DumpToArray(y);
+    pIntStepper->RightHandSide(y, dydx, field);
+}
+
+template <class T>
+void G4RKIntegrationDriver<T>::UpdateErrorConstraints()
+{
+    errorConstraintShrink = std::pow(
+            max_stepping_decrease / GetSafety(), 1. / GetPshrnk());
+
+    errorConstraintGrow = std::pow(
+            max_stepping_increase / GetSafety(), 1. / GetPgrow());
+}
+
+template <class T>
+inline G4double G4RKIntegrationDriver<T>::GetSafety() const
+{
+    return safety;
+}
+
+template <class T>
+inline G4double G4RKIntegrationDriver<T>::GetPshrnk() const
+{
+    return pshrnk;
+}
+
+template <class T>
+G4double G4RKIntegrationDriver<T>::GetPgrow() const
+{
+    return pgrow;
+}
+
+template <class T>
+void G4RKIntegrationDriver<T>::ReSetParameters(G4double new_safety)
+{
+    safety = new_safety;
+    pshrnk = -1.0 / pIntStepper->IntegratorOrder();
+    pgrow  = -1.0 / (1.0 + pIntStepper->IntegratorOrder());
+    UpdateErrorConstraints();
+}
+
+template <class T>
+void G4RKIntegrationDriver<T>::SetSafety(G4double val)
+{ 
+    safety = val;
+    UpdateErrorConstraints();
+}
+
+template <class T> void G4RKIntegrationDriver<T>::
+RenewStepperAndAdjust(G4MagIntegratorStepper* stepper)
+{  
+   T* ourStepper = dynamic_cast<T*>(stepper);
+   if ( ourStepper )
+   {
+      RenewStepperAndAdjustImpl( ourStepper );
+   }
+   else
+   {
+      G4Exception("G4RKIntegrationDriver::RenewStepperAndAdjust()",
+                  "GeomField0002", FatalException,
+     "The type of the stepper provided is incorrect for this templated driver");
+   }
+}
+
+template <class T>
+void G4RKIntegrationDriver<T>::RenewStepperAndAdjustImpl(T* stepper)
+{  
+    pIntStepper = stepper;
+    ReSetParameters();
+}
+
+template <class T>
+const T* G4RKIntegrationDriver<T>::GetStepper() const
+{
+    return pIntStepper;
+}
+
+template <class T>
+T* G4RKIntegrationDriver<T>::GetStepper()
+{
+    return pIntStepper;
+}
+
+template <class T>
+G4int G4RKIntegrationDriver<T>::GetMaxNoSteps() const
+{
+    return fMaxNoSteps;
+}
+
+template <class T>
+void G4RKIntegrationDriver<T>::SetMaxNoSteps(G4int val)
+{
+    fMaxNoSteps = val;
+}
+
+template <class T>
+G4EquationOfMotion* G4RKIntegrationDriver<T>::GetEquationOfMotion()
+{
+    return pIntStepper->GetEquationOfMotion();
+}
+
+template <class T>
+void G4RKIntegrationDriver<T>::SetEquationOfMotion(G4EquationOfMotion* equation)
+{
+    pIntStepper->SetEquationOfMotion(equation);
+}

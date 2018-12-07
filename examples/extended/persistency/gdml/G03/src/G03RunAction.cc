@@ -27,7 +27,6 @@
 /// \brief Implementation of the G03RunAction class
 //
 //
-// $Id: G03RunAction.cc 110384 2018-05-22 07:50:04Z gcosmo $
 //
 // Class G03RunAction implementation
 //

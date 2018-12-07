@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: ExTGDetectorConstructionWithSD.cc 101674 2016-11-21 09:23:15Z gcosmo $
 //
 /// \file persistency/P03/src/ExTGDetectorConstructionWithSD.cc
 /// \brief Implementation of the ExTGDetectorConstructionWithSD class

@@ -26,7 +26,6 @@
 /// \file medical/fanoCavity2/include/Run.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 68999 2013-04-15 09:23:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id:   $
-// GEANT4 tag $Name:  $
 //
 // -------------------------------------------------------------------
 //
@@ -161,6 +159,7 @@ private:
   G4double par1,par2,par3;
 
   G4double stepmin;
+  G4double stepmina,stepminb;
 
   G4double currentKinEnergy;
   G4double currentRange; 
@@ -232,6 +231,9 @@ inline void G4UrbanMscModel::UpdateCache()
 
   Z2   = Zeff*Zeff;
   Z23  = Z13*Z13;               
+
+  stepmina = 15.99/(1.+0.119*Zeff);
+  stepminb =  4.39/(1.+0.079*Zeff);
                                               
   Zold = Zeff;
 }

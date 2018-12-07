@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B3DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 /// \file B3DetectorConstruction.cc
 /// \brief Implementation of the B3DetectorConstruction class

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.16 2010-03-12 15:45:18 gunter Exp $ //
 //
 
 #include <vector>

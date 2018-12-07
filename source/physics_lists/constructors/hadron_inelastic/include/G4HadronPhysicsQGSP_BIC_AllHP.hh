@@ -23,28 +23,89 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//----------------------------------------------------------------------------
+//
+//---------------------------------------------------------------------------
 //
 #ifndef G4HadronPhysicsQGSP_BIC_AllHP_h
 #define G4HadronPhysicsQGSP_BIC_AllHP_h 1
 
-#include "G4HadronPhysicsQGSP_BIC.hh"
+#include "globals.hh"
+#include "G4ios.hh"
 
-class G4HadronPhysicsQGSP_BIC_AllHP : public G4HadronPhysicsQGSP_BIC 
+#include "G4VPhysicsConstructor.hh"
+
+#include "G4PiKBuilder.hh"
+#include "G4FTFPPiKBuilder.hh"
+#include "G4QGSPPiKBuilder.hh"
+#include "G4BertiniPiKBuilder.hh"
+
+#include "G4ProtonBuilder.hh"
+#include "G4FTFPProtonBuilder.hh"
+#include "G4QGSPProtonBuilder.hh"
+#include "G4BinaryProtonBuilder.hh"
+#include "G4ProtonPHPBuilder.hh"
+
+#include "G4NeutronBuilder.hh"
+#include "G4FTFPNeutronBuilder.hh"
+#include "G4QGSPNeutronBuilder.hh"
+#include "G4BinaryNeutronBuilder.hh"
+#include "G4NeutronPHPBuilder.hh"
+
+#include "G4HyperonFTFPBuilder.hh"
+#include "G4AntiBarionBuilder.hh"
+#include "G4FTFPAntiBarionBuilder.hh"
+
+
+class G4ComponentGGHadronNucleusXsc;
+
+
+class G4HadronPhysicsQGSP_BIC_AllHP : public G4VPhysicsConstructor
 {
   public: 
     G4HadronPhysicsQGSP_BIC_AllHP(G4int verbose =1);
     G4HadronPhysicsQGSP_BIC_AllHP(const G4String& name, G4bool quasiElastic=true);
-    virtual ~G4HadronPhysicsQGSP_BIC_AllHP() {}
+    virtual ~G4HadronPhysicsQGSP_BIC_AllHP();
 
-  protected:
-    virtual void Neutron() override;
-    virtual void Proton() override;
-    G4double minBIC_neutron;
-    G4double minBIC_proton;
-    G4double maxHP_neutron;
-    G4double maxHP_proton;
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
+
+  private:
+    void CreateModels();
+
+    const G4double maxFTFP = 25.0*CLHEP::GeV;
+    const G4double minFTFP =  9.5*CLHEP::GeV;
+    const G4double maxBIC  =  9.9*CLHEP::GeV;
+    const G4double maxBERT =  5.0*CLHEP::GeV;
+    const G4double minBIC_neutron = 19.9*CLHEP::MeV;
+    const G4double maxHP_neutron =  20.0*CLHEP::MeV;
+    const G4double minBIC_proton = 199.0*CLHEP::MeV;
+    const G4double maxHP_proton =  200.0*CLHEP::MeV;
+
+    struct ThreadPrivate {
+      G4NeutronBuilder * theNeutrons;
+      G4FTFPNeutronBuilder * theFTFPNeutron;
+      G4QGSPNeutronBuilder * theQGSPNeutron;
+      G4BinaryNeutronBuilder * theBinaryNeutron;
+      G4NeutronPHPBuilder * thePHPNeutron;
+    
+      G4PiKBuilder * thePiK;
+      G4FTFPPiKBuilder * theFTFPPiK;
+      G4QGSPPiKBuilder * theQGSPPiK;
+      G4BertiniPiKBuilder * theBertiniPiK;
+    
+      G4ProtonBuilder * thePro;
+      G4FTFPProtonBuilder * theFTFPPro;
+      G4QGSPProtonBuilder * theQGSPPro;
+      G4BinaryProtonBuilder * theBinaryPro;
+      G4ProtonPHPBuilder * thePHPProton;
+
+      G4HyperonFTFPBuilder * theHyperon;
+
+      G4AntiBarionBuilder * theAntiBaryon;
+      G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
+    };
+    static G4ThreadLocal ThreadPrivate* tpdata;
+
 };
 
 #endif
-

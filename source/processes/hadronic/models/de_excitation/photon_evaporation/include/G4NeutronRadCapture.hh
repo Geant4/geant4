@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronRadCapture.hh 74869 2013-10-23 09:26:17Z gcosmo $
 //
 //
 // Geant4 header : G4NeutronRadCapture

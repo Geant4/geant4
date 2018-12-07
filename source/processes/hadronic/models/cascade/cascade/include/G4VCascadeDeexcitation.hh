@@ -25,7 +25,6 @@
 //
 #ifndef G4VCASCADE_DEEXCITATION_HH
 #define G4VCASCADE_DEEXCITATION_HH
-// $Id: G4VCascadeDeexcitation.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // Base class to define a common interface for post-cascade processing.
 //

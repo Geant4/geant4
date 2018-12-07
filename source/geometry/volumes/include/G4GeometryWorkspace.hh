@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryWorkspace.hh 79096 2014-02-14 16:07:39Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -50,6 +49,7 @@
 #ifndef G4GEOMETRYWORKSPACE_HH
 #define G4GEOMETRYWORKSPACE_HH
 
+#include "G4TWorkspacePool.hh"
 #include "G4PVReplica.hh"
 #include "G4PVParameterised.hh"
 #include "G4VPVParameterisation.hh"
@@ -63,6 +63,7 @@ class G4GeometryWorkspace
 {
   public:
  
+    typedef G4TWorkspacePool<G4GeometryWorkspace> pool_type;
     G4GeometryWorkspace();
    ~G4GeometryWorkspace();
 
@@ -75,6 +76,8 @@ class G4GeometryWorkspace
 
     inline void   SetVerbose(G4bool v) { fVerbose=v; } 
     inline G4bool GetVerbose()  { return fVerbose;   } 
+
+    static pool_type* GetPool();
   
   protected:  // Implementation methods
 

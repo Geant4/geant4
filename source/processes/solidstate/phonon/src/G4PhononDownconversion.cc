@@ -26,7 +26,6 @@
 /// \file processes/phonon/src/G4PhononDownconversion.cc
 /// \brief Implementation of the G4PhononDownconversion class
 //
-// $Id: G4PhononDownconversion.cc 79766 2014-03-13 16:11:36Z gcosmo $
 //
 // 20131111  Add verbose output for MFP calculation
 // 20131115  Initialize data buffers in ctor

@@ -49,9 +49,12 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(HepMCEx02 HepMCEx02.cc ${sources} ${headers})
+#target_link_libraries(HepMCEx02 ${Geant4_LIBRARIES}
+#                      ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
+#                      ${PYTHIA6_LIBRARIES} gfortran)
 target_link_libraries(HepMCEx02 ${Geant4_LIBRARIES}
                       ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
-                      ${PYTHIA6_LIBRARIES} gfortran)
+                      ${PYTHIA6_LIBRARIES})
 
 # if pythia is compiled with g77, link with -lg2c instead.
 #target_link_libraries(HepMCEx02 ${Geant4_LIBRARIES}

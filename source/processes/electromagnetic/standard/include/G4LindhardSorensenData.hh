@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LindhardSorensenData.hh 96909 2016-05-17 10:16:09Z vnivanch $
 
 #ifndef G4LindhardSorensenData_h
 #define G4LindhardSorensenData_h 1

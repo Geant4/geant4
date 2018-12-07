@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 /// \brief This class is a slightly modified version of G4Transportation
 ///        initially written by J. Apostolakis and colleagues

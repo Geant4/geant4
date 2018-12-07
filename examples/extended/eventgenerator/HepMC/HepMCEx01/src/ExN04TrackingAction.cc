@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04TrackingAction.cc
 /// \brief Implementation of the ExN04TrackingAction class
 //
-// $Id: ExN04TrackingAction.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #include "G4Track.hh"

@@ -1,4 +1,3 @@
-/* $Id: liblist.c 66368 2012-12-18 09:20:17Z gcosmo $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory

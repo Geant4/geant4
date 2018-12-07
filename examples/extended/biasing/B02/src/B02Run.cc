@@ -27,7 +27,6 @@
 /// \brief Implementation of the B02Run class
 //
 //
-// $Id: B02Run.cc 98774 2016-08-09 14:28:06Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

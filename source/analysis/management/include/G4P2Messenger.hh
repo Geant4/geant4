@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // The messenger class for P2 management.
 // It implements commands in /analysis/p2 directory.

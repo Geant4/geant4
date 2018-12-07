@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4DNAChemistryList_hh
-#define G4DNAChemistryList_hh 1
+#ifndef G4EmDNAChemistry_hh
+#define G4EmDNAChemistry_hh 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "G4VUserChemistryList.hh"

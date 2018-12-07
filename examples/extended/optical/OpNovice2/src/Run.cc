@@ -26,7 +26,6 @@
 /// \file optical/OpNovice2/src/Run.cc
 /// \brief Implementation of the Run class
 //
-// $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +33,7 @@
 #include <numeric>
 
 #include "Run.hh"
+#include "DetectorConstruction.hh"
 
 #include "G4OpBoundaryProcess.hh"
 #include "G4SystemOfUnits.hh"
@@ -110,6 +110,9 @@ void Run::EndOfRun()
   G4int TotNbofEvents = numberOfEvent;
   if (TotNbofEvents == 0) return;
 
+  const DetectorConstruction* det = (const DetectorConstruction*)
+    (G4RunManager::GetRunManager()->GetUserDetectorConstruction()); 
+
   std::ios::fmtflags mode = G4cout.flags();
   G4int prec = G4cout.precision(2);
 
@@ -117,6 +120,11 @@ void Run::EndOfRun()
   G4cout <<   "---------------------------------\n";
   G4cout << "Primary particle was: " << fParticle->GetParticleName() 
          << " with energy " << G4BestUnit(fEkin, "Energy") << "." << G4endl;
+
+  G4cout << "Material of world: " << det->GetWorldMaterial()->GetName()
+         << G4endl;
+  G4cout << "Material of tank:  " << det->GetTankMaterial()->GetName()
+         << G4endl << G4endl;
 
   if (fParticle->GetParticleName() != "opticalphoton") {
     G4cout << "Average energy of Cerenkov photons created per event: " 
@@ -135,13 +143,14 @@ void Run::EndOfRun()
       G4cout << " Average energy: " << (fScintEnergy/eV)/fScintCount << " eV."
              << G4endl;
     }
-    G4cout << "Average number of OpRayleigh scatters per event: "
-           << fRayleighCount/TotNbofEvents << G4endl;
-    G4cout << "\n";
   }
-  G4cout << "OpAbsorption per event:      " << fOpAbsorption/TotNbofEvents
+  G4cout << "Average number of OpRayleigh per event:   "
+         << fRayleighCount/TotNbofEvents << G4endl;
+  G4cout << "Average number of OpAbsorption per event: "
+         << fOpAbsorption/TotNbofEvents << G4endl;
+  G4cout << 
+    "\nSurface events (on +X surface, maximum one per photon) this run:" 
          << G4endl;
-  G4cout << "\nSurface events (on +X surface) this run:" << G4endl;
   G4cout << "# of primary particles:      " << std::setw(8) << TotNbofEvents
          << G4endl;
   G4cout << "OpAbsorption before surface: " << std::setw(8)

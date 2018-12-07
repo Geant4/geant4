@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationGEMFactoryVI.cc 92422 2015-09-01 08:38:35Z vnivanch $
 //
 //
 // GEM de-excitation model

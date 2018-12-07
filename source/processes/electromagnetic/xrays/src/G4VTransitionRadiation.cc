@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.cc 108423 2018-02-13 11:18:13Z gcosmo $
 //
 // G4VTransitionRadiation class -- implementation file
 

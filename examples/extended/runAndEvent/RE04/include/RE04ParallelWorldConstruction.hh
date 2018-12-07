@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/include/RE04ParallelWorldConstruction.hh
 /// \brief Definition of the RE04ParallelWorldConstruction class
 //
-// $Id: $
 //
 #ifndef RE04ParallelWorldConstruction_h
 #define RE04ParallelWorldConstruction_h 1

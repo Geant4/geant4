@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmDNAPhysics.hh 98736 2016-08-09 10:55:12Z gcosmo $
 
 #ifndef G4EmDNAPhysics_h
 #define G4EmDNAPhysics_h 1

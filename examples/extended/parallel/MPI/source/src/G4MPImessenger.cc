@@ -88,7 +88,7 @@ G4MPImessenger::G4MPImessenger()
   p2-> SetDefaultValue(true);
   dot_beam_on_-> SetParameter(p2);
 
-  // /mpi/weightForMaster
+  // /mpi/masterWeight
   master_weight_ = new G4UIcmdWithADouble("/mpi/masterWeight", this);
   master_weight_-> SetGuidance("Set weight for master node.");
   master_weight_-> SetParameterName("weight", false, false);

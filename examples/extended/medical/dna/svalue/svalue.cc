@@ -23,9 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 37 (2010) 4692-4708
+// Phys. Med. 31 (2015) 861-874
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/svalue/svalue.cc
 /// \brief Main program of the medical/dna/svalue example
+
 #include "G4Types.hh"
+
+#include "MyFile.hh"
 
 #ifdef G4MULTITHREADED
  #include "G4MTRunManager.hh"
@@ -45,20 +55,17 @@
 #include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+ 
 int main(int argc,char** argv) {
-
+ 
   //delete output file
   remove ("s.txt");
-
+  
   //detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = 0;
   if ( argc == 1 ) {
     ui = new G4UIExecutive(argc, argv);
   }
-
-  //choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   //construct the default run manager
 #ifdef G4MULTITHREADED
@@ -67,31 +74,32 @@ int main(int argc,char** argv) {
   if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
   runManager->SetNumberOfThreads(nThreads);
 #else
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);  
   G4RunManager* runManager = new G4RunManager();
-#endif
+#endif  
 
   //set mandatory initialization classes
-  runManager->SetUserInitialization(new DetectorConstruction());
+  DetectorConstruction* detector = new DetectorConstruction;
+  runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList());
-  runManager->SetUserInitialization(new ActionInitialization());
+  runManager->SetUserInitialization(new ActionInitialization(detector));
 
   //visualization
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
+    
+  //get the pointer to the User Interface manager 
+  G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  //get the pointer to the User Interface manager
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-
-  if (argc>1)   // batch mode
+  if (argc>1)   // batch mode  
     {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
     }
-
+    
   else           //define visualization and UI terminal for interactive mode
-    {
+    { 
       ui->SessionStart();
       delete ui;
     }

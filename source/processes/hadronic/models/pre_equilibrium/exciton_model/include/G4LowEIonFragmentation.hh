@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEIonFragmentation.hh 68028 2013-03-13 13:48:15Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
-// $Id: G4LowEIonFragmentation.hh 68028 2013-03-13 13:48:15Z gcosmo $
 //
 // ClassName:   G4LowEIonFragmentation
 //

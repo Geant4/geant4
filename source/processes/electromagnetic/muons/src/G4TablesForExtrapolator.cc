@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TablesForExtrapolator.cc 75145 2013-10-28 18:34:48Z vnivanch $
 //
 //---------------------------------------------------------------------------
 //
@@ -80,7 +79,7 @@ G4TablesForExtrapolator::G4TablesForExtrapolator(G4int verb, G4int bins,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4TablesForExtrapolator:: ~G4TablesForExtrapolator()
+G4TablesForExtrapolator::~G4TablesForExtrapolator()
 {
   for(G4int i=0; i<nmat; i++) {delete couples[i];}
 

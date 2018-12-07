@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4SingleDiffractiveExcitation.hh 107867 2017-12-07 14:44:07Z gcosmo $
 
 #ifndef G4SingleDiffractiveExcitation_h
 #define G4SingleDiffractiveExcitation_h 1
@@ -48,16 +47,14 @@ class G4ExcitedString;
 
 class G4SingleDiffractiveExcitation : public G4QGSDiffractiveExcitation
 {
-
-public:
-
+  public:
 	G4SingleDiffractiveExcitation();
 	~G4SingleDiffractiveExcitation();
 
-	G4bool ExciteParticipants (G4VSplitableHadron *aPartner, G4VSplitableHadron * bPartner, G4bool ProjectileDiffraction) const;
+	G4bool ExciteParticipants (G4VSplitableHadron *aPartner, G4VSplitableHadron * bPartner, 
+                                   G4bool ProjectileDiffraction) const;
 
-private:
-
+  private:
 	G4SingleDiffractiveExcitation(const G4SingleDiffractiveExcitation &right);
 
 	G4double ChooseX(G4double Xmin, G4double Xmax) const;
@@ -66,7 +63,6 @@ private:
 	const G4SingleDiffractiveExcitation & operator=(const G4SingleDiffractiveExcitation &right);
 	int operator==(const G4SingleDiffractiveExcitation &right) const;
 	int operator!=(const G4SingleDiffractiveExcitation &right) const;
-
 };
 
 #endif

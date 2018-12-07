@@ -26,7 +26,6 @@
 /// \file exoticphysics/monopole/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 107534 2017-11-21 13:13:36Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +40,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
+#include "G4ProductionCutsTable.hh"
 
 #include "G4EmCalculator.hh"
 
@@ -79,6 +79,9 @@ G4Run* RunAction::GenerateRun()
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
+  // Dump production cuts
+  G4ProductionCutsTable::GetProductionCutsTable()->DumpCouples();
+
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   //histograms
   //        

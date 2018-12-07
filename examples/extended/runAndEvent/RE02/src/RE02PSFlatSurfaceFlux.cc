@@ -27,7 +27,6 @@
 /// \brief Implementation of the RE02PSFlatSurfaceFlux class
 //
 //
-// $Id: RE02PSFlatSurfaceFlux.cc 72957 2013-08-14 14:27:23Z gcosmo $
 //
 // RE02PSFlatSurfaceFlux
 #include "RE02PSFlatSurfaceFlux.hh"

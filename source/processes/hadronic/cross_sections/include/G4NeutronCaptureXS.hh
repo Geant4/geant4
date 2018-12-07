@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.hh 110787 2018-06-14 06:43:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -39,7 +38,7 @@
 
 // Class Description:
 // This is a base class for neutron radiative capture cross section based on
-// data files from G4NEUTRONXSDATA data set 
+// data files from G4PARTICLEXSDATA data set 
 // Class Description - End
  
 #ifndef G4NeutronCaptureXS_h

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GNASHTransitions.hh 96527 2016-04-20 08:51:00Z gcosmo $
 //
 #ifndef G4GNASHTransitions_hh
 #define G4GNASHTransitions_hh 1

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -155,8 +155,8 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGenUrban
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -256,340 +256,340 @@ DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      100 MeV
 
  The run is 1000 e- of 12.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 0.064 +- 0.245
+ Nb of ionisations = 0.057 +- 0.232
 
- w = 187.500 eV  +- 717.050 eV 
+ w = 210.526 eV  +- 856.298 eV 
 
  Total Energy deposited        = 12.000 eV  +- 0.000 eV 
 
- Track length of primary track = 10.754 nm  +- 10.829 nm 
- Projected range               = 2.358 Ang +- 1.365 nm 
+ Track length of primary track = 11.005 nm  +- 10.740 nm 
+ Projected range               = 1.934 Ang +- 1.438 nm 
 
- Nb of steps of primary track  = 59.97 +- 58.97
+ Nb of steps of primary track  = 61.37 +- 58.20
 
- Step size                     = 1.715 Ang +- 41003.779 fm 
+ Step size                     = 1.724 Ang +- 40341.767 fm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 15.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 0.195 +- 0.396
+ Nb of ionisations = 0.226 +- 0.418
 
- w = 76.923 eV  +- 156.292 eV 
+ w = 66.372 eV  +- 122.828 eV 
 
  Total Energy deposited        = 15.000 eV  +- 0.000 eV 
 
- Track length of primary track = 8.407 nm  +- 8.504 nm 
- Projected range               = 3.373 Ang +- 1.237 nm 
+ Track length of primary track = 8.407 nm  +- 7.666 nm 
+ Projected range               = 2.887 Ang +- 1.296 nm 
 
- Nb of steps of primary track  = 43.27 +- 41.81
+ Nb of steps of primary track  = 43.57 +- 38.47
 
- Step size                     = 1.863 Ang +- 50395.492 fm 
+ Step size                     = 1.837 Ang +- 48581.138 fm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 20.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 0.453 +- 0.498
+ Nb of ionisations = 0.483 +- 0.500
 
- w = 44.150 eV  +- 48.515 eV 
+ w = 41.408 eV  +- 42.841 eV 
 
  Total Energy deposited        = 20.000 eV  +- 0.000 eV 
 
- Track length of primary track = 11.475 nm  +- 12.699 nm 
- Projected range               = 2.594 Ang +- 1.579 nm 
+ Track length of primary track = 11.562 nm  +- 13.405 nm 
+ Projected range               = 3.431 Ang +- 1.546 nm 
 
- Nb of steps of primary track  = 59.23 +- 69.77
+ Nb of steps of primary track  = 59.45 +- 72.51
 
- Step size                     = 1.960 Ang +- 52699.014 fm 
+ Step size                     = 1.965 Ang +- 56108.183 fm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 30.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 0.916 +- 0.483
+ Nb of ionisations = 0.965 +- 0.462
 
- w = 32.751 eV  +- 17.257 eV 
+ w = 31.088 eV  +- 14.895 eV 
 
  Total Energy deposited        = 30.000 eV  +- 0.000 eV 
 
- Track length of primary track = 12.484 nm  +- 11.102 nm 
- Projected range               = 4.180 Ang +- 1.586 nm 
+ Track length of primary track = 11.799 nm  +- 10.840 nm 
+ Projected range               = 4.119 Ang +- 1.617 nm 
 
- Nb of steps of primary track  = 61.08 +- 58.47
+ Nb of steps of primary track  = 58.53 +- 58.36
 
- Step size                     = 2.116 Ang +- 52408.673 fm 
+ Step size                     = 2.116 Ang +- 53906.854 fm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 40.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 1.386 +- 0.532
+ Nb of ionisations = 1.417 +- 0.565
 
- w = 28.860 eV  +- 11.077 eV 
+ w = 28.229 eV  +- 11.254 eV 
 
  Total Energy deposited        = 40.000 eV  +- 0.000 eV 
 
- Track length of primary track = 11.502 nm  +- 9.747 nm 
- Projected range               = 6.424 Ang +- 1.646 nm 
+ Track length of primary track = 11.878 nm  +- 10.474 nm 
+ Projected range               = 5.588 Ang +- 1.654 nm 
 
- Nb of steps of primary track  = 55.19 +- 51.58
+ Nb of steps of primary track  = 56.44 +- 53.88
 
- Step size                     = 2.164 Ang +- 50802.118 fm 
+ Step size                     = 2.204 Ang +- 52897.101 fm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 50.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 1.861 +- 0.624
+ Nb of ionisations = 1.841 +- 0.603
 
- w = 26.867 eV  +- 9.012 eV 
+ w = 27.159 eV  +- 8.897 eV 
 
  Total Energy deposited        = 50.000 eV  +- 0.000 eV 
 
- Track length of primary track = 12.746 nm  +- 10.756 nm 
- Projected range               = 8.224 Ang +- 1.816 nm 
+ Track length of primary track = 13.209 nm  +- 10.275 nm 
+ Projected range               = 6.614 Ang +- 1.849 nm 
 
- Nb of steps of primary track  = 59.87 +- 55.41
+ Nb of steps of primary track  = 62.05 +- 52.75
 
- Step size                     = 2.247 Ang +- 52634.943 fm 
+ Step size                     = 2.250 Ang +- 53177.352 fm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 60.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 2.330 +- 0.692
+ Nb of ionisations = 2.299 +- 0.655
 
- w = 25.751 eV  +- 7.650 eV 
+ w = 26.098 eV  +- 7.441 eV 
 
  Total Energy deposited        = 60.000 eV  +- 0.000 eV 
 
- Track length of primary track = 13.489 nm  +- 11.188 nm 
- Projected range               = 9.873 Ang +- 1.943 nm 
+ Track length of primary track = 13.360 nm  +- 11.404 nm 
+ Projected range               = 9.811 Ang +- 1.864 nm 
 
- Nb of steps of primary track  = 62.13 +- 57.75
+ Nb of steps of primary track  = 61.94 +- 59.52
 
- Step size                     = 2.329 Ang +- 56883.932 fm 
+ Step size                     = 2.304 Ang +- 51042.109 fm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 70.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 2.779 +- 0.694
+ Nb of ionisations = 2.748 +- 0.706
 
- w = 25.189 eV  +- 6.294 eV 
+ w = 25.473 eV  +- 6.545 eV 
 
  Total Energy deposited        = 70.000 eV  +- 0.000 eV 
 
- Track length of primary track = 13.844 nm  +- 11.384 nm 
- Projected range               = 1.057 nm  +- 2.094 nm 
+ Track length of primary track = 14.589 nm  +- 11.619 nm 
+ Projected range               = 9.734 Ang +- 2.102 nm 
 
- Nb of steps of primary track  = 62.60 +- 59.26
+ Nb of steps of primary track  = 66.01 +- 61.06
 
- Step size                     = 2.397 Ang +- 57026.847 fm 
+ Step size                     = 2.382 Ang +- 55677.687 fm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 80.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 3.181 +- 0.742
+ Nb of ionisations = 3.243 +- 0.771
 
- w = 25.149 eV  +- 5.865 eV 
+ w = 24.669 eV  +- 5.862 eV 
 
  Total Energy deposited        = 80.000 eV  +- 0.000 eV 
 
- Track length of primary track = 15.103 nm  +- 10.887 nm 
- Projected range               = 1.139 nm  +- 2.238 nm 
+ Track length of primary track = 14.150 nm  +- 11.072 nm 
+ Projected range               = 1.047 nm  +- 2.109 nm 
 
- Nb of steps of primary track  = 66.94 +- 55.29
+ Nb of steps of primary track  = 62.66 +- 55.90
 
- Step size                     = 2.412 Ang +- 52314.966 fm 
+ Step size                     = 2.437 Ang +- 58312.927 fm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 90.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 3.659 +- 0.802
+ Nb of ionisations = 3.653 +- 0.772
 
- w = 24.597 eV  +- 5.389 eV 
+ w = 24.637 eV  +- 5.209 eV 
 
  Total Energy deposited        = 90.000 eV  +- 0.000 eV 
 
- Track length of primary track = 14.915 nm  +- 10.887 nm 
- Projected range               = 1.113 nm  +- 2.251 nm 
+ Track length of primary track = 14.632 nm  +- 10.234 nm 
+ Projected range               = 1.126 nm  +- 2.154 nm 
 
- Nb of steps of primary track  = 65.04 +- 54.82
+ Nb of steps of primary track  = 63.68 +- 51.82
 
- Step size                     = 2.485 Ang +- 59168.739 fm 
+ Step size                     = 2.473 Ang +- 56051.374 fm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 100.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 4.139 +- 0.876
+ Nb of ionisations = 4.096 +- 0.823
 
- w = 24.160 eV  +- 5.114 eV 
+ w = 24.414 eV  +- 4.903 eV 
 
  Total Energy deposited        = 100.000 eV  +- 0.000 eV 
 
- Track length of primary track = 15.200 nm  +- 11.067 nm 
- Projected range               = 1.233 nm  +- 2.351 nm 
+ Track length of primary track = 15.009 nm  +- 10.450 nm 
+ Projected range               = 1.052 nm  +- 2.380 nm 
 
- Nb of steps of primary track  = 64.82 +- 56.53
+ Nb of steps of primary track  = 64.01 +- 51.58
 
- Step size                     = 2.544 Ang +- 61222.724 fm 
+ Step size                     = 2.512 Ang +- 57595.334 fm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 200.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 8.624 +- 1.194
+ Nb of ionisations = 8.577 +- 1.171
 
- w = 23.191 eV  +- 3.212 eV 
+ w = 23.318 eV  +- 3.185 eV 
 
  Total Energy deposited        = 200.000 eV  +- 0.000 eV 
 
- Track length of primary track = 20.671 nm  +- 12.381 nm 
- Projected range               = 2.571 nm  +- 3.246 nm 
+ Track length of primary track = 20.744 nm  +- 11.606 nm 
+ Projected range               = 2.832 nm  +- 3.429 nm 
 
- Nb of steps of primary track  = 76.09 +- 61.15
+ Nb of steps of primary track  = 75.74 +- 57.75
 
- Step size                     = 3.070 Ang +- 86768.553 fm 
+ Step size                     = 3.092 Ang +- 83363.142 fm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 300.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 13.042 +- 1.449
+ Nb of ionisations = 12.982 +- 1.433
 
- w = 23.003 eV  +- 2.556 eV 
+ w = 23.109 eV  +- 2.551 eV 
 
  Total Energy deposited        = 300.000 eV  +- 0.000 eV 
 
- Track length of primary track = 25.884 nm  +- 11.930 nm 
- Projected range               = 4.372 nm  +- 4.541 nm 
+ Track length of primary track = 25.991 nm  +- 12.094 nm 
+ Projected range               = 4.225 nm  +- 4.530 nm 
 
- Nb of steps of primary track  = 79.94 +- 55.31
+ Nb of steps of primary track  = 81.20 +- 56.38
 
- Step size                     = 3.681 Ang +- 1.063 Ang
+ Step size                     = 3.658 Ang +- 1.108 Ang
 
  ======================== run summary =====================
 
  The run is 1000 e- of 400.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 17.345 +- 1.709
+ Nb of ionisations = 17.336 +- 1.639
 
- w = 23.061 eV  +- 2.272 eV 
+ w = 23.073 eV  +- 2.181 eV 
 
  Total Energy deposited        = 400.000 eV  +- 0.000 eV 
 
- Track length of primary track = 31.393 nm  +- 12.137 nm 
- Projected range               = 6.535 nm  +- 5.974 nm 
+ Track length of primary track = 31.192 nm  +- 12.359 nm 
+ Projected range               = 6.767 nm  +- 5.983 nm 
 
- Nb of steps of primary track  = 85.03 +- 52.00
+ Nb of steps of primary track  = 84.70 +- 54.16
 
- Step size                     = 4.176 Ang +- 1.261 Ang
+ Step size                     = 4.183 Ang +- 1.291 Ang
 
  ======================== run summary =====================
 
  The run is 1000 e- of 500.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 21.855 +- 1.847
+ Nb of ionisations = 21.835 +- 1.794
 
- w = 22.878 eV  +- 1.934 eV 
+ w = 22.899 eV  +- 1.881 eV 
 
  Total Energy deposited        = 500.000 eV  +- 0.000 eV 
 
- Track length of primary track = 37.693 nm  +- 13.232 nm 
- Projected range               = 9.262 nm  +- 8.012 nm 
+ Track length of primary track = 38.362 nm  +- 13.660 nm 
+ Projected range               = 9.194 nm  +- 8.102 nm 
 
- Nb of steps of primary track  = 90.94 +- 53.94
+ Nb of steps of primary track  = 92.55 +- 56.43
 
- Step size                     = 4.707 Ang +- 1.497 Ang
+ Step size                     = 4.725 Ang +- 1.495 Ang
 
  ======================== run summary =====================
 
  The run is 1000 e- of 600.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 26.103 +- 1.983
+ Nb of ionisations = 26.206 +- 1.996
 
- w = 22.986 eV  +- 1.746 eV 
+ w = 22.896 eV  +- 1.744 eV 
 
  Total Energy deposited        = 600.000 eV  +- 0.000 eV 
 
- Track length of primary track = 44.473 nm  +- 15.114 nm 
- Projected range               = 11.998 nm  +- 9.818 nm 
+ Track length of primary track = 45.236 nm  +- 14.937 nm 
+ Projected range               = 11.827 nm  +- 9.637 nm 
 
- Nb of steps of primary track  = 94.08 +- 57.29
+ Nb of steps of primary track  = 95.59 +- 58.09
 
- Step size                     = 5.390 Ang +- 1.737 Ang
+ Step size                     = 5.400 Ang +- 1.723 Ang
 
  ======================== run summary =====================
 
  The run is 1000 e- of 700.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 30.591 +- 2.201
+ Nb of ionisations = 30.669 +- 2.176
 
- w = 22.883 eV  +- 1.647 eV 
+ w = 22.824 eV  +- 1.619 eV 
 
  Total Energy deposited        = 700.000 eV  +- 0.000 eV 
 
- Track length of primary track = 52.858 nm  +- 16.744 nm 
- Projected range               = 15.335 nm  +- 11.497 nm 
+ Track length of primary track = 52.930 nm  +- 16.589 nm 
+ Projected range               = 14.870 nm  +- 12.387 nm 
 
- Nb of steps of primary track  = 100.59 +- 58.57
+ Nb of steps of primary track  = 99.69 +- 56.05
 
- Step size                     = 5.954 Ang +- 1.925 Ang
+ Step size                     = 5.995 Ang +- 1.914 Ang
 
  ======================== run summary =====================
 
  The run is 1000 e- of 800.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 35.015 +- 2.281
+ Nb of ionisations = 34.986 +- 2.343
 
- w = 22.847 eV  +- 1.488 eV 
+ w = 22.866 eV  +- 1.531 eV 
 
  Total Energy deposited        = 800.000 eV  +- 0.000 eV 
 
- Track length of primary track = 61.671 nm  +- 18.188 nm 
- Projected range               = 18.451 nm  +- 14.030 nm 
+ Track length of primary track = 61.521 nm  +- 17.703 nm 
+ Projected range               = 17.864 nm  +- 14.364 nm 
 
- Nb of steps of primary track  = 105.47 +- 57.85
+ Nb of steps of primary track  = 105.95 +- 58.60
 
- Step size                     = 6.623 Ang +- 2.176 Ang
+ Step size                     = 6.558 Ang +- 2.086 Ang
 
  ======================== run summary =====================
 
  The run is 1000 e- of 900.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 39.415 +- 2.410
+ Nb of ionisations = 39.580 +- 2.492
 
- w = 22.834 eV  +- 1.396 eV 
+ w = 22.739 eV  +- 1.431 eV 
 
  Total Energy deposited        = 900.000 eV  +- 0.000 eV 
 
- Track length of primary track = 68.422 nm  +- 19.910 nm 
- Projected range               = 21.028 nm  +- 16.580 nm 
+ Track length of primary track = 68.839 nm  +- 20.072 nm 
+ Projected range               = 21.323 nm  +- 16.567 nm 
 
- Nb of steps of primary track  = 105.83 +- 55.71
+ Nb of steps of primary track  = 107.18 +- 55.92
 
- Step size                     = 7.247 Ang +- 2.353 Ang
+ Step size                     = 7.187 Ang +- 2.324 Ang
 
  ======================== run summary =====================
 
  The run is 1000 e- of 1.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 43.842 +- 2.492
+ Nb of ionisations = 43.849 +- 2.685
 
- w = 22.809 eV  +- 1.296 eV 
+ w = 22.806 eV  +- 1.397 eV 
 
  Total Energy deposited        = 1.000 keV +- 0.000 eV 
 
- Track length of primary track = 78.769 nm  +- 21.923 nm 
- Projected range               = 25.552 nm  +- 18.775 nm 
+ Track length of primary track = 78.702 nm  +- 21.160 nm 
+ Projected range               = 26.391 nm  +- 19.549 nm 
 
- Nb of steps of primary track  = 111.88 +- 55.62
+ Nb of steps of primary track  = 108.75 +- 53.70
 
- Step size                     = 7.847 Ang +- 2.506 Ang
+ Step size                     = 8.021 Ang +- 2.473 Ang
 Graphics systems deleted.
 Visualization Manager deleting...

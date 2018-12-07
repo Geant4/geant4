@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the ExN04PrimaryGeneratorMessenger class
 //
-// $Id: ExN04PrimaryGeneratorMessenger.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #include "G4UIcommand.hh"
@@ -42,37 +41,37 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04PrimaryGeneratorMessenger::ExN04PrimaryGeneratorMessenger
                                 (ExN04PrimaryGeneratorAction* genaction)
-  : primaryAction(genaction)
+  : fPrimaryAction(genaction)
 {
-  mydetdir = new G4UIdirectory("/mydet/");
-  mydetdir-> SetGuidance("ExN04 detector control commands.");
+  fMyDetDir = new G4UIdirectory("/mydet/");
+  fMyDetDir-> SetGuidance("ExN04 detector control commands.");
 
-  dir= new G4UIdirectory("/generator/");
-  dir-> SetGuidance("Control commands for primary generator");
+  fDir= new G4UIdirectory("/generator/");
+  fDir-> SetGuidance("Control commands for primary generator");
 
-  select= new G4UIcmdWithAString("/generator/select", this);
-  select-> SetGuidance("select generator type");
-  select-> SetParameterName("generator_type", false, false);
-  select-> SetCandidates("particleGun pythia hepmcAscii");
-  select-> SetDefaultValue("particleGun");
+  fSelect= new G4UIcmdWithAString("/generator/select", this);
+  fSelect-> SetGuidance("fSelect generator type");
+  fSelect-> SetParameterName("generator_type", false, false);
+  fSelect-> SetCandidates("particleGun pythia hepmcAscii");
+  fSelect-> SetDefaultValue("particleGun");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04PrimaryGeneratorMessenger::~ExN04PrimaryGeneratorMessenger()
 {
-  delete select;
-  delete mydetdir;
-  delete dir;
+  delete fSelect;
+  delete fMyDetDir;
+  delete fDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
                                               G4String newValues)
 {
-  if ( command == select ) {
-    primaryAction-> SetGenerator(newValues);
+  if ( command == fSelect ) {
+    fPrimaryAction-> SetGenerator(newValues);
     G4cout << "current generator type: "
-            << primaryAction-> GetGeneratorName() << G4endl;
+            << fPrimaryAction-> GetGeneratorName() << G4endl;
   }
 }
 
@@ -81,8 +80,8 @@ void ExN04PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
 G4String ExN04PrimaryGeneratorMessenger::GetCurrentValue(G4UIcommand* command)
 {
   G4String cv, st;
-  if ( command == select ) {
-    cv = primaryAction-> GetGeneratorName();
+  if ( command == fSelect ) {
+    cv = fPrimaryAction-> GetGeneratorName();
   }
 
  return cv;

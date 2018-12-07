@@ -26,7 +26,6 @@
 /// \file RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 70756 2013-06-05 12:20:06Z ihrivnac $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

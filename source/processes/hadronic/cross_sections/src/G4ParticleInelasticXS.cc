@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticleInelasticXS.cc 109964 2018-05-11 17:48:23Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -119,6 +118,7 @@ G4ParticleInelasticXS::G4ParticleInelasticXS(const G4ParticleDefinition* part)
     }
   }
   SetForAllAtomsAndEnergies(true);
+  fNist  = G4NistManager::Instance();
 }
 
 G4ParticleInelasticXS::~G4ParticleInelasticXS()
@@ -126,8 +126,6 @@ G4ParticleInelasticXS::~G4ParticleInelasticXS()
   //G4cout << "G4ParticleInelasticXS::~G4ParticleInelasticXS() " 
   // << " isMaster= " << isMaster << "  data: " << data << G4endl;
   delete fNucleon;
-  delete ggXsection;
-  delete nnXsection;
   if(isMaster) { delete data; data = nullptr; }
 }
 
@@ -173,22 +171,26 @@ G4double G4ParticleInelasticXS::GetElementCrossSection(
 
   if(ekin <= pv->GetMaxEnergy()) { 
     xs = pv->Value(ekin); 
-  } else if(1 == Z && fNucleon) { 
-    fNucleon->GetHadronNucleonXscPDG(aParticle, proton);
-    xs = coeff[1]*fNucleon->GetInelasticHadronNucleonXsc();
-  } else if(ggXsection) {
-    G4int Amean = 
-      G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
-    ggXsection->GetIsoCrossSection(aParticle, Z, Amean);
-    xs = coeff[Z]*ggXsection->GetInelasticGlauberGribovXsc();
-  } else if(nnXsection) {
-    G4int Amean = 
-      G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
-    nnXsection->GetZandACrossSection(aParticle, Z, Amean);
-    xs = coeff[Z]*nnXsection->GetInelasticGlauberGribovXsc();
+  } else if(1 == Z) {
+    if(fNucleon) { 
+      fNucleon->GetHadronNucleonXscNS(aParticle, proton);
+      xs = coeff[1]*fNucleon->GetInelasticHadronNucleonXsc();
+    } else {
+      nnXsection->GetZandACrossSection(aParticle, 1, 1);
+      xs = coeff[1]*nnXsection->GetInelasticGlauberGribovXsc();
+    }
+  } else {
+    G4int Amean = G4lrint(fNist->GetAtomicMassAmu(Z));
+    if(ggXsection) {
+      ggXsection->GetIsoCrossSection(aParticle, Z, Amean);
+      xs = coeff[Z]*ggXsection->GetInelasticGlauberGribovXsc();
+    } else {
+      nnXsection->GetZandACrossSection(aParticle, Z, Amean);
+      xs = coeff[Z]*nnXsection->GetInelasticGlauberGribovXsc();
+    }
   }
 
-  if(verboseLevel > 0) {
+  if(verboseLevel > 1) {
     G4cout  << "ElmXS: Z= " << Z << " Ekin(MeV)= " << ekin/CLHEP::MeV 
 	    << " xs(bn)= " << xs/CLHEP::barn << " element data for "
 	    << particleName << G4endl;
@@ -327,7 +329,7 @@ G4ParticleInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 
     // check environment variable 
     // Build the complete string identifying the file with the data set
-    char* path = getenv("G4NEUTRONXSDATA");
+    char* path = getenv("G4PARTICLEXSDATA");
 
     G4DynamicParticle* dynParticle = 
       new G4DynamicParticle(particle,G4ThreeVector(1,0,0),1);
@@ -356,11 +358,11 @@ void G4ParticleInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
   if(!p) {
     // check environment variable 
     // Build the complete string identifying the file with the data set
-    path = getenv("G4NEUTRONXSDATA");
+    path = getenv("G4PARTICLEXSDATA");
     if (!path) {
       G4Exception("G4ParticleInelasticXS::Initialise(..)","had013",
 		  FatalException,
-                  "Environment variable G4NEUTRONXSDATA is not defined");
+                  "Environment variable G4PARTICLEXSDATA is not defined");
       return;
     }
   }
@@ -382,7 +384,7 @@ void G4ParticleInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
 
     for(G4int A=amin[Z]; A<=amax[Z]; ++A) {
       std::ostringstream ost1;
-      ost1 << path << "/neutron/inel" << Z << "_" << A;
+      ost1 << path << "/" << particleName << "/inel" << Z << "_" << A;
       G4PhysicsVector* v1 = RetrieveVector(ost1, false);
       data->AddComponent(Z, A, v1); 
     }
@@ -392,17 +394,23 @@ void G4ParticleInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
   G4double sig1 = (*v)[v->GetVectorLength()-1];
   dp->SetKineticEnergy(v->GetMaxEnergy());
   G4double sig2 = 0.0;
-  G4int Amean = 
-    G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
-  if(1 == Z && fNucleon) {
-    fNucleon->GetHadronNucleonXscPDG(dp, proton);
-    sig2 = fNucleon->GetInelasticHadronNucleonXsc();
-  } else if(ggXsection) {
-    ggXsection->GetIsoCrossSection(dp, Z, Amean);
-    sig2 = ggXsection->GetInelasticGlauberGribovXsc();
-  } else if(nnXsection) {
-    nnXsection->GetZandACrossSection(dp, Z, Amean);
-    sig2 = nnXsection->GetInelasticGlauberGribovXsc();
+  if(1 == Z) {
+    if(fNucleon) {
+      fNucleon->GetHadronNucleonXscNS(dp, proton);
+      sig2 = fNucleon->GetInelasticHadronNucleonXsc();
+    } else {
+      nnXsection->GetZandACrossSection(dp, 1, 1);
+      sig2 = nnXsection->GetInelasticGlauberGribovXsc();
+    }
+  } else {
+    G4int Amean = G4lrint(fNist->GetAtomicMassAmu(Z));
+    if(ggXsection) {
+      ggXsection->GetIsoCrossSection(dp, Z, Amean);
+      sig2 = ggXsection->GetInelasticGlauberGribovXsc();
+    } else {
+      nnXsection->GetZandACrossSection(dp, Z, Amean);
+      sig2 = nnXsection->GetInelasticGlauberGribovXsc();
+    }
   }
   if(sig2 > 0.) { coeff[Z] = sig1/sig2; } 
 }
@@ -418,7 +426,7 @@ G4ParticleInelasticXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
       ed << "Data file <" << ost.str().c_str()
 	 << "> is not opened!";
       G4Exception("G4ParticleInelasticXS::RetrieveVector(..)","had014",
-		  FatalException, ed, "Check G4NEUTRONXSDATA");
+		  FatalException, ed, "Check G4PARTICLEXSDATA");
     }
   } else {
     if(verboseLevel > 1) {
@@ -432,7 +440,7 @@ G4ParticleInelasticXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
       ed << "Data file <" << ost.str().c_str()
 	 << "> is not retrieved!";
       G4Exception("G4ParticleInelasticXS::RetrieveVector(..)","had015",
-		  FatalException, ed, "Check G4NEUTRONXSDATA");
+		  FatalException, ed, "Check G4PARTICLEXSDATA");
     }
   }
   return v;

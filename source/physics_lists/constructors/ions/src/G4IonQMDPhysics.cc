@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonQMDPhysics.cc 80671 2014-05-06 13:59:16Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -69,141 +68,96 @@
 #include "G4IonConstructor.hh"
 #include "G4BuilderType.hh"
 #include "G4HadronicInteractionRegistry.hh"
+#include "G4HadronicParameters.hh"
+#include "G4DeexPrecoParameters.hh"
+#include "G4NuclearLevelData.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4IonQMDPhysics);
 
-G4ThreadLocal std::vector<G4HadronInelasticProcess*>* G4IonQMDPhysics::p_list = 0;
-G4ThreadLocal std::vector<G4HadronicInteraction*>* G4IonQMDPhysics::model_list = 0;
-
-G4ThreadLocal G4VCrossSectionDataSet* G4IonQMDPhysics::theNuclNuclData = 0; 
-G4ThreadLocal G4VComponentCrossSection* G4IonQMDPhysics::theGGNuclNuclXS = 0;
-
-G4ThreadLocal G4BinaryLightIonReaction* G4IonQMDPhysics::theIonBC = 0;
-G4ThreadLocal G4HadronicInteraction* G4IonQMDPhysics::theFTFP = 0;
-G4ThreadLocal G4FTFBuilder* G4IonQMDPhysics::theBuilder = 0;
-G4ThreadLocal  G4QMDReaction* G4IonQMDPhysics::theQMD = 0;
-G4ThreadLocal G4bool G4IonQMDPhysics::wasActivated = false;
+G4ThreadLocal G4FTFBuilder* G4IonQMDPhysics::theFTFPBuilder = nullptr;
 
 G4IonQMDPhysics::G4IonQMDPhysics(G4int ver)
-  :  G4VPhysicsConstructor("IonQMD"), verbose(ver)
-{
-  eminBIC  = 0.*MeV;
-  eminQMD  = 100.*MeV;
-  emaxQMD  = 10.*GeV;
-  emaxFTFP = 1.*TeV;
-  overlap  = 10*MeV;
-  SetPhysicsType(bIons);
-  if(verbose > 1) G4cout << "### G4IonQMDPhysics" << G4endl;
-}
+  :  G4IonQMDPhysics("IonQMD", ver)
+{}
 
-G4IonQMDPhysics::G4IonQMDPhysics(const G4String& name, 
-						     G4int ver)
-  :  G4VPhysicsConstructor(name), verbose(ver)
+G4IonQMDPhysics::G4IonQMDPhysics(const G4String& nname, G4int ver)
+  :  G4VPhysicsConstructor(nname), verbose(ver)
 {
-  eminBIC  = 0.*MeV;
   eminQMD  = 100.*MeV;
   emaxQMD  = 10.*GeV;
-  emaxFTFP = 1.*TeV;
   overlap  = 10*MeV;
   SetPhysicsType(bIons);
-  if(verbose > 1) G4cout << "### G4IonQMDPhysics" << G4endl;
+  G4DeexPrecoParameters* param = G4NuclearLevelData::GetInstance()->GetParameters();
+  param->SetDeexChannelsType(fCombined);
+  if(verbose > 1) { G4cout << "### IonPhysics: " << nname << G4endl; }
 }
 
 G4IonQMDPhysics::~G4IonQMDPhysics()
 {
-  if(wasActivated) {
-    delete theBuilder; theBuilder = 0;
-    delete theGGNuclNuclXS; theGGNuclNuclXS = 0; 
-    delete theNuclNuclData; theNuclNuclData = 0;
-    G4int i;
-    if ( p_list ) {
-      G4int n = p_list->size();
-      for(i=0; i<n; i++) {delete (*p_list)[i];}
-      delete p_list; p_list = 0;
-    }
-    if ( model_list ) {
-      G4int n = model_list->size();
-      for(i=0; i<n; i++) {delete (*model_list)[i];}
-      delete model_list; model_list = 0;
-    }
-  }
+  delete theFTFPBuilder; theFTFPBuilder = nullptr;
 }
 
 void G4IonQMDPhysics::ConstructProcess()
 {
-  if(wasActivated) return;
-  wasActivated = true;
-
   G4HadronicInteraction* p =
     G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
   G4PreCompoundModel* thePreCompound = static_cast<G4PreCompoundModel*>(p); 
   if(!thePreCompound) { thePreCompound = new G4PreCompoundModel; }
 
-  theIonBC = new G4BinaryLightIonReaction(thePreCompound);
-  if ( model_list == 0 ) model_list = new std::vector<G4HadronicInteraction*>;
-  model_list->push_back(theIonBC);
+  G4BinaryLightIonReaction* theIonBC = new G4BinaryLightIonReaction(thePreCompound);
+  theIonBC->SetMaxEnergy(eminQMD + overlap);
 
-  theBuilder = new G4FTFBuilder("FTFP",thePreCompound);
-  theFTFP = theBuilder->GetModel();
-  model_list->push_back(theFTFP);
+  G4double emax = G4HadronicParameters::Instance()->GetMaxEnergy();
+  G4HadronicInteraction* theFTFP = nullptr;
+  if(emax > emaxQMD) {
+    theFTFPBuilder = new G4FTFBuilder("FTFP",thePreCompound);
+    theFTFP = theFTFPBuilder->GetModel();
+    theFTFP->SetMinEnergy(emaxQMD - overlap);
+    theFTFP->SetMaxEnergy(emax);
+  }
 
-  theQMD= new G4QMDReaction();
-  model_list->push_back(theQMD);
+  G4QMDReaction* theQMD = new G4QMDReaction();
+  theQMD->SetMinEnergy(eminQMD);
+  theQMD->SetMaxEnergy(emaxQMD);
 
-  theNuclNuclData = new G4CrossSectionInelastic( theGGNuclNuclXS = new G4ComponentGGNuclNuclXsc() );
+  G4VCrossSectionDataSet* theNuclNuclData = 
+    new G4CrossSectionInelastic( new G4ComponentGGNuclNuclXsc() );
 
-  AddProcess("dInelastic", G4Deuteron::Deuteron(), theIonBC, theQMD, theFTFP);
-  AddProcess("tInelastic", G4Triton::Triton(), theIonBC, theQMD, theFTFP);
-  AddProcess("He3Inelastic", G4He3::He3(), theIonBC, theQMD, theFTFP);
-  AddProcess("alphaInelastic", G4Alpha::Alpha(), theIonBC, theQMD, theFTFP);
-  AddProcess("ionInelastic", G4GenericIon::GenericIon(), theIonBC, theQMD, theFTFP);
-
+  AddProcess("dInelastic", G4Deuteron::Deuteron(), theIonBC, theQMD, theFTFP, theNuclNuclData);
+  AddProcess("tInelastic", G4Triton::Triton(), theIonBC, theQMD, theFTFP, theNuclNuclData);
+  AddProcess("He3Inelastic", G4He3::He3(), theIonBC, theQMD, theFTFP, theNuclNuclData);
+  AddProcess("alphaInelastic", G4Alpha::Alpha(), theIonBC, theQMD, theFTFP, theNuclNuclData);
+  AddProcess("ionInelastic", G4GenericIon::GenericIon(), theIonBC, theQMD, theFTFP, theNuclNuclData);
 }
 
 void G4IonQMDPhysics::AddProcess(const G4String& name,
 			         G4ParticleDefinition* p, 
 				 G4BinaryLightIonReaction* BIC,
 				 G4QMDReaction* QMD,
-				 G4HadronicInteraction* FTFP)
+				 G4HadronicInteraction* FTFP,
+				 G4VCrossSectionDataSet* theNuclNuclData)
 {
   G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, p);
-  if ( p_list == 0 ) p_list = new  std::vector<G4HadronInelasticProcess*>;
-  p_list->push_back(hadi);
   G4ProcessManager* pManager = p->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
 
   hadi->AddDataSet(theNuclNuclData);
 
-  BIC->SetMinEnergy(eminBIC);
-  BIC->SetMaxEnergy(emaxQMD);  //reset when QMD is present 
   hadi->RegisterMe(BIC);
-
-  if(QMD) {
-    QMD->SetMinEnergy(eminQMD);
-    BIC->SetMaxEnergy(eminQMD+overlap);
-    QMD->SetMaxEnergy(emaxQMD);
-    hadi->RegisterMe(QMD);
-  }  
-
-  if(FTFP) {
-    FTFP->SetMinEnergy(emaxQMD - overlap);
-    FTFP->SetMaxEnergy(emaxFTFP);
-    hadi->RegisterMe(FTFP);
-  }  
+  hadi->RegisterMe(QMD);
+  if(FTFP) { hadi->RegisterMe(FTFP); }  
 
   if(verbose > 1) {
     G4cout << "Register " << hadi->GetProcessName()
 	   << " for " << p->GetParticleName() << G4endl
-	   << "       Binary Cascade for E(MeV)= " << eminBIC << " - " 
-	   << (QMD==0 ? emaxQMD : (eminQMD-overlap)) ;
-    if(QMD) {
-      G4cout  << G4endl <<"       QMD for E(MeV)= " << eminQMD << " - " << emaxQMD;
-    }
+	   << "       Binary Cascade for E(MeV)= 0 - " 
+	   << eminQMD+overlap;
+    G4cout << "       QMD for E(MeV)= " << eminQMD << " - " << emaxQMD;
     if(FTFP) {
-      G4cout << G4endl<< "       FTFP for E(MeV)= " << emaxQMD-overlap << " - " << emaxFTFP;
+      G4cout << "       FTFP for E(MeV)= " << emaxQMD-overlap << " - " << FTFP->GetMaxEnergy();
     }
     G4cout << G4endl;
   }

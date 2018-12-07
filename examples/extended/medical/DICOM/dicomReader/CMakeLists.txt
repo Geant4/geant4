@@ -45,31 +45,74 @@ dicom_build_library(
     LINK_LIBRARIES ${Geant4_LIBRARIES} ${DCMTK_LIBRARIES})
 
 #----------------------------------------------------------------------------
-# Install the library to 'lib' directory under CMAKE_INSTALL_PREFIX
+# Configuration
 #
-set(dicomReader_DIR lib/Geant4-${Geant4_VERSION} CACHE PATH "dicomReader installation")
-
-install(FILES ${headers} DESTINATION include/dicomReader)
-install(TARGETS ${${PROJECT_NAME}_INSTALL_LIBRARIES}
-    DESTINATION lib EXPORT dicomReaderTargets)
-install(EXPORT dicomReaderTargets DESTINATION ${dicomReader_DIR})
-
-set(INCLUDE_INSTALL_DIR include/dicomReader)
-set(LIB_INSTALL_DIR lib)
-set(CONFIG_INSTALL_DIR ${dicomReader_DIR})
-
 include(CMakePackageConfigHelpers)
-configure_package_config_file(
-    ${PROJECT_SOURCE_DIR}/cmake/dicomReaderConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/dicomReaderConfig.cmake
-    INSTALL_DESTINATION ${dicomReader_DIR}
-    PATH_VARS INCLUDE_INSTALL_DIR CONFIG_INSTALL_DIR)
+include(GNUInstallDirs)
+
+#----------------------------------------------------------------------------
+# Configuration for build tree
+#
+export(TARGETS ${${PROJECT_NAME}_INSTALL_LIBRARIES}
+    FILE ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Build.cmake)
+
+set(PROJECT_TARGETS_FILE ${PROJECT_NAME}Build.cmake)
+set(PACKAGE_INCLUDE_INSTALL_DIR ${PROJECT_SOURCE_DIR}/include)
+set(PACKAGE_INIT
+"macro(set_and_check _var _file)
+    set(\${_var} \"\${_file}\")
+    if(NOT EXISTS \"\${_file}\")
+        message(FATAL_ERROR \"File or directory \${_file} referenced by variable \${_var} does not exist !\")
+    endif()
+endmacro()
+
+macro(check_required_components _NAME)
+    foreach(comp \${\${_NAME}_FIND_COMPONENTS})
+        if(NOT \${_NAME}_\${comp}_FOUND)
+            if(\${_NAME}_FIND_REQUIRED_\${comp})
+                set(\${_NAME}_FOUND FALSE)
+            endif()
+        endif()
+    endforeach()
+endmacro()
+")
+
+configure_file(
+    ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
+    ${CMAKE_BINARY_DIR}/${PROJECT_NAME}Config.cmake @ONLY)
 
 write_basic_package_version_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/dicomReaderConfigVersion.cmake
+    ${CMAKE_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
     VERSION ${Geant4_VERSION}
     COMPATIBILITY SameMajorVersion )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dicomReaderConfig.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/dicomReaderConfigVersion.cmake
-    DESTINATION ${dicomReader_DIR} )
+unset(PACKAGE_INIT)
+
+#----------------------------------------------------------------------------
+# Install the library to 'lib' directory under CMAKE_INSTALL_PREFIX
+#
+set(${PROJECT_NAME}_DIR ${CMAKE_INSTALL_LIBDIR}/Geant4-${Geant4_VERSION} CACHE PATH "${PROJECT_NAME} installation")
+
+install(FILES ${headers} DESTINATION include/${PROJECT_NAME})
+install(TARGETS ${${PROJECT_NAME}_INSTALL_LIBRARIES}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR} EXPORT ${PROJECT_NAME}Targets)
+install(EXPORT ${PROJECT_NAME}Targets DESTINATION ${${PROJECT_NAME}_DIR})
+
+set(PROJECT_TARGETS_FILE ${PROJECT_NAME}Targets.cmake)
+set(INCLUDE_INSTALL_DIR include/${PROJECT_NAME})
+set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
+
+configure_package_config_file(
+    ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
+    ${CMAKE_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}Config.cmake
+    INSTALL_DESTINATION ${${PROJECT_NAME}_DIR}
+    PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
+
+write_basic_package_version_file(
+    ${CMAKE_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}ConfigVersion.cmake
+    VERSION ${Geant4_VERSION}
+    COMPATIBILITY SameMajorVersion )
+
+install(FILES ${CMAKE_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}Config.cmake
+    ${CMAKE_BINARY_DIR}/InstallTreeFiles/${PROJECT_NAME}ConfigVersion.cmake
+    DESTINATION ${${PROJECT_NAME}_DIR} )

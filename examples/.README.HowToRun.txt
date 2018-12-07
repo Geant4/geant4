@@ -1,4 +1,3 @@
-$Id$
 
 ///\file ".README.HowToRun.txt"
 ///\brief Examples How To Run README page

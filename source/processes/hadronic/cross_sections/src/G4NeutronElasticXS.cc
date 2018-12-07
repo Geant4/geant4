@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.cc 110744 2018-06-12 06:35:40Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -69,28 +68,31 @@ G4double G4NeutronElasticXS::coeff[] = {1.0};
 
 G4NeutronElasticXS::G4NeutronElasticXS() 
  : G4VCrossSectionDataSet(Default_Name()),
-   proton(G4Proton::Proton())
+   ggXsection(nullptr),
+   fNucleon(nullptr),
+   proton(G4Proton::Proton()),
+   isMaster(false)
 {
   //  verboseLevel = 0;
   if(verboseLevel > 0){
     G4cout  << "G4NeutronElasticXS::G4NeutronElasticXS Initialise for Z < " 
 	    << MAXZEL << G4endl;
   }
-  ggXsection = new G4ComponentGGHadronNucleusXsc();
-  fNucleon = new G4HadronNucleonXsc();
-  isMaster = false;
+  SetForAllAtomsAndEnergies(true);
 }
 
 G4NeutronElasticXS::~G4NeutronElasticXS()
 {
+  //std::cout << "delete G4NeutronElasticXS  " << fNucleon 
+  // << "  " << ggXsection << std::endl; 
   delete fNucleon;
-  delete ggXsection;
   if(isMaster) {
     for(G4int i=0; i<MAXZEL; ++i) {
       delete data[i];
       data[i] = nullptr;
     }
   }
+  //std::cout << "delete G4NeutronElasticXS done " << std::endl; 
 }
 
 void G4NeutronElasticXS::CrossSectionDescription(std::ostream& outFile) const
@@ -130,7 +132,7 @@ G4NeutronElasticXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
   if(ekin <= pv->GetMaxEnergy()) { 
     xs = pv->Value(ekin); 
   } else if(1 == Z) { 
-    fNucleon->GetHadronNucleonXscPDG(aParticle, proton);
+    fNucleon->GetHadronNucleonXscNS(aParticle, proton);
     xs = coeff[1]*fNucleon->GetElasticHadronNucleonXsc();
   } else {          
     G4int Amean = 
@@ -162,6 +164,8 @@ G4NeutronElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 		FatalException, ed, "");
     return; 
   }
+  if(!ggXsection) { ggXsection = new G4ComponentGGHadronNucleusXsc(); }
+  if(!fNucleon)   { fNucleon = new G4HadronNucleonXsc(); }
 
   if(!data[1]) { 
 #ifdef G4MULTITHREADED
@@ -180,7 +184,7 @@ G4NeutronElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 
     // check environment variable 
     // Build the complete string identifying the file with the data set
-    char* path = getenv("G4NEUTRONXSDATA");
+    char* path = getenv("G4PARTICLEXSDATA");
 
     G4DynamicParticle* dynParticle = 
       new G4DynamicParticle(G4Neutron::Neutron(),G4ThreeVector(1,0,0),1);
@@ -208,11 +212,11 @@ G4NeutronElasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
   if(!p) {
     // check environment variable 
     // Build the complete string identifying the file with the data set
-    path = getenv("G4NEUTRONXSDATA");
+    path = getenv("G4PARTICLEXSDATA");
     if (!path) {
       G4Exception("G4NeutronElasticXS::Initialise(..)","had013",
 		  FatalException,
-                  "Environment variable G4NEUTRONXSDATA is not defined");
+                  "Environment variable G4PARTICLEXSDATA is not defined");
       return;
     }
   }
@@ -228,7 +232,7 @@ G4NeutronElasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
     ed << "Data file <" << ost.str().c_str()
        << "> is not opened!";
     G4Exception("G4NeutronElasticXS::Initialise(..)","had014",
-                FatalException, ed, "Check G4NEUTRONXSDATA");
+                FatalException, ed, "Check G4PARTICLEXSDATA");
     return;
   }else{
     if(verboseLevel > 1) {
@@ -242,7 +246,7 @@ G4NeutronElasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
       ed << "Data file <" << ost.str().c_str()
 	 << "> is not retrieved!";
       G4Exception("G4NeutronElasticXS::Initialise(..)","had015",
-		  FatalException, ed, "Check G4NEUTRONXSDATA");
+		  FatalException, ed, "Check G4PARTICLEXSDATA");
       return;
     }
     
@@ -251,7 +255,7 @@ G4NeutronElasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
     dp->SetKineticEnergy(data[Z]->GetMaxEnergy());
     G4double sig2 = 0.0;
     if(1 == Z) {
-      fNucleon->GetHadronNucleonXscPDG(dp, proton);
+      fNucleon->GetHadronNucleonXscNS(dp, proton);
       sig2 = fNucleon->GetElasticHadronNucleonXsc();
     } else {
       G4int Amean = 

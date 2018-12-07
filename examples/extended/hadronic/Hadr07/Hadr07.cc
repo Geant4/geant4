@@ -26,7 +26,6 @@
 /// \file Hadr07.cc
 /// \brief Main program of the hadronic/Hadr07 example
 //
-// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

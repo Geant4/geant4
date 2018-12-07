@@ -37,35 +37,24 @@
 #ifndef G4HadronElasticPhysicsPHP_h
 #define G4HadronElasticPhysicsPHP_h 1
 
-#include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
+#include "G4HadronElasticPhysics.hh"
 
-class G4HadronElasticPhysics;
-
-class G4HadronElasticPhysicsPHP : public G4VPhysicsConstructor
+class G4HadronElasticPhysicsPHP : public G4HadronElasticPhysics
 {
 public: 
 
-  G4HadronElasticPhysicsPHP(G4int ver = 1); 
+  explicit G4HadronElasticPhysicsPHP(G4int ver = 1); 
 
   virtual ~G4HadronElasticPhysicsPHP();
 
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
- 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+  void ConstructProcess() final;
 
 private:
-  G4HadronElasticPhysicsPHP(const G4HadronElasticPhysicsPHP&);
-  G4HadronElasticPhysicsPHP& operator=(const G4HadronElasticPhysicsPHP&);
-  G4int    verbose;
-  static G4ThreadLocal G4bool wasActivated;
-  static G4ThreadLocal G4HadronElasticPhysics* mainElasticBuilder;
+  G4HadronElasticPhysicsPHP(const G4HadronElasticPhysicsPHP&) = delete;
+  G4HadronElasticPhysicsPHP& operator=(const G4HadronElasticPhysicsPHP&) = delete;
 };
-
 
 #endif

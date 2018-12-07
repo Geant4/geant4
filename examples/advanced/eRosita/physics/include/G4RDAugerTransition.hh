@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDAugerTransition.hh v0.1
 // 
 // 
 // Author: Alfonso Mantero (Alfosno.Mantero@ge.infn.it)

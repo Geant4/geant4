@@ -27,7 +27,6 @@
 /// \brief Definition of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.hh 72513 2013-07-24 20:37:54Z gum $
 //
 //
 

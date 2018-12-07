@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StepMaxMessenger.cc 70735 2013-06-05 10:13:16Z gcosmo $
 //
 /// \file medical/electronScattering2/src/StepMaxMessenger.cc
 /// \brief Implementation of the StepMaxMessenger class

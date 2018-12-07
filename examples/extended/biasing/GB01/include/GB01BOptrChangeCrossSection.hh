@@ -26,7 +26,6 @@
 /// \file GB01/include/GB01BOptrChangeCrossSection.hh
 /// \brief Definition of the GB01BOptrChangeCrossSection class
 //
-// $Id: $
 //---------------------------------------------------------------
 //
 // GB01BOptrChangeCrossSection

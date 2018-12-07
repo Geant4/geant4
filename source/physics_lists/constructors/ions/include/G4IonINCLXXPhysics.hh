@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonINCLXXPhysics.hh 78602 2014-01-09 11:40:04Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -44,12 +43,11 @@
 
 #include <vector>
 
-class G4HadronInelasticProcess;
-class G4HadronicInteraction;
 class G4INCLXXInterface;
 class G4FTFBuilder;
+class G4ParticleDefinition;
+class G4HadronicInteraction;
 class G4VCrossSectionDataSet;
-class G4VComponentCrossSection;
 
 class G4IonINCLXXPhysics : public G4VPhysicsConstructor
 {
@@ -73,38 +71,20 @@ private:
 		  G4ParticleDefinition*, 
 		  G4HadronicInteraction*,
 		  G4HadronicInteraction*,
-		  const G4double);
-  static G4ThreadLocal std::vector<G4HadronInelasticProcess*>* p_list;
-  static G4ThreadLocal std::vector<G4HadronicInteraction*>* model_list;
-
-  static G4ThreadLocal G4VCrossSectionDataSet* theNuclNuclData; 
-  static G4ThreadLocal G4VComponentCrossSection* theGGNuclNuclXS;
+		  G4VCrossSectionDataSet*);
 
   static G4ThreadLocal G4INCLXXInterface* theINCLXXDeuteron;
   static G4ThreadLocal G4INCLXXInterface* theINCLXXTriton;
   static G4ThreadLocal G4INCLXXInterface* theINCLXXHe3;
   static G4ThreadLocal G4INCLXXInterface* theINCLXXAlpha;
   static G4ThreadLocal G4INCLXXInterface* theINCLXXIons;
-  static G4ThreadLocal G4HadronicInteraction* theFTFPDeuteron;
-  static G4ThreadLocal G4HadronicInteraction* theFTFPTriton;
-  static G4ThreadLocal G4HadronicInteraction* theFTFPHe3;
-  static G4ThreadLocal G4HadronicInteraction* theFTFPAlpha;
-  static G4ThreadLocal G4HadronicInteraction* theFTFPIons;
-  static G4ThreadLocal G4FTFBuilder* theFTFPBuilderDeuteron;
-  static G4ThreadLocal G4FTFBuilder* theFTFPBuilderTriton;
-  static G4ThreadLocal G4FTFBuilder* theFTFPBuilderHe3;
-  static G4ThreadLocal G4FTFBuilder* theFTFPBuilderAlpha;
-  static G4ThreadLocal G4FTFBuilder* theFTFPBuilderIons;
+  static G4ThreadLocal G4FTFBuilder* theFTFPBuilder;
 
-  G4double emin;
-  G4double emax_d, emax_t, emax_he3, emax_alpha;
-  G4double emax;
-  G4double emaxFTFP;
+  G4double emaxINCLXX;
+  G4double deltaE;
 
   G4int  verbose;
-  static G4ThreadLocal G4bool wasActivated;
 };
-
 
 #endif
 

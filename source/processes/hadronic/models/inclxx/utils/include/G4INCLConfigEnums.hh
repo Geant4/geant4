@@ -76,6 +76,9 @@ namespace G4INCL {
 #ifdef INCL_DEEXCITATION_ABLAXX
     , DeExcitationABLAv3p
 #endif
+#ifdef INCL_DEEXCITATION_ABLACXX
+    , DeExcitationABLACXX
+#endif
 #ifdef INCL_DEEXCITATION_ABLA07
     , DeExcitationABLA07
 #endif

@@ -53,12 +53,12 @@ class G4HadronCaptureProcess : public G4HadronicProcess
 {
   public:
 
-    G4HadronCaptureProcess(const G4String& processName ="nCapture");
+    explicit G4HadronCaptureProcess(const G4String& processName ="nCapture");
   
     virtual ~G4HadronCaptureProcess();
  
-    virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+    G4bool IsApplicable(const G4ParticleDefinition& aParticleType) final;
 
-    virtual void ProcessDescription(std::ostream& outFile) const;
+    void ProcessDescription(std::ostream& outFile) const final;
 };
 #endif

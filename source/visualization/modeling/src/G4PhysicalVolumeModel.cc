@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc 110743 2018-06-12 06:33:37Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -32,7 +31,6 @@
 
 #include "G4PhysicalVolumeModel.hh"
 
-#include "G4ModelingParameters.hh"
 #include "G4VGraphicsScene.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VPVParameterisation.hh"
@@ -54,23 +52,27 @@
 #include "G4Vector3D.hh"
 
 #include <sstream>
+#include <iomanip>
 
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
-(G4VPhysicalVolume*          pVPV
+(G4VPhysicalVolume*            pVPV
  , G4int                       requestedDepth
- , const G4Transform3D& modelTransformation
+ , const G4Transform3D&        modelTransformation
  , const G4ModelingParameters* pMP
- , G4bool useFullExtent)
-: G4VModel           (modelTransformation, pMP)
+ , G4bool                      useFullExtent
+ , const std::vector<G4PhysicalVolumeNodeID>& baseFullPVPath)
+: G4VModel           (modelTransformation,pMP)
 , fpTopPV            (pVPV)
 , fTopPVCopyNo       (0)
 , fRequestedDepth    (requestedDepth)
 , fUseFullExtent     (useFullExtent)
 , fCurrentDepth      (0)
-, fpCurrentPV        (0)
-, fpCurrentLV        (0)
-, fpCurrentMaterial  (0)
-, fpCurrentTransform (0)
+, fpCurrentPV        (fpTopPV)
+, fCurrentPVCopyNo   (fpTopPV? fpTopPV->GetCopyNo(): 0)
+, fpCurrentLV        (fpTopPV? fpTopPV->GetLogicalVolume(): 0)
+, fpCurrentMaterial  (fpCurrentLV? fpCurrentLV->GetMaterial(): 0)
+, fpCurrentTransform (const_cast<G4Transform3D*>(&modelTransformation))
+, fBaseFullPVPath    (baseFullPVPath)
 , fAbort             (false)
 , fCurtailDescent    (false)
 , fpClippingSolid    (0)
@@ -96,17 +98,11 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   } else {
 
     fTopPVName = fpTopPV -> GetName ();
-    fTopPVCopyNo = fpTopPV -> GetCopyNo ();
-    std::ostringstream o;
-    o << fpTopPV -> GetCopyNo ();
-    fGlobalTag = fpTopPV -> GetName () + "." + o.str();
+    std::ostringstream oss;
+    oss << fpTopPV->GetName() << ':' << fpTopPV->GetCopyNo()
+    << " BasePath:" << fBaseFullPVPath;
+    fGlobalTag = oss.str();
     fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
-
-    fpCurrentPV = fpTopPV;
-    if (fpCurrentPV) fpCurrentLV = fpCurrentPV->GetLogicalVolume();
-    if (fpCurrentLV) fpCurrentMaterial = fpCurrentLV->GetMaterial();
-    fpCurrentTransform = const_cast<G4Transform3D*>(&modelTransformation);
-
     CalculateExtent ();
   }
 }
@@ -114,6 +110,18 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
 G4PhysicalVolumeModel::~G4PhysicalVolumeModel ()
 {
   delete fpClippingSolid;
+}
+
+G4ModelingParameters::PVNameCopyNoPath G4PhysicalVolumeModel::GetPVNameCopyNoPath
+(const std::vector<G4PhysicalVolumeNodeID>& path)
+{
+  G4ModelingParameters::PVNameCopyNoPath PVNameCopyNoPath;
+  for (const auto& node: path) {
+    PVNameCopyNoPath.push_back
+    (G4ModelingParameters::PVNameCopyNo
+     (node.GetPhysicalVolume()->GetName(),node.GetCopyNo()));
+  }
+  return PVNameCopyNoPath;
 }
 
 void G4PhysicalVolumeModel::CalculateExtent ()
@@ -166,9 +174,6 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
     ("G4PhysicalVolumeModel::DescribeYourselfTo",
      "modeling0003", FatalException, "No modeling parameters.");
 
-  // For safety...
-  fCurrentDepth = 0;
-
   G4Transform3D startingTransformation = fTransform;
 
   VisitGeometryAndGetVisReps
@@ -177,23 +182,16 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
      startingTransformation,
      sceneHandler);
 
-  // Clear data...
+  // Reset or clear data...
   fCurrentDepth     = 0;
-  fpCurrentPV       = 0;
-  fpCurrentLV       = 0;
-  fpCurrentMaterial = 0;
-  if (fFullPVPath.size() != fBaseFullPVPath.size()) {
-    // They should be equal if pushing and popping is happening properly.
-    G4Exception
-    ("G4PhysicalVolumeModel::DescribeYourselfTo",
-     "modeling0013",
-     FatalException,
-     "Path at start of modeling not equal to base path.  Something badly"
-     "\nwrong.  Please contact visualisation coordinator.");
-  }
+  fpCurrentPV       = fpTopPV;
+  fCurrentPVCopyNo  = fpTopPV->GetCopyNo();
+  fpCurrentLV       = fpTopPV->GetLogicalVolume();
+  fpCurrentMaterial = fpCurrentLV? fpCurrentLV->GetMaterial(): 0;
+  fFullPVPath       = fBaseFullPVPath;
   fDrawnPVPath.clear();
-  fAbort = false;
-  fCurtailDescent = false;
+  fAbort            = false;
+  fCurtailDescent   = false;
 }
 
 G4String G4PhysicalVolumeModel::GetCurrentTag () const
@@ -255,6 +253,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	pP -> ComputeTransformation (n, pVPV);
 	pSol -> ComputeDimensions (pP, n, pVPV);
 	pVPV -> SetCopyNo (n);
+        fCurrentPVCopyNo = n;
 	// Create a touchable of current parent for ComputeMaterial.
 	// fFullPVPath has not been updated yet so at this point it
 	// corresponds to the parent.
@@ -338,6 +337,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	pVPV -> SetTranslation (translation);
 	pVPV -> SetRotation    (pRotation);
 	pVPV -> SetCopyNo (n);
+        fCurrentPVCopyNo = n;
 	if (visualisable) {
 	  DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
 			    theAT, sceneHandler);
@@ -365,6 +365,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 {
   // Maintain useful data members...
   fpCurrentPV = pVPV;
+  fCurrentPVCopyNo = pVPV->GetCopyNo();
   fpCurrentLV = pLV;
   fpCurrentMaterial = pMaterial;
 
@@ -801,7 +802,9 @@ const std::map<G4String,G4AttDef>* G4PhysicalVolumeModel::GetAttDefs() const
       = G4AttDefStore::GetInstance("G4PhysicalVolumeModel", isNew);
     if (isNew) {
       (*store)["PVPath"] =
-	G4AttDef("PVPath","Physical Volume Path","Physics","","G4String");
+      G4AttDef("PVPath","Physical Volume Path","Physics","","G4String");
+      (*store)["BasePVPath"] =
+      G4AttDef("BasePVPath","Base Physical Volume Path","Physics","","G4String");
       (*store)["LVol"] =
 	G4AttDef("LVol","Logical Volume","Physics","","G4String");
       (*store)["Solid"] =
@@ -829,8 +832,6 @@ const std::map<G4String,G4AttDef>* G4PhysicalVolumeModel::GetAttDefs() const
     }
   return store;
 }
-
-#include <iomanip>
 
 static std::ostream& operator<< (std::ostream& o, const G4Transform3D t)
 {
@@ -874,12 +875,6 @@ static std::ostream& operator<< (std::ostream& o, const G4Transform3D t)
 std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
 {
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
-  std::ostringstream oss;
-  for (size_t i = 0; i < fFullPVPath.size(); ++i) {
-    oss << fFullPVPath[i].GetPhysicalVolume()->GetName()
-	<< ':' << fFullPVPath[i].GetCopyNo();
-    if (i != fFullPVPath.size() - 1) oss << '/';
-  }
 
   if (!fpCurrentLV) {
      G4Exception
@@ -890,7 +885,10 @@ std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
      return values;
   }
 
+  std::ostringstream oss; oss << fFullPVPath;
   values->push_back(G4AttValue("PVPath", oss.str(),""));
+  oss.str(""); oss << fBaseFullPVPath;
+  values->push_back(G4AttValue("BasePVPath", oss.str(),""));
   values->push_back(G4AttValue("LVol", fpCurrentLV->GetName(),""));
   G4VSolid* pSol = fpCurrentLV->GetSolid();
   values->push_back(G4AttValue("Solid", pSol->GetName(),""));
@@ -954,8 +952,12 @@ std::ostream& operator<<
 std::ostream& operator<<
 (std::ostream& os, const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path)
 {
-  for (const auto& nodeID: path) {
-    os << nodeID << ' ';
+  if (path.empty()) {
+    os << " NULL PATH";
+  } else {
+    for (const auto& nodeID: path) {
+      os << ' ' << nodeID;
+    }
   }
   return os;
 }

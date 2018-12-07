@@ -32,28 +32,33 @@
 #ifndef G4ParticleHPContAngularPar_h
 #define G4ParticleHPContAngularPar_h 1
 
-#include "G4ios.hh"
 #include <fstream>
+#include <set>
+
+#include "G4ios.hh"
 #include "globals.hh"
 #include "G4ParticleHPList.hh"
 #include "G4ReactionProduct.hh"
 #include "G4ParticleHPInterpolator.hh"
 #include "G4InterpolationManager.hh"
 #include "G4Cache.hh"
-#include <set>
+
 class G4ParticleDefinition;
 
 class G4ParticleHPContAngularPar
 {
 
-   struct toBeCached {
+   struct toBeCached
+   {
       G4bool fresh;
       G4double currentMeanEnergy;
       G4double remaining_energy; 
       G4double theTargetCode;
       G4ReactionProduct* theTarget;
       G4ReactionProduct* thePrimary;
-      toBeCached():fresh(true),currentMeanEnergy(-2.0),remaining_energy(0.0),theTargetCode(-1.0),theTarget(NULL),thePrimary(NULL){};
+      toBeCached()
+      : fresh(true),currentMeanEnergy(-2.0),remaining_energy(0.0),
+        theTargetCode(-1.0),theTarget(0),thePrimary(0) {}
    };
 
   public:
@@ -63,14 +68,14 @@ class G4ParticleHPContAngularPar
     theAngular = 0;
     //currentMeanEnergy = -2;
     //fresh = true;
-    fCache.Put(NULL);
+    fCache.Put(0);
     theMinEner = DBL_MAX;
     theMaxEner = -DBL_MAX;
     theEnergy = -1;
     nEnergies = -1;
     nDiscreteEnergies = -1;
     nAngularParameters = -1;
-    theProjectile = NULL;
+    theProjectile = 0;
     adjustResult = true;
   }
 
@@ -78,17 +83,22 @@ class G4ParticleHPContAngularPar
 
   ~G4ParticleHPContAngularPar()
   {
-    if(theAngular!=0) delete [] theAngular;
+    if (theAngular !=0 ) delete [] theAngular;
+    if (fCache.Get() != 0) delete fCache.Get();
   }
   
   void Init(std::istream & aDataFile, G4ParticleDefinition* projectile);
   
-  G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass, 
-                             G4int angularRep, G4int interpol);
+  G4ReactionProduct* Sample(G4double anEnergy, G4double massCode, G4double mass, 
+                            G4int angularRep, G4int interpol);
   
-  G4double GetEnergy() { 
-    if( getenv("G4PHPTEST") ) G4cout << this << " G4ParticleHPContAngularPar::GetEnergy " << theEnergy <<  " nE " << nEnergies << G4endl;
-    return theEnergy; }
+  G4double GetEnergy()
+  { 
+    if( getenv("G4PHPTEST") )
+      G4cout << this << " G4ParticleHPContAngularPar::GetEnergy "
+             << theEnergy <<  " nE " << nEnergies << G4endl;
+    return theEnergy;
+  }
   
   void SetPrimary(G4ReactionProduct * aPrimary)
   {
@@ -100,7 +110,10 @@ class G4ParticleHPContAngularPar
     fCache.Get()->theTarget = aTarget;
   }
   
- void SetTargetCode(G4double aTargetCode) { fCache.Get()->theTargetCode = aTargetCode; }
+  void SetTargetCode(G4double aTargetCode)
+  {
+    fCache.Get()->theTargetCode = aTargetCode;
+  }
   
   void SetInterpolation(G4int theInterpolation)
   {
@@ -109,7 +122,8 @@ class G4ParticleHPContAngularPar
 
   void BuildByInterpolation(G4double anEnergy, G4InterpolationScheme aScheme, 
              G4ParticleHPContAngularPar & store1, 
-             G4ParticleHPContAngularPar & store2); // hmmmm, this interpolates legendre coefficients. Dangerous @@@
+             G4ParticleHPContAngularPar & store2);
+    // NOTE: this interpolates legendre coefficients
 
   void PrepareTableInterpolation(const G4ParticleHPContAngularPar* angularPrev);
   
@@ -157,15 +171,23 @@ class G4ParticleHPContAngularPar
   {
     return theDiscreteEnergiesOwn;
   }
-  G4ParticleHPList* GetAngDataList() const {
+  G4ParticleHPList* GetAngDataList() const
+  {
     return theAngular; 
   }
   
+  void ClearHistories()
+  { 
+    if ( fCache.Get() == 0 ) cacheInit();
+    fCache.Get()->fresh = true;
+  }
+
+  void Dump();
+
 private:
   
   // incoming particle
-  G4double theEnergy; 
-  
+  G4double theEnergy;
   // number of exit channel energies
   G4int nEnergies; 
   // number of discrete exit channels
@@ -179,41 +201,29 @@ private:
   
   G4ParticleHPInterpolator theInt;
   
-  //G4double theTargetCode;
-  //G4ReactionProduct * theTarget;
-  //G4ReactionProduct * thePrimary;
-  
-  //G4double currentMeanEnergy;
+private:
 
-//080718
-   public:
-      //void ClearHistories(){ fresh = true; };
-      void ClearHistories(){ 
-         if ( fCache.Get() == NULL ) cacheInit();
-         fCache.Get()->fresh = true; };
+  G4Cache< toBeCached* > fCache;
+  void cacheInit()
+  {
+    toBeCached* val = new toBeCached;
+    val->currentMeanEnergy = -2;
+    val->remaining_energy = 0;
+    val->fresh=true;
+    fCache.Put( val );
+  };
 
-  void Dump();
-   private:
-      G4Cache< toBeCached* > fCache;
-      void cacheInit() {
-         toBeCached* val = new toBeCached;
-         val->currentMeanEnergy = -2;
-         val->remaining_energy = 0;
-         val->fresh=true;
-         fCache.Put( val );
-      };
-      /*G4bool fresh;*/ 
-      /*G4double remaining_energy;*/ // represent energy rest of cascade chain
+  G4ParticleDefinition* theProjectile;
 
-   G4ParticleDefinition* theProjectile;
-
-  G4bool adjustResult; // if not set it will not force the conservation of energy in angularRep==1, but will sample the particle energy according to the database
+  G4bool adjustResult;
+    // if not set it will not force the conservation of energy in angularRep==1,
+    // but will sample the particle energy according to the database
 
   G4double theMinEner;
   G4double theMaxEner;
   std::set<G4double> theEnergiesTransformed;
   std::set<G4double> theDiscreteEnergies;
   std::map<G4double,G4int> theDiscreteEnergiesOwn;
-
 };
+
 #endif

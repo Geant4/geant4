@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.hh 107868 2017-12-07 14:45:15Z gcosmo $
-// GEANT4 tag $Name:  $
 //
 #ifndef G4FTFParameters_h
 #define G4FTFParameters_h 1
@@ -46,7 +44,6 @@
      //       * "undefined" projectile - nucleon assumed
 
 class G4FTFParamCollection {
-
    public:
    
       //dtor
@@ -132,8 +129,8 @@ class G4FTFParamCollection {
       // ctor
       G4FTFParamCollection();
 
-     // parameters of excitation
-     //
+      // parameters of excitation
+      //
       //
       // these are for Inelastic interactions, i.e. Xinelastic=(Xtotal-Xelastix)>0.
       // for elastic, all the A's & B's, Atop & Ymin are zeros
@@ -230,16 +227,13 @@ class G4FTFParamCollection {
    private:
    
       void Reset();
-
 };
 
-class G4FTFParamCollBaryonProj : public G4FTFParamCollection {
 
+class G4FTFParamCollBaryonProj : public G4FTFParamCollection {
    public:
-   
       // ctor 
       G4FTFParamCollBaryonProj();
-
 };
 
 
@@ -354,10 +348,10 @@ class G4FTFParameters {
     G4double GetPt2ofNuclearDestruction();
     G4double GetMaxPt2ofNuclearDestruction();
 
-  // JVY, July 31, 2017: Is there any reason for NOT making 
-  //                     all the members data private ???
-  //
-  // private: 
+    // JVY, July 31, 2017: Is there any reason for NOT making 
+    //                     all the members data private ???
+    //
+    // private: 
 
     // Initial energy of hN interactions
     G4double FTFhNcmsEnergy;  // Initial hN CMS energy

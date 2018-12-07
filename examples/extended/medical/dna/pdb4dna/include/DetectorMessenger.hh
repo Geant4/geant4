@@ -37,7 +37,6 @@
 // november 2013
 // --------------------------------------------------------------
 //
-// $Id$
 //
 /// \file DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class

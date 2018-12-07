@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "parallel/TopC/ParN04/.README.txt"
 ///\brief Example ParN04 README page

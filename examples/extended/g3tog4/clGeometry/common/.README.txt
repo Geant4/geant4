@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "common/.README.txt"
 ///\brief Common classes README page

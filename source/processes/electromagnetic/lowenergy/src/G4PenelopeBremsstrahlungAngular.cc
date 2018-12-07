@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungAngular.cc 99415 2016-09-21 09:05:43Z gcosmo $
 //
 // --------------------------------------------------------------
 //

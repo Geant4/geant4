@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 // class G4VIntegrationDriver
 //
@@ -53,26 +52,37 @@
 
 class G4VIntegrationDriver {
 public:
-    G4VIntegrationDriver()
-      : max_stepping_increase(5), max_stepping_decrease(0.1) {};
     virtual ~G4VIntegrationDriver() = default;
 
-    G4VIntegrationDriver(const G4VIntegrationDriver&) = delete;
-    const G4VIntegrationDriver& operator = (const G4VIntegrationDriver&) = delete;
+    virtual G4double AdvanceChordLimited(G4FieldTrack& track,
+                                         G4double hstep,
+                                         G4double eps,
+                                         G4double chordDistance) = 0;
 
-    virtual G4bool QuickAdvance(G4FieldTrack& track,   // INOUT
-                                const G4double dydx[],
-                                G4double hstep,
-                                G4double& dchord_step,
-                                G4double& dyerr) = 0;
+    //[[deprecated("will be removed")]]
+    virtual G4bool QuickAdvance(G4FieldTrack& /*track*/,   // INOUT
+                                const G4double /*dydx*/[],
+                                G4double /*hstep*/,
+                                G4double /*inverseCurvatureRadius*/,
+                                G4double& /*dchord_step*/,
+                                G4double& /*dyerr*/) 
+    {
+        return false;
+    };
 
     virtual G4bool AccurateAdvance(G4FieldTrack& track,
                                    G4double hstep,
                                    G4double eps,               // Requested y_err/hstep
                                    G4double hinitial = 0) = 0; // Suggested 1st interval
 
+    //[[deprecated("will be removed")]]
     virtual void GetDerivatives(const G4FieldTrack& track,
                                 G4double dydx[]) const = 0;
+
+    //[[deprecated("will be removed")]]
+    virtual void GetDerivatives(const G4FieldTrack& track,
+                                G4double dydx[],
+                                G4double field[]) const = 0;
 
     virtual void SetEquationOfMotion(G4EquationOfMotion* equation) = 0;
     virtual G4EquationOfMotion* GetEquationOfMotion() = 0;
@@ -88,16 +98,26 @@ public:
     // a step size for the next step.
     // Do not limit the next step's size within a factor of the
     // current one.
+    //[[deprecated("will be removed")]]
     virtual G4double ComputeNewStepSize(G4double errMaxNorm,    // normalised error
                                         G4double hstepCurrent) = 0; // current step size
 
     virtual void SetVerboseLevel(G4int level) = 0;
     virtual G4int GetVerboseLevel() const = 0;
 
-  protected:
+    virtual G4double GetInverseCurvatureRadius(const G4FieldTrack& track,
+                                               G4double field[]) const;
 
-    G4double max_stepping_increase;
-    G4double max_stepping_decrease;
+    virtual void OnComputeStep() = 0;
+
+    virtual void OnStartTracking() = 0;
+
+protected:
+    using State = G4double[G4FieldTrack::ncompSVEC];
+
+    static constexpr G4double UNKNOWN_CURVATURE_RADIUS = -1;
+    static constexpr G4double max_stepping_increase = 5;
+    static constexpr G4double max_stepping_decrease = 0.1;
 };
 
 

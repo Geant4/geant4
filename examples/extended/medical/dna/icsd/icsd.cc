@@ -30,7 +30,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $Id$
 //
 /// \file icds.cc
 /// \brief icds example
@@ -78,9 +77,6 @@ int main(int argc,char** argv)
                     "To many argument were provided.");
         return 0;
     }
-
-   // Choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
 

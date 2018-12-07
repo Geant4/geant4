@@ -1,4 +1,3 @@
-$Id: README 76254 2013-11-08 11:27:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,11 +7,9 @@ $Id: README 76254 2013-11-08 11:27:57Z gcosmo $
                                  README
                           -----------------------
 
-Authors: S. Guatelli (susanna@uow.edu.au), University of Wollongong, Australia,  M. G. Pia (pia@ge.infn.it),
-         INFN Genova, Italy and F. Ambroglini (filippo.ambroglini@pg.infn.it), INFN Perugia, Italy.
-
-This example is currently maintained by S. Guatelli, University of Wollongong, Australia 
-and L. Pandola, LNGS, INFN, Italy.
+Past Authors:  G. Guerrieri, S. Guatelli, M. G. Pia (pia@ge.infn.it),INFN Genova, Italy.
+Current authors (since 2007): S. Guatelli (susanna@uow.edu.au), University of Wollongong, Australia.
+Contributions by F. Ambroglini (filippo.ambroglini@pg.infn.it), INFN Perugia, Italy.
 
 The example is based on code developed by G. Guerrieri, University of Genova, Italy.
 

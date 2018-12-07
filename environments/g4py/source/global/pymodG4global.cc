@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4global.cc 66892 2013-01-17 10:57:59Z gunter $
 // ====================================================================
 //   pymodG4global.cc [Geant4Py module]
 //

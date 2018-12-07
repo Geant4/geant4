@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/src/RE04TrackingAction.cc
 /// \brief Implementation of the RE04TrackingAction class
 //
-// $Id: $
 //
 #include "RE04TrackingAction.hh"
 #include "G4TrackingManager.hh"

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc 108131 2018-01-09 13:23:26Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -33,7 +32,7 @@
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #include "G4ios.hh"
-#include "G4SystemOfUnits.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLTransform3D.hh"
@@ -1203,8 +1202,8 @@ void G4OpenGLViewer::rotateSceneThetaPhi(G4double dx, G4double dy)
     delta_theta = dx * fRot_sens;
   }    
   
-  delta_alpha *= deg;
-  delta_theta *= deg;
+  delta_alpha *= CLHEP::deg;
+  delta_theta *= CLHEP::deg;
   
   new_vp = std::cos(delta_alpha) * vp + std::sin(delta_alpha) * zprime;
   

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.cc 108685 2018-02-27 07:58:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -62,9 +61,8 @@ G4PreCompoundEmission::G4PreCompoundEmission()
   theFragmentsVector = 
     new G4PreCompoundFragmentVector(theFragmentsFactory->GetFragmentVector());
   g4calc = G4Pow::GetInstance();
-  G4DeexPrecoParameters* param = 
-    G4NuclearLevelData::GetInstance()->GetParameters() ;
-  fLevelDensity = param->GetLevelDensity();
+  fNuclData = G4NuclearLevelData::GetInstance();
+  G4DeexPrecoParameters* param = fNuclData->GetParameters();
   fFermiEnergy  = param->GetFermiEnergy();
   fUseAngularGenerator = param->UseAngularGen();
 }
@@ -188,7 +186,8 @@ void G4PreCompoundEmission::AngularDistribution(
   // Emission particle separation energy
   G4double Bemission = thePreFragment->GetBindingEnergy();
 	
-  G4double gg = (6.0/pi2)*aFragment.GetA_asInt()*fLevelDensity;
+  G4double gg = (6.0/pi2)*fNuclData->GetLevelDensity(aFragment.GetZ_asInt(),
+                                                     aFragment.GetA_asInt(),U);
 	
   // Average exciton energy relative to bottom of nuclear well
   G4double Eav = 2*p*(p+1)/((p+h)*gg);

@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr01/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 109654 2018-05-04 08:57:00Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -158,8 +157,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     z += 2.0*fSliceZ;
   }
   G4cout << "### Target consist of " << fSlices
-         << " of " << fTargetMaterial->GetName() 
-         << " disks with R(mm)= " << fRadius/mm
+         << " disks of " << fTargetMaterial->GetName() 
+         << " with R(mm)= " << fRadius/mm
          << "  Width(mm)= " << 2.0*fSliceZ/mm
          << "  Total Length(mm)= " << 2.0*fTargetZ/mm
          <<  "  ###" << G4endl;

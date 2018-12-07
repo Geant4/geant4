@@ -27,7 +27,6 @@
 /// \brief Definition of the LXeHistoManager class
 //
 //
-// $Id: LXeHistoManager.hh 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElectronElModel.cc 91806 2015-08-06 12:20:45Z gcosmo $
 //
 // Geant4 Header : G4NeutronElectronElModel
 //

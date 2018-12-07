@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id:$
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -50,10 +49,10 @@
 
 #include "G4Polyhedron.hh"
 
-class G4UTrd : public G4UAdapter<vecgeom::UnplacedTrd> 
+class G4UTrd : public G4UAdapter<vecgeom::GenericUnplacedTrd> 
 {
-  using Shape_t = vecgeom::UnplacedTrd;
-  using Base_t  = G4UAdapter<vecgeom::UnplacedTrd>;
+  using Shape_t = vecgeom::GenericUnplacedTrd;
+  using Base_t  = G4UAdapter<vecgeom::GenericUnplacedTrd>;
 
   public:  // with description
 

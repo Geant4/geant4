@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellFluxForCylinder3D.cc 67992 2013-03-13 10:59:57Z gcosmo $
-// GEANT4 tag $Name: geant4-09-04 $
 //
 // G4PSPassageCellFluxForCylinder3D
 #include "G4PSPassageCellFluxForCylinder3D.hh"

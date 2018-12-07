@@ -27,7 +27,6 @@
 /// \brief Implementation of the DetectorHarris73 class
 //
 //
-// $Id: DetectorHarris73.cc 72517 2013-07-24 23:01:29Z gum $
 //
 //
 

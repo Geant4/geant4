@@ -1,4 +1,3 @@
-$Id: History 108673 2018-02-27 07:30:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +12,35 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-November-2018 A. Ribon  (phys-lists-V10-04-07)
+- Shielding : replaced "putenv" of the environmental variable
+    G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS with a call to
+    G4ParticleHPManager::SetProduceFissionFragments .
+
+03-November-2018 V.Ivanchenko  (phys-lists-V10-04-06)
+- PhysListFactory - added extra EM options "WVI" and "_EM"
+
+15-October-2018 V.Ivanchenko  (phys-lists-V10-04-05)
+- QGSP_BIC, Shielding, QBBC - return to use of EM physics Opt0
+- QGSP_BIC_HP and QGSP_BIC_AllHP use EM Opt4
+- Shielding, ShieldingLEND, QGSP_BIC, QGSP_BIC_HP, QGSP_BIC_AllHP
+    implementation is moved to src, templated are removed
+
+11-October-2018 R. Hatcher (phys-list-V10-04-04)
+- Add "EM0" option to g4alt::G4PhysListFactory (via G4PhysListRegistry)
+
+22-August-2018 V.Ivanchenko  (phys-lists-V10-04-03)
+- QGSP_BIC_HP, Shielding, QBBC - use EM physics Opt4
+- PhysListFactory - added extra EM option "EM0", which means the
+   default Opt0 EM physics configuration
+
+17-August-2018 V.Ivanchenko  (phys-lists-V10-04-02)
+- QBBC - use G4IonPhysicsXS
+
+06-August-2018 A. Ribon  (phys-list-V10-04-01)
+- LBE : replaced the explicit high-energy limit of hadronic physics
+  with the one from G4HadronicParameters .
 
 26-Februrary-2018 R. Hatcher (phys-list-V10-04-00)
 - cowork with phys-ctor-fact-V10-04-00

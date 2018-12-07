@@ -1,4 +1,3 @@
-# $Id: run2.mac,v 1.6 2002-12-16 16:37:25 maire Exp $
 #
 # Macro file for example B3 test
 #
@@ -6,4 +5,5 @@
 #
 /control/verbose 2
 #
+/run/printProgress 1000
 /run/beamOn 10000

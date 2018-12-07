@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -64,6 +63,7 @@
 
 class G4ParticleChangeForLoss;
 class G4EmCorrections;
+class G4ICRU90StoppingData;
 
 class G4BraggIonModel : public G4VEmModel
 {
@@ -142,7 +142,7 @@ private:
   G4BraggIonModel & operator=(const  G4BraggIonModel &right) = delete;
   G4BraggIonModel(const  G4BraggIonModel&) = delete;
 
-  G4bool HasMaterial(const G4Material* material);
+  void HasMaterial(const G4Material* material);
 
   G4double StoppingPower(const G4Material* material,
                                G4double kineticEnergy);
@@ -159,8 +159,10 @@ private:
   G4ParticleChangeForLoss*    fParticleChange;
 
   static G4ASTARStopping*     fASTAR;
+  G4ICRU90StoppingData*       fICRU90;
 
   const G4Material*           currentMaterial;
+  const G4Material*           baseMaterial;
 
   G4double mass;
   G4double spin;
@@ -176,6 +178,7 @@ private:
 
   G4int    iMolecula;          // index in the molecula's table
   G4int    iASTAR;             // index in ASTAR
+  G4int    iICRU90;
   G4bool   isIon;
 };
 

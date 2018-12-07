@@ -126,7 +126,7 @@ namespace G4INCL {
 			}
 			else if(available_iso-std::abs(iso-iso_system) == 2){
 				rdm = Random::shoot();
-				//				pn							pp too high (nn too low) -> PiMinus(PiPlus)				pp too low (nn too high) -> PiPlus(PiMinus)
+				//				pn					   		pp too high (nn too low) -> PiMinus(PiPlus)			            			pp too low (nn too high) -> PiPlus(PiMinus)
 				if(((iso == 0) && (rdm*0.7 < 0.3)) || ((rdm*0.60 < 0.25) && (Math::sign(iso-iso_system)*2-iso != 0)) || ((rdm*0.75 < 0.40) && (Math::sign(iso-iso_system)*2+iso != 0) && (iso != 0))){
 					pion->setType(ParticleTable::getPionType(Math::sign(iso-iso_system)*2));
 					iso_system += Math::sign(iso-iso_system)*2;
@@ -235,8 +235,6 @@ namespace G4INCL {
 		list.push_back(kaon);
 		
 		PhaseSpaceGenerator::generateBiased(sqrtS, list, list.size()-3, angularSlope);
-		
-		// INCL_DEBUG("NN Missing " << (kaon->getMomentum().theta()) * 180. / G4INCL::Math::pi << '\n');
 		
 		fs->addModifiedParticle(particle1);
 		fs->addModifiedParticle(particle2);

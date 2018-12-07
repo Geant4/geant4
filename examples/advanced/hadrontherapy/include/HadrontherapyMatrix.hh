@@ -32,7 +32,7 @@
 #include "globals.hh"
 #include <vector>
 #include <fstream>
-#include "g4csv.hh"
+//#include "g4csv.hh"
 
 
 #ifndef HADRONTHERAPYANALYSISMANAGER_HH
@@ -43,7 +43,7 @@ class HadrontherapyAnalysisFileMessenger;
 /**
  * A class for connecting the simulation to an analysis package.
  */
-class HadrontherapyAnalysisManager
+class HadrontherapyAnalysis
 {
 private:
     /**
@@ -52,21 +52,21 @@ private:
      *
      * @see GetInstance
      */
-    HadrontherapyAnalysisManager();
+    HadrontherapyAnalysis();
     
     
     
 public:
-    ~HadrontherapyAnalysisManager();
+    ~HadrontherapyAnalysis();
     
     /**
      * Get the pointer to the analysis manager.
      */
-    static HadrontherapyAnalysisManager* GetInstance();
+    static HadrontherapyAnalysis* GetInstance();
     
     
     
-    static HadrontherapyAnalysisManager* instance;
+    static HadrontherapyAnalysis* instance;
     HadrontherapyAnalysisFileMessenger* fMess;
     
 };
@@ -113,7 +113,6 @@ public:
 
   static G4bool secondary;
   // Full list of generated nuclides
-    
     
     
   void PrintNuclides(); 

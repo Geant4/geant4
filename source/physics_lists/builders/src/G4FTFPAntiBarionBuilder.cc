@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPAntiBarionBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
-// GEANT4 tag $Name:  $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,17 +41,19 @@
 #include "G4ProcessManager.hh"
 #include "G4ComponentAntiNuclNuclearXS.hh"  // For anti-ions
 #include "G4CrossSectionInelastic.hh"
-
-// #include "G4AntiBarionNuclearCrossSection.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+#include "G4HadronicParameters.hh"
 
 G4FTFPAntiBarionBuilder::
 G4FTFPAntiBarionBuilder(G4bool quasiElastic) 
 {
-  theAntiNucleonData = 
-    new G4CrossSectionInelastic(theAntiNucleonXS=new G4ComponentAntiNuclNuclearXS());
+  G4CrossSectionDataSetRegistry* xsreg = G4CrossSectionDataSetRegistry::Instance();
+  theAntiNucleonXS = xsreg->GetComponentCrossSection("AntiAGlauber");
+  if(!theAntiNucleonXS) { theAntiNucleonXS = new G4ComponentAntiNuclNuclearXS(); }
+  theAntiNucleonData = new G4CrossSectionInelastic(theAntiNucleonXS);
 
   theMin =   0.0*GeV;
-  theMax = 100.0*TeV;
+  theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel = new G4TheoFSGenerator("FTFP");
 
   theStringModel = new G4FTFModel;
@@ -72,18 +72,16 @@ G4FTFPAntiBarionBuilder(G4bool quasiElastic)
 
   theModel->SetTransport(theCascade);
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMaxEnergy(theMax);
 }
 
 G4FTFPAntiBarionBuilder::~G4FTFPAntiBarionBuilder() 
 {
   delete theStringDecay;
-  delete theStringModel;
+  //delete theStringModel;
   //delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
   delete theLund;
-  delete theAntiNucleonXS;
-  //delete theAntiNucleonData;
 }
 
 void G4FTFPAntiBarionBuilder::

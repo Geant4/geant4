@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 109620 2018-05-03 13:01:04Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -80,7 +79,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4LindhardSorensenIonModel.hh
         G4ModifiedTsai.hh
         G4MollerBhabhaModel.hh
-        G4MottCoefficients.hh
+        G4MottData.hh
         G4NISTStoppingData.hh
         G4NuclearStopping.hh
         G4PAIModel.hh
@@ -93,6 +92,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PSTARStopping.hh
         G4PairProductionRelModel.hh
         G4PhotoElectricEffect.hh
+        G4SBBremTable.hh
         G4SauterGavrilaAngularDistribution.hh
         G4ScreeningMottCrossSection.hh
         G4SeltzerBergerModel.hh
@@ -156,7 +156,6 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4LindhardSorensenIonModel.cc
         G4ModifiedTsai.cc
         G4MollerBhabhaModel.cc
-        G4MottCoefficients.cc
         G4NuclearStopping.cc
         G4PAIModel.cc
         G4PAIModelData.cc
@@ -168,6 +167,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PSTARStopping.cc
         G4PairProductionRelModel.cc
         G4PhotoElectricEffect.cc
+        G4SBBremTable.cc
         G4SauterGavrilaAngularDistribution.cc
         G4ScreeningMottCrossSection.cc
         G4SeltzerBergerModel.cc
@@ -181,7 +181,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4XrayRayleighModel.cc
         G4alphaIonisation.cc
         G4eBremsstrahlung.cc
-	G4eBremParametrizedModel.cc
+	    G4eBremParametrizedModel.cc
         G4eBremsstrahlungRelModel.cc
         G4eCoulombScatteringModel.cc
         G4eIonisation.cc

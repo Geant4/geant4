@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScintillationTrackInformation.hh ????? 2016-01-21 ??:??:??? ?????? $
 //
 // Author : Valentin Libioulle valentin.libioulle@usherbrooke.ca (3IT - GRAMS)
 //

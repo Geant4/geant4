@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5RunAction.cc 74204 2013-10-01 07:04:43Z ihrivnac $
 //
 /// \file B5RunAction.cc
 /// \brief Implementation of the B5RunAction class

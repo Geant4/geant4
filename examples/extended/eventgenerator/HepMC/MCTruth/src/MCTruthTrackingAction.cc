@@ -27,7 +27,6 @@
 /// \brief Implementation of the MCTruthTrackingAction class
 //
 //
-// $Id: MCTruthTrackingAction.cc 99841 2016-10-07 10:09:34Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -50,7 +49,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-MCTruthTrackingAction::MCTruthTrackingAction() 
+MCTruthTrackingAction::MCTruthTrackingAction() :
+  G4UserTrackingAction() 
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

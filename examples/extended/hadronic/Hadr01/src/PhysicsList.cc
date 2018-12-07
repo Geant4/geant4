@@ -27,7 +27,6 @@
 /// \brief Implementation of the PhysicsList class
 //
 //
-// $Id: PhysicsList.cc 107541 2017-11-22 08:24:57Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -65,6 +64,8 @@
 #include "G4StoppingPhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4IonPhysics.hh"
+#include "G4IonPhysicsXS.hh"
+#include "G4IonElasticPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4EmParameters.hh"
 #include "G4PhysListFactoryMessenger.hh"
@@ -256,6 +257,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     SetBuilderList0(false);
     fHadronPhys.push_back( new G4HadronPhysicsQGSP_BIC(verboseLevel));
+    fHadronPhys.push_back( new G4IonElasticPhysics(verboseLevel));
 
   } else if (name == "QGSP_BIC_EMY") {
 
@@ -321,7 +323,8 @@ void PhysicsList::SetBuilderList2()
   fHadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
   fHadronPhys.push_back( new G4HadronElasticPhysicsXS(verboseLevel) );
   fHadronPhys.push_back( new G4StoppingPhysics(verboseLevel));
-  fHadronPhys.push_back( new G4IonPhysics(verboseLevel));
+  fHadronPhys.push_back( new G4IonPhysicsXS(verboseLevel));
+  fHadronPhys.push_back( new G4IonElasticPhysics(verboseLevel));
   fHadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
 

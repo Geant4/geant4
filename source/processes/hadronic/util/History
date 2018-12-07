@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22 August 2018 Vladimir Ivanchenko (hadr-util-V10-04-04)
+--------------------------------------------------------
+- sources.cmake, GNUmakefile - removed G4HadronicWhiteBoard
+
+10 August 2018 Alberto Ribon (hadr-util-V10-04-03)
+-------------------------------------------------
+- sources.cmake, G4HadronicParameters : moved in class G4HadronicParameters
+  from hadronic/management/ to avoid circular dependency between 
+  hadronic/management/ and hadronic/cross_sections/ (the former has to depend
+  on the latter, but not vice versa; hadronic/util/ does not depend on either).
+
 17 May 2018 Jonathan Madsen (hadr-util-V10-04-02)
 -------------------------------------------------
 - updated "thread-local-static-var" model to

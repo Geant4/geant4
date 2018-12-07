@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -62,7 +62,7 @@ Some /vis commands (optionally) take a string to specify colour.
 *** /run/numberOfThreads command is issued in sequential mode.
 Command is ignored.
 WARNING: There is no world volume!
-PhysicsList::RegisterConstructor: <G4EmDNAPhysics_stationary_option2>
+PhysicsList::AddPhysicsList: <dna_stat_opt2>
 
 ---------------------------------------------------------
 ---> The Absorber is a sphere of 1 m   radius of G4_WATER made of
@@ -149,8 +149,8 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGenUrban
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -250,19 +250,19 @@ DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      100 TeV
 
  The run is 10000 e- of 50.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- total Stopping Power (keV/um)   = 14.25 +- 0.88
+ total Stopping Power (keV/um)   = 14.26 +- 0.86
 
  ======================== run summary =====================
 
  The run is 10000 e- of 100.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- total Stopping Power (keV/um)   = 21.94 +- 1.06
+ total Stopping Power (keV/um)   = 21.95 +- 1.15
 
  ======================== run summary =====================
 
  The run is 10000 e- of 200.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- total Stopping Power (keV/um)   = 21.67 +- 1.06
+ total Stopping Power (keV/um)   = 21.68 +- 1.07
 
  ======================== run summary =====================
 
@@ -274,4 +274,4 @@ DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      100 TeV
 
  The run is 10000 e- of 1.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- total Stopping Power (keV/um)   = 10.50 +- 0.67
+ total Stopping Power (keV/um)   = 10.50 +- 0.68

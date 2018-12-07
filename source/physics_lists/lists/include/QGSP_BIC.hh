@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BIC.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,33 +34,25 @@
 //
 //----------------------------------------------------------------------------
 //
-#ifndef TQGSP_BIC_h
-#define TQGSP_BIC_h 1
-
-#include <CLHEP/Units/SystemOfUnits.h>
+#ifndef QGSP_BIC_h
+#define QGSP_BIC_h 1
 
 #include "globals.hh"
 #include "G4VModularPhysicsList.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class TQGSP_BIC: public T
+class QGSP_BIC : public G4VModularPhysicsList
 {
 public:
-  TQGSP_BIC(G4int ver = 1);
-  virtual ~TQGSP_BIC();
+  QGSP_BIC(G4int ver = 1);
+  virtual ~QGSP_BIC();
   
-public:
-  // SetCuts() 
-  virtual void SetCuts();
-
 private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
-};
-#include "QGSP_BIC.icc"
-typedef TQGSP_BIC<G4VModularPhysicsList> QGSP_BIC;
 
-// 2002 by J.P. Wellisch
+  // copy constructor and hide assignment operator
+  QGSP_BIC(QGSP_BIC &);
+  QGSP_BIC & operator=(const QGSP_BIC &right);
+
+};
 
 #endif
 

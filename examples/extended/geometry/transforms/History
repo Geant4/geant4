@@ -1,4 +1,3 @@
-$Id:$
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+01-10-18 mma, I. Hrivnacova (exTransforms-V10-04-02)
+- DetectorConstruction::PlaceWithAxialRotations : use rotate(angle, axis)
+- Added descriptions for placement methods in README
+
+24-09-18 mma (exTransforms-V10-04-01)
+- update README
+
 11-03-18 mma (exTransforms-V10-04-00)
 - transforms.cc : remove G4UI_USE and G4VIS_USE
 

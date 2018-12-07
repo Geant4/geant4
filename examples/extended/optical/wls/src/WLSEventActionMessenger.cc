@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSEventActionMessenger.cc 90240 2015-05-21 09:08:13Z gcosmo $
 //
 /// \file optical/wls/src/WLSEventActionMessenger.cc
 /// \brief Implementation of the WLSEventActionMessenger class

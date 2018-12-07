@@ -1,4 +1,3 @@
-$Id: History 85260 2014-10-27 08:53:35Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,15 +13,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-09-05-18 B. Morgan (mfp-V10-04-01)
+
+04-11-18 S. Incerti - tag mfp-V10-04-03
+- rewrite of physics list and macro mfp.in to avoid factory usage
+
+22-07-18 S. Incerti - tag mfp-V10-04-02
+- removed obsolete RanecuEngine.
+
+09-05-18 B. Morgan - tag mfp-V10-04-01
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor
   symbols.
 
-26-02-18  R. Hatcher    (mfp-V10-04-00)
+26-02-18  R. Hatcher - tag mfp-V10-04-00
 - Use G4RegisterPhysicsConstructors.icc to ensure G4PhysicsConstructorRegisty
   is filled when using static libraries
 
-15-06-17 SI (mfp-V10-03-00)
+15-06-17 SI - tag mfp-V10-03-00
 - created
 

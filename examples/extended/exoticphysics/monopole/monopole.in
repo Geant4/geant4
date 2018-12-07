@@ -6,7 +6,6 @@
 /control/verbose 1
 /control/cout/ignoreThreadsExcept 0
 /run/verbose 0
-/testex/run/verbose 1
 /tracking/verbose 0
 #
 /testex/det/setMat G4_Si
@@ -23,7 +22,8 @@
 #
 /run/printProgress 10
 #
-
+#
+/testex/fld/setField 0.2 tesla
 #
 /gun/particle monopole
 /gun/energy 100 GeV

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysicsXS.hh 71037 2013-06-10 09:20:54Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -39,41 +38,25 @@
 #ifndef G4HadronElasticPhysicsXS_h
 #define G4HadronElasticPhysicsXS_h 1
 
-#include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
+#include "G4HadronElasticPhysics.hh"
 
-class G4HadronElasticPhysics;
-class G4VCrossSectionDataSet;
-class G4ParticleDefinition;
-
-class G4HadronElasticPhysicsXS : public G4VPhysicsConstructor
+class G4HadronElasticPhysicsXS : public G4HadronElasticPhysics
 {
 public: 
 
-  G4HadronElasticPhysicsXS(G4int ver = 1); 
+  explicit G4HadronElasticPhysicsXS(G4int ver = 1); 
 
   virtual ~G4HadronElasticPhysicsXS();
 
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
- 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
-
-  void AddXSection(const G4ParticleDefinition*,
-		   G4VCrossSectionDataSet*); 
+  void ConstructProcess() final;
 
 private:
 
-  G4HadronElasticPhysicsXS(G4HadronElasticPhysicsXS &);
-  G4HadronElasticPhysicsXS & operator=(const G4HadronElasticPhysicsXS &right);
-
-  G4int    verbose;
-  static G4ThreadLocal G4bool   wasActivated;
-  static G4ThreadLocal G4HadronElasticPhysics* mainElasticBuilder;
+  G4HadronElasticPhysicsXS(G4HadronElasticPhysicsXS &) = delete;
+  G4HadronElasticPhysicsXS & operator=(const G4HadronElasticPhysicsXS &right) = delete;
 };
 
 

@@ -42,16 +42,23 @@ class HadrontherapyPrimaryGeneratorMessenger:
 public G4UImessenger
 {
 public:
-   
-  HadrontherapyPrimaryGeneratorMessenger(HadrontherapyPrimaryGeneratorAction*);
-  ~HadrontherapyPrimaryGeneratorMessenger();
-
-
+    
+    HadrontherapyPrimaryGeneratorMessenger(HadrontherapyPrimaryGeneratorAction*);
+    ~HadrontherapyPrimaryGeneratorMessenger();
+    
+    
     HadrontherapyPrimaryGeneratorAction* HadrontherapyAction;
-
-
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+    
+    G4UIcmdWithABool *NewSource;
+    G4UIcmdWithAString  *calculatedPhaseSpaceFileIN;
+    G4UIdirectory* changeTheSource;
+    G4bool *BoolRead;
+    
 private:
-
+    
 };
 
 #endif

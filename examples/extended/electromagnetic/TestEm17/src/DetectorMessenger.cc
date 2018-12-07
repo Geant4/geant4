@@ -27,7 +27,6 @@
 /// \brief Implementation of the DetectorMessenger class
 //
 //
-// $Id: DetectorMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 // 
 

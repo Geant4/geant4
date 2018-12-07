@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointForcedInteractionForGamma.hh 80314 2014-04-10 12:23:52Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4AdjointForcedInteractionForGamma

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh 102801 2017-02-22 15:17:53Z gcosmo $
 // John Allison  19th July 1996
 //
 // Class Description:

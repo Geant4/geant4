@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc 108010 2017-12-19 08:59:48Z gcosmo $
-// GEANT4 tag $Name:  $
 //
 
 // ------------------------------------------------------------
@@ -199,7 +197,7 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
   G4cout << "Projectile and target are nuclei" << G4endl;
   #endif
 
-//G4cout<<theProjectileNucleus->GetOuterRadius()/fermi<<" "<<theNucleus->GetOuterRadius()/fermi<<" "<<deltaxy/fermi<<G4endl;
+  //G4cout<<theProjectileNucleus->GetOuterRadius()/fermi<<" "<<theNucleus->GetOuterRadius()/fermi<<" "<<deltaxy/fermi<<G4endl;
 
   G4double xyradius;                          
   xyradius = theProjectileNucleus->GetOuterRadius() +  // Range of impact parameter sampling

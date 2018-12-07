@@ -26,7 +26,6 @@
 /// \file medical/electronScattering/include/Run.hh
 /// \brief Definition of the Run class
 //
-// $Id: Run.hh 98254 2016-07-04 17:31:33Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

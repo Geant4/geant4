@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc 110870 2018-06-22 12:14:16Z gcosmo $
-// GEANT4 tag $Name:  $
 //
 
 // ------------------------------------------------------------
@@ -289,7 +287,7 @@ G4ExcitedStringVector* G4FTFModel::GetStrings() {
   G4cout << "G4FTFModel::GetStrings() " << G4endl;
   #endif
 
-  G4ExcitedStringVector* theStrings( 0 );
+  G4ExcitedStringVector* theStrings = new G4ExcitedStringVector;
   theParticipants.GetList( theProjectile, theParameters );
   StoreInvolvedNucleon(); 
 
@@ -1995,7 +1993,7 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
                                                     primaries[ahadron]->GetPosition(),
                                                     ParticleMomentum );
        FirstString = new G4ExcitedString( aTrack );
-      } else if(primaries[ahadron]->GetStatus() == 2) {
+      } else if (primaries[ahadron]->GetStatus() == 2) {
        G4LorentzVector ParticleMomentum=primaries[ahadron]->Get4Momentum();
        G4KineticTrack* aTrack = new G4KineticTrack( primaries[ahadron]->GetDefinition(),
                                                     primaries[ahadron]->GetTimeOfCreation(),
@@ -2578,8 +2576,8 @@ G4ThreeVector G4FTFModel::GaussianPt( G4double AveragePt2, G4double maxPtSquare 
 
   G4double Pt2( 0.0 );
 
-  if(AveragePt2 > 0.0) {
-    if(maxPtSquare/AveragePt2 < 1.0e+9) {
+  if (AveragePt2 > 0.0) {
+    if (maxPtSquare/AveragePt2 < 1.0e+9) {
       Pt2 = -AveragePt2 * G4Log( 1.0 + G4UniformRand() * 
                                      ( G4Exp( -maxPtSquare/AveragePt2 ) -1.0 ) );
     } else {
@@ -2642,8 +2640,7 @@ ComputeNucleusProperties( G4V3DNucleus* nucleus,               // input paramete
                               +  aNucleon->Get4Momentum().perp2() );                     
       sumMasses += 20.0*MeV;  // Separation energy for a nucleon
 
-      //AR-11Oct2016 : brought back residual excitation energy as it was in G4 10.1
-      //residualExcitationEnergy += ExcitationEnergyPerWoundedNucleon;
+      //residualExcitationEnergy += ExcitationEnergyPerWoundedNucleon;  // In G4 10.1
       residualExcitationEnergy += -ExcitationEnergyPerWoundedNucleon*G4Log( G4UniformRand() );
 
       residualMassNumber--;
@@ -2715,7 +2712,7 @@ GenerateDeltaIsobar( const G4double sqrtS,                  // input parameter
       G4VSplitableHadron* splitableHadron = involvedNucleons[i]->GetSplitableHadron();
       G4double massNuc = std::sqrt( sqr( splitableHadron->GetDefinition()->GetPDGMass() )
                                     + splitableHadron->Get4Momentum().perp2() );
-      //AR The absolute value below is needed in the case of an antinucleus. 
+      // The absolute value below is needed in the case of an antinucleus. 
       G4int pdgCode = std::abs( splitableHadron->GetDefinition()->GetPDGEncoding() );
       const G4ParticleDefinition* old_def = splitableHadron->GetDefinition();
       G4int newPdgCode = pdgCode/10; newPdgCode = newPdgCode*10 + 4; // Delta
@@ -2832,7 +2829,7 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
         break;
       }
       xSum += x;
-      //AR The energy is in the lab (instead of cms) frame but it will not be used.
+      // The energy is in the lab (instead of cms) frame but it will not be used.
 
       G4LorentzVector tmp( aNucleon->Get4Momentum().x(), aNucleon->Get4Momentum().y(), 
                            x, aNucleon->Get4Momentum().e() );

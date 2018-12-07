@@ -40,27 +40,21 @@
 //
 //*******************************************************//
 
+
 #include "ML2PhantomConstruction.hh"
 #include "ML2PhantomConstructionMessenger.hh"
+
+#include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
 
-CML2PhantomConstruction::CML2PhantomConstruction(void): PVPhmWorld(0), sensDet(0)
+CML2PhantomConstruction::CML2PhantomConstruction(void): PVPhmWorld(0)
 {
-	phantomContstructionMessenger=new CML2PhantomConstructionMessenger(this);
-	idCurrentCentre=0;
+	phantomContstructionMessenger = new CML2PhantomConstructionMessenger(this);
+	idCurrentCentre = 0;
 }
 
 CML2PhantomConstruction::~CML2PhantomConstruction(void)
-{
-	if (phantomName=="fullWater")
-	{
-		delete Ph_fullWater;
-	}
-	else if (phantomName=="boxInBox")
-	{
-		delete Ph_BoxInBox;
-	}
-}
+{}
 
 CML2PhantomConstruction* CML2PhantomConstruction::instance = 0;
 
@@ -75,75 +69,84 @@ CML2PhantomConstruction* CML2PhantomConstruction::GetInstance(void)
 }
 bool CML2PhantomConstruction::design(void)
 {
-// switch between two different phantoms according to the main macro selection
-	bool bPhanExists=false;
+	// switch between two different phantoms according to the macro ml2.mac
+	bool bPhanExists = false;
 
-	std::cout << "I'm building "<< phantomName<<"  phantom"<< G4endl;
+	G4cout << "I'm building "<< phantomName<<"  phantom"<< G4endl;
 
-	if (phantomName=="fullWater")
+	if (phantomName == "fullWater")
 	{
-		Ph_fullWater=new CML2Ph_FullWater();bPhanExists=true;
-		halfPhantomInsideSize=Ph_fullWater->getHalfContainerSize();
+		Ph_fullWater = new CML2Ph_FullWater();
+		bPhanExists=true;
+		halfPhantomInsideSize = Ph_fullWater->getHalfContainerSize();
 	}
-	else if (phantomName=="boxInBox")
+	else if (phantomName == "boxInBox")
 	{
-		Ph_BoxInBox=new CML2Ph_BoxInBox();bPhanExists=true;
-		halfPhantomInsideSize=Ph_BoxInBox->getHalfContainerSize();
+		Ph_BoxInBox = new CML2Ph_BoxInBox();
+		bPhanExists=true;
+		halfPhantomInsideSize = Ph_BoxInBox->getHalfContainerSize();
 	}
 
- 	if (centre.size()<1)
- 	{addNewCentre(G4ThreeVector(0.,0.,0.));}
+ 	if (centre.size() < 1)
+ 	{
+ 		addNewCentre(G4ThreeVector(0.,0.,0.));
+ 	}
 	return bPhanExists;
 }
 G4int CML2PhantomConstruction::getTotalNumberOfEvents()
 {
-	if (phantomName=="fullWater")
-	{return Ph_fullWater->getTotalNumberOfEvents();}
-	else if (phantomName=="boxInBox")
-	{return Ph_BoxInBox->getTotalNumberOfEvents();}
-	return 0;
+G4cout << "Not implemented at the moment " << G4endl;
+	/*if (phantomName == "fullWater")
+	{
+		return Ph_fullWater->getTotalNumberOfEvents();
+	}
+	else if (phantomName == "boxInBox")
+	{
+		return Ph_BoxInBox->getTotalNumberOfEvents();
+	}
+	
+*/
+return 0;
 }
 
 bool CML2PhantomConstruction::Construct(G4VPhysicalVolume *PVWorld,
-        G4int saving_in_ROG_Voxels_every_events, G4int seed,
-        G4String ROGOutFile, G4bool bSaveROG, G4bool bOV)
+        G4int voxelX, G4int voxelY, G4int voxelZ, G4bool bOV)
 {
-	idVolumeName=0;
-	bOnlyVisio=bOV;
-// a call to select the right phantom
+	idVolumeName = 0;
+	bOnlyVisio = bOV;
+	// a call to select the right phantom
 	if(design())
 	{
 		phantomContstructionMessenger->SetReferenceWorld(bOV);	// create the phantom-world box
 		G4Material *Vacuum=G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 
-		G4Box *phmWorldB = new G4Box("phmWorldG", halfPhantomInsideSize.getX(), halfPhantomInsideSize.getY(), halfPhantomInsideSize.getZ());
+		G4Box *phmWorldB = new G4Box("phmWorldG", halfPhantomInsideSize.getX(), 
+                                     halfPhantomInsideSize.getY(), halfPhantomInsideSize.getZ());
 		G4LogicalVolume *phmWorldLV = new G4LogicalVolume(phmWorldB, Vacuum, "phmWorldL", 0, 0, 0);
 		G4VisAttributes* simpleAlSVisAtt= new G4VisAttributes(G4Colour::White());
 		simpleAlSVisAtt->SetVisibility(false);
-// 		simpleAlSVisAtt->SetForceWireframe(false);
 		phmWorldLV->SetVisAttributes(simpleAlSVisAtt);
 	
 
-		PVPhmWorld= new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), "phmWorldPV", phmWorldLV, PVWorld, false, 0);
+		PVPhmWorld = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), "phmWorldPV", phmWorldLV, PVWorld, false, 0);
 	
-	// create the actual phantom
+		// create the actual phantom
 		if (phantomName=="fullWater")
 		{
-			Ph_fullWater->Construct(PVPhmWorld, saving_in_ROG_Voxels_every_events, seed, ROGOutFile, bSaveROG);
-			sensDet=Ph_fullWater->getSensDet();
+			Ph_fullWater->Construct(PVPhmWorld, voxelX, voxelY, voxelZ); // provide the voxelisation to the phantom
+			//sensDet=Ph_fullWater->getSensDet();
 			createPhysicalVolumeNamesList(Ph_fullWater->getPhysicalVolume());
 			Ph_fullWater->writeInfo();
 		}
 		else if (phantomName=="boxInBox")
 		{
-			Ph_BoxInBox->Construct(PVPhmWorld, saving_in_ROG_Voxels_every_events, seed, ROGOutFile, bSaveROG);
-			sensDet=Ph_BoxInBox->getSensDet();
+			Ph_BoxInBox->Construct(PVPhmWorld);
+			//sensDet=Ph_BoxInBox->getSensDet();
 			createPhysicalVolumeNamesList(Ph_BoxInBox->getPhysicalVolume());
 			Ph_BoxInBox->writeInfo();
+                        
 		}
-		// I create the data base volumeName-volumeID in the sensitive detector 
-
-		sensDet->setVolumeNameIdLink(volumeNameIdLink);
+                
 	}
 	else
 	{
@@ -166,7 +169,7 @@ void CML2PhantomConstruction::createPhysicalVolumeNamesList(G4VPhysicalVolume  *
 	int nLVD1;
 	nLVD1=(int) PV->GetLogicalVolume()->GetNoDaughters();
 	SvolumeNameId svnid;
-		std::cout << "PV in name: " <<PV->GetName() << G4endl;
+		G4cout << "PV in name: " <<PV->GetName() << G4endl;
 	if (nLVD1>0)
 	{
 		for (int i=0; i <nLVD1; i++)
@@ -177,7 +180,7 @@ void CML2PhantomConstruction::createPhysicalVolumeNamesList(G4VPhysicalVolume  *
 		svnid.volumeId=idVolumeName;
 		svnid.volumeName=PV->GetLogicalVolume()->GetMaterial()->GetName();
 		volumeNameIdLink.push_back(svnid);
-		std::cout << "physical volume name: " <<svnid.volumeName << G4endl;
+		G4cout << "physical volume name: " <<svnid.volumeName << G4endl;
 	}
 	else
 	{
@@ -185,14 +188,14 @@ void CML2PhantomConstruction::createPhysicalVolumeNamesList(G4VPhysicalVolume  *
 		svnid.volumeId=idVolumeName;
 		svnid.volumeName=PV->GetLogicalVolume()->GetMaterial()->GetName();
 		volumeNameIdLink.push_back(svnid);
-		std::cout << "physical volume name: " <<svnid.volumeName << G4endl;
+		G4cout << "physical volume name: " <<svnid.volumeName << G4endl;
 	}
 }
 bool  CML2PhantomConstruction::applyNewCentre()
 {
 	if (idCurrentCentre <(int) centre.size())
 	{
-		currentCentre=centre[idCurrentCentre];
+		currentCentre = centre[idCurrentCentre];
 		applyNewCentre(currentCentre);
 		idCurrentCentre++;
 		return true;
@@ -202,21 +205,21 @@ bool  CML2PhantomConstruction::applyNewCentre()
 void CML2PhantomConstruction::writeInfo()
 {
 	if (!bOnlyVisio)
-	{std::cout <<"Actual centre: "<<idCurrentCentre<<"/"<<centre.size() <<"  "<< G4endl;}
-	std::cout <<"Phantom and its ROG centre: " << currentCentre<< G4endl;
+	{
+		G4cout << "Actual centre: "<<idCurrentCentre << "/" << centre.size() << "  " << G4endl;
+	}
+	G4cout <<"Phantom and its ROG centre: " << currentCentre<< G4endl;
 }
 void CML2PhantomConstruction::applyNewCentre(G4ThreeVector ctr)
 {
-	if (sensDet!=0)
-	{	
-		currentCentre=ctr;
-		G4GeometryManager::GetInstance()->OpenGeometry();
-		PVPhmWorld->SetTranslation(ctr);
-		sensDet->GetROgeometry()->GetROWorld()->GetLogicalVolume()->GetDaughter(0)->SetTranslation(ctr);
-		sensDet->resetVoxelsSingle();
-		G4GeometryManager::GetInstance()->CloseGeometry();
-		G4RunManager::GetRunManager()->GeometryHasBeenModified();
-	}
+ if (PVPhmWorld)
+     {
+	currentCentre=ctr;
+	G4GeometryManager::GetInstance()->OpenGeometry();
+	PVPhmWorld->SetTranslation(ctr);
+	G4GeometryManager::GetInstance()->CloseGeometry();
+	G4RunManager::GetRunManager()->GeometryHasBeenModified();
+     }
 }
 G4String CML2PhantomConstruction::getCurrentTranslationString()
 {

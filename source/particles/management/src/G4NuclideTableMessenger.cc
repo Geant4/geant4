@@ -51,24 +51,22 @@ G4NuclideTableMessenger::G4NuclideTableMessenger(G4NuclideTable* nuclideTable)
                         :theNuclideTable(nuclideTable)
 {
   //Commnad   /particle/manage/nuclide
-  thisDirectory = new G4UIdirectory("/particle/manage/nuclideTable/");
+  thisDirectory = new G4UIdirectory("/particle/nuclideTable/");
   thisDirectory->SetGuidance("Nuclide table control commands.");
 
   ///particle/manage/nuclide/min_halflife
-  lifetimeCmd = new G4UIcmdWithADoubleAndUnit("/particle/manage/nuclideTable/min_halflife",this);
+  lifetimeCmd = new G4UIcmdWithADoubleAndUnit("/particle/nuclideTable/min_halflife",this);
   lifetimeCmd->SetGuidance("Set threshold of half-life.");
   lifetimeCmd->SetGuidance("Unit of the time can be :");
   lifetimeCmd->SetGuidance(" s, ms, ns (default)");
   lifetimeCmd->SetParameterName("life",false);
   lifetimeCmd->SetDefaultValue( 1000.0 );
   lifetimeCmd->SetRange("life >0.0");
-  //lifetimeCmd->SetUnitCategory("Time");
-  //lifetimeCmd->SetUnitCandidates("s ms ns");
   lifetimeCmd->SetDefaultUnit("ns");
   lifetimeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   ///particle/manage/nuclide/level_tolerance
-  lToleranceCmd = new G4UIcmdWithADoubleAndUnit("/particle/manage/nuclideTable/level_tolerance",this);
+  lToleranceCmd = new G4UIcmdWithADoubleAndUnit("/particle/nuclideTable/level_tolerance",this);
   lToleranceCmd->SetGuidance("Set tolerance in level seaching.");
   lToleranceCmd->SetGuidance("Unit of the energy can be :");
   lToleranceCmd->SetGuidance(" MeV, keV, eV (default)");
@@ -78,17 +76,10 @@ G4NuclideTableMessenger::G4NuclideTableMessenger(G4NuclideTable* nuclideTable)
   lToleranceCmd->SetDefaultUnit("eV");
   lToleranceCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  //Commnad   /particle/manage/nuclide/dump
-  //dumpCmd = new G4UIcmdWithoutParameter("/particle/manage/nuclide/dump",this);
-  //dumpCmd->SetGuidance("dump nuclide table.");
-
 }
 
 G4NuclideTableMessenger::~G4NuclideTableMessenger()
 {
-//  if (fDecayTableMessenger !=0) delete  fDecayTableMessenger;
-//  fDecayTableMessenger = 0;
-
   delete thisDirectory;
   delete lifetimeCmd;
   delete lToleranceCmd;

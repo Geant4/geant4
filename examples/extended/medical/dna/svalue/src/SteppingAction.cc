@@ -23,21 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 37 (2010) 4692-4708
+// Phys. Med. 31 (2015) 861-874
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/svalue/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 
 #include "SteppingAction.hh"
 #include "Run.hh"
 #include "EventAction.hh"
+#include "DetectorConstruction.hh"
 #include "HistoManager.hh"
 
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(EventAction* event)
+SteppingAction::SteppingAction(EventAction* event, DetectorConstruction* detector)
 :G4UserSteppingAction(),
- fEventAction(event)
+ fEventAction(event),
+ fDetectorConstruction(detector)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,9 +61,15 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4double edep = aStep->GetTotalEnergyDeposit();
  if (edep <= 0.) return;
  
- //total energy deposit in absorber
+ //total energy deposit in cytoplasm or nucleus
  //
- fEventAction->AddEdep(edep);     
+ if (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()
+     ==fDetectorConstruction->GetCytoLogicalVolume()) fEventAction->AddCytoEdep(edep);
+       
+ if (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()
+     ==fDetectorConstruction->GetNuclLogicalVolume()) fEventAction->AddNuclEdep(edep);     
+
+ //G4cout << edep << G4endl;
 
  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
      
@@ -62,7 +77,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  //
  G4double steplen = aStep->GetStepLength();
  const G4Track* track = aStep->GetTrack();
- if      (track->GetTrackID() == 1) analysisManager->FillH1(4, steplen);
+ if      (track->GetTrackID() == 1) analysisManager->FillH1(8, steplen);
  else if (track->GetDefinition()->GetPDGCharge() != 0.)
-                                    analysisManager->FillH1(7, steplen); 
+                                    analysisManager->FillH1(9, steplen); 
 }

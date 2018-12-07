@@ -20,17 +20,23 @@ endif()
 #
 include(${Geant4_USE_FILE})
 # Setup of ROOT ANALYSIS : optional. 
-option(WITH_ANALYSIS_USE "Build example with analysis objects" OFF)
-if(WITH_ANALYSIS_USE)
-add_definitions(-DANALYSIS_USE)
+find_package(ROOT QUIET)
+if(ROOT_FOUND)
+   option(WITH_ANALYSIS_USE "Build example with analysis objects" ON)
 else()
+   option(WITH_ANALYSIS_USE "Build example with analysis objects" OFF)
 endif()
-
+if(WITH_ANALYSIS_USE)
+   #  ROOT was found already..
+   add_definitions(-DANALYSIS_USE)
+endif()
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include  
                      ${Geant4_INCLUDE_DIR} )
+
+#----------------------------------------------------------------------------
 
 if(WITH_ANALYSIS_USE)
 	EXECUTE_PROCESS(COMMAND root-config --cflags OUTPUT_VARIABLE ROOT_CXX_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -62,7 +68,7 @@ set(brachy_SCRIPTS
    IodineSourceMacro.mac  LeipzigSourceMacro.mac VisualisationMacro.mac
    macro.C iridium_source_primary.mac iodine_source_primary.mac iridium_source_leipzig_primary.mac
    plot_primary.C  iodine_decay.mac FlexiSourceMacro.mac 
-   TG43_relative_dose.C TG186SourceMacro.mac TG186_iridium_decay.mac
+   TG186SourceMacro.mac TG186_iridium_decay.mac OncuraIodineSourceMacro.mac
   )
 
 foreach(_script ${brachy_SCRIPTS})

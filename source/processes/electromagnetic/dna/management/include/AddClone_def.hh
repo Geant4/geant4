@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: AddClone_def.hh 100802 2016-11-02 14:55:27Z gcosmo $
 //
 // Author: Mathieu Karamitros
 

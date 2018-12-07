@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/include/RE04TrajectoryPoint.hh
 /// \brief Definition of the RE04TrajectoryPoint class
 //
-// $Id: $
 //
 #ifndef RE04TrajectoryPoint_h
 #define RE04TrajectoryPoint_h 1

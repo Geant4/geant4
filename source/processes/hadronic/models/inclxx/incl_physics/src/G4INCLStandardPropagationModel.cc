@@ -142,7 +142,7 @@ namespace G4INCL {
       theNucleus->setIncomingAngularMomentum(p->getAngularMomentum());
       theNucleus->setIncomingMomentum(p->getMomentum());
       theNucleus->setInitialEnergy(p->getEnergy()
-          + ParticleTable::getTableMass(theNucleus->getA(),theNucleus->getZ()));
+          + ParticleTable::getTableMass(theNucleus->getA(),theNucleus->getZ(),theNucleus->getS()));
 
       // Reset the particle kinematics to the INCL values
       p->setINCLMass();
@@ -204,7 +204,7 @@ namespace G4INCL {
       theNucleus->setIncomingAngularMomentum(pr->getAngularMomentum());
       theNucleus->setIncomingMomentum(pr->getMomentum());
       theNucleus->setInitialEnergy(pr->getEnergy()
-          + ParticleTable::getTableMass(theNucleus->getA(),theNucleus->getZ()));
+          + ParticleTable::getTableMass(theNucleus->getA(),theNucleus->getZ(),theNucleus->getS()));
 
       generateAllAvatars();
       firstAvatar = false;

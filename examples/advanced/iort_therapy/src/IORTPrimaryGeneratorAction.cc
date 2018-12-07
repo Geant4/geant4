@@ -33,13 +33,12 @@
 //   (b) IBFM-CNR , Segrate (Milano), Italy
 //   (c) LATO (Laboratorio di Tecnologie Oncologiche), Cefalù, Italy
 //   (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
-//   (e) University of Wallongong, Australia
+//   (e) University of Wollongong, Australia
 //
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <CLHEP/Units/SystemOfUnits.h>
-
+#include "G4SystemOfUnits.hh"
 #include "IORTPrimaryGeneratorAction.hh"
 #include "IORTPrimaryGeneratorMessenger.hh"
 
@@ -49,9 +48,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
-
-#include "IORTAnalysisManager.hh"      
-
+  
 IORTPrimaryGeneratorAction::IORTPrimaryGeneratorAction()
 {
   // Define the messenger
@@ -88,15 +85,9 @@ void IORTPrimaryGeneratorAction::SetDefaultPrimaryParticle()
 
   G4double defaultsigmaEnergy = 100.0 *CLHEP::keV;   
   sigmaEnergy = defaultsigmaEnergy;
-  
-  // Write these values into the analysis if needed. Have to be written separately on change.
-  IORTAnalysisManager::GetInstance()->
-    setBeamMetaData(meanKineticEnergy, sigmaEnergy);
-
-
+ 
   // Define the parameters of the initial position: 
-  // the y, z coordinates have a gaussian distribution
-  
+  // the y, z coordinates have a gaussian distribution 
   
   G4double defaultX0 = -862.817 *CLHEP::mm;                 
   X0 = defaultX0;
@@ -131,9 +122,6 @@ void IORTPrimaryGeneratorAction::SetDefaultPrimaryParticle()
 
 void IORTPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  // Increment the event counter
-  IORTAnalysisManager::GetInstance()->startNewEvent();
-
   // ****************************************
   // Set the beam angular apread 
   // and spot size
@@ -226,21 +214,16 @@ while (true)  {
 
 void IORTPrimaryGeneratorAction::SetmeanKineticEnergy (G4double val )  
 {
-	meanKineticEnergy = val;
-
-  // Update the beam-data in the analysis manager
-  IORTAnalysisManager::GetInstance()->
-    setBeamMetaData(meanKineticEnergy, sigmaEnergy);
-
-
+  meanKineticEnergy = val;
+  G4cout << "The mean Kinetic energy of the incident beam has been changed to (MeV):" 
+         << meanKineticEnergy/MeV << G4endl; 
 } 
 
 void IORTPrimaryGeneratorAction::SetsigmaEnergy (G4double val )  
 { 
-  sigmaEnergy = val;
-  // Update the sigmaenergy in the metadata.
-  IORTAnalysisManager::GetInstance()->
-    setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+ sigmaEnergy = val;
+ G4cout << "The sigma of the kinetic energy of the incident beam has been changed to (MeV):"
+        << sigmaEnergy/MeV << G4endl; 
 }
 
 void IORTPrimaryGeneratorAction::SetXposition (G4double val )  

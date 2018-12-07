@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 ///
 /// \file GB04BOptrBremSplitting.hh
 /// \brief Definition of the GB04BOptrBremSplitting class

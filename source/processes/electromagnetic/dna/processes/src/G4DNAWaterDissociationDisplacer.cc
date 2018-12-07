@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAWaterDissociationDisplacer.cc 101362 2016-11-15 15:26:23Z gcosmo $
 //
 // Author: Mathieu Karamitros
 //

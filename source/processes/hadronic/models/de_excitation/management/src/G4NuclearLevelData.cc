@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelData.cc 86536 2014-11-13 19:05:21Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -47,6 +46,7 @@
 #include "G4DeexPrecoParameters.hh"
 #include "G4PairingCorrection.hh"
 #include "G4ShellCorrection.hh"
+#include "G4Pow.hh"
 #include <iomanip>
 
 G4NuclearLevelData* G4NuclearLevelData::theInstance = nullptr;
@@ -91,7 +91,7 @@ const G4int G4NuclearLevelData::LEVELIDX[] = {0,
   3024,   3040,   3055,   3070,   3083,   3099,   3111,   3126,   3141,   3154,     // Z= 101-110
   3163,   3174,   3179,   3184,   3184,   3186,   3186};                            // Z= 111-117
 
-// obtained from PhotonEvaporation4.3.2
+// obtained from PhotonEvaporation5.2
 static const G4float LEVELMAX[3188] = {0.0f,
     0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f, //1-10
     0.0f,    0.0f,    0.0f,    0.0f,    0.0f,  5.366f,   4.63f,  2.255f,  2.691f,    0.0f, //11-20
@@ -233,11 +233,11 @@ static const G4float LEVELMAX[3188] = {0.0f,
  5.1722f, 4.8903f, 6.1635f, 7.7224f, 6.6692f,   5.16f, 3.6273f, 2.7603f, 2.2105f,    0.0f, //1371-1380
     0.0f,    0.0f,    0.0f,    0.0f, 4.6208f,  7.075f, 13.017f, 8.7122f, 31.621f,  8.576f, //1381-1390
  19.449f, 11.403f, 21.128f, 2.8059f, 11.823f, 6.3618f, 11.143f, 8.3232f, 8.9855f, 5.5555f, //1391-1400
- 3.8679f, 1.1022f, 3.3503f, 4.1498f,  3.408f, 1.0791f, 2.3522f,0.27786f, 4.0473f, 1.1065f, //1401-1410
+ 3.8679f, 1.1022f, 3.3503f, 4.1498f,  3.408f,  1.079f, 2.3522f,0.27786f, 4.0473f, 1.1065f, //1401-1410
  5.8492f, 4.0745f, 3.8528f,    0.0f, 3.3323f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f, //1411-1420
     0.0f,    0.0f, 1.8897f,    0.0f, 4.4691f, 13.218f, 34.591f, 11.183f, 23.483f, 24.255f, //1421-1430
  15.399f, 20.542f,  12.15f, 13.651f, 13.473f, 9.4266f,  16.53f, 37.618f, 8.7448f,  9.523f, //1431-1440
- 5.5734f, 3.8291f, 6.9713f, 3.1859f, 4.1884f, 2.1237f, 3.4923f, 3.1699f,  6.624f, 5.1702f, //1441-1450
+ 5.5734f, 3.8291f, 6.9713f, 3.1859f, 4.1884f, 2.1237f, 3.4923f, 3.1699f, 6.6241f, 5.1702f, //1441-1450
   5.814f, 5.0965f, 5.5036f, 3.3657f, 4.5112f, 1.9627f, 2.3027f,    0.0f,    0.0f,    0.0f, //1451-1460
     0.0f, 2.1434f,   8.29f, 6.1544f,    0.0f, 10.381f, 14.396f,    0.0f,  4.891f,  7.126f, //1461-1470
  12.184f,  7.873f, 11.233f,  6.127f,  11.31f,  8.687f, 5.8654f, 4.9467f, 8.0995f, 4.0405f, //1471-1480
@@ -278,7 +278,7 @@ static const G4float LEVELMAX[3188] = {0.0f,
  1.5209f,   3.55f,   1.49f, 2.8571f,    0.0f, 2.3769f,    0.0f, 1.6015f,    0.0f,    0.0f, //1821-1830
     0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f, 3.0429f,  6.712f, 6.7863f, 10.126f, //1831-1840
  5.3799f, 14.119f, 2.1568f, 14.344f, 14.091f, 19.595f, 21.805f, 35.544f, 18.003f,  7.447f, //1841-1850
-   7.45f,  17.07f, 15.907f, 6.5819f, 0.3884f,  3.794f,0.76797f, 1.8569f,0.44211f,  0.373f, //1851-1860
+   7.45f,  17.07f, 15.907f, 6.5819f, 0.3884f,  3.794f,0.76797f,  1.857f,0.44211f,  0.373f, //1851-1860
     0.0f,    0.0f, 1.0155f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f, 2.1661f, //1861-1870
     0.0f, 3.2412f, 8.4975f, 4.6021f, 2.7442f,  6.095f, 3.6506f, 14.235f, 14.233f, 16.291f, //1871-1880
  21.825f,  34.66f, 21.565f, 22.435f,  18.45f, 30.241f,  12.72f,  7.454f, 13.897f, 7.2306f, //1881-1890
@@ -291,7 +291,7 @@ static const G4float LEVELMAX[3188] = {0.0f,
   16.03f, 17.086f, 16.583f, 19.505f, 24.115f, 17.888f, 22.788f, 26.143f, 27.581f, 13.865f, //1951-1960
  11.549f, 1.6218f,  3.498f, 3.7561f,  3.921f,  4.549f, 7.5314f, 2.1041f, 1.3967f,    0.0f, //1961-1970
     0.0f,    0.0f,    0.0f,    0.0f,    0.0f, 3.3115f,    0.0f, 3.5235f,    0.0f,    0.0f, //1971-1980
- 0.6713f, 6.9085f, 2.5551f, 9.1688f, 6.1412f, 0.6142f,  4.773f, 13.242f, 10.357f, 8.1322f, //1981-1990
+ 0.6713f, 6.9085f,  2.555f, 9.1688f, 6.1412f, 0.6142f,  4.773f, 13.242f, 10.357f, 8.1322f, //1981-1990
   8.635f, 11.582f, 15.865f, 14.882f, 5.8891f, 10.051f, 9.3388f,  2.799f,  4.951f, 5.5983f, //1991-2000
  3.8641f, 1.4006f,0.79742f, 1.2129f, 0.7729f, 1.3677f,    0.0f,    0.0f,    0.0f,    0.0f, //2001-2010
     0.0f,    0.0f,  2.448f, 2.7445f, 2.5782f, 7.6099f, 2.2813f, 10.232f, 6.9884f,  13.96f, //2011-2020
@@ -330,7 +330,7 @@ static const G4float LEVELMAX[3188] = {0.0f,
  3.1292f, 4.5298f, 2.5926f, 3.4243f,0.74782f,  3.017f,  0.424f, 3.2266f, 1.4555f, 1.7885f, //2341-2350
     0.0f,  3.153f,    0.0f,    0.0f,    0.0f, 1.8274f, 2.1985f,    0.0f, 5.4301f, 1.7992f, //2351-2360
  6.1583f,    0.0f, 7.1722f,    0.0f, 5.7177f, 4.5791f, 7.8795f, 6.3223f,  7.038f,  3.954f, //2361-2370
-   7.22f, 5.3252f, 9.5804f, 5.3789f, 10.935f, 4.6355f, 4.0632f, 2.1848f,  2.792f, 1.6729f, //2371-2380
+   7.22f, 5.3252f, 9.5804f, 5.3789f, 10.935f, 4.6355f, 4.0632f, 2.1848f,  2.792f,  1.673f, //2371-2380
   1.242f, 1.5604f, 1.7705f,0.46871f,   1.76f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f, //2381-2390
     0.0f,    0.0f,    0.0f,    0.0f,    0.0f, 2.2786f,    0.0f,    0.0f,  2.523f, 2.8744f, //2391-2400
  1.7955f, 5.5345f, 5.2669f, 5.8034f, 2.9527f, 5.1081f, 4.7019f, 7.3176f, 4.7027f,  8.873f, //2401-2410
@@ -366,7 +366,7 @@ static const G4float LEVELMAX[3188] = {0.0f,
  3.4623f,  1.973f, 3.0023f, 3.0451f,  0.778f, 0.5111f, 0.8242f,    0.0f, 1.6954f,    0.0f, //2701-2710
  1.7498f,    0.0f,0.95506f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f, //2711-2720
     0.0f,    0.0f,    0.0f,    0.0f, 2.0101f,    0.0f, 2.1474f,    0.0f,  4.257f, 1.1981f, //2721-2730
- 3.9294f,   1.77f,   7.87f, 6.2832f, 6.2661f,     5.f, 6.6788f, 4.3458f, 6.2555f, 1.3758f, //2731-2740
+ 3.9294f,   1.77f,   7.87f, 6.2832f, 6.2661f,    5.0f, 6.6788f, 4.3458f, 6.2555f, 1.3758f, //2731-2740
  3.2877f, 1.0289f, 2.3687f, 0.7241f,  2.382f, 1.4748f, 3.4189f, 1.7205f, 2.4183f, 1.7739f, //2741-2750
    1.05f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f,    0.0f, 0.1336f, //2751-2760
   1.884f, 0.0918f,  2.438f,  0.322f,  2.013f, 2.5077f, 3.7208f, 3.4056f, 2.5144f,    0.0f, //2761-2770
@@ -444,6 +444,7 @@ G4NuclearLevelData::G4NuclearLevelData()
   }
   fShellCorrection = new G4ShellCorrection();
   fPairingCorrection = new G4PairingCorrection();
+  fG4calc = G4Pow::GetInstance();
 }
 
 G4NuclearLevelData::~G4NuclearLevelData()
@@ -466,14 +467,12 @@ const G4LevelManager*
 G4NuclearLevelData::GetLevelManager(G4int Z, G4int A)
 {
   const G4LevelManager* man = nullptr;
-  //G4cout << "G4NuclearLevelData: Z= " << Z << " A= " << A << G4endl;  
   if(0 < Z && Z < ZMAX && A >= AMIN[Z] && A <= AMAX[Z]) {
     if(!(fLevelManagerFlags[Z])[A - AMIN[Z]]) {
       InitialiseForIsotope(Z, A);
     }
     man = (fLevelManagers[Z])[A - AMIN[Z]];
   }
-  //G4cout << man << G4endl;
   return man;
 }
 
@@ -522,6 +521,7 @@ void G4NuclearLevelData::InitialiseForIsotope(G4int Z, G4int A)
 #ifdef G4MULTITHREADED
   G4MUTEXLOCK(&nuclearLevelDataMutex);
 #endif
+  // initialise only once
   if(!(fLevelManagerFlags[Z])[A - AMIN[Z]]) {
     (fLevelManagers[Z])[A - AMIN[Z]] = 
       fLevelReader->CreateLevelManager(Z, A);
@@ -612,15 +612,34 @@ G4ShellCorrection* G4NuclearLevelData::GetShellCorrection()
   return fShellCorrection;
 }
 
-void G4NuclearLevelData::StreamLevels(std::ostream& os, 
-                                      G4int Z, G4int A) const
+G4double G4NuclearLevelData::GetLevelDensity(G4int Z, G4int A, G4double U)
 {
-  if(0 < Z && Z < ZMAX && A >= AMIN[Z] && A <= AMAX[Z]) {
-    const G4LevelManager* man = (fLevelManagers[Z])[A - AMIN[Z]];
-    if(man) { 
-      os << "Level data for Z= " << Z << " A= " << A << "  " 
-	 << man->NumberOfTransitions() + 1 << " levels \n";
-      man->StreamInfo(os);
-    }
+  if(fDeexPrecoParameters->GetLevelDensityFlag()) {
+    return A*fDeexPrecoParameters->GetLevelDensity();
+  }
+  const G4LevelManager* man = GetLevelManager(Z, A);
+  return (man) ? man->LevelDensity(U) 
+    : 0.058025*A*(1.0 + 5.9059/fG4calc->Z13(A));
+}
+
+G4double G4NuclearLevelData::GetPairingCorrection(G4int Z, G4int A)
+{
+  if(fDeexPrecoParameters->GetLevelDensityFlag()) {
+    return fPairingCorrection->GetPairingCorrection(A, Z);
+  }
+  const G4LevelManager* man = GetLevelManager(Z, A);
+  if(man) { return man->PairingCorrection(); }
+  G4int N = A - Z;
+  return 12.*(2 - Z +(Z/2)*Z - N + (N/2)*2)/std::sqrt((G4double)A);
+}
+
+void G4NuclearLevelData::StreamLevels(std::ostream& os, 
+                                      G4int Z, G4int A)
+{
+  const G4LevelManager* man = GetLevelManager(Z, A);
+  if(man) { 
+    os << "Level data for Z= " << Z << " A= " << A << "  " 
+       << man->NumberOfTransitions() + 1 << " levels \n";
+    man->StreamInfo(os);
   }
 }

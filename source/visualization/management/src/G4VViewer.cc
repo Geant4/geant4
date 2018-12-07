@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc 101714 2016-11-22 08:53:13Z gcosmo $
 //
 // 
 // John Allison  27th March 1996
@@ -157,7 +156,7 @@ void G4VViewer::TouchableSetVisibility
   (G4ModelingParameters::VisAttributesModifier
    (workingVisAtts,
     G4ModelingParameters::VASVisibility,
-    fullPath));
+    G4PhysicalVolumeModel::GetPVNameCopyNoPath(fullPath)));
   // G4ModelingParameters::VASVisibility (VAS = Vis Attribute Signifier)
   // signifies that it is the visibility that should be picked out
   // and merged with the touchable's normal vis attributes.
@@ -192,7 +191,7 @@ void G4VViewer::TouchableSetColour
   (G4ModelingParameters::VisAttributesModifier
    (workingVisAtts,
     G4ModelingParameters::VASColour,
-    fullPath));
+    G4PhysicalVolumeModel::GetPVNameCopyNoPath(fullPath)));
   // G4ModelingParameters::VASColour (VAS = Vis Attribute Signifier)
   // signifies that it is the colour that should be picked out
   // and merged with the touchable's normal vis attributes.

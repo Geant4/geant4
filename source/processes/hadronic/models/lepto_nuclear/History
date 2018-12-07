@@ -1,4 +1,3 @@
-$Id: History 109666 2018-05-04 13:59:45Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +13,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+06 August 2018 Alberto Ribon (hadr-lepnuc-V10-04-02)
+---------------------------------------------------
+- G4NeutrinoElectronCcModel : replaced the explicit high-energy limit
+  of hadronic physics with the one from G4HadronicParameters .
 
 04 May 2018 Vladimir Ivanchenko (hadr-lepnuc-V10-04-01)
 ---------------------------------------------------

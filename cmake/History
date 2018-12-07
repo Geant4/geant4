@@ -1,4 +1,3 @@
-cvs log $Id: History,v 1.3 2010-12-03 17:58:51 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -30,6 +29,53 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+5th November 2018 - Gunter Folger  (cmake-V10-04-27)
+- Switch to G4PARTICLEXS 1.1
+
+5th November 2018 - Gunter Folger  (cmake-V10-04-26)
+- Modules/Geant4DatasetDefinitions.cmake:
+   remove entry for G4NEUTRONXS 
+
+2nd November 2018 - Gunter Folger  (cmake-V10-04-25)
+- Modules/Geant4DatasetDefinitions.cmake: 
+   Add new  G4PARTICLEXS data set; this replaces G4NEUTRONXS
+- fix dates of two entries below; was wrong, not even a typo   
+
+29th October 2018 - Gunter Folger  (cmake-V10-04-24)
+- Switch to new dataset RadioactiveDecay5.3
+
+29th October 2018 - Gunter Folger  (cmake-V10-04-23)
+- Switch to new dataset PhotonEvaporation5.3
+
+18th October 2018 - Ben Morgan (cmake-V10-04-22)
+- Modules/Geant4InstallData.cmake: Use https for URL
+- Templates/geant4-config.in: Add -L flag to curl to follow redirects
+  when accessing dataset url
+
+28th September 2018  - Gabriele Cosmo (cmake-V10-04-21)
+- Modules/Geant4MakeRules_cxx.cmake: added -DGL_SILENCE_DEPRECATION
+  to CMAKE_CXX_FLAGS_INIT for clang to silence GL deprecation compilation
+  warnings on MacOS 10.14 Mojave.
+
+19th September 2018  - Gunter Folger (cmake-V10-04-20)
+- Switch to G4SAIDDATA2.0
+
+17th September 2018  - Gunter Folger (cmake-V10-04-19)
+- Switch to G4EMLOW7.7
+
+22nd August 2018 - Gabriele Cosmo (cmake-V10-04-18)
+- Updated FindInventor.cmake to properly setup SoQt if existing.
+- Geant4InterfaceOptions.cmake: added check for existance of SoQt package.
+
+9th August 2018  - Gunter Folger (cmake-V10-04-17)
+- Switch to G4EMLOW7.6
+
+3rd August 2018  - Gunter Folger (cmake-V10-04-16)
+- Add new dataset for INCL, G4INCL1.0
+
+4th July 2018  - Gunter Folger (cmake-V10-04-15)
+- Switch to G4EMLOW7.5
 
 19th June 2018 - Gunter Folger (cmake-V10-04-14)
 - Templates/geant4_validate_sources.cmake.in, revert addition of .c and .h

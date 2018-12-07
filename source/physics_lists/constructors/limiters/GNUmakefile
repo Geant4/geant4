@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 101161 2016-11-08 08:31:49Z gcosmo $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/constructors/factory library.  
 #  Gunter Folger 10-Jan-2012.

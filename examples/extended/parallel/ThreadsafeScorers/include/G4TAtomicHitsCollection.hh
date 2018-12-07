@@ -27,7 +27,6 @@
 /// \brief Definition of the G4TAtomicHitsCollection class
 //
 //
-// $Id: G4TAtomicHitsCollection.hh 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 /// This is an implementation of G4THitsCollection<T> where the underlying

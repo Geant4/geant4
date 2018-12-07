@@ -22,8 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4UIExecutive.icc,v 1.7 2010-05-28 08:12:27 kmura Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-02 $
 
 #include "G4UIExecutive.hh"
 #include "G4UIsession.hh"
@@ -114,17 +112,17 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
     G4String appinput = argv[0];
     G4String appname = "";
     size_t islash = appinput.find_last_of("/\\");
-    if (islash == G4String::npos) 
+    if (islash == G4String::npos)
       appname = appinput;
-    else 
+    else
       appname = appinput(islash+1, appinput.size()-islash-1);
 
     SelectSessionByFile(appname);
   }
 
-  // 4th, best guess of session type  
+  // 4th, best guess of session type
   if ( selected == kNone) SelectSessionByBestGuess();
-    
+
   // instantiate a session...
   switch ( selected ) {
   case kQt:
@@ -170,14 +168,14 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
     DISCARD_PARAMETER(argc);
     DISCARD_PARAMETER(argv);
     shell = new G4UIcsh;
-    session = new G4UIterminal(shell);    
+    session = new G4UIterminal(shell);
   default:
     break;
   }
 
   // fallback (csh)
   if ( session == NULL ) {
-    G4Exception("G4UIExecutive::G4UIExecutive()", 
+    G4Exception("G4UIExecutive::G4UIExecutive()",
                 "UI0002",
                 JustWarning,
                 "Specified session type is not build in your system,\n"
@@ -233,10 +231,10 @@ void G4UIExecutive::SelectSessionByFile(const G4String& appname)
 #else
   G4String fname= homedir + "\\.g4session";
 #endif
-    
+
   std::ifstream fsession;
   enum { BUFSIZE= 1024 }; char linebuf[BUFSIZE];
-  
+
   fsession.open(fname, std::ios::in);
 
   G4String default_session = "";
@@ -248,6 +246,7 @@ void G4UIExecutive::SelectSessionByFile(const G4String& appname)
     G4String aline = linebuf;
     aline.strip(G4String::both);
     if ( aline(0) == '#' ) continue;
+    if ( aline == "" ) continue;
     if ( iline == 1 )
       default_session = aline;
     else {

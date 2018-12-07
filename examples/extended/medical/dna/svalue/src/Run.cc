@@ -23,13 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publications:
+// Med. Phys. 37 (2010) 4692-4708
+// Phys. Med. 31 (2015) 861-874
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 /// \file medical/dna/svalue/src/Run.cc
 /// \brief Implementation of the Run class
 
 #include "Run.hh"
 #include "DetectorConstruction.hh"
 #include "HistoManager.hh"
-#include "PrimaryGeneratorAction.hh"
+#include "MyFile.hh"
+
+#ifdef MYFILE
+ #include "MyPrimaryGeneratorActionFromFile.hh"
+#else
+ #include "PrimaryGeneratorAction.hh"
+#endif
 
 #include "G4Material.hh"
 #include "G4SystemOfUnits.hh"
@@ -41,7 +54,8 @@ Run::Run(const DetectorConstruction* detector)
 : G4Run(),
   fDetector(detector),
   fParticle(0), fEkin(0.),  
-  fEdeposit(0.),  fEdeposit2(0.),
+  fCytoEdeposit(0.),  fCytoEdeposit2(0.),
+  fNuclEdeposit(0.),  fNuclEdeposit2(0.),
   fTrackLen(0.),  fTrackLen2(0.),
   fProjRange(0.), fProjRange2(0.),
   fNbOfSteps(0), fNbOfSteps2(0),
@@ -63,10 +77,18 @@ void Run::SetPrimary (G4ParticleDefinition* particle, G4double energy)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::AddEdep (G4double e)        
+void Run::AddCytoEdep (G4double e)        
 {
-  fEdeposit  += e;
-  fEdeposit2 += e*e;
+  fCytoEdeposit  += e;
+  fCytoEdeposit2 += e*e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::AddNuclEdep (G4double e)        
+{
+  fNuclEdeposit  += e;
+  fNuclEdeposit2 += e*e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,8 +128,12 @@ void Run::Merge(const G4Run* run)
   fEkin     = localRun->fEkin;
 
   // accumulate sums
-  fEdeposit   += localRun->fEdeposit;
-  fEdeposit2  += localRun->fEdeposit2;
+  
+  fCytoEdeposit   += localRun->fCytoEdeposit;
+  fCytoEdeposit2  += localRun->fCytoEdeposit2;
+  fNuclEdeposit   += localRun->fNuclEdeposit;
+  fNuclEdeposit2  += localRun->fNuclEdeposit2;
+  
   fTrackLen   += localRun->fTrackLen;  
   fTrackLen2  += localRun->fTrackLen2;
   fProjRange  += localRun->fProjRange; 
@@ -130,17 +156,12 @@ void Run::EndOfRun()
   
   //run conditions  
   //
-  G4Material* material = fDetector->GetAbsorMaterial();
-  G4double density  = material->GetDensity();       
   G4String partName = fParticle->GetParticleName();
   
   G4cout << "\n ======================== run summary =====================\n";  
   G4cout 
     << "\n The run is " << numberOfEvent << " "<< partName << " of "
-    << G4BestUnit(fEkin,"Energy") << " through a sphere of radius "
-    << G4BestUnit(fDetector->GetAbsorRadius(),"Length") << "of "
-    << material->GetName() << " (density: " 
-    << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;    
+    << G4BestUnit(fEkin,"Energy") << G4endl;    
 
   if (numberOfEvent == 0) {
     G4cout.setf(mode,std::ios::floatfield);
@@ -148,30 +169,54 @@ void Run::EndOfRun()
     return;
   }
       
-  fEdeposit /= numberOfEvent; fEdeposit2 /= numberOfEvent;
-  G4double rms = fEdeposit2 - fEdeposit*fEdeposit;        
-  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
+  //
+  
+  fCytoEdeposit /= numberOfEvent; fCytoEdeposit2 /= numberOfEvent;
+  G4double rmsCyto = fCytoEdeposit2 - fCytoEdeposit*fCytoEdeposit;        
+  if (rmsCyto>0.) rmsCyto = std::sqrt(rmsCyto); else rmsCyto = 0.;
 
   G4cout.precision(3);       
   G4cout 
-    << "\n Total Energy deposited        = " << G4BestUnit(fEdeposit,"Energy")
-    << " +- "                                << G4BestUnit( rms,"Energy")
+    << "\n Total Energy deposited in cytoplasm = " << G4BestUnit(fCytoEdeposit,"Energy")
+    << " +- "                                << G4BestUnit( rmsCyto,"Energy")
     << G4endl;
                     
-  G4double sValue=fEdeposit/fDetector->GetAbsorMass();
-  G4double rmsSValue=rms/fDetector->GetAbsorMass();
+  G4double sValueCyto=fCytoEdeposit/fDetector->GetCytoMass();
+  G4double rmsSValueCyto=rmsCyto/fDetector->GetCytoMass();
   
   G4cout.precision(3);       
   G4cout 
-    << "\n S value                       = " << sValue/gray << " Gy/Bq.s "
-    << " +- "                                << rmsSValue/gray 
+    << "\n S value for cytoplasm (C<-C) = " << sValueCyto/gray << " Gy/Bq.s "
+    << " +- "                                << rmsSValueCyto/gray 
     <<  " Gy/Bq.s "
     << G4endl;
               
+  //
+  
+  fNuclEdeposit /= numberOfEvent; fNuclEdeposit2 /= numberOfEvent;
+  G4double rmsNucl = fNuclEdeposit2 - fNuclEdeposit*fNuclEdeposit;        
+  if (rmsNucl>0.) rmsNucl = std::sqrt(rmsNucl); else rmsNucl = 0.;
+
+  G4cout.precision(3);       
+  G4cout 
+    << "\n Total Energy deposited in nucleus = " << G4BestUnit(fNuclEdeposit,"Energy")
+    << " +- "                                << G4BestUnit( rmsNucl,"Energy")
+    << G4endl;
+                    
+  G4double sValueNucl=fNuclEdeposit/fDetector->GetNuclMass();
+  G4double rmsSValueNucl=rmsNucl/fDetector->GetNuclMass();
+  
+  G4cout.precision(3);       
+  G4cout 
+    << "\n S value for nucleus (N<-C) = " << sValueNucl/gray << " Gy/Bq.s "
+    << " +- "                                << rmsSValueNucl/gray 
+    <<  " Gy/Bq.s "
+    << G4endl;
+
   //compute track length of primary track
   //
   fTrackLen /= numberOfEvent; fTrackLen2 /= numberOfEvent;
-  rms = fTrackLen2 - fTrackLen*fTrackLen;        
+  G4double rms = fTrackLen2 - fTrackLen*fTrackLen;        
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
   G4cout.precision(3);       
@@ -227,8 +272,15 @@ void Run::EndOfRun()
   //output file
   FILE *myFile;
   myFile = fopen ("s.txt","a");
-  fprintf (myFile, "%e %e %e %e \n", fDetector->GetAbsorRadius()/nm,fEkin/eV,
-                                     sValue/gray, rmsSValue/gray );
+  fprintf (myFile, "%e %e %e %e %e %e %e \n", 
+    fDetector->GetNuclRadius()/nm,
+    fDetector->GetCytoThickness()/nm,
+    fEkin/eV,
+    sValueCyto/gray,
+    rmsSValueCyto/gray,
+    sValueNucl/gray,
+    rmsSValueNucl/gray
+    );
   fclose (myFile);
   
 }

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserActionInitialization.hh 68830 2013-04-06 04:17:11Z asaim $
 //
 
 #ifndef G4VUserActionInitialization_h

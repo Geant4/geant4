@@ -26,11 +26,12 @@
 /// \file eventgenerator/HepMC/HepMCEx01/HepMCEx01.cc
 /// \brief Main program of the eventgenerator/HepMC/HepMCEx01 example
 //
-// $Id: HepMCEx01.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 // --------------------------------------------------------------
 //      GEANT 4 - example derived from novice exampleN04
 // --------------------------------------------------------------
+
+#include "G4Types.hh"
 
 #include "FTFP_BERT.hh"
 #include "G4RunManager.hh"
@@ -45,16 +46,17 @@
 #include "ExN04SteppingVerbose.hh"
 #include "ExN04TrackingAction.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 int main(int argc,char** argv)
 {
+  // Instantiate G4UIExecutive if there are no arguments (interactive mode)
+  G4UIExecutive* ui = nullptr;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // User Verbose output class
   //
   G4VSteppingVerbose* verbosity = new ExN04SteppingVerbose;
@@ -94,42 +96,30 @@ int main(int argc,char** argv)
   G4UserSteppingAction* stepping_action = new ExN04SteppingAction;
   runManager->SetUserAction(stepping_action);
 
-#ifdef G4VIS_USE
-  // Visualization, if you choose to have it!
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
 
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (argc!=1)   // batch mode
+  if (!ui)   // batch mode
     {
-#ifdef G4VIS_USE
       visManager->SetVerboseLevel("quiet");
-#endif
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);
     }
   else
     {  // interactive mode : define UI session
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       ui->SessionStart();
       delete ui;
-#endif
     }
 
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
   delete verbosity;
-
-  return 0;
 }

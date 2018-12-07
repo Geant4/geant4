@@ -34,29 +34,15 @@
 /// \brief Implementation of the RunAction class
 
 #include "RunAction.hh"
+#include "Analysis.hh"
 
 #include "G4RunManager.hh"
-
-#include "Analysis.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction()
 :G4UserRunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::BeginOfRunAction(const G4Run*)
-{ 
-  // inform the runManager to save random number seed
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
-
+{
   // book histograms, ntuple
   
   // create analysis manager
@@ -64,8 +50,10 @@ void RunAction::BeginOfRunAction(const G4Run*)
   // in Analysis.hh
 
   G4cout << "##### Create analysis manager " << "  " << this << G4endl;
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  auto analysisManager = G4AnalysisManager::Instance();
   
+  analysisManager->SetNtupleMerging(true);
+    
   G4cout << "Using " << analysisManager->GetType()
       << " analysis manager"
       << G4endl;
@@ -74,11 +62,6 @@ void RunAction::BeginOfRunAction(const G4Run*)
   
   analysisManager->SetVerboseLevel(1);
   
-  // open an output file
-  
-  G4String fileName = "yz";
-  analysisManager->OpenFile(fileName);
-
   // creating ntuple
   
   analysisManager->CreateNtuple("yz", "yz-distributions");
@@ -90,7 +73,26 @@ void RunAction::BeginOfRunAction(const G4Run*)
   analysisManager->CreateNtupleDColumn("z");
   analysisManager->CreateNtupleDColumn("Einc");
 
-  analysisManager->FinishNtuple();}
+  analysisManager->FinishNtuple();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RunAction::~RunAction()
+{
+  delete G4AnalysisManager::Instance();  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::BeginOfRunAction(const G4Run*)
+{ 
+  // open an output file
+  auto analysisManager = G4AnalysisManager::Instance();  
+  G4String fileName = "yz";
+  analysisManager->OpenFile(fileName);
+
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -98,16 +100,12 @@ void RunAction::EndOfRunAction(const G4Run* )
 {
   // print histogram statistics
   
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  auto analysisManager = G4AnalysisManager::Instance();
   
   // save histograms 
   
   analysisManager->Write();
   analysisManager->CloseFile();
-  
-  // complete cleanup
-  
-  delete G4AnalysisManager::Instance();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveHHScatterer.hh 100828 2016-11-02 15:25:59Z gcosmo $
 
 #ifndef G4DiffractiveHHScatterer_h
 #define G4DiffractiveHHScatterer_h 1

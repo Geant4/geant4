@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc 109177 2018-04-03 06:55:14Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -36,16 +35,7 @@
 //
 // Creation date: 02.08.2004
 //
-// Modifications:
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
-// 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
-// 03-05-05 suppress Integral option (mma)
-// 04-05-05 Make class to be default (V.Ivanchenko)
-// 25-01-06 remove cut dependance in AtRestDoIt (mma)
-// 09-08-06 add SetModel(G4VEmModel*) (mma)
-// 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
-// 30-05-12 propagate parent weight to secondaries (D. Sawkey)
-//
+// Modified by Michel Maire, Vladimir Ivanchenko and Daren Sawkey
 
 //
 // -------------------------------------------------------------------
@@ -114,8 +104,7 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eplusAnnihilation::StreamProcessInfo(std::ostream&,
-                                            G4String) const
+void G4eplusAnnihilation::StreamProcessInfo(std::ostream&) const
 {} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -178,7 +167,11 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
         if (good) { 
           G4Track* t = new G4Track(dp, time, track.GetPosition());
           t->SetTouchableHandle(track.GetTouchableHandle());
-          t->SetWeight(weight);
+          if (biasManager) {
+            t->SetWeight(biasManager->GetWeight(i));
+          } else {
+            t->SetWeight(weight);
+          }
           pParticleChange->AddSecondary(t);
 
           // define type of secondary
@@ -213,7 +206,7 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& track,
 
 void G4eplusAnnihilation::ProcessDescription(std::ostream& out) const
 {
-  out << "<strong>Positron annihilation</strong>";
+  out << "  Positron annihilation";
   G4VEmProcess::ProcessDescription(out);
 }
 

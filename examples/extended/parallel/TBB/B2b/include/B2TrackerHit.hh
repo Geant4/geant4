@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B2TrackerHit.hh 69505 2013-05-07 01:57:27Z asaim $
 //
 /// \file B2TrackerHit.hh
 /// \brief Definition of the B2TrackerHit class

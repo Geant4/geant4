@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.cc 104015 2017-05-08 07:28:08Z gcosmo $
 
 #include "G4RayTracerSceneHandler.hh"
 
@@ -94,7 +93,7 @@ void G4RayTracerSceneHandler::BuildVisAttsMap (const G4VSolid&)
     G4ModelingParameters::PVPointerCopyNoPath temp;
     for (const auto& nodeID: fpPVModel->GetFullPVPath()) {
       // Build an element from the nodeid.
-      temp.push_back(G4ModelingParameters::PVPointerCopyNo(nodeID));
+      temp.push_back(G4ModelingParameters::PVPointerCopyNo(nodeID.GetPhysicalVolume(),nodeID.GetCopyNo()));
     }
     const G4VisAttributes* pVisAtts = fpVisAttribs;
     if (!pVisAtts) {

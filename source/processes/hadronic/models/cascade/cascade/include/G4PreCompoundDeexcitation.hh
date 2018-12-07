@@ -25,7 +25,6 @@
 //
 #ifndef G4PRECOMPOUND_DEEXCITATION_HH
 #define G4PRECOMPOUND_DEEXCITATION_HH
-// $Id: G4PreCompoundDeexcitation.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
 // a final state with evaporated particles and (possibly) a stable nucleus.

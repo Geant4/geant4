@@ -192,7 +192,7 @@ void G4EmDNAPhysics_option7::ConstructProcess()
       G4DNABornExcitationModel* bornExc = new G4DNABornExcitationModel();
       bornExc->SetActivationLowEnergyLimit(10*keV);
       bornExc->SetActivationHighEnergyLimit(1.*MeV);
-      theDNAExcitationProcess->AddEmModel(1, bornExc);
+      theDNAExcitationProcess->AddEmModel(2, bornExc);
       
       ph->RegisterProcess(theDNAExcitationProcess, particle);
 
@@ -211,7 +211,7 @@ void G4EmDNAPhysics_option7::ConstructProcess()
       G4DNABornIonisationModel* bornIon = new G4DNABornIonisationModel();
       bornIon->SetActivationLowEnergyLimit(10*keV);
       bornIon->SetActivationHighEnergyLimit(1.*MeV);
-      theDNAIonisationProcess->AddEmModel(1,bornIon);
+      theDNAIonisationProcess->AddEmModel(2,bornIon);
       
       ph->RegisterProcess(theDNAIonisationProcess, particle);
       

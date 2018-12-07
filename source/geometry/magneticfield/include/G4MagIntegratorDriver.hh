@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh 109569 2018-05-02 07:08:33Z gcosmo $
 //
 //
 // class G4MagInt_Driver
@@ -43,8 +42,10 @@
 
 #include "G4VIntegrationDriver.hh"
 #include "G4MagIntegratorStepper.hh"
+#include "G4ChordFinderDelegate.hh"
 
-class G4MagInt_Driver : public G4VIntegrationDriver
+class G4MagInt_Driver : public G4VIntegrationDriver,
+                        public G4ChordFinderDelegate<G4MagInt_Driver>
 {
 public:  // with description
 
@@ -59,6 +60,22 @@ public:  // with description
     G4MagInt_Driver& operator=(const G4MagInt_Driver&) = delete;
     // deleted Private copy constructor and assignment operator.
 
+    virtual G4double AdvanceChordLimited(G4FieldTrack& track, 
+                                        G4double stepMax, 
+                                        G4double epsStep,
+                                        G4double chordDistance) override
+    {
+      return ChordFinderDelegate::AdvanceChordLimitedImpl(track, stepMax, epsStep, chordDistance);
+    }
+
+    virtual void OnComputeStep() override
+    {
+      ChordFinderDelegate::ResetStepEstimate();
+    }
+
+    virtual void OnStartTracking() override {};
+
+
     virtual G4bool AccurateAdvance(G4FieldTrack& y_current,
                                    G4double hstep,
                                    G4double eps,            // Requested y_err/hstep
@@ -71,7 +88,8 @@ public:  // with description
 
     virtual G4bool QuickAdvance(G4FieldTrack& y_val,      // INOUT
                                 const G4double dydx[],
-                                G4double hstep,       // IN
+                                G4double hstep,
+                                G4double inverseCurvatureRadius,
                                 G4double& dchord_step,
                                 G4double& dyerr) override;
     // QuickAdvance just tries one Step - it does not ensure accuracy.
@@ -93,8 +111,12 @@ public:  // with description
     inline G4double GetPshrnk() const;
     inline G4double GetPgrow() const;
     inline G4double GetErrcon() const;
-    virtual void GetDerivatives(const G4FieldTrack &y_curr,     // const, INput
+    virtual void GetDerivatives(const G4FieldTrack& y_curr,     // const, INput
                                 G4double dydx[]) const override;      //       OUTput
+
+    virtual void GetDerivatives(const G4FieldTrack& track,
+                                G4double dydx[],
+                                G4double field[]) const override;
     // Accessors.
 
     virtual G4EquationOfMotion* GetEquationOfMotion() override;
@@ -244,6 +266,8 @@ private:
 
     G4int  fVerboseLevel;   // Verbosity level for printing (debug, ..)
     // Could be varied during tracking - to help identify issues
+
+    using ChordFinderDelegate = G4ChordFinderDelegate<G4MagInt_Driver>;
 
 };
 

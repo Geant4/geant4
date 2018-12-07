@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc 109510 2018-04-26 07:15:57Z gcosmo $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -48,7 +47,7 @@ G4double        G4VVisCommand::fCurrentLineWidth = 1.;  // pixels
 // Not yet used: G4VisAttributes::LineStyle G4VVisCommand::fCurrentLineStyle = G4VisAttributes::unbroken;
 // Not yet used: G4VMarker::FillStyle       G4VVisCommand::fCurrentFillStyle = G4VMarker::filled;
 // Not yet used: G4VMarker::SizeType        G4VVisCommand::fCurrentSizeType = G4VMarker::screen;
-G4ModelingParameters::PVNameCopyNoPath G4VVisCommand::fCurrentTouchablePath;
+G4PhysicalVolumeModel::TouchableProperties G4VVisCommand::fCurrentTouchableProperties;
 
 G4VVisCommand::G4VVisCommand () {}
 
@@ -188,41 +187,32 @@ G4bool G4VVisCommand::ProvideValueOfUnit
   return success;
 }
 
-void G4VVisCommand::UpdateVisManagerScene
-(const G4String& sceneName) {
-
+void G4VVisCommand::CheckSceneAndNotifyHandlers(G4Scene* pScene)
+{
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-
-  const G4SceneList& sceneList = fpVisManager -> GetSceneList ();
-
-  G4int iScene, nScenes = sceneList.size ();
-  for (iScene = 0; iScene < nScenes; iScene++) {
-    if (sceneList [iScene] -> GetName () == sceneName) break;
-  }
-
-  G4Scene* pScene = 0;  // Zero unless scene has been found...
-  if (iScene < nScenes) {
-    pScene = sceneList [iScene];
-  }
 
   if (!pScene) {
     if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: Scene \"" << sceneName << "\" not found."
-	     << G4endl;
+      G4cout << "WARNING: Scene pointer is null."
+      << G4endl;
     }
     return;
   }
 
-  fpVisManager -> SetCurrentScene (pScene);
-
-  // Scene has changed.  Refresh viewers of all sceneHandlers using
-  // this scene...
-  G4VViewer* pViewer = fpVisManager -> GetCurrentViewer();
-  G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler();
-  if (sceneHandler && sceneHandler -> GetScene ()) {
-    if (pViewer) {
-      G4UImanager::GetUIpointer () ->
-	ApplyCommand ("/vis/scene/notifyHandlers");
+  G4VSceneHandler* pSceneHandler = fpVisManager -> GetCurrentSceneHandler();
+  if (!pSceneHandler) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: Scene handler not found." << G4endl;
     }
+    return;
   }
+
+  // Scene has changed.  If it is the scene of the currrent scene handler
+  // refresh viewers of all scene handlers using this scene. If not, it may be
+  // a scene that the user is building up before attaching to a scene handler,
+  // so do nothing.
+  if (pScene == pSceneHandler->GetScene()) {
+    G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/scene/notifyHandlers");
+  }
+
 }

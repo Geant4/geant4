@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniPionBuilder.hh 103593 2017-04-19 08:10:21Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,8 +48,8 @@
 #include "G4NeutronInelasticProcess.hh"
 #include "G4VPionBuilder.hh"
 
-#include "G4PiNuclearCrossSection.hh"
 #include "G4CascadeInterface.hh"
+
 
 class G4BertiniPionBuilder : public G4VPionBuilder
 {
@@ -67,7 +66,6 @@ class G4BertiniPionBuilder : public G4VPionBuilder
 
     using G4VPionBuilder::Build; //Prevent compiler warning
   private:
-    G4PiNuclearCrossSection* thePiData;
     G4CascadeInterface * theModel;    
     G4double theMin;
     G4double theMax;

@@ -27,7 +27,6 @@
 /// \brief Implementation of the G04SensitiveDetector class
 //
 //
-// $Id: G04SensitiveDetector.cc 68025 2013-03-13 13:43:46Z gcosmo $
 //
 
 #include "G04SensitiveDetector.hh"

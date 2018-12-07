@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAnalysisManager.hh 71635 2013-06-19 13:48:28Z ihrivnac $
 
 // The nonvirtual public interface class to g4tools based analysis.
 // It is defined as a composite of object manager base classes.
@@ -55,6 +54,7 @@ class G4VP1Manager;
 class G4VP2Manager;
 class G4VNtupleManager;
 class G4VFileManager;
+class G4PlotManager;
 
 namespace tools {
 namespace histo{
@@ -71,7 +71,7 @@ class G4VAnalysisManager
     // Methods for handling files 
     G4bool OpenFile(const G4String& fileName = "");
     G4bool Write(); 
-    G4bool CloseFile(); 
+    G4bool CloseFile(G4bool reset = true); 
     G4bool Merge(tools::histo::hmpi* hmpi);   
     G4bool Plot();
     G4bool IsOpenFile() const;
@@ -589,7 +589,7 @@ class G4VAnalysisManager
     // virtual methods
     virtual G4bool OpenFileImpl(const G4String& fileName) = 0;
     virtual G4bool WriteImpl() = 0;
-    virtual G4bool CloseFileImpl() = 0;
+    virtual G4bool CloseFileImpl(G4bool reset) = 0;
     virtual G4bool PlotImpl() = 0;
     virtual G4bool MergeImpl(tools::histo::hmpi* hmpi) = 0;
     virtual G4bool IsOpenFileImpl() const = 0;
@@ -602,6 +602,7 @@ class G4VAnalysisManager
     void SetP2Manager(G4VP2Manager* p2Manager);
     void SetNtupleManager(G4VNtupleManager* ntupleManager);   
     void SetFileManager(std::shared_ptr<G4VFileManager> fileManager);
+    void SetPlotManager(std::shared_ptr<G4PlotManager> plotManager);
 
     // Methods to manipulate additional information
     G4bool  WriteAscii(const G4String& fileName); 
@@ -609,6 +610,7 @@ class G4VAnalysisManager
     // data members
     G4AnalysisManagerState fState;
     std::shared_ptr<G4VFileManager>  fVFileManager;
+    std::shared_ptr<G4PlotManager>   fPlotManager;
 
   private:
     // data members

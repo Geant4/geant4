@@ -41,6 +41,7 @@ class G4MPImessenger;
 class G4MPIsession;
 class G4MPIstatus;
 class G4VMPIseedGenerator;
+class G4VMPIextraWorker;
 
 class G4MPImanager {
 public:
@@ -54,11 +55,12 @@ public:
     kTAG_DATA = 1000,
     kTAG_HISTO = 1001,
     kTAG_RUN = 1002,
-    kTAG_CMDSCR = 1003
+    kTAG_CMDSCR = 1003,
+    kTAG_NTUPLE = 1004
   };
 
-  G4MPImanager();
-  G4MPImanager(int argc, char** argv);
+  G4MPImanager(int nof_extra_workers = 0);
+  G4MPImanager(int argc, char** argv, int nof_extra_workers = 0);
   ~G4MPImanager();
 
   static G4MPImanager* GetManager();
@@ -69,11 +71,13 @@ public:
   G4int GetVerbose() const;
   void SetVerbose(G4int iverbose);
 
-  G4int GetSize() const;
+  G4int GetTotalSize() const;    // get size of all ranks
+  G4int GetActiveSize() const;   // get size of ranks wher RunBeamOn is called
   G4int GetRank() const;
 
   G4bool IsMaster() const;
   G4bool IsSlave() const;
+  G4bool IsExtraWorker() const;
 
   G4bool IsInitMacro() const;
   const G4String& GetInitFileName() const;
@@ -83,6 +87,9 @@ public:
 
   void SetMasterWeight(G4double aweight);
   G4double GetMasterWeight() const;
+
+  void SetExtraWorker(G4VMPIextraWorker* extraWorker);
+  G4VMPIextraWorker* GetExtraWorker() const;
 
   G4VMPIseedGenerator* GetSeedGenerator() const;
 
@@ -107,7 +114,10 @@ public:
   // misc
   void ShowHelp() const;
 
-  //MPI::Intracomm* GetComm() const { return &COMM_G4COMMAND_; }
+  const MPI::Intracomm* GetComm() const { return &COMM_G4COMMAND_; }
+  const MPI_Comm* GetProcessingComm() const { return &processing_comm_; }
+  const MPI_Comm* GetCollectingComm() const { return &collecting_comm_; }
+  const MPI_Comm* GetAllComm() const { return &all_comm_; }
 private:
   DISALLOW_COPY_AND_ASSIGN(G4MPImanager);
 
@@ -119,6 +129,7 @@ private:
   static G4MPImanager* g4mpi_;
   G4MPImessenger* messenger_;
   G4MPIsession* session_;
+  G4VMPIextraWorker* extra_worker_;
 
   // seed generator
   G4VMPIseedGenerator* seed_generator_;
@@ -130,11 +141,24 @@ private:
   // MPI rank
   G4bool is_master_;
   G4bool is_slave_;
+  G4bool is_extra_worker_;
   G4int rank_;
-  G4int size_;
+  G4int size_;  // processing comm size
+  G4int world_size_;  // world comm size
 
-  // MPI communicator
+  // MPI communicator (when no extra ranks)
   MPI::Intracomm COMM_G4COMMAND_;
+  // MPI communicator (processing ranks - if ntuple merging)
+  MPI_Comm processing_comm_;
+  // MPI communicator (collecting ranks - if ntuple merging)
+  MPI_Comm collecting_comm_;
+  // MPI communicator (all ranks - if ntuple mergins)
+  MPI_Comm all_comm_;
+  // Interim data - need to be freed
+  MPI_Group world_group_;
+  MPI_Group processing_group_;
+  MPI_Group collecting_group_;
+  MPI_Group all_group_;
 
   // cout/cerr control
   G4bool qfcout_;
@@ -151,6 +175,7 @@ private:
 
   // parallel parameters
   G4double master_weight_;
+  G4int nof_extra_workers_;
 };
 
 // ====================================================================
@@ -179,7 +204,12 @@ inline G4int G4MPImanager::GetRank() const
   return rank_;
 }
 
-inline G4int G4MPImanager::GetSize() const
+inline G4int G4MPImanager::GetTotalSize() const
+{
+  return world_size_;
+}
+
+inline G4int G4MPImanager::GetActiveSize() const
 {
   return size_;
 }
@@ -192,6 +222,11 @@ inline G4bool G4MPImanager::IsMaster() const
 inline G4bool G4MPImanager::IsSlave() const
 {
   return is_slave_;
+}
+
+inline G4bool G4MPImanager::IsExtraWorker() const
+{
+  return is_extra_worker_;
 }
 
 inline G4bool G4MPImanager::IsInitMacro() const
@@ -227,6 +262,11 @@ inline void G4MPImanager::SetMasterWeight(G4double aweight)
 inline G4double G4MPImanager::GetMasterWeight() const
 {
   return master_weight_;
+}
+
+inline G4VMPIextraWorker* G4MPImanager::GetExtraWorker() const
+{
+  return extra_worker_;
 }
 
 inline G4VMPIseedGenerator* G4MPImanager::GetSeedGenerator() const

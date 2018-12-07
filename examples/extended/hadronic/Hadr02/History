@@ -1,4 +1,3 @@
-$Id: History 109656 2018-05-04 09:00:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-10-18  A. Ribon  (exhadr02-V10-04-03)
+- Introduced CRMC (Cosmic Ray Monte Carlo) interface and created a
+  physics list which uses this interface for very high energy
+  hadronic interactions, while using FTFP_BERT for the rest.
+  See the README file for more information.
+
+09-08-18  A. Ribon  (exhadr02-V10-04-02)
+- UrQMDProtonBuilder, IonUrQMDPhysics, UrQMDPiKBuilder, 
+  UrQMDAntiBarionBuilder, UrQMDNeutronBuilder, 
+  HIJINGProtonBuilder, IonHIJINGPhysics, HIJINGNeutronBuilder :
+  replaced the explicit high-energy limit of hadronic
+  physics with the one from G4HadronicParameters .
 
 03-05-18  J.Allison (exhadr02-V10-04-01)
 - RunAction.cc:

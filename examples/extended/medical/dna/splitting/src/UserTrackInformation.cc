@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $ID$
 /// \file UserTrackInformation.cc
 /// \brief Implementation of the UserTrackInformation class
 //

@@ -99,7 +99,7 @@ namespace G4INCL {
     ParticleTable::setProtonSeparationEnergy(thePotential->getSeparationEnergy(Proton));
     ParticleTable::setNeutronSeparationEnergy(thePotential->getSeparationEnergy(Neutron));
 
-    theDensity = NuclearDensityFactory::createDensity(theA, theZ);
+    theDensity = NuclearDensityFactory::createDensity(theA, theZ, theS);
 
     theParticleSampler->setPotential(thePotential);
     theParticleSampler->setDensity(theDensity);
@@ -223,8 +223,8 @@ namespace G4INCL {
         totalEnergy += (*p)->getKineticEnergy() - (*p)->getPotentialEnergy();
       else if((*p)->isResonance())
         totalEnergy += (*p)->getEnergy() - (*p)->getPotentialEnergy() - ParticleTable::effectiveNucleonMass;
-      else if((*p)->isLambda())
-        totalEnergy += (*p)->getKineticEnergy() - (*p)->getPotentialEnergy();
+      else if((*p)->isHyperon())
+        totalEnergy += (*p)->getEnergy() - (*p)->getPotentialEnergy() - ParticleTable::getRealMass((*p)->getType());
       else
         totalEnergy += (*p)->getEnergy() - (*p)->getPotentialEnergy();
     }
@@ -260,7 +260,7 @@ namespace G4INCL {
     thePosition = computeCenterOfMass();
     theSpin -= (thePosition-initialCenterOfMass).vector(theMomentum);
 
-    setMass(ParticleTable::getTableMass(theA,theZ) + theExcitationEnergy);
+    setMass(ParticleTable::getTableMass(theA,theZ,theS) + theExcitationEnergy);
     adjustEnergyFromMomentum();
     remnant=true;
   }
@@ -654,8 +654,8 @@ namespace G4INCL {
   }
 
   G4bool Nucleus::decayMe() {
-    // Do the phase-space decay only if Z=0 or Z=A
-    if(theA<=1 || (theZ!=0 && theA!=theZ))
+    // Do the phase-space decay only if Z=0 or N=0
+    if(theA<=1 || (theZ!=0 && (theA+theS)!=theZ))
       return false;
 
     ParticleList decayProducts = ClusterDecay::decay(this);
@@ -687,7 +687,7 @@ namespace G4INCL {
                    << thePion->print() << '\n');
         thePion->setEmissionTime(theStore->getBook().getCurrentTime());
         // Correction for real masses
-        const G4double theQValueCorrection = thePion->getEmissionQValueCorrection(theA,theZ);
+        const G4double theQValueCorrection = thePion->getEmissionQValueCorrection(theA,theZ,theS);
         const G4double kineticEnergyOutside = thePion->getKineticEnergy() - thePion->getPotentialEnergy() + theQValueCorrection;
         thePion->setTableMass();
         if(kineticEnergyOutside > 0.0)
@@ -708,7 +708,7 @@ namespace G4INCL {
   }
   
   void Nucleus::emitInsideStrangeParticles() {
-    /* Forcing emissions of all strange particles exept Lambda particles in the nucleus.
+    /* Forcing emissions of Sigmas and antiKaons.
      * This probably violates energy conservation
      * (although the computation of the recoil kinematics
      * might sweep this under the carpet).
@@ -728,7 +728,7 @@ namespace G4INCL {
                    << theParticle->print() << '\n');
         theParticle->setEmissionTime(theStore->getBook().getCurrentTime());
         // Correction for real masses
-        const G4double theQValueCorrection = theParticle->getEmissionQValueCorrection(theA,theZ); // Does it work for strange particles? should be check
+        const G4double theQValueCorrection = theParticle->getEmissionQValueCorrection(theA,theZ,theS); // Does it work for strange particles? should be check
         const G4double kineticEnergyOutside = theParticle->getKineticEnergy() - theParticle->getPotentialEnergy() + theQValueCorrection;
         theParticle->setTableMass();
         if(kineticEnergyOutside > 0.0)
@@ -771,7 +771,7 @@ namespace G4INCL {
                    << theLambda->print() << '\n');
         theLambda->setEmissionTime(theStore->getBook().getCurrentTime());
         // Correction for real masses
-        const G4double theQValueCorrection = theLambda->getEmissionQValueCorrection(theA,theZ); // Does it work for strange particles? Should be check
+        const G4double theQValueCorrection = theLambda->getEmissionQValueCorrection(theA,theZ,theS); // Does it work for strange particles? Should be check
         const G4double kineticEnergyOutside = theLambda->getKineticEnergy() - theLambda->getPotentialEnergy() + theQValueCorrection;
         theLambda->setTableMass();
         if(kineticEnergyOutside > 0.0)
@@ -794,7 +794,7 @@ namespace G4INCL {
   }
       
   G4bool Nucleus::emitInsideKaon() {
-    /* Forcing emissions of all Kaon in the nucleus.
+    /* Forcing emissions of all Kaon (not antiKaons) in the nucleus.
      * This probably violates energy conservation
      * (although the computation of the recoil kinematics
      * might sweep this under the carpet).
@@ -814,7 +814,7 @@ namespace G4INCL {
                    << theKaon->print() << '\n');
         theKaon->setEmissionTime(theStore->getBook().getCurrentTime());
         // Correction for real masses
-        const G4double theQValueCorrection = theKaon->getEmissionQValueCorrection(theA,theZ);
+        const G4double theQValueCorrection = theKaon->getEmissionQValueCorrection(theA,theZ,theS);
         const G4double kineticEnergyOutside = theKaon->getKineticEnergy() - theKaon->getPotentialEnergy() + theQValueCorrection;
         theKaon->setTableMass();
         if(kineticEnergyOutside > 0.0)
@@ -833,6 +833,7 @@ namespace G4INCL {
       theStore->addToOutgoing(*i);
       (*i)->setParticleBias(Particle::getTotalBias());
     }
+    theNKaon -= 1;
     return toEject.size() != 0;
   }
 
@@ -1166,7 +1167,7 @@ namespace G4INCL {
     for(ParticleIter i=outgoingParticles.begin(), e=outgoingParticles.end(); i!=e; ++i ) {
       theBalance.Z -= (*i)->getZ();
       theBalance.A -= (*i)->getA();
-      theBalance.S += (*i)->getS();
+      theBalance.S -= (*i)->getS();
       // For outgoing clusters, the total energy automatically includes the
       // excitation energy
       theBalance.energy -= (*i)->getEnergy(); // Note that outgoing particles should have the real mass
@@ -1177,10 +1178,9 @@ namespace G4INCL {
     if(theProjectileRemnant && theProjectileRemnant->getA()>0) {
       theBalance.Z -= theProjectileRemnant->getZ();
       theBalance.A -= theProjectileRemnant->getA();
-      theBalance.S += theProjectileRemnant->getS();
-      theBalance.energy -= ParticleTable::getTableMass(theProjectileRemnant->getA(),theProjectileRemnant->getZ()) +
+      theBalance.S -= theProjectileRemnant->getS();
+      theBalance.energy -= ParticleTable::getTableMass(theProjectileRemnant->getA(),theProjectileRemnant->getZ(),theProjectileRemnant->getS()) +
         theProjectileRemnant->getExcitationEnergy();
-      if(theProjectileRemnant->getS() != 0) theBalance.energy -= theProjectileRemnant->getS()*(ParticleTable::effectiveNucleonMass - ParticleTable::effectiveLambdaMass); // Trick because hypernuclus mass unkown
       theBalance.energy -= theProjectileRemnant->getKineticEnergy();
       theBalance.momentum -= theProjectileRemnant->getMomentum();
     }
@@ -1189,10 +1189,9 @@ namespace G4INCL {
     if(hasRemnant()) {
       theBalance.Z -= getZ();
       theBalance.A -= getA();
-      theBalance.S += getS();
-      theBalance.energy -= ParticleTable::getTableMass(getA(),getZ()) +
+      theBalance.S -= getS();
+      theBalance.energy -= ParticleTable::getTableMass(getA(),getZ(),getS()) +
         getExcitationEnergy();
-      if(getS() != 0) theBalance.energy -= getS()*(ParticleTable::effectiveNucleonMass - ParticleTable::effectiveLambdaMass); // Trick because hypernuclus mass unkown
       if(afterRecoil)
         theBalance.energy -= getKineticEnergy();
       theBalance.momentum -= getMomentum();
@@ -1219,7 +1218,7 @@ namespace G4INCL {
 
       // Compute the excitation energy from the invariant mass
       const G4double anExcitationEnergy = aMass
-        - ParticleTable::getTableMass(prA, theProjectileRemnant->getZ());
+        - ParticleTable::getTableMass(prA, theProjectileRemnant->getZ(), theProjectileRemnant->getS());
 
       // Set the excitation energy
       theProjectileRemnant->setExcitationEnergy(anExcitationEnergy);

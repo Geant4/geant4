@@ -27,7 +27,6 @@
 /// \brief Definition of the B02ImportanceDetectorConstruction class
 //
 //
-// $Id: B02ImportanceDetectorConstruction.hh 77324 2013-11-22 14:26:57Z ahoward$
 //
 
 #ifndef B02ImportanceDetectorConstruction_hh 

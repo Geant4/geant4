@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id:$
 //
 //
 // class G4ScaledSolid
@@ -87,6 +86,9 @@ class G4ScaledSolid : public G4VSolid
                             const G4int n,
                             const G4VPhysicalVolume* pRep );
 
+    G4double GetCubicVolume();
+    G4double GetSurfaceArea();
+
     void CleanTransformations();
 
     G4ThreeVector GetPointOnSurface() const;
@@ -121,6 +123,8 @@ class G4ScaledSolid : public G4VSolid
 
     G4VSolid* fPtrSolid;
     G4ScaleTransform* fScale;
+    G4double fCubicVolume;
+    G4double fSurfaceArea;
     mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 } ;

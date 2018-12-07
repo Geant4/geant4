@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHighEnergyGenerator.hh 69717 2013-05-13 09:47:57Z gcosmo $
 //      V. Uzhinsky Nov. 2012
 //          Added method GetProjectileNucleus for simulation of nucleus-nucleus inter. 
 //

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -259,8 +259,8 @@ eBrem:   for  e-    SubType= 3
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGenUrban
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -279,8 +279,8 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGenUrban
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -308,7 +308,7 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 0, fluct: 0, linLossLimit= 0.02
-      Stopping Power data for 17 ion/material pairs 
+      Stopping Power data for 17 ion/material pairs
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
@@ -491,14 +491,14 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.050000s Real=0.046529s Sys=0.000000s
+  User=0.040000s Real=0.046973s Sys=0.000000s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	2.7529 cm  +- 19.55 nm 
- geomPathLength :	2.0709 cm  +- 7.1087 nm 
+ truePathLength :	2.7529 cm  +- 21.721 nm 
+ geomPathLength :	2.0688 cm  +- 15.407 nm 
  lateralDisplac :	0 fm  +- 0 fm 
  Psi            :	0 mrad +- 0 mrad  (0 deg +- 0 deg)
 
@@ -507,7 +507,7 @@ Run Summary
 
  Verification from G4EmCalculator. 
 
- transport mean free path :	8.3595 cm 
+ transport mean free path :	8.3246 cm 
  range from restrict dE/dx:	2.7529 cm 
  ---> effective facRange  :	1
 
@@ -563,27 +563,27 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.090000s Real=0.092069s Sys=0.000000s
+  User=0.060000s Real=0.066399s Sys=0.000000s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	6.2917 um  +- 475.13 nm 
- geomPathLength :	6.167 um  +- 456.34 nm 
- lateralDisplac :	900.24 nm  +- 215.58 nm 
- Psi            :	144.38 mrad +- 30.394 mrad  (8.2722 deg +- 1.7415 deg)
+ truePathLength :	6.1297 um  +- 598.79 nm 
+ geomPathLength :	6.0076 um  +- 575.09 nm 
+ lateralDisplac :	878.75 nm  +- 223.81 nm 
+ Psi            :	144.41 mrad +- 30.471 mrad  (8.2743 deg +- 1.7459 deg)
 
- Theta_plane    :	237.39 mrad  (13.601 deg)
- phi correlation:	0.1687 +- 0.14409  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	239.17 mrad  (13.704 deg)
+ phi correlation:	0.1684 +- 0.14259  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
- transport mean free path :	157.63 um 
+ transport mean free path :	153.44 um 
  range from restrict dE/dx:	143.25 um 
- ---> effective facRange  :	0.039915
+ ---> effective facRange  :	0.039948
 
- compute theta0 from Highland :	180.47 mrad  (10.34 deg)
+ compute theta0 from Highland :	177.83 mrad  (10.189 deg)
 
 ------- MixMaxRng engine status -------
  Current state vector is:

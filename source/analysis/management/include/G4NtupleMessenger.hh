@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NtupleMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
 
 // The messenger class for histogram information management.
 // It implements commands in /analysis/h1 directory.

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // The main manager for Hdf5 analysis reader.
 // It delegates most of functions to the object specific managers. 

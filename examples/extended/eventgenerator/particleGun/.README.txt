@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "eventgenerator/particleGun/.README.txt"
 ///\brief Example ParticleGun README page

@@ -27,7 +27,6 @@
 /// \brief Definition of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.hh 94932 2015-12-18 09:21:29Z gcosmo $
 //
 
 #ifndef DetectorConstruction_h

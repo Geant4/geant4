@@ -190,7 +190,7 @@ G4TsitourasRK45::Stepper(  const G4double yInput[],
     const G4int numberOfVariables= this->GetNumberOfVariables();
     
     // The number of variables to be integrated over
-    yOut[7] = yTemp[7]  = yIn[7];
+    yOut[7] = yTemp[7]  = yIn[7] = yInput[7];
     //  Saving yInput because yInput and yOut can be aliases for same array
     
     for(i=0;i<numberOfVariables;i++)

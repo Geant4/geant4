@@ -40,6 +40,7 @@
 //
 //*******************************************************//
 
+
 #ifndef CML2PrimaryGenerationActionH
 #define CML2PrimaryGenerationActionH
 
@@ -54,8 +55,6 @@
 
 #include "G4ParticleDefinition.hh"
 #include "ML2SinputData.hh"
-#include "ML2SDWithParticle.hh"
-#include "ML2SDWithVoxels.hh"
 #include "ML2PrimaryGenerationActionMessenger.hh"
 
 class G4ParticleGun;
@@ -74,11 +73,11 @@ public:
 	void inizialize(SPrimaryParticle *primaryParticleData);
 	inline void setNRecycling(G4int val){nRecycling=val;}
 	inline void setNLoopsPhSpParticles(G4int val){nLoopsPhSpParticles=val;}
-	inline void setNMaxParticlesInRamPhaseSpace(G4int val){nMaxParticlesInRamPhaseSpace=val;std::cout<<"Current nMaxParticlesInRamPhaseSpace: " << nMaxParticlesInRamPhaseSpace<< G4endl;}
+	inline void setNMaxParticlesInRamPhaseSpace(G4int val){nMaxParticlesInRamPhaseSpace=val;G4cout<<"Current nMaxParticlesInRamPhaseSpace: " << nMaxParticlesInRamPhaseSpace<< G4endl;}
 
-	inline void setGunMeanEnergy(G4double val){GunMeanEnegy=val;}
-	inline void setGunStdEnergy(G4double val){GunStdEnegy=val;}
-	inline void setGunRadious(G4double val){GunRadious=val;}
+	inline void setGunMeanEnergy(G4double val){GunMeanEnergy=val;}
+	inline void setGunStdEnergy(G4double val){GunStdEnergy=val;}
+	inline void setGunRadius(G4double val){GunRadius=val;}
 	inline void setCalculatedPhaseSpaceFileIN(G4String val){calculatedPhaseSpaceFileIN=val;}
 	inline void setSourceTypeName(G4String val)
 	{
@@ -107,7 +106,7 @@ private:
 	static CML2PrimaryGenerationAction * instance;
 
 	G4int nRecycling, nLoopsPhSpParticles, nMaxParticlesInRamPhaseSpace, idParticleSource;
-	G4double GunMeanEnegy, GunStdEnegy, GunRadious;
+	G4double GunMeanEnergy, GunStdEnergy, GunRadius;
 	G4String calculatedPhaseSpaceFileIN;
 
 	CML2PrimaryGenerationActionMessenger *PrimaryGenerationActionMessenger;
@@ -119,7 +118,7 @@ private:
 
 	G4Timer myTime;
 	G4double sinTheta, cosTheta, phi;
-	G4double ro, alfa;
+	G4double rho, alpha;
 	G4ParticleGun *particleGun;
 	G4ParticleDefinition *gamma;
 	G4ParticleDefinition *electron;

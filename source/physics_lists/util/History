@@ -1,4 +1,3 @@
-$Id: History 106958 2017-10-31 08:33:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +12,12 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-Nov-2018, Vladimir Ivanchenko        (phys-util-V10-04-01)
+- G4DataQuestionaire - substituted G4NEUTRONXSDATA by G4PARTICLEXSDATA
+
+21-Jul-2018, Vladimir Ivanchenko        (phys-util-V10-04-00)
+- G4PhysListUtil - added methods GetCaptureProcess and GetFissionProcess
 
 26-Oct-2017, Tatsumi Koi                (phys-util-V10-03-00)
 - Fix address of ftp site of LEND data 

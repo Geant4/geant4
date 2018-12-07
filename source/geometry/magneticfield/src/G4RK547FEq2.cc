@@ -42,14 +42,6 @@
 
 using namespace field_utils;
 
-namespace {
-
-void copyArray(G4double dst[], const G4double src[])
-{
-    memcpy(dst, src, sizeof(G4double) * G4FieldTrack::ncompSVEC);
-}
-
-} // namespace
 
 G4RK547FEq2::G4RK547FEq2(G4EquationOfMotion* EqRhs, G4int integrationVariables)
    : G4MagIntegratorStepper(EqRhs, integrationVariables)
@@ -141,13 +133,13 @@ void G4RK547FEq2::Stepper(
     G4double yOutput[],
     G4double yError[])
 {
-    copyArray(fyIn, yInput);
-    copyArray(fdydx, dydx);
+    copy(fyIn, yInput);
+    copy(fdydx, dydx);
     fhstep = hstep;
 
     makeStep(fyIn, fdydx, fhstep, fyOut, fdydxOut, yError);
 
-    copyArray(yOutput, fyOut);
+    copy(yOutput, fyOut);
 }
 
 void G4RK547FEq2::Stepper(
@@ -158,14 +150,14 @@ void G4RK547FEq2::Stepper(
     G4double yError[],
     G4double dydxOutput[])
 {
-    copyArray(fyIn, yInput);
-    copyArray(fdydx, dydx);
+    copy(fyIn, yInput);
+    copy(fdydx, dydx);
     fhstep = hstep;
 
     makeStep(fyIn, fdydx, fhstep, fyOut, fdydxOut, yError);
 
-    copyArray(yOutput, fyOut);
-    copyArray(dydxOutput, fdydxOut);
+    copy(yOutput, fyOut);
+    copy(dydxOutput, fdydxOut);
 }
 
 G4double G4RK547FEq2::DistChord() const

@@ -26,7 +26,6 @@
 /// \file biasing/ReverseMC01/src/G4AdjointPhysicsMessenger.cc
 /// \brief Implementation of the G4AdjointPhysicsMessenger class
 //
-// $Id: G4AdjointPhysicsMessenger.cc 71233 2013-06-12 13:16:05Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        G4AdjointPhysicsMessenger

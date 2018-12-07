@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "analysis/B1Con/.README.txt"
 ///\brief Example B1Con README page

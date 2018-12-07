@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc 92631 2015-09-09 12:53:04Z gcosmo $
 //
 // class G4PVDivision Implementation file
 //

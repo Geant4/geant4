@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDVeLowEnergyLoss.hh 107396 2017-11-10 08:28:08Z gcosmo $
-// GEANT4 tag $Name: geant4-09-01-ref-00 $
 //
 // 3.4.2000 Veronique Lefebure:
 //          Move utils/include/G4VEnergyLoss.hh to 

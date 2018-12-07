@@ -27,7 +27,6 @@
 /// \brief Main program of the advanced/amsEcal example
 //
 //
-// $Id: amsEcal.cc 109984 2018-05-14 07:18:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

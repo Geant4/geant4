@@ -26,7 +26,6 @@
 /// \file EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 95740 2016-02-23 09:34:37Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

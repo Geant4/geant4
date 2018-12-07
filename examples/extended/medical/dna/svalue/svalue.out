@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -63,28 +63,18 @@ Some /vis commands (optionally) take a string to specify colour.
 Command is ignored.
 WARNING: There is no world volume!
 WARNING: There is no world volume!
-PhysicsList::AddPhysicsList: <dna>
+WARNING: There is no world volume!
+PhysicsList::AddPhysicsList: <dna_opt2>
 
 ---------------------------------------------------------
 ---> The tracking cut is set to 12 eV 
----> The Absorber is a sphere of 20 nm  radius of G4_WATER made of
- 
- Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.375 cm 
-                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
-          ElmMassFraction:  11.19 %  ElmAbundance  66.67 % 
-
-   --->  Element: O (O)   Z =  8.0   N =    16   A = 15.999 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
-
+---> The World is a sphere of 50 um radius of G4_WATER
+---> The Nucleus is a sphere of 50 nm radius of G4_WATER of mass 5.23599e-13 mg
+---> The Cytoplasm is a spherical shell of thickness 3 nm of G4_WATER of mass 1.00016e-13 mg
 
 ---------------------------------------------------------
+
+  Set atomic relaxation mode 1
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
           DefaultRegionForTheWorld  1  1  0
@@ -128,7 +118,7 @@ DNABornExcitationModel :  Emin=        0 eV    Emax=        1 MeV
 
 e-_G4DNAIonisation:   for  e-    SubType= 53  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNABornIonisationModel :  Emin=        0 eV    Emax=        1 MeV   deltaBorn  FluoActive
+DNABornIonisationModel :  Emin=        0 eV    Emax=      100 TeV   deltaBorn  FluoActive
 
 e-_G4DNAVibExcitation:   for  e-    SubType= 54  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -155,8 +145,8 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   AngularGenUrban
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -173,7 +163,7 @@ DNABornExcitationModel :  Emin=      500 keV   Emax=      100 MeV
 
 proton_G4DNAIonisation:   for  proton    SubType= 53  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      500 keV   deltaRudd  FluoActive
+DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=      500 keV   deltaRudd  FluoActive
 DNABornIonisationModel :  Emin=      500 keV   Emax=      100 MeV   deltaBorn  FluoActive
 
 proton_G4DNAChargeDecrease:   for  proton    SubType= 56  BuildTable= 0
@@ -183,6 +173,20 @@ DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      100 MeV
 GenericIon_G4DNAIonisation:   for  GenericIon    SubType= 53  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=        1 TeV   deltaRudd  FluoActive
+=======================================================================
+======       Radioactive Decay Physics Parameters              ========
+=======================================================================
+Max life time                                     0.14427 ps
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Auger cascade enabled                             1
+Check EM cuts disabled for atomic de-excitation   1
+Use Bearden atomic level energies                 0
+=======================================================================
 
 alpha_G4DNAElastic:   for  alpha    SubType= 51  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -194,7 +198,7 @@ DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      400 MeV
 
 alpha_G4DNAIonisation:   for  alpha    SubType= 53  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV   deltaRudd  FluoActive
+DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=      100 TeV   deltaRudd  FluoActive
 
 alpha_G4DNAChargeDecrease:   for  alpha    SubType= 56  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -210,7 +214,7 @@ DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      400 MeV
 
 alpha+_G4DNAIonisation:   for  alpha+    SubType= 53  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV   deltaRudd  FluoActive
+DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=      100 TeV   deltaRudd  FluoActive
 
 alpha+_G4DNAChargeDecrease:   for  alpha+    SubType= 56  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -230,7 +234,7 @@ DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      400 MeV
 
 helium_G4DNAIonisation:   for  helium    SubType= 53  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV   deltaRudd  FluoActive
+DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=      100 TeV   deltaRudd  FluoActive
 
 helium_G4DNAChargeIncrease:   for  helium    SubType= 57  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -246,295 +250,383 @@ DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      500 keV
 
 hydrogen_G4DNAIonisation:   for  hydrogen    SubType= 53  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      100 MeV   deltaRudd  FluoActive
+DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=      100 TeV   deltaRudd  FluoActive
 
 hydrogen_G4DNAChargeIncrease:   for  hydrogen    SubType= 57  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      100 MeV
 
- ======================== run summary =====================
+========= Table of registered couples ==============================
 
- The run is 1000 e- of 100.00 eV  through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
+Index : 0     used in the geometry : Yes
+ Material : G4_WATER
+ Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
+ Energy thresholds :  gamma  10 eV     e-  10 eV     e+  10 eV  proton 0.1 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
- Total Energy deposited        = 87.731 eV  +- 26.661 eV 
+====================================================================
 
- S value                       = 419.457 Gy/Bq.s  +- 127.471 Gy/Bq.s 
-
- Track length of primary track = 10.336 nm  +- 8.574 nm 
- Projected range               = 1.684 nm  +- 9.266 nm 
-
- Nb of steps of primary track  = 32.39 +- 32.20
-
- Step size                     = 3.736 Ang +- 1.696 Ang
 
  ======================== run summary =====================
 
- The run is 1000 e- of 200.00 eV  through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 100.00 eV 
 
- Total Energy deposited        = 160.902 eV  +- 66.265 eV 
+ Total Energy deposited in cytoplasm = 60.990 eV  +- 32.727 eV 
 
- S value                       = 769.296 Gy/Bq.s  +- 316.823 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 97.702 Gy/Bq.s  +- 52.425 Gy/Bq.s 
 
- Track length of primary track = 13.563 nm  +- 11.000 nm 
- Projected range               = 2.590 nm  +- 9.101 nm 
+ Total Energy deposited in nucleus = 18.818 eV  +- 28.668 eV 
 
- Nb of steps of primary track  = 35.40 +- 39.21
+ S value for nucleus (N<-C) = 5.758 Gy/Bq.s  +- 8.772 Gy/Bq.s 
 
- Step size                     = 5.060 Ang +- 2.806 Ang
+ Track length of primary track = 12.844 nm  +- 10.693 nm 
+ Projected range               = 24155.325 fm  +- 30.009 nm 
 
- ======================== run summary =====================
+ Nb of steps of primary track  = 43.48 +- 42.08
 
- The run is 1000 e- of 300.00 eV  through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
-
- Total Energy deposited        = 218.415 eV  +- 110.697 eV 
-
- S value                       = 1044.273 Gy/Bq.s  +- 529.258 Gy/Bq.s 
-
- Track length of primary track = 15.192 nm  +- 11.826 nm 
- Projected range               = 4.070 nm  +- 9.171 nm 
-
- Nb of steps of primary track  = 32.86 +- 37.68
-
- Step size                     = 6.582 Ang +- 3.942 Ang
+ Step size                     = 3.201 Ang +- 83299.663 fm 
 
  ======================== run summary =====================
 
- The run is 1000 e- of 400.00 eV  through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 200.00 eV 
 
- Total Energy deposited        = 263.901 eV  +- 153.740 eV 
+ Total Energy deposited in cytoplasm = 93.827 eV  +- 64.372 eV 
 
- S value                       = 1261.751 Gy/Bq.s  +- 735.052 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 150.303 Gy/Bq.s  +- 103.120 Gy/Bq.s 
 
- Track length of primary track = 17.493 nm  +- 11.982 nm 
- Projected range               = 5.523 nm  +- 9.119 nm 
+ Total Energy deposited in nucleus = 50.773 eV  +- 65.383 eV 
 
- Nb of steps of primary track  = 31.25 +- 32.17
+ S value for nucleus (N<-C) = 15.536 Gy/Bq.s  +- 20.007 Gy/Bq.s 
 
- Step size                     = 8.306 Ang +- 5.263 Ang
+ Track length of primary track = 17.766 nm  +- 11.560 nm 
+ Projected range               = 2.015 nm  +- 29.651 nm 
 
- ======================== run summary =====================
+ Nb of steps of primary track  = 50.72 +- 45.14
 
- The run is 1000 e- of 500.00 eV  through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
-
- Total Energy deposited        = 270.941 eV  +- 195.578 eV 
-
- S value                       = 1295.406 Gy/Bq.s  +- 935.086 Gy/Bq.s 
-
- Track length of primary track = 18.404 nm  +- 13.632 nm 
- Projected range               = 7.196 nm  +- 8.861 nm 
-
- Nb of steps of primary track  = 27.30 +- 32.64
-
- Step size                     = 1.018 nm  +- 6.174 Ang
+ Step size                     = 3.961 Ang +- 1.121 Ang
 
  ======================== run summary =====================
 
- The run is 1000 e- of 600.00 eV  through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 300.00 eV 
 
- Total Energy deposited        = 267.827 eV  +- 229.913 eV 
+ Total Energy deposited in cytoplasm = 104.594 eV  +- 87.678 eV 
 
- S value                       = 1280.519 Gy/Bq.s  +- 1099.245 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 167.551 Gy/Bq.s  +- 140.454 Gy/Bq.s 
 
- Track length of primary track = 18.890 nm  +- 15.118 nm 
- Projected range               = 8.227 nm  +- 8.546 nm 
+ Total Energy deposited in nucleus = 81.195 eV  +- 105.871 eV 
 
- Nb of steps of primary track  = 24.08 +- 32.59
+ S value for nucleus (N<-C) = 24.845 Gy/Bq.s  +- 32.396 Gy/Bq.s 
 
- Step size                     = 1.264 nm  +- 8.311 Ang
+ Track length of primary track = 22.407 nm  +- 11.409 nm 
+ Projected range               = 5.996 nm  +- 29.914 nm 
 
- ======================== run summary =====================
+ Nb of steps of primary track  = 53.30 +- 39.45
 
- The run is 1000 e- of 700.00 eV  through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
-
- Total Energy deposited        = 258.537 eV  +- 246.414 eV 
-
- S value                       = 1236.102 Gy/Bq.s  +- 1178.142 Gy/Bq.s 
-
- Track length of primary track = 18.838 nm  +- 15.727 nm 
- Projected range               = 9.607 nm  +- 8.515 nm 
-
- Nb of steps of primary track  = 19.47 +- 28.67
-
- Step size                     = 1.453 nm  +- 8.889 Ang
+ Step size                     = 4.700 Ang +- 1.313 Ang
 
  ======================== run summary =====================
 
- The run is 1000 e- of 800.00 eV  through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 400.00 eV 
 
- Total Energy deposited        = 246.650 eV  +- 249.416 eV 
+ Total Energy deposited in cytoplasm = 111.753 eV  +- 101.409 eV 
 
- S value                       = 1179.270 Gy/Bq.s  +- 1192.496 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 179.019 Gy/Bq.s  +- 162.450 Gy/Bq.s 
 
- Track length of primary track = 18.768 nm  +- 14.678 nm 
- Projected range               = 9.929 nm  +- 8.392 nm 
+ Total Energy deposited in nucleus = 132.242 eV  +- 151.511 eV 
 
- Nb of steps of primary track  = 15.85 +- 21.37
+ S value for nucleus (N<-C) = 40.465 Gy/Bq.s  +- 46.361 Gy/Bq.s 
 
- Step size                     = 1.636 nm  +- 9.271 Ang
+ Track length of primary track = 28.354 nm  +- 11.969 nm 
+ Projected range               = 6.679 nm  +- 30.162 nm 
 
- ======================== run summary =====================
+ Nb of steps of primary track  = 58.72 +- 40.37
 
- The run is 1000 e- of 900.00 eV  through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
-
- Total Energy deposited        = 207.281 eV  +- 234.028 eV 
-
- S value                       = 991.040 Gy/Bq.s  +- 1118.920 Gy/Bq.s 
-
- Track length of primary track = 17.562 nm  +- 13.603 nm 
- Projected range               = 11.344 nm  +- 7.378 nm 
-
- Nb of steps of primary track  = 12.22 +- 17.76
-
- Step size                     = 1.895 nm  +- 1.021 nm 
+ Step size                     = 5.482 Ang +- 1.675 Ang
 
  ======================== run summary =====================
 
- The run is 1000 e- of 1.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 500.00 eV 
 
- Total Energy deposited        = 181.122 eV  +- 216.525 eV 
+ Total Energy deposited in cytoplasm = 111.047 eV  +- 113.648 eV 
 
- S value                       = 865.969 Gy/Bq.s  +- 1035.237 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 177.888 Gy/Bq.s  +- 182.056 Gy/Bq.s 
 
- Track length of primary track = 17.082 nm  +- 13.174 nm 
- Projected range               = 11.714 nm  +- 7.588 nm 
+ Total Energy deposited in nucleus = 172.349 eV  +- 195.518 eV 
 
- Nb of steps of primary track  = 9.86 +- 12.26
+ S value for nucleus (N<-C) = 52.738 Gy/Bq.s  +- 59.827 Gy/Bq.s 
 
- Step size                     = 2.149 nm  +- 1.276 nm 
+ Track length of primary track = 33.546 nm  +- 12.497 nm 
+ Projected range               = 9.643 nm  +- 30.402 nm 
 
- ======================== run summary =====================
+ Nb of steps of primary track  = 60.09 +- 37.44
 
- The run is 1000 e- of 2.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
-
- Total Energy deposited        = 90.088 eV  +- 128.112 eV 
-
- S value                       = 430.726 Gy/Bq.s  +- 612.520 Gy/Bq.s 
-
- Track length of primary track = 15.452 nm  +- 10.820 nm 
- Projected range               = 14.067 nm  +- 5.129 nm 
-
- Nb of steps of primary track  = 4.71 +- 3.80
-
- Step size                     = 3.622 nm  +- 2.384 nm 
+ Step size                     = 6.220 Ang +- 1.880 Ang
 
  ======================== run summary =====================
 
- The run is 1000 e- of 3.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 600.00 eV 
 
- Total Energy deposited        = 61.902 eV  +- 91.965 eV 
+ Total Energy deposited in cytoplasm = 105.592 eV  +- 116.464 eV 
 
- S value                       = 295.960 Gy/Bq.s  +- 439.697 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 169.151 Gy/Bq.s  +- 186.566 Gy/Bq.s 
 
- Track length of primary track = 14.833 nm  +- 9.951 nm 
- Projected range               = 14.509 nm  +- 4.404 nm 
+ Total Energy deposited in nucleus = 199.785 eV  +- 235.466 eV 
 
- Nb of steps of primary track  = 3.51 +- 2.34
+ S value for nucleus (N<-C) = 61.133 Gy/Bq.s  +- 72.051 Gy/Bq.s 
 
- Step size                     = 4.689 nm  +- 3.503 nm 
+ Track length of primary track = 41.545 nm  +- 14.239 nm 
+ Projected range               = 13.512 nm  +- 31.229 nm 
 
- ======================== run summary =====================
+ Nb of steps of primary track  = 68.03 +- 41.33
 
- The run is 1000 e- of 4.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
-
- Total Energy deposited        = 46.077 eV  +- 76.840 eV 
-
- S value                       = 220.300 Gy/Bq.s  +- 367.382 Gy/Bq.s 
-
- Track length of primary track = 15.063 nm  +- 9.970 nm 
- Projected range               = 14.604 nm  +- 4.465 nm 
-
- Nb of steps of primary track  = 2.98 +- 1.95
-
- Step size                     = 5.566 nm  +- 3.823 nm 
+ Step size                     = 6.926 Ang +- 2.131 Ang
 
  ======================== run summary =====================
 
- The run is 1000 e- of 5.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 700.00 eV 
 
- Total Energy deposited        = 45.657 eV  +- 84.439 eV 
+ Total Energy deposited in cytoplasm = 103.413 eV  +- 119.158 eV 
 
- S value                       = 218.295 Gy/Bq.s  +- 403.716 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 165.660 Gy/Bq.s  +- 190.882 Gy/Bq.s 
 
- Track length of primary track = 15.157 nm  +- 9.981 nm 
- Projected range               = 14.988 nm  +- 3.878 nm 
+ Total Energy deposited in nucleus = 243.686 eV  +- 280.069 eV 
 
- Nb of steps of primary track  = 2.70 +- 1.74
+ S value for nucleus (N<-C) = 74.566 Gy/Bq.s  +- 85.699 Gy/Bq.s 
 
- Step size                     = 6.286 nm  +- 4.662 nm 
+ Track length of primary track = 49.228 nm  +- 15.582 nm 
+ Projected range               = 14.834 nm  +- 31.535 nm 
 
- ======================== run summary =====================
+ Nb of steps of primary track  = 69.85 +- 37.85
 
- The run is 1000 e- of 6.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
-
- Total Energy deposited        = 35.939 eV  +- 72.719 eV 
-
- S value                       = 171.828 Gy/Bq.s  +- 347.682 Gy/Bq.s 
-
- Track length of primary track = 14.695 nm  +- 9.631 nm 
- Projected range               = 14.745 nm  +- 4.123 nm 
-
- Nb of steps of primary track  = 2.37 +- 1.45
-
- Step size                     = 6.911 nm  +- 5.052 nm 
+ Step size                     = 7.780 Ang +- 2.314 Ang
 
  ======================== run summary =====================
 
- The run is 1000 e- of 7.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 800.00 eV 
 
- Total Energy deposited        = 37.648 eV  +- 83.530 eV 
+ Total Energy deposited in cytoplasm = 91.553 eV  +- 110.602 eV 
 
- S value                       = 180.003 Gy/Bq.s  +- 399.370 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 146.661 Gy/Bq.s  +- 177.177 Gy/Bq.s 
 
- Track length of primary track = 15.435 nm  +- 10.126 nm 
- Projected range               = 14.878 nm  +- 4.032 nm 
+ Total Energy deposited in nucleus = 284.227 eV  +- 326.782 eV 
 
- Nb of steps of primary track  = 2.29 +- 1.44
+ S value for nucleus (N<-C) = 86.972 Gy/Bq.s  +- 99.993 Gy/Bq.s 
 
- Step size                     = 7.522 nm  +- 5.565 nm 
+ Track length of primary track = 58.001 nm  +- 17.724 nm 
+ Projected range               = 17.506 nm  +- 32.772 nm 
 
- ======================== run summary =====================
+ Nb of steps of primary track  = 75.25 +- 40.33
 
- The run is 1000 e- of 8.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
-
- Total Energy deposited        = 27.535 eV  +- 62.630 eV 
-
- S value                       = 131.647 Gy/Bq.s  +- 299.442 Gy/Bq.s 
-
- Track length of primary track = 14.675 nm  +- 9.812 nm 
- Projected range               = 14.772 nm  +- 4.020 nm 
-
- Nb of steps of primary track  = 2.11 +- 1.28
-
- Step size                     = 7.751 nm  +- 5.753 nm 
+ Step size                     = 8.558 Ang +- 2.628 Ang
 
  ======================== run summary =====================
 
- The run is 1000 e- of 9.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 900.00 eV 
 
- Total Energy deposited        = 24.044 eV  +- 56.853 eV 
+ Total Energy deposited in cytoplasm = 92.245 eV  +- 116.892 eV 
 
- S value                       = 114.959 Gy/Bq.s  +- 271.822 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 147.769 Gy/Bq.s  +- 187.253 Gy/Bq.s 
 
- Track length of primary track = 14.267 nm  +- 9.805 nm 
- Projected range               = 14.970 nm  +- 3.733 nm 
+ Total Energy deposited in nucleus = 287.026 eV  +- 353.516 eV 
 
- Nb of steps of primary track  = 1.92 +- 1.11
+ S value for nucleus (N<-C) = 87.828 Gy/Bq.s  +- 108.173 Gy/Bq.s 
 
- Step size                     = 8.177 nm  +- 6.169 nm 
+ Track length of primary track = 66.177 nm  +- 19.264 nm 
+ Projected range               = 22.916 nm  +- 36.111 nm 
+
+ Nb of steps of primary track  = 77.65 +- 39.50
+
+ Step size                     = 9.337 Ang +- 2.703 Ang
 
  ======================== run summary =====================
 
- The run is 1000 e- of 10.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
+ The run is 1000 e- of 1.00 keV
 
- Total Energy deposited        = 25.828 eV  +- 68.146 eV 
+ Total Energy deposited in cytoplasm = 86.667 eV  +- 109.806 eV 
 
- S value                       = 123.486 Gy/Bq.s  +- 325.814 Gy/Bq.s 
+ S value for cytoplasm (C<-C) = 138.835 Gy/Bq.s  +- 175.901 Gy/Bq.s 
 
- Track length of primary track = 15.192 nm  +- 9.720 nm 
- Projected range               = 15.259 nm  +- 3.623 nm 
+ Total Energy deposited in nucleus = 313.829 eV  +- 387.027 eV 
 
- Nb of steps of primary track  = 1.91 +- 1.09
+ S value for nucleus (N<-C) = 96.030 Gy/Bq.s  +- 118.428 Gy/Bq.s 
 
- Step size                     = 8.768 nm  +- 6.316 nm 
+ Track length of primary track = 75.643 nm  +- 22.113 nm 
+ Projected range               = 27.144 nm  +- 36.783 nm 
+
+ Nb of steps of primary track  = 80.54 +- 37.61
+
+ Step size                     = 1.016 nm  +- 2.826 Ang
+
+ ======================== run summary =====================
+
+ The run is 1000 e- of 2.00 keV
+
+ Total Energy deposited in cytoplasm = 55.274 eV  +- 80.267 eV 
+
+ S value for cytoplasm (C<-C) = 88.545 Gy/Bq.s  +- 128.581 Gy/Bq.s 
+
+ Total Energy deposited in nucleus = 240.755 eV  +- 432.093 eV 
+
+ S value for nucleus (N<-C) = 73.669 Gy/Bq.s  +- 132.218 Gy/Bq.s 
+
+ Track length of primary track = 205.494 nm  +- 50.085 nm 
+ Projected range               = 83.148 nm  +- 63.183 nm 
+
+ Nb of steps of primary track  = 121.71 +- 45.00
+
+ Step size                     = 1.787 nm  +- 4.505 Ang
+
+ ======================== run summary =====================
+
+ The run is 1000 e- of 3.00 keV
+
+ Total Energy deposited in cytoplasm = 37.121 eV  +- 73.144 eV 
+
+ S value for cytoplasm (C<-C) = 59.466 Gy/Bq.s  +- 117.171 Gy/Bq.s 
+
+ Total Energy deposited in nucleus = 120.594 eV  +- 244.212 eV 
+
+ S value for nucleus (N<-C) = 36.901 Gy/Bq.s  +- 74.727 Gy/Bq.s 
+
+ Track length of primary track = 376.152 nm  +- 90.566 nm 
+ Projected range               = 167.236 nm  +- 107.693 nm 
+
+ Nb of steps of primary track  = 152.22 +- 44.44
+
+ Step size                     = 2.550 nm  +- 5.611 Ang
+
+ ======================== run summary =====================
+
+ The run is 1000 e- of 4.00 keV
+
+ Total Energy deposited in cytoplasm = 27.434 eV  +- 49.511 eV 
+
+ S value for cytoplasm (C<-C) = 43.947 Gy/Bq.s  +- 79.313 Gy/Bq.s 
+
+ Total Energy deposited in nucleus = 100.215 eV  +- 213.599 eV 
+
+ S value for nucleus (N<-C) = 30.665 Gy/Bq.s  +- 65.360 Gy/Bq.s 
+
+ Track length of primary track = 594.496 nm  +- 141.796 nm 
+ Projected range               = 269.783 nm  +- 174.428 nm 
+
+ Nb of steps of primary track  = 182.61 +- 45.23
+
+ Step size                     = 3.319 nm  +- 6.720 Ang
+
+ ======================== run summary =====================
+
+ The run is 1000 e- of 5.00 keV
+
+ Total Energy deposited in cytoplasm = 22.406 eV  +- 45.644 eV 
+
+ S value for cytoplasm (C<-C) = 35.892 Gy/Bq.s  +- 73.118 Gy/Bq.s 
+
+ Total Energy deposited in nucleus = 75.723 eV  +- 172.441 eV 
+
+ S value for nucleus (N<-C) = 23.171 Gy/Bq.s  +- 52.766 Gy/Bq.s 
+
+ Track length of primary track = 866.759 nm  +- 208.344 nm 
+ Projected range               = 414.403 nm  +- 239.328 nm 
+
+ Nb of steps of primary track  = 216.94 +- 53.92
+
+ Step size                     = 4.062 nm  +- 7.889 Ang
+
+ ======================== run summary =====================
+
+ The run is 1000 e- of 6.00 keV
+
+ Total Energy deposited in cytoplasm = 20.544 eV  +- 42.518 eV 
+
+ S value for cytoplasm (C<-C) = 32.910 Gy/Bq.s  +- 68.110 Gy/Bq.s 
+
+ Total Energy deposited in nucleus = 67.521 eV  +- 152.081 eV 
+
+ S value for nucleus (N<-C) = 20.661 Gy/Bq.s  +- 46.536 Gy/Bq.s 
+
+ Track length of primary track = 1.145 um  +- 265.175 nm 
+ Projected range               = 545.286 nm  +- 321.156 nm 
+
+ Nb of steps of primary track  = 242.22 +- 53.16
+
+ Step size                     = 4.773 nm  +- 8.351 Ang
+
+ ======================== run summary =====================
+
+ The run is 1000 e- of 7.00 keV
+
+ Total Energy deposited in cytoplasm = 17.642 eV  +- 39.041 eV 
+
+ S value for cytoplasm (C<-C) = 28.262 Gy/Bq.s  +- 62.541 Gy/Bq.s 
+
+ Total Energy deposited in nucleus = 53.637 eV  +- 129.394 eV 
+
+ S value for nucleus (N<-C) = 16.413 Gy/Bq.s  +- 39.594 Gy/Bq.s 
+
+ Track length of primary track = 1.491 um  +- 333.333 nm 
+ Projected range               = 742.031 nm  +- 413.549 nm 
+
+ Nb of steps of primary track  = 270.23 +- 56.23
+
+ Step size                     = 5.554 nm  +- 8.792 Ang
+
+ ======================== run summary =====================
+
+ The run is 1000 e- of 8.00 keV
+
+ Total Energy deposited in cytoplasm = 14.986 eV  +- 35.817 eV 
+
+ S value for cytoplasm (C<-C) = 24.006 Gy/Bq.s  +- 57.376 Gy/Bq.s 
+
+ Total Energy deposited in nucleus = 48.635 eV  +- 138.413 eV 
+
+ S value for nucleus (N<-C) = 14.882 Gy/Bq.s  +- 42.353 Gy/Bq.s 
+
+ Track length of primary track = 1.841 um  +- 430.855 nm 
+ Projected range               = 905.772 nm  +- 495.995 nm 
+
+ Nb of steps of primary track  = 296.47 +- 60.79
+
+ Step size                     = 6.234 nm  +- 1.000 nm 
+
+ ======================== run summary =====================
+
+ The run is 1000 e- of 9.00 keV
+
+ Total Energy deposited in cytoplasm = 13.037 eV  +- 31.007 eV 
+
+ S value for cytoplasm (C<-C) = 20.884 Gy/Bq.s  +- 49.672 Gy/Bq.s 
+
+ Total Energy deposited in nucleus = 45.935 eV  +- 109.565 eV 
+
+ S value for nucleus (N<-C) = 14.056 Gy/Bq.s  +- 33.526 Gy/Bq.s 
+
+ Track length of primary track = 2.279 um  +- 496.899 nm 
+ Projected range               = 1.127 um  +- 601.529 nm 
+
+ Nb of steps of primary track  = 327.70 +- 60.61
+
+ Step size                     = 6.975 nm  +- 1.059 nm 
+
+ ======================== run summary =====================
+
+ The run is 1000 e- of 10.00 keV
+
+ Total Energy deposited in cytoplasm = 11.453 eV  +- 31.859 eV 
+
+ S value for cytoplasm (C<-C) = 18.347 Gy/Bq.s  +- 51.036 Gy/Bq.s 
+
+ Total Energy deposited in nucleus = 38.928 eV  +- 94.168 eV 
+
+ S value for nucleus (N<-C) = 11.912 Gy/Bq.s  +- 28.815 Gy/Bq.s 
+
+ Track length of primary track = 2.737 um  +- 576.239 nm 
+ Projected range               = 1.377 um  +- 745.672 nm 
+
+ Nb of steps of primary track  = 354.98 +- 65.42
+
+ Step size                     = 7.732 nm  +- 1.094 nm 
 Graphics systems deleted.
 Visualization Manager deleting...

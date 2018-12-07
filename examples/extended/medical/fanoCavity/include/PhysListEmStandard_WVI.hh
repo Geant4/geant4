@@ -26,7 +26,6 @@
 /// \file medical/fanoCavity/include/PhysListEmStandard_WVI.hh
 /// \brief Definition of the PhysListEmStandard_WVI class
 //
-// $Id: PhysListEmStandard_WVI.hh 86064 2014-11-07 08:49:32Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

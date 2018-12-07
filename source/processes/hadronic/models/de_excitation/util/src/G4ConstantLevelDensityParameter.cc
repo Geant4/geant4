@@ -34,9 +34,14 @@
 #include "G4SystemOfUnits.hh"
 
 G4ConstantLevelDensityParameter::G4ConstantLevelDensityParameter() 
-  :  EvapLevelDensityParameter(0.125/CLHEP::MeV) 
+  :  EvapLevelDensityParameter(0.1/CLHEP::MeV) 
 {}
 
 G4ConstantLevelDensityParameter::~G4ConstantLevelDensityParameter()
 {}
 
+G4double G4ConstantLevelDensityParameter::LevelDensityParameter(
+         G4int A, G4int, G4double) const 
+{
+  return A * EvapLevelDensityParameter;
+}

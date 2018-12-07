@@ -27,32 +27,40 @@
 //                              GEANT 4 - Hadrontherapy example
 //      ----------------------------------------------------------------------------
 //
-//                                      MAIN AUTHORS
+//                                      MAIN AUTHOR
 //                                  ====================
-//                             G.A.P. Cirrone(a)*, F.Romano(a)
+//                                  G.A.P. Cirrone(a)*
 //
 //                 *Corresponding author, email to pablo.cirrone@lns.infn.it
 //
-//                                          WEB
-//                                      ===========
-//                       http://www.lns.infn.it/link/Hadrontherapy
+//                                  ACTUAL CONTRIBUTORS
+//                                  ====================
+//          G.A.P. Cirrone(a), Z. Mei(i), L. Pandola(a), G. Petringa(a), F. Romano (a,g)
 //
 //
 //                      ==========>   PAST CONTRIBUTORS  <==========
 //
 //                      R. Calcagno(a), G.Danielsen (b), F.Di Rosa(a),
 //                      S.Guatelli(c), A.Heikkinen(b), P.Kaitaniemi(b),
-//                      A.Lechner(d), S.E.Mazzaglia(a),  M.G.Pia(e),
-//                      G.Russo(a), M.Russo(a), A. Tramontana (a),
+//                      A.Lechner(d), S.E.Mazzaglia(a), M.G.Pia(e),
+//                      G.Russo(a,h), M.Russo(a), A. Tramontana (a),
 //                      A.Varisano(a)
 //
-//              (a) Laboratori Nazionali del Sud of INFN, Catania, Italy
+//              (a) Laboratori Nazionali del Sud of INFN, Catania, Italy
 //              (b) Helsinki Institute of Physics, Helsinki, Finland
 //              (c) University of Wallongong, Australia
 //              (d) CERN, Geneve, Switzwerland
 //              (e) INFN Section of Genova, Genova, Italy
 //              (f) Physics and Astronomy Department, Univ. of Catania, Catania, Italy
+//              (g) National Physics Laboratory, Teddington, UK
+//              (h) CNR-IBFM, Italy
+//              (i) Institute of Applied Electromagnetic Engineering(IAEE) 
+//                  Huazhong University of Science and Technology(HUST), Wuhan, China
 //
+//
+//                                          WEB
+//                                      ===========
+//       https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
 //
 // ----------------------------------------------------------------------------
 
@@ -79,6 +87,7 @@
 #include "G4ScoringManager.hh"
 #include "G4ParallelWorldPhysics.hh"
 #include <time.h>
+#include "G4Timer.hh"
 
 //************************MT*********************
 #ifdef G4MULTITHREADED
@@ -89,17 +98,27 @@
 
 #include "HadrontherapyActionInitialization.hh"
 
-#ifdef G4VIS_USE
+//#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
+//#endif
 
-#ifdef G4UI_USE
+//#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+//#endif
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc ,char ** argv)
 {
+        G4UIExecutive* ui = 0;
+    if ( argc == 1 ) {
+        ui = new G4UIExecutive(argc, argv);
+    }
+    
+    //Instantiate the G4Timer object, to monitor the CPU time spent for
+    //the entire execution
+    G4Timer* theTimer = new G4Timer();
+    //Start the benchmark
+    theTimer->Start();
     
     // Set the Random engine
     // The following guarantees random generation also for different runs
@@ -116,9 +135,8 @@ int main(int argc ,char ** argv)
     G4RunManager* runManager = new G4RunManager;
 #endif
     
-    
     // Geometry controller is responsible for instantiating the
-    // geometries. All geometry specific setup tasks are now in class
+    // geometries. All geometry specific m tasks are now in class
     // HadrontherapyGeometryController.
     HadrontherapyGeometryController *geometryController = new HadrontherapyGeometryController();
     
@@ -128,12 +146,8 @@ int main(int argc ,char ** argv)
     G4ScoringManager *scoringManager = G4ScoringManager::GetScoringManager();
     scoringManager->SetVerboseLevel(1);
     
-    
     // Initialize the default Hadrontherapy geometry
     geometryController->SetGeometry("default");
-    
-    // Initialize command based scoring
-    G4ScoringManager::GetScoringManager();
     
     // Initialize the physics
     G4PhysListFactory factory;
@@ -159,51 +173,62 @@ int main(int argc ,char ** argv)
         phys = new HadrontherapyPhysicsList();
     }
     
+    // Initialisations of physics
     runManager->SetUserInitialization(phys);
     
-    //************************MT
+    // Initialisation of the Actions
     runManager->SetUserInitialization(new HadrontherapyActionInitialization);
     
-    
+    // Initialize command based scoring
+    G4ScoringManager::GetScoringManager();
     
     // Interaction data: stopping powers
     HadrontherapyInteractionParameters* pInteraction = new HadrontherapyInteractionParameters(true);
     
     // Initialize analysis
-    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
+    HadrontherapyAnalysis* analysis = HadrontherapyAnalysis::GetInstance();
     
+
     
-    // Get the pointer to the visualization manager
-#ifdef G4VIS_USE
+// Initialise the Visualisation
+//#ifdef G4VIS_USE
     G4VisManager* visManager = new G4VisExecutive;
     visManager -> Initialize();
-#endif
+//#endif
     
-    // Get the pointer to the User Interface manager
+    //** Get the pointer to the User Interface manager
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
     
-    if (argc == 1)   // Define UI session for interactive mode.
-    {
-#ifdef G4UI_USE
-        G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-        G4cout << " UI session starts ..." << G4endl;
-        
-        UImanager -> ApplyCommand("/control/execute macro/defaultMacro.mac");
-        
-        
-        ui -> SessionStart();
-        delete ui;
-#endif
-    }
-    else           // Batch mode
-    {
+    if ( !ui ) {
+        // batch mode
         G4String command = "/control/execute ";
         G4String fileName = argv[1];
-        UImanager -> ApplyCommand(command+fileName);
+        UImanager->ApplyCommand(command+fileName);
+        
     }
     
+    else {
+        G4cout << "sono qua" << G4endl;
+
+        UImanager -> ApplyCommand("/control/execute macro/defaultMacro.mac");
+        ui -> SessionStart();
+        delete ui;
+    }
+    delete visManager;
+ 
+    //Stop the benchmark here
+    theTimer->Stop();
+    
+    G4cout << "The simulation took: " << theTimer->GetRealElapsed() << " s to run (real time)"
+    << G4endl;
+    
     // Job termination
-    if ( HadrontherapyMatrix * pMatrix = HadrontherapyMatrix::GetInstance() )
+    // Free the store: user actions, physics_list and detector_description are
+    // owned and deleted by the run manager, so they should not be deleted
+    // in the main() program !
+    
+    
+        if ( HadrontherapyMatrix * pMatrix = HadrontherapyMatrix::GetInstance() )
     {
         // pMatrix -> TotalEnergyDeposit();
         pMatrix -> StoreDoseFluenceAscii();
@@ -216,12 +241,6 @@ int main(int argc ,char ** argv)
             let -> LetOutput(); 	// Calculate let
             let -> StoreLetAscii(); // Store it
         }
-    
-    
-    
-#ifdef G4VIS_USE
-    delete visManager;
-#endif
     
     delete geometryMessenger;
     delete geometryController;

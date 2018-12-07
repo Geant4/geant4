@@ -27,7 +27,6 @@
 /// \brief Definition of the PhysicsList class
 //
 //
-// $Id: PhysicsList.hh 98767 2016-08-09 14:18:40Z gcosmo $
 //
 // 
 

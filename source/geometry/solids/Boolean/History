@@ -1,5 +1,4 @@
 
-$Id: History 110606 2018-06-01 14:48:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +18,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ October 4, 2018 E.Tcherniaev            geom-bool-V10-04-08
+ - G4ScaledSolid: return back using EstimateSurfaceArea() from G4VSolid,
+   as it was originally, but now adopting the more precise algorithm
+   implemented in G4VSolid.
+
+ October 4, 2018 E.Tcherniaev            geom-bool-V10-04-07
+ - G4ScaledSolid: improved approximated computation for surface area.
+
+ October 3, 2018 E.Tcherniaev            geom-bool-V10-04-06, 05
+ - Minor optimisations to G4SubtractionSolid and G4IntersectionSolid
+   for use of early returns.
+ - G4ScaledSolid: implemented approximated computation for surface
+   area and cubic volume.
 
  June 1, 2018 G. Cosmo                   geom-bool-V10-04-04
  - G4MultiUnion: added protection for normal initialisation in

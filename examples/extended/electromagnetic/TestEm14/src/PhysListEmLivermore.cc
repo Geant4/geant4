@@ -27,7 +27,6 @@
 /// \brief Implementation of the PhysListEmLivermore class
 //
 //
-// $Id: PhysListEmLivermore.cc 108013 2017-12-19 09:03:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

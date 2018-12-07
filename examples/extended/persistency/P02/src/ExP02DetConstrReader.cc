@@ -26,7 +26,6 @@
 /// \file persistency/P02/src/ExP02DetConstrReader.cc
 /// \brief Implementation of the ExP02DetConstrReader class
 //
-// $Id: ExP02DetConstrReader.cc 93306 2015-10-16 07:38:07Z gcosmo $
 //
 //ROOT
 #include "TROOT.h"

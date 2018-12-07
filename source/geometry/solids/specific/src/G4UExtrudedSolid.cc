@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id:$
 //
 // 
 // Implementation of G4UExtrudedSolid wrapper class
@@ -257,7 +256,7 @@ void G4UExtrudedSolid::BoundingLimits(G4ThreeVector& pMin,
   //
   if (checkBBox)
   {
-    UVector3 vmin, vmax;
+    U3Vector vmin, vmax;
     Base_t::Extent(vmin,vmax);
     if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
         std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
@@ -392,7 +391,7 @@ G4Polyhedron* G4UExtrudedSolid::CreatePolyhedron () const
     G4int v[3];  // Facets are only triangular in VecGeom
     for (unsigned int j = 0; j < 3; ++j)
     {
-      UVector3 vtx = Base_t::GetStruct().fTslHelper.fFacets[i]->fVertices[j];
+      U3Vector vtx = Base_t::GetStruct().fTslHelper.fFacets[i]->fVertices[j];
       polyhedron->AddVertex(G4ThreeVector(vtx.x(), vtx.y(), vtx.z()));
       v[j] = Base_t::GetStruct().fTslHelper.fFacets[i]->fIndices[j]+1;
     }

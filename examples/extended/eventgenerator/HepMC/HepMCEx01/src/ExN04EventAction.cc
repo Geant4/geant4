@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04EventAction.cc
 /// \brief Implementation of the ExN04EventAction class
 //
-// $Id: ExN04EventAction.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #include "G4Event.hh"
@@ -44,10 +43,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04EventAction::ExN04EventAction()
+ : G4UserEventAction(),
+   ftrackerCollID(-1),
+   fcalorimeterCollID(-1),
+   fmuonCollID(-1)
 {
-  ftrackerCollID = -1;
-  fcalorimeterCollID = -1;
-  fmuonCollID = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

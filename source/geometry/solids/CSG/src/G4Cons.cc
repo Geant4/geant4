@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc 104316 2017-05-24 13:04:23Z gcosmo $
-// GEANT4 tag $Name: $
 //
 //
 // class G4Cons
@@ -2139,37 +2137,50 @@ std::ostream& G4Cons::StreamInfo(std::ostream& os) const
 // GetPointOnSurface
 
 G4ThreeVector G4Cons::GetPointOnSurface() const
-{   
+{
   // declare working variables
   //
-  G4double Aone, Atwo, Athree, Afour, Afive, slin, slout, phi;
-  G4double zRand, cosu, sinu, rRand1, rRand2, chose, rone, rtwo, qone, qtwo;
-  rone = (fRmax1-fRmax2)/(2.*fDz);
-  rtwo = (fRmin1-fRmin2)/(2.*fDz);
-  qone=0.; qtwo=0.;
-  if(fRmax1!=fRmax2) { qone = fDz*(fRmax1+fRmax2)/(fRmax1-fRmax2); }
-  if(fRmin1!=fRmin2) { qtwo = fDz*(fRmin1+fRmin2)/(fRmin1-fRmin2); }
-  slin   = std::sqrt(sqr(fRmin1-fRmin2)+sqr(2.*fDz));
-  slout  = std::sqrt(sqr(fRmax1-fRmax2)+sqr(2.*fDz));
-  Aone   = 0.5*fDPhi*(fRmax2 + fRmax1)*slout;       
-  Atwo   = 0.5*fDPhi*(fRmin2 + fRmin1)*slin;
-  Athree = 0.5*fDPhi*(fRmax1*fRmax1-fRmin1*fRmin1); 
-  Afour  = 0.5*fDPhi*(fRmax2*fRmax2-fRmin2*fRmin2);
-  Afive  = fDz*(fRmax1-fRmin1+fRmax2-fRmin2);
-  
-  phi    = G4RandFlat::shoot(fSPhi,fSPhi+fDPhi);
-  cosu   = std::cos(phi);  sinu = std::sin(phi);
-  rRand1 = GetRadiusInRing(fRmin1, fRmax1);
-  rRand2 = GetRadiusInRing(fRmin2, fRmax2);
+  G4double rone = (fRmax1-fRmax2)/(2.*fDz);
+  G4double rtwo = (fRmin1-fRmin2)/(2.*fDz);
+  G4double qone = (fRmax1 == fRmax2) ? 0. : fDz*(fRmax1+fRmax2)/(fRmax1-fRmax2);
+  G4double qtwo = (fRmin1 == fRmin2) ? 0. : fDz*(fRmin1+fRmin2)/(fRmin1-fRmin2);
+
+  G4double slin   = std::hypot(fRmin1-fRmin2, 2.*fDz);
+  G4double slout  = std::hypot(fRmax1-fRmax2, 2.*fDz);
+  G4double Aone   = 0.5*fDPhi*(fRmax2 + fRmax1)*slout; // outer surface
+  G4double Atwo   = 0.5*fDPhi*(fRmin2 + fRmin1)*slin;  // inner surface
+  G4double Athree = 0.5*fDPhi*(fRmax1*fRmax1-fRmin1*fRmin1); // base at -Dz
+  G4double Afour  = 0.5*fDPhi*(fRmax2*fRmax2-fRmin2*fRmin2); // base at +Dz
+  G4double Afive  = fDz*(fRmax1-fRmin1+fRmax2-fRmin2); // phi section
+
+  G4double phi    = G4RandFlat::shoot(fSPhi,fSPhi+fDPhi);
+  G4double cosu   = std::cos(phi);
+  G4double sinu   = std::sin(phi);
+  G4double rRand1 = GetRadiusInRing(fRmin1, fRmax1);
+  G4double rRand2 = GetRadiusInRing(fRmin2, fRmax2);
   
   if ( (fSPhi == 0.) && fPhiFullCone )  { Afive = 0.; }
-  chose  = G4RandFlat::shoot(0.,Aone+Atwo+Athree+Afour+2.*Afive);
- 
-  if( (chose >= 0.) && (chose < Aone) )
+  G4double chose  = G4RandFlat::shoot(0.,Aone+Atwo+Athree+Afour+2.*Afive);
+
+  if( (chose >= 0.) && (chose < Aone) ) // outer surface
+  {
+    if(fRmax1 != fRmax2)
+    {
+      G4double zRand = G4RandFlat::shoot(-1.*fDz,fDz);
+      return G4ThreeVector (rone*cosu*(qone-zRand),
+                            rone*sinu*(qone-zRand), zRand);
+    }
+    else
+    {
+      return G4ThreeVector(fRmax1*cosu, fRmax2*sinu,
+                           G4RandFlat::shoot(-1.*fDz,fDz));
+    }
+  }
+  else if( (chose >= Aone) && (chose < Aone + Atwo) )  // inner surface
   {
     if(fRmin1 != fRmin2)
     {
-      zRand = G4RandFlat::shoot(-1.*fDz,fDz); 
+      G4double zRand = G4RandFlat::shoot(-1.*fDz,fDz);
       return G4ThreeVector (rtwo*cosu*(qtwo-zRand),
                             rtwo*sinu*(qtwo-zRand), zRand);
     }
@@ -2179,41 +2190,27 @@ G4ThreeVector G4Cons::GetPointOnSurface() const
                            G4RandFlat::shoot(-1.*fDz,fDz));
     }
   }
-  else if( (chose >= Aone) && (chose <= Aone + Atwo) )
-  {
-    if(fRmax1 != fRmax2)
-    {
-      zRand = G4RandFlat::shoot(-1.*fDz,fDz); 
-      return G4ThreeVector (rone*cosu*(qone-zRand),
-                            rone*sinu*(qone-zRand), zRand);
-    }    
-    else
-    {
-      return G4ThreeVector(fRmax1*cosu, fRmax2*sinu,
-                           G4RandFlat::shoot(-1.*fDz,fDz));
-    }
-  }
-  else if( (chose >= Aone + Atwo) && (chose < Aone + Atwo + Athree) )
+  else if( (chose >= Aone + Atwo) && (chose < Aone + Atwo + Athree) ) // base at -Dz
   {
     return G4ThreeVector (rRand1*cosu, rRand1*sinu, -1*fDz);
   }
   else if( (chose >= Aone + Atwo + Athree)
-        && (chose < Aone + Atwo + Athree + Afour) )
+        && (chose < Aone + Atwo + Athree + Afour) ) // base at +Dz
   {
     return G4ThreeVector (rRand2*cosu,rRand2*sinu,fDz);
   }
-  else if( (chose >= Aone + Atwo + Athree + Afour)
+  else if( (chose >= Aone + Atwo + Athree + Afour) // SPhi section
         && (chose < Aone + Atwo + Athree + Afour + Afive) )
   {
-    zRand  = G4RandFlat::shoot(-1.*fDz,fDz);
+    G4double zRand  = G4RandFlat::shoot(-1.*fDz,fDz);
     rRand1 = G4RandFlat::shoot(fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2),
-                               fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2)); 
+                               fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2));
     return G4ThreeVector (rRand1*std::cos(fSPhi),
                           rRand1*std::sin(fSPhi), zRand);
   }
-  else
-  { 
-    zRand  = G4RandFlat::shoot(-1.*fDz,fDz);
+  else // SPhi+DPhi section
+  {
+    G4double zRand  = G4RandFlat::shoot(-1.*fDz,fDz);
     rRand1 = G4RandFlat::shoot(fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2),
                                fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2)); 
     return G4ThreeVector (rRand1*std::cos(fSPhi+fDPhi),

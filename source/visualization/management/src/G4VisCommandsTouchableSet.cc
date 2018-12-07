@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsTouchableSet.cc 104163 2017-05-15 06:52:42Z gcosmo $
 
 // /vis/touchable/set commands - John Allison  8th October 2012
 
@@ -187,7 +186,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASColour,
-      fCurrentTouchablePath));
+      fCurrentTouchableProperties.fTouchablePath));
   }
   
   else if (command == fpCommandSetDaughtersInvisible) {
@@ -196,7 +195,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASDaughtersInvisible,
-      fCurrentTouchablePath));
+      fCurrentTouchableProperties.fTouchablePath));
   }
   
   else if (command == fpCommandSetForceAuxEdgeVisible) {
@@ -205,7 +204,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASForceAuxEdgeVisible,
-      fCurrentTouchablePath));
+      fCurrentTouchableProperties.fTouchablePath));
   }
   
   else if (command == fpCommandSetLineSegmentsPerCircle) {
@@ -215,7 +214,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASForceLineSegmentsPerCircle,
-      fCurrentTouchablePath));
+      fCurrentTouchableProperties.fTouchablePath));
   }
   
   else if (command == fpCommandSetForceSolid) {
@@ -224,7 +223,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASForceSolid,
-      fCurrentTouchablePath));
+      fCurrentTouchableProperties.fTouchablePath));
   }
   
   else if (command == fpCommandSetForceWireframe) {
@@ -233,7 +232,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASForceWireframe,
-      fCurrentTouchablePath));
+      fCurrentTouchableProperties.fTouchablePath));
   }
   
   else if (command == fpCommandSetLineStyle) {
@@ -249,7 +248,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASLineStyle,
-      fCurrentTouchablePath));
+      fCurrentTouchableProperties.fTouchablePath));
   }
   
   else if (command == fpCommandSetLineWidth) {
@@ -258,7 +257,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASLineWidth,
-      fCurrentTouchablePath));
+      fCurrentTouchableProperties.fTouchablePath));
   }
   
   else if (command == fpCommandSetVisibility) {
@@ -267,7 +266,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASVisibility,
-      fCurrentTouchablePath));
+      fCurrentTouchableProperties.fTouchablePath));
   }
   
   else {

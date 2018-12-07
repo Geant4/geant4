@@ -93,7 +93,8 @@ public:
 				 G4double maxEnergy) final;
 
   inline void SetRecoilThreshold(G4double eth);
-  inline void SetXSectionModel(const G4String& model);
+
+  void SetXSectionModel(const G4String& model);
 
 private:
 
@@ -156,16 +157,6 @@ G4eSingleCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
 inline void G4eSingleCoulombScatteringModel::SetRecoilThreshold(G4double eth)
 {
   recoilThreshold = eth;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4eSingleCoulombScatteringModel::SetXSectionModel(const G4String& model)
-{
-  if(model == "fast") { XSectionModel=1; }
-  else if(model == "precise") { XSectionModel=0; }
-  else { G4cout<<"G4eSingleCoulombScatteringModel WARNING: "<<model
-	       <<" : G4eSingleScatteringModel x-section model is not valid"<<G4endl;}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

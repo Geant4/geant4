@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclNuclDiffuseElastic.cc 106722 2017-10-20 09:48:19Z gcosmo $
 //
 //
 // Physics model class G4NuclNuclDiffuseElastic 
@@ -59,6 +58,7 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsFreeVector.hh"
+#include "G4HadronicParameters.hh"
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -69,7 +69,7 @@ G4NuclNuclDiffuseElastic::G4NuclNuclDiffuseElastic()
   : G4HadronElastic("NNDiffuseElastic"), fParticle(0)
 {
   SetMinEnergy( 50*MeV );
-  SetMaxEnergy( 1.*TeV );
+  SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   verboseLevel = 0;
   lowEnergyRecoilLimit = 100.*keV;  
   lowEnergyLimitQ  = 0.0*GeV;  
@@ -84,7 +84,7 @@ G4NuclNuclDiffuseElastic::G4NuclNuclDiffuseElastic()
   thePionPlus = G4PionPlus::PionPlus();
   thePionMinus= G4PionMinus::PionMinus();
 
-  fEnergyBin = 200;
+  fEnergyBin = 300;  // Increased from the original 200 to have no wider log-energy-bins up to 10 PeV 
   fAngleBin  = 200;
 
   fEnergyVector =  new G4PhysicsLogVector( theMinEnergy, theMaxEnergy, fEnergyBin );

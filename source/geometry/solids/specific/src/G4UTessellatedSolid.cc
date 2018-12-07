@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id:$
 //
 // 
 // Implementation of G4UTessellatedSolid wrapper class
@@ -131,13 +130,13 @@ G4bool G4UTessellatedSolid::AddFacet(G4VFacet* aFacet)
   if (aFacet->GetNumberOfVertices() == 3)
   {
     G4TriangularFacet* a3Facet = dynamic_cast<G4TriangularFacet*>(aFacet);
-    return Base_t::AddTriangularFacet(UVector3(a3Facet->GetVertex(0).x(),
+    return Base_t::AddTriangularFacet(U3Vector(a3Facet->GetVertex(0).x(),
                                                a3Facet->GetVertex(0).y(),
                                                a3Facet->GetVertex(0).z()),
-                                      UVector3(a3Facet->GetVertex(1).x(),
+                                      U3Vector(a3Facet->GetVertex(1).x(),
                                                a3Facet->GetVertex(1).y(),
                                                a3Facet->GetVertex(1).z()),
-                                      UVector3(a3Facet->GetVertex(2).x(),
+                                      U3Vector(a3Facet->GetVertex(2).x(),
                                                a3Facet->GetVertex(2).y(),
                                                a3Facet->GetVertex(2).z()),
                                       true);
@@ -145,16 +144,16 @@ G4bool G4UTessellatedSolid::AddFacet(G4VFacet* aFacet)
   else if (aFacet->GetNumberOfVertices() == 4)
   {
     G4QuadrangularFacet* a4Facet = dynamic_cast<G4QuadrangularFacet*>(aFacet);
-    return Base_t::AddQuadrilateralFacet(UVector3(a4Facet->GetVertex(0).x(),
+    return Base_t::AddQuadrilateralFacet(U3Vector(a4Facet->GetVertex(0).x(),
                                                   a4Facet->GetVertex(0).y(),
                                                   a4Facet->GetVertex(0).z()),
-                                         UVector3(a4Facet->GetVertex(1).x(),
+                                         U3Vector(a4Facet->GetVertex(1).x(),
                                                   a4Facet->GetVertex(1).y(),
                                                   a4Facet->GetVertex(1).z()),
-                                         UVector3(a4Facet->GetVertex(2).x(),
+                                         U3Vector(a4Facet->GetVertex(2).x(),
                                                   a4Facet->GetVertex(2).y(),
                                                   a4Facet->GetVertex(2).z()),
-                                         UVector3(a4Facet->GetVertex(3).x(),
+                                         U3Vector(a4Facet->GetVertex(3).x(),
                                                   a4Facet->GetVertex(3).y(),
                                                   a4Facet->GetVertex(3).z()),
                                          true);
@@ -187,7 +186,7 @@ void G4UTessellatedSolid::SetSolidClosed(const G4bool t)
     G4int nFacets   = fTessellated.fFacets.size();
     for (G4int j = 0; j < nVertices; ++j)
     {
-      UVector3 vt = fTessellated.fVertices[j];
+      U3Vector vt = fTessellated.fVertices[j];
       fVertexList.push_back(G4ThreeVector(vt.x(), vt.y(), vt.z()));
     }
     for (G4int i = 0; i < nFacets; ++i)
@@ -224,37 +223,37 @@ void G4UTessellatedSolid::SetMaxVoxels(G4int)
 
 G4double G4UTessellatedSolid::GetMinXExtent() const
 {
-  UVector3 aMin, aMax;
+  U3Vector aMin, aMax;
   Base_t::Extent(aMin, aMax);
   return aMin.x();
 }
 G4double G4UTessellatedSolid::GetMaxXExtent() const
 {
-  UVector3 aMin, aMax;
+  U3Vector aMin, aMax;
   Base_t::Extent(aMin, aMax);
   return aMax.x();
 }
 G4double G4UTessellatedSolid::GetMinYExtent() const
 {
-  UVector3 aMin, aMax;
+  U3Vector aMin, aMax;
   Base_t::Extent(aMin, aMax);
   return aMin.y();
 }
 G4double G4UTessellatedSolid::GetMaxYExtent() const
 {
-  UVector3 aMin, aMax;
+  U3Vector aMin, aMax;
   Base_t::Extent(aMin, aMax);
   return aMax.y();
 }
 G4double G4UTessellatedSolid::GetMinZExtent() const
 {
-  UVector3 aMin, aMax;
+  U3Vector aMin, aMax;
   Base_t::Extent(aMin, aMax);
   return aMin.z();
 }
 G4double G4UTessellatedSolid::GetMaxZExtent() const
 {
-  UVector3 aMin, aMax;
+  U3Vector aMin, aMax;
   Base_t::Extent(aMin, aMax);
   return aMax.z();
 }
@@ -295,7 +294,7 @@ void G4UTessellatedSolid::DisplayAllocatedMemory()
 void G4UTessellatedSolid::BoundingLimits(G4ThreeVector& pMin,
                                          G4ThreeVector& pMax) const
 {
-  UVector3 aMin, aMax;
+  U3Vector aMin, aMax;
   Base_t::Extent(aMin, aMax);
   pMin = G4ThreeVector(aMin.x(), aMin.y(), aMin.z());
   pMax = G4ThreeVector(aMax.x(), aMax.y(), aMax.z());

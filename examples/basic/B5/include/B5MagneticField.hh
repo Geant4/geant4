@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5MagneticField.hh 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5MagneticField.hh
 /// \brief Definition of the B5MagneticField class

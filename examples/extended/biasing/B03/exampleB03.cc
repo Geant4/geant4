@@ -27,7 +27,6 @@
 /// \brief Main program of the biasing/B03 example
 //
 //
-// $Id: exampleB03.cc 70528 2013-05-31 16:50:36Z gcosmo $
 //
 //
 // --------------------------------------------------------------

@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr02/Hadr02.cc
 /// \brief Main program of the hadronic/Hadr02 example
 //
-// $Id: Hadr02.cc 109063 2018-03-23 12:56:28Z gcosmo $
 //
 // -------------------------------------------------------------
 //      GEANT4 Hadr02
@@ -40,29 +39,22 @@
 // -------------------------------------------------------------
 //
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
-
 #include "DetectorConstruction.hh"
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
-
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "StackingAction.hh"
 #include "HistoManager.hh"
-
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
-
 #include "UrQMD.hh"
+#include "CRMC_FTFP_BERT.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
@@ -91,8 +83,13 @@ int main(int argc,char** argv) {
     char* path = getenv("PHYSLIST");
     if (path) { physName = G4String(path); }
   }
-  if ( physName == "UrQMD" ) { phys = new UrQMD; }
-  else { phys = factory.GetReferencePhysList(physName); }
+  if ( physName == "UrQMD" ) { 
+    phys = new UrQMD; 
+  } else if ( physName == "CRMC_FTFP_BERT" ) {
+    phys = new CRMC_FTFP_BERT;
+  } else { 
+    phys = factory.GetReferencePhysList( physName ); 
+  }
 
   // Physics List is defined via environment variable PHYSLIST
   if(!phys) {
@@ -134,4 +131,3 @@ int main(int argc,char** argv) {
   delete runManager;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

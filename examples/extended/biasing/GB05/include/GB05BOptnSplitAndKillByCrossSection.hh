@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 /// \file GB05BOptnSplitAndKillByCrossSection.hh
 /// \brief Definition of the GB05BOptnSplitAndKillByCrossSection class

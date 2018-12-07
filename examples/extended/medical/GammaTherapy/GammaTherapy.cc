@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GammaTherapy.cc 110004 2018-05-14 07:40:59Z gcosmo $
 //
 /// \file medical/GammaTherapy/GammaTherapy.cc
 /// \brief Main program of the medical/GammaTherapy example

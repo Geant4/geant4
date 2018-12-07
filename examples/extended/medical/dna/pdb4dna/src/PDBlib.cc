@@ -32,7 +32,6 @@
 //                  simulations (submitted to Comput. Phys. Commun.)
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $Id$
 // 
 /// \file PDBlib.cc
 /// \brief Implementation file for PDBlib class

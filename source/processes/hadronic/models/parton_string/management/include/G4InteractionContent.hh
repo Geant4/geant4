@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4InteractionContent.hh 100828 2016-11-02 15:25:59Z gcosmo $
 //
 
 #ifndef G4InteractionContent_h
@@ -39,18 +38,9 @@
 // ------------------------------------------------------------
 
 #include "globals.hh"
-
-//#include "G4PhysicalConstants.hh"       // Uzhi 8.09.2014
-//#include "G4SystemOfUnits.hh"           // Uzhi 8.09.2014
-
 #include "G4VSplitableHadron.hh"
 #include "G4Nucleon.hh"
 
-//#define debug_QGSM
-#ifdef debug_QGSM
-  #include "../../qgsm/include/G4QGSMSplitableHadron.hh"
-  #include <deque>
-#endif  
 
 class G4InteractionContent 
 {
@@ -207,24 +197,6 @@ inline void G4InteractionContent::Dump()
     G4cout <<  theProjectile->GetDefinition()->GetPDGEncoding()
            << "  " << theProjectile->Get4Momentum()<< G4endl;
     mom+=theProjectile->Get4Momentum();
-    #ifdef debug_QGSM 
-    G4QGSMSplitableHadron * at =(G4QGSMSplitableHadron*)theProjectile;
-    std::deque<G4Parton *>color=at->GetColorPartons();
-    std::deque<G4Parton *>anticolor=at->GetAntiColorPartons();
-    G4cout << " proj. color/anti size " << color.size() << " / " << anticolor.size() << G4endl;
-    std::deque<G4Parton *>::iterator p_iter;
-    G4LorentzVector colmom(0.,0.,0.,0.);
-    for ( p_iter=color.begin(); p_iter!= color.end(); ++p_iter){
-      G4cout << "proj color : "<<(*p_iter)->GetPDGcode() << ", mom= "<< (*p_iter)->Get4Momentum()<<G4endl;
-      colmom+=(*p_iter)->Get4Momentum();
-    }
-    G4LorentzVector anticolmom(0.,0.,0.,0.);
-    for ( p_iter=anticolor.begin(); p_iter!= anticolor.end(); ++p_iter){
-      G4cout << "proj antic : "<<(*p_iter)->GetPDGcode() << ", mom= "<< (*p_iter)->Get4Momentum()<<G4endl;
-      anticolmom+=(*p_iter)->Get4Momentum();
-    }
-    G4cout << " proj. color/anti mom " << colmom << " / " << anticolmom  << " Sum: " << colmom+anticolmom <<G4endl;
-    #endif
   } else {	 
     G4cout << " none " << G4endl;
   }	    
@@ -233,24 +205,6 @@ inline void G4InteractionContent::Dump()
     G4cout <<  "Target     " << theTarget->GetDefinition()->GetPDGEncoding()
 	   << "  " << theTarget->Get4Momentum()<< G4endl;
     mom+=theTarget->Get4Momentum();
-    #ifdef debug_QGSM 
-    G4QGSMSplitableHadron * at =(G4QGSMSplitableHadron*)theTarget;
-    std::deque<G4Parton *>color=at->GetColorPartons();
-    std::deque<G4Parton *>anticolor=at->GetAntiColorPartons();
-    G4cout << " target color/anti size " << color.size() << " / " << anticolor.size() << G4endl;
-    std::deque<G4Parton *>::iterator p_iter;
-    G4LorentzVector colmom(0.,0.,0.,0.);
-    for ( p_iter=color.begin(); p_iter!= color.end(); ++p_iter){
-      G4cout << "target color : "<<(*p_iter)->GetPDGcode() << ", mom= "<< (*p_iter)->Get4Momentum()<<G4endl;
-      colmom+=(*p_iter)->Get4Momentum();
-    }
-    G4LorentzVector anticolmom(0.,0.,0.,0.);
-    for ( p_iter=anticolor.begin(); p_iter!= anticolor.end(); ++p_iter){
-      G4cout << "target antic : "<<(*p_iter)->GetPDGcode() << ", mom= "<< (*p_iter)->Get4Momentum()<<G4endl;
-      anticolmom+=(*p_iter)->Get4Momentum();
-    }
-    G4cout << " target color/anti mom " << colmom << " / " << anticolmom  << " Sum: " << colmom+anticolmom <<G4endl;
-    #endif
   } else {
     G4cout << " none " << G4endl;
   }	    

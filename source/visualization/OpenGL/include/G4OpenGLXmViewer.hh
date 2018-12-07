@@ -24,14 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
 // G4OpenGLXmViewer : Class derived from G4OpenGLXViewer, to provide
 //                    (Motif) widget OpenGL functionality for GEANT4.
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
+#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
 
 #ifndef G4OPENGLXMVIEWER_HH
 #define G4OPENGLXMVIEWER_HH

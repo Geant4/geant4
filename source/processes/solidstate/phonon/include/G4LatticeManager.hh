@@ -26,7 +26,6 @@
 /// \file materials/include/G4LatticeManager.hh
 /// \brief Definition of the G4LatticeManager class
 //
-// $Id: G4LatticeManager.hh 84149 2014-10-08 18:04:16Z mkelsey $
 //
 // 20131113  Add registry to carry unique lattice pointers, for EOJ deletion
 // 20131115  Drop lattice counters, not used anywhere

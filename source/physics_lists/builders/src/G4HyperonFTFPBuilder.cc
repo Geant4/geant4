@@ -41,6 +41,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
+#include "G4HadronicParameters.hh"
   
   
 G4HyperonFTFPBuilder::G4HyperonFTFPBuilder(): 
@@ -64,7 +65,7 @@ G4HyperonFTFPBuilder::G4HyperonFTFPBuilder():
   HyperonFTFP = new G4TheoFSGenerator("FTFP");
   
   HyperonFTFP->SetMinEnergy( 2.*GeV );
-  HyperonFTFP->SetMaxEnergy( 100.*TeV );
+  HyperonFTFP->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
 
   theStringModel = new G4FTFModel;
   theStringDecay = new G4ExcitedStringDecay(theLund = new G4LundStringFragmentation);
@@ -83,7 +84,7 @@ G4HyperonFTFPBuilder::G4HyperonFTFPBuilder():
 
   AntiHyperonFTFP = new G4TheoFSGenerator("FTFP");
   AntiHyperonFTFP->SetMinEnergy( 0.*GeV );
-  AntiHyperonFTFP->SetMaxEnergy( 100.*TeV );
+  AntiHyperonFTFP->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
   AntiHyperonFTFP->SetTransport(theCascade);
   AntiHyperonFTFP->SetHighEnergyGenerator(theStringModel);
 
@@ -91,30 +92,10 @@ G4HyperonFTFPBuilder::G4HyperonFTFPBuilder():
   theCHIPSInelastic = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsHyperonInelasticXS::Default_Name());
 }
 
-
 G4HyperonFTFPBuilder::~G4HyperonFTFPBuilder()
 {
-  //delete HyperonFTFP;
-  delete theStringModel;
   delete theStringDecay;
   delete theLund;
-  //delete AntiHyperonFTFP;
-  /*  
-  if (wasActivated) {
-     delete theLambdaInelastic;
-     delete theAntiLambdaInelastic;
-     delete theSigmaMinusInelastic;
-     delete theAntiSigmaMinusInelastic;
-     delete theSigmaPlusInelastic;
-     delete theAntiSigmaPlusInelastic;
-     delete theXiMinusInelastic;
-     delete theAntiXiMinusInelastic;
-     delete theXiZeroInelastic;
-     delete theAntiXiZeroInelastic;
-     delete theOmegaMinusInelastic;
-     delete theAntiOmegaMinusInelastic;
-  } 
-  */  
 }
 
 void G4HyperonFTFPBuilder::Build()

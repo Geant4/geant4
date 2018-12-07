@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/include/RE04Trajectory.hh
 /// \brief Definition of the RE04Trajectory class
 //
-// $Id: $
 //
 #ifndef RE04Trajectory_h
 #define RE04Trajectory_h 1

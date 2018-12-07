@@ -26,8 +26,6 @@
 /// \file hadronic/Hadr02/include/HIJING.icc
 /// \brief Implementation of the HIJING class inline functions
 //
-// $Id: HIJING.icc,v 1.7 2010-08-16 07:14:44 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //

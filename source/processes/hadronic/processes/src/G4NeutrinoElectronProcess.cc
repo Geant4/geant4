@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutrinoElectronProcess.cc 92396 2015-08-31 14:12:40Z gcosmo $
 //
 // Geant4 Hadron Elastic Scattering Process 
 // 
@@ -32,7 +31,7 @@
 // Modified:
 //
 // 2.2.18 V.Grichine - PostStepDoIt implementation
-
+// 03.10.18 V. Grichine - G4Region name and optionally total cross section biased in the region only.
 #include <iostream>
 #include <typeinfo>
 
@@ -76,6 +75,7 @@ G4NeutrinoElectronProcess::G4NeutrinoElectronProcess( G4String anEnvelopeName, c
   fTotXsc = nullptr; // new G4NeutrinoElectronTotXsc();
   fNuEleCcBias=1.;
   fNuEleNcBias=1.;
+  fNuEleTotXscBias=1.;
   safetyHelper = G4TransportationManager::GetTransportationManager()->GetSafetyHelper();
   safetyHelper->InitialiseHelper();
 }
@@ -84,13 +84,63 @@ G4NeutrinoElectronProcess::~G4NeutrinoElectronProcess()
 {
   // if( fTotXsc ) delete fTotXsc;
 }
-  void G4NeutrinoElectronProcess::SetBiasingFactors(G4double bfCc, G4double bfNc)
+
+///////////////////////////////////////////////////////
+
+void G4NeutrinoElectronProcess::SetBiasingFactor(G4double bf)
+{
+  fNuEleTotXscBias = bf;
+
+  fTotXsc = new G4NeutrinoElectronTotXsc();
+  // fTotXsc->SetBiasingFactor(bf);
+}
+
+///////////////////////////////////////////////////////
+
+void G4NeutrinoElectronProcess::SetBiasingFactors(G4double bfCc, G4double bfNc)
 {
   fNuEleCcBias=bfCc;
   fNuEleNcBias=bfNc;
 
   fTotXsc = new G4NeutrinoElectronTotXsc();
   fTotXsc->SetBiasingFactors(bfCc, bfNc);
+}
+
+//////////////////////////////////////////////////
+
+G4double G4NeutrinoElectronProcess::
+GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
+{
+  //G4cout << "GetMeanFreePath " << aTrack.GetDefinition()->GetParticleName()
+  //	 << " Ekin= " << aTrack.GetKineticEnergy() << G4endl;
+  G4String rName = aTrack.GetStep()->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetRegion()->GetName();
+  G4double totxsc(0.);
+  try
+  {
+    if( rName == fEnvelopeName && fNuEleTotXscBias > 1.)    
+    {
+      totxsc = fNuEleTotXscBias*
+	GetCrossSectionDataStore()->ComputeCrossSection(aTrack.GetDynamicParticle(),
+						    aTrack.GetMaterial());
+    }
+    else
+    {
+      totxsc = GetCrossSectionDataStore()->ComputeCrossSection(aTrack.GetDynamicParticle(),
+						    aTrack.GetMaterial());
+    }
+  }
+  catch(G4HadronicException & aR)
+  {
+    G4ExceptionDescription ed;
+    aR.Report(ed);
+    DumpState(aTrack,"GetMeanFreePath",ed);
+    ed << " Cross section is not available" << G4endl;
+    G4Exception("G4NeutrinoElectronProcess::GetMeanFreePath", "had002", FatalException,
+		ed);
+  }
+  G4double res = (totxsc>0.0) ? 1.0/totxsc : DBL_MAX;
+  //G4cout << "         xsection= " << totxsc << G4endl;
+  return res;
 }
 
 ///////////////////////////////////////////////////
@@ -109,8 +159,12 @@ void G4NeutrinoElectronProcess::ProcessDescription(std::ostream& outFile) const
 G4VParticleChange* 
 G4NeutrinoElectronProcess::PostStepDoIt(const G4Track& track, const G4Step& step)
 {
-  // if( track.GetVolume()->GetLogicalVolume() != fEnvelope ) 
-  if( track.GetVolume()->GetLogicalVolume()->GetName() != fEnvelopeName ) 
+  // track.GetVolume()->GetLogicalVolume()->GetName()
+  // if( track.GetVolume()->GetLogicalVolume() != fEnvelope )
+ 
+  G4String rName = track.GetStep()->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetRegion()->GetName();
+
+  if( rName != fEnvelopeName ) 
   {
     if( verboseLevel > 0 )
     {

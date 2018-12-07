@@ -12,22 +12,23 @@ a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
 
-The recent update of this example may contain bugs.
-
 ---->0. INTRODUCTION.                                                    
                                                                        
 The dnaphysics example shows how to simulate track structures in liquid water
 using the Geant4-DNA physics processes and models. 
 
-This example is provided by the Geant4-DNA collaboration.
+Below 1 MeV, Geant4-DNA models are used while, above this energy, 
+G4EmStandardPhysics_option4 models are used.
 
-These processes and models are further described at:
+The Geant4-DNA processes and models are further described at:
 http://geant4-dna.org
 
 Any report or published results obtained using the Geant4-DNA software shall 
 cite the following Geant4-DNA collaboration publications:
+Med. Phys. 45, e722-e739 (2018)
 Phys. Med. 31 (2015) 861-874
 Med. Phys. 37 (2010) 4692-4708
+Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 
 ---->1. GEOMETRY SET-UP.
  
@@ -35,11 +36,12 @@ The geometry is a 100-micron side cube (World) made of liquid water (G4_WATER
 material). Particles are shot from the center of the volume.
 
 The variable density feature of materials is illustrated. 
+
 Material can be changed directly in dna.mac macro file.
 
 ---->2. SET-UP 
                                                                         
-Make sure G4LEDATA points to the low energy electromagnetic data files.
+Make sure $G4LEDATA points to the low energy electromagnetic data files.
 
 The code can be compiled with cmake.
 
@@ -54,11 +56,18 @@ In interactive mode, run:
 In batch, the macro dnaphysics.in can be used. It shows how to shoot different 
 particle types.
 
+The combination of G4EmStandardPhysics_option4 and Geant4-DNA models in the World
+is activated thanks to the following UI command in dnaphysics.in: 
+
+/process/em/AddDNARegion World DNA_Opt0
+
+For now, only the "DNA_Opt0" configuration is allowed.
+
 ---->4. PHYSICS
 
 This example shows:
-- how to use the Geant4-DNA processes, which are activated automatically at low energy,
-below the applicability range of G4EmStandardPhysics_option4 constructor
+- how to use the Geant4-DNA models, which are activated automatically at low energy,
+below 1 MeV, and G4EmStandardPhysics_option4 models above
 (look at the PhysicsList.cc file)
 - how to count and save occurrences of processes
 (look at the SteppingAction.cc file)

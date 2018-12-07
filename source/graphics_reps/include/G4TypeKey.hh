@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TypeKey.hh 69802 2013-05-15 14:52:57Z gcosmo $
 //
 // Base type key class
 //

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation]ProcessType.hh,v 1.2 2008-09-19 03:19:53 kurasige Exp $
 //
 //
 //---------------------------------------------------------------
@@ -44,7 +43,7 @@ enum G4TransportationProcessType
 {
   TRANSPORTATION = 91 ,
   COUPLED_TRANSPORTATION = 92 ,
-  // follwoing processes belong to 'General' type
+  // following processes belong to 'General' type
   STEP_LIMITER = 401,
   USER_SPECIAL_CUTS = 402,
   NEUTRON_KILLER = 403

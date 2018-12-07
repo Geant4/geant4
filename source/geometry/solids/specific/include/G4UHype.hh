@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id:$
 //
 // 
 // --------------------------------------------------------------------
@@ -51,10 +50,10 @@
 
 #include "G4Polyhedron.hh"
 
-class G4UHype : public G4UAdapter<vecgeom::UnplacedHype>
+class G4UHype : public G4UAdapter<vecgeom::GenericUnplacedHype>
 {
-  using Shape_t = vecgeom::UnplacedHype;
-  using Base_t  = G4UAdapter<vecgeom::UnplacedHype>;
+  using Shape_t = vecgeom::GenericUnplacedHype;
+  using Base_t  = G4UAdapter<vecgeom::GenericUnplacedHype>;
 
   public:  // with description
 

@@ -30,14 +30,13 @@
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyInteractionParameters.hh"
 #include "HadrontherapyDetectorROGeometry.hh"
-
+#include "HadrontherapyTIFPAPassiveProtonBeamLine.hh"
 #include "PassiveProtonBeamLine.hh"
 #include "PassiveCarbonBeamLine.hh"
 #include "LaserDrivenBeamLine.hh"
 #include "G4RunManager.hh"
 #include "G4VUserParallelWorld.hh"
 #include "G4ThreeVector.hh"
-#include "TrentoPassiveProtonBeamLine.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyGeometryController::HadrontherapyGeometryController()

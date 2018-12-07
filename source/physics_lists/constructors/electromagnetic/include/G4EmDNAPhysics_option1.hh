@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmDNAPhysics_option1.hh 66704 2013-01-10 18:20:17Z gunter $
 
 #ifndef G4EmDNAPhysics_option1_h
 #define G4EmDNAPhysics_option1_h 1

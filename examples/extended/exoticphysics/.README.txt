@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "exoticphysics/.README.txt"
 ///\brief Examples  exoticphysics README page
@@ -11,6 +10,11 @@
 \link Examplechanneling channeling \endlink
 
 This example simulates channeling of 400 GeV/c protons in a bent crystal.
+
+\link Exampledmparticle dmparticle \endlink
+
+This is very preliminary and simplified Geant4 example for light dark matter 
+(LDM) particles. 
 
 \link Examplemonopole monopole \endlink
 
@@ -27,4 +31,3 @@ This example simulates the passage of ultra-cold neutrons (UCN) in a
 hollow pipe.
 
 */
-

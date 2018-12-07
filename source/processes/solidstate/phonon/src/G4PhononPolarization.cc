@@ -26,7 +26,6 @@
 /// \file processes/phonon/src/G4PhononPolarization.cc
 /// \brief implementation of the G4PhononPolarization enum
 //
-// $Id: G4PhononPolarization.cc 75725 2013-11-05 16:52:30Z mkelsey $
 //
 
 #include "G4PhononPolarization.hh"

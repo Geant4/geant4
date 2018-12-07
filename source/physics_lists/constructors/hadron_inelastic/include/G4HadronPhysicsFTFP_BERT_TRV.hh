@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsFTFP_BERT_TRV.hh 105736 2017-08-16 13:01:11Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -57,6 +56,7 @@ class G4HadronPhysicsFTFP_BERT_TRV : public G4HadronPhysicsFTFP_BERT
       virtual void Pion() override;
       virtual void Kaon() override;
       virtual void DumpBanner() override;
+      virtual void ExtraConfiguration() override;
 };
 
 #endif

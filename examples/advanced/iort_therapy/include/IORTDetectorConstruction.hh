@@ -32,7 +32,7 @@
 //   (b) IBFM-CNR , Segrate (Milano), Italy
 //   (c) LATO (Laboratorio di Tecnologie Oncologiche), Cefalù, Italy
 //   (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
-//   (e) University of Wallongong, Australia
+//   (e) University of Wollongong, Australia
 //
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,10 +50,7 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
-class IORTDetectorROGeometry;
 class IORTDetectorMessenger;
-class IORTDetectorSD;
-class IORTMatrix;
 
 class IORTDetectorConstruction 
 {
@@ -70,7 +67,7 @@ private:
   void ConstructPhantom();
   void ConstructDetector();
   //  void ConstructDisc();
-  void ConstructSensitiveDetector(G4ThreeVector positionToWORLD);
+  void ConstructSensitiveDetector();
   void ParametersCheck();
 
 public: 
@@ -79,6 +76,7 @@ inline G4ThreeVector GetDetectorToWorldPosition()
   {
     return phantomPosition + detectorPosition;
   }
+
 /////////////////////////////////////////////////////////////////////////////
 // Get displacement between phantom and detector by detector position (center of), phantom (center of) and detector sizes
 inline G4ThreeVector GetDetectorToPhantomPosition()
@@ -116,7 +114,7 @@ inline bool IsInside(G4double detectorX,
 	{
 	    if (detectorX > phantomX) 
 		 {
-		    G4cout << "Error: Detector X dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
+		    G4cout << "Error: Detector X dimension must be smaller or equal to the correspondent of the phantom" << G4endl;
 		    return false;
 		 }
 	    if ( (phantomX - detectorX) < detToPhantomPosition.getX()) 
@@ -129,7 +127,7 @@ inline bool IsInside(G4double detectorX,
 	{
 	    if (detectorY > phantomY) 
 		 {
-		    G4cout << "Error: Detector Y dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
+		    G4cout << "Error: Detector Y dimension must be smaller or equal to the correspondent of the phantom" << G4endl;
 		    return false;
 		 }
 	    if ( (phantomY - detectorY) < detToPhantomPosition.getY()) 
@@ -142,7 +140,7 @@ inline bool IsInside(G4double detectorX,
 	{
 	    if (detectorZ > phantomZ) 
 		 {
-		    G4cout << "Error: Detector Z dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
+		    G4cout << "Error: Detector Z dimension must be smaller or equal to the correspondent of the phantom" << G4endl;
 		    return false;
 		 }
 	    if ( (phantomZ - detectorZ) < detToPhantomPosition.getZ()) 
@@ -192,10 +190,6 @@ private:
 
   G4VPhysicalVolume* motherPhys;
 
-  IORTDetectorSD*         detectorSD; // Pointer to sensitive detector
-  IORTDetectorROGeometry* detectorROGeometry; // Pointer to ROGeometry 
-  IORTMatrix*             matrix;
-
   G4Box *phantom , *detector;
   G4LogicalVolume *phantomLogicalVolume, *detectorLogicalVolume; 
   G4VPhysicalVolume *phantomPhysicalVolume,   *detectorPhysicalVolume;
@@ -210,20 +204,8 @@ private:
 
   G4ThreeVector phantomPosition, detectorPosition, detectorToPhantomPosition; //  phantom center, detector center, detector to phantom relative position
 
-  G4double sizeOfVoxelAlongX; 
-  G4double sizeOfVoxelAlongY; 
-  G4double sizeOfVoxelAlongZ; 
-
-  G4int numberOfVoxelsAlongX; 
-  G4int numberOfVoxelsAlongY;
-  G4int numberOfVoxelsAlongZ;  
-
-  G4double volumeOfVoxel, massOfVoxel;
-
   G4Material *phantomMaterial, *detectorMaterial;
   G4Region* aRegion;
-
-  
   
   //Disco0 IORT
   G4Tubs* solidDiscoIORT0;
@@ -245,7 +227,6 @@ private:
   G4LogicalVolume* logicDiscoIORT;
   G4VPhysicalVolume* physiDiscoIORT;
   G4Material* DiscoMaterialIORT;
-
 
    // Disco2 IORT
   

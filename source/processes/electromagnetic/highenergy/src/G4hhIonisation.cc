@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.cc 106715 2017-10-20 09:39:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -161,8 +160,7 @@ void G4hhIonisation::PrintInfo()
 
 void G4hhIonisation::ProcessDescription(std::ostream& out) const
 {
-  out << "No description available.";
-  out << "<br>\n";
+  out << "No description available." << G4endl;
   G4VEnergyLossProcess::ProcessDescription(out);
 }
 

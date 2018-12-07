@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Xt.hh 110808 2018-06-15 06:58:36Z gcosmo $
 //
 //  To unify X11 event treatment between 
 // G4/interfaces Xt sessions and G4/visualizations Xt drivers.

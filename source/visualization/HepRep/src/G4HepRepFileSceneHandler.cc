@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc 101714 2016-11-22 08:53:13Z gcosmo $
 //
 //
 // Joseph Perl  27th January 2002

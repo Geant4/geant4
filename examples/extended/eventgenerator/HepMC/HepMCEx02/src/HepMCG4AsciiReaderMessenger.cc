@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4AsciiReaderMessenger.cc
 /// \brief Implementation of the HepMCG4AsciiReaderMessenger class
 //
-// $Id: HepMCG4AsciiReaderMessenger.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"

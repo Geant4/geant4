@@ -27,7 +27,6 @@
 /// \brief Main program of the eventgenerator/particleGun example
 //
 //
-// $Id: particleGun.cc 109733 2018-05-08 14:05:09Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

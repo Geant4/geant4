@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id:  TrackingAction.hh 81498 2014-05-31 13:45:23Z ldesorgh $
 //
 /// \file eventgenerator/exgps/include/TrackingAction.hh
 /// \brief Definition of the  TrackingAction class

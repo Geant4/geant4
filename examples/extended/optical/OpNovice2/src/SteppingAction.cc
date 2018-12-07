@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc 71007 2013-06-09 16:14:59Z maire $
 //
 /// \file optical/OpNovice2/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
@@ -53,7 +52,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 SteppingAction::SteppingAction()
-: G4UserSteppingAction()
+: G4UserSteppingAction(),
+  fVerbose(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +65,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 {
   static G4ParticleDefinition* opticalphoton = 
               G4OpticalPhoton::OpticalPhotonDefinition();
-  static G4AnalysisManager* analysisMan = G4AnalysisManager::Instance();
+  G4AnalysisManager* analysisMan = G4AnalysisManager::Instance();
   Run* run = static_cast<Run*>(
                G4RunManager::GetRunManager()->GetNonConstCurrentRun());
 
@@ -269,9 +269,37 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   }
 
   else { // particle != opticalphoton
+    // print how many Cerenkov and scint photons produced this step
+    // this demonstrates use of GetNumPhotons()
+    auto proc_man = track->GetDynamicParticle()->GetParticleDefinition()
+                         ->GetProcessManager();
+    G4int n_proc = proc_man->GetPostStepProcessVector()->entries();
+    G4ProcessVector* proc_vec = proc_man->GetPostStepProcessVector(typeDoIt);
+
+    G4int n_scint = 0;
+    G4int n_cer   = 0;
+    for (G4int i = 0; i < n_proc; ++i) {
+      if ((*proc_vec)[i]->GetProcessName().compare("Cerenkov") == 0) {
+        auto cer = (G4Cerenkov*)(*proc_vec)[i];
+        n_cer = cer->GetNumPhotons();
+      }
+      else if ((*proc_vec)[i]->GetProcessName().compare("Scintillation") == 0) {
+        auto scint = (G4Scintillation*)(*proc_vec)[i];
+        n_scint = scint->GetNumPhotons();
+      }
+    }
+    if (fVerbose > 0) {
+      if (n_cer > 0 || n_scint > 0) {
+        G4cout << "In this step, " << n_cer
+               << " Cerenkov and " << n_scint
+               << " scintillation photons were produced." << G4endl;
+      }
+    }
+
+    // loop over secondaries, create statistics
     const std::vector<const G4Track*>* secondaries =
                                 step->GetSecondaryInCurrentStep();
-    
+
     for (auto sec : *secondaries) {
       if (sec->GetDynamicParticle()->GetParticleDefinition() == opticalphoton){
         if (sec->GetCreatorProcess()->GetProcessName().compare("Cerenkov")==0){

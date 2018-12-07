@@ -27,7 +27,6 @@
 /// \brief Definition of the RE02DetectorConstruction class
 //
 //
-// $Id: RE02DetectorConstruction.hh 75682 2013-11-05 09:11:19Z gcosmo $
 //
 
 #ifndef RE02DetectorConstruction_h

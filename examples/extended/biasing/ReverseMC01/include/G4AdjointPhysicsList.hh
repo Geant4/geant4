@@ -26,7 +26,6 @@
 /// \file biasing/ReverseMC01/include/G4AdjointPhysicsList.hh
 /// \brief Definition of the G4AdjointPhysicsList class
 //
-// $Id: G4AdjointPhysicsList.hh 101303 2016-11-14 11:21:18Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:             G4AdjointPhysicsList

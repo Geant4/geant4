@@ -54,27 +54,27 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old)
 	theStableParton=old.theStableParton;
 	theDecayParton=old.theDecayParton;
 	decaying=old.decaying;
-Pstring=old.Pstring;
-Pleft  =old.Pleft;
-Pright =old.Pright;
+        Pstring=old.Pstring;
+        Pleft  =old.Pleft;
+        Pright =old.Pright;
 }
 
 G4FragmentingString & G4FragmentingString::operator =(const G4FragmentingString &old)
 {
    if (this != &old)
    {
-   LeftParton=old.LeftParton;
-   RightParton=old.RightParton;
-   Ptleft=old.Ptleft;
-   Ptright=old.Ptright;
-   Pplus=old.Pplus;
-   Pminus=old.Pminus;
-   theStableParton=old.theStableParton;
-   theDecayParton=old.theDecayParton;
-   decaying=old.decaying;
-Pstring=old.Pstring;
-Pleft  =old.Pleft;
-Pright =old.Pright;
+     LeftParton=old.LeftParton;
+     RightParton=old.RightParton;
+     Ptleft=old.Ptleft;
+     Ptright=old.Ptright;
+     Pplus=old.Pplus;
+     Pminus=old.Pminus;
+     theStableParton=old.theStableParton;
+     theDecayParton=old.theDecayParton;
+     decaying=old.decaying;
+     Pstring=old.Pstring;
+     Pleft  =old.Pleft;
+     Pright =old.Pright;
    }
    return *this;
 }
@@ -98,9 +98,9 @@ G4FragmentingString::G4FragmentingString(const G4ExcitedString &excited)
         if(excited.GetDirection() > 0) {decaying=Left; }
         else                           {decaying=Right;}
 
-Pleft  = excited.GetLeftParton()->Get4Momentum();
-Pright = excited.GetRightParton()->Get4Momentum();
-Pstring= Pleft + Pright;
+        Pleft  = excited.GetLeftParton()->Get4Momentum();
+        Pright = excited.GetRightParton()->Get4Momentum();
+        Pstring= Pleft + Pright;
 }
 
 //---------------------------------------------------------------------------------
@@ -110,37 +110,37 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 					 const G4LorentzVector *momentum)
 {
 	decaying=None;
-G4LorentzVector Momentum = G4LorentzVector(momentum->vect(),momentum->e());
+        G4LorentzVector Momentum = G4LorentzVector(momentum->vect(),momentum->e());
              // Momentum of produced hadron
-//G4cout<<"Had Mom "<<Momentum<<G4endl;
-//G4cout<<"Str Mom "<<old.Pstring<<G4endl;
-Pstring = old.Pstring - Momentum;
-//G4cout<<"New Str Mom "<<Pstring<<" "<<Pstring.mag()<<G4endl;
+        //G4cout<<"Had Mom "<<Momentum<<G4endl;
+        //G4cout<<"Str Mom "<<old.Pstring<<G4endl;
+        Pstring = old.Pstring - Momentum;
+        //G4cout<<"New Str Mom "<<Pstring<<" "<<Pstring.mag()<<G4endl;
 
-G4double StringMass = Pstring.mag();
+        G4double StringMass = Pstring.mag();
 
-G4LorentzRotation toLAB(Pstring.boostVector());
+        G4LorentzRotation toLAB(Pstring.boostVector());
 
-Pleft  = toLAB*G4LorentzVector(0.,0., StringMass/2.,StringMass/2.);
-Pright = toLAB*G4LorentzVector(0.,0.,-StringMass/2.,StringMass/2.);
+        Pleft  = toLAB*G4LorentzVector(0.,0., StringMass/2.,StringMass/2.);
+        Pright = toLAB*G4LorentzVector(0.,0.,-StringMass/2.,StringMass/2.);
 
-Ptleft =Pleft.vect();  Ptleft.setZ(0.);
-Ptright=Pright.vect(); Ptright.setZ(0.);
+        Ptleft =Pleft.vect();  Ptleft.setZ(0.);
+        Ptright=Pright.vect(); Ptright.setZ(0.);
 
-//G4cout<<"Pleft   "<<Pleft<<G4endl;
-//G4cout<<"Pright  "<<Pright<<G4endl;
-//G4cout<<"Pstring "<<Pstring<<G4endl;
+        //G4cout<<"Pleft   "<<Pleft<<G4endl;
+        //G4cout<<"Pright  "<<Pright<<G4endl;
+        //G4cout<<"Pstring "<<Pstring<<G4endl;
 	if ( old.decaying == Left )
 	{
 		RightParton= old.RightParton;
-//		Ptright    = old.Ptright;
-//Pright = old.Pright;
+                // Ptright    = old.Ptright;
+                // Pright = old.Pright;
 
 		LeftParton = newdecay;
-//		Ptleft     = old.Ptleft - momentum->vect();
-//		Ptleft.setZ(0.);
-//Pleft  = old.Pleft - Momentum;
-//Pstring=Pleft + Pright;
+                // Ptleft     = old.Ptleft - momentum->vect();
+                // Ptleft.setZ(0.);
+                // Pleft  = old.Pleft - Momentum;
+                // Pstring=Pleft + Pright;
 
 		theDecayParton=GetLeftParton();
 		theStableParton=GetRightParton();
@@ -148,14 +148,14 @@ Ptright=Pright.vect(); Ptright.setZ(0.);
 	} else if ( old.decaying == Right )
 	{
 		RightParton = newdecay;
-//		Ptright     = old.Ptright - momentum->vect();
-//		Ptright.setZ(0.);
-//Pright = old.Pright + Momentum;
+                // Ptright     = old.Ptright - momentum->vect();
+                // Ptright.setZ(0.);
+                // Pright = old.Pright + Momentum;
 
 		LeftParton  = old.LeftParton;
-//		Ptleft      = old.Ptleft;
-//Pleft  = old.Pleft;
-//Pstring=Pleft + Pright;
+                // Ptleft      = old.Ptleft;
+                // Pleft  = old.Pleft;
+                // Pstring=Pleft + Pright;
 
 		theDecayParton=GetRightParton();
 		theStableParton=GetLeftParton();
@@ -164,8 +164,8 @@ Ptright=Pright.vect(); Ptright.setZ(0.);
 	{
 		throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::G4FragmentingString: no decay Direction defined");
 	}
-	Pplus  = Pstring.plus(); //old.Pplus  - (momentum->e() + momentum->pz());
-	Pminus = Pstring.minus();//old.Pminus - (momentum->e() - momentum->pz());
+	Pplus  = Pstring.plus();   //old.Pplus  - (momentum->e() + momentum->pz());
+	Pminus = Pstring.minus();  //old.Pminus - (momentum->e() - momentum->pz());
 }
 
 
@@ -181,9 +181,9 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
         Pplus=0.; Pminus=0.;                               
         theStableParton=0; theDecayParton=0;              
 
-Pstring=G4LorentzVector(0.,0.,0.,0.);
-Pleft  =G4LorentzVector(0.,0.,0.,0.);
-Pright =G4LorentzVector(0.,0.,0.,0.);
+        Pstring=G4LorentzVector(0.,0.,0.,0.);
+        Pleft  =G4LorentzVector(0.,0.,0.,0.);
+        Pright =G4LorentzVector(0.,0.,0.,0.);
 
 	if ( old.decaying == Left )                                       
 	{                                                                 
@@ -305,26 +305,26 @@ G4LorentzVector G4FragmentingString::Get4Momentum() const
 
 G4double G4FragmentingString::Mass2() const
 {
-//	return Pplus*Pminus - (Ptleft+Ptright).mag2();
-return Pstring.mag2();
+  // return Pplus*Pminus - (Ptleft+Ptright).mag2();
+  return Pstring.mag2();
 }
 
 G4double G4FragmentingString::Mass() const
 {
-//	return std::sqrt(this->Mass2());
-return Pstring.mag();
+  // return std::sqrt(this->Mass2());
+  return Pstring.mag();
 }
 
 G4double G4FragmentingString::MassT2() const
 {
-	return Pplus*Pminus;
+  return Pplus*Pminus;
 }
 
 G4LorentzVector G4FragmentingString::GetPstring()
-{return Pstring;}
+{ return Pstring; }
 
 G4LorentzVector G4FragmentingString::GetPleft()
-{return Pleft;}
+{ return Pleft; }
 
 G4LorentzVector G4FragmentingString::GetPright()
-{return Pright;}
+{ return Pright; }

@@ -3,16 +3,6 @@
                      Text version of the iort_therapy README file
              =========================================================
 
-Last revision: C.Casarino, October 2014;
-Released with the Geant4 10.0 version (December 2013)
- 
-
-
-
-             =========================================================
-                                       iort_therapy
-             =========================================================
-
  Main Authors:
  G.Russo(a,b), C.Casarino*(c), G.C. Candiano(c), G.A.P. Cirrone(d), F.Romano(d)
  
@@ -30,7 +20,7 @@ Released with the Geant4 10.0 version (December 2013)
  
  (d) Laboratori Nazionali del Sud of the INFN, Catania, Italy
 
- (e) University of Wallongong, Australia
+ (e) University of Wollongong, Australia
 
 
   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
@@ -53,8 +43,6 @@ iort_therapy distribution contain these sub-folders:
 
 \src: where source .cc files are stored
 \include: where header .hh files are stored
-\macro: where a set of ready-to-use macro files are provided
-
 
 Currently this folders structure is in development and in the meanwhile new features and capabilities will be added. 
 
@@ -69,9 +57,6 @@ To run iort_therapy you must first install the Geant4 package. Once Geant4 is in
 A CMakeLists.txt file is provided together with a standard GNUmakefile for compilation. 
 
 A complete guide for the Geant4 installation in different operating systems can be found inside the official installation Geant4 pages.
-
-If you have troubles with the Geant4 installation please send an e-mail to us.
-
 
 
 GEOMETRICAL SET-UP
@@ -105,8 +90,6 @@ The applicator consists of a cylindrical PMMA tube (the final collimator). In th
   IortBeamLineJunctions(); 
   IortBeamLineFinalCollimator();
 
-
-
 The user has now the possibility to vary, via messenger, the inner and outer radius of the final collimator.
 
 
@@ -118,7 +101,7 @@ At the end of a simulation run the dose deposited by primaries and secondaries i
 
 THE DETECTOR
 
-The default sizes of the sensible voxelized region (detector) are 7cmx15cmx15cm and actually the default voxel configuration is   0.5mm x 0.5mm x 0.5mm, which means a matrix of 140x300x300 cubic voxels each with a lateral dimension of 0.5 mm. Of course this default can be modified.
+A scoring mesh is set to score the dose in the phantom (see defaultMacro.mac)
 
 As concern the cut and stepMax values, the default configuration implies a cut value of 0.01 mm in the whole  world (use the command /physic/setCuts <length>  in order to set the cut for all, and the command /physic/setDetectorCuts <length> to set the cut for the detector only)  and a stepMax of 0.01 mm just in the phantom (use the command /Step/waterPhantomStepMax 0.01 mm).
 In any case it is strongly recommended to use a stepMax value not bigger than 5% of the dose slice thickness.
@@ -127,37 +110,16 @@ In any case it is strongly recommended to use a stepMax value not bigger than 5%
 SHIELDING DISC
 
 Inside the detector is positioned a double layered shielding disc. For both layers it is possible via macro to change the outer and inner radius, the thickness, the position along the beam axis and the material.
-ADVERTISEMENT: to delete the disc out the entire geometry the relative macro command must be used!!
-ADVERTISEMENT: to re-insert the disc in the entire geometry the relative macro command must be used!!
+NOTE 1: to delete the disc out the entire geometry the relative macro command must be used!!
+NOTE 2: to re-insert the disc in the entire geometry the relative macro command must be used!!
   
- 
 
 PHYSICS PROCESSES AND PHYSICS MODELS IMPLEMENTATION
 
- Physics models in iort_therapy, following the Geant4 organization, can be defined using two different approaches:
-
-
-Activating one of the 'Reference Physics Lists' that are already prepared by the Geant4 Collaboration and are contained in the $G4INSTALL/source/physics_lists/lists folderlist.
-The 'Reference Physics Lists' can be activated setting a specific environment variable to the name of the physics. For example if the QGSP_BIC Reference Physics Lists  must be activated the User must set export PHYSLIST=QGSP_BIC (or setenv PHYSLIST QGSP_BIC). A 'Reference Physics Lists' contains all the physics process necessary to a particle  transport.
-If  the  User set the PHYSLIST variable,  iort_therapy  will  start  with  the             defaultMacroWithReferencePhysicsList.mac macro. See this macro file for more details.
-Activating the 'Builders' already prepared by the Geant4 Collaboration and contained in the $G4INSTALL/source/physics_lists/builder folder.
-Each builder is specific  of  a  given  model.  There  are  builders  for  the  electromagnetic processes, for the hadronic one, etc.
-If the PHYSLIST variable is not defined iort_therapy starts with the defaultMacro.mac where the single builders are activated for the various processes of interest.
-Each builder is activated with the /Physics/addPhysics <nome builder> command.
-
-
-       ******       SUGGESTED PHYSICS       *********
-
-    AT MOMENT, IF ACCURATE RESULTS ARE NEDED, WE STRONGLY RECOMMEND: 
-    1. The use of the emstandard_opt3, or
-    2. the QGSP_BIC_EMY Reference Physics Lists (define the PHYSLIST evironment variable):
-       export PHYSLIST=QGSP_BIC_EMY
-A particular care is addressed to the simulation of the physic processes.
+EM Standard option 4 is activated. The user can change the physics list interactively.
 
 
 INTERACTIVE COMMANDS
-
-
 
 How to change Phantom, Detector and Shielding Disc geometries
 
@@ -181,21 +143,13 @@ The user can change:
 
 (1) The detector (box) size.
  
-(2) The voxels sizes. Changing this parameters, and/or the detector sizes, user should choose values in order to be divisors of the detector correspondent sizes.
-For both above commands, zero or negative values mean << don't change it >>
-
-(3) The displacement between the phantom and the detector.  Displacement parameters refer to the lower left corner of the detector respect to that of the phantom, by the point of view of the beam. In this case zero or positive values are allowed, while the negatives ones mean: << don't change it>>.
-
+(2) The displacement between the phantom and the detector.  Displacement parameters refer to the lower left corner of the detector respect to that of the phantom, by the point of view of the beam. In this case zero or positive values are allowed, while the negatives ones mean: << don't change it>>.
 
 Command synopsis:
-
-
 /changeDetector/size <dimX> <dimY> <dimZ> <[unit]>
-/changeDetector/voxelSize <dimX> <dimY> <dimZ> <[unit]> 
 /changeDetector/displacement <dispX> <dispY> <dispZ> <[unit]> 
 
-Default size values are 7x15x15 cm for the detector, 0.5x0.5x0.5 mm for any voxel. The default detector position is chosen so that the 15x15 detector face is aligned and centered respect the detector beam exposed face.
-
+The user has to change the scoring mesh accordingly via UI commands. 
 
 
 Shielding Disc geometry
@@ -233,41 +187,7 @@ Command synopsis:
 
 /InsertProtectionDisc/insert
 
- 
-Stopping powers calculation
-
-It is possible for the end-user to calculate, via macro command, stopping powers only for those materials inserted into G4NistMaterialBuilder class (about 300).
-To get stopping powers user must provide this command line on the idle interactive terminal (or into a macro file) :
-
-/parameter/getstopping <G4_material> <Emin> <Emax> <nPoints> <[particle]> <[output_filename]>
-
-All parameters are mandatory except those inside square brackets [].
-Default values for parameters inside square brackets are respectively proton and standard output (usually the user console terminal).
-
-Parameters are respectively:
-
-The material (NIST) name (something like G4_..., the complete list of elements and materials is available into the G4NistMaterialBuilder class and can be printed  to the terminal screen via the macro command: /parameter/nist )
-Kinetic energy range in MeV and the number of data points to be retrieved (in a logarithmically uniform space)
-The particle name (proton, e+, e-, He3, neutron,... a full list can be gotten via the macro command: /particle/list).
-         Only for ions, user must firstly give them to the particle gun, for example issuing the  macro commands:
-/gun/particle ion
-/gun/ion <Z> <A> <[charge]>
-The output filename: if users leave this blank then the standard output is used.
-
-Below is an example in order to calculate the stopping power for alphas into Hydrogen between 1 keV to 150 MeV for 15 points:
-
-/parameter/getstopping G4_H 0.001 150 15 alpha 
-
-# and for C12 ion:
-
-/gun/particle ion
-/gun/ion 6 12 6
-/parameter/getstopping G4_H 0.001 150 15 C12[0.0]
-
-# Value inside square brackets is the excitation energy of the ion (ground state in this case).
-
-
-To set initial beam features
+**** To set initial beam features
 
 By default, the beam propagates along the positive X direction with Gaussian momentum and Y-Z distributions. 
 It is possible to select: particle type, mean energy and relative standard deviation, X,Y and Z coordinates, Y and Z standard deviations and, finally, the beam spread along X direction (Theta). 
@@ -284,8 +204,6 @@ Command synopsis:
 /beam/position/Zposition/sigmaZ 
 /beam/momentum/Theta
  
-
-
 HOW RUN iort_therapy
 
 Run the example in interactive mode                                      
@@ -308,28 +226,8 @@ SIMULATION OUTPUT
 
 Store results in an ASCII file
 
-A .out ASCII file is generated at the end of each run, Dose.out is its default name that can be changed in the IORTMatrix.cc file.
-The file contains four columns; the first three columns represent the voxel indexes (that univocally identify the voxel volume), while the last column represents the dose deposited in that given voxel.
+A .out ASCII file is generated at the end of each run, Dose.out. 
+The file contains four columns; the first three columns represent the voxel indexes (that univocally identify the voxel volume), while the last column represents the dose  in Gray deposited in that given voxel.
 
-
-FUTURE CHALLENGES
-
-This is a list of future components that will be added in iort_therapy.
-
-In the next future iort_therapy will be improved making it possible to simulate roto-translations of the collimator beam    line respect the target thus reproducing the mobility characteristics of the linac.
-
-
-Dicom Interface
-
-A first work in progress version iort_therapy-DICOM is underdeveloped. This application imports in iort_therapy the main parts and facilities of the Dicom extended-medical example, so it permits to replace the water phantom with a voxellized phantom version of the dicom images.
-
-Human-Phantom Interface
-
-Also a second work in progress version iort_therapy-Human-Phantom is underdeveloped. It is based on the Human-Phantom advanced example. Thus there will be the possibility to replace the water phantom with the human phantom. 
-
-All these configuration will be set by macro commands.
-
-
-Please contact carlo.casarino@polooncologicocefalu.it for more details or suggestions and feedbacks on this document.
 
 

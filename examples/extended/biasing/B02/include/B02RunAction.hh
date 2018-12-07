@@ -27,7 +27,6 @@
 /// \brief Definition of the B02RunAction class
 //
 //
-// $Id: B02RunAction.hh 98774 2016-08-09 14:28:06Z gcosmo $
 // 
 
 #ifndef B02RunAction_h

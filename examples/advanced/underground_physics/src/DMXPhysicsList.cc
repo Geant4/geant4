@@ -565,7 +565,7 @@ void DMXPhysicsList::ConstructOp()
 #include "G4PiMinusAbsorptionBertini.hh"
 #include "G4KaonMinusAbsorptionBertini.hh"
 #include "G4AntiProtonAbsorptionFritiof.hh"
-
+#include "G4HadronicParameters.hh"
 
 
 void DMXPhysicsList::ConstructHad() 
@@ -584,7 +584,7 @@ void DMXPhysicsList::ConstructHad()
   // Inelastic scattering
   const G4double theFTFMin0 =    0.0*GeV;
   const G4double theFTFMin1 =    4.0*GeV;
-  const G4double theFTFMax =   100.0*TeV;
+  const G4double theFTFMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   const G4double theBERTMin0 =   0.0*GeV;
   const G4double theBERTMin1 =  19.0*MeV;
   const G4double theBERTMax =    5.0*GeV;

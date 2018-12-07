@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConvergenceTester.hh 79002 2014-02-10 15:03:47Z gcosmo $
 //
 // Class description:
 //
@@ -66,6 +65,9 @@ class G4ConvergenceTester
    public:
 
       void AddScore( G4double );
+
+      G4ConvergenceTester& operator+=(G4double val)
+      { this->AddScore(val); return *this; }
 
       // default to G4cout but can redirected to another ostream
       void ShowHistory(std::ostream& out = G4cout);

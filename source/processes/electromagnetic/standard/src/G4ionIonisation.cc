@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc 107058 2017-11-01 14:54:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -159,7 +158,8 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
 
       // Add ion stoping tables for Generic Ion if the default 
       // model is used (with eth ~= 2 MeV)
-      if(part == ion) {
+      if(part == ion && (EmModel(1)->GetName() == "BetheBloch" ||
+			 EmModel(1)->GetName() == "BetheBlochGasIon")) {
 	stopDataActive = true;
 	G4WaterStopping  ws(corr);
 	corr->SetIonisationModels(EmModel(0),EmModel(1));
@@ -173,14 +173,12 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ionIonisation::StreamProcessInfo(std::ostream& out,
-                                        G4String endOfLine) const
+void G4ionIonisation::StreamProcessInfo(std::ostream& out) const
 {
   if (stopDataActive && G4GenericIon::GenericIon() == theParticle) {
     out << "      Stopping Power data for " 
 	<< corr->GetNumberOfStoppingVectors()
-	<< " ion/material pairs "
-	<< endOfLine;
+	<< " ion/material pairs" << G4endl;
   }
 }
 
@@ -197,7 +195,7 @@ void G4ionIonisation::AddStoppingData(G4int Z, G4int A,
 
 void G4ionIonisation::ProcessDescription(std::ostream& out) const
 {
-  out << "<strong>Ion ionisation</strong>";
+  out << "  Ion ionisation";
   G4VEnergyLossProcess::ProcessDescription(out);
 }
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.cc 106723 2017-10-20 09:50:34Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -72,7 +71,6 @@ G4PhotonEvaporation::G4PhotonEvaporation(G4GammaTransition* p)
   //G4cout << "### New G4PhotonEvaporation() " << this << G4endl;   
   fNuclearLevelData = G4NuclearLevelData::GetInstance(); 
   fNucPStore = G4NuclearPolarizationStore::GetInstance();
-  LevelDensity = 0.125/CLHEP::MeV;
   Tolerance = 20*CLHEP::eV;
 
   if(!fTransition) { fTransition = new G4GammaTransition(); }
@@ -98,7 +96,6 @@ void G4PhotonEvaporation::Initialise()
     G4cout << "### G4PhotonEvaporation is initialized " << this << G4endl;   
   }
   G4DeexPrecoParameters* param = fNuclearLevelData->GetParameters();
-  LevelDensity = param->GetLevelDensity();
   Tolerance = param->GetMinExcitation();
   fMaxLifeTime = param->GetMaxLifeTime();
   fCorrelatedGamma = param->CorrelatedGamma();
@@ -280,7 +277,8 @@ G4PhotonEvaporation::GetEmissionProbability(G4Fragment* nucleus)
   G4double wres = (G4double)GRWidth[A];
   G4double eres2= eres*eres;
   G4double wres2= wres*wres;
-  G4double xsqr = std::sqrt(A*LevelDensity*fExcEnergy);
+  G4double levelDensity = fNuclearLevelData->GetLevelDensity(Z,A,fExcEnergy);
+  G4double xsqr = std::sqrt(levelDensity*fExcEnergy);
 
   G4double egam    = fExcEnergy;
   G4double gammaE2 = egam*egam;
@@ -295,7 +293,7 @@ G4PhotonEvaporation::GetEmissionProbability(G4Fragment* nucleus)
     gammaE2 = egam*egam;
     gammaR2 = gammaE2*wres2;
     egdp2   = gammaE2 - eres2;
-    p1 = G4Exp(2.0*(std::sqrt(A*LevelDensity*std::abs(fExcEnergy - egam)) - xsqr))
+    p1 = G4Exp(2.0*(std::sqrt(levelDensity*std::abs(fExcEnergy - egam)) - xsqr))
       *gammaR2*gammaE2/(egdp2*egdp2 + gammaR2);
     fProbability += (p1 + p0);
     fCummProbability[i] = fProbability;
@@ -437,6 +435,8 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     if(fVerbose > 1) {
       G4cout << "Discrete emission from level Index= " << fIndex 
 	     << " Elevel= " << fLevelManager->LevelEnergy(fIndex)
+             << " Ltime= " << fLevelManager->LifeTime(fIndex)
+             << " LtimeMax= " << fMaxLifeTime
 	     << "  RDM= " << fRDM << "  ICM= " << fICM << G4endl;
     }
     if(0 == fIndex || !level) { return result; }

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc 108402 2018-02-12 10:31:27Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -76,7 +75,8 @@ G4StateManager::~G4StateManager()
       }
     } 
     if ( state )  { delete state; }
-  } 
+  }
+  theStateManager = 0;
 #ifdef G4MULTITHREADED_DEACTIVATE
   G4iosFinalization();
 #endif
@@ -177,24 +177,25 @@ G4StateManager::DeregisterDependent(G4VStateDependent* aDependent)
   return (tmp != 0);
 }
 
-G4ApplicationState
+const G4ApplicationState&
 G4StateManager::GetCurrentState() const
 {
    return theCurrentState;
 }
 
-G4ApplicationState
+const G4ApplicationState&
 G4StateManager::GetPreviousState() const
 {
    return thePreviousState;
 }
 
 G4bool
-G4StateManager::SetNewState(G4ApplicationState requestedState)
+G4StateManager::SetNewState(const G4ApplicationState& requestedState)
 { return SetNewState(requestedState,0); }
 
 G4bool
-G4StateManager::SetNewState(G4ApplicationState requestedState, const char* msg)
+G4StateManager::SetNewState(const G4ApplicationState& requestedState,
+                            const char* msg)
 {
    if(requestedState==G4State_Abort && suppressAbortion>0)
    {
@@ -254,7 +255,7 @@ G4StateManager::RemoveDependent(const G4VStateDependent* aDependent)
 }
 
 G4String
-G4StateManager::GetStateString(G4ApplicationState aState) const
+G4StateManager::GetStateString(const G4ApplicationState& aState) const
 {
   G4String stateName;
   switch(aState)
@@ -284,19 +285,3 @@ G4StateManager::SetVerboseLevel(G4int val)
 {
   verboseLevel = val;
 }
-
-//void G4StateManager::Pause()
-//{
-//  Pause("G4_pause> ");
-//}
-//
-//void G4StateManager::Pause(const char* msg)
-//{
-//  G4String msgS = msg;
-//  Pause(msgS);
-//}
-//
-//void G4StateManager::Pause(G4String msg)
-//{
-//  G4UImanager::GetUIpointer()->PauseSession(msg);
-//}

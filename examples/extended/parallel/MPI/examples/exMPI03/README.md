@@ -5,7 +5,7 @@ Description
 -----------
 An example of dosimetry in a water phantom.
 The example has same geometry and physics as exMPI02, only the analysis part
-is diffenrent.
+is different.
 
 ### Configuration:
 - Geometry     : water phantom
@@ -51,4 +51,4 @@ Follow these commands,
     > make
     > make install
 
-Repalce mpicxx with your MPI-compiler wrapper
+Replace mpicxx with your MPI-compiler wrapper.

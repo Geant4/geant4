@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04CalorimeterHit.cc
 /// \brief Implementation of the ExN04CalorimeterHit class
 //
-// $Id: ExN04CalorimeterHit.cc 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #include "G4Colour.hh"
@@ -39,7 +38,7 @@ G4Allocator<ExN04CalorimeterHit> ExN04CalorimeterHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04CalorimeterHit::ExN04CalorimeterHit()
- : fpLogV(NULL)
+ : G4VHit(), fpLogV(NULL)
 {
 }
 

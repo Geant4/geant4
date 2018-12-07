@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDAtomicTransitionManager.cc,v 1.2 ????
-// GEANT4 tag $Name: emlowen-V09-01-01 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)

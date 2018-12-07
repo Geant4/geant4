@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc 106714 2017-10-20 09:38:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -800,14 +799,6 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
 
 void G4EmModelManager::DumpModelList(std::ostream& out, G4int verb)
 {
-  DumpModelList(out, verb, G4String("\n"));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4EmModelManager::DumpModelList(std::ostream& out, G4int verb,
-                                     G4String endOfLine)
-{
   if(verb == 0) { return; }
   for(G4int i=0; i<nRegions; ++i) {
     G4RegionModels* r = setOfRegionModels[i];
@@ -815,7 +806,7 @@ void G4EmModelManager::DumpModelList(std::ostream& out, G4int verb,
     G4int n = r->NumberOfModels();  
     if(n > 0) {
       out << "      ===== EM models for the G4Region  " << reg->GetName()
-	  << " ======" << endOfLine;
+	  << " ======" << G4endl;
       for(G4int j=0; j<n; ++j) {
         G4VEmModel* model = models[r->ModelIndex(j)];
         G4double emin = 
@@ -848,15 +839,14 @@ void G4EmModelManager::DumpModelList(std::ostream& out, G4int verb,
 	  if(fluoFlag && model->DeexcitationFlag()) { 
 	    out << "  FluoActive"; 
 	  }
-	  out << endOfLine;
+	  out << G4endl;
 	}
       }  
     }
     if(1 == nEmModels) { break; }
   }
   if(theCutsNew) {
-    out << "      ===== Limit on energy threshold has been applied " 
-	<< endOfLine;
+    out << "      ===== Limit on energy threshold has been applied " << G4endl;
   }
 }
 

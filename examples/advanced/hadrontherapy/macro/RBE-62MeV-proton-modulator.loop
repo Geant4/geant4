@@ -1,0 +1,3 @@
+# macro to be run in loop
+/modulator/angle 1 deg
+/run/beamOn 100

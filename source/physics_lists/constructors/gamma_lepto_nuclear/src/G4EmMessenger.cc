@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmMessenger.cc 66704 2013-01-10 18:20:17Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -104,6 +103,10 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   theNu->SetGuidance("Activation of neutrino processes");
   theNu->AvailableForStates(G4State_PreInit);
 
+  theNuETX = new G4UIcmdWithABool("/physics_lists/em/NuETotXscActivation",this);
+  theNuETX->SetGuidance("Activation of neutrino processes");
+  theNuETX->AvailableForStates(G4State_PreInit);
+
   theGMM1 = new G4UIcmdWithADouble("/physics_lists/em/GammaToMuonsFactor",this);
   theGMM1->SetGuidance("Factor for gamma conversion to muon pair.");
   theGMM1->AvailableForStates(G4State_PreInit);
@@ -145,6 +148,7 @@ G4EmMessenger::~G4EmMessenger()
   delete thePMM;
   delete thePH;
   delete theNu;
+  delete theNuETX;
 
   delete theGMM1;
   delete thePMM1;
@@ -152,6 +156,7 @@ G4EmMessenger::~G4EmMessenger()
   delete theNuEleCcBF;
   delete theNuEleNcBF;
   delete theNuNucleusBF;
+  delete theNuDN;
 
   delete aDir1;
   delete aDir2;
@@ -169,6 +174,7 @@ void G4EmMessenger::SetNewValue(G4UIcommand* aComm, G4String aS)
   if(aComm==thePMM)      theB->PositronToMuMu(thePMM->GetNewBoolValue(aS));
   if(aComm==thePH)       theB->PositronToHadrons(thePH->GetNewBoolValue(aS));
   if(aComm==theNu)       theB->NeutrinoActivated(theNu->GetNewBoolValue(aS));
+  if(aComm==theNuETX)    theB->NuETotXscActivated(theNu->GetNewBoolValue(aS));
 
   if(aComm==theGMM1)     theB->GammaToMuMuFactor(theGMM1->GetNewDoubleValue(aS));
   if(aComm==thePMM1)     theB->PositronToMuMuFactor(thePMM1->GetNewDoubleValue(aS));

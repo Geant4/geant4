@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE02/src/RE02NestedPhantomParameterisation.cc
 /// \brief Implementation of the RE02NestedPhantomParameterisation class
 //
-// $Id: $
 //
 ///////////////////////////////////////////////////////////////////////////////
 #include "RE02NestedPhantomParameterisation.hh"

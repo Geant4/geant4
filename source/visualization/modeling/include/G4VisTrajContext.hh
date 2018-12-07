@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisTrajContext.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // Jane Tinslay May 2006
 //
@@ -53,6 +52,9 @@ public:
   // Line
   void SetLineColour(const G4Colour& colour);
   G4Colour GetLineColour() const;
+
+  void SetLineWidth(const G4double& width);
+  G4double GetLineWidth() const;
 
   void SetDrawLine(const G4bool& draw); 
   G4bool GetDrawLine() const;
@@ -113,6 +115,7 @@ private:
   G4String fName;
 
   // Line data
+  G4double fLineWidth;
   G4Colour fLineColour;
   G4bool fLineVisible;
   G4bool fDrawLine;

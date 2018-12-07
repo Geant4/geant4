@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflash.cc 110276 2018-05-17 14:46:47Z gcosmo $
 //
 /// \file parameterisations/gflash/ExGflash.cc
 /// \brief Main program of the parameterisations/gflash example

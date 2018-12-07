@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // Code developed by:
-//  S.Guatelli
+//  S.Guatelli, A. Le
 //
 //    *******************************
 //    *                             *
@@ -32,7 +32,6 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyMaterial.cc 100821 2016-11-02 15:21:34Z gcosmo $
 //
 #include "globals.hh"
 #include "Randomize.hh"  
@@ -69,7 +68,6 @@ void BrachyMaterial::DefineMaterials()
   G4Element* elN = new G4Element("Nitrogen","N",Z = 7.,A);
 
   A = 16.00*g/mole;
-
   G4Element* elO = new G4Element("Oxygen","O",Z = 8.,A);
 
   A=26.98*g/mole;
@@ -145,6 +143,12 @@ void BrachyMaterial::DefineMaterials()
   d = 4.50*g/cm3;
   Titanium = new G4Material("titanium" ,Z = 22.,A,d);
  
+  //silver
+  A = 107.87*g/mole;
+  d = 10.49*g/cm3;
+  Z = 22.0;
+  matAg = new G4Material("Silver", Z, A, d);
+
   // Air material
   d = 1.290*mg/cm3;
   matAir = new G4Material("Air",d,2);

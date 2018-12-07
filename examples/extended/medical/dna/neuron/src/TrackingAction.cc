@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $ID$
 /// \file TrackingAction.cc 
 /// \brief Implementation of the TrackingAction class
 

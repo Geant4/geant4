@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file FCALActionInitialization.cc
 /// \brief Implementation of the FCALActionInitialization class

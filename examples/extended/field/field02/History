@@ -1,4 +1,3 @@
-$Id: History 110101 2018-05-15 11:31:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +14,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 27, 2018 I.Hrivnacova - fieldex02-V10-04-02
+- Added command:
+   /field/setField  Bx By Bz unit
+- Macro review and code clean-up:
+  - Removed EventAction, RunAction, RunActionMessenger
+    used only for storing random numbers, already available in kernel
+  - Separated other than visualization settings from vis.mac in a 
+    new init_vis.mac
+  - Added test for commands defined in the example at the end 
+    of field02.in macro
+  - Improved visualization of geometry
+  - Added "beamOn 10" button in gui.mac
+  - Updated README files
+
+May 15, 2018 J.Allison - fieldex01-V10-04-01
 May 15, 2018 J.Allison - fieldex02-V10-04-01
 - Remove G4UI_USE and G4VIS_USE.
 - Move instantiation of G4UIExecutive to start of main.

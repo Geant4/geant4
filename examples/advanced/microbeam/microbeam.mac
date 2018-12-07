@@ -1,7 +1,5 @@
 /run/initialize
 
-/process/inactivate nuclearStopping
-
 /tracking/verbose 0
 /run/verbose 0
 

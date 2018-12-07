@@ -27,7 +27,6 @@
 /// \brief Definition of the G4atomic_defines class
 //
 //
-// $Id: G4atomic_defines.hh 93110 2015-11-05 08:37:42Z jmadsen $
 //
 //
 /// This is a functional class for G4atomic. The functions in this

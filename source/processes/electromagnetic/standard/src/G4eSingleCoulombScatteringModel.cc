@@ -139,11 +139,27 @@ void G4eSingleCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   //G4cout<<"NUCLEAR FORM FACTOR: "<<FormFactor<<G4endl;
 }
 
-void G4eSingleCoulombScatteringModel::InitialiseLocal(const G4ParticleDefinition*,
-                                                G4VEmModel* masterModel)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4eSingleCoulombScatteringModel::InitialiseLocal(const G4ParticleDefinition*,
+                                                 G4VEmModel* masterModel)
 {
   SetElementSelectors(masterModel->GetElementSelectors());
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4eSingleCoulombScatteringModel::SetXSectionModel(const G4String& model)
+{
+  if(model == "Fast" || model == "fast")            { XSectionModel=1; }
+  else if(model == "Precise" || model == "precise") { XSectionModel=0; }
+  else { 
+    G4cout<<"G4eSingleCoulombScatteringModel WARNING: "<<model
+	  <<" is not a valid model name"<<G4endl;
+  }
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4eSingleCoulombScatteringModel::ComputeCrossSectionPerAtom(
@@ -207,7 +223,7 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
 
   G4double z1 = Mottcross->GetScatteringAngle(FormFactor,XSectionModel);
   G4double sint = sin(z1);
-  G4double cost = sqrt(1.0 - sint*sint);
+  G4double cost = cos(z1);
   G4double phi  = twopi* G4UniformRand();
 
   // kinematics in the Lab system

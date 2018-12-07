@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleB4b.cc 100946 2016-11-03 11:28:08Z gcosmo $
 //
 /// \file exampleB4b.cc
 /// \brief Main program of the B4b example

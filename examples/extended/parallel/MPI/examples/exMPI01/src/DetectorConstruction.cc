@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc 78126 2013-12-03 17:43:56Z gcosmo $
 //
 /// @file DetectorConstruction.cc
 /// @brief Define geometry

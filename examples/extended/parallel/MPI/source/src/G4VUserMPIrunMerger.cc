@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <functional>
 #include "G4MPIutils.hh"
+#include "G4MPImanager.hh"
 
 G4VUserMPIrunMerger::G4VUserMPIrunMerger( const G4Run* aRun ,
                                 G4int destination ,
@@ -86,8 +87,9 @@ void G4VUserMPIrunMerger::Send(const unsigned int destination)
 
 void G4VUserMPIrunMerger::Receive(const unsigned int source)
 {
+  const MPI::Intracomm* parentComm = G4MPImanager::GetManager()->GetComm();
   DMSG( 1 , "G4VUserMPIrunMerger::Receive(...) , this rank : "
-            <<MPI::COMM_WORLD.Get_rank()<<" and receiving from : "<<source);
+            <<parentComm->Get_rank()<<" and receiving from : "<<source);
   //DestroyBuffer();
   //Receive from all but one
   //for (G4int rank = 0; rank < commSize-1; ++rank)
@@ -136,14 +138,19 @@ void G4VUserMPIrunMerger::Receive(const unsigned int source)
 
 void G4VUserMPIrunMerger::Merge()
 {
+  // G4cout << "G4VUserMPIrunMerger::Merge called" << G4endl;
+
   DMSG(0, "G4VUserMPIrunMerger::Merge called");
-  const unsigned int myrank = MPI::COMM_WORLD.Get_rank();
-  commSize = MPI::COMM_WORLD.Get_size();
+  const MPI::Intracomm* parentComm = G4MPImanager::GetManager()->GetComm();
+  const unsigned int myrank = parentComm->Get_rank();
+  commSize = G4MPImanager::GetManager()->GetActiveSize();
+      // do not include extra worker in this communication
+
   if ( commSize == 1 ) {
       DMSG(1,"Comm world size is 1, nothing to do");
       return;
   }
-  COMM_G4COMMAND_ = MPI::COMM_WORLD.Dup();
+  COMM_G4COMMAND_ = parentComm->Dup();
   bytesSent = 0;
   const G4double sttime = MPI::Wtime();
 
@@ -154,6 +161,7 @@ void G4VUserMPIrunMerger::Merge()
   handler_t receiver = std::bind(&G4VUserMPIrunMerger::Receive, this, _1);
   std::function<void(void)> barrier =
       std::bind(&MPI::Intracomm::Barrier,&COMM_G4COMMAND_);
+  // G4cout << "go to  G4mpi::Merge" << G4endl;
   G4mpi::Merge( sender , receiver , barrier , commSize , myrank );
 
   //OLD Style p2p communications
@@ -170,7 +178,6 @@ void G4VUserMPIrunMerger::Merge()
       }
   }
 */
-
   const G4double elapsed = MPI::Wtime() - sttime;
   long total=0;
   COMM_G4COMMAND_.Reduce(&bytesSent,&total,1,MPI::LONG,MPI::SUM,
@@ -182,8 +189,6 @@ void G4VUserMPIrunMerger::Merge()
                   <<" (Total Data Transfer= "<<double(total)/1000<<" kB in "
                   <<elapsed<<" s)."<<G4endl;
   }
-
-
 
   COMM_G4COMMAND_.Free();
   DMSG(0,"G4VUserMPIrunMerger::Merge done");

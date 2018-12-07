@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExUCNPhysicsList.cc 75296 2013-10-30 09:34:21Z gcosmo $
 //
 /// \file exoticphysics/ucn/src/ExUCNPhysicsList.cc
 /// \brief Implementation of the ExUCNPhysicsList class

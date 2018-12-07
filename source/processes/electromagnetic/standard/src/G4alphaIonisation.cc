@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4alphaIonisation.cc 107058 2017-11-01 14:54:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -155,7 +154,7 @@ void G4alphaIonisation::PrintInfo()
 
 void G4alphaIonisation::ProcessDescription(std::ostream& out) const
 {
-  out << "<strong>Alpha ionisation</strong>";
+  out << "  Alpha ionisation";
   G4VEnergyLossProcess::ProcessDescription(out);
 }
 

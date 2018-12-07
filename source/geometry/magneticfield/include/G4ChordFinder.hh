@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh 107470 2017-11-15 07:14:28Z gcosmo $
 //
 // 
 // Class G4ChordFinder
@@ -47,13 +46,16 @@
 class G4VFSALIntegrationStepper;
 // #include "G4VFSALIntegratorSteper.hh"
 
-class G4MagneticField;  
+class G4MagneticField;
+class G4CachedMagneticField;
 
 class G4ChordFinder
-{ 
+{
    public:  // with description
 
       explicit G4ChordFinder( G4VIntegrationDriver* pIntegrationDriver );
+        // The most flexible constructor, which allows the user to specify
+        //   any type of field, equation, stepper and integration driver.
 
       G4ChordFinder( G4MagneticField* itsMagField,
                      G4double         stepMinimum = 1.0e-2, // * mm 
@@ -61,14 +63,20 @@ class G4ChordFinder
                      // G4bool           useHigherEfficiencyStepper = true,
                      G4bool           useFSALstepper = false  );
         // A constructor that creates defaults for all "children" classes.
+        //
+        //   The type of equation of motion is fixed.
+        //   A default type of stepper (Dormand Prince since release 10.4) is used,
+        //   and the corresponding (old-style without themplates) integration driver.
+        //   Except if 'useFSAL' is set (true), which provides a FSAL stepper
+        //    and its corresponding specialised (templated) driver.
       
       virtual ~G4ChordFinder();
 
-      G4double    AdvanceChordLimited( G4FieldTrack& yCurrent,
-                                       G4double stepInitial,
-                                       G4double epsStep_Relative,
-                                       const G4ThreeVector& latestSafetyOrigin,
-                                       G4double lasestSafetyRadius);
+      inline G4double AdvanceChordLimited( G4FieldTrack& yCurrent,
+                                           G4double stepInitial,
+                                           G4double epsStep_Relative,
+                                           const G4ThreeVector& latestSafetyOrigin,
+                                           G4double lasestSafetyRadius);
         // Uses ODE solver's driver to find the endpoint that satisfies 
         // the chord criterion: that d_chord < delta_chord
         // -> Returns Length of Step taken.
@@ -100,67 +108,17 @@ class G4ChordFinder
       inline void ResetStepEstimate();
         // Clear internal state (last step estimate)
 
-      inline G4int GetNoCalls(); 
-      inline G4int GetNoTrials();        // Total number of trials
-      inline G4int GetNoMaxTrials();     // Maximum # of trials for one call
-        // Get statistics about number of calls & trials in FindNextChord
-
-      virtual void   PrintStatistics(); 
         // A report with the above -- and possibly other stats
       inline G4int SetVerbose( G4int newvalue=1); 
         // Set verbosity and return old value
 
-      void SetFractions_Last_Next( G4double fractLast= 0.90, 
-                                   G4double fractNext= 0.95 ); 
-        // Parameters for  performance ... change with great care
-
-      inline void SetFirstFraction(G4double fractFirst);
-        // Parameter for  performance ... change with great care
-
-   public:  // without description
-
-      void     TestChordPrint( G4int    noTrials, 
-                               G4int    lastStepTrial, 
-                               G4double dChordStep, 
-                               G4double nextStepTrial );
-
-        //   Printing for monitoring ...
- 
-      inline   G4double GetFirstFraction();         // Originally 0.999
-      inline   G4double GetFractionLast();          // Originally 1.000
-      inline   G4double GetFractionNextEstimate();  // Originally 0.980
-      inline   G4double GetMultipleRadius();        // No original value
-        //  Parameters for adapting performance ... use with great care
+      void OnComputeStep();
 
    protected:   // .........................................................
-
-      inline  void    AccumulateStatistics( G4int noTrials ); 
-        // Accumulate the basic statistics 
-        //   - other specialised ones must be kept by derived classes
- 
-      inline G4bool AcceptableMissDist(G4double dChordStep) const;
-
-      G4double NewStep( G4double stepTrialOld, 
-                        G4double dChordStep,     // Current dchord estimate
-                        G4double& stepEstimate_Unconstrained ) ;  
-      
-      virtual G4double FindNextChord( const  G4FieldTrack& yStart,
-                              G4double     stepMax,
-                              G4FieldTrack& yEnd,
-                              G4double&    dyErr,      //  Error of endpoint 
-                              G4double     epsStep,
-                              G4double*  pNextStepForAccuracy,  // = 0,
-                              const G4ThreeVector latestSafetyOrigin,
-                              G4double       latestSafetyRadius 
-                                      );  
-
       void     PrintDchordTrial(G4int     noTrials, 
                                 G4double  stepTrial, 
                                 G4double  oldStepTrial, 
                                 G4double  dChordStep);
-
-      inline G4double GetLastStepEstimateUnc(); 
-      inline void     SetLastStepEstimateUnc( G4double stepEst ); 
 
    private:  // ............................................................
 
@@ -177,9 +135,8 @@ class G4ChordFinder
       //  PARAMETERS 
       //  ---------------------
       G4double  fDeltaChord;               //  Maximum miss distance 
-      //    Internal parameters
-      G4double  fFirstFraction, fFractionLast, fFractionNextEstimate;
-      G4double  fMultipleRadius; 
+
+      // G4double  fMultipleRadius;        //  Use forgotten
       G4int     fStatsVerbose;  // if > 0, print Statistics in destructor
 
       //  DEPENDENT Objects
@@ -187,17 +144,9 @@ class G4ChordFinder
       G4VIntegrationDriver*      fIntgrDriver;
       G4MagIntegratorStepper*    fRegularStepperOwned= nullptr;
       G4MagIntegratorStepper*    fNewFSALStepperOwned= nullptr;
+      G4CachedMagneticField*     fCachedField= nullptr;
    // G4VFSALIntegrationStepper* fOldFSALStepperOwned= nullptr;
-      G4EquationOfMotion*        fEquation; 
-
-      //  STATE information
-      //  --------------------
-      G4double    fLastStepEstimate_Unconstrained;
-        //  State information for efficiency
-
-      // For Statistics
-      // -- G4int   fNoTrials, fNoCalls;
-      G4int   fTotalNoTrials_FNC,  fNoCalls_FNC, fmaxTrials_FNC; // fnoTimesMaxTrFNC; 
+      G4EquationOfMotion*        fEquation;  
 };
 
 // Inline function implementation:

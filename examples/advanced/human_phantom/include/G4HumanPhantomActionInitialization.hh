@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Author: S. Guatelli, susanna@uow.edu.au
+// Author: S. Guatelli, University of Wollongong, Australia, susanna@uow.edu.au
 //
 #ifndef G4HumanPhantomActionInitialization_h
 #define G4HumanPhantomActionInitialization_h 1

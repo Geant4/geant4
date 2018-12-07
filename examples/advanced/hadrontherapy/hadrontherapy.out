@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -15,6 +15,7 @@
 Activating geometry default
 Going to register Parallel world...... done
 Using HadrontherapyPhysicsList()
+Using Csv
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -76,7 +77,7 @@ The (X,Y,Z) dimensions of the detector are : (40 cm ,40 cm ,40 cm )
 Displacement between Phantom and World is: DX= 20 cm DY= 0 fm DZ= 0 fm 
 The (X,Y,Z) sizes of the Voxels are: (200 um ,4 cm ,4 cm )
 The number of Voxels along (X,Y,Z) is: (200,1,1)
- G4PhysicsListHelper::AddTransportation()--- G4CoupledTransportation is used 
+--- G4CoupledTransportation is used 
 Warning : Region <DetectorLog> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
@@ -113,9 +114,8 @@ The number of Voxels along (X,Y,Z) is: (40,1,1)
 /run/beamOn 500
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 2 regions:
-          DefaultRegionForTheWorld  1  1  0
-          DetectorLog  1  1  0
-### ===  Auger cascade flag: 1
+          DefaultRegionForTheWorld  1  0  0
+          DetectorLog  1  0  0
 ### ===  Ignore cuts flag:   0
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
@@ -133,7 +133,8 @@ compt:   for  gamma    SubType= 13  BuildTable= 1
 conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 20 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PenConversion :  Emin=        0 eV    Emax=       80 GeV
+       PenConversion :  Emin=        0 eV    Emax=       20 MeV
+        BetheHeitler :  Emin=       20 MeV   Emax=       80 GeV   AngularGenUrban
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
@@ -153,8 +154,8 @@ eIoni:   for  e-    SubType= 2
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             PenIoni :  Emin=        0 eV    Emax=        1 MeV
-        MollerBhabha :  Emin=        1 MeV   Emax=      100 TeV   deltaVI
+       LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV   deltaVI
+        MollerBhabha :  Emin=      100 keV   Emax=      100 TeV   deltaVI
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -188,8 +189,8 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             PenIoni :  Emin=        0 eV    Emax=        1 MeV
-        MollerBhabha :  Emin=        1 MeV   Emax=      100 TeV   deltaVI
+             PenIoni :  Emin=        0 eV    Emax=      100 keV
+        MollerBhabha :  Emin=      100 keV   Emax=      100 TeV   deltaVI
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -224,7 +225,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=        2 MeV   Emax=      100 TeV   deltaVI
@@ -247,10 +248,6 @@ CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
-
-nuclearStopping:   for  proton    SubType= 8  BuildTable= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -276,7 +273,7 @@ msc:   for alpha    SubType= 10
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV   deltaVI
           BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV   deltaVI
@@ -293,7 +290,7 @@ msc:   for anti_proton    SubType= 10
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=        2 MeV   Emax=      100 TeV   deltaVI
@@ -317,10 +314,6 @@ CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
-nuclearStopping:   for  anti_proton    SubType= 8  BuildTable= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
-
 msc:   for kaon+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -329,7 +322,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
           BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV   deltaVI
@@ -361,7 +354,7 @@ msc:   for kaon-    SubType= 10
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
           BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV   deltaVI
@@ -393,7 +386,7 @@ msc:   for mu+    SubType= 10
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
@@ -426,7 +419,7 @@ msc:   for mu-    SubType= 10
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
@@ -459,7 +452,7 @@ msc:   for pi+    SubType= 10
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
           BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV   deltaVI
@@ -491,7 +484,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
           BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV   deltaVI
@@ -595,1214 +588,17 @@ Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 500
-  User=5.590000s Real=5.661969s Sys=0.050000s
-Dose is being written to Dose.out
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W011
-      issued by : G4TNtupleManager::FillNtupleTColumn
-      ntupleId 1 does not exist.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
+  User=5.090000s Real=5.282071s Sys=0.040000s
+... write Csv file : Hadrontherapy_h1_Ekin.csv - done
+... write Csv file : Hadrontherapy_h1_Edep.csv - done
 ... write Csv files :  - done
 Graphics systems deleted.
 Visualization Manager deleting...
+The simulation took: 9.91325 s to run (real time)
+Dose is being written to Dose.out
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.26 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.25 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

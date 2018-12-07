@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayTable.cc 105720 2017-08-16 12:38:10Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -85,9 +84,9 @@ void G4DecayTable::Insert( G4VDecayChannel * aChannel){
 G4VDecayChannel *G4DecayTable::SelectADecayChannel(G4double parentMass)
 {
   // check if contents exist
-  if (channels->size()<1) return 0;
+  if (channels->size()<1) return nullptr;
 
-  if(parentMass<0.) parentMass=parent->GetPDGMass(); 
+  if(parentMass < 0.) parentMass=parent->GetPDGMass(); 
 
   G4VDecayChannelVector::iterator iCh;
   G4double sumBR = 0.;
@@ -95,7 +94,7 @@ G4VDecayChannel *G4DecayTable::SelectADecayChannel(G4double parentMass)
     if ( !((*iCh)->IsOKWithParentMass(parentMass)) ) continue;
     sumBR += (*iCh)->GetBR();
   }
-  if (sumBR <=0.0) {
+  if (sumBR <= 0.0) {
 #ifdef G4VERBOSE
     G4cout << " G4DecayTable::SelectADecayChannel :: no possible DecayChannel"
            << "       " << parent->GetParticleName() << G4endl;

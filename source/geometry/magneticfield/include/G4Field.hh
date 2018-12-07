@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Field.hh 96751 2016-05-04 09:39:38Z gcosmo $
 //
 //
 // class G4Field
@@ -65,6 +64,8 @@
 class G4Field
 {
   public:  // with description
+
+      static constexpr G4int MAX_NUMBER_OF_COMPONENTS = 24;
 
       virtual void  GetFieldValue( const  double Point[4],
                                           double *fieldArr ) const = 0;

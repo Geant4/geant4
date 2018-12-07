@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 
 // Manager class for tools::histo::p2d.
 // It implements functions specific to the P2 type

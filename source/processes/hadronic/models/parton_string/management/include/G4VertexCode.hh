@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VertexCode.hh 108062 2017-12-19 15:18:27Z gcosmo $
 //
 #ifndef G4VertexCode_h
 #define G4VertexCode_h 1

@@ -1,4 +1,3 @@
-//$Id: genconf.cpp,v 1.35 2008/10/15 21:51:24 marcocle Exp $	//
 
 #ifdef _WIN32
   // Disable a warning in Boost program_options headers:

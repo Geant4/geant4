@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc 92625 2015-09-09 12:34:07Z gcosmo $
 //
 // class G4VDivisionParameterisation Implementation file
 //

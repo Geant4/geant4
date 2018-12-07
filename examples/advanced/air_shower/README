@@ -31,8 +31,8 @@ of object parameterisation/replication capabilities.
                                                                         |
 The primary vertex generator describes a plane circular source of UV 
 (3eV, about 400 nm) optical photons.                                    |
-Depending on the user selection (see below for the relevant environment 
-variables) the source can be positioned such that the photons are fired |
+Depending on the selected detector configuration, the source can be     |
+positioned such that the photons are fired                              |
 to a reflecting surface or, by default, directly to the UVscope 
 (no reflecting surface is present in this case).                        |
 Reflection at the surface can be chosen to be specular or diffuse.
@@ -51,17 +51,16 @@ processes is made.                                                      |
 A standard Geant4 example GNUmakefile and a CMakeLists.txt file are 
 provided, for building with cmake                                       |
 
-The following environment variables can be set:                         |
+The following environment variable can be set in order to get           |
+additional verbosity during program running:                            |
 
  1) GNUmakefile
 
-  setenv ULTRA_VERBOSE
-  setenv ULTRA_MIRROR_USE 1 : A specular reflecting surface is used.
-  setenv ULTRA_GROUND_USE 1 : A diffusive reflecting surface is used. 
+  setenv ULTRA_VERBOSE 
 
- 2) CMakeLists.txt
+or 
 
-    set ON/OFF the appropriate option (ULTRA_MIRROR_USE, ULTRA_GROUND_USE)
+ 2) cmake -DULTRA_VERBOSE=ON "path to source"
 
 
 ------------------------------------------------------------------------
@@ -84,13 +83,23 @@ the Geant4 application developer manual (Analysis Manager Classes)
 -
 
 -----------------------------------------------------------------------
-----> How to run the example.                                           |
+----> How to run the example.                                          |
 
   From the directory where the Ultra binary resides :
 
-  ./Ultra UltraMacro.mac   for running in batch mode                   |
+  ./Ultra "macro name" for running in batch mode                       |
                                                                        |                                             
-  ./Ultra     for running in interative mode.                          |
+  ./Ultra  for running in interative mode.                             |
+  The macro VisDirect.mac is executed.                                 |
+                                                                       | 
+  Several macros are available for interactive visualisation.          |
+  While in interactive mode type the command                           |
+  /control/execute "name_of_macro", 
+  where "name_of_macro" is one of the following:
+
+  Direct.mac - a beam of photons is shot directly to the telescope.    |
+  Mirror.mac - the beam is directed to a specular reflecing surface    |
+  Ground.mac - the beam is directed to a diffusively reflecting surface|
 
 ------------------------------------------------------------------------
 ----> Simulation output                                                 |

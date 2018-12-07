@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -482,8 +482,8 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.070000s Real=0.069175s Sys=0.000000s
-RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0159854
+  User=0.080000s Real=0.074090s Sys=0.000000s
+RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0160892
  ====================================================
    Beam Particle: proton
    Ekin(MeV)    = 200000
@@ -492,30 +492,30 @@ RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0159854
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 15.985 +- 0.36547 keV    RMS/Emean = 0.72299
-   Mean number of steps in absorber= 1.235  mean number of ion-clusters = 799.4 MeanCluster= 799.23
+   Mean energy deposit in absorber = 16.089 +- 0.39057 keV    RMS/Emean = 0.76765
+   Mean number of steps in absorber= 1.24  mean number of ion-clusters = 804.76 MeanCluster= 804.46
 
  ====== Energy deposit distribution   Noverflows= 0.014 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           7       0.007
-    2         6         102       0.102
-    3         9         260        0.26
-    4        12         249       0.249
-    5        15         159       0.159
-    6        18          86       0.086
-    7        21          42       0.042
-    8        24          29       0.029
-    9        27          19       0.019
-   10        30           4       0.004
-   11        33          10        0.01
-   12        36           6       0.006
-   13        39           3       0.003
-   14        42           3       0.003
-   15        45           2       0.002
+    1         3           8       0.008
+    2         6         100         0.1
+    3         9         262       0.262
+    4        12         251       0.251
+    5        15         148       0.148
+    6        18          89       0.089
+    7        21          44       0.044
+    8        24          25       0.025
+    9        27          23       0.023
+   10        30          10        0.01
+   11        33           8       0.008
+   12        36           7       0.007
+   13        39           2       0.002
+   14        42           2       0.002
+   15        45           5       0.005
    16        48           0           0
    17        51           0           0
-   18        54           3       0.003
+   18        54           0           0
    19        57           2       0.002
  ================== run end ==========================
 ... write Root file : testem8.root - done
@@ -524,6 +524,6 @@ RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0159854
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.017 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.019 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

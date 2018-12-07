@@ -1,0 +1,14 @@
+/control/verbose 2
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 20 47
+#
+/grdm/decayBiasProfile timeWindowBiased.data
+/grdm/BRbias 0
+#
+/analysis/setFileName Ca47bias
+/analysis/h1/set 8  100  0. 30. day   #time of life
+#
+/run/printProgress 10000
+/run/beamOn 100000

@@ -1,4 +1,3 @@
-$Id: History 110571 2018-05-30 13:06:17Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 September 18: D.Sawkey (emmuons-V10-04-05)
+- G4MuMultipleScattering, G4MuPairProduction, G4eePairProduction, G4MuBremsstrahlung,
+  G4MuIonisation: automatic documenation format now rST
+
+22 August 18: V.Ivant (emmuons-V10-04-04)
+- G4EnergyLossForExtrapolator - fixed MT initialisation and destruction
 
 30 May 18: V.Ivant (emmuons-V10-04-02)
 - G4MuPairProductionModel - added minor protection

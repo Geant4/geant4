@@ -43,18 +43,17 @@
 
 #include "G4HadronCaptureProcess.hh"
 #include "G4Neutron.hh"
+#include "G4NeutronCaptureXS.hh"
 #include "G4HadronCaptureDataSet.hh"
 
 G4HadronCaptureProcess::G4HadronCaptureProcess(const G4String& processName) : 
   G4HadronicProcess(processName, fCapture)
 {
-  G4HadronicProcess::AddDataSet(new G4HadronCaptureDataSet());
+  AddDataSet(new G4NeutronCaptureXS());
 }
-
 
 G4HadronCaptureProcess::~G4HadronCaptureProcess()
 {}
-
 
 G4bool
 G4HadronCaptureProcess::IsApplicable(const G4ParticleDefinition& aParticleType)
@@ -65,7 +64,7 @@ G4HadronCaptureProcess::IsApplicable(const G4ParticleDefinition& aParticleType)
 void G4HadronCaptureProcess::ProcessDescription(std::ostream& outFile) const
 {
   outFile << "G4HadronCaptureProcess handles the capture of neutrons by nuclei\n"
-          << "by invoking one or more hadronic models and one or more hadronic\n"
-          << "cross section sets.\n";
+	  << "following by gamma/electron de-excitation cascade. One or more\n"
+          << "hadronic models and hadronic cross section sets may be invoked.\n";
 }
 

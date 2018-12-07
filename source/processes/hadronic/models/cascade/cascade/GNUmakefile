@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 71741 2013-06-21 17:38:28Z mkelsey $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 #

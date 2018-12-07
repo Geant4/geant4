@@ -27,7 +27,6 @@
 /// \brief Implementation of the ExN02EventAction class
 //
 //
-// $Id: ExN02EventAction.cc 78055 2013-12-03 08:27:48Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

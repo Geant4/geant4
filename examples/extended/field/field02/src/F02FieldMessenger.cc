@@ -27,7 +27,6 @@
 /// \brief Implementation of the F02FieldMessenger class
 //
 //
-// $Id: F02FieldMessenger.cc 104216 2017-05-18 13:45:22Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +37,7 @@
 #include "F02ElectricFieldSetup.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,6 +47,7 @@ F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* fieldSetup)
    fElFieldSetup(fieldSetup),
    fFieldDir(0),
    fStepperCmd(0),
+   fElFieldZCmd(0),
    fElFieldCmd(0),
    fMinStepCmd(0),
    fUpdateCmd(0)
@@ -66,12 +67,19 @@ F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* fieldSetup)
   fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
   fUpdateCmd->AvailableForStates(G4State_Idle);
 
-  fElFieldCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);
+  fElFieldZCmd = new G4UIcmdWithADoubleAndUnit("/field/setFieldZ",this);
+  fElFieldZCmd->SetGuidance("Define uniform Electric field.");
+  fElFieldZCmd->SetGuidance("Electric field will be in Z direction.");
+  fElFieldZCmd->SetGuidance("Value of Electric field has to be given in volt/m");
+  fElFieldZCmd->SetParameterName("Ez",false,false);
+  fElFieldZCmd->SetDefaultUnit("megavolt/m");
+  fElFieldZCmd->AvailableForStates(G4State_Idle);
+ 
+  fElFieldCmd = new G4UIcmdWith3VectorAndUnit("/field/setField",this);
   fElFieldCmd->SetGuidance("Define uniform Electric field.");
-  fElFieldCmd->SetGuidance("Electric field will be in Z direction.");
   fElFieldCmd->SetGuidance("Value of Electric field has to be given in volt/m");
-  fElFieldCmd->SetParameterName("Ez",false,false);
-  fElFieldCmd->SetDefaultUnit("volt/m");
+  fElFieldCmd->SetParameterName("Ex","Ey","Ez",false,false);
+  fElFieldCmd->SetDefaultUnit("megavolt/m");
   fElFieldCmd->AvailableForStates(G4State_Idle);
  
   fMinStepCmd = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);
@@ -86,6 +94,7 @@ F02FieldMessenger::F02FieldMessenger(F02ElectricFieldSetup* fieldSetup)
 F02FieldMessenger::~F02FieldMessenger()
 {
   delete fStepperCmd;
+  delete fElFieldZCmd;
   delete fElFieldCmd;
   delete fMinStepCmd;
   delete fFieldDir;
@@ -100,8 +109,10 @@ void F02FieldMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fElFieldSetup->SetStepperType(fStepperCmd->GetNewIntValue(newValue));
   if( command == fUpdateCmd )
     fElFieldSetup->UpdateIntegrator();
+  if( command == fElFieldZCmd )
+    fElFieldSetup->SetFieldZValue(fElFieldZCmd->GetNewDoubleValue(newValue));
   if( command == fElFieldCmd )
-    fElFieldSetup->SetFieldValue(fElFieldCmd->GetNewDoubleValue(newValue));
+    fElFieldSetup->SetFieldValue(fElFieldCmd->GetNew3VectorValue(newValue));
   if( command == fMinStepCmd )
     fElFieldSetup->SetMinStep(fMinStepCmd->GetNewDoubleValue(newValue));
 }

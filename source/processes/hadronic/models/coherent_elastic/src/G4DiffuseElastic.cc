@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc 108978 2018-03-20 13:10:24Z gcosmo $
 //
 //
 // Physics model class G4DiffuseElastic 
@@ -66,6 +65,8 @@
 
 #include "G4Exp.hh"
 
+#include "G4HadronicParameters.hh"
+
 /////////////////////////////////////////////////////////////////////////
 //
 // Test Constructor. Just to check xsc
@@ -74,8 +75,8 @@
 G4DiffuseElastic::G4DiffuseElastic() 
   : G4HadronElastic("DiffuseElastic"), fParticle(0)
 {
-  SetMinEnergy( 0.01*MeV ); // 0.01*GeV );
-  SetMaxEnergy( 100.*TeV ); // 1.*TeV
+  SetMinEnergy( 0.01*MeV );
+  SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
 
   verboseLevel         = 0;
   lowEnergyRecoilLimit = 100.*keV;  
@@ -91,8 +92,7 @@ G4DiffuseElastic::G4DiffuseElastic()
   thePionPlus  = G4PionPlus::PionPlus();
   thePionMinus = G4PionMinus::PionMinus();
 
-  fEnergyBin = 250;  // Increased from 200 to 250 to keep the same bin size when extending
-                     // the upper limit of validity of the model from 1 TeV to 100 TeV. 
+  fEnergyBin = 300;  // Increased from the original 200 to have no wider log-energy-bins up to 10 PeV 
   fAngleBin  = 200;
 
   fEnergyVector =  new G4PhysicsLogVector( theMinEnergy, theMaxEnergy, fEnergyBin );

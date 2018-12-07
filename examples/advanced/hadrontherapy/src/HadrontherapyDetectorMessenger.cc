@@ -37,136 +37,176 @@
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* detector)
-  :hadrontherapyDetector(detector)
+:hadrontherapyDetector(detector)
 {
     // Change Phantom size
     changeThePhantomDir = new G4UIdirectory("/changePhantom/");
     changeThePhantomDir -> SetGuidance("Command to change the Phantom Size/position");
     changeThePhantomSizeCmd = new G4UIcmdWith3VectorAndUnit("/changePhantom/size", this);
     changeThePhantomSizeCmd -> SetGuidance("Insert sizes X Y and Z"
-	                                   "\n   0 or negative values mean <<Don't change it!>>");
-    changeThePhantomSizeCmd -> SetParameterName("PhantomSizeAlongX", 
-						"PhantomSizeAlongY", 
-						"PhantomSizeAlongZ", false);
+                                           "\n   0 or negative values mean <<Don't change it!>>");
+    changeThePhantomSizeCmd -> SetParameterName("PhantomSizeAlongX",
+                                                "PhantomSizeAlongY",
+                                                "PhantomSizeAlongZ", false);
     changeThePhantomSizeCmd -> SetDefaultUnit("mm");
-    changeThePhantomSizeCmd -> SetUnitCandidates("nm um mm cm"); 
+    changeThePhantomSizeCmd -> SetUnitCandidates("nm um mm cm");
     changeThePhantomSizeCmd -> AvailableForStates(G4State_Idle);
-
-
-    // Change Phantom material 
+    
+    
+    // Change Phantom material
     changeThePhantomMaterialCmd = new G4UIcmdWithAString("/changePhantom/material", this);
-    changeThePhantomMaterialCmd -> SetGuidance("Change the Phantom and the detector material"); 
+    changeThePhantomMaterialCmd -> SetGuidance("Change the Phantom and the detector material");
     changeThePhantomMaterialCmd -> SetParameterName("PhantomMaterial", false);
     changeThePhantomMaterialCmd -> SetDefaultValue("G4_WATER");
     changeThePhantomMaterialCmd -> AvailableForStates(G4State_Idle);
-
+    
     // Change Phantom position
     changeThePhantomPositionCmd = new G4UIcmdWith3VectorAndUnit("/changePhantom/position", this);
     changeThePhantomPositionCmd -> SetGuidance("Insert X Y and Z dimensions for the position of the center of the Phantom"
-						" respect to that of the \"World\""); 
-    changeThePhantomPositionCmd -> SetParameterName("PositionAlongX", 
-						    "PositionAlongY", 
-						    "PositionAlongZ", false);
+                                               " respect to that of the \"World\"");
+    changeThePhantomPositionCmd -> SetParameterName("PositionAlongX",
+                                                    "PositionAlongY",
+                                                    "PositionAlongZ", false);
     changeThePhantomPositionCmd -> SetDefaultUnit("mm");
-    changeThePhantomPositionCmd -> SetUnitCandidates("um mm cm m"); 
+    changeThePhantomPositionCmd -> SetUnitCandidates("um mm cm m");
     changeThePhantomPositionCmd -> AvailableForStates(G4State_Idle);
-
-
+    
+    
     updateCmd = new G4UIcmdWithoutParameter("/changePhantom/update",this);
     updateCmd->SetGuidance("Update Phantom/Detector geometry.");
     updateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
     updateCmd->SetGuidance("if you changed geometrical value(s).");
     updateCmd->AvailableForStates(G4State_Idle);
-
+    
     //  Change detector size
     changeTheDetectorDir = new G4UIdirectory("/changeDetector/");
     changeTheDetectorDir -> SetGuidance("Command to change the Detector's Size/position/Voxels");
     
     changeTheDetectorSizeCmd = new G4UIcmdWith3VectorAndUnit("/changeDetector/size",this);
     changeTheDetectorSizeCmd -> SetGuidance("Insert sizes for X Y and Z dimensions of the Detector"
-					    "\n   0 or negative values mean <<Don't change it>>");
+                                            "\n   0 or negative values mean <<Don't change it>>");
     changeTheDetectorSizeCmd -> SetParameterName("DetectorSizeAlongX", "DetectorSizeAlongY", "DetectorSizeAlongZ", false);
     changeTheDetectorSizeCmd -> SetDefaultUnit("mm");
-    changeTheDetectorSizeCmd -> SetUnitCandidates("nm um mm cm"); 
+    changeTheDetectorSizeCmd -> SetUnitCandidates("nm um mm cm");
     changeTheDetectorSizeCmd -> AvailableForStates(G4State_Idle);
-
+    
     //  Change the detector to phantom displacement
     changeTheDetectorToPhantomPositionCmd = new G4UIcmdWith3VectorAndUnit("/changeDetector/displacement",this);
     changeTheDetectorToPhantomPositionCmd -> SetGuidance("Insert X Y and Z displacements between Detector and Phantom"
-	                                                 "\nNegative values mean <<Don't change it!>>"); 
+                                                         "\nNegative values mean <<Don't change it!>>");
     changeTheDetectorToPhantomPositionCmd -> SetParameterName("DisplacementAlongX",
-							      "DisplacementAlongY", 
-							      "DisplacementAlongZ", false);
+                                                              "DisplacementAlongY",
+                                                              "DisplacementAlongZ", false);
     changeTheDetectorToPhantomPositionCmd -> SetDefaultUnit("mm");
-    changeTheDetectorToPhantomPositionCmd -> SetUnitCandidates("nm um mm cm"); 
+    changeTheDetectorToPhantomPositionCmd -> SetUnitCandidates("nm um mm cm");
     changeTheDetectorToPhantomPositionCmd -> AvailableForStates(G4State_Idle);
     
     // Change voxels by its size
     changeTheDetectorVoxelCmd = new G4UIcmdWith3VectorAndUnit("/changeDetector/voxelSize",this);
     changeTheDetectorVoxelCmd -> SetGuidance("Insert Voxel sizes for X Y and Z dimensions"
-		                             "\n   0 or negative values mean <<Don't change it!>>");
+                                             "\n   0 or negative values mean <<Don't change it!>>");
     changeTheDetectorVoxelCmd -> SetParameterName("VoxelSizeAlongX", "VoxelSizeAlongY", "VoxelSizeAlongZ", false);
     changeTheDetectorVoxelCmd -> SetDefaultUnit("mm");
     changeTheDetectorVoxelCmd -> SetUnitCandidates("nm um mm cm");
     changeTheDetectorVoxelCmd -> AvailableForStates(G4State_Idle);
-
-
     
     
-
+    changeTheSource = new G4UIdirectory("/changeTheSource/");
+    changeTheSource -> SetGuidance("Command to change the source");
+    
+    
+    
+    
+    /////////////////////////////////////////////////////////////////////////////
+    
+    VirtualLayer = new G4UIcmdWithABool("/changeTheSource/VirtualLayer",this);
+    VirtualLayer -> SetParameterName("VirtualLayer ", false);
+    VirtualLayer -> SetDefaultValue("false");
+    VirtualLayer -> SetGuidance("Set if you want place a VirtualLayer"
+                                "\n[usage]: /changeTheSource/VirtualLayer [true/false]");
+    VirtualLayer -> AvailableForStates(G4State_Idle, G4State_PreInit);
+    
+    
+    VirtualLayerPosition = new G4UIcmdWith3VectorAndUnit("/changeTheSource/VirtualLayerPosition", this);
+    VirtualLayerPosition -> SetGuidance("Insert X Y and Z dimensions for the position of the center of the Virtual Layer"
+                                        " respect to that of the \"World\"");
+    VirtualLayerPosition -> SetParameterName("PositionAlongX",
+                                             "PositionAlongY",
+                                             "PositionAlongZ", false);
+    
+    VirtualLayerPosition -> SetDefaultUnit("cm");
+    VirtualLayerPosition -> SetUnitCandidates("um mm cm m");
+    VirtualLayerPosition -> AvailableForStates(G4State_Idle);
+    
+    
+    
 }
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorMessenger::~HadrontherapyDetectorMessenger()
 {
-    delete changeThePhantomDir; 
-    delete changeThePhantomSizeCmd; 
-    delete changeThePhantomPositionCmd; 
-    delete changeThePhantomMaterialCmd; 
+    delete changeThePhantomDir;
+    delete changeThePhantomSizeCmd;
+    delete changeThePhantomPositionCmd;
+    delete changeThePhantomMaterialCmd;
     delete updateCmd;
-    delete changeTheDetectorDir; 
-    delete changeTheDetectorSizeCmd; 
-    delete changeTheDetectorToPhantomPositionCmd; 
+    delete changeTheDetectorDir;
+    delete changeTheDetectorSizeCmd;
+    delete changeTheDetectorToPhantomPositionCmd;
     delete changeTheDetectorVoxelCmd;
-
+    delete VirtualLayer;
+    delete VirtualLayerPosition;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-	
-  if( command == changeThePhantomSizeCmd)
+    
+    if( command == changeThePhantomSizeCmd)
     {
-	G4ThreeVector size = changeThePhantomSizeCmd -> GetNew3VectorValue(newValue);
-	hadrontherapyDetector -> SetPhantomSize(size.getX(),size.getY(),size.getZ());
+        G4ThreeVector size = changeThePhantomSizeCmd -> GetNew3VectorValue(newValue);
+        hadrontherapyDetector -> SetPhantomSize(size.getX(),size.getY(),size.getZ());
     }
-  else if (command == changeThePhantomPositionCmd )
-  {
-	 G4ThreeVector size = changeThePhantomPositionCmd -> GetNew3VectorValue(newValue);
-         hadrontherapyDetector -> SetPhantomPosition(size);
-  }
-  else if (command == changeThePhantomMaterialCmd)
-  {
-      hadrontherapyDetector -> SetPhantomMaterial(newValue);
-  }
-  else if (command == changeTheDetectorSizeCmd)
-  {
-	G4ThreeVector size = changeTheDetectorSizeCmd  -> GetNew3VectorValue(newValue);
+    else if (command == changeThePhantomPositionCmd )
+    {
+        
+        G4ThreeVector size = changeThePhantomPositionCmd -> GetNew3VectorValue(newValue);
+        hadrontherapyDetector -> SetPhantomPosition(size);
+    }
+    else if (command == changeThePhantomMaterialCmd)
+    {
+        hadrontherapyDetector -> SetPhantomMaterial(newValue);
+    }
+    else if (command == changeTheDetectorSizeCmd)
+    {
+        G4ThreeVector size = changeTheDetectorSizeCmd  -> GetNew3VectorValue(newValue);
         hadrontherapyDetector -> SetDetectorSize(size.getX(),size.getY(),size.getZ());
-  }
-  else if (command == changeTheDetectorToPhantomPositionCmd)
-  {
-	G4ThreeVector size = changeTheDetectorToPhantomPositionCmd-> GetNew3VectorValue(newValue);
+    }
+    else if (command == changeTheDetectorToPhantomPositionCmd)
+    {
+        G4ThreeVector size = changeTheDetectorToPhantomPositionCmd-> GetNew3VectorValue(newValue);
         hadrontherapyDetector -> SetDetectorToPhantomPosition(size);
-  }
-  else if (command == changeTheDetectorVoxelCmd)
-  {
-	G4ThreeVector size = changeTheDetectorVoxelCmd  -> GetNew3VectorValue(newValue);
+        
+    }
+    else if (command == changeTheDetectorVoxelCmd)
+    {
+        G4ThreeVector size = changeTheDetectorVoxelCmd  -> GetNew3VectorValue(newValue);
         hadrontherapyDetector -> SetVoxelSize(size.getX(),size.getY(),size.getZ());
-  }
-  else if (command == updateCmd)
-  {
-      hadrontherapyDetector -> UpdateGeometry();
-  }
- 
+    }
+    else if (command == updateCmd)
+    {
+        hadrontherapyDetector -> UpdateGeometry();
+    }
+    
+    else if(command == VirtualLayer)
+    {
+        hadrontherapyDetector->VirtualLayer(VirtualLayer->GetNewBoolValue(newValue));
+    }
+    else if(command == VirtualLayerPosition)
+    {
+        G4ThreeVector size = VirtualLayerPosition-> GetNew3VectorValue(newValue);
+
+        hadrontherapyDetector -> SetVirtualLayerPosition(size);
+    }
+    
 }

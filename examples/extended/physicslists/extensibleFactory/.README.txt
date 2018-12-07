@@ -1,4 +1,3 @@
-//$Id: .README.txt 106871 2017-10-26 14:33:27Z ihrivnac $
 
 ///\file "physicslists/extensibleFactory/.README.txt"
 ///\brief Example extensibleFactory README page

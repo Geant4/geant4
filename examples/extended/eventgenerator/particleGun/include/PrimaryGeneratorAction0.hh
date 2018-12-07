@@ -27,7 +27,6 @@
 /// \brief Definition of the PrimaryGeneratorAction0 class
 //
 //
-// $Id: PrimaryGeneratorAction0.hh 67332 2013-02-14 17:12:13Z ihrivnac $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

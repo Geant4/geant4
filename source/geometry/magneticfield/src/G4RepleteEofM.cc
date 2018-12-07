@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RepleteEofM.cc $
 //
 //
 //  This is the standard right-hand side for equation of motion.

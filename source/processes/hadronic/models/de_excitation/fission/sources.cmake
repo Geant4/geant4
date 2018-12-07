@@ -11,7 +11,6 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 88406 2015-02-18 09:13:29Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -44,6 +43,7 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fission
     HEADERS
         G4CompetitiveFission.hh
+        G4EvaporationLevelDensityParameter.hh
         G4FissionBarrier.hh
         G4FissionLevelDensityParameter.hh
         G4FissionLevelDensityParameterINCLXX.hh
@@ -53,6 +53,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fission
         G4VFissionBarrier.hh
     SOURCES
         G4CompetitiveFission.cc
+        G4EvaporationLevelDensityParameter.cc
         G4FissionBarrier.cc
         G4FissionLevelDensityParameter.cc
         G4FissionLevelDensityParameterINCLXX.cc

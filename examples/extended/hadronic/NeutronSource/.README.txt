@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "hadronic/NeutronSource/.README.txt"
 ///\brief Example NeutronSource README page
@@ -38,7 +37,7 @@
    
   "Full" set of physics processes are registered, but via PhysicsConstructor
   objects rather than complete pre-defined G4 physics lists. This alternative 
-  way gives more freedom to register physics.
+  way may give more freedom to register physics.
   
   Physics constructors are either constructors provided in Geant4 (with G4 prefix)
   or 'local'. They include : HadronElastic, HadronInelastic, IonsInelastic, GammaNuclear,
@@ -54,6 +53,8 @@
   In perticular, no step constraint is imposed for energy loss mechanism (ionisation and brems).
   This is enough when spatial distribution of deposited energy do not need
   to be accurate (see param->SetStepFunction(1., 1*mm)).
+
+  In PhysicsList::ConstructProcess() we give an example of how to access hadronic models.
 
   Several hadronic physics options are controlled by environment variables.
   To trigger them, an envHadronic.csh has been added in this example.

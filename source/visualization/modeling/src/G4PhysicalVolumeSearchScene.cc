@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.cc 91686 2015-07-31 09:40:08Z gcosmo $
 //
 // 
 // John Allison  10th August 1998.
@@ -46,7 +45,6 @@ G4PhysicalVolumeSearchScene::G4PhysicalVolumeSearchScene
   fRequiredCopyNo               (requiredCopyNo),
   fFoundDepth                   (0),
   fpFoundPV                     (0),
-  fpFoundLV                     (0),
   fVerbosity                    (verbosity),
   fMultipleOccurrence           (false)
 {}
@@ -71,11 +69,7 @@ void G4PhysicalVolumeSearchScene::ProcessVolume (const G4VSolid&) {
       typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
       typedef std::vector<PVNodeID> PVPath;
       const PVPath& fullPVPath = fpPVModel->GetFullPVPath();
-      G4int currentDepth = fpPVModel->GetCurrentDepth();
-      G4LogicalVolume* pCurrentLV = fpPVModel->GetCurrentLV();
-      //G4Material* pCurrentMaterial = fpPVModel->GetCurrentMaterial();
-      // Note: pCurrentMaterial may be zero (parallel world).
-      
+      G4int currentDepth = fpPVModel->GetCurrentDepth();      
       if ((fRequiredCopyNo             < 0 ||  // I.e., ignore negative request.
            fRequiredCopyNo             == pCurrentPV -> GetCopyNo ())) {
         // Current policy - take first one found!!
@@ -83,7 +77,6 @@ void G4PhysicalVolumeSearchScene::ProcessVolume (const G4VSolid&) {
           fFoundFullPVPath           = fullPVPath;
           fFoundDepth                = currentDepth;
           fpFoundPV                  = pCurrentPV;
-          fpFoundLV                  = pCurrentLV;
           fFoundObjectTransformation = *fpCurrentObjectTransformation;
         }
         else {

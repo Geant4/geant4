@@ -1,4 +1,3 @@
-$Id: History 110899 2018-06-25 08:39:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,26 @@ committal in the source repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-September-2018  G.Cosmo         (geom-specific-V10-04-15)
+- Make G4UPolycone wrapper inheriting from vecgeom::GenericUnplacedPolycone,
+  following the latest changes in VecGeom.
+
+13-September-2018  G.Cosmo         (geom-specific-V10-04-14)
+- G4UTessellatedSolid, G4UExtrudedSolid: removed leftover use of
+  UVector3 and replaced with U3Vector.
+
+23-August-2018  G.Cosmo            (geom-specific-V10-04-13)
+- Enabled VecGeom wrapper for G4Tet.
+
+10-August-2018  A.Gheata           (geom-specific-V10-04-12)
+- Make G4UHype wrapper inheriting from vecgeom::GenericUnplacedHype,
+  following the latest changes in VecGeom.
+
+12-July-2018  G.Cosmo              (geom-specific-V10-04-11)
+- Removed G4SolidsWorkspacePool class. Adapted G4SolidsWorkspace to
+  use templated class G4TWorkspacePool.
+- Coworks with tags in geometry/volumes, run and visualization/management.
 
 25-Jun-2018  G.Cosmo               (geom-specific-V10-04-10)
 - Use dynamic_cast to attempt fix for spurious compilation warnings on

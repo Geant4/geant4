@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootAnalysisManager.hh 106985 2017-10-31 10:07:18Z gcosmo $
 
 // The main manager for Root analysis.
 // It delegates most of functions to the object specific managers. 
@@ -60,6 +59,8 @@ enum class G4NtupleMergeMode {
 
 class G4RootAnalysisManager : public  G4ToolsAnalysisManager
 {
+  friend class G4RootMpiAnalysisManager;
+
   public:
     explicit G4RootAnalysisManager(G4bool isMaster = true);
     virtual ~G4RootAnalysisManager();
@@ -81,15 +82,19 @@ class G4RootAnalysisManager : public  G4ToolsAnalysisManager
     // MT/MPI
     void SetNtupleMerging(G4bool mergeNtuples, 
                           G4int nofReducedNtupleFiles = 0,
-                          G4bool rowWise = 0,
+                          G4bool rowWise = true,
                           unsigned int basketSize = fgkDefaultBasketSize);
+    void SetNtupleRowWise(G4bool rowWise);
 
   protected:
     // virtual methods from base class
-    virtual G4bool OpenFileImpl(const G4String& fileName) final;
+    virtual G4bool OpenFileImpl(const G4String& fileName) override;
     virtual G4bool WriteImpl() final;
-    virtual G4bool CloseFileImpl() final; 
+    virtual G4bool CloseFileImpl(G4bool reset) override; 
     virtual G4bool IsOpenFileImpl() const final;
+    // virtual functions (overriden in MPI implementation)
+    virtual G4bool WriteNtuple();
+    virtual G4bool Reset();
 
   private:
     // constants
@@ -100,10 +105,13 @@ class G4RootAnalysisManager : public  G4ToolsAnalysisManager
     static G4ThreadLocal G4RootAnalysisManager* fgInstance;    
 
     // methods
-    void SetNtupleMergingMode(G4bool mergeNtuples, G4int nofNtupleFiles);
+    void SetNtupleMergingMode(G4bool mergeNtuples, 
+                              G4int nofNtupleFiles, 
+                              G4bool rowWise);
     void ClearNtupleManagers();
     void CreateNtupleManagers();
     G4int  GetNtupleFileNumber();
+    G4bool ResetNtuple();
 
     template <typename T>
     G4bool WriteT(const std::vector<T*>& htVector,
@@ -115,8 +123,6 @@ class G4RootAnalysisManager : public  G4ToolsAnalysisManager
     G4bool WriteH3();
     G4bool WriteP1();
     G4bool WriteP2();
-    G4bool WriteNtuple();
-    G4bool Reset();
 
     // data members 
     G4int   fNofNtupleFiles;

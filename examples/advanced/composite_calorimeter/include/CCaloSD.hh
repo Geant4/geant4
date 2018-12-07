@@ -71,16 +71,22 @@ public:
 
 public:
   
-  void SetPrimaryID(int i) {PrimaryID = i;
-#ifdef debug
-  G4cout << "CCaloSD SetPrimaryID primID =" << i << G4endl;
-#endif
-  }
+  void SetPrimaryID(int i) {PrimaryID = i;}
   int  GetPrimaryID( )     {return PrimaryID;}
   void SetOrganization(CCalVOrganization* org);
 
 private:
-  
+
+  G4ThreeVector SetToLocal(const G4ThreeVector& globalPoint) const;
+  void getStepInfo(const G4Step* aStep);
+  G4bool hitExists();
+  void createNewHit();
+  void updateHit();
+  void StoreHit(CCalG4Hit* ahit);
+  void ResetForNewPrimary();
+  void summarize();
+  G4double curve_LY(const G4StepPoint* stepPoint);
+        
   // Data relative to primary particle (the one which triggers a shower)
   // These data are common to all Hits of a given shower.
   // One shower is made of several hits which differ by the
@@ -90,39 +96,24 @@ private:
   float IncidentEnergy;
   G4int PrimID  ; //@@ ID of the primary particle.
 
-
-private:
   G4int                HCID;
   G4String             SDname;
   CCalG4HitCollection* theHC; 
 
   G4int              TSID; 
   CCalG4Hit*         CurrentHit;
-  G4Track*           theTrack;
+  const G4Track*     theTrack;
   G4VPhysicalVolume* CurrentPV;
   G4VPhysicalVolume* PreviousPV;
   unsigned int       UnitID, PreviousUnitID;
   G4int              PrimaryID, TSliceID;  
   G4double           TSlice;
 
-  G4StepPoint*   PreStepPoint  ; 
-  G4StepPoint*   PostStepPoint ; 
-  float          EdepositEM, EdepositEHAD     ;
-  G4ThreeVector  HitPoint      ;	 
- 
-private:
+  const G4StepPoint*   PreStepPoint; 
+  const G4StepPoint*   PostStepPoint; 
+  float          EdepositEM, EdepositEHAD;
+  G4ThreeVector  HitPoint;
 
-  G4ThreeVector SetToLocal(G4ThreeVector globalPoint);
-  void getStepInfo(G4Step* aStep);
-  G4bool hitExists();
-  void createNewHit();
-  void updateHit();
-  void StoreHit(CCalG4Hit* ahit);
-  void ResetForNewPrimary();
-  void summarize();
-  G4double curve_LY(G4StepPoint* stepPoint);
-      
-private:
   CCalVOrganization* theDescription;
 
 };

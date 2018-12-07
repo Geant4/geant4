@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWt.cc 75567 2013-11-04 11:35:11Z gcosmo $
 //
 // 
 // OpenGLImmediateWt graphics system factory.

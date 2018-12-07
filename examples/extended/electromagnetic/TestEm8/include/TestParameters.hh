@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm8/include/TestParameters.hh
 /// \brief Definition of the TestParameters class
 //
-// $Id: HistoManager.hh 78549 2014-01-07 09:42:35Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

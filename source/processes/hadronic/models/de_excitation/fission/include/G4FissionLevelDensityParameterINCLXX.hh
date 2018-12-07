@@ -24,21 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionLevelDensityParameterINCLXX.hh 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitation
 // by D. Mancusi (6th October 2014)
 //
 
-
-
 #ifndef G4FissionLevelDensityParameterINCLXX_h
 #define G4FissionLevelDensityParameterINCLXX_h 1
 
-
 #include "G4VLevelDensityParameter.hh"
-#include "G4EvaporationLevelDensityParameter.hh"
 
+class G4NuclearLevelData;
 
 /** \class G4FissionLevelDensityParameterINCLXX
  *  \brief Revised level-density parameter for fission after INCL++
@@ -56,21 +52,23 @@
  * p+U238. A linear interpolation was adopted between the two extreme values.
  */
 
+class G4NuclearLevelData;
+
 class G4FissionLevelDensityParameterINCLXX : public G4VLevelDensityParameter
 {
 public:
-  G4FissionLevelDensityParameterINCLXX();
+  explicit G4FissionLevelDensityParameterINCLXX();
   virtual ~G4FissionLevelDensityParameterINCLXX();
 
 private:  
   G4FissionLevelDensityParameterINCLXX(const G4FissionLevelDensityParameterINCLXX &right);
-
-  const G4FissionLevelDensityParameterINCLXX & operator=(const G4FissionLevelDensityParameterINCLXX &right);
+  const G4FissionLevelDensityParameterINCLXX & operator=
+  (const G4FissionLevelDensityParameterINCLXX &right);
   G4bool operator==(const G4FissionLevelDensityParameterINCLXX &right) const;
   G4bool operator!=(const G4FissionLevelDensityParameterINCLXX &right) const;
   
 public:
-  G4double LevelDensityParameter(G4int A, G4int Z, G4double U) const;
+  G4double LevelDensityParameter(G4int A, G4int Z, G4double U) const final;
 
   void setAfanLow(const double a) { afanLow = a; UpdateAfanSlope(); }
   void setAfanHigh(const double a) { afanHigh = a; UpdateAfanSlope(); }
@@ -85,7 +83,7 @@ private:
   
   void UpdateAfanSlope();
 
-  G4EvaporationLevelDensityParameter theEvaporationLevelDensityParameter;
+  G4NuclearLevelData* fNucData;
 
   double afanLow, afanHigh;
   int ZLow, ZHigh;

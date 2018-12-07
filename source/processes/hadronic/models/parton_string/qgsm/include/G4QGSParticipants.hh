@@ -36,14 +36,14 @@
 #include "G4QGSMSplitableHadron.hh" 
 #include "G4V3DNucleus.hh"
 
-#include "G4VSplitableHadron.hh"                 // Uzhi
+#include "G4VSplitableHadron.hh"
 
 #include "G4Reggeons.hh"
 #include "G4QuarkExchange.hh"
 
 class G4QGSParticipants : public G4VParticipants
 {
-public:
+  public:
 	G4QGSParticipants();
 	G4QGSParticipants(const G4QGSParticipants &right);
 	const G4QGSParticipants & operator=(const G4QGSParticipants &right);
@@ -63,7 +63,7 @@ public:
 	void BuildInteractions(const G4ReactionProduct  &thePrimary);
 	void StartPartonPairLoop();
 
-private:
+  private:
     G4V3DNucleus* GetTargetNucleus() const;
     G4V3DNucleus* GetProjectileNucleus() const;
 
@@ -108,7 +108,7 @@ private:
 
     void CreateStrings();
 
-private:
+  private:
     // Set parameters of nuclear destruction
     void SetCofNuclearDestruction( const G4double aValue );
     void SetR2ofNuclearDestruction( const G4double aValue );
@@ -129,14 +129,14 @@ private:
     G4double GetPt2ofNuclearDestruction();
     G4double GetMaxPt2ofNuclearDestruction();
 
-protected:
+  protected:
 	virtual G4VSplitableHadron* SelectInteractions(const G4ReactionProduct  &thePrimary);
 	void SplitHadrons(); 
 	void PerformSoftCollisions();
 	void PerformDiffractiveCollisions();
         G4bool DeterminePartonMomenta();
 
-protected:
+  protected:
 	struct DeleteInteractionContent {void operator()(G4InteractionContent*aC){delete aC;}};
 	std::vector<G4InteractionContent*> theInteractions;
 	struct DeleteSplitableHadron{void operator()(G4VSplitableHadron*aS){delete aS;}};
@@ -144,14 +144,15 @@ protected:
 	struct DeletePartonPair{void operator()(G4PartonPair*aP){delete aP;}};
 	std::vector<G4PartonPair*>   thePartonPairs;
 
-	G4QuarkExchange 	      theQuarkExchange;         // Uzhi 20 Oct. 2016
+	G4QuarkExchange 	      theQuarkExchange;
 	G4SingleDiffractiveExcitation theSingleDiffExcitation;
 	G4QGSDiffractiveExcitation    theDiffExcitaton;
 	G4int ModelMode;
 
 	G4ThreeVector theBoost;
 	G4double SampleX(G4double anXmin, G4int nSea, G4int theTotalSea, G4double aBeta);
-protected:
+
+  protected:
 	// model parameters HPW
 	enum  { SOFT, DIFFRACTIVE };
 	enum  { ALL, WITHOUT_R, NON_DIFF };   // Interaction modes
@@ -162,12 +163,13 @@ protected:
 	const G4double QGSMThreshold;
 	const G4double theNucleonRadius;
 
-        G4ThreeVector theCurrentVelocity;                  // Uzhi 17 Apr. 2015 Is it needed?
+        G4ThreeVector theCurrentVelocity;
         G4QGSMSplitableHadron* theProjectileSplitable;
-private:
+
+  private:
     G4ReactionProduct theProjectile;       
 
-    G4Reggeons* Regge;     // Uzhi 18 Oct. 2016
+    G4Reggeons* Regge;
     G4int InteractionMode;
 
     G4double alpha;
@@ -191,7 +193,7 @@ private:
     G4int           TargetResidualCharge;
     G4double        TargetResidualExcitationEnergy;
 
-private:
+  private:
     // Parameters of nuclear destruction
     G4double CofNuclearDestruction;   // Cnd of nuclear destruction
     G4double R2ofNuclearDestruction;  // R2nd
@@ -201,7 +203,6 @@ private:
     G4double DofNuclearDestruction;       // D for momentum sampling
     G4double Pt2ofNuclearDestruction;     // Pt2
     G4double MaxPt2ofNuclearDestruction;  // Max Pt2
-
 };
 
 inline void G4QGSParticipants::StartPartonPairLoop()
@@ -216,7 +217,6 @@ inline G4PartonPair* G4QGSParticipants::GetNextPartonPair()
 	return result;
 }
 
-
 inline void G4QGSParticipants::SplitHadrons()
 {
 	unsigned int i;
@@ -225,13 +225,6 @@ inline void G4QGSParticipants::SplitHadrons()
 		theInteractions[i]->SplitHadrons();
 	}
 }
-//--------------------------------------
-//Uzhi Copy from FTF Model.hh
-/*
-inline G4V3DNucleus* G4QGSParticipants::GetWoundedNucleus() const {
-  return theNucleus;
-}
-*/
 
 inline G4V3DNucleus* G4QGSParticipants::GetTargetNucleus() const {
   return theNucleus;
@@ -294,5 +287,4 @@ inline G4double G4QGSParticipants::GetMaxPt2ofNuclearDestruction() {
 }
 //Uzhi End copy from FTFparameters
 #endif
-
 

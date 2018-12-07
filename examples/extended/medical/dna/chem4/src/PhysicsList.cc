@@ -28,9 +28,9 @@
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
 // J. Comput. Phys. 274 (2014) 841-882
+// Phys. Med. Biol. 63(10) (2018) 105014-12pp
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $Id$
 //
 /// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
@@ -39,23 +39,33 @@
 
 #include "G4SystemOfUnits.hh"
 #include "G4EmDNAChemistry.hh"
+#include "G4EmDNAChemistry_option1.hh"
+#include "G4EmDNAPhysics.hh"
+#include "G4EmDNAPhysics_option1.hh"
+#include "G4EmDNAPhysics_option2.hh"
+#include "G4EmDNAPhysics_option3.hh"
+#include "G4EmDNAPhysics_option4.hh"
+#include "G4EmDNAPhysics_option5.hh"
+#include "G4EmDNAPhysics_option6.hh"
+#include "G4EmDNAPhysics_option7.hh"
+#include "G4EmDNAPhysics_option8.hh"
 #include "G4PhysicsConstructorRegistry.hh"
-// G4RegisterPhysicsConstructors.icc is necessary for static builds
-#define REGREF PhysicsList
-#include "G4RegisterPhysicsConstructors.icc"
 #include "CommandLineParser.hh"
+#include "G4EmParameters.hh"
 
 using namespace G4DNAPARSER;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
-: G4VModularPhysicsList()
+  : G4VModularPhysicsList(),
+    fEmDNAPhysicsList(nullptr),fEmDNAChemistryList(nullptr),
+    fEmDNAChemistryList1(nullptr),fPhysDNAName("")
 {
     double currentDefaultCut   = 1.*nanometer;
     // fixe lower limit for cut
     G4ProductionCutsTable::GetProductionCutsTable()->
-     SetEnergyRange(100*eV, 1*GeV);
+      SetEnergyRange(100*eV, 1*GeV);
     SetDefaultCutValue(currentDefaultCut);
     SetVerboseLevel(1);
   
@@ -64,6 +74,7 @@ PhysicsList::PhysicsList()
     {
       RegisterConstructor("G4EmDNAChemistry");
     }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,10 +84,74 @@ PhysicsList::~PhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void PhysicsList::ConstructParticle()
+{
+  if(fEmDNAPhysicsList)    { fEmDNAPhysicsList->ConstructParticle(); }
+  if(fEmDNAChemistryList)  { fEmDNAChemistryList->ConstructParticle(); }
+  if(fEmDNAChemistryList1) { fEmDNAChemistryList1->ConstructParticle(); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::ConstructProcess()
+{
+  if(fEmDNAPhysicsList)    { fEmDNAPhysicsList->ConstructProcess(); }
+  if(fEmDNAChemistryList)  { fEmDNAChemistryList->ConstructProcess(); }
+  if(fEmDNAChemistryList1) { fEmDNAChemistryList1->ConstructProcess(); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void PhysicsList::RegisterConstructor(const G4String& name)
 {
-    RegisterPhysics(G4PhysicsConstructorRegistry::Instance()->
-     GetPhysicsConstructor(name));
+  if(name == fPhysDNAName) { return; }
+  if(name == "G4EmDNAPhysics") {
+    delete fEmDNAPhysicsList;
+    fEmDNAPhysicsList = new G4EmDNAPhysics(verboseLevel);
+    fPhysDNAName = name;
+  } else if(name == "G4EmDNAPhysics_option1") {
+    delete fEmDNAPhysicsList;
+    fEmDNAPhysicsList = new G4EmDNAPhysics_option1(verboseLevel);
+    fPhysDNAName = name;
+  } else if(name == "G4EmDNAPhysics_option2") {
+    delete fEmDNAPhysicsList;
+    fEmDNAPhysicsList = new G4EmDNAPhysics_option2(verboseLevel);
+    fPhysDNAName = name;
+  } else if(name == "G4EmDNAPhysics_option3") {
+    delete fEmDNAPhysicsList;
+    fEmDNAPhysicsList = new G4EmDNAPhysics_option3(verboseLevel);
+    fPhysDNAName = name;
+  } else if(name == "G4EmDNAPhysics_option4") {
+    delete fEmDNAPhysicsList;
+    fEmDNAPhysicsList = new G4EmDNAPhysics_option4(verboseLevel);
+    fPhysDNAName = name;
+  } else if(name == "G4EmDNAPhysics_option5") {
+    delete fEmDNAPhysicsList;
+    fEmDNAPhysicsList = new G4EmDNAPhysics_option5(verboseLevel);
+    fPhysDNAName = name;
+  } else if(name == "G4EmDNAPhysics_option6") {
+    delete fEmDNAPhysicsList;
+    fEmDNAPhysicsList = new G4EmDNAPhysics_option6(verboseLevel);
+    fPhysDNAName = name;
+  } else if(name == "G4EmDNAPhysics_option7") {
+    delete fEmDNAPhysicsList;
+    fEmDNAPhysicsList = new G4EmDNAPhysics_option7(verboseLevel);
+    fPhysDNAName = name;
+  } else if(name == "G4EmDNAPhysics_option8") {
+    delete fEmDNAPhysicsList;
+    fEmDNAPhysicsList = new G4EmDNAPhysics_option8(verboseLevel);
+    fPhysDNAName = name;
+  } else if(name == "G4EmDNAChemistry") {
+    if(fEmDNAChemistryList || fEmDNAChemistryList1) { return; }
+    fEmDNAChemistryList = new G4EmDNAChemistry();
+  } else if(name == "G4EmDNAChemistry_option1") {
+    if(fEmDNAChemistryList || fEmDNAChemistryList1) { return; }
+    fEmDNAChemistryList1 = new G4EmDNAChemistry_option1();
+  } else {
+    G4cout << "PhysicsList::RegisterConstructor: <" << name << ">"
+           << " fails - name is not defined"
+           << G4endl;    
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

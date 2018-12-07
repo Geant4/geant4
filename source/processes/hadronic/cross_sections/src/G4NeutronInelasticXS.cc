@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronInelasticXS.cc 110787 2018-06-14 06:43:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -105,6 +104,7 @@ G4NeutronInelasticXS::G4NeutronInelasticXS()
   }
   ggXsection = new G4ComponentGGHadronNucleusXsc();
   fNucleon = new G4HadronNucleonXsc();
+  SetForAllAtomsAndEnergies(true);
   isMaster = false;
 }
 
@@ -113,7 +113,6 @@ G4NeutronInelasticXS::~G4NeutronInelasticXS()
   //G4cout << "G4NeutronInelasticXS::~G4NeutronInelasticXS() " 
   // << " isMaster= " << isMaster << "  data: " << data << G4endl;
   delete fNucleon;
-  delete ggXsection;
   if(isMaster) { delete data; data = nullptr; }
 }
 
@@ -160,7 +159,7 @@ G4double G4NeutronInelasticXS::GetElementCrossSection(
   if(ekin <= pv->GetMaxEnergy()) { 
     xs = pv->Value(ekin); 
   } else if(1 == Z) { 
-    fNucleon->GetHadronNucleonXscPDG(aParticle, proton);
+    fNucleon->GetHadronNucleonXscNS(aParticle, proton);
     xs = coeff[1]*fNucleon->GetInelasticHadronNucleonXsc();
   } else {          
     G4int Amean = 
@@ -240,7 +239,7 @@ const G4Isotope* G4NeutronInelasticXS::SelectIsotope(
 
   // isotope wise cross section not available
   size_t j;
-  if(kinEnergy > emax || 0 >= amin[Z] || Z >= MAXZINEL) {
+  if(kinEnergy > emax || 0 == amin[Z] || Z >= MAXZINEL) {
     for (j = 0; j<nIso; ++j) {
       sum += abundVector[j];
       if(q <= sum) {
@@ -308,7 +307,7 @@ G4NeutronInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 
     // check environment variable 
     // Build the complete string identifying the file with the data set
-    char* path = getenv("G4NEUTRONXSDATA");
+    char* path = getenv("G4PARTICLEXSDATA");
 
     G4DynamicParticle* dynParticle = 
       new G4DynamicParticle(G4Neutron::Neutron(),G4ThreeVector(1,0,0),1);
@@ -338,11 +337,11 @@ G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
   if(!p) {
     // check environment variable 
     // Build the complete string identifying the file with the data set
-    path = getenv("G4NEUTRONXSDATA");
+    path = getenv("G4PARTICLEXSDATA");
     if (!path) {
       G4Exception("G4NeutronInelasticXS::Initialise(..)","had013",
 		  FatalException,
-                  "Environment variable G4NEUTRONXSDATA is not defined");
+                  "Environment variable G4PARTICLEXSDATA is not defined");
       return;
     }
   }
@@ -374,7 +373,7 @@ G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
   dp->SetKineticEnergy(v->GetMaxEnergy());
   G4double sig2 = 0.0;
   if(1 == Z) {
-    fNucleon->GetHadronNucleonXscPDG(dp, proton);
+    fNucleon->GetHadronNucleonXscNS(dp, proton);
     sig2 = fNucleon->GetInelasticHadronNucleonXsc();
   } else {
     G4int Amean = 
@@ -396,7 +395,7 @@ G4NeutronInelasticXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
       ed << "Data file <" << ost.str().c_str()
 	 << "> is not opened!";
       G4Exception("G4NeutronInelasticXS::RetrieveVector(..)","had014",
-		  FatalException, ed, "Check G4NEUTRONXSDATA");
+		  FatalException, ed, "Check G4PARTICLEXSDATA");
     }
   } else {
     if(verboseLevel > 1) {
@@ -410,7 +409,7 @@ G4NeutronInelasticXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
       ed << "Data file <" << ost.str().c_str()
 	 << "> is not retrieved!";
       G4Exception("G4NeutronInelasticXS::RetrieveVector(..)","had015",
-		  FatalException, ed, "Check G4NEUTRONXSDATA");
+		  FatalException, ed, "Check G4PARTICLEXSDATA");
     }
   }
   return v;

@@ -14,13 +14,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20-05-18 J. Allison (exicsd-V10-04-01)
+07-11-18 I. Hrivnacova - tag exicsd-V10-04-04
+- Updated plot.C for reading ntuples merged with row-wise mode
+  (now default)
+
+26-07-18 S. Incerti - tag exicsd-V10-04-03
+- added ntuple merging
+
+22-07-18 S. Incerti - tag exicsd-V10-04-02
+- removed obsolete RanecuEngine.
+
+20-05-18 J. Allison tag exicsd-V10-04-01
 - Remove G4UI_USE.
 
-09-05-18 B. Morgan (exicsd-V10-04-00)
+09-05-18 B. Morgan tag exicsd-V10-04-00
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor
   symbols.
 
-06-06-2017 C. Villagrasa & S. Meylan (exicsd-V10-03-01)
+06-06-2017 C. Villagrasa & S. Meylan tag exicsd-V10-03-01
 - New extended example using DNA materials

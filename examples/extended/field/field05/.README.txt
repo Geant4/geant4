@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "field/field05/.README.txt"
 ///\brief Example field05 README page
@@ -55,21 +54,11 @@ Classes Used
 
 \section field05_s4 PHYSICS
 \verbatim
-RegisterPHysics(new G4DecayPhysics());
+RegisterPhysics(new G4SpinDecayPhysics());
 RegisterPhysics(new G4StepLimiterPhysics());
 
-G4VModularPhysicsList::ConstructParticle();
-\endverbatim
-
- and replace muon decay modes with those with spin:
-- G4MuonDecayChannelWithSpin
-- G4MuonRadiativeDecayChannelWithSpin
-
- and replace G4Decay with
-- G4DecayWithSpin process for the muon
-- G4PionDecayMakeSpin process for the pion
-
- G4StepLimiterPhysics defines G4StepLimiter and G4UserSpecialCuts
+ G4SpinDecayPhysics defines muon decay modes with spin,
+ G4StepLimiterPhysics defines G4StepLimiter and G4UserSpecialCuts.
 
 \section field05_s5 User Action Classes
 

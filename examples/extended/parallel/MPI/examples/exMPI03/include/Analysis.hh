@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Analysis.hh 76431 2013-11-10 20:28:49Z kmura $
 //
 /// @file Analysis.hh
 /// @brief Define histograms
@@ -51,7 +50,7 @@ public:
   void Update();
   void Clear();
   void Save(const G4String& fname);
-  void Close();
+  void Close(G4bool reset = true);
 
   void FillIncident(const G4ThreeVector& p);
   void FillDose(const G4ThreeVector& p, G4double dedx);

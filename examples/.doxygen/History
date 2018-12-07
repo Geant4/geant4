@@ -1,4 +1,3 @@
-$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +16,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+9/11/18 I.Hrivnacova (doxygen-V10-04-01)
+- Added chem5 example
+
+7/11/18 I.Hrivnacova (doxygen-V10-04-00)
+- Added new examples:
+  analysis/B3aScoreWriter,B4dScoreWriter; medical/DICOM2; optical/OpNovice2
 
 30/11/17 I.Hrivnacova (doxygen-V10-03-02)
 - Fixing documentation for 10.4:

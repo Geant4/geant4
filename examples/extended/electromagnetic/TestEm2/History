@@ -1,4 +1,3 @@
-$Id: History 109179 2018-04-03 07:14:46Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-07-18 V.Ivant (testem2-V10-04-05)
+- Run - added protection for division by zero
 
 30-03-18 V.Ivant (testem2-V10-04-04)
 - testem2.cc : minor cleanup

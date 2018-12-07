@@ -269,7 +269,7 @@ namespace G4INCL {
             }
         }
 
-        std::random_shuffle(isosp,isosp+npion,Random::getAdapter()); // isospin randomly distributed
+        std::shuffle(isosp,isosp+npion,Random::getAdapter()); // isospin randomly distributed
     }
 
 }

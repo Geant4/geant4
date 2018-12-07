@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadParticle.hh 67738 2013-03-05 05:54:30Z mkelsey $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100126  M. Kelsey -- Replace vector<G4Double> position with G4ThreeVector,

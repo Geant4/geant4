@@ -1,4 +1,3 @@
-//$Id$
 
 ///\file "electromagnetic/TestEm6/.README.txt"
 ///\brief Example TestEm6 README page

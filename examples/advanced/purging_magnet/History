@@ -1,5 +1,4 @@
 -------------------------------------------------------------------
-$Id: History 109979 2018-05-14 07:13:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +7,15 @@ $Id: History 109979 2018-05-14 07:13:42Z gcosmo $
 
                       Category History file
                       ---------------------
+
+7.11.2018 - I. Hrivnacova (purmag-V10-04-02)
+- Switch back to csv output format.
+
+29.10.2018 - L. Pandola (purmag-V10-04-01)
+- Remove the useless buffer singleton PurgMagAnalysisManager class, 
+  and call directly G4AnalysisManager tools. Clean-up in the SteppingAction. 
+  Use root instead of csv as output format.
+  
 10.05.2018 - B. Morgan     (purmag-V10-04-00)
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

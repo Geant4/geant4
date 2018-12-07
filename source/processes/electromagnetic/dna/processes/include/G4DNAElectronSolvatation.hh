@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAElectronSolvatation.hh 93914 2015-11-03 17:18:12Z matkara $
 //
 // Author: Mathieu Karamitros
 

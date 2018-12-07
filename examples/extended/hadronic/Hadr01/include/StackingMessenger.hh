@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr01/include/StackingMessenger.hh
 /// \brief Definition of the StackingMessenger class
 //
-// $Id: StackingMessenger.hh 68803 2013-04-05 13:59:55Z gcosmo $
 //
 //
 /////////////////////////////////////////////////////////////////////////

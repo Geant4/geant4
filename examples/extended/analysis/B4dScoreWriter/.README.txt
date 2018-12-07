@@ -1,0 +1,73 @@
+
+/*! \page ExampleB4dScoreWriter Example B4dScoreWriter
+
+This example demonstrates saving the Geant4 scorers hits in form of ntuples in a Root 
+file using Geant4 analysis tools. 
+
+The example is completely based on basic B4d example, the storing hits is activated 
+in the main () function with instantiating G4ScoreNtupleWriter. 
+In difference from the B3aScoreWriter example, the G4AnalysisManager is explicitly used 
+in this example and the ntuples with scorers hits are saved in addition to the histograms 
+and ntuples created in B4RunAction.
+
+The G4ScoreNtupleWriter and G4ScoreNtupleWriterMessenger classses are provided in
+the 'scoreWriter' directory in this example. These classes are fully independent from 
+the example classes and they can be reused in any Geant4 application.
+
+The Geant4 UI command defined in G4ScoreNtupleWriterMessenger can be used to choose
+the output file type, the file name and the level of verbosity:
+
+\verbatim
+/score/writerType root
+/score/fileName name
+/score/writerVerbose 1
+\endverbatim
+
+\section B4dScoreWriter_s1 How to build
+
+An additional step is needed when building the example with GNUmake
+due to using the extra 'scoreWriter' directory: 
+
+\verbatim
+% cd path_to_B4dScoreWriter/B4dScoreWriter
+% gmake setup
+% gmake
+\endverbatim
+
+ This will copy the files from scoreWriter in the example include and src;
+ to remove these files:
+
+\verbatim
+% gmake clean_setup
+\endverbatim
+ 	 	
+\section B4dScoreWriter_s2 How to run
+
+- Execute exampleB4dExt in the 'interactive mode' with visualization
+\verbatim
+% ./exampleB4dExt
+\endverbatim
+  and type in the commands from run1.mac line by line:  
+\verbatim
+Idle> /run/initialize
+Idle> /control/verbose 2
+Idle> /tracking/verbose 2
+Idle> /run/beamOn 1 
+Idle> ...
+Idle> exit
+\endverbatim
+  or
+\verbatim
+Idle> /control/execute run1.mac
+....
+Idle> exit
+\endverbatim
+
+- Execute exampleB4dExt in the 'batch' mode from macro files 
+ (without visualization)
+\verbatim
+% ./exampleB4dExt -m run2.mac
+% ./exampleB4dExt -m exampleB4dExt.in > exampleB3.out
+\endverbatim
+
+*/

@@ -446,8 +446,8 @@ G4PiNuclearCrossSection::G4PiNuclearCrossSection()
 G4PiNuclearCrossSection::
 ~G4PiNuclearCrossSection()
 {
-  std::for_each(thePimData.begin(), thePimData.end(), G4PiData::Delete());
-  std::for_each(thePipData.begin(), thePipData.end(), G4PiData::Delete());
+  for(auto xsec : thePimData) { delete xsec; }
+  for(auto xsec : thePipData) { delete xsec; }
 }
 
 void

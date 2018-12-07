@@ -27,7 +27,6 @@
 /// \brief Definition of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.hh 73446 2013-08-27 11:32:59Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -55,31 +54,14 @@ public:
   DetectorConstruction();
   ~DetectorConstruction();
   
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
 
 private:
 
   void PrintParameters();
     // Print the name of absorber and active materials.
 
-  G4Material* Iron;
-  G4Material* Copper;
-  G4Material* Tungsten;
-  G4Material* Lead;
-  G4Material* Uranium;
-  G4Material* PbWO4;
-  G4Material* Polystyrene;
-  G4Material* LiquidArgon;
-  G4Material* theAbsorberMaterial;
-  
-  G4LogicalVolume* experimentalHall_log;
-  G4VPhysicalVolume* experimentalHall_phys;
-    // World envelope. 
-  
-  G4LogicalVolume*  logicAbsorber;
-  G4VPhysicalVolume* physiAbsorber;
-    // Absorber layer of the "calorimeter".
-  
+  G4Material* fAbsorberMaterial;
 };
 
 #endif

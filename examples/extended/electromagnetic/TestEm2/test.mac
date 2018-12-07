@@ -1,0 +1,38 @@
+#
+# Macro file for "TestEm2.cc"
+# (can be run in batch, without graphic)
+#
+# PbWO4 L = 20 radl  R = 5 radl; electron 5 GeV
+#
+/control/verbose 1
+/control/cout/ignoreThreadsExcept 0
+#/control/cout/ignoreInitializationCout false
+/run/numberOfThreads 8
+/run/verbose 1
+#/tracking/verbose 2
+#
+/testem/det/setMat G4_PbWO4
+/testem/det/setLbin 40 0.5
+/testem/det/setRbin 50 0.1
+#
+# Acceptance printout is activated
+/testem/run/acceptance  0.949 0.0082 3.0
+#
+/testem/phys/addPhysics  emstandard_opt0
+#
+/run/setCut 1.0 mm
+#
+/process/em/verbose 1
+#/process/em/workerVerbose 1
+/process/em/UseSuperProcess true
+/run/initialize
+#
+/gun/particle e-
+/gun/energy 5 GeV
+#
+#/run/printProgress 100
+#
+/run/beamOn 1
+/run/beamOn 10000
+#/run/particle/storePhysicsTable physdata
+#

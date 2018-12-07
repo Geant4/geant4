@@ -1,0 +1,97 @@
+#==========================- Pre-initialisation parameters -=========================
+
+########### Image Quality Phantom ####################
+#choose the type of phantom
+/changePhantom/setPhantom NEMA_imageQualityPhantom_smallAnimal
+
+#set the activity in the phantom
+/change/Activity 3840000 becquerel #3840000 becquerel
+
+#Set the halflife of the isotope in units of second
+/change/HalfLife 6586.2 s #Halflife of F-18
+
+/run/initialize
+/run/verbose 2
+
+
+#### The activity strength of all hot regions is the same. Only volume consideration is used to calculate the intensity
+
+#hotsphere1, diameter = 1 mm
+/gps/source/intensity 1
+/gps/particle ion
+/gps/ion 9 18 0 0 # F-18
+/gps/energy 0 keV
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/centre 7 0 -15 mm
+/gps/pos/radius 0.5 mm 
+/gps/pos/halfz 10 mm 
+/gps/ang/type iso
+
+
+#hotsphere2, diameter = 2 mm
+/gps/source/add 4
+/gps/ion 9 18 0 0 # F-18
+/gps/energy 0 keV
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/centre 2.16312 6.6574 -15 mm 
+/gps/pos/radius 1 mm 
+/gps/pos/halfz 10 mm
+/gps/ang/type iso
+
+
+#hotsphere3, diameter = 3 mm
+/gps/source/add 9
+/gps/ion 9 18 0 0 # F-18
+/gps/energy 0 keV
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/centre -5.66312 4.1145 -15 mm 
+/gps/pos/radius 1.5 mm 
+/gps/pos/halfz 10 mm
+/gps/ang/type iso
+
+
+#hotsphere4, diameter = 4 mm 
+/gps/source/add 16
+/gps/ion 9 18 0 0 # F-18
+/gps/energy 0 keV
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/radius 2 mm 
+/gps/pos/halfz 10 mm
+/gps/pos/centre -5.66312 -4.1145 -15 mm 
+/gps/ang/type iso
+
+#hotsphere4, diameter = 5 mm 
+/gps/source/add 25
+/gps/ion 9 18 0 0 # F-18
+/gps/energy 0 keV
+/gps/pos/type Volume
+/gps/pos/centre 2.16312 -6.6574 -15 mm 
+/gps/pos/shape Cylinder
+/gps/pos/radius 2.5 mm 
+/gps/pos/halfz 10 mm
+/gps/ang/type iso
+
+#hotsphere4, diameter = 30 mm 
+/gps/source/add 1350
+/gps/ion 9 18 0 0 # F-18
+/gps/energy 0 keV
+/gps/pos/type Volume
+/gps/pos/centre 0 0 10 mm 
+/gps/pos/shape Cylinder
+/gps/pos/radius 15 mm 
+/gps/pos/halfz 15 mm
+/gps/ang/type iso
+
+
+
+
+#/random/setSeeds  1 2 
+
+/run/beamOn 800000000 #15 minuts scan
+
+
+

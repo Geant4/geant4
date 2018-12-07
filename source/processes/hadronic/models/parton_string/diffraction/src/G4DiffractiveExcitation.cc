@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc 110870 2018-06-22 12:14:16Z gcosmo $
 //
 
 // ------------------------------------------------------------
@@ -71,8 +70,6 @@
 #include "G4Pow.hh"
 
 //#include "G4ios.hh"
-//#include "UZHI_diffraction.hh"
-
 
 //============================================================================
 
@@ -1219,8 +1216,8 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
       if ( isProjectile ) {  // Projectile
         if ( end->GetDefinition()->GetParticleType() == "diquarks"  &&
              end->GetDefinition()->GetPDGEncoding() > 0 ) {  // DiQuark on the end
-          FirstString  = new G4ExcitedString( end        , Gquark, +1 );  // Open Uzhi
-          SecondString = new G4ExcitedString( Ganti_quark, start , +1 );  // Open Uzhi
+          FirstString  = new G4ExcitedString( end        , Gquark, +1 );
+          SecondString = new G4ExcitedString( Ganti_quark, start , +1 );
           Gquark->Set4Momentum( PkinkQ1 );
           Ganti_quark->Set4Momentum( PkinkQ2 );
 
@@ -1241,7 +1238,7 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
           SecondString = new G4ExcitedString( Ganti_quark,  start, -1 );
 
         } else {  // Anti_DiQuark on the end or Q
-          FirstString  = new G4ExcitedString( Ganti_quark, end   , -1 );  // Uzhi ?????
+          FirstString  = new G4ExcitedString( Ganti_quark, end   , -1 );
           SecondString = new G4ExcitedString( start      , Gquark, -1 );
           Gquark->Set4Momentum( PkinkQ2 );
           Ganti_quark->Set4Momentum( PkinkQ1 );
@@ -1262,7 +1259,7 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
     FirstString->SetPosition( hadron->GetPosition() );
     SecondString = 0;
 
-    if ( ! (end->Get4Momentum().e() != 0.) ) {  //AR-Oct2017
+    if ( ! (end->Get4Momentum().e() != 0.) ) {
       // momenta of string ends
       G4double Momentum = hadron->Get4Momentum().vect().mag();
       G4double Plus  = hadron->Get4Momentum().e() + Momentum;
@@ -1286,19 +1283,17 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
         Pend1   *= (-1.0)*Minus/2.0;
       }
 
-      //AR-Oct2017  Momentum = -Pstart1.mag();
       Momentum = Pstart1.vect().mag();  
 
       Pstart1.setT( Momentum );  // It is assumed that quark has m=0.
 
-      //AR-Oct2017  Momentum = -Pend1.mag();
       Momentum = Pend1.vect().mag();
 
       Pend1.setT( Momentum );    // It is assumed that di-quark has m=0.
       start->Set4Momentum( Pstart1 );
       end->Set4Momentum( Pend1 );
       SecondString = 0;
-    }  //AR-Oct2017
+    }
   } // End of kink is impossible 
 
   //G4cout << "Quarks in the string at creation" << FirstString->GetRightParton()->GetPDGcode()
@@ -1430,7 +1425,7 @@ G4int G4DiffractiveExcitation::NewNucleonId( G4int Q1, G4int Q2, G4int Q3 ) cons
 
 G4DiffractiveExcitation::G4DiffractiveExcitation( const G4DiffractiveExcitation& ) {
   throw G4HadronicException( __FILE__, __LINE__, 
-                             "G4DiffractiveExcitation copy contructor not meant to be called" );
+                             "G4DiffractiveExcitation copy constructor not meant to be called" );
 }
 
 

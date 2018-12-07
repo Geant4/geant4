@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMChannelVI.cc 98577 2016-07-25 13:05:12Z vnivanch $
 //
 // GEM de-excitation model
 // by V. Ivanchenko (July 2016)

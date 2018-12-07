@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc 105034 2017-07-06 08:34:37Z gcosmo $
-// GEANT4 tag $Name:  $
 //
 
 #include "G4DNARuddIonisationModel.hh"
@@ -46,7 +44,7 @@ using namespace std;
 
 G4DNARuddIonisationModel::G4DNARuddIonisationModel(const G4ParticleDefinition*,
                                                    const G4String& nam) :
-    G4VEmModel(nam), isInitialised(false)
+G4VEmModel(nam), isInitialised(false)
 {
   fpWaterDensity = 0;
 
@@ -337,79 +335,67 @@ G4double G4DNARuddIonisationModel::CrossSectionPerVolume(const G4Material* mater
 
   G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
 
-  if(waterDensity!= 0.0)
-  //  if (material == nistwater || material->GetBaseMaterial() == nistwater)
+  const G4String& particleName = particleDefinition->GetParticleName();
+
+  // SI - the following is useless since lowLim is already defined
+  /*
+  std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
+  pos1 = lowEnergyLimit.find(particleName);
+
+  if (pos1 != lowEnergyLimit.end())
   {
-    const G4String& particleName = particleDefinition->GetParticleName();
+    lowLim = pos1->second;
+  }
+  */
 
-    // SI - the following is useless since lowLim is already defined
-    /*
-     std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
-     pos1 = lowEnergyLimit.find(particleName);
+  std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
+  pos2 = highEnergyLimit.find(particleName);
 
-     if (pos1 != lowEnergyLimit.end())
-     {
-     lowLim = pos1->second;
-     }
-     */
-
-    std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
-    pos2 = highEnergyLimit.find(particleName);
-
-    if (pos2 != highEnergyLimit.end())
-    {
-      highLim = pos2->second;
-    }
-
-    if (k <= highLim)
-    {
-      //SI : XS must not be zero otherwise sampling of secondaries method ignored
-
-      if (k < lowLim) k = lowLim;
-
-      //
-
-      std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-      pos = tableData.find(particleName);
-
-      if (pos != tableData.end())
-      {
-        G4DNACrossSectionDataSet* table = pos->second;
-        if (table != 0)
-        {
-          sigma = table->FindValue(k);
-        }
-      }
-      else
-      {
-        G4Exception("G4DNARuddIonisationModel::CrossSectionPerVolume","em0002",
-            FatalException,"Model not applicable to particle type.");
-      }
-
-    } // if (k >= lowLim && k < highLim)
-
-    if (verboseLevel > 2)
-    {
-      G4cout << "__________________________________" << G4endl;
-      G4cout << "G4DNARuddIonisationModel - XS INFO START" << G4endl;
-      G4cout << "Kinetic energy(eV)=" << k/eV << " particle : " << particleDefinition->GetParticleName() << G4endl;
-      G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-      G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
-      //      G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
-      G4cout << "G4DNARuddIonisationModel - XS INFO END" << G4endl;
-    }
-
-  } // if (waterMaterial)
-  else
+  if (pos2 != highEnergyLimit.end())
   {
-    if (verboseLevel > 2)
+    highLim = pos2->second;
+  }
+
+  if (k <= highLim)
+  {
+    //SI : XS must not be zero otherwise sampling of secondaries method ignored
+
+    if (k < lowLim) k = lowLim;
+
+    //
+
+    std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
+    pos = tableData.find(particleName);
+
+    if (pos != tableData.end())
     {
-      G4cout << "Warning : RuddIonisationModel: WATER DENSITY IS NULL" << G4endl;
+      G4DNACrossSectionDataSet* table = pos->second;
+      if (table != 0)
+      {
+        sigma = table->FindValue(k);
+      }
     }
+    else
+    {
+      G4Exception("G4DNARuddIonisationModel::CrossSectionPerVolume","em0002",
+          FatalException,"Model not applicable to particle type.");
+    }
+
+  } 
+
+  if (verboseLevel > 2)
+  {
+    G4cout << "__________________________________" << G4endl;
+    G4cout << "G4DNARuddIonisationModel - XS INFO START" << G4endl;
+    G4cout << "Kinetic energy(eV)=" << k/eV << " particle : " << particleDefinition->GetParticleName() << G4endl;
+    G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
+    G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
+    //G4cout << " - Cross section per water molecule (cm^-1)=" 
+    //<< sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
+    G4cout << "G4DNARuddIonisationModel - XS INFO END" << G4endl;
   }
 
   return sigma*waterDensity;
-  //    return sigma*material->GetAtomicNumDensityVector()[1];
 
 }
 
@@ -459,7 +445,7 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
    {
    lowLim = pos1->second;
    }
-   */
+  */
 
   std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
   pos2 = highEnergyLimit.find(particleName);
@@ -478,7 +464,7 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
      G4double totalEnergy = k + particleMass;
      G4double pSquare = k*(totalEnergy+particleMass);
      G4double totalMomentum = std::sqrt(pSquare);
-     */
+    */
 
     G4int ionizationShell = RandomSelect(k,particleName);
 
@@ -527,48 +513,53 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
     // here we assume that H_{2}O electronic levels are the same of Oxigen.
     // this can be considered true with a rough 10% error in energy on K-shell,
 
-    G4int secNumberInit = 0;// need to know at a certain point the enrgy of secondaries
-    G4int secNumberFinal = 0;// So I'll make the diference and then sum the energies
+    size_t secNumberInit = 0;// need to know at a certain point the energy of secondaries
+    size_t secNumberFinal = 0;// So I'll make the diference and then sum the energies
 
-    if(fAtomDeexcitation)
+    G4double scatteredEnergy = k-bindingEnergy-secondaryKinetic;
+
+    // SI: only atomic deexcitation from K shell is considered
+    if(fAtomDeexcitation && ionizationShell == 4)
     {
-      G4AtomicShellEnumerator as = fKShell;
-
-      if (ionizationShell <5 && ionizationShell >1)
-      {
-        as = G4AtomicShellEnumerator(4-ionizationShell);
-      }
-      else if (ionizationShell <2)
-      {
-        as = G4AtomicShellEnumerator(3);
-      }
-
-      //	DEBUG
-      //	if (ionizationShell == 4) {
-      //
-      //	  G4cout << "Z: " << Z << " as: " << as
-      //               << " ionizationShell: " << ionizationShell << " bindingEnergy: "<< bindingEnergy/eV << G4endl;
-      //	  G4cout << "Press <Enter> key to continue..." << G4endl;
-      //	  G4cin.ignore();
-      //	}
-
-      const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
+      const G4AtomicShell* shell 
+        = fAtomDeexcitation->GetAtomicShell(Z, G4AtomicShellEnumerator(0));
       secNumberInit = fvect->size();
       fAtomDeexcitation->GenerateParticles(fvect, shell, Z, 0, 0);
       secNumberFinal = fvect->size();
+
+      if(secNumberFinal > secNumberInit) 
+      {
+	for (size_t i=secNumberInit; i<secNumberFinal; ++i) 
+        {
+          //Check if there is enough residual energy 
+          if (bindingEnergy >= ((*fvect)[i])->GetKineticEnergy())
+          {
+             //Ok, this is a valid secondary: keep it
+	     bindingEnergy -= ((*fvect)[i])->GetKineticEnergy();
+          }
+          else
+          {
+ 	     //Invalid secondary: not enough energy to create it!
+ 	     //Keep its energy in the local deposit
+             delete (*fvect)[i]; 
+             (*fvect)[i]=0;
+          }
+	} 
+      }
+
     }
 
-    G4double scatteredEnergy = k-bindingEnergy-secondaryKinetic;
-    G4double deexSecEnergy = 0;
-    for (G4int j=secNumberInit; j < secNumberFinal; j++)
-    {
-      deexSecEnergy = deexSecEnergy + (*fvect)[j]->GetKineticEnergy();
-    }
-
+    //This should never happen
+    if(bindingEnergy < 0.0) 
+     G4Exception("G4DNAEmfietzoglouIonisatioModel1::SampleSecondaries()",
+                 "em2050",FatalException,"Negative local energy deposit");	 
+ 
+    //bindingEnergy has been decreased 
+    //by the amount of energy taken away by deexc. products
     if (!statCode)
     {
       fParticleChangeForGamma->SetProposedKineticEnergy(scatteredEnergy);
-      fParticleChangeForGamma->ProposeLocalEnergyDeposit(k-scatteredEnergy-secondaryKinetic-deexSecEnergy);
+      fParticleChangeForGamma->ProposeLocalEnergyDeposit(bindingEnergy);
     }
     else
     {
@@ -852,9 +843,11 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
             / (std::pow((1. + w), 3)
                 * (1. + G4Exp(alphaConst * (w - wc) / v))));
   }
-//    if (    particleDefinition == G4Proton::ProtonDefinition()
-//            || particleDefinition == instance->GetIon("hydrogen")
-//            )
+  
+  //    if (    particleDefinition == G4Proton::ProtonDefinition()
+  //            || particleDefinition == instance->GetIon("hydrogen")
+  //            )
+  
   if (isProtonOrHydrogen)
   {
     return (sigma);
@@ -892,10 +885,10 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
     sCoefficient[2] = 0.25;
   }
 
-//    if (    particleDefinition == instance->GetIon("helium")
-//            || particleDefinition == instance->GetIon("alpha+")
-//            || particleDefinition == instance->GetIon("alpha++")
-//            )
+  //    if (    particleDefinition == instance->GetIon("helium")
+  //            || particleDefinition == instance->GetIon("alpha+")
+  //            || particleDefinition == instance->GetIon("alpha++")
+  //            )
   if (isHelium)
   {
     sigma = Gj[j] * (S / Bj[ionizationLevelIndex])

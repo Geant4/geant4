@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
 //
 /// \file dicom2.cc
 /// \brief Main program of the Dicom2 example
@@ -38,6 +37,7 @@
 #include "G4tgrMessenger.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
+#include "G4Timer.hh"
 #include "globals.hh"
 #include "Randomize.hh"
 #include "Shielding.hh"
@@ -55,6 +55,7 @@
 #   include "DicomHandler.hh"
 #endif
 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
@@ -69,7 +70,7 @@ int main(int argc,char** argv)
     char* part = getenv("DICOM_PARTIAL_PARAM");
     G4bool bPartial = (part && G4String(part) == "1") ? true : false;
 
-    CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+    CLHEP::HepRandom::setTheEngine(new CLHEP::MixMaxRng);
     CLHEP::HepRandom::setTheSeed(24534575684783);
     long seeds[2];
     seeds[0] = 534524575674523;
@@ -78,10 +79,9 @@ int main(int argc,char** argv)
 
     // Construct the default run manager
 #ifdef G4MULTITHREADED
-    char* nthread_c = getenv("DICOM_NTHREADS");
+    G4int nthreads = G4GetEnv<G4int>("DICOM_NTHREADS", G4Thread::hardware_concurrency());
     G4MTRunManager* runManager = new G4MTRunManager;
-    if(nthread_c)
-        runManager->SetNumberOfThreads(G4UIcommand::ConvertToDouble(nthread_c));
+    runManager->SetNumberOfThreads(nthreads);
 
     G4cout << "\n\n\tDICOM2 running in multithreaded mode with "
            << runManager->GetNumberOfThreads()
@@ -102,8 +102,13 @@ int main(int argc,char** argv)
     if( !bPartial )
     {
 #ifdef G4_DCMTK
+        G4String inpfile = "Data.dat";
+        char* env_inpfile = getenv("DICOM_INPUT_FILE");
+        if(env_inpfile)
+            inpfile = env_inpfile;
+
         theFileMgr = DicomFileMgr::GetInstance();
-        theFileMgr->Convert("Data.dat");
+        theFileMgr->Convert(inpfile);
 #else
         // Treatment of DICOM images before creating the G4runManager
         dcmHandler = new DicomHandler;
@@ -126,6 +131,7 @@ int main(int argc,char** argv)
     //    MyConstr->push_back("G4EmStandardPhysics");
     //    G4VModularPhysicsList* phys = new G4GenericPhysicsList(MyConstr);
     G4VModularPhysicsList* phys = new Shielding();
+    phys->SetDefaultCutValue(0.5*CLHEP::mm);
     runManager->SetUserInitialization(phys);
 
     // User action initialization
@@ -145,6 +151,9 @@ int main(int argc,char** argv)
     // Get the pointer to the User Interface manager
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
+    G4Timer t;
+    t.Start();
+
     // Process macro or start UI session
     //
     if ( ! ui ) {
@@ -159,6 +168,8 @@ int main(int argc,char** argv)
         ui->SessionStart();
         delete ui;
     }
+
+    t.Stop();
 
     // Job termination
     // Free the store: user actions, physics_list and detector_description are
@@ -177,6 +188,8 @@ int main(int argc,char** argv)
 #endif
     }
 
+    G4cout << "\n[" << argv[0] << "] Primary execution time: " << t << "\n"
+           << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

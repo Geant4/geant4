@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPrimaryParticleInformation.cc 67971 2013-03-13 10:13:24Z gcosmo $
 //
 #include "G4VUserPrimaryParticleInformation.hh"
 G4VUserPrimaryParticleInformation::G4VUserPrimaryParticleInformation() {;}

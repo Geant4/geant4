@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F06PrimaryGeneratorAction.cc 75296 2013-10-30 09:34:21Z gcosmo $
 //
 /// \file field/field06/src/F06PrimaryGeneratorAction.cc
 /// \brief Implementation of the F06PrimaryGeneratorAction class
@@ -87,7 +86,7 @@ F06PrimaryGeneratorAction::F06PrimaryGeneratorAction(void)
   anomaly = (g_factor - 2.)/2.;
   G4cout << " *** anomaly: " << anomaly << G4endl;
 
-    G4cout << " *** MuonPlus *** " << G4endl;
+  G4cout << " *** MuonPlus *** " << G4endl;
 
   particle = particleTable->FindParticle("mu+");
   G4double mass_muon = particle->GetPDGMass();

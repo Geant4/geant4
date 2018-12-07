@@ -124,7 +124,17 @@ then make
        Note 1: The Conversion of Hounsfield numbers to materials (point 5) is not used. The material is associated to the voxel in the Detector Construction 
                without using the calibration curve.This happens because the DICOM project has already been segmented and cleaned from artefacts (see publication).
 
---->4a) Metadata file, OLD version:
+---> 4) Metadata file:
+
+The old version of "Data.dat" is found in "Data.dat.old", when the project is configured with DICOM_USE_DCMTK=OFF,
+"Data.dat.old" is copied into the binary directory at "Data.dat".
+  - i.e. cp ${PROJECT_SOURCE_DIR}/Data.dat.old ${PROJECT_BINARY_DIR}/Data.dat
+
+The new version of "Data.dat" is found in "Data.dat.new", when the project is configured with DICOM_USE_DCMTK=ON,
+"Data.dat.new" is copied into the binary directory as "Data.dat".
+  - i.e. cp ${PROJECT_SOURCE_DIR}/Data.dat.new ${PROJECT_BINARY_DIR}/Data.dat
+
+---> 4a) Metadata file, OLD version:
 
  The file Data.dat has the following information
   - A line with the compression value (used only to create the .g4dcm and .g4dcmb, not to read it)
@@ -135,7 +145,7 @@ In case you want to convert DICOM files to text files, it must have the followin
   - The number of materials you want to use
   - A line for each material describing its name and the upper bound of the density interval. The materials should be described in increasing order of density. The voxels with a density between 0. and the first upper bound will be assigned to the first material, those with a density between the first upper bound and the second upper bound will be assigned to the second material, etc.
 
---->4b) Metadata file, NEW version (based on DCMTK):
+---> 4b) Metadata file, NEW version (based on DCMTK):
 
 As for the previous version, a Data.dat file has to be defined to manage the conversion options. The format of this file is though quite different from the previous version. The format of this file is based on tags (similary to the ASCII geometry files).
 The following tags should be used:

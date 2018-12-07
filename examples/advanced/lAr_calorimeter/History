@@ -1,5 +1,4 @@
 Hi-------------------------------------------------------------------
-$Id: History 109981 2018-05-14 07:15:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +7,12 @@ $Id: History 109981 2018-05-14 07:15:53Z gcosmo $
 
                       Category History file
                       ---------------------
+
+09.11.2018 - G. Cosmo (lAr_calorimeter-V10-04-02)
+             FCALTBEventAction: fixed typo in printout.
+
+21.10.2018 - F. Romano (lAr_calorimeter-V10-04-01)
+             G4VIS_USE and G4UI_USE deleted
 
 10.05.2018 - B. Morgan (lAr_calorimeter-V10-04-00)
              Include G4Types before use of G4MULTITHREADED. For forward 

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id:   $
-// GEANT4 tag $Name:  $
 //
 // -------------------------------------------------------------------
 //   
@@ -91,6 +89,8 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   tlimitminfix  = 0.01*nm;             
   tlimitminfix2 =   1.*nm;             
   stepmin       = tlimitminfix;
+  stepmina      = 1.;
+  stepminb      = 1.;
   smallstep     = 1.e10;
   currentRange  = 0. ;
   rangeinit     = 0.;
@@ -409,6 +409,9 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
     else if(AtomicNumber > ZZ2)
       sigma = AtomicNumber*AtomicNumber*c2/(ZZ2*ZZ2);
   }
+  // low energy correction based on theory 
+  sigma *= 1.+0.30/(1.+sqrt(1000.*eKineticEnergy));  
+
   return sigma;
 
 }
@@ -453,7 +456,6 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   */
   // set flag to default values
   Zeff = couple->GetMaterial()->GetIonisation()->GetZeffective();
-  //         couple->GetMaterial()->GetTotNbOfAtomsPerVolume();
 
   if(Zold != Zeff)
     UpdateCache();
@@ -519,11 +521,11 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
           //define stepmin here (it depends on lambda!)
           //rough estimation of lambda_elastic/lambda_transport
           G4double rat = currentKinEnergy*invmev;
-          rat = 1.e-3/(rat*(10.+rat)) ;
+          rat = 1.e-3/(2.e-3+rat*(stepmina+stepminb*rat));
           //stepmin ~ lambda_elastic
           stepmin = rat*lambda0;
           skindepth = skin*stepmin;
-          tlimitmin = max(10*stepmin,tlimitminfix);
+          tlimitmin = max(0.7*sqrt(Zeff)*stepmin,tlimitminfix);
         /* 
           G4cout << "rangeinit= " << rangeinit << " stepmin= " << stepmin
                  << " tlimitmin= " << tlimitmin << " geomlimit= " 
@@ -629,9 +631,9 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
           }
         //lower limit for tlimit
         G4double rat = currentKinEnergy*invmev;
-        rat = 1.e-3/(rat*(10 + rat)) ;
+        rat = 1.e-3/(2.e-3+rat*(stepmina+stepminb*rat));
         stepmin = lambda0*rat;
-        tlimitmin = max(10*stepmin, tlimitminfix);
+        tlimitmin = max(0.7*sqrt(Zeff)*stepmin,tlimitminfix);
       }
 
       //step limit
@@ -681,9 +683,9 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
           }
         //lower limit for tlimit
         G4double rat = currentKinEnergy*invmev;
-        rat = 1.e-3/(rat*(10 + rat)) ;
+        rat = 1.e-3/(2.e-3+rat*(stepmina+stepminb*rat));
         stepmin = lambda0*rat;
-        tlimitmin = max(10*stepmin, tlimitminfix);
+        tlimitmin = max(0.7*sqrt(Zeff)*stepmin,tlimitminfix);
       }
       //step limit
       tlimit = max(fr*rangeinit, facsafety*presafety);

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $ID$
 /// \file RunInitObserver.hh
 /// \brief Definition of the RunInitObserver class
 

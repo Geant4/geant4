@@ -221,11 +221,11 @@ class G4Opt {
 
 public:
   G4Opt()
-    :optemd(0), optcha(0), optshpimf(0), optimfallowed(0)
+    :optemd(0), optcha(0), optshpimf(0), optimfallowed(0), nblan0(0)
   {};
   ~G4Opt() {};
   
-  G4int optemd,optcha,optshpimf,optimfallowed;                                 
+  G4int optemd,optcha,optshpimf,optimfallowed,nblan0;                                 
 };
 
 #define EENUCSIZE 2002
@@ -361,6 +361,7 @@ public:
       itypcasc[i] = 0;
       avv[i] = 0;
       zvv[i] = 0;
+      svv[i] = 0;
       enerj[i] = 0.0;
       pxlab[i] = 0.0;
       pylab[i] = 0.0;
@@ -633,6 +634,11 @@ public:
    * Z
    */
   G4int zvv[VARNTPSIZE];
+
+  /**
+   * S (-1 for lambda_0).
+   */
+  G4int svv[VARNTPSIZE];
 
   /**
    * Kinetic energy.

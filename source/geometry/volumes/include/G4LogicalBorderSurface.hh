@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.hh 80067 2014-03-31 13:48:09Z gcosmo $
 //
 // class G4LogicalBorderSurface
 //

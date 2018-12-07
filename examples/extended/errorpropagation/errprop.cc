@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: errprop.cc 84599 2014-10-17 07:42:42Z gcosmo $
 //
 /// \file errorpropagation/errprop.cc
 /// \brief Main program of the errorpropagation example

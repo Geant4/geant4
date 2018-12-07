@@ -24,13 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific
 //                       functionality for OpenGL in GEANT4
 
-#ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
+#if defined (G4VIS_BUILD_OPENGLWIN32_DRIVER) || defined (G4VIS_USE_OPENGLWIN32)
 
 #ifndef G4OPENGLWIN32VIEWER_HH
 #define G4OPENGLWIN32VIEWER_HH

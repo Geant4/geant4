@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-05-beta-01    (29-June-2018)
+ Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -352,41 +352,41 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.500000s Real=1.507458s Sys=0.000000s
+  User=1.410000s Real=1.480957s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 e- of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
- total energy deposit: 99.797 MeV
+ total energy deposit: 99.81 MeV
 
- nb tracks/event   neutral:  25.267   charged:   137.2
- nb  steps/event   neutral:  139.44   charged:  202.97
+ nb tracks/event   neutral:  25.387   charged:  137.25
+ nb  steps/event   neutral:  139.45   charged:  202.92
 
  Process calls frequency :
-                 Rayl=  17676        Transportation=   1858               annihil=   2796
-                compt= 210671                  conv=   2778                 eBrem=  46001
-                eIoni= 356685                   msc=    446                  phot=  45905
+                 Rayl=  17629        Transportation=   1815               annihil=   2779
+                compt= 210496                  conv=   2758                 eBrem=  46334
+                eIoni= 356394                   msc=    329                  phot=  46204
 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.162 cm    rms = 3.8982 cm 
- proj Range = 9.7102 cm    rms = 3.5887 cm 
- proj/true  = 0.86992
- transverse dispersion at end = 1.6585 cm 
-      mass true Range from simulation = 30.138 g/cm2 
+ true Range = 11.188 cm    rms = 3.8667 cm 
+ proj Range = 9.7015 cm    rms = 3.5938 cm 
+ proj/true  = 0.86714
+ transverse dispersion at end = 1.6564 cm 
+      mass true Range from simulation = 30.207 g/cm2 
        from PhysicsTable (csda range) = 32.1 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1927272673, 1717789735
+ Current couple of seeds = 1141212198, 786041491
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.037 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.036 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

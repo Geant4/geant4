@@ -1,0 +1,8 @@
+/primaryKiller/eLossMin 10 keV # primary is killed if deposited E is greater than this value
+/primaryKiller/eLossMax 10.1 keV # event is aborted if deposited E is greated than this value
+/gun/position  0 0 0
+/gun/direction 0 0 1
+/gun/particle e-
+/gun/energy 999.999 eV
+
+/run/beamOn 10

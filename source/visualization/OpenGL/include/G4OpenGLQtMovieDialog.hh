@@ -24,12 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtMovieDialog.hh 66373 2012-12-18 09:41:34Z gcosmo $
-// GEANT4 tag $Name: 
 //
 // 
 
-#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
+#if defined (G4VIS_BUILD_OPENGLQT_DRIVER) || defined (G4VIS_USE_OPENGLQT)
 
 #ifndef G4OPENGLQTMOVIEDIALOG_HH
 #define G4OPENGLQTMOVIEDIALOG_HH

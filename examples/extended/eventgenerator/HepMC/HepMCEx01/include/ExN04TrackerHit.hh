@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04TrackerHit.hh
 /// \brief Definition of the ExN04TrackerHit class
 //
-// $Id: ExN04TrackerHit.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef ExN04TrackerHit_h
@@ -49,17 +48,17 @@ public:
   inline void *operator new(size_t);
   inline void operator delete(void *aHit);
 
-  void Draw();
-  void Print();
+  virtual void Draw();
+  virtual void Print();
 
-  inline void SetEdep(G4double de) { edep = de; }
-  inline G4double GetEdep() { return edep; }
-  inline void SetPos(G4ThreeVector xyz) { pos = xyz; }
-  inline G4ThreeVector GetPos() { return pos; }
+  inline void SetEdep(G4double de) { fEdep = de; }
+  inline G4double GetEdep() { return fEdep; }
+  inline void SetPos(G4ThreeVector xyz) { fPos = xyz; }
+  inline G4ThreeVector GetPos() { return fPos; }
 
 private:
-  G4double edep;
-  G4ThreeVector pos;
+  G4double fEdep;
+  G4ThreeVector fPos;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

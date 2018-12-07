@@ -1,4 +1,3 @@
-// $Id: Doxymodules_parameterisations.h 104750 2017-06-15 08:47:26Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_parameterisations.h

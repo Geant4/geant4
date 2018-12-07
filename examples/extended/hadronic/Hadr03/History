@@ -1,4 +1,3 @@
-$Id: History 109858 2018-05-09 12:15:01Z gcosmo $
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -13,6 +12,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-10-18 mma (exhadr03-V10-04-06)
+- PhysicsList : add G4HadronElasticPhysicsXS
+
+28-09-18 mma (exhadr03-V10-04-05)
+- PhysicsList : use G4IonPhysicsXS
+- Run.cc : complete Merge() for fNbGamma and fPbalance 
+
+24-06-18 mma (exhadr03-V10-04-04)
+- envHadronic : add env variables for particleHP (PHP)
+
 09-05-18 B. Morgan (exhadr03-V10-04-03)
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

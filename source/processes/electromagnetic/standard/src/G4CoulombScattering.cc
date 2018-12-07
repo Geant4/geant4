@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc 107365 2017-11-09 10:54:29Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -160,8 +159,7 @@ G4double G4CoulombScattering::MinPrimaryEnergy(const G4ParticleDefinition* part,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4CoulombScattering::StreamProcessInfo(std::ostream& outFile,
-                                            G4String endOfLine) const
+void G4CoulombScattering::StreamProcessInfo(std::ostream& outFile) const
 {
   G4double tetmin = G4EmParameters::Instance()->MscThetaLimit()/degree;
   outFile << "      ";
@@ -170,7 +168,7 @@ void G4CoulombScattering::StreamProcessInfo(std::ostream& outFile,
   outFile << " < Theta(degree) < 180";
 
   if(q2Max < DBL_MAX) { outFile << "; pLimit(GeV^1)= " << sqrt(q2Max)/GeV; }
-  outFile << endOfLine;
+  outFile << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -178,10 +176,10 @@ void G4CoulombScattering::StreamProcessInfo(std::ostream& outFile,
 void G4CoulombScattering::ProcessDescription(std::ostream& out) const
 {
   out <<
-  "<strong>Coulomb scattering</strong>. Simulation of elastic scattering <br>"
-  "events individually. May be used in combination with multiple<br>"
-  "scattering, where Coulomb scattering is used for hard (large angle)<br>"
-  "collisions and multiple scattering for soft collisions.";
+  "  Coulomb scattering. Simulation of elastic scattering\n" << 
+  "    events individually. May be used in combination with multiple\n" << 
+  "    scattering, where Coulomb scattering is used for hard (large angle)\n" <<
+  "    collisions and multiple scattering for soft collisions.";
   G4VEmProcess::ProcessDescription(out);
 }
 

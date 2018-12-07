@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomRun.cc 106196 2017-09-19 04:19:33Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomRun.cc
 /// \brief Implementation of the DicomRun class
@@ -150,7 +149,8 @@ void DicomRun::ConstructMFD(const std::vector<G4String>& mfdName)
 //  is accumulated during a Run.
 void DicomRun::RecordEvent(const G4Event* aEvent)
 {
-  numberOfEvent++;  // This is an original line.
+  // disable below because this is done in G4Run::RecordEvent(aEvent);
+  //numberOfEvent++;  // This is an original line.
   
   //G4cout << "Dicom Run :: Recording event " << aEvent->GetEventID() 
   //<< "..." << G4endl;
@@ -195,7 +195,6 @@ void DicomRun::Merge(const G4Run* aRun)
   unsigned ncopies = Copy(fRunMap, localRun->fRunMap);
   // copy function returns the fRunMap size if all data is copied
   // so this loop isn't executed the first time around
-  G4cout << "DicomRun :: Num copies = " << ncopies << G4endl;
   for(unsigned i = ncopies; i < fRunMap.size(); ++i) {
     *fRunMap[i] += *localRun->fRunMap[i];
   }

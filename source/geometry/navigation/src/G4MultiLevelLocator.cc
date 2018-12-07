@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultiLevelLocator.cc 110832 2018-06-15 15:00:33Z gcosmo $
 //
 // Class G4MultiLevelLocator implementation
 //

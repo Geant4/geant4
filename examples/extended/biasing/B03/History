@@ -1,4 +1,3 @@
-$Id: History 75090 2013-10-25 23:25:51Z dwright $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 9th, 2018 A. Ribon  - B03-V10-04-02
+- B03PhysicsList : replaced the explicit high-energy limit of hadronic
+  physics with the one from G4HadronicParameters .
 
 May 8th, 2018 B. Morgan - B03-V10-04-01
 - Include G4Types before use of G4MULTITHREADED. For forward

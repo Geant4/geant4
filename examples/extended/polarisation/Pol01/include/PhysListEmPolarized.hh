@@ -27,7 +27,6 @@
 /// \brief Definition of the PhysListEmPolarized class
 //
 //
-// $Id: PhysListEmPolarized.hh 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

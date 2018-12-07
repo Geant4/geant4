@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/MCTruth/mctruthex.cc
 /// \brief Main program of the eventgenerator/HepMC/MCTruth example
 //
-// $Id: mctruthex.cc 82281 2014-06-13 14:47:16Z gcosmo $
 //
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -77,7 +76,6 @@ int main()
 
   // job termination
   delete runManager;
-  return 0;
 }
 
 

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4DigiManager.cc 80987 2014-05-19 10:50:22Z gcosmo $
 //
 
 #include "G4DigiManager.hh"
@@ -77,14 +76,14 @@ void G4DigiManager::AddNewModule(G4VDigitizerModule* DM)
   {
     if(DMtable[j]==DM)
     { 
-      G4cout << "<" << DMname << "> has already been registored." << G4endl; 
+      G4cout << "<" << DMname << "> has already been registered." << G4endl; 
       return;
     }
   }
   if( verboseLevel > 0 )
   {
     G4cout << "New DigitizerModule <" << DMname
-         << "> is registored." << G4endl;
+         << "> is registered." << G4endl;
   }
   DMtable.push_back(DM);
 
@@ -95,13 +94,13 @@ void G4DigiManager::AddNewModule(G4VDigitizerModule* DM)
     if( DCtable->Registor(DMname,DCname) < 0 )
     { 
       G4cout << "DigiCollection <" << DCname 
-           << "> has already been registored with "
+           << "> has already been registered with "
            << DMname << " DigitizerModule." << G4endl;
     }
     else if( verboseLevel > 0 )
     {
       G4cout << "DigiCollection " << DCname 
-           << " is registored. " << G4endl;
+           << " is registered. " << G4endl;
     }
   }
   

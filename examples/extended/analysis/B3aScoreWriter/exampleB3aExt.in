@@ -1,0 +1,12 @@
+#
+# Macro file for example B3 test
+#
+/score/writerType root
+/score/writerVerbose 1
+#
+/run/initialize
+#
+/control/verbose 2
+#
+/run/printProgress 1000
+/run/beamOn 10000

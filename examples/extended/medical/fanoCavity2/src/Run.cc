@@ -26,7 +26,6 @@
 /// \file medical/fanoCavity2/src/Run.cc
 /// \brief Implementation of the Run class
 //
-// $Id: Run.cc 71035 2013-06-10 09:17:35Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmParameters.hh 66885 2013-01-16 17:37:13Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -113,6 +112,7 @@ public:
   void SetAuger(G4bool val);
   G4bool Auger() const;
 
+  // obsolete methods
   void SetAugerCascade(G4bool val);
   G4bool AugerCascade() const;
 
@@ -146,6 +146,9 @@ public:
   void SetBirksActive(G4bool val);
   G4bool BirksActive() const;
 
+  void SetUseICRU90Data(G4bool val);
+  G4bool UseICRU90Data() const;
+
   void SetDNAFast(G4bool val);
   G4bool DNAFast() const;
 
@@ -155,8 +158,11 @@ public:
   void SetDNAElectronMsc(G4bool val);
   G4bool DNAElectronMsc() const;
 
-  void SetGammaSharkActive(G4bool val);
-  G4bool GammaSharkActive() const;
+  void SetGeneralProcessActive(G4bool val);
+  G4bool GeneralProcessActive() const;
+
+  void SetEnableSamplingTable(G4bool val);
+  G4bool EnableSamplingTable() const;
 
   void SetEmSaturation(G4EmSaturation*);
   G4EmSaturation* GetEmSaturation();
@@ -275,6 +281,7 @@ public:
   const std::vector<G4String>& RegionsDNA() const;
   const std::vector<G4String>& TypesDNA() const;
 
+  // obsolete methods
   void AddMsc(const G4String& region, const G4String& type);
   const std::vector<G4String>& RegionsMsc() const;
   const std::vector<G4String>& TypesMsc() const;
@@ -300,6 +307,18 @@ public:
 				const G4String& region, 
 				G4double factor,
 				G4double energyLimit);
+
+  G4bool GetDirectionalSplitting() { return directionalSplitting; }
+  void   SetDirectionalSplitting(G4int v) { directionalSplitting = v; }
+
+  void  SetDirectionalSplittingTarget(G4ThreeVector v)
+    { directionalSplittingTarget = v; }
+  G4ThreeVector  GetDirectionalSplittingTarget()
+    { return directionalSplittingTarget; }
+  void  SetDirectionalSplittingRadius(G4double r)
+    { directionalSplittingRadius = r; }
+  G4double  GetDirectionalSplittingRadius()
+    { return directionalSplittingRadius; }
 
   // initialisation methods
   void DefineRegParamForLoss(G4VEnergyLossProcess*, 
@@ -350,12 +369,15 @@ private:
   G4bool useMottCorrection;
   G4bool integral;
   G4bool birks;
+  G4bool fICRU90;
   G4bool dnaFast;
   G4bool dnaStationary;
   G4bool dnaMsc;
-  G4bool gammaShark;
+  G4bool gener;
+  G4bool enableSamplingTable;
   G4bool onIsolated; // 5d model conversion on free ions
-
+  G4bool directionalSplitting;
+  
   G4double minSubRange;
   G4double minKinEnergy;
   G4double maxKinEnergy;
@@ -378,12 +400,15 @@ private:
   G4double dRoverRangeMuHad;
   G4double finalRangeMuHad;
   G4double factorScreen;
+  G4double directionalSplittingRadius;
 
   G4int nbins;
   G4int nbinsPerDecade;
   G4int verbose;
   G4int workerVerbose;
   G4int tripletConv;  // 5d model triplet generation type
+
+  G4ThreeVector directionalSplittingTarget;
 
   G4MscStepLimitType mscStepLimit;
   G4MscStepLimitType mscStepLimitMuHad;
@@ -402,8 +427,8 @@ private:
   std::vector<G4String>  m_regnamesDNA;
   std::vector<G4String>  m_typesDNA;
 
-  std::vector<G4String>  m_regnamesMsc;
-  std::vector<G4String>  m_typesMsc;
+  std::vector<G4String>  m_regnamesPhys;
+  std::vector<G4String>  m_typesPhys;
 
   std::vector<G4String>  m_regnamesSubCut;
   std::vector<G4bool>    m_subCuts;

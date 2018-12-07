@@ -25,7 +25,6 @@
 //
 #ifndef G4V_CASCADE_COLLIDER_HH
 #define G4V_CASCADE_COLLIDER_HH
-// $Id: G4VCascadeCollider.hh 71719 2013-06-21 00:01:54Z mkelsey $
 //
 // 20100615  M. Kelsey -- Split constructor to have verbose separately
 // 20100711  M. Kelsey -- Allow name to be changed after ctor, by self

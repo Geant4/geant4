@@ -25,7 +25,6 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id: G4UIGainServer.cc 110933 2018-06-26 08:09:42Z gcosmo $
 //
 #ifndef WIN32
 
@@ -284,9 +283,9 @@ G4String G4UIGainServer::GetCommand()
       {
         if ( uiMode == terminal_mode){
           G4cerr << "You are now processing RUN." << G4endl;
-          G4cerr << "Please abrot it using \"/run/abort\" command first" << G4endl;
+          G4cerr << "Please abort it using \"/run/abort\" command first" << G4endl;
           G4cerr << " and use \"continue\" command until the application" << G4endl;
-          G4cerr << " becomes to Idle." << G4endl;
+          G4cerr << " gets to Idle." << G4endl;
         }else{
           G4cout << "@@ErrResult \"You are now processing RUN.\"" << G4endl;
         }

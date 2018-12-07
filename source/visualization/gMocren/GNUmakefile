@@ -1,4 +1,3 @@
-# $Id: GNUmakefile 99176 2016-09-07 09:46:36Z gcosmo $
 
 name := G4GMocren
 

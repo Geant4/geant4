@@ -5,10 +5,10 @@
 /mfp/det/setRadius 10 m
 #
 # Register physics constructor
-#/mfp/phys/addPhysics  G4EmDNAPhysics
-/mfp/phys/addPhysics  G4EmDNAPhysics_option2
-#/mfp/phys/addPhysics  G4EmDNAPhysics_option4
-#/mfp/phys/addPhysics  G4EmDNAPhysics_option6
+#/mfp/phys/addPhysics  dna
+/mfp/phys/addPhysics  dna_opt2
+#/mfp/phys/addPhysics  dna_opt4
+#/mfp/phys/addPhysics  dna_opt6
 #
 /run/initialize
 #

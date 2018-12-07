@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CsvNtupleManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Value type independent base class for accumulables handled by Geant4 analysis
 //

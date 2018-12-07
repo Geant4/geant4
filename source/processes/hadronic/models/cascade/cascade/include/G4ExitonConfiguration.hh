@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExitonConfiguration.hh 71942 2013-06-28 19:08:11Z mkelsey $
 //
 // 20100909  Add function to reset values to zero
 // 20100924  Migrate to integer A and Z

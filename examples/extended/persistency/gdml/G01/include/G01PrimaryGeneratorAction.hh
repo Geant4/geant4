@@ -27,7 +27,6 @@
 /// \brief Definition of the G01PrimaryGeneratorAction class
 //
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.2 2008-11-10 15:39:34 gcosmo Exp $
 //
 //
 

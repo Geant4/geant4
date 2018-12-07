@@ -77,10 +77,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     void SetSurfaceSigmaAlpha(G4double v);
 
-    void AddBoxMPV(const char* c, G4MaterialPropertyVector* mpv);
-    void AddBoxMPCV(const char* c, G4double v);
-    G4MaterialPropertiesTable* GetBoxMaterialPropertiesTable() 
-      {return fBoxMPT;}
+    void AddTankMPV(const char* c, G4MaterialPropertyVector* mpv);
+    void AddTankMPCV(const char* c, G4double v);
+    G4MaterialPropertiesTable* GetTankMaterialPropertiesTable() 
+      {return fTankMPT;}
 
     void AddWorldMPV(const char* c, G4MaterialPropertyVector* mpv);
     void AddWorldMPCV(const char* c, G4double v);
@@ -91,6 +91,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4MaterialPropertiesTable* GetSurfaceMaterialPropertiesTable() 
       {return fSurfaceMPT;}
 
+    void        SetWorldMaterial(const G4String&);
+    G4Material* GetWorldMaterial() const {return fWorldMaterial;}
+    void        SetTankMaterial(const G4String&);
+    G4Material* GetTankMaterial() const {return fTankMaterial;}
 
     virtual G4VPhysicalVolume* Construct();
 
@@ -105,11 +109,17 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4double fTank_y;
     G4double fTank_z;
 
+    G4LogicalVolume* fWorld_LV;
+    G4LogicalVolume* fTank_LV;
+
+    G4Material* fWorldMaterial;
+    G4Material* fTankMaterial;
+
     G4OpticalSurface* fSurface;
 
     DetectorMessenger* fDetectorMessenger;
 
-    G4MaterialPropertiesTable* fBoxMPT;
+    G4MaterialPropertiesTable* fTankMPT;
     G4MaterialPropertiesTable* fWorldMPT;
     G4MaterialPropertiesTable* fSurfaceMPT;
 };

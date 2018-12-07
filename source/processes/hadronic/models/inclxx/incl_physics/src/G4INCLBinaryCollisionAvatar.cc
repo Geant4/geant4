@@ -126,7 +126,8 @@ namespace G4INCL {
     : InteractionAvatar(time, n, p1, p2), theCrossSection(crossSection),
     isParticle1Spectator(false),
     isParticle2Spectator(false),
-    isElastic(false)
+    isElastic(false),
+    isStrangeProduction(false)
   {
     setType(CollisionAvatarType);
   }
@@ -181,17 +182,24 @@ namespace G4INCL {
       return NULL;
     }
 
+    /** Bias apply for this reaction in order to get the same
+     * ParticleBias for all stange particles.
+     * Can be reduced after because of the watchdog.
+     */
+    G4double bias_apply = 1.;
+    if(bias != 1.) bias_apply = Particle::getBiasFromVector(Particle::MergeVectorBias(particle1,particle2)) * bias;
+
 //// NN
     if(particle1->isNucleon() && particle2->isNucleon()) {
-      
-      G4double NLKProductionCX = CrossSections::NNToNLK(particle1, particle2)*bias;
-      G4double NSKProductionCX = CrossSections::NNToNSK(particle1, particle2)*bias;
-      G4double NLKpiProductionCX = CrossSections::NNToNLKpi(particle1, particle2)*bias;
-      G4double NSKpiProductionCX = CrossSections::NNToNSKpi(particle1, particle2)*bias;
-      G4double NLK2piProductionCX = CrossSections::NNToNLK2pi(particle1, particle2)*bias;
-      G4double NSK2piProductionCX = CrossSections::NNToNSK2pi(particle1, particle2)*bias;
-      G4double NNKKbProductionCX = CrossSections::NNToNNKKb(particle1, particle2)*bias;
-      G4double NNMissingCX = CrossSections::NNToMissingStrangeness(particle1, particle2)*bias;
+
+      G4double NLKProductionCX = CrossSections::NNToNLK(particle1, particle2)*bias_apply;
+      G4double NSKProductionCX = CrossSections::NNToNSK(particle1, particle2)*bias_apply;
+      G4double NLKpiProductionCX = CrossSections::NNToNLKpi(particle1, particle2)*bias_apply;
+      G4double NSKpiProductionCX = CrossSections::NNToNSKpi(particle1, particle2)*bias_apply;
+      G4double NLK2piProductionCX = CrossSections::NNToNLK2pi(particle1, particle2)*bias_apply;
+      G4double NSK2piProductionCX = CrossSections::NNToNSK2pi(particle1, particle2)*bias_apply;
+      G4double NNKKbProductionCX = CrossSections::NNToNNKKb(particle1, particle2)*bias_apply;
+      G4double NNMissingCX = CrossSections::NNToMissingStrangeness(particle1, particle2)*bias_apply;
       
       const G4double UnStrangeProdCX = CrossSections::elastic(particle1, particle2) + CrossSections::NNToNDelta(particle1, particle2) + CrossSections::NNToxPiNN(1,particle1, particle2)
                                    + CrossSections::NNToxPiNN(2,particle1, particle2) + CrossSections::NNToxPiNN(3,particle1, particle2) + CrossSections::NNToxPiNN(4,particle1, particle2)
@@ -199,21 +207,21 @@ namespace G4INCL {
                                    + CrossSections::NNToNNEtaxPi(2,particle1, particle2) +  CrossSections::NNToNNEtaxPi(3,particle1, particle2) + CrossSections::NNToNNEtaxPi(4,particle1, particle2)
                                    + CrossSections::NNToNNOmegaExclu(particle1, particle2) + CrossSections::NNToNDeltaOmega(particle1, particle2) + CrossSections::NNToNNOmegaxPi(1,particle1, particle2)
                                    + CrossSections::NNToNNOmegaxPi(2,particle1, particle2) + CrossSections::NNToNNOmegaxPi(3,particle1, particle2) + CrossSections::NNToNNOmegaxPi(4,particle1, particle2);
-      const G4double StrangenessProdCX = (NLKProductionCX + NSKProductionCX + NLKpiProductionCX + NSKpiProductionCX + NLK2piProductionCX + NSK2piProductionCX + NNKKbProductionCX + NNMissingCX)/bias;
+      const G4double StrangenessProdCX = (NLKProductionCX + NSKProductionCX + NLKpiProductionCX + NSKpiProductionCX + NLK2piProductionCX + NSK2piProductionCX + NNKKbProductionCX + NNMissingCX)/bias_apply;
       
-      G4double counterweight = (1. - bias * StrangenessProdCX / (StrangenessProdCX + UnStrangeProdCX))/(1. - StrangenessProdCX / (StrangenessProdCX + UnStrangeProdCX));
-      G4double limit_bias = bias;
+      G4double counterweight = (1. - bias_apply * StrangenessProdCX / (StrangenessProdCX + UnStrangeProdCX))/(1. - StrangenessProdCX / (StrangenessProdCX + UnStrangeProdCX));
+
       if(counterweight < 0.5) {
          counterweight = 0.5;
-         limit_bias = 0.5*UnStrangeProdCX/StrangenessProdCX+1;
-         NLKProductionCX = CrossSections::NNToNLK(particle1, particle2)*limit_bias;
-         NSKProductionCX = CrossSections::NNToNSK(particle1, particle2)*limit_bias;
-         NLKpiProductionCX = CrossSections::NNToNLKpi(particle1, particle2)*limit_bias;
-         NSKpiProductionCX = CrossSections::NNToNSKpi(particle1, particle2)*limit_bias;
-         NLK2piProductionCX = CrossSections::NNToNLK2pi(particle1, particle2)*limit_bias;
-         NSK2piProductionCX = CrossSections::NNToNSK2pi(particle1, particle2)*limit_bias;
-         NNKKbProductionCX = CrossSections::NNToNNKKb(particle1, particle2)*limit_bias;
-         NNMissingCX = CrossSections::NNToMissingStrangeness(particle1, particle2)*limit_bias;
+         bias_apply = 0.5*UnStrangeProdCX/StrangenessProdCX+1;
+         NLKProductionCX = CrossSections::NNToNLK(particle1, particle2)*bias_apply;
+         NSKProductionCX = CrossSections::NNToNSK(particle1, particle2)*bias_apply;
+         NLKpiProductionCX = CrossSections::NNToNLKpi(particle1, particle2)*bias_apply;
+         NSKpiProductionCX = CrossSections::NNToNSKpi(particle1, particle2)*bias_apply;
+         NLK2piProductionCX = CrossSections::NNToNLK2pi(particle1, particle2)*bias_apply;
+         NSK2piProductionCX = CrossSections::NNToNSK2pi(particle1, particle2)*bias_apply;
+         NNKKbProductionCX = CrossSections::NNToNNKKb(particle1, particle2)*bias_apply;
+         NNMissingCX = CrossSections::NNToMissingStrangeness(particle1, particle2)*bias_apply;
       }
       
       
@@ -374,114 +382,130 @@ namespace G4INCL {
                           + omegaProductionCX + omegadeltaProductionCX + omegaonePiProductionCX + omegatwoPiProductionCX + omegathreePiProductionCX + omegafourPiProductionCX
                           + NLKProductionCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // NN -> NLK channel is chosen
         INCL_DEBUG("NN interaction: NLK channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NNToNLKChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX
                           + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX
                           + omegaProductionCX + omegadeltaProductionCX + omegaonePiProductionCX + omegatwoPiProductionCX + omegathreePiProductionCX + omegafourPiProductionCX
                           + NLKProductionCX + NLKpiProductionCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // NN -> NLKpi channel is chosen
         INCL_DEBUG("NN interaction: NLKpi channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NNToNLKpiChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX
                           + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX
                           + omegaProductionCX + omegadeltaProductionCX + omegaonePiProductionCX + omegatwoPiProductionCX + omegathreePiProductionCX + omegafourPiProductionCX
                           + NLKProductionCX + NLKpiProductionCX + NLK2piProductionCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // NN -> NLK2pi channel is chosen
         INCL_DEBUG("NN interaction: NLK2pi channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NNToNLK2piChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX
                           + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX
                           + omegaProductionCX + omegadeltaProductionCX + omegaonePiProductionCX + omegatwoPiProductionCX + omegathreePiProductionCX + omegafourPiProductionCX
                           + NLKProductionCX + NLKpiProductionCX + NLK2piProductionCX + NSKProductionCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // NN -> NSK channel is chosen
         INCL_DEBUG("NN interaction: NSK channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NNToNSKChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX
                           + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX
                           + omegaProductionCX + omegadeltaProductionCX + omegaonePiProductionCX + omegatwoPiProductionCX + omegathreePiProductionCX + omegafourPiProductionCX
                           + NLKProductionCX + NLKpiProductionCX + NLK2piProductionCX + NSKProductionCX + NSKpiProductionCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // NN -> NSKpi channel is chosen
         INCL_DEBUG("NN interaction: NSKpi channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NNToNSKpiChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX
                           + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX
                           + omegaProductionCX + omegadeltaProductionCX + omegaonePiProductionCX + omegatwoPiProductionCX + omegathreePiProductionCX + omegafourPiProductionCX
                           + NLKProductionCX + NLKpiProductionCX + NLK2piProductionCX + NSKProductionCX + NSKpiProductionCX + NSK2piProductionCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // NN -> NSK2pi channel is chosen
         INCL_DEBUG("NN interaction: NSK2pi channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NNToNSK2piChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX
                           + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX
                           + omegaProductionCX + omegadeltaProductionCX + omegaonePiProductionCX + omegatwoPiProductionCX + omegathreePiProductionCX + omegafourPiProductionCX
                           + NLKProductionCX + NLKpiProductionCX + NLK2piProductionCX + NSKProductionCX + NSKpiProductionCX + NSK2piProductionCX + NNKKbProductionCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // NN -> NNKKb channel is chosen
         INCL_DEBUG("NN interaction: NNKKb channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NNToNNKKbChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX
                           + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX
                           + omegaProductionCX + omegadeltaProductionCX + omegaonePiProductionCX + omegatwoPiProductionCX + omegathreePiProductionCX + omegafourPiProductionCX
                           + NLKProductionCX + NLKpiProductionCX + NLK2piProductionCX + NSKProductionCX + NSKpiProductionCX + NSK2piProductionCX + NNKKbProductionCX + NNMissingCX> rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // NN -> Missing Strangeness channel is chosen
         INCL_DEBUG("NN interaction: Missing Strangeness channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NNToMissingStrangenessChannel(particle1, particle2);
       } else {
         INCL_WARN("inconsistency within the NN Cross Sections (sum!=inelastic)" << '\n');
         if(NNMissingCX>0.) {
             INCL_WARN("Returning an Missing Strangeness channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NNToNNKKbChannel(particle1, particle2);
         } else if(NNKKbProductionCX>0.) {
             INCL_WARN("Returning an NNKKb channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NNToNNKKbChannel(particle1, particle2);
         } else if(NSK2piProductionCX>0.) {
             INCL_WARN("Returning an NSK2pi channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NNToNSK2piChannel(particle1, particle2);
         } else if(NSKpiProductionCX>0.) {
             INCL_WARN("Returning an NSKpi channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NNToNSKpiChannel(particle1, particle2);
         } else if(NSKProductionCX>0.) {
             INCL_WARN("Returning an NSK channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NNToNSKChannel(particle1, particle2);
         } else if(NLK2piProductionCX>0.) {
             INCL_WARN("Returning an NLK2pi channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NNToNLK2piChannel(particle1, particle2);
         } else if(NLKpiProductionCX>0.) {
             INCL_WARN("Returning an NLKpi channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NNToNLKpiChannel(particle1, particle2);
         } else if(NLKProductionCX>0.) {
             INCL_WARN("Returning an NLK channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NNToNLKChannel(particle1, particle2);
         } else if(omegafourPiProductionCX>0.) {
             INCL_WARN("Returning an Omega + four Pions channel" << '\n');
@@ -581,26 +605,26 @@ namespace G4INCL {
     else if((particle1->isNucleon() && particle2->isDelta()) ||
                  (particle1->isDelta() && particle2->isNucleon())) {
           
-          G4double NLKProductionCX = CrossSections::NDeltaToNLK(particle1, particle2)*bias;
-          G4double NSKProductionCX = CrossSections::NDeltaToNSK(particle1, particle2)*bias;
-          G4double DeltaLKProductionCX = CrossSections::NDeltaToDeltaLK(particle1, particle2)*bias;
-          G4double DeltaSKProductionCX = CrossSections::NDeltaToDeltaSK(particle1, particle2)*bias;
-          G4double NNKKbProductionCX = CrossSections::NDeltaToNNKKb(particle1, particle2)*bias;
+          G4double NLKProductionCX = CrossSections::NDeltaToNLK(particle1, particle2)*bias_apply;
+          G4double NSKProductionCX = CrossSections::NDeltaToNSK(particle1, particle2)*bias_apply;
+          G4double DeltaLKProductionCX = CrossSections::NDeltaToDeltaLK(particle1, particle2)*bias_apply;
+          G4double DeltaSKProductionCX = CrossSections::NDeltaToDeltaSK(particle1, particle2)*bias_apply;
+          G4double NNKKbProductionCX = CrossSections::NDeltaToNNKKb(particle1, particle2)*bias_apply;
           
           const G4double UnStrangeProdCX = CrossSections::elastic(particle1, particle2) + CrossSections::NDeltaToNN(particle1, particle2);
-          const G4double StrangenessProdCX = (NLKProductionCX + NSKProductionCX + DeltaLKProductionCX + DeltaSKProductionCX + NNKKbProductionCX)/bias;
+          const G4double StrangenessProdCX = (NLKProductionCX + NSKProductionCX + DeltaLKProductionCX + DeltaSKProductionCX + NNKKbProductionCX)/bias_apply;
           
-          G4double counterweight = (1. - bias * StrangenessProdCX / (StrangenessProdCX + UnStrangeProdCX))/(1. - StrangenessProdCX / (StrangenessProdCX + UnStrangeProdCX));
-          G4double limit_bias = bias;
+          G4double counterweight = (1. - bias_apply * StrangenessProdCX / (StrangenessProdCX + UnStrangeProdCX))/(1. - StrangenessProdCX / (StrangenessProdCX + UnStrangeProdCX));
+
           if(counterweight < 0.5){
              counterweight = 0.5;
-             limit_bias = 0.5*UnStrangeProdCX/StrangenessProdCX+1;
+             bias_apply = 0.5*UnStrangeProdCX/StrangenessProdCX+1;
              
-             NLKProductionCX = CrossSections::NDeltaToNLK(particle1, particle2)*limit_bias;
-             NSKProductionCX = CrossSections::NDeltaToNSK(particle1, particle2)*limit_bias;
-             DeltaLKProductionCX = CrossSections::NDeltaToDeltaLK(particle1, particle2)*limit_bias;
-             DeltaSKProductionCX = CrossSections::NDeltaToDeltaSK(particle1, particle2)*limit_bias;
-             NNKKbProductionCX = CrossSections::NDeltaToNNKKb(particle1, particle2)*limit_bias;
+             NLKProductionCX = CrossSections::NDeltaToNLK(particle1, particle2)*bias_apply;
+             NSKProductionCX = CrossSections::NDeltaToNSK(particle1, particle2)*bias_apply;
+             DeltaLKProductionCX = CrossSections::NDeltaToDeltaLK(particle1, particle2)*bias_apply;
+             DeltaSKProductionCX = CrossSections::NDeltaToDeltaSK(particle1, particle2)*bias_apply;
+             NNKKbProductionCX = CrossSections::NDeltaToNNKKb(particle1, particle2)*bias_apply;
           }
       
           G4double elasticCX = CrossSections::elastic(particle1, particle2)*counterweight;
@@ -623,33 +647,38 @@ namespace G4INCL {
              return new RecombinationChannel(particle1, particle2);
           } else if (elasticCX + recombinationCX + NLKProductionCX > rChannel){
             isElastic = false;
+            isStrangeProduction = true;
 // NDelta -> NLK channel is chosen
              INCL_DEBUG("NDelta interaction: NLK channel chosen" << '\n');
-             weight = limit_bias;
+             weight = bias_apply;
              return new NDeltaToNLKChannel(particle1, particle2);
           } else if (elasticCX + recombinationCX + NLKProductionCX + NSKProductionCX > rChannel){
             isElastic = false;
+            isStrangeProduction = true;
 // NDelta -> NSK channel is chosen
              INCL_DEBUG("NDelta interaction: NSK channel chosen" << '\n');
-             weight = limit_bias;
+             weight = bias_apply;
              return new NDeltaToNSKChannel(particle1, particle2);
           } else if (elasticCX + recombinationCX + NLKProductionCX + NSKProductionCX + DeltaLKProductionCX > rChannel){
             isElastic = false;
+            isStrangeProduction = true;
 // NDelta -> DeltaLK channel is chosen
              INCL_DEBUG("NDelta interaction: DeltaLK channel chosen" << '\n');
-             weight = limit_bias;
+             weight = bias_apply;
              return new NDeltaToDeltaLKChannel(particle1, particle2);
           } else if (elasticCX + recombinationCX + NLKProductionCX + NSKProductionCX + DeltaLKProductionCX + DeltaSKProductionCX > rChannel){
             isElastic = false;
+            isStrangeProduction = true;
 // NDelta -> DeltaSK channel is chosen
              INCL_DEBUG("NDelta interaction: DeltaSK channel chosen" << '\n');
-             weight = limit_bias;
+             weight = bias_apply;
              return new NDeltaToDeltaSKChannel(particle1, particle2);
           } else if (elasticCX + recombinationCX + NLKProductionCX + NSKProductionCX + DeltaLKProductionCX + DeltaSKProductionCX + NNKKbProductionCX > rChannel){
             isElastic = false;
+            isStrangeProduction = true;
 // NDelta -> NNKKb channel is chosen
              INCL_DEBUG("NDelta interaction: NNKKb channel chosen" << '\n');
-             weight = limit_bias;
+             weight = bias_apply;
              return new NDeltaToNNKKbChannel(particle1, particle2);
           }
           else{
@@ -668,33 +697,33 @@ namespace G4INCL {
 //// PiN
     } else if(isPiN) {
       
-      G4double LKProdCX = CrossSections::NpiToLK(particle1,particle2)*bias;
-      G4double SKProdCX = CrossSections::NpiToSK(particle1,particle2)*bias;
-      G4double LKpiProdCX = CrossSections::NpiToLKpi(particle1,particle2)*bias;
-      G4double SKpiProdCX = CrossSections::NpiToSKpi(particle1,particle2)*bias;
-      G4double LK2piProdCX = CrossSections::NpiToLK2pi(particle1,particle2)*bias;
-      G4double SK2piProdCX = CrossSections::NpiToSK2pi(particle1,particle2)*bias;
-      G4double NKKbProdCX = CrossSections::NpiToNKKb(particle1,particle2)*bias;
-      G4double MissingCX = CrossSections::NpiToMissingStrangeness(particle1,particle2)*bias;
+      G4double LKProdCX = CrossSections::NpiToLK(particle1,particle2)*bias_apply;
+      G4double SKProdCX = CrossSections::NpiToSK(particle1,particle2)*bias_apply;
+      G4double LKpiProdCX = CrossSections::NpiToLKpi(particle1,particle2)*bias_apply;
+      G4double SKpiProdCX = CrossSections::NpiToSKpi(particle1,particle2)*bias_apply;
+      G4double LK2piProdCX = CrossSections::NpiToLK2pi(particle1,particle2)*bias_apply;
+      G4double SK2piProdCX = CrossSections::NpiToSK2pi(particle1,particle2)*bias_apply;
+      G4double NKKbProdCX = CrossSections::NpiToNKKb(particle1,particle2)*bias_apply;
+      G4double MissingCX = CrossSections::NpiToMissingStrangeness(particle1,particle2)*bias_apply;
       
       const G4double UnStrangeProdCX = CrossSections::elastic(particle1, particle2) + CrossSections::piNToDelta(particle1, particle2)
                                    + CrossSections::piNToxPiN(2,particle1, particle2) + CrossSections::piNToxPiN(3,particle1, particle2) + CrossSections::piNToxPiN(4,particle1, particle2)
                                    + CrossSections::piNToEtaN(particle1, particle2) + CrossSections::piNToOmegaN(particle1, particle2);
-      const G4double StrangenessProdCX = (LKProdCX + SKProdCX + LKpiProdCX + SKpiProdCX + LK2piProdCX + SK2piProdCX + NKKbProdCX + MissingCX)/bias;
+      const G4double StrangenessProdCX = (LKProdCX + SKProdCX + LKpiProdCX + SKpiProdCX + LK2piProdCX + SK2piProdCX + NKKbProdCX + MissingCX)/bias_apply;
       
-      G4double counterweight = (1. - bias * StrangenessProdCX / (StrangenessProdCX + UnStrangeProdCX))/(1. - StrangenessProdCX / (StrangenessProdCX + UnStrangeProdCX));
-      G4double limit_bias = bias;
+      G4double counterweight = (1. - bias_apply * StrangenessProdCX / (StrangenessProdCX + UnStrangeProdCX))/(1. - StrangenessProdCX / (StrangenessProdCX + UnStrangeProdCX));
+      
       if(counterweight < 0.5) {
          counterweight = 0.5;
-         limit_bias = 0.5*UnStrangeProdCX/StrangenessProdCX+1;
-         LKProdCX = CrossSections::NpiToLK(particle1,particle2)*limit_bias;
-         SKProdCX = CrossSections::NpiToSK(particle1,particle2)*limit_bias;
-         LKpiProdCX = CrossSections::NpiToLKpi(particle1,particle2)*limit_bias;
-         SKpiProdCX = CrossSections::NpiToSKpi(particle1,particle2)*limit_bias;
-         LK2piProdCX = CrossSections::NpiToLK2pi(particle1,particle2)*limit_bias;
-         SK2piProdCX = CrossSections::NpiToSK2pi(particle1,particle2)*limit_bias;
-         NKKbProdCX = CrossSections::NpiToNKKb(particle1,particle2)*limit_bias;
-         MissingCX = CrossSections::NpiToMissingStrangeness(particle1,particle2)*limit_bias;
+         bias_apply = 0.5*UnStrangeProdCX/StrangenessProdCX+1;
+         LKProdCX = CrossSections::NpiToLK(particle1,particle2)*bias_apply;
+         SKProdCX = CrossSections::NpiToSK(particle1,particle2)*bias_apply;
+         LKpiProdCX = CrossSections::NpiToLKpi(particle1,particle2)*bias_apply;
+         SKpiProdCX = CrossSections::NpiToSKpi(particle1,particle2)*bias_apply;
+         LK2piProdCX = CrossSections::NpiToLK2pi(particle1,particle2)*bias_apply;
+         SK2piProdCX = CrossSections::NpiToSK2pi(particle1,particle2)*bias_apply;
+         NKKbProdCX = CrossSections::NpiToNKKb(particle1,particle2)*bias_apply;
+         MissingCX = CrossSections::NpiToMissingStrangeness(particle1,particle2)*bias_apply;
       }
       
       
@@ -757,101 +786,117 @@ namespace G4INCL {
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + etaProductionCX+ omegaProductionCX
                           + LKProdCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // PiN -> LK channel is chosen
         INCL_DEBUG("PiN interaction: LK channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NpiToLKChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + etaProductionCX+ omegaProductionCX
                           + LKProdCX + SKProdCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // PiN -> SK channel is chosen
         INCL_DEBUG("PiN interaction: SK channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NpiToSKChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + etaProductionCX+ omegaProductionCX
                           + LKProdCX + SKProdCX + LKpiProdCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // PiN -> LKpi channel is chosen
         INCL_DEBUG("PiN interaction: LKpi channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NpiToLKpiChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + etaProductionCX+ omegaProductionCX
                           + LKProdCX + SKProdCX + LKpiProdCX + SKpiProdCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // PiN -> SKpi channel is chosen
         INCL_DEBUG("PiN interaction: SKpi channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NpiToSKpiChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + etaProductionCX+ omegaProductionCX
                           + LKProdCX + SKProdCX + LKpiProdCX + SKpiProdCX + LK2piProdCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // PiN -> LK2pi channel is chosen
         INCL_DEBUG("PiN interaction: LK2pi channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NpiToLK2piChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + etaProductionCX+ omegaProductionCX
                           + LKProdCX + SKProdCX + LKpiProdCX + SKpiProdCX + LK2piProdCX + SK2piProdCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // PiN -> SK2pi channel is chosen
         INCL_DEBUG("PiN interaction: SK2pi channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NpiToSK2piChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + etaProductionCX+ omegaProductionCX
                           + LKProdCX + SKProdCX + LKpiProdCX + SKpiProdCX + LK2piProdCX + SK2piProdCX + NKKbProdCX > rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // PiN -> NKKb channel is chosen
         INCL_DEBUG("PiN interaction: NKKb channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NpiToNKKbChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + etaProductionCX+ omegaProductionCX
                           + LKProdCX + SKProdCX + LKpiProdCX + SKpiProdCX + LK2piProdCX + SK2piProdCX + NKKbProdCX + MissingCX> rChannel) {
         isElastic = false;
+        isStrangeProduction = true;
 // PiN -> Missinge Strangeness channel is chosen
         INCL_DEBUG("PiN interaction: Missinge Strangeness channel chosen" << '\n');
-        weight = limit_bias;
+        weight = bias_apply;
         return new NpiToMissingStrangenessChannel(particle1, particle2);
       }
       else {
          INCL_WARN("inconsistency within the PiN Cross Sections (sum!=inelastic)" << '\n');
          if(MissingCX>0.) {
             INCL_WARN("Returning a Missinge Strangeness channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NpiToMissingStrangenessChannel(particle1, particle2);
         } else if(NKKbProdCX>0.) {
             INCL_WARN("Returning a NKKb channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NpiToNKKbChannel(particle1, particle2);
         } else if(SK2piProdCX>0.) {
             INCL_WARN("Returning a SK2pi channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NpiToSK2piChannel(particle1, particle2);
         } else if(LK2piProdCX>0.) {
             INCL_WARN("Returning a LK2pi channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NpiToLK2piChannel(particle1, particle2);
         } else if(SKpiProdCX>0.) {
             INCL_WARN("Returning a SKpi channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NpiToSKpiChannel(particle1, particle2);
         } else if(LKpiProdCX>0.) {
             INCL_WARN("Returning a LKpi channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NpiToLKpiChannel(particle1, particle2);
         } else if(SKProdCX>0.) {
             INCL_WARN("Returning a SK channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NpiToSKChannel(particle1, particle2);
         } else if(LKProdCX>0.) {
             INCL_WARN("Returning a LK channel" << '\n');
-            weight = limit_bias;
+            weight = bias_apply;
             isElastic = false;
+            isStrangeProduction = true;
             return new NpiToLKChannel(particle1, particle2);
         } else if(omegaProductionCX>0.) {
             INCL_WARN("Returning a Omega channel" << '\n');
@@ -1224,12 +1269,14 @@ namespace G4INCL {
       case ValidFS:
         Book &theBook = theNucleus->getStore()->getBook();
         theBook.incrementAcceptedCollisions();
+        
         if(theBook.getAcceptedCollisions() == 1) {
           // Store time and cross section of the first collision
           G4double t = theBook.getCurrentTime();
           theBook.setFirstCollisionTime(t);
           theBook.setFirstCollisionXSec(oldXSec);
-
+          // Increase the number of Kaon by 1
+          if(isStrangeProduction) theNucleus->setNumberOfKaon(theNucleus->getNumberOfKaon()+1);
           // Store position and momentum of the spectator on the first
           // collision
           if((isParticle1Spectator && isParticle2Spectator) || (!isParticle1Spectator && !isParticle2Spectator)) {

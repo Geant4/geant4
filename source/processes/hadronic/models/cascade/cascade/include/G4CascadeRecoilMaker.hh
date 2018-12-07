@@ -25,7 +25,6 @@
 //
 #ifndef G4CASCADE_RECOIL_MAKER_HH
 #define G4CASCADE_RECOIL_MAKER_HH
-// $Id: G4CascadeRecoilMaker.hh 71719 2013-06-21 00:01:54Z mkelsey $
 //
 // Collects generated cascade data (using Collider::collide() interface)
 // and computes the nuclear recoil kinematics needed to balance the event.

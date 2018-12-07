@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusTo2GammaOKVIModel.cc 101193 2016-11-08 18:02:50Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -41,6 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+
 #include "G4eplusTo2GammaOKVIModel.hh"
 #include "G4eplusTo3GammaOKVIModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -50,6 +50,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
+#include "G4DataVector.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLogVector.hh"
 #include "Randomize.hh"
@@ -61,17 +62,19 @@
 
 using namespace std;
 
-G4PhysicsVector* G4eplusTo2GammaOKVIModel::fCrossSection = nullptr;
-G4PhysicsVector* G4eplusTo2GammaOKVIModel::f3GProbability= nullptr;
+G4PhysicsVector* G4eplusTo2GammaOKVIModel::fCrossSection   = nullptr;
+G4PhysicsVector* G4eplusTo2GammaOKVIModel::fCrossSection3G = nullptr;
+G4PhysicsVector* G4eplusTo2GammaOKVIModel::f3GProbability  = nullptr;
 
 G4eplusTo2GammaOKVIModel::G4eplusTo2GammaOKVIModel(const G4ParticleDefinition*,
-                                         const G4String& nam)
+                                                   const G4String& nam)
   : G4VEmModel(nam),
-    pi_rcl2(pi*classic_electr_radius*classic_electr_radius),
-    energyTh(10*MeV)
+    fDelta(0.001),
+    fGammaTh(MeV)
 {
   theGamma = G4Gamma::Gamma();
   fParticleChange = nullptr;
+  fCuts = nullptr;
   f3GModel = new G4eplusTo3GammaOKVIModel();
   SetTripletModel(f3GModel);
 }
@@ -86,17 +89,20 @@ G4eplusTo2GammaOKVIModel::~G4eplusTo2GammaOKVIModel()
 void G4eplusTo2GammaOKVIModel::Initialise(const G4ParticleDefinition* p,
 					  const G4DataVector& cuts)
 {
-  energyTh = G4EmParameters::Instance()->LowestTripletEnergy();
   f3GModel->Initialise(p, cuts); 
+  fCuts = &cuts;
+  fGammaTh = G4EmParameters::Instance()->LowestTripletEnergy();
   
   if(IsMaster()) {
     if(!fCrossSection) {
+      f3GModel->SetDelta(fDelta);
       G4double emin = 10*eV;
       G4double emax = 100*TeV;
       G4int nbins = 20*G4lrint(std::log10(emax/emin));
       fCrossSection = new G4PhysicsLogVector(emin, emax, nbins);
       f3GProbability= new G4PhysicsLogVector(emin, emax, nbins);
       fCrossSection->SetSpline(true);
+      fCrossSection3G->SetSpline(true);
       f3GProbability->SetSpline(true);
       for(G4int i=0; i<= nbins; ++i) {
         G4double e = fCrossSection->Energy(i);
@@ -104,6 +110,7 @@ void G4eplusTo2GammaOKVIModel::Initialise(const G4ParticleDefinition* p,
         G4double cs3 = f3GModel->ComputeCrossSectionPerElectron(e);
 	cs2 += cs3;
 	fCrossSection->PutValue(i, cs2);
+	fCrossSection3G->PutValue(i, cs3);
 	f3GProbability->PutValue(i, cs3/cs2);
       }
     }
@@ -116,22 +123,24 @@ void G4eplusTo2GammaOKVIModel::Initialise(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double 
-G4eplusTo2GammaOKVIModel::ComputeCrossSectionPerElectron(G4double kineticEnergy)
+G4eplusTo2GammaOKVIModel::ComputeCrossSectionPerElectron(G4double kinEnergy)
 {
-  // Calculates the cross section per electron of annihilation into two photons
-  // from the Heilter formula.
+  // Calculates the cross section per electron of annihilation into two 
+  // photons from the Heilter formula with the radiation correction to 3 gamma 
+  // annihilation channel. (A.A.) rho is changed
 
-  G4double ekin  = std::max(eV,kineticEnergy);   
+  G4double ekin   = std::max(eV,kinEnergy);   
+  G4double tau    = ekin/electron_mass_c2;
+  G4double gam    = tau + 1.0;
+  G4double gamma2 = gam*gam;
+  G4double bg2    = tau * (tau+2.0);
+  G4double bg     = sqrt(bg2);
+  G4double rho = (gamma2+4.*gam+1.)*G4Log(gam+bg)/(gamma2-1.) 
+    - (gam+3.)/(sqrt(gam*gam - 1.));   
 
-  G4double tau   = ekin/electron_mass_c2;
-  G4double gam   = tau + 1.0;
-  G4double gamma2= gam*gam;
-  G4double bg2   = tau * (tau+2.0);
-  G4double bg    = sqrt(bg2);
+  static const G4double pir2 = pi*classic_electr_radius*classic_electr_radius;
+  G4double cross = (pir2*rho + alpha_rcl2*2.*G4Log(fDelta)*rho*rho)/(gam+1.);
 
-  G4double cross = pi_rcl2*((gamma2+4*gam+1.)*G4Log(gam+bg) - (gam+3.)*bg)
-                 / (bg2*(gam+1.));
-  
   return cross;  
 }
 
@@ -176,12 +185,25 @@ G4eplusTo2GammaOKVIModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
 
   if(rndmEngine->flat() < f3GProbability->Value(posiKinEnergy)) {
-    f3GModel->SampleSecondaries(vdp, mcc, dp);
-    return;
+    G4double cutd = std::max(fGammaTh,(*fCuts)[mcc->GetIndex()])
+      /(posiKinEnergy + electron_mass_c2);
+    // check cut to avoid production of 3d gamma below 
+    if(cutd > fDelta) {
+      G4double cs30 = fCrossSection3G->Value(posiKinEnergy);
+      f3GModel->SetDelta(cutd);
+      G4double cs3 = f3GModel->ComputeCrossSectionPerElectron(posiKinEnergy);
+      if(rndmEngine->flat()*cs30 < cs3) {
+	f3GModel->SampleSecondaries(vdp, mcc, dp);
+	return;
+      }
+    } else {
+      f3GModel->SampleSecondaries(vdp, mcc, dp);
+      return;
+    }
   }
 
   G4DynamicParticle *aGamma1, *aGamma2;
-   
+
   // Case at rest
   if(posiKinEnergy == 0.0) {
     G4double cost = 2.*rndmEngine->flat()-1.;

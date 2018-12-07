@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusTo2GammaOKVIModel.hh 96909 2016-05-17 10:16:09Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -52,6 +51,7 @@
 class G4eplusTo3GammaOKVIModel;
 class G4ParticleChangeForGamma;
 class G4PhysicsVector;
+class G4DataVector;
 
 class G4eplusTo2GammaOKVIModel : public G4VEmModel
 {
@@ -88,6 +88,8 @@ public:
 				 G4double tmin = 0.0,
 				 G4double maxEnergy = DBL_MAX) final;
 
+  inline void SetDelta(G4double val) { if(val > 0.0) { fDelta = val; } };
+
 private:
 
   // hide assignment operator
@@ -95,13 +97,16 @@ private:
   (const  G4eplusTo2GammaOKVIModel &right) = delete;
   G4eplusTo2GammaOKVIModel(const  G4eplusTo2GammaOKVIModel&) = delete;
 
-  G4double pi_rcl2;
-  G4double energyTh;
-  G4ParticleDefinition*  theGamma;
+  G4double fDelta;
+  G4double fGammaTh;
+  const G4ParticleDefinition* theGamma;
   G4ParticleChangeForGamma* fParticleChange;
   G4eplusTo3GammaOKVIModel* f3GModel;
+
+  const G4DataVector*     fCuts;
  
   static G4PhysicsVector* fCrossSection;
+  static G4PhysicsVector* fCrossSection3G;
   static G4PhysicsVector* f3GProbability;
 };
 

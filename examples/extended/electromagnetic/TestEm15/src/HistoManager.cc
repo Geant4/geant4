@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc 110439 2018-05-23 11:24:51Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

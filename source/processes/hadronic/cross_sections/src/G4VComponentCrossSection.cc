@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VComponentCrossSection.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -38,13 +37,20 @@
 //
 
 #include "G4VComponentCrossSection.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+#include <iostream>
 
 G4VComponentCrossSection::G4VComponentCrossSection(const G4String& nam) :
   verboseLevel(0),minKinEnergy(0.0),maxKinEnergy(DBL_MAX),name(nam) 
-{}
+{
+  registry = G4CrossSectionDataSetRegistry::Instance();
+  registry->Register(this);
+}
 
 G4VComponentCrossSection::~G4VComponentCrossSection()
-{}
+{
+  registry->DeRegister(this);
+}
 
 G4double 
 G4VComponentCrossSection::ComputeQuasiElasticRatio(const G4ParticleDefinition*,
@@ -54,8 +60,7 @@ G4VComponentCrossSection::ComputeQuasiElasticRatio(const G4ParticleDefinition*,
   return 0.0;
 }
 
-void 
-G4VComponentCrossSection::Description() const
+void G4VComponentCrossSection::Description(std::ostream&) const
 {}
 
 void 

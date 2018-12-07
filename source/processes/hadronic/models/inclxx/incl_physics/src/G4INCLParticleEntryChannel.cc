@@ -53,7 +53,7 @@ namespace G4INCL {
     // Behaves slightly differency if a third body (the projectile) is present
     G4bool isNN = theNucleus->isNucleusNucleusCollision();
 
-    /* Corrections to the energy of the entering nucleon
+    /* Corrections to the energy of the entering particle
      *
      * In particle-nucleus reactions, the goal of this correction is to satisfy
      * energy conservation in particle-nucleus reactions using real particle
@@ -82,7 +82,7 @@ namespace G4INCL {
      */
     G4double theCorrection;
     if(isNN) {
-// assert(theParticle->isNucleon());
+// assert(theParticle->isNucleonorLambda()); // Possible hypernucleus projectile of inverse kinematic
       ProjectileRemnant * const projectileRemnant = theNucleus->getProjectileRemnant();
 // assert(projectileRemnant);
 
@@ -125,14 +125,15 @@ namespace G4INCL {
       // const G4double theProjectileExcitationEnergy = 0.;
       // The part that follows is common to model 3. and 4.
       const G4double theProjectileEffectiveMass =
-        ParticleTable::getTableMass(projectileRemnant->getA() - theParticle->getA(), projectileRemnant->getZ() - theParticle->getZ())
+        ParticleTable::getTableMass(projectileRemnant->getA() - theParticle->getA(), projectileRemnant->getZ() - theParticle->getZ(), projectileRemnant->getS() - theParticle->getS())
         + theProjectileExcitationEnergy;
       const ThreeVector &theProjectileMomentum = projectileRemnant->getMomentum() - theParticle->getMomentum();
       const G4double theProjectileEnergy = std::sqrt(theProjectileMomentum.mag2() + theProjectileEffectiveMass*theProjectileEffectiveMass);
       const G4double theProjectileCorrection = theProjectileEnergy - (projectileRemnant->getEnergy() - theParticle->getEnergy());
       theCorrection = theParticle->getEmissionQValueCorrection(
           theNucleus->getA() + theParticle->getA(),
-          theNucleus->getZ() + theParticle->getZ())
+          theNucleus->getZ() + theParticle->getZ(),
+          theNucleus->getS() + theParticle->getS())
         + theParticle->getTableMass() - theParticle->getINCLMass()
         + theProjectileCorrection;
       // end of part common to model 3. and 4.
@@ -142,8 +143,10 @@ namespace G4INCL {
     } else {
       const G4int ACN = theNucleus->getA() + theParticle->getA();
       const G4int ZCN = theNucleus->getZ() + theParticle->getZ();
+      const G4int SCN = theNucleus->getS() + theParticle->getS();
       // Correction to the Q-value of the entering particle
-      theCorrection = theParticle->getEmissionQValueCorrection(ACN,ZCN);
+      if(theParticle->isKaon()) theCorrection = theParticle->getEmissionQValueCorrection(ACN,ZCN,theNucleus->getS());
+      else theCorrection = theParticle->getEmissionQValueCorrection(ACN,ZCN,SCN);
       INCL_DEBUG("The following Particle enters with correction " << theCorrection << '\n'
           << theParticle->print() << '\n');
     }
@@ -154,12 +157,12 @@ namespace G4INCL {
 
     if(!success) {
       fs->makeParticleBelowZero();
-    } else if(theParticle->isNucleon() &&
+    } else if(theParticle->isNucleonorLambda() &&
         theParticle->getKineticEnergy()<theNucleus->getPotential()->getFermiEnergy(theParticle)) {
       // If the participant is a nucleon entering below its Fermi energy, force a
       // compound nucleus
       fs->makeParticleBelowFermi();
-    }
+    } else if(theParticle->isKaon()) theNucleus->setNumberOfKaon(theNucleus->getNumberOfKaon()+1);
 
     fs->setTotalEnergyBeforeInteraction(energyBefore);
   }

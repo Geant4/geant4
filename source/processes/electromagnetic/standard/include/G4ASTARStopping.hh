@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ASTARStopping.hh 96934 2016-05-18 09:10:41Z gcosmo $
 
 #ifndef G4ASTARStopping_h
 #define G4ASTARStopping_h 1

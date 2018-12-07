@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option2.cc 109526 2018-04-30 07:11:52Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -128,6 +127,7 @@ G4EmStandardPhysics_option2::G4EmStandardPhysics_option2(G4int ver,
   param->SetVerbose(verbose);
   param->SetApplyCuts(false);
   param->SetMscRangeFactor(0.2);
+  param->SetLateralDisplacement(false);
   param->SetMscStepLimitType(fMinimal);
   SetPhysicsType(bElectromagnetic);
 }
@@ -213,12 +213,10 @@ void G4EmStandardPhysics_option2::ConstructProcess()
     if (particleName == "gamma") {
 
       G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
-      pee->SetEmModel(new G4LivermorePhotoElectricModel());
       ph->RegisterProcess(pee, particle);
 
       ph->RegisterProcess(new G4ComptonScattering(), particle);
       ph->RegisterProcess(new G4GammaConversion(), particle);
-      ph->RegisterProcess(new G4RayleighScattering(), particle);
 
     } else if (particleName == "e-") {
 
@@ -241,13 +239,6 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       ssm->SetActivationLowEnergyLimit(highEnergyLimit);
 
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      G4SeltzerBergerModel* br1 = new G4SeltzerBergerModel();
-      G4eBremsstrahlungRelModel* br2 = new G4eBremsstrahlungRelModel();
-      br1->SetAngularDistribution(new G4Generator2BS());
-      br2->SetAngularDistribution(new G4Generator2BS());
-      brem->SetEmModel(br1);
-      brem->SetEmModel(br2);
-      br2->SetLowEnergyLimit(GeV);
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eioni, particle);
@@ -275,13 +266,6 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       ssm->SetActivationLowEnergyLimit(highEnergyLimit);
 
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      G4SeltzerBergerModel* br1 = new G4SeltzerBergerModel();
-      G4eBremsstrahlungRelModel* br2 = new G4eBremsstrahlungRelModel();
-      br1->SetAngularDistribution(new G4Generator2BS());
-      br2->SetAngularDistribution(new G4Generator2BS());
-      brem->SetEmModel(br1);
-      brem->SetEmModel(br2);
-      br2->SetLowEnergyLimit(GeV);
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eioni, particle);
@@ -307,8 +291,6 @@ void G4EmStandardPhysics_option2::ConstructProcess()
     } else if (particleName == "GenericIon") {
 
       G4ionIonisation* ionIoni = new G4ionIonisation();
-      //ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      //ionIoni->SetStepFunction(0.1, 20*um);
 
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(ionIoni, particle);

@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr02/src/IonUrQMDPhysics.cc
 /// \brief Implementation of the IonUrQMDPhysics class
 //
-// $Id: IonUrQMDPhysics.cc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -58,6 +57,7 @@
 #include "G4UrQMD1_3Model.hh"
 
 #include "G4BuilderType.hh"
+#include "G4HadronicParameters.hh"
 #include "G4SystemOfUnits.hh"
 
 using namespace std;
@@ -86,7 +86,7 @@ void IonUrQMDPhysics::ConstructProcess()
   fWasActivated = true;
 
   G4double emin = 0.*MeV;
-  G4double emax = 100.*TeV;
+  G4double emax = G4HadronicParameters::Instance()->GetMaxEnergy();
 
   fModel = new G4UrQMD1_3Model();
   fModel->SetMinEnergy( emin );

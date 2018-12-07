@@ -26,7 +26,6 @@
 /// \file RE06/src/RE06Run.cc
 /// \brief Implementation of the RE06Run class
 //
-// $Id: RE06Run.cc 75123 2013-10-28 09:53:28Z gcosmo $
 //
 
 #include "RE06Run.hh"

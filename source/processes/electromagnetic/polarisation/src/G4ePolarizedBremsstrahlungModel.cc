@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedBremsstrahlungModel.cc 97384 2016-06-02 09:59:17Z gcosmo $
 //
 // -------------------------------------------------------------------
 //

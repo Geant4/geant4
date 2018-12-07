@@ -1,0 +1,12 @@
+
+/accelerator/isoCentre 1000 mm      # distance between the isocentre and the target of the accelerator
+/accelerator/rotation90Y false      # to rotate the accelerator of 90 deg around the Y axis (true)
+#/accelerator/rotationX 0 deg       # rotation around X [deg]
+#/accelerator/rotationX 200 deg     # rotation around X [deg]
+#/accelerator/rotationX -45 deg     # rotation around X [deg]
+
+/accelerator/aperture1X 50 mm       
+/accelerator/aperture2X -50 mm      
+/accelerator/aperture1Y 50 mm       
+/accelerator/aperture2Y -50 mm      
+

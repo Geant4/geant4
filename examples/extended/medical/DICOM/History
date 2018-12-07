@@ -1,11 +1,58 @@
-$Id: History 110890 2018-06-25 06:21:23Z gcosmo $
 -------------------------------------------------------------------
- 
+
      =========================================================
  		      Geant4 - DICOM example
      =========================================================
 
                       Category History file
+
+13.11.2018 - Jonathan Madsen (DICOM-V10-04-11)
+             Bugfix (2102) to DicomHandler reading fPixelSpacingY
+
+13.11.2018 - Jonathan Madsen (DICOM-V10-04-10)
+             Bugfix (2101) to DicomHandler skipping 2 bytes in implicit VR
+
+12.11.2018 - Jonathan Madsen (DICOM-V10-04-09)
+             Updated DICOMUtilities.cmake to handle Windows builds
+             Using modern CMake DICOM::target library alias
+
+12.11.2018 - Gabriele Cosmo (DICOM-V10-04-08)
+             DicomDetectorConstruction: removed useless static Instance()
+             method.
+
+12.11.2018 - Gabriele Cosmo (DICOM-V10-04-07)
+             DicomPartialDetectorConstruction: fixed shadowing of base class
+             data for 'fMateIDs'. Fixed type conversion unsigned_int -> int.
+
+12.11.2018 - Gabriele Cosmo (DICOM-V10-04-06)
+             DicomNestedPhantomParameterisation: removed useless statement
+             causing compilation error on Linux.
+
+10.11.2018 - Jonathan Madsen (DICOM-V10-04-05)
+             DICOMConfig.cmake.in handles DICOM_USE_HEAD being set
+             DownloadDICOMData.cmake does installation
+             CMakeLists.txt creates build-tree export
+             DicomDetectorConstruction is globally accessible
+             DicomHandler implements GetDicomData{Path,File}
+               which provides a fallback path to data libraries
+               directory for DICOM2 and handles DICOM_USE_HEAD situation
+             Phantom parameterization classes take an argument
+               specifying color file
+             fDcmrun is protected instead of private (for DICOM2)
+             DicomEventAction doesn't print every event
+             Removed DicomRun::RecordEvent incrementing numberOfEvent
+               (done by G4Run::RecordEvent)
+             Cleaned up output (when provided along with DICOM2 output
+               it was too excessive) now just a summary is provided
+               and per-voxel is output to file only
+             Moved Data.dat to Data.dat.old and CMake copies correct
+               Data.dat.{old,new} to Data.dat in binary directory based
+               on DICOM_USE_DCMTK setting
+             Updated README
+
+09.11.2018 - Gabriele Cosmo (DICOM-V10-04-04)
+             Use canonical definition for DICOMRunAction; removed wrong
+             singleton specification (in any case not necessary).
 
 22.06.2018 - Jonathan Madsen (DICOM-V10-04-03)
              Added dicomReader/cmake/DICOMUtilities.cmake that defines
@@ -52,12 +99,12 @@ $Id: History 110890 2018-06-25 06:21:23Z gcosmo $
              Added downloading DICOM data in CMake build
              (used only with DICOM_USE_HEAD option)
 
-07.11.2017 - S. Guatelli (DICOM-V10-03-06). 
+07.11.2017 - S. Guatelli (DICOM-V10-03-06).
              Warning deleted, updated README and .README.txt
 
-01.11.2017 - S. Guatelli (DICOM-V10-03-05). 
-             DICOM_HEAD library can be used as input to the DICOM   
-             DICOM_v1 does not need to be copied in the directory where the simulation is executed               
+01.11.2017 - S. Guatelli (DICOM-V10-03-05).
+             DICOM_HEAD library can be used as input to the DICOM
+             DICOM_v1 does not need to be copied in the directory where the simulation is executed
 
 01.11.2017 - S. Guatelli (DICOM-V10-03-04). DICOM_HEAD library can be used as input to the DICOM
 
@@ -83,17 +130,17 @@ $Id: History 110890 2018-06-25 06:21:23Z gcosmo $
            - New DICOM reader based on DCMTK
 
 20.07.2016 - Ivana Hrivnacova (DICOM-V10-02-00)
-           - Fixed coding guidelines 
-             (redundant empty lines, class data member names) 
+           - Fixed coding guidelines
+             (redundant empty lines, class data member names)
 
 17.09.2015 - Pedro Arce (DICOM-V10-01-01)
-           - Fixed coding guidelines (long lines) 
+           - Fixed coding guidelines (long lines)
 
 21.10.2014 - Pedro Arce (DICOM-V10-00-04)
-           - Fixed coding guidelines (long lines) 
-                      
+           - Fixed coding guidelines (long lines)
+
 16.10.2014 - Ivana Hrivnacova (DICOM-V10-00-03)
-           - Fixed coding guidelines (long lines) in 
+           - Fixed coding guidelines (long lines) in
              DicomPartialDetectorConstruction.hh, DicomPhantomZSliceHeader.hh
 
 29.07.2014 - Pedro Arce (DICOM-V10-00-02)
@@ -101,7 +148,7 @@ $Id: History 110890 2018-06-25 06:21:23Z gcosmo $
 
 25.07.2014 - Pedro Arce (DICOM-V10-00-01)
            - Using G4GenericPhysicsList
-     	   - no std::cout 
+     	   - no std::cout
 	   - no exit()
 
 03.12.2013 - Gabriele Cosmo (DICOM-V10-00-00)
@@ -112,7 +159,7 @@ $Id: History 110890 2018-06-25 06:21:23Z gcosmo $
            - Updated README and .README to match (Pedro Arce)
 
 18.11.2014 - Ivana Hrivnacova (DICOM-V09-06-08)
-           - Fixed DicomPhantomZSliceMerged.hh file description 
+           - Fixed DicomPhantomZSliceMerged.hh file description
              (for Doxygen)
 
 13.11.2014 - Jonathan Mdsen (DICOM-V09-06-07)
@@ -149,7 +196,7 @@ $Id: History 110890 2018-06-25 06:21:23Z gcosmo $
              Improvements and bug-fixes ->
              DicomHandler had some bugs when using DCM files
                other than examples provided
-             Added DicomPhantomZSliceMerged class to handle 
+             Added DicomPhantomZSliceMerged class to handle
                inconsistencies in DCM file meta-data
              DicomPhantomZSliceHeader class is extended to hold density
                and material ID data and the printing of data
@@ -162,34 +209,34 @@ $Id: History 110890 2018-06-25 06:21:23Z gcosmo $
              these files with Data.dat to use
            Kept CMakeLists.txt to copy over extra data file and anonymous
              DCM files
-      
+
 16.07.2013 - Jonathan Madsen
-           Many modifications to the DICOM example. 
+           Many modifications to the DICOM example.
            Added more anonymous DICOM files.
-           Added more script configurations. 
+           Added more script configurations.
            Added DicomCommandLineOptions, DicomHelpers, DicomTypeConversion,
              DicomOption as part of a command line processing package.
-           Modified CMakeLists.txt to configure extra files. 
+           Modified CMakeLists.txt to configure extra files.
            Added capability to use different data files for DICOM set,
              CT2Density file, ColourMap file.
            Added Statistical Analysis and Statistical Manager classes
-           Miscellaneous improvements. 
-           DICOM.cc now has a large list of runtime configuration options 
-             via command line. 
+           Miscellaneous improvements.
+           DICOM.cc now has a large list of runtime configuration options
+             via command line.
            Options set at command line are set to override environment
              variables.
 
 15.02.2013 - Ivana Hrivnacova (DICOM-V09-06-00)
            Applied coding guidelines (virtual keyword, data members
            names and initialization)
-           
+
 07.11.2012 - Gabriele Cosmo (DICOM-V09-05-10)
            Fixed compilation warnings for shadowing of variables and unused
            return flag from system calls.
 
 18.10.2012 - Ivana Hrivnacova (DICOM-V09-05-09)
 	   Updated CMakeLists.txt: added copying data files to the build
-           area as they are needed to run the tests. 
+           area as they are needed to run the tests.
 
 13.10.2012 - Andrea Dotti (DICOM-V09-05-08)
 	   Removing previous tag modification (not needed)
@@ -203,8 +250,8 @@ $Id: History 110890 2018-06-25 06:21:23Z gcosmo $
 04.09.2012 - Pedro Arce    (DICOM-V09-05-05)
              Remove old renamed files
              Updated CMakeLists.txt (By I.Hrivnacova)
-             Adding visualization, copying macros, install target and 
-             comment lines 
+             Adding visualization, copying macros, install target and
+             comment lines
 
 17.07.2012 - Ivana Hrivnacova (DICOM-V09-05-04)
              Improved README files
@@ -223,7 +270,7 @@ $Id: History 110890 2018-06-25 06:21:23Z gcosmo $
              Migration to new G4Exception scheme.
 
 03.10.2011 - G.Folger   (DICOM-V09-04-02)
-             Fix gcc46 compilation warning in DicomHandler.cc 
+             Fix gcc46 compilation warning in DicomHandler.cc
              and DicomPhantomParameterisationColour.cc
 
 05.06.2011 - Pedro Arce (DICOM-V09-04-01)
@@ -232,12 +279,12 @@ $Id: History 110890 2018-06-25 06:21:23Z gcosmo $
              report #1210.
              Corrected axis slicing hint in nested-parameterisation.
 
-23.12.2010 - Stephane Chauvie 
+23.12.2010 - Stephane Chauvie
              Corrected 2 bugs in DicomHandler
 
 30.11.2010 - John Allison
              dicom.cc: Removed redundant headers:
-             "G4UIterminal.hh" and "G4UItcsh.hh".             
+             "G4UIterminal.hh" and "G4UItcsh.hh".
 
 30.11.2010 - Ivana Hrivnacova (DICOM-V09-03-09)
              Moved inclusion of vis headers as last in main().
@@ -248,7 +295,7 @@ $Id: History 110890 2018-06-25 06:21:23Z gcosmo $
 24.11.2010 - Pedro Arce (DICOM-V09-03-07)
 	     Introduced partial phantom example
 	     Delete G4PSDoseDeposit_RegNav and use G4ScoreSplittingProcess instead
-     
+
 11.11.2010 - Gabriele Cosmo (DICOM-V09-03-06)
              Corrected vis.mac macro and set OGL as default viewer.
              Corrected some printouts in code...
@@ -262,18 +309,18 @@ $Id: History 110890 2018-06-25 06:21:23Z gcosmo $
              Introduced G4UIExecutive.
 
 06.06.2010 - Joseph Perl (DICOM-V09-03-03)
-	     Remove unused variable in EventAction 
+	     Remove unused variable in EventAction
 
 03.06.2010 - Joseph Perl (DICOM-V09-03-02)
 	     Updated vis usage
 
 19.11.2009 - StÈphane Chauvie (DICOM-V09-03-00)
-01.06.2010 - Stephane Chauvie - Andrea Armando 
+01.06.2010 - Stephane Chauvie - Andrea Armando
 	     Added function to read nested items (defined and undefined)
 	     Removed dependencies on CONQUEST
 	     DICOM handler could now read whichever DICOM file
-             (PT,CT,DR,CR,US,MR... ) 
-	    
+             (PT,CT,DR,CR,US,MR... )
+
 19.11.2009 - Stephanee Chauvie (DICOM-V09-02-03)
 	     Changed DICOM Handler to read CT files coming from CONQUEST
              DICOM server
@@ -288,8 +335,8 @@ $Id: History 110890 2018-06-25 06:21:23Z gcosmo $
              lengths in voxels of the regular structure.
 
 27.11.2008 - Pedro Arce (DICOM-V09-01-02)
-             Included G4PSDoseDeposit_RegNav to distribute dose along voxels, 
-	     including msc and energy loss corrections, for the case of 
+             Included G4PSDoseDeposit_RegNav to distribute dose along voxels,
+	     including msc and energy loss corrections, for the case of
 	     skipping voxel with equal materials when using regular
 	     navigation
 

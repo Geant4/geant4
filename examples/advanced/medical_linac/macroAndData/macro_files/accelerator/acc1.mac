@@ -1,0 +1,37 @@
+
+
+
+/accelerator/isoCentre 1000 mm      # distance between the isocentre and the target of the accelerator
+/accelerator/rotation90Y false      # rotate the accelerator of 90 deg around Y axis
+#/accelerator/rotationX 0 deg       # rotation around X [deg]
+#/accelerator/rotationX 200 deg     # rotation around X [deg]
+#/accelerator/rotationX -45 deg     # rotation around X [deg]
+
+/accelerator/idEnergy 6             # no units
+/accelerator/aperture1X -10 cm           
+/accelerator/aperture2X 100 mm      
+/accelerator/aperture1Y -100 mm     
+/accelerator/aperture2Y 100  mm     
+
+/accelerator/leavesA 200            
+/accelerator/leavesA 200            
+/accelerator/leavesA 200            
+/accelerator/leavesA 200            
+/accelerator/leavesA 200            
+/accelerator/leavesA 200            
+/accelerator/leavesA 200            
+/accelerator/leavesA 200            
+/accelerator/leavesA 200            
+/accelerator/leavesA 200            
+                                    
+/accelerator/leavesB 200            
+/accelerator/leavesB 200            
+/accelerator/leavesB 200            
+/accelerator/leavesB 200            
+/accelerator/leavesB 200            
+/accelerator/leavesB 200            
+/accelerator/leavesB 200            
+/accelerator/leavesB 200            
+/accelerator/leavesB 200            
+/accelerator/leavesB 200            
+

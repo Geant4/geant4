@@ -44,7 +44,7 @@
 
 SimpleTbbMasterRunManager::SimpleTbbMasterRunManager() : 
     G4MTRunManager(),
-    theTasks(static_cast<tbb::task_list*>(0)),
+    theTasks(static_cast<tbb::task_list*>(nullptr)),
     nEvtsPerTask(1)
 {
 }
@@ -74,7 +74,7 @@ void SimpleTbbMasterRunManager::CreateAndStartWorkers()
 void SimpleTbbMasterRunManager::CreateTask(G4int id,G4int evts)
 {
     tbbTask& task = * new(tbb::task::allocate_root())
-    tbbTask( id , NULL , evts ); //Add output for merging
+    tbbTask( id , nullptr , evts ); //Add output for merging
     theTasks->push_back( task );
 }
 

@@ -1,5 +1,4 @@
 -------------------------------------------------------------------
-$Id: History 110545 2018-05-29 13:40:55Z gcosmo $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,6 +14,14 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+03 October 2018 Vladimir Ivanchenko (hadr-proc-V10-04-09)
+-----------------------------------------------------
+- G4NeutrinoElectronProcess : V.Grichine added cross section biasing
+
+18 July 2018 Vladimir Ivanchenko (hadr-proc-V10-04-08)
+-----------------------------------------------------
+- G4HadronCaptureProcess : revised description, added C++11 keywards
 
 29 May 2018 Vladimir Ivanchenko (hadr-proc-V10-04-07)
 -----------------------------------------------------

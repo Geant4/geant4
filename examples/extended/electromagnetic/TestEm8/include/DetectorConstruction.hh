@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm8/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 106960 2017-10-31 08:35:19Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //

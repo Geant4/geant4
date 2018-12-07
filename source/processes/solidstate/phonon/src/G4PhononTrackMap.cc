@@ -26,7 +26,6 @@
 /// \file processes/phonon/src/G4PhononTrackMap.hh
 /// \brief Implementation of the G4PhononTrackMap base class
 //
-// $Id: G4PhononTrackMap.cc 76492 2013-11-11 17:15:04Z mkelsey $
 //
 // 20131111  Move Clear() function to .cc file
 

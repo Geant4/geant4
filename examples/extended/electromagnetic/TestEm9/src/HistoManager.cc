@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm9/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 100809 2016-11-02 15:02:53Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaPrimaryGeneratorAction.hh 107473 2017-11-15 08:02:34Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

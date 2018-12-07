@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm9/src/Histo.cc
 /// \brief Implementation of the Histo class
 //
-// $Id: Histo.cc 98275 2016-07-04 17:59:05Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

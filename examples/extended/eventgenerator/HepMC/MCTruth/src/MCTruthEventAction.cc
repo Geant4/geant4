@@ -27,7 +27,6 @@
 /// \brief Implementation of the MCTruthEventAction class
 //
 //
-// $Id: MCTruthEventAction.cc 99841 2016-10-07 10:09:34Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -38,21 +37,21 @@
 //
 // --------------------------------------------------------------
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "MCTruthEventAction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 MCTruthEventAction::MCTruthEventAction() : G4UserEventAction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 MCTruthEventAction::~MCTruthEventAction() 
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void MCTruthEventAction::BeginOfEventAction(const G4Event*)
 {
@@ -60,7 +59,7 @@ void MCTruthEventAction::BeginOfEventAction(const G4Event*)
   MCTruthManager::GetInstance()->NewEvent();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void MCTruthEventAction::EndOfEventAction(const G4Event*)
 {
@@ -68,4 +67,4 @@ void MCTruthEventAction::EndOfEventAction(const G4Event*)
   MCTruthManager::GetInstance()->PrintEvent();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -26,7 +26,6 @@
 /// \file StepMaxProcess.cc
 /// \brief Implementation of the StepMaxProcess class
 //
-// $Id: StepMaxProcess.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

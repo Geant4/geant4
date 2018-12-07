@@ -27,7 +27,6 @@
 /// \brief Definition of the ExP01PrimaryGeneratorAction class
 //
 //
-// $Id: ExP01PrimaryGeneratorAction.hh 98770 2016-08-09 14:22:25Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

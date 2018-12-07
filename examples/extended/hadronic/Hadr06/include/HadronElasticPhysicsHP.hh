@@ -26,7 +26,6 @@
 /// \file HadronElasticPhysicsHP.hh
 /// \brief Definition of the HadronElasticPhysicsHP class
 //
-// $Id: HadronElasticPhysicsHP.hh 71037 2013-06-10 09:20:54Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

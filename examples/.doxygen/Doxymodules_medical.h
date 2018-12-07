@@ -1,4 +1,3 @@
-// $Id: Doxymodules_medical.h 107787 2017-11-30 13:11:33Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_medical.h
@@ -59,6 +58,17 @@
   class DicomVFileImage {};
 
 /** @} */
+
+/** @} */
+
+/** @defgroup extended_medical_DICOM2 DICOM2
+ *  Medical example DICOM2
+ *  @ingroup extended_medical
+ *  @{
+ */
+
+  class Dicom2ActionInitialization {};
+  class Dicom2PrimaryGeneratorAction {};
 
 /** @} */
 
@@ -148,8 +158,17 @@
 
 /** @} */
 
+/** @defgroup extended_medical_dna_chem5 chem5
+ *  Medical dna chem5 example has its
+ *  <a href="../html_chem5/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
 /** @defgroup extended_medical_dna_clustering clustering
- *  Medical dna chem4 example has its
+ *  Medical dna clustering example has its
  *  <a href="../html_clustering/html/index.html">standalone documentation </a>
  *  @ingroup extended_medical_dna
  *  @{

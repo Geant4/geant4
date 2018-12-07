@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc 107060 2017-11-01 15:00:04Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -54,10 +53,9 @@ G4CompetitiveFission::G4CompetitiveFission() : G4VEvaporationChannel("fission")
   theLevelDensityPtr = new G4FissionLevelDensityParameter;
   MyOwnLevelDensity = true;
 
-  MaximalKineticEnergy = -1000.0;
+  MaximalKineticEnergy = 0.0;
   FissionBarrier = 0.0;
   FissionProbability = 0.0;
-  LevelDensityParameter = 0.0;
   pairingCorrection = G4NuclearLevelData::GetInstance()->GetPairingCorrection();
 }
 
@@ -71,32 +69,28 @@ G4CompetitiveFission::~G4CompetitiveFission()
 G4double G4CompetitiveFission::GetEmissionProbability(G4Fragment* fragment)
 {
   G4int anA = fragment->GetA_asInt();
-  G4int aZ  = fragment->GetZ_asInt();
-  G4double ExEnergy = fragment->GetExcitationEnergy() - 
-    pairingCorrection->GetFissionPairingCorrection(anA,aZ);
+  FissionProbability = 0.0;
+  if (anA >= 65) {
+    G4int aZ  = fragment->GetZ_asInt();
+    G4double ExEnergy = fragment->GetExcitationEnergy() - 
+      pairingCorrection->GetFissionPairingCorrection(anA,aZ);
   
-  // Saddle point excitation energy ---> A = 65
-  // Fission is excluded for A < 65
-  if (anA >= 65 && ExEnergy > 0.0) {
-    FissionBarrier = theFissionBarrierPtr->FissionBarrier(anA,aZ,ExEnergy);
-    MaximalKineticEnergy = ExEnergy - FissionBarrier;
-    LevelDensityParameter = 
-      theLevelDensityPtr->LevelDensityParameter(anA,aZ,ExEnergy);
-    FissionProbability = 
-      theFissionProbabilityPtr->EmissionProbability(*fragment,
-						    MaximalKineticEnergy);
+    // Saddle point excitation energy ---> A = 65
+    // Fission is excluded for A < 65
+    if (ExEnergy > 0.0) {
+      FissionBarrier = theFissionBarrierPtr->FissionBarrier(anA,aZ,ExEnergy);
+      MaximalKineticEnergy = ExEnergy - FissionBarrier;
+      FissionProbability = 
+	theFissionProbabilityPtr->EmissionProbability(*fragment,
+						      MaximalKineticEnergy);
     }
-  else {
-    MaximalKineticEnergy = -1000.0;
-    LevelDensityParameter = 0.0;
-    FissionProbability = 0.0;
   }
   return FissionProbability;
 }
 
 G4Fragment* G4CompetitiveFission::EmittedFragment(G4Fragment* theNucleus)
 {
-  G4Fragment * Fragment1 = 0; 
+  G4Fragment * Fragment1 = nullptr; 
   // Nucleus data
   // Atomic number of nucleus
   G4int A = theNucleus->GetA_asInt();
@@ -166,12 +160,10 @@ G4Fragment* G4CompetitiveFission::EmittedFragment(G4Fragment* theNucleus)
     // excitation energy
 
     FragmentsExcitationEnergy = 
-      // Tmax - FragmentsKineticEnergy;
       Tmax - FragmentsKineticEnergy + pcorr;
 
     // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
-  } while (FragmentsExcitationEnergy < 0.0
-	   && ++Trials < 100);
+  } while (FragmentsExcitationEnergy < 0.0 && ++Trials < 100);
     
   if (FragmentsExcitationEnergy <= 0.0) { 
     throw G4HadronicException(__FILE__, __LINE__, 

@@ -1,4 +1,3 @@
-$Id: History 93110 2015-11-05 08:37:42Z jmadsen $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +14,22 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13/11/2018 Jonathan Madsen (ThreadsafeScorers-V10-04-06)
+- Fixed shadowing warnings in G4atomic.hh header (recommit of ThreadsafeScorers-V10-04-03)
+
+11/11/2018 Jonathan Madsen (ThreadsafeScorers-V10-04-05)
+- Replaced TIMEMORY_AUTO_TIMER_BASIC with TIMEMORY_BASIC_AUTO_TIMER as the
+  latter is defined in G4TiMemory.hh and the former is deprecated by TiMemory
+- Included plot generation in main
+- Added plots/ts_scorers_{timing,memory}.jpeg
+- Updated threadsafe_scorers.out
+- Updated documentation
+
+09/11/2018 Jonathan Madsen (ThreadsafeScorers-V10-04-04)
+- Added scorers with G4StatAnalysis and G4ConvergenceTester
+- Improved scheme for using TiMemory to time how long the
+  scoring takes w.r.t. storage container and PS
+  
 15/6/2018 Gabriele Cosmo (ThreadsafeScorers-V10-04-03)
 - Fixed shadowing warnings in G4atomic.hh header.
 
@@ -58,9 +73,9 @@ track of all tags.
 - Removed preprocessor checks for C++11
 - Removed _HAS_ATOMICS_ preprocessor definition/conditions
 - Changed G4atomic to only be defined if G4MULTITHREADED,
-  otherwise, G4atomic<_Tp> is aliased to _Tp 
+  otherwise, G4atomic<_Tp> is aliased to _Tp
 - Included *.in files in macros to be copied to build directory
-  
+
 05/11/15 J. Madsen
 - Prefixed classes with "TS" for "Thread-safe"
 - Renamed all data members with f + uppercase

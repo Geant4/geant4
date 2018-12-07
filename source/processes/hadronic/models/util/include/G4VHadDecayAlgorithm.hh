@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 // Abstract base class for multibody "phase space" generators.  Subclasses
 // implement a specific algorithm, such as Kopylov, GENBOD, or Makoto's

@@ -45,6 +45,7 @@
 #include "G4HCofThisEvent.hh"
 #include "G4RunManager.hh"
 #include "G4UserSteppingAction.hh"
+#include "G4UImanager.hh"
 
 #include <iostream>
 #include <vector>
@@ -56,7 +57,7 @@
 //#define ddebug
 
 
-CCalEventAction::CCalEventAction (CCalPrimaryGeneratorAction* pg,
+CCalEventAction::CCalEventAction(CCalPrimaryGeneratorAction* pg,
 				 CCalSteppingAction* sa): 
   isInitialized(false),fPrimaryGenerator(pg),
   fSteppingAction(sa),SDnames(nullptr),numberOfSD(0) 
@@ -67,19 +68,12 @@ CCalEventAction::CCalEventAction (CCalPrimaryGeneratorAction* pg,
   
   G4cout << "Get Calorimter organisation" << G4endl;
   theOrg = new CCaloOrganization;
-  G4cout << "end of instantiation of EndofEventAction" << G4endl;
 }
-
 
 CCalEventAction::~CCalEventAction() {
-
-  if (theOrg)
-    delete theOrg;
-  if (SDnames)
-    delete[] SDnames;
-  G4cout << "CCalOfEventAction deleted" << G4endl;
+  delete theOrg;
+  delete[] SDnames;
 }
-
 
 void CCalEventAction::initialize() {
 
@@ -91,10 +85,10 @@ void CCalEventAction::initialize() {
 #endif
   if (numberOfSD > 0) {
     G4int n = numberOfSD;
-    if (n < 2) n = 2;
+    n = std::min(n, 2);
     SDnames = new nameType[n];
   }
-  for (int i=0; i<numberOfSD; i++) {
+  for (int i=0; i<numberOfSD; ++i) {
     SDnames[i] = G4String(CCalSDList::getInstance()->getCaloSDName(i));
 #ifdef debug
     G4cout << "CCalEndOfEventAction: found SD " << i << " name "
@@ -103,22 +97,21 @@ void CCalEventAction::initialize() {
   }       
 }
 
+void CCalEventAction::BeginOfEventAction(const G4Event* evt) { 
 
-void CCalEventAction::StartOfEventAction(const G4Event* evt) { 
-  G4cout << "\n---> Begin of event: " << evt->GetEventID() << G4endl;
+  if (!isInitialized) { initialize(); }
+  G4cout << " --- Begin of event: " << evt->GetEventID() << G4endl;
+  /*
+  if(15 == evt->GetEventID()) {
+    G4UImanager * UImanager = G4UImanager::GetUIpointer();
+    UImanager->ApplyCommand("/tracking/verbose 2");
+  }
+  */
 }
-
 
 void CCalEventAction::EndOfEventAction(const G4Event* evt){
 
-#ifdef debug
-  G4cout << G4endl << "=== Begin of EndOfEventAction === " << G4endl;
-#endif
-
-  if (!isInitialized) initialize();
-
-  fSteppingAction->endOfEvent();
-  
+  fSteppingAction->endOfEvent();  
   //
   // Look for the Hit Collection 
   //  
@@ -143,7 +136,7 @@ void CCalEventAction::EndOfEventAction(const G4Event* evt){
 
   float* edep = new float[numberOfSD];
   int nhit=0;
-  for (i = 0; i < numberOfSD; i++){
+  for (i = 0; i < numberOfSD; ++i){
 
     //
     // Look for the Hit Collection
@@ -281,8 +274,7 @@ void CCalEventAction::EndOfEventAction(const G4Event* evt){
 #ifdef debug
   G4cout << "CCalAnalysis:: Fill Ntuple " << G4endl;
 #endif
-  
-  
+    
   // 5)
   static G4int IDtimeProfile = -1;
   if (IDtimeProfile < 0)

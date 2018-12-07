@@ -54,6 +54,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 #include "G4HadronicInteractionRegistry.hh"
+#include "G4HadronicParameters.hh"
 
 // Constructor
 G4HadronicAbsorptionFritiof::
@@ -80,7 +81,7 @@ G4HadronicAbsorptionFritiof( G4ParticleDefinition* pdef )
   theModel->SetTransport( theCascade );
 
   G4double theMin = 0.0*GeV;
-  G4double theMax = 100.0*TeV;
+  G4double theMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   theModel->SetMinEnergy( theMin );
   theModel->SetMaxEnergy( theMax );
 

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id:  G4BiasingProcessLimiterForParallelGeometries.cc $
 //
 //
 

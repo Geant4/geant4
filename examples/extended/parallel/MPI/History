@@ -9,6 +9,18 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 November 2018 I. Hrivnacova (MPI-V10-04-01)
+- Adapted g4mpi to allow to define an extra worker for collecting data 
+  from processing workers (needed for merging ntuples)
+- Added classes for ntuple merging (in source/analysis)
+- Added exMPI04 demonstrating merging ntuples via MPI
+  (with Root output only)
+- In exMPI03: fixed warning from analysis when opening the second output 
+  file (dose-merged) within the same run 
+
+02 May 2018 J.Allison (MPI-V10-04-00)
+- Removed G4VIS_USE and G4UI_USE.
+
 28 November 2017 B.Morgan (MPI-V10-03-02)
 - Repace ROOT_INCLUDE_DIR with ROOT_INCLUDE_DIRS
 

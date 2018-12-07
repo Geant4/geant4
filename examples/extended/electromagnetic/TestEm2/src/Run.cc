@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm2/src/Run.cc
 /// \brief Implementation of the Run class
 //
-// $Id: Run.cc 75577 2013-11-04 12:03:26Z vnivanch $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -271,8 +270,10 @@ void Run::EndOfRun(G4double edep, G4double rms, G4double& limit)
     G4int imin = 0;
     while( (imin < f_nRbin-1) && (MeanERadialCumul[imin] < EMoliere) ) 
       { ++imin; }
-    G4double ratio = (EMoliere - MeanERadialCumul[imin]) /
-                     (MeanERadialCumul[imin+1] - MeanERadialCumul[imin]);
+
+    G4double del = MeanERadialCumul[imin+1] - MeanERadialCumul[imin];
+    G4double ratio = 
+      (del > 0.0) ? (EMoliere - MeanERadialCumul[imin])/del : 0.0;
     iMoliere = 1. + imin + ratio;
   }                       
       

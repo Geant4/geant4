@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL2PSAction.hh 110513 2018-05-28 07:37:38Z gcosmo $
 //
 
 #ifndef G4OpenGL2PSAction_h

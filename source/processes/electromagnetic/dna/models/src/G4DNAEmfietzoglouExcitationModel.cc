@@ -26,7 +26,7 @@
 // Based on the work described in
 // Rad Res 163, 98-111 (2005)
 // D. Emfietzoglou, H. Nikjoo
-// 
+//
 // Authors of the class (2014):
 // I. Kyriakou (kyriak@cc.uoi.gr)
 // D. Emfietzoglou (demfietz@cc.uoi.gr)
@@ -46,10 +46,8 @@ using namespace std;
 
 G4DNAEmfietzoglouExcitationModel::G4DNAEmfietzoglouExcitationModel(const G4ParticleDefinition*,
                                                    const G4String& nam)
-    :G4VEmModel(nam),isInitialised(false)
+:G4VEmModel(nam),isInitialised(false)
 {
-
-    //  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
     fpMolWaterDensity = 0;
 
     verboseLevel= 0;
@@ -62,21 +60,21 @@ G4DNAEmfietzoglouExcitationModel::G4DNAEmfietzoglouExcitationModel(const G4Parti
 
     if( verboseLevel>0 )
     {
-        G4cout << "Emfietzoglou excitation model is constructed " << G4endl;
+      G4cout << "Emfietzoglou excitation model is constructed " << G4endl;
     }
     fParticleChangeForGamma = 0;
-    SetLowEnergyLimit(8. * eV);
-    SetHighEnergyLimit(10. * keV);
+
+    SetLowEnergyLimit(8.*eV);
+    SetHighEnergyLimit(10.*keV);
 
     // Selection of stationary mode
-
     statCode = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DNAEmfietzoglouExcitationModel::~G4DNAEmfietzoglouExcitationModel()
-{ 
+{
     // Cross section
 
     std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
@@ -111,38 +109,29 @@ void G4DNAEmfietzoglouExcitationModel::Initialise(const G4ParticleDefinition* pa
 
     tableFile[electron] = fileElectron;
 
-    lowEnergyLimit[electron] = 8. * eV;
-    highEnergyLimit[electron] = 10. * keV;
-
     // Cross section
-    
+
     G4DNACrossSectionDataSet* tableE = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
     tableE->LoadData(fileElectron);
 
     tableData[electron] = tableE;
-    
-    //
 
-    if (particle==electronDef)
-    {
-        SetLowEnergyLimit(lowEnergyLimit[electron]);
-        SetHighEnergyLimit(highEnergyLimit[electron]);
-    }
+    //
 
     if( verboseLevel>0 )
     {
-        G4cout << "Emfietzoglou excitation model is initialized " << G4endl
-               << "Energy range: "
-               << LowEnergyLimit() / eV << " eV - "
-               << HighEnergyLimit() / keV << " keV for "
-               << particle->GetParticleName()
-               << G4endl;
+      G4cout << "Emfietzoglou excitation model is initialized " << G4endl
+             << "Energy range: "
+             << LowEnergyLimit() / eV << " eV - "
+             << HighEnergyLimit() / keV << " keV for "
+             << particle->GetParticleName()
+             << G4endl;
     }
 
     // Initialize water density pointer
     fpMolWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
 
-    if (isInitialised) { return; }
+    if (isInitialised) return;
     fParticleChangeForGamma = GetParticleChangeForGamma();
     isInitialised = true;
 }
@@ -162,62 +151,40 @@ G4double G4DNAEmfietzoglouExcitationModel::CrossSectionPerVolume(const G4Materia
 
     // Calculate total cross section for model
 
-    G4double lowLim = 0;
-    G4double highLim = 0;
     G4double sigma=0;
 
     G4double waterDensity = (*fpMolWaterDensity)[material->GetIndex()];
 
-    if(waterDensity!= 0.0)
+    const G4String& particleName = particleDefinition->GetParticleName();
+
+    if (ekin >= LowEnergyLimit() && ekin <= HighEnergyLimit())
     {
-        const G4String& particleName = particleDefinition->GetParticleName();
+      std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
+      pos = tableData.find(particleName);
 
-        std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
-        pos1 = lowEnergyLimit.find(particleName);
-        if (pos1 != lowEnergyLimit.end())
-        {
-            lowLim = pos1->second;
-        }
-
-        std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
-        pos2 = highEnergyLimit.find(particleName);
-        if (pos2 != highEnergyLimit.end())
-        {
-            highLim = pos2->second;
-        }
-
-        if (ekin >= lowLim && ekin < highLim)
-        {
-            std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-            pos = tableData.find(particleName);
-
-            if (pos != tableData.end())
-            {
-                G4DNACrossSectionDataSet* table = pos->second;
-                if (table != 0)
-                {
-                    sigma = table->FindValue(ekin);
-                }
-            }
-            else
-            {
-                G4Exception("G4DNAEmfietzoglouExcitationModel::CrossSectionPerVolume","em0002",
+      if (pos != tableData.end())
+      {
+        G4DNACrossSectionDataSet* table = pos->second;
+        if (table != 0) sigma = table->FindValue(ekin);
+      }
+      else
+      {
+        G4Exception("G4DNAEmfietzoglouExcitationModel::CrossSectionPerVolume","em0002",
                             FatalException,"Model not applicable to particle type.");
-            }
-        }
+      }
+    }
 
-        if (verboseLevel > 2)
-        {
-            G4cout << "__________________________________" << G4endl;
-            G4cout << "G4DNAEmfietzoglouExcitationModel - XS INFO START" << G4endl;
-            G4cout << "Kinetic energy(eV)=" << ekin/eV << " particle : " << particleName << G4endl;
-            G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-            G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
-            //      G4cout << "   Cross section per water molecule (cm^-1)=" << sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
-            G4cout << "G4DNAEmfietzoglouExcitationModel - XS INFO END" << G4endl;
-        }
-
-    } // if (waterMaterial)
+    if (verboseLevel > 2)
+    {
+      G4cout << "__________________________________" << G4endl;
+      G4cout << "G4DNAEmfietzoglouExcitationModel - XS INFO START" << G4endl;
+      G4cout << "Kinetic energy(eV)=" << ekin/eV << " particle : " << particleName << G4endl;
+      G4cout << "Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
+      G4cout << "Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
+      //G4cout << "   Cross section per water molecule (cm^-1)=" <<
+      ///sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
+      G4cout << "G4DNAEmfietzoglouExcitationModel - XS INFO END" << G4endl;
+    }
 
     return sigma*waterDensity;
 }
@@ -261,9 +228,9 @@ void G4DNAEmfietzoglouExcitationModel::SampleSecondaries(std::vector<G4DynamicPa
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int G4DNAEmfietzoglouExcitationModel::RandomSelect(G4double k, const G4String& particle)
-{   
- 
-         G4int level = 0;
+{
+
+    G4int level = 0;
 
     std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
     pos = tableData.find(particle);
@@ -280,7 +247,7 @@ G4int G4DNAEmfietzoglouExcitationModel::RandomSelect(G4double k, const G4String&
             G4double value = 0.;
 
             //Check reading of initial xs file
-	    //G4cout << table->GetComponent(0)->FindValue(k)/ ((1.e-22 / 3.343) * m*m) << G4endl;
+	        //G4cout << table->GetComponent(0)->FindValue(k)/ ((1.e-22 / 3.343) * m*m) << G4endl;
             //G4cout << table->GetComponent(1)->FindValue(k)/ ((1.e-22 / 3.343) * m*m) << G4endl;
             //G4cout << table->GetComponent(2)->FindValue(k)/ ((1.e-22 / 3.343) * m*m) << G4endl;
             //G4cout << table->GetComponent(3)->FindValue(k)/ ((1.e-22 / 3.343) * m*m) << G4endl;
@@ -288,8 +255,8 @@ G4int G4DNAEmfietzoglouExcitationModel::RandomSelect(G4double k, const G4String&
             //G4cout << table->GetComponent(5)->FindValue(k)/ ((1.e-22 / 3.343) * m*m) << G4endl;
             //G4cout << table->GetComponent(6)->FindValue(k)/ ((1.e-22 / 3.343) * m*m) << G4endl;
             //abort();
-	    
-	    while (i>0)
+
+	        while (i>0)
             {
                 i--;
                 valuesBuffer[i] = table->GetComponent(i)->FindValue(k);

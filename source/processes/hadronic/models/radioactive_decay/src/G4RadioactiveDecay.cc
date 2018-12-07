@@ -711,7 +711,9 @@ void G4RadioactiveDecay::BuildPhysicsTable(const G4ParticleDefinition&)
 {
   if (!isInitialised) {
     isInitialised = true;
+#ifdef G4VERBOSE
     if(G4Threading::IsMasterThread()) { StreamInfo(G4cout, "\n"); }
+#endif
   }
 }
 

@@ -1,0 +1,89 @@
+/Physics/addPhysics QGSP_BIC_EMY
+# /geometrySetup/selectGeometry Carbon
+/run/initialize
+
+/run/setCut 1 mm
+/run/setCutForRegion DetectorLog 1 km
+
+/Step/waterPhantomStepMax 10 um
+
+# /gps/particle proton
+# /gps/pos/centre 0. 0. 0. cm
+# /gps/pos/type Beam
+# /gps/pos/rot1 0 1 0
+# /gps/pos/rot2 0 0 1
+# /gps/ene/type Gauss
+# /gps/ene/mono 62 MeV
+# /gps/direction 1 0 0
+
+#---------------------------gps-----------------
+/gps/pos/shape Circle
+/gps/pos/centre -310. 0. 0. cm
+/gps/pos/radius 0. mm
+/gps/pos/sigma_r 2.5 mm
+/gps/particle proton
+/gps/pos/type Beam
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0
+/gps/ang/type beam1d
+/gps/ang/sigma_r 0. deg
+/gps/ene/type Gauss
+/gps/ene/mono 62 MeV
+/gps/ene/sigma 0.3 MeV
+
+#--------------detector and phantom-----------------
+/changePhantom/size 40 40 40 cm
+/changePhantom/position 20 0 0 cm
+/changePhantom/material G4_WATER
+
+/changeDetector/voxelSize .02 40 40 mm
+/changeDetector/size 120 40 40 mm
+/changeDetector/displacement 0 18 18 cm   # With respect to the phantom
+
+/changePhantom/update
+
+
+# /score/create/boxMesh boxMesh_1
+# /score/mesh/translate/xyz 60. 20. 20. mm
+# /score/mesh/boxSize 60. 20. 20. mm
+# /score/mesh/nBin 6000 1 1
+# /score/quantity/doseDeposit dose
+# /score/close
+
+/event/printEventNumber 100
+
+### RBE
+/rbe/verbose 2
+/rbe/loadLemTable data/rbe/lem1.csv
+/rbe/calculation 1
+/rbe/accumulate 1
+
+## U87
+#/rbe/dcut 8.0 gray
+#/rbe/alphaX 0.11 gray(-1)
+#/rbe/betaX 0.06 gray(-2)
+#/rbe/lemTable data/rbe/U87_LEM.dat
+/rbe/cellLine U87
+
+## AG01522
+#/rbe/dcut 9.5 gray
+#/rbe/alphaX 0.54 gray(-1)
+#/rbe/betaX 0.062 gray(-2)
+#/rbe/lemTable data/rbe/AG01522_LEM.dat
+
+/rbe/doseScale 7777770
+# Dose scale should be: 2e7 / nEvents * voxelSizeInCm2
+
+/modulator/ReadData Modulators/Modulator010.txt
+/modulator/RMWMat G4_PLEXIGLASS
+/modulator/position -2160.5 30 50 mm
+/modulator/innerRadius 2.5 cm
+/modulator/outRadius 9.5 cm
+
+# Running in loop
+/control/alias initialValue 0
+/control/alias   finalValue 360
+/control/alias     stepSize 1
+/control/loop macro/RBE-62MeV-proton-modulator.loop counterName {initialValue} {finalValue} {stepSize}

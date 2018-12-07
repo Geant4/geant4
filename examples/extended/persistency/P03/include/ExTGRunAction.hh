@@ -26,7 +26,6 @@
 /// \file persistency/P03/include/ExTGRunAction.hh
 /// \brief Definition of the ExTGRunAction class
 //
-// $Id: ExTGRunAction.hh 68025 2013-03-13 13:43:46Z gcosmo $
 
 #ifndef ExTGRunAction_h
 #define ExTGRunAction_h 1

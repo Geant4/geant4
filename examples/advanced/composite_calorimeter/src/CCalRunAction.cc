@@ -32,8 +32,6 @@
 #include "globals.hh"
 #include "G4Run.hh"
 
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 
 #include "CCalAnalysis.hh"
@@ -41,37 +39,24 @@
 
 void CCalRunAction::BeginOfRunAction(const G4Run* aRun) 
 {
-
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   numberOfTimeSlices = 200;
-
-  // A.R. Added for visualization of events.
-  if ( G4VVisManager::GetConcreteInstance() ) {
-    G4UImanager* UI = G4UImanager::GetUIpointer(); 
-    UI->ApplyCommand("/vis/scene/notifyHandlers");
-  } 
 
   if (aRun->GetRunID() == 0) //first run
     Book();
       
-
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
   //cleanup
   G4int timeHist = analysis->GetH1Id("h300");
-  for (int i=0; i<numberOfTimeSlices; i++)
+  for (int i=0; i<numberOfTimeSlices; i++) {
     analysis->GetH1(timeHist+i)->reset();
-  
+  }
 }
 
 
 void CCalRunAction::EndOfRunAction(const G4Run* aRun) 
 {
   G4cout << "### Run " << aRun->GetRunID() << " end." << G4endl;
-
-  // A.R. Added for visualization of events.
-  if (G4VVisManager::GetConcreteInstance()) {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  }
 }   
 
 void CCalRunAction::Book()

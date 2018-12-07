@@ -1,4 +1,3 @@
-$Id: History 110832 2018-06-15 15:00:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 26, 2018 - D.Sorokin (geomnav-V10-04-12)
+-----------------------
+- Notify G4ChordFinder at the beginning of each ComputeStep call. 
 
 June 15, 2018 - G.Cosmo (geomnav-V10-04-11)
 -----------------------

@@ -27,7 +27,6 @@
 /// \brief Definition of the GB06ParallelWorldForSlices class
 //
 //
-// $Id: GB06ParallelWorldForSlices.hh 90093 2015-05-13 11:59:54Z gcosmo $
 //
 #ifndef GB06ParallelWorldForSlices_hh
 #define GB06ParallelWorldForSlices_hh

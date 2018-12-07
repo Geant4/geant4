@@ -373,7 +373,7 @@ install_datasets()
       # - Download bundle to cache
       dataset_file=$(echo $ds | cut -d "|" -f4)
       echo "+ downloading ${dataset_file}"
-      ${G4CURL} -f -m ${dataset_timeout} -o ${g4downloaddir}/${dataset_file} ${dataset_url}/${dataset_file}
+      ${G4CURL} -L -f -m ${dataset_timeout} -o ${g4downloaddir}/${dataset_file} ${dataset_url}/${dataset_file}
       curl_status="$?"
       if [ "$curl_status" != "0" ] ; then
         echo "- download of '${dataset_file}' failed : CURL error $?"

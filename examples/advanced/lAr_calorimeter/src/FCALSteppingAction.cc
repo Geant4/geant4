@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALSteppingAction.cc 67976 2013-03-13 10:23:17Z gcosmo $
 //
 // 
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh 99152 2016-09-07 08:04:30Z gcosmo $
 //
 
 /**

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh 105820 2017-08-22 08:03:26Z gcosmo $
 
 #ifndef G4NistElementBuilder_h
 #define G4NistElementBuilder_h 1

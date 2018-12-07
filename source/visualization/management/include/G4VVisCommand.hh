@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh 109186 2018-04-03 07:22:18Z gcosmo $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -95,7 +94,7 @@ protected:
   // Return false if there's a problem
 
   // Other utilities.
-  void UpdateVisManagerScene (const G4String& sceneName = "");
+  void CheckSceneAndNotifyHandlers (G4Scene* = nullptr);
 
   // Data members.
   static G4VisManager* fpVisManager;
@@ -106,14 +105,14 @@ protected:
   // Current quantities for use in appropriate commands
   static G4int fCurrentArrow3DLineSegmentsPerCircle;
   static G4Colour                   fCurrentColour;
-  //static G4VMarker::FillStyle       fCurrentFillStyle;  Not yet used.
-  //static G4VMarker::SizeType        fCurrentSizeType;  Not yet used.
   static G4double                   fCurrentLineWidth;
   //static G4VisAttributes::LineStyle fCurrentLineStyle;  Not yet used.
+  //static G4VMarker::FillStyle       fCurrentFillStyle;  Not yet used.
+  //static G4VMarker::SizeType        fCurrentSizeType;  Not yet used.
   static G4Colour                   fCurrentTextColour;
   static G4Text::Layout             fCurrentTextLayout;
   static G4double                   fCurrentTextSize;
-  static G4ModelingParameters::PVNameCopyNoPath fCurrentTouchablePath;
+  static G4PhysicalVolumeModel::TouchableProperties fCurrentTouchableProperties;
 };
 
 #include "G4VVisCommand.icc"

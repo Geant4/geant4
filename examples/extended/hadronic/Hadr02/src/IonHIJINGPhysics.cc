@@ -26,8 +26,6 @@
 /// \file hadronic/Hadr02/src/IonHIJINGPhysics.cc
 /// \brief Implementation of the IonHIJINGPhysics class
 //
-// $Id: IonHIJINGPhysics.cc,v 1.1 2006/10/28 16:00:25 vnivanch Exp $
-// GEANT4 tag $Name: $
 //
 //---------------------------------------------------------------------------
 //
@@ -62,6 +60,7 @@
 #include "G4FTFBuilder.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4BuilderType.hh"
+#include "G4HadronicParameters.hh"
 using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,7 +88,7 @@ void IonHIJINGPhysics::ConstructProcess()
   G4double emin = 0.*MeV;
   G4double emaxFTF = 25.*GeV;
   G4double eminHIJ = 12.*GeV;
-  G4double emaxHIJ = 100.*TeV;
+  G4double emaxHIJ = G4HadronicParameters::Instance()->GetMaxEnergy();
 
   G4ExcitationHandler* handler = new G4ExcitationHandler();
   G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);

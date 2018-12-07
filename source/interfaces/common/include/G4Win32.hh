@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4Win32.hh 66892 2013-01-17 10:57:59Z gunter $
 //
 //  To unify Windows message treatment between 
 // G4/interfaces Windows sessions and G4/visualizations Windows drivers.

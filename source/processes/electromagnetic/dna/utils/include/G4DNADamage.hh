@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADamages.hh 100781 2016-11-02 11:50:20Z matkara $
 //
 // Author: Mathieu Karamitros
 

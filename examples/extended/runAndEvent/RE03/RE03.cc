@@ -27,7 +27,6 @@
 /// \brief Main program of the runAndEvent/RE03 example
 //
 //
-// $Id: $
 //
 
 #include "G4Types.hh"

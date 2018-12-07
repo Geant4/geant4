@@ -8,3 +8,7 @@
 #
 /run/beamOn 1
 #
+/OpNovice/phys/cerenkovMaxPhotons  15  # default: 20
+#
+/run/beamOn 1
+

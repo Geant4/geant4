@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr02/include/UrQMDProtonBuilder.hh
 /// \brief Definition of the UrQMDProtonBuilder class
 //
-// $Id: UrQMDProtonBuilder.hh 77519 2013-11-25 10:54:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

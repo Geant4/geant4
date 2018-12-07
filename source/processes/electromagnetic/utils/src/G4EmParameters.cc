@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmParameters.cc 69320 2013-04-30 15:59:36Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -131,11 +130,13 @@ void G4EmParameters::Initialise()
   useMottCorrection = false;
   integral = true;
   birks = false;
+  fICRU90 = false;
   dnaFast = false;
   dnaStationary = false;
   dnaMsc = false;
-  gammaShark = false;
+  gener = false;
   onIsolated = false;
+  enableSamplingTable = false;
 
   minSubRange = 1.0;
   minKinEnergy = 0.1*CLHEP::keV;
@@ -173,6 +174,10 @@ void G4EmParameters::Initialise()
 
   namePIXE = "Empirical";
   nameElectronPIXE = "Livermore";
+
+  directionalSplitting = false;
+  directionalSplittingTarget = G4ThreeVector(0.,0.,0.);
+  directionalSplittingRadius = 0.;
 }
 
 void G4EmParameters::SetLossFluctuations(G4bool val)
@@ -406,6 +411,16 @@ G4bool G4EmParameters::BirksActive() const
   return birks;
 }
 
+void G4EmParameters::SetUseICRU90Data(G4bool val)
+{
+  fICRU90 = val;
+}
+
+G4bool G4EmParameters::UseICRU90Data() const
+{
+  return fICRU90;
+}
+
 void G4EmParameters::SetDNAFast(G4bool val)
 {
   if(IsLocked()) { return; }
@@ -439,15 +454,25 @@ G4bool G4EmParameters::DNAElectronMsc() const
   return dnaMsc;
 }
 
-void G4EmParameters::SetGammaSharkActive(G4bool val)
+void G4EmParameters::SetGeneralProcessActive(G4bool val)
 {
   if(IsLocked()) { return; }
-  gammaShark = val;
+  gener = val;
+  // if general interaction is enabled then sub-cutoff and 
+  // force interaction options should be disabled
+  if(gener) {
+    m_regnamesForced.clear();
+    m_procForced.clear();
+    m_lengthForced.clear();
+    m_weightForced.clear();
+    m_regnamesSubCut.clear();
+    m_subCuts.clear();
+  }
 }
 
-G4bool G4EmParameters::GammaSharkActive() const
+G4bool G4EmParameters::GeneralProcessActive() const
 {
-  return gammaShark;
+  return gener;
 }
 
 void G4EmParameters::SetEmSaturation(G4EmSaturation* ptr)
@@ -468,6 +493,17 @@ void G4EmParameters::SetOnIsolated(G4bool val)
 G4bool G4EmParameters::OnIsolated() const
 {
   return onIsolated;
+}
+
+void G4EmParameters::SetEnableSamplingTable(G4bool val)
+{
+  if(IsLocked()) { return; }
+  enableSamplingTable = val;
+}
+
+G4bool G4EmParameters::EnableSamplingTable() const
+{
+  return enableSamplingTable;
 }
 
 G4EmSaturation* G4EmParameters::GetEmSaturation()
@@ -1063,39 +1099,39 @@ void G4EmParameters::AddMsc(const G4String& region, const G4String& type)
 
 const std::vector<G4String>& G4EmParameters::RegionsMsc() const
 {
-  return m_regnamesMsc;
+  return m_regnamesPhys;
 }
 
 const std::vector<G4String>& G4EmParameters::TypesMsc() const
 {
-  return m_typesMsc;
+  return m_typesPhys;
 }
 
 void G4EmParameters::AddPhysics(const G4String& region, const G4String& type)
 {
   if(IsLocked()) { return; }
   G4String r = CheckRegion(region);
-  G4int nreg =  m_regnamesMsc.size();
+  G4int nreg =  m_regnamesPhys.size();
   for(G4int i=0; i<nreg; ++i) {
-    if(r == m_regnamesMsc[i]) { return; }
+    if(r == m_regnamesPhys[i]) { return; }
   }
-  m_regnamesMsc.push_back(r);
-  m_typesMsc.push_back(type);
+  m_regnamesPhys.push_back(r);
+  m_typesPhys.push_back(type);
 }
 
 const std::vector<G4String>& G4EmParameters::RegionsPhysics() const
 {
-  return m_regnamesMsc;
+  return m_regnamesPhys;
 }
 
 const std::vector<G4String>& G4EmParameters::TypesPhysics() const
 {
-  return m_typesMsc;
+  return m_typesPhys;
 }
 
 void G4EmParameters::SetSubCutoff(G4bool val, const G4String& region)
 {
-  if(IsLocked()) { return; }
+  if(IsLocked() && !gener) { return; }
   G4String r = CheckRegion(region);
   G4int nreg =  m_regnamesSubCut.size();
   for(G4int i=0; i<nreg; ++i) {
@@ -1168,7 +1204,7 @@ G4EmParameters::ActivateForcedInteraction(const G4String& procname,
                                           G4double length, 
                                           G4bool wflag)
 {
-  if(IsLocked()) { return; }
+  if(IsLocked() && !gener) { return; }
   G4String r = CheckRegion(region);
   if(length >= 0.0) {
     G4int n =  m_procForced.size();
@@ -1309,8 +1345,10 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
   os << "=======================================================================" << "\n";
   os << "LPM effect enabled                                 " <<flagLPM << "\n";
   os << "Spline of EM tables enabled                        " <<spline << "\n";
+  os << "Enable creation and use of sampling tables         " <<enableSamplingTable << "\n";
   os << "Apply cuts on all EM processes                     " <<applyCuts << "\n";
   os << "Use integral approach for tracking                 " <<integral << "\n";
+  os << "Use general process                                " <<gener << "\n";
   os << "X-section factor for integral approach             " <<lambdaFactor << "\n";
   os << "Min kinetic energy for tables                      " 
      <<G4BestUnit(minKinEnergy,"Energy") << "\n";
@@ -1340,9 +1378,10 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Lowest muon/hadron kinetic energy                  " 
      <<G4BestUnit(lowestMuHadEnergy,"Energy") << "\n";
   os << "Fluctuations of dE/dx are enabled                  " <<lossFluctuation << "\n";
+  os << "Use ICRU90 data                                    " << fICRU90 << "\n";
   os << "Use built-in Birks satuaration                     " << birks << "\n";
   os << "Build CSDA range enabled                           " <<buildCSDARange << "\n";
-  os << "Use cut as a final range enabled                   " <<finalRange << "\n";
+  os << "Use cut as a final range enabled                   " <<cutAsFinalRange << "\n";
   os << "Enable angular generator interface                 " 
      <<useAngGeneratorForIonisation << "\n";
   os << "Factor of cut reduction for sub-cutoff method      " << minSubRange << "\n";

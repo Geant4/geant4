@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04StackingAction.hh
 /// \brief Definition of the ExN04StackingAction class
 //
-// $Id: ExN04StackingAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
 //
 
 #ifndef ExN04StackingAction_H
@@ -50,28 +49,28 @@ public:
   virtual void NewStage();
   virtual void PrepareNewEvent();
 
-  inline void SetNRequestMuon(G4int val) { reqMuon = val; }
-  inline G4int GetNRequestMuon() const { return reqMuon; }
-  inline void SetNRequestIsoMuon(G4int val) { reqIsoMuon = val; }
-  inline G4int GetNRequestIsoMuon() const { return reqIsoMuon; }
-  inline void SetNIsolation(G4int val) { reqIso = val; }
-  inline G4int GetNIsolation() const { return reqIso; }
-  inline void SetRoIAngle(G4double val) { angRoI = val; }
-  inline G4double GetRoIAngle() const { return angRoI; }
+  inline void SetNRequestMuon(G4int val) { fReqMuon = val; }
+  inline G4int GetNRequestMuon() const { return fReqMuon; }
+  inline void SetNRequestIsoMuon(G4int val) { fReqIsoMuon = val; }
+  inline G4int GetNRequestIsoMuon() const { return fReqIsoMuon; }
+  inline void SetNIsolation(G4int val) { fReqIso = val; }
+  inline G4int GetNIsolation() const { return fReqIso; }
+  inline void SetRoIAngle(G4double val) { fAngRoI = val; }
+  inline G4double GetRoIAngle() const { return fAngRoI; }
 
 private:
   G4bool InsideRoI(const G4Track * aTrack,G4double ang);
   G4VHitsCollection* GetCollection(G4String colName);
 
-  ExN04TrackerHitsCollection* trkHits;
-  ExN04MuonHitsCollection* muonHits;
-  ExN04StackingActionMessenger* theMessenger;
+  ExN04TrackerHitsCollection* fTrkHits;
+  ExN04MuonHitsCollection* fMuonHits;
+  ExN04StackingActionMessenger* fMessenger;
 
-  G4int stage;
-  G4int reqMuon;
-  G4int reqIsoMuon;
-  G4int reqIso;
-  G4double angRoI;
+  G4int fStage;
+  G4int fReqMuon;
+  G4int fReqIsoMuon;
+  G4int fReqIso;
+  G4double fAngRoI;
 };
 
 #endif

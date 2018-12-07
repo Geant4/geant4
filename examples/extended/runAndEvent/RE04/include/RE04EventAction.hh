@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE04/include/RE04EventAction.hh
 /// \brief Definition of the RE04EventAction class
 //
-// $Id: $
 //
 #ifndef RE04EventAction_h
 #define RE04EventAction_h 1

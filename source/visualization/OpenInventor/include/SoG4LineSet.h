@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SoG4LineSet.h 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // John Allison  26th October 2006
 // Extended SoLineSet to include G4Atts.

@@ -26,7 +26,8 @@
 //  Bogacki-Shampine's RK 5(4) non-FSAL implementation by Somnath Banerjee
 //  Supervision / code review: John Apostolakis
 //
-// Sponsored by Google in Google Summer of Code 2015.
+//  Somnath's work was sponsored by Google as part of the Google Summer of
+//  Code 2015, as part of the CERN / SFT organisation.p
 //
 // First version: 25 May 2015
 //
@@ -233,7 +234,7 @@ void G4BogackiShampine45::Stepper( const G4double yInput[],
     const G4int numberOfVariables= this->GetNumberOfVariables();
     
     // The number of variables to be integrated over
-    yOut[7] = yTemp[7]  = yIn[7];
+    yOut[7] = yTemp[7]  = yIn[7] = yInput[7];
     //  Saving yInput because yInput and yOut can be aliases for same array
     
     for(i=0;i<numberOfVariables;i++)

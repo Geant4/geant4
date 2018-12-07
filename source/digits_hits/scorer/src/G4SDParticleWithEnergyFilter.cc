@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDParticleWithEnergyFilter.cc 81108 2014-05-21 08:10:15Z gcosmo $
 //
 // G4VSensitiveDetector
 #include "G4SDParticleWithEnergyFilter.hh"

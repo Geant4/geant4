@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HnManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
 // Class for management of G4HnInformation.
 // It implements functions handling the added H1/H2 information

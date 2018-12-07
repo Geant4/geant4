@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm2/include/Run.hh
 /// \brief Definition of the Run class
 //
-// $Id: Run.hh 75565 2013-11-04 11:24:11Z vnivanch $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExErrorMagneticField.cc 110760 2018-06-13 06:24:05Z gcosmo $
 //
 /// \file ExErrorMagneticField.cc
 /// \brief Implementation of the ExErrorMagneticField class

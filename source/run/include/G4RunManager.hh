@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh 95232 2016-02-01 14:31:22Z gcosmo $
 //
 // 
 
@@ -325,6 +324,7 @@ public: // with description
     G4int numberOfEventProcessed;
     G4String selectMacro;
     G4bool fakeRun;
+    G4bool isScoreNtupleWriter;
 
   public:
     virtual void rndmSaveThisRun();

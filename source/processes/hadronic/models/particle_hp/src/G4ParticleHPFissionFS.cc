@@ -292,9 +292,11 @@
 
       //Isotropic Distribution 
       G4double phi = twopi*G4UniformRand();
-      G4double theta = pi*G4UniformRand();
+      // Bug #1745 DHW G4double theta = pi*G4UniformRand();
+      G4double costheta = 2.*G4UniformRand()-1.;
+      G4double theta = std::acos(costheta); 
       G4double sinth = std::sin(theta);
-      G4ThreeVector direction (sinth*std::cos(phi) , sinth*std::sin(phi), std::cos(theta) );
+      G4ThreeVector direction(sinth*std::cos(phi), sinth*std::sin(phi), costheta);
 
       // Just use ENDF value for this 
       G4double ER = eDepByFragments; 

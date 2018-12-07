@@ -27,7 +27,6 @@
 /// \brief Definition of the DetectorMessenger class
 //
 //
-// $Id: DetectorMessenger.hh 98243 2016-07-04 16:58:38Z gcosmo $
 //
 // 
 
@@ -60,7 +59,6 @@ class DetectorMessenger: public G4UImessenger
   private:
     DetectorConstruction* fDetector;
     
-    G4UIdirectory*             fN03Dir;
     G4UIdirectory*             fDetDir;
     G4UIcmdWithAString*        fAbsMaterCmd;
     G4UIcmdWithAString*        fGapMaterCmd;

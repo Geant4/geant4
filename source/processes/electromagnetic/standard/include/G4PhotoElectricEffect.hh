@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.hh 106717 2017-10-20 09:41:27Z gcosmo $
 //
 //------------------ G4PhotoElectricEffect physics process ------------------
 //                   by Michel Maire, 24 May 1996

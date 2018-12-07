@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4FieldManager.cc 107590 2017-11-24 11:59:22Z gcosmo $
 // ====================================================================
 //   pyG4FieldManager.cc
 //

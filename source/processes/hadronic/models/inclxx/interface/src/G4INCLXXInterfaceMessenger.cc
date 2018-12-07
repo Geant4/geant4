@@ -91,7 +91,7 @@ G4INCLXXInterfaceMessenger::G4INCLXXInterfaceMessenger(G4INCLXXInterfaceStore *a
   inclPhysicsCmd = new G4UIcmdWithAString((theUIDirectory + "setPhysics").data(),this);
   inclPhysicsCmd->SetGuidance("Set a global configuration for INCL++.");
   inclPhysicsCmd->SetGuidance(" default: default configuration, most recent options");
-  inclPhysicsCmd->SetGuidance(" incl42: try to mimick the behaviour from INCL4.2");
+  inclPhysicsCmd->SetGuidance(" incl42: try to mimic the behaviour from INCL4.2");
   inclPhysicsCmd->SetParameterName("type", false);
   inclPhysicsCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 

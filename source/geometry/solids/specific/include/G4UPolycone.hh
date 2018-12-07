@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id:$
 //
 // 
 // --------------------------------------------------------------------
@@ -54,10 +53,10 @@
 #include "G4PolyconeHistorical.hh"
 #include "G4Polyhedron.hh"
 
-class G4UPolycone : public G4UAdapter<vecgeom::UnplacedPolycone>
+class G4UPolycone : public G4UAdapter<vecgeom::GenericUnplacedPolycone>
 {
-  using Shape_t = vecgeom::UnplacedPolycone;
-  using Base_t  = G4UAdapter<vecgeom::UnplacedPolycone>;
+  using Shape_t = vecgeom::GenericUnplacedPolycone;
+  using Base_t  = G4UAdapter<vecgeom::GenericUnplacedPolycone>;
 
   public:  // with description
 

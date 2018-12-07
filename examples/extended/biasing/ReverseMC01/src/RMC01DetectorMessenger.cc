@@ -26,7 +26,6 @@
 /// \file biasing/ReverseMC01/src/RMC01DetectorMessenger.cc
 /// \brief Implementation of the RMC01DetectorMessenger class
 //
-// $Id: RMC01DetectorMessenger.cc 71233 2013-06-12 13:16:05Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01DetectorMessenger

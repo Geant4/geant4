@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc 91897 2015-08-10 09:55:12Z gcosmo $
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model
@@ -50,11 +49,13 @@
 #include "G4Log.hh"
 #include "G4Pow.hh"
 
+#include "G4HadronicParameters.hh"
+
 
 G4ChargeExchange::G4ChargeExchange() : G4HadronicInteraction("Charge Exchange")
 {
   SetMinEnergy( 0.0*GeV );
-  SetMaxEnergy( 100.*TeV );
+  SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
 
   lowEnergyRecoilLimit = 100.*keV;  
   lowestEnergyLimit    = 1.*MeV;  

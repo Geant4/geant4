@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.hh 81056 2014-05-20 09:02:16Z gcosmo $
 //
 // 
 // John Allison  10th August 1998.
@@ -73,7 +72,6 @@ private:
                        fFoundFullPVPath;            // Found full path.
   G4int                fFoundDepth;                 // Found depth.
   G4VPhysicalVolume*   fpFoundPV;                   // Found physical volume.
-  G4LogicalVolume*     fpFoundLV;                   // Found logical volume.
   G4Transform3D        fFoundObjectTransformation;  // Found transformation.
   G4int                fVerbosity;
   G4bool               fMultipleOccurrence;

@@ -24,12 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmVWidgetObject.hh 66373 2012-12-18 09:41:34Z gcosmo $
 //
 // 
 //Virtual base class for all Motif widgets.
 
-#ifdef G4VIS_BUILD_OPENGLXM_DRIVER
+#if defined (G4VIS_BUILD_OPENGLXM_DRIVER) || defined (G4VIS_USE_OPENGLXM)
 
 #ifndef G4OPENGLXMVWIDGETOBJECT_HH
 #define G4OPENGLXMVWIDGETOBJECT_HH

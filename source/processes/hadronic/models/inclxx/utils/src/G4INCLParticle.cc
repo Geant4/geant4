@@ -73,6 +73,7 @@ namespace G4INCL {
     rpCorrelated(false),
     uncorrelatedMomentum(0.),
     theParticleBias(1.),
+    theNKaon(0),
     theHelicity(0.0),
     emissionTime(0.0),
     outOfWell(false),
@@ -92,12 +93,13 @@ namespace G4INCL {
     theFrozenMomentum(theMomentum),
     thePosition(position),
     nCollisions(0), nDecays(0),
-      thePotentialEnergy(0.),
-      rpCorrelated(false),
-      uncorrelatedMomentum(theMomentum.mag()),
-      theParticleBias(1.),
-      theHelicity(0.0),
-      emissionTime(0.0), outOfWell(false)
+    thePotentialEnergy(0.),
+    rpCorrelated(false),
+    uncorrelatedMomentum(theMomentum.mag()),
+    theParticleBias(1.),
+    theNKaon(0),
+    theHelicity(0.0),
+    emissionTime(0.0), outOfWell(false)
   {
     theParticipantType = TargetSpectator;
     ID = nextID;
@@ -117,12 +119,13 @@ namespace G4INCL {
     theFrozenMomentum(theMomentum),
     thePosition(position),
     nCollisions(0), nDecays(0),
-      thePotentialEnergy(0.),
-      rpCorrelated(false),
-      uncorrelatedMomentum(theMomentum.mag()),
+    thePotentialEnergy(0.),
+    rpCorrelated(false),
+    uncorrelatedMomentum(theMomentum.mag()),
     theParticleBias(1.),
-      theHelicity(0.0),
-      emissionTime(0.0), outOfWell(false)
+    theNKaon(0),
+    theHelicity(0.0),
+    emissionTime(0.0), outOfWell(false)
   {
     theParticipantType = TargetSpectator;
     ID = nextID;
@@ -235,7 +238,7 @@ namespace G4INCL {
             if(i == G4int(VectorBias1.size())){
                 for(;j<G4int(VectorBias2.size());j++) MergedVectorBias.push_back(VectorBias2[j]);
             }
-            if(j == G4int(VectorBias2.size())){
+            else if(j == G4int(VectorBias2.size())){
                 for(;i<G4int(VectorBias1.size());i++) MergedVectorBias.push_back(VectorBias1[i]);
             }
         } else if(VectorBias1[i]<VectorBias2[j]){
@@ -273,7 +276,7 @@ namespace G4INCL {
             if(i == G4int(p1.size())){
                 for(;j<G4int(VectorBias.size());j++) MergedVectorBias.push_back(VectorBias[j]);
             }
-            if(j == G4int(VectorBias.size())){
+            else if(j == G4int(VectorBias.size())){
                 for(;i<G4int(p1.size());i++) MergedVectorBias.push_back(p1[i]);
             }
         } else if(p1[i]<VectorBias[j]){

@@ -1,4 +1,3 @@
-$Id: History 109654 2018-05-04 08:57:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-11-18  V.Ivanchenko (exhadr01-V10-04-05)
+- PhysicsList - make local PhysicsList to be coherent with 
+   physics_list library
+
+14-08-18  V.Ivanchenko (exhadr01-V10-04-04)
+- DetectorConstruction - minor improvement of printout
+- added test macros
 
 03-05-18  J.Allison (exhadr01-V10-04-03)
 - RunAction.cc:

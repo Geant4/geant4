@@ -27,7 +27,6 @@
 /// \brief Definition of the G4BlinePrimaryGeneratorAction class
 //
 //
-// $Id: G4BlinePrimaryGeneratorAction.hh 68021 2013-03-13 13:36:07Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------

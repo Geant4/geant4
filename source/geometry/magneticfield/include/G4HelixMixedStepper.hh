@@ -72,13 +72,13 @@ class G4HelixMixedStepper: public G4MagHelicalStepper
   ~G4HelixMixedStepper();
 
    void Stepper( const G4double y[],
-                  const G4double dydx[],
-                        G4double h,
-                        G4double yout[],
-                        G4double yerr[]  );
+                 const G4double dydx[],
+                       G4double h,
+                       G4double yout[],
+                       G4double yerr[]  );
       // Step 'integration' for step size 'h'
-      // If SteppingAngle=h/R_curve<pi/3 uses RK4Stepper
-      // Else Helix Fast Method 
+      // If SteppingAngle= h/R_curve < pi/3 uses RK stepper (default DormandPrince745) 
+      // Else   use Helix Fast Method 
       
   
     void DumbStepper( const G4double y[],

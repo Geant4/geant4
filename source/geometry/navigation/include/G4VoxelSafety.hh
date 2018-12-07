@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VoxelSafety.hh 92576 2015-09-04 10:26:26Z gcosmo $
 //
 // class G4VoxelSafety
 //

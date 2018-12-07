@@ -27,7 +27,6 @@
 /// \brief Implementation of the DetectorALICE06 class
 //
 //
-// $Id: DetectorALICE06.cc 72517 2013-07-24 23:01:29Z gum $
 //
 //
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc 76431 2013-11-10 20:28:49Z kmura $
 //
 /// @file EventAction.cc
 /// @brief Describe event actions

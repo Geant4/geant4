@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr02/src/UrQMDPiKBuilder.cc
 /// \brief Implementation of the UrQMDPiKBuilder class
 //
-// $Id: UrQMDPiKBuilder.cc 77519 2013-11-25 10:54:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,6 +42,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4HadronicParameters.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,7 @@
 UrQMDPiKBuilder::UrQMDPiKBuilder()
 {
   fMin = 0*MeV;
-  fMax = 100*TeV;
+  fMax = G4HadronicParameters::Instance()->GetMaxEnergy();
   fModel = new G4UrQMD1_3Model(); 
 }
 

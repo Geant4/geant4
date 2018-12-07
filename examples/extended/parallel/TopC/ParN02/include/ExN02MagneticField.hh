@@ -27,7 +27,6 @@
 /// \brief Definition of the ExN02MagneticField class
 //
 //
-// $Id: ExN02MagneticField.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 //
 //    A class for control of the Magnetic Field of the detector.

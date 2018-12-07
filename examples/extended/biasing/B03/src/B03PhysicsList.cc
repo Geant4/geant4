@@ -27,7 +27,6 @@
 /// \brief Implementation of the B03PhysicsList class
 //
 //
-// $Id: B03PhysicsList.cc 75089 2013-10-25 23:25:21Z dwright $
 //
 
 #include "globals.hh"
@@ -50,6 +49,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4HadronicParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -325,7 +325,7 @@ void B03PhysicsList::ConstructHad()
   theTheoModel->SetTransport(theCascade);
   theTheoModel->SetHighEnergyGenerator(theStringModel);
   theTheoModel->SetMinEnergy(19*GeV);
-  theTheoModel->SetMaxEnergy(100*TeV);
+  theTheoModel->SetMaxEnergy( G4HadronicParameters::Instance()->GetMaxEnergy() );
 
   G4VLongitudinalStringDecay* theFragmentation = new G4QGSMFragmentation;
   G4ExcitedStringDecay* theStringDecay = 

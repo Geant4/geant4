@@ -36,7 +36,6 @@
 // November 2016
 // -------------------------------------------------------------------
 //
-// $Id$
 //
 /// \file PhysicsList.hh
 /// \brief Definition of the PhysicsList class
@@ -48,18 +47,31 @@
 #include "globals.hh"
 
 class G4VPhysicsConstructor;
-//
+class G4EmDNAPhysicsActivator;
 class G4EmDNAChemistry;
+class G4EmDNAChemistry_option1;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysicsList: public G4VModularPhysicsList
 {
-  public:
-    PhysicsList();
-    virtual ~PhysicsList();
- //
-    void RegisterConstructor(const G4String& name);
+public:
+  explicit PhysicsList();
+  ~PhysicsList() override;
+
+  void ConstructParticle() override;
+  void ConstructProcess() override;
+ 
+  void RegisterConstructor(const G4String& name);
+
+private:
+
+  G4VPhysicsConstructor*    fEmPhysicsList;
+  G4EmDNAPhysicsActivator*  fDNAActivator;
+  G4EmDNAChemistry*         fEmDNAChemistryList;
+  G4EmDNAChemistry_option1* fEmDNAChemistryList1;
+  G4String                  fEmName;
+  G4bool                    fHadronic;
 };
 
 #endif
