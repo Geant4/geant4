@@ -51,8 +51,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_util
         G4HadSecondary.hh
         G4HadSignalHandler.hh
         G4HadTmpUtil.hh
-	G4HadronicDeprecate.hh
-	G4HadronicDeveloperParameters.hh
+        G4HadronicDeprecate.hh
+        G4HadronicDeveloperParameters.hh
         G4HadronicException.hh
         G4HadronicParameters.hh
         G4IsoResult.hh
@@ -71,7 +71,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_util
         G4HadSecondary.cc
         G4HadSignalHandler.cc
         G4HadTmpUtil.cc
-	G4HadronicDeveloperParameters.cc
+        G4HadronicDeveloperParameters.cc
+        G4HadronicException.cc
         G4HadronicParameters.cc
         G4IsoResult.cc
         G4LightMedia.cc
