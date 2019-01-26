@@ -76,8 +76,7 @@ class G4GammaConversion : public G4VEmProcess
 {
 public:  // with description
 
-  explicit G4GammaConversion(const G4String& processName ="conv",
-			     G4ProcessType type = fElectromagnetic);
+  explicit G4GammaConversion(const G4String& processName ="conv");
 
   virtual ~G4GammaConversion();
 

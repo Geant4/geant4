@@ -52,8 +52,7 @@ class G4RayleighScattering : public G4VEmProcess
 {
 public:  // with description
 
-  explicit G4RayleighScattering(const G4String& processName ="Rayl",
-		                G4ProcessType type = fElectromagnetic);
+  explicit G4RayleighScattering(const G4String& processName ="Rayl");
 
   virtual ~G4RayleighScattering();
 

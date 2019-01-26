@@ -63,8 +63,7 @@ class G4PolarizedGammaConversion : public G4VEmProcess
 {
 public:  // with description
 
-  explicit G4PolarizedGammaConversion(const G4String& processName ="pol-conv",
-			     G4ProcessType type = fElectromagnetic);
+  explicit G4PolarizedGammaConversion(const G4String& processName ="pol-conv");
 
   virtual ~G4PolarizedGammaConversion();
 

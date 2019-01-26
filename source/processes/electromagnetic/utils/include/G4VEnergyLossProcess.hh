@@ -82,8 +82,7 @@ class G4VEnergyLossProcess : public G4VContinuousDiscreteProcess
 {
 public:
 
-  G4VEnergyLossProcess(const G4String& name = "EnergyLoss",
-                       G4ProcessType type = fElectromagnetic);
+  G4VEnergyLossProcess(const G4String& name = "EnergyLoss");
 
   virtual ~G4VEnergyLossProcess();
 

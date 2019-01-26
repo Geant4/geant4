@@ -69,8 +69,8 @@
         // Constructors
         /////////////////
 
-G4OpAbsorption::G4OpAbsorption(const G4String& processName, G4ProcessType type)
-              : G4VDiscreteProcess(processName, type)
+G4OpAbsorption::G4OpAbsorption(const G4String& processName):
+    G4VDiscreteProcess{processName,fOptical}
 {
         if (verboseLevel>0) {
            G4cout << GetProcessName() << " is created " << G4endl;

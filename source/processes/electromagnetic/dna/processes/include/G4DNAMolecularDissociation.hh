@@ -65,8 +65,7 @@ class G4MoleculeDefinition;
 class G4DNAMolecularDissociation: public G4VITRestDiscreteProcess //G4VITRestProcess
 {
 public:
-    G4DNAMolecularDissociation(const G4String& processName = "DNAMolecularDecay",
-                            G4ProcessType type = fDecay);
+    G4DNAMolecularDissociation(const G4String& processName = "DNAMolecularDecay");
 
     virtual ~G4DNAMolecularDissociation();
 

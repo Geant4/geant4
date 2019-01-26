@@ -85,8 +85,7 @@ public:
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4OpWLS(const G4String& processName = "OpWLS",
-                         G4ProcessType type = fOptical);
+        G4OpWLS(const G4String& processName = "OpWLS");
         ~G4OpWLS();
 
 private:

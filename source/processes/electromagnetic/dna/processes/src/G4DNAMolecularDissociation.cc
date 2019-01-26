@@ -48,9 +48,8 @@ using namespace std;
 //______________________________________________________________________________
 
 G4DNAMolecularDissociation::
-G4DNAMolecularDissociation(const G4String& processName,
-                           G4ProcessType type) :
-    G4VITRestDiscreteProcess(processName, type)
+G4DNAMolecularDissociation(const G4String& processName):
+    G4VITRestDiscreteProcess{processName,fDecay}
 {
   // set Process Sub Type
   SetProcessSubType(59); // DNA sub-type

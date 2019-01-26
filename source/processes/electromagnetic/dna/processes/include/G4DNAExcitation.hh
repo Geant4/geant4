@@ -45,8 +45,7 @@ class G4DNAExcitation : public G4VEmProcess
 {
 public: 
 
-  G4DNAExcitation(const G4String& processName ="DNAExcitation",
-		     G4ProcessType type = fElectromagnetic);
+  G4DNAExcitation(const G4String& processName ="DNAExcitation");
 
   virtual ~G4DNAExcitation();
 

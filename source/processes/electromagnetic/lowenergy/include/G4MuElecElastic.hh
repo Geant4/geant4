@@ -49,8 +49,7 @@ class G4MuElecElastic : public G4VEmProcess
 {
 public: 
 
-  G4MuElecElastic(const G4String& processName ="MuElecElastic",
-		     G4ProcessType type = fElectromagnetic);
+  G4MuElecElastic(const G4String& processName ="MuElecElastic");
 
   virtual ~G4MuElecElastic();
 

@@ -42,8 +42,8 @@
 
 using namespace std;
 
-G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
+G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName):
+    G4VEmProcess {processName},
     isInitialised(false)
 {
   SetBuildTableFlag(false);

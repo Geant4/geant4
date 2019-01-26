@@ -106,9 +106,8 @@
         // Constructors
         /////////////////
 
-G4Scintillation::G4Scintillation(const G4String& processName,
-                                       G4ProcessType type)
-                  : G4VRestDiscreteProcess(processName, type) ,
+G4Scintillation::G4Scintillation(const G4String& processName):
+    G4VRestDiscreteProcess{processName,fElectromagnetic} ,
     fTrackSecondariesFirst(false),
     fFiniteRiseTime(false),
     fYieldFactor(1.0),

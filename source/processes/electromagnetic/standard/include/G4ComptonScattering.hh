@@ -72,8 +72,7 @@ class G4ComptonScattering : public G4VEmProcess
 {
 public:  // with description
 
-  explicit G4ComptonScattering(const G4String& processName ="compt",
-			       G4ProcessType type = fElectromagnetic);
+  explicit G4ComptonScattering(const G4String& processName ="compt");
 
   virtual ~G4ComptonScattering();
 

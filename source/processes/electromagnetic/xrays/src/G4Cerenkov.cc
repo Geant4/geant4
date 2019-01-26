@@ -92,8 +92,8 @@
   // Constructors
   /////////////////
 
-G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
-           : G4VProcess(processName, type),
+G4Cerenkov::G4Cerenkov(const G4String& processName):
+    G4VProcess{processName,fElectromagnetic},
              fTrackSecondariesFirst(false),
              fMaxBetaChange(0.0),
              fMaxPhotons(0),

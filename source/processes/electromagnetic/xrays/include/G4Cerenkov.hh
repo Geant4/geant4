@@ -86,8 +86,7 @@ public:
   // Constructors and Destructor
   ////////////////////////////////
 
-  explicit G4Cerenkov(const G4String& processName = "Cerenkov", 
-             G4ProcessType type = fElectromagnetic);
+  explicit G4Cerenkov(const G4String& processName = "Cerenkov");
   ~G4Cerenkov();
 
   explicit G4Cerenkov(const G4Cerenkov &right);

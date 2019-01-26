@@ -44,8 +44,7 @@ class G4DNAChargeDecrease : public G4VEmProcess
 {
 public: 
 
-  G4DNAChargeDecrease(const G4String& processName ="DNAChargeDecrease",
-		     G4ProcessType type = fElectromagnetic);
+  G4DNAChargeDecrease(const G4String& processName ="DNAChargeDecrease");
 
   virtual ~G4DNAChargeDecrease();
 

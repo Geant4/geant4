@@ -71,8 +71,7 @@ public:
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4UCNLoss(const G4String& processName = "UCNLoss",
-                           G4ProcessType type = fUCN);
+        G4UCNLoss(const G4String& processName = "UCNLoss");
 	virtual ~G4UCNLoss();
 
 private:

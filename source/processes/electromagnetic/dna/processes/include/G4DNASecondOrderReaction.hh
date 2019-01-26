@@ -54,8 +54,7 @@ class G4MolecularConfiguration;
 class G4DNASecondOrderReaction : public G4VITProcess
 {
 public:
-    G4DNASecondOrderReaction(const G4String& aName =  "DNASecondOrderReaction",
-                             G4ProcessType type = fDecay);
+    G4DNASecondOrderReaction(const G4String& aName =  "DNASecondOrderReaction");
     virtual ~G4DNASecondOrderReaction();
 
     G4IT_ADD_CLONE(G4VITProcess,G4DNASecondOrderReaction)

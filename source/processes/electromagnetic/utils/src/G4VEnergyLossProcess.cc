@@ -84,9 +84,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, 
-                                           G4ProcessType type): 
-  G4VContinuousDiscreteProcess(name, type),
+G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name):
+    G4VContinuousDiscreteProcess{name,fElectromagnetic},
   secondaryParticle(nullptr),
   nSCoffRegions(0),
   idxSCoffRegions(nullptr),

@@ -74,10 +74,9 @@ class G4VXTRenergyLoss : public G4VDiscreteProcess  // G4VContinuousProcess
 {
 public:
 
-  explicit G4VXTRenergyLoss (G4LogicalVolume *anEnvelope,G4Material*,
+  explicit G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,G4Material*,
                     G4Material*, G4double,G4double,G4int,
-                    const G4String & processName = "XTRenergyLoss",
-                    G4ProcessType type = fElectromagnetic);
+                    const G4String & processName = "XTRenergyLoss");
   virtual  ~G4VXTRenergyLoss ();
 
   // These virtual has to be implemented in inherited particular TR radiators

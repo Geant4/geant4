@@ -64,8 +64,8 @@
         // Constructors
         /////////////////
 
-G4UCNLoss::G4UCNLoss(const G4String& processName, G4ProcessType type)
-         : G4VDiscreteProcess(processName, type)
+G4UCNLoss::G4UCNLoss(const G4String& processName):
+    G4VDiscreteProcess{processName,fUCN}
 {
   if (verboseLevel>0) G4cout << GetProcessName() << " is created " << G4endl;
 

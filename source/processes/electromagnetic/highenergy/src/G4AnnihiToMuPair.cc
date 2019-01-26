@@ -55,8 +55,8 @@
 
 using namespace std;
 
-G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName,
-    G4ProcessType type):G4VDiscreteProcess (processName, type)
+G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName):
+    G4VDiscreteProcess {processName,fElectromagnetic}
 {
  //e+ Energy threshold
  const G4double Mu_massc2 = G4MuonPlus::MuonPlus()->GetPDGMass();

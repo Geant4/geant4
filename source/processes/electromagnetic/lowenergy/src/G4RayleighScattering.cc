@@ -37,8 +37,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4RayleighScattering::G4RayleighScattering(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
+G4RayleighScattering::G4RayleighScattering(const G4String& processName):
+    G4VEmProcess {processName},
     isInitialised(false)
 {
   SetStartFromNullFlag(false);

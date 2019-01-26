@@ -56,8 +56,7 @@ class G4TransitionRadiation : public   G4VDiscreteProcess
 {
 public:
 
-  explicit G4TransitionRadiation( const G4String& processName = "TR",
-			 G4ProcessType type = fElectromagnetic) ;
+  explicit G4TransitionRadiation( const G4String& processName = "TR");
 
   virtual ~G4TransitionRadiation() ;
 

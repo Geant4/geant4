@@ -31,9 +31,8 @@
 
 using namespace std;
 
-G4DNAChargeDecrease::G4DNAChargeDecrease(const G4String& processName,
-                                         G4ProcessType type) :
-    G4VEmProcess(processName, type), isInitialised(false)
+G4DNAChargeDecrease::G4DNAChargeDecrease(const G4String& processName):
+    G4VEmProcess{processName}, isInitialised(false)
 {
   SetProcessSubType(56);
 }

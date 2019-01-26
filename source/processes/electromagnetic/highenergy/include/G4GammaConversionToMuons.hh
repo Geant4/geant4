@@ -63,8 +63,7 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
 public:  // with description
 
   explicit G4GammaConversionToMuons(
-                        const G4String& processName ="GammaToMuPair",
-                        G4ProcessType type = fElectromagnetic);
+                        const G4String& processName ="GammaToMuPair");
 
   ~G4GammaConversionToMuons() override;
 

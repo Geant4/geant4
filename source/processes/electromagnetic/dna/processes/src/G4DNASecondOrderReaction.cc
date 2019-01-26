@@ -64,8 +64,8 @@ void G4DNASecondOrderReaction::Create()
   verboseLevel = 0;
 }
 
-G4DNASecondOrderReaction::G4DNASecondOrderReaction(const G4String &aName, G4ProcessType type) :
-        G4VITProcess(aName,type)
+G4DNASecondOrderReaction::G4DNASecondOrderReaction(const G4String &aName):
+    G4VITProcess{aName,fDecay}
 {
   Create();
 }

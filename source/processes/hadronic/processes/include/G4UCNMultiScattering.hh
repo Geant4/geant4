@@ -71,8 +71,7 @@ public:
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4UCNMultiScattering(const G4String& processName = "UCNMultiScattering",
-                                      G4ProcessType type = fUCN);
+        G4UCNMultiScattering(const G4String& processName = "UCNMultiScattering");
 	virtual ~G4UCNMultiScattering();
 
 private:

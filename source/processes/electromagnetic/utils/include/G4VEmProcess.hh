@@ -76,8 +76,7 @@ class G4VEmProcess : public G4VDiscreteProcess
 {
 public:
 
-  G4VEmProcess(const G4String& name,
-               G4ProcessType type = fElectromagnetic);
+  G4VEmProcess(const G4String& name);
 
   virtual ~G4VEmProcess();
 

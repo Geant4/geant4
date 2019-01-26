@@ -70,8 +70,7 @@ class G4AdjointAlongStepWeightCorrection : public G4VContinuousProcess
 {
 public:
 
-  G4AdjointAlongStepWeightCorrection(const G4String& name = "ContinuousWeightCorrection",
-                         G4ProcessType type = fElectromagnetic);
+  G4AdjointAlongStepWeightCorrection(const G4String& name = "ContinuousWeightCorrection");
 
   virtual ~G4AdjointAlongStepWeightCorrection();
 

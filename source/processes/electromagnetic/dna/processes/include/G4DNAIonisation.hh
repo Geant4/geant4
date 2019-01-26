@@ -46,8 +46,7 @@ class G4DNAIonisation : public G4VEmProcess
 {
 public: 
 
-  G4DNAIonisation(const G4String& processName ="DNAIonisation",
-		     G4ProcessType type = fElectromagnetic);
+  G4DNAIonisation(const G4String& processName ="DNAIonisation");
 
   virtual ~G4DNAIonisation();
 

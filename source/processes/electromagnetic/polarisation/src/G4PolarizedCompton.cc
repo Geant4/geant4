@@ -69,9 +69,8 @@
 
 G4PhysicsTable* G4PolarizedCompton::theAsymmetryTable = nullptr;
 
-G4PolarizedCompton::G4PolarizedCompton(const G4String& processName,
-  G4ProcessType type):
-  G4VEmProcess (processName, type),
+G4PolarizedCompton::G4PolarizedCompton(const G4String& processName):
+    G4VEmProcess {processName},
   buildAsymmetryTable(true),
   useAsymmetryTable(true),
   isInitialised(false),

@@ -63,9 +63,8 @@
 G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
 				   G4Material* foilMat,G4Material* gasMat,
 				   G4double a, G4double b,
-				   G4int n,const G4String& processName,
-				   G4ProcessType type) :
-  G4VDiscreteProcess(processName, type),
+				   G4int n,const G4String& processName):
+    G4VDiscreteProcess{processName,fElectromagnetic},
   fGammaCutInKineticEnergy(nullptr),
   fGammaTkinCut(0.0),
   fAngleDistrTable(nullptr),

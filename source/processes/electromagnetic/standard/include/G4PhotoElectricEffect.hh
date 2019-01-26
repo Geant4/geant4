@@ -80,8 +80,7 @@ class G4PhotoElectricEffect : public G4VEmProcess
 {
 public:  // with description
 
-  explicit G4PhotoElectricEffect(const G4String& processName ="phot",
-				 G4ProcessType type = fElectromagnetic);
+  explicit G4PhotoElectricEffect(const G4String& processName ="phot");
 
   virtual ~G4PhotoElectricEffect();
 

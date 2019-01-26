@@ -43,8 +43,7 @@ class G4DNAAttachment : public G4VEmProcess
 {
 public: 
 
-  G4DNAAttachment(const G4String& processName ="DNAAttachment",
-		     G4ProcessType type = fElectromagnetic);
+  G4DNAAttachment(const G4String& processName ="DNAAttachment");
 
   virtual ~G4DNAAttachment();
 

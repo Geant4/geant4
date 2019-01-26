@@ -48,8 +48,8 @@
 
 using namespace std;
 
-G4MuElecInelastic::G4MuElecInelastic(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
+G4MuElecInelastic::G4MuElecInelastic(const G4String& processName):
+    G4VEmProcess {processName},
     isInitialised(false)
 {
   SetProcessSubType(53);

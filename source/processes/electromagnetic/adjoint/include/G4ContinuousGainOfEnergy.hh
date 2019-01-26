@@ -69,8 +69,7 @@ class G4ContinuousGainOfEnergy : public G4VContinuousProcess
 {
 public:
 
-  G4ContinuousGainOfEnergy(const G4String& name = "EnergyGain",
-                         G4ProcessType type = fElectromagnetic);
+  G4ContinuousGainOfEnergy(const G4String& name = "EnergyGain");
 
   virtual ~G4ContinuousGainOfEnergy();
 

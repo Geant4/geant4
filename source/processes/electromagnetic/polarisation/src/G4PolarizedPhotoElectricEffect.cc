@@ -41,8 +41,8 @@
 using namespace std;
 
 G4PolarizedPhotoElectricEffect::G4PolarizedPhotoElectricEffect(
-  const G4String& processName, G4ProcessType type)
- : G4VEmProcess (processName, type), isInitialised(false)
+  const G4String& processName):
+    G4VEmProcess {processName}, isInitialised(false)
 {
   SetBuildTableFlag(false);
   SetSecondaryParticle(G4Electron::Electron());

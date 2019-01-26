@@ -58,8 +58,7 @@ class G4MicroElecInelastic : public G4VEmProcess
 {
 public: 
 
-  G4MicroElecInelastic(const G4String& processName ="MicroElecIonisation",
-		     G4ProcessType type = fElectromagnetic);
+  G4MicroElecInelastic(const G4String& processName ="MicroElecIonisation");
 
   virtual ~G4MicroElecInelastic();
 

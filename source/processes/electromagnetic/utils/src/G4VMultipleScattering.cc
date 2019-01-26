@@ -87,8 +87,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType)
-  : G4VContinuousDiscreteProcess("msc", fElectromagnetic),
+G4VMultipleScattering::G4VMultipleScattering(const G4String& name):
+    G4VContinuousDiscreteProcess{"msc", fElectromagnetic},
   numberOfModels(0),
   firstParticle(nullptr),
   currParticle(nullptr),

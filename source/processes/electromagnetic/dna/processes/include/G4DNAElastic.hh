@@ -44,8 +44,7 @@ class G4DNAElastic : public G4VEmProcess
 {
 public: 
 
-  G4DNAElastic(const G4String& processName ="DNAElastic",
-		     G4ProcessType type = fElectromagnetic);
+  G4DNAElastic(const G4String& processName ="DNAElastic");
 
   virtual ~G4DNAElastic();
 

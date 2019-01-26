@@ -56,8 +56,7 @@ class G4DNAElectronSolvation : public G4VEmProcess
 {
 public:
   G4DNAElectronSolvation(const G4String& processName =
-                            "DNAElectronSolvation",
-                           G4ProcessType type = fElectromagnetic);
+                            "DNAElectronSolvation");
   virtual ~G4DNAElectronSolvation();
 
   virtual G4bool IsApplicable(const G4ParticleDefinition&);

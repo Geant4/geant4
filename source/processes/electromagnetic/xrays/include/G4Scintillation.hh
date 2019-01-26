@@ -93,8 +93,7 @@ public:
 	// Constructors and Destructor
 	////////////////////////////////
 
-	explicit G4Scintillation(const G4String& processName = "Scintillation",
-                                 G4ProcessType type = fElectromagnetic);
+	explicit G4Scintillation(const G4String& processName = "Scintillation");
 	~G4Scintillation();
 
 private:

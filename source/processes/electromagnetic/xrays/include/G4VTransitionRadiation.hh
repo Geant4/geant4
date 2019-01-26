@@ -53,8 +53,7 @@ class G4VTransitionRadiation : public   G4VDiscreteProcess
 public:
 
 // Constructors
-  explicit G4VTransitionRadiation( const G4String& processName = "TR",
-                                G4ProcessType type = fElectromagnetic);
+  explicit G4VTransitionRadiation( const G4String& processName = "TR");
 
 
 // Destructor

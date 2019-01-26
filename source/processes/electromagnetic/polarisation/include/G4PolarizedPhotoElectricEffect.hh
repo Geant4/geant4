@@ -78,8 +78,7 @@ class G4PolarizedPhotoElectricEffect : public G4VEmProcess
 {
 public:  // with description
 
-  explicit G4PolarizedPhotoElectricEffect(const G4String& processName ="pol-phot",
-					  G4ProcessType type = fElectromagnetic);
+  explicit G4PolarizedPhotoElectricEffect(const G4String& processName ="pol-phot");
 
   virtual ~G4PolarizedPhotoElectricEffect();
 

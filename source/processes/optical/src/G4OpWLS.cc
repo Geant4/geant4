@@ -64,8 +64,8 @@
 // Constructors
 /////////////////
 
-G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
-  : G4VDiscreteProcess(processName, type)
+G4OpWLS::G4OpWLS(const G4String& processName):
+    G4VDiscreteProcess{processName,fOptical}
 {
   SetProcessSubType(fOpWLS);
 

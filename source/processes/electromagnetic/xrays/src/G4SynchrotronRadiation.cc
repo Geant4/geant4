@@ -53,8 +53,8 @@
 //  Constructor
 //
 
-G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
-  G4ProcessType type):G4VDiscreteProcess (processName, type),
+G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName):
+    G4VDiscreteProcess {processName,fElectromagnetic},
   theGamma (G4Gamma::Gamma() ) 
 {
   G4TransportationManager* transportMgr = 

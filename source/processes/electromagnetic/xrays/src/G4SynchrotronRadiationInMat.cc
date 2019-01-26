@@ -119,8 +119,8 @@ G4SynchrotronRadiationInMat::fIntegralProbabilityOfSR[200] =
 //  Constructor
 //
 
-G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& processName,
-  G4ProcessType type):G4VDiscreteProcess (processName, type),
+G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& processName):
+    G4VDiscreteProcess {processName,fElectromagnetic},
   LowestKineticEnergy (10.*keV),
   theGamma (G4Gamma::Gamma() ),
   theElectron ( G4Electron::Electron() ),

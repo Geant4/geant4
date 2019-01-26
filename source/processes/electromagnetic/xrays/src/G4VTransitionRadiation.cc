@@ -44,9 +44,8 @@
 
 ///////////////////////////////////////////////////////////////////////
 
-G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName,
-                                                      G4ProcessType type )
-  : G4VDiscreteProcess(processName, type),
+G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName):
+    G4VDiscreteProcess{processName,fElectromagnetic},
     region(nullptr),
     model(nullptr),
   nSteps(0),

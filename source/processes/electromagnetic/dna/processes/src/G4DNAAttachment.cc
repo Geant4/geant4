@@ -34,8 +34,8 @@
 
 using namespace std;
 
-G4DNAAttachment::G4DNAAttachment(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
+G4DNAAttachment::G4DNAAttachment(const G4String& processName):
+    G4VEmProcess {processName},
     isInitialised(false)
 {
   SetProcessSubType(55);

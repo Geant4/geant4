@@ -56,8 +56,8 @@ const G4int   G4TransitionRadiation::fPointNumber = 100 ;
 //
 
 G4TransitionRadiation::
-G4TransitionRadiation( const G4String& processName, G4ProcessType type )
-  : G4VDiscreteProcess(processName, type)
+G4TransitionRadiation( const G4String& processName):
+    G4VDiscreteProcess{processName,fElectromagnetic}
 {
   SetProcessSubType(fTransitionRadiation);
   fMatIndex1 = fMatIndex2 = 0;

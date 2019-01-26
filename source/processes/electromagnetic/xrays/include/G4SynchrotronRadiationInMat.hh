@@ -69,8 +69,7 @@ class G4SynchrotronRadiationInMat : public G4VDiscreteProcess
 public:
 
   explicit G4SynchrotronRadiationInMat(const G4String& processName =
-                              "SynchrotronRadiation",
-                              G4ProcessType type = fElectromagnetic);
+                              "SynchrotronRadiation");
 
   virtual ~G4SynchrotronRadiationInMat();
 

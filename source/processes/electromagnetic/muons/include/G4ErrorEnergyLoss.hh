@@ -49,8 +49,7 @@ class G4ErrorEnergyLoss : public G4VContinuousProcess
 
 public: 
 
-  explicit G4ErrorEnergyLoss(const G4String& processName = "G4ErrorEnergyLoss",
-		    G4ProcessType type = fElectromagnetic);
+  explicit G4ErrorEnergyLoss(const G4String& processName = "G4ErrorEnergyLoss");
 
   virtual ~G4ErrorEnergyLoss();	
 

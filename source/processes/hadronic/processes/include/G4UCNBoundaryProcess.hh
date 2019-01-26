@@ -88,8 +88,7 @@ public:
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4UCNBoundaryProcess(const G4String& processName = "UCNBoundaryProcess",
-                             G4ProcessType type = fUCN);
+        G4UCNBoundaryProcess(const G4String& processName = "UCNBoundaryProcess");
 	virtual ~G4UCNBoundaryProcess();
 
 private:

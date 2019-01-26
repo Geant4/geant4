@@ -82,8 +82,7 @@ public:
         // Constructors and Destructor
         ////////////////////////////////
  
-        G4OpRayleigh(const G4String& processName = "OpRayleigh",
-                              G4ProcessType type = fOptical);
+        G4OpRayleigh(const G4String& processName = "OpRayleigh");
 	~G4OpRayleigh();
 
 private:

@@ -48,8 +48,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4PolarizedGammaConversion::G4PolarizedGammaConversion(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
+G4PolarizedGammaConversion::G4PolarizedGammaConversion(const G4String& processName):
+    G4VEmProcess {processName},
     isInitialised(false)
 {
   SetMinKinEnergy(2.0*electron_mass_c2);

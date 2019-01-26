@@ -41,8 +41,8 @@
 
 ///////////////////////////////////////////////////////
 //
-G4ContinuousGainOfEnergy::G4ContinuousGainOfEnergy(const G4String& name, 
-  G4ProcessType type): G4VContinuousProcess(name, type)
+G4ContinuousGainOfEnergy::G4ContinuousGainOfEnergy(const G4String& name):
+    G4VContinuousProcess{name,fElectromagnetic}
 {
 
 

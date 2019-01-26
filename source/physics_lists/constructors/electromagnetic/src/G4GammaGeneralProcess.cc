@@ -81,7 +81,7 @@ G4String G4GammaGeneralProcess::nameT[nTables] =
    "9","10","11","12","13","14"};
 
 G4GammaGeneralProcess::G4GammaGeneralProcess():
-  G4VEmProcess("GammaGeneralProc", fElectromagnetic),
+  G4VEmProcess("GammaGeneralProc"),
   minPEEnergy(50*CLHEP::keV),
   minEEEnergy(2*CLHEP::electron_mass_c2),
   minMMEnergy(100*CLHEP::MeV),

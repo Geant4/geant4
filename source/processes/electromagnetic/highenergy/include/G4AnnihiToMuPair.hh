@@ -57,8 +57,7 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
 {
   public:  // with description
 
-     explicit G4AnnihiToMuPair(const G4String& processName ="AnnihiToMuPair",
-		            G4ProcessType type = fElectromagnetic);
+     explicit G4AnnihiToMuPair(const G4String& processName ="AnnihiToMuPair");
 
     ~G4AnnihiToMuPair();
 

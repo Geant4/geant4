@@ -29,9 +29,8 @@
 #include "G4EnergyLossForExtrapolator.hh"
 
 //-------------------------------------------------------------------
-G4ErrorEnergyLoss::G4ErrorEnergyLoss(const G4String& processName, 
-				     G4ProcessType type)
-           : G4VContinuousProcess(processName, type)
+G4ErrorEnergyLoss::G4ErrorEnergyLoss(const G4String& processName):
+    G4VContinuousProcess{processName,fElectromagnetic}
 {
   if (verboseLevel>2) {
     G4cout << GetProcessName() << " is created " << G4endl;

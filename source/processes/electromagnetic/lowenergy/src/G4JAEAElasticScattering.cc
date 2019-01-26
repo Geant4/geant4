@@ -47,8 +47,8 @@ https://doi.org/10.11484/jaea-data-code-2018-007
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4JAEAElasticScattering::G4JAEAElasticScattering(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
+G4JAEAElasticScattering::G4JAEAElasticScattering(const G4String& processName):
+    G4VEmProcess {processName},
     isInitialised(false)
 {
   SetStartFromNullFlag(false);

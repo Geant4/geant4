@@ -71,8 +71,7 @@ public:
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4UCNAbsorption(const G4String& processName = "UCNAbsorption",
-                                 G4ProcessType type = fUCN);
+        G4UCNAbsorption(const G4String& processName = "UCNAbsorption");
 	virtual ~G4UCNAbsorption();
 
 private:

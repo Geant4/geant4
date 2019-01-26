@@ -74,8 +74,7 @@ class G4PolarizedCompton : public G4VEmProcess
 {
 public:  // with description
 
-  explicit G4PolarizedCompton(const G4String& processName ="pol-compt",
-		     G4ProcessType type = fElectromagnetic);
+  explicit G4PolarizedCompton(const G4String& processName ="pol-compt");
 
   virtual ~G4PolarizedCompton();
 

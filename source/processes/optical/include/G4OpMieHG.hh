@@ -54,8 +54,7 @@ public:
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4OpMieHG(const G4String& processName = "OpMieHG",
-                           G4ProcessType type = fOptical);
+        G4OpMieHG(const G4String& processName = "OpMieHG");
         ~G4OpMieHG();
 
 private:

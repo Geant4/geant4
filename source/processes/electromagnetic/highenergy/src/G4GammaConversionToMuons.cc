@@ -51,9 +51,8 @@ using namespace std;
 static const G4double sqrte=sqrt(exp(1.));
 static const G4double PowSat=-0.88;
 
-G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
-						   G4ProcessType type)
-  : G4VDiscreteProcess (processName, type),
+G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName):
+    G4VDiscreteProcess {processName,fElectromagnetic},
     Mmuon(G4MuonPlus::MuonPlus()->GetPDGMass()),
     Rc(elm_coupling/Mmuon),
     LowestEnergyLimit (4.*Mmuon), // 4*Mmuon

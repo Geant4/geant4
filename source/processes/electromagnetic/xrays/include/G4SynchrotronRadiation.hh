@@ -64,8 +64,7 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
 {
 public:
 
-  explicit G4SynchrotronRadiation(const G4String& pName = "SynRad",
-		         G4ProcessType type = fElectromagnetic);
+  explicit G4SynchrotronRadiation(const G4String& pName = "SynRad");
 
   virtual ~G4SynchrotronRadiation();
 

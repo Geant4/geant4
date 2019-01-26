@@ -138,8 +138,7 @@ public:
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4OpBoundaryProcess(const G4String& processName = "OpBoundary",
-                                     G4ProcessType type = fOptical);
+        G4OpBoundaryProcess(const G4String& processName = "OpBoundary");
         ~G4OpBoundaryProcess();
 
 private:

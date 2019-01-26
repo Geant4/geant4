@@ -72,8 +72,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
-  G4VDiscreteProcess(name, type),
+G4VEmProcess::G4VEmProcess(const G4String& name):
+    G4VDiscreteProcess{name,fElectromagnetic},
   secondaryParticle(nullptr),
   buildLambdaTable(true),
   numberOfModels(0),

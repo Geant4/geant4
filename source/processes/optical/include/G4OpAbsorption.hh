@@ -79,8 +79,7 @@ public:
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4OpAbsorption(const G4String& processName = "OpAbsorption",
-                                G4ProcessType type = fOptical);
+        G4OpAbsorption(const G4String& processName = "OpAbsorption");
 	~G4OpAbsorption();
 
 private:

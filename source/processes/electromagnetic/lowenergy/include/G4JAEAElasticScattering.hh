@@ -50,8 +50,7 @@ class G4JAEAElasticScattering : public G4VEmProcess
 
 public:
 //Constructor
-  G4JAEAElasticScattering(const G4String& processName ="JAEA_ES",
-		      G4ProcessType type = fElectromagnetic);
+  G4JAEAElasticScattering(const G4String& processName ="JAEA_ES");
 //Destructor
   virtual ~G4JAEAElasticScattering();
 

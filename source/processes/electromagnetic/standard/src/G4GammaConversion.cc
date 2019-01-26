@@ -44,8 +44,8 @@
 
 using namespace std;
 
-G4GammaConversion::G4GammaConversion(const G4String& processName,
-  G4ProcessType type):G4VEmProcess (processName, type),
+G4GammaConversion::G4GammaConversion(const G4String& processName):
+    G4VEmProcess {processName},
     isInitialised(false)
 {
   SetMinKinEnergy(2.0*electron_mass_c2);

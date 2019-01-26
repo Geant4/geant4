@@ -92,8 +92,7 @@ class G4VMultipleScattering : public G4VContinuousDiscreteProcess
 {
 public:
 
-  G4VMultipleScattering(const G4String& name = "msc",
-                        G4ProcessType type = fElectromagnetic);
+  G4VMultipleScattering(const G4String& name = "msc");
 
   virtual ~G4VMultipleScattering();
 
