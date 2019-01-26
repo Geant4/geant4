@@ -87,16 +87,6 @@ static const char* G4Hadronic_Random_File = getenv("G4HADRONIC_RANDOM_FILE");
 //////////////////////////////////////////////////////////////////
 
 G4HadronicProcess::G4HadronicProcess(const G4String& processName,
-                                     G4ProcessType procType)
- : G4VDiscreteProcess(processName, procType)
-{
-  SetProcessSubType(fHadronInelastic);	// Default unless subclass changes
-  InitialiseLocal();
-}
-
-//////////////////////////////////////////////////////////////////
-
-G4HadronicProcess::G4HadronicProcess(const G4String& processName,
                                      G4HadronicProcessType aHadSubType)
  : G4VDiscreteProcess(processName, fHadronic)
 {

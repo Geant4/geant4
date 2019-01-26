@@ -68,9 +68,6 @@ class G4VLeadingParticleBiasing;
 class G4HadronicProcess : public G4VDiscreteProcess
 {
 public:
-  G4HadronicProcess(const G4String& processName="Hadronic",
-		    G4ProcessType procType=fHadronic);    
-
   // Preferred signature for subclasses, specifying their subtype here
   G4HadronicProcess(const G4String& processName, 
 		    G4HadronicProcessType subType);    
