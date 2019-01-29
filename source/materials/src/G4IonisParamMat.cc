@@ -499,6 +499,7 @@ void G4IonisParamMat::SetSternheimerExactDensityEffect()
 
   fCalcDensity->sternf = (double *)malloc(sizeof(double) * fCalcDensity->nlev);
   fCalcDensity->levE   = (double *)malloc(sizeof(double) * fCalcDensity->nlev);
+  memset(fCalcDensity->sternf, 0, sizeof(double)*fCalcDensity->nlev);
   memset(fCalcDensity->levE, 0, sizeof(double)*fCalcDensity->nlev);
 
   int sh = 0;
@@ -516,7 +517,7 @@ void G4IonisParamMat::SetSternheimerExactDensityEffect()
       // band, regardless of element.
       const int lev = i < nshell-1 || !isconductor? sh: fCalcDensity->nlev-1;
       fCalcDensity->sternf[lev] += numberfracs[j] *
-        double(G4AtomicShells::GetNumberOfElectrons(Z[j], i))/Z[j];
+        double(G4AtomicShells::GetNumberOfElectrons(Z[j], i));
       fCalcDensity->levE[lev] = G4AtomicShells::GetBindingEnergy(Z[j], i)/eV;
       sh++;
     }

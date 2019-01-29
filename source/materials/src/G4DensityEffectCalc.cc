@@ -215,8 +215,17 @@ bool SetupFermiDeltaCalc(G4DensityEffectCalcData * par)
     "*********************************************************************\n"
     "* Warning: Could not solve for Sternheimer rho. Probably you have a *\n"
     "* mean ionization energy which is incompatible with your            *\n"
-    "* distribution of energy levels.  Falling back to parameterization. *\n"
-    "*********************************************************************\n";
+    "* distribution of energy levels, or an unusually dense material.    *\n"
+    "* Falling back to parameterization.                                 *\n"
+    "*********************************************************************"
+    << G4endl
+    << "Number of levels: " << par->nlev << G4endl
+    << "Mean ionization energy: " << par->meanexcite << "eV" << G4endl
+    << "Plasma energy: " << par->plasmaE << "eV" << G4endl;
+    for(int i = 0; i < par->nlev; i++)
+      G4cerr << "Level " << i
+             << ": strength " << par->sternf[i]
+             << ": energy " << par->levE[i] << "eV" << G4endl;
     return false;
   }
 
