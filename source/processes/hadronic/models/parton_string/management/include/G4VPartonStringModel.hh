@@ -56,8 +56,8 @@ class G4VPartonStringModel : public G4VHighEnergyGenerator
   private:
     G4VPartonStringModel(const G4VPartonStringModel &right);
     const G4VPartonStringModel & operator=(const G4VPartonStringModel &right);
-    int operator==(const G4VPartonStringModel &right) const;
-    int operator!=(const G4VPartonStringModel &right) const;
+    G4bool operator==(const G4VPartonStringModel &right) const;
+    G4bool operator!=(const G4VPartonStringModel &right) const;
 
   public:
     void SetFragmentationModel(G4VStringFragmentation * aModel);

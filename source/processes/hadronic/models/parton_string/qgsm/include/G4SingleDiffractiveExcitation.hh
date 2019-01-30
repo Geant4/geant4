@@ -61,8 +61,8 @@ class G4SingleDiffractiveExcitation : public G4QGSDiffractiveExcitation
 	G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare) const;
 
 	const G4SingleDiffractiveExcitation & operator=(const G4SingleDiffractiveExcitation &right);
-	int operator==(const G4SingleDiffractiveExcitation &right) const;
-	int operator!=(const G4SingleDiffractiveExcitation &right) const;
+	G4bool operator==(const G4SingleDiffractiveExcitation &right) const;
+	G4bool operator!=(const G4SingleDiffractiveExcitation &right) const;
 };
 
 #endif

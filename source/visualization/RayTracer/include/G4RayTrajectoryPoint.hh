@@ -55,7 +55,7 @@ class G4RayTrajectoryPoint :public G4VTrajectoryPoint
 
     inline void *operator new(size_t);
     inline void operator delete(void *aTrajectoryPoint);
-  //    inline int operator==(const G4RayTrajectoryPoint& right) const
+  //    inline G4bool operator==(const G4RayTrajectoryPoint& right) const
   // { return (this==&right); };
 
   private:

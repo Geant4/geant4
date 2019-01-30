@@ -64,9 +64,9 @@ const eRositaTrackerHit& eRositaTrackerHit::operator=(const eRositaTrackerHit& r
 }
 
 
-G4int eRositaTrackerHit::operator==(const eRositaTrackerHit& right) const
+G4bool eRositaTrackerHit::operator==(const eRositaTrackerHit& right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 

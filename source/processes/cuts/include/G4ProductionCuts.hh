@@ -73,8 +73,8 @@ class G4ProductionCuts
   virtual ~G4ProductionCuts();
 
   // equal opperators
-  G4int operator==(const G4ProductionCuts &right) const;
-  G4int operator!=(const G4ProductionCuts &right) const;
+  G4bool operator==(const G4ProductionCuts &right) const;
+  G4bool operator!=(const G4ProductionCuts &right) const;
 
   public: // with description
   // Set Cuts methods

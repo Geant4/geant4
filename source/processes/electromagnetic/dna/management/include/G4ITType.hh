@@ -73,9 +73,9 @@ public :
     inline G4ITType & operator=(const int & rhs) { fValue = rhs; return *this;}
     inline operator int & () { return fValue; }
     inline operator const int & () const { return fValue; }
-    inline bool operator==(const G4ITType & rhs) const { return fValue == rhs.fValue; }
-    inline bool operator==(const int & rhs) const { return fValue == rhs; }
-    inline bool operator<(const G4ITType & rhs) const { return fValue < rhs.fValue; }
+    inline G4bool operator==(const G4ITType & rhs) const { return fValue == rhs.fValue; }
+    inline G4bool operator==(const int & rhs) const { return fValue == rhs; }
+    inline G4bool operator<(const G4ITType & rhs) const { return fValue < rhs.fValue; }
     inline void operator++() { fValue++; }
 };
 

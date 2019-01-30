@@ -229,12 +229,12 @@ const G4ParticleDefinition & G4ParticleDefinition::operator=(const G4ParticleDef
   return *this;
 }
 
-G4int G4ParticleDefinition::operator==(const G4ParticleDefinition &right) const
+G4bool G4ParticleDefinition::operator==(const G4ParticleDefinition &right) const
 {
   return (this->theParticleName == right.theParticleName);
 }
 
-G4int G4ParticleDefinition::operator!=(const G4ParticleDefinition &right) const
+G4bool G4ParticleDefinition::operator!=(const G4ParticleDefinition &right) const
 {
   return (this->theParticleName != right.theParticleName);
 }

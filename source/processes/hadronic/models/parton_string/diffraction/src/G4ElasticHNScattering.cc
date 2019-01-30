@@ -246,7 +246,7 @@ const G4ElasticHNScattering & G4ElasticHNScattering::operator=( const G4ElasticH
 
 //============================================================================
 
-int G4ElasticHNScattering::operator==( const G4ElasticHNScattering& ) const {
+G4bool G4ElasticHNScattering::operator==( const G4ElasticHNScattering& ) const {
  throw G4HadronicException( __FILE__, __LINE__, 
                             "G4ElasticHNScattering == operator not meant to be called" );
 }
@@ -254,7 +254,7 @@ int G4ElasticHNScattering::operator==( const G4ElasticHNScattering& ) const {
 
 //============================================================================
 
-int G4ElasticHNScattering::operator!=( const G4ElasticHNScattering& ) const {
+G4bool G4ElasticHNScattering::operator!=( const G4ElasticHNScattering& ) const {
   throw G4HadronicException( __FILE__, __LINE__, 
                             "G4ElasticHNScattering != operator not meant to be called" );
 }

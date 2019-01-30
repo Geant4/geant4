@@ -53,8 +53,8 @@ public:
 private:
   G4PionPlusField(const  G4PionPlusField &right);
   const G4PionPlusField & operator=(const G4PionPlusField & right);
-  int operator==(const G4PionPlusField & right) const;
-  int operator!=(const G4PionPlusField & right) const;
+  G4bool operator==(const G4PionPlusField & right) const;
+  G4bool operator!=(const G4PionPlusField & right) const;
 
 public:
   virtual G4double GetField(const G4ThreeVector & aPosition);

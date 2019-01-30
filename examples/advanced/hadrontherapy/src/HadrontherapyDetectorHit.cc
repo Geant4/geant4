@@ -61,7 +61,7 @@ const HadrontherapyDetectorHit& HadrontherapyDetectorHit::operator=(const Hadron
  return *this;
 }
 
-G4int HadrontherapyDetectorHit::operator==(const HadrontherapyDetectorHit& right) const
+G4bool HadrontherapyDetectorHit::operator==(const HadrontherapyDetectorHit& right) const
 {
  return((xHitID==right.xHitID)&&(zHitID==right.zHitID)&&(yHitID==right.yHitID));
 }

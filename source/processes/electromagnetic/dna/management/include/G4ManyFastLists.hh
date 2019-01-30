@@ -359,12 +359,12 @@ template<class OBJECT>
       return operator--();
     }
 
-    bool operator==(const _Self& __x) const
+    G4bool operator==(const _Self& __x) const
     {
       return (fIterator == __x.fIterator && fCurrentListIt == __x.fCurrentListIt);
     } // Fast check
 
-    bool operator!=(const _Self& __x) const
+    G4bool operator!=(const _Self& __x) const
     {
       return !(this->operator ==(__x));
     }

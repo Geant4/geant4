@@ -91,8 +91,8 @@ G4EventManager::~G4EventManager()
 /*
 const G4EventManager & G4EventManager::operator=(const G4EventManager &right)
 { }
-G4int G4EventManager::operator==(const G4EventManager &right) const { }
-G4int G4EventManager::operator!=(const G4EventManager &right) const { }
+G4bool G4EventManager::operator==(const G4EventManager &right) const { }
+G4bool G4EventManager::operator!=(const G4EventManager &right) const { }
 */
 
 void G4EventManager::DoProcessing(G4Event* anEvent)

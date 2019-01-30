@@ -104,8 +104,8 @@ class G4DynamicParticle
 
   //- operators
      G4DynamicParticle & operator=(const G4DynamicParticle &right);
-     G4int operator==(const G4DynamicParticle &right) const;
-     G4int operator!=(const G4DynamicParticle &right) const;
+     G4bool operator==(const G4DynamicParticle &right) const;
+     G4bool operator!=(const G4DynamicParticle &right) const;
 
   //  new/delete operators are oberloded to use G4Allocator
      inline void *operator new(size_t);

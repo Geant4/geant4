@@ -47,9 +47,9 @@ class G4VKineticNucleon
 
       const G4VKineticNucleon& operator=(const G4VKineticNucleon& right);
 
-      int operator==(const G4VKineticNucleon& right) const;
+      G4bool operator==(const G4VKineticNucleon& right) const;
 
-      int operator!=(const G4VKineticNucleon& right) const;
+      G4bool operator!=(const G4VKineticNucleon& right) const;
 
       virtual G4KineticTrackVector* Decay();
 

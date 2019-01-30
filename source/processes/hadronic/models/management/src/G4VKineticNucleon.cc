@@ -45,12 +45,12 @@ G4VKineticNucleon::~G4VKineticNucleon()
 //{}
 
 
-int G4VKineticNucleon::operator==(const G4VKineticNucleon &right) const
+G4bool G4VKineticNucleon::operator==(const G4VKineticNucleon &right) const
 {
 	return this == &right;
 }
 
-int G4VKineticNucleon::operator!=(const G4VKineticNucleon &right) const
+G4bool G4VKineticNucleon::operator!=(const G4VKineticNucleon &right) const
 {
 	return this != &right;
 

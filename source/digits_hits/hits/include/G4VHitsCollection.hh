@@ -47,7 +47,7 @@ class G4VHitsCollection
       G4VHitsCollection();
       G4VHitsCollection(G4String detName,G4String colNam);
       virtual ~G4VHitsCollection();
-      G4int operator==(const G4VHitsCollection &right) const;
+      G4bool operator==(const G4VHitsCollection &right) const;
 
       virtual void DrawAllHits();
       virtual void PrintAllHits();

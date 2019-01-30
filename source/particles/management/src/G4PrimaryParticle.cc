@@ -184,10 +184,10 @@ G4PrimaryParticle & G4PrimaryParticle::operator=(const G4PrimaryParticle & right
   return *this; 
 }
 
-G4int G4PrimaryParticle::operator==(const G4PrimaryParticle &right) const
+G4bool G4PrimaryParticle::operator==(const G4PrimaryParticle &right) const
 { return (this==&right); }
 
-G4int G4PrimaryParticle::operator!=(const G4PrimaryParticle &right) const
+G4bool G4PrimaryParticle::operator!=(const G4PrimaryParticle &right) const
 { return (this!=&right); }
 
 G4PrimaryParticle::~G4PrimaryParticle()

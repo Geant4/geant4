@@ -1080,7 +1080,7 @@ const G4FTFAnnihilation & G4FTFAnnihilation::operator=( const G4FTFAnnihilation&
 
 //============================================================================
 
-int G4FTFAnnihilation::operator==( const G4FTFAnnihilation& ) const {
+G4bool G4FTFAnnihilation::operator==( const G4FTFAnnihilation& ) const {
   throw G4HadronicException( __FILE__, __LINE__, 
                              "G4FTFAnnihilation == operator not meant to be called" );
 }
@@ -1088,7 +1088,7 @@ int G4FTFAnnihilation::operator==( const G4FTFAnnihilation& ) const {
 
 //============================================================================
 
-int G4FTFAnnihilation::operator!=( const G4FTFAnnihilation& ) const {
+G4bool G4FTFAnnihilation::operator!=( const G4FTFAnnihilation& ) const {
   throw G4HadronicException( __FILE__, __LINE__, 
                              "G4DiffractiveExcitation != operator not meant to be called" );
 }

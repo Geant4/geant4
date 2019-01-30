@@ -93,8 +93,8 @@ class G4LogicalSurface
 
    virtual ~G4LogicalSurface();
 
-   inline G4int operator==(const G4LogicalSurface &right) const;
-   inline G4int operator!=(const G4LogicalSurface &right) const;
+   inline G4bool operator==(const G4LogicalSurface &right) const;
+   inline G4bool operator!=(const G4LogicalSurface &right) const;
 
  protected:
 

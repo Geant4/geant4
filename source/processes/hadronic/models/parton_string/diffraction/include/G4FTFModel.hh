@@ -74,8 +74,8 @@ class G4FTFModel : public G4VPartonStringModel {
   private:
     G4FTFModel( const G4FTFModel& right );
     const G4FTFModel& operator=( const G4FTFModel& right );
-    int operator==( const G4FTFModel& right ) const;
-    int operator!=( const G4FTFModel& right ) const;
+    G4bool operator==( const G4FTFModel& right ) const;
+    G4bool operator!=( const G4FTFModel& right ) const;
 
     void StoreInvolvedNucleon();              
     void ReggeonCascade();

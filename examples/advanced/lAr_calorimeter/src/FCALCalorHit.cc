@@ -66,9 +66,9 @@ const FCALCalorHit& FCALCalorHit::operator=(const FCALCalorHit& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int FCALCalorHit::operator==(const FCALCalorHit& right) const
+G4bool FCALCalorHit::operator==(const FCALCalorHit& right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

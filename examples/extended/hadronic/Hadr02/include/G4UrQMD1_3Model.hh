@@ -90,8 +90,8 @@ public:
     
 private: 
 
-  G4int operator==(G4UrQMD1_3Model& right);
-  G4int operator!=(G4UrQMD1_3Model& right);
+  G4bool operator==(G4UrQMD1_3Model& right);
+  G4bool operator!=(G4UrQMD1_3Model& right);
                                     
   void InitialiseDataTables();
 

@@ -61,8 +61,8 @@ private:
   G4PreCompoundNucleon(const G4PreCompoundNucleon &right);
   const G4PreCompoundNucleon& 
   operator= (const G4PreCompoundNucleon &right);
-  G4int operator==(const G4PreCompoundNucleon &right) const;
-  G4int operator!=(const G4PreCompoundNucleon &right) const;    
+  G4bool operator==(const G4PreCompoundNucleon &right) const;
+  G4bool operator!=(const G4PreCompoundNucleon &right) const;    
 
 };
 

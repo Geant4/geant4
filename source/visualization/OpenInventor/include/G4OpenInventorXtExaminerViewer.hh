@@ -278,7 +278,7 @@ private:
       float distanceToBeamlineStart;
       std::string name;
 
-      bool operator<(elementForSorting const &other) const
+      G4bool operator<(elementForSorting const &other) const
       {
          if (closestPointZCoord < other.closestPointZCoord)
             return true;

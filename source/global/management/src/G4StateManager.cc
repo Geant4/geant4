@@ -114,13 +114,13 @@ G4StateManager::operator=(const G4StateManager &right)
    return *this;
 }
 
-G4int
+G4bool
 G4StateManager::operator==(const G4StateManager &right) const
 {
    return (this == &right);
 }
 
-G4int
+G4bool
 G4StateManager::operator!=(const G4StateManager &right) const
 {
    return (this != &right);

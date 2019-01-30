@@ -57,7 +57,7 @@ class DMXScintHit : public G4VHit
       ~DMXScintHit();
       DMXScintHit(const DMXScintHit&);
       const DMXScintHit& operator=(const DMXScintHit&);
-      int operator==(const DMXScintHit&) const;
+      G4bool operator==(const DMXScintHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);

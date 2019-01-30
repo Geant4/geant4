@@ -69,8 +69,8 @@ private:
   G4PreCompoundIon(const G4PreCompoundIon &right);
   const G4PreCompoundIon& 
   operator= (const G4PreCompoundIon &right);
-  G4int operator==(const G4PreCompoundIon &right) const;
-  G4int operator!=(const G4PreCompoundIon &right) const;    
+  G4bool operator==(const G4PreCompoundIon &right) const;
+  G4bool operator!=(const G4PreCompoundIon &right) const;    
 
   G4double fact;
 };

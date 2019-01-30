@@ -67,8 +67,8 @@ class G4SensitiveVolumeList
 );
 
     //Equality Operations
-      G4int operator==(const G4SensitiveVolumeList &right) const;
-      G4int operator!=(const G4SensitiveVolumeList &right) const;
+      G4bool operator==(const G4SensitiveVolumeList &right) const;
+      G4bool operator!=(const G4SensitiveVolumeList &right) const;
 
 
     //Other Operations

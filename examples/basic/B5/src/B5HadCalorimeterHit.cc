@@ -91,7 +91,7 @@ const B5HadCalorimeterHit& B5HadCalorimeterHit::operator=(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int B5HadCalorimeterHit::operator==(const B5HadCalorimeterHit &right) const
+G4bool B5HadCalorimeterHit::operator==(const B5HadCalorimeterHit &right) const
 {
   return (fColumnID==right.fColumnID&&fRowID==right.fRowID);
 }

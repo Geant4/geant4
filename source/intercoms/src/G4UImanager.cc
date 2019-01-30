@@ -176,9 +176,9 @@ G4UImanager::G4UImanager(const G4UImanager& ui)
 
 const G4UImanager & G4UImanager::operator=(const G4UImanager &right)
 { return right; }
-G4int G4UImanager::operator==(const G4UImanager &right) const
+G4bool G4UImanager::operator==(const G4UImanager &right) const
 { return (this==&right); }
-G4int G4UImanager::operator!=(const G4UImanager &right) const
+G4bool G4UImanager::operator!=(const G4UImanager &right) const
 { return (this!=&right); }
 
 void G4UImanager::UseDoublePrecisionStr(G4bool val)

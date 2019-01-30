@@ -59,8 +59,8 @@ class G4ParticlePropertyTable
   G4ParticlePropertyTable & operator=(const G4ParticlePropertyTable &right);
   
  public:
-  G4int operator==(const G4ParticlePropertyTable &right) const;
-  G4int operator!=(const G4ParticlePropertyTable &right) const;
+  G4bool operator==(const G4ParticlePropertyTable &right) const;
+  G4bool operator!=(const G4ParticlePropertyTable &right) const;
 
  public:
   virtual ~G4ParticlePropertyTable();

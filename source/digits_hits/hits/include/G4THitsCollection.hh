@@ -51,7 +51,7 @@ class G4HitsCollection : public G4VHitsCollection
       G4HitsCollection();
       G4HitsCollection(G4String detName,G4String colNam);
       virtual ~G4HitsCollection();
-      G4int operator==(const G4HitsCollection &right) const;
+      G4bool operator==(const G4HitsCollection &right) const;
 
   protected:
       void* theCollection;
@@ -72,7 +72,7 @@ template <class T> class G4THitsCollection : public G4HitsCollection
       // constructor.
   public:
       virtual ~G4THitsCollection();
-      G4int operator==(const G4THitsCollection<T> &right) const;
+      G4bool operator==(const G4THitsCollection<T> &right) const;
       
       inline void *operator new(size_t);
       inline void operator delete(void* anHC);
@@ -166,7 +166,7 @@ template <class T> G4THitsCollection<T>::~G4THitsCollection()
   delete theHitsCollection;
 }
 
-template <class T> G4int G4THitsCollection<T>::operator==(const G4THitsCollection<T> &right) const
+template <class T> G4bool G4THitsCollection<T>::operator==(const G4THitsCollection<T> &right) const
 {
     if (!anHCAllocator_G4MT_TLS_()) anHCAllocator_G4MT_TLS_() = new G4Allocator<G4HitsCollection>;
     return (collectionName==right.collectionName);

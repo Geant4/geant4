@@ -51,8 +51,8 @@ class G4HEPEvtParticle
       ~G4HEPEvtParticle();
 
       G4HEPEvtParticle & operator=(const G4HEPEvtParticle &right);
-      G4int operator==(const G4HEPEvtParticle &right) const;
-      G4int operator!=(const G4HEPEvtParticle &right) const;
+      G4bool operator==(const G4HEPEvtParticle &right) const;
+      G4bool operator!=(const G4HEPEvtParticle &right) const;
 
   private:
       G4PrimaryParticle * theParticle;

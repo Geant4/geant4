@@ -52,8 +52,8 @@ class G3MatTableEntry
     
     // operators
     G3MatTableEntry& operator=(const G3MatTableEntry& right);
-    G4int operator==(const G3MatTableEntry& right) const;
-    G4int operator!=(const G3MatTableEntry& right) const;
+    G4bool operator==(const G3MatTableEntry& right) const;
+    G4bool operator!=(const G3MatTableEntry& right) const;
 
     // get methods
     G4int       GetID() const;

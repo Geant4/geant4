@@ -469,14 +469,14 @@ G4KineticTrack& G4KineticTrack::operator=(const G4KineticTrack& right)
 
 
 
-G4int G4KineticTrack::operator==(const G4KineticTrack& right) const
+G4bool G4KineticTrack::operator==(const G4KineticTrack& right) const
 {
  return (this == & right);
 }
 
 
 
-G4int G4KineticTrack::operator!=(const G4KineticTrack& right) const
+G4bool G4KineticTrack::operator!=(const G4KineticTrack& right) const
 {
  return (this != & right);
 }

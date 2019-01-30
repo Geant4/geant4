@@ -55,8 +55,8 @@ public:
 private:
   G4ProtonField(const  G4ProtonField &right);
   const G4ProtonField & operator=(const G4ProtonField & right);
-  int operator==(const G4ProtonField & right) const;
-  int operator!=(const G4ProtonField & right) const;
+  G4bool operator==(const G4ProtonField & right) const;
+  G4bool operator!=(const G4ProtonField & right) const;
 
 public:
 

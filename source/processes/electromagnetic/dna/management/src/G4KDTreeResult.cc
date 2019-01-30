@@ -64,7 +64,7 @@ public:
   }
   ~ResNode(){;}
   
-  bool operator<(const ResNode& right) const
+  G4bool operator<(const ResNode& right) const
   {
     return (fDistanceSqr < right.fDistanceSqr);
   }

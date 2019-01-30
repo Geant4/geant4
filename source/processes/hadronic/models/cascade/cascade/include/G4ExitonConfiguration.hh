@@ -67,7 +67,7 @@ public:
 
   void fill(const G4Fragment& frag);	// Initialize from G4Fragment data
 
-  bool operator==(const G4ExitonConfiguration& right) const {
+  G4bool operator==(const G4ExitonConfiguration& right) const {
     return ( (&right == this) ||
 	     (protonQuasiParticles == right.protonQuasiParticles &&
 	      neutronQuasiParticles == right.neutronQuasiParticles &&
@@ -75,7 +75,7 @@ public:
 	      neutronHoles == right.neutronHoles) );
   }
 
-  bool operator!=(const G4ExitonConfiguration& right) const {
+  G4bool operator!=(const G4ExitonConfiguration& right) const {
     return !operator==(right);
   }
 

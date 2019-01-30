@@ -107,8 +107,8 @@ public:
   G4VITProcess& operator=(const G4VITProcess& other);
 
   // equal opperators
-  G4int operator==(const G4VITProcess &right) const;
-  G4int operator!=(const G4VITProcess &right) const;
+  G4bool operator==(const G4VITProcess &right) const;
+  G4bool operator!=(const G4VITProcess &right) const;
 
   G4IT_TO_BE_CLONED(G4VITProcess)
 

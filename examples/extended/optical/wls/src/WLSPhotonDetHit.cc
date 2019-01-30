@@ -77,7 +77,7 @@ const WLSPhotonDetHit& WLSPhotonDetHit::operator=(const WLSPhotonDetHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int WLSPhotonDetHit::operator==(const WLSPhotonDetHit& right) const
+G4bool WLSPhotonDetHit::operator==(const WLSPhotonDetHit& right) const
 {
   return fPosExit     == right.fPosExit    &&
          fPosArrive   == right.fPosArrive  &&

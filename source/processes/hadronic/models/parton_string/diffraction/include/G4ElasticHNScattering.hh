@@ -58,8 +58,8 @@ class G4ElasticHNScattering {
     G4ElasticHNScattering( const G4ElasticHNScattering& right );
     G4ThreeVector GaussianPt( G4double AveragePt2, G4double maxPtSquare ) const;
     const G4ElasticHNScattering& operator=( const G4ElasticHNScattering& right );
-    int operator==( const G4ElasticHNScattering& right ) const;
-    int operator!=( const G4ElasticHNScattering& right ) const;
+    G4bool operator==( const G4ElasticHNScattering& right ) const;
+    G4bool operator!=( const G4ElasticHNScattering& right ) const;
 };
 
 #endif

@@ -44,8 +44,8 @@ class G4StringModel : public G4VHighEnergyGenerator
   private:
     G4StringModel(const G4StringModel &right);
     const G4StringModel & operator=(const G4StringModel &right);
-    int operator==(const G4StringModel &right) const;
-    int operator!=(const G4StringModel &right) const;
+    G4bool operator==(const G4StringModel &right) const;
+    G4bool operator!=(const G4StringModel &right) const;
 
   public:
     void Set3DNucleus(G4V3DNucleus *const  value);

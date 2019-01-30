@@ -157,8 +157,8 @@ private:
   inline G4double DerivativeXY(size_t idx, size_t idy, G4double fac) const;
   // computation of derivatives
 
-  G4int operator==(const G4Physics2DVector &right) const = delete;
-  G4int operator!=(const G4Physics2DVector &right) const = delete;
+  G4bool operator==(const G4Physics2DVector &right) const = delete;
+  G4bool operator!=(const G4Physics2DVector &right) const = delete;
 
   G4PhysicsVectorType type;   // The type of PhysicsVector (enumerator)    
 

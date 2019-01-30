@@ -135,10 +135,10 @@ G4PrimaryVertex &  G4PrimaryVertex::operator=(const G4PrimaryVertex & right)
   return *this; 
 }
 
-G4int G4PrimaryVertex::operator==(const G4PrimaryVertex &right) const
+G4bool G4PrimaryVertex::operator==(const G4PrimaryVertex &right) const
 { return (this==&right); }
 
-G4int G4PrimaryVertex::operator!=(const G4PrimaryVertex &right) const
+G4bool G4PrimaryVertex::operator!=(const G4PrimaryVertex &right) const
 { return (this!=&right); }
 
 G4PrimaryParticle* G4PrimaryVertex::GetPrimary(G4int i) const

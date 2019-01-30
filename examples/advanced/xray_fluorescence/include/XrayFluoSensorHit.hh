@@ -54,7 +54,7 @@ public:
   ~XrayFluoSensorHit();
   XrayFluoSensorHit(const XrayFluoSensorHit&);
   const XrayFluoSensorHit& operator=(const XrayFluoSensorHit&);
-  int operator==(const XrayFluoSensorHit&) const;
+  G4bool operator==(const XrayFluoSensorHit&) const;
   inline void* operator new(size_t);
   inline void  operator delete(void*);
   inline void AddEnergy(G4double de)    {EdepTot += de;};

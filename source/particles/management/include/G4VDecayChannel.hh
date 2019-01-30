@@ -72,11 +72,11 @@ class G4VDecayChannel
     virtual ~G4VDecayChannel();
 
     // equality operators
-    G4int operator==(const G4VDecayChannel &right) const {return (this == &right);}
-    G4int operator!=(const G4VDecayChannel &right) const {return (this != &right);}
+    G4bool operator==(const G4VDecayChannel &right) const {return (this == &right);}
+    G4bool operator!=(const G4VDecayChannel &right) const {return (this != &right);}
 
     // less-than operator is defined for G4DecayTable
-    G4int operator<(const G4VDecayChannel &right) const;
+    G4bool operator<(const G4VDecayChannel &right) const;
 
     virtual G4DecayProducts* DecayIt(G4double parentMass = -1.0) = 0;
 
@@ -202,7 +202,7 @@ class G4VDecayChannel
 // ------------------------------------------------------------
 
 inline
- G4int G4VDecayChannel::operator<(const G4VDecayChannel &right) const
+ G4bool G4VDecayChannel::operator<(const G4VDecayChannel &right) const
 {
   return (this->rbranch < right.rbranch);
 }

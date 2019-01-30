@@ -55,9 +55,9 @@ class G4PenelopeOscillator
 
   //I need to overload the following operators: > < == =
   G4PenelopeOscillator& operator=(const G4PenelopeOscillator&);
-  int operator==(const G4PenelopeOscillator&) const;
-  int operator>(const G4PenelopeOscillator&) const;
-  int operator<(const G4PenelopeOscillator&) const;
+  G4bool operator==(const G4PenelopeOscillator&) const;
+  G4bool operator>(const G4PenelopeOscillator&) const;
+  G4bool operator<(const G4PenelopeOscillator&) const;
   
   //Setters and getters
   G4double GetHartreeFactor() {return hartreeFactor;};

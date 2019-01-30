@@ -52,8 +52,8 @@ class G4VHighEnergyGenerator
   private:
       G4VHighEnergyGenerator(const G4VHighEnergyGenerator &right);
       const G4VHighEnergyGenerator & operator=(const G4VHighEnergyGenerator &right);
-      int operator==(const G4VHighEnergyGenerator &right) const;
-      int operator!=(const G4VHighEnergyGenerator &right) const;
+      G4bool operator==(const G4VHighEnergyGenerator &right) const;
+      G4bool operator!=(const G4VHighEnergyGenerator &right) const;
 
  public:
       virtual G4V3DNucleus * GetWoundedNucleus() const = 0;

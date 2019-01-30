@@ -102,8 +102,8 @@ class G4PhysicsVector
          // Obsolete method to get value, isOutRange is not used anymore. 
          // This method is kept for the compatibility reason.
 
-    G4int operator==(const G4PhysicsVector &right) const ;
-    G4int operator!=(const G4PhysicsVector &right) const ;
+    G4bool operator==(const G4PhysicsVector &right) const ;
+    G4bool operator!=(const G4PhysicsVector &right) const ;
 
     inline G4double operator[](const size_t index) const ;
          // Returns the value for the specified index of the dataVector

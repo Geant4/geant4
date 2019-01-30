@@ -1440,7 +1440,7 @@ const G4DiffractiveExcitation & G4DiffractiveExcitation::operator=( const G4Diff
 
 //============================================================================
 
-int G4DiffractiveExcitation::operator==( const G4DiffractiveExcitation& ) const {
+G4bool G4DiffractiveExcitation::operator==( const G4DiffractiveExcitation& ) const {
   throw G4HadronicException( __FILE__, __LINE__, 
                              "G4DiffractiveExcitation == operator not meant to be called" );
 }
@@ -1448,7 +1448,7 @@ int G4DiffractiveExcitation::operator==( const G4DiffractiveExcitation& ) const 
 
 //============================================================================
 
-int G4DiffractiveExcitation::operator!= ( const G4DiffractiveExcitation& ) const {
+G4bool G4DiffractiveExcitation::operator!= ( const G4DiffractiveExcitation& ) const {
   throw G4HadronicException( __FILE__, __LINE__, 
                              "G4DiffractiveExcitation != operator not meant to be called" );
 }

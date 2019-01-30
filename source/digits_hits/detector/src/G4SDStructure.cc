@@ -52,7 +52,7 @@ G4SDStructure::~G4SDStructure()
   detector.clear();
 }
 
-G4int G4SDStructure::operator==(const G4SDStructure &right) const
+G4bool G4SDStructure::operator==(const G4SDStructure &right) const
 {
   return (this==&right);
 }

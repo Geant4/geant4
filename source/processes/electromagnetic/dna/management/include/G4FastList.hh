@@ -425,8 +425,8 @@ template<class OBJECT>
   private:
     G4FastList(const G4FastList<OBJECT>& other);
     G4FastList<OBJECT> & operator=(const G4FastList<OBJECT> &right);
-    G4int operator==(const G4FastList<OBJECT> &right) const;
-    G4int operator!=(const G4FastList<OBJECT> &right) const;
+    G4bool operator==(const G4FastList<OBJECT> &right) const;
+    G4bool operator!=(const G4FastList<OBJECT> &right) const;
   };
 
 
@@ -526,12 +526,12 @@ template<typename OBJECT>
       return __tmp;
     }
 
-    bool operator==(const _Self& __x) const
+    G4bool operator==(const _Self& __x) const
     {
       return (fpNode == __x.fpNode);
     }
 
-    bool operator!=(const _Self& __x) const
+    G4bool operator!=(const _Self& __x) const
     {
       return (fpNode != __x.fpNode);
     }
@@ -615,12 +615,12 @@ template<typename OBJECT>
       return __tmp;
     }
 
-    bool operator==(const _Self& __x) const
+    G4bool operator==(const _Self& __x) const
     {
       return (fpNode == __x.fpNode);
     }
 
-    bool operator!=(const _Self& __x) const
+    G4bool operator!=(const _Self& __x) const
     {
       return (fpNode != __x.fpNode);
     }

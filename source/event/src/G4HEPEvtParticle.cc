@@ -55,12 +55,12 @@ G4HEPEvtParticle& G4HEPEvtParticle::operator=(const G4HEPEvtParticle &)
   return *this;
 }
 
-G4int G4HEPEvtParticle::operator==(const G4HEPEvtParticle &right) const
+G4bool G4HEPEvtParticle::operator==(const G4HEPEvtParticle &right) const
 {
   return (this==&right);
 }
 
-G4int G4HEPEvtParticle::operator!=(const G4HEPEvtParticle &right) const
+G4bool G4HEPEvtParticle::operator!=(const G4HEPEvtParticle &right) const
 {
   return (this!=&right);
 }

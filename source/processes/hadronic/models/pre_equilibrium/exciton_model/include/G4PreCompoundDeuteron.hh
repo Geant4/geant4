@@ -60,8 +60,8 @@ private:
   G4PreCompoundDeuteron(const G4PreCompoundDeuteron &right);
   const G4PreCompoundDeuteron& 
   operator= (const G4PreCompoundDeuteron &right);
-  G4int operator==(const G4PreCompoundDeuteron &right) const;
-  G4int operator!=(const G4PreCompoundDeuteron &right) const;    
+  G4bool operator==(const G4PreCompoundDeuteron &right) const;
+  G4bool operator!=(const G4PreCompoundDeuteron &right) const;    
 
   G4DeuteronCoulombBarrier theDeuteronCoulombBarrier;
 };

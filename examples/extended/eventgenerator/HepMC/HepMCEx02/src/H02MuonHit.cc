@@ -78,9 +78,9 @@ const H02MuonHit& H02MuonHit::operator=(const H02MuonHit& right)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4int H02MuonHit::operator==(const H02MuonHit& right) const
+G4bool H02MuonHit::operator==(const H02MuonHit& right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

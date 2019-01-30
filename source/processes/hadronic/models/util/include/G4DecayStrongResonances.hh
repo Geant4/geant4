@@ -49,8 +49,8 @@ public:
   ~G4DecayStrongResonances();
 
 private:
-   G4int operator==(G4DecayStrongResonances& right) {return (this == &right);}
-   G4int operator!=(G4DecayStrongResonances& right) {return (this != &right);}
+   G4bool operator==(G4DecayStrongResonances& right) {return (this == &right);}
+   G4bool operator!=(G4DecayStrongResonances& right) {return (this != &right);}
       
 public:
    G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries,

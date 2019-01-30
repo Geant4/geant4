@@ -90,7 +90,7 @@ struct ion
   G4int A; 		 // mass number
   G4double *dose; 	 // pointer to dose matrix
   unsigned int    *fluence;  // pointer to fluence matrix
-  //friend bool operator<(const ion& a, const ion& b) {return (a.Z == b.Z) ? b.A < a.A : b.Z < a.Z ;}
+  //friend G4bool operator<(const ion& a, const ion& b) {return (a.Z == b.Z) ? b.A < a.A : b.Z < a.Z ;}
   G4bool operator<(const ion& a) const{return (this->Z == a.Z) ? this-> A < a.A : this->Z < a.Z ;}
 };
 

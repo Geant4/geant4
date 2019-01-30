@@ -57,10 +57,10 @@ public:
   G4CollisionInitialState(const G4CollisionInitialState & right);
   G4CollisionInitialState & operator=(const G4CollisionInitialState & right);
 
-  int operator<(const G4CollisionInitialState & right) const
+  G4bool operator<(const G4CollisionInitialState & right) const
     {return (theCollisionTime < right.theCollisionTime);}
 
-  int operator==(const G4CollisionInitialState& right) const
+  G4bool operator==(const G4CollisionInitialState& right) const
     {return (theCollisionTime == right.theCollisionTime);}
 
 

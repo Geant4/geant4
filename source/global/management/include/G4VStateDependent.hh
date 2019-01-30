@@ -58,8 +58,8 @@ public:
 
   explicit G4VStateDependent(G4bool bottom=false);
   virtual ~G4VStateDependent();
-  G4int operator==(const G4VStateDependent &right) const;
-  G4int operator!=(const G4VStateDependent &right) const;
+  G4bool operator==(const G4VStateDependent &right) const;
+  G4bool operator!=(const G4VStateDependent &right) const;
 
 public: // with description
 

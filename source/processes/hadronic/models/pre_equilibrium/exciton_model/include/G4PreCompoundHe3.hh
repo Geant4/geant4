@@ -60,8 +60,8 @@ private:
   G4PreCompoundHe3(const G4PreCompoundHe3 &right);
   const G4PreCompoundHe3& 
   operator= (const G4PreCompoundHe3 &right);
-  G4int operator==(const G4PreCompoundHe3 &right) const;
-  G4int operator!=(const G4PreCompoundHe3 &right) const;    
+  G4bool operator==(const G4PreCompoundHe3 &right) const;
+  G4bool operator!=(const G4PreCompoundHe3 &right) const;    
 
   G4He3CoulombBarrier theHe3CoulombBarrier;
 };

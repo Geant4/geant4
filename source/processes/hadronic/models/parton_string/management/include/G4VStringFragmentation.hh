@@ -41,8 +41,8 @@ class G4VStringFragmentation
   private:
     G4VStringFragmentation(const G4VStringFragmentation &right);
     const G4VStringFragmentation & operator=(const G4VStringFragmentation &right);
-    int operator==(const G4VStringFragmentation &right) const;
-    int operator!=(const G4VStringFragmentation &right) const;
+    G4bool operator==(const G4VStringFragmentation &right) const;
+    G4bool operator!=(const G4VStringFragmentation &right) const;
 
   public:
     virtual G4KineticTrackVector * FragmentStrings(const G4ExcitedStringVector * theStrings)=0;

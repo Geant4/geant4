@@ -44,8 +44,8 @@ class G4ExcitedStringDecay: public G4VStringFragmentation
   private:
       G4ExcitedStringDecay(const G4ExcitedStringDecay &right);
       const G4ExcitedStringDecay & operator=(const G4ExcitedStringDecay &right);
-      int operator==(const G4ExcitedStringDecay &right) const;
-      int operator!=(const G4ExcitedStringDecay &right) const;
+      G4bool operator==(const G4ExcitedStringDecay &right) const;
+      G4bool operator!=(const G4ExcitedStringDecay &right) const;
 
   public:
 

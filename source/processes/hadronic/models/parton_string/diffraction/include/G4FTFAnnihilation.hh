@@ -59,8 +59,8 @@ class G4FTFAnnihilation {
   private:
     G4FTFAnnihilation( const G4FTFAnnihilation& right );      
     const G4FTFAnnihilation& operator=( const G4FTFAnnihilation& right );
-    int operator==( const G4FTFAnnihilation& right ) const;
-    int operator!=( const G4FTFAnnihilation& right ) const;
+    G4bool operator==( const G4FTFAnnihilation& right ) const;
+    G4bool operator!=( const G4FTFAnnihilation& right ) const;
 
     // The "Annihilate" method uses the following struct and 4 new utility methods:
     struct CommonVariables {

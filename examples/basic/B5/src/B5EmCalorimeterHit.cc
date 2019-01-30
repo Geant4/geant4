@@ -89,7 +89,7 @@ const B5EmCalorimeterHit& B5EmCalorimeterHit::operator=(const B5EmCalorimeterHit
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int B5EmCalorimeterHit::operator==(const B5EmCalorimeterHit &right) const
+G4bool B5EmCalorimeterHit::operator==(const B5EmCalorimeterHit &right) const
 {
   return (fCellID==right.fCellID);
 }

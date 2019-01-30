@@ -93,8 +93,8 @@ private:
 
   G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right) = delete;
   const G4VIntraNuclearTransportModel& operator=(const G4VIntraNuclearTransportModel &right) = delete;
-  int operator==(const G4VIntraNuclearTransportModel& right) const = delete;
-  int operator!=(const G4VIntraNuclearTransportModel& right) const = delete;
+  G4bool operator==(const G4VIntraNuclearTransportModel& right) const = delete;
+  G4bool operator!=(const G4VIntraNuclearTransportModel& right) const = delete;
 
 protected:
 

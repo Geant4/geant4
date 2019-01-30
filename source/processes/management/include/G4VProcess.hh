@@ -97,8 +97,8 @@ class G4VProcess
       virtual ~G4VProcess();
 
   // equal opperators
-      G4int operator==(const G4VProcess &right) const;
-      G4int operator!=(const G4VProcess &right) const;
+      G4bool operator==(const G4VProcess &right) const;
+      G4bool operator!=(const G4VProcess &right) const;
 
   public: // with description
   ////////////////////////////

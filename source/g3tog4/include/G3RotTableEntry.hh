@@ -53,8 +53,8 @@ class G3RotTableEntry
     
     // operators
     G3RotTableEntry& operator=(const G3RotTableEntry& right);
-    G4int operator==(const G3RotTableEntry& right) const;
-    G4int operator!=(const G3RotTableEntry& right) const;
+    G4bool operator==(const G3RotTableEntry& right) const;
+    G4bool operator!=(const G3RotTableEntry& right) const;
 
     // get methods
     G4int       GetID() const;

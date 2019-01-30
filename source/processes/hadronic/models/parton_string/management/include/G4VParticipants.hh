@@ -52,8 +52,8 @@ class G4VParticipants
     virtual ~G4VParticipants();
 
     const G4VParticipants & operator=(const G4VParticipants &right);
-    int operator==(const G4VParticipants &right) const;
-    int operator!=(const G4VParticipants &right) const;
+    G4bool operator==(const G4VParticipants &right) const;
+    G4bool operator!=(const G4VParticipants &right) const;
 
     virtual void Init(G4int theZ, G4int theA);
     virtual void SetNucleus(G4V3DNucleus* aNucleus);

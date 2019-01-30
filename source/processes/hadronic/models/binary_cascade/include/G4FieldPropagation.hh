@@ -39,8 +39,8 @@ public:
 private:   // Operators
    const G4FieldPropagation & operator=(const G4FieldPropagation &right);
 
-   int operator==(const G4FieldPropagation &right) const;
-   int operator!=(const G4FieldPropagation &right) const;
+   G4bool operator==(const G4FieldPropagation &right) const;
+   G4bool operator!=(const G4FieldPropagation &right) const;
 
 public:    // Methods
 

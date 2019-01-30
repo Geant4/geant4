@@ -109,12 +109,12 @@ G4UIcommand::~G4UIcommand()
   parameter.clear();
 }
 
-G4int G4UIcommand::operator==(const G4UIcommand &right) const
+G4bool G4UIcommand::operator==(const G4UIcommand &right) const
 {
   return ( commandPath == right.GetCommandPath() );
 }
 
-G4int G4UIcommand::operator!=(const G4UIcommand &right) const
+G4bool G4UIcommand::operator!=(const G4UIcommand &right) const
 {
   return ( commandPath != right.GetCommandPath() );
 }

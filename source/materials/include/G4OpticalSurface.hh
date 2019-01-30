@@ -136,8 +136,8 @@ public: // Without description
 	G4OpticalSurface(const G4OpticalSurface &right);
 	G4OpticalSurface & operator=(const G4OpticalSurface &right);
   
-	G4int operator==(const G4OpticalSurface &right) const;
-	G4int operator!=(const G4OpticalSurface &right) const;
+	G4bool operator==(const G4OpticalSurface &right) const;
+	G4bool operator!=(const G4OpticalSurface &right) const;
 
 public: // With description
 

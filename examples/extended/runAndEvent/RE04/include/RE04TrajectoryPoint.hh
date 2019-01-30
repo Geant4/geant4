@@ -71,7 +71,7 @@ public:
 // Operators
    inline void *operator new(size_t);
    inline void operator delete(void *aTrajectoryPoint);
-   inline int operator==(const RE04TrajectoryPoint& right) const
+   inline G4bool operator==(const RE04TrajectoryPoint& right) const
    { return (this==&right); };
 
 // Get/Set functions

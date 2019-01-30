@@ -83,9 +83,9 @@ SensitiveDetectorHit::operator=(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int SensitiveDetectorHit::operator==
+G4bool SensitiveDetectorHit::operator==
 (const SensitiveDetectorHit &/*right*/) const{
-    return 0;
+    return false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

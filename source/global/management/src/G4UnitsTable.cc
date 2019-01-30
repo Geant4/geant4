@@ -139,14 +139,14 @@ G4UnitDefinition& G4UnitDefinition::operator=(const G4UnitDefinition& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-G4int G4UnitDefinition::operator==(const G4UnitDefinition& right) const
+G4bool G4UnitDefinition::operator==(const G4UnitDefinition& right) const
 {
   return (this == (G4UnitDefinition *) &right);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-G4int G4UnitDefinition::operator!=(const G4UnitDefinition &right) const
+G4bool G4UnitDefinition::operator!=(const G4UnitDefinition &right) const
 {
   return (this != (G4UnitDefinition *) &right);
 }
@@ -457,14 +457,14 @@ G4UnitsCategory& G4UnitsCategory::operator=(const G4UnitsCategory& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-G4int G4UnitsCategory::operator==(const G4UnitsCategory& right) const
+G4bool G4UnitsCategory::operator==(const G4UnitsCategory& right) const
 {
   return (this == (G4UnitsCategory *) &right);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-G4int G4UnitsCategory::operator!=(const G4UnitsCategory &right) const
+G4bool G4UnitsCategory::operator!=(const G4UnitsCategory &right) const
 {
   return (this != (G4UnitsCategory *) &right);
 }

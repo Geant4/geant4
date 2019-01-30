@@ -52,19 +52,19 @@ G3RotTableEntry& G3RotTableEntry::operator=(const G3RotTableEntry& right)
   return *this;
 }
 
-G4int G3RotTableEntry::operator==(const G3RotTableEntry& right) const
+G4bool G3RotTableEntry::operator==(const G3RotTableEntry& right) const
 { 
   if (fID == right.GetID()) 
-    return 1;
+    return true;
   else
-    return 0;
+    return false;
 }
 
-G4int G3RotTableEntry::operator!=(const G3RotTableEntry& right) const
+G4bool G3RotTableEntry::operator!=(const G3RotTableEntry& right) const
 { 
   if (*this == right) 
-    return 0;
+    return false;
   else
-    return 1;
+    return true;
 }
 

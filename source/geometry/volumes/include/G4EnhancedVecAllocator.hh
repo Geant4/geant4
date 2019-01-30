@@ -260,7 +260,7 @@ _Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count)
 // ************************************************************
 //
 template<typename _T1, typename _T2>
-inline bool operator==(const G4EnhancedVecAllocator<_T1>&,
+inline G4bool operator==(const G4EnhancedVecAllocator<_T1>&,
                        const G4EnhancedVecAllocator<_T2>&)
 { return true; }
 
@@ -269,7 +269,7 @@ inline bool operator==(const G4EnhancedVecAllocator<_T1>&,
 // ************************************************************
 //
 template<typename _T1, typename _T2>
-inline bool operator!=(const G4EnhancedVecAllocator<_T1>&,
+inline G4bool operator!=(const G4EnhancedVecAllocator<_T1>&,
                        const G4EnhancedVecAllocator<_T2>&)
 { return false; }
 

@@ -69,8 +69,8 @@ class G4UImanager : public G4VStateDependent
   private:
       G4UImanager(const G4UImanager &right);
       const G4UImanager & operator=(const G4UImanager &right);
-      G4int operator==(const G4UImanager &right) const;
-      G4int operator!=(const G4UImanager &right) const;
+      G4bool operator==(const G4UImanager &right) const;
+      G4bool operator!=(const G4UImanager &right) const;
 
   public: // with description
       G4String GetCurrentValues(const char * aCommand);

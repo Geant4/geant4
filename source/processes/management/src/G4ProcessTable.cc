@@ -132,13 +132,13 @@ G4ProcessTable & G4ProcessTable::operator=(const G4ProcessTable &)
 }
 
 //////////////////////////
-G4int G4ProcessTable::operator==(const G4ProcessTable &right) const
+G4bool G4ProcessTable::operator==(const G4ProcessTable &right) const
 {
   return (this == &right);
 }
 
 //////////////////////////
-G4int G4ProcessTable::operator!=(const G4ProcessTable &right) const
+G4bool G4ProcessTable::operator!=(const G4ProcessTable &right) const
 {
   return (this != &right);
 }

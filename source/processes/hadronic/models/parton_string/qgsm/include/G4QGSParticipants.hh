@@ -49,8 +49,8 @@ class G4QGSParticipants : public G4VParticipants
 	const G4QGSParticipants & operator=(const G4QGSParticipants &right);
 	virtual ~G4QGSParticipants();
 
-	int operator==(const G4QGSParticipants &right) const;
-	int operator!=(const G4QGSParticipants &right) const;
+	G4bool operator==(const G4QGSParticipants &right) const;
+	G4bool operator!=(const G4QGSParticipants &right) const;
 
 	virtual void DoLorentzBoost(G4ThreeVector aBoost)
 	{

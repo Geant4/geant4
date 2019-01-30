@@ -71,9 +71,9 @@ const RE05MuonHit& RE05MuonHit::operator=(const RE05MuonHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int RE05MuonHit::operator==(const RE05MuonHit &right) const
+G4bool RE05MuonHit::operator==(const RE05MuonHit &right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 std::map<G4String,G4AttDef> RE05MuonHit::fAttDefs;

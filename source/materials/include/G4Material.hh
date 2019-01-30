@@ -282,8 +282,8 @@ public:  // with description
 private:
 
   // operators       
-  G4int operator==(const G4Material&) const = delete;
-  G4int operator!=(const G4Material&) const = delete;
+  G4bool operator==(const G4Material&) const = delete;
+  G4bool operator!=(const G4Material&) const = delete;
   G4Material(const G4Material&) = delete;
   const G4Material& operator=(const G4Material&) = delete;
 

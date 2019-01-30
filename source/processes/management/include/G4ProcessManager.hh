@@ -122,8 +122,8 @@ class G4ProcessManager
       ~G4ProcessManager();
       //  Destructor
 
-      G4int operator==(const G4ProcessManager &right) const;
-      G4int operator!=(const G4ProcessManager &right) const;
+      G4bool operator==(const G4ProcessManager &right) const;
+      G4bool operator!=(const G4ProcessManager &right) const;
 
  public: //  with description
       G4ProcessVector* GetProcessList() const;

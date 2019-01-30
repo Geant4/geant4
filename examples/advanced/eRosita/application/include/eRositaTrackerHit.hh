@@ -48,7 +48,7 @@ public:
   ~eRositaTrackerHit();
   eRositaTrackerHit(const eRositaTrackerHit&);
   const eRositaTrackerHit& operator=(const eRositaTrackerHit&);
-  G4int operator==(const eRositaTrackerHit&) const;
+  G4bool operator==(const eRositaTrackerHit&) const;
 
   inline void* operator new(size_t);
   inline void  operator delete(void*);

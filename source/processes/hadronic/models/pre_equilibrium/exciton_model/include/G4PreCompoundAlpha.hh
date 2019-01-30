@@ -60,8 +60,8 @@ private:
   G4PreCompoundAlpha(const G4PreCompoundAlpha &right);
   const G4PreCompoundAlpha& 
   operator= (const G4PreCompoundAlpha &right);
-  G4int operator==(const G4PreCompoundAlpha &right) const;
-  G4int operator!=(const G4PreCompoundAlpha &right) const;    
+  G4bool operator==(const G4PreCompoundAlpha &right) const;
+  G4bool operator!=(const G4PreCompoundAlpha &right) const;    
 
   G4AlphaCoulombBarrier theAlphaCoulombBarrier;
 

@@ -990,13 +990,13 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
 } 
 
 // ///////////////////////////////////////
-G4int G4ProcessManager::operator==(const G4ProcessManager &right) const
+G4bool G4ProcessManager::operator==(const G4ProcessManager &right) const
 {
   return (this == &right);
 }
 
 // ///////////////////////////////////////
-G4int G4ProcessManager::operator!=(const G4ProcessManager &right) const
+G4bool G4ProcessManager::operator!=(const G4ProcessManager &right) const
 {
   return (this != &right);
 }

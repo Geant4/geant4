@@ -84,12 +84,12 @@ G4UIparameter::G4UIparameter(const char * theName, char theType, G4bool theOmitt
 G4UIparameter::~G4UIparameter()
 { }
 
-G4int G4UIparameter::operator==(const G4UIparameter &right) const
+G4bool G4UIparameter::operator==(const G4UIparameter &right) const
 {
   return ( this == &right );
 }
 
-G4int G4UIparameter::operator!=(const G4UIparameter &right) const
+G4bool G4UIparameter::operator!=(const G4UIparameter &right) const
 {
   return ( this != &right );
 }

@@ -47,7 +47,7 @@ struct ionLet
     G4int Z;                // atomic number
     G4int A;            // mass number
     G4double *letDN , *letDD, *letTN , *letTD; // Track averaged LET and Dose averaged LET
-    //friend bool operator<(const ionLet& a, const ionLet& b) {return (a.Z == b.Z) ? b.A < a.A : b.Z < a.Z ;}
+    //friend G4bool operator<(const ionLet& a, const ionLet& b) {return (a.Z == b.Z) ? b.A < a.A : b.Z < a.Z ;}
     G4bool operator<(const ionLet& a) const{return (this->Z == a.Z) ? this-> A < a.A : this->Z < a.Z ;}
     // For isotopes sort by the mass number, else sort by the atomic one.
 };

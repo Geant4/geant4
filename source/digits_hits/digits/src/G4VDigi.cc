@@ -36,7 +36,7 @@ G4VDigi::G4VDigi()
 G4VDigi::~G4VDigi()
 {;}
 
-G4int G4VDigi::operator==(const G4VDigi &right) const
+G4bool G4VDigi::operator==(const G4VDigi &right) const
 { return (this==&right); }
 
 void G4VDigi::Draw() 

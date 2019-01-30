@@ -57,7 +57,7 @@ class DMXPmtHit : public G4VHit
 
       DMXPmtHit(const DMXPmtHit&);
       const DMXPmtHit& operator=(const DMXPmtHit&);
-      int operator==(const DMXPmtHit&) const;
+      G4bool operator==(const DMXPmtHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);

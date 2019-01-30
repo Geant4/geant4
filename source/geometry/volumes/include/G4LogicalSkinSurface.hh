@@ -72,8 +72,8 @@ class G4LogicalSkinSurface : public G4LogicalSurface
     static void DumpInfo(); // const 
       // To handle with the table of surfaces.
 
-    G4int operator==(const G4LogicalSkinSurface &right) const;
-    G4int operator!=(const G4LogicalSkinSurface &right) const;
+    G4bool operator==(const G4LogicalSkinSurface &right) const;
+    G4bool operator!=(const G4LogicalSkinSurface &right) const;
       // Operators.
 
   private:

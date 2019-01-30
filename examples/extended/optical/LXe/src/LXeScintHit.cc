@@ -70,7 +70,7 @@ const LXeScintHit& LXeScintHit::operator=(const LXeScintHit &right){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int LXeScintHit::operator==(const LXeScintHit&) const{
+G4bool LXeScintHit::operator==(const LXeScintHit&) const{
   return false;
   //returns false because there currently isnt need to check for equality yet
 }

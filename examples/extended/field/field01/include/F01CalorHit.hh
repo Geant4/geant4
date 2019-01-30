@@ -50,7 +50,7 @@ class F01CalorHit : public G4VHit
       virtual ~F01CalorHit();
 
       const F01CalorHit& operator=(const F01CalorHit&);
-      G4int operator==(const F01CalorHit&) const;
+      G4bool operator==(const F01CalorHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);

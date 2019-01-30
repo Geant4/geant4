@@ -73,9 +73,9 @@ const RE05TrackerHit& RE05TrackerHit::operator=(const RE05TrackerHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int RE05TrackerHit::operator==(const RE05TrackerHit &right) const
+G4bool RE05TrackerHit::operator==(const RE05TrackerHit &right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

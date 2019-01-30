@@ -65,15 +65,15 @@ const G4ExcitedStringDecay & G4ExcitedStringDecay::operator=(const G4ExcitedStri
 }
 
 
-int G4ExcitedStringDecay::operator==(const G4ExcitedStringDecay &) const
+G4bool G4ExcitedStringDecay::operator==(const G4ExcitedStringDecay &) const
 {
-  return 0;
+  return false;
 }
 
 
-int G4ExcitedStringDecay::operator!=(const G4ExcitedStringDecay &) const
+G4bool G4ExcitedStringDecay::operator!=(const G4ExcitedStringDecay &) const
 {
-  return 1;
+  return true;
 }
 
 

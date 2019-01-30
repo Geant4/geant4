@@ -55,9 +55,9 @@ public:
   G4BatemanParameters& operator=(const G4BatemanParameters&);
 
   // equality operators
-  G4int operator==(const G4BatemanParameters& right) const
+  G4bool operator==(const G4BatemanParameters& right) const
     {return (this == &right);};
-  G4int operator!=(const G4BatemanParameters& right) const
+  G4bool operator!=(const G4BatemanParameters& right) const
     {return (this != &right);};
 
   void DumpInfo();

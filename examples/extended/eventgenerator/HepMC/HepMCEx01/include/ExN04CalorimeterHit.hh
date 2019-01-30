@@ -48,7 +48,7 @@ public:
   virtual ~ExN04CalorimeterHit();
 
   const ExN04CalorimeterHit& operator=(const ExN04CalorimeterHit& right);
-  G4int operator==(const ExN04CalorimeterHit& right) const;
+  G4bool operator==(const ExN04CalorimeterHit& right) const;
 
   inline void* operator new(size_t);
   inline void operator delete(void* aHit);

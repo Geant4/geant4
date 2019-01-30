@@ -179,8 +179,8 @@ private:
 
   G4ForwardXrayTR& operator=(const G4ForwardXrayTR& right) = delete;
 
-  // G4int operator==(const G4ForwardXrayTR& right)const;
-  // G4int operator!=(const G4ForwardXrayTR& right)const;
+  // G4bool operator==(const G4ForwardXrayTR& right)const;
+  // G4bool operator!=(const G4ForwardXrayTR& right)const;
 
 };    // end of G4ForwardXrayTR class ---------------------------
 

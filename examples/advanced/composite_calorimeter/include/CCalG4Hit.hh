@@ -45,7 +45,7 @@ public:
   ~CCalG4Hit();
   CCalG4Hit(const CCalG4Hit & right);
   const CCalG4Hit& operator=(const CCalG4Hit & right); 
-  int operator==(const CCalG4Hit &){return 0;}
+  G4bool operator==(const CCalG4Hit &){return 0;}
 
 public:
 

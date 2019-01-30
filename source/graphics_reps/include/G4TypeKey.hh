@@ -52,10 +52,10 @@ public:
   
   // Operators
   Key operator()() const {return fMyKey;}  
-  bool operator==(const G4TypeKey& rhs) const {return fMyKey == rhs.fMyKey;}
-  bool operator!=(const G4TypeKey& rhs) const {return !operator==(rhs);}
-  bool operator<(const G4TypeKey& rhs) const {return fMyKey < rhs.fMyKey;}
-  bool operator>(const G4TypeKey& rhs) const {return fMyKey > rhs.fMyKey;}
+  G4bool operator==(const G4TypeKey& rhs) const {return fMyKey == rhs.fMyKey;}
+  G4bool operator!=(const G4TypeKey& rhs) const {return !operator==(rhs);}
+  G4bool operator<(const G4TypeKey& rhs) const {return fMyKey < rhs.fMyKey;}
+  G4bool operator>(const G4TypeKey& rhs) const {return fMyKey > rhs.fMyKey;}
 
   friend std::ostream& operator<<(std::ostream& out, const G4TypeKey& key){ 
     return out<< key.fMyKey;

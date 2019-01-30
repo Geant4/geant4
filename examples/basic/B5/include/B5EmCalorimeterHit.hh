@@ -57,7 +57,7 @@ class B5EmCalorimeterHit : public G4VHit
     virtual ~B5EmCalorimeterHit();
 
     const B5EmCalorimeterHit& operator=(const B5EmCalorimeterHit &right);
-    int operator==(const B5EmCalorimeterHit &right) const;
+    G4bool operator==(const B5EmCalorimeterHit &right) const;
     
     inline void *operator new(size_t);
     inline void operator delete(void *aHit);

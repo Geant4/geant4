@@ -69,7 +69,7 @@ const LXePMTHit& LXePMTHit::operator=(const LXePMTHit &right){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int LXePMTHit::operator==(const LXePMTHit &right) const{
+G4bool LXePMTHit::operator==(const LXePMTHit &right) const{
   return (fPmtNumber==right.fPmtNumber);
 }
 

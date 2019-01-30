@@ -102,7 +102,7 @@ public:
   G4InuclNuclei& operator=(const G4InuclNuclei& right);
 
   // Equality (comparison) operator -- NOT SORTING
-  bool operator==(const G4InuclNuclei& right) {
+  G4bool operator==(const G4InuclNuclei& right) {
     return ( G4InuclParticle::operator==(right) && 
 	     theExitonConfiguration == right.theExitonConfiguration );
   }

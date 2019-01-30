@@ -79,7 +79,7 @@ const GammaRayTelAnticoincidenceHit& GammaRayTelAnticoincidenceHit::operator=(co
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int GammaRayTelAnticoincidenceHit::operator==(const GammaRayTelAnticoincidenceHit& right) const
+G4bool GammaRayTelAnticoincidenceHit::operator==(const GammaRayTelAnticoincidenceHit& right) const
 {
    return((EdepACD==right.EdepACD)&&(ACDTileNumber==right.ACDTileNumber)&&(IsACDPlane==right.IsACDPlane)&& (pos==right.pos));
 }

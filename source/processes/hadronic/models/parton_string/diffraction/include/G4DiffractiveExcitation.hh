@@ -66,8 +66,8 @@ class G4DiffractiveExcitation {
   private:
     G4DiffractiveExcitation( const G4DiffractiveExcitation& right );
     const G4DiffractiveExcitation& operator=( const G4DiffractiveExcitation& right );
-    int operator==( const G4DiffractiveExcitation& right ) const;
-    int operator!=( const G4DiffractiveExcitation& right ) const;
+    G4bool operator==( const G4DiffractiveExcitation& right ) const;
+    G4bool operator!=( const G4DiffractiveExcitation& right ) const;
 
     G4double LambdaF(G4double sqrM, G4double sqrM1, G4double sqrM2) const;
       

@@ -87,9 +87,9 @@ const DMXPmtHit& DMXPmtHit::operator=(const DMXPmtHit& right) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int DMXPmtHit::operator==(const DMXPmtHit& right) const {
+G4bool DMXPmtHit::operator==(const DMXPmtHit& right) const {
 
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 
 }
 

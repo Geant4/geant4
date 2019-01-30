@@ -61,8 +61,8 @@ class G4UIparameter
       // NOT to invoke this by him/herself.
 
   public:
-      G4int operator==(const G4UIparameter &right) const;
-      G4int operator!=(const G4UIparameter &right) const;
+      G4bool operator==(const G4UIparameter &right) const;
+      G4bool operator!=(const G4UIparameter &right) const;
 
       G4int CheckNewValue(const char* newValue);
       void List();

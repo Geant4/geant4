@@ -70,9 +70,9 @@ class G4RadioactiveDecayRatesToDaughter
     G4RadioactiveDecayRatesToDaughter(const G4RadioactiveDecayRatesToDaughter&);
     G4RadioactiveDecayRatesToDaughter& operator=(const G4RadioactiveDecayRatesToDaughter&);
 
-    G4int operator==(const G4RadioactiveDecayRatesToDaughter& right) const
+    G4bool operator==(const G4RadioactiveDecayRatesToDaughter& right) const
       {return (this == &right);};
-    G4int operator!=(const G4RadioactiveDecayRatesToDaughter& right) const
+    G4bool operator!=(const G4RadioactiveDecayRatesToDaughter& right) const
       {return (this != &right);};
 
   public:

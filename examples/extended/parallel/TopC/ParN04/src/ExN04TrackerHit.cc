@@ -57,9 +57,9 @@ const ExN04TrackerHit& ExN04TrackerHit::operator=(const ExN04TrackerHit &right)
   return *this;
 }
 
-G4int ExN04TrackerHit::operator==(const ExN04TrackerHit &right) const
+G4bool ExN04TrackerHit::operator==(const ExN04TrackerHit &right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 void ExN04TrackerHit::Draw()

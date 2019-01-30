@@ -57,7 +57,7 @@ class B5DriftChamberHit : public G4VHit
     virtual ~B5DriftChamberHit();
 
     const B5DriftChamberHit& operator=(const B5DriftChamberHit &right);
-    int operator==(const B5DriftChamberHit &right) const;
+    G4bool operator==(const B5DriftChamberHit &right) const;
     
     inline void *operator new(size_t);
     inline void operator delete(void *aHit);

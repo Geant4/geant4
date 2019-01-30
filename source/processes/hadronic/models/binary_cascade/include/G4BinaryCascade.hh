@@ -89,8 +89,8 @@ private:
 
   G4BinaryCascade(const G4BinaryCascade & right);
   const G4BinaryCascade& operator=(G4BinaryCascade & right);
-  G4int operator==(G4BinaryCascade& right) {return (this == &right);}
-  G4int operator!=(G4BinaryCascade& right) {return (this != &right);}
+  G4bool operator==(G4BinaryCascade& right) {return (this == &right);}
+  G4bool operator!=(G4BinaryCascade& right) {return (this != &right);}
 
 // Implementation
   void PrintWelcomeMessage();

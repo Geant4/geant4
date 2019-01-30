@@ -36,8 +36,8 @@ class G4QGSMParameters
       
   private:
     G4QGSMParameters(const G4QGSMParameters &right);
-    int operator==(const G4QGSMParameters &right) const;
-    int operator!=(const G4QGSMParameters &right) const;
+    G4bool operator==(const G4QGSMParameters &right) const;
+    G4bool operator!=(const G4QGSMParameters &right) const;
 };
 
 #endif

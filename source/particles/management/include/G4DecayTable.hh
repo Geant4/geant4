@@ -69,8 +69,8 @@ class G4DecayTable
 
  public:
     // equality operators
-    G4int operator==(const G4DecayTable &right) const {return (this == &right);};
-    G4int operator!=(const G4DecayTable &right) const {return (this != &right);};
+    G4bool operator==(const G4DecayTable &right) const {return (this == &right);};
+    G4bool operator!=(const G4DecayTable &right) const {return (this != &right);};
 
  public: // With Description
     void  Insert( G4VDecayChannel* aChannel);

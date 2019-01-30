@@ -55,7 +55,7 @@ public:
     return *this;
   }
 
-  bool operator==(const AClass& aclass) const {
+  G4bool operator==(const AClass& aclass) const {
     if(ival == aclass.ival) return true;
     return false;
   }
