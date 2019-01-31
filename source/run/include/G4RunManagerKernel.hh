@@ -156,6 +156,7 @@ class G4RunManagerKernel
     G4EventManager * eventManager;
     G4ExceptionHandler* defaultExceptionHandler;
     G4String versionString;
+    G4String gitHash; 
   protected:
     G4Region* defaultRegion;
     G4Region* defaultRegionForParallelWorld;
@@ -188,6 +189,9 @@ class G4RunManagerKernel
 
     inline const G4String& GetVersionString() const
     { return versionString; }
+
+    inline const G4String& GetGitHash() const 
+    { return gitHash; }
 
     inline void SetVerboseLevel(G4int vl)
     { verboseLevel = vl; }

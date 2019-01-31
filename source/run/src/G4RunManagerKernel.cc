@@ -126,6 +126,8 @@ G4RunManagerKernel::G4RunManagerKernel()
   // set the initial application state
   G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
 
+  gitHash = GIT_SHA1; 
+  
   // version banner
   G4String vs = G4Version;
   vs = vs.substr(1,vs.size()-2);
@@ -139,6 +141,7 @@ G4RunManagerKernel::G4RunManagerKernel()
     << "                      Copyright : Geant4 Collaboration" << G4endl
     << "                      Reference : NIM A 506 (2003), 250-303" << G4endl
     << "                            WWW : http://cern.ch/geant4" << G4endl
+    << " Git SHA-1: " << gitHash << G4endl
     << "*************************************************************" << G4endl
     << G4endl;
 }
@@ -203,7 +206,7 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
     
     // set the initial application state
     G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
-    
+   
     // version banner
     G4String vs = G4Version;
     vs = vs.substr(1,vs.size()-2);
