@@ -190,9 +190,6 @@ class G4RunManagerKernel
     inline const G4String& GetVersionString() const
     { return versionString; }
 
-    inline const G4String& GetGitHash() const 
-    { return gitHash; }
-
     inline void SetVerboseLevel(G4int vl)
     { verboseLevel = vl; }
 
