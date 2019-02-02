@@ -50,7 +50,7 @@
 #endif
 
 #ifndef G4VERSION_TAG
-#define G4VERSION_TAG "$Name: geant4-10-02-patch-03 $"
+#define G4VERSION_TAG "${GIT_SHA1}" 
 #endif
 
 // as variables
