@@ -27,7 +27,7 @@
 /// \brief Implementation of the F03CalorHit class
 //
 //
-// $Id: F03CalorHit.cc 76602 2013-11-13 08:33:35Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

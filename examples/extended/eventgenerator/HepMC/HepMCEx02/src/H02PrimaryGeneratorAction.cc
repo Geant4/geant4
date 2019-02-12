@@ -25,7 +25,7 @@
 //
 /// \file eventgenerator/HepMC/HepMCEx02/src/H02PrimaryGeneratorAction.cc
 /// \brief Implementation of the H02PrimaryGeneratorAction class
-//   $Id: H02PrimaryGeneratorAction.cc 77801 2013-11-28 13:33:20Z gcosmo $
+//   $Id$
 //
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"

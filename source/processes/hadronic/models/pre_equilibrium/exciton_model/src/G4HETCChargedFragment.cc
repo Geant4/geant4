@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCChargedFragment.cc 96527 2016-04-20 08:51:00Z gcosmo $
+// $Id$
 //
 // by V. Lara
 //

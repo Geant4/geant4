@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04DetectorConstruction.cc 78551 2014-01-07 09:45:08Z gcosmo $
+// $Id$
 //
 /// \file field/field04/src/F04DetectorConstruction.cc
 /// \brief Implementation of the F04DetectorConstruction class

@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/src/PhysListEmStandardWVI.cc
 /// \brief Implementation of the PhysListEmStandardWVI class
 //
-// $Id: PhysListEmStandardWVI.cc 100262 2016-10-17 08:08:04Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

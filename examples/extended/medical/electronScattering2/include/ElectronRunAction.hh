@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ElectronRunAction.hh 75702 2013-11-05 13:08:48Z gcosmo $
+// $Id$
 //
 /// \file medical/electronScattering2/include/ElectronRunAction.hh
 /// \brief Definition of the ElectronRunAction class

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.hh 95657 2016-02-17 13:03:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -108,8 +107,9 @@ inline const G4Element* G4EmElementSelector::SelectRandomAtom(G4double e) const
   const G4Element* element = (*theElementVector)[nElmMinusOne];
   if (nElmMinusOne > 0) {
     G4double x = G4UniformRand();
+    size_t idx(0);
     for(G4int i=0; i<nElmMinusOne; ++i) {
-      if (x <= (xSections[i])->Value(e)) {
+      if (x <= (xSections[i])->Value(e, idx)) {
         element = (*theElementVector)[i];
         break;
       }

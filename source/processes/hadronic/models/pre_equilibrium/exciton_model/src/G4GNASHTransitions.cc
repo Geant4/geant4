@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GNASHTransitions.cc 96603 2016-04-25 13:29:51Z gcosmo $
+// $Id$
 //
 // 20.08.2010 V.Ivanchenko move constructor and destructor to the source 
 

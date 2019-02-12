@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmVWidgetObject.cc 68043 2013-03-13 14:27:49Z gcosmo $
+// $Id$
 //
 //Virtual base class for all Motif widgets.
 

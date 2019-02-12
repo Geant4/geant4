@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1SceneHandler.hh 99152 2016-09-07 08:04:30Z gcosmo $
+// $Id$
 //
 // G4VRML1SceneHandler.hh
 // Yasuhide Sawada & Satoshi Tanaka

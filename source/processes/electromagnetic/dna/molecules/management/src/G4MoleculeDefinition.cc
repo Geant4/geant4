@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MoleculeDefinition.cc 93883 2015-11-03 08:25:04Z gcosmo $
+// $Id$
 //
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file

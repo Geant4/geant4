@@ -27,7 +27,7 @@
 /// \brief Definition of the DetectorMessenger class
 //
 //
-// $Id: DetectorMessenger.hh 98243 2016-07-04 16:58:38Z gcosmo $
+// $Id$
 //
 // 
 

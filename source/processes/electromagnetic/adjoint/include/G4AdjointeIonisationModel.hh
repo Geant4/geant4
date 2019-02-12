@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointeIonisationModel.hh 68044 2013-03-13 14:29:07Z gcosmo $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4AdjointeIonisationModel

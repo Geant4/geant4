@@ -367,6 +367,7 @@ G4bool G4RootPNtupleManager::AddNtupleRow(G4int ntupleId)
   if ( ! ntupleDescription ) return false;
   
   G4AutoLock lock(&addRowMutex);
+  lock.unlock();
   mutex toolsLock(lock);
   auto result 
     = ntupleDescription->fNtuple
@@ -407,6 +408,7 @@ G4bool G4RootPNtupleManager::Merge()
 #endif
   
     G4AutoLock lock(&endFillMutex);
+    lock.unlock();
     mutex toolsLock(lock);
     auto result 
       = ntupleDescription->fNtuple

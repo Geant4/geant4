@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVolumeMaterialScanner.hh 108480 2018-02-15 14:28:27Z gcosmo $
+// $Id$
 //
 // class G4VVolumeMaterialScanner
 //

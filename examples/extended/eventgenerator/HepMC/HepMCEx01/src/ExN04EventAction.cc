@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04EventAction.cc
 /// \brief Implementation of the ExN04EventAction class
 //
-// $Id: ExN04EventAction.cc 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #include "G4Event.hh"

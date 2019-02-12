@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryWorkspacePool.cc 103041 2017-03-10 11:47:01Z gcosmo $
+// $Id$
 //
 // 
 // Class G4GeometryWorkspacePool - implementation

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VDNAReactionModel.cc 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id$
 //
 #include "G4VDNAReactionModel.hh"
 

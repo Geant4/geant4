@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh 103795 2017-04-27 13:38:36Z gcosmo $
+// $Id$
 //
 /// \file medical/GammaTherapy/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class

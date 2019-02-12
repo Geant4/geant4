@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B3StackingAction.hh 66536 2012-12-19 14:32:36Z ihrivnac $
+// $Id$
 //
 /// \file B3StackingAction.hh
 /// \brief Definition of the B3StackingAction class

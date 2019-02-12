@@ -24,7 +24,7 @@
 *     ********************************************************************
 *    
 *    
-*     $Id: G3toG4.inc 67982 2013-03-13 10:36:03Z gcosmo $
+*     $Id$
 *    
       integer maxlines
       parameter (maxlines = 750) ! max no. of cmd lines per C++ source file

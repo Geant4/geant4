@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/PhysListEmStandard_option3.cc
 /// \brief Implementation of the PhysListEmStandard_option3 class
 //
-// $Id: PhysListEmStandard_option3.cc 103180 2017-03-21 10:33:40Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

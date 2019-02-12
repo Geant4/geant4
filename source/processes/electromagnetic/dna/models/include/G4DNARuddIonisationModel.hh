@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.hh 96060 2016-03-11 12:58:04Z gcosmo $
+// $Id$
 //
 
 #ifndef G4DNARuddIonisationModel_h

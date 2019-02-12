@@ -26,7 +26,7 @@
 /// \file RE06/src/RE06DetectorConstruction.cc
 /// \brief Implementation of the RE06DetectorConstruction class
 //
-// $Id: RE06DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
+// $Id$
 // 
 
 #include "RE06DetectorConstruction.hh"

@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx02/include/H02MuonHit.hh
 /// \brief Definition of the H02MuonHit class
 //
-//   $Id: H02MuonHit.hh 77801 2013-11-28 13:33:20Z gcosmo $
+//   $Id$
 //
 #ifndef H02_MUON_HIT_H
 #define H02_MUON_HIT_H

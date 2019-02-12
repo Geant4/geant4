@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogLogInterpolator.cc 70904 2013-06-07 10:34:25Z gcosmo $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

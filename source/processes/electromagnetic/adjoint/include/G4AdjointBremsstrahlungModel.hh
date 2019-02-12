@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointBremsstrahlungModel.hh 100666 2016-10-31 10:27:00Z gcosmo $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class:		G4AdjointBremsstrahlungModel

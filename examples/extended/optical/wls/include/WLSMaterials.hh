@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSMaterials.hh 69561 2013-05-08 12:25:56Z gcosmo $
+// $Id$
 //
 /// \file optical/wls/include/WLSMaterials.hh
 /// \brief Definition of the WLSMaterials class

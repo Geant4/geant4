@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomEventAction.cc 74857 2013-10-23 07:55:55Z gcosmo $
+// $Id$
 //
 /// \file medical/DICOM/src/DicomEventAction.cc
 /// \brief Implementation of the DicomEventAction class

@@ -18,7 +18,7 @@ using namespace HEPREP;
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DefaultHepRepAttValue.cc 68043 2013-03-13 14:27:49Z gcosmo $
+ * @version $Id$
  */
 namespace cheprep {
 

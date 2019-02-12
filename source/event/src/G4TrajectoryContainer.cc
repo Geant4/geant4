@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryContainer.cc 69010 2013-04-15 09:34:16Z gcosmo $
+// $Id$
 //
 
 #include "G4TrajectoryContainer.hh"

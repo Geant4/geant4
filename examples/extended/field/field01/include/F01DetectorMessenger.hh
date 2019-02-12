@@ -27,7 +27,7 @@
 /// \brief Definition of the F01DetectorMessenger class
 //
 //
-// $Id: F01DetectorMessenger.hh 77115 2013-11-21 15:06:37Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

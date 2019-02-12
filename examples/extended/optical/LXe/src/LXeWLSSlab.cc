@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeWLSSlab.cc 77486 2013-11-25 10:14:16Z gcosmo $
+// $Id$
 //
 /// \file optical/LXe/src/LXeWLSSlab.cc
 /// \brief Implementation of the LXeWLSSlab class

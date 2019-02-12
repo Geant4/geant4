@@ -26,7 +26,7 @@
 /// \file materials/include/G4LatticePhysical.hh
 /// \brief Definition of the G4LatticePhysical class
 //
-// $Id: G4LatticePhysical.hh 76883 2013-11-18 12:50:08Z gcosmo $
+// $Id$
 //
 // 20131114  Add verbosity for diagnostic output
 // 20131116  Replace G4Transform3D with G4RotationMatrix

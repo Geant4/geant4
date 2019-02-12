@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE02RunAction class
 //
 //
-// $Id: RE02RunAction.cc 75682 2013-11-05 09:11:19Z gcosmo $
+// $Id$
 // 
 #include "RE02RunAction.hh"
 #include "RE02Run.hh"

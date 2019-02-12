@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLowEPPhysics.cc 107183 2017-11-03 14:57:23Z gcosmo $
+// $Id$
 
 #include "G4EmLowEPPhysics.hh"
 #include "G4ParticleDefinition.hh"

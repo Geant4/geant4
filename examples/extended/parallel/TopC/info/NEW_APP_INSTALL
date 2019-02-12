@@ -1,4 +1,4 @@
-$Id: NEW_APP_INSTALL 66241 2012-12-13 18:34:42Z gunter $
+$Id$
 ------------------------------------------------------------------------------
 These are instructions for parallelizing a new application.  Before
 doing so, try out the examples, ParN02 and ParN04, which have

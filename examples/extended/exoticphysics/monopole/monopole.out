@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-04-patch-03    (8-February-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -21,7 +17,7 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 
 Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
 /monopole/setup 
-/control/execute /mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/geant4-10-04-patches_branch/geant4-10-04-patches_branch/examples/extended/exoticphysics/monopole/monopole.in
+/control/execute /mnt/build/jenkins/workspace/g4n-centos7/COMPILER/gcc63/LABEL/centos7/THREAD/Seq/geant4/examples/extended/exoticphysics/monopole/monopole.in
 /control/verbose 1
 /control/cout/ignoreThreadsExcept 0
 /run/verbose 0

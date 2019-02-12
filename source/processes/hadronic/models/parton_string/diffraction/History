@@ -1,4 +1,4 @@
-$Id: History 107525 2017-11-21 07:16:52Z gcosmo $
+$Id: History 110918 2018-06-25 14:15:38Z ribon $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,10 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+25-Jun-2018 A. Ribon          (hadr-string-diff-V10-03-11)
+- G4FTFAnnihilation : fix to get flat cos(theta) and phi distributions
+  for antiproton annihilation at rest.
 
 20-Nov-2017 A. Ribon          (hadr-string-diff-V10-03-10)
 - G4FTFAnnihilation : improved anisotropy of secondary pions in annihilation.

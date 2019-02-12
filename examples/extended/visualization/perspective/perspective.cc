@@ -27,7 +27,7 @@
 /// \brief Main program of the visualization/perspective example
 //
 //
-// $Id: perspective.cc 103931 2017-05-03 13:52:02Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

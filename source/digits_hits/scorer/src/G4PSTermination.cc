@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTermination.cc 81087 2014-05-20 15:44:27Z gcosmo $
+// $Id$
 //
 // G4PSTermination
 #include "G4PSTermination.hh"

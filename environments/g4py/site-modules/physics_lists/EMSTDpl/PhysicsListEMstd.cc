@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListEMstd.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id$
 // ====================================================================
 //   PhysicsListEMstd.cc
 //

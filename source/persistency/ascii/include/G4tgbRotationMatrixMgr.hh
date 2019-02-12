@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbRotationMatrixMgr.hh 66872 2013-01-15 01:25:57Z japost $
+// $Id$
 //
 //
 // class G4tgbRotationMatrixMgr

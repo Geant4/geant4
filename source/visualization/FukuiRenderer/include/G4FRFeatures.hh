@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRFeatures.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id$
 //
 #if !defined G4_FR_FEATURES_HH
 #define      G4_FR_FEATURES_HH

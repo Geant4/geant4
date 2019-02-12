@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 77567 2013-11-26 09:40:31Z gcosmo $
+# $Id$
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/constructors/electromagnetic library.  
 #  Gunter Folger 10-Jan-2012.

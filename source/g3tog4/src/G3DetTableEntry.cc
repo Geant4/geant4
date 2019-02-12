@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3DetTableEntry.cc 67982 2013-03-13 10:36:03Z gcosmo $
+// $Id$
 //
 #include "globals.hh"
 #include "G3DetTableEntry.hh"

@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04TrackerParametrisation.cc
 /// \brief Implementation of the ExN04TrackerParametrisation class
 //
-// $Id: ExN04TrackerParametrisation.cc 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #include "G4SystemOfUnits.hh"

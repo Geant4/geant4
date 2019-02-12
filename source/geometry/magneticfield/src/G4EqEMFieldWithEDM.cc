@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithEDM.cc 95822 2016-02-26 08:04:51Z gcosmo $
+// $Id$
 //
 //
 //  This is the standard right-hand side for equation of motion.

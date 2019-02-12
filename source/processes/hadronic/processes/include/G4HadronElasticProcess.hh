@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElasticProcess.hh 90262 2015-05-22 09:03:22Z gcosmo $
+// $Id$
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 

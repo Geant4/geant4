@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StokesVector.hh 108502 2018-02-15 15:41:45Z gcosmo $
+// $Id$
 //
 // GEANT4 Class header file
 //

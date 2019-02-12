@@ -27,7 +27,7 @@
 /// \brief Implementation of the Par01DetectorConstruction class
 //
 //
-// $Id: Par01DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
+// $Id$
 //
 #include "Par01DetectorConstruction.hh"
 #include "Par01CalorimeterSD.hh"

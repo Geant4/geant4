@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HumanPhantomPhysicsList.hh 84279 2014-10-13 07:19:58Z gcosmo $
+// $Id$
 //
 // Authors: S. Guatelli, G. Guerrieri and M. G. Pia 
 //

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm9/include/Histo.hh
 /// \brief Definition of the Histo class
 //
-// $Id: Histo.hh 98275 2016-07-04 17:59:05Z gcosmo $
+// $Id$
 
 #ifndef Histo_h
 #define Histo_h 1

@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-04-patch-03    (8-February-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1484,7 +1480,7 @@ Event 16594
 Run terminated.
 Run Summary
   Number of events processed : 16595, effectively: 10
-  User=16.27s Real=17.36s Sys=0s
+  User=10.08s Real=10.23s Sys=0s
 
  --- Setup acceptances (range | real (trg / mon) | rec (trg / mon / all)):
         1 [ 1.0000,  0.8000)  | 0.00000000 ( 0 / 1295 )  | 0.00000000 ( 0 / 1295 / 1601 )

@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsListMessenger class
 //
 //
-// $Id: PhysicsListMessenger.hh 95713 2016-02-22 08:08:38Z gcosmo $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //

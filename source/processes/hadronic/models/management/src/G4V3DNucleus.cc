@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.cc 66785 2013-01-12 15:10:13Z gcosmo $
+// $Id$
 //
 #include "G4V3DNucleus.hh"
 #include "G4HadronicException.hh"

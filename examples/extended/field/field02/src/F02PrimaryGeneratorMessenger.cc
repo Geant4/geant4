@@ -27,7 +27,7 @@
 /// \brief Implementation of the F02PrimaryGeneratorMessenger class
 //
 //
-// $Id: F02PrimaryGeneratorMessenger.cc 77893 2013-11-29 08:57:22Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -27,7 +27,7 @@
 /// \brief Implementation of the StandaloneVisAction class
 //
 //
-// $Id: StandaloneVisAction.cc 69587 2013-05-08 14:26:03Z gcosmo $
+// $Id$
 
 #include "StandaloneVisAction.hh"
 

@@ -27,7 +27,7 @@
 /// \brief Implementation of the B01DetectorConstruction class
 //
 //
-// $Id: B01DetectorConstruction.cc 98774 2016-08-09 14:28:06Z gcosmo $
+// $Id$
 //
 
 #include "G4Types.hh"

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PSTARStopping.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id$
 
 #ifndef G4PSTARStopping_h
 #define G4PSTARStopping_h 1

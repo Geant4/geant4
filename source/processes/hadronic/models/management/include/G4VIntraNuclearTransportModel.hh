@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntraNuclearTransportModel.hh 96490 2016-04-19 06:57:04Z gcosmo $
+// $Id$
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file

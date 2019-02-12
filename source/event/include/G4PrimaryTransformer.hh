@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.hh 72252 2013-07-12 09:04:11Z gcosmo $
+// $Id$
 //
 
 #ifndef G4PromaryTransformer_h 

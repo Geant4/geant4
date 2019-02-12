@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pythia6Decayer.hh 98497 2016-07-20 15:39:38Z ihrivnac $
+// $Id$
 //
 /// \file eventgenerator/pythia/decayer6/include/G4Pythia6Decayer.hh
 /// \brief Definition of the G4Pythia6Decayer class

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc 107508 2017-11-20 08:23:14Z gcosmo $
+// $Id$
 //
 //
 // 25.02.97 - John Apostolakis - Design and implementation 

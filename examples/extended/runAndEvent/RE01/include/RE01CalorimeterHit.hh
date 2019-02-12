@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01CalorimeterHit.hh
 /// \brief Definition of the RE01CalorimeterHit class
 //
-// $Id: RE01CalorimeterHit.hh 75295 2013-10-30 09:32:52Z gcosmo $
+// $Id$
 //
 
 #ifndef RE01CalorimeterHit_h

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
+# $Id$
 # -------------------------------------------------------------
 # GNUmakefile for interfaces/basic library.  John Allison, 6/7/98.
 

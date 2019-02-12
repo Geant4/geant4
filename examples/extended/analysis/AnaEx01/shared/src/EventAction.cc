@@ -27,7 +27,7 @@
 /// \brief Implementation of the EventAction class
 //
 //
-// $Id: EventAction.cc 98241 2016-07-04 16:56:59Z gcosmo $
+// $Id$
 //
 // 
 

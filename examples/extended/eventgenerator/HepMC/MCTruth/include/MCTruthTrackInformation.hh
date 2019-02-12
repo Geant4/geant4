@@ -27,7 +27,7 @@
 /// \brief Definition of the MCTruthTrackInformation class
 //
 //
-// $Id: MCTruthTrackInformation.hh 103182 2017-03-21 10:36:09Z gcosmo $
+// $Id$
 //
 //
 // --------------------------------------------------------------

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXe.cc 77782 2013-11-28 08:12:12Z gcosmo $
+// $Id$
 //
 /// \file optical/LXe/LXe.cc
 /// \brief Main program of the optical/LXe example

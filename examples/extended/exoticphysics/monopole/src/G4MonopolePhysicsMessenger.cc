@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/G4MonopolePhysicsMessenger.cc
 /// \brief Implementation of the G4MonopolePhysicsMessenger class
 //
-// $Id: G4MonopolePhysicsMessenger.cc 107526 2017-11-21 07:17:43Z gcosmo $
+// $Id$
 //
 //  12.07.10  S.Burdin (changed the magnetic and electric charge variables 
 //            from integer to double)

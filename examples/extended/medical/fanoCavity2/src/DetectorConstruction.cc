@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 103507 2017-04-11 14:15:33Z gcosmo $
+// $Id$
 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

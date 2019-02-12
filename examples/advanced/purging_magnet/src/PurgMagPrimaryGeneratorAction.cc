@@ -32,7 +32,7 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: PurgMagPrimaryGeneratorAction.cc 84393 2014-10-15 07:11:25Z gcosmo $
+// $Id$
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

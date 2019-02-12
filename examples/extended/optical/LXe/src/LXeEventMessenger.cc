@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeEventMessenger.cc 70256 2013-05-28 07:29:30Z gcosmo $
+// $Id$
 //
 /// \file optical/LXe/src/LXeEventMessenger.cc
 /// \brief Implementation of the LXeEventMessenger class

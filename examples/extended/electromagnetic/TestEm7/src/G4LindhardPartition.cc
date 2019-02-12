@@ -33,7 +33,7 @@
  */
 
 //
-// $Id: G4LindhardPartition.cc 68263 2013-03-20 10:16:46Z maire $
+// $Id$
 
 #include "G4LindhardPartition.hh"
 #include "G4Material.hh"

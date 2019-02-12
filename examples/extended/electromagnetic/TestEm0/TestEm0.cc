@@ -27,7 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm0 example
 //
 //
-// $Id: TestEm0.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmPushButton.cc 68043 2013-03-13 14:27:49Z gcosmo $
+// $Id$
 //
 //Push button class. Inherits from G4OpenGLXmVWidgetComponent
 

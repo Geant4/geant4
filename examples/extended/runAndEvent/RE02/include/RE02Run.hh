@@ -27,7 +27,7 @@
 /// \brief Definition of the RE02Run class
 //
 //
-// $Id: RE02Run.hh 75682 2013-11-05 09:11:19Z gcosmo $
+// $Id$
 // 
 
 #ifndef RE02Run_h

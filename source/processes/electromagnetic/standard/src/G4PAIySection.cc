@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIySection.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id$
 //
 // 
 // G4PAIySection.cc -- class implementation file

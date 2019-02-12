@@ -60,7 +60,7 @@
 G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* projectile )
 {  
   theAngular = 0;
-  if ( fCache.Get() == NULL ) cacheInit();
+  if ( fCache.Get() == 0 ) cacheInit();
   fCache.Get()->currentMeanEnergy = -2;
   fCache.Get()->fresh = true;
   adjustResult = true;
@@ -104,7 +104,7 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
                                     G4int angularRep, G4int /*interpolE*/ )
   {
     if( getenv("G4PHPTEST") ) G4cout << "  G4ParticleHPContAngularPar::Sample " << anEnergy << " " << massCode << " " << angularRep << G4endl; //GDEB
-    if ( fCache.Get() == NULL ) cacheInit();
+    if ( fCache.Get() == 0 ) cacheInit();
     G4ReactionProduct * result = new G4ReactionProduct;
     G4int Z = static_cast<G4int>(massCode/1000);
     G4int A = static_cast<G4int>(massCode-1000*Z);

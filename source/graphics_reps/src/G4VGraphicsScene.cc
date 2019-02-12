@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.cc 102801 2017-02-22 15:17:53Z gcosmo $
+// $Id$
 // John Allison  19th July 1996
 
 #include "G4VGraphicsScene.hh"

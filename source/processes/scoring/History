@@ -1,4 +1,4 @@
-$Id: History 103731 2017-04-25 08:01:05Z gcosmo $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 24, 2018, M. Asai (procscore-V10-03-01)
+- G4ParallelWorldProcess.cc
+  - Fix the track velocity of optical photon for the first step
+    in the layered mass geometry.
 
 April 24, 2017, M. Asai (procscore-V10-03-00)
 - G4ParallelWorldProcess: G4Step of a parallel world now has a valid

@@ -27,7 +27,7 @@
 /// \brief Implementation of the F01FieldSetup class
 //
 //
-// $Id: F01FieldSetup.cc 104350 2017-05-26 07:20:25Z gcosmo $
+// $Id$
 //
 //   User Field setup class implementation.
 //

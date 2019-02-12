@@ -26,7 +26,7 @@
 /// \file persistency/P02/include/ExP02Classes.hh
 /// \brief Declaration of the classes for generating dictionaries
 //
-// $Id: ExP02Classes.hh 71569 2013-06-18 10:13:24Z gcosmo $
+// $Id$
 //
 #include "ExP02GeoTree.hh"
 //

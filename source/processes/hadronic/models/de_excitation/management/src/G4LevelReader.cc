@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LevelReader.cc 88407 2015-02-18 09:18:44Z vnivanch $
 //
 // -------------------------------------------------------------------
 //
@@ -54,9 +53,9 @@ G4String G4LevelReader::fFloatingLevels[] = {
   "-", "+X", "+Y", "+Z", "+U", "+V", "+W", "+R", "+S", "+T", "+A", "+B", "+C"};
 
 G4LevelReader::G4LevelReader(G4NuclearLevelData* ptr) 
-  : fData(ptr),fAlphaMax(9.0e9f),fVerbose(0),fLevelMax(632),fTransMax(145)
+  : fData(ptr),fVerbose(0),fLevelMax(632),fTransMax(145)
 {
-  //G4cout << "### G4LevelReader AlphaMax= " << fAlphaMax << G4endl;
+  fAlphaMax = (G4float)1.e15;
   fParam = fData->GetParameters();
   fTimeFactor = CLHEP::second/G4Pow::GetInstance()->logZ(2);
   char* directory = getenv("G4LEVELGAMMADATA");
@@ -177,8 +176,8 @@ const std::vector<G4float>* G4LevelReader::NormalizedICCProbability(G4int Z)
     norm += fICC[i]; 
     fICC[i] = norm;
   }
-  if(norm == 0.0f && fAlpha > fAlphaMax) {
-    fICC[9] = norm = 1.0f;
+  if(norm == 0.0f && fAlpha > 0.0f) {
+    fICC[0] = norm = 1.0f;
   } 
   if(norm > 0.0f) {
     norm = 1.0f/norm;
@@ -267,7 +266,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
     vSpin.resize(fLevelMax,0);
     vLevel.resize(fLevelMax,nullptr);
   }
-  G4int ntrans(0), i1, i, k;
+  G4int ntrans(0), i1, i, k, kk;
   G4int i2;    // Level number at which transition ends
   G4int tnum;  // Multipolarity index
   G4String xf("  ");
@@ -288,7 +287,8 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
       ed << " G4LevelReader: wrong data file for Z= " << Z << " A= " << A 
 	 << " level #" << i << " has index " << i1 << G4endl;
       G4Exception("G4LevelReader::LevelManager(..)","had014",
-		  FatalException, ed, "Check G4LEVELGAMMADATA");
+		  JustWarning, ed, "Check G4LEVELGAMMADATA");
+      break;
     }
 
     if(!(ReadDataItem(infile,ener) &&
@@ -372,17 +372,11 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
           i2 = 0;
 	}
 	vTrans[j] = i2*10000 + tnum;
-        if(fAlpha < fAlphaMax) {
-	  G4float x = 1.0f + fAlpha;
-	  fNorm1 += x*fProb;
-	  vGammaCumProbability[j] = fNorm1;
-	  vGammaProbability[j] = 1.0f/x;
-	} else {
-	  // only internal conversion case - no gamma conversion at all
-	  fNorm1 += fProb;
-	  vGammaCumProbability[j] = fNorm1;
-	  vGammaProbability[j] = 0.0f;
-	} 
+        fAlpha = std::min(std::max(fAlpha,0.f), fAlphaMax);
+	G4float x = 1.0f + fAlpha;
+	fNorm1 += x*fProb;
+	vGammaCumProbability[j] = fNorm1;
+	vGammaProbability[j] = 1.0f/x;
 	vShellProbability[j] = nullptr;
 	if(fVerbose > 1) { 
 	  G4int prec = G4cout.precision(4);
@@ -403,6 +397,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
 		       << " for transition j= " << j 
 		       << "  Z= " << Z << " A= " << A << G4endl; 
 	      }
+	      for(kk=k; kk<10; ++kk) { fICC[kk] = 0.f; }
 	      break;
 	    }
 	  }

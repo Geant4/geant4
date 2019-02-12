@@ -26,7 +26,7 @@
 /// \file persistency/gdml/G03/src/G03ColorReader.cc
 /// \brief Implementation of the G03ColorReader class
 //
-// $Id: G03ColorReader.cc 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id$
 //
 // --------------------------------------------------------------------
 

@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-04-patch-03    (8-February-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -139,7 +135,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.156
 9.283e+04	3.157
 
-total time for build X-ray TR energy loss tables = 0.17 s
+total time for build X-ray TR energy loss tables = 0.13 s
 Build angle for energy distribution according the current radiator
 
 Lorentz Factor	XTR photon number
@@ -231,13 +227,13 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.156
 9.283e+04	3.157
 
-total time for build X-ray TR energy loss tables = 0.15 s
+total time for build X-ray TR energy loss tables = 0.13 s
 Build angle for energy distribution according the current radiator
 
 Lorentz Factor	XTR photon number
 
 
-total time for build XTR angle for given energy tables = 0.12 s
+total time for build XTR angle for given energy tables = 0.14 s
 
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -561,7 +557,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.27s Real=0.28s Sys=0s
+  User=0.26s Real=0.26s Sys=0.01s
  ================== run summary =====================
  End of Run TotNbofEvents = 1000
  Mean energy deposit in absorber = 0.0491746 +-0.0185795  MeV 

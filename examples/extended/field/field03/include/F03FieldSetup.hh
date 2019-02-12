@@ -27,7 +27,7 @@
 /// \brief Definition of the F03FieldSetup class
 //
 //
-// $Id: F03FieldSetup.hh 77294 2013-11-22 11:01:00Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

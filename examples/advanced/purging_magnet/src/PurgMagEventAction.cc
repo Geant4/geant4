@@ -32,7 +32,7 @@
 //    *                              *
 //    ********************************
 //
-// $Id: PurgMagEventAction.cc 72967 2013-08-14 14:57:48Z gcosmo $
+// $Id$
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

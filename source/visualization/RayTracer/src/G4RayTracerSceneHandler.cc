@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.cc 104015 2017-05-08 07:28:08Z gcosmo $
+// $Id$
 
 #include "G4RayTracerSceneHandler.hh"
 

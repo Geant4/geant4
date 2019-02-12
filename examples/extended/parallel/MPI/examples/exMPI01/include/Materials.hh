@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Materials.hh 71843 2013-06-25 16:58:09Z gcosmo $
+// $Id$
 //
 /// @file Materials.hh
 /// @brief Define materials

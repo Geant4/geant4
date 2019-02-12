@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc 87360 2014-12-01 16:07:16Z gcosmo $
+// $Id$
 
 // /vis/scene commands - John Allison  9th August 1998
 

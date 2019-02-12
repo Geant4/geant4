@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc 101105 2016-11-07 08:09:26Z gcosmo $
+// $Id$
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 

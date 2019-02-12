@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc 99312 2016-09-13 09:47:18Z gcosmo $
+// $Id$
 //
 // 
 // Andrew Walkden  10th February 1997

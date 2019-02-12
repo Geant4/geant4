@@ -27,7 +27,7 @@
 /// \brief Implementation of the DetectorMessenger class
 //
 //
-// $Id: DetectorMessenger.cc 98244 2016-07-04 17:21:15Z gcosmo $
+// $Id$
 //
 // 
 

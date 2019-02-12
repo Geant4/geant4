@@ -27,7 +27,7 @@
 /// \brief Main program of the persistency/gdml/G04 example
 //
 //
-// $Id: gdml_det.cc 93506 2015-10-23 12:30:58Z gcosmo $
+// $Id$
 //
 //
 // --------------------------------------------------------------

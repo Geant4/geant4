@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01EventAction class
 //
 //
-// $Id: ExP01EventAction.hh 71111 2013-06-11 10:51:02Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

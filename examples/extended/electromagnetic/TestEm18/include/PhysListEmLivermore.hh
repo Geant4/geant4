@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysListEmLivermore class
 //
 //
-// $Id: PhysListEmLivermore.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id$
 
 #ifndef PhysListEmLivermore_h
 #define PhysListEmLivermore_h 1

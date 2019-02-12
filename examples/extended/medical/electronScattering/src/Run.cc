@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/src/Run.cc
 /// \brief Implementation of the Run class
 //
-// $Id: Run.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

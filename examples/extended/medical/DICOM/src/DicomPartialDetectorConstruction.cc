@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPartialDetectorConstruction.cc 101301 2016-11-14 11:19:22Z gcosmo $
+// $Id$
 //
 /// \file medical/DICOM/src/DicomPartialDetectorConstruction.cc
 /// \brief Implementation of the DicomPartialDetectorConstruction class

@@ -27,7 +27,7 @@
 /// \brief Implementation of the G4BlineEventAction class
 //
 //
-// $Id: G4BlineEventAction.cc 68021 2013-03-13 13:36:07Z gcosmo $
+// $Id$
 //
 //
 // --------------------------------------------------------------------

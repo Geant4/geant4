@@ -27,7 +27,7 @@
 /// \brief Main program of the biasing/B01 example
 //
 //
-// $Id: exampleB01.cc 103006 2017-03-08 08:12:23Z gcosmo $
+// $Id$
 //
 // 
 // --------------------------------------------------------------

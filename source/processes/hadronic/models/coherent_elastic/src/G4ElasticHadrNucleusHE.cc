@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc 94236 2015-11-09 11:00:13Z gcosmo $
+// $Id$
 //
 //
 //  The generator of high energy hadron-nucleus elastic scattering

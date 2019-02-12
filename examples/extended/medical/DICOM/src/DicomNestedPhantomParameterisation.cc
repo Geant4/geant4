@@ -26,7 +26,7 @@
 /// \file medical/DICOM/src/DicomNestedPhantomParameterisation.cc
 /// \brief Implementation of the DicomNestedPhantomParameterisation class
 //
-// $Id: DicomNestedPhantomParameterisation.cc 106196 2017-09-19 04:19:33Z gcosmo $
+// $Id$
 //
 
 #include "DicomNestedPhantomParameterisation.hh"

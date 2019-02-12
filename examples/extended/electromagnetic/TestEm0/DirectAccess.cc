@@ -27,7 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm0 example
 //
 //
-// $Id: DirectAccess.cc 94302 2015-11-11 12:58:04Z gcosmo $
+// $Id$
 // 
 // ------------------------------------------------------------
 //

@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04DummySD.hh
 /// \brief Definition of the ExN04DummySD class
 //
-// $Id: ExN04DummySD.hh 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 // Dummy sensitive used only to flag sensitivity

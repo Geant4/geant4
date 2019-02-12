@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Analysis.cc 88353 2015-02-16 08:54:08Z gcosmo $
+// $Id$
 //
 /// @file Analysis.cc
 /// @brief Define histograms

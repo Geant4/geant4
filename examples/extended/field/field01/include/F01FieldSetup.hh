@@ -27,7 +27,7 @@
 /// \brief Definition of the F01FieldSetup class
 //
 //
-// $Id: F01FieldSetup.hh 90341 2015-05-26 08:38:36Z gcosmo $
+// $Id$
 //
 //
 //  A class for control of the Magnetic Field of the detector.

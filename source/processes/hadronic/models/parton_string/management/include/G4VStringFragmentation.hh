@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStringFragmentation.hh 100828 2016-11-02 15:25:59Z gcosmo $
+// $Id$
 //
 #ifndef G4VStringFragmentation_h
 #define G4VStringFragmentation_h 1

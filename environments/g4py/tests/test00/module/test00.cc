@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: test00.cc 86612 2014-11-14 08:17:25Z kmura $
+// $Id$
 // ====================================================================
 //   test00.cc
 //   Hallo World of Boost.Python

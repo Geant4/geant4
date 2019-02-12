@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE03/include/RE03DetectorConstruction.hh
 /// \brief Definition of the RE03DetectorConstruction class
 //
-// $Id: RE03DetectorConstruction.hh 68780 2013-04-05 13:06:07Z gcosmo $
+// $Id$
 // 
 
 #ifndef RE03DetectorConstruction_h

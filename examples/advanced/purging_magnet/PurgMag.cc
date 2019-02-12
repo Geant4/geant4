@@ -32,7 +32,7 @@
 //    *                   *
 //    *********************
 //
-// $Id: PurgMag.cc 84477 2014-10-16 08:44:04Z gcosmo $
+// $Id$
 //
 // Comments: Main program for the Purgin Magnet example. 
 //

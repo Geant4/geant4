@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryOriginVolumeFilter.cc 95115 2016-01-26 16:33:29Z gcosmo $
+// $Id$
 //
 // Filter trajectories according to volume name. Only registered 
 // volumes will pass the filter.

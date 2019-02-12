@@ -32,7 +32,7 @@
 //    *                            *
 //    ******************************
 //
-// $Id: PurgMagRunAction.hh 72967 2013-08-14 14:57:48Z gcosmo $
+// $Id$
 //
 
 #ifndef PurgMagRunAction_h

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc 92635 2015-09-09 13:39:54Z gcosmo $
+// $Id$
 //
 // class G4ParameterisationPolyhedra Implementation file
 //

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofCollision.cc 81087 2014-05-20 15:44:27Z gcosmo $
+// $Id$
 //
 // G4PSNofCollision
 #include "G4PSNofCollision.hh"

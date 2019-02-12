@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc 97241 2016-05-30 12:06:54Z gcosmo $
+// $Id$
 //
 /*
  * jck : 05 Feb 1997 : Initial Implementation

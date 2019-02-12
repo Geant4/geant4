@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc 110067 2018-05-15 09:20:12Z gcosmo $
+// $Id$
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation

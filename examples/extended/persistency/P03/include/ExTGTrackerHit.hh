@@ -26,7 +26,7 @@
 /// \file persistency/P03/include/ExTGTrackerHit.hh
 /// \brief Definition of the ExTGTrackerHit class
 //
-// $Id: ExTGTrackerHit.hh 76481 2013-11-11 10:49:21Z gcosmo $
+// $Id$
 
 #ifndef ExTGTrackerHit_h
 #define ExTGTrackerHit_h 1

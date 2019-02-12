@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04DetectorParameterDef.hh
 /// \brief Definition of the ExN04DetectorParameterDef class
 //
-// $Id: ExN04DetectorParameterDef.hh 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 G4double fexpHall_x;

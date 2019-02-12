@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1EventAction.hh 93886 2015-11-03 08:28:26Z gcosmo $
+// $Id$
 //
 /// \file B1EventAction.hh
 /// \brief Definition of the B1EventAction class

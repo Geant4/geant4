@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 81932 2014-06-06 15:39:45Z gcosmo $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //

@@ -4,7 +4,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: config.h 94590 2015-11-25 11:12:46Z gcosmo $
+ * @version $Id$
  */
 namespace cheprep {
 

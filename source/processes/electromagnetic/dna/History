@@ -14,6 +14,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+01-09-2018, SI, tag emdna-V10-03-32
+renamed tag
+
+01-09-2018, SI
+- bugzilla 2084
+https://bugzilla-geant4.kek.jp/show_bug.cgi?id=2084
+
 09-02-2018, M.Asai tag emdna-V10-03-31
 - G4DNAMolecularMaterial.cc :
   GetDensityTableFor() and GetNumMolPerVolTableFor() methods are accepted

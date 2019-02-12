@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh 101105 2016-11-07 08:09:26Z gcosmo $
+// $Id$
 //
 // 
 // G4OpenGLQtViewer : Class to provide WindowsNT specific

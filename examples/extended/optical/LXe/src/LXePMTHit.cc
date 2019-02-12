@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXePMTHit.cc 72250 2013-07-12 08:59:26Z gcosmo $
+// $Id$
 //
 /// \file optical/LXe/src/LXePMTHit.cc
 /// \brief Implementation of the LXePMTHit class

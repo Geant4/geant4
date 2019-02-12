@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GeneratorPrecompoundInterface.cc 92692 2015-09-14 07:06:19Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class file
@@ -335,7 +334,7 @@ ApplyYourself(const G4HadProjectile &, G4Nucleus & )
 void G4GeneratorPrecompoundInterface::PropagateModelDescription(std::ostream& outFile) const
 {
    outFile << "G4GeneratorPrecompoundInterface interfaces a high\n"
-         << "energy model through the wounded nucleus to precompound de-excition.\n"
+         << "energy model through the wounded nucleus to precompound de-excitation.\n"
          << "Low energy protons and neutron present among secondaries produced by \n"
          << "the high energy generator and within the nucleus are captured. The wounded\n"
          << "nucleus and the captured particles form an excited nuclear fragment. This\n"

@@ -35,7 +35,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: G4HumanPhantomPhysicsList.cc 84279 2014-10-13 07:19:58Z gcosmo $
+// $Id$
 //
 #include "G4HumanPhantomPhysicsList.hh"
 

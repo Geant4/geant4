@@ -27,7 +27,7 @@
 /// \brief Implementation of the F02ElectricFieldSetup class
 //
 //
-// $Id: F02ElectricFieldSetup.cc 104352 2017-05-26 07:23:36Z gcosmo $
+// $Id$
 //
 //   User Field class implementation.
 //

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05DetectorConstruction.cc 101676 2016-11-21 09:25:51Z gcosmo $
+// $Id$
 //
 /// \file RE05/src/RE05DetectorConstruction.cc
 /// \brief Implementation of the RE05DetectorConstruction class

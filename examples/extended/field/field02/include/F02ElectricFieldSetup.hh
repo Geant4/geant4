@@ -27,7 +27,7 @@
 /// \brief Definition of the F02ElectricFieldSetup class
 //
 //
-// $Id: F02ElectricFieldSetup.hh 104216 2017-05-18 13:45:22Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

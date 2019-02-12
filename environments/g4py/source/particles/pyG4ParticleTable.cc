@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ParticleTable.cc 86749 2014-11-17 15:03:05Z gcosmo $
+// $Id$
 // ====================================================================
 //   pyG4ParticleTable.cc
 //

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HnInformation.hh 92688 2015-09-14 07:01:13Z gcosmo $
+// $Id$
 
 // Data class for the added Hn/Pn information (not available in g4tools). 
 //

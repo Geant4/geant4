@@ -27,7 +27,7 @@
 /// \brief Definition of the G04SensitiveDetector class
 //
 //
-// $Id: G04SensitiveDetector.hh 69988 2013-05-21 12:36:24Z gcosmo $
+// $Id$
 //
 
 #ifndef G04SensitiveDetector_h

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66356 2012-12-18 09:02:32Z gcosmo $
+# $Id$
 # --------------------------------------------------------------------
 # GNUmakefile for geometry/magneticfield library.  G.Cosmo, 22/01/97.
 

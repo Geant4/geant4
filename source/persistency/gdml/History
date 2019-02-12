@@ -1,4 +1,4 @@
-$Id: History 110108 2018-05-15 11:46:54Z gcosmo $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5 October 2018 Gabriele Cosmo (gdml-V10-03-12)
+- Added stripping of invalid characters for names generation in writer classes
+  to prevent invalid NCName strings in exported GDML files. Adopt properly
+  stripped generated strings for exporting names of optical surfaces.
+  Patch provided courtesy of B.Couturier (LHCb).
+
+7 June 2018 Gabriele Cosmo
+- Clear also auxiliary map information in G4GDMLReadStructure::Clear().
+  Addressing problem report #2064.
 
 15 March 2018 Gabriele Cosmo (gdml-V10-03-11)
 - Protect printout of progress in reading/writing by G4VERBOSE. 

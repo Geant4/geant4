@@ -27,7 +27,7 @@
 /// \brief Definition of the B02DetectorConstruction class
 //
 //
-// $Id: B02DetectorConstruction.hh 98774 2016-08-09 14:28:06Z gcosmo $
+// $Id$
 //
 
 #ifndef B02DetectorConstruction_hh

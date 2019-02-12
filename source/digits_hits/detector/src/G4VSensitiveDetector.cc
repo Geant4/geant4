@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.cc 94771 2015-12-09 09:44:05Z gcosmo $
+// $Id$
 //
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"

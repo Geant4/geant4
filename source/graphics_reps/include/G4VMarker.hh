@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.hh 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id$
 //
 // 
 // G4VMarker - base class for markers - circles, squares, etc.

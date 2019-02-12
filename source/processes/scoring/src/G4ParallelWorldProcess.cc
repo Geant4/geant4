@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldProcess.cc 103731 2017-04-25 08:01:05Z gcosmo $
+// $Id: G4ParallelWorldProcess.cc 113522 2018-11-24 23:20:01Z asaim $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 //
@@ -151,6 +151,12 @@ void G4ParallelWorldProcess::StartTracking(G4Track* trk)
   {
     G4StepPoint* realWorldPostStepPoint = trk->GetStep()->GetPostStepPoint();
     SwitchMaterial(realWorldPostStepPoint);
+    G4StepPoint *realWorldPreStepPoint = trk->GetStep()->GetPreStepPoint();
+    SwitchMaterial(realWorldPreStepPoint);
+    G4double velocity = trk->CalculateVelocity();
+    realWorldPostStepPoint->SetVelocity(velocity);
+    realWorldPreStepPoint->SetVelocity(velocity);
+    trk->SetVelocity(velocity);
   }
   *(fpHyperStep->GetPreStepPoint()) = *(fpHyperStep->GetPostStepPoint());
 }

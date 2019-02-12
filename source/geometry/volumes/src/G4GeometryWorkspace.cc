@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryWorkspace.cc 100429 2016-10-21 13:00:52Z gcosmo $
+// $Id$
 //
 // 
 // Class G4GeometryWorkspace - implementation

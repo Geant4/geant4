@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MolecularDissociationTable.cc 93883 2015-11-03 08:25:04Z gcosmo $
+// $Id$
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.

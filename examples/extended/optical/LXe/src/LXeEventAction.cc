@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeEventAction.cc 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id$
 //
 /// \file optical/LXe/src/LXeEventAction.cc
 /// \brief Implementation of the LXeEventAction class

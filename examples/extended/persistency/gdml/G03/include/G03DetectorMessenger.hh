@@ -27,7 +27,7 @@
 /// \brief Definition of the G03DetectorMessenger class
 //
 //
-// $Id: G03DetectorMessenger.hh 69987 2013-05-21 12:33:52Z gcosmo $
+// $Id$
 //
 // Class G03DetectorMessenger
 //

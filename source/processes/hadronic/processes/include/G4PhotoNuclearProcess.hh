@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoNuclearProcess.hh 69176 2013-04-22 06:51:19Z gcosmo $
+// $Id$
 //
 // Class Description
 // Process for photon nuclear inelastic scattering; 

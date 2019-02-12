@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremParametrizedModel.hh 98737 2016-08-09 12:51:38Z gcosmo $
+// $Id$
 // GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------

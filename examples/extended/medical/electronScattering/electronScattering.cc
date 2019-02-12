@@ -27,7 +27,7 @@
 /// \brief Main program of the medical/electronScattering example
 //
 //
-// $Id: electronScattering.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

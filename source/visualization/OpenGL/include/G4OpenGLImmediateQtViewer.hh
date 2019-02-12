@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.hh 83403 2014-08-21 15:07:30Z gcosmo $
+// $Id$
 //
 // 
 // Class G4OpenGLImmediateQtViewer : a class derived from

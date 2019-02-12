@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackCounter.cc 81087 2014-05-20 15:44:27Z gcosmo $
+// $Id$
 //
 // G4PSTrackCounter
 #include "G4PSTrackCounter.hh"

@@ -26,7 +26,7 @@
 /// \file particles/include/G4PhononLong.hh
 /// \brief Definition of the G4PhononLong class
 //
-// $Id: G4PhononLong.hh 75122 2013-10-28 09:51:40Z gcosmo $
+// $Id$
 //
 #ifndef G4PhononLong_h
 #define G4PhononLong_h 1

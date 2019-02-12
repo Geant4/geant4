@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.hh 81932 2014-06-06 15:39:45Z gcosmo $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //

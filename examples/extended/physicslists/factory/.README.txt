@@ -1,4 +1,4 @@
-//$Id: .README.txt 107717 2017-11-29 08:17:16Z gcosmo $
+//$Id$
 
 ///\file "physicslists/factory/.README.txt"
 ///\brief Example factory README page

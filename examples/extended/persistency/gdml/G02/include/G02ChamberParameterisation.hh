@@ -27,7 +27,7 @@
 /// \brief Definition of the G02ChamberParameterisation class
 //
 //
-// $Id: G02ChamberParameterisation.hh 73394 2013-08-27 09:23:26Z gcosmo $
+// $Id$
 //
 // Class G02ChamberParameterisation
 //

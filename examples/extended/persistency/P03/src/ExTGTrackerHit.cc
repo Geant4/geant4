@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExTGTrackerHit.cc 92819 2015-09-17 15:21:25Z gcosmo $
+// $Id$
 //
 /// \file persistency/P03/src/ExTGTrackerHit.cc
 /// \brief Implementation of the ExTGTrackerHit class

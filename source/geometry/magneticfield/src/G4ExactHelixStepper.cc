@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExactHelixStepper.cc 66356 2012-12-18 09:02:32Z gcosmo $ 
+// $Id$ 
 //
 //  Helix a-la-Explicity Euler: x_1 = x_0 + helix(h)
 //   with helix(h) being a helix piece of length h

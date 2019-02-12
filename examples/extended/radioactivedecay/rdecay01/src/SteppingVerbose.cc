@@ -26,7 +26,7 @@
 /// \file SteppingVerbose.cc
 /// \brief Implementation of the SteppingVerbose class
 //
-// $Id: SteppingVerbose.cc 98257 2016-07-04 17:39:46Z gcosmo $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

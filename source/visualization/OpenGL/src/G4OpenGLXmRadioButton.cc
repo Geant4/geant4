@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmRadioButton.cc 68043 2013-03-13 14:27:49Z gcosmo $
+// $Id$
 //
 //Radio button class. Inherits from G4OpenGLXmVWidgetComponent
 

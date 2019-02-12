@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.hh 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id$
 
 #ifndef G4POLYHEDRON_HH
 #define G4POLYHEDRON_HH

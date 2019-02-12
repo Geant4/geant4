@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx02/src/H02MuonSD.cc
 /// \brief Implementation of the H02MuonSD class
 //
-//   $Id: H02MuonSD.cc 77801 2013-11-28 13:33:20Z gcosmo $
+//   $Id$
 //
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"

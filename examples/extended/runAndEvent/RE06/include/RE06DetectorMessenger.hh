@@ -26,7 +26,7 @@
 /// \file RE06/include/RE06DetectorMessenger.hh
 /// \brief Definition of the RE06DetectorMessenger class
 //
-// $Id: RE06DetectorMessenger.hh 68026 2013-03-13 13:45:22Z gcosmo $
+// $Id$
 //
 
 #ifndef RE06DetectorMessenger_h

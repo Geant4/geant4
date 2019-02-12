@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.cc 104521 2017-06-02 07:17:28Z gcosmo $
+// $Id$
 //
 
 #include "G4VUserDetectorConstruction.hh"

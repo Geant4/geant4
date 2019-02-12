@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroBiNucleon.hh 108519 2018-02-16 08:25:29Z gcosmo $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara

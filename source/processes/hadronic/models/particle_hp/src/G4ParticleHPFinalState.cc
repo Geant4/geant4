@@ -43,6 +43,11 @@
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 
+G4bool G4ParticleHPFinalState::DoNotAdjustFinalState()
+{
+   return !G4ParticleHPManager::GetInstance()->GetDoNotAdjustFinalState();
+}
+
 void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 {
 
@@ -71,7 +76,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 
    }
 
-   G4ParticleDefinition* resi_pd = NULL;
+   G4ParticleDefinition* resi_pd = 0;
 
    G4double baseZNew = theBaseZ;
    G4double baseANew = theBaseA;
@@ -99,7 +104,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 #endif
 
    G4bool needOneMoreSec = false;
-   G4ParticleDefinition* oneMoreSec_pd = NULL;
+   G4ParticleDefinition* oneMoreSec_pd = 0;
    if ( (int)(baseZNew - sum_Z) == 0 && (int)(baseANew - sum_A) == 0 )
    {
       //All secondaries are already created;
@@ -144,7 +149,7 @@ void G4ParticleHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
          }
       }
   
-      if ( resi_pd == NULL )
+      if ( resi_pd == 0 )
       {
          // theNDLDataZ,A has the Z and A of used NDL file
 	G4double ndlZNew = theNDLDataZ;

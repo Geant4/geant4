@@ -27,7 +27,7 @@
 /// \brief Definition of the G04PrimaryGeneratorAction class
 //
 //
-// $Id: G04PrimaryGeneratorAction.hh 69988 2013-05-21 12:36:24Z gcosmo $
+// $Id$
 //
 //
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeAnnihilationModel.hh 74452 2013-10-07 15:08:00Z gcosmo $
+// $Id$
 //
 // Author: Luciano Pandola
 //

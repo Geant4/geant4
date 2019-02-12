@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc 110108 2018-05-15 11:46:54Z gcosmo $
+// $Id: G4GDMLWrite.cc 112280 2018-10-05 09:59:45Z gcosmo $
 //
 // class G4GDMLWrite Implementation
 //
@@ -128,9 +128,14 @@ G4String G4GDMLWrite::GenerateName(const G4String& name, const void* const ptr)
    if (addPointerToName) { stream << ptr; };
 
    nameOut=G4String(stream.str());
-   if(nameOut.contains(' '))
-   nameOut.erase(std::remove(nameOut.begin(),nameOut.end(),' '),nameOut.end());
-
+   std::vector<char> toremove = { ' ', '/', ':', '#', '+' };
+   for (auto c: toremove)
+   {
+     if(nameOut.contains(c))
+     {
+       std::replace(nameOut.begin(),nameOut.end(),c, '_');
+     }
+   }
    return nameOut;
 }
 

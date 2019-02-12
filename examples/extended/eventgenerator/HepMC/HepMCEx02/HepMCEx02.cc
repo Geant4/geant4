@@ -27,7 +27,7 @@
 /// \brief Main program of the eventgenerator/HepMC/HepMCEx02 example
 //
 //
-// $Id: HepMCEx02.cc 73446 2013-08-27 11:32:59Z gcosmo $
+// $Id$
 //
 // 
 // --------------------------------------------------------------

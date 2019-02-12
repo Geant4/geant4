@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExtDEDXTable.hh 96794 2016-05-09 10:09:30Z gcosmo $
+// $Id$
 //
 // ===========================================================================
 // GEANT4 class header file

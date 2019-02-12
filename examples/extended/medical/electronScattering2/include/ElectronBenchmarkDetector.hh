@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ElectronBenchmarkDetector.hh 93389 2015-10-20 07:04:35Z gcosmo $
+// $Id$
 //
 /// \file medical/electronScattering2/include/ElectronBenchmarkDetector.hh
 /// \brief Definition of the ElectronBenchmarkDetector class

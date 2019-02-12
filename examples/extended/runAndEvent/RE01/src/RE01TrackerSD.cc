@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01TrackerSD.cc
 /// \brief Implementation of the RE01TrackerSD class
 //
-// $Id: RE01TrackerSD.cc 66379 2012-12-18 09:46:33Z gcosmo $
+// $Id$
 //
 
 #include "RE01TrackerSD.hh"

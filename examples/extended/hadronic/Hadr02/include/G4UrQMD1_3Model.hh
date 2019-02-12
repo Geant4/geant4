@@ -32,7 +32,7 @@
 /// \file hadronic/Hadr02/include/G4UrQMD1_3Model.hh
 /// \brief Definition of the G4UrQMD1_3Model class
 //
-// $Id: G4UrQMD1_3Model.hh 81932 2014-06-06 15:39:45Z gcosmo $
+// $Id$
 //
 
 #ifndef G4UrQMD1_3Model_hh

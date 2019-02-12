@@ -26,7 +26,7 @@
 /// \file persistency/P03/include/ExTGTrackerSD.hh
 /// \brief Definition of the ExTGTrackerSD class
 //
-// $Id: ExTGTrackerSD.hh 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id$
 
 #ifndef ExTGTrackerSD_h
 #define ExTGTrackerSD_h 1

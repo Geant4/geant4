@@ -27,7 +27,7 @@
 /// \brief Implementation of the F01EventAction class
 //
 //
-// $Id: F01EventAction.cc 92496 2015-09-02 07:22:25Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

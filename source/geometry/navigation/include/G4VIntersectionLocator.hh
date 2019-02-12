@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntersectionLocator.hh 93289 2015-10-15 10:01:15Z gcosmo $
+// $Id$
 //
 //
 // Class G4VIntersectionLocator 

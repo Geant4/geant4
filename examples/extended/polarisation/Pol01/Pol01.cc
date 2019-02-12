@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/Pol01.cc
 /// \brief Main program of the polarisation/Pol01 example
 //
-// $Id: Pol01.cc 86418 2014-11-11 10:39:38Z gcosmo $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

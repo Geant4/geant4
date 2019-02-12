@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTable.icc 71231 2013-06-12 13:06:28Z gcosmo $
+// $Id$
 //
 //  History:
 //   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige

@@ -26,7 +26,7 @@
 /// \file persistency/P03/include/ExTGRCRegionData.hh
 /// \brief Definition of the ExTGRCRegionData class
 //
-// $Id: ExTGRCRegionData.hh 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id$
 
 #ifndef ExTGRCRegionData_h
 #define ExTGRCRegionData_h

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationMessenger.hh 68056 2013-03-13 14:44:48Z gcosmo $
+// $Id$
 //
 // 
 //	GEANT 4 class header file 

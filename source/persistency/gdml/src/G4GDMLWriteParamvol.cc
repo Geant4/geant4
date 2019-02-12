@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.cc 77913 2013-11-29 10:59:07Z gcosmo $
+// $Id$
 //
 // class G4GDMLParamVol Implementation
 //

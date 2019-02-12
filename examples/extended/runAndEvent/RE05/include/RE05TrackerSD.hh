@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05TrackerSD.hh 98775 2016-08-09 14:30:39Z gcosmo $
+// $Id$
 //
 /// \file RE05/include/RE05TrackerSD.hh
 /// \brief Definition of the RE05TrackerSD class

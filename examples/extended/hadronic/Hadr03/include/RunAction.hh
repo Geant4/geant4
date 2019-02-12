@@ -26,7 +26,7 @@
 /// \file RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 98265 2016-07-04 17:47:54Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

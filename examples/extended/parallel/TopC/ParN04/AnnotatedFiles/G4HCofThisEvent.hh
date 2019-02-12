@@ -27,7 +27,7 @@
 /// \brief Definition of the G4HCofThisEvent class
 //
 //
-// $Id: G4HCofThisEvent.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id$
 //
 
 #ifndef G4HCofThisEvent_h

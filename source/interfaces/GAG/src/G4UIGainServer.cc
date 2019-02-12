@@ -25,7 +25,6 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id: G4UIGainServer.cc 66892 2013-01-17 10:57:59Z gunter $
 //
 #ifndef WIN32
 
@@ -123,7 +122,8 @@ void G4UIGainServer::PauseSessionStart(const G4String& msg)
       ExecuteCommand(newCommand);
       newCommand= GetCommand();
       strcpy(buf,"nowIdle");
-      write(socketD[1],buf,strlen(buf));
+      ssize_t rc = write(socketD[1],buf,strlen(buf));
+      if (rc < 0) {}
     }
 }
 
@@ -201,7 +201,8 @@ G4String G4UIGainServer::GetCommand()
 
     /////////////////////////////
     /////////////////////////////
-    read(socketD[1],buf,1024);
+    ssize_t rc = read(socketD[1],buf,1024);
+    if ( rc < 0 ) {} 
     newCommand=buf;
     //DEBUG cout<<"->"<<newCommand<<"<-"<<newCommand.length()<<G4endl;
     //newCommand.readLine( G4cin, FALSE );
@@ -315,7 +316,8 @@ G4int G4UIGainServer::ReceiveG4cout(const G4String& coutString)
 //////////////////////////////////////////////////////
 {
     if(socketD[1]>0){
-        write(socketD[1],coutString,coutString.length());
+        ssize_t rc = write(socketD[1],coutString,coutString.length());
+	if ( rc < 0 ){} 
     }
     return 0;
 
@@ -328,7 +330,8 @@ G4int G4UIGainServer::ReceiveG4cerr(const G4String& cerrString)
 //////////////////////////////////////////////////////
 {
     if(socketD[2]>0){
-        write(socketD[2],cerrString,cerrString.length());
+        ssize_t rc = write(socketD[2],cerrString,cerrString.length());
+	if ( rc < 0 ) {} 
     }
     return 0;
 

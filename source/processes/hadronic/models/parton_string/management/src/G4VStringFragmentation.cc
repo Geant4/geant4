@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStringFragmentation.cc 100828 2016-11-02 15:25:59Z gcosmo $
+// $Id$
 //
 // G4VStringFragmentation
 #include "G4VStringFragmentation.hh"

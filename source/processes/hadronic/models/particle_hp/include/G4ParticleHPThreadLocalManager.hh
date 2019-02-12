@@ -33,28 +33,24 @@
 // 140825 First implementation done by T. Koi (SLAC/PPA)
 //
 #include "globals.hh"
+#include "G4ThreadLocalSingleton.hh"
 
 class G4ParticleHPReactionWhiteBoard;
 
 class G4ParticleHPThreadLocalManager 
 {
+   friend class G4ThreadLocalSingleton<G4ParticleHPThreadLocalManager>;
+
    public:
-      static G4ParticleHPThreadLocalManager* GetInstance() {
-         if ( instance == NULL) instance = new G4ParticleHPThreadLocalManager();
-         return instance;
-      };
+      static G4ParticleHPThreadLocalManager* GetInstance();
+      G4ParticleHPReactionWhiteBoard* GetReactionWhiteBoard();
+      void OpenReactionWhiteBoard();
+      void CloseReactionWhiteBoard();
 
    private: 
       G4ParticleHPThreadLocalManager();
-      G4ParticleHPThreadLocalManager( const G4ParticleHPThreadLocalManager& ){};
+      G4ParticleHPThreadLocalManager( const G4ParticleHPThreadLocalManager& );
       ~G4ParticleHPThreadLocalManager();
-      static G4ThreadLocal G4ParticleHPThreadLocalManager* instance;
-
-   public:
-      G4ParticleHPReactionWhiteBoard* GetReactionWhiteBoard();
-      void OpenReactionWhiteBoard();
-      //void CloseReactionWhiteBoard(){delete RWB; RWB=NULL;};
-      void CloseReactionWhiteBoard();
 
    private:
       G4ParticleHPReactionWhiteBoard* RWB;

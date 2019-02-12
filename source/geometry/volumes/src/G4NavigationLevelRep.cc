@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevelRep.cc 85846 2014-11-05 15:45:28Z gcosmo $
+// $Id$
 //
 //  1 October 1997 J.Apostolakis Initial version. 
 //                        

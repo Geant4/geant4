@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GVFlashShowerParameterisation.cc 100944 2016-11-03 11:18:29Z gcosmo $
+// $Id$
 //
 //
 // ------------------------------------------------------------

@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01MagneticField class
 //
 //
-// $Id: ExP01MagneticField.hh 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id$
 //
 //
 //    A class for control of the Magnetic Field of the detector.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: VoxelParam.cc 78126 2013-12-03 17:43:56Z gcosmo $
+// $Id$
 //
 /// @file VoxelParam.cc
 /// @brief Define voxel parameterization

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 70761 2013-06-05 12:30:51Z gcosmo $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //

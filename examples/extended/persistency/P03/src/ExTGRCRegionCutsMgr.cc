@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGRCRegionCutsMgr.cc 76943 2013-11-19 09:57:34Z gcosmo $
+// $Id$
 //
 /// \file persistency/P03/src/ExTGRCRegionCutsMgr.cc
 /// \brief Implementation of the ExTGRCRegionCutsMgr class

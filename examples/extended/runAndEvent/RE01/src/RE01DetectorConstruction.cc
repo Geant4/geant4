@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01DetectorConstruction.cc
 /// \brief Implementation of the RE01DetectorConstruction class
 //
-// $Id: RE01DetectorConstruction.cc 101677 2016-11-21 09:26:55Z gcosmo $
+// $Id$
 //
 
 #include "RE01DetectorConstruction.hh"

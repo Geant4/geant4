@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc 91806 2015-08-06 12:20:45Z gcosmo $
+// $Id$
 //
 // Geant4 Header : G4HadronElastic
 //

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPrimaryGeneratorAction.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id$
 //
 
 #include "G4VUserPrimaryGeneratorAction.hh"

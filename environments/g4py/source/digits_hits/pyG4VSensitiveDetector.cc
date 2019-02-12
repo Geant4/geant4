@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VSensitiveDetector.cc 76884 2013-11-18 12:54:03Z gcosmo $
+// $Id$
 // ====================================================================
 //   pyG4VSensitiveDetector.cc
 //

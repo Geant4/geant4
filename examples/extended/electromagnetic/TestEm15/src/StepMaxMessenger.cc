@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm15/src/StepMaxMessenger.cc
 /// \brief Implementation of the StepMaxMessenger class
 //
-// $Id: StepMaxMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

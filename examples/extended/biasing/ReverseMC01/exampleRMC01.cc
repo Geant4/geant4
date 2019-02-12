@@ -27,7 +27,7 @@
 /// \brief Main program of the biasing/ReverseMC01 example
 //
 //
-// $Id: exampleRMC01.cc 101303 2016-11-14 11:21:18Z gcosmo $
+// $Id$
 //
 // 
 // --------------------------------------------------------------

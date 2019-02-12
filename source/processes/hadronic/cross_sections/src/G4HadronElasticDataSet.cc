@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElasticDataSet.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id$
 //
 //
 // G4 Physics class: HadronElasticDataSet for cross sections

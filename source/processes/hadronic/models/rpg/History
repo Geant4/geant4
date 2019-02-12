@@ -14,6 +14,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+9 May 2018 Alberto Ribon           (hadr-rpg-V10-03-00)
+--------------------------------------------------------
+- G4RPGAntiKZeroInelastic, G4RPGInelastic : fixed warnings in gcc 8
+    regarding catching polymorphic type by value, instead of by reference.
+
 24 November 2015 Gunter Folger     (hadr-rpg-V10-01-04)
 --------------------------------------------------------
 - add few 'f' for initialisation, previously missed.

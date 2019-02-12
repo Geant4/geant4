@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UserTimeStepAction.hh 100802 2016-11-02 14:55:27Z gcosmo $
+// $Id$
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.

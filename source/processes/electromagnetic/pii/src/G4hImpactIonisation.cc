@@ -28,7 +28,7 @@
 // ------------------------------------------------------------
 // G4RDHadronIonisation
 //
-// $Id: G4hImpactIonisation.cc 70904 2013-06-07 10:34:25Z gcosmo $
+// $Id$
 //
 // Author: Maria Grazia Pia (MariaGrazia.Pia@ge.infn.it)
 //

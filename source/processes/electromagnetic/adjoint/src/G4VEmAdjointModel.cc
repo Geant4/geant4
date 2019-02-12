@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAdjointModel.cc 100341 2016-10-18 08:02:25Z gcosmo $
+// $Id$
 //
 #include "G4VEmAdjointModel.hh"
 #include "G4AdjointCSManager.hh"

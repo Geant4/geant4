@@ -14,6 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 January 2019 Vladimir Ivanchenko (hadr-deex-V10-03-53)
+
+28 January 2019
+- G4LevelReader - fixed typo (problem #2124)
+
+20 November 2018
+- G4LevelReader - (L.Desorgher) fAlphaMax is changed from
+    1.e+6 to 1.e+15 (needed for correct IC probability of some
+    isotopes)
+
+24 August 2018 Vladimir Ivanchenko
+- G4LevelReader - attempt to fix problems #1986 and #2076 by
+    change of hadling of internal convertion data
+
 19 December 2017 Gabriele Cosmo (hadr-deex-V10-03-52)
 - Fixed self-consistency in G4ChatterjeeCrossSection header (missing #include).
   Fixed #ifdef guard in G4StatMFMacroBiNucleon header.

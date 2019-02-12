@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-04-patch-03    (8-February-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -436,7 +432,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.15s Real=1.16s Sys=0s
+  User=1.02s Real=1.03s Sys=0s
 
  ======================== run summary ======================
 
@@ -860,7 +856,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=1.48s Real=1.48s Sys=0s
+  User=1.05s Real=1.05s Sys=0s
 
  ======================== run summary ======================
 
@@ -1289,7 +1285,7 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=2.84s Real=2.85s Sys=0s
+  User=2.17s Real=2.18s Sys=0s
 
  ======================== run summary ======================
 
@@ -1724,7 +1720,7 @@ Index : 4     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=0.62s Real=0.62s Sys=0s
+  User=0.7s Real=0.7s Sys=0s
 
  ======================== run summary ======================
 
@@ -2160,7 +2156,7 @@ Index : 5     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=13.74s Real=14.07s Sys=0s
+  User=8.61s Real=8.68s Sys=0s
 
  ======================== run summary ======================
 

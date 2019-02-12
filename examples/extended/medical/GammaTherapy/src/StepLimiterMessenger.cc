@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StepLimiterMessenger.cc 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id$
 //
 /// \file medical/GammaTherapy/src/StepLimiterMessenger.cc
 /// \brief Implementation of the StepLimiterMessenger class

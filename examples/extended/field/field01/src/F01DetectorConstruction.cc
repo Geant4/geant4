@@ -27,7 +27,7 @@
 /// \brief Implementation of the F01DetectorConstruction class
 //
 //
-// $Id: F01DetectorConstruction.cc 101664 2016-11-21 09:10:32Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.hh 81087 2014-05-20 15:44:27Z gcosmo $
+// $Id$
 //
 
 #ifndef G4VSensitiveDetector_h

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorPropagatorManager.cc 107054 2017-11-01 14:35:18Z gcosmo $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 

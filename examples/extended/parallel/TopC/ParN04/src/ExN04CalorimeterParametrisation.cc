@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExN04CalorimeterParametrisation.cc 78055 2013-12-03 08:27:48Z gcosmo $
+// $Id$
 //
 /// \file parallel/ParN04/src/ExN04CalorimeterParametrisation.cc
 /// \brief Implementation of the ExN04CalorimeterParametrisation class

@@ -1,4 +1,4 @@
-//$Id: .README.txt 94957 2016-01-08 13:27:26Z gcosmo $
+//$Id$
 
 ///\file "B2/.README.txt"
 ///\brief Example B2 README page

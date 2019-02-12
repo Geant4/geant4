@@ -1,3 +1,14 @@
+ 4.2.3 :
+ - tools/sg/text_freetype : g++-8.1.0 : use the functions introduced below in glutess.
+ - tools/tess_contour : g++-8.1.0 : use the functions introduced below in glutess.
+ - tools/glutess/glutess : g++-8.1.0 : introduce five gluTessCallback_<enum>() functions to be able to avoid warnings :
+     warning :cast between incompatible function types
+ - test/cpp/test/lego_offscreen_zb.cpp : message about freetype in case of failure.
+ 
+ 4.2.2 : g++-8.1.0 : fix warnings.
+ - forit : (a__it) => a__it.
+ - xml/tree : two const std::string& atb => const std::string& _atb to avoid shadow warnings.
+
  4.2.1 : fix Coverity notifications.
  - wroot/MT_SET_MAX.icc : protect usage of null object in "return false" messages.
  - wroot/ntuple : tree : create_branch : add a null pointer check.

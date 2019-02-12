@@ -27,7 +27,7 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.cc 101309 2016-11-14 11:26:17Z gcosmo $
+// $Id$
 //
 //
 

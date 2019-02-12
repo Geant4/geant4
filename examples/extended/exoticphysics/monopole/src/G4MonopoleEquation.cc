@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/G4MonopoleEquation.cc
 /// \brief Implementation of the G4MonopoleEquation class
 //
-// $Id: G4MonopoleEquation.cc 69705 2013-05-13 09:09:52Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

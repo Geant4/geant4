@@ -27,7 +27,7 @@
 /// \brief Implementation of the G02ChamberParameterisation class
 //
 //
-// $Id: G02ChamberParameterisation.cc 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id$
 //
 // Class G02ChamberParameterisation implementation
 //

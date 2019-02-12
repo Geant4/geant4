@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGAntiKZeroInelastic.cc 94214 2015-11-09 08:18:05Z gcosmo $
+// $Id: G4RPGAntiKZeroInelastic.cc 109775 2018-05-09 06:47:34Z ribon $
 //
  
 #include "G4RPGAntiKZeroInelastic.hh"
@@ -110,7 +110,7 @@
                       targetNucleus, currentParticle, targetParticle,
                       incidentHasChanged, targetHasChanged, quasiElastic );
     }
-    catch(G4HadReentrentException aR)
+    catch(G4HadReentrentException & aR)
     {
       aR.Report(G4cout);
       throw G4HadReentrentException(__FILE__, __LINE__, "Bailing out");

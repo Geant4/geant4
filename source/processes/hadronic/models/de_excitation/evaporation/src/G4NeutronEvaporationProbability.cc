@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronEvaporationProbability.cc 96634 2016-04-27 09:31:49Z gcosmo $
+// $Id$
 //
 // J.M. Quesada (August2008). Based on:
 //

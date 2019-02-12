@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE02PSNofStep class
 //
 //
-// $Id: RE02PSNofStep.cc 72957 2013-08-14 14:27:23Z gcosmo $
+// $Id$
 //
 // RE02PSNofStep
 #include "RE02PSNofStep.hh"

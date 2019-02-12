@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeDetectorMessenger.cc 104474 2017-06-01 07:35:19Z gcosmo $
+// $Id$
 //
 /// \file optical/LXe/src/LXeDetectorMessenger.cc
 /// \brief Implementation of the LXeDetectorMessenger class

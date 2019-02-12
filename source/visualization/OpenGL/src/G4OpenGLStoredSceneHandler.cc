@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc 108544 2018-02-16 09:47:30Z gcosmo $
+// $Id$
 //
 // 
 // Andrew Walkden  10th February 1997

@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04Field.hh
 /// \brief Definition of the ExN04Field class
 //
-// $Id: ExN04Field.hh 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #ifndef ExN04Field_H

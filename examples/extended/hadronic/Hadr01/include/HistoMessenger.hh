@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/include/HistoMessenger.hh
 /// \brief Definition of the HistoMessenger class
 //
-// $Id: HistoMessenger.hh 107541 2017-11-22 08:24:57Z gcosmo $
+// $Id$
 //
 //
 

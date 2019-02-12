@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomRunAction.hh 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id$
 //
 /// \file medical/DICOM/include/DicomRunAction.hh
 /// \brief Definition of the DicomRunAction class

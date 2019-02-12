@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5CellParameterisation.hh 101036 2016-11-04 09:00:23Z gcosmo $
+// $Id$
 //
 /// \file B5CellParameterisation.hh
 /// \brief Definition of the B5CellParameterisation class

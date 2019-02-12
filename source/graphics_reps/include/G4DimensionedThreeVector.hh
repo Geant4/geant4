@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DimensionedThreeVector.hh 66376 2012-12-18 09:42:59Z gcosmo $
+// $Id$
 //
 // Dimensioned G4Threevector.
 //

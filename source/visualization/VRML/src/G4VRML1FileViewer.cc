@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileViewer.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id$
 //
 // G4VRMLView.cc
 // Satoshi Tanaka & Yasuhide Sawada

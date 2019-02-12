@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadParamvol.cc 96190 2016-03-29 08:07:36Z gcosmo $
+// $Id$
 //
 // class G4GDMLReadParamvol Implementation
 //

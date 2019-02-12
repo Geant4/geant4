@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01EventAction.hh
 /// \brief Definition of the RE01EventAction class
 //
-// $Id: RE01EventAction.hh 90679 2015-06-08 07:58:19Z gcosmo $
+// $Id$
 //
 
 #ifndef RE01EventAction_h

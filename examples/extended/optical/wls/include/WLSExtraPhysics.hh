@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSExtraPhysics.hh 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id$
 //
 /// \file optical/wls/include/WLSExtraPhysics.hh
 /// \brief Definition of the WLSExtraPhysics class

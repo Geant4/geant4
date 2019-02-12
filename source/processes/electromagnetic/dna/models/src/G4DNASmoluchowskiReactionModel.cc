@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASmoluchowskiReactionModel.cc 95948 2016-03-03 10:40:33Z gcosmo $
+// $Id$
 //
 #include "G4DNASmoluchowskiReactionModel.hh"
 #include "Randomize.hh"

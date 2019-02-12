@@ -37,7 +37,7 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorAction.cc 84280 2014-10-13 07:21:10Z gcosmo $
+// $Id$
 //
 
 #include "globals.hh"

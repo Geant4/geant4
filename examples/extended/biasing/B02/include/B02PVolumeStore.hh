@@ -27,7 +27,7 @@
 /// \brief Definition of the B02PVolumeStore class
 //
 //
-// $Id: B02PVolumeStore.hh 98774 2016-08-09 14:28:06Z gcosmo $
+// $Id$
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------

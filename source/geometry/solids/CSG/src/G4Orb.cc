@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc 105834 2017-08-23 08:14:34Z gcosmo $
+// $Id$
 //
 // class G4Orb
 //

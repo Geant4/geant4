@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TargetSD.hh 103469 2017-04-11 07:29:36Z gcosmo $
+// $Id$
 //
 /// \file medical/GammaTherapy/include/TargetSD.hh
 /// \brief Definition of the TargetSD class

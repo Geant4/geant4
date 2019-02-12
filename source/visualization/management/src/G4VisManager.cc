@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc 106957 2017-10-31 08:32:27Z gcosmo $
+// $Id$
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.

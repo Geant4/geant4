@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LinInterpolation.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

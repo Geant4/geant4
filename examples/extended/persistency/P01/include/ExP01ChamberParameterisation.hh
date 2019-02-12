@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01ChamberParameterisation class
 //
 //
-// $Id: ExP01ChamberParameterisation.hh 98770 2016-08-09 14:22:25Z gcosmo $
+// $Id$
 //
 //
 //  A parameterisation that describes a series of boxes along Z

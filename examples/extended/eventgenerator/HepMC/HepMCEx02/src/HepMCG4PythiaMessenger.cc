@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4PythiaMessenger.cc
 /// \brief Implementation of the HepMCG4PythiaMessenger class
 //
-// $Id: HepMCG4PythiaMessenger.cc 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #ifdef G4LIB_USE_PYTHIA

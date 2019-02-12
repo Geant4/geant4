@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id$
 //
 // Default implementations for Parameterisations that do not
 // parameterise solid and/or material.

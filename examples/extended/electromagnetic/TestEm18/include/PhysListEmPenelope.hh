@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysListEmPenelope class
 //
 //
-// $Id: PhysListEmPenelope.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id$
 
 #ifndef PhysListEmPenelope_h
 #define PhysListEmPenelope_h 1

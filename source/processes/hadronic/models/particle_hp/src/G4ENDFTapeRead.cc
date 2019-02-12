@@ -106,7 +106,7 @@ G4FFG_FUNCTIONENTER__
     try
     {
         ReadInData(dataStream);
-    } catch (std::exception e)
+    } catch (std::exception & e)
     {
         delete YieldContainerTable_;
 

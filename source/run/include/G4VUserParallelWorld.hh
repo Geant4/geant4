@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserParallelWorld.hh 69917 2013-05-17 13:28:02Z gcosmo $
+// $Id$
 //
 
 #ifndef G4VUserParallelWorld_h

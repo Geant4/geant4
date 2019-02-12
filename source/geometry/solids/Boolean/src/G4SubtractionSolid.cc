@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc 104316 2017-05-24 13:04:23Z gcosmo $
+// $Id$
 //
 // Implementation of methods for the class G4IntersectionSolid
 //

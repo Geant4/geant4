@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.hh 108508 2018-02-15 15:54:35Z gcosmo $
+// $Id$
 //
 // G4VTransitionRadiation  -- header file
 //

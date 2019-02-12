@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HarmonicPolMagField.hh 68055 2013-03-13 14:43:28Z gcosmo $
+// $Id$
 //
 // class G4HarmonicPolMagField
 //

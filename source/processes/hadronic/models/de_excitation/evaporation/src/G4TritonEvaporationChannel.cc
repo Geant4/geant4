@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TritonEvaporationChannel.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)

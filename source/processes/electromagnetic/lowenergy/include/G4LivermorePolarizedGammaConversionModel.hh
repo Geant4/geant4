@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedGammaConversionModel.hh 93359 2015-10-19 13:42:18Z gcosmo $
+// $Id$
 //
 // Authors: G.Depaola & F.Longo
 //

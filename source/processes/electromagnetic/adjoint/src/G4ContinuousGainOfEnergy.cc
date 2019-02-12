@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuousGainOfEnergy.cc 91870 2015-08-07 15:21:40Z gcosmo $
+// $Id$
 //
 
 #include "G4ContinuousGainOfEnergy.hh"

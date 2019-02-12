@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04RunAction.hh
 /// \brief Definition of the ExN04RunAction class
 //
-// $Id: ExN04RunAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

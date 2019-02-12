@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 98759 2016-08-09 14:03:09Z gcosmo $
+// $Id$
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/TargetSD.cc
 /// \brief Implementation of the TargetSD class
 //
-// $Id: TargetSD.cc 81932 2014-06-06 15:39:45Z gcosmo $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //

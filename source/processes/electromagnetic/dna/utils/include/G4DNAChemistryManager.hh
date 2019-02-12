@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChemistryManager.hh 103042 2017-03-10 11:50:07Z gcosmo $
+// $Id$
 //
 
 // Author: Mathieu Karamitros

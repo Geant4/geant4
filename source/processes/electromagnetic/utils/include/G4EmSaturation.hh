@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.hh 100346 2016-10-18 15:30:36Z gcosmo $
+// $Id$
 //
 //
 #ifndef G4EmSaturation_h

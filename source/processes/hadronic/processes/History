@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 105287 2017-07-19 08:45:40Z gcosmo $
+$Id$
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,6 +15,13 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+25 January 2019 Vladimir Ivantchenko (hadr-proc-V10-03-01)
+----------------------------------------------------------
+
+09 May 2018 Alberto Ribon
+- G4HadronElasticProcess : fixed warnings in gcc 8 regarding catching 
+  polymorphic type by value, instead of by reference.
 
 18 July 2017 Dennis Wright  (hadr-proc-V10-03-00)
 -------------------------------------------------

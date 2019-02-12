@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.cc 95713 2016-02-22 08:08:38Z gcosmo $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //

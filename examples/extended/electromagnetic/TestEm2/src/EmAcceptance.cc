@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/src/EmAcceptance.cc
 /// \brief Implementation of the Emeptance class
 //
-// $Id: EmAcceptance.cc 74994 2013-10-25 10:47:45Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

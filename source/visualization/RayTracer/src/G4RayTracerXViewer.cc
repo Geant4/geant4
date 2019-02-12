@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerXViewer.cc 104015 2017-05-08 07:28:08Z gcosmo $
+// $Id$
 
 #ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
 

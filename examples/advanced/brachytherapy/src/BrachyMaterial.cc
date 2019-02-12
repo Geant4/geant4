@@ -32,7 +32,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyMaterial.cc 100821 2016-11-02 15:21:34Z gcosmo $
+// $Id$
 //
 #include "globals.hh"
 #include "Randomize.hh"  

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/UrQMDPiKBuilder.cc
 /// \brief Implementation of the UrQMDPiKBuilder class
 //
-// $Id: UrQMDPiKBuilder.cc 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //

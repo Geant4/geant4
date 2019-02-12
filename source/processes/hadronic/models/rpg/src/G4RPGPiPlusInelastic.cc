@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGPiPlusInelastic.cc 79697 2014-03-12 13:10:09Z gcosmo $
+// $Id$
 //
  
 #include "G4RPGPiPlusInelastic.hh"

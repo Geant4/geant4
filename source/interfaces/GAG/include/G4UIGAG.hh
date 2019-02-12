@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id$
 //
 // G4UIGAG.hh
 // GAG(Geant4 adaptive GUI) interface class

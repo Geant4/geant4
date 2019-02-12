@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id$
 //
 // G4UIGAG.cc
 // 18.Feb.98 M.Nagamatu and T.Kodama created G4UIGAG from G4UIterminal

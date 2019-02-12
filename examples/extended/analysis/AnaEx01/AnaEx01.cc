@@ -27,7 +27,7 @@
 /// \brief Main program of the analysis/AnaEx01 example
 //
 //
-// $Id: AnaEx01.cc 100674 2016-10-31 10:43:40Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

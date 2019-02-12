@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04StepMax.cc 68021 2013-03-13 13:36:07Z gcosmo $
+// $Id$
 //
 /// \file field/field04/src/F04StepMax.cc
 /// \brief Implementation of the F04StepMax class

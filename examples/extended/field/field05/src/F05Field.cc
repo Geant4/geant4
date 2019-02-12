@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F05Field.cc 75672 2013-11-05 08:47:41Z gcosmo $
+// $Id$
 //
 /// \file field/field05/src/F05Field.cc
 /// \brief Implementation of the F05Field class

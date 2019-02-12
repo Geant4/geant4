@@ -27,7 +27,7 @@
 /// \brief Implementation of the ExP01TrackerSD class
 //
 //
-// $Id: ExP01TrackerSD.cc 71111 2013-06-11 10:51:02Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

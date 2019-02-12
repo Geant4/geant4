@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.hh 97520 2016-06-03 14:23:17Z gcosmo $
+// $Id$
 //
 
 #ifndef G4DNAScreenedRutherfordElasticModel_h

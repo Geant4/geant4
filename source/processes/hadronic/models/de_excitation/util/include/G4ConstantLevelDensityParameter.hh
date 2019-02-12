@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConstantLevelDensityParameter.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations (photon evaporation)
 // by C. Dallapiccola (Nov 1998) 

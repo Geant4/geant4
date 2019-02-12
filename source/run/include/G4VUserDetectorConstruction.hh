@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.hh 70423 2013-05-30 09:09:21Z gcosmo $
+// $Id$
 //
 
 #ifndef G4VUserDetectorConstruction_h

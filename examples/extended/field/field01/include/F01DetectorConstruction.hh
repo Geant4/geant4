@@ -27,7 +27,7 @@
 /// \brief Definition of the F01DetectorConstruction class
 //
 //
-// $Id: F01DetectorConstruction.hh 90341 2015-05-26 08:38:36Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

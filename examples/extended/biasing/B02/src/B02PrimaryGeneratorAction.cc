@@ -27,7 +27,7 @@
 /// \brief Implementation of the B02PrimaryGeneratorAction class
 //
 //
-// $Id: B02PrimaryGeneratorAction.cc 70238 2013-05-27 11:59:40Z gcosmo $
+// $Id$
 //
 
 #include "globals.hh"

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.hh 83403 2014-08-21 15:07:30Z gcosmo $
+// $Id$
 //
 // 
 // Class G4OpenGLStoredQtViewer : a class derived from

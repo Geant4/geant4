@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04StackingActionMessenger.hh
 /// \brief Definition of the ExN04StackingActionMessenger class
 //
-// $Id: ExN04StackingActionMessenger.hh 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #ifndef ExN04StackingActionMessenger_h

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F06PhysicsList.hh 69762 2013-05-14 08:08:54Z gcosmo $
+// $Id$
 //
 /// \file field/field06/include/F06PhysicsList.hh
 /// \brief Definition of the F06PhysicsList class

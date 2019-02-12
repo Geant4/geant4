@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 88154 2015-02-02 12:25:20Z gcosmo $
+# $Id$
 # GEANT4 tag $Name: 
 # --------------------------------------------------------------
 # GNUmakefile for examples module with DPMJET interface 

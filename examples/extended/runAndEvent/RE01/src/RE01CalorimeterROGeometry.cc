@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01CalorimeterROGeometry.cc
 /// \brief Implementation of the RE01CalorimeterROGeometry class
 //
-// $Id: RE01CalorimeterROGeometry.cc 101677 2016-11-21 09:26:55Z gcosmo $
+// $Id$
 //
 
 #include "RE01CalorimeterROGeometry.hh"

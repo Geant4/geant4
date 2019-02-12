@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorSymMatrix.hh 108476 2018-02-15 14:21:25Z gcosmo $
+// $Id$
 //
 // Class Description:
 //

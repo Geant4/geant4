@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LorentzRotation.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id$
 //
 #ifndef G4LorentzRotation_hh
 #define G4LorentzRotation_hh

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashEventAction.cc 94396 2015-11-13 13:37:16Z gcosmo $
+// $Id$
 //
 /// \file parameterisations/gflash/src/ExGflashEventAction.cc
 /// \brief Implementation of the ExGflashEventAction class

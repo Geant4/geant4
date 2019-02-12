@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWin.cc 97241 2016-05-30 12:06:54Z gcosmo $
+// $Id$
 //
 // OpenInventor graphics system factory.
 

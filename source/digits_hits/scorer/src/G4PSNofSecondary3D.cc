@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary3D.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id$
 //
 // G4PSNofSecondary3D
 #include "G4PSNofSecondary3D.hh"

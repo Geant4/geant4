@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: VoxelSD.hh 71843 2013-06-25 16:58:09Z gcosmo $
+// $Id$
 //
 /// @file VoxelSD.hh
 /// @brief Define detector sensitivity on voxels

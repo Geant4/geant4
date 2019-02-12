@@ -1,12 +1,8 @@
-####   Starting: /mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/geant4-10-04-patches_branch/build/examples/extended/hadronic/FissionFragment/FissionFragment    ####
+####   Starting: /mnt/build/jenkins/workspace/g4n-centos7/COMPILER/gcc63/LABEL/centos7/THREAD/Seq/build/examples/extended/hadronic/FissionFragment/FissionFragment    ####
 MT RNG Seed: 62737819
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-04-patch-03    (8-February-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -364,12 +360,10 @@ RayTracer (RayTracer)
 VRML1FILE (VRML1FILE)
 VRML2FILE (VRML2FILE)
 gMocrenFile (gMocrenFile)
-OpenGLImmediateQt (OGLIQt, OGLI)
-OpenGLStoredQt (OGLSQt, OGL, OGLS)
-OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
-OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
-OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
-OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+OpenGLImmediateXm (OGLIXm, OGLI)
+OpenGLStoredXm (OGLSXm, OGL, OGLS)
+OpenGLImmediateX (OGLIX, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSXm_FALLBACK)
 RayTracerX (RayTracerX)
 
 Registering model factories...
@@ -1147,151 +1141,151 @@ Shooting event 1
 Emission Location: r: (4.45494,0,466.79)
 Emission Direction: r: (-0.97197,-0.108229,-0.208711)
 Shooting event 2
-Emission Location: r: (2.16725,0,459.501)
-Emission Direction: r: (0.244968,-0.939393,0.239859)
+Emission Location: r: (3.52169,0,462.021)
+Emission Direction: r: (-0.821505,-0.408724,-0.397585)
 Shooting event 3
-Emission Location: r: (0.99181,0,484.766)
-Emission Direction: r: (0.707271,-0.505943,-0.49375)
+Emission Location: r: (4.42003,0,471.644)
+Emission Direction: r: (0.492471,0.780896,-0.384283)
 Shooting event 4
-Emission Location: r: (0.61904,0,439.298)
-Emission Direction: r: (-0.166203,0.676929,0.717038)
+Emission Location: r: (3.91954,0,456.523)
+Emission Direction: r: (-0.813445,-0.545195,0.202657)
 Shooting event 5
-Emission Location: r: (2.50915,0,468.065)
-Emission Direction: r: (0.717557,-0.0652228,0.693439)
+Emission Location: r: (1.52544,0,449.67)
+Emission Direction: r: (0.90161,0.39793,0.169562)
 Shooting event 6
-Emission Location: r: (1.43203,0,447.804)
-Emission Direction: r: (-0.822895,0.552398,0.13304)
+Emission Location: r: (3.39997,0,436.586)
+Emission Direction: r: (0.741182,-0.670493,0.0330044)
 Shooting event 7
-Emission Location: r: (1.69793,0,485.63)
-Emission Direction: r: (-0.549562,0.825396,0.129242)
+Emission Location: r: (0.794532,0,457.722)
+Emission Direction: r: (0.209888,0.326396,0.921636)
 Shooting event 8
-Emission Location: r: (0.80307,0,478.311)
-Emission Direction: r: (-0.179827,0.548906,-0.816312)
+Emission Location: r: (2.3815,0,484.957)
+Emission Direction: r: (-0.320016,-0.771817,-0.549444)
 Shooting event 9
-Emission Location: r: (2.5894,0,447.251)
-Emission Direction: r: (-0.574025,-0.673182,-0.466177)
+Emission Location: r: (1.91068,0,485.732)
+Emission Direction: r: (0.114706,-0.803541,0.584093)
 Shooting event 10
-Emission Location: r: (3.10835,0,435.233)
-Emission Direction: r: (0.451355,0.857877,-0.245614)
+Emission Location: r: (2.9005,0,443.031)
+Emission Direction: r: (-0.580466,-0.789639,0.198821)
 Shooting event 11
-Emission Location: r: (3.28587,0,456.574)
-Emission Direction: r: (-0.22568,0.968107,0.108802)
+Emission Location: r: (1.04751,0,476.202)
+Emission Direction: r: (-0.0728801,-0.337152,-0.938625)
 Shooting event 12
-Emission Location: r: (2.67392,0,442.141)
-Emission Direction: r: (0.776429,-0.600636,-0.190773)
+Emission Location: r: (0.555583,0,466.885)
+Emission Direction: r: (-0.763674,0.120578,0.634242)
 Shooting event 13
-Emission Location: r: (3.27153,0,483.543)
-Emission Direction: r: (0.783641,0.602116,-0.152849)
+Emission Location: r: (0.488194,0,482.659)
+Emission Direction: r: (0.125415,0.961491,0.244553)
 Shooting event 14
-Emission Location: r: (0.73031,0,464.552)
-Emission Direction: r: (0.236744,-0.0568415,-0.969908)
+Emission Location: r: (2.26699,0,469.524)
+Emission Direction: r: (-0.179551,-0.973955,0.138468)
 Shooting event 15
-Emission Location: r: (0.733019,0,463.596)
-Emission Direction: r: (-0.864497,-0.0218552,0.502162)
+Emission Location: r: (3.8978,0,483.582)
+Emission Direction: r: (-0.00198147,-0.958528,-0.28499)
 Shooting event 16
-Emission Location: r: (0.898677,0,465.329)
-Emission Direction: r: (0.542839,0.836406,-0.0758332)
+Emission Location: r: (4.50855,0,450.635)
+Emission Direction: r: (0.441125,-0.868547,0.225908)
 Shooting event 17
-Emission Location: r: (3.50762,0,439.178)
-Emission Direction: r: (-0.602954,-0.313613,-0.733548)
+Emission Location: r: (3.62354,0,454.754)
+Emission Direction: r: (-0.147631,-0.182812,0.972)
 Shooting event 18
-Emission Location: r: (4.55529,0,452.979)
-Emission Direction: r: (0.692462,0.10217,-0.714183)
+Emission Location: r: (2.57824,0,438.649)
+Emission Direction: r: (0.50293,0.837965,-0.211842)
 Shooting event 19
-Emission Location: r: (1.32808,0,455.153)
-Emission Direction: r: (0.795606,0.594817,0.11491)
+Emission Location: r: (1.07468,0,453.81)
+Emission Direction: r: (-0.966456,-0.195159,-0.166958)
 Shooting event 20
-Emission Location: r: (4.66057,0,456.57)
-Emission Direction: r: (0.521703,-0.694703,-0.495191)
+Emission Location: r: (2.16704,0,468.337)
+Emission Direction: r: (0.0797919,-0.985409,0.150339)
 Shooting event 21
-Emission Location: r: (0.629111,0,451.557)
-Emission Direction: r: (0.893477,-0.382658,-0.235099)
+Emission Location: r: (0.490657,0,465.712)
+Emission Direction: r: (-0.491678,-0.316339,0.811284)
 Shooting event 22
-Emission Location: r: (1.74226,0,477.687)
-Emission Direction: r: (-0.937845,0.249263,-0.241483)
+Emission Location: r: (3.39669,0,481.978)
+Emission Direction: r: (-0.446401,0.231865,-0.864271)
 Shooting event 23
-Emission Location: r: (1.50181,0,482.018)
-Emission Direction: r: (0.55138,0.80992,-0.200025)
+Emission Location: r: (1.49216,0,469.467)
+Emission Direction: r: (0.654914,-0.750631,0.0874162)
 Shooting event 24
-Emission Location: r: (1.18298,0,456.838)
-Emission Direction: r: (0.980988,-0.116072,-0.155531)
+Emission Location: r: (3.75983,0,442.803)
+Emission Direction: r: (0.678458,-0.604742,0.417112)
 Shooting event 25
-Emission Location: r: (0.945523,0,477.005)
-Emission Direction: r: (-0.8573,0.46965,-0.210867)
+Emission Location: r: (2.28881,0,438.659)
+Emission Direction: r: (0.746512,-0.561225,-0.357416)
 Shooting event 26
-Emission Location: r: (2.96877,0,468.604)
-Emission Direction: r: (0.737051,-0.178041,-0.651964)
+Emission Location: r: (2.17217,0,458.03)
+Emission Direction: r: (0.747656,0.178755,0.639576)
 Shooting event 27
-Emission Location: r: (3.69345,0,470.617)
-Emission Direction: r: (0.395191,0.917301,-0.048814)
+Emission Location: r: (0.835159,0,439.669)
+Emission Direction: r: (-0.46842,0.16494,-0.867973)
 Shooting event 28
-Emission Location: r: (5.05346,0,482.368)
-Emission Direction: r: (0.70597,0.477364,-0.523192)
+Emission Location: r: (2.90067,0,455.565)
+Emission Direction: r: (-0.0195654,0.962446,0.270766)
 Shooting event 29
-Emission Location: r: (4.55339,0,481.399)
-Emission Direction: r: (0.691941,0.0826806,0.717204)
+Emission Location: r: (3.59706,0,457.664)
+Emission Direction: r: (-0.793509,0.595366,-0.126026)
 Shooting event 30
-Emission Location: r: (1.04565,0,448.537)
-Emission Direction: r: (-0.95587,-0.231299,-0.181143)
+Emission Location: r: (1.81974,0,473.023)
+Emission Direction: r: (-0.349272,0.92805,-0.129351)
 Shooting event 31
-Emission Location: r: (2.57103,0,445.048)
-Emission Direction: r: (0.895422,0.137397,-0.423487)
+Emission Location: r: (2.44272,0,462.722)
+Emission Direction: r: (-0.741595,0.572249,-0.350098)
 Shooting event 32
-Emission Location: r: (3.61647,0,467.068)
-Emission Direction: r: (0.434561,-0.789546,0.433329)
+Emission Location: r: (2.40607,0,445.018)
+Emission Direction: r: (-0.0649941,-0.833299,0.548988)
 Shooting event 33
-Emission Location: r: (0.861123,0,453.379)
-Emission Direction: r: (0.538996,0.246709,-0.805368)
+Emission Location: r: (2.44713,0,469.631)
+Emission Direction: r: (0.799043,-0.536452,-0.271568)
 Shooting event 34
-Emission Location: r: (1.33371,0,464)
-Emission Direction: r: (-0.224864,-0.445182,-0.866746)
+Emission Location: r: (2.76796,0,468.705)
+Emission Direction: r: (0.586844,0.62823,0.510823)
 Shooting event 35
-Emission Location: r: (2.05357,0,443.093)
-Emission Direction: r: (0.620767,-0.744405,-0.245988)
+Emission Location: r: (0.545187,0,485.015)
+Emission Direction: r: (0.481365,0.673553,0.560905)
 Shooting event 36
-Emission Location: r: (0.468119,0,482.251)
-Emission Direction: r: (0.141869,0.81785,0.557669)
+Emission Location: r: (1.95267,0,482.355)
+Emission Direction: r: (0.888382,0.113702,-0.444803)
 Shooting event 37
-Emission Location: r: (3.32918,0,469.962)
-Emission Direction: r: (0.517344,-0.820361,0.243645)
+Emission Location: r: (3.88587,0,462.967)
+Emission Direction: r: (0.887315,0.314433,-0.337348)
 Shooting event 38
-Emission Location: r: (4.09524,0,473.05)
-Emission Direction: r: (0.658524,-0.39108,-0.642964)
+Emission Location: r: (2.44783,0,482.251)
+Emission Direction: r: (-0.841082,-0.14338,0.521558)
 Shooting event 39
-Emission Location: r: (0.413636,0,459.136)
-Emission Direction: r: (0.787739,-0.325148,-0.523208)
+Emission Location: r: (1.16415,0,484.905)
+Emission Direction: r: (-0.334962,0.913676,-0.23021)
 Shooting event 40
-Emission Location: r: (2.44949,0,472.796)
-Emission Direction: r: (0.393416,-0.627374,-0.672031)
+Emission Location: r: (0.148851,0,480.536)
+Emission Direction: r: (0.670683,-0.729549,-0.133948)
 Shooting event 41
-Emission Location: r: (2.44166,0,439.529)
-Emission Direction: r: (0.51858,-0.763,-0.385884)
+Emission Location: r: (2.85545,0,478.158)
+Emission Direction: r: (-0.00290659,0.869181,0.494485)
 Shooting event 42
-Emission Location: r: (2.38444,0,462.632)
-Emission Direction: r: (-0.627785,0.259726,-0.733777)
+Emission Location: r: (1.2766,0,485.589)
+Emission Direction: r: (0.584647,-0.152492,0.796827)
 Shooting event 43
-Emission Location: r: (1.51742,0,439.467)
-Emission Direction: r: (0.538508,0.0263599,0.842208)
+Emission Location: r: (1.1807,0,463.15)
+Emission Direction: r: (0.302196,-0.952981,0.0224669)
 Shooting event 44
-Emission Location: r: (3.40547,0,446.061)
-Emission Direction: r: (-0.0066387,0.842123,0.539245)
+Emission Location: r: (1.77653,0,442.593)
+Emission Direction: r: (-0.256816,0.859781,-0.441387)
 Shooting event 45
-Emission Location: r: (0.4133,0,472.405)
-Emission Direction: r: (-0.580123,-0.769981,0.265681)
+Emission Location: r: (2.87583,0,476.883)
+Emission Direction: r: (-0.294403,0.285762,-0.911958)
 Shooting event 46
-Emission Location: r: (3.29729,0,480.724)
-Emission Direction: r: (-0.567211,-0.27753,0.775402)
+Emission Location: r: (4.40096,0,469.066)
+Emission Direction: r: (0.150916,-0.970595,0.187537)
 Shooting event 47
-Emission Location: r: (3.63095,0,442.64)
-Emission Direction: r: (-0.512462,0.779594,0.360023)
+Emission Location: r: (4.01111,0,445.644)
+Emission Direction: r: (0.163509,-0.635732,0.754393)
 Shooting event 48
-Emission Location: r: (1.98188,0,449.676)
-Emission Direction: r: (-0.69289,-0.444226,0.56795)
+Emission Location: r: (4.36398,0,482.846)
+Emission Direction: r: (0.939924,0.113124,0.322095)
 Shooting event 49
-Emission Location: r: (1.63597,0,445.186)
-Emission Direction: r: (-0.604069,0.769749,-0.206367)
+Emission Location: r: (2.90786,0,440.066)
+Emission Direction: r: (-0.614315,-0.741694,-0.26927)
 Shooting event 50
-Emission Location: r: (1.73937,0,444.321)
-Emission Direction: r: (-0.251747,-0.345485,0.904026)
+Emission Location: r: (0.556684,0,447.719)
+Emission Direction: r: (0.614018,0.253927,0.74733)
 Graphics systems deleted.
 Visualization Manager deleting...

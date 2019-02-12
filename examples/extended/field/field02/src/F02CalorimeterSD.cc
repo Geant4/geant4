@@ -27,7 +27,7 @@
 /// \brief Implementation of the F02CalorimeterSD class
 //
 //
-// $Id: F02CalorimeterSD.cc 76247 2013-11-08 11:18:52Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXePMTSD.hh 73915 2013-09-17 07:32:26Z gcosmo $
+// $Id$
 //
 /// \file optical/LXe/include/LXePMTSD.hh
 /// \brief Definition of the LXePMTSD class

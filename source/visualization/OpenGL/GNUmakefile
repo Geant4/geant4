@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 99445 2016-09-22 09:18:19Z gcosmo $
+# $Id$
 
 name := G4OpenGL
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.cc 74051 2013-09-20 09:39:41Z gcosmo $
+// $Id$
 //
 // 
 // Abstract interface for GEANT4 Visualization Manager.

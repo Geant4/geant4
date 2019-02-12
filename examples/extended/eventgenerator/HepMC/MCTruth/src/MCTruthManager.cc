@@ -27,7 +27,7 @@
 /// \brief Implementation of the MCTruthManager class
 //
 //
-// $Id: MCTruthManager.cc 103182 2017-03-21 10:36:09Z gcosmo $
+// $Id$
 //
 //
 // --------------------------------------------------------------

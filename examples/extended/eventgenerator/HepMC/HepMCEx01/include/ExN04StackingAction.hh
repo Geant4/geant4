@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04StackingAction.hh
 /// \brief Definition of the ExN04StackingAction class
 //
-// $Id: ExN04StackingAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #ifndef ExN04StackingAction_H

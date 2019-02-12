@@ -1,4 +1,4 @@
-// $Id: Doxymodules_hadronic.h 107787 2017-11-30 13:11:33Z gcosmo $
+// $Id$
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_hadronic.h

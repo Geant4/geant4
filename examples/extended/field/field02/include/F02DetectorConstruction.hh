@@ -27,7 +27,7 @@
 /// \brief Definition of the F02DetectorConstruction class
 //
 //
-// $Id: F02DetectorConstruction.hh 90340 2015-05-26 08:38:06Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

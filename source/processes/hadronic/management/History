@@ -14,6 +14,24 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 January 2019   Vladimir Ivantchenko (hadr-man-V10-03-07)
+-----------------------------------------------------------
+08 November 2018 V. Ivanchenko
+- G4HadronicProcess - added check if secondary particle is on the mass
+    shell, if its mass differ from the PDG mass more for 1.5 MeV then mass
+    is forced to the mass shell, energy concerved, but momentum is changed
+8 June 2018 J. Yarba
+- G4HadronicProcess - use correct return type when calling CheckResult
+    (from PostStepDoIt); otherwise the value of pointer 'result' does not
+    get properly reset to NULL in case a non-conservation is detected,
+    thus "bad" interaction does not get re-sampled
+30 May 2017 V. Ivanchenko
+- G4HadronicProcess, G4VLeadingParticleBiasing, G4HadLeadBias
+    fixed compilation warning of CMSSW at gcc7.0.0
+09 May 2018  Alberto Ribon
+- G4HadronicProcess : fixed warnings in gcc 8 regarding catching 
+    polymorphic type by value, instead of by reference.
+
 12 September 2017  Krzysztof Genser (hadr-man-V10-03-06)
 ---------------------------------------------------
 - G4HadronicProcessType.hh added fMuAtomicCapture

@@ -17,6 +17,13 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 14, 2018 Vladimir Ivanchenko (global-V10-03-13)
+- G4PhysicsVector: similar fix as in previous tag of the problem #2087
+
+September 10, 2018 Mihaly Novak
+- G4Physics2DVector: fixed possible out-of-bound access in the FindBin method.
+  problem report #2087
+
 February 12, 2018 G.Cosmo (global-V10-03-12)
 - G4StateManager: move static method SetVerboseLevel() to be non inline.
 

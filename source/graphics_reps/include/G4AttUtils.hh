@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttUtils.hh 78955 2014-02-05 09:45:46Z gcosmo $
+// $Id$
 //
 // Jane Tinslay September 2006
 //

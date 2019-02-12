@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParamLinear.cc 66363 2012-12-18 09:12:54Z gcosmo $
+// $Id$
 //
 //
 // class G4tgbPlaceParamLinear

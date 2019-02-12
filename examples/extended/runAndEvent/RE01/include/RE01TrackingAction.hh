@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01TrackingAction.hh
 /// \brief Definition of the RE01TrackingAction class
 //
-// $Id: RE01TrackingAction.hh 66379 2012-12-18 09:46:33Z gcosmo $
+// $Id$
 //
 
 #ifndef RE01TrackingAction_h

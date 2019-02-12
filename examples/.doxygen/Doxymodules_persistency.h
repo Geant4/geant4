@@ -1,4 +1,4 @@
-// $Id: Doxymodules_persistency.h 86514 2014-11-13 09:10:24Z gcosmo $
+// $Id$
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_persistency.h

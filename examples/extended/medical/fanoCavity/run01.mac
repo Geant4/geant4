@@ -1,4 +1,4 @@
-# $Id: run01.mac 93258 2015-10-14 08:34:50Z gcosmo $
+# $Id$
 #
 /control/verbose 2
 /run/verbose 2

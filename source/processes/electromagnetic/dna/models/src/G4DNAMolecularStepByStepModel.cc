@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularStepByStepModel.cc 94218 2015-11-09 08:24:48Z gcosmo $
+// $Id$
 //
 
 #include <globals.hh>

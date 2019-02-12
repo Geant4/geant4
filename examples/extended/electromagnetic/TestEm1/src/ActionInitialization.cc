@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ActionInitialization.cc 98759 2016-08-09 14:03:09Z gcosmo $
+// $Id$
 //
 /// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class

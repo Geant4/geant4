@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05Field.cc 98775 2016-08-09 14:30:39Z gcosmo $
+// $Id$
 //
 /// \file RE05/src/RE05Field.cc
 /// \brief Implementation of the RE05Field class

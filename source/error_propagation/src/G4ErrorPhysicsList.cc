@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorPhysicsList.cc 99974 2016-10-13 07:22:33Z gcosmo $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 

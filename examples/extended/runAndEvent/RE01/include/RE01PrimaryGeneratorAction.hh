@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01PrimaryGeneratorAction.hh
 /// \brief Definition of the RE01PrimaryGeneratorAction class
 //
-// $Id: RE01PrimaryGeneratorAction.hh 66379 2012-12-18 09:46:33Z gcosmo $
+// $Id$
 //
 
 #ifndef RE01PrimaryGeneratorAction_h

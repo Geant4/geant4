@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx02/src/H02SteppingAction.cc
 /// \brief Implementation of the H02SteppingAction class
 //
-//   $Id: H02SteppingAction.cc 77801 2013-11-28 13:33:20Z gcosmo $
+//   $Id$
 //
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"

@@ -26,7 +26,7 @@
 /// \file particles/phonons/include/G4PhononTransSlow.hh
 /// \brief Definition of the G4PhononTransSlow class
 //
-// $Id: G4PhononTransSlow.hh 75122 2013-10-28 09:51:40Z gcosmo $
+// $Id$
 //
 
 #ifndef G4PhononTransSlow_h

@@ -32,7 +32,7 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: PurgMagAnalysisManager.cc 84477 2014-10-16 08:44:04Z gcosmo $
+// $Id$
 //
 #include "PurgMagAnalysisManager.hh"
 

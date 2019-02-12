@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StrawTubeXTRadiator.cc 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id$
 //
 
 #include "G4StrawTubeXTRadiator.hh"

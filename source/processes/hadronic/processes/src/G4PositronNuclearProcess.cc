@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PositronNuclearProcess.cc 105287 2017-07-19 08:45:40Z gcosmo $
+// $Id$
 //
 
 #include "G4PositronNuclearProcess.hh" 

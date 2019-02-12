@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.hh 100828 2016-11-02 15:25:59Z gcosmo $
+// $Id$
 
 #ifndef G4DiffractiveExcitation_h
 #define G4DiffractiveExcitation_h 1

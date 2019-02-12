@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc 105034 2017-07-06 08:34:37Z gcosmo $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 

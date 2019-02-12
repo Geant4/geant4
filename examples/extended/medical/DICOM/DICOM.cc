@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DICOM.cc 101109 2016-11-07 08:14:53Z gcosmo $
+// $Id$
 //
 /// \file medical/DICOM/DICOM.cc
 /// \brief Main program of the medical/DICOM example

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.hh 107317 2017-11-08 16:25:57Z gcosmo $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 #ifndef G4FTFParameters_h

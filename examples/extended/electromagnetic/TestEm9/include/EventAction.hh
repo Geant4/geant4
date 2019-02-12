@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm9/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 82278 2014-06-13 14:42:11Z gcosmo $
+// $Id$
 //
 
 #ifndef EventAction_h

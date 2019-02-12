@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAOneStepThermalizationModel.cc 101807 2016-11-30 13:42:28Z gunter $
+// $Id$
 //
 // Author: Mathieu Karamitros
 //

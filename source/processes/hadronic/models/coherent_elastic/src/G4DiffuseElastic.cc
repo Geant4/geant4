@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc 93440 2015-10-22 14:11:41Z gcosmo $
+// $Id$
 //
 //
 // Physics model class G4DiffuseElastic 

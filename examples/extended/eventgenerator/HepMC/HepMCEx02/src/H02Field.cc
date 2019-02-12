@@ -27,7 +27,7 @@
 /// \brief Implementation of the H02Field class
 //
 //   H02Field.hh
-//   $Id: H02Field.cc 77801 2013-11-28 13:33:20Z gcosmo $
+//   $Id$
 //
 #include "G4SystemOfUnits.hh"
 #include "H02Field.hh"

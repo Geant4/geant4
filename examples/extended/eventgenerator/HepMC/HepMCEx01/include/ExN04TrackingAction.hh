@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04TrackingAction.hh
 /// \brief Definition of the ExN04TrackingAction class
 //
-// $Id: ExN04TrackingAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #ifndef ExN04TrackingAction_h

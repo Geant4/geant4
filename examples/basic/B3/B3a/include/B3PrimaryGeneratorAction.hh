@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B3PrimaryGeneratorAction.hh 89901 2015-05-04 09:28:53Z ihrivnac $
+// $Id$
 //
 /// \file B3PrimaryGeneratorAction.hh
 /// \brief Definition of the B3PrimaryGeneratorAction class

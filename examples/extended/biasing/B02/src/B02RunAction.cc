@@ -27,7 +27,7 @@
 /// \brief Implementation of the B02RunAction class
 //
 //
-// $Id: B02RunAction.cc 98774 2016-08-09 14:28:06Z gcosmo $
+// $Id$
 // 
 #include "B02RunAction.hh"
 #include "B02Run.hh"

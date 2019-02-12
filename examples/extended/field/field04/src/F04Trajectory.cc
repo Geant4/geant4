@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04Trajectory.cc 90239 2015-05-21 09:07:05Z gcosmo $
+// $Id$
 //
 /// \file field/field04/src/F04Trajectory.cc
 /// \brief Implementation of the F04Trajectory class

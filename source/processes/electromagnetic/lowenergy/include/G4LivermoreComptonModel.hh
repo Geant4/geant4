@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.hh 82874 2014-07-15 15:25:29Z gcosmo $
+// $Id$
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

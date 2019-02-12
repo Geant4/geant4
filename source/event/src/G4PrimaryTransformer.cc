@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc 101916 2016-12-08 08:04:03Z gcosmo $
+// $Id$
 //
 
 #include "G4PrimaryTransformer.hh"

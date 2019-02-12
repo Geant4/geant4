@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/include/TargetSD.hh
 /// \brief Definition of the TargetSD class
 //
-// $Id: TargetSD.hh 86976 2014-11-21 12:07:00Z gcosmo $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //

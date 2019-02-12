@@ -32,7 +32,7 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: PurgMagSteppingVerbose.cc 69086 2013-04-18 07:29:59Z gcosmo $
+// $Id$
 //
 
 #include "PurgMagSteppingVerbose.hh"

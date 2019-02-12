@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomDetectorConstruction.hh 101301 2016-11-14 11:19:22Z gcosmo $
+// $Id$
 //
 /// \file medical/DICOM/include/DicomDetectorConstruction.hh
 /// \brief Definition of the DicomDetectorConstruction class

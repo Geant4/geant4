@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointhMultipleScattering.cc 90259 2015-05-22 08:57:37Z gcosmo $
+// $Id$
 //
 
 //

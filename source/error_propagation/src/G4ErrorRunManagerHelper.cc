@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorRunManagerHelper.cc 78318 2013-12-11 15:02:40Z gcosmo $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 

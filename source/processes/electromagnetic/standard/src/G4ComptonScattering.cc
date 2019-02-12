@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering.cc 107058 2017-11-01 14:54:12Z gcosmo $
+// $Id$
 //
 // 
 //------------ G4ComptonScattering physics process -----------------------------

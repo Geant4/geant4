@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChipsElasticModel.hh 90228 2015-05-21 08:49:57Z gcosmo $
+// $Id$
 //
 // Geant4 Header : G4ChipsElasticModel
 //

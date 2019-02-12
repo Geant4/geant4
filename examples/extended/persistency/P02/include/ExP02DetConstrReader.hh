@@ -26,7 +26,7 @@
 /// \file persistency/P02/include/ExP02DetConstrReader.hh
 /// \brief Definition of the ExP02DetConstrReader class
 //
-// $Id: ExP02DetConstrReader.hh 71727 2013-06-21 07:55:45Z gcosmo $
+// $Id$
 //
 //
 #ifndef ExP02DetConstrReader_h

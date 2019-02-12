@@ -27,7 +27,7 @@
 /// \brief Implementation of the F03FieldSetup class
 //
 //
-// $Id: F03FieldSetup.cc 104351 2017-05-26 07:23:04Z gcosmo $
+// $Id$
 //
 //
 //   Field Setup class implementation.

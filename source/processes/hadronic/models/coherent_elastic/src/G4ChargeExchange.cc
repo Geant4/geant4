@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc 91897 2015-08-10 09:55:12Z gcosmo $
+// $Id$
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model

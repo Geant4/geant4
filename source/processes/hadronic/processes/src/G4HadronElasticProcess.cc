@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticProcess.cc 92396 2015-08-31 14:12:40Z gcosmo $
+// $Id$
 //
 // Geant4 Hadron Elastic Scattering Process 
 // 
@@ -129,7 +129,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 
 	  result = fDiffraction->ApplyYourself(theProj, *targNucleus);
 	}
-      catch(G4HadronicException aR)
+      catch(G4HadronicException & aR)
 	{
 	  G4ExceptionDescription ed;
 	  aR.Report(ed);
@@ -192,7 +192,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
     {
       result = hadi->ApplyYourself( theProj, *targNucleus);
     }
-  catch(G4HadronicException aR)
+  catch(G4HadronicException & aR)
     {
       G4ExceptionDescription ed;
       aR.Report(ed);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FCALEMModuleSD.cc 84602 2014-10-17 07:46:09Z gcosmo $
+// $Id$
 //
 // 
 

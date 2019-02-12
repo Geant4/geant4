@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ElectronPrimaryGeneratorAction.hh 70325 2013-05-29 08:06:02Z gcosmo $
+// $Id$
 //
 /// \file medical/electronScattering2/include/ElectronPrimaryGeneratorAction.hh
 /// \brief Definition of the ElectronPrimaryGeneratorAction class

@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4AsciiReader.cc
 /// \brief Implementation of the HepMCG4AsciiReader class
 //
-// $Id: HepMCG4AsciiReader.cc 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #include "HepMCG4AsciiReader.hh"

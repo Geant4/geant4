@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05TrackerHit.cc 98775 2016-08-09 14:30:39Z gcosmo $
+// $Id$
 //
 /// \file RE05/src/RE05TrackerHit.cc
 /// \brief Implementation of the RE05TrackerHit class

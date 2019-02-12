@@ -25,7 +25,7 @@
 //
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04TrackerParametrisation.hh
 /// \brief Definition of the ExN04TrackerParametrisation class
-// $Id: ExN04TrackerParametrisation.hh 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 //
 

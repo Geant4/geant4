@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 85903 2014-11-06 08:47:08Z gcosmo $
+# $Id$
 # --------------------------------------------------------------
 # GNUmakefile for examples module
 # with use of classes from common repository.

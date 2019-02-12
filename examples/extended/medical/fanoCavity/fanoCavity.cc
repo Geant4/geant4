@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/fanoCavity.cc
 /// \brief Main program of the medical/fanoCavity example
 //
-// $Id: fanoCavity.cc 103257 2017-03-23 08:54:31Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

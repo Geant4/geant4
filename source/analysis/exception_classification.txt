@@ -1,4 +1,4 @@
-$Id: exception_classification.txt 92099 2015-08-18 09:04:30Z gcosmo $
+$Id$
 
 Analysis_F001: Fatal exception when trying to create a singleton manager twice
 

@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/StackingMessenger.cc
 /// \brief Implementation of the StackingMessenger class
 //
-// $Id: StackingMessenger.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

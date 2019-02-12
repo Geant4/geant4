@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HyperNucleiProperties.cc 94091 2015-11-05 15:13:52Z gcosmo $
+// $Id$
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 

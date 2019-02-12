@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc 106233 2017-09-22 21:34:41Z gcosmo $
+// $Id$
 //
 // by V. Lara
 //

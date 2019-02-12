@@ -27,7 +27,7 @@
 /// \brief Definition of the ExN04SteppingVerbose class
 //
 //
-// $Id: ExN04SteppingVerbose.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id$
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
 //   It inherits from G4SteppingVerbose.

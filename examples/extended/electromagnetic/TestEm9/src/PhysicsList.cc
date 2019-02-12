@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm9/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 100282 2016-10-17 08:39:00Z gcosmo $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //

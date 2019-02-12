@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE02PrimaryGeneratorAction class
 //
 //
-// $Id: RE02PrimaryGeneratorAction.cc 68026 2013-03-13 13:45:22Z gcosmo $
+// $Id$
 //
 
 #include "RE02PrimaryGeneratorAction.hh"

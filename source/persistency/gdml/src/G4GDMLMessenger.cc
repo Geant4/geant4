@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMessenger.cc 105114 2017-07-13 09:49:54Z gcosmo $
+// $Id$
 //
 //
 // class G4GDMLMessenger Implementation

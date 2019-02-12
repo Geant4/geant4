@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm9/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id$
 //
 //
 // -------------------------------------------------------------

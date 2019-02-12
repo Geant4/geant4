@@ -27,7 +27,7 @@
 /// \brief Definition of the B01RunAction class
 //
 //
-// $Id: B01RunAction.hh 98774 2016-08-09 14:28:06Z gcosmo $
+// $Id$
 // 
 
 #ifndef B01RunAction_h

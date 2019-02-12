@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MoleculeHandleManager.cc 84858 2014-10-21 16:08:22Z gcosmo $
+// $Id$
 //
 #include "G4MoleculeHandleManager.hh"
 #include "G4Molecule.hh"

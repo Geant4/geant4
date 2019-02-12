@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/include/RMC01AnalysisManager.hh
 /// \brief Definition of the RMC01AnalysisManager class
 //
-// $Id: RMC01AnalysisManager.hh 98774 2016-08-09 14:28:06Z gcosmo $
+// $Id$
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:            RMC01AnalysisManager

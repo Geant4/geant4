@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: meshdefs.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id$
 //
 //
 // Tube/Cone Meshing constants for extent calculations

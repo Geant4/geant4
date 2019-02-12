@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElRatios.cc 96538 2016-04-20 12:39:18Z gcosmo $
+// $Id$
 //
 //
 // G4 Physics class: G4QuasiElRatios for N+A elastic cross sections

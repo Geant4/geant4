@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//    $Id: G4AntiNeutronAnnihilationAtRest.cc 104961 2017-07-03 07:36:14Z gcosmo $
+//    $Id$
 //    G4AntiNeutronAnnihilationAtRest physics process
 //    Larry Felawka (TRIUMF), April 1998
 //---------------------------------------------------------------------

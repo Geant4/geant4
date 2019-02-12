@@ -27,7 +27,7 @@
 /// \brief Implementation of the G03DetectorMessenger class
 //
 //
-// $Id: G03DetectorMessenger.cc 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id$
 //
 // Class G03DetectorMessenger implementation
 //

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.cc 81087 2014-05-20 15:44:27Z gcosmo $
+// $Id$
 //
 // G4PSNofSecondary
 #include "G4PSNofSecondary.hh"

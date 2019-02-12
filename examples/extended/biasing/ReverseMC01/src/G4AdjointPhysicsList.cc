@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/src/G4AdjointPhysicsList.cc
 /// \brief Implementation of the G4AdjointPhysicsList class
 //
-// $Id: G4AdjointPhysicsList.cc 107258 2017-11-07 09:58:16Z gcosmo $
+// $Id$
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:        G4AdjointPhysicsList

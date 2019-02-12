@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularReaction.cc 91584 2015-07-27 13:01:48Z gcosmo $
+// $Id$
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //

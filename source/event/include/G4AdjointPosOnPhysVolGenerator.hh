@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPosOnPhysVolGenerator.hh 68047 2013-03-13 14:32:59Z gcosmo $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointPosOnPhysVolGenerator

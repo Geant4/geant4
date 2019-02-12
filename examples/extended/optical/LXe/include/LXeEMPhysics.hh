@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeEMPhysics.hh 81557 2014-06-03 08:32:44Z gcosmo $
+// $Id$
 //
 /// \file optical/LXe/include/LXeEMPhysics.hh
 /// \brief Definition of the LXeEMPhysics class

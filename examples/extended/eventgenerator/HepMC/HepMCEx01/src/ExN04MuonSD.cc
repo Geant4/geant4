@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04MuonSD.cc
 /// \brief Implementation of the ExN04MuonSD class
 //
-// $Id: ExN04MuonSD.cc 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #include "G4HCofThisEvent.hh"

@@ -26,7 +26,7 @@
 /// \file exoticphysics/phonon/include/XAluminumElectrodeHit.hh
 /// \brief Definition of the XAluminumElectrodeHit class
 //
-// $Id: XAluminumElectrodeHit.hh 92176 2015-08-20 13:07:22Z gcosmo $
+// $Id$
 //
 // 20141008  Allocators must be thread-local, and must be pointers
 // 20150818  Make hit a simple container, with public data members

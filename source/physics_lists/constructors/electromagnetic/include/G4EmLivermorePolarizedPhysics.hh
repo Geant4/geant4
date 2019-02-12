@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.hh 105735 2017-08-16 12:59:43Z gcosmo $
+// $Id$
 
 #ifndef G4EmLivermorePolarizedPhysics_h
 #define G4EmLivermorePolarizedPhysics_h 1

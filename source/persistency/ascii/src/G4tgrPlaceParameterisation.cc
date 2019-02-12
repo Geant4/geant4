@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceParameterisation.cc 73052 2013-08-15 15:45:36Z gcosmo $
+// $Id$
 //
 //
 // class G4tgrPlaceParameterisation

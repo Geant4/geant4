@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExGflashDetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
+// $Id$
 //
 /// \file parameterisations/gflash/src/ExGflashDetectorConstruction.cc
 /// \brief Implementation of the ExGflashDetectorConstruction class

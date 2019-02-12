@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/HepMCEx01.cc
 /// \brief Main program of the eventgenerator/HepMC/HepMCEx01 example
 //
-// $Id: HepMCEx01.cc 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 // --------------------------------------------------------------
 //      GEANT 4 - example derived from novice exampleN04

@@ -27,7 +27,7 @@
 /// \brief Implementation of the HistoMessenger class
 //
 //
-// $Id: HistoMessenger.cc 107541 2017-11-22 08:24:57Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 74059 2013-09-20 10:01:33Z gcosmo $
+# $Id$
 
 name := G4RayTracer
 

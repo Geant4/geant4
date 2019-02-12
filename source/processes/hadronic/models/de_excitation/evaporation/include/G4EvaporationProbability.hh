@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationProbability.hh 103162 2017-03-20 09:40:58Z gcosmo $
+// $Id$
 //
 //J.M. Quesada (August2008). Based on:
 //

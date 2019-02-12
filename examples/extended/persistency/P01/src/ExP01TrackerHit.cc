@@ -27,7 +27,7 @@
 /// \brief Implementation of the ExP01TrackerHit class
 //
 //
-// $Id: ExP01TrackerHit.cc 71791 2013-06-24 14:08:28Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

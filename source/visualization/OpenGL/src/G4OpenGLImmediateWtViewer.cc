@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWtViewer.cc 85263 2014-10-27 08:58:31Z gcosmo $
+// $Id$
 //
 //
 // Class G4OpenGLImmediateWtViewer : a class derived from G4OpenGLWtViewer and

@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-04-patch-03    (8-February-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -455,50 +451,48 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=12.82s Real=13.24s Sys=0s
+  User=7.44s Real=7.53s Sys=0.01s
 
  The run is 10000 neutron of 14.1 MeV through 30 cm  of Li7 (density: 1.85 g/cm3 )
 
  Process calls frequency :
-                Decay=      1      RadioactiveDecay= 197902        Transportation=  71545
-              annihil=    203                 compt= 397319                  conv=    202
-           dInelastic=      4                 eIoni= 406705                 hIoni=    497
-           hadElastic= 181722               ionIoni= 198265                   msc=    201
-             nCapture=     26      neutronInelastic=  16289                  phot=  20526
-
+     RadioactiveDecay= 197319        Transportation=  72456               annihil=    213
+                compt= 395175                  conv=    214            dInelastic=      2
+                eIoni= 405068                 hIoni=    515            hadElastic= 181018
+              ionIoni= 197698                   msc=    179              nCapture=     17
+     neutronInelastic=  16466                  phot=  20647 
 
  List of generated particles:
-  Be8[3030.000]:      26  Emean =  7.1753 keV	( 364.97 eV  --> 11.928 keV)
-            He6:     169  Emean =  2.2395 MeV	( 93.939 keV --> 4.9431 MeV)
-            Li6:     739  Emean =  1.5568 MeV	( 7.3298 eV  --> 8.216 MeV)
-            Li7:  196942  Emean =  329.27 keV	( 0.64665 meV --> 6.2236 MeV)
-            Li8:      26  Emean =  4.2743 keV	( 177.11 eV  --> 25.301 keV)
-          alpha:     389  Emean =   1.258 MeV	( 73.896 keV --> 10.898 MeV)
-      anti_nu_e:     195  Emean =  2.5711 MeV	( 351.24 keV --> 12.356 MeV)
-       deuteron:     497  Emean =  4.6119 MeV	( 183.37 keV --> 31.475 MeV)
-             e+:     202  Emean =  1.3817 MeV	( 112.53 keV --> 4.3072 MeV)
-             e-:  406659  Emean =  86.701 keV	( 100 eV  --> 11.8 MeV)
-          gamma:   45444  Emean =  1.1978 MeV	( 1.0002 keV --> 12.05 MeV)
-        neutron:   17026  Emean =   3.339 MeV	( 2.3963 keV --> 13.636 MeV)
-         proton:       3  Emean =    4.38 MeV	( 2.4475 MeV --> 5.7945 MeV)
-         triton:       1  Emean =  1.2162 MeV	( 1.2162 MeV --> 1.2162 MeV)
+  Be8[3030.000]:      17  Emean =  8.5571 keV	( 4.4921 keV --> 12.078 keV)
+            He6:     159  Emean =  2.3683 MeV	( 88.378 keV --> 4.9192 MeV)
+            Li6:     692  Emean =  1.5504 MeV	( 51.164 eV  --> 8.6859 MeV)
+            Li7:  196434  Emean =  330.18 keV	( 0.74397 meV --> 6.1903 MeV)
+            Li8:      17  Emean =  617.89 eV 	( 52.206 eV  --> 5.4527 keV)
+          alpha:     396  Emean =  1.3259 MeV	( 12.009 keV --> 11.287 MeV)
+      anti_nu_e:     176  Emean =  2.3773 MeV	( 292.73 keV --> 9.7825 MeV)
+       deuteron:     517  Emean =   4.528 MeV	( 114.24 keV --> 27.414 MeV)
+             e+:     214  Emean =   1.486 MeV	( 89.632 keV --> 3.7905 MeV)
+             e-:  404974  Emean =    86.4 keV	( 100.01 eV  --> 11.413 MeV)
+          gamma:   46078  Emean =  1.1937 MeV	( 1.0002 keV --> 5.8783 MeV)
+        neutron:   17200  Emean =  3.3507 MeV	( 9.4929 keV --> 13.64 MeV)
 
- Mean energy deposit per event = 10.447 MeV  rms = 3.4778 MeV
- Mean energy flow per event    = 3.0668 MeV  rms = 3.2632 MeV
+ Mean energy deposit per event = 10.432 MeV  rms = 3.4432 MeV
+ Mean energy flow per event    = 3.0853 MeV  rms = 3.2284 MeV
 
  List of particles emerging from the absorber :
-      anti_nu_e:     195  Emean =  2.5711 MeV	( 351.24 keV --> 12.356 MeV) 	Eflow/event = 50.136 keV
-             e-:     144  Emean =  1.3641 MeV	( 1.9928 keV --> 4.4361 MeV) 	Eflow/event = 19.644 keV
-          gamma:   24716  Emean =  773.41 keV	( 3.2026 keV --> 12.05 MeV) 	Eflow/event = 1.9116 MeV
-        neutron:   10711  Emean =  1.0134 MeV	( 10.708 meV --> 14.1 MeV) 	Eflow/event = 1.0855 MeV
+      anti_nu_e:     176  Emean =  2.3773 MeV	( 292.73 keV --> 9.7825 MeV) 	Eflow/event = 41.84 keV
+             e+:       1  Emean =  370.41 keV	( 370.41 keV --> 370.41 keV) 	Eflow/event = 37.041 eV 
+             e-:     112  Emean =  1.3321 MeV	( 12.63 keV --> 8.8435 MeV) 	Eflow/event = 14.92 keV
+          gamma:   25217  Emean =  786.53 keV	( 2.0674 keV --> 5.8783 MeV) 	Eflow/event = 1.9834 MeV
+        neutron:   10717  Emean =   975.2 keV	( 26.378 meV --> 14.1 MeV) 	Eflow/event = 1.0451 MeV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 670277445, 2122362997
+ Current couple of seeds = 563963993, 2053492691
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.061 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.063 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

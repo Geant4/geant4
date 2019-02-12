@@ -31,6 +31,16 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+18th October 2018 - Ben Morgan (cmake-V10-03-55)
+- Modules/Geant4InstallData.cmake: Use https for URL
+- Templates/geant4-config.in: Add -L flag to curl to follow redirects
+  when accessing dataset url
+
+28th September 2018  - Gabriele Cosmo
+- Modules/Geant4MakeRules_cxx.cmake: added -DGL_SILENCE_DEPRECATION
+  to CMAKE_CXX_FLAGS_INIT for clang to silence GL deprecation compilation
+  warnings on MacOS 10.14 Mojave.
+
 23rd May 2018 -      Gunter Folger (cmake-V10-03-54)
 - Update Geant4DatasetDefinitions to use G4RealSurface 2.1.1
    patched version bringing back data lost in 2.1

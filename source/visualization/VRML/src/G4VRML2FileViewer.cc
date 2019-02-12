@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileViewer.cc 77479 2013-11-25 10:01:22Z gcosmo $
+// $Id$
 //
 // G4VRML2FileViewer.cc
 // Satoshi Tanaka & Yasuhide Sawada

@@ -27,7 +27,7 @@
 /// \brief Definition of the F03EventAction class
 //
 //
-// $Id: F03EventAction.hh 92498 2015-09-02 07:24:12Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

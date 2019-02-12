@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeTrajectory.cc 72349 2013-07-16 12:13:16Z gcosmo $
+// $Id$
 //
 /// \file optical/LXe/src/LXeTrajectory.cc
 /// \brief Implementation of the LXeTrajectory class

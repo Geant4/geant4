@@ -32,7 +32,7 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: PurgMagAnalysisManager.hh 84477 2014-10-16 08:44:04Z gcosmo $
+// $Id$
 //
 
 #ifndef G4PROCESSTESTANALYSIS_HH

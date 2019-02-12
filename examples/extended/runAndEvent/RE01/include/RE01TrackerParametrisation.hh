@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01TrackerParametrisation.hh
 /// \brief Definition of the RE01TrackerParametrisation class
 //
-// $Id: RE01TrackerParametrisation.hh 73442 2013-08-27 11:26:43Z gcosmo $
+// $Id$
 //
 
 #ifndef RE01TrackerParametrisation_H

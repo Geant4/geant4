@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.cc 86527 2014-11-13 15:06:24Z gcosmo $
+// $Id$
 //
 // 
 // class G4TouchableHistory Implementation

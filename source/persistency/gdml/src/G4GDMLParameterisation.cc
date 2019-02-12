@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLParameterisation.cc 77556 2013-11-26 08:56:14Z gcosmo $
+// $Id$
 //
 // class G4GDMLParameterisation Implementation
 //

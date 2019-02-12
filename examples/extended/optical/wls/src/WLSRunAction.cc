@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSRunAction.cc 70603 2013-06-03 11:23:16Z gcosmo $
+// $Id$
 //
 /// \file optical/wls/src/WLSRunAction.cc
 /// \brief Implementation of the WLSRunAction class

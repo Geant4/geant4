@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/monopole.cc
 /// \brief Main program of the exoticphysics/monopole example
 //
-// $Id: monopole.cc 107526 2017-11-21 07:17:43Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

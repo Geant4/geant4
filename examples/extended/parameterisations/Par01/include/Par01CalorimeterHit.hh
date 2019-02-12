@@ -27,7 +27,7 @@
 /// \brief Definition of the Par01CalorimeterHit class
 //
 //
-// $Id: Par01CalorimeterHit.hh 100936 2016-11-03 11:07:41Z gcosmo $
+// $Id$
 //
 
 #ifndef Par01CalorimeterHit_h

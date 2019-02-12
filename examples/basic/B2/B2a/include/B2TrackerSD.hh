@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B2TrackerSD.hh 69706 2013-05-13 09:12:40Z gcosmo $
+// $Id$
 //
 /// \file B2TrackerSD.hh
 /// \brief Definition of the B2TrackerSD class

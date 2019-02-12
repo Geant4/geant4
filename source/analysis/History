@@ -1,4 +1,4 @@
-$Id: History 108469 2018-02-15 14:07:01Z gcosmo $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,20 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 25, 2018 I. Hrivnacova (analysis-V10-03-19)
+- Updated to g4tools 4.2.3 (Guy Barrand):
+  Fixed remaining gcc-8.1.0 warnings.
+  See History_tools for the complete list of modifications.
+
+May 23, 2018 I. Hrivnacova
+- Updated to g4tools 4.2.2 (Guy Barrand):
+  Fixed gcc-8.1.0 warnings.
+  See History_tools for the complete list of modifications.
+
+February 15, 2018 J. Madsen
+- Fixed a deadlock issue with G4RootPNtupleManager where the mutex
+  was locked before being passed to ROOT
+  
 December 21, 2017 G. Cosmo (analysis-V10-03-18)
 - Fixed self-consistency in headers (missing #include) in G4BaseAnalysisManager,
   and G4PlotManager.

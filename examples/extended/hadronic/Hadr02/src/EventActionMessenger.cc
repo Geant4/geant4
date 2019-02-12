@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/EventActionMessenger.cc
 /// \brief Implementation of the EventActionMessenger class
 //
-// $Id: EventActionMessenger.cc 81932 2014-06-06 15:39:45Z gcosmo $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //

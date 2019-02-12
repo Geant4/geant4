@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExErrorDetectorConstruction.cc 84599 2014-10-17 07:42:42Z gcosmo $
+// $Id$
 //
 /// \file ExErrorDetectorConstruction.cc
 /// \brief Implementation of the ExErrorDetectorConstruction class

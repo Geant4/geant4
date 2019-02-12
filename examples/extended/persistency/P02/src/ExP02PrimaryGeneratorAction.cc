@@ -26,7 +26,7 @@
 /// \file persistency/P02/src/ExP02PrimaryGeneratorAction.cc
 /// \brief Implementation of the ExP02PrimaryGeneratorAction class
 //
-// $Id: ExP02PrimaryGeneratorAction.cc 71727 2013-06-21 07:55:45Z gcosmo $
+// $Id$
 //
 #include "ExP02PrimaryGeneratorAction.hh"
 

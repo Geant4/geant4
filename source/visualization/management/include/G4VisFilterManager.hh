@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisFilterManager.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id$
 //
 // Filter manager. Manages filter models, factories, messengers, 
 // command placement, filter mode etc

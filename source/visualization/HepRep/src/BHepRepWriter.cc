@@ -9,7 +9,7 @@
                         
 /**
  * @author Mark Donszelmann
- * @version $Id: BHepRepWriter.cc 66870 2013-01-14 23:38:59Z adotti $
+ * @version $Id$
  */
 namespace cheprep {
 

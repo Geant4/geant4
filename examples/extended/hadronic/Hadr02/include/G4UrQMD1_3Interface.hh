@@ -32,7 +32,7 @@
 /// \file hadronic/Hadr02/include/G4UrQMD1_3Interface.hh
 /// \brief Definition of the G4UrQMD1_3Interface class
 //
-// $Id: G4UrQMD1_3Interface.hh 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id$
 //
 
 #ifndef G4UrQMD1_3Interface_hh

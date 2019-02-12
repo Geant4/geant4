@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPrimaryGenerator.hh 86965 2014-11-21 11:48:22Z gcosmo $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4AdjointPrimaryGenerator

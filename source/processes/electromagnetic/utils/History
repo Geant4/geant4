@@ -1,4 +1,4 @@
-$Id: History 108506 2018-02-15 15:50:39Z gcosmo $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 January 19: V.Ivant (emutils-V10-03-33)
+
+25 July 18: V.Ivanchenko
+- G4EmElementSelector - optimisation of for compound materials
 
 14 December 17: V.Ivant (emutils-V10-03-32)
 - G4EmParametersMessenger - use G4Exception for warnings instead 

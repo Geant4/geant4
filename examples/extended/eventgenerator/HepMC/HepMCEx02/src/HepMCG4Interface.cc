@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4Interface.cc
 /// \brief Implementation of the HepMCG4Interface class
 //
-// $Id: HepMCG4Interface.cc 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #include "HepMCG4Interface.hh"

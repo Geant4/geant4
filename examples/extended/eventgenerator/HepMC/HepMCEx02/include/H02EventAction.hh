@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx02/include/H02EventAction.hh
 /// \brief Definition of the H02EventAction class
 //
-//   $Id: H02EventAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
+//   $Id$
 //
 #ifndef H02_EVENT_ACTION_H
 #define H02_EVENT_ACTION_H

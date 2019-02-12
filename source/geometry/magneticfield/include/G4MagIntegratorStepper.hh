@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MagIntegratorStepper.hh 107059 2017-11-01 14:58:16Z gcosmo $
+// $Id$
 //
 //
 // class G4MagIntegratorStepper

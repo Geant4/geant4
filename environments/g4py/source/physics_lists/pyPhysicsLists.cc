@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyPhysicsLists.cc 101514 2016-11-18 15:30:57Z gcosmo $
+// $Id$
 // ====================================================================
 //   pyPhysicsLists.cc
 //

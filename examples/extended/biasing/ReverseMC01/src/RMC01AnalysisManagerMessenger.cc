@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/src/RMC01AnalysisManagerMessenger.cc
 /// \brief Implementation of the RMC01AnalysisManagerMessenger class
 //
-// $Id: RMC01AnalysisManagerMessenger.cc 71233 2013-06-12 13:16:05Z gcosmo $
+// $Id$
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01AnalysisManagerMessenger

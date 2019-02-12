@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04TrackingAction.hh 68021 2013-03-13 13:36:07Z gcosmo $
+// $Id$
 //
 /// \file field/field04/include/F04TrackingAction.hh
 /// \brief Definition of the F04TrackingAction class

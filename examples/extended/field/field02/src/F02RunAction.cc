@@ -27,7 +27,7 @@
 /// \brief Implementation of the F02RunAction class
 //
 //
-// $Id: F02RunAction.cc 92497 2015-09-02 07:23:12Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

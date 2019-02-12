@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCHe3.cc 90337 2015-05-26 08:34:27Z gcosmo $
+// $Id$
 //
 // by V. Lara
 //

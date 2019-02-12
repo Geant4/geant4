@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorMessenger.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 

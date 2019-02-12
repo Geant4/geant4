@@ -27,7 +27,7 @@
 /// \brief Implementation of the G03DetectorConstruction class
 //
 //
-// $Id: G03DetectorConstruction.cc 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id$
 //
 // Class G03DetectorConstruction implementation
 //

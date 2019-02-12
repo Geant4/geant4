@@ -27,7 +27,7 @@
 /// \brief Implementation of the SteppingAction class
 //
 //
-// $Id: SteppingAction.cc 98767 2016-08-09 14:18:40Z gcosmo $
+// $Id$
 //
 // 
 

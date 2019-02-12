@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/G4MonopoleFieldSetup.hh
 /// \brief Definition of the G4MonopoleFieldSetup class
 //
-// $Id: G4MonopoleFieldSetup.hh 104872 2017-06-23 14:19:16Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

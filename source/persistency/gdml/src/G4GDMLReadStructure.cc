@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc 110108 2018-05-15 11:46:54Z gcosmo $
+// $Id: G4GDMLReadStructure.cc 110678 2018-06-07 14:46:51Z gcosmo $
 //
 // class G4GDMLReadStructure Implementation
 //
@@ -902,4 +902,5 @@ void G4GDMLReadStructure::Clear()
 {
   eval.Clear();
   setuptoPV.clear();
+  auxMap.clear();
 }

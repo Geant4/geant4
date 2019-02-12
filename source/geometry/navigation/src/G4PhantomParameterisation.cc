@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.cc 101807 2016-11-30 13:42:28Z gunter $
+// $Id$
 // GEANT4 tag $ Name:$
 //
 // class G4PhantomParameterisation implementation

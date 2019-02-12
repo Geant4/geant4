@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventor.hh 91687 2015-07-31 09:44:16Z gcosmo $
+// $Id$
 //
 // Guy Barrand 26 Mar 1998.
 // OpenInventor graphics system factory.

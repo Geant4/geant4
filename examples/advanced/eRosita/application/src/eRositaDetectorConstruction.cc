@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaDetectorConstruction.cc 107396 2017-11-10 08:28:08Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/src/RMC01DetectorConstruction.cc
 /// \brief Implementation of the RMC01DetectorConstruction class
 //
-// $Id: RMC01DetectorConstruction.cc 71233 2013-06-12 13:16:05Z gcosmo $
+// $Id$
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01DetectorConstruction

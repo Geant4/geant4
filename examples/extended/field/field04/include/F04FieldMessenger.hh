@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04FieldMessenger.hh 78551 2014-01-07 09:45:08Z gcosmo $
+// $Id$
 //
 /// \file field/field04/include/F04FieldMessenger.hh
 /// \brief Definition of the F04FieldMessenger class

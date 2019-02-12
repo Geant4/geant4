@@ -27,7 +27,7 @@
 /// \brief Implementation of the G4BlineSteppingAction class
 //
 //
-// $Id: G4BlineSteppingAction.cc 68021 2013-03-13 13:36:07Z gcosmo $
+// $Id$
 //
 //
 // --------------------------------------------------------------------

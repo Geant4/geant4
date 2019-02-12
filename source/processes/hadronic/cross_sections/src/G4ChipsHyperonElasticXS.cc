@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChipsHyperonElasticXS.cc 93260 2015-10-14 08:37:04Z gcosmo $
+// $Id$
 //
 //
 // G4 Physics class: G4ChipsHyperonElasticXS for pA elastic cross sections

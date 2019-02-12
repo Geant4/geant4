@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsTouchableSet.cc 104163 2017-05-15 06:52:42Z gcosmo $
+// $Id$
 
 // /vis/touchable/set commands - John Allison  8th October 2012
 

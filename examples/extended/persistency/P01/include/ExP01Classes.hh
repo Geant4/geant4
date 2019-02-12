@@ -26,7 +26,7 @@
 /// \file persistency/P01/include/ExP01Classes.hh
 /// \brief Declaration of the classes for generating dictionaries
 //
-// $Id: ExP01Classes.hh 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id$
 //
 #include "ExP01TrackerHit.hh"
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.hh 73434 2013-08-27 11:06:16Z gcosmo $
+// $Id$
 //
 // class G4VPVParamterisation
 //

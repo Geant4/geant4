@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc 68726 2013-04-05 09:35:20Z gcosmo $
+// $Id$
 //
 /// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class

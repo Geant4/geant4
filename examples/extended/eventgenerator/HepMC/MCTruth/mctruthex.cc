@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/MCTruth/mctruthex.cc
 /// \brief Main program of the eventgenerator/HepMC/MCTruth example
 //
-// $Id: mctruthex.cc 82281 2014-06-13 14:47:16Z gcosmo $
+// $Id$
 //
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"

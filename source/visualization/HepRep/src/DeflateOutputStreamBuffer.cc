@@ -4,7 +4,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DeflateOutputStreamBuffer.cc 68043 2013-03-13 14:27:49Z gcosmo $
+ * @version $Id$
  */
 namespace cheprep {
 

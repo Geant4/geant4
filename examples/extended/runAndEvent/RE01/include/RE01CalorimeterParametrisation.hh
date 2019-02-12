@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01CalorimeterParametrisation.hh
 /// \brief Definition of the RE01CalorimeterParametrisation class
 //
-// $Id: RE01CalorimeterParametrisation.hh 73442 2013-08-27 11:26:43Z gcosmo $
+// $Id$
 //
 
 #ifndef RE01CalorimeterParametrisation_H

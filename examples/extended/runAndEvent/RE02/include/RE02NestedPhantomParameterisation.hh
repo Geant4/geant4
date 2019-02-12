@@ -27,7 +27,7 @@
 /// \brief Definition of the RE02NestedPhantomParameterisation class
 //
 //
-// $Id: RE02NestedPhantomParameterisation.hh 73475 2013-08-28 15:23:19Z gcosmo $
+// $Id$
 //
 #ifndef RE02NESTEDPARAMETERISATION_HH
 #define RE02NESTEDPARAMETERISATION_HH

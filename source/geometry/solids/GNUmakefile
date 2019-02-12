@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 85530 2014-10-30 16:17:43Z gcosmo $
+# $Id$
 # --------------------------------------------------------------
 # Makes libraries for each subdomain: 
 #         CSG, specific, Boolean.

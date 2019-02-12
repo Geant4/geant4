@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeDecreaseModel.cc 96060 2016-03-11 12:58:04Z gcosmo $
+// $Id$
 //
 
 #include "G4DNADingfelderChargeDecreaseModel.hh"

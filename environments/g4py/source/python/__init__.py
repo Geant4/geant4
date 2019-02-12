@@ -7,7 +7,7 @@
 #  This package contains a set of Python interface with Geant4.
 # ==================================================================
 """
-# $Id: __init__.py 107590 2017-11-24 11:59:22Z gcosmo $
+# $Id$
 __version__ ='10.4'
 __date__ = 'December/2017'
 __author__ = 'K.Murakami (Koichi.Murakami@kek.jp)'

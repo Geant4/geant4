@@ -1,4 +1,4 @@
-// $Id: Doxymodules_common.h 88001 2015-01-23 11:32:10Z gcosmo $
+// $Id$
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_common.h

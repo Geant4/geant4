@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04PrimaryGeneratorMessenger.hh
 /// \brief Definition of the ExN04PrimaryGeneratorMessenger class
 //
-// $Id: ExN04PrimaryGeneratorMessenger.hh 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #ifndef EXN04_PRIMARY_GENERATOR_MESSENGER_H

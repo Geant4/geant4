@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXePhysicsList.cc 68752 2013-04-05 10:23:47Z gcosmo $
+// $Id$
 //
 /// \file optical/LXe/src/LXePhysicsList.cc
 /// \brief Implementation of the LXePhysicsList class

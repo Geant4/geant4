@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-04-patch-03    (8-February-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -576,7 +572,7 @@ Launched 100000 random primary particles
 *********************************************
 n. of events collected in the whole ROG phantom for all geometries: 1934
 n. of events collected in the whole ROG phantom for the current geometry: 1934
-loop elapsed time [s] : 41.24
+loop elapsed time [s] : 24.8
 
 ################ END NEW GEOMETRY ########################
 
@@ -635,8 +631,8 @@ Launched 100000 random primary particles
 *********************************************
 n. of events collected in the whole ROG phantom for all geometries: 3044
 n. of events collected in the whole ROG phantom for the current geometry: 1110
-loop elapsed time [s] : 37.85
+loop elapsed time [s] : 24.85
 
 ################ END NEW GEOMETRY ########################
-loop elapsed time [s] : 82.67
+loop elapsed time [s] : 52.27
 

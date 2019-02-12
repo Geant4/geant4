@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmSeparator.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id$
 //
 // 
 //Separator class. Inherits from G4OpenGLXmVWidgetComponent

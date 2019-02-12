@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: field03.cc 98065 2016-07-01 16:30:19Z gcosmo $
+// $Id$
 //
 /// \file field/field03/field03.cc
 /// \brief Main program of the field/field03 example

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4cCalorHit.cc 69586 2013-05-08 14:20:11Z gcosmo $
+// $Id$
 //
 /// \file B4cCalorHit.cc
 /// \brief Implementation of the B4cCalorHit class

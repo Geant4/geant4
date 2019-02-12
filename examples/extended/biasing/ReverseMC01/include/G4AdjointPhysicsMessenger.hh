@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/include/G4AdjointPhysicsMessenger.hh
 /// \brief Definition of the G4AdjointPhysicsMessenger class
 //
-// $Id: G4AdjointPhysicsMessenger.hh 71233 2013-06-12 13:16:05Z gcosmo $
+// $Id$
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:        G4AdjointPhysicsMessenger

@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04MuonHit.hh
 /// \brief Definition of the ExN04MuonHit class
 //
-// $Id: ExN04MuonHit.hh 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #ifndef ExN04MuonHit_h

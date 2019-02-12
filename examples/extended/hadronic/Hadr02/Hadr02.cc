@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/Hadr02.cc
 /// \brief Main program of the hadronic/Hadr02 example
 //
-// $Id: Hadr02.cc 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id$
 //
 // -------------------------------------------------------------
 //      GEANT4 Hadr02

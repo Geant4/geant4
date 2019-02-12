@@ -26,7 +26,7 @@
 /// \file materials/src/G4LatticeLogical.cc
 /// \brief Implementation of the G4LatticeLogical class
 //
-// $Id: G4LatticeLogical.cc 76764 2013-11-15 09:37:24Z gcosmo $
+// $Id$
 //
 #include "G4LatticeLogical.hh"
 #include "G4SystemOfUnits.hh"

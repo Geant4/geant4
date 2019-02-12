@@ -1,4 +1,4 @@
-$Id: History 110081 2018-05-15 10:13:55Z gcosmo $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26th June 2018 Koichi Murakami (interfaces-V10-03-04)
+- G4UIGainServer.cc, G4InteractorMessenger.cc :
+  suppress compilation warning for -Wunused-result
+
+15th June 2018 Fred Jones
+- G4Xt: fixed compilation warnings for casts on gcc-8.1.
 
 14th May 2018 Garnier Laurent (interfaces-V10-03-03)
 - G4UIQt.cc:

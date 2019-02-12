@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporation.hh 102025 2016-12-16 14:43:41Z gcosmo $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations interface
 //

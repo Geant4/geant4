@@ -44,28 +44,34 @@
 
 class G4ParticleHPFSFissionFS : public G4ParticleHPFinalState
 {
-   struct toBeCached {
-      const G4ReactionProduct* theNeutronRP;
-      const G4ReactionProduct* theTarget;
-      toBeCached() : theNeutronRP(NULL),theTarget(NULL){};
-   };
-
-  public:
-  
-  G4ParticleHPFSFissionFS(){ hasXsec = true; }
-  ~G4ParticleHPFSFissionFS(){}
-  
-  void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G4ParticleDefinition*);
-  
-  G4DynamicParticleVector * ApplyYourself(G4int Prompt, G4int delayed, G4double *decayconst);
-  
-  G4ParticleHPFinalState * New() 
+  struct toBeCached
   {
-   G4ParticleHPFSFissionFS * theNew = new G4ParticleHPFSFissionFS;
-   return theNew;
+    const G4ReactionProduct* theNeutronRP;
+    const G4ReactionProduct* theTarget;
+    toBeCached() : theNeutronRP(0),theTarget(0) {}
+  };
+
+public:
+  
+  G4ParticleHPFSFissionFS() { hasXsec = true; }
+  ~G4ParticleHPFSFissionFS() {}
+  
+  void Init (G4double A, G4double Z, G4int M,
+             G4String & dirName, G4String & aFSType, G4ParticleDefinition*);
+  
+  G4DynamicParticleVector * ApplyYourself(G4int Prompt, G4int delayed,
+                                          G4double *decayconst);
+  
+  G4ParticleHPFinalState* New()
+  {
+    G4ParticleHPFSFissionFS * theNew = new G4ParticleHPFSFissionFS;
+    return theNew;
   }
   
-  inline G4double GetMass(){ return theFinalStateNeutrons.GetTargetMass(); }
+  inline G4double GetMass()
+  {
+    return theFinalStateNeutrons.GetTargetMass();
+  }
   
   void SampleNeutronMult(G4int&all, 
 	  		 G4int&Prompt, 
@@ -74,16 +80,16 @@ class G4ParticleHPFSFissionFS : public G4ParticleHPFinalState
 			 G4int off);
 						 
   inline void SetNeutronRP(const G4ReactionProduct & aNeutron)
-                        { 
-                          fCache.Get().theNeutronRP = &aNeutron; 
-                          theNeutronAngularDis.SetProjectileRP(aNeutron);
-                        }
+  { 
+    fCache.Get().theNeutronRP = &aNeutron; 
+    theNeutronAngularDis.SetProjectileRP(aNeutron);
+  }
   
   inline void SetTarget(const G4ReactionProduct & aTarget)
-                        { 
-                          fCache.Get().theTarget = &aTarget; 
-                          theNeutronAngularDis.SetTarget(aTarget);
-                        }
+  { 
+    fCache.Get().theTarget = &aTarget; 
+    theNeutronAngularDis.SetTarget(aTarget);
+  }
     
   G4DynamicParticleVector * GetPhotons();
   
@@ -92,10 +98,9 @@ class G4ParticleHPFSFissionFS : public G4ParticleHPFinalState
     return &theEnergyRelease;
   }
   
-  private:
+private:
 
   G4HadFinalState * ApplyYourself(const G4HadProjectile & ) { return 0; }  
-  //G4double targetMass;
   
   G4ParticleHPParticleYield theFinalStateNeutrons;
   G4ParticleHPEnergyDistribution thePromptNeutronEnDis;
@@ -105,14 +110,8 @@ class G4ParticleHPFSFissionFS : public G4ParticleHPFinalState
   G4ParticleHPPhotonDist theFinalStatePhotons;
   G4ParticleHPFissionERelease theEnergyRelease;
   
-  //G4ReactionProduct theNeutronRP;
-  //G4ReactionProduct theTarget;
-   private:
-      G4Cache<toBeCached> fCache;
-  
-  private:
-  
-  G4ParticleHPNames theNames;
-  
+  G4Cache<toBeCached> fCache;
+  G4ParticleHPNames theNames;  
 };
+
 #endif

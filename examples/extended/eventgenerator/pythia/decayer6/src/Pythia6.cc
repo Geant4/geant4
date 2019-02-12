@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Pythia6.cc 98526 2016-07-21 11:15:24Z ihrivnac $
+// $Id$
 //
 /// \file eventgenerator/pythia/decayer6/src/Pythia6.cc
 /// \brief Implementation of the Pythia6 class

@@ -27,7 +27,7 @@
 /// \brief Implementation of the PerspectiveVisActionMessenger class
 //
 //
-// $Id: PerspectiveVisActionMessenger.cc 69587 2013-05-08 14:26:03Z gcosmo $
+// $Id$
 
 #include "PerspectiveVisActionMessenger.hh"
 

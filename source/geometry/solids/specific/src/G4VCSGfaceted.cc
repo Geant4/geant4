@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc 92024 2015-08-13 14:16:00Z gcosmo $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------

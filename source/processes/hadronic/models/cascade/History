@@ -15,6 +15,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+ 6 July 2018  Vladimir Ivanchenko (hadr-casc-V10-03-08)
+------------------------------------------------------
+- G4GDecay3 - fixed problem reported by CMS due to wrong kinematics
+    in the final state by removing loop check; adding protection
+    for low value of mother mass
+
 27 February 2018  Alberto Ribon (hadr-casc-V10-03-07)
 -----------------------------------------------------
 -  G4NucleiModel : replaced obsolete std::bind2nd with std::bind .

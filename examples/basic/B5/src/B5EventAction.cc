@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5EventAction.cc 108624 2018-02-26 11:48:31Z gcosmo $
+// $Id$
 //
 /// \file B5EventAction.cc
 /// \brief Implementation of the B5EventAction class

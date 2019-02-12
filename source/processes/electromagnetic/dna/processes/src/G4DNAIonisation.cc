@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAIonisation.cc 105719 2017-08-16 12:36:37Z gcosmo $
+// $Id$
 
 #include "G4DNAIonisation.hh"
 #include "G4LEPTSIonisationModel.hh"

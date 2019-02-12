@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GFlashHomoShowerParameterisation.cc 69579 2013-05-08 13:53:57Z gcosmo $
+// $Id$
 //
 //
 // ------------------------------------------------------------

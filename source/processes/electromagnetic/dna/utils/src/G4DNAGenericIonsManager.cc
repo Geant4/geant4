@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAGenericIonsManager.cc 87449 2014-12-04 14:13:06Z gunter $
+// $Id$
 
 #include "G4DNAGenericIonsManager.hh"
 #include "G4PhysicalConstants.hh"

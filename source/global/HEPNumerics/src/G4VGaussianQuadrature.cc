@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGaussianQuadrature.cc 69546 2013-05-08 09:50:34Z gcosmo $
+// $Id$
 //
 // Implementation file for G4VGaussianQuadrature virtual base class
 //

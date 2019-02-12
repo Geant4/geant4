@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/MyKleinNishinaCompton.cc
 /// \brief Implementation of the MyKleinNishinaCompton class
 //
-// $Id: MyKleinNishinaCompton.cc 98764 2016-08-09 14:12:17Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

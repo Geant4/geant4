@@ -26,7 +26,7 @@
 /// \file exoticphysics/phonon/include/XPhysicsList.hh
 /// \brief Definition of the XPhysicsList class
 //
-// $Id: XPhysicsList.hh 76938 2013-11-19 09:51:36Z gcosmo $
+// $Id$
 //
 // 20131117  Add verbosity argument, to set verbosity from main program
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F05DetectorConstruction.hh 75672 2013-11-05 08:47:41Z gcosmo $
+// $Id$
 //
 /// \file field/field05/include/F05DetectorConstruction.hh
 /// \brief Definition of the F05DetectorConstruction class

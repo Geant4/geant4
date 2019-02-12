@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMolecularDissociationDisplacer.cc 101423 2016-11-17 10:42:09Z gcosmo $
+// $Id$
 //
 #include "G4VMolecularDissociationDisplacer.hh"
 #include "G4Molecule.hh"

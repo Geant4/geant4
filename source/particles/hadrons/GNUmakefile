@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
+# $Id$
 # ---------------------------------------------------------------
 # Makes libraries for each subdomain: barions, ions, mesons.
 # GNUmakefile for particles libraries.  Gabriele Cosmo, 18/9/96.

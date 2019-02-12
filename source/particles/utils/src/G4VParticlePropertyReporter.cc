@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticlePropertyReporter.cc 91885 2015-08-10 07:05:56Z gcosmo $
+// $Id$
 //
 // 
 // ---------------------------------------------------------------

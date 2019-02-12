@@ -29,7 +29,7 @@
 // ====================================================================
 //
 //   H02PrimaryGeneratorAction.hh
-//   $Id: H02PrimaryGeneratorAction.hh 77801 2013-11-28 13:33:20Z gcosmo $
+//   $Id$
 //
 // ====================================================================
 #ifndef H02_PRIMARY_GENERATOR_ACTION_H

@@ -27,7 +27,7 @@
 /// \brief Main program of the persistency/gdml/G02 example
 //
 //
-// $Id: geotest.cc 103277 2017-03-23 14:05:55Z gcosmo $
+// $Id$
 //
 //
 // --------------------------------------------------------------

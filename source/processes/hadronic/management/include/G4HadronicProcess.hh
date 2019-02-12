@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.hh 104121 2017-05-11 13:49:37Z gcosmo $
+// $Id$
 //
 // -------------------------------------------------------------------
 //
@@ -54,8 +54,6 @@
 #include "G4Nucleus.hh" 
 #include "G4ReactionProduct.hh"
 #include <vector>
-#include "G4VCrossSectionDataSet.hh"
-#include "G4VLeadingParticleBiasing.hh"
 
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronicProcessType.hh"
@@ -65,6 +63,8 @@ class G4Step;
 class G4Element;
 class G4ParticleChange;
 class G4HadronicProcessStore;
+class G4VCrossSectionDataSet;
+class G4VLeadingParticleBiasing;
 
 class G4HadronicProcess : public G4VDiscreteProcess
 {

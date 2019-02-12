@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.hh 93818 2015-11-02 11:34:19Z gcosmo $
+// $Id$
 //
 // 20110805  M. Kelsey -- Change nucleon vector to use objects, not pointers
 

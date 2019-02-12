@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisVerbose.cc 72292 2013-07-15 12:01:43Z ihrivnac $
+// $Id$
 
 // Author: Ivana Hrivnacova, 17/10/2011  (ivana@ipno.in2p3.fr)
 

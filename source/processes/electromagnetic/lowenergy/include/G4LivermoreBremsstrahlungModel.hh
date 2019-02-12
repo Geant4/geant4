@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreBremsstrahlungModel.hh 74822 2013-10-22 14:42:13Z gcosmo $
+// $Id$
 //
 // -------------------------------------------------------------------
 //

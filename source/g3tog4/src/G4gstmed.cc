@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gstmed.cc 67982 2013-03-13 10:36:03Z gcosmo $
+// $Id$
 //
 // The last G4int argument of G4gstmed(..) is used for sending
 // info whether the Geant3 tracking medium parameters should

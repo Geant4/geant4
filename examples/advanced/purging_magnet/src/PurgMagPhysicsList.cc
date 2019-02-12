@@ -33,7 +33,7 @@
 //    ********************************
 //
 //
-// $Id: PurgMagPhysicsList.cc 100654 2016-10-31 10:14:05Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

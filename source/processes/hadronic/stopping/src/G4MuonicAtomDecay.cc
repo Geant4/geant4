@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonicAtomDecay.cc 94351 2015-11-12 15:35:32Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -384,7 +383,7 @@ G4VParticleChange* G4MuonicAtomDecay::DecayIt(const G4Track& aTrack,
         result = cmptr->ApplyYourself(theMuPro, nucleus); // muon and muonic atom nucleus
         ++reentryCount;
       }
-      catch(G4HadronicException aR) {
+      catch(G4HadronicException & aR) {
         G4ExceptionDescription ed;
         ed << "Call for " << cmptr->GetModelName() << G4endl;
         ed << "  Z= "

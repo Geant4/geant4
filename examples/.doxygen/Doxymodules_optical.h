@@ -1,4 +1,4 @@
-// $Id: Doxymodules_optical.h 104750 2017-06-15 08:47:26Z gcosmo $
+// $Id$
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_optical.h

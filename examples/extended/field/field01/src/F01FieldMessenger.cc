@@ -27,7 +27,7 @@
 /// \brief Implementation of the F01FieldMessenger class
 //
 //
-// $Id: F01FieldMessenger.cc 76248 2013-11-08 11:19:52Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

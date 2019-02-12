@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc 99418 2016-09-21 09:18:42Z gcosmo $
+// $Id$
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 

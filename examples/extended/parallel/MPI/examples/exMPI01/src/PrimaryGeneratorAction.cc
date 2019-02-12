@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc 98250 2016-07-04 17:27:47Z gcosmo $
+// $Id$
 //
 /// @file PrimaryGeneratorAction.cc
 /// @brief Define primary generator action

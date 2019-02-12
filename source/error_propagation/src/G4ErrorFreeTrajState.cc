@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorFreeTrajState.cc 107409 2017-11-10 13:36:41Z gcosmo $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 

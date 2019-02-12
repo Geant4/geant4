@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VKineticNucleon.hh 80499 2014-04-24 13:54:26Z gcosmo $
+// $Id$
 //
 #ifndef G4VKineticNucleon_h
 #define G4VKineticNucleon_h 1

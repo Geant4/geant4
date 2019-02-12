@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExTGTrackerSD.cc 76943 2013-11-19 09:57:34Z gcosmo $
+// $Id$
 //
 /// \file persistency/P03/src/ExTGTrackerSD.cc
 /// \brief Implementation of the ExTGTrackerSD class

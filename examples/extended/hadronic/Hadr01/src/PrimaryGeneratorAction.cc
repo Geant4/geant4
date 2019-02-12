@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.cc 70761 2013-06-05 12:30:51Z gcosmo $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //

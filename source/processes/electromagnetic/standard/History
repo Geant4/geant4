@@ -1,4 +1,4 @@
-$Id: History 108504 2018-02-15 15:46:37Z gcosmo $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+25 January 19: V.Ivanchenko (emstand-V10-03-53)
+
+28 May 18: M. Novak
+- G4GoudsmitSaundersonTable - fix gcc-8 warnings
 
 09 December 17: V.Ivanchenko (emstand-V10-03-52)
 - G4PairProductionRelModel - fixed misuse of G4Pow (A13(..) should

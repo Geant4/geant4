@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE02EventAction class
 //
 //
-// $Id: RE02EventAction.cc 110134 2018-05-16 06:51:34Z gcosmo $
+// $Id$
 //
  
 #include "RE02EventAction.hh"

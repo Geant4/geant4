@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh 96490 2016-04-19 06:57:04Z gcosmo $
+// $Id$
 //
 // Hadronic Interaction  abstract base class
 // This class is the base class for the model classes.

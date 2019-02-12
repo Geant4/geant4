@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FSALIntegrationDriver.hh 107164 2017-11-03 12:11:45Z gcosmo $
+// $Id$
 //
 //
 // class G4FSALIntegrationDriver

@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/include/MyMollerBhabhaModel.hh
 /// \brief Definition of the MyMollerBhabhaModel class
 //
-// $Id: MyMollerBhabhaModel.hh 68763 2013-04-05 12:36:20Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

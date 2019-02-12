@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/PhysListEmStandardNR.cc
 /// \brief Implementation of the PhysListEmStandardNR class
 //
-// $Id: PhysListEmStandardNR.cc 100284 2016-10-17 08:41:43Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -27,7 +27,7 @@
 /// \brief Definition of the F02SteppingVerbose class
 //
 //
-// $Id: F02SteppingVerbose.hh 76247 2013-11-08 11:18:52Z gcosmo $
+// $Id$
 //
 //
 //---------------------------------------------------------------

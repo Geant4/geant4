@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4AtomicShells.cc 101514 2016-11-18 15:30:57Z gcosmo $
+// $Id$
 // ====================================================================
 //   pyG4AtomicShells.cc
 //

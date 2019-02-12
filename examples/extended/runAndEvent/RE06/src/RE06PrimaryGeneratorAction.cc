@@ -26,7 +26,7 @@
 /// \file RE06/src/RE06PrimaryGeneratorAction.cc
 /// \brief Implementation of the RE06PrimaryGeneratorAction class
 //
-// $Id: RE06PrimaryGeneratorAction.cc 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id$
 //
 
 #include "RE06PrimaryGeneratorAction.hh"

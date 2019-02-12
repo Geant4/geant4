@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: textGeom.cc 83430 2014-08-21 15:48:43Z gcosmo $
+// $Id$
 //
 /// \file persistency/P03/textGeom.cc
 /// \brief Main program of the persistency/P03 example

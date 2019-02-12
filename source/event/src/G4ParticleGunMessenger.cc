@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc 108473 2018-02-15 14:15:09Z gcosmo $
+// $Id$
 //
 
 #include "G4ParticleGunMessenger.hh"

@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx02/src/H02PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the H02PrimaryGeneratorMessenger class
 //
-//   $Id: H02PrimaryGeneratorMessenger.cc 77801 2013-11-28 13:33:20Z gcosmo $
+//   $Id$
 //
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"

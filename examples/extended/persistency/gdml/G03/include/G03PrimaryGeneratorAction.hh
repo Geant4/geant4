@@ -27,7 +27,7 @@
 /// \brief Definition of the G03PrimaryGeneratorAction class
 //
 //
-// $Id: G03PrimaryGeneratorAction.hh 69987 2013-05-21 12:33:52Z gcosmo $
+// $Id$
 //
 // Class G03PrimaryGeneratorAction
 //

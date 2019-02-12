@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 110061 2018-05-15 09:06:38Z gcosmo $
+# $Id$
 # -----------------------------------------------------------------------
 # GNUmakefile for Geant4 external packages
 # Gunter Folger 26-April-2011 

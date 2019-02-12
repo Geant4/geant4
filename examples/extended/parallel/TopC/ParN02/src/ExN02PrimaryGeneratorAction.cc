@@ -27,7 +27,7 @@
 /// \brief Implementation of the ExN02PrimaryGeneratorAction class
 //
 //
-// $Id: ExN02PrimaryGeneratorAction.cc 78055 2013-12-03 08:27:48Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

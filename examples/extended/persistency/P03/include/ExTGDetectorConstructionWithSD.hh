@@ -26,7 +26,7 @@
 /// \file persistency/P03/include/ExTGDetectorConstructionWithSD.hh
 /// \brief Definition of the ExTGDetectorConstructionWithSD class
 //
-// $Id: ExTGDetectorConstructionWithSD.hh 76481 2013-11-11 10:49:21Z gcosmo $
+// $Id$
 
 #ifndef ExTGDetectorConstructionWithSD_h
 #define ExTGDetectorConstructionWithSD_h 1

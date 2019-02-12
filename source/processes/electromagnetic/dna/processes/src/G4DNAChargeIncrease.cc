@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChargeIncrease.cc 91584 2015-07-27 13:01:48Z gcosmo $
+// $Id$
 
 #include "G4DNAChargeIncrease.hh"
 #include "G4SystemOfUnits.hh"

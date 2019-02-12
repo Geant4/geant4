@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.hh 89523 2015-04-16 09:56:35Z gcosmo $
+// $Id$
 //
 // by V. Lara
 // 01.05.2008 J. M. Quesada . New methods for accessing to individual transition 

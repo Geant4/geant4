@@ -27,7 +27,7 @@
 /// \brief Definition of the ExN04RunAction class
 //
 //
-// $Id: ExN04RunAction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

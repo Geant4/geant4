@@ -26,7 +26,7 @@
 /// \file RE06/include/RE06PrimaryGeneratorAction.hh
 /// \brief Definition of the RE06PrimaryGeneratorAction class
 //
-// $Id: RE06PrimaryGeneratorAction.hh 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id$
 //
 
 #ifndef RE06PrimaryGeneratorAction_h

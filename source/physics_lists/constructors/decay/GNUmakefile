@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 97907 2016-06-22 13:37:05Z gcosmo $
+# $Id$
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/constructors/decay library.  
 #  Gunter Folger 10-Jan-2012.

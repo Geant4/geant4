@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SceneHandlerList.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id$
 
 #include "G4SceneHandlerList.hh"
 

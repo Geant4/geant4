@@ -27,7 +27,7 @@
 /// \brief Implementation of the F03FieldMessenger class
 //
 //
-// $Id: F03FieldMessenger.cc 96980 2016-05-19 09:41:22Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

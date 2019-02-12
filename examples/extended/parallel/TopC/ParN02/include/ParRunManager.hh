@@ -26,7 +26,7 @@
 /// \file parallel/ParN02/include/ParRunManager.hh
 /// \brief Definition of the ParRunManager class
 //
-// $Id: ParRunManager.hh 78055 2013-12-03 08:27:48Z gcosmo $
+// $Id$
 //
 // --------------------------------------------------------------------
 //                   Parallel Library for Geant4

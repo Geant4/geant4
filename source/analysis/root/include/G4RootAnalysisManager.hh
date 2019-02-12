@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootAnalysisManager.hh 106985 2017-10-31 10:07:18Z gcosmo $
+// $Id$
 
 // The main manager for Root analysis.
 // It delegates most of functions to the object specific managers. 

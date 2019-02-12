@@ -27,7 +27,7 @@
 /// \brief Implementation of the RunAction class
 //
 //
-// $Id: RunAction.cc 98243 2016-07-04 16:58:38Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiFunctionalDetector.cc 94771 2015-12-09 09:44:05Z gcosmo $
+// $Id$
 //
 // G4MultiFunctionalDetector
 //

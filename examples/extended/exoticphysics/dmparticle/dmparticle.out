@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
+ Geant4 version Name: geant4-10-04-patch-03    (8-February-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -950,7 +946,7 @@ Event = 0 z0 = -779.999  Primary direction = (0,0,1)
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.12s Real=1.18s Sys=0s
+  User=0.76s Real=0.78s Sys=0s
 RunAction: End of run actions are started 1  Nevt=  100  Edep= 3973.71
  ====================================================
    Beam Particle: proton

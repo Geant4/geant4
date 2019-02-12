@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.hh 105754 2017-08-16 13:47:18Z gcosmo $
+// $Id$
 
 #ifndef G4ATTDEFSTORE_HH
 #define G4ATTDEFSTORE_HH

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronNuclearProcess.cc 105287 2017-07-19 08:45:40Z gcosmo $
+// $Id$
 //
 
 #include "G4ElectronNuclearProcess.hh" 

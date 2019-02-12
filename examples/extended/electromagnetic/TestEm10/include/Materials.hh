@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Materials.hh 94932 2015-12-18 09:21:29Z gcosmo $
+// $Id$
 //
 /// \file electromagnetic/TestEm10/include/Materials.hh
 /// \brief Definition of the Materials class

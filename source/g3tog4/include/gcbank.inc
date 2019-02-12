@@ -24,7 +24,7 @@
 *     ********************************************************************
 *    
 *    
-*     $Id: gcbank.inc 67982 2013-03-13 10:36:03Z gcosmo $
+*     $Id$
 *    
       INTEGER IQ,LQ,NZEBRA,IXSTOR,IXDIV,IXCONS,LMAIN,LR1,JCG
       INTEGER KWBANK,KWWORK,IWS

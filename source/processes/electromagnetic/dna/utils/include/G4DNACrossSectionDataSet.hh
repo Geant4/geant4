@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNACrossSectionDataSet.hh 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id$
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
 //

@@ -27,7 +27,7 @@
 /// \brief Definition of the F02PrimaryGeneratorAction class
 //
 //
-// $Id: F02PrimaryGeneratorAction.hh 77893 2013-11-29 08:57:22Z gcosmo $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

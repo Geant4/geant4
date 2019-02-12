@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSEnergyDeposit.cc 81087 2014-05-20 15:44:27Z gcosmo $
+// $Id$
 //
 // G4PSEnergyDeposit
 #include "G4PSEnergyDeposit.hh"

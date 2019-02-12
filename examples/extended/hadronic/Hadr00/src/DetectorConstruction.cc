@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 106244 2017-09-26 01:58:00Z gcosmo $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //

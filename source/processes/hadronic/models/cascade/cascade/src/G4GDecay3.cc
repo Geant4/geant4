@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
 // File:    G4GDecay3.cc
 // Author:  Dennis Wright (SLAC)
@@ -42,15 +41,14 @@
 
 G4GDecay3::G4GDecay3(const G4double& pMass, const G4double& dMass0,
                      const G4double& dMass1, const G4double& dMass2)
- : loopMax(100), parentMass(pMass), mDaughter0(dMass0), mDaughter1(dMass1),
-   mDaughter2(dMass2), pDaughter0(0.), pDaughter1(0.), pDaughter2(0.) {;}
-
+ : loopMax(100), mDaughter0(dMass0), mDaughter1(dMass1),
+   mDaughter2(dMass2), pDaughter0(0.), pDaughter1(0.), pDaughter2(0.) 
+{
+  parentMass = std::max(pMass, mDaughter0 + mDaughter1 + mDaughter2 + CLHEP::keV);
+}
 
 G4bool G4GDecay3::CalculateMomentumMagnitudes()
 {
-  G4int looper = 0;
-  G4bool status;
-
   G4double rndm;
   G4double rndm1;
   G4double rndm2;
@@ -89,11 +87,9 @@ G4bool G4GDecay3::CalculateMomentumMagnitudes()
     pDaughter2 = std::sqrt(energy*energy + 2.0*energy*mDaughter2);
     if (pDaughter2 > momentummax) momentummax = pDaughter2;
     momentumsum += pDaughter2;
-    looper++;
-    status = looper < loopMax;
-  } while ((momentummax > momentumsum - momentummax) && status);
+  } while (momentummax > momentumsum - momentummax);
 
-  return status;
+  return true;
 }
 
 

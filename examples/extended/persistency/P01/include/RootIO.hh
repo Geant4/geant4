@@ -26,7 +26,7 @@
 /// \file persistency/P01/include/RootIO.hh
 /// \brief Definition of the RootIO class
 //
-// $Id: RootIO.hh 71791 2013-06-24 14:08:28Z gcosmo $
+// $Id$
 #ifndef INCLUDE_ROOTIO_HH 
 #define INCLUDE_ROOTIO_HH 1
 

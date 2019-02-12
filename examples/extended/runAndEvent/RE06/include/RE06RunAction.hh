@@ -26,7 +26,7 @@
 /// \file RE06/include/RE06RunAction.hh
 /// \brief Definition of the RE06RunAction class
 //
-// $Id: RE06RunAction.hh 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id$
 //
 
 #ifndef RE06RunAction_h

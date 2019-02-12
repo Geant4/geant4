@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL.hh 101714 2016-11-22 08:53:13Z gcosmo $
+// $Id$
 //
 // G.Barrand.
 

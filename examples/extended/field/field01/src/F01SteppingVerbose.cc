@@ -27,7 +27,7 @@
 /// \brief Implementation of the F01SteppingVerbose class
 //
 //
-// $Id: F01SteppingVerbose.cc 77483 2013-11-25 10:10:57Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

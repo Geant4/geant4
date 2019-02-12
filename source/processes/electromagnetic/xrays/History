@@ -1,4 +1,4 @@
-$Id: History 108508 2018-02-15 15:54:35Z gcosmo $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 January 19: V.Ivanchenko (xrays-V10-03-02)
+
+20 September 18: D. Sawkey
+- G4Cerenkov, G4Scintillation - reset fNumPhotons to 0 correctly 
+  at each step (fixes bug 2056).
+
+3 August 18: D. Sawkey
+- G4Cerenkov - added protection against infinite loops due to very small
+  steps (fixes bug 1992). 
 
 12 February 18: V.Ivanchenko (xrays-V10-03-01)
 - G4VTransitionRadiation, G4TransitionRadiation, G4SynchrotronRadiationInMat,

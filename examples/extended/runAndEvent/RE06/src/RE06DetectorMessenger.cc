@@ -26,7 +26,7 @@
 /// \file RE06/src/RE06DetectorMessenger.cc
 /// \brief Implementation of the RE06DetectorMessenger class
 //
-// $Id: RE06DetectorMessenger.cc 68026 2013-03-13 13:45:22Z gcosmo $
+// $Id$
 //
 
 #include "RE06DetectorMessenger.hh"

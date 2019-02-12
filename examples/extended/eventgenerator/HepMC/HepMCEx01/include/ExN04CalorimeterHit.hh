@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04CalorimeterHit.hh
 /// \brief Definition of the ExN04CalorimeterHit class
 //
-// $Id: ExN04CalorimeterHit.hh 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #ifndef ExN04CalorimeterHit_h

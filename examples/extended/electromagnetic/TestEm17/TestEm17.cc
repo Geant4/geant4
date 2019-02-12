@@ -27,7 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm17 example
 //
 //
-// $Id: TestEm17.cc 99017 2016-08-31 08:24:29Z gcosmo $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

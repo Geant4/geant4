@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the ExN04PrimaryGeneratorMessenger class
 //
-// $Id: ExN04PrimaryGeneratorMessenger.cc 77801 2013-11-28 13:33:20Z gcosmo $
+// $Id$
 //
 
 #include "G4UIcommand.hh"

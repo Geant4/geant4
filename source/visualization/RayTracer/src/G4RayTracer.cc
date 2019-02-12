@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc 103626 2017-04-19 13:29:18Z gcosmo $
+// $Id$
 
 #include "G4RayTracer.hh"
 #include "G4RayTracerFeatures.hh"

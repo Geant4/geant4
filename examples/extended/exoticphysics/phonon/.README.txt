@@ -1,4 +1,4 @@
-//$Id: .README.txt 98745 2016-08-09 13:36:03Z gcosmo $
+//$Id$
 
 ///\file "exoticphysics/phonon/.README.txt"
 ///\brief Example phonon README page

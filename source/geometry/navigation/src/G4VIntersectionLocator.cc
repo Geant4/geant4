@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntersectionLocator.cc 105904 2017-08-28 07:36:13Z gcosmo $
+// $Id$
 //
 // Class G4VIntersectionLocator implementation
 //

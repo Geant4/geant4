@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonInverseIonisation.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4IonInverseIonisation

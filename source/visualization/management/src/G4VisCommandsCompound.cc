@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc 98766 2016-08-09 14:17:17Z gcosmo $
+// $Id$
 
 // Compound /vis/ commands - John Allison  15th May 2000
 

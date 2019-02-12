@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNestedParameterisation.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id$
 //
 // class G4VNestedParameterisation implementation
 //

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/UrQMDNeutronBuilder.cc
 /// \brief Implementation of the UrQMDNeutronBuilder class
 //
-// $Id: UrQMDNeutronBuilder.cc 77519 2013-11-25 10:54:57Z gcosmo $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //

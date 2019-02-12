@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMessenger.cc 72057 2013-07-04 13:07:29Z gcosmo $
+// $Id$
 //
 //
 // File name:     G4NistMessenger

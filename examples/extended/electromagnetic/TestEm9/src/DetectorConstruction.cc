@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm9/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
+// $Id$
 //
 //
 /////////////////////////////////////////////////////////////////////////

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserParallelWorld.cc 69917 2013-05-17 13:28:02Z gcosmo $
+// $Id$
 //
 
 #include "G4VUserParallelWorld.hh"

@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysListEmPenelope class
 //
 //
-// $Id: PhysListEmPenelope.cc 100278 2016-10-17 08:34:03Z gcosmo $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
