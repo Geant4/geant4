@@ -348,10 +348,9 @@ G4GDMLWriteStructure::GetBorderSurface(const G4VPhysicalVolume* const pvol)
   {
     const G4LogicalBorderSurfaceTable* btable =
           G4LogicalBorderSurface::GetSurfaceTable();
-    std::vector<G4LogicalBorderSurface*>::const_iterator pos;
-    for (pos = btable->begin(); pos != btable->end(); pos++)
+    for (auto pos : btable)
     {
-      if (pvol == (*pos)->GetVolume1())  // just the first in the couple 
+      if (pvol == pos->first.first)  // just the first in the couple 
       {                                  // is enough
         surf = *pos; break;
       }
