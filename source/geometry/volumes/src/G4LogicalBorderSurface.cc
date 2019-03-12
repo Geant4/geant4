@@ -38,6 +38,8 @@
 //
 // ----------------------------------------------------------------------
 
+#include <map>
+
 #include "G4LogicalBorderSurface.hh"
 #include "G4VPhysicalVolume.hh"
 
@@ -62,7 +64,7 @@ G4LogicalBorderSurface(const G4String& name,
 
   // Store in the table of Surfaces
   //
-  theBorderSurfaceTable->push_back(this);
+  theBorderSurfaceTable->insert(std::make_pair(std::make_pair(vol1,vol2),this));
 }
 
 G4LogicalBorderSurface::
@@ -143,12 +145,8 @@ G4LogicalBorderSurface::GetSurface(const G4VPhysicalVolume* vol1,
 {
   if (theBorderSurfaceTable)
   {
-    for (size_t i=0; i<theBorderSurfaceTable->size(); i++)
-    {
-      if( ((*theBorderSurfaceTable)[i]->GetVolume1() == vol1) &&
-          ((*theBorderSurfaceTable)[i]->GetVolume2() == vol2) )
-        return (*theBorderSurfaceTable)[i];
-    }
+    auto foundSurf = theBorderSurfaceTable->find(std::make_pair(vol1,vol2));
+    if(foundSurf != theBorderSurfaceTable->end()) return foundSurf->second;
   }
   return 0;
 }
@@ -162,9 +160,9 @@ void G4LogicalBorderSurface::DumpInfo()
 
   if (theBorderSurfaceTable)
   {
-    for (size_t i=0; i<theBorderSurfaceTable->size(); i++)
+    for (auto it = theBorderSurfaceTable->begin(); it!= theBorderSurfaceTable->end(); ++it)
     {
-      G4LogicalBorderSurface* pBorderSurface = (*theBorderSurfaceTable)[i];
+      G4LogicalBorderSurface* pBorderSurface = it->second;
       G4cout << pBorderSurface->GetName() << " : " << G4endl
              << " Border of volumes "
              << pBorderSurface->GetVolume1()->GetName() << " and " 
@@ -183,7 +181,7 @@ void G4LogicalBorderSurface::CleanSurfaceTable()
     for(pos=theBorderSurfaceTable->begin();
         pos!=theBorderSurfaceTable->end(); pos++)
     {
-      if (*pos)  { delete *pos; }
+      if (pos->second)  { delete pos->second; }
     }
     theBorderSurfaceTable->clear();
   }

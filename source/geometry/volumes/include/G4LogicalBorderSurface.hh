@@ -50,7 +50,7 @@
 class G4VPhysicalVolume;
 class G4LogicalBorderSurface;
 
-typedef std::vector<G4LogicalBorderSurface*> G4LogicalBorderSurfaceTable;
+typedef std::map<std::pair<const G4VPhysicalVolume*,const  G4VPhysicalVolume*>, G4LogicalBorderSurface*> G4LogicalBorderSurfaceTable;
 
 class G4LogicalBorderSurface : public G4LogicalSurface
 {
