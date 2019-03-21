@@ -45,7 +45,7 @@ using namespace G4InuclParticleNames;
 namespace {
   // gamma p : Outgoing particle types of a given multiplicity
   static const G4int gamp2bfs[8][2] =
-    {{gam,pro}, {pi0, pro}, {pip, neu}, {pro,pi0}, {neu,pip}, {lam,kpl}, {s0, kpl}, {sp,k0}};
+    {{gam,pro}, {pi0, pro}, {pip, neu}, {pro,pi0}, {neu,pip}, {kpl, lam}, {kpl, s0}, {k0, sp}};
 
   static const G4int gamp3bfs[6][3] =
   {{pro,pip,pim}, {pro,pi0,pi0}, {neu,pip,pi0},
@@ -84,7 +84,7 @@ namespace {
 namespace {
   // gamma n : Outgoing particle types of a given multiplicity
   static const G4int gamn2bfs[8][2] =
-    {{gam,neu}, {pi0,neu}, {pim, pro}, {neu,pi0}, {pro,pim}, {lam,k0}, {s0, k0}, {sm,kpl}};
+    {{gam,neu}, {pi0,neu}, {pim, pro}, {neu,pi0}, {pro,pim}, {k0, lam}, {k0, s0}, {kpl, sm}};
 
   static const G4int gamn3bfs[6][3] =
   {{neu,pip,pim}, {neu,pi0,pi0}, {pro,pim,pi0},
