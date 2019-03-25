@@ -46,6 +46,7 @@
 
 #include "G4ios.hh"
 #include "G4DensityEffectCalc.hh"
+#include "G4NistManager.hh"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -211,21 +212,23 @@ bool SetupFermiDeltaCalc(G4DensityEffectCalcData * par)
   // Negative values, and values much larger than unity are non-physical.
   // Values between zero and one are also suspect, but not as clearly wrong.
   if(sternrho <= 0 || sternrho > 100){
-    G4cerr <<
-    "*********************************************************************\n"
-    "* Warning: Could not solve for Sternheimer rho. Probably you have a *\n"
-    "* mean ionization energy which is incompatible with your            *\n"
-    "* distribution of energy levels, or an unusually dense material.    *\n"
-    "* Falling back to parameterization.                                 *\n"
-    "*********************************************************************"
-    << G4endl
-    << "Number of levels: " << par->nlev << G4endl
-    << "Mean ionization energy: " << par->meanexcite << "eV" << G4endl
-    << "Plasma energy: " << par->plasmaE << "eV" << G4endl;
-    for(int i = 0; i < par->nlev; i++)
-      G4cerr << "Level " << i
-             << ": strength " << par->sternf[i]
-             << ": energy " << par->levE[i] << "eV" << G4endl;
+    if(G4NistManager::Instance()->GetVerbose() > -1){
+      G4cerr <<
+      "*********************************************************************\n"
+      "* Warning: Could not solve for Sternheimer rho. Probably you have a *\n"
+      "* mean ionization energy which is incompatible with your            *\n"
+      "* distribution of energy levels, or an unusually dense material.    *\n"
+      "* Falling back to parameterization.                                 *\n"
+      "*********************************************************************"
+      << G4endl
+      << "Number of levels: " << par->nlev << G4endl
+      << "Mean ionization energy: " << par->meanexcite << "eV" << G4endl
+      << "Plasma energy: " << par->plasmaE << "eV" << G4endl;
+      for(int i = 0; i < par->nlev; i++)
+        G4cerr << "Level " << i
+               << ": strength " << par->sternf[i]
+               << ": energy " << par->levE[i] << "eV" << G4endl;
+    }
     return false;
   }
 

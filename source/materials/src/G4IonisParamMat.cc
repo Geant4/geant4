@@ -662,9 +662,11 @@ G4double G4IonisParamMat::DensityCorrection(G4double x)
   if(fCalcDensity != nullptr){
     const double exact = DoFermiDeltaCalc(fCalcDensity, x);
     if(approx > 0 && exact < 0){
-      G4cerr << "Error: Sternheimer fit failed for "
-        << fMaterial->GetName() << ". x = " << x << ": Delta = "
-        << exact << " exact " << approx  << " approx" << G4endl;
+      if(G4NistManager::Instance()->GetVerbose() > -1){
+        G4cerr << "Error: Sternheimer fit failed for "
+          << fMaterial->GetName() << ". x = " << x << ": Delta = "
+          << exact << " exact " << approx  << " approx" << G4endl;
+      }
       return approx;
     }
 
@@ -674,9 +676,11 @@ G4double G4IonisParamMat::DensityCorrection(G4double x)
     // have seen this clearly-wrong result occur for substances with extremely
     // low density (1e-25 g/cc).
     if(approx >= 0 && fabs(exact - approx) > 1){
+      if(G4NistManager::Instance()->GetVerbose() > 0){
       G4cerr << "Error: Sternheimer exact, " << exact << ", and approx, "
         << approx << " are too different for "
         << fMaterial->GetName() << ", x = " << x << G4endl;
+      }
       return approx;
     }
     return exact;
