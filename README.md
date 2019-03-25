@@ -1,1 +1,4 @@
-Geant4 public releases Git mirror
+# Geant4
+---
+
+Official Geant4 LDMX release.
