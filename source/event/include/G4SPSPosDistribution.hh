@@ -212,6 +212,8 @@ public:
   const G4ThreeVector& GetRotx() const {return Rotx;}
   const G4ThreeVector& GetRoty() const {return Roty;}
   const G4ThreeVector& GetRotz() const {return Rotz;}
+  G4bool GetConfined() const { return Confine; }
+  G4String GetConfineVolume() const { return VolName; }
 
     G4ThreeVector GetSideRefVec1() const;
     G4ThreeVector GetSideRefVec2() const;
