@@ -64,7 +64,7 @@ G4Step* G4ParticleChangeForOccurenceBiasing::UpdateStepForAlongStep(G4Step* step
   // -- make particle change of wrapped process to apply its changes:
   if ( fWrappedParticleChange ) fWrappedParticleChange->UpdateStepForAlongStep( step );
   
-  // -- multiply parent weight by weight due to occurence biasing:
+  // -- multiply parent weight by weight due to occurrence biasing:
   G4StepPoint* postStepPoint = step->GetPostStepPoint();
   postStepPoint->SetWeight( postStepPoint->GetWeight() * fOccurenceWeightForNonInteraction );
   
@@ -75,7 +75,7 @@ G4Step* G4ParticleChangeForOccurenceBiasing::UpdateStepForPostStep(G4Step* step)
 {
   // -- let make first wrapped process to apply its changes:
   fWrappedParticleChange->UpdateStepForPostStep(step);
-  // -- then apply weight correction due to occurence biasing:
+  // -- then apply weight correction due to occurrence biasing:
   G4StepPoint* postStepPoint = step->GetPostStepPoint();
   postStepPoint->SetWeight( postStepPoint->GetWeight() * fOccurenceWeightForInteraction );
 

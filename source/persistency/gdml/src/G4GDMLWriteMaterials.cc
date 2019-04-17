@@ -209,6 +209,12 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
 void G4GDMLWriteMaterials::PropertyVectorWrite(const G4String& key,
                            const G4PhysicsOrderedFreeVector* const pvec)
 {
+   for (size_t i=0; i<propertyList.size(); i++)   // Check if property is
+   {                                              // already in the list!
+      if (propertyList[i] == pvec)  { return; }
+   }
+   propertyList.push_back(pvec);
+ 
    const G4String matrixref = GenerateName(key, pvec);
    xercesc::DOMElement* matrixElement = NewElement("matrix");
    matrixElement->setAttributeNode(NewAttribute("name", matrixref));
@@ -292,6 +298,7 @@ void G4GDMLWriteMaterials::MaterialsWrite(xercesc::DOMElement* element)
    isotopeList.clear();
    elementList.clear();
    materialList.clear();
+   propertyList.clear(); 
 }
 
 void G4GDMLWriteMaterials::AddIsotope(const G4Isotope* const isotopePtr)

@@ -8,6 +8,9 @@ https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamplesHadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+31.01.2019, I.Hrivnacova Tag: hadrontherapy-V10-04-10
+      - Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 09.11.2018 G.Cosmo; Tag: hadrontherapy-V10-04-09
       - HadrontherapyDetectorConstruction: fixed typos in printout.
 

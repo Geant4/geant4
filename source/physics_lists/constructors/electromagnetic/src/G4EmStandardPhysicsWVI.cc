@@ -86,6 +86,7 @@
 #include "G4IonParametrisedLossModel.hh"
 #include "G4BraggIonModel.hh"
 #include "G4NuclearStopping.hh"
+#include "G4eplusTo2GammaOKVIModel.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4Gamma.hh"
@@ -248,10 +249,13 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
       msc->SetEmModel(new G4WentzelVIModel());
       G4CoulombScattering* ss = new G4CoulombScattering();
 
+      G4eplusAnnihilation* ann = new G4eplusAnnihilation();
+      ann->SetEmModel(new G4eplusTo2GammaOKVIModel());
+
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4eIonisation(), particle);
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);
-      ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+      ph->RegisterProcess(ann, particle);
       ph->RegisterProcess(ss, particle);
 
     } else if (particleName == "mu+" ||

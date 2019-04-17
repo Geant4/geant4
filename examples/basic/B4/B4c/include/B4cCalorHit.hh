@@ -51,7 +51,7 @@ class B4cCalorHit : public G4VHit
 
     // operators
     const B4cCalorHit& operator=(const B4cCalorHit&);
-    G4int operator==(const B4cCalorHit&) const;
+    G4bool operator==(const B4cCalorHit&) const;
 
     inline void* operator new(size_t);
     inline void  operator delete(void*);

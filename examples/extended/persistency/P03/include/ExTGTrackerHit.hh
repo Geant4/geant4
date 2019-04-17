@@ -45,7 +45,7 @@ class ExTGTrackerHit : public G4VHit
    ~ExTGTrackerHit();
     ExTGTrackerHit(const ExTGTrackerHit&);
     const ExTGTrackerHit& operator=(const ExTGTrackerHit&);
-    G4int operator==(const ExTGTrackerHit&) const;
+    G4bool operator==(const ExTGTrackerHit&) const;
 
     inline void* operator new(size_t);
     inline void  operator delete(void*);

@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
+ Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -13,7 +9,7 @@
 **************************************************************
 
 
-***** Table : Nb of materials = 21 *****
+***** Table : Nb of materials = 25 *****
 
  Material:    G4_Ar    density:  1.662 mg/cm3  RadL: 117.621 m    Nucl.Int.Length: 719.888 m  
                        Imean: 188.000 eV   temperature: 293.15 K  pressure:   1.00 atm
@@ -117,6 +113,20 @@
           ElmMassFraction:  18.29 %  ElmAbundance  72.73 % 
 
 
+ Material: Propane10    density: 18.794 mg/cm3  RadL:  24.143 m    Nucl.Int.Length:  34.508 m  
+                       Imean:  47.100 eV   temperature: 293.15 K  pressure:  10.00 atm
+
+   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
+          ElmMassFraction:  81.71 %  ElmAbundance  27.27 % 
+
+   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
+          ElmMassFraction:  18.29 %  ElmAbundance  72.73 % 
+
+
  Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
 
@@ -180,6 +190,21 @@
           ElmMassFraction:  72.71 %  ElmAbundance  66.67 % 
 
 
+ Material: TRT_CO2p    density:  1.842 mg/cm3  RadL: 196.499 m    Nucl.Int.Length: 466.034 m  
+                       Imean:  90.958 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
+          ElmMassFraction:  27.29 %  ElmAbundance  33.33 % 
+
+   --->  Element: O (O)   Z =  8.0   N =    16   A = 15.999 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
+          ElmMassFraction:  72.71 %  ElmAbundance  66.67 % 
+
+
  Material:  TRT_CF4    density:  3.900 mg/cm3  RadL:  87.158 m    Nucl.Int.Length: 234.187 m  
                        Imean: 109.384 eV   temperature: 293.15 K  pressure:   1.00 atm
 
@@ -225,6 +250,20 @@
 
 
  Material:     C3H8    density:  3.758 mg/cm3  RadL: 120.742 m    Nucl.Int.Length: 172.576 m  
+                       Imean:  52.014 eV   temperature: 293.15 K  pressure:   2.00 atm
+
+   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
+          ElmMassFraction:  81.71 %  ElmAbundance  27.27 % 
+
+   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
+          ElmMassFraction:  18.29 %  ElmAbundance  72.73 % 
+
+
+ Material:    C3H8p    density:  3.415 mg/cm3  RadL: 132.867 m    Nucl.Int.Length: 189.905 m  
                        Imean:  52.014 eV   temperature: 293.15 K  pressure:   2.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
@@ -377,6 +416,27 @@
           ElmMassFraction:   5.35 %  ElmAbundance   8.37 % 
 
 
+ Material: TPC_Ne-CO2-2p    density:  0.939 kg/m3   RadL: 320.749 m    Nucl.Int.Length: 993.343 m  
+                       Imean: 126.350 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Ne (Ne)   Z = 10.0   N =    20   A = 20.180 g/mole
+         --->  Isotope:  Ne20   Z = 10   N =  20   A =  19.99 g/mole   abundance: 90.480 %
+         --->  Isotope:  Ne21   Z = 10   N =  21   A =  20.99 g/mole   abundance:  0.270 %
+         --->  Isotope:  Ne22   Z = 10   N =  22   A =  21.99 g/mole   abundance:  9.250 %
+          ElmMassFraction:  80.38 %  ElmAbundance  74.86 % 
+
+   --->  Element: O (O)   Z =  8.0   N =    16   A = 15.999 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
+          ElmMassFraction:  14.26 %  ElmAbundance  16.75 % 
+
+   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
+          ElmMassFraction:   5.36 %  ElmAbundance   8.39 % 
+
+
  Material:  Xe15CO2    density:  4.939 mg/cm3  RadL:  17.942 m    Nucl.Int.Length: 339.776 m  
                        Imean: 430.867 eV   temperature: 293.15 K  pressure:   1.00 atm
 
@@ -482,7 +542,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.080000s Real=0.074090s Sys=0.000000s
+  User=0.060000s Real=0.066873s Sys=0.010000s
 RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0160892
  ====================================================
    Beam Particle: proton

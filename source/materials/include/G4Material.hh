@@ -113,7 +113,7 @@
 
 enum G4State { kStateUndefined = 0, kStateSolid, kStateLiquid, kStateGas };
 
-static const G4double NTP_Temperature = 293.15;
+static const G4double NTP_Temperature = 293.15*CLHEP::kelvin;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -282,8 +282,8 @@ public:  // with description
 private:
 
   // operators       
-  G4int operator==(const G4Material&) const = delete;
-  G4int operator!=(const G4Material&) const = delete;
+  G4bool operator==(const G4Material&) const = delete;
+  G4bool operator!=(const G4Material&) const = delete;
   G4Material(const G4Material&) = delete;
   const G4Material& operator=(const G4Material&) = delete;
 

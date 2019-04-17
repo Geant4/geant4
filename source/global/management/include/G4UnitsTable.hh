@@ -86,8 +86,8 @@ class G4UnitDefinition
   public:  // without description
     
    ~G4UnitDefinition();
-    G4int operator==(const G4UnitDefinition&) const;
-    G4int operator!=(const G4UnitDefinition&) const;
+    G4bool operator==(const G4UnitDefinition&) const;
+    G4bool operator!=(const G4UnitDefinition&) const;
     
   public:  // with description
 
@@ -141,8 +141,8 @@ class G4UnitsCategory
 
     explicit G4UnitsCategory(const G4String& name);
    ~G4UnitsCategory();
-    G4int operator==(const G4UnitsCategory&) const;
-    G4int operator!=(const G4UnitsCategory&) const;
+    G4bool operator==(const G4UnitsCategory&) const;
+    G4bool operator!=(const G4UnitsCategory&) const;
     
   public:  // without description
 

@@ -95,6 +95,7 @@ void PhysicsList::ConstructParticle()
 
 void PhysicsList::ConstructProcess()
 {
+  AddTransportation();
   if(fEmDNAPhysicsList)    { fEmDNAPhysicsList->ConstructProcess(); }
   if(fEmDNAChemistryList)  { fEmDNAChemistryList->ConstructProcess(); }
   if(fEmDNAChemistryList1) { fEmDNAChemistryList1->ConstructProcess(); }

@@ -63,7 +63,7 @@ public:
  
   const RMC01DoubleWithWeightHit& operator = (const RMC01DoubleWithWeightHit &right);
  
-  int operator == (const RMC01DoubleWithWeightHit &right) const;
+  G4bool operator == (const RMC01DoubleWithWeightHit &right) const;
 
   inline void *operator new(size_t);
   inline void operator delete(void *aHit);

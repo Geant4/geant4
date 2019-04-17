@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jan 31, 2019  Ivana Hrivnacova              geometry-V10-04-00
+----------------------------
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 Oct 31, 2014  Gabriele Cosmo                geometry-V10-00-02
 ----------------------------
 - Fixed internal link dependency on USolids module in CMake scripts.

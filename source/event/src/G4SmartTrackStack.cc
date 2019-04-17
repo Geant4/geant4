@@ -63,11 +63,11 @@ G4SmartTrackStack::operator=(const G4SmartTrackStack &) {
 	return *this;
 }
 
-int G4SmartTrackStack::operator==(const G4SmartTrackStack &right) const {
+G4bool G4SmartTrackStack::operator==(const G4SmartTrackStack &right) const {
 	return (this==&right);
 }
 
-int G4SmartTrackStack::operator!=(const G4SmartTrackStack &right) const {
+G4bool G4SmartTrackStack::operator!=(const G4SmartTrackStack &right) const {
 	return (this!=&right);
 }
 

@@ -49,6 +49,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIparameter.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
 #include "G4Tokenizer.hh"           
@@ -91,7 +92,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   param->SetParameterRange("cut>=0.0") ;
   setCutForAGivenParticleCmd->SetParameter(param) ;
   param = new G4UIparameter("unit",'s',false) ;
-  param->SetDefaultValue("mm") ;
+  param->SetDefaultUnit("mm");
   setCutForAGivenParticleCmd->SetParameter(param) ;
   setCutForAGivenParticleCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
@@ -154,7 +155,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
 
   //  /run/particle/setStoredInAscii command
   asciiCmd = new G4UIcmdWithAnInteger("/run/particle/setStoredInAscii",this);
-  asciiCmd->SetGuidance("Switch on/off ascii mode in store/retreive Physics Table");
+  asciiCmd->SetGuidance("Switch on/off ascii mode in store/retrieve Physics Table");
   asciiCmd->SetGuidance("  Enter 0(binary) or 1(ascii)");
   asciiCmd->SetParameterName("ascii",true);
   asciiCmd->SetDefaultValue(0);
@@ -191,7 +192,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   dumpCutValuesCmd->SetGuidance("Dumping a list takes place when you issue 'beamOn' and");
   dumpCutValuesCmd->SetGuidance("actual conversion tables from range to energy are available.");
   dumpCutValuesCmd->SetGuidance("If you want a list 'immediately', use '/run/dumpRegion' for threshold");
-  dumpCutValuesCmd->SetGuidance("list given in gange only. Also, '/run/dumpCouples' gives you the");
+  dumpCutValuesCmd->SetGuidance("list given in range only. Also, '/run/dumpCouples' gives you the");
   dumpCutValuesCmd->SetGuidance("current list if you have already issued 'run/beamOn' at least once.");
   dumpCutValuesCmd->SetParameterName("particle",true);
   dumpCutValuesCmd->SetDefaultValue("all");

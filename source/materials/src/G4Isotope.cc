@@ -121,14 +121,14 @@ G4Isotope & G4Isotope::operator=(const G4Isotope& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int G4Isotope::operator==(const G4Isotope &right) const
+G4bool G4Isotope::operator==(const G4Isotope &right) const
 {
   return (this == (G4Isotope *) &right);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int G4Isotope::operator!=(const G4Isotope &right) const
+G4bool G4Isotope::operator!=(const G4Isotope &right) const
 {
   return (this != (G4Isotope *) &right);
 }

@@ -58,8 +58,8 @@ class G4Event
       inline void *operator new(size_t);
       inline void operator delete(void* anEvent);
 
-      G4int operator==(const G4Event &right) const;
-      G4int operator!=(const G4Event &right) const;
+      G4bool operator==(const G4Event &right) const;
+      G4bool operator!=(const G4Event &right) const;
 
   public: // with description
       void Print() const;

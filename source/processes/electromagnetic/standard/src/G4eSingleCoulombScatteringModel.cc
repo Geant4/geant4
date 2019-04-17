@@ -206,9 +206,8 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
 
   // Choose nucleus
   //last two :cutEnergy= min e kinEnergy=max
-  currentElement = SelectRandomAtom(couple,particle,
-				    kinEnergy,cutEnergy,kinEnergy);
-
+  currentElement = SelectRandomAtom(couple, particle, kinEnergy, 
+                                    cutEnergy, kinEnergy);
   G4double Z  = currentElement->GetZ();
   G4int iz    = G4int(Z);
   G4int ia = SelectIsotopeNumber(currentElement);
@@ -227,23 +226,24 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
   G4double phi  = twopi* G4UniformRand();
 
   // kinematics in the Lab system
-  G4double ptot = dp->GetTotalMomentum();
-  G4double e1   = dp->GetTotalEnergy();
+  G4double ptot = sqrt(kinEnergy*(kinEnergy + 2.0*mass));
+  G4double e1   = mass + kinEnergy;
+  
   // Lab. system kinematics along projectile direction
-  G4LorentzVector v0 = G4LorentzVector(0, 0, ptot, e1);
-  G4double bet  = ptot/(v0.e() + mass2);
-  G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
+  G4LorentzVector v0 = G4LorentzVector(0, 0, ptot, e1+mass2);
+  G4LorentzVector v1 = G4LorentzVector(0, 0, ptot, e1);
+  G4ThreeVector bst = v0.boostVector();
+  v1.boost(-bst);
+  // CM projectile
+  G4double momCM = v1.pz(); 
+  
+  // Momentum after scattering of incident particle
+  v1.setX(momCM*sint*cos(phi));
+  v1.setY(momCM*sint*sin(phi));
+  v1.setZ(momCM*cost);
 
-  //CM Projectile
-  G4double momCM = gam*(ptot - bet*e1);
-  G4double eCM   = gam*(e1 - bet*ptot);
-  //energy & momentum after scattering of incident particle
-  G4double pxCM = momCM*sint*cos(phi);
-  G4double pyCM = momCM*sint*sin(phi);
-  G4double pzCM = momCM*cost;
-
-  //CM--->Lab
-  G4LorentzVector v1(pxCM , pyCM, gam*(pzCM + bet*eCM), gam*(eCM + bet*pzCM));
+  // CM--->Lab
+  v1.boost(bst);
 
   // Rotate to global system
   G4ThreeVector dir = dp->GetMomentumDirection();
@@ -254,7 +254,7 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
 
   // recoil
   v0 -= v1;
-  G4double trec = v0.e();
+  G4double trec = std::max(v0.e() - mass2, 0.0);
   G4double edep = 0.0;
 
   G4double tcut = recoilThreshold;

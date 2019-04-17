@@ -61,8 +61,8 @@ class G4VSensitiveDetector
 
       G4VSensitiveDetector & operator=(const G4VSensitiveDetector &right);
 
-      G4int operator==(const G4VSensitiveDetector &right) const;
-      G4int operator!=(const G4VSensitiveDetector &right) const;
+      G4bool operator==(const G4VSensitiveDetector &right) const;
+      G4bool operator!=(const G4VSensitiveDetector &right) const;
 
   public: // with description
       virtual void Initialize(G4HCofThisEvent*);

@@ -16,6 +16,24 @@ committal in the source repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-February-2019  E.Tcherniaev     (geom-specific-V10-04-16)
+- Accurate calculation of radical in G4IntersectingCone.
+  It addresses the problem report #2111.
+
+4-February-2019  G.Cosmo
+- Fix in G4EllipticalTube::CheckParameters() for typo in condition.
+
+30-January-2019  G.Cosmo
+- Disabled precise computation of extent and use simple bounding-box
+  in CalculateExtent() for G4Tet and G4TessellatedSolid, to speed up
+  intialisation in setups with relatively complex meshes.
+- Apply bounding-box calculation for extent also for corresponding
+  VecGeom wrappers.
+
+24-January-2019  E.Tcherniaev
+- Completely revised, more robust and performant G4EllipticalTube;
+  new exhaustive test/testEllipticalTube.cc based on Shape Conventions.
+
 20-September-2018  G.Cosmo         (geom-specific-V10-04-15)
 - Make G4UPolycone wrapper inheriting from vecgeom::GenericUnplacedPolycone,
   following the latest changes in VecGeom.

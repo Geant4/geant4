@@ -52,19 +52,19 @@ G3MatTableEntry& G3MatTableEntry::operator=(const G3MatTableEntry& right)
   return *this;
 }
 
-G4int G3MatTableEntry::operator==(const G3MatTableEntry& right) const
+G4bool G3MatTableEntry::operator==(const G3MatTableEntry& right) const
 { 
   if (fID == right.GetID()) 
-    return 1;
+    return true;
   else
-    return 0;
+    return false;
 }
 
-G4int G3MatTableEntry::operator!=(const G3MatTableEntry& right) const
+G4bool G3MatTableEntry::operator!=(const G3MatTableEntry& right) const
 { 
   if (*this == right) 
-    return 0;
+    return false;
   else
-    return 1;
+    return true;
 }
 

@@ -49,7 +49,7 @@ public:
   ~Par01CalorimeterHit();
   Par01CalorimeterHit(const Par01CalorimeterHit &right);
   const Par01CalorimeterHit& operator=(const Par01CalorimeterHit &right);
-  G4int operator==(const Par01CalorimeterHit &right) const;
+  G4bool operator==(const Par01CalorimeterHit &right) const;
   
   
   inline void *operator new(size_t);

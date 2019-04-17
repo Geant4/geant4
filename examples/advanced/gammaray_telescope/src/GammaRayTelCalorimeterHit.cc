@@ -82,7 +82,7 @@ const GammaRayTelCalorimeterHit& GammaRayTelCalorimeterHit::operator=(const Gamm
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int GammaRayTelCalorimeterHit::operator==(const GammaRayTelCalorimeterHit& right) const
+G4bool GammaRayTelCalorimeterHit::operator==(const GammaRayTelCalorimeterHit& right) const
 {
   return((EdepCAL==right.EdepCAL)&&(CALBarNumber==right.CALBarNumber)&&(CALPlaneNumber==right.CALPlaneNumber)&&(IsCALPlane==right.IsCALPlane)&& (pos==right.pos));
 }

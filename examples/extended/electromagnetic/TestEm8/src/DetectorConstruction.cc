@@ -70,6 +70,8 @@
 #include "TestParameters.hh"
 #include "G4PionPlus.hh"
 
+#include <vector>
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
@@ -139,6 +141,11 @@ void DetectorConstruction::DefineMaterials()
   G4Material* Mylar  = manager->FindOrBuildMaterial("G4_MYLAR");
   G4Material* Methane= manager->FindOrBuildMaterial("G4_METHANE");
   G4Material* Propane= manager->FindOrBuildMaterial("G4_PROPANE");
+
+  // propane at 10 atmospheres
+  manager->ConstructNewGasMaterial("Propane10","G4_PROPANE",
+                                   NTP_Temperature,10.*atmosphere);
+
   G4Material* empty  = manager->FindOrBuildMaterial("G4_Galactic");
 
   // 93% Kr + 7% CH4, STP
@@ -162,6 +169,12 @@ void DetectorConstruction::DefineMaterials()
   TRT_CO2->AddElement(elC,1);
   TRT_CO2->AddElement(elO,2);
 
+  // check alternative constructor
+  std::vector<G4String> trtatom = {"C","O"};
+  std::vector<G4int> trtnum  = {1, 2};
+  manager->ConstructNewMaterial("TRT_CO2p",trtatom,trtnum,TRT_CO2_density,
+                                true,kStateGas,NTP_Temperature,atmosphere);
+
   G4double TRT_CF4_density = 3.9*mg/cm3;
   G4Material* TRT_CF4 = 
     new G4Material(name="TRT_CF4", TRT_CF4_density, nel=2,
@@ -180,22 +193,27 @@ void DetectorConstruction::DefineMaterials()
   XeCO2CF4->AddMaterial(TRT_CF4,0.154);
 
   // C3H8,20 C, 2 atm
-  density = 3.758*mg/cm3 ;
-  G4Material* C3H8 = 
-    new G4Material(name="C3H8",density,nel=2,
-                   kStateGas,293.15*kelvin,2.*atmosphere);
-  C3H8->AddElement(elC,3) ;
-  C3H8->AddElement(elH,8) ;
+  density = 3.758*mg/cm3;
+  G4Material* C3H8 = new G4Material(name="C3H8",density,nel=2,
+                                    kStateGas,293.15*kelvin,2.*atmosphere);
+  C3H8->AddElement(elC,3);
+  C3H8->AddElement(elH,8);
 
-  // 87.5% Xe + 7.5% CH4 + 5% C3H8, 20 C, 1 atm 
+  // The same material via different constructor
+  std::vector<G4String> elmname = {"C","H"};
+  std::vector<G4int>  atomnum = {3, 8};
+  manager->ConstructNewIdealGasMaterial("C3H8p",elmname,atomnum,true,
+                                        293.15*kelvin,2.*atmosphere);
+
+  // 87.5% Xe + 7.5% CH4 + 5% C3H8, 20 C, 1. atm 
   density = 4.9196*mg/cm3 ;
   G4Material* XeCH4C3H8 = 
     new G4Material(name="XeCH4C3H8"  , 
                    density,  ncomponents=3,
                    kStateGas,NTP_Temperature,1.*atmosphere);
-  XeCH4C3H8->AddMaterial( Xe,      fractionmass = 0.971 ) ;
-  XeCH4C3H8->AddMaterial( Methane, fractionmass = 0.010 ) ;
-  XeCH4C3H8->AddMaterial( Propane, fractionmass = 0.019 ) ;
+  XeCH4C3H8->AddMaterial( Xe,      fractionmass = 0.971);
+  XeCH4C3H8->AddMaterial( Methane, fractionmass = 0.010);
+  XeCH4C3H8->AddMaterial( Propane, fractionmass = 0.019);
 
   // 93% Ar + 7% CH4, STP
   density = 1.709*mg/cm3 ;
@@ -238,11 +256,17 @@ void DetectorConstruction::DefineMaterials()
   NeCO2->AddElement( elO,  fractionmass = 0.1426 ) ;
   NeCO2->AddElement( elC,  fractionmass = 0.0535 ) ;
 
+  // check alternative constructor
+  std::vector<G4String> neatom = {"Ne","O","C"};
+  std::vector<G4double> nefr   = {0.8039, 0.1426, 0.0536};
+  manager->ConstructNewMaterial("TPC_Ne-CO2-2p",neatom,nefr,density,true,
+                                kStateGas,NTP_Temperature,atmosphere);
+
   // ALICE TRD mixure 85% Xe + 15% CO2 NTP
   density = 4.9389*mg/cm3 ;      
   G4Material* Xe15CO2 = 
     new G4Material(name="Xe15CO2", density, ncomponents=2,
-                   kStateGas,NTP_Temperature,1.*atmosphere);
+                   kStateGas,NTP_Temperature,atmosphere);
   Xe15CO2->AddMaterial( Xe,            fractionmass = 0.944 );
   Xe15CO2->AddMaterial( CarbonDioxide, fractionmass = 0.056 );
    

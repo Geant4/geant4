@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jan 31, 2019, I.Hrivnacova - exbiasing-V10-04-00
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 Nov 8, 2016, M. Verderi - exbiasing-V10-02-02
 - revert ReverseMC to ReverseMC01-V10-02-00
 

@@ -88,11 +88,11 @@ public:
     
    private: 
 
-   G4int operator==(G4HIJING_Model& right) {
+   G4bool operator==(G4HIJING_Model& right) {
     return (this == &right);
    }
 
-   G4int operator!=(G4HIJING_Model& right) {
+   G4bool operator!=(G4HIJING_Model& right) {
     return (this != &right);
    }
    

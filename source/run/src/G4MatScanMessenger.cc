@@ -110,7 +110,7 @@ G4MatScanMessenger::G4MatScanMessenger(G4MaterialScanner* p1)
   singleCmd->SetParameter(par);
 
   single2Cmd = new G4UIcmdWith3Vector("/control/matScan/singleTo",this);
-  single2Cmd->SetGuidance("Measure thicknesss for one direction defined by a unit vector.");
+  single2Cmd->SetGuidance("Measure thickness for one direction defined by a unit vector.");
   single2Cmd->SetParameterName("X","Y","Z",false);
 
   eyePosCmd = new G4UIcmdWith3VectorAndUnit("/control/matScan/eyePosition",this);

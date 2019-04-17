@@ -88,9 +88,9 @@ const ExGflashHit & ExGflashHit::operator=(const ExGflashHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int ExGflashHit::operator==(const ExGflashHit &right) const
+G4bool ExGflashHit::operator==(const ExGflashHit &right) const
 {
-// @@@@ return 0;
+// @@@@ return false;
   if ((fPos==right.fPos) &&  (fEdep == right.fEdep)) return true;
   else return false;
   

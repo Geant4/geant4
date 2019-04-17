@@ -601,11 +601,11 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
   }
   if (fRetrievePhysicsTable) {
     if ( !fIsRestoredCutValues){
-      // fail to retreive cut tables
+      // fail to retrieve cut tables
 #ifdef G4VERBOSE
       if (verboseLevel>0){
 	G4cout << "G4VUserPhysicsList::BuildPhysicsTable  "
-	       << "Physics table can not be retreived and will be calculated "
+	       << "Physics table can not be retrieved and will be calculated "
 	       << G4endl;
       }
 #endif

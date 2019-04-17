@@ -35,32 +35,7 @@
 //
 // Creation date: 07.05.2002
 //
-// Modifications:
-//
-// 23-12-02 V.Ivanchenko change interface in order to move
-//                           to cut per region
-// 20-01-03 Migrade to cut per region (V.Ivanchenko)
-// 24-01-03 Make models region aware (V.Ivanchenko)
-// 13-02-03 The set of models is defined for region (V.Ivanchenko)
-// 06-03-03 Fix in energy intervals for models (V.Ivanchenko)
-// 13-04-03 Add startFromNull (V.Ivanchenko)
-// 13-05-03 Add calculation of precise range (V.Ivanchenko)
-// 16-07-03 Replace G4Material by G4MaterialCutCouple in dE/dx and CrossSection
-//          calculation (V.Ivanchenko)
-// 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
-// 03-11-03 Substitute STL vector for G4RegionModels (V.Ivanchenko)
-// 26-01-04 Fix in energy range conditions (V.Ivanchenko)
-// 24-03-05 Remove check or IsInCharge (V.Ivanchenko)
-// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-// 18-08-05 Fix cut for e+e- pair production (V.Ivanchenko)
-// 29-11-05 Add protection for arithmetic operations with cut=DBL_MAX (V.Ivanchenko)
-// 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
-// 13-05-06 Add GetModel by index method (VI)
-// 15-03-07 Add maxCutInRange (V.Ivanchenko)
-// 12-04-07 Add verbosity at destruction (V.Ivanchenko)
-// 08-04-08 Fixed and simplified initialisation of G4RegionModel (VI)
-// 03-08-09 Create internal vectors only it is needed (VI)
-// 14-07-11 Use pointer to the vector of cuts and not local copy (VI)
+// Modifications: V.Ivanchenko
 //
 // Class Description:
 //
@@ -392,10 +367,6 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 	    // this model has lower order parameter than possible
 	    // other models, with which there may be intersections
 	    // so, appliction area of such models may be reduced
-            //G4cout << "tmin= " << tmin << "  tmax= " 
-            //       << tmax << "  push= " << push << " idx= " << idx <<G4endl;
-	    //G4cout << "n= " << n << " eLow[0]= " <<  eLow[0] << " eLow[n-1]= " << eLow[n-1]
-	    //	   << " eHigh[0]= " << eHigh[0] << " eHigh[n-1]= " << eHigh[n-1] << G4endl;
 
 	    // insert below the first model
 	    if (tmax <= eLow[0]) {
@@ -507,7 +478,8 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     eLow[n] = eHigh[n-1];
 
     if(1 < verboseLevel) {
-      G4cout << "### New G4RegionModels set with " << n << " models for region <";
+      G4cout << "### New G4RegionModels set with " << n 
+             << " models for region <";
       if (region) { G4cout << region->GetName(); }
       G4cout << ">  Elow(MeV)= ";
       for(G4int iii=0; iii<=n; ++iii) {G4cout << eLow[iii]/MeV << " ";}
@@ -815,10 +787,10 @@ void G4EmModelManager::DumpModelList(std::ostream& out, G4int verb)
           std::min(r->LowEdgeEnergy(j+1),model->HighEnergyActivationLimit());
         if(emax > emin) {
 	  out << std::setw(20);
-	  out << model->GetName() << " :  Emin= " 
-	      << std::setw(8) << G4BestUnit(emin,"Energy")
-	      << "   Emax= " 
-	      << std::setw(8) << G4BestUnit(emax,"Energy");
+	  out << model->GetName() << " : Emin=" 
+	      << std::setw(5) << G4BestUnit(emin,"Energy")
+	      << " Emax=" 
+	      << std::setw(5) << G4BestUnit(emax,"Energy");
 	  G4PhysicsTable* table = model->GetCrossSectionTable();
 	  if(table) {
 	    size_t kk = table->size();
@@ -826,18 +798,18 @@ void G4EmModelManager::DumpModelList(std::ostream& out, G4int verb)
 	      G4PhysicsVector* v = (*table)[k];
 	      if(v) {
 		G4int nn = v->GetVectorLength() - 1;
-		out << "  Table with " << nn << " bins Emin= "
-		    << std::setw(6) << G4BestUnit(v->Energy(0),"Energy")
-		    << "   Emax= " 
-		    << std::setw(6) << G4BestUnit(v->Energy(nn),"Energy");
+		out << " Nbins=" << nn << " "
+		    << std::setw(3) << G4BestUnit(v->Energy(0),"Energy")
+		    << " - " 
+		    << std::setw(3) << G4BestUnit(v->Energy(nn),"Energy");
 		break;
 	      }
 	    }
           }
 	  G4VEmAngularDistribution* an = model->GetAngularDistribution();
-	  if(an) { out << "   " << an->GetName(); }
+	  if(an) { out << "  " << an->GetName(); }
 	  if(fluoFlag && model->DeexcitationFlag()) { 
-	    out << "  FluoActive"; 
+	    out << " Fluo"; 
 	  }
 	  out << G4endl;
 	}

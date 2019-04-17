@@ -148,7 +148,7 @@ G4EmPenelopePhysics::G4EmPenelopePhysics(G4int ver, const G4String&)
   param->SetUseMottCorrection(true);  
   param->SetMscStepLimitType(fUseSafetyPlus);
   param->SetMscSkin(3);            
-  param->SetMscRangeFactor(0.2);   
+  param->SetMscRangeFactor(0.08);
   param->SetMuHadLateralDisplacement(true);
   param->SetFluo(true);
   //param->SetAugerCascade(true);
@@ -233,7 +233,6 @@ void G4EmPenelopePhysics::ConstructProcess()
 
   // nuclear stopping
   G4NuclearStopping* pnuc = new G4NuclearStopping();
-  G4NuclearStopping* inuc = new G4NuclearStopping();
 
   //Applicability range for Penelope models
   //for higher energies, the Standard models are used   
@@ -395,7 +394,7 @@ void G4EmPenelopePhysics::ConstructProcess()
 
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(ionIoni, particle);
-      ph->RegisterProcess(inuc, particle);
+      ph->RegisterProcess(pnuc, particle);
 
     } else if (particleName == "pi+" ||
                particleName == "pi-" ) {
@@ -423,6 +422,7 @@ void G4EmPenelopePhysics::ConstructProcess()
 	       particleName == "anti_proton") {
 
       G4hMultipleScattering* pmsc = new G4hMultipleScattering();
+      pmsc->SetEmModel(new G4WentzelVIModel());
       G4hIonisation* hIoni = new G4hIonisation();
 
       ph->RegisterProcess(pmsc, particle);
@@ -430,7 +430,6 @@ void G4EmPenelopePhysics::ConstructProcess()
       ph->RegisterProcess(pb, particle);
       ph->RegisterProcess(pp, particle);
       ph->RegisterProcess(new G4CoulombScattering(), particle);
-      ph->RegisterProcess(pnuc, particle);
 
     } else if (particleName == "B+" ||
 	       particleName == "B-" ||
@@ -471,7 +470,6 @@ void G4EmPenelopePhysics::ConstructProcess()
     
   // Nuclear stopping
   pnuc->SetMaxKinEnergy(MeV);
-  inuc->SetMaxKinEnergy(MeV);
   
   // Deexcitation
   //

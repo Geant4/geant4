@@ -61,8 +61,8 @@ class G4DecayProducts
     ~G4DecayProducts();
 
     // (un)equal operator
-    G4int operator==(const G4DecayProducts &right) const;
-    G4int operator!=(const G4DecayProducts &right) const;
+    G4bool operator==(const G4DecayProducts &right) const;
+    G4bool operator!=(const G4DecayProducts &right) const;
 
   public: // With Description
    //  set-get methods for the parent particle   
@@ -104,13 +104,13 @@ class G4DecayProducts
 // ------------------------
 
 inline 
- G4int G4DecayProducts::operator==(const G4DecayProducts &right) const
+ G4bool G4DecayProducts::operator==(const G4DecayProducts &right) const
 {
   return (this == (G4DecayProducts *) &right);
 }
 
 inline 
- G4int G4DecayProducts::operator!=(const G4DecayProducts &right) const
+ G4bool G4DecayProducts::operator!=(const G4DecayProducts &right) const
 {
   return (this != (G4DecayProducts *) &right);
 }

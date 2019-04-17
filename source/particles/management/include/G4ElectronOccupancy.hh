@@ -77,8 +77,8 @@ class G4ElectronOccupancy
  
   //- operators
      G4ElectronOccupancy & operator=(const G4ElectronOccupancy &right);
-     G4int operator==(const G4ElectronOccupancy &right) const;
-     G4int operator!=(const G4ElectronOccupancy &right) const;
+     G4bool operator==(const G4ElectronOccupancy &right) const;
+     G4bool operator!=(const G4ElectronOccupancy &right) const;
    
  public: // With Description
    // The following methods returns

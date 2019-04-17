@@ -55,7 +55,7 @@ G4String G4LevelReader::fFloatingLevels[] = {
 G4LevelReader::G4LevelReader(G4NuclearLevelData* ptr) 
   : fData(ptr),fVerbose(0),fLevelMax(632),fTransMax(145)
 {
-  fAlphaMax = (G4float)1.e-15;
+  fAlphaMax = (G4float)1.e15;
   fParam = fData->GetParameters();
   fTimeFactor = CLHEP::second/G4Pow::GetInstance()->logZ(2);
   char* directory = getenv("G4LEVELGAMMADATA");

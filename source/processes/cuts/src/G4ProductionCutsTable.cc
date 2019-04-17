@@ -437,7 +437,7 @@ G4bool  G4ProductionCutsTable::StoreCutsTable(const G4String& dir,
 #ifdef G4VERBOSE  
   if (verboseLevel >2) {
     G4cout << "G4ProductionCutsTable::StoreCutsTable " ;
-    G4cout << " Material/Cuts information have been succesfully stored ";
+    G4cout << " Material/Cuts information have been successfully stored ";
     if (ascii) {
       G4cout << " in Ascii mode ";
     }else{
@@ -458,7 +458,7 @@ G4bool  G4ProductionCutsTable::RetrieveCutsTable(const G4String& dir,
 #ifdef G4VERBOSE  
   if (verboseLevel >2) {
     G4cout << "G4ProductionCutsTable::RetrieveCutsTable " ;
-    G4cout << " Material/Cuts information have been succesfully retreived ";
+    G4cout << " Material/Cuts information have been successfully retrieved ";
     if (ascii) {
       G4cout << " in Ascii mode ";
     }else{

@@ -19,6 +19,9 @@ committal in the CVS repository !
 History file for graphics_reps category
 ---------------------------------------
 
+31 January 2019  Ivana Hrivnacova (greps-V10-04-09)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 19 October 2018  John Allison (greps-V10-04-08)
 - G4VisExtent: Add GetNullExtent.
 
@@ -696,7 +699,7 @@ June 11, 2012 G.Cosmo (greps-V09-05-09)
 - Replaced M_PI with CLHEP's pi.
 
 8th December 2004  G.Cosmo  (greps-V06-02-03)
-- HepPolyhedron, BooleanProcessor: replaced occurences of HepStd::
+- HepPolyhedron, BooleanProcessor: replaced occurrences of HepStd::
   with std::
 - Added inclusion of <cmath> in HepPolyhedron.cc.
 

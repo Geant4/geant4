@@ -76,6 +76,7 @@ public:
      energy = 0;
      theYield = 0;
      thePartialXsec = 0;
+     theReactionXsec = 0;
      isPrimary = 0;
      theShells = 0;
      theGammas = 0;
@@ -99,6 +100,7 @@ public:
      delete [] energy;
      delete [] theYield;
      delete [] thePartialXsec;
+     delete [] theReactionXsec;
      delete [] isPrimary;
      delete [] theShells;
      delete [] theGammas;
@@ -135,7 +137,7 @@ public:
   
   void InitEnergies(std::istream & aDataFile);
   
-  void InitPartials(std::istream & aDataFile);
+  void InitPartials(std::istream& aDataFile, G4ParticleHPVector* theXsec = 0);
   
   G4ReactionProductVector * GetPhotons(G4double anEnergy);
   
@@ -151,12 +153,13 @@ private:
    G4double targetMass;
    
    G4int nDiscrete;  //number of discrete photons 
-   G4int * disType;  // discrete, or continuum photons
-   G4double * energy;  // photon energies
-   G4ParticleHPVector * theYield; // multiplicity as a function of neutron energy.
+   G4int* disType;  // discrete, or continuum photons
+   G4double* energy;  // photon energies
+   G4ParticleHPVector* theYield; // multiplicity as a function of neutron energy.
    G4ParticleHPVector theTotalXsec;
-   G4ParticleHPVector * thePartialXsec;
-   G4int * isPrimary;
+   G4ParticleHPVector* thePartialXsec;
+   G4ParticleHPVector* theReactionXsec;
+   G4int* isPrimary;
   
    G4int isoFlag; // isotropic or not?
    G4int tabulationType;

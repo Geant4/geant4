@@ -56,7 +56,7 @@ class B5HodoscopeHit : public G4VHit
     virtual ~B5HodoscopeHit();
 
     const B5HodoscopeHit& operator=(const B5HodoscopeHit &right);
-    int operator==(const B5HodoscopeHit &right) const;
+    G4bool operator==(const B5HodoscopeHit &right) const;
     
     inline void *operator new(size_t);
     inline void operator delete(void*aHit);

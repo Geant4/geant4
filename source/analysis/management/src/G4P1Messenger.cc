@@ -105,7 +105,7 @@ void G4P1Messenger::CreateP1Cmd()
   auto p1xValFcn0 = new G4UIparameter("xvalFcn0", 's', true);
   G4String fcnxGuidance = "The function applied to filled x-values (log, log10, exp, none).\n";
   fcnxGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnxGuidance += "but none value should be used insted.";
+  fcnxGuidance += "but none value should be used instead.";
   p1xValFcn0->SetGuidance(fcnxGuidance);
   p1xValFcn0->SetParameterCandidates("log log10 exp none");
   p1xValFcn0->SetDefaultValue("none");
@@ -115,7 +115,7 @@ void G4P1Messenger::CreateP1Cmd()
   p1xValBinScheme0->SetParameterCandidates("linear log");
   binSchemeGuidance 
     += "Note that the unit and fcn parameters cannot be omitted in this case,\n";
-  binSchemeGuidance += "but none value should be used insted.";
+  binSchemeGuidance += "but none value should be used instead.";
   p1xValBinScheme0->SetGuidance(binSchemeGuidance);
   p1xValBinScheme0->SetDefaultValue("linear");
   
@@ -136,7 +136,7 @@ void G4P1Messenger::CreateP1Cmd()
   auto p1yValFcn0 = new G4UIparameter("yvalFcn0", 's', true);
   G4String fcnyGuidance = "The function applied to filled y-values (log, log10, exp, none).\n";
   fcnyGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnyGuidance += "but none value should be used insted.";
+  fcnyGuidance += "but none value should be used instead.";
   p1yValFcn0->SetGuidance(fcnyGuidance);
   p1yValFcn0->SetParameterCandidates("log log10 exp none");
   p1yValFcn0->SetDefaultValue("none");
@@ -183,7 +183,7 @@ void G4P1Messenger::SetP1Cmd()
   p1xValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnxGuidance = "The function applied to filled x-values (log, log10, exp, none).\n";
   fcnxGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnxGuidance += "but none value should be used insted.";
+  fcnxGuidance += "but none value should be used instead.";
   p1xValFcn->SetGuidance(fcnxGuidance);
   p1xValFcn->SetDefaultValue("none");
  
@@ -192,7 +192,7 @@ void G4P1Messenger::SetP1Cmd()
   p1xValBinScheme->SetParameterCandidates("linear log");
   binSchemeGuidance 
     += "Note that the unit and fcn parameters cannot be omitted in this case,\n";
-  binSchemeGuidance += "but none value should be used insted.";
+  binSchemeGuidance += "but none value should be used instead.";
   p1xValBinScheme->SetGuidance(binSchemeGuidance);
   p1xValBinScheme->SetDefaultValue("linear");
   
@@ -210,7 +210,7 @@ void G4P1Messenger::SetP1Cmd()
   p1yValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnyGuidance = "The function applied to filled y-values (log, log10, exp, none).\n";
   fcnyGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnyGuidance += "but none value should be used insted.";
+  fcnyGuidance += "but none value should be used instead.";
   p1yValFcn->SetGuidance(fcnyGuidance);
   p1yValFcn->SetDefaultValue("none");
  

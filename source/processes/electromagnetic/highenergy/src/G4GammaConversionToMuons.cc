@@ -56,8 +56,9 @@ G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
   : G4VDiscreteProcess (processName, type),
     Mmuon(G4MuonPlus::MuonPlus()->GetPDGMass()),
     Rc(elm_coupling/Mmuon),
-    LowestEnergyLimit (4.*Mmuon), // 4*Mmuon
-    HighestEnergyLimit(1e21*eV), // ok to 1e21eV=1e12GeV, then LPM suppression
+    LimitEnergy (5.*Mmuon), 
+    LowestEnergyLimit (2.*Mmuon), 
+    HighestEnergyLimit(1e12*GeV), // ok to 1e12GeV, then LPM suppression
     CrossSecFactor(1.)
 { 
   SetProcessSubType(fGammaConversionToMuMu);
@@ -116,12 +117,19 @@ G4GammaConversionToMuons::ComputeMeanFreePath(G4double GammaEnergy,
   const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();
 
   G4double SIGMA = 0.0;
+  G4double fact  = 1.0;
+  G4double e = GammaEnergy;
+  // low energy approximation as in Bethe-Heitler model
+  if(e < LimitEnergy) {
+    G4double y = (e - LowestEnergyLimit)/(LimitEnergy - LowestEnergyLimit);
+    fact = y*y;
+    e = LimitEnergy;
+  } 
 
   for ( size_t i=0 ; i < aMaterial->GetNumberOfElements(); ++i)
   {
-    SIGMA += NbOfAtomsPerVolume[i] *
-      ComputeCrossSectionPerAtom(GammaEnergy,
-                                 (*theElementVector)[i]->GetZasInt());
+    SIGMA += NbOfAtomsPerVolume[i] * fact *
+      ComputeCrossSectionPerAtom(e, (*theElementVector)[i]->GetZasInt());
   }
   return (SIGMA > 0.0) ? 1./SIGMA : DBL_MAX;
 }
@@ -147,7 +155,7 @@ G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
 // Total cross section parametrisation from H.Burkhardt
 // It gives a good description at any energy (from 0 to 10**21 eV)
 { 
-  if(Egam <= LowestEnergyLimit) return 0.0; // below threshold return 0
+  if(Egam < LimitEnergy) return 0.0; // below threshold return 0
 
   G4double CrossSection = 0.0;
   G4NistManager* nist = G4NistManager::Instance();
@@ -235,11 +243,11 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   G4double C2Term2=electron_mass_c2/(183.*Zthird*Mmuon);
 
   G4double GammaMuonInv=Mmuon/Egam;
-  G4double sqrtx=sqrt(.25-GammaMuonInv);
-  G4double xmax=.5+sqrtx;
-  G4double xmin=.5-sqrtx;
 
   // generate xPlus according to the differential cross section by rejection
+  G4double xmin=(Egam < LimitEnergy) ? GammaMuonInv : .5-sqrt(.25-GammaMuonInv);
+  G4double xmax=1.-xmin;
+
   G4double Ds2=(Dn*sqrte-2.);
   G4double sBZ=sqrte*B*Zthird/electron_mass_c2;
   G4double LogWmaxInv=1./G4Log(Winfty*(1.+2.*Ds2*GammaMuonInv)
@@ -247,15 +255,14 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   G4double xPlus,xMinus,xPM,result,W;
   G4int nn = 0;
   const G4int nmax = 1000;
-  do
-  { xPlus=xmin+G4UniformRand()*(xmax-xmin);
+  do {
+    xPlus=xmin+G4UniformRand()*(xmax-xmin);
     xMinus=1.-xPlus;
     xPM=xPlus*xMinus;
     G4double del=Mmuon*Mmuon/(2.*Egam*xPM);
     W=Winfty*(1.+Ds2*del/Mmuon)/(1.+sBZ*del);
-    if(W<=1. || nn > nmax) { break; } // to avoid negative cross section at xmin
     G4double xxp=1.-4./3.*xPM; // the main xPlus dependence
-    result=xxp*G4Log(W)*LogWmaxInv;
+    result=(xxp > 0.) ? xxp*G4Log(W)*LogWmaxInv : 0.0;
     if(result>1.) {
       G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
 	     << " in dSigxPlusGen, result=" << result << " > 1" << G4endl;

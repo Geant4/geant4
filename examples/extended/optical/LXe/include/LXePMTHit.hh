@@ -53,7 +53,7 @@ class LXePMTHit : public G4VHit
     LXePMTHit(const LXePMTHit &right);
 
     const LXePMTHit& operator=(const LXePMTHit &right);
-    G4int operator==(const LXePMTHit &right) const;
+    G4bool operator==(const LXePMTHit &right) const;
 
     inline void *operator new(size_t);
     inline void operator delete(void *aHit);

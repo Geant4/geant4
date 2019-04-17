@@ -15,6 +15,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+19 December 2018 - Alberto Ribon (hadr-inclxx-V10-04-07)
+---------------------------------------------------------------
+- G4INCLHFB.cc : Fixed (weak and strong) non-reproducibility by making
+  the arrays radiusP, radiusN, diffusenessP, diffusenessN thread-local.
+
 21 November 2018 - Gabriele Cosmo (hadr-inclxx-V10-04-06)
 ---------------------------------------------------------------
 - G4INCLRandom.hh: changed Adapter::operator()() to make direct use of

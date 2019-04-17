@@ -87,8 +87,8 @@ class G4SurfaceProperty
     // G4SurfaceProperty(const G4SurfaceProperty &right);
     // const G4SurfaceProperty & operator=(const G4SurfaceProperty &right);
 
-    // G4int operator==(const G4SurfaceProperty &right) const;
-    // G4int operator!=(const G4SurfaceProperty &right) const;
+    // G4bool operator==(const G4SurfaceProperty &right) const;
+    // G4bool operator!=(const G4SurfaceProperty &right) const;
 
   public: // With description
 

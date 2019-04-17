@@ -94,7 +94,7 @@ inline void
 
 template  < CexmcValueCategory  RangeCategory,
             CexmcValueCategory  ValueCategory >
-inline bool  operator<(
+inline G4bool  operator<(
     const CexmcSimpleRangeWithValue< RangeCategory, ValueCategory > &  left,
     const CexmcSimpleRangeWithValue< RangeCategory, ValueCategory > &  right )
 {

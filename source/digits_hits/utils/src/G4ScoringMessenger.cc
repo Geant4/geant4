@@ -41,6 +41,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcommand.hh"
+#include "G4UIparameter.hh"
 #include "G4Tokenizer.hh"
 #include "G4UnitsTable.hh"
 #include "G4VScoreColorMap.hh"
@@ -111,7 +112,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param->SetParameterRange("Dz>0");
   mCylinderSizeCmd->SetParameter(param);
   param = new G4UIparameter("unit",'s',true);
-  param->SetDefaultValue("mm");
+  param->SetDefaultUnit("mm");
   mCylinderSizeCmd->SetParameter(param);
   //
   //   Division command
@@ -223,7 +224,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   listColorMapCmd->SetToBeBroadcasted(false);
 
   floatMinMaxCmd = new G4UIcmdWithAString("/score/colorMap/floatMinMax",this);
-  floatMinMaxCmd->SetGuidance("Min/Max of the color map is calculated accorging to the actual scores.");
+  floatMinMaxCmd->SetGuidance("Min/Max of the color map is calculated according to the actual scores.");
   floatMinMaxCmd->SetParameterName("colorMapName",true,false);
   floatMinMaxCmd->SetDefaultValue("defaultLinearColorMap");
   floatMinMaxCmd->SetToBeBroadcasted(false);

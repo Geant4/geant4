@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-03-19 M.Novak (materials-V10-04-11)
+- G4NistMaterialBuilder - fixed atomic number value in simple material printout
+
+13-02-19 V.Ivanchenko
+- G4NistManager - added more detailed comments to public methods
+- G4NistMaterialBuilder - fixed build of gas materials 
+    (problem reports #2133, #2134) 
+
+31-01-19  I.Hrivnacova
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 19-10-18 V.Ivanchenko (materials-V10-04-10)
 18-10-18 V.Ivanchenko (materials-V10-04-09)
 - G4ICRU90StoppingData - fixed initialisation

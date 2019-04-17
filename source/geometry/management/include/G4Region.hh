@@ -110,11 +110,15 @@ class G4Region
     inline G4bool operator==(const G4Region& rg) const;
       // Equality defined by address only.
 
-    void AddRootLogicalVolume(G4LogicalVolume* lv);
+    void AddRootLogicalVolume(G4LogicalVolume* lv, G4bool search=true);
     void RemoveRootLogicalVolume(G4LogicalVolume* lv, G4bool scan=true);
       // Add/remove root logical volumes and set/reset their
       // daughters flags as regions. They also recompute the
-      // materials list for the region.
+      // materials list for the region. Flag for scanning the subtree
+      // always enabled by default. Search in the tree can be turned off
+      // when adding, assuming the user guarantees the logical volume is
+      // NOT already inserted, in which case significant speedup can be
+      // achieved in very complex flat geometry setups.
 
     inline void SetName(const G4String& name);
     inline const G4String& GetName() const;

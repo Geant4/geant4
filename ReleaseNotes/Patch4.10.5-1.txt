@@ -1,0 +1,318 @@
+
+                 Geant4 10.5 - patch-01 Release Notes
+                 ------------------------------------
+
+                                                             17 April 2019
+
+List of fixes included in this public patch since the public release 10.5:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Added configuration GEANT4_USE_SMARTSTACK to enable use of smart-stack
+        algorithm for default stack in G4TrackStack.
+
+  o Analysis:
+    --------
+    + Fixed few typos in printouts.
+
+  o Digits_Hits:
+    -----------
+    + Define unit categories in messengers for UI commands that take units.
+    + G4SDManager, G4VSDFilter: cleanly delete all the G4VSDFilter objects at
+      the end of program.
+    + Fixed return type of Boolean operators.
+    + Fixed shadowing compilation warning in G4ScoringBox and G4ScoringCylinder.
+    + Fixed few typos in printouts.
+
+  o Event:
+    -----
+    + G4PrimaryTransformer: allowing absolute zero proper decay time.
+    + G4HEPEvtInterface: clean up G4Exception severities when end-of-file
+      is detected.
+    + Fixed return type of Boolean operators.
+    + Fixed typos in printouts in G4GeneralParticleSourceMessenger.
+
+  o G3toG4:
+    ------
+    + Fixed return type of Boolean operators.
+    + Fixed shadowing compilation warning in G3toG4MakeSolid.
+
+  o Geometry:
+    --------
+    + Fixed return type of Boolean operators.
+    + magneticfield
+      o Corrected transformation to local system in G4QuadrupoleMagField.
+      o Corrected 'RegularStepperName' in G4ChordFinder to refer to the actual
+        default stepper G4DormandPrince745 rather than G4NystromRK4.
+    + management:
+      o Use reverse_iterator in G4SolidStore::DeRegister() in order to speedup
+        partial deregistration on setups with many solids instances.
+      o G4Region: added possibility to disable search in the tree in
+        AddRootLogicalVolume() for speeding up process in complex flat
+        geometries.
+      o G4LogicalVolume: in AddDaughter() avoid propagating pointer to
+        field-manager if this is null. Addressing problem report #2145.
+    + navigation:
+      o Protected report for looping particles under verbosity flag in
+        G4PropagatorInField::ComputeStep().
+      o Fixed few typos in printouts in G4NavigationLogger.
+    + solids/specific:
+      o Disabled precise computation of extent and use simple bounding-box in
+        CalculateExtent() for G4Tet and G4TessellatedSolid, to speed up
+        intialisation in setups with relatively complex meshes.
+        Apply bounding-box calculation for extent also for the corresponding
+        VecGeom wrappers.
+      o Revised algorithms and improved robustness in G4EllipticalTube.
+      o Accurate calculation of radical in G4IntersectingCone.
+        Addressing problem report #2111.
+    + volumes:
+      o Correction in G4AssemblyVolume destructor to avoid deletion of internal
+        physical volumes, as cleanup is taken care by G4PhysicalVolumeStore.
+        Addressing problem report #2140.
+
+  o Global:
+    ------
+    + Enable FPE detection on MacOS with clang. Addressing problem report #2147.
+    + Fixed return type of Boolean operators.
+    + Updated date and version for 10.5.p01.
+
+  o Graphics Representations:
+    ------------------------
+    + Fixed return type of Boolean operators in G4TypeKey.
+
+  o Intercoms:
+    ---------
+    + G4UIcommand: fixed misbehavior in RangeCheck() method, when string-type
+      parameter comes prior to numeric-type parameters in commands.
+    + Added G4UIparameter::SetDefaultUnit() method to simplify the definition
+      of a unit parameter.
+    + Fixed return type of Boolean operators.
+    + Fixed few typos in printouts.
+
+  o Materials
+    ---------
+    + G4NistMaterialBuilder: fixed atomic number value in simple material
+      printout. Fixed build of gas materials.
+      Addressing problem reports #2133 and #2134. 
+    + G4NistManager: added more detailed comments to public methods.
+    + Fixed return type of Boolean operators.
+
+  o Parameterisations - gflash
+    --------------------------
+    + Fixed return type of Boolean operators in G4VGFlashSensitiveDetector.
+
+  o Particles
+    ---------
+    + G4PrimaryParticle: allowing absolute zero proper decay time.
+    + Fixed return type of Boolean operators.
+    + Fixed typo in printout in G4NuclideTableMessenger.
+
+  o Persistency
+    -----------
+    + ascii:
+      o Fixed shadowing compilation warnings.
+    + gdml:
+      o Fix in G4GDMLReadStructure::PhysvolRead() to allow correct import of
+        recursive assembly structures. Addressing problem report #2141.
+      o Added protection to G4GDMLParser for dumping geometry only through
+        the master thread. Added extra protection also in reading.
+        Addressing problem report #2156.
+      o Fixed export of optical surface properties.
+        Addressing problem reports #2142 and 2143.
+
+  o Physics Lists
+    -------------
+    + constructors/electromagnetic:
+      o G4OpticalPhysics, G4OpticalPhysicsMessenger: put all UI commands into
+        a messenger class; addressing problem report #2085; deprecated commands
+        with /default/ in command string.
+      o G4EmModelActivator: addressing problem report #2106.
+        Fixed compilation warning on clang.
+      o G4EmLivermorePhysics, G4EmPenelopePhysics: set multiple-scattering
+        configuration the same as in Opt4: RangeFactor=0.08, Skin=3,
+        UserSafetyPlus on.
+      o G4EmStandardPhysicsWVI: use G4eplusTo2GammaOKVIModel with 3-gamma
+        annihilation for e+.
+      o G4EmStandardPhysics_option4: changed RangeFactor to 0.08 to improve
+        results from fanoCavity test.
+    + constructors/hadron_elastic:
+      o G4HadronElasticPhysics: for deuteron, triton and alpha, use
+        Glauber-Gribov elastic cross-sections (instead of Gheisha ones,
+        which returns zero).
+    + lists:
+      o Shielding, QGSP_BIC_HP, QGSP_BIC_AllHP: set cut for proton to zero.
+        Addressing problem report #2150.
+      o Minor code clean-up.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + adjoint:
+      o Fixed typos in printouts and comments.
+    + high energy:
+      o G4mplIonisation, G4mplIonisationWithDeltaModel: added low limit for
+        delta-electron production threshold. Addressing problem report #2126.
+      o G4GammaConversionToMuons: fixed low-energy part of the model by adding
+        intermediate limit of 5*MuMass, below which an approximation of the
+        cross-section similar to the Bethe-Heitler model is used; fixed bug
+        in energy sampling for low-energy.
+    + low energy:
+      o Fixed 'dsigma' calculation in G4PhotoElectricAngularGeneratorPolarized.
+        Addressing problem report #2089.
+      o Fixed return type of Boolean operators.
+    + muons:
+      o G4MuMultipleSacttering: reduced length of printout.
+        Addressing problem report #2105.
+    + standard:
+      o G4IonCoulombScatteringModel, G4eCoulombScatteringModel,
+        G4eSingleCoulombScatteringModel, G4hCoulombScatteringModel: fixed
+        precision loss for scattering with very small kinetic energy.
+        Addressing problem report #2152.
+      o G4eMultipleSacttering, G4hMultipleScattering: reduced length of
+        printouts. Addressing problem report #2105.
+      o G4eplusTo2GammaOKVIModel: fixed crash at initialisation.
+      o G4ModifiedTsai, G4SauterGavrilaAngularDistribution: reduced length of
+        names for these generators. Addressing problem report #2105.
+      o Code clean-up in G4BetheBlochModel.
+    + utils:
+      o G4EmBiasingManager, G4VEmProcess, G4VEnergyLossProcess: fixed weights
+        for biasing. Should be like version 10.4 now for range cut, splitting,
+        roulette.
+      o G4EmBiasingManager: fixed incorrect weights with brem splitting
+        introduced in release 10.5. Addressing problem report #2125.
+      o G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering,
+        G4EmModelManager: make info printout at initialisation more compact.
+        Addressing problem report #2105.
+      o G4VEmProcess, G4VEnergyLossProcess: make printout information more
+        compact.
+      o G4EmParametersMessenger: defining unit categories for UI commands
+        that take units. Fixed typos in printouts
+    + xrays:
+      o G4Cerenkov: increase protection against infinite loops.
+
+  o Processes - Generic:
+    -------------------
+    + biasing:
+      o Fixed typos in printouts and comments.
+    + cuts:
+      o Fixed return type of Boolean operators.
+      o Fixed typos in printouts in G4PhysicsTableHelper and
+        G4ProductionCutsTable.
+    + decay:
+      o G4Decay, G4UnknownDecay: allowing absolute zero proper decay time.
+    + solidstate/channeling:
+      o Fixed printouts and comments.
+
+  o Processes - Hadronic:
+    --------------------
+    + cross_sections:
+      o G4ChipsNeutronElasticXS: fixed compilation warnings on clang.
+    + models/de_excitation:
+      o G4PhotonEvaporation: for nuclear levels without decay modes defined
+        perform decay not to the ground state but to the nearest level.
+        Addressing problem report #2123.
+      o G4LevelReader: fixed typo. Addressing problem report #2124.
+      o G4LevelManager, G4NucLevel: fixed debug and warning printouts.
+    + models/fission:
+      o G4SmpIsoDir: removed use of G4Pow for squaring, sometimes causing crash.
+    + models/inclxx:
+      o G4INCLHFB: fixed (weak and strong) event non-reproducibility by making
+        the arrays 'radiusP, radiusN, diffusenessP, diffusenessN' thread-local.
+      o Fixed return type of Boolean operators.
+    + models/particle_hp:
+      o Fix to make sure production cross-section is not ignored when sampling
+        discrete gamma emission. Addressing problem report #1824.
+      o G4ParticleHPKallbachMannSyst::Kallbach: replaced G4Exp with std::exp in
+        order to avoid underflow/overflow crashes observed with the physics list
+        QGSP_BIC_AllHP.
+    + models/parton_string/diffraction:
+      o G4FTFModel: fixed a memory leak in G4FTFModel::GetStrings().
+        Addressing problem report #2138.
+      o Corrected FTF_NUCDESTR_P1_ADEP_TGT parameter that was accidentally
+        set as "fixed". Minor cleanups.
+      o Fixed return type of Boolean operators.
+    + models/parton_string/qgsm:
+      o G4QGSParticipants: bug-fix in computation of the transverse mass in
+        DeterminePartonMomenta() method.
+      o Fixed return type of Boolean operators.
+
+  o Processes - Management:
+    ----------------------
+    o Fixed typos in printouts in G4ProcessTableMessenger, G4ProcessManager
+      and G4VRest*Process.
+    o Fixed return type of Boolean operators.
+
+  o Readout:
+    -------
+    o Fixed return type of Boolean operators.
+
+  o Run:
+    ---
+    o Fix in G4MultiRunAction to cope with more than one user run action
+      classes.
+    o G4UserPhysicsListMessenger.cc: defining unit categories for UI commands
+      that take units.
+    o Fixed return type of Boolean operators.
+    o Fixed typos in printouts.
+
+  o Tracking:
+    --------
+    o Fixed return type of Boolean operators.
+    o Fixed typos in printouts and comments.
+
+  o Visualization:
+    -------------
+    o Fix to pick up default number of line-segments-per-circle from
+      G4Polyhedron in G4ViewParameters.
+
+
+  o Examples:
+    --------
+    + Fixed return type of Boolean operators.
+    + advanced/ChargeExchangeMC
+      o Fixed compilation warnings for unused data when no analysis set.
+      o Fixed regular expression error in schema validation for lht.gdml.
+    + advanced/doiPET
+      o Fixed compilation warnings on clang for unused data members in
+        doiPETDetectorConstruction and doiPETEventAction classes.
+    + basic/B4
+      o Corrected name of include file: csv.hh.
+    + extended/electromagnetic/TestEm8
+      o DetectorConstruction: added alternative materials in order to test all
+        methods to construct new material with G4NistMaterialBuilder.
+        Addressing problem reports #2133 and #2134.
+    + extended/exoticphysics/monopole
+      o Avoid instantiation of the vis-manager in the main() in the batch mode;
+        set default number of threads to 1.
+      o Run, RunAction: extended histograms and printouts to restricted dEdx
+        and delta-electron cross-section (addressing problem report #2126).
+      o G4MonopolePhysics: minor code clean-up.
+    + extended/hadronic/Hadr02
+      o Fixed bug in the energe range of the transition between FTFP and BERT.
+    + extended/medical/dna/chem1-5
+      o Fixed PhysicsList.
+    + extended/medical/dna/dnaphysics
+      o Updated README.
+    + extended/persistency/gdml/G01
+      o Migrated example to multi-threading, to test MT in reading/writing.
+    + extended/persistency/P03
+      o Fixed compilation warnings on unused local iterators.
+    + extended/runAndEvent/RE05
+      o Reduced the number of events in pythia_event.data to make it smaller
+        than 2 MB. Number of events executed by the macro exampleRE05.in is
+        also reduced accordingly.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.5.
+  o  Technical notes distributed for release 10.5 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.5.p01 are available
+through our "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

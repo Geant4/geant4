@@ -41,8 +41,8 @@ class G4DiffractiveStringBuilder
 
   private:
     G4DiffractiveStringBuilder(const G4DiffractiveStringBuilder &right);
-    G4int operator==(const G4DiffractiveStringBuilder &right) const;
-    G4int operator!=(const G4DiffractiveStringBuilder &right) const;
+    G4bool operator==(const G4DiffractiveStringBuilder &right) const;
+    G4bool operator!=(const G4DiffractiveStringBuilder &right) const;
 };
 
 #endif

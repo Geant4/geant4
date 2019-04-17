@@ -57,9 +57,9 @@ const G4HumanPhantomHit& G4HumanPhantomHit::operator=(const G4HumanPhantomHit& r
   return *this;
 }
 
-G4int G4HumanPhantomHit::operator==(const G4HumanPhantomHit& right) const
+G4bool G4HumanPhantomHit::operator==(const G4HumanPhantomHit& right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 void G4HumanPhantomHit::Draw()

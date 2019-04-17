@@ -96,7 +96,7 @@ G4IsotopeProperty & G4IsotopeProperty::operator=(G4IsotopeProperty& right)
 
  
 // equal / unequal operator
-G4int G4IsotopeProperty::operator==(const G4IsotopeProperty &right) const
+G4bool G4IsotopeProperty::operator==(const G4IsotopeProperty &right) const
 {
   G4bool value = true;
   value = value && ( fAtomicNumber    == right.fAtomicNumber);
@@ -110,7 +110,7 @@ G4int G4IsotopeProperty::operator==(const G4IsotopeProperty &right) const
   return value;
 }
 
-G4int G4IsotopeProperty::operator!=(const G4IsotopeProperty &right) const
+G4bool G4IsotopeProperty::operator!=(const G4IsotopeProperty &right) const
 {
   return !(*this == right);
 }

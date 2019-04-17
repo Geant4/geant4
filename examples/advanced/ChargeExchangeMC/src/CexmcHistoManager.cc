@@ -92,8 +92,10 @@ namespace
     const G4double  CexmcHistoMissEnergyResolution( 0.2 * MeV );
     const G4double  CexmcHistoAngularResolution( 0.5 );
     const G4double  CexmcHistoAngularCResolution( 0.001 );
+#ifdef CEXMC_USE_ROOTQT
     const G4int     CexmcHistoCanvasWidth( 800 );
     const G4int     CexmcHistoCanvasHeight( 600 );
+#endif
     const G4String  CexmcHistoDirectoryHandle( "histograms" );
     const G4String  CexmcHistoDirectoryTitle( "Histograms" );
 }

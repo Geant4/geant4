@@ -176,9 +176,9 @@ G4UImanager::G4UImanager(const G4UImanager& ui)
 
 const G4UImanager & G4UImanager::operator=(const G4UImanager &right)
 { return right; }
-G4int G4UImanager::operator==(const G4UImanager &right) const
+G4bool G4UImanager::operator==(const G4UImanager &right) const
 { return (this==&right); }
-G4int G4UImanager::operator!=(const G4UImanager &right) const
+G4bool G4UImanager::operator!=(const G4UImanager &right) const
 { return (this!=&right); }
 
 void G4UImanager::UseDoublePrecisionStr(G4bool val)
@@ -423,7 +423,7 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
         G4cerr << aCommand << G4endl;
         for(G4int i=0;i<ia;i++) G4cerr << " ";
         G4cerr << "^" << G4endl;
-        G4cerr << "Unmatched alias parenthis -- command ignored" << G4endl;
+        G4cerr << "Unmatched alias parenthesis -- command ignored" << G4endl;
         G4String nullStr;
         return nullStr;
       }

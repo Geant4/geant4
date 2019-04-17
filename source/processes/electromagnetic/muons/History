@@ -16,9 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 February 19:  V.Ivanchenko (emmuons-V10-04-06)
+- G4MuMultipleSacttering - reduced length of printout (fix problem #2105)
+
 17 September 18: D.Sawkey (emmuons-V10-04-05)
-- G4MuMultipleScattering, G4MuPairProduction, G4eePairProduction, G4MuBremsstrahlung,
-  G4MuIonisation: automatic documenation format now rST
+- G4MuMultipleScattering, G4MuPairProduction, G4eePairProduction, 
+  G4MuBremsstrahlung, G4MuIonisation: automatic documenation format now rST
 
 22 August 18: V.Ivant (emmuons-V10-04-04)
 - G4EnergyLossForExtrapolator - fixed MT initialisation and destruction

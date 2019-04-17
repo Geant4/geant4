@@ -78,7 +78,7 @@ const GammaRayTelTrackerHit& GammaRayTelTrackerHit::operator=(const GammaRayTelT
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int GammaRayTelTrackerHit::operator==(const GammaRayTelTrackerHit& right) const
+G4bool GammaRayTelTrackerHit::operator==(const GammaRayTelTrackerHit& right) const
 {
   return((EdepSil==right.EdepSil)&&(NStrip==right.NStrip)&&(IsXPlane==right.IsXPlane)&& (pos==right.pos));
 }

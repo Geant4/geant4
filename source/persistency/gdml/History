@@ -16,6 +16,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 April 2019 Witek Pokorski (gdml-V10-04-06)
+- Fixes to BorderSurface and OpticalSurface writer provided by Binbin Qi.
+  Addressing problem reports #2143 and #2142.
+
+2 April 2019 Gabriele Cosmo (gdml-V10-04-05)
+- Added more protections for workers also for writing modules and read.
+
+1 April 2019 Gabriele Cosmo
+- Added protection to G4GDMLParser::Write() to dump geometry only through
+  the master thread. Addressing problem report #2156.
+
+4 March 2019 Gabriele Cosmo
+- Fix in G4GDMLReadStructure::PhysvolRead() to allow correct import of
+  recursive assembly structures. Thanks to B.Qi for the suggested fix.
+  Addressing problem report #2141.
+
 5 October 2018 Gabriele Cosmo (gdml-V10-04-04)
 - Added stripping of invalid characters for names generation in writer classes
   to prevent invalid NCName strings in exported GDML files. Adopt properly

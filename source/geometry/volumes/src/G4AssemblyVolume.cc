@@ -101,7 +101,7 @@ G4AssemblyVolume::~G4AssemblyVolume()
   unsigned int howmany = fTriplets.size();
   if( howmany != 0 )
   {
-    for( unsigned int i = 0; i < howmany; i++ )
+    for( unsigned int i = 0; i < howmany; ++i )
     {
       G4RotationMatrix* pRotToClean = fTriplets[i].GetRotation();
       if( pRotToClean != 0 )
@@ -112,14 +112,9 @@ G4AssemblyVolume::~G4AssemblyVolume()
   }
   fTriplets.clear();
   
-  howmany = fPVStore.size();
-  if( howmany != 0 )
-  {
-    for( unsigned int j = 0; j < howmany; j++ )
-    {
-      delete fPVStore[j];
-    }
-  }
+  // No need to delete physical volumes, as these are deleted
+  // by physical-volumes store.
+  //
   fPVStore.clear();
   InstanceCountMinus();
   G4AssemblyStore::GetInstance()->DeRegister(this);

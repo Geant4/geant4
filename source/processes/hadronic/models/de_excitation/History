@@ -14,6 +14,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18 March 2019 Vladimir Ivanchenko (hadr-deex-V10-04-20)
+- G4PhotonEvaporation - for nuclear levels without decay modes defined
+    perform decay not to the ground state but to the nearest level  
+    (problem #2123)
+- G4LevelManager, G4NucLevel - fixed debug and warning printouts
+
+12 March 2019 Vladimir Ivanchenko
+- G4PhotonEvaporation - fixed decay from nuclear level, which has no
+    decay channels defined (problem #2123)
+
+28 January 2019 Vladimir Ivanchenko
+- G4LevelReader - fixed typo (problem #2124)
+
 05 December 2018 Gabriele Cosmo (hadr-deex-V10-04-19)
 - G4ExcitationHandler: added protection to verbosity printouts in
   SetDeexChannelsType() and Initialise() methods.

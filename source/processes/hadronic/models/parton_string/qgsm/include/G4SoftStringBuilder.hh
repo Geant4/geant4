@@ -42,8 +42,8 @@ class G4SoftStringBuilder
 
   private:     
     G4SoftStringBuilder(const G4SoftStringBuilder &right);
-    G4int operator==(const G4SoftStringBuilder &right) const;
-    G4int operator!=(const G4SoftStringBuilder &right) const;
+    G4bool operator==(const G4SoftStringBuilder &right) const;
+    G4bool operator!=(const G4SoftStringBuilder &right) const;
 };
 
 #endif

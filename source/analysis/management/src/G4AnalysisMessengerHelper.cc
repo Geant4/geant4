@@ -63,7 +63,7 @@ G4String ObjectType(const G4String& hnType)
 
 //_____________________________________________________________________________
 void Replace(std::string& str, const std::string& from, const std::string& to) {
-  // Replace all occurences of from string
+  // Replace all occurrences of from string
   if (from.empty()) return;
   size_t start_pos = 0;
   while ((start_pos = str.find(from, start_pos)) != std::string::npos) {

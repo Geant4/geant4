@@ -49,7 +49,7 @@ class G4SDStructure
       G4SDStructure(G4String aPath);
       ~G4SDStructure();
 
-      G4int operator==(const G4SDStructure &right) const;
+      G4bool operator==(const G4SDStructure &right) const;
 
       void AddNewDetector(G4VSensitiveDetector*aSD, G4String treeStructure);
       void Activate(G4String aName, G4bool sensitiveFlag);

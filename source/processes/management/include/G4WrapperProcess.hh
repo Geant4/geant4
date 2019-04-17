@@ -67,8 +67,8 @@ class G4WrapperProcess : public G4VProcess
       virtual ~G4WrapperProcess();
 
   // equality opperators
-      inline G4int operator==(const G4WrapperProcess &right) const;
-      inline G4int operator!=(const G4WrapperProcess &right) const;
+      inline G4bool operator==(const G4WrapperProcess &right) const;
+      inline G4bool operator!=(const G4WrapperProcess &right) const;
 
   public: // with description
     virtual void              RegisterProcess(G4VProcess*);
@@ -190,13 +190,13 @@ inline
 }
 
 inline
- G4int G4WrapperProcess::operator==(const G4WrapperProcess &right) const
+ G4bool G4WrapperProcess::operator==(const G4WrapperProcess &right) const
 {
   return (this == &right);
 }
 
 inline
- G4int G4WrapperProcess::operator!=(const G4WrapperProcess &right) const
+ G4bool G4WrapperProcess::operator!=(const G4WrapperProcess &right) const
 {
   return (this !=  &right);
 }

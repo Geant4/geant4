@@ -119,7 +119,7 @@ G4BiasingProcessInterface::G4BiasingProcessInterface(G4VProcess* wrappedProcess,
 
   // -- create physical interaction law:
   fPhysicalInteractionLaw         = new            G4InteractionLawPhysical("PhysicalInteractionLawFor("+GetProcessName()+")");
-  // -- instantiate particle change wrapper for occurence biaising:
+  // -- instantiate particle change wrapper for occurrence biaising:
   fOccurenceBiasingParticleChange = new G4ParticleChangeForOccurenceBiasing("biasingPCfor"+GetProcessName());
   // -- instantiate a "do nothing" particle change:
   fDummyParticleChange            = new          G4ParticleChangeForNothing();
@@ -362,7 +362,7 @@ G4double G4BiasingProcessInterface::PostStepGetPhysicalInteractionLength( const 
 	  ResetForUnbiasedTracking();
 	  if ( fIsPhysicsBasedBiasing )
 	    {
-	      // -- if the physics process has been under occurence biasing, reset it:
+	      // -- if the physics process has been under occurrence biasing, reset it:
 	      if ( fResetWrappedProcessInteractionLength )
 		{
 		  fResetWrappedProcessInteractionLength = false;
@@ -414,7 +414,7 @@ G4double G4BiasingProcessInterface::PostStepGetPhysicalInteractionLength( const 
   fOccurenceBiasingOperation = (fSharedData->fCurrentBiasingOperator)->GetProposedOccurenceBiasingOperation( &track, this );
 
 
-  // -- no operation for occurence biasing, analog GPIL returns the wrapped process GPIL and condition values
+  // -- no operation for occurrence biasing, analog GPIL returns the wrapped process GPIL and condition values
   if ( fOccurenceBiasingOperation == 0 )
     {
       *condition = fWrappedProcessForceCondition;
@@ -474,14 +474,14 @@ G4VParticleChange* G4BiasingProcessInterface::PostStepDoIt(const G4Track& track,
   // --    stepping.
   // --    In all other cases (analog final state or biased final but
   // --    not forced) the final state weight may be modified by the
-  // --    occurence biasing, if such an occurence biasing is at play.
+  // --    occurrence biasing, if such an occurrence biasing is at play.
   
   // -- Get final state, biased or analog:
   G4VParticleChange*   finalStateParticleChange;
   G4BiasingAppliedCase BAC;
   fFinalStateBiasingOperation = (fSharedData->fCurrentBiasingOperator)->GetProposedFinalStateBiasingOperation( &track, this );
-  // -- Flag below is to force the biased generated particle change to be retruned "as is" to the stepping, disregarding there
-  // -- was or not a occurence biasing that would apply. Weight relevance under full responsibility of the biasing operation.
+  // -- Flag below is to force the biased generated particle change to be returned "as is" to the stepping, disregarding there
+  // -- was or not a occurrence biasing that would apply. Weight relevance under full responsibility of the biasing operation.
   G4bool forceBiasedFinalState = false;
   if ( fFinalStateBiasingOperation != 0 )
     {
@@ -494,7 +494,7 @@ G4VParticleChange* G4BiasingProcessInterface::PostStepDoIt(const G4Track& track,
       BAC =  BAC_None ;
     }
   
-  // -- if no occurence biasing operation, we're done:
+  // -- if no occurrence biasing operation, we're done:
   if ( fOccurenceBiasingOperation == 0 )
     {
       (fSharedData->fCurrentBiasingOperator)->ReportOperationApplied( this, BAC, fFinalStateBiasingOperation, finalStateParticleChange );
@@ -509,7 +509,7 @@ G4VParticleChange* G4BiasingProcessInterface::PostStepDoIt(const G4Track& track,
     }
   
 
-  // -- If occurence biasing, applies the occurence biasing weight correction on top of final state (biased or not):
+  // -- If occurrence biasing, applies the occurrence biasing weight correction on top of final state (biased or not):
   G4double weightForInteraction = 1.0;
   if ( !fBiasingInteractionLaw->IsSingular() ) weightForInteraction =
 						 fPhysicalInteractionLaw->ComputeEffectiveCrossSectionAt(step.GetStepLength()) /
@@ -615,9 +615,9 @@ G4double           G4BiasingProcessInterface::AlongStepGetPhysicalInteractionLen
     }
 
   
-  // ----------------------------------------------------------
-  // -- From here we have an valid occurence biasing operation:
-  // ----------------------------------------------------------
+  // -----------------------------------------------------------
+  // -- From here we have an valid occurrence biasing operation:
+  // -----------------------------------------------------------
   // -- Give operation opportunity to shorten step proposed by physics process:
   fBiasingAlongStepGPIL =  fOccurenceBiasingOperation->ProposeAlongStepLimit( this );
   G4double minimumStep  = fBiasingAlongStepGPIL < currentMinimumStep ? fBiasingAlongStepGPIL : currentMinimumStep ;
@@ -1051,7 +1051,7 @@ void G4BiasingProcessInterface::InvokeWrappedProcessPostStepGPIL( const G4Track&
 								  G4ForceCondition*        condition )
 {
   G4double usedPreviousStepSize = previousStepSize;
-  // -- if the physics process has been under occurence biasing in the previous step
+  // -- if the physics process has been under occurrence biasing in the previous step
   // -- we reset it, as we don't know if it will be biased again or not in this
   // -- step. The pity is that PostStepGPIL and interaction length (cross-section)
   // -- calculations are done both in the PostStepGPIL of the process, while here we

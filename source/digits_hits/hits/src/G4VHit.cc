@@ -36,7 +36,7 @@ G4VHit::G4VHit()
 G4VHit::~G4VHit()
 {;}
 
-G4int G4VHit::operator==(const G4VHit &) const
+G4bool G4VHit::operator==(const G4VHit &) const
 { return false; }
 
 void G4VHit::Draw()

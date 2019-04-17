@@ -41,10 +41,10 @@
  - kaons
    - cross section: Glauber-Gribov
    - final-state:   Gheisha
- - hyperons, anti-hyperons, deuteron, triton, alpha
+ - hyperons, anti-hyperons
    - cross section: Gheisha
    - final-state:   Gheisha
- - He3
+ - deuteron, triton, He3, alpha 
    - cross section: Glauber-Gribov
    - final-state:   Gheisha
  - anti_proton, anti_deuteron, anti_triton, anti_He3, anti_alpha

@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
+ Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,7 +8,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
-##### Create analysis manager   0x954250
+##### Create analysis manager   0x16142a0
 Using Root analysis manager
 e-_G4DNAPTBAugerModel is constructed
 
@@ -24,17 +20,17 @@ e-_G4DNAPTBAugerModel is constructed
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
 
-e-_G4DNAElastic:   for  e-    SubType= 51  BuildTable= 0
+e-_G4DNAElastic:  for e- SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-e-_elastic_interaction :  Emin=        0 eV    Emax=      100 TeV
+e-_elastic_interaction : Emin=    0 eV  Emax=  100 TeV
 
-e-_G4DNAExcitation:   for  e-    SubType= 52  BuildTable= 0
+e-_G4DNAExcitation:  for e- SubType=52 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-e-_excitation_interaction :  Emin=        0 eV    Emax=      100 TeV
+e-_excitation_interaction : Emin=    0 eV  Emax=  100 TeV
 
-e-_G4DNAIonisation:   for  e-    SubType= 53  BuildTable= 0
+e-_G4DNAIonisation:  for e- SubType=53 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-e-_ionisation_interaction :  Emin=        0 eV    Emax=      100 TeV
+e-_ionisation_interaction : Emin=    0 eV  Emax=  100 TeV
 ... open Root analysis file : ICSD.root - done
 ... write Root file : ICSD.root - done
 ... close Root file : ICSD.root - done

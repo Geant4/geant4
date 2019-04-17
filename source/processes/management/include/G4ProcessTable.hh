@@ -68,8 +68,8 @@ class G4ProcessTable
   G4ProcessTable(const G4ProcessTable &right);
   G4ProcessTable & operator=(const G4ProcessTable &right);
   // Assignment operator
-  G4int operator==(const G4ProcessTable &right) const;
-  G4int operator!=(const G4ProcessTable &right) const;
+  G4bool operator==(const G4ProcessTable &right) const;
+  G4bool operator!=(const G4ProcessTable &right) const;
   // equal / unequal operator
   
  

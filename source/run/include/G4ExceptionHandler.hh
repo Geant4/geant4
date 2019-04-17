@@ -59,8 +59,8 @@ public:
 
   G4ExceptionHandler();
   virtual ~G4ExceptionHandler();
-  G4int operator==(const G4ExceptionHandler &right) const;
-  G4int operator!=(const G4ExceptionHandler &right) const;
+  G4bool operator==(const G4ExceptionHandler &right) const;
+  G4bool operator!=(const G4ExceptionHandler &right) const;
 
 public: // with description
 

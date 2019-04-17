@@ -51,7 +51,7 @@ class G4VDigi
       G4VDigi();
       virtual ~G4VDigi();
 
-      G4int operator==(const G4VDigi &right) const;
+      G4bool operator==(const G4VDigi &right) const;
 
       virtual void Draw();
       virtual void Print();

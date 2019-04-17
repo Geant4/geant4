@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+- Mar. 11, 2019  Gabriele Cosmo (procman-V10-04-05)
+- Fixed typos in printouts in G4ProcessTableMessenger, G4ProcessManager
+  and G4VRest*Process.
+
+- Jan. 31, 2019  Ivana Hrivnacova
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 - Nov. 24, 2018  Hisaya Kurashige (procman-V10-04-04)
 - Fix a bug in G4ProcessTableMessenger.cc (Coverity 98892)
 

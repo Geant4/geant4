@@ -37,7 +37,7 @@
 //    occurs. In volumes with biasing (with a G4VBiasingOperator
 //    attached) the process gets what to do messaging the biasing
 //    operator :
-//        - at the PostStepGPIL level, for getting an occurence biasing
+//        - at the PostStepGPIL level, for getting an occurrence biasing
 //          operation. If such an operation is returned to the process
 //          this operation will be messaged at several places.
 //        - at the PostStepDoIt level, to get a possible final state

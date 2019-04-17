@@ -28,7 +28,6 @@
 // modified by I.Hrivnacova, V.Berejnoi 27 Sep 99 
 
 #include "globals.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4Trd.hh"
@@ -42,7 +41,8 @@
 #include "G4Hype.hh"
 #include "G4EllipticalTube.hh"
 #include "G3toG4MakeSolid.hh"
-        
+#include "G4SystemOfUnits.hh"
+
 G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape, 
 			  const G4double* rpar, const G4int npar, 
 			  G4bool& NegVolPars, G4bool& Deferred,

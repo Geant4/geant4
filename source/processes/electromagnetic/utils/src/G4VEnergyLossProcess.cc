@@ -677,7 +677,7 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
                            num == "kaon+" || num == "kaon-" || 
                            num == "alpha" || num == "anti_proton" || 
                            num == "GenericIon"|| num == "alpha++" ||
-			   num == "alpha+" )))
+                           num == "alpha+" )))
     { 
       StreamInfo(G4cout, part); 
     }
@@ -887,8 +887,8 @@ void G4VEnergyLossProcess::StreamInfo(std::ostream& out,
   G4String indent = (rst ? "  " : "");
   out << std::setprecision(6);
   out << G4endl << indent << GetProcessName()  << ": ";
-  if (!rst) out << "  for  " << part.GetParticleName();
-  out << "    SubType= " << GetProcessSubType() << G4endl
+  if (!rst) out << " for " << part.GetParticleName();
+  out << "  SubType=" << GetProcessSubType() << G4endl
       << "      dE/dx and range tables from "
       << G4BestUnit(minKinEnergy,"Energy")
       << " to " << G4BestUnit(maxKinEnergy,"Energy")
@@ -896,33 +896,33 @@ void G4VEnergyLossProcess::StreamInfo(std::ostream& out,
       << "      Lambda tables from threshold to "
       << G4BestUnit(maxKinEnergy,"Energy")
       << ", " << theParameters->NumberOfBinsPerDecade() 
-      << " bins per decade, spline: " 
+      << " bins/decade, spline: "
       << theParameters->Spline()
       << G4endl;
   if(theRangeTableForLoss && isIonisation) {
-    out << "      finalRange(mm)= " << finalRange/mm
-	<< ", dRoverRange= " << dRoverRange
-	<< ", integral: " << integral
-	<< ", fluct: " << lossFluctuationFlag
-	<< ", linLossLimit= " << linLossLimit
-	<< G4endl;
+    out << "      StepFunction=(" << dRoverRange << ", "
+        << finalRange/mm << " mm)"
+        << ", integ: " << integral
+        << ", fluct: " << lossFluctuationFlag
+        << ", linLossLim= " << linLossLimit
+        << G4endl;
   }
   StreamProcessInfo(out);
   modelManager->DumpModelList(out, verboseLevel);
   if(theCSDARangeTable && isIonisation) {
     out << "      CSDA range table up"
-	<< " to " << G4BestUnit(maxKinEnergyCSDA,"Energy")
-	<< " in " << nBinsCSDA << " bins" << G4endl;
+        << " to " << G4BestUnit(maxKinEnergyCSDA,"Energy")
+        << " in " << nBinsCSDA << " bins" << G4endl;
   }
   if(nSCoffRegions>0 && isIonisation) {
     out << "      Subcutoff sampling in " << nSCoffRegions 
-	<< " regions" << G4endl;
+        << " regions" << G4endl;
   }
   if(2 < verboseLevel) {
     out << "      DEDXTable address= " << theDEDXTable << G4endl; 
     if(theDEDXTable && isIonisation) out << (*theDEDXTable) << G4endl;
     out << "non restricted DEDXTable address= " 
-	<< theDEDXunRestrictedTable << G4endl;
+        << theDEDXunRestrictedTable << G4endl;
     if(theDEDXunRestrictedTable && isIonisation) {
       out << (*theDEDXunRestrictedTable) << G4endl;
     }
@@ -933,11 +933,13 @@ void G4VEnergyLossProcess::StreamInfo(std::ostream& out,
     if(theCSDARangeTable && isIonisation) {
       out << (*theCSDARangeTable) << G4endl;
     }
-    out << "      RangeTableForLoss address= " << theRangeTableForLoss << G4endl;
+    out << "      RangeTableForLoss address= " << theRangeTableForLoss 
+        << G4endl;
     if(theRangeTableForLoss && isIonisation) {
       out << (*theRangeTableForLoss) << G4endl;
     }
-    out << "      InverseRangeTable address= " << theInverseRangeTable << G4endl;
+    out << "      InverseRangeTable address= " << theInverseRangeTable 
+        << G4endl;
     if(theInverseRangeTable && isIonisation) {
       out << (*theInverseRangeTable) << G4endl;
     }
@@ -1029,7 +1031,7 @@ G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
     G4double finR = (rndmStepFlag) ? std::min(finalRange,
       currentCouple->GetProductionCuts()->GetProductionCut(1)) : finalRange;
     x = (fRange > finR) ? 
-      fRange*dRoverRange + finR*(1.0 - dRoverRange)*(2.0 - finR/fRange) : fRange; 
+      fRange*dRoverRange + finR*(1.0-dRoverRange)*(2.0-finR/fRange) : fRange; 
    // if(particle->GetPDGMass() > 0.9*GeV)
     /*
     G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
@@ -1643,7 +1645,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
         G4Track* t = new G4Track(secParticles[i], time, track.GetPosition());
         t->SetTouchableHandle(track.GetTouchableHandle());
         if (biasManager) {
-          t->SetWeight(biasManager->GetWeight(i));
+          t->SetWeight(weight * biasManager->GetWeight(i));
         } else {
           t->SetWeight(weight);
         }

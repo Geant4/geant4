@@ -45,16 +45,17 @@
 #include "G4INCLHFB.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLGlobals.hh"
+#include "G4Threading.hh"
 #include <algorithm>
 #include <istream>
 
 namespace G4INCL {
 
   namespace {
-   G4double radiusP[TableZSize][TableASize];
-   G4double radiusN[TableZSize][TableASize];
-   G4double diffusenessP[TableZSize][TableASize];
-   G4double diffusenessN[TableZSize][TableASize];
+   G4ThreadLocal G4double radiusP[TableZSize][TableASize];
+   G4ThreadLocal G4double radiusN[TableZSize][TableASize];
+   G4ThreadLocal G4double diffusenessP[TableZSize][TableASize];
+   G4ThreadLocal G4double diffusenessN[TableZSize][TableASize];
 
    void cleanTable(){
     for(G4int i=0;i<TableZSize;++i)

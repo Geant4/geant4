@@ -58,12 +58,12 @@ G4ExceptionHandler& G4ExceptionHandler::operator=(const G4ExceptionHandler &)
    return *this;
 }
 
-G4int G4ExceptionHandler::operator==(const G4ExceptionHandler &right) const
+G4bool G4ExceptionHandler::operator==(const G4ExceptionHandler &right) const
 {
    return (this == &right);
 }
 
-G4int G4ExceptionHandler::operator!=(const G4ExceptionHandler &right) const
+G4bool G4ExceptionHandler::operator!=(const G4ExceptionHandler &right) const
 {
    return (this != &right);
 }

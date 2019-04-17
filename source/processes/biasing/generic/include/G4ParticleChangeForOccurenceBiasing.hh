@@ -30,7 +30,7 @@
 // G4ParticleChangeForOccurenceBiasing
 //
 // Class Description:
-//     A G4VParticleChange dedicated to occurence biasing : it
+//     A G4VParticleChange dedicated to occurrence biasing : it
 // applies weights for non-interaction over a step, and for
 // interaction at the end of the step (if interaction occurs) on
 // top of a given particle change, that is the one produced by a
@@ -56,7 +56,7 @@ public:
   G4double GetOccurenceWeightForInteraction()              const {return fOccurenceWeightForInteraction;}
 
 public:
-  // -- set a wrapped particle change AND USE IT TO UPDATE this occurence particle change state:
+  // -- set a wrapped particle change AND USE IT TO UPDATE this occurrence particle change state:
   void               SetWrappedParticleChange(G4VParticleChange* wpc);
   G4VParticleChange* GetWrappedParticleChange()                      const {return fWrappedParticleChange;}
 public:

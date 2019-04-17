@@ -2,7 +2,6 @@
 # Macro file for "monopole.cc"
 # (can be run in batch, without graphic)
 #
-#
 /control/verbose 1
 /control/cout/ignoreThreadsExcept 0
 /run/verbose 0
@@ -16,12 +15,15 @@
 /testex/run/binSize 0.2 mm
 #
 /process/em/verbose 1
+#
+/run/setCut 0.7 mm
+#
 /run/initialize
+#
 /particle/select monopole
 /particle/process/dump
 #
 /run/printProgress 10
-#
 #
 /testex/fld/setField 0.2 tesla
 #

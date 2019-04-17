@@ -40,14 +40,14 @@
 //    dumpRegion *          Dump information of a region.
 //    dumpCouples *         Dump information of material-cuts-couples.
 //    optimizeGeometry *    Set the optimization flag of closing geometry.
-//    breakAtBeginOfEvent * Set a break point at the begining of every event.
+//    breakAtBeginOfEvent * Set a break point at the beginning of every event.
 //    breakAtEndOfEvent *   Set a break point at the end of every event.
 //    abort *               Abort current run processing.
 //    Initialize *          Initialize G4 kernel.
 //    geometryModified *    Force geometry to be closed again.
 //    physicsModified *     Force cross-section tables to be calculated again.
 //           (and rebuilding physics table will be invoked)
-//    constructScoringWorlds * Constrct scoring world(s) if defined
+//    constructScoringWorlds * Construct scoring world(s) if defined
 // 
 
 #ifndef G4RunMessenger_h

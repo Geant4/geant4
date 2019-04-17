@@ -97,7 +97,7 @@ G4VParticleChange* G4BOptnForceCommonTruncatedExp::ApplyFinalStateBiasing( const
   if ( processGPIL <= step->GetStepLength() )
     {
       // -- if process won, wrapped process produces the final state.
-      // -- In this case, the weight for occurence biasing is applied
+      // -- In this case, the weight for occurrence biasing is applied
       // -- by the callingProcess, at exit of present method. This is
       // -- selected by "forceFinalState = false":
       forceFinalState     = false;

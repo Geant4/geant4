@@ -29,8 +29,9 @@
 //	GEANT 4 class header file 
 //
 // Class Description
+//
 //  G4PhysicsTableHelper is a static utility class 
-//  for helping proceeses to build their physics table
+//  for helping processes to build their physics table
 //
 // ------------------------------------------------------------
 //   First Implementation          20 Aug. 2004   H.Kurashige
@@ -145,7 +146,7 @@ G4bool G4PhysicsTableHelper::RetrievePhysicsTable(G4PhysicsTable* physTable,
 #ifdef G4VERBOSE  
     if (verboseLevel>1) {
       G4cerr << "G4PhysicsTableHelper::RetrievePhysicsTable  ";
-      G4cerr << "Fail to retreive from "<< fileName << G4endl;
+      G4cerr << "Fail to retrieve from "<< fileName << G4endl;
     }
 #endif 
     G4Exception( "G4ProductionCutsTable::RetrievePhysicsTable()",

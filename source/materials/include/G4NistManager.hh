@@ -197,6 +197,7 @@ public:
 					  G4double pres = CLHEP::STP_Pressure);  
 
   // Construct a G4Material from scratch by atome count
+  // temperature and pressure should be consistent with the density
   // 
   inline G4Material* ConstructNewMaterial(
 			          const G4String& name,
@@ -209,6 +210,7 @@ public:
 				  G4double  pressure = CLHEP::STP_Pressure); 
 
   // Construct a G4Material from scratch by fraction mass
+  // temperature and pressure should be consistent with the density
   // 
   inline G4Material* ConstructNewMaterial(
 				  const G4String& name,

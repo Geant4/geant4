@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-01-19  A. Ribon  (exhadr02-V10-04-04)
+- Fixed bug in the energe range of the transition between FTFP and BERT
+  for the recently created CRMC_FTFP_BERT physics list.
+
 24-10-18  A. Ribon  (exhadr02-V10-04-03)
 - Introduced CRMC (Cosmic Ray Monte Carlo) interface and created a
   physics list which uses this interface for very high energy

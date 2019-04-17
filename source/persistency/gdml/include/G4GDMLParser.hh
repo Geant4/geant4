@@ -47,7 +47,7 @@
 
 #include "G4TransportationManager.hh"
 #include "G4Navigator.hh"
-
+#include "G4Threading.hh"
 
 #define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd")
 

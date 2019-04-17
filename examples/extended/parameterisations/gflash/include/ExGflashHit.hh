@@ -47,7 +47,7 @@ class ExGflashHit : public G4VHit
       ~ExGflashHit();
       ExGflashHit(const ExGflashHit &right);
       const ExGflashHit& operator=(const ExGflashHit &right);
-      int operator==(const ExGflashHit &right) const;
+      G4bool operator==(const ExGflashHit &right) const;
 
       inline void *operator new(size_t);
       inline void operator delete(void *aHit);

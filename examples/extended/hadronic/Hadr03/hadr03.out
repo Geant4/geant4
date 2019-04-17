@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
+ Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -114,6 +110,7 @@ NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: alphaInelastic
@@ -208,6 +205,7 @@ NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: dInelastic
@@ -342,6 +340,7 @@ NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: tInelastic
@@ -381,17 +380,17 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.160000s Real=0.180046s Sys=0.000000s
+  User=0.150000s Real=0.181131s Sys=0.000000s
 
  The run is 10000 proton of 10 MeV through 10 m   of Molybdenum98 (density: 10.28 g/cm3 )
 
  Process calls frequency:
-	hadElastic= 7500	protonInelastic= 2500
+	hadElastic= 7555	protonInelastic= 2445
 
 
- MeanFreePath:	5.3372 cm  +- 5.3863 cm 	massic: 54.866 g/cm2 
- CrossSection:	0.18736 cm^-1 		massic: 1.8226 mm2/g 
- crossSection per atom:	2.9631 barn  
+ MeanFreePath:	5.3564 cm  +- 5.3244 cm 	massic: 55.064 g/cm2 
+ CrossSection:	0.18669 cm^-1 		massic: 1.8161 mm2/g 
+ crossSection per atom:	2.9525 barn  
 
  Verification: crossSections from G4HadronicProcessStore:
           hadElastic= 1.366 mm2/g 	2.2207 barn  
@@ -400,30 +399,35 @@ Run Summary
 
  List of nuclear reactions: 
 
-                proton + Mo98 --> N gamma or e- + alpha + Nb95:      14   Q =  3.5405 MeV
-       proton + Mo98 --> N gamma or e- + alpha + Nb95[235.690]:       4   Q =  3.3048 MeV
-              proton + Mo98 --> N gamma or e- + neutron + Tc98:    2466   Q = -2.4725 MeV
-               proton + Mo98 --> N gamma or e- + proton + Mo98:      16   Q = -4.9191e-06 eV 
-                               proton + Mo98 --> proton + Mo98:    7500   Q = 2.1865e-06 eV 
+               proton + Mo98 --> N gamma or e- + Tc99[142.683]:       1   Q =  6.3518 MeV
+                proton + Mo98 --> N gamma or e- + alpha + Nb95:      18   Q =  3.5405 MeV
+              proton + Mo98 --> N gamma or e- + neutron + Tc98:    2412   Q = -2.4725 MeV
+               proton + Mo98 --> N gamma or e- + proton + Mo98:      12   Q = 0.026235 eV 
+                               proton + Mo98 --> proton + Mo98:    7555   Q = 2.085e-06 eV 
+                      proton + Mo98 --> proton + Mo98[132.572]:       1   Q = -132.57 keV
+                      proton + Mo98 --> proton + Mo98[249.800]:       1   Q =  -249.8 keV
 
                           number of gamma or e- (ic): N = 1 --> 10
 
  List of generated particles:
-           Mo98:    7516  Emean =  31.651 keV	( 1.1542 eV  --> 404.68 keV)
-           Nb95:      14  Emean =  414.57 keV	( 240.1 keV --> 651.67 keV)
-  Nb95[235.690]:       4  Emean =  639.62 keV	( 412.49 keV --> 865.21 keV)
-           Tc98:    2466  Emean =  120.26 keV	( 12.311 keV --> 294.56 keV)
-          alpha:      18  Emean =  8.9744 MeV	( 7.7547 MeV --> 10.253 MeV)
-          gamma:   16670  Emean =   857.2 keV	( 7.8619 keV --> 6.7209 MeV)
-        neutron:    2466  Emean =  1.6564 MeV	( 17.366 keV --> 6.8875 MeV)
-         proton:      16  Emean =  7.7045 MeV	( 6.3869 MeV --> 9.8142 MeV)
+           Mo98:    7567  Emean =  32.204 keV	( 1.9446 eV  --> 401.83 keV)
+  Mo98[132.572]:       1  Emean =  53.223 keV	( 53.223 keV --> 53.223 keV)
+  Mo98[249.800]:       1  Emean =  6.0138 keV	( 6.0138 keV --> 6.0138 keV)
+           Nb95:      18  Emean =  469.55 keV	( 147.04 keV --> 860.83 keV)
+           Tc98:    2412  Emean =  118.81 keV	( 16.382 keV --> 281.05 keV)
+  Tc99[142.683]:       1  Emean =  112.39 keV	( 112.39 keV --> 112.39 keV)
+          alpha:      18  Emean =  8.7586 MeV	( 7.8597 MeV --> 10.94 MeV)
+             e-:     660  Emean =  141.77 keV	( 21.509 keV --> 3.4907 MeV)
+          gamma:   16321  Emean =  851.31 keV	( 21.774 keV --> 12.205 MeV)
+        neutron:    2412  Emean =  1.6584 MeV	( 27.022 keV --> 6.3366 MeV)
+         proton:      14  Emean =  8.1192 MeV	( 6.3869 MeV --> 9.8142 MeV)
 
-   Momentum balance: Pmean = 0.0096763 eV 	( 1.3198e-07 eV  --> 1.0298 eV ) 
+   Momentum balance: Pmean =  53.446 eV 	( 1.1044e-06 eV  --> 2.2441 keV) 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2051416086, 1483958570
+ Current couple of seeds = 1669577790, 1284520743
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

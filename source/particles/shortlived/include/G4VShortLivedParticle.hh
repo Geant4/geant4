@@ -71,8 +71,8 @@ class G4VShortLivedParticle : public G4ParticleDefinition
 
    virtual ~G4VShortLivedParticle();
 
-   G4int operator==(const G4VShortLivedParticle &right) const;
-   G4int operator!=(const G4VShortLivedParticle &right) const;
+   G4bool operator==(const G4VShortLivedParticle &right) const;
+   G4bool operator!=(const G4VShortLivedParticle &right) const;
 
 };
  

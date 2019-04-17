@@ -87,7 +87,7 @@ public: // with description
     // destructor
     virtual ~G4VTHitsMap();
     // equivalence operator
-    G4int operator==(const G4VTHitsMap<T, Map_t> &right) const;
+    G4bool operator==(const G4VTHitsMap<T, Map_t> &right) const;
 
     //------------------------------------------------------------------------//
     // Generic operator += where add(...) overloads handle various
@@ -499,7 +499,7 @@ G4VTHitsMap<T, Map_t>::~G4VTHitsMap()
 //============================================================================//
 
 template <typename T, typename Map_t>
-G4int G4VTHitsMap<T, Map_t>::operator==(const G4VTHitsMap<T, Map_t> &right) const
+G4bool G4VTHitsMap<T, Map_t>::operator==(const G4VTHitsMap<T, Map_t> &right) const
 {
     return (collectionName==right.collectionName);
 }

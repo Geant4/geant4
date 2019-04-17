@@ -51,7 +51,7 @@ class G4VHit
       G4VHit();
       virtual ~G4VHit();
 
-      G4int operator==(const G4VHit &right) const;
+      G4bool operator==(const G4VHit &right) const;
 
       virtual void Draw();
       virtual void Print();

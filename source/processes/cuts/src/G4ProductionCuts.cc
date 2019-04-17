@@ -75,13 +75,13 @@ G4ProductionCuts & G4ProductionCuts::operator=(const G4ProductionCuts &right)
 
 
 
-G4int G4ProductionCuts::operator==(const G4ProductionCuts &right) const
+G4bool G4ProductionCuts::operator==(const G4ProductionCuts &right) const
 {
   return (this == &right);
 }
 
 
-G4int G4ProductionCuts::operator!=(const G4ProductionCuts &right) const
+G4bool G4ProductionCuts::operator!=(const G4ProductionCuts &right) const
 {
   return (this !=  &right);
 }

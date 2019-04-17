@@ -139,11 +139,12 @@ void G4SolidStore::DeRegister(G4VSolid* pSolid)
   if (!locked)    // Do not de-register if locked !
   {
     if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }
-    for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
+    for (reverse_iterator i=GetInstance()->rbegin();
+                          i!=GetInstance()->rend(); i++)
     {
       if (**i==*pSolid)
       {
-        GetInstance()->erase(i);
+        GetInstance()->erase(std::next(i).base());
         break;
       }
     }

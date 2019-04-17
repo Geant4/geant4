@@ -110,10 +110,10 @@ class G4VRestDiscreteProcess : public G4VProcess
 
      virtual G4double GetMeanLifeTime(const G4Track& aTrack,G4ForceCondition* condition)=0;
       //  Calculates the mean life-time (i.e. for decays) of the
-      //  particle at rest due to the occurence of the given process,
+      //  particle at rest due to the occurrence of the given process,
       //  or converts the probability of interaction (i.e. for
       //  annihilation) into the life-time of the particle for the
-      //  occurence of the given process.
+      //  occurrence of the given process.
 
   private:
   // hide default constructor and assignment operator as private 

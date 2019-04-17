@@ -50,7 +50,7 @@ class G4DigiCollection : public G4VDigiCollection
       G4DigiCollection();
       G4DigiCollection(G4String detName,G4String colNam);
       virtual ~G4DigiCollection();
-      G4int operator==(const G4DigiCollection &right) const;
+      G4bool operator==(const G4DigiCollection &right) const;
 
   protected:
       void* theCollection;
@@ -71,7 +71,7 @@ template <class T> class G4TDigiCollection : public G4DigiCollection
       // Constructor.
   public:
       virtual ~G4TDigiCollection();
-      G4int operator==(const G4TDigiCollection &right) const;
+      G4bool operator==(const G4TDigiCollection &right) const;
       
       inline void *operator new(size_t);
       inline void operator delete(void* aDC);
@@ -170,7 +170,7 @@ template <class T> G4TDigiCollection<T>::~G4TDigiCollection()
     delete theDigiCollection;
 }
 
-template <class T> G4int G4TDigiCollection<T>::operator==(const G4TDigiCollection<T> &right) const
+template <class T> G4bool G4TDigiCollection<T>::operator==(const G4TDigiCollection<T> &right) const
 {
     if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>;
     return (collectionName==right.collectionName);

@@ -454,7 +454,7 @@ G4double G4Decay::PostStepGetPhysicalInteractionLength(
     //pre-assigned Decay time case
     // reminder proper time
     fRemainderLifeTime = pTime - track.GetProperTime();
-    if (fRemainderLifeTime <= 0.0) fRemainderLifeTime = DBL_MIN;
+    if (fRemainderLifeTime <= 0.0) fRemainderLifeTime = 0.0;
     
     G4double  rvalue=0.0; 
     // use pre-assigned Decay time to determine PIL

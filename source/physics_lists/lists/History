@@ -13,6 +13,11 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-April-2019 V.Ivanchenko  (phys-lists-V10-04-08)
+  18-March-2019 V.Ivanchenko 
+- Shielding, QGSP_BIC_HP, QGSP_BIC_AllHP - cut for proton is set 
+    to zero (problem #2150) and code clean-up
+
 21-November-2018 A. Ribon  (phys-lists-V10-04-07)
 - Shielding : replaced "putenv" of the environmental variable
     G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS with a call to

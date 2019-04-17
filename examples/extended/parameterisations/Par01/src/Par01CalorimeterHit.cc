@@ -81,9 +81,9 @@ const Par01CalorimeterHit& Par01CalorimeterHit::operator=(const Par01Calorimeter
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int Par01CalorimeterHit::operator==(const Par01CalorimeterHit &right) const
+G4bool Par01CalorimeterHit::operator==(const Par01CalorimeterHit &right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

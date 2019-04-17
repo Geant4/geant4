@@ -52,7 +52,7 @@
 
 // New FSAL type driver / steppers -----
 #include "G4IntegrationDriver.hh"
-#include "G4FSALBogackiShampine45.hh"
+// #include "G4FSALBogackiShampine45.hh"
 // #include "G4FSALDormandPrince745.hh"
 
 #include <cassert>
@@ -88,17 +88,19 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   //  by creating in inverse order the  Driver, the Stepper and EqRhs ...
 
   using NewFsalStepperType = G4RK547FEq1; // or 2 or 3
-  const char* NewFSALStepperName = "G4RK574FEq1> FSAL 4th/5th order 7-stage 'Equilibrium-type' #1.";
+  const char* NewFSALStepperName =
+      "G4RK574FEq1> FSAL 4th/5th order 7-stage 'Equilibrium-type' #1.";
   using RegularStepperType =
-         G4DormandPrince745; // 
+         G4DormandPrince745; // DOPRI5 (MatLab) 5th order embedded method. High efficiency.
          // G4ClassicalRK4;        // The old default
          // G4CashKarpRKF45;       // First embedded method in G4
          // G4BogackiShampine45;   // High efficiency 5th order embedded method
-         // G4DormandPrince745 // Famous DOPRI5 (MatLab) 5th order embedded method. High efficiency.
+         // G4NystromRK4;          // Nystrom stepper 4th order 
          // G4RK547FEq1;  // or 2 or 3 
-  const char* RegularStepperName = "Nystrom stepper 4th order";
-      //"G4DormandPrince745 (aka DOPRI5): 5th/4th Order 7-stage embedded stepper";
+  const char* RegularStepperName = 
+      "G4DormandPrince745 (aka DOPRI5): 5th/4th Order 7-stage embedded stepper";
       // "BogackiShampine 45 (Embedded 5th/4th Order, 7-stage)";
+      // "Nystrom stepper 4th order";
 
   // Configurable
   G4bool forceFSALstepper= false; //  Choice - true to enable !!
@@ -118,10 +120,10 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   G4Mag_EqRhs *pEquation = new G4Mag_UsualEqRhs(theMagField);
   fEquation = pEquation;                            
 
-  // G4MagIntegratorStepper*    regularStepper = nullptr;
-  // G4VFSALIntegrationStepper*    fsalSepper  = nullptr; // for new-type FSAL steppers only
-  // NewFsalStepperType*           fsalStepper =nullptr;
-  // G4MagIntegratorStepper*    oldFSALStepper =nullptr;
+  // G4MagIntegratorStepper* regularStepper = nullptr;
+  // G4VFSALIntegrationStepper*  fsalSepper = nullptr; // for new-type FSAL steppers only
+  // NewFsalStepperType*        fsalStepper = nullptr;
+  // G4MagIntegratorStepper* oldFSALStepper = nullptr;
 
   G4bool errorInStepperCreation = false;
 

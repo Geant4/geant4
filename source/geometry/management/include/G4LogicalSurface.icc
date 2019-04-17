@@ -88,13 +88,13 @@ G4LogicalSurface::operator=(const G4LogicalSurface &right)
   return *this;
 }
 
-inline G4int
+inline G4bool
 G4LogicalSurface::operator==(const G4LogicalSurface &right) const
 {
   return (this == (G4LogicalSurface *) &right);
 }
 
-inline G4int
+inline G4bool
 G4LogicalSurface::operator!=(const G4LogicalSurface &right) const
 {
   return (this != (G4LogicalSurface *) &right);

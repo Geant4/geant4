@@ -82,9 +82,9 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 void G4MuMultipleScattering::StreamProcessInfo(std::ostream& out) const
 {
   out << "      RangeFactor= " << RangeFactor()
-      << ", step limit type: " << StepLimitType()
-      << ", lateralDisplacement: " << LateralDisplasmentFlag()
-      << ", polarAngleLimit(deg)= " << PolarAngleLimit()/degree
+      << ", stepLimType: " << StepLimitType()
+      << ", latDisp: " << LateralDisplasmentFlag()
+      << ", polarAngLim(deg)= " << PolarAngleLimit()/degree
       << G4endl;
 }
 

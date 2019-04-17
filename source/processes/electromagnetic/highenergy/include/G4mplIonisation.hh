@@ -72,6 +72,9 @@ public:
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+                                    const G4Material*, G4double cut) final;
+
   // Print out of the class parameters
   virtual void PrintInfo() override;
 
@@ -81,7 +84,7 @@ public:
 protected:
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*) override;
+                                           const G4ParticleDefinition*) override;
 
 private:
 
@@ -91,7 +94,6 @@ private:
 
   G4double    magneticCharge;
   G4bool      isInitialised;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

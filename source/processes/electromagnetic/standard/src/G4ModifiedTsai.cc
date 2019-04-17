@@ -63,7 +63,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ModifiedTsai::G4ModifiedTsai(const G4String&)
-  : G4VEmAngularDistribution("AngularGenUrban")
+  : G4VEmAngularDistribution("ModifiedTsai")
 {}    
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -32,20 +30,26 @@
 //
 // G4EllipticalTube.cc
 //
-// Implementation of a CSG volume representing a tube with elliptical cross
-// section (geant3 solid 'ELTU')
+// Implementation of a CSG volume representing a tube with elliptical
+// cross section (geant3 solid 'ELTU')
+//
+
+// First implementation:
+//   David C. Williams (davidw@scipp.ucsc.edu)
+//
+// Complete revision, speed-up:
+//   Evgueni Tcherniaev (evgueni.tcherniaev@cern.ch), 23.12.2019
 //
 // --------------------------------------------------------------------
 
 #include "G4EllipticalTube.hh"
 
 #include "G4GeomTools.hh"
+#include "G4RandomTools.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4AffineTransform.hh"
-#include "G4SolidExtentList.hh"
 #include "G4VoxelLimits.hh"
 #include "G4BoundingEnvelope.hh"
-#include "meshdefs.hh"
 
 #include "Randomize.hh"
 
@@ -61,59 +65,63 @@ namespace
 
 using namespace CLHEP;
 
+//////////////////////////////////////////////////////////////////////////
 //
 // Constructor
-//
-G4EllipticalTube::G4EllipticalTube( const G4String &name, 
-                                          G4double theDx,
-                                          G4double theDy,
-                                          G4double theDz )
-  : G4VSolid( name ), fCubicVolume(0.), fSurfaceArea(0.),
-    fRebuildPolyhedron(false), fpPolyhedron(0)
-{
-  halfTol = 0.5*kCarTolerance;
 
-  dx = theDx;
-  dy = theDy;
-  dz = theDz;
-}
-
-
-//
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-//
-G4EllipticalTube::G4EllipticalTube( __void__& a )
-  : G4VSolid(a), dx(0.), dy(0.), dz(0.), halfTol(0.),
+G4EllipticalTube::G4EllipticalTube( const G4String &name,
+                                          G4double Dx,
+                                          G4double Dy,
+                                          G4double Dz )
+  : G4VSolid(name), fDx(Dx), fDy(Dy), fDz(Dz),
     fCubicVolume(0.), fSurfaceArea(0.),
     fRebuildPolyhedron(false), fpPolyhedron(0)
 {
+  CheckParameters();
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
 
-//
-// Destructor
-//
-G4EllipticalTube::~G4EllipticalTube()
-{
-  delete fpPolyhedron;  fpPolyhedron = 0;
-}
-
-
-//
-// Copy constructor
-//
-G4EllipticalTube::G4EllipticalTube(const G4EllipticalTube& rhs)
-  : G4VSolid(rhs), dx(rhs.dx), dy(rhs.dy), dz(rhs.dz), halfTol(rhs.halfTol),
-    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+G4EllipticalTube::G4EllipticalTube( __void__& a )
+  : G4VSolid(a), halfTolerance(0.), fDx(0.), fDy(0.), fDz(0.),
+    fCubicVolume(0.), fSurfaceArea(0.),
+    fRsph(0.), fDDx(0.), fDDy(0.), fSx(0.), fSy(0.), fR(0.),
+    fQ1(0.), fQ2(0.), fScratch(0.),
     fRebuildPolyhedron(false), fpPolyhedron(0)
 {
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Destructor
 
+G4EllipticalTube::~G4EllipticalTube()
+{
+  delete fpPolyhedron; fpPolyhedron = 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4EllipticalTube::G4EllipticalTube(const G4EllipticalTube& rhs)
+  : G4VSolid(rhs), halfTolerance(rhs.halfTolerance),
+    fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    fRsph(rhs.fRsph), fDDx(rhs.fDDx), fDDy(rhs.fDDy),
+    fSx(rhs.fSx), fSy(rhs.fSy), fR(rhs.fR),
+    fQ1(rhs.fQ1), fQ2(rhs.fQ2), fScratch(rhs.fScratch),
+    fRebuildPolyhedron(false), fpPolyhedron(0)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
 // Assignment operator
-//
+
 G4EllipticalTube& G4EllipticalTube::operator = (const G4EllipticalTube& rhs) 
 {
    // Check assignment to self
@@ -126,13 +134,66 @@ G4EllipticalTube& G4EllipticalTube::operator = (const G4EllipticalTube& rhs)
 
    // Copy data
    //
-   dx = rhs.dx; dy = rhs.dy; dz = rhs.dz;
-   halfTol = rhs.halfTol;
-   fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
+   halfTolerance = rhs.halfTolerance;
+   fDx = rhs.fDx;
+   fDy = rhs.fDy;
+   fDz = rhs.fDz;
+   fCubicVolume = rhs.fCubicVolume;
+   fSurfaceArea = rhs.fSurfaceArea;
+
+   fRsph = rhs.fRsph;
+   fDDx  = rhs.fDDx;
+   fDDy  = rhs.fDDy;
+   fSx   = rhs.fSx;
+   fSy   = rhs.fSy;
+   fR    = rhs.fR;
+   fQ1   = rhs.fQ1;
+   fQ2   = rhs.fQ2;
+   fScratch = rhs.fScratch;
+
    fRebuildPolyhedron = false;
    delete fpPolyhedron; fpPolyhedron = 0;
 
    return *this;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Check dimensions
+
+void G4EllipticalTube::CheckParameters()
+{
+  // Check dimensions
+  //
+  halfTolerance = 0.5*kCarTolerance; // half tolerance
+  G4double dmin = 2*kCarTolerance;
+  if (fDx < dmin || fDy < dmin || fDz < dmin)
+  {
+    std::ostringstream message;
+    message << "Invalid (too small or negative) dimensions for Solid: "
+            << GetName()
+            << "\n  Dx = " << fDx
+            << "\n  Dy = " << fDy
+            << "\n  Dz = " << fDz;
+    G4Exception("G4EllipticalTube::CheckParameters()", "GeomSolids0002",
+	        FatalException, message);
+  }
+
+  // Set pre-calculatated values
+  //
+  halfTolerance = 0.5*kCarTolerance; // half tolerance
+  fRsph = std::sqrt(fDx * fDx + fDy * fDy + fDz * fDz); // radius of surrounding sphere
+  fDDx = fDx * fDx; // X semi-axis squared
+  fDDy = fDy * fDy; // Y semi-axis squared
+
+  fR = std::min(fDx, fDy); // resulting radius, after scaling elipse to circle
+  fSx = fR / fDx; // X scale factor
+  fSy = fR / fDy; // Y scale factor
+
+  fQ1 = 0.5 / fR; // distance approxiamtion dist = Q1 * (x^2 + y^2) - Q2
+  fQ2 = 0.5 * (fR + halfTolerance * halfTolerance / fR);
+  fScratch = 2. * fR * fR * DBL_EPSILON; // scratch within calculation error thickness
+  // fScratch = (B * B / A) * (2. + halfTolerance / A) * halfTolerance; // alternative
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -142,8 +203,8 @@ G4EllipticalTube& G4EllipticalTube::operator = (const G4EllipticalTube& rhs)
 void G4EllipticalTube::BoundingLimits( G4ThreeVector& pMin,
                                        G4ThreeVector& pMax ) const
 {
-  pMin.set(-dx,-dy,-dz);
-  pMax.set( dx, dy, dz);
+  pMin.set(-fDx,-fDy,-fDz);
+  pMax.set( fDx, fDy, fDz);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -164,16 +225,20 @@ G4EllipticalTube::CalculateExtent( const EAxis pAxis,
   BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit, pTransform, pMin, pMax);
 #endif
-  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis, pVoxelLimit, pTransform, pMin, pMax))
   {
     return exist = (pMin < pMax) ? true : false;
   }
 
+  G4double dx = fDx;
+  G4double dy = fDy;
+  G4double dz = fDz;
+
   // Set bounding envelope (benv) and calculate extent
   //
-  const G4int NSTEPS = 48; // number of steps for whole circle
+  const G4int NSTEPS = 24; // number of steps for whole circle
   G4double ang = twopi/NSTEPS;
 
   G4double sinHalf = std::sin(0.5*ang);
@@ -199,643 +264,434 @@ G4EllipticalTube::CalculateExtent( const EAxis pAxis,
   std::vector<const G4ThreeVectorList *> polygons(2);
   polygons[0] = &baseA;
   polygons[1] = &baseB;
-  G4BoundingEnvelope benv(bmin,bmax,polygons);
-  exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  G4BoundingEnvelope benv(bmin, bmax, polygons);
+  exist = benv.CalculateExtent(pAxis, pVoxelLimit, pTransform, pMin, pMax);
   return exist;
 }
 
+//////////////////////////////////////////////////////////////////////////
 //
-// Inside
+// Determine where is point: inside, outside or on surface
 //
-// Note that for this solid, we've decided to define the tolerant
-// surface as that which is bounded by ellipses with axes
-// at +/- 0.5*kCarTolerance.
-//
+
 EInside G4EllipticalTube::Inside( const G4ThreeVector& p ) const
 {
-  //
-  // Check z extents: are we outside?
-  //
-  G4double absZ = std::fabs(p.z());
-  if (absZ > dz+halfTol) return kOutside;
-  
-  //
-  // Check x,y: are we outside?
-  //
-  // G4double x = p.x(), y = p.y();
-  
-  if (CheckXY(p.x(), p.y(), +halfTol) > 1.0) return kOutside;
-  
-  //
-  // We are either inside or on the surface: recheck z extents
-  //
-  if (absZ > dz-halfTol) return kSurface;
-  
-  //
-  // Recheck x,y
-  //
-  if (CheckXY(p.x(), p.y(), -halfTol) > 1.0) return kSurface;
-  
-  return kInside;
+  G4double x = p.x() * fSx;
+  G4double y = p.y() * fSy;
+  G4double distR = fQ1 * (x * x + y * y) - fQ2;
+  G4double distZ = std::abs(p.z()) - fDz;
+  G4double dist = std::max(distR, distZ);
+
+  if (dist > halfTolerance) return kOutside;
+  return (dist > -halfTolerance) ? kSurface : kInside;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Return unit normal at surface closest to p
 
-//
-// SurfaceNormal
-//
 G4ThreeVector G4EllipticalTube::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  //
-  // SurfaceNormal for the point On the Surface, sum the normals on the Corners
-  //
+  G4ThreeVector norm(0, 0, 0);
+  G4int nsurf = 0;
 
-  G4int noSurfaces=0;
-  G4ThreeVector norm, sumnorm(0.,0.,0.);
+  // check lateral surface
+  G4double x = p.x() * fSx;
+  G4double y = p.y() * fSy;
+  G4double distR = fQ1 * (x * x + y * y) - fQ2;
+  if (std::abs(distR) <= halfTolerance) {
+    norm = G4ThreeVector(p.x() * fDDy, p.y() * fDDx, 0.).unit();
+    ++nsurf;
+  }
 
-  G4double distZ = std::fabs(std::fabs(p.z()) - dz);
-  
-  G4double distR1 = CheckXY( p.x(), p.y(),+ halfTol );
-  G4double distR2 = CheckXY( p.x(), p.y(),- halfTol );
- 
-  if (  (distZ  < halfTol ) && ( distR1 <= 1 ) )
-  {
-    noSurfaces++;
-    sumnorm=G4ThreeVector( 0.0, 0.0, p.z() < 0 ? -1.0 : 1.0 );
+  // check lateral bases
+  G4double distZ = std::abs(p.z()) - fDz;
+  if (std::abs(distZ) <= halfTolerance) {
+    norm.setZ(p.z() < 0 ? -1. : 1.);
+    ++nsurf;
   }
-  if( (distR1 <= 1 ) && ( distR2 >= 1 ) )
+
+  // return normal
+  if (nsurf == 1) return norm;
+  else if (nsurf > 1) return norm.unit(); // edge
+  else
   {
-    noSurfaces++;
-    norm= G4ThreeVector( p.x()*dy*dy, p.y()*dx*dx, 0.0 ).unit();
-    sumnorm+=norm;
-  }
-  if ( noSurfaces == 0 )
-  {
-#ifdef G4SPECSDEBUG
+    // Point is not on the surface
+    //
+#ifdef G4SPECDEBUG
+    std::ostringstream message;
+    G4int oldprc = message.precision(16);
+    message << "Point p is not on surface (!?) of solid: "
+            << GetName() << G4endl;
+    message << "Position:\n";
+    message << "   p.x() = " << p.x()/mm << " mm\n";
+    message << "   p.y() = " << p.y()/mm << " mm\n";
+    message << "   p.z() = " << p.z()/mm << " mm";
+    G4cout.precision(oldprc);
     G4Exception("G4EllipticalTube::SurfaceNormal(p)", "GeomSolids1002",
-                JustWarning, "Point p is not on surface !?" );
-#endif 
-    norm = ApproxSurfaceNormal(p);
+                JustWarning, message );
+    DumpInfo();
+#endif
+    return ApproxSurfaceNormal(p);
   }
-  else if ( noSurfaces == 1 )  { norm = sumnorm; }
-  else                         { norm = sumnorm.unit(); }
- 
-  return norm;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Find surface nearest to point and return corresponding normal.
+// The algorithm is similar to the algorithm used in Inside().
+// This method normally should not be called.
 
-//
-// ApproxSurfaceNormal
-//
 G4ThreeVector
 G4EllipticalTube::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 {
-  //
-  // Which of the three surfaces are we closest to (approximatively)?
-  //
-  G4double distZ = std::fabs(p.z()) - dz;
-  
-  G4double rxy = CheckXY( p.x(), p.y() );
-  G4double distR2 = (rxy < DBL_MIN) ? DBL_MAX : 1.0/rxy;
-
-  //
-  // Closer to z?
-  //
-  if (distZ*distZ < distR2)
-  {
-    return G4ThreeVector( 0.0, 0.0, p.z() < 0 ? -1.0 : 1.0 );
-  }
-
-  //
-  // Closer to x/y
-  //
-  return G4ThreeVector( p.x()*dy*dy, p.y()*dx*dx, 0.0 ).unit();
+  G4double x = p.x() * fSx;
+  G4double y = p.y() * fSy;
+  G4double distR = fQ1 * (x * x + y * y) - fQ2;
+  G4double distZ = std::abs(p.z()) - fDz;
+  if (distR > distZ && (x * x + y * y) > 0)
+    return G4ThreeVector(p.x() * fDDy, p.y() * fDDx, 0.).unit();
+  else
+    return G4ThreeVector(0, 0, (p.z() < 0 ? -1. : 1.));
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate distance to shape from outside, along normalised vector,
+// return kInfinity if no intersection, or distance < halfTolerance
 
-//
-// DistanceToIn(p,v)
-//
-// Unlike DistanceToOut(p,v), it is possible for the trajectory
-// to miss. The geometric calculations here are quite simple.
-// More difficult is the logic required to prevent particles
-// from sneaking (or leaking) between the elliptical and end
-// surfaces.
-//
-// Keep in mind that the true distance is allowed to be
-// negative if the point is currently on the surface. For oblique
-// angles, it can be very negative. 
-//
 G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p,
                                          const G4ThreeVector& v ) const
 {
-  //
-  // Check z = -dz planer surface
-  //
-  G4double sigz = p.z()+dz;
+  G4double offset = 0.;
+  G4ThreeVector pcur = p;
 
-  if (sigz < halfTol)
+  // Check if point is flying away
+  //
+  G4double safex = std::abs(pcur.x()) - fDx;
+  G4double safey = std::abs(pcur.y()) - fDy;
+  G4double safez = std::abs(pcur.z()) - fDz;
+
+  if (safez >= -halfTolerance && pcur.z() * v.z() >= 0.) return kInfinity;
+  if (safey >= -halfTolerance && pcur.y() * v.y() >= 0.) return kInfinity;
+  if (safex >= -halfTolerance && pcur.x() * v.x() >= 0.) return kInfinity;
+
+  // Relocate point, if required
+  //
+  G4double Dmax = 32. * fRsph;
+  if (std::max(std::max(safex, safey), safez) > Dmax)
   {
-    //
-    // We are "behind" the shape in z, and so can
-    // potentially hit the rear face. Correct direction?
-    //
-    if (v.z() <= 0)
-    {
-      //
-      // As long as we are far enough away, we know we
-      // can't intersect
-      //
-      if (sigz < 0) return kInfinity;
-      
-      //
-      // Otherwise, we don't intersect unless we are
-      // on the surface of the ellipse
-      //
-      if (CheckXY(p.x(),p.y(),-halfTol) <= 1.0) return kInfinity;
-    }
-    else
-    {
-      //
-      // How far?
-      //
-      G4double q = -sigz/v.z();
-      
-      //
-      // Where does that place us?
-      //
-      G4double xi = p.x() + q*v.x(),
-               yi = p.y() + q*v.y();
-      
-      //
-      // Is this on the surface (within ellipse)?
-      //
-      if (CheckXY(xi,yi) <= 1.0)
-      {
-        //
-        // Yup. Return q, unless we are on the surface
-        //
-        return (sigz < -halfTol) ? q : 0;
-      }
-      else if (xi*dy*dy*v.x() + yi*dx*dx*v.y() >= 0)
-      {
-        //
-        // Else, if we are traveling outwards, we know
-        // we must miss
-        //
-        return kInfinity;
-      }
-    }
+    offset = (1. - 1.e-08) * pcur.mag() - 2. * fRsph;
+    pcur += offset * v;
+    G4double dist = DistanceToIn(pcur, v);
+    return (dist == kInfinity) ? kInfinity : dist + offset;
   }
 
+  // Scale elliptical tube to cylinder
   //
-  // Check z = +dz planer surface
-  //
-  sigz = p.z() - dz;
-  
-  if (sigz > -halfTol)
-  {
-    if (v.z() >= 0)
-    {
-      if (sigz > 0) return kInfinity;
-      if (CheckXY(p.x(),p.y(),-halfTol) <= 1.0) return kInfinity;
-    }
-    else {
-      G4double q = -sigz/v.z();
+  G4double px = pcur.x() * fSx;
+  G4double py = pcur.y() * fSy;
+  G4double pz = pcur.z();
+  G4double vx = v.x() * fSx;
+  G4double vy = v.y() * fSy;
+  G4double vz = v.z();
 
-      G4double xi = p.x() + q*v.x(),
-               yi = p.y() + q*v.y();
-      
-      if (CheckXY(xi,yi) <= 1.0)
-      {
-        return (sigz > -halfTol) ? q : 0;
-      }
-      else if (xi*dy*dy*v.x() + yi*dx*dx*v.y() >= 0)
-      {
-        return kInfinity;
-      }
-    }
-  }
-  
+  // Set coefficients of quadratic equation: A t^2 + 2B t + C = 0
   //
-  // Check intersection with the elliptical tube
-  //
-  G4double q[2];
-  G4int n = IntersectXY( p, v, q );
-  
-  if (n==0) return kInfinity;
-  
-  //
-  // Is the original point on the surface?
-  //
-  if (std::fabs(p.z()) < dz+halfTol) {
-    if (CheckXY( p.x(), p.y(), halfTol ) < 1.0)
-    {
-      //
-      // Well, yes, but are we traveling inwards at this point?
-      //
-      if (p.x()*dy*dy*v.x() + p.y()*dx*dx*v.y() < 0) return 0;
-    }
-  }
-  
-  //
-  // We are now certain that point p is not on the surface of 
-  // the solid (and thus std::fabs(q[0]) > halfTol). 
-  // Return kInfinity if the intersection is "behind" the point.
-  //
-  if (q[0] < 0) return kInfinity;
-  
-  //
-  // Check to see if we intersect the tube within
-  // dz, but only when we know it might miss
-  //
-  G4double zi = p.z() + q[0]*v.z();
+  G4double rr = px * px + py * py;
+  G4double A  = vx * vx + vy * vy;
+  G4double B  = px * vx + py * vy;
+  G4double C  = rr - fR * fR;
+  G4double D  = B * B - A * C;
 
-  if (v.z() < 0)
-  {
-    if (zi < -dz) return kInfinity;
-  }
-  else if (v.z() > 0)
-  {
-    if (zi > +dz) return kInfinity;
-  }
+  // Check if point is flying away relative to lateral surface
+  //
+  G4double distR  = fQ1 * rr - fQ2;
+  G4bool parallelToZ = (A < DBL_EPSILON || std::abs(vz) >= 1.);
+  if (distR >= -halfTolerance && (B >= 0. || parallelToZ)) return kInfinity;
 
-  return q[0];
+  // Find intersection with Z planes
+  //
+  G4double invz  = (vz == 0) ? DBL_MAX : -1./vz;
+  G4double dz    = std::copysign(fDz, invz);
+  G4double tzmin = (pz - dz) * invz;
+  G4double tzmax = (pz + dz) * invz;
+
+  // Solve qudratic equation. There are two cases special where D <= 0:
+  //   1) trajectory parallel to Z axis (A = 0, B = 0, C - any, D = 0)
+  //   2) touch (D = 0) or no intersection (D < 0) with lateral surface
+  //
+  if (parallelToZ) return (tzmin < halfTolerance) ? offset : tzmin + offset; // 1)
+  if (D <= A * A * fScratch) return kInfinity; // 2)
+
+  // Find roots of quadratic equation
+  G4double tmp = -B - std::copysign(std::sqrt(D), B);
+  G4double t1 = tmp / A;
+  G4double t2 = C / tmp;
+  G4double trmin = std::min(t1, t2);
+  G4double trmax = std::max(t1, t2);
+
+  // Return distance
+  G4double tin  = std::max(tzmin, trmin);
+  G4double tout = std::min(tzmax, trmax);
+
+  if (tout <= tin + halfTolerance) return kInfinity; // touch or no hit
+  return (tin < halfTolerance) ? offset : tin + offset;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Estimate distance to the surface from outside,
+// returns 0 if point is inside
 
-//
-// DistanceToIn(p)
-//
-// The distance from a point to an ellipse (in 2 dimensions) is a
-// surprisingly complicated quadric expression (this is easy to
-// appreciate once one understands that there may be up to
-// four lines normal to the ellipse intersecting any point). To 
-// solve it exactly would be rather time consuming. This method, 
-// however, is supposed to be a quick check, and is allowed to be an
-// underestimate.
-//
-// So, I will use the following underestimate of the distance
-// from an outside point to an ellipse. First: find the intersection "A"
-// of the line from the origin to the point with the ellipse.
-// Find the line passing through "A" and tangent to the ellipse 
-// at A. The distance of the point p from the ellipse will be approximated
-// as the distance to this line.
-//
 G4double G4EllipticalTube::DistanceToIn( const G4ThreeVector& p ) const
-{  
-  if (CheckXY( p.x(), p.y(), +halfTol ) < 1.0)
-  {
-    //
-    // We are inside or on the surface of the
-    // elliptical cross section in x/y. Check z
-    //
-    if (p.z() < -dz-halfTol) 
-      return -p.z()-dz;
-    else if (p.z() > dz+halfTol)
-      return p.z()-dz;
-    else
-      return 0;    // On any surface here (or inside)
-  }
-  
-  //
-  // Find point on ellipse
-  //
-  G4double qnorm = CheckXY( p.x(), p.y() );
-  if (qnorm < DBL_MIN) return 0;  // This should never happen
-  
-  G4double q = 1.0/std::sqrt(qnorm);
-  
-  G4double xe = q*p.x(), ye = q*p.y();
-     
-  //
-  // Get tangent to ellipse
-  //
-  G4double tx = -ye*dx*dx, ty = +xe*dy*dy;
-  G4double tnorm = std::sqrt( tx*tx + ty*ty );
-  
-  //
-  // Calculate distance
-  //
-  G4double distR = ( (p.x()-xe)*ty - (p.y()-ye)*tx )/tnorm;
-  
-  //
-  // Add the result in quadrature if we are, in addition,
-  // outside the z bounds of the shape
-  //
-  // We could save some time by returning the maximum rather
-  // than the quadrature sum
-  //
-  if (p.z() < -dz) 
-    return std::sqrt( (p.z()+dz)*(p.z()+dz) + distR*distR );
-  else if (p.z() > dz)
-    return std::sqrt( (p.z()-dz)*(p.z()-dz) + distR*distR );
+{
+  // safety distance to bounding box
+  G4double distX = std::abs(p.x()) - fDx;
+  G4double distY = std::abs(p.y()) - fDy;
+  G4double distZ = std::abs(p.z()) - fDz;
+  G4double distB = std::max(std::max(distX, distY), distZ);
+  // return (distB < 0) ? 0 : distB;
 
-  return distR;
+  // safety distance to lateral surface
+  G4double x = p.x() * fSx;
+  G4double y = p.y() * fSy;
+  G4double distR = std::sqrt(x * x + y * y) - fR;
+
+  // return SafetyToIn
+  G4double dist = std::max(distB, distR);
+  return (dist < 0) ? 0 : dist;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate distance to shape from inside and find normal
+// at exit point, if required
+// - when leaving the surface, return 0
 
-//
-// DistanceToOut(p,v)
-//
-// This method can be somewhat complicated for a general shape.
-// For a convex one, like this, there are several simplifications,
-// the most important of which is that one can treat the surfaces
-// as infinite in extent when deciding if the p is on the surface.
-//
 G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
                                           const G4ThreeVector& v,
                                           const G4bool calcNorm,
                                                 G4bool *validNorm,
-                                                G4ThreeVector *norm ) const
+                                                G4ThreeVector *n ) const
 {
+  // Check if point flying away relative to Z planes
   //
-  // Our normal is always valid
-  //
-  if (calcNorm)  { *validNorm = true; }
-  
-  G4double sBest = kInfinity;
-  G4ThreeVector nBest(0,0,0);
-  
-  //
-  // Might we intersect the -dz surface?
-  //
-  if (v.z() < 0)
+  G4double pz = p.z();
+  G4double vz = v.z();
+  G4double distZ = std::abs(pz) - fDz;
+  if (distZ >= -halfTolerance && pz * vz > 0)
   {
-    static const G4ThreeVector normHere(0.0,0.0,-1.0);
-    //
-    // Yup. What distance?
-    //
-    sBest = -(p.z()+dz)/v.z();
-    
-    //
-    // Are we on the surface? If so, return zero
-    //
-    if (p.z() < -dz+halfTol)
+    if (calcNorm)
     {
-      if (calcNorm)  { *norm = normHere; }
-      return 0;
+      *validNorm = true;
+      n->set(0, 0, (pz < 0) ? -1. : 1.);
     }
-    else
-    {
-      nBest = normHere;
-    }
+    return 0.;
   }
-  
-  //
-  // How about the +dz surface?
-  //
-  if (v.z() > 0)
-  {
-    static const G4ThreeVector normHere(0.0,0.0,+1.0);
-    //
-    // Yup. What distance?
-    //
-    G4double q = (dz-p.z())/v.z();
-    
-    //
-    // Are we on the surface? If so, return zero
-    //
-    if (p.z() > +dz-halfTol)
-    {
-      if (calcNorm)  { *norm = normHere; }
-      return 0;
-    }
-    
-    //
-    // Best so far?
-    //
-    if (q < sBest) { sBest = q; nBest = normHere; }
-  }
-  
-  //
-  // Check furthest intersection with ellipse 
-  //
-  G4double q[2];
-  G4int n = IntersectXY( p, v, q );
+  G4double tzmax = (vz == 0) ? DBL_MAX : (std::copysign(fDz, vz) - pz) / vz;
 
-  if (n == 0)
-  {
-    if (sBest == kInfinity)
-    {
-      DumpInfo();
-      std::ostringstream message;
-      G4int oldprc = message.precision(16) ;
-      message << "Point p is outside !?" << G4endl
-              << "Position:"  << G4endl
-              << "   p.x() = "   << p.x()/mm << " mm" << G4endl
-              << "   p.y() = "   << p.y()/mm << " mm" << G4endl
-              << "   p.z() = "   << p.z()/mm << " mm" << G4endl
-              << "Direction:" << G4endl << G4endl
-              << "   v.x() = "   << v.x() << G4endl
-              << "   v.y() = "   << v.y() << G4endl
-              << "   v.z() = "   << v.z() << G4endl
-              << "Proposed distance :" << G4endl
-              << "   snxt = "    << sBest/mm << " mm";
-      message.precision(oldprc) ;
-      G4Exception( "G4EllipticalTube::DistanceToOut(p,v,...)",
-                   "GeomSolids1002", JustWarning, message);
-    }
-    if (calcNorm)  { *norm = nBest; }
-    return sBest;
-  }
-  else if (q[n-1] > sBest)
-  {
-    if (calcNorm)  { *norm = nBest; }
-    return sBest;
-  }  
-  sBest = q[n-1];
-      
+  // Scale elliptical tube to cylinder
   //
-  // Intersection with ellipse. Get normal at intersection point.
+  G4double px = p.x() * fSx;
+  G4double py = p.y() * fSy;
+  G4double vx = v.x() * fSx;
+  G4double vy = v.y() * fSy;
+
+  // Check if point is flying away relative to lateral surface
+  //
+  G4double rr = px * px + py * py;
+  G4double B  = px * vx + py * vy;
+  G4double distR  = fQ1 * rr - fQ2;
+  if (distR >= -halfTolerance && B > 0.)
+  {
+    if (calcNorm)
+    {
+      *validNorm = true;
+      *n = G4ThreeVector(px * fDDy, py * fDDx, 0.).unit();
+    }
+    return 0.;
+  }
+
+  // Just in case check if point is outside, normally it should never be
+  //
+  if (std::max(distZ, distR) > halfTolerance) {
+#ifdef G4SPECDEBUG
+    std::ostringstream message;
+    G4int oldprc = message.precision(16);
+    message << "Point p is outside (!?) of solid: "
+            << GetName() << G4endl;
+    message << "Position:  " << p << G4endl;;
+    message << "Direction: " << v;
+    G4cout.precision(oldprc);
+    G4Exception("G4EllipticalTube::DistanceToOut(p,v)", "GeomSolids1002",
+                JustWarning, message );
+    DumpInfo();
+#endif
+    if (calcNorm)
+    {
+      *validNorm = true;
+      *n = ApproxSurfaceNormal(p);
+    }
+    return 0.;
+  }
+
+  // Set coefficients of quadratic equation: A t^2 + 2B t + C = 0
+  //
+  G4double A  = vx * vx + vy * vy;
+  G4double C  = rr - fR * fR;
+  G4double D  = B * B - A * C;
+
+  // Solve qudratic equation. There are two special cases where D <= 0:
+  //   1) trajectory parallel to Z axis (A = 0, B = 0, C - any, D = 0)
+  //   2) touch (D = 0) or no intersection (D < 0) with lateral surface
+  //
+  G4bool parallelToZ = (A < DBL_EPSILON || std::abs(vz) >= 1.);
+  if (parallelToZ) // 1)
+  {
+    if (calcNorm)
+    {
+      *validNorm = true;
+      n->set(0, 0, (vz < 0) ? -1. : 1.);
+    }
+    return tzmax;
+  }
+  if (D <= A * A * fScratch) // 2)
+  {
+    if (calcNorm)
+    {
+      *validNorm = true;
+      *n = G4ThreeVector(px * fDDy, py * fDDx, 0.).unit();
+    }
+    return 0.;
+  }
+
+  // Find roots of quadratic equation
+  G4double tmp = -B - std::copysign(std::sqrt(D), B);
+  G4double t1 = tmp / A;
+  G4double t2 = C / tmp;
+  G4double trmax = std::max(t1, t2);
+
+  // Return distance
+  G4double tmax = std::min(tzmax, trmax);
+
+  // Set normal, if required, and return distance
   //
   if (calcNorm)
   {
-    G4ThreeVector ip = p + sBest*v;
-    *norm = G4ThreeVector( ip.x()*dy*dy, ip.y()*dx*dx, 0.0 ).unit();
+    *validNorm = true;
+    G4ThreeVector pnew = p + tmax * v;
+    if (tmax == tzmax)
+      n->set(0, 0, (pnew.z() < 0) ? -1. : 1.);
+    else
+      *n = G4ThreeVector(pnew.x() * fDDy, pnew.y() * fDDx, 0.).unit();
   }
-  
-  //
-  // Do we start on the surface?
-  //
-  if (CheckXY( p.x(), p.y(), -halfTol ) > 1.0)
-  {
-    //
-    // Well, yes, but are we traveling outwards at this point?
-    //
-    if (p.x()*dy*dy*v.x() + p.y()*dx*dx*v.y() > 0) return 0;
-  }
-  
-  return sBest;
+  return tmax;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Estimate distance to the surface from inside,
+// returns 0 if point is outside
+//
 
-//
-// DistanceToOut(p)
-//
-// See DistanceToIn(p) for notes on the distance from a point
-// to an ellipse in two dimensions.
-//
-// The approximation used here for a point inside the ellipse
-// is to find the intersection with the ellipse of the lines 
-// through the point and parallel to the x and y axes. The
-// distance of the point from the line connecting the two 
-// intersecting points is then used.
-//
 G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
 {
-  //
-  // We need to calculate the distances to all surfaces,
-  // and then return the smallest
-  //
-  // Check -dz and +dz surface
-  //
-  G4double sBest = dz - std::fabs(p.z());
-  if (sBest < halfTol) return 0;
-  
-  //
-  // Check elliptical surface: find intersection of
-  // line through p and parallel to x axis
-  //
-  G4double radical = 1.0 - p.y()*p.y()/dy/dy;
-  if (radical < +DBL_MIN) return 0;
-  
-  G4double xi = dx*std::sqrt( radical );
-  if (p.x() < 0) xi = -xi;
-  
-  //
-  // Do the same with y axis
-  //
-  radical = 1.0 - p.x()*p.x()/dx/dx;
-  if (radical < +DBL_MIN) return 0;
-  
-  G4double yi = dy*std::sqrt( radical );
-  if (p.y() < 0) yi = -yi;
-  
-  //
-  // Get distance from p to the line connecting
-  // these two points
-  //
-  G4double xdi = p.x() - xi,
-     ydi = yi - p.y();
-
-  G4double normi = std::sqrt( xdi*xdi + ydi*ydi );
-  if (normi < halfTol) return 0;
-  xdi /= normi;
-  ydi /= normi;
-  
-  G4double q = 0.5*(xdi*(p.y()-yi) - ydi*(p.x()-xi));
-  if (xi*yi < 0) q = -q;
-  
-  if (q < sBest) sBest = q;
-  
-  //
-  // Return best answer
-  //
-  return sBest < halfTol ? 0 : sBest;
-}
-
-
-//
-// IntersectXY
-//
-// Decide if and where the x/y trajectory hits the elliptical cross
-// section.
-//
-// Arguments:
-//     p     - (in) Point on trajectory
-//     v     - (in) Vector along trajectory
-//     q     - (out) Up to two points of intersection, where the
-//                   intersection point is p + q*v, and if there are
-//                   two intersections, q[0] < q[1]. May be negative.
-// Returns:
-//     The number of intersections. If 0, the trajectory misses. If 1, the 
-//     trajectory just grazes the surface.
-//
-// Solution:
-//     One needs to solve: ((p.x + q*v.x)/dx)**2  + ((p.y + q*v.y)/dy)**2 = 1
-//
-//     The solution is quadratic: a*q**2 + b*q + c = 0
-//
-//           a = (v.x/dx)**2 + (v.y/dy)**2
-//           b = 2*p.x*v.x/dx**2 + 2*p.y*v.y/dy**2
-//           c = (p.x/dx)**2 + (p.y/dy)**2 - 1
-//
-G4int G4EllipticalTube::IntersectXY( const G4ThreeVector &p,
-                                     const G4ThreeVector &v,
-                                           G4double ss[2] ) const
-{
-  G4double px = p.x(), py = p.y();
-  G4double vx = v.x(), vy = v.y();
-  
-  G4double a = (vx/dx)*(vx/dx) + (vy/dy)*(vy/dy);
-  G4double b = 2.0*( px*vx/dx/dx + py*vy/dy/dy );
-  G4double c = (px/dx)*(px/dx) + (py/dy)*(py/dy) - 1.0;
-  
-  if (a < DBL_MIN) return 0;      // Trajectory parallel to z axis
-  
-  G4double radical = b*b - 4*a*c;
-  
-  if (radical < -DBL_MIN) return 0;    // No solution
-  
-  if (radical < DBL_MIN)
+#ifdef G4SPECDEBUG
+  if( Inside(p) == kOutside )
   {
-    //
-    // Grazes surface
-    //
-    ss[0] = -b/a/2.0;
-    return 1;
+    std::ostringstream message;
+    G4int oldprc = message.precision(16);
+    message << "Point p is outside (!?) of solid: " << GetName() << "\n"
+            << "Position:\n"
+            << "   p.x() = "  << p.x()/mm << " mm\n"
+            << "   p.y() = "  << p.y()/mm << " mm\n"
+            << "   p.z() = "  << p.z()/mm << " mm";
+    message.precision(oldprc) ;
+    G4Exception("G4ElliptocalTube::DistanceToOut(p)", "GeomSolids1002",
+                JustWarning, message);
+    DumpInfo();
   }
-  
-  radical = std::sqrt(radical);
-  
-  G4double q = -0.5*( b + (b < 0 ? -radical : +radical) );
-  G4double sa = q/a;
-  G4double sb = c/q;    
-  if (sa < sb) { ss[0] = sa; ss[1] = sb; } else { ss[0] = sb; ss[1] = sa; }
-  return 2;
+#endif
+  // safety distance to Z-bases
+  G4double distZ = fDz - std::abs(p.z());
+
+  // safety distance lateral surface
+  G4double x = p.x() * fSx;
+  G4double y = p.y() * fSy;
+  G4double distR = fR - std::sqrt(x * x + y * y);
+
+  // return SafetyToOut
+  G4double dist = std::min(distZ, distR);
+  return (dist < 0) ? 0 : dist;
 }
 
-
+//////////////////////////////////////////////////////////////////////////
 //
 // GetEntityType
-//
+
 G4GeometryType G4EllipticalTube::GetEntityType() const
 {
   return G4String("G4EllipticalTube");
 }
 
-
+//////////////////////////////////////////////////////////////////////////
 //
 // Make a clone of the object
-//
+
 G4VSolid* G4EllipticalTube::Clone() const
 {
   return new G4EllipticalTube(*this);
 }
 
+//////////////////////////////////////////////////////////////////////////
 //
-// GetCubicVolume
-//
+// Return volume
+
 G4double G4EllipticalTube::GetCubicVolume()
 {
-  if (fCubicVolume == 0.)
-    fCubicVolume = twopi*dx*dy*dz;
+  if (fCubicVolume == 0.) {
+    fCubicVolume = twopi * fDx * fDy * fDz;
+  }
   return fCubicVolume;
 }
 
+//////////////////////////////////////////////////////////////////////////
 //
-// GetSurfaceArea
+// Return cached surface area
+
+G4double G4EllipticalTube::GetCachedSurfaceArea() const
+{
+  G4ThreadLocalStatic G4double cached_Dx = 0;
+  G4ThreadLocalStatic G4double cached_Dy = 0;
+  G4ThreadLocalStatic G4double cached_Dz = 0;
+  G4ThreadLocalStatic G4double cached_area = 0;
+  if (cached_Dx != fDx || cached_Dy != fDy || cached_Dz != fDz)
+  {
+    cached_Dx = fDx;
+    cached_Dy = fDy;
+    cached_Dz = fDz;
+    cached_area = 2. * (pi * fDx * fDy + G4GeomTools::EllipsePerimeter(fDx, fDy) * fDz);
+  }
+  return cached_area;
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
+// Return surface area
+
 G4double G4EllipticalTube::GetSurfaceArea()
 {
-  if(fSurfaceArea == 0.)
-    fSurfaceArea = 2.*(pi*dx*dy + G4GeomTools::EllipsePerimeter(dx,dy)*dz);
+  if(fSurfaceArea == 0.) {
+    fSurfaceArea = GetCachedSurfaceArea();
+  }
   return fSurfaceArea;
 }
 
+//////////////////////////////////////////////////////////////////////////
 //
-// Stream object contents to an output stream
-//
+// Stream object contents to output stream
+
 std::ostream& G4EllipticalTube::StreamInfo(std::ostream& os) const
 {
   G4int oldprc = os.precision(16);
@@ -844,9 +700,9 @@ std::ostream& G4EllipticalTube::StreamInfo(std::ostream& os) const
      << "    ===================================================\n"
      << " Solid type: G4EllipticalTube\n"
      << " Parameters: \n"
-     << "    length Z: " << dz/mm << " mm \n"
-     << "    surface equation in X and Y: \n"
-     << "       (X / " << dx << ")^2 + (Y / " << dy << ")^2 = 1 \n"
+     << "    length Z: " << fDz/mm << " mm \n"
+     << "    lateral surface equation: \n"
+     << "       (X / " << fDx << ")^2 + (Y / " << fDy << ")^2 = 1 \n"
      << "-----------------------------------------------------------\n";
   os.precision(oldprc);
 
@@ -854,108 +710,99 @@ std::ostream& G4EllipticalTube::StreamInfo(std::ostream& os) const
 }
 
 
+//////////////////////////////////////////////////////////////////////////
 //
-// GetPointOnSurface
-//
-// Randomly generates a point on the surface, 
-// with ~ uniform distribution across surface.
-//
+// Pick up a random point on the surface 
+
 G4ThreeVector G4EllipticalTube::GetPointOnSurface() const
 {
-  G4double xRand, yRand, zRand, phi, cosphi, sinphi, zArea, cArea,p, chose;
+  // Select surface (0 - base at -Z, 1 - base at +Z, 2 - lateral surface)
+  //
+  G4double sbase = pi * fDx * fDy;
+  G4double ssurf = GetCachedSurfaceArea();
+  G4double select = ssurf * G4UniformRand();
 
-  phi    = G4RandFlat::shoot(0., 2.*pi);
-  cosphi = std::cos(phi);
-  sinphi = std::sin(phi);
-  
-  // the ellipse perimeter from: "http://mathworld.wolfram.com/Ellipse.html"
-  //   m = (dx - dy)/(dx + dy);
-  //   k = 1.+1./4.*m*m+1./64.*sqr(m)*sqr(m)+1./256.*sqr(m)*sqr(m)*sqr(m);
-  //   p = pi*(a+b)*k;
+  G4int k = 0;
+  if (select > sbase) k = 1;
+  if (select > 2. * sbase) k = 2;
 
-  // perimeter below from "http://www.efunda.com/math/areas/EllipseGen.cfm"
-
-  p = 2.*pi*std::sqrt(0.5*(dx*dx+dy*dy));
-
-  cArea = 2.*dz*p;
-  zArea = pi*dx*dy;
-
-  xRand = dx*cosphi;
-  yRand = dy*sinphi;
-  zRand = G4RandFlat::shoot(dz, -1.*dz);
-    
-  chose = G4RandFlat::shoot(0.,2.*zArea+cArea);
-  
-  if( (chose>=0) && (chose < cArea) )
-  {
-    return G4ThreeVector (xRand,yRand,zRand);
+  // Pick random point on selected surface (rejection sampling)
+  //
+  G4ThreeVector p;
+  switch (k) {
+    case 0: // base at -Z
+    {
+      G4TwoVector rho = G4RandomPointInEllipse(fDx, fDy);
+      p.set(rho.x(), rho.y(), -fDz);
+      break;
+    }
+    case 1: // base at +Z
+    {
+      G4TwoVector rho = G4RandomPointInEllipse(fDx, fDy);
+      p.set(rho.x(), rho.y(), fDz);
+      break;
+    }
+    case 2: // lateral surface
+    {
+      G4TwoVector rho = G4RandomPointOnEllipse(fDx, fDy);
+      p.set(rho.x(), rho.y(), (2. * G4UniformRand() - 1.) * fDz);
+      break;
+    }
   }
-  else if( (chose >= cArea) && (chose < cArea + zArea) )
-  {
-    xRand = G4RandFlat::shoot(-1.*dx,dx);
-    yRand = std::sqrt(1.-sqr(xRand/dx));
-    yRand = G4RandFlat::shoot(-1.*yRand, yRand);
-    return G4ThreeVector (xRand,yRand,dz); 
-  }
-  else
-  { 
-    xRand = G4RandFlat::shoot(-1.*dx,dx);
-    yRand = std::sqrt(1.-sqr(xRand/dx));
-    yRand = G4RandFlat::shoot(-1.*yRand, yRand);
-    return G4ThreeVector (xRand,yRand,-1.*dz);
-  }
+  return p;
 }
 
 
+//////////////////////////////////////////////////////////////////////////
 //
 // CreatePolyhedron
-//
+
 G4Polyhedron* G4EllipticalTube::CreatePolyhedron() const
 {
   // create cylinder with radius=1...
   //
-  G4Polyhedron* eTube = new G4PolyhedronTube(0.,1.,dz);
+  G4Polyhedron* eTube = new G4PolyhedronTube(0., 1., fDz);
 
   // apply non-uniform scaling...
   //
-  eTube->Transform(G4Scale3D(dx,dy,1.));
-  return  eTube;
+  eTube->Transform(G4Scale3D(fDx, fDy, 1.));
+  return eTube;
 }
 
-
+//////////////////////////////////////////////////////////////////////////
 //
 // GetPolyhedron
-//
+
 G4Polyhedron* G4EllipticalTube::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
       fRebuildPolyhedron ||
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
-    {
-      G4AutoLock l(&polyhedronMutex);
-      delete fpPolyhedron;
-      fpPolyhedron = CreatePolyhedron();
-      fRebuildPolyhedron = false;
-      l.unlock();
-    }
+  {
+    G4AutoLock l(&polyhedronMutex);
+    delete fpPolyhedron;
+    fpPolyhedron = CreatePolyhedron();
+    fRebuildPolyhedron = false;
+    l.unlock();
+  }
   return fpPolyhedron;
 }
 
-
+//////////////////////////////////////////////////////////////////////////
 //
 // DescribeYourselfTo
-//
+
 void G4EllipticalTube::DescribeYourselfTo( G4VGraphicsScene& scene ) const
 {
   scene.AddSolid (*this);
 }
 
-
+//////////////////////////////////////////////////////////////////////////
 //
 // GetExtent
-//
+
 G4VisExtent G4EllipticalTube::GetExtent() const
 {
-  return G4VisExtent( -dx, dx, -dy, dy, -dz, dz );
+  return G4VisExtent( -fDx, fDx, -fDy, fDy, -fDz, fDz );
 }

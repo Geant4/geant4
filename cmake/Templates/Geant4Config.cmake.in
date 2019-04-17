@@ -322,6 +322,13 @@ if(Geant4_gdml_FOUND)
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS gdml)
 endif()
 
+# - Smart track stack
+set(Geant4_use_smartstack_FOUND @GEANT4_USE_SMARTSTACK@)
+if(Geant4_use_smartstack_FOUND)
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS smartstack)
+  list(APPEND Geant4_DEFINITIONS -DG4_USESMARTSTACK)
+endif()
+
 # - TiMemory
 set(Geant4_timemory_FOUND @GEANT4_USE_TIMEMORY@)
 if(Geant4_timemory_FOUND)

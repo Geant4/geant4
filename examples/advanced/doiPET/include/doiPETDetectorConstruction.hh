@@ -80,8 +80,8 @@ private:
 
 	G4LogicalVolume* phantom_logicalV;
 	G4VPhysicalVolume* phantom_physicalV;
-	G4LogicalVolume* gelatin_logicalV;
-	G4VPhysicalVolume* gelatin_physicalV;
+	// G4LogicalVolume* gelatin_logicalV;
+	// G4VPhysicalVolume* gelatin_physicalV;
 
 	//wolrd
 	G4LogicalVolume* world_logicalV;
@@ -116,8 +116,8 @@ private:
 	G4VPhysicalVolume* lung_physicalVPMMA;
 
 	//cold regions
-	G4LogicalVolume* coldRegion_logicalV;
-	G4VPhysicalVolume* coldRegion_physicalV;
+	// G4LogicalVolume* coldRegion_logicalV;
+	// G4VPhysicalVolume* coldRegion_physicalV;
 
 	//
 	//Surrounding PMMA for hot sphere
@@ -160,7 +160,7 @@ private:
 
 
 	//Dimension of the sphere
-	G4double spherePositionX, spherePositionY, spherePositionZ;
+	G4double spherePositionX, spherePositionY; // spherePositionZ;
 	G4double sphereDiameter;
 	G4double distanceFromCenter;
 	G4int numberOfSpheres;
@@ -175,7 +175,7 @@ private:
 	G4Material* water;
 	G4Material* polyethylene;
 	G4Material* polyethylene_NEMA;
-	G4Material* inflatedLung;
+	// G4Material* inflatedLung;
 	G4Material* polystyrene;
 	G4Material* Aluminum;
 
@@ -233,7 +233,7 @@ private:
 	G4double thetaDetector; //The azimuthal angle for arranging the detector in the PET ring 
 	//G4double ringGap;
 	G4int blockIndex;
-	G4int AlCase_Index;
+	// G4int AlCase_Index;
 	G4int crystalIndex;
 
 	//detector position
@@ -255,7 +255,7 @@ private:
 	G4double phantomLength;
 
 	//Phantom dimension for rectangular box (placed for therapy study)
-	G4double phantomSizeX, phantomSizeY, phantomSizeZ;
+	// G4double phantomSizeX, phantomSizeY, phantomSizeZ;
 
 	//the following is to make the body phantom 
 	G4double yOffsetBodyPhantom;

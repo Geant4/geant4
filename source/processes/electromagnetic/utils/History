@@ -16,6 +16,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 March 19: M.Asai (emutils-V10-04-27)
+- G4EmParametersMessenger: Defining unit categories for UI commands
+  that take units.
+
+11 March 19: G.Cosmo (emutils-V10-04-26)
+- Fixed typos in printouts in G4EmParametersMessenger.
+
+04 March 19: D.Sawkey 
+- G4EmBiasingManager, G4VEmProcess, G4VEnergyLossProcess - fix
+   weights for biasing. Should be like version 10.4 now for range cut,
+   splitting, roulette
+
+18 February 19: D.Sawkey 
+- G4VEmProcess, G4VEnergyLossProcess - make printout information
+    more compact
+
+13 February 19: D.Sawkey
+- G4EmBiasingManager: fix incorrect weights with brem splitting
+    introduced in 10.5 (problem #2125)
+
+31 January 19: V.Ivanchenko
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering,
+  G4EmModelManager - make info printout at intialisation more 
+    compact (fix problem #2105)
+
 29 October 18: D.Sawkey (emutils-V10-04-25)
 - G4EmBiasingManager - fix Valgrind warning
 

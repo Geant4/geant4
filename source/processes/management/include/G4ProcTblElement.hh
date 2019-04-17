@@ -67,8 +67,8 @@ class G4ProcTblElement
     G4ProcTblElement & operator=(const G4ProcTblElement &right);
     // Assignment operator
 
-    G4int operator==(const G4ProcTblElement &right) const;
-    G4int operator!=(const G4ProcTblElement &right) const;
+    G4bool operator==(const G4ProcTblElement &right) const;
+    G4bool operator!=(const G4ProcTblElement &right) const;
     // equal / unequal operator
 
   protected:

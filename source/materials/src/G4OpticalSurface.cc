@@ -191,12 +191,12 @@ G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface &right)
        *(this->DichroicVector) = *(right.DichroicVector);
 }
 
-G4int G4OpticalSurface::operator==(const G4OpticalSurface &right) const
+G4bool G4OpticalSurface::operator==(const G4OpticalSurface &right) const
 {
         return (this == (G4OpticalSurface *) &right);
 }
 
-G4int G4OpticalSurface::operator!=(const G4OpticalSurface &right) const
+G4bool G4OpticalSurface::operator!=(const G4OpticalSurface &right) const
 {
         return (this != (G4OpticalSurface *) &right);
 }

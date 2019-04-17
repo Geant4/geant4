@@ -176,7 +176,7 @@ void G4ParticleHPInelasticCompFS::Init (G4double A, G4double Z, G4int M, G4Strin
     else if(dataType==13)
     {
       theFinalStatePhotons[it] = new G4ParticleHPPhotonDist;
-      theFinalStatePhotons[it]->InitPartials(theData);
+      theFinalStatePhotons[it]->InitPartials(theData, theXsection[50]);
     }
     else if(dataType==14)
     {

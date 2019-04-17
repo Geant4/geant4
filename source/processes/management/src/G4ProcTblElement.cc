@@ -89,14 +89,14 @@ G4ProcTblElement & G4ProcTblElement::operator=(const G4ProcTblElement &right)
 
 
 //////////////////////////
-G4int G4ProcTblElement::operator==(const G4ProcTblElement &right) const
+G4bool G4ProcTblElement::operator==(const G4ProcTblElement &right) const
 {
   return (this == &right);
 }
 
 
 //////////////////////////
-G4int G4ProcTblElement::operator!=(const G4ProcTblElement &right) const
+G4bool G4ProcTblElement::operator!=(const G4ProcTblElement &right) const
 {
   return (this != &right);
 }

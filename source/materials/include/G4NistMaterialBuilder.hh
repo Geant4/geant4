@@ -173,8 +173,7 @@ private:
 		   G4double pot=0.0, G4int ncomp=1,
 		   G4State=kStateSolid, G4bool stp = true);
 
-  void AddGas(const G4String& nameMat, G4double t=NTP_Temperature,
-                                       G4double p=CLHEP::STP_Pressure);
+  void AddGas(const G4String& nameMat, G4double T, G4double P);
 
   void AddElementByWeightFraction(G4int Z, G4double);
   void AddElementByAtomCount     (G4int Z, G4int);

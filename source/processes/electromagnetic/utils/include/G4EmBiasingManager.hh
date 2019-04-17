@@ -144,14 +144,14 @@ private:
 			  G4int index,
 			  G4double tcut);
 
-  void ApplyDirectionalSplitting(std::vector<G4DynamicParticle*>& vd,
+  G4double ApplyDirectionalSplitting(std::vector<G4DynamicParticle*>& vd,
         const G4Track& track,
         G4VEmModel* currentModel, 
         G4int index,
         G4double tcut,
         G4ParticleChangeForGamma* partChange);
 
-  void ApplyDirectionalSplitting(std::vector<G4DynamicParticle*>& vd,
+  G4double ApplyDirectionalSplitting(std::vector<G4DynamicParticle*>& vd,
         const G4Track& track,
         G4VEmModel* currentModel, 
         G4int index,
@@ -186,8 +186,6 @@ private:
   G4double fSafetyMin;
   G4double currentStepLimit;
   G4bool   startTracking;
-
-  G4double      fWeight;
 
   G4bool        fDirectionalSplitting;
   G4ThreeVector fDirectionalSplittingTarget;

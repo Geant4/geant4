@@ -80,9 +80,9 @@ const XrayFluoSensorHit& XrayFluoSensorHit::operator=(const XrayFluoSensorHit& r
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int XrayFluoSensorHit::operator==(const XrayFluoSensorHit&) const
+G4bool XrayFluoSensorHit::operator==(const XrayFluoSensorHit&) const
 {
-  return 0;
+  return false;
 }
 
 

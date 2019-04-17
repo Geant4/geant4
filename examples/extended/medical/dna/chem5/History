@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 Feb 2019 - VI, WGS, SI         - chem5-V10-04-04
+- Fixed PhysicsList
+
 26 Nov 2018 -  V. Ivanchenko      - chem5-V10-04-03
 - Fixed nightly problem
 

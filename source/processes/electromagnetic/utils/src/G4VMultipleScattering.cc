@@ -317,7 +317,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
         G4VMscModel* msc = static_cast<G4VMscModel*>(GetModelByIndex(i));
         if(!msc) { continue; }
         G4VMscModel* msc0= 
-	  static_cast<G4VMscModel*>(masterProcess->GetModelByIndex(i));
+          static_cast<G4VMscModel*>(masterProcess->GetModelByIndex(i));
         msc->SetCrossSectionTable(msc0->GetCrossSectionTable(), false);
         msc->InitialiseLocal(firstParticle, msc0);
       }
@@ -333,7 +333,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
                            num == "kaon+" || num == "kaon-" || 
                            num == "alpha" || num == "anti_proton" || 
                            num == "GenericIon" || num == "alpha+" || 
-			   num == "alpha++" )))
+                           num == "alpha++" )))
     { 
       StreamInfo(G4cout, part);
     }
@@ -353,8 +353,8 @@ void G4VMultipleScattering::StreamInfo(std::ostream& outFile,
 {
   G4String indent = (rst ? "  " : "");
   outFile << G4endl << indent << GetProcessName() << ": ";
-  if (!rst) outFile << "  for " << part.GetParticleName();
-  outFile  << "    SubType= " << GetProcessSubType() << G4endl;
+  if (!rst) outFile << " for " << part.GetParticleName();
+  outFile  << "  SubType= " << GetProcessSubType() << G4endl;
   StreamProcessInfo(outFile);
   modelManager->DumpModelList(outFile, verboseLevel);
 }
@@ -380,9 +380,9 @@ void G4VMultipleScattering::StartTracking(G4Track* track)
   for(G4int i=0; i<numberOfModels; ++i) {
     /*
     G4cout << "Next model " << i << "  " << msc 
-	   << " Emin= " << msc->LowEnergyLimit() 
-	   << " Emax= " << msc->HighEnergyLimit() 
-	   << " Eact= " << msc->LowEnergyActivationLimit() << G4endl;
+           << " Emin= " << msc->LowEnergyLimit() 
+           << " Emax= " << msc->HighEnergyLimit() 
+           << " Eact= " << msc->LowEnergyActivationLimit() << G4endl;
     */
     G4VEmModel* msc = GetModelByIndex(i);
     msc->StartTracking(track);
@@ -510,16 +510,16 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
       if(r2 > minDisplacement2) {
 
         fPositionChanged = true;
-	G4double dispR = std::sqrt(r2);
+        G4double dispR = std::sqrt(r2);
         G4double postSafety = 
-	  sFact*safetyHelper->ComputeSafety(fNewPosition, dispR); 
+          sFact*safetyHelper->ComputeSafety(fNewPosition, dispR); 
         //G4cout<<"    R= "<< dispR<<" postSafety= "<<postSafety<<G4endl;
 
         // far away from geometry boundary
         if(postSafety > 0.0 && dispR <= postSafety) {
           fNewPosition += displacement;
 
-	  //near the boundary
+          //near the boundary
         } else {
           // displaced point is definitely within the volume
           //G4cout<<"    R= "<<dispR<<" postSafety= "<<postSafety<<G4endl;
@@ -543,72 +543,73 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
                      << G4endl; 
             */
             // check if it is possible to shift to the boundary
-	    // and the shift is not large
+            // and the shift is not large
             if(safetyHelper->RecheckDistanceToCurrentBoundary(fNewPosition,
                fNewDirection, maxshift, &dist, &safety) 
-	       && std::abs(dist) < maxshift) {
-	         /* 
-		    G4cout << "##MSC after Recheck dist= " << dist
-		    << " postsafety= " << postSafety
-		    << " t= " << tPathLength
-		    << " g=  " << geomLength
-		    << " p=  " << physStepLimit
-		    << G4endl; 
-	         */
-	      // shift is positive
-	      if(dist >= 0.0) {
-		tPathLength *= (1.0 + dist/geomLength);
-		fNewPosition += dist*fNewDirection; 
+               && std::abs(dist) < maxshift) {
+                 /* 
+                    G4cout << "##MSC after Recheck dist= " << dist
+                    << " postsafety= " << postSafety
+                    << " t= " << tPathLength
+                    << " g=  " << geomLength
+                    << " p=  " << physStepLimit
+                    << G4endl; 
+                 */
+              // shift is positive
+              if(dist >= 0.0) {
+                tPathLength *= (1.0 + dist/geomLength);
+                fNewPosition += dist*fNewDirection; 
 
-		// shift is negative cannot be larger than geomLength
-	      } else {
-		maxshift = std::min(maxshift, geomLength);
-		if(0.0 < maxshift + dist) {
-		  const G4ThreeVector& postpoint = step.GetPostStepPoint()->GetPosition();
-		  G4ThreeVector point = fNewPosition + dist*fNewDirection;
-		  G4double R2 = (postpoint - point).mag2();
-		  G4double newdist = dist;
-		  // check not more than 10 extra boundaries
-		  for(G4int i=0; i<10; ++i) {
-		    dist = 0.0;
-		    if(safetyHelper->RecheckDistanceToCurrentBoundary(
-		       point, fNewDirection, maxshift, &dist, &safety) 
-		       && std::abs(newdist + dist) < maxshift) {
-		      point += dist*fNewDirection;
-		      G4double R2new = (postpoint - point).mag2();
-		      //G4cout << "Backward  i= " << i << " dist= " << dist 
-		      //     << " R2= " << R2new << G4endl; 
-		      if(dist >= 0.0 || R2new > R2) { break; }
-		      R2 = R2new;
-		      fNewPosition = point;
-		      newdist += dist;
-		    } else { 
-		      break; 
-		    }
-		  }
-		  tPathLength *= (1.0 + newdist/geomLength);
-		// shift on boundary is not possible for negative disp
-		} else {
-		  fNewPosition += displacement*(postSafety/dispR - 1.0); 
-		}
-	      }
-	      // shift on boundary is not possible for any disp
-	    } else {
-	      fNewPosition += displacement*(postSafety/dispR - 1.0); 
-	    }
-	    // reduced displacement
-	  } else if(postSafety > geomMin) {
-	    fNewPosition += displacement*(postSafety/dispR); 
+                // shift is negative cannot be larger than geomLength
+              } else {
+                maxshift = std::min(maxshift, geomLength);
+                if(0.0 < maxshift + dist) {
+                  const G4ThreeVector& postpoint = 
+                    step.GetPostStepPoint()->GetPosition();
+                  G4ThreeVector point = fNewPosition + dist*fNewDirection;
+                  G4double R2 = (postpoint - point).mag2();
+                  G4double newdist = dist;
+                  // check not more than 10 extra boundaries
+                  for(G4int i=0; i<10; ++i) {
+                    dist = 0.0;
+                    if(safetyHelper->RecheckDistanceToCurrentBoundary(
+                       point, fNewDirection, maxshift, &dist, &safety) 
+                       && std::abs(newdist + dist) < maxshift) {
+                      point += dist*fNewDirection;
+                      G4double R2new = (postpoint - point).mag2();
+                      //G4cout << "Backward  i= " << i << " dist= " << dist 
+                      //     << " R2= " << R2new << G4endl; 
+                      if(dist >= 0.0 || R2new > R2) { break; }
+                      R2 = R2new;
+                      fNewPosition = point;
+                      newdist += dist;
+                    } else { 
+                      break; 
+                    }
+                  }
+                  tPathLength *= (1.0 + newdist/geomLength);
+                // shift on boundary is not possible for negative disp
+                } else {
+                  fNewPosition += displacement*(postSafety/dispR - 1.0); 
+                }
+              }
+              // shift on boundary is not possible for any disp
+            } else {
+              fNewPosition += displacement*(postSafety/dispR - 1.0); 
+            }
+            // reduced displacement
+          } else if(postSafety > geomMin) {
+            fNewPosition += displacement*(postSafety/dispR); 
 
             // very small postSafety
           } else {
             fPositionChanged = false;
           }
         }
-	if(fPositionChanged) { 
-	  safetyHelper->ReLocateWithinVolume(fNewPosition);
-	  fParticleChange.ProposePosition(fNewPosition); 
-	}
+        if(fPositionChanged) { 
+          safetyHelper->ReLocateWithinVolume(fNewPosition);
+          fParticleChange.ProposePosition(fNewPosition); 
+        }
       }
     }
   }

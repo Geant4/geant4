@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+12 Jan 19 S. Incerti - tag dnaphysics-V10-04-05
+- Updated README (test)
+
 7 Nov 18 I. Hrivnacova - tag dnaphysics-V10-04-04
 - Updated plot.C for reading ntuples merged with row-wise mode
   (now default)

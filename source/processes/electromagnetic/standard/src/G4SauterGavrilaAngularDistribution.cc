@@ -46,7 +46,7 @@
 #include "Randomize.hh"
 
 G4SauterGavrilaAngularDistribution::G4SauterGavrilaAngularDistribution()
-  : G4VEmAngularDistribution("AngularGenSauterGavrila")
+  : G4VEmAngularDistribution("SauterGavrila")
 {}    
 
 G4SauterGavrilaAngularDistribution::~G4SauterGavrilaAngularDistribution() 

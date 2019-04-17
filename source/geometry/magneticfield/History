@@ -16,6 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+April 8, 2019 H.Burkhardt                        - field-V10-04-18
+-------------------------
+- Correcting transformation to local system in G4QuadrupoleMagField.cc
+
+March 20, 2019 G.Cosmo
+----------------------
+- Corrected 'RegularStepperName' in G4ChordFinder to refer to the actual
+  default stepper G4DormandPrince745 rather than G4NystromRK4...
+
 November 9, 2018 J.Apostolakis                   - field-V10-04-17
 ------------------------------
 - Small fixes for warnings in compilation.
@@ -2035,4 +2045,3 @@ May    7th, 1998    J. Apostolakis   -  magfield-06-01
     * G4ChordFinder:           methods to get/set IntegratorDriver
     * G4MagIntegratorDriver:   made OneGoodStep method public
 - created the file.
-

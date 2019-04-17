@@ -15,6 +15,9 @@ track of all tags.
 
      ----------------------------------------------------------
 
+31 January 2019:  I. Hrivnacova (exExoticphysics-V10-04-01)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 9 November 2018:  I. Hrivnacova (exExoticphysics-V10-04-00)
 - Added new dmparticle example in CMake and README's
 

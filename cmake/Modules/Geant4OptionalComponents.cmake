@@ -192,6 +192,26 @@ endif()
 GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Building Geant4 with GDML support")
 
 #-----------------------------------------------------------------------
+# Optional use of smart stack
+#  With this option, G4StackManager uses G4SmartTrackStack instead of
+# ordinary G4TrackStack as the Urgent stack. G4SmartTrackStack tries to
+# stick to the same kind of particle as the previous track when Pop()
+# is called. This G4SmartTrackStack may provide some performance 
+# improvements in particular for crystal calorimeters in high energy
+# physics experiments. On the other hand, G4SmartTrackStack won't give
+# any benefit for granular geometry or lower energy applications, while
+# it may causes some visible memory footprint increase.
+
+option(GEANT4_USE_SMARTSTACK "Use smart track stack" OFF)
+mark_as_advanced(GEANT4_USE_SMARTSTACK)
+
+if(GEANT4_USE_SMARTSTACK)
+  add_definitions(-DG4_USESMARTSTACK)
+endif()
+
+GEANT4_ADD_FEATURE(GEANT4_USE_SMARTSTACK "Use smart track stack")
+
+#-----------------------------------------------------------------------
 # Optional Support for TiMemory -- cross-language timing and memory
 # easily installed via:
 #   "pip install timemory" and pointing TiMemory_DIR to 
@@ -208,6 +228,7 @@ endif()
 option(GEANT4_USE_TIMEMORY "Build Geant4 with TiMemory support"
     ${_default_use_timemory}
 )
+mark_as_advanced(GEANT4_USE_TIMEMORY)
 
 if(GEANT4_USE_TIMEMORY)
     find_package(TiMemory REQUIRED)

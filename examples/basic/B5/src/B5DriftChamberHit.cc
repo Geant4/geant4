@@ -87,9 +87,9 @@ const B5DriftChamberHit& B5DriftChamberHit::operator=(const B5DriftChamberHit &r
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int B5DriftChamberHit::operator==(const B5DriftChamberHit &/*right*/) const
+G4bool B5DriftChamberHit::operator==(const B5DriftChamberHit &/*right*/) const
 {
-  return 0;
+  return false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

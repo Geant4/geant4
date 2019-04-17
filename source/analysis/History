@@ -16,6 +16,9 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 11, 2019 G. Cosmo (analysis-V10-04-11)
+- Fixed typos in printouts in G4P1Messenger, G4PlotMessenger, G4PlotParameters.
+
 November 28, 2018 I. Hrivnacova (analysis-V10-04-10)
 - Use the same mutex in Root pntuple add_row and end_fill.
   This should fix occassional failures of tests in MT mode.

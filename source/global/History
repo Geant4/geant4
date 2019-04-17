@@ -16,6 +16,14 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 13, 2019 Gabriele Cosmo (global-V10-04-32)
+- Enable FPE detection on MacOS with clang.
+  Addressing problem report #2147.
+- Changed ID for release 10.5.p01.
+
+January 31, 2019 Ivana Hrivnacova
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 November 26, 2018 Gabriele Cosmo (global-V10-04-31)
 - G4Cache, G4CacheDetails: minor code cleanup and formatting.
 

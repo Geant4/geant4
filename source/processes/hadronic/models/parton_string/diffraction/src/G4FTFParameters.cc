@@ -117,11 +117,13 @@ class G4FTFSettingDefaultHDP
     //
     HDP.SetDefault( "FTF_BARYON_DELTA_PROB_QEXCHG", 0. );
     HDP.SetDefault( "FTF_BARYON_PROB_SAME_QEXCHG", 0. );
-    HDP.SetDefault( "FTF_BARYON_DIFF_M_PROJ", 1.16, 1.16, 3. );
-    HDP.SetDefault( "FTF_BARYON_NONDIFF_M_PROJ", 1.16, 1.16, 3. );
-    HDP.SetDefault( "FTF_BARYON_DIFF_M_TGT", 1.16, 1.16, 3. );
-    HDP.SetDefault( "FTF_BARYON_NONDIFF_M_TGT", 1.16, 1.16, 3. );
-    HDP.SetDefault( "FTF_BARYON_AVRG_PT2", 0.3, 0.08, 1. );
+    HDP.SetDefault( "FTF_BARYON_DIFF_M_PROJ", 1.16, 1.16, 3. );    // it's supposed to be in GeV but do NOT do (*CLHEP::GeV) 
+                                                                   // because it'll be done in the G4FTFParameters::SetProjMinDiffMass
+    HDP.SetDefault( "FTF_BARYON_NONDIFF_M_PROJ", 1.16, 1.16, 3. ); // do NOT (*CLHEP::GeV) - same as above
+    HDP.SetDefault( "FTF_BARYON_DIFF_M_TGT", 1.16, 1.16, 3. );     // do NOT (*CLHEP::GeV) - same as above
+    HDP.SetDefault( "FTF_BARYON_NONDIFF_M_TGT", 1.16, 1.16, 3. );  // do NOT (*CLHEP::GeV) - same as above
+    HDP.SetDefault( "FTF_BARYON_AVRG_PT2", 0.3, 0.08, 1. );        // do NOT (*CLHEP::GeV) - same as above
+
     //
     // JVY, Oct. 6, 2017: Per Alberto R., keep these two settings fixed (for now)
     //
@@ -180,19 +182,17 @@ G4FTFParamCollection::G4FTFParamCollection()
   HDP.DeveloperGet( "FTF_PT2_NUCDESTR_P3", fPt2NuclearDestructP3 ); 
   HDP.DeveloperGet( "FTF_PT2_NUCDESTR_P4", fPt2NuclearDestructP4 ); 
   //
-  // fNuclearProjDestructP1 = 1.; // in 10.2.p03 & 10.3.ref04-ref07/08/09 it's 0.00481; in 10.3.p01/p02/p03, etc. it's be 1. (fixed)
-  // fNuclearProjDestructP1_NBRNDEP = false;
-  // fNuclearTgtDestructP1 = 1.;  // in 10.2.p03 & 10.3.ref04-ref07/08/09 it's 0.00481; in 10.3.p01/p02/p03, etc. it's be 1. (fixed)
-  fNuclearTgtDestructP1_ADEP = false;
+  // we keep these parameters fixed, that's why they're defined here explicitly
+  // rather than being picked up from HDP
+  //
   fNuclearProjDestructP2 = 4.0;
   fNuclearProjDestructP3 = 2.1;
-  // fNuclearTgtDestructP2 = 4.0;
-  // fNuclearTgtDestructP3 = 2.1;
-  // fPt2NuclearDestructP1 = 0.035;
-  // fPt2NuclearDestructP2 = 0.04;
-  // fPt2NuclearDestructP3 = 4.0;
-  // fPt2NuclearDestructP4 = 2.5;
 
+  //
+  // there are the default settings
+  // they may be overriden by values from HDP later on 
+  // (e.g. in G4FTFParamCollBaryonProj(), etc.)
+  //
   fProjDiffDissociation = false;
   fTgtDiffDissociation = false;
 }
@@ -278,7 +278,9 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj()
   //
   // Proc=0 --> Qexchg w/o excitation
   //
-  /* As of Oct. 31, 2017 keep these fixed
+  /* // As of Oct. 31, 2017 keep these fixed; 
+     // this is why we keep this code block commented, and
+     // set the parameters explicitly below rather than picking up from HDP
   HDP.DeveloperGet( "FTF_BARYON_PROC0_A1",   fProc0A1 );
   HDP.DeveloperGet( "FTF_BARYON_PROC0_B1",   fProc0B1 );
   HDP.DeveloperGet( "FTF_BARYON_PROC0_A2",   fProc0A2 ); 
@@ -298,7 +300,9 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj()
   //
   // Proc=1 --> Qexchg w/excitation
   //
-  /* As of Oct. 31, 2017 keep these fixed
+  /* // As of Oct. 31, 2017 keep these fixed
+     // this is why we keep this code block commented,
+     // and set the parameters explicitly below rather than picking up from HDP
   HDP.DeveloperGet( "FTF_BARYON_PROC1_A1",   fProc1A1 );
   HDP.DeveloperGet( "FTF_BARYON_PROC1_B1",   fProc1B1 );
   HDP.DeveloperGet( "FTF_BARYON_PROC1_A2",   fProc1A2 ); 
@@ -328,7 +332,9 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj()
   //
   // Proc=4 --> Qexchg "w/additional multiplier" in excitation 
   //
-  /* As of Oct. 31, 2017 keep these fixed
+  /* // As of Oct. 31, 2017 keep these fixed
+     // this is why we keep this code block commented out,
+     // and set the parameters explicitly below rather than picking up from HDP
   HDP.DeveloperGet( "FTF_BARYON_PROC4_A1",   fProc4A1 );
   HDP.DeveloperGet( "FTF_BARYON_PROC4_B1",   fProc4B1 );
   HDP.DeveloperGet( "FTF_BARYON_PROC4_A2",   fProc4A2 ); 
@@ -355,15 +361,6 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj()
   HDP.DeveloperGet( "FTF_BARYON_NONDIFF_M_TGT", fTgtMinNonDiffMass );
   HDP.DeveloperGet( "FTF_BARYON_AVRG_PT2", fAveragePt2 );
   //
-  // fDeltaProbAtQuarkExchange = 0.;  
-  // fProbOfSameQuarkExchange  = 0.;
-  // fProjMinDiffMass          = 1.16; // it's supposed to be in GeV but do NOT do (*CLHEP::GeV) 
-                                       // because it'll be done in the G4FTFParameters::SetProjMinDiffMass
-  // fProjMinNonDiffMass       = 1.16; // do NOT (*CLHEP::GeV) - same as above
-  // fTgtMinDiffMass           = 1.16; // do NOT (*CLHEP::GeV) - same as above
-  // fTgtMinNonDiffMass        = 1.16; // do NOT (*CLHEP::GeV) - same as above
-  // fAveragePt2               = 0.15;  //  do NOT (*CLHEP::GeV*CLHEP::GeV) 
-  //
   // JVY - Per Alberto R., we're curretly keeping these two settings fixed,
   // thus they're defined here explicitly, rather than via HDP
   //
@@ -383,11 +380,7 @@ G4FTFParamCollBaryonProj::G4FTFParamCollBaryonProj()
   HDP.DeveloperGet( "FTF_BARYON_EXCI_E_PER_WNDNUCLN", fExciEnergyPerWoundedNucleon );
   HDP.DeveloperGet( "FTF_BARYON_NUCDESTR_DOF", fDofNuclearDestruct );
   //
-  // fR2ofNuclearDestruct         = 1.5 * CLHEP::fermi*CLHEP::fermi;
-  // fExciEnergyPerWoundedNucleon = 40. * CLHEP::MeV;
-  // fDofNuclearDestruct          = 0.3;
-  // 
-  // NOTE-1: this parameter has changed from 1. to 9. between 10.2 and 10.3.ref07 !!!
+  // NOTE-1: this parameter (below) has changed from 1. to 9. between 10.2 and 10.3.ref07 !!!
   //         ... then it went back to 1. for the 10.4-candidate... 
   // NOTE-2: this is a "technical" parameter, it should not be changed; this is why
   //         it is defined explicitly rather than via HDP
@@ -529,20 +522,6 @@ void G4FTFParameters::InitForInteraction( const G4ParticleDefinition* particle,
 
   TargetMass     /= GeV; TargetMass2     /= (GeV*GeV);
   ProjectileMass /= GeV; ProjectileMass2 /= (GeV*GeV);
-
-  /* JYV, Oct. 31, 2017: Keep it in the ctor
-
-  // Andrea Dotti (13Jan2013):
-  // The following lines are changed for G4MT. Originally the code was:
-  //   static G4ChipsComponentXS* _instance = new G4ChipsComponentXS();  // Witek Pokorski
-  // Note the code could go back at original if _instance could be shared among threads
-  if ( ! chipsComponentXSisInitialized ) {
-    chipsComponentXSisInitialized = true;
-    chipsComponentXSinstance = new G4ChipsComponentXS();
-  }
-  G4ChipsComponentXS* _instance = chipsComponentXSinstance;
-  FTFxsManager = _instance;
-  */
 
   Plab /= GeV;
   G4double Xftf = 0.0;

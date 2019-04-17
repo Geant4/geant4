@@ -55,7 +55,7 @@ public:
   GammaRayTelAnticoincidenceHit(const GammaRayTelAnticoincidenceHit&);
   const GammaRayTelAnticoincidenceHit& operator=(const
 						GammaRayTelAnticoincidenceHit&);
-  int operator==(const GammaRayTelAnticoincidenceHit&) const;
+  G4bool operator==(const GammaRayTelAnticoincidenceHit&) const;
   
   inline void* operator new(size_t);
   inline void  operator delete(void*);

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 14 December 2018 Makoto Asai (decay-V10-04-00)
+- G4Decay.cc, G4UnknownDecay : Allowing absolute zero proper decay time.
+
 - 12 September 2017 Krzysztof Genser (decay-V10-03-04)
 - Moved Muonic Atom files to processes/hadronic/stopping
 - Replaced DECAY_MuonicAtomDecay process type with DECAY_MuAtom

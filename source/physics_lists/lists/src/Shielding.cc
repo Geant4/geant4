@@ -45,10 +45,7 @@
 //
 
 #include "Shielding.hh"
-//#include <iomanip>   
-
 #include "globals.hh"
-//#include "G4ios.hh"
 
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
@@ -88,11 +85,12 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
     "<<< LEND will be used for low energy neutron and gamma projectiles"
     << G4endl;
 
-  this->defaultCutValue = 0.7*CLHEP::mm;  
-  this->SetVerboseLevel(verbose);
+  defaultCutValue = 0.7*CLHEP::mm;  
+  SetCutValue(0, "proton");  
+  SetVerboseLevel(verbose);
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics(verbose));
+  RegisterPhysics( new G4EmStandardPhysics(verbose));
 
   // Synchroton Radiation & GN Physics
   G4EmExtraPhysics* emExtraPhysics = new G4EmExtraPhysics(verbose);
@@ -100,20 +98,20 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
      // Use LEND model for Gamma Nuclear 
      emExtraPhysics->LENDGammaNuclear(true);
   }
-  this->RegisterPhysics( emExtraPhysics );
+  RegisterPhysics( emExtraPhysics );
 
   // Decays 
-  this->RegisterPhysics( new G4DecayPhysics(verbose) );
-  this->RegisterPhysics( new G4RadioactiveDecayPhysics(verbose) );
+  RegisterPhysics( new G4DecayPhysics(verbose) );
+  RegisterPhysics( new G4RadioactiveDecayPhysics(verbose) );
 
   // Hadron Elastic scattering
   if ( LEN_model == "HP" ) 
   {
-     this->RegisterPhysics( new G4HadronElasticPhysicsHP(verbose) );
+     RegisterPhysics( new G4HadronElasticPhysicsHP(verbose) );
   }
   else if ( LEN_model == "LEND" ) 
   {
-     this->RegisterPhysics( new G4HadronElasticPhysicsLEND(verbose,evaluation));
+     RegisterPhysics( new G4HadronElasticPhysicsLEND(verbose,evaluation));
      G4DataQuestionaire itt(lend);
   }
   else 
@@ -122,7 +120,7 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
      G4cout << "\"" << LEN_model 
             << "\" is not valid for the low energy neutorn model." <<G4endl;
      G4cout << "Neutron HP package will be used." <<G4endl;
-     this->RegisterPhysics( new G4HadronElasticPhysicsHP(verbose) );
+     RegisterPhysics( new G4HadronElasticPhysicsHP(verbose) );
   } 
 
   G4VPhysicsConstructor* hpc;
@@ -150,7 +148,7 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
      //         << " is invalid." <<G4endl;
      //G4cout << "Will use neutron HP package." <<G4endl;
   }
-  this->RegisterPhysics( hpc );
+  RegisterPhysics( hpc );
 
   if ( LEN_model == "HP" ) {
      //Activate prodcuton of fission fragments in neutronHP
@@ -158,11 +156,11 @@ Shielding::Shielding(G4int verbose, const G4String& n_model,
   }
 
   // Stopping Physics
-  this->RegisterPhysics( new G4StoppingPhysics(verbose) );
+  RegisterPhysics( new G4StoppingPhysics(verbose) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonElasticPhysics(verbose));
-  this->RegisterPhysics( new G4IonQMDPhysics(verbose));  
+  RegisterPhysics( new G4IonElasticPhysics(verbose));
+  RegisterPhysics( new G4IonQMDPhysics(verbose));  
 }
 
 Shielding::~Shielding()

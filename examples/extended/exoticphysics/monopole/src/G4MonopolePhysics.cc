@@ -105,12 +105,10 @@ void G4MonopolePhysics::ConstructProcess()
   G4ProcessManager* pmanager = fMpl->GetProcessManager();
   
   // defined monopole parameters and binning
-
   G4double magn = fMpl->MagneticCharge();
-  G4double emin = fMonopoleMass/20000.;
-  if(emin < keV) { emin = keV; }
+  G4double emin = std::min(fMonopoleMass/20000., CLHEP::keV);
   G4double emax = std::max(10.*TeV, fMonopoleMass*100);
-  G4int nbin = G4lrint(10*std::log10(emax/emin));
+  G4int nbin    = G4lrint(10*std::log10(emax/emin));
 
   // dedicated trasporation 
   if(magn != 0.0) {
@@ -141,10 +139,11 @@ void G4MonopolePhysics::ConstructProcess()
 void G4MonopolePhysics::SetMagneticCharge(G4double val)
 {
   if ( fMpl ) {
-    G4cerr << "Cannot set value. Monopole particle was already constructed." << G4endl;
+    G4Exception("G4MonopolePhysics", "01", JustWarning, 
+                "Cannot set value when monopole is already constructed.");
+  } else {
+    fMagCharge = val;
   }
-
-  fMagCharge = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -152,10 +151,11 @@ void G4MonopolePhysics::SetMagneticCharge(G4double val)
 void G4MonopolePhysics::SetElectricCharge(G4double val)
 {
   if ( fMpl ) {
-    G4cerr << "Cannot set value. Monopole particle was already constructed." << G4endl;
+    G4Exception("G4MonopolePhysics", "01", JustWarning, 
+                "Cannot set value when monopole is already constructed.");
+  } else {
+    fElCharge = val;
   }
-
-  fElCharge = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -163,10 +163,11 @@ void G4MonopolePhysics::SetElectricCharge(G4double val)
 void G4MonopolePhysics::SetMonopoleMass(G4double mass)
 {
   if ( fMpl ) {
-    G4cerr << "Cannot set value. Monopole particle was already constructed." << G4endl;
+    G4Exception("G4MonopolePhysics", "01", JustWarning, 
+                "Cannot set value when monopole is already constructed.");
+  } else {
+    fMonopoleMass = mass;
   }
-
-  fMonopoleMass = mass;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

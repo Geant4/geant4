@@ -130,12 +130,12 @@ G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
 
 }
 
-G4int G4VRangeToEnergyConverter::operator==(const G4VRangeToEnergyConverter &right) const
+G4bool G4VRangeToEnergyConverter::operator==(const G4VRangeToEnergyConverter &right) const
 {
   return this == &right;
 }
 
-G4int G4VRangeToEnergyConverter::operator!=(const G4VRangeToEnergyConverter &right) const
+G4bool G4VRangeToEnergyConverter::operator!=(const G4VRangeToEnergyConverter &right) const
 {
   return this != &right;
 }

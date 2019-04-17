@@ -184,13 +184,13 @@ G4ParticlePropertyData & G4ParticlePropertyData::operator=(const G4ParticlePrope
 }
   
 ////////////////////////
-G4int G4ParticlePropertyData::operator==(const G4ParticlePropertyData &right) const
+G4bool G4ParticlePropertyData::operator==(const G4ParticlePropertyData &right) const
 {
   return (this == &right);
 }
 
 ////////////////////////
-G4int G4ParticlePropertyData::operator!=(const G4ParticlePropertyData &right) const
+G4bool G4ParticlePropertyData::operator!=(const G4ParticlePropertyData &right) const
 {
   return (this != &right);
 }

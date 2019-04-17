@@ -14,6 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-02-19 V.Ivantchenko (testem8-V10-04-06)
+- DetectorConstruction - added alternative materials in order to test
+    all methods to construct new material by G4NistMaterialBuilder
+    (problem reports #2133, #2134)
+
 16-05-18 J.Allison (testem8-V10-04-05)
 - RunAction.cc: Removed vis commands.
 

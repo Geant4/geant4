@@ -168,8 +168,8 @@ private:
 
   // operators
   G4IonisParamMat& operator=(const G4IonisParamMat&) = delete;
-  G4int operator==(const G4IonisParamMat&) const = delete;
-  G4int operator!=(const G4IonisParamMat&) const = delete;
+  G4bool operator==(const G4IonisParamMat&) const = delete;
+  G4bool operator!=(const G4IonisParamMat&) const = delete;
   G4IonisParamMat(const G4IonisParamMat&) = delete;
 
   //
