@@ -165,12 +165,12 @@ G4VProcess & G4VProcess::operator=(const G4VProcess &)
   return *this;
 }
 
-G4int G4VProcess::operator==(const G4VProcess &right) const
+G4bool G4VProcess::operator==(const G4VProcess &right) const
 {
   return (this == &right);
 }
 
-G4int G4VProcess::operator!=(const G4VProcess &right) const
+G4bool G4VProcess::operator!=(const G4VProcess &right) const
 {
   return (this !=  &right);
 }

@@ -36,7 +36,12 @@
 
 #include <vector>
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 
 #include "G4LogicalVolumeStore.hh"
@@ -44,6 +49,8 @@
 
 #include "G01PrimaryGeneratorAction.hh"
 #include "G01DetectorConstruction.hh"
+#include "G01ActionInitialization.hh"
+
 #include "FTFP_BERT.hh"
 
 #include "G4VisExecutive.hh"
@@ -97,12 +104,16 @@ int main(int argc,char **argv)
       return -1;
    }
 
+#ifdef G4MULTITHREADED
+   G4MTRunManager* runManager = new G4MTRunManager;
+#else
    G4RunManager* runManager = new G4RunManager;
+#endif
 
    runManager->SetUserInitialization(new G01DetectorConstruction(
                                      parser.GetWorldVolume()));
    runManager->SetUserInitialization(new FTFP_BERT);
-   runManager->SetUserAction(new G01PrimaryGeneratorAction);
+   runManager->SetUserInitialization(new G01ActionInitialization());
 
    runManager->Initialize();
 

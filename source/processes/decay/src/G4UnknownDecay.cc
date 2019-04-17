@@ -71,7 +71,7 @@ G4bool G4UnknownDecay::IsApplicable(const G4ParticleDefinition& aParticleType)
 
 G4double G4UnknownDecay::GetMeanFreePath(const G4Track& /*aTrack*/,G4double, G4ForceCondition*)
 {
-   return  DBL_MIN;
+   return 0.0;
 }
 
 void G4UnknownDecay::BuildPhysicsTable(const G4ParticleDefinition&)
@@ -131,7 +131,7 @@ G4VParticleChange* G4UnknownDecay::DecayIt(const G4Track& aTrack, const G4Step& 
   G4double finalGlobalTime = aTrack.GetGlobalTime();
   //boost all decay products to laboratory frame
   //if the particle has traveled 
-  if(aParticle->GetPreAssignedDecayProperTime()>0.) {
+  if(aParticle->GetPreAssignedDecayProperTime()>=0.) {
     products->Boost( ParentEnergy, ParentDirection);
   }
 

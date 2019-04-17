@@ -40,12 +40,6 @@
 //
 //----------------------------------------------------------------------------
 //
-// CHIPS for sampling scattering for p and n
-// Glauber model for samplimg of high energy pi+- (E > 1GeV)
-// LHEP sampling model for the other particle
-// BBG cross sections for p, n and pi+- 
-// LHEP cross sections for other particles
-
 #include "G4HadronElasticPhysics.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -156,10 +150,7 @@ void G4HadronElasticPhysics::ConstructProcess()
        pname == "omega-"    || 
        pname == "sigma-"    || 
        pname == "sigma+"    || 
-       pname == "xi-"       || 
-       pname == "alpha"     ||
-       pname == "deuteron"  ||
-       pname == "triton"   
+       pname == "xi-"
        ) {
       
       hel = new G4HadronElasticProcess();
@@ -170,7 +161,11 @@ void G4HadronElasticPhysics::ConstructProcess()
 	       << " added for " << particle->GetParticleName() << G4endl;
       }
 
-    } else if(pname == "He3") {
+    } else if(pname == "alpha"     ||
+              pname == "deuteron"  ||
+              pname == "triton"    ||
+              pname == "He3"
+             ) {
       hel = new G4HadronElasticProcess();
       G4VCrossSectionDataSet* theComponentGGNuclNuclData = 
         new G4CrossSectionElastic(new G4ComponentGGNuclNuclXsc());

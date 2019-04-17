@@ -37,7 +37,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4ios.hh"
+#include "G4Polyhedron.hh"
 
 G4ViewParameters::G4ViewParameters ():
   fDrawingStyle (wireframe),
@@ -53,7 +53,7 @@ G4ViewParameters::G4ViewParameters ():
   fCutawayMode (cutawayUnion),
   fCutawayPlanes (),
   fExplodeFactor (1.),
-  fNoOfSides (24),
+  fNoOfSides (),
   fViewpointDirection (G4Vector3D (0., 0., 1.)),  // On z-axis.
   fUpVector (G4Vector3D (0., 1., 0.)),            // y-axis up.
   fFieldHalfAngle (0.),                           // Orthogonal projection.
@@ -100,6 +100,15 @@ G4ViewParameters::G4ViewParameters ():
   fDisplayLightFrontGreen(1.),
   fDisplayLightFrontBlue(0.)
 {
+  // Pick up default no of sides from G4Polyhedron.
+  // Note that this parameter is variously called:
+  //   No of sides
+  //   NumberOfRotationSteps
+  //   Line segments per circle
+  // It refers to the approximation of a circle by a polygon of
+  // stated number of sides.
+  fNoOfSides = G4Polyhedron::GetNumberOfRotationSteps();
+  
   fDefaultMarker.SetScreenSize (5.);
   // Markers are 5 pixels "overall" size, i.e., diameter.
 }

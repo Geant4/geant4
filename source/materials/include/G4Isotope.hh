@@ -120,8 +120,8 @@ class G4Isotope
      
  public:  // without description
  
-    G4int operator==(const G4Isotope&) const;
-    G4int operator!=(const G4Isotope&) const;
+    G4bool operator==(const G4Isotope&) const;
+    G4bool operator!=(const G4Isotope&) const;
 
     G4Isotope(__void__&);
       // Fake default constructor for usage restricted to direct object

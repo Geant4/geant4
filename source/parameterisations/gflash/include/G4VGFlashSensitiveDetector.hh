@@ -65,9 +65,9 @@ class G4VGFlashSensitiveDetector
 
       virtual ~G4VGFlashSensitiveDetector() {}
 
-      G4int operator==(const G4VGFlashSensitiveDetector &right) const
+      G4bool operator==(const G4VGFlashSensitiveDetector &right) const
         {return this == &right;}
-      G4int operator!=(const G4VGFlashSensitiveDetector &right) const
+      G4bool operator!=(const G4VGFlashSensitiveDetector &right) const
         {return this != &right;}
 
   public: // without description

@@ -96,13 +96,13 @@ G4LogicalSkinSurface::operator=(const G4LogicalSkinSurface& right)
   return *this;
 }
 
-G4int
+G4bool
 G4LogicalSkinSurface::operator==(const G4LogicalSkinSurface& right) const
 {
   return (this == (G4LogicalSkinSurface *) &right);
 }
 
-G4int
+G4bool
 G4LogicalSkinSurface::operator!=(const G4LogicalSkinSurface& right) const
 {
   return (this != (G4LogicalSkinSurface *) &right);

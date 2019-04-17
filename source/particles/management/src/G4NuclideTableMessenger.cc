@@ -67,7 +67,7 @@ G4NuclideTableMessenger::G4NuclideTableMessenger(G4NuclideTable* nuclideTable)
 
   ///particle/manage/nuclide/level_tolerance
   lToleranceCmd = new G4UIcmdWithADoubleAndUnit("/particle/nuclideTable/level_tolerance",this);
-  lToleranceCmd->SetGuidance("Set tolerance in level seaching.");
+  lToleranceCmd->SetGuidance("Set tolerance in level searching.");
   lToleranceCmd->SetGuidance("Unit of the energy can be :");
   lToleranceCmd->SetGuidance(" MeV, keV, eV (default)");
   lToleranceCmd->SetParameterName("lTolerance",false);

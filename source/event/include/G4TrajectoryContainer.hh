@@ -61,8 +61,8 @@ class G4TrajectoryContainer
     inline void *operator new(size_t);
     inline void operator delete(void* anEvent);
 
-    G4int operator==(const G4TrajectoryContainer& right) const;
-    G4int operator!=(const G4TrajectoryContainer& right) const;
+    G4bool operator==(const G4TrajectoryContainer& right) const;
+    G4bool operator!=(const G4TrajectoryContainer& right) const;
 
   public:
     inline size_t size() const { return vect->size(); }

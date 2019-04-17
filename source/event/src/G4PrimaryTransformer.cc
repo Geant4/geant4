@@ -180,7 +180,7 @@ void G4PrimaryTransformer::GenerateSingleTrack
                           primaryParticle->GetPolY(),
                           primaryParticle->GetPolZ());
     }
-    if(primaryParticle->GetProperTime()>0.0)
+    if(primaryParticle->GetProperTime()>=0.0)
     { DP->SetPreAssignedDecayProperTime(primaryParticle->GetProperTime()); }
 
     // Set Mass if it is specified
@@ -270,7 +270,7 @@ void G4PrimaryTransformer::SetDecayProducts
         = new G4DynamicParticle(partDef,daughter->GetMomentum());
       DP->SetPrimaryParticle(daughter);
       // Decay proper time for daughter
-      if(daughter->GetProperTime()>0.0)
+      if(daughter->GetProperTime()>=0.0)
       { DP->SetPreAssignedDecayProperTime(daughter->GetProperTime()); }
       // Set Charge is specified
       if (daughter->GetCharge()<DBL_MAX) {

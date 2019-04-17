@@ -78,7 +78,7 @@ const RMC01DoubleWithWeightHit& RMC01DoubleWithWeightHit::operator=(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int RMC01DoubleWithWeightHit::operator==
+G4bool RMC01DoubleWithWeightHit::operator==
                                          (const RMC01DoubleWithWeightHit &right) const
 {
  return(fValue == right.fValue && fWeight == right.fWeight);

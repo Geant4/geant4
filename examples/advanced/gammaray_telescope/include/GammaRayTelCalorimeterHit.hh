@@ -55,7 +55,7 @@ public:
   GammaRayTelCalorimeterHit(const GammaRayTelCalorimeterHit&);
   const GammaRayTelCalorimeterHit& operator=(const
 						GammaRayTelCalorimeterHit&);
-  int operator==(const GammaRayTelCalorimeterHit&) const;
+  G4bool operator==(const GammaRayTelCalorimeterHit&) const;
   
   inline void* operator new(size_t);
   inline void  operator delete(void*);

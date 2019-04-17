@@ -74,7 +74,7 @@
       G4HitsCollection();
       G4HitsCollection(G4String detName,G4String colNam);
       virtual ~G4HitsCollection();
-      G4int operator==(const G4HitsCollection &right) const;
+      G4bool operator==(const G4HitsCollection &right) const;
 
   protected:
       void* theCollection;
@@ -103,7 +103,7 @@ public:
   // constructor.
 public:
   virtual ~G4TAtomicHitsCollection();
-  G4int operator==(const G4TAtomicHitsCollection<T> &right) const;
+  G4bool operator==(const G4TAtomicHitsCollection<T> &right) const;
 
   //inline void *operator new(size_t);
   //inline void operator delete(void* anHC);
@@ -179,7 +179,7 @@ template <class T> G4TAtomicHitsCollection<T>::~G4TAtomicHitsCollection()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 template <class T>
-G4int G4TAtomicHitsCollection<T>
+G4bool G4TAtomicHitsCollection<T>
 ::operator==(const G4TAtomicHitsCollection<T> &right) const
 {
     return (collectionName == right.collectionName);

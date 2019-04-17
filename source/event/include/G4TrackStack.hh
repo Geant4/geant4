@@ -54,8 +54,8 @@ public:
   
 private:
 	const G4TrackStack & operator=(const G4TrackStack &right);
-	G4int operator==(const G4TrackStack &right) const;
-	G4int operator!=(const G4TrackStack &right) const;
+	G4bool operator==(const G4TrackStack &right) const;
+	G4bool operator!=(const G4TrackStack &right) const;
   
 public:
 	void PushToStack(const G4StackedTrack& aStackedTrack) { push_back(aStackedTrack); }

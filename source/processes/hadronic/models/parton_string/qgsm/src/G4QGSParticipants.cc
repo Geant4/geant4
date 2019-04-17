@@ -1718,7 +1718,8 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
       G4cout<<"              "<<tmp<<" "<<SumZ<<" (z-fraction)"<<G4endl;
     #endif
     tmp.setPx(-SumPx); tmp.setPy(-SumPy);
-    Mt = std::sqrt(aPtVector.mag2()+sqr(VaqM_pr));
+    //Uzhi 2019  Mt = std::sqrt(aPtVector.mag2()+sqr(VaqM_pr));
+    Mt = std::sqrt( sqr(SumPx) + sqr(SumPy) + sqr(VaqM_pr) );  //Uzhi 2019
     ProjSumMt += Mt;
     tmp.setPz(1.-SumZ);
 
@@ -1824,7 +1825,8 @@ G4bool G4QGSParticipants::DeterminePartonMomenta()
         G4cout<<"              "<<tmp<<" "<<SumZw<<" (sum z-fracs) "<<SumZ<<" (total z-sum) "<<G4endl;
       #endif
       tmp.setPx(-SumPx);                  tmp.setPy(-SumPy);
-      Mt=std::sqrt(aPtVector.mag2()+sqr(VqqM_tr));
+      //Uzhi 2019  Mt=std::sqrt(aPtVector.mag2()+sqr(VqqM_tr));
+      Mt=std::sqrt( sqr(SumPx) + sqr(SumPy) + sqr(VqqM_tr) );  //Uzhi 2019   
       TargSumMt += Mt; 
 
       tmp.setPz((*i)->Get4Momentum().pz()*(1.0 - SumZ));

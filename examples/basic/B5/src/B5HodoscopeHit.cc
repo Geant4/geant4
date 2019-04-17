@@ -82,9 +82,9 @@ const B5HodoscopeHit& B5HodoscopeHit::operator=(const B5HodoscopeHit &right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int B5HodoscopeHit::operator==(const B5HodoscopeHit &/*right*/) const
+G4bool B5HodoscopeHit::operator==(const B5HodoscopeHit &/*right*/) const
 {
-  return 0;
+  return false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

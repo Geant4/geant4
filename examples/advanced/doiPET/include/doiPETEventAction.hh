@@ -58,7 +58,7 @@ public:
 	virtual void  EndOfEventAction(const G4Event*);
 
 private:
-	G4int eventID;
+	// G4int eventID;
 	G4int printModulo;
 };
 

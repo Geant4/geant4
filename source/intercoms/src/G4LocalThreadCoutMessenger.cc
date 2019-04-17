@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// 
 
 #include "G4LocalThreadCoutMessenger.hh"
 
@@ -96,7 +93,7 @@ G4LocalThreadCoutMessenger::G4LocalThreadCoutMessenger()
   ignoreCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   ignoreInitCmd = new G4UIcmdWithABool("/control/cout/ignoreInitializationCout",this);
-  ignoreInitCmd->SetGuidance("Omit cout from threads during initialization, as they should be identical to the masther thread.");
+  ignoreInitCmd->SetGuidance("Omit cout from threads during initialization, as they should be identical to the master thread.");
   ignoreInitCmd->SetGuidance("This command takes effect only if cout destination is screen without buffering.");
   ignoreInitCmd->SetGuidance("This command does not affect to cerr.");
   ignoreInitCmd->SetParameterName("IgnoreInit",true);

@@ -1,0 +1,26 @@
+#================================================
+#     Macro file for Hadr01
+#     17.12.2018 V.Ivanchneko
+#================================================
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 0
+#
+/testhadr/TargetMat        G4_W
+/testhadr/TargetRadius     20 cm
+/testhadr/TargetLength     50 cm
+/testhadr/NumberDivZ       1000
+/testhadr/NumberOfBinsE    1000
+/testhadr/PrintModulo      1000
+#
+/run/setCut                2 mm
+#/testhadr/Physics         PHYSLIST
+#
+/run/initialize
+/testhadr/HistoName        p_w_8gev
+/testhadr/MaxEdep          8 GeV
+#
+/gun/particle proton
+/gun/energy 8. GeV
+/run/beamOn 1000
+#

@@ -66,8 +66,8 @@ class G4StackManager
 
   private:
       const G4StackManager& operator=(const G4StackManager &right);
-      G4int operator==(const G4StackManager &right) const;
-      G4int operator!=(const G4StackManager &right) const;
+      G4bool operator==(const G4StackManager &right) const;
+      G4bool operator!=(const G4StackManager &right) const;
 
   public:
       G4int PushOneTrack(G4Track *newTrack, G4VTrajectory *newTrajectory = 0);

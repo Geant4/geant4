@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar. 11th, 2019  - G.Cosmo (procuts-V10-04-01)
+- Fixed typos in printouts in G4PhysicsTableHelper and G4ProductionCutsTable.
+
 Aug. 13th, 2018  - H.Kurashige (procuts-V10-04-00)
 - clean up codes (use nullptr, and so on )
 

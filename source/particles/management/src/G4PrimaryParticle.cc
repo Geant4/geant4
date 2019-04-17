@@ -44,7 +44,7 @@ G4PrimaryParticle::G4PrimaryParticle()
  direction(0.,0.,1.),kinE(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
- Weight0(1.0),properTime(0.0),userInfo(0)
+ Weight0(1.0),properTime(-1.0),userInfo(0)
 {;}
 
 G4PrimaryParticle::G4PrimaryParticle(G4int Pcode)
@@ -52,7 +52,7 @@ G4PrimaryParticle::G4PrimaryParticle(G4int Pcode)
  direction(0.,0.,1.),kinE(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
- Weight0(1.0),properTime(0.0),userInfo(0)
+ Weight0(1.0),properTime(-1.0),userInfo(0)
 { 
   G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); 
   if (G4code !=0) {
@@ -67,7 +67,7 @@ G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
  direction(0.,0.,1.),kinE(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
- Weight0(1.0),properTime(0.0),userInfo(0)
+ Weight0(1.0),properTime(-1.0),userInfo(0)
 { 
   G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); 
   if (G4code !=0) {
@@ -83,7 +83,7 @@ G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
  direction(0.,0.,1.),kinE(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
- Weight0(1.0),properTime(0.0),userInfo(0)
+ Weight0(1.0),properTime(-1.0),userInfo(0)
 {
  G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); 
  if (G4code !=0) {
@@ -98,7 +98,7 @@ G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode)
  direction(0.,0.,1.),kinE(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
- Weight0(1.0),properTime(0.0),userInfo(0)
+ Weight0(1.0),properTime(-1.0),userInfo(0)
 { 
   if (G4code !=0) {
     PDGcode = Gcode->GetPDGEncoding(); 
@@ -113,7 +113,7 @@ G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode,
  direction(0.,0.,1.),kinE(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
- Weight0(1.0),properTime(0.0),userInfo(0)
+ Weight0(1.0),properTime(-1.0),userInfo(0)
 { 
   if (G4code !=0) {
     PDGcode = Gcode->GetPDGEncoding(); 
@@ -129,7 +129,7 @@ G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode,
  direction(0.,0.,1.),kinE(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
- Weight0(1.0),properTime(0.0),userInfo(0)
+ Weight0(1.0),properTime(-1.0),userInfo(0)
 {
   if (G4code !=0) {
     PDGcode = Gcode->GetPDGEncoding(); 
@@ -144,7 +144,7 @@ G4PrimaryParticle::G4PrimaryParticle(const G4PrimaryParticle& right)
  direction(0.,0.,1.),kinE(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
- Weight0(1.0),properTime(0.0),userInfo(0)
+ Weight0(1.0),properTime(-1.0),userInfo(0)
 {
   *this = right;
 }
@@ -184,10 +184,10 @@ G4PrimaryParticle & G4PrimaryParticle::operator=(const G4PrimaryParticle & right
   return *this; 
 }
 
-G4int G4PrimaryParticle::operator==(const G4PrimaryParticle &right) const
+G4bool G4PrimaryParticle::operator==(const G4PrimaryParticle &right) const
 { return (this==&right); }
 
-G4int G4PrimaryParticle::operator!=(const G4PrimaryParticle &right) const
+G4bool G4PrimaryParticle::operator!=(const G4PrimaryParticle &right) const
 { return (this!=&right); }
 
 G4PrimaryParticle::~G4PrimaryParticle()
@@ -284,7 +284,7 @@ void G4PrimaryParticle::Print() const
 	 << polZ << " )" 
 	 << G4endl;
   G4cout << "     Weight : " << Weight0 << G4endl;
-  if(properTime>0.0) { 
+  if(properTime>=0.0) { 
     G4cout << "     PreAssigned proper decay time : " << properTime/ns << " [ns] " << G4endl; 
   }
   if(userInfo != 0) { userInfo->Print(); }

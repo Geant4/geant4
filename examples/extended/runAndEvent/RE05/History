@@ -16,6 +16,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-28-19 M. Asai       (exampleRE05-V10-04-03)
+- Reduce the number of events in pythia_event.data to make it
+  smaller than 2 MB. Number of events executed by the macro
+  exampleRE05.in is also reduced accordingly.
+
 10-05-18 J. Allison    (exampleRE05-V10-04-02)
 - Move deletion of vis manager to top scope. For batch jobs it was
   not being deleted.

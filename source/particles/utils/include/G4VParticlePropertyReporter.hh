@@ -53,10 +53,10 @@ class G4VParticlePropertyReporter
   
  public:
   // equality operators
-  G4int operator==(const G4VParticlePropertyReporter &right) const 
+  G4bool operator==(const G4VParticlePropertyReporter &right) const
   {   return (this == &right);    }
   
-  G4int operator!=(const G4VParticlePropertyReporter &right) const 
+  G4bool operator!=(const G4VParticlePropertyReporter &right) const
   {   return (this != &right);    }
   
  public:

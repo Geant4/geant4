@@ -16,6 +16,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 March 2019 G. Cosmo channeling-V10-04-00
+-----------------------------------------------------
+- Fixed typos in printouts and comments.
+
 6 July 2017 E. Bagli channeling-V10-03-03
 -----------------------------------------------------
 - Coverity bug removal

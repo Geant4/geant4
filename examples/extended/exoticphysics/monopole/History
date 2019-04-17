@@ -14,6 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01 March 2019: V.Ivantchenko (monopole-V10-04-07)
+- G4MonopolePhysics - minor code clean-up, replaced G4cerr by G4Exception
+- monopole.cc - do not instantiate VisManager in the batch mode, default
+    number of threads is now 1
+- Run, RunAction - extend histograms and printouts to restricted dEdx and
+    delta-electron cross section (needed to fix problem #2126)  
+
 23 October 2018: I.Hrivnacova (monopole-V10-04-06)
 - Define the field setup data (fMonFieldSetup) in the DetectorConstruction class
   thread-local using G4Cache utility.

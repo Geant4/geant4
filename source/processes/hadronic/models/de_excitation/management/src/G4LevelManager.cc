@@ -127,7 +127,7 @@ G4LevelManager::NearestLevelIndex(G4double energy, size_t index) const
 const G4String& G4LevelManager::FloatingType(size_t i) const
 {
 #ifdef G4VERBOSE
-  if(i > nTransitions) { PrintError(i, "Meta"); }
+  if(i > nTransitions) { PrintError(i, "FloatingType(idx)"); }
 #endif
   return fFloatingLevels[fSpin[i]/100000]; 
 }
@@ -137,10 +137,9 @@ void G4LevelManager::PrintError(size_t idx, const G4String& ss) const
 {
   G4String sss = "G4LevelManager::"+ss+"()";
   G4ExceptionDescription ed;
-  ed << "Index of a level " << idx << " > " 
-     << nTransitions << " (number of levels)";
-  G4Exception(sss,"had061",JustWarning,ed,"stop run");
-  throw G4HadronicException(__FILE__, __LINE__,"FATAL Hadronic Exception");
+  ed << "Index of a level " << idx << " >= " 
+     << nTransitions+1 << " (Nlevels) ";
+  G4Exception(sss,"had061",JustWarning,ed,"");
 }  
 #endif
 

@@ -39,7 +39,7 @@
 //		
 //		-January 2009. L. Desorgher	
 //		 Put a higher limit on the CS to avoid a high rate of  Inverse Photo e- effect at low energy. The very high adjoint CS of the reverse 
-//		 photo electric reaction produce a high rate of reverse photo electric reaction in the inner side of a shielding for eaxmple, the correction of this occurence
+//		 photo electric reaction produce a high rate of reverse photo electric reaction in the inner side of a shielding for eaxmple, the correction of this occurrence
 //		 by weight correction in the StepDoIt method is not statistically sufficient at small energy. The problem is partially solved by setting an higher CS limit 
 //		 and compensating it by an extra weight correction factor. However when  coupling it with other reverse  processes the reverse photo-electric is still 
 //		 the source of very occasional high weight that decrease the efficiency of the computation. A way to solve this problemn is still needed but is difficult

@@ -53,7 +53,7 @@ public:
   virtual ~XAluminumElectrodeHit();
   XAluminumElectrodeHit(const XAluminumElectrodeHit &right);
   const XAluminumElectrodeHit& operator=(const XAluminumElectrodeHit &right);
-  int operator==(const XAluminumElectrodeHit &right) const;
+  G4bool operator==(const XAluminumElectrodeHit &right) const;
   
   inline void *operator new(size_t);
   inline void operator delete(void *aHit);

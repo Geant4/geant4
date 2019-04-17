@@ -286,20 +286,27 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
 //    regions. It also recomputes the materials list for the region.
 // *******************************************************************
 //
-void G4Region::AddRootLogicalVolume(G4LogicalVolume* lv)
+void G4Region::AddRootLogicalVolume(G4LogicalVolume* lv, G4bool search)
 {
   // Check the logical volume is not already in the list
   //
-  G4RootLVList::iterator pos;
-  pos = std::find(fRootVolumes.begin(),fRootVolumes.end(),lv);
-  if (pos == fRootVolumes.end())
+  if (search) 
   {
-    // Insert the root volume in the list and set it as root region
-    //
+    G4RootLVList::iterator pos;
+    pos = std::find(fRootVolumes.begin(),fRootVolumes.end(),lv);
+    if (pos == fRootVolumes.end())
+    {
+      // Insert the root volume in the list and set it as root region
+      //
+      fRootVolumes.push_back(lv);
+      lv->SetRegionRootFlag(true);
+    }
+  }
+  else  // WARNING: user *MUST* guarantee lv is not already inserted.
+  {     // Providing speedup for very complex flat geometries
     fRootVolumes.push_back(lv);
     lv->SetRegionRootFlag(true);
   }
-
   // Scan recursively the tree of daugther volumes and set regions
   //
   ScanVolumeTree(lv, true);

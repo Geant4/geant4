@@ -37,6 +37,9 @@ class G4VSensitiveDetector;
 class G4HCofThisEvent;
 class G4SDmessenger;
 
+#include "G4VSDFilter.hh"
+#include <vector>
+
 // class description:
 //
 //  This is a singleton class which manages the sensitive detectors.
@@ -104,6 +107,12 @@ private:
     G4SDManager( const G4SDManager& );
     G4SDManager& operator=(const G4SDManager&);
 
+public:
+    void RegisterSDFilter(G4VSDFilter* filter);
+    void DeRegisterSDFilter(G4VSDFilter* filter);
+private:
+    void DestroyFilters();
+    std::vector<G4VSDFilter*> FilterList;
 };
 
 

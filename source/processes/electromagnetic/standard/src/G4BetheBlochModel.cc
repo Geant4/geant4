@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -169,7 +168,7 @@ void G4BetheBlochModel::SetupParameters()
   if(particle->GetLeptonNumber() == 0) {
     G4int iz = G4lrint(q);
     if(iz <= 1) {
-      formfact = (spin == 0.0 && mass < GeV) ? 1.181e-6 : 1.548e-6;	
+      formfact = (spin == 0.0 && mass < GeV) ? 1.181e-6 : 1.548e-6;
     } else {
       G4double x = nist->GetA27(iz);
       formfact = 3.969e-6*x*x;
@@ -271,23 +270,23 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
     if(material != currentMaterial) {
       currentMaterial = material;
       baseMaterial = material->GetBaseMaterial() 
-	? material->GetBaseMaterial() : material;
+        ? material->GetBaseMaterial() : material;
       iICRU90 = fICRU90->GetIndex(baseMaterial);
     }
     if(iICRU90 >= 0) {
       G4double e = kineticEnergy*proton_mass_c2/mass;
       G4double dedx = 0.0;
       if(chargeSquare > 1.1 && e < fAlphaTlimit) {
-	dedx = fICRU90->GetElectronicDEDXforAlpha(iICRU90, e)
-	  *material->GetDensity()*0.25;
+        dedx = fICRU90->GetElectronicDEDXforAlpha(iICRU90, e)
+          *material->GetDensity()*0.25;
       } else if(chargeSquare < 1.1 && e < fProtonTlimit) {
-	dedx = fICRU90->GetElectronicDEDXforProton(iICRU90, e)
-	  *material->GetDensity();
+        dedx = fICRU90->GetElectronicDEDXforProton(iICRU90, e)
+          *material->GetDensity();
       }
-      if(dedx > 0.0) {
-	dedx += (G4Log(xc) + (1.0 - xc)*beta2)*twopi_mc2_rcl2
-	  *eDensity/beta2;
-	return std::max(chargeSquare*dedx, 0.0);
+      if(cutEnergy < tmax) {
+        dedx += (G4Log(xc) + (1.0 - xc)*beta2)*twopi_mc2_rcl2
+          *eDensity/beta2;
+        return std::max(chargeSquare*dedx, 0.0);
       }
     } 
   }

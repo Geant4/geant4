@@ -67,7 +67,7 @@ typedef struct yystype
     yystype() : type(NONE), D(0.0), I(0), C(' '), S("")
     {
     }
-    G4int operator==(const yystype& right) const
+    G4bool operator==(const yystype& right) const
     {
       return (this == &right)?1:0;
     }

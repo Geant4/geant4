@@ -81,6 +81,7 @@ class G4GDMLWriteMaterials : public G4GDMLWriteDefine
    std::vector<const G4Isotope*> isotopeList;
    std::vector<const G4Element*> elementList;
    std::vector<const G4Material*> materialList;
+   std::vector<const G4PhysicsOrderedFreeVector*> propertyList;
    xercesc::DOMElement* materialsElement;
 };
 

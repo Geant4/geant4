@@ -17,6 +17,26 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+
+09 April 19:  V.Ivanchenko (emstand-V10-04-55)
+- G4IonCoulombScatteringModel, G4eSingleCoulombScatteringModel,
+  G4hCoulombScatteringModel - fixed kinematics for low kinetic energy
+     of primary (problem #2152)
+
+01 March 19:  V.Ivanchenko 
+- G4BetheBlochModel - code clean-up, removed tabs, some empty lines
+
+07 February 19:  V.Ivanchenko  
+- G4eMultipleSacttering, G4hMultipleScattering - reduced
+    length of printouts (fix problem #2105)
+
+31 January 19:  V.Ivanchenko 
+- G4ModifiedTsai, G4SauterGavrilaAngularDistribution - reduced
+    length of names for these generators (fix problem #2105)
+
+15 January 19:  V.Ivanchenko 
+- G4eplusTo2GammaOKVIModel - fixed crash at initialisation
+
 26 November 18:  V.Ivanchenko (emstand-V10-04-54)
 - G4WentzelOKandVIxSection - fixed destructor
 

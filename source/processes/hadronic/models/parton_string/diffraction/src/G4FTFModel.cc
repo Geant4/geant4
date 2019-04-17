@@ -324,7 +324,7 @@ G4ExcitedStringVector* G4FTFModel::GetStrings() {
     G4cout << "FTF BuildStrings ";
     #endif
 
-    theStrings = BuildStrings();
+    BuildStrings( theStrings );
 
     #ifdef debugFTFmodel
     G4cout << "FTF BuildStrings " << theStrings << " OK" << G4endl
@@ -1945,11 +1945,10 @@ void G4FTFModel::AdjustNucleonsAlgorithm_afterSampling( G4int interactionCase,
 
 //============================================================================
 
-G4ExcitedStringVector* G4FTFModel::BuildStrings() {
+void G4FTFModel::BuildStrings( G4ExcitedStringVector* strings ) {
   // Loop over all collisions; find all primaries, and all targets 
   // (targets may be duplicate in the List (to unique G4VSplitableHadrons) ).
 
-  G4ExcitedStringVector* strings = new G4ExcitedStringVector();
   G4ExcitedString* FirstString( 0 );     // If there will be a kink,
   G4ExcitedString* SecondString( 0 );    // two strings will be produced.
 
@@ -2244,7 +2243,7 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
   //}
   //G4cout << "------------------------" << G4endl;
 
-  return strings;
+  return;
 }
 
 

@@ -1859,18 +1859,22 @@ G4TessellatedSolid::CalculateExtent(const EAxis pAxis,
                                           G4double& pMin, G4double& pMax) const
 {
   G4ThreeVector bmin, bmax;
-  G4bool exist;
 
   // Check bounding box (bbox)
   //
   BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
-#ifdef G4BBOX_EXTENT
-  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
-#endif
+
+  // Use simple bounding-box to help in the case of complex meshes
+  //
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+
+#if 0
+  // Precise extent computation (disabled by default for this shape)
+  //
   if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    return exist = (pMin < pMax) ? true : false;
+    return (pMin < pMax) ? true : false;
   }
 
   // The extent is calculated as cumulative extent of the pyramids
@@ -1907,6 +1911,7 @@ G4TessellatedSolid::CalculateExtent(const EAxis pAxis,
     if (eminlim > pMin && emaxlim < pMax) break; // max possible extent
   }
   return (pMin < pMax);
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////

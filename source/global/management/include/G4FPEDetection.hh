@@ -29,9 +29,9 @@
 // -*- C++ -*-
 //
 // -----------------------------------------------------------------------
-// This global method should be used on LINUX or MacOSX platforms with gcc
-// compiler for activating NaN detection and FPE signals, and forcing
-// abortion of the application at the time these are detected.
+// This global method should be used on LINUX/gcc or MacOS/clang platforms
+// for activating NaN detection and FPE signals, and forcing abortion of
+// the application at the time these are detected.
 // Meant to be used for debug purposes, can be activated by compiling the
 // "run" module with the flag G4FPE_DEBUG set in the environment.
 // -----------------------------------------------------------------------
@@ -42,104 +42,107 @@
 #include <iostream>
 #include <stdlib.h>  /* abort(), exit() */
 
-#if (defined(__GNUC__) && !defined(__clang__))
 #ifdef __linux__
-  #include <features.h>
-  #include <fenv.h>
-  #include <csignal>
-// for G4StackBacktrace()
-  #include <execinfo.h>
-  #include <cxxabi.h>
+  #if (defined(__GNUC__) && !defined(__clang__))
+    #include <features.h>
+    #include <fenv.h>
+    #include <csignal>
+  // for G4StackBacktrace()
+    #include <execinfo.h>
+    #include <cxxabi.h>
 
-  struct sigaction termaction, oldaction;
+    struct sigaction termaction, oldaction;
 
-  static void G4StackBackTrace()
-  {
-
-     //   from http://linux.die.net/man/3/backtrace_symbols_fd
-     #define BSIZE 50
-     void * buffer[ BSIZE ];
-     int nptrs = backtrace( buffer, BSIZE );
-       //std::cerr << "nptrs=" << nptrs << std::endl;
-     char ** strings = backtrace_symbols( buffer, nptrs );
-     if ( strings == NULL ) {
-       perror( "backtrace_symbols" );
-       return;
-     }
-     std::cerr << std::endl<< "Call Stack:" << std::endl;
-     for ( int j = 0; j < nptrs; j++ ){
-         //printf("%s\n", strings[j]);
-         std::cerr  << nptrs-j-1 <<": ";
-	    //std::cerr  << strings[j] << std::endl;
-       char * mangled_start = strchr( strings[j],  '(' ) + 1;
-       if (mangled_start) *(mangled_start-1) = '\0'; 
-       char * mangled_end   = strchr( mangled_start,'+' );
-       if ( mangled_end ) *mangled_end = '\0';
-         //std::cerr << "mangled .. " << mangled_start << ", len:" << strlen(mangled_start)<< std::endl;
-       int status = 0;
-       char *realname=0;       
-       if ( mangled_end && strlen(mangled_start)  ) 
-              realname = abi::__cxa_demangle( mangled_start, 0, 0, &status );
-       if ( realname ) {
-	 std::cerr << strings[j]<< " : " << realname  << std::endl;
-	 free( realname );
-       } else {
-	 std::cerr << strings[j] << std::endl;
-       }
-     }
-     free( strings );
-     // c++filt can demangle: http://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
-     //-------------------------------------------------------------
-
-  }
-  static void TerminationSignalHandler(int sig, siginfo_t* sinfo, void* /* context */)
-  {
-    std::cerr << "ERROR: " << sig;
-    std::string message = "Floating-point exception (FPE).";
-
-    if (sinfo) {
-      switch (sinfo->si_code) {
-#ifdef FPE_NOOP		/* BUG: MacOSX uses this instead of INTDIV */
-      case FPE_NOOP:
-#endif
-      case FPE_INTDIV:
-        message = "Integer divide by zero.";
-        break;
-      case FPE_INTOVF:
-        message = "Integer overflow.";
-        break;
-      case FPE_FLTDIV:
-        message = "Floating point divide by zero.";
-        break;
-      case FPE_FLTOVF:
-        message = "Floating point overflow.";
-        break;
-      case FPE_FLTUND:
-        message = "Floating point underflow.";
-        break;
-      case FPE_FLTRES:
-        message = "Floating point inexact result.";
-        break;
-      case FPE_FLTINV:
-        message = "Floating point invalid operation.";
-        break;
-      case FPE_FLTSUB:
-        message = "Subscript out of range.";
-        break;
-      default:
-        message = "Unknown error.";
-        break;
+    static void G4StackBackTrace()
+    {
+      //   from http://linux.die.net/man/3/backtrace_symbols_fd
+      #define BSIZE 50
+      void * buffer[ BSIZE ];
+      int nptrs = backtrace( buffer, BSIZE );
+      char ** strings = backtrace_symbols( buffer, nptrs );
+      if ( strings == NULL )
+      {
+        perror( "backtrace_symbols" );
+        return;
       }
+      std::cerr << std::endl<< "Call Stack:" << std::endl;
+      for ( int j = 0; j < nptrs; j++ )
+      {
+        std::cerr  << nptrs-j-1 <<": ";
+        char * mangled_start = strchr( strings[j],  '(' ) + 1;
+        if (mangled_start) *(mangled_start-1) = '\0'; 
+        char * mangled_end   = strchr( mangled_start,'+' );
+        if ( mangled_end ) *mangled_end = '\0';
+        int status = 0;
+        char *realname=0;       
+        if ( mangled_end && strlen(mangled_start)  )
+          realname = abi::__cxa_demangle( mangled_start, 0, 0, &status );
+        if ( realname )
+        {
+	  std::cerr << strings[j]<< " : " << realname  << std::endl;
+	  free( realname );
+        }
+        else
+        {
+	  std::cerr << strings[j] << std::endl;
+        }
+      }
+      free( strings );
+      // c++filt can demangle:
+      // http://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html
+      //-------------------------------------------------------------------
     }
 
-    std::cerr << " - " << message << std::endl;
-    G4StackBackTrace();
-    ::abort();
-  }
+    static void TerminationSignalHandler(int sig, siginfo_t* sinfo,
+                                         void* /* context */)
+    {
+      std::cerr << "ERROR: " << sig;
+      std::string message = "Floating-point exception (FPE).";
 
-  static void InvalidOperationDetection()
-  {
-    std::cout << std::endl
+      if (sinfo)
+      {
+        switch (sinfo->si_code)
+        {
+#ifdef FPE_NOOP      /* BUG: MacOS uses this instead of INTDIV */
+          case FPE_NOOP:
+#endif
+          case FPE_INTDIV:
+          message = "Integer divide by zero.";
+          break;
+        case FPE_INTOVF:
+          message = "Integer overflow.";
+          break;
+        case FPE_FLTDIV:
+          message = "Floating point divide by zero.";
+          break;
+        case FPE_FLTOVF:
+          message = "Floating point overflow.";
+          break;
+        case FPE_FLTUND:
+          message = "Floating point underflow.";
+          break;
+        case FPE_FLTRES:
+          message = "Floating point inexact result.";
+          break;
+        case FPE_FLTINV:
+          message = "Floating point invalid operation.";
+          break;
+        case FPE_FLTSUB:
+          message = "Subscript out of range.";
+          break;
+        default:
+          message = "Unknown error.";
+          break;
+        }
+      }
+      std::cerr << " - " << message << std::endl;
+      G4StackBackTrace();
+      ::abort();
+    }
+
+    static void InvalidOperationDetection()
+    {
+      std::cout << std::endl
               << "        "
               << "############################################" << std::endl
               << "        "
@@ -147,19 +150,26 @@
               << "        "
               << "############################################" << std::endl;
 
-    (void) feenableexcept( FE_DIVBYZERO );
-    (void) feenableexcept( FE_INVALID );
-    //(void) feenableexcept( FE_OVERFLOW );
-    //(void) feenableexcept( FE_UNDERFLOW );
+      (void) feenableexcept( FE_DIVBYZERO );
+      (void) feenableexcept( FE_INVALID );
+      //(void) feenableexcept( FE_OVERFLOW );
+      //(void) feenableexcept( FE_UNDERFLOW );
 
-    sigfillset(&termaction.sa_mask);
-    sigdelset(&termaction.sa_mask,SIGFPE);
-    termaction.sa_sigaction=TerminationSignalHandler;
-    termaction.sa_flags=SA_SIGINFO;
-    sigaction(SIGFPE, &termaction, &oldaction);
-  }
+      sigfillset(&termaction.sa_mask);
+      sigdelset(&termaction.sa_mask,SIGFPE);
+      termaction.sa_sigaction=TerminationSignalHandler;
+      termaction.sa_flags=SA_SIGINFO;
+      sigaction(SIGFPE, &termaction, &oldaction);
+    }
 
-#elif defined(__MACH__)      /* MacOSX */
+  #else  /* Not GCC */
+
+    static void InvalidOperationDetection() {;}
+
+  #endif
+
+#elif defined(__MACH__)      /* MacOS */
+
   #include <fenv.h>
   #include <signal.h>
 
@@ -242,7 +252,7 @@
 
     if (sinfo) {
       switch (sinfo->si_code) {
-#ifdef FPE_NOOP		/* BUG: MacOSX uses this instead of INTDIV */
+#ifdef FPE_NOOP		/* BUG: MacOS uses this instead of INTDIV */
       case FPE_NOOP:
 #endif
       case FPE_INTDIV:
@@ -303,13 +313,11 @@
     termaction.sa_flags=SA_SIGINFO;
     sigaction(SIGFPE, &termaction, &oldaction);
   }
-#else  /* Not Linux, nor MacOSX ... */
+
+#else  /* Not Linux, nor MacOS ... */
 
   static void InvalidOperationDetection() {;}
 
-#endif	/* Linus or MacOSX */
-#else  /* Not GCC */
+#endif	/* Linux or MacOS */
 
-  static void InvalidOperationDetection() {;}
-#endif
 #endif	/* G4FPEDetection_h */

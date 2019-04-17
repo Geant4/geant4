@@ -7,6 +7,9 @@
                            History file
                            ------------
 
+31.01.2019 - I.Hrivnacova (air_shower-V10-04-05)
+             Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 09.11.2018 - B. Tome (air_shower-V10-04-04)
              Allow to remove reflecting surface. 
 

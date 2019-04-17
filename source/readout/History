@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jan 31, 2019,  I.Hrivnacova (readout-V10-04-01)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 Nov 9, 2018, G.Cosmo (readout-V10-04-00)
 - G4DigiManager: fixed printout typos.
 

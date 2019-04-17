@@ -81,7 +81,7 @@ const GammaRayTelDigi& GammaRayTelDigi::operator=(const GammaRayTelDigi& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int GammaRayTelDigi::operator==(const GammaRayTelDigi& right) const
+G4bool GammaRayTelDigi::operator==(const GammaRayTelDigi& right) const
 { 
  return ((PlaneType==right.PlaneType)&&(PlaneNumber==right.PlaneNumber)&&(StripNumber==right.StripNumber)&&(DigiType==right.DigiType)&&(Energy==right.Energy)); 
 }

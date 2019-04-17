@@ -51,7 +51,7 @@ class B2TrackerHit : public G4VHit
 
     // operators
     const B2TrackerHit& operator=(const B2TrackerHit&);
-    G4int operator==(const B2TrackerHit&) const;
+    G4bool operator==(const B2TrackerHit&) const;
 
     inline void* operator new(size_t);
     inline void  operator delete(void*);

@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jan 31st, 2019  I. Hrivnacova (exParameterisations-V10-04-00)
+--------------------
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 Jun 10th, 2015 I. Hrivnacova (exParameterisations-V10-01-01)
 --------------------
 - Fixed handling required gdml package in CMake files

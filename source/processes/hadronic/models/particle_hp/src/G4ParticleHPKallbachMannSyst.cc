@@ -76,8 +76,10 @@ G4double G4ParticleHPKallbachMannSyst::Kallbach(G4double cosTh, G4double anEnerg
   // Kallbach-Mann systematics without normalization.
   G4double result;
   G4double theX = A(anEnergy)*cosTh;
-  result = 0.5*(G4Exp( theX)*(1+theCompoundFraction)
-               +G4Exp(-theX)*(1-theCompoundFraction));
+  // We need to use here std::exp (and not G4Exp) to avoid underflow/overflow problems
+  // (observed with the physics list QGSP_BIC_AllHP in the version G4 10.5).
+  result = 0.5*(std::exp( theX)*(1+theCompoundFraction)
+               +std::exp(-theX)*(1-theCompoundFraction));
   return result;
 }
 

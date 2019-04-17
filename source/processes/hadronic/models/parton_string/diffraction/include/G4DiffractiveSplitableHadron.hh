@@ -60,8 +60,8 @@ class G4DiffractiveSplitableHadron : public G4VSplitableHadron {
   private:
     G4DiffractiveSplitableHadron( const G4DiffractiveSplitableHadron& );
     G4DiffractiveSplitableHadron& operator=( const G4DiffractiveSplitableHadron& );
-    int operator==( const G4DiffractiveSplitableHadron& right ) const;
-    int operator!=( const G4DiffractiveSplitableHadron& right ) const;
+    G4bool operator==( const G4DiffractiveSplitableHadron& right ) const;
+    G4bool operator!=( const G4DiffractiveSplitableHadron& right ) const;
 
     G4int Diquark( G4int aquark, G4int bquark, G4int Spin ) const;
     void ChooseStringEnds( G4int PDGcode, G4int* aEnd, G4int* bEnd ) const;

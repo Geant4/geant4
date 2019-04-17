@@ -13,6 +13,24 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09 April 2019, V.Ivanchenko (phys-ctor-em-V10-04-22)
+  20 March 2019, D.Sawkey 
+- G4OpticalPhysics, G4OpticalPhysicsMessenger - put all UI commands
+  into messenger class; fix bug 2085; deprecate commands with
+  /default/ in command string
+  07 March 2019, V.Ivanchenko 
+- G4EmLivermorePhysics, G4EmPenelopePhysics - make msc configuration 
+    as in Opt4 : RangeFactor=0.08, Skin=3, UserSafetyPlus
+- G4EmModelActivator - fixed problem 2106
+  18 January 2019, V.Ivanchenko
+- G4EmStandardPhysicsWVI - use G4eplusTo2GammaOKVIModel with 3-gamma
+    annihilation for e+
+  14 January 2019, V.Ivanchenko
+- G4EmStandardPhysics_option4 - change RangeFactor to 0.08 in
+    order to have expected results from fanoCavity test (M.Novak)
+  19 December 2018, V.Ivanchenko
+- G4EmModelActivator - fixed clang7 compilation warning
+ 
 27 November 2018, V.Ivanchenko (phys-ctor-em-V10-04-21)
 - G4EmStandardPhysics_option2 - use the same models and parameters as 
     in LHCb EM physics constructor

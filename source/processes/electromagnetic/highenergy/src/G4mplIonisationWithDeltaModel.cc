@@ -62,6 +62,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4Log.hh"
+#include "G4Pow.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -70,10 +71,10 @@ using namespace std;
 std::vector<G4double>* G4mplIonisationWithDeltaModel::dedx0 = nullptr;
 
 G4mplIonisationWithDeltaModel::G4mplIonisationWithDeltaModel(G4double mCharge,
-							     const G4String& nam)
+                                                             const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
   magCharge(mCharge),
-  twoln10(log(100.0)),
+  twoln10(std::log(100.0)),
   betalow(0.01),
   betalim(0.1),
   beta2lim(betalim*betalim),
@@ -88,7 +89,7 @@ G4mplIonisationWithDeltaModel::G4mplIonisationWithDeltaModel(G4double mCharge,
   fParticleChange = nullptr;
   theElectron = G4Electron::Electron();
   G4cout << "### Monopole ionisation model with d-electron production, Gmag= " 
-	 << magCharge/eplus << G4endl;
+         << magCharge/eplus << G4endl;
   monopole = nullptr;
   mass = 0.0;
 }
@@ -118,7 +119,7 @@ void G4mplIonisationWithDeltaModel::SetParticle(const G4ParticleDefinition* p)
 
 void 
 G4mplIonisationWithDeltaModel::Initialise(const G4ParticleDefinition* p,
-					  const G4DataVector&)
+                                          const G4DataVector&)
 {
   if(!monopole) { SetParticle(p); }
   if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
@@ -129,27 +130,37 @@ G4mplIonisationWithDeltaModel::Initialise(const G4ParticleDefinition* p,
     G4int numOfCouples = theCoupleTable->GetTableSize();
     G4int n = dedx0->size();
     if(n < numOfCouples) { dedx0->resize(numOfCouples); }
+    G4Pow* g4calc = G4Pow::GetInstance();
 
     // initialise vector
     for(G4int i=0; i<numOfCouples; ++i) {
 
       const G4Material* material = 
-	theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
+        theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
       G4double eDensity = material->GetElectronDensity();
-      G4double vF = electron_Compton_length*pow(3.*pi*pi*eDensity,0.3333333333);
+      G4double vF = electron_Compton_length*g4calc->A13(3.*pi*pi*eDensity);
       (*dedx0)[i] = pi_hbarc2_over_mc2*eDensity*nmpl*nmpl*
-	(G4Log(2*vF/fine_structure_const) - 0.5)/vF;
+        (G4Log(2*vF/fine_structure_const) - 0.5)/vF;
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double 
+G4mplIonisationWithDeltaModel::MinEnergyCut(const G4ParticleDefinition*,
+                                            const G4MaterialCutsCouple* couple)
+{
+  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double 
 G4mplIonisationWithDeltaModel::ComputeDEDXPerVolume(const G4Material* material,
-						    const G4ParticleDefinition* p,
-						    G4double kineticEnergy,
-						    G4double maxEnergy)
+                                                    const G4ParticleDefinition* p,
+                                                    G4double kineticEnergy,
+                                                    G4double maxEnergy)
 {
   if(!monopole) { SetParticle(p); }
   G4double tmax = MaxSecondaryEnergy(p,kineticEnergy);
@@ -162,7 +173,6 @@ G4mplIonisationWithDeltaModel::ComputeDEDXPerVolume(const G4Material* material,
   G4double beta  = sqrt(beta2);
 
   // low-energy asymptotic formula
-  //G4double dedx  = dedxlim*beta*material->GetDensity();
   G4double dedx = (*dedx0)[CurrentCouple()->GetIndex()]*beta;
 
   // above asymptotic
@@ -173,8 +183,6 @@ G4mplIonisationWithDeltaModel::ComputeDEDXPerVolume(const G4Material* material,
       dedx = ComputeDEDXAhlen(material, bg2, cutEnergy);
 
     } else {
-
-      //G4double dedx1 = dedxlim*betalow*material->GetDensity();
       G4double dedx1 = (*dedx0)[CurrentCouple()->GetIndex()]*betalow;
       G4double dedx2 = ComputeDEDXAhlen(material, bg2lim, cutEnergy);
 
@@ -191,15 +199,15 @@ G4mplIonisationWithDeltaModel::ComputeDEDXPerVolume(const G4Material* material,
 
 G4double 
 G4mplIonisationWithDeltaModel::ComputeDEDXAhlen(const G4Material* material, 
-						G4double bg2, 
-						G4double cutEnergy)
+                                                G4double bg2, 
+                                                G4double cutEnergy)
 {
   G4double eDensity = material->GetElectronDensity();
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
 
   // Ahlen's formula for nonconductors, [1]p157, f(5.7)
   G4double dedx = 
-    0.5*(log(2.0 * electron_mass_c2 * bg2*cutEnergy / (eexc*eexc)) - 1.0);
+    0.5*(G4Log(2.0*electron_mass_c2*bg2*cutEnergy/(eexc*eexc)) -1.0);
 
   // Kazama et al. cross-section correction
   G4double  k = 0.406;
@@ -217,7 +225,7 @@ G4mplIonisationWithDeltaModel::ComputeDEDXAhlen(const G4Material* material,
   // now compute the total ionization loss
   dedx *=  pi_hbarc2_over_mc2 * eDensity * nmpl * nmpl;
 
-  if (dedx < 0.0) { dedx = 0.; }
+  dedx = std::max(dedx, 0.0);
   return dedx;
 }
 
@@ -226,18 +234,16 @@ G4mplIonisationWithDeltaModel::ComputeDEDXAhlen(const G4Material* material,
 G4double
 G4mplIonisationWithDeltaModel::ComputeCrossSectionPerElectron(
                                            const G4ParticleDefinition* p,
-					   G4double kineticEnergy,
-					   G4double cut,
-					   G4double maxKinEnergy)
+                                           G4double kineticEnergy,
+                                           G4double cut,
+                                           G4double maxKinEnergy)
 {
   if(!monopole) { SetParticle(p); }
-  G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = std::min(tmax,maxKinEnergy);
+  G4double maxEnergy = std::min(tmax, maxKinEnergy);
   G4double cutEnergy = std::max(LowEnergyLimit(), cut);
-  if(cutEnergy < maxEnergy) {
-    cross = (0.5/cutEnergy - 0.5/maxEnergy)*pi_hbarc2_over_mc2 * nmpl * nmpl;
-  }
+  G4double cross = (cutEnergy < maxEnergy) 
+    ? (0.5/cutEnergy - 0.5/maxEnergy)*pi_hbarc2_over_mc2 * nmpl * nmpl : 0.0;
   return cross;
 }
 
@@ -245,11 +251,11 @@ G4mplIonisationWithDeltaModel::ComputeCrossSectionPerElectron(
 
 G4double 
 G4mplIonisationWithDeltaModel::ComputeCrossSectionPerAtom(
-					  const G4ParticleDefinition* p,
-					  G4double kineticEnergy,
-					  G4double Z, G4double,
-					  G4double cutEnergy,
-					  G4double maxEnergy)
+                                          const G4ParticleDefinition* p,
+                                          G4double kineticEnergy,
+                                          G4double Z, G4double,
+                                          G4double cutEnergy,
+                                          G4double maxEnergy)
 {
   G4double cross = 
     Z*ComputeCrossSectionPerElectron(p,kineticEnergy,cutEnergy,maxEnergy);
@@ -260,10 +266,10 @@ G4mplIonisationWithDeltaModel::ComputeCrossSectionPerAtom(
 
 void 
 G4mplIonisationWithDeltaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
-						 const G4MaterialCutsCouple*,
-						 const G4DynamicParticle* dp,
-						 G4double minKinEnergy,
-						 G4double maxEnergy)
+                                                 const G4MaterialCutsCouple*,
+                                                 const G4DynamicParticle* dp,
+                                                 G4double minKinEnergy,
+                                                 G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy);
@@ -272,8 +278,8 @@ G4mplIonisationWithDeltaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp
   if(minKinEnergy >= maxKinEnergy) { return; }
 
   //G4cout << "G4mplIonisationWithDeltaModel::SampleSecondaries: E(GeV)= "
-  //	 << kineticEnergy/GeV << " M(GeV)= " << mass/GeV
-  //	 << " tmin(MeV)= " << minKinEnergy/MeV << G4endl;
+  //         << kineticEnergy/GeV << " M(GeV)= " << mass/GeV
+  //         << " tmin(MeV)= " << minKinEnergy/MeV << G4endl;
 
   G4double totEnergy     = kineticEnergy + mass;
   G4double etot2         = totEnergy*totEnergy;
@@ -290,7 +296,7 @@ G4mplIonisationWithDeltaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp
            sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
   G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
                                    (deltaMomentum * totMomentum);
-  if(cost > 1.0) { cost = 1.0; }
+  cost = std::min(cost, 1.0);
 
   G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
 
@@ -318,11 +324,11 @@ G4mplIonisationWithDeltaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4mplIonisationWithDeltaModel::SampleFluctuations(
-				       const G4MaterialCutsCouple* couple,
-				       const G4DynamicParticle* dp,
-				       G4double tmax,
-				       G4double length,
-				       G4double meanLoss)
+                                       const G4MaterialCutsCouple* couple,
+                                       const G4DynamicParticle* dp,
+                                       G4double tmax,
+                                       G4double length,
+                                       G4double meanLoss)
 {
   G4double siga = Dispersion(couple->GetMaterial(),dp,tmax,length);
   G4double loss = meanLoss;
@@ -349,9 +355,9 @@ G4double G4mplIonisationWithDeltaModel::SampleFluctuations(
 
 G4double 
 G4mplIonisationWithDeltaModel::Dispersion(const G4Material* material,
-					  const G4DynamicParticle* dp,
-					  G4double tmax,
-					  G4double length)
+                                          const G4DynamicParticle* dp,
+                                          G4double tmax,
+                                          G4double length)
 {
   G4double siga = 0.0;
   G4double tau   = dp->GetKineticEnergy()/mass;
@@ -369,7 +375,7 @@ G4mplIonisationWithDeltaModel::Dispersion(const G4Material* material,
 
 G4double 
 G4mplIonisationWithDeltaModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
-						  G4double kinEnergy)
+                                                  G4double kinEnergy)
 {
   G4double tau = kinEnergy/mass;
   return 2.0*electron_mass_c2*tau*(tau + 2.);

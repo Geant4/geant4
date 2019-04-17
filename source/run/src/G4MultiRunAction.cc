@@ -49,7 +49,7 @@ G4Run* G4MultiRunAction::GenerateRun() {
               " of G4Run, not allowed.");
           return nullptr;
       }
-      aRun = anotherRun;
+      if( anotherRun != nullptr) aRun = anotherRun;
   }
   return aRun;
 }

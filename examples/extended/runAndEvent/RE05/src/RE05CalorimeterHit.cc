@@ -91,7 +91,7 @@ const RE05CalorimeterHit& RE05CalorimeterHit::operator=(const RE05CalorimeterHit
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int RE05CalorimeterHit::operator==(const RE05CalorimeterHit &right) const
+G4bool RE05CalorimeterHit::operator==(const RE05CalorimeterHit &right) const
 {
   return ((fZCellID==right.fZCellID)&&(fPhiCellID==right.fPhiCellID));
 }

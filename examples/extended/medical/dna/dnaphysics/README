@@ -20,6 +20,8 @@ using the Geant4-DNA physics processes and models.
 Below 1 MeV, Geant4-DNA models are used while, above this energy, 
 G4EmStandardPhysics_option4 models are used.
 
+Geant4-DNA models for electrons are based on a combination of default models with option4 models.
+
 The Geant4-DNA processes and models are further described at:
 http://geant4-dna.org
 

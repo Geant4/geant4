@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
+ Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -342,7 +338,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=2.720000s Real=2.892390s Sys=0.000000s
+  User=2.150000s Real=2.152335s Sys=0.000000s
 
  ======================== run summary ======================
 
@@ -409,7 +405,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=3.750000s Real=3.837973s Sys=0.000000s
+  User=3.320000s Real=3.320199s Sys=0.000000s
 
  ======================== run summary ======================
 

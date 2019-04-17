@@ -64,7 +64,7 @@ class WLSTrajectoryPoint : public G4TrajectoryPoint {
 
     inline void *operator new(size_t);
     inline void operator delete(void *aTrajectoryPoint);
-    inline int operator==(const WLSTrajectoryPoint& right) const
+    inline G4bool operator==(const WLSTrajectoryPoint& right) const
     { return (this==&right); };
 
 // Get/Set functions

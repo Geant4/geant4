@@ -102,13 +102,13 @@ G4LogicalBorderSurface::operator=(const G4LogicalBorderSurface &right)
   return *this;
 }
 
-G4int
+G4bool
 G4LogicalBorderSurface::operator==(const G4LogicalBorderSurface &right) const
 {
   return (this == (G4LogicalBorderSurface *) &right);
 }
 
-G4int
+G4bool
 G4LogicalBorderSurface::operator!=(const G4LogicalBorderSurface &right) const
 {
   return (this != (G4LogicalBorderSurface *) &right);

@@ -91,7 +91,7 @@ public:
     // destructor
     virtual ~G4VTHitsVector();
     // equivalence operator
-    G4int operator==(const this_type& rhs) const;
+    G4bool operator==(const this_type& rhs) const;
 
     virtual void DrawAllHits();
     virtual void PrintAllHits();
@@ -613,7 +613,7 @@ G4VTHitsVector<T, Vector_t>::~G4VTHitsVector()
 //============================================================================//
 
 template <typename T, typename Vector_t>
-G4int G4VTHitsVector<T, Vector_t>::operator==(const G4VTHitsVector<T, Vector_t> &right) const
+G4bool G4VTHitsVector<T, Vector_t>::operator==(const G4VTHitsVector<T, Vector_t> &right) const
 {
     return (collectionName==right.collectionName);
 }

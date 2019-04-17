@@ -42,7 +42,7 @@ public:
   ~ExN04MuonHit();
   ExN04MuonHit(const ExN04MuonHit& right);
   const ExN04MuonHit& operator=(const ExN04MuonHit &right);
-  G4int operator==(const ExN04MuonHit &right) const;
+  G4bool operator==(const ExN04MuonHit &right) const;
 
   inline void *operator new(size_t);
   inline void operator delete(void *aHit);

@@ -109,8 +109,8 @@ class G4StateManager
     G4StateManager();
     G4StateManager(const G4StateManager &right);
     G4StateManager& operator=(const G4StateManager &right);
-    G4int operator==(const G4StateManager &right) const;
-    G4int operator!=(const G4StateManager &right) const;
+    G4bool operator==(const G4StateManager &right) const;
+    G4bool operator!=(const G4StateManager &right) const;
 
   private:
 

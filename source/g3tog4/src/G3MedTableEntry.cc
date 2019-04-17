@@ -64,19 +64,19 @@ G3MedTableEntry& G3MedTableEntry::operator=(const G3MedTableEntry& right)
   return *this;
 }
 
-G4int G3MedTableEntry::operator==(const G3MedTableEntry& right) const
+G4bool G3MedTableEntry::operator==(const G3MedTableEntry& right) const
 { 
   if (fID == right.GetID()) 
-    return 1;
+    return true;
   else
-    return 0;
+    return false;
 }
 
-G4int G3MedTableEntry::operator!=(const G3MedTableEntry& right) const
+G4bool G3MedTableEntry::operator!=(const G3MedTableEntry& right) const
 { 
   if (*this == right) 
-    return 0;
+    return false;
   else
-    return 1;
+    return true;
 }
 

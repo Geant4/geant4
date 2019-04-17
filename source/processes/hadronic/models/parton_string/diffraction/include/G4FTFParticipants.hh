@@ -52,8 +52,8 @@ class G4FTFParticipants : public G4VParticipants {
     G4FTFParticipants();
     const G4FTFParticipants& operator=( const G4FTFParticipants& right );
     ~G4FTFParticipants();
-    int operator==( const G4FTFParticipants& right ) const;
-    int operator!=( const G4FTFParticipants& right ) const;
+    G4bool operator==( const G4FTFParticipants& right ) const;
+    G4bool operator!=( const G4FTFParticipants& right ) const;
 
     void GetList( const G4ReactionProduct& thePrimary, G4FTFParameters* theParameters );
     void StartLoop();

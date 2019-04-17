@@ -75,28 +75,28 @@ G4PenelopeOscillator& G4PenelopeOscillator::operator=(const G4PenelopeOscillator
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int G4PenelopeOscillator::operator==(const G4PenelopeOscillator& right) const
+G4bool G4PenelopeOscillator::operator==(const G4PenelopeOscillator& right) const
 {
   //Oscillator are ordered according to the ionisation energy. They are considered to be
   //equal if the ionisation energy is the same
-  return (ionisationEnergy == right.ionisationEnergy) ? 1 : 0;
+  return (ionisationEnergy == right.ionisationEnergy) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int G4PenelopeOscillator::operator>(const G4PenelopeOscillator& right) const
+G4bool G4PenelopeOscillator::operator>(const G4PenelopeOscillator& right) const
 {
   //Oscillator are ordered according to the ionisation energy. 
-  return (ionisationEnergy > right.ionisationEnergy) ? 1 : 0;
+  return (ionisationEnergy > right.ionisationEnergy) ? true : false;
 }
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int G4PenelopeOscillator::operator<(const G4PenelopeOscillator& right) const
+G4bool G4PenelopeOscillator::operator<(const G4PenelopeOscillator& right) const
 {
   //Oscillator are ordered according to the ionisation energy. 
-  return (ionisationEnergy < right.ionisationEnergy) ? 1 : 0;
+  return (ionisationEnergy < right.ionisationEnergy) ? true : false;
 }
 
 

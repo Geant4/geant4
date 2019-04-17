@@ -81,9 +81,9 @@ const XAluminumElectrodeHit& XAluminumElectrodeHit::operator=(const XAluminumEle
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int XAluminumElectrodeHit::operator==(const XAluminumElectrodeHit &/*right*/) const
+G4bool XAluminumElectrodeHit::operator==(const XAluminumElectrodeHit &/*right*/) const
 {
-  return 0;
+  return false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

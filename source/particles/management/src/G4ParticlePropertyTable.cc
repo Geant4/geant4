@@ -85,13 +85,13 @@ G4ParticlePropertyTable & G4ParticlePropertyTable::operator=(const G4ParticlePro
 }
   
 ////////////////////////
-G4int G4ParticlePropertyTable::operator==(const G4ParticlePropertyTable &) const
+G4bool G4ParticlePropertyTable::operator==(const G4ParticlePropertyTable &) const
 {
   return true;
 }
 
 ////////////////////////
-G4int G4ParticlePropertyTable::operator!=(const G4ParticlePropertyTable &) const
+G4bool G4ParticlePropertyTable::operator!=(const G4ParticlePropertyTable &) const
 {
   return false;
 }

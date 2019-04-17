@@ -43,7 +43,7 @@ public:
   ~ExN04TrackerHit();
   ExN04TrackerHit(const ExN04TrackerHit &right);
   const ExN04TrackerHit& operator=(const ExN04TrackerHit &right);
-  G4int operator==(const ExN04TrackerHit &right) const;
+  G4bool operator==(const ExN04TrackerHit &right) const;
 
   inline void *operator new(size_t);
   inline void operator delete(void *aHit);

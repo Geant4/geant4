@@ -45,7 +45,7 @@ G4VDigiCollection::G4VDigiCollection(G4String DMnam,G4String colNam)
 G4VDigiCollection::~G4VDigiCollection()
 { ; }
 
-G4int G4VDigiCollection::operator==(const G4VDigiCollection &right) const
+G4bool G4VDigiCollection::operator==(const G4VDigiCollection &right) const
 { 
   return ((collectionName==right.collectionName)
         &&(DMname==right.DMname));

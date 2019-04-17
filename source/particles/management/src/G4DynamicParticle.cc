@@ -337,13 +337,13 @@ void G4DynamicParticle::SetDefinition(const G4ParticleDefinition * aParticleDefi
 }
 
 ////////////////////
-G4int G4DynamicParticle::operator==(const G4DynamicParticle &right) const
+G4bool G4DynamicParticle::operator==(const G4DynamicParticle &right) const
 {
   return (this == (G4DynamicParticle *) &right);
 }
 
 ////////////////////
-G4int G4DynamicParticle::operator!=(const G4DynamicParticle &right) const
+G4bool G4DynamicParticle::operator!=(const G4DynamicParticle &right) const
 {
   return (this != (G4DynamicParticle *) &right);
 }

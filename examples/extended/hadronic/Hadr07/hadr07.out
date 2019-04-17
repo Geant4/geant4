@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
+ Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -143,6 +139,7 @@ NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 meV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
 
   Process: alphaInelastic
@@ -237,6 +234,7 @@ NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 meV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
 
   Process: dInelastic
@@ -365,6 +363,7 @@ NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 meV/n ---> 100 TeV/n
+     Cr_sctns:  Glauber-Gribov Nucl-nucl: 0 meV ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
 
   Process: tInelastic
@@ -411,7 +410,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=5.200000s Real=5.521184s Sys=0.000000s
+  User=4.820000s Real=4.841042s Sys=0.000000s
 
  ======================== run summary =====================
 
@@ -419,45 +418,44 @@ Run Summary
     1        30 cm  of Li7 (density: 1.85 g/cm3 )
 
  Process calls frequency :
-     RadioactiveDecay=  99911        Transportation=  89481               annihil=    125
-                compt= 127998                  conv=    126            dInelastic=      2
-                eBrem=   1044                 eIoni= 139819                 hIoni=    451
-           hadElastic=  85944               ionIoni= 100204                   msc=    410
-             nCapture=      1      neutronInelastic=  14093                  phot=  12727
+                Decay=      1      RadioactiveDecay= 100080        Transportation=  89870
+              annihil=    145                 compt= 130598                  conv=    146
+           dInelastic=      2                 eBrem=   1076                 eIoni= 142600
+                hIoni=    442            hadElastic=  86107               ionIoni= 100375
+                  msc=    378      neutronInelastic=  14115                  phot=  12877
+        photonNuclear=      1 
 
-
- Edep in absorber 1 = 8.04 MeV	(16.3 keV-->37.5 MeV)
+ Edep in absorber 1 = 8.07 MeV	(16.3 keV-->37.5 MeV)
 
  List of generated particles in absorber 1:
-  Be8[3030.000]:       1  Emean =    6.06 keV	( 6.06 keV --> 6.06 keV)
-            He6:     162  Emean =    2.29 MeV	( 93.8 keV --> 4.84 MeV)
-            Li6:     730  Emean =    1.52 MeV	( 37 eV  --> 7.16 MeV)
-            Li7:   99017  Emean =     559 keV	( 115 meV --> 6.22 MeV)
-            Li8:       1  Emean =    12.1 keV	( 12.1 keV --> 12.1 keV)
-          alpha:     294  Emean =    1.23 MeV	( 47 keV --> 6.34 MeV)
-      anti_nu_e:     163  Emean =    1.93 MeV	( 353 keV --> 9.86 MeV)
-       deuteron:     452  Emean =    4.61 MeV	( 30.9 keV --> 31.2 MeV)
-             e+:     126  Emean =    1.36 MeV	( 102 keV --> 4.25 MeV)
-             e-:  139243  Emean =     155 keV	( 100 eV  --> 5.62 MeV)
-          gamma:   41519  Emean =    1.24 MeV	( 1 keV --> 5.88 MeV)
-        neutron:   14790  Emean =    3.61 MeV	( 2.5 keV --> 13.6 MeV)
+            He6:     150  Emean =    2.31 MeV	( 93.8 keV --> 4.83 MeV)
+            Li6:     697  Emean =    1.55 MeV	( 37 eV  --> 8.21 MeV)
+            Li7:   99233  Emean =     559 keV	( 115 meV --> 6.21 MeV)
+          alpha:     295  Emean =    1.23 MeV	( 47 keV --> 6.34 MeV)
+      anti_nu_e:     150  Emean =    1.86 MeV	( 298 keV --> 3.27 MeV)
+       deuteron:     442  Emean =    4.79 MeV	( 30.9 keV --> 31.2 MeV)
+             e+:     146  Emean =    1.39 MeV	( 102 keV --> 4.25 MeV)
+             e-:  141964  Emean =     153 keV	( 100 eV  --> 5.45 MeV)
+          gamma:   41919  Emean =    1.24 MeV	( 1 keV --> 5.88 MeV)
+        neutron:   14805  Emean =    3.61 MeV	( 2.5 keV --> 13.6 MeV)
+         triton:       1  Emean =    1.81 MeV	( 1.81 MeV --> 1.81 MeV)
 
  List of particles emerging from absorbers :
-      anti_nu_e:     163  Emean =    1.93 MeV	( 353 keV --> 9.86 MeV)
+      anti_nu_e:     150  Emean =    1.86 MeV	( 298 keV --> 3.27 MeV)
              e+:       1  Emean =    3.44 MeV	( 3.44 MeV --> 3.44 MeV)
-             e-:     200  Emean =    1.31 MeV	( 19.1 keV --> 4.76 MeV)
-          gamma:   28666  Emean =    1.05 MeV	( 2.13 keV --> 5.88 MeV)
-        neutron:   10696  Emean =    2.25 MeV	( 13.2 eV  --> 14.1 MeV)
+             e-:     188  Emean =    1.39 MeV	( 19.1 keV --> 4.76 MeV)
+          gamma:   28895  Emean =    1.05 MeV	( 2.13 keV --> 5.88 MeV)
+        neutron:   10690  Emean =    2.21 MeV	( 13.2 eV  --> 14.1 MeV)
 
- Nb of events with primary absorbed = 87 %,   transmit = 6.8 %,   reflected = 6.6 %
+ Nb of events with primary absorbed = 87 %,   transmit = 6.6 %,   reflected = 6.4 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 336367018, 1864199277
+ Current couple of seeds = 1941603550, 1778528672
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.041 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.043 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

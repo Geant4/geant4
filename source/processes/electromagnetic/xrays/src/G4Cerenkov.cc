@@ -552,8 +552,9 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
   G4double Step = Range - RangeMin;
 
   // If the step is smaller than 1e-16 mm, it may happen that the particle
-  // does not move. See bug 1992. 
-  if (Step < 1.e-16*mm) return StepLimit;
+  // does not move. See bug 1992.
+  //  2019-03-11: change to 1e-15
+  if (Step < 1.e-15*mm) return StepLimit;
 
   if (Step < StepLimit) StepLimit = Step; 
   // If user has defined an average maximum number of photons to

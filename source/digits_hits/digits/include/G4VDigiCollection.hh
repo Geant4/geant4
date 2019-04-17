@@ -47,7 +47,7 @@ class G4VDigiCollection
       G4VDigiCollection();
       G4VDigiCollection(G4String DMnam,G4String colNam);
       virtual ~G4VDigiCollection();
-      G4int operator==(const G4VDigiCollection &right) const;
+      G4bool operator==(const G4VDigiCollection &right) const;
 
       virtual void DrawAllDigi();
       virtual void PrintAllDigi();

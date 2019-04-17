@@ -373,6 +373,10 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement,
 
    if (pAssembly)   // Fill assembly structure
    {
+     if (assembly)   // Case of recursive assemblies
+     {
+       pAssembly->AddPlacedAssembly(assembly, transform);
+     }
      if (!logvol) { return; }
      pAssembly->AddPlacedVolume(logvol, transform);
    }

@@ -43,13 +43,13 @@
 //   two vectors for processes with PostStepGetPhysicalInteractionLength
 //                                    and PostStepDoIt
 //  The tracking will message three types of GetPhysicalInteractionLength
-//  in order to limit the Step and select the occurence of processes. 
+//  in order to limit the Step and select the occurrence of processes. 
 //  It will message the corresponding DoIt() to apply the selected 
 //  processes. In addition, the Tracking will limit the Step
-//  and select the occurence of the processes according to
+//  and select the occurrence of the processes according to
 //  the shortest physical interaction length computed (except for
 //  processes at rest, for which the Tracking will select the
-//  occurence of the process which returns the shortest mean
+//  occurrence of the process which returns the shortest mean
 //  life-time from the GetPhysicalInteractionLength()).
 //
 // History:
@@ -122,8 +122,8 @@ class G4ProcessManager
       ~G4ProcessManager();
       //  Destructor
 
-      G4int operator==(const G4ProcessManager &right) const;
-      G4int operator!=(const G4ProcessManager &right) const;
+      G4bool operator==(const G4ProcessManager &right) const;
+      G4bool operator!=(const G4ProcessManager &right) const;
 
  public: //  with description
       G4ProcessVector* GetProcessList() const;

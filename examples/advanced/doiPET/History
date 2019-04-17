@@ -5,6 +5,11 @@
 
                       Category History file
                       ---------------------
+
+17.12.2018 - G. Cosmo;doiPET-V10-04-01
+             Fixed compilation warnings on clang for unused data members in
+             doiPETDetectorConstruction and doiPETEventAction classes.
+
 25.10.2018 - S. Guatelli;doiPET-V10-04-00
              PET example introduced for the first time
 

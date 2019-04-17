@@ -66,8 +66,8 @@ class G4QGSDiffractiveExcitation
 	G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
 
 	const G4QGSDiffractiveExcitation & operator=(const G4QGSDiffractiveExcitation &right);
-	int operator==(const G4QGSDiffractiveExcitation &right) const;
-	int operator!=(const G4QGSDiffractiveExcitation &right) const;
+	G4bool operator==(const G4QGSDiffractiveExcitation &right) const;
+	G4bool operator!=(const G4QGSDiffractiveExcitation &right) const;
 };
 
 #endif

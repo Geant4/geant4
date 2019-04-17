@@ -30,6 +30,11 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+21st December 2018 - Makoto Asai (cmake-V10-04-28)
+- Modules/Geant4OptionalComponents.cmake:
+- Template/Geant4Config.cmake.in:
+   Add GEANT4_USE_SMARTSTACK
+
 5th November 2018 - Gunter Folger  (cmake-V10-04-27)
 - Switch to G4PARTICLEXS 1.1
 

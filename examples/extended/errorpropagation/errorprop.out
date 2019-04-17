@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
+ Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,7 +8,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
- creating G4RunManagerKernel 0x24c7010
+ creating G4RunManagerKernel 0x266ead0
 
 The materials defined are : 
 
@@ -87,34 +83,34 @@ G4Transportation:  Current values for thresholds related to  the killing of loop
     Important Energy = 250  ( above this tracks are given multiple chances ) 
     Extra Trials     = 10 'important' tracks, i.e. those above 'important' energy 
  G4Transportation constructor> set fShortStepOptimisation to false
-0x26d5f90G4ErrorPhysicsList:: particle process manager e+ = 0x26d86b0
-0x26d5e40G4ErrorPhysicsList:: particle process manager e- = 0x26da140
-0x26d5cf0G4ErrorPhysicsList:: particle process manager gamma = 0x26da370
-0x26d73e0G4ErrorPhysicsList:: particle process manager geantino = 0x26da5c0
-0x26d6170G4ErrorPhysicsList:: particle process manager mu+ = 0x26da810
-0x26d6520G4ErrorPhysicsList:: particle process manager mu- = 0x26daa60
-0x26d6940G4ErrorPhysicsList:: particle process manager pi+ = 0x26dacb0
-0x26d6d90G4ErrorPhysicsList:: particle process manager pi- = 0x26daf00
-0x26d71b0G4ErrorPhysicsList:: particle process manager proton = 0x26db150
+0x287df00G4ErrorPhysicsList:: particle process manager e+ = 0x28805e0
+0x287ddb0G4ErrorPhysicsList:: particle process manager e- = 0x2882070
+0x287d840G4ErrorPhysicsList:: particle process manager gamma = 0x28822a0
+0x287f310G4ErrorPhysicsList:: particle process manager geantino = 0x28824f0
+0x287e0a0G4ErrorPhysicsList:: particle process manager mu+ = 0x2882740
+0x287e450G4ErrorPhysicsList:: particle process manager mu- = 0x2882990
+0x287e870G4ErrorPhysicsList:: particle process manager pi+ = 0x2882be0
+0x287ecc0G4ErrorPhysicsList:: particle process manager pi- = 0x2882e30
+0x287f0e0G4ErrorPhysicsList:: particle process manager proton = 0x2883080
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 
-conv:   for  gamma    SubType= 14  BuildTable= 1
-      Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
+conv:  for gamma SubType=14 BuildTable=1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins/decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV   AngularGenUrban
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV   AngularGenUrban
+        BetheHeitler : Emin=    0 eV  Emax=   80 GeV  ModifiedTsai
+     BetheHeitlerLPM : Emin=   80 GeV Emax=  100 TeV  ModifiedTsai
 
-compt:   for  gamma    SubType= 13  BuildTable= 1
-      Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
+compt:  for gamma SubType=13 BuildTable=1
+      Lambda table from 100 eV  to 1 MeV, 7 bins/decade, spline: 1
       LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :  Emin=        0 eV    Emax=      100 TeV
+       Klein-Nishina : Emin=    0 eV  Emax=  100 TeV
 
-phot:   for  gamma    SubType= 12  BuildTable= 0
+phot:  for gamma SubType=12 BuildTable=0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila
+       PhotoElectric : Emin=    0 eV  Emax=  100 TeV  SauterGavrila
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.

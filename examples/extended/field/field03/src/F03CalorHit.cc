@@ -72,9 +72,9 @@ const F03CalorHit& F03CalorHit::operator=(const F03CalorHit& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int F03CalorHit::operator==(const F03CalorHit& right) const
+G4bool F03CalorHit::operator==(const F03CalorHit& right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

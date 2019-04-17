@@ -44,7 +44,7 @@ public:
 
   H02MuonHit(const H02MuonHit& right);
   const H02MuonHit& operator=(const H02MuonHit& right);
-  G4int operator==(const H02MuonHit& right) const;
+  G4bool operator==(const H02MuonHit& right) const;
 
   void* operator new(size_t);
   void operator delete(void* aHit);

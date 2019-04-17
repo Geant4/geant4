@@ -65,9 +65,9 @@ const ExN04MuonHit& ExN04MuonHit::operator=(const ExN04MuonHit &right)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4int ExN04MuonHit::operator==(const ExN04MuonHit &right) const
+G4bool ExN04MuonHit::operator==(const ExN04MuonHit &right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -59,8 +59,8 @@ class G4QuarkExchange
 	G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare) const;
 
 	const G4QuarkExchange & operator=(const G4QuarkExchange &right);
-	int operator==(const G4QuarkExchange &right) const;
-	int operator!=(const G4QuarkExchange &right) const;
+	G4bool operator==(const G4QuarkExchange &right) const;
+	G4bool operator!=(const G4QuarkExchange &right) const;
 };
 
 #endif

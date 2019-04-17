@@ -74,14 +74,14 @@ class G4FTFModel : public G4VPartonStringModel {
   private:
     G4FTFModel( const G4FTFModel& right );
     const G4FTFModel& operator=( const G4FTFModel& right );
-    int operator==( const G4FTFModel& right ) const;
-    int operator!=( const G4FTFModel& right ) const;
+    G4bool operator==( const G4FTFModel& right ) const;
+    G4bool operator!=( const G4FTFModel& right ) const;
 
     void StoreInvolvedNucleon();              
     void ReggeonCascade();
     G4bool PutOnMassShell();
     G4bool ExciteParticipants();
-    G4ExcitedStringVector* BuildStrings();
+    void BuildStrings( G4ExcitedStringVector* strings );
     void GetResiduals();
       
     G4bool AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,

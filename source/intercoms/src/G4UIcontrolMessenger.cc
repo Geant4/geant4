@@ -50,7 +50,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
 
   macroPathCommand = new G4UIcmdWithAString("/control/macroPath",this);
   macroPathCommand->SetGuidance("Set macro search path" 
-                                "with colon-separated list.");
+                                " with colon-separated list.");
   macroPathCommand->SetParameterName("path",false);
 
   ExecuteCommand = new G4UIcmdWithAString("/control/execute",this);
@@ -128,7 +128,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   aliasCommand->SetGuidance("The string may contain one or more spaces,");
   aliasCommand->SetGuidance("the string must be enclosed by double quotes (\").");
   aliasCommand->SetGuidance("To use an alias, enclose the alias name with");
-  aliasCommand->SetGuidance("parenthis \"{\" and \"}\".");
+  aliasCommand->SetGuidance("parenthesis \"{\" and \"}\".");
   G4UIparameter* aliasNameParam = new G4UIparameter("aliasName",'s',false);
   aliasCommand->SetParameter(aliasNameParam);
   G4UIparameter* aliasValueParam = new G4UIparameter("aliasValue",'s',false);
@@ -236,7 +236,7 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   subtractCommand->SetToBeBroadcasted(false);
 
   multiplyCommand = new G4UIcommand("/control/multiply",this);
-  multiplyCommand->SetGuidance("Define a new alias as the multiplification of two values.");
+  multiplyCommand->SetGuidance("Define a new alias as the multiplication of two values.");
   multiplyCommand->SetGuidance(" Syntax : <new_alias> <value1> <value2>");
   multiplyCommand->SetGuidance(" <new_alias> may be an already existing alias. If it is the case,");
   multiplyCommand->SetGuidance(" aliased value is alternated.");

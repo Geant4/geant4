@@ -8,6 +8,9 @@
                           History file
                           ------------
 
+31.01.2019 - I.Hrivnacova, Tag gammaraytel-V10-04-07
+             Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 21.10.2018 - F. Romano, Tag gammaraytel-V10-04-06
              - G4VIS_USE and G4UI_USE deleted
 

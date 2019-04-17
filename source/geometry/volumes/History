@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 1st, 2019 G.Cosmo                   - geomvol-V10-04-06
+- Correction in G4AssemblyVolume destructor to avoid deletion of internal
+  physical volumes, as cleanup is taken care by G4PhysicalVolumeStore.
+  Addressing problem report #2140.
+
 October 9th, 2018 G.Cosmo                 - geomvol-V10-04-05, 04
 - Added G4AssemblyStore singleton class for assembly structures bookeeping,
   to address the specific use-case of allowing identification of assembly

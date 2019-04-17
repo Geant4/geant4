@@ -51,7 +51,7 @@ class LXeScintHit : public G4VHit
     virtual ~LXeScintHit();
     LXeScintHit(const LXeScintHit &right);
     const LXeScintHit& operator=(const LXeScintHit &right);
-    G4int operator==(const LXeScintHit &right) const;
+    G4bool operator==(const LXeScintHit &right) const;
 
     inline void *operator new(size_t);
     inline void operator delete(void *aHit);

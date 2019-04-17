@@ -88,12 +88,12 @@ G4VSensitiveDetector & G4VSensitiveDetector::operator=(const G4VSensitiveDetecto
   return *this;
 }
 
-G4int G4VSensitiveDetector::operator==(const G4VSensitiveDetector &right) const
+G4bool G4VSensitiveDetector::operator==(const G4VSensitiveDetector &right) const
 {
    return (this==&right);
 }
 
-G4int G4VSensitiveDetector::operator!=(const G4VSensitiveDetector &right) const
+G4bool G4VSensitiveDetector::operator!=(const G4VSensitiveDetector &right) const
 {
    return (this!=&right);
 }

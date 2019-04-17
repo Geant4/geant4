@@ -54,7 +54,7 @@ class ExN02TrackerHit : public G4VHit
 
       ExN02TrackerHit(const ExN02TrackerHit&);
       const ExN02TrackerHit& operator=(const ExN02TrackerHit&);
-      G4int operator==(const ExN02TrackerHit&) const;
+      G4bool operator==(const ExN02TrackerHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);

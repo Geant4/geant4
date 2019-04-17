@@ -14,6 +14,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 Feb 2019 - VI, WGS, SI       tag chem1-V10-04-03
+-----------------------------------------------------
+- Fixed PhysicsList
+
 28.11.2018 V. Ivanchenko        tag chem1-V10-04-02
 -----------------------------------------------------
 - Fixed nightly problem by change initial parameters in beam.in and

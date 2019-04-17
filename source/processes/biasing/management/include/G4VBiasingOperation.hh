@@ -36,13 +36,13 @@
 //
 // o The change of behavior of a physics process can be:
 //     - a change of the PostStep interaction probabilty, so-called
-//       occurence biasing
+//       occurrence biasing
 //     - a change in final state production
 //     - both, provided above two are uncorrelated.
-// o The change of occurence is driven by providing a biasing interaction
+// o The change of occurrence is driven by providing a biasing interaction
 //   law (G4VBiasingInteractionLaw) that is used in place of the analog
 //   exponential law.
-//   This change of occurence is controlled through many handles.
+//   This change of occurrence is controlled through many handles.
 // o The change in final state production is made through one single
 //   method the user is fully responsible of.
 //
@@ -96,12 +96,12 @@ public:
   // ** Methods for physics-based biasing:
   // *************************************
   // --
-  // ---- I. Biasing of the process occurence:
+  // ---- I. Biasing of the process occurrence:
   // -----------------------------------------
-  // ---- The biasing of the process occurence regards the occurence of the PostStepDoIt
+  // ---- The biasing of the process occurrence regards the occurrence of the PostStepDoIt
   // ---- behavior. But the weight is manipulated by both AlongStep methods (weight for
   // ---- non-interaction) and PostStep methods (weight for interaction). For this
-  // ---- reason, occurence biasing is handled by both AlongStep and PostStep methods.
+  // ---- reason, occurrence biasing is handled by both AlongStep and PostStep methods.
   // ----
   // ---- If the operation is returned to the G4BiasingProcessInterface process by the
   // ---- ProposeOccurenceBiasingOperation(...)/GetProposedOccurenceBiasingOperation(...) method
@@ -109,7 +109,7 @@ public:
   // ----
   // ---- I.1) Methods called in at the PostStepGetPhysicalInteractionLength(...) level :
   // ---- 
-  // ------ o Main and mandatory method for biasing of the PostStep process biasing occurence :
+  // ------ o Main and mandatory method for biasing of the PostStep process biasing occurrence :
   // ------   - propose an interaction law to be substituted to the process that is biased
   // ------   - the operation is told which is the G4BiasingProcessInterface calling it with
   // ------     callingProcess argument.
@@ -148,13 +148,13 @@ public:
   // ------ User has full freedom for the particle change returned, and is reponsible for
   // ------ the correctness of weights set to tracks.
   // ------ The forcedBiasedFinalState should be left as is (ie false) in general. In this
-  // ------ way, if an occurence biasing is also applied in the step, the weight correction
+  // ------ way, if an occurrence biasing is also applied in the step, the weight correction
   // ------ for it will be applied. If returned forceBiasedFinalState is returned true, then
   // ------ the returned particle change will be returned as is to the stepping. Full
   // ------ responsibility of the weight correctness is taken by the biasing operation.
   // ------ The wrappedProcess can be accessed through the G4BiasingProcessInterface if needed.
-  // ------ This can be used in conjonction with an occurence biasing, provided this final
-  // ------ state biasing is uncorrelated with the occurence biasing (as single multiplication
+  // ------ This can be used in conjunction with an occurrence biasing, provided this final
+  // ------ state biasing is uncorrelated with the occurrence biasing (as single multiplication
   // ------ of weights occur between these two biasings).
   virtual G4VParticleChange*  ApplyFinalStateBiasing( const G4BiasingProcessInterface*       /* callingProcess */,
 						      const G4Track*                                  /* track */,

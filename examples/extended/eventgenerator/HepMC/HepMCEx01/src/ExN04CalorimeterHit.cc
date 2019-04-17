@@ -81,7 +81,7 @@ const ExN04CalorimeterHit& ExN04CalorimeterHit::operator=
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4int ExN04CalorimeterHit::operator==(const ExN04CalorimeterHit &right) const
+G4bool ExN04CalorimeterHit::operator==(const ExN04CalorimeterHit &right) const
 {
   return ( (fZCellID == right.fZCellID) &&
            (fPhiCellID == right.fPhiCellID) );

@@ -91,7 +91,7 @@ public: // with description
 
 public:
   virtual ~G4TAtomicHitsMap();
-  G4int operator==(const G4TAtomicHitsMap<T> &right) const;
+  G4bool operator==(const G4TAtomicHitsMap<T> &right) const;
   G4TAtomicHitsMap<T> & operator+=(const G4TAtomicHitsMap<T> &right) const;
   G4TAtomicHitsMap<T> & operator+=(const G4THitsMap<T> &right) const;
 
@@ -174,7 +174,7 @@ G4TAtomicHitsMap<T>::~G4TAtomicHitsMap()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 template <typename T>
-G4int G4TAtomicHitsMap<T>::operator==(const G4TAtomicHitsMap<T> &right) const
+G4bool G4TAtomicHitsMap<T>::operator==(const G4TAtomicHitsMap<T> &right) const
 {
   return (collectionName == right.collectionName);
 }

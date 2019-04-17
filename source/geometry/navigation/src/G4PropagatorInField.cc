@@ -243,8 +243,10 @@ G4PropagatorInField::ComputeStep(
     G4double stepTrial;
 
     stepTrial= fFull_CurveLen_of_LastAttempt; 
-    if( (stepTrial <= 0.0) && (fLast_ProposedStepLength > 0.0) ) 
+    if( (stepTrial <= 0.0) && (fLast_ProposedStepLength > 0.0) )
+    {
       stepTrial= fLast_ProposedStepLength; 
+    }
 
     G4double decreaseFactor = 0.9; // Unused default
     if(   (fNoZeroStep < fSevereActionThreshold_NoZeroSteps)
@@ -302,7 +304,9 @@ G4PropagatorInField::ComputeStep(
        return 0;  // = stepTrial;
      }
      if( stepTrial < CurrentProposedStepLength )
+     {
        CurrentProposedStepLength = stepTrial;
+     }
   }
   fLast_ProposedStepLength = CurrentProposedStepLength;
 
@@ -406,9 +410,10 @@ G4PropagatorInField::ComputeStep(
     }
     if( !intersects )
     {
-      StepTaken += s_length_taken; 
-      // For smooth trajectory display (jacek 01/11/2002)
-      if (fpTrajectoryFilter) {
+      StepTaken += s_length_taken;
+
+      if (fpTrajectoryFilter) // For smooth trajectory display (jacek 1/11/2002)
+      {
         fpTrajectoryFilter->TakeIntermediatePoint(CurrentState.GetPosition());
       }
     }
@@ -453,7 +458,7 @@ G4PropagatorInField::ComputeStep(
   {
     fParticleIsLooping = true;
   }
-  if ( fParticleIsLooping ) // && (fVerboseLevel > 0) )
+  if ( ( fParticleIsLooping ) && (fVerboseLevel > 0) )
   {
     ReportLoopingParticle( do_loop_count, StepTaken,
                            CurrentProposedStepLength, methodName,
@@ -512,7 +517,8 @@ G4PropagatorInField::ComputeStep(
      {
         fNoZeroStep++;
      }
-     else{
+     else
+     {
         fNoZeroStep = 0;
      }
   }

@@ -63,12 +63,12 @@
 
 
  //Equality Operations
-   G4int G4SensitiveVolumeList::operator==(const G4SensitiveVolumeList &right) const
+   G4bool G4SensitiveVolumeList::operator==(const G4SensitiveVolumeList &right) const
    {
      return (this == (G4SensitiveVolumeList *) &right);
    }
 
-   G4int G4SensitiveVolumeList::operator!=(const G4SensitiveVolumeList &right) const
+   G4bool G4SensitiveVolumeList::operator!=(const G4SensitiveVolumeList &right) const
    {
      return (this != (G4SensitiveVolumeList *) &right);
    }

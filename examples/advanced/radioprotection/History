@@ -8,6 +8,9 @@
                       Category History file
                       ---------------------
 
+31.01.2019 - I.Hrivnacova tag radioprotection-V10-04-00
+             Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 19.11.2016 - A. Dotti   tag radioprotection-V10-02-01
 	    Explicit set of SD to manager
 

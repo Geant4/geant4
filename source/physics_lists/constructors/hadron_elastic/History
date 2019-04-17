@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-Mar-2019, A. Ribon       (phys-ctor-helastic-V10-04-06)
+- G4HadronElasticPhysics : for deuteron, triton and alpha, use Glauber-Gribov
+  elastic cross sections (instead of Gheisha ones, which returns zero).
+
 26-Nov-2018, A. Ribon       (phys-ctor-helastic-V10-04-05)
 - README : updated this file. No changes to anything else.
 

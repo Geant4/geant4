@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+02-Apr-2019 A. Ribon                     (hadr-qgsm-V10-04-09)
+-  G4QGSParticipants : bug-fix (made by Vladimir Uzhinsky) in the 
+   computation of the transverse mass in the method 
+   G4QGSParticipants::DeterminePartonMomenta() .
+
 20-Nov-2018 A. Ribon                     (hadr-qgsm-V10-04-08)
 -  Minor clean-up and indentation: no changes in the random sequence.
 

@@ -194,8 +194,9 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i)
 	}
       }
     }
+  }
     // liquids
-  } else if( !STP[i] ) { t = 0.0; }
+  //  } else if( !STP[i] ) { t = 0.0; }
 
   mat = new G4Material(names[i],densities[i],nc,states[i],t,p);
 
@@ -277,10 +278,11 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   // add parameters of material into internal vectors
   // density in g/cm3, mean ionisation potential is not defined
   G4bool stp = true;
-  if(state == kStateGas && (temp != NTP_Temperature || pres != STP_Pressure))
+  if(state == kStateGas && 
+     (temp != NTP_Temperature || pres != CLHEP::STP_Pressure))
     { stp = false; }
 
-  AddMaterial(name,dens*cm3/g,0,0.,els,state,stp);
+  AddMaterial(name,dens*CLHEP::cm3/CLHEP::g,0,0.,els,state,stp);
   if(!stp) { AddGas(name,temp,pres); }
 
   for (G4int i=0; i<els; ++i) {
@@ -327,9 +329,10 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   // add parameters of material into internal vectors
   // density in g/cm3, mean ionisation potential is not defined
   G4bool stp = true;
-  if(state == kStateGas && (temp != NTP_Temperature || pres != STP_Pressure))
+  if(state == kStateGas && 
+     (temp != NTP_Temperature || pres != CLHEP::STP_Pressure))
     { stp = false; }
-  AddMaterial(name,dens*cm3/g,0,0.,els,state,stp);
+  AddMaterial(name,dens*CLHEP::cm3/CLHEP::g,0,0.,els,state,stp);
   if(!stp) { AddGas(name,temp,pres); }
 
   for (G4int i=0; i<els; ++i) {
@@ -423,10 +426,10 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
   // add parameters of material into internal vectors
   // density in g/cm3, mean ionisation potential is not defined
   G4bool stp = true;
-  if(temp != NTP_Temperature && pres != STP_Pressure)
+  if(temp != NTP_Temperature || pres != CLHEP::STP_Pressure)
     { stp = false; }
 
-  G4double massPerMole = 0;
+  G4double massPerMole = 0.;
 
   G4int Z = 0;
   for (G4int i=0; i<els; ++i) {
@@ -603,11 +606,11 @@ void G4NistMaterialBuilder::ListBioChemicalMaterials() const
 
 void G4NistMaterialBuilder::DumpElm(G4int i) const
 {
-  G4cout << std::setw(2) << i+1 << " " 
-	 << std::setw(6) << names[i] 
+  G4cout << std::setw(2)  << i << " " 
+         << std::setw(6)  << names[i] 
          << std::setw(14) << densities[i]*cm3/g 
-	 << std::setw(11) << ionPotentials[i]/eV
-	 << G4endl;
+         << std::setw(11) << ionPotentials[i]/eV
+         << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

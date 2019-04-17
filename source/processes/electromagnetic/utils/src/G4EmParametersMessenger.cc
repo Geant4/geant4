@@ -289,7 +289,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   labCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   mscfCmd = new G4UIcmdWithADouble("/process/msc/FactorForAngleLimit",this);
-  mscfCmd->SetGuidance("Set factor for computation of a limit for -t (invariant trasfer)");
+  mscfCmd->SetGuidance("Set factor for computation of a limit for -t (invariant transfer)");
   mscfCmd->SetParameterName("Fact",true);
   mscfCmd->SetRange("Fact>0");
   mscfCmd->SetDefaultValue(1.);
@@ -471,6 +471,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   StepFuncCmd->SetGuidance("Set the energy loss step limitation parameters for e+-.");
   StepFuncCmd->SetGuidance("  dRoverR   : max Range variation per step");
   StepFuncCmd->SetGuidance("  finalRange: range for final step");
+  StepFuncCmd->SetGuidance("  unit      : unit of finalRange");
   StepFuncCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   G4UIparameter* dRoverRPrm = new G4UIparameter("dRoverR",'d',false);
@@ -482,7 +483,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   StepFuncCmd->SetParameter(finalRangePrm);
 
   G4UIparameter* unitPrm = new G4UIparameter("unit",'s',true);
-  unitPrm->SetDefaultValue("mm");
+  unitPrm->SetDefaultUnit("mm");
   StepFuncCmd->SetParameter(unitPrm);
 
   StepFuncCmd1 = new G4UIcommand("/process/eLoss/StepFunctionMuHad",this);
@@ -555,19 +556,22 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   fiCmd->SetParameter(regNam);
 
   G4UIparameter* tlength = new G4UIparameter("tlength",'d',false);
+  tlength->SetParameterRange("tlength>0");
   fiCmd->SetParameter(tlength);
 
   G4UIparameter* unitT = new G4UIparameter("unitT",'s',true);
+  unitT->SetDefaultUnit("mm");
   fiCmd->SetParameter(unitT);
 
-  G4UIparameter* flagT = new G4UIparameter("tflag",'s',true);
+  G4UIparameter* flagT = new G4UIparameter("tflag",'b',true);
+  flagT->SetDefaultValue(true);
   fiCmd->SetParameter(flagT);
 
   bsCmd = new G4UIcommand("/process/em/setSecBiasing",this);
-  bsCmd->SetGuidance("Set bremsstrahlung or delta-e- splitting/Russian roullette per region.");
+  bsCmd->SetGuidance("Set bremsstrahlung or delta-e- splitting/Russian roulette per region.");
   bsCmd->SetGuidance("  bProcNam : process name");
   bsCmd->SetGuidance("  bRegNam  : region name");
-  bsCmd->SetGuidance("  bFactor  : number of splitted gamma or probability of Russian roulette");
+  bsCmd->SetGuidance("  bFactor  : number of split gamma or probability of Russian roulette");
   bsCmd->SetGuidance("  bEnergy  : max energy of a secondary for this biasing method");
   bsCmd->SetGuidance("  bUnit    : energy unit");
   bsCmd->AvailableForStates(G4State_Idle,G4State_Idle);
@@ -585,6 +589,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   bsCmd->SetParameter(bEnergy);
 
   G4UIparameter* bUnit = new G4UIparameter("bUnit",'s',true);
+  bUnit->SetDefaultUnit("MeV");
   bsCmd->SetParameter(bUnit);
 
   dirSplitCmd = new G4UIcmdWithABool("/process/em/setDirectionalSplitting",this);
@@ -606,7 +611,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   nffCmd->AvailableForStates(G4State_PreInit);
 
   tripletCmd = new G4UIcmdWithAnInteger("/process/gconv/conversionType",this);
-  tripletCmd->SetGuidance("gamma conversion triplet/nuclear genaration type:");
+  tripletCmd->SetGuidance("gamma conversion triplet/nuclear generation type:");
   tripletCmd->SetGuidance("0 - (default) both triplet and nuclear");
   tripletCmd->SetGuidance("1 - force nuclear");
   tripletCmd->SetGuidance("2 - force triplet");

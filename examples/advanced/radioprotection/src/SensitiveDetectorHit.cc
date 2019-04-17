@@ -60,9 +60,9 @@ const SensitiveDetectorHit& SensitiveDetectorHit::operator=(const SensitiveDetec
   return *this;
 }
 
-G4int SensitiveDetectorHit::operator==(const SensitiveDetectorHit& right) const
+G4bool SensitiveDetectorHit::operator==(const SensitiveDetectorHit& right) const
 {
-  return ( this == &right ) ? 1 : 0;
+  return ( this == &right ) ? true : false;
 }
 
 void SensitiveDetectorHit::Draw()

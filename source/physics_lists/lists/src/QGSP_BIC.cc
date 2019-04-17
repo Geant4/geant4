@@ -68,33 +68,33 @@ QGSP_BIC::QGSP_BIC(G4int ver)
   G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BIC"<<G4endl;
   G4cout <<G4endl;
 
-  this->defaultCutValue = 0.7*CLHEP::mm;
-  this->SetVerboseLevel(ver);
+  defaultCutValue = 0.7*CLHEP::mm;
+  SetVerboseLevel(ver);
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics(ver) );
+  RegisterPhysics( new G4EmStandardPhysics(ver) );
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
+  RegisterPhysics( new G4EmExtraPhysics(ver) );
 
   // Decays
-  this->RegisterPhysics( new G4DecayPhysics(ver) );
+  RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering
-  this->RegisterPhysics( new G4HadronElasticPhysics(ver) );
+  RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
    // Hadron Physics
-  this->RegisterPhysics(  new G4HadronPhysicsQGSP_BIC(ver));
+  RegisterPhysics( new G4HadronPhysicsQGSP_BIC(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4StoppingPhysics(ver) );
+  RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonElasticPhysics(ver) );
-  this->RegisterPhysics( new G4IonPhysics(ver));
+  RegisterPhysics( new G4IonElasticPhysics(ver) );
+  RegisterPhysics( new G4IonPhysics(ver));
   
   // Neutron tracking cut
-  this->RegisterPhysics( new G4NeutronTrackingCut(ver));
+  RegisterPhysics( new G4NeutronTrackingCut(ver));
 
 }
 

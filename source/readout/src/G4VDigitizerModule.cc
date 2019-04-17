@@ -40,10 +40,10 @@ G4VDigitizerModule::G4VDigitizerModule(G4String modName)
 G4VDigitizerModule::~G4VDigitizerModule()
 {;}
 
-int G4VDigitizerModule::operator==(const G4VDigitizerModule &right) const
+G4bool G4VDigitizerModule::operator==(const G4VDigitizerModule &right) const
 { return (moduleName==right.moduleName); }
 
-int G4VDigitizerModule::operator!=(const G4VDigitizerModule &right) const
+G4bool G4VDigitizerModule::operator!=(const G4VDigitizerModule &right) const
 { return (moduleName!=right.moduleName); }
 
 void G4VDigitizerModule::StoreDigiCollection(G4VDigiCollection* aDC)

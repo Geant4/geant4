@@ -121,18 +121,20 @@ G4bool G4ParticleHPPhotonDist::InitMean(std::istream & aDataFile)
 
 void G4ParticleHPPhotonDist::InitAngular(std::istream & aDataFile)
 {
-
   G4int i, ii;
   //angular distributions
   aDataFile >> isoFlag;
   if (isoFlag != 1)
   {
-if ( repFlag == 2 ) G4cout << "G4ParticleHPPhotonDist: repFlag == 2 && isoFlag != 1 is unexpected! If you use G4ND3.x, then please report to Geant4 Hyper News. Thanks." << G4endl;
+    if (repFlag == 2) G4cout << "G4ParticleHPPhotonDist: repFlag == 2 && isoFlag != 1 is unexpected! If you use G4ND3.x, then please report to Geant4 HyperNews. " << G4endl;
     aDataFile >> tabulationType >> nDiscrete2 >> nIso;
 //080731
-      if ( theGammas != NULL && nDiscrete2 != nDiscrete ) G4cout << "080731c G4ParticleHPPhotonDist nDiscrete2 != nDiscrete, It looks like something wrong in your NDL files. Please update the latest. If you still have this messages after the update, then please report to Geant4 Hyper News." << G4endl;
+      if (theGammas != NULL && nDiscrete2 != nDiscrete)
+        G4cout << "080731c G4ParticleHPPhotonDist nDiscrete2 != nDiscrete, It looks like something wrong in your NDL files. Please update the latest. If you still have this messages after the update, then please report to Geant4 Hyper News." << G4endl;
 
-      // The order of cross section (InitPartials) and distribution (InitAngular here) data are different, we have to re-coordinate consistent data order.
+      // The order of cross section (InitPartials) and distribution
+      // (InitAngular here) data are different, we have to re-coordinate
+      // consistent data order.
       std::vector < G4double > vct_gammas_par; 
       std::vector < G4double > vct_shells_par; 
       std::vector < G4int > vct_primary_par; 
@@ -250,10 +252,11 @@ void G4ParticleHPPhotonDist::InitEnergies(std::istream & aDataFile)
   }
 }
 
-void G4ParticleHPPhotonDist::InitPartials(std::istream & aDataFile)
+void G4ParticleHPPhotonDist::InitPartials(std::istream& aDataFile,
+                                          G4ParticleHPVector* theXsec)
 {
+  if (theXsec) theReactionXsec = theXsec;
 
-  //G4cout << "G4ParticleHPPhotonDist::InitPartials " << G4endl;
   aDataFile >> nDiscrete >> targetMass;
   if(nDiscrete != 1)
   {
@@ -723,6 +726,16 @@ G4int maxEnergyIndex = 0;
       }
       //G4cout << "iphoton " << iphoton << G4endl;
       //G4cout << "photon energy " << theGammas[ iphoton ] /eV  << G4endl;
+
+      // Statistically suppress the photon according to reaction cross section
+      // Fix proposed by Artem Zontikov, Bug report #1824
+      if (theReactionXsec) {
+        if (thePartialXsec[iphoton].GetXsec(anEnergy)/theReactionXsec->GetXsec(anEnergy) < G4UniformRand() ) {
+          delete thePhotons;
+          thePhotons = 0;
+          return thePhotons;
+        }
+      }
 
 // Angle 
       G4double cosTheta = 0.0; // mu

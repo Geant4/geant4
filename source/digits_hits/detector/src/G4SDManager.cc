@@ -61,6 +61,7 @@ G4SDManager::~G4SDManager()
   delete theMessenger;
   delete HCtable;
   delete treeTop;
+  DestroyFilters();
   theMessenger = nullptr;
   HCtable = nullptr;
   treeTop = nullptr;
@@ -149,4 +150,32 @@ G4int G4SDManager::GetCollectionID(G4VHitsCollection* aHC)
   return GetCollectionID(HCname);
 }
 
+void G4SDManager::RegisterSDFilter(G4VSDFilter* filter)
+{
+  FilterList.push_back(filter);
+}
+
+void G4SDManager::DeRegisterSDFilter(G4VSDFilter* filter)
+{
+  for(auto f = FilterList.begin(); f != FilterList.end(); f++)
+  {
+    if(*f == filter)
+    {
+      FilterList.erase(f);
+      break;
+    }
+  }
+}
+
+void G4SDManager::DestroyFilters()
+{
+  auto f = FilterList.begin();
+  while( f != FilterList.end() )
+  {
+    if(verboseLevel>0) G4cout << "### deleting " << (*f)->GetName() << " " << (*f) << G4endl;
+    delete *f;
+    f = FilterList.begin();
+  }
+  FilterList.clear();
+}
 

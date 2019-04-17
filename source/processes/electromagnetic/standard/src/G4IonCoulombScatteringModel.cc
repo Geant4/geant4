@@ -144,8 +144,6 @@ G4double G4IonCoulombScatteringModel::ComputeCrossSectionPerAtom(
   ioncross->SetupKinematic(kinEnergy, tmass);
   ioncross->SetupTarget(Z, kinEnergy, heavycorr);
   cross = ioncross->NuclearCrossSection();
-
-  //cout<< "..........cross "<<G4BestUnit(cross,"Surface") <<endl;
   return cross;
 }
 
@@ -158,9 +156,7 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
 			       G4double, G4double)
 {
   G4double kinEnergy = dp->GetKineticEnergy();
-	
   DefineMaterial(couple);
-
   SetupParticle(dp->GetDefinition());
 
   // Choose nucleus
@@ -171,38 +167,42 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
   ioncross->SetupKinematic(kinEnergy, mass2);
-
   ioncross->SetupTarget(currentElement->GetZ(), kinEnergy, heavycorr);
     
   //scattering angle, z1 == (1-cost)
   G4double z1 = ioncross->SampleCosineTheta(); 
   if(z1 > 2.0)      { z1 = 2.0; }
   else if(z1 < 0.0) { z1 = 0.0; }
-
+  /*
+  G4cout << "Sample: " << particle->GetParticleName() 
+	 << " mass(GeV)= " << mass/GeV 
+	 << " Ekin(MeV)= " << kinEnergy << " cost= " << 1. - z1 << G4endl; 
+  G4cout << "     Z= " << iz << " A= " << ia 
+	 << " mass(GeV)= " << mass2/GeV << G4endl;
+  */
   G4double cost = 1.0 - z1;
   G4double sint = sqrt(z1*(1.0 + cost));
   G4double phi  = twopi * G4UniformRand();
 
   // kinematics in the Lab system
-  G4double ptot = dp->GetTotalMomentum();
-  G4double e1   = dp->GetTotalEnergy();
+  G4double ptot = sqrt(kinEnergy*(kinEnergy + 2.0*mass));
+  G4double e1   = mass + kinEnergy;
   
   // Lab. system kinematics along projectile direction
-  G4LorentzVector v0 = G4LorentzVector(0, 0, ptot, e1);
-  G4double bet  = ptot/(e1 + mass2);
-  G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
-
+  G4LorentzVector v0 = G4LorentzVector(0, 0, ptot, e1+mass2);
+  G4LorentzVector v1 = G4LorentzVector(0, 0, ptot, e1);
+  G4ThreeVector bst = v0.boostVector();
+  v1.boost(-bst);
   // CM projectile
-  G4double momCM = gam*(ptot - bet*e1); 
-  G4double eCM   = gam*(e1 - bet*ptot); 
+  G4double momCM = v1.pz(); 
   
   // Momentum after scattering of incident particle
-  G4double pxCM = momCM*sint*cos(phi);
-  G4double pyCM = momCM*sint*sin(phi);
-  G4double pzCM = momCM*cost;
+  v1.setX(momCM*sint*cos(phi));
+  v1.setY(momCM*sint*sin(phi));
+  v1.setZ(momCM*cost);
 
   // CM--->Lab
-  G4LorentzVector v1(pxCM , pyCM, gam*(pzCM + bet*eCM), gam*(eCM + bet*pzCM));
+  v1.boost(bst);
 
   // Rotate to global system
   G4ThreeVector dir = dp->GetMomentumDirection(); 
@@ -213,7 +213,7 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   
   // recoil v0 energy is kinetic
   v0 -= v1; 
-  G4double trec = v0.e();
+  G4double trec = std::max(v0.e() - mass2, 0.0);
   G4double edep = 0.0;
 
   G4double tcut = recoilThreshold;
@@ -241,6 +241,8 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
     finalT = 0.0;
   } 
   edep = std::max(edep, 0.0);
+  //G4cout << "Efinal(MeV)= " << finalT << " Edep(MeV)= " << edep 
+  //	 << " Trec(MeV)= " << trec << G4endl;
   fParticleChange->SetProposedKineticEnergy(finalT);
   fParticleChange->ProposeLocalEnergyDeposit(edep);
 }

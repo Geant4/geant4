@@ -83,8 +83,8 @@ class G4CRMCModel : public G4HadronicInteraction {
     G4HadFinalState* ApplyYourself( const G4HadProjectile &theProjectile, G4Nucleus &theNucleus );
     G4ParticleDefinition* GetParticleDefinition( long particle_id );
   private: 
-    G4int operator==( G4CRMCModel& right );
-    G4int operator!=( G4CRMCModel& right );
+    G4bool operator==( G4CRMCModel& right );
+    G4bool operator!=( G4CRMCModel& right );
     void WelcomeMessage () const;
     G4int CurrentEvent;
     G4int verbose;

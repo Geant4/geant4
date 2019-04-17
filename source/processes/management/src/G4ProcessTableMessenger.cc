@@ -79,7 +79,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   listCmd = new G4UIcmdWithAString("/process/list",this);
   listCmd->SetGuidance("List up process names");
   listCmd->SetGuidance("  list [type] ");
-  listCmd->SetGuidance("    type: process type [all:for all proceeses]");
+  listCmd->SetGuidance("    type: process type [all:for all processes]");
   listCmd->SetParameterName("type", true);
   listCmd->SetDefaultValue("all");
   SetNumberOfProcessType();
@@ -108,7 +108,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   procVerboseCmd->SetGuidance("    level: verbose level ");
   procVerboseCmd->SetGuidance("    name : process name ");
   procVerboseCmd->SetGuidance("    type : process type ");
-  procVerboseCmd->SetGuidance("       [all] for all proceeses ");
+  procVerboseCmd->SetGuidance("       [all] for all processes ");
   G4UIparameter* param = new G4UIparameter("verbose",'i',false);
   procVerboseCmd->SetParameter(param);
   param = new G4UIparameter("type",'s',true);

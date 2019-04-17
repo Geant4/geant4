@@ -353,8 +353,9 @@ G4GDMLWriteStructure::GetBorderSurface(const G4VPhysicalVolume* const pvol)
     for (pos = btable->begin(); pos != btable->end(); pos++)
     {
       if (pvol == (*pos)->GetVolume1())  // just the first in the couple 
-      {                                  // is enough
-        surf = *pos; break;
+      {                                  // could be enough?
+        surf = *pos; // break;
+        BorderSurfaceCache(surf);
       }
     }
   }
@@ -542,7 +543,8 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
                    
 	       PhysvolWrite(volumeElement,physvol,invR*P*daughterR,ModuleName);
 	     }
-       BorderSurfaceCache(GetBorderSurface(physvol));
+       //       BorderSurfaceCache(GetBorderSurface(physvol));
+       GetBorderSurface(physvol);
      }
 
    if (cexport)  { ExportEnergyCuts(volumePtr); }

@@ -50,8 +50,8 @@ class G4PartonPair
 
   private:
     G4PartonPair(const G4PartonPair &right);
-    int operator==(const G4PartonPair &right) const;
-    int operator!=(const G4PartonPair &right) const;
+    G4bool operator==(const G4PartonPair &right) const;
+    G4bool operator!=(const G4PartonPair &right) const;
 
   public:
     void  SetPartons(G4Parton* P1, G4Parton* P2);

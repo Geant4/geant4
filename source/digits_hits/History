@@ -16,6 +16,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 13th, 2019 M. Asai (digits_hits-V10-04-13)
+- Defining unit categories for UI commands that take units. Co-working with
+  intercoms-V10-05-02.
+
+March 10th, 2019 M. Asai
+- G4SDManager, G4VSDFilter :
+    Cleanly deleting all the G4VSDFilter objects at the end of program.
+
+January 31st, 2019 I. Hrivnacova
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+December 20th, 2018 G. Cosmo
+- Fixed shadowing compilation warning in G4ScoringBox and G4ScoringCylinder.
+
 October 30th, 2018 I. Hrivnacova (digits_hits-V10-04-11,12)
 - Removed the dependence on analysis:
   Introduced a new interface class, G4VScoreNtupleWriter, in 

@@ -141,21 +141,21 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   evModCmd->SetGuidance("The value N may affect on the computing performance in particular");
   evModCmd->SetGuidance("if N is too small compared to the total number of events.");
   evModCmd->SetGuidance("The second parameter seedOnce specifies how frequently each worker");
-  evModCmd->SetGuidance("thread is seeded by the random number sequence contrally managed");
+  evModCmd->SetGuidance("thread is seeded by the random number sequence centrally managed");
   evModCmd->SetGuidance("by the master G4MTRunManager.");
   evModCmd->SetGuidance(" - If seedOnce is set to 0 (default), seeds that are centrally managed");
   evModCmd->SetGuidance("   by G4MTRunManager are set for every event of every worker thread.");
-  evModCmd->SetGuidance("   This option guarantees event reproducability regardless of number");
+  evModCmd->SetGuidance("   This option guarantees event reproducibility regardless of number");
   evModCmd->SetGuidance("   of threads.");
   evModCmd->SetGuidance(" - If seedOnce is set to 1, seeds are set only once for the first");
-  evModCmd->SetGuidance("   event of each run of each worker thread. Event reproducability is");
+  evModCmd->SetGuidance("   event of each run of each worker thread. Event reproducibility is");
   evModCmd->SetGuidance("   guaranteed only if the same number of worker threads are used.");
   evModCmd->SetGuidance("   On the other hand, this option offers better computing performance");
   evModCmd->SetGuidance("   in particular for applications with relatively small primary");
   evModCmd->SetGuidance("   particle energy and large number of events."); 
   evModCmd->SetGuidance(" - If seedOnce is set to 2, seeds are set only for the first event of");
   evModCmd->SetGuidance("   group of N events. This option is reserved for the future use when");
-  evModCmd->SetGuidance("   Geant4 allows number of threads to be dynatically changed during an");
+  evModCmd->SetGuidance("   Geant4 allows number of threads to be dynamically changed during an");
   evModCmd->SetGuidance("   event loop.");
   evModCmd->SetGuidance("This command is valid only for multi-threaded mode.");
   evModCmd->SetGuidance("This command is ignored if it is issued in sequential mode.");
@@ -237,7 +237,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   physCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   constScoreCmd = new G4UIcmdWithoutParameter("/run/constructScoringWorlds",this);
-  constScoreCmd->SetGuidance("Constrct scoring parallel world(s) if defined.");
+  constScoreCmd->SetGuidance("Construct scoring parallel world(s) if defined.");
   constScoreCmd->SetGuidance("This command is not mandatory, but automatically called when a run starts.");
   constScoreCmd->SetGuidance("But the user may use this to visualize the scoring world(s) before a run to start.");
   constScoreCmd->AvailableForStates(G4State_Idle);

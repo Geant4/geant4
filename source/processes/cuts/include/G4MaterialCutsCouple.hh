@@ -63,8 +63,8 @@ class G4MaterialCutsCouple
   virtual ~G4MaterialCutsCouple();
 
   // equal opperators
-  G4int operator==(const G4MaterialCutsCouple &right) const;
-  G4int operator!=(const G4MaterialCutsCouple &right) const;
+  G4bool operator==(const G4MaterialCutsCouple &right) const;
+  G4bool operator!=(const G4MaterialCutsCouple &right) const;
 
   public: // with description
   void              SetMaterial(const G4Material*);
@@ -127,13 +127,13 @@ inline
 { return fCuts; }
 
 inline
- G4int G4MaterialCutsCouple::operator==(const G4MaterialCutsCouple &right) const
+ G4bool G4MaterialCutsCouple::operator==(const G4MaterialCutsCouple &right) const
 {
   return (this == &right);
 }
 
 inline
- G4int G4MaterialCutsCouple::operator!=(const G4MaterialCutsCouple &right) const
+ G4bool G4MaterialCutsCouple::operator!=(const G4MaterialCutsCouple &right) const
 {
   return (this !=  &right);
 }

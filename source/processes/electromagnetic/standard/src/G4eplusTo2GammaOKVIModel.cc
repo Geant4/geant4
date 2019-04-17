@@ -92,15 +92,16 @@ void G4eplusTo2GammaOKVIModel::Initialise(const G4ParticleDefinition* p,
   f3GModel->Initialise(p, cuts); 
   fCuts = &cuts;
   fGammaTh = G4EmParameters::Instance()->LowestTripletEnergy();
+  f3GModel->SetDelta(fDelta);
   
   if(IsMaster()) {
     if(!fCrossSection) {
-      f3GModel->SetDelta(fDelta);
       G4double emin = 10*eV;
       G4double emax = 100*TeV;
       G4int nbins = 20*G4lrint(std::log10(emax/emin));
-      fCrossSection = new G4PhysicsLogVector(emin, emax, nbins);
-      f3GProbability= new G4PhysicsLogVector(emin, emax, nbins);
+      fCrossSection   = new G4PhysicsLogVector(emin, emax, nbins);
+      fCrossSection3G = new G4PhysicsLogVector(emin, emax, nbins);
+      f3GProbability  = new G4PhysicsLogVector(emin, emax, nbins);
       fCrossSection->SetSpline(true);
       fCrossSection3G->SetSpline(true);
       f3GProbability->SetSpline(true);

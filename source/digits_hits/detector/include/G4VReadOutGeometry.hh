@@ -46,8 +46,8 @@ class G4VReadOutGeometry
       G4VReadOutGeometry(G4String);
       virtual ~G4VReadOutGeometry();
 
-      G4int operator==(const G4VReadOutGeometry &right) const;
-      G4int operator!=(const G4VReadOutGeometry &right) const;
+      G4bool operator==(const G4VReadOutGeometry &right) const;
+      G4bool operator!=(const G4VReadOutGeometry &right) const;
 
       // buildROGeomety must be invoked to Build (ie Build() method)
       // the ROGeometry. It sets up in addition the needed

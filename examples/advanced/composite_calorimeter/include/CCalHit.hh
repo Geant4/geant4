@@ -59,7 +59,7 @@ public:
   ~CCalHit();
   CCalHit(const CCalHit &right);
   const CCalHit& operator=(const CCalHit &right);
-  int operator==(const CCalHit &){return 0;}
+  G4bool operator==(const CCalHit &){return 0;}
   
   void print();
   

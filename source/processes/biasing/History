@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 11th, 2019   Gabriele Cosmo (procbiasing-V10-04-04)
+- Fixed typos in printouts and comments.
+
 May 17th, 2018   Jonathan Madsen (procbiasing-V10-04-03)
 - updated "thread-local-static-var" model to
   "function-returning-thread-local-static-reference" model

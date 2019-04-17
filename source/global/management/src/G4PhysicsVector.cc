@@ -98,14 +98,14 @@ G4PhysicsVector& G4PhysicsVector::operator=(const G4PhysicsVector& right)
 
 // --------------------------------------------------------------
 
-G4int G4PhysicsVector::operator==(const G4PhysicsVector &right) const
+G4bool G4PhysicsVector::operator==(const G4PhysicsVector &right) const
 {
   return (this == &right);
 }
 
 // --------------------------------------------------------------
 
-G4int G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
+G4bool G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
 {
   return (this != &right);
 }

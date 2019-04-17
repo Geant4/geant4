@@ -35,7 +35,7 @@ class G4Step;
 // class description:
 //
 //  This is the abstract base class of a filter to be associated with a
-// sensitive detector. 
+// sensitive detector or a primitive scorer. 
 
 class G4VSDFilter 
 {

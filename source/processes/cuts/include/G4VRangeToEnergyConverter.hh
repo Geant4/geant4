@@ -70,8 +70,8 @@ class G4VRangeToEnergyConverter
   virtual ~G4VRangeToEnergyConverter();
 
   // equal opperators
-  G4int operator==(const G4VRangeToEnergyConverter &right) const;
-  G4int operator!=(const G4VRangeToEnergyConverter &right) const;
+  G4bool operator==(const G4VRangeToEnergyConverter &right) const;
+  G4bool operator!=(const G4VRangeToEnergyConverter &right) const;
 
   public: // with description 
   // calculate energy cut from given range cut for the material

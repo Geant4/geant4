@@ -49,7 +49,7 @@ public:
                         const SensitiveDetectorHit &right);
     const SensitiveDetectorHit& operator=(
                         const SensitiveDetectorHit &right);
-    int operator==(const SensitiveDetectorHit &right) const;
+    G4bool operator==(const SensitiveDetectorHit &right) const;
     
     inline void *operator new(size_t);
     inline void operator delete(void *aHit);

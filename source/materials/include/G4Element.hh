@@ -222,8 +222,8 @@ private:
 
   G4Element(G4Element&) = delete;
   const G4Element & operator=(const G4Element&) = delete;
-  G4int operator==(const G4Element&) const = delete;
-  G4int operator!=(const G4Element&) const = delete;
+  G4bool operator==(const G4Element&) const = delete;
+  G4bool operator!=(const G4Element&) const = delete;
 
   //
   // Basic data members (which define an Element)

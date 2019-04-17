@@ -257,7 +257,7 @@ G4PhotoElectricAngularGeneratorPolarized::DSigmaKshellGavrila1959(
                + (1-sqrtOneBeta2)/(4*beta2*oneBetaCosTheta*oneBetaCosTheta) * (beta/oneBeta2 - 2/oneBeta2 * cosTheta * cosPhi2 +
                (1-sqrtOneBeta2)/oneBeta2_to_3_2 * cosTheta - beta * (1-sqrtOneBeta2)/oneBeta2_to_3_2);
 
-  dsigma = ( firstTerm*(1-pi*fine_structure_const/beta) + secondTerm*(pi*fine_structure_const) );
+  dsigma = ( firstTerm*(1-pi*fine_structure_const/beta) + secondTerm*(pi*fine_structure_const) )*std::sin(theta);
 
   return dsigma;
 }

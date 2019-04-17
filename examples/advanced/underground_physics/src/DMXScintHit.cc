@@ -90,9 +90,9 @@ const DMXScintHit& DMXScintHit::operator=(const DMXScintHit& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int DMXScintHit::operator==(const DMXScintHit& right) const
+G4bool DMXScintHit::operator==(const DMXScintHit& right) const
 {
-  return (this==&right) ? 1 : 0;
+  return (this==&right) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

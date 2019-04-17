@@ -1025,7 +1025,7 @@ G4FFG_DATA_FUNCTIONENTER__
 //        // issue /run/particle/addProcManage
 //        G4UImanager::GetUIpointer()->ApplyCommand(cmdAdd);
 //
-//        // retreive  /control/verbose
+//        // retrieve  /control/verbose
 //        G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
 //    }
 

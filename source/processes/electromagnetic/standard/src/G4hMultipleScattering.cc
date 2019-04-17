@@ -84,8 +84,8 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 void G4hMultipleScattering::StreamProcessInfo(std::ostream& out) const
 {
   out << "      RangeFactor= " << RangeFactor()
-      << ", stepLimitType: " << StepLimitType()
-      << ", latDisplacement: " << LateralDisplasmentFlag();
+      << ", stepLimType: " << StepLimitType()
+      << ", latDisp: " << LateralDisplasmentFlag();
   if(StepLimitType() == fUseDistanceToBoundary) {
     out  << ", skin= " << Skin() << ", geomFactor= " << GeomFactor();
   }  

@@ -41,12 +41,12 @@ G4UIaliasList::~G4UIaliasList()
     delete value[i]; }
 }
 
-G4int G4UIaliasList::operator==(const G4UIaliasList &right) const
+G4bool G4UIaliasList::operator==(const G4UIaliasList &right) const
 {
   return ( this == &right );
 }
 
-G4int G4UIaliasList::operator!=(const G4UIaliasList &right) const
+G4bool G4UIaliasList::operator!=(const G4UIaliasList &right) const
 {
   return ( this != &right );
 }

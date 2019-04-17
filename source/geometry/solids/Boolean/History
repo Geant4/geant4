@@ -461,7 +461,7 @@ committal in the CVS repository !
 
  Aug 13  2001  Vladimir Grichine    geom-solid-bool-V03-02-00
   - Introduced G4BOOLDEBUG flag and replaced G4Exception statements with
-    simple warnings to G4cerr for rare occurences of anomalous conditions.
+    simple warnings to G4cerr for rare occurrences of anomalous conditions.
 
  May 30  2001  Vladimir Grichine    geom-solid-bool-V03-01-00
   - G4IntersectionSolid: fix in DistanceToIn(p,v) resolving bug observed

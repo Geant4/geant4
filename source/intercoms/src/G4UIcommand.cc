@@ -109,12 +109,12 @@ G4UIcommand::~G4UIcommand()
   parameter.clear();
 }
 
-G4int G4UIcommand::operator==(const G4UIcommand &right) const
+G4bool G4UIcommand::operator==(const G4UIcommand &right) const
 {
   return ( commandPath == right.GetCommandPath() );
 }
 
-G4int G4UIcommand::operator!=(const G4UIcommand &right) const
+G4bool G4UIcommand::operator!=(const G4UIcommand &right) const
 {
   return ( commandPath != right.GetCommandPath() );
 }
@@ -662,8 +662,8 @@ RangeCheck(const char* t) {
         switch ( type ) {
             case 'D':  is >> newVal[i].D;  break;
             case 'I':  is >> newVal[i].I;  break;
-            case 'S':
-            case 'B':
+            case 'S':  is >> newVal[i].S;  break;
+            case 'B':  is >> newVal[i].C;  break;
             default:  ;
         }
    }

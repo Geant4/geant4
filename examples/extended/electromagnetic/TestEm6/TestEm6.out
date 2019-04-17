@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 **************************************************************
- Geant4 version Name: geant4-10-05-ref-00    (7-December-2018)
+ Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -90,15 +86,15 @@ G4eeToHadronsModel::Initialise:
 CM System: emin(MeV)= 1019.46 epeak(MeV)= 1019.46 emax(MeV)= 4521
 
 GammaToMuPair:  gamma->mu+mu- Bethe Heitler process, SubType= 15
-        good cross section parametrization from 422.633 MeV to 1e+12 GeV for all Z.
+        good cross section parametrization from 211.317 MeV to 1e+12 GeV for all Z.
 
 AnnihiToMuPair:  e+e->mu+mu- annihilation, atomic e- at rest, SubType=.6
         threshold at 43.6931 GeV good description up to 1000 TeV for all Z.
 
-ee2hadr:   for  e+, integral: 1     SubType= 7  BuildTable= 0
+ee2hadr:  for e+, integral:1  SubType=7 BuildTable=0
       e+ annihilation into hadrons active from 76.2411 GeV to 19999.5 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         eeToHadrons :  Emin=        0 eV    Emax=      100 TeV
+         eeToHadrons : Emin=    0 eV  Emax=  100 TeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <Iron> world volume
  This region is in the mass world.
@@ -194,7 +190,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.000000s Real=0.001746s Sys=0.000000s
+  User=0.000000s Real=0.001630s Sys=0.000000s
 
  Number of process calls --->	GammaToMuPair : 5... write Root file : testem6_0.root - done
 ... close Root file : testem6_0.root - done
@@ -300,7 +296,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.010000s Real=0.004579s Sys=0.000000s
+  User=0.000000s Real=0.000482s Sys=0.000000s
 
  Number of process calls --->	ee2hadr : 5	AnnihiToMuPair : 1... write Root file : testem6_1.root - done
 ... close Root file : testem6_1.root - done

@@ -25,6 +25,9 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+21 January 2019  John Allison  (visman-V10-04-29)
+- Pick up default number of line-segments-per-circle from G4Polyhedron.
+
 14 November 2018  John Allison  (visman-V10-04-28)
 - G4VisCommandsSceneAdd.cc: /vis/scene/add/userAction:
   o Fix bug whereby success was branded unsuccessful when verbosity <= warnings.

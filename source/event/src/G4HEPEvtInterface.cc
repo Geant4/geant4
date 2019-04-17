@@ -56,23 +56,7 @@ G4HEPEvtInterface::G4HEPEvtInterface(const char* evfile, G4int vl)
   particle_time = 0.0;
 
 }
-/*************************************
-G4HEPEvtInterface::G4HEPEvtInterface(G4String evfile)
-{
-  const char* fn = evfile.data();
-  inputFile.open((char*)fn);
-  if (inputFile.is_open()) {
-    fileName = evfile;
-  }
-  else {
-    G4Exception("G4HEPEvtInterface::G4HEPEvtInterface","Event0201",FatalException,
-    "G4HEPEvtInterface:: cannot open file.");
-  }
-  G4ThreeVector zero;
-  particle_position = zero;
-  particle_time = 0.0;
-}
-**************************************/
+
 G4HEPEvtInterface::~G4HEPEvtInterface()
 {;}
 
@@ -89,7 +73,7 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
   if( inputFile.eof() ) 
   {
     G4Exception("G4HEPEvtInterface::GeneratePrimaryVertex","Event0202",
-    JustWarning,"End-Of-File : HEPEvt input file");
+    RunMustBeAborted,"End-Of-File : HEPEvt input file -- no more event to read!");
     return;
   }
 
@@ -113,8 +97,8 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
        >> PHEP1 >> PHEP2 >> PHEP3 >> PHEP5;
     if( inputFile.eof() ) 
     {
-      G4Exception("G4HEPEvtInterface::GeneratePrimaryVertex","Event0202",
-        FatalException,"Unexpected End-Of-File : HEPEvt input file");
+      G4Exception("G4HEPEvtInterface::GeneratePrimaryVertex","Event0203",
+        FatalException,"Unexpected End-Of-File in the middle of an event");
     }
     if(vLevel > 1)
     {

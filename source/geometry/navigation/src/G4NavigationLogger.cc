@@ -381,7 +381,7 @@ G4NavigationLogger::CheckDaughterEntryPoint(const G4VSolid* sampleSolid,
     {
       msg << "NearMiss> Intersection to Daughter volume is in extension past the"
           <<   " current exit point of the mother volume." << G4endl;
-      msg << "          This is not an error - just an unusual occurence,"
+      msg << "          This is not an error - just an unusual occurrence,"
           <<   " possible in the case of concave volume. " << G4endl;
     }
     msg << "---- Information about intersection with daughter, mother: "

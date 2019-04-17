@@ -16,9 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 1, 2019 - G.Cosmo (geomnav-V10-04-13)
+------------------------
+- Protected report for looping particles under verbosity flag.
+
+March 11, 2019 - G.Cosmo
+------------------------
+- Fixed typos in printouts in G4NavigationLogger.
+
 September 26, 2018 - D.Sorokin (geomnav-V10-04-12)
------------------------
-- Notify G4ChordFinder at the beginning of each ComputeStep call. 
+------------------------------
+- Notify G4ChordFinder at the beginning of each ComputeStep() call. 
 
 June 15, 2018 - G.Cosmo (geomnav-V10-04-11)
 -----------------------

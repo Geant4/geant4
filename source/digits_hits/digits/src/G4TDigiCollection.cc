@@ -44,6 +44,6 @@ G4DigiCollection::G4DigiCollection(G4String detName,G4String colNam)
 G4DigiCollection::~G4DigiCollection()
 { if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>  ;;}
 
-G4int G4DigiCollection::operator==(const G4DigiCollection &right) const
+G4bool G4DigiCollection::operator==(const G4DigiCollection &right) const
 { if (!aDCAllocator_G4MT_TLS_()) aDCAllocator_G4MT_TLS_() = new G4Allocator<G4DigiCollection>  ; return (collectionName==right.collectionName); }
 

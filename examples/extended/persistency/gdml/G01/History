@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 1st, 2019 Gabriele Cosmo G01-V10-04-00
+- Migrated example to multi-threading, to test MT in writing.
+
+March 4th, 2019 Gabriele Cosmo
+- Added block.gdml sample demonstrating nested assemblies.
+
 March 23rd, 2017 Gabriele Cosmo G01-V10-03-01
 - Updated setup for visualization in main program.
 
