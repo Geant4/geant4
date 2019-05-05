@@ -43,21 +43,6 @@
 #include "G4Exp.hh"
 #include "G4RandomDirection.hh"
 
-class SumCoulombEnergy : public std::binary_function<G4double,G4double,G4double>
-{
-public:
-  SumCoulombEnergy() : total(0.0) {}
-  G4double operator() (G4double& , G4StatMFFragment*& frag)
-  { 
-      total += frag->GetCoulombEnergy();
-      return total;
-  }
-    
-  G4double GetTotal() { return total; }
-public:
-  G4double total;  
-};
-
 G4StatMFChannel::G4StatMFChannel() : 
   _NumOfNeutralFragments(0), 
   _NumOfChargedFragments(0)
@@ -103,7 +88,10 @@ void G4StatMFChannel::CreateFragment(G4int A, G4int Z)
 G4double G4StatMFChannel::GetFragmentsCoulombEnergy(void)
 {
   G4double Coulomb = std::accumulate(_theFragments.begin(),_theFragments.end(),
-				     0.0,SumCoulombEnergy());
+                                    0.0,
+                                    [](const G4double& running_total, G4StatMFFragment*& fragment) {
+                                        return running_total + fragment->GetCoulombEnergy(); }
+                                    );
   //      G4double Coulomb = 0.0;
   //      for (unsigned int i = 0;i < _theFragments.size(); i++)
   //  	Coulomb += _theFragments[i]->GetCoulombEnergy();

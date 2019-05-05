@@ -115,7 +115,10 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
   // W is the total probability
   W = std::accumulate(_ThePartitionManagerVector.begin(),
 		      _ThePartitionManagerVector.end(),
-		      W, SumProbabilities());
+		      W,
+		      [](const G4double& running_total, G4StatMFMicroManager*& manager) {
+		         return running_total + manager->GetProbability();
+		      });
   
   // Normalization of statistical weights
   for (it =  _ThePartitionManagerVector.begin(); it !=  _ThePartitionManagerVector.end(); ++it) 

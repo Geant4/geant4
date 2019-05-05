@@ -383,7 +383,8 @@ G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
   //
   // First list: sort by total CPU time
   //
-  std::sort( stats.begin(), stats.end(), G4SmartVoxelStat::ByCpu() );
+  std::sort( stats.begin(), stats.end(), [](const G4SmartVoxelStat& a, const G4SmartVoxelStat& b){
+      return a.GetTotalTime() > b.GetTotalTime(); });
          
   G4int nPrint = nStat > 10 ? 10 : nStat;
 
@@ -424,7 +425,9 @@ G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
   //
   // Second list: sort by memory use
   //
-  std::sort( stats.begin(), stats.end(), G4SmartVoxelStat::ByMemory() );
+  std::sort( stats.begin(), stats.end(), [](const G4SmartVoxelStat& a, const G4SmartVoxelStat& b){
+      return a.GetMemoryUse() > b.GetMemoryUse();
+    } );
  
   if (nPrint)
   {

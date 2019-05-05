@@ -41,7 +41,6 @@
 #define G4SmartVoxelStat_hh
 
 #include "G4Types.hh"
-#include <functional>
 
 class G4LogicalVolume;
 class G4SmartVoxelHeader;
@@ -97,32 +96,7 @@ class G4SmartVoxelStat
     G4long heads;
     G4long nodes;
     G4long pointers;
-  
-  
-  public:
-  
-    //
-    // Functor objects for sorting
-    //
-    struct ByCpu
-      : public std::binary_function< const G4SmartVoxelStat,
-                                     const G4SmartVoxelStat, G4bool >
-    {
-      G4bool operator()( const G4SmartVoxelStat &a, const G4SmartVoxelStat &b )
-      {
-        return a.GetTotalTime() > b.GetTotalTime();
-      }
-    };
-  
-    struct ByMemory
-      : public std::binary_function< const G4SmartVoxelStat,
-                                     const G4SmartVoxelStat, G4bool >
-    {
-      G4bool operator()( const G4SmartVoxelStat &a, const G4SmartVoxelStat &b )
-      {
-        return a.GetMemoryUse() > b.GetMemoryUse();
-      }
-    };
+
 };
 
 #endif
