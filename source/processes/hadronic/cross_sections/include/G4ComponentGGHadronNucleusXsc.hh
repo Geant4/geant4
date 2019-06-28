@@ -33,6 +33,7 @@
 //
 // 04.09.18 V. Ivantchenko Major revision of interfaces and implementation
 // 01.10.18 V. Grichine strange hyperon xsc
+// 27.05.19 V. Ivantchenko Removed obsolete methods and members 
 
 #ifndef G4ComponentGGHadronNucleusXsc_h
 #define G4ComponentGGHadronNucleusXsc_h 1
@@ -51,8 +52,8 @@ class G4ComponentGGHadronNucleusXsc : public G4VComponentCrossSection
 {
 public:
 
-  G4ComponentGGHadronNucleusXsc();
-  virtual ~G4ComponentGGHadronNucleusXsc();
+  explicit G4ComponentGGHadronNucleusXsc();
+  ~G4ComponentGGHadronNucleusXsc() final;
 
   static const char* Default_Name() { return "Glauber-Gribov"; }
 
@@ -97,10 +98,6 @@ public:
   G4double GetProductionIsotopeCrossSection(const G4ParticleDefinition* aParticle,
 					    G4double kinEnergy, 
 					    G4int Z, G4int A);
-   
-  G4bool IsIsoApplicable(const G4DynamicParticle* aDP, G4int Z, G4int A, 
-			 const G4Element* elm = nullptr,
-			 const G4Material* mat = nullptr);
 
   G4double GetRatioSD(const G4DynamicParticle*, G4int At, G4int Zt);
   G4double GetRatioQE(const G4DynamicParticle*, G4int At, G4int Zt);
@@ -116,12 +113,6 @@ public:
   G4double GetHNinelasticXsc(const G4DynamicParticle*, const G4Element*);
   G4double GetHNinelasticXsc(const G4DynamicParticle*, G4int At, G4int Zt);
   G4double GetHNinelasticXscVU(const G4DynamicParticle*, G4int At, G4int Zt);
-
-  G4double CalculateEcmValue (G4double , G4double, G4double); 
-  G4double CalcMandelstamS(G4double , G4double , G4double);
-
-  G4double GetNucleusRadius(const G4DynamicParticle*, const G4Element*);
-  G4double GetNucleusRadius(G4int At);
 
   void Description(std::ostream&) const final;
 
@@ -140,16 +131,11 @@ public:
   inline G4double GetInelasticGlauberGribovXsc() const   { return fInelasticXsc; }; 
   inline G4double GetProductionGlauberGribovXsc() const  { return fProductionXsc; }; 
   inline G4double GetDiffractionGlauberGribovXsc() const { return fDiffractionXsc; }; 
-  inline G4double GetRadiusConst() const                 { return fRadiusConst; }; 
-  inline void     SetEnergyLowerLimit(G4double E)        { fLowerLimit=E; };
 
   inline G4double GetParticleBarCorTot(const G4ParticleDefinition* theParticle, G4int Z);
   inline G4double GetParticleBarCorIn(const G4ParticleDefinition* theParticle, G4int Z);
 
 private:
-
-  G4double fLowerLimit; 
-  G4double fRadiusConst;
 
   static const G4double fNeutronBarCorrectionTot[93];
   static const G4double fNeutronBarCorrectionIn[93];
@@ -165,6 +151,7 @@ private:
 
   G4double fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc, fDiffractionXsc;
   G4double fAxsc2piR2, fModelInLog;
+  G4double fEnergy; //Cache
  
   const G4ParticleDefinition* theGamma;
   const G4ParticleDefinition* theProton;
@@ -177,28 +164,11 @@ private:
   const G4ParticleDefinition* theKMinus;
   const G4ParticleDefinition* theK0S;
   const G4ParticleDefinition* theK0L;
-  // strange hyperons
-  const G4ParticleDefinition* theL;
-  const G4ParticleDefinition* theAntiL;
-  const G4ParticleDefinition* theSPlus;
-  const G4ParticleDefinition* theASPlus;
-  const G4ParticleDefinition* theSMinus;
-  const G4ParticleDefinition* theASMinus;
-  const G4ParticleDefinition* theS0;
-  const G4ParticleDefinition* theAS0;
-  const G4ParticleDefinition* theXiMinus;
-  const G4ParticleDefinition* theXi0;
-  const G4ParticleDefinition* theAXiMinus;
-  const G4ParticleDefinition* theAXi0;
-  const G4ParticleDefinition* theOmega;
-  const G4ParticleDefinition* theAOmega;
 
   G4HadronNucleonXsc* hnXsc;
-  G4Pow* g4calc;
 
   // Cache
   const G4ParticleDefinition* fParticle;
-  G4double fEnergy;
   G4int fZ, fA;
 
 };

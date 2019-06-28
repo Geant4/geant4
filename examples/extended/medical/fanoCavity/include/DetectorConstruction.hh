@@ -34,7 +34,6 @@
 #define DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
-#include "G4NistManager.hh"
 #include "globals.hh"
 
 class G4VPhysicalVolume;
@@ -53,17 +52,14 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
      void SetWallThickness   (G4double);
-     void SetWallMaterial    (G4String);
+     void SetWallMaterial    (const G4String&);
        
      void SetCavityThickness (G4double);
      void SetCavityRadius    (G4double);           
-     void SetCavityMaterial  (G4String);
+     void SetCavityMaterial  (const G4String&);
           
      virtual G4VPhysicalVolume* Construct();
-     void               UpdateGeometry();
      
-  public:
-    
      G4double     GetWallThickness()   {return fWallThickness;};
      G4double     GetWallRadius()      {return fWallRadius;};           
      G4Material*  GetWallMaterial()    {return fWallMaterial;};
@@ -79,6 +75,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void         PrintParameters();
                        
   private:
+
+     void         DefineMaterials();
    
      G4double            fWallThickness;
      G4double            fWallRadius;     
@@ -93,11 +91,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4double            fTotalThickness;
 
      DetectorMessenger*  fDetectorMessenger;
-
-  private:
-    
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

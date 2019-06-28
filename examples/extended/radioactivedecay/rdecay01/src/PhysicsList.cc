@@ -27,15 +27,13 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
 #include "G4UnitsTable.hh"
 #include "G4ParticleTypes.hh"
 #include "G4IonConstructor.hh"
 #include "G4PhysicsListHelper.hh"
-#include "G4RadioactiveDecay.hh"
+#include "G4Radioactivation.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NuclideTable.hh"
 #include "G4LossTableManager.hh"
@@ -44,7 +42,6 @@
 #include "G4DeexPrecoParameters.hh"
 #include "G4NuclideTable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
 : G4VUserPhysicsList()
@@ -75,12 +72,10 @@ PhysicsList::PhysicsList()
                 /std::log(2.));
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::~PhysicsList()
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
@@ -106,13 +101,12 @@ void PhysicsList::ConstructParticle()
   iConstructor.ConstructParticle();  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
 
-  G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
+  G4Radioactivation* radioactiveDecay = new G4Radioactivation();
 
   G4bool ARMflag = false;
   radioactiveDecay->SetARM(ARMflag);        //Atomic Rearangement
@@ -139,11 +133,9 @@ void PhysicsList::ConstructProcess()
   G4cout << "\n  Set atomic relaxation mode " << ARMflag << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCuts()
 {
   SetCutsWithDefault();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

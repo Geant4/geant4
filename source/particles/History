@@ -16,17 +16,29 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- 09 April 2019 Gabriele Cosmo (particles-V10-04-13)
+- 24 May 2019 Vladimir Ivanchenko (particles-V10-05-05)
+  G4DynamicParticle: make members of the class private; removed boolean
+    flag; alined class members 3-vectors, doubles, integer; added
+    initialisation of PDG code and polarization in all constructors;
+    added method SetPolarisation(const G4ThreeVector&); use CLHEP electron
+    mass; removed unused forward declarations and headers   
+
+- 09 April 2019 Gabriele Cosmo (particles-V10-05-04)
 - Fixed typo in G4ElectronOccupancy::operator==().
 
-- 13 Mar 2019 Makoto Asai
+- 17 March 2019 Mihaly Novak (particles-V10-05-03)
+- G4DynamicParticle: functionality to provide log-kinetic energy value (computed 
+  only on demand if its stored value is not up-to-date with the kinetic energy).
+
+- 13 Mar 2019 Makoto Asai (particles-V10-05-02)
 - G4NuclideTableMessenger.cc : fixing a typo.
 
-- 31 Jan 2019 Ivana Hrivnacova
+- 31 Jan 2019 Ivana Hrivnacova (particles-V10-05-01)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
-- 14 Dec 2018 Makoto Asai
+- 14 Dec 2018 Makoto Asai (particles-V10-05-00)
 - G4PrimaryParticle.cc: Allowing absolute zero proper decay time.
+  Co-working with event-V10-05-00 and decay-V10-05-00.
 
 - 09 Nov 2018 Gabriele Cosmo (particles-V10-04-12)
 - G4PrimaryVertex: fixed typo in class description.

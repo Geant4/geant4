@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -82,15 +81,15 @@ public: //with description
   // Element-wise cross section
   virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z, 
-			     const G4Material* mat = 0);
+			     const G4Material* mat = nullptr);
 
   // Derived classes should implement this method if they provide isotope-wise 
   // cross sections.  Default arguments G4Element and G4Material are needed to 
   // access low-energy neutron cross sections, but are not required for others.
   virtual
   G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,    
-			 const G4Element* elm = 0,
-			 const G4Material* mat = 0);
+			 const G4Element* elm = nullptr,
+			 const G4Material* mat = nullptr);
 
   //============== GetCrossSection methods ===============================
 
@@ -107,7 +106,7 @@ public: //with description
 			       const G4Material* mat = nullptr);
 
   // The following two methods have default implementations which throw
-  // G4HadronicException.  Derived classes should implement only needed
+  // G4Exception.  Derived classes should implement only needed
   // methods, which are assumed to be called at run time.
 
   // Implement this method for element-wise cross section 
@@ -129,7 +128,8 @@ public: //with description
   // Implement this method if needed
   // This method is called for element-wise cross section
   // Default implementation assumes equal cross sections for all isotopes 
-  virtual const G4Isotope* SelectIsotope(const G4Element*, G4double kinEnergy);
+  virtual const G4Isotope* SelectIsotope(const G4Element*, G4double kinEnergy, 
+                                         G4double logE);
 
   // Implement this method if needed
   virtual

@@ -33,6 +33,10 @@
 #include "G4IonTable.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4NistManager.hh"
+#include "G4Material.hh"
+#include "G4Element.hh"
+#include "G4Isotope.hh"
+#include "G4ElementVector.hh"
 
 #include "G4MuonMinus.hh"
 #include "G4MuonPlus.hh"
@@ -41,7 +45,7 @@ using namespace std;
 using namespace CLHEP;
 
 G4MuNeutrinoNucleusTotXsc::G4MuNeutrinoNucleusTotXsc()
- : G4VCrossSectionDataSet("NuElectronTotXsc")
+ : G4VCrossSectionDataSet("NuMuNuclTotXsc")
 {
   fCofXsc = 1.e-38*cm2/GeV;
 
@@ -56,13 +60,17 @@ G4MuNeutrinoNucleusTotXsc::G4MuNeutrinoNucleusTotXsc()
   fCofS = 5.*fSin2tW*fSin2tW/9.;
   fCofL = 1. - fSin2tW + fCofS;
 
-  G4cout<<"fCosL = "<<fCofL<<", fCofS = "<<fCofS<<G4endl;
+  // G4cout<<"fCosL = "<<fCofL<<", fCofS = "<<fCofS<<G4endl;
 
   fCutEnergy = 0.; // default value
 
   fBiasingFactor = 1.; // default as physics
 
   fIndex = 50;
+
+  fTotXsc = 0.;
+  fCcTotRatio = 0.75; // from nc/cc~0.33 ratio
+  fCcFactor = fNcFactor = 1.;
 
   theMuonMinus = G4MuonMinus::MuonMinus(); 
   theMuonPlus  = G4MuonPlus::MuonPlus(); 
@@ -74,7 +82,7 @@ G4MuNeutrinoNucleusTotXsc::~G4MuNeutrinoNucleusTotXsc()
 //////////////////////////////////////////////////////
 
 G4bool 
-G4MuNeutrinoNucleusTotXsc::IsElementApplicable( const G4DynamicParticle* aPart, G4int, const G4Material*)
+G4MuNeutrinoNucleusTotXsc::IsIsoApplicable( const G4DynamicParticle* aPart, G4int, G4int, const G4Element*, const G4Material*)
 {
   G4bool result  = false;
   G4String pName = aPart->GetDefinition()->GetParticleName();
@@ -86,6 +94,43 @@ G4MuNeutrinoNucleusTotXsc::IsElementApplicable( const G4DynamicParticle* aPart, 
   return result;
 }
 
+//////////////////////////////////////
+
+G4double G4MuNeutrinoNucleusTotXsc::GetElementCrossSection(const G4DynamicParticle* part,
+					       G4int Z,    const G4Material* mat )
+{
+  G4int Zi(0);
+  size_t i(0), j(0);
+  const G4ElementVector* theElementVector = mat->GetElementVector();
+  
+  for ( i = 0; i < theElementVector->size(); ++i )
+  {
+    Zi = (*theElementVector)[i]->GetZasInt();
+    if( Zi == Z ) break;
+  }
+  const G4Element* elm = (*theElementVector)[i];
+  size_t nIso = elm->GetNumberOfIsotopes();    
+  G4double fact = 0.0;
+  G4double xsec = 0.0;
+  const G4Isotope* iso = nullptr;       
+  const G4IsotopeVector* isoVector = elm->GetIsotopeVector();
+  const G4double* abundVector = elm->GetRelativeAbundanceVector();
+
+  for (j = 0; j<nIso; ++j)
+  {
+    iso = (*isoVector)[j];
+    G4int A = iso->GetN();
+    
+    if( abundVector[j] > 0.0 && IsIsoApplicable(part, Z, A, elm, mat) )
+    {
+      fact += abundVector[j];
+      xsec += abundVector[j]*GetIsoCrossSection( part, Z, A, iso, elm, mat);
+    }
+  }
+  if( fact > 0.0) { xsec /= fact; }
+  return xsec;
+}
+
 ////////////////////////////////////////////////////
 //
 //
@@ -93,6 +138,9 @@ G4MuNeutrinoNucleusTotXsc::IsElementApplicable( const G4DynamicParticle* aPart, 
 G4double G4MuNeutrinoNucleusTotXsc::GetIsoCrossSection(const G4DynamicParticle* aPart, G4int, G4int A,  
 			      const G4Isotope*, const G4Element*, const G4Material* )
 {
+  fCcFactor   = fNcFactor = 1.;
+  fCcTotRatio = 0.25;
+
   G4double ccnuXsc, ccanuXsc, ncXsc, totXsc(0.);
 
   G4double energy  = aPart->GetTotalEnergy();
@@ -100,29 +148,46 @@ G4double G4MuNeutrinoNucleusTotXsc::GetIsoCrossSection(const G4DynamicParticle* 
 
   G4int index = GetEnergyIndex(energy);
 
+  if( index >= fIndex )
+  {
+    G4double pm = proton_mass_c2;
+    G4double s2 = 2.*energy*pm+pm*pm;
+    G4double aa = 1.;
+    G4double bb = 1.085;
+    G4double mw = 80.385*GeV;
+    fCcFactor   = bb/(1.+ aa*s2/mw/mw);
+
+    G4double mz = 91.1876*GeV;
+    fNcFactor   =  bb/(1.+ aa*s2/mz/mz);
+  }
   ccnuXsc  = GetNuMuTotCsXsc(index, energy);
+  ccnuXsc *= fCcFactor;
   ccanuXsc = GetANuMuTotCsXsc(index, energy);
+  ccanuXsc *= fCcFactor;
 
   if( pName == "nu_mu")
   {
     ncXsc = fCofL*ccnuXsc + fCofS*ccanuXsc;
+    ncXsc *= fNcFactor/fCcFactor;
     totXsc = ccnuXsc + ncXsc;
+    if( totXsc > 0.) fCcTotRatio = ccnuXsc/totXsc;
   }
   else if( pName == "anti_nu_mu")
   {
     ncXsc = fCofL*ccanuXsc + fCofS*ccnuXsc;
+    ncXsc *= fNcFactor/fCcFactor;
     totXsc = ccanuXsc + ncXsc;
+    if( totXsc > 0.) fCcTotRatio = ccanuXsc/totXsc;
   }
   else return totXsc;
 
-  // totXsc -= ncXsc; // to test experimentally available cc part
-
-  totXsc *= fCofXsc; //*energy;
-  totXsc *= energy; //  + 0.5*emass;
+  totXsc *= fCofXsc; 
+  totXsc *= energy; 
   totXsc *= A;  // incoherent sum over  all isotope nucleons
 
   totXsc *= fBiasingFactor; // biasing up, if set >1
 
+  fTotXsc = totXsc;
 
   return totXsc;
 }
@@ -156,7 +221,7 @@ G4double G4MuNeutrinoNucleusTotXsc::GetNuMuTotCsXsc(G4int index, G4double energy
 {
   G4double xsc(0.);
 
-  if( index <= 0 || energy < theMuonMinus->GetPDGMass() ) xsc = 0.;
+  if( index <= 0 || energy < theMuonMinus->GetPDGMass() ) xsc = fNuMuTotXsc[0];
   else if (index >= fIndex) xsc = fNuMuTotXsc[fIndex-1];
   else
   {
@@ -183,7 +248,7 @@ G4double G4MuNeutrinoNucleusTotXsc::GetANuMuTotCsXsc(G4int index, G4double energ
 {
   G4double xsc(0.);
 
-  if( index <= 0 || energy < theMuonPlus->GetPDGMass() ) xsc = 0.;
+  if( index <= 0 || energy < theMuonPlus->GetPDGMass() ) xsc = fANuMuTotXsc[0];
   else if (index >= fIndex) xsc = fANuMuTotXsc[fIndex-1];
   else
   {
@@ -263,7 +328,7 @@ const G4double G4MuNeutrinoNucleusTotXsc::fNuMuTotXsc[50] =
   0.857978, 0.835424, 0.814112, 0.794314, 0.776204, 
   0.759884, 0.745394, 0.732719, 0.721809, 0.712164, 
   0.704299, 0.697804, 0.692491, 0.688137, 0.68448, 
-  0.681232, 0.676128, 0.674154, 0.670553, 0.666034};
+  0.681232, 0.676128, 0.674154, 0.670553, 0.666034 };
 
 
 
@@ -273,13 +338,13 @@ const G4double G4MuNeutrinoNucleusTotXsc::fNuMuTotXsc[50] =
 
 const G4double G4MuNeutrinoNucleusTotXsc::fANuMuTotXsc[50] = 
 {
-0.0291812, 0.0979725, 0.136884, 0.16794, 0.194698, 
-0.218468, 0.23992, 0.259241, 0.27665, 0.292251, 
-0.30612, 0.318314, 0.328886, 0.337885, 0.345464, 
-0.351495, 0.356131, 0.359448, 0.361531, 0.362474, 
-0.362382, 0.361365, 0.359538, 0.357024, 0.353943, 
-0.350422, 0.346685, 0.342662, 0.338567, 0.334514, 
-0.330612, 0.326966, 0.323668, 0.320805, 0.318451, 
-0.316671, 0.315514, 0.315013, 0.315187, 0.316036, 
-0.317541, 0.319667, 0.322362, 0.325556, 0.329159, 
-0.332577, 0.337133, 0.341214, 0.345128, 0.347657};
+  0.0291812, 0.0979725, 0.136884, 0.16794, 0.194698, 
+  0.218468, 0.23992, 0.259241, 0.27665, 0.292251, 
+  0.30612, 0.318314, 0.328886, 0.337885, 0.345464, 
+  0.351495, 0.356131, 0.359448, 0.361531, 0.362474, 
+  0.362382, 0.361365, 0.359538, 0.357024, 0.353943, 
+  0.350422, 0.346685, 0.342662, 0.338567, 0.334514, 
+  0.330612, 0.326966, 0.323668, 0.320805, 0.318451, 
+  0.316671, 0.315514, 0.315013, 0.315187, 0.316036, 
+  0.317541, 0.319667, 0.322362, 0.325556, 0.329159, 
+  0.332577, 0.337133, 0.341214, 0.345128, 0.347657 };

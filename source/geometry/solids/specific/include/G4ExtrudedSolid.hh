@@ -42,7 +42,7 @@
 // Parameters in the constructor:
 // const G4String& pName             - solid name
 // std::vector<G4TwoVector> polygon  - the vertices of the outlined polygon
-//                                     defined in clockwise or anti-clockwise order     
+//                                     defined in clockwise or anti-clockwise order
 // std::vector<ZSection>             - the z-sections defined by
 //                                     z position, offset and scale
 //                                     in increasing z-position order
@@ -61,6 +61,8 @@
 
 #ifndef G4ExtrudedSolid_HH
 #define G4ExtrudedSolid_HH
+
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UEXTRUDEDSOLID 1

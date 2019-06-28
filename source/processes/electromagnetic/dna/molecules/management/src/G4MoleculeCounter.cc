@@ -25,7 +25,6 @@
 //
 //
 
-#include <iomanip>
 #include "G4MoleculeCounter.hh"
 #include "G4MoleculeTable.hh"
 #include "G4UIcommand.hh"
@@ -34,93 +33,106 @@
 #include "G4MoleculeDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Scheduler.hh" // TODO: remove this dependency
+#include <iomanip>
 
 using namespace std;
 
-G4ThreadLocal double compDoubleWithPrecision::fPrecision = 0;
+namespace G4{
+namespace MoleculeCounter {
+
+bool TimePrecision::operator()(const double& a, const double& b) const
+{
+    if (std::fabs(a - b) < fPrecision)
+    {
+        return false;
+    }
+    else
+    {
+        return a < b;
+    }
+}
+
+G4ThreadLocal double TimePrecision::fPrecision = 0.5 * picosecond;
+}
+}
 
 //------------------------------------------------------------------------------
-G4MoleculeCounter* G4MoleculeCounter::Instance(){
-  if (!fpInstance) fpInstance = new G4MoleculeCounter();
-  return dynamic_cast<G4MoleculeCounter*>(fpInstance);
+G4MoleculeCounter* G4MoleculeCounter::Instance()
+{
+    if (!fpInstance)
+    {
+        fpInstance = new G4MoleculeCounter();
+    }
+    return dynamic_cast<G4MoleculeCounter*>(fpInstance);
 }
 
 //------------------------------------------------------------------------------
 
 G4MoleculeCounter::G4MoleculeCounter()
 {
-  fVerbose = 0;
-  fCheckTimeIsConsistentWithScheduler = true;
-  if(compDoubleWithPrecision::fPrecision == 0)
-  {
-    compDoubleWithPrecision::fPrecision = 0.5*picosecond;
-  }
+    fVerbose = 0;
+    fCheckTimeIsConsistentWithScheduler = true;
 }
 
 //------------------------------------------------------------------------------
 
-G4MoleculeCounter::~G4MoleculeCounter()
-{
-}
-  
+G4MoleculeCounter::~G4MoleculeCounter() = default;
+
 //------------------------------------------------------------------------------
 
 void G4MoleculeCounter::Initialize()
 {
-//  G4cout << "G4MoleculeCounter::Initialize" << G4endl;
-  
-  G4ConfigurationIterator mol_iterator = G4MoleculeTable::Instance()
-      ->GetConfigurationIterator();
-  while ((mol_iterator)())
-  {
-    if(IsRegistered(mol_iterator.value()->GetDefinition()) == false)
+    auto mol_iterator = G4MoleculeTable::Instance()->GetConfigurationIterator();
+    while ((mol_iterator)())
     {
-      continue;
-    }
+        if (IsRegistered(mol_iterator.value()->GetDefinition()) == false)
+        {
+            continue;
+        }
 
-    //    G4cout << "G4MoleculeCounter::Initialize" << G4endl;
-    //    G4cout << mol_iterator->value()->GetName() << G4endl;
-    fCounterMap[mol_iterator.value()]; // initialize the second map
-  }
+        fCounterMap[mol_iterator.value()]; // initialize the second map
+    }
 }
 
 //------------------------------------------------------------------------------
 
 void G4MoleculeCounter::SetTimeSlice(double timeSlice)
 {
-  compDoubleWithPrecision::fPrecision = timeSlice;
+    G4::MoleculeCounter::TimePrecision::fPrecision = timeSlice;
 }
 
 //------------------------------------------------------------------------------
 
-G4bool G4MoleculeCounter::SearchTimeMap(G4MolecularConfiguration* molecule)
+G4bool G4MoleculeCounter::SearchTimeMap(Reactant* molecule)
 {
-  if (fpLastSearch.get() == 0)
-  {
-    fpLastSearch.reset(new Search());
-  }
-  else
-  {
-    if (fpLastSearch->fLowerBoundSet &&
-        fpLastSearch->fLastMoleculeSearched->first == molecule)
-      return true;
-  }
+    if (fpLastSearch == nullptr)
+    {
+        fpLastSearch.reset(new Search());
+    }
+    else
+    {
+        if (fpLastSearch->fLowerBoundSet &&
+            fpLastSearch->fLastMoleculeSearched->first == molecule)
+        {
+            return true;
+        }
+    }
 
-  CounterMapType::iterator mol_it = fCounterMap.find(molecule);
-  fpLastSearch->fLastMoleculeSearched = mol_it;
+    auto mol_it = fCounterMap.find(molecule);
+    fpLastSearch->fLastMoleculeSearched = mol_it;
 
-  if (mol_it != fCounterMap.end()) // TODO
-  {
-    fpLastSearch->fLowerBoundTime = fpLastSearch->fLastMoleculeSearched->second
-        .end();
-    fpLastSearch->fLowerBoundSet = true;
-  }
-  else
-  {
-    fpLastSearch->fLowerBoundSet = false;
-  }
+    if (mol_it != fCounterMap.end())
+    {
+        fpLastSearch->fLowerBoundTime = fpLastSearch->fLastMoleculeSearched->second
+                .end();
+        fpLastSearch->fLowerBoundSet = true;
+    }
+    else
+    {
+        fpLastSearch->fLowerBoundSet = false;
+    }
 
-  return false;
+    return false;
 }
 
 //------------------------------------------------------------------------------
@@ -128,286 +140,265 @@ G4bool G4MoleculeCounter::SearchTimeMap(G4MolecularConfiguration* molecule)
 int G4MoleculeCounter::SearchUpperBoundTime(double time,
                                             bool sameTypeOfMolecule)
 {
-  CounterMapType::iterator mol_it = fpLastSearch->fLastMoleculeSearched;
-  if (mol_it == fCounterMap.end()) return 0; // RETURN
-
-  NbMoleculeAgainstTime& timeMap = mol_it->second;
-  if (timeMap.empty()) return 0;
-
-  NbMoleculeAgainstTime::iterator end_time = timeMap.end();
-
-  if (sameTypeOfMolecule == true)
-  {
-    //G4cout << "SAME MOLECULE" << G4endl;
-    if (fpLastSearch->fLowerBoundSet && fpLastSearch->fLowerBoundTime
-        != end_time)
+    auto mol_it = fpLastSearch->fLastMoleculeSearched;
+    if (mol_it == fCounterMap.end())
     {
-      if (fpLastSearch->fLowerBoundTime->first < time)
-      {
-        NbMoleculeAgainstTime::iterator upperToLast = fpLastSearch
-            ->fLowerBoundTime;
-        upperToLast++;
-
-        if (upperToLast == end_time)
-        {
-          return fpLastSearch->fLowerBoundTime->second;
-        }
-
-        if (upperToLast->first > time)
-        {
-          return fpLastSearch->fLowerBoundTime->second;
-        }
-      }
+        return 0;
     }
-  }
-  /*
-   else
-   {
-   G4cout << "--> Molecule has changed" << G4endl;
-   }
-   */
-  //G4cout << "Searching" << G4endl;
-  // With upper bound
-  NbMoleculeAgainstTime::iterator up_time_it = timeMap.upper_bound(time);
 
-  if (up_time_it == end_time)
-  {
-    NbMoleculeAgainstTime::reverse_iterator last_time = timeMap.rbegin();
+    NbMoleculeAgainstTime& timeMap = mol_it->second;
+    if (timeMap.empty())
+    {
+        return 0;
+    }
 
-//    {
-      //G4cout << "RETURN LAST : " << G4BestUnit(time, "Time") << G4endl;
-      return last_time->second;
-//    }
+    if (sameTypeOfMolecule == true)
+    {
+        if (fpLastSearch->fLowerBoundSet && fpLastSearch->fLowerBoundTime != timeMap.end())
+        {
+            if (fpLastSearch->fLowerBoundTime->first < time)
+            {
+                auto upperToLast = fpLastSearch->fLowerBoundTime;
+                upperToLast++;
 
-//    G4cout << "RETURN 0 (1)" << G4endl;
-//    return 0; // RETURN
-  }
-  if (up_time_it == timeMap.begin())
-  {
-//    G4cout << "RETURN 0 (2)" << G4endl;
-    return 0; // RETURN
-  }
+                if (upperToLast == timeMap.end())
+                {
+                    return fpLastSearch->fLowerBoundTime->second;
+                }
 
-  //G4cout << "Going back : " << up_time_it->first << "-->";
+                if (upperToLast->first > time)
+                {
+                    return fpLastSearch->fLowerBoundTime->second;
+                }
+            }
+        }
+    }
 
-  up_time_it--;
+    auto up_time_it = timeMap.upper_bound(time);
 
-//  G4cout << up_time_it->first << G4endl;
+    if (up_time_it == timeMap.end())
+    {
+        NbMoleculeAgainstTime::reverse_iterator last_time = timeMap.rbegin();
+        return last_time->second;
+    }
+    if (up_time_it == timeMap.begin())
+    {
+        return 0;
+    }
 
-  fpLastSearch->fLowerBoundTime = up_time_it;
-  fpLastSearch->fLowerBoundSet = true;
+    up_time_it--;
 
-//  G4cout << "returning : " << fpLastSearch->fLowerBoundTime->second << G4endl;
+    fpLastSearch->fLowerBoundTime = up_time_it;
+    fpLastSearch->fLowerBoundSet = true;
 
-  return fpLastSearch->fLowerBoundTime->second;
+    return fpLastSearch->fLowerBoundTime->second;
 }
 
 //------------------------------------------------------------------------------
 
-int G4MoleculeCounter::GetNMoleculesAtTime(G4MolecularConfiguration* molecule,
+int G4MoleculeCounter::GetNMoleculesAtTime(Reactant* molecule,
                                            double time)
 {
-  G4bool sameTypeOfMolecule = SearchTimeMap(molecule);
-  return SearchUpperBoundTime(time, sameTypeOfMolecule);
+    G4bool sameTypeOfMolecule = SearchTimeMap(molecule);
+    return SearchUpperBoundTime(time, sameTypeOfMolecule);
 }
 
 //------------------------------------------------------------------------------
 
-void G4MoleculeCounter::AddAMoleculeAtTime(G4MolecularConfiguration* molecule,
+void G4MoleculeCounter::AddAMoleculeAtTime(Reactant* molecule,
                                            G4double time,
                                            const G4ThreeVector* /*position*/,
                                            int number)
 {
-  if (fDontRegister[molecule->GetDefinition()]) return;
-
-  if (fVerbose){
-    G4cout << "G4MoleculeCounter::AddAMoleculeAtTime : " << molecule->GetName()
-           << " at time : " << G4BestUnit(time, "Time") << G4endl;
-  }
-
-  CounterMapType::iterator counterMap_i =
-      fCounterMap.find(molecule);
-
-  if (counterMap_i == fCounterMap.end()){
-    fCounterMap[molecule][time] = number;
-  }
-  else if (counterMap_i->second.empty()){
-    counterMap_i->second[time] = number;
-  }
-  else{
-    NbMoleculeAgainstTime::reverse_iterator end = counterMap_i->second.rbegin();
-
-    if (end->first <= time ||
-        fabs(end->first - time) <= compDoubleWithPrecision::fPrecision)
-      // Case 1 = new time comes after last recorded data
-      // Case 2 = new time is about the same as the last recorded one
+    if (fDontRegister[molecule->GetDefinition()])
     {
-      double newValue =  end->second + number;
-      counterMap_i->second[time] = newValue;
+        return;
+    }
+
+    if (fVerbose)
+    {
+        G4cout << "G4MoleculeCounter::AddAMoleculeAtTime : " << molecule->GetName()
+               << " at time : " << G4BestUnit(time, "Time") << G4endl;
+    }
+
+    auto counterMap_i = fCounterMap.find(molecule);
+
+    if (counterMap_i == fCounterMap.end())
+    {
+        fCounterMap[molecule][time] = number;
+    }
+    else if (counterMap_i->second.empty())
+    {
+        counterMap_i->second[time] = number;
     }
     else
     {
-//      if(fabs(time - G4Scheduler::Instance()->GetGlobalTime()) >
-//         G4Scheduler::Instance()->GetTimeTolerance())
-      {
-        G4ExceptionDescription errMsg;
-        errMsg << "Time of species "
-            << molecule->GetName() << " is "
-            << G4BestUnit(time, "Time") << " while "
-            << " global time is "
-            << G4BestUnit(G4Scheduler::Instance()->GetGlobalTime(), "Time")
-            << G4endl;
-        G4Exception("G4MoleculeCounter::RemoveAMoleculeAtTime",
-                    "TIME_DONT_MATCH",
-                    FatalException, errMsg);
-      }
+        NbMoleculeAgainstTime::reverse_iterator end = counterMap_i->second.rbegin();
+
+        if (end->first <= time ||
+            fabs(end->first - time) <= G4::MoleculeCounter::TimePrecision::fPrecision)
+            // Case 1 = new time comes after last recorded data
+            // Case 2 = new time is about the same as the last recorded one
+        {
+            double newValue = end->second + number;
+            counterMap_i->second[time] = newValue;
+        }
+        else
+        {
+            //      if(fabs(time - G4Scheduler::Instance()->GetGlobalTime()) >
+            //         G4Scheduler::Instance()->GetTimeTolerance())
+            {
+                G4ExceptionDescription errMsg;
+                errMsg << "Time of species "
+                       << molecule->GetName() << " is "
+                       << G4BestUnit(time, "Time") << " while "
+                       << " global time is "
+                       << G4BestUnit(G4Scheduler::Instance()->GetGlobalTime(), "Time")
+                       << G4endl;
+                G4Exception("G4MoleculeCounter::RemoveAMoleculeAtTime",
+                            "TIME_DONT_MATCH",
+                            FatalException, errMsg);
+            }
+        }
     }
-  }
 }
 
 //------------------------------------------------------------------------------
 
-void
-G4MoleculeCounter::RemoveAMoleculeAtTime(G4MolecularConfiguration* molecule,
-                                         G4double time,
-                                         const G4ThreeVector* /*position*/,
-                                         int number)
+void G4MoleculeCounter::RemoveAMoleculeAtTime(const G4MolecularConfiguration* pMolecule,
+                                              G4double time,
+                                              const G4ThreeVector* /*position*/,
+                                              int number)
 {
-  if (fDontRegister[molecule->GetDefinition()]) return;
-
-  if (fVerbose)
-  {
-    G4cout << "G4MoleculeCounter::RemoveAMoleculeAtTime : "
-           << molecule->GetName() << " at time : " << G4BestUnit(time, "Time")
-           << G4endl;
-  }
-
-  if(fCheckTimeIsConsistentWithScheduler)
-  {
-    if(fabs(time - G4Scheduler::Instance()->GetGlobalTime()) >
-       G4Scheduler::Instance()->GetTimeTolerance())
+    if (fDontRegister[pMolecule->GetDefinition()])
     {
-      G4ExceptionDescription errMsg;
-      errMsg << "Time of species "
-          << molecule->GetName() << " is "
-          << G4BestUnit(time, "Time") << " while "
-          << " global time is "
-          << G4BestUnit(G4Scheduler::Instance()->GetGlobalTime(), "Time")
-          << G4endl;
-      G4Exception("G4MoleculeCounter::RemoveAMoleculeAtTime",
-                  "TIME_DONT_MATCH",
-                  FatalException, errMsg);
-    }
-  }
-
-  NbMoleculeAgainstTime& nbMolPerTime = fCounterMap[molecule];
-
-  if (nbMolPerTime.empty())
-  {
-    molecule->PrintState();
-    Dump();
-    G4String errMsg =
-        "You are trying to remove molecule " + molecule->GetName()
-        + " from the counter while this kind of molecules has not been registered yet";
-    G4Exception("G4MoleculeCounter::RemoveAMoleculeAtTime", "",
-                FatalErrorInArgument, errMsg);
-
-    return;
-  }
-  else
-  {
-    NbMoleculeAgainstTime::reverse_iterator it = nbMolPerTime.rbegin();
-    
-    if (it == nbMolPerTime.rend()){
-      it--;
-      
-      G4String errMsg = "There was no " + molecule->GetName()
-      + " recorded at the time or even before the time asked";
-      G4Exception("G4MoleculeCounter::RemoveAMoleculeAtTime", "",
-                  FatalErrorInArgument, errMsg);
+        return;
     }
 
-    if (time - it->first < -compDoubleWithPrecision::fPrecision){
-      Dump();
-      G4ExceptionDescription errMsg;
-      errMsg << "Is time going back?? " << molecule->GetName()
-             << " is being removed at time " << G4BestUnit(time, "Time")
-             << " while last recorded time was "
-             << G4BestUnit(it->first, "Time") << ".";
-      G4Exception("G4MoleculeCounter::RemoveAMoleculeAtTime",
-                  "RETURN_TO_THE_FUTUR",
-                  FatalErrorInArgument,
-                  errMsg);
+    if (fVerbose)
+    {
+        G4cout << "G4MoleculeCounter::RemoveAMoleculeAtTime : "
+               << pMolecule->GetName() << " at time : " << G4BestUnit(time, "Time")
+               << G4endl;
     }
 
-    double finalN = it->second - number;
-
-    if(finalN < 0){
-      Dump();
-      G4ExceptionDescription errMsg;
-      errMsg << "After removal of " << number << " species of "
-          << molecule->GetName() << " the final number at time "
-          << G4BestUnit(time, "Time") << " is less than zero and so not valid."
-          << " Global time is "
-          << G4BestUnit(G4Scheduler::Instance()->GetGlobalTime(), "Time")
-          << ". Previous selected time is "
-          << G4BestUnit(it->first, "Time")
-          << G4endl;
-      G4Exception("G4MoleculeCounter::RemoveAMoleculeAtTime",
-                  "N_INF_0",
-                  FatalException, errMsg);
+    if (fCheckTimeIsConsistentWithScheduler)
+    {
+        if (fabs(time - G4Scheduler::Instance()->GetGlobalTime()) >
+            G4Scheduler::Instance()->GetTimeTolerance())
+        {
+            G4ExceptionDescription errMsg;
+            errMsg << "Time of species "
+                   << pMolecule->GetName() << " is "
+                   << G4BestUnit(time, "Time") << " while "
+                   << " global time is "
+                   << G4BestUnit(G4Scheduler::Instance()->GetGlobalTime(), "Time")
+                   << G4endl;
+            G4Exception("G4MoleculeCounter::RemoveAMoleculeAtTime",
+                        "TIME_DONT_MATCH",
+                        FatalException, errMsg);
+        }
     }
 
-    nbMolPerTime[time] = finalN;
-  }
+    NbMoleculeAgainstTime& nbMolPerTime = fCounterMap[pMolecule];
+
+    if (nbMolPerTime.empty())
+    {
+        pMolecule->PrintState();
+        Dump();
+        G4String errMsg =
+                "You are trying to remove molecule " + pMolecule->GetName() +
+                " from the counter while this kind of molecules has not been registered yet";
+        G4Exception("G4MoleculeCounter::RemoveAMoleculeAtTime", "",
+                    FatalErrorInArgument, errMsg);
+
+        return;
+    }
+    else
+    {
+        NbMoleculeAgainstTime::reverse_iterator it = nbMolPerTime.rbegin();
+
+        if (it == nbMolPerTime.rend())
+        {
+            it--;
+
+            G4String errMsg =
+                    "There was no " + pMolecule->GetName() + " recorded at the time or even before the time asked";
+            G4Exception("G4MoleculeCounter::RemoveAMoleculeAtTime", "",
+                        FatalErrorInArgument, errMsg);
+        }
+
+        if (time - it->first < -G4::MoleculeCounter::TimePrecision::fPrecision)
+        {
+            Dump();
+            G4ExceptionDescription errMsg;
+            errMsg << "Is time going back?? " << pMolecule->GetName()
+                   << " is being removed at time " << G4BestUnit(time, "Time")
+                   << " while last recorded time was "
+                   << G4BestUnit(it->first, "Time") << ".";
+            G4Exception("G4MoleculeCounter::RemoveAMoleculeAtTime",
+                        "RETURN_TO_THE_FUTUR",
+                        FatalErrorInArgument,
+                        errMsg);
+        }
+
+        double finalN = it->second - number;
+
+        if (finalN < 0)
+        {
+            Dump();
+            G4ExceptionDescription errMsg;
+            errMsg << "After removal of " << number << " species of "
+                   << pMolecule->GetName() << " the final number at time "
+                   << G4BestUnit(time, "Time") << " is less than zero and so not valid."
+                   << " Global time is "
+                   << G4BestUnit(G4Scheduler::Instance()->GetGlobalTime(), "Time")
+                   << ". Previous selected time is "
+                   << G4BestUnit(it->first, "Time")
+                   << G4endl;
+            G4Exception("G4MoleculeCounter::RemoveAMoleculeAtTime",
+                        "N_INF_0",
+                        FatalException, errMsg);
+        }
+
+        nbMolPerTime[time] = finalN;
+    }
 }
 
 //------------------------------------------------------------------------------
 
 G4MoleculeCounter::RecordedMolecules G4MoleculeCounter::GetRecordedMolecules()
 {
-  if (fVerbose > 1)
-  {
-    G4cout << "Entering in G4MoleculeCounter::RecordMolecules" << G4endl;
-  }
+    if (fVerbose > 1)
+    {
+        G4cout << "Entering in G4MoleculeCounter::RecordMolecules" << G4endl;
+    }
 
-  CounterMapType::iterator it;
-  RecordedMolecules output (new vector<G4MolecularConfiguration*>);
+    RecordedMolecules output(new ReactantList());
 
-  for(it = fCounterMap.begin(); it != fCounterMap.end(); it++)
-  {
-    output->push_back(it->first);
-  }
-  return output;
+    for (auto it : fCounterMap)
+    {
+        output->push_back(it.first);
+    }
+    return output;
 }
 
 //------------------------------------------------------------------------------
 
 RecordedTimes G4MoleculeCounter::GetRecordedTimes()
 {
-  RecordedTimes output(new std::set<G4double>);
+    RecordedTimes output(new std::set<G4double>);
 
-  //G4double time;
-
-  CounterMapType::iterator it;
-  CounterMapType::const_iterator ite;
-
-  NbMoleculeAgainstTime::iterator it2;
-  NbMoleculeAgainstTime::const_iterator ite2;
-
-  // iterate on each molecule
-  for (it = fCounterMap.begin(), ite = fCounterMap.end(); it != ite; ++it)
-  {
-    // iterate on each time
-    for (it2 = (it->second).begin(), ite2 = (it->second).end(); it2 != ite2;
-        ++it2)
+    for(const auto& it : fCounterMap)
     {
-      //time = it2->first;
-      output->insert(it2->first);
+        for(const auto& it2 : it.second)
+        {
+            //time = it2->first;
+            output->insert(it2.first);
+        }
     }
-  }
 
-  return output;
+    return output;
 }
 
 //------------------------------------------------------------------------------
@@ -438,21 +429,85 @@ RecordedTimes G4MoleculeCounter::GetRecordedTimes()
 
 void G4MoleculeCounter::Dump()
 {
-  CounterMapType::iterator it = fCounterMap.begin();
-  CounterMapType::iterator end = fCounterMap.end();
-
-  for(;it!=end;++it)
-  {
-    G4MolecularConfiguration* molConf = it->first;
-
-    G4cout << " --- > For " << molConf->GetName() << G4endl;
-    NbMoleculeAgainstTime::iterator it2 = it->second.begin();
-    NbMoleculeAgainstTime::iterator end2 = it->second.end();
-
-    for(;it2!=end2;++it2)
+    for (auto it : fCounterMap)
     {
-      G4cout << " " << G4BestUnit(it2->first, "Time")
-             << "    " << it2->second << G4endl;
+        auto pReactant = it.first;
+
+        G4cout << " --- > For " << pReactant->GetName() << G4endl;
+
+        for (auto it2 : it.second)
+        {
+            G4cout << " " << G4BestUnit(it2.first, "Time")
+                   << "    " << it2.second << G4endl;
+        }
     }
-  }
 }
+
+//------------------------------------------------------------------------------
+
+void G4MoleculeCounter::ResetCounter()
+{
+    if (fVerbose)
+    {
+        G4cout << " ---> G4MoleculeCounter::ResetCounter" << G4endl;
+    }
+    fCounterMap.clear();
+    fpLastSearch.reset(0);
+}
+
+//------------------------------------------------------------------------------
+
+const NbMoleculeAgainstTime& G4MoleculeCounter::GetNbMoleculeAgainstTime(Reactant* molecule)
+{
+    return fCounterMap[molecule];
+}
+
+//------------------------------------------------------------------------------
+
+void G4MoleculeCounter::SetVerbose(G4int level)
+{
+    fVerbose = level;
+}
+
+//------------------------------------------------------------------------------
+
+G4int G4MoleculeCounter::GetVerbose()
+{
+    return fVerbose;
+}
+
+//------------------------------------------------------------------------------
+
+void G4MoleculeCounter::DontRegister(const G4MoleculeDefinition* molDef)
+{
+    fDontRegister[molDef] = true;
+}
+
+//------------------------------------------------------------------------------
+
+bool G4MoleculeCounter::IsRegistered(const G4MoleculeDefinition* molDef)
+{
+    if (fDontRegister.find(molDef) == fDontRegister.end())
+    {
+        return true;
+    }
+    return false;
+}
+
+//------------------------------------------------------------------------------
+
+void G4MoleculeCounter::RegisterAll()
+{
+    fDontRegister.clear();
+}
+
+G4bool G4MoleculeCounter::IsTimeCheckedForConsistency() const
+{
+    return fCheckTimeIsConsistentWithScheduler;
+}
+
+void G4MoleculeCounter::CheckTimeForConsistency(G4bool flag)
+{
+    fCheckTimeIsConsistentWithScheduler = flag;
+}
+

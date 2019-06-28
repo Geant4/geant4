@@ -154,12 +154,11 @@ void G4ScreeningMottCrossSection::SetScreeningCoefficient()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ScreeningMottCrossSection::SetupKinematic(G4double ekin, G4double Z )
+void G4ScreeningMottCrossSection::SetupKinematic(G4double ekin, G4int Z )
 {
   //...Target
-  G4int iz = std::min(92, G4lrint(Z));
-  G4double A = fNistManager->GetAtomicMassAmu(iz);
-  G4int ia = G4lrint(A);
+  G4int iz = std::min(92, Z);
+  G4int ia = G4lrint(fNistManager->GetAtomicMassAmu(iz));
   G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
   targetZ = iz;

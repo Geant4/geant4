@@ -209,6 +209,27 @@ size_t G4PhysicsVector::FindBinLocation(G4double theEnergy) const
    return std::min(bin, numberOfNodes-2);
 }
 
+
+//---------------------------------------------------------------
+
+inline
+size_t G4PhysicsVector::FindBinLocation(G4double theEnergy,
+                                        G4double theLogEnergy) const
+{
+   size_t bin;
+   const G4double ex = (type==T_G4PhysicsLogVector) ? theLogEnergy : theEnergy;
+   if(type == T_G4PhysicsLogVector || type == T_G4PhysicsLinearVector) {
+     bin = size_t(ex/dBin - baseBin);
+     if(bin > 0 && theEnergy < binVector[bin]) { --bin; }
+     else if(theEnergy > binVector[bin+1]) { ++bin; }
+   } else {
+     // Bin location proposed by K.Genser (FNAL)
+     bin = std::lower_bound(binVector.begin(), binVector.end(), theEnergy)
+         - binVector.begin() - 1;
+   }
+   return std::min(bin, numberOfNodes-2);
+}
+
 //---------------------------------------------------------------
 
 inline size_t G4PhysicsVector::FindBin(G4double e, size_t idx) const
@@ -228,10 +249,35 @@ inline size_t G4PhysicsVector::FindBin(G4double e, size_t idx) const
 //---------------------------------------------------------------
 
 inline
+size_t G4PhysicsVector::FindBin(G4double e, G4double loge, size_t idx) const
+{
+  size_t id = idx;
+  if(e < binVector[1]) {
+    id = 0;
+  } else if(e >= binVector[numberOfNodes-2]) {
+    id = numberOfNodes - 2;
+  } else if(idx >= numberOfNodes || e < binVector[idx]
+            || e > binVector[idx+1]) {
+    id = FindBinLocation(e, loge);
+  }
+  return id;
+}
+
+//---------------------------------------------------------------
+
+inline
  G4double G4PhysicsVector::Value(G4double theEnergy) const
 {
   size_t idx=0;
   return Value(theEnergy, idx);
+}
+
+//---------------------------------------------------------------
+inline
+G4double G4PhysicsVector::Value(G4double theEnergy, G4double theLogEnergy) const
+{
+  size_t idx=0;
+  return Value(theEnergy, theLogEnergy, idx);
 }
 
 //---------------------------------------------------------------

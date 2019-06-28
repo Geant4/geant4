@@ -148,7 +148,14 @@ class G4AssemblyVolume
   inline unsigned int TotalImprintedVolumes() const;
     //
     // Methods to access the physical volumes imprinted with the assembly.
+  inline G4Transform3D& GetImprintTransformation(unsigned int imprintID);
+    // Method to access transformation for each imprint
 
+  inline std::vector<G4AssemblyTriplet>::iterator GetTripletsIterator();
+  inline unsigned int TotalTriplets() const;
+    //
+    // Methods to access the triplets which are part of the assembly
+  
   unsigned int GetImprintsCount() const;
     //
     // Return the number of made imprints.
@@ -217,6 +224,9 @@ class G4AssemblyVolume
     //
     // Assembly object ID derived from instance counter at construction time.
 
+  std::map<unsigned int, G4Transform3D> fImprintsTransf;
+    //
+    // Container of transformations for each imprint (used by GDML persistency)
 };
 
 #include "G4AssemblyVolume.icc"

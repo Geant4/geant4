@@ -20,12 +20,33 @@ include_directories(${TiMemory_INCLUDE_DIRS})
 
 # List internal includes needed.
 
+# Configure header for preprocessor symbols
+#
+# Convert CMake variables -> #cmakedefine symbols here for now
+# Could be done in cmake category as well, but it's here we control
+# the actual names of the definitions
+set(G4MULTITHREADED ${GEANT4_BUILD_MULTITHREADED})
+set(G4_STORE_TRAJECTORY ${GEANT4_BUILD_STORE_TRAJECTORY})
+set(G4VERBOSE ${GEANT4_BUILD_VERBOSE_CODE})
+
+configure_file(${CMAKE_CURRENT_LIST_DIR}/include/G4GlobalConfig.hh.in
+  ${CMAKE_CURRENT_BINARY_DIR}/include/G4GlobalConfig.hh
+  )
+
+# WORKAROUND: When building/testing examples uing ROOT, ROOT's
+# dictionary generation is not smart enough to handle target usage
+# requirements for include paths. Explicitly add the path to the
+# generated header into build time include paths...
+set_property(GLOBAL APPEND
+  PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/include")
+
 #
 # Define the Geant4 Module.
 #
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4globman
     HEADERS
+        ${CMAKE_CURRENT_BINARY_DIR}/include/G4GlobalConfig.hh
         globals.hh
         templates.hh
         tls.hh

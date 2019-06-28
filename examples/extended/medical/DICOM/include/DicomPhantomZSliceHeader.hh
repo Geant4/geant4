@@ -31,10 +31,11 @@
 #ifndef DicomPhantomZSliceHeader_h
 #define DicomPhantomZSliceHeader_h 1
 
-#include "globals.hh"
-class G4material;
 #include <fstream>
 #include <vector>
+#include "globals.hh"
+
+class G4material;
 
 //*******************************************************
 /// DicomPhantomZSliceHeader class
@@ -51,7 +52,7 @@ class DicomPhantomZSliceHeader
 public:
   DicomPhantomZSliceHeader(const G4String&);
   
-  DicomPhantomZSliceHeader( const DicomPhantomZSliceHeader& rhs );
+  DicomPhantomZSliceHeader( const DicomPhantomZSliceHeader& ) = default;
   // build object copying an existing one (except Z dimensions)
   
   DicomPhantomZSliceHeader( std::ifstream& fin );

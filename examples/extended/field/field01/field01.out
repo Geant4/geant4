@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -279,6 +279,27 @@ G4DormandPrince745 Stepper is chosen
 The minimal step is equal to 0.1 mm
                  2. Creating ChordFinder.
                  3. Updating Field Manager.
+=======================================================================
+======       Pre-compound/De-excitation Physics Parameters     ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
+Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation+GEM
+Number of de-excitation channels                    68
+Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
+Limit excitation energy for Fermi BreakUp (MeV)     20
+Level density (1/MeV)                               0.075
+Model of level density flag                         1
+Time limit for long lived isomeres (ns)             1e+12
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
+Electron internal conversion ID                     2
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
+=======================================================================
 
 ========= Table of registered couples ==============================
 
@@ -291,6 +312,8 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ### Run 0 start.
  Calling F01RunAction::ChangeLooperParameters() 
@@ -307,7 +330,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.010000s Real=0.001530s Sys=0.000000s
+  User=0.000000s Real=0.001613s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -338,7 +361,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000154s Sys=0.000000s
+  User=0.000000s Real=0.000138s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -369,7 +392,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000196s Sys=0.000000s
+  User=0.000000s Real=0.000140s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -396,11 +419,11 @@ Step#          X             Y             Z    Direction x      dir y      dir 
     0          0 fm          0 fm    21.9895 m           0          0         -1      100 MeV     0 eV          0 fm          0 fm      World    initStep
     1          0 fm     20.319 cm    21.9895 m  5.03276e-08 3.37364e-08          1      100 MeV0.000676633 eV    31.9182 cm    31.9182 cm      World  Transportation
     2    50328.4 fm    20.3185 cm    21.9905 m  5.03276e-08 -0.00984295   0.999952      100 MeV2.21968e-06 eV    1.04707 mm    32.0229 cm   Absorber  Transportation
-    3    5.29388 Ang   20.2645 cm         22 m  6.5133e-08  -0.103352   0.994645      100 MeV2.03471e-05 eV    9.59813 mm    32.9827 cm OutOfWorld  Transportation
+    3    5.29388 Ang   20.2645 cm         22 m  1.48908e-07  -0.103352   0.994645      100 MeV2.03471e-05 eV    9.59813 mm    32.9827 cm OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000216s Sys=0.000000s
+  User=0.000000s Real=0.000189s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -425,13 +448,13 @@ Index : 0     used in the geometry : Yes
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    10.2108 cm    21.9895 m  3.95796e-08 -2.87631e-08          1       50 MeV0.000318195 eV    16.0403 cm    16.0403 cm      World  Transportation
-    2    39582.2 fm    10.2098 cm    21.9905 m  3.95796e-08 -0.0195872   0.999808       50 MeV2.02392e-06 eV    1.02026 mm    16.1423 cm   Absorber  Transportation
-    3    4.18577 Ang   10.1016 cm         22 m  3.95796e-08  -0.205667   0.978622       50 MeV1.90072e-05 eV    9.58159 mm    17.1005 cm OutOfWorld  Transportation
+    1          0 fm    10.2108 cm    21.9895 m  -8.42505e-09 -9.58672e-08          1       50 MeV0.000318195 eV    16.0403 cm    16.0403 cm      World  Transportation
+    2   -8425.59 fm    10.2098 cm    21.9905 m  -2.94296e-08 -0.0195872   0.999808       50 MeV2.02392e-06 eV    1.02026 mm    16.1423 cm   Absorber  Transportation
+    3   -2.90229 Ang   10.1016 cm         22 m  -2.94296e-08  -0.205667   0.978622       50 MeV1.90072e-05 eV    9.58159 mm    17.1005 cm OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000131s Sys=0.000000s
+  User=0.000000s Real=0.000123s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 G4Integration Driver Stats: #QuickAdvance 186 - #AccurateAdvance 30 #good steps 30 #bad steps 0
@@ -467,13 +490,13 @@ Index : 0     used in the geometry : Yes
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1       50 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    3.36956 m     21.9895 m  8.19633e-08 3.87095e-08          1       50 MeV0.0104996 eV     5.2929 m      5.2929 m       World  Transportation
-    2    81963.3 fm    3.36956 m     21.9905 m  8.19633e-08 -0.000593511          1       50 MeV2.02392e-06 eV    1.02026 mm    5.29392 m    Absorber  Transportation
-    3     8.6062 Ang   3.36953 m          22 m  1.16073e-07 -0.00623228   0.999981       50 MeV1.88455e-05 eV    9.50007 mm    5.30342 m  OutOfWorld  Transportation
+    1          0 fm    3.36956 m     21.9895 m  5.03344e-08 4.10621e-08          1       50 MeV0.0104996 eV     5.2929 m      5.2929 m       World  Transportation
+    2    50334.4 fm    3.36956 m     21.9905 m  2.97687e-07 -0.000593498          1       50 MeV2.02392e-06 eV    1.02026 mm    5.29392 m    Absorber  Transportation
+    3    2.87839 nm    3.36953 m          22 m  5.20032e-07 -0.00623232   0.999981       50 MeV1.88455e-05 eV    9.50007 mm    5.30342 m  OutOfWorld  Transportation
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.000000s Real=0.000165s Sys=0.000000s
+  User=0.000000s Real=0.000172s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 
@@ -504,7 +527,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.000000s Real=0.009189s Sys=0.000000s
+  User=0.010000s Real=0.008717s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 #
@@ -571,7 +594,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.020000s Real=0.021797s Sys=0.000000s
+  User=0.010000s Real=0.007380s Sys=0.000000s
  G4Transportation: Statistics for looping particles 
  No looping tracks found or killed. 
 Graphics systems deleted.
@@ -579,10 +602,10 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.3 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.29 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)
-G4Integration Driver Stats: #QuickAdvance 24546 - #AccurateAdvance 214 #good steps 214 #bad steps 0
+G4Integration Driver Stats: #QuickAdvance 19753 - #AccurateAdvance 209 #good steps 209 #bad steps 1
 G4ChordFinder statistics report: 
-  No trials: 24546  No Calls: 24017  Max-trial: 4
+  No trials: 19752  No Calls: 19404  Max-trial: 4
   Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98

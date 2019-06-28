@@ -14,7 +14,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-01 March 2019: V.Ivantchenko (monopole-V10-04-07)
+01 March 2019: V.Ivantchenko (monopole-V10-05-00)
 - G4MonopolePhysics - minor code clean-up, replaced G4cerr by G4Exception
 - monopole.cc - do not instantiate VisManager in the batch mode, default
     number of threads is now 1

@@ -97,14 +97,14 @@ G4double G4Bessel::I0 (G4double x)
                  Q9 = 0.00392377;
   
   G4double I = 0.0;
-  if (std::fabs(x) < 3.75)
+  if (std::abs(x) < 3.75)
   {
     G4double y = G4Pow::GetInstance()->powN(x/3.75, 2);
     I = P1+y*(P2+y*(P3+y*(P4+y*(P5+y*(P6+y*P7)))));
   }
   else
   {
-    G4double ax = std::fabs(x);
+    G4double ax = std::abs(x);
     G4double y  = 3.75/ax;
     I  = G4Exp(ax) / std::sqrt(ax) *
       (Q1+y*(Q2+y*(Q3+y*(Q4+y*(Q5+y*(Q6+y*(Q7+y*(Q8+y*Q9))))))));
@@ -167,15 +167,15 @@ G4double G4Bessel::I1 (G4double x)
                  Q9 =-0.00420059;
 
   G4double I = 0.0;
-  if (std::fabs(x) < 3.75)
+  if (std::abs(x) < 3.75)
   {
-    G4double ax = std::fabs(x);
+    G4double ax = std::abs(x);
     G4double y = G4Pow::GetInstance()->powN(x/3.75, 2);
     I = ax*(P1+y*(P2+y*(P3+y*(P4+y*(P5+y*(P6+y*P7))))));
   }
   else
   {
-    G4double ax = std::fabs(x);
+    G4double ax = std::abs(x);
     G4double y  = 3.75/ax;
     I  = G4Exp(ax) / std::sqrt(ax) *
       (Q1+y*(Q2+y*(Q3+y*(Q4+y*(Q5+y*(Q6+y*(Q7+y*(Q8+y*Q9))))))));

@@ -14,7 +14,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-31st Jan 2019  Ivana Hrivnacova (fieldex-V10-04-00)
+31st Jan 2019  Ivana Hrivnacova (fieldex-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 02nd Dec 2013 Ivana Hrivnacova (fieldex-V09-06-02)

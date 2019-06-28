@@ -56,6 +56,15 @@ void GIDI_settings_flux_order::initialize( int order, int length, double const *
 /*
 =========================================================
 */
+GIDI_settings_flux_order& GIDI_settings_flux_order::operator=( const GIDI_settings_flux_order &fluxOrder ) {
+  if ( this != &fluxOrder ) {
+    initialize( fluxOrder.mOrder, fluxOrder.size(), &(fluxOrder.mEnergies[0]), &(fluxOrder.mFluxes[0]) );
+  }
+  return *this;
+}
+/*
+=========================================================
+*/
 GIDI_settings_flux_order::~GIDI_settings_flux_order( ) {
 
 }
@@ -107,6 +116,17 @@ GIDI_settings_flux::GIDI_settings_flux( GIDI_settings_flux const &flux ) {
     mLabel = flux.getLabel( );
     mTemperature = flux.mTemperature;
     for( std::vector<GIDI_settings_flux_order>::const_iterator iter = flux.mFluxOrders.begin( ); iter < flux.mFluxOrders.end( ); ++iter ) addFluxOrder( *iter );
+}
+/*
+=========================================================
+*/
+GIDI_settings_flux& GIDI_settings_flux::operator=( const GIDI_settings_flux &flux ) {
+  if ( this != &flux ) {
+    mLabel = flux.getLabel();
+    mTemperature = flux.mTemperature;
+    for( std::vector<GIDI_settings_flux_order>::const_iterator iter = flux.mFluxOrders.begin( ); iter < flux.mFluxOrders.end( ); ++iter ) addFluxOrder( *iter );
+  }
+  return *this;
 }
 /*
 =========================================================

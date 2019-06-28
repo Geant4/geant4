@@ -151,7 +151,7 @@ G4ThreadLocal G4int G4ParticleHPChannelList::trycounter = 0;
        G4ParticleDefinition* targ_pd = G4IonTable::GetIonTable()->GetIon ( targZ , targA , 0.0 );
        G4DynamicParticle* targ_dp = new G4DynamicParticle( targ_pd , G4ThreeVector(1,0,0), 0.0 );
        unChanged.SetEnergyChange(aTrack.GetKineticEnergy());
-       unChanged.SetMomentumChange(aTrack.Get4Momentum().vect() );
+       unChanged.SetMomentumChange(aTrack.Get4Momentum().vect().unit() );
        unChanged.AddSecondary(targ_dp);
        //TK121106
        G4ParticleHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargA( targA ); 

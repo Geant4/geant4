@@ -31,20 +31,20 @@
 //
 // Class description:
 //
-//    G4TessellatedSolid is a special Geant4 solid defined by a number of 
+//    G4TessellatedSolid is a special Geant4 solid defined by a number of
 //    facets (UVFacet). It is important that the supplied facets shall form a
-//    fully enclose space which is the solid. 
-//    At the moment only two types of facet can be used for the construction of 
+//    fully enclose space which is the solid.
+//    At the moment only two types of facet can be used for the construction of
 //    a G4TessellatedSolid, i.e. the G4TriangularFacet and G4QuadrangularFacet.
 //
 //    How to contruct a G4TessellatedSolid:
-//  
+//
 //    First declare a tessellated solid:
 //
 //      G4TessellatedSolid* solidTarget = new G4TessellatedSolid("Solid_name");
 //
 //    Define the facets which form the solid
-// 
+//
 //      G4double targetSiz = 10*cm ;
 //      G4TriangularFacet *facet1 = new
 //      G4TriangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
@@ -73,7 +73,7 @@
 //                           G4ThreeVector(+targetSize,-targetSize,      0.0),
 //                           ABSOLUTE);
 //
-//    Then add the facets to the solid:    
+//    Then add the facets to the solid:
 //
 //      solidTarget->AddFacet((UVFacet*) facet1);
 //      solidTarget->AddFacet((UVFacet*) facet2);
@@ -89,7 +89,7 @@
 // --------------
 // 31 October 2004, P R Truscott, QinetiQ Ltd, UK
 //  - Created.
-// 22 November 2005, F Lei, 
+// 22 November 2005, F Lei,
 //  - Added GetPolyhedron().
 // 12 October 2012, M Gayer,
 //  - Reviewed optimized implementation including voxelization of surfaces.
@@ -97,6 +97,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef G4TessellatedSolid_hh
 #define G4TessellatedSolid_hh 1
+
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UTESSELLATEDSOLID 1

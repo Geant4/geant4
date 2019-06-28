@@ -41,8 +41,8 @@ class G4EventGenerator : public G4HadronicInteraction
   private:
     G4EventGenerator(const G4EventGenerator &right);
     const G4EventGenerator & operator=(const G4EventGenerator &right);
-    int operator==(const G4EventGenerator &right) const;
-    int operator!=(const G4EventGenerator &right) const;
+    G4bool operator==(const G4EventGenerator &right) const;
+    G4bool operator!=(const G4EventGenerator &right) const;
 
   public:
     virtual G4double GetWidth(G4VertexCode &theCode) = 0;

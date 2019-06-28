@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -492,6 +492,8 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 End of tracking primary particle, its final energy is :3.47547 GeV
 Physics stage ends
 End of tracking primary particle, its final energy is :3.47536 GeV
@@ -543,7 +545,7 @@ Physics stage ends
  Outputs of energy deposition per event written in data file:
  OutputPerEvent.out
  
- Calculation time                      = 3.19684 s 
+ Calculation time                      = 3.18688 s 
 
 Graphics systems deleted.
 Visualization Manager deleting...

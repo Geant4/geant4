@@ -51,11 +51,11 @@
 #include "globals.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4Threading.hh"
 
 class G4ComponentGGHadronNucleusXsc;
 class G4NucleonNuclearCrossSection;
 class G4HadronNucleonXsc;
-class G4ComponentSAIDTotalXS;
 class G4Material;
 class G4Element;
 class G4Isotope;
@@ -64,35 +64,28 @@ class G4BGGNucleonInelasticXS : public G4VCrossSectionDataSet
 {
 public:
 
-  G4BGGNucleonInelasticXS (const G4ParticleDefinition*);
+  explicit G4BGGNucleonInelasticXS (const G4ParticleDefinition*);
 
-  virtual ~G4BGGNucleonInelasticXS();
+  ~G4BGGNucleonInelasticXS() override;
    
-  virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
-			     const G4Material* mat = 0);
+			     const G4Material* mat) override;
 
-  virtual
   G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,  
-			 const G4Element* elm = 0,
-			 const G4Material* mat = 0);
+			 const G4Element* elm,
+			 const G4Material* mat) override;
 
-  virtual
   G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z,
-				  const G4Material* mat = 0);
+				  const G4Material* mat) override;
 
-  virtual
   G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,  
-			      const G4Isotope* iso = 0,
-			      const G4Element* elm = 0,
-			      const G4Material* mat = 0);
+			      const G4Isotope* iso = nullptr,
+			      const G4Element* elm = nullptr,
+			      const G4Material* mat = nullptr) override;
 
-  virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&);
+  void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
-  virtual void CrossSectionDescription(std::ostream&) const;
-
-  inline void SetLowestCrossSection(G4double val);
+  void CrossSectionDescription(std::ostream&) const override;
 
 private:
 
@@ -104,11 +97,10 @@ private:
   G4double fGlauberEnergy;  
   G4double fLowEnergy;  
   G4double fHighEnergy;  
-  G4double fSAIDHighEnergyLimit;
-  G4double fLowestXSection;
-  G4double theGlauberFac[93];
-  G4double theCoulombFac[93];
-  G4int    theA[93];
+
+  static G4double theGlauberFac[93];
+  static G4double theCoulombFac[93];
+  static G4int    theA[93];
 
   const G4ParticleDefinition*     particle;
   const G4ParticleDefinition*     theProton;
@@ -116,14 +108,12 @@ private:
   G4ComponentGGHadronNucleusXsc*  fGlauber;
   G4NucleonNuclearCrossSection*   fNucleon;
   G4HadronNucleonXsc*             fHadron;
-  G4ComponentSAIDTotalXS*         fSAID;
   G4bool                          isProton;
-  G4bool                          isInitialized;
-};
+  G4bool                          isMaster;
 
-inline void G4BGGNucleonInelasticXS::SetLowestCrossSection(G4double val)
-{
-  fLowestXSection = val;
-}
+#ifdef G4MULTITHREADED
+  static G4Mutex nucleonInelasticXSMutex;
+#endif
+};
 
 #endif

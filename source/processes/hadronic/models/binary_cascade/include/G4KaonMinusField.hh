@@ -53,8 +53,8 @@ public:
 private:
   G4KaonMinusField(const  G4KaonMinusField &right);
   const G4KaonMinusField & operator=(const G4KaonMinusField & right);
-  int operator==(const G4KaonMinusField & right) const;
-  int operator!=(const G4KaonMinusField & right) const;
+  G4bool operator==(const G4KaonMinusField & right) const;
+  G4bool operator!=(const G4KaonMinusField & right) const;
 
 public:
   virtual G4double GetField(const G4ThreeVector & aPosition);

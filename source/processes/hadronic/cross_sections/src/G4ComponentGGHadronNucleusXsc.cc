@@ -29,6 +29,7 @@
 //
 // 04.09.18 V. Ivantchenko Major revision of interfaces and implementation
 // 01.10.18 V. Grichine strange hyperon xsc
+// 27.05.19 V. Ivantchenko Removed obsolete methods and members 
 //
 
 #include "G4ComponentGGHadronNucleusXsc.hh"
@@ -41,19 +42,16 @@
 #include "G4DynamicParticle.hh"
 #include "G4HadronNucleonXsc.hh"
 #include "G4Log.hh"
-#include "G4Exp.hh"
-#include "G4Pow.hh"
+#include "G4NuclearRadii.hh"
 
 //////////////////////////////////////////////////////////////////////////////
 //
 
 G4ComponentGGHadronNucleusXsc::G4ComponentGGHadronNucleusXsc() 
  : G4VComponentCrossSection(Default_Name()),
-   fLowerLimit(10.*MeV),
-   fRadiusConst(1.08*fermi),  
-   fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),
-   fDiffractionXsc(0.0), fAxsc2piR2(0.0),fModelInLog(0.0),
-   fParticle(nullptr), fEnergy(0.0), fZ(0), fA(0)
+   fTotalXsc(0.0),fElasticXsc(0.0),fInelasticXsc(0.0),fProductionXsc(0.0),
+   fDiffractionXsc(0.0),fAxsc2piR2(0.0),fModelInLog(0.0),fEnergy(0.0),
+   fParticle(nullptr),fZ(0),fA(0)
 {
   theGamma    = G4Gamma::Gamma();
   theProton   = G4Proton::Proton();
@@ -66,24 +64,8 @@ G4ComponentGGHadronNucleusXsc::G4ComponentGGHadronNucleusXsc()
   theKMinus   = G4KaonMinus::KaonMinus();
   theK0S      = G4KaonZeroShort::KaonZeroShort();
   theK0L      = G4KaonZeroLong::KaonZeroLong();
-  //strange hyperons
-  theL        = G4Lambda::Lambda();
-  theAntiL    = G4AntiLambda::AntiLambda();
-  theSPlus    = G4SigmaPlus::SigmaPlus();
-  theASPlus   = G4AntiSigmaPlus::AntiSigmaPlus();
-  theSMinus   = G4SigmaMinus::SigmaMinus();
-  theASMinus  = G4AntiSigmaMinus::AntiSigmaMinus();
-  theS0       = G4SigmaZero::SigmaZero();
-  theAS0      = G4AntiSigmaZero::AntiSigmaZero();
-  theXiMinus  = G4XiMinus::XiMinus();
-  theXi0      = G4XiZero::XiZero();
-  theAXiMinus = G4AntiXiMinus::AntiXiMinus();
-  theAXi0     = G4AntiXiZero::AntiXiZero();
-  theOmega    = G4OmegaMinus::OmegaMinus();
-  theAOmega   = G4AntiOmegaMinus::AntiOmegaMinus();
  
   hnXsc = new G4HadronNucleonXsc();
-  g4calc = G4Pow::GetInstance();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -186,46 +168,6 @@ G4double G4ComponentGGHadronNucleusXsc::GetProductionIsotopeCrossSection(
   return fProductionXsc;
 }
 
-//////////////////////////////////////////////////////////////////////
-
-G4bool 
-G4ComponentGGHadronNucleusXsc::IsIsoApplicable(const G4DynamicParticle* aDP, 
-					       G4int /*Z*/, G4int /*A*/, 
-					       const G4Element*,
-					       const G4Material*)
-{
-  G4bool applicable      = false;
-  G4double kineticEnergy = aDP->GetKineticEnergy();
-
-  const G4ParticleDefinition* theParticle = aDP->GetDefinition();
- 
-  if ((kineticEnergy  >= fLowerLimit &&
-      (theParticle == theAProton   ||
-       theParticle == theGamma     ||
-       theParticle == theSMinus    ||  
-       theParticle == theProton    ||
-       theParticle == theNeutron   ||   
-       theParticle == thePiPlus    ||
-       theParticle == thePiMinus   || 
-       theParticle == theL || theParticle == theAntiL || theParticle == theSPlus || theParticle == theASPlus || 
-       theParticle == theSMinus || theParticle == theASMinus || theParticle == theS0 || theParticle == theAS0 || 
-       theParticle == theXiMinus || theParticle == theXi0 || theParticle == theAXiMinus || theParticle == theAXi0 ||  
-       theParticle == theOmega || theParticle == theAOmega  
-       ))  
-      ||
-       (kineticEnergy  >= 0.01*fLowerLimit &&
-	( 
-	 theParticle == theKPlus     ||
-	 theParticle == theKMinus    || 
-	 theParticle == theK0L       ||
-	 theParticle == theK0S           
-	  )
-	) 
-      ) applicable = true;
-
-  return applicable;
-}
-
 ////////////////////////////////////////////////////////////////////////////
 //
 // Calculates total and inelastic Xsc, derives elastic as total 
@@ -247,35 +189,14 @@ void G4ComponentGGHadronNucleusXsc::ComputeCrossSections(
   fEnergy = kinEnergy;
 
   //
-  G4double sigma(0.0), cofInelastic(2.2), cofTotal(2.0);
-  G4double hpInXsc(0.), hnInXsc(0.);
-  G4double R = GetNucleusRadius(A); 
+  G4double cofInelastic = 2.4;
+  static const G4double cofTotal = 2.0;
+  G4double sigma(0.0), hpInXsc(0.0), hnInXsc(0.0), R(0.0); 
   
-  G4int N = std::max(A - Z, 0);              // number of neutrons
+  G4int N = std::max(A - Z, 0);  // number of neutrons
 
-  if( aParticle == theProton  || 
-      aParticle == theNeutron ||
-      aParticle == thePiPlus  || 
-      aParticle == thePiMinus ||    
-      aParticle == theL || aParticle == theAntiL || aParticle == theSPlus || aParticle == theASPlus || 
-      aParticle == theSMinus || aParticle == theASMinus || aParticle == theS0 || aParticle == theAS0 || 
-      aParticle == theXiMinus || aParticle == theXi0 || aParticle == theAXiMinus || aParticle == theAXi0 ||  
-      aParticle == theOmega || aParticle == theAOmega  
-    )
-  {
-    sigma = Z*hnXsc->HadronNucleonXscNS(aParticle, theProton, kinEnergy);
-    hpInXsc = hnXsc->GetInelasticHadronNucleonXsc();
-
-    if(N > 0) { 
-      sigma += N*hnXsc->HadronNucleonXscNS(aParticle, theNeutron, kinEnergy);
-      hnInXsc = hnXsc->GetInelasticHadronNucleonXsc();
-    }
-    cofInelastic = 2.4;
-
-  } else if( aParticle == theKPlus   || 
-	     aParticle == theKMinus  || 
-	     aParticle == theK0S     || 
-	     aParticle == theK0L) 
+  if( aParticle == theKPlus || aParticle == theKMinus  || 
+      aParticle == theK0S   || aParticle == theK0L) 
   {
     sigma = (1 == Z) 
       ? hnXsc->KaonNucleonXscNS(aParticle, theProton, kinEnergy)
@@ -286,7 +207,8 @@ void G4ComponentGGHadronNucleusXsc::ComputeCrossSections(
       sigma += N*hnXsc->KaonNucleonXscGG(aParticle, theNeutron, kinEnergy);
       hnInXsc = hnXsc->GetInelasticHadronNucleonXsc();
     }
-    R = 1.3*fermi*g4calc->Z13(A);
+    R = G4NuclearRadii::RadiusKNGG(A);
+    cofInelastic = 2.2;
   }
   else
   {
@@ -297,7 +219,9 @@ void G4ComponentGGHadronNucleusXsc::ComputeCrossSections(
       sigma += N*hnXsc->HadronNucleonXscNS(aParticle, theNeutron, kinEnergy);
       hnInXsc = hnXsc->GetInelasticHadronNucleonXsc();
     }
+    R = G4NuclearRadii::RadiusHNGG(A);
   }
+
   G4double nucleusSquare = cofTotal*pi*R*R;   // basically 2piRR
   G4double ratio = sigma/nucleusSquare;
   G4double difratio = ratio/(1.+ratio);
@@ -314,7 +238,7 @@ void G4ComponentGGHadronNucleusXsc::ComputeCrossSections(
     fInelasticXsc = nucleusSquare*fModelInLog/cofInelastic;
     G4double barcorr = GetParticleBarCorIn(aParticle, Z);
     fInelasticXsc *= barcorr;
-    fElasticXsc   = std::max(fTotalXsc - fInelasticXsc, 0.);
+    fElasticXsc = std::max(fTotalXsc - fInelasticXsc, 0.);
 
     G4double xratio = (Z*hpInXsc + N*hnInXsc)/nucleusSquare;
     fProductionXsc = 
@@ -330,7 +254,7 @@ void G4ComponentGGHadronNucleusXsc::ComputeCrossSections(
     fProductionXsc = nucleusSquare*G4Log(1. + cofInelastic*xratio)/cofInelastic;
     fProductionXsc = std::min(fProductionXsc, fInelasticXsc);
   }
-  /*
+  /*  
   G4cout << "GGXsc: Z= " << Z << " A= " << A << " E= " << kinEnergy 
 	 << " xtot(b)= " << fTotalXsc/barn
 	 << " xel(b)= " <<  fElasticXsc/barn << " xinel(b)= " << fInelasticXsc/barn
@@ -368,9 +292,6 @@ GetRatioQE(const G4DynamicParticle* aParticle, G4int A, G4int Z)
 /////////////////////////////////////////////////////////////////////////////////////
 //
 // Returns hadron-nucleon total Xsc according to differnt parametrisations:
-// [2] E. Levin, hep-ph/9710546
-// [3] U. Dersch, et al, hep-ex/9910052
-// [4] M.J. Longo, et al, Phys.Rev.Lett. 33 (1974) 725 
 
 G4double G4ComponentGGHadronNucleusXsc::GetHadronNucleonXsc(
          const G4DynamicParticle* aParticle, const G4Element* anElement)
@@ -384,9 +305,6 @@ G4double G4ComponentGGHadronNucleusXsc::GetHadronNucleonXsc(
 /////////////////////////////////////////////////////////////////////////////////////
 //
 // Returns hadron-nucleon total Xsc according to differnt parametrisations:
-// [2] E. Levin, hep-ph/9710546
-// [3] U. Dersch, et al, hep-ex/9910052
-// [4] M.J. Longo, et al, Phys.Rev.Lett. 33 (1974) 725 
 
 G4double G4ComponentGGHadronNucleusXsc::GetHadronNucleonXsc(
          const G4DynamicParticle* aParticle, G4int, G4int)
@@ -517,84 +435,6 @@ G4double G4ComponentGGHadronNucleusXsc::GetHNinelasticXscVU(
     sumInelastic += Nt*hnXsc->GetInelasticHadronNucleonXsc();
   }
   return sumInelastic;
-}
-
-////////////////////////////////////////////////////////////////////////////////////
-
-G4double G4ComponentGGHadronNucleusXsc::GetNucleusRadius(
-          const G4DynamicParticle*, const G4Element* anElement)
-{
-  G4int At = G4lrint(anElement->GetN());
-  G4double R = fRadiusConst*g4calc->Z13(At);
-
-  static const G4double meanA  = 21.;
-  static const G4double tauA1  = 40.; 
-  static const G4double tauA2  = 10.; 
-  static const G4double tauA3  = 5.; 
-
-  static const G4double a1 = 0.85;
-  static const G4double b1 = 1. - a1;
-
-  static const G4double b2 = 0.3;
-  static const G4double b3 = 4.;
-
-  if (At > 20) 
-  {
-    R *= ( a1 + b1*G4Exp( -(At - meanA)/tauA1) ); 
-  }
-  else if (At > 3)
-  {
-    R *= ( 1.0 + b2*( 1. - G4Exp( (At - meanA)/tauA2) ) ); 
-  }
-  else 
-  {
-    R *= ( 1.0 + b3*( 1. - G4Exp( (At - meanA)/tauA3) ) ); 
-  }  
-  return R;
- 
-}
-
-//////////////////////////////////////////////////////////////////////
-
-G4double G4ComponentGGHadronNucleusXsc::GetNucleusRadius(G4int At)
-{
-  G4double R = fRadiusConst*g4calc->Z13(At);
-
-  static const G4double meanA = 20.;
-  static const G4double tauA  = 20.; 
-
-  if (At > 20) 
-  {
-    R *= ( 0.8 + 0.2*G4Exp( -(G4double(At) - meanA)/tauA) ); 
-  }
-  else
-  {
-    R *= ( 1.0 + 0.1*( 1. - G4Exp( (G4double(At) - meanA)/tauA) ) ); 
-  }
-  return R;
-}
-
-////////////////////////////////////////////////////////////////////////
-
-G4double G4ComponentGGHadronNucleusXsc::CalculateEcmValue(G4double mp , 
-                                                          G4double mt , 
-                                                          G4double Plab )
-{
-  G4double Elab = std::sqrt ( mp * mp + Plab * Plab );
-  G4double Ecm  = std::sqrt ( mp * mp + mt * mt + 2 * Elab * mt );
-  return Ecm ; 
-}
-
-////////////////////////////////////////////////////////////////////////
-
-G4double G4ComponentGGHadronNucleusXsc::CalcMandelstamS(G4double mp , 
-                                                        G4double mt , 
-                                                        G4double Plab )
-{
-  G4double Elab = std::sqrt ( mp * mp + Plab * Plab );
-  G4double sMand  = mp*mp + mt*mt + 2*Elab*mt ;
-
-  return sMand;
 }
 
 ///////////////////////////////////////////////////////////////////////

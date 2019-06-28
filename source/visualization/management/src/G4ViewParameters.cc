@@ -41,6 +41,7 @@
 
 G4ViewParameters::G4ViewParameters ():
   fDrawingStyle (wireframe),
+  fNumberOfCloudPoints(10000),
   fAuxEdgeVisible (false),
   fCulling (true),
   fCullInvisible (true),
@@ -219,11 +220,23 @@ G4int G4ViewParameters::SetNoOfSides (G4int nSides) {
   if (nSides < nSidesMin) {
     nSides = nSidesMin;
     G4cout << "G4ViewParameters::SetNoOfSides: attempt to set the"
-      "\nnumber of sides per circle < " << nSidesMin
-	 << "; forced to " << nSides << G4endl;
+    "\nnumber of sides per circle < " << nSidesMin
+    << "; forced to " << nSides << G4endl;
   }
   fNoOfSides = nSides;
   return fNoOfSides;
+}
+
+G4int G4ViewParameters::SetNumberOfCloudPoints(G4int nPoints) {
+  const G4int nPointsMin = 100;
+  if (nPoints < nPointsMin) {
+    nPoints = nPointsMin;
+    G4cout << "G4ViewParameters::SetNumberOfCloudPoints:"
+    "\nnumber of points per cloud set to minimum " << nPoints
+    << G4endl;
+  }
+  fNumberOfCloudPoints = nPoints;
+  return fNumberOfCloudPoints;
 }
 
 void G4ViewParameters::SetViewAndLights
@@ -239,7 +252,7 @@ void G4ViewParameters::SetViewAndLights
       firstTime = false;
       G4cout <<
       "WARNING: Viewpoint direction is very close to the up vector direction."
-      "\n  Consider setting the up vector to obtain definable behaviour."
+      "\n  Change the up vector or \"/vis/viewer/set/rotationStyle freeRotation\"."
       << G4endl;
     }
   }
@@ -393,12 +406,20 @@ G4String G4ViewParameters::DrawingStyleCommands() const
   oss << "#\n# Drawing style commands";
   
   oss << "\n/vis/viewer/set/style ";
-  if (fDrawingStyle == wireframe || fDrawingStyle == hlr) {
-    oss << "wireframe";
-  } else {
-    oss << "surface";
+  switch (fDrawingStyle) {
+    case wireframe:
+    case hlr:
+      oss << "wireframe";
+      break;
+    case hsr:
+    case hlhsr:
+      oss << "surface";
+      break;
+    case cloud:
+      oss << "cloud";
+      break;
   }
-  
+
   oss << "\n/vis/viewer/set/hiddenEdge ";
   if (fDrawingStyle == hlr || fDrawingStyle == hlhsr) {
     oss << "true";
@@ -425,7 +446,10 @@ G4String G4ViewParameters::DrawingStyleCommands() const
   
   oss << "\n/vis/viewer/set/globalMarkerScale "
   << fGlobalMarkerScale;
-  
+
+  oss << "\n/vis/viewer/set/numberOfCloudPoints "
+  << fNumberOfCloudPoints;
+
   oss << std::endl;
   
   return oss.str();
@@ -619,6 +643,18 @@ G4String G4ViewParameters::TouchableCommands() const
           }
         }
         break;
+      case G4ModelingParameters::VASForceCloud:
+        if (vamVisAtts.IsForceDrawingStyle()) {
+          if (vamVisAtts.GetForcedDrawingStyle() == G4VisAttributes::cloud) {
+            oss << "\n/vis/touchable/set/forceCloud ";
+            if (vamVisAtts.IsForceDrawingStyle()) {
+              oss << "true";
+            } else {
+              oss << "false";
+            }
+          }
+        }
+        break;
       case G4ModelingParameters::VASForceAuxEdgeVisible:
         if (vamVisAtts.IsForceAuxEdgeVisible()) {
           oss << "\n/vis/touchable/set/forceAuxEdgeVisible ";
@@ -630,10 +666,12 @@ G4String G4ViewParameters::TouchableCommands() const
         }
         break;
       case G4ModelingParameters::VASForceLineSegmentsPerCircle:
-        if (vamVisAtts.GetForcedLineSegmentsPerCircle() > 0) {
-          oss << "\n/vis/touchable/set/lineSegmentsPerCircle "
-          << vamVisAtts.GetForcedLineSegmentsPerCircle();
-        }
+        oss << "\n/vis/touchable/set/lineSegmentsPerCircle "
+        << vamVisAtts.GetForcedLineSegmentsPerCircle();
+        break;
+      case G4ModelingParameters::VASForceNumberOfCloudPoints:
+        oss << "\n/vis/touchable/set/numberOfCloudPoints "
+        << vamVisAtts.GetForcedNumberOfCloudPoints();
         break;
     }
   }
@@ -707,6 +745,7 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
 
       // No particular order from here on.
       (fDrawingStyle         != v.fDrawingStyle)         ||
+      (fNumberOfCloudPoints  != v.fNumberOfCloudPoints)  ||
       (fAuxEdgeVisible       != v.fAuxEdgeVisible)       ||
       (fCulling              != v.fCulling)              ||
       (fCullInvisible        != v.fCullInvisible)        ||
@@ -826,6 +865,8 @@ std::ostream& operator <<
     os << "hsr - hidden surfaces removed"; break;
   case G4ViewParameters::hlhsr:
     os << "hlhsr - hidden line, hidden surface removed"; break;
+  case G4ViewParameters::cloud:
+    os << "cloud - draw volume as a cloud of dots"; break;
   default: os << "unrecognised"; break;
   }
   return os;
@@ -834,18 +875,9 @@ std::ostream& operator <<
 std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   os << "View parameters and options:";
 
-  os << "\n  Drawing style: ";
-  switch (v.fDrawingStyle) {
-  case G4ViewParameters::wireframe:
-    os << "edges, wireframe"; break;
-  case G4ViewParameters::hlr:
-    os << "edges, hidden line removal"; break;
-  case G4ViewParameters::hsr:
-    os << "surfaces, hidden surface removal"; break;
-  case G4ViewParameters::hlhsr:
-    os << "surfaces and edges, hidden line and surface removal"; break;
-  default: os << "unrecognised"; break;
-  }
+  os << "\n  Drawing style: " << v.fDrawingStyle;
+
+  os << "\n  Number of cloud points: " << v.fNumberOfCloudPoints;
 
   os << "\n  Auxiliary edges: ";
   if (!v.fAuxEdgeVisible) os << "in";
@@ -1029,6 +1061,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
 
       // No particular order from here on.
       (fDrawingStyle         != v.fDrawingStyle)         ||
+      (fNumberOfCloudPoints  != v.fNumberOfCloudPoints)  ||
       (fAuxEdgeVisible       != v.fAuxEdgeVisible)       ||
       (fCulling              != v.fCulling)              ||
       (fCullInvisible        != v.fCullInvisible)        ||

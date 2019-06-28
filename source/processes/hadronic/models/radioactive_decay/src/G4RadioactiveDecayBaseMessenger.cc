@@ -55,15 +55,6 @@ G4RadioactiveDecayBaseMessenger::G4RadioactiveDecayBaseMessenger
     ("Set the atomic weight and number limits for the RDM.");
   nucleuslimitsCmd->SetParameterName("aMin","aMax","zMin","zMax",true);
 
-  // Command controlling whether beta decay will be treated faithfully or 
-  // in fast mode (obsolete) 
-  fbetaCmd = new G4UIcmdWithABool ("/grdm/fBeta",this);
-//  fbetaCmd->SetGuidance("false: use 3-body decay, true: use histogram method");
-  fbetaCmd->SetGuidance("Fast (approximate) beta decay no longer used.");
-  fbetaCmd->SetGuidance("Kept for backward compatibility.");
-  fbetaCmd->SetParameterName("fBeta",true);
-  fbetaCmd->SetDefaultValue(false);
-
   // Select a logical volume for RDM
   avolumeCmd = new
     G4UIcmdWithAString("/grdm/selectVolume",this);
@@ -169,7 +160,6 @@ G4RadioactiveDecayBaseMessenger::~G4RadioactiveDecayBaseMessenger ()
 {
   delete grdmDirectory;
   delete nucleuslimitsCmd;
-  delete fbetaCmd;
   delete verboseCmd;
   delete avolumeCmd;
   delete deavolumeCmd;
@@ -187,38 +177,35 @@ G4RadioactiveDecayBaseMessenger::~G4RadioactiveDecayBaseMessenger ()
 void
 G4RadioactiveDecayBaseMessenger::SetNewValue(G4UIcommand *command, G4String newValues)
 {
-  if (command==nucleuslimitsCmd) {
+  if (command == nucleuslimitsCmd) {
     theRadioactiveDecayContainer->
     SetNucleusLimits(nucleuslimitsCmd->GetNewNucleusLimitsValue(newValues));
 
-  } else if (command==fbetaCmd) {
-    theRadioactiveDecayContainer->
-    SetFBeta(fbetaCmd->GetNewBoolValue(newValues));
-
-  } else if (command==avolumeCmd) {
+  } else if (command == avolumeCmd) {
     theRadioactiveDecayContainer->SelectAVolume(newValues);
 
-  } else if (command==deavolumeCmd) {
+  } else if (command == deavolumeCmd) {
     theRadioactiveDecayContainer->DeselectAVolume(newValues);
 
-  } else if (command==allvolumesCmd) {
+  } else if (command == allvolumesCmd) {
     theRadioactiveDecayContainer->SelectAllVolumes();
 
-  } else if (command==deallvolumesCmd) {
+  } else if (command == deallvolumesCmd) {
     theRadioactiveDecayContainer->DeselectAllVolumes();
 
-  } else if (command==verboseCmd) {
+  } else if (command == verboseCmd) {
     theRadioactiveDecayContainer->
     SetVerboseLevel(verboseCmd->GetNewIntValue(newValues));
-  } else if (command==icmCmd) {
+
+  } else if (command == icmCmd) {
     theRadioactiveDecayContainer->
     SetICM(icmCmd->GetNewBoolValue(newValues));
 
-  } else if (command==armCmd) {
+  } else if (command == armCmd) {
     theRadioactiveDecayContainer->
     SetARM(armCmd->GetNewBoolValue(newValues));
 
-  } else if (command ==userDecayDataCmd) {
+  } else if (command == userDecayDataCmd) {
     G4int Z,A;
     G4String file_name;
     const char* nv = (const char*)newValues;
@@ -226,7 +213,7 @@ G4RadioactiveDecayBaseMessenger::SetNewValue(G4UIcommand *command, G4String newV
     is >> Z >> A >> file_name;
     theRadioactiveDecayContainer->AddUserDecayDataFile(Z,A,file_name);
 
-  } else if (command ==userEvaporationDataCmd) {
+  } else if (command == userEvaporationDataCmd) {
     G4int Z,A;
     G4String file_name;
     const char* nv = (const char*)newValues;
@@ -234,11 +221,11 @@ G4RadioactiveDecayBaseMessenger::SetNewValue(G4UIcommand *command, G4String newV
     is >> Z >> A >> file_name;
     G4NuclearLevelData::GetInstance()->AddPrivateData(Z,A,file_name);
 
-  } else if (command==colldirCmd) {
+  } else if (command == colldirCmd) {
     theRadioactiveDecayContainer->
     SetDecayDirection(colldirCmd->GetNew3VectorValue(newValues));
 
-  } else if (command==collangleCmd) {
+  } else if (command == collangleCmd) {
     theRadioactiveDecayContainer->
     SetDecayHalfAngle(collangleCmd->GetNewDoubleValue(newValues));
   }

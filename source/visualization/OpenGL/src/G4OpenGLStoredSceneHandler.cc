@@ -274,64 +274,69 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal
     fPickMap[fPickName] = holder;
   }
   
-  // Can we re-use a display list?
   const G4VSolid* pSolid = 0;
-  G4PhysicalVolumeModel* pPVModel =
-  dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+
+  // Can we re-use a display list?
+  if (isMarker)
+    // It is a marker, which may have its own position relative to fObjectTransformation
+    goto end_of_display_list_reuse_test;
   if (fpViewer->GetViewParameters().GetVisAttributesModifiers().size())
     // Touchables have been modified - don't risk re-using display list.
     goto end_of_display_list_reuse_test;
-  if (pPVModel) {
-    // Check that it isn't a G4LogicalVolumeModel (which is a sub-class of
-    // G4PhysicalVolumeModel).
-    G4LogicalVolumeModel* pLVModel =
-    dynamic_cast<G4LogicalVolumeModel*>(pPVModel);
-    if (pLVModel)
-      // Logical volume model - don't re-use.
-      goto end_of_display_list_reuse_test;
-    // If part of the geometry hierarchy, i.e., from a
-    // G4PhysicalVolumeModel, check if a display list already exists for
-    // this solid, re-use it if possible.  We could be smarter, and
-    // recognise repeated branches of the geometry hierarchy, for
-    // example.  But this algorithm should be secure, I think...
-    G4VPhysicalVolume* pPV = pPVModel->GetCurrentPV();
-    if (!pPV)
-      // It's probably a dummy model, e.g., for a user-drawn hit?
-      goto end_of_display_list_reuse_test;
-    G4LogicalVolume* pLV = pPV->GetLogicalVolume();
-    if (!pLV)
-      // Dummy model again?
-      goto end_of_display_list_reuse_test;
-    pSolid = pLV->GetSolid();
-    EAxis axis = kRho;
-    G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
-    if (pCurrentPV -> IsReplicated ()) {
-      G4int nReplicas;
-      G4double width;
-      G4double offset;
-      G4bool consuming;
-      pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
-    }
-    // Provided it is not parametrised (because if so, the
-    // solid's parameters might have been changed)...
-    if (!(pCurrentPV -> IsParameterised ()) &&
-        // Provided it is not replicated radially (because if so, the
-        // solid's parameters will have been changed)...
-        !(pCurrentPV -> IsReplicated () && axis == kRho) &&
-        // ...and if the solid has already been rendered...
-        (fSolidMap.find (pSolid) != fSolidMap.end ())) {
-      fDisplayListId = fSolidMap [pSolid];
-      PO po(fDisplayListId,fObjectTransformation);
-      if (isPicking) po.fPickName = fPickName;
-      po.fColour = c;
-      po.fMarkerOrPolyline = isMarkerOrPolyline;
-      fPOList.push_back(po);
-      // No need to test if gl commands are used (result of
-      // ExtraPOProcessing) because we have already decided they will
-      // not, at least not here.  Also, pass a dummy G4Visible since
-      // not relevant for G4PhysicalVolumeModel.
-      (void) ExtraPOProcessing(G4Visible(), fPOList.size() - 1);
-      return false;  // No further processing.
+  {  // It is a viable candidate for display list re-use
+    G4PhysicalVolumeModel* pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+    if (pPVModel) {
+      // Check that it isn't a G4LogicalVolumeModel (which is a sub-class of
+      // G4PhysicalVolumeModel).
+      G4LogicalVolumeModel* pLVModel =
+      dynamic_cast<G4LogicalVolumeModel*>(pPVModel);
+      if (pLVModel)
+        // Logical volume model - don't re-use.
+        goto end_of_display_list_reuse_test;
+      // If part of the geometry hierarchy, i.e., from a
+      // G4PhysicalVolumeModel, check if a display list already exists for
+      // this solid, re-use it if possible.  We could be smarter, and
+      // recognise repeated branches of the geometry hierarchy, for
+      // example.  But this algorithm should be secure, I think...
+      G4VPhysicalVolume* pPV = pPVModel->GetCurrentPV();
+      if (!pPV)
+        // It's probably a dummy model, e.g., for a user-drawn hit?
+        goto end_of_display_list_reuse_test;
+      G4LogicalVolume* pLV = pPV->GetLogicalVolume();
+      if (!pLV)
+        // Dummy model again?
+        goto end_of_display_list_reuse_test;
+      pSolid = pLV->GetSolid();
+      EAxis axis = kRho;
+      G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+      if (pCurrentPV -> IsReplicated ()) {
+        G4int nReplicas;
+        G4double width;
+        G4double offset;
+        G4bool consuming;
+        pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
+      }
+      // Provided it is not parametrised (because if so, the
+      // solid's parameters might have been changed)...
+      if (!(pCurrentPV -> IsParameterised ()) &&
+          // Provided it is not replicated radially (because if so, the
+          // solid's parameters will have been changed)...
+          !(pCurrentPV -> IsReplicated () && axis == kRho) &&
+          // ...and if the solid has already been rendered...
+          (fSolidMap.find (pSolid) != fSolidMap.end ())) {
+        fDisplayListId = fSolidMap [pSolid];
+        PO po(fDisplayListId,fObjectTransformation);
+        if (isPicking) po.fPickName = fPickName;
+        po.fColour = c;
+        po.fMarkerOrPolyline = isMarkerOrPolyline;
+        fPOList.push_back(po);
+        // No need to test if gl commands are used (result of
+        // ExtraPOProcessing) because we have already decided they will
+        // not, at least not here.  Also, pass a dummy G4Visible since
+        // not relevant for G4PhysicalVolumeModel.
+        (void) ExtraPOProcessing(G4Visible(), fPOList.size() - 1);
+        return false;  // No further processing.
+      }
     }
   }
 end_of_display_list_reuse_test:

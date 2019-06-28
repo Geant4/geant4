@@ -47,8 +47,8 @@ class G4QGSMFragmentation:public G4VLongitudinalStringDecay
     // not implemented to protect/forbid use
     G4QGSMFragmentation(const G4QGSMFragmentation &right);
     const G4QGSMFragmentation & operator=(const G4QGSMFragmentation &right);
-    int operator==(const G4QGSMFragmentation &right) const;
-    int operator!=(const G4QGSMFragmentation &right) const;
+    G4bool operator==(const G4QGSMFragmentation &right) const;
+    G4bool operator!=(const G4QGSMFragmentation &right) const;
 
   private:
     void SetMinMasses();

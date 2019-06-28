@@ -204,10 +204,36 @@ void G4TriangularFacet::CopyFrom (const G4TriangularFacet &rhs)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+void G4TriangularFacet::MoveFrom (G4TriangularFacet &rhs)
+{
+  fSurfaceNormal = move(rhs.fSurfaceNormal);
+  fArea = move(rhs.fArea);
+  fCircumcentre = move(rhs.fCircumcentre);
+  fRadius = move(rhs.fRadius);
+  fIndices = move(rhs.fIndices);
+  fA = move(rhs.fA); fB = move(rhs.fB); fC = move(rhs.fC);
+  fDet = move(rhs.fDet);
+  fSqrDist = move(rhs.fSqrDist);
+  fE1 = move(rhs.fE1); fE2 = move(rhs.fE2);
+  fIsDefined = move(rhs.fIsDefined);
+  fVertices = move(rhs.fVertices);
+  rhs.fVertices = 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
 G4TriangularFacet::G4TriangularFacet (const G4TriangularFacet &rhs)
   : G4VFacet(rhs)
 {
   CopyFrom(rhs);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4TriangularFacet::G4TriangularFacet (G4TriangularFacet &&rhs)
+  : G4VFacet(rhs)
+{
+  MoveFrom(rhs);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -218,7 +244,26 @@ G4TriangularFacet::operator=(const G4TriangularFacet &rhs)
   SetVertices(0);
 
   if (this != &rhs)
+  {
+    delete fVertices;
     CopyFrom(rhs);
+  }
+
+  return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4TriangularFacet &
+G4TriangularFacet::operator=(G4TriangularFacet &&rhs)
+{
+  SetVertices(0);
+
+  if (this != &rhs)
+  {
+    delete fVertices;
+    MoveFrom(rhs);
+  }
 
   return *this;
 }

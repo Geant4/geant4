@@ -81,8 +81,8 @@ private:
 
   G4GeneratorPrecompoundInterface(const G4GeneratorPrecompoundInterface& right);
   const G4GeneratorPrecompoundInterface& operator=(const G4GeneratorPrecompoundInterface &right);
-  G4int operator==(G4GeneratorPrecompoundInterface& right) {return (this == &right);}
-  G4int operator!=(G4GeneratorPrecompoundInterface& right) {return (this != &right);}
+  G4bool operator==(G4GeneratorPrecompoundInterface& right) {return (this == &right);}
+  G4bool operator!=(G4GeneratorPrecompoundInterface& right) {return (this != &right);}
 
   G4double CaptureThreshold;
   const G4ParticleDefinition* proton;

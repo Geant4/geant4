@@ -18,16 +18,16 @@ committal in the CVS repository !
 
 March 13th, 2019, M. Asai (run-V10-05-03)
 - G4UserPhysicsListMessenger.cc: Defining unit categories for UI commands
-  that take units.
+  that take units. Co-working with intercoms-V10-05-02.
 
-March 11th, 2019, G. Cosmo
+March 11th, 2019, G. Cosmo (run-V10-05-02)
 - Fixed typos in printouts in G4RunMessenger, G4UserPhysicsListMessenger
   and G4VUserPhysicsList.
 
-February 13th, 2019, M. Asai
+February 13th, 2019, M. Asai (run-V10-05-01)
 - Fix G4MultiRunAction.cc to coop with more than one user run action classes
 
-January 31st, 2019, I.Hrivnacova
+January 31st, 2019, I.Hrivnacova (run-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 November 9th, 2018, J. Apostolakis (run-V10-04-22)

@@ -206,16 +206,15 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
 
   // Choose nucleus
   //last two :cutEnergy= min e kinEnergy=max
-  currentElement = SelectRandomAtom(couple, particle, kinEnergy, 
-                                    cutEnergy, kinEnergy);
-  G4double Z  = currentElement->GetZ();
-  G4int iz    = G4int(Z);
+  currentElement = SelectTargetAtom(couple, particle, kinEnergy, 
+                               dp->GetLogKineticEnergy(), cutEnergy, kinEnergy);
+  G4int iz    = currentElement->GetZasInt();
   G4int ia = SelectIsotopeNumber(currentElement);
   G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
   //G4cout<<"..Z: "<<Z<<" ..iz: "<<iz<<" ..ia: "<<ia<<" ..mass2: "<<mass2<<G4endl;
 
-  Mottcross->SetupKinematic(kinEnergy, Z);
+  Mottcross->SetupKinematic(kinEnergy, iz);
   G4double cross= Mottcross->NuclearCrossSection(FormFactor,XSectionModel);
   if(cross == 0.0) { return; }
   //cout<< "Energy: "<<kinEnergy/MeV<<" Z: "<<Z<<"....cross "<<G4BestUnit(cross,"Surface") << " cm2 "<< cross/cm2 <<endl;

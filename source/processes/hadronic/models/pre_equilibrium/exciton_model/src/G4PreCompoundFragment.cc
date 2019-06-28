@@ -88,7 +88,7 @@ IntegrateEmissionProbability(G4double low, G4double up,
 {  
   static const G4double den = 1.0/CLHEP::MeV;
   G4double del = (up - low);
-  G4int nbins  = std::max(3,(G4int)(del*den));
+  G4int nbins  = std::max(4,(G4int)(del*den));
   del /= (G4double)nbins;
   G4double e = low + 0.5*del;
   probmax = ProbabilityDistributionFunction(e, aFragment);

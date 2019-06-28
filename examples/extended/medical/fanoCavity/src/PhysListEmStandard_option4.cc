@@ -78,7 +78,7 @@ PhysListEmStandard_option4::PhysListEmStandard_option4(const G4String& name,
   param->SetUseMottCorrection(true);          
   param->SetMscStepLimitType(fUseSafetyPlus); 
   param->SetMscSkin(3);             
-  param->SetMscRangeFactor(0.2); 
+  param->SetMscRangeFactor(0.08); 
   SetPhysicsType(bElectromagnetic);
 }
 

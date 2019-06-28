@@ -34,7 +34,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} -pipe")
 
   # Additional per-mode flags
-  set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g -DG4FPE_DEBUG")
+  set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g")
   set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O3 -DNDEBUG")
   # Assist auto-vectorization
   set(CMAKE_CXX_FLAGS_RELEASE_INIT "${CMAKE_CXX_FLAGS_RELEASE_INIT} -fno-trapping-math -ftree-vectorize -fno-math-errno")
@@ -52,6 +52,9 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
   endif()
 
   # Extra Geant4 modes
+  # - Debug_FPE: Core Debug mode plus FPE)
+  set(CMAKE_CXX_FLAGS_DEBUG_FPE_INIT "${CMAKE_CXX_FLAGS_DEBUG_INIT} -DG4FPE_DEBUG")
+
   # - TestRelease
   set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-g -DG4DEBUG_VERBOSE -DG4FPE_DEBUG")
 

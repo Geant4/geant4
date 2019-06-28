@@ -42,8 +42,9 @@
 // category. The followings are commonly-used attributes:
 //   - visibility
 //   - visibility of daughters
-//   - force wireframe style, force solid style
-//   - force auxiliary edge visibility, force line segments pe circle
+//   - force style
+//   - force auxiliary edge visibility
+//   - force line segments per circle
 //   - colour
 // Class Description - End:
 
@@ -72,7 +73,7 @@ class G4VisAttributes {
 public: // With description
 
   enum LineStyle {unbroken, dashed, dotted};
-  enum ForcedDrawingStyle {wireframe, solid};
+  enum ForcedDrawingStyle {wireframe, solid, cloud};
 
   G4VisAttributes ();
   G4VisAttributes (G4bool visibility);
@@ -108,6 +109,8 @@ public: // With description
   void SetLineWidth           (G4double);
   void SetForceWireframe      (G4bool = true);
   void SetForceSolid          (G4bool = true);
+  void SetForceCloud          (G4bool = true);
+  void SetForceNumberOfCloudPoints (G4int nPoints);
   void SetForceAuxEdgeVisible (G4bool = true);
   void SetForceLineSegmentsPerCircle (G4int nSegments);
   // Allows choice of circle approximation.  A circle of 360 degrees
@@ -127,6 +130,7 @@ public: // With description
   G4double        GetLineWidth                   () const;
   G4bool          IsForceDrawingStyle            () const;
   ForcedDrawingStyle GetForcedDrawingStyle       () const;
+  G4int           GetForcedNumberOfCloudPoints   () const;
   G4bool          IsForceAuxEdgeVisible          () const;
   G4bool          IsForcedAuxEdgeVisible         () const;
   G4bool          IsForceLineSegmentsPerCircle   () const;
@@ -155,6 +159,8 @@ private:
                                    // pixels for screen, 0.1 mm for paper.
   G4bool      fForceDrawingStyle;  // To switch on forced drawing style.
   ForcedDrawingStyle fForcedStyle; // Value of forced drawing style.
+  G4int       fForcedNumberOfCloudPoints;  // Number of points used for cloud style.
+                                           // <=0 means take viewer default
   G4bool      fForceAuxEdgeVisible;   // To switch on a forced auxiliary edge mode.
   G4bool      fForcedAuxEdgeVisible;  // Whether aux edges are visible or not.
   G4int fForcedLineSegmentsPerCircle;  // Forced lines segments per

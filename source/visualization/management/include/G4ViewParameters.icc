@@ -291,6 +291,10 @@ inline G4double G4ViewParameters::GetDisplayLightFrontBlue () const {
   return fDisplayLightFrontBlue;
 }
 
+inline G4int G4ViewParameters::GetNumberOfCloudPoints () const {
+  return fNumberOfCloudPoints;
+}
+
 inline void
 G4ViewParameters::SetDrawingStyle (G4ViewParameters::DrawingStyle style) {
   fDrawingStyle = style;

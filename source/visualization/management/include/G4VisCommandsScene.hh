@@ -137,4 +137,16 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
+class G4VisCommandSceneShowExtents: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneShowExtents ();
+  virtual ~G4VisCommandSceneShowExtents ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneShowExtents (const G4VisCommandSceneShowExtents&);
+  G4VisCommandSceneShowExtents& operator = (const G4VisCommandSceneShowExtents&);
+  G4UIcmdWithoutParameter* fpCommand;
+};
+
 #endif

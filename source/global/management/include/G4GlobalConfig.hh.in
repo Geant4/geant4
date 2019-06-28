@@ -1,0 +1,54 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//! \file G4GlobalConfig.hh
+//! \brief Public global preprocessor defines
+
+#ifndef G4GLOBALCONFIG_HH
+#define G4GLOBALCONFIG_HH
+
+//! \def G4MULTITHREADED
+//! \brief Defined if Geant4 is built with Multithreading support
+#cmakedefine G4MULTITHREADED
+
+//! \def G4_STORE_TRAJECTORY
+//! \brief Defined if Geant4 is built with trajectory storage
+#cmakedefine G4_STORE_TRAJECTORY
+
+//! \def G4VERBOSE
+//! \brief Defined if Geant4 is built with additional verbosity in logging
+#cmakedefine G4VERBOSE
+
+//! \def G4USE_STD11
+//! \brief Defined if the C++11 standard or newer is in use
+//! \deprecated Geant4 requires C++11 or later, so this should no longer be used
+#define G4USE_STD11
+
+//! \def GEANT4_USE_TIMEMORY
+//! \brief Defined if Geant4 built with TiMemory support
+#cmakedefine GEANT4_USE_TIMEMORY
+
+#endif // G4GLOBALCONFIG_HH
+

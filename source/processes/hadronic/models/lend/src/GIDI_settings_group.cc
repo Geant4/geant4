@@ -54,6 +54,15 @@ void GIDI_settings_group::initialize( std::string const &label, int size1, int l
 /*
 =========================================================
 */
+GIDI_settings_group& GIDI_settings_group::operator=( const GIDI_settings_group &group ) {
+  if ( this != &group ) {
+    initialize( group.mLabel, group.size(), group.size(), &(group.mBoundaries[0]) );
+  }
+  return *this;
+}
+/*
+=========================================================
+*/
 GIDI_settings_group::~GIDI_settings_group( ) {
 
 }

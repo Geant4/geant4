@@ -58,8 +58,8 @@ class G4Nucleon : public G4VKineticNucleon
       G4Nucleon();
       ~G4Nucleon();
 
-      inline int operator==(const G4Nucleon &right) const;
-      inline int operator!=(const G4Nucleon &right) const;
+      inline G4bool operator==(const G4Nucleon &right) const;
+      inline G4bool operator!=(const G4Nucleon &right) const;
       G4Nucleon& operator=(const G4Nucleon& right);
 
   public:
@@ -108,11 +108,11 @@ class G4Nucleon : public G4VKineticNucleon
 
 std::ostream & operator << (std::ostream &, const G4Nucleon&);
 
-inline int G4Nucleon::operator==(const G4Nucleon &right) const
+inline G4bool G4Nucleon::operator==(const G4Nucleon &right) const
 {
 	return this==&right;
 }
-inline int G4Nucleon::operator!=(const G4Nucleon &right) const
+inline G4bool G4Nucleon::operator!=(const G4Nucleon &right) const
 {
 	return this!=&right;
 }

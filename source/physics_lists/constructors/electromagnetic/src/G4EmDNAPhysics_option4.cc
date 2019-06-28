@@ -100,6 +100,7 @@ G4EmDNAPhysics_option4::G4EmDNAPhysics_option4(G4int ver, const G4String&)
   param->SetAuger(true);  
   param->SetAugerCascade(true);  
   param->SetDeexcitationIgnoreCut(true);
+  param->ActivateDNA();
 
   SetPhysicsType(bElectromagnetic);
 }
@@ -155,13 +156,13 @@ void G4EmDNAPhysics_option4::ConstructProcess()
       // *** Solvation ***
       
       G4DNAElectronSolvation* solvation =
-       new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
-      G4DNAOneStepThermalizationModel* therm =
-       new G4DNAOneStepThermalizationModel();
+      new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
+
+      auto therm = G4DNASolvationModelFactory::GetMacroDefinedModel();
       therm->SetHighEnergyLimit(10.*eV); // limit of the Uehara's model
       solvation->SetEmModel(therm);
       ph->RegisterProcess(solvation, particle);
-      
+     
       // *** Elastic scattering (two alternative models available) ***
       
       G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");

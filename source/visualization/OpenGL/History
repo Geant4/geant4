@@ -16,6 +16,44 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 June 2019  John Allison (OpenGL-V10-05-06)
+- Part of vis-V10-05-20.
+- Final changes for introduction of cloud drawing:
+  o Follow change of accessor name: GetNumberOfCloudPoints.
+
+10 June 2019  John Allison (OpenGL-V10-05-05)
+- Part of vis-V10-05-19.
+- G4OpenGLImmediateXViewer:
+  Force double buffer context. (This can happen anyway when the display
+  list limit is reached in stored mode. Seems to be no problem.) We were
+  finding that the single buffer visual gave an X Error (BadMatch) on
+  some systems, so let us force the use if a double buffer. All systems
+  have double buffers nowadays.
+- G4OpenGLStoredViewer and StoredQtViewer:
+  Force kernel visit on change of number of cloud points.
+
+29 March 2019  John Allison (opengl-V10-05-04)
+- G4OpenGLSceneHandler.cc: Fix Coverity warning. Minor tidying.
+- G4OpenGLStoredViewer.cc and G4OpenGLStoredQtViewer.cc:
+  In CompareForKernelVisit require kernel visit if section plane changes.
+  Note this is required since *for now* sections are made in the base class
+  by using Boolean Processor.
+
+24 March 2019  John Allison (opengl-V10-05-03)
+- Fix bug in /vis/viewer/set/sectionPlane.
+  Involves using G4DisplacedSolid instead of plain G4VSolid.
+
+18 March 2019  Gabriele Cosmo (opengl-V10-05-02)
+- Corrected few typos in printout/comments.
+
+10 March 2019  John Allison (opengl-V10-05-01)
+- G4OpenGLStoredSceneHandler.cc: Tidy.
+
+08 March 2019  John Allison (opengl-V10-05-00)
+- G4OpenGLStoredSceneHandler.cc:
+  o Avoid re-using display lists for markers. They may have their own
+    position relative to the overall object transformation.
+
 5 October 2018  John Allison (opengl-V10-04-10)
 - In all header files, change
 #ifdef G4VIS_BUILD_OPENGL_DRIVER

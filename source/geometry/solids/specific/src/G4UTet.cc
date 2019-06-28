@@ -234,20 +234,20 @@ G4UTet::CalculateExtent(const EAxis pAxis,
 //
 G4Polyhedron* G4UTet::CreatePolyhedron() const
 {
-  G4int index = 0;
-  G4double array[12];
-  Base_t::GetParametersList(index, array);
+  std::vector<U3Vector> vec(4);
+  Base_t::GetVertices(vec[0], vec[1], vec[2], vec[3]);
 
-  G4Polyhedron *ph=new G4Polyhedron;
   G4double xyz[4][3];
-  const G4int faces[4][4]={{1,3,2,0},{1,4,3,0},{1,2,4,0},{2,3,4,0}};
-  xyz[0][0]=array[0]; xyz[0][1]=array[1]; xyz[0][2]=array[2]; // fAnchor
-  xyz[1][0]=array[3]; xyz[1][1]=array[4]; xyz[1][2]=array[5]; // fP2
-  xyz[2][0]=array[6]; xyz[2][1]=array[7]; xyz[2][2]=array[8]; // fP3
-  xyz[3][0]=array[9]; xyz[3][1]=array[10]; xyz[3][2]=array[11]; // fP4
+  const G4int faces[4][4] = {{1,3,2,0},{1,4,3,0},{1,2,4,0},{2,3,4,0}};
+  for (unsigned int i=0; i<4; ++i)
+  {
+    xyz[i][0] = vec[i].x();
+    xyz[i][1] = vec[i].y();
+    xyz[i][2] = vec[i].z();
+  }
 
+  G4Polyhedron *ph = new G4Polyhedron;
   ph->createPolyhedron(4,4,xyz,faces);
-
   return ph;
 }
 

@@ -32,7 +32,6 @@
 #include "G4VVisManager.hh"
 
 G4VVisManager::G4VVisManager ()
-: fDrawOverlapsFlag(false)
 {}
 
 G4VVisManager::~G4VVisManager () {}

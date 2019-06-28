@@ -81,6 +81,7 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   useAngularGenerator = false;
   isLocked = false;
   idxTable = 0;
+  fIdxTableElmSelector = 0;
 
   fEmManager = G4LossTableManager::Instance();
   fEmManager->Register(this);

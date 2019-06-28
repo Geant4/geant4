@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // Geant4 Header : G4HadronElastic
 //
 // Author : V.Ivanchenko 29 June 2009 (redesign old elastic model)
@@ -50,18 +49,17 @@ class G4HadronElastic : public G4HadronicInteraction
 {
 public:
 
-  G4HadronElastic(const G4String& name = "hElasticLHEP");
+  explicit G4HadronElastic(const G4String& name = "hElasticLHEP");
 
-  virtual ~G4HadronElastic();
+  ~G4HadronElastic() override;
  
   // implementation of the G4HadronicInteraction interface
-  virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
-					  G4Nucleus & targetNucleus);
+  G4HadFinalState* ApplyYourself(const G4HadProjectile & aTrack, 
+				 G4Nucleus & targetNucleus) override;
 
   // sample momentum transfer using Lab. momentum
-  virtual G4double SampleInvariantT(const G4ParticleDefinition* p, 
-				    G4double plab,
-				    G4int Z, G4int A);
+  G4double SampleInvariantT(const G4ParticleDefinition* p, G4double plab,
+			    G4int Z, G4int A) override;
 
   inline void SetLowestEnergyLimit(G4double value);
 
@@ -70,7 +68,11 @@ public:
   inline G4double ComputeMomentumCMS(const G4ParticleDefinition* p, 
 				     G4double plab, G4int Z, G4int A);
   
-  virtual void ModelDescription(std::ostream&) const;
+  void ModelDescription(std::ostream&) const override;
+
+protected:
+
+  G4double pLocalTmax;
 
 private:
 
@@ -79,8 +81,7 @@ private:
   G4ParticleDefinition* theDeuteron;
   G4ParticleDefinition* theAlpha;
 
-  G4double lowestEnergyLimit;  
-
+  G4double lowestEnergyLimit;
 };
 
 inline void G4HadronElastic::SetLowestEnergyLimit(G4double value)
@@ -95,7 +96,7 @@ inline G4double G4HadronElastic::LowestEnergyLimit() const
 
 inline G4double
 G4HadronElastic::ComputeMomentumCMS(const G4ParticleDefinition* p, 
-				     G4double plab, G4int Z, G4int A)
+				    G4double plab, G4int Z, G4int A)
 {
   G4double m1 = p->GetPDGMass();
   G4double m12= m1*m1;

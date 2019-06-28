@@ -34,8 +34,6 @@
 // Author:        Vladimir Ivanchenko
 //
 // Creation date: 13.03.2007
-// Modifications:
-//
 //
 // -------------------------------------------------------------------
 //
@@ -45,7 +43,6 @@
 #include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4NucleonNuclearCrossSection.hh"
 #include "G4HadronNucleonXsc.hh"
-#include "G4ComponentSAIDTotalXS.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4NistManager.hh"
@@ -54,29 +51,27 @@
 
 #include "G4CrossSectionDataSetRegistry.hh"
 
+G4double G4BGGNucleonElasticXS::theGlauberFac[93] = {0.0};
+G4double G4BGGNucleonElasticXS::theCoulombFac[93] = {0.0};
+G4int    G4BGGNucleonElasticXS::theA[93] = {0};
+
+#ifdef G4MULTITHREADED
+G4Mutex G4BGGNucleonElasticXS::nucleonElasticXSMutex = G4MUTEX_INITIALIZER;
+#endif
+
 G4BGGNucleonElasticXS::G4BGGNucleonElasticXS(const G4ParticleDefinition* p)
- : G4VCrossSectionDataSet("Barashenkov-Glauber") 
+ : G4VCrossSectionDataSet("BarashenkovGlauberGribov") 
 {
   verboseLevel = 0;
   fGlauberEnergy = 91.*GeV;
-  fPDGEnergy = 5*GeV;
-  fLowEnergy = 14.*MeV;
-  fSAIDLowEnergyLimit = 1*MeV;
-  fSAIDHighEnergyLimit = 1.3*GeV;
-  fLowestXSection = millibarn;
-  for (G4int i = 0; i < 93; ++i) {
-    theGlauberFac[i] = 0.0;
-    theCoulombFac[i] = 0.0;
-    theA[i] = 1;
-  }
+  fLowEnergy = 0.75*MeV;
   fNucleon = nullptr;
   fGlauber = nullptr;
   fHadron  = nullptr;
-  fSAID    = nullptr;
   particle = p;
   theProton= G4Proton::Proton();
   isProton = (theProton == p) ? true : false;
-  isInitialized = false;
+  isMaster = false;
   SetForAllAtomsAndEnergies(true);
 }
 
@@ -149,14 +144,10 @@ G4BGGNucleonElasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
 					  const G4Material*)
 {
   // this method should be called only for Z = 1
+  fHadron->HadronNucleonXscNS(dp->GetDefinition(), theProton, 
+			      dp->GetKineticEnergy());
+  G4double cross = A*fHadron->GetElasticHadronNucleonXsc();
 
-  G4double cross = 0.0;
-  if(1 == Z) {
-    G4double ekin = std::max(dp->GetKineticEnergy(), fLowEnergy);
-    fHadron->HadronNucleonXscNS(dp->GetDefinition(), theProton, ekin);
-    cross = fHadron->GetElasticHadronNucleonXsc();
-  }
-  cross *= A;
   if(verboseLevel > 1) {
     G4cout << "G4BGGNucleonElasticXS::GetIsoCrossSection  for "
 	   << dp->GetDefinition()->GetParticleName()
@@ -174,62 +165,75 @@ void G4BGGNucleonElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
   if(&p == theProton || &p == G4Neutron::Neutron()) {
     particle = &p;
+    isProton = (theProton == particle) ? true : false;
 
   } else {
-    G4cout << "### G4BGGNucleonElasticXS WARNING: is not applicable to " 
-	   << p.GetParticleName()
-	   << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__,
-	  "G4BGGNucleonElasticXS::BuildPhysicsTable is used for wrong particle");
+    G4ExceptionDescription ed;
+    ed << "This BGG cross section is applicable only to nucleons and not to " 
+       << p.GetParticleName() << G4endl; 
+    G4Exception("G4BGGNucleonElasticXS::BuildPhysicsTable", "had001", 
+		FatalException, ed);
     return;
   }
 
-  if(isInitialized) { return; }
-  isInitialized = true;
-
-  fNucleon = (G4NucleonNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NucleonNuclearCrossSection::Default_Name());
-  fGlauber = new G4ComponentGGHadronNucleusXsc();
-  fHadron  = new G4HadronNucleonXsc();
-
+  if(!fNucleon) { 
+    fNucleon = (G4NucleonNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NucleonNuclearCrossSection::Default_Name());
+    fGlauber = new G4ComponentGGHadronNucleusXsc();
+    fHadron  = new G4HadronNucleonXsc();
+  }
   fNucleon->BuildPhysicsTable(*particle);
   fGlauber->BuildPhysicsTable(*particle);
 
-  G4ThreeVector mom(0.0,0.0,1.0);
-  G4DynamicParticle dp(particle, mom, fGlauberEnergy);
-
-  G4NistManager* nist = G4NistManager::Instance();
-
-  G4double csup, csdn;
-  G4int A;
-
-  if(verboseLevel > 0) {
-    G4cout << "### G4BGGNucleonElasticXS::Initialise for "
-	   << particle->GetParticleName() << G4endl;
+  if(0 == theA[0]) { 
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&nucleonElasticXSMutex);
+    if(0 == theA[0]) { 
+#endif
+      isMaster = true;
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&nucleonElasticXSMutex);
+#endif
   }
 
-  for(G4int iz=2; iz<93; iz++) {
+  if(isMaster && 0 == theA[0]) {
 
-    A = G4lrint(nist->GetAtomicMassAmu(iz));
-    theA[iz] = A;
+    theA[0] = 1;
+    G4ThreeVector mom(0.0,0.0,1.0);
+    G4DynamicParticle dp(particle, mom, fGlauberEnergy);
 
-    csup = fGlauber->GetElasticGlauberGribov(&dp, iz, A);
-    csdn = fNucleon->GetElasticCrossSection(&dp, iz);
+    G4NistManager* nist = G4NistManager::Instance();
+    G4double csup, csdn;
 
-    theGlauberFac[iz] = csdn/csup;
-    if(verboseLevel > 0) { 
-      G4cout << "Z= " << iz <<  "  A= " << A 
-	     << " factor= " << theGlauberFac[iz] << G4endl;
-    } 
-  }
-
-  theCoulombFac[0] = theCoulombFac[1] = 1.0; 
-  dp.SetKineticEnergy(fLowEnergy);
-  for(G4int iz=2; iz<93; iz++) {
-    theCoulombFac[iz] = 
-      fNucleon->GetElasticCrossSection(&dp, iz)/CoulombFactor(fLowEnergy, iz);
     if(verboseLevel > 0) {
-      G4cout << "Z= " << iz <<  "  A= " << theA[iz]
-             << " factor= " << theCoulombFac[iz] << G4endl; 
+      G4cout << "### G4BGGNucleonElasticXS::Initialise for "
+	     << particle->GetParticleName() << G4endl;
+    }
+
+    for(G4int iz=2; iz<93; iz++) {
+
+      G4int A = G4lrint(nist->GetAtomicMassAmu(iz));
+      theA[iz] = A;
+
+      csup = fGlauber->GetElasticGlauberGribov(&dp, iz, A);
+      csdn = fNucleon->GetElasticCrossSection(&dp, iz);
+
+      theGlauberFac[iz] = csdn/csup;
+      if(verboseLevel > 0) { 
+	G4cout << "Z= " << iz <<  "  A= " << A 
+	       << " factor= " << theGlauberFac[iz] << G4endl;
+      } 
+    }
+
+    theCoulombFac[0] = theCoulombFac[1] = 1.0; 
+    dp.SetKineticEnergy(fLowEnergy);
+    for(G4int iz=2; iz<93; ++iz) {
+      theCoulombFac[iz] = 
+	fNucleon->GetElasticCrossSection(&dp, iz)/CoulombFactor(fLowEnergy, iz);
+      if(verboseLevel > 0) {
+	G4cout << "Z= " << iz <<  "  A= " << theA[iz]
+	       << " factor= " << theCoulombFac[iz] << G4endl; 
+      }
     }
   }
 }

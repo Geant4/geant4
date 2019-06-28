@@ -47,7 +47,9 @@ G4double        G4VVisCommand::fCurrentLineWidth = 1.;  // pixels
 // Not yet used: G4VisAttributes::LineStyle G4VVisCommand::fCurrentLineStyle = G4VisAttributes::unbroken;
 // Not yet used: G4VMarker::FillStyle       G4VVisCommand::fCurrentFillStyle = G4VMarker::filled;
 // Not yet used: G4VMarker::SizeType        G4VVisCommand::fCurrentSizeType = G4VMarker::screen;
-G4PhysicalVolumeModel::TouchableProperties G4VVisCommand::fCurrentTouchableProperties;
+G4PhysicalVolumeModel::TouchableProperties          G4VVisCommand::fCurrentTouchableProperties;
+G4VisExtent                                         G4VVisCommand::fCurrentExtentForField;
+std::vector<G4PhysicalVolumesSearchScene::Findings> G4VVisCommand::fCurrrentPVFindingsForField;
 
 G4VVisCommand::G4VVisCommand () {}
 
@@ -215,4 +217,127 @@ void G4VVisCommand::CheckSceneAndNotifyHandlers(G4Scene* pScene)
     G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/scene/notifyHandlers");
   }
 
+}
+
+void G4VVisCommand::G4VisCommandsSceneAddUnsuccessful
+(G4VisManager::Verbosity verbosity) {
+  // Some frequently used error printing...
+  if (verbosity >= G4VisManager::warnings) {
+    G4cout <<
+    "WARNING: For some reason, possibly mentioned above, it has not been"
+    "\n  possible to add to the scene."
+    << G4endl;
+  }
+}
+
+void G4VVisCommand::SetViewParameters
+(G4VViewer* viewer, const G4ViewParameters& viewParams) {
+  viewer->SetViewParameters(viewParams);
+  RefreshIfRequired(viewer);
+}
+
+void G4VVisCommand::RefreshIfRequired(G4VViewer* viewer) {
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
+  const G4ViewParameters& viewParams = viewer->GetViewParameters();
+  if (sceneHandler && sceneHandler->GetScene()) {
+    if (viewParams.IsAutoRefresh()) {
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+    }
+    else {
+      if (verbosity >= G4VisManager::warnings) {
+        G4cout << "Issue /vis/viewer/refresh or flush to see effect."
+        << G4endl;
+      }
+    }
+  }
+}
+
+void G4VVisCommand::InterpolateViews
+(G4VViewer* currentViewer,
+ std::vector<G4ViewParameters> viewVector,
+ const G4int nInterpolationPoints,
+ const G4int waitTimePerPointmilliseconds,
+ const G4String exportString)
+{
+  const G4int safety = viewVector.size()*nInterpolationPoints;
+  G4int safetyCount = 0;
+  do {
+    G4ViewParameters* vp =
+    G4ViewParameters::CatmullRomCubicSplineInterpolation(viewVector,nInterpolationPoints);
+    if (!vp) break;  // Finished.
+    currentViewer->SetViewParameters(*vp);
+    currentViewer->RefreshView();
+    if (exportString == "export" &&
+        currentViewer->GetName().contains("OpenGL")) {
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/ogl/export");
+    }
+    // File-writing viewers need to close the file
+    currentViewer->ShowView();
+#ifdef G4VIS_USE_STD11
+    if (waitTimePerPointmilliseconds > 0)
+      std::this_thread::sleep_for(std::chrono::milliseconds(waitTimePerPointmilliseconds));
+#endif
+  } while (safetyCount++ < safety);  // Loop checking, 16.02.2016, J.Allison
+}
+
+void G4VVisCommand::InterpolateToNewView
+(G4VViewer* currentViewer,
+ const G4ViewParameters& oldVP,
+ const G4ViewParameters& newVP,
+ const G4int nInterpolationPoints,
+ const G4int waitTimePerPointmilliseconds,
+ const G4String exportString)
+{
+  std::vector<G4ViewParameters> viewVector;
+  viewVector.push_back(oldVP);
+  viewVector.push_back(oldVP);
+  viewVector.push_back(newVP);
+  viewVector.push_back(newVP);
+  
+  InterpolateViews
+  (currentViewer,
+   viewVector,
+   nInterpolationPoints,
+   waitTimePerPointmilliseconds,
+   exportString);
+}
+
+void G4VVisCommand::CopyGuidanceFrom
+(const G4UIcommand* fromCmd, G4UIcommand* toCmd, G4int startLine)
+{
+  if (fromCmd && toCmd) {
+    const G4int nGuideEntries = fromCmd->GetGuidanceEntries();
+    for (G4int i = startLine; i < nGuideEntries; ++i) {
+      const G4String& guidance = fromCmd->GetGuidanceLine(i);
+      toCmd->SetGuidance(guidance);
+    }
+  }
+}
+
+void G4VVisCommand::CopyParametersFrom
+(const G4UIcommand* fromCmd, G4UIcommand* toCmd)
+{
+  if (fromCmd && toCmd) {
+    const G4int nParEntries = fromCmd->GetParameterEntries();
+    for (G4int i = 0; i < nParEntries; ++i) {
+      G4UIparameter* parameter = new G4UIparameter(*(fromCmd->GetParameter(i)));
+      toCmd->SetParameter(parameter);
+    }
+  }
+}
+
+void G4VVisCommand::DrawExtent(const G4VisExtent& extent)
+{
+  if (fpVisManager) {
+    const G4double halfX = (extent.GetXmax() - extent.GetXmin()) / 2.;
+    const G4double halfY = (extent.GetYmax() - extent.GetYmin()) / 2.;
+    const G4double halfZ = (extent.GetZmax() - extent.GetZmin()) / 2.;
+    if (halfX > 0. && halfY > 0. && halfZ > 0.) {
+      const G4Box box("vis_extent",halfX,halfY,halfZ);
+      const G4VisAttributes visAtts(G4Color::Red());
+      const G4Point3D& centre = extent.GetExtentCenter();
+      fpVisManager->Draw(box,visAtts,G4Translate3D(centre));
+    }
+  }
 }

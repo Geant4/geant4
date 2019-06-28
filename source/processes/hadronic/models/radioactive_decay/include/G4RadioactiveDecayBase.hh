@@ -127,10 +127,6 @@ class G4RadioactiveDecayBase : public G4VRestDiscreteProcess
     // by G4RadioactiveDecay
     inline G4NucleusLimits GetNucleusLimits() const {return theNucleusLimits;}
 
-    // Controls whether G4RadioactiveDecay uses fast beta simulation mode
-    // Currently does nothing - kept for backward compatibility
-    inline void SetFBeta (G4bool r ) { FBeta  = r; }
-
     inline void SetDecayDirection(const G4ThreeVector& theDir) {
       forceDecayDirection = theDir.unit();
     }
@@ -173,8 +169,6 @@ class G4RadioactiveDecayBase : public G4VRestDiscreteProcess
     G4double GetMeanLifeTime(const G4Track& theTrack,
                              G4ForceCondition* condition);
 
-//    G4double GetDecayTime();
-
     // ParticleChange for decay process
     G4ParticleChangeForRadDecay fParticleChangeForRadDecay;
 
@@ -188,13 +182,14 @@ class G4RadioactiveDecayBase : public G4VRestDiscreteProcess
 
   private:
 
+    void StreamInfo(std::ostream& os, const G4String& endline);
+
     G4RadioactiveDecayBase(const G4RadioactiveDecayBase &right);
     G4RadioactiveDecayBase& operator=(const G4RadioactiveDecayBase &right);
 
     G4NucleusLimits theNucleusLimits;
 
     G4bool isInitialised;
-    G4bool FBeta;
 
     G4bool applyICM;
     G4bool applyARM;
@@ -244,6 +239,8 @@ class G4RadioactiveDecayBase : public G4VRestDiscreteProcess
 #ifdef G4MULTITHREADED
   public:
     static G4Mutex radioactiveDecayMutex;
+  protected:
+    G4int& NumberOfInstances();
 #endif
 };
 

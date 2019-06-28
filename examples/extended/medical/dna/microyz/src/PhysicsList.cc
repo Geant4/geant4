@@ -44,7 +44,11 @@
 #include "G4EmDNAPhysics_option5.hh"
 #include "G4EmDNAPhysics_option6.hh"
 
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
+
 #include "G4UserSpecialCuts.hh"
+#include "G4StepLimiter.hh"
 
 // particles
 
@@ -128,6 +132,10 @@ void PhysicsList::ConstructProcess()
   //
   AddTrackingCut();
 
+  // maximum step size
+  //
+  AddMaxStepSize();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -175,6 +183,16 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option6();
          
+  } else if (name == "liv") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLivermorePhysics();
+         
+  } else if (name == "pene") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmPenelopePhysics();
+         
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
@@ -204,4 +222,24 @@ void PhysicsList::AddTrackingCut()
   }
 }
       
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::AddMaxStepSize()
+{
+
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)())
+  {
+    G4ParticleDefinition* particle = particleIterator->value();
+    G4String particleName = particle->GetParticleName();
+
+    if (particleName == "e-") 
+    {
+      ph->RegisterProcess(new G4StepLimiter(), particle); 
+    }
+  }
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

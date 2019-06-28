@@ -14,6 +14,30 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+03-06-2019, MK, tag emdna-V10-05-06
+- Fix GCC9 warnings
+
+26-03-2019, HT, tag emdna-V10-05-05
+- Added G4DNAMolecule
+
+10-03-2019, MK, tag emdna-V10-05-04
+- Fix reaction site issue
+- Chemistry: clarify pointer ownership, clean code
+
+11-03-2019, G.Cosmo, tag emdna-V10-05-03
+- Fixed typos in printouts in G4MolecularConfiguration, G4VITRestDiscreteProcess,
+  G4VITRestProcess, G4DNAElectronHoleRecombination.
+
+18-01-2019, HT, tag emdna-V10-05-02
+- Transformed the exception into warning in G4DNAMolecularDissociation
+
+28-12-2018, MK, tag emdna-V10-05-01
+DEV-300 : G4DNAChemistryManager clarify pointer ownership
+
+05-01-2019, HT, tag emdna-V10-05-00
+- moved the checking position of track status 
+in G4ITStepProcessor::SetInitialStep()  
+
 01-09-2018, SI, tag emdna-V10-04-10
 renamed tag
 

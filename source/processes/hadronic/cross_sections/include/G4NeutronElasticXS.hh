@@ -33,8 +33,6 @@
 //
 // Author  Ivantchenko, Geant4, 3-AUG-09
 //
-// Modifications:
-//
  
 // Class Description:
 // This is a base class for neutron elastic hadronic cross section based on
@@ -57,7 +55,7 @@ class G4ParticleDefinition;
 class G4Element;
 class G4PhysicsVector;
 class G4ComponentGGHadronNucleusXsc;
-class G4HadronNucleonXsc;
+class G4NistManager;
 
 class G4NeutronElasticXS : public G4VCrossSectionDataSet
 {
@@ -65,38 +63,35 @@ public:
 
   explicit G4NeutronElasticXS();
 
-  virtual ~G4NeutronElasticXS();
+  ~G4NeutronElasticXS() final;
     
   static const char* Default_Name() {return "G4NeutronElasticXS";}
 
-  virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, 
-			     G4int Z, const G4Material*);
+			     G4int Z, const G4Material*) final;
 
-  virtual
   G4double GetElementCrossSection(const G4DynamicParticle*, 
-				  G4int Z, const G4Material* mat=nullptr); 
+			          G4int Z, const G4Material*) final; 
 
-  virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&);
+  void BuildPhysicsTable(const G4ParticleDefinition&) final;
 
-  virtual void CrossSectionDescription(std::ostream&) const;
+  void CrossSectionDescription(std::ostream&) const final;
 
 private: 
 
-  void Initialise(G4int Z, G4DynamicParticle* dp, const char*);
+  void Initialise(G4int Z, const char*);
 
   G4NeutronElasticXS & operator=(const G4NeutronElasticXS &right);
   G4NeutronElasticXS(const G4NeutronElasticXS&);
   
+  G4NistManager* nist;
   G4ComponentGGHadronNucleusXsc* ggXsection;
-  G4HadronNucleonXsc* fNucleon;
-
-  const G4ParticleDefinition* proton;
+  const G4ParticleDefinition* neutron;
 
   static G4PhysicsVector* data[MAXZEL];
-  static G4double  coeff[MAXZEL];
+  static G4double coeff[MAXZEL];
 
+  size_t  fIdxXSTable;
   G4bool  isMaster;
 
 #ifdef G4MULTITHREADED

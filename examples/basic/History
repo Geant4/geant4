@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-31/01/19, I.Hrivnacova (exbasic-V10-04-01)
+31/01/19, I.Hrivnacova (exbasic-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 30/11/18 I. Hrivnacova (exbasic-V10-04-00)

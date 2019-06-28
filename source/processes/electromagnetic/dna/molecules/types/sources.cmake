@@ -40,6 +40,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-moltypes
         G4H3O.hh
         G4Hydrogen.hh
         G4OH.hh
+        G4DNAMolecule.hh
     SOURCES
         G4Electron_aq.cc
         G4H2.cc
@@ -48,6 +49,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-moltypes
         G4H3O.cc
         G4Hydrogen.cc
         G4OH.cc
+        G4DNAMolecule.cc
     GRANULAR_DEPENDENCIES
         G4geometrymng
         G4globman

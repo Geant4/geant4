@@ -25,12 +25,12 @@
 //
 //
 //
-// 
+//
 // class G4UAdapter
 //
 // Class description:
 //
-// Utility class for adapting VecGeom solids API to Geant4 solids. 
+// Utility class for adapting VecGeom solids API to Geant4 solids.
 // NOTE: Using protected inheritance since the Adapter is supposed to
 // be a G4VSolid "implemented-in-terms-of" the VecGeom UnplacedVolume_t.
 // The choice of protected vs private is due to the fact that we want
@@ -55,6 +55,8 @@
 #include "G4VisExtent.hh"
 #include "G4BoundingEnvelope.hh"
 #include "G4AutoLock.hh"
+
+#include "G4GeomTypes.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 

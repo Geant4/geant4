@@ -185,7 +185,9 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   if (eps0 > 0.5) { return; }
   //
   // select target element of the material (probs. are based on partial x-secs)
-  const G4Element* anElement = SelectRandomAtom(couple,fTheGamma,gammaEnergy);
+  const G4Element* anElement = SelectTargetAtom(couple, fTheGamma, gammaEnergy,
+                                          aDynamicGamma->GetLogKineticEnergy());
+
   // 
   // get the random engine
   CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();

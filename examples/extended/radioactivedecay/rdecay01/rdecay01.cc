@@ -50,7 +50,6 @@
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
@@ -106,6 +105,4 @@ int main(int argc,char** argv) {
   delete visManager;
   delete runManager;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

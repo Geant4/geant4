@@ -64,15 +64,17 @@ class G4PVData
   //  and must have a per-thread state.
 
   public:
-    G4PVData():frot(0) {}
 
-    void initialize() {
+    G4PVData() : frot(0) {}
+
+    void initialize()
+    {
       frot = 0;
-      ftrans = G4ThreeVector(0,0,0);
+      tx = 0.; ty = 0.; tz = 0.;
     }
 
     G4RotationMatrix *frot;
-    G4ThreeVector ftrans;
+    G4double tx = 0., ty = 0., tz = 0.;
 };
 
 typedef G4GeomSplitter<G4PVData> G4PVManager;
@@ -124,7 +126,7 @@ class G4VPhysicalVolume
 
     // Older access functions, that do not distinguish between frame/object!
 
-    const G4ThreeVector& GetTranslation() const;
+    const G4ThreeVector GetTranslation() const;
     const G4RotationMatrix* GetRotation() const;
       // Old access functions, that do not distinguish between frame/object!
       // They return the translation/rotation of the volume.

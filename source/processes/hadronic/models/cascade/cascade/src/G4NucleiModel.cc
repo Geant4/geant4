@@ -1193,7 +1193,7 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
 
   if (adjustpperp) {                       // NAT
     G4ThreeVector old_pperp = mom.vect() - pos*(pr/r);
-    G4double new_pperp_mag = std::sqrt(pperp2 + qv - p1r*p1r);
+    G4double new_pperp_mag = std::sqrt(std::max(0.0, pperp2 + qv - p1r*p1r) );
     // new total momentum found by rescaling p_perp
     mom.setVect(old_pperp * new_pperp_mag/std::sqrt(pperp2));
     // add a small radial component to make sure that we propagate into new zone

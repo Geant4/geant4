@@ -58,10 +58,7 @@
 #                     Geant4_LIBRARIES being populated with the static
 #                     versions of the Geant4 libraries. It does not
 #                     guarantee the use of static third party libraries.)
-#  multithreaded     (Libraries have multithreading support. Using this
-#                     component will add the compiler definitions needed
-#                     to activate multithread mode to Geant4_DEFINITIONS,
-#                     if the libraries support it.)
+#  multithreaded     (Libraries are multithread capable)
 #
 #  usolids           (Geant4 solids are replaced with USolids equivalents)
 #
@@ -301,19 +298,12 @@ set(Geant4_builtin_zlib_FOUND @GEANT4_USE_BUILTIN_ZLIB@)
 set(Geant4_multithreaded_FOUND @GEANT4_BUILD_MULTITHREADED@)
 if(Geant4_multithreaded_FOUND)
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS multithreaded)
-  list(APPEND Geant4_DEFINITIONS -DG4MULTITHREADED)
 
   # - Define variable to indicate TLS model used
   set(Geant4_TLS_MODEL "@GEANT4_BUILD_TLS_MODEL@")
   if(Geant4_TLS_MODEL STREQUAL "auto")
     unset(Geant4_TLS_MODEL)
   endif()
-endif()
-
-# - Muonic Atom support
-set(Geant4_muonic_atoms_FOUND @GEANT4_BUILD_MUONIC_ATOMS_IN_USE@)
-if(Geant4_muonic_atoms_FOUND)
-  list(REMOVE_ITEM Geant4_FIND_COMPONENTS muonic_atoms)
 endif()
 
 # - GDML
@@ -333,7 +323,6 @@ endif()
 set(Geant4_timemory_FOUND @GEANT4_USE_TIMEMORY@)
 if(Geant4_timemory_FOUND)
     list(REMOVE_ITEM Geant4_FIND_COMPONENTS timemory)
-    list(APPEND Geant4_DEFINITIONS -DGEANT4_USE_TIMEMORY)
     set(_geant4_timemory_dir "@TiMemory_DIR@")
     # always use same installation
     unset(TiMemory_DIR CACHE)
@@ -356,6 +345,7 @@ endif()
 # - Usolids
 set(Geant4_usolids_FOUND @GEANT4_USE_USOLIDS_EITHER@)
 if(Geant4_usolids_FOUND)
+  # Requires refind of VecGeom once that supports Targets/Usage Reqs
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS usolids)
 endif()
 

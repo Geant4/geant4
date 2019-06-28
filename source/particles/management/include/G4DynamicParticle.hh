@@ -42,6 +42,8 @@
 //                             17 AUg. 1999   H.Kurashige  
 //      Add thePreAssignedDecayTime   18 Jan. 2001 H.Kurashige
 //      Added  MagneticMoment               Mar. 2007
+//      Added GetLogKineticEnergy: the log-kinetic energy value is computed only 
+ //     on demand if its stored value is not up-to-date. 15 March 2019 M. Novak
 // ------------------------------------------------------------
 
 #ifndef G4DynamicParticle_h
@@ -49,6 +51,7 @@
 
 #include <cmath>
 #include <CLHEP/Units/SystemOfUnits.h>
+#include <CLHEP/Units/PhysicalConstants.h>
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -56,6 +59,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Allocator.hh"
 #include "G4LorentzVector.hh"
+#include "G4Log.hh"
 
 #include "G4ParticleMomentum.hh"
 //  G4ParticleMomentum is "momentum direction" not "momentum vector"
@@ -64,10 +68,8 @@
 
 #include "G4ElectronOccupancy.hh"
 
-
 class G4PrimaryParticle;
-class  G4VProcess;
-class  G4DecayProducts;
+class G4DecayProducts;
 
 class G4DynamicParticle 
 {
@@ -130,7 +132,6 @@ class G4DynamicParticle
      void Set4Momentum( const G4LorentzVector &momentum);
       //  Set the current particle energy-momentum 4vector
 
-
      G4double GetTotalMomentum() const;
       //  Returns the module of the momentum vector
      G4double GetTotalEnergy() const;
@@ -138,26 +139,27 @@ class G4DynamicParticle
 
      G4double GetKineticEnergy() const;
       //  Returns the kinetic energy of a particle
+     G4double GetLogKineticEnergy() const;
+      //  Returns:
+      //   - natural logarithm of the particle kinetic energy (E_k) if E_k > 0
+      //   - LOG_EKIN_MIN otherwise
      void SetKineticEnergy(G4double aEnergy);
       //  Sets the kinetic energy of a particle
-
 
      G4double GetProperTime() const;
       //  Returns the current particle proper time
      void SetProperTime( G4double );
       //  Set the current particle Proper Time
 
-
      const G4ThreeVector& GetPolarization() const;
+     void SetPolarization(const G4ThreeVector&);
      void SetPolarization(G4double polX, G4double polY, G4double polZ);
       //   Set/Get polarization vector       
-
 
      G4double GetMass() const;
      void     SetMass(G4double mass);
      // set/get dynamical mass
      // the dynamical mass is set to PDG mass in default
-
 
      G4double GetCharge() const;
      void     SetCharge(G4double charge);
@@ -176,7 +178,6 @@ class G4DynamicParticle
      // set/get dynamical MagneticMoment  
      // the dynamical mass is set to PDG MagneticMoment in default
 
-
      const G4ElectronOccupancy* GetElectronOccupancy() const;
      // Get electron occupancy 
      // ElectronOccupancy is valid only if the particle is ion
@@ -184,15 +185,13 @@ class G4DynamicParticle
      G4int  GetOccupancy(G4int orbit) const;
      void   AddElectron(G4int orbit, G4int number = 1);
      void   RemoveElectron(G4int orbit, G4int number = 1);
- 
- 
+  
      const G4ParticleDefinition* GetParticleDefinition() const;
      void SetDefinition(const G4ParticleDefinition * aParticleDefinition);
      //   Set/Get particle definition  
      //  following method of GetDefinition remains 
      //  because of backward compatiblity. It will be removed in future 
      G4ParticleDefinition* GetDefinition() const;
- 
      
      const G4DecayProducts *GetPreAssignedDecayProducts() const;
      void SetPreAssignedDecayProducts(G4DecayProducts *aDecayProducts);
@@ -203,45 +202,15 @@ class G4DynamicParticle
       //   Set/Get pre-assigned proper time when the particle will decay
  
    
-  //- print out information
+     //- print out information
      void DumpInfo(G4int mode= 0) const;
      //    mode 0 : default )(minimum)
      //    mode 1 : 0 + electron occupancy
 
-   protected:
+ protected:
      void      AllocateElectronOccupancy(); 
      G4double  GetElectronMass() const;
 
-   protected:
-     G4ThreeVector theMomentumDirection;
-      //  The normalized momentum vector
-
-     const G4ParticleDefinition *theParticleDefinition;
-      //  Contains the static information of this particle.
-
-     G4ThreeVector thePolarization;
-
-     G4double theKineticEnergy;
-
-     G4double theProperTime;
-
-     G4double theDynamicalMass;
-
-     G4double theDynamicalCharge;
-
-     G4double theDynamicalSpin;
-
-     G4double theDynamicalMagneticMoment;
-
-     G4ElectronOccupancy* theElectronOccupancy;          
-  
-     G4DecayProducts *thePreAssignedDecayProducts;
-
-     G4double thePreAssignedDecayTime;
-
- protected:
-   G4int verboseLevel;
- 
  public:  // With Description
    void  SetVerboseLevel(G4int value);
    G4int GetVerboseLevel() const;
@@ -250,13 +219,6 @@ class G4DynamicParticle
    //  1: Warning message
    //  2: More
 
- protected:
-   G4PrimaryParticle* primaryParticle;
-   // This void pointer is used by G4EventManager to maintain the
-   // link between pre-assigned decay products and corresponding
-   // primary particle.
-
- public:
    void SetPrimaryParticle(G4PrimaryParticle* p);
    void SetPDGcode(G4int c);
 
@@ -273,7 +235,43 @@ class G4DynamicParticle
    // corresponding primary particle or pre-assigned decay product will be
    // returned if available. Otherwise (e.g. for geantino) returns 0.
 
- protected:
+ private:
+
+   G4ThreeVector theMomentumDirection;
+   //  The normalized momentum vector
+
+   G4ThreeVector thePolarization;
+
+   const G4ParticleDefinition *theParticleDefinition;
+   //  Contains the static information of this particle.
+
+   G4ElectronOccupancy* theElectronOccupancy;          
+  
+   G4DecayProducts *thePreAssignedDecayProducts;
+
+   G4PrimaryParticle* primaryParticle;
+   // This void pointer is used by G4EventManager to maintain the
+   // link between pre-assigned decay products and corresponding
+   // primary particle.
+
+   G4double theKineticEnergy;
+
+   mutable G4double theLogKineticEnergy;
+
+   G4double theProperTime;
+
+   G4double theDynamicalMass;
+
+   G4double theDynamicalCharge;
+
+   G4double theDynamicalSpin;
+
+   G4double theDynamicalMagneticMoment;
+
+   G4double thePreAssignedDecayTime;
+
+   G4int verboseLevel;
+
    G4int thePDGcode;
 };
 

@@ -43,51 +43,47 @@
 
 #include "globals.hh"
 #include "G4PiData.hh"
+#include "G4Threading.hh"
+#include <vector>
 
 class G4ComponentBarNucleonNucleusXsc : public G4VComponentCrossSection
 {
 
 public:
   
-  G4ComponentBarNucleonNucleusXsc();
-  virtual ~G4ComponentBarNucleonNucleusXsc();
+  explicit G4ComponentBarNucleonNucleusXsc();
+  ~G4ComponentBarNucleonNucleusXsc() override;
 
-  virtual
   G4double GetTotalIsotopeCrossSection(const G4ParticleDefinition* aParticle,
 				       G4double kinEnergy,
-				       G4int Z, G4int );
+				       G4int Z, G4int ) final;
 
-  virtual
   G4double GetTotalElementCrossSection(const G4ParticleDefinition* aParticle,
 				       G4double kinEnergy, 
-				       G4int Z, G4double );
+				       G4int Z, G4double ) final;
 
-  virtual
   G4double GetInelasticIsotopeCrossSection(const G4ParticleDefinition* aParticle,
 					   G4double kinEnergy, 
-					   G4int Z, G4int );
+					   G4int Z, G4int ) final;
 
-  virtual
   G4double GetInelasticElementCrossSection(const G4ParticleDefinition* aParticle,
 					   G4double kinEnergy, 
-					   G4int Z, G4double );
+					   G4int Z, G4double ) final;
 
-  virtual
   G4double GetElasticElementCrossSection(const G4ParticleDefinition* aParticle,
 					 G4double kinEnergy, 
-					 G4int Z, G4double );
+					 G4int Z, G4double ) final;
 
-  virtual
   G4double GetElasticIsotopeCrossSection(const G4ParticleDefinition* aParticle,
 					 G4double kinEnergy, 
-					 G4int Z, G4int );
+					 G4int Z, G4int ) final;
 
   void ComputeCrossSections(const G4ParticleDefinition* aParticle,
 			    G4double kinEnergy, G4int Z);
  
-  G4bool IsElementApplicable(const G4DynamicParticle* aParticle, G4int Z);
+  void BuildPhysicsTable(const G4ParticleDefinition&) final;
 
-  virtual void CrossSectionDescription(std::ostream&) const;
+  void Description(std::ostream&) const final;
 
   inline G4double GetElementCrossSection(const G4DynamicParticle* aParticle, G4int Z); 
   inline G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, G4int Z);
@@ -98,11 +94,9 @@ public:
   
 private:
 
-  G4double Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2);
+  G4double Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2) const;
 
-  std::vector< G4int >     theZ;
-  std::vector< G4PiData* > thePipData;
-  std::vector< G4PiData* > thePimData;
+  void LoadData();
 
   // cross sections
   G4double fTotalXsc;
@@ -113,8 +107,19 @@ private:
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theNeutron;
 
+  G4bool isMaster;
+
   static G4double theA[93];
   static G4double A75[93];
+
+  static const G4int NZ = 17;
+  static G4int theZ[NZ];
+  static std::vector<G4PiData*>* thePData;
+  static std::vector<G4PiData*>* theNData;
+
+#ifdef G4MULTITHREADED
+  static G4Mutex barNNXSMutex;
+#endif
 
 };
 

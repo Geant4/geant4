@@ -58,12 +58,16 @@ using namespace std;
 
 G4CT_COUNT_IMPL(G4DNAWaterDissociationDisplacer,
                 Ionisation_DissociationDecay)
+
 G4CT_COUNT_IMPL(G4DNAWaterDissociationDisplacer,
                 A1B1_DissociationDecay)
+
 G4CT_COUNT_IMPL(G4DNAWaterDissociationDisplacer,
                 B1A1_DissociationDecay)
+
 G4CT_COUNT_IMPL(G4DNAWaterDissociationDisplacer,
                 AutoIonisation)
+
 G4CT_COUNT_IMPL(G4DNAWaterDissociationDisplacer,
                 DissociativeAttachment)
 
@@ -95,288 +99,321 @@ G4double G4DNAWaterDissociationDisplacer::ElectronProbaDistribution(G4double r)
 G4double G4DNAWaterDissociationDisplacer::ElectronProbaDistribution(G4double r)
 {
 #define b 27.22 //*nanometer
-  static constexpr double sqrt_pi=1.77245; // sqrt(CLHEP::pi);
-  static constexpr double b_to3 = 20168.1; // pow(b,3.);
-  static constexpr double b_to2 = 740.928; // pow(b,2.);
-  static constexpr double inverse_b_to2 = 1./b_to2;
+    static constexpr double sqrt_pi = 1.77245; // sqrt(CLHEP::pi);
+    static constexpr double b_to3 = 20168.1; // pow(b,3.);
+    static constexpr double b_to2 = 740.928; // pow(b,2.);
+    static constexpr double inverse_b_to2 = 1. / b_to2;
 
-  static constexpr double main_factor=4./(sqrt_pi*b_to3);
-  static constexpr double factorA=sqrt_pi*b_to3/4.;
-  static constexpr double factorB=b_to2/2.;
+    static constexpr double main_factor = 4. / (sqrt_pi * b_to3);
+    static constexpr double factorA = sqrt_pi * b_to3 / 4.;
+    static constexpr double factorB = b_to2 / 2.;
 
-  return (main_factor*
-          (factorA*erf(r/b)
-            - factorB*r*G4Exp(-pow(r,2.)*inverse_b_to2)));
+    return (main_factor *
+            (factorA * erf(r / b)
+             - factorB * r * G4Exp(-pow(r, 2.) * inverse_b_to2)));
 }
+
 #endif
 //------------------------------------------------------------------------------
 
-G4DNAWaterDissociationDisplacer::G4DNAWaterDissociationDisplacer() :
-    G4VMolecularDecayDisplacer(),
+G4DNAWaterDissociationDisplacer::G4DNAWaterDissociationDisplacer()
+        :
+        G4VMolecularDissociationDisplacer(),
 #ifdef _WATER_DISPLACER_USE_KREIPL_
-    fFastElectronDistrib(0., 5., 0.001)
+        fFastElectronDistrib(0., 5., 0.001)
 #elif defined _WATER_DISPLACER_USE_TERRISOL_
-    fFastElectronDistrib(0., 100., 0.001)
+        fFastElectronDistrib(0., 100., 0.001)
 #endif
 {
-  fProba1DFunction =
-      std::bind((G4double(*)(G4double))
-                &G4DNAWaterDissociationDisplacer::ElectronProbaDistribution,
-                std::placeholders::_1);
+    fProba1DFunction =
+            std::bind((G4double(*)(G4double))
+                              &G4DNAWaterDissociationDisplacer::ElectronProbaDistribution,
+                      std::placeholders::_1);
 
-  size_t nBins = 500;
-  fElectronThermalization.reserve(nBins);
-  double eps = 1./((int)nBins);
-  double proba = eps;
+    size_t nBins = 500;
+    fElectronThermalization.reserve(nBins);
+    double eps = 1. / ((int) nBins);
+    double proba = eps;
 
-  fElectronThermalization.push_back(0.);
+    fElectronThermalization.push_back(0.);
 
-  for(size_t i = 1 ; i < nBins ; ++i){
-    double r = fFastElectronDistrib.Revert(proba, fProba1DFunction);
-    fElectronThermalization.push_back(r*nanometer);
-    proba+=eps;
+    for (size_t i = 1; i < nBins; ++i)
+    {
+        double r = fFastElectronDistrib.Revert(proba, fProba1DFunction);
+        fElectronThermalization.push_back(r * nanometer);
+        proba += eps;
 //  G4cout << G4BestUnit(r*nanometer, "Length") << G4endl;
-  }
+    }
 //   SetVerbose(1);
 }
 
 //------------------------------------------------------------------------------
 
 G4DNAWaterDissociationDisplacer::~G4DNAWaterDissociationDisplacer()
-{;}
+{
+    ;
+}
 
 //------------------------------------------------------------------------------
 
 G4ThreeVector
 G4DNAWaterDissociationDisplacer::
 GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel*
-                              theDecayChannel) const
+theDecayChannel) const
 {
-  G4int decayType = theDecayChannel->GetDisplacementType();
-  G4double RMSMotherMoleculeDisplacement(0.);
+    G4int decayType = theDecayChannel->GetDisplacementType();
+    G4double RMSMotherMoleculeDisplacement(0.);
 
-  switch(decayType){
-    case Ionisation_DissociationDecay:
-      RMSMotherMoleculeDisplacement = 2.0 * nanometer;
-      break;
-    case A1B1_DissociationDecay:
-      RMSMotherMoleculeDisplacement = 0. * nanometer;
-      break;
-    case B1A1_DissociationDecay:
-      RMSMotherMoleculeDisplacement = 0. * nanometer;
-      break;
-    case AutoIonisation:
-      RMSMotherMoleculeDisplacement = 2.0 * nanometer;
-      break;
-    case DissociativeAttachment:
-      RMSMotherMoleculeDisplacement = 0. * nanometer;
-      break;
-  }
+    switch (decayType)
+    {
+        case Ionisation_DissociationDecay:
+            RMSMotherMoleculeDisplacement = 2.0 * nanometer;
+            break;
+        case A1B1_DissociationDecay:
+            RMSMotherMoleculeDisplacement = 0. * nanometer;
+            break;
+        case B1A1_DissociationDecay:
+            RMSMotherMoleculeDisplacement = 0. * nanometer;
+            break;
+        case AutoIonisation:
+            RMSMotherMoleculeDisplacement = 2.0 * nanometer;
+            break;
+        case DissociativeAttachment:
+            RMSMotherMoleculeDisplacement = 0. * nanometer;
+            break;
+    }
 
-  if(RMSMotherMoleculeDisplacement == 0){
-    return G4ThreeVector(0, 0, 0);
-  }
-  auto RandDirection =
-    radialDistributionOfProducts(RMSMotherMoleculeDisplacement);
+    if (RMSMotherMoleculeDisplacement == 0)
+    {
+        return G4ThreeVector(0, 0, 0);
+    }
+    auto RandDirection =
+            radialDistributionOfProducts(RMSMotherMoleculeDisplacement);
 
-  return RandDirection;
+    return RandDirection;
 }
 
 //------------------------------------------------------------------------------
 
 vector<G4ThreeVector>
 G4DNAWaterDissociationDisplacer::
-GetProductsDisplacement(const G4MolecularDissociationChannel*
-                        theDecayChannel) const
+GetProductsDisplacement(const G4MolecularDissociationChannel* pDecayChannel) const
 {
-  G4int nbProducts = theDecayChannel->GetNbProducts();
-  vector<G4ThreeVector> theProductDisplacementVector(nbProducts);
+    G4int nbProducts = pDecayChannel->GetNbProducts();
+    vector<G4ThreeVector> theProductDisplacementVector(nbProducts);
 
-  typedef map<const G4MoleculeDefinition*, G4double> RMSmap;
-  RMSmap theRMSmap;
+    typedef map<const G4MoleculeDefinition*, G4double> RMSmap;
+    RMSmap theRMSmap;
 
-  G4int decayType = theDecayChannel->GetDisplacementType();
-  
-  switch(decayType){
-    case Ionisation_DissociationDecay:
+    G4int decayType = pDecayChannel->GetDisplacementType();
+
+    switch (decayType)
     {
-      if (fVerbose){
-        G4cout << "Ionisation_DissociationDecay" << G4endl;
-        G4cout << "Channel's name: " << theDecayChannel->GetName() << G4endl;
-      }
-      G4double RdmValue = G4UniformRand();
-      
-      if(RdmValue< 0.5){
-        // H3O
-        theRMSmap[G4H3O::Definition()] = 0.* nanometer;
-        // OH
-        theRMSmap[G4OH::Definition()] = 0.8* nanometer;
-      }
-      else{
-        // H3O
-        theRMSmap[G4H3O::Definition()] = 0.8* nanometer;
-        // OH
-        theRMSmap[G4OH::Definition()] = 0.* nanometer;
-      }
-      
-      for(int i = 0; i < nbProducts; i++){
-        G4MolecularConfiguration* product = theDecayChannel->GetProduct(i);
-        G4double theRMSDisplacement = theRMSmap[product->GetDefinition()];
-        
-        if(theRMSDisplacement==0.){
-          theProductDisplacementVector[i] = G4ThreeVector();
+        case Ionisation_DissociationDecay:
+        {
+            if (fVerbose)
+            {
+                G4cout << "Ionisation_DissociationDecay" << G4endl;
+                G4cout << "Channel's name: " << pDecayChannel->GetName() << G4endl;
+            }
+            G4double RdmValue = G4UniformRand();
+
+            if (RdmValue < 0.5)
+            {
+                // H3O
+                theRMSmap[G4H3O::Definition()] = 0. * nanometer;
+                // OH
+                theRMSmap[G4OH::Definition()] = 0.8 * nanometer;
+            }
+            else
+            {
+                // H3O
+                theRMSmap[G4H3O::Definition()] = 0.8 * nanometer;
+                // OH
+                theRMSmap[G4OH::Definition()] = 0. * nanometer;
+            }
+
+            for (int i = 0; i < nbProducts; i++)
+            {
+                auto pProduct = pDecayChannel->GetProduct(i);
+                G4double theRMSDisplacement = theRMSmap[pProduct->GetDefinition()];
+
+                if (theRMSDisplacement == 0.)
+                {
+                    theProductDisplacementVector[i] = G4ThreeVector();
+                }
+                else
+                {
+                    auto RandDirection = radialDistributionOfProducts(theRMSDisplacement);
+                    theProductDisplacementVector[i] = RandDirection;
+                }
+            }
+            break;
         }
-        else{
-          auto RandDirection = radialDistributionOfProducts(theRMSDisplacement);
-          theProductDisplacementVector[i] = RandDirection;
+        case A1B1_DissociationDecay:
+        {
+            if (fVerbose)
+            {
+                G4cout << "A1B1_DissociationDecay" << G4endl;
+                G4cout << "Channel's name: " << pDecayChannel->GetName() << G4endl;
+            }
+            G4double theRMSDisplacement = 2.4 * nanometer;
+            auto RandDirection =
+                    radialDistributionOfProducts(theRMSDisplacement);
+
+            for (G4int i = 0; i < nbProducts; i++)
+            {
+                auto pProduct = pDecayChannel->GetProduct(i);
+
+                if (pProduct->GetDefinition() == G4OH::Definition())
+                {
+                    theProductDisplacementVector[i] = -1. / 18. * RandDirection;
+                }
+                else if (pProduct->GetDefinition() == G4Hydrogen::Definition())
+                {
+                    theProductDisplacementVector[i] = +17. / 18. * RandDirection;
+                }
+            }
+            break;
         }
-      }
-      break;
+        case B1A1_DissociationDecay:
+        {
+            if (fVerbose)
+            {
+                G4cout << "B1A1_DissociationDecay" << G4endl;
+                G4cout << "Channel's name: " << pDecayChannel->GetName() << G4endl;
+            }
+
+            G4double theRMSDisplacement = 0.8 * nanometer;
+            auto RandDirection =
+                    radialDistributionOfProducts(theRMSDisplacement);
+
+            G4int NbOfOH = 0;
+            for (G4int i = 0; i < nbProducts; ++i)
+            {
+                auto pProduct = pDecayChannel->GetProduct(i);
+                if (pProduct->GetDefinition() == G4H2::Definition())
+                {
+                    // H2
+                    theProductDisplacementVector[i] = -2. / 18. * RandDirection;
+                }
+                else if (pProduct->GetDefinition() == G4OH::Definition())
+                {
+                    // OH
+                    G4ThreeVector OxygenDisplacement = +16. / 18. * RandDirection;
+                    G4double OHRMSDisplacement = 1.1 * nanometer;
+
+                    auto OHDisplacement =
+                            radialDistributionOfProducts(OHRMSDisplacement);
+
+                    if (NbOfOH == 0)
+                    {
+                        OHDisplacement = 0.5 * OHDisplacement;
+                    }
+                    else
+                    {
+                        OHDisplacement = -0.5 * OHDisplacement;
+                    }
+
+                    theProductDisplacementVector[i] =
+                            OHDisplacement + OxygenDisplacement;
+
+                    ++NbOfOH;
+                }
+            }
+            break;
+        }
+        case AutoIonisation:
+        {
+            if (fVerbose)
+            {
+                G4cout << "AutoIonisation" << G4endl;
+                G4cout << "Channel's name: " << pDecayChannel->GetName() << G4endl;
+            }
+
+            G4double RdmValue = G4UniformRand();
+
+            if (RdmValue < 0.5)
+            {
+                // H3O
+                theRMSmap[G4H3O::Definition()] = 0. * nanometer;
+                // OH
+                theRMSmap[G4OH::Definition()] = 0.8 * nanometer;
+            }
+            else
+            {
+                // H3O
+                theRMSmap[G4H3O::Definition()] = 0.8 * nanometer;
+                // OH
+                theRMSmap[G4OH::Definition()] = 0. * nanometer;
+            }
+
+            for (G4int i = 0; i < nbProducts; i++)
+            {
+                auto pProduct = pDecayChannel->GetProduct(i);
+                auto theRMSDisplacement = theRMSmap[pProduct->GetDefinition()];
+
+                if (theRMSDisplacement == 0)
+                {
+                    theProductDisplacementVector[i] = G4ThreeVector();
+                }
+                else
+                {
+                    auto RandDirection =
+                            radialDistributionOfProducts(theRMSDisplacement);
+                    theProductDisplacementVector[i] = RandDirection;
+                }
+                if (pProduct->GetDefinition() == G4Electron_aq::Definition())
+                {
+                    theProductDisplacementVector[i] = radialDistributionOfElectron();
+                }
+            }
+            break;
+        }
+        case DissociativeAttachment:
+        {
+            if (fVerbose)
+            {
+                G4cout << "DissociativeAttachment" << G4endl;
+                G4cout << "Channel's name: " << pDecayChannel->GetName() << G4endl;
+            }
+            G4double theRMSDisplacement = 0.8 * nanometer;
+            auto RandDirection =
+                    radialDistributionOfProducts(theRMSDisplacement);
+
+            G4int NbOfOH = 0;
+            for (G4int i = 0; i < nbProducts; ++i)
+            {
+                auto pProduct = pDecayChannel->GetProduct(i);
+                if (pProduct->GetDefinition() == G4H2::Definition())
+                {
+                    theProductDisplacementVector[i] = -2. / 18. * RandDirection;
+                }
+                else if (pProduct->GetDefinition() == G4OH::Definition())
+                {
+                    G4ThreeVector OxygenDisplacement = +16. / 18. * RandDirection;
+                    G4double OHRMSDisplacement = 1.1 * nanometer;
+
+                    auto OHDisplacement =
+                            radialDistributionOfProducts(OHRMSDisplacement);
+
+                    if (NbOfOH == 0)
+                    {
+                        OHDisplacement = 0.5 * OHDisplacement;
+                    }
+                    else
+                    {
+                        OHDisplacement = -0.5 * OHDisplacement;
+                    }
+                    theProductDisplacementVector[i] = OHDisplacement +
+                                                      OxygenDisplacement;
+                    ++NbOfOH;
+                }
+            }
+            break;
+        }
     }
-    case A1B1_DissociationDecay:
-    {
-      if(fVerbose){
-        G4cout<<"A1B1_DissociationDecay"<<G4endl;
-        G4cout << "Channel's name: " << theDecayChannel->GetName() << G4endl;
-      }
-      G4double theRMSDisplacement = 2.4 * nanometer;
-      auto RandDirection =
-      radialDistributionOfProducts(theRMSDisplacement);
-      
-      for(G4int i =0; i < nbProducts; i++){
-        G4MolecularConfiguration* product = theDecayChannel->GetProduct(i);
-        
-        if(product->GetDefinition()== G4OH::Definition()){
-          // OH
-          theProductDisplacementVector[i] = -1./18.*RandDirection;
-        }
-        else if(product->GetDefinition() == G4Hydrogen::Definition()){
-          // H
-          theProductDisplacementVector[i] = +17./18.*RandDirection;
-        }
-      }
-      break;
-    }
-    case B1A1_DissociationDecay:
-    {
-      if(fVerbose){
-        G4cout<<"B1A1_DissociationDecay"<<G4endl;
-        G4cout << "Channel's name: " << theDecayChannel->GetName() << G4endl;
-      }
-      
-      G4double theRMSDisplacement = 0.8 * nanometer;
-      auto RandDirection =
-      radialDistributionOfProducts(theRMSDisplacement);
-      
-      G4int NbOfOH = 0;
-      for(G4int i =0; i < nbProducts; ++i)
-      {
-        G4MolecularConfiguration* product = theDecayChannel->GetProduct(i);
-        if(product->GetDefinition() == G4H2::Definition()){
-          // H2
-          theProductDisplacementVector[i] = -2./18.*RandDirection;
-        }
-        else if(product->GetDefinition() == G4OH::Definition()){
-          // OH
-          G4ThreeVector OxygenDisplacement = +16./18.*RandDirection;
-          G4double OHRMSDisplacement = 1.1 * nanometer;
-          
-          auto OHDisplacement =
-          radialDistributionOfProducts(OHRMSDisplacement);
-          
-          if(NbOfOH==0){
-            OHDisplacement = 0.5*OHDisplacement;
-          }
-          else{
-            OHDisplacement = -0.5*OHDisplacement;
-          }
-          
-          theProductDisplacementVector[i] =
-          OHDisplacement + OxygenDisplacement;
-          
-          ++NbOfOH;
-        }
-      }
-      break;
-    }
-    case AutoIonisation:
-    {
-      if(fVerbose){
-        G4cout<<"AutoIonisation"<<G4endl;
-        G4cout << "Channel's name: " << theDecayChannel->GetName() << G4endl;
-      }
-      
-      G4double RdmValue = G4UniformRand();
-      
-      if(RdmValue< 0.5){
-        // H3O
-        theRMSmap[G4H3O::Definition()] = 0.* nanometer;
-        // OH
-        theRMSmap[G4OH::Definition()] = 0.8* nanometer;
-      }
-      else{
-        // H3O
-        theRMSmap[G4H3O::Definition()] = 0.8* nanometer;
-        // OH
-        theRMSmap[G4OH::Definition()] = 0.* nanometer;
-      }
-      
-      for(G4int i =0; i < nbProducts; i++){
-        G4MolecularConfiguration* product = theDecayChannel->GetProduct(i);
-        auto theRMSDisplacement = theRMSmap[product->GetDefinition()];
-        
-        if(theRMSDisplacement==0){
-          theProductDisplacementVector[i] = G4ThreeVector();
-        }
-        else{
-          auto RandDirection =
-          radialDistributionOfProducts(theRMSDisplacement);
-          theProductDisplacementVector[i] = RandDirection;
-        }
-        if(product->GetDefinition() == G4Electron_aq::Definition()){
-          theProductDisplacementVector[i]=radialDistributionOfElectron();
-        }
-      }
-      break;
-    }
-    case DissociativeAttachment:
-    {
-      if(fVerbose){
-        G4cout<<"DissociativeAttachment"<<G4endl;
-        G4cout << "Channel's name: " << theDecayChannel->GetName() << G4endl;
-      }
-      G4double theRMSDisplacement = 0.8 * nanometer;
-      auto RandDirection =
-      radialDistributionOfProducts(theRMSDisplacement);
-      
-      G4int NbOfOH = 0;
-      for(G4int i =0; i < nbProducts; ++i){
-        G4MolecularConfiguration* product = theDecayChannel->GetProduct(i);
-        if(product->GetDefinition() == G4H2::Definition()){
-          theProductDisplacementVector[i] = -2./18.*RandDirection;
-        }
-        else if(product->GetDefinition() == G4OH::Definition()){
-          G4ThreeVector OxygenDisplacement = +16./18.*RandDirection;
-          G4double OHRMSDisplacement = 1.1 * nanometer;
-          
-          auto OHDisplacement =
-          radialDistributionOfProducts(OHRMSDisplacement);
-          
-          if(NbOfOH==0){
-            OHDisplacement = 0.5*OHDisplacement;
-          }
-          else{
-            OHDisplacement = -0.5*OHDisplacement;
-          }
-          theProductDisplacementVector[i] = OHDisplacement +
-            OxygenDisplacement;
-          ++NbOfOH;
-        }
-      }
-      break;
-    }
-  }
-  return theProductDisplacementVector;
+    return theProductDisplacementVector;
 }
 
 //------------------------------------------------------------------------------
@@ -385,12 +422,12 @@ G4ThreeVector
 G4DNAWaterDissociationDisplacer::
 radialDistributionOfProducts(G4double Rrms) const
 {
-  static const double inverse_sqrt_3 = 1./sqrt(3.);
-  double sigma = Rrms*inverse_sqrt_3;
-  double x = G4RandGauss::shoot(0.,sigma);
-  double y = G4RandGauss::shoot(0.,sigma);
-  double z = G4RandGauss::shoot(0.,sigma);
-  return G4ThreeVector(x,y,z);
+    static const double inverse_sqrt_3 = 1. / sqrt(3.);
+    double sigma = Rrms * inverse_sqrt_3;
+    double x = G4RandGauss::shoot(0., sigma);
+    double y = G4RandGauss::shoot(0., sigma);
+    double z = G4RandGauss::shoot(0., sigma);
+    return G4ThreeVector(x, y, z);
 }
 
 //------------------------------------------------------------------------------
@@ -398,13 +435,12 @@ radialDistributionOfProducts(G4double Rrms) const
 G4ThreeVector
 G4DNAWaterDissociationDisplacer::radialDistributionOfElectron() const
 {
-  G4double rand_value = G4UniformRand();
-  size_t nBins = fElectronThermalization.size();
-  size_t bin = size_t(floor(rand_value*nBins));
-  size_t bin_p1 = min(bin+1,nBins-1);
-  
-  return (fElectronThermalization[bin]*(1.-rand_value)
-          + fElectronThermalization[bin_p1]*rand_value)*
-          G4RandomDirection();
-//   return fElectronThermalization[bin]*G4RandomDirection();
+    G4double rand_value = G4UniformRand();
+    size_t nBins = fElectronThermalization.size();
+    size_t bin = size_t(floor(rand_value * nBins));
+    size_t bin_p1 = min(bin + 1, nBins - 1);
+
+    return (fElectronThermalization[bin] * (1. - rand_value)
+            + fElectronThermalization[bin_p1] * rand_value) *
+           G4RandomDirection();
 }

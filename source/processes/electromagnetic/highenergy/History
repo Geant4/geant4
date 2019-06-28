@@ -16,13 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-21 March 2018: V.Ivantchenko (emhighenergy-V10-04-03)
-  21 March 2019: V.Ivantchenko 
+03 April 2019: V.Ivantchenko (emhighenergy-V10-05-02)
+- G4GammaConversionToMuons, G4AnnihiToMuPair - added Register/DeRegister
+    mechanism
+
+21 March 2019: V.Ivantchenko (emhighenergy-V10-05-01)
 - G4GammaConversionToMuons - fixed low-energy part of the model by adding
     of intermediate limit 5*MuMass, below which an approximation of
     x-section similar to the Bethe-Heitler model is used; fixed bug
-    in energy sampling for low-energy
-  01 March 2019: V.Ivantchenko 
+    in energy sampling for low-energy 
+
+01 March 2019: V.Ivantchenko (emhighenergy-V10-05-00)
 - G4mplIonisation, G4mplIonisationWithDeltaModel - added low limit
     for delta-electron production threshold (fixing problem #2126)
 

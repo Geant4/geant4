@@ -38,27 +38,48 @@
 #include "G4VisAttributes.hh"
 #include "G4VMarker.hh"
 #include "G4ModelingParameters.hh"
+#include "G4PhysicalVolumesSearchScene.hh"
 #include <vector>
 
 class G4UIcommand;
 class G4UIcmdWithAString;
 
-class G4VVisCommand: public G4UImessenger {
+class G4VVisCommand: public G4UImessenger
+{
 public:
+  
   // Uses compiler defaults for copy constructor and assignment.
   G4VVisCommand ();
   virtual ~G4VVisCommand ();
-  static void SetVisManager (G4VisManager*);
-  static const G4Colour& GetCurrentColour() {return fCurrentColour;}
-  //static G4VMarker::FillStyle GetCurrentFillStyle() {return fCurrentFillStyle;}
-  //static G4VMarker::SizeType  GetCurrentSizeType() {return fCurrentSizeType;}
-  static G4double GetCurrentLineWidth() {return fCurrentLineWidth;}
-  //static G4VisAttributes::LineStyle GetCurrentLineStyle() {return fCurrentLineStyle;}
-  static const G4Colour& GetCurrentTextColour() {return fCurrentTextColour;}
-  static G4Text::Layout GetCurrentTextLayout() {return fCurrentTextLayout;}
-  static G4double GetCurrentTextSize() {return fCurrentTextSize;}
+
+  static void SetVisManager (G4VisManager* pVisManager)
+  {fpVisManager = pVisManager;}
+
+  static const G4Colour& GetCurrentTextColour()
+  {return fCurrentTextColour;}
 
 protected:
+
+  // Utility functions
+
+  void SetViewParameters(G4VViewer* viewer, const G4ViewParameters& viewParams);
+
+  void RefreshIfRequired(G4VViewer* viewer);
+
+  void InterpolateViews
+  (G4VViewer* currentViewer,
+   std::vector<G4ViewParameters> viewVector,
+   const G4int nInterpolationPoints = 50,
+   const G4int waitTimePerPointmilliseconds = 20,
+   const G4String exportString = "");
+
+  void InterpolateToNewView
+  (G4VViewer* currentViewer,
+   const G4ViewParameters& oldVP,
+   const G4ViewParameters& newVP,
+   const G4int nInterpolationPoints = 50,
+   const G4int waitTimePerPointmilliseconds = 20,
+   const G4String exportString = "");
 
   // Conversion routines augmenting those in G4UIcommand.
 
@@ -93,13 +114,24 @@ protected:
    G4double& value);
   // Return false if there's a problem
 
-  // Other utilities.
+  // Other utilities
+
   void CheckSceneAndNotifyHandlers (G4Scene* = nullptr);
 
-  // Data members.
+  void G4VisCommandsSceneAddUnsuccessful(G4VisManager::Verbosity verbosity);
+
+  void CopyGuidanceFrom
+  (const G4UIcommand* fromCmd, G4UIcommand* toCmd, G4int startLine = 0);
+
+  void CopyParametersFrom
+  (const G4UIcommand* fromCmd, G4UIcommand* toCmd);
+
+  void DrawExtent(const G4VisExtent&);
+
+  // Data members
+
   static G4VisManager* fpVisManager;
 
-  // Error management
   static G4int fErrorCode;
 
   // Current quantities for use in appropriate commands
@@ -113,8 +145,8 @@ protected:
   static G4Text::Layout             fCurrentTextLayout;
   static G4double                   fCurrentTextSize;
   static G4PhysicalVolumeModel::TouchableProperties fCurrentTouchableProperties;
+  static G4VisExtent                fCurrentExtentForField;
+  static std::vector<G4PhysicalVolumesSearchScene::Findings> fCurrrentPVFindingsForField;
 };
-
-#include "G4VVisCommand.icc"
 
 #endif

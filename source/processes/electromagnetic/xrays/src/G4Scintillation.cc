@@ -76,36 +76,6 @@
 
 #include "G4Scintillation.hh"
 
-/////////////////////////
-// Class Implementation
-/////////////////////////
-
-        //////////////////////
-        // static data members
-        //////////////////////
-
-
-//G4bool G4Scintillation::fTrackSecondariesFirst = false;
-//G4bool G4Scintillation::fFiniteRiseTime = false;
-//G4double G4Scintillation::fYieldFactor = 1.0;
-//G4double G4Scintillation::fExcitationRatio = 1.0;
-//G4bool G4Scintillation::fScintillationByParticleType = false;
-//G4bool G4Scintillation::fScintillationTrackInfo = false;
-//G4bool G4Scintillation::fStackingFlag = true;
-//G4EmSaturation* G4Scintillation::fEmSaturation = NULL;
-
-        //////////////
-        // Operators
-        //////////////
-
-// G4Scintillation::operator=(const G4Scintillation &right)
-// {
-// }
-
-        /////////////////
-        // Constructors
-        /////////////////
-
 G4Scintillation::G4Scintillation(const G4String& processName,
                                        G4ProcessType type)
                   : G4VRestDiscreteProcess(processName, type) ,
@@ -134,10 +104,6 @@ G4Scintillation::G4Scintillation(const G4String& processName,
         }
 }
 
-        ////////////////
-        // Destructors
-        ////////////////
-
 G4Scintillation::~G4Scintillation()
 {
 	if (fFastIntegralTable != nullptr) {
@@ -150,16 +116,10 @@ G4Scintillation::~G4Scintillation()
         }
 }
 
-        ////////////
-        // Methods
-        ////////////
-
 G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-       if (aParticleType.GetParticleName() == "opticalphoton") return false;
-       if (aParticleType.IsShortLived()) return false;
-
-       return true;
+       return (aParticleType.GetPDGCharge() == 0.0 || 
+	       aParticleType.IsShortLived()) ? false : true;
 }
 
 void G4Scintillation::BuildPhysicsTable(const G4ParticleDefinition&)

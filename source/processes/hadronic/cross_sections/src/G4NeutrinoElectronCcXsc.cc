@@ -79,7 +79,7 @@ G4NeutrinoElectronCcXsc::IsElementApplicable( const G4DynamicParticle* aPart, G4
   G4double minEnergy = 0., energy = aPart->GetTotalEnergy();
   G4double fmass, emass = electron_mass_c2;
 
-  if(      pName == "nu_mu"   || pName == "anti_nu_mu"  ) fmass = theMuonMinus->GetPDGMass(); 
+  if(    pName == "anti_nu_e" ||   pName == "nu_mu"   || pName == "anti_nu_mu"  ) fmass = theMuonMinus->GetPDGMass(); 
   else if( pName == "nu_tau"  || pName == "anti_nu_tau" ) fmass = theTauMinus->GetPDGMass(); 
   else fmass = emass;
 
@@ -108,7 +108,7 @@ GetElementCrossSection(const G4DynamicParticle* aPart, G4int ZZ,
   emass2 = emass*emass;
   totS   = 2.*energy*emass + emass2;
 
-  if( pName == "nu_mu")
+  if( pName == "anti_nu_e" || pName == "nu_mu")
   {
     fmass  = theMuonMinus->GetPDGMass();
     fmass2 = fmass*fmass;
@@ -144,6 +144,22 @@ GetElementCrossSection(const G4DynamicParticle* aPart, G4int ZZ,
   }
   // if( energy <= electron_mass_c2 ) return result;
 
+  G4double aa = 1.;
+  G4double bb = 1.7;
+  G4double gw = 2.141*GeV;
+  G4double dd = 5000.;
+  G4double mw = 80.385*GeV;
+
+  if( energy > 50.*GeV )
+  {
+    result *= bb;
+    result /= 1.+ aa*totS/mw/mw;
+
+    if( pName == "anti_nu_e")
+    {
+      result *= 1. + dd*gw*gw*totS/( (totS-mw*mw)*(totS-mw*mw)+gw*gw*mw*mw );
+    }
+  }
   result *= fCofXsc; //*energy;
   result *= energy + 0.5*emass;
   result *= ZZ;  // incoherent sum over  all element electrons

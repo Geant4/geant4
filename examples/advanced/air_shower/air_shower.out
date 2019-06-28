@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -221,25 +221,27 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00            1k World
+       0.00         0.00         0.00            1k World
        0.00         0.00         0.00            1k LensMotherLV
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       52.31          0k         1       13         26         0.00    LensMotherLV
-      47.69          0k         3        9         22         0.01    World
+      47.69          0k         3        9         22         0.00    World
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ooo Run 0 starts (global).
 
 --------- Ranlux engine status ---------
- Initial seed = 1555323384
- float_seed_table[] = 0.922361 0.399452 0.855538 0.663299 0.279111 0.434571 0.0675856 0.538489 0.123617 0.579216 0.821405 0.705478 0.167029 0.680165 0.314814 0.973872 0.545352 0.780809 0.462219 0.320429 0.670571 0.250029 0.730802 0.454868 
+ Initial seed = 1561509691
+ float_seed_table[] = 0.390448 0.516582 0.718621 0.902451 0.80715 0.303156 0.569336 0.419386 0.4811 0.847958 0.223924 0.111116 0.408568 0.492225 0.0618125 0.391615 0.0868812 0.649005 0.462748 0.537417 0.387408 0.84246 0.334233 0.0452129 
  i_lag = 23, j_lag = 9
  carry = 0, count24 = 0
  luxury = 3 nskip = 199
@@ -250,7 +252,7 @@ mu- Mono Plane
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.260000s Real=2.262972s Sys=0.000000s
+  User=2.020000s Real=2.022162s Sys=0.000000s
 ### Run 0 (global) ended.
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -265,22 +267,22 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 10
+Total navigation history collections cleaned: 9
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0135 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0115 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.025 MB
-Pool ID '7G4Track', size : 0.05 MB
+Pool ID '17G4DynamicParticle', size : 0.024 MB
+Pool ID '7G4Track', size : 0.0471 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '15UltraOpticalHit', size : 0.000961 MB
+Pool ID '15UltraOpticalHit', size : 0.00385 MB
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.097 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.094 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

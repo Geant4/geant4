@@ -86,8 +86,8 @@ G4GammaGeneralProcess::G4GammaGeneralProcess():
   minEEEnergy(2*CLHEP::electron_mass_c2),
   minMMEnergy(100*CLHEP::MeV),
   peLambda(0.0),
-  nLowE(100),
-  nHighE(100),
+  nLowE(40),
+  nHighE(50),
   splineFlag(false)
 {
   thePhotoElectric = theCompton = theConversionEE = theRayleigh = nullptr;
@@ -209,8 +209,8 @@ void G4GammaGeneralProcess::InitialiseProcess(const G4ParticleDefinition*)
 
       G4PhysicsVector* vec = nullptr;
       G4PhysicsLogVector aVector(mine,minPEEnergy,nbin1);
-      G4PhysicsLinearVector bVector(minPEEnergy,minEEEnergy,nLowE);
-      G4PhysicsLinearVector cVector(minEEEnergy,minMMEnergy,nHighE);
+      G4PhysicsLogVector bVector(minPEEnergy,minEEEnergy,nLowE);
+      G4PhysicsLogVector cVector(minEEEnergy,minMMEnergy,nHighE);
       G4PhysicsLogVector dVector(minMMEnergy,maxe,nbin2);
       if(splineFlag) { 
         aVector.SetSpline(splineFlag);
@@ -474,14 +474,16 @@ G4double G4GammaGeneralProcess::PostStepGetPhysicalInteractionLength(
   G4double x = DBL_MAX;
 
   G4double energy = track.GetKineticEnergy();
-  const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple();
-  const G4Material* mat = couple->GetMaterial();
+  currentCouple = track.GetMaterialCutsCouple();
+  const G4Material* mat = currentCouple->GetMaterial();
 
   // compute mean free path
   if(mat != currentMaterial || energy != preStepKinEnergy) {
+    currentCoupleIndex = currentCouple->GetIndex();
     currentMaterial = mat;
     preStepKinEnergy = energy;
-    preStepLambda = TotalCrossSectionPerVolume(energy, couple);
+    preStepLogE = track.GetDynamicParticle()->GetLogKineticEnergy();
+    preStepLambda = TotalCrossSectionPerVolume();
 
     // zero cross section
     if(preStepLambda <= 0.0) { 
@@ -521,26 +523,23 @@ G4double G4GammaGeneralProcess::PostStepGetPhysicalInteractionLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4GammaGeneralProcess::TotalCrossSectionPerVolume(G4double energy,
-                                      const G4MaterialCutsCouple* couple)
+G4double G4GammaGeneralProcess::TotalCrossSectionPerVolume()
 {
-  currentCouple = couple;
-  currentCoupleIndex = couple->GetIndex();
   G4double cross = 0.0;
-  if(energy < minPEEnergy) {
-    cross = ComputeGeneralLambda(0, 0, idx0, energy);
-    peLambda = (thePhotoElectric) 
-      ? thePhotoElectric->GetLambda(energy, couple) : 0.0;
+  if(preStepKinEnergy < minPEEnergy) {
+    cross = ComputeGeneralLambda(0, 0, idx0);
+    peLambda = (thePhotoElectric) ? thePhotoElectric
+      ->GetLambda(preStepKinEnergy, currentCouple, preStepLogE) : 0.0;
     cross += peLambda; 
     
-  } else if(energy < minEEEnergy) {
-    cross = ComputeGeneralLambda(1, 2, idx1, energy);
+  } else if(preStepKinEnergy < minEEEnergy) {
+    cross = ComputeGeneralLambda(1, 2, idx1);
 
-  } else if(energy < minMMEnergy) {
-    cross = ComputeGeneralLambda(2, 6, idx2, energy);
+  } else if(preStepKinEnergy < minMMEnergy) {
+    cross = ComputeGeneralLambda(2, 6, idx2);
 
   } else {
-    cross = ComputeGeneralLambda(3, 10, idx3, energy);
+    cross = ComputeGeneralLambda(3, 10, idx3);
   }
   /*
   G4cout << "xs= " << cross << " idxE= " << idxEnergy 
@@ -553,7 +552,7 @@ G4double G4GammaGeneralProcess::TotalCrossSectionPerVolume(G4double energy,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4GammaGeneralProcess::PostStepDoIt(const G4Track& track,
-                                                     const G4Step& step)
+                                                       const G4Step& step)
 {
   // In all cases clear number of interaction lengths
   theNumberOfInteractionLengthLeft = -1.0;

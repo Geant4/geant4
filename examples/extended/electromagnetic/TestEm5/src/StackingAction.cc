@@ -40,6 +40,8 @@
 #include "G4RunManager.hh"
 #include "G4Track.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction(EventAction* EA)
@@ -126,17 +128,18 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   //energy spectrum of secondaries
   //
   G4double energy = aTrack->GetKineticEnergy();
+  G4double loge   = (energy > 0.) ? std::log10(energy/CLHEP::MeV) : -100.;
   G4double charge = aTrack->GetDefinition()->GetPDGCharge();
 
   if (charge != 0.) {
     analysisManager->FillH1(2,energy);
-    analysisManager->FillH1(4,energy);
+    analysisManager->FillH1(4,loge);
     if(idx == fPhotoAuger || idx == fComptAuger) {
       analysisManager->FillH1(50,energy);
-      analysisManager->FillH1(52,energy);
+      analysisManager->FillH1(52,loge);
     } else if(idx == fPixeAuger) {
       analysisManager->FillH1(54,energy);
-      analysisManager->FillH1(56,energy);
+      analysisManager->FillH1(56,loge);
     } else if(idx == fElectronDNAAuger || 
               idx == fProtonDNAAuger || 
               idx == fHydrogenDNAAuger || 
@@ -145,19 +148,19 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
               idx == fHeliumDNAAuger || 
               idx == fGenericIonDNAAuger) {
       analysisManager->FillH1(58,energy);
-      analysisManager->FillH1(60,energy);
+      analysisManager->FillH1(60,loge);
     }
   }
 
   if (aTrack->GetDefinition() == G4Gamma::Gamma()) {
     analysisManager->FillH1(3,energy);
-    analysisManager->FillH1(5,energy);
+    analysisManager->FillH1(5,loge);
     if(idx == fPhotoGamma || idx == fComptGamma) {
       analysisManager->FillH1(51,energy);
-      analysisManager->FillH1(53,energy);
+      analysisManager->FillH1(53,loge);
     } else if(idx == fPixeGamma) {
       analysisManager->FillH1(55,energy);
-      analysisManager->FillH1(57,energy);
+      analysisManager->FillH1(57,loge);
     } else if(idx == fElectronDNAGamma || 
               idx == fProtonDNAGamma || 
               idx == fHydrogenDNAGamma || 
@@ -166,7 +169,7 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
               idx == fHeliumDNAGamma || 
               idx == fGenericIonDNAGamma) {
       analysisManager->FillH1(59,energy);
-      analysisManager->FillH1(61,energy);
+      analysisManager->FillH1(61,loge);
     }
   }  
 

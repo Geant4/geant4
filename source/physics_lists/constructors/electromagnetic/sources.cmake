@@ -70,6 +70,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
   HEADERS
     G4EmDNAChemistry.hh
     G4EmDNAChemistry_option1.hh
+    G4EmDNAChemistry_option2.hh
     G4EmDNAPhysics.hh
     G4EmDNAPhysics_option1.hh
     G4EmDNAPhysics_option2.hh
@@ -106,6 +107,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
   SOURCES
     G4EmDNAChemistry.cc
     G4EmDNAChemistry_option1.cc
+    G4EmDNAChemistry_option2.cc
     G4EmDNAPhysics.cc
     G4EmDNAPhysics_option1.cc
     G4EmDNAPhysics_option2.cc

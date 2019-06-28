@@ -47,7 +47,7 @@ class G4UIcmdWithoutParameter;
 class DetectorMessenger: public G4UImessenger
 {
   public:
-  
+
     DetectorMessenger(DetectorConstruction* );
    ~DetectorMessenger();
     
@@ -61,10 +61,9 @@ class DetectorMessenger: public G4UImessenger
     G4UIdirectory*             fDetDir;    
     G4UIcmdWithAString*        fWallMater;
     G4UIcmdWithADoubleAndUnit* fWallThick;
+    G4UIcmdWithAString*        fCavMater;
     G4UIcmdWithADoubleAndUnit* fCavThick;
-    G4UIcmdWithADoubleAndUnit* fWorldRadius;
-            
-    G4UIcmdWithoutParameter*   fUpdateCmd;
+    G4UIcmdWithADoubleAndUnit* fCavRadius;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

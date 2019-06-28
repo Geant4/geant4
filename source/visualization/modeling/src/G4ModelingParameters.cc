@@ -36,6 +36,7 @@
 #include "G4ExceptionSeverity.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VSolid.hh"
+#include "G4DisplacedSolid.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4UnitsTable.hh"
@@ -44,6 +45,7 @@ G4ModelingParameters::G4ModelingParameters ():
   fWarning               (true),
   fpDefaultVisAttributes (0),
   fDrawingStyle          (wf),
+  fNumberOfCloudPoints   (10000),
   fCulling               (false),
   fCullInvisible         (false),
   fDensityCulling        (false),
@@ -70,12 +72,13 @@ G4ModelingParameters::G4ModelingParameters
   fWarning        (true),
   fpDefaultVisAttributes (pDefaultVisAttributes),
   fDrawingStyle   (drawingStyle),
+  fNumberOfCloudPoints (10000),
   fCulling        (isCulling),
   fCullInvisible  (isCullingInvisible),
   fDensityCulling (isDensityCulling),
   fVisibleDensity (visibleDensity),
   fCullCovered    (isCullingCovered),
-  fCBDAlgorithmNumber(0),
+  fCBDAlgorithmNumber (0),
   fExplodeFactor  (1.),
   fNoOfSides      (noOfSides),
   fpSectionSolid  (0),
@@ -140,13 +143,13 @@ G4int G4ModelingParameters::SetNoOfSides (G4int nSides) {
 }
 
 void G4ModelingParameters::SetSectionSolid
-(G4VSolid* pSectionSolid) {
+(G4DisplacedSolid* pSectionSolid) {
   delete fpSectionSolid;
   fpSectionSolid = pSectionSolid;
 }
 
 void G4ModelingParameters::SetCutawaySolid
-(G4VSolid* pCutawaySolid) {
+(G4DisplacedSolid* pCutawaySolid) {
   delete fpCutawaySolid;
   fpCutawaySolid = pCutawaySolid;
 }
@@ -165,16 +168,20 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
 
   os << "\n  Current requested drawing style: ";
   switch (mp.fDrawingStyle) {
-  case G4ModelingParameters::wf:
-    os << "wireframe"; break;
-  case G4ModelingParameters::hlr:
-    os << "hidden line removal (hlr)"; break;
-  case G4ModelingParameters::hsr:
-    os << "surface (hsr)"; break;
-  case G4ModelingParameters::hlhsr:
-    os << "surface and edges (hlhsr)"; break;
-  default: os << "unrecognised"; break;
+    case G4ModelingParameters::wf:
+      os << "wireframe"; break;
+    case G4ModelingParameters::hlr:
+      os << "hidden line removal (hlr)"; break;
+    case G4ModelingParameters::hsr:
+      os << "surface (hsr)"; break;
+    case G4ModelingParameters::hlhsr:
+      os << "surface and edges (hlhsr)"; break;
+    case G4ModelingParameters::cloud:
+      os << "cloud"; break;
+    default: os << "unrecognised"; break;
   }
+
+  os << "\n  Number of cloud points: " << mp.fNumberOfCloudPoints;
 
   os << "\n  Culling: ";
   if (mp.fCulling) os << "on";
@@ -211,11 +218,11 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
   os << "\n  No. of sides used in circle polygon approximation: "
      << mp.fNoOfSides;
 
-  os << "\n  Section (DCUT) shape (G4VSolid) pointer: ";
+  os << "\n  Section (DCUT) shape (G4DisplacedSolid) pointer: ";
   if (!mp.fpSectionSolid) os << "non-";
   os << "null";
 
-  os << "\n  Cutaway (DCUT) shape (G4VSolid) pointer: ";
+  os << "\n  Cutaway (DCUT) shape (G4DisplacedSolid) pointer: ";
   if (!mp.fpCutawaySolid) os << "non-";
   os << "null";
 
@@ -239,6 +246,8 @@ G4bool G4ModelingParameters::operator !=
   if (
       (fWarning                != mp.fWarning)                ||
       (*fpDefaultVisAttributes != *mp.fpDefaultVisAttributes) ||
+      (fDrawingStyle           != mp.fDrawingStyle)           ||
+      (fNumberOfCloudPoints    != mp.fNumberOfCloudPoints)    ||
       (fCulling                != mp.fCulling)                ||
       (fCullInvisible          != mp.fCullInvisible)          ||
       (fDensityCulling         != mp.fDensityCulling)         ||
@@ -295,13 +304,15 @@ G4bool G4ModelingParameters::VisAttributesModifier::operator!=
         return true;
       break;
     case G4ModelingParameters::VASForceWireframe:
+    case G4ModelingParameters::VASForceSolid:
+    case G4ModelingParameters::VASForceCloud:
       if (fVisAtts.GetForcedDrawingStyle() !=
           rhs.fVisAtts.GetForcedDrawingStyle())
         return true;
       break;
-    case G4ModelingParameters::VASForceSolid:
-      if (fVisAtts.GetForcedDrawingStyle() !=
-          rhs.fVisAtts.GetForcedDrawingStyle())
+    case G4ModelingParameters::VASForceNumberOfCloudPoints:
+      if (fVisAtts.GetForcedNumberOfCloudPoints() !=
+          rhs.fVisAtts.GetForcedNumberOfCloudPoints())
         return true;
       break;
     case G4ModelingParameters::VASForceAuxEdgeVisible:
@@ -331,13 +342,18 @@ G4bool G4ModelingParameters::PVNameCopyNo::operator!=
 std::ostream& operator <<
 (std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath& path)
 {
-  os << "Touchable path: physical-volume-name:copy-number pairs:\n  ";
-  G4ModelingParameters::PVNameCopyNoPathConstIterator i;
-  for (i = path.begin(); i != path.end(); ++i) {
-    if (i != path.begin()) {
-      os << ',';
+  os << "Touchable path: ";
+  if (path.empty()) {
+    os << "empty";
+  } else {
+    os << "physical-volume-name:copy-number pairs:\n  ";
+    G4ModelingParameters::PVNameCopyNoPathConstIterator i;
+    for (i = path.begin(); i != path.end(); ++i) {
+      if (i != path.begin()) {
+        os << ',';
+      }
+      os << i->GetName() << ':' << i->GetCopyNo();
     }
-    os << i->GetName() << ':' << i->GetCopyNo();
   }
   return os;
 }
@@ -439,6 +455,20 @@ std::ostream& operator <<
             os << "false";
           }
         }
+        break;
+      case G4ModelingParameters::VASForceCloud:
+        if (vamVisAtts.GetForcedDrawingStyle() == G4VisAttributes::cloud) {
+          os << " forceCloud ";
+          if (vamVisAtts.IsForceDrawingStyle()) {
+            os << "true";
+          } else {
+            os << "false";
+          }
+        }
+        break;
+      case G4ModelingParameters::VASForceNumberOfCloudPoints:
+        os << " numberOfCloudPoints "
+        << vamVisAtts.GetForcedNumberOfCloudPoints();
         break;
       case G4ModelingParameters::VASForceAuxEdgeVisible:
         os << " forceAuxEdgeVisible: ";

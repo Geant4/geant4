@@ -64,18 +64,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 enum G4RadioactiveDecayMode
-  {RDM_ERROR=-1, IT=0, BetaMinus=1, BetaPlus=2, KshellEC=3, LshellEC=4, MshellEC=5, NshellEC=6,Alpha=7,
-   Proton=8, Neutron=9, BDProton=10, BDNeutron=11, Beta2Minus=12, Beta2Plus=13, Proton2=14,
-   Neutron2=15, SpFission=16};
+  {RDM_ERROR=-1, IT=0, BetaMinus=1, BetaPlus=2, KshellEC=3, LshellEC=4,
+   MshellEC=5, NshellEC=6, Alpha=7, Proton=8, Neutron=9, SpFission=10,
+   BDProton=11, BDNeutron=12, Beta2Minus=13, Beta2Plus=14, Proton2=15,
+   Neutron2=16};
 
 std::istream &operator >> (std::istream &s, G4RadioactiveDecayMode &q);
 
 ////////////////////////////////////////////////////////////////////////////////
 #endif
-
-
-
-
-
-
 

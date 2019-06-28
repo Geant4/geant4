@@ -345,6 +345,11 @@ class G4Navigator
     // o Recompute transforms and/or solids of replicated/parameterised
     //   volumes.
 
+  G4bool CheckOverlapsIterative(G4VPhysicalVolume* vol);
+    // Utility method to trigger overlaps check on a volume with reported
+    // overlaps ordered by relevance. Used in ComputeStep() when loopings
+    // with zero step are detected.
+
  private:
 
   G4Navigator(const G4Navigator&);
@@ -456,6 +461,9 @@ class G4Navigator
     // that origin of current Step is in the same volume as the point of the
     // last relocation
 
+  G4VPhysicalVolume* fLastMotherPhys= nullptr;
+    // Memory of the mother volume during previous step.
+    //  Intended use: inform user in case of stuck track.
   //
   // END State information
   //

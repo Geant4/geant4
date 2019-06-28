@@ -50,6 +50,9 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
 
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
@@ -58,7 +61,7 @@ DetectorConstruction::DetectorConstruction()
 {
   fBoxSize = 10*m;
   DefineMaterials();
-  SetMaterial("Aluminium");  
+  SetMaterial("G4_Al");  
   fDetectorMessenger = new DetectorMessenger(this);
 }
 
@@ -188,6 +191,7 @@ void DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
+  if(fPBox) { return fPBox; }
   fBox = new G4Box("Container",                         //its name
                    fBoxSize/2,fBoxSize/2,fBoxSize/2);   //its dimensions
 
@@ -220,7 +224,7 @@ void DetectorConstruction::PrintParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetMaterial(G4String materialChoice)
+void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 {
   // search the material by its name
   G4Material* pttoMaterial = 
@@ -249,9 +253,6 @@ void DetectorConstruction::SetSize(G4double value)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4GlobalMagFieldMessenger.hh"
-#include "G4AutoDelete.hh"
 
 void DetectorConstruction::ConstructSDandField()
 {

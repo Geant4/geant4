@@ -1,0 +1,168 @@
+
+                 Geant4 10.4 - patch-03 Release Notes
+                 ------------------------------------
+
+                                                             8 February 2019
+
+List of fixes included in this public patch since the public release 10.4.p02:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Corrected URLs for data installation to use https; added -L flag to curl
+        to follow redirects when accessing a dataset URL.
+      o Geant4MakeRules_cxx.cmake: added -DGL_SILENCE_DEPRECATION to
+        CMAKE_CXX_FLAGS_INIT for clang to silence GL deprecation compilation
+        warnings on MacOS 10.14 Mojave.
+    + GNUMake:
+      o Fixed setting of G4RUNPATHOPTION in Darwin/Linux-clang/g++ and binmake.cmk.
+        Addressing problem report #2086.
+      o Cleanup settings for GL in Darwin-clang.gmk and Darwin-g++.gmk.
+        Added -DGL_SILENCE_DEPRECATION to CPPFLAGS to silence GL deprecation
+        compilation warnings on MacOS 10.14 Mojave.
+
+  o Analysis:
+    --------
+    + Fixed a deadlock issue with G4RootPNtupleManager where the mutex
+      was locked before being passed to Root.
+    + Fixed compilation warnings on gcc-8.1.0.
+
+  o Geometry:
+    --------
+    + management:
+      o Use reverse_iterator in G4SolidStore::DeRegister() in order to speedup
+        partial deregistration on setups with many solids instances.
+      o G4Region: added possibility to disable search in the tree in
+        AddRootLogicalVolume() for speeding up process in complex flat geometries.
+
+  o Global:
+    ------
+    + G4PhysicsVector, G4Physics2DVector: fixed possible out-of-bound access
+      in FindBin() method. Addressing problem report #2087.
+    + Updated date and version for 10.4.p03.
+
+  o Interfaces:
+    ----------
+    + G4Xt: fixed compilation warnings for casts on gcc-8.1.
+    + Fixed compilation warnings for not used return parameters.
+
+  o Persistency - gdml
+    ------------------
+    + Clear auxiliary map information in G4GDMLReadStructure::Clear().
+      Addressing problem report #2064.
+    + Added stripping of invalid characters for names generation in writer classes
+      to prevent invalid NCName strings in exported GDML files. Adopt properly
+      stripped generated strings for exporting names of optical surfaces.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + dna:
+      o Fixed header guards in G4ITFinder and G4AllITFinder.
+        Addressing problem report #2084.
+    + standard:
+      o G4GoudsmitSaundersonTable: fixed gcc-8.1.0 compilation warnings.
+    + utils:
+      o G4EmElementSelector: optimisation of element selection for compound
+        materials.
+    + xrays:
+      o G4Cerenkov, G4Scintillation: correctly reset number of photons
+        to 0 each step. Addressing problem report #2056.
+        Added protection against infinite loops due to very small steps.
+        Addressing problem report #1992.
+
+  o Processes - Hadronic:
+    --------------------
+    + management:
+      o G4HadronicProcess: added check if secondary particle is on the mass
+        shell; if its mass differ from the PDG mass more for 1.5 MeV then mass
+        is forced to the mass shell, energy conserved, but momentum is changed.
+        Use correct return type when calling CheckResult() from PostStepDoIt():
+        fixes case when the value of pointer 'result' does not get properly
+        reset to NULL in case a non-conservation is detected, thus "bad"
+        interaction does not get re-sampled.
+        Fixed compilation warnings on gcc-8.1.0 regarding catching polymorphic
+        type by value, instead of by reference.
+      o G4HadronicProcess, G4VLeadingParticleBiasing, G4HadLeadBias: fixed
+        compilation warning with gcc-7.
+    + models/binary_cascade
+      o G4GeneratorPrecompoundInterface: fixed printout typo.
+    + models/cascade:
+      o G4GDecay3: fixed problem reported by CMS due to wrong kinematics in
+        the final state by removing loop check; adding protection for low value
+        of mother mass.
+    + models/de_excitation:
+      o G4LevelReader: fixed initialisation of 'fAlphaMax' from 1.e+6 to 1.e+15;
+        needed for correct IC probability of some isotopes.
+        Addresses problem reports #1986 and #2076, by change of handling of
+        internal conversion data.
+    + models/particle_hp
+      o G4ParticleHPCaptureFS::ApplyYourself(): Lorentz boost of neutron into
+        target frame was backwards; reversed it. Also replaced SetDefinition()
+        with SetDefinitionAndUpdateE(). Addresses problem report #1919.
+      o Fixed definition of singletons for G4ParticleHPManager and
+        G4ParticleHPThreadLocalManager and some code cleanup.
+        Made G4ParticleHPThreadLocalManager a G4ThreadlLocalSingleton to avoid
+        memory leaks generated each time a thread creates the instance.
+      o Fixed bug for double allocation of G4ParticleHPReactionWhiteBoard in
+        G4ParticleHPThreadLocalManager::OpenReactionWhiteBoard().
+      o G4ParticleHPElementData: removed unnecessary inheritance from
+        G4HadronicCrossSection.
+      o Fixed incorrect sampling of isotropic distribution.
+        Addressing problem report #1745.
+      o Fixed gamma level mismatch in G4ParticleHPInelasticCompFS.
+        Not a complete fix because gamma data comes from ENSDF and does not
+        necessarily match excitations in ENDF.
+        Addressing problem report #1789.
+      o Fixed memory leaks in G4ParticleHPContEnergyAngular::Sample() and 
+        G4ParticleHPContAngularPar::cacheInit().
+        Addressing problem report #2026.
+      o G4ParticleHPElasticFS::ApplyYourself(): use correct reference frames for
+        calculation of projectile and target momenta. Correction made for cases
+        when cos(Theta) is given in lab frame and in center of momentum frame.
+        Partial fix of momentum non-conservation for problem report #1918. 
+      o Fixed potential leaks in G4ParticleHPPhotonDist, G4ParticleHPContAngularPar
+        and G4ParticleHPFinalState for use of pointers cached in G4Cache.
+      o G4ENDFTapeRead, G4FissionProductYieldDist: fixed compilation warnings
+        on gcc 8.1.0, regarding catching polymorphic type by value, instead of
+        by reference.
+      o Minor code cleanup and formatting.
+    + models/parton_string/diffraction
+      o G4FTFAnnihilation: fix to get flat cos(theta) and phi distributions for
+        antiproton annihilation at rest.
+    + models/rpg
+      o G4RPGAntiKZeroInelastic, G4RPGInelastic: fixed compilation warnings on
+        gcc-8.1.0, regarding catching polymorphic type by value, instead of by
+        reference.
+    + processes:
+      o G4HadronElasticProcess, G4NeutrinoElectronProcess: fixed compilation
+        warnings on gcc 8.1.0, regarding catching polymorphic type by value,
+        instead of by reference.
+    + stopping:
+      o G4HadronStoppingProcess, G4MuonicAtomDecay: fixed compilation warnings
+        on gcc 8.1.0, regarding catching polymorphic type by value, instead of
+        by reference.
+
+  o Processes - Scoring:
+    -------------------
+    o G4ParallelWorldProcess: fixed track velocity of optical photons for the
+      first step in a layered mass geometry.
+
+  o Examples:
+    --------
+    + extended/fieldBlineTracer:
+      o Fixed compilation error for missing header inclusion.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.4 or 10.4.p01 or p02.
+  o  Technical notes distributed for release 10.4 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.4.p03 are available
+through our "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

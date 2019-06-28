@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -141,7 +141,7 @@ Build angle for energy distribution according the current radiator
 Lorentz Factor	XTR photon number
 
 
-total time for build XTR angle for given energy tables = 0.11 s
+total time for build XTR angle for given energy tables = 0.12 s
 
 msc:  for e+  SubType= 10
       RangeFactor= 0.04, stepLimType: 1, latDisp: 1
@@ -227,13 +227,13 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.156
 9.283e+04	3.157
 
-total time for build X-ray TR energy loss tables = 0.14 s
+total time for build X-ray TR energy loss tables = 0.13 s
 Build angle for energy distribution according the current radiator
 
 Lorentz Factor	XTR photon number
 
 
-total time for build XTR angle for given energy tables = 0.11 s
+total time for build XTR angle for given energy tables = 0.12 s
 
 msc:  for proton  SubType= 10
       RangeFactor= 0.2, stepLimType: 0, latDisp: 0
@@ -557,16 +557,16 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.260000s Real=0.264153s Sys=0.000000s
+  User=0.260000s Real=0.270783s Sys=0.000000s
  ================== run summary =====================
  End of Run TotNbofEvents = 1000
- Mean energy deposit in absorber = 0.0483531 +-0.0185219  MeV 
- Total number of XTR gammas = 2660
- Total number of all gammas = 2751
+ Mean energy deposit in absorber = 0.0485693 +-0.0191948  MeV 
+ Total number of XTR gammas = 2701
+ Total number of all gammas = 2807
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 731840905, 1379565857
+ Current couple of seeds = 774604579, 16663174
 ----------------------------------------
 ... write Root file : testem10.root - done
 ... close Root file : testem10.root - done

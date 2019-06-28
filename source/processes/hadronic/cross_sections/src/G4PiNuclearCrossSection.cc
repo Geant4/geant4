@@ -27,8 +27,6 @@
 #include "G4PiNuclearCrossSection.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
-#include "G4HadronicException.hh"
-#include "G4HadTmpUtil.hh"
 #include "G4Pow.hh"
 
 // factory
@@ -470,8 +468,13 @@ G4PiNuclearCrossSection::IsElementApplicable(const G4DynamicParticle*,
 
 void G4PiNuclearCrossSection::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
-  if(&p == G4PionMinus::PionMinus() || &p == G4PionPlus::PionPlus()) { return; }
-  throw G4HadronicException(__FILE__, __LINE__,"Is applicable only for pions");
+  if(&p != G4PionMinus::PionMinus() && &p != G4PionPlus::PionPlus()) {
+    G4ExceptionDescription ed;
+    ed << "This cross section is applicable only to pions and not to " 
+       << p.GetParticleName() << G4endl; 
+    G4Exception("G4PiNuclearCrossSection::BuildPhysicsTable", "had001", 
+		FatalException, ed);
+  }
 }
 
 G4double 
@@ -498,7 +501,7 @@ G4PiNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* particl
     const G4bool isHeavyElementAllowed = true;
     if ( isHeavyElementAllowed ) {
       it--;
-      if ( Z > 100 ) Z = 100;  // Above Fermium, treat it as Fermium
+      G4int zz = (Z > 100) ? 100 : Z;  // Above Fermium, treat it as Fermium
       // The cross section for a transuranic element is scaled from the
       // corresponding cross section of Uranium, as follows:
       //   (atomic_weight_element/atomic_weight_uranium)^0.75
@@ -515,14 +518,16 @@ G4PiNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* particl
                                               1.040598,    // <A>=251.0 for Cf (Z=98)
                                               1.043706,    // <A>=252.0 for Es (Z=99)
                                               1.059199 };  // <A>=257.0 for Fm (Z=100)
-      result =    vecScaling[Z-93] * thePimData[it]->ReactionXSection( kineticEnergy );
-      fTotalXsc = vecScaling[Z-93] * thePimData[it]->TotalXSection( kineticEnergy );
-      fElasticXsc = fTotalXsc - result;
-      if ( fElasticXsc < 0.0 ) fElasticXsc = 0.0;
+      result =    vecScaling[zz-93] * thePimData[it]->ReactionXSection( kineticEnergy );
+      fTotalXsc = vecScaling[zz-93] * thePimData[it]->TotalXSection( kineticEnergy );
+      fElasticXsc = std::max(fTotalXsc - result, 0.0);
       return result;
     } else {
-      throw G4HadronicException(__FILE__, __LINE__,
-        "Called G4PiNuclearCrossSection outside parametrization");
+      G4ExceptionDescription ed;
+      ed << "This cross section not applicable to Z= " << Z << " projectile: "  
+	 << particle->GetParticleDefinition()->GetParticleName() << G4endl; 
+      G4Exception("G4PiNuclearCrossSection::GetElementCrossSection", "had001", 
+		  FatalException, ed);
     }
   }
   G4int Z1, Z2;

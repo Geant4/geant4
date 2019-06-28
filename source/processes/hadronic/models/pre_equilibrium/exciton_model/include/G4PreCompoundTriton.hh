@@ -60,8 +60,8 @@ private:
   G4PreCompoundTriton(const G4PreCompoundTriton &right);
   const G4PreCompoundTriton& 
   operator= (const G4PreCompoundTriton &right);
-  G4int operator==(const G4PreCompoundTriton &right) const;
-  G4int operator!=(const G4PreCompoundTriton &right) const;    
+  G4bool operator==(const G4PreCompoundTriton &right) const;
+  G4bool operator!=(const G4PreCompoundTriton &right) const;    
 
   G4TritonCoulombBarrier theTritonCoulombBarrier;
 };

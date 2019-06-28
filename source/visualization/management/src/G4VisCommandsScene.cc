@@ -41,6 +41,7 @@
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithoutParameter.hh"
 #include "G4ios.hh"
 #include <sstream>
 
@@ -780,9 +781,9 @@ G4VisCommandSceneSelect::G4VisCommandSceneSelect () {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/scene/select", this);
   fpCommand -> SetGuidance ("Selects a scene");
-  fpCommand -> SetGuidance 
-    ("Makes the scene current.  \"/vis/scene/list\" to see"
-     "\n possible scene names.");
+  fpCommand -> SetGuidance
+  ("Makes the scene current.  \"/vis/scene/list\" to see"
+   "\n possible scene names.");
   fpCommand -> SetParameterName ("scene-name", omitable = false);
 }
 
@@ -807,16 +808,111 @@ void G4VisCommandSceneSelect::SetNewValue (G4UIcommand*, G4String newValue) {
   if (iScene >= nScenes) {
     if (verbosity >= G4VisManager::warnings) {
       G4cout << "WARNING: Scene \"" << selectName
-	     << "\" not found - \"/vis/scene/list\" to see possibilities."
-	     << G4endl;
+      << "\" not found - \"/vis/scene/list\" to see possibilities."
+      << G4endl;
     }
     return;
   }
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Scene \"" << selectName
-	   << "\" selected." << G4endl;
+    << "\" selected." << G4endl;
   }
 
   CheckSceneAndNotifyHandlers (sceneList [iScene]);
+}
+
+////////////// /vis/scene/showExtents ///////////////////////////////////////
+
+G4VisCommandSceneShowExtents::G4VisCommandSceneShowExtents () {
+  fpCommand = new G4UIcmdWithoutParameter ("/vis/scene/showExtents", this);
+  fpCommand -> SetGuidance ("Prints and draws extents of models in a scene");
+}
+
+G4VisCommandSceneShowExtents::~G4VisCommandSceneShowExtents () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneShowExtents::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneShowExtents::SetNewValue (G4UIcommand*, G4String) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4VSceneHandler* pCurrentSceneHandler =
+  fpVisManager -> GetCurrentSceneHandler();
+  if (!pCurrentSceneHandler) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: No current scene handler."
+      << G4endl;
+    }
+    return;
+  }
+  G4VViewer* pCurrentViewer = fpVisManager -> GetCurrentViewer();
+  if (!pCurrentViewer) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: No current viewer."
+      << G4endl;
+    }
+    return;
+  }
+  G4Scene* pCurrentScene = fpVisManager -> GetCurrentScene();
+  if (!pCurrentScene) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: No current scene."
+      << G4endl;
+    }
+    return;
+  }
+
+  G4cout << "\n  Run-duration models:";
+  G4int nRunModels = pCurrentScene -> GetRunDurationModelList ().size ();
+  if (nRunModels == 0) {
+    G4cout << " none.";
+  }
+  for (G4int i = 0; i < nRunModels; i++) {
+    if (pCurrentScene -> GetRunDurationModelList()[i].fActive)
+      G4cout << "\n   Active:   ";
+    else G4cout << "\n   Inactive: ";
+    G4VModel* pModel = pCurrentScene -> GetRunDurationModelList()[i].fpModel;
+    const G4VisExtent& transformedExtent = pModel -> GetTransformedExtent();
+    G4cout << pModel -> GetGlobalDescription ()
+    << "\n" << transformedExtent;
+    DrawExtent(transformedExtent);
+  }
+  G4cout << "\n  End-of-event models:";
+  G4int nEOEModels = pCurrentScene -> GetEndOfEventModelList ().size ();
+  if (nEOEModels == 0) {
+    G4cout << " none.";
+  }
+  for (G4int i = 0; i < nEOEModels; i++) {
+    if (pCurrentScene -> GetEndOfEventModelList()[i].fActive)
+      G4cout << "\n   Active:   ";
+    else G4cout << "\n   Inactive: ";
+    G4VModel* pModel = pCurrentScene -> GetEndOfEventModelList()[i].fpModel;
+    const G4VisExtent& transformedExtent = pModel -> GetTransformedExtent();
+    G4cout << pModel -> GetGlobalDescription ()
+    << "\n" << transformedExtent;
+    DrawExtent(transformedExtent);
+  }
+  G4cout << "\n  End-of-run models:";
+  G4int nEORModels = pCurrentScene -> GetEndOfRunModelList ().size ();
+  if (nEORModels == 0) {
+    G4cout << " none.";
+  }
+  for (G4int i = 0; i < nEORModels; i++) {
+    if (pCurrentScene -> GetEndOfRunModelList()[i].fActive)
+      G4cout << "\n   Active:   ";
+    else G4cout << "\n   Inactive: ";
+    G4VModel* pModel = pCurrentScene -> GetEndOfRunModelList()[i].fpModel;
+    const G4VisExtent& transformedExtent = pModel -> GetTransformedExtent();
+    G4cout << pModel -> GetGlobalDescription ()
+    << "\n" << transformedExtent;
+    DrawExtent(transformedExtent);
+  }
+  G4cout << "Overall extent:\n";
+  DrawExtent(pCurrentScene->GetExtent());
+  G4cout << G4endl;
 }

@@ -52,81 +52,48 @@
 
 #include "G4VComponentCrossSection.hh"
 
+
 class G4ParticleDefinition;
 
-class G4ComponentAntiNuclNuclearXS : public G4VComponentCrossSection
-{
-public:
 
-  G4ComponentAntiNuclNuclearXS ();
-  virtual ~G4ComponentAntiNuclNuclearXS ();
-   
-virtual
-  G4double GetTotalIsotopeCrossSection(const G4ParticleDefinition* aParticle,
-				       G4double kinEnergy,
-				       G4int Z, G4int A);
+class G4ComponentAntiNuclNuclearXS : public G4VComponentCrossSection {
 
-virtual
-  G4double GetTotalElementCrossSection(const G4ParticleDefinition* aParticle,
-				       G4double kinEnergy, 
-				       G4int Z, G4double A);
+  public:
+    G4ComponentAntiNuclNuclearXS ();
+    virtual ~G4ComponentAntiNuclNuclearXS ();
+    virtual G4double GetTotalIsotopeCrossSection(const G4ParticleDefinition* aParticle,
+				                 G4double kinEnergy, G4int Z, G4int A);
+    virtual G4double GetTotalElementCrossSection(const G4ParticleDefinition* aParticle,
+				                 G4double kinEnergy, G4int Z, G4double A);
+    virtual G4double GetInelasticIsotopeCrossSection(const G4ParticleDefinition* aParticle,
+					             G4double kinEnergy, G4int Z, G4int A);
+    virtual G4double GetInelasticElementCrossSection(const G4ParticleDefinition* aParticle,
+					             G4double kinEnergy, G4int Z, G4double A);
+    virtual G4double GetElasticElementCrossSection(const G4ParticleDefinition* aParticle,
+					           G4double kinEnergy, G4int Z, G4double A);
+    virtual G4double GetElasticIsotopeCrossSection(const G4ParticleDefinition* aParticle,
+					           G4double kinEnergy, G4int Z, G4int A);
+    virtual void BuildPhysicsTable(const G4ParticleDefinition&) {}
+    virtual void DumpPhysicsTable(const G4ParticleDefinition&)  {}
+    virtual void CrossSectionDescription(std::ostream&) const;
+    // Method for calculation of Anti-Hadron Nucleon Total Cross-section
+    G4double GetAntiHadronNucleonTotCrSc(const G4ParticleDefinition* aParticle, G4double kinEnergy);
+    // Method for calculation of Anti-Hadron Nucleon Elastic Cross-section
+    G4double GetAntiHadronNucleonElCrSc(const G4ParticleDefinition* aParticle, G4double kinEnergy);
 
-virtual
-  G4double GetInelasticIsotopeCrossSection(const G4ParticleDefinition* aParticle,
-					   G4double kinEnergy, 
-					   G4int Z, G4int A);
-
-virtual
-  G4double GetInelasticElementCrossSection(const G4ParticleDefinition* aParticle,
-					   G4double kinEnergy, 
-					   G4int Z, G4double A);
-
-virtual
-  G4double GetElasticElementCrossSection(const G4ParticleDefinition* aParticle,
-					 G4double kinEnergy, 
-					 G4int Z, G4double A);
-
-virtual
-  G4double GetElasticIsotopeCrossSection(const G4ParticleDefinition* aParticle,
-					 G4double kinEnergy, 
-					 G4int Z, G4int A);
- 
-virtual
- void BuildPhysicsTable(const G4ParticleDefinition&)
- {}
-
-virtual
- void DumpPhysicsTable(const G4ParticleDefinition&) 
- {}
-
-virtual void CrossSectionDescription(std::ostream&) const;
-
-// Method for calculation of Anti-Hadron Nucleon Total Cross-section
-G4double GetAntiHadronNucleonTotCrSc(const G4ParticleDefinition* aParticle, G4double kinEnergy);
-
-
-// Method for calculation of Anti-Hadron Nucleon Elastic Cross-section
-G4double GetAntiHadronNucleonElCrSc(const G4ParticleDefinition* aParticle, G4double kinEnergy);
-
-
-private:
-
-//  const G4double fUpperLimit;
-//  const G4double fLowerLimit; 
-  G4double fRadiusEff;  // Effective Radius for AntiNucleus 
-  G4double fRadiusNN2;  // Sqr of radius of NN collision
-
-  G4double fTotalXsc, fElasticXsc, fInelasticXsc;
-  G4double fAntiHadronNucleonTotXsc, fAntiHadronNucleonElXsc; 
-  G4double Elab, S, SqrtS ;
-  G4double Mn, b0, b2,  SqrtS0, S0, R0; //parameters for AntiHadron-Nucleon Xsc  
-   
-  G4ParticleDefinition* theAProton;
-  G4ParticleDefinition* theANeutron;
-  G4ParticleDefinition* theADeuteron;
-  G4ParticleDefinition* theATriton;
-  G4ParticleDefinition* theAAlpha;
-  G4ParticleDefinition* theAHe3;
+  private:
+    G4double fRadiusEff;  // Effective Radius for AntiNucleus 
+    G4double fRadiusNN2;  // Sqr of radius of NN collision
+    G4double fTotalXsc, fElasticXsc, fInelasticXsc;
+    G4double fAntiHadronNucleonTotXsc, fAntiHadronNucleonElXsc; 
+    G4double Elab, S, SqrtS ;
+    G4double Mn, b0, b2,  SqrtS0, S0, R0;  // Parameters for AntiHadron-Nucleon Xsc  
+    G4ParticleDefinition* theAProton;
+    G4ParticleDefinition* theANeutron;
+    G4ParticleDefinition* theADeuteron;
+    G4ParticleDefinition* theATriton;
+    G4ParticleDefinition* theAAlpha;
+    G4ParticleDefinition* theAHe3;
 
 };
 

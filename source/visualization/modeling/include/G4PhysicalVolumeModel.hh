@@ -48,7 +48,7 @@
 // number but also by its position in the geometry hierarchy.
 //
 // It is guaranteed that touchables are presented to the scene handler
-// in top-down hierarchy order, i.e., ancesters first, mothers before
+// in top-down hierarchy order, i.e., ancestors first, mothers before
 // daughters, so the scene handler can be assured that, if it is
 // building its own scene graph tree, a mother, if any, will have
 // already been encountered and there will already be a node in place
@@ -133,9 +133,10 @@ public: // With description
 
   // Nested struct for encapsulating touchable properties
   struct TouchableProperties {
-    TouchableProperties(): fpTouchablePV(nullptr) {}
+    TouchableProperties(): fpTouchablePV(nullptr), fCopyNo(0) {}
     G4ModelingParameters::PVNameCopyNoPath fTouchablePath;
     G4VPhysicalVolume*                     fpTouchablePV;
+    G4int                                  fCopyNo;
     G4Transform3D                          fTouchableGlobalTransform;
     std::vector<G4PhysicalVolumeNodeID>    fTouchableBaseFullPVPath;
   };
@@ -204,7 +205,7 @@ public: // With description
   const std::vector<G4PhysicalVolumeNodeID>& GetDrawnPVPath() const
   {return fDrawnPVPath;}
   // Path of the current drawn (non-culled) touchable in terms of
-  // drawn (non-culled) ancesters.  It is a vector of physical volume
+  // drawn (non-culled) ancestors.  It is a vector of physical volume
   // node identifiers corresponding to the geometry hierarchy actually
   // selected, i.e., with "culled" volumes NOT included.
 

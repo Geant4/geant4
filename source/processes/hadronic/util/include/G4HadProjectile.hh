@@ -30,7 +30,7 @@
 #include "G4Material.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4LorentzVector.hh"
-#include "G4LorentzVector.hh"
+#include "G4ThreeVector.hh"
 #include "G4LorentzRotation.hh"
 
 class G4Track;
@@ -49,6 +49,7 @@ public:
   inline const G4Material * GetMaterial() const;
   inline const G4ParticleDefinition * GetDefinition() const;
   inline const G4LorentzVector & Get4Momentum() const;
+  inline const G4ThreeVector & GetMomentumDirection() const;
   inline G4LorentzRotation & GetTrafoToLab();
   inline G4double GetKineticEnergy() const;
   inline G4double GetTotalEnergy() const;
@@ -59,16 +60,20 @@ public:
   inline void SetBoundEnergy(G4double e);
     
 private:
+
+  void InitialiseLocal(const G4DynamicParticle*);
   
   // hide assignment operator as private 
   G4HadProjectile& operator=(const G4HadProjectile &right);
   G4HadProjectile(const G4HadProjectile& );
 
   const G4Material * theMat;
-  G4LorentzVector theOrgMom;
-  G4LorentzVector theMom;
   const G4ParticleDefinition * theDef;
+  G4LorentzVector theMom;
   G4LorentzRotation toLabFrame;
+  G4ThreeVector theDirection;
+  G4double theMass;
+  G4double theKinEnergy;
   G4double theTime;
   G4double theBoundEnergy;
 };
@@ -93,21 +98,24 @@ inline G4LorentzRotation& G4HadProjectile::GetTrafoToLab()
   return toLabFrame;
 }
 
+inline const G4ThreeVector& G4HadProjectile::GetMomentumDirection() const
+{
+  return theDirection;
+}
+
 G4double G4HadProjectile::GetTotalEnergy() const
 {
-  return Get4Momentum().e();
+  return theMom.e();
 }
 
 G4double G4HadProjectile::GetTotalMomentum() const
 {
-  return Get4Momentum().vect().mag();
+  return theMom.pz();
 }
 
 G4double G4HadProjectile::GetKineticEnergy() const 
 {
-  G4double ekin = GetTotalEnergy() - GetDefinition()->GetPDGMass();
-  if(ekin < 0.0) { ekin = 0.0; }
-  return ekin;
+  return theKinEnergy;
 }
 
 inline G4double G4HadProjectile::GetGlobalTime() const 

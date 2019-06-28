@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -8,6 +8,8 @@
                              WWW : http://geant4.org/
 **************************************************************
 
+===== Register constructor ==== G4EmDNAPhysics
+===== Register constructor ==== G4EmDNAChemistry
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -219,6 +221,8 @@ DNARuddIonisationModel : Emin=    0 eV  Emax=  100 MeV  deltaRudd Fluo
 hydrogen_G4DNAChargeIncrease:  for hydrogen SubType=57 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  100 MeV
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 End of tracking primary particle, its final energy is :0.025 eV 
 Physics stage ends
 Number of chemical species involved in reactions = 6
@@ -246,46 +250,53 @@ DNAMolecularStepByStepModel will be used
 *** G4Scheduler starts processing 
 At time :  28.509 ps Reaction : OH^0 (-209) + OH^0 (-144) -> H2O2^0 (-217)
 At time :  73.295 ps Reaction : e_aq^-1 (-60) + OH^0 (-171) -> OH^-1 (-218)
-At time :   158.3 ps Reaction : OH^0 (-174) + OH^0 (-179) -> H2O2^0 (-219)
-At time :  201.88 ps Reaction : e_aq^-1 (-39) + OH^0 (-205) -> OH^-1 (-220)
-At time :  232.58 ps Reaction : OH^0 (-176) + e_aq^-1 (-99) -> OH^-1 (-221)
-At time :  235.58 ps Reaction : OH^0 (-198) + e_aq^-1 (-68) -> OH^-1 (-222)
-At time :  241.58 ps Reaction : OH^0 (-110) + OH^0 (-136) -> H2O2^0 (-223)
-At time :  247.58 ps Reaction : OH^0 (-191) + H^0 (-177) -> No product
-At time :  511.61 ps Reaction : H^0 (-199) + H^0 (-210) -> H_2^0 (-224)
-At time :  681.64 ps Reaction : OH^-1 (-220) + H3O^1 (-119) -> No product
-At time :  888.46 ps Reaction : OH^0 (-180) + OH^0 (-165) -> H2O2^0 (-225)
-At time :  927.58 ps Reaction : OH^0 (-185) + OH^0 (-118) -> H2O2^0 (-226)
-At time :  1.0713 ns Reaction : OH^-1 (-222) + H3O^1 (-147) -> No product
-At time :  1.7171 ns Reaction : H^0 (-186) + OH^0 (-142) -> No product
-At time :  3.1283 ns Reaction : OH^0 (-188) + OH^0 (-124) -> H2O2^0 (-227)
-At time :  4.9346 ns Reaction : H3O^1 (-121) + OH^-1 (-218) -> No product
-At time :  6.9793 ns Reaction : OH^0 (-207) + OH^0 (-112) -> H2O2^0 (-228)
-At time :  8.7857 ns Reaction : e_aq^-1 (-70) + H^0 (-184) -> OH^-1 (-229) + H_2^0 (-230)
-At time :  9.3266 ns Reaction : e_aq^-1 (-65) + H3O^1 (-172) -> H^0 (-231)
-At time :  9.3466 ns Reaction : e_aq^-1 (-64) + H3O^1 (-139) -> H^0 (-232)
-At time :   10.11 ns Reaction : H^0 (-190) + OH^0 (-132) -> No product
-At time :   10.51 ns Reaction : e_aq^-1 (-108) + e_aq^-1 (-71) -> OH^-1 (-233) + OH^-1 (-234) + H_2^0 (-235)
-At time :   10.61 ns Reaction : e_aq^-1 (-94) + OH^0 (-212) -> OH^-1 (-236)
-At time :   10.71 ns Reaction : H3O^1 (-215) + e_aq^-1 (-95) -> H^0 (-237)
-At time :   10.71 ns Reaction : e_aq^-1 (-41) + H3O^1 (-141) -> H^0 (-238)
-At time :   11.41 ns Reaction : OH^0 (-116) + OH^0 (-160) -> H2O2^0 (-239)
-At time :   11.61 ns Reaction : OH^0 (-193) + e_aq^-1 (-93) -> OH^-1 (-240)
-At time :   12.31 ns Reaction : OH^-1 (-221) + H3O^1 (-159) -> No product
-At time :   12.81 ns Reaction : H^0 (-201) + H^0 (-175) -> H_2^0 (-241)
-At time :   13.71 ns Reaction : OH^0 (-148) + OH^0 (-158) -> H2O2^0 (-242)
-At time :   14.31 ns Reaction : e_aq^-1 (-37) + OH^0 (-122) -> OH^-1 (-243)
-At time :  21.022 ns Reaction : OH^-1 (-233) + H3O^1 (-133) -> No product
-At time :  26.788 ns Reaction : e_aq^-1 (-82) + OH^0 (-128) -> OH^-1 (-244)
-At time :  31.465 ns Reaction : H^0 (-238) + OH^0 (-120) -> No product
-At time :  39.073 ns Reaction : e_aq^-1 (-84) + OH^0 (-156) -> OH^-1 (-245)
-At time :   50.21 ns Reaction : H3O^1 (-129) + OH^-1 (-240) -> No product
-At time :  55.188 ns Reaction : e_aq^-1 (-100) + H2O2^0 (-223) -> OH^-1 (-246) + OH^0 (-247)
-At time :  57.057 ns Reaction : H3O^1 (-137) + OH^-1 (-243) -> No product
-At time :  57.898 ns Reaction : e_aq^-1 (-42) + H2O2^0 (-227) -> OH^-1 (-248) + OH^0 (-249)
-At time :  62.809 ns Reaction : H^0 (-182) + e_aq^-1 (-73) -> OH^-1 (-250) + H_2^0 (-251)
-At time :  63.309 ns Reaction : e_aq^-1 (-75) + e_aq^-1 (-88) -> OH^-1 (-252) + OH^-1 (-253) + H_2^0 (-254)
-At time :  67.672 ns Reaction : OH^0 (-189) + OH^0 (-140) -> H2O2^0 (-255)
+At time :  186.09 ps Reaction : H^0 (-175) + OH^0 (-181) -> No product
+At time :  301.45 ps Reaction : e_aq^-1 (-99) + H3O^1 (-169) -> H^0 (-219)
+At time :  448.84 ps Reaction : e_aq^-1 (-55) + e_aq^-1 (-73) -> OH^-1 (-220) + OH^-1 (-221) + H_2^0 (-222)
+At time :  478.84 ps Reaction : H3O^1 (-119) + OH^-1 (-218) -> No product
+At time :  545.91 ps Reaction : OH^0 (-156) + OH^0 (-165) -> H2O2^0 (-223)
+At time :  805.72 ps Reaction : H^0 (-201) + OH^0 (-114) -> No product
+At time :  829.54 ps Reaction : OH^0 (-180) + OH^0 (-179) -> H2O2^0 (-224)
+At time :  1.3167 ns Reaction : OH^0 (-208) + H^0 (-184) -> No product
+At time :  1.3167 ns Reaction : e_aq^-1 (-64) + OH^0 (-188) -> OH^-1 (-225)
+At time :  1.4267 ns Reaction : OH^-1 (-225) + H3O^1 (-123) -> No product
+At time :  2.0274 ns Reaction : H^0 (-177) + OH^0 (-160) -> No product
+At time :  2.3956 ns Reaction : OH^0 (-207) + OH^0 (-112) -> H2O2^0 (-226)
+At time :  2.5786 ns Reaction : OH^0 (-128) + OH^0 (-138) -> H2O2^0 (-227)
+At time :  2.7215 ns Reaction : e_aq^-1 (-48) + H3O^1 (-172) -> H^0 (-228)
+At time :  3.5737 ns Reaction : OH^0 (-197) + e_aq^-1 (-80) -> OH^-1 (-229)
+At time :  3.5837 ns Reaction : OH^0 (-196) + OH^0 (-193) -> H2O2^0 (-230)
+At time :  3.6137 ns Reaction : H^0 (-219) + e_aq^-1 (-90) -> OH^-1 (-231) + H_2^0 (-232)
+At time :  3.6753 ns Reaction : OH^0 (-176) + e_aq^-1 (-93) -> OH^-1 (-233)
+At time :  4.6364 ns Reaction : H^0 (-186) + OH^0 (-152) -> No product
+At time :  6.1144 ns Reaction : H^0 (-182) + OH^0 (-205) -> No product
+At time :  6.5335 ns Reaction : OH^0 (-174) + OH^0 (-120) -> H2O2^0 (-234)
+At time :  8.0126 ns Reaction : OH^-1 (-221) + H3O^1 (-111) -> No product
+At time :  8.2017 ns Reaction : H3O^1 (-141) + e_aq^-1 (-167) -> H^0 (-235)
+At time :  8.7754 ns Reaction : e_aq^-1 (-33) + OH^0 (-118) -> OH^-1 (-236)
+At time :  8.9122 ns Reaction : OH^-1 (-233) + H3O^1 (-213) -> No product
+At time :  9.4477 ns Reaction : OH^0 (-148) + e_aq^-1 (-170) -> OH^-1 (-237)
+At time :  9.5928 ns Reaction : OH^-1 (-237) + H3O^1 (-149) -> No product
+At time :   9.872 ns Reaction : e_aq^-1 (-41) + e_aq^-1 (-39) -> OH^-1 (-238) + OH^-1 (-239) + H_2^0 (-240)
+At time :  10.216 ns Reaction : H3O^1 (-215) + e_aq^-1 (-47) -> H^0 (-241)
+At time :  10.716 ns Reaction : e_aq^-1 (-86) + OH^0 (-130) -> OH^-1 (-242)
+At time :  11.116 ns Reaction : OH^0 (-198) + e_aq^-1 (-81) -> OH^-1 (-243)
+At time :  11.616 ns Reaction : e_aq^-1 (-70) + H3O^1 (-139) -> H^0 (-244)
+At time :  11.716 ns Reaction : e_aq^-1 (-91) + OH^0 (-150) -> OH^-1 (-245)
+At time :  12.416 ns Reaction : H3O^1 (-113) + OH^-1 (-236) -> No product
+At time :  12.616 ns Reaction : e_aq^-1 (-65) + H3O^1 (-157) -> H^0 (-246)
+At time :  14.416 ns Reaction : e_aq^-1 (-82) + OH^0 (-126) -> OH^-1 (-247)
+At time :  14.516 ns Reaction : e_aq^-1 (-95) + OH^0 (-142) -> OH^-1 (-248)
+At time :  18.796 ns Reaction : OH^0 (-200) + OH^0 (-110) -> H2O2^0 (-249)
+At time :  18.796 ns Reaction : e_aq^-1 (-107) + OH^0 (-132) -> OH^-1 (-250)
+At time :  23.571 ns Reaction : OH^-1 (-242) + H3O^1 (-159) -> No product
+At time :  27.246 ns Reaction : H3O^1 (-109) + OH^-1 (-229) -> No product
+At time :  28.873 ns Reaction : e_aq^-1 (-35) + H^0 (-194) -> OH^-1 (-251) + H_2^0 (-252)
+At time :  29.173 ns Reaction : e_aq^-1 (-94) + H3O^1 (-211) -> H^0 (-253)
+At time :    50.3 ns Reaction : OH^-1 (-250) + H3O^1 (-117) -> No product
+At time :  67.912 ns Reaction : OH^-1 (-239) + H3O^1 (-143) -> No product
+At time :  78.045 ns Reaction : H3O^1 (-151) + OH^-1 (-251) -> No product
+At time :  80.831 ns Reaction : OH^0 (-140) + OH^0 (-168) -> H2O2^0 (-254)
 *** G4Scheduler ends at time : 100 ns
 ___________________________________
 Seed used :1

@@ -196,7 +196,7 @@ GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Building Geant4 with GDML support")
 #  With this option, G4StackManager uses G4SmartTrackStack instead of
 # ordinary G4TrackStack as the Urgent stack. G4SmartTrackStack tries to
 # stick to the same kind of particle as the previous track when Pop()
-# is called. This G4SmartTrackStack may provide some performance 
+# is called. This G4SmartTrackStack may provide some performance
 # improvements in particular for crystal calorimeters in high energy
 # physics experiments. On the other hand, G4SmartTrackStack won't give
 # any benefit for granular geometry or lower energy applications, while
@@ -214,7 +214,7 @@ GEANT4_ADD_FEATURE(GEANT4_USE_SMARTSTACK "Use smart track stack")
 #-----------------------------------------------------------------------
 # Optional Support for TiMemory -- cross-language timing and memory
 # easily installed via:
-#   "pip install timemory" and pointing TiMemory_DIR to 
+#   "pip install timemory" and pointing TiMemory_DIR to
 #    <install-prefix>/share/cmake/TiMemory
 #    e.g. -DTiMemory_DIR=/usr/local/share/cmake/TiMemory
 #    for /usr/local/bin/pip
@@ -232,8 +232,6 @@ mark_as_advanced(GEANT4_USE_TIMEMORY)
 
 if(GEANT4_USE_TIMEMORY)
     find_package(TiMemory REQUIRED)
-    # definition that enables macros
-    add_definitions(-DGEANT4_USE_TIMEMORY)
 endif()
 
 GEANT4_ADD_FEATURE(GEANT4_USE_TIMEMORY "Building Geant4 with TiMemory support")
@@ -314,22 +312,19 @@ if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
   find_package(VecGeom REQUIRED)
 
   if(GEANT4_USE_ALL_USOLIDS)
-    set(GEANT4_USOLIDS_COMPILE_DEFINITIONS "-DG4GEOM_USE_USOLIDS")
+    set(G4GEOM_USE_USOLIDS TRUE)
     GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with all VecGeom equivalents (EXPERIMENTAL)")
   else()
-    set(GEANT4_USOLIDS_COMPILE_DEFINITIONS "-DG4GEOM_USE_PARTIAL_USOLIDS")
+    set(G4GEOM_USE_PARTIAL_USOLIDS TRUE)
     foreach(__g4_usolid_shape ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST})
-      list(APPEND GEANT4_USOLIDS_COMPILE_DEFINITIONS "-DG4GEOM_USE_U${__g4_usolid_shape}")
+      set(G4GEOM_USE_U${__g4_usolid_shape} TRUE)
     endforeach()
     GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with VecGeom equivalents for ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST} (EXPERIMENTAL)")
   endif()
-  list (APPEND GEANT4_USOLIDS_COMPILE_DEFINITIONS ${VECGEOM_DEFINITIONS})
 
-  # Combined definitions
-  add_definitions(${GEANT4_USOLIDS_COMPILE_DEFINITIONS})
-
-  # Add VecGeom inc dirs here - can be removed once VecGeom supports
-  # INTERFACE_INCLUDE_DIRECTORIES
+  # Always need defs/includes for VecGeom until that supports usage reqs...
+  # Or can create a "G4VecGeom" internal target to propagate these.
+  add_definitions(${VECGEOM_DEFINITIONS})
   include_directories(${VECGEOM_INCLUDE_DIR} ${VECGEOM_EXTERNAL_INCLUDES})
 endif()
 

@@ -29,7 +29,7 @@
 G4IntegrationDriver<G4BulirschStoer>::G4IntegrationDriver(
     G4double hminimum,
     G4BulirschStoer* stepper,
-    G4int, // numberOfComponents,
+    G4int numberOfComponents,
     G4int statisticsVerbosity)
         : fMinimumStep(hminimum)
         , fVerbosity(statisticsVerbosity)
@@ -39,6 +39,15 @@ G4IntegrationDriver<G4BulirschStoer>::G4IntegrationDriver(
         , interval_sequence{2,4}
 {
     assert(stepper->GetNumberOfVariables() == numberOfComponents);
+    
+    if( stepper->GetNumberOfVariables() != numberOfComponents){
+      std::ostringstream msg;
+      msg << "Disagreement in number of variables = "
+          << stepper->GetNumberOfVariables()
+          << " vs no of components = " << numberOfComponents;
+      G4Exception("G4IntegrationDriver<G4BulirschStoer> Constructor:",
+                  "GeomField1001", FatalException, msg);       
+    }
 }
 
 G4bool G4IntegrationDriver<G4BulirschStoer>::AccurateAdvance(

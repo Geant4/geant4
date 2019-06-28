@@ -13,7 +13,13 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-05-Mar-2019, A. Ribon       (phys-ctor-helastic-V10-04-06)
+08-May-2019, V. Ivanchenko  (phys-ctor-helastic-V10-05-01)
+- G4HadronElasticPhysics : use Glauber-Gribov x-section for hyperons
+- G4HadronDElasticPhysics, G4HadronDElasticPhysics : use 
+    Glauber-Gribov x-section for hyperons, d, t, He3, He4
+- G4HadronElasticPhysicsXS, G4IonElasticPhysics - removed commented lines
+
+05-Mar-2019, A. Ribon       (phys-ctor-helastic-V10-05-00)
 - G4HadronElasticPhysics : for deuteron, triton and alpha, use Glauber-Gribov
   elastic cross sections (instead of Gheisha ones, which returns zero).
 

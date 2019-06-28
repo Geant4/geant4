@@ -54,7 +54,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4NucleusLimits::G4NucleusLimits ()
-  : aMin(1), aMax(250), zMin(0), zMax(100)
+  : aMin(1), aMax(260), zMin(0), zMax(100)
   //
   // Default constructor sets the limits to cover all nuclei with Z<100.
   //

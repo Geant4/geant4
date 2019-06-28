@@ -3,10 +3,20 @@
 #
 /tracking/verbose 0
 #
-#/microyz/phys/addPhysics  dna	        
+#/microyz/phys/addPhysics  liv	        
+#/microyz/phys/addPhysics  pene	        
 /microyz/phys/addPhysics  dna_opt2	        
 #/microyz/phys/addPhysics  dna_opt4	        
 #/microyz/phys/addPhysics  dna_opt6	        
+#
+/microyz/det/setTrackingCut 11 eV
+#
+# *** For Geant4 (condensed history) only ***
+#/run/setCut 1 nm
+#/cuts/setLowEdge 100 eV
+#/process/em/lowestElectronEnergy 100 eV
+#/microyz/det/setMaxStepSize 1 nm
+# ***
 #
 /run/initialize
 #
@@ -22,6 +32,7 @@
 #
 /run/printProgress 100
 #
+# *** For Geant4-DNA only ***
 /process/inactivate e-_G4DNAVibExcitation
 /process/inactivate e-_G4DNAAttachment
 #

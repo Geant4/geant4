@@ -25,7 +25,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-//  File:   G4Radioactivation.hh                                              //
+//  File:   G4Radioactivation.cc                                              //
 //  Author: D.H. Wright (SLAC)                                                //
 //  Date:   29 August 2017                                                    //
 //  Description: activation process derived from the original                 //
@@ -52,6 +52,7 @@
 #include "G4AlphaDecay.hh"
 #include "G4ProtonDecay.hh"
 #include "G4NeutronDecay.hh"
+#include "G4SFDecay.hh"
 #include "G4VDecayChannel.hh"
 #include "G4NuclearDecay.hh"
 #include "G4RadioactiveDecayMode.hh"
@@ -115,7 +116,8 @@ G4Radioactivation::G4Radioactivation(const G4String& processName)
   G4RadioactivityTable* rTable = new G4RadioactivityTable() ;
   theRadioactivityTables.push_back(rTable);
   NSplit      = 1;
-  BRBias      = true ;
+  AnalogueMC = true;
+  BRBias = true;
   halflifethreshold = nanosecond;
 }
 
@@ -187,13 +189,11 @@ G4Radioactivation::ConvolveSourceTimeProfile(const G4double t, const G4double ta
     nbin = 0;
 
     G4int loop = 0;
-    G4ExceptionDescription ed;
-    ed << " While count exceeded " << G4endl;
     while (t > SBin[nbin]) {  // Loop checking, 01.09.2015, D.Wright
       loop++;
       if (loop > 1000) {
         G4Exception("G4RadioactiveDecay::ConvolveSourceTimeProfile()",
-                    "HAD_RDM_100", JustWarning, ed);
+                    "HAD_RDM_100", JustWarning, "While loop count exceeded");
         break;
       }
       nbin++;
@@ -248,15 +248,14 @@ G4double G4Radioactivation::GetDecayTime()
   G4int i = 0;
 
   G4int loop = 0;
-  G4ExceptionDescription ed;
-  ed << " While count exceeded " << G4endl;
-  while ( DProfile[i] < rand) {  /* Loop checking, 01.09.2015, D.Wright */
+  while (DProfile[i] < rand) {  /* Loop checking, 01.09.2015, D.Wright */
     // Entries in DProfile[i] are all between 0 and 1 and arranged in inreaseing order
     // Comparison with rand chooses which time bin to sample  
     i++;
     loop++;
     if (loop > 100000) {
-      G4Exception("G4RadioactiveDecay::GetDecayTime()", "HAD_RDM_100", JustWarning, ed);
+      G4Exception("G4RadioactiveDecay::GetDecayTime()", "HAD_RDM_100",
+                  JustWarning, "While loop count exceeded");
       break;
     }
   }
@@ -276,13 +275,12 @@ G4int G4Radioactivation::GetDecayTimeBin(const G4double aDecayTime)
   G4int i = 0;
 
   G4int loop = 0;
-  G4ExceptionDescription ed;
-  ed << " While count exceeded " << G4endl;
-  while ( aDecayTime > DBin[i] ) {   /* Loop checking, 01.09.2015, D.Wright */
+  while (aDecayTime > DBin[i] ) {   /* Loop checking, 01.09.2015, D.Wright */
     i++;
     loop++;
     if (loop > 100000) {
-      G4Exception("G4RadioactiveDecay::GetDecayTimeBin()", "HAD_RDM_100", JustWarning, ed);
+      G4Exception("G4RadioactiveDecay::GetDecayTimeBin()", "HAD_RDM_100", 
+                  JustWarning, "While loop count exceeded");
       break;
     }
   }
@@ -358,6 +356,8 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
   G4AlphaDecay* theAlphaChannel = 0;
   G4ProtonDecay* theProtonChannel = 0;
   G4NeutronDecay* theNeutronChannel = 0;
+  G4SFDecay* theFissionChannel = 0;
+
   G4RadioactiveDecayMode theDecayMode;
   G4double theBR = 0.0;
   G4int AP = 0;
@@ -378,20 +378,18 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
   G4double TaoPlus;
   G4int nS = 0;        // Running index of first decay in a given generation
   G4int nT = nEntry;   // Total number of decays accumulated over entire history
-  const G4int nMode = 9;
+  const G4int nMode = 11;
   G4double brs[nMode];
   //
   theIonTable =
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
 
   G4int loop = 0;
-  G4ExceptionDescription ed;
-  ed << " While count exceeded " << G4endl;
- 
   while (!stable) {   /* Loop checking, 01.09.2015, D.Wright */
     loop++;
     if (loop > 10000) {
-      G4Exception("G4RadioactiveDecay::CalculateChainsFromParent()", "HAD_RDM_100", JustWarning, ed);
+      G4Exception("G4RadioactiveDecay::CalculateChainsFromParent()", "HAD_RDM_100",
+                  JustWarning, "While loop count exceeded");
       break;
     }
     nGeneration++;
@@ -460,11 +458,11 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
         }
       } // Combine decay channels (loop i)
 	    
-      brs[2] = brs[2]+brs[3]+brs[4]+brs[5];  // Combine beta+ and EC 
-      brs[3] = brs[4] =brs[5] =  0.0;
-      for (i= 0; i<nMode; i++){            // loop over decay modes
+      brs[2] = brs[2]+brs[3]+brs[4]+brs[5]+brs[6];  // Combine beta+ and EC 
+      brs[3] = brs[4] = brs[5] = brs[6] = 0.0;
+      for (i = 0; i < nMode; i++) {                 // loop over decay modes
         if (brs[i] > 0.) {
-          switch ( i ) {
+          switch (i) {
           case 0:
             // Decay mode is isomeric transition
             theITChannel = new G4ITDecay(aParentNucleus, brs[0], 0.0, 0.0,
@@ -489,24 +487,32 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
             summedDecayTable->Insert(theBetaPlusChannel);
             break;
 
-          case 6:
+          case 7:
             // Decay mode is alpha.
-            theAlphaChannel = new G4AlphaDecay(aParentNucleus, brs[6], 0.*MeV,
+            theAlphaChannel = new G4AlphaDecay(aParentNucleus, brs[7], 0.*MeV,
                                                0.*MeV, noFloat);
             summedDecayTable->Insert(theAlphaChannel);
             break;
 
-	  case 7:
+          case 8:
             // Decay mode is proton.
-            theProtonChannel = new G4ProtonDecay(aParentNucleus, brs[7], 0.*MeV,
+            theProtonChannel = new G4ProtonDecay(aParentNucleus, brs[8], 0.*MeV,
                                                  0.*MeV, noFloat);
             summedDecayTable->Insert(theProtonChannel);
             break;
-	  case 8:
+
+          case 9:
             // Decay mode is neutron.
-            theNeutronChannel = new G4NeutronDecay(aParentNucleus, brs[8], 0.*MeV,
-                                                 0.*MeV, noFloat);
+            theNeutronChannel = new G4NeutronDecay(aParentNucleus, brs[9], 0.*MeV,
+                                                   0.*MeV, noFloat);
             summedDecayTable->Insert(theNeutronChannel);
+            break;
+
+          case 10:
+            // Decay mode is spontaneous fission
+            theFissionChannel = new G4SFDecay(aParentNucleus, brs[10], 0.*MeV,
+                                              0.*MeV, noFloat);
+            summedDecayTable->Insert(theFissionChannel);
             break;
 
           default:
@@ -593,8 +599,9 @@ CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
             nEntry++;
           } // there are entries in the table
         } // nuclide is OK to decay
-      } // end of loop (i) over decay table branches 
-      //      delete summedDecayTable;
+      } // end of loop (i) over decay table branches
+
+      delete summedDecayTable;
 
     } // Getting contents of decay rate vector (end loop on j)
     nS = nT;
@@ -638,13 +645,11 @@ void G4Radioactivation::SetSourceTimeProfile(G4String filename)
   NSourceBin = -1;
 
   G4int loop = 0;
-  G4ExceptionDescription ed;
-  ed << " While count exceeded " << G4endl;
- 
-  while (infile >> bin >> flux ) {  /* Loop checking, 01.09.2015, D.Wright */
+  while (infile >> bin >> flux) {  /* Loop checking, 01.09.2015, D.Wright */
     loop++;
     if (loop > 10000) {
-      G4Exception("G4RadioactiveDecay::SetSourceTimeProfile()", "HAD_RDM_100", JustWarning, ed);
+      G4Exception("G4RadioactiveDecay::SetSourceTimeProfile()", "HAD_RDM_100",
+                  JustWarning, "While loop count exceeded");
       break;
     }
  
@@ -659,6 +664,7 @@ void G4Radioactivation::SetSourceTimeProfile(G4String filename)
     }
   }
 
+  AnalogueMC = false;
   infile.close();
 
 #ifdef G4VERBOSE
@@ -676,7 +682,6 @@ void G4Radioactivation::SetSourceTimeProfile(G4String filename)
 
 void G4Radioactivation::SetDecayBias(G4String filename)
 {
-  
   std::ifstream infile(filename, std::ios::in);
   if (!infile) G4Exception("G4RadioactiveDecay::SetDecayBias()", "HAD_RDM_003",
                            FatalException, "Unable to open bias data file" );
@@ -690,14 +695,12 @@ void G4Radioactivation::SetDecayBias(G4String filename)
   NDecayBin = -1;
 
   G4int loop = 0;
-  G4ExceptionDescription ed;
-  ed << " While count exceeded " << G4endl;
- 
   while (infile >> bin >> flux ) {  /* Loop checking, 01.09.2015, D.Wright */
     NDecayBin++;
     loop++;
     if (loop > 10000) {
-      G4Exception("G4RadioactiveDecay::SetDecayBias()", "HAD_RDM_100", JustWarning, ed);
+      G4Exception("G4RadioactiveDecay::SetDecayBias()", "HAD_RDM_100",
+                  JustWarning, "While loop count exceeded");
       break;
     }
  
@@ -720,6 +723,7 @@ void G4Radioactivation::SetDecayBias(G4String filename)
                              // Normalize so entries increase from 0 to 1
   // converted to accumulated probabilities
 
+  AnalogueMC = false;
   infile.close();
 
 #ifdef G4VERBOSE
@@ -1010,7 +1014,7 @@ G4Radioactivation::DecayIt(const G4Track& theTrack, const G4Step&)
         currentTime = finalGlobalTime + theDecayTime;
         for (index = 0; index < numberOfSecondaries; index++) {
           asecondaryparticle = tempprods->PopProducts();
-          if (asecondaryparticle->GetDefinition()->GetBaryonNumber() < 5) {
+          if (asecondaryparticle->GetDefinition()->GetPDGStable() ) {
             pw.push_back(weight);
             ptime.push_back(currentTime);
             secondaryparticles.push_back(asecondaryparticle);

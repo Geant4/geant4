@@ -13,6 +13,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+21-03-19 mma (fano-V10-05-03)
+- DefineMaterial() : restaure G4_WATER
+     
+18-03-19 mma (fano-V10-05-02)
+- DetectorConstruction : simplification of DefineMaterial()
+
+25-02-19 V. Ivanchenko (fano-V10-05-01)
+- PhysListEmStandard_option4 - set RangeFactor=0.08 (as in the 
+    physics_list library)
+- PhysListEmStandard_option3 - set parameters as in the 
+    physics_list library
+
+29-01-19 V. Ivanchenko (fano-V10-05-00)
+- DetectorConstruction, DetectorMessenger - fixed usage of base
+  materials and cleanup (should fix ~1% error for Opt4 EM physics)
 
 20-11-18 V. Ivanchenko (fano-V10-04-06)
 - PhysListEmStandard_option3 - use the same lateral displacement as in 

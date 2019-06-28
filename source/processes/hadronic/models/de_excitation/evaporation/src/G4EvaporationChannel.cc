@@ -54,11 +54,11 @@ G4EvaporationChannel::G4EvaporationChannel(G4int anA, G4int aZ,
 					   const G4String & aName,
 					   G4EvaporationProbability* aprob,
                                            G4VCoulombBarrier* barrier):
-    G4VEvaporationChannel(aName),
-    theA(anA),
-    theZ(aZ),
-    theProbability(aprob),
-    theCoulombBarrier(barrier)
+  G4VEvaporationChannel(aName),
+  theA(anA),
+  theZ(aZ),
+  theProbability(aprob),
+  theCoulombBarrier(barrier)
 { 
   ResA = ResZ = 0;
   Mass = CoulombBarrier = MinKinEnergy = MaxKinEnergy = EmissionProbability = 0.0; 
@@ -100,9 +100,6 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
 
     G4double delta0 = 
       std::max(0.0,pairingCorrection->GetPairingCorrection(FragA,FragZ));
-    G4double delta1 = 
-      std::max(0.0,pairingCorrection->GetPairingCorrection(ResA,ResZ));
-    ResMass += delta1;  
     /*
     G4cout << "ExEnergy= " << ExEnergy << " Ec= " << CoulombBarrier
 	   << " delta0= " << delta0 << " delta1= " << delta1
@@ -110,22 +107,20 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
 	   << G4endl;
     */
     // for OPTxs >0 penetration under the barrier is taken into account
-    // G4double elim = (0 == OPTxs) ? CoulombBarrier : CoulombBarrier*0.5;
-    static const G4double dCB = 3.5*CLHEP::MeV;
-    G4double elim = (0 == OPTxs) ? CoulombBarrier : CoulombBarrier - dCB*theZ;
-    if(ExEnergy >= delta0 && Mass >= ResMass + EvapMass + elim) {
-      G4double xm2 = (Mass - EvapMass)*(Mass - EvapMass);
-      G4double xm  = Mass - EvapMass - elim;
-      MinKinEnergy = (0.0 >= elim) ? 0.0 : std::max(0.5*(xm2 - xm*xm)/Mass, 0.0);
-      MaxKinEnergy = std::max(0.5*(xm2 - ResMass*ResMass)/Mass, 0.0);
-      //G4cout << "Emin= " << MinKinEnergy << " Emax= " << MaxKinEnergy 
-      //     << "  xm= " << xm  << G4endl;
+    G4double elim = (0 == OPTxs) ? CoulombBarrier : CoulombBarrier*0.5;
+    if(ExEnergy > delta0 && Mass > ResMass + EvapMass + elim) {
+      G4double twoMass = Mass + Mass;
+      MaxKinEnergy = std::max(((Mass-ResMass)*(Mass+ResMass) 
+			       + EvapMass*EvapMass)/twoMass - EvapMass,0.0);
+      MinKinEnergy = (elim == 0.0) ? 0.0 
+	: std::max(((EvapMass + elim)*(twoMass-EvapMass-elim) 
+		    + EvapMass*EvapMass)/twoMass - EvapMass,0.0);
+      //G4cout << "Emin= " << MinKinEnergy << " Emax= " << MaxKinEnergy << G4endl;
       EmissionProbability = theProbability->
 	TotalProbability(*fragment, MinKinEnergy, MaxKinEnergy, CoulombBarrier);
     }
   }
-  //G4cout << "G4EvaporationChannel:: probability= " 
-  //    << EmissionProbability << G4endl;   
+  //G4cout<<"G4EvaporationChannel: probability= "<<EmissionProbability<<G4endl;
   return EmissionProbability;
 }
 

@@ -16,7 +16,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-31.01.2019, I.Hrivnacova eRosita-V10-04-00
+31.01.2019, I.Hrivnacova eRosita-V10-05-00
             Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 15.11.2017, G.Cosmo eRosita-V10-03-02

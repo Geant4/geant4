@@ -56,6 +56,7 @@ class PhysicsList: public G4VModularPhysicsList
     virtual void ConstructProcess();
 
     void AddTrackingCut();       
+    void AddMaxStepSize();       
 
   private:       
   

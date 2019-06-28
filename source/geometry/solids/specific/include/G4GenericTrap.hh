@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 // --------------------------------------------------------------------
 // GEANT 4 class header file
 //
@@ -34,14 +34,14 @@
 //
 // Class description:
 //
-// G4GenericTrap is a solid which represents an arbitrary trapezoid with 
+// G4GenericTrap is a solid which represents an arbitrary trapezoid with
 // up to 8 vertices standing on two parallel planes perpendicular to Z axis.
-// 
+//
 // Parameters in the constructor:
 // - name               - solid name
 // - halfZ              - the solid half length in Z
 // - vertices           - the (x,y) coordinates of vertices:
-//                        o first four points: vertices[i], i<4 
+//                        o first four points: vertices[i], i<4
 //                          are the vertices sitting on the -halfZ plane;
 //                        o last four points: vertices[i], i>=4
 //                          are the vertices sitting on the +halfZ plane.
@@ -65,6 +65,8 @@
 
 #ifndef G4GenericTrap_HH
 #define G4GenericTrap_HH
+
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UGENERICTRAP 1
@@ -106,7 +108,7 @@ class G4GenericTrap : public G4VSolid
     inline G4int       GetVisSubdivisions() const;
     inline void        SetVisSubdivisions(G4int subdiv);
 
-    // Solid methods                                
+    // Solid methods
 
     EInside Inside(const G4ThreeVector& p) const;
     G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
@@ -137,12 +139,12 @@ class G4GenericTrap : public G4VSolid
     G4double GetSurfaceArea();
 
     // Visualisation functions
-  
+
     G4Polyhedron* GetPolyhedron () const;
     void DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4VisExtent   GetExtent() const;
     G4Polyhedron* CreatePolyhedron() const;
-       
+
   public:  // without description
 
     G4GenericTrap(__void__&);
@@ -151,7 +153,7 @@ class G4GenericTrap : public G4VSolid
       // persistifiable objects.
 
     G4GenericTrap(const G4GenericTrap& rhs);
-    G4GenericTrap& operator=(const G4GenericTrap& rhs); 
+    G4GenericTrap& operator=(const G4GenericTrap& rhs);
       // Copy constructor and assignment operator.
 
   private:
@@ -161,25 +163,25 @@ class G4GenericTrap : public G4VSolid
     inline void SetTwistAngle(G4int index, G4double twist);
     G4bool  ComputeIsTwisted() ;
     G4bool  CheckOrder(const std::vector<G4TwoVector>& vertices) const;
-    G4bool  IsSegCrossing(const G4TwoVector& a, const G4TwoVector& b, 
+    G4bool  IsSegCrossing(const G4TwoVector& a, const G4TwoVector& b,
                           const G4TwoVector& c, const G4TwoVector& d) const;
-    G4bool  IsSegCrossingZ(const G4TwoVector& a, const G4TwoVector& b, 
+    G4bool  IsSegCrossingZ(const G4TwoVector& a, const G4TwoVector& b,
                            const G4TwoVector& c, const G4TwoVector& d) const;
     void ReorderVertices(std::vector<G4ThreeVector>& vertices) const;
     void ComputeBBox();
     inline G4ThreeVector GetMinimumBBox() const;
     inline G4ThreeVector GetMaximumBBox() const;
-      
-    G4VFacet* MakeDownFacet(const std::vector<G4ThreeVector>& fromVertices, 
+
+    G4VFacet* MakeDownFacet(const std::vector<G4ThreeVector>& fromVertices,
                             G4int ind1, G4int ind2, G4int ind3) const;
-    G4VFacet* MakeUpFacet(const std::vector<G4ThreeVector>& fromVertices, 
-                            G4int ind1, G4int ind2, G4int ind3) const;      
-    G4VFacet* MakeSideFacet(const G4ThreeVector& downVertex0, 
+    G4VFacet* MakeUpFacet(const std::vector<G4ThreeVector>& fromVertices,
+                            G4int ind1, G4int ind2, G4int ind3) const;
+    G4VFacet* MakeSideFacet(const G4ThreeVector& downVertex0,
                             const G4ThreeVector& downVertex1,
                             const G4ThreeVector& upVertex1,
                             const G4ThreeVector& upVertex0) const;
     G4TessellatedSolid* CreateTessellatedSolid() const;
-     
+
     EInside InsidePolygone(const G4ThreeVector& p,
                            const std::vector<G4TwoVector>& poly) const;
     G4double DistToPlane(const G4ThreeVector& p,
@@ -228,7 +230,7 @@ class G4GenericTrap : public G4VSolid
     G4double                 fSurfaceArea;
     G4double                 fCubicVolume;
       // Surface and Volume
-};    
+};
 
 #include "G4GenericTrap.icc"
 

@@ -34,6 +34,7 @@
 
 class G4UIcmdWithAString;
 class G4UIcmdWithoutParameter;
+class G4UIcmdWithABool;
 
 class G4VisCommandsTouchable: public G4VVisCommand {
 public:
@@ -44,8 +45,14 @@ public:
 private:
   G4VisCommandsTouchable (const G4VisCommandsTouchable&);
   G4VisCommandsTouchable& operator = (const G4VisCommandsTouchable&);
+  G4UIcmdWithoutParameter* fpCommandCentreOn;
+  G4UIcmdWithoutParameter* fpCommandCentreAndZoomInOn;
+  G4UIcmdWithoutParameter* fpCommandDraw;
   G4UIcmdWithoutParameter* fpCommandDump;
-  G4UIcmdWithAString*      fpCommandFindPath;
+  G4UIcmdWithABool*        fpCommandExtentForField;
+  G4UIcommand*             fpCommandFindPath;
+  G4UIcmdWithABool*        fpCommandShowExtent;
+  G4UIcmdWithABool*        fpCommandVolumeForField;
 };
 
 #endif

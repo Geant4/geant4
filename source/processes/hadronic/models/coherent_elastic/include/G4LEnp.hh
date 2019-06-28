@@ -35,56 +35,35 @@
 #define G4LEnp_h 1
  
 #include "globals.hh"
-#include "Randomize.hh"
-#include "G4Element.hh"
-#include "G4ElementVector.hh"
-#include "G4ElementTable.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsVector.hh"
-#include "G4LPhysicsFreeVector.hh"
-#include "G4Gamma.hh"
-#include "G4Step.hh"
-#include "G4TrackStatus.hh"
-// #include "G4HadronicInteraction.hh"
 #include "G4HadronElastic.hh"
-
-#ifdef NPDEBUG
-#include <iostream>
-#include <fstream>
-#endif
-
 
 class G4LEnp : public G4HadronElastic  // G4HadronicInteraction
 {
- private:
+private:
 
-  //enum { NENERGY=21, NANGLE=180 };
-    enum { NENERGY=39, NANGLE=180 };
+  enum { NENERGY=39, NANGLE=180 };
 
- public:
+public:
 
-   G4LEnp();
+  explicit G4LEnp();
 
-   ~G4LEnp();
+  ~G4LEnp() override;
  
-   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
-                                  G4Nucleus& targetNucleus);
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+                                 G4Nucleus& targetNucleus) override;
 
   // sample momentum transfer using Lab. momentum
 
   G4double SampleInvariantT(const G4ParticleDefinition* p, 
-			    G4double plab, G4int Z, G4int A);
- private:
-
-   //   std::ofstream* outFile;
-   //   std::ofstream* outFile1;
+			    G4double plab, G4int Z, G4int A) override;
+private:
 
  // The following arrays are declared static to allow the use of initializers.
  // They are initialized in G4LEnpData.hh
 
-   static const G4float sig[NENERGY][NANGLE];
-   static const G4float pcm[NENERGY], elab[NENERGY], 
-     dsigmax[NENERGY], sigtot[NENERGY];
+  static const G4float sig[NENERGY][NANGLE];
+  static const G4float pcm[NENERGY], elab[NENERGY]; 
+  static const G4float dsigmax[NENERGY], sigtot[NENERGY];
 
 };
 

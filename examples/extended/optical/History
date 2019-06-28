@@ -14,7 +14,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-31 January 2019:   I. Hrivnacova (exOptical-V10-04-03)
+31 January 2019:   I. Hrivnacova (exOptical-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 30 November 2018:  I. Hrivnacova (exOptical-V10-04-02)

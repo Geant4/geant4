@@ -37,11 +37,11 @@
 // In GEANT4 visualization, we have the concept of a "Standard
 // View".  This is the view when the complete set of objects being
 // viewed is comfortably in view from any viewpoint.  It is defined by
-// the "Bounding Sphere" of "visible" objects when initially
+// the "Bounding Extent" of "visible" objects when initially
 // registered in the scene, and by the View Parameters.
 //
 // There is also the "Standard Target Point", which is the centre of
-// the Bounding Sphere (note that this belongs to the scene and is
+// the Bounding Extent (note that this belongs to the scene and is
 // stored in the G4Scene object).  The "Current Target Point", defined
 // relative to the Standard Target Point, is changed by the
 // "dolly" and "zoom" commands, and can be reset to the Standard
@@ -50,7 +50,7 @@
 // Also, the "Standard Camera Position" is the "Standard Camera
 // Distance" along the Viewpoint Direction vector from the Standard
 // Target Point.  The Standard Camera Distance is the radius of the
-// Bounding Sphere divided by fFieldHalfAngle.  It is not stored
+// Bounding Extent divided by fFieldHalfAngle.  It is not stored
 // explicitly because of the singularity at fFieldHalfAngle = 0,
 // which implies parallel projection.
 //
@@ -62,7 +62,8 @@
 // conceptually possible, but which might give some problems when
 // setting up the view matrix - see, for example, G4OpenGLView::SetView ().
 //
-// All viewers are expected to keep the "Up Vector" vertical.
+// All viewers are expected to keep the "Up Vector" vertical unless
+// RotationStyle is freeRotation.
 //
 // Finally, the view is magnified by the "Zoom Factor" which is
 // reset to 1 by the "/vis/viewer/reset" command.
@@ -94,7 +95,8 @@ public: // With description
     wireframe,  // Draw edges    - no hidden line removal.
     hlr,        // Draw edges    - hidden lines removed.
     hsr,        // Draw surfaces - hidden surfaces removed.
-    hlhsr       // Draw surfaces and edges - hidden removed.
+    hlhsr,      // Draw surfaces and edges - hidden removed.
+    cloud       // Draw volume as a cloud of dots.
   };
 
   enum CutawayMode {
@@ -122,6 +124,7 @@ public: // With description
 
   // Get and Is functions.
         DrawingStyle     GetDrawingStyle         () const;
+        G4int            GetNumberOfCloudPoints  () const;
         G4bool           IsAuxEdgeVisible        () const;
         G4bool           IsCulling               () const;
         G4bool           IsCullingInvisible      () const;
@@ -200,7 +203,7 @@ public: // With description
         G4double         GetDisplayLightFrontBlue () const;
 
   // Here Follow functions to evaluate useful quantities as a
-  // function of the radius of the Bounding Sphere of the object being
+  // function of the radius of the Bounding Extent of the object being
   // viewed.  Call them in the order given - for efficiency, later
   // functions depend on the results of earlier ones (Store the
   // results of earlier functions in your own temporary variables -
@@ -213,6 +216,7 @@ public: // With description
 
   // Set, Add, Multiply, Increment, Unset and Clear functions.
   void SetDrawingStyle         (G4ViewParameters::DrawingStyle style);
+  G4int SetNumberOfCloudPoints (G4int);  // Returns number actually set.
   void SetAuxEdgeVisible       (G4bool);
   void SetCulling              (G4bool);
   void SetCullingInvisible     (G4bool);
@@ -230,7 +234,7 @@ public: // With description
   void SetExplodeFactor        (G4double explodeFactor);
   void UnsetExplodeFactor      ();
   void SetExplodeCentre        (const G4Point3D& explodeCentre);
-  G4int SetNoOfSides           (G4int nSides);  // Returns actual number set.
+  G4int SetNoOfSides           (G4int nSides);  // Returns number actually set.
   void SetViewpointDirection   (const G4Vector3D& viewpointDirection);
   // Calls the following to get lightpoint direction right too.
   void SetViewAndLights        (const G4Vector3D& viewpointDirection);
@@ -321,6 +325,8 @@ private:
   G4int ReadInteger(char *string, char **NextString);
 
   DrawingStyle fDrawingStyle;    // Drawing style.
+  G4int        fNumberOfCloudPoints; // For drawing in cloud style.
+                                     // <= 0 means use viewer default.
   G4bool       fAuxEdgeVisible;  // Auxiliary edge visibility.
   G4bool       fCulling;         // Culling requested.
   G4bool       fCullInvisible;   // Cull (don't Draw) invisible objects.

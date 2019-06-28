@@ -123,7 +123,7 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
 
   G4LorentzVector lv(0.0,0.0,0.0,TargMass);   
   lv += Pproj;
-  G4double S = lv.mag2()/GeV/GeV;
+  G4double S = lv.mag2()/(GeV*GeV);
 
   G4ThreeVector bst = lv.boostVector();
   Pproj.boost(-bst);
@@ -135,7 +135,7 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
   fptot= ptot;
   fTmax = 4.0*ptot*ptot;  
 
-  if(Plab/std::abs(particle->GetBaryonNumber()) < 100.*MeV)    // Uzhi 24 Nov. 2011
+  if(Plab < (std::abs(particle->GetBaryonNumber())*100)*MeV)   // Uzhi 24 Nov. 2011
   {return fTmax*G4UniformRand();}                              // Uzhi 24 Nov. 2011
   
   G4double  Z1 = particle->GetPDGCharge();
@@ -372,11 +372,13 @@ G4double G4AntiNuclElastic::SampleInvariantT(const G4ParticleDefinition* particl
    T*=3.893913e+4;                // fm -> MeV^2
    }
 
+  // VI: 29.04.2019 unnecessary computation of trigonometry
+  /*
    G4double cosTet=1.0-T/(2.*ptot*ptot);
    if(cosTet >  1.0 ) cosTet= 1.;          // Uzhi 30 Nov. 
    if(cosTet < -1.0 ) cosTet=-1.;          // Uzhi 30 Nov. 
    fTetaCMS=std::acos(cosTet);
-
+  */
    return T;
 }
 

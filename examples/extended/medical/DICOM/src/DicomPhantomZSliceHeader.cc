@@ -53,26 +53,6 @@ DicomPhantomZSliceHeader::~DicomPhantomZSliceHeader()
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
-DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( 
-                              const DicomPhantomZSliceHeader& rhs )
-{
-    fNoVoxelX = rhs.GetNoVoxelX();
-    fNoVoxelY = rhs.GetNoVoxelY();
-    fNoVoxelZ = rhs.GetNoVoxelZ();
-    fMinX = rhs.GetMinX();
-    fMaxX = rhs.GetMaxX();
-    fMinY = rhs.GetMinY();
-    fMaxY = rhs.GetMaxY();
-    fMinZ = rhs.GetMinZ();
-    fMaxZ = rhs.GetMaxZ();
-    fMaterialNames = rhs.GetMaterialNames();
-    fFilename = rhs.fFilename;
-    fValues = rhs.fValues;
-    fMateIDs = rhs.fMateIDs;
-    fSliceLocation = rhs.fSliceLocation;
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( std::ifstream& fin )
 {

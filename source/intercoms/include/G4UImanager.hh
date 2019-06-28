@@ -170,17 +170,17 @@ class G4UImanager : public G4VStateDependent
 
   public: // with description
       G4String GetCurrentStringValue(const char * aCommand,
-      G4int parameterNumber=1, G4bool reGet=true);
+        G4int parameterNumber=1, G4bool reGet=true);
       G4int GetCurrentIntValue(const char * aCommand,
-      G4int parameterNumber=1, G4bool reGet=true);
+        G4int parameterNumber=1, G4bool reGet=true);
       G4double GetCurrentDoubleValue(const char * aCommand,
-      G4int parameterNumber=1, G4bool reGet=true);
+        G4int parameterNumber=1, G4bool reGet=true);
       G4String GetCurrentStringValue(const char * aCommand,
-      const char * aParameterName, G4bool reGet=true);
+        const char * aParameterName, G4bool reGet=true);
       G4int GetCurrentIntValue(const char * aCommand,
-      const char * aParameterName, G4bool reGet=true);
+        const char * aParameterName, G4bool reGet=true);
       G4double GetCurrentDoubleValue(const char * aCommand,
-      const char * aParameterName, G4bool reGet=true);
+        const char * aParameterName, G4bool reGet=true);
       //  These six methods returns the current value of a parameter of the
       // given command. For the first three methods, the ordering number of
       // the parameter (1 is the first parameter) can be given, whereas,
@@ -300,6 +300,13 @@ class G4UImanager : public G4VStateDependent
   public:
       static void UseDoublePrecisionStr(G4bool val);
       static G4bool DoublePrecisionStr();
+ 
+  private:
+      G4int lastRC;
+  public:
+      G4int GetLastReturnCode() const
+      { return lastRC; }
+
 };
 
 #endif

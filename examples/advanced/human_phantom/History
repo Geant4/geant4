@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Jan 31, 2019, I.Hrivnacova tag human_phantom-V10-04-01
+Jan 31, 2019, I.Hrivnacova tag human_phantom-V10-05-00
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 Oct 19, 2018. S. Guatelli tag human_phantom-V10-04-00

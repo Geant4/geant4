@@ -23,18 +23,34 @@ add_subdirectory(solids)
 add_subdirectory(volumes)
 
 if(NOT GEANT4_BUILD_GRANULAR_LIBS)
-    include(Geant4MacroLibraryTargets)
-    GEANT4_GLOBAL_LIBRARY_TARGET(NAME G4geometry
-        COMPONENTS
-            biasing/sources.cmake
-            divisions/sources.cmake
-            magneticfield/sources.cmake
-            management/sources.cmake
-            navigation/sources.cmake
-            solids/Boolean/sources.cmake
-            solids/CSG/sources.cmake
-            solids/specific/sources.cmake
-            volumes/sources.cmake
-)
+  include(Geant4MacroLibraryTargets)
+  GEANT4_GLOBAL_LIBRARY_TARGET(NAME G4geometry
+    COMPONENTS
+      biasing/sources.cmake
+      divisions/sources.cmake
+      magneticfield/sources.cmake
+      management/sources.cmake
+      navigation/sources.cmake
+      solids/Boolean/sources.cmake
+      solids/CSG/sources.cmake
+      solids/specific/sources.cmake
+      volumes/sources.cmake
+    )
+
+  # Temp hack to get "G4GeomConfig.hh" generated header in include
+  # path for dependent targets
+  # TODO: Remove once migration to new module/library system in place.
+  #       This will automatically set include paths
+  if(TARGET G4geometry)
+    target_include_directories(G4geometry PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+      )
+  endif()
+
+  if(TARGET G4geometry-static)
+    target_include_directories(G4geometry-static PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+    )
+  endif()
 endif()
 

@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
-//
 //
 // File name:     G4EmParameters
 //
@@ -60,13 +58,16 @@
 #include "G4NuclearFormfactorType.hh"
 #include "G4DNAModelSubType.hh"
 #include "G4EmSaturation.hh"
+#include "G4ThreeVector.hh"
 #include "G4Threading.hh"
 #include <vector>
 
 class G4EmParametersMessenger;
+class G4EmExtraParameters;
+class G4EmLowEParameters;
+class G4VAtomDeexcitation;
 class G4VEnergyLossProcess;
 class G4VEmProcess;
-class G4VAtomDeexcitation;
 class G4StateManager;
 
 class G4EmParameters
@@ -80,7 +81,7 @@ public:
   void SetDefaults();
 
   // printing
-  std::ostream& StreamInfo(std::ostream& os) const;
+  void StreamInfo(std::ostream& os) const;
   void Dump() const;
   friend std::ostream& operator<< (std::ostream& os, const G4EmParameters&);
 
@@ -164,12 +165,20 @@ public:
   void SetEnableSamplingTable(G4bool val);
   G4bool EnableSamplingTable() const;
 
-  void SetEmSaturation(G4EmSaturation*);
-  G4EmSaturation* GetEmSaturation();
+  void SetEnablePolarisation(G4bool val);
+  G4bool EnablePolarisation() const;
+
+  G4bool GetDirectionalSplitting();
+  void SetDirectionalSplitting(G4bool v);
+
+  G4bool QuantumEntanglement();
+  void SetQuantumEntanglement(G4bool v);
 
   // 5d
   void  SetOnIsolated(G4bool val);
-  bool  OnIsolated() const;
+  G4bool  OnIsolated() const;
+
+  void  ActivateDNA();
 
   // double parameters with values
   void SetMinSubRange(G4double val);
@@ -226,9 +235,18 @@ public:
   void SetScreeningFactor(G4double val);
   G4double ScreeningFactor() const;
 
+  void SetMaxNIELEnergy(G4double val);
+  G4double MaxNIELEnergy() const;
+
   void SetStepFunction(G4double v1, G4double v2);
 
   void SetStepFunctionMuHad(G4double v1, G4double v2);
+
+  void SetDirectionalSplittingRadius(G4double r);
+  G4double GetDirectionalSplittingRadius();
+
+  void SetDirectionalSplittingTarget(const G4ThreeVector& v);
+  G4ThreeVector GetDirectionalSplittingTarget() const;
 
   // integer parameters 
   void SetNumberOfBins(G4int val);
@@ -281,11 +299,6 @@ public:
   const std::vector<G4String>& RegionsDNA() const;
   const std::vector<G4String>& TypesDNA() const;
 
-  // obsolete methods
-  void AddMsc(const G4String& region, const G4String& type);
-  const std::vector<G4String>& RegionsMsc() const;
-  const std::vector<G4String>& TypesMsc() const;
-
   void AddPhysics(const G4String& region, const G4String& type);
   const std::vector<G4String>& RegionsPhysics() const;
   const std::vector<G4String>& TypesPhysics() const;
@@ -308,17 +321,8 @@ public:
 				G4double factor,
 				G4double energyLimit);
 
-  G4bool GetDirectionalSplitting() { return directionalSplitting; }
-  void   SetDirectionalSplitting(G4int v) { directionalSplitting = v; }
-
-  void  SetDirectionalSplittingTarget(G4ThreeVector v)
-    { directionalSplittingTarget = v; }
-  G4ThreeVector  GetDirectionalSplittingTarget()
-    { return directionalSplittingTarget; }
-  void  SetDirectionalSplittingRadius(G4double r)
-    { directionalSplittingRadius = r; }
-  G4double  GetDirectionalSplittingRadius()
-    { return directionalSplittingRadius; }
+  void SetEmSaturation(G4EmSaturation*);
+  G4EmSaturation* GetEmSaturation();
 
   // initialisation methods
   void DefineRegParamForLoss(G4VEnergyLossProcess*, 
@@ -337,17 +341,15 @@ private:
 
   G4bool IsLocked() const;
 
-  G4String CheckRegion(const G4String&) const;
-
-  void PrintWarning(G4ExceptionDescription& ed) const;
+  void PrintWarning(G4ExceptionDescription& ed) const; 
 
   static G4EmParameters* theInstance;
 
   G4EmParametersMessenger* theMessenger;
-
-  G4StateManager* fStateManager;
-
-  G4EmSaturation* emSaturation;
+  G4EmExtraParameters* fBParameters;
+  G4EmLowEParameters* fCParameters;
+  G4StateManager*  fStateManager;
+  G4EmSaturation*  emSaturation;
 
   G4bool lossFluctuation;
   G4bool buildCSDARange;
@@ -355,12 +357,6 @@ private:
   G4bool spline;
   G4bool cutAsFinalRange;
   G4bool applyCuts;
-  G4bool fluo;
-  G4bool beardenFluoDir;
-  G4bool auger;
-  G4bool augerCascade;
-  G4bool pixe;
-  G4bool deexIgnoreCut;
   G4bool lateralDisplacement;
   G4bool lateralDisplacementAlg96;
   G4bool muhadLateralDisplacement;
@@ -370,13 +366,11 @@ private:
   G4bool integral;
   G4bool birks;
   G4bool fICRU90;
-  G4bool dnaFast;
-  G4bool dnaStationary;
-  G4bool dnaMsc;
   G4bool gener;
-  G4bool enableSamplingTable;
+  G4bool fSamplingTable;
+  G4bool fPolarisation;
   G4bool onIsolated; // 5d model conversion on free ions
-  G4bool directionalSplitting;
+  G4bool fDNA;
   
   G4double minSubRange;
   G4double minKinEnergy;
@@ -391,16 +385,12 @@ private:
   G4double factorForAngleLimit;
   G4double thetaLimit;
   G4double energyLimit;
+  G4double maxNIELEnergy;
   G4double rangeFactor;
   G4double rangeFactorMuHad;
   G4double geomFactor;
   G4double skin;
-  G4double dRoverRange;
-  G4double finalRange;
-  G4double dRoverRangeMuHad;
-  G4double finalRangeMuHad;
   G4double factorScreen;
-  G4double directionalSplittingRadius;
 
   G4int nbins;
   G4int nbinsPerDecade;
@@ -408,49 +398,9 @@ private:
   G4int workerVerbose;
   G4int tripletConv;  // 5d model triplet generation type
 
-  G4ThreeVector directionalSplittingTarget;
-
   G4MscStepLimitType mscStepLimit;
   G4MscStepLimitType mscStepLimitMuHad;
   G4NuclearFormfactorType nucFormfactor;
-  G4DNAModelSubType  dnaElectronSolvation;
-
-  G4String namePIXE;
-  G4String nameElectronPIXE;
-
-  std::vector<G4String>  m_particlesPAI;
-  std::vector<G4String>  m_regnamesPAI;
-  std::vector<G4String>  m_typesPAI;
-
-  std::vector<G4String>  m_regnamesME;
-
-  std::vector<G4String>  m_regnamesDNA;
-  std::vector<G4String>  m_typesDNA;
-
-  std::vector<G4String>  m_regnamesPhys;
-  std::vector<G4String>  m_typesPhys;
-
-  std::vector<G4String>  m_regnamesSubCut;
-  std::vector<G4bool>    m_subCuts;
-
-  std::vector<G4String>  m_regnamesDeex;
-  std::vector<G4bool>    m_fluo;
-  std::vector<G4bool>    m_auger;
-  std::vector<G4bool>    m_pixe;
-
-  std::vector<G4String>  m_procBiasedXS;
-  std::vector<G4double>  m_factBiasedXS;
-  std::vector<G4bool>    m_weightBiasedXS;
-
-  std::vector<G4String>  m_procForced;
-  std::vector<G4String>  m_regnamesForced;
-  std::vector<G4double>  m_lengthForced;
-  std::vector<G4bool>    m_weightForced;
-
-  std::vector<G4String>  m_procBiasedSec;
-  std::vector<G4String>  m_regnamesBiasedSec;
-  std::vector<G4double>  m_factBiasedSec;
-  std::vector<G4double>  m_elimBiasedSec;
 
 #ifdef G4MULTITHREADED
   static G4Mutex emParametersMutex;

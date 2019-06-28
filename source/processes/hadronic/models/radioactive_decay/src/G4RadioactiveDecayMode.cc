@@ -50,6 +50,8 @@ std::istream &operator >> (std::istream& strm, G4RadioactiveDecayMode& q)
     {q = Proton;}
   else if (a == "Neutron")
     {q = Neutron;}
+  else if (a == "SpFission")
+    {q = SpFission;}
   else if (a == "BDProton")
     {q = BDProton;}
   else if (a == "BDNeutron")
@@ -62,8 +64,6 @@ std::istream &operator >> (std::istream& strm, G4RadioactiveDecayMode& q)
     {q = Proton2;}
   else if (a == "Neutron2")
     {q = Neutron2;}
-  else if (a == "SpFission")
-    {q = SpFission;}
   else
     {q = RDM_ERROR;}
   return strm;

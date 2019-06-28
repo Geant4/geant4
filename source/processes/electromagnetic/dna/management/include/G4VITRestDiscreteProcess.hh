@@ -48,180 +48,65 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-#ifndef G4VITRESTDISCRETEPROCESS_H
-#define G4VITRESTDISCRETEPROCESS_H
-
-#include <CLHEP/Units/SystemOfUnits.h>
-
+#pragma  once
 #include "G4VITProcess.hh"
 
-/**
- * Identical to G4VRestDiscreteProcess with dependency from G4VITProcess
- */
+/** Identical to G4VRestDiscreteProcess with dependency on G4VITProcess */
 
 class G4VITRestDiscreteProcess : public G4VITProcess
 {
-  //  Abstract class which defines the public behavior of
-  //  rest + discrete physics interactions.
+    //  Abstract class which defines the public behavior of
+    //  rest + discrete physics interactions.
 public:
-
-  G4VITRestDiscreteProcess(const G4String&, G4ProcessType aType = fNotDefined);
-  G4VITRestDiscreteProcess(const G4VITRestDiscreteProcess &);
-
-  virtual ~G4VITRestDiscreteProcess();
+    G4VITRestDiscreteProcess() = delete;
+    G4VITRestDiscreteProcess(const G4String&, G4ProcessType aType = fNotDefined);
+    G4VITRestDiscreteProcess(const G4VITRestDiscreteProcess&) = delete;
+    G4VITRestDiscreteProcess& operator=(const G4VITRestDiscreteProcess& right) = delete;
+    ~G4VITRestDiscreteProcess() override;
 
 public:
-  // with description
-  virtual G4double
-  PostStepGetPhysicalInteractionLength(const G4Track& track,
-                                       G4double previousStepSize,
-                                       G4ForceCondition* condition);
+    // with description
+    G4double
+    PostStepGetPhysicalInteractionLength(const G4Track& track,
+                                         G4double previousStepSize,
+                                         G4ForceCondition* condition) override;
 
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+    G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&) override;
 
-  virtual G4double AtRestGetPhysicalInteractionLength(const G4Track&,
-                                                      G4ForceCondition*);
+    G4double AtRestGetPhysicalInteractionLength(const G4Track&,
+                                                G4ForceCondition*) override;
 
-  virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&);
+    G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&) override;
 
-  //  no operation in  AlongStepDoIt
-  virtual G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
-                                                         G4double,
-                                                         G4double,
-                                                         G4double&,
-                                                         G4GPILSelection*)
-  {
-    return -1.0;
-  }
+    //  no operation in  AlongStepDoIt
+    G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
+                                                   G4double,
+                                                   G4double,
+                                                   G4double&,
+                                                   G4GPILSelection*) override
+    {
+        return -1.0;
+    }
 
-  //  no operation in  AlongStepDoIt
-  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&)
-  {
-    return 0;
-  }
+    //  no operation in  AlongStepDoIt
+    G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&) override
+    {
+        return nullptr;
+    }
 
 protected:
-  // with description
-  virtual G4double GetMeanFreePath(const G4Track& aTrack,
-                                   G4double previousStepSize,
-                                   G4ForceCondition* condition)=0;
-  //  Calculates from the macroscopic cross section a mean
-  //  free path, the value is returned in units of distance.
+    // with description
+    virtual G4double GetMeanFreePath(const G4Track& aTrack,
+                                     G4double previousStepSize,
+                                     G4ForceCondition* condition) = 0;
+    //  Calculates from the macroscopic cross section a mean
+    //  free path, the value is returned in units of distance.
 
-  virtual G4double GetMeanLifeTime(const G4Track& aTrack,
-                                   G4ForceCondition* condition)=0;
-  //  Calculates the mean life-time (i.e. for decays) of the
-  //  particle at rest due to the occurence of the given process,
-  //  or converts the probability of interaction (i.e. for
-  //  annihilation) into the life-time of the particle for the
-  //  occurence of the given process.
-
-protected:
-  // hide default constructor and assignment operator as private
-  G4VITRestDiscreteProcess();
-  G4VITRestDiscreteProcess & operator=(const G4VITRestDiscreteProcess &right);
-
+    virtual G4double GetMeanLifeTime(const G4Track& aTrack,
+                                     G4ForceCondition* condition) = 0;
+    //  Calculates the mean life-time (i.e. for decays) of the
+    //  particle at rest due to the occurrence of the given process,
+    //  or converts the probability of interaction (i.e. for
+    //  annihilation) into the life-time of the particle for the
+    //  occurrence of the given process.
 };
-
-// -----------------------------------------
-//  inlined function members implementation
-// -----------------------------------------
-inline G4double G4VITRestDiscreteProcess::PostStepGetPhysicalInteractionLength(const G4Track& track,
-                                                                               G4double previousStepSize,
-                                                                               G4ForceCondition* condition)
-{
-  if((previousStepSize < 0.0) || (fpState->theNumberOfInteractionLengthLeft
-      <= 0.0))
-  {
-    // beggining of tracking (or just after DoIt of this process)
-    ResetNumberOfInteractionLengthLeft();
-  }
-  else if(previousStepSize > 0.0)
-  {
-    // subtract NumberOfInteractionLengthLeft
-    SubtractNumberOfInteractionLengthLeft(previousStepSize);
-  }
-  else
-  {
-    // zero step
-    //  DO NOTHING
-  }
-
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-
-  // get mean free path
-  fpState->currentInteractionLength = GetMeanFreePath(track,
-                                                      previousStepSize,
-                                                      condition);
-
-  G4double value;
-  if(fpState->currentInteractionLength < DBL_MAX)
-  {
-    value = fpState->theNumberOfInteractionLengthLeft * (fpState->currentInteractionLength);
-  }
-  else
-  {
-    value = DBL_MAX;
-  }
-#ifdef G4VERBOSE
-  if(verboseLevel > 1)
-  {
-    G4cout << "G4VITRestDiscreteProcess::PostStepGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" << G4endl;
-    track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() << G4endl;
-    G4cout << "InteractionLength= " << value / CLHEP::cm << "[cm] " << G4endl;
-  }
-#endif
-  return value;
-}
-
-inline G4VParticleChange* G4VITRestDiscreteProcess::PostStepDoIt(const G4Track&,
-                                                                 const G4Step&)
-{
-//  reset NumberOfInteractionLengthLeft
-  ClearNumberOfInteractionLengthLeft();
-
-  return pParticleChange;
-}
-
-inline G4double G4VITRestDiscreteProcess::AtRestGetPhysicalInteractionLength(const G4Track& track,
-                                                                             G4ForceCondition* condition)
-{
-  // beggining of tracking
-  ResetNumberOfInteractionLengthLeft();
-
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-
-  // get mean life time
-  fpState->currentInteractionLength = GetMeanLifeTime(track, condition);
-
-#ifdef G4VERBOSE
-  if((fpState->currentInteractionLength < 0.0) || (verboseLevel > 2))
-  {
-    G4cout << "G4VITRestDiscreteProcess::AtRestGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" << G4endl;
-    track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() << G4endl;
-    G4cout << "MeanLifeTime = " << fpState->currentInteractionLength / CLHEP::ns
-           << "[ns]" << G4endl;
-  }
-#endif
-
-  return fpState->theNumberOfInteractionLengthLeft
-      * (fpState->currentInteractionLength);
-}
-
-inline G4VParticleChange* G4VITRestDiscreteProcess::AtRestDoIt(const G4Track&,
-                                                               const G4Step&)
-{
-//  clear NumberOfInteractionLengthLeft
-  ClearNumberOfInteractionLengthLeft();
-
-  return pParticleChange;
-}
-
-#endif
-

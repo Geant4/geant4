@@ -44,31 +44,29 @@
 #include "G4PhysicalConstants.hh"
 #include "G4OpProcessSubType.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4OpMieHG::G4OpMieHG(const G4String& processName, G4ProcessType type)
            : G4VDiscreteProcess(processName, type)
 {
-        if (verboseLevel>0) {
-           G4cout << GetProcessName() << " is created " << G4endl;
-        }
+  if (verboseLevel>0) {
+     G4cout << GetProcessName() << " is created " << G4endl;
+  }
 
-        SetProcessSubType(fOpMieHG);
+  SetProcessSubType(fOpMieHG);
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4OpMieHG::~G4OpMieHG(){}
 
-        ////////////
-        // Methods
-        ////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// PostStepDoIt
-// -------------
-//
-G4VParticleChange* 
+G4VParticleChange*
 G4OpMieHG::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
-        aParticleChange.Initialize(aTrack);
+  aParticleChange.Initialize(aTrack);
 
-        const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+  const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
 	const G4Material* aMaterial = aTrack.GetMaterial();
 	G4MaterialPropertiesTable* aMaterialPropertyTable =
 	  aMaterial->GetMaterialPropertiesTable();
@@ -80,7 +78,7 @@ G4OpMieHG::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	G4double ForwardRatio =
               aMaterialPropertyTable->GetConstProperty(kMIEHG_FORWARD_RATIO);
 
-        if (verboseLevel>0) {
+  if (verboseLevel >0 ) {
 		G4cout << "MIE Scattering Photon!" << G4endl;
 		G4cout << "MIE Old Momentum Direction: "
 	     	     << aParticle->GetMomentumDirection() << G4endl;
@@ -88,102 +86,99 @@ G4OpMieHG::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		     << aParticle->GetPolarization() << G4endl;
 	}
 
-        G4double gg;
-        G4int direction;
-        if (G4UniformRand()<=ForwardRatio){
-           gg = forward_g;
-           direction = 1;
-        } else {
-           gg = backward_g;
-           direction = -1;
+  G4double gg;
+  G4int direction;
+  if (G4UniformRand() <= ForwardRatio){
+     gg = forward_g;
+     direction = 1;
+  } else {
+     gg = backward_g;
+     direction = -1;
 	}
 
-        G4double r = G4UniformRand();
+  G4double r = G4UniformRand();
 
-        G4double Theta;
-        //sample the direction
-        if (gg!=0) {
-          Theta = std::acos(2*r*(1+gg)*(1+gg)*(1-gg+gg*r)/((1-gg+2*gg*r)*(1-gg+2*gg*r)) -1);
-        } else {
-          Theta = std::acos(2*r-1.);
+  G4double Theta;
+  //sample the direction
+  if (gg != 0.) {
+    Theta = std::acos(2.*r*(1.+gg)*(1.+gg)*(1.-gg+gg*r)/((1.-gg+2.*gg*r)*(1.-gg+2.*gg*r)) -1.);
+  } else {
+    Theta = std::acos(2.*r-1.);
 	}
-        G4double Phi = G4UniformRand()*2*pi;
+  G4double Phi = G4UniformRand()*twopi;
+  //G4double Phi = G4UniformRand()*2*pi;
 
-        if (direction==-1) Theta = pi - Theta; //backward scattering
+  if (direction == -1) Theta = pi - Theta; //backward scattering
 
-        G4ThreeVector NewMomentumDirection, OldMomentumDirection;
-        G4ThreeVector OldPolarization, NewPolarization;
+  G4ThreeVector NewMomentumDirection, OldMomentumDirection;
+  G4ThreeVector OldPolarization, NewPolarization;
 
-        NewMomentumDirection.set
-                       (std::sin(Theta)*std::cos(Phi), std::sin(Theta)*std::sin(Phi), std::cos(Theta));
-        OldMomentumDirection = aParticle->GetMomentumDirection();
-        NewMomentumDirection.rotateUz(OldMomentumDirection);
-        NewMomentumDirection = NewMomentumDirection.unit();
+  NewMomentumDirection.set
+                 (std::sin(Theta)*std::cos(Phi), std::sin(Theta)*std::sin(Phi), std::cos(Theta));
+  OldMomentumDirection = aParticle->GetMomentumDirection();
+  NewMomentumDirection.rotateUz(OldMomentumDirection);
+  NewMomentumDirection = NewMomentumDirection.unit();
 
-        OldPolarization = aParticle->GetPolarization();
-        G4double constant = -1./NewMomentumDirection.dot(OldPolarization);
+  OldPolarization = aParticle->GetPolarization();
+  G4double constant = -1./NewMomentumDirection.dot(OldPolarization);
 
-        NewPolarization = NewMomentumDirection + constant*OldPolarization;
-        NewPolarization = NewPolarization.unit();
+  NewPolarization = NewMomentumDirection + constant*OldPolarization;
+  NewPolarization = NewPolarization.unit();
 
-        if (NewPolarization.mag()==0) {
-           r = G4UniformRand()*twopi;
-           NewPolarization.set(std::cos(r),std::sin(r),0.);
-           NewPolarization.rotateUz(NewMomentumDirection);
-        } else {
-	   // There are two directions which perpendicular
-           // new momentum direction
-           if (G4UniformRand() < 0.5) NewPolarization = -NewPolarization;
-        }
+  if (NewPolarization.mag() == 0.) {
+    r = G4UniformRand()*twopi;
+    NewPolarization.set(std::cos(r),std::sin(r),0.);
+    NewPolarization.rotateUz(NewMomentumDirection);
+  } else {
+	  // There are two directions which perpendicular
+    // new momentum direction
+    if (G4UniformRand() < 0.5) NewPolarization = -NewPolarization;
+  }
 
-        aParticleChange.ProposePolarization(NewPolarization);
-        aParticleChange.ProposeMomentumDirection(NewMomentumDirection);
+  aParticleChange.ProposePolarization(NewPolarization);
+  aParticleChange.ProposeMomentumDirection(NewMomentumDirection);
 
-        if (verboseLevel>0) {
-              G4cout << "MIE New Polarization: " 
-                     << NewPolarization << G4endl;
-              G4cout << "MIE Polarization Change: "
-                     << *(aParticleChange.GetPolarization()) << G4endl;  
-              G4cout << "MIE New Momentum Direction: " 
-                     << NewMomentumDirection << G4endl;
-              G4cout << "MIE Momentum Change: "
-                     << *(aParticleChange.GetMomentumDirection()) << G4endl; 
-        }
+  if (verboseLevel > 0) {
+    G4cout << "MIE New Polarization: " << NewPolarization << G4endl;
+    G4cout << "MIE Polarization Change: " << *(aParticleChange.GetPolarization()) << G4endl;
+    G4cout << "MIE New Momentum Direction: " << NewMomentumDirection << G4endl;
+    G4cout << "MIE Momentum Change: " << *(aParticleChange.GetMomentumDirection()) << G4endl;
+  }
 
-        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+  return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
-// GetMeanFreePath()
-// -----------------
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4OpMieHG::GetMeanFreePath(const G4Track& aTrack,
-                                    G4double ,
-                                    G4ForceCondition* )
+                                    G4double,
+                                    G4ForceCondition*)
 {
-        const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-        const G4Material* aMaterial = aTrack.GetMaterial();
+  const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+  const G4Material* aMaterial = aTrack.GetMaterial();
 
-        G4double thePhotonEnergy = aParticle->GetTotalEnergy();
+  G4double thePhotonEnergy = aParticle->GetTotalEnergy();
 
-        G4double AttenuationLength = DBL_MAX;
+  G4double AttenuationLength = DBL_MAX;
 
-        G4MaterialPropertiesTable* aMaterialPropertyTable =
-          aMaterial->GetMaterialPropertiesTable();
+  G4MaterialPropertiesTable* aMaterialPropertyTable =
+    aMaterial->GetMaterialPropertiesTable();
 
-        if (aMaterialPropertyTable) {
-           G4MaterialPropertyVector* AttenuationLengthVector =
-                                 aMaterialPropertyTable->GetProperty(kMIEHG);
-           if (AttenuationLengthVector) {
-              AttenuationLength = AttenuationLengthVector ->
-                                    Value(thePhotonEnergy);
-           } else {
-//              G4cout << "No Mie scattering length specified" << G4endl;
-           }
-        } else {
-//           G4cout << "No Mie scattering length specified" << G4endl; 
-        }
+  if (aMaterialPropertyTable) {
+    G4MaterialPropertyVector* AttenuationLengthVector =
+                          aMaterialPropertyTable->GetProperty(kMIEHG);
+    if (AttenuationLengthVector) {
+        AttenuationLength = AttenuationLengthVector->Value(thePhotonEnergy);
+    }
+    // else {
+    //          G4cout << "No Mie scattering length specified" << G4endl;
+    //      }
+  }
+  //else {
+  //         G4cout << "No Mie scattering length specified" << G4endl; 
+  //     }
 
 //	G4cout << thePhotonEnergy/GeV << " \t" << AttenuationLength/m << G4endl;
 
-        return AttenuationLength;
+  return AttenuationLength;
 }

@@ -248,7 +248,7 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
                                     G4bool surfCheck )
 {
   unsigned int  numberOfDaughters;
-  
+    
   if( copyNumBase == 0 )
   {
     numberOfDaughters = pMotherLV->GetNoDaughters();
@@ -265,6 +265,9 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
   ImprintsCountPlus();
   
   std::vector<G4AssemblyTriplet> triplets = pAssembly->fTriplets;
+
+  // store the transformation in a container (for GDML persistency)
+  fImprintsTransf[GetImprintsCount()] = transformation;
 
   for( unsigned int   i = 0; i < triplets.size(); i++ )
   {
@@ -314,6 +317,10 @@ void G4AssemblyVolume::MakeImprint( G4AssemblyVolume* pAssembly,
       //
       fPVStore.push_back( pvPlaced.first );
       if ( pvPlaced.second )  { fPVStore.push_back( pvPlaced.second ); }
+
+      // Here I want to save the imprint transformation to some container, so I can retrieve the original values later
+      // imprintTrans[GetImprintsCount()] = transformation;
+      
     }
     else if ( triplets[i].GetAssembly() )
     {

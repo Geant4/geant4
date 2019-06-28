@@ -15,7 +15,22 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-06-16  Dennis Wright (rdecay02-V10-05-00)
+--------------------------------------------
+- in order to separate biased from unbiased RDM in physics lists, create new 
+  class BiasedRDPhysics which uses new G4Radioactivation process with all
+  biasing available, instead of using 
+  physics_lists/constructors/decay/G4RadioactiveDecayPhysics
+  which will in future used only unbiased RDM.
+
+- PhysicsList.cc: replace G4RadioactiveDecayPhysics with BiasedRDPhysics,
+  also remove HP option physics lists 
+
+- Run.cc:  replace G4RadioactiveDecay with G4Radioactivation
+
+
 08-05-18 Ben Morgan (rdecay02-V10-04-03)
+----------------------------------------
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor
   symbols.

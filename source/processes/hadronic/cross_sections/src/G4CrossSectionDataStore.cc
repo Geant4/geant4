@@ -44,8 +44,6 @@
 #include "G4CrossSectionDataStore.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
-#include "G4HadronicException.hh"
-#include "G4HadTmpUtil.hh"
 #include "Randomize.hh"
 #include "G4Nucleus.hh"
 
@@ -375,16 +373,15 @@ G4CrossSectionDataStore::GetIsoCrossSection(const G4DynamicParticle* part,
       }
     }
   }
-  G4cout << "G4CrossSectionDataStore::GetCrossSection ERROR: "
-	 << " no isotope cross section found"
-	 << G4endl;
-  G4cout << "  for " << part->GetDefinition()->GetParticleName() 
-	 << " off Element " << elm->GetName()
-         << "  in " << mat->GetName() 
-	 << " Z= " << Z << " A= " << A
-	 << " E(MeV)= " << part->GetKineticEnergy()/MeV << G4endl; 
-  throw G4HadronicException(__FILE__, __LINE__, 
-                      " no applicable data set found for the isotope");
+  G4ExceptionDescription ed;
+  ed << "No isotope cross section found for " 
+     << part->GetDefinition()->GetParticleName() 
+     << " off Element " << elm->GetName()
+     << "  in " << mat->GetName() << " Z= " << Z << " A= " << A
+     << " E(MeV)= " << part->GetKineticEnergy()/MeV << G4endl; 
+  G4Exception("G4CrossSectionDataStore::GetIsoCrossSection", "had001", 
+              FatalException, ed);
+  return 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -401,16 +398,15 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* part,
       return dataSetList[i]->GetIsoCrossSection(part, Z, A, iso, elm, mat);
     }
   }
-  G4cout << "G4CrossSectionDataStore::GetCrossSection ERROR: "
-	 << " no isotope cross section found"
-	 << G4endl;
-  G4cout << "  for " << part->GetDefinition()->GetParticleName() 
-	 << " off Element " << elm->GetName()
-         << "  in " << mat->GetName() 
-	 << " Z= " << Z << " A= " << A
-	 << " E(MeV)= " << part->GetKineticEnergy()/MeV << G4endl; 
-  throw G4HadronicException(__FILE__, __LINE__, 
-                  " no applicable data set found for the isotope");
+  G4ExceptionDescription ed;
+  ed << "No isotope cross section found for " 
+     << part->GetDefinition()->GetParticleName() 
+     << " off Element " << elm->GetName()
+     << "  in " << mat->GetName() << " Z= " << Z << " A= " << A
+     << " E(MeV)= " << part->GetKineticEnergy()/MeV << G4endl; 
+  G4Exception("G4CrossSectionDataStore::GetCrossSection", "had001", 
+              FatalException, ed);
+  return 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -449,9 +445,10 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* part,
 
     // more than 1 isotope
     if(1 < nIso) { 
-      iso = dataSetList[i]->SelectIsotope(anElement, part->GetKineticEnergy());
+      iso = dataSetList[i]->SelectIsotope(anElement, 
+                                          part->GetKineticEnergy(),
+					  part->GetLogKineticEnergy());
     }
-
   } else {
 
     //----------------------------------------------------------------
@@ -496,12 +493,14 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* part,
 void
 G4CrossSectionDataStore::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
-  if (nDataSetList == 0) 
-    {
-      throw G4HadronicException(__FILE__, __LINE__, 
-				"G4CrossSectionDataStore: no data sets registered");
-      return;
-    }
+  if (nDataSetList == 0) {
+    G4ExceptionDescription ed;
+    ed << "No cross section is registered for " 
+       << aParticleType.GetParticleName() << G4endl;
+    G4Exception("G4CrossSectionDataStore::BuildPhysicsTable", "had001", 
+                FatalException, ed);
+    return;
+  }
   for (G4int i=0; i<nDataSetList; ++i) {
     dataSetList[i]->BuildPhysicsTable(aParticleType);
   } 
@@ -529,16 +528,19 @@ G4CrossSectionDataStore::BuildPhysicsTable(const G4ParticleDefinition& aParticle
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4CrossSectionDataStore::ActivateFastPath( const G4ParticleDefinition* pdef, const G4Material* mat, G4double min_cutoff)
+void G4CrossSectionDataStore::ActivateFastPath( const G4ParticleDefinition* pdef, 
+     const G4Material* mat, G4double min_cutoff)
 {
-	assert(pdef!=nullptr&&mat!=nullptr);
-	G4FastPathHadronicCrossSection::G4CrossSectionDataStore_Key key={pdef,mat};
-	if ( requests.insert( { key , min_cutoff } ).second ) {
-		std::ostringstream msg;
-		msg<<"Attempting to request FastPath for couple: "<<pdef->GetParticleName()<<","<<mat->GetName();
-		msg<<" but combination already exists";
-		throw G4HadronicException(__FILE__,__LINE__,msg.str());
-	}
+  assert(pdef!=nullptr&&mat!=nullptr);
+  G4FastPathHadronicCrossSection::G4CrossSectionDataStore_Key key={pdef,mat};
+  if ( requests.insert( { key , min_cutoff } ).second ) {
+    G4ExceptionDescription ed;
+    ed << "Attempting to request FastPath for couple: <"
+       << pdef->GetParticleName() << ", " <<mat->GetName() 
+       << "> but combination already exists" << G4endl;
+    G4Exception("G4CrossSectionDataStore::ActivateFastPath", "had001", 
+                FatalException, ed);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

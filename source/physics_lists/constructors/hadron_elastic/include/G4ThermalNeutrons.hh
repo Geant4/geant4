@@ -45,7 +45,7 @@
 class G4ThermalNeutrons : public G4VHadronPhysics {
 
 public:
-  explicit G4ThermalNeutrons(G4int ver);
+  explicit G4ThermalNeutrons(G4int ver=1);
   virtual ~G4ThermalNeutrons();
 
   void ConstructProcess() override;

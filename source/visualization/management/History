@@ -25,8 +25,198 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
-21 January 2019  John Allison  (visman-V10-04-29)
+13 June 2019  John Allison (visman-V10-05-06)
+- Part of vis-V10-05-20.
+- G4VSceneHandler:
+  o Final changes for introduction of cloud drawing.
+  o Add GetNumberOfCloudPoints:
+    Returns no of cloud points from current view parameters, unless the user
+    has forced through the vis attributes, thereby over-riding the
+    current view parameter.
+- G4ViewParameters:
+  o Add accessors for number of cloud points.
+- G4VisCommandsGeometrySet: Tidy.
+- G4VisCommandsTouchableSet: Add commands for cloud style.
+- G4VisCommandsViewerSet: Add commands for cloud style.
+- G4VisCommandsCompound.cc: Tidy.
+- G4VisCommandsGeometrySet.cc: Tidy.
+- G4VisCommandsTouchable.cc: Improve printing.
+
+29 May 2019  John Allison (visman-V10-05-05)
+- G4VisManager.cc:
+  o Removed the word "WARNING" from message about number of events
+    kept for refreshing and/or reviewing.
+
+04 April 2019  John Allison (visman-V10-05-04)
+- Co-works modeling-V10-05-01.
+- Final (for now) corrections to /vis/viewer/set/sectionPlane.
+  Still some strange behaviour in small fraction of cases. See
+  comments in G4PhysicalVolumeModel::DescribeSolid around line 748.
+
+29 March 2019  John Allison (visman-V10-05-03)
+- G4VSceneHandler.hh:
+  o BeginPrimitives/2D: Added default argument G4Transform3D() to
+    correspond to base class G4VGraphicsScene.
+- G4ViewParameters.hh:
+  o Improved comments.
+- G4Scene.cc: Improved operator<<.
+
+24 March 2019  John Allison (visman-V10-05-02)
+- Fix bug in /vis/viewer/set/sectionPlane.
+  Involves using G4DisplacedSolid instead of plain G4VSolid.
+
+18 March 2019  Gabriele Cosmo (visman-V10-05-01)
+- Corrected few typos in printout/comments.
+
+10 March 2019  John Allison  (visman-V10-05-00)
+- Introduce cloud drawing style:
+  New parameter candidate in /vis/viewer/set/style:
+    /vis/viewer/set/style cloud
+  Cloud drawing uses solid->GetPointOnSurface, i.e., it uses kernel
+  algorithms and by-passes polyhedral representations. The solid is
+  represented by a polymarker of dots. The default number of points
+  is 1000. This can be changed with
+    /vis/viewer/set/numberOfCloudPoints
+  (The minimum number is 100.)
+  Note that OpenGL has a fast algorithm for polymarker.
+- This allows us to use cloud style both as a choice or as fallback when the
+  polyhedral representation fails, for example, when BooleanProcessor fails.
+- Many files affected:
+  o G4ViewParameters.hh/icc/cc
+  enum DrawingStyle {
+    wireframe,  // Draw edges    - no hidden line removal.
+    hlr,        // Draw edges    - hidden lines removed.
+    hsr,        // Draw surfaces - hidden surfaces removed.
+    hlhsr,      // Draw surfaces and edges - hidden removed.
+    cloud       // Draw volume as a cloud of dots.
+  };
+    and consequential augmentation of access function, test functions and
+    stream output functions.
+  o G4VisCommandsViewerSet.hh/cc
+    . Add /vis/viewer/set/numberOfCloudPoints.
+    . Augment /vis/viewer/set/style to handle "c[loud]".
+    . Note: G4VisCommandsViewerSet.cc: Indentations recomputed (Xcode has
+      a slightly different algorithm to emacs). Many hundreds of lines changed.
+  o G4VSceneHandler::RequestPrimitives: Augmented to handle cloud.
+  o G4VisCommandsCompound.cc: Augment message from /vis/drawLogicalVolume.
+  o G4VisCommandsViewerDefault: Augment /vis/viewer/default/style.
+- Other developments:
+  o void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
+    Functionally unchanged but algorithmetically improved.
+    Note, as stated above, OpenGL does not use this default function -
+    it has its own version.
+
+24 February 2019  John Allison
+- Included in vis-V10-05-13
+- Add /vis/touchable/extentForField and volumeForField.
+
+19 February 2019  John Allison
+- Included in vis-V10-05-12
+- G4VVisCommand:
+  o Introduced fCurrrentPVFindingsForField.
+  o Added DrawExtent to utility functions.
+- G4VisCommandsScene: Add /vis/scene/showExtents.
+- G4VisCommandsSet: Add /vis/set/volumeForField.
+- G4VisCommandsTouchable:
+  o Add /vis/touchable/showExtent.
+  o Add copy number parameter to /vis/touchable/findPath.
+- G4Scene:
+  o Use G4BoundingExtentScene instead of G4BoundingSphereScene.
+  o Use G4VisExtent::GetTransformedExtent to correct for fix to bug in
+    G4PhysicalVolumeModel - see modeling/History.
+- G4ViewParameters: Improve message.
+- G4VisManager: Register the new commands.
+
+13 February 2019  John Allison
+- Included in vis-V10-05-11
+- Implement /vis/set/extentForField - see visualisation/History.
+
+10 February 2019  John Allison
+- Included in vis-V10-05-10
+- G4VisCommandsViewer:
+  o Improved /vis/viewer/centreOn (it does not zoom).
+  o Introduced /vis/viewer/centreAndZoomInOn.
+- G4VisCommandsTouchable:
+  o Improved /vis/touchable/centreOn (it does not zoom).
+  o Introduced /vis/touchable/centreAndZoomInOn.
+- G4VVisCommand:
+  o Introduced utility functions CopyGuidanceFrom and CopyParametersFrom.
+- G4VisCommandsCompound:
+  o Made use of above-mentioned utility functions.
+
+08 February 2019  John Allison
+- Included in vis-V10-05-09
+- Fix Coverity warnings.
+
+31 January 2019  Michael Kelsey
+- Included in vis-V10-05-08
+- Provide ability to draw electric fields, and eventually any other field.
+  Refactor G4MagneticFieldModel to have an intermediate base class, which
+  implements DescribeYourselfTo().  Concrete class only implements a utility
+  function to get value from field.  Add new G4ElectricFieldModel which does
+  the same thing.  Add commands for the latter.
+
+29 January 2019  John Allison
+- Included in vis-V10-05-06
+- G4VisCommandsTochable:
+  o Add /vis/touchable/draw.
+- G4VisCommandsViewer: /vis/viewer/centreOn:
+  o Add copy number to parameter list.
+- CheckSceneAndNotifyHandlers: move from xx to G4VVisCommand so that it
+  can be used by any messenger.
+
+26 January 2019  John Allison
+- Included in vis-V10-05-06
+- Fix calculation of vis extent for parameterisations.
+- Some minor tidying.
+
+25 January 2019  John Allison
+- Included in vis-V10-05-06
+- Rationalise view interpolation
+  Encapsulate algorithm into base class G4VVisCommand. The commands
+    /vis/viewer/interpolate
+    /vis/viewer/centreOn
+    /vis/touchable/centerOn
+  now use this. Might consider use by all view changing commands.
+
+25 January 2019  John Allison
+- Included in vis-V10-05-05
+- Include parameterised volumes in overlap checking and visualisation
+  in G4LogicalVolumeModel (in addition to ordinary placements).
+
+22 January 2019  John Allison
+- Included in vis-V10-05-04
+- Introduce /vis/viewer/centreOn and /vis/touchable/centreOn
+  This allows one to centre the view (zoom in) on a volume.
+  Reset with /vis/viewer/reset.
+- Moved
+    void SetViewParameters(G4VViewer* viewer, const G4ViewParameters& viewParams);
+    void RefreshIfRequired(G4VViewer* viewer);
+  from G4VisCommandsViewer to the higher level G4VVisCommand so that all
+  vis commands may make use. In so doing eliminated the intermediate class
+  G4VVisCommandViewer (which did not have a .hh file of its own and was anyhow
+  obscurely buried in G4VisComandsViewer). Much cleaner now.
+
+21 January 2019  John Allison
+- Included in vis-V10-05-03.
 - Pick up default number of line-segments-per-circle from G4Polyhedron.
+
+08 January 2019  John Allison
+- Correct History files after merge
+
+02 January 2019  John Allison
+- Included in vis-V10-05-01.
+- Minor improvements to vis manager.
+- Added confirmation printing when registering models with the scene.
+- At start of run:
+  // Check to see if the user has created a trajectory model. If not, create
+  // a default one. To avoid code duplication the following function is used
+  // and its result (a const G4VTrajectoryModel*) is thrown away at this point.
+  // The function is called again later when needed.
+
+02 January 2019  John Allison
+- Included in vis-V10-05-00.
+- G4VisCommandsSceneAdd.cc: Improve guidance for /vis/scene/add/volume.
 
 14 November 2018  John Allison  (visman-V10-04-28)
 - G4VisCommandsSceneAdd.cc: /vis/scene/add/userAction:

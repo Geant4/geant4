@@ -11,6 +11,9 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31 Jan. 2019, I.Hrivnacova
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 30 Nov. 2017 K. Murakami
  - update for 10.5 release
  - fix CMAKE_INSTALL_PREFIX does not work (id 1924)

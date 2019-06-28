@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-02-2019 IgS (testem15-V10-05-00)
+- SteppingAction.cc : not fill hist #11,#12 when no recoil returned
+
 23-10-2018 IgS (testem15-V10-04-08)
 - cosmetics in DetectorConstruction and SteppingAction.cc
 

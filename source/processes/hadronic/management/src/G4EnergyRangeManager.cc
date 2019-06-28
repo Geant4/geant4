@@ -84,8 +84,8 @@ G4EnergyRangeManager::GetHadronicInteraction(const G4HadProjectile & aHadProject
 
   G4double kineticEnergy = aHadProjectile.GetKineticEnergy();
   // For ions, get kinetic energy per nucleon
-  if ( aHadProjectile.GetDefinition()->GetBaryonNumber() > 1.5 ) {
-    kineticEnergy /= aHadProjectile.GetDefinition()->GetBaryonNumber();
+  if ( std::abs( aHadProjectile.GetDefinition()->GetBaryonNumber() ) > 1 ) {
+    kineticEnergy /= static_cast< G4double >( std::abs( aHadProjectile.GetDefinition()->GetBaryonNumber() ) );
   }
 
   G4int cou = 0, memory = 0, memor2 = 0;

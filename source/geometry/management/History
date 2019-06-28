@@ -16,11 +16,39 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-March 8, 2019 G.Cosmo (geommng-V10-04-09)
+May 29, G. Cosmo (geommng-V10-05-07)
+- Fixed minor Coverity defects.
+
+May 20, G. Cosmo (geommng-V10-05-06)
+- Defined move constructor and move assignment operator for G4AffineTransform.
+
+May 14, B. Morgan (geommng-V10-05-05)
+- Use header-based #define/undef symbols to configure VecGeom replacements
+- G4GeomConfig.hh: Generated header configuring #defines using CMake settings
+- G4GeomTypes.hh: "Interface" header to support old GNUmake system. All Geant4
+  code should #include this rather than the generated header, which is only
+  present in CMake mode.
+- G4UAdapter.hh: Add inclusion of G4GeomTypes.hh
+- See also cmake-V10-05-03
+
+May 13, 2019 G.Cosmo (geommng-V10-05-04)
+- Replaced deprecated std::binary_function calls with lambdas in
+  G4SmartVoxelStat and G4GeometryManager.
+  Courtesy of S.Losilla, from GitHub PR#8.
+
+April 29, 2019 G.Cosmo (geommng-V10-05-03)
+- Properly initialise to zero splitted data in G4VPhysicalVolume.
+
+April 23, 2019 G.Cosmo (geommng-V10-05-02)
+- G4GeomSplitter: re-enabled use or realloc()/free() and memcpy(), after
+  adapting G4VPhysicalVolume MT splitted data to adopt only trivial types
+  for allocation.
+
+March 8, 2019 G.Cosmo (geommng-V10-05-01)
 - G4LogicalVolume: in AddDaughter() avoid propagating pointer to field-manager
   if this is null. Addressing problem report #2145.
 
-January 30, 2019 A.Dotti, G.Cosmo
+January 30, 2019 A.Dotti, G.Cosmo (geommng-V10-05-00)
 - Use reverse_iterator in G4SolidStore::DeRegister() in order to speedup
   partial deregistration on setups with many solids instances.
 - G4Region: added possibility to disable search in the tree in

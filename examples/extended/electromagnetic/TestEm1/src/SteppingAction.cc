@@ -39,12 +39,21 @@
 #include "G4SteppingManager.hh"
 #include "G4VProcess.hh"
 #include "G4UnitsTable.hh"
+#include "G4NIELCalculator.hh"
+#include "G4ICRU49NuclearStoppingModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(EventAction* event)
-:G4UserSteppingAction(), fEventAction(event)
-{ }
+  :G4UserSteppingAction(), fEventAction(event)
+{
+  fNIELCalculator = new G4NIELCalculator(new G4ICRU49NuclearStoppingModel(),1);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+SteppingAction::~SteppingAction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,10 +65,18 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
    
   G4double EdepStep = aStep->GetTotalEnergyDeposit();
 
-  if (EdepStep > 0.) {         run->AddEdep(EdepStep);
-                      fEventAction->AddEdep(EdepStep);
+  if (EdepStep > 0.) {
+    run->AddEdep(EdepStep);
+    fEventAction->AddEdep(EdepStep);
   }
- const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
+  G4double niel = fNIELCalculator->ComputeNIEL(aStep);
+  if(niel > 0.) {
+    run->AddNIEL(niel);
+    fEventAction->AddNIEL(niel);
+  }
+
+  const G4VProcess* process = 
+    aStep->GetPostStepPoint()->GetProcessDefinedStep();
   if (process) run->CountProcesses(process->GetProcessName());
 
   // step length of primary particle

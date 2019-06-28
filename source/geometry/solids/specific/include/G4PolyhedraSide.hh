@@ -75,14 +75,13 @@ struct G4PolyhedraSideRZ
 class G4PhSideData
 {
   public:
+
     void initialize()
     {
-      fPhi.first = G4ThreeVector(0,0,0);
-      fPhi.second= 0.0;
+      fPhix = 0.; fPhiy = 0.; fPhiz = 0.; fPhik = 0.;
     }
 
-    std::pair<G4ThreeVector, G4double> fPhi;  // Cached value for phi
-
+    G4double fPhix=0., fPhiy=0., fPhiz=0., fPhik=0.;   // Cached values for phi
 };
 
 // The type G4PhSideManager is introduced to encapsulate the methods used

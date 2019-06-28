@@ -75,6 +75,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4KaonZeroLInelasticProcess.hh
         G4KaonZeroSInelasticProcess.hh
         G4LambdaInelasticProcess.hh
+	G4MuNeutrinoNucleusProcess.hh
         G4MuonNuclearProcess.hh
         G4NeutrinoElectronProcess.hh
         G4NeutronInelasticProcess.hh
@@ -123,6 +124,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4KaonZeroLInelasticProcess.cc
         G4KaonZeroSInelasticProcess.cc
         G4LambdaInelasticProcess.cc
+	G4MuNeutrinoNucleusProcess.cc
         G4MuonNuclearProcess.cc
         G4NeutrinoElectronProcess.cc
         G4NeutronInelasticProcess.cc

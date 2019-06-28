@@ -39,13 +39,10 @@
 #include "G4UImessenger.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
-// #include "G4UIcmdWith3VectorAndUnit.hh"
-// #include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
-// #include "G4UIcmdWithoutParameter.hh"
 #include "globals.hh"
 
 #include "G4Radioactivation.hh"
@@ -65,26 +62,13 @@ class G4RadioactivationMessenger: public G4UImessenger
     G4Radioactivation* theRadioactivationContainer;
   
     G4UIdirectory* grdmDirectory;
-//    G4UIcmdWithNucleusLimits* nucleuslimitsCmd;
+    G4UIcmdWithABool* analoguemcCmd;
     G4UIcmdWithAString* sourcetimeprofileCmd;
     G4UIcmdWithAString* decaybiasprofileCmd;
-//    G4UIcmdWithABool* fbetaCmd;
     G4UIcmdWithABool* brbiasCmd;
     G4UIcmdWithAnInteger* splitnucleiCmd;
-//    G4UIcmdWithAnInteger* verboseCmd;
-//    G4UIcmdWithAString* avolumeCmd;
-//    G4UIcmdWithAString* deavolumeCmd;
-//    G4UIcmdWithoutParameter* allvolumesCmd;
-//    G4UIcmdWithoutParameter* deallvolumesCmd;
-//    G4UIcmdWithABool* icmCmd;
-//    G4UIcmdWithABool* armCmd;
     G4UIcmdWithADoubleAndUnit* hlthCmd;
 
-//    G4UIcommand* userDecayDataCmd;
-//    G4UIcommand* userEvaporationDataCmd;
-
-//    G4UIcmdWith3Vector* colldirCmd;
-//    G4UIcmdWithADoubleAndUnit* collangleCmd;
 };
 
 #endif

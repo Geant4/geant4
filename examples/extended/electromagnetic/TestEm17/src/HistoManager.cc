@@ -148,11 +148,10 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+  const G4String id[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9",
                  "10", "11", "12", "13", "14", "15"};
   const G4String title[] = 
-                { "dummy",                                           //0
-                  "log10(Etransfert/Emu) muIonization",              //1
+                { "log10(Etransfert/Emu) muIonization",              //1
                   "log10(Etransfert/Emu) muPair",                    //2
                   "log10(Etransfert/Emu) muBrems",                   //3
                   "log10(Etransfert/Emu) muNuclear",                 //4

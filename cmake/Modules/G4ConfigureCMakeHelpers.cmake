@@ -64,15 +64,6 @@ set(GEANT4_THIRD_PARTY_IMPORT_SETUP )
 # Externals libraries that may be present
 set(GEANT4_EXTERNALS_TARGETS )
 
-# - Stuff from Geant4LibraryBuildOptions.cmake
-if(GEANT4_BUILD_STORE_TRAJECTORY)
-  list(APPEND GEANT4_CORE_DEFINITIONS -DG4_STORE_TRAJECTORY)
-endif()
-
-if(GEANT4_BUILD_VERBOSE_CODE)
-  list(APPEND GEANT4_CORE_DEFINITIONS -DG4VERBOSE)
-endif()
-
 # - Stuff from Geant4OptionalComponents.cmake
 # - CLHEP
 # If it's internal, add it to the externals list
@@ -104,11 +95,11 @@ endif()
 # Compile definitions
 if(GEANT4_USE_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
   set(GEANT4_USE_USOLIDS_EITHER ON)
-  list(APPEND GEANT4_CORE_DEFINITIONS ${GEANT4_USOLIDS_COMPILE_DEFINITIONS})
 
   # System USolids headers, because these do appear in Geant4's
   # public interface. The library should be in the link interface
   # of G4geometry (may need refinding)
+  list(APPEND GEANT4_CORE_DEFINITIONS ${VECGEOM_DEFINITIONS})
   list(APPEND GEANT4_THIRD_PARTY_INCLUDES "${USOLIDS_INCLUDE_DIRS} ${VECGEOM_EXTERNAL_INCLUDES}")
 endif()
 

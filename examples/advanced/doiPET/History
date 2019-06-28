@@ -6,7 +6,7 @@
                       Category History file
                       ---------------------
 
-17.12.2018 - G. Cosmo;doiPET-V10-04-01
+17.12.2018 - G. Cosmo;doiPET-V10-05-00
              Fixed compilation warnings on clang for unused data members in
              doiPETDetectorConstruction and doiPETEventAction classes.
 

@@ -47,6 +47,7 @@
 #include "G4PhysicsVector.hh"
 #include "G4DynamicParticle.hh"
 #include "Randomize.hh"
+#include "G4Log.hh" 
 
 // factory
 #include "G4CrossSectionFactory.hh"
@@ -69,7 +70,7 @@ const G4int G4NeutronCaptureXS::amin[] = {
   0, 235};
 const G4int G4NeutronCaptureXS::amax[] = {
   0,
-  1,   4,   7,   9, 11,  13,  15,  18,  19,  22,  //1-10
+  2,   4,   7,   9, 11,  13,  15,  18,  19,  22,  //1-10
  23,  26,  27,  30, 31,  34,  37,  40,  41,  48,  //11-20
  45,  50,  51,  54, 55,  58,  59,  64,  65,  70,  //21-30
  71,  76,  75,   0,  0,   0,   0,   0,   0,  96,  //31-40
@@ -95,7 +96,9 @@ G4NeutronCaptureXS::G4NeutronCaptureXS()
     G4cout  << "G4NeutronCaptureXS::G4NeutronCaptureXS: Initialise for Z < "
 	    << MAXZCAPTURE << G4endl;
   }
-  isMaster = false;
+  logElimit   = G4Log(elimit);
+  isMaster    = false;
+  fIdxXSTable = 0;
 }
 
 G4NeutronCaptureXS::~G4NeutronCaptureXS()
@@ -129,20 +132,26 @@ G4NeutronCaptureXS::IsIsoApplicable(const G4DynamicParticle*,
 
 G4double 
 G4NeutronCaptureXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
-					   G4int Z, const G4Material*)
+					   G4int ZZ, const G4Material*)
 {
   G4double xs = 0.0;
   G4double ekin = aParticle->GetKineticEnergy();
-  if(ekin > emax || Z < 1 || Z >= MAXZCAPTURE) { return xs; }
-  if(ekin < elimit) { ekin = elimit; }
+  if(ekin > emax) { return xs; }
+
+  G4int Z = std::min(ZZ, MAXZCAPTURE-1);
+  G4double logEkin = aParticle->GetLogKineticEnergy();
+  if(ekin < elimit) { ekin = elimit; logEkin = logElimit; }
 
   // element was not initialised
   G4PhysicsVector* pv = data->GetElementData(Z);
   if(!pv) { return xs; }
 
   G4double e1 = pv->Energy(0);
-  if(ekin < e1) { xs = (*pv)[0]*std::sqrt(e1/ekin); }
-  else if(ekin <= pv->GetMaxEnergy()) { xs = pv->Value(ekin); }
+  if(ekin < e1) { 
+    xs = (*pv)[0]*std::sqrt(e1/ekin); 
+  } else if(ekin <= pv->GetMaxEnergy()) { 
+    xs = pv->Value(ekin, logEkin, fIdxXSTable); 
+  }
 
   if(verboseLevel > 0){
     G4cout  << "ekin= " << ekin << ",  xs= " << xs << G4endl;
@@ -156,45 +165,60 @@ G4NeutronCaptureXS::GetIsoCrossSection(const G4DynamicParticle* aParticle,
 				       const G4Isotope*, const G4Element*,
 				       const G4Material*)
 {
-  return IsoCrossSection(aParticle->GetKineticEnergy(), Z, A); 
+  return IsoCrossSection(aParticle->GetKineticEnergy(), 
+                         aParticle->GetLogKineticEnergy(),
+                         Z, A); 
 }
 
-G4double G4NeutronCaptureXS::IsoCrossSection(G4double ekin, G4int Z, G4int A)
+G4double G4NeutronCaptureXS::IsoCrossSection(G4double eKin, G4double logE,
+                                             G4int ZZ, G4int A)
 {
   G4double xs = 0.0;
-  if(ekin > emax || Z < 1 || Z >= MAXZCAPTURE) { return xs; }
-  if(ekin < elimit) { ekin = elimit; }
+  if(eKin > emax) { return xs; }
 
-  G4PhysicsVector* pviso = data->GetComponentDataByID(Z, A - amin[Z]);
-  if(pviso) { 
-    G4double e1 = pviso->Energy(1);
-    if(ekin < e1) { xs = (*pviso)[1]*std::sqrt(e1/ekin); }
-    else if(ekin <= pviso->GetMaxEnergy()) { xs = pviso->Value(ekin); }
-    if(verboseLevel > 0) {
-      G4cout  << "G4NeutronCaptureXS::IsoXS: Ekin(MeV)= " << ekin/MeV 
-	      << "  xs(b)= " << xs/barn 
-	      << "  Z= " << Z << "  A= " << A << G4endl;
-    }
-    return xs;
+  G4int Z = std::min(ZZ, MAXZCAPTURE-1);
+  G4double ekin = eKin;
+  G4double logEkin = logE;
+  if(ekin < elimit) { 
+    ekin = elimit; 
+    logEkin = logElimit; 
   }
-  // isotope data are not available or applicable
-  G4PhysicsVector* pv = data->GetElementData(Z);
-  if(pv) { 
-    G4double e1 = pv->Energy(1);
-    if(ekin < e1) { xs = (*pv)[1]*std::sqrt(e1/ekin); }
-    else if(ekin <= pv->GetMaxEnergy()) { xs = pv->Value(ekin); }
-    if(verboseLevel > 0) {
-      G4cout  << "G4NeutronCaptureXS::IsoXS: Ekin(MeV)= " << ekin/MeV 
-	      << "  xs(b)= " << xs/barn 
-	      << "  Z= " << Z << "  A= " << A << G4endl;
+
+  if(amin[Z] > 0) {
+    if(A >= amin[Z] && A <= amax[Z]) {
+      G4PhysicsVector* pviso = data->GetComponentDataByID(Z, A - amin[Z]);
+      if(pviso) { 
+	G4double e1 = pviso->Energy(1);
+	if(ekin < e1) { 
+	  xs = (*pviso)[1]*std::sqrt(e1/ekin); 
+	} else if(ekin <= pviso->GetMaxEnergy()) { 
+	  xs = pviso->Value(ekin, logEkin, fIdxXSTable); 
+	}
+      }
     }
+  } else {
+    // isotope data are not available or applicable
+    G4PhysicsVector* pv = data->GetElementData(Z);
+    if(pv) { 
+      G4double e1 = pv->Energy(1);
+      if(ekin < e1) { 
+	xs = (*pv)[1]*std::sqrt(e1/ekin); 
+      } else if(ekin <= pv->GetMaxEnergy()) { 
+	xs = pv->Value(ekin, logEkin, fIdxXSTable); 
+      }
+    }
+  }
+  if(verboseLevel > 0) {
+    G4cout << "G4NeutronCaptureXS::IsoXS: Ekin(MeV)= " << ekin/MeV 
+           << "  xs(b)= " << xs/barn 
+	   << "  Z= " << Z << "  A= " << A << G4endl;
   }
   return xs;
 }
 
 const G4Isotope* 
 G4NeutronCaptureXS::SelectIsotope(const G4Element* anElement,
-				  G4double kinEnergy)
+				  G4double kinEnergy, G4double logE)
 {
   size_t nIso = anElement->GetNumberOfIsotopes();
   const G4Isotope* iso = anElement->GetIsotope(0);
@@ -222,7 +246,7 @@ G4NeutronCaptureXS::SelectIsotope(const G4Element* anElement,
       if(nn < nIso) { temp.resize(nIso, 0.); }
 
       for (j=0; j<nIso; ++j) {
-        sum += abundVector[j]*IsoCrossSection(kinEnergy, Z, 
+        sum += abundVector[j]*IsoCrossSection(kinEnergy, logE, Z, 
 					      anElement->GetIsotope(j)->GetN());
         temp[j] = sum;
       }
@@ -280,10 +304,7 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     const G4ElementTable* theElmTable = G4Element::GetElementTable();
     size_t numOfElm = G4Element::GetNumberOfElements();
     for(size_t i=0; i<numOfElm; ++i) {
-      G4int Z = ((*theElmTable)[i])->GetZasInt();
-      if(Z >= MAXZCAPTURE) { Z = MAXZCAPTURE-1; }
-      //G4cout << "Z= " << Z << G4endl;
-      // Initialisation 
+      G4int Z = std::min(((*theElmTable)[i])->GetZasInt(),MAXZCAPTURE-1);
       if(!data->GetElementData(Z)) { Initialise(Z, path); }
     }
   }

@@ -132,7 +132,8 @@ G4Sphere::G4Sphere( __void__& a )
   : G4CSGSolid(a), fRminTolerance(0.), fRmaxTolerance(0.),
     kAngTolerance(0.), kRadTolerance(0.), fEpsilon(0.),
     fRmin(0.), fRmax(0.), fSPhi(0.), fDPhi(0.), fSTheta(0.),
-    fDTheta(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
+    fDTheta(0.), sinCPhi(0.), cosCPhi(0.),
+    cosHDPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
     sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.), hDPhi(0.), cPhi(0.),
     ePhi(0.), sinSTheta(0.), cosSTheta(0.), sinETheta(0.), cosETheta(0.),
     tanSTheta(0.), tanSTheta2(0.), tanETheta(0.), tanETheta2(0.), eTheta(0.),
@@ -159,7 +160,7 @@ G4Sphere::G4Sphere(const G4Sphere& rhs)
     kRadTolerance(rhs.kRadTolerance), fEpsilon(rhs.fEpsilon),
     fRmin(rhs.fRmin), fRmax(rhs.fRmax), fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
     fSTheta(rhs.fSTheta), fDTheta(rhs.fDTheta),
-    sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi),
+    sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi), cosHDPhi(rhs.cosHDPhi),
     cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
     sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
     sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi),
@@ -196,6 +197,7 @@ G4Sphere& G4Sphere::operator = (const G4Sphere& rhs)
    fEpsilon = rhs.fEpsilon; fRmin = rhs.fRmin; fRmax = rhs.fRmax;
    fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi; fSTheta = rhs.fSTheta;
    fDTheta = rhs.fDTheta; sinCPhi = rhs.sinCPhi; cosCPhi = rhs.cosCPhi;
+   cosHDPhi = rhs.cosHDPhi;
    cosHDPhiOT = rhs.cosHDPhiOT; cosHDPhiIT = rhs.cosHDPhiIT;
    sinSPhi = rhs.sinSPhi; cosSPhi = rhs.cosSPhi;
    sinEPhi = rhs.sinEPhi; cosEPhi = rhs.cosEPhi;
@@ -1710,7 +1712,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p ) const
     // Psi=angle from central phi to point
     //
     cosPsi=(p.x()*cosCPhi+p.y()*sinCPhi)/rho;
-    if (cosPsi<std::cos(hDPhi))
+    if (cosPsi<cosHDPhi)
     {
       // Point lies outside phi range
       //

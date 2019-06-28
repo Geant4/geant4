@@ -167,10 +167,6 @@ G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
   // Create a G4ReactionProduct 
   G4ReactionProduct * MyRP = thePreFragment->GetReactionProduct();
 
-  //  if(kinEnergy < MeV) {
-  //G4cout << "G4PreCompoundEmission::Fragment emitted" << G4endl;
-  //G4cout << *thePreFragment << G4endl;
-  // }
   return MyRP;
 }
 

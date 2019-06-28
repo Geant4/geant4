@@ -162,6 +162,27 @@ GetElementCrossSection(const G4DynamicParticle* aPart, G4int ZZ,
   // G4cout<<"cofL2 + cofR2/3. = "<<result<<G4endl;
   // result -= 0.5*cofL*cofR*electron_mass_c2/energy;
 
+  G4double aa = 1.;
+  G4double bb = 1.7;
+  G4double gw = 2.141*GeV;
+  G4double dd = 5000.;
+  G4double mw = 80.385*GeV;
+  G4double mz = 91.1876*GeV;
+
+  G4double emass = electron_mass_c2;
+  G4double totS  = 2.*energy*emass + emass*emass;
+
+  if( energy > 50.*GeV )
+  {
+    result *= bb;
+    result /= 1.+ aa*totS/mz/mz;
+
+    if( pName == "anti_nu_e")
+    {
+      result *= 1. + dd*gw*gw*totS/( (totS-mw*mw)*(totS-mw*mw)+gw*gw*mw*mw );
+    }
+  }
+
   result *= fCofXsc; //*energy;
 
   result *= ZZ;  // incoherent sum over  all element electrons

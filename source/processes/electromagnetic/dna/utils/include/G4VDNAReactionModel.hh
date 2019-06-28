@@ -43,11 +43,9 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-#ifndef G4VReactionModel_hh
-#define G4VReactionModel_hh
+#pragma once
 
 #include "globals.hh"
-#include "AddClone_def.hh"
 
 class G4DNAMolecularReactionTable;
 class G4MolecularConfiguration;
@@ -59,42 +57,27 @@ class G4Track;
   * It defines how the reaction radius should be calculated and whether two molecules
   * can indeed react.
   */
-
 class G4VDNAReactionModel
 {
 public :
     G4VDNAReactionModel();
-    G4VDNAReactionModel(const G4VDNAReactionModel&);
+    G4VDNAReactionModel(const G4VDNAReactionModel&) = delete;
+    G4VDNAReactionModel& operator=(const G4VDNAReactionModel&) = delete;
     virtual ~G4VDNAReactionModel();
 
-    /** This macro is defined in AddClone_def **/
-    G4IT_TO_BE_CLONED(G4VDNAReactionModel)
-
-    virtual void Initialise(G4MolecularConfiguration*, const G4Track&) {;}
-    virtual void InitialiseToPrint(G4MolecularConfiguration*) = 0 ;
-    virtual G4double GetReactionRadius(G4MolecularConfiguration*,
-                                       G4MolecularConfiguration*) = 0;
-    virtual G4double GetReactionRadius(const int) = 0;
+    virtual void Initialise(const G4MolecularConfiguration*, const G4Track&) {;}
+    virtual void InitialiseToPrint(const G4MolecularConfiguration*) = 0 ;
+    virtual G4double GetReactionRadius(const G4MolecularConfiguration*,
+                                       const G4MolecularConfiguration*) = 0;
+    virtual G4double GetReactionRadius(int) = 0;
     virtual G4bool FindReaction(const G4Track&, const G4Track&,
-                                const G4double /*reactionRadius*/,
+                                G4double /*reactionRadius*/,
                                 G4double& /*separationDistance*/,  // To be calculated
-                                const G4bool /*hasReachedUserTimeLimit*/) = 0;
+                                G4bool /*hasReachedUserTimeLimit*/) = 0;
 
-    inline void SetReactionTable(const G4DNAMolecularReactionTable*);
-    inline const G4DNAMolecularReactionTable* GetReactionTable();
+    void SetReactionTable(const G4DNAMolecularReactionTable*);
+    const G4DNAMolecularReactionTable* GetReactionTable();
 
 protected :
-    G4VDNAReactionModel& operator=(const G4VDNAReactionModel&);
-    const G4DNAMolecularReactionTable* fReactionTable ;
+    const G4DNAMolecularReactionTable* fpReactionTable ;
 };
-
-inline void G4VDNAReactionModel::SetReactionTable(const G4DNAMolecularReactionTable* table)
-{
-    fReactionTable = table ;
-}
-
-inline const G4DNAMolecularReactionTable* G4VDNAReactionModel::GetReactionTable()
-{
-    return fReactionTable ;
-}
-#endif

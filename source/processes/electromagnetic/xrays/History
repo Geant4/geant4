@@ -16,9 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15 March 19: D. Sawkey (xrays-V10-04-06)
-- G4Cerenkov: increase protection against infinite loops
-    (backport of xrays-V10-05-00)
+03 April 19: V. Ivanchenko (xrays-V10-05-01)
+- G4Cerenkov, G4Scintillation, G4SynchrotronRadiation, G4VTransitionRadiation
+  added Register/DeRegister mechnism
+
+11 March 19: D. Sawkey (xrays-V10-05-00)
+- G4Cerenkov: increase protection against infinite loops (see xrays-V10-04-04)
 
 20 September 18: D. Sawkey (xrays-V10-04-05)
 - G4Cerenkov, G4Scintillation. Reset fNumPhotons to 0 correctly each step.

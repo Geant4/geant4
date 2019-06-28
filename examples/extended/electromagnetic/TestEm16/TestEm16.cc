@@ -56,9 +56,6 @@ int main(int argc,char** argv) {
   G4UIExecutive* ui = nullptr;
   if (argc == 1) ui = new G4UIExecutive(argc,argv);
 
-  //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-
   //construct the default run manager
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
@@ -85,19 +82,18 @@ int main(int argc,char** argv) {
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if (ui)  {
-   //interactive mode
-   visManager = new G4VisExecutive;
-   visManager->Initialize();
-   // define icons before SessionStart
-   if (ui->IsGUI()) UImanager->ApplyCommand("/control/execute gui.mac");
-   ui->SessionStart();
-   delete ui;
-  }
-  else  {
-   //batch mode
-   G4String command = "/control/execute ";
-   G4String fileName = argv[1];
-   UImanager->ApplyCommand(command+fileName);
+    //interactive mode
+    visManager = new G4VisExecutive;
+    visManager->Initialize();
+    // define icons before SessionStart
+    if (ui->IsGUI()) { UImanager->ApplyCommand("/control/execute gui.mac"); }
+    ui->SessionStart();
+    delete ui;
+  } else  {
+    //batch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
   }
 
   //job termination

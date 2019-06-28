@@ -90,7 +90,7 @@ public:
   void Initialise(const G4ParticleDefinition*, G4double cosThetaLim);
 
   inline void SetupParticle(const G4ParticleDefinition*);
-  void SetupKinematic(G4double kinEnergy ,G4double Z);
+  void SetupKinematic(G4double kinEnergy, G4int Z);
 
   G4double NuclearCrossSection(G4int, G4int);
   G4ThreeVector GetNewDirection();
@@ -118,8 +118,8 @@ private:
   G4double  GetTransitionRandom();
 
   G4ScreeningMottCrossSection & operator=
-  (const  G4ScreeningMottCrossSection &right) = delete;
-  G4ScreeningMottCrossSection(const  G4ScreeningMottCrossSection&) = delete;
+  (const  G4ScreeningMottCrossSection &right);
+  G4ScreeningMottCrossSection(const  G4ScreeningMottCrossSection&);
 
   G4NistManager*  fNistManager;
   G4Pow*          fG4pow;

@@ -107,8 +107,8 @@ public:
   };
   
 private:
-  typedef G4MolecularConfiguration* Species;
-  typedef std::map<Species, SpeciesInfo>  InnerSpeciesMap;
+  typedef const G4MolecularConfiguration Species;
+  typedef std::map<Species*, SpeciesInfo>  InnerSpeciesMap;
   typedef std::map<double, InnerSpeciesMap> SpeciesMap;
   SpeciesMap fSpeciesInfoPerTime;
 

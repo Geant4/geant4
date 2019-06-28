@@ -16,6 +16,51 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th June 2019  Gabriele Cosmo (examples-V10-05-06)
+- Updated reference outputs according to reference tag geant4-10-05-ref-06.
+- Includes tags: B03-V10-05-01, testem1-V10-05-00, exhadr02-V10-05-01,
+                 DICOM-V10-05-00, rdecay01-V10-05-00, rdecay02-V10-05-00.
+
+31st May 2019  Gabriele Cosmo (examples-V10-05-05)
+- Updated reference outputs according to reference tag geant4-10-05-ref-05.
+- Includes tags: doxygen-V10-05-00, DMX-V10-05-01, B03-V10-05-00,
+                 testem17-V10-05-00, exdna-V10-05-00, dnadamage1-V10-05-00,
+                 exampleES2-V10-05-00, LXe-V10-05-00, MPI-V10-05-00,
+                 G01-V10-05-03.
+
+30th April 2019  Gabriele Cosmo (examples-V10-05-04)
+- Updated reference outputs according to reference tag geant4-10-05-ref-04.
+- Includes tags: nanobeam-V10-05-00, testem16-V10-05-01, DICOM2-V10-05-00,
+                 fano2-V10-05-02, G01-V10-05-02, exampleP01-V10-05-00.
+
+29th March 2019  Gabriele Cosmo (examples-V10-05-03)
+- Updated reference outputs according to reference tag geant4-10-05-ref-03.
+- Includes tags: exampleB4-V10-05-00, monopole-V10-05-00, chem4-V10-05-02,
+                 chem5-V10-05-01, microdosimetry-V10-05-00, microprox-V10-05-00,
+                 fano-V10-05-03, G01-V10-05-00, exampleP03-V10-05-00.
+
+28th February 2019  Gabriele Cosmo (examples-V10-05-02)
+- Updated reference outputs according to reference tag geant4-10-05-ref-02.
+- Includes tags: airshower-V10-05-00, ChargeExchangeMC-V10-05-01,
+                 ccal-V10-05-00, eRosita-V10-05-00, gammaraytel-V10-05-00,
+                 hadrontherapy-V10-05-00, DMX-V10-05-00, XrayFluo-V10-05-00,
+                 human_phantom-V10-05-00, lAr_calorimeter-V10-05-00,
+                 radioprotection-V10-05-00, exbiasing-V10-05-00,
+                 exbasic-V10-05-00, testem8-V10-05-00, testem15-V10-05-00,
+                 exEventgenerator-V10-05-00, exExoticphysics-V10-05-00,
+                 fieldex-V10-05-00, exHadronic-V10-05-00, chem1-V10-05-00,
+                 chem2-V10-05-01, chem3-V10-05-01, chem4-V10-05-01,
+                 chem5-V10-05-00, microyz-V10-05-02, exparallel-V10-05-00,
+                 fano-V10-05-01, fano2-V10-05-01, exParameterisations-V10-05-00,
+                 exOptical-V10-05-00, exPersistency-V10-05-00,
+                 exRunAndEvent-V10-05-00.
+
+31st January 2019  Gabriele Cosmo (examples-V10-05-01)
+- Updated reference outputs according to reference tag geant4-10-05-ref-01.
+- Includes tags: doiPET-V10-05-00, testem5-V10-05-00, exhadr01-V10-05-00,
+                 exhadr02-V10-05-00, dnaphysics-V10-05-00, fano-V10-05-00,
+                 fano2-V10-05-00, exampleRE05-V10-05-00.
+
 6th December 2018  Gabriele Cosmo (examples-V10-05-00)
 - Updated reference outputs according to reference tag geant4-10-05-ref-00.
 - Includes tags: doxygen-V10-04-01, examples-advanced-cmk-V10-04-01,

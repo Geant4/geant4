@@ -34,6 +34,8 @@
 #include "G4VSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4PVParameterised.hh"
+#include "G4VPVParameterisation.hh"
 #include "G4ModelingParameters.hh"
 #include "G4VGraphicsScene.hh"
 #include "G4DrawVoxels.hh"
@@ -86,53 +88,35 @@ G4LogicalVolumeModel::G4LogicalVolumeModel
 G4LogicalVolumeModel::~G4LogicalVolumeModel () {}
 
 namespace {
-  // Keep a vector of solid-transform pairs to avoid duplication.
-  typedef std::pair<G4VSolid*,G4Transform3D> solidTransformPair;
-  std::vector<solidTransformPair> solidTransformVector;
-  void drawSolidsAndPoint
+  // Vis attributes
+  const G4Colour highlightSolidColour(1.0,0.8,0.8);
+  const G4double highlightSolidLineWidth(10./*pixels*/);
+  const G4Colour highlightPointColour(0.5,0.5,1.0);
+  const G4double highlightPointDiameter(20./*pixels*/);
+  // Keep a vector of solid-copy number pairs to avoid duplication.
+  typedef std::pair<G4VSolid*,G4int> solidCopyNoPair;
+  std::vector<solidCopyNoPair> solidCopyNoVector;
+  void DrawSolid
   (G4VGraphicsScene& sceneHandler,
-   const G4ThreeVector& point,
-   G4VSolid* sol1, const G4Transform3D& t1,
-   G4VSolid* sol2, const G4Transform3D& t2)
-  {
-    const G4Colour highlightSolidColour(1.0,0.8,0.8);
-    const G4double highlightSolidLineWidth(10./*pixels*/);
-    const G4Colour highlightPointColour(0.5,0.5,1.0);
-    const G4double highlightPointDiameter(20./*pixels*/);
-
-    // Draw first solid. Avoid duplication.
-    std::pair<G4VSolid*,G4Transform3D> pair1(sol1,t1);
-    auto iter1 = solidTransformVector.begin();
-    for ( ; iter1 != solidTransformVector.end(); ++iter1) {
-      if (iter1->first == pair1.first &&
-          iter1->second ==  pair1.second) break;
+   G4VSolid* sol, G4int copyNo, const G4Transform3D& t) {
+    // Avoid duplication.
+    std::pair<G4VSolid*,G4int> pair(sol,copyNo);
+    auto iter = solidCopyNoVector.begin();
+    for ( ; iter != solidCopyNoVector.end(); ++iter) {
+      if (*iter == pair) break;
     }
-    if (iter1 == solidTransformVector.end()) {
-      solidTransformVector.push_back(pair1);
+    if (iter == solidCopyNoVector.end()) {
+      solidCopyNoVector.push_back(pair);
       G4VisAttributes highlightSolidVisAtts(highlightSolidColour);
       highlightSolidVisAtts.SetLineWidth(highlightSolidLineWidth);
-      sceneHandler.PreAddSolid(t1,highlightSolidVisAtts);
-      sceneHandler.AddSolid(*sol1);
+      sceneHandler.PreAddSolid(t,highlightSolidVisAtts);
+      sceneHandler.AddSolid(*sol);
       sceneHandler.PostAddSolid();
     }
-
-    // Draw second solid. Avoid duplication.
-    std::pair<G4VSolid*,G4Transform3D> pair2(sol2,t2);
-    auto iter2 = solidTransformVector.begin();
-    for ( ; iter2 != solidTransformVector.end(); ++iter2) {
-      if (iter2->first == pair2.first &&
-          iter2->second ==  pair2.second) break;
-    }
-    if (iter2 == solidTransformVector.end()) {
-      solidTransformVector.push_back(pair2);
-      G4VisAttributes highlightSolidVisAtts(highlightSolidColour);
-      highlightSolidVisAtts.SetLineWidth(highlightSolidLineWidth);
-      sceneHandler.PreAddSolid(t2,highlightSolidVisAtts);
-      sceneHandler.AddSolid(*sol2);
-      sceneHandler.PostAddSolid();
-    }
-
-    // Draw points. Draw them all.
+  }
+  void DrawPoint
+  (G4VGraphicsScene& sceneHandler,
+   const G4ThreeVector& point) {
     G4VisAttributes highlightPointVisAtts(highlightPointColour);
     G4Circle overlapPoint;
     overlapPoint.SetVisAttributes(highlightPointVisAtts);
@@ -207,38 +191,95 @@ void G4LogicalVolumeModel::DescribeYourselfTo
       fOverlapsPrinted = true;
     }
 
-    // Draw overlaps. This algorithm is based on G4PVPlacement::CheckOverlaps.
-    solidTransformVector.clear();
+    // Draw overlaps
+    solidCopyNoVector.clear();
     for (G4int iDaughter = 0; iDaughter < nDaughters; ++iDaughter) {
       G4VPhysicalVolume* daughterPhys = motherLog->GetDaughter(iDaughter);
-      // Replicas and paramaterisations not presently processed
-      if (!dynamic_cast<G4PVPlacement*>(daughterPhys)) continue;
-      G4AffineTransform tDaughter(daughterPhys->GetRotation(),daughterPhys->GetTranslation());
-      G4VSolid* daughterSolid = daughterPhys->GetLogicalVolume()->GetSolid();
-      const G4int nTrials = 1000;
-      for (G4int i = 0; i < nTrials; ++i) {
-        G4ThreeVector p = daughterSolid->GetPointOnSurface();
-        // Transform to mother's coordinate system
-        G4ThreeVector pMother = tDaughter.TransformPoint(p);
-        // Check overlaps with the mother volume
-        if (motherSolid->Inside(pMother)==kOutside) {
-          // Draw mother and daughter and point
-          drawSolidsAndPoint
-          (sceneHandler,pMother,motherSolid,G4Transform3D(),daughterSolid,tDaughter);
+      G4PVPlacement* daughterPVPlace = dynamic_cast<G4PVPlacement*>(daughterPhys);
+      G4PVParameterised* daughterPVParam = dynamic_cast<G4PVParameterised*>(daughterPhys);
+      const G4int nPoints = 1000;
+
+      if (daughterPVPlace) {
+
+        // This algorithm is based on G4PVPlacement::CheckOverlaps.
+        G4AffineTransform tDaughter(daughterPhys->GetRotation(),daughterPhys->GetTranslation());
+        G4VSolid* daughterSolid = daughterPhys->GetLogicalVolume()->GetSolid();
+        for (G4int i = 0; i < nPoints; ++i) {
+          G4ThreeVector point = daughterSolid->GetPointOnSurface();
+          // Transform to mother's coordinate system
+          G4ThreeVector motherPoint = tDaughter.TransformPoint(point);
+          // Check overlaps with the mother volume
+          if (motherSolid->Inside(motherPoint)==kOutside) {
+            // Draw mother and daughter and point
+            DrawSolid(sceneHandler,motherSolid,0,G4Transform3D());
+            DrawSolid(sceneHandler,daughterSolid,daughterPhys->GetCopyNo(),tDaughter);
+            DrawPoint(sceneHandler,motherPoint);
+          }
+          // Check other daughters
+          for (G4int iSister = 0; iSister < nDaughters; ++iSister) {
+            if (iSister == iDaughter) continue;
+            G4VPhysicalVolume* sisterPhys = motherLog->GetDaughter(iSister);
+            G4AffineTransform tSister(sisterPhys->GetRotation(),sisterPhys->GetTranslation());
+            // Transform to sister's coordinate system
+            G4ThreeVector sisterPoint = tSister.InverseTransformPoint(motherPoint);
+            G4LogicalVolume* sisterLog = sisterPhys->GetLogicalVolume();
+            G4VSolid* sisterSolid = sisterLog->GetSolid();
+            if (sisterSolid->Inside(sisterPoint)==kInside) {
+              // Draw daughter and sister and point
+              DrawSolid(sceneHandler,daughterSolid,daughterPhys->GetCopyNo(),tDaughter);
+              DrawSolid(sceneHandler,sisterSolid,sisterPhys->GetCopyNo(),tSister);
+              DrawPoint(sceneHandler,motherPoint);
+            }
+          }
         }
-        // Check other daughters
-        for (G4int iSister = 0; iSister < nDaughters; ++iSister) {
-          if (iSister == iDaughter) continue;
-          G4VPhysicalVolume* sisterPhys = motherLog->GetDaughter(iSister);
-          G4AffineTransform tSister(sisterPhys->GetRotation(),sisterPhys->GetTranslation());
-          // Transform to sister's coordinate system
-          G4ThreeVector pSister = tSister.InverseTransformPoint(pMother);
-          G4LogicalVolume* sisterLog = sisterPhys->GetLogicalVolume();
-          G4VSolid* sisterSolid = sisterLog->GetSolid();
-          if (sisterSolid->Inside(pSister)==kInside) {
-            // Draw daughter and sister and point
-            drawSolidsAndPoint
-            (sceneHandler,pMother,daughterSolid,tDaughter,sisterSolid,tSister);
+
+      } else if (daughterPVParam) {
+
+        // This algorithm is based on G4PVParameterised::CheckOverlaps
+        const G4int multiplicity = daughterPVParam->GetMultiplicity();
+        auto* param = daughterPVParam->GetParameterisation();
+        // Cache points for later checking against other parameterisations
+        std::vector<G4ThreeVector> motherPoints;
+        for (G4int iP = 0; iP < multiplicity; iP++) {
+          G4VSolid* daughterSolid = param->ComputeSolid(iP, daughterPhys);
+          daughterSolid->ComputeDimensions(param, iP, daughterPhys);
+          param->ComputeTransformation(iP, daughterPhys);
+          G4AffineTransform tDaughter(daughterPVParam->GetRotation(),daughterPVParam->GetTranslation());
+          for (G4int i = 0; i < nPoints; ++i) {
+            G4ThreeVector point = daughterSolid->GetPointOnSurface();
+            // Transform to mother's coordinate system
+            G4ThreeVector motherPoint = tDaughter.TransformPoint(point);
+            // Check overlaps with the mother volume
+            if (motherSolid->Inside(motherPoint)==kOutside) {
+              // Draw mother and daughter and point
+              DrawSolid(sceneHandler,motherSolid,0,G4Transform3D());
+              DrawSolid(sceneHandler,daughterSolid,iP,tDaughter);
+              DrawPoint(sceneHandler,motherPoint);
+            }
+            motherPoints.push_back(motherPoint);
+          }
+          // Check sister parameterisations
+          for (G4int iPP = iP + 1; iPP < multiplicity; iPP++) {
+            G4VSolid* sisterSolid = param->ComputeSolid(iPP, daughterPhys);
+            sisterSolid->ComputeDimensions(param, iPP, daughterPhys);
+            param->ComputeTransformation(iPP, daughterPhys);
+            G4AffineTransform tSister
+            (daughterPVParam->GetRotation(),daughterPVParam->GetTranslation());
+            for (const auto& motherPoint: motherPoints) {
+              // Transform each point into daughter's frame
+              G4ThreeVector sisterPoint = tSister.InverseTransformPoint(motherPoint);
+              if (sisterSolid->Inside(sisterPoint)==kInside) {
+                // Draw sister
+                DrawSolid(sceneHandler,sisterSolid,iPP,tSister);
+                // Recompute daughter parameterisation before drawing
+                daughterSolid->ComputeDimensions(param, iP, daughterPhys);
+                param->ComputeTransformation(iP, daughterPhys);
+                tDaughter = G4AffineTransform
+                (daughterPVParam->GetRotation(),daughterPVParam->GetTranslation());
+                DrawSolid(sceneHandler,daughterSolid,iP,tDaughter);
+                DrawPoint(sceneHandler,motherPoint);
+              }
+            }
           }
         }
       }

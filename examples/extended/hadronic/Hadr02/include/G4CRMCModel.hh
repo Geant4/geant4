@@ -82,6 +82,22 @@ class G4CRMCModel : public G4HadronicInteraction {
     virtual ~G4CRMCModel ();
     G4HadFinalState* ApplyYourself( const G4HadProjectile &theProjectile, G4Nucleus &theNucleus );
     G4ParticleDefinition* GetParticleDefinition( long particle_id );
+
+    // The following virtual method can be used to override the default check levels
+    // (relative energy violation value of 2% and absolute energy violation value of 1 GeV)
+    // used to check (by the hadronic process, in the method G4HadronicProcess::CheckResult)
+    // whether the (inelastic) final state is acceptable or not in terms of energy
+    // conservation. If it is not, then the final-state is rejected, a "JustWarning"
+    // exception is thrown, and another attempt is done to find an acceptable final-state.
+    // Only in the case of 100 consecutive failed attempts, the program crashes.
+    // In the case of EPOS-LHC, there are some cases of final-states that are rejected
+    // because they do not pass the default energy conservation. The number of these
+    // cases is relatively low and harmless (because these final-states are rejected),
+    // therefore we suggest to keep using the default. If you want instead to keep
+    // more final-states, i.e. be more tolerant on the energy violations, then uncomment
+    // the following line and its implementation (in the source file).
+    //virtual const std::pair< G4double, G4double > GetFatalEnergyCheckLevels() const;
+
   private: 
     G4bool operator==( G4CRMCModel& right );
     G4bool operator!=( G4CRMCModel& right );

@@ -16,12 +16,43 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 20, 2019 D. Sorokin                          - field-V10-05-08
+-----------------------------------------
+- New version of G4InterpolationDriver with multiple steppers for each substep.
 
-April 8, 2019 H.Burkhardt                        - field-V10-04-18
+June 12, 2019 D. Sorokin & J. Apostolakis         - field-V10-05-07
+-----------------------------------------
+- Revert to use G4IntegrationDriver as default in G4ChordFinder 
+    ( c-tor for magnetic field. ).
+  Change to use concrete type of Stepper as template parameter
+
+June 10, 2019 Dmitry Sorokin                      - field-V10-05-06
+-------------------------
+- Remove division in G4DormandPrince745::Interpolate4thOrder.
+
+June 7, 2019 Dmitry Sorokin                      - field-V10-05-05
+-------------------------
+- Switch to original chord finding algorithm in G4InterpolationDriver
+- Reset step estimate in G4MagInt_Driver only at the beginning of a track
+- Change G4VERBOSE to G4FIELD_DEBUG in G4InterpolationDriver to speed-up
+
+June 4, 2019 Dmitry Sorokin                      - field-V10-05-04
+-------------------------
+- Use FSAL property of G4DormandPrince745 in G4InterpolationDriver.
+
+June 3, 2019 Dmitry Sorokin                      - field-V10-05-03
+-------------------------
+- Fix memory churn in G4InterpolationDriver.
+
+May 20, 2019 Dmitry Sorokin                      - field-V10-05-02
+-------------------------
+- Make interpolation driver default for immediate testing.
+
+April 8, 2019 H.Burkhardt                        - field-V10-05-01
 -------------------------
 - Correcting transformation to local system in G4QuadrupoleMagField.cc
 
-March 20, 2019 G.Cosmo
+March 20, 2019 G.Cosmo                           - field-V10-05-00
 ----------------------
 - Corrected 'RegularStepperName' in G4ChordFinder to refer to the actual
   default stepper G4DormandPrince745 rather than G4NystromRK4...

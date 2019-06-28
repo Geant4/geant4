@@ -37,7 +37,6 @@
 
 #include "G4UnitsTable.hh"
 #include <G4MolecularConfiguration.hh>
-#include <G4Molecule.hh>
 #include <G4MoleculeCounter.hh>
 #include "G4Event.hh"
 #include <G4SystemOfUnits.hh>
@@ -148,8 +147,7 @@ void ScoreSpecies::EndOfEvent(G4HCofThisEvent*)
         G4Exception("","N<0",FatalException,"");
       }
 
-      SpeciesInfo& molInfo =
-        fSpeciesInfoPerTime[time_mol][molecule];
+      SpeciesInfo& molInfo = fSpeciesInfoPerTime[time_mol][molecule];
       molInfo.fNumber += n_mol;
       double gValue = (n_mol/(fEdep/eV)) * 100.;
       molInfo.fG += gValue;

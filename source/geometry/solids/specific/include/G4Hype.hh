@@ -26,7 +26,7 @@
 //
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 //
-// 
+//
 // --------------------------------------------------------------------
 // GEANT 4 class header file
 //
@@ -41,13 +41,13 @@
 //   the z-axis. The solid has a specified half-length along the z axis,
 //   about which it is centered, and a given minimum and maximum radius.
 //   A minimum radius of 0 signifies a filled Hype (with hyperbolical
-//   inner surface). To have a filled Hype the user must specify 
+//   inner surface). To have a filled Hype the user must specify
 //   inner radius = 0 AND inner stereo angle = 0.
-// 
+//
 //   The inner and outer hyperbolical surfaces can have different
 //   stereo angles. A stereo angle of 0 gives a cylindrical surface.
 
-// Authors: 
+// Authors:
 //      Ernesto Lamanna (Ernesto.Lamanna@roma1.infn.it) &
 //      Francesco Safai Tehrani (Francesco.SafaiTehrani@roma1.infn.it)
 //      Rome, INFN & University of Rome "La Sapienza",  9 June 1998.
@@ -55,6 +55,8 @@
 // --------------------------------------------------------------------
 #ifndef G4HYPE_HH
 #define G4HYPE_HH
+
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UHYPE 1
@@ -84,7 +86,7 @@ class G4Hype : public G4VSolid
                G4double  newHalfLenZ);
 
   virtual ~G4Hype();
-    
+
   void ComputeDimensions(G4VPVParameterisation* p,
                          const G4int n,
                          const G4VPhysicalVolume* pRep);
@@ -124,7 +126,7 @@ class G4Hype : public G4VSolid
   G4VSolid* Clone() const;
 
   std::ostream& StreamInfo(std::ostream& os) const;
-  
+
   G4double GetCubicVolume();
   G4double GetSurfaceArea();
 
@@ -143,11 +145,11 @@ class G4Hype : public G4VSolid
     // persistifiable objects.
 
   G4Hype(const G4Hype& rhs);
-  G4Hype& operator=(const G4Hype& rhs); 
+  G4Hype& operator=(const G4Hype& rhs);
     // Copy constructor and assignment operator.
 
  protected:  // without description
-  
+
   inline G4bool InnerSurfaceExists() const;
     // whether we have an inner surface or not
 
@@ -155,13 +157,13 @@ class G4Hype : public G4VSolid
                                      G4double r0, G4double tanPhi );
   static G4double ApproxDistInside( G4double pr, G4double pz,
                                     G4double r0, G4double tan2Phi );
-    // approximate isotropic distance to hyperbolic surface 
+    // approximate isotropic distance to hyperbolic surface
 
   inline G4double HypeInnerRadius2(G4double zVal) const;
   inline G4double HypeOuterRadius2(G4double zVal) const;
     // values of hype radius at a given Z
 
-  static G4int IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v, 
+  static G4int IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v,
                               G4double r2, G4double tan2Phi, G4double s[2] );
     // intersection with hyperbolic surface
 
@@ -185,7 +187,7 @@ class G4Hype : public G4VSolid
   G4double endOuterRadius2; // squared endcap Outer Radius
   G4double endInnerRadius; // endcap Inner Radius
   G4double endOuterRadius; // endcap Outer Radius
-  
+
   // Used by distanceToOut
 
   enum ESide {outerFace,innerFace,leftCap, rightCap};
@@ -195,7 +197,7 @@ class G4Hype : public G4VSolid
   G4double asinh(G4double arg);
 
  private:
-  
+
   G4double fCubicVolume;
   G4double fSurfaceArea;
 

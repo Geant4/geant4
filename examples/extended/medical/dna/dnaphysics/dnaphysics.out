@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -8,7 +8,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
-##### Create analysis manager   0x1d27710
+##### Create analysis manager   0xd47fb0
 Using Root analysis manager
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -685,12 +685,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ... open Root analysis file : dna.root - done
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=5.360000s Real=5.396066s Sys=0.030000s
+  User=5.180000s Real=5.255519s Sys=0.030000s
 ... write Root file : dna.root - done
 ... close Root file : dna.root - done
 Graphics systems deleted.

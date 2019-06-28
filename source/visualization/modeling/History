@@ -19,6 +19,113 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+13 June 2019  John Allison  (modeling-V10-05-04)
+- Part of vis-V10-05-20.
+- G4ModelingParameters:
+  o Add cloud to enum options and updated operators != and <<:
+  o Similarly added to VisAttributesSignifier
+- G4PhysicalVolumeModel.cc:
+  o Handle new VisAttributesSignifiers.
+
+10 June 2019  John Allison  (modeling-V10-05-03)
+- Part of vis-V10-05-19.
+- G4ArrowModel: Further use of const and introduce further protection.
+- G4VFieldModel.cc: Further use of const.
+
+29 May 2019  John Allison  (modeling-V10-05-02)
+- Improve field modelling:
+  o G4VFieldModel: Improve so even the smallest non-zero sample is visible:
+    . Values < 10% max are drawn as lines of width 2.
+    . Values < 1% max have their length fixed at 1% max.
+    . Reverse colour code. Now, where f = fieldStrength/maxStrength:
+        0 -> f/2 -> f is coded as red -> green -> blue.
+      For a uniform field this means arrows are now blue instead of red.
+  o G4ArrowModel:
+    . Place checks on dimensions to prevent G4Exceptions in used solids.
+    . Model arrow head as G4Tet.
+- G4PhysicalVolumeModel.cc:
+  o Improve printing from operator<< for nodeID path.
+
+04 April 2019  John Allison  (modeling-V10-05-01)
+- Co-works visman-V10-05-04.
+- Final (for now) corrections to /vis/viewer/set/sectionPlane.
+  Still some strange behaviour in small fraction of cases. See
+  comments in G4PhysicalVolumeModel::DescribeSolid around line 748.
+
+24 March 2019  John Allison  (modeling-V10-05-00)
+- Fix bug in /vis/viewer/set/sectionPlane.
+  Involves using G4DisplacedSolid instead of plain G4VSolid.
+
+18 March 2019  Gabriele Cosmo
+- Included in vis-V10-05-15
+- Corrected few typos comments.
+
+24 February 2019  John Allison
+- Included in vis-V10-05-13
+- Add constructor to G4PhysicalVolumesSearchScene::Findings from
+  G4PhysicalVolumeModel::TouchableProperties.
+- Fix bug in overlap drawing of parameterised volumes.
+
+19 February 2019  John Allison
+- Included in vis-V10-05-12
+- Introduced G4BoundingExtentScene. This allows one to accumulate extents
+  using the newly introduced G4VisExtent::Transform and is a better way
+  of determining the overall extent of a scene (or of any set of extents)
+  than by the bounding sphere approach.
+- G4VFieldModel, G4ElectricFieldModel, G4MagneticFieldModel:
+  o Introduced volume for field.
+- G4VModel: Introduced GetTransformedExtent. This calculates the extent as
+  it appears to the user, based on the local extent and the transformation.
+- G4PhysicalVolumeModel:
+  o Use G4BoundingExtentScene instead of G4BoundingSphereScene.
+  o Fix bug whereby the local extent was incorrectly calculated - in fact
+    it was the transformed extent. Corresponding corrections to all cases
+    where the extent is needed, for example, in defining the view
+    parameters, have been made in this commit.
+
+13 February 2019  John Allison
+- Included in vis-V10-05-11
+- Implement /vis/set/extentForField - see visualisation/History.
+
+08 February 2019  John Allison
+- Included in vis-V10-05-09
+- Fix Coverity warnings.
+
+31 January 2019  Michael Kelsey
+- Included in vis-V01-05-08
+
+- G4VFieldModel.hh/cc: NEW intermediate base class for magnetic, electric
+  and gravitational fields.  Contains all of DescribeYourselfTo() moved from
+  G4MagneticFieldModel, plus a pure virtual function (GetFieldAtLocation) to
+  fetch the field vector (differently by each subclass).  Constructor now
+  takes two strings to let subclasses customize diagnostics and arrow labels.
+
+- G4ElectricFieldModel:  NEW concrete class implementing GetFieldAtLocation()
+  for electric field access.
+
+- G4MagneticFieldModel:  Move all of DescribeYourselfTo() to new base class
+  G4VFieldModel.  Implement old contents of "if (field) { ..." block as new
+  GetFieldAtLocation() function.
+
+29 January 2019  John Allison
+- Included in vis-V10-05-06
+- G4PhysicalVolumeModel.cc:
+  o If the top volume is parameterised or a replica describe only one
+    of them, namely the one specified by the copy number.
+
+26 January 2019  John Allison
+- Included in vis-V10-05-06
+- Fix calculation of vis extent for parameterisations. This involved
+  extending G4PhysicalVolumeModel::TouchableProperties to include copy
+  number and initialising the copy number in the constructor. Then in
+  G4PhysicalVolumeModel::CalculateExtent solid->ComputeDimensions is
+  invoked if it is a parameterised volume.
+- Some minor tidying.
+
+02 January 2019  John Allison
+- Included in vis-V10-05-00.
+- G4PhysicalVolumeModel.cc: Add volume count (but comment out printing).
+
 14 November 2018  John Allison  (modeling-V10-04-18)
 - G4PhysicalVolumeModel.cc: Fix Coverity warning.
 
@@ -964,7 +1071,7 @@ History file for visualization/modeling
 26th January 2006  John Allison (modeling-V08-00-01)
 - G4PhysicalVolumeModel: Added capability of maintaining path of the
   current drawn (non-culled) volume in terms of drawn (non-culled)
-  ancesters.  See G4PhysicalVolumeModel.hh for detailed description.
+  ancestors.  See G4PhysicalVolumeModel.hh for detailed description.
 - Removed some unnecessary data members and other small tidying.
 
 11th January 2006  John Allison (modeling-V08-00-00)

@@ -11,10 +11,10 @@ This directory contains a set of Geant4-DNA examples.
    The dnaphysics example shows how to simulate track structures in liquid water
 using the Geant4-DNA physics processes and models.
 
-   - \link ExampleIcsd icsd \endlink 
+   - \link Exampleicsd icsd \endlink
        This example shows how to use cross section models for DNA materials
 
-   - \link ExampleMfp mfp \endlink 
+   - \link Examplemfp mfp \endlink
        This example shows how to simulate mean free path in liquid water
 
    - \link ExampleMicrodosimetry  microdosimetry \endlink   

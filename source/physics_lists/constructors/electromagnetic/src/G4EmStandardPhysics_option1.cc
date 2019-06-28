@@ -112,7 +112,7 @@ G4EmStandardPhysics_option1::G4EmStandardPhysics_option1(G4int ver,
   param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetApplyCuts(true);
-  //param->SetGeneralProcessActive(true);
+  param->SetGeneralProcessActive(true);
   param->SetMscRangeFactor(0.2);
   param->SetMscStepLimitType(fMinimal);
   SetPhysicsType(bElectromagnetic);

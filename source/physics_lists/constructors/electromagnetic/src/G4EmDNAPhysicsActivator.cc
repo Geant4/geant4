@@ -97,6 +97,7 @@ G4EmDNAPhysicsActivator::G4EmDNAPhysicsActivator(G4int ver)
   : G4VPhysicsConstructor("G4EmDNAPhysicsActivator"), verbose(ver)
 {
   theParameters = G4EmParameters::Instance();
+  theParameters->ActivateDNA();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -69,12 +69,11 @@ public:  // with description
   
   inline G4ReferenceCountedHandle( const G4ReferenceCountedHandle<X>& right );
     // Copy constructor.
-  
+
   inline ~G4ReferenceCountedHandle();
     // Destructor.
   
-  inline G4ReferenceCountedHandle<X>&
-    operator =( const G4ReferenceCountedHandle<X>& right );
+  inline G4ReferenceCountedHandle<X>& operator =( const G4ReferenceCountedHandle<X>& right );
     // Assignment operator by reference.
   
   inline G4ReferenceCountedHandle<X>& operator =( X* objPtr );

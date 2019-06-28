@@ -160,7 +160,8 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   SetupParticle(dp->GetDefinition());
 
   // Choose nucleus
-  currentElement = SelectRandomAtom(couple, particle, kinEnergy);
+  currentElement = SelectTargetAtom(couple, particle, kinEnergy,
+                                    dp->GetLogKineticEnergy());
 
   G4int iz = currentElement->GetZasInt();
   G4int ia = SelectIsotopeNumber(currentElement);

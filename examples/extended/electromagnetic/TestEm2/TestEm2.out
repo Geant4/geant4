@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -537,37 +537,37 @@ N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.950000s Real=2.969098s Sys=0.000000s
+  User=2.710000s Real=2.712436s Sys=0.000000s
 
  ===== SUMMARY ===== 
 
  Total number of events:        100
- Mean number of charged steps:  7239.71
- Mean number of neutral steps:  4099.85
+ Mean number of charged steps:  7264.02
+ Mean number of neutral steps:  4106.63
 
- energy deposit :   94.95 % E0 +-    0.94 % E0
- charged traklen:  484.18 radl +-    5.04 radl
- neutral traklen: 4205.51 radl +-  126.08 radl
+ energy deposit :   95.15 % E0 +-    0.92 % E0
+ charged traklen:  485.37 radl +-    4.67 radl
+ neutral traklen: 4222.75 radl +-  101.51 radl
 
- 90.00 % confinement: radius = 2.93 radl  (2.62 cm )
+ 90.00 % confinement: radius = 2.90 radl  (2.59 cm )
 
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.949472  delEdep= 0.000471952 nrms= 0.575551
-Erms: 0.00939419  delErms= 0.00119419 nrms= 1.45633
-<<<<END>>>>   IS ACCEPTED
+Edep: 0.951528  delEdep= 0.00252802 nrms= 3.08295
+Erms: 0.00924807  delErms= 0.00104807 nrms= 1.27813
+<<<<END>>>>   IS NOT ACCEPTED
 
 
 ------- MixMaxRng engine status -------
  Current state vector is:
 mixmax state, file version 1.0
-N=17 V[N]={2190176847188726962, 284808319687426819, 1522983791198480650, 859341387997770223, 413306040217046219, 1404079503871567763, 1584008655829615797, 399855323794275113, 382306046830638793, 259428528721343839, 1261913582880192934, 1042325389412414942, 1511936439208651595, 177427239016089672, 456387940659368154, 2039721287502751714, 1363779749589451903} counter= 13sumtot= 1012885009109955435
+N=17 V[N]={1456376683079201629, 517985824475863921, 511948926957980794, 1353655700210543279, 1408698074564240176, 1795590274897364214, 2252012166181592618, 1176235539626734720, 1917084855057524137, 39333108570579076, 990012765610199292, 1774542995346816524, 1197304772488297596, 1674228714561384217, 1520030277918481505, 2243498411373012368, 526434336315375207} counter= 14sumtot= 1602386344311945714
 ---------------------------------------
 ... write Root file : testem2.root - done
 ... close Root file : testem2.root - done
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.059 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.062 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

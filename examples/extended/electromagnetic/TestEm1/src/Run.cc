@@ -37,19 +37,18 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4EmCalculator.hh"
-#include "G4ProductionCutsTable.hh"
 
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Run::Run(DetectorConstruction* det)
+Run::Run(const DetectorConstruction* det)
 : G4Run(),
   fDetector(det), 
   fParticle(0), fEkin(0.),
   fNbOfTraks0(0), fNbOfTraks1(0),
   fNbOfSteps0(0), fNbOfSteps1(0),
-  fEdep(0),
+  fEdep(0.), fNIEL(0.),
   fTrueRange(0.), fTrueRange2(0.),
   fProjRange(0.), fProjRange2(0.),  
   fTransvDev(0.), fTransvDev2(0.)
@@ -62,14 +61,14 @@ Run::~Run()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
+void Run::SetPrimary(const G4ParticleDefinition* particle, G4double energy)
 { 
   fParticle = particle;
   fEkin = energy;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::CountProcesses(G4String procName) 
+void Run::CountProcesses(const G4String& procName) 
 {
   std::map<G4String,G4int>::iterator it = fProcCounter.find(procName);
   if ( it == fProcCounter.end()) {
@@ -97,6 +96,7 @@ void Run::Merge(const G4Run* run)
   fNbOfSteps0 += localRun->fNbOfSteps0;
   fNbOfSteps1 += localRun->fNbOfSteps1;   
   fEdep       += localRun->fEdep;  
+  fNIEL       += localRun->fNIEL;  
   fTrueRange  += localRun->fTrueRange;
   fTrueRange2 += localRun->fTrueRange2;
   fProjRange  += localRun->fProjRange;
@@ -132,7 +132,7 @@ void Run::EndOfRun()
   //run condition
   //        
   G4String partName    = fParticle->GetParticleName();    
-  G4Material* material = fDetector->GetMaterial();
+  const G4Material* material = fDetector->GetMaterial();
   G4double density     = material->GetDensity();
      
   G4cout << "\n ======================== run summary ======================\n";
@@ -144,16 +144,18 @@ void Run::EndOfRun()
 
   if (numberOfEvent == 0) { G4cout.precision(dfprec);   return;}   
 
-  G4double dNbOfEvents = double(numberOfEvent);  
-  G4cout << "\n total energy deposit: " 
+  G4double dNbOfEvents = (G4double)numberOfEvent;  
+  G4cout << "\n Total energy deposit:   " 
          << G4BestUnit(fEdep/dNbOfEvents, "Energy") << G4endl;
+  G4cout << " NIEL energy calculated: " 
+         << G4BestUnit(fNIEL/dNbOfEvents, "Energy") << G4endl;
                
   //nb of tracks and steps per event
   //           
-  G4cout << "\n nb tracks/event"
+  G4cout << "\n Nb tracks/event"
          << "   neutral: " << std::setw(wid) << fNbOfTraks0/dNbOfEvents
          << "   charged: " << std::setw(wid) << fNbOfTraks1/dNbOfEvents
-         << "\n nb  steps/event"
+         << "\n Nb  steps/event"
          << "   neutral: " << std::setw(wid) << fNbOfSteps0/dNbOfEvents
          << "   charged: " << std::setw(wid) << fNbOfSteps1/dNbOfEvents
          << G4endl;

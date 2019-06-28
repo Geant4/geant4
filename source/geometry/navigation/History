@@ -16,11 +16,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-April 1, 2019 - G.Cosmo (geomnav-V10-04-13)
+June 19, 2019 - G.Cosmo (geomnav-V10-05-04)
+-----------------------
+- Fixed compilation warning for unused variable when G4VERBOSE is not set.
+
+June 18, 2019 - J.Apostolakis (geomnav-V10-05-03)
+-----------------------------
+- Revised (recent) code for Exceptions to avoid creating ostringstream
+  when it is not needed / used.
+  Seen only in 'stuck tracks' that are trying to recover from more than 
+  10 zero steps in a row (fixes problem seen in one benchmark). 
+
+June 5, 2019 - J.Apostolakis (geomnav-V10-05-02)
+----------------------------
+- Improved information in Exceptions for particles stuck due to multiple
+  zero steps in G4Navigator.
+
+April 1, 2019 - G.Cosmo (geomnav-V10-05-01)
 ------------------------
 - Protected report for looping particles under verbosity flag.
 
-March 11, 2019 - G.Cosmo
+March 11, 2019 - G.Cosmo (geomnav-V10-05-00)
 ------------------------
 - Fixed typos in printouts in G4NavigationLogger.
 

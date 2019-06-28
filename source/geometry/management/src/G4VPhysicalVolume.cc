@@ -43,7 +43,9 @@ G4PVManager G4VPhysicalVolume::subInstanceManager;
 // in the class G4PVData.
 //
 #define G4MT_rot ((subInstanceManager.offset[instanceID]).frot)
-#define G4MT_trans ((subInstanceManager.offset[instanceID]).ftrans)
+#define G4MT_tx ((subInstanceManager.offset[instanceID]).tx)
+#define G4MT_ty ((subInstanceManager.offset[instanceID]).ty)
+#define G4MT_tz ((subInstanceManager.offset[instanceID]).tz)
 #define G4MT_pvdata (subInstanceManager.offset[instanceID])
 
 // Constructor: init parameters and register in Store
@@ -64,7 +66,9 @@ G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
   // Initialize 'Shadow' data structure - for use by object persistency
   pvdata = new G4PVData();
   pvdata->frot = pRot;
-  pvdata->ftrans = G4ThreeVector(tlate);
+  pvdata->tx = tlate.x();
+  pvdata->ty = tlate.y();
+  pvdata->tz = tlate.z();
 
   G4PhysicalVolumeStore::Register(this);
 }
@@ -135,14 +139,14 @@ G4int G4VPhysicalVolume::GetMultiplicity() const
   return 1;
 }
 
-const G4ThreeVector& G4VPhysicalVolume::GetTranslation() const
+const G4ThreeVector G4VPhysicalVolume::GetTranslation() const
 {
-  return G4MT_trans;
+  return G4ThreeVector(G4MT_tx, G4MT_ty, G4MT_tz);
 }
 
 void G4VPhysicalVolume::SetTranslation(const G4ThreeVector &vec)
 {
-  G4MT_trans=vec;
+  G4MT_tx=vec.x(); G4MT_ty=vec.y(); G4MT_tz=vec.z();
 }
 
 const G4RotationMatrix* G4VPhysicalVolume::GetRotation() const
@@ -190,7 +194,7 @@ G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
 
 G4ThreeVector  G4VPhysicalVolume::GetObjectTranslation() const
 {
-  return G4MT_trans;
+  return G4ThreeVector(G4MT_tx, G4MT_ty, G4MT_tz);
 }
 
 const G4RotationMatrix* G4VPhysicalVolume::GetFrameRotation() const
@@ -200,7 +204,7 @@ const G4RotationMatrix* G4VPhysicalVolume::GetFrameRotation() const
 
 G4ThreeVector  G4VPhysicalVolume::GetFrameTranslation() const
 {
-  return -G4MT_trans;
+  return -G4ThreeVector(G4MT_tx, G4MT_ty, G4MT_tz);
 }
 
 // Only implemented for placed and parameterised volumes.

@@ -19,7 +19,11 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 include_directories(${ZLIB_INCLUDE_DIRS})
 
 # List internal includes needed.
-include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
+include_directories(${PROJECT_SOURCE_DIR}/source/global/management/include)
+# WORKAROUND: Now have a generated header, so must add include directory,
+# but not that we lose one directory level because the management subcategory
+# is merged into the main global one!
+include_directories(${PROJECT_BINARY_DIR}/source/global/include)
 
 # Must have GL headers available
 include_directories(${OPENGL_INCLUDE_DIR})

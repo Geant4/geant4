@@ -70,6 +70,8 @@
 #ifndef G4Para_HH
 #define G4Para_HH
 
+#include "G4GeomTypes.hh"
+
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UPARA 1
 #endif

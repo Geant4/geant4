@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 29th, 2019 V. Ivanchenko  - B03-V10-05-01
+- B03PhysicsList : use G4NeutronInelasticXS cross section
+
+May 10th, 2019 V. Ivanchenko  - B03-V10-05-00
+- B03PhysicsList : explicitly defined hadronic x-sections
+
 Aug 9th, 2018 A. Ribon  - B03-V10-04-02
 - B03PhysicsList : replaced the explicit high-energy limit of hadronic
   physics with the one from G4HadronicParameters .

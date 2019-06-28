@@ -43,6 +43,10 @@ G4ModelingParameters::GetDrawingStyle () const {
   return fDrawingStyle;
 }
 
+inline G4int G4ModelingParameters::GetNumberOfCloudPoints () const {
+  return fNumberOfCloudPoints;
+}
+
 inline G4bool G4ModelingParameters::IsCulling () const {
   return fCulling;
 }
@@ -87,10 +91,10 @@ inline G4int G4ModelingParameters::GetNoOfSides () const {
   return fNoOfSides;
 }
 
-inline G4VSolid* G4ModelingParameters::GetSectionSolid () const
+inline G4DisplacedSolid* G4ModelingParameters::GetSectionSolid () const
 {return fpSectionSolid;}
 
-inline G4VSolid* G4ModelingParameters::GetCutawaySolid () const
+inline G4DisplacedSolid* G4ModelingParameters::GetCutawaySolid () const
 {return fpCutawaySolid;}
 
 inline const G4Event* G4ModelingParameters::GetEvent () const
@@ -114,6 +118,10 @@ inline void
 G4ModelingParameters::SetDrawingStyle
 (G4ModelingParameters::DrawingStyle style) {
   fDrawingStyle = style;
+}
+
+inline void G4ModelingParameters::SetNumberOfCloudPoints (G4int n) {
+  fNumberOfCloudPoints = n;
 }
 
 inline void G4ModelingParameters::SetCulling (G4bool value) {

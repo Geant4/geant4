@@ -45,7 +45,6 @@
 #include "G4PhysicsVector.hh"
 #include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4ComponentGGNuclNuclXsc.hh"
-#include "G4HadronNucleonXsc.hh"
 #include "G4NistManager.hh"
 #include "G4Proton.hh"
 #include "Randomize.hh"
@@ -70,7 +69,7 @@ const G4int G4ParticleInelasticXS::amin[] = {
   0, 235};
 const G4int G4ParticleInelasticXS::amax[] = {
   0,
-  1,   4,   7,   9, 11,  13,  15,  18,  19,  22,  //1-10
+  2,   4,   7,   9, 11,  13,  15,  18,  19,  22,  //1-10
  23,  26,  27,  30, 31,  34,  37,  40,  41,  48,  //11-20
  45,  50,  51,  54, 55,  58,  59,  64,  65,  70,  //21-30
  71,  76,  75,   0,  0,   0,   0,   0,   0,  96,  //31-40
@@ -93,39 +92,34 @@ G4ParticleInelasticXS::G4ParticleInelasticXS(const G4ParticleDefinition* part)
   : G4VCrossSectionDataSet("G4ParticleInelasticXS"),
     ggXsection(nullptr),
     nnXsection(nullptr),
-    fNucleon(nullptr),
     particle(part),
     proton(G4Proton::Proton()),
-    particleName(""),
-    isMaster(false),
-    emax(20*CLHEP::MeV)
+    emax(20*CLHEP::MeV),
+    fIdxXSTable(0),
+    isMaster(false)
 {
   if(!part) {
     G4Exception("G4ParticleInelasticXS::G4ParticleInelasticXS(..)","had015",
 		FatalException, "NO particle definition in constructor");
   } else {
-    //  verboseLevel = 0;
-    particleName = particle->GetParticleName();
+    verboseLevel = 0;
+    G4String particleName = particle->GetParticleName();
     if(verboseLevel > 0){
       G4cout << "G4ParticleInelasticXS::G4ParticleInelasticXS for " 
 	     << particleName << " on atoms with Z < " << MAXZINELP << G4endl;
     }
     if(particleName == "neutron" || particleName == "proton") {
       ggXsection = new G4ComponentGGHadronNucleusXsc();
-      fNucleon = new G4HadronNucleonXsc();
     } else {
       nnXsection = new G4ComponentGGNuclNuclXsc();
     }
   }
   SetForAllAtomsAndEnergies(true);
-  fNist  = G4NistManager::Instance();
+  fNist = G4NistManager::Instance();
 }
 
 G4ParticleInelasticXS::~G4ParticleInelasticXS()
 {
-  //G4cout << "G4ParticleInelasticXS::~G4ParticleInelasticXS() " 
-  // << " isMaster= " << isMaster << "  data: " << data << G4endl;
-  delete fNucleon;
   if(isMaster) { delete data; data = nullptr; }
 }
 
@@ -170,30 +164,22 @@ G4double G4ParticleInelasticXS::GetElementCrossSection(
   if(!pv || ekin <= pv->Energy(0)) { return xs; }
 
   if(ekin <= pv->GetMaxEnergy()) { 
-    xs = pv->Value(ekin); 
-  } else if(1 == Z) {
-    if(fNucleon) { 
-      fNucleon->GetHadronNucleonXscNS(aParticle, proton);
-      xs = coeff[1]*fNucleon->GetInelasticHadronNucleonXsc();
-    } else {
-      nnXsection->GetZandACrossSection(aParticle, 1, 1);
-      xs = coeff[1]*nnXsection->GetInelasticGlauberGribovXsc();
-    }
+    xs = pv->Value(ekin, aParticle->GetLogKineticEnergy(), fIdxXSTable); 
   } else {
-    G4int Amean = G4lrint(fNist->GetAtomicMassAmu(Z));
+    G4double Amean = fNist->GetAtomicMassAmu(Z);
     if(ggXsection) {
-      ggXsection->GetIsoCrossSection(aParticle, Z, Amean);
-      xs = coeff[Z]*ggXsection->GetInelasticGlauberGribovXsc();
+      xs = coeff[Z]*ggXsection->GetInelasticElementCrossSection(particle,
+			        ekin, Z, Amean);
     } else {
-      nnXsection->GetZandACrossSection(aParticle, Z, Amean);
-      xs = coeff[Z]*nnXsection->GetInelasticGlauberGribovXsc();
+      xs = coeff[Z]*nnXsection->GetInelasticElementCrossSection(particle,
+			        ekin, Z, Amean);
     }
   }
 
   if(verboseLevel > 1) {
     G4cout  << "ElmXS: Z= " << Z << " Ekin(MeV)= " << ekin/CLHEP::MeV 
 	    << " xs(bn)= " << xs/CLHEP::barn << " element data for "
-	    << particleName << G4endl;
+	    << particle->GetParticleName() << G4endl;
   }
   return xs;
 }
@@ -204,11 +190,13 @@ G4double G4ParticleInelasticXS::GetIsoCrossSection(
 	 const G4Isotope*, const G4Element*,
 	 const G4Material*)
 {
-  return IsoCrossSection(aParticle->GetKineticEnergy(), Z, A);
+  return IsoCrossSection(aParticle->GetKineticEnergy(), 
+                         aParticle->GetLogKineticEnergy(),Z, A);
 }
 
 G4double 
-G4ParticleInelasticXS::IsoCrossSection(G4double ekin, G4int ZZ, G4int A)
+G4ParticleInelasticXS::IsoCrossSection(G4double ekin, G4double logE,
+                                       G4int ZZ, G4int A)
 {
   G4double xs = 0.0;
   G4int Z = (ZZ >= MAXZINELP) ? MAXZINELP - 1 : ZZ; 
@@ -217,25 +205,19 @@ G4ParticleInelasticXS::IsoCrossSection(G4double ekin, G4int ZZ, G4int A)
          << "  Amin= " << amin[Z] << " Amax= " << amax[Z]
          << " E(MeV)= " << ekin << G4endl;
   */
-  // first compute isotope cross section 
-  if(ekin <=emax && amin[Z]>0 && A >= amin[Z] && A <= amax[Z]) {
-    G4PhysicsVector* pviso = data->GetComponentDataByIndex(Z, A - amin[Z]);
-    if(pviso) { 
-      xs = pviso->Value(ekin); 
-      if(verboseLevel > 0){
-	G4cout  << "IsoXS for " << particleName 
-		<< " Target Z= " << Z << " A= " << A 
-		<< " Ekin(MeV)= " << ekin/CLHEP::MeV 
-		<< " xs(bn)= " << xs/CLHEP::barn << G4endl;
-      }
-      return xs;
+  // compute isotope cross section if applicable 
+  if(ekin <= emax && amin[Z]>0) { 
+    if(A >= amin[Z] && A <= amax[Z]) {
+      G4PhysicsVector* pviso = data->GetComponentDataByIndex(Z, A - amin[Z]);
+      if(pviso) { xs = pviso->Value(ekin, logE, fIdxXSTable); } 
     }
+  } else {
+    // isotope data are not available or applicable
+    G4PhysicsVector* pv = data->GetElementData(Z);
+    if(pv) { xs = pv->Value(ekin, logE, fIdxXSTable); }
   }
-  // isotope data are not available or applicable
-  G4PhysicsVector* pv = data->GetElementData(Z);
-  if(pv) { xs = pv->Value(ekin); }
   if(verboseLevel > 0) {
-    G4cout  << "IsoXS for " << particleName 
+    G4cout  << "IsoXS for " << particle->GetParticleName() 
 	    << " Target Z= " << Z << " A= " << A 
 	    << " Ekin(MeV)= " << ekin/CLHEP::MeV 
 	    << " xs(bn)= " << xs/CLHEP::barn << G4endl;
@@ -244,7 +226,7 @@ G4ParticleInelasticXS::IsoCrossSection(G4double ekin, G4int ZZ, G4int A)
 }
 
 const G4Isotope* G4ParticleInelasticXS::SelectIsotope(
-           const G4Element* anElement, G4double kinEnergy)
+		 const G4Element* anElement, G4double kinEnergy, G4double logE)
 {
   size_t nIso = anElement->GetNumberOfIsotopes();
   const G4Isotope* iso = anElement->GetIsotope(0);
@@ -279,7 +261,7 @@ const G4Isotope* G4ParticleInelasticXS::SelectIsotope(
   for (j=0; j<nIso; ++j) {
     //G4cout << j << "-th isotope " << (*isoVector)[j]->GetN() 
     //       <<  " abund= " << abundVector[j] << G4endl;
-    sum += abundVector[j]*IsoCrossSection(kinEnergy, Z, 
+    sum += abundVector[j]*IsoCrossSection(kinEnergy, logE, Z, 
 					  anElement->GetIsotope(j)->GetN());
     temp[j] = sum;
   }
@@ -303,7 +285,7 @@ G4ParticleInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   if(&p != particle) { 
     G4ExceptionDescription ed;
     ed << p.GetParticleName() << " is a wrong particle type -"
-       << particleName << " is expected";
+       << particle->GetParticleName() << " is expected";
     G4Exception("G4ParticleInelasticXS::BuildPhysicsTable(..)","had012",
 		FatalException, ed, "");
     return; 
@@ -316,7 +298,7 @@ G4ParticleInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 #endif
       isMaster = true;
       data = new G4ElementData(); 
-      data->SetName(particleName + "Inelastic");
+      data->SetName(particle->GetParticleName() + "Inelastic");
       temp.resize(13,0.0);
 #ifdef G4MULTITHREADED
     }
@@ -331,27 +313,17 @@ G4ParticleInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     // Build the complete string identifying the file with the data set
     char* path = getenv("G4PARTICLEXSDATA");
 
-    G4DynamicParticle* dynParticle = 
-      new G4DynamicParticle(particle,G4ThreeVector(1,0,0),1);
-
     // Access to elements
     const G4ElementTable* theElmTable = G4Element::GetElementTable();
     size_t numOfElm = G4Element::GetNumberOfElements();
     for(size_t i=0; i<numOfElm; ++i) {
-      G4int Z = ((*theElmTable)[i])->GetZasInt();
-      if(Z >= MAXZINELP) { Z = MAXZINELP-1; }
-      //G4cout << "Z= " << Z << G4endl;
-      // Initialisation 
-      if(!(data->GetElementData(Z))) { 
-	Initialise(Z, dynParticle, path); 
-      }
+      G4int Z = std::min(((*theElmTable)[i])->GetZasInt(), MAXZINELP-1);
+      if(!(data->GetElementData(Z))) { Initialise(Z, path); }
     }
-    delete dynParticle;
   }
 }
 
-void G4ParticleInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp, 
-				       const char* p)
+void G4ParticleInelasticXS::Initialise(G4int Z, const char* p)
 {
   if(data->GetElementData(Z)) { return; }
   const char* path = p;
@@ -368,6 +340,7 @@ void G4ParticleInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
   }
 
   // upload element data 
+  G4String particleName = particle->GetParticleName();
   std::ostringstream ost;
   ost << path << "/" << particleName << "/inel" << Z ;
   G4PhysicsVector* v = RetrieveVector(ost, true);
@@ -389,28 +362,17 @@ void G4ParticleInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
       data->AddComponent(Z, A, v1); 
     }
   }
-
   // smooth transition 
-  G4double sig1 = (*v)[v->GetVectorLength()-1];
-  dp->SetKineticEnergy(v->GetMaxEnergy());
-  G4double sig2 = 0.0;
-  if(1 == Z) {
-    if(fNucleon) {
-      fNucleon->GetHadronNucleonXscNS(dp, proton);
-      sig2 = fNucleon->GetInelasticHadronNucleonXsc();
-    } else {
-      nnXsection->GetZandACrossSection(dp, 1, 1);
-      sig2 = nnXsection->GetInelasticGlauberGribovXsc();
-    }
+  G4double sig1  = (*v)[v->GetVectorLength()-1];
+  G4double sig2  = 0.0;
+  G4double ehigh = v->GetMaxEnergy();
+  G4double Amean = fNist->GetAtomicMassAmu(Z);
+  if(ggXsection) {
+    sig2 = ggXsection->GetInelasticElementCrossSection(particle,
+			                               ehigh, Z, Amean);
   } else {
-    G4int Amean = G4lrint(fNist->GetAtomicMassAmu(Z));
-    if(ggXsection) {
-      ggXsection->GetIsoCrossSection(dp, Z, Amean);
-      sig2 = ggXsection->GetInelasticGlauberGribovXsc();
-    } else {
-      nnXsection->GetZandACrossSection(dp, Z, Amean);
-      sig2 = nnXsection->GetInelasticGlauberGribovXsc();
-    }
+    sig2 = nnXsection->GetInelasticElementCrossSection(particle,
+			                               ehigh, Z, Amean);
   }
   if(sig2 > 0.) { coeff[Z] = sig1/sig2; } 
 }

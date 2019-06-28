@@ -43,6 +43,7 @@ class GIDI_settings_group {
         GIDI_settings_group( std::string const &label, int length, double const *values );
         GIDI_settings_group( std::string const &label, std::vector<double> const &boundaries );
         GIDI_settings_group( GIDI_settings_group const &group );
+        GIDI_settings_group& operator=( const GIDI_settings_group &group );
         ~GIDI_settings_group( );
 
         inline double operator[]( int const index ) const { return( mBoundaries[index] ); }
@@ -105,6 +106,7 @@ class GIDI_settings_flux_order {
                                   std::vector<double> const  &energies   /**< List of energies where flux is given. */,
                                   std::vector<double> const  &fluxes     /**< List of flux value for each energies value. */ );
         GIDI_settings_flux_order( GIDI_settings_flux_order const &fluxOrder /**< Legendre flux order to copy. */ );
+        GIDI_settings_flux_order& operator=( const GIDI_settings_flux_order &fluxOrder );
         ~GIDI_settings_flux_order( );
 
         inline int getOrder( void ) const { return( mOrder ); }
@@ -128,6 +130,7 @@ class GIDI_settings_flux {
         GIDI_settings_flux( std::string const &label, double temperature_MeV );
         GIDI_settings_flux( char const *label, double temperature_MeV );
         GIDI_settings_flux( GIDI_settings_flux const &flux );
+        GIDI_settings_flux& operator=( const GIDI_settings_flux &flux );
         ~GIDI_settings_flux( );
 
         GIDI_settings_flux_order const *operator[]( int order ) const;
@@ -175,6 +178,7 @@ class GIDI_settings_processedFlux {
     public:
         GIDI_settings_processedFlux( GIDI_settings_flux const &flux, GIDI::ptwXPoints *groupX );
         GIDI_settings_processedFlux( GIDI_settings_processedFlux const &flux );
+        GIDI_settings_processedFlux& operator=( const GIDI_settings_processedFlux &flux );
         ~GIDI_settings_processedFlux( );
 
         inline double getTemperature( ) const { return( mFlux.getTemperature( ) ); }

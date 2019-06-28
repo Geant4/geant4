@@ -14,11 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-06-Mar-2019 A. Ribon          (hadr-string-diff-V10-04-16)
+06-Mar-2019 A. Ribon          (hadr-string-diff-V10-05-01)
 - G4FTFModel: fixed a memory leak in G4FTFModel::GetStrings() reported as
   bug #2138.
 
-26-Feb-2019 J. Yarba
+26-Feb-2019 J. Yarba          (hadr-string-diff-V10-05-00)
 - Correct FTF_NUCDESTR_P1_ADEP_TGT parameter (fNuclearTgtDestructP1_ADEP)
   that has accidentally been made "fixed". No changes in the random sequence.
 - Minor cleanups

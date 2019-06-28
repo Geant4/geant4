@@ -16,21 +16,45 @@ committal in the source repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15-February-2019  E.Tcherniaev     (geom-specific-V10-04-16)
+11-June-2019 E.Tcherniaev          (geom-specific-V10-05-10)
+- Use GetVertices() instead of GetParametersList() in the wrapper G4UTet.
+
+29-May-2019 G.Cosmo                (geom-specific-V10-05-09)
+- Fixed minor Coverity defects.
+
+20-May-2019 G.Cosmo                (geom-specific-V10-05-08)
+- Defined move constructor and move assignment operator for G4TriangularFacet.
+
+14-May-2019 B.Morgan               (geom-specific-V10-05-07)
+- Add inclusion of new G4GeomTypes.hh header to those headers allowing
+  VecGeom replacement.
+- See also geommng-10-05-05
+
+23-April-2019  G.Cosmo             (geom-specific-V10-05-06)
+- Modified G4PolyconeSide and G4PolyhedraSide to use only trivial types for
+  MT splitted data in G4PlSideData and G4PhSideData respectively.
+
+16-April-2019  G.Cosmo             (geom-specific-V10-05-05)
+- Protected check in G4TwistTubsSide::DistanceToPlane() withing debug flag.
+
+4-April-2019  G.Cosmo              (geom-specific-V10-05-04)
+- Enabled wrapper for VecGeom implementation of G4GenericPolycone.
+
+15-February-2019  E.Tcherniaev     (geom-specific-V10-05-03)
 - Accurate calculation of radical in G4IntersectingCone.
   It addresses the problem report #2111.
 
-4-February-2019  G.Cosmo
+4-February-2019  G.Cosmo           (geom-specific-V10-05-02)
 - Fix in G4EllipticalTube::CheckParameters() for typo in condition.
 
-30-January-2019  G.Cosmo
+30-January-2019  G.Cosmo           (geom-specific-V10-05-01)
 - Disabled precise computation of extent and use simple bounding-box
   in CalculateExtent() for G4Tet and G4TessellatedSolid, to speed up
   intialisation in setups with relatively complex meshes.
 - Apply bounding-box calculation for extent also for corresponding
   VecGeom wrappers.
 
-24-January-2019  E.Tcherniaev
+24-January-2019  E.Tcherniaev      (geom-specific-V10-05-00)
 - Completely revised, more robust and performant G4EllipticalTube;
   new exhaustive test/testEllipticalTube.cc based on Shape Conventions.
 

@@ -228,32 +228,12 @@ public: // With description
 
 #endif
 
-  G4bool GetDrawOverlapsFlag() const {return fDrawOverlapsFlag;}
-  // This is intended to be inspected by methods capable of drawing
-  // overlaps. See for example, CheckOverlaps in G4PVPlacement and
-  // G4PVParameterised.
-
-  void SetDrawOverlapsFlag(G4bool draw) {fDrawOverlapsFlag = draw;}
-  // This is for use by specialist models that request drawing of overlaps.
-  // It must be unset after use (by calling with a false argument).  See,
-  // for example, G4LogicalVolumeModel.
-  // This must not be set by the user because the coordinate system is only
-  // valid under certain conditions. It must be unset so that overlaps are
-  // not drawn when, for example, CheckOverlaps is called during detector
-  // construction or when the user requests overlap checking with
-  // /geometry/test/run. (It is only in special cases that the viewer is ready
-  // to have the overlaps drawn in the logical volume's coordinate system
-  // and this must be decided by the vis system.)
-
 protected:
 
   static void SetConcreteInstance (G4VVisManager*);
 
   static G4VVisManager* fpConcreteInstance;  // Pointer to real G4VisManager.
 
-private:
-
-  G4bool fDrawOverlapsFlag;
 };
 
 #endif

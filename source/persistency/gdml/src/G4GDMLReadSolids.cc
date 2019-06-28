@@ -68,7 +68,6 @@
 #include "G4OpticalSurface.hh"
 #include "G4UnitsTable.hh"
 #include "G4SurfaceProperty.hh"
-#include "G4MaterialPropertiesTable.hh"
 
 G4GDMLReadSolids::G4GDMLReadSolids() : G4GDMLReadMaterials()
 {
@@ -2535,11 +2534,24 @@ PropertyRead(const xercesc::DOMElement* const propertyElement,
    }
    else  // build the material properties vector
    {
-     G4MaterialPropertyVector* propvect = new G4MaterialPropertyVector();
-     for (size_t i=0; i<matrix.GetRows(); i++)
-     {
-       propvect->InsertValues(matrix.Get(i,0),matrix.Get(i,1));
-     }
+     G4MaterialPropertyVector* propvect;
+     // first check if it was already built
+     if ( mapOfMatPropVects.find(Strip(name)) == mapOfMatPropVects.end())
+       {
+	 // if not create a new one
+	 propvect = new G4MaterialPropertyVector();
+	 for (size_t i=0; i<matrix.GetRows(); i++)
+	   {
+	     propvect->InsertValues(matrix.Get(i,0),matrix.Get(i,1));
+	   }
+	 // and add it to the list for potential future reuse
+	 mapOfMatPropVects[Strip(name)] = propvect;
+       }
+     else
+       {
+	 propvect = mapOfMatPropVects[Strip(name)];
+       }
+	 
      matprop->AddProperty(Strip(name),propvect);
    }
 }

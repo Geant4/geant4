@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 May 19: D. Sawkey (op-v10-05-00)
+- most files: format indentation, parentheses; add C++11 keywords;
+    - some changes to if/else loops and variable names
+
 25 May 18: D. Sawkey (op-V10-04-00)
 - G4OpMieHG: change GetProperty from string to enum
 

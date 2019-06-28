@@ -34,34 +34,24 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
+#include "G4NuclearRadii.hh"
 
 G4CoulombBarrier::G4CoulombBarrier(G4int A, G4int Z)
-  : G4VCoulombBarrier(A, Z) 
+  : G4VCoulombBarrier(A, Z), g4calc(G4Pow::GetInstance())
 {
-  g4calc = G4Pow::GetInstance();
-  if(Z > 0) {
-    G4double rho = 1.2*CLHEP::fermi; 
-    G4double r0  = 1.5*CLHEP::fermi; 
-    if(1 == A) {
-      rho = 0.0;
-    } else if(A <= 3) {
-      rho = 0.8*CLHEP::fermi; 
-      r0  = 1.7*CLHEP::fermi;
-    } else {
-      r0  = 1.7*CLHEP::fermi;
-    }
-    SetParameters(rho, r0);
-  }
+  factor = CLHEP::elm_coupling*Z;
+  SetParameters(0.4*G4NuclearRadii::RadiusCB(Z, A),1.3*CLHEP::fermi);
 }
 
 G4CoulombBarrier::~G4CoulombBarrier() 
 {}
 
-G4double G4CoulombBarrier::GetCoulombBarrier(G4int ARes, G4int ZRes, G4double) const 
+G4double G4CoulombBarrier::GetCoulombBarrier(
+         G4int ARes, G4int ZRes, G4double) const 
 {
-  //  return BarrierPenetrationFactor(GetA())* 
-  return
-    CLHEP::elm_coupling*(GetZ()*ZRes)/(GetR0()*g4calc->Z13(ARes) + GetRho());
+  return factor*ZRes/(G4NuclearRadii::RadiusCB(ZRes,ARes) + GetRho());
+  //return factor*ZRes/((G4NuclearRadii::RadiusCB(ZRes,ARes) 
+  //	     + GetRho())*(1.0 + std::sqrt(U/(G4double)(2*ARes))));
 }
 
 G4double G4CoulombBarrier::BarrierPenetrationFactor(G4int aZ) const 

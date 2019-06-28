@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -8,7 +8,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
-##### Create analysis manager   0x230b1b0
+##### Create analysis manager   0x25beb70
 Using Root analysis manager
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -81,6 +81,7 @@ Computed tolerance = 0.1 nm
 
 ---------------------------------------------------------
 ---> The tracking cut is set to 11 eV 
+---> The maximum step size is set to 5.82593e+288 pc 
 
 ---------------------------------------------------------
 
@@ -118,7 +119,7 @@ Rayl:  for gamma SubType=11 BuildTable=1
 
 e-_G4DNAElectronSolvation:  for e- SubType=58 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAOneStepThermalizationModel : Emin=    0 eV  Emax=  7.4 eV 
+DNAOneStepThermalizationModel_Meesungnoen2002 : Emin=    0 eV  Emax=  7.4 eV 
 
 e-_G4DNAElastic:  for e- SubType=51 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -253,6 +254,8 @@ DNARuddIonisationExtendedModel : Emin=    0 eV  Emax=  100 TeV  deltaRudd Fluo
 hydrogen_G4DNAChargeIncrease:  for hydrogen SubType=57 BuildTable=0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNADingfelderChargeIncreaseModel : Emin=    0 eV  Emax=  100 MeV
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ... open Root analysis file : yz.root - done
 --> Event 0 starts.

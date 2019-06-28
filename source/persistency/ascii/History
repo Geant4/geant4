@@ -15,7 +15,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19 December 2018 - G.Cosmo (ascii-V10-04-00)
+19 December 2018 - G.Cosmo (ascii-V10-05-00)
 - Fixed shadowing compilation warning in G4tgbGeometryDumper and G4tgbVolume.
 
 11 April 2014 - P.Arce (ascii-V10-00-01)

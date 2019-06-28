@@ -82,7 +82,7 @@ public:
    */
   virtual void WriteInto(const G4String&,
                          std::ios_base::openmode mode = std::ios_base::out);
-  virtual void AddEmptyLineInOuputFile();
+  virtual void AddEmptyLineInOutputFile();
   
   /**
    * Close the file specified with WriteInto
@@ -142,7 +142,7 @@ public:
    */
   virtual void WriteInto(const G4String&, std::ios_base::openmode mode =
                          std::ios_base::out);
-  virtual void AddEmptyLineInOuputFile(){}
+  virtual void AddEmptyLineInOutputFile(){}
   
   /**
    * Close the file specified with WriteInto

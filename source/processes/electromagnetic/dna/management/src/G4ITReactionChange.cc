@@ -129,8 +129,7 @@ G4VParticleChange* G4ITReactionChange::GetParticleChange(const G4Track* track)
 
 const G4Track* G4ITReactionChange::GetTrackA()
 {
-  std::map<const G4Track*, G4VParticleChange*>::iterator it = fParticleChange
-      .begin();
+  auto it = fParticleChange.begin();
   if (it != fParticleChange.end())
   {
     return it->first;
@@ -146,9 +145,8 @@ const G4Track* G4ITReactionChange::GetTrackA()
 
 const G4Track* G4ITReactionChange::GetTrackB()
 {
-  std::map<const G4Track*, G4VParticleChange*>::iterator it = fParticleChange
-      .begin();
-  std::map<const G4Track*, G4VParticleChange*>::iterator next = it++;
+  auto it = fParticleChange.begin();
+  auto next = it++;
   if (next == fParticleChange.end())
   {
     G4ExceptionDescription exceptionDescription;

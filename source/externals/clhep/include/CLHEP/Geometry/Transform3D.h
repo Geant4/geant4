@@ -214,7 +214,7 @@ namespace HepGeom {
   
     /**
      * Constructor: rotation and then translation. */
-    inline Transform3D(const CLHEP::HepRotation & m, const CLHEP::Hep3Vector & v);
+    inline Transform3D(const CLHEP::HepRotation & mt, const CLHEP::Hep3Vector & v);
 
     /**
      * Constructor: transformation of basis (assumed - no reflection). */
@@ -227,10 +227,10 @@ namespace HepGeom {
 
     /**
      * Copy constructor. */
-    Transform3D(const Transform3D & m)
-      : xx_(m.xx_), xy_(m.xy_), xz_(m.xz_), dx_(m.dx_),
-	yx_(m.yx_), yy_(m.yy_), yz_(m.yz_), dy_(m.dy_),
-	zx_(m.zx_), zy_(m.zy_), zz_(m.zz_), dz_(m.dz_) {}
+    Transform3D(const Transform3D & mt)
+      : xx_(mt.xx_), xy_(mt.xy_), xz_(mt.xz_), dx_(mt.dx_),
+	yx_(mt.yx_), yy_(mt.yy_), yz_(mt.yz_), dy_(mt.dy_),
+	zx_(mt.zx_), zy_(mt.zy_), zz_(mt.zz_), dz_(mt.dz_) {}
 
     /**
      * Destructor. 
@@ -285,10 +285,10 @@ namespace HepGeom {
     
     /**
      * Assignment. */
-    Transform3D & operator=(const Transform3D &m) {
-      xx_= m.xx_; xy_= m.xy_; xz_= m.xz_; dx_= m.dx_;
-      yx_= m.yx_; yy_= m.yy_; yz_= m.yz_; dy_= m.dy_;
-      zx_= m.zx_; zy_= m.zy_; zz_= m.zz_; dz_= m.dz_;
+    Transform3D & operator=(const Transform3D &mt) {
+      xx_= mt.xx_; xy_= mt.xy_; xz_= mt.xz_; dx_= mt.dx_;
+      yx_= mt.yx_; yy_= mt.yy_; yz_= mt.yz_; dy_= mt.dy_;
+      zx_= mt.zx_; zy_= mt.zy_; zz_= mt.zz_; dz_= mt.dz_;
       return *this;
     }
 
@@ -378,7 +378,7 @@ namespace HepGeom {
     
     /**
      * Constructor from CLHEP::HepRotation. */
-    inline Rotate3D(const CLHEP::HepRotation &m);
+    inline Rotate3D(const CLHEP::HepRotation &mt);
 
     /**
      * Constructor from angle and axis given by two points.
@@ -621,8 +621,8 @@ namespace HepGeom {
   class Reflect3D : public Transform3D {
   protected:
     Reflect3D(double XX, double XY, double XZ, double DX,
-		 double YX, double YY, double YZ, double DY,
-		 double ZX, double ZY, double ZZ, double DZ)
+              double YX, double YY, double YZ, double DY,
+              double ZX, double ZY, double ZZ, double DZ)
       : Transform3D(XX,XY,XZ,DX, YX,YY,YZ,DY, ZX,ZY,ZZ,DZ) {}
 
   public:
@@ -639,7 +639,7 @@ namespace HepGeom {
     /**
      * Constructor from a plane given by its normal and origin. */
     inline Reflect3D(const Normal3D<double> & normal,
-			const Point3D<double> & point);
+                     const Point3D<double> & point);
   };
 
   /**
@@ -735,8 +735,8 @@ namespace HepGeom {
 
     /**
      * Constructor from a number: sets uniform scaling in all directions. */
-    Scale3D(double s)
-      : Transform3D(s,0,0,0, 0,s,0,0, 0,0,s,0) {}
+    Scale3D(double sc)
+      : Transform3D(sc,0,0,0, 0,sc,0,0, 0,0,sc,0) {}
   };
 
   /**

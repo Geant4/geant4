@@ -52,38 +52,31 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   
     DetectorConstruction();
     virtual ~DetectorConstruction();
-
-  public:
   
-     virtual G4VPhysicalVolume* Construct();
-     virtual void ConstructSDandField();
+    virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
      
-     void SetSize     (G4double);              
-     void SetMaterial (G4String);
-
-  public:
+    void SetSize     (G4double);              
+    void SetMaterial (const G4String&);
   
-     const
-     G4VPhysicalVolume* GetWorld()      {return fPBox;};           
-                    
-     G4double           GetSize()       {return fBoxSize;};      
-     G4Material*        GetMaterial()   {return fMaterial;};
+    inline const G4VPhysicalVolume* GetWorld() const {return fPBox;};
+    inline G4double GetSize() const                  {return fBoxSize;};      
+    inline const G4Material* GetMaterial() const     {return fMaterial;};
      
-     void               PrintParameters();
-     void               DefineMaterials();
+    void   PrintParameters();
+    void   DefineMaterials();
                        
   private:
   
-     G4VPhysicalVolume*    fPBox;
-     G4LogicalVolume*      fLBox;
-     G4Box*                fBox;
+    G4VPhysicalVolume*    fPBox;
+    G4LogicalVolume*      fLBox;
+    G4Box*                fBox;
      
-     G4double              fBoxSize;
-     G4Material*           fMaterial;
+    G4double              fBoxSize;
+    G4Material*           fMaterial;
 
-     DetectorMessenger* fDetectorMessenger;
-     G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
-
+    DetectorMessenger* fDetectorMessenger;
+    G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

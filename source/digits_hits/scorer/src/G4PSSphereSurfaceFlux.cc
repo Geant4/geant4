@@ -132,17 +132,16 @@ G4bool G4PSSphereSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
         /std::sqrt(localdirL2)/std::sqrt(localR2);
       if ( anglefactor < 0.0 ) anglefactor *= -1.0;
 
-      G4double radi   = sphereSolid->GetInnerRadius();
-      G4double dph    = sphereSolid->GetDeltaPhiAngle()/radian;
-      G4double stth   = sphereSolid->GetStartThetaAngle()/radian;
-      G4double enth   = stth+sphereSolid->GetDeltaThetaAngle()/radian;
-      G4double square = radi*radi*dph*( -std::cos(enth) + std::cos(stth) );
-
-      G4double current = 1.0;
-      if ( weighted ) thisStep->GetWeight(); // Flux (Particle Weight)
-      if ( divideByArea ) current = current/square;  // Flux with angle.
-
-      current /= anglefactor;
+      G4double current = 1.0 / anglefactor;
+      if ( weighted ) current *= thisStep->GetWeight(); // Flux (Particle Weight)
+      if ( divideByArea ) // Flux with angle.
+      {
+        G4double radi   = sphereSolid->GetInnerRadius();
+        G4double dph    = sphereSolid->GetDeltaPhiAngle()/radian;
+        G4double stth   = sphereSolid->GetStartThetaAngle()/radian;
+        G4double enth   = stth+sphereSolid->GetDeltaThetaAngle()/radian;
+        current /= radi*radi*dph*( -std::cos(enth) + std::cos(stth) );
+      }
 
       G4int index = GetIndex(aStep);
       EvtMap->add(index,current);

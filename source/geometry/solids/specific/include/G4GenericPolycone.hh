@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 // --------------------------------------------------------------------
 // GEANT 4 class header file
 //
@@ -35,21 +35,23 @@
 // Class description:
 //
 //   Class implementing a GenericPolycone constructed by points with
-//          (r,z)coordinates, allows Z 'go back' 
+//          (r,z)coordinates, allows Z 'go back'
 //
 //
-//   G4GenericPolycone( const G4String& name, 
+//   G4GenericPolycone( const G4String& name,
 //               G4double phiStart,   // initial phi starting angle
 //               G4double phiTotal,   // total phi angle
 //               G4int    numRZ,      // number corners in r,z space
 //               const G4double r[],  // r coordinate of these corners
 //               const G4double z[])  // z coordinate of these corners
 //
-//  
+//
 // --------------------------------------------------------------------
 #ifndef G4GenericPolycone_hh
 #define G4GenericPolycone_hh
-/*
+
+#include "G4GeomTypes.hh"
+
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UGENERICPOLYCONE 1
 #endif
@@ -58,7 +60,7 @@
   #define G4UGenericPolycone G4GenericPolycone
   #include "G4UGenericPolycone.hh"
 #else
-*/
+
 #include "G4VCSGfaceted.hh"
 #include "G4PolyconeSide.hh"
 
@@ -66,12 +68,12 @@ class G4EnclosingCylinder;
 class G4ReduciblePolygon;
 class G4VCSGface;
 
-class G4GenericPolycone : public G4VCSGfaceted 
+class G4GenericPolycone : public G4VCSGfaceted
 {
 
  public:  // with description
 
-  G4GenericPolycone( const G4String& name, 
+  G4GenericPolycone( const G4String& name,
                     G4double phiStart,    // initial phi starting angle
                     G4double phiTotal,    // total phi angle
                     G4int    numRZ,       // number corners in r,z space
@@ -79,7 +81,7 @@ class G4GenericPolycone : public G4VCSGfaceted
                     const G4double z[]       ); // z coordinate of these corners
 
   virtual ~G4GenericPolycone();
-  
+
   // Methods for solid
 
   EInside Inside( const G4ThreeVector &p ) const;
@@ -115,7 +117,7 @@ class G4GenericPolycone : public G4VCSGfaceted
   inline G4bool IsOpen()           const;
   inline G4int  GetNumRZCorner()   const;
   inline G4PolyconeSideRZ GetCorner(G4int index) const;
-  
+
  public:  // without description
 
   G4GenericPolycone(__void__&);
@@ -130,8 +132,6 @@ class G4GenericPolycone : public G4VCSGfaceted
  protected:  // without description
 
   // Generic initializer, called by all constructors
-
-  // void SetOriginalParameters(G4ReduciblePolygon *rz);
 
   void Create( G4double phiStart,        // initial phi starting angle
                G4double phiTotal,        // total phi angle
@@ -150,15 +150,15 @@ class G4GenericPolycone : public G4VCSGfaceted
   G4bool   phiIsOpen;   // true if there is a phi segment
   G4int    numCorner;   // number RZ points
   G4PolyconeSideRZ *corners;  // corner r,z points
- 
+
   // Our quick test
 
   G4EnclosingCylinder *enclosingCylinder;
-  
+
 };
 
 #include "G4GenericPolycone.icc"
 
-//#endif
+#endif
 
 #endif

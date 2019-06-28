@@ -296,6 +296,23 @@ G4double G4ProductionCutsTable::ConvertRangeToEnergy(
 						     )
 {
   // This method gives energy corresponding to range value  
+
+  // protection against premature call
+  if(firstUse)
+  {
+#ifdef G4VERBOSE
+    if(verboseLevel>0)
+    {
+      G4ExceptionDescription ed;
+      ed << "G4ProductionCutsTable::ConvertRangeToEnergy is invoked prematurely "
+         << "before it is fully initialized.";
+      G4Exception("G4ProductionCutsTable::ConvertRangeToEnergy","CUTS0100",
+                  JustWarning,ed);
+    }
+#endif
+    return -1.0;
+  }
+
   // check material
   if (material ==nullptr) return -1.0;
 
@@ -306,12 +323,19 @@ G4double G4ProductionCutsTable::ConvertRangeToEnergy(
   // check particle
   G4int index = G4ProductionCuts::GetIndex(particle);
 
-  if (index<0) {
-#ifdef G4VERBOSE  
-    if (verboseLevel >1) {
-      G4cout << "G4ProductionCutsTable::ConvertRangeToEnergy" ;
-      G4cout << particle->GetParticleName() << " has no cut value " << G4endl;
-    }  
+  if (index<0 || converters[index] == nullptr) {
+#ifdef G4VERBOSE
+    if(verboseLevel>0)
+    {
+      G4ExceptionDescription ed;
+      ed << "G4ProductionCutsTable::ConvertRangeToEnergy is invoked ";
+      if(particle != nullptr)
+      { ed << "for particle <" << particle->GetParticleName() << ">."; }
+      else
+      { ed << "without valid particle pointer."; }
+      G4Exception("G4ProductionCutsTable::ConvertRangeToEnergy","CUTS0101",
+                  JustWarning,ed);
+    }
 #endif
     return -1.0;
   }

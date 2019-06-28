@@ -508,15 +508,12 @@ void G4EmDNAChemistry::ConstructProcess()
     }
     else
     {
-      pMoleculeDef->GetProcessManager()
-                  ->AddRestProcess(new G4DNAElectronHoleRecombination(), 2);
+      pMoleculeDef->GetProcessManager()->AddRestProcess(new G4DNAElectronHoleRecombination(), 2);
       G4DNAMolecularDissociation* pDissociationProcess = new G4DNAMolecularDissociation("H2O_DNAMolecularDecay");
-      pDissociationProcess->SetDecayDisplacer(pMoleculeDef,
-                                              new G4DNAWaterDissociationDisplacer);
+      pDissociationProcess->SetDisplacer(pMoleculeDef, new G4DNAWaterDissociationDisplacer);
       pDissociationProcess->SetVerboseLevel(1);
 
-      pMoleculeDef->GetProcessManager()
-                  ->AddRestProcess(pDissociationProcess, 1);
+      pMoleculeDef->GetProcessManager()->AddRestProcess(pDissociationProcess, 1);
     }
   }
 

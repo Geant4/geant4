@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // Geant4 Hadron Elastic Scattering Process 
 // 
 // Created 26 July 2012 V.Ivanchenko from G4WHadronElasticProcess
@@ -32,7 +31,6 @@
 // 14-Sep-12 M.Kelsey -- Pass subType code to base ctor
 
 #include <iostream>
-#include <typeinfo>
 
 #include "G4HadronElasticProcess.hh"
 #include "G4SystemOfUnits.hh"
@@ -42,33 +40,27 @@
 #include "G4HadronElasticDataSet.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4HadronicException.hh"
-#include "G4HadronicDeprecate.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4VCrossSectionRatio.hh"
 
 G4HadronElasticProcess::G4HadronElasticProcess(const G4String& pName)
-  : G4HadronicProcess(pName, fHadronElastic), isInitialised(false),
+  : G4HadronicProcess(pName, fHadronElastic), 
     fDiffraction(nullptr), fDiffractionRatio(nullptr)
-{
-  AddDataSet(new G4HadronElasticDataSet);
-  lowestEnergy = 1.*keV;
-}
+{}
 
 G4HadronElasticProcess::~G4HadronElasticProcess()
 {}
 
 void G4HadronElasticProcess::ProcessDescription(std::ostream& outFile) const
 {
-
-    outFile << "G4HadronElasticProcess handles the elastic scattering of \n"
-            << "hadrons by invoking the following hadronic model(s) and \n"
-            << "hadronic cross section(s).\n";
-
+  outFile << "G4HadronElasticProcess handles the elastic scattering of \n"
+	  << "hadrons by invoking the following hadronic model(s) and \n"
+	  << "hadronic cross section(s).\n";
 }
 
 G4VParticleChange* 
 G4HadronElasticProcess::PostStepDoIt(const G4Track& track, 
-				     const G4Step& /*step*/)
+				     const G4Step&)
 {
   theTotalResult->Clear();
   theTotalResult->Initialize(track);
@@ -79,13 +71,13 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   ClearNumberOfInteractionLengthLeft();
 
   G4double kineticEnergy = track.GetKineticEnergy();
+  G4TrackStatus status = track.GetTrackStatus();
+  if(kineticEnergy == 0.0 || track.GetTrackStatus() != fAlive) {
+    return theTotalResult;
+  }
+
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   const G4ParticleDefinition* part = dynParticle->GetDefinition();
-
-  // NOTE:  Very low energy scatters were causing numerical (FPE) errors
-  //        in earlier releases; these limits have not been changed since.
-  if (kineticEnergy <= lowestEnergy)   return theTotalResult;
-
   const G4Material* material = track.GetMaterial();
   G4Nucleus* targNucleus = GetTargetNucleusPointer();
 
@@ -107,10 +99,9 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
     }
 
   // Initialize the hadronic projectile from the track
-  //  G4cout << "track " << track.GetDynamicParticle()->Get4Momentum()<<G4endl;
   G4HadProjectile theProj(track);
-  G4HadronicInteraction* hadi = 0;
-  G4HadFinalState* result = 0;
+  G4HadronicInteraction* hadi = nullptr;
+  G4HadFinalState* result = nullptr;
 
   if(fDiffraction) 
   {
@@ -123,9 +114,6 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
     {
       try
 	{
-//   if(part->GetParticleName() == "pi-")
-// G4cout<<part->GetParticleName()<<"; "<<kineticEnergy/CLHEP::GeV<<" GeV; r = "<<ratio<<G4endl;
-
 	  result = fDiffraction->ApplyYourself(theProj, *targNucleus);
 	}
       catch(G4HadronicException & aR)
@@ -184,7 +172,8 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 	   << part->GetParticleName()
 	   << " in " << material->GetName() 
 	   << " Target Z= " << targNucleus->GetZ_asInt() 
-	   << " A= " << targNucleus->GetA_asInt() << G4endl; 
+	   << " A= " << targNucleus->GetA_asInt() 
+	   << " Tcut(MeV)= " << tcut << G4endl; 
   }
 
   try
@@ -212,8 +201,6 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 
   // directions
   G4ThreeVector indir = track.GetMomentumDirection();
-  G4double phi = CLHEP::twopi*G4UniformRand();
-  G4ThreeVector it(0., 0., 1.);
   G4ThreeVector outdir = result->GetMomentumChange();
 
   if(verboseLevel>1) {
@@ -225,24 +212,13 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   }
 
   // energies  
-  G4double edep = result->GetLocalEnergyDeposit();
-  G4double efinal = result->GetEnergyChange();
-  if(efinal < 0.0) { efinal = 0.0; }
-  if(edep < 0.0)   { edep = 0.0; }
-
-  // NOTE:  Very low energy scatters were causing numerical (FPE) errors
-  //        in earlier releases; these limits have not been changed since.
-  if(efinal <= lowestEnergy) {
-    edep += efinal;
-    efinal = 0.0;
-  }
+  G4double edep = std::max(result->GetLocalEnergyDeposit(), 0.0);
+  G4double efinal = std::max(result->GetEnergyChange(), 0.0);
 
   // primary change
   theTotalResult->ProposeEnergy(efinal);
 
-  G4TrackStatus status = track.GetTrackStatus();
   if(efinal > 0.0) {
-    outdir.rotate(phi, it);
     outdir.rotateUz(indir);
     theTotalResult->ProposeMomentumDirection(outdir);
   } else {
@@ -253,7 +229,6 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   }
 
   //G4cout << "Efinal= " << efinal << "  TrackStatus= " << status << G4endl;
-
   theTotalResult->SetNumberOfSecondaries(0);
 
   // recoil
@@ -264,8 +239,6 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
       theTotalResult->SetNumberOfSecondaries(1);
       G4ThreeVector pdir = p->GetMomentumDirection();
       // G4cout << "recoil " << pdir << G4endl;
-      //!! is not needed for models inheriting G4HadronElastic
-      pdir.rotate(phi, it);
       pdir.rotateUz(indir);
       // G4cout << "recoil rotated " << pdir << G4endl;
       p->SetMomentumDirection(pdir);
@@ -289,26 +262,15 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   return theTotalResult;
 }
 
-void 
-G4HadronElasticProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
+void G4HadronElasticProcess::SetLowestEnergy(G4double)
 {
-  if(!isInitialised) {
-    isInitialised = true;
-    if(G4Neutron::Neutron() == &part) { lowestEnergy = 1.e-6*eV; }
-  }
-  G4HadronicProcess::PreparePhysicsTable(part);
-}
-
-void G4HadronElasticProcess::SetLowestEnergy(G4double val)
-{
-  lowestEnergy = val;
+  PrintWarning("G4HadronElasticProcess::SetLowestEnergy(..) ");
 }
 
 void 
-G4HadronElasticProcess::SetLowestEnergyNeutron(G4double val)
+G4HadronElasticProcess::SetLowestEnergyNeutron(G4double)
 {
-  lowestEnergy = val;
-  G4HadronicDeprecate("G4HadronElasticProcess::SetLowestEnergyNeutron()");
+  PrintWarning("G4HadronElasticProcess::SetLowestEnergyNeutron(..) ");
 }
 
 void G4HadronElasticProcess::SetDiffraction(G4HadronicInteraction* hi, 
@@ -318,4 +280,10 @@ void G4HadronElasticProcess::SetDiffraction(G4HadronicInteraction* hi,
     fDiffraction = hi;
     fDiffractionRatio = xsr;
   }
+}
+
+void G4HadronElasticProcess::PrintWarning(const G4String& tit) const
+{
+  G4Exception(tit, "had003", JustWarning, 
+  " method is obsolete and will be removed in the next release");
 }

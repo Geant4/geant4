@@ -55,7 +55,7 @@ class TrackerHit : public G4VHit
 
     // operators
     const TrackerHit& operator=(const TrackerHit&);
-    G4int operator==(const TrackerHit&) const;
+    G4bool operator==(const TrackerHit&) const;
 
     inline void* operator new(size_t);
     inline void  operator delete(void*);

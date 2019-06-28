@@ -90,7 +90,7 @@ G4UImanager::G4UImanager()
     UImessenger(0), UnitsMessenger(0), CoutMessenger(0),
     isMaster(false),bridges(0),
     ignoreCmdNotFound(false), stackCommandsForBroadcast(false),
-    threadID(-1), threadCout(0) 
+    threadID(-1), threadCout(0), lastRC(0)
 {
   savedCommand = 0;
   treeTop = new G4UIcommandTree("/");
@@ -312,7 +312,9 @@ void G4UImanager::ExecuteMacroFile(const char * fileName)
 {
   G4UIsession* batchSession = new G4UIbatch(fileName,session);
   session = batchSession;
+  lastRC = 0;
   G4UIsession* previousSession = session->SessionStart();
+  lastRC = session->GetLastReturnCode();
   delete session;
   session = previousSession;
 }
@@ -403,6 +405,14 @@ void G4UImanager::Foreach(const char * macroFile,const char * variableName,
     vl += cd;
     SetAlias(vl);
     ExecuteMacroFile(FindMacroPath(macroFile));
+    if(lastRC!=0)
+    {
+      G4ExceptionDescription ed;
+      ed << "Loop aborted due to a command execution error - "
+         << "error code " << lastRC;
+      G4Exception("G4UImanager::Foreach","UIMAN0201",JustWarning,ed);
+      break;
+    }
   }
 }
 

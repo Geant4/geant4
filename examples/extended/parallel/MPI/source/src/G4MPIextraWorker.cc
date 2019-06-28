@@ -34,7 +34,7 @@
 #include "G4MPIextraWorker.hh"
 #include "G4UserRunAction.hh"
 #include "G4Run.hh"
-#include "g4ios.hh"
+#include "G4ios.hh"
 
 void G4MPIextraWorker::BeamOn()
 {

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4HadronElasticPhysicsXS
@@ -68,14 +67,5 @@ G4HadronElasticPhysicsXS::~G4HadronElasticPhysicsXS()
 void G4HadronElasticPhysicsXS::ConstructProcess()
 {
   G4HadronElasticPhysics::ConstructProcess();
-  /*
-  const G4ParticleDefinition* part = G4Proton::Proton();
-  AddXSection(part, new G4BGGNucleonElasticXS(part));
-
-  if(verbose > 1) { 
-    G4cout << "### G4HadronElasticPhysicsXS is constructed " 
-	   << G4endl; 
-  }
-  */
 }
 

@@ -44,8 +44,7 @@
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
 
-#ifndef G4VMolecularDecayDisplacer_h
-#define G4VMolecularDecayDisplacer_h 1
+#pragma once
 
 #include <vector>
 #include "globals.hh"
@@ -55,32 +54,33 @@
 class G4Molecule;
 class G4MolecularDissociationChannel;
 
-typedef int DisplacementType;
+using DisplacementType = int;
 
 //------------------------------------------------------------------------------
 
-class G4VMolecularDecayDisplacer
+class G4VMolecularDissociationDisplacer
 {
-  public :
-  virtual ~G4VMolecularDecayDisplacer();
-  
-  virtual std::vector<G4ThreeVector>
-  GetProductsDisplacement(const G4MolecularDissociationChannel*) const=0;
-  virtual G4ThreeVector
-  GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel*) const=0;
-  
-  inline void SetVerbose(G4int verbose){
-    fVerbose = verbose ;
-  }
-  
-  protected :
-  G4VMolecularDecayDisplacer();
-  G4int fVerbose ;
-  
 public:
-  G4CT_COUNT_INIT_DEF(0)
-  G4CT_COUNT_DEF(NoDisplacement)
-};
-#endif
+    virtual ~G4VMolecularDissociationDisplacer() = default;
 
+    virtual std::vector<G4ThreeVector>
+    GetProductsDisplacement(const G4MolecularDissociationChannel*) const = 0;
+
+    virtual G4ThreeVector
+    GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel*) const = 0;
+
+    inline void SetVerbose(G4int verbose)
+    {
+        fVerbose = verbose;
+    }
+
+public:
+    G4CT_COUNT_INIT_DEF(0)
+    G4CT_COUNT_DEF(NoDisplacement)
+
+protected :
+    G4VMolecularDissociationDisplacer() = default;
+
+    G4int fVerbose;
+};
 

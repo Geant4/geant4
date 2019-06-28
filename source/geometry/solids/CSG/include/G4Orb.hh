@@ -37,12 +37,14 @@
 //   fRmax  outer radius
 
 //  History:
-// 08.08.17 E.Tcherniaev - revised 
+// 08.08.17 E.Tcherniaev - revised
 // 20.08.03 V.Grichine - created
 // --------------------------------------------------------------------
 
 #ifndef G4Orb_HH
 #define G4Orb_HH
+
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UORB 1
@@ -97,7 +99,7 @@ class G4Orb : public G4CSGSolid
                           const G4ThreeVector& v) const;
 
     G4double DistanceToIn(const G4ThreeVector& p) const;
-    
+
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
                            const G4bool calcNorm=G4bool(false),
@@ -128,7 +130,7 @@ class G4Orb : public G4CSGSolid
       // persistifiable objects
 
     G4Orb(const G4Orb& rhs);
-    G4Orb& operator=(const G4Orb& rhs); 
+    G4Orb& operator=(const G4Orb& rhs);
       // Copy constructor and assignment operator
 
   protected:

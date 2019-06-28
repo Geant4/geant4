@@ -528,7 +528,7 @@ void G4EmDNAChemistry_option1::ConstructProcess()
                       ->AddRestProcess(new G4DNAElectronHoleRecombination(), 2);
       G4DNAMolecularDissociation* dissociationProcess =
           new G4DNAMolecularDissociation("H2O_DNAMolecularDecay");
-      dissociationProcess->SetDecayDisplacer(
+      dissociationProcess->SetDisplacer(
           moleculeDef, new G4DNAWaterDissociationDisplacer);
       dissociationProcess->SetVerboseLevel(1);
 //      ph->RegisterProcess(dissociationProcess, moleculeDef);

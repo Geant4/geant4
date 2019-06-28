@@ -38,24 +38,22 @@
 
 #include "G4Run.hh"
 #include "G4UnitsTable.hh"
-#include "G4EmCalculator.hh"
-
 #include "Randomize.hh"
-#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-:G4UserRunAction(),fDetector(det),fPrimary(kin),fRun(0),fHistoManager(0)
+RunAction::RunAction(const DetectorConstruction* det, 
+                     PrimaryGeneratorAction* kin)
+  : G4UserRunAction(),fDetector(det),fPrimary(kin),fRun(nullptr)
 { 
- fHistoManager = new HistoManager();
+  fHistoManager = new HistoManager();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
 {
- delete fHistoManager;
+  delete fHistoManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

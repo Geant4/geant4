@@ -39,27 +39,28 @@
 // - The meaning of each digit is as follows;
 //
 //   711
-//   |--> major version number 
+//   |--> major version number
 //    |--> minor version number
 //     |--> patch number
 
 #ifndef G4VERSION_NUMBER
-#define G4VERSION_NUMBER  1051
+#define G4VERSION_NUMBER  1060
 #endif
 
 #ifndef G4VERSION_TAG
-#define G4VERSION_TAG "$Name: geant4-10-05-patch-01 $"
+#define G4VERSION_TAG "$Name: geant4-10-06-beta-01 $"
 #endif
 
 // as variables
 
+#include "G4Types.hh"
 #include "G4String.hh"
 
 #ifdef G4MULTITHREADED
-static const G4String G4Version = "$Name: geant4-10-05-patch-01 [MT]$";
+static const G4String G4Version = "$Name: geant4-10-06-beta-01 [MT]$";
 #else
-static const G4String G4Version = "$Name: geant4-10-05-patch-01 $";
+static const G4String G4Version = "$Name: geant4-10-06-beta-01 $";
 #endif
-static const G4String G4Date    = "(17-April-2019)";
+static const G4String G4Date    = "(28-June-2019)";
 
 #endif

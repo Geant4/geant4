@@ -703,14 +703,14 @@ G4double G4TwistTubsSide::DistanceToPlane(const G4ThreeVector &p,
 
    G4double distToanm = G4VTwistSurface::DistanceToPlane(p, A, (N - A), (M - A), xxanm, nanm) * parity;
    G4double distTocmn = G4VTwistSurface::DistanceToPlane(p, C, (M - C), (N - C), xxcmn, ncmn) * parity;
-
+#ifdef G4SPECSDEBUG
    // if p is behind of both surfaces, abort.
    if (distToanm * distTocmn > 0 && distToanm < 0) {
      G4Exception("G4TwistTubsSide::DistanceToPlane()",
                  "GeomSolids0003", FatalException,
                  "Point p is behind the surfaces.");
    }
-
+#endif
    // if p is on surface, return 0.
    if (std::fabs(distToanm) <= halftol) {
       xx = xxanm;

@@ -76,12 +76,12 @@ PhysListEmStandard_option3::PhysListEmStandard_option3(const G4String& name,
   param->SetMinEnergy(10*eV);
   param->SetMaxEnergy(10*GeV);
   param->SetNumberOfBinsPerDecade(20);
-  param->SetLowestElectronEnergy(10*eV);
+  param->SetLowestElectronEnergy(100*eV);
   param->SetStepFunction(0.2, 100*um);
   param->SetBuildCSDARange(true);
   param->SetMaxEnergyForCSDARange(10*GeV);
   param->SetMscStepLimitType(fUseDistanceToBoundary);
-  param->SetLateralDisplacementAlg96(false);
+  param->SetLateralDisplacementAlg96(true);
   SetPhysicsType(bElectromagnetic);
 }
 

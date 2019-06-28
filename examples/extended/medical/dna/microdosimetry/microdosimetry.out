@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -335,16 +335,18 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=29.770000s Real=29.967389s Sys=0.010000s
+  User=30.870000s Real=30.920272s Sys=0.010000s
 Number and type of particles created outside region "Target" :
-N e- : 730
+N e- : 728
 _______________________
 Number and type of particles created in region "Target" :
-N e- : 46398
+N e- : 46477
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

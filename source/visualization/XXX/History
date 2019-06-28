@@ -19,6 +19,19 @@ committal in the CVS repository !
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
 
+13 June 2019  John Allison (visXXX-V10-05-02)
+- Part of vis-V10-05-20.
+- Final changes for introduction of cloud drawing:
+  o Follow change of accessor name: GetNumberOfCloudPoints.
+
+10 June 2019  John Allison (visXXX-V10-05-01)
+- Part of vis-V10-05-19.
+- G4XXXSGViewer.cc and G4XXXStoredViewer.cc:
+  Force kernel visit on change of number of cloud points.
+
+18 March 2019  Gabriele Cosmo (visXXX-V10-05-00)
+- Corrected typo in comments.
+
 25 April 2015  John Allison (visXXX-V10-04-00)
 - G4XXXStoredViewer::CompareForKernelVisit, G4XXXSGViewer::CompareForKernelVisit
   o Implement comparison for "colour by density".

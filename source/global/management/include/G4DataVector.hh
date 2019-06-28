@@ -54,6 +54,10 @@ class G4DataVector : public std::vector<G4double>
   G4DataVector();
    // Default constructor.
 
+  G4DataVector(const G4DataVector&) = default;
+  G4DataVector(G4DataVector&&) = default;
+   // Default copy&move constructors.
+
   explicit G4DataVector(size_t cap);
    // Constructor given a 'capacity' defining the initial number of elements.
 
@@ -63,6 +67,10 @@ class G4DataVector : public std::vector<G4double>
 
   virtual ~G4DataVector();
    // Empty destructor
+
+  G4DataVector& operator=(const G4DataVector &) = default;
+  G4DataVector& operator=(G4DataVector &&) = default;
+   // Default copy&move assignment operators.
 
   inline void insertAt(size_t, const G4double&);
     // Insert an element at given position

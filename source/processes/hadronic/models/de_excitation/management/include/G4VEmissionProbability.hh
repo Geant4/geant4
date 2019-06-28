@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
 //
@@ -33,10 +31,8 @@
 // JMQ (06 September 2008) Also external choices have been added for 
 // superimposed Coulomb barrier (if useSICB is set true, by default is false) 
 
-
 #ifndef G4VEmissionProbability_h
 #define G4VEmissionProbability_h 1
-
 
 #include "globals.hh"
 #include "G4Fragment.hh"
@@ -75,30 +71,27 @@ protected:
   G4int theZ;
   G4int theA;
 
-  G4Pow*   fG4pow;
+  G4Pow* fG4pow;
   G4PairingCorrection* fPairCorr;
 
 private:  
 
   G4VEmissionProbability(const G4VEmissionProbability &right) = delete;
-  const G4VEmissionProbability & operator=(const G4VEmissionProbability &right) = delete;
+  const G4VEmissionProbability & operator=
+  (const G4VEmissionProbability &right) = delete;
   G4bool operator==(const G4VEmissionProbability &right) const = delete;
   G4bool operator!=(const G4VEmissionProbability &right) const = delete;
 
   size_t length;
-  size_t nfilled;
+  size_t nbin;
 
   G4double emin;
   G4double emax;
   G4double elimit;
   G4double eCoulomb;
   G4double accuracy;
-  G4double probmax;
-  G4double eprobmax;
   G4double totProbability;
-
-  std::vector<G4double> fEner;
-  std::vector<G4double> fProb;
+  G4double probmax;
 };
 
 #endif

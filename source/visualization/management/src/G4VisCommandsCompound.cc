@@ -212,17 +212,9 @@ G4VisCommandDrawLogicalVolume::G4VisCommandDrawLogicalVolume() {
   const G4UIcommandTree* tree = G4UImanager::GetUIpointer()->GetTree();
   const G4UIcommand* addLogVolCmd = tree->FindPath("/vis/scene/add/logicalVolume");
   // Pick up guidance from /vis/scene/add/logicalVolume
-  G4int nGuideEntries = addLogVolCmd->GetGuidanceEntries();
-  for (G4int i = 0; i < nGuideEntries; ++i) {
-    const G4String& guidance = addLogVolCmd->GetGuidanceLine(i);
-    fpCommand->SetGuidance(guidance);
-  }
+  CopyGuidanceFrom(addLogVolCmd,fpCommand);
   // Pick up parameters from /vis/scene/add/logicalVolume
-  G4int nParEntries = addLogVolCmd->GetParameterEntries();
-  for (G4int i = 0; i < nParEntries; ++i) {
-    G4UIparameter* parameter = new G4UIparameter(*(addLogVolCmd->GetParameter(i)));
-    fpCommand->SetParameter(parameter);
-  }
+  CopyParametersFrom(addLogVolCmd,fpCommand);
 }
 
 G4VisCommandDrawLogicalVolume::~G4VisCommandDrawLogicalVolume() {
@@ -245,7 +237,8 @@ void G4VisCommandDrawLogicalVolume::SetNewValue(G4UIcommand*, G4String newValue)
   UImanager->ApplyCommand(G4String("/vis/scene/add/logicalVolume " + newValue));
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   G4ViewParameters::DrawingStyle keepDrawingStyle = currentViewParams.GetDrawingStyle();
-  if(keepDrawingStyle != G4ViewParameters::wireframe) UImanager->ApplyCommand("/vis/viewer/set/style wireframe");
+  if(keepDrawingStyle != G4ViewParameters::wireframe)
+    UImanager->ApplyCommand("/vis/viewer/set/style wireframe");
   G4bool keepMarkerNotHidden = currentViewParams.IsMarkerNotHidden();
   if (!keepMarkerNotHidden) UImanager->ApplyCommand("/vis/viewer/set/hiddenMarker false");
   if (keepAutoRefresh) UImanager->ApplyCommand("/vis/viewer/set/autoRefresh true");
@@ -264,11 +257,12 @@ void G4VisCommandDrawLogicalVolume::SetNewValue(G4UIcommand*, G4String newValue)
           style = "surface"; edge = "false"; break;
         case G4ViewParameters::hlhsr:
           style = "surface"; edge = "true"; break;
+        case G4ViewParameters::cloud:
+          style = "cloud"; edge = ""; break;
       }
-      G4cout
-      << "\n  /vis/viewer/set/style " + style
-      << "\n  /vis/viewer/set/hiddenEdge " + edge
-      << G4endl;
+      G4cout << "\n  /vis/viewer/set/style " + style;
+      if (!edge.empty()) G4cout << "\n  /vis/viewer/set/hiddenEdge " + edge;
+      G4cout << G4endl;
     }
     if (keepMarkerNotHidden != currentViewParams.IsMarkerNotHidden()) {
       G4cout
@@ -297,17 +291,9 @@ G4VisCommandDrawVolume::G4VisCommandDrawVolume() {
   const G4UIcommandTree* tree = G4UImanager::GetUIpointer()->GetTree();
   const G4UIcommand* addVolCmd = tree->FindPath("/vis/scene/add/volume");
   // Pick up guidance from /vis/scene/add/volume
-  G4int nGuideEntries = addVolCmd->GetGuidanceEntries();
-  for (G4int i = 0; i < nGuideEntries; ++i) {
-    const G4String& guidance = addVolCmd->GetGuidanceLine(i);
-    fpCommand->SetGuidance(guidance);
-  }
+  CopyGuidanceFrom(addVolCmd,fpCommand);
   // Pick up parameters from /vis/scene/add/volume
-  G4int nParEntries = addVolCmd->GetParameterEntries();
-  for (G4int i = 0; i < nParEntries; ++i) {
-    G4UIparameter* parameter = new G4UIparameter(*(addVolCmd->GetParameter(i)));
-    fpCommand->SetParameter(parameter);
-  }
+  CopyParametersFrom(addVolCmd,fpCommand);
 }
 
 G4VisCommandDrawVolume::~G4VisCommandDrawVolume() {

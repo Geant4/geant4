@@ -84,8 +84,8 @@ class G4InteractionContent
   private:
     G4InteractionContent & operator=(const G4InteractionContent &right);
     G4InteractionContent(const G4InteractionContent &right);
-    int operator==(const G4InteractionContent &right) const;
-    int operator!=(const G4InteractionContent &right) const;
+    G4bool operator==(const G4InteractionContent &right) const;
+    G4bool operator!=(const G4InteractionContent &right) const;
 
   protected:
 

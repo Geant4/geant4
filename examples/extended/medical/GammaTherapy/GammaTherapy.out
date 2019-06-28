@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -579,32 +579,32 @@ Index : 5     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.860000s Real=3.913954s Sys=0.010000s
+  User=3.620000s Real=3.635257s Sys=0.010000s
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         33.5
-Average number of gamma                      19.69
-Average number of e+                         0.7775
-Average number of steps in the phantom       11.71
-Average number of e- steps in the target     17.98
-Average number of g  produced in the target  18.83
-Average number of e- produced in the target  21.09
-Average number of g produced in the phantom  0.5008
-Average number of e- produced in the phantom 5.991
-Total fGamma fluence in front of the phantom 7.965 MeV 
+Average number of e-                         33.3
+Average number of gamma                      19.59
+Average number of e+                         0.7599
+Average number of steps in the phantom       11.64
+Average number of e- steps in the target     18.12
+Average number of g  produced in the target  18.75
+Average number of e- produced in the target  21.02
+Average number of g produced in the phantom  0.4928
+Average number of e- produced in the phantom 5.939
+Total fGamma fluence in front of the phantom 8.185 MeV 
 ========================================================
 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1044967642, 1076671597
+ Current couple of seeds = 1290475086, 451564420
 ----------------------------------------
 #
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.06 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.058 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

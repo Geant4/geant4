@@ -14,17 +14,43 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-18 March 2019 Vladimir Ivanchenko (hadr-deex-V10-04-20)
+04 June 2019 Vladimir Ivanchenko (hadr-deex-V10-05-07)
+- G4ExcitationHandler - removed debug cout 
+
+30 May 2019 Vladimir Ivanchenko (hadr-deex-V10-05-06)
+- G4Evaporation, G4ExcitationHandler, G4LevelReader, 
+  G4VEmissionProbability, G4GammaTransition, G4PhotonEvaporation, 
+  G4PolarizationTransition - changed scheme of verbosity, 0- silence,
+  1- dump of parameters at initialisation, 2- debugg printout,
+  3- very detailed debug printout (Bugzilla #2098)
+- G4CoulombBarrier - use G4NuclearRadii utility to copute nuclear radius
+
+13 May 2019 Gabriele Cosmo (hadr-deex-V10-05-05)
+- Replaced deprecated std::binary_function calls with lambdas in
+  G4StatMFMicroCanonical and G4StatMFChannel.
+  Courtesy of S.Losilla, from GitHub PR#8.
+
+06 May 2019 Vladimir Ivanchenko (hadr-deex-V10-05-04)
+- G4VEmissionProbability - use simple rejection
+- G4FermiFragment - fixed Coulomb barrier correction computation
+
+30 April 2019 Vladimir Ivanchenko (hadr-deex-V10-05-03)
+- G4EvaporationChannel, G4EvaporationProbability, 
+  G4FermiDecayProbability, G4VEmissionProbability -
+    simplified algorithm to sample kinetic energy of a fragment;
+    minor code clean-up, removed commented lines
+
+18 March 2019 Vladimir Ivanchenko (hadr-deex-V10-05-02)
 - G4PhotonEvaporation - for nuclear levels without decay modes defined
     perform decay not to the ground state but to the nearest level  
     (problem #2123)
 - G4LevelManager, G4NucLevel - fixed debug and warning printouts
 
-12 March 2019 Vladimir Ivanchenko
+12 March 2019 Vladimir Ivanchenko (hadr-deex-V10-05-01)
 - G4PhotonEvaporation - fixed decay from nuclear level, which has no
     decay channels defined (problem #2123)
 
-28 January 2019 Vladimir Ivanchenko
+28 January 2019 Vladimir Ivanchenko (hadr-deex-V10-05-00)
 - G4LevelReader - fixed typo (problem #2124)
 
 05 December 2018 Gabriele Cosmo (hadr-deex-V10-04-19)

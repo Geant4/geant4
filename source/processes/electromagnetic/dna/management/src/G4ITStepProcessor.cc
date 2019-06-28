@@ -800,6 +800,9 @@ void G4ITStepProcessor::SetInitialStep()
     fpTrack->SetTrackStatus(fAlive);
   }
 
+  //HoangTRAN: it's better to check the status here
+  if(fpTrack->GetTrackStatus() == fStopAndKill) return;
+
   // If the primary track has 'zero' kinetic energy, set the track
   // state to 'StopButAlive'.
   if(fpTrack->GetKineticEnergy() <= 0.0)
@@ -839,8 +842,6 @@ void G4ITStepProcessor::SetInitialStep()
     // Initial set up for attribues of 'Step'
     fpStep->InitializeStep( fpTrack );
   }
-
-  if(fpTrack->GetTrackStatus() == fStopAndKill) return;
 
   fpState->fStepStatus = fUndefined;
 }

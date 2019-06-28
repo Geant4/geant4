@@ -14,7 +14,85 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-20 December 2018 - Alberto Ribon      (hadr-cross-V10-04-55)
+12 June 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-16)
+- G4BGGPionElasticXS, G4BGGPionInelasticXS - fixed initialisation for 
+    pi+- by usage of separate vectors of correction factors; fixed 
+    computation for Hydrogen target
+- G4BGGNucleonElasticXS, G4BGGNucleonInelasticXS - fixed computation
+    for Hydrogen target
+- G4ComponentGGHadronNucleusXsc - fixed correction factor for kaons
+
+03 June 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-15)
+- G4HadronicException is substituted by G4Exception in all classes with
+  exceptions
+
+27 May 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-14)
+- G4ComponentGGHadronNucleusXsc,  G4ComponentGGNuclNuclXsc - removed
+    remaining unused obsolete methods and members, use G4NuclearRadii
+    utility to compute nuclear radius
+
+24 May 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-13)
+  G4ParticleInelasticXS - set verbosity to 0
+
+22 May 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-12)
+- G4NeutronCaptureXS, G4NeutronElasticXS, G4NeutronInelasticXS
+  G4ParticleInelasticXS - clean-up classes assuming usage of the new 
+    data-set G4PARTICLEXSDATA2.0, removed unused variables and methods,
+    use only methods with logarithm of energy
+- G4VCrossSectionDataSet, G4CrossSectionDataStore, 
+- G4IonProtonCrossSection - use only methods with logarithm of energy
+- G4ComponentGGHadronNucleusXsc,  G4ComponentGGNuclNuclXsc - removed
+    unused obsolete methods
+
+20 May 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-11)
+- G4BGGNucleonElasticXS - reduce low-energy limit from 1 to 0.75 MeV
+- G4HadronNucleonXsc - improved K+p parameterisations (NS and VG),
+    removed obsolete methods: ISApplicable.., PDG05
+- G4VCrossSectionDataSet - use correct variable type
+
+17 May 2019 - V. Grichine (hadr-cross-V10-05-10) 
+- G4MuNeutrinoNucleusTotXsc.hh/cc - new method GetElementCrossSection
+
+02 May 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-09)
+- G4ParticleInelasticXS, G4BGGPionElasticXS, G4BGGPionInelasticXS,
+  G4BGGNucleonElasticXS, G4BGGNucleonInelasticXS,
+  G4NucleonNuclearCrossSection, G4ComponentBarNucleonNucleusXsc,
+  G4UPiNuclearCrossSection - share internal data
+    vectors between threads, initilise data once,
+    removed unused parameters, code clean-up, use C++11 keywords 
+
+12 April 2019 - V.Grichine (hadr-cross-V10-05-08)
+- G4HadronNucleonXsc - extension to c- and b- mesons 
+
+09 April 2019 - V.Grichine (hadr-cross-V10-05-07)
+- G4HadronNucleonXsc - extension to c- and b- hyperons 
+
+07 April 2019 - Vladimir Ivanchenko (hadr-cross-V10-05-06)
+- G4HadronNucleonXsc - added extra method for hyperon x-sections 
+
+17 March 2019 - Mihaly Novak (hadr-cross-V10-05-05)
+- G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS - utilise the new
+  G4PhysicsVector::Value method (global-V10-05-03) that can make use of the 
+  already known value of the log-kinetic energy (particles-V10-05-03) in the XS 
+  table log-vector accesses. 
+
+15 march 2019 - V. Grichine (hadr-cross-V10-05-04) 
+- G4MuNeutrinoNucleusTotXsc.cc - new name, default fCcTotRatio and high 
+  energy parameter bb
+
+06 March 2019 - Alberto Ribon         (hadr-cross-V10-05-03)
+- G4ComponentAntiNuclNuclearXS : clean-up and corrected the description.
+                               No changes in the random sequence.
+
+18 February 2019 - V. Grichine        (hadr-cross-V10-05-02)
+- G4MuNeutrinoNucleusTotXsc.hh/cc   high energy extension 
+  of cc/nc xsc (M_W and M_Z propagator factors) cc/tot ratio 
+
+13 January 2019 - V. Grichine         (hadr-cross-V10-05-01)
+- G4NeutrinoElectronNcXsc.cc, G4NeutrinoElectronTotXsc.cc high energy extension 
+  of nu-e xsc (M_W and M_Z propagator factors and Glashow resonance) 
+
+20 December 2018 - Alberto Ribon      (hadr-cross-V10-05-00)
 - G4ChipsNeutronElasticXS : fixed compilation warnings on clang-7 .
 
 22 October 2018 - Vladimir Ivanchenko (hadr-cross-V10-04-54)

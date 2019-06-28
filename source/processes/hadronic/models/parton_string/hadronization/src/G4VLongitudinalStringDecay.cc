@@ -120,7 +120,7 @@ G4VLongitudinalStringDecay::~G4VLongitudinalStringDecay()
 
 //-----------------------------------------------------------------------------
 
-int G4VLongitudinalStringDecay::operator==(const G4VLongitudinalStringDecay &) const
+G4bool G4VLongitudinalStringDecay::operator==(const G4VLongitudinalStringDecay &) const
 {
    throw G4HadronicException(__FILE__, __LINE__, "G4VLongitudinalStringDecay::operator== forbidden");
    return false;
@@ -128,7 +128,7 @@ int G4VLongitudinalStringDecay::operator==(const G4VLongitudinalStringDecay &) c
 
 //-------------------------------------------------------------------------------------
 
-int G4VLongitudinalStringDecay::operator!=(const G4VLongitudinalStringDecay &) const
+G4bool G4VLongitudinalStringDecay::operator!=(const G4VLongitudinalStringDecay &) const
 {
    throw G4HadronicException(__FILE__, __LINE__, "G4VLongitudinalStringDecay::operator!= forbidden");
    return true;

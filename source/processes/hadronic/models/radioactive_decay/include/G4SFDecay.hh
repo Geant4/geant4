@@ -23,11 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  File:   G4SFDecay.hh                                                      //
+//  Author: D.H. Wright (SLAC)                                                //
+//  Date:   27 March 2019                                                     //
+//  Description: performs emission of neutrons and gammas from spontaneous    //
+//               fission of the parent nucleus.  The LLNL model for neutron   //
+//               and gamma spectra is used.  Final state nuclear fragments    //
+//               are not currently generated.                                 //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
 
-// Base class for visualization commands - John Allison  9th August 1998
-// It is really a messenger - we have one command per messenger.
+#ifndef G4SFDecay_h
+#define G4SFDecay_h 1
 
-inline void G4VVisCommand::SetVisManager (G4VisManager* pVisManager) {
-  fpVisManager = pVisManager;
-}
+#include "G4NuclearDecay.hh"
+
+
+class G4SFDecay : public G4NuclearDecay
+{
+  public:
+    G4SFDecay(const G4ParticleDefinition* theParentNucleus,
+              const G4double& theBR, const G4double& Qvalue,
+              const G4double& excitation, const G4Ions::G4FloatLevelBase& flb);
+
+    virtual ~G4SFDecay();
+
+    virtual G4DecayProducts* DecayIt(G4double);
+
+    virtual void DumpNuclearInfo();
+
+    void SetARM(G4bool onoff) {applyARM = onoff;}
+ 
+  private:
+    const G4double transitionQ;
+    G4int parentZ;
+    G4int parentA;
+    G4bool applyARM;
+};
+
+#endif
+

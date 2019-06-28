@@ -16,7 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Jan 31, 2019  Ivana Hrivnacova              geometry-V10-04-00
+June  5, 2019 J.Apostolakis                 geometry-V10-05-01
+---------------------------
+- Change CMakeLists.txt in test directories to allow optional use
+  with integrated testing, while keeping existing use case for
+  one-target builds when G4TARGET is defined.
+
+Jan 31, 2019  Ivana Hrivnacova              geometry-V10-05-00
 ----------------------------
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 

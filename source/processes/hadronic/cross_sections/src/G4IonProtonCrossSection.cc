@@ -33,8 +33,6 @@
 //
 // Author  Ivantchenko, Geant4, 30 July 2010
 //
-// Modifications:
-//
 
 #include "G4IonProtonCrossSection.hh"
 #include "G4SystemOfUnits.hh"
@@ -42,6 +40,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
 #include "G4Proton.hh"
+#include "G4Log.hh"
 
 using namespace std;
 
@@ -70,7 +69,7 @@ G4IonProtonCrossSection::GetElementCrossSection(
   G4double e = dp->GetKineticEnergy()*CLHEP::proton_mass_c2/p->GetPDGMass();
   G4int Z = p->GetAtomicNumber();
   G4int A = p->GetAtomicMass();
-  return theForward->IsoCrossSection(e, Z, A);
+  return theForward->IsoCrossSection(e, G4Log(e), Z, A);
 }
 
 void G4IonProtonCrossSection::BuildPhysicsTable(const G4ParticleDefinition& part)

@@ -228,8 +228,9 @@ G4int G4ParticleHPInelasticCompFS::SelectExitChannel(G4double eKinetic)
 }
 
 
-                                                                                                       //n,p,d,t,he3,a
-void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack, G4ParticleDefinition * aDefinition)
+// n,p,d,t,he3,a
+void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile& theTrack,
+                                                 G4ParticleDefinition* aDefinition)
 {
 
 // prepare neutron
@@ -395,43 +396,44 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
         G4double dqi = QI[it]; 
         if ( dqi < 0 || 849 < dqi ) useQI = true; //Former libraies does not have values of this range
  
-        if ( useQI ) 
-        {
-           // QI introudced since G4NDL3.15
-           eExcitation = -QI[it];
-           //Re-evluate iLevel based on this eExcitation 
-           iLevel = 0;
-           G4bool find = false;
-           G4int imaxEx = 0;
-           G4double level_tolerance = 1.0*CLHEP::keV;
+        if (useQI) {
+          // QI introudced since G4NDL3.15
+          eExcitation = -QI[it];
+          //Re-evluate iLevel based on this eExcitation 
+          iLevel = 0;
+          G4bool find = false;
+          G4int imaxEx = 0;
+          G4double level_tolerance = 1.0*CLHEP::keV;
 
-           while( theGammas.GetLevel(iLevel+1) != 0 ) // Loop checking, 11.05.2015, T. Koi
-           { 
-              G4double maxEx = 0.0;
-              if ( maxEx < theGammas.GetLevel(iLevel)->GetLevelEnergy() ) 
-              {
-                 maxEx = theGammas.GetLevel(iLevel)->GetLevelEnergy();  
-                 imaxEx = iLevel;
-              }
+          while (theGammas.GetLevel(iLevel+1) != 0) // Loop checking, 11.05.2015, T. Koi
+          { 
+            G4double maxEx = 0.0;
+            if (maxEx < theGammas.GetLevel(iLevel)->GetLevelEnergy() ) {
+              maxEx = theGammas.GetLevel(iLevel)->GetLevelEnergy();  
+              imaxEx = iLevel;
+            }
 
-              // Fix bug 1789 DHW - first if-branch added because gamma data come from ENSDF
-              //                    and do not necessarily match the excitations used in ENDF-B.VII
-              //                    Compromise solution: use 1 keV tolerance suggested by T. Koi
-              if (std::abs(eExcitation - theGammas.GetLevel(iLevel)->GetLevelEnergy() ) < level_tolerance) {
-                find = true;
-                break;
+            // Fix bug 1789 DHW - first if-branch added because gamma data come from ENSDF
+            //                    and do not necessarily match the excitations used in ENDF-B.VII
+            //                    Compromise solution: use 1 keV tolerance suggested by T. Koi
+            if (std::abs(eExcitation - theGammas.GetLevel(iLevel)->GetLevelEnergy() ) < level_tolerance) {
+              find = true;
+              break;
 
-              } else if (eExcitation < theGammas.GetLevel(iLevel)->GetLevelEnergy() ) {
-                 find = true; 
-                 iLevel--; 
-                 // very small eExcitation, iLevel becomes -1, this is protected below.
-                 if ( iLevel == -1 ) iLevel = 0; // But cause energy trouble. 
-                 break;
-              }
-              iLevel++; 
-           }
-           // In case, cannot find proper level, then use the maximum level. 
-           if ( !find ) iLevel = imaxEx;
+            } else if (eExcitation < theGammas.GetLevel(iLevel)->GetLevelEnergy() ) {
+              find = true; 
+              iLevel--; 
+              // very small eExcitation, iLevel becomes -1, this is protected below.
+              // Fix bug 1838 DHW - only reset iLevel when incoming and outgoing particles are the same
+              if (theTrack.GetDefinition() == aDefinition) {
+                if (iLevel == -1) iLevel = 0;
+              } 
+              break;
+            }
+            iLevel++; 
+          }
+          // If proper level cannot be found, use the maximum level 
+          if ( !find ) iLevel = imaxEx;
         }
         //110610TK END
 	
@@ -584,6 +586,8 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
 //    In this case, hadron should be isotropic in CM
 //    mu and p should be correlated
 //
+//  Following lines made obsolete by fix to bug 2166 (A. Zontikov) 
+/*
       G4double totalPhotonEnergy = 0.0;
       if ( thePhotons != 0 )
       {
@@ -595,18 +599,24 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
             totalPhotonEnergy += thePhotons->operator[](ii0)->GetTotalEnergy();
          }
       }
-
+*/
       //isotropic distribution in CM 
-      G4double mu = 1.0 - 2 * G4UniformRand();
+      G4double mu = 1.0 - 2.*G4UniformRand();
 
-      // need momentums in target rest frame;
+      // Need momenta in target rest frame
       G4LorentzVector target_in_LAB ( theTarget.GetMomentum() , theTarget.GetTotalEnergy() );
       G4ThreeVector boostToTargetRest = -target_in_LAB.boostVector();
       G4LorentzVector proj_in_LAB = hadProjectile->Get4Momentum();
 
-      G4DynamicParticle* proj = new G4DynamicParticle( theProjectile , proj_in_LAB.boost( boostToTargetRest ) ); 
-      G4DynamicParticle* targ = new G4DynamicParticle( G4IonTable::GetIonTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , totalPhotonEnergy )  , G4ThreeVector(0) );
-      G4DynamicParticle* hadron = new G4DynamicParticle( aHadron.GetDefinition() , G4ThreeVector(0) );  // will be fill momentum
+      G4DynamicParticle* proj = new G4DynamicParticle(theProjectile, proj_in_LAB.boost(boostToTargetRest) ); 
+//      G4DynamicParticle* targ = 
+//        new G4DynamicParticle(G4IonTable::GetIonTable()->GetIon((G4int)theBaseZ, (G4int)theBaseA, totalPhotonEnergy), G4ThreeVector(0) );
+//    Fix bug 2166 (A. Zontikov): replace above two lines with next three lines
+      G4double excitationEnergy = theFinalStatePhotons[it] ? theFinalStatePhotons[it]->GetLevelEnergy() : 0.0;
+      G4DynamicParticle* targ = 
+        new G4DynamicParticle(G4IonTable::GetIonTable()->GetIon((G4int)theBaseZ, (G4int)theBaseA, excitationEnergy), G4ThreeVector(0) );
+      G4DynamicParticle* hadron = 
+        new G4DynamicParticle(aHadron.GetDefinition(), G4ThreeVector(0) );  // Will fill in the momentum
 
       two_body_reaction ( proj , targ , hadron , mu );
 

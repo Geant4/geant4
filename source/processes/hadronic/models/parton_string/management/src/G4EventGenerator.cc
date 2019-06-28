@@ -54,13 +54,13 @@ const G4EventGenerator & G4EventGenerator::operator=(const G4EventGenerator &)
 }
 
 
-int G4EventGenerator::operator==(const G4EventGenerator &) const
+G4bool G4EventGenerator::operator==(const G4EventGenerator &) const
 {
-  return 0;
+  return false;
 }
 
-int G4EventGenerator::operator!=(const G4EventGenerator &) const
+G4bool G4EventGenerator::operator!=(const G4EventGenerator &) const
 {
-  return 1;
+  return true;
 }
 

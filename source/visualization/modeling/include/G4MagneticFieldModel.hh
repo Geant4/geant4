@@ -26,7 +26,8 @@
 //
 //
 // 
-// John Allison  17th August 2013
+// John Allison    17th August 2013
+// Michael Kelsey  31st January 2019 -- Move functionality to G4VFieldModel
 //
 // Class Description:
 //
@@ -35,40 +36,38 @@
 #ifndef G4MAGNETICFIELDMODEL_HH
 #define G4MAGNETICFIELDMODEL_HH
 
-#include "G4VModel.hh"
+#include "G4VFieldModel.hh"
 
-class G4Colour;
-class G4Polyhedron;
 
-class G4MagneticFieldModel: public G4VModel {
+class G4MagneticFieldModel: public G4VFieldModel {
+public: 		// With description
 
-public: // With description
-
-  enum Representation {fullArrow, lightArrow};
-
+  // Constructor just passes through to base
   G4MagneticFieldModel
-  (G4int nDataPointsPerHalfScene = 10,
+  (G4int nDataPointsPerHalfExtent = 3,
    Representation representation = Representation::fullArrow,
-   G4int arrow3DLineSegmentsPerCircle = 6);
-  virtual ~G4MagneticFieldModel ();
+   G4int arrow3DLineSegmentsPerCircle = 6,
+   const G4VisExtent& extentForField = G4VisExtent(),
+   const std::vector<G4PhysicalVolumesSearchScene::Findings>& pvFindings
+   = std::vector<G4PhysicalVolumesSearchScene::Findings>())
+  : G4VFieldModel
+  ("Magnetic","B", extentForField, pvFindings,
+  nDataPointsPerHalfExtent, representation, arrow3DLineSegmentsPerCircle)
+  {}
 
-  virtual void DescribeYourselfTo (G4VGraphicsScene&);
-  // The main task of a model is to describe itself to the graphics scene.
+  virtual ~G4MagneticFieldModel() {;}
+
+protected:
+  virtual void GetFieldAtLocation(const G4Field* field,
+				  const G4Point3D& position, G4double time,
+				  G4Point3D& result) const;
+  // The appropriate output from GetFieldValue should be filled into result.
+  // If (field==0), the function should do nothing; returning without error.
 
 private:
-
   // Private copy contructor and assignment to forbid use...
-  G4MagneticFieldModel (const G4MagneticFieldModel&);
-  G4MagneticFieldModel& operator = (const G4MagneticFieldModel&);
-
-  // No. of data points sampled per maximum half scene extent.
-  // Note that total number of data poinrs sampled can be as high as
-  // (2*n+1)^3, which can get very big very soon.
-  G4int fNDataPointsPerMaxHalfScene;
-
-  Representation fRepresentation;
-
-  G4int fArrow3DLineSegmentsPerCircle;
+  G4MagneticFieldModel(const G4MagneticFieldModel&);
+  G4MagneticFieldModel& operator=(const G4MagneticFieldModel&);
 };
 
 #endif

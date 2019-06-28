@@ -56,6 +56,8 @@
 #ifndef G4TRD_HH
 #define G4TRD_HH
 
+#include "G4GeomTypes.hh"
+
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UTRD 1
 #endif

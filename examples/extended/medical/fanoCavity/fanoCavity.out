@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -9,9 +9,73 @@
 **************************************************************
 
 
-***** Table : Nb of materials = 10 *****
+***** Table : Nb of materials = 8 *****
 
- Material:    Water H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.375 cm 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.356 cm 
+                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
+          ElmMassFraction:  11.21 %  ElmAbundance  66.67 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
+          ElmMassFraction:  88.79 %  ElmAbundance  33.33 % 
+
+
+ Material: Water_gas    density:  1.000 mg/cm3  RadL: 360.924 m    Nucl.Int.Length: 753.560 m  
+                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
+          ElmMassFraction:  11.21 %  ElmAbundance  66.67 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
+          ElmMassFraction:  88.79 %  ElmAbundance  33.33 % 
+
+
+ Material: Graphite    density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.387 cm 
+                       Imean:  81.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.010 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material: Graphite_gas    density:  2.265 mg/cm3  RadL: 188.496 m    Nucl.Int.Length: 353.873 m  
+                       Imean:  81.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.010 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm 
+                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.980 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material: Aluminium_gas    density:  2.700 mg/cm3  RadL:  88.925 m    Nucl.Int.Length: 388.793 m  
+                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.980 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.375 cm 
                        Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -26,22 +90,7 @@
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material: G4_WATER_VAPOR H_2O-Gas   density:  0.756 kg/m3   RadL: 477.173 m    Nucl.Int.Length: 996.781 m  
-                       Imean:  71.600 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
-          ElmMassFraction:  11.19 %  ElmAbundance  66.67 % 
-
-   --->  Element: O (O)   Z =  8.0   N =    16   A = 15.999 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
-
-
- Material: Water_vapor H_2O-Gas   density:  1.000 mg/cm3  RadL: 360.830 m    Nucl.Int.Length: 753.748 m  
+ Material: g4Water_gas H_2O   density:  1.000 mg/cm3  RadL: 360.830 m    Nucl.Int.Length: 753.748 m  
                        Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
@@ -54,83 +103,6 @@
          --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
          --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
-
-
- Material:      Air    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.095 m  
-                       Imean:  85.700 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
-          ElmMassFraction:   0.01 %  ElmAbundance   0.02 % 
-
-   --->  Element: N (N)   Z =  7.0   N =    14   A = 14.007 g/mole
-         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance: 99.632 %
-         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:  0.368 %
-          ElmMassFraction:  75.53 %  ElmAbundance  78.44 % 
-
-   --->  Element: O (O)   Z =  8.0   N =    16   A = 15.999 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction:  23.18 %  ElmAbundance  21.07 % 
-
-   --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.948 g/mole
-         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
-         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:  0.063 %
-         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance: 99.600 %
-          ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
-
-
- Material: G4_GRAPHITE Graphite   density:  2.210 g/cm3   RadL:  19.320 cm   Nucl.Int.Length:  36.269 cm 
-                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material: Graphite Graphite   density:  2.265 g/cm3   RadL:  18.851 cm   Nucl.Int.Length:  35.388 cm 
-                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material: Graphite_gas Graphite   density:  2.265 mg/cm3  RadL: 188.508 m    Nucl.Int.Length: 353.880 m  
-                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:  1.070 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.894 cm 
-                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.982 g/mole
-         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.880 cm 
-                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.982 g/mole
-         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material: Aluminium_gas    density:  2.700 mg/cm3  RadL:  88.930 m    Nucl.Int.Length: 388.800 m  
-                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
-
-   --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.982 g/mole
-         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
 
@@ -143,8 +115,8 @@ PhysicsList::AddPhysicsList: <standard_opt3>
 /run/initialize
 
 ---------------------------------------------------------
----> The Wall is 5 mm  of Water ( 1 g/cm3  )
-     The Cavity is 2 mm  of Water_vapor ( 1 mg/cm3 )
+---> The Wall is 5 mm  of G4_WATER ( 1 g/cm3  )
+     The Cavity is 2 mm  of g4Water_gas ( 1 mg/cm3 )
 ---------------------------------------------------------
 
 PhysicsList::SetCuts:CutLength : 10 km 
@@ -214,23 +186,16 @@ hIoni:  for proton  SubType=2
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes
- Material : Water
+ Material : G4_WATER
  Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 10 km 
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1 TeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
- Material : Water_vapor
+ Material : g4Water_gas
  Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 10 km 
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1 TeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : Yes
- Material : G4_WATER_VAPOR
- Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 10 km 
- Energy thresholds :  gamma  10 GeV    e-  8.28481 GeV    e+  7.85117 GeV proton 1 TeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -240,52 +205,52 @@ Index : 2     used in the geometry : Yes
 ### Run 0 start.
 --> Event 0 starts.
 --> Event 1000 starts.
+ ---> NbofEvents= 1000   NbOfelectr= 70862   Tkin= 588.581 keV (0.000 %)   NbOfelec in cav= 4670   Dose/EnFluence= 30.208 cm2/g (0.000 %) 
 
- ---> NbofEvents= 1000   NbOfelectr= 71082   Tkin= 588.277 keV (0.000 %)   NbOfelec in cav= 4722   Dose/EnFluence= 30.900 cm2/g (0.000 %)
 --> Event 2000 starts.
+ ---> NbofEvents= 2000   NbOfelectr= 140770   Tkin= 588.302 keV (-0.047 %)   NbOfelec in cav= 9324   Dose/EnFluence= 27.920 cm2/g (-7.574 %) 
 
- ---> NbofEvents= 2000   NbOfelectr= 141526   Tkin= 587.828 keV (-0.076 %)   NbOfelec in cav= 9600   Dose/EnFluence= 29.141 cm2/g (-5.694 %)
 --> Event 3000 starts.
+ ---> NbofEvents= 3000   NbOfelectr= 210833   Tkin= 588.321 keV (0.003 %)   NbOfelec in cav= 14377   Dose/EnFluence= 28.740 cm2/g (2.939 %) 
 
- ---> NbofEvents= 3000   NbOfelectr= 212220   Tkin= 587.778 keV (-0.009 %)   NbOfelec in cav= 14253   Dose/EnFluence= 29.234 cm2/g (0.320 %)
  Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=15.110000s Real=15.145430s Sys=0.010000s
+  User=12.720000s Real=12.739130s Sys=0.000000s
 
  ======================== run summary ======================
 
- The run consists of 4000 gamma of 1.250 MeV through 2*5.000 mm  of Water (density: 1.000 g/cm3 )
+ The run consists of 4000 gamma of 1.250 MeV through 2*5.000 mm  of G4_WATER (density: 1.000 g/cm3 )
 
- the cavity is 2.000 mm  of Water_vapor (density: 1.000 mg/cm3) Mass = 0.628 mg
+ the cavity is 2.000 mm  of g4Water_gas (density: 1.000 mg/cm3) Mass = 0.628 mg
 
  ============================================================
 
- Process calls frequency --->  compt= 282544  Transportation= 78222  msc= 2595336  eIoni= 1723309
+ Process calls frequency --->  compt= 280949  Transportation= 77842  msc= 2584487  eIoni= 1716870
 
  Gamma crossSections in wall material :  compt= 63.464 cm2/g   --> total= 63.464 cm2/g
 
- Mean energy of secondary e- = 587.9970 keV +- 0.1030 %  (--> range in wall material = 2.2199 mm )
- Mass_energy_transfer coef: 29.8532 cm2/g
+ Mean energy of secondary e- = 589.0003 keV +- 0.1029 %  (--> range in wall material = 2.2250 mm )
+ Mass_energy_transfer coef: 29.9041 cm2/g
 
- StoppingPower in wall   = 1.9645 MeV*cm2/g
-               in cavity = 1.9831 MeV*cm2/g
+ StoppingPower in wall   = 1.9640 MeV*cm2/g
+               in cavity = 1.9640 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 19198	 Energy = 9.7592 GeV
-      Exit  --> nbParticles = 19191	 Energy = 9.7554 GeV
+      Enter --> nbParticles = 19096	 Energy = 9.6036 GeV
+      Exit  --> nbParticles = 19086	 Energy = 9.6007 GeV
 
- Total edep in cavity = 13.5943 MeV +- 3.9081 %	 Total charged trackLength = 53.6346 m     (mean value = 2.7938 mm )
- Total dose in cavity = 21.6361 MeV/mg
- Dose/EnergyFluence   = 30.5873 cm2/g
+ Total edep in cavity = 12.7979 MeV +- 3.1764 %	 Total charged trackLength = 52.9933 m     (mean value = 2.7751 mm )
+ Total dose in cavity = 20.3685 MeV/mg
+ Dose/EnergyFluence   = 28.7953 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 1.02459 +- 0.04006
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.96292 +- 0.03060
 
- StepSize of ch. tracks in wall   = 110.2714 um  +- 70.4853 um 	 (nbSteps/track = 15.2569)
- StepSize of ch. tracks in cavity = 682.5567 um  +- 734.3644 um 	 (nbSteps/track = 4.0931)
+ StepSize of ch. tracks in wall   = 110.2992 um  +- 70.5230 um 	 (nbSteps/track = 15.2836)
+ StepSize of ch. tracks in cavity = 681.9104 um  +- 731.8146 um 	 (nbSteps/track = 4.0696)
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.069 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.067 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 // --------------------------------------------------------------------
 // GEANT 4 class header file
 //
@@ -37,7 +37,7 @@
 //   Class implementing a CSG-like type "PCON" Geant 3.21 volume,
 //   inherited from  class G4VCSGfaceted:
 //
-//   G4Polycone( const G4String& name, 
+//   G4Polycone( const G4String& name,
 //               G4double phiStart,     // initial phi starting angle
 //               G4double phiTotal,     // total phi angle
 //               G4int numZPlanes,      // number of z planes
@@ -47,18 +47,20 @@
 //
 //   Alternative constructor, but limited to increasing-only Z sections:
 //
-//   G4Polycone( const G4String& name, 
+//   G4Polycone( const G4String& name,
 //               G4double phiStart,   // initial phi starting angle
 //               G4double phiTotal,   // total phi angle
 //               G4int    numRZ,      // number corners in r,z space
 //               const G4double r[],  // r coordinate of these corners
 //               const G4double z[])  // z coordinate of these corners
 
-// Author: 
+// Author:
 //   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 #ifndef G4Polycone_hh
 #define G4Polycone_hh
+
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UPOLYCONE 1
@@ -78,12 +80,12 @@ class G4EnclosingCylinder;
 class G4ReduciblePolygon;
 class G4VCSGface;
 
-class G4Polycone : public G4VCSGfaceted 
+class G4Polycone : public G4VCSGfaceted
 {
 
  public:  // with description
 
-  G4Polycone( const G4String& name, 
+  G4Polycone( const G4String& name,
                     G4double phiStart,     // initial phi starting angle
                     G4double phiTotal,     // total phi angle
                     G4int numZPlanes,      // number of z planes
@@ -91,7 +93,7 @@ class G4Polycone : public G4VCSGfaceted
               const G4double rInner[],     // tangent distance to inner surface
               const G4double rOuter[]  );  // tangent distance to outer surface
 
-  G4Polycone( const G4String& name, 
+  G4Polycone( const G4String& name,
                     G4double phiStart,    // initial phi starting angle
                     G4double phiTotal,    // total phi angle
                     G4int    numRZ,       // number corners in r,z space
@@ -99,7 +101,7 @@ class G4Polycone : public G4VCSGfaceted
               const G4double z[]       ); // z coordinate of these corners
 
   virtual ~G4Polycone();
-  
+
   // Methods for solid
 
   EInside Inside( const G4ThreeVector &p ) const;
@@ -171,11 +173,11 @@ class G4Polycone : public G4VCSGfaceted
                                G4double fRmin2, G4double fRmax2,
                                G4double zOne,   G4double zTwo,
                                G4double& totArea) const;
-  
+
   G4ThreeVector GetPointOnTubs(G4double fRMin, G4double fRMax,
                                G4double zOne,  G4double zTwo,
                                G4double& totArea) const;
-  
+
   G4ThreeVector GetPointOnCut(G4double fRMin1, G4double fRMax1,
                               G4double fRMin2, G4double fRMax2,
                               G4double zOne,   G4double zTwo,
@@ -199,7 +201,7 @@ class G4Polycone : public G4VCSGfaceted
   // Our quick test
 
   G4EnclosingCylinder *enclosingCylinder;
-  
+
 };
 
 #include "G4Polycone.icc"

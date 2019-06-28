@@ -27,6 +27,7 @@
 /// \file dicom2.cc
 /// \brief Main program of the Dicom2 example
 
+#include "G4Types.hh"
 #ifdef G4MULTITHREADED
 #   include "G4MTRunManager.hh"
 #else

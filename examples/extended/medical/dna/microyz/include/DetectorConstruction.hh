@@ -39,6 +39,7 @@
 #include "G4VUserDetectorConstruction.hh"
 
 class G4Material;
+class DetectorMessenger;
 
 /// Detector construction class to define materials, geometry
 /// and global uniform magnetic field.
@@ -51,14 +52,20 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
+    
+    void SetTrackingCut(G4double);
+    void SetMaxStepSize(G4double);
     void PrintParameters() const;
   
   private:
     void DefineMaterials();
     G4VPhysicalVolume* DefineVolumes();
   
+    DetectorMessenger* fDetectorMessenger;
+    
     G4Material* fpWaterMaterial;
     G4double fpTrackingCut;
+    G4double fpMaxStepSize;
 
 };
 

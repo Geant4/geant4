@@ -68,12 +68,12 @@ public:  // with description
       return ChordFinderDelegate::AdvanceChordLimitedImpl(track, stepMax, epsStep, chordDistance);
     }
 
-    virtual void OnComputeStep() override
+    virtual void OnStartTracking() override
     {
       ChordFinderDelegate::ResetStepEstimate();
     }
 
-    virtual void OnStartTracking() override {};
+    virtual void  OnComputeStep() override {};
 
 
     virtual G4bool AccurateAdvance(G4FieldTrack& y_current,

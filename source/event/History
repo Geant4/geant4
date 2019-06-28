@@ -16,18 +16,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-March 11th, 2019 G. Cosmo (event-V10-04-09)
+June 3rd, 2019 M. Asai (event-V10-05-04)
+- G4SPSPosDistribution::GetConfineVolume() now returns 
+  const G4String&.
+
+May 29th, 2019 M. Asai (event-V10-05-03)
+- G4SPSPosDistribution.hh: Add get methods for volume confinement 
+  based on the Geant4 GitHub user request.
+
+March 11th, 2019 G. Cosmo (event-V10-05-02)
 - Fixed typos in printouts in G4GeneralParticleSourceMessenger.
 
 January 31st, 2019 I. Hrivnacova
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
-January 28th, 2019 M. Asai
+January 28th, 2019 M. Asai (event-V10-05-01)
 - G4HEPEvtInterface.cc : Clean up G4Exception seviorities when 
   end-of-file is detected.
 
-December 14th, 2018 M. Asai
+December 14th, 2018 M. Asai (event-V10-05-00)
 - G4PrimaryTransformer.cc : Allowing absolute zero proper decay time.
+  Co-working with particles-V10-05-00 and decay-V10-05-00.
  
 November 9th, 2018 G. Cosmo (event-V10-04-08)
 - Fixed printout typos.

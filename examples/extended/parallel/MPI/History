@@ -9,6 +9,10 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 May 2019 I. Hrivnacova (MPI-V10-05-00)
+- Fixed compilation of G4MPIextraWorker.cc.
+  This fixes problem report #2163.
+
 23 November 2018 I. Hrivnacova (MPI-V10-04-01)
 - Adapted g4mpi to allow to define an extra worker for collecting data 
   from processing workers (needed for merging ntuples)

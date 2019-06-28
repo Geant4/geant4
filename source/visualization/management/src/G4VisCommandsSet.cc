@@ -34,8 +34,10 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithABool.hh"
 #include "G4TouchablePropertiesScene.hh"
 #include "G4TransportationManager.hh"
+#include "G4BoundingExtentScene.hh"
 #include <sstream>
 
 ////////////// /vis/set/arrow3DLineSegmentsPerCircle ////////////////////////////////////
@@ -84,15 +86,15 @@ G4VisCommandSetColour::G4VisCommandSetColour ()
   G4bool omitable;
   fpCommand = new G4UIcommand("/vis/set/colour", this);
   fpCommand->SetGuidance
-    ("Defines colour and opacity for future \"/vis/scene/add/\" commands.");
+  ("Defines colour and opacity for future \"/vis/scene/add/\" commands.");
   fpCommand->SetGuidance
-    ("(Except \"/vis/scene/add/text\" commands - see \"/vis/set/textColour\".)");
+  ("(Except \"/vis/scene/add/text\" commands - see \"/vis/set/textColour\".)");
   fpCommand->SetGuidance(ConvertToColourGuidance());
   fpCommand->SetGuidance("Default: white and opaque.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("red", 's', omitable = true);
   parameter->SetGuidance
-    ("Red component or a string, e.g., \"cyan\" (green and blue parameters are ignored).");
+  ("Red component or a string, e.g., \"cyan\" (green and blue parameters are ignored).");
   parameter->SetDefaultValue ("1.");
   fpCommand->SetParameter (parameter);
   parameter = new G4UIparameter ("green", 'd', omitable = true);
@@ -130,10 +132,80 @@ void G4VisCommandSetColour::SetNewValue (G4UIcommand*, G4String newValue)
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout <<
-      "Colour for future \"/vis/scene/add/\" commands has been set to "
-	   << fCurrentColour <<
-      ".\n(Except \"/vis/scene/add/text\" commands - use \"/vis/set/textColour\".)"
-	   << G4endl;
+    "Colour for future \"/vis/scene/add/\" commands has been set to "
+    << fCurrentColour <<
+    ".\n(Except \"/vis/scene/add/text\" commands - use \"/vis/set/textColour\".)"
+    << G4endl;
+  }
+}
+
+////////////// /vis/set/extentForField ////////////////////////////////////
+
+G4VisCommandSetExtentForField::G4VisCommandSetExtentForField ()
+{
+  G4bool omitable;
+  fpCommand = new G4UIcommand("/vis/set/extentForField", this);
+  fpCommand->SetGuidance
+  ("Sets an extent for future \"/vis/scene/add/*Field\" commands.");
+  fpCommand->SetGuidance
+  ("The default is a null extent, which is interpreted by the commands as the"
+   "\nextent of the whole scene.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("xmin", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter = new G4UIparameter ("xmax", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter = new G4UIparameter ("ymin", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter = new G4UIparameter ("ymax", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter = new G4UIparameter ("zmin", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter = new G4UIparameter ("zmax", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter = new G4UIparameter ("unit", 's', omitable = true);
+  parameter->SetDefaultValue ("m");
+  fpCommand->SetParameter (parameter);
+}
+
+G4VisCommandSetExtentForField::~G4VisCommandSetExtentForField ()
+{
+  delete fpCommand;
+}
+
+G4String G4VisCommandSetExtentForField::GetCurrentValue (G4UIcommand*)
+{
+  return G4String();
+}
+
+void G4VisCommandSetExtentForField::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4double xmin, xmax, ymin, ymax, zmin, zmax;
+  G4String unitString;
+  std::istringstream iss(newValue);
+  iss >> xmin >> xmax >> ymin >> ymax >> zmin >> zmax >> unitString;
+  G4double unit = G4UIcommand::ValueOf(unitString);
+  xmin *= unit; xmax *= unit;
+  ymin *= unit; ymax *= unit;
+  zmin *= unit; zmax *= unit;
+
+  fCurrentExtentForField = G4VisExtent(xmin,xmax,ymin,ymax,zmin,zmax);
+  fCurrrentPVFindingsForField.clear();
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout <<
+    "Extent for future \"/vis/scene/add/*Field\" commands has been set to "
+    << fCurrentExtentForField
+    << "\nVolume for field has been cleared."
+    << G4endl;
   }
 }
 
@@ -289,7 +361,7 @@ G4VisCommandSetTextSize::G4VisCommandSetTextSize ()
   ("Defines text size (pixels) for future \"/vis/scene/add/\" commands.");
   fpCommand->SetParameterName ("textSize", omitable = true);
   fpCommand->SetDefaultValue (12.);  // pixels
-  fpCommand->SetRange("textSize >= 1.");
+  fpCommand->SetRange("textSize >= 8.");
 }
 
 G4VisCommandSetTextSize::~G4VisCommandSetTextSize ()
@@ -331,7 +403,7 @@ G4VisCommandSetTouchable::G4VisCommandSetTouchable ()
    "\n  /vis/set/touchable World 0 Envelope 0 Shape1 0"
    "\n(To get list of touchables, use \"/vis/drawTree\")"
    "\n(To save, use \"/vis/viewer/save\")");
-  parameter = new G4UIparameter ("list", 's', omitable = false);
+  parameter = new G4UIparameter ("list", 's', omitable = true);
   parameter->SetGuidance
   ("List of physical volume names and copy number pairs");
   fpCommand->SetParameter (parameter);
@@ -350,9 +422,19 @@ G4String G4VisCommandSetTouchable::GetCurrentValue (G4UIcommand*)
 void G4VisCommandSetTouchable::SetNewValue (G4UIcommand*, G4String newValue)
 {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  if (newValue.isNull()) {
+    fCurrentTouchableProperties = G4PhysicalVolumeModel::TouchableProperties();
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout <<
+      "Current touchable reset to: " << fCurrentTouchableProperties.fTouchablePath
+      << G4endl;
+    }
+    return;
+  }
   
   G4ModelingParameters::PVNameCopyNoPath currentTouchablePath;
-  
+
   // Algorithm from Josuttis p.476.
   G4String::size_type iBegin, iEnd;
   iBegin = newValue.find_first_not_of(' ');
@@ -428,6 +510,108 @@ void G4VisCommandSetTouchable::SetNewValue (G4UIcommand*, G4String newValue)
       "\n  Touchable not found."
       << G4endl;
       return;
+    }
+  }
+}
+
+////////////// /vis/set/volumeForField ////////////////////////////////////
+
+G4VisCommandSetVolumeForField::G4VisCommandSetVolumeForField ()
+{
+  G4bool omitable;
+  G4UIparameter* parameter;
+  fpCommand = new G4UIcommand("/vis/set/volumeForField", this);
+  fpCommand->SetGuidance
+  ("Sets a volume and optional copy number \"/vis/scene/add/*Field\" commands.");
+  parameter = new G4UIparameter ("physical-volume-name", 's', omitable = true);
+  parameter -> SetDefaultValue ("none");
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("copy-no", 'i', omitable = true);
+  parameter -> SetGuidance ("If negative, matches any copy no.");
+  parameter -> SetDefaultValue (-1);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("draw", 'b', omitable = true);
+  parameter -> SetGuidance ("If true, draw extent of found volumes.");
+  parameter -> SetDefaultValue (false);
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSetVolumeForField::~G4VisCommandSetVolumeForField ()
+{
+  delete fpCommand;
+}
+
+G4String G4VisCommandSetVolumeForField::GetCurrentValue (G4UIcommand*)
+{
+  return G4String();
+}
+
+void G4VisCommandSetVolumeForField::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String name, drawString;
+  G4int copyNo;
+  std::istringstream is (newValue);
+  is >> name >> copyNo >> drawString;
+  G4bool draw = G4UIcmdWithABool::ConvertToBool(drawString);
+
+  if (name == "none") {
+    fCurrrentPVFindingsForField.clear();
+    fCurrentExtentForField = G4VisExtent();
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "Volume for field cleared" << G4endl;
+    }
+    return;
+  }
+
+  G4TransportationManager* transportationManager =
+  G4TransportationManager::GetTransportationManager ();
+  size_t nWorlds = transportationManager->GetNoWorlds();
+  std::vector<G4VPhysicalVolume*>::iterator iterWorld =
+  transportationManager->GetWorldsIterator();
+  fCurrrentPVFindingsForField.clear();
+  G4BoundingExtentScene extentScene;
+  for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
+    G4PhysicalVolumeModel searchModel (*iterWorld);  // Unlimited depth.
+    G4ModelingParameters mp;  // Default - no culling.
+    searchModel.SetModelingParameters (&mp);
+    G4PhysicalVolumesSearchScene searchScene (&searchModel, name, copyNo);
+    searchModel.DescribeYourselfTo (searchScene);  // Initiate search.
+    for (const auto& findings: searchScene.GetFindings()) {
+      fCurrrentPVFindingsForField.push_back(findings);
+      G4VisExtent extent = findings.fpFoundPV->GetLogicalVolume()->GetSolid()->GetExtent();
+      extent.Transform(findings.fFoundObjectTransformation);
+      extentScene.AccrueBoundingExtent(extent);
+    }
+  }
+
+  if (fCurrrentPVFindingsForField.empty()) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr << "ERROR: Volume \"" << name << "\"";
+      if (copyNo >= 0) {
+        G4cerr << ", copy no. " << copyNo << ",";
+      }
+      G4cerr << " not found." << G4endl;
+    }
+    return;
+  }
+
+  fCurrentExtentForField = extentScene.GetExtent();
+
+  if (draw) DrawExtent(fCurrentExtentForField);
+
+  if (verbosity >= G4VisManager::confirmations) {
+    for (const auto& findings: fCurrrentPVFindingsForField) {
+      G4cout
+      << "\"" << findings.fpFoundPV->GetName()
+      << "\", copy no. " << findings.fFoundPVCopyNo
+      << ", found\nin searched volume \""
+      << findings.fpSearchPV->GetName()
+      << "\" at depth " << findings.fFoundDepth
+      << ",\nbase path: \"" << findings.fFoundBasePVPath
+      << "\",\nand has been set as volume for field."
+      << G4endl;
     }
   }
 }

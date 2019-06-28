@@ -16,6 +16,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 31, 2019 J.Apostolakis geom-csg-V10-05-03
+- G4Tubs: Fixed normal from DistanceToOut (to be unit vector) for abnormal
+    exit points.  Added  inverse-Rmax and -Rmin as data members.
+
+May 31, 2019 G.Cosmo geom-csg-V10-05-02
+- More reuse of pre-calculated values for sin() and cos() in G4Tubs,
+  G4Cons, G4CutTubs, G4Sphere.
+
+May 28, 2019 J.Apostolakis geom-csg-V10-05-01
+- G4Tubs: reused pre-calculated values instead of using std::cos(), std::sin().
+
+May 14, 2019 B.Morgan geom-csg-V10-05-00
+- Add inclusion of new G4GeomTypes.hh header to those headers allowing
+  VecGeom replacement.
+- See also geommng-10-05-05
+
 November 13, 2018 E.Tcherniaev geom-csg-V10-04-07
 - G4Orb: improved check if point is too far in DistanceToIn(p,v).
 - G4Torus: added check if point is too far in DistanceToIn(p,v).

@@ -96,6 +96,7 @@ G4EmDNAPhysics_option8::G4EmDNAPhysics_option8(G4int ver, const G4String&)
   param->SetAuger(true);  
   param->SetAugerCascade(true);  
   param->SetDeexcitationIgnoreCut(true);
+  param->ActivateDNA();
 
   SetPhysicsType(bElectromagnetic);
 }
@@ -152,8 +153,7 @@ void G4EmDNAPhysics_option8::ConstructProcess()
       
       G4DNAElectronSolvation* solvation =
        new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
-      G4DNAOneStepThermalizationModel* therm =
-       new G4DNAOneStepThermalizationModel();
+      auto therm = G4DNASolvationModelFactory::GetMacroDefinedModel();
       therm->SetHighEnergyLimit(11.*eV); // limit of the CPA100 model
       solvation->SetEmModel(therm);
       ph->RegisterProcess(solvation, particle);
@@ -181,10 +181,10 @@ void G4EmDNAPhysics_option8::ConstructProcess()
       ph->RegisterProcess(new G4DNAIonisation("e-_G4DNAIonisation"), particle);
 
       // *** Vibrational excitation ***
-      //ph->RegisterProcess(new G4DNAVibExcitation("e-_G4DNAVibExcitation"), particle);
+      ph->RegisterProcess(new G4DNAVibExcitation("e-_G4DNAVibExcitation"), particle);
       
       // *** Attachment ***
-      //ph->RegisterProcess(new G4DNAAttachment("e-_G4DNAAttachment"), particle); 
+      ph->RegisterProcess(new G4DNAAttachment("e-_G4DNAAttachment"), particle); 
     
     } else if ( particleName == "proton" ) {
       ph->RegisterProcess(new G4DNAElastic("proton_G4DNAElastic"), particle);

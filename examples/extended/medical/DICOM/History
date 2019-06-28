@@ -6,6 +6,10 @@
 
                       Category History file
 
+08.06.2019 - Gabriele Cosmo (DICOM-V10-05-00)
+             Defaulted copy-ctr in DicomPhantomZSliceHeader, to fix deprecation
+             compilation warnings on gcc-9.1.
+
 13.11.2018 - Jonathan Madsen (DICOM-V10-04-11)
              Bugfix (2102) to DicomHandler reading fPixelSpacingY
 

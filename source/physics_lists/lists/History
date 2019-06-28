@@ -13,8 +13,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-09-April-2019 V.Ivanchenko  (phys-lists-V10-04-08)
-  18-March-2019 V.Ivanchenko 
+25-June-2019  Dennis Wright (phys-lists-V10-05-01)
+- replace G4RadioactiveDecay with G4RadioactiveDecayBase in LBE.icc
+
+18-March-2019 V.Ivanchenko  (phys-lists-V10-05-00)
 - Shielding, QGSP_BIC_HP, QGSP_BIC_AllHP - cut for proton is set 
     to zero (problem #2150) and code clean-up
 

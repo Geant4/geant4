@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-31.01.2019 Ivana Hrivnacova  Tag: XrayFluo-V10-04-02
+31.01.2019 Ivana Hrivnacova  Tag: XrayFluo-V10-05-00
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 09.11.2018 Gabiele Cosmo   Tag: XrayFluo-V10-04-01

@@ -95,7 +95,9 @@ ifeq ($(G4SYSTEM),Linux-g++)
     QTMOC      := $(QTHOME)/bin/moc
   endif
 
-  QT_VERSION := $(shell $(QTMOC) 2>&1 -v | sed 's/.* .Qt \([0-9]\)\..*/\1/' )
+  ifndef QT_VERSION
+    QT_VERSION := 5
+  endif
 
   ifeq ($(QT_VERSION),5)
     ifndef QTFLAGS              # Qt5
@@ -123,10 +125,10 @@ ifeq ($(G4SYSTEM),Linux-g++)
   endif
   ifeq ($(QT_VERSION),5)
     ifndef QTLIBS              # Qt5
-      QTLIBS   := -L$(QTLIBPATH) -lQtCore -lQtGui -lQtWidgets -lQtPrintSupport
+      QTLIBS   := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets -lQt5PrintSupport
     endif
     ifndef GLQTLIBS
-      GLQTLIBS := -L$(QTLIBPATH) -lQtCore -lQtGui -lQtWidgets  -lQtOpenGL -lQtPrintSupport
+      GLQTLIBS := -L$(QTLIBPATH) -lQt5Core -lQt5Gui -lQt5Widgets  -lQt5OpenGL -lQt5PrintSupport
     endif
   else                         # Qt4
     ifndef QTLIBS

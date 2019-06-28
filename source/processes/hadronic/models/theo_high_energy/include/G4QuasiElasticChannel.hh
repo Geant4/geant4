@@ -63,8 +63,8 @@ class G4QuasiElasticChannel
   private:
         G4QuasiElasticChannel(const G4QuasiElasticChannel &);
 	const G4QuasiElasticChannel & operator=(const G4QuasiElasticChannel &);
-	int operator==(const G4QuasiElasticChannel &) const;
-	int operator!=(const G4QuasiElasticChannel &) const;
+	G4bool operator==(const G4QuasiElasticChannel &) const;
+	G4bool operator!=(const G4QuasiElasticChannel &) const;
 
    private:
    	G4QuasiElRatios* theQuasiElastic;

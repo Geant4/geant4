@@ -43,6 +43,8 @@
 
 namespace field_utils {
 
+using State = G4double[G4FieldTrack::ncompSVEC];
+
 enum class Value3D {
     Position = 0,
     Momentum = 3,
@@ -96,6 +98,9 @@ void setValue(const SourceArray& src, Value1D value, TargetArray& trg, TargetArr
 void copy(G4double dst[], const G4double src[], size_t size = G4FieldTrack::ncompSVEC);
 
 G4double inverseCurvatureRadius(G4double particleCharge, G4double momentum, G4double BField);
+
+template <typename T>
+T clamp(T value, T lo, T hi);
 
 } // field_utils
 

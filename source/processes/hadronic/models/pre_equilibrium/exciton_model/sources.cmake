@@ -65,6 +65,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_preequ_exciton
         G4HETCNeutron.hh
         G4HETCProton.hh
         G4HETCTriton.hh
+        G4LowEGammaNuclearModel.hh
         G4LowEIonFragmentation.hh
         G4PreCompoundAlpha.hh
         G4PreCompoundDeuteron.hh
@@ -95,6 +96,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_preequ_exciton
         G4HETCNeutron.cc
         G4HETCProton.cc
         G4HETCTriton.cc
+        G4LowEGammaNuclearModel.cc
         G4LowEIonFragmentation.cc
         G4PreCompoundAlpha.cc
         G4PreCompoundDeuteron.cc

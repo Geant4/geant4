@@ -168,9 +168,6 @@ void DMXPhysicsList::ConstructMyShortLiveds()
   slConstructor.ConstructParticle();
 }
 
-
-
-
 // Construct Processes //////////////////////////////////////////////////////
 void DMXPhysicsList::ConstructProcess() 
 {
@@ -422,7 +419,6 @@ void DMXPhysicsList::ConstructEM() {
 	//ionisation
 	pmanager->AddProcess(ahadronIon,       -1,2,2);      
       }
-    
   }
 }
 
@@ -549,6 +545,7 @@ void DMXPhysicsList::ConstructOp()
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4ComponentAntiNuclNuclearXS.hh"
 #include "G4ComponentGGNuclNuclXsc.hh"
+#include "G4ComponentGGHadronNucleusXsc.hh"
 
 #include "G4HadronElastic.hh"
 #include "G4HadronCaptureProcess.hh"
@@ -621,6 +618,9 @@ void DMXPhysicsList::ConstructHad()
   G4VCrossSectionDataSet * theAntiNucleonData = new G4CrossSectionInelastic( new G4ComponentAntiNuclNuclearXS );
   G4ComponentGGNuclNuclXsc * ggNuclNuclXsec = new G4ComponentGGNuclNuclXsc();
   G4VCrossSectionDataSet * theGGNuclNuclData = new G4CrossSectionInelastic(ggNuclNuclXsec);
+  G4VCrossSectionDataSet * theGGNNEl = new G4CrossSectionElastic(ggNuclNuclXsec);
+  G4ComponentGGHadronNucleusXsc * ggHNXsec = new G4ComponentGGHadronNucleusXsc();
+  G4VCrossSectionDataSet * theGGHNEl = new G4CrossSectionElastic(ggHNXsec);
 
   auto particleIterator=GetParticleIterator();
   particleIterator->reset();
@@ -670,6 +670,7 @@ void DMXPhysicsList::ConstructHad()
 	{
 	  // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
+	  theElasticProcess->AddDataSet( theGGHNEl );
           theElasticProcess->RegisterMe( elastic_lhep0 );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering	
@@ -686,6 +687,7 @@ void DMXPhysicsList::ConstructHad()
 	{
 	  // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
+	  theElasticProcess->AddDataSet( theGGHNEl );
           theElasticProcess->RegisterMe( elastic_lhep0 );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering	 
@@ -702,6 +704,7 @@ void DMXPhysicsList::ConstructHad()
 	{
 	  // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
+	  theElasticProcess->AddDataSet( theGGHNEl );
           theElasticProcess->RegisterMe( elastic_lhep0 );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
 	  // Inelastic scattering
@@ -718,6 +721,7 @@ void DMXPhysicsList::ConstructHad()
 	{
 	  // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
+	  theElasticProcess->AddDataSet( theGGHNEl );
           theElasticProcess->RegisterMe( elastic_lhep0 );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
@@ -811,6 +815,7 @@ void DMXPhysicsList::ConstructHad()
 	{
 	  // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
+	  theElasticProcess->AddDataSet( theGGHNEl );
           theElasticProcess->RegisterMe( elastic_lhep0 );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering (include annihilation on-fly)
@@ -825,6 +830,7 @@ void DMXPhysicsList::ConstructHad()
 	{
 	  // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
+	  theElasticProcess->AddDataSet( theGGNNEl );
           theElasticProcess->RegisterMe( elastic_lhep0 );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
@@ -840,6 +846,7 @@ void DMXPhysicsList::ConstructHad()
 	{
 	  // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
+	  theElasticProcess->AddDataSet( theGGNNEl );
           theElasticProcess->RegisterMe( elastic_lhep0 );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
@@ -854,6 +861,7 @@ void DMXPhysicsList::ConstructHad()
 	{
 	  // Elastic scattering
           G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
+	  theElasticProcess->AddDataSet( theGGNNEl );
           theElasticProcess->RegisterMe( elastic_lhep0 );
 	  pmanager->AddDiscreteProcess( theElasticProcess );
           // Inelastic scattering
@@ -864,10 +872,8 @@ void DMXPhysicsList::ConstructHad()
           theInelasticProcess->RegisterMe( theBERTModel0 );
 	  pmanager->AddDiscreteProcess( theInelasticProcess );
 	}
-
     }
 }
-
 
 // Decays ///////////////////////////////////////////////////////////////////
 #include "G4Decay.hh"

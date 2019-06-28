@@ -94,13 +94,22 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetLineSegmentsPerCircle->SetParameterName("lineSegmentsPerCircle", omitable = true);
   fpCommandSetLineSegmentsPerCircle->SetDefaultValue(0);
   
+  fpCommandSetForceCloud = new G4UIcmdWithABool
+  ("/vis/touchable/set/forceCloud", this);
+  fpCommandSetForceCloud->SetGuidance
+  ("Force current touchable always to be drawn as a cloud.");
+  fpCommandSetForceCloud->SetGuidance
+  ("Use \"/vis/set/touchable\" to set current touchable.");
+  fpCommandSetForceCloud->SetParameterName("force", omitable = true);
+  fpCommandSetForceCloud->SetDefaultValue(true);
+
   fpCommandSetForceSolid = new G4UIcmdWithABool
   ("/vis/touchable/set/forceSolid", this);
   fpCommandSetForceSolid->SetGuidance
   ("Force current touchable always to be drawn solid (surface drawing).");
   fpCommandSetForceSolid->SetGuidance
   ("Use \"/vis/set/touchable\" to set current touchable.");
-  fpCommandSetForceSolid->SetParameterName("forceSolid", omitable = true);
+  fpCommandSetForceSolid->SetParameterName("force", omitable = true);
   fpCommandSetForceSolid->SetDefaultValue(true);
 
   fpCommandSetForceWireframe = new G4UIcmdWithABool
@@ -129,6 +138,18 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetLineWidth->SetParameterName("lineWidth", omitable = true);
   fpCommandSetLineWidth->SetDefaultValue(1.);
 
+  fpCommandSetNumberOfCloudPoints = new G4UIcmdWithAnInteger
+  ("/vis/touchable/set/numberOfCloudPoints", this);
+  fpCommandSetNumberOfCloudPoints->SetGuidance
+  ("For current touchable, set number of line segments per circle, the"
+   "\nprecision with which a curved line or surface is represented by a"
+   "\npolygon or polyhedron, regardless of the view parameters."
+   "\nNegative to pick up G4Polyhedron default value.");
+  fpCommandSetNumberOfCloudPoints->SetGuidance
+  ("Use \"/vis/set/touchable\" to set current touchable.");
+  fpCommandSetNumberOfCloudPoints->SetParameterName("lineSegmentsPerCircle", omitable = true);
+  fpCommandSetNumberOfCloudPoints->SetDefaultValue(0);
+
   fpCommandSetVisibility = new G4UIcmdWithABool
   ("/vis/touchable/set/visibility", this);
   fpCommandSetVisibility->SetGuidance
@@ -141,10 +162,12 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
 
 G4VisCommandsTouchableSet::~G4VisCommandsTouchableSet() {
   delete fpCommandSetVisibility;
+  delete fpCommandSetNumberOfCloudPoints;
   delete fpCommandSetLineWidth;
   delete fpCommandSetLineStyle;
   delete fpCommandSetForceWireframe;
   delete fpCommandSetForceSolid;
+  delete fpCommandSetForceCloud;
   delete fpCommandSetLineSegmentsPerCircle;
   delete fpCommandSetForceAuxEdgeVisible;
   delete fpCommandSetDaughtersInvisible;
@@ -217,6 +240,15 @@ void G4VisCommandsTouchableSet::SetNewValue
       fCurrentTouchableProperties.fTouchablePath));
   }
   
+  else if (command == fpCommandSetForceCloud) {
+    workingVisAtts.SetForceCloud(G4UIcommand::ConvertToBool(newValue));
+    workingVP.AddVisAttributesModifier
+    (G4ModelingParameters::VisAttributesModifier
+     (workingVisAtts,
+      G4ModelingParameters::VASForceCloud,
+      fCurrentTouchableProperties.fTouchablePath));
+  }
+
   else if (command == fpCommandSetForceSolid) {
     workingVisAtts.SetForceSolid(G4UIcommand::ConvertToBool(newValue));
     workingVP.AddVisAttributesModifier
@@ -225,7 +257,7 @@ void G4VisCommandsTouchableSet::SetNewValue
       G4ModelingParameters::VASForceSolid,
       fCurrentTouchableProperties.fTouchablePath));
   }
-  
+
   else if (command == fpCommandSetForceWireframe) {
     workingVisAtts.SetForceWireframe(G4UIcommand::ConvertToBool(newValue));
     workingVP.AddVisAttributesModifier
@@ -260,6 +292,16 @@ void G4VisCommandsTouchableSet::SetNewValue
       fCurrentTouchableProperties.fTouchablePath));
   }
   
+  else if (command == fpCommandSetNumberOfCloudPoints) {
+    workingVisAtts.SetForceNumberOfCloudPoints
+    (G4UIcommand::ConvertToInt(newValue));
+    workingVP.AddVisAttributesModifier
+    (G4ModelingParameters::VisAttributesModifier
+     (workingVisAtts,
+      G4ModelingParameters::VASForceNumberOfCloudPoints,
+      fCurrentTouchableProperties.fTouchablePath));
+  }
+
   else if (command == fpCommandSetVisibility) {
     workingVisAtts.SetVisibility(G4UIcommand::ConvertToBool(newValue));
     workingVP.AddVisAttributesModifier

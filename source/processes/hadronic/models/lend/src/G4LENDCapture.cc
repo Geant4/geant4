@@ -137,7 +137,7 @@ G4HadFinalState * G4LENDCapture::ApplyYourself(const G4HadProjectile& aTrack, G4
       G4FragmentVector* products_from_PE = photonEvaporation.BreakItUp(nucleus);
       G4FragmentVector::iterator it;
 
-      for ( it = products_from_PE->begin(); it != products_from_PE->end(); it++)
+      for (it = products_from_PE->begin(); it != products_from_PE->end(); it++)
       {
          if ( (*it)->GetZ_asInt() == iZ + ipZ &&  (*it)->GetA_asInt() == iA + ipA )  needResidual = false;
          G4DynamicParticle* theSec = new G4DynamicParticle;
@@ -152,6 +152,7 @@ G4HadFinalState * G4LENDCapture::ApplyYourself(const G4HadProjectile& aTrack, G4
          }
          theResult->AddSecondary( theSec );
       }
+      delete products_from_PE;
    }
    
    //if necessary, generate residual nucleus

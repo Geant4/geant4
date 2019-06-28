@@ -78,6 +78,7 @@
 #include "G4alphaIonisation.hh"
 #include "G4AtimaEnergyLossModel.hh"
 #include "G4AtimaFluctuations.hh"
+#include "G4eplusTo2GammaOKVIModel.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -248,10 +249,13 @@ void PhysListEm19DStandard::ConstructProcess()
       ssm->SetLowEnergyLimit(highEnergyLimit);
       ssm->SetActivationLowEnergyLimit(highEnergyLimit);
 
+      G4eplusAnnihilation* ann = new G4eplusAnnihilation();
+      ann->SetEmModel(new G4eplusTo2GammaOKVIModel());
+
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4eIonisation(), particle);
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);
-      ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+      ph->RegisterProcess(ann, particle);
       ph->RegisterProcess(ss, particle);
 
     } else if (particleName == "mu+" ||

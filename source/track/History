@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
 
+- May 24, 2019 V.Ivanchenko (track-V10-05-00)
+  G4Track.hh added forward declaration for G4VProcess
+
 - Nov. 5, 2018 H.Kurashige(track-V10-04-02)
 - Add protection for nullptr access in G4Track.icc
   Addressing problem report #2097.

@@ -137,6 +137,7 @@ class G4ReplicatedSlice : public G4VPhysicalVolume
     virtual G4int GetCopyNo() const;
     virtual void  SetCopyNo(G4int CopyNo);
     virtual G4bool IsReplicated() const;
+    virtual G4int GetMultiplicity() const;
     virtual G4VPVParameterisation* GetParameterisation() const;
     virtual void GetReplicationData( EAxis& axis,
                                      G4int& nReplicas,

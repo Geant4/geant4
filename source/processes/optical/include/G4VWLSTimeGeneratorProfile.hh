@@ -52,7 +52,7 @@
 #include "globals.hh"
 #include "G4MaterialPropertiesTable.hh"
 
-class G4VWLSTimeGeneratorProfile 
+class G4VWLSTimeGeneratorProfile
 {
 
 public:
@@ -64,15 +64,13 @@ public:
   virtual G4double GenerateTime(const G4double time_constant) = 0;
   virtual G4double GenerateTime(const G4MaterialPropertiesTable*) = 0;
 
-protected:
-
 private:
 
   // hide assignment operator
 
-     G4VWLSTimeGeneratorProfile & operator=
-                         (const  G4VWLSTimeGeneratorProfile &right);
-     G4VWLSTimeGeneratorProfile(const  G4VWLSTimeGeneratorProfile&);
+  G4VWLSTimeGeneratorProfile & operator=
+                      (const  G4VWLSTimeGeneratorProfile &right) = delete;
+  G4VWLSTimeGeneratorProfile(const  G4VWLSTimeGeneratorProfile&) = delete;
 
 };
 

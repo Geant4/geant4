@@ -54,6 +54,10 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EmCorrections.hh
         G4EmDataHandler.hh
         G4EmElementSelector.hh
+        G4EmExtraParameters.hh
+        G4EmExtraParametersMessenger.hh
+        G4EmLowEParameters.hh
+        G4EmLowEParametersMessenger.hh
         G4EmModelManager.hh
         G4EmMultiModel.hh
         G4EmParameters.hh
@@ -66,6 +70,7 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4LossTableBuilder.hh
         G4LossTableManager.hh
         G4MscStepLimitType.hh
+        G4NIELCalculator.hh
         G4NuclearFormfactorType.hh
         G4VAtomDeexcitation.hh
         G4VEmAngularDistribution.hh
@@ -87,6 +92,10 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EmCorrections.cc
         G4EmDataHandler.cc
         G4EmElementSelector.cc 
+        G4EmExtraParameters.cc
+        G4EmExtraParametersMessenger.cc
+        G4EmLowEParameters.cc
+        G4EmLowEParametersMessenger.cc
         G4EmModelManager.cc
         G4EmMultiModel.cc
         G4EmParameters.cc
@@ -96,6 +105,7 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EnergyLossTables.cc
         G4LossTableBuilder.cc
         G4LossTableManager.cc
+        G4NIELCalculator.cc
         G4VAtomDeexcitation.cc
         G4VEmAngularDistribution.cc
         G4VEmFluctuationModel.cc

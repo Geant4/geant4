@@ -114,6 +114,10 @@ typedef float Float;
 #define INT_MIN   std::numeric_limits<int>::min()   // -2147483648
 #endif
 
+#ifndef LOG_EKIN_MIN  /* Min value of the natural logarithm of kin. energy. */
+#define LOG_EKIN_MIN   -30
+#endif
+
 //---------------------------------
 
 template <class T>

@@ -59,8 +59,8 @@ class G4TheoFSGenerator : public G4HadronicInteraction
   private:
       G4TheoFSGenerator(const G4TheoFSGenerator &right);
       const G4TheoFSGenerator & operator=(const G4TheoFSGenerator &right);
-      int operator==(const G4TheoFSGenerator &right) const;
-      int operator!=(const G4TheoFSGenerator &right) const;
+      G4bool operator==(const G4TheoFSGenerator &right) const;
+      G4bool operator!=(const G4TheoFSGenerator &right) const;
 
   public:
       G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus);

@@ -7,15 +7,9 @@
 //
 // ======================================================================
 
-#if defined (G4MULTITHREADED)
-
-  #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 7) || __clang__ || WIN32
-    #include <atomic>
-    #define CLHEP_ATOMIC_INT_TYPE std::atomic<int>
-  #else
-    #define CLHEP_ATOMIC_INT_TYPE int
-  #endif
-
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 7) || __clang__ || WIN32
+  #include <atomic>
+  #define CLHEP_ATOMIC_INT_TYPE std::atomic<int>
 #else
   #define CLHEP_ATOMIC_INT_TYPE int
 #endif

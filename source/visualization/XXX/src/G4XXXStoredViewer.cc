@@ -114,6 +114,7 @@ G4bool G4XXXStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
   // Typical comparison.  Taken from OpenGL.
   if (
       (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (lastVP.GetNumberOfCloudPoints()  != fVP.GetNumberOfCloudPoints())  ||
       (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
       (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||

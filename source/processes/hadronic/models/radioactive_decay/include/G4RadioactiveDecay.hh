@@ -359,6 +359,8 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 #ifdef G4MULTITHREADED
   public:
     static G4Mutex radioactiveDecayMutex;
+  protected:
+    G4int& NumberOfInstances();
 #endif
 };
 

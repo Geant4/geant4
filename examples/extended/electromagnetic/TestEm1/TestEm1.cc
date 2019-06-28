@@ -55,15 +55,12 @@ int main(int argc,char** argv) {
 
   //detect interactive mode (if no arguments) and define UI session
   G4UIExecutive* ui = nullptr;
-  if (argc == 1) ui = new G4UIExecutive(argc,argv);
-
-  //choose the Random engine
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  if (argc == 1) { ui = new G4UIExecutive(argc,argv); }
 
   //construct the default run manager
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
-    G4int nThreads = G4Threading::G4GetNumberOfCores();
+    G4int nThreads = 4;
     if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
     runManager->SetNumberOfThreads(nThreads);
 #else

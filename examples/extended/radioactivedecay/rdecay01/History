@@ -14,7 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-06-19 Dennis Wright (rdecay01-V10-05-00)
+-------------------------------------------
+- PhysicsList.cc: replace G4RadioactiveDecay with refactored class G4Radioactivation
+
 27-06-18 mma (rdecay01-V10-04-03)
+---------------------------------
 - add timeWindowBiased.mac and data
 
 08-05-18 Ben Morgan (rdecay01-V10-04-02)

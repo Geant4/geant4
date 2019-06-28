@@ -39,6 +39,8 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3Vector.hh"
+#include "G4PhysicalVolumesSearchScene.hh"
+#include "G4TransportationManager.hh"
 #include "G4Point3D.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
@@ -56,33 +58,6 @@
 #include <regex>
 #include <filesystem>
 #endif //WIN32
-
-G4VVisCommandViewer::G4VVisCommandViewer () {}
-
-G4VVisCommandViewer::~G4VVisCommandViewer () {}
-
-void G4VVisCommandViewer::SetViewParameters
-(G4VViewer* viewer, const G4ViewParameters& viewParams) {
-  viewer->SetViewParameters(viewParams);
-  RefreshIfRequired(viewer);
-}
-
-void G4VVisCommandViewer::RefreshIfRequired(G4VViewer* viewer) {
-  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-  G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
-  const G4ViewParameters& viewParams = viewer->GetViewParameters();
-  if (sceneHandler && sceneHandler->GetScene()) {
-    if (viewParams.IsAutoRefresh()) {
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
-    }
-    else {
-      if (verbosity >= G4VisManager::warnings) {
-	G4cout << "Issue /vis/viewer/refresh or flush to see effect."
-	       << G4endl;
-      }
-    }
-  }
-}
 
 ////////////// /vis/viewer/addCutawayPlane ///////////////////////////////////////
 
@@ -162,6 +137,173 @@ void G4VisCommandViewerAddCutawayPlane::SetNewValue (G4UIcommand*, G4String newV
   }
 
   SetViewParameters(viewer, vp);
+}
+
+////////////// /vis/viewer/centreOn ///////////////////////////////////////
+
+G4VisCommandViewerCentreOn::G4VisCommandViewerCentreOn () {
+  G4bool omitable;
+  fpCommandCentreAndZoomInOn = new G4UIcommand ("/vis/viewer/centreAndZoomInOn", this);
+  fpCommandCentreAndZoomInOn->SetGuidance
+  ("Centre and zoom in on the given physical volume.");
+  fpCommandCentreAndZoomInOn->SetGuidance
+  ("The names of all volumes in all worlds are matched against pv-name. If"
+   "\ncopy-no is supplied, it matches the copy number too. If pv-name is of the"
+   "\nform \"/regexp/\", where regexp is a regular expression (see C++ regex),"
+   "\nthe match uses the usual rules of regular expression matching."
+   "\nOtherwise an exact match is required."
+   "\nFor example, \"/Shap/\" matches \"Shape1\" and \"Shape2\".");
+  fpCommandCentreAndZoomInOn->SetGuidance
+  ("It may help to see a textual representation of the geometry hierarchy of"
+   "\nthe worlds. Try \"/vis/drawTree [worlds]\" or one of the driver/browser"
+   "\ncombinations that have the required functionality, e.g., HepRepFile.");
+  fpCommandCentreAndZoomInOn->SetGuidance
+   ("If there are more than one matching physical volumes they will all be"
+    "\nincluded. If this is not what you want, and what you want is to centre on a"
+    "\nparticular touchable, then select the touchable (\"/vis/set/touchable\") and"
+    "\nuse \"/vis/touchable/centreOn\". (You may need \"/vis/touchable/findPath\".)");
+  G4UIparameter* parameter;
+  parameter =  new G4UIparameter("pv-name",'s',omitable = false);
+  parameter->SetGuidance      ("Physical volume name.");
+  fpCommandCentreAndZoomInOn->SetParameter(parameter);
+  parameter =  new G4UIparameter("copy-no",'i',omitable = true);
+  parameter->SetDefaultValue  (-1);
+  parameter->SetGuidance      ("Copy number. -1 means any or all copy numbers");
+  fpCommandCentreAndZoomInOn->SetParameter(parameter);
+
+  fpCommandCentreOn = new G4UIcommand ("/vis/viewer/centreOn", this);
+  fpCommandCentreOn->SetGuidance ("Centre the view on the given physical volume.");
+  // Pick up additional guidance from /vis/viewer/centreAndZoomInOn
+  CopyGuidanceFrom(fpCommandCentreAndZoomInOn,fpCommandCentreOn,1);
+  // Pick up parameters from /vis/viewer/centreAndZoomInOn
+  CopyParametersFrom(fpCommandCentreAndZoomInOn,fpCommandCentreOn);
+}
+
+G4VisCommandViewerCentreOn::~G4VisCommandViewerCentreOn () {
+  delete fpCommandCentreAndZoomInOn;
+  delete fpCommandCentreOn;
+}
+
+G4String G4VisCommandViewerCentreOn::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandViewerCentreOn::SetNewValue (G4UIcommand* command, G4String newValue) {
+  
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn = verbosity >= G4VisManager::warnings;
+
+  G4VViewer* currentViewer = fpVisManager -> GetCurrentViewer ();
+  if (!currentViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<
+      "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
+      << G4endl;
+    }
+    return;
+  }
+  
+  G4String pvName;
+  G4int copyNo;
+  std::istringstream is (newValue);
+  is >> pvName >> copyNo;
+
+  // Find physical volumes
+  G4TransportationManager* transportationManager =
+  G4TransportationManager::GetTransportationManager ();
+  size_t nWorlds = transportationManager->GetNoWorlds();
+  std::vector<G4PhysicalVolumesSearchScene::Findings> findingsVector;
+  std::vector<G4VPhysicalVolume*>::iterator iterWorld =
+  transportationManager->GetWorldsIterator();
+  for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
+    G4PhysicalVolumeModel searchModel (*iterWorld);  // Unlimited depth.
+    G4ModelingParameters mp;  // Default - no culling.
+    searchModel.SetModelingParameters (&mp);
+    G4PhysicalVolumesSearchScene searchScene (&searchModel, pvName, copyNo);
+    searchModel.DescribeYourselfTo (searchScene);  // Initiate search.
+    for (const auto& findings: searchScene.GetFindings()) {
+      findingsVector.push_back(findings);
+    }
+  }
+  
+  if (findingsVector.empty()) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cerr
+      << "WARNING: Volume \"" << pvName << "\" ";
+      if (copyNo > 0) {
+        G4cerr << "copy number " << copyNo;
+      }
+      G4cerr << " not found." << G4endl;
+    }
+    return;
+  }
+
+  // Use a temporary scene in order to find vis extent
+  G4Scene tempScene("Centre Scene");
+  for (const auto& findings: findingsVector) {
+    // To handle paramaterisations we have to set the copy number
+    findings.fpFoundPV->SetCopyNo(findings.fFoundPVCopyNo);
+    // Create a temporary physical volume model.
+    // They have to be created on the heap because they have
+    // to hang about long enough to be conflated.
+    G4PhysicalVolumeModel* tempPVModel = new G4PhysicalVolumeModel
+    (findings.fpFoundPV,
+     0, // Only interested in top volume
+     findings.fFoundObjectTransformation,
+     0, // No modelling parameters (these are set later by the scene handler).
+     true,  // Use full extent
+     findings.fFoundBasePVPath);
+    // ...and add it to the scene.
+    G4bool successful = tempScene.AddRunDurationModel(tempPVModel,warn);
+    if (successful) {
+      if (verbosity >= G4VisManager::confirmations) {
+        G4cout << "\"" << findings.fpFoundPV->GetName()
+        << "\", copy no. " << findings.fFoundPVCopyNo
+        << ",\n  found in searched volume \""
+        << findings.fpSearchPV->GetName()
+        << "\" at depth " << findings.fFoundDepth
+        << ",\n  base path: \"" << findings.fFoundBasePVPath
+        << ",\n  has been added to temporary scene \"" << tempScene.GetName() << "\"."
+        << G4endl;
+      }
+    }
+  }
+  // Delete temporary physical volume models
+  for (const auto& sceneModel: tempScene.GetRunDurationModelList()) {
+    delete sceneModel.fpModel;
+  }
+  
+  // Relevant results
+  const G4VisExtent& newExtent = tempScene.GetExtent();
+  const G4ThreeVector& newTargetPoint = newExtent.GetExtentCentre();
+  
+  G4Scene* currentScene = currentViewer->GetSceneHandler()->GetScene();
+  G4ViewParameters saveVP = currentViewer->GetViewParameters();
+  G4ViewParameters newVP = saveVP;
+  if (command == fpCommandCentreAndZoomInOn) {
+    // Calculate the new zoom factor
+    const G4double zoomFactor
+    = currentScene->GetExtent().GetExtentRadius()/newExtent.GetExtentRadius();
+    newVP.SetZoomFactor(zoomFactor);
+  }
+  // Change the target point
+  const G4Point3D& standardTargetPoint = currentScene->GetStandardTargetPoint();
+  newVP.SetCurrentTargetPoint(newTargetPoint - standardTargetPoint);
+  // Interpolate
+  InterpolateToNewView(currentViewer, saveVP, newVP);
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout
+    << "Viewer \"" << currentViewer->GetName()
+    << "\" centred ";
+    if (fpCommandCentreAndZoomInOn) {
+      G4cout << "and zoomed in";
+    }
+    G4cout << " on physical volume(s) \"" << pvName << '\"'
+    << G4endl;
+  }  
+  
+  SetViewParameters(currentViewer, newVP);
 }
 
 ////////////// /vis/viewer/changeCutawayPlane ///////////////////////////////////////
@@ -1211,7 +1353,10 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
     while (fileliststream >> pathname
            && safetyCount++ < safety) {  // Loop checking, 16.02.2016, J.Allison
       uiManager->ApplyCommand("/control/execute " + pathname);
-      viewVector.push_back(currentViewer->GetViewParameters());
+      G4ViewParameters vp = currentViewer->GetViewParameters();
+      // Set original auto-refresh status.
+      vp.SetAutoRefresh(saveVP.IsAutoRefresh());
+      viewVector.push_back(vp);
     }
   }
   pclose(filelist);
@@ -1267,7 +1412,10 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
     if (std::regex_match(filename, result_pattern_regex))
     {
       uiManager->ApplyCommand("/control/execute " + filename);
-      viewVector.push_back(currentViewer->GetViewParameters());
+      G4ViewParameters vp = currentViewer->GetViewParameters();
+      // Set original auto-refresh status.
+      vp.SetAutoRefresh(saveVP.IsAutoRefresh());
+      viewVector.push_back(vp);
     }
   }
 
@@ -1283,27 +1431,9 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
     return;
   }
 
-  // Interpolate views
-  safetyCount = 0;
-  do {
-    G4ViewParameters* vp =
-    G4ViewParameters::CatmullRomCubicSplineInterpolation(viewVector,nInterpolationPoints);
-    if (!vp) break;  // Finished.
-    // Set original auto-refresh status.
-    vp->SetAutoRefresh(saveVP.IsAutoRefresh());
-    currentViewer->SetViewParameters(*vp);
-    currentViewer->RefreshView();
-    if (exportString == "export" &&
-        currentViewer->GetName().contains("OpenGL")) {
-      uiManager->ApplyCommand("/vis/ogl/export");
-    }
-    // File-writing viewers need to close the file
-    currentViewer->ShowView();
-#ifdef G4VIS_USE_STD11
-    if (waitTimePerPointmilliseconds > 0)
-      std::this_thread::sleep_for(std::chrono::milliseconds(waitTimePerPointmilliseconds));
-#endif
-  } while (safetyCount++ < safety);  // Loop checking, 16.02.2016, J.Allison
+  InterpolateViews
+  (currentViewer,viewVector,
+   nInterpolationPoints,waitTimePerPointmilliseconds,exportString);
 
   // Restore original verbosities
   uiManager->SetVerboseLevel(keepUIVerbosity);

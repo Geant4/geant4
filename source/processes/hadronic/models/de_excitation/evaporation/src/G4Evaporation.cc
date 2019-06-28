@@ -63,7 +63,7 @@
 #include "Randomize.hh"
 
 G4Evaporation::G4Evaporation(G4VEvaporationChannel* photoEvaporation)  
-  : G4VEvaporation(),fVerbose(0),nChannels(0),minExcitation(0.1*keV),
+  : G4VEvaporation(),fVerbose(1),nChannels(0),minExcitation(0.1*keV),
     isInitialised(false)
 {
   if(photoEvaporation) { SetPhotonEvaporation(photoEvaporation); }
@@ -90,6 +90,7 @@ void G4Evaporation::InitialiseChannels()
   G4DeexPrecoParameters* param = 
     G4NuclearLevelData::GetInstance()->GetParameters(); 
   minExcitation = param->GetMinExcitation();
+  fVerbose = param->GetVerbose();
 
   G4DeexChannelType type = param->GetDeexChannelsType();
   if(type == fCombined) { SetCombinedChannel(); }
@@ -104,7 +105,7 @@ void G4Evaporation::InitialiseChannelFactory()
   nChannels = theChannels->size();   
   probabilities.resize(nChannels, 0.0);
 
-  if(fVerbose > 0) {
+  if(fVerbose > 1) {
     G4cout << "### G4Evaporation::InitialiseChannelFactory  for " 
 	   << nChannels << " channels " << this << G4endl;
   }
@@ -171,7 +172,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
 
     // check if it is stable, then finish evaporation
     G4double abun = nist->GetIsotopeAbundance(Z, A); 
-    if(fVerbose > 0) {
+    if(fVerbose > 1) {
       G4cout << "### G4Evaporation::BreakItUp step " << ia << " Z= " << Z
 	     << " A= " << A << " Eex(MeV)= " 
 	     << theResidualNucleus->GetExcitationEnergy()
@@ -182,14 +183,14 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
  
     totprob = 0.0;
     maxchannel = nChannels;
-    if(fVerbose > 1) {
+    if(fVerbose > 2) {
       G4cout << "### Evaporation loop #" << ia 
 	     << "  Fragment: " << theResidualNucleus << G4endl;
     }
     // loop over evaporation channels
     for(i=0; i<nChannels; ++i) {
       prob = (*theChannels)[i]->GetEmissionProbability(theResidualNucleus);
-      if(fVerbose > 1 && prob > 0.0) {
+      if(fVerbose > 2 && prob > 0.0) {
 	G4cout << "  Channel# " << i << "  prob= " << prob << G4endl; 
       }
       totprob += prob;
@@ -208,7 +209,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     // photon evaporation in the case of no other channels available
     // do evaporation chain and reset total probability
     if(0.0 < totprob && probabilities[0] == totprob) {
-      if(fVerbose > 1) {
+      if(fVerbose > 2) {
 	G4cout << "Start chain of gamma evaporation" << G4endl;
       }
       (*theChannels)[0]->BreakUpChain(theResult, theResidualNucleus);
@@ -222,7 +223,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
       if(0.0 == abun) {
 	if(!unstableBreakUp->BreakUpChain(theResult, theResidualNucleus))
 	  { break; }
-	if(fVerbose > 1) { G4cout << "$$$ Decay exotic fragment" << G4endl; }
+	if(fVerbose > 2) { G4cout << "$$$ Decay exotic fragment" << G4endl; }
       } else {
 	break;
       }
@@ -233,9 +234,9 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     // loop over evaporation channels
     for(i=0; i<maxchannel; ++i) { if(probabilities[i] >= totprob) { break; } }
 
-    if(fVerbose > 1) { G4cout << "Channel # " << i << G4endl; }
+    if(fVerbose > 2) { G4cout << "Channel # " << i << G4endl; }
     G4Fragment* frag = (*theChannels)[i]->EmittedFragment(theResidualNucleus);
-    if(fVerbose > 1 && frag) { G4cout << "   " << *frag << G4endl; }
+    if(fVerbose > 2 && frag) { G4cout << "   " << *frag << G4endl; }
 
     // normaly a fragment should be created
     if(frag) { theResult->push_back(frag); }

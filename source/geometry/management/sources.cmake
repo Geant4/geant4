@@ -26,12 +26,27 @@ include_directories(${CMAKE_SOURCE_DIR}/source/graphics_reps/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 
+
+# Configure header for preprocessor symbols for USolids
+configure_file(${CMAKE_CURRENT_LIST_DIR}/include/G4GeomConfig.hh.in
+  ${CMAKE_CURRENT_BINARY_DIR}/include/G4GeomConfig.hh
+  )
+
+# WORKAROUND: When building/testing examples uing ROOT, ROOT's
+# dictionary generation is not smart enough to handle target usage
+# requirements for include paths. Explicitly add the path to the
+# generated header into build time include paths...
+set_property(GLOBAL APPEND
+  PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/include")
+
+
 #
 # Define the Geant4 Module.
 #
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4geometrymng
     HEADERS
+        ${CMAKE_CURRENT_BINARY_DIR}/include/G4GeomConfig.hh
         G4AffineTransform.hh
         G4AffineTransform.icc
         G4BlockingList.hh
@@ -44,6 +59,7 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4ErrorTarget.hh
         G4GeomSplitter.hh
         G4GeomTools.hh
+        G4GeomTypes.hh
         G4GeometryManager.hh
         G4IdentityTrajectoryFilter.hh
         G4LogicalCrystalVolume.hh

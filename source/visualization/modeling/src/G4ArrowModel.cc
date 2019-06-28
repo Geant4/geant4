@@ -35,11 +35,12 @@
 #include "G4VGraphicsScene.hh"
 #include "G4VisAttributes.hh"
 #include "G4Tubs.hh"
-#include "G4GenericPolycone.hh"
+#include "G4Tet.hh"
 #include "G4Polyhedron.hh"
 #include "G4Vector3D.hh"
 #include "G4Point3D.hh"
 #include "G4Transform3D.hh"
+#include "G4GeometryTolerance.hh"
 
 G4ArrowModel::~G4ArrowModel ()
 {
@@ -53,6 +54,8 @@ G4ArrowModel::G4ArrowModel
  G4double width, const G4Colour& colour,
  const G4String& description,
  G4int lineSegmentsPerCircle)
+: fpShaftPolyhedron(nullptr)
+, fpHeadPolyhedron(nullptr)
 {
   fType = "G4ArrowModel";
   fGlobalTag = fType;
@@ -71,28 +74,33 @@ G4ArrowModel::G4ArrowModel
 
   // Make a cylinder slightly shorter than the arrow length so that it
   // doesn't stick out of the head.
-  const G4double shaftLength = std::sqrt
+  const G4double tolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
+  G4double shaftLength = std::sqrt
     (std::pow(x2-x1,2)+std::pow(y2-y1,2)+std::pow(z2-z1,2));
+  if (shaftLength < tolerance) shaftLength = tolerance;
   G4double shaftRadius = width/2.;
-  // Limit the radius
   if (shaftRadius > shaftLength/100.) shaftRadius = shaftLength/100.;
+  if (shaftRadius < tolerance) shaftRadius = tolerance;
   const G4double halfShaftLength = shaftLength/2.;
   const G4double halfReduction = 4.*shaftRadius;
-  const G4double halfLength = halfShaftLength-halfReduction;
-  G4Tubs shaft("shaft",0.,shaftRadius,halfLength,0.,twopi);
+  G4double halfLength = halfShaftLength - halfReduction;
+  if (halfLength < tolerance) halfLength = tolerance;
+  const G4Tubs shaft("shaft",0.,shaftRadius,halfLength,0.,twopi);
   fpShaftPolyhedron = shaft.CreatePolyhedron();
   // Move it a little so that the tail is at z = -halfShaftLength.
-  fpShaftPolyhedron->Transform(G4Translate3D(0,0,-halfReduction));
+  if (fpShaftPolyhedron)
+    fpShaftPolyhedron->Transform(G4Translate3D(0,0,-halfReduction));
 
   // Locate the head at +halfShaftLength.
-  const G4int numRZ = 3;
-  G4double r[] = {0,4,0};
-  G4double z[] = {0,-6,-4};
-  for (G4int i = 0; i < numRZ; i++) {
-    r[i] *= 2.*shaftRadius;
-    z[i] = halfShaftLength + z[i] * 2.*shaftRadius;
-  }
-  G4GenericPolycone head("head",0,twopi,numRZ,r,z);
+  const G4double zHi  = halfShaftLength;
+  const G4double zLow = halfShaftLength - 12.*shaftRadius;
+  const G4double rExt = 8. * shaftRadius;
+  const G4double xExt = std::sqrt(3.)*rExt/2.;
+  const G4Tet head("head",
+                   G4ThreeVector(0.,0.,zHi),
+                   G4ThreeVector(0.,rExt,zLow),
+                   G4ThreeVector(xExt,-rExt/2.,zLow),
+                   G4ThreeVector(-xExt,-rExt/2.,zLow));
   fpHeadPolyhedron = head.CreatePolyhedron();
 
   // Transform to position
@@ -102,14 +110,14 @@ G4ArrowModel::G4ArrowModel
   const G4Point3D arrowCentre(0.5*(x1+x2),0.5*(y1+y2),0.5*(z1+z2));
   const G4Transform3D tr =
     G4Translate3D(arrowCentre) * G4RotateZ3D(phi) * G4RotateY3D(theta);
-  fpShaftPolyhedron->Transform(tr);
-  fpHeadPolyhedron->Transform(tr);
+  if (fpShaftPolyhedron) fpShaftPolyhedron->Transform(tr);
+  if (fpHeadPolyhedron) fpHeadPolyhedron->Transform(tr);
 
   G4VisAttributes va;
   va.SetColour(colour);
   va.SetForceSolid(true);
-  fpShaftPolyhedron->SetVisAttributes(va);
-  fpHeadPolyhedron->SetVisAttributes(va);
+  if (fpShaftPolyhedron) fpShaftPolyhedron->SetVisAttributes(va);
+  if (fpHeadPolyhedron) fpHeadPolyhedron->SetVisAttributes(va);
 
   // Restore number of line segments per circle
   G4Polyhedron::SetNumberOfRotationSteps(tempN);
@@ -118,7 +126,7 @@ G4ArrowModel::G4ArrowModel
 void G4ArrowModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
   sceneHandler.BeginPrimitives();
-  sceneHandler.AddPrimitive(*fpShaftPolyhedron);
-  sceneHandler.AddPrimitive(*fpHeadPolyhedron);
+  if (fpShaftPolyhedron) sceneHandler.AddPrimitive(*fpShaftPolyhedron);
+  if (fpHeadPolyhedron) sceneHandler.AddPrimitive(*fpHeadPolyhedron);
   sceneHandler.EndPrimitives();
 }

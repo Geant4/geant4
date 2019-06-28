@@ -94,10 +94,12 @@ public: // with description
     // Optionally rotate by *rot then translate by tlate - rot may be null
 
   inline G4AffineTransform(const G4AffineTransform& rhs);
-    // Copy constructor
+  inline G4AffineTransform(G4AffineTransform&& rhs) = default;
+    // Copy and move constructors
 
   inline G4AffineTransform& operator=(const G4AffineTransform& rhs);
-    // Assignment operator
+  inline G4AffineTransform& operator=(G4AffineTransform&& rhs) = default;
+    // Assignment & Move operators
 
   inline ~G4AffineTransform();
     // Destructor

@@ -19,8 +19,27 @@ committal in the CVS repository !
 History file for graphics_reps category
 ---------------------------------------
 
-31 January 2019  Ivana Hrivnacova (greps-V10-04-09)
+12 June 2019  John Allison (greps-V10-05-03)
+- G4VisAttributes:
+  o Add G4VisAttributes::cloud and methods to force:
+    .  SetForceCloud
+    .  SetForceNumberOfCloudPoints
+
+24 February 2019  John Allison (greps-V10-05-02)
+- Remove Get/SetDrawOverlapsFlag from G4VVisManager.
+
+19 February 2019  John Allison
+- Included in vis-V10-05-12
+- G4VisExtent:
+  o Replaced operator*(const G4Transform3D&) by
+    Transform(const G4Transform3D&).
+    (Note: operator* was only ever in a development version of Geant4.)
+
+31 January 2019  Ivana Hrivnacova (greps-V10-05-01)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+02 January 2018  John Allison (greps-V10-05-00)
+- G4VisExtent: Add operator*(const G4Transform3D&).
 
 19 October 2018  John Allison (greps-V10-04-08)
 - G4VisExtent: Add GetNullExtent.

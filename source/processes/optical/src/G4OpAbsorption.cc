@@ -53,101 +53,73 @@
 
 #include "G4OpAbsorption.hh"
 
-/////////////////////////
-// Class Implementation
-/////////////////////////
-
-        //////////////
-        // Operators
-        //////////////
-
-// G4OpAbsorption::operator=(const G4OpAbsorption &right)
-// {
-// }
-
-        /////////////////
-        // Constructors
-        /////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4OpAbsorption::G4OpAbsorption(const G4String& processName, G4ProcessType type)
-              : G4VDiscreteProcess(processName, type)
+  : G4VDiscreteProcess(processName, type)
 {
-        if (verboseLevel>0) {
-           G4cout << GetProcessName() << " is created " << G4endl;
-        }
+  if (verboseLevel >0 ) {
+     G4cout << GetProcessName() << " is created " << G4endl;
+  }
 
-        SetProcessSubType(fOpAbsorption);
+  SetProcessSubType(fOpAbsorption);
 }
 
-// G4OpAbsorption::G4OpAbsorption(const G4OpAbsorpton &right)
-// {
-// }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-        ////////////////
-        // Destructors
-        ////////////////
+G4OpAbsorption::~G4OpAbsorption()
+{}
 
-G4OpAbsorption::~G4OpAbsorption(){}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-        ////////////
-        // Methods
-        ////////////
-
-// PostStepDoIt
-// -------------
-//
 G4VParticleChange*
 G4OpAbsorption::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
-        aParticleChange.Initialize(aTrack);
+  aParticleChange.Initialize(aTrack);
 
-        const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-        G4double thePhotonMomentum = aParticle->GetTotalMomentum();
+  const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+  G4double thePhotonMomentum = aParticle->GetTotalMomentum();
 
-        aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
+  aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
 
-        aParticleChange.ProposeTrackStatus(fStopAndKill);
+  aParticleChange.ProposeTrackStatus(fStopAndKill);
 
-        if (verboseLevel>0) {
-	   G4cout << "\n** Photon absorbed! **" << G4endl;
-        }
-        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+  if (verboseLevel>0) {
+    G4cout << "\n** Photon absorbed! **" << G4endl;
+  }
+  return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// GetMeanFreePath
-// ---------------
-//
 G4double G4OpAbsorption::GetMeanFreePath(const G4Track& aTrack,
- 				         G4double ,
-				         G4ForceCondition* )
+ 				         G4double,
+				         G4ForceCondition*)
 {
 	const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-        const G4Material* aMaterial = aTrack.GetMaterial();
+  const G4Material* aMaterial = aTrack.GetMaterial();
 
 	G4double thePhotonMomentum = aParticle->GetTotalMomentum();
 
 	G4MaterialPropertiesTable* aMaterialPropertyTable;
 	G4MaterialPropertyVector* AttenuationLengthVector;
-	
-        G4double AttenuationLength = DBL_MAX;
+
+  G4double AttenuationLength = DBL_MAX;
 
 	aMaterialPropertyTable = aMaterial->GetMaterialPropertiesTable();
 
-	if ( aMaterialPropertyTable ) {
-	   AttenuationLengthVector = aMaterialPropertyTable->
-                                                GetProperty(kABSLENGTH);
-           if ( AttenuationLengthVector ){
-             AttenuationLength = AttenuationLengthVector->
-                                         Value(thePhotonMomentum);
-           }
-           else {
-//             G4cout << "No Absorption length specified" << G4endl;
-           }
-        } 
-        else {
-//           G4cout << "No Absorption length specified" << G4endl;
-        }
+	if (aMaterialPropertyTable) {
+    AttenuationLengthVector = aMaterialPropertyTable->GetProperty(kABSLENGTH);
+    if (AttenuationLengthVector) {
+      AttenuationLength = AttenuationLengthVector->Value(thePhotonMomentum);
+    }
+    //    else {
+    //    G4cout << "No Absorption length specified" << G4endl;
+    //    }
+  }
+  //  else {
+  //           G4cout << "No Absorption length specified" << G4endl;
+  //  }
 
-        return AttenuationLength;
+  return AttenuationLength;
 }

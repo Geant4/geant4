@@ -80,6 +80,15 @@ include(IntelCompileFeatures)
 if(NOT WIN32)
 
 #.rst:
+# - ``Debug_FPE``
+#   For debugging with full Floating Point Exception checking
+#
+set(CMAKE_CXX_FLAGS_DEBUG_FPE "${CMAKE_CXX_FLAGS_DEBUG_FPE_INIT}"
+  CACHE STRING "Flags used by the compiler during Debug_FPE builds"
+  )
+mark_as_advanced(CMAKE_CXX_FLAGS_DEBUG_FPE)
+
+#.rst:
 # - ``TestRelease``:
 #   For trial production and extended testing. It has verbose
 #   output, has debugging symbols, and adds definitions to allow FPE
@@ -110,18 +119,19 @@ if(NOT CMAKE_CONFIGURATION_TYPES)
   if(NOT CMAKE_BUILD_TYPE)
     # Default to a Release build if nothing else...
     set(CMAKE_BUILD_TYPE Release
-      CACHE STRING "Choose the type of build, options are: None Release TestRelease MinSizeRel Debug RelWithDebInfo MinSizeRel Maintainer."
+      CACHE STRING "Choose the type of build, options are: None Release TestRelease MinSizeRel Debug Debug_FPE RelWithDebInfo MinSizeRel Maintainer."
       FORCE
       )
   else()
     # Force to the cache, but use existing value.
     set(CMAKE_BUILD_TYPE "${CMAKE_BUILD_TYPE}"
-      CACHE STRING "Choose the type of build, options are: None Release TestRelease MinSizeRel Debug RelWithDebInfo MinSizeRel Maintainer."
+      CACHE STRING "Choose the type of build, options are: None Release TestRelease MinSizeRel Debug Debug_FPE RelWithDebInfo MinSizeRel Maintainer."
       FORCE
       )
   endif()
 else()
   # Multimode tools like VS, Xcode
+  list(APPEND CMAKE_CONFIGURATION_TYPES Debug_FPE)
   list(APPEND CMAKE_CONFIGURATION_TYPES TestRelease)
   list(APPEND CMAKE_CONFIGURATION_TYPES Maintainer)
   list(REMOVE_DUPLICATES CMAKE_CONFIGURATION_TYPES)
@@ -200,9 +210,6 @@ endif()
 # An example of where a workaround is needed
 # Rest of concurrency a library implementation feature
 
-# Add Definition to flags for temporary back compatibility
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DG4USE_STD11")
-
 # Hold any appropriate compile flag(s) in variable for later export to
 # config files. Needed to support clients using late CMake 2.8 where compile features
 # are not available.
@@ -261,7 +268,6 @@ if(GEANT4_BUILD_MULTITHREADED)
 
   # Set Defs/Compiler Flags
   # TODO: Migrate def to header
-  add_definitions(-DG4MULTITHREADED)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GEANT4_MULTITHREADED_CXX_FLAGS}")
 endif()
 
@@ -280,11 +286,6 @@ option(GEANT4_BUILD_STORE_TRAJECTORY
   ON)
 mark_as_advanced(GEANT4_BUILD_STORE_TRAJECTORY)
 
-# TODO: Migrate this to header
-if(GEANT4_BUILD_STORE_TRAJECTORY)
-  add_definitions(-DG4_STORE_TRAJECTORY)
-endif()
-
 #.rst:
 # - ``GEANT4_BUILD_VERBOSE_CODE`` (Default: ON)
 #
@@ -296,29 +297,6 @@ option(GEANT4_BUILD_VERBOSE_CODE
   "Enable verbose output from Geant4 code. Switch off for better performance at the cost of fewer informational messages or warnings"
   ON)
 mark_as_advanced(GEANT4_BUILD_VERBOSE_CODE)
-
-# TODO: Migrate this to header
-if(GEANT4_BUILD_VERBOSE_CODE)
-  add_definitions(-DG4VERBOSE)
-endif()
-
-#.rst:
-# - ``GEANT4_BUILD_MUONIC_ATOMS_IN_USE`` (Default: OFF)
-#
-#   - Switched off by default to improve performance when not using
-#     Muonic Atom code. It should be switched on if the project requires
-#     support for Muonic Atoms.
-#     Mark as advanced because most users should not need to worry about it
-#
-option(GEANT4_BUILD_MUONIC_ATOMS_IN_USE
-  "Enable turning on some if statements in track and event code. Switch on if using new Muonic Atom code."
-  OFF)
-mark_as_advanced(GEANT4_BUILD_MUONIC_ATOMS_IN_USE)
-
-# TODO: Migrate this to header
-if(GEANT4_BUILD_MUONIC_ATOMS_IN_USE)
-  add_definitions(-DG4MUATOMS_INUSE)
-endif()
 
 #.rst:
 # - ``GEANT4_BUILD_MSVC_MP`` (Windows only, Default: OFF)

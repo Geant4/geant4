@@ -100,6 +100,10 @@ inline G4bool G4VisAttributes::IsForceDrawingStyle () const {
   return fForceDrawingStyle;
 }
 
+inline G4int G4VisAttributes::GetForcedNumberOfCloudPoints () const {
+  return fForcedNumberOfCloudPoints;
+}
+
 inline G4bool G4VisAttributes::IsForceAuxEdgeVisible () const {
   return fForceAuxEdgeVisible;
 }

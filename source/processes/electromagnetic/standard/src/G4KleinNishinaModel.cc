@@ -338,7 +338,7 @@ void G4KleinNishinaModel::SampleSecondaries(
   if(fAtomDeexcitation) {
     G4int index = couple->GetIndex();
     if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
-      G4int Z = G4lrint(elm->GetZ());
+      G4int Z = elm->GetZasInt();
       G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
       const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
       G4int nbefore = fvect->size();

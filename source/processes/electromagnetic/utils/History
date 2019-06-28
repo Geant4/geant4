@@ -16,27 +16,61 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13 March 19: M.Asai (emutils-V10-04-27)
-- G4EmParametersMessenger: Defining unit categories for UI commands
-  that take units.
+31 May 19: V.Ivanchenko (emutils-V10-05-12)
+- G4NIELCalculator - new helper class
+- G4LossTableManager - added access and initialisation of 
+    G4NIELCalculator
 
-11 March 19: G.Cosmo (emutils-V10-04-26)
+17 May 19: V.Ivanchenko (emutils-V10-05-11)
+- G4EmParameters, G4EmParametersMessenger, G4EmExtraParameters, 
+  G4EmExtraParametersMessenger - added extra parameters;
+
+07 May 19: V.Ivanchenko (emutils-V10-05-10)
+- G4EmParameters, G4EmParametersMessenger - split clases keeping the 
+    user interface unchanged;
+  G4EmExtraParameters, G4EmExtraParametersMessenger - new classes for 
+    complex EM parameters;
+  G4EmLowEParameters, G4EmLowEParametersMessenger - new classes for 
+    low-energy and DNA parameters
+
+19 April 19: V.Ivanchenko (emutils-V10-05-09)
+- G4EmParameters - added polarisation flag, move implementation of splitting
+  parameters to source and added check on lock; added 9.99 MeV low limit
+  in the SetMaxEnergy() method, added thread lock to Dump method 
+
+01 April 19: V.Ivanchenko (emutils-V10-05-08)
+- G4LossTableManager - added Register/DeRegister methods and vector
+  of pointers for G4VProcess classes for X-ray and optical processes
+
+17 March 19: M.Novak (emutils-V10-05-07)
+- G4EmElementSelector, G4VEmModel - added extra method to select the target atom
+  by making use of the already known log-energy value in the log-vector access
+
+17 March 19: M.Novak (emutils-V10-05-06)
+- G4VEmProcess, G4VEnergyLossProcess and G4VMscModel - added extra methods to 
+  access log-vector tables by propagating the already known log-energy value
+
+13 March 19: M.Asai (emutils-V10-05-05)
+- G4EmParametersMessenger: Defining unit categories for UI commands
+  that take units. Co-working with intercoms-V10-05-02.
+
+11 March 19: G.Cosmo (emutils-V10-05-04)
 - Fixed typos in printouts in G4EmParametersMessenger.
 
-04 March 19: D.Sawkey 
+04 March 19: D.Sawkey (emutils-V10-05-03)
 - G4EmBiasingManager, G4VEmProcess, G4VEnergyLossProcess - fix
    weights for biasing. Should be like version 10.4 now for range cut,
    splitting, roulette
 
-18 February 19: D.Sawkey 
+18 February 19: D.Sawkey (emutils-V10-05-02)
 - G4VEmProcess, G4VEnergyLossProcess - make printout information
     more compact
 
-13 February 19: D.Sawkey
+13 February 19: D.Sawkey (emutils-V10-05-01)
 - G4EmBiasingManager: fix incorrect weights with brem splitting
     introduced in 10.5 (problem #2125)
 
-31 January 19: V.Ivanchenko
+31 January 19: V.Ivant (emutils-V10-05-00)
 - G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering,
   G4EmModelManager - make info printout at intialisation more 
     compact (fix problem #2105)

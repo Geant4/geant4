@@ -13,6 +13,13 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-May-2019, Alberto Ribon              (phys-ctor-stopping-V10-05-00)
+- Use FTFP also for the annihilation at rest of neutral anti-hadrons:
+  anti-neutron, anti-lambda, anti-sigma0 anti-xi0.
+  Note: this extension is for completeness and practical convenience,
+        although physically neutral hadrons should never be completely
+        at rest!
+
 03-Nov-2016, Alberto Ribon              (phys-ctor-stopping-V10-02-02)
 - Written first draft of the README
 	 

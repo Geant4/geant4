@@ -65,6 +65,8 @@
 #ifndef G4Cons_HH
 #define G4Cons_HH
 
+#include "G4GeomTypes.hh"
+
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UCONS 1
 #endif
@@ -108,7 +110,7 @@ class G4Cons : public G4CSGSolid
     inline G4double GetCosStartPhi()       const;
     inline G4double GetSinEndPhi()         const;
     inline G4double GetCosEndPhi()         const;
-  
+
     // Modifiers
 
     inline void SetInnerRadiusMinusZ (G4double Rmin1 );
@@ -133,7 +135,7 @@ class G4Cons : public G4CSGSolid
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
                             const G4AffineTransform& pTransform,
-                                  G4double& pMin, G4double& pMax ) const;         
+                                  G4double& pMin, G4double& pMax ) const;
 
     EInside Inside( const G4ThreeVector& p ) const;
 
@@ -146,13 +148,13 @@ class G4Cons : public G4CSGSolid
                            const G4ThreeVector& v,
                            const G4bool calcNorm=G4bool(false),
                                  G4bool *validNorm=0,
-                                 G4ThreeVector *n=0) const;             
+                                 G4ThreeVector *n=0) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
-        
-    G4ThreeVector GetPointOnSurface() const; 
-        
+
+    G4ThreeVector GetPointOnSurface() const;
+
     G4VSolid* Clone() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
@@ -163,7 +165,7 @@ class G4Cons : public G4CSGSolid
     G4Polyhedron* CreatePolyhedron() const;
 
   public:  // without description
-       
+
     G4Cons(__void__&);
       //
       // Fake default constructor for usage restricted to direct object
@@ -171,7 +173,7 @@ class G4Cons : public G4CSGSolid
       // persistifiable objects.
 
     G4Cons(const G4Cons& rhs);
-    G4Cons& operator=(const G4Cons& rhs); 
+    G4Cons& operator=(const G4Cons& rhs);
       // Copy constructor and assignment operator.
 
     //  Old access functions
@@ -185,7 +187,7 @@ class G4Cons : public G4CSGSolid
     inline G4double    GetDPhi() const;
 
   private:
- 
+
     inline void Initialize();
       //
       // Reset relevant values to zero
@@ -210,7 +212,7 @@ class G4Cons : public G4CSGSolid
     // Used by distanceToOut
     //
     enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
-  
+
     // used by normal
     //
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
@@ -223,7 +225,7 @@ class G4Cons : public G4CSGSolid
       //
       // Radial and angular dimensions
 
-    G4double sinCPhi, cosCPhi, cosHDPhiOT, cosHDPhiIT,
+    G4double sinCPhi, cosCPhi, cosHDPhi, cosHDPhiOT, cosHDPhiIT,
              sinSPhi, cosSPhi, sinEPhi, cosEPhi;
       //
       // Cached trigonometric values

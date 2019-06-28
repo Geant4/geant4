@@ -19,6 +19,9 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
+19 December 2018  Gabriele Cosmo  (gMocren-V10-05-00)
+- Fixed shadowing compilation warning in G4GMocrenFileSceneHandler.
+
 13 July 2018  Gabriele Cosmo  (gMocren-V10-04-01)
 - Fixed remaining gcc-8 compilation warnings in G4GMocrenFileViewer.
 

@@ -38,188 +38,86 @@
 #include "G4DNAMolecularReaction.hh"
 #include "G4DNAMolecularReactionTable.hh"
 #include "G4VDNAReactionModel.hh"
-#include "G4MoleculeFinder.hh"
-#include "G4UnitsTable.hh"
 #include "G4MolecularConfiguration.hh"
+#include "G4Molecule.hh"
+#include "G4MoleculeFinder.hh"
+#include "G4ITReactionChange.hh"
 
-using namespace std;
-
-G4DNAMolecularReaction::G4DNAMolecularReaction() :
-    G4VITReactionProcess(),
-    fMolReactionTable(
-        reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
+G4DNAMolecularReaction::G4DNAMolecularReaction()
+    : G4VITReactionProcess()
+    , fMolReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
+    , fpReactionModel(nullptr)
 {
-  //ctor
-  fVerbose = 0;
-  fReactionModel = 0;
-  fReactionRadius = -1;
-  fDistance = -1;
 }
 
-G4DNAMolecularReaction::~G4DNAMolecularReaction()
+G4DNAMolecularReaction::G4DNAMolecularReaction(G4VDNAReactionModel* pReactionModel)
+    : G4DNAMolecularReaction()
 {
-  //dtor
-  if (fpChanges) delete fpChanges;
+    fpReactionModel = pReactionModel;
 }
 
-G4DNAMolecularReaction::G4DNAMolecularReaction(const G4DNAMolecularReaction& other) :
-    G4VITReactionProcess(other),
-    fMolReactionTable(
-        reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
-{
-  //copy ctor
-  fVerbose = other.fVerbose;
-  fMolReactionTable = other.fMolReactionTable;
-  fReactionModel = 0;
-  fReactionRadius = -1;
-  fDistance = -1;
-}
-
-G4DNAMolecularReaction& G4DNAMolecularReaction::operator=(const G4DNAMolecularReaction& rhs)
-{
-  if (this == &rhs) return *this; // handle self assignment
-
-  fVerbose = rhs.fVerbose;
-  fMolReactionTable = rhs.fMolReactionTable;
-  fReactionRadius = -1;
-  fDistance = -1;
-
-  //assignment operator
-  return *this;
-}
-
-G4bool G4DNAMolecularReaction::TestReactibility(const G4Track& trackA,
-                                                const G4Track& trackB,
-                                                const double currentStepTime,
-                                                const double /*previousStepTime*/,
+G4bool G4DNAMolecularReaction::TestReactibility(const G4Track &trackA,
+                                                const G4Track &trackB,
+                                                double currentStepTime,
                                                 bool userStepTimeLimit) /*const*/
 {
-  G4MolecularConfiguration* moleculeA =
-      GetMolecule(trackA)->GetMolecularConfiguration();
-  G4MolecularConfiguration* moleculeB =
-      GetMolecule(trackB)->GetMolecularConfiguration();
+    const auto pMoleculeA = GetMolecule(trackA)->GetMolecularConfiguration();
+    const auto pMoleculeB = GetMolecule(trackB)->GetMolecularConfiguration();
 
-  if (!fReactionModel)
-  {
-    G4ExceptionDescription exceptionDescription(
-        "You have to give a reaction model to the molecular reaction process");
-    G4Exception("G4DNAMolecularReaction::TestReactibility",
-                "MolecularReaction001", FatalErrorInArgument,
-                exceptionDescription);
-    return false; // makes coverity happy
-  }
-  if (fMolReactionTable == 0)
-  {
-    G4ExceptionDescription exceptionDescription(
-        "You have to give a reaction table to the molecular reaction process");
-    G4Exception("G4DNAMolecularReaction::TestReactibility",
-                "MolecularReaction002", FatalErrorInArgument,
-                exceptionDescription);
-    return false; // makes coverity happy
-  }
+    const G4double reactionRadius = fpReactionModel->GetReactionRadius(pMoleculeA, pMoleculeB);
 
-  // Retrieve reaction range
-  fReactionRadius = -1; // reaction Range
-  fReactionRadius = fReactionModel->GetReactionRadius(moleculeA, moleculeB);
+    G4double separationDistance = -1.;
 
-  fDistance = -1; // separation distance
+    if (currentStepTime == 0.)
+    {
+        userStepTimeLimit = false;
+    }
 
-  if (currentStepTime == 0.)
-  {
-    userStepTimeLimit = false;
-  }
-
-  G4bool output = fReactionModel->FindReaction(trackA, trackB, fReactionRadius,
-                                               fDistance, userStepTimeLimit);
-
-#ifdef G4VERBOSE
-  //    DEBUG
-  if (fVerbose > 1)
-  {
-    G4cout << "\033[1;39;36m" << "G4MolecularReaction " << G4endl;
-    G4cout << "FindReaction returned : " << G4BestUnit(output,"Length") << G4endl;
-    G4cout << " reaction radius : " << G4BestUnit(fReactionRadius,"Length")
-    << " real distance : " << G4BestUnit((trackA.GetPosition() - trackB.GetPosition()).mag(), "Length")
-    << " calculated distance by model (= -1 if real distance > reaction radius and the user limitation step is not reached) : "
-    << G4BestUnit(fDistance,"Length")
-    << G4endl;
-
-    G4cout << "TrackID A : " << trackA.GetTrackID()
-    << ", TrackID B : " << trackB.GetTrackID()
-    << " | MolA " << moleculeA->GetName()
-    << ", MolB " << moleculeB->GetName()
-    <<"\033[0m\n"
-    << G4endl;
-    G4cout << "--------------------------------------------" << G4endl;
-  }
-#endif
-  return output;
+    G4bool output = fpReactionModel->FindReaction(trackA, trackB, reactionRadius,
+                                                  separationDistance, userStepTimeLimit);
+    return output;
 }
 
-G4ITReactionChange* G4DNAMolecularReaction::MakeReaction(const G4Track& trackA,
-                                                         const G4Track& trackB)
+std::unique_ptr<G4ITReactionChange> G4DNAMolecularReaction::MakeReaction(const G4Track &trackA,
+                                                                          const G4Track &trackB)
 {
-  fpChanges = new G4ITReactionChange();
-  fpChanges->Initialize(trackA, trackB);
+    std::unique_ptr<G4ITReactionChange> pChanges(new G4ITReactionChange());
+    pChanges->Initialize(trackA, trackB);
 
-  G4MolecularConfiguration* moleculeA =
-      GetMolecule(trackA)->GetMolecularConfiguration();
-  G4MolecularConfiguration* moleculeB =
-      GetMolecule(trackB)->GetMolecularConfiguration();
+    const auto pMoleculeA = GetMolecule(trackA)->GetMolecularConfiguration();
+    const auto pMoleculeB = GetMolecule(trackB)->GetMolecularConfiguration();
 
-#ifdef G4VERBOSE
-  // DEBUG
-  if (fVerbose)
-  {
-    G4cout << "G4DNAMolecularReaction::MakeReaction" << G4endl;
-    G4cout<<"TrackA n°" << trackA.GetTrackID()
-    <<"\t | Track B n°" << trackB.GetTrackID() << G4endl;
+    const auto pReactionData = fMolReactionTable->GetReactionData(pMoleculeA, pMoleculeB);
 
-    G4cout<<"Track A : Position : " << G4BestUnit(trackA.GetPosition(),"Length")
-    <<"\t Global Time : " << G4BestUnit(trackA.GetGlobalTime(), "Time")<< G4endl;
+    const G4int nbProducts = pReactionData->GetNbProducts();
 
-    G4cout<<"Track B : Position : " << G4BestUnit(trackB.GetPosition() ,"Length")
-    <<"\t Global Time : " << G4BestUnit(trackB.GetGlobalTime(), "Time")<< G4endl;
-
-    G4cout<<"Reaction range : " << G4BestUnit(fReactionRadius,"Length")
-    << " \t Separation distance : " << G4BestUnit(fDistance,"Length")<< G4endl;
-    G4cout << "--------------------------------------------" << G4endl;
-  }
-#endif
-
-  const G4DNAMolecularReactionData* reactionData = fMolReactionTable
-      ->GetReactionData(moleculeA, moleculeB);
-
-  G4int nbProducts = reactionData->GetNbProducts();
-
-  if (nbProducts)
-  {
-    G4double D1 = moleculeA->GetDiffusionCoefficient();
-    G4double D2 = moleculeB->GetDiffusionCoefficient();
-    G4double sqrD1 = sqrt(D1);
-    G4double sqrD2 = sqrt(D2);
-    G4double numerator = sqrD1 + sqrD2;
-    G4ThreeVector reactionSite = sqrD1 / numerator * trackA.GetPosition()
-        + sqrD2 / numerator * trackB.GetPosition();
-
-    for (G4int j = 0; j < nbProducts; j++)
+    if (nbProducts)
     {
-      G4Molecule* product = new G4Molecule(reactionData->GetProduct(j));
-      G4Track* productTrack = product->BuildTrack(trackA.GetGlobalTime(),
-                                                  reactionSite);
+        const G4double D1 = pMoleculeA->GetDiffusionCoefficient();
+        const G4double D2 = pMoleculeB->GetDiffusionCoefficient();
+        const G4double sqrD1 = D1 == 0. ? 0. : sqrt(D1);
+        const G4double sqrD2 = D2 == 0. ? 0. : sqrt(D2);
+        const G4double inv_numerator = 1./(sqrD1 + sqrD2);
+        const G4ThreeVector reactionSite = sqrD2 * inv_numerator * trackA.GetPosition()
+                                         + sqrD1 * inv_numerator * trackB.GetPosition();
 
-//            G4cout << ">> G4DNAMolecularReaction::MakeReaction " << G4endl
-//            		<< "\t track A ("<< trackA.GetTrackID() <<"): " << trackA.GetGlobalTime() << G4endl
-//            		<< "\t track B ("<< trackB.GetTrackID() <<"): " << trackB.GetGlobalTime() << G4endl;
+        for (G4int j = 0; j < nbProducts; ++j)
+        {
+            auto pProduct = new G4Molecule(pReactionData->GetProduct(j));
+            auto pProductTrack = pProduct->BuildTrack(trackA.GetGlobalTime(), reactionSite);
 
-      productTrack->SetTrackStatus(fAlive);
+            pProductTrack->SetTrackStatus(fAlive);
 
-      fpChanges->AddSecondary(productTrack);
-      G4MoleculeFinder::Instance()->Push(productTrack);
+            pChanges->AddSecondary(pProductTrack);
+            G4MoleculeFinder::Instance()->Push(pProductTrack);
+        }
     }
-  }
 
-  fpChanges->KillParents(true);
+    pChanges->KillParents(true);
+    return pChanges;
+}
 
-  return fpChanges;
+void G4DNAMolecularReaction::SetReactionModel(G4VDNAReactionModel* pReactionModel)
+{
+    fpReactionModel = pReactionModel;
 }

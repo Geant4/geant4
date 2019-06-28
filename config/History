@@ -15,6 +15,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16th May 2019 Gabriele Cosmo (config-V10-05-01)
+- Hard-code Qt version through QT_VERSION flag.
+  Corrected Qt5 setup for Linux-g++ and Linux-clang.
+
+26th April 2019 Ben Morgan (config-V10-05-00)
+- Add -DG4GMAKE to CPPFLAGS to indicate use, or not, of Geant4Make.
+  This is to protect use or not of the new G4GlobalConfig header
+  introduced in cmake-V10-05-02.
+
 28th September 2018 Gabriele Cosmo  (config-V10-04-09)
 - Added -DGL_SILENCE_DEPRECATION to CPPFLAGS to Darwin setups to silence
   deprecation compilation warnings on MacOS 10.14 Mojave.

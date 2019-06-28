@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -33,8 +32,6 @@
 // Author:        Vladimir Ivanchenko created from G4EnergyLossMessenger
 //
 // Creation date: 22-05-2013
-//
-// Modifications:
 //
 // -------------------------------------------------------------------
 //
@@ -90,12 +87,6 @@ private:
   G4UIcmdWithABool*          splCmd;
   G4UIcmdWithABool*          rsCmd;
   G4UIcmdWithABool*          aplCmd;
-  G4UIcmdWithABool*          deCmd;
-  G4UIcmdWithABool*          dirFluoCmd;
-  G4UIcmdWithABool*          auCmd;
-  G4UIcmdWithABool*          auCascadeCmd;
-  G4UIcmdWithABool*          pixeCmd;
-  G4UIcmdWithABool*          dcutCmd;
   G4UIcmdWithABool*          latCmd;
   G4UIcmdWithABool*          lat96Cmd;
   G4UIcmdWithABool*          mulatCmd;
@@ -104,14 +95,10 @@ private:
   G4UIcmdWithABool*          IntegCmd;
   G4UIcmdWithABool*          mottCmd;
   G4UIcmdWithABool*          birksCmd;
-  G4UIcmdWithABool*          dnafCmd;
-  G4UIcmdWithABool*          dnasCmd;
-  G4UIcmdWithABool*          dnamscCmd;
   G4UIcmdWithABool*          sharkCmd;
   G4UIcmdWithABool*          onIsolatedCmd;
   G4UIcmdWithABool*          sampleTCmd;
   G4UIcmdWithABool*          icru90Cmd;
-  G4UIcmdWithABool*          dirSplitCmd;
 
   G4UIcmdWithADouble*        minSubSecCmd;
   G4UIcmdWithADoubleAndUnit* minEnCmd;
@@ -126,12 +113,12 @@ private:
   G4UIcmdWithADouble*        mscfCmd;
   G4UIcmdWithADoubleAndUnit* angCmd;
   G4UIcmdWithADoubleAndUnit* msceCmd;
+  G4UIcmdWithADoubleAndUnit* nielCmd;
   G4UIcmdWithADouble*        frCmd;
   G4UIcmdWithADouble*        fr1Cmd;
   G4UIcmdWithADouble*        fgCmd;
   G4UIcmdWithADouble*        skinCmd;
   G4UIcmdWithADouble*        screCmd;
-  G4UIcmdWithADoubleAndUnit* dirSplitRadiusCmd;
 
   G4UIcmdWithAnInteger*      dedxCmd;
   G4UIcmdWithAnInteger*      lamCmd;
@@ -143,27 +130,10 @@ private:
 
   G4UIcmdWithAString*        mscCmd;
   G4UIcmdWithAString*        msc1Cmd;
-
-  G4UIcmdWithAString*        pixeXsCmd;
-  G4UIcmdWithAString*        pixeeXsCmd;
-  G4UIcmdWithAString*        dnaSolCmd;
-
-  G4UIcommand*               paiCmd;
-  G4UIcmdWithAString*        meCmd;
-  G4UIcommand*               dnaCmd;
-  G4UIcommand*               mscoCmd;
-  G4UIcommand*               dumpCmd;
-
-  G4UIcommand*               SubSecCmd;
-  G4UIcommand*               StepFuncCmd;
-  G4UIcommand*               StepFuncCmd1;
-  G4UIcommand*               deexCmd;
-  G4UIcommand*               bfCmd;
-  G4UIcommand*               fiCmd;
-  G4UIcommand*               bsCmd;
   G4UIcmdWithAString*        nffCmd;
 
-  G4UIcmdWith3VectorAndUnit* dirSplitTargetCmd;
+  G4UIcommand*               dumpCmd;
+
 };
 
 #endif

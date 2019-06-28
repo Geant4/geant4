@@ -6,6 +6,9 @@
 
                       Category History file
 
+23.04.2019 - Ben Morgan (DICOM2-V10-05-00)
+             Explicitly include G4Types.hh to pick up G4MULTITHREADED
+
 15.11.2018 - Jonathan Madsen (DICOM2-V10-04-04)
              Fixed serial execution
 

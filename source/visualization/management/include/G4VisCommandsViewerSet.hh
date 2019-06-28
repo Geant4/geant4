@@ -42,7 +42,7 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADouble;
 class G4UIcmdWith3VectorAndUnit;
 
-class G4VisCommandsViewerSet: public G4VVisCommandViewer {
+class G4VisCommandsViewerSet: public G4VVisCommand {
 public:
   G4VisCommandsViewerSet ();
   virtual ~G4VisCommandsViewerSet ();
@@ -65,11 +65,12 @@ private:
   G4UIcmdWithADouble*   fpCommandGlobalLineWidthScale;
   G4UIcmdWithABool*     fpCommandHiddenEdge;
   G4UIcmdWithABool*     fpCommandHiddenMarker;
-  G4UIcmdWithAnInteger* fpCommandLineSegments;
   G4UIcmdWithAString*   fpCommandLightsMove;
   G4UIcommand*          fpCommandLightsThetaPhi;
   G4UIcommand*          fpCommandLightsVector;
   G4ThreeVector         fLightsVector;
+  G4UIcmdWithAnInteger* fpCommandLineSegments;
+  G4UIcmdWithAnInteger* fpCommandNumberOfCloudPoints;
   G4UIcmdWithABool*     fpCommandPicking;
   G4UIcommand*          fpCommandProjection;
   G4UIcmdWithAString*   fpCommandRotationStyle;

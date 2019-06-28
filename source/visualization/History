@@ -23,8 +23,162 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-21 January 2019  John Allison  (vis-V10-04-26)
+13 June 2019  John Allison  (vis-V10-05-20)
+- modeling-V10-05-04: Add cloud parameters.
+- visman-V10-05-06: Final changes for introduction of cloud drawing.
+- OpenGL-V10-05-06: Final changes for introduction of cloud drawing.
+- visXXX-V10-05-02: Final changes for introduction of cloud drawing.
+- openinventor-V10-05-05: Test number of cloud points for kernel visit.
+
+10 June 2019  John Allison  (vis-V10-05-19)
+- modeling-V10-05-03:
+  o Arrows and field models: Introduce further protection.
+- OpenGL-V10-05-05:
+  o Force double buffer context for OGLIX.
+  o Force kernel visit on change of number of cloud points.
+- openinventor-V10-05-04:
+  o Add missing #ifdef G4VIS_BUILD_OIX_DRIVER.
+- visXXX-V10-05-01:
+  o Force kernel visit on change of number of cloud points
+
+30 May 2019  John Allison  (vis-V10-05-18)
+- modeling-V10-05-02: Improve field modelling.
+- visman-V10-05-05: Improve message.
+
+04 April 2019  John Allison  (vis-V10-05-17)
+- Co-working tags visman-V10-05-04 and modeling-V10-05-01.
+  o Final (for now) corrections to /vis/viewer/set/sectionPlane.
+    Still some strange behaviour in small fraction of cases. See
+    comments in G4PhysicalVolumeModel::DescribeSolid around line 748.
+
+29 March 2019  John Allison
+- opengl-V10-05-04: Fix Coverity warning and bug in section plane.
+- visman-V10-05-03: Minor tidying.
+
+24 March 2019  John Allison  (vis-V10-05-16)
+- modeling-V10-05-00, visman-V10-05-02, opengl-V10-05-03:
+  o Fix bug in /vis/viewer/set/sectionPlane.
+
+18 March 2019  Gabriele Cosmo (vis-V10-05-15)
+- Corrected few typos in printout/comments.
+
+10 February 2019  John Allison (vis-V10-05-14)
+- visman-V10-05-00:  Introduce cloud drawing style
+  New parameter candidate in /vis/viewer/set/style:
+    /vis/viewer/set/style cloud
+  Cloud drawing uses solid->GetPointOnSurface, i.e., it uses kernel
+  algorithms and by-passes polyhedral representations. The solid is
+  represented by a polymarker of dots. The default number of points
+  is 1000. This can be changed with
+    /vis/viewer/set/numberOfCloudPoints
+  (The minimum number is 100.)
+  Note that OpenGL has a fast algorithm for polymarker.
+- This allows us to use cloud style both as a choice or as fallback when the
+  polyhedral representation fails, for example, when BooleanProcessor fails.
+- See management/History for details.
+- opengl-V10-05-00 and opengl-V10-05-01:
+  o Avoid re-using display lists for markers. They may have their own
+    position relative to the overall object transformation.
+
+24 February 2019  John Allison (vis-V10-05-13)
+- Remove Get/SetDrawOverlapsFlag from G4VVisManager.
+- Fix bug in overlap drawing of parameterised volumes.
+- Add /vis/touchable/extentForField and volumeForField.
+
+19 February 2019  John Allison (vis-V10-05-12)
+- In graphics reps (see graphics_reps/History for details):
+  o Implemented G4VisExtent::Transform(const G4Transform3D&).
+- In modeling (see modeling/History for details):
+  o Introduced G4BoundingExtentScene. This allows one to accumulate extents
+    using the newly introduced G4VisExtent::Transform and is a better way
+    of determining the overall extent of a scene (or of any set of extents)
+    than by the bounding sphere approach.
+  o G4VFieldModel, G4ElectricFieldModel, G4MagneticFieldModel:
+    . Introduced volume for field.
+  o G4VModel: Introduced GetTransformedExtent.
+  o G4PhysicalVolumeModel:
+    . Use G4BoundingExtentScene instead of G4BoundingSphereScene.
+    . Fix bug whereby the local extent was incorrectly calculated - in fact
+      it was the transformed extent.
+- In management (see management/History for details):
+  o Add /vis/scene/showExtents.
+  o Add /vis/set/volumeForField.
+  o Add /vis/touchable/showExtent.
+  o Add copy number parameter to /vis/touchable/findPath.
+  o Correct for fix to bug in G4PhysicalVolumeModel - see modeling/History.
+
+13 February 2019  John Allison (vis-V10-05-11)
+- Implement /vis/set/extentForField
+  o The default is a null extent, which is to be interpreted by the field
+    model as the whole extent of the current scene. Otherwise, with this
+    command, you can limit the extent over which the field is drawn. This
+    would help, for example, if drawing over the whole scene produced so
+    many arrows or lines that it clutters the scene.
+  o Changed the default spacing - the parameter nDataPointsPerHalfExtent
+    is changed from 10 to 3 - so as not to clutter the scene. See
+    guidance of /vis/scene/add/*Field commands for further explanation.
+
+10 February 2019  John Allison (vis-V10-05-10)
+- See manegement/History for details.
+- New and improved commands:
+  o /vis/viewer/centreOn: Improved - it does not zoom.
+  o /vis/viewer/centreAndZoomInOn: New.
+  o /vis/touchable/centreOn: Improved - it does not zoom.
+  o /vis/touchable/centreAndZoomInOn: New.
+
+08 February 2019  John Allison (vis-V10-05-09)
+- Fix Coverity warnings.
+
+03 February 2019  Michael Kelsey (vis-V10-05-08)
+- See modeling/History and management/History for details.
+  o Add /vis/scene/add/electricField by analogy to existing .../magneticField.
+  o Refactor MagneticFieldModel class with new base to handle all kinds of
+    vector fields; existing, and new ElectricFieldModel only have to
+    implement a simple function to get the field vector at a location.
+
+31 January 2019  Ivana Hrivnacova (vis-V10-05-07)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+29 January 2019  John Allison  (vis-V10-05-06)
+- See modeling/History and management/History for details.
+- Add /vis/touchable/draw.
+- /vis/viewer/centreOn: Add copy number to parameter list.
+- Several fixes to handle paramaterisations and replicas.
+
+26 January 2019  John Allison
+- Fix calculation of vis extent for parameterisations. See
+  modeling/History and management/History for details.
+
+25 January 2019  John Allison
+- Rationalise view interpolation
+  Encapsulate algorithm into base class G4VVisCommand. The commands
+    /vis/viewer/interpolate
+    /vis/viewer/centreOn
+    /vis/touchable/centerOn
+  now use this. Might consider use by all view changing commands.
+
+25 January 2019  John Allison  (vis-V10-05-05)
+- Include parameterised volumes in overlap checking and visualisation
+  in G4LogicalVolumeModel
+
+22 January 2019  John Allison  (vis-V10-05-04)
+- Introduce /vis/viewer/centreOn and /vis/touchable/centreOn
+  This allows one to centre the view (zoom in) on a volume.
+  Reset with /vis/viewer/reset.
+
+21 January 2019  John Allison  (vis-V10-05-03)
 - Pick up default number of line-segments-per-circle from G4Polyhedron.
+
+08 January 2019  John Allison  (vis-V10-05-02)
+- Correct History files after merge.
+
+02 January 2019  John Allison  (vis-V10-05-01)
+- Minor improvements to vis manager - see management/History for details.
+
+02 January 2019  John Allison  (vis-V10-05-00)
+- Improve volume handling.
+  o modeling: Add volume count (but comment out printing).
+  o management: Improve guidance for /vis/scene/add/volume.
 
 14 November 2018  John Allison  (vis-V10-04-25)
 - modeling-V10-04-18: Fix Coverity warning.
@@ -3763,7 +3917,7 @@ To be included:
 
 7th December 2004 Joseph Perl (vis-V06-02-08)
 - Tagged right after migration to cmath
-- All occurences of include <math.h> have now become include <cmath>.
+- All occurrences of include <math.h> have now become include <cmath>.
 - All math functions are now prefaced with std::
 
 7th December 2004 Joseph Perl (vis-V06-02-07)

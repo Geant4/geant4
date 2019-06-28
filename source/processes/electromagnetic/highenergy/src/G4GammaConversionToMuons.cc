@@ -40,6 +40,7 @@
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
 #include "G4EmProcessSubType.hh"
+#include "G4LossTableManager.hh"
 #include "G4NistManager.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
@@ -63,12 +64,15 @@ G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
 { 
   SetProcessSubType(fGammaConversionToMuMu);
   MeanFreePath = DBL_MAX;
+  G4LossTableManager::Instance()->Register(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4GammaConversionToMuons::~G4GammaConversionToMuons() 
-{}
+{
+  G4LossTableManager::Instance()->DeRegister(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 

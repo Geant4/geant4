@@ -74,13 +74,13 @@ class G4VisCommandGeometrySetForceAuxEdgeVisibleFunction:
 public:
   virtual ~G4VisCommandGeometrySetForceAuxEdgeVisibleFunction() {}
   G4VisCommandGeometrySetForceAuxEdgeVisibleFunction
-  (G4bool forceAuxEdgeVisible):
-    fForceAuxEdgeVisible(forceAuxEdgeVisible) {}
+  (G4bool force):
+    fForce(force) {}
   void operator()
     (G4VisAttributes* visAtts) const
-  {visAtts->SetForceAuxEdgeVisible(fForceAuxEdgeVisible);}
+  {visAtts->SetForceAuxEdgeVisible(fForce);}
 private:
-  G4bool fForceAuxEdgeVisible;
+  G4bool fForce;
 };
 
 class G4VisCommandGeometrySetForceLineSegmentsPerCircleFunction:
@@ -102,13 +102,13 @@ class G4VisCommandGeometrySetForceSolidFunction:
 public:
   virtual ~G4VisCommandGeometrySetForceSolidFunction() {}
   G4VisCommandGeometrySetForceSolidFunction
-  (G4bool forceSolid):
-    fForceSolid(forceSolid) {}
+  (G4bool force):
+    fForce(force) {}
   void operator()
     (G4VisAttributes* visAtts) const
-  {visAtts->SetForceSolid(fForceSolid);}
+  {visAtts->SetForceSolid(fForce);}
 private:
-  G4bool fForceSolid;
+  G4bool fForce;
 };
 
 class G4VisCommandGeometrySetForceWireframeFunction:
@@ -116,13 +116,13 @@ class G4VisCommandGeometrySetForceWireframeFunction:
 public:
   virtual ~G4VisCommandGeometrySetForceWireframeFunction() {}
   G4VisCommandGeometrySetForceWireframeFunction
-  (G4bool forceWireframe):
-    fForceWireframe(forceWireframe) {}
+  (G4bool force):
+    fForce(force) {}
   void operator()
     (G4VisAttributes* visAtts) const
-  {visAtts->SetForceWireframe(fForceWireframe);}
+  {visAtts->SetForceWireframe(fForce);}
 private:
-  G4bool fForceWireframe;
+  G4bool fForce;
 };
 
 class G4VisCommandGeometrySetLineStyleFunction:

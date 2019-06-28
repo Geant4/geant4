@@ -83,8 +83,8 @@ private:
   G4PreCompoundFragment(const G4PreCompoundFragment &right) = delete;
   const G4PreCompoundFragment& 
   operator= (const G4PreCompoundFragment &right) = delete;
-  G4int operator==(const G4PreCompoundFragment &right) const = delete;
-  G4int operator!=(const G4PreCompoundFragment &right) const = delete;
+  G4bool operator==(const G4PreCompoundFragment &right) const = delete;
+  G4bool operator!=(const G4PreCompoundFragment &right) const = delete;
 
   G4int index;
 

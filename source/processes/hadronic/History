@@ -16,6 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 1, 2019  I. Hrivnacova (hadr-V10-05-00)
+- Merged GitHub PR #4:
+  - Improvements to G4HadronicException.
+    - Align the behavior of G4HadronicException with std::exception: what() returns
+      the exception explanation.
+    - Move the member definition to a source file.
+    - Added some consts.
+  - All Boolean operators now return G4bool.
+
 November 6, 2015 G.Cosmo (hadr-V10-01-01)
 - Added missing tags: hadr-cross-V10-01-33, hadr-hpp-V10-01-29.
 

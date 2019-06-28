@@ -14,6 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-01-19 V.Ivant (testem5-V10-05-00)
+- StackinAction - fixed all log histograms, which where filled in a wrong 
+                  way
+- PhysListEm19DStandard - use 3-gamma annihilation model
+
 09-09-18 S.Incerti (testem5-V10-04-07)
 - updated dna.mac
 

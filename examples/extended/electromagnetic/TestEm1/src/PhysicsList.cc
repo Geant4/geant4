@@ -63,6 +63,21 @@
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+#include "G4PhysicsListHelper.hh"
+#include "G4Decay.hh"
+#include "G4RadioactiveDecay.hh"
+#include "G4GenericIon.hh"
+#include "G4NuclideTable.hh"
+
+#include "G4ProcessManager.hh"
+#include "StepMax.hh"
+#include "G4Material.hh"
+
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Proton.hh"
+#include "G4GenericIon.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList(DetectorConstruction* det) 
@@ -73,7 +88,7 @@ PhysicsList::PhysicsList(DetectorConstruction* det)
 
   // EM physics
   fEmName = G4String("local");
-  fEmPhysicsList = new PhysListEmStandard(fEmName);
+  fEmPhysicsList = new G4EmStandardPhysics(1);
   
   G4LossTableManager::Instance();
   // fix lower limit for cut
@@ -137,8 +152,9 @@ void PhysicsList::ConstructProcess()
   
   // Get process
   auto process = GetProcess("RadioactiveDecay");
-  if (process != nullptr)
-  G4cout << "\n  GetProcess : " << process->GetProcessName() << G4endl;
+  if (process != nullptr) {
+    G4cout << "\n  GetProcess : " << process->GetProcessName() << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -218,10 +234,8 @@ void PhysicsList::AddPhysicsList(const G4String& name)
            << G4endl;
   }
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4PhysicsListHelper.hh"
-#include "G4Decay.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddDecay()
 {
@@ -242,11 +256,6 @@ void PhysicsList::AddDecay()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4PhysicsListHelper.hh"
-#include "G4RadioactiveDecay.hh"
-#include "G4GenericIon.hh"
-#include "G4NuclideTable.hh"
-
 void PhysicsList::AddRadioactiveDecay()
 {  
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
@@ -262,9 +271,6 @@ void PhysicsList::AddRadioactiveDecay()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ProcessManager.hh"
-#include "StepMax.hh"
 
 void PhysicsList::AddStepMax()
 {
@@ -286,18 +292,15 @@ void PhysicsList::AddStepMax()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Material.hh"
-
 void PhysicsList::GetRange(G4double val)
 {
   G4LogicalVolume* lBox = fDet->GetWorld()->GetLogicalVolume();
-  G4ParticleTable* particleTable =  G4ParticleTable::GetParticleTable();
   const G4MaterialCutsCouple* couple = lBox->GetMaterialCutsCouple();
   const G4Material* currMat = lBox->GetMaterial();
 
   G4ParticleDefinition* part;
   G4double cut;
-  part = particleTable->FindParticle("e-");
+  part = G4Electron::Electron();
   cut = G4LossTableManager::Instance()->GetRange(part,val,couple);
   G4cout << "material : " << currMat->GetName()       << G4endl;
   G4cout << "particle : " << part->GetParticleName()  << G4endl;
@@ -306,11 +309,6 @@ void PhysicsList::GetRange(G4double val)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Proton.hh"
-#include "G4GenericIon.hh"
 
 G4VProcess* PhysicsList::GetProcess(const G4String& processName) const
 {

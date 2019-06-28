@@ -66,6 +66,7 @@ void G4TouchablePropertiesScene::ProcessVolume (const G4VSolid& /*solid*/) {
     if (iNameCopyNo == fRequiredTouchable.end()) {
       fFoundTouchableProperties.fTouchablePath            = fRequiredTouchable;
       fFoundTouchableProperties.fpTouchablePV             = fpSearchPVModel->GetCurrentPV();
+      fFoundTouchableProperties.fCopyNo                   = fpSearchPVModel->GetCurrentPVCopyNo();
       fFoundTouchableProperties.fTouchableGlobalTransform = *fpSearchPVModel->GetCurrentTransform();
       fFoundTouchableProperties.fTouchableBaseFullPVPath  = fpSearchPVModel->GetFullPVPath();
       // Base path is one down from found PV

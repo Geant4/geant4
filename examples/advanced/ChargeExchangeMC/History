@@ -7,11 +7,11 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
-31.01.2019 - G.Cosmo, Tag ChargeExchangeMC-V10-04-01
+31.01.2019 - G.Cosmo, Tag ChargeExchangeMC-V10-05-01
              Fixed compilation warnings for unused data when no analysis set.
              Fixed regular expression error in schema validation for lht.gdml.
 
-31.01.2019 - I.Hrivnacova
+31.01.2019 - I.Hrivnacova, Tag ChargeExchangeMC-V10-05-00
              Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 09.11.2018 - G.Cosmo, Tag ChargeExchangeMC-V10-04-00

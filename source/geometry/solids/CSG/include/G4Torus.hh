@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 // --------------------------------------------------------------------
 // GEANT 4 class header file
 //
@@ -72,18 +72,20 @@
 //   similar to rho for G4Tubs and is used for definiton of the point
 //   relative to fRmin and fRmax, i.e. for solution of inside/outside
 //   problems
- 
+
 // History:
 // 30.10.96 V.Grichine: first version of G4Torus
 // 21.04.98 J.Apostolakis: added SetAllParameters() function
 // 26.05.00 V.Grichine: added new SolveBiQuadratic/Cubic() developed
-//                      by O.Cremonesi 
+//                      by O.Cremonesi
 // 31.08.00 E.Medernach: added SolveNumeric functions, migrated to
 //                       numeric solutions
 // --------------------------------------------------------------------
 
 #ifndef G4TORUS_HH
 #define G4TORUS_HH
+
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UTORUS 1
@@ -111,7 +113,7 @@ class G4Torus : public G4CSGSolid
                   G4double pDPhi);
 
    ~G4Torus();
-    
+
     // Accessors
 
     inline G4double GetRmin() const;
@@ -163,14 +165,14 @@ class G4Torus : public G4CSGSolid
 
     void SetAllParameters(G4double pRmin, G4double pRmax, G4double pRtor,
                           G4double pSPhi, G4double pDPhi);
- 
+
     G4Torus(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
     G4Torus(const G4Torus& rhs);
-    G4Torus& operator=(const G4Torus& rhs); 
+    G4Torus& operator=(const G4Torus& rhs);
       // Copy constructor and assignment operator.
 
   private:
@@ -198,7 +200,7 @@ class G4Torus : public G4CSGSolid
 
     // used by normal
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi};
-    
+
     G4double fRminTolerance, fRmaxTolerance, kRadTolerance, kAngTolerance;
       // Radial and angular tolerances
 

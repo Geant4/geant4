@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -8,7 +8,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
- creating G4RunManagerKernel 0x266ead0
+ creating G4RunManagerKernel 0x2629850
 
 The materials defined are : 
 
@@ -83,15 +83,15 @@ G4Transportation:  Current values for thresholds related to  the killing of loop
     Important Energy = 250  ( above this tracks are given multiple chances ) 
     Extra Trials     = 10 'important' tracks, i.e. those above 'important' energy 
  G4Transportation constructor> set fShortStepOptimisation to false
-0x287df00G4ErrorPhysicsList:: particle process manager e+ = 0x28805e0
-0x287ddb0G4ErrorPhysicsList:: particle process manager e- = 0x2882070
-0x287d840G4ErrorPhysicsList:: particle process manager gamma = 0x28822a0
-0x287f310G4ErrorPhysicsList:: particle process manager geantino = 0x28824f0
-0x287e0a0G4ErrorPhysicsList:: particle process manager mu+ = 0x2882740
-0x287e450G4ErrorPhysicsList:: particle process manager mu- = 0x2882990
-0x287e870G4ErrorPhysicsList:: particle process manager pi+ = 0x2882be0
-0x287ecc0G4ErrorPhysicsList:: particle process manager pi- = 0x2882e30
-0x287f0e0G4ErrorPhysicsList:: particle process manager proton = 0x2883080
+0x2837c70G4ErrorPhysicsList:: particle process manager e+ = 0x283a2f0
+0x2837a90G4ErrorPhysicsList:: particle process manager e- = 0x283bd80
+0x28378b0G4ErrorPhysicsList:: particle process manager gamma = 0x283bfb0
+0x2839020G4ErrorPhysicsList:: particle process manager geantino = 0x283c200
+0x2837e50G4ErrorPhysicsList:: particle process manager mu+ = 0x283c450
+0x2838160G4ErrorPhysicsList:: particle process manager mu- = 0x283c6a0
+0x2838580G4ErrorPhysicsList:: particle process manager pi+ = 0x283c8f0
+0x28389d0G4ErrorPhysicsList:: particle process manager pi- = 0x283cb40
+0x2838df0G4ErrorPhysicsList:: particle process manager proton = 0x283cd90
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 
@@ -161,7 +161,7 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume

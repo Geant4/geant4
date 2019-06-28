@@ -41,19 +41,7 @@ class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWith3Vector;
 
-class G4VVisCommandViewer: public G4VVisCommand {
-public:
-  G4VVisCommandViewer ();
-  virtual ~G4VVisCommandViewer ();
-protected:
-  void SetViewParameters(G4VViewer*, const G4ViewParameters&);
-  void RefreshIfRequired(G4VViewer*);
-private:
-  G4VVisCommandViewer (const G4VVisCommandViewer&);
-  G4VVisCommandViewer& operator = (const G4VVisCommandViewer&);
-};
-
-class G4VisCommandViewerAddCutawayPlane: public G4VVisCommandViewer {
+class G4VisCommandViewerAddCutawayPlane: public G4VVisCommand {
 public:
   G4VisCommandViewerAddCutawayPlane ();
   virtual ~G4VisCommandViewerAddCutawayPlane ();
@@ -65,7 +53,20 @@ private:
   G4UIcommand* fpCommand;
 };
 
-class G4VisCommandViewerChangeCutawayPlane: public G4VVisCommandViewer {
+class G4VisCommandViewerCentreOn: public G4VVisCommand {
+public:
+  G4VisCommandViewerCentreOn ();
+  virtual ~G4VisCommandViewerCentreOn ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerCentreOn (const G4VisCommandViewerCentreOn&);
+  G4VisCommandViewerCentreOn& operator = (const G4VisCommandViewerCentreOn&);
+  G4UIcommand* fpCommandCentreOn;
+  G4UIcommand* fpCommandCentreAndZoomInOn;
+};
+
+class G4VisCommandViewerChangeCutawayPlane: public G4VVisCommand {
 public:
   G4VisCommandViewerChangeCutawayPlane ();
   virtual ~G4VisCommandViewerChangeCutawayPlane ();
@@ -77,7 +78,7 @@ private:
   G4UIcommand* fpCommand;
 };
 
-class G4VisCommandViewerClear: public G4VVisCommandViewer {
+class G4VisCommandViewerClear: public G4VVisCommand {
 public:
   G4VisCommandViewerClear ();
   virtual ~G4VisCommandViewerClear ();
@@ -89,7 +90,7 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerClearCutawayPlanes: public G4VVisCommandViewer {
+class G4VisCommandViewerClearCutawayPlanes: public G4VVisCommand {
 public:
   G4VisCommandViewerClearCutawayPlanes ();
   virtual ~G4VisCommandViewerClearCutawayPlanes ();
@@ -101,7 +102,7 @@ private:
   G4UIcmdWithoutParameter* fpCommand;
 };
 
-class G4VisCommandViewerClearTransients: public G4VVisCommandViewer {
+class G4VisCommandViewerClearTransients: public G4VVisCommand {
 public:
   G4VisCommandViewerClearTransients ();
   virtual ~G4VisCommandViewerClearTransients ();
@@ -114,7 +115,7 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerClearVisAttributesModifiers: public G4VVisCommandViewer {
+class G4VisCommandViewerClearVisAttributesModifiers: public G4VVisCommand {
 public:
   G4VisCommandViewerClearVisAttributesModifiers ();
   virtual ~G4VisCommandViewerClearVisAttributesModifiers ();
@@ -126,7 +127,7 @@ private:
   G4UIcmdWithoutParameter* fpCommand;
 };
 
-class G4VisCommandViewerClone: public G4VVisCommandViewer {
+class G4VisCommandViewerClone: public G4VVisCommand {
 public:
   G4VisCommandViewerClone ();
   virtual ~G4VisCommandViewerClone ();
@@ -139,7 +140,7 @@ private:
   G4UIcommand* fpCommand;
 };
 
-class G4VisCommandViewerColourByDensity: public G4VVisCommandViewer {
+class G4VisCommandViewerColourByDensity: public G4VVisCommand {
 public:
   G4VisCommandViewerColourByDensity ();
   virtual ~G4VisCommandViewerColourByDensity ();
@@ -151,7 +152,7 @@ private:
   G4UIcommand* fpCommand;
 };
 
-class G4VisCommandViewerCopyViewFrom: public G4VVisCommandViewer {
+class G4VisCommandViewerCopyViewFrom: public G4VVisCommand {
 public:
   G4VisCommandViewerCopyViewFrom ();
   virtual ~G4VisCommandViewerCopyViewFrom ();
@@ -164,7 +165,7 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerCreate: public G4VVisCommandViewer {
+class G4VisCommandViewerCreate: public G4VVisCommand {
 public:
   G4VisCommandViewerCreate ();
   virtual ~G4VisCommandViewerCreate ();
@@ -178,7 +179,7 @@ private:
   G4int fId;
 };
 
-class G4VisCommandViewerDolly: public G4VVisCommandViewer {
+class G4VisCommandViewerDolly: public G4VVisCommand {
 public:
   G4VisCommandViewerDolly ();
   virtual ~G4VisCommandViewerDolly ();
@@ -193,7 +194,7 @@ private:
   G4double fDollyTo;
 };
 
-class G4VisCommandViewerFlush: public G4VVisCommandViewer {
+class G4VisCommandViewerFlush: public G4VVisCommand {
 public:
   G4VisCommandViewerFlush ();
   virtual ~G4VisCommandViewerFlush ();
@@ -205,7 +206,7 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerInterpolate: public G4VVisCommandViewer {
+class G4VisCommandViewerInterpolate: public G4VVisCommand {
 public:
   G4VisCommandViewerInterpolate ();
   virtual ~G4VisCommandViewerInterpolate ();
@@ -217,7 +218,7 @@ private:
   G4UIcommand* fpCommand;
 };
 
-class G4VisCommandViewerList: public G4VVisCommandViewer {
+class G4VisCommandViewerList: public G4VVisCommand {
 public:
   G4VisCommandViewerList ();
   virtual ~G4VisCommandViewerList ();
@@ -229,7 +230,7 @@ private:
   G4UIcommand* fpCommand;
 };
 
-class G4VisCommandViewerPan: public G4VVisCommandViewer {
+class G4VisCommandViewerPan: public G4VVisCommand {
 public:
   G4VisCommandViewerPan ();
   virtual ~G4VisCommandViewerPan ();
@@ -244,7 +245,7 @@ private:
   G4double fPanToRight, fPanToUp;
 };
 
-class G4VisCommandViewerReset: public G4VVisCommandViewer {
+class G4VisCommandViewerReset: public G4VVisCommand {
 public:
   G4VisCommandViewerReset ();
   virtual ~G4VisCommandViewerReset ();
@@ -256,7 +257,7 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerRefresh: public G4VVisCommandViewer {
+class G4VisCommandViewerRefresh: public G4VVisCommand {
 public:
   G4VisCommandViewerRefresh ();
   virtual ~G4VisCommandViewerRefresh ();
@@ -268,7 +269,7 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerRebuild: public G4VVisCommandViewer {
+class G4VisCommandViewerRebuild: public G4VVisCommand {
 public:
   G4VisCommandViewerRebuild ();
   virtual ~G4VisCommandViewerRebuild ();
@@ -280,7 +281,7 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerSave: public G4VVisCommandViewer {
+class G4VisCommandViewerSave: public G4VVisCommand {
 public:
   G4VisCommandViewerSave ();
   virtual ~G4VisCommandViewerSave ();
@@ -292,7 +293,7 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerScale: public G4VVisCommandViewer {
+class G4VisCommandViewerScale: public G4VVisCommand {
 public:
   G4VisCommandViewerScale ();
   virtual ~G4VisCommandViewerScale ();
@@ -307,7 +308,7 @@ private:
   G4Vector3D fScaleTo;
 };
 
-class G4VisCommandViewerSelect: public G4VVisCommandViewer {
+class G4VisCommandViewerSelect: public G4VVisCommand {
 public:
   G4VisCommandViewerSelect ();
   virtual ~G4VisCommandViewerSelect ();
@@ -319,7 +320,7 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerUpdate: public G4VVisCommandViewer {
+class G4VisCommandViewerUpdate: public G4VVisCommand {
 public:
   G4VisCommandViewerUpdate ();
   virtual ~G4VisCommandViewerUpdate ();
@@ -331,7 +332,7 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerZoom: public G4VVisCommandViewer {
+class G4VisCommandViewerZoom: public G4VVisCommand {
 public:
   G4VisCommandViewerZoom ();
   virtual ~G4VisCommandViewerZoom ();

@@ -86,7 +86,7 @@ void FormattedText::WriteInto(const G4String& output,
 
 //------------------------------------------------------------------------------
 
-void FormattedText::AddEmptyLineInOuputFile()
+void FormattedText::AddEmptyLineInOutputFile()
 {
   if(fFileInitialized) fOfstream << G4endl;
 }

@@ -239,7 +239,6 @@ foreach(__g4clhep_target G4clhep G4clhep-static)
   endif()
 endforeach()
 
-
 #----------------------------------------------------------------------------
 # Ensure the header directory gets added to the list of ones to export
 #

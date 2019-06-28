@@ -97,6 +97,16 @@ G4CRMCModel::G4CRMCModel( const int model ) : G4HadronicInteraction( "CRMC" ),  
 G4CRMCModel::~G4CRMCModel() {}
 
 
+/*
+const std::pair< G4double, G4double > G4CRMCModel::GetFatalEnergyCheckLevels() const {
+  // The default in the base class, G4HadronicInteraction, is 2% and 1 GeV .
+  // Note that when both relative and absolute need fail the final-state is rejected
+  // and the interaction is re-sampled.
+  return std::pair< G4double, G4double >( 10.0*perCent, DBL_MAX );
+}
+*/
+
+
 G4HadFinalState* G4CRMCModel::ApplyYourself( const G4HadProjectile &theProjectile, 
                                              G4Nucleus &theTarget ) {
 
@@ -118,7 +128,19 @@ G4HadFinalState* G4CRMCModel::ApplyYourself( const G4HadProjectile &theProjectil
   G4ThreeVector pBefore = theProjectile.Get4Momentum().vect();
   G4double E = theProjectile.GetTotalEnergy();        
   G4double totalEbefore = E*AP + theTarget.AtomicMass( AT, ZT ) + theTarget.GetEnergyDeposit();
-  G4double pProj = theProjectile.Get4Momentum().pz() / GeV;  // Energy unit must be GeV
+
+  // Note: because of the rotation of the projectile along the z-axis (made by
+  //       the calling method G4HadronicProcess::PostStepDoIt), it is equivalent
+  //       to take the momentum component along the z-axis or the whole momentum. 
+  G4double pProj = theProjectile.Get4Momentum().vect().mag() / GeV;  // Energy unit must be GeV
+
+  // Note: from my understanding of the CRMC interface, it seems that in the case
+  //       of nucleus projectile, the energy per nucleon (instead of the energy of
+  //       the whole projectile) should be provided.
+  //       We consider the absolute value of the baryon number to cover also the
+  //       case of anti-nuclei.
+  if ( std::abs( AP ) > 1 ) pProj /= static_cast< G4double >( std::abs( AP ) );  // Energy per nucleon
+
   G4double pTarg = 0.0;
 
   fInterface->crmc_set( 1,         // fNCollision,

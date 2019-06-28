@@ -68,257 +68,235 @@
 #include "G4SystemOfUnits.hh"
 #include "G4OpProcessSubType.hh"
 
-/////////////////////////
-// Class Implementation
-/////////////////////////
-
-        //////////////
-        // Operators
-        //////////////
-
-// G4OpRayleigh::operator=(const G4OpRayleigh &right)
-// {
-// }
-
-        /////////////////
-        // Constructors
-        /////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4OpRayleigh::G4OpRayleigh(const G4String& processName, G4ProcessType type)
-           : G4VDiscreteProcess(processName, type)
+   : G4VDiscreteProcess(processName, type)
 {
-        SetProcessSubType(fOpRayleigh);
+  SetProcessSubType(fOpRayleigh);
 
-        thePhysicsTable = NULL;
+  thePhysicsTable = nullptr;
 
-        if (verboseLevel>0) {
-           G4cout << GetProcessName() << " is created " << G4endl;
-        }
+  if (verboseLevel > 0) {
+    G4cout << GetProcessName() << " is created " << G4endl;
+  }
 }
 
-// G4OpRayleigh::G4OpRayleigh(const G4OpRayleigh &right)
-// {
-// }
-
-        ////////////////
-        // Destructors
-        ////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4OpRayleigh::~G4OpRayleigh()
 {
-        if (thePhysicsTable) {
-           thePhysicsTable->clearAndDestroy();
-           delete thePhysicsTable;
-        }
+  if (thePhysicsTable) {
+    thePhysicsTable->clearAndDestroy();
+    delete thePhysicsTable;
+  }
 }
 
-        ////////////
-        // Methods
-        ////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// PostStepDoIt
-// -------------
-//
 G4VParticleChange*
 G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
-        aParticleChange.Initialize(aTrack);
+  aParticleChange.Initialize(aTrack);
 
-        const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+  const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
 
-        if (verboseLevel>0) {
-                G4cout << "Scattering Photon!" << G4endl;
-                G4cout << "Old Momentum Direction: "
-                       << aParticle->GetMomentumDirection() << G4endl;
-                G4cout << "Old Polarization: "
-                       << aParticle->GetPolarization() << G4endl;
-        }
+  if (verboseLevel >0 ) {
+    G4cout << "Scattering Photon!" << G4endl;
+    G4cout << "Old Momentum Direction: "
+           << aParticle->GetMomentumDirection() << G4endl;
+    G4cout << "Old Polarization: "
+           << aParticle->GetPolarization() << G4endl;
+  }
 
-        G4double cosTheta;
-        G4ThreeVector OldMomentumDirection, NewMomentumDirection;
-        G4ThreeVector OldPolarization, NewPolarization;
+  G4double cosTheta;
+  G4ThreeVector OldMomentumDirection, NewMomentumDirection;
+  G4ThreeVector OldPolarization, NewPolarization;
 
-        G4double rand, constant;
-        G4double CosTheta, SinTheta, SinPhi, CosPhi, unit_x, unit_y, unit_z;
+  G4double rand, constant;
+  G4double CosTheta, SinTheta, SinPhi, CosPhi, unit_x, unit_y, unit_z;
 
-        do {
-           // Try to simulate the scattered photon momentum direction
-           // w.r.t. the initial photon momentum direction
+  do {
+     // Try to simulate the scattered photon momentum direction
+     // w.r.t. the initial photon momentum direction
 
-           CosTheta = G4UniformRand();
-           SinTheta = std::sqrt(1.-CosTheta*CosTheta);
-           // consider for the angle 90-180 degrees
-           if (G4UniformRand() < 0.5) CosTheta = -CosTheta;
+     CosTheta = G4UniformRand();
+     SinTheta = std::sqrt(1.-CosTheta*CosTheta);
+     // consider for the angle 90-180 degrees
+     if (G4UniformRand() < 0.5) CosTheta = -CosTheta;
 
-           // simulate the phi angle
-           rand = twopi*G4UniformRand();
-           SinPhi = std::sin(rand);
-           CosPhi = std::cos(rand);
+     // simulate the phi angle
+     rand = twopi*G4UniformRand();
+     SinPhi = std::sin(rand);
+     CosPhi = std::cos(rand);
 
-           // start constructing the new momentum direction
-	   unit_x = SinTheta * CosPhi; 
-	   unit_y = SinTheta * SinPhi;  
-	   unit_z = CosTheta; 
+     // start constructing the new momentum direction
+	   unit_x = SinTheta * CosPhi;
+	   unit_y = SinTheta * SinPhi;
+	   unit_z = CosTheta;
 	   NewMomentumDirection.set (unit_x,unit_y,unit_z);
 
-           // Rotate the new momentum direction into global reference system
-           OldMomentumDirection = aParticle->GetMomentumDirection();
-           OldMomentumDirection = OldMomentumDirection.unit();
-           NewMomentumDirection.rotateUz(OldMomentumDirection);
-           NewMomentumDirection = NewMomentumDirection.unit();
+     // Rotate the new momentum direction into global reference system
+     OldMomentumDirection = aParticle->GetMomentumDirection();
+     OldMomentumDirection = OldMomentumDirection.unit();
+     NewMomentumDirection.rotateUz(OldMomentumDirection);
+     NewMomentumDirection = NewMomentumDirection.unit();
 
-           // calculate the new polarization direction
-           // The new polarization needs to be in the same plane as the new
-           // momentum direction and the old polarization direction
-           OldPolarization = aParticle->GetPolarization();
-           constant = -NewMomentumDirection.dot(OldPolarization);
+     // calculate the new polarization direction
+     // The new polarization needs to be in the same plane as the new
+     // momentum direction and the old polarization direction
+     OldPolarization = aParticle->GetPolarization();
+     constant = -NewMomentumDirection.dot(OldPolarization);
 
-           NewPolarization = OldPolarization + constant*NewMomentumDirection;
-           NewPolarization = NewPolarization.unit();
+     NewPolarization = OldPolarization + constant*NewMomentumDirection;
+     NewPolarization = NewPolarization.unit();
 
-           // There is a corner case, where the Newmomentum direction
-           // is the same as oldpolariztion direction:
-           // random generate the azimuthal angle w.r.t. Newmomentum direction
-           if (NewPolarization.mag() == 0.) {
-              rand = G4UniformRand()*twopi;
-              NewPolarization.set(std::cos(rand),std::sin(rand),0.);
-              NewPolarization.rotateUz(NewMomentumDirection);
-           } else {
-              // There are two directions which are perpendicular
-              // to the new momentum direction
-              if (G4UniformRand() < 0.5) NewPolarization = -NewPolarization;
-           }
-	  
+     // There is a corner case, where the Newmomentum direction
+     // is the same as oldpolariztion direction:
+     // random generate the azimuthal angle w.r.t. Newmomentum direction
+     if (NewPolarization.mag() == 0.) {
+       rand = G4UniformRand()*twopi;
+       NewPolarization.set(std::cos(rand),std::sin(rand),0.);
+       NewPolarization.rotateUz(NewMomentumDirection);
+     } else {
+       // There are two directions which are perpendicular
+       // to the new momentum direction
+       if (G4UniformRand() < 0.5) NewPolarization = -NewPolarization;
+     }
+
 	   // simulate according to the distribution cos^2(theta)
-           cosTheta = NewPolarization.dot(OldPolarization);
-          // Loop checking, 13-Aug-2015, Peter Gumplinger
-        } while (std::pow(cosTheta,2) < G4UniformRand());
+     cosTheta = NewPolarization.dot(OldPolarization);
+     // Loop checking, 13-Aug-2015, Peter Gumplinger
+   } while (std::pow(cosTheta,2) < G4UniformRand());
 
-        aParticleChange.ProposePolarization(NewPolarization);
-        aParticleChange.ProposeMomentumDirection(NewMomentumDirection);
+   aParticleChange.ProposePolarization(NewPolarization);
+   aParticleChange.ProposeMomentumDirection(NewMomentumDirection);
 
-        if (verboseLevel>0) {
-                G4cout << "New Polarization: " 
-                     << NewPolarization << G4endl;
-                G4cout << "Polarization Change: "
-                     << *(aParticleChange.GetPolarization()) << G4endl;  
-                G4cout << "New Momentum Direction: " 
-                     << NewMomentumDirection << G4endl;
-                G4cout << "Momentum Change: "
-                     << *(aParticleChange.GetMomentumDirection()) << G4endl; 
-        }
+   if (verboseLevel > 0) {
+     G4cout << "New Polarization: "
+          << NewPolarization << G4endl;
+     G4cout << "Polarization Change: "
+          << *(aParticleChange.GetPolarization()) << G4endl;
+     G4cout << "New Momentum Direction: "
+          << NewMomentumDirection << G4endl;
+     G4cout << "Momentum Change: "
+          << *(aParticleChange.GetMomentumDirection()) << G4endl;
+   }
 
-        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+   return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
-// BuildPhysicsTable for the Rayleigh Scattering process
-// --------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4OpRayleigh::BuildPhysicsTable(const G4ParticleDefinition&)
 {
   if (thePhysicsTable) {
-     thePhysicsTable->clearAndDestroy();
-     delete thePhysicsTable;
-     thePhysicsTable = NULL;
+    thePhysicsTable->clearAndDestroy();
+    delete thePhysicsTable;
+    thePhysicsTable = nullptr;
   }
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   const G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
-  thePhysicsTable = new G4PhysicsTable( numOfMaterials );
-  
-  for( G4int iMaterial = 0; iMaterial < numOfMaterials; iMaterial++ )
+  thePhysicsTable = new G4PhysicsTable(numOfMaterials);
+
+  for (G4int iMaterial = 0; iMaterial < numOfMaterials; ++iMaterial)
   {
-      G4Material* material = (*theMaterialTable)[iMaterial];
-      G4MaterialPropertiesTable* materialProperties = 
-                                       material->GetMaterialPropertiesTable();
-      G4PhysicsOrderedFreeVector* rayleigh = NULL;
-      if ( materialProperties != NULL ) {
-         rayleigh = materialProperties->GetProperty( kRAYLEIGH );
-         if ( rayleigh == NULL ) rayleigh = 
-                                   CalculateRayleighMeanFreePaths( material );
-      }
-      thePhysicsTable->insertAt( iMaterial, rayleigh );
+    G4Material* material = (*theMaterialTable)[iMaterial];
+    G4MaterialPropertiesTable* materialProperties =
+                                     material->GetMaterialPropertiesTable();
+    G4PhysicsOrderedFreeVector* rayleigh = nullptr;
+    if (materialProperties) {
+      rayleigh = materialProperties->GetProperty(kRAYLEIGH);
+      if (rayleigh == nullptr) rayleigh = CalculateRayleighMeanFreePaths(material);
+    }
+    thePhysicsTable->insertAt(iMaterial, rayleigh);
   }
 }
 
-// GetMeanFreePath()
-// -----------------
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4OpRayleigh::GetMeanFreePath(const G4Track& aTrack,
                                        G4double ,
-                                       G4ForceCondition* )
+                                       G4ForceCondition*)
 {
   const G4DynamicParticle* particle = aTrack.GetDynamicParticle();
   const G4double photonMomentum = particle->GetTotalMomentum();
   const G4Material* material = aTrack.GetMaterial();
 
-  G4PhysicsOrderedFreeVector* rayleigh = 
+  G4PhysicsOrderedFreeVector* rayleigh =
                               static_cast<G4PhysicsOrderedFreeVector*>
                               ((*thePhysicsTable)(material->GetIndex()));
-  
+
   G4double rsLength = DBL_MAX;
-  if( rayleigh != NULL ) rsLength = rayleigh->Value( photonMomentum );
+  if (rayleigh) rsLength = rayleigh->Value(photonMomentum);
   return rsLength;
 }
 
-// CalculateRayleighMeanFreePaths()
-// --------------------------------
-// Private method to compute Rayleigh Scattering Lengths
-G4PhysicsOrderedFreeVector* 
-G4OpRayleigh::CalculateRayleighMeanFreePaths( const G4Material* material ) const
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4PhysicsOrderedFreeVector*
+G4OpRayleigh::CalculateRayleighMeanFreePaths(const G4Material* material) const
 {
-  G4MaterialPropertiesTable* materialProperties = 
+  G4MaterialPropertiesTable* materialProperties =
                                        material->GetMaterialPropertiesTable();
 
   // Retrieve the beta_T or isothermal compressibility value. For backwards
   // compatibility use a constant if the material is "Water". If the material
   // doesn't have an ISOTHERMAL_COMPRESSIBILITY constant then return
   G4double betat;
-  if ( material->GetName() == "Water" )
+  if (material->GetName() == "Water") {
     betat = 7.658e-23*m3/MeV;
-  else if(materialProperties->ConstPropertyExists("ISOTHERMAL_COMPRESSIBILITY"))
+  }
+  else if (materialProperties->ConstPropertyExists("ISOTHERMAL_COMPRESSIBILITY")) {
     betat = materialProperties->GetConstProperty(kISOTHERMAL_COMPRESSIBILITY);
-  else
-    return NULL;
+  }
+  else {
+    return nullptr;
+  }
 
   // If the material doesn't have a RINDEX property vector then return
   G4MaterialPropertyVector* rIndex = materialProperties->GetProperty(kRINDEX);
-  if ( rIndex == NULL ) return NULL;
+  if (rIndex == nullptr) return nullptr;
 
   // Retrieve the optional scale factor, (this just scales the scattering length
   G4double scaleFactor = 1.0;
-  if( materialProperties->ConstPropertyExists( "RS_SCALE_FACTOR" ) )
-    scaleFactor= materialProperties->GetConstProperty(kRS_SCALE_FACTOR );
+  if (materialProperties->ConstPropertyExists("RS_SCALE_FACTOR")) {
+    scaleFactor = materialProperties->GetConstProperty(kRS_SCALE_FACTOR);
+  }
 
-  // Retrieve the material temperature. For backwards compatibility use a 
+  // Retrieve the material temperature. For backwards compatibility use a
   // constant if the material is "Water"
   G4double temperature;
-  if( material->GetName() == "Water" )
+  if (material->GetName() == "Water") {
     temperature = 283.15*kelvin; // Temperature of water is 10 degrees celsius
-  else
+  }
+  else {
     temperature = material->GetTemperature();
+  }
 
   G4PhysicsOrderedFreeVector* rayleighMeanFreePaths =
                                              new G4PhysicsOrderedFreeVector();
   // This calculates the meanFreePath via the Einstein-Smoluchowski formula
-  const G4double c1 = scaleFactor * betat * temperature * k_Boltzmann / 
+  const G4double c1 = scaleFactor * betat * temperature * k_Boltzmann /
                       ( 6.0 * pi );
 
-  for( size_t uRIndex = 0; uRIndex < rIndex->GetVectorLength(); uRIndex++ )
+  for (size_t uRIndex = 0; uRIndex < rIndex->GetVectorLength(); ++uRIndex)
   {
-     const G4double energy = rIndex->Energy( uRIndex );
-     const G4double rIndexSquared = (*rIndex)[uRIndex] * (*rIndex)[uRIndex];
-     const G4double xlambda = h_Planck * c_light / energy;
-     const G4double c2 = std::pow(twopi/xlambda,4);
-     const G4double c3 = 
-                    std::pow(((rIndexSquared-1.0)*(rIndexSquared+2.0 )/3.0),2);
+    const G4double energy = rIndex->Energy(uRIndex);
+    const G4double rIndexSquared = (*rIndex)[uRIndex] * (*rIndex)[uRIndex];
+    const G4double xlambda = h_Planck * c_light / energy;
+    const G4double c2 = std::pow(twopi/xlambda,4);
+    const G4double c3 =
+                   std::pow(((rIndexSquared-1.0)*(rIndexSquared+2.0 )/3.0),2);
 
-     const G4double meanFreePath = 1.0 / ( c1 * c2 * c3 );
+    const G4double meanFreePath = 1.0 / ( c1 * c2 * c3 );
 
-     if( verboseLevel>0 )
-       G4cout << energy << "MeV\t" << meanFreePath << "mm" << G4endl;
+    if( verboseLevel > 0) {
+      G4cout << energy << "MeV\t" << meanFreePath << "mm" << G4endl;
+    }
 
-     rayleighMeanFreePaths->InsertValues( energy, meanFreePath );
+    rayleighMeanFreePaths->InsertValues(energy, meanFreePath);
   }
 
   return rayleighMeanFreePaths;

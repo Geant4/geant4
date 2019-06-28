@@ -50,48 +50,35 @@ class G4OpMieHG : public G4VDiscreteProcess
 
 public:
 
-        ////////////////////////////////
-        // Constructors and Destructor
-        ////////////////////////////////
-
-        G4OpMieHG(const G4String& processName = "OpMieHG",
+  explicit G4OpMieHG(const G4String& processName = "OpMieHG",
                            G4ProcessType type = fOptical);
-        ~G4OpMieHG();
-
-private:
-
-        G4OpMieHG(const G4OpMieHG &right);
-
-        //////////////
-        // Operators
-        //////////////
-
-        G4OpMieHG& operator=(const G4OpMieHG &right);
+  virtual ~G4OpMieHG();
 
 public:
 
-        ////////////
-        // Methods
-        ////////////
+  virtual G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
+  // Returns true -> 'is applicable' only for an optical photon.
 
-        G4bool IsApplicable(const G4ParticleDefinition& aParticleType);  
-        // Returns true -> 'is applicable' only for an optical photon.
+  virtual G4double GetMeanFreePath(const G4Track& aTrack,
+                                   G4double,
+                                   G4ForceCondition*) override;
+  // Return the mean free path of Mie scattering
 
-        G4double GetMeanFreePath(const G4Track& aTrack,
-                                 G4double,
-                                 G4ForceCondition* );
-        // Return the mean free path of Mie scattering
+  virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
+                                          const G4Step&  aStep) override;
+  // This is the method implementing Mie scattering.
 
-        G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-                                        const G4Step&  aStep);
-        // This is the method implementing Mie scattering.
+private:
+
+  G4OpMieHG(const G4OpMieHG &right) = delete;
+  G4OpMieHG& operator=(const G4OpMieHG &right) = delete;
+
 };
-  
 
 inline
 G4bool G4OpMieHG::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-  return ( &aParticleType == G4OpticalPhoton::OpticalPhoton() );
+  return (&aParticleType == G4OpticalPhoton::OpticalPhoton());
 }
 
 #endif /* G4OpMieHG_h */

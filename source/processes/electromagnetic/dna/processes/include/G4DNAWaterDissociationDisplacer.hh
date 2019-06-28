@@ -53,7 +53,7 @@
 #define _WATER_DISPLACER_USE_TERRISOL_
 //#define _WATER_DISPLACER_USE_KREIPL_
 
-class G4DNAWaterDissociationDisplacer: public G4VMolecularDecayDisplacer
+class G4DNAWaterDissociationDisplacer: public G4VMolecularDissociationDisplacer
 {
 public:
   G4DNAWaterDissociationDisplacer();

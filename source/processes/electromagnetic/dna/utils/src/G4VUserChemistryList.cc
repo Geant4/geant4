@@ -49,7 +49,7 @@ G4VUserChemistryList::~G4VUserChemistryList()
   G4DNAChemistryManager* chemMan = G4DNAChemistryManager::GetInstanceIfExists();
   if (chemMan)
   {
-    chemMan->Deregister(this);
+    chemMan->Deregister(*this);
   }
 }
 

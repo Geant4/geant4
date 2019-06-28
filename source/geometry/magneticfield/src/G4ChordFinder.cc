@@ -52,6 +52,7 @@
 
 // New FSAL type driver / steppers -----
 #include "G4IntegrationDriver.hh"
+#include "G4InterpolationDriver.hh"
 // #include "G4FSALBogackiShampine45.hh"
 // #include "G4FSALDormandPrince745.hh"
 
@@ -156,7 +157,7 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
      }
      else
      {
-        fIntgrDriver = new G4IntegrationDriver<G4MagIntegratorStepper>(
+        fIntgrDriver = new G4IntegrationDriver<RegularStepperType>(
               stepMinimum, regularStepper, regularStepper->GetNumberOfVariables());
         
         if( fIntgrDriver==nullptr)

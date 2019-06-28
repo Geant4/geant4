@@ -92,7 +92,7 @@ G4VPreCompoundFragment::Initialize(const G4Fragment & aFragment)
   theCoulombBarrier = theCoulombBarrierPtr->
     GetCoulombBarrier(theResA,theResZ,aFragment.GetExcitationEnergy());
     
-  theMinKinEnergy = (0 == OPTxs) ? theCoulombBarrier : theCoulombBarrier*0.7;
+  G4double elim = (0 == OPTxs) ? theCoulombBarrier : theCoulombBarrier*0.5;
   
   // Calculate masses
   theResMass = G4NucleiProperties::GetNuclearMass(theResA, theResZ);
@@ -104,7 +104,11 @@ G4VPreCompoundFragment::Initialize(const G4Fragment & aFragment)
     
   // Compute Maximal Kinetic Energy which can be carried by fragments 
   // after separation - the true assimptotic value
-  G4double Ecm  = aFragment.GetMomentum().m();
-  theMaxKinEnergy = ((Ecm-theResMass)*(Ecm+theResMass) + theMass*theMass)
-    /(2.0*Ecm) - theMass;
+  G4double Ecm = aFragment.GetMomentum().m();
+  G4double twoEcm = Ecm + Ecm;
+  theMaxKinEnergy = std::max(((Ecm-theResMass)*(Ecm+theResMass) + theMass*theMass)
+			     /twoEcm - theMass,0.0);
+  theMinKinEnergy = (elim == 0.0) ? 0.0 :
+    std::max(((theMass+elim)*(twoEcm-theMass-elim) + 
+	      theMass*theMass)/twoEcm - theMass,0.0);
 }

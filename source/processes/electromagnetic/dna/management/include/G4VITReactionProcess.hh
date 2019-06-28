@@ -44,83 +44,46 @@
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
 
-#ifndef G4VITREACTIONPROCESS_H
-#define G4VITREACTIONPROCESS_H
+#pragma once
 
 #include "globals.hh"
-#include "G4IT.hh"
-#include "G4ITReactionChange.hh"
-#include "G4ITReactionTable.hh"
-#include "AddClone_def.hh"
+#include <memory>
+
+class G4ITReactionTable;
+class G4ITReactionChange;
+class G4Track;
+struct G4ITType;
 
 /**
  * G4VITReactionProcess defines the reaction between two G4IT.
  * It should be stored in a G4VITModel.
+ * \deprecated This class will be removed
  */
-
 class G4VITReactionProcess
 {
 public:
-    /** Default constructor */
-    G4VITReactionProcess();
-    /** Default destructor */
-    virtual ~G4VITReactionProcess();
-    /** Copy constructor
-         *  \param other Object to copy from
-         */
-    G4VITReactionProcess(const G4VITReactionProcess& other);
-    /** Will Clone the reaction process
-         * i.e. new reaction process will be created with same features
-         * as the parent one.
-         * Use preprocessor macro : AddCloneReactionProcess
-         * the copy constructor of the derived class must be
-         * implemented.
-         * This macro is defined in AddClone_def
-         */
-    G4IT_TO_BE_CLONED(G4VITReactionProcess)
-
-    /** Assignment operator
-         *  \param other Object to assign from
-         *  \return A reference to this
-         */
-    G4VITReactionProcess& operator=(const G4VITReactionProcess& other);
+    G4VITReactionProcess() = default;
+    virtual ~G4VITReactionProcess() = default;
+    G4VITReactionProcess(const G4VITReactionProcess& other) = delete;
+    G4VITReactionProcess& operator=(const G4VITReactionProcess& other) = delete;
 
     /** First initialization (done once for all at the begin of the run)
      * eg. check if the reaction table is given ...
      */
     virtual void Initialize(){;}
 
-    virtual G4bool IsApplicable(G4ITType,G4ITType) const {return true;}
-//    virtual void GetApplicableTypes(G4ITType&, G4ITType&) const;
+    virtual G4bool IsApplicable(const G4ITType&, const G4ITType&) const;
 
     virtual G4bool TestReactibility(const G4Track&,
                                     const G4Track&,
-                                    const double /*currentStepTime*/,
-                                    const double /*previousStepTime*/,
+                                    double /*currentStepTime*/,
                                     bool /*reachedUserStepTimeLimit*/) = 0;
 
-    virtual G4ITReactionChange* MakeReaction(const G4Track&, const G4Track&) = 0;
+    virtual std::unique_ptr<G4ITReactionChange> MakeReaction(const G4Track&, const G4Track&) = 0;
 
-    inline void SetReactionTable(const G4ITReactionTable*);
-
-    inline void ResetChanges();
+    virtual void SetReactionTable(const G4ITReactionTable*);
 
 protected:
-//    G4ITType    fApplicableType1;
-//    G4ITType    fApplicableType2;
-
-    const G4ITReactionTable* fpReactionTable;
-    G4ITReactionChange*  fpChanges ;
-    G4String    fName ;
+    const G4ITReactionTable* fpReactionTable = nullptr;
+    G4String fName ;
 };
-
-inline void G4VITReactionProcess::SetReactionTable(const G4ITReactionTable* table)
-{
-    fpReactionTable = table;
-}
-
-inline void G4VITReactionProcess::ResetChanges()
-{
-    fpChanges = 0;
-}
-#endif // G4VITREACTIONPROCESS_H

@@ -37,9 +37,10 @@
 //
 // Modifications:
 // 27-10-17 New class (IgS)
-// 19-01-18 version that calculates the pdf in the same way as in the fortran 
+// 19-01-18 version that calculates the pdf in the same way as in the fortran
 //          version (Denis Bernard)
-// 04-06-18 Performance optimization of the final state sampling (M. Novak) 
+// 04-06-18 Performance optimization of the final state sampling (M. Novak)
+// 10-04-19 CLHEP for boost and rotation, remove local functions (IgS)
 //
 // Class Description:
 //
@@ -81,13 +82,6 @@ private:
   // hide assignment operator
   G4BetheHeitler5DModel& operator=(const G4BetheHeitler5DModel& right) = delete;
   G4BetheHeitler5DModel(const  G4BetheHeitler5DModel&) = delete;
-
-  void BoostG4LorentzVector(const G4LorentzVector& p, const G4LorentzVector& q, 
-                            G4LorentzVector& res) const;
-
-  void BoostG4LorentzVector(const G4LorentzVector& p, const G4double qz,
-                            const G4double qt, const G4double lffac,
-                            const G4double imass, G4LorentzVector& res) const;
 
   G4double MaxDiffCrossSection(const G4double* par, G4double eZ,
                                G4double e, G4double loge) const;

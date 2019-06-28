@@ -61,6 +61,9 @@
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
 
+#include <vector>
+#include <array>
+
 class G4TriangularFacet : public G4VFacet
 {
   public:  // with desctiption
@@ -71,8 +74,10 @@ class G4TriangularFacet : public G4VFacet
     G4TriangularFacet (const G4ThreeVector &vt0, const G4ThreeVector &vt1,
                        const G4ThreeVector &vt2, G4FacetVertexType);
     G4TriangularFacet (const G4TriangularFacet &right);
+    G4TriangularFacet (      G4TriangularFacet &&right);
 
     G4TriangularFacet &operator=(const G4TriangularFacet &right);    
+    G4TriangularFacet &operator=(      G4TriangularFacet &&right);    
 
     G4VFacet *GetClone ();
     G4TriangularFacet *GetFlippedFacet ();
@@ -110,13 +115,13 @@ class G4TriangularFacet : public G4VFacet
   private:
 
     void CopyFrom(const G4TriangularFacet &rhs);
+    void MoveFrom(G4TriangularFacet &rhs);
 
     G4ThreeVector fSurfaceNormal;
     G4double fArea;
     G4ThreeVector fCircumcentre;
     G4double fRadius;
-    G4int fIndices[3];
-
+    std::array<G4int, 3> fIndices;
     std::vector<G4ThreeVector> *fVertices;
 
     G4double fA, fB, fC;

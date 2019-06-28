@@ -16,13 +16,59 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-March 13, 2019 Gabriele Cosmo (global-V10-04-32)
+June 17, 2019 Gabriele Cosmo (global-V10-05-10)
+- Updated date and tag-ID for geant4-10-05-ref-06.
+
+May 28, 2019 Gabriele Cosmo (global-V10-05-09)
+- Updated date and tag-ID for geant4-10-05-ref-05.
+
+May 20, 2019 Gabriele Cosmo (global-V10-05-08)
+- Defined default move constructor and move assignment operator for G4String
+  and G4DataVector.
+
+May 16, 2019 Gabriele Cosmo (global-V10-05-07)
+- Defaulted copy constructor for G4StatDouble, to fix compilation warnings
+  on gcc-9.1.
+
+April 27, 2019 Gabriele Cosmo (global-V10-05-06)
+- Updated date and tag-ID for geant4-10-05-ref-04.
+
+April 25, 2019 Ben Morgan (global-V10-05-05)
+- DEV-250: Add G4GlobalConfig.hh generated header to hold global, always
+  required, preprocessor symbols instead of relying on -D flags.
+  - G4USE_STD11
+  - G4MULTITHREADED
+  - G4_STORE_TRAJECTORY
+  - G4VERBOSE
+  - GEANT4_USE_TIMEMORY
+- Add inclusion of G4GlobalConfig.hh in G4Types.hh, tls.hh and
+  G4TiMemory.hh so that global and other categories pick up
+  the definitions transparently. Protect inclusion so that
+  only CMake builds use this header
+- Update other headers/srcs to include G4Types/G4Threading if
+  they use G4MULTITHREADED
+- Uses cmake-V10-05-02
+
+March 29, 2019 Gabriele Cosmo (global-V10-05-04)
+- Updated date and tag-ID for geant4-10-05-ref-03.
+
+March 17, 2019 Mihaly Novak (global-V10-05-03)
+- G4PhysicsVector: adding additional public Value() method option to propagate 
+  down the known log-energy value (can avoid the log call in case of log-vector)
+- templates: new LOG_EKIN_MIN constant as value taken incase of zero kin-energy. 
+
+March 13, 2019 Gabriele Cosmo (global-V10-05-02)
 - Enable FPE detection on MacOS with clang.
   Addressing problem report #2147.
-- Changed ID for release 10.5.p01.
 
-January 31, 2019 Ivana Hrivnacova
+February 28, 2019 Gabriele Cosmo
+- Updated date and tag-ID for geant4-10-05-ref-02.
+
+January 31, 2019 Ivana Hrivnacova (global-V10-05-01)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
+
+January 30, 2019 Gabriele Cosmo (global-V10-05-00)
+- Updated date and tag-ID for geant4-10-05-ref-01.
 
 November 26, 2018 Gabriele Cosmo (global-V10-04-31)
 - G4Cache, G4CacheDetails: minor code cleanup and formatting.
@@ -1729,8 +1775,8 @@ June 17, 2003  G.Cosmo (global-V05-02-00)
 June 6, 2003  G.Cosmo (global-V05-01-01)
 - Made g4std wrappers obsolete:
   o modified wrappers to include standard std headers
-  o replaced all occurences of G4std:: with std::
-  o replaced all occurences of
+  o replaced all occurrences of G4std:: with std::
+  o replaced all occurrences of
       #include "g4std/XXX"
     with
       #include <XXX>

@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -167,10 +167,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ### Run 0 starts.
 ### Run 0 start.
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008233404568, 2262190991329242458, 2266470399991071809, 1976726662926872232, 245458862506414172, 1955974201201518530, 2155248512522080758, 604170912935414061, 1116171330120743511, 1861018313684488333, 1296715403254578286, 1549011045957234151, 370819759640195970, 2230139271784837643} counter= 17sumtot= 1977567618660788324
+---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
 --> Event 2000 starts.
@@ -184,19 +185,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.570000s Real=1.577240s Sys=0.000000s
+  User=1.670000s Real=1.675538s Sys=0.000000s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 462325	muPairProd : 63380	muBrems : 651	CoulombScat : 5635
+ Number of process calls --->	CoulombScat : 5704	muIoni : 463430	muPairProd : 63325	muBrems : 675
 
- Simulation: total CrossSection = 0.53199 /cm	 MeanFreePath = 1.8797 cm 	 massicCrossSection = 0.067597 cm2/g
- Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 2136523655, 622891914
-----------------------------------------
+ Simulation: total CrossSection = 0.53313 /cm	 MeanFreePath = 1.8757 cm 	 massicCrossSection = 0.067743 cm2/g
+ Theory:     total CrossSection = 0.52673 /cm	 MeanFreePath = 1.8985 cm 	 massicCrossSection = 0.066928 cm2/g
 #
 /gun/particle pi+
 /run/beamOn 10000
@@ -228,10 +224,11 @@ Index : 0     used in the geometry : Yes
 ### Run 1 starts.
 ### Run 1 start.
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 2136523655, 622891914
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={1836146824433546620, 950382853238645698, 2094018365169294982, 2049087344852607113, 1917530755571867102, 1217520297191286722, 1826947212591349430, 1876146072880251596, 220343395841813647, 1533539852786663375, 666541535008072943, 366974464646549659, 366932929726804827, 1969082536459027925, 1936051335817397104, 1097274089910695440, 2273907905499670430} counter= 4sumtot= 1139997679488605103
+---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
 --> Event 2000 starts.
@@ -245,18 +242,13 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.470000s Real=1.470375s Sys=0.000000s
+  User=1.540000s Real=1.540321s Sys=0.000000s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 428257	hPairProd : 59922	CoulombScat : 5636	hBrems : 370
+ Number of process calls --->	hIoni : 427158	hPairProd : 59432	CoulombScat : 5535	hBrems : 375
 
- Simulation: total CrossSection = 0.49418 /cm	 MeanFreePath = 2.0235 cm 	 massicCrossSection = 0.062794 cm2/g
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 422684227, 154440098
-----------------------------------------
+ Simulation: total CrossSection = 0.4925 /cm	 MeanFreePath = 2.0305 cm 	 massicCrossSection = 0.062579 cm2/g
 #
 /gun/particle proton
 /run/beamOn 10000
@@ -288,10 +280,11 @@ Index : 0     used in the geometry : Yes
 ### Run 2 starts.
 ### Run 2 start.
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 422684227, 154440098
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={86651234175384203, 106102879081428136, 1286100341176940579, 1902059702220643736, 1020666474972928708, 911872111381615693, 2302874691462746848, 670006653248785965, 1891095621247521631, 821295092539106705, 26059527148486563, 1948759662344548752, 1391369605036002721, 1101943770424097486, 222798383255355367, 1206227794782025790, 601255295509814994} counter= 4sumtot= 1356237775511576220
+---------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
 --> Event 2000 starts.
@@ -305,18 +298,13 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.340000s Real=1.343370s Sys=0.000000s
+  User=1.440000s Real=1.449632s Sys=0.000000s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 426647	hPairProd : 34171	CoulombScat : 5591	hBrems : 5
+ Number of process calls --->	CoulombScat : 5688	hIoni : 426050	hPairProd : 34409	hBrems : 7
 
- Simulation: total CrossSection = 0.46641 /cm	 MeanFreePath = 2.144 cm 	 massicCrossSection = 0.059265 cm2/g
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1504636874, 633529531
-----------------------------------------
+ Simulation: total CrossSection = 0.46615 /cm	 MeanFreePath = 2.1452 cm 	 massicCrossSection = 0.059232 cm2/g
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -335,11 +323,11 @@ Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.0163 MB
-Pool ID '7G4Track', size : 0.0327 MB
+Pool ID '7G4Track', size : 0.0317 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.062 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.061 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

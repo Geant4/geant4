@@ -46,6 +46,7 @@
 class G4LogicalVolume;
 class G4VisAttributes;
 class G4VSolid;
+class G4DisplacedSolid;
 class G4Event;
 
 class G4ModelingParameters {
@@ -57,7 +58,8 @@ public: // With description
     wf,         // Draw edges    - no hidden line removal (wireframe).
     hlr,        // Draw edges    - hidden lines removed.
     hsr,        // Draw surfaces - hidden surfaces removed.
-    hlhsr       // Draw surfaces and edges - hidden removed.
+    hlhsr,      // Draw surfaces and edges - hidden removed.
+    cloud       // Draw as a cloud of points
   };
 
   // enums and nested class for communicating a modification to the vis
@@ -70,6 +72,8 @@ public: // With description
     VASLineWidth,
     VASForceWireframe,
     VASForceSolid,
+    VASForceCloud,
+    VASForceNumberOfCloudPoints,
     VASForceAuxEdgeVisible,
     VASForceLineSegmentsPerCircle
   };
@@ -157,6 +161,7 @@ public: // With description
   G4bool           IsWarning                     () const;
   const G4VisAttributes* GetDefaultVisAttributes () const;
   DrawingStyle     GetDrawingStyle               () const;
+  G4int            GetNumberOfCloudPoints        () const;
   G4bool           IsCulling                     () const;
   G4bool           IsCullingInvisible            () const;
   G4bool           IsDensityCulling              () const;
@@ -168,8 +173,8 @@ public: // With description
   G4double         GetExplodeFactor              () const;
   const G4Point3D& GetExplodeCentre              () const;
   G4int            GetNoOfSides                  () const;
-  G4VSolid*        GetSectionSolid               () const;
-  G4VSolid*        GetCutawaySolid               () const;
+  G4DisplacedSolid* GetSectionSolid              () const;
+  G4DisplacedSolid* GetCutawaySolid              () const;
   const G4Event*   GetEvent                      () const;
   const std::vector<VisAttributesModifier>& GetVisAttributesModifiers() const;
 
@@ -177,6 +182,7 @@ public: // With description
   void SetWarning              (G4bool);
   void SetDefaultVisAttributes (const G4VisAttributes* pDefaultVisAttributes);
   void SetDrawingStyle         (DrawingStyle);
+  void SetNumberOfCloudPoints  (G4int);
   void SetCulling              (G4bool);
   void SetCullingInvisible     (G4bool);
   void SetDensityCulling       (G4bool);
@@ -187,8 +193,8 @@ public: // With description
   void SetExplodeFactor        (G4double explodeFactor);
   void SetExplodeCentre        (const G4Point3D& explodeCentre);
   G4int SetNoOfSides           (G4int);  // Returns actual number set.
-  void SetSectionSolid         (G4VSolid* pSectionSolid);
-  void SetCutawaySolid         (G4VSolid* pCutawaySolid);
+  void SetSectionSolid         (G4DisplacedSolid* pSectionSolid);
+  void SetCutawaySolid         (G4DisplacedSolid* pCutawaySolid);
   void SetEvent                (const G4Event* pEvent);
   void SetVisAttributesModifiers(const std::vector<VisAttributesModifier>&);
 
@@ -211,6 +217,8 @@ private:
   G4bool       fWarning;         // Print warnings if true.
   const G4VisAttributes* fpDefaultVisAttributes;
   DrawingStyle fDrawingStyle;    // Drawing style.
+  G4int        fNumberOfCloudPoints;  // For drawing in cloud style.
+                                      // <= 0 means use viewer default.
   G4bool       fCulling;         // Culling requested.
   G4bool       fCullInvisible;   // Cull (don't Draw) invisible objects.
   G4bool       fDensityCulling;  // Density culling requested.  If so...
@@ -221,8 +229,8 @@ private:
   G4double     fExplodeFactor;   // Explode along radius by this factor...
   G4Point3D    fExplodeCentre;   // ...about this centre.
   G4int        fNoOfSides;       // ...if polygon approximates circle.
-  G4VSolid*    fpSectionSolid;   // For generic section (DCUT).
-  G4VSolid*    fpCutawaySolid;   // For generic cutaways.
+  G4DisplacedSolid* fpSectionSolid;  // For generic section (DCUT).
+  G4DisplacedSolid* fpCutawaySolid;  // For generic cutaways.
   const G4Event* fpEvent;        // Event being processed.
   std::vector<VisAttributesModifier> fVisAttributesModifiers;
 };

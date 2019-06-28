@@ -68,6 +68,7 @@ class G4Step;                         // Forward declaration
 class G4MaterialCutsCouple;
 class G4VelocityTable;
 class G4VAuxiliaryTrackInformation;
+class G4VProcess;
 
 #include <map>
 
@@ -173,7 +174,7 @@ public: // With description
    G4double GetTotalEnergy() const;
 
  
-  // moemtnum
+  // momentum
    const G4ThreeVector& GetMomentumDirection() const;
    void SetMomentumDirection(const G4ThreeVector& aValue);
 

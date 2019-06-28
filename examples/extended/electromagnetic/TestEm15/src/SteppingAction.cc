@@ -130,10 +130,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
     const G4TrackVector* secondary = fpSteppingManager->GetSecondary();
 
+    const size_t Nsecondaries = (*secondary).size();
+
     //No conversion , E < threshold
-    if ((*secondary).size() == 0) return;
+    if (Nsecondaries == 0) return;
   
-    for (size_t lp=0; lp< std::min((*secondary).size(),size_t(2) ); lp++) {
+    for (size_t lp=0; lp< std::min(Nsecondaries,size_t(2) ); lp++) {
       if ((*secondary)[lp]->GetDefinition()==G4Electron::ElectronDefinition()) {
         Pminus = (*secondary)[lp]->GetMomentum();
       }
@@ -143,10 +145,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       }
     }
 
-    if ( (*secondary).size() >= 3 ) {
+    if ( Nsecondaries >= 3 ) {
       Precoil  = (*secondary)[2]->GetMomentum();
-    } else {
-      Precoil  = G4ThreeVector();
     }
 
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
@@ -174,9 +174,11 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     G4double angleE = Pplus.angle(Pminus) * EGamma;
     analysisManager->FillH1(10,angleE);
  
-    analysisManager->FillH1(11,std::log10(Precoil.mag()));
-    analysisManager->FillH1(12,Precoil.transform(WtoG).phi());
-    
+    if ( Nsecondaries >= 3 ) {
+      // recoil returned
+      analysisManager->FillH1(11,std::log10(Precoil.mag()));
+      analysisManager->FillH1(12,Precoil.transform(WtoG).phi());
+    }
     G4double phiPlus =  Pplus.transform(WtoG).phi();
     G4double phiMinus =  Pminus.transform(WtoG).phi();
     analysisManager->FillH1(13,phiPlus);

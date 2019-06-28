@@ -192,7 +192,6 @@ G4RadioactiveDecaymessenger::G4RadioactiveDecaymessenger
   Z_para->SetParameterRange("Z_isotope > 0");
   Z_para->SetGuidance("Z: Charge number of isotope");
 
-
   G4UIparameter*  A_para= new G4UIparameter("A_isotope",'i',true);
   A_para->SetParameterRange("A_isotope > 1");
   A_para->SetGuidance("A: mass number of isotope");
@@ -208,9 +207,19 @@ G4RadioactiveDecaymessenger::G4RadioactiveDecaymessenger
   // a given isotope
   //
   userEvaporationDataCmd = new G4UIcommand("/grdm/setPhotoEvaporationFile",this);
-  userEvaporationDataCmd->SetParameter(Z_para);
-  userEvaporationDataCmd->SetParameter(A_para);
-  userEvaporationDataCmd->SetParameter(FileName_para);
+  G4UIparameter*  Z_para_ = new G4UIparameter("Z_isotope",'i',true);
+  Z_para->SetParameterRange("Z_isotope > 0");
+  Z_para->SetGuidance("Z: Charge number of isotope");
+
+  G4UIparameter*  A_para_ = new G4UIparameter("A_isotope",'i',true);
+  A_para->SetParameterRange("A_isotope > 1");
+  A_para->SetGuidance("A: mass number of isotope");
+
+  G4UIparameter*  FileName_para_ = new G4UIparameter("file_name",'s',true);
+  FileName_para->SetGuidance("Name of the user data file");
+  userEvaporationDataCmd->SetParameter(Z_para_ );
+  userEvaporationDataCmd->SetParameter(A_para_ );
+  userEvaporationDataCmd->SetParameter(FileName_para_ );
 
 
 }

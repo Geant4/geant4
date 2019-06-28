@@ -14,6 +14,53 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 June 2019  Makoto Asai  radioactive_decay-V10-05-05
+--------------------------------------------------------
+- G4RadioactiveDecay, G4RadioactiveDecayBase : make sure decay table maps
+    are cleanly deleted at the end of program.
+
+17 June 2019  Dennis Wright  radioactive_decay-V10-05-04
+--------------------------------------------------------
+- G4RadioactivationMessenger : remove "fast beta" option (obsolete), internal 
+    conversion option (not part of biasing) and atomic relaxation option (not 
+    part of biasing).
+    Add analogueMC option which was forgotten when class was developed.
+- G4RadioactiveDecayBaseMessenger : remove "fast beta" option 
+- G4RadioactiveDecayBase.hh : remove boolean FBeta
+
+- replace G4ExceptionDescription in loop with simple string at exception time
+  (G4RadioactiveDecay, G4RadioactiveDecayBase, G4Radioactivation)
+ 
+29 May 2019  Dennis Wright  radioactive_decay-V10-05-03
+------------------------------------------------------- 
+- G4RadioactiveDecay::CalculateChainsFromParent and
+  G4Radioactivation::CalculateChainsFromParent : fix Coverity memory leak 
+  of summedDecayTable
+
+ 8 May 2019  Dennis Wright  radioactive_decay-V10-05-02
+-------------------------------------------------------
+- Fix incorrect branching ratio sum for biased mode, to account for the addition 
+  of N shell EC capture and spontaneous fission.  Files affected:
+    G4Radioactivation.cc
+    G4RadioactiveDecay.cc
+
+ 4 April 2019  Dennis Wright  radioactive_decay-V10-05-01
+---------------------------------------------------------
+- Add spontaneous fission channel
+    Add new class G4SFDecay to handle neutron and gamma generation using LLNL model 
+    G4RadioactiveDecayMode.hh, .cc : add SpFission to enum
+    G4NucleusLimits.cc : set aMax to 260 (to accommodate 252Cf)
+    G4RadioactiveDecay.cc, G4RadioactiveDecayBase.cc : read spontaneous fission data 
+      from database, insert into decay tables and instantiate G4SFDecay
+    modify sources.cmake to include fission model library and G4SFDecay 
+    add fission model directory to GNUmakefile  
+  
+14 December 2018  Dennis Wright  radioactive_decay-V10-05-00
+------------------------------------------------------------
+- G4RadioactiveDecayBase.hh - add StreamInfo() method
+- G4RadioactiveDecayBase.cc - update to new N shell EC, add StreamInfo() method.
+   Enable printout of parameters with G4VERBOSE in BuildPhysicsTable().
+
  5 December 2018  Gabriele Cosmo  radioactive_decay-V10-04-04
 -------------------------------------------------------------
 - G4RadioactiveDecay: enable printout of parameters with G4VERBOSE in

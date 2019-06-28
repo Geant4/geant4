@@ -26,6 +26,7 @@
 //
 
 // /vis/scene commands - John Allison  9th August 1998
+// Michael Kelsey  31 Jan 2019 -- Add new command for electric field
 
 #ifndef G4VISCOMMANDSSCENEADD_HH
 #define G4VISCOMMANDSSCENEADD_HH
@@ -166,6 +167,18 @@ private:
     void operator()(G4VGraphicsScene&, const G4Transform3D&);
     G4VisExtent fExtent;
   };
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddElectricField: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddElectricField ();
+  virtual ~G4VisCommandSceneAddElectricField ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddElectricField (const G4VisCommandSceneAddElectricField&);
+  G4VisCommandSceneAddElectricField& operator = (const G4VisCommandSceneAddElectricField&);
   G4UIcommand* fpCommand;
 };
 

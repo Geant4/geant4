@@ -53,23 +53,23 @@ class G4WLSTimeGeneratorProfileExponential : public G4VWLSTimeGeneratorProfile
 
 public:
 
-  G4WLSTimeGeneratorProfileExponential(const G4String& name);
+  explicit G4WLSTimeGeneratorProfileExponential(const G4String& name);
 
-  ~G4WLSTimeGeneratorProfileExponential();
+  virtual ~G4WLSTimeGeneratorProfileExponential();
 
-  G4double GenerateTime(const G4double time_constant);
+  virtual G4double GenerateTime(const G4double time_constant) override;
 
-  G4double GenerateTime(const G4MaterialPropertiesTable*);
+  virtual G4double GenerateTime(const G4MaterialPropertiesTable*) override;
 
 protected:
 
 private:
 
   // hide assignment operator
- 
-     G4WLSTimeGeneratorProfileExponential & operator=
-                        (const  G4WLSTimeGeneratorProfileExponential &right);
-     G4WLSTimeGeneratorProfileExponential(const  G4WLSTimeGeneratorProfileExponential&);
+
+  G4WLSTimeGeneratorProfileExponential & operator=
+                     (const  G4WLSTimeGeneratorProfileExponential &right) = delete;
+  G4WLSTimeGeneratorProfileExponential(const  G4WLSTimeGeneratorProfileExponential&) = delete;
 
 };
 

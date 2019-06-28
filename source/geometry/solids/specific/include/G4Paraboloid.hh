@@ -57,6 +57,8 @@
 #ifndef G4Paraboloid_HH
 #define G4Paraboloid_HH
 
+#include "G4GeomTypes.hh"
+
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UPARABOLOID 1
 #endif
@@ -142,11 +144,11 @@ class G4Paraboloid : public G4VSolid
       // persistifiable objects.
 
     G4Paraboloid(const G4Paraboloid& rhs);
-    G4Paraboloid& operator=(const G4Paraboloid& rhs); 
+    G4Paraboloid& operator=(const G4Paraboloid& rhs);
       // Copy constructor and assignment operator.
 
   protected:  // without description
- 
+
     mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
@@ -158,7 +160,7 @@ class G4Paraboloid : public G4VSolid
     G4double fCubicVolume;
 
     G4double dz, r1, r2;
-    G4double k1, k2; 
+    G4double k1, k2;
     // Defined to make some calculations easier to follow
 };
 

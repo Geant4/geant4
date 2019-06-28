@@ -35,17 +35,8 @@
 //
 // Creation date: 22.08.2005
 //
-// Modifications:
+// Modifications: V.Ivanchenko
 //
-// 01.08.06 V.Ivanchenko extend upper limit of table to TeV and review the
-//          logic of building - only elements from G4ElementTable
-// 08.08.06 V.Ivanchenko build internal table in ekin scale, introduce faclim
-// 19.08.06 V.Ivanchenko add inline function ScreeningParameter 
-// 09.10.07 V.Ivanchenko reorganized methods, add cut dependence in scattering off e- 
-// 09.06.08 V.Ivanchenko add SelectIsotope and sampling of the recoil ion 
-// 16.06.09 C.Consolandi fixed computation of effective mass
-// 27.05.10 V.Ivanchenko added G4WentzelOKandVIxSection class to
-//              compute cross sections and sample scattering angle
 //
 //
 // Class Description:
@@ -95,7 +86,8 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(G4bool combined)
 
   particle = nullptr;
   currentCouple = nullptr;
-  wokvi = nullptr;
+
+  wokvi = new G4WentzelOKandVIxSection(isCombined);
 
   currentMaterialIndex = 0;
   mass = CLHEP::proton_mass_c2;
@@ -114,8 +106,6 @@ G4eCoulombScatteringModel::~G4eCoulombScatteringModel()
 void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
 					   const G4DataVector& cuts)
 {
-  if(!wokvi) { wokvi = new G4WentzelOKandVIxSection(); }
-
   SetupParticle(part);
   currentCouple = nullptr;
 
@@ -128,19 +118,12 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
   }
 
   wokvi->Initialise(part, cosThetaMin);
-  /*
-  G4cout << "G4eCoulombScatteringModel: " << particle->GetParticleName()
-         << "  1-cos(ThetaLimit)= " << 1 - cosThetaMin
-	 << "  cos(thetaMax)= " <<  cosThetaMax
-	 << G4endl;
-  */
   pCuts = &cuts;
-  //G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
   /*
-  G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
-  	 << part->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
-  	 << "  cos(TetMax)= " << cosThetaMax <<G4endl;
-  G4cout << "cut= " << (*pCuts)[0] << "  cut1= " << (*pCuts)[1] << G4endl;
+  G4cout << "G4eCoulombScatteringModel::Initialise for " 
+  	 << part->GetParticleName() << " 1-cos(TetMin)= " << 1.0 - cosThetaMin 
+  	 << " 1-cos(TetMax)= " << 1. - cosThetaMax << G4endl;
+  G4cout << "cut[0]= " << (*pCuts)[0] << G4endl;
   */
   if(!fParticleChange) {
     fParticleChange = GetParticleChangeForGamma();
@@ -195,8 +178,11 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 		G4double Z, G4double,
 		G4double cutEnergy, G4double)
 {
-  //G4cout << "### G4eCoulombScatteringModel::ComputeCrossSectionPerAtom  for " 
-  //<< p->GetParticleName()<<" Z= "<<Z<<" e(MeV)= "<< kinEnergy/MeV << G4endl; 
+  /*
+  G4cout << "### G4eCoulombScatteringModel::ComputeCrossSectionPerAtom  for " 
+	 << p->GetParticleName()<<" Z= "<<Z<<" e(MeV)= "<< kinEnergy/MeV 
+	 << G4endl; 
+  */
   G4double cross = 0.0;
   elecRatio = 0.0;
   if(p != particle) { SetupParticle(p); }
@@ -206,18 +192,22 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   DefineMaterial(CurrentCouple());
   G4double costmin = wokvi->SetupKinematic(kinEnergy, currentMaterial);
 
+  //G4cout << "cosThetaMax= "<<cosThetaMax<<" costmin= "<<costmin<< G4endl;
+
   if(cosThetaMax < costmin) {
     G4int iz = G4lrint(Z);
     G4double cut = (0.0 < fixedCut) ? fixedCut : cutEnergy;
     costmin = wokvi->SetupTarget(iz, cut);
+    //G4cout << "SetupTarget: Z= " << iz << "  cut= " << cut << "  "
+    //	   << costmin << G4endl;
     G4double costmax = (1 == iz && particle == theProton && cosThetaMax < 0.0)
       ? 0.0 : cosThetaMax; 
     if(costmin > costmax) {
       cross = wokvi->ComputeNuclearCrossSection(costmin, costmax)
-	+ wokvi->ComputeElectronCrossSection(costmin, costmax);
+      	+ wokvi->ComputeElectronCrossSection(costmin, costmax);
     }
     /*    
-  if(p->GetParticleName() == "e-") 
+    if(p->GetParticleName() == "e-") 
     G4cout << "Z= " << Z << " e(MeV)= " << kinEnergy/MeV 
 	   << " cross(b)= " << cross/barn << " 1-costmin= " << 1-costmin
 	   << " 1-costmax= " << 1-costmax 
@@ -226,6 +216,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 	   << G4endl;
     */
   }
+  //G4cout << "====== cross= " << cross << G4endl;
   return cross;  
 }
 
@@ -251,9 +242,8 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 
   wokvi->SetupKinematic(kinEnergy, currentMaterial);
 
-  const G4Element* currentElement = 
-    SelectRandomAtom(couple,particle,kinEnergy,cut,kinEnergy);
-
+  const G4Element* currentElement = SelectTargetAtom(couple,particle,kinEnergy,
+                                       dp->GetLogKineticEnergy(),cut,kinEnergy);
   G4int iz = currentElement->GetZasInt();
 
   G4double costmin = wokvi->SetupTarget(iz, cut);
@@ -292,7 +282,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
     /(targetMass + (mass + kinEnergy)*(1.0 - cost));
 
   // the check likely not needed
-  if(trec > kinEnergy) { trec = kinEnergy; }
+  trec = std::min(trec, kinEnergy);
   G4double finalT = kinEnergy - trec; 
   G4double edep = 0.0;
     /*

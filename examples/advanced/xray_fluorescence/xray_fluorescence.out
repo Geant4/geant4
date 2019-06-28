@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -2368,7 +2368,6 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/physicsModified
 #Selecting Reis model for PIXE. Analytical PIXE will be used outsie 01-10 MeV energy Range
 /process/em/pixeXSmodel ECPSSR_FormFactor
-G4EmParameters::SetPIXECrossSectionModel ECPSSR_FormFactor
 /run/physicsModified
 #
 #/analysis/setPhysicProduction true
@@ -2890,6 +2889,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     -------   --------     ------   ------   --------   ----------    ----------
       69.08          0k         3        9         24         0.00    World
       30.92          0k         2        3         11         0.00    HPGeDetector
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ### Run 0 starts (master).
 Reading data... done
@@ -2904,7 +2905,7 @@ Created histos
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.730000s Real=0.734524s Sys=0.000000s
+  User=0.680000s Real=0.681905s Sys=0.010000s
 Going to save histograms
 ... write Root file : xrayfluo.root - done
 ... close Root file : xrayfluo.root - done

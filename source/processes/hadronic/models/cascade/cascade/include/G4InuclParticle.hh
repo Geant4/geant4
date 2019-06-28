@@ -85,11 +85,11 @@ public:
   G4InuclParticle& operator=(const G4InuclParticle& right);
 
   // Equality (comparison) operator -- NOT SORTING
-  bool operator==(const G4InuclParticle& right) {
+  G4bool operator==(const G4InuclParticle& right) {
     return ( (&right == this) || (pDP == right.pDP) );	// Ignore model code
   }
 
-  bool operator!=(const G4InuclParticle& right) {
+  G4bool operator!=(const G4InuclParticle& right) {
     return !operator==(right);
   }
 

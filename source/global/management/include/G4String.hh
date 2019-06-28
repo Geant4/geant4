@@ -71,11 +71,13 @@ public:
   inline G4String ( const char *, str_size );
   inline G4String ( const G4String& );
   inline G4String ( const std::string & );
+  inline G4String ( G4String&& ) = default;
   ~G4String () {}
 
   inline G4String& operator=(const G4String&);
   inline G4String& operator=(const std::string &);
   inline G4String& operator=(const char*);
+  inline G4String& operator=(G4String&&) = default;
 
   inline char operator () (str_size) const; 
   inline char& operator () (str_size);

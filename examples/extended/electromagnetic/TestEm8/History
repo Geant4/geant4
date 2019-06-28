@@ -14,7 +14,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13-02-19 V.Ivantchenko (testem8-V10-04-06)
+13-02-19 V.Ivantchenko (testem8-V10-05-00)
 - DetectorConstruction - added alternative materials in order to test
     all methods to construct new material by G4NistMaterialBuilder
     (problem reports #2133, #2134)

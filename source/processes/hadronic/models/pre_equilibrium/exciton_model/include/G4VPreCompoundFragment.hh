@@ -125,8 +125,8 @@ private:
   G4VPreCompoundFragment(const G4VPreCompoundFragment &right) = delete;
   const G4VPreCompoundFragment& 
   operator= (const G4VPreCompoundFragment &right) = delete;  
-  G4int operator==(const G4VPreCompoundFragment &right) const = delete;
-  G4int operator!=(const G4VPreCompoundFragment &right) const = delete;
+  G4bool operator==(const G4VPreCompoundFragment &right) const = delete;
+  G4bool operator!=(const G4VPreCompoundFragment &right) const = delete;
 
   // =============
   // Data members

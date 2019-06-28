@@ -55,6 +55,13 @@ G4String G4VModel::GetCurrentDescription () const {
   return fGlobalDescription;
 }
 
+const G4VisExtent& G4VModel::GetTransformedExtent () const {
+  static G4VisExtent transformedExtent;
+  transformedExtent = fExtent;
+  transformedExtent.Transform(fTransform);
+  return transformedExtent;
+}
+
 G4bool G4VModel::Validate (G4bool) {
   return true;
 }

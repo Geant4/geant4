@@ -145,7 +145,7 @@ G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver,
   param->SetMscRangeFactor(0.08);    // error-free stepping for e-/e+ msc gs
   param->SetMuHadLateralDisplacement(true);
   param->SetFluo(true);
-  //param->SetAugerCascade(true);
+  param->SetMaxNIELEnergy(1*MeV);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -223,10 +223,11 @@ void G4EmStandardPhysics_option4::ConstructProcess()
 
   // energy limits for e+- scattering models
   G4double highEnergyLimit = G4EmParameters::Instance()->MscEnergyLimit();
+  G4double nielEnergyLimit = G4EmParameters::Instance()->MaxNIELEnergy();
 
   // nuclear stopping
   G4NuclearStopping* pnuc = new G4NuclearStopping();
-  pnuc->SetMaxKinEnergy(MeV);
+  pnuc->SetMaxKinEnergy(nielEnergyLimit);
 
   // Add standard EM Processes
   G4ParticleTable* table = G4ParticleTable::GetParticleTable();

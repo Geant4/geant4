@@ -24,6 +24,9 @@ committal in the CVS repository !
 History file for visualization/Tree sub-category
 ------------------------------------------------
 
+18 March 2019  Gabriele Cosmo (vistree-V10-05-00)
+- Corrected few typos in comments.
+
 11th March 2018  John Allison  (vistree-V10-04-00)
 - G4ASCIITreeSceneHandler.cc:
   o Fix bug in suppressed writing of repeated parameterised volumes.

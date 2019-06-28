@@ -86,4 +86,10 @@ void setValue(const SourceArray& src, Value1D value, TargetArray& trg, TargetArr
     setValue(src, value, trgs...);
 }
 
+template <typename T>
+T clamp(T value, T lo, T hi)
+{
+    return std::min(std::max(lo, value), hi);
+}
+
 } // field_utils

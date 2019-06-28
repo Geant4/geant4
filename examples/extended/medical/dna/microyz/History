@@ -5,6 +5,15 @@
                        Package History file
                        --------------------
 
+11/02/19 - tag microyz-V10-05-02 - S. Incerti
+added EM UI commands in microyz.in
+
+09/02/19 - tag microyz-V10-05-01 - S. Incerti
+added condensed history models including step size control
+
+31/01/19 - tag microyz-V10-05-00 - I. Hrivnacova 
+Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 07/11/18 - tag microyz-V10-04-03 - I. Hrivnacova 
 updated plot.C for reading ntuples merged with row-wise mode
 (now default)

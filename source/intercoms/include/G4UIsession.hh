@@ -64,8 +64,10 @@ class G4UIsession : public G4coutDestination
   protected:
       G4ICOMS_DLL static G4int inSession;
       G4int ifBatch;
+      G4int lastRC;
   public:
       static G4int InSession() { return inSession; }
+      G4int GetLastReturnCode() const { return lastRC; }
 };
 
 

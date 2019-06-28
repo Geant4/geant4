@@ -62,6 +62,18 @@ private:
   G4UIcommand* fpCommand;
 };
 
+class G4VisCommandSetExtentForField: public G4VVisCommand {
+public:
+  G4VisCommandSetExtentForField ();
+  virtual ~G4VisCommandSetExtentForField ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSetExtentForField (const G4VisCommandSetExtentForField&);
+  G4VisCommandSetExtentForField& operator = (const G4VisCommandSetExtentForField&);
+  G4UIcommand* fpCommand;
+};
+
 class G4VisCommandSetLineWidth: public G4VVisCommand {
 public:
   G4VisCommandSetLineWidth ();
@@ -119,6 +131,18 @@ public:
 private:
   G4VisCommandSetTouchable (const G4VisCommandSetTouchable&);
   G4VisCommandSetTouchable& operator = (const G4VisCommandSetTouchable&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSetVolumeForField: public G4VVisCommand {
+public:
+  G4VisCommandSetVolumeForField ();
+  virtual ~G4VisCommandSetVolumeForField ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSetVolumeForField (const G4VisCommandSetVolumeForField&);
+  G4VisCommandSetVolumeForField& operator = (const G4VisCommandSetVolumeForField&);
   G4UIcommand* fpCommand;
 };
 

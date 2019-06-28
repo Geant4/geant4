@@ -47,11 +47,16 @@ public:
   ~G4MuNeutrinoNucleusTotXsc();
 
   virtual
-  G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z, const G4Material*);
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A, const G4Element*, const G4Material*);
+  
+  virtual
+  G4bool IsElementApplicable(const G4DynamicParticle*, G4int , const G4Material*){ return true; };
 
 
   // virtual G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z, const G4Material*);
-
+  virtual G4double GetElementCrossSection(const G4DynamicParticle* dynPart,
+					       G4int Z,
+					  const G4Material* mat);
   virtual
   G4double GetIsoCrossSection(const G4DynamicParticle* aPart, G4int Z, G4int A,  
 			      const G4Isotope*,
@@ -71,6 +76,9 @@ public:
   void SetBiasingFactor(G4double bf){fBiasingFactor=bf;};
   G4double GetBiasingFactor(){return fBiasingFactor;};
 
+  G4double GetTotXsc(){return fTotXsc;};
+  G4double GetCcTotRatio(){return fCcTotRatio;};
+
 protected:
 
   G4double fCofXsc;    // 2*Gf*Gf*MeC2/pi
@@ -78,6 +86,7 @@ protected:
   G4double fCofS, fCofL;
   G4double fCutEnergy; // minimal recoil electron energy detected
   G4double fBiasingFactor; // biasing xsc up
+  G4double fTotXsc, fCcTotRatio, fCcFactor, fNcFactor;
 
   G4int fIndex;
 

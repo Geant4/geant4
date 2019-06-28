@@ -130,6 +130,9 @@ void G4HadronElasticPhysics::ConstructProcess()
   G4VCrossSectionDataSet* theComponentGGHadronNucleusData = 
     new G4CrossSectionElastic( new G4ComponentGGHadronNucleusXsc );
 
+  G4VCrossSectionDataSet* theComponentGGNuclNuclData = 
+    new G4CrossSectionElastic( new G4ComponentGGNuclNuclXsc );
+
   G4HadronElasticProcess* hel = nullptr; 
 
   auto myParticleIterator=GetParticleIterator();
@@ -155,6 +158,7 @@ void G4HadronElasticPhysics::ConstructProcess()
       
       hel = new G4HadronElasticProcess();
       hel->RegisterMe(lhep0);
+      hel->AddDataSet( theComponentGGHadronNucleusData );
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
 	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
@@ -167,8 +171,6 @@ void G4HadronElasticPhysics::ConstructProcess()
               pname == "He3"
              ) {
       hel = new G4HadronElasticProcess();
-      G4VCrossSectionDataSet* theComponentGGNuclNuclData = 
-        new G4CrossSectionElastic(new G4ComponentGGNuclNuclXsc());
       hel->AddDataSet(theComponentGGNuclNuclData);
       hel->RegisterMe(lhep0);
       pmanager->AddDiscreteProcess(hel);
@@ -181,9 +183,6 @@ void G4HadronElasticPhysics::ConstructProcess()
 
       hel = new G4HadronElasticProcess();
       hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
-
-      //hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsProtonElasticXS::Default_Name()));
-     
       hel->RegisterMe(new G4ChipsElasticModel());
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
@@ -194,7 +193,7 @@ void G4HadronElasticPhysics::ConstructProcess()
     } else if(pname == "neutron") {   
 
       hel = new G4HadronElasticProcess();
-      hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronElasticXS::Default_Name()));
+      hel->AddDataSet(new G4NeutronElasticXS());
       hel->RegisterMe(new G4ChipsElasticModel());
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {

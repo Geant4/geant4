@@ -418,7 +418,7 @@ void ElectronBenchmarkDetector::ConstructSDandField()
         sensitiveDetector->RegisterPrimitive(primitive);
     }
     G4SDManager::GetSDMpointer()->AddNewDetector(sensitiveDetector);
-    SetSensitiveDetector("scorerRingLog",sensitiveDetector);
+    fScorerRingLog->SetSensitiveDetector(sensitiveDetector);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

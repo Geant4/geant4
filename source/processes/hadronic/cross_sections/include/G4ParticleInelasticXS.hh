@@ -33,8 +33,6 @@
 //
 // Author  Ivantchenko, Geant4, 24 May 2018
 //
-// Modifications:
-//
 
 // Class Description:
 // This is a base class for n,p,d,t,he3,he4 inelastic hadronic cross 
@@ -50,7 +48,6 @@
 #include "G4ElementData.hh"
 #include "G4Threading.hh"
 #include <vector>
-#include <iostream>
 
 const G4int MAXZINELP = 93;
 
@@ -60,7 +57,6 @@ class G4Element;
 class G4PhysicsVector;
 class G4ComponentGGHadronNucleusXsc;
 class G4ComponentGGNuclNuclXsc;
-class G4HadronNucleonXsc;
 class G4NistManager;
 
 class G4ParticleInelasticXS : public G4VCrossSectionDataSet
@@ -69,38 +65,34 @@ public:
 
   explicit G4ParticleInelasticXS(const G4ParticleDefinition*);
 
-  virtual ~G4ParticleInelasticXS();
+  ~G4ParticleInelasticXS() final;
 
-  virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
-			     const G4Material*);
+			     const G4Material*) final;
 
-  virtual
   G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,
-			 const G4Element*, const G4Material*);
+			 const G4Element*, const G4Material*) final;
 
-  virtual
   G4double GetElementCrossSection(const G4DynamicParticle*, 
-				  G4int Z, const G4Material* mat=nullptr);
+				  G4int Z, const G4Material* mat) final;
 
-  virtual
   G4double GetIsoCrossSection(const G4DynamicParticle*, G4int Z, G4int A,
                               const G4Isotope* iso,
                               const G4Element* elm,
-                              const G4Material* mat);
+                              const G4Material* mat) final;
 
-  virtual const G4Isotope* SelectIsotope(const G4Element*, G4double kinEnergy);
+  const G4Isotope* SelectIsotope(const G4Element*, 
+                                 G4double kinEnergy, G4double logE) final;
 
-  virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&);
+  void BuildPhysicsTable(const G4ParticleDefinition&) final;
 
-  virtual void CrossSectionDescription(std::ostream&) const;
+  void CrossSectionDescription(std::ostream&) const final;
 
-  G4double IsoCrossSection(G4double ekin, G4int Z, G4int A);
+  G4double IsoCrossSection(G4double ekin, G4double logE, G4int Z, G4int A);
 
 private: 
 
-  void Initialise(G4int Z, G4DynamicParticle* dp, const char*);
+  void Initialise(G4int Z, const char*);
 
   G4PhysicsVector* RetrieveVector(std::ostringstream& in, G4bool warn);
 
@@ -109,25 +101,23 @@ private:
   
   G4ComponentGGHadronNucleusXsc* ggXsection;
   G4ComponentGGNuclNuclXsc* nnXsection;
-  G4HadronNucleonXsc* fNucleon;
   G4NistManager* fNist;
 
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* proton;
 
-  G4String particleName;
-
-  G4bool   isMaster;
-
   G4double emax;
   std::vector<G4double> temp;
 
-  static G4ElementData* data;
+  size_t  fIdxXSTable;
+  G4bool  isMaster;
 
   static G4double  coeff[MAXZINELP];
 
   static const G4int amin[MAXZINELP];
   static const G4int amax[MAXZINELP];
+
+  static G4ElementData* data;
 
 #ifdef G4MULTITHREADED
   static G4Mutex particleInelasticXSMutex;

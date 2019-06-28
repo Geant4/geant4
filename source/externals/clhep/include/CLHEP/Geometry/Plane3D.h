@@ -67,9 +67,7 @@ namespace HepGeom {
 
     /**
      * Assignment. */
-    Plane3D<T> & operator=(const Plane3D<T> & p) {
-      a_ = p.a_; b_ = p.b_; c_ = p.c_; d_ = p.d_; return *this;
-    }
+    Plane3D<T> & operator=(const Plane3D<T> &) = default;
 
     /**
      * Returns the a-coefficient in the plane equation: a*x+b*y+c*z+d=0. */

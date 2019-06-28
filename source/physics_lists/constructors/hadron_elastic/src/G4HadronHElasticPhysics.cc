@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4HadronHElasticPhysics
@@ -133,6 +132,8 @@ void G4HadronHElasticPhysics::ConstructProcess() {
   G4HadronElastic* lhep = new G4HadronElastic();
   lhep->SetMaxEnergy( elimitAntiNuc + delta );
 
+  G4HadronElastic* lhep0 = new G4HadronElastic();
+
   // Three instances of Chips elastic model: one used everywhere,
   // one used below a energy threshold, and one used only for the
   // hydrogen element.
@@ -223,7 +224,7 @@ void G4HadronHElasticPhysics::ConstructProcess() {
 
     } else if ( pname == "neutron" ) {   
       hel = new G4HadronElasticProcess();
-      hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronElasticXS::Default_Name()) );
+      hel->AddDataSet(new G4NeutronElasticXS() );
       // To preserve reproducibility, a different instance of
       // G4DiffuseElastic must be used for each particle type.
       G4DiffuseElastic* neutronDiffuseElastic = new G4DiffuseElastic();
@@ -238,31 +239,15 @@ void G4HadronHElasticPhysics::ConstructProcess() {
 	       << " added for " << particle->GetParticleName() << G4endl;
       }
 
-    } else if ( pname == "pi-" ) { 
+    } else if ( pname == "pi-" || pname == "pi+" ) { 
       hel = new G4HadronElasticProcess();
       hel->AddDataSet( new G4BGGPionElasticXS( particle ) );
       // To preserve reproducibility, a different instance of
       // G4DiffuseElastic must be used for each particle type.
-      G4DiffuseElastic* pionMinusDiffuseElastic = new G4DiffuseElastic();
-      pionMinusDiffuseElastic->SetMinEnergy( elimitDiffuse );
+      G4DiffuseElastic* dElastic = new G4DiffuseElastic();
+      dElastic->SetMinEnergy( elimitDiffuse );
       hel->RegisterMe( chipsH );  // Use Chips only for Hydrogen element
-      hel->RegisterMe( pionMinusDiffuseElastic );
-      pmanager->AddDiscreteProcess( hel );
-      if(fDiffraction) { hel->SetDiffraction(diffGen, diffRatio); }
-      if ( verbose > 1 ) {
-	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
-	       << " added for " << particle->GetParticleName() << G4endl;
-      }
-
-    } else if ( pname == "pi+" ) { 
-      hel = new G4HadronElasticProcess();
-      hel->AddDataSet( new G4BGGPionElasticXS( particle ) );
-      // To preserve reproducibility, a different instance of
-      // G4DiffuseElastic must be used for each particle type.
-      G4DiffuseElastic* pionPlusDiffuseElastic = new G4DiffuseElastic();
-      hel->RegisterMe( chipsH );  // Use Chips only for Hydrogen element
-      pionPlusDiffuseElastic->SetMinEnergy( elimitDiffuse );
-      hel->RegisterMe( pionPlusDiffuseElastic );
+      hel->RegisterMe( dElastic );
       pmanager->AddDiscreteProcess( hel );
       if(fDiffraction) { hel->SetDiffraction(diffGen, diffRatio); }
       if ( verbose > 1 ) {
@@ -291,17 +276,16 @@ void G4HadronHElasticPhysics::ConstructProcess() {
 	       << " added for " << particle->GetParticleName() << G4endl;
       }
 
-    } else if ( 
-                pname == "deuteron"  ||
-                pname == "triton"    ||
-                pname == "He3"       ||
-                pname == "alpha"
-              ) {
+    } else if(pname == "alpha"     ||
+              pname == "deuteron"  ||
+              pname == "triton"    ||
+              pname == "He3"
+             ) {
       hel = new G4HadronElasticProcess();
-      hel->AddDataSet( theComponentGGNuclNuclData );
-      hel->RegisterMe( diffuseNuclNuclElastic );
-      pmanager->AddDiscreteProcess( hel );
-      if ( verbose > 1 ) {
+      hel->AddDataSet(theComponentGGNuclNuclData);
+      hel->RegisterMe(lhep0);
+      pmanager->AddDiscreteProcess(hel);
+      if(verbose > 1) {
 	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
 	       << " added for " << particle->GetParticleName() << G4endl;
       }
@@ -330,16 +314,6 @@ void G4HadronHElasticPhysics::ConstructProcess() {
       if ( verbose > 1 ) {
 	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
 	       << " added for " << particle->GetParticleName() << G4endl;
-      }
-
-    } else if ( pname == "GenericIon" ) {
-      hel = new G4HadronElasticProcess();
-      hel->AddDataSet( theComponentGGNuclNuclData );
-      hel->RegisterMe( diffuseNuclNuclElastic );
-      pmanager->AddDiscreteProcess( hel );
-      if ( verbose > 1 ) {
-        G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
-               << " added for " << particle->GetParticleName() << G4endl;
       }
     }
   }

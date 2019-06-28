@@ -134,6 +134,7 @@ G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver,
   param->SetLateralDisplacementAlg96(true);
   //param->SetUseICRU90Data(true);
   param->SetFluo(true);
+  param->SetMaxNIELEnergy(1*MeV);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -196,8 +197,9 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
   // nuclear stopping
+  G4double nielEnergyLimit = G4EmParameters::Instance()->MaxNIELEnergy();
   G4NuclearStopping* pnuc = new G4NuclearStopping();
-  pnuc->SetMaxKinEnergy(MeV);
+  pnuc->SetMaxKinEnergy(nielEnergyLimit);
 
   // Add standard EM Processes
   G4ParticleTable* table = G4ParticleTable::GetParticleTable();

@@ -278,6 +278,12 @@ G4bool G4PVDivision::IsReplicated() const
 }
 
 //--------------------------------------------------------------------------
+G4int G4PVDivision::GetMultiplicity() const
+{
+  return fnReplicas;
+}
+
+//--------------------------------------------------------------------------
 G4VPVParameterisation* G4PVDivision::GetParameterisation() const
 {
   return fparam;

@@ -277,7 +277,7 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
     new G4UIcommand("/vis/ogl/set/printSize", this);
   fpCommandPrintSize->SetGuidance ("Set print size");
   fpCommandPrintSize->SetGuidance ("Tip : -1 will mean 'print size' = 'window size'");
-  fpCommandPrintSize->SetGuidance ("       Setting size greatter than your maximum graphic card capacity , will set the size to maximum  size.");
+  fpCommandPrintSize->SetGuidance ("       Setting size greater than your maximum graphic card capacity , will set the size to maximum  size.");
   G4UIparameter* parameterPrintSize;
   parameterPrintSize = new G4UIparameter ("width", 'd', omitable = false);
   parameterPrintSize->SetDefaultValue(-1);

@@ -134,10 +134,10 @@ G4Cons::G4Cons( const G4String& pName,
 G4Cons::G4Cons( __void__& a )
   : G4CSGSolid(a), kRadTolerance(0.), kAngTolerance(0.),
     fRmin1(0.), fRmin2(0.), fRmax1(0.), fRmax2(0.), fDz(0.),
-    fSPhi(0.), fDPhi(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhiOT(0.),
-    cosHDPhiIT(0.), sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.),
-    fPhiFullCone(false), halfCarTolerance(0.), halfRadTolerance(0.),
-    halfAngTolerance(0.)
+    fSPhi(0.), fDPhi(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhi(0.),
+    cosHDPhiOT(0.), cosHDPhiIT(0.), sinSPhi(0.), cosSPhi(0.),
+    sinEPhi(0.), cosEPhi(0.), fPhiFullCone(false),
+    halfCarTolerance(0.), halfRadTolerance(0.), halfAngTolerance(0.)
 {
 }
 
@@ -158,9 +158,9 @@ G4Cons::G4Cons(const G4Cons& rhs)
     kAngTolerance(rhs.kAngTolerance), fRmin1(rhs.fRmin1), fRmin2(rhs.fRmin2),
     fRmax1(rhs.fRmax1), fRmax2(rhs.fRmax2), fDz(rhs.fDz), fSPhi(rhs.fSPhi),
     fDPhi(rhs.fDPhi), sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi),
-    cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
-    sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi), sinEPhi(rhs.sinEPhi),
-    cosEPhi(rhs.cosEPhi), fPhiFullCone(rhs.fPhiFullCone),
+    cosHDPhi(rhs.cosHDPhi), cosHDPhiOT(rhs.cosHDPhiOT),
+    cosHDPhiIT(rhs.cosHDPhiIT), sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
+    sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi), fPhiFullCone(rhs.fPhiFullCone),
     halfCarTolerance(rhs.halfCarTolerance),
     halfRadTolerance(rhs.halfRadTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
@@ -188,7 +188,7 @@ G4Cons& G4Cons::operator = (const G4Cons& rhs)
    fRmin1 = rhs.fRmin1; fRmin2 = rhs.fRmin2;
    fRmax1 = rhs.fRmax1; fRmax2 = rhs.fRmax2;
    fDz = rhs.fDz; fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi;
-   sinCPhi = rhs.sinCPhi; cosCPhi = rhs.cosCPhi;
+   sinCPhi = rhs.sinCPhi; cosCPhi = rhs.cosCPhi; cosHDPhi = rhs.cosHDPhi;
    cosHDPhiOT = rhs.cosHDPhiOT; cosHDPhiIT = rhs.cosHDPhiIT;
    sinSPhi = rhs.sinSPhi; cosSPhi = rhs.cosSPhi;
    sinEPhi = rhs.sinEPhi; cosEPhi = rhs.cosEPhi;
@@ -472,8 +472,8 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
       distSPhi = 0.; 
       distEPhi = 0.; 
     }
-    nPs = G4ThreeVector(std::sin(fSPhi), -std::cos(fSPhi), 0);
-    nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi), std::cos(fSPhi+fDPhi), 0);
+    nPs = G4ThreeVector( sinSPhi, -cosSPhi, 0 );
+    nPe = G4ThreeVector( -sinEPhi, cosEPhi, 0 );
   }
   if ( rho > halfCarTolerance )   
   {
@@ -607,29 +607,41 @@ G4ThreeVector G4Cons::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   switch (side)
   {
     case kNRMin:      // Inner radius
+    {
       rho *= secRMin ;
       norm = G4ThreeVector(-p.x()/rho, -p.y()/rho, tanRMin/secRMin) ;
       break ;
+    }
     case kNRMax:      // Outer radius
+    {
       rho *= secRMax ;
       norm = G4ThreeVector(p.x()/rho, p.y()/rho, -tanRMax/secRMax) ;
       break ;
+    }
     case kNZ:         // +/- dz
+    {
       if (p.z() > 0)  { norm = G4ThreeVector(0,0,1);  }
       else            { norm = G4ThreeVector(0,0,-1); }
       break ;
+    }
     case kNSPhi:
-      norm = G4ThreeVector(std::sin(fSPhi), -std::cos(fSPhi), 0) ;
+    {
+      norm = G4ThreeVector(sinSPhi, -cosSPhi, 0) ;
       break ;
+    }
     case kNEPhi:
-      norm=G4ThreeVector(-std::sin(fSPhi+fDPhi), std::cos(fSPhi+fDPhi), 0) ;
+    {
+      norm = G4ThreeVector(-sinEPhi, cosEPhi, 0) ;
       break ;
+    }
     default:          // Should never reach this case...
+    {
       DumpInfo();
       G4Exception("G4Cons::ApproxSurfaceNormal()",
                   "GeomSolids1002", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break ;    
+    }
   }
   return norm ;
 }
@@ -1367,11 +1379,11 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p) const
 
     cosPsi = (p.x()*cosCPhi + p.y()*sinCPhi)/rho ;
 
-    if ( cosPsi < std::cos(fDPhi*0.5) ) // Point lies outside phi range
+    if ( cosPsi < cosHDPhi ) // Point lies outside phi range
     {
       if ( (p.y()*cosCPhi - p.x()*sinCPhi) <= 0.0 )
       {
-        safePhi = std::fabs(p.x()*std::sin(fSPhi)-p.y()*std::cos(fSPhi));
+        safePhi = std::fabs(p.x()*sinSPhi-p.y()*cosSPhi);
       }
       else
       {
@@ -2205,16 +2217,16 @@ G4ThreeVector G4Cons::GetPointOnSurface() const
     G4double zRand  = G4RandFlat::shoot(-1.*fDz,fDz);
     rRand1 = G4RandFlat::shoot(fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2),
                                fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2));
-    return G4ThreeVector (rRand1*std::cos(fSPhi),
-                          rRand1*std::sin(fSPhi), zRand);
+    return G4ThreeVector (rRand1*cosSPhi,
+                          rRand1*sinSPhi, zRand);
   }
   else // SPhi+DPhi section
   {
     G4double zRand  = G4RandFlat::shoot(-1.*fDz,fDz);
     rRand1 = G4RandFlat::shoot(fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2),
                                fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2)); 
-    return G4ThreeVector (rRand1*std::cos(fSPhi+fDPhi),
-                          rRand1*std::sin(fSPhi+fDPhi), zRand);
+    return G4ThreeVector (rRand1*cosEPhi,
+                          rRand1*sinEPhi, zRand);
   }
 }
 

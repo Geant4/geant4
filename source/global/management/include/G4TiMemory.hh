@@ -35,6 +35,11 @@
 #ifndef g4timemory_hh_
 #define g4timemory_hh_
 
+// Fundamental definitions
+#ifndef G4GMAKE
+#include "G4GlobalConfig.hh"
+#endif
+
 #include "globals.hh"
 
 //----------------------------------------------------------------------------//

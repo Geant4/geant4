@@ -39,8 +39,10 @@ generate() {
   fi    
   #echo "Generating Doxyfile for example: ${EXAMPLE_NAME}"
   cat $CURDIR/Doxyfile_standalone | sed s/"EXAMPLE_NAME"/"${EXAMPLE_NAME}"/g | sed sY"BACK_PATH"Y"${2}"Yg | sed sY"ADD_SHARED"Y"${ADD_SHARED}"Yg | sed sY"ADD_COMMON"Y"${ADD_COMMON}"Yg > Doxyfile
+  ln -s $CURDIR/geant4.tag geant4.tag
   doxygen >& $CURDIR/doxygen_${EXAMPLE_NAME}.out
   rm Doxyfile
+  rm geant4.tag
   cd $CURDIR
 }
 

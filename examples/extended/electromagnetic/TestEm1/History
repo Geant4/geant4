@@ -14,6 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31-05-19 V.Ivanchenko (testem1-V10-05-00)
+- Added G4NIELCalculator, corresponding histograms and printouts,
+  general clean-up of the code, use default random number 
+  generator
+
 09-05-18 B.Morgan (testem1-V10-04-02)
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

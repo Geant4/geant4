@@ -162,6 +162,7 @@ private:
   G4double stepmina,stepminb;
 
   G4double currentKinEnergy;
+  G4double currentLogKinEnergy;
   G4double currentRange; 
   G4double rangeinit;
   G4double currentRadLength;

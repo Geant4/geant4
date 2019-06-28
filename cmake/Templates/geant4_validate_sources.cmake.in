@@ -1,18 +1,18 @@
 # - Validate sources listed in sources.cmake with those on disk
-# This file is configured by Geant4 to locate all sources.cmake files in 
-# the source tree used by the current build tree. 
+# This file is configured by Geant4 to locate all sources.cmake files in
+# the source tree used by the current build tree.
 #
-# We have to parse the sources.cmake files for the headers and sources 
-# because these files use the include_directories command, which is non 
-# scriptable. A simple REGEX is used to find all the .cc, .hh and .icc 
-# files listed in each sources.cmake file. These lists are compared with 
-# a GLOB of those in the include and src directories of the module 
+# We have to parse the sources.cmake files for the headers and sources
+# because these files use the include_directories command, which is non
+# scriptable. A simple REGEX is used to find all the .cc, .hh and .icc
+# files listed in each sources.cmake file. These lists are compared with
+# a GLOB of those in the include and src directories of the module
 # corresponding to the sources.cmake file.
 #
 # Warnings are printed when a mismatch is detected.
 #
-# Note that certain modules have configurable source lists and so we 
-# expect these to show a mismatch. We allow for this by providing the 
+# Note that certain modules have configurable source lists and so we
+# expect these to show a mismatch. We allow for this by providing the
 # variable:
 #
 #  GEANT4_FALSEPOSITIVE_SOURCES  List of all source files (.cc, .hh, .icc)
@@ -27,6 +27,9 @@
 # but still on disk
 #
 set(GEANT4_FALSEPOSITIVE_SOURCES
+  # G4{Global,Geom}Config.hh generated
+  G4GlobalConfig.hh
+  G4GeomConfig.hh
   # - Xaw is deprecated...
   G4UIXaw.hh
   G4UIXaw.cc
@@ -37,8 +40,8 @@ set(GEANT4_FALSEPOSITIVE_SOURCES
   G4OpenGLImmediateWt.cc
   G4OpenGLImmediateWtViewer.cc
   G4OpenGLWtViewer.cc
-  # - VRML has icc files in the src/ directory. These are only used 
-  #   internally but validate_sources assumes icc files will be in 
+  # - VRML has icc files in the src/ directory. These are only used
+  #   internally but validate_sources assumes icc files will be in
   #   include/
   #   They are covered in sources.cmake though!
   G4VRML1SceneHandlerFunc.icc
@@ -77,13 +80,13 @@ foreach(_sourcesfile ${GEANT4_SOURCESCMAKE_FILES})
   get_filename_component(_sourcesfile_location ${_sourcesfile} PATH)
 
   # - Find on disk files...
-  file(GLOB 
+  file(GLOB
     _ondisk_hh
     RELATIVE ${_sourcesfile_location}/include
     ${_sourcesfile_location}/include/*.hh
     ${_sourcesfile_location}/include/*.icc
     )
-  file(GLOB 
+  file(GLOB
     _ondisk_cc
     RELATIVE ${_sourcesfile_location}/src
     ${_sourcesfile_location}/src/*.cc
@@ -96,7 +99,7 @@ foreach(_sourcesfile ${GEANT4_SOURCESCMAKE_FILES})
   string(REGEX MATCHALL "[A-Z0-9a-z_]+\\.cc" _sources_cc "${_sourcesfile_contents}")
   string(REGEX MATCHALL "[A-Z0-9a-z_]+\\.(hh|icc)" _sources_hh "${_sourcesfile_contents}")
 
-  # - If we take the difference of each list (in both directions), 
+  # - If we take the difference of each list (in both directions),
   #   then there should be no mismatch if resulting lists are empty.
   # - On disk, but not in sources
   set(_cmp_ondisk ${_ondisk_hh} ${_ondisk_cc})

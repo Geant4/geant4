@@ -374,7 +374,14 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   }  
   if(command==ExecuteCommand)
   {
+    command->ResetFailure();
     UI-> ExecuteMacroFile(UI-> FindMacroPath(newValue));
+    if(UI->GetLastReturnCode() != 0)
+    {
+      G4ExceptionDescription ed;
+      ed << "Command aborted (" << UI->GetLastReturnCode() << ")";
+      command->CommandFailed(UI->GetLastReturnCode(),ed);
+    }
   }
   if(command==suppressAbortionCommand)
   {
@@ -414,6 +421,7 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   }
   if(command==getEnvCmd)
   {
+    command->ResetFailure();
     if(getenv(newValue))
     { 
       G4String st = "/control/alias ";
@@ -423,7 +431,11 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
       UI->ApplyCommand(st);
     }
     else
-    { G4cerr << "<" << newValue << "> is not defined as a shell variable. Command ignored." << G4endl; }
+    { 
+      G4ExceptionDescription ed;
+      ed << "<" << newValue << "> is not defined as a shell variable. Command ignored.";
+      command->CommandFailed(ed);
+    }
   }
   if(command==getValCmd)
   {
@@ -451,16 +463,36 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { G4cout << UI->SolveAlias(newValue) << G4endl; }
   if(command==shellCommand)
   {
+    command->ResetFailure();
     int rc = system(newValue);
-    if ( rc < 0 ) {}
+    if ( rc < 0 )
+    { 
+      G4ExceptionDescription ed;
+      ed << "<" << newValue << "> is not a valid shell command. Command ignored.";
+      command->CommandFailed(ed);
+    }
   }
   if(command==loopCommand)
   {
+    command->ResetFailure();
     UI->LoopS(newValue);
+    if(UI->GetLastReturnCode() != 0)
+    {
+      G4ExceptionDescription ed;
+      ed << "Command aborted (" << UI->GetLastReturnCode() << ")";
+      command->CommandFailed(UI->GetLastReturnCode(),ed);
+    }
   }
   if(command==foreachCommand)
   {
+    command->ResetFailure();
     UI->ForeachS(newValue);
+    if(UI->GetLastReturnCode() != 0)
+    {
+      G4ExceptionDescription ed;
+      ed << "Command aborted (" << UI->GetLastReturnCode() << ")";
+      command->CommandFailed(UI->GetLastReturnCode(),ed);
+    }
   }
   if(command==HTMLCommand)
   {

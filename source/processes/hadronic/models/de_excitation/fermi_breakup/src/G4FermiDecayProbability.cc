@@ -47,11 +47,11 @@ G4FermiDecayProbability::ComputeProbability(G4int, G4int A, G4int spin,
   G4double prob = 0.0;
   G4double mass1 = f1->GetTotalEnergy();
   G4double mass2 = f2->GetTotalEnergy();
+  G4double bCouloumb = f1->GetCoulombBarrier(f2->GetA(), f2->GetZ(), 0.0);
+  if(etot <= mass1 + mass2 + bCouloumb) { return prob; }
+  
   //G4cout << "ComputeProbability M1= " << mass1 << " M2= " << mass2 << G4endl;
-  G4double ekin = etot - mass1 - mass2
-    - f1->GetCoulombBarrier(f2->GetA(), f2->GetZ(), 0.0); 
-  //G4cout << " Ekin= " << ekin << G4endl;
-  if(ekin <= 0.0) { return prob; }
+  G4double ekin = etot - mass1 - mass2;
 
   // mass factors
   G4double massFactor = mass1*mass2/(mass1 + mass2);

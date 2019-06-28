@@ -480,7 +480,8 @@ G4double G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track&
   SetCurrentCouple(currentCouple);
   currentMaterialIndex        = currentCouple->GetMaterial()->GetIndex();
   currentKinEnergy            = dp->GetKineticEnergy();
-  currentRange                = GetRange(particle,currentKinEnergy,currentCouple);
+  currentRange                = GetRange(particle,currentKinEnergy,currentCouple,
+                                         dp->GetLogKineticEnergy());
   // elastic and first transport mfp, screening parameter and G1 are also set
   // (Mott-correction will be used if it was requested by the user)
   fLambda1 = GetTransportMeanFreePath(particle,currentKinEnergy);

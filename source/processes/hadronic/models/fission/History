@@ -14,7 +14,7 @@ code and to keep track of all tags.
     * Please list in reverse chronological order (last date on top)
     ---------------------------------------------------------------
 
-3 April 2019  Dennis Wright (hadr-fission-V10-04-01)
+3 April 2019  Dennis Wright (hadr-fission-V10-05-00)
 ----------------------------------------------------
 - G4SmpIsoDir.cc: remove use of G4Pow for squaring cospolang - sometimes 
   causes crash

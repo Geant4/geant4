@@ -16,22 +16,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12 April, 2019  M. Asai (intercoms-V10-04-06)
+17 April, 2019  M. Asai (intercoms-V10-05-05)
+- Following UI commands now return proper return code when they are
+  not successful. Addressing to bug report #2159.
+   - /control/execute
+   - /control/loop
+   - /control/foreach
+   - /control/shell
+   - /control/getEnv
+
+12 April, 2019  M. Asai (intercoms-V10-05-04)
 - Fix comments in this History file and G4UIparameter.hh.
 
-29 March, 2019  M. Asai (intercoms-V10-04-05)
+29 March, 2019  M. Asai (intercoms-V10-05-03)
 - G4UIcommand::RangeCheck() : fixing a misbehavior caused in case
   string-type parameter comes prior to numeric-type parameters.
 
-13 March, 2019  M. Asai
+13 March, 2019  M. Asai (intercoms-V10-05-02)
 - Introducing G4UIparameter::SetDefaultUnit() method that simplifies
   the definition of a unit parameter.
 
-11 March, 2019  G. Cosmo
+11 March, 2019  G. Cosmo (intercoms-V10-05-01)
 - Fixed typos in printouts in G4LocalThreadCoutMessenger,
   G4UImanager and G4UIcontrolMessenger.
 
-31 January, 2019  I. Hrivnacova
+31 January, 2019  I. Hrivnacova (intercoms-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 23 July, 2018 M. Asai (intercoms-V10-04-04)

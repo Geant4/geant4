@@ -91,10 +91,15 @@ void G4XmlNtupleManager::FinishTNtuple(
   G4bool /*fromBooking*/)
 
 {
+  // Do nothing if the base file name was not yet defined
+  if ( ! fFileManager->GetFileName().size() ) return;
+
+  // Create ntuple from booking
   if ( ! ntupleDescription->fNtuple ) {
     CreateTNtupleFromBooking(ntupleDescription);
   }
 
+  // Write header
   G4String path = "/";
   path.append(fFileManager->GetNtupleDirectoryName());
   ntupleDescription->fNtuple

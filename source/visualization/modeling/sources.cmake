@@ -55,10 +55,12 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4AttValueFilterT.hh
         G4AttributeFilterT.hh
         G4AxesModel.hh
+        G4BoundingExtentScene.hh
         G4BoundingSphereScene.hh
         G4CallbackModel.hh
         G4DigiFilterFactories.hh
         G4DigiModel.hh
+        G4ElectricFieldModel.hh
         G4GPSModel.hh
         G4HitFilterFactories.hh
         G4HitsModel.hh
@@ -97,6 +99,7 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4TrajectoryParticleFilter.hh
         G4TrajectoryEncounteredVolumeFilter.hh
         G4VAttValueFilter.hh
+        G4VFieldModel.hh
         G4VModel.hh
         G4VModel.icc
         G4VModelCommand.hh
@@ -108,9 +111,11 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4ArrowModel.cc
         G4AttFilterUtils.cc
         G4AxesModel.cc
+        G4BoundingExtentScene.cc
         G4BoundingSphereScene.cc
         G4DigiFilterFactories.cc
         G4DigiModel.cc
+        G4ElectricFieldModel.cc
         G4GPSModel.cc
         G4HitFilterFactories.cc
         G4HitsModel.cc
@@ -141,6 +146,7 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4TrajectoryOriginVolumeFilter.cc
         G4TrajectoryParticleFilter.cc
         G4TrajectoryEncounteredVolumeFilter.cc
+        G4VFieldModel.cc
         G4VModel.cc
         G4VTrajectoryModel.cc
         G4VisTrajContext.cc

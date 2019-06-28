@@ -68,9 +68,15 @@ G4Navigator::G4Navigator()
     // - zero step counters
     // - blocked volume 
 
-  fActionThreshold_NoZeroSteps  = 10; 
-  fAbandonThreshold_NoZeroSteps = 25; 
+  fActionThreshold_NoZeroSteps  = 10;
+  fAbandonThreshold_NoZeroSteps = 25;
 
+  if( fVerbose > 2 )
+    G4cout << " G4Navigator parameters: Action Threshold (No Zero Steps) = "
+           << fActionThreshold_NoZeroSteps
+           << "  Abandon Threshold (No Zero Steps) = "
+           << fAbandonThreshold_NoZeroSteps << G4endl;
+  
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fMinStep = 0.05*kCarTolerance;
   fSqTol = kCarTolerance*kCarTolerance;
@@ -987,71 +993,92 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   if ( fLastStepWasZero )
   {
     fNumberZeroSteps++;
-#ifdef G4DEBUG_NAVIGATION
-    if( fNumberZeroSteps > 1 )
-    {
-       G4cout << "G4Navigator::ComputeStep(): another 'zero' step, # "
-              << fNumberZeroSteps
-              << ", at " << pGlobalpoint
-              << ", in volume " << motherPhysical->GetName()
-              << ", nav-comp-step calls # " << sNavCScalls
-              << ", Step= " << Step
-              << G4endl;
-    }
-#endif
-    if( fNumberZeroSteps > fActionThreshold_NoZeroSteps-1 )
-    {
-       // Act to recover this stuck track. Pushing it along direction
-       //
-       Step += 100*kCarTolerance;
+    
+    G4bool act     = fNumberZeroSteps >= fActionThreshold_NoZeroSteps ;
+    G4bool actAndReport = false;
+    G4bool abandon = fNumberZeroSteps >= fAbandonThreshold_NoZeroSteps ;
+    G4bool inform  = false;
 #ifdef G4VERBOSE
-       if ((!fPushed) && (fWarnPush))
-       {
-         std::ostringstream message;
-         message.precision(16);
-         message << "Track stuck or not moving." << G4endl
-                 << "          Track stuck, not moving for " 
-                 << fNumberZeroSteps << " steps" << G4endl
-                 << "          in volume -" << motherPhysical->GetName()
-                 << "- at point " << pGlobalpoint
-                 << " (local point " << newLocalPoint << ")" << G4endl
-                 << "          direction: " << pDirection
-                 << " (local direction: " << localDirection << ")." << G4endl
-                 << "          Potential geometry or navigation problem !"
-                 << G4endl
-                 << "          Trying pushing it of " << Step << " mm ...";
-         G4Exception("G4Navigator::ComputeStep()", "GeomNav1002",
-                     JustWarning, message, "Potential overlap in geometry!");
-       }
+    actAndReport = act && (!fPushed) && fWarnPush ;
+    inform = fNumberZeroSteps > 1 ;
 #endif
-       fPushed = true;
-    }
-    if( fNumberZeroSteps > fAbandonThreshold_NoZeroSteps-1 )
+
+    if ( act || inform )
     {
-      // Must kill this stuck track
-      //
-      std::ostringstream message;
-      message << "Stuck Track: potential geometry or navigation problem."
-              << G4endl
-              << "        Track stuck, not moving for " 
-              << fNumberZeroSteps << " steps" << G4endl
-              << "        in volume -" << motherPhysical->GetName()
-              << "- at point " << pGlobalpoint << G4endl
-              << "        direction: " << pDirection << ".";
-#ifdef G4VERBOSE
-      if ( fWarnPush )
+      if( act && !abandon )
       {
-         motherPhysical->CheckOverlaps(5000, false);
+        // Act to recover this stuck track. Pushing it along original direction
+        //
+        Step += 100*kCarTolerance;
+        fPushed = true;
       }
+
+      if( actAndReport || abandon || inform )
+      {
+        std::ostringstream message;
+         
+        message.precision(16);      
+        message << "Stuck Track: potential geometry or navigation problem."
+                << G4endl;
+        message << "  Track stuck, not moving for " 
+                << fNumberZeroSteps << " steps."  << G4endl
+                << "  Current  phys volume: '" << motherPhysical->GetName()
+                << "'" << G4endl
+                << "   - at position : " << pGlobalpoint << G4endl
+                << "     in direction: " << pDirection   << G4endl
+                << "    (local position: " << newLocalPoint << ")" << G4endl
+                << "    (local direction: " << localDirection << ")." << G4endl
+                << "  Previous phys volume: '"
+                << ( fLastMotherPhys ? fLastMotherPhys->GetName() : "" )
+                << "'" << G4endl << G4endl;
+        if( actAndReport || abandon )
+        {
+           message << "  Likely geometry overlap - else navigation problem !"
+                   << G4endl;
+        }
+        if( abandon ) // i.e. fNumberZeroSteps >= fAbandonThreshold_NoZeroSteps
+        {
+          // Must kill this stuck track
+#ifdef G4VERBOSE
+          if ( fWarnPush ) { CheckOverlapsIterative(motherPhysical); }
 #endif
-      G4Exception("G4Navigator::ComputeStep()", "GeomNav0003",
-                  EventMustBeAborted, message);
-    }
+          message << " Track *abandoned* due to excessive number of Zero steps."
+                  << " Event aborted. " << G4endl << G4endl;
+          G4Exception("G4Navigator::ComputeStep()", "GeomNav0003",
+                      EventMustBeAborted, message);
+        }
+        else
+        {
+#ifdef G4VERBOSE
+          if ( actAndReport )  // (!fPushed => !wasPushed) && (fWarnPush))
+          {
+             message << "   *** Trying to get *unstuck* using a push"
+                     << " - expanding step to " << Step << " (mm) ..."
+                     << "       Potential overlap in geometry !" << G4endl;
+             G4Exception("G4Navigator::ComputeStep()", "GeomNav1002",
+                         JustWarning, message); 
+          }
+#endif
+#ifdef G4DEBUG_NAVIGATION      
+          else
+          {
+            if( fNumberZeroSteps > 1 )
+            {
+               message << ", nav-comp-step calls # " << sNavCScalls
+                       << ", Step= " << Step << G4endl;
+               G4cout << message.c_str();
+            }
+          }
+#endif
+        } // end of else if ( abandon )
+      } // end of if( actAndReport || abandon || inform )
+    } // end of if ( act || inform )
   }
   else
   {
     if (!fPushed)  fNumberZeroSteps = 0;
   }
+  fLastMotherPhys= motherPhysical;
 
   fEnteredDaughter = fEntering;   // I expect to enter a volume in this Step
   fExitedMother = fExiting;
@@ -1065,7 +1092,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
 #ifdef G4DEBUG_NAVIGATION
     if( fVerbose > 2 )
     { 
-      G4cout << " At G4Nav CompStep End - if(exiting) - fExiting= " << fExiting 
+      G4cout << " At G4Nav CompStep End - if(exiting) - fExiting= " << fExiting
              << " fValidExitNormal = " << fValidExitNormal  << G4endl;
       G4cout << " fExitNormal= " << fExitNormal << G4endl;
     }
@@ -1148,17 +1175,17 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       G4int depth= fHistory.GetDepth();
       if( depth > 0 )
       {
-        fExitNormalGlobalFrame =
-          fHistory.GetTransform(depth-1).InverseTransformAxis( fGrandMotherExitNormal );
+        fExitNormalGlobalFrame = fHistory.GetTransform(depth-1)
+                                .InverseTransformAxis( fGrandMotherExitNormal );
       }
       else
       {
-        fExitNormalGlobalFrame= fGrandMotherExitNormal;
+        fExitNormalGlobalFrame = fGrandMotherExitNormal;
       }
     }
     else
     {
-      fExitNormalGlobalFrame= G4ThreeVector( 0., 0., 0.);
+      fExitNormalGlobalFrame = G4ThreeVector( 0., 0., 0.);
     }
   }
 
@@ -1254,12 +1281,14 @@ void G4Navigator::ResetState()
   fPreviousSafety        = 0.0; 
 
   fNumberZeroSteps       = 0;
-    
+
   fBlockedPhysicalVolume = 0;
   fBlockedReplicaNo      = -1;
 
   fLastLocatedPointLocal = G4ThreeVector( kInfinity, -kInfinity, 0.0 ); 
   fLocatedOutsideWorld   = false;
+
+  fLastMotherPhys= nullptr;
 }
 
 // ********************************************************************
@@ -1599,7 +1628,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
     //
     globalNormal = fExitNormalGlobalFrame; 
     G4double  normMag2 = globalNormal.mag2(); 
-    if( std::fabs ( normMag2 - 1.0 ) < perThousand ) // was perMillion )  // Value is good 
+    if( std::fabs ( normMag2 - 1.0 ) < perThousand ) // was perMillion
     {
        *pNormalCalculated = true; // ComputeStep always computes it if Exiting
                                   // (fExiting==true)
@@ -1644,7 +1673,8 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
        localNormal = GetLocalExitNormalAndCheck(IntersectPointGlobal,
                                                 &validNormal);
        *pNormalCalculated = fCalculatedExitNormal;
-       globalNormal = fHistory.GetTopTransform().InverseTransformAxis( localNormal );
+       globalNormal = fHistory.GetTopTransform()
+                     .InverseTransformAxis(localNormal);
     }
   }
   else
@@ -1701,7 +1731,8 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
                    "Value obtained from new local *solid* is incorrect.");
        localNormal = localNormal.unit(); // Should we correct it ??
      }
-     globalNormal = fHistory.GetTopTransform().InverseTransformAxis( localNormal );
+     globalNormal = fHistory.GetTopTransform()
+                   .InverseTransformAxis(localNormal);
   }
 
 #ifdef G4DEBUG_NAVIGATION
@@ -1711,7 +1742,8 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
 
     localNormal= GetLocalExitNormalAndCheck(IntersectPointGlobal, &validNormal);
     
-    globalNormAgn = fHistory.GetTopTransform().InverseTransformAxis( localNormal );
+    globalNormAgn = fHistory.GetTopTransform()
+                   .InverseTransformAxis(localNormal);
     
     // Check the value computed against fExitNormalGlobalFrame
     G4ThreeVector diffNorm = globalNormAgn - fExitNormalGlobalFrame;
@@ -2244,6 +2276,31 @@ void G4Navigator::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
     G4Exception("G4Navigator::ComputeStep()", "GeomNav1002",
                 JustWarning, message);
   }
+}
+
+// ********************************************************************
+// CheckOverlapsIterative
+// ********************************************************************
+//
+G4bool G4Navigator::CheckOverlapsIterative(G4VPhysicalVolume* vol)
+{
+  // Check and report overlaps
+  //
+  G4bool foundOverlap = false;
+  G4int  nPoints = 300000,  ntrials = 9, numOverlaps = 5;
+  G4double  trialLength = 1.0 * CLHEP::centimeter;
+  while ( ntrials-- > 0 && !foundOverlap )
+  {
+    if( fVerbose > 1 )
+       G4cout << " ** Running overlap checks in volume "
+              <<  vol->GetName()
+              << " with length = " << trialLength << G4endl;
+    foundOverlap = vol->CheckOverlaps(nPoints, trialLength,
+                                      fVerbose, numOverlaps);
+    trialLength *= 0.1;
+    if( trialLength <= 1.0e-5 ) { numOverlaps= 1;}
+  }
+  return foundOverlap;
 }
 
 // ********************************************************************

@@ -25,16 +25,7 @@
 //
 //
 #include "G4VMolecularDissociationDisplacer.hh"
-#include "G4Molecule.hh"
 
-G4CT_COUNT_INIT_IMPL(G4VMolecularDecayDisplacer, 0)
-G4CT_COUNT_IMPL(G4VMolecularDecayDisplacer, NoDisplacement)
+G4CT_COUNT_INIT_IMPL(G4VMolecularDissociationDisplacer, 0)
+G4CT_COUNT_IMPL(G4VMolecularDissociationDisplacer, NoDisplacement)
 
-//------------------------------------------------------------------------------
-
-G4VMolecularDecayDisplacer::G4VMolecularDecayDisplacer(){
-  fVerbose = 0;
-}
-
-G4VMolecularDecayDisplacer::~G4VMolecularDecayDisplacer()
-{;}

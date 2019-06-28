@@ -42,8 +42,7 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-#ifndef G4MoleculeCounter_h
-#define G4MoleculeCounter_h
+#pragma once
 
 #include "G4VMoleculeCounter.hh"
 #include <map>
@@ -53,187 +52,99 @@
 
 //------------------------------------------------------------------------------
 
-struct compDoubleWithPrecision{
-  bool operator()(const double& a, const double& b) const{
-    if (std::fabs(a - b) < fPrecision){
-      return false;
-    }
-    else{
-      return a < b;
-    }
-  }
-
-  static G4ThreadLocal double fPrecision;
+namespace G4 {
+namespace MoleculeCounter {
+struct TimePrecision
+{
+    bool operator()(const double& a, const double& b) const;
+    static G4ThreadLocal double fPrecision;
 };
-
-//------------------------------------------------------------------------------
-
-typedef std::map<G4double, G4int, compDoubleWithPrecision>
-  NbMoleculeAgainstTime;
-
-typedef std::unique_ptr<std::set<G4double> > RecordedTimes;
-typedef std::set<G4double>::iterator RecordedTimesIterator;
+}
+}
+using NbMoleculeAgainstTime = std::map<G4double, G4int, G4::MoleculeCounter::TimePrecision>;
+using RecordedTimes = std::unique_ptr<std::set<G4double>>;
 
 //------------------------------------------------------------------------------
 
 class G4MoleculeCounter : public G4VMoleculeCounter
 {
-  //----------------------------------------------------------------------------
+    //----------------------------------------------------------------------------
 public:
-  typedef std::map<G4MolecularConfiguration*,
-                   NbMoleculeAgainstTime> CounterMapType;
-  typedef std::unique_ptr<std::vector<G4MolecularConfiguration*> >
-    RecordedMolecules;
+    using ReactantList = std::vector<Reactant*>;
+    using CounterMapType = std::map<Reactant*, NbMoleculeAgainstTime>;
+    using RecordedMolecules = std::unique_ptr<ReactantList>;
 
-  //----------------------------------------------------------------------------
-protected:
-  G4MoleculeCounter();
-  virtual ~G4MoleculeCounter();
+    static G4MoleculeCounter* Instance();
 
-  CounterMapType fCounterMap;
-  std::map<const G4MoleculeDefinition*, G4bool> fDontRegister;
+    void Initialize() override;
+    void ResetCounter() override;
 
-  G4int fVerbose;
-  G4bool fCheckTimeIsConsistentWithScheduler;
+    /* The dynamics of the given molecule won't be saved into memory.*/
+    void DontRegister(const G4MoleculeDefinition*) override;
+    bool IsRegistered(const G4MoleculeDefinition*) override;
+    void RegisterAll() override;
 
-  struct Search
-  {
-    Search(){
-      fLowerBoundSet = false;
-    }
-    CounterMapType::iterator fLastMoleculeSearched;
-    NbMoleculeAgainstTime::iterator fLowerBoundTime;
-    bool fLowerBoundSet;
-  };
+    //----------------------------------------------------------------------------
 
-  std::unique_ptr<Search> fpLastSearch;
+    int GetNMoleculesAtTime(Reactant* molecule, double time);
+    const NbMoleculeAgainstTime& GetNbMoleculeAgainstTime(Reactant* molecule);
+
+    RecordedMolecules GetRecordedMolecules();
+    RecordedTimes GetRecordedTimes();
+
+    void SetVerbose(G4int);
+    G4int GetVerbose();
+
+    /* It sets the min time difference in between two time slices. */
+    static void SetTimeSlice(double);
+
+    void Dump();
+
+    G4bool IsTimeCheckedForConsistency() const;
+    void CheckTimeForConsistency(G4bool flag);
 
 #ifdef MOLECULE_COUNTER_TESTING
 public:
 #else
 protected:
 #endif
+    void AddAMoleculeAtTime(Reactant*,
+                            G4double time,
+                            const G4ThreeVector* position = nullptr,
+                            int number = 1) override;
+    void RemoveAMoleculeAtTime(Reactant*,
+                               G4double time,
+                               const G4ThreeVector* position = nullptr,
+                               int number = 1) override;
 
-  friend class G4Molecule;
-  friend class G4VMoleculeCounter;
-
-  //----------------------------------------------------------------------------
-public:
-  static G4MoleculeCounter* Instance();
-  
-  //----------------------------------------------------------------------------
-public:
-  void Initialize() override;
-  
-  void ResetCounter() override;
-  
-  void AddAMoleculeAtTime(G4MolecularConfiguration*,
-                          G4double time,
-                          const G4ThreeVector* position = nullptr,
-                          int number = 1) override;
-  void RemoveAMoleculeAtTime(G4MolecularConfiguration*,
-                             G4double time,
-                             const G4ThreeVector* position = nullptr,
-                             int number = 1) override;
-  
-  /* The dynamics of the given molecule won't be saved into memory.*/
-  inline void DontRegister(const G4MoleculeDefinition*) override;
-  inline bool IsRegistered(const G4MoleculeDefinition*) override;
-  inline void RegisterAll() override;
-
-  //----------------------------------------------------------------------------
-public:
-  int GetNMoleculesAtTime(G4MolecularConfiguration* molecule,
-                          double time);
-  inline const NbMoleculeAgainstTime&
-  GetNbMoleculeAgainstTime(G4MolecularConfiguration* molecule);
-
-  RecordedMolecules GetRecordedMolecules();
-  RecordedTimes GetRecordedTimes();
-
-  inline void SetVerbose(G4int);
-  inline G4int GetVerbose();
-
-  /*
-   * It sets the min time difference in between two time slices.
-   */
-  void SetTimeSlice(double);
-
-  
-  void Dump();
-
-  inline G4bool IsTimeCheckedForConsistency() const
-  {
-    return fCheckTimeIsConsistentWithScheduler;
-  }
-
-  inline void CheckTimeForConsistency(G4bool flag)
-  {
-    fCheckTimeIsConsistentWithScheduler = flag;
-  }
-  
-  //----------------------------------------------------------------------------
+    //----------------------------------------------------------------------------
 protected:
-  G4bool SearchTimeMap(G4MolecularConfiguration* molecule);
-  int SearchUpperBoundTime(double time, bool sameTypeOfMolecule);
+    G4bool SearchTimeMap(Reactant* molecule);
+    int SearchUpperBoundTime(double time, bool sameTypeOfMolecule);
+
+protected:
+    G4MoleculeCounter();
+    ~G4MoleculeCounter() override;
+
+    CounterMapType fCounterMap;
+    std::map<const G4MoleculeDefinition*, G4bool> fDontRegister;
+
+    G4int fVerbose;
+    G4bool fCheckTimeIsConsistentWithScheduler;
+
+    struct Search
+    {
+        Search()
+        {
+            fLowerBoundSet = false;
+        }
+        CounterMapType::iterator fLastMoleculeSearched;
+        NbMoleculeAgainstTime::iterator fLowerBoundTime;
+        bool fLowerBoundSet;
+    };
+
+    std::unique_ptr<Search> fpLastSearch;
+
+    friend class G4Molecule;
+    friend class G4VMoleculeCounter;
 };
-
-//------------------------------------------------------------------------------
-
-inline void G4MoleculeCounter::ResetCounter()
-{
-  if(fVerbose)
-  {
-      G4cout << " ---> G4MoleculeCounter::ResetCounter" << G4endl;
-  }
-  fCounterMap.clear();
-  fpLastSearch.reset(0);
-}
-
-//------------------------------------------------------------------------------
-
-inline const NbMoleculeAgainstTime&
-G4MoleculeCounter::GetNbMoleculeAgainstTime(G4MolecularConfiguration* molecule)
-{
-  return fCounterMap[molecule];
-}
-
-//------------------------------------------------------------------------------
-
-inline void G4MoleculeCounter::SetVerbose(G4int level)
-{
-  fVerbose = level;
-}
-
-//------------------------------------------------------------------------------
-
-inline G4int G4MoleculeCounter::GetVerbose()
-{
-  return fVerbose;
-}
-
-//------------------------------------------------------------------------------
-
-inline void
-G4MoleculeCounter::DontRegister(const G4MoleculeDefinition* molDef)
-{
-  fDontRegister[molDef] = true;
-}
-
-//------------------------------------------------------------------------------
-
-inline bool
-G4MoleculeCounter::IsRegistered(const G4MoleculeDefinition* molDef)
-{
-  if(fDontRegister.find(molDef) == fDontRegister.end()) return true;
-  return false;
-}
-
-//------------------------------------------------------------------------------
-
-inline void G4MoleculeCounter::RegisterAll()
-{
-  fDontRegister.clear();
-}
-
-#endif

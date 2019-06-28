@@ -28,8 +28,8 @@
 // 
 // John Allison  5th September 2018, based on G4PhysicalVolumeSearchScene
 // An artificial scene to find physical volumes. Instead of returning the
-// first occurence (G4PhysicalVolumeSearchScene) this class (note the extra
-// 's' in the name of this class) returns a vector of all occurences.
+// first occurrence (G4PhysicalVolumeSearchScene) this class (note the extra
+// 's' in the name of this class) returns a vector of all occurrences.
 // It can match a physical volume name with the required match. The latter can
 // be of the form "/regexp/", where regexp is a regular expression (see C++
 // regex), or a plain string, in which case there must be an exact match.
@@ -70,6 +70,13 @@ public:
     , fFoundDepth(foundDepth)
     , fFoundBasePVPath(foundBasePVPath)
     , fFoundObjectTransformation(foundObjectTransformation) {}
+    Findings(const G4PhysicalVolumeModel::TouchableProperties& tp)
+    : fpSearchPV(nullptr)
+    , fpFoundPV(tp.fpTouchablePV)
+    , fFoundPVCopyNo(tp.fCopyNo)
+    , fFoundDepth(0)
+    , fFoundBasePVPath(tp.fTouchableBaseFullPVPath)
+    , fFoundObjectTransformation(tp.fTouchableGlobalTransform) {}
     G4VPhysicalVolume*   fpSearchPV;   // Searched physical volume.
     G4VPhysicalVolume*   fpFoundPV;    // Found physical volume.
     G4int                fFoundPVCopyNo;  // Found Copy number.

@@ -80,3 +80,22 @@ unsigned int G4AssemblyVolume::TotalImprintedVolumes() const
 {
   return fPVStore.size();
 }
+
+inline
+G4Transform3D& G4AssemblyVolume::GetImprintTransformation(unsigned int imprintID)
+{
+  return fImprintsTransf[imprintID];
+}
+inline
+std::vector<G4AssemblyTriplet>::iterator
+             G4AssemblyVolume::GetTripletsIterator()
+{
+  std::vector<G4AssemblyTriplet>::iterator iterator = fTriplets.begin();
+  return iterator;
+}
+
+inline 
+unsigned int G4AssemblyVolume::TotalTriplets() const
+{
+  return fTriplets.size();
+}

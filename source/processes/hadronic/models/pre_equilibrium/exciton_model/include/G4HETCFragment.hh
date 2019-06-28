@@ -69,8 +69,8 @@ private:
   G4HETCFragment(const G4HETCFragment &right);
   const G4HETCFragment& 
   operator= (const G4HETCFragment &right);  
-  G4int operator==(const G4HETCFragment &right) const;
-  G4int operator!=(const G4HETCFragment &right) const;
+  G4bool operator==(const G4HETCFragment &right) const;
+  G4bool operator!=(const G4HETCFragment &right) const;
 
   G4double r2norm;
 };

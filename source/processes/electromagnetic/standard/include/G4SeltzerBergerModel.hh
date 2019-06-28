@@ -101,7 +101,9 @@ private:
 
   void ReadData(G4int izet, const char* path = nullptr);
 
-  G4double SampleEnergyTransfer(const G4double kineticEnergy, const G4double cut,
+  G4double SampleEnergyTransfer(const G4double kineticEnergy, 
+                                const G4double logKineticEnergy, 
+                                const G4double cut,
                                 const G4double emax);
 
   // hide assignment operator and cctr

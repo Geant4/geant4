@@ -37,8 +37,6 @@
 //
 // Intermediate base class for hadronic absorption at rest using
 // Fritiof (FTF), and Precompound for the nuclear de-excitation. 
-// Physics lists should reference the concrete subclasses for:
-// anti_proton, anti_sigma+, and all anti-nuclei.
 //
 //---------------------------------------------------------------------------
 

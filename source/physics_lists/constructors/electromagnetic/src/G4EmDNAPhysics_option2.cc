@@ -95,6 +95,7 @@ G4EmDNAPhysics_option2::G4EmDNAPhysics_option2(G4int ver, const G4String&)
   param->SetAuger(true);  
   param->SetAugerCascade(true);  
   param->SetDeexcitationIgnoreCut(true);
+  param->ActivateDNA();
 
   SetPhysicsType(bElectromagnetic);
 }
@@ -149,8 +150,8 @@ void G4EmDNAPhysics_option2::ConstructProcess()
 
       G4DNAElectronSolvation* solvation =
       new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
-      G4DNAOneStepThermalizationModel* therm =
-      new G4DNAOneStepThermalizationModel();
+
+      auto therm = G4DNASolvationModelFactory::GetMacroDefinedModel();
       therm->SetHighEnergyLimit(7.4*eV); // limit of the Champion's model
       solvation->SetEmModel(therm);
       ph->RegisterProcess(solvation, particle);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//J.M. Quesada (August2008). Based on:
+// J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -47,6 +47,7 @@
 #include "G4ChatterjeeCrossSection.hh"
 #include "Randomize.hh"
 #include "G4Exp.hh"
+#include "G4Log.hh"
 
 using namespace std;
 
@@ -70,9 +71,9 @@ G4EvaporationProbability::G4EvaporationProbability(G4int anA, G4int aZ,
   if(0 == aZ) {
     ResetIntegrator(30, 0.25*CLHEP::MeV, 0.02);
   } else if(1 == aZ && 1 == anA) {
-    ResetIntegrator(20, 0.5*CLHEP::MeV, 0.03);
+    ResetIntegrator(30, 0.5*CLHEP::MeV, 0.03);
   } else {
-    ResetIntegrator(20, CLHEP::MeV, 0.04);
+    ResetIntegrator(30, 0.5*CLHEP::MeV, 0.03);
   }
 }
 
@@ -99,8 +100,6 @@ G4double G4EvaporationProbability::TotalProbability(
   Mass = fragMass + U;
   delta0 = std::max(0.0, fPairCorr->GetPairingCorrection(fragA,fragZ));
   delta1 = std::max(0.0, fPairCorr->GetPairingCorrection(resA,resZ));
-  //delta0 = fLevelData->GetPairingCorrection(fragZ,fragA);
-  //delta1 = fLevelData->GetPairingCorrection(resZ,resA);
   resMass = G4NucleiProperties::GetNuclearMass(resA, resZ);
   resA13 = fG4pow->Z13(resA);
   a0 = fLevelData->GetLevelDensity(fragZ,fragA,U);
@@ -158,10 +157,8 @@ G4double G4EvaporationProbability::ComputeProbability(G4double K, G4double cb)
   //G4cout << "### G4EvaporationProbability::ProbabilityDistributionFunction" 
   //  << G4endl;
 
-  G4double E0 = U - delta0;
-  //G4double E1 = Mass - partMass - resMass - delta1 - K;
-  G4double E1 = std::sqrt((Mass - partMass)*(Mass - partMass) - 2*Mass*K) 
-    - resMass - delta1;
+  G4double E0 = std::max(U - delta0, 0.0);
+  G4double E1 = Mass - partMass - resMass - delta1 - K;
   /*  
   G4cout << "PDF: FragZ= " << fragZ << " FragA= " << fragA
   	 << " Z= " << theZ << "  A= " << theA 

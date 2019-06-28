@@ -43,6 +43,7 @@
 #include "G4GDMLReadMaterials.hh"
 #include "G4ExtrudedSolid.hh"
 #include "G4MultiUnion.hh"
+#include "G4MaterialPropertiesTable.hh"
 
 class G4VSolid;
 class G4QuadrangularFacet;
@@ -108,6 +109,9 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    rzPointType RZPointRead(const xercesc::DOMElement* const);
    void OpticalSurfaceRead(const xercesc::DOMElement* const);
    void PropertyRead(const xercesc::DOMElement* const,G4OpticalSurface*);
+
+private:
+  std::map<G4String, G4MaterialPropertyVector*> mapOfMatPropVects;
   
 };
 

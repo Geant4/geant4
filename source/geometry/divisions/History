@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 13th, 2019         G.Cosmo (geomdiv-V10-05-00)
+- Return correct value for multiplicity in G4PVDivision and G4ReplicatedSlice.
+  Addressing problem report #2168.
+
 March 22nd, 2017        G.Cosmo (geomdiv-V10-03-00)
 - Updated ExDivision unit test.
 

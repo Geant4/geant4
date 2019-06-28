@@ -25,12 +25,13 @@
 //
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
-// 17-Aug-2012 V.Ivanchenko added hadronic model factories
+// 17-Aug-2012 V.Ivanchenko added methods
 
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4HadronicInteraction.hh"
 
-G4ThreadLocal G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::instance = nullptr;
+G4ThreadLocal G4HadronicInteractionRegistry* 
+G4HadronicInteractionRegistry::instance = nullptr;
 
 G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::Instance()
 {
@@ -42,10 +43,7 @@ G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::Instance()
 }
 
 G4HadronicInteractionRegistry::G4HadronicInteractionRegistry()
-  : isInitialized(false)
-{
-  //G4cout << "G4HadronicInteractionRegistry  " << this << G4endl;
-}
+{}
 
 G4HadronicInteractionRegistry::~G4HadronicInteractionRegistry()
 {

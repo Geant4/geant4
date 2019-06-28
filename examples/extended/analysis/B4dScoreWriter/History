@@ -14,5 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 March 2019, John Allison   (B4dScoreWriter-V10-05-00)
+- Part of Merge Request exampleB4-V10-05-00.
+- Corrected name of include file: csv.hh
+
 30 October 2018, Ivana Hrivnacova   (B4dScoreWriter-V10-04-00)
 - First version

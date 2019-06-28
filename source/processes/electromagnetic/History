@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31 January 2019  I. Hrivnacova (em-V10-05-00)
+- Merged GitHub PR #4: all Boolean operators now return G4bool.
+
 17 March 2011 G.Cosmo (em-V09-04-00)
 - Added "dna" module.
 

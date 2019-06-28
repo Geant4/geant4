@@ -356,7 +356,7 @@ G4VisCommandGeometrySetForceSolid::G4VisCommandGeometrySetForceSolid()
   parameter->SetGuidance
     ("Depth of propagation (-1 means unlimited depth).");
   fpCommand->SetParameter(parameter);
-  parameter = new G4UIparameter("forceSolid", 'b', omitable = true);
+  parameter = new G4UIparameter("force", 'b', omitable = true);
   parameter->SetDefaultValue(true);
   fpCommand->SetParameter(parameter);
 }
@@ -377,12 +377,12 @@ void G4VisCommandGeometrySetForceSolid::SetNewValue
 {
   G4String name;
   G4int requestedDepth;
-  G4String forceSolidString;
+  G4String forceString;
   std::istringstream iss(newValue);
-  iss >> name >> requestedDepth >> forceSolidString;
-  G4bool forceSolid = G4UIcommand::ConvertToBool(forceSolidString);
+  iss >> name >> requestedDepth >> forceString;
+  G4bool force = G4UIcommand::ConvertToBool(forceString);
 
-  G4VisCommandGeometrySetForceSolidFunction setForceSolid(forceSolid);
+  G4VisCommandGeometrySetForceSolidFunction setForceSolid(force);
   Set(name, setForceSolid, requestedDepth);
 }
 

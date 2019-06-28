@@ -122,10 +122,6 @@ public:
                               const G4String& directory,
                               G4bool ascii) final;
 
-  // It returns the cross section per volume for energy/ material
-  G4double TotalCrossSectionPerVolume(G4double energy,
-				      const G4MaterialCutsCouple* couple);
-
   const G4String& GetProcessName() const;
 
   G4int GetProcessSubType() const;
@@ -137,8 +133,10 @@ protected:
 
 private:
 
-  inline G4double ComputeGeneralLambda(size_t idxe, size_t idxt, 
-                                     size_t& idx, G4double e);
+  // It returns the cross section per volume for energy/ material
+  G4double TotalCrossSectionPerVolume();
+
+  inline G4double ComputeGeneralLambda(size_t idxe, size_t idxt, size_t& idx);
 
   inline G4double GetProbability(size_t idxt, size_t& idx);
 
@@ -171,6 +169,7 @@ private:
   G4double                     minEEEnergy;
   G4double                     minMMEnergy;
   G4double                     peLambda;
+  G4double                     preStepLogE;
 
   size_t                       nLowE;
   size_t                       nHighE;
@@ -185,11 +184,11 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 inline G4double
-G4GammaGeneralProcess::ComputeGeneralLambda(size_t idxe, size_t idxt, 
-				            size_t& idx, G4double e)
+G4GammaGeneralProcess::ComputeGeneralLambda(size_t idxe, size_t idxt, size_t& idx)
 {
   idxEnergy = idxe;
-  return theHandler->GetVector(idxt, currentCoupleIndex)->Value(e, idx);
+  return theHandler->GetVector(idxt, currentCoupleIndex)
+    ->Value(preStepKinEnergy, preStepLogE, idx);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -197,7 +196,7 @@ G4GammaGeneralProcess::ComputeGeneralLambda(size_t idxe, size_t idxt,
 inline G4double G4GammaGeneralProcess::GetProbability(size_t idxt, size_t& idx)
 {
   return (theT[idxt]) ? theHandler->GetVector(idxt, 
-          currentCoupleIndex)->Value(preStepKinEnergy, idx) : 1.0;
+          currentCoupleIndex)->Value(preStepKinEnergy, preStepLogE, idx) : 1.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -67,7 +67,6 @@ class G4RadioactiveDecayBaseMessenger: public G4UImessenger
   
     G4UIdirectory* grdmDirectory;
     G4UIcmdWithNucleusLimits* nucleuslimitsCmd;
-    G4UIcmdWithABool* fbetaCmd;
     G4UIcmdWithAnInteger* verboseCmd;
     G4UIcmdWithAString* avolumeCmd;
     G4UIcmdWithAString* deavolumeCmd;

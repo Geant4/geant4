@@ -72,6 +72,7 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
   
   if (
       (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (lastVP.GetNumberOfCloudPoints()  != fVP.GetNumberOfCloudPoints())  ||
       (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
       (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
       (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
@@ -103,17 +104,15 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
   return true;
   
-  /**************************************************************
-   Section (DCUT) implemented locally.  No need to visit kernel if
-   section plane itself changes.
-   if (lastVP.IsSection () &&
-   (lastVP.GetSectionPlane () != fVP.GetSectionPlane ()))
-   return true;
-   ***************************************************************/
+//  /**************************************************************
+//   If section (DCUT) is implemented locally, comment this out.
+  if (lastVP.IsSection () &&
+      (lastVP.GetSectionPlane () != fVP.GetSectionPlane ()))
+    return true;
+//   ***************************************************************/
   
   /**************************************************************
-   Cutaways implemented locally.  No need to visit kernel if cutaway
-   planes themselves change.
+   If cutaways are implemented locally, comment this out.
    if (lastVP.IsCutaway ()) {
    if (lastVP.GetCutawayPlanes ().size () !=
    fVP.GetCutawayPlanes ().size ()) return true;
@@ -130,7 +129,7 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
 
   if (lastVP.IsExplode () &&
       (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
-  return true;
+    return true;
 
   // Time window parameters operate on the existing database so no need
   // to rebuild even if they change.

@@ -1011,7 +1011,7 @@ void SbPainterPS::putImageInStream (
     }
   }
   if(status==0) 
-    ::printf("SbPainterPS::putImageInStream: problem to retreive some pixel rgb.\n");
+    ::printf("SbPainterPS::putImageInStream: problem to retrieve some pixel rgb.\n");
   putRestoreStateInStream();
 }
 //////////////////////////////////////////////////////////////////////////////

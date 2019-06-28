@@ -16,7 +16,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-Jan 31st, 2019, I.Hrivnacova (gflash-V10-04-01)
+Jan 31st, 2019, I.Hrivnacova (gflash-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 Dec 19th, 2017, G.Cosmo (gflash-V10-04-00)

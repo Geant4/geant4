@@ -42,15 +42,20 @@
 #ifndef G4UGENERICPOLYCONE_hh
 #define G4UGENERICPOLYCONE_hh
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UGenericPolycone.hh"
+#include <volumes/UnplacedGenericPolycone.h>
+
+#include "G4TwoVector.hh"
 #include "G4PolyconeSide.hh"
 
-class G4UGenericPolycone : public G4USolid 
+class G4UGenericPolycone : public G4UAdapter<vecgeom::UnplacedGenericPolycone>
 {
+  using Shape_t = vecgeom::UnplacedGenericPolycone;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedGenericPolycone>;
+
   public:  // with description
 
     G4UGenericPolycone(const G4String& name, 
@@ -61,8 +66,6 @@ class G4UGenericPolycone : public G4USolid
                  const G4double z[]       ); // z coordinate of these corners
 
    ~G4UGenericPolycone();
-
-    inline UGenericPolycone* GetShape() const;
 
     G4double GetStartPhi()    const;
     G4double GetEndPhi()      const;
@@ -75,6 +78,8 @@ class G4UGenericPolycone : public G4USolid
     G4PolyconeSideRZ GetCorner(G4int index) const;
   
     inline G4GeometryType GetEntityType() const;
+
+    G4VSolid* Clone() const;
 
   public:  // without description
 
@@ -95,16 +100,17 @@ class G4UGenericPolycone : public G4USolid
                            G4double& pMin, G4double& pMax) const;
 
     G4Polyhedron* CreatePolyhedron() const;
+
+  private:
+
+    G4double wrStart;
+    G4double wrDelta;
+    std::vector<G4TwoVector> rzcorners;
 };
 
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UGenericPolycone* G4UGenericPolycone::GetShape() const
-{
-  return (UGenericPolycone*) fShape;
-}
 
 inline G4GeometryType G4UGenericPolycone::GetEntityType() const
 {

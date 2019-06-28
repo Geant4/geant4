@@ -47,7 +47,7 @@ class G4UIcmdWithoutParameter;
 class DetectorMessenger: public G4UImessenger
 {
   public:
-  
+
     DetectorMessenger(DetectorConstruction* );
    ~DetectorMessenger();
     
@@ -64,8 +64,6 @@ class DetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*        fCavMater;
     G4UIcmdWithADoubleAndUnit* fCavThick;
     G4UIcmdWithADoubleAndUnit* fCavRadius;
-            
-    G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

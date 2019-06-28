@@ -14,6 +14,8 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-05-19 V.Ivanchenko (testem17-V10-05-00)
+- code clean-up, switch to MixMax random generator
 
 10-04-18 mma (testem17-V10-04-01)
 - testem17.cc : set visualisation only in interactive mode

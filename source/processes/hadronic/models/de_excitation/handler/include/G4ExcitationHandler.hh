@@ -107,11 +107,11 @@ private:
 
   void SetParameters();
 
-  G4ExcitationHandler(const G4ExcitationHandler &right) = delete;
+  G4ExcitationHandler(const G4ExcitationHandler &right);
   const G4ExcitationHandler & operator
-  =(const G4ExcitationHandler &right) = delete;
-  G4bool operator==(const G4ExcitationHandler &right) const = delete;
-  G4bool operator!=(const G4ExcitationHandler &right) const = delete;
+  =(const G4ExcitationHandler &right);
+  G4bool operator==(const G4ExcitationHandler &right) const;
+  G4bool operator!=(const G4ExcitationHandler &right) const;
   
   G4VEvaporation* theEvaporation;  
   G4VMultiFragmentation* theMultiFragmentation;

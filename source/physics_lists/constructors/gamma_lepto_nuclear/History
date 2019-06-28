@@ -13,6 +13,12 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 May 2019, V. Grichine (phys-ctor-glnuclear-V10-05-01)
+- G4EmExtraPhysics - add muon-neutrino nucleus interactions
+
+03 April 2019, V.Ivanchenko (phys-ctor-glnuclear-V10-05-00)
+- G4EmExtraPhysics - removed extra static members
+
 26 November 2018, V.Ivanchenko (phys-ctor-glnuclear-V10-04-08)
 - G4EmMessenger - fixed destructor
 

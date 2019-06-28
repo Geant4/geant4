@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -49,10 +49,10 @@
 
 
 
-/control/cout/ignoreThreadsExcept 0
 /run/numberOfThreads 2
 *** /run/numberOfThreads command is issued in sequential mode.
 Command is ignored.
+/control/cout/ignoreThreadsExcept 0
 /run/verbose 1
 #
 /testem/det/setMat Vacuum
@@ -253,10 +253,11 @@ Index : 0     used in the geometry : Yes
 
 ### Run 0 starts.
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008233404568, 2262190991329242458, 2266470399991071809, 1976726662926872232, 245458862506414172, 1955974201201518530, 2155248512522080758, 604170912935414061, 1116171330120743511, 1861018313684488333, 1296715403254578286, 1549011045957234151, 370819759640195970, 2230139271784837643} counter= 17sumtot= 1977567618660788324
+---------------------------------------
 G4SynchrotronRadiation::GetMeanFreePath  for particle e-:
   MeanFreePath = 16.1828 cm 
 G4SynchrotronRadiation::GetRandomEnergySR :
@@ -266,22 +267,23 @@ G4SynchrotronRadiation::GetRandomEnergySR :
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.190000s Real=0.189323s Sys=0.000000s
+  User=0.190000s Real=0.191524s Sys=0.000000s
 Summary for synchrotron radiation :
-  Number of photons = 64554
-  Emean             = 20.24 +/- 0.1449 keV
-  E_rms             = 36.82 keV
-  Energy Max / Mean = 29.54
-  MeanFreePath      = 16.2 cm 
+  Number of photons = 65086
+  Emean             = 20.39 +/- 0.1444 keV
+  E_rms             = 36.83 keV
+  Energy Max / Mean = 27.54
+  MeanFreePath      = 16.07 cm 
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1554742231, 6856043
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={1402135844460474226, 1250051493877681105, 260032901618238037, 1959548330058272173, 333697207877744815, 2195090962095573257, 757497238491870347, 1983172992205346680, 333986983656040467, 1332034388201043752, 1148533830487492631, 1572133571051143919, 269618836299041414, 1500430236492907451, 1379717044319899969, 489791943798559179, 1807394300704501137} counter= 13sumtot= 1528124031986278951
+---------------------------------------
 G4 kernel has come to Quit state.
-G4Integration Driver Stats: #QuickAdvance 81187 - #AccurateAdvance 199 #good steps 199 #bad steps 0
+G4Integration Driver Stats: #QuickAdvance 81602 - #AccurateAdvance 199 #good steps 199 #bad steps 0
 G4ChordFinder statistics report: 
-  No trials: 81166  No Calls: 81136  Max-trial: 2
+  No trials: 81573  No Calls: 81552  Max-trial: 2
   Parameters:   fFirstFraction 0.999  fFractionLast 1  fFractionNextEstimate 0.98
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

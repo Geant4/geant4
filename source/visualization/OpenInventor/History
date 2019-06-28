@@ -19,6 +19,34 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+14 June 2019  Gabriele Cosmo (openinventor-V10-05-06)
+- Fixed compilation error in G4OpenInventorViewer::CompareForKernelVisit()
+  for typo introduced in previous tag...
+
+13 June 2019  John Allison (openinventor-V10-05-05)
+- Part of vis-V10-05-20.
+- Test number of cloud points for kernel visit.
+
+10 June 2019  John Allison (openinventor-V10-05-04)
+- Part of vis-V10-05-19.
+- G4OpenInventorXtExaminerViewer.cc and wheelmouse.cc:
+  Add #ifdef G4VIS_BUILD_OIX_DRIVER
+
+16 May 2019  Gabriele Cosmo (openinventor-V10-05-03)
+- Fixed compilation warning from gcc-9.1 in SoCounterAction for setting
+  of name, apparently not allowed in OpenInventor.
+
+18 March 2019  Gabriele Cosmo (openinventor-V10-05-02)
+- Corrected typo in comments.
+
+12 March 2019  John Allison (openinventor-V10-05-01)
+- Fix compiler warnings about new cloud style.
+  Note: this does not yet mean that OI can handle cloud style. In fact
+  I think it will render in wireframe if cloud is selected.
+
+11 March 2019  Gabriele Cosmo (openinventor-V10-05-00)
+- Fixed typos in printouts in SbPainterPS.
+
 22 August 2018  Gabriele Cosmo (openinventor-V10-04-08)
 - sources.cmake: make OIQT driver installation optional when QT is
   selected for CMake configuration (SoQt library is not mandatory

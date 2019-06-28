@@ -41,6 +41,7 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
+fForcedNumberOfCloudPoints (10000),
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
@@ -58,6 +59,7 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
+fForcedNumberOfCloudPoints (10000),
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
@@ -75,6 +77,7 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
+fForcedNumberOfCloudPoints (10000),
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
@@ -93,6 +96,7 @@ fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
+fForcedNumberOfCloudPoints (10000),
 fForceAuxEdgeVisible (false),
 fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
@@ -110,6 +114,7 @@ fLineStyle           (va.fLineStyle),
 fLineWidth           (va.fLineWidth),
 fForceDrawingStyle   (va.fForceDrawingStyle),
 fForcedStyle         (va.fForcedStyle),
+fForcedNumberOfCloudPoints (va.fForcedNumberOfCloudPoints),
 fForceAuxEdgeVisible (va.fForceAuxEdgeVisible),
 fForcedAuxEdgeVisible(va.fForcedAuxEdgeVisible),
 fForcedLineSegmentsPerCircle (va.fForcedLineSegmentsPerCircle),
@@ -137,6 +142,7 @@ G4VisAttributes& G4VisAttributes::operator= (const G4VisAttributes& rhs)
   fLineWidth            = rhs.fLineWidth;
   fForceDrawingStyle    = rhs.fForceDrawingStyle;
   fForcedStyle          = rhs.fForcedStyle;
+  fForcedNumberOfCloudPoints = rhs.fForcedNumberOfCloudPoints;
   fForceAuxEdgeVisible  = rhs.fForceAuxEdgeVisible;
   fForcedAuxEdgeVisible = rhs.fForcedAuxEdgeVisible;
   fForcedLineSegmentsPerCircle = rhs.fForcedLineSegmentsPerCircle;
@@ -177,6 +183,26 @@ void G4VisAttributes::SetForceSolid (G4bool force) {
     fForcedStyle = G4VisAttributes::solid;
   } else {
     fForceDrawingStyle = false;
+  }
+}
+
+void G4VisAttributes::SetForceCloud (G4bool force) {
+  if (force) {
+    fForceDrawingStyle = true;
+    fForcedStyle = G4VisAttributes::cloud;
+  } else {
+    fForceDrawingStyle = false;
+  }
+}
+
+void G4VisAttributes::SetForceNumberOfCloudPoints (G4int nPoints) {
+  fForcedNumberOfCloudPoints = nPoints;
+  if (nPoints <= 0) {
+    G4cout <<
+    "G4VisAttributes::SetForceNumberOfCloudPoints: number of cloud points"
+    "set to " << fForcedNumberOfCloudPoints
+    << ". This means the viewer default will be used."
+    << G4endl;
   }
 }
 

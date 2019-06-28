@@ -118,8 +118,8 @@ void G4SeltzerBergerModel::Initialise(const G4ParticleDefinition* p,
     const G4ElementTable* theElemTable = G4Element::GetElementTable();
     size_t numOfElem = G4Element::GetNumberOfElements();
     for (size_t ie = 0; ie < numOfElem; ++ie) {
-      G4int izet = std::min(G4lrint(((*theElemTable)[ie])->GetZ()), gMaxZet-1);
-      izet       = std::max(1, izet);
+      G4int izet = 
+	std::max(1,std::min(((*theElemTable)[ie])->GetZasInt(), gMaxZet-1));
       // load SB-DCS data for this atomic number if it has not been loaded yet
       if (!gSBDCSData[izet]) {
         ReadData(izet, path);
@@ -253,8 +253,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 {
   static const G4double kMC2  = CLHEP::electron_mass_c2;
   const G4double kinEnergy    = dp->GetKineticEnergy();
-//  const G4double logKinEnergy = dp->GetLogKineticEnergy();
-  const G4double logKinEnergy = G4Log(kinEnergy); // WILL BE REMOVED
+  const G4double logKinEnergy = dp->GetLogKineticEnergy();
   const G4double tmin = std::min(cutEnergy, kinEnergy);
   const G4double tmax = std::min(maxEnergy, kinEnergy);
   if (tmin >= tmax) {
@@ -262,11 +261,8 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   }
   // set local variables and select target element
   SetupForMaterial(fPrimaryParticle, couple->GetMaterial(), kinEnergy);
-  const G4Element* elm = SelectRandomAtom(couple, fPrimaryParticle, kinEnergy,
-                                          tmin, tmax);
-//  const G4Element* elm = SelectTargetAtom(couple, fPrimaryParticle, kinEnergy,
-//                                          logKinEnergy, fElemSelectorEkinIndx,
-//                                          tmin, tmax);
+  const G4Element* elm = SelectTargetAtom(couple, fPrimaryParticle, kinEnergy,
+                                          logKinEnergy, tmin, tmax);
   fCurrentIZ = std::max(std::min(elm->GetZasInt(),gMaxZet-1), 1);
   //
   const G4double totMomentum = std::sqrt(kinEnergy*(fPrimaryTotalEnergy+kMC2));
@@ -278,10 +274,9 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   */
   // sample emitted photon energy either by rejection or from samplign tables
   const G4double gammaEnergy = !fIsUseSamplingTables
-                              ? SampleEnergyTransfer(kinEnergy, tmin, tmax)
-                              : gSBSamplingTable->SampleEnergyTransfer(kinEnergy,
-                                logKinEnergy, tmin, fDensityCorr, fCurrentIZ,
-                                couple->GetIndex(), fIsElectron);
+        ? SampleEnergyTransfer(kinEnergy, logKinEnergy, tmin, tmax)
+        : gSBSamplingTable->SampleEnergyTransfer(kinEnergy, logKinEnergy, tmin, 
+                     fDensityCorr, fCurrentIZ, couple->GetIndex(), fIsElectron);
   // should never happen under normal conditions but protect it
   if (gammaEnergy <= 0.) {
     return;
@@ -324,8 +319,9 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 // sample emitted photon energy by usign rejection
 G4double
 G4SeltzerBergerModel::SampleEnergyTransfer(const G4double kinEnergy,
-                                            const G4double tmin,
-                                            const G4double tmax)
+                                           const G4double logKinEnergy,
+                                           const G4double tmin,
+                                           const G4double tmax)
 {
   static const G4double kMC2   = CLHEP::electron_mass_c2;
   static const G4double kAlpha = CLHEP::twopi*CLHEP::fine_structure_const;
@@ -333,7 +329,7 @@ G4SeltzerBergerModel::SampleEnergyTransfer(const G4double kinEnergy,
   // [ln(k_c^2+k_p^2), ln(E_k^2+k_p^2)]
   const G4double xmin   = G4Log(tmin*tmin+fDensityCorr);
   const G4double xrange = G4Log(tmax*tmax+fDensityCorr)-xmin;
-  const G4double y      = G4Log(kinEnergy/CLHEP::MeV);
+  const G4double y      = logKinEnergy;
   // majoranta
   const G4double x0 = tmin/kinEnergy;
   G4double vmax;

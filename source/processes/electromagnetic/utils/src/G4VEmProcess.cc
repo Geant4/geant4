@@ -105,7 +105,8 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   actBinning = actSpline = actMinKinEnergy = actMaxKinEnergy = false;
 
   // default lambda factor
-  lambdaFactor  = 0.8;
+  lambdaFactor    = 0.8;
+  logLambdaFactor = G4Log(lambdaFactor);
 
   // default limit on polar angle
   biasFactor = fFactor = 1.0;
@@ -124,11 +125,11 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   baseMaterial = currentMaterial = nullptr;
 
   preStepLambda = preStepKinEnergy = 0.0;
+  preStepLogKinEnergy = LOG_EKIN_MIN;
   mfpKinEnergy  = DBL_MAX;
   massRatio     = 1.0;
 
-  idxLambda = idxLambdaPrim = currentCoupleIndex 
-    = basedCoupleIndex = 0;
+  idxLambda = idxLambdaPrim = currentCoupleIndex = basedCoupleIndex = 0;
 
   modelManager = new G4EmModelManager();
   biasManager  = nullptr;
@@ -306,8 +307,9 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   } else {  
     SetVerboseLevel(theParameters->WorkerVerbose()); 
   }
-  applyCuts = theParameters->ApplyCuts();
-  lambdaFactor = theParameters->LambdaFactor();
+  applyCuts       = theParameters->ApplyCuts();
+  lambdaFactor    = theParameters->LambdaFactor();
+  logLambdaFactor = G4Log(lambdaFactor);
   theParameters->DefineRegParamForEM(this);
 
   // initialisation of models
@@ -637,7 +639,8 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   G4double x = DBL_MAX;
 
   DefineMaterial(track.GetMaterialCutsCouple());
-  preStepKinEnergy = track.GetKineticEnergy();
+  preStepKinEnergy      = track.GetKineticEnergy();
+  preStepLogKinEnergy   = track.GetDynamicParticle()->GetLogKineticEnergy();
   G4double scaledEnergy = preStepKinEnergy*massRatio;
   SelectModel(scaledEnergy, currentCoupleIndex);
 
@@ -659,8 +662,11 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
 
   // compute mean free path
   if(preStepKinEnergy < mfpKinEnergy) {
-    if (integral) { ComputeIntegralLambda(preStepKinEnergy); }
-    else { preStepLambda = GetCurrentLambda(preStepKinEnergy); }
+    if (integral) {
+      ComputeIntegralLambda(preStepKinEnergy, preStepLogKinEnergy);
+    } else {
+      preStepLambda = GetCurrentLambda(preStepKinEnergy, preStepLogKinEnergy);
+    }
 
     // zero cross section
     if(preStepLambda <= 0.0) { 
@@ -695,30 +701,29 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::ComputeIntegralLambda(G4double e)
+void G4VEmProcess::ComputeIntegralLambda(G4double e, G4double loge)
 {
   // condition to skip recomputation of cross section
-  G4double epeak = theEnergyOfCrossSectionMax[currentCoupleIndex];
+  const G4double epeak = theEnergyOfCrossSectionMax[currentCoupleIndex];
   if(e <= epeak && e/lambdaFactor >= mfpKinEnergy) { return; }
 
   // recomputation is needed 
   if (e <= epeak) {
-    preStepLambda = GetCurrentLambda(e);
-    mfpKinEnergy = e;
-
+    preStepLambda = GetCurrentLambda(e, loge);
+    mfpKinEnergy  = e;
   } else {
-    G4double e1 = e*lambdaFactor;
-    if(e1 > epeak) {
-      preStepLambda = GetCurrentLambda(e);
-      mfpKinEnergy = e;
-      G4double preStepLambda1 = GetCurrentLambda(e1);
-      if(preStepLambda1 > preStepLambda) {
-        mfpKinEnergy = e1;
+    const G4double e1 = e*lambdaFactor;
+    if (e1 > epeak) {
+      preStepLambda = GetCurrentLambda(e, loge);
+      mfpKinEnergy  = e;
+      const G4double preStepLambda1 = GetCurrentLambda(e1,loge+logLambdaFactor);
+      if (preStepLambda1 > preStepLambda) {
+        mfpKinEnergy  = e1;
         preStepLambda = preStepLambda1;
       }
     } else {
       preStepLambda = fFactor*theCrossSectionMax[currentCoupleIndex];
-      mfpKinEnergy = epeak;
+      mfpKinEnergy  = epeak;
     }
   }
 }
@@ -738,7 +743,8 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   // should be performed by the AtRestDoIt!
   if (track.GetTrackStatus() == fStopButAlive) { return &fParticleChange; }
 
-  G4double finalT = track.GetKineticEnergy();
+  const G4double finalT    = track.GetKineticEnergy();
+  const G4double logFinalT = track.GetDynamicParticle()->GetLogKineticEnergy();
 
   // forced process - should happen only once per track
   if(biasFlag) {
@@ -749,7 +755,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
   // Integral approach
   if (integral) {
-    G4double lx = GetLambda(finalT, currentCouple);
+    G4double lx = GetLambda(finalT, currentCouple, logFinalT);
     if(preStepLambda<lx && 1 < verboseLevel) {
       G4cout << "WARNING: for " << currentParticle->GetParticleName() 
              << " and " << GetProcessName()
@@ -1048,9 +1054,10 @@ G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
 
 G4double G4VEmProcess::MeanFreePath(const G4Track& track)
 {
-  G4double kinEnergy = track.GetKineticEnergy();
+  const G4double kinEnergy = track.GetKineticEnergy();
   CurrentSetup(track.GetMaterialCutsCouple(), kinEnergy);
-  G4double xs = GetCurrentLambda(kinEnergy);
+  const G4double xs = GetCurrentLambda(kinEnergy,
+                             track.GetDynamicParticle()->GetLogKineticEnergy());
   return (0.0 < xs) ? 1.0/xs : DBL_MAX; 
 }
 

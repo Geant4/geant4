@@ -53,7 +53,10 @@ G4PhSideManager G4PolyhedraSide::subInstanceManager;
 // This macro changes the references to fields that are now encapsulated
 // in the class G4PhSideData.
 //
-#define G4MT_phphi ((subInstanceManager.offset[instanceID]).fPhi)
+#define G4MT_phphix ((subInstanceManager.offset[instanceID]).fPhix)
+#define G4MT_phphiy ((subInstanceManager.offset[instanceID]).fPhiy)
+#define G4MT_phphiz ((subInstanceManager.offset[instanceID]).fPhiz)
+#define G4MT_phphik ((subInstanceManager.offset[instanceID]).fPhik)
 
 // Returns the private data instance manager.
 //
@@ -82,9 +85,9 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
   instanceID = subInstanceManager.CreateSubInstance();
 
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-  fSurfaceArea=0.;
-  G4MT_phphi.first = G4ThreeVector(0,0,0);
-  G4MT_phphi.second= 0.0;
+  fSurfaceArea = 0.0;
+  G4MT_phphix = 0.0; G4MT_phphiy = 0.0; G4MT_phphiz = 0.0;
+  G4MT_phphik = 0.0;
 
   //
   // Record values
@@ -1011,16 +1014,17 @@ G4int G4PolyhedraSide::PhiSegment( G4double phi0 )
 G4double G4PolyhedraSide::GetPhi( const G4ThreeVector& p )
 {
   G4double val=0.;
+  G4ThreeVector vphi(G4MT_phphix, G4MT_phphiy, G4MT_phphiz);
 
-  if (G4MT_phphi.first != p)
+  if (vphi != p)
   {
     val = p.phi();
-    G4MT_phphi.first = p;
-    G4MT_phphi.second = val;
+    G4MT_phphix = p.x(); G4MT_phphiy = p.y(); G4MT_phphiz = p.z();
+    G4MT_phphik = val;
   }
   else
   {
-    val = G4MT_phphi.second;
+    val = G4MT_phphik;
   }
   return val;
 }

@@ -78,7 +78,7 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
   }
   G4double etrans = nucleus->GetExcitationEnergy() - newExcEnergy 
     - bond_energy;
-  if(fVerbose > 1) {
+  if(fVerbose > 2) {
     G4cout << "G4GammaTransition::GenerateGamma - Etrans(MeV)= " 
 	   << etrans << "  Eexnew= " << newExcEnergy 
 	   << " Ebond= " << bond_energy << G4endl;
@@ -142,7 +142,7 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
 
   //G4cout << " DeltaE= " << e0 - lv.e() - res4mom.e() + emass
   //	 << "   Emass= " << emass << G4endl;
-  if(fVerbose > 1) {
+  if(fVerbose > 2) {
     G4cout << "G4GammaTransition::SampleTransition : " << *result << G4endl;
     G4cout << "       Left nucleus: " << *nucleus << G4endl;
   }
@@ -154,7 +154,7 @@ void G4GammaTransition::SampleDirection(G4Fragment* nuc, G4double ratio,
 {
   G4double cosTheta, phi;
   G4NuclearPolarization* np = nuc->GetNuclearPolarization(); 
-  if(fVerbose > 1) {
+  if(fVerbose > 2) {
     G4cout << "G4GammaTransition::SampleDirection : 2J1= " << twoJ1 
 	   << " 2J2= " << twoJ2 << " ratio= " << ratio 
 	   << " mp= " << mp << G4endl;
@@ -188,7 +188,7 @@ void G4GammaTransition::SampleDirection(G4Fragment* nuc, G4double ratio,
 
   G4double sinTheta = std::sqrt((1.-cosTheta)*(1.+cosTheta));
   fDirection.set(sinTheta*std::cos(phi),sinTheta*std::sin(phi),cosTheta);
-  if(fVerbose > 1) {
+  if(fVerbose > 3) {
     G4cout << "G4GammaTransition::SampleDirection done: " << fDirection << G4endl;
     if(np) { G4cout << *np << G4endl; }
   }

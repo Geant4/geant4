@@ -29,3 +29,8 @@
 /run/printProgress 200
 #
 /run/beamOn 2000
+#
+/gun/particle proton
+#
+/run/beamOn 2000
+#

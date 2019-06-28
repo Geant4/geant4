@@ -89,9 +89,7 @@ namespace HepGeom {
 
     /**
      * Assignment. */
-    BasicVector3D<T> & operator= (const BasicVector3D<T> & v) {
-      v_[0] = v.v_[0]; v_[1] = v.v_[1]; v_[2] = v.v_[2]; return *this;
-    }
+    BasicVector3D<T> & operator= (const BasicVector3D<T> &) = default;
     /**
      * Addition. */
     BasicVector3D<T> & operator+=(const BasicVector3D<T> & v) {

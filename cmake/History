@@ -30,7 +30,41 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
-21st December 2018 - Makoto Asai (cmake-V10-04-28)
+6th June 2019 - Ben Morgan (cmake-V10-05-05)
+- Remove G4FPE_DEBUG from Debug build mode
+  - Not appropriate for basic debug and incompatible with Qt
+- Provide new "Debug_FPE" build mode which copies Debug mode and
+  appends -DG4FPE_DEBUG to allow continued use without clashing
+  with common primary modes.
+
+24th May 2019 - Gunter Folger (cmake-V10-05-04)
+- Switch to G4PARTICLEXS 2.0
+
+14th May 2019 - Ben Morgan (cmake-V10-05-03)
+- Promote always required -D flags for VecGeom replacements to fixed
+  #define/undef flags in a header
+  - See geommng-V10-05-05, G4GeomTypes/G4GeomConfig.hh
+- Set CMake variables for G4GEOM_USE_... parameters as configured
+- Retain add_definitions for VecGeom until it supports usage requirements
+- Update XXHelpers scripts for generating GNUmake/pkg-config/CMake files
+
+8th February 2019 - Ben Morgan (cmake-V10-05-02)
+- DEV-250: Promote global, always required, -D flags to fixed #define/undef
+  in new G4GlobalConfig.hh header:
+  - G4USE_STD11
+  - G4MULTITHREADED
+  - G4_STORE_TRAJECTORY
+  - G4VERBOSE
+  - GEANT4_USE_TIMEMORY
+- Remove use of add_definitions of CMAKE_CXX_FLAGS to set these in Geant4
+  and client scripts
+- Used by global-V10-05-02
+
+7th February 2019 - Ben Morgan (cmake-V10-05-01)
+- Remove obsolete GEANT4_BUILD_MUONIC_ATOMS_IN_USE option
+  and associated configuration/compiler flags.
+
+21st December 2018 - Makoto Asai (cmake-V10-05-00)
 - Modules/Geant4OptionalComponents.cmake:
 - Template/Geant4Config.cmake.in:
    Add GEANT4_USE_SMARTSTACK

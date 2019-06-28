@@ -25,7 +25,7 @@
 //
 //
 //
-// 
+//
 // --------------------------------------------------------------------
 // GEANT 4 class header file
 //
@@ -37,7 +37,7 @@
 //   Class implementing a CSG-like type "PGON" Geant 3.21 volume,
 //   inherited from class G4VCSGfaceted:
 //
-//   G4Polyhedra( const G4String& name, 
+//   G4Polyhedra( const G4String& name,
 //                G4double phiStart,         - initial phi starting angle
 //                G4double phiTotal,         - total phi angle
 //                G4int numSide,             - number sides
@@ -46,7 +46,7 @@
 //                const G4double rInner[],   - tangent distance to inner surface
 //                const G4double rOuter[]  ) - tangent distance to outer surface
 //
-//   G4Polyhedra( const G4String& name, 
+//   G4Polyhedra( const G4String& name,
 //                G4double phiStart,    - initial phi starting angle
 //                G4double phiTotal,    - total phi angle
 //                G4int    numSide,     - number sides
@@ -54,11 +54,13 @@
 //                const G4double r[],   - r coordinate of these corners
 //                const G4double z[] )  - z coordinate of these corners
 
-// Author: 
+// Author:
 //   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 #ifndef G4Polyhedra_hh
 #define G4Polyhedra_hh
+
+#include "G4GeomTypes.hh"
 
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UPOLYHEDRA 1
@@ -81,7 +83,7 @@ class G4Polyhedra : public G4VCSGfaceted
 {
  public:  // with description
 
-  G4Polyhedra( const G4String& name, 
+  G4Polyhedra( const G4String& name,
                      G4double phiStart,    // initial phi starting angle
                      G4double phiTotal,    // total phi angle
                      G4int numSide,        // number sides
@@ -90,7 +92,7 @@ class G4Polyhedra : public G4VCSGfaceted
                const G4double rInner[],    // tangent distance to inner surface
                const G4double rOuter[]  ); // tangent distance to outer surface
 
-  G4Polyhedra( const G4String& name, 
+  G4Polyhedra( const G4String& name,
                      G4double phiStart,    // initial phi starting angle
                      G4double phiTotal,    // total phi angle
                      G4int    numSide,     // number sides
@@ -106,7 +108,7 @@ class G4Polyhedra : public G4VCSGfaceted
   G4double DistanceToIn( const G4ThreeVector &p,
                          const G4ThreeVector &v ) const;
   G4double DistanceToIn( const G4ThreeVector &p ) const;
-  
+
   void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
   G4bool CalculateExtent(const EAxis pAxis,
                          const G4VoxelLimits& pVoxelLimit,

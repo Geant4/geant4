@@ -102,16 +102,72 @@ void TimeStepAction::UserPostTimeStepAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TimeStepAction::UserReactionAction(const G4Track&,
-    const G4Track&,
+void TimeStepAction::UserReactionAction(const G4Track& /*a*/,
+    const G4Track& /*b*/,
     const std::vector<G4Track*>* /*products*/)
 {
+  // Example to display reactions with product
+  // S. Incerti, H. Tran
+  // 2019/01/24
+
   /*
-  for (int i = 0 ; i < nbProducts ; i ++)
-  {
-    G4cout << "Product[" << i << "] : "
-        << GetMolecule(products[i])->GetName()
+  if (products) 
+  {  
+    G4cout << G4endl;
+    G4int nbProducts = products->size();
+    for (int i = 0 ; i < nbProducts ; i ++)
+    {
+      G4cout << "-> A = "
+        << GetMolecule(&a)->GetName() << " (TrackID=" << a.GetTrackID() << ")"
+        << " reacts with B = "
+        << GetMolecule(&b)->GetName() << " (TrackID=" << b.GetTrackID() << ")"
+        << " creating product " << i+1 << " ="
+        << GetMolecule((*products)[i])->GetName()
         << G4endl ;
+
+      G4cout 
+      <<" A position: x(nm)="<<a.GetPosition().getX()/nm
+      <<" y(nm)="<<a.GetPosition().getY()/nm
+      <<" z(nm)="<<a.GetPosition().getZ()/nm
+      <<G4endl;
+
+      G4cout 
+      <<" B position: x(nm)="<<b.GetPosition().getX()/nm
+      <<" y(nm)="<<b.GetPosition().getY()/nm
+      <<" z(nm)="<<b.GetPosition().getZ()/nm
+      <<G4endl;
+
+      G4cout 
+      <<" Product " << i+1 << "position: x(nm)="<<(*products)[i]->GetPosition().getX()/nm
+      <<" y(nm)="<<a.GetPosition().getY()/nm
+      <<" z(nm)="<<a.GetPosition().getZ()/nm
+      <<G4endl;
+    }
   }
-   */
+
+  else
+
+  {  
+     G4cout << G4endl;
+     G4cout << "-> A = "
+        << GetMolecule(&a)->GetName() << " (TrackID=" << a.GetTrackID() << ")"
+        << " reacts with B = "
+        << GetMolecule(&b)->GetName() << " (TrackID=" << b.GetTrackID() << ")"
+        << G4endl ;
+
+      G4cout 
+      <<" A position: x(nm)="<<a.GetPosition().getX()/nm
+      <<" y(nm)="<<a.GetPosition().getY()/nm
+      <<" z(nm)="<<a.GetPosition().getZ()/nm
+      <<G4endl;
+
+      G4cout 
+      <<" B position: x(nm)="<<b.GetPosition().getX()/nm
+      <<" y(nm)="<<b.GetPosition().getY()/nm
+      <<" z(nm)="<<b.GetPosition().getZ()/nm
+      <<G4endl;
+
+  }
+  */
+
 }

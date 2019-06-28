@@ -484,8 +484,8 @@ void G4eBremParametrizedModel::SampleSecondaries(
 
   SetupForMaterial(particle, couple->GetMaterial(),kineticEnergy);
 
-  const G4Element* elm = 
-    SelectRandomAtom(couple,particle,kineticEnergy,cut,emax);
+  const G4Element* elm = SelectTargetAtom(couple,particle,kineticEnergy,
+                                          dp->GetLogKineticEnergy(),cut,emax);
   SetCurrentElement(elm->GetZ());
 
   kinEnergy   = kineticEnergy;

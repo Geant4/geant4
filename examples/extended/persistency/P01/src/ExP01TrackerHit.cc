@@ -38,7 +38,7 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 
-G4Allocator<ExP01TrackerHit> ExP01TrackerHitAllocator;
+G4ThreadLocal G4Allocator<ExP01TrackerHit>* ExP01TrackerHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

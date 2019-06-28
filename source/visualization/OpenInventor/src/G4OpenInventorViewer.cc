@@ -158,6 +158,7 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
 
   if (
       (vp.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (vp.GetNumberOfCloudPoints()  != fVP.GetNumberOfCloudPoints())  ||
       (vp.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
       (vp.IsCulling ()          != fVP.IsCulling ())          ||
       (vp.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
@@ -667,6 +668,9 @@ void G4OpenInventorViewer::SetSolid() {
     break;
   case G4ViewParameters::hlhsr:
     break;
+  case G4ViewParameters::cloud:
+    vp.SetDrawingStyle(G4ViewParameters::hsr);
+    break;
   }
   SetViewParameters(vp);
   DrawDetector();
@@ -684,6 +688,9 @@ void G4OpenInventorViewer::SetWireFrame() {
     break;
   case G4ViewParameters::hlhsr:
     vp.SetDrawingStyle(G4ViewParameters::hlr);
+    break;
+  case G4ViewParameters::cloud:
+    vp.SetDrawingStyle(G4ViewParameters::wireframe);
     break;
   }
   SetViewParameters(vp);
@@ -709,6 +716,9 @@ void G4OpenInventorViewer::SetReducedWireFrame(bool aValue) {
     break;
   case G4ViewParameters::hlhsr:
     vp.SetDrawingStyle(G4ViewParameters::hlr);
+    break;
+  case G4ViewParameters::cloud:
+    vp.SetDrawingStyle(G4ViewParameters::wireframe);
     break;
   }
   SetViewParameters(vp);

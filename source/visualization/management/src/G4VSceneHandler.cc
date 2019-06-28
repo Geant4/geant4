@@ -90,6 +90,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+#include <set>
+
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
   fSceneHandlerId        (id),
@@ -526,36 +528,36 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
 
 void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   switch (polymarker.GetMarkerType()) {
-  default:
-  case G4Polymarker::dots:
+    default:
+    case G4Polymarker::dots:
     {
+      G4Circle dot (polymarker);
+      dot.SetWorldSize  (0.);
+      dot.SetScreenSize (0.1);  // Very small circle.
       for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
-	G4Circle dot (polymarker);
         dot.SetPosition (polymarker[iPoint]);
-	dot.SetWorldSize  (0.);
-	dot.SetScreenSize (0.1);  // Very small circle.
-	AddPrimitive (dot);
+        AddPrimitive (dot);
       }
     }
-    break;
-  case G4Polymarker::circles:
+      break;
+    case G4Polymarker::circles:
     {
+      G4Circle circle (polymarker);  // Default circle
       for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
-	G4Circle circle (polymarker);
-	circle.SetPosition (polymarker[iPoint]);
-	AddPrimitive (circle);
+        circle.SetPosition (polymarker[iPoint]);
+        AddPrimitive (circle);
       }
     }
-    break;
-  case G4Polymarker::squares:
+      break;
+    case G4Polymarker::squares:
     {
+      G4Square square (polymarker);  // Default square
       for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
-	G4Square square (polymarker);
-	square.SetPosition (polymarker[iPoint]);
-	AddPrimitive (square);
+        square.SetPosition (polymarker[iPoint]);
+        AddPrimitive (square);
       }
     }
-    break;
+      break;
   }
 }
 
@@ -572,38 +574,79 @@ void G4VSceneHandler::SetScene (G4Scene* pScene) {
   }
 }
 
-void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
-  G4Polyhedron::SetNumberOfRotationSteps (GetNoOfSides (fpVisAttribs));
-  G4Polyhedron* pPolyhedron = solid.GetPolyhedron ();
-  G4Polyhedron::ResetNumberOfRotationSteps ();
-  if (pPolyhedron) {
-    pPolyhedron -> SetVisAttributes (fpVisAttribs);
-    BeginPrimitives (fObjectTransformation);
-    AddPrimitive (*pPolyhedron);
-    EndPrimitives ();
-  }
-  else {
-    G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
-    if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
-      "ERROR: G4VSceneHandler::RequestPrimitives"
-      "\n  Polyhedron not available for " << solid.GetName () <<
-      "\n  Touchable path: ";
-      G4PhysicalVolumeModel* pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
-      if (pPVModel) {
-        G4cerr << pPVModel->GetFullPVPath();
+void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid)
+{
+  const G4ViewParameters::DrawingStyle style = GetDrawingStyle(fpVisAttribs);
+  const G4ViewParameters& vp = fpViewer->GetViewParameters();
+
+  switch (style) {
+    default:
+    case G4ViewParameters::wireframe:
+    case G4ViewParameters::hlr:
+    case G4ViewParameters::hsr:
+    case G4ViewParameters::hlhsr:
+    {
+      // Use polyhedral representation
+      G4Polyhedron::SetNumberOfRotationSteps (GetNoOfSides (fpVisAttribs));
+      G4Polyhedron* pPolyhedron = solid.GetPolyhedron ();
+      G4Polyhedron::ResetNumberOfRotationSteps ();
+      if (pPolyhedron) {
+        pPolyhedron -> SetVisAttributes (fpVisAttribs);
+        BeginPrimitives (fObjectTransformation);
+        AddPrimitive (*pPolyhedron);
+        EndPrimitives ();
+        break;
+      } else {  // Print warnings and drop through to cloud
+        G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
+        static std::set<const G4VSolid*> problematicSolids;
+        if (verbosity >= G4VisManager::errors &&
+            problematicSolids.find(&solid) == problematicSolids.end()) {
+          problematicSolids.insert(&solid);
+          G4cerr <<
+          "ERROR: G4VSceneHandler::RequestPrimitives"
+          "\n  Polyhedron not available for " << solid.GetName ();
+          G4PhysicalVolumeModel* pPVModel = dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+          if (pPVModel) {
+            G4cerr << "\n  Touchable path: " << pPVModel->GetFullPVPath();
+          }
+          static G4bool explanation = false;
+          if (!explanation) {
+            explanation = true;
+            G4cerr <<
+            "\n  This means it cannot be visualized in the usual way on most systems."
+            "\n  1) The solid may not have implemented the CreatePolyhedron method."
+            "\n  2) For Boolean solids, the BooleanProcessor, which attempts to create"
+            "\n     the resultant polyhedron, may have failed."
+            "\n  Try RayTracer. It uses Geant4's tracking algorithms instead.";
+          }
+          G4cerr << "\n  Drawing solid with cloud of points.";
+          G4cerr << G4endl;
+        }
       }
-      static G4bool explanation = false;
-      if (!explanation) {
-        explanation = true;
-        G4cerr <<
-        "\n  This means it cannot be visualized on most systems (try RayTracer)."
-        "\n  1) The solid may not have implemented the CreatePolyhedron method."
-        "\n  2) For Boolean solids, the BooleanProcessor, which attempts to create"
-        "\n     the resultant polyhedron, may have failed.";
+    }  // fallthrough
+
+    case G4ViewParameters::cloud:
+    {
+      // Form solid out of cloud of dots
+      G4Polymarker dots;
+      // Note: OpenGL has a fast implementation of polymarker so it's better
+      // to build a polymarker rather than add a succession of circles.
+      // And anyway, in Qt, in the latter case each circle would be a scene-tree
+      // entry, something we would want to avoid.
+      dots.SetVisAttributes(fpVisAttribs);
+      dots.SetMarkerType(G4Polymarker::dots);
+      dots.SetSize(G4VMarker::screen,1.);
+      G4int numberOfCloudPoints = GetNumberOfCloudPoints(fpVisAttribs);
+      if (numberOfCloudPoints <= 0) numberOfCloudPoints = vp.GetNumberOfCloudPoints();
+      for (G4int i = 0; i < numberOfCloudPoints; ++i) {
+        G4ThreeVector p = solid.GetPointOnSurface();
+        dots.push_back(p);
       }
-      G4cerr << G4endl;
+      BeginPrimitives (fObjectTransformation);
+      AddPrimitive(dots);
+      EndPrimitives ();
     }
+      break;
   }
 }
 
@@ -790,21 +833,24 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
 
   // Convert drawing styles...
   G4ModelingParameters::DrawingStyle modelDrawingStyle =
-    G4ModelingParameters::wf;
+  G4ModelingParameters::wf;
   switch (vp.GetDrawingStyle ()) {
-  default:
-  case G4ViewParameters::wireframe:
-    modelDrawingStyle = G4ModelingParameters::wf;
-    break;
-  case G4ViewParameters::hlr:
-    modelDrawingStyle = G4ModelingParameters::hlr;
-    break;
-  case G4ViewParameters::hsr:
-    modelDrawingStyle = G4ModelingParameters::hsr;
-    break;
-  case G4ViewParameters::hlhsr:
-    modelDrawingStyle = G4ModelingParameters::hlhsr;
-    break;
+    default:
+    case G4ViewParameters::wireframe:
+      modelDrawingStyle = G4ModelingParameters::wf;
+      break;
+    case G4ViewParameters::hlr:
+      modelDrawingStyle = G4ModelingParameters::hlr;
+      break;
+    case G4ViewParameters::hsr:
+      modelDrawingStyle = G4ModelingParameters::hsr;
+      break;
+    case G4ViewParameters::hlhsr:
+      modelDrawingStyle = G4ModelingParameters::hlhsr;
+      break;
+    case G4ViewParameters::cloud:
+      modelDrawingStyle = G4ModelingParameters::cloud;
+      break;
   }
 
   // Decide if covered daughters are really to be culled...
@@ -825,6 +871,7 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
      vp.GetNoOfSides ()
      );
 
+  pModelingParams->SetNumberOfCloudPoints(vp.GetNumberOfCloudPoints());
   pModelingParams->SetWarning
     (G4VisManager::GetVerbosity() >= G4VisManager::warnings);
 
@@ -843,34 +890,44 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
   return pModelingParams;
 }
 
-G4VSolid* G4VSceneHandler::CreateSectionSolid()
+G4DisplacedSolid* G4VSceneHandler::CreateSectionSolid()
 {
-  G4VSolid* sectioner = 0;
+  G4DisplacedSolid* sectioner = 0;
+
   const G4ViewParameters& vp = fpViewer->GetViewParameters();
   if (vp.IsSection () ) {
+
     G4double radius = fpScene->GetExtent().GetExtentRadius();
     G4double safe = radius + fpScene->GetExtent().GetExtentCentre().mag();
     G4VSolid* sectionBox =
-      new G4Box("_sectioner", safe, safe, 1.e-5 * radius);  // Thin in z-plane.
+      new G4Box("_sectioner", safe, safe, 1.e-5 * radius);  // Thin in z-plane...
+    const G4Normal3D originalNormal(0,0,1);  // ...so this is original normal.
+
     const G4Plane3D& sp = vp.GetSectionPlane ();
-    G4double a = sp.a();
-    G4double b = sp.b();
-    G4double c = sp.c();
-    G4double d = sp.d();
-    G4Transform3D transform = G4TranslateZ3D(-d);
-    const G4Normal3D normal(a,b,c);
-    if (normal != G4Normal3D(0,0,1)) {
-      const G4double angle = std::acos(normal.dot(G4Normal3D(0,0,1)));
-      const G4Vector3D axis = G4Normal3D(0,0,1).cross(normal);
-      transform = G4Rotate3D(angle, axis) * transform;
+    const G4double& a = sp.a();
+    const G4double& b = sp.b();
+    const G4double& c = sp.c();
+    const G4double& d = sp.d();
+    const G4Normal3D newNormal(a,b,c);
+
+    G4Transform3D requiredTransform;
+    // Rotate
+    if (newNormal != originalNormal) {
+      const G4double& angle = std::acos(newNormal.dot(originalNormal));
+      const G4Vector3D& axis = originalNormal.cross(newNormal);
+      requiredTransform = G4Rotate3D(angle, axis);
     }
+    // Translate
+    requiredTransform = requiredTransform * G4TranslateZ3D(-d);
+
     sectioner = new G4DisplacedSolid
-      ("_displaced_sectioning_box", sectionBox, transform);
+      ("_displaced_sectioning_box", sectionBox, requiredTransform);
   }
+  
   return sectioner;
 }
 
-G4VSolid* G4VSceneHandler::CreateCutawaySolid()
+G4DisplacedSolid* G4VSceneHandler::CreateCutawaySolid()
 {
   // To be reviewed.
   return 0;
@@ -882,7 +939,7 @@ G4VSolid* G4VSceneHandler::CreateCutawaySolid()
   main geometry tree (material world) is added.  If "worlds", the
   top of all worlds - material world and parallel worlds, if any - are
     added.  Otherwise a search of all worlds is made, taking the first
-    matching occurence only.  To see a representation of the geometry
+    matching occurrence only.  To see a representation of the geometry
     hierarchy of the worlds, try "/vis/drawTree [worlds]" or one of the
     driver/browser combinations that have the required functionality, e.g., HepRep.
     If clip-volume-type is specified, the subsequent parameters are used to
@@ -983,39 +1040,56 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
   // Drawing style is normally determined by the view parameters, but
   // it can be overriddden by the ForceDrawingStyle flag in the vis
   // attributes.
-  G4ViewParameters::DrawingStyle style = 
-    fpViewer->GetViewParameters().GetDrawingStyle();
+  const G4ViewParameters& vp = fpViewer->GetViewParameters();
+  G4ViewParameters::DrawingStyle style = vp.GetDrawingStyle();
   if (pVisAttribs -> IsForceDrawingStyle ()) {
     G4VisAttributes::ForcedDrawingStyle forcedStyle =
-      pVisAttribs -> GetForcedDrawingStyle ();
+    pVisAttribs -> GetForcedDrawingStyle ();
     // This is complicated because if hidden line and surface removal
     // has been requested we wish to preserve this sometimes.
     switch (forcedStyle) {
-    case (G4VisAttributes::solid):
-      switch (style) {
-      case (G4ViewParameters::hlr):
-	style = G4ViewParameters::hlhsr;
-	break;
-      case (G4ViewParameters::wireframe):
-	style = G4ViewParameters::hsr;
-	break;
-      case (G4ViewParameters::hlhsr):
-      case (G4ViewParameters::hsr):
+      case (G4VisAttributes::solid):
+        switch (style) {
+          case (G4ViewParameters::hlr):
+            style = G4ViewParameters::hlhsr;
+            break;
+          case (G4ViewParameters::wireframe):
+            style = G4ViewParameters::hsr;
+            break;
+          case (G4ViewParameters::cloud):
+            style = G4ViewParameters::hsr;
+            break;
+          case (G4ViewParameters::hlhsr):
+          case (G4ViewParameters::hsr):
+            break;
+        }
+        break;
+      case (G4VisAttributes::cloud):
+        style = G4ViewParameters::cloud;
+        break;
+      case (G4VisAttributes::wireframe):
       default:
-	break;
-      }	
-      break;
-    case (G4VisAttributes::wireframe):
-    default:
-      // But if forced style is wireframe, do it, because one of its
-      // main uses is in displaying the consituent solids of a Boolean
-      // solid and their surfaces overlap with the resulting Booean
-      // solid, making a mess if hlr is specified.
-      style = G4ViewParameters::wireframe;
-      break;
+        // But if forced style is wireframe, do it, because one of its
+        // main uses is in displaying the consituent solids of a Boolean
+        // solid and their surfaces overlap with the resulting Booean
+        // solid, making a mess if hlr is specified.
+        style = G4ViewParameters::wireframe;
+        break;
     }
   }
   return style;
+}
+
+G4int G4VSceneHandler::GetNumberOfCloudPoints
+(const G4VisAttributes* pVisAttribs) const {
+  // Returns no of cloud points from current view parameters, unless the user
+  // has forced through the vis attributes, thereby over-riding the
+  // current view parameter.
+  G4int numberOfCloudPoints = fpViewer->GetViewParameters().GetNumberOfCloudPoints();
+  if (pVisAttribs -> GetForcedNumberOfCloudPoints() > 0) {
+    numberOfCloudPoints = pVisAttribs -> GetForcedNumberOfCloudPoints();
+  }
+  return numberOfCloudPoints;
 }
 
 G4bool G4VSceneHandler::GetAuxEdgeVisible (const G4VisAttributes* pVisAttribs) {

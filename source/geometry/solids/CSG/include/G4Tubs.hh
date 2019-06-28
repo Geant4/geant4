@@ -25,11 +25,11 @@
 //
 //
 //
-// 
+//
 // --------------------------------------------------------------------
 // GEANT 4 class header file
 //
-// 
+//
 // G4Tubs
 //
 // Class description:
@@ -67,6 +67,8 @@
 #ifndef G4TUBS_HH
 #define G4TUBS_HH
 
+#include "G4GeomTypes.hh"
+
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UTUBS 1
 #endif
@@ -99,7 +101,7 @@ class G4Tubs : public G4CSGSolid
       // Destructor
 
     // Accessors
-    
+
     inline G4double GetInnerRadius   () const;
     inline G4double GetOuterRadius   () const;
     inline G4double GetZHalfLength   () const;
@@ -117,7 +119,7 @@ class G4Tubs : public G4CSGSolid
     inline void SetZHalfLength   (G4double newDz);
     inline void SetStartPhiAngle (G4double newSPhi, G4bool trig=true);
     inline void SetDeltaPhiAngle (G4double newDPhi);
-    
+
     // Methods for solid
 
     inline G4double GetCubicVolume();
@@ -167,7 +169,7 @@ class G4Tubs : public G4CSGSolid
       // persistifiable objects.
 
     G4Tubs(const G4Tubs& rhs);
-    G4Tubs& operator=(const G4Tubs& rhs); 
+    G4Tubs& operator=(const G4Tubs& rhs);
       // Copy constructor and assignment operator.
 
     //  Older names for access functions
@@ -194,6 +196,11 @@ class G4Tubs : public G4CSGSolid
       //
       // Recompute relevant trigonometric values and cache them
 
+    inline G4double FastInverseRxy( const G4ThreeVector& pos, G4double invRad, G4double normalTolerance ) const;
+      //
+      // Compute fast inverse cylindrical (Rxy) radius for points expected to be on a cylindrical surface
+      //   Ensures that surface normal vector produced has magnitude with 'normalTolerance' of unit. 
+
     virtual G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       //
       // Algorithm for SurfaceNormal() following the original
@@ -213,11 +220,15 @@ class G4Tubs : public G4CSGSolid
       //
       // Radial and angular tolerances
 
+    static constexpr G4double kNormTolerance= 1.0e-6;
+      // 
+      // Tolerance of unity for surface normal (for speedup - use fInvRmax if possible )
+   
     G4double fRMin, fRMax, fDz, fSPhi, fDPhi;
       //
       // Radial and angular dimensions
 
-    G4double sinCPhi, cosCPhi, cosHDPhiOT, cosHDPhiIT,
+    G4double sinCPhi, cosCPhi, cosHDPhi, cosHDPhiOT, cosHDPhiIT,
              sinSPhi, cosSPhi, sinEPhi, cosEPhi;
       //
       // Cached trigonometric values
@@ -226,6 +237,10 @@ class G4Tubs : public G4CSGSolid
       //
       // Flag for identification of section or full tube
 
+    G4double fInvRmax, fInvRmin;
+      // 
+      // More cached values - inverse of Rmax, Rmin.
+   
     G4double halfCarTolerance, halfRadTolerance, halfAngTolerance;
       //
       // Cached half tolerance values

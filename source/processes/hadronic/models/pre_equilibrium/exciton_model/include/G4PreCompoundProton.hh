@@ -58,8 +58,8 @@ private:
   G4PreCompoundProton(const G4PreCompoundProton &right);
   const G4PreCompoundProton& 
   operator= (const G4PreCompoundProton &right);
-  G4int operator==(const G4PreCompoundProton &right) const;
-  G4int operator!=(const G4PreCompoundProton &right) const;    
+  G4bool operator==(const G4PreCompoundProton &right) const;
+  G4bool operator!=(const G4PreCompoundProton &right) const;    
 
   G4ProtonCoulombBarrier theProtonCoulombBarrier;
 };

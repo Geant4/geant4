@@ -42,18 +42,22 @@
 
 EventAction::EventAction()
 :G4UserEventAction()
-{ }
+{ 
+  fTotalEnergyDeposit = 0.;
+  fNIEL = 0.;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event*)
 {
- fTotalEnergyDeposit = 0.;
+  fTotalEnergyDeposit = 0.;
+  fNIEL = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,10 +66,7 @@ void EventAction::EndOfEventAction(const G4Event*)
 {
 
   G4AnalysisManager::Instance()->FillH1(4,fTotalEnergyDeposit);
-  
-  ////G4cout << " Energy deposit: "
-  ////       << G4BestUnit(fTotalEnergyDeposit,"Energy")
-  ////       << G4endl;
+  G4AnalysisManager::Instance()->FillH1(7,fNIEL);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

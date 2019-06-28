@@ -33,71 +33,78 @@
 #include "G4VMoleculeCounter.hh"
 #include "G4MoleculeCounter.hh"
 
-using namespace std;
-
 G4bool G4VMoleculeCounter::fUse = false;
 G4ThreadLocal
-G4VMoleculeCounter* G4VMoleculeCounter::fpInstance = 0;
+G4VMoleculeCounter* G4VMoleculeCounter::fpInstance = nullptr;
 
 //------------------------------------------------------------------------------
 
 void
-G4VMoleculeCounter::SetInstance(G4VMoleculeCounter* instance)
+G4VMoleculeCounter::SetInstance(G4VMoleculeCounter* pCounterInstance)
 {
-  if (fpInstance!=0){
-    G4ExceptionDescription errMsg;
-    errMsg<< "The G4MoleculeCounter was already initialized." << G4endl
-    << "The previous instance will be deleted in order to use yours." << G4endl
-    << "However this can generate conflicts. Make sure you call G4MoleculeCounter::SetInstance at the beginning of your application."
-    << "A good place would be ActionInitialization::Build & BuildForMaster"
-    << G4endl;
-    
-    G4Exception("G4MoleculeCounter::SetInstance",
-                "SINGLETON_ALREADY_INITIALIZED",
-                JustWarning, errMsg);
-    delete fpInstance;
-    fpInstance = 0;
-  }
-  
-  fpInstance = instance;
+    if (fpInstance != nullptr)
+    {
+        G4ExceptionDescription errMsg;
+        errMsg << "The G4MoleculeCounter was already initialized." << G4endl
+               << "The previous instance will be deleted in order to use yours." << G4endl
+               << "However this can generate conflicts. Make sure you call G4MoleculeCounter::SetInstance"
+                  "at the beginning of your application."
+               << "A good place would be ActionInitialization::Build & BuildForMaster"
+               << G4endl;
+
+        G4Exception("G4MoleculeCounter::SetInstance",
+                    "SINGLETON_ALREADY_INITIALIZED",
+                    JustWarning, errMsg);
+        delete fpInstance;
+        fpInstance = nullptr;
+    }
+
+    fpInstance = pCounterInstance;
 }
 
 //------------------------------------------------------------------------------
 
 G4VMoleculeCounter* G4VMoleculeCounter::Instance()
 {
-  if (!fpInstance) fpInstance = new G4MoleculeCounter();
-  return fpInstance;
+    if (fpInstance == nullptr)
+    {
+        fpInstance = new G4MoleculeCounter();
+    }
+    return fpInstance;
 }
 
 //------------------------------------------------------------------------------
 
 void G4VMoleculeCounter::DeleteInstance()
 {
-  if (fpInstance){
-    delete fpInstance;
-    fpInstance = 0;
-  }
+    if (fpInstance != nullptr)
+    {
+        delete fpInstance;
+        fpInstance = nullptr;
+    }
 }
 
 //------------------------------------------------------------------------------
 
 void G4VMoleculeCounter::InitializeInstance()
 {
-  if(fpInstance) fpInstance->Initialize();
+    if (fpInstance)
+    {
+        fpInstance->Initialize();
+    }
 }
 
 //------------------------------------------------------------------------------
 
 void G4VMoleculeCounter::Use(G4bool flag)
 {
-  fUse=flag;
+    fUse = flag;
 }
 
 //------------------------------------------------------------------------------
 
 G4bool G4VMoleculeCounter::InUse()
 {
-  return fUse;
+    return fUse;
 }
 

@@ -14,6 +14,35 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+     
+19 May 2019 V. Grichine (hadr-proc-V10-05-05)
+-----------------------------------------------------
+- G4MuNeutrinoNucleusProcess : change process type to fHadronInelastic
+
+12 May 2019 Vladimir Ivanchenko (hadr-proc-V10-05-04)
+-----------------------------------------------------
+- G4HadronElasticProcess : removed final state rotation
+
+08 May 2019 Vladimir Ivanchenko (hadr-proc-V10-05-03)
+-----------------------------------------------------
+- G4HadronElasticProcess : removed default GHEISHA cross section
+
+06 May 2019 V. Grichine (hadr-proc-V10-05-02)
+-----------------------------------------------------
+- G4MuNeutrinoNucleusProcess : new process managing 
+    G4NuMuNucleusCc(Nc)Model models
+
+30 April 2019 Vladimir Ivanchenko (hadr-proc-V10-05-01)
+-----------------------------------------------------
+- G4HadronElasticProcess : added protection for zero energy primary
+
+19 April 2019 Vladimir Ivanchenko (hadr-proc-V10-05-00)
+-----------------------------------------------------
+- G4HadronElasticProcess : removed tracking cut for all particles (charged
+  particles may be stopped by the tracking cut of ionisation process,
+  neutrons should be stopped by G4NeutronKiller); clean up sampling
+  of final state; improved description and comments; added C++11 keywords;
+  removed unused local members
 
 03 October 2018 Vladimir Ivanchenko (hadr-proc-V10-04-09)
 -----------------------------------------------------

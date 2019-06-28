@@ -14,6 +14,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-04-19 mma (fano2-V10-05-02)
+- DetectorConstruction : restore wallThickness = 5 cm; radius = 10 m;
+
+25-02-19 V. Ivanchenko (fano2-V10-05-01)
+- PhysListEmStandard_option4 - set RangeFactor=0.08 (as in the 
+    physics_list library)
+- PhysListEmStandard_option3 - set parameters as in the 
+    physics_list library
+
+30-01-19 V. Ivanchenko (fano2-V10-05-00)
+- DetectorConstruction, DetectorMessenger, Run - fixed usage of base
+  materials and cleanup (should fix Opt4 EM physics results)
+
 20-11-18 V. Ivanchenko (fano2-V10-04-04)
 - PhysListEmStandard_option3 - use the same lateral displacement as in 
   physics_list library

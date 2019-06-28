@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -273,6 +273,7 @@
 
 
 
+G4NIELCalculator: is created with the model <ICRU49NucStopping>
 /control/cout/ignoreThreadsExcept 0
 /run/numberOfThreads 2
 *** /run/numberOfThreads command is issued in sequential mode.
@@ -331,10 +332,11 @@ Index : 0     used in the geometry : Yes
 
 ### Run 0 starts.
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={906770732717044781, 629165745432651234, 1235682547346241386, 68420008233404568, 2262190991329242458, 2266470399991071809, 1976726662926872232, 245458862506414172, 1955974201201518530, 2155248512522080758, 604170912935414061, 1116171330120743511, 1861018313684488333, 1296715403254578286, 1549011045957234151, 370819759640195970, 2230139271784837643} counter= 17sumtot= 1977567618660788324
+---------------------------------------
 --> Event 0 starts.
 --> Event 200 starts.
 --> Event 400 starts.
@@ -348,41 +350,112 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.400000s Real=1.403614s Sys=0.000000s
+  User=1.390000s Real=1.402145s Sys=0.000000s
 
  ======================== run summary ======================
 
  The run is: 2000 e- of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
- total energy deposit: 99.81 MeV
+ Total energy deposit:   99.8 MeV
+ NIEL energy calculated: 0 eV 
 
- nb tracks/event   neutral:  25.387   charged:  137.25
- nb  steps/event   neutral:  139.45   charged:  202.92
+ Nb tracks/event   neutral:  25.375   charged:  138.49
+ Nb  steps/event   neutral:  140.72   charged:  204.99
 
  Process calls frequency :
-                 Rayl=  17629        Transportation=   1815               annihil=   2779
-                compt= 210496                  conv=   2758                 eBrem=  46334
-                eIoni= 356394                   msc=    329                  phot=  46204
-
+          CoulombScat=      1                  Rayl=  17919        Transportation=   1893
+              annihil=   2928                 compt= 212779                  conv=   2922
+                eBrem=  46011                 eIoni= 360643                   msc=    386
+                 phot=  45939 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.188 cm    rms = 3.8667 cm 
- proj Range = 9.7015 cm    rms = 3.5938 cm 
- proj/true  = 0.86714
- transverse dispersion at end = 1.6564 cm 
-      mass true Range from simulation = 30.207 g/cm2 
+ true Range = 10.965 cm    rms = 3.8375 cm 
+ proj Range = 9.5384 cm    rms = 3.568 cm 
+ proj/true  = 0.86989
+ transverse dispersion at end = 1.6112 cm 
+      mass true Range from simulation = 29.606 g/cm2 
        from PhysicsTable (csda range) = 32.1 g/cm2 
 ---------------------------------------------------------
 
 
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1141212198, 786041491
-----------------------------------------
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={2031873584265960620, 622507089045045433, 22422546016843345, 495435721881672961, 206001911099862491, 770722890597424911, 1066394520851527311, 880415356861482673, 1742530766070595907, 1657507365339702529, 1926583258781533475, 812616883571229806, 1022991302094510677, 554724334253111068, 2070248109427892588, 535330816359514199, 1042845930388460343} counter= 6sumtot= 1320251322410512680
+---------------------------------------
+#
+/gun/particle proton
+#
+/run/beamOn 2000
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Aluminium
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  6.89843 keV    e-  599.101 keV    e+  573.786 keV proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 1 starts.
+
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={2031873584265960620, 622507089045045433, 22422546016843345, 495435721881672961, 206001911099862491, 770722890597424911, 1066394520851527311, 880415356861482673, 1742530766070595907, 1657507365339702529, 1926583258781533475, 812616883571229806, 1022991302094510677, 554724334253111068, 2070248109427892588, 535330816359514199, 1042845930388460343} counter= 6sumtot= 1320251322410512680
+---------------------------------------
+--> Event 0 starts.
+--> Event 200 starts.
+--> Event 400 starts.
+--> Event 600 starts.
+--> Event 800 starts.
+--> Event 1000 starts.
+--> Event 1200 starts.
+--> Event 1400 starts.
+--> Event 1600 starts.
+--> Event 1800 starts.
+ Run terminated.
+Run Summary
+  Number of events processed : 2000
+  User=0.080000s Real=0.074285s Sys=0.000000s
+
+ ======================== run summary ======================
+
+ The run is: 2000 proton of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
+
+ Total energy deposit:   100 MeV
+ NIEL energy calculated: 231.28 eV 
+
+ Nb tracks/event   neutral:       0   charged:   1.007
+ Nb  steps/event   neutral:       0   charged:  19.282
+
+ Process calls frequency :
+          CoulombScat=     39      RadioactiveDecay=     14                 hIoni=  38498
+              ionIoni=     14 
+
+---------------------------------------------------------
+ Primary particle : 
+ true Range = 3.7116 cm    rms = 402.76 um 
+ proj Range = 3.7031 cm    rms = 430.51 um 
+ proj/true  = 0.99771
+ transverse dispersion at end = 1.1551 mm 
+      mass true Range from simulation = 10.021 g/cm2 
+       from PhysicsTable (csda range) = 10.012 g/cm2 
+---------------------------------------------------------
+
+
+------- MixMaxRng engine status -------
+ Current state vector is:
+mixmax state, file version 1.0
+N=17 V[N]={1974224681893168029, 1965629350189180792, 2149446006452828190, 836335630534088439, 1835111934799833733, 2285826079354604722, 1901053091689188819, 653388806531699075, 186055322664990869, 171399043059235721, 788477970145032726, 253565281565090958, 439145741967805911, 1018099360741507957, 2151496725065425995, 1592975707546752145, 229850192346479570} counter= 14sumtot= 1985336852837362043
+---------------------------------------
+#
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.036 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.038 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

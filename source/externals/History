@@ -16,6 +16,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 June 2019 - G.Cosmo (externals-V10-05-02)
+- Synchronised with CLHEP-2.4.1.2:
+  MixMaxRng: throw if seed is zero. Use throw instead of exit() elsewhere.
+
+07 June 2019 - G.Cosmo (externals-V10-05-01)
+- CLHEP: defaulted operator=() also for Plan3D; fixing deprecation warnings 
+  on gcc-9.1.
+  Fixed shadowing compilation warnings in Transform3D as reported on gcc-9.1.
+
+06 June 2019 - G.Cosmo (externals-V10-05-00)
+- CLHEP: defaulted operator=() for BasicVector3D; fixing deprecation warnings
+  on gcc-9.1.
+
 10 July 2018 - G.Cosmo (externals-V10-04-06)
 - CLHEP: removed not implemented constructor declaration in MixMaxRng.
 - Includes tag zlib-V10-04-03.

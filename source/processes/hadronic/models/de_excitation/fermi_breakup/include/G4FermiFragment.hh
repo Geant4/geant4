@@ -87,7 +87,7 @@ public:
   inline G4double GetCoulombBarrier(G4int Ares, G4int Zres, G4double Eex) const
   {
     return cBarrier ? cBarrier->GetCoulombBarrier(Ares, Zres, Eex)
-      *cBarrier->BarrierPenetrationFactor(Eex) : 0.0;
+      *cBarrier->BarrierPenetrationFactor(Z) : 0.0;
   }
 
   inline G4bool operator==(const G4FermiFragment &right) const

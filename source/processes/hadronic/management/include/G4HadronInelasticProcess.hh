@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // Hadronic Inelastic Process class
 // The specific particle inelastic processes derive from this class
 // This is an abstract base class, since the pure virtual function
@@ -49,8 +47,8 @@ class G4HadronInelasticProcess : public G4HadronicProcess
 {
 public:
     
-  G4HadronInelasticProcess(const G4String &processName,
-			   G4ParticleDefinition*);
+  explicit G4HadronInelasticProcess(const G4String &processName,
+                                    const G4ParticleDefinition*);
     
   ~G4HadronInelasticProcess() override;
         

@@ -32,9 +32,9 @@
 
 #include "G4VisExtent.hh"
 
-#include "G4ios.hh"
+#include "G4ThreeVector.hh"
 
-G4VisExtent::G4VisExtent (G4double xmin, G4double xmax, 
+G4VisExtent::G4VisExtent (G4double xmin, G4double xmax,
                           G4double ymin, G4double ymax, 
                           G4double zmin, G4double zmax):
   fXmin(xmin), fXmax(xmax), fYmin(ymin), fYmax(ymax), fZmin(zmin), fZmax(zmax),
@@ -97,4 +97,45 @@ G4bool G4VisExtent::operator != (const G4VisExtent& e) const {
           (fYmax != e.fYmax) ||
           (fZmin != e.fZmin) ||
           (fZmax != e.fZmax));
+}
+
+G4VisExtent& G4VisExtent::Transform (const G4Transform3D& transform)
+{
+  auto rotation = transform.getRotation();
+  auto translation = transform.getTranslation();
+
+  G4ThreeVector nnn(fXmin,fYmin,fZmin);
+  G4ThreeVector nnx(fXmin,fYmin,fZmax);
+  G4ThreeVector nxn(fXmin,fYmax,fZmin);
+  G4ThreeVector nxx(fXmin,fYmax,fZmax);
+  G4ThreeVector xnn(fXmax,fYmin,fZmin);
+  G4ThreeVector xnx(fXmax,fYmin,fZmax);
+  G4ThreeVector xxn(fXmax,fYmax,fZmin);
+  G4ThreeVector xxx(fXmax,fYmax,fZmax);
+
+  nnn.transform(rotation); nnn += translation;
+  nnx.transform(rotation); nnx += translation;
+  nxn.transform(rotation); nxn += translation;
+  nxx.transform(rotation); nxx += translation;
+  xnn.transform(rotation); xnn += translation;
+  xnx.transform(rotation); xnx += translation;
+  xxn.transform(rotation); xxn += translation;
+  xxx.transform(rotation); xxx += translation;
+
+  fXmin = DBL_MAX;
+  fYmin = DBL_MAX;
+  fZmin = DBL_MAX;
+  fXmax = -DBL_MAX;
+  fYmax = -DBL_MAX;
+  fZmax = -DBL_MAX;
+  for (const auto& corner: {nnn,nnx,nxn,nxx,xnn,xnx,xxn,xxx}) {
+    if (fXmin > corner.getX()) fXmin = corner.getX();
+    if (fYmin > corner.getY()) fYmin = corner.getY();
+    if (fZmin > corner.getZ()) fZmin = corner.getZ();
+    if (fXmax < corner.getX()) fXmax = corner.getX();
+    if (fYmax < corner.getY()) fYmax = corner.getY();
+    if (fZmax < corner.getZ()) fZmax = corner.getZ();
+  }
+
+  return *this;
 }

@@ -150,11 +150,11 @@ protected:
 
 
 private:
-  G4int operator==(const G4CascadeInterface& right) const {
+  G4bool operator==(const G4CascadeInterface& right) const {
     return (this == &right);
   }
 
-  G4int operator!=(const G4CascadeInterface& right) const {
+  G4bool operator!=(const G4CascadeInterface& right) const {
     return (this != &right);
   }
 

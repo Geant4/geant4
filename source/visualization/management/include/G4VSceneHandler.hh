@@ -56,6 +56,7 @@ class G4VPhysicalVolume;
 class G4Material;
 class G4Event;
 class G4AttHolder;
+class G4DisplacedSolid;
 
 class G4VSceneHandler: public G4VGraphicsScene {
 
@@ -156,7 +157,7 @@ public: // With description
   // }
 
   virtual void BeginPrimitives
-  (const G4Transform3D& objectTransformation);
+  (const G4Transform3D& objectTransformation = G4Transform3D());
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
   // void MyXXXSceneHandler::BeginPrimitives
   // (const G4Transform3D& objectTransformation) {
@@ -172,7 +173,7 @@ public: // With description
   // }
 
   virtual void BeginPrimitives2D
-  (const G4Transform3D& objectTransformation);
+  (const G4Transform3D& objectTransformation = G4Transform3D());
   // The x,y coordinates of the primitives passed to AddPrimitive are
   // intrepreted as screen coordinates, -1 < x,y < 1.  The
   // z-coordinate is ignored.
@@ -249,6 +250,11 @@ public: // With description
   // has forced through the vis attributes, thereby over-riding the
   // current view parameter.
 
+  G4int GetNumberOfCloudPoints (const G4VisAttributes*) const;
+  // Returns no of cloud points from current view parameters, unless the user
+  // has forced through the vis attributes, thereby over-riding the
+  // current view parameter.
+
   G4bool GetAuxEdgeVisible (const G4VisAttributes*);
   // Returns auxiliary edge visibility from current view parameters,
   // unless the user has forced through the vis attributes, thereby
@@ -315,8 +321,8 @@ protected:
   //////////////////////////////////////////////////////////////
   // Other internal routines...
 
-  virtual G4VSolid* CreateSectionSolid ();
-  virtual G4VSolid* CreateCutawaySolid ();
+  virtual G4DisplacedSolid* CreateSectionSolid ();
+  virtual G4DisplacedSolid* CreateCutawaySolid ();
   // Generic clipping using the BooleanProcessor in graphics_reps is
   // implemented in this class.  Subclasses that implement their own
   // clipping should provide an override that returns zero.

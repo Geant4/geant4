@@ -151,7 +151,7 @@ G4EmPenelopePhysics::G4EmPenelopePhysics(G4int ver, const G4String&)
   param->SetMscRangeFactor(0.08);
   param->SetMuHadLateralDisplacement(true);
   param->SetFluo(true);
-  //param->SetAugerCascade(true);
+  param->SetMaxNIELEnergy(1*MeV);
   param->SetPIXEElectronCrossSectionModel("Penelope");
   SetPhysicsType(bElectromagnetic);
 }
@@ -232,7 +232,9 @@ void G4EmPenelopePhysics::ConstructProcess()
   G4double highEnergyLimit = G4EmParameters::Instance()->MscEnergyLimit();
 
   // nuclear stopping
+  G4double nielEnergyLimit = G4EmParameters::Instance()->MaxNIELEnergy();
   G4NuclearStopping* pnuc = new G4NuclearStopping();
+  pnuc->SetMaxKinEnergy(nielEnergyLimit);
 
   //Applicability range for Penelope models
   //for higher energies, the Standard models are used   

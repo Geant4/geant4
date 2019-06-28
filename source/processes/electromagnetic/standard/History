@@ -17,24 +17,63 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+28 May 19:  V.Ivanchenko (emstand-V10-05-12)
+- G4UrbanMscModel - L.Urban modified lateral displacement sampling
 
-09 April 19:  V.Ivanchenko (emstand-V10-04-55)
+14 May 19:  V.Ivanchenko (emstand-V10-05-11)
+- G4ScreeningMottCrossSection, G4KleinNishinaModel, G4SeltzerBergerModel,
+  G4eSingleCoulombScatteringModel - use element->GetZasInt() interface
+    in order to reduce number of double->int conversions in run time
+
+10 April 19: I.Semeniouk (emstand-V10-05-10)
+- G4BetheHeitler5DModel - replace local boost and rotation functions with
+  CLHEP boost, boostZ, transform. One random generator flatArray call in
+  sampling loop.
+
+09 April 19:  V.Ivanchenko (emstand-V10-05-09)
 - G4IonCoulombScatteringModel, G4eSingleCoulombScatteringModel,
   G4hCoulombScatteringModel - fixed kinematics for low kinetic energy
-     of primary (problem #2152)
+  of primary (problem #2152)
 
-01 March 19:  V.Ivanchenko 
-- G4BetheBlochModel - code clean-up, removed tabs, some empty lines
+01 April 19: V.Ivanchenko (emstand-V10-05-08)
+- G4eCoulombScatteringModel, G4WentzelOKandVIxSection - cleanup debug cout
+  and initialisation
 
-07 February 19:  V.Ivanchenko  
+17 March 19: M.Novak (emstand-V10-05-07) 
+- G4BetheHeitler5DModel, G4BetheHeitlerModel, G4IonCoulombScatteringModel, 
+  G4PAIModel, G4PAIPhotModel, G4PairProductionRelModel, G4SeltzerBergerModel, 
+  G4XrayRayleighModel, G4eBremParametrizedModel, G4eBremsstrahlungRelModel, 
+  G4eCoulombScatteringModel, G4eSingleCoulombScatteringModel - make use of the 
+  new target atom selector (emutils-V10-05-07) that can reuse the already known 
+  log-energy value.
+
+17 March 19: M.Novak (emstand-V10-05-06) 
+- G4UrbanMscModel, G4WentzelVIModel, G4GoudsmitSaundersonMscModel - make use of 
+  the new base class methods (emutils-V10-05-06), utilising the already known 
+  log-energy value, in case of dEdx, range and transport mean free path log - 
+  vector table accesses.
+
+04 March 19:  V.Ivanchenko (emstand-V10-05-05)
+- G4UrbanMscModel - L.Urban optimise step limitation for UseSafetyPlus 
+    and UseDistanceToBoundary; minor clean-up of step limit method
+
+01 March 19:  V.Ivanchenko (emstand-V10-05-04)
+- G4BetheBlochModel - code clean-up, removed tabs, some empty lines 
+
+27 February 19:  I.Semeniouk (emstand-V10-05-03)
+- G4BetheHeitler5DModel - commint assert on negative bp1
+- G4BetheHeitler5DModel - set x,y components in BoostG4LorentzVector
+    method
+
+07 February 19:  V.Ivanchenko (emstand-V10-05-02)
 - G4eMultipleSacttering, G4hMultipleScattering - reduced
     length of printouts (fix problem #2105)
 
-31 January 19:  V.Ivanchenko 
+31 January 19:  V.Ivanchenko (emstand-V10-05-01)
 - G4ModifiedTsai, G4SauterGavrilaAngularDistribution - reduced
     length of names for these generators (fix problem #2105)
 
-15 January 19:  V.Ivanchenko 
+15 January 19:  V.Ivanchenko (emstand-V10-05-00)
 - G4eplusTo2GammaOKVIModel - fixed crash at initialisation
 
 26 November 18:  V.Ivanchenko (emstand-V10-04-54)

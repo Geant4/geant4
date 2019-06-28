@@ -38,7 +38,7 @@
 
 #include "G4GenericPolycone.hh"
 
-//#if !defined(G4GEOM_USE_UGENERICPOLYCONE)
+#if !defined(G4GEOM_USE_UGENERICPOLYCONE)
 
 #include "G4PolyconeSide.hh"
 #include "G4PolyPhiFace.hh"
@@ -595,16 +595,7 @@ G4GenericPolycone::CalculateExtent(const EAxis pAxis,
   return (pMin < pMax);
 }
 
-//
-// ComputeDimensions
-//
-/*void G4GenericPolycone::ComputeDimensions(       G4VPVParameterisation* p,
-                                      const G4int n,
-                                    const G4VPhysicalVolume* pRep )
-{
-  p->ComputeDimensions(*this,n,pRep);
-}
-*/
+
 //
 // GetEntityType
 //
@@ -945,4 +936,4 @@ G4Polyhedron* G4GenericPolycone::CreatePolyhedron() const
     }
 }
 
-//#endif
+#endif

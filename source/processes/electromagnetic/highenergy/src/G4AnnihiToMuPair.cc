@@ -50,6 +50,7 @@
 #include "G4MuonMinus.hh"
 #include "G4Material.hh"
 #include "G4Step.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,23 +59,25 @@ using namespace std;
 G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName,
     G4ProcessType type):G4VDiscreteProcess (processName, type)
 {
- //e+ Energy threshold
- const G4double Mu_massc2 = G4MuonPlus::MuonPlus()->GetPDGMass();
- LowestEnergyLimit  = 2.*Mu_massc2*Mu_massc2/electron_mass_c2 - electron_mass_c2;
+  //e+ Energy threshold
+  const G4double Mu_massc2 = G4MuonPlus::MuonPlus()->GetPDGMass();
+  LowestEnergyLimit = 2.*Mu_massc2*Mu_massc2/electron_mass_c2 - electron_mass_c2;
  
- //modele ok up to 1000 TeV due to neglected Z-interference
- HighestEnergyLimit = 1000.*TeV;
+  //modele ok up to 1000 TeV due to neglected Z-interference
+  HighestEnergyLimit = 1000.*TeV;
  
- CurrentSigma = 0.0;
- CrossSecFactor = 1.;
- SetProcessSubType(6);
-
+  CurrentSigma = 0.0;
+  CrossSecFactor = 1.;
+  SetProcessSubType(6);
+  G4LossTableManager::Instance()->Register(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4AnnihiToMuPair::~G4AnnihiToMuPair() // (empty) destructor
-{ }
+{ 
+  G4LossTableManager::Instance()->DeRegister(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

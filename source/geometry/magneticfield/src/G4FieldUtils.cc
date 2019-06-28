@@ -59,10 +59,6 @@ G4double relativeError2(const G4double y[],
 
     G4double inv_eps_vel_sq = 1.0 / (eps_rel_max * eps_rel_max);
     G4double errvel_sq = 0.0;    // square of momentum vector difference
-    G4double errspin_sq = 0.0;   // square of spin vector difference
-
-    G4double spin_mag2 = getValue2(y, Value3D::Spin);
-    G4bool hasSpin = (spin_mag2 > 0.0); 
 
     G4double eps_pos = eps_rel_max * h; 
     G4double inv_eps_pos_sq = 1.0 / (eps_pos * eps_pos); 
@@ -86,14 +82,6 @@ G4double relativeError2(const G4double y[],
     }
     errvel_sq *= inv_eps_vel_sq;
     errmax_sq = std::max(errpos_sq, errvel_sq);
-
-    if (hasSpin)
-    {
-      // Accuracy for spin
-      errspin_sq = getValue2(yerr, Value3D::Spin) /  spin_mag2;
-      errspin_sq *= inv_eps_vel_sq;
-      errmax_sq = std::max( errmax_sq, errspin_sq ); 
-    }
 
     return errmax_sq;
 }

@@ -265,7 +265,7 @@ void F01FieldSetup::SetStepper()
       G4cout<<"G4BogackiShampine23 Stepper is chosen"<<G4endl;
       break;
 
-      // Other optimised 4/5th order embedded drivers
+      // Other optimised 4/5th order embedded steppers
     case 15:
     case 45:       
       fStepper = new G4BogackiShampine45( fEquation );
@@ -278,7 +278,7 @@ void F01FieldSetup::SetStepper()
       G4cout<<"G4TsitourasRK45 Stepper is chosen"<<G4endl;
       break;      
 
-      // Higher order embedded drivers - for very smooth fields
+      // Higher order embedded steppers - for very smooth fields
     case 56:
       fStepper = new G4DormandPrinceRK56( fEquation );
       G4cout<<"G4DormandPrinceRK56 Stepper is chosen"<<G4endl;

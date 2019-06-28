@@ -42,95 +42,57 @@
 //   Revisions : 
 //   * 29 June 2015:  Added interpolate() method(s) - Somnath
 //   *     May 2016:  Cleanup and first comming in G4 - John Apostolakis
+//   *  4 June 2019:  Cleanup and add FSAL method 
 
-#ifndef Dormand_Prince_745
-#define Dormand_Prince_745
+#ifndef DORMAND_PRINCE_745
+#define DORMAND_PRINCE_745
 
 #include "G4MagIntegratorStepper.hh"
+#include "G4FieldUtils.hh"
 
 class G4DormandPrince745 : public G4MagIntegratorStepper
 {
-  public:
-    G4DormandPrince745(G4EquationOfMotion *EqRhs,
-					 G4int numberOfVariables = 6,
-					 G4bool primary =  true);
-    ~G4DormandPrince745();
-   
-    void Stepper( const G4double y[],
-                  const G4double dydx[],
-                        G4double h,
-                        G4double yout[],
-                        G4double yerr[] ) ;
+public:
+    G4DormandPrince745(G4EquationOfMotion* equation,
+                       G4int numberOfVariables = 6);
 
-    //For Preparing the Interpolant and calculating the extra stages
-    void SetupInterpolation_low( /* const G4double yInput[],
-                                    const G4double dydx[],
-                                    const G4double Step */ );
-    
+    virtual void Stepper(const G4double yInput[],
+                         const G4double dydx[],
+                         G4double hstep,
+                         G4double yOutput[],
+                         G4double yError[]) override;
+
+    void Stepper(const G4double yInput[],
+                 const G4double dydx[],
+                 G4double hstep,
+                 G4double yOutput[],
+                 G4double yError[],
+                 G4double dydxOutput[]);
+
+    inline void SetupInterpolation() {}
+
     //For calculating the output at the tau fraction of Step
-    void Interpolate_low( /* const G4double yInput[],
-                             const G4double dydx[],
-                             const G4double Step, */ 
-                          G4double yOut[],
-                          G4double tau );
-    
-    inline void SetupInterpolation()
-                            /* ( const G4double yInput[],
-                                 const G4double dydx[],
-                                 const G4double Step ) */
-    { 
-       SetupInterpolation_low( /* yInput, dydx, Step */ );
-       // SetupInterpolation_high( /* yInput, dydx, Step */ );       
-    }
-    
-    //For calculating the output at the tau fraction of Step
-    inline void Interpolate(
-                         /* const G4double yInput[],
-                            const G4double dydx[],
-                            const G4double Step,  */
-                                  G4double tau,    
-                                  G4double yOut[]
-       )
+    inline void Interpolate(G4double tau, G4double yOut[]) const
     {
-        Interpolate_low(  /* yInput, dydx, Step, */  yOut, tau);
-        // Interpolate_high(  /* yInput, dydx, Step, */  yOut, tau);        
+        Interpolate4thOrder(yOut, tau);       
     }
-    
-    void SetupInterpolation_high( /* const G4double yInput[],
-                               const G4double dydx[],
-                               const G4double Step */ );
-    
-    //For calculating the output at the tau fraction of Step
-    void Interpolate_high( /* const G4double yInput[],
-                              const G4double dydx[],
-                              const G4double Step, */ 
-                                 G4double yOut[],
-                                 G4double tau );
 
-    G4double  DistChord() const;
-    G4double DistChord2() const;
-    G4double DistChord3() const;
-   
-    //  Enabling method, with common code between implementations (and steppers)
-    G4double DistLine( G4double yStart[], G4double yMid[], G4double yEnd[] ) const;   
-    G4int IntegratorOrder() const {return 4; }
-    
-    //New copy constructor
-    //  G4DormandPrince745(const G4DormandPrince745 &);
-    
-private :
-    
-    G4DormandPrince745& operator=(const G4DormandPrince745&);
-    
-    G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7,
-      *ak8, *ak9, 	//For additional stages in the interpolant
-      *yTemp, *yIn;
-    
-    G4double fLastStepLength;
-    G4double *fLastInitialVector, *fLastFinalVector,
-             *fInitialDyDx, *fMidVector, *fMidError;
-    // for DistChord calculations
-    
-    G4DormandPrince745* fAuxStepper;
+    virtual G4double DistChord() const override;
+
+    virtual G4int IntegratorOrder() const override { return 4; }
+
+    const field_utils::State& GetYOut() const { return fyOut; }
+
+private:
+    void Interpolate4thOrder(G4double yOut[], G4double tau) const;
+
+    void SetupInterpolation_high();
+    void Interpolate_high(G4double yOut[], G4double tau);
+
+    field_utils::State ak2, ak3, ak4, ak5, ak6, ak7, ak8, ak9;
+    field_utils::State fyIn, fyOut, fdydxIn;
+
+    G4double fLastStepLength = -1.0;
+
 };
-#endif /* defined(__Geant4__G4DormandPrince745__) */
+#endif

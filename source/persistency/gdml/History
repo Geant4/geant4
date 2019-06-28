@@ -16,18 +16,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12 April 2019 Witek Pokorski (gdml-V10-04-06)
+17 May 2019 Witek Pokorski (gdml-V10-05-05)
+- Adding support for writing out assemblies.
+
+2 May 2019 Witek Pokorski (gdml-V10-05-04)
+- Improvement in the optical properties reader allowing to reuse the same
+G4MaterialPropertyVector object for identical properties.
+
+12 April 2019 Witek Pokorski (gdml-V10-05-03)
 - Fixes to BorderSurface and OpticalSurface writer provided by Binbin Qi.
   Addressing problem reports #2143 and #2142.
 
-2 April 2019 Gabriele Cosmo (gdml-V10-04-05)
+2 April 2019 Gabriele Cosmo (gdml-V10-05-02)
 - Added more protections for workers also for writing modules and read.
 
-1 April 2019 Gabriele Cosmo
+1 April 2019 Gabriele Cosmo (gdml-V10-05-01)
 - Added protection to G4GDMLParser::Write() to dump geometry only through
   the master thread. Addressing problem report #2156.
 
-4 March 2019 Gabriele Cosmo
+4 March 2019 Gabriele Cosmo (gdml-V10-05-00)
 - Fix in G4GDMLReadStructure::PhysvolRead() to allow correct import of
   recursive assembly structures. Thanks to B.Qi for the suggested fix.
   Addressing problem report #2141.

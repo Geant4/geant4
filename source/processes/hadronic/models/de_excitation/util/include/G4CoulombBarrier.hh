@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
 //
@@ -53,13 +52,17 @@ public:
 
 private:
 
-  G4CoulombBarrier(const G4CoulombBarrier & right) = delete;
-  const G4CoulombBarrier & operator=(const G4CoulombBarrier & right) = delete;
-  G4bool operator==(const G4CoulombBarrier & right) const = delete;
-  G4bool operator!=(const G4CoulombBarrier & right) const = delete;
+  G4CoulombBarrier(const G4CoulombBarrier & right);
+  const G4CoulombBarrier & operator=(const G4CoulombBarrier & right);
+  G4bool operator==(const G4CoulombBarrier & right) const;
+  G4bool operator!=(const G4CoulombBarrier & right) const;
   
 protected:
 
   G4Pow* g4calc;
+
+private:
+
+  G4double factor; 
 };
 #endif

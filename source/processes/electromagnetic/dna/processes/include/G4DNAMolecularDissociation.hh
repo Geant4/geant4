@@ -44,15 +44,13 @@
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
 
-#ifndef G4MOLECULARDECAYPROCESS_HH
-#define G4MOLECULARDECAYPROCESS_HH
+#pragma once
 
-#include "G4VITRestProcess.hh"
 #include "G4VITRestDiscreteProcess.hh"
 #include <map>
 
 class G4ParticleChange;
-class G4VMolecularDecayDisplacer;
+class G4VMolecularDissociationDisplacer;
 class G4MoleculeDefinition;
 
 /**
@@ -62,104 +60,51 @@ class G4MoleculeDefinition;
   * it will place the products to the expected position.
   */
 
-class G4DNAMolecularDissociation: public G4VITRestDiscreteProcess //G4VITRestProcess
+class G4DNAMolecularDissociation : public G4VITRestDiscreteProcess
 {
 public:
     G4DNAMolecularDissociation(const G4String& processName = "DNAMolecularDecay",
-                            G4ProcessType type = fDecay);
+                               G4ProcessType type = fDecay);
+    G4DNAMolecularDissociation() = delete;
+    G4DNAMolecularDissociation(const G4DNAMolecularDissociation& right) = delete;
+    G4DNAMolecularDissociation& operator=(const G4DNAMolecularDissociation& right) = delete;
+    ~G4DNAMolecularDissociation() override;
 
-    virtual ~G4DNAMolecularDissociation();
+    using Species = const G4MoleculeDefinition;
+    using Displacer = G4VMolecularDissociationDisplacer;
 
-    G4IT_ADD_CLONE(G4VITProcess, G4DNAMolecularDissociation)
+    G4bool IsApplicable(const G4ParticleDefinition&) override;
 
-    virtual G4bool IsApplicable(const G4ParticleDefinition&);
+    G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
+                                                  G4double previousStepSize,
+                                                  G4ForceCondition* condition) override;
 
+    G4double AtRestGetPhysicalInteractionLength(const G4Track& track,
+                                                G4ForceCondition* condition) override;
 
-    virtual G4double
-    PostStepGetPhysicalInteractionLength(const G4Track& track,
-                                         G4double previousStepSize,
-                                         G4ForceCondition* condition);
+    G4VParticleChange* AtRestDoIt(const G4Track& track, const G4Step& step) override;
 
-    inline G4double AtRestGetPhysicalInteractionLength(
-        const G4Track& track,
-        G4ForceCondition* condition
-        );
-    inline G4VParticleChange* AtRestDoIt(
-        const G4Track& track,
-        const G4Step& step
-        );
+    G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step& step) override;
 
-    inline G4VParticleChange* PostStepDoIt(
-        const G4Track& track,
-        const G4Step& step
-        )
-    {
-      return AtRestDoIt(track, step);
-    }
+    void SetVerbose(G4int);
 
-    inline void SetVerbose(G4int);
-
-    //__________________________________________________________________
-    void SetDecayDisplacer(const G4ParticleDefinition*, G4VMolecularDecayDisplacer*);
-    G4VMolecularDecayDisplacer* GetDecayDisplacer(const G4ParticleDefinition*);
-  
-  //__________________________________________________________________
-  void SetDisplacer(const G4ParticleDefinition*, G4VMolecularDecayDisplacer*);
-  G4VMolecularDecayDisplacer* GetDisplacer(const G4ParticleDefinition*);
+    void SetDisplacer(Species*, Displacer*);
+    Displacer* GetDisplacer(Species*);
 
 protected:
-    //__________________________________________________________________
-    // Make the decay
-    virtual G4VParticleChange* DecayIt(const G4Track& ,const G4Step&);
-    virtual G4double GetMeanLifeTime(const G4Track&,G4ForceCondition*);
-    virtual G4double GetMeanFreePath(const G4Track& ,
-                                     G4double ,
-                                     G4ForceCondition* )
-    {
-      return 0;
-    }
+    virtual G4VParticleChange* DecayIt(const G4Track&, const G4Step&);
+
+    G4double GetMeanLifeTime(const G4Track&, G4ForceCondition*) override;
+
+    G4double GetMeanFreePath(const G4Track&,
+                             G4double,
+                             G4ForceCondition*) override;
 
 private:
-    G4DNAMolecularDissociation();
-    G4DNAMolecularDissociation(const G4DNAMolecularDissociation &right);
-    G4DNAMolecularDissociation & operator=(const G4DNAMolecularDissociation &right);
+    using DisplacementMap = std::map<Species*, std::unique_ptr<Displacer>>;
 
-private:
-    G4bool fDecayAtFixedTime ;
-
-    typedef std::map<const G4ParticleDefinition*, G4VMolecularDecayDisplacer*>  DisplacementMap;
+    G4bool fDecayAtFixedTime;
     DisplacementMap fDisplacementMap;
-
     G4int fVerbose;
 };
 
-inline void G4DNAMolecularDissociation::SetVerbose(G4int verbose)
-{
-    fVerbose = verbose ;
-}
-
-inline G4double G4DNAMolecularDissociation::AtRestGetPhysicalInteractionLength(
-    const G4Track& track,
-    G4ForceCondition* condition)
-{
-    if(fDecayAtFixedTime)
-    {
-        return GetMeanLifeTime(track, condition);
-    }
-
-    return G4VITRestDiscreteProcess::AtRestGetPhysicalInteractionLength(track, condition);
-//    return G4VITRestProcess::AtRestGetPhysicalInteractionLength(track, condition);
-}
-
-inline G4VParticleChange* G4DNAMolecularDissociation::AtRestDoIt(
-    const G4Track& track,
-    const G4Step& step
-    )
-{
-    ClearNumberOfInteractionLengthLeft();
-    ClearInteractionTimeLeft();
-    return DecayIt(track, step);
-}
-
-
-#endif /* G4MOLECULARDECAYPROCESS_HH */

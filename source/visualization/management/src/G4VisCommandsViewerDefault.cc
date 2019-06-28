@@ -65,31 +65,37 @@ void G4VisCommandViewerDefaultHiddenEdge::SetNewValue(G4UIcommand*, G4String new
   G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
 
   if (G4UIcommand::ConvertToBool(newValue)) {
-    switch (existingStyle) {
-    case G4ViewParameters::wireframe:
-      vp.SetDrawingStyle(G4ViewParameters::hlr);
-      break;
-    case G4ViewParameters::hlr:
-      break;
-    case G4ViewParameters::hsr:
-      vp.SetDrawingStyle(G4ViewParameters::hlhsr);
-      break;
-    case G4ViewParameters::hlhsr:
-      break;
+    switch (existingStyle) {  // true
+      case G4ViewParameters::wireframe:
+        vp.SetDrawingStyle(G4ViewParameters::hlr);
+        break;
+      case G4ViewParameters::hlr:
+        break;
+      case G4ViewParameters::hsr:
+        vp.SetDrawingStyle(G4ViewParameters::hlhsr);
+        break;
+      case G4ViewParameters::hlhsr:
+        break;
+      case G4ViewParameters::cloud:
+        G4cout << "No effect in cloud style" << G4endl;
+        break;
     }
   }
   else {
-    switch (existingStyle) {
-    case G4ViewParameters::wireframe:
-      break;
-    case G4ViewParameters::hlr:
-      vp.SetDrawingStyle(G4ViewParameters::wireframe);
-      break;
-    case G4ViewParameters::hsr:
-      break;
-    case G4ViewParameters::hlhsr:
-      vp.SetDrawingStyle(G4ViewParameters::hsr);
-      break;
+    switch (existingStyle) {  // false
+      case G4ViewParameters::wireframe:
+        break;
+      case G4ViewParameters::hlr:
+        vp.SetDrawingStyle(G4ViewParameters::wireframe);
+        break;
+      case G4ViewParameters::hsr:
+        break;
+      case G4ViewParameters::hlhsr:
+        vp.SetDrawingStyle(G4ViewParameters::hsr);
+        break;
+      case G4ViewParameters::cloud:
+        G4cout << "No effect in cloud style" << G4endl;
+        break;
     }
   }
 
@@ -109,11 +115,11 @@ G4VisCommandViewerDefaultStyle::G4VisCommandViewerDefaultStyle()
   fpCommand = new G4UIcmdWithAString("/vis/viewer/default/style", this);
   fpCommand->SetGuidance("Default drawing style for future viewers.");
   fpCommand->SetGuidance
-    ("Set style of drawing - w[ireframe] or s[urface].");
+    ("Set style of drawing - w[ireframe] or s[urface] or c[loud].");
   fpCommand->SetGuidance 
     ("(Default hidden line drawing is controlled by \"/vis/viewer/default/hiddenEdge\".)");
   fpCommand->SetParameterName ("style",omitable = false);
-  fpCommand->SetCandidates("w wireframe s surface");
+  fpCommand->SetCandidates("w wireframe s surface c cloud");
 }
 
 G4VisCommandViewerDefaultStyle::~G4VisCommandViewerDefaultStyle()
@@ -137,36 +143,60 @@ void G4VisCommandViewerDefaultStyle::SetNewValue(G4UIcommand*, G4String newValue
   const size_t iPos0 = 0;
   if (newValue[iPos0] == 'w') {  // "wireframe"
     switch (existingStyle) {
-    case G4ViewParameters::wireframe:
-      break;
-    case G4ViewParameters::hlr:
-      break;
-    case G4ViewParameters::hsr:
-      vp.SetDrawingStyle(G4ViewParameters::wireframe);
-      break;
-    case G4ViewParameters::hlhsr:
-      vp.SetDrawingStyle(G4ViewParameters::hlr);
-      break;
+      case G4ViewParameters::wireframe:
+        break;
+      case G4ViewParameters::hlr:
+        break;
+      case G4ViewParameters::hsr:
+        vp.SetDrawingStyle(G4ViewParameters::wireframe);
+        break;
+      case G4ViewParameters::hlhsr:
+        vp.SetDrawingStyle(G4ViewParameters::hlr);
+        break;
+      case G4ViewParameters::cloud:
+        vp.SetDrawingStyle(G4ViewParameters::wireframe);
+        break;
     }
   }
   else if (newValue[iPos0] == 's') {  // "surface"
     switch (existingStyle) {
-    case G4ViewParameters::wireframe:
-      vp.SetDrawingStyle(G4ViewParameters::hsr);
-      break;
-    case G4ViewParameters::hlr:
-      vp.SetDrawingStyle(G4ViewParameters::hlhsr);
-      break;
-    case G4ViewParameters::hsr:
-      break;
-    case G4ViewParameters::hlhsr:
-      break;
+      case G4ViewParameters::wireframe:
+        vp.SetDrawingStyle(G4ViewParameters::hsr);
+        break;
+      case G4ViewParameters::hlr:
+        vp.SetDrawingStyle(G4ViewParameters::hlhsr);
+        break;
+      case G4ViewParameters::hsr:
+        break;
+      case G4ViewParameters::hlhsr:
+        break;
+      case G4ViewParameters::cloud:
+        vp.SetDrawingStyle(G4ViewParameters::hsr);
+        break;
+    }
+  }
+  else if (newValue[iPos0] == 'c') {  // "cloud"
+    switch (existingStyle) {
+      case G4ViewParameters::wireframe:
+        vp.SetDrawingStyle(G4ViewParameters::cloud);
+        break;
+      case G4ViewParameters::hlr:
+        vp.SetDrawingStyle(G4ViewParameters::cloud);
+        break;
+      case G4ViewParameters::hsr:
+        vp.SetDrawingStyle(G4ViewParameters::cloud);
+        break;
+      case G4ViewParameters::hlhsr:
+        vp.SetDrawingStyle(G4ViewParameters::cloud);
+        break;
+      case G4ViewParameters::cloud:
+        break;
     }
   }
   else {
     if (verbosity >= G4VisManager::errors) {
       G4cerr << "ERROR: \"" << newValue << "\" not recognised."
-	"  Looking for 'w' or 's' first character." << G4endl;
+	"  Looking for 'w' or 's' or 'c' first character." << G4endl;
     }
     return;
   }

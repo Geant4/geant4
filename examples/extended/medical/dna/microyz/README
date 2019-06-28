@@ -32,7 +32,12 @@ They are shot from the center of the box.
 3) Physics
 The default Geant4-DNA physics constructor 2 is used in
 the PhysicsList class. Alternative constructor can be
-selected from microyz.in
+selected from microyz.in.
+
+Livermore and Penelope physics lists can be used as well.
+
+Tracking cut and maximum step size can be selected in the macro
+ file microyz.in
 
 4) Scoring of enery deposition
 Energy depositions are scored in spheres randomly

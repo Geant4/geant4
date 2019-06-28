@@ -141,8 +141,8 @@ protected:
   virtual ~G4OpenGLSceneHandler ();
   
   void ProcessScene();
-  G4VSolid* CreateSectionSolid ();
-  G4VSolid* CreateCutawaySolid ();
+  G4DisplacedSolid* CreateSectionSolid ();
+  G4DisplacedSolid* CreateCutawaySolid ();
   
   void ClearAndDestroyAtts();  // Destroys att holders and clears pick map.
   

@@ -53,8 +53,8 @@ public:
 private:
   G4AntiProtonField(const  G4AntiProtonField &right);
   const G4AntiProtonField & operator=(const G4AntiProtonField & right);
-  int operator==(const G4AntiProtonField & right) const;
-  int operator!=(const G4AntiProtonField & right) const;
+  G4bool operator==(const G4AntiProtonField & right) const;
+  G4bool operator!=(const G4AntiProtonField & right) const;
 
 public:
   virtual G4double GetField(const G4ThreeVector & aPosition);

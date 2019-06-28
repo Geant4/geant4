@@ -14,7 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-17-01-19  A. Ribon  (exhadr02-V10-04-04)
+12-06-19  A. Ribon  (exhadr02-V10-05-01)
+- G4CRMCModel : some improvements (e.g. considered the energy-per-nucleon,
+  instead of the whole projectile, in the case of nucleus projectile) and
+  better documentation (in the form of comments in the class).
+
+17-01-19  A. Ribon  (exhadr02-V10-05-00)
 - Fixed bug in the energe range of the transition between FTFP and BERT
   for the recently created CRMC_FTFP_BERT physics list.
 

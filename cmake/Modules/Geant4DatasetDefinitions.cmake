@@ -48,11 +48,11 @@ geant4_add_dataset(
 # - Particle XS - replaces Neutron XS
 geant4_add_dataset(
   NAME      G4PARTICLEXS
-  VERSION   1.1
+  VERSION   2.0
   FILENAME  G4PARTICLEXS
   EXTENSION tar.gz
   ENVVAR    G4PARTICLEXSDATA
-  MD5SUM    17dc6c6f11db7ca81dea1c2c2b3707d2
+  MD5SUM    bc115502d4524ef7625557d9cab355c0
   )
 
 # - PII

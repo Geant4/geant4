@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -577,22 +577,24 @@ Index : 9     used in the geometry : Yes
 
 ====================================================================
 
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 500
-  User=5.370000s Real=8.881610s Sys=0.040000s
+  User=5.520000s Real=7.801751s Sys=0.030000s
 ... write Csv file : Hadrontherapy_h1_Ekin.csv - done
 ... write Csv file : Hadrontherapy_h1_Edep.csv - done
 ... write Csv files :  - done
 Graphics systems deleted.
 Visualization Manager deleting...
-The simulation took: 13.4309 s to run (real time)
+The simulation took: 11.6726 s to run (real time)
 Dose is being written to Dose.out
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.26 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.48 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

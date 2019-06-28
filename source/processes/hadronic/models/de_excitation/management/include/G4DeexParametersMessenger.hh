@@ -84,6 +84,7 @@ private:
   G4UIcmdWithABool*          corgCmd;
 
   G4UIcmdWithAnInteger*      maxjCmd;
+  G4UIcmdWithAnInteger*      verbCmd;
 
 };
 

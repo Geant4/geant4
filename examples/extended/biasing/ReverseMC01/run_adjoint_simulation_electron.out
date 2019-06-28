@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -152,6 +152,8 @@ Index : 4     used in the geometry : Yes
 
 ====================================================================
 
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ### Run 0 start.
 
@@ -315,11 +317,11 @@ nb event 175000
 1%  Precision reached!
  Run terminated.
 Run Summary
-  Run Aborted after 175814 events processed.
-  User=77.900000s Real=78.495986s Sys=0.110000s
+  Run Aborted after 176016 events processed.
+  User=81.460000s Real=81.996199s Sys=0.090000s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.0016228
-error[MeV] = 1.62274e-05
+normalised edep [MeV] = 0.00165411
+error[MeV] = 1.65409e-05
 
 ----> Histogram Tree is saved in adjoint_sim.root
 Graphics systems deleted.

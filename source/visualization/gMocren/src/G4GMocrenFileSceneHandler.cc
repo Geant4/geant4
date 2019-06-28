@@ -42,8 +42,6 @@
 #include <iomanip>
 
 #include "globals.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4VisManager.hh"
 
 #include "G4GMocrenFile.hh"
@@ -89,6 +87,9 @@
 
 #include "G4ScoringManager.hh"
 #include "G4ScoringBox.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //----- constants
 const char  GDD_FILE_HEADER      [] = "g4_";

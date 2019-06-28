@@ -64,17 +64,17 @@ const G4ParticleGun& G4ParticleGun::operator=(const G4ParticleGun &right)
 }
 
 /////////////////////////////////////////////////////////////////
-G4int G4ParticleGun::operator==(const G4ParticleGun &right) const
+G4bool G4ParticleGun::operator==(const G4ParticleGun &right) const
 /////////////////////////////////////////////////////////////////
 {
-  return 0;
+  return false;
 }
 
 /////////////////////////////////////////////////////////////////
-G4int G4ParticleGun::operator!=(const G4ParticleGun &right) const
+G4bool G4ParticleGun::operator!=(const G4ParticleGun &right) const
 /////////////////////////////////////////////////////////////////
 {
-  return 0;
+  return false;
 }
 
 #endif

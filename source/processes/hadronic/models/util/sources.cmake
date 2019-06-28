@@ -64,6 +64,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_util
         G4LegendrePolynomial.hh
         G4NuclearFermiDensity.hh
         G4NuclearPolarizationStore.hh
+        G4NuclearRadii.hh
         G4NuclearShellModelDensity.hh
         G4Nucleon.hh
         G4Parton.hh
@@ -91,6 +92,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_util
         G4LegendrePolynomial.cc
         G4NuclearFermiDensity.cc
         G4NuclearPolarizationStore.cc
+        G4NuclearRadii.cc
         G4NuclearShellModelDensity.cc
         G4Nucleon.cc
         G4Parton.cc

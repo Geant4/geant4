@@ -50,14 +50,14 @@ const G4V3DNucleus & G4V3DNucleus::operator=(const G4V3DNucleus &)
 }
 
 
-int G4V3DNucleus::operator==(const G4V3DNucleus &) const
+G4bool G4V3DNucleus::operator==(const G4V3DNucleus &) const
 {
-  return 0;
+  return false;
 }
 
-int G4V3DNucleus::operator!=(const G4V3DNucleus &) const
+G4bool G4V3DNucleus::operator!=(const G4V3DNucleus &) const
 {
-  return 1;
+  return true;
 }
 
 

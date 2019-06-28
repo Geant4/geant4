@@ -238,7 +238,7 @@ void LXeEventAction::EndOfEventAction(const G4Event* anEvent){
   run->IncHitsAboveThreshold(fPMTsAboveThreshold);
 
   //If we have set the flag to save 'special' events, save here
-  if(fPhotonCount_Scint + fPhotonCount_Ceren <= fDetector->GetSaveThreshold())
+  if(fPhotonCount_Scint + fPhotonCount_Ceren < fDetector->GetSaveThreshold())
   {
     G4RunManager::GetRunManager()->rndmSaveThisEvent();
   }

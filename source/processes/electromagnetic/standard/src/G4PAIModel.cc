@@ -300,7 +300,9 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   if( deltaTkin > tmax) { deltaTkin = tmax; }
 
-  const G4Element* anElement = SelectRandomAtom(matCC,fParticle,kineticEnergy);
+  const G4Element* anElement = SelectTargetAtom(matCC, fParticle, kineticEnergy,
+                                                dp->GetLogKineticEnergy());
+
   G4int Z = G4lrint(anElement->GetZ());
  
   G4DynamicParticle* deltaRay = new G4DynamicParticle(fElectron, 

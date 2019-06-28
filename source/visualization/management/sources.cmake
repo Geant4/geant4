@@ -63,7 +63,6 @@ GEANT4_DEFINE_MODULE(NAME G4vis_management
         G4VViewer.hh
         G4VViewer.icc
         G4VVisCommand.hh
-        G4VVisCommand.icc
         G4ViewParameters.hh
         G4ViewParameters.icc
         G4ViewerList.hh

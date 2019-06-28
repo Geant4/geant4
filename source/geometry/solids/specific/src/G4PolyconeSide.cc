@@ -54,7 +54,10 @@ G4PlSideManager G4PolyconeSide::subInstanceManager;
 // This macro changes the references to fields that are now encapsulated
 // in the class G4PlSideData.
 //
-#define G4MT_pcphi ((subInstanceManager.offset[instanceID]).fPhi)
+#define G4MT_pcphix ((subInstanceManager.offset[instanceID]).fPhix)
+#define G4MT_pcphiy ((subInstanceManager.offset[instanceID]).fPhiy)
+#define G4MT_pcphiz ((subInstanceManager.offset[instanceID]).fPhiz)
+#define G4MT_pcphik ((subInstanceManager.offset[instanceID]).fPhik)
 
 // Returns the private data instance manager.
 //
@@ -84,8 +87,7 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
 
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fSurfaceArea = 0.0;
-  G4MT_pcphi.first = G4ThreeVector(0,0,0);
-  G4MT_pcphi.second= 0.0;
+  G4MT_pcphix = 0.0; G4MT_pcphiy = 0.0; G4MT_pcphiz = 0.0; G4MT_pcphik = 0.0;
 
   //
   // Record values
@@ -885,16 +887,17 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 G4double G4PolyconeSide::GetPhi( const G4ThreeVector& p )
 {
   G4double val=0.;
+  G4ThreeVector vphi(G4MT_pcphix, G4MT_pcphiy, G4MT_pcphiz);
 
-  if (G4MT_pcphi.first != p)
+  if (vphi != p)
   {
     val = p.phi();
-    G4MT_pcphi.first = p;
-    G4MT_pcphi.second = val;
+    G4MT_pcphix = p.x(); G4MT_pcphiy = p.y(); G4MT_pcphiz = p.z();
+    G4MT_pcphik = val;
   }
   else
   {
-    val = G4MT_pcphi.second;
+    val = G4MT_pcphik;
   }
   return val;
 }

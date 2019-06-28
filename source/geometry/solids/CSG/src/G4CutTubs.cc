@@ -589,8 +589,8 @@ G4ThreeVector G4CutTubs::SurfaceNormal( const G4ThreeVector& p ) const
       distSPhi = 0.; 
       distEPhi = 0.; 
     }
-    nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
-    nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
+    nPs = G4ThreeVector( sinSPhi, -cosSPhi, 0 );
+    nPe = G4ThreeVector( -sinEPhi, cosEPhi, 0 );
   }
   if ( rho > halfCarTolerance ) { nR = G4ThreeVector(p.x()/rho,p.y()/rho,0); }
 
@@ -752,12 +752,12 @@ G4ThreeVector G4CutTubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
     }
     case kNSPhi:
     {
-      norm = G4ThreeVector(std::sin(fSPhi), -std::cos(fSPhi), 0) ;
+      norm = G4ThreeVector(sinSPhi, -cosSPhi, 0) ;
       break ;
     }
     case kNEPhi:
     {
-      norm = G4ThreeVector(-std::sin(fSPhi+fDPhi), std::cos(fSPhi+fDPhi), 0) ;
+      norm = G4ThreeVector(-sinEPhi, cosEPhi, 0) ;
       break;
     }
     default:      // Should never reach this case ...
@@ -1282,7 +1282,7 @@ G4double G4CutTubs::DistanceToIn( const G4ThreeVector& p ) const
      //
      cosPsi = (p.x()*cosCPhi + p.y()*sinCPhi)/rho ;
      
-     if ( cosPsi < std::cos(fDPhi*0.5) )
+     if ( cosPsi < cosHDPhi )
      {
        // Point lies outside phi range
  
@@ -1884,16 +1884,16 @@ G4ThreeVector G4CutTubs::GetPointOnSurface() const
   else if( (chose >= aOne + aTwo + 2.*aThr)
         && (chose < aOne + aTwo + 2.*aThr + aFou) )
   {
-    xRand = rRand*std::cos(fSPhi);
-    yRand = rRand*std::sin(fSPhi);
+    xRand = rRand*cosSPhi;
+    yRand = rRand*sinSPhi;
     zRand = G4RandFlat::shoot(GetCutZ(G4ThreeVector(xRand,yRand,-fDz)),
                               GetCutZ(G4ThreeVector(xRand,yRand,fDz)));
     return G4ThreeVector  (xRand, yRand, zRand);
   }
   else
   {
-    xRand = rRand*std::cos(fSPhi+fDPhi);
-    yRand = rRand*std::sin(fSPhi+fDPhi);
+    xRand = rRand*cosEPhi;
+    yRand = rRand*sinEPhi;
     zRand = G4RandFlat::shoot(GetCutZ(G4ThreeVector(xRand,yRand,-fDz)),
                               GetCutZ(G4ThreeVector(xRand,yRand,fDz)));
     return G4ThreeVector  (xRand, yRand, zRand);
@@ -2069,23 +2069,23 @@ void G4CutTubs::GetMaxMinZ(G4double& zmin,G4double& zmax)const
     if (phiHigh>twopi)  { phiHigh-=twopi; }
   }
 
-  xc = fRMin*std::cos(fSPhi);
-  yc = fRMin*std::sin(fSPhi);
+  xc = fRMin*cosSPhi;
+  yc = fRMin*sinSPhi;
   z[0] = GetCutZ(G4ThreeVector(xc, yc, -fDz));
   z[4] = GetCutZ(G4ThreeVector(xc, yc, fDz));
  
-  xc = fRMin*std::cos(fSPhi+fDPhi);
-  yc = fRMin*std::sin(fSPhi+fDPhi);
+  xc = fRMin*cosEPhi;
+  yc = fRMin*sinEPhi;
   z[1] = GetCutZ(G4ThreeVector(xc, yc, -fDz));
   z[5] = GetCutZ(G4ThreeVector(xc, yc, fDz));
  
-  xc = fRMax*std::cos(fSPhi);
-  yc = fRMax*std::sin(fSPhi);
+  xc = fRMax*cosSPhi;
+  yc = fRMax*sinSPhi;
   z[2] = GetCutZ(G4ThreeVector(xc, yc, -fDz));
   z[6] = GetCutZ(G4ThreeVector(xc, yc, fDz));
  
-  xc = fRMax*std::cos(fSPhi+fDPhi);
-  yc = fRMax*std::sin(fSPhi+fDPhi);
+  xc = fRMax*cosEPhi;
+  yc = fRMax*sinEPhi;
   z[3] = GetCutZ(G4ThreeVector(xc, yc, -fDz));
   z[7] = GetCutZ(G4ThreeVector(xc, yc, fDz));
  

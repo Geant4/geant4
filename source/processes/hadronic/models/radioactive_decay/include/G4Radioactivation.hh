@@ -103,14 +103,28 @@ class G4Radioactivation : public G4RadioactiveDecayBase
     inline G4int GetVerboseLevel() const {return verboseLevel;}
     // Returns the VerboseLevel which controls level of debugging output
 
+    // Controls whether G4Radioactivation runs in analogue mode or
+    // variance reduction mode.  SetBRBias, SetSplitNuclei and
+    // SetSourceTimeProfile all turn off analogue mode and use VR mode
+    inline void SetAnalogueMonteCarlo (G4bool r ) {
+      AnalogueMC = r;
+      if (!AnalogueMC) halflifethreshold = 1e-6*CLHEP::s;
+    }
+
+    // Returns true if the simulation is an analogue Monte Carlo, and false if
+    // any of the biassing schemes have been selected.
+    inline G4bool IsAnalogueMonteCarlo () {return AnalogueMC;}
+
      // Sets whether branching ration bias scheme applies.
     inline void SetBRBias(G4bool r) {
       BRBias = r;
-     }
+      AnalogueMC = false;
+    }
 
     // Sets the number of times a nucleus will decay when biased
     inline void SetSplitNuclei(G4int r) {
       NSplit = r;
+      AnalogueMC = false;
     }
 
     //  Returns the nuclear splitting number
@@ -137,6 +151,7 @@ class G4Radioactivation : public G4RadioactiveDecayBase
 
   private:
 
+    G4bool AnalogueMC;
     G4bool BRBias;
     G4int NSplit;
 
@@ -158,8 +173,6 @@ class G4Radioactivation : public G4RadioactiveDecayBase
     std::vector<G4RadioactivityTable*> theRadioactivityTables;
     G4int decayWindows[100];
 
-    // Remainder of life time at rest
-//    G4double fRemainderLifeTime;
     G4int verboseLevel;
 
 };

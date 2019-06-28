@@ -61,9 +61,9 @@ class G4FragmentingString
       ~G4FragmentingString();
 
       G4FragmentingString& operator=(const G4FragmentingString &);
-      int operator==(const G4FragmentingString &right) const;
+      G4bool operator==(const G4FragmentingString &right) const;
 
-      int operator!=(const G4FragmentingString &right) const;
+      G4bool operator!=(const G4FragmentingString &right) const;
 
       
       G4LorentzVector Get4Momentum() const;
@@ -118,13 +118,13 @@ class G4FragmentingString
 };
 
 inline
-int G4FragmentingString::operator==(const G4FragmentingString &right) const
+G4bool G4FragmentingString::operator==(const G4FragmentingString &right) const
 {
 	return this == &right;
 }
 
 inline
-int G4FragmentingString::operator!=(const G4FragmentingString &right) const
+G4bool G4FragmentingString::operator!=(const G4FragmentingString &right) const
 {
 	return this != &right;
 }

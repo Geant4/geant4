@@ -47,8 +47,8 @@
 using namespace std;
 
 G4PolarizationTransition::G4PolarizationTransition() 
-  : fVerbose(0), fTwoJ1(0), fTwoJ2(0), fLbar(1), fL(0), fDelta(0), kEps(1.e-15), 
-    kPolyPDF(0, nullptr, -1, 1)
+  : fVerbose(1), fTwoJ1(0), fTwoJ2(0), fLbar(1), fL(0), fDelta(0), 
+    kEps(1.e-15), kPolyPDF(0, nullptr, -1, 1)
 {}
 
 G4PolarizationTransition::~G4PolarizationTransition() 
@@ -112,7 +112,7 @@ G4double G4PolarizationTransition::GenerateGammaCosTheta(const POLAR& pol)
   vector<G4double> polyPDFCoeffs(length, 0.0);
   for(size_t k = 0; k < length; k += 2) {
     if ((pol[k]).size() > 0 ) {
-      if(std::abs(((pol)[k])[0].imag()) > kEps && fVerbose > 0) {
+      if(fVerbose > 1 && std::abs(((pol)[k])[0].imag()) > kEps) {
         G4cout << "G4PolarizationTransition::GenerateGammaCosTheta WARNING: \n"
 	     << "          fPolarization[" 
 	     << k << "][0] has imag component: = " 
@@ -131,7 +131,7 @@ G4double G4PolarizationTransition::GenerateGammaCosTheta(const POLAR& pol)
       return G4UniformRand()*2.-1.; 
     }
   }
-  if(polyPDFCoeffs[polyPDFCoeffs.size()-1] == 0 && fVerbose > 0) {
+  if(fVerbose > 1 && polyPDFCoeffs[polyPDFCoeffs.size()-1] == 0) {
     G4cout << "G4PolarizationTransition::GenerateGammaCosTheta: WARNING: "
            << "got zero highest-order coefficient." << G4endl;
     DumpTransitionData(pol);
@@ -175,7 +175,7 @@ G4double G4PolarizationTransition::GenerateGammaPhi(G4double& cosTheta,
         if(kappa > 0) tmpAmp *= 2.*G4Exp(0.5*(LnFactorial(k-kappa) - LnFactorial(k+kappa)));
         cAmpSum += ((pol)[k])[kappa]*tmpAmp;
       } else {
-	if(fVerbose > 0) {
+	if(fVerbose > 1) {
 	  G4cout << "G4PolarizationTransition::GenerateGammaPhi: WARNING: \n"
 		 << " size of pol[" << k << "] = " << (pol[k]).size()
 		 << " returning isotropic " << G4endl;
@@ -183,7 +183,7 @@ G4double G4PolarizationTransition::GenerateGammaPhi(G4double& cosTheta,
         return G4UniformRand()*CLHEP::twopi;
       }
     }
-    if(kappa == 0 && std::abs(cAmpSum.imag()) > kEps && fVerbose > 0) {
+    if(fVerbose > 1 && kappa == 0 && std::abs(cAmpSum.imag()) > kEps) {
       G4cout << "G4PolarizationTransition::GenerateGammaPhi: WARNING: \n"
 	     << "    Got complex amp for kappa = 0! A = " << cAmpSum.real() 
 	     << " + " << cAmpSum.imag() << "*i" << G4endl;
@@ -196,7 +196,7 @@ G4double G4PolarizationTransition::GenerateGammaPhi(G4double& cosTheta,
   // assuming that all of the phases line up at a max)
   G4double pdfMax = 0.;
   for(size_t kappa = 0; kappa < length; ++kappa) { pdfMax += amp[kappa]; }
-  if(pdfMax < kEps && fVerbose > 0) {
+  if(fVerbose > 1 && pdfMax < kEps) {
     G4cout << "G4PolarizationTransition::GenerateGammaPhi: WARNING "
 	   << "got pdfMax = 0 for \n";
     DumpTransitionData(pol);
@@ -213,16 +213,17 @@ G4double G4PolarizationTransition::GenerateGammaPhi(G4double& cosTheta,
     for(size_t kappa = 1; kappa < length; ++kappa) {
       pdfSum += amp[kappa]*std::cos(phi*kappa + phase[kappa]);
     }
-    if(pdfSum > pdfMax && fVerbose > 0) {
+    if(fVerbose > 1 && pdfSum > pdfMax) {
       G4cout << "G4PolarizationTransition::GenerateGammaPhi: WARNING: \n"
              << "got pdfSum (" << pdfSum << ") > pdfMax (" 
 	     << pdfMax << ") at phi = " << phi << G4endl;
     }
     if(prob <= pdfSum) { return phi; }
   }
-  if(fVerbose > 0) {
+  if(fVerbose > 1) {
     G4cout << "G4PolarizationTransition::GenerateGammaPhi: WARNING: \n"
-	   << "no phi generated in 1000 throws! Returning isotropic phi..." << G4endl;
+	   << "no phi generated in 1000 throws! Returning isotropic phi..." 
+           << G4endl;
   }
   return G4UniformRand()*CLHEP::twopi;
 }
@@ -234,7 +235,7 @@ void G4PolarizationTransition::SampleGammaTransition(
 		   G4double& cosTheta, G4double& phi)
 {
   if(nucpol == nullptr) {
-    if(fVerbose > 0) {
+    if(fVerbose > 1) {
       G4cout << "G4PolarizationTransition::SampleGammaTransition ERROR: "
              << "cannot update NULL nuclear polarization" << G4endl;
     }
@@ -245,9 +246,10 @@ void G4PolarizationTransition::SampleGammaTransition(
   fLbar  = L0;
   fL     = Lp;
   fDelta = mpRatio;
-  if(fVerbose > 1) {
+  if(fVerbose > 2) {
     G4cout << "G4PolarizationTransition: 2J1= " << fTwoJ1 << " 2J2= " << fTwoJ2
-	   << " Lbar= " << fLbar << " delta= " << fDelta << " Lp= " << fL << G4endl;
+	   << " Lbar= " << fLbar << " delta= " << fDelta << " Lp= " << fL 
+           << G4endl;
     G4cout << *nucpol << G4endl;
   }
 
@@ -261,12 +263,12 @@ void G4PolarizationTransition::SampleGammaTransition(
   const POLAR& pol = nucpol->GetPolarization();
 
   cosTheta = GenerateGammaCosTheta(pol);
-  if(fVerbose > 1) {
+  if(fVerbose > 2) {
     G4cout << "G4PolarizationTransition::SampleGammaTransition: cosTheta= " 
 	   << cosTheta << G4endl;
   }
   phi = GenerateGammaPhi(cosTheta, pol);
-  if(fVerbose > 1) {
+  if(fVerbose > 2) {
     G4cout << "G4PolarizationTransition::SampleGammaTransition: phi= " 
 	   << phi << G4endl;
   }
@@ -334,7 +336,7 @@ void G4PolarizationTransition::SampleGammaTransition(
   }
 
   // sanity checks
-  if(0.0 == newPol[0][0] && fVerbose > 1) {
+  if(fVerbose > 2 && 0.0 == newPol[0][0]) {
     G4cout << "G4PolarizationTransition::SampleGammaTransition WARNING:"
 	   << " P[0][0] is zero!" << G4endl;
     G4cout << "Old pol is: " << *nucpol << G4endl;
@@ -343,7 +345,7 @@ void G4PolarizationTransition::SampleGammaTransition(
     nucpol->Unpolarize();
     return;
   }
-  if(std::abs((newPol[0])[0].imag()) > kEps && fVerbose > 1) {
+  if(fVerbose > 2 && std::abs((newPol[0])[0].imag()) > kEps) {
     G4cout << "G4PolarizationTransition::SampleGammaTransition WARNING: \n"
 	   << " P[0][0] has a non-zero imaginary part! Unpolarizing..." 
 	   << G4endl;
@@ -377,7 +379,7 @@ void G4PolarizationTransition::SampleGammaTransition(
   (newPol[0])[0] = 1.0;
 
   nucpol->SetPolarization(newPol);
-  if(fVerbose > 1) {
+  if(fVerbose > 2) {
     G4cout << "Updated polarization: " << *nucpol << G4endl;
   }
 }

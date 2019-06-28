@@ -91,7 +91,6 @@ if test "x${have_multithreading}" = "xyes" ; then
   if test "x${geant4_tls_model}" = "xauto" ; then
     geant4_tls_model=""
   fi
-  cflags="${cflags} -DG4MULTITHREADED"
 else
   geant4_tls_model=""
 fi
@@ -126,10 +125,6 @@ libs="-lG4interfaces \
 # - ALL
 geant4_uses_opengl="no"
 geant4_uses_x11="no"
-
-# - Muonic Atom support
-have_muonic_atoms="@G4_BUILTWITH_MUONIC_ATOMS@"
-feature_list="${feature_list} muonic_atoms[${have_muonic_atoms}]"
 
 # - CLHEP
 have_clhep="@G4_BUILTWITH_CLHEP@"

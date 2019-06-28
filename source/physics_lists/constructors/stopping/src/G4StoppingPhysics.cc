@@ -39,6 +39,9 @@
 //                       G4StoppingPhysics.
 // 17-Oct-2012 A. Ribon: added nuclear capture at rest of anti-nuclei with
 //                       Fritof/Precompound.
+// 22-May-2019 A. Ribon: added annihilation at rest with Fritiof/Precompound
+//                       for neutral anti-hadrons: anti-neutron, anti-lambda
+//                       anti-sigma0 nd anti-xi0.
 //
 //----------------------------------------------------------------------------
 
@@ -144,14 +147,18 @@ void G4StoppingPhysics::ConstructProcess() {
       }
     }
 
-    if ( particle->GetPDGCharge() < 0.0       && 
+    if ( particle->GetPDGCharge() <= 0.0      && 
          particle->GetPDGMass() > mThreshold  &&
          ! particle->IsShortLived() ) {
 
-      // Use Fritiof/Precompound for: anti-protons, anti-sigma+, and
-      // anti-nuclei.
-      if ( particle == G4AntiProton::AntiProton() ||
-           particle == G4AntiSigmaPlus::AntiSigmaPlus() ||
+      // Use Fritiof/Precompound for: anti-proton, anti-neutron, anti-lambda, 
+      //                              anti-sigma0, anti-sigma+, anti-xi0 and anti-nuclei.
+      if ( particle == G4AntiProton::Definition()     ||
+           particle == G4AntiNeutron::Definition()    ||
+           particle == G4AntiLambda::Definition()     ||
+           particle == G4AntiSigmaZero::Definition()  ||
+           particle == G4AntiSigmaPlus::Definition()  ||
+           particle == G4AntiXiZero::Definition()     ||
            particle->GetBaryonNumber() < -1 ) {  // Anti-nuclei
         if ( hFritiofProcess->IsApplicable( *particle ) ) {
           pmanager->AddRestProcess( hFritiofProcess );
@@ -162,11 +169,11 @@ void G4StoppingPhysics::ConstructProcess() {
         }
 
       // Use Bertini/Precompound for pi-, K-, Sigma-, Xi-, and Omega-
-      } else if ( particle == G4PionMinus::PionMinus() ||
-                  particle == G4KaonMinus::KaonMinus() ||
-                  particle == G4SigmaMinus::SigmaMinus() ||
-                  particle == G4XiMinus::XiMinus() ||
-                  particle == G4OmegaMinus::OmegaMinus() ) {
+      } else if ( particle == G4PionMinus::Definition()   ||
+                  particle == G4KaonMinus::Definition()   ||
+                  particle == G4SigmaMinus::Definition()  ||
+                  particle == G4XiMinus::Definition()     ||
+                  particle == G4OmegaMinus::Definition() ) {
         if ( hBertiniProcess->IsApplicable( *particle ) ) {
           pmanager->AddRestProcess( hBertiniProcess );
           if ( verbose > 1 ) {

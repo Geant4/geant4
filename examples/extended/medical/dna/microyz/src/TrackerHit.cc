@@ -83,9 +83,9 @@ const TrackerHit& TrackerHit::operator=(const TrackerHit& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int TrackerHit::operator==(const TrackerHit& right) const
+G4bool TrackerHit::operator==(const TrackerHit& right) const
 {
-  return ( this == &right ) ? 1 : 0;
+  return ( this == &right ) ? true : false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -13,6 +13,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+07-05-19 I. Hrivnacova (exampleES2-V10-05-00)
+- Fixed warning about "Attempting to add multiple times the same
+  sensitive detector".
+  Thanks to Sussanna G. for pointing at this.
+
 09-05-18 B. Morgan (exampleES2-V10-04-03)
 - Include G4Types before use of G4MULTITHREADED. For forward
   compatibility with move to #defines over -D for G4 preprocessor

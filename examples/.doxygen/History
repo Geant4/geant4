@@ -17,6 +17,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7/5/19 I.Hrivnacova (doxygen-V10-05-00)
+- Fixes in documentation:
+  - Linking of geant4.tag in standalone documentation
+  - Formatting in extended/.README.txt
+  - Fixed links to icsd and mfp examples in extended/medical/dna/.README.txt
+
 9/11/18 I.Hrivnacova (doxygen-V10-04-01)
 - Added chem5 example
 

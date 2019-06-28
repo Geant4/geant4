@@ -14,6 +14,36 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14 May 2019 - A.Ribon           (hadr-cohe-V10-05-03)
+--------------------------------------------------------
+- G4HadronElastic : numerically safer treatment of the very rare cases
+    in which cos(theta) is either greater than 1.0 or smaller than -1.0
+    (in the first case, we assume no interaction and the projectile keeps
+    going unchanged; in the second case, we assume that the projectile
+    stops and its kinetic energy is deposited locally, neglecting the
+    recoil of the target nucleus).
+
+10 May 2019 - V.Ivanchenko      (hadr-cohe-V10-05-02)
+--------------------------------------------------------
+- G4ElasticHadrNucleusHE, G4LEpp, G4LEnp - clean-up
+- G4LowEHadronElastic - new model class
+
+29 April 2019 - V.Ivanchenko    (hadr-cohe-V10-05-01)
+--------------------------------------------------------
+- G4HadronElastic - added protected variable pLocalTmax, added protection 
+    for zero energy primary;
+  G4ChargeExchange - updated interfaces, added protection for zero 
+    energy primary
+  G4ElasticHadrNucleusHE - make all data shared between threads
+  G4AntiNuclElastic - do not compute trigonametric functions, 
+  which are not used
+
+19 April 2019 - V.Ivanchenko    (hadr-cohe-V10-05-00)
+--------------------------------------------------------
+- G4HadronElastic - removed tracking cut and use numerically safer 
+  computation for very low-energy projectile; improved description 
+  and comments; added C++11 keywords
+
 05 November 2018 - V.Ivanchenko    (hadr-cohe-V10-04-08)
 --------------------------------------------------------
 - G4HadronElastic - fixed numberical instability when 

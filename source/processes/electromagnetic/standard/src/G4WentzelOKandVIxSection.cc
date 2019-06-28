@@ -137,6 +137,11 @@ void G4WentzelOKandVIxSection::Initialise(const G4ParticleDefinition* p,
     fMottXSection = new G4ScreeningMottCrossSection();
     fMottXSection->Initialise(p, 1.0);
   }
+  /*
+  G4cout << "G4WentzelOKandVIxSection::Initialise for " 
+	 << p->GetParticleName() << " cosThetaMax= " << cosThetaMax 
+	 << "  " << ScreenRSquare[0] << " coeff= " << coeff << G4endl;
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -181,11 +186,6 @@ void G4WentzelOKandVIxSection::InitialiseA()
 
 void G4WentzelOKandVIxSection::SetupParticle(const G4ParticleDefinition* p)
 {
-  /*
-  G4cout << "G4WentzelOKandVIxSection::SetupParticle " << p 
-	 << "  " << particle << "  " << this << G4endl; 
-  G4cout << this << "  " << p->GetParticleName() << G4endl; 
-  */
   particle = p;
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();
@@ -253,6 +253,8 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     cosTetMaxElec = 1.0;
     ComputeMaxElectronScattering(cut); 
   }
+  //G4cout << "SetupTarget:  Z= " << targetZ << " kinFactor= " << kinFactor
+  //	 << " fMottFactor= " << fMottFactor << " screenZ= " << screenZ <<G4endl;
   return cosTetMaxNuc2;
 } 
 

@@ -31,12 +31,12 @@
 #include "G4UIsession.hh"
 
 G4int G4UIsession::inSession = 0;
-G4UIsession::G4UIsession() : ifBatch(0) 
+G4UIsession::G4UIsession() : ifBatch(0) , lastRC(0)
 {
  inSession++;
 }
 
-G4UIsession::G4UIsession(G4int iBatch) : ifBatch(iBatch) 
+G4UIsession::G4UIsession(G4int iBatch) : ifBatch(iBatch) , lastRC(0)
 {;}
 
 G4UIsession::~G4UIsession() 

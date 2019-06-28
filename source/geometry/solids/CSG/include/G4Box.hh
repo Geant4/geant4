@@ -28,7 +28,7 @@
 // --------------------------------------------------------------------
 // GEANT 4 class header file
 //
-// 
+//
 // G4Box
 //
 // Class description:
@@ -48,6 +48,8 @@
 #ifndef G4BOX_HH
 #define G4BOX_HH
 
+#include "G4GeomTypes.hh"
+
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UBOX 1
 #endif
@@ -60,7 +62,7 @@
 #include "G4CSGSolid.hh"
 #include "G4Polyhedron.hh"
 
-class G4Box : public G4CSGSolid 
+class G4Box : public G4CSGSolid
 {
   public:  // with description
 
@@ -106,7 +108,7 @@ class G4Box : public G4CSGSolid
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
-    G4ThreeVector GetPointOnSurface() const; 
+    G4ThreeVector GetPointOnSurface() const;
 
     G4VSolid* Clone() const;
 
@@ -126,7 +128,7 @@ class G4Box : public G4CSGSolid
       // persistifiable objects.
 
     G4Box(const G4Box& rhs);
-    G4Box& operator=(const G4Box& rhs); 
+    G4Box& operator=(const G4Box& rhs);
       // Copy constructor and assignment operator.
 
   private:

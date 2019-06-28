@@ -14,6 +14,21 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 June 2019 A. Ribon (hadr-man-V10-05-02)
+---------------------------------------------------
+- G4EnergyRangeManager : fixed bug regarding the kinetic energy per nucleon
+  in the case of anti-nuclei (the bug was harmless because one single model,
+  FTFP, is used for all energies in the case of anti-nuclei projectiles).
+
+03 June 2019 V. Ivanchenko (hadr-man-V10-05-01)
+---------------------------------------------------
+- G4HadronicProcess - removed try/couch pattern from computation of mean
+    free path, removed final state random rotation  
+ 
+08 May 2019 V. Ivanchenko (hadr-man-V10-05-00)
+---------------------------------------------------
+- G4HadronicInelasticProcess - removed default GHEISHA cross section
+
 08 November 2018 V. Ivanchenko (hadr-man-V10-04-12)
 07 November 2018 V. Ivanchenko (hadr-man-V10-04-10)
 06 November 2018 V. Ivanchenko (hadr-man-V10-04-09)

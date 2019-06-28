@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -366,6 +366,8 @@ Index : 6     used in the geometry : Yes
 
 ====================================================================
 
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ### Run : 0 (master)
 WARNING: Scene "none" not found.
@@ -374,7 +376,7 @@ Opening output file xraytel ...  done
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.030000s Real=0.026532s Sys=0.000000s
+  User=0.010000s Real=0.012217s Sys=0.000000s
 ##########################################
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 Graphics systems deleted.

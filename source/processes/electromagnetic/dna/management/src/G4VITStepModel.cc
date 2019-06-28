@@ -35,56 +35,23 @@
 #include "G4VITStepModel.hh"
 
 G4VITStepModel::G4VITStepModel(const G4String& aName)
+    : G4VITStepModel(nullptr, nullptr, aName)
 {
-    //ctor
-    fpTimeStepper        = 0;
-    fpReactionProcess    = 0;
-    fpReactionTable      = 0;
-
-    fType1              = -1;
-    fType2              = -1;
-    fName               = aName;
 }
 
-G4VITStepModel::~G4VITStepModel()
+G4VITStepModel::G4VITStepModel(std::unique_ptr<G4VITTimeStepComputer> pTimeStepper,
+                               std::unique_ptr<G4VITReactionProcess> pReactionProcess,
+                               const G4String& aName)
+    : fName(aName)
+    , fpTimeStepper(std::move(pTimeStepper))
+    , fpReactionProcess(std::move(pReactionProcess))
+    , fpReactionTable(nullptr)
+    , fType1(-1)
+    , fType2(-1)
 {
-    //dtor
-    if(fpTimeStepper)        delete fpTimeStepper;
-    if(fpReactionProcess)    delete fpReactionProcess;
-    //if(fReactionTable)      delete fReactionTable;
-    // Let the concrete class delete the reactionTable
 }
 
-G4VITStepModel::G4VITStepModel(const G4VITStepModel& right)
-{
-    //copy ctor
-    fName               = right.fName;
-    fType1              = right.fType1;
-    fType2              = right.fType2;
-    fpReactionTable     = 0;
-    fpTimeStepper     = right.fpTimeStepper->Clone();
-    fpReactionProcess = right.fpReactionProcess->Clone();
-}
-
-// should not be used
-G4VITStepModel& G4VITStepModel::operator=(const G4VITStepModel& right)
-{
-    if (this == &right) return *this; // handle self assignment
-
-    fName               = right.fName;
-    fType1              = right.fType1;
-    fType2              = right.fType2;
-    fpReactionTable      = 0;
-    if(fpTimeStepper) delete fpTimeStepper;
-    fpTimeStepper        = right.fpTimeStepper->Clone();
-    if(fpReactionProcess) delete fpReactionProcess;
-    fpReactionProcess    = right.fpReactionProcess->Clone();
-
-    //assignment operator
-    return *this;
-}
-
-void G4VITStepModel::IsApplicable(G4ITType& type1, G4ITType& type2)
+void G4VITStepModel::GetApplicable(G4ITType& type1, G4ITType& type2)
 {
     type1 = fType1;
     type2 = fType2;
@@ -97,4 +64,34 @@ void G4VITStepModel::Initialize()
     fpTimeStepper->SetReactionTable(fpReactionTable);
     fpTimeStepper->Initialize();
     fpReactionProcess->Initialize();
+}
+
+void G4VITStepModel::PrepareNewTimeStep()
+{
+    fpTimeStepper->Prepare();
+}
+
+void G4VITStepModel::SetReactionTable(G4ITReactionTable* pReactionTable)
+{
+    fpReactionTable = pReactionTable;
+}
+
+const G4ITReactionTable* G4VITStepModel::GetReactionTable()
+{
+    return fpReactionTable ;
+}
+
+G4VITTimeStepComputer* G4VITStepModel::GetTimeStepper()
+{
+    return fpTimeStepper.get();
+}
+
+G4VITReactionProcess* G4VITStepModel::GetReactionProcess()
+{
+    return fpReactionProcess.get();
+}
+
+const G4String& G4VITStepModel::GetName()
+{
+    return fName;
 }

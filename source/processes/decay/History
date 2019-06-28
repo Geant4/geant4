@@ -16,8 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- 14 December 2018 Makoto Asai (decay-V10-04-00)
+- 14 December 2018 Makoto Asai (decay-V10-05-00)
 - G4Decay.cc, G4UnknownDecay : Allowing absolute zero proper decay time.
+  Co-working with event-V10-05-00 and particles-V10-05-00
 
 - 12 September 2017 Krzysztof Genser (decay-V10-03-04)
 - Moved Muonic Atom files to processes/hadronic/stopping

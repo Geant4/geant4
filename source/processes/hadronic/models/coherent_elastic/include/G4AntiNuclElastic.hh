@@ -47,16 +47,15 @@ class G4AntiNuclElastic : public G4HadronElastic
 {
 public:
 
-  G4AntiNuclElastic();
+  explicit G4AntiNuclElastic();
 
-  virtual ~G4AntiNuclElastic();
+  ~G4AntiNuclElastic() override;
  
-  virtual G4double SampleInvariantT(const G4ParticleDefinition* p, 
-				    G4double plab,
-				    G4int Z, G4int A);
+  G4double SampleInvariantT(const G4ParticleDefinition* p, 
+                            G4double plab, G4int Z, G4int A) override;
 
  G4double SampleThetaCMS(const G4ParticleDefinition* p, G4double plab, 
- G4int Z, G4int A);
+                         G4int Z, G4int A);
 
  G4double SampleThetaLab(const G4ParticleDefinition* p, 
                                 G4double plab, G4int Z, G4int A);
@@ -88,10 +87,10 @@ private:
   G4AntiNuclElastic(const G4AntiNuclElastic&);
 
   G4ComponentAntiNuclNuclearXS* cs;    //cross section of antiA-A interaction
+  const G4ParticleDefinition*  fParticle;
 
   G4double fTetaCMS;        //  sampled Theta in CMS 
   G4double fThetaLab;        //sampled Theta in Lab system
-  const G4ParticleDefinition*  fParticle;
   G4double fWaveVector;
   G4double fBeta;         // velosity of projectile 
   G4double fZommerfeld;   // parameter of Zommerfeld for calculation of Coulomb cross-section

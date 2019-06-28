@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -182,6 +182,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
 ### Run 0 starts.
 ### Run 0 start.
 --> Event 0 starts.
@@ -189,39 +191,39 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.080000s Real=0.076494s Sys=0.000000s
+  User=0.070000s Real=0.074396s Sys=0.000000s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
  Process calls frequency --->
-	Transportation = 31082
-	pol-compt = 247
-	pol-eBrem = 323
-	msc = 1679
-	pol-eIoni = 586
-	pol-phot = 163
+	Transportation = 31198
+	pol-compt = 273
+	pol-eBrem = 339
+	pol-phot = 157
+	pol-eIoni = 590
 	pol-conv = 218
-	pol-annihil = 53
+	msc = 1682
+	pol-annihil = 66
  Gamma: 
-Mean Number per Event :1.0036
-Mean Energy :9.6289 MeV +- 1.7861 MeV
-Mean Polarization :-0.96894 +- 0.17095
+Mean Number per Event :1.0089
+Mean Energy :9.568 MeV +- 1.9382 MeV
+Mean Polarization :-0.96282 +- 0.18587
  Electron: 
-Mean Number per Event :0.0334
-Mean Energy :5.1865 MeV +- 2.5002 MeV
-Mean Polarization :-0.72122 +- 0.29799
+Mean Number per Event :0.0352
+Mean Energy :5.3354 MeV +- 2.5102 MeV
+Mean Polarization :-0.72706 +- 0.29245
  Positron: 
-Mean Number per Event :0.0171
-Mean Energy :4.222 MeV +- 2.0916 MeV
-Mean Polarization :-0.58519 +- 0.34217
+Mean Number per Event :0.0158
+Mean Energy :4.1553 MeV +- 2.0307 MeV
+Mean Polarization :-0.61047 +- 0.28026
 ... write Root file : pol01.root - done
 ... close Root file : pol01.root - done
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.447712 0.436395 0.886232 0.255581 0.600726 0.0189115 0.0503416 0.905132 0.101332 0.164019 0.0210468 0.500174 0.642739 0.0313798 0.439157 0.600835 0.209763 0.199544 0.574678 0.157237 0.253073 0.285816 0.183246 0.132469 
- i_lag = 14, j_lag = 0
- carry = 5.96046e-08, count24 = 2
+ float_seed_table[] = 0.564175 0.55382 0.0379403 0.494735 0.891048 0.0179662 0.910863 0.559054 0.95513 0.295018 0.274368 0.484574 0.365144 0.950522 0.00705117 0.114351 0.394937 0.928496 0.103677 0.535047 0.32307 0.576281 0.181624 0.931424 
+ i_lag = 7, j_lag = 17
+ carry = 5.96046e-08, count24 = 4
  luxury = 3 nskip = 199
 ----------------------------------------
 #
@@ -244,11 +246,11 @@ Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00192 MB
-Pool ID '7G4Track', size : 0.00385 MB
+Pool ID '7G4Track', size : 0.00288 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.019 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.018 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

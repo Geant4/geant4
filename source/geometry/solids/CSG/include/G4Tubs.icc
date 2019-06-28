@@ -92,6 +92,8 @@ void G4Tubs::Initialize()
 {
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
+  fInvRmax= 1.0 / fRMax;
+  fInvRmin= fRMin > 0. ? 1.0 / fRMin : 0.0;
   fRebuildPolyhedron = true;
 }
 
@@ -104,6 +106,7 @@ void G4Tubs::InitializeTrigonometry()
 
   sinCPhi    = std::sin(cPhi);
   cosCPhi    = std::cos(cPhi);
+  cosHDPhi   = std::cos(hDPhi);
   cosHDPhiIT = std::cos(hDPhi - 0.5*kAngTolerance); // inner/outer tol half dphi
   cosHDPhiOT = std::cos(hDPhi + 0.5*kAngTolerance);
   sinSPhi = std::sin(fSPhi);
@@ -288,4 +291,13 @@ G4double G4Tubs::GetSurfaceArea()
     }
   }
   return fSurfaceArea;
+}
+
+inline
+G4double G4Tubs::FastInverseRxy( const G4ThreeVector& pos, G4double invRad, G4double tolerance ) const
+{
+  G4double rho2      = sqr( pos.x() ) + sqr( pos.y() );
+  G4bool   onSurface = std::fabs( rho2 * invRad * invRad - 1.0 ) < tolerance;
+  G4double invRho = onSurface ? invRad : 1.0 / sqrt(rho2);
+  return   invRho;
 }

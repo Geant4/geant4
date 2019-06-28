@@ -59,8 +59,8 @@ class G4VSplitableHadron
 
     virtual ~G4VSplitableHadron();
 
-    int operator==(const G4VSplitableHadron &right) const;
-    int operator!=(const G4VSplitableHadron &right) const;
+    G4bool operator==(const G4VSplitableHadron &right) const;
+    G4bool operator!=(const G4VSplitableHadron &right) const;
 
     void Set4Momentum(const G4LorentzVector &a4Momentum);
     const G4LorentzVector & Get4Momentum() const;

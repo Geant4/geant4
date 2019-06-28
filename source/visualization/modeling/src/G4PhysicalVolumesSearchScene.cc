@@ -28,8 +28,8 @@
 // 
 // John Allison  5th September 2018, based on G4PhysicalVolumeSearchScene
 // An artificial scene to find physical volumes. Instead of returning the
-// first occurence (G4PhysicalVolumeSearchScene) this class (note the extra
-// 's' in the name of this class) returns a vector of all occurences.
+// first occurrence (G4PhysicalVolumeSearchScene) this class (note the extra
+// 's' in the name of this class) returns a vector of all occurrences.
 
 #include "G4PhysicalVolumesSearchScene.hh"
 
@@ -49,6 +49,7 @@ void G4PhysicalVolumesSearchScene::ProcessVolume (const G4VSolid&)
   G4VPhysicalVolume* pCurrentPV = fpSearchVolumesModel->GetCurrentPV();
   const G4String& name = pCurrentPV->GetName();
   G4int copyNo = fpSearchVolumesModel->GetCurrentPVCopyNo();
+
   // Match the name with the required physical volume name. The latter can be of
   // the form "/regexp/", where regexp is a regular expression (see C++ regex),
   // or a plain name, in which case there must be an exact match.

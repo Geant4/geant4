@@ -287,6 +287,12 @@ G4bool G4ReplicatedSlice::IsReplicated() const
 }
 
 //--------------------------------------------------------------------------
+G4int G4ReplicatedSlice::GetMultiplicity() const
+{
+  return fnReplicas;
+}
+
+//--------------------------------------------------------------------------
 G4VPVParameterisation* G4ReplicatedSlice::GetParameterisation() const
 {
   return fparam;

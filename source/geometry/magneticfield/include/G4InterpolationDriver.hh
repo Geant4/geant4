@@ -37,22 +37,25 @@
 // - Created. D.Sorokin
 // --------------------------------------------------------------------
 
-#ifndef G4InterpolationDriver_HH
-#define G4InterpolationDriver_HH
+#ifndef G4INTERPOLATION_DRIVER_HH
+#define G4INTERPOLATION_DRIVER_HH
 
 #include "G4RKIntegrationDriver.hh"
+#include "G4FieldUtils.hh"
 
-using State = G4double[G4FieldTrack::ncompSVEC];
+#include "globals.hh"
+
+#include <vector>
+#include <memory>
+
 
 template <class T>
 class G4InterpolationDriver : public G4RKIntegrationDriver<T> {
 public:
-    G4InterpolationDriver(  G4double hminimum,
-                          T*       stepper,
-                          G4int    numberOfComponents = 6,
-                          G4int    statisticsVerbosity = 1);
-
-    virtual ~G4InterpolationDriver() override;
+    G4InterpolationDriver(G4double hminimum,
+                          T* stepper,
+                          G4int numberOfComponents = 6,
+                          G4int statisticsVerbosity = 1);
 
     G4InterpolationDriver(const G4InterpolationDriver &) = delete;
     const G4InterpolationDriver& operator =(const G4InterpolationDriver &) = delete;
@@ -64,9 +67,10 @@ public:
 
     virtual void OnStartTracking() override
     {
-        fhnext = 0;
-        fChordStepEstimate = 0;
-    };
+        fChordStepEstimate = DBL_MAX;
+        fhnext = DBL_MAX;
+        fTotalStepsForTrack = 0;
+    }
 
     // Integrates ODE from current s (s=s0) to s=s0+h with accuracy eps.
     // On output track is replaced by value at end of interval.
@@ -76,71 +80,84 @@ public:
                                    G4double eps,                     // Requested y_err/hstep
                                    G4double hinitial = 0) override;  // Suggested 1st interval
 
-    virtual void SetVerboseLevel(G4int newLevel) override;
-    virtual G4int GetVerboseLevel() const override;
-
     virtual void OnComputeStep() override 
     { 
-        fIntegrationInterval = {DBL_MAX, -DBL_MAX}; 
+        fKeepLastStepper = false;
+        fFirstStep = true;
+        fLastStepper = fSteppers.end();
     }
 
-    // Accessors.
-    G4double GetMinimumStep() const;
-    void SetMinimumStep(G4double newval);
+    virtual void SetVerboseLevel(G4int level) override { fVerboseLevel = level; }
+    virtual G4int GetVerboseLevel() const override { return fVerboseLevel; }
+
+private:
+    struct InterpStepper {
+        std::unique_ptr<T> stepper;
+        G4double begin;
+        G4double end;
+        G4double inverseLength;
+    };
+
+    using StepperIterator = typename std::vector<InterpStepper>::iterator;
+    using ConstStepperIterator = typename std::vector<InterpStepper>::const_iterator;
 
     // This takes one Step that is of size htry, or as large 
     // as possible while satisfying the accuracy criterion of:
     //     yerr < eps * |y_end-y_start|
-    void OneGoodStep(const G4double  yVar[],  // InOut
-                     const G4double  dydx[],
-                           G4double  htry,
-                           G4double  eps,
-                           G4double& hdid,
-                           G4double& hnext);
+    // return hdid
+    G4double OneGoodStep(StepperIterator it,
+                         field_utils::State& y,
+                         field_utils::State& dydx,
+                         G4double& hstep,
+                         G4double eps,
+                         G4double curveLength);
 
-     G4double GetSmallestFraction() const;
-     void SetSmallestFraction(G4double val);
+    void Interpolate(G4double curveLength, field_utils::State& y) const;
 
-private:
-    G4double FindNextChord(State& y,
-                           G4double hstart,
-                           G4double hmax,
-                           G4double chordDistance);
-    G4double BinsearchChord(State& y,
-                           G4double hstart,
-                           G4double hmax,
-                           G4double chordDistance);
+    void InterpolateImpl(G4double curveLength, 
+                         ConstStepperIterator it, 
+                         field_utils::State& y) const;
 
+    G4double DistChord(const field_utils::State& yBegin, 
+                       G4double curveLengthBegin, 
+                       const field_utils::State& yEnd, 
+                       G4double curveLengthEnd) const;
 
-    void CheckStep(const G4ThreeVector& posIn, 
-                   const G4ThreeVector& posOut, 
-                   G4double hdid);
+    G4double FindNextChord(const field_utils::State& yBegin,
+                           G4double curveLengthBegin,
+                           field_utils::State& yEnd,
+                           G4double curveLengthEnd,
+                           G4double dChord,
+                           G4double maxChordDistance);
 
-    std::pair<G4double, G4double> fIntegrationInterval;
-    G4double fhnext;
+    G4double CalcChordStep(G4double stepTrialOld, 
+                           G4double dChordStep,
+                           G4double fDeltaChord);
+
+    void PrintState() const;
+
+    void CheckState() const;
+
+    std::vector<InterpStepper> fSteppers;
+    typename std::vector<InterpStepper>::iterator fLastStepper;
+    G4bool fKeepLastStepper = false;
+
+    G4double fhnext = DBL_MAX;
 
     // Minimum Step allowed in a Step (in absolute units)
     G4double fMinimumStep;
 
-    // Smallest fraction of (existing) curve length - in relative units
-    // below this fraction the current step will be the last
-    G4double fSmallestFraction;
-    //  Expected range: smaller than 0.1 * epsilon and bigger than 5e-13
-    //    ( Note: this range is not enforced. )
+    G4double fChordStepEstimate = DBL_MAX;
+    const G4double fFractionNextEstimate = 0.98;
+    const G4double fSmallestCurveFraction = 0.01;
 
-    // Verbosity level for printing (debug, ..)
-    // Could be varied during tracking - to help identify issues
     G4int fVerboseLevel;
 
-    G4int fNoAdvanceChordLimitedCalls;
-    G4int fNoAdvanceChordLimitedSmallSteps;
-    G4int fNoAdvanceChordLimitedFullSteps;
-    G4int fNoAccurateAdvanceCalls;    
-    G4int fNoAccurateAdvanceBadSteps;
-    G4int fNoAccurateAdvanceGoodSteps;
-    G4int fMaxTrials;
+    field_utils::State fdydx;
+    G4bool fFirstStep = true;
 
-    G4double fChordStepEstimate = 0;
+    const G4int fMaxTrials = 100; 
+    G4int fTotalStepsForTrack = 0;
 
     using Base = G4RKIntegrationDriver<T>;
 };

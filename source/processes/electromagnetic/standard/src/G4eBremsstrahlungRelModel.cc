@@ -561,13 +561,10 @@ G4eBremsstrahlungRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vd
   }
   //
   SetupForMaterial(fPrimaryParticle, couple->GetMaterial(), kineticEnergy);
-  const G4Element* elem = SelectRandomAtom(couple, fPrimaryParticle, kineticEnergy,
-                                          tmin, tmax);
-//  const G4Element* elem = SelectTargetAtom(couple,fPrimaryParticle,kineticEnergy,
-//                                           logKineticEnergy, fElemSelectorEkinIndx,
-//                                           tmin,tmax);
+  const G4Element* elm = SelectTargetAtom(couple,fPrimaryParticle,kineticEnergy,
+                                          dp->GetLogKineticEnergy(),tmin,tmax);
   //
-  fCurrentIZ = elem->GetZasInt();
+  fCurrentIZ = elm->GetZasInt();
   const ElementData* elDat = gElementData[fCurrentIZ];
   const G4double funcMax = elDat->fZFactor1+elDat->fZFactor2;
   // get the random engine

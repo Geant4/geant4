@@ -126,7 +126,7 @@ AccurateAdvance(G4FieldTrack& track, G4double hstep,
         std::min(eps * hstep, fSmallestFraction * startCurveLength);
 
     G4double h = hstep;
-    if (hinitial > perMillion * hstep && hinitial < hstep)
+    if (hinitial > CLHEP::perMillion * hstep && hinitial < hstep)
     {
         h = hinitial;
     }
@@ -316,7 +316,7 @@ CheckStep( const G4ThreeVector& posIn,
            const G4ThreeVector& posOut, G4double hdid)
 {
     const G4double endPointDist = (posOut - posIn).mag();
-    if (endPointDist >= hdid * (1. + perMillion))
+    if (endPointDist >= hdid * (1. + CLHEP::perMillion))
     {
         ++fNoAccurateAdvanceBadSteps;
 #ifdef G4DEBUG_FIELD

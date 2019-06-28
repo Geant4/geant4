@@ -94,6 +94,7 @@ G4EmDNAPhysics_stationary_option4::G4EmDNAPhysics_stationary_option4(G4int ver)
   param->SetAuger(true);  
   param->SetAugerCascade(true);  
   param->SetDeexcitationIgnoreCut(true);
+  param->ActivateDNA();
 
   SetPhysicsType(bElectromagnetic);
 }

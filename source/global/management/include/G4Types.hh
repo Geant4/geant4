@@ -32,6 +32,11 @@
 #ifndef G4TYPES_HH
 #define G4TYPES_HH
 
+// Fundamental definitions
+#ifndef G4GMAKE
+#include "G4GlobalConfig.hh"
+#endif
+
 #ifdef WIN32
   // Disable warning C4786 on WIN32 architectures:
   // identifier was truncated to '255' characters

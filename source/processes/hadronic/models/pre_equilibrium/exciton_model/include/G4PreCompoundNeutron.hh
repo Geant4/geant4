@@ -58,8 +58,8 @@ private:
   G4PreCompoundNeutron(const G4PreCompoundNeutron &right);
   const G4PreCompoundNeutron& 
   operator= (const G4PreCompoundNeutron &right);
-  G4int operator==(const G4PreCompoundNeutron &right) const;
-  G4int operator!=(const G4PreCompoundNeutron &right) const;    
+  G4bool operator==(const G4PreCompoundNeutron &right) const;
+  G4bool operator!=(const G4PreCompoundNeutron &right) const;    
 
   G4NeutronCoulombBarrier theNeutronCoulombBarrier;
 };

@@ -59,13 +59,13 @@ public:
   }
 
   // Equality only true for same object (tests by address)
-  bool operator==(const G4Fancy3DNucleusHelper &right) const
+  G4bool operator==(const G4Fancy3DNucleusHelper &right) const
   {
     return (this == &right);
   }
 
   // Sorting on size value
-  bool operator<(const G4Fancy3DNucleusHelper &right) const
+  G4bool operator<(const G4Fancy3DNucleusHelper &right) const
   {
     return (Size < right.Size);
   }

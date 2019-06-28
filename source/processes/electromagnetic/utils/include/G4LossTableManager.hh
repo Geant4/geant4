@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -37,29 +35,7 @@
 //
 // Creation date: 03.01.2002
 //
-// Modifications:
-//
-// 20-01-03 Migrade to cut per region (V.Ivanchenko)
-// 17-02-03 Fix problem of store/restore tables for ions (V.Ivanchenko)
-// 10-03-03 Add Ion registration (V.Ivanchenko)
-// 25-03-03 Add deregistration (V.Ivanchenko)
-// 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
-// 02-04-03 Change messenger (V.Ivanchenko)
-// 23-07-03 Add exchange with G4EnergyLossTables (V.Ivanchenko)
-// 05-10-03 Add G4VEmProcesses registration (V.Ivanchenko)
-// 17-10-03 Add SetParameters method (V.Ivanchenko)
-// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
-// 14-01-04 Activate precise range calculation (V.Ivanchenko)
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-// 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
-// 20-01-06 Introduce GetSubDEDX method (VI)
-// 26-01-06 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
-// 10-05-06 Add methods  SetMscStepLimitation, FacRange and MscFlag (VI)
-// 22-05-06 Add methods  Set/Get bremsTh (VI)
-// 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
-// 18-06-07 Move definition of msc parameters to G4EmProcessOptions (V.Ivanchenko)
-// 12-04-10 Added PreparePhsyicsTables and BuildPhysicsTables entries (V.Ivanchenko)
-// 04-06-13 Adaptation for MT mode, new method LocalPhysicsTables (V.Ivanchenko)  
+// Modifications by V.Ivanchenko  
 //
 // Class Description:
 //
@@ -93,6 +69,7 @@ class G4Region;
 class G4EmSaturation;
 class G4EmConfigurator;
 class G4ElectronIonPair;
+class G4NIELCalculator;
 class G4VMultipleScattering;
 class G4VEmProcess;
 
@@ -106,12 +83,6 @@ public:
   static G4LossTableManager* Instance();
 
   ~G4LossTableManager();
-
-  //-------------------------------------------------
-  // called from destructor
-  //-------------------------------------------------
-
-  void Clear();
 
   //-------------------------------------------------
   // initialisation before a new run
@@ -178,6 +149,7 @@ public:
 
   //-------------------------------------------------
   // Methods to be called only at initialisation
+  // and at the end of the job
   //-------------------------------------------------
 
   void Register(G4VEnergyLossProcess* p);
@@ -191,6 +163,10 @@ public:
   void Register(G4VEmProcess* p);
 
   void DeRegister(G4VEmProcess* p);
+
+  void Register(G4VProcess* p);
+
+  void DeRegister(G4VProcess* p);
 
   void Register(G4VEmModel* p);
 
@@ -208,6 +184,8 @@ public:
   void SetAtomDeexcitation(G4VAtomDeexcitation*);
 
   void SetSubCutProducer(G4VSubCutProducer*);
+
+  void SetNIELCalculator(G4NIELCalculator*);
 
   //-------------------------------------------------
   // Access methods
@@ -228,6 +206,8 @@ public:
   G4EmConfigurator* EmConfigurator();
 
   G4ElectronIonPair* ElectronIonPair();
+
+  G4NIELCalculator* NIELCalculator();
 
   inline G4EmCorrections* EmCorrections();
 
@@ -252,6 +232,8 @@ private:
   //-------------------------------------------------
 
   G4LossTableManager();
+
+  void Clear();
 
   void ResetParameters();
 
@@ -287,6 +269,7 @@ private:
   std::vector<G4VEmProcess*> emp_vector;
   std::vector<G4VEmModel*> mod_vector;
   std::vector<G4VEmFluctuationModel*> fmod_vector;
+  std::vector<G4VProcess*> p_vector;
 
   // cache
   G4VEnergyLossProcess* currentLoss;
@@ -305,6 +288,7 @@ private:
   G4EmCorrections*            emCorrections;
   G4EmConfigurator*           emConfigurator;
   G4ElectronIonPair*          emElectronIonPair;
+  G4NIELCalculator*           nielCalculator;
   G4VAtomDeexcitation*        atomDeexcitation;
   G4VSubCutProducer*          subcutProducer;
 

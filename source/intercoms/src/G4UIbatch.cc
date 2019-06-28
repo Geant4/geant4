@@ -75,6 +75,7 @@ G4UIbatch::G4UIbatch(const char* fileName, G4UIsession* prevSession)
     G4cerr << "ERROR: Can not open a macro file <"
            << fileName << ">. Set macro path with \"/control/macroPath\" if needed."
            << G4endl;
+    lastRC = fParameterUnreadable;
   } else {
     isOpened= true;
   }
@@ -215,6 +216,7 @@ G4UIsession * G4UIbatch::SessionStart()
     G4int rc= ExecCommand(newCommand);
     if(rc != fCommandSucceeded) {
       G4cerr << G4endl << "***** Batch is interrupted!! *****" << G4endl;
+      lastRC = rc;
       break;
     }
   }

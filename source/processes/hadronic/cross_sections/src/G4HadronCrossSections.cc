@@ -37,7 +37,6 @@
 #include "G4HadronCrossSections.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4HadronicException.hh"
 #include "G4Pow.hh"
 #include "G4Threading.hh"
  
@@ -1706,13 +1705,6 @@ G4HadronCrossSections::GetParticleCode(const G4DynamicParticle* aParticle)
     case -3334:
       ipart = 34;  // anti-omega-
       break;
-      /*
-    default:      
-      throw G4HadronicException(__FILE__, __LINE__,
-	"G4HadronCrossSections::GetParticleCode: unsupported particle "
-	+ aParticle->GetDefinition()->GetParticleName());
-      return 0;
-      */
   }
 
   return ipart;

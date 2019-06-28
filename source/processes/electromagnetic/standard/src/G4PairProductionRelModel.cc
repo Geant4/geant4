@@ -356,7 +356,8 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   if (eps0 > 0.5) { return; }
   // 
   // select target atom of the material
-  const G4Element* anElement = SelectRandomAtom(couple, fTheGamma, gammaEnergy);
+  const G4Element* anElement = SelectTargetAtom(couple, fTheGamma, gammaEnergy,
+                                         aDynamicGamma->GetLogKineticEnergy());
   CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
   //
   // 'eps' is the total energy transferred to one of the e-/e+ pair in initial

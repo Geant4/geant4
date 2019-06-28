@@ -26,7 +26,6 @@
 /// \file hadronic/Hadr01/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-//
 //---------------------------------------------------------------------------
 //
 // ClassName:   HistoManager

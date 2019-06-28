@@ -33,8 +33,8 @@
 //
 
 #include "G4NucleonNuclearCrossSection.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
 #include "G4ComponentBarNucleonNucleusXsc.hh"
@@ -43,9 +43,6 @@
 #include "G4CrossSectionFactory.hh"
 //
 G4_DECLARE_XS_FACTORY(G4NucleonNuclearCrossSection);
-
-
-using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -65,7 +62,6 @@ G4NucleonNuclearCrossSection::~G4NucleonNuclearCrossSection()
 {}
 
 ////////////////////////////////////////////////////////////////////////////
-//
 
 G4bool G4NucleonNuclearCrossSection::IsElementApplicable(
        const G4DynamicParticle*, G4int Z, const G4Material*)
@@ -74,7 +70,6 @@ G4bool G4NucleonNuclearCrossSection::IsElementApplicable(
 }
 
 ////////////////////////////////////////////////////////////////////////////
-//
 
 G4double G4NucleonNuclearCrossSection::GetElementCrossSection(
          const G4DynamicParticle* dp, G4int Z, const G4Material*)
@@ -84,7 +79,6 @@ G4double G4NucleonNuclearCrossSection::GetElementCrossSection(
 }
 
 ////////////////////////////////////////////////////////////////////////////
-//
 
 void G4NucleonNuclearCrossSection::ComputeCrossSections(
             const G4ParticleDefinition* pd, 
@@ -96,9 +90,14 @@ void G4NucleonNuclearCrossSection::ComputeCrossSections(
   fElasticXsc = fBarash->GetElasticXsc();
 }
 
+////////////////////////////////////////////////////////////////////////////
+
+void G4NucleonNuclearCrossSection::BuildPhysicsTable(const G4ParticleDefinition& part)
+{
+  fBarash->BuildPhysicsTable(part);
+}
 
 ////////////////////////////////////////////////////////////////////////////
-//
 
 void
 G4NucleonNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) const
@@ -110,4 +109,6 @@ G4NucleonNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) con
           << "G4BGGNucleonInelasticXS.  It is valid for incident energies up\n"
           << "to 1 TeV.\n"; 
 }
+
+////////////////////////////////////////////////////////////////////////////
 

@@ -98,12 +98,12 @@ const G4VSplitableHadron & G4VSplitableHadron::operator=(const G4VSplitableHadro
 }
 
 
-int G4VSplitableHadron::operator==(const G4VSplitableHadron &right) const
+G4bool G4VSplitableHadron::operator==(const G4VSplitableHadron &right) const
 {
   return this==&right;
 }
 
-int G4VSplitableHadron::operator!=(const G4VSplitableHadron &right) const
+G4bool G4VSplitableHadron::operator!=(const G4VSplitableHadron &right) const
 {
   return this!=&right;
 }

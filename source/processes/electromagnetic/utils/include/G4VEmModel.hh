@@ -284,6 +284,14 @@ public:
                                            G4double kineticEnergy,
                                            G4double cutEnergy = 0.0,
                                            G4double maxEnergy = DBL_MAX);
+  // same as SelectRandomAtom above but more efficient since log-ekin is known
+  inline const G4Element* SelectTargetAtom(const G4MaterialCutsCouple*,
+                                           const G4ParticleDefinition*,
+                                           G4double kineticEnergy,
+                                           G4double logKineticEnergy,
+                                           G4double cutEnergy = 0.0,
+                                           G4double maxEnergy = DBL_MAX);
+
 
   // to select atom cross section per volume is recomputed for each element 
   const G4Element* SelectRandomAtom(const G4Material*,
@@ -429,6 +437,7 @@ protected:
   const std::vector<G4double>* theDensityFactor;
   const std::vector<G4int>*    theDensityIdx;
   size_t                       idxTable;
+  size_t                       fIdxTableElmSelector;
   G4bool                       lossFlucFlag;
   G4double                     inveplus;       
 
@@ -558,6 +567,26 @@ G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
   fCurrentIsotope = nullptr;
   return fCurrentElement;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline const G4Element*
+G4VEmModel::SelectTargetAtom(const G4MaterialCutsCouple* couple,
+                             const G4ParticleDefinition* part,
+                             G4double kinEnergy,
+                             G4double logKinEnergy,
+                             G4double cutEnergy,
+                             G4double maxEnergy)
+{
+  fCurrentCouple = couple;
+  fCurrentElement = (nSelectors > 0)
+   ? ((*elmSelectors)[couple->GetIndex()])->SelectRandomAtom(kinEnergy,
+                      logKinEnergy, fIdxTableElmSelector)
+   : SelectRandomAtom(couple->GetMaterial(),part,kinEnergy,cutEnergy,maxEnergy);
+  fCurrentIsotope = nullptr;
+  return fCurrentElement;
+}
+
 
 // ======== Get/Set inline methods used at initialisation ================
 

@@ -43,18 +43,18 @@ class EventAction : public G4UserEventAction
 {
   public:
     EventAction();
-   ~EventAction();
+   ~EventAction() override;
 
-  public:
-    virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
+    void BeginOfEventAction(const G4Event*) override;
+    void   EndOfEventAction(const G4Event*) override;
     
-    void AddEdep(G4double Edep)    {fTotalEnergyDeposit += Edep;};      
-    G4double GetEnergyDeposit()    {return fTotalEnergyDeposit;};    
-            
+    inline void AddEdep(G4double Edep)    {fTotalEnergyDeposit += Edep;};
+    inline void AddNIEL(G4double Edep)    {fNIEL += Edep;};
+    inline G4double GetEnergyDeposit()    {return fTotalEnergyDeposit;};
     
   private:
-    G4double fTotalEnergyDeposit;   
+    G4double fTotalEnergyDeposit;
+    G4double fNIEL;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

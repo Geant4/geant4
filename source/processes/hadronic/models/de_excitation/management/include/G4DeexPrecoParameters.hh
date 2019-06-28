@@ -97,6 +97,8 @@ public:
 
   inline G4int GetTwoJMAX() const;
 
+  inline G4int GetVerbose() const;
+
   inline G4bool NeverGoBack() const;
 
   inline G4bool UseSoftCutoff() const;
@@ -154,6 +156,8 @@ public:
   void SetDeexModelType(G4int);
 
   void SetTwoJMAX(G4int);
+
+  void SetVerbose(G4int);
 
   void SetNeverGoBack(G4bool);
 
@@ -237,6 +241,8 @@ private:
   // Preco model
   G4int fMinZForPreco;
   G4int fMinAForPreco;
+
+  G4int fVerbose;
 
   // Preco flags
   G4bool fNeverGoBack;
@@ -339,6 +345,11 @@ inline G4int G4DeexPrecoParameters::GetDeexModelType() const
 inline G4int G4DeexPrecoParameters::GetTwoJMAX() const
 {
   return fTwoJMAX;
+}
+
+inline G4int G4DeexPrecoParameters::GetVerbose() const
+{
+  return fVerbose;
 }
 
 inline G4bool G4DeexPrecoParameters::NeverGoBack() const

@@ -48,12 +48,6 @@
 #include "G4EmMessenger.hh"
 
 class G4BertiniElectroNuclearBuilder;
-class G4SynchrotronRadiation;
-class G4GammaConversionToMuons;
-class G4AnnihiToMuPair;
-class G4eeToHadrons;
-class G4NeutrinoElectronProcess;
-class G4NeutrinoElectronTotXsc;
 
 class G4EmExtraPhysics : public G4VPhysicsConstructor
 {
@@ -91,35 +85,28 @@ public:
 
 private:
 
-  static G4bool gnActivated;
-  static G4bool gLENDActivated;
-  static G4bool eActivated;
-  static G4bool munActivated;
-  static G4bool synActivated;
-  static G4bool synActivatedForAll;
-  static G4bool gmumuActivated;
-  static G4bool pmumuActivated;
-  static G4bool phadActivated;
-  static G4bool fNuActivated;
-  static G4bool fNuETotXscActivated;
+  G4bool gnActivated;
+  G4bool eActivated;
+  G4bool gLENDActivated;
+  G4bool munActivated;
+  G4bool synActivated;
+  G4bool synActivatedForAll;
+  G4bool gmumuActivated;
+  G4bool pmumuActivated;
+  G4bool phadActivated;
+  G4bool fNuActivated;
+  G4bool fNuETotXscActivated;
 
-  static G4double gmumuFactor;
-  static G4double pmumuFactor;
-  static G4double phadFactor;
-  static G4double fNuEleCcBias;
-  static G4double fNuEleNcBias;
-  static G4double fNuNucleusBias;
+  G4double gmumuFactor;
+  G4double pmumuFactor;
+  G4double phadFactor;
+  G4double fNuEleCcBias;
+  G4double fNuEleNcBias;
+  G4double fNuNucleusBias;
 
-  static G4String fNuDetectorName;
+  G4String fNuDetectorName;
 
   static G4ThreadLocal G4BertiniElectroNuclearBuilder* theGNPhysics;
-  static G4ThreadLocal G4SynchrotronRadiation* theSynchRad;
-  static G4ThreadLocal G4GammaConversionToMuons* theGammaToMuMu;
-  static G4ThreadLocal G4AnnihiToMuPair* thePosiToMuMu;
-  static G4ThreadLocal G4eeToHadrons* thePosiToHadrons;
-
-  static G4ThreadLocal G4NeutrinoElectronProcess* theNuEleProcess;
-  static G4ThreadLocal G4NeutrinoElectronTotXsc* theNuEleTotXsc;
 
   G4EmMessenger* theMessenger;
   G4int verbose;

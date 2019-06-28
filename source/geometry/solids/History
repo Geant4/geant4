@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 3, 2019 J.Apostolakis              - geomsolids-V10-05-00
+- Change CMakeLists.txt in test directories to allow optional use
+  with integrate testing or via one-target builds using G4TARGET
+
 May, 24th, 2017,  G.Cosmo               -  geomsolids-V10-03-00
 - Renamed ambiguous name Extent() in all solids and G4U* wrappers to
   BoundingLimits(). Change required in order to avoid signature conflict

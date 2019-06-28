@@ -72,9 +72,9 @@ class G4RadioactiveDecayChainsFromParent
     G4RadioactiveDecayChainsFromParent& operator=(const G4RadioactiveDecayChainsFromParent&);
   
     // equality operators
-    G4int operator==(const G4RadioactiveDecayChainsFromParent& right) const
+    G4bool operator==(const G4RadioactiveDecayChainsFromParent& right) const
       {return (this == &right);}
-    G4int operator!=(const G4RadioactiveDecayChainsFromParent& right) const
+    G4bool operator!=(const G4RadioactiveDecayChainsFromParent& right) const
       {return (this != &right);}
   
   public:

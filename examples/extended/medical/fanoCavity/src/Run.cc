@@ -306,6 +306,7 @@ void Run::EndOfRun()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Run::SurveyConvergence(G4int NbofEvents)
 {
   if (NbofEvents == 0) return;
@@ -338,13 +339,13 @@ void Run::SurveyConvergence(G4int NbofEvents)
   G4cout.setf(std::ios::fixed,std::ios::floatfield);
   G4int prec = G4cout.precision(3);
 
-  G4cout << "\n ---> NbofEvents= " << NbofEvents
+  G4cout << " ---> NbofEvents= " << NbofEvents
          << "   NbOfelectr= " << fNbSec
          << "   Tkin= " << G4BestUnit(meanEsecond,"Energy")
          << " (" << rateEmean << " %)"
          << "   NbOfelec in cav= " << fPartFlowCavity[0]
          << "   Dose/EnFluence= " << G4BestUnit(doseOverBeam,"Surface/Mass")
-         << " (" << rateDose << " %)"
+         << " (" << rateDose << " %) \n"
          << G4endl;
 
   // reset default formats

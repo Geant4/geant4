@@ -43,7 +43,6 @@
 #include "globals.hh"
 #include "geomwdefs.hh"
 #include "G4AutoLock.hh"
-#include "G4Allocator.hh"
 
 template <class T>  // T is the private data from the object to be split
 class G4GeomSplitter
@@ -56,33 +55,10 @@ class G4GeomSplitter
       G4MUTEXINIT(mutex);
     }
 
-    void *operator new(size_t)
-      // Override "new" for "G4Allocator"
-    {
-      if (!anOffsetAllocator) anOffsetAllocator = new G4Allocator<T>;
-      return (void *) anOffsetAllocator->MallocSingle();
-    }
-
-    void operator delete(void *anOffset)
-      // Override "delete" for "G4Allocator".
-    {
-      anOffsetAllocator->FreeSingle((T*) anOffset);
-    }
-
     T* Reallocate(G4int size)
     {
-       T* noffset = new T[size];
-       if (offset)
-       {
-         for (G4int i=0; i<totalspace; ++i)
-         {
-           noffset[i] = offset[i];
-         }
-         delete [] offset;
-       }
        totalspace = size;
-       
-       return noffset;
+       return (T *) std::realloc(offset, totalspace * sizeof(T));
     }
 
     G4int CreateSubInstance()
@@ -107,10 +83,7 @@ class G4GeomSplitter
     void CopyMasterContents()
     {
       G4AutoLock l(&mutex);
-      for (G4int i=0; i<totalspace; ++i)
-      {
-        offset[i] = sharedOffset[i];
-      }
+      std::memcpy(offset, sharedOffset, totalspace * sizeof(T));
     }
   
     void SlaveCopySubInstanceArray()
@@ -170,7 +143,7 @@ class G4GeomSplitter
       // Invoked by all threads to free the subinstance array.
     {
       if (!offset)  { return; }
-      delete [] offset;
+      std::free( offset );
       offset = 0;
     }
 
@@ -202,7 +175,6 @@ class G4GeomSplitter
   public:
 
     G4GEOM_DLL static G4ThreadLocal T* offset;
-    G4GEOM_DLL static G4ThreadLocal G4Allocator<T>* anOffsetAllocator;
 
   private:
 
@@ -212,9 +184,6 @@ class G4GeomSplitter
     G4Mutex mutex;
 };
 
-template <typename T> G4ThreadLocal
-  T* G4GeomSplitter<T>::offset = 0;
-template <typename T> G4ThreadLocal
-  G4Allocator<T>* G4GeomSplitter<T>::anOffsetAllocator = 0;
+template <typename T> G4ThreadLocal T* G4GeomSplitter<T>::offset = 0;
 
 #endif

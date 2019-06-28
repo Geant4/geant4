@@ -59,96 +59,25 @@
 //
 //  First version: 25 May 2015 - Somnath Banerjee
 //
-//  Note: Current version includes 3 versions of 'DistChord' method.
-//        Default is hard-coded interpolation.
-//
 #include "G4DormandPrince745.hh"
 #include "G4LineSection.hh"
-#include <cmath>
 
-//Constructor
-G4DormandPrince745::G4DormandPrince745(G4EquationOfMotion *EqRhs,
-                                   G4int noIntegrationVariables,
-                                   G4bool primary)
-: G4MagIntegratorStepper(EqRhs, noIntegrationVariables),
-  fAuxStepper(0)  
+using namespace field_utils;
+
+G4DormandPrince745::G4DormandPrince745(G4EquationOfMotion* equation,
+                                       G4int noIntegrationVariables)
+    : G4MagIntegratorStepper(equation, noIntegrationVariables)
+{}
+
+void G4DormandPrince745::Stepper(const G4double yInput[],
+                                 const G4double dydx[],
+                                 G4double hstep,
+                                 G4double yOutput[],
+                                 G4double yError[],
+                                 G4double dydxOutput[])
 {
-    const G4int numberOfVariables = // noIntegrationVariables;
-      std::max( noIntegrationVariables,
-               ( ( (noIntegrationVariables-1)/4 + 1 ) * 4 ) );
-    // For better alignment with cache-line
-    
-    //New Chunk of memory being created for use by the stepper
-    
-    //ak_i - for storing intermediate RHS
-    ak2 = new G4double[numberOfVariables];
-    ak3 = new G4double[numberOfVariables];
-    ak4 = new G4double[numberOfVariables];
-    ak5 = new G4double[numberOfVariables];
-    ak6 = new G4double[numberOfVariables];
-    ak7 = new G4double[numberOfVariables];
-    // Also always allocate arrays for interpolation stages
-    ak8 = new G4double[numberOfVariables];
-    ak9 = new G4double[numberOfVariables];
-
-    // Must ensure space for extra 'state' variables exists - i.e. yIn[7]
-    const G4int numStateVars =
-       std::max(noIntegrationVariables,
-                std::max( GetNumberOfStateVariables(), 8)
-               );
-    yTemp = new G4double[numStateVars];
-    yIn   = new G4double[numStateVars];
-    
-    fLastInitialVector = new G4double[numStateVars] ;
-    fLastFinalVector = new G4double[numStateVars] ;
-
-    // fLastDyDx  = new G4double[numberOfVariables];
-    
-    fMidVector = new G4double[numStateVars];
-    fMidError =  new G4double[numStateVars];
-    
-    yTemp = new G4double[numberOfVariables] ;
-    yIn =   new G4double[numberOfVariables] ;
-
-    fLastInitialVector = new G4double[numberOfVariables] ;
-    fLastFinalVector = new G4double[numberOfVariables] ;
-    fInitialDyDx = new G4double[numberOfVariables];
-    
-    fMidVector = new G4double[numberOfVariables];
-    fMidError =  new G4double[numberOfVariables];
-    fAuxStepper = nullptr;
-    if( primary )
-    {
-        fAuxStepper = new G4DormandPrince745(EqRhs, numberOfVariables,
-                                           !primary);
-    }
-    fLastStepLength = -1.0;
-}
-
-//Destructor
-G4DormandPrince745::~G4DormandPrince745()
-{
-    //clear all previously allocated memory for stepper and DistChord
-    delete[] ak2;
-    delete[] ak3;
-    delete[] ak4;
-    delete[] ak5;
-    delete[] ak6;
-    delete[] ak7;
-    // Used only for interpolation
-    delete[] ak8;
-    delete[] ak9;
-    
-    delete[] yTemp;
-    delete[] yIn;
-    
-    delete[] fLastInitialVector;
-    delete[] fLastFinalVector;
-    delete[] fInitialDyDx;
-    delete[] fMidVector;
-    delete[] fMidError;
-    
-    delete fAuxStepper;
+    Stepper(yInput, dydx, hstep, yOutput, yError);
+    copy(dydxOutput, ak7);
 }
 
 
@@ -179,158 +108,118 @@ G4DormandPrince745::~G4DormandPrince745()
 // Giving back yOut and yErr arrays for output and error respectively
 
 void G4DormandPrince745::Stepper(const G4double yInput[],
-                               const G4double DyDx[],
-                                     G4double Step,
-                                     G4double yOut[],
-                                     G4double yErr[] )
+                                 const G4double dydx[],
+                                       G4double hstep,
+                                       G4double yOut[],
+                                       G4double yErr[])
 {
-    G4int i;
-    
     //The various constants defined on the basis of butcher tableu
-    const G4double  //G4double - only once
-    b21 = 0.2 ,
-    
-    b31 = 3.0/40.0, b32 = 9.0/40.0 ,
-    
-    b41 = 44.0/45.0, b42 = -56.0/15.0, b43 = 32.0/9.0,
-    
-    b51 = 19372.0/6561.0, b52 = -25360.0/2187.0, b53 = 64448.0/6561.0,
-    b54 = -212.0/729.0 ,
-    
-    b61 = 9017.0/3168.0 , b62 =   -355.0/33.0,
-    b63 =  46732.0/5247.0    , b64 = 49.0/176.0 ,
-    b65 = -5103.0/18656.0 ,
-    
-    b71 = 35.0/384.0, b72 = 0.,
-    b73 = 500.0/1113.0, b74 = 125.0/192.0,
-    b75 = -2187.0/6784.0, b76 = 11.0/84.0,
+    const G4double
+        b21 = 0.2,
+        
+        b31 = 3.0 / 40.0, b32 = 9.0 / 40.0,
+        
+        b41 = 44.0 / 45.0, b42 = -56.0 / 15.0, b43 = 32.0/9.0,
+        
+        b51 = 19372.0 / 6561.0, b52 = -25360.0 / 2187.0, b53 = 64448.0 / 6561.0,
+        b54 = -212.0 / 729.0,
+        
+        b61 = 9017.0 / 3168.0 , b62 =   -355.0 / 33.0,
+        b63 = 46732.0 / 5247.0, b64 = 49.0 / 176.0,
+        b65 = -5103.0 / 18656.0,
+        
+        b71 = 35.0 / 384.0, b72 = 0.,
+        b73 = 500.0 / 1113.0, b74 = 125.0 / 192.0,
+        b75 = -2187.0 / 6784.0, b76 = 11.0 / 84.0,
     
     //Sum of columns, sum(bij) = ei
-//    e1 = 0. ,
-//    e2 = 1.0/5.0 ,
-//    e3 = 3.0/10.0 ,
-//    e4 = 4.0/5.0 ,
-//    e5 = 8.0/9.0 ,
-//    e6 = 1.0 ,
-//    e7 = 1.0 ,
+    //    e1 = 0. ,
+    //    e2 = 1.0/5.0 ,
+    //    e3 = 3.0/10.0 ,
+    //    e4 = 4.0/5.0 ,
+    //    e5 = 8.0/9.0 ,
+    //    e6 = 1.0 ,
+    //    e7 = 1.0 ,
     
-// Difference between the higher and the lower order method coeff. :
+    // Difference between the higher and the lower order method coeff. :
     // b7j are the coefficients of higher order
     
-    dc1 = -( b71 - 5179.0/57600.0),
-    dc2 = -( b72 - .0),
-    dc3 = -( b73 - 7571.0/16695.0),
-    dc4 = -( b74 - 393.0/640.0),
-    dc5 = -( b75 + 92097.0/339200.0),
-    dc6 = -( b76 - 187.0/2100.0),
-    dc7 = -( - 1.0/40.0 ); //end of declaration
+        dc1 = -(b71 - 5179.0 / 57600.0),
+        dc2 = -(b72 - .0),
+        dc3 = -(b73 - 7571.0 / 16695.0),
+        dc4 = -(b74 - 393.0 / 640.0),
+        dc5 = -(b75 + 92097.0 / 339200.0),
+        dc6 = -(b76 - 187.0 / 2100.0),
+        dc7 = -(- 1.0 / 40.0);
     
     const G4int numberOfVariables= this->GetNumberOfVariables();
+    State yTemp;
     
     // The number of variables to be integrated over
     yOut[7] = yTemp[7]  = yInput[7];
     //  Saving yInput because yInput and yOut can be aliases for same array
     
-    for(i=0;i<numberOfVariables;i++)
+    for(G4int i = 0; i < numberOfVariables; ++i)
     {
-        yIn[i]=yInput[i];
+        fyIn[i] = yInput[i];
     }
+    // RightHandSide(yIn, dydx);
     
-    // RightHandSide(yIn, DyDx) ;
-    // 1st Step - Not doing, getting passed
-    
-    for(i=0;i<numberOfVariables;i++)
+    for(G4int i = 0; i < numberOfVariables; ++i)
     {
-        yTemp[i] = yIn[i] + b21*Step*DyDx[i] ;
+        yTemp[i] = fyIn[i] + b21 * hstep * dydx[i];
     }
-    RightHandSide(yTemp, ak2) ;              // 2nd stage
+    RightHandSide(yTemp, ak2);              // 2nd stage
     
-    for(i=0;i<numberOfVariables;i++)
+    for(G4int i = 0; i < numberOfVariables; ++i)
     {
-        yTemp[i] = yIn[i] + Step*(b31*DyDx[i] + b32*ak2[i]) ;
+        yTemp[i] = fyIn[i] + hstep * (b31 * dydx[i] + b32 * ak2[i]);
     }
-    RightHandSide(yTemp, ak3) ;              // 3rd stage
+    RightHandSide(yTemp, ak3);              // 3rd stage
     
-    for(i=0;i<numberOfVariables;i++)
+    for(G4int i = 0; i < numberOfVariables; ++i)
     {
-        yTemp[i] = yIn[i] + Step*(b41*DyDx[i] + b42*ak2[i] + b43*ak3[i]) ;
+        yTemp[i] = fyIn[i] + hstep * (b41 * dydx[i] + b42 * ak2[i] + b43 * ak3[i]);
     }
-    RightHandSide(yTemp, ak4) ;              // 4th stage
+    RightHandSide(yTemp, ak4);              // 4th stage
     
-    for(i=0;i<numberOfVariables;i++)
+    for(G4int i = 0; i < numberOfVariables; ++i)
     {
-        yTemp[i] = yIn[i] + Step*(b51*DyDx[i] + b52*ak2[i] + b53*ak3[i] +
-                                  b54*ak4[i]) ;
+        yTemp[i] = fyIn[i] + hstep * (
+            b51 * dydx[i] + b52 * ak2[i] + b53 * ak3[i] + b54 * ak4[i]);
     }
-    RightHandSide(yTemp, ak5) ;              // 5th stage
+    RightHandSide(yTemp, ak5);              // 5th stage
     
-    for(i=0;i<numberOfVariables;i++)
+    for(G4int i = 0; i < numberOfVariables; ++i)
     {
-        yTemp[i] = yIn[i] + Step*(b61*DyDx[i] + b62*ak2[i] + b63*ak3[i] +
-                                  b64*ak4[i] + b65*ak5[i]) ;
+        yTemp[i] = fyIn[i] + hstep * (
+            b61 * dydx[i] + b62 * ak2[i] + 
+            b63 * ak3[i] + b64 * ak4[i] + b65 * ak5[i]);
     }
-    RightHandSide(yTemp, ak6) ;              // 6th stage
+    RightHandSide(yTemp, ak6);              // 6th stage
     
-    for(i=0;i<numberOfVariables;i++)
+    for(G4int i = 0; i < numberOfVariables; ++i)
     {
-        yOut[i] = yIn[i] + Step*(b71*DyDx[i] + b72*ak2[i] + b73*ak3[i] +
-                                  b74*ak4[i] + b75*ak5[i] + b76*ak6[i] );
+        yOut[i] = fyIn[i] + hstep * (
+            b71 * dydx[i] + b72 * ak2[i] + b73 * ak3[i] +
+            b74 * ak4[i] + b75 * ak5[i] + b76 * ak6[i]);
     }
     RightHandSide(yOut, ak7);				//7th and Final stage
     
-    for(i=0;i<numberOfVariables;i++)
+    for(G4int i = 0; i < numberOfVariables; ++i)
     {
-        yErr[i] = Step*(dc1*DyDx[i] + dc2*ak2[i] + dc3*ak3[i] + dc4*ak4[i] +
-                            dc5*ak5[i] + dc6*ak6[i] + dc7*ak7[i] ) + 1.5e-18 ;
+        yErr[i] = hstep * (
+            dc1 * dydx[i] + dc2 * ak2[i] + 
+            dc3 * ak3[i] + dc4 * ak4[i] +
+            dc5 * ak5[i] + dc6 * ak6[i] + dc7 * ak7[i]
+        ) + 1.5e-18;
 
         // Store Input and Final values, for possible use in calculating chord
-        fLastInitialVector[i] = yIn[i] ;
-        fLastFinalVector[i]   = yOut[i];
-        fInitialDyDx[i]          = DyDx[i];        
+        fyOut[i] = yOut[i];
+        fdydxIn[i] = dydx[i];        
     }
     
-    fLastStepLength = Step;
-    
-    return ;
-}
-
-
-// Calculate DistChord given start, mid and end-point of step
-G4double G4DormandPrince745::DistLine( G4double yStart[], G4double yMid[], G4double yEnd[] ) const
-{
-    G4double distLine, distChord;
-    G4ThreeVector initialPoint, finalPoint, midPoint;
-    
-    initialPoint = G4ThreeVector( yStart[0], yStart[1], yStart[2]);
-    finalPoint   = G4ThreeVector( yEnd[0], yEnd[1],  yEnd[2]);
-    midPoint = G4ThreeVector( yMid[0], yMid[1], yMid[2]);
-
-    // Use stored values of Initial and Endpoint + new Midpoint to evaluate
-    //  distance of Chord
-    if (initialPoint != finalPoint)
-    {
-        distLine  = G4LineSection::Distline( midPoint, initialPoint, finalPoint );
-        distChord = distLine;
-    }
-    else
-    {
-        distChord = (midPoint-initialPoint).mag();
-    }
-    return distChord;
-}
-
-// (New) DistChord function using interpolation
-G4double G4DormandPrince745::DistChord2() const
-{
-    // Copy the values of stages from this (original) into the Aux Stepper
-    *fAuxStepper = *this;
-
-    //Preparing for the interpolation
-    fAuxStepper->SetupInterpolation(); // (fLastInitialVector, fInitialDyDx, fLastStepLength);
-    //Interpolate to half step
-    fAuxStepper->Interpolate( /*fLastInitialVector, fInitialDyDx, fLastStepLength,*/ 0.5, fAuxStepper->fMidVector);
-
-    return DistLine( fLastInitialVector, fAuxStepper->fMidVector, fLastFinalVector);
+    fLastStepLength = hstep;
 }
 
 G4double G4DormandPrince745::DistChord() const
@@ -338,31 +227,25 @@ G4double G4DormandPrince745::DistChord() const
     // Coefficients were taken from Some Practical Runge-Kutta Formulas by Lawrence F. Shampine, page 149, c*
     const G4double
         hf1 = 6025192743.0 / 30085553152.0,
-        hf2 = 0.0,
         hf3 = 51252292925.0 / 65400821598.0,
         hf4 = - 2691868925.0 / 45128329728.0,
         hf5 = 187940372067.0 / 1594534317056.0,
         hf6 = - 1776094331.0 / 19743644256.0,
         hf7 = 11237099.0 / 235043384.0;
 
-    for(G4int i = 0; i < 3; ++i) {
-       fMidVector[i] = fLastInitialVector[i] + 0.5 * fLastStepLength * 
-           (hf1 * fInitialDyDx[i] + hf2 * ak2[i] + hf3 * ak3[i] + 
+    G4ThreeVector mid;
+
+    for(G4int i = 0; i < 3; ++i) 
+    {
+        mid[i] = fyIn[i] + 0.5 * fLastStepLength * (
+            hf1 * fdydxIn[i] + hf3 * ak3[i] + 
             hf4 * ak4[i] + hf5 * ak5[i] + hf6 * ak6[i] + hf7 * ak7[i]);
     }
-     
-    // Use stored values of Initial and Endpoint + new Midpoint to evaluate
-    //  distance of Chord
-    return DistLine( fLastInitialVector, fMidVector, fLastFinalVector);
-}
 
-//The original DistChord() function for the class
-G4double  G4DormandPrince745::DistChord3() const
-{
-    // Do half a step using StepNoErr    
-    fAuxStepper->Stepper( fLastInitialVector, fInitialDyDx, 0.5 * fLastStepLength,
-                          fAuxStepper->fMidVector,  fAuxStepper->fMidError) ;
-    return DistLine( fLastInitialVector, fAuxStepper->fMidVector, fLastFinalVector);
+    const G4ThreeVector begin = makeVector(fyIn, Value3D::Position);
+    const G4ThreeVector end = makeVector(fyOut, Value3D::Position);
+
+    return G4LineSection::Distline(mid, begin, end);
 }
 
 // The lower (4th) order interpolant given by Dormand and prince
@@ -372,46 +255,43 @@ G4double  G4DormandPrince745::DistChord3() const
 //	Computers & Mathematics with Applications, vol. 12, no. 9,
 //	pp. 1007–1017, 1986.
 //---------------------------
-
-void G4DormandPrince745::SetupInterpolation_low() // const G4double *yInput, const G4double *dydx, const G4double Step)
+void G4DormandPrince745::Interpolate4thOrder(G4double yOut[], G4double tau) const
 {
-    //Nothing to be done
-}
-
-void G4DormandPrince745::Interpolate_low( /* const G4double yInput[],
-                                                const G4double dydx[], 
-                                                const G4double Step, */
-                                                G4double yOut[],
-                                               G4double tau )
-{
-    G4double bf1, bf2, bf3, bf4, bf5, bf6, bf7;
-    // Coefficients for all the seven stages.
-    G4double Step = fLastStepLength;
-    const G4double *dydx= fInitialDyDx;
-    
-    const G4int numberOfVariables= this->GetNumberOfVariables();
-
-    // for(int i=0;i<numberOfVariables;i++) { yIn[i]=yInput[i]; }
+    const G4int numberOfVariables = this->GetNumberOfVariables();
     
     const G4double
-      tau_2 = tau   * tau,
-      tau_3 = tau   * tau_2,
-      tau_4 = tau_2 * tau_2;
-    
-    bf1 = (157015080.0*tau_4 - 13107642775.0*tau_3+ 34969693132.0*tau_2- 32272833064.0*tau
-           + 11282082432.0)/11282082432.0,
-    bf2 = 0.0 ,
-    bf3 = - 100.0*tau*(15701508.0*tau_3 - 914128567.0*tau_2 + 2074956840.0*tau
-                 - 1323431896.0)/32700410799.0,
-    bf4 = 25.0*tau*(94209048.0*tau_3- 1518414297.0*tau_2+ 2460397220.0*tau - 889289856.0)/5641041216.0 ,
-    bf5 = -2187.0*tau*(52338360.0*tau_3 - 451824525.0*tau_2 + 687873124.0*tau - 259006536.0)/199316789632.0 ,
-    bf6 =  11.0*tau*(106151040.0*tau_3- 661884105.0*tau_2 + 946554244.0*tau - 361440756.0)/2467955532.0 ,
-    bf7 = tau*(1.0 - tau)*(8293050.0*tau_2 - 82437520.0*tau + 44764047.0)/ 29380423.0 ;
+      tau2 = tau * tau,
+      tau3 = tau * tau2,
+      tau4 = tau2 * tau2;
 
-    //Putting together the coefficients calculated as the respective stage coefficients
-    for( int i=0; i<numberOfVariables; i++){
-        yOut[i] = yIn[i] + Step*tau*(bf1*dydx[i] + bf2*ak2[i] + bf3*ak3[i] + bf4*ak4[i]
-                                     + bf5*ak5[i] + bf6*ak6[i] + bf7*ak7[i]  ) ;
+    const G4double bf1 = 1.0 / 11282082432.0 * (
+        157015080.0 * tau4 - 13107642775.0 * tau3 + 34969693132.0 * tau2 - 
+        32272833064.0 * tau + 11282082432.0);
+
+    const G4double bf3 = - 100.0 / 32700410799.0 * tau * (
+        15701508.0 * tau3 - 914128567.0 * tau2 + 2074956840.0 * tau - 
+        1323431896.0);
+    
+    const G4double bf4 = 25.0 / 5641041216.0 * tau * (
+        94209048.0 * tau3 - 1518414297.0 * tau2 + 2460397220.0 * tau - 
+        889289856.0);
+    
+    const G4double bf5 = - 2187.0 / 199316789632.0 * tau * (
+        52338360.0 * tau3 - 451824525.0 * tau2 + 687873124.0 * tau - 
+        259006536.0);
+
+    const G4double bf6 = 11.0 / 2467955532.0 * tau * (
+        106151040.0 * tau3 - 661884105.0 * tau2 + 
+        946554244.0 * tau - 361440756.0);
+    
+    const G4double bf7 = 1.0 / 29380423.0 * tau * (1.0 - tau) * (
+        8293050.0 * tau2 - 82437520.0 * tau + 44764047.0);
+
+    for(G4int i = 0; i < numberOfVariables; ++i)
+    {
+        yOut[i] = fyIn[i] + fLastStepLength * tau * (
+            bf1 * fdydxIn[i] + bf3 * ak3[i] + bf4 * ak4[i] + 
+            bf5 * ak5[i] + bf6 * ak6[i] + bf7 * ak7[i]);
     }
 }
 
@@ -424,10 +304,8 @@ void G4DormandPrince745::Interpolate_low( /* const G4double yInput[],
 //---------------------
 
 // Calculating the extra stages for the interpolant :
-void G4DormandPrince745::SetupInterpolation_high( /* const G4double yInput[],
-                                               const G4double dydx[],
-                                               const G4double Step */  ){
-    
+void G4DormandPrince745::SetupInterpolation_high()
+{
     //Coefficients for the additional stages :
     const G4double
     b81 =  6245.0/62208.0 ,
@@ -448,8 +326,9 @@ void G4DormandPrince745::SetupInterpolation_high( /* const G4double yInput[],
     b98 = -805.0/4104.0 ;
     
     const G4int numberOfVariables= this->GetNumberOfVariables();
-    const G4double *dydx = fInitialDyDx;
+    const G4double *dydx = fdydxIn;
     const G4double  Step = fLastStepLength;
+    State yTemp;
     
     //  Saving yInput because yInput and yOut can be aliases for same array
     // for(int i=0;i<numberOfVariables;i++) { yIn[i]=yInput[i]; }
@@ -458,7 +337,7 @@ void G4DormandPrince745::SetupInterpolation_high( /* const G4double yInput[],
     //Evaluate the extra stages :
     for(int i=0;i<numberOfVariables;i++)
     {
-        yTemp[i] = yIn[i] + Step*(b81*dydx[i] + b82*ak2[i] + b83*ak3[i] +
+        yTemp[i] = fyIn[i] + Step*(b81*dydx[i] + b82*ak2[i] + b83*ak3[i] +
                                   b84*ak4[i] + b85*ak5[i] + b86*ak6[i] +
                                   b87*ak7[i]);
     }
@@ -466,7 +345,7 @@ void G4DormandPrince745::SetupInterpolation_high( /* const G4double yInput[],
     
     for(int i=0;i<numberOfVariables;i++)
     {
-        yTemp[i] = yIn[i] + Step*(b91*dydx[i] + b92*ak2[i] + b93*ak3[i] +
+        yTemp[i] = fyIn[i] + Step*(b91*dydx[i] + b92*ak2[i] + b93*ak3[i] +
                                  b94*ak4[i] + b95*ak5[i] + b96*ak6[i] +
                                  b97*ak7[i] + b98*ak8[i] );
     }
@@ -475,15 +354,11 @@ void G4DormandPrince745::SetupInterpolation_high( /* const G4double yInput[],
 
 
 // Calculating the interpolated result yOut with the coefficients
-void G4DormandPrince745::Interpolate_high( /* const G4double yInput[],
-                                         const G4double dydx[],
-                                         const G4double Step, */
-                                               G4double yOut[],
-                                               G4double tau ){
+void G4DormandPrince745::Interpolate_high(G4double yOut[], G4double tau )
+{
     //Define the coefficients for the polynomials
     G4double bi[10][5], b[10];
     const G4int numberOfVariables = this->GetNumberOfVariables();
-    const G4double *dydx = fInitialDyDx;
     // const G4double fullStep = fLastStepLength;
 
     // If given requestedStep in argument:
@@ -591,41 +466,9 @@ void G4DormandPrince745::Interpolate_high( /* const G4double yInput[],
     
     G4double stepLen = fLastStepLength * tau;
     for(int i=0; i<numberOfVariables; i++){		//Here i IS the cooridnate no.
-        yOut[i] = yIn[i] + stepLen *(b[1]*dydx[i] + b[2]*ak2[i] + b[3]*ak3[i] +
+        yOut[i] = fyIn[i] + stepLen *(b[1]*fdydxIn[i] + b[2]*ak2[i] + b[3]*ak3[i] +
                                      b[4]*ak4[i] + b[5]*ak5[i] + b[6]*ak6[i] +
                                      b[7]*ak7[i] + b[8]*ak8[i] + b[9]*ak9[i] );
     }
 
-}
-
-//G4DormandPrince745::G4DormandPrince745(G4DormandPrince745& DP_Obj){
-//    
-//}
-
-// Overloaded = operator
-G4DormandPrince745& G4DormandPrince745::operator=(const G4DormandPrince745& right)
-{
-//    this->G4DormandPrince745(right.GetEquationOfMotion(),right.GetNumberOfVariables(), false);
-
-    int noVars = right.GetNumberOfVariables();
-    for(int i =0; i< noVars; i++)
-    {
-        this->ak2[i] = right.ak2[i];
-        this->ak3[i] = right.ak3[i];
-        this->ak4[i] = right.ak4[i];
-        this->ak5[i] = right.ak5[i];
-        this->ak6[i] = right.ak6[i];
-        this->ak7[i] = right.ak7[i];
-        this->ak8[i] = right.ak8[i];
-        this->ak9[i] = right.ak9[i];     
-
-        this->fInitialDyDx[i] = right.fInitialDyDx[i];
-        this->fLastInitialVector[i] = right.fLastInitialVector[i];
-        this->fMidVector[i] = right.fMidVector[i];
-        this->fMidError[i] = right.fMidError[i];
-    }
-    
-    this->fLastStepLength = right.fLastStepLength;
-    
-    return *this;
 }

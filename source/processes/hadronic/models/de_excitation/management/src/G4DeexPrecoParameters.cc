@@ -74,6 +74,7 @@ void G4DeexPrecoParameters::SetDefaults()
   fPrecoType = 3;
   fDeexType = 3;
   fTwoJMAX = 10;
+  fVerbose = 1;
   fNeverGoBack = false;
   fUseSoftCutoff = false;
   fUseCEM = true;
@@ -181,6 +182,12 @@ void G4DeexPrecoParameters::SetTwoJMAX(G4int n)
 {
   if(IsLocked() || n < 0) { return; }
   fTwoJMAX = n;
+}
+
+void G4DeexPrecoParameters::SetVerbose(G4int n)
+{
+  if(IsLocked()) { return; }
+  fVerbose = n;
 }
 
 void G4DeexPrecoParameters::SetNeverGoBack(G4bool val)

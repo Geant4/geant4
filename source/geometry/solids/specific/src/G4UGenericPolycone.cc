@@ -30,7 +30,6 @@
 // --------------------------------------------------------------------
 
 #include "G4GenericPolycone.hh"
-#if 0
 #include "G4UGenericPolycone.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
@@ -54,8 +53,22 @@ G4UGenericPolycone::G4UGenericPolycone(const G4String& name,
                                              G4int    numRZ,
                                        const G4double r[],
                                        const G4double z[]   )
-  : G4USolid(name, new UGenericPolycone(name, phiStart, phiTotal, numRZ, r, z))
+  : Base_t(name, phiStart, phiTotal, numRZ, r, z)
 { 
+  wrStart = phiStart; while (wrStart < 0) wrStart += twopi;
+  wrDelta = phiTotal;
+  if (wrDelta <= 0 || wrDelta >= twopi*(1-DBL_EPSILON))
+  {
+    wrStart = 0;
+    wrDelta = twopi;
+  }
+  rzcorners.resize(0);
+  for (G4int i=0; i<numRZ; ++i)
+  {
+    rzcorners.push_back(G4TwoVector(r[i],z[i]));
+  }
+  std::vector<G4int> iout;
+  G4GeomTools::RemoveRedundantVertices(rzcorners,iout,2*kCarTolerance);
 }
 
 
@@ -65,7 +78,7 @@ G4UGenericPolycone::G4UGenericPolycone(const G4String& name,
 //                            for usage restricted to object persistency.
 //
 G4UGenericPolycone::G4UGenericPolycone(__void__& a)
-  : G4USolid(a)
+  : Base_t(a)
 {
 }
 
@@ -84,8 +97,11 @@ G4UGenericPolycone::~G4UGenericPolycone()
 // Copy constructor
 //
 G4UGenericPolycone::G4UGenericPolycone(const G4UGenericPolycone &source)
-  : G4USolid(source)
+  : Base_t(source)
 {
+  wrStart   = source.wrStart;
+  wrDelta   = source.wrDelta;
+  rzcorners = source.rzcorners;
 }
 
 
@@ -98,57 +114,69 @@ G4UGenericPolycone::operator=(const G4UGenericPolycone &source)
 {
   if (this == &source) return *this;
   
-  G4USolid::operator=( source );
-  
+  Base_t::operator=( source );
+  wrStart   = source.wrStart;
+  wrDelta   = source.wrDelta;
+  rzcorners = source.rzcorners;
+
   return *this;
 }
 
 G4double G4UGenericPolycone::GetStartPhi() const
 {
-  return GetShape()->GetStartPhi();
+  return wrStart;
 }
 G4double G4UGenericPolycone::GetEndPhi() const
 {
-  return GetShape()->GetEndPhi();
+  return (wrStart + wrDelta);
 }
 G4double G4UGenericPolycone::GetSinStartPhi() const
 {
-  if (!GetShape()->IsOpen()) return 0;
-  G4double phi = GetShape()->GetStartPhi();
+  if (IsOpen()) return 0;
+  G4double phi = GetStartPhi();
   return std::sin(phi);
 }
 G4double G4UGenericPolycone::GetCosStartPhi() const
 {
-  if (!GetShape()->IsOpen()) return 1;
-  G4double phi = GetShape()->GetStartPhi();
+  if (IsOpen()) return 1;
+  G4double phi = GetStartPhi();
   return std::cos(phi);
 }
 G4double G4UGenericPolycone::GetSinEndPhi() const
 {
-  if (!GetShape()->IsOpen()) return 0;
-  G4double phi = GetShape()->GetEndPhi();
+  if (IsOpen()) return 0;
+  G4double phi = GetEndPhi();
   return std::sin(phi);
 }
 G4double G4UGenericPolycone::GetCosEndPhi() const
 {
-  if (!GetShape()->IsOpen()) return 1;
-  G4double phi = GetShape()->GetEndPhi();
+  if (IsOpen()) return 1;
+  G4double phi = GetEndPhi();
   return std::cos(phi);
 }
 G4bool G4UGenericPolycone::IsOpen() const
 {
-  return GetShape()->IsOpen();
+  return (wrDelta < twopi);
 }
 G4int G4UGenericPolycone::GetNumRZCorner() const
 {
-  return GetShape()->GetNumRZCorner();
+  return rzcorners.size();
 }
 G4PolyconeSideRZ G4UGenericPolycone::GetCorner(G4int index) const
 {
-  UPolyconeSideRZ pside = GetShape()->GetCorner(index);
-  G4PolyconeSideRZ psiderz = { pside.r, pside.z };
+  G4TwoVector rz = rzcorners.at(index);
+  G4PolyconeSideRZ psiderz = { rz.x(), rz.y() };
 
   return psiderz;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4UGenericPolycone::Clone() const
+{
+  return new G4UGenericPolycone(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -629,4 +657,3 @@ G4Polyhedron* G4UGenericPolycone::CreatePolyhedron() const
 }
 
 #endif  // G4GEOM_USE_USOLIDS
-#endif

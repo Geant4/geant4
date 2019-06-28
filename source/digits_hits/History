@@ -16,18 +16,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-March 13th, 2019 M. Asai (digits_hits-V10-04-13)
+May 29th, 2019 M. Asai (digits_hits-V10-05-04)
+- G4PSSphereSurfaceFlux : fix track weight forgotten from SphereSurfaceFlux.
+
+March 13th, 2019 M. Asai (digits_hits-V10-05-03)
 - Defining unit categories for UI commands that take units. Co-working with
   intercoms-V10-05-02.
 
-March 10th, 2019 M. Asai
+March 10th, 2019 M. Asai (digits_hits-V10-05-02)
 - G4SDManager, G4VSDFilter :
     Cleanly deleting all the G4VSDFilter objects at the end of program.
 
-January 31st, 2019 I. Hrivnacova
+January 31st, 2019 I. Hrivnacova (digits_hits-V10-05-01)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
-December 20th, 2018 G. Cosmo
+December 20th, 2018 G. Cosmo (digits_hits-V10-05-00)
 - Fixed shadowing compilation warning in G4ScoringBox and G4ScoringCylinder.
 
 October 30th, 2018 I. Hrivnacova (digits_hits-V10-04-11,12)

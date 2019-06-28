@@ -1,6 +1,6 @@
 
 **************************************************************
- Geant4 version Name: geant4-10-05-patch-01    (17-April-2019)
+ Geant4 version Name: geant4-10-05-ref-06    (30-June-2019)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -753,7 +753,9 @@ CoulombScat:  for pi-, integral:1  SubType=1 BuildTable=1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering : Emin=    0 eV  Emax=  100 TeV
-##### Create analysis manager   0xdf3ea0
+G4VisManager: Using G4TrajectoryDrawByCharge as fallback trajectory model.
+See commands in /vis/modeling/trajectories/ for other options.
+##### Create analysis manager   0xf7bd80
 Using Root analysis manager
 All Ntuples have been created 
 -> Event # 1 generated 
@@ -761,34 +763,34 @@ All Ntuples have been created
 
 -> Event # 2 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.30832977717125
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.012658759300938
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.29742493740398
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.037565768440983
 
 -> Event # 3 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.32818767799678
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.040445595179846
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 4 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.27385154431883
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.024526134263825
 
 -> Event # 5 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.30051308302664
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.020664256535765
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.35574464570266
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.031220006922342
 
 -> Event # 6 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.31146622510197
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.047806526099121
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 7 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.35269013799571
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.039951247639529
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.32032653995638
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.029179681108197
 
 -> Event # 8 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.23499105665859
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.045595002738755
 
 -> Event # 9 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !

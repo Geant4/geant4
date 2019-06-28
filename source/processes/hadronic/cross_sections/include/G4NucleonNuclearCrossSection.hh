@@ -40,25 +40,26 @@
 #include "globals.hh"
 
 class G4ComponentBarNucleonNucleusXsc;
+class G4ParticleDefinition;
 
 class G4NucleonNuclearCrossSection : public G4VCrossSectionDataSet
 {
 public:
   
-  G4NucleonNuclearCrossSection();
-  virtual ~G4NucleonNuclearCrossSection();
+  explicit G4NucleonNuclearCrossSection();
+  ~G4NucleonNuclearCrossSection() override;
     
-  static const char* Default_Name() {return "G4NucleonNuclearCrossSection";}
+  static const char* Default_Name() {return "BarashenkovNucleonXS";}
 
-  virtual G4bool IsElementApplicable(const G4DynamicParticle* aParticle,
-				     G4int Z, 
-				     const G4Material* mat = nullptr);
+  G4bool IsElementApplicable(const G4DynamicParticle* aParticle,
+			     G4int Z, const G4Material* mat) final;
 
-  virtual G4double GetElementCrossSection(const G4DynamicParticle* aParticle, 
-					  G4int Z, 
-					  const G4Material* mat = nullptr);
+  G4double GetElementCrossSection(const G4DynamicParticle* aParticle, 
+                                  G4int Z, const G4Material* mat=nullptr) final;
 
-  virtual void CrossSectionDescription(std::ostream&) const;
+  void BuildPhysicsTable(const G4ParticleDefinition&) final;
+
+  void CrossSectionDescription(std::ostream&) const final;
 
   inline G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
 					 G4int Z);

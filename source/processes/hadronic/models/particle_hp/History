@@ -14,21 +14,51 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-11 April 2019  Dennis Wright (hadr-hpp-V10-04-13)
+25 June 2019  Dennis Wright (hadr-hpp-V10-05-05)
+------------------------------------------------
+- G4ParticleHPInelasticCompFS.cc : adopt fix of bug #2166 (A. Zontikov) to
+  avoid arbitrary number of target nuclei being generated and slowing down 
+  multithreaded operation.  
+
+24 June 2019  Alberto Ribon (hadr-hpp-V10-05-04)
+------------------------------------------------
+- G4ParticleHPChannelList : fixed bug in the momentum change (it has to be
+  a normalized 3-vector, but it was not) in the case that NeutronHP could
+  not find a proper reaction channel. The bug was there since a while, but
+  we started getting new warnings since G4 10.5.ref05, likely due to the
+  change made on 8 May.
+
+21 June 2019  Dennis Wright (hadr-hpp-V10-05-03)
+------------------------------------------------
+- fix of bug report 2167
+  Adopted fix of Artem Zontikov to deal with un-incremented index of photons
+  in G4ParticleHPPhotonDist::GetPhotons.  Also clean up dead code in that class. 
+
+8 May 2019  Dennis Wright (hadr-hpp-V10-05-02)
+----------------------------------------------
+- fix of bug report 1838
+  Adopted fix of Artem Zontikov to deal with incorrect excitation energy 
+  when charged particles are emitted during neutron reaction
+    G4ParticleHPInelasticCompFS.cc : method CompositeApply(), for very small 
+    excitation, change level index from -1 to 0 only if incident and outgoing 
+    particles are the same.
+
+
+11 April 2019  Dennis Wright (hadr-hpp-V10-05-01)
 -------------------------------------------------
-- fix of bug report #1824
+- fix of bug report #1824 
   Adopoted fix of Artem Zontikov to make sure production cross section is
   not ignored when sampling discrete gamma emission.
     G4ParticleHPPhotonDist.hh : added reaction cross section data member
-    G4ParticleHPPhotonDist::GetPhotons() modified to statistically suppress
+    G4ParticleHPPhotonDist::GetPhotons() modified to statistically suppress 
     gammas when reaction cross section is non-zero.
     G4ParticleHPPhotonDist::InitPartials() modified to take cross section
       argument
-    G4ParticleHPInelasticBaseFS.cc and G4ParticleHPInelasticCompFS.cc
-      modified to change calls to InitPartials to take cross section argument
+    G4ParticleHPInelasticBaseFS.cc and G4ParticleHPInelasticCompFS.cc 
+      modified to change calls to InitPartials to take cross section argument 
 
-6 February 2019  Alberto Ribon (hadr-hpp-V10-04-12)
------------------------------------------------------
+6 February 2019  Alberto Ribon (hadr-hpp-V10-05-00)
+---------------------------------------------------
 - G4ParticleHPKallbachMannSyst::Kallbach : replaced G4Exp with std::exp in order
   to avoid underflow/overflow crashes observed with the physics list
   QGSP_BIC_AllHP in the version G4 10.5 .

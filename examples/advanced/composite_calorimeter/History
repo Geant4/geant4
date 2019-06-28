@@ -8,7 +8,7 @@
                       Example History file
                       ---------------------
 
-31.01.2019 - I.Hrivnacova (ccal-V10-04-08)
+31.01.2019 - I.Hrivnacova (ccal-V10-05-00)
 - Merged GitHub PR #4: all Boolean operators now return G4bool.
 
 13.11.2018 - V.Ivanchenko (ccal-V10-04-07)

@@ -512,6 +512,25 @@ G4double G4PhysicsVector::Value(G4double theEnergy, size_t& lastIdx) const
 
 //---------------------------------------------------------------
 
+G4double G4PhysicsVector::Value(G4double theEnergy, G4double theLogEnergy,
+                                size_t& lastIdx) const
+{
+  G4double y;
+  if(theEnergy <= edgeMin) {
+    lastIdx = 0;
+    y = dataVector[0];
+  } else if(theEnergy >= edgeMax) {
+    lastIdx = numberOfNodes-1;
+    y = dataVector[lastIdx];
+  } else {
+    lastIdx = FindBin(theEnergy, theLogEnergy, lastIdx);
+    y = Interpolation(lastIdx, theEnergy);
+  }
+  return y;
+}
+
+//---------------------------------------------------------------
+
 G4double G4PhysicsVector::FindLinearEnergy(G4double rand) const
 {
   if(1 >= numberOfNodes) { return 0.0; }

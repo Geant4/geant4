@@ -51,6 +51,7 @@ class G4LogicalSkinSurface;
 class G4OpticalSurface;
 class G4SurfaceProperty;
 class G4ReflectionFactory;
+class G4AssemblyTriplet;
 
 class G4GDMLWriteStructure : public G4GDMLWriteParamvol
 {
@@ -75,6 +76,7 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
    void PhysvolWrite(xercesc::DOMElement*,const G4VPhysicalVolume* const topVol,
                    const G4Transform3D& transform, const G4String& moduleName);
    void ReplicavolWrite(xercesc::DOMElement*, const G4VPhysicalVolume* const);
+   void AssemblyWrite(xercesc::DOMElement*, const int assemblyID);
    G4Transform3D TraverseVolumeTree(const G4LogicalVolume* const topVol,
                                     const G4int depth);
    void SurfacesWrite();
@@ -101,6 +103,10 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
    G4bool sdexport; // Flag for optional export of SD per volume
    G4int maxLevel;  // Maximum number of levels to export
    static G4int levelNo;  // Counter for level being exported
+   std::map<const G4VPhysicalVolume*, G4int> assemblyVolMap; // Map of phys volumes to assembly IDs
+   std::map<const G4VPhysicalVolume*, G4int> imprintsMap; // Map of phys volumes to imprints IDs
+   std::vector<int> addedAssemblies; // vector of assemblies IDs already added to the structure
+
 };
 
 #endif

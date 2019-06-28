@@ -12,8 +12,7 @@
 /process/eLoss/StepFunction 1 10 um
 #
 /analysis/setFileName nothing_dr100
-/analysis/h1/set 9 100  0  5 mm	#step size in wall
+/analysis/h1/set 9 100  0  5 mm	  #step size in wall
 #
 /run/printProgress 200000
-#
 /run/beamOn 2000000

@@ -37,9 +37,8 @@
 
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
-#include "G4DataVector.hh"
 #include "globals.hh"
-#include <vector>
+#include "G4Threading.hh"
 
 class G4PhysicsTable;
 
@@ -47,50 +46,57 @@ class G4UPiNuclearCrossSection : public G4VCrossSectionDataSet
 {
 public:
   
-  G4UPiNuclearCrossSection();
+  explicit G4UPiNuclearCrossSection();
 
-  virtual ~G4UPiNuclearCrossSection();
+  ~G4UPiNuclearCrossSection() override;
 
-  virtual
   G4bool IsElementApplicable(const G4DynamicParticle* aParticle, 
-			     G4int Z, const G4Material*);
+			     G4int Z, const G4Material*) final;
 
   G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
-				  G4int Z, G4int A);
+				  G4int Z, G4int A) const;
 
   G4double GetInelasticCrossSection(const G4DynamicParticle* aParticle, 
-				    G4int Z, G4int A);
+				    G4int Z, G4int A) const;
 
-  void BuildPhysicsTable(const G4ParticleDefinition&);
+  void BuildPhysicsTable(const G4ParticleDefinition&) final;
 
-  void DumpPhysicsTable(const G4ParticleDefinition&);
+  void DumpPhysicsTable(const G4ParticleDefinition&) final;
 
-  virtual void CrossSectionDescription(std::ostream&) const;
+  void CrossSectionDescription(std::ostream&) const final;
   
 private:
+
+  G4double Interpolate(G4int Z, G4int A, G4double ekin, G4PhysicsTable*) const;
 
   void AddDataSet(const G4String& p, const G4double* tot, 
 		  const G4double* in, const G4double* e, G4int n); 
 
-  G4double Interpolate(G4int Z, G4int A, G4double ekin, 
-		       G4PhysicsTable*);
-
-  G4int              NZ;
-  std::vector<G4int> theZ;
-  G4DataVector       theA;
-  G4PhysicsTable*    piPlusElastic;
-  G4PhysicsTable*    piPlusInelastic;
-  G4PhysicsTable*    piMinusElastic;
-  G4PhysicsTable*    piMinusInelastic;
-
-  G4double           aPower;
-  G4double           elow;
-  G4double           elowest;
-  G4double           APower[93];
+  void LoadData();
 
   const G4ParticleDefinition* piPlus;
   const G4ParticleDefinition* piMinus;
-  G4bool isInitialized;
+
+  static const G4int NZ = 16;
+  static G4int theZ[NZ];
+
+  static G4double theA[NZ];
+  static G4double APower[93];
+
+  static G4PhysicsTable* piPlusElastic;
+  static G4PhysicsTable* piPlusInelastic;
+  static G4PhysicsTable* piMinusElastic;
+  static G4PhysicsTable* piMinusInelastic;
+
+  G4double aPower;
+  G4double elow;
+  G4double elowest;
+
+  G4bool isMaster;
+
+#ifdef G4MULTITHREADED
+  static G4Mutex pionUXSMutex;
+#endif
 };
 
 #endif

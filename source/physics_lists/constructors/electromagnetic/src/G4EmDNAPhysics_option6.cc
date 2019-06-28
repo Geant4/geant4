@@ -112,6 +112,7 @@ G4EmDNAPhysics_option6::G4EmDNAPhysics_option6(G4int ver, const G4String&)
   param->SetAuger(true);  
   param->SetAugerCascade(true);  
   param->SetDeexcitationIgnoreCut(true);
+  param->ActivateDNA();
 
   SetPhysicsType(bElectromagnetic);
 }
@@ -165,14 +166,14 @@ void G4EmDNAPhysics_option6::ConstructProcess()
     if (particleName == "e-") {
 
       // *** Solvation ***
-      G4DNAElectronSolvation* solvation = 
-        new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
-      G4DNAOneStepThermalizationModel* therm =
-       new G4DNAOneStepThermalizationModel();
+      G4DNAElectronSolvation* solvation =
+      new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
+
+      auto therm = G4DNASolvationModelFactory::GetMacroDefinedModel();
       therm->SetHighEnergyLimit(11.*eV); // limit of the CPA100 elastic model
       solvation->SetEmModel(therm);
       ph->RegisterProcess(solvation, particle);
-
+     
       // *** Elastic scattering (two alternative models available) ***      
       G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
       theDNAElasticProcess->SetEmModel(new G4DNACPA100ElasticModel());
