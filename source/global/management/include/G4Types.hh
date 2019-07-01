@@ -84,6 +84,8 @@ typedef bool G4bool;
 typedef long G4long;
 typedef std::complex<G4double> G4complex;
 
+typedef double G4SuperSpecialType;
+
 // Forward declation of void type argument for usage in direct object
 // persistency to define fake default constructors
 //
