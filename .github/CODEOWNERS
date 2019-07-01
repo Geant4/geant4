@@ -28,6 +28,7 @@
 
 # Generic Processes and Materials
 /source/materials/                  @marcverderi @civanch
+/source/parameterisations/          @marcverderi
 /source/processes/biasing/          @marcverderi @civanch
 /source/processes/parameterisation/ @marcverderi @civanch
 
