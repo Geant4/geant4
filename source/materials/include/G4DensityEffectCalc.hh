@@ -62,7 +62,7 @@ struct G4DensityEffectCalcData{
   // the conduction band.  If the material is an insulator, set the
   // oscillator strength for that level to zero and the energy to
   // any value.
-  int nlev;
+  G4int nlev;
 
   // Sternheimer's "oscillator strengths", which are simply the fraction
   // of electrons in a given energy level.  For a single element, this is
@@ -70,7 +70,7 @@ struct G4DensityEffectCalcData{
   // it is weighted by the number fraction of electrons contributed by
   // each element, e.g. for water, oxygen's electrons are given 8/10 of the
   // weight.
-  double * sternf;
+  G4double * sternf;
 
   // Energy levels.  Can be found for free atoms in, e.g., T. A. Carlson.
   // Photoelectron and Auger Spectroscopy. Plenum Press, New York and London,
@@ -79,24 +79,24 @@ struct G4DensityEffectCalcData{
   // Sternheimer 1984 implies that the energy level for conduction electrons
   // (the final element of this array) should be set to zero, although the
   // computation could be run with other values.
-  double * levE;
+  G4double * levE;
 
   // The plasma energy of the material in eV, which is simply
   // 28.816 sqrt(density Z/A), with density in g/cc.
-  double plasmaE;
+  G4double plasmaE;
 
   // The mean excitation energy of the material in eV, i.e. the 'I' in the
   // Bethe energy loss formula.
-  double meanexcite;
+  G4double meanexcite;
 
 
   /***** Results of intermediate calculations *****/
 
   // The Sternheimer parameters l_i which appear in Sternheimer 1984 eq(1).
-  double * sternl;
+  G4double * sternl;
 
   // The adjusted energy levels, as found using Sternheimer 1984 eq(8).
-  double * sternEbar;
+  G4double * sternEbar;
 
 
   /***** Packaged for convenience *****/
@@ -104,7 +104,7 @@ struct G4DensityEffectCalcData{
   // The Sternheimer 'x' defined as log10(p/m) == log10(beta*gamma).
   // This is packaged with the rest of the data for convenience.
   // Any value set here is overwritten when the user calls DoFermiDeltaCalc().
-  double sternx;
+  G4double sternx;
 };
 
 /**
@@ -116,7 +116,7 @@ struct G4DensityEffectCalcData{
  * After doing this, 'par' is ready for a calculation of delta for an
  * arbitrary particle energy.  Returns true on success, false on failure.
  */
-bool SetupFermiDeltaCalc(G4DensityEffectCalcData * par);
+G4bool SetupFermiDeltaCalc(G4DensityEffectCalcData * par);
 
 /**
  * Given that SetupFermiDeltaCalc() has already been called, calculate
@@ -126,7 +126,7 @@ bool SetupFermiDeltaCalc(G4DensityEffectCalcData * par);
  *
  * Physically, delta is always non-negative.  Returns -1 on failure.
  */
-double DoFermiDeltaCalc(G4DensityEffectCalcData * par,
-                        const double sternx);
+G4double DoFermiDeltaCalc(G4DensityEffectCalcData * par,
+                        const G4double sternx);
 
 #endif

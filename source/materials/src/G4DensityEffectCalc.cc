@@ -47,30 +47,31 @@
 #include "G4ios.hh"
 #include "G4DensityEffectCalc.hh"
 #include "G4NistManager.hh"
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include "G4Pow.hh"
+#include "globals.hh"
+
+static G4Pow * gpow = G4Pow::GetInstance();
 
 /* Newton's method for finding roots.  Adapted from G4PolynominalSolver, but
  * without the assumption that the input is a polynomial.  Also, here we
  * always expect the roots to be positive, so return -1 as an error value. */
-static double newton(const double start,
-                     double(*Function)(double, G4DensityEffectCalcData *),
-                     double(*Derivative)(double, G4DensityEffectCalcData *),
-                     G4DensityEffectCalcData * par)
+static G4double newton(const G4double start,
+                       G4double(*Function)(G4double, G4DensityEffectCalcData *),
+                       G4double(*Derivative)(G4double, G4DensityEffectCalcData *),
+                       G4DensityEffectCalcData * par)
 {
-  const int maxIter = 100;
+  const G4int maxIter = 100;
 
-  int nbad = 0, ngood = 0;
+  G4int nbad = 0, ngood = 0;
 
-  double Lambda = start;
+  G4double Lambda = start;
 
   while(true){
-    const double Value = Function(Lambda, par);
-    const double Gradient = Derivative(Lambda, par);
+    const G4double Value = Function(Lambda, par);
+    const G4double Gradient = Derivative(Lambda, par);
     Lambda -= Value/Gradient;
 
-    if(std::fabs((Value/Gradient)/Lambda) <= 1e-12) {
+    if(std::abs((Value/Gradient)/Lambda) <= 1e-12) {
       ngood++;
       if(ngood == 2) return Lambda;
     } else {
@@ -82,45 +83,46 @@ static double newton(const double start,
 
 /* Return the derivative of the equation used
  * to solve for the Sternheimer parameter rho. */
-static double dfrho(double rho, G4DensityEffectCalcData * p)
+static G4double dfrho(G4double rho, G4DensityEffectCalcData * p)
 {
-  double ans = 0;
-  for(int i = 0; i < p->nlev-1; i++)
+  G4double ans = 0;
+  for(G4int i = 0; i < p->nlev-1; i++)
     if(p->sternf[i] > 0)
-      ans += p->sternf[i] * pow(p->levE[i], 2) * rho /
-        (pow(p->levE[i] * rho, 2) + 2./3. * p->sternf[i] * pow(p->plasmaE, 2));
+      ans += p->sternf[i] * gpow->powN(p->levE[i], 2) * rho /
+        (gpow->powN(p->levE[i] * rho, 2)
+         + 2./3. * p->sternf[i] * gpow->powN(p->plasmaE, 2));
 
   return ans;
 }
 
 /* Return the functional value for the equation used
  * to solve for the Sternheimer parameter rho. */
-static double frho(double rho, G4DensityEffectCalcData * p)
+static G4double frho(G4double rho, G4DensityEffectCalcData * p)
 {
-  double ans = 0;
-  for(int i = 0; i < p->nlev-1; i++)
+  G4double ans = 0;
+  for(G4int i = 0; i < p->nlev-1; i++)
     if(p->sternf[i] > 0)
-      ans += p->sternf[i] * log(pow(p->levE[i]*rho, 2) +
-        2./3. * p->sternf[i]*pow(p->plasmaE, 2));
+      ans += p->sternf[i] * G4Log(gpow->powN(p->levE[i]*rho, 2) +
+        2./3. * p->sternf[i]*gpow->powN(p->plasmaE, 2));
 
   ans *= 0.5; // pulled out of loop for efficiency
 
   if(p->sternf[p->nlev-1] > 0)
-    ans += p->sternf[p->nlev-1] * log(p->plasmaE * sqrt(p->sternf[p->nlev-1]));
+    ans += p->sternf[p->nlev-1] * G4Log(p->plasmaE * sqrt(p->sternf[p->nlev-1]));
 
-  ans -= log(p->meanexcite);
+  ans -= G4Log(p->meanexcite);
 
   return ans;
 }
 
 /* Return the derivative for the equation used to
  * solve for the Sternheimer parameter l, called 'L' here. */
-static double dell(double L, G4DensityEffectCalcData * p)
+static G4double dell(G4double L, G4DensityEffectCalcData * p)
 {
-  double ans = 0;
-  for(int i = 0; i < p->nlev; i++)
+  G4double ans = 0;
+  for(G4int i = 0; i < p->nlev; i++)
     if(p->sternf[i] > 0 && (p->sternEbar[i] > 0 || L != 0))
-      ans += p->sternf[i]/pow(pow(p->sternEbar[i], 2) + L*L, 2);
+      ans += p->sternf[i]/gpow->powN(gpow->powN(p->sternEbar[i], 2) + L*L, 2);
 
   ans *= -2*L; // pulled out of the loop for efficiency
 
@@ -129,14 +131,14 @@ static double dell(double L, G4DensityEffectCalcData * p)
 
 /* Return the functional value for the equation used to
  * solve for the Sternheimer parameter l, called 'L' here. */
-static double ell(double L, G4DensityEffectCalcData * p)
+static G4double ell(G4double L, G4DensityEffectCalcData * p)
 {
-  double ans = 0;
-  for(int i = 0; i < p->nlev; i++)
+  G4double ans = 0;
+  for(G4int i = 0; i < p->nlev; i++)
     if(p->sternf[i] > 0 && (p->sternEbar[i] > 0 || L != 0))
-      ans += p->sternf[i]/(pow(p->sternEbar[i], 2) + L*L);
+      ans += p->sternf[i]/(gpow->powN(p->sternEbar[i], 2) + L*L);
 
-  ans -= pow(10, - 2 * p->sternx);
+  ans -= gpow->powZ(10, - 2 * p->sternx);
 
   return ans;
 }
@@ -146,16 +148,17 @@ static double ell(double L, G4DensityEffectCalcData * p)
  * the l_i and adjusted energies have been found with SetupFermiDeltaCalc(),
  * return the value of delta.  Helper function for DoFermiDeltaCalc().
  */
-static double delta_once_solved(G4DensityEffectCalcData * p,
-                                const double sternL)
+static G4double delta_once_solved(G4DensityEffectCalcData * p,
+                                  const G4double sternL)
 {
-  double ans = 0;
-  for(int i = 0; i < p->nlev; i++)
+  G4double ans = 0;
+  for(G4int i = 0; i < p->nlev; i++)
     if(p->sternf[i] > 0)
       ans += p->sternf[i] *
-        log((pow(p->sternl[i], 2) + pow(sternL, 2))/pow(p->sternl[i], 2));
+        G4Log((gpow->powN(p->sternl[i], 2)
+              + gpow->powN(sternL, 2))/gpow->powN(p->sternl[i], 2));
 
-  ans -= pow(sternL, 2)/(1 + pow(10, 2 * p->sternx));
+  ans -= gpow->powN(sternL, 2)/(1 + gpow->powZ(10, 2 * p->sternx));
   return ans;
 }
 
@@ -164,14 +167,14 @@ static double delta_once_solved(G4DensityEffectCalcData * p,
  * the Sternheimer parameter rho.  Helper function for SetupFermiDeltaCalc().
  */
 static void calc_Ebarl(G4DensityEffectCalcData * par,
-                       const double sternrho)
+                       const G4double sternrho)
 {
-  par->sternl    = (double *)malloc(sizeof(double)*par->nlev);
-  par->sternEbar = (double *)malloc(sizeof(double)*par->nlev);
-  for(int i = 0; i < par->nlev; i++){
+  par->sternl    = (G4double *)malloc(sizeof(G4double)*par->nlev);
+  par->sternEbar = (G4double *)malloc(sizeof(G4double)*par->nlev);
+  for(G4int i = 0; i < par->nlev; i++){
     par->sternEbar[i] = par->levE[i] * sternrho/par->plasmaE;
     par->sternl[i] = i < par->nlev-1?
-      sqrt(pow(par->sternEbar[i], 2) + 2./3. * par->sternf[i])
+      sqrt(gpow->powN(par->sternEbar[i], 2) + 2./3. * par->sternf[i])
       : sqrt(par->sternf[i]);
   }
 }
@@ -182,9 +185,9 @@ static void calc_Ebarl(G4DensityEffectCalcData * par,
  */
 static void normalize_sternf(G4DensityEffectCalcData * par)
 {
-  double sum = 0;
-  for(int i = 0; i < par->nlev; i++) sum += par->sternf[i];
-  for(int i = 0; i < par->nlev; i++) par->sternf[i] /= sum;
+  G4double sum = 0;
+  for(G4int i = 0; i < par->nlev; i++) sum += par->sternf[i];
+  for(G4int i = 0; i < par->nlev; i++) par->sternf[i] /= sum;
 }
 
 /**
@@ -192,10 +195,10 @@ static void normalize_sternf(G4DensityEffectCalcData * par)
  * form.  Also at sufficiently high energy, we run into numerical problems
  * doing the full calculation.  In that case, return this.
  */
-static double delta_limiting_case(G4DensityEffectCalcData * par,
-                                  const double sternx)
+static G4double delta_limiting_case(G4DensityEffectCalcData * par,
+                                    const G4double sternx)
 {
-  return 2 * (log(par->plasmaE/par->meanexcite) + log(10.)*sternx) - 1;
+  return 2 * (G4Log(par->plasmaE/par->meanexcite) + G4Log(10.)*sternx) - 1;
 }
 
 
@@ -203,11 +206,11 @@ static double delta_limiting_case(G4DensityEffectCalcData * par,
 /* Public functions */
 /********************/
 
-bool SetupFermiDeltaCalc(G4DensityEffectCalcData * par)
+G4bool SetupFermiDeltaCalc(G4DensityEffectCalcData * par)
 {
   normalize_sternf(par);
 
-  const double sternrho = newton(1.5, frho, dfrho, par);
+  const G4double sternrho = newton(1.5, frho, dfrho, par);
 
   // Negative values, and values much larger than unity are non-physical.
   // Values between zero and one are also suspect, but not as clearly wrong.
@@ -224,7 +227,7 @@ bool SetupFermiDeltaCalc(G4DensityEffectCalcData * par)
       << "Number of levels: " << par->nlev << G4endl
       << "Mean ionization energy: " << par->meanexcite << "eV" << G4endl
       << "Plasma energy: " << par->plasmaE << "eV" << G4endl;
-      for(int i = 0; i < par->nlev; i++)
+      for(G4int i = 0; i < par->nlev; i++)
         G4cerr << "Level " << i
                << ": strength " << par->sternf[i]
                << ": energy " << par->levE[i] << "eV" << G4endl;
@@ -236,8 +239,8 @@ bool SetupFermiDeltaCalc(G4DensityEffectCalcData * par)
   return true;
 }
 
-double DoFermiDeltaCalc(G4DensityEffectCalcData * par,
-                        const double sternx)
+G4double DoFermiDeltaCalc(G4DensityEffectCalcData * par,
+                          const G4double sternx)
 {
   // Above beta*gamma of 10^10, the exact treatment is within machine
   // precision of the limiting case, for ordinary solids, at least. The
@@ -258,9 +261,9 @@ double DoFermiDeltaCalc(G4DensityEffectCalcData * par,
   if(ell(0, par) <= 0) return 0;
 
   // Increase initial guess until it converges.
-  int startLi;
+  G4int startLi;
   for(startLi = -10; startLi < 30; startLi++){
-    const double sternL = newton(pow(2, startLi), &ell, &dell, par);
+    const G4double sternL = newton(gpow->powZ(2, startLi), &ell, &dell, par);
     if(sternL != -1)
       return delta_once_solved(par, sternL);
   }

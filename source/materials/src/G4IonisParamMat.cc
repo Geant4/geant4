@@ -472,9 +472,9 @@ void G4IonisParamMat::SetDensityEffectParameters(const G4Material* bmat)
 void G4IonisParamMat::SetSternheimerExactDensityEffect()
 {
   std::vector<G4int> Z;
-  std::vector<double> numberfracs;
+  std::vector<G4double> numberfracs;
 
-  const bool isconductor =
+  const G4bool isconductor =
        fMaterial->GetMaterialPropertiesTable() != nullptr
    && fMaterial->GetMaterialPropertiesTable()->ConstPropertyExists("conductor")
    && fMaterial->GetMaterialPropertiesTable()->GetConstProperty("conductor");
@@ -484,7 +484,7 @@ void G4IonisParamMat::SetSternheimerExactDensityEffect()
   memset(fCalcDensity, 0, sizeof(G4DensityEffectCalcData));
 
   fCalcDensity->nlev = 0;
-  for(unsigned int i = 0; i < fMaterial->GetNumberOfElements(); i++){
+  for(size_t i = 0; i < fMaterial->GetNumberOfElements(); i++){
     Z.push_back(fMaterial->GetElement(i)->GetZ());
     fCalcDensity->nlev += G4AtomicShells::GetNumberOfShells(Z[i]);
   }
@@ -493,17 +493,17 @@ void G4IonisParamMat::SetSternheimerExactDensityEffect()
   // make a dummy conductor level with zero electrons in it.
   if(!isconductor) fCalcDensity->nlev++;
 
-  for(unsigned int i = 0; i < fMaterial->GetNumberOfElements(); i++)
+  for(size_t i = 0; i < fMaterial->GetNumberOfElements(); i++)
     numberfracs.push_back(fMaterial->GetVecNbOfAtomsPerVolume()[i]/
                           fMaterial->GetTotNbOfAtomsPerVolume());
 
-  fCalcDensity->sternf = (double *)malloc(sizeof(double) * fCalcDensity->nlev);
-  fCalcDensity->levE   = (double *)malloc(sizeof(double) * fCalcDensity->nlev);
-  memset(fCalcDensity->sternf, 0, sizeof(double)*fCalcDensity->nlev);
-  memset(fCalcDensity->levE, 0, sizeof(double)*fCalcDensity->nlev);
+  fCalcDensity->sternf = (G4double *)malloc(sizeof(G4double) * fCalcDensity->nlev);
+  fCalcDensity->levE   = (G4double *)malloc(sizeof(G4double) * fCalcDensity->nlev);
+  memset(fCalcDensity->sternf, 0, sizeof(G4double)*fCalcDensity->nlev);
+  memset(fCalcDensity->levE, 0, sizeof(G4double)*fCalcDensity->nlev);
 
-  int sh = 0;
-  for(unsigned int j = 0; j < fMaterial->GetNumberOfElements(); j++){
+  G4int sh = 0;
+  for(size_t j = 0; j < fMaterial->GetNumberOfElements(); j++){
     // The last subshell is considered to contain the conduction
     // electrons. Sternheimer 1984 says "the lowest chemical valance of
     // the element" is used to set the number of conduction electrons.
@@ -511,13 +511,13 @@ void G4IonisParamMat::SetSternheimerExactDensityEffect()
     // shell, but in any case, he also says that the choice is arbitrary
     // and offers a possible alternative. This is one of the sources of
     // uncertainty in the model.
-    const int nshell = G4AtomicShells::GetNumberOfShells(Z[j]);
-    for(int i = 0; i < nshell; i++){
+    const G4int nshell = G4AtomicShells::GetNumberOfShells(Z[j]);
+    for(G4int i = 0; i < nshell; i++){
       // For conductors, put *all* top shell electrons into the conduction
       // band, regardless of element.
-      const int lev = i < nshell-1 || !isconductor? sh: fCalcDensity->nlev-1;
+      const G4int lev = i < nshell-1 || !isconductor? sh: fCalcDensity->nlev-1;
       fCalcDensity->sternf[lev] += numberfracs[j] *
-        double(G4AtomicShells::GetNumberOfElectrons(Z[j], i));
+        G4double(G4AtomicShells::GetNumberOfElectrons(Z[j], i));
       fCalcDensity->levE[lev] = G4AtomicShells::GetBindingEnergy(Z[j], i)/eV;
       sh++;
     }
@@ -531,8 +531,8 @@ void G4IonisParamMat::SetSternheimerExactDensityEffect()
     fCalcDensity->levE[fCalcDensity->nlev-1] = 0;
   }
 
-  double sumZ = 0, sumA = 0;
-  for(unsigned int i = 0; i < fMaterial->GetNumberOfElements(); i++){
+  G4double sumZ = 0, sumA = 0;
+  for(size_t i = 0; i < fMaterial->GetNumberOfElements(); i++){
     sumA += numberfracs[i] * fMaterial->GetElement(i)->GetAtomicMassAmu();
     sumZ += numberfracs[i] * fMaterial->GetElement(i)->GetZ();
   }
@@ -660,7 +660,7 @@ G4double G4IonisParamMat::DensityCorrection(G4double x)
   }
 
   if(fCalcDensity != nullptr){
-    const double exact = DoFermiDeltaCalc(fCalcDensity, x);
+    const G4double exact = DoFermiDeltaCalc(fCalcDensity, x);
     if(approx > 0 && exact < 0){
       if(G4NistManager::Instance()->GetVerbose() > -1){
         G4cerr << "Error: Sternheimer fit failed for "
@@ -675,7 +675,7 @@ G4double G4IonisParamMat::DensityCorrection(G4double x)
     // somehow, with the exception of the case where approx is negative.  I
     // have seen this clearly-wrong result occur for substances with extremely
     // low density (1e-25 g/cc).
-    if(approx >= 0 && fabs(exact - approx) > 1){
+    if(approx >= 0 && std::abs(exact - approx) > 1){
       if(G4NistManager::Instance()->GetVerbose() > 0){
       G4cerr << "Error: Sternheimer exact, " << exact << ", and approx, "
         << approx << " are too different for "
